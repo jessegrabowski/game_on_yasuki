@@ -739,7 +739,6 @@ cards:
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -955,7 +954,6 @@ cards:
   - Other
   keywords:
   - Armor
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+3'
@@ -975,7 +973,6 @@ cards:
   - Other
   keywords:
   - Armor
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+4'
@@ -1264,8 +1261,8 @@ cards:
   - Other
   keywords:
   - Terrain
-  text: May not be included in decks.<br><b>Battle:</b> Non-Naval personalities at this battlefield bow
-    after the resolution of each action they perform.
+  text: <b>Battle:</b> Non-Naval personalities at this battlefield bow after the resolution of each action
+    they perform.
   gold_cost: 0
   focus: 0
   is_proxy: true
@@ -1887,7 +1884,6 @@ cards:
   keywords:
   - Weapon
   - Improvised
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+3'
@@ -1929,7 +1925,6 @@ cards:
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -2264,7 +2259,6 @@ cards:
   keywords:
   - Weapon
   - Earth
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+2'
@@ -2290,7 +2284,6 @@ cards:
   - Lion Clan
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2849,7 +2842,6 @@ cards:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+2'
@@ -4113,7 +4105,6 @@ cards:
   - Plague
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1

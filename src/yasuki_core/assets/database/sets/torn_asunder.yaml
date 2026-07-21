@@ -514,7 +514,6 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 4
   chi: 2
@@ -617,7 +616,7 @@ cards:
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.<br><b>:bow::</b> Produce 2 Gold.
+  text: <b>:bow::</b> Produce 2 Gold.
   gold_cost: 0
   is_proxy: true
   legality:
@@ -1405,7 +1404,6 @@ cards:
   keywords:
   - Samurai
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 3
   chi: 3
@@ -1769,7 +1767,7 @@ cards:
   keywords:
   - Ninja
   - Unaligned
-  text: May not be included in decks.<br>This card has your Clan alignment keyword.
+  text: This card has your Clan alignment keyword.
   gold_cost: 0
   force: 4
   chi: 3
@@ -1792,7 +1790,6 @@ cards:
   - Podling
   - Shadowlands
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 1
@@ -3794,9 +3791,8 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: 'May not be included in decks.<br>Other player''s Battle actions must target a Butterfly Personality
-    at this battlefield, if legal.<br>After another player''s Battle action targets this card: Destroy
-    this card.'
+  text: 'Other player''s Battle actions must target a Butterfly Personality at this battlefield, if legal.<br>After
+    another player''s Battle action targets this card: Destroy this card.'
   gold_cost: 0
   force: 0
   chi: 2

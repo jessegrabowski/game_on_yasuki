@@ -532,7 +532,6 @@ cards:
   - Raptor
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -1165,7 +1164,6 @@ cards:
   - Other
   keywords:
   - Ashigaru
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -1253,7 +1251,6 @@ cards:
   - Ninja
   - Shadowlands
   - Spider Clan
-  text: May not be included in decks.
   gold_cost: 0
   force: 1
   chi: 1
@@ -1977,7 +1974,6 @@ cards:
   - Other
   keywords:
   - Scout
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -2296,7 +2292,6 @@ cards:
   - Deathseeker
   - Lion Clan
   - Samurai
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -3593,7 +3588,6 @@ cards:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+1'

@@ -934,7 +934,6 @@ cards:
   - Ninja
   keywords:
   - Ninja
-  text: May not be included in decks.
   gold_cost: 4
   force: 2
   chi: 3
@@ -1066,7 +1065,6 @@ cards:
   keywords:
   - Nonhuman
   - Ratling
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2

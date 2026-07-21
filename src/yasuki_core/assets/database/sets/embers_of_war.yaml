@@ -191,7 +191,6 @@ cards:
   - Duelist
   - Assassin
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 0
   chi: 3
@@ -723,7 +722,6 @@ cards:
   - Magistrate
   - Samurai
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 4
   chi: 4
@@ -832,7 +830,6 @@ cards:
   - Ronin
   - Samurai
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -990,7 +987,6 @@ cards:
   keywords:
   - Monk
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 1
   chi: 1
@@ -1016,8 +1012,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: 'May not be included in decks.<br><b>Limited:</b> If another player has higher Family Honor than
-    you: Gain 2 Honor.'
+  text: '<b>Limited:</b> If another player has higher Family Honor than you: Gain 2 Honor.'
   gold_cost: 0
   force: 2
   chi: 2
@@ -1970,7 +1965,6 @@ cards:
   - Lion Clan
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2

@@ -72,8 +72,7 @@ cards:
   - Naga
   - Nonhuman
   - Warrior
-  text: <i>(If you destroy your Warrior, draw a card.)</i> <br><i>(This is a proxy for a created card.
-    It cannot be included in decks.)</i>
+  text: <i>(If you destroy your Warrior, draw a card.)</i>
   gold_cost: 0
   force: 2
   chi: 2

@@ -162,7 +162,7 @@ cards:
   keywords:
   - Cat
   - Nonhuman
-  text: Matsu Benika Follower.<br>May not be included in decks.
+  text: Matsu Benika Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -635,7 +635,6 @@ cards:
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -709,7 +708,6 @@ cards:
   keywords:
   - Duelist
   - Samurai
-  text: May not be included in decks.
   gold_cost: 0
   force: 5
   chi: 6
@@ -1067,7 +1065,6 @@ cards:
   keywords:
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 3
   chi: 3
@@ -1245,7 +1242,6 @@ cards:
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -2012,7 +2008,6 @@ cards:
   - Phoenix Clan
   - Samurai
   - Yojimbo
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2124,7 +2119,6 @@ cards:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+2'
@@ -2459,7 +2453,6 @@ cards:
   - Bear
   - Nonhuman
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2772,7 +2765,6 @@ cards:
   keywords:
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2922,7 +2914,6 @@ cards:
   - Samurai
   - Scout
   - Unicorn Clan
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2

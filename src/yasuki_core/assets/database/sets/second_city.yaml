@@ -1002,8 +1002,8 @@ cards:
   keywords:
   - Weapon
   - Fire
-  text: 'May not be included in decks.<br><b>Battle:</b> Bow this card unless this Personality is Fire,
-    and target an enemy card without attachments: Destroy it.'
+  text: '<b>Battle:</b> Bow this card unless this Personality is Fire, and target an enemy card without
+    attachments: Destroy it.'
   gold_cost: 0
   focus: 0
   force: '+3'
@@ -1947,7 +1947,6 @@ cards:
   - Lion Clan
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2246,8 +2245,7 @@ cards:
   - Nonhuman
   - Sparrow
   - Spirit
-  text: 'May not be included in decks.<br><b>Limited:</b> If none of your provinces were destroyed since
-    your last turn ended: Gain 3 Honor.'
+  text: '<b>Limited:</b> If none of your provinces were destroyed since your last turn ended: Gain 3 Honor.'
   gold_cost: 0
   force: 0
   chi: 2
@@ -2323,7 +2321,7 @@ cards:
   - Proxy
   decks:
   - Other
-  text: 'May not be included in decks.<br>Bow this card: Produce 3 Gold.'
+  text: 'Bow this card: Produce 3 Gold.'
   gold_cost: 0
   is_proxy: true
   legality:
@@ -3445,8 +3443,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: 'May not be included in decks.<br><b>Battle:</b> Target an attacking enemy card: Bow it. Destroy
-    it if it is an attachment.'
+  text: '<b>Battle:</b> Target an attacking enemy card: Bow it. Destroy it if it is an attachment.'
   gold_cost: 0
   force: 4
   chi: 2
@@ -3660,8 +3657,7 @@ cards:
   keywords:
   - Weapon
   - Water
-  text: 'May not be included in decks.<br><b>Battle:</b> Target an enemy card without attachments: Bow
-    it.'
+  text: '<b>Battle:</b> Target an enemy card without attachments: Bow it.'
   gold_cost: 0
   focus: 0
   force: '+2'

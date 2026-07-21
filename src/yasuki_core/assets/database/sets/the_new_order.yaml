@@ -3892,8 +3892,7 @@ cards:
   - Nonhuman
   - Spirit
   text: <b>Battle:</b> Fear 3, or Fear 4 if the target is Cavalry <i>(Bow a target enemy Follower or Personality
-    without Followers with Force equal to or lower than the Fear's strength)</i>.<br><i>(This is a proxy
-    for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+    without Followers with Force equal to or lower than the Fear's strength)</i>.
   gold_cost: 0
   force: 4
   chi: 2
@@ -3930,8 +3929,6 @@ cards:
   - Nonhuman
   - Shadowlands
   - Undead
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0

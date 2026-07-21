@@ -853,7 +853,7 @@ cards:
   - Cavalry
   - Samurai
   - Unaligned
-  text: May not be included in decks.<br>This card has your Clan alignment keyword.
+  text: This card has your Clan alignment keyword.
   gold_cost: 0
   force: 3
   chi: 1
@@ -1885,7 +1885,6 @@ cards:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+4'
@@ -1989,7 +1988,7 @@ cards:
   - Nonhuman
   - Spirit
   - Swarm
-  text: 'May not be included in decks.<br><b>Battle:</b> Bow this card: Ranged 4 Attack.'
+  text: '<b>Battle:</b> Bow this card: Ranged 4 Attack.'
   gold_cost: 0
   force: 0
   chi: 2
@@ -2410,7 +2409,6 @@ cards:
   keywords:
   - Ninja
   - Scorpion Clan
-  text: May not be included in decks.
   gold_cost: 0
   force: 0
   chi: 2
@@ -2689,7 +2687,6 @@ cards:
   - Other
   keywords:
   - Ronin
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -4016,8 +4013,7 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: May not be included in decks.<br>This card has the title and base Gold Cost of the Personality
-    who performed Akuma's Power's action.
+  text: This card has the title and base Gold Cost of the Personality who performed Akuma's Power's action.
   gold_cost: 0
   force: 9
   chi: 5

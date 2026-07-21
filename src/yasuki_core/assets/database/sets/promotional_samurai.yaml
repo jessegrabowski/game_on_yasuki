@@ -224,7 +224,7 @@ cards:
   - Other
   keywords:
   - Ashigaru
-  text: Daigotsu Masahiko Follower.<br>May not be included in decks.
+  text: Daigotsu Masahiko Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -385,7 +385,7 @@ cards:
   keywords:
   - Cat
   - Nonhuman
-  text: Matsu Benika Follower.<br>May not be included in decks.
+  text: Matsu Benika Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -580,7 +580,6 @@ cards:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -777,7 +776,7 @@ cards:
   keywords:
   - Crab Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -797,7 +796,7 @@ cards:
   - Other
   keywords:
   - Cavalry
-  text: Utaku Meadows Follower.<br>May not be included in decks.
+  text: Utaku Meadows Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -820,7 +819,7 @@ cards:
   keywords:
   - Crane Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -1264,7 +1263,7 @@ cards:
   keywords:
   - Dragon Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -1409,7 +1408,7 @@ cards:
   - Proxy
   decks:
   - Other
-  text: Farmlands Follower.<br>May not be included in decks.
+  text: Farmlands Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -2018,7 +2017,7 @@ cards:
   keywords:
   - Lion Clan
   - Samurai
-  text: Unexpected Reinforcements Personality.<br>May not be included in decks.
+  text: Unexpected Reinforcements Personality.
   gold_cost: 0
   force: 1
   chi: 1
@@ -2462,7 +2461,7 @@ cards:
   keywords:
   - Ronin
   - Samurai
-  text: Shinjo Kurimoko Personality.<br>May not be included in decks.
+  text: Shinjo Kurimoko Personality.
   gold_cost: 0
   force: 2
   chi: 1
@@ -2632,7 +2631,7 @@ cards:
   keywords:
   - Lion Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -2674,7 +2673,7 @@ cards:
   keywords:
   - Mantis Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -2797,7 +2796,7 @@ cards:
   - Proxy
   decks:
   - Other
-  text: We Stand Ready Follower.<br>May not be included in decks.
+  text: We Stand Ready Follower.
   gold_cost: 0
   focus: 0
   force: 0
@@ -2815,7 +2814,7 @@ cards:
   - Proxy
   decks:
   - Other
-  text: Militia Training Ground Follower.<br>May not be included in decks.
+  text: Militia Training Ground Follower.
   gold_cost: 0
   focus: 0
   force: 0
@@ -3164,7 +3163,7 @@ cards:
   - Other
   keywords:
   - Samurai
-  text: Recruiting Allies Personality.<br>May not be included in decks.
+  text: Recruiting Allies Personality.
   gold_cost: 0
   force: 2
   chi: 2
@@ -3376,7 +3375,7 @@ cards:
   keywords:
   - Phoenix Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -3398,7 +3397,7 @@ cards:
   keywords:
   - Phoenix Clan
   - Samurai
-  text: Shiba Ningen Personality.<br>May not be included in decks.
+  text: Shiba Ningen Personality.
   gold_cost: 0
   force: 2
   chi: 2
@@ -4238,7 +4237,7 @@ cards:
   keywords:
   - Samurai
   - Spider Clan
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -4421,7 +4420,7 @@ cards:
   keywords:
   - Samurai
   - Unicorn Clan
-  text: The Western Steppes Personality.<br>May not be included in decks.
+  text: The Western Steppes Personality.
   gold_cost: 0
   force: 0
   chi: 1
@@ -4464,7 +4463,7 @@ cards:
   - Apprentice
   - Courtier
   - Scorpion Clan
-  text: Shosuro Takuro Apprentice Personality.<br>May not be included in decks.
+  text: Shosuro Takuro Apprentice Personality.
   gold_cost: 0
   force: 0
   chi: 2
@@ -5132,7 +5131,6 @@ cards:
   - Other
   keywords:
   - Guard
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -5305,7 +5303,7 @@ cards:
   keywords:
   - Samurai
   - Unicorn Clan
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -5511,7 +5509,7 @@ cards:
   - Proxy
   decks:
   - Other
-  text: Daidoji Yaichiro Follower.<br>May not be included in decks.
+  text: Daidoji Yaichiro Follower.
   gold_cost: 0
   focus: 0
   force: 2
@@ -5668,7 +5666,7 @@ cards:
   - Other
   keywords:
   - Yojimbo
-  text: Brilliant Rebirth Temple Follower.<br>May not be included in decks.
+  text: Brilliant Rebirth Temple Follower.
   gold_cost: 0
   focus: 0
   force: 0

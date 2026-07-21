@@ -965,8 +965,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: 'May not be included in decks.<br><b>Battle:</b> Target an enemy attacking Personality: Move him
-    home.'
+  text: '<b>Battle:</b> Target an enemy attacking Personality: Move him home.'
   gold_cost: 0
   force: 2
   chi: 2

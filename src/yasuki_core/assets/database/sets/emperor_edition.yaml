@@ -2470,7 +2470,6 @@ cards:
   - Samurai
   - Scout
   - Unicorn Clan
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2592,8 +2591,7 @@ cards:
   - Nonhuman
   - Snake
   - Spirit
-  text: 'May not be included in decks.<br><b>Open:</b> Target a Personality: He is bitten. His base abilities
-    may not be used.'
+  text: '<b>Open:</b> Target a Personality: He is bitten. His base abilities may not be used.'
   gold_cost: 0
   force: 2
   chi: 2
@@ -2881,7 +2879,6 @@ cards:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -3139,7 +3136,6 @@ cards:
   - Other
   keywords:
   - Ashigaru
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -3444,8 +3440,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: May not be included in decks.<br>Enemy attacking Personalities and Followers at this card's battlefield
-    have -1F.
+  text: Enemy attacking Personalities and Followers at this card's battlefield have -1F.
   gold_cost: 0
   force: 2
   chi: 2
@@ -4544,7 +4539,6 @@ cards:
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -4866,7 +4860,6 @@ cards:
   - Other
   keywords:
   - Armor
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+1'
@@ -5526,7 +5519,6 @@ cards:
   keywords:
   - Ninja
   - Shadowlands
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -5655,7 +5647,6 @@ cards:
   - Other
   keywords:
   - Scout
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -5824,7 +5815,6 @@ cards:
   - Lion Clan
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -6613,7 +6603,6 @@ cards:
   keywords:
   - Cavalry
   - Ashigaru
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -6701,7 +6690,6 @@ cards:
   keywords:
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -7131,8 +7119,8 @@ cards:
   - Other
   keywords:
   - Terrain
-  text: 'May not be included in decks.<br><b>Battle:</b> If this card is in play, destroy it and target
-    a Terrain in your hand: Take an additional Battle action to play it.'
+  text: '<b>Battle:</b> If this card is in play, destroy it and target a Terrain in your hand: Take an
+    additional Battle action to play it.'
   gold_cost: 0
   focus: 0
   is_proxy: true
@@ -7645,7 +7633,6 @@ cards:
   - Apprentice
   - Courtier
   - Scorpion Clan
-  text: May not be included in decks.
   gold_cost: 0
   force: 0
   chi: 2
@@ -9189,7 +9176,6 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -9344,7 +9330,6 @@ cards:
   - Shadowlands
   - Spirit
   - Swamp Spirit
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -10335,7 +10320,6 @@ cards:
   keywords:
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -10668,7 +10652,6 @@ cards:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+1'
@@ -11194,7 +11177,7 @@ cards:
   keywords:
   - Samurai
   - Unaligned
-  text: May not be included in decks.<br>This card has your Clan alignment keyword.
+  text: This card has your Clan alignment keyword.
   gold_cost: 0
   force: 3
   chi: 3
@@ -11529,7 +11512,7 @@ cards:
   keywords:
   - Samurai
   - Unaligned
-  text: May not be included in decks.<br>This card has your Clan alignment keyword.
+  text: This card has your Clan alignment keyword.
   gold_cost: 0
   force: 2
   chi: 2
@@ -11669,7 +11652,6 @@ cards:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+1'

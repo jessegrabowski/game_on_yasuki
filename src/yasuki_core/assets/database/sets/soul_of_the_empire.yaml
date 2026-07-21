@@ -183,7 +183,6 @@ cards:
   - Ashigaru
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -515,7 +514,6 @@ cards:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -1123,7 +1121,7 @@ cards:
   - Proxy
   decks:
   - Other
-  text: Farmlands Follower.<br>May not be included in decks.
+  text: Farmlands Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -2488,7 +2486,6 @@ cards:
   - Cavalry
   - Mujina
   - Nonhuman
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -2537,7 +2534,6 @@ cards:
   keywords:
   - Naga
   - Nonhuman
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -3153,7 +3149,6 @@ cards:
   keywords:
   - Nonhuman
   - Ratling
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -4476,7 +4471,6 @@ cards:
   - Other
   keywords:
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1

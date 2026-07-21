@@ -183,7 +183,6 @@ cards:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+1'
@@ -949,7 +948,6 @@ cards:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -992,8 +990,8 @@ cards:
   keywords:
   - Weapon
   - Earth
-  text: 'May not be included in decks.<br><b>Reaction:</b> After an action targets this Personality: Negate
-    his movement from the action''s effects.'
+  text: '<b>Reaction:</b> After an action targets this Personality: Negate his movement from the action''s
+    effects.'
   gold_cost: 0
   focus: 0
   force: '+3'
@@ -1062,7 +1060,6 @@ cards:
   - Other
   keywords:
   - Ashigaru
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -1252,7 +1249,6 @@ cards:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+2'
@@ -1681,7 +1677,6 @@ cards:
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -3030,7 +3025,6 @@ cards:
   - Other
   keywords:
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -3506,7 +3500,6 @@ cards:
   keywords:
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -3641,7 +3634,6 @@ cards:
   - Other
   keywords:
   - Guard
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1

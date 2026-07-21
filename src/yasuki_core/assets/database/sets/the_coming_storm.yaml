@@ -165,8 +165,6 @@ cards:
   - Other
   keywords:
   - Armor
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: '+2'
   chi: '+0'
@@ -210,8 +208,6 @@ cards:
   - Nonhuman
   - Shugenja
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 4
   chi: 4
@@ -296,8 +292,6 @@ cards:
   - Cavalry
   - Scout
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 3
   chi: 1
@@ -458,8 +452,7 @@ cards:
   - Nonhuman
   - Spirit
   text: Has -2F while attacking.<br><b>Battle:</b> Fear 4 <i>(Bow a target enemy Follower, or Personality
-    without Followers, with 4 or lower Force)</i>.<br><i>(This is a proxy for a created card. It is not
-    considered to have a title and cannot be included in decks.)</i>
+    without Followers, with 4 or lower Force)</i>.
   gold_cost: 0
   force: 5
   chi: 2
@@ -680,8 +673,6 @@ cards:
   - Samurai
   - Yojimbo
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 3
@@ -701,8 +692,6 @@ cards:
   - Nonhuman
   - Yojimbo
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -1184,8 +1173,6 @@ cards:
   - Pet
   - Shadowlands
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -1601,8 +1588,6 @@ cards:
   - Magistrate
   - Samurai
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 5
@@ -1805,8 +1790,6 @@ cards:
   - Dog
   - Nonhuman
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -1826,8 +1809,7 @@ cards:
   - Shadowlands
   - Spirit
   - Unaligned
-  text: 'Battle, :bow:: Melee 4 Attack.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>'
+  text: 'Battle, :bow:: Melee 4 Attack.'
   gold_cost: 0
   force: 4
   chi: 2
@@ -2044,8 +2026,6 @@ cards:
   - Other
   keywords:
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 0
@@ -2063,8 +2043,6 @@ cards:
   - Cat
   - Nonhuman
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -2083,8 +2061,6 @@ cards:
   - Elephant
   - Nonhuman
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -2148,8 +2124,7 @@ cards:
   - Samurai
   - Spirit
   - Unaligned
-  text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.<br><i>(This
-    is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+  text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.
   gold_cost: 0
   force: '*'
   chi: 2
@@ -2196,8 +2171,6 @@ cards:
   keywords:
   - Cavalry
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -2213,8 +2186,6 @@ cards:
   - Other
   keywords:
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -2255,8 +2226,7 @@ cards:
   - Shugenja
   - Unaligned
   text: This Personality's Chi and Personal Honor are equal to the Chi and Personal Honor of the caster,
-    respectively.<br><i>(This is a proxy for a created card. It is not considered to have a title and
-    cannot be included in decks.)</i>
+    respectively.
   gold_cost: 0
   force: 0
   chi: '*'
@@ -2504,8 +2474,6 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 2
@@ -2525,8 +2493,6 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 2
@@ -2598,8 +2564,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: <b>Battle:</b> Melee 2 Attack.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>
+  text: <b>Battle:</b> Melee 2 Attack.
   gold_cost: 0
   force: 3
   chi: 2
@@ -2647,8 +2612,6 @@ cards:
   keywords:
   - Ashigaru
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -3128,8 +3091,7 @@ cards:
   - Proxy
   decks:
   - Other
-  text: <b>:bow::</b> Produce 1 Gold.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>
+  text: <b>:bow::</b> Produce 1 Gold.
   gold_cost: 0
   is_proxy: true
   rarity: Premium
@@ -3755,8 +3717,6 @@ cards:
   - Guard
   - Samurai
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 2
@@ -3803,8 +3763,6 @@ cards:
   - Illusion
   - Shugenja
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 3
@@ -3905,8 +3863,6 @@ cards:
   - Shadowlands
   - Undead
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 2
@@ -3924,8 +3880,7 @@ cards:
   keywords:
   - Weapon
   - Unaligned
-  text: This Item's Force Modifier is equal to the discarded card's Focus Value.<br><i>(This is a proxy
-    for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+  text: This Item's Force Modifier is equal to the discarded card's Focus Value.
   gold_cost: 0
   force: +*
   chi: '+0'
@@ -4253,8 +4208,7 @@ cards:
   - Nonhuman
   - Spirit
   text: <b>Battle:</b> Discard a card to give a target enemy Personality or Follower a Force penalty equal
-    to the card's Focus Value.<br><i>(This is a proxy for a created card. It is not considered to have
-    a title and cannot be included in decks.)</i>
+    to the card's Focus Value.
   gold_cost: 0
   force: 3
   chi: 2
@@ -4466,8 +4420,6 @@ cards:
   - Shadowlands
   - Undead
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 2
