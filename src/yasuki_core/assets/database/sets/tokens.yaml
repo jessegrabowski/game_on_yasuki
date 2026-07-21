@@ -9,7 +9,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_affection
   title: Affection Token
   types:
@@ -18,7 +17,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_arrow
   title: Arrow Token
   types:
@@ -27,7 +25,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_aura
   title: Aura Token
   types:
@@ -38,7 +35,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_blood
   title: Blood Token
   types:
@@ -48,7 +44,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_change
   title: Change Token
   types:
@@ -59,7 +54,6 @@ cards:
   chi: 3
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_charge
   title: Charge Token
   types:
@@ -68,7 +62,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_charging
   title: Charging Token
   types:
@@ -77,7 +70,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_chi
   title: Chi Token
   types:
@@ -86,7 +78,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_cloud
   title: Cloud Token
   types:
@@ -95,7 +86,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_clout
   title: Clout Token
   types:
@@ -104,7 +94,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_conspiracy
   title: Conspiracy Token
   types:
@@ -113,7 +102,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_corpse
   title: Corpse Token
   types:
@@ -122,7 +110,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_corruption
   title: Corruption Token
   types:
@@ -132,7 +119,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_counter
   title: Counter Token
   types:
@@ -141,8 +127,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: Unnamed counters used purely as a tally (e.g. Secrets on the Wind banks tokens equal to Chi, spent
-    later). (Token — attach for its modifier; not deckable)
 - id: token_curse
   title: Curse Token
   types:
@@ -153,7 +137,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_doom
   title: Doom Token
   types:
@@ -162,7 +145,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_doom_of_the_dragon
   title: Doom of the Dragon Token
   types:
@@ -171,7 +153,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_edge
   title: Edge Token
   types:
@@ -181,7 +162,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_engineering
   title: Engineering Token
   types:
@@ -190,7 +170,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_erosion
   title: Erosion Token
   types:
@@ -200,7 +179,6 @@ cards:
   province_strength: -1
   gold_cost: 0
   is_proxy: true
-  text: -1 Province Strength on the host Province. (Token — attach for its modifier; not deckable)
 - id: token_exhaustion
   title: Exhaustion Token
   types:
@@ -210,7 +188,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_explosive
   title: Explosive Token
   types:
@@ -219,8 +196,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: Marks an enemy Personality; enables payoff effects against tokened targets. (Token — attach for
-    its modifier; not deckable)
 - id: token_favor
   title: Favor Token
   types:
@@ -229,7 +204,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_fire
   title: Fire Token
   types:
@@ -239,8 +213,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: +1 Force. Often accumulated then spent (e.g. destroyed for a melee burst). (Token — attach for
-    its modifier; not deckable)
 - id: token_flow
   title: Flow Token
   types:
@@ -250,7 +222,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: +1 Chi to the host Personality. (Token — attach for its modifier; not deckable)
 - id: token_frenzy
   title: Frenzy Token
   types:
@@ -260,7 +231,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_fury
   title: Fury Token
   types:
@@ -270,7 +240,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_glass
   title: Glass Token
   types:
@@ -279,7 +248,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_goblet
   title: Goblet Token
   types:
@@ -288,7 +256,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_guard
   title: Guard Token
   types:
@@ -297,8 +264,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: No stat modifier on its own; cards key off having Guard tokens (e.g. Elite at 2+). (Token — attach
-    for its modifier; not deckable)
 - id: token_haunted
   title: Haunted Token
   types:
@@ -307,7 +272,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_hunted
   title: Hunted Token
   types:
@@ -316,7 +280,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_infamy
   title: Infamy Token
   types:
@@ -326,7 +289,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_influence
   title: Influence Token
   types:
@@ -335,8 +297,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: 'Alternate win condition: begin a turn with 50+ Influence tokens to win the game. (Token — attach
-    for its modifier; not deckable)'
 - id: token_jade
   title: Jade Token
   types:
@@ -345,7 +305,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_lesson
   title: Lesson Token
   types:
@@ -355,8 +314,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: +1 Force; several cards scale an effect by their number of Lesson tokens. (Token — attach for
-    its modifier; not deckable)
 - id: token_madness
   title: Madness Token
   types:
@@ -365,7 +322,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_maho
   title: Maho Token
   types:
@@ -376,7 +332,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_master
   title: Master Token
   types:
@@ -385,7 +340,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_mastery
   title: Mastery Token
   types:
@@ -394,7 +348,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_merchant
   title: Merchant Token
   types:
@@ -403,7 +356,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus1c
   title: -1C Token
   types:
@@ -413,7 +365,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus1f
   title: -1F Token
   types:
@@ -423,7 +374,6 @@ cards:
   force: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus1f_minus1c
   title: -1F/-1C Token
   types:
@@ -434,7 +384,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus1gp
   title: -1GP Token
   types:
@@ -444,7 +393,6 @@ cards:
   gold_production: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus1ps
   title: -1PS Token
   types:
@@ -454,7 +402,6 @@ cards:
   province_strength: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus2c
   title: -2C Token
   types:
@@ -464,7 +411,6 @@ cards:
   chi: -2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus2f
   title: -2F Token
   types:
@@ -474,7 +420,6 @@ cards:
   force: -2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus2f_minus2c
   title: -2F/-2C Token
   types:
@@ -485,7 +430,6 @@ cards:
   chi: -2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus2gp
   title: -2GP Token
   types:
@@ -495,7 +439,6 @@ cards:
   gold_production: -2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus3f
   title: -3F Token
   types:
@@ -505,7 +448,6 @@ cards:
   force: -3
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus3f_minus1c
   title: -3F/-1C Token
   types:
@@ -516,7 +458,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus4c
   title: -4C Token
   types:
@@ -526,7 +467,6 @@ cards:
   chi: -4
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus4f
   title: -4F Token
   types:
@@ -536,7 +476,6 @@ cards:
   force: -4
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus5f
   title: -5F Token
   types:
@@ -546,7 +485,6 @@ cards:
   force: -5
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_minus5f_minus2c
   title: -5F/-2C Token
   types:
@@ -557,7 +495,6 @@ cards:
   chi: -2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_mountain
   title: Mountain Token
   types:
@@ -566,7 +503,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_nemuranai
   title: Nemuranai Token
   types:
@@ -576,7 +512,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_nightmare
   title: Nightmare Token
   types:
@@ -586,7 +521,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_oath
   title: Oath Token
   types:
@@ -595,7 +529,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_obsession
   title: Obsession Token
   types:
@@ -605,7 +538,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_omen
   title: Omen Token
   types:
@@ -616,7 +548,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_pearl
   title: Pearl Token
   types:
@@ -625,7 +556,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plague
   title: Plague Token
   types:
@@ -635,7 +565,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus1c
   title: +1C Token
   types:
@@ -645,7 +574,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus1f
   title: +1F Token
   types:
@@ -655,7 +583,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus1f_minus1c
   title: +1F/-1C Token
   types:
@@ -666,7 +593,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus1f_plus1c
   title: +1F/+1C Token
   types:
@@ -677,7 +603,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus1f_plus1c_plus1ph
   title: +1F/+1C/+1PH Token
   types:
@@ -689,7 +614,6 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus1gp
   title: +1GP Token
   types:
@@ -699,7 +623,6 @@ cards:
   gold_production: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus1ph
   title: +1PH Token
   types:
@@ -709,7 +632,6 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus1ps
   title: +1PS Token
   types:
@@ -719,7 +641,6 @@ cards:
   province_strength: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus2f
   title: +2F Token
   types:
@@ -729,7 +650,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus2f_minus1c
   title: +2F/-1C Token
   types:
@@ -740,7 +660,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus2f_plus1c
   title: +2F/+1C Token
   types:
@@ -751,7 +670,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus2f_plus2c
   title: +2F/+2C Token
   types:
@@ -762,7 +680,6 @@ cards:
   chi: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus2ph
   title: +2PH Token
   types:
@@ -772,7 +689,6 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus3f
   title: +3F Token
   types:
@@ -782,7 +698,6 @@ cards:
   force: 3
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_plus4f_minus1c
   title: +4F/-1C Token
   types:
@@ -793,7 +708,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_poison
   title: Poison Token
   types:
@@ -804,8 +718,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: -1 Force and -1 Chi to the host Personality. Reducing Chi to 0 can be lethal. (Token — attach
-    for its modifier; not deckable)
 - id: token_porcelain
   title: Porcelain Token
   types:
@@ -816,7 +728,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_power
   title: Power Token
   types:
@@ -825,7 +736,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_prophecy
   title: Prophecy Token
   types:
@@ -836,7 +746,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_rage
   title: Rage Token
   types:
@@ -845,8 +754,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: No stat modifier; effects scale by the number of Rage tokens. (Token — attach for its modifier;
-    not deckable)
 - id: token_recruit
   title: Recruit Token
   types:
@@ -856,8 +763,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: +1 Force; Obsidian Legion Followers scale strength by Recruit tokens. (Token — attach for its
-    modifier; not deckable)
 - id: token_recruiter
   title: Recruiter Token
   types:
@@ -866,7 +771,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_remembrance
   title: Remembrance Token
   types:
@@ -875,7 +779,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_revenge
   title: Revenge Token
   types:
@@ -885,7 +788,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_sake
   title: Sake Token
   types:
@@ -895,7 +797,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_scroll
   title: Scroll Token
   types:
@@ -904,7 +805,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_seduction
   title: Seduction Token
   types:
@@ -914,7 +814,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_sensei
   title: Sensei Token
   types:
@@ -925,7 +824,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_shadow
   title: Shadow Token
   types:
@@ -934,7 +832,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_shrine
   title: Shrine Token
   types:
@@ -943,7 +840,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_shuriken
   title: Shuriken Token
   types:
@@ -952,7 +848,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_sincerity
   title: Sincerity Token
   types:
@@ -961,8 +856,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: Spent to pay for Sincerity cards; many 'Sincerity:' abilities trigger off removing tokens. (Token
-    — attach for its modifier; not deckable)
 - id: token_sleep
   title: Sleep Token
   types:
@@ -971,8 +864,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: While present, the host straightens by removing a Sleep token instead of untapping. (Token — attach
-    for its modifier; not deckable)
 - id: token_sleeper
   title: Sleeper Token
   types:
@@ -981,7 +872,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_sling
   title: Sling Token
   types:
@@ -990,7 +880,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_soul
   title: Soul Token
   types:
@@ -999,7 +888,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_spirit
   title: Spirit Token
   types:
@@ -1010,7 +898,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_storage
   title: Storage Token
   types:
@@ -1019,7 +906,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_structure
   title: Structure Token
   types:
@@ -1028,8 +914,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: Placed on a Province; removed to swing its strength +2PS or -2PS. (Token — attach for its modifier;
-    not deckable)
 - id: token_tactician
   title: Tactician Token
   types:
@@ -1038,7 +922,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_taint
   title: Taint Token
   types:
@@ -1047,7 +930,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_tattoo
   title: Tattoo Token
   types:
@@ -1056,7 +938,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_tidal
   title: Tidal Token
   types:
@@ -1065,7 +946,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_training_dojo
   title: Training Dojo Token
   types:
@@ -1074,7 +954,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_unstitched
   title: Unstitched Token
   types:
@@ -1083,7 +962,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_valor
   title: Valor Token
   types:
@@ -1092,7 +970,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_venom
   title: Venom Token
   types:
@@ -1102,7 +979,6 @@ cards:
   chi: -1
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_vial
   title: Vial Token
   types:
@@ -1111,7 +987,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_victory
   title: Victory Token
   types:
@@ -1120,7 +995,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_void
   title: Void Token
   types:
@@ -1129,7 +1003,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_wall
   title: Wall Token
   types:
@@ -1139,8 +1012,6 @@ cards:
   province_strength: 1
   gold_cost: 0
   is_proxy: true
-  text: +1 Province Strength (printed as '+1 strength') on the host Province. (Token — attach for its
-    modifier; not deckable)
 - id: token_wanted
   title: Wanted Token
   types:
@@ -1149,7 +1020,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_ward
   title: Ward Token
   types:
@@ -1158,7 +1028,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_wasting
   title: Wasting Token
   types:
@@ -1167,7 +1036,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_wealth
   title: Wealth Token
   types:
@@ -1177,8 +1045,6 @@ cards:
   gold_production: 1
   gold_cost: 0
   is_proxy: true
-  text: Raises the host Holding's Gold Production by 1. Pirate/Raid economy fuel; many effects spend (destroy)
-    it. (Token — attach for its modifier; not deckable)
 - id: token_web
   title: Web Token
   types:
@@ -1187,7 +1053,6 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: token_worker
   title: Worker Token
   types:
@@ -1196,9 +1061,8 @@ cards:
   - Other
   gold_cost: 0
   is_proxy: true
-  text: (Token — attach for its modifier; not deckable)
 - id: ancestor_yojimbo_follower_0f
-  title: Follower Token
+  title: Blessed Guard
   types:
   - Follower
   - Proxy
@@ -1212,9 +1076,8 @@ cards:
   force: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: armor_item_plus2f
-  title: Item Token
+  title: Armor
   types:
   - Item
   - Proxy
@@ -1225,9 +1088,8 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: berserker_cavalry_follower_1f
-  title: Follower Token
+  title: Berserker Cavalry
   types:
   - Follower
   - Proxy
@@ -1239,9 +1101,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: blossom_oni_follower_1f
-  title: Follower Token
+  title: Shidare's Blossom
   types:
   - Follower
   - Proxy
@@ -1255,9 +1116,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: courage_follower_1f
-  title: Follower Token
+  title: Courageous Troops
   types:
   - Follower
   - Proxy
@@ -1268,9 +1128,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: courage_follower_2f
-  title: Follower Token
+  title: Drilled Troops
   types:
   - Follower
   - Proxy
@@ -1279,11 +1138,10 @@ cards:
   keywords:
   - Courage
   force: 2
-  gold_cost: 0
+  gold_cost: 2
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: courtier_0_3_2
-  title: Personality Token
+  title: Courtier
   types:
   - Personality
   - Proxy
@@ -1296,9 +1154,8 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: courtier_expendable_personality_0_2_2
-  title: Personality Token
+  title: Terumoto's Courtier
   types:
   - Personality
   - Proxy
@@ -1312,9 +1169,9 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: 'Political Open, bow: a target player gains or loses 1 Honor. (Token — created in play; not deckable)'
+  text: <b>Political Open, :bow::</b> A target player gains or loses 1 Honor.
 - id: courtier_personality_0_2_2
-  title: Personality Token
+  title: Courtier
   types:
   - Personality
   - Proxy
@@ -1327,9 +1184,8 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: crane_courtier_personality_0_2_3
-  title: Personality Token
+  title: Kagami's Courtier
   types:
   - Personality
   - Proxy
@@ -1344,9 +1200,9 @@ cards:
   personal_honor: 3
   gold_cost: 0
   is_proxy: true
-  text: Before your turn ends, banish it to gain 2 Honor. (Token — created in play; not deckable)
+  text: Before your turn ends, banish this Personality; if you did, gain 2 Honor.
 - id: dragon_yojimbo_personality_2_2_2
-  title: Personality Token
+  title: Dragon Yojimbo
   types:
   - Personality
   - Proxy
@@ -1360,11 +1216,10 @@ cards:
   force: 2
   chi: 2
   personal_honor: 2
-  gold_cost: 0
+  gold_cost: 3
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: earth_fire_terrain_strategy
-  title: Strategy Token
+  title: Terrain
   types:
   - Strategy
   - Proxy
@@ -1376,10 +1231,21 @@ cards:
   - Fire
   gold_cost: 0
   is_proxy: true
-  text: 'Grants the controller: Repeatable Battle: Bow your target Ring or Earth Personality to make a
-    ranged 3. Put into play. (Token — created in play; not deckable)'
+  text: '<b>Repeatable Battle:</b> Bow your target Ring, or :earth: Personality, to make a :ranged: 3.'
+- id: water_ancestor_terrain_strategy
+  title: Terrain
+  types:
+  - Strategy
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Terrain
+  gold_cost: 0
+  is_proxy: true
+  text: 'Your opposed Ancestor and :water: Personalities at this battlefield have +1F.'
 - id: expendable_personality_0_2_1
-  title: Personality Token
+  title: Expendable Servant
   types:
   - Personality
   - Proxy
@@ -1390,11 +1256,10 @@ cards:
   force: 0
   chi: 2
   personal_honor: 1
-  gold_cost: 0
+  gold_cost: 1
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: fushicho_personality_3_2_3
-  title: Personality Token
+  title: Fushicho
   types:
   - Personality
   - Proxy
@@ -1410,9 +1275,8 @@ cards:
   personal_honor: 3
   gold_cost: 0
   is_proxy: true
-  text: Banished at end of turn. (Token — created in play; not deckable)
 - id: gaijin_yodotai_follower_1f
-  title: Follower Token
+  title: Aulus's Yodotai
   types:
   - Follower
   - Proxy
@@ -1424,9 +1288,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: goose_spirit_personality_1_2_3
-  title: Personality Token
+  title: Yayuko's Goose
   types:
   - Personality
   - Proxy
@@ -1439,11 +1302,12 @@ cards:
   force: 1
   chi: 2
   personal_honor: 3
-  gold_cost: 0
+  gold_cost: 4
   is_proxy: true
-  text: (Token — created in play; not deckable)
+  text: <b>Open, :bow::</b> If an Attack is declared against you this turn, gain 1 Honor at the end of
+    it for each of your Provinces, to a maximum of 3.
 - id: horror_shadowlands_personality
-  title: Personality Token
+  title: Horror
   types:
   - Personality
   - Proxy
@@ -1453,11 +1317,12 @@ cards:
   - Horror
   - Nonhuman
   - Shadowlands
-  gold_cost: 0
+  force: '*'
+  chi: '*'
+  gold_cost: '*'
   is_proxy: true
-  text: Gold Cost / Force / Chi equal to the targets' totals. (Token — created in play; not deckable)
 - id: mantis_samurai_naval_personality_2_1_2
-  title: Personality Token
+  title: Thunder Veteran
   types:
   - Personality
   - Proxy
@@ -1473,9 +1338,8 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: mercenary_ronin_personality_2_2_1
-  title: Personality Token
+  title: Ninsei's Mercenary
   types:
   - Personality
   - Proxy
@@ -1488,11 +1352,10 @@ cards:
   force: 2
   chi: 2
   personal_honor: 1
-  gold_cost: 0
+  gold_cost: 2
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: moth_spirit_follower_0f
-  title: Follower Token
+  title: Sawako's Moth
   types:
   - Follower
   - Proxy
@@ -1506,9 +1369,9 @@ cards:
   force: 0
   gold_cost: 0
   is_proxy: true
-  text: 'Yu: Gain 2 Honor. (Token — created in play; not deckable)'
+  text: 'Yu: Gain 2 Honor.'
 - id: naga_zealot_personality_2_2_1
-  title: Personality Token
+  title: Naga Zealot
   types:
   - Personality
   - Proxy
@@ -1523,9 +1386,8 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: oni_personality_2_1
-  title: Personality Token
+  title: Lesser Oni
   types:
   - Personality
   - Proxy
@@ -1539,9 +1401,8 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: Created in home. (Token — created in play; not deckable)
 - id: oni_personality_3_1_0
-  title: Personality Token
+  title: Oni
   types:
   - Personality
   - Proxy
@@ -1556,9 +1417,8 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: oni_personality_variable_chi
-  title: Personality Token
+  title: Mishime's Oni
   types:
   - Personality
   - Proxy
@@ -1568,12 +1428,13 @@ cards:
   - Shadowlands
   - Nonhuman
   - Oni
+  force: '*'
   chi: 2
-  gold_cost: 0
+  gold_cost: 3
+  personal_honor: 0
   is_proxy: true
-  text: Force equal to the target's Chi. (Token — created in play; not deckable)
 - id: orochi_follower_2f
-  title: Follower Token
+  title: Sasada's Orochi
   types:
   - Follower
   - Proxy
@@ -1585,9 +1446,8 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: orochi_follower_3f
-  title: Follower Token
+  title: Sarassa's Orochi
   types:
   - Follower
   - Proxy
@@ -1599,9 +1459,9 @@ cards:
   force: 3
   gold_cost: 0
   is_proxy: true
-  text: 'Battle: ranged 3. (Token — created in play; not deckable)'
+  text: '<b>Battle:</b> :ranged: 3.'
 - id: ox_spirit_personality_6_2_3
-  title: Personality Token
+  title: Maiko's Ox
   types:
   - Personality
   - Proxy
@@ -1614,11 +1474,10 @@ cards:
   force: 6
   chi: 2
   personal_honor: 3
-  gold_cost: 0
+  gold_cost: 7
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: panda_berserker_follower_2f
-  title: Follower Token
+  title: Ogaru's Panda
   types:
   - Follower
   - Proxy
@@ -1633,9 +1492,8 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: Banished after the phase ends. (Token — created in play; not deckable)
 - id: pearl_strategy
-  title: Strategy Token
+  title: Pearl
   types:
   - Strategy
   - Proxy
@@ -1645,9 +1503,8 @@ cards:
   - Pearl
   gold_cost: 0
   is_proxy: true
-  text: Put into play. (Token — created in play; not deckable)
 - id: pirate_naval_personality
-  title: Personality Token
+  title: Pirate
   types:
   - Personality
   - Proxy
@@ -1663,9 +1520,8 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-  text: Usually banished at end of turn. (Token — created in play; not deckable)
 - id: ram_spirit_personality_3_1_3
-  title: Personality Token
+  title: Toson's Ram
   types:
   - Personality
   - Proxy
@@ -1679,11 +1535,11 @@ cards:
   force: 3
   chi: 1
   personal_honor: 3
-  gold_cost: 0
+  gold_cost: 4
   is_proxy: true
-  text: 'Battle, bow: melee 2. (Token — created in play; not deckable)'
+  text: '<b>Battle, :bow::</b> :melee: 2.'
 - id: ratling_scout_follower_1f
-  title: Follower Token
+  title: Kan'ol'ti'chek's Scout
   types:
   - Follower
   - Proxy
@@ -1696,9 +1552,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: ratling_scout_personality_1_1_1
-  title: Personality Token
+  title: Zin'tik'kir's Scout
   types:
   - Personality
   - Proxy
@@ -1713,9 +1568,8 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-  text: Created bowed. (Token — created in play; not deckable)
 - id: ronin_samurai_personality_4_4_4
-  title: Personality Token
+  title: Sacred Stone Ronin
   types:
   - Personality
   - Proxy
@@ -1732,9 +1586,8 @@ cards:
   personal_honor: 4
   gold_cost: 0
   is_proxy: true
-  text: Banished after the battle resolves. (Token — created in play; not deckable)
 - id: samurai_yojimbo_2_2_2
-  title: Personality Token
+  title: Yojimbo
   types:
   - Personality
   - Proxy
@@ -1748,9 +1601,8 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: scorpion_yojimbo_personality_2_2_0
-  title: Personality Token
+  title: Scorpion Yojimbo
   types:
   - Personality
   - Proxy
@@ -1766,9 +1618,9 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: 'Yu: A target player loses 2 Honor. (Token — created in play; not deckable)'
+  text: 'Yu: A target player loses 2 Honor.'
 - id: shugenja_2_2_2
-  title: Personality Token
+  title: Shugenja
   types:
   - Personality
   - Proxy
@@ -1781,9 +1633,8 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: tanuki_samurai_personality_2_2_2
-  title: Personality Token
+  title: Waietto's Tanuki
   types:
   - Personality
   - Proxy
@@ -1797,9 +1648,8 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: Created in home. (Token — created in play; not deckable)
 - id: undead_cavalry_follower_2f
-  title: Follower Token
+  title: Ikarichi's Undead
   types:
   - Follower
   - Proxy
@@ -1813,9 +1663,8 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: undead_cavalry_follower_2f_fear2
-  title: Follower Token
+  title: Undead Outrider
   types:
   - Follower
   - Proxy
@@ -1829,9 +1678,9 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: 'Battle: fear 2. (Token — created in play; not deckable)'
+  text: '<b>Battle:</b> :fear: 2.'
 - id: undead_follower_2f
-  title: Follower Token
+  title: Undead Troops
   types:
   - Follower
   - Proxy
@@ -1844,9 +1693,8 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: victim_personality_0_3_0
-  title: Personality Token
+  title: Victim
   types:
   - Personality
   - Proxy
@@ -1859,9 +1707,8 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: weapon_item_claw_plus1f
-  title: Item Token
+  title: Hiyamako's Claw
   types:
   - Item
   - Proxy
@@ -1874,9 +1721,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: weapon_item_sword_plus1f
-  title: Item Token
+  title: Sword
   types:
   - Item
   - Proxy
@@ -1889,9 +1735,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: weapon_item_sword_plus2f_plus1c
-  title: Item Token
+  title: Fine Sword
   types:
   - Item
   - Proxy
@@ -1905,7 +1750,6 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: tsuyoshis_wakizashi
   title: Tsuyoshi's Wakizashi
   types:
@@ -1920,9 +1764,8 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: yobanjin_cavalry_personality_4_2
-  title: Personality Token
+  title: Yobanjin Raider
   types:
   - Personality
   - Proxy
@@ -1935,7 +1778,6 @@ cards:
   chi: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: twin_kama
   title: Twin Kama
   types:
@@ -1947,7 +1789,7 @@ cards:
   - Weapon
   gold_cost: 0
   is_proxy: true
-  text: Attached Personality has +1F and +1C. (Token — created in play; not deckable)
+  text: Attached Personality has +1F and +1C.
 - id: air_kami
   title: Air Kami
   types:
@@ -1960,7 +1802,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: animated_armor
   title: Animated Armor
   types:
@@ -1977,7 +1818,6 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: farmhands
   title: Farmhands
   types:
@@ -1990,7 +1830,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: horde_outrider
   title: Horde Outrider
   types:
@@ -2005,8 +1844,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: Remove this Personality from the game after this battle's Resolution Segment. (Token — created
-    in play; not deckable)
+  text: Remove this Personality from the game after this battle's Resolution Segment.
 - id: fishermen
   title: Fishermen
   types:
@@ -2022,7 +1860,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: While this Follower remains attached to its Personality, gain 3 Honor after the first time each
-    attack its controller assigns or moves him. (Token — created in play; not deckable)
+    attack its controller assigns or moves him.
 - id: mantis_marine
   title: Mantis Marine
   types:
@@ -2036,7 +1874,6 @@ cards:
   force: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: reluctant_conscript
   title: Reluctant Conscript
   types:
@@ -2050,7 +1887,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: Remove this Personality from the game after it is targeted, or when the Combat Segment of that
-    battlefield's battle ends. (Token — created in play; not deckable)
+    battlefield's battle ends.
 - id: daitans_ancestor
   title: Daitan's Ancestor
   types:
@@ -2065,7 +1902,6 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: fallen_marine
   title: Fallen Marine
   types:
@@ -2080,7 +1916,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: earthen_servant
   title: Earthen Servant
   types:
@@ -2094,7 +1929,7 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: Remove from the game after the battle ends. (Token — created in play; not deckable)
+  text: Remove from the game after the battle ends.
 - id: stone_sentinel
   title: Stone Sentinel
   types:
@@ -2110,7 +1945,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: May not be destroyed to pay costs. (Token — created in play; not deckable)
+  text: May not be destroyed to pay costs.
 - id: eighth_dragon
   title: Eighth Dragon
   types:
@@ -2128,7 +1963,6 @@ cards:
   personal_honor: 3
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: eiyas_shade
   title: Eiya's Shade
   types:
@@ -2142,7 +1976,6 @@ cards:
   force: 3
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: emperors_legion
   title: Emperor's Legion
   types:
@@ -2155,7 +1988,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: Banish this Personality at the end of the turn. (Token — created in play; not deckable)
 - id: erenas_avatar
   title: Erena's Avatar
   types:
@@ -2173,7 +2005,6 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: hunting_falcon
   title: Hunting Falcon
   types:
@@ -2188,7 +2019,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: forgotten_dead
   title: Forgotten Dead
   types:
@@ -2203,7 +2033,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: battlefield_revenant
   title: Battlefield Revenant
   types:
@@ -2219,7 +2048,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: armored_cavalry
   title: Armored Cavalry
   types:
@@ -2232,7 +2060,6 @@ cards:
   force: 4
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: fu_lengs_minion
   title: Fu Leng's Minion
   types:
@@ -2247,7 +2074,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: risen_ghul
   title: Risen Ghul
   types:
@@ -2264,7 +2090,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: gift_horse
   title: Gift Horse
   types:
@@ -2278,7 +2103,7 @@ cards:
   force: 0
   gold_cost: 0
   is_proxy: true
-  text: This Personality has Cavalry. (Token — created in play; not deckable)
+  text: This Personality has Cavalry.
 - id: goblin_rabble
   title: Goblin Rabble
   types:
@@ -2293,7 +2118,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: earthen_golem
   title: Earthen Golem
   types:
@@ -2312,7 +2136,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: Will not be destroyed for having 0 Chi. (Token — created in play; not deckable)
+  text: Will not be destroyed for having 0 Chi.
 - id: hida_fubatsus_armor
   title: Hida Fubatsu's Armor
   types:
@@ -2324,7 +2148,7 @@ cards:
   - Armor
   gold_cost: 0
   is_proxy: true
-  text: +1F. (Token — created in play; not deckable)
+  text: +1F.
 - id: hida_fubatsus_weapon
   title: Hida Fubatsu's Weapon
   types:
@@ -2336,7 +2160,7 @@ cards:
   - Weapon
   gold_cost: 0
   is_proxy: true
-  text: +1F. (Token — created in play; not deckable)
+  text: +1F.
 - id: hidas_fury
   title: Hida's Fury
   types:
@@ -2347,8 +2171,7 @@ cards:
   force: 4
   gold_cost: 0
   is_proxy: true
-  text: Remove this Follower from the game at the end of the turn unless you are a Crab Clan player. (Token
-    — created in play; not deckable)
+  text: Remove this Follower from the game at the end of the turn unless you are a Crab Clan player.
 - id: horoisos_scout
   title: Horoiso's Scout
   types:
@@ -2367,7 +2190,7 @@ cards:
   personal_honor: 3
   gold_cost: 0
   is_proxy: true
-  text: Remove this Personality from the game after the battle ends. (Token — created in play; not deckable)
+  text: Remove this Personality from the game after the battle ends.
 - id: house_geisha
   title: House Geisha
   types:
@@ -2382,7 +2205,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: You have -1 maximum hand size. (Token — created in play; not deckable)
+  text: You have -1 maximum hand size.
 - id: swift_outrider
   title: Swift Outrider
   types:
@@ -2395,7 +2218,6 @@ cards:
   force: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: illusory_shugenja
   title: Illusory Shugenja
   types:
@@ -2413,7 +2235,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: legion_armor
   title: Legion Armor
   types:
@@ -2425,7 +2246,6 @@ cards:
   - Armor
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: iron_blade
   title: Iron Blade
   types:
@@ -2437,7 +2257,6 @@ cards:
   - Weapon
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: isawa_tsumaros_illusion
   title: Isawa Tsumaro's Illusion
   types:
@@ -2454,8 +2273,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: While this Personality is in play, abilities on the target's spells have Home. (Token — created
-    in play; not deckable)
+  text: While this Personality is in play, abilities on the target's spells have Home.
 - id: jackal_pack
   title: Jackal Pack
   types:
@@ -2470,7 +2288,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: jade_dragon_avatar
   title: Jade Dragon Avatar
   types:
@@ -2489,7 +2306,6 @@ cards:
   personal_honor: 3
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: jinseis_avatar
   title: Jinsei's Avatar
   types:
@@ -2506,7 +2322,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: Your created Personalities have +1F. (Token — created in play; not deckable)
+  text: Your created Personalities have +1F.
 - id: kakita_sakis_armor
   title: Kakita Saki's Armor
   types:
@@ -2518,8 +2334,7 @@ cards:
   - Armor
   gold_cost: 0
   is_proxy: true
-  text: Attached Personality's Melee and Ranged Attacks have -3 strength. (Token — created in play; not
-    deckable)
+  text: Attached Personality's Melee and Ranged Attacks have -3 strength.
 - id: spirit_of_kamoko
   title: Spirit of Kamoko
   types:
@@ -2538,22 +2353,7 @@ cards:
   personal_honor: 5
   gold_cost: 0
   is_proxy: true
-  text: Remove this Personality from the game after the next Dynasty Phase begins. (Token — created in
-    play; not deckable)
-- id: kamokos_cavalry
-  title: Kamoko's Cavalry
-  types:
-  - Follower
-  - Proxy
-  decks:
-  - Other
-  keywords:
-  - Cavalry
-  force: 1
-  gold_cost: 0
-  is_proxy: true
-  text: After this Personality's Battle action targets Yogo Junzo, destroy him. (Token — created in play;
-    not deckable)
+  text: Remove this Personality from the game after the next Dynasty Phase begins.
 - id: kanekas_samurai
   title: Kaneka's Samurai
   types:
@@ -2569,7 +2369,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: When the turn ends, remove them from the game. (Token — created in play; not deckable)
+  text: When the turn ends, remove them from the game.
 - id: kichis_spirit
   title: Kichi's Spirit
   types:
@@ -2588,7 +2388,7 @@ cards:
   personal_honor: 3
   gold_cost: 0
   is_proxy: true
-  text: 'Battle: Target an enemy Personality: Reduce his Force to 0. (Token — created in play; not deckable)'
+  text: 'Battle: Target an enemy Personality: Reduce his Force to 0.'
 - id: legionnaire
   title: Legionnaire
   types:
@@ -2604,7 +2404,6 @@ cards:
   personal_honor: 4
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: matsu_ancestor
   title: Matsu Ancestor
   types:
@@ -2621,7 +2420,6 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: lost_soul
   title: Lost Soul
   types:
@@ -2635,7 +2433,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: makirtchs_ratling
   title: Mak'irtch's Ratling
   types:
@@ -2649,8 +2446,7 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: Permanently give this Follower all Tribe keywords that Mak'irtch has. (Token — created in play;
-    not deckable)
+  text: Permanently give this Follower all Tribe keywords that Mak'irtch has.
 - id: moto_gonnohyoes_cavalry
   title: Moto Gonnohyoe's Cavalry
   types:
@@ -2667,7 +2463,6 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: mountain_sentry
   title: Mountain Sentry
   types:
@@ -2686,8 +2481,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: Remove this Personality from the game after this battle's resolution. (Token — created in play;
-    not deckable)
+  text: Remove this Personality from the game after this battle's resolution.
 - id: naga_warrior
   title: Naga Warrior
   types:
@@ -2703,7 +2497,6 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: mantis_sailor
   title: Mantis Sailor
   types:
@@ -2716,7 +2509,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: deckhands
   title: Deckhands
   types:
@@ -2729,7 +2521,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: lurking_shinobi
   title: Lurking Shinobi
   types:
@@ -2744,7 +2535,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: shadow_ninja
   title: Shadow Ninja
   types:
@@ -2757,7 +2547,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: covert_ninja
   title: Covert Ninja
   types:
@@ -2771,7 +2560,6 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: Destroy this Follower before you reveal cards in your Provinces at the start of your next turn.
-    (Token — created in play; not deckable)
 - id: war_beast
   title: War Beast
   types:
@@ -2784,7 +2572,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: oni_whelp
   title: Oni Whelp
   types:
@@ -2801,7 +2588,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: oni_brood
   title: Oni Brood
   types:
@@ -2816,7 +2602,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: peasant_mob
   title: Peasant Mob
   types:
@@ -2827,7 +2612,6 @@ cards:
   force: 3
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: shiba_yojimbo
   title: Shiba Yojimbo
   types:
@@ -2845,7 +2629,6 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: nezumi_warrior
   title: Nezumi Warrior
   types:
@@ -2861,7 +2644,6 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: nezumi_scout
   title: Nezumi Scout
   types:
@@ -2875,7 +2657,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: nezumi_pack
   title: Nezumi Pack
   types:
@@ -2890,7 +2671,6 @@ cards:
   force: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: nezumi_whelp
   title: Nezumi Whelp
   types:
@@ -2906,7 +2686,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: bone_tribe_nezumi
   title: Bone Tribe Nezumi
   types:
@@ -2924,7 +2703,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: nezumi_cleaver
   title: Nezumi Cleaver
   types:
@@ -2936,7 +2714,7 @@ cards:
   - Weapon
   gold_cost: 0
   is_proxy: true
-  text: Attached Personality has +3F. (Token — created in play; not deckable)
+  text: Attached Personality has +3F.
 - id: hired_ronin
   title: Hired Ronin
   types:
@@ -2951,7 +2729,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: Remove him from the game after this battle ends. (Token — created in play; not deckable)
+  text: Remove him from the game after this battle ends.
 - id: recruited_ronin
   title: Recruited Ronin
   types:
@@ -2967,7 +2745,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: Remove him from the game when this turn ends. (Token — created in play; not deckable)
+  text: Remove him from the game when this turn ends.
 - id: mounted_samurai
   title: Mounted Samurai
   types:
@@ -2983,7 +2761,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: guardian_spirit
   title: Guardian Spirit
   types:
@@ -2997,7 +2774,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: scarab_ghul
   title: Scarab Ghul
   types:
@@ -3012,7 +2788,6 @@ cards:
   force: 3
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: sworn_yojimbo
   title: Sworn Yojimbo
   types:
@@ -3028,7 +2803,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: Remove this Personality from the game before this turn ends. (Token — created in play; not deckable)
+  text: Remove this Personality from the game before this turn ends.
 - id: sleeper_agent
   title: Sleeper Agent
   types:
@@ -3041,8 +2816,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: Remove from the game after two more Battle actions other than this one resolve this turn. (Token
-    — created in play; not deckable)
+  text: Remove from the game after two more Battle actions other than this one resolve this turn.
 - id: shireikans_bushi
   title: Shireikan's Bushi
   types:
@@ -3057,7 +2831,7 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-  text: Transfer all cards from Shireikan to this Personality. (Token — created in play; not deckable)
+  text: Transfer all cards from Shireikan to this Personality.
 - id: ancestral_shiryo
   title: Ancestral Shiryo
   types:
@@ -3070,7 +2844,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: hisashis_guard
   title: Hisashi's Guard
   types:
@@ -3088,7 +2861,6 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: shosuros_spy
   title: Shosuro's Spy
   types:
@@ -3106,7 +2878,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: After the battle ends, remove this Personality from the game, then return Shosuro Infiltrator
-    to play attached to this Personality. (Token — created in play; not deckable)
+    to play attached to this Personality.
 - id: lesser_spirit
   title: Lesser Spirit
   types:
@@ -3120,7 +2892,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: battle_ally
   title: Battle Ally
   types:
@@ -3133,7 +2904,6 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: tais_avatar
   title: Tai's Avatar
   types:
@@ -3146,7 +2916,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-  text: When the battle ends, remove this Personality from the game. (Token — created in play; not deckable)
+  text: When the battle ends, remove this Personality from the game.
 - id: tamed_beast
   title: Tamed Beast
   types:
@@ -3159,7 +2929,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: masterwork_blade
   title: Masterwork Blade
   types:
@@ -3172,7 +2941,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: 'Attached Personality has +2F. After this Personality assigns: Target another player. He gains
-    2 Honor. (Token — created in play; not deckable)'
+    2 Honor.'
 - id: shambling_dead
   title: Shambling Dead
   types:
@@ -3186,7 +2955,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: risen_dead
   title: Risen Dead
   types:
@@ -3201,7 +2969,6 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: utemaros_mercenary
   title: Utemaro's Mercenary
   types:
@@ -3215,7 +2982,7 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: Remove it from the game after the turn ends. (Token — created in play; not deckable)
+  text: Remove it from the game after the turn ends.
 - id: champion_duelist
   title: Champion Duelist
   types:
@@ -3231,7 +2998,7 @@ cards:
   personal_honor: 3
   gold_cost: 0
   is_proxy: true
-  text: Remove him from the game when your next turn ends. (Token — created in play; not deckable)
+  text: Remove him from the game when your next turn ends.
 - id: sezarus_inquisitor
   title: Sezaru's Inquisitor
   types:
@@ -3247,8 +3014,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: 'Until the game ends, remove these Shugenja from the game if that player ever controls zero Bloodspeaker
-    cards, and that player has the ability, " Open: Destroy all your Bloodspeakers." (Token — created
-    in play; not deckable)'
+    cards, and that player has the ability, " Open: Destroy all your Bloodspeakers."'
 - id: shadowlands_wretch
   title: Shadowlands Wretch
   types:
@@ -3262,7 +3028,6 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-  text: (Token — created in play; not deckable)
 - id: yobanjin_raider
   title: Yobanjin Raider
   types:
@@ -3278,7 +3043,6 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: Remove this Personality from the game after two more actions resolve or after the battle ends.
-    (Token — created in play; not deckable)
 - id: yobanjin_outrider
   title: Yobanjin Outrider
   types:
@@ -3292,4 +3056,4 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-  text: This Personality has Cavalry. (Token — created in play; not deckable)
+  text: This Personality has Cavalry.

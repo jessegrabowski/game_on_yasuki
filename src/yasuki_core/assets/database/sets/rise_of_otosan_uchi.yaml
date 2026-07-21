@@ -1224,6 +1224,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Flood from Beyond
+  creates:
+  - water_ancestor_terrain_strategy
   types:
   - Spell
   decks:
