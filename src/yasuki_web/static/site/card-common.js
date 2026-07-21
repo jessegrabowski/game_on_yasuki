@@ -29,9 +29,23 @@ export const displayName = (card) => {
   return card.is_unique ? '◆ ' + title : title;
 };
 
+// Personalities placeholder to their clan frame; unaligned (or a non-great-clan alignment) falls
+// back to DEFAULT_BY_TYPE.personality. Mirrors default_personality_image in yasuki_core/paths.py.
+const GREAT_CLANS = new Set([
+  'crab', 'crane', 'dragon', 'lion', 'mantis', 'naga', 'phoenix', 'scorpion', 'spider', 'unicorn',
+]);
+
+function personalityFallback(card) {
+  for (const clan of card.clans || []) {
+    const slug = clan.toLowerCase().replace(' clan', '').trim();
+    if (GREAT_CLANS.has(slug)) return `defaults/generic_personality_${slug}.jpg`;
+  }
+  return DEFAULT_BY_TYPE.personality;
+}
+
 export function fallbackSrc(card, imgBase) {
   const type = ((card.types || [])[0] || '').toLowerCase();
-  const path = DEFAULT_BY_TYPE[type];
+  const path = type === 'personality' ? personalityFallback(card) : DEFAULT_BY_TYPE[type];
   return path ? `${imgBase}/${path}` : null;
 }
 

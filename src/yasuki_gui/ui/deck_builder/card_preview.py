@@ -41,7 +41,6 @@ DEFAULT_BY_TYPE: dict[str, Path] = {
     "item": asset_paths.DEFAULT_ITEM,
     "follower": asset_paths.DEFAULT_FOLLOWER,
     "spell": asset_paths.DEFAULT_SPELL,
-    "personality": asset_paths.DEFAULT_PERSONALITY,
     "holding": asset_paths.DEFAULT_HOLDING,
     "event": asset_paths.DEFAULT_EVENT,
     "region": asset_paths.DEFAULT_REGION,
@@ -68,6 +67,8 @@ def front_image_source(card: dict, print_info: dict, repository):
 
     types = card.get("types") or []
     ctype = types[0].lower() if types else ""
+    if ctype == "personality":
+        return asset_paths.default_personality_image(card.get("clans"))
     return DEFAULT_BY_TYPE.get(ctype)
 
 

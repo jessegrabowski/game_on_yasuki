@@ -191,7 +191,7 @@ describe('preview rendering', () => {
     await showPreview(CARD, null, '/api');
 
     const el = document.getElementById('preview');
-    assert.ok(el.innerHTML.includes('defaults/generic_personality.jpg'));
+    assert.ok(el.innerHTML.includes('defaults/generic_personality_crab.jpg'));
   });
 
   it('renders fallback image when card has no prints and no image_path', async () => {
@@ -200,7 +200,17 @@ describe('preview rendering', () => {
     await showPreview(card, null, '/api');
 
     const el = document.getElementById('preview');
+    assert.ok(el.innerHTML.includes('defaults/generic_personality_crab.jpg'));
+  });
+
+  it('renders the base personality frame for an unaligned personality', async () => {
+    mockFetchPrints([]);
+    const card = { ...CARD, clans: [], image_path: null };
+    await showPreview(card, null, '/api');
+
+    const el = document.getElementById('preview');
     assert.ok(el.innerHTML.includes('defaults/generic_personality.jpg'));
+    assert.ok(!el.innerHTML.includes('generic_personality_'));
   });
 
   it('renders onerror fallback on img tag when print has image_path', async () => {
@@ -209,7 +219,7 @@ describe('preview rendering', () => {
 
     const el = document.getElementById('preview');
     assert.ok(el.innerHTML.includes('onerror'));
-    assert.ok(el.innerHTML.includes('defaults/generic_personality.jpg'));
+    assert.ok(el.innerHTML.includes('defaults/generic_personality_crab.jpg'));
   });
 
   it('renders flip button', async () => {

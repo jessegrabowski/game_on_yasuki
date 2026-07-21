@@ -37,6 +37,20 @@ describe('fallbackSrc', () => {
     );
   });
 
+  it('uses the clan frame for an aligned personality', () => {
+    assert.equal(
+      fallbackSrc({ types: ['Personality'], clans: ['Crane'] }, '/images'),
+      '/images/defaults/generic_personality_crane.jpg',
+    );
+  });
+
+  it('falls back to the base personality frame for a non-great-clan alignment', () => {
+    assert.equal(
+      fallbackSrc({ types: ['Personality'], clans: ['Ratling'] }, '/images'),
+      '/images/defaults/generic_personality.jpg',
+    );
+  });
+
   it('returns null for an unknown type', () => {
     assert.equal(fallbackSrc({ types: ['Mystery'] }, '/images'), null);
   });

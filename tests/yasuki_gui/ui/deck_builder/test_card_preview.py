@@ -18,6 +18,18 @@ def test_front_image_source_falls_back_to_type_default_when_image_missing():
     assert front_image_source(card, print_info, repository=None) == DEFAULT_BY_TYPE["strategy"]
 
 
+def test_front_image_source_uses_clan_frame_for_personality():
+    card = {"types": ["Personality"], "clans": ["Crane"]}
+    result = front_image_source(card, {"image_path": None}, repository=None)
+    assert result.name == "generic_personality_crane.jpg"
+
+
+def test_front_image_source_unaligned_personality_falls_back_to_base_frame():
+    card = {"types": ["Personality"], "clans": ["Ratling"]}
+    result = front_image_source(card, {"image_path": None}, repository=None)
+    assert result.name == "generic_personality.jpg"
+
+
 def test_back_image_source_none_for_single_sided_print():
     assert back_image_source({"image_path": "sets/x/a.jpg", "back_image_path": None}) is None
     assert back_image_source({"image_path": "sets/x/a.jpg"}) is None

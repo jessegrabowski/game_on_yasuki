@@ -57,3 +57,28 @@ DEFAULT_HOLDING: Path = DEFAULTS_DIR / "generic_holding.jpg"
 DEFAULT_EVENT: Path = DEFAULTS_DIR / "generic_event.jpg"
 DEFAULT_REGION: Path = DEFAULTS_DIR / "generic_region.jpg"
 DEFAULT_CELESTIAL: Path = DEFAULTS_DIR / "generic_celestial.jpg"
+
+_GREAT_CLANS = frozenset(
+    {
+        "crab",
+        "crane",
+        "dragon",
+        "lion",
+        "mantis",
+        "naga",
+        "phoenix",
+        "scorpion",
+        "spider",
+        "unicorn",
+    }
+)
+
+
+def default_personality_image(clans: list[str] | None) -> Path:
+    """The clan-specific placeholder frame for a Personality with no scanned print. Fall back to the
+    unaligned frame (``generic_personality.jpg``) when no great-clan alignment is present."""
+    for clan in clans or []:
+        slug = clan.lower().replace(" clan", "").strip()
+        if slug in _GREAT_CLANS:
+            return DEFAULTS_DIR / f"generic_personality_{slug}.jpg"
+    return DEFAULT_PERSONALITY
