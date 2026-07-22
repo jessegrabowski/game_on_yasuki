@@ -18,9 +18,9 @@ cards:
   flavor_text: <i>Deep in the heart of the Shadowlands, Junzo opens another scroll, and the souls of all
     of Rokugan's shugenja shudder.</i>
 - id: a_terrible_oath
-  creates:
-  - token_corruption
-  - token_oath
+  grants:
+  - corruption
+  - oath
   title: A Terrible Oath
   types:
   - Spell
@@ -91,8 +91,8 @@ cards:
   artist: Rob Alexander
   flavor_text: <i>An ancient spirit came to Toturi, willing to atone.</i>
 - title: An Untold Cost
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   types:
   - Event
   decks:
@@ -281,8 +281,8 @@ cards:
   rarity: Common
   artist: Nicola Leonard
 - id: black_wind_from_the_soul
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   title: Black Wind From the Soul
   types:
   - Spell
@@ -493,8 +493,8 @@ cards:
   artist: Brian Snoddy
   flavor_text: <i>"Out of my way, samurai. You don't need to die today."</i>
 - title: Dark Daughter of Fu Leng
-  creates:
-  - token_blood
+  grants:
+  - blood
   types:
   - Personality
   decks:
@@ -629,9 +629,9 @@ cards:
     pounded in her ears as she heard the steel snap. Lightning flashed behind him as his tetsubo rose
     above his head, ready to fall.</i>
 - title: Dripping Poison
-  creates:
-  - token_poison
-  - token_vial
+  grants:
+  - poison
+  - vial
   types:
   - Item
   decks:
@@ -1600,8 +1600,8 @@ cards:
   flavor_text: '<i>As they crushed our ranks, their leader showed his snaggly teeth and spoke with a beastly
     snarl: "So you thought I was alone...?"</i>'
 - title: Oni no Akeru
-  creates:
-  - token_void
+  grants:
+  - void
   types:
   - Personality
   decks:
@@ -1697,8 +1697,8 @@ cards:
   rarity: Uncommon
   artist: Quinton Hoover
 - title: Oni no Seiryoku
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Personality
   decks:
@@ -1899,8 +1899,8 @@ cards:
   artist: Wackwitz & Daily
   flavor_text: <i>Awaiting the hungry with full stomachs, that is mastering strength. - Sun Tzu</i>
 - id: return_of_the_fallen_lord
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   title: Return of the Fallen Lord
   types:
   - Spell
@@ -2429,8 +2429,8 @@ cards:
   rarity: Rare
   artist: Douglas Shuler
 - id: the_iron_citadel
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   title: The Iron Citadel
   types:
   - Spell
@@ -2656,8 +2656,8 @@ cards:
   rarity: Rare
   artist: Tom Biondolillo
 - id: the_walking_horror_of_fu_leng
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   title: The Walking Horror of Fu Leng
   types:
   - Spell
@@ -2682,9 +2682,9 @@ cards:
   rarity: Rare
   artist: Matt Wilson
 - id: the_wasting_disease
-  creates:
-  - token_corruption
-  - token_wasting
+  grants:
+  - corruption
+  - wasting
   title: The Wasting Disease
   types:
   - Spell

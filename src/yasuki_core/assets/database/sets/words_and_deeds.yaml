@@ -190,8 +190,8 @@ cards:
     do it for me!"</i>
   collector_number: '86'
 - title: Asahina Keitaro
-  creates:
-  - token_minus1c
+  grants:
+  - minus1c
   types:
   - Personality
   decks:
@@ -1464,8 +1464,8 @@ cards:
     and rice are not free." - Yasuki Jinn-Kuen</i>
   collector_number: '81'
 - title: Hurried Gempukku
-  creates:
-  - token_plus2f
+  grants:
+  - plus2f
   types:
   - Event
   decks:
@@ -2237,8 +2237,8 @@ cards:
     him?"</i>
   collector_number: '8'
 - title: Mirumoto Atsushi
-  creates:
-  - token_arrow
+  grants:
+  - arrow
   types:
   - Personality
   decks:
@@ -2293,8 +2293,8 @@ cards:
   flavor_text: <i>"You presume much, Mantis. You are not welcome here."</i>
   collector_number: '27'
 - title: Mirumoto Toshiyuki
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -2581,8 +2581,8 @@ cards:
     own life."</i>
   collector_number: '117'
 - title: Reckless Abandon
-  creates:
-  - token_minus4f
+  grants:
+  - minus4f
   types:
   - Strategy
   decks:

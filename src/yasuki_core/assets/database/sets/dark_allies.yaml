@@ -1692,8 +1692,8 @@ cards:
     islands. Whatever she seeks, I'm staying out of her way." - Yoritomo Yoyonagi</i>
   collector_number: '61'
 - title: Kyojin's Blade
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:
@@ -1846,8 +1846,8 @@ cards:
     of the House of the Morning Star</i>
   collector_number: '16'
 - title: Massive Power
-  creates:
-  - token_power
+  grants:
+  - power
   types:
   - Spell
   decks:
@@ -2204,8 +2204,8 @@ cards:
   flavor_text: <i>"Did you hear that noise, my lord?" "My lord?!?"</i>
   collector_number: '17'
 - title: Omen
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   types:
   - Personality
   decks:

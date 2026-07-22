@@ -1617,8 +1617,8 @@ cards:
   flavor_text: <i>"Honorless dog!" the samurai cried, Dairya looked down with his one good eye and smiled,
     slowly drawing the long sword from its saya.</i>
 - title: Oath of Fealty
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Strategy
   decks:

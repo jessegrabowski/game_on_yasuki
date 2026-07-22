@@ -565,10 +565,9 @@ def get_creates_for_cards(
 
     Reads the ``card_creates`` relation for every id in ``card_ids`` and fetches each distinct token
     card with the same shape ``get_card_by_id`` returns, so the card factory can build a live token
-    from it. Used once at deck load to populate ``TableState.creatable_tokens``.
-
-    Only spawnable cards are returned: stat-marker tokens (the ``Token``-typed ``+1F`` / Wealth
-    proxies) are host modifiers, not cards, so they are excluded from the Create menu and templates.
+    from it. Used once at deck load to populate ``TableState.creatable_tokens``. ``card_creates`` holds
+    only spawnable cards — counter/marker provenance lives in ``card_grants_counter`` — so no marker
+    filtering is needed here.
 
     Parameters
     ----------
@@ -591,11 +590,7 @@ def get_creates_for_cards(
             # resolved one level deep — no such data exists today.
             cur.execute(
                 "SELECT creator_card_id, created_card_id FROM card_creates "
-                "WHERE creator_card_id = ANY(%s) "
-                "AND NOT EXISTS ("
-                "  SELECT 1 FROM card_card_types t "
-                "  WHERE t.card_id = card_creates.created_card_id AND t.type = 'Token'"
-                ")",
+                "WHERE creator_card_id = ANY(%s)",
                 (card_ids,),
             )
             creates: dict[str, list[str]] = {}

@@ -1058,8 +1058,8 @@ cards:
     and merchants dance together in joyful harmony.</i>
   collector_number: '2'
 - title: Gunso Atshushi
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Follower
   decks:
@@ -1562,8 +1562,8 @@ cards:
   flavor_text: <i>"I pray for his wisdom as well as his power." - Isawa Kyoko</i>
   collector_number: '147'
 - title: Isawa's Blood
-  creates:
-  - token_minus1c
+  grants:
+  - minus1c
   types:
   - Spell
   decks:
@@ -1913,8 +1913,8 @@ cards:
     you stray."</i>
   collector_number: '15'
 - title: Kusari-Gama
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Item
   decks:

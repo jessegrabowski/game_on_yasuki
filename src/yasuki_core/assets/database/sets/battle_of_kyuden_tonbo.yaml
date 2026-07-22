@@ -665,8 +665,8 @@ cards:
     I only wish Mariko could be spared."</i>
   collector_number: '68'
 - title: Fire Blossom
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -998,8 +998,8 @@ cards:
     challenge!" - Togashi Hogai</i>
   collector_number: '76'
 - title: Laughter of the Flames
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Strategy
   decks:
@@ -1772,8 +1772,8 @@ cards:
     remembers his short time at the Imperial Court fondly.</i>
   collector_number: '26'
 - title: Togashi Konishi
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -1892,9 +1892,9 @@ cards:
     for the Empress, yet still advises his clan." - Mirumoto Kei</i>
   collector_number: '30'
 - title: Togashi Shintaro
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:

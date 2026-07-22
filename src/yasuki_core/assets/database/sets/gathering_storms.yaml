@@ -685,8 +685,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Otokoshi District
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -750,9 +750,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Questionable Market
-  creates:
-  - token_plus1gp
-  - token_wealth
+  grants:
+  - plus1gp
+  - wealth
   types:
   - Holding
   decks:
@@ -933,8 +933,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Shattered Stormfront of the Mantis
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Stronghold
   decks:
@@ -959,9 +959,9 @@ cards:
   doublesided: true
   gold_production: 3
 - title: Togashi Ogai
-  creates:
-  - token_flow
-  - token_wealth
+  grants:
+  - flow
+  - wealth
   types:
   - Personality
   decks:

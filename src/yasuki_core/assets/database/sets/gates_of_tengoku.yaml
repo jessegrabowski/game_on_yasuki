@@ -520,8 +520,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Dark Oracle of Earth, The Broken Man
-  creates:
-  - token_minus1gp
+  grants:
+  - minus1gp
   types:
   - Holding
   decks:
@@ -578,8 +578,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Dark Oracle of Water, Hida Saiyuki
-  creates:
-  - token_erosion
+  grants:
+  - erosion
   types:
   - Holding
   decks:
@@ -722,7 +722,8 @@ cards:
 - title: Favor of the Blessed Guard
   creates:
   - ancestor_yojimbo_follower_0f
-  - token_sincerity
+  grants:
+  - sincerity
   types:
   - Strategy
   decks:
@@ -784,9 +785,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Haruna
-  creates:
-  - token_plus1f
-  - token_wealth
+  grants:
+  - plus1f
+  - wealth
   types:
   - Personality
   decks:
@@ -1949,8 +1950,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shrine of Sincerity
-  creates:
-  - token_sincerity
+  grants:
+  - sincerity
   types:
   - Holding
   decks:
@@ -2295,8 +2296,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Noritada, Defender of the High House
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Personality
   decks:
@@ -2496,8 +2497,9 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Wataru's Masterpiece
   creates:
-  - token_poison
   - watarus_potion
+  grants:
+  - poison
   types:
   - Spell
   decks:
@@ -2518,8 +2520,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yoritomo Robusuta, Master of Gaijin Pepper
-  creates:
-  - token_explosive
+  grants:
+  - explosive
   types:
   - Personality
   decks:

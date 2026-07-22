@@ -403,8 +403,8 @@ cards:
   artist: Chris Pritchard
   collector_number: '112'
 - title: Bayushi Azumamoru
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -519,8 +519,8 @@ cards:
     is. Until then, watch him." - Shosuro Jimen</i>
   collector_number: '57'
 - title: Bestial Rage
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -985,8 +985,8 @@ cards:
   flavor_text: <i>"Such a fascinating comment, Bayushi-san. I am sure it will rivet all who hear of it."</i>
   collector_number: '22'
 - title: Doji Shikatsu
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -1050,8 +1050,8 @@ cards:
   flavor_text: <i>"There is so much beyond the world that mortals know," Kimi whispered.</i>
   collector_number: '103'
 - title: Ekibyogami's Spite
-  creates:
-  - token_minus1c
+  grants:
+  - minus1c
   types:
   - Celestial
   decks:
@@ -1661,8 +1661,8 @@ cards:
   flavor_text: <i>"It is moving."</i>
   collector_number: '51'
 - title: Isawa Kuniki
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -1891,8 +1891,8 @@ cards:
   flavor_text: <i>"This war is a chance for us to erase the stain upon the Khol's name." - Moto Chen</i>
   collector_number: '87'
 - title: Kitsuki Bokuko
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -3326,8 +3326,8 @@ cards:
     I pray that the Lords of Death will reward you well." - Mirumoto Washizuka</i>
   collector_number: '155'
 - title: Togashi Okamoto
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -3580,9 +3580,9 @@ cards:
     from afar."</i>
   collector_number: '43'
 - title: Ujisato
-  creates:
-  - token_haunted
-  - token_soul
+  grants:
+  - haunted
+  - soul
   types:
   - Personality
   decks:

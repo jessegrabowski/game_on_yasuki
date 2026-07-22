@@ -950,8 +950,8 @@ cards:
   flavor_text: <i>He tore the air to ribbons, and from the mountains of the Dragon I saw the smoke and
     fire of the Kaiu Wall. "Fear not," he hissed. "There is more than one way to defeat the Darkness."</i>
 - title: Gift of the Maker
-  creates:
-  - token_plus1f_minus1c
+  grants:
+  - plus1f_minus1c
   types:
   - Spell
   decks:
@@ -1224,8 +1224,8 @@ cards:
   flavor_text: <i>For centuries he protected the pale body of the Star. How could he refuse to follow
     her, when she called his name? No matter to what land he travels, he will always remember her face.</i>
 - title: Hoshi Wayan
-  creates:
-  - token_tattoo
+  grants:
+  - tattoo
   types:
   - Personality
   decks:

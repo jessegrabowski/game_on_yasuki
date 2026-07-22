@@ -513,8 +513,8 @@ cards:
   flavor_text: <i>"A white fire struck the thing down. I felt all the fear in my heart burn as well."
     - Shisobi's Tale</i>
 - id: dark_divination
-  creates:
-  - token_minus1c
+  grants:
+  - minus1c
   title: Dark Divination
   types:
   - Spell
@@ -791,8 +791,8 @@ cards:
   flavor_text: <i>A fallen foe will prove to be their undoing. They will be led astray by a deceiver,
     and the true hero will arise too late to save them. - The Prophecies of Uikku</i>
 - title: Doom of the Dragon
-  creates:
-  - token_doom_of_the_dragon
+  grants:
+  - doom_of_the_dragon
   types:
   - Event
   decks:
@@ -811,8 +811,8 @@ cards:
   rarity: Uncommon
   artist: Matt Wilson
 - title: Doom of the Lion
-  creates:
-  - token_doom
+  grants:
+  - doom
   types:
   - Event
   decks:
@@ -1443,8 +1443,8 @@ cards:
   flavor_text: <i>Genaru pulled back, set his aim, and let the fire roar and fly by his face into the
     Lion's chest.</i>
 - title: Jade Goblet
-  creates:
-  - token_goblet
+  grants:
+  - goblet
   types:
   - Item
   decks:
@@ -1539,8 +1539,8 @@ cards:
   rarity: Rare
   artist: Randy Elliott
 - title: Kolat Oyabun
-  creates:
-  - token_conspiracy
+  grants:
+  - conspiracy
   types:
   - Holding
   decks:
@@ -1652,8 +1652,8 @@ cards:
   rarity: Rare
   artist: Shipley & Daily
 - title: Mara
-  creates:
-  - token_minus2f
+  grants:
+  - minus2f
   types:
   - Personality
   decks:
@@ -2049,8 +2049,8 @@ cards:
   artist: Wackwitz & Daily
   flavor_text: <i>"The pearls of the Naga are as pure as their hearts." - Togashi Mitsu</i>
 - title: Pennaggolan
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Personality
   decks:
@@ -2166,8 +2166,8 @@ cards:
   artist: Randy Elliott
   flavor_text: <i>"I am not here to protect you. I am here for my people and my home, not your Throne."</i>
 - title: Rampant Plague
-  creates:
-  - token_minus1c
+  grants:
+  - minus1c
   types:
   - Event
   decks:
@@ -2384,8 +2384,8 @@ cards:
   flavor_text: <i>"'Lose your fear of them!" he called out to the Phoenix samurai. "They are not your
     ancestors, they are only dead men! Fight or we will be lost!'"</i>
 - id: shapeshifting
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   title: Shapeshifting
   types:
   - Spell
@@ -3075,8 +3075,8 @@ cards:
   flavor_text: <i>As the fury of Osano-Wo fell upon them, I saw the mighty Oni tremble in fear and the
     laughter of the Thunder Dragon was like lightning on his breath.</i>
 - title: Togashi Gaijutsu
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Personality
   decks:
@@ -3124,8 +3124,8 @@ cards:
   flavor_text: <i>The words were read and the air turned thick with the sounds of screams as the creatures
     were entombed in bodies of jade - trapped forever in a prison of pain. - Mirumoto Daini</i>
 - id: touch_of_despair
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   title: Touch of Despair
   types:
   - Spell
@@ -3147,8 +3147,8 @@ cards:
   flavor_text: <i>My doom you have chased, my end you have sought My evil embraced, in my web you are
     caught.</i>
 - id: touch_of_fu_leng
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   title: Touch of Fu Leng
   types:
   - Spell

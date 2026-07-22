@@ -281,8 +281,8 @@ cards:
   flavor_text: <i>The madness of the Bitter Lies proved effective even against Kali-Ma's forces.</i>
   collector_number: '55'
 - title: Bayushi Keirei
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -423,8 +423,8 @@ cards:
   flavor_text: <i>With the wrong location, one can lose a battle before it begins.</i>
   collector_number: '113'
 - title: Chuda Kanashi
-  creates:
-  - token_web
+  grants:
+  - web
   types:
   - Personality
   decks:
@@ -2206,8 +2206,8 @@ cards:
   flavor_text: <i>A well-kept secret of the Toturi Dynasty.</i>
   collector_number: '81'
 - title: Mouth of the Plague
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Region
   decks:
@@ -2478,8 +2478,8 @@ cards:
     that none approach before the birth of the heir." - Mirumoto Mori</i>
   collector_number: '140'
 - title: Plagued Terrain
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Strategy
   decks:
@@ -3189,8 +3189,8 @@ cards:
   flavor_text: <i>"The Realm of Dreams will grant you its insight." - Ryoshun</i>
   collector_number: '98'
 - title: Tamori Shimura
-  creates:
-  - token_rage
+  grants:
+  - rage
   types:
   - Personality
   decks:

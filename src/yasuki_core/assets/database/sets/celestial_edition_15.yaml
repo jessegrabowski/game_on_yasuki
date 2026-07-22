@@ -323,8 +323,8 @@ cards:
   flavor_text: <i>There are ways to counter the Mantis' power.</i>
   collector_number: '7'
 - title: Bloodsword
-  creates:
-  - token_plus2f_plus2c
+  grants:
+  - plus2f_plus2c
   types:
   - Item
   decks:
@@ -2635,8 +2635,8 @@ cards:
   flavor_text: <i>"They...fell off a cart." - Satoshi</i>
   collector_number: '100'
 - title: Secrets on the Wind
-  creates:
-  - token_chi
+  grants:
+  - chi
   types:
   - Spell
   decks:
@@ -3172,8 +3172,8 @@ cards:
   flavor_text: <i>"Whatever is required. No matter the cost." - Hida Reiha</i>
   collector_number: '109'
 - title: Togashi Mitsu
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Personality
   decks:

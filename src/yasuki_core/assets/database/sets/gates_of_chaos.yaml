@@ -1,8 +1,8 @@
 set: Gates of Chaos
 cards:
 - title: A Doomseeker's Tomb
-  creates:
-  - token_plus1f_plus1c_plus1ph
+  grants:
+  - plus1f_plus1c_plus1ph
   types:
   - Strategy
   decks:
@@ -518,8 +518,8 @@ cards:
   collector_number: '98'
   designer: Bryan
 - title: Blood of Shahai
-  creates:
-  - token_blood
+  grants:
+  - blood
   types:
   - Celestial
   decks:
@@ -704,8 +704,8 @@ cards:
   collector_number: '117'
   designer: Bryan
 - title: Clay Kshatriya
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Follower
   decks:
@@ -982,8 +982,8 @@ cards:
   collector_number: '88'
   designer: Loki
 - title: Doji Razan
-  creates:
-  - token_plus1c
+  grants:
+  - plus1c
   types:
   - Personality
   decks:
@@ -1245,8 +1245,8 @@ cards:
   collector_number: '9'
   designer: Loki
 - title: Hida Gojiro
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -1530,8 +1530,8 @@ cards:
   collector_number: '10'
   designer: Duncan
 - title: Isawa Hajime
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -2514,8 +2514,8 @@ cards:
   collector_number: '135'
   designer: Bryan
 - title: Poison the Cup
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Spell
   decks:
@@ -2603,8 +2603,8 @@ cards:
   collector_number: '137'
   designer: Bryan
 - title: Red Hunger's Fang
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Item
   decks:
@@ -2890,8 +2890,8 @@ cards:
   collector_number: '74'
   designer: Bryan
 - title: Shosuro Nigawa
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -3433,9 +3433,9 @@ cards:
   collector_number: '15'
   designer: Loki
 - title: Togashi Noritada
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:
@@ -3550,8 +3550,8 @@ cards:
   collector_number: '147'
   designer: Duncan
 - title: Translated Story of Shaharazad
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:
@@ -3645,8 +3645,8 @@ cards:
   collector_number: '149'
   designer: Bryan
 - title: Utaku Sayaka
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:

@@ -575,8 +575,8 @@ cards:
   collector_number: '117'
   designer: Jeremy
 - title: Bookkeeper
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -2292,8 +2292,8 @@ cards:
   collector_number: '34'
   designer: Randy
 - title: Mobile Troops
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Follower
   decks:
@@ -2984,8 +2984,8 @@ cards:
   collector_number: '60'
   designer: Jeremy
 - title: Shosuro Sadao
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -3059,8 +3059,8 @@ cards:
   collector_number: '108'
   designer: Trevor
 - title: Singing Blade
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:
@@ -3514,8 +3514,8 @@ cards:
   collector_number: '100'
   designer: Jeremy
 - title: The Blessing
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Event
   decks:
@@ -3558,8 +3558,8 @@ cards:
   collector_number: '109'
   designer: Randy
 - title: The Dragon's Talon
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Spell
   decks:
@@ -3626,8 +3626,8 @@ cards:
   collector_number: '111'
   designer: Jeremy
 - title: Thousand Year Rivalry
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -3889,8 +3889,8 @@ cards:
   artist: Gong Studios
   collector_number: '32'
 - title: Unsanctioned Strike
-  creates:
-  - token_minus1f_minus1c
+  grants:
+  - minus1f_minus1c
   types:
   - Strategy
   decks:

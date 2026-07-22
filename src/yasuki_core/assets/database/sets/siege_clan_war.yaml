@@ -16,8 +16,8 @@ cards:
   collector_number: '10'
   designer: Bryan
 - title: Bayushi Kachiko, Seven Thunder
-  creates:
-  - token_minus1f_minus1c
+  grants:
+  - minus1f_minus1c
   types:
   - Personality
   decks:
@@ -481,8 +481,8 @@ cards:
   collector_number: '38'
   designer: Bryan
 - title: Insidious Influence
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   types:
   - Strategy
   decks:
@@ -850,8 +850,8 @@ cards:
   collector_number: '5'
   designer: Bryan
 - title: Parasite
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   types:
   - Item
   decks:
@@ -1463,8 +1463,8 @@ cards:
   collector_number: '1'
   designer: Bryan
 - title: Throne Room
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   types:
   - Territory
   decks:

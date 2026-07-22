@@ -597,8 +597,8 @@ cards:
   rarity: Common
   artist: Monika Livingstone
 - title: Quarry
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:

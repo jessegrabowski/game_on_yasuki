@@ -329,8 +329,8 @@ cards:
   flavor_text: <i>"If it were not for those honored nobles who carry their love of Rokugan to the farthest
     shores, our Empire would not be what it is today, sire." - Kakita Yoshi</i>
 - title: Iuchi Shahai
-  creates:
-  - token_maho
+  grants:
+  - maho
   types:
   - Personality
   decks:
@@ -808,8 +808,8 @@ cards:
   flavor_text: <i>"Trapped and starving in Hiruma palace, we had lost hope of escape. Then, they crept
     from the shadows, bearing rice and sake to sustain us." - Hida Yakamo</i>
 - title: Tattooed Men
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Follower
   decks:

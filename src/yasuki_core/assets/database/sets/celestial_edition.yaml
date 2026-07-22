@@ -63,8 +63,8 @@ cards:
     Clans." - The Chronicles of Empress Iweko, Part II</i>
   collector_number: '2'
 - title: A Walking Death
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Event
   decks:
@@ -802,8 +802,8 @@ cards:
   flavor_text: <i>"Indeed, Cranes are useful friends. But I can offer you so much more...."</i>
   collector_number: '134'
 - title: Bayushi Kurumi
-  creates:
-  - token_minus1f_minus1c
+  grants:
+  - minus1f_minus1c
   types:
   - Personality
   decks:
@@ -1064,8 +1064,8 @@ cards:
     Ayano</i>
   collector_number: '339'
 - title: Blowdarts
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Item
   decks:
@@ -7065,8 +7065,8 @@ cards:
     no mortal has ever seen, save perhaps for the insidious members of the Spider Clan.</i>
   collector_number: '50'
 - title: Shio no Oni
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:

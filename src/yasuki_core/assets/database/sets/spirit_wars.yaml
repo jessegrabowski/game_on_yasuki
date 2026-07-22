@@ -4031,8 +4031,8 @@ cards:
   flavor_text: <i>"Come, come, Otomo-sama. All wars must have soldiers, and soldiers must have weapons.
     Where else can you get such fine wares, now that the spirits have taken the mines of the Crab?"</i>
 - title: West Wall of Otosan Uchi
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   types:
   - Holding
   decks:

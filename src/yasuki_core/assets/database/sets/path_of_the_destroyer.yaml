@@ -1549,8 +1549,8 @@ cards:
   flavor_text: <i>"They are weak! Honor lends us strength! To victory!"</i>
   collector_number: '103'
 - title: Isawa Fosuta
-  creates:
-  - token_curse
+  grants:
+  - curse
   types:
   - Personality
   decks:
@@ -2232,8 +2232,8 @@ cards:
   flavor_text: <i>"So what if I am remembered as a villain? I will be remembered!" - Moto Kang</i>
   collector_number: '150'
 - title: Moto Paisei
-  creates:
-  - token_sake
+  grants:
+  - sake
   types:
   - Personality
   decks:
@@ -2305,8 +2305,8 @@ cards:
     our Lord with respect." - Torao</i>
   collector_number: '112'
 - title: Nightshade Touch
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Strategy
   decks:
@@ -3621,8 +3621,8 @@ cards:
   flavor_text: <i>"Destroyers? They have no idea what the word means! They will learn!"</i>
   collector_number: '79'
 - title: Walk in Shadows
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Strategy
   decks:

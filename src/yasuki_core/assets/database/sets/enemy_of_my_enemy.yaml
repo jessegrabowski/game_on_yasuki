@@ -2804,9 +2804,9 @@ cards:
   artist: Brad Williams
   collector_number: '155'
 - title: Shosuro Adeiko
-  creates:
-  - token_minus1c
-  - token_minus3f_minus1c
+  grants:
+  - minus1c
+  - minus3f_minus1c
   types:
   - Personality
   decks:

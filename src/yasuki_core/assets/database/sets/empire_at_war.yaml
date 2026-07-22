@@ -1700,8 +1700,8 @@ cards:
     push forward. No longer. I will either free them, or know their fate."</i>
   collector_number: '16'
 - title: Honorable Death
-  creates:
-  - token_fury
+  grants:
+  - fury
   types:
   - Strategy
   decks:
@@ -2451,8 +2451,8 @@ cards:
     to a calculating, efficient warrior. Already the Yobanjin fear his name." - Mirumoto Kenzo</i>
   collector_number: '28'
 - title: Mirumoto Kenzo
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -2910,7 +2910,8 @@ cards:
 - title: Savagery
   creates:
   - improvised_weapon
-  - token_minus3f
+  grants:
+  - minus3f
   types:
   - Strategy
   decks:

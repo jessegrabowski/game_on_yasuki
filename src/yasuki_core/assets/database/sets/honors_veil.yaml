@@ -496,8 +496,8 @@ cards:
     Shaitung</i>
   collector_number: '150'
 - title: Cornered Market
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Strategy
   decks:
@@ -2124,8 +2124,8 @@ cards:
   flavor_text: <i>"Virtue is a compaion that never tires, never abandons you."</i>
   collector_number: '37'
 - title: Mirumoto Katsutoshi
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -2547,8 +2547,8 @@ cards:
   flavor_text: <i>Fear the students of the reborn Hiruma school.</i>
   collector_number: '148'
 - title: Respect Among Warriors
-  creates:
-  - token_plus3f
+  grants:
+  - plus3f
   types:
   - Strategy
   decks:

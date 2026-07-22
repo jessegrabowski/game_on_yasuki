@@ -1,8 +1,8 @@
 set: Chaos Reigns Part II
 cards:
 - title: '"Failure, My Sensei"'
-  creates:
-  - token_lesson
+  grants:
+  - lesson
   types:
   - Item
   decks:
@@ -292,8 +292,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Chojiro
-  creates:
-  - token_lesson
+  grants:
+  - lesson
   types:
   - Personality
   decks:
@@ -412,8 +412,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Fortified Farmlands
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -592,8 +592,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hotaru Okane, the Last Light
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -759,8 +759,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kaiu Ishiku
-  creates:
-  - token_structure
+  grants:
+  - structure
   types:
   - Personality
   decks:
@@ -894,8 +894,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Matsu Kurutta
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -941,8 +941,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Buyan, Death's Messenger
-  creates:
-  - token_minus1ps
+  grants:
+  - minus1ps
   types:
   - Personality
   decks:
@@ -974,8 +974,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Houkai
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Personality
   decks:
@@ -1035,8 +1035,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Nezumi Warrens
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -1130,8 +1130,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Rice Farm
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -1410,8 +1410,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Susumu Geiko
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -1528,8 +1528,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tetsubo of Seven Battles
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:
@@ -1645,8 +1645,8 @@ cards:
   doublesided: true
   gold_production: 2
 - title: The First Kengun
-  creates:
-  - token_recruit
+  grants:
+  - recruit
   types:
   - Follower
   decks:
@@ -1673,8 +1673,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Head of My Enemy
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Strategy
   decks:
@@ -1955,8 +1955,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Wheat Farm
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:

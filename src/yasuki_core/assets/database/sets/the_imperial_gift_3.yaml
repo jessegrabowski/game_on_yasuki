@@ -491,7 +491,8 @@ cards:
 - title: Kazuwaru
   creates:
   - improvised_weapon
-  - token_minus3f
+  grants:
+  - minus3f
   types:
   - Personality
   decks:

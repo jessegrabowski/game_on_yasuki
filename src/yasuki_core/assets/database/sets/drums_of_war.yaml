@@ -251,8 +251,8 @@ cards:
   flavor_text: <i>"I live for her. You die for my lord."</i>
   collector_number: '47'
 - title: Blade of Hubris
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:
@@ -2951,9 +2951,9 @@ cards:
     one knows the reason." - Doji Soh</i>
   collector_number: '140'
 - title: Togashi Mitsu
-  creates:
-  - token_fire
-  - token_minus1f
+  grants:
+  - fire
+  - minus1f
   types:
   - Personality
   decks:

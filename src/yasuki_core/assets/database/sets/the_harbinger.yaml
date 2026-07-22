@@ -1219,8 +1219,8 @@ cards:
     - Kakita Hideo</i>
   collector_number: '102'
 - title: Flawless Assassin
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Follower
   decks:

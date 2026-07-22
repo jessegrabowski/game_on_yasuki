@@ -80,8 +80,8 @@ cards:
     of war."</i>
   collector_number: '94'
 - title: Aka-Name
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -2483,8 +2483,8 @@ cards:
   flavor_text: <i>The City of Tears if well-defended now.</i>
   collector_number: '42'
 - title: Shinbone Warpack
-  creates:
-  - token_plus2f
+  grants:
+  - plus2f
   types:
   - Personality
   decks:
@@ -2545,8 +2545,8 @@ cards:
     revolutions.</i>
   collector_number: '72'
 - title: Shinjo Saihan
-  creates:
-  - token_plus2f
+  grants:
+  - plus2f
   types:
   - Personality
   decks:

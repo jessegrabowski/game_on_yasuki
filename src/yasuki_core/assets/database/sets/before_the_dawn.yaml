@@ -1,8 +1,8 @@
 set: Before the Dawn
 cards:
 - title: A Champion in Court
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -478,8 +478,8 @@ cards:
     the Scorpion will end you."</i>
   collector_number: '54'
 - title: Beautiful Host
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Holding
   decks:
@@ -2258,8 +2258,8 @@ cards:
     front.</i>
   collector_number: '15'
 - title: No Time for Games
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -3260,8 +3260,8 @@ cards:
     - Asako Bare</i>
   collector_number: '78'
 - title: The Agony of Her Gaze
-  creates:
-  - token_frenzy
+  grants:
+  - frenzy
   types:
   - Event
   decks:
@@ -3529,9 +3529,9 @@ cards:
   flavor_text: <i>"You think like the earth. Do not be restricted. Think like the wind, and all is possible."</i>
   collector_number: '150'
 - title: Togashi Sakata
-  creates:
-  - token_fire
-  - token_sake
+  grants:
+  - fire
+  - sake
   types:
   - Personality
   decks:

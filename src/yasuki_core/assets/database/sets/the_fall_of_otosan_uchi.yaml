@@ -1049,8 +1049,8 @@ cards:
     One who knows all, begins learning anew."</i>
   collector_number: '153'
 - title: Hungry Ghost
-  creates:
-  - token_spirit
+  grants:
+  - spirit
   types:
   - Holding
   decks:
@@ -1988,8 +1988,8 @@ cards:
   artist: Bryon Wackwitz
   collector_number: '120'
 - title: Moshi Hinome
-  creates:
-  - token_aura
+  grants:
+  - aura
   types:
   - Personality
   decks:
@@ -2759,8 +2759,8 @@ cards:
     as an ally."</i>
   collector_number: '102'
 - title: Summon the Dead
-  creates:
-  - token_porcelain
+  grants:
+  - porcelain
   types:
   - Spell
   decks:

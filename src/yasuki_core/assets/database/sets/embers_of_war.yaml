@@ -641,8 +641,8 @@ cards:
   collector_number: '90'
   designer: Bryan
 - title: Deadly Discipline
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -1516,9 +1516,9 @@ cards:
   collector_number: '46'
   designer: Bryan
 - title: Isawa Mina
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:
@@ -3415,8 +3415,8 @@ cards:
   collector_number: '145'
   designer: Loki
 - title: The Cycle of Vengeance
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:

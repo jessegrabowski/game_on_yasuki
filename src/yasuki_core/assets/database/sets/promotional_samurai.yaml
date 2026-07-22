@@ -1333,8 +1333,8 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>Berserkers do not fear death, for it is their constant companion.</i>
 - title: Equipment Storage
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Holding
   decks:
@@ -1894,8 +1894,8 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>Debauchery and deceit in equal measure.</b>
 - title: Hunger of the Dead
-  creates:
-  - token_minus1f_minus1c
+  grants:
+  - minus1f_minus1c
   types:
   - Event
   decks:
@@ -3409,8 +3409,8 @@ cards:
   artist: Doug Kovacs
   flavor_text: <i>I live but to serve.</i>
 - title: Poison Sake
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Strategy
   decks:
@@ -4266,9 +4266,9 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>"Just another day on the Wall, eh men?"</i>
 - title: Striking the Balance
-  creates:
-  - token_plus1f
-  - token_plus1ph
+  grants:
+  - plus1f
+  - plus1ph
   types:
   - Strategy
   decks:
@@ -4894,8 +4894,8 @@ cards:
   flavor_text: <i>The Unicorn worship their gaijin gods of justice, the Lords of Death, within. Beware
     their judgment.</i>
 - title: The Trackless Road
-  creates:
-  - token_mastery
+  grants:
+  - mastery
   types:
   - Strategy
   decks:

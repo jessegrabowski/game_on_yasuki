@@ -315,8 +315,8 @@ cards:
   collector_number: '52'
   designer: Loki
 - title: Bayushi Jin-e
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -590,8 +590,8 @@ cards:
   collector_number: '79'
   designer: Thomas
 - title: Dagger of Crystal Wind
-  creates:
-  - token_obsession
+  grants:
+  - obsession
   types:
   - Item
   decks:
@@ -648,8 +648,8 @@ cards:
   collector_number: '23'
   designer: Thomas
 - title: Daidoji Tametaka
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Personality
   decks:
@@ -1916,8 +1916,8 @@ cards:
   collector_number: '41'
   designer: Bryan
 - title: Knowledge and Power
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -3116,8 +3116,8 @@ cards:
   collector_number: '8'
   designer: Bryan
 - title: The Broken Man
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -3744,8 +3744,8 @@ cards:
   collector_number: '109'
   designer: Duncan
 - title: Yoritomo Toganin
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:

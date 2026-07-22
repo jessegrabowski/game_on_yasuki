@@ -395,8 +395,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Channel the Fire Dragon
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Strategy
   decks:
@@ -764,8 +764,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Flock of Blood
-  creates:
-  - token_plus1f_minus1c
+  grants:
+  - plus1f_minus1c
   types:
   - Spell
   decks:
@@ -882,8 +882,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Kazuko
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Personality
   decks:
@@ -1214,8 +1214,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Interesting Stick
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:
@@ -1574,8 +1574,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - id: kisadas_shrine_2
-  creates:
-  - token_plus1ps
+  grants:
+  - plus1ps
   title: Kisada's Shrine
   types:
   - Holding
@@ -1861,8 +1861,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Minor Illness
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Strategy
   decks:
@@ -2024,8 +2024,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Needles of Dust
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Spell
   decks:
@@ -2120,8 +2120,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Open the Way
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Spell
   decks:
@@ -2171,8 +2171,8 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Order of the Shattered Star
   gold_production: 0
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Sensei
   decks:
@@ -2245,8 +2245,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Renyu, Apocalypse
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Personality
   decks:
@@ -2512,8 +2512,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Soshi Aoto, Master Assassin
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -2622,8 +2622,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tanegashima
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Item
   decks:
@@ -2869,9 +2869,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Kyo
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:
@@ -3009,8 +3009,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Twentieth Legion
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Follower
   decks:
@@ -3375,8 +3375,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Poisoned Weapon
-  creates:
-  - token_poison
+  grants:
+  - poison
   extended_title: Poisoned Weapon • Experienced
   types:
   - Strategy

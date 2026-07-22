@@ -2016,8 +2016,8 @@ cards:
   artist: Llyn Hunter
   collector_number: '108'
 - title: Official Papers
-  creates:
-  - token_favor
+  grants:
+  - favor
   types:
   - Item
   decks:
@@ -3336,7 +3336,8 @@ cards:
 - title: Wretches
   creates:
   - shadowlands_wretch
-  - token_worker
+  grants:
+  - worker
   types:
   - Holding
   decks:
@@ -3356,8 +3357,8 @@ cards:
   artist: Drew Baker
   collector_number: '22'
 - title: Writ of Conscription
-  creates:
-  - token_favor
+  grants:
+  - favor
   types:
   - Item
   decks:
@@ -3381,8 +3382,8 @@ cards:
   artist: Mike Jackson
   collector_number: '138'
 - title: Writ of Justice
-  creates:
-  - token_favor
+  grants:
+  - favor
   types:
   - Item
   decks:
@@ -3406,8 +3407,8 @@ cards:
   artist: Steve Snyder
   collector_number: '142'
 - title: Writ of Peace
-  creates:
-  - token_favor
+  grants:
+  - favor
   types:
   - Item
   decks:
