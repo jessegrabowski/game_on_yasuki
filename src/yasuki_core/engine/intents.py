@@ -346,7 +346,8 @@ class SpawnCard:
     The card id is assigned by the caller and recorded, so a replay reproduces the same card. The
     source is exactly one of: ``token_id`` (a creatable-token template on the table), ``source_card_id``
     (a visible in-play card to duplicate), or ``card`` (a card the web layer pre-resolved, e.g. a
-    database search result). The spawned card is unowned (public), so either seat may move or remove it.
+    database search result). The spawned card is owned by the acting seat: face up and visible to both,
+    but only its creator may move or remove it (control can later be handed over with GiveControl).
     """
 
     card_id: str
@@ -881,7 +882,7 @@ def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Ev
         source = intent.card
     if source is None:
         return []
-    card = ops.spawn_token(state, intent.card_id, source, intent.position)
+    card = ops.spawn_token(state, intent.card_id, source, intent.position, owner=seat)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 

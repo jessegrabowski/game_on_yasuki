@@ -1233,7 +1233,7 @@ def test_rejected_intent_leaves_state_unchanged(intent):
     assert table.seq == before_seq
 
 
-def test_spawn_card_creates_a_public_face_up_battlefield_card():
+def test_spawn_card_creates_a_face_up_token_owned_by_the_creator():
     table = TableState.empty_two_seat()
     intent = SpawnCard(
         card_id="tok1",
@@ -1245,7 +1245,7 @@ def test_spawn_card_creates_a_public_face_up_battlefield_card():
 
     assert table.seq == 1 and events[0].cards == ("tok1",)
     card = table.cards_by_id["tok1"]
-    assert card.owner is None and card.face_up is True
+    assert card.owner is PlayerId.P1 and card.face_up is True
     assert card.is_token is True  # spawned pieces are tokens, the only removable cards
     assert card in table.battlefield.cards
     assert table.positions["tok1"] == BoardPos(5.0, 6.0)
@@ -1269,12 +1269,33 @@ def test_spawn_card_with_token_id_copies_the_full_template():
 
     card = table.cards_by_id["spawn-1"]
     assert events[0].cards == ("spawn-1",)
-    assert card.is_token and card.owner is None and card.face_up is True
+    assert card.is_token and card.owner is PlayerId.P1 and card.face_up is True
     # The spawned token is the full typed template, not a name/image stub.
     assert isinstance(card, DynastyPersonality)
     assert (card.force, card.chi) == (2, 2)
     assert card.keywords == ("Shadowlands", "Ghul", "Undead")
     assert table.positions["spawn-1"] == BoardPos(1.0, 2.0)
+    table.validate()
+
+
+def test_spawned_token_is_interactable_only_by_its_creator():
+    table = TableState.empty_two_seat()
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="tok1",
+            card=L5RCard(id="src", name="Bushi Token", side=Side.DYNASTY),
+            position=BoardPos(5.0, 6.0),
+        ),
+    )
+
+    assert apply_intent(table, PlayerId.P2, SetCardPos("tok1", 9.0, 9.0)) == []
+    assert apply_intent(table, PlayerId.P2, RemoveCard("tok1")) == []
+    assert table.positions["tok1"] == BoardPos(5.0, 6.0) and "tok1" in table.cards_by_id
+
+    assert apply_intent(table, PlayerId.P1, SetCardPos("tok1", 9.0, 9.0))
+    assert table.positions["tok1"] == BoardPos(9.0, 9.0)
     table.validate()
 
 
@@ -1307,7 +1328,7 @@ def test_spawn_card_with_source_card_id_duplicates_a_full_in_play_card():
     copy = table.cards_by_id["spawn-1"]
     assert isinstance(copy, DynastyPersonality)
     assert (copy.force, copy.chi) == (3, 2) and copy.keywords == ("Lion",)
-    assert copy.is_token and copy.owner is None and copy.id != source.id
+    assert copy.is_token and copy.owner is PlayerId.P2 and copy.id != source.id
     table.validate()
 
 
@@ -1336,7 +1357,7 @@ def test_spawn_card_rejects_a_duplicate_id():
     assert apply_intent(table, PlayerId.P1, intent) == []
 
 
-def test_remove_card_takes_a_public_card_off_the_table():
+def test_remove_card_takes_a_spawned_token_off_the_table():
     table = TableState.empty_two_seat()
     apply_intent(
         table,
@@ -1348,7 +1369,9 @@ def test_remove_card_takes_a_public_card_off_the_table():
         ),
     )
 
-    events = apply_intent(table, PlayerId.P2, RemoveCard("tok1"))  # public → either seat may remove
+    events = apply_intent(
+        table, PlayerId.P1, RemoveCard("tok1")
+    )  # its creator may remove its token
 
     assert events[0].cards == ("tok1",)
     assert "tok1" not in table.cards_by_id

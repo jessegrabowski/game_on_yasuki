@@ -275,16 +275,20 @@ def reveal_provinces(state: TableState, seat: PlayerId) -> list[str]:
     return revealed
 
 
-def spawn_token(state: TableState, new_id: str, template: L5RCard, position: BoardPos) -> L5RCard:
-    """Place a fresh public, face-up token onto the battlefield at ``position``.
+def spawn_token(
+    state: TableState, new_id: str, template: L5RCard, position: BoardPos, owner: PlayerId | None
+) -> L5RCard:
+    """Place a fresh face-up token onto the battlefield at ``position``, controlled by ``owner``.
 
     The token is a copy of ``template`` (a full card, so it carries the template's type, stats,
-    keywords, and text) under a new id, stripped of any per-instance state and marked a token.
+    keywords, and text) under a new id, stripped of any per-instance state and marked a token. It is
+    face up, so both seats see it; ``owner`` gates who may move or remove it, not who may see it, and
+    ``None`` leaves it public — either seat may act on it.
     """
     card = replace(
         template,
         id=new_id,
-        owner=None,
+        owner=owner,
         is_token=True,
         face_up=True,
         bowed=False,

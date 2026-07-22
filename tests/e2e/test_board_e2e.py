@@ -122,9 +122,10 @@ def _deal_two_players(new_player, p1_view=None, p2_view=None):
 
 
 def _spawn_token(page, room_id, position=(0.4, 0.6)):
-    # A spawned token lands as a public, face-up, owner-less battlefield card tagged data-token="1";
-    # the server mints its `spawn-N` id. The dealt table also carries stronghold/pregame board-cards,
-    # so the token must be selected by data-token, not "the first board-card".
+    # A spawned token lands as a face-up battlefield card owned by the spawning seat, tagged
+    # data-token="1"; the server mints its `spawn-N` id. The dealt table also carries
+    # stronghold/pregame board-cards, so the token must be selected by data-token, not "the first
+    # board-card".
     send_intent(
         page, room_id, {"op": "SPAWN_CARD", "token_id": TOKEN_CARD_ID, "position": list(position)}
     )
@@ -180,6 +181,10 @@ def test_each_player_sees_own_cards_low_and_the_opponent_mirrored(new_player):
     assert p2_view["fy"] < 0.5, "opponent sees the same card on the opposite (top) side"
     assert abs(p2_view["fx"] - (1 - p1_view["fx"])) < MIRROR_TOL
     assert abs(p2_view["fy"] - (1 - p1_view["fy"])) < MIRROR_TOL
+
+    # A spawned token belongs to its creator, so P1 hands control to P2 before P2 can move it.
+    send_intent(p1, room_id, {"op": "GIVE_CONTROL", "card_id": card_id})
+    _wait_for_card(p2, card_id, "el.dataset.owner === 'P2'")
 
     # P2 drags it to ITS own lower half — exercises P2's view→canonical send transform.
     p1_seed = _fraction(p1, card_id)
