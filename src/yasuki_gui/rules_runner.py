@@ -53,18 +53,24 @@ class GameRunner:
         Empty when the card offers nothing right now."""
         game = self.session.game
         card = game.table.cards_by_id[card_id]
-        base = flow.recruit_cost(game, card)
+        # Deferred until a Recruit action confirms this is a recruitable card: recruit_cost reads
+        # gold_cost, which only Dynasty/Fate cards carry. Clicking a card that only offers an
+        # activated ability (e.g. a stronghold) must not reach it.
+        base: int | None = None
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if getattr(action, "card_id", None) != card_id:
                 continue
-            if isinstance(action, Recruit) and action.invest:
-                items.append((self._invest_label(card, base), action))
-            elif isinstance(action, Recruit) and action.proclaim:
-                label = f"Recruit & Proclaim: Pay {base} gold, gain {card.personal_honor} honor"
-                items.append((label, action))
-            elif isinstance(action, Recruit):
-                items.append((f"Recruit: Pay {base} gold", action))
+            if isinstance(action, Recruit):
+                if base is None:
+                    base = flow.recruit_cost(game, card)
+                if action.invest:
+                    items.append((self._invest_label(card, base), action))
+                elif action.proclaim:
+                    label = f"Recruit & Proclaim: Pay {base} gold, gain {card.personal_honor} honor"
+                    items.append((label, action))
+                else:
+                    items.append((f"Recruit: Pay {base} gold", action))
             elif isinstance(action, DynastyDiscard):
                 items.append(("Discard from province", action))
         return items
