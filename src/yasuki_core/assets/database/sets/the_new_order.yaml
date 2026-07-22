@@ -2647,8 +2647,8 @@ cards:
   designer: Jeremy
 - title: Seppun Tasuke
   gold_production: -1
-  creates:
-  - token_affection
+  grants:
+  - affection
   types:
   - Sensei
   decks:
@@ -3175,9 +3175,9 @@ cards:
   collector_number: '99'
   designer: Jeremy
 - title: The Abbot
-  creates:
-  - token_clout
-  - token_conspiracy
+  grants:
+  - clout
+  - conspiracy
   types:
   - Personality
   decks:

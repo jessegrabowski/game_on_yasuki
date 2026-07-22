@@ -16,7 +16,7 @@ from yasuki_gui.constants import (
 )
 from yasuki_gui.ui.images import load_image, load_back_image, ImageProvider
 from yasuki_gui.visuals.visual import Visual
-from yasuki_core.game_pieces.counters import ALL_COUNTERS, SINCERITY, WEALTH
+from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 import tkinter as tk
 
 # Per-counter badge colors — (fill, count-text) — so a card carrying more than one kind reads at a
@@ -181,11 +181,12 @@ class CardSpriteVisual(Visual):
         w, h = self.size
         cx = self.x + w // 2 - COUNTER_BADGE_R - 2
         cy = self.y - h // 2 + COUNTER_BADGE_R + 2
-        for counter in ALL_COUNTERS:
-            count = counters.get(counter.key, 0)
+        # Iterate the counters actually on the card (sorted for a stable stack), not the whole
+        # registry — so the badge system doesn't scale with the catalogue's size.
+        for key, count in sorted(counters.items()):
             if count <= 0:
                 continue
-            fill, text_fill = _COUNTER_STYLE.get(counter.key, _DEFAULT_COUNTER_STYLE)
+            fill, text_fill = _COUNTER_STYLE.get(key, _DEFAULT_COUNTER_STYLE)
             canvas.create_oval(
                 cx - COUNTER_BADGE_R,
                 cy - COUNTER_BADGE_R,

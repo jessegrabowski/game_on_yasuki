@@ -1482,8 +1482,8 @@ cards:
     must know."</i>
   collector_number: '150'
 - title: Kuni Kiyoshi
-  creates:
-  - token_jade
+  grants:
+  - jade
   types:
   - Personality
   decks:
@@ -2954,8 +2954,8 @@ cards:
   artist: Michael Phillippi
   collector_number: '131'
 - title: Tsuno Takuma
-  creates:
-  - token_tactician
+  grants:
+  - tactician
   types:
   - Personality
   decks:

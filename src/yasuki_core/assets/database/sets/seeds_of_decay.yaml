@@ -122,8 +122,8 @@ cards:
   collector_number: '1'
   designer: Bryan
 - title: An Insult Answered
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -624,8 +624,8 @@ cards:
   collector_number: '88'
   designer: Loki
 - title: Chuda Seki
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Personality
   decks:
@@ -759,8 +759,8 @@ cards:
   collector_number: '60'
   designer: Bryan
 - title: Dark Experiments
-  creates:
-  - token_minus1gp
+  grants:
+  - minus1gp
   types:
   - Event
   decks:
@@ -944,8 +944,8 @@ cards:
   collector_number: '24'
   designer: Duncan
 - title: Dragon Tattoo
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Strategy
   decks:
@@ -2124,8 +2124,8 @@ cards:
   collector_number: '28'
   designer: Thomas
 - title: Moksha Patam
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:
@@ -2147,8 +2147,8 @@ cards:
   collector_number: '95'
   designer: Thomas
 - title: Monastery of New Thought
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Stronghold
   decks:
@@ -3396,9 +3396,9 @@ cards:
   collector_number: '41'
   designer: Duncan
 - title: Togashi Hiroto
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:

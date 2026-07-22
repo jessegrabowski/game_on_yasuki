@@ -509,8 +509,8 @@ cards:
   designer: Julien
 - title: Aroru Sensei
   gold_production: -1
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Sensei
   decks:
@@ -1605,8 +1605,8 @@ cards:
   collector_number: '354'
   designer: Chris
 - title: Daigotsu Atsushi
-  creates:
-  - token_infamy
+  grants:
+  - infamy
   types:
   - Personality
   decks:
@@ -1665,8 +1665,8 @@ cards:
   collector_number: '142'
   designer: Chris
 - title: Daigotsu Hayigi
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -7256,8 +7256,8 @@ cards:
   collector_number: '137'
   designer: Jeremy
 - title: Shosuro Sakura
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -7484,8 +7484,8 @@ cards:
   collector_number: '140'
   designer: Jeremy
 - title: Spinning the Web
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Strategy
   decks:
@@ -8467,8 +8467,8 @@ cards:
   collector_number: '213'
   designer: Randy
 - title: Throes of Madness
-  creates:
-  - token_madness
+  grants:
+  - madness
   types:
   - Holding
   decks:
@@ -8670,8 +8670,8 @@ cards:
     can unleash myself. Pain and rage. For myself and for my enemies."'
   collector_number: '84'
 - title: Tonbo Jairyu
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Personality
   decks:

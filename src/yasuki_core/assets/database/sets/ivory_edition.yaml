@@ -1840,8 +1840,8 @@ cards:
   collector_number: '151'
   designer: Bryan
 - title: Daigotsu Meguro
-  creates:
-  - token_minus2f
+  grants:
+  - minus2f
   types:
   - Personality
   decks:
@@ -1930,9 +1930,9 @@ cards:
     yours, if necessary." - Daigotsu Kanpeki</i>
   collector_number: '154'
 - title: Dainiko
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:
@@ -3687,8 +3687,8 @@ cards:
   flavor_text: The House shall thrive forever, under good guidance.
   collector_number: '28'
 - title: Humble House
-  creates:
-  - token_sake
+  grants:
+  - sake
   types:
   - Holding
   decks:
@@ -5751,9 +5751,9 @@ cards:
     None shall cross this threshold while I draw breath!"</i>
   collector_number: '89'
 - title: Mirumoto Yasushi
-  creates:
-  - token_plus1c
-  - token_plus1f
+  grants:
+  - plus1c
+  - plus1f
   types:
   - Personality
   decks:
@@ -6441,8 +6441,8 @@ cards:
   artist: Mark Smylie
   collector_number: '21'
 - title: Plague Zombies
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Follower
   decks:
@@ -6470,8 +6470,8 @@ cards:
     in its ranks.
   collector_number: '206'
 - title: Political Standoff
-  creates:
-  - token_influence
+  grants:
+  - influence
   types:
   - Event
   decks:
@@ -7260,8 +7260,8 @@ cards:
   flavor_text: <i>"I will never serve a lord whom I do not respect."</i>
   collector_number: '133'
 - title: Shiba Myoushi
-  creates:
-  - token_void
+  grants:
+  - void
   types:
   - Personality
   decks:

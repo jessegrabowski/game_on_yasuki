@@ -73,8 +73,8 @@ cards:
   flavor_text: <i>"Earth and sky, fire and water, Empire and the Kingdoms... all are the same if you but
     know how to look." - Isawa Kimi</i>
 - title: Alone with One's Thoughts
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -217,8 +217,8 @@ cards:
   artist: Edwin David
   flavor_text: <i>"Their songs can rouse the soul to war, or placate the fires within." - Asahina Beniha</i>
 - title: Blue Tanuki Bar
-  creates:
-  - token_sake
+  grants:
+  - sake
   types:
   - Holding
   decks:
@@ -238,8 +238,8 @@ cards:
   flavor_text: <i>"It is a den of sin and iniquity," said Akodo Shigetoshi. "But for the less disciplined
     samurai, it offers a night of respite from the war."
 - title: Blue Tanuki Serving Girl
-  creates:
-  - token_sake
+  grants:
+  - sake
   types:
   - Personality
   decks:
@@ -264,8 +264,8 @@ cards:
   flavor_text: <i>"This is one of the Lord Kincho's favorite blends, sama. I am certain you will enjoy
     it."</i>
 - title: Bottled Fire
-  creates:
-  - token_sake
+  grants:
+  - sake
   types:
   - Item
   decks:
@@ -460,8 +460,8 @@ cards:
   - Other
   rarity: Promo
 - title: Cultist Infiltrator
-  creates:
-  - token_minus1c
+  grants:
+  - minus1c
   types:
   - Follower
   decks:
@@ -1495,8 +1495,8 @@ cards:
   - Other
   rarity: Promo
 - title: Liquid Courage
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -1817,9 +1817,9 @@ cards:
   flavor_text: <i>"Place a man upon a horse and you double his tactical value. If he is actually trained
     for such tactics, then his worth it twice that again." -Akodo Shigetoshi</i>
 - title: Nakadai
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:
@@ -2093,7 +2093,8 @@ cards:
 - title: Rallying the Recruits
   creates:
   - chikara
-  - token_recruiter
+  grants:
+  - recruiter
   types:
   - Strategy
   decks:
@@ -2134,7 +2135,8 @@ cards:
 - title: Recruitment Center
   creates:
   - chikara
-  - token_recruiter
+  grants:
+  - recruiter
   types:
   - Holding
   decks:
@@ -2829,8 +2831,8 @@ cards:
   flavor_text: <i>"Perhaps it will be used for display, or carried by a great warrior. I never know for
     certain, but I will find its true form regardless."</i>
 - title: Tsubo the Drunk
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:

@@ -855,8 +855,8 @@ cards:
   artist: Ben Peck
   collector_number: '480'
 - title: Blackened Claws
-  creates:
-  - token_minus1c
+  grants:
+  - minus1c
   types:
   - Item
   decks:
@@ -968,8 +968,8 @@ cards:
   flavor_text: <i>"If the enemy never arrives to field his army, is that not victory?" - Doji Kurohito</i>
   collector_number: '484'
 - title: Bloodstrike
-  creates:
-  - token_blood
+  grants:
+  - blood
   types:
   - Strategy
   decks:
@@ -1015,8 +1015,8 @@ cards:
   artist: Mark Smylie
   collector_number: '4'
 - title: Bone of the Tattered Ear Tribe
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Item
   decks:
@@ -1060,8 +1060,8 @@ cards:
     frown, "but which is our savior and which is our destruction?"</i>
   collector_number: '5'
 - title: Byoki no Oni
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Follower
   decks:
@@ -3134,8 +3134,8 @@ cards:
     Wish will rise to threaten the Empire.</i>
   collector_number: '338'
 - title: Freezing the Lifeblood
-  creates:
-  - token_sleep
+  grants:
+  - sleep
   types:
   - Strategy
   decks:
@@ -3160,8 +3160,8 @@ cards:
   flavor_text: <i>"Rise again, and sleep forever," the monk warned.</i>
   collector_number: '421'
 - title: Fushiki no Oni
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -3958,8 +3958,8 @@ cards:
   artist: Drew Baker
   collector_number: '346'
 - title: Hoshi Wayan
-  creates:
-  - token_tattoo
+  grants:
+  - tattoo
   types:
   - Personality
   decks:
@@ -9183,8 +9183,8 @@ cards:
   flavor_text: <i>"Such wisdom it holds." - Bayushi Kwanchai</i>
   collector_number: '63'
 - title: Tattered Ear Watcher
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Follower
   decks:
@@ -9822,8 +9822,8 @@ cards:
     it can never know defeat." - Naka Kuro</i>
   collector_number: '189'
 - title: Tidal Land Bridge
-  creates:
-  - token_tidal
+  grants:
+  - tidal
   types:
   - Region
   decks:
@@ -9881,8 +9881,8 @@ cards:
     memory." - Doji Kurohito</i>
   collector_number: '487'
 - title: Today We Die
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Strategy
   decks:
@@ -9904,8 +9904,8 @@ cards:
   artist: Malcolm McClinton
   collector_number: '314'
 - title: Togashi Jusai
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Personality
   decks:

@@ -2025,8 +2025,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Shaoru, Clan Champion
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -5743,8 +5743,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Ajinai, Harbinger
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Personality
   decks:
@@ -7263,8 +7263,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shiba Kudome, Council Guardian
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Personality
   decks:
@@ -8027,8 +8027,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Suzume Nae, Trusted Aide
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Personality
   decks:
@@ -8215,8 +8215,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Teardrop Island
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -9641,8 +9641,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Way of the Mantis
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Strategy
   decks:
@@ -9724,8 +9724,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Way of the Unicorn
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Strategy
   decks:
@@ -10070,8 +10070,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yoritomo Murai
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Personality
   decks:

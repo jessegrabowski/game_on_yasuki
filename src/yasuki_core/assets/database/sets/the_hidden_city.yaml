@@ -614,8 +614,8 @@ cards:
   flavor_text: <i>"Kikaze seeks neither glory nor fame," Kurohito said. "Only results."</i>
   collector_number: '25'
 - title: Daidoji Tani
-  creates:
-  - token_hunted
+  grants:
+  - hunted
   types:
   - Personality
   decks:
@@ -1238,8 +1238,8 @@ cards:
   artist: Malcolm McClinton
   collector_number: '95'
 - title: Fudoshi
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Follower
   decks:
@@ -1306,8 +1306,8 @@ cards:
     accepting the scroll. Yasuko said nothing.</i>
   collector_number: '4'
 - title: Glassblower
-  creates:
-  - token_glass
+  grants:
+  - glass
   types:
   - Holding
   decks:
@@ -2377,8 +2377,8 @@ cards:
   flavor_text: <i>"Let the Empire think me dead..."</i>
   collector_number: '11'
 - title: S'ktcha
-  creates:
-  - token_plus2f_minus1c
+  grants:
+  - plus2f_minus1c
   types:
   - Personality
   decks:

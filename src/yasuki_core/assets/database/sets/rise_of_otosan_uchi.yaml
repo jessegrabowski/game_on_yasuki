@@ -269,8 +269,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Band of Survivors
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Follower
   decks:
@@ -294,8 +294,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Bayushi Kanihime, Clan Champion
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -563,7 +563,8 @@ cards:
 - title: Courts of Otosan Uchi
   creates:
   - courtier_personality_0_2_2
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -1049,8 +1050,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Diligent Preparation
-  creates:
-  - token_sincerity
+  grants:
+  - sincerity
   types:
   - Strategy
   decks:
@@ -1340,8 +1341,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Ichido, Clan Champion
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Personality
   decks:
@@ -1448,8 +1449,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hida Kanjouteki
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -1726,8 +1727,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Iweko Honor Guard
-  creates:
-  - token_unstitched
+  grants:
+  - unstitched
   types:
   - Follower
   decks:
@@ -1858,8 +1859,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kakita Shinzaburo
-  creates:
-  - token_plus1c
+  grants:
+  - plus1c
   types:
   - Personality
   decks:
@@ -1960,8 +1961,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kireru Hyoujin
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Item
   decks:
@@ -2275,8 +2276,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Mirumoto Tadakuni
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Personality
   decks:
@@ -2751,8 +2752,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Rebuilt Harbor
-  creates:
-  - token_plus1gp
+  grants:
+  - plus1gp
   types:
   - Holding
   decks:
@@ -3179,8 +3180,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shosuro Yorio
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -3253,8 +3254,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Soshi Aoto, Master Assassin
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:
@@ -3625,9 +3626,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Iwane
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:

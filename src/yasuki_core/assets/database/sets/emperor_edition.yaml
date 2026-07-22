@@ -216,8 +216,8 @@ cards:
     other. His honor comes through service and he lives that service constantly.
   rarity: Fixed
 - title: Akodo Kano
-  creates:
-  - token_master
+  grants:
+  - master
   types:
   - Personality
   decks:
@@ -1560,8 +1560,8 @@ cards:
   artist: Jason Juta
   collector_number: '28'
 - title: Breath of the Heavens
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Strategy
   decks:
@@ -1741,8 +1741,8 @@ cards:
   artist: Heather V. Kreiter
   collector_number: '247'
 - title: Chrysanthemum Blossom
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:
@@ -5686,8 +5686,8 @@ cards:
   flavor_text: <i>"We are never alone." - Mantra of the Kitsune</i>
   collector_number: '410'
 - title: Kyuden Otomo
-  creates:
-  - token_favor
+  grants:
+  - favor
   types:
   - Stronghold
   decks:
@@ -6271,8 +6271,8 @@ cards:
   flavor_text: <i>"That… is a very strange weapon."<br>"I have faced very strange opponents."</i>
   collector_number: '236'
 - title: Moneylender
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -10424,9 +10424,9 @@ cards:
     declines politely. She has a greater duty to the Dragon Clan.
   rarity: Fixed
 - title: Togashi Torazu
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:

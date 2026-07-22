@@ -763,8 +763,8 @@ cards:
   collector_number: '121'
   designer: Jeremy
 - title: Doji Ikei
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -1232,8 +1232,8 @@ cards:
   province_strength: -1
   gold_production: 0
   starting_honor: 0
-  creates:
-  - token_madness
+  grants:
+  - madness
   types:
   - Sensei
   decks:
@@ -1963,8 +1963,8 @@ cards:
   collector_number: '9'
   designer: Loki
 - title: Light Tetsubo
-  creates:
-  - token_madness
+  grants:
+  - madness
   types:
   - Item
   decks:
@@ -4118,8 +4118,8 @@ cards:
   collector_number: '49'
   designer: Jeremy
 - title: Your True Colors
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:

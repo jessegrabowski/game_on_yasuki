@@ -779,8 +779,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Earth's Yearning Clasp
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Spell
   decks:
@@ -1109,8 +1109,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hida Izo
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -1876,8 +1876,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Makeshift Fortifications
-  creates:
-  - token_plus1ps
+  grants:
+  - plus1ps
   types:
   - Holding
   decks:
@@ -2102,8 +2102,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Khedai
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Personality
   decks:
@@ -2133,8 +2133,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Maral
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Personality
   decks:
@@ -2349,8 +2349,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Radakast
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:
@@ -2505,8 +2505,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Rural Market
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -2547,8 +2547,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Sapphire Mine
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:
@@ -2569,8 +2569,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Seven Heavens Strike
-  creates:
-  - token_fire
+  grants:
+  - fire
   types:
   - Strategy
   decks:
@@ -3088,8 +3088,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Crimson Mountain Oni
-  creates:
-  - token_minus1f
+  grants:
+  - minus1f
   types:
   - Personality
   decks:
@@ -3373,8 +3373,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tsuruchi Kinuyo
-  creates:
-  - token_arrow
+  grants:
+  - arrow
   types:
   - Personality
   decks:
@@ -3906,8 +3906,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Zaiberu's Trinket
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Item
   decks:

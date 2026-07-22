@@ -17,6 +17,7 @@ from yasuki_core.database import (
     query_types_with_stat,
     get_card_backs,
     get_connection_string,
+    get_db_connection,
     build_search_filters,
 )
 from yasuki_core.paths import SETS_DIR, resolve_set_image_path
@@ -113,6 +114,17 @@ def test_get_card_by_invalid_id():
     """Test that fetching a non-existent card returns None."""
     card = get_card_by_id("this-card-does-not-exist-12345")
     assert card is None
+
+
+def test_a_cards_grant_lands_in_card_grants_counter():
+    # Courts of Otosan Uchi grants a Wealth counter — the migration moved it from `creates:` to
+    # `grants:`, so it must load into card_grants_counter, not card_creates.
+    with get_db_connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "SELECT counter_key FROM card_grants_counter WHERE creator_card_id = %s",
+            ("courts_of_otosan_uchi",),
+        )
+        assert "wealth" in {row["counter_key"] for row in cur.fetchall()}
 
 
 def test_query_all_prints_returns_multiple_prints_per_card():

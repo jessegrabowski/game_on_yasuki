@@ -13,6 +13,7 @@ from yasuki_core.install.yaml_to_sql import (
     _card_columns,
     _experience_level,
     _link_and_validate_back_faces,
+    _validate_grants,
     _print_columns,
     _revision_baseline,
     _RULES_TEXT_COL,
@@ -267,3 +268,17 @@ def test_creates_edge_with_unknown_id_raises():
 def test_self_referential_create_raises():
     with pytest.raises(ValueError, match="self-referential"):
         _validate_creates({"akodo_kage": None}, {("akodo_kage", "akodo_kage")})
+
+
+def test_grants_with_known_creator_and_counter_pass():
+    _validate_grants({"akodo_kage": None}, {("akodo_kage", "wealth")})
+
+
+def test_grants_from_unknown_card_raises():
+    with pytest.raises(ValueError, match="unknown card ids"):
+        _validate_grants({"akodo_kage": None}, {("ghost_card", "wealth")})
+
+
+def test_grants_of_unknown_counter_raises():
+    with pytest.raises(ValueError, match="unknown counter keys"):
+        _validate_grants({"akodo_kage": None}, {("akodo_kage", "not_a_counter")})

@@ -254,9 +254,9 @@ def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
 
 
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
-def test_get_creates_for_cards_excludes_stat_marker_tokens():
-    # Courts of Otosan Uchi creates a real courtier (a spawnable card) and a Wealth token (a
-    # Token-typed stat marker). Only the card is offered; the marker is a counter/note, not a spawn.
+def test_get_creates_for_cards_offers_only_spawnable_cards():
+    # Courts of Otosan Uchi creates a real courtier (a spawnable card) and grants a Wealth counter.
+    # Only the card is offered — counter grants live in card_grants_counter, not card_creates.
     creates, tokens = get_creates_for_cards(["courts_of_otosan_uchi"])
     made = creates.get("courts_of_otosan_uchi", [])
     assert "courtier_personality_0_2_2" in made
@@ -264,7 +264,7 @@ def test_get_creates_for_cards_excludes_stat_marker_tokens():
     assert "token_wealth" not in made
     assert "token_wealth" not in tokens
 
-    # A creator whose only creation is a stat marker offers nothing to spawn.
+    # A creator whose only output is a counter grant offers nothing to spawn.
     marker_only, marker_tokens = get_creates_for_cards(["a_champion_in_court"])
     assert marker_only.get("a_champion_in_court", []) == []
     assert marker_tokens == {}

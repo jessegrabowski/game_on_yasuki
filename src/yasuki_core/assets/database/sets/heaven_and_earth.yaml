@@ -2111,8 +2111,8 @@ cards:
     borders that the true threat lies." - Sun Tao</i>
   collector_number: '122'
 - title: Poison Marsh
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Region
   decks:
@@ -2344,8 +2344,8 @@ cards:
   artist: Ed Cox
   collector_number: '59'
 - title: Shiba Yobei
-  creates:
-  - token_void
+  grants:
+  - void
   types:
   - Personality
   decks:
@@ -2419,8 +2419,8 @@ cards:
     still remains."</i>
   collector_number: '74'
 - title: Shinjo Slings
-  creates:
-  - token_sling
+  grants:
+  - sling
   types:
   - Event
   decks:
@@ -2876,8 +2876,8 @@ cards:
   artist: Ed Cox
   collector_number: '108'
 - title: Tear Away the Darkness
-  creates:
-  - token_charge
+  grants:
+  - charge
   types:
   - Spell
   decks:

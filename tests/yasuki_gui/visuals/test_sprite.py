@@ -2,7 +2,6 @@ from yasuki_gui.visuals.sprite import CardSpriteVisual
 from yasuki_gui.visuals.visual import MarqueeBoxVisual
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.counters import ALL_COUNTERS
 import tkinter as tk
 
 
@@ -52,15 +51,30 @@ def test_wealth_counter_draws_a_badge(root):
     assert cv.find_withtag("card:w:counter")  # the wealth badge (disc + count) is drawn
 
 
-def test_each_counter_kind_draws_a_distinctly_coloured_badge(root):
+def test_styled_counters_draw_their_own_colours(root):
     cv = tk.Canvas(root, width=200, height=200)
     cv.pack()
     root.update_idletasks()
 
-    card = L5RCard(id="c1", name="C", side=Side.DYNASTY, counters={c.key: 1 for c in ALL_COUNTERS})
+    # Wealth and Sincerity carry hand-picked badge styles, so a card holding both reads them apart.
+    card = L5RCard(id="c1", name="C", side=Side.DYNASTY, counters={"wealth": 1, "sincerity": 2})
     CardSpriteVisual(card, x=100, y=100, tag="card:c").draw(cv)
 
     discs = [i for i in cv.find_withtag("card:c:counter") if cv.type(i) == "oval"]
-    distinct_colours = {cv.itemcget(disc, "fill") for disc in discs}
-    assert len(discs) == len(ALL_COUNTERS)  # one badge per kind on the card
-    assert len(distinct_colours) == len(ALL_COUNTERS)  # each kind a distinct colour, none alike
+    assert len(discs) == 2  # one badge per counter kind on the card
+    assert len({cv.itemcget(disc, "fill") for disc in discs}) == 2  # the two styles differ
+
+
+def test_badges_scale_with_the_cards_counters_not_the_catalogue(root):
+    cv = tk.Canvas(root, width=200, height=200)
+    cv.pack()
+    root.update_idletasks()
+
+    # A card with three counters draws three badges — rendering tracks the card's own tallies, not
+    # the 100+-entry counter catalogue.
+    card = L5RCard(
+        id="c2", name="C", side=Side.DYNASTY, counters={"fire": 1, "poison": 3, "wealth": 2}
+    )
+    CardSpriteVisual(card, x=100, y=100, tag="card:d").draw(cv)
+    discs = [i for i in cv.find_withtag("card:d:counter") if cv.type(i) == "oval"]
+    assert len(discs) == 3

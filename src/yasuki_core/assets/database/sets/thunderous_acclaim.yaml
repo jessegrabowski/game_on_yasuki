@@ -1409,8 +1409,8 @@ cards:
   collector_number: '124'
   designer: Jeremy
 - title: Inevitable Victory
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Item
   decks:
@@ -1858,8 +1858,8 @@ cards:
   collector_number: '32'
   designer: Randy
 - title: Kitsune Narako
-  creates:
-  - token_omen
+  grants:
+  - omen
   types:
   - Personality
   decks:
@@ -1890,8 +1890,8 @@ cards:
   collector_number: '44'
   designer: Chris
 - title: Kuni Igarasu
-  creates:
-  - token_plus1f_plus1c
+  grants:
+  - plus1f_plus1c
   types:
   - Personality
   decks:
@@ -2812,8 +2812,8 @@ cards:
   collector_number: '59'
   designer: Loki
 - title: Shosuro Wayari
-  creates:
-  - token_madness
+  grants:
+  - madness
   types:
   - Personality
   decks:
@@ -3220,9 +3220,9 @@ cards:
   collector_number: '87'
   designer: Loki
 - title: Togashi Tameko
-  creates:
-  - token_fire
-  - token_plus1f
+  grants:
+  - fire
+  - plus1f
   types:
   - Personality
   decks:

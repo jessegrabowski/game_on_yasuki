@@ -965,8 +965,8 @@ cards:
   flavor_text: <i>"Sureness is strength. Certainty of purpose is assurance of victory."</i>
   collector_number: '97'
 - title: First-Hand Account
-  creates:
-  - token_victory
+  grants:
+  - victory
   types:
   - Strategy
   decks:
@@ -3024,8 +3024,8 @@ cards:
     and can change their affiliation multiple times in the span of an afternoon.</i>
   collector_number: '124'
 - title: Shosuro Nitsu
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Personality
   decks:

@@ -1044,8 +1044,8 @@ cards:
   flavor_text: <i>"Clumsy, but good battle fodder," Rekai said.</i>
   collector_number: '7'
 - title: Funeral Rites
-  creates:
-  - token_remembrance
+  grants:
+  - remembrance
   types:
   - Spell
   decks:
@@ -3656,8 +3656,8 @@ cards:
   flavor_text: <i>Youthful exuberance makes her daring. Skill keeps her alive.</i>
   collector_number: '73'
 - title: Vengeful Shadows
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Strategy
   decks:

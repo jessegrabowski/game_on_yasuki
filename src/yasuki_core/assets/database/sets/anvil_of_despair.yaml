@@ -35,8 +35,8 @@ cards:
   rarity: Rare
   artist: Randy Gallegos
 - title: A Prophecy Fulfilled
-  creates:
-  - token_prophecy
+  grants:
+  - prophecy
   types:
   - Spell
   decks:
@@ -572,8 +572,8 @@ cards:
   rarity: Rare
   artist: Ben Peck
 - id: doom_of_fu_leng
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   title: Doom of Fu Leng
   types:
   - Spell
@@ -1157,8 +1157,8 @@ cards:
   rarity: Uncommon
   artist: Heather Bruton
 - title: Isawa Tsuke
-  creates:
-  - token_corruption
+  grants:
+  - corruption
   types:
   - Personality
   decks:
@@ -1679,8 +1679,8 @@ cards:
   rarity: Common
   artist: Anthony Grabski
 - title: Plague Skulls
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Item
   decks:
@@ -1698,8 +1698,8 @@ cards:
   rarity: Rare
   artist: Matt Wilson
 - title: Plague-Infested Region
-  creates:
-  - token_plague
+  grants:
+  - plague
   types:
   - Region
   decks:
@@ -2704,8 +2704,8 @@ cards:
   rarity: Rare
   artist: Tom Biondolillo
 - title: Togashi Yama
-  creates:
-  - token_mountain
+  grants:
+  - mountain
   types:
   - Personality
   decks:

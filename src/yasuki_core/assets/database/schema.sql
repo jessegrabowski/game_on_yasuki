@@ -81,13 +81,34 @@ CREATE TABLE card_keywords (
   PRIMARY KEY (card_id, keyword)
 );
 
--- Tokens a card creates in play. Both sides are cards: `created_card_id` is the token's own card
--- row (a marker Token card, or a created-card proxy).
+-- Real cards a card creates in play: `created_card_id` is a spawnable card proxy (a made
+-- Personality, an Ashigaru, …). Counter/marker "tokens" are NOT here — they are scalar host state,
+-- catalogued in `counters` and linked to their creators via `card_grants_counter`.
 CREATE TABLE card_creates (
   creator_card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
   created_card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
   PRIMARY KEY (creator_card_id, created_card_id),
   CHECK (creator_card_id <> created_card_id)
+);
+
+-- The catalogue of counter kinds (Wealth, Fire, +1F, …) — scalar tallies set on a host card, not
+-- cards themselves. Each stat field is a per-count modifier the effect layer reads. Loaded from
+-- assets/database/counters.yaml, the same source the engine's Counter registry uses.
+CREATE TABLE counters (
+  key               TEXT PRIMARY KEY,
+  name              TEXT NOT NULL,
+  force             INT NOT NULL DEFAULT 0,
+  chi               INT NOT NULL DEFAULT 0,
+  gold_production   INT NOT NULL DEFAULT 0,
+  province_strength INT NOT NULL DEFAULT 0,
+  personal_honor    INT NOT NULL DEFAULT 0
+);
+
+-- Provenance: which cards grant which counters in play (the counter analogue of card_creates).
+CREATE TABLE card_grants_counter (
+  creator_card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  counter_key     TEXT NOT NULL REFERENCES counters(key),
+  PRIMARY KEY (creator_card_id, counter_key)
 );
 
 
@@ -256,6 +277,7 @@ CREATE INDEX idx_card_card_types_type   ON card_card_types (type) INCLUDE (card_
 CREATE INDEX idx_card_decks_deck        ON card_decks (deck) INCLUDE (card_id);
 CREATE INDEX idx_card_keywords_lower_kw ON card_keywords (lower(keyword)) INCLUDE (card_id);
 CREATE INDEX idx_card_creates_created   ON card_creates (created_card_id) INCLUDE (creator_card_id);
+CREATE INDEX idx_card_grants_counter    ON card_grants_counter (counter_key) INCLUDE (creator_card_id);
 CREATE INDEX idx_card_legalities_format ON card_legalities (format_name);
 CREATE INDEX idx_print_legalities_format ON print_legalities (format_name);
 

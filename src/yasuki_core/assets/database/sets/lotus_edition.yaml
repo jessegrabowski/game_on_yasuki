@@ -7455,8 +7455,8 @@ cards:
     Master Tiger</i>
   collector_number: '32'
 - title: Secluded Waystation
-  creates:
-  - token_wealth
+  grants:
+  - wealth
   types:
   - Holding
   decks:

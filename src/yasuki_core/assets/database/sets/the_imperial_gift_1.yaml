@@ -173,8 +173,8 @@ cards:
   flavor_text: <i>"By the Fortunes! Could this really be the chop of Isawa Hochiu?"</i>
   collector_number: '18'
 - title: Drinking One's Life
-  creates:
-  - token_plus1f_minus1c
+  grants:
+  - plus1f_minus1c
   types:
   - Strategy
   decks:

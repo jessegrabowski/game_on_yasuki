@@ -548,8 +548,8 @@ cards:
   collector_number: '76'
   designer: Thomas
 - title: Calling the Darkness
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -1109,8 +1109,8 @@ cards:
   collector_number: '93'
   designer: Bryan
 - title: Eye of the Sword
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Strategy
   decks:
@@ -3031,8 +3031,8 @@ cards:
   collector_number: '88'
   designer: Bryan
 - title: Suck the Marrow
-  creates:
-  - token_poison
+  grants:
+  - poison
   types:
   - Strategy
   decks:

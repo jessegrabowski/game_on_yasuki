@@ -21,8 +21,8 @@ cards:
     is a poor time to be a criminal." - Doji Hakuseki, First Magistrate</i>
   collector_number: '102'
 - title: A Quiet Transaction
-  creates:
-  - token_minus2gp
+  grants:
+  - minus2gp
   types:
   - Strategy
   decks:
@@ -2524,8 +2524,8 @@ cards:
     a euphemism." - Yoritomo Emoto</i>
   collector_number: '73'
 - title: Shiba Kudome
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Personality
   decks:

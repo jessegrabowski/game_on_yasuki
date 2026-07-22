@@ -9,9 +9,12 @@ import psycopg
 import yaml
 from psycopg.types.json import Json
 
+from yasuki_core.game_pieces.counters import ALL_COUNTERS
 from yasuki_core.install.format_metadata import populate_format_metadata
 from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.utils import normalize_name
+
+_COUNTER_KEYS = frozenset(counter.key for counter in ALL_COUNTERS)
 
 logger = logging.getLogger(__name__)
 
@@ -282,6 +285,17 @@ def _validate_creates(cards: dict, creates_links: set[tuple[str, str]]) -> None:
         raise ValueError(f"`creates:` has self-referential edges: {sorted(self_edges)}")
 
 
+def _validate_grants(cards: dict, grants_links: set[tuple[str, str]]) -> None:
+    """Check every `grants:` edge before inserting it: the creator must be a loaded card and the
+    counter key must be in the catalogue, so a typo fails the load rather than a dangling FK."""
+    bad_creators = {creator for creator, _ in grants_links if creator not in cards}
+    if bad_creators:
+        raise ValueError(f"`grants:` from unknown card ids: {sorted(bad_creators)}")
+    bad_keys = {key for _, key in grants_links if key not in _COUNTER_KEYS}
+    if bad_keys:
+        raise ValueError(f"`grants:` references unknown counter keys: {sorted(bad_keys)}")
+
+
 def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) -> None:
     """Point each front row at its back face. Every is_back card must have a front (is_back=False)
     card of the same name — the link is derived from that shared name, so its absence is a fatal
@@ -348,6 +362,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     keywords: set[str] = set()
     keyword_links: set[tuple[str, str]] = set()
     creates_links: set[tuple[str, str]] = set()
+    grants_links: set[tuple[str, str]] = set()
     formats: set[str] = set()
     legality_links: set[tuple[str, str]] = set()
     print_rows: list[tuple] = []
@@ -405,9 +420,10 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                         {**erratum, "set_slug": set_slug, "home_text": entry.get("text", "") or ""}
                     )
 
-                # `creates:` is card-level but unioned across printings so it loads regardless of
-                # which printing entry carries it.
+                # `creates:` (spawns a real card) and `grants:` (applies a counter) are card-level
+                # but unioned across printings so they load regardless of which printing carries them.
                 creates_links.update((card_id, tok) for tok in entry.get("creates", []))
+                grants_links.update((card_id, key) for key in entry.get("grants", []))
 
                 n = printings_seen.get(card_id, 0)
                 printings_seen[card_id] = n + 1
@@ -419,6 +435,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
 
         _link_and_validate_back_faces(cards, card_names, back_ids)
         _validate_creates(cards, creates_links)
+        _validate_grants(cards, grants_links)
 
         # Set each card's standing rules text to its most-recent printing (MRP standard). This runs
         # before errata folding so an erratum, being the newest revision, still wins over the printing.
@@ -458,6 +475,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             keywords,
             keyword_links,
             creates_links,
+            grants_links,
             formats,
             legality_links,
             print_rows,
@@ -484,6 +502,7 @@ def _insert_all(
     keywords,
     keyword_links,
     creates_links,
+    grants_links,
     formats,
     legality_links,
     print_rows,
@@ -493,6 +512,25 @@ def _insert_all(
     """Batch-insert the accumulated rows in dependency order, then resolve print numbers."""
     cur.executemany(
         "INSERT INTO formats (name) VALUES (%s) ON CONFLICT DO NOTHING", [(f,) for f in formats]
+    )
+    cur.executemany(
+        "INSERT INTO counters (key, name, force, chi, gold_production, province_strength, "
+        "personal_honor) VALUES (%s, %s, %s, %s, %s, %s, %s) "
+        "ON CONFLICT (key) DO UPDATE SET name = EXCLUDED.name, force = EXCLUDED.force, "
+        "chi = EXCLUDED.chi, gold_production = EXCLUDED.gold_production, "
+        "province_strength = EXCLUDED.province_strength, personal_honor = EXCLUDED.personal_honor",
+        [
+            (
+                c.key,
+                c.name,
+                c.force,
+                c.chi,
+                c.gold_production,
+                c.province_strength,
+                c.personal_honor,
+            )
+            for c in ALL_COUNTERS
+        ],
     )
     cur.executemany(
         "INSERT INTO keywords (keyword) VALUES (%s) ON CONFLICT DO NOTHING",
@@ -540,6 +578,11 @@ def _insert_all(
         "INSERT INTO card_creates (creator_card_id, created_card_id) VALUES (%s, %s) "
         "ON CONFLICT DO NOTHING",
         list(creates_links),
+    )
+    cur.executemany(
+        "INSERT INTO card_grants_counter (creator_card_id, counter_key) VALUES (%s, %s) "
+        "ON CONFLICT DO NOTHING",
+        list(grants_links),
     )
 
     cur.executemany(

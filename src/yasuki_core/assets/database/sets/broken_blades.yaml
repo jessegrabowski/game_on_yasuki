@@ -369,8 +369,8 @@ cards:
   flavor_text: <i>"Aikune has found what?" - Isawa Taeruko</i>
   collector_number: '87'
 - title: Blessed Ward
-  creates:
-  - token_ward
+  grants:
+  - ward
   types:
   - Strategy
   decks:
@@ -2946,8 +2946,8 @@ cards:
   flavor_text: <i>"Kitao? Kumiko? Whats the difference?" - Moshi Kalani</i>
   collector_number: '102'
 - title: Traveling Merchants
-  creates:
-  - token_merchant
+  grants:
+  - merchant
   types:
   - Event
   decks:

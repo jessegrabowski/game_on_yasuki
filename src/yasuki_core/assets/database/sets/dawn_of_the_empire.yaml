@@ -1157,8 +1157,8 @@ cards:
   artist: Jon Hodgson
   collector_number: '98'
 - title: Isawa's Scrolls
-  creates:
-  - token_scroll
+  grants:
+  - scroll
   types:
   - Spell
   decks:
@@ -2315,8 +2315,8 @@ cards:
     the First Emperor's heart - Mioko, the simple daughter of a Crane fisherman.</i>
   collector_number: '6'
 - title: The Lying Darkness
-  creates:
-  - token_minus1c
+  grants:
+  - minus1c
   types:
   - Follower
   decks:

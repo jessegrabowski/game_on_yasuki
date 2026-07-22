@@ -4818,8 +4818,8 @@ cards:
     wastes. If we could discover why, we could strike a great blow against our ancient enemy." - The Journal
     of Kuni Mokuna</i>
 - title: Ratling Conscripts
-  creates:
-  - token_plus1f
+  grants:
+  - plus1f
   types:
   - Follower
   decks:
@@ -6633,8 +6633,8 @@ cards:
   rarity: Fixed
   artist: Wackwitz & Daily
 - title: Toku
-  creates:
-  - token_exhaustion
+  grants:
+  - exhaustion
   types:
   - Personality
   decks:
