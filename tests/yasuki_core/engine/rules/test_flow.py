@@ -256,3 +256,12 @@ def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
     )  # off-clan from the Crab stronghold
     # Both apply and sum: +2 off-clan surcharge, -1 Merchant Caravan discount.
     assert flow.recruit_cost(game, traders) == 5 + flow.OFF_CLAN_SURCHARGE - 1
+
+
+def test_recruit_rejects_invest_and_proclaim_together():
+    # legal_actions never offers the pair, but a decoded tape could still carry it; recruit must
+    # fail loudly rather than silently drop the Proclaim.
+    game = _discount_game(clan="Crab")
+    holding = _register(game.table, _holding("teahouse", gold_cost=2))
+    with pytest.raises(ValueError, match="Invest and Proclaim"):
+        flow.recruit(game, holding.id, invest=True, proclaim=True)

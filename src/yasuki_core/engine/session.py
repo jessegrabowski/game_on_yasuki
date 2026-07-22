@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.log import (
     cancel_and_log,
     replay,
 )
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 
 
 @dataclass(slots=True)
@@ -70,8 +70,8 @@ class EngineSession:
 
     def legal_actions(self, seat: PlayerId) -> list[Action]:
         """Return the free actions ``seat`` may take right now: always a pass, plus — in the Dynasty
-        phase — a Recruit for each face-up Holding in its provinces it could pay for. Empty while a
-        decision is pending and for any seat but the active one.
+        phase — a Recruit for each face-up Holding or Personality in its provinces it could pay for.
+        Empty while a decision is pending and for any seat but the active one.
 
         Gold is not a free action: it is produced only while paying a cost (rules-skeleton §7), so
         it surfaces through the Recruit's ``ChoosePayment``, never here."""
@@ -117,20 +117,27 @@ class EngineSession:
         return discards
 
     def _recruits(self, seat: PlayerId) -> list[Action]:
-        """The Recruit actions ``seat`` can afford: each face-up Holding in its provinces whose cost
-        its pool plus its unbowed producers' gold could cover, plus an Invest variant when the seat
-        could also cover the card's Invest cost."""
+        """The Recruit actions ``seat`` can afford: each face-up Holding or Personality in its
+        provinces whose cost its pool plus its unbowed producers' gold could cover. A Personality is
+        withheld while the seat's Family Honor is below its Honor Requirement, and adds a Proclaim
+        variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an
+        Invest variant when the seat could also cover the card's Invest cost."""
         recruits: list[Action] = []
+        honor = self.game.table.seats[seat].honor
         for key, zone in self.game.table.zones.items():
             if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
                 continue
             for card in zone.cards:
-                if not (isinstance(card, DynastyHolding) and card.face_up):
+                if not (isinstance(card, (DynastyHolding, DynastyPersonality)) and card.face_up):
+                    continue
+                if isinstance(card, DynastyPersonality) and honor < card.honor_requirement:
                     continue
                 affordable = flow.reachable_gold(self.game, seat, card)
                 base = flow.recruit_cost(self.game, card)
                 if base <= affordable:
                     recruits.append(Recruit(card.id))
+                    if flow.can_proclaim(self.game, card):
+                        recruits.append(Recruit(card.id, proclaim=True))
                 invest = abilities.invest_for(card)
                 if invest is not None and base + invest.minimum <= affordable:
                     recruits.append(Recruit(card.id, invest=True))

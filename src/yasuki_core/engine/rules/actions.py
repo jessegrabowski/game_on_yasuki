@@ -17,10 +17,14 @@ class Recruit:
     invest : bool
         Whether to also pay the card's Invest cost for its one-time enter-play effect — the
         kicker-style second purchase option. Default False.
+    proclaim : bool
+        Whether to Proclaim the recruit (once per turn, own-clan Personalities only), adding the
+        Personality's Personal Honor to the seat's Family Honor after it enters play. Default False.
     """
 
     card_id: str
     invest: bool = False
+    proclaim: bool = False
 
 
 @dataclass(frozen=True, slots=True)

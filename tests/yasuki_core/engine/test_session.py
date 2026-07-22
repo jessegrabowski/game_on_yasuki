@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.actions import DynastyDiscard, Pass, Recruit
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
+from yasuki_core.game_pieces.pregame import StrongholdCard
 
 
 def _register(state: TableState, card):
@@ -121,24 +122,166 @@ def test_recruit_is_withheld_when_the_seat_cannot_cover_the_cost():
     assert Recruit("P1-buy") not in session.legal_actions(PlayerId.P1)
 
 
-def test_recruit_is_withheld_for_a_face_up_personality():
-    # Step 2 buys Holdings only; a revealed Personality in a province is not yet recruitable.
-    state = _dealt_table()
-    _gold_source(state, "P1-SH", 8)  # plenty to pay with
+def _personality_in_province(
+    state,
+    card_id: str,
+    *,
+    gold_cost: int = 0,
+    idx: int = 0,
+    clan: str | None = None,
+    personal_honor: int = 0,
+    honor_requirement: int = 0,
+) -> DynastyPersonality:
     person = _register(
         state,
         DynastyPersonality(
-            id="P1-person", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=0
+            id=card_id,
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=gold_cost,
+            clan=clan,
+            personal_honor=personal_honor,
+            honor_requirement=honor_requirement,
         ),
     )
     person.turn_face_up()
     province = ProvinceZone(owner=PlayerId.P1)
     province.add(person)
-    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, idx)] = province
+    return person
+
+
+def _stronghold(state, clan: str) -> StrongholdCard:
+    """A zero-production stronghold in play, giving P1 a clan alignment for Proclaim."""
+    stronghold = _register(
+        state,
+        StrongholdCard(
+            id="P1-strong", name="Keep", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan
+        ),
+    )
+    state.battlefield.add(stronghold)
+    return stronghold
+
+
+def test_recruit_pays_then_brings_the_personality_into_play_unbowed_and_refills():
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
+    ]
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_province(state, "P1-person", gold_cost=5, personal_honor=2)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert Recruit("P1-person") not in session.legal_actions(PlayerId.P1)  # Action phase
+    _in_dynasty(session)
+    session.act(PlayerId.P1, Recruit("P1-person"))
+    pending = session.project(PlayerId.P1).pending
+    assert isinstance(pending, ChoosePayment) and pending.amount == 5
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    bought = game.table.cards_by_id["P1-person"]
+    assert bought in game.table.battlefield.cards
+    assert not bought.bowed  # Personalities enter unbowed (rules-skeleton §6)
+    assert game.table.positions["P1-person"] == UNPLACED_BOARD_POS
+    assert game.gold[PlayerId.P1] == 3  # 8 produced - 5 spent, excess pools
+    refilled = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
+    assert [card.id for card in refilled] == ["P1-refill"] and not refilled[0].face_up
+    assert game.table.seats[PlayerId.P1].honor == 0  # an unproclaimed recruit gains no honor
+    assert game.pending is None and not game.stack
+
+
+def test_recruit_is_withheld_for_a_personality_above_the_seats_family_honor():
+    state = _dealt_table()
+    state.seats[PlayerId.P1].honor = 2
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_province(state, "P1-proud", honor_requirement=3)
+    _personality_in_province(state, "P1-humble", honor_requirement=2, idx=1)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    assert Recruit("P1-person") not in session.legal_actions(PlayerId.P1)
+    actions = session.legal_actions(PlayerId.P1)
+    assert Recruit("P1-proud") not in actions  # HR 3 > Family Honor 2
+    assert Recruit("P1-humble") in actions  # HR at the seat's honor is met
+
+
+def test_proclaim_is_offered_only_for_an_own_clan_personality():
+    state = _dealt_table()
+    _stronghold(state, clan="Crab")
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_province(state, "P1-crab", clan="Crab")
+    _personality_in_province(state, "P1-crane", clan="Crane", idx=1)
+    _personality_in_province(state, "P1-ronin", idx=2)  # clanless — Unaligned is never own-clan
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    actions = session.legal_actions(PlayerId.P1)
+    assert Recruit("P1-crab", proclaim=True) in actions
+    assert Recruit("P1-crane") in actions  # off-clan recruits fine, at the surcharge
+    assert Recruit("P1-crane", proclaim=True) not in actions
+    assert Recruit("P1-ronin") in actions
+    assert Recruit("P1-ronin", proclaim=True) not in actions
+
+
+def test_proclaim_adds_personal_honor_and_is_once_per_turn():
+    state = _dealt_table()
+    _stronghold(state, clan="Crab")
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_province(state, "P1-first", clan="Crab", gold_cost=2, personal_honor=2)
+    _personality_in_province(state, "P1-second", clan="Crab", personal_honor=1, idx=1)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, Recruit("P1-first", proclaim=True))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    assert game.table.cards_by_id["P1-first"] in game.table.battlefield.cards
+    assert game.table.seats[PlayerId.P1].honor == 2  # Personal Honor added to Family Honor
+    actions = session.legal_actions(PlayerId.P1)
+    assert Recruit("P1-second") in actions  # still recruitable plain
+    assert Recruit("P1-second", proclaim=True) not in actions  # the turn's Proclaim is spent
+
+
+def test_proclaim_is_available_again_on_the_seats_next_turn():
+    state = _dealt_table()
+    _stronghold(state, clan="Crab")
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_province(state, "P1-first", clan="Crab", personal_honor=2)
+    _personality_in_province(state, "P1-second", clan="Crab", personal_honor=1, idx=1)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+    session.act(PlayerId.P1, Recruit("P1-first", proclaim=True))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    assert Recruit("P1-second", proclaim=True) not in session.legal_actions(PlayerId.P1)
+
+    session.act(PlayerId.P1, Pass())  # end P1's turn; the full hand + fate draw forces a discard
+    discard = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
+    session.submit(PlayerId.P1, DecisionResponse((discard,)))
+    for _ in range(3):  # P2's empty turn passes straight back
+        session.act(PlayerId.P2, Pass())
+    _in_dynasty(session)
+
+    assert Recruit("P1-second", proclaim=True) in session.legal_actions(PlayerId.P1)
+
+
+def test_cancel_of_a_proclaim_payment_leaves_the_proclaim_available():
+    state = _dealt_table()
+    _stronghold(state, clan="Crab")
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_province(state, "P1-person", clan="Crab", personal_honor=2)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, Recruit("P1-person", proclaim=True))
+    session.cancel(PlayerId.P1)
+
+    game = session.game
+    assert game.table.seats[PlayerId.P1].honor == 0
+    assert Recruit("P1-person", proclaim=True) in session.legal_actions(PlayerId.P1)
 
 
 def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
@@ -194,8 +337,8 @@ def test_dynasty_discard_is_offered_for_any_face_up_province_card_in_dynasty():
     assert (
         DynastyDiscard("P1-junk") in actions
     )  # a Holding too expensive to recruit is still discardable
-    assert DynastyDiscard("P1-person") in actions  # a Personality is discardable, not recruitable
-    assert Recruit("P1-person") not in actions
+    assert DynastyDiscard("P1-person") in actions  # a recruitable Personality is also discardable
+    assert Recruit("P1-person") in actions
 
 
 def test_dynasty_discard_moves_the_card_to_the_discard_and_refills():
