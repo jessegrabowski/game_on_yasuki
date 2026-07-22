@@ -48,8 +48,9 @@ class GameRunner:
 
     def province_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The labeled actions offered for a face-up province card, for its left-click menu: a plain
-        Recruit and, for an Invest holding, a second Invest option (both labeled with their gold),
-        plus a Dynasty Discard. Empty when the card offers nothing right now."""
+        Recruit plus its second purchase option where one exists — Invest for an Invest holding,
+        Proclaim for an own-clan Personality (all labeled with their gold) — and a Dynasty Discard.
+        Empty when the card offers nothing right now."""
         game = self.session.game
         card = game.table.cards_by_id[card_id]
         base = flow.recruit_cost(game, card)
@@ -59,6 +60,9 @@ class GameRunner:
                 continue
             if isinstance(action, Recruit) and action.invest:
                 items.append((self._invest_label(card, base), action))
+            elif isinstance(action, Recruit) and action.proclaim:
+                label = f"Recruit & Proclaim: Pay {base} gold, gain {card.personal_honor} honor"
+                items.append((label, action))
             elif isinstance(action, Recruit):
                 items.append((f"Recruit: Pay {base} gold", action))
             elif isinstance(action, DynastyDiscard):

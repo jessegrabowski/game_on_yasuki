@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.actions import Legacy, Pass
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_gui.rules_runner import GameRunner
 
@@ -155,6 +155,48 @@ def test_province_menu_offers_recruit_with_cost_and_dynasty_discard():
 
     labels = [label for label, _ in runner.province_menu("P1-buy")]
     assert labels == ["Recruit: Pay 5 gold", "Discard from province"]
+
+
+def test_province_menu_offers_proclaim_for_an_own_clan_personality():
+    state = _dealt_table(0)
+    state.battlefield.add(
+        _register(
+            state,
+            StrongholdCard(
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=PlayerId.P1,
+                clan="Crab",
+                gold_production=8,
+            ),
+        )
+    )
+    person = _register(
+        state,
+        DynastyPersonality(
+            id="P1-person",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=5,
+            clan="Crab",
+            personal_honor=2,
+        ),
+    )
+    person.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(person)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    _to_dynasty(runner)
+
+    labels = [label for label, _ in runner.province_menu("P1-person")]
+    assert labels == [
+        "Recruit: Pay 5 gold",
+        "Recruit & Proclaim: Pay 5 gold, gain 2 honor",
+        "Discard from province",
+    ]
 
 
 def test_province_menu_drops_recruit_when_it_is_unaffordable():
