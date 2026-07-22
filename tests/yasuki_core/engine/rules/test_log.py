@@ -25,7 +25,8 @@ from yasuki_core.engine.rules.log import (
     game_log_from_dict,
     _decode_action,
 )
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
+from yasuki_core.game_pieces.pregame import StrongholdCard
 
 
 def _register(state: TableState, card):
@@ -47,6 +48,16 @@ def _dealt_table() -> TableState:
             _register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
         )
     return state
+
+
+def _place_in_province(state: TableState, card):
+    """Register ``card`` and set it face-up as the sole card of P1's first province."""
+    _register(state, card)
+    card.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(card)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    return card
 
 
 def _played_game_and_log() -> tuple:
@@ -88,14 +99,10 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
             ),
         )
     )
-    holding = _register(
+    _place_in_province(
         state,
         DynastyHolding(id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5),
     )
-    holding.turn_face_up()
-    province = ProvinceZone(owner=PlayerId.P1)
-    province.add(holding)
-    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
@@ -105,6 +112,50 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))
 
     assert game.table.cards_by_id["P1-buy"] in game.table.battlefield.cards
+    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
+    assert restored.replay() == game
+
+
+def test_proclaimed_recruit_replays_and_round_trips():
+    # The proclaim flag must survive the codec, or a replay would drop the honor gain.
+    state = _dealt_table()
+    state.battlefield.add(
+        _register(
+            state,
+            StrongholdCard(
+                id="P1-strong", name="Keep", side=Side.STRONGHOLD, owner=PlayerId.P1, clan="Crab"
+            ),
+        )
+    )
+    state.battlefield.add(
+        _register(
+            state,
+            DynastyHolding(
+                id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+            ),
+        )
+    )
+    _place_in_province(
+        state,
+        DynastyPersonality(
+            id="P1-person",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=5,
+            clan="Crab",
+            personal_honor=2,
+        ),
+    )
+
+    log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
+    game = build_game(log)
+    act_and_log(game, log, Pass())  # Action -> Attack
+    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Recruit("P1-person", proclaim=True))  # pauses for payment
+    submit_and_log(game, log, DecisionResponse(("P1-SH",)))
+
+    assert game.table.seats[PlayerId.P1].honor == 2
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
     assert restored.replay() == game
 
@@ -130,14 +181,10 @@ def test_boosted_payment_round_trips_through_the_codec():
         ),
     )
     state.battlefield.add(outlying)
-    holding = _register(
+    _place_in_province(
         state,
         DynastyHolding(id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4),
     )
-    holding.turn_face_up()
-    province = ProvinceZone(owner=PlayerId.P1)
-    province.add(holding)
-    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
@@ -183,7 +230,7 @@ def test_triggered_choice_replays_and_round_trips():
             ),
         )
     )
-    wheat = _register(
+    _place_in_province(
         state,
         DynastyHolding(
             id="P1-wheat",
@@ -195,10 +242,6 @@ def test_triggered_choice_replays_and_round_trips():
             gold_cost=3,
         ),
     )
-    wheat.turn_face_up()
-    province = ProvinceZone(owner=PlayerId.P1)
-    province.add(wheat)
-    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
@@ -224,14 +267,10 @@ def test_cancelled_recruit_payment_replays_and_round_trips():
             ),
         )
     )
-    holding = _register(
+    _place_in_province(
         state,
         DynastyHolding(id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5),
     )
-    holding.turn_face_up()
-    province = ProvinceZone(owner=PlayerId.P1)
-    province.add(holding)
-    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
@@ -241,6 +280,7 @@ def test_cancelled_recruit_payment_replays_and_round_trips():
     cancel_and_log(game, log)  # backs out
 
     assert log.entries[-1] == Cancel(PlayerId.P1)
+    province = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)]
     assert game.pending is None and game.table.cards_by_id["P1-buy"] in province.cards
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
     assert restored.replay() == game

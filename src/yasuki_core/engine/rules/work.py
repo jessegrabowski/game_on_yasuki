@@ -21,12 +21,16 @@ class ResolveRecruit:
     renew : bool
         Whether to refill the vacated province face-up (a granted Renew), on top of the card's own
         Renew keyword. Default False.
+    proclaim : bool
+        Whether the recruit is Proclaimed, claiming the seat's once-per-turn Proclaim and adding the
+        Personality's Personal Honor to its Family Honor after entry. Default False.
     """
 
     seat: PlayerId
     card_id: str
     invest_amount: int = 0
     renew: bool = False
+    proclaim: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,9 +78,9 @@ class SelectAbilityTarget:
 
 @dataclass(frozen=True, slots=True)
 class FinishRecruit:
-    """The recruit steps that follow a card entering play — clearing its Sincerity tokens and
-    applying any Invest effect. Deferred behind the ``EnteredPlay`` cascade so a trait that pauses on
-    entry (a Sincerity seed choice) resolves before them.
+    """The recruit steps that follow a card entering play — clearing its Sincerity tokens, resolving
+    a Proclaim's honor gain, and applying any Invest effect. Deferred behind the ``EnteredPlay``
+    cascade so a trait that pauses on entry (a Sincerity seed choice) resolves before them.
 
     Attributes
     ----------
@@ -84,10 +88,14 @@ class FinishRecruit:
         The card that entered play.
     invest_amount : int
         The gold Invested while recruiting, driving the Invest effect, or 0 when not Invested.
+    proclaim : bool
+        Whether the recruit was Proclaimed, so entry claims the once-per-turn Proclaim and adds the
+        Personality's Personal Honor to its seat's Family Honor. Default False.
     """
 
     card_id: str
     invest_amount: int
+    proclaim: bool = False
 
 
 @dataclass(frozen=True, slots=True)

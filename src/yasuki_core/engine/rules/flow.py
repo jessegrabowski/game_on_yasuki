@@ -5,6 +5,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
@@ -92,8 +93,8 @@ def perform(game: GameState, action: Action) -> None:
     match action:
         case Pass():
             advance(game)
-        case Recruit(card_id=card_id, invest=invest):
-            recruit(game, card_id, invest)
+        case Recruit(card_id=card_id, invest=invest, proclaim=proclaim):
+            recruit(game, card_id, invest, proclaim=proclaim)
         case DynastyDiscard(card_id=card_id):
             dynasty_discard(game, card_id)
         case Legacy():
@@ -146,7 +147,13 @@ def recruit_cost(game: GameState, card: L5RCard) -> int:
     return max(0, cost)
 
 
-def recruit(game: GameState, card_id: str, invest: bool = False, renew: bool = False) -> None:
+def recruit(
+    game: GameState,
+    card_id: str,
+    invest: bool = False,
+    renew: bool = False,
+    proclaim: bool = False,
+) -> None:
     """Announce a Recruit: defer bringing the card into play, then pause for its cost payment. The
     payment bows gold producers to cover :func:`recruit_cost` plus any Invest cost; once answered,
     the stack resolves the move into play and the province refill.
@@ -154,11 +161,17 @@ def recruit(game: GameState, card_id: str, invest: bool = False, renew: bool = F
     With ``invest`` set, also pay the card's Invest cost for its one-time enter-play effect. A fixed
     Invest folds straight into the payment; a variable one pauses first for
     :class:`ChooseInvestAmount` to pick how much to pay. With ``renew`` set, the vacated province
-    refills face-up (a Renew granted by the recruiting effect)."""
+    refills face-up (a Renew granted by the recruiting effect). With ``proclaim`` set, claim the
+    seat's once-per-turn Proclaim and add the Personality's Personal Honor to its Family Honor after
+    it enters play (rules-skeleton §6); nothing is claimed until the payment resolves, so a
+    cancelled Proclaim leaves it available. Raise ``ValueError`` if both ``invest`` and ``proclaim``
+    are set — Invest belongs to Holdings and Proclaim to Personalities, so no card offers both."""
+    if invest and proclaim:
+        raise ValueError("a Recruit cannot both Invest and Proclaim")
     card = game.table.cards_by_id[card_id]
     seat = card.owner
     if not invest:
-        _announce_recruit(game, card, seat, invest_amount=0, renew=renew)
+        _announce_recruit(game, card, seat, invest_amount=0, renew=renew, proclaim=proclaim)
         return
     ability = abilities.invest_for(card)
     if ability.minimum == ability.maximum:
@@ -174,10 +187,15 @@ def recruit(game: GameState, card_id: str, invest: bool = False, renew: bool = F
 
 
 def _announce_recruit(
-    game: GameState, card: L5RCard, seat: PlayerId, invest_amount: int, renew: bool = False
+    game: GameState,
+    card: L5RCard,
+    seat: PlayerId,
+    invest_amount: int,
+    renew: bool = False,
+    proclaim: bool = False,
 ) -> None:
     producers = gold_producers(game, seat)
-    game.stack.append(ResolveRecruit(seat, card.id, invest_amount, renew))
+    game.stack.append(ResolveRecruit(seat, card.id, invest_amount, renew, proclaim))
     game.pending = ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
@@ -283,8 +301,10 @@ def run_stack(game: GameState) -> None:
 
 def _resolve(game: GameState, item: WorkItem) -> None:
     match item:
-        case ResolveRecruit(seat=seat, card_id=card_id, invest_amount=invest_amount, renew=renew):
-            _resolve_recruit(game, seat, card_id, invest_amount, renew)
+        case ResolveRecruit(
+            seat=seat, card_id=card_id, invest_amount=invest_amount, renew=renew, proclaim=proclaim
+        ):
+            _resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
         case SelectAbilityTarget(card_id=card_id, candidates=candidates):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(
@@ -299,8 +319,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
                 for effect in ability.effects(source, game.table.cards_by_id[target_id])
             ]
             triggers.resolve_effects(game, effects)
-        case FinishRecruit(card_id=card_id, invest_amount=invest_amount):
-            _finish_recruit(game, card_id, invest_amount)
+        case FinishRecruit(card_id=card_id, invest_amount=invest_amount, proclaim=proclaim):
+            _finish_recruit(game, card_id, invest_amount, proclaim=proclaim)
         case ModestFarmStraighten(modest_farm_id=modest_farm_id, target_id=target_id):
             owner = game.table.cards_by_id[target_id].owner
             triggers.resolve_effects(
@@ -330,26 +350,37 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
 
 
 def _resolve_recruit(
-    game: GameState, seat: PlayerId, card_id: str, invest_amount: int = 0, renew: bool = False
+    game: GameState,
+    seat: PlayerId,
+    card_id: str,
+    invest_amount: int = 0,
+    renew: bool = False,
+    proclaim: bool = False,
 ) -> None:
     card = game.table.cards_by_id[card_id]
     province = _province_of(game, seat, card_id)
-    # Enter unplaced so the client clusters the new holding into the seat's home row by the
-    # stronghold, rather than dropping it at the origin.
+    # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
+    # rather than dropping it at the origin.
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
-    card.bow()  # Holdings enter play bowed (rules-skeleton §6)
+    if isinstance(card, DynastyHolding):
+        card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     if province is not None:
         refill = ops.fill_province(game.table, seat, province)
         if refill is not None and (renew or RENEW_KEYWORD in card.keywords):
             refill.turn_face_up()  # Renew: the vacated Province refills face-up
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
-    game.stack.append(FinishRecruit(card_id, invest_amount))
+    game.stack.append(FinishRecruit(card_id, invest_amount, proclaim))
     triggers.fire(game, EnteredPlay(card_id))
 
 
-def _finish_recruit(game: GameState, card_id: str, invest_amount: int) -> None:
+def _finish_recruit(
+    game: GameState, card_id: str, invest_amount: int, proclaim: bool = False
+) -> None:
     card = game.table.cards_by_id[card_id]
     _clear_sincerity(game, card)
+    if proclaim:
+        game.use_once(proclaim_key(card.owner, game.turn))
+        ops.set_honor(game.table, card.owner, delta=card.personal_honor)
     if invest_amount:
         triggers.resolve_effects(game, abilities.invest_for(card).effect(card, invest_amount))
 
@@ -372,6 +403,24 @@ def dynasty_discard(game: GameState, card_id: str) -> None:
     if province is not None:
         ops.fill_province(game.table, seat, province)
     triggers.fire(game, CardDiscarded(card_id, card.side, seat))
+
+
+def proclaim_key(seat: PlayerId, turn: int) -> str:
+    """The once-per-turn usage key for a seat's Proclaim, scoped to the turn so it resets each turn
+    without clearing ``GameState.once_per``."""
+    return f"proclaim:{seat.name}:{turn}"
+
+
+def can_proclaim(game: GameState, card: L5RCard) -> bool:
+    """Whether recruiting ``card`` could be Proclaimed by its seat: it is a Personality of the
+    seat's own clan, and the seat has not yet Proclaimed this turn (rules-skeleton §6)."""
+    if not isinstance(card, DynastyPersonality):
+        return False
+    seat = card.owner
+    seat_clan = _seat_clan(game, seat)
+    if seat_clan is None or card.clan != seat_clan:
+        return False
+    return not game.has_used(proclaim_key(seat, game.turn))
 
 
 def legacy_key(seat: PlayerId, turn: int) -> str:
