@@ -70,3 +70,15 @@ only shared file is `cards.py` (each side adds fields), and the only shared disc
 re-conflating the two concepts — which this note exists to prevent. When the branches meet, the
 proxy-marker entries in `tokens.yaml` are retired in favour of counters; the created-card entries and
 the whole spawn path stay.
+
+## Status: leapfrog complete
+
+The retirement is done. The 122 proxy-marker cards are gone from `tokens.yaml`; the counter
+vocabulary lives in `src/yasuki_core/assets/database/counters.yaml`, loaded both into the engine's
+`Counter` registry (`game_pieces/counters.py`) and a DB `counters` table. Provenance — which cards
+grant which counters — moved from the marker `card_creates` edges into `card_grants_counter`, fed by
+a `grants:` YAML field parallel to `creates:`. `card_creates` now holds only genuine spawnable cards,
+so the type-based marker exclusions in search and the Create menu were deleted. `Counter` gained
+`force`/`chi`/`province_strength`/`personal_honor` delta fields, but only Gold Production is wired to
+an effective-stat computation — the other deltas are captured data awaiting `effective_force`-style
+rules-engine growth.
