@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Event, Intent, apply_intent
 from yasuki_core.engine.redaction import ViewSnapshot
+from yasuki_core.game_pieces.dynasty import DynastyPersonality
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import CARD_H, CARD_W, HOME_STACK_OFFSET
@@ -487,20 +488,29 @@ class FieldView(tk.Canvas):
     def _home_positions(self, rendered, w: int, h: int) -> dict[str, tuple[int, int]]:
         """Stacked home-row positions for the unplaced cards among ``rendered``, grouped per owner:
         copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``, while the
-        stronghold, sensei, and distinct holdings each take their own column."""
-        by_owner: dict[PlayerId | None, list[tuple[str, object]]] = {}
+        stronghold, sensei, and distinct holdings each take their own column. Personalities lay out
+        in the front (personalities) row; everything else in the holdings row."""
+        holdings: dict[PlayerId | None, list[tuple[str, object]]] = {}
+        personalities: dict[PlayerId | None, list[tuple[str, object]]] = {}
         for rc, pos in rendered:
             if pos is None or pos.x < 0 or pos.y < 0:
                 key = getattr(rc, "printed_id", None) or rc.id
-                by_owner.setdefault(rc.owner, []).append((rc.id, key))
+                bucket = personalities if isinstance(rc, DynastyPersonality) else holdings
+                bucket.setdefault(rc.owner, []).append((rc.id, key))
         positions: dict[str, tuple[int, int]] = {}
-        for owner, unplaced in by_owner.items():
-            seat_at_bottom = (owner or self.seat) is self.seat
-            positions.update(
-                home_stack_positions(
-                    unplaced, w, h, seat_at_bottom=seat_at_bottom, offset=HOME_STACK_OFFSET
+        for personality_row, by_owner in ((False, holdings), (True, personalities)):
+            for owner, unplaced in by_owner.items():
+                seat_at_bottom = (owner or self.seat) is self.seat
+                positions.update(
+                    home_stack_positions(
+                        unplaced,
+                        w,
+                        h,
+                        seat_at_bottom=seat_at_bottom,
+                        offset=HOME_STACK_OFFSET,
+                        personality_row=personality_row,
+                    )
                 )
-            )
         return positions
 
     def _province_keys_by_owner(self) -> dict[PlayerId, list[ZoneKey]]:

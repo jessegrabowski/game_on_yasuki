@@ -1,5 +1,5 @@
 from yasuki_core.engine.table import BoardPos
-from yasuki_gui.constants import CARD_W
+from yasuki_gui.constants import CARD_H, CARD_W
 from yasuki_gui.layout import (
     card_view_placement,
     divider_y,
@@ -34,7 +34,7 @@ class TestProvincePositions:
         xs = [x for x, _ in province_positions(W, H, 4, seat_at_bottom=True)]
         assert sorted(xs) == xs  # left to right
         gaps = {b - a for a, b in zip(xs, xs[1:])}
-        assert gaps == {CARD_W}
+        assert len(gaps) == 1 and gaps.pop() > CARD_W  # evenly spaced, with a gap between cards
         assert abs(sum(xs) / len(xs) - W / 2) <= 1  # centred about the canvas (within rounding)
 
     def test_top_seat_mirrors_column_order(self):
@@ -44,10 +44,10 @@ class TestProvincePositions:
 
 
 class TestHomeRow:
-    def test_steps_right_by_a_card_width_in_the_bottom_half(self):
+    def test_steps_right_with_a_gap_in_the_bottom_half(self):
         x0, y0 = home_slot(W, H, 0, seat_at_bottom=True)
         x1, y1 = home_slot(W, H, 1, seat_at_bottom=True)
-        assert x1 - x0 == CARD_W  # the next home card sits one width to the right
+        assert x1 - x0 > CARD_W  # the next home card sits one width plus a gap to the right
         assert y0 == y1 > H // 2  # the bottom seat's home row is below the midline
 
     def test_top_seat_home_row_is_above_the_midline(self):
@@ -112,5 +112,29 @@ def test_holdings_row_sits_between_the_divider_and_the_provinces():
     h = 800
     holding_y = home_slot(1000, h, 0, seat_at_bottom=True)[1]
     province_y = province_positions(1000, h, 1, seat_at_bottom=True)[0][1]
-    # Bottom-to-top the human's rows run provinces, holdings, (reserved personalities), divider.
+    # Bottom-to-top the human's rows run provinces, holdings, personalities, divider.
     assert divider_y(h) < holding_y < province_y
+    assert province_y - holding_y > CARD_H  # rows clear each other vertically, not overlapping
+
+
+def test_personalities_center_in_the_front_row():
+    w, h = 1000, 800
+    province_y = province_positions(w, h, 1, seat_at_bottom=True)[0][1]
+    holding_y = home_slot(w, h, 0, seat_at_bottom=True)[1]
+    pos = home_stack_positions(
+        [("a", "k1"), ("b", "k2"), ("c", "k3")],
+        w,
+        h,
+        seat_at_bottom=True,
+        offset=26,
+        personality_row=True,
+    )
+    personality_y = pos["a"][1]
+    xs = sorted(x for x, _ in pos.values())
+    gaps = {b - a for a, b in zip(xs, xs[1:])}
+    # All share the front row, which sits ahead of the holdings, nearest the divider.
+    assert all(y == personality_y for _, y in pos.values())
+    assert divider_y(h) < personality_y < holding_y < province_y
+    # Centre-justified across the canvas, evenly spaced with a gap — not left-justified like holdings.
+    assert abs(sum(xs) / len(xs) - w / 2) <= 1
+    assert len(gaps) == 1 and gaps.pop() > CARD_W

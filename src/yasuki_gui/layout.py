@@ -1,5 +1,5 @@
 from yasuki_core.engine.table import BoardPos
-from yasuki_gui.constants import CARD_W
+from yasuki_gui.constants import CARD_H, CARD_W
 
 # How far each seat's province row sits from its edge. The human band (bottom) leaves room for the
 # hand strip below it; the opponent (top) draws no hand, so its provinces tuck right up against the
@@ -13,10 +13,13 @@ _HAND_INSET = 54
 # The seat halves are split higher than centre so the human's band gets the larger share; the
 # opponent's compresses to the top edge.
 _DIVIDER_FRAC = 0.42
-# Each seat has three card rows stepping in from its edge: provinces (nearest the edge/hand), then
-# stronghold + holdings, then personalities. This is the gap between them. Personalities aren't
-# buyable yet, so that row is reserved — nothing draws in it — but the holdings row leaves it open.
-_ROW_STEP = 100
+# Each seat has three card rows stepping in from its edge, toward the divider: provinces (nearest the
+# edge/hand), then stronghold + holdings, then personalities out front. Rows step by a card height
+# plus a gap, and cards within a row step by a card width plus a gap, so neither touches edge-to-edge.
+_ROW_GAP = 16
+_CARD_GAP = 8
+_ROW_STEP = CARD_H + _ROW_GAP
+_COLUMN_STEP = CARD_W + _CARD_GAP
 
 
 def _row_y(canvas_h: int, seat_at_bottom: bool) -> int:
@@ -28,6 +31,13 @@ def _holding_row_y(canvas_h: int, seat_at_bottom: bool) -> int:
     """The stronghold/holdings row: one step inward from the provinces row, toward the divider."""
     province = _row_y(canvas_h, seat_at_bottom)
     return province - _ROW_STEP if seat_at_bottom else province + _ROW_STEP
+
+
+def _personality_row_y(canvas_h: int, seat_at_bottom: bool) -> int:
+    """The personalities row: two steps inward from the provinces row, out in front of the
+    holdings and nearest the divider."""
+    province = _row_y(canvas_h, seat_at_bottom)
+    return province - 2 * _ROW_STEP if seat_at_bottom else province + 2 * _ROW_STEP
 
 
 def divider_y(canvas_h: int) -> int:
@@ -49,31 +59,30 @@ def province_positions(
 ) -> list[tuple[int, int]]:
     """Centre points for ``count`` provinces, centre-justified across the canvas on the seat's row.
 
-    The columns are evenly spaced by one card width and reversed for the top seat so its leftmost
+    The columns are evenly spaced by one column step and reversed for the top seat so its leftmost
     province faces the same edge as the bottom seat's.
     """
     if count <= 0:
         return []
     y = _row_y(canvas_h, seat_at_bottom)
     center_x = canvas_w // 2
-    offsets = [(i - (count - 1) / 2) * CARD_W for i in range(count)]
+    offsets = [(i - (count - 1) / 2) * _COLUMN_STEP for i in range(count)]
     if not seat_at_bottom:
         offsets.reverse()
     return [(int(center_x + off), y) for off in offsets]
 
 
 # Where a seat's home row of unplaced cards (its stronghold, sensei, and freshly recruited holdings)
-# begins, and how its cards step rightward. The stronghold sits first, so everything that joins it
-# later lands beside it.
+# begins. The stronghold sits first, so everything that joins it later lands beside it, one column
+# step to the right.
 _HOME_X0 = CARD_W
-_HOME_STEP = CARD_W
 
 
 def home_slot(canvas_w: int, canvas_h: int, index: int, *, seat_at_bottom: bool) -> tuple[int, int]:
     """Position for the ``index``-th unplaced card in a seat's home (holdings) row, laid left to
     right from inside the seat's edge. The stronghold, sensei, and freshly recruited holdings park
     here in battlefield order until a drag gives them a board spot."""
-    return _HOME_X0 + index * _HOME_STEP, _holding_row_y(canvas_h, seat_at_bottom)
+    return _HOME_X0 + index * _COLUMN_STEP, _holding_row_y(canvas_h, seat_at_bottom)
 
 
 def home_stack_positions(
@@ -83,19 +92,40 @@ def home_stack_positions(
     *,
     seat_at_bottom: bool,
     offset: int,
+    personality_row: bool = False,
 ) -> dict[str, tuple[int, int]]:
     """Home-row positions for a seat's unplaced cards. ``unplaced`` is a list of ``(card_id,
     group_key)`` in placement order: distinct group keys take consecutive columns, and copies
     sharing a key stack down a single column by ``offset`` each. Returns a map of card id to
-    ``(x, y)``."""
+    ``(x, y)``.
+
+    With ``personality_row`` set, the cards land in the personalities row, centre-justified across
+    the canvas (like the provinces); otherwise they land in the holdings row, laid out left to right
+    from the seat's edge behind the stronghold.
+    """
     columns: dict[object, int] = {}
+    for _, key in unplaced:
+        columns.setdefault(key, len(columns))
+
+    if personality_row:  # centre-justified across the canvas, like the provinces
+        center_x = canvas_w // 2
+        row_y = _personality_row_y(canvas_h, seat_at_bottom)
+        base = {
+            col: (int(center_x + (col - (len(columns) - 1) / 2) * _COLUMN_STEP), row_y)
+            for col in columns.values()
+        }
+    else:  # left-justified in the holdings row, behind the stronghold
+        base = {
+            col: home_slot(canvas_w, canvas_h, col, seat_at_bottom=seat_at_bottom)
+            for col in columns.values()
+        }
+
     copies: dict[object, int] = {}
     placed: dict[str, tuple[int, int]] = {}
     for card_id, key in unplaced:
-        column = columns.setdefault(key, len(columns))
         copy = copies.get(key, 0)
         copies[key] = copy + 1
-        x, y = home_slot(canvas_w, canvas_h, column, seat_at_bottom=seat_at_bottom)
+        x, y = base[columns[key]]
         placed[card_id] = (x, y + copy * offset)
     return placed
 
