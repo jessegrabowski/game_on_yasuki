@@ -40,6 +40,7 @@ from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules import abilities, triggers
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
 from yasuki_core.game_pieces.counters import SINCERITY
+from yasuki_core.ruleset import SHATTERED_EMPIRE
 
 # The boldface keyword marking a card the Legacy rulebook ability can search out.
 LEGACY_KEYWORD = "Legacy"
@@ -51,9 +52,9 @@ RENEW_KEYWORD = "Renew"
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
 
-# Extra gold a Recruit costs when the card's clan differs from the recruiting seat's (rules-skeleton
-# §6: "+2 Gold if its clan ≠ yours").
-OFF_CLAN_SURCHARGE = 2
+# The active ruleset: legal Clan Alignments and the off-clan surcharge.
+RULESET = SHATTERED_EMPIRE
+OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
 
 
 def next_phase(phase: Phase) -> Phase | None:
@@ -135,13 +136,36 @@ def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
     return total
 
 
+def _clan_names(card: L5RCard) -> tuple[str, ...]:
+    """The card's printed clan names: its :attr:`clans` list, or the lone ``clan`` when that is
+    empty."""
+    if card.clans:
+        return card.clans
+    return (card.clan,) if card.clan else ()
+
+
+def _card_alignments(card: L5RCard) -> set[str]:
+    """The canonical Clan Alignment slugs ``card`` carries, dropping clan names that are not
+    alignments in the active ruleset (minor clans, Shadowlands, "Unaligned", ...). Empty for an
+    unaligned card."""
+    return {slug for name in _clan_names(card) if (slug := RULESET.alignment(name)) is not None}
+
+
+def _seat_alignment(game: GameState, seat: PlayerId | None) -> str | None:
+    """The seat's Clan Alignment slug, taken from its Stronghold, or None when the Stronghold carries
+    no legal alignment (an unaligned seat)."""
+    clan = _seat_clan(game, seat)
+    return RULESET.alignment(clan) if clan is not None else None
+
+
 def recruit_cost(game: GameState, card: L5RCard) -> int:
     """The gold a seat pays to recruit ``card``: its printed gold cost, plus the off-clan surcharge
-    when the card's clan differs from the seat's Stronghold clan (rules-skeleton §6), less the card's
-    own conditional recruit discount. Floored at zero."""
+    when the card has a Clan Alignment the seat does not share, less the card's own conditional
+    recruit discount. Floored at zero."""
     cost = card.gold_cost or 0
-    seat_clan = _seat_clan(game, card.owner)
-    if card.clan is not None and seat_clan is not None and card.clan != seat_clan:
+    seat_align = _seat_alignment(game, card.owner)
+    card_aligns = _card_alignments(card)
+    if seat_align is not None and card_aligns and seat_align not in card_aligns:
         cost += OFF_CLAN_SURCHARGE
     cost -= effective_recruit_discount(game, card)
     return max(0, cost)
@@ -412,13 +436,13 @@ def proclaim_key(seat: PlayerId, turn: int) -> str:
 
 
 def can_proclaim(game: GameState, card: L5RCard) -> bool:
-    """Whether recruiting ``card`` could be Proclaimed by its seat: it is a Personality of the
-    seat's own clan, and the seat has not yet Proclaimed this turn (rules-skeleton §6)."""
+    """Whether recruiting ``card`` could be Proclaimed by its seat: a Personality carrying the seat's
+    Clan Alignment that the seat has not yet Proclaimed against this turn."""
     if not isinstance(card, DynastyPersonality):
         return False
     seat = card.owner
-    seat_clan = _seat_clan(game, seat)
-    if seat_clan is None or card.clan != seat_clan:
+    seat_align = _seat_alignment(game, seat)
+    if seat_align is None or seat_align not in _card_alignments(card):
         return False
     return not game.has_used(proclaim_key(seat, game.turn))
 

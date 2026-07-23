@@ -5,7 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
+from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
@@ -183,6 +183,65 @@ def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
         id="h", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crane"
     )
     assert flow.recruit_cost(game, holding) == 4  # no Stronghold clan to compare against
+
+
+def _personality(clans: tuple[str, ...], **kwargs) -> DynastyPersonality:
+    return DynastyPersonality(
+        id="p",
+        name="P",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_cost=5,
+        clan=clans[0] if clans else None,
+        clans=clans,
+        **kwargs,
+    )
+
+
+def test_recruit_cost_reads_every_listed_clan_not_just_the_first():
+    # Bayushi Aramoro is printed Ninja and Scorpion; the alignment that matters is second in the list.
+    game = _game_with_stronghold_clan("Scorpion")
+    aramoro = _personality(("Ninja", "Scorpion"))
+    assert flow.recruit_cost(game, aramoro) == 5
+
+
+def test_recruit_cost_treats_naga_and_akasha_as_one_alignment():
+    game = _game_with_stronghold_clan("Naga")
+    akasha_personality = _personality(("Akasha",))
+    assert flow.recruit_cost(game, akasha_personality) == 5
+
+
+def test_recruit_cost_charges_no_surcharge_for_an_unaligned_personality():
+    game = _game_with_stronghold_clan("Scorpion")
+    # A clan name that is not a legal alignment (a minor clan) leaves the card unaligned.
+    assert flow.recruit_cost(game, _personality(("Fox",))) == 5
+    assert flow.recruit_cost(game, _personality(())) == 5
+
+
+def test_recruit_cost_surcharges_a_personality_aligned_to_another_clan():
+    game = _game_with_stronghold_clan("Scorpion")
+    assert flow.recruit_cost(game, _personality(("Crane",))) == 5 + flow.OFF_CLAN_SURCHARGE
+
+
+def test_a_stronghold_with_no_legal_alignment_neither_surcharges_nor_proclaims():
+    # A Shadowlands / minor-clan Stronghold has no legal Clan Alignment, so it has nothing to compare
+    # against: an aligned Personality costs face value and none can be Proclaimed.
+    game = _game_with_stronghold_clan("Shadowlands")
+    assert flow.recruit_cost(game, _personality(("Crab",))) == 5
+    assert not flow.can_proclaim(game, _personality(("Crab",)))
+
+
+def test_can_proclaim_accepts_any_shared_alignment_of_a_multi_clan_personality():
+    doji = _personality(("Crane", "Mantis"))  # a legal Crane/Mantis Personality
+    assert flow.can_proclaim(_game_with_stronghold_clan("Crane"), doji)
+    assert flow.can_proclaim(_game_with_stronghold_clan("Mantis"), doji)
+
+
+def test_can_proclaim_rejects_off_clan_and_unaligned_personalities():
+    game = _game_with_stronghold_clan("Scorpion")
+    assert not flow.can_proclaim(game, _personality(("Crane",)))  # off-clan
+    assert not flow.can_proclaim(game, _personality(("Fox",)))  # unaligned (minor clan only)
+    assert not flow.can_proclaim(game, _personality(()))  # unaligned (no clan)
 
 
 def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):

@@ -14,6 +14,9 @@ class L5RCard:
     # off it; None for fabricated demo cards and spawned tokens, which fall back to plain behavior.
     printed_id: str | None = None
     clan: str | None = None
+    # All Clan names printed on the card (the card_clans relation); ``clan`` is only the first.
+    # Recruit's off-clan and Proclaim rules test alignment membership against the full list.
+    clans: tuple[str, ...] = ()
     keywords: tuple[str, ...] = ()
     traits: tuple[str, ...] = ()
     # The card's primary printed type (e.g. "Item", "Personality"), kept so the web client can pick a
@@ -60,6 +63,8 @@ class L5RCard:
 
     def __post_init__(self):
         # Normalize collections to tuples for consistent immutability
+        if not isinstance(self.clans, tuple):
+            object.__setattr__(self, "clans", tuple(self.clans))
         if not isinstance(self.keywords, tuple):
             object.__setattr__(self, "keywords", tuple(self.keywords))
         if not isinstance(self.traits, tuple):
