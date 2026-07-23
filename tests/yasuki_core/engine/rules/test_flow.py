@@ -6,7 +6,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
@@ -242,6 +242,40 @@ def test_can_proclaim_rejects_off_clan_and_unaligned_personalities():
     assert not flow.can_proclaim(game, _personality(("Crane",)))  # off-clan
     assert not flow.can_proclaim(game, _personality(("Fox",)))  # unaligned (minor clan only)
     assert not flow.can_proclaim(game, _personality(()))  # unaligned (no clan)
+
+
+def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
+    state = TableState.empty_two_seat()
+    state.battlefield.add(
+        _register(
+            state, StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1)
+        )
+    )
+    state.battlefield.add(
+        _register(
+            state,
+            SenseiCard(
+                id="P1-SE",
+                name="Sensei",
+                side=Side.FATE,
+                owner=PlayerId.P1,
+                printed_id=sensei_printed_id,
+            ),
+        )
+    )
+    game = GameState.start(state, PlayerId.P1)
+    flow.begin_game(game)
+    return game
+
+
+def test_begin_game_grants_mishimes_ignore_honor_requirements_waiver():
+    game = _begun_game_with_sensei("mishime_sensei")
+    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is True
+
+
+def test_begin_game_leaves_an_ordinary_seat_enforcing_honor_requirements():
+    game = _begun_game_with_sensei("some_other_sensei")
+    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is False
 
 
 def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):

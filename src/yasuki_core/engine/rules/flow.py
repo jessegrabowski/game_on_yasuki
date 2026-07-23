@@ -4,7 +4,7 @@ from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, Z
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
@@ -64,10 +64,24 @@ def next_phase(phase: Phase) -> Phase | None:
     return TURN_PHASES[index + 1] if index + 1 < len(TURN_PHASES) else None
 
 
+# The pre-game permanents that get their enters-play effect fired as the game begins.
+_PREGAME_PERMANENTS = (StrongholdCard, SenseiCard, WindCard)
+
+
 def begin_game(game: GameState) -> None:
-    """Run the first turn's start-of-turn housekeeping. Call once after :meth:`GameState.start`,
-    before the active player begins acting."""
+    """Run the game-start pass once after :meth:`GameState.start`, before the active player acts:
+    fire each pre-game permanent's enters-play effect, then the first turn's housekeeping. Re-runs on
+    every replay, so those effects must be idempotent."""
+    _begin_pregame(game)
     _begin_turn(game)
+
+
+def _begin_pregame(game: GameState) -> None:
+    """Fire EnteredPlay for each pre-game permanent on the battlefield, so a Stronghold or Sensei with
+    an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
+    for card in list(game.table.battlefield.cards):
+        if isinstance(card, _PREGAME_PERMANENTS):
+            triggers.fire(game, EnteredPlay(card.id))
 
 
 def advance(game: GameState) -> None:

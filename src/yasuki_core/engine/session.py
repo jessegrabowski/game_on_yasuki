@@ -119,18 +119,26 @@ class EngineSession:
     def _recruits(self, seat: PlayerId) -> list[Action]:
         """The Recruit actions ``seat`` can afford: each face-up Holding or Personality in its
         provinces whose cost its pool plus its unbowed producers' gold could cover. A Personality is
-        withheld while the seat's Family Honor is below its Honor Requirement, and adds a Proclaim
-        variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an
-        Invest variant when the seat could also cover the card's Invest cost."""
+        withheld while its Honor Requirement is above the seat's Family Honor (a dash ``None`` never
+        withholds; the check is skipped entirely when the seat ignores Honor Requirements), and adds a
+        Proclaim variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds
+        an Invest variant when the seat could also cover the card's Invest cost."""
         recruits: list[Action] = []
-        honor = self.game.table.seats[seat].honor
+        seat_info = self.game.table.seats[seat]
+        honor = seat_info.honor
+        enforce_honor = not seat_info.ignores_honor_requirements
         for key, zone in self.game.table.zones.items():
             if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
                 continue
             for card in zone.cards:
                 if not (isinstance(card, (DynastyHolding, DynastyPersonality)) and card.face_up):
                     continue
-                if isinstance(card, DynastyPersonality) and honor < card.honor_requirement:
+                if (
+                    enforce_honor
+                    and isinstance(card, DynastyPersonality)
+                    and card.honor_requirement is not None
+                    and honor < card.honor_requirement
+                ):
                     continue
                 affordable = flow.reachable_gold(self.game, seat, card)
                 base = flow.recruit_cost(self.game, card)

@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.triggers import (
     AdjustCounter,
     Choose,
     Destroy,
+    IgnoreHonorRequirements,
     apply_effect,
     choice_resolver,
     fire,
@@ -46,6 +47,14 @@ def _sandwich_grant(game, source_id, chosen):
 
 def _game():
     return GameState.start(TableState.empty_two_seat(), PlayerId.P1)
+
+
+def test_ignore_honor_requirements_effect_sets_the_seat_flag():
+    game = _game()
+    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is False
+    apply_effect(game, IgnoreHonorRequirements(PlayerId.P1))
+    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is True
+    assert game.table.seats[PlayerId.P2].ignores_honor_requirements is False
 
 
 def _rice_farm(game, seat=PlayerId.P1, card_id="P1-farm"):
