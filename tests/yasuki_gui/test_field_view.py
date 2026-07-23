@@ -11,6 +11,7 @@ from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, 
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_gui.tags import card_tag, deck_tag, zone_tag
 from yasuki_gui.visuals.cardface import HiddenFace
 
@@ -127,6 +128,21 @@ class TestHomeRow:
         stronghold = field.sprites[card_tag("P1-SH")]
         sensei = field.sprites[card_tag("P1-extra")]
         assert stronghold.x != sensei.x  # the home row steps them apart, not stacked
+
+    def test_recruited_personality_sits_in_front_of_a_holding(self, loaded):
+        field, state = loaded
+        holding = DynastyHolding(id="P1-hold", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1)
+        personality = DynastyPersonality(
+            id="P1-pers", name="Bushi", side=Side.DYNASTY, owner=PlayerId.P1
+        )
+        for card in (holding, personality):
+            state.cards_by_id[card.id] = card
+            state.battlefield.add(card)
+            state.positions[card.id] = UNPLACED_BOARD_POS
+        field.reconcile_all()
+
+        # P1 sits at the bottom, so its personalities row is further in (smaller y) than its holdings.
+        assert field.sprites[card_tag("P1-pers")].y < field.sprites[card_tag("P1-hold")].y
 
 
 class TestOffBoardReads:

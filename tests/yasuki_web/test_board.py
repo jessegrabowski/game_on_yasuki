@@ -56,7 +56,7 @@ def test_spawn_injects_a_public_card_logs_and_broadcasts():
     _spawn(room, ws)
 
     card = room.state.battlefield.cards[0]
-    assert card.owner is None and card.face_up is True
+    assert card.owner is PlayerId.P1 and card.face_up is True
     assert room.action_log.entries[-1].intent.op is IntentOp.SPAWN_CARD  # a real logged intent
     snapshot = [m for m in ws.sent if m["type"] == "SNAPSHOT"][-1]
     placed = snapshot["snapshot"]["battlefield"][0]

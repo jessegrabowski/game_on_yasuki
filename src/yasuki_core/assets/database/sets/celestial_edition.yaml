@@ -580,7 +580,7 @@ cards:
   types:
   - Holding
   decks:
-  - Pre-Game
+  - Dynasty
   keywords:
   - Unique
   - Forest
@@ -1092,7 +1092,7 @@ cards:
   types:
   - Holding
   decks:
-  - Pre-Game
+  - Dynasty
   keywords:
   - Unique
   text: ':bow:: Produce 2 Gold. <br><b>Limited:</b> If it is your first turn, put one or more cards in

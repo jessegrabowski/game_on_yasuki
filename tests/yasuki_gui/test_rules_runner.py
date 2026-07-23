@@ -209,6 +209,19 @@ def test_province_menu_drops_recruit_when_it_is_unaffordable():
     assert labels == ["Discard from province"]
 
 
+def test_province_menu_is_empty_for_a_stronghold():
+    # A stronghold has no gold_cost; clicking it must not reach recruit_cost.
+    state = _dealt_table(0)
+    state.battlefield.add(
+        _register(
+            state,
+            StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1),
+        )
+    )
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    assert runner.province_menu("P1-SH") == []
+
+
 def _dynasty_runner_with_producer(card_id, printed_id, gold_cost):
     state = _dealt_table(0)
     state.battlefield.add(

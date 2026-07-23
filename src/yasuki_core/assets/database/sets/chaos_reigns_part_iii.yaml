@@ -1489,7 +1489,7 @@ cards:
   types:
   - Wind
   decks:
-  - Fate
+  - Pre-Game
   text: 'Other players must bow a Personality they control to use their Wind''s Lobby ability. You may
     use the rulebook Favor actions. You have a +2 Lobby bonus for each unbowed Personality you or any
     other player controls, whichever is higher.<br><b>Battle, :favor: :</b> A target enemy Personality
@@ -2147,7 +2147,7 @@ cards:
   types:
   - Holding
   decks:
-  - Fate
+  - Dynasty
   keywords:
   - Oracle
   - Retainer
