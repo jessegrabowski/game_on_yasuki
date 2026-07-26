@@ -130,7 +130,7 @@ def _personality_in_province(
     idx: int = 0,
     clan: str | None = None,
     personal_honor: int = 0,
-    honor_requirement: int = 0,
+    honor_requirement: int | None = 0,
 ) -> DynastyPersonality:
     person = _register(
         state,
@@ -206,6 +206,35 @@ def test_recruit_is_withheld_for_a_personality_above_the_seats_family_honor():
     actions = session.legal_actions(PlayerId.P1)
     assert Recruit("P1-proud") not in actions  # HR 3 > Family Honor 2
     assert Recruit("P1-humble") in actions  # HR at the seat's honor is met
+
+
+def test_dash_honor_requirement_recruits_at_negative_family_honor():
+    # A Spider seat under Mishime Sensei sits at negative Family Honor; a dash-HR Personality (None)
+    # has no threshold, so it stays recruitable, while a real HR-0 Personality does not.
+    state = _dealt_table()
+    state.seats[PlayerId.P1].honor = -2
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_province(state, "P1-dash", honor_requirement=None)
+    _personality_in_province(state, "P1-zero", honor_requirement=0, idx=1)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    actions = session.legal_actions(PlayerId.P1)
+    assert Recruit("P1-dash") in actions  # dash is always below any Family Honor
+    assert Recruit("P1-zero") not in actions  # HR 0 still needs Family Honor >= 0
+
+
+def test_ignoring_honor_requirements_waives_the_gate_for_every_personality():
+    state = _dealt_table()
+    state.seats[PlayerId.P1].honor = -2
+    state.seats[PlayerId.P1].ignores_honor_requirements = True
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_province(state, "P1-proud", honor_requirement=5)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    # An HR-5 Personality is recruitable at -2 Family Honor because the seat ignores requirements.
+    assert Recruit("P1-proud") in session.legal_actions(PlayerId.P1)
 
 
 def test_proclaim_is_offered_only_for_an_own_clan_personality():

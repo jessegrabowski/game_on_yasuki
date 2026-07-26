@@ -22,7 +22,9 @@ class DynastyPersonality(DynastyCard):
     force: int = 0
     chi: int = 0
     personal_honor: int = 0
-    honor_requirement: int = 0
+    # None is the printed dash: an infinitely low requirement below any number, so the card recruits
+    # at any Family Honor. A number (possibly 0 or negative) is a real threshold to meet.
+    honor_requirement: int | None = None
     image_front: Path | None = DEFAULT_PERSONALITY
 
 

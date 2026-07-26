@@ -321,3 +321,13 @@ def set_honor(
         return False
     info.honor = new_honor
     return True
+
+
+def set_ignore_honor_requirements(state: TableState, seat: PlayerId, value: bool) -> bool:
+    """Set whether ``seat`` waives every Personality's Honor Requirement when recruiting; returns
+    whether it changed."""
+    info = state.seats[seat]
+    if info.ignores_honor_requirements == value:
+        return False
+    info.ignores_honor_requirements = value
+    return True

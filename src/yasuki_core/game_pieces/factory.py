@@ -303,6 +303,7 @@ def _construct_face(
         side=side,
         owner=owner,
         clan=clans[0] if clans else None,
+        clans=tuple(clans),
         keywords=tuple(record.get("keywords") or ()),
         card_type=card_type,
         creates=creates,
@@ -320,11 +321,14 @@ def _stat_fields(card_cls: type, card_type: str | None, record: dict) -> dict:
     if issubclass(card_cls, DynastyCard):
         fields = {"gold_cost": record.get("gold_cost")}
         if card_cls is DynastyPersonality:
+            # A dash Honor Requirement (absent, or the non-numeric "*") stays None; only a real
+            # integer (possibly 0 or negative) is a threshold.
+            hr = record.get("honor_requirement")
             fields.update(
                 force=record.get("force") or 0,
                 chi=record.get("chi") or 0,
                 personal_honor=record.get("personal_honor") or 0,
-                honor_requirement=record.get("honor_requirement") or 0,
+                honor_requirement=hr if isinstance(hr, int) else None,
             )
         elif card_cls is DynastyHolding:
             fields["gold_production"] = record.get("gold_production") or 0

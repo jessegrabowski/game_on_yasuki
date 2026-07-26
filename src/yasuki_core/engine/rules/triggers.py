@@ -98,6 +98,14 @@ class GainGold:
 
 
 @dataclass(frozen=True, slots=True)
+class IgnoreHonorRequirements:
+    """Effect: grant ``seat`` the standing waiver of every Personality's Honor Requirement when
+    recruiting."""
+
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
 class Choose:
     """Effect: pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of
     ``candidates``; the chosen ids feed the registered ``resolver``, whose effects apply on resume.
@@ -137,6 +145,7 @@ Effect = (
     | Straighten
     | BanishTopFate
     | GainGold
+    | IgnoreHonorRequirements
     | Choose
 )
 
@@ -241,6 +250,8 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
                 ops.move_card(game.table, deck.cards[-1], ZoneKey(seat, ZoneRole.FATE_BANISH))
         case GainGold(seat=seat, amount=amount):
             game.add_gold(seat, amount)
+        case IgnoreHonorRequirements(seat=seat):
+            ops.set_ignore_honor_requirements(game.table, seat, True)
         case Choose():
             raise RuntimeError("a Choose pauses the trigger cascade; it is never applied directly")
     return []
@@ -445,6 +456,15 @@ def _sapphire_mine(ctx: TriggerContext) -> list[Effect]:
     if ctx.card.counters.get(SINCERITY.key, 0) < 2:
         return []
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+@on(EnteredPlay, "mishime_sensei")
+def _mishime_sensei_enters_play(ctx: TriggerContext) -> list[Effect]:
+    """Mishime Sensei: grant its controller the ignore-Honor-Requirements waiver as it enters
+    play."""
+    if ctx.event.card_id != ctx.card.id or ctx.card.owner is None:
+        return []
+    return [IgnoreHonorRequirements(ctx.card.owner)]
 
 
 @on(EnteredPlay, "the_kurai_district_court")
