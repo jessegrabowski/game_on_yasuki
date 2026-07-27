@@ -1,0 +1,31 @@
+yasuki_core.engine.ops
+======================
+
+.. automodule:: yasuki_core.engine.ops
+
+.. currentmodule:: yasuki_core.engine.ops
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: generated/
+
+    attach
+    bring_to_top
+    create_province
+    destroy_province
+    detach
+    discard_province
+    draw_to_hand
+    fill_province
+    move_card
+    remove_card
+    remove_from_location
+    reorder_in_hand
+    reorder_in_pile
+    reveal_provinces
+    set_honor
+    set_ignore_honor_requirements
+    set_position
+    spawn_token
+    straighten
