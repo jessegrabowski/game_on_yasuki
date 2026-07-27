@@ -88,13 +88,13 @@ matches nothing rather than everything.
 ## Examples
 
 ```
-c:Crane t:personality f>=4                # powerful Crane personalities
+c:Crane t:personality f>=4                # high-Force Crane personalities
 gold<=2 -type:holding                     # cheap non-holdings
 c:crane t:personality is:shugenja|courtier # Crane shugenja or courtiers
-(c:dragon OR c:phoenix) t:personality f>=3 # Dragon or Phoenix bruisers
+(c:dragon OR c:phoenix) t:personality f>=3 # high-Force Dragon or Phoenix personalities
 is:unique t:personality chi>=2            # unique personalities, high chi
 is:cavalry clan:Unicorn force>=3          # Unicorn cavalry rush
-t:personality gold<=2 -is:unique          # cheap spam
+t:personality gold<=2 -is:unique          # cheap non-unique personalities
 ```
 
 The search box and the filter dialog combine — queries parse alongside any active

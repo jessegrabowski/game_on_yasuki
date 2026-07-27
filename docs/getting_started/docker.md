@@ -1,7 +1,7 @@
 # Docker Guide
 
-Docker lets you run PostgreSQL (and optionally the API server) without installing
-them natively. The GUI still runs on your host machine.
+Docker runs PostgreSQL (and optionally the API server) without a native install.
+The GUI still runs on the host machine.
 
 **Prerequisite:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 installed and running.
@@ -32,8 +32,8 @@ pixi run docker-api
 
 ## Environment Variables
 
-All Docker services read their configuration from environment variables with
-sensible defaults. To override them, copy `.env.example` to `.env`:
+All Docker services read their configuration from environment variables, falling
+back to the defaults in `.env.example`. To override them, copy `.env.example` to `.env`:
 
 ```bash
 cp .env.example .env
@@ -49,7 +49,7 @@ Docker Compose automatically loads `.env` from the project root. See
 pixi run docker-test
 ```
 
-Builds, starts everything, hits the API health and card endpoints, reports status.
+Builds the image, starts the services, requests the API health and card endpoints, and reports the result.
 
 ## Command Reference
 

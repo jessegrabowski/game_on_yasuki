@@ -1,4 +1,17 @@
-# Development Guide
+# Contributing
+
+Game on, Yasuki! is a personal, educational project, but contributions are welcome.
+
+## Workflow
+
+1. Fork the repo and create a feature branch.
+2. Install dependencies and hooks: `pixi install && pre-commit install`.
+3. Make your changes and add tests.
+4. Run `pixi run test` and `pre-commit run --all`.
+5. Open a pull request.
+
+New to the codebase? Start with [Setup](../getting_started/setup.md), then read
+[Design & Architecture](../design/index.md) for how the pieces fit together.
 
 ## Running Tests
 
@@ -18,11 +31,8 @@ pixi run test -- --cov=yasuki_core --cov=yasuki_gui --cov=yasuki_web --cov-repor
 This project uses pre-commit with ruff:
 
 ```bash
-# Install hooks (once)
-pre-commit install
-
-# Run on all files
-pre-commit run --all
+pre-commit install       # once
+pre-commit run --all     # run on all files
 ```
 
 ## Project Structure
@@ -30,8 +40,9 @@ pre-commit run --all
 ```
 src/
 ├── yasuki_core/          # Game engine and data layer
-│   ├── engine/           #   Players, zones
-│   ├── game_pieces/      #   Cards, decks, constants
+│   ├── engine/           #   Table state, zones, players, and the rules/ subpackage
+│   │   └── rules/        #   State, flow, actions, decisions, abilities, effects, triggers
+│   ├── game_pieces/      #   Cards, decks, counters, constants
 │   ├── search/           #   Scryfall-style query parser
 │   ├── install/          #   Database bootstrap
 │   ├── database.py       #   PostgreSQL queries
@@ -58,19 +69,12 @@ src/
 Tests mirror this structure under `tests/yasuki_core/`, `tests/yasuki_web/`,
 `tests/yasuki_gui/`.
 
-## Architecture
-
-**Dependency graph:** `yasuki_core ← yasuki_web`, `yasuki_core ← yasuki_gui`.
-No dependency between web and gui.
-
-**Key patterns:**
-- Cards are frozen dataclasses with `object.__setattr__` state transitions
-- Zones enforce capacity rules (e.g., ProvinceZone holds exactly 1 card)
-- GUI separation: `FieldView` renders, `Controller` handles interaction
-- Database stores card definitions; game state lives in memory
-
 ## Adding a Card Set
 
-1. Place set images in `sets/<set_name>/` (one `.png` per card)
-2. Add set metadata to `src/yasuki_core/assets/database/set_info.json`
-3. Run `pixi run install-db --force` to re-seed
+Card data is committed YAML — the full workflow (set YAML, image manifests, errata) lives in
+[Database & card data](../design/database.md). The short version:
+
+1. Add the set's card data to `src/yasuki_core/assets/database/sets/<slug>.yaml` and its metadata to
+   `set_info.yaml`.
+2. Add the image manifest at `src/yasuki_core/assets/database/images/<slug>.yaml`.
+3. Reload the database: `pixi run install-db --force`.

@@ -74,7 +74,7 @@ a password. For custom setups:
 
 ```bash
 # Explicit DSN
-pixi run install-db -- --dsn "postgresql://user:pass@host:5432/yasuki"
+pixi run install-db --dsn "postgresql://user:pass@host:5432/yasuki"
 
 # Or via environment variable
 export YASUKI_DATABASE_URL="postgresql://user:pass@host:5432/yasuki"
@@ -85,12 +85,13 @@ pixi run install-db
 
 | Flag | Effect |
 |------|--------|
-| `--force` | Drop and recreate schema (destroys existing data) |
+| `--force` | Reapply the schema and reload data even if the tables already exist |
 | `--skip-sets` | Skip set metadata import |
 | `--skip-cards` | Skip card data import |
-| `--cards PATH` | Override path to `cards.json` |
-| `--sets PATH` | Override path to `set_info.json` |
-| `--schema PATH` | Override path to `schema.sql` |
+| `--cards PATH` | Override the per-set card YAML directory (default: bundled `assets/database/sets/`) |
+| `--sets PATH` | Override the set-info YAML (default: `assets/database/set_info.yaml`) |
+| `--images PATH` | Override the per-set image-manifest directory (default: `assets/database/images/`) |
+| `--schema PATH` | Override the schema SQL file (default: `assets/database/schema.sql`) |
 
 ## Card Set Images
 
@@ -107,4 +108,4 @@ The game works without them — generic card-type images are bundled in the pack
 
 - [Run the desktop client](running.md)
 - [Run with Docker](docker.md)
-- [Development guide](development.md)
+- [Contributing guide](../contributing/index.md)

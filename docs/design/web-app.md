@@ -1,4 +1,9 @@
-# API Reference
+# Web App: HTTP & WebSocket API
+
+The web app is a FastAPI server fronting the same `yasuki_core` engine the desktop client uses. The
+server is authoritative: clients never mutate game state directly — they send intents over a WebSocket,
+the server applies them through the engine, and broadcasts the resulting state. Card browsing, room
+management, and configuration are plain REST; live gameplay runs over the WebSocket protocol below.
 
 ## REST Endpoints
 
