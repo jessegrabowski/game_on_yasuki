@@ -37,14 +37,21 @@ Dependency direction: `yasuki_core ← yasuki_web`, `yasuki_core ← yasuki_gui`
 
 ## Documentation
 
+Full documentation is hosted at **[game-on-yasuki.readthedocs.io](https://game-on-yasuki.readthedocs.io)** —
+narrative guides plus an auto-generated API reference for all three packages.
+
 | Guide | Description |
 |-------|-------------|
-| [Setup](docs/setup.md) | Installation — PostgreSQL, Pixi, database seeding, card images |
-| [Running](docs/running.md) | Launch the GUI, start the API server, configuration |
-| [Docker](docs/docker.md) | Run PostgreSQL and the API in containers |
-| [Development](docs/development.md) | Tests, linting, project structure |
-| [Search syntax](docs/search-syntax.md) | Scryfall-style card search query language |
-| [API reference](docs/api.md) | REST endpoints and WebSocket protocol |
+| [Setup](docs/getting_started/setup.md) | Installation — PostgreSQL, Pixi, database seeding, card images |
+| [Running](docs/getting_started/running.md) | Launch the GUI, start the API server, configuration |
+| [Docker](docs/getting_started/docker.md) | Run PostgreSQL and the API in containers |
+| [Database & card data](docs/design/database.md) | How card data, printings, errata, and images are stored |
+| [Web app API](docs/design/web-app.md) | REST endpoints and WebSocket protocol |
+| [Search syntax](docs/design/search.md) | Scryfall-style card search query language |
+| [Contributing](docs/contributing/index.md) | Tests, linting, project structure, workflow |
+
+Build the docs locally with `pixi run docs-build` (output in `docs/_build/html`), or
+serve them at <http://localhost:8080> with `pixi run docs-serve`.
 
 ## Contributing
 
