@@ -24,14 +24,18 @@ iwr -useb https://pixi.sh/install.ps1 | iex
 pixi install
 ```
 
-This installs Python 3.12, psycopg2, Pillow, Tk, FastAPI, and all dev tools from
-conda-forge and PyPI.
+This installs Python 3.12, psycopg (v3), Pillow, Tk, FastAPI, and all dev tools
+from conda-forge and PyPI.
 
-**Alternative (pip only):**
+**Alternative (pip, server only):**
 
 ```bash
 pip install -e ".[all]"
 ```
+
+This installs the core library and the web server (`web` extra), but **not** the
+desktop client: Tk is a conda/system dependency pip cannot provide, and the `all`
+extra omits `reportlab`. Use the Pixi environment above to run the GUI.
 
 ## Install PostgreSQL
 
@@ -69,8 +73,13 @@ createdb yasuki
 pixi run install-db
 ```
 
-This assumes PostgreSQL is running on localhost and your user can access it without
-a password. For custom setups:
+This assumes PostgreSQL is already running on localhost and your user can access it
+without a password (check with `pg_isready`). `createdb` creates the database;
+`install-db` only populates an existing one. If `createdb` reports that `yasuki`
+already exists, skip it. `install-db` is do-nothing-on-conflict, so to reload card
+data into an already-seeded database, add `--force` (see the flag table below).
+
+For custom setups:
 
 ```bash
 # Explicit DSN
@@ -88,10 +97,10 @@ pixi run install-db
 | `--force` | Reapply the schema and reload data even if the tables already exist |
 | `--skip-sets` | Skip set metadata import |
 | `--skip-cards` | Skip card data import |
-| `--cards PATH` | Override the per-set card YAML directory (default: bundled `assets/database/sets/`) |
-| `--sets PATH` | Override the set-info YAML (default: `assets/database/set_info.yaml`) |
-| `--images PATH` | Override the per-set image-manifest directory (default: `assets/database/images/`) |
-| `--schema PATH` | Override the schema SQL file (default: `assets/database/schema.sql`) |
+| `--cards PATH` | Override the per-set card YAML directory (default: `src/yasuki_core/assets/database/sets/`) |
+| `--sets PATH` | Override the set-info YAML (default: `src/yasuki_core/assets/database/set_info.yaml`) |
+| `--images PATH` | Override the per-set image-manifest directory (default: `src/yasuki_core/assets/database/images/`) |
+| `--schema PATH` | Override the schema SQL file (default: `src/yasuki_core/assets/database/schema.sql`) |
 
 ## Card Set Images
 
