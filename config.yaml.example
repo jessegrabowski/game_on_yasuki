@@ -1,0 +1,19 @@
+# Optional configuration for the desktop client. Copy to `config.yaml` in the
+# repository root and edit. Every field is optional; omit what you do not override.
+
+database:
+  # Used by the desktop client only, when YASUKI_DATABASE_URL is unset. Takes precedence
+  # over DATABASE_URL and the built-in default. See docs/getting_started/running.md.
+  dsn: postgresql://localhost/yasuki
+
+gui:
+  hotkeys:
+    bow: b
+    flip: f
+    invert: d
+    fill: l
+    destroy: c
+    draw: r
+    shuffle: s
+    inspect: i
+    view: v

@@ -1,0 +1,22 @@
+# Read the Docs build configuration.
+# https://docs.readthedocs.io/en/stable/config-file/v2.html
+#
+# We drive the build with pixi (build.commands mode) so RTD uses the same
+# toolchain and lockfile as local `pixi run docs-build`. In this mode RTD does
+# not run Sphinx for us: we build the HTML ourselves and copy it into
+# $READTHEDOCS_OUTPUT/html. The `sphinx:` and `python:` keys are intentionally
+# absent — they are not allowed alongside build.commands.
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.12"
+  commands:
+    - curl -fsSL https://pixi.sh/install.sh | bash
+    - ~/.pixi/bin/pixi run -e docs docs-build
+    - mkdir -p "$READTHEDOCS_OUTPUT/html"
+    - cp -r docs/_build/html/. "$READTHEDOCS_OUTPUT/html/"
+
+formats:
+  - htmlzip

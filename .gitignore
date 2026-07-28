@@ -218,6 +218,8 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+# autosummary stubs — regenerated each build from the committed docs/api/*.rst
+docs/api/generated/
 
 # PyBuilder
 .pybuilder/
