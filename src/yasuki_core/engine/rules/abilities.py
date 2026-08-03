@@ -15,9 +15,7 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
 )
 from yasuki_core.engine.rules.triggers import province_holdings, sincerity_seed_targets
-from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
@@ -48,20 +46,9 @@ def _banish_top_fate(source: L5RCard) -> list[Effect]:
 
 
 def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:
-    """Whether ``card`` can pay ``cost`` — every effect it spends can actually apply: a bow needs the
-    card unbowed, a counter spend needs enough of that counter, a Fate-deck banish needs a card to
-    banish. Any other cost effect always applies."""
-    for effect in cost(card):
-        match effect:
-            case Bow() if card.bowed:
-                return False
-            case AdjustCounter(counter=counter, delta=delta) if delta < 0:
-                if card.counters.get(counter.key, 0) < -delta:
-                    return False
-            case BanishTopFate(seat=seat):
-                if not game.table.decks[DeckKey(seat, Side.FATE)].cards:
-                    return False
-    return True
+    """Whether ``card`` can pay ``cost``: every effect it spends is payable against the current
+    state. Each effect owns its own precondition, so a new cost effect needs no change here."""
+    return all(effect.is_payable(game) for effect in cost(card))
 
 
 @dataclass(frozen=True, slots=True)

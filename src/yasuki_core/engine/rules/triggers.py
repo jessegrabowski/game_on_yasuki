@@ -1,7 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
@@ -14,21 +13,17 @@ from yasuki_core.engine.rules.events import (
 from yasuki_core.engine.rules.decisions import ChooseCards
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    BanishTopFate,
-    Bow,
     Choose,
     Destroy,
     DrawCard,
     Effect,
     GainGold,
-    GrantModifier,
     IgnoreHonorRequirements,
     Straighten,
 )
-from yasuki_core.engine.rules.modifiers import Modifier
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ResumeCascade
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter, SINCERITY, WEALTH
@@ -103,50 +98,9 @@ def once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
 
 
 def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
-    """Commit one effect and return the events it raises, for the fixpoint walk to drain. This is the
-    single mutation boundary; triggers themselves never mutate."""
-    match effect:
-        case AdjustCounter(card_id=card_id, counter=counter, delta=delta):
-            card = game.table.cards_by_id.get(card_id)
-            if card is None:
-                return []
-            before = card.counters.get(counter.key, 0)
-            card.adjust_counter(counter.key, delta)
-            gained = card.counters.get(counter.key, 0) - before
-            if gained > 0:
-                return [CounterGained(card_id, counter, gained)]
-        case DrawCard(seat=seat):
-            ops.draw_to_hand(game.table, seat)
-        case Destroy(card_id=card_id):
-            card = game.table.cards_by_id.get(card_id)
-            if card is None or card.owner is None:
-                return []
-            role = ZoneRole.DYNASTY_DISCARD if card.side is Side.DYNASTY else ZoneRole.FATE_DISCARD
-            ops.move_card(game.table, card, ZoneKey(card.owner, role))
-            return [Destroyed(card_id)]
-        case GrantModifier(
-            source_id=source_id, target_id=target_id, stat=stat, amount=amount, duration=duration
-        ):
-            game.modifiers.append(Modifier(source_id, target_id, stat, amount, duration))
-        case Bow(card_id=card_id):
-            card = game.table.cards_by_id.get(card_id)
-            if card is not None:
-                card.bow()
-        case Straighten(card_id=card_id):
-            card = game.table.cards_by_id.get(card_id)
-            if card is not None:
-                card.unbow()
-        case BanishTopFate(seat=seat):
-            deck = game.table.decks[DeckKey(seat, Side.FATE)]
-            if deck.cards:
-                ops.move_card(game.table, deck.cards[-1], ZoneKey(seat, ZoneRole.FATE_BANISH))
-        case GainGold(seat=seat, amount=amount):
-            game.add_gold(seat, amount)
-        case IgnoreHonorRequirements(seat=seat):
-            ops.set_ignore_honor_requirements(game.table, seat, True)
-        case Choose():
-            raise RuntimeError("a Choose pauses the trigger cascade; it is never applied directly")
-    return []
+    """Commit one effect and return the events it raises, for the fixpoint walk to drain. This is
+    the single mutation boundary; triggers themselves never mutate."""
+    return effect.perform(game)
 
 
 def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
