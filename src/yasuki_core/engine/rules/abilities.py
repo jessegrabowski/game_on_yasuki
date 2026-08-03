@@ -46,9 +46,9 @@ def _banish_top_fate(source: L5RCard) -> list[Effect]:
 
 
 def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:
-    """Whether ``card`` can pay ``cost``: every effect it spends can apply against the current
+    """Whether ``card`` can pay ``cost``: every effect it spends is payable against the current
     state. Each effect owns its own precondition, so a new cost effect needs no change here."""
-    return all(effect.can_apply(game) for effect in cost(card))
+    return all(effect.is_payable(game) for effect in cost(card))
 
 
 @dataclass(frozen=True, slots=True)

@@ -61,42 +61,42 @@ def test_effects_stay_frozen_hashable_and_slotted():
         bow.card_id = "other"
 
 
-def test_can_apply_defaults_to_true():
+def test_is_payable_defaults_to_true():
     game = two_seat_game()
-    assert effects.DrawCard(PlayerId.P1).can_apply(game) is True
+    assert effects.DrawCard(PlayerId.P1).is_payable(game) is True
 
 
-def test_bow_cannot_apply_to_an_already_bowed_card():
+def test_bow_is_not_payable_for_an_already_bowed_card():
     game = two_seat_game()
     card = put_in_play(game, holding("P1-h"))
-    assert Bow(card.id).can_apply(game) is True
+    assert Bow(card.id).is_payable(game) is True
     card.bow()
-    assert Bow(card.id).can_apply(game) is False
+    assert Bow(card.id).is_payable(game) is False
 
 
-def test_bow_cannot_apply_to_a_card_that_is_not_there():
-    assert Bow("nonexistent").can_apply(two_seat_game()) is False
+def test_bow_is_not_payable_for_a_card_that_is_not_there():
+    assert Bow("nonexistent").is_payable(two_seat_game()) is False
 
 
 def test_removing_a_counter_needs_enough_of_it():
     game = two_seat_game()
     card = put_in_play(game, holding("P1-h", counters={"wealth": 1}))
-    assert AdjustCounter(card.id, WEALTH, -1).can_apply(game) is True
-    assert AdjustCounter(card.id, WEALTH, -2).can_apply(game) is False
+    assert AdjustCounter(card.id, WEALTH, -1).is_payable(game) is True
+    assert AdjustCounter(card.id, WEALTH, -2).is_payable(game) is False
 
 
 def test_granting_a_counter_always_applies():
     game = two_seat_game()
     card = put_in_play(game, holding("P1-h"))
-    assert AdjustCounter(card.id, WEALTH, 1).can_apply(game) is True
+    assert AdjustCounter(card.id, WEALTH, 1).is_payable(game) is True
 
 
 def test_banishing_needs_a_fate_card_to_banish():
     game = two_seat_game()
-    assert BanishTopFate(PlayerId.P1).can_apply(game) is False
+    assert BanishTopFate(PlayerId.P1).is_payable(game) is False
     deck = game.table.decks[DeckKey(PlayerId.P1, Side.FATE)]
     deck.cards = [fate_card("P1-fd", PlayerId.P1)]
-    assert BanishTopFate(PlayerId.P1).can_apply(game) is True
+    assert BanishTopFate(PlayerId.P1).is_payable(game) is True
 
 
 def test_choose_refuses_to_be_committed_directly():

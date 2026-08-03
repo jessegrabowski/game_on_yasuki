@@ -15,8 +15,7 @@ class Effect(ABC):
     """One change to game state, described as data.
 
     Triggers and activated abilities return lists of effects rather than mutating the board, and the
-    cascade commits each through :meth:`perform`. An effect that cannot be added without implementing
-    its own behavior cannot be added and then forgotten about at the commit site.
+    cascade commits each through :meth:`perform`.
     """
 
     __slots__ = ()
@@ -25,9 +24,9 @@ class Effect(ABC):
     def perform(self, game: GameState) -> list[GameEvent]:
         """Commit this effect and return the events it raises, for the cascade to drain."""
 
-    def can_apply(self, game: GameState) -> bool:
-        """Whether this effect would do anything against the current state. Only effects with a
-        precondition an ability must satisfy before paying it override this."""
+    def is_payable(self, game: GameState) -> bool:
+        """Whether an ability can pay this effect as a cost. Most effects carry no precondition
+        and always can."""
         return True
 
 
@@ -41,7 +40,7 @@ class AdjustCounter(Effect):
     counter: Counter
     delta: int
 
-    def can_apply(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState) -> bool:
         """A removal needs the card to hold enough of the counter; a grant always applies."""
         if self.delta >= 0:
             return True
@@ -111,7 +110,7 @@ class Bow(Effect):
 
     card_id: str
 
-    def can_apply(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState) -> bool:
         """An already-bowed card cannot bow again."""
         card = game.table.cards_by_id.get(self.card_id)
         return card is not None and not card.bowed
@@ -142,7 +141,7 @@ class BanishTopFate(Effect):
 
     seat: PlayerId
 
-    def can_apply(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState) -> bool:
         """An empty Fate deck has nothing to banish."""
         return bool(game.table.decks[DeckKey(self.seat, Side.FATE)].cards)
 
