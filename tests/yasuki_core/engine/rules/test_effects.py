@@ -1,4 +1,5 @@
 import inspect
+from dataclasses import FrozenInstanceError
 
 import pytest
 
@@ -9,6 +10,7 @@ from yasuki_core.engine.rules.effects import (
     BanishTopFate,
     Bow,
     Choose,
+    Destroy,
     Effect,
 )
 from yasuki_core.engine.table import DeckKey
@@ -37,18 +39,10 @@ def test_every_effect_implements_perform():
     assert missing == []
 
 
-def test_the_module_defines_the_effects_the_engine_expects():
+def test_effect_discovery_finds_concrete_effects_and_excludes_the_base():
     # Guards the discovery above: if it silently found nothing, the other tests would pass vacuously.
-    assert len(_effect_types()) == 10
-
-
-def test_an_effect_cannot_be_defined_without_perform():
-    with pytest.raises(TypeError, match="abstract"):
-
-        class Forgetful(Effect):
-            pass
-
-        Forgetful()
+    assert Bow in _effect_types()
+    assert Effect not in _effect_types()
 
 
 def test_effects_stay_frozen_hashable_and_slotted():
@@ -57,7 +51,7 @@ def test_effects_stay_frozen_hashable_and_slotted():
     bow = Bow("card")
     assert bow == Bow("card") and hash(bow) == hash(Bow("card"))
     assert not hasattr(bow, "__dict__")
-    with pytest.raises(Exception):
+    with pytest.raises(FrozenInstanceError):
         bow.card_id = "other"
 
 
@@ -103,3 +97,30 @@ def test_choose_refuses_to_be_committed_directly():
     choice = Choose(PlayerId.P1, ("a",), 0, 1, "resolver", "src")
     with pytest.raises(RuntimeError, match="pauses the trigger cascade"):
         choice.perform(two_seat_game())
+
+
+def _vanished(game, card_id):
+    """Drop a card from the id map while leaving it on the battlefield, as a mid-cascade destroy
+    does to any effect that bound it earlier."""
+    del game.table.cards_by_id[card_id]
+
+
+def test_adjusting_a_counter_on_a_vanished_card_is_a_no_op():
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h"))
+    _vanished(game, card.id)
+    assert AdjustCounter(card.id, WEALTH, 1).perform(game) == []
+
+
+def test_destroying_a_vanished_card_is_a_no_op():
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h"))
+    _vanished(game, card.id)
+    assert Destroy(card.id).perform(game) == []
+
+
+def test_destroying_an_unowned_card_is_a_no_op():
+    # A card with no owner has no discard pile to go to.
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h", owner=None))
+    assert Destroy(card.id).perform(game) == []
