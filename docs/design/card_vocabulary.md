@@ -94,8 +94,8 @@ Legality with respect to game state is checked separately.
 
 A work item is a unit of engine work held on `GameState.stack` and run once the current decision
 clears. An action pushes its remaining steps onto the stack when an earlier step pauses, so that an
-interrupting trait resolves first, and a `Then` effect queues its sub-sequence the same way. Work
-items are ephemeral: replay reconstructs the stack by re-running
+interrupting trait resolves first, and a `Then` effect queues its sub-sequence the same way. The
+stack is last in, first out. Work items are ephemeral: replay reconstructs the stack by re-running
 the action rather than by deserializing it.
 
 ```{eval-rst}

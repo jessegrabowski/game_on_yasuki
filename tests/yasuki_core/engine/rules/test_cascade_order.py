@@ -132,6 +132,36 @@ def test_recruit_card_pauses_for_payment_and_brings_the_card_in():
     assert target in game.table.battlefield.cards
 
 
+@on(EnteredPlay, "order_on_entry")
+def _record_entry(ctx):
+    if ctx.event.card_id == ctx.card.id:
+        FIRING_ORDER.append(("entered", ctx.card.id))
+    return []
+
+
+def test_a_deferred_step_runs_after_the_recruited_cards_entry_trait():
+    # The interleaving the design mockup got wrong. Both the entry trait and the deferred step land
+    # in the same log, so this asserts their ORDER rather than merely that both happened.
+    game = two_seat_game()
+    put_in_play(game, holding("P1-gold", gold_production=8))
+    put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
+    target = province_card(game, "P1-target", gold_cost=2, printed_id="order_on_entry")
+
+    resolve_effects(
+        game,
+        [
+            RecruitCard(target.id),
+            Then((AdjustCounter("P1-watcher", WEALTH, 1),)),
+        ],
+    )
+    submit(game, DecisionResponse(("P1-gold",)))
+
+    assert FIRING_ORDER == [
+        ("entered", "P1-target"),
+        ("watcher", "P1-watcher", {"wealth": 1}),
+    ]
+
+
 def test_recruit_card_refills_the_vacated_province_face_up_with_renew():
     game = two_seat_game()
     put_in_play(game, holding("P1-gold", gold_production=8))
