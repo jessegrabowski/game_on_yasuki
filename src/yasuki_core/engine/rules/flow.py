@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import (
+    ApplyEffects,
     ApplyAbilityEffects,
     FinishRecruit,
     ModestFarmStraighten,
@@ -359,6 +360,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             triggers.resolve_effects(game, effects)
         case FinishRecruit(card_id=card_id, invest_amount=invest_amount, proclaim=proclaim):
             _finish_recruit(game, card_id, invest_amount, proclaim=proclaim)
+        case ApplyEffects(effects=effects):
+            triggers.resolve_effects(game, list(effects))
         case ModestFarmStraighten(modest_farm_id=modest_farm_id, target_id=target_id):
             owner = game.table.cards_by_id[target_id].owner
             triggers.resolve_effects(

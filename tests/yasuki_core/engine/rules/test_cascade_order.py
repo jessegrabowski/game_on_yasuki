@@ -2,10 +2,16 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay
-from yasuki_core.engine.rules.triggers import AdjustCounter, fire, on
+from yasuki_core.engine.rules.effects import AdjustCounter, Then
+from yasuki_core.engine.rules.flow import run_stack
+from yasuki_core.engine.rules.triggers import fire, on, resolve_effects
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    holding,
+    put_in_play,
+    two_seat_game,
+)
 
 # Characterization tests: these pin the *order* the cascade resolves in, which the outcome-focused
 # suites do not. A refactor that reorders decisions can leave every final board state identical, so
@@ -81,3 +87,26 @@ def test_a_second_subscriber_still_fires_after_the_first_ones_effects_resolve():
     # Every EnteredPlay subscriber runs before the derived CounterGained events are dequeued.
     both_counters = ("watcher", "P1-a-source", {"wealth": 1, "sincerity": 1})
     assert FIRING_ORDER == [("recorder", "P1-b-recorder"), both_counters, both_counters]
+
+
+def test_then_defers_its_effects_until_the_cascade_has_finished_reacting():
+    # An effect placed inline runs before the events already queued behind it. Then exists for the
+    # step that must follow another card's reaction to what just happened.
+    game = two_seat_game()
+    source = put_in_play(game, holding("P1-source"))
+    put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
+
+    resolve_effects(
+        game,
+        [
+            AdjustCounter(source.id, WEALTH, 1),
+            Then((AdjustCounter(source.id, SINCERITY, 1),)),
+        ],
+    )
+
+    assert FIRING_ORDER == [("watcher", "P1-source", {"wealth": 1})]  # reacted already
+    assert source.counters.get("sincerity") is None  # deferred effect has not run
+
+    run_stack(game)
+
+    assert source.counters["sincerity"] == 1

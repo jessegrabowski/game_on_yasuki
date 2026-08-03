@@ -9,13 +9,15 @@ machine) are described in [the engine design](engine.md).
 
 ## Effects
 
-An effect is a frozen dataclass describing one change to game state. Triggers and activated abilities
-return lists of effects, and `yasuki_core.engine.rules.triggers.apply_effect` is the sole point at
-which they are committed. The events that function returns feed the cascade, which may in turn
-produce further effects.
+An effect is a frozen dataclass describing one change to game state, and it carries its own
+behavior. `perform` commits the change and returns the events it raises; `is_payable` reports
+whether an ability can pay the effect as a cost. Triggers and activated abilities return lists of
+effects, and the cascade commits each in turn, draining the events they raise until no further
+events are produced.
 
-`Choose` differs from the others in kind. It suspends the cascade to put a question to a seat; the
-chosen ids are passed to a registered resolver, whose own effects apply when the cascade resumes.
+`Then` is the counterpart for sequencing. An effect placed inline runs before the events already
+queued behind it, so a step that must follow another card's reaction to what just happened is
+deferred through `Then` instead.
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.effects
@@ -23,6 +25,8 @@ chosen ids are passed to a registered resolver, whose own effects apply when the
 .. autosummary::
    :toctree: ../api/generated
 
+   Effect
+   InterruptingEffect
    AdjustCounter
    Bow
    Straighten
@@ -32,6 +36,7 @@ chosen ids are passed to a registered resolver, whose own effects apply when the
    GainGold
    GrantModifier
    IgnoreHonorRequirements
+   Then
    Choose
 ```
 
@@ -83,8 +88,9 @@ Legality with respect to game state is checked separately.
 
 A work item is a unit of engine work held on `GameState.stack` and run once the current decision
 clears. An action pushes its remaining steps onto the stack when an earlier step pauses, so that an
-interrupting trait resolves first. Work items are ephemeral: replay reconstructs the stack by
-re-running the action rather than by deserializing it.
+interrupting trait resolves first, and a `Then` effect queues its sub-sequence the same way. Work
+items are ephemeral: replay reconstructs the stack by re-running
+the action rather than by deserializing it.
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.work

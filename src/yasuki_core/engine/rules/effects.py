@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest
 from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
@@ -195,6 +196,21 @@ class IgnoreHonorRequirements(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         ops.set_ignore_honor_requirements(game.table, self.seat, True)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class Then(Effect):
+    """Defer ``effects`` until the current step has fully resolved, cascade included.
+
+    Effects placed inline run before the events already queued behind them, so a step that must
+    follow another card's reaction to what just happened belongs here instead.
+    """
+
+    effects: tuple[Effect, ...]
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.stack.append(ApplyEffects(self.effects))
         return []
 
 

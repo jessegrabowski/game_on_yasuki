@@ -116,6 +116,21 @@ class ApplyAbilityEffects:
 
 
 @dataclass(frozen=True, slots=True)
+class ApplyEffects:
+    """Resolve ``effects`` once the current step finishes. The generic deferral: an effect that must
+    wait for what precedes it to resolve fully — including any cascade it raises — is queued here
+    rather than placed inline, where it would run ahead of the events already in flight.
+
+    Attributes
+    ----------
+    effects : tuple of Effect
+        The effects to resolve, in order.
+    """
+
+    effects: tuple[object, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class ModestFarmStraighten:
     """Offer Modest Farm's optional sacrifice once its targeted recruit has resolved: the controller
     may destroy Modest Farm to straighten the freshly recruited card. Deferred so it runs after the
@@ -141,6 +156,7 @@ WorkItem = (
     | ResumeCascade
     | SelectAbilityTarget
     | ApplyAbilityEffects
+    | ApplyEffects
     | FinishRecruit
     | ModestFarmStraighten
 )
