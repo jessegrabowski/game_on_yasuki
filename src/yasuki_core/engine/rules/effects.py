@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest
 from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
@@ -28,6 +29,26 @@ class Effect(ABC):
         """Whether an ability can pay this effect as a cost. Most effects carry no precondition
         and always can."""
         return True
+
+
+class InterruptingEffect(Effect, ABC):
+    """An effect that pauses the cascade to put a question to a seat.
+
+    The walker records :meth:`request` as the pending decision and stashes the rest of the cascade,
+    resuming once the seat answers. It never calls :meth:`perform` on one.
+    """
+
+    __slots__ = ()
+
+    @abstractmethod
+    def request(self, game: GameState) -> DecisionRequest:
+        """The decision to put to the seat."""
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Never reached: the walker records :meth:`request` and pauses instead of committing."""
+        raise RuntimeError(
+            f"{type(self).__name__} pauses the cascade; it is never applied directly"
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -178,11 +199,9 @@ class IgnoreHonorRequirements(Effect):
 
 
 @dataclass(frozen=True, slots=True)
-class Choose(Effect):
+class Choose(InterruptingEffect):
     """Pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of ``candidates``;
-    the chosen ids feed the registered ``resolver``, whose effects apply on resume. The one
-    interruption point in the effect vocabulary: every other effect commits at once, so a trigger
-    returns a Choose as its sole effect.
+    the chosen ids feed the registered ``resolver``, whose effects apply on resume.
 
     Attributes
     ----------
@@ -207,5 +226,12 @@ class Choose(Effect):
     resolver: str
     source_id: str
 
-    def perform(self, game: GameState) -> list[GameEvent]:
-        raise RuntimeError("a Choose pauses the trigger cascade; it is never applied directly")
+    def request(self, game: GameState) -> DecisionRequest:
+        return ChooseCards(
+            seat=self.seat,
+            candidates=self.candidates,
+            minimum=self.minimum,
+            maximum=self.maximum,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
