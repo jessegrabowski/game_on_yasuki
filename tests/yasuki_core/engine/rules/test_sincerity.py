@@ -10,27 +10,11 @@ from yasuki_core.game_pieces.counters import SINCERITY, counter_from_key
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
-from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
 
+from tests.yasuki_core.engine.builders import two_seat_game
 
-def _game():
-    return GameState.start(TableState.empty_two_seat(), PlayerId.P1)
-
-
-def _province_card(
-    game, card_id, *, seat=PlayerId.P1, keywords=("Sincerity",), face_up=True, index=0
-):
-    card = DynastyHolding(
-        id=card_id, name=card_id, side=Side.DYNASTY, owner=seat, keywords=keywords
-    )
-    card.turn_face_up() if face_up else card.turn_face_down()
-    game.table.cards_by_id[card.id] = card
-    key = ZoneKey(seat, ZoneRole.PROVINCE, index)
-    zone = game.table.zones.get(key) or ProvinceZone(owner=seat)
-    game.table.zones[key] = zone
-    zone.add(card)
-    return card
+from tests.yasuki_core.engine.builders import province_card
 
 
 def test_sincerity_counter_is_registered_and_grants_no_gold():
@@ -39,8 +23,8 @@ def test_sincerity_counter_is_registered_and_grants_no_gold():
 
 
 def test_end_of_turn_gives_a_face_up_sincerity_province_card_a_token():
-    game = _game()
-    card = _province_card(game, "s")
+    game = two_seat_game()
+    card = province_card(game, "s", keywords=("Sincerity",))
 
     flow._end_turn(game)
 
@@ -48,8 +32,8 @@ def test_end_of_turn_gives_a_face_up_sincerity_province_card_a_token():
 
 
 def test_a_face_down_province_card_does_not_accrue():
-    game = _game()
-    card = _province_card(game, "s", face_up=False)
+    game = two_seat_game()
+    card = province_card(game, "s", keywords=("Sincerity",), face_up=False)
 
     flow._end_turn(game)
 
@@ -57,8 +41,8 @@ def test_a_face_down_province_card_does_not_accrue():
 
 
 def test_a_non_sincerity_province_card_does_not_accrue():
-    game = _game()
-    card = _province_card(game, "p", keywords=())
+    game = two_seat_game()
+    card = province_card(game, "p", keywords=())
 
     flow._end_turn(game)
 
@@ -66,9 +50,9 @@ def test_a_non_sincerity_province_card_does_not_accrue():
 
 
 def test_every_lingering_sincerity_card_accrues_across_provinces():
-    game = _game()
-    first = _province_card(game, "s1", index=0)
-    second = _province_card(game, "s2", index=1)
+    game = two_seat_game()
+    first = province_card(game, "s1", keywords=("Sincerity",), index=0)
+    second = province_card(game, "s2", keywords=("Sincerity",), index=1)
 
     flow._end_turn(game)
 
@@ -76,7 +60,7 @@ def test_every_lingering_sincerity_card_accrues_across_provinces():
 
 
 def test_a_sincerity_card_in_play_does_not_accrue():
-    game = _game()
+    game = two_seat_game()
     card = DynastyHolding(
         id="s", name="s", side=Side.DYNASTY, owner=PlayerId.P1, keywords=("Sincerity",)
     )
@@ -90,8 +74,8 @@ def test_a_sincerity_card_in_play_does_not_accrue():
 
 
 def test_sincerity_accrues_only_on_the_owners_own_turns():
-    game = _game()  # P1 active
-    card = _province_card(game, "s")  # in P1's Province
+    game = two_seat_game()  # P1 active
+    card = province_card(game, "s", keywords=("Sincerity",))  # in P1's Province
 
     flow._end_turn(game)  # P1's turn ends -> +1
     flow._end_turn(game)  # P2's turn ends -> P1's card is not in P2's Provinces

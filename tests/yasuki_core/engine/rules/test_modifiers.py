@@ -1,35 +1,20 @@
-from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState
-from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.effects import active_modifiers, effective_gold_production
 
-
-def _holding(card_id: str, gp: int, wealth: int = 0) -> DynastyHolding:
-    counters = {"wealth": wealth} if wealth else {}
-    return DynastyHolding(
-        id=card_id,
-        name="H",
-        side=Side.DYNASTY,
-        owner=PlayerId.P1,
-        gold_production=gp,
-        counters=counters,
-    )
+from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 
 
 def _game(card: DynastyHolding, modifiers=()) -> GameState:
-    state = TableState.empty_two_seat()
-    state.cards_by_id[card.id] = card
-    state.battlefield.add(card)
-    game = GameState.start(state, PlayerId.P1)
+    game = two_seat_game()
+    put_in_play(game, card)
     game.modifiers.extend(modifiers)
     return game
 
 
 def test_a_wealth_counter_yields_a_derived_while_source_modifier():
-    farm = _holding("f", gp=2, wealth=2)
+    farm = holding("f", gold_production=2, counters={"wealth": 2})
     game = _game(farm)
     mods = list(active_modifiers(game, farm, Stat.GOLD_PRODUCTION))
 
@@ -38,7 +23,7 @@ def test_a_wealth_counter_yields_a_derived_while_source_modifier():
 
 
 def test_effective_gp_sums_base_counters_and_recorded_modifiers():
-    farm = _holding("f", gp=2, wealth=1)
+    farm = holding("f", gold_production=2, counters={"wealth": 1})
     recorded = Modifier("src", "f", Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN)
     game = _game(farm, [recorded])
 
@@ -46,7 +31,7 @@ def test_effective_gp_sums_base_counters_and_recorded_modifiers():
 
 
 def test_effective_gp_floors_at_zero():
-    farm = _holding("f", gp=2)
+    farm = holding("f", gold_production=2)
     penalty = Modifier("src", "f", Stat.GOLD_PRODUCTION, -5, Duration.UNTIL_END_OF_TURN)
     game = _game(farm, [penalty])
 
@@ -54,7 +39,7 @@ def test_effective_gp_floors_at_zero():
 
 
 def test_while_source_in_play_modifier_is_ignored_when_its_source_is_absent():
-    farm = _holding("f", gp=2)
+    farm = holding("f", gold_production=2)
     # "ghost" is not on the battlefield; a PERMANENT one from the same absent source still applies.
     game = _game(
         farm,

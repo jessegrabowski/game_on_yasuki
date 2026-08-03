@@ -5,12 +5,10 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import Pass, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import (
     GameLog,
     Act,
@@ -28,31 +26,14 @@ from yasuki_core.engine.rules.log import (
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.pregame import StrongholdCard
 
+from tests.yasuki_core.engine.builders import put_in_play, register
 
-def _register(state: TableState, card):
-    state.cards_by_id[card.id] = card
-    return card
-
-
-def _dealt_table() -> TableState:
-    """A two-seat table where P1 holds a full hand and has a fate card to draw, forcing an
-    end-of-turn discard."""
-    state = TableState.empty_two_seat()
-    for seat in PlayerId:
-        state.decks[DeckKey(seat, Side.FATE)].cards = [
-            _register(state, FateCard(id=f"{seat.name}-fd", name="F", side=Side.FATE, owner=seat))
-        ]
-    hand = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
-    for i in range(flow.MAX_HAND_SIZE):
-        hand.add(
-            _register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
-        )
-    return state
+from tests.yasuki_core.engine.builders import dealt_table
 
 
 def _place_in_province(state: TableState, card):
     """Register ``card`` and set it face-up as the sole card of P1's first province."""
-    _register(state, card)
+    register(state, card)
     card.turn_face_up()
     province = ProvinceZone(owner=PlayerId.P1)
     province.add(card)
@@ -63,7 +44,7 @@ def _place_in_province(state: TableState, card):
 def _played_game_and_log() -> tuple:
     """Play P1's full turn — three advances into the end-of-turn discard, then the discard —
     recording every input to the log."""
-    log = GameLog(initial=InitialRecord.from_state(_dealt_table()), first_player=PlayerId.P1)
+    log = GameLog(initial=InitialRecord.from_state(dealt_table()), first_player=PlayerId.P1)
     game = build_game(log)
     act_and_log(game, log, Pass())  # Action -> Attack
     act_and_log(game, log, Pass())  # Attack -> Dynasty
@@ -85,19 +66,17 @@ def test_log_records_each_input_in_order():
 
 
 def test_recruit_action_and_its_payment_replay_and_round_trip():
-    state = _dealt_table()
+    state = dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
+        register(
             state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
         )
     ]
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+        ),
     )
     _place_in_province(
         state,
@@ -118,22 +97,18 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
 
 def test_proclaimed_recruit_replays_and_round_trips():
     # The proclaim flag must survive the codec, or a replay would drop the honor gain.
-    state = _dealt_table()
-    state.battlefield.add(
-        _register(
-            state,
-            StrongholdCard(
-                id="P1-strong", name="Keep", side=Side.STRONGHOLD, owner=PlayerId.P1, clan="Crab"
-            ),
-        )
+    state = dealt_table()
+    put_in_play(
+        state,
+        StrongholdCard(
+            id="P1-strong", name="Keep", side=Side.STRONGHOLD, owner=PlayerId.P1, clan="Crab"
+        ),
     )
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+        ),
     )
     _place_in_province(
         state,
@@ -162,13 +137,13 @@ def test_proclaimed_recruit_replays_and_round_trips():
 
 def test_boosted_payment_round_trips_through_the_codec():
     # The payment answer carries which producers were boosted; that must survive JSON encode/decode.
-    state = _dealt_table()
+    state = dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
+        register(
             state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
         )
     ]
-    outlying = _register(
+    outlying = register(
         state,
         DynastyHolding(
             id="P1-of",
@@ -203,32 +178,28 @@ def test_boosted_payment_round_trips_through_the_codec():
 def test_triggered_choice_replays_and_round_trips():
     # Recruiting a Wheat Farm fires its EnteredPlay trigger, which pauses to choose other Farms to
     # give a Wealth token — the recruit -> pay -> choose -> resume chain must survive replay.
-    state = _dealt_table()
+    state = dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
+        register(
             state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
         )
     ]
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+        ),
     )
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="P1-other",
-                name="Other Farm",
-                side=Side.DYNASTY,
-                owner=PlayerId.P1,
-                keywords=("Farm",),
-                gold_production=2,
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="P1-other",
+            name="Other Farm",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            keywords=("Farm",),
+            gold_production=2,
+        ),
     )
     _place_in_province(
         state,
@@ -258,14 +229,12 @@ def test_triggered_choice_replays_and_round_trips():
 
 
 def test_cancelled_recruit_payment_replays_and_round_trips():
-    state = _dealt_table()
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
-            ),
-        )
+    state = dealt_table()
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+        ),
     )
     _place_in_province(
         state,
@@ -294,7 +263,7 @@ def test_serialization_round_trips_then_replays():
 
 
 def test_submit_and_log_does_not_record_a_rejected_answer():
-    log = GameLog(initial=InitialRecord.from_state(_dealt_table()), first_player=PlayerId.P1)
+    log = GameLog(initial=InitialRecord.from_state(dealt_table()), first_player=PlayerId.P1)
     game = build_game(log)
     for _ in range(3):
         act_and_log(game, log, Pass())
@@ -309,7 +278,7 @@ def test_submit_and_log_does_not_record_a_rejected_answer():
 
 def test_replay_rejects_a_desynced_tape():
     log = GameLog(
-        initial=InitialRecord.from_state(_dealt_table()),
+        initial=InitialRecord.from_state(dealt_table()),
         first_player=PlayerId.P1,
         entries=[Act(PlayerId.P2, Pass())],  # P1 starts, so an opening P2 act is impossible
     )
