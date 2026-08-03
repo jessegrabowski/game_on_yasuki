@@ -180,9 +180,7 @@ class IgnoreHonorRequirements(Effect):
 @dataclass(frozen=True, slots=True)
 class Choose(Effect):
     """Pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of ``candidates``;
-    the chosen ids feed the registered ``resolver``, whose effects apply on resume. The one
-    interruption point in the effect vocabulary: every other effect commits at once, so a trigger
-    returns a Choose as its sole effect.
+    the chosen ids feed the registered ``resolver``, whose effects apply on resume.
 
     Attributes
     ----------
