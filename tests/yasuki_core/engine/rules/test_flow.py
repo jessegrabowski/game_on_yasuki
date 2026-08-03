@@ -11,10 +11,7 @@ from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
 
-
-def _register(state: TableState, card):
-    state.cards_by_id[card.id] = card
-    return card
+from tests.yasuki_core.engine.builders import put_in_play, register
 
 
 def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
@@ -23,15 +20,13 @@ def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
     state = TableState.empty_two_seat()
     for seat in PlayerId:
         state.decks[DeckKey(seat, Side.FATE)].cards = [
-            _register(
-                state, FateCard(id=f"{seat.name}-fd{i}", name="F", side=Side.FATE, owner=seat)
-            )
+            register(state, FateCard(id=f"{seat.name}-fd{i}", name="F", side=Side.FATE, owner=seat))
             for i in range(fate_deck)
         ]
     hand_zone = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     for i in range(hand):
         hand_zone.add(
-            _register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
+            register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
         )
     return GameState.start(state, PlayerId.P1)
 
@@ -123,14 +118,14 @@ def test_submit_rejects_a_malformed_or_illegal_answer():
 
 
 def _bowed_on_battlefield(state: TableState, seat: PlayerId, card_id: str):
-    card = _register(state, DynastyCard(id=card_id, name="B", side=Side.DYNASTY, owner=seat))
+    card = register(state, DynastyCard(id=card_id, name="B", side=Side.DYNASTY, owner=seat))
     card.bow()
     state.battlefield.add(card)
     return card
 
 
 def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
-    card = _register(state, DynastyCard(id=card_id, name="P", side=Side.DYNASTY, owner=seat))
+    card = register(state, DynastyCard(id=card_id, name="P", side=Side.DYNASTY, owner=seat))
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
     return card
@@ -153,13 +148,9 @@ def test_begin_game_straightens_and_reveals_only_the_active_board():
 
 def _game_with_stronghold_clan(clan: str | None) -> GameState:
     state = TableState.empty_two_seat()
-    state.battlefield.add(
-        _register(
-            state,
-            StrongholdCard(
-                id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan
-            ),
-        )
+    put_in_play(
+        state,
+        StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan),
     )
     return GameState.start(state, PlayerId.P1)
 
@@ -246,22 +237,18 @@ def test_can_proclaim_rejects_off_clan_and_unaligned_personalities():
 
 def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
     state = TableState.empty_two_seat()
-    state.battlefield.add(
-        _register(
-            state, StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1)
-        )
+    put_in_play(
+        state, StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1)
     )
-    state.battlefield.add(
-        _register(
-            state,
-            SenseiCard(
-                id="P1-SE",
-                name="Sensei",
-                side=Side.FATE,
-                owner=PlayerId.P1,
-                printed_id=sensei_printed_id,
-            ),
-        )
+    put_in_play(
+        state,
+        SenseiCard(
+            id="P1-SE",
+            name="Sensei",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            printed_id=sensei_printed_id,
+        ),
     )
     game = GameState.start(state, PlayerId.P1)
     flow.begin_game(game)
@@ -280,16 +267,12 @@ def test_begin_game_leaves_an_ordinary_seat_enforcing_honor_requirements():
 
 def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
     state = TableState.empty_two_seat()
-    state.battlefield.add(
-        _register(
-            state,
-            StrongholdCard(
-                id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan
-            ),
-        )
+    put_in_play(
+        state,
+        StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan),
     )
     for card in in_play:
-        state.battlefield.add(_register(state, card))
+        put_in_play(state, card)
     return GameState.start(state, first_player)
 
 
@@ -355,6 +338,6 @@ def test_recruit_rejects_invest_and_proclaim_together():
     # legal_actions never offers the pair, but a decoded tape could still carry it; recruit must
     # fail loudly rather than silently drop the Proclaim.
     game = _discount_game(clan="Crab")
-    holding = _register(game.table, _holding("teahouse", gold_cost=2))
+    holding = register(game.table, _holding("teahouse", gold_cost=2))
     with pytest.raises(ValueError, match="Invest and Proclaim"):
         flow.recruit(game, holding.id, invest=True, proclaim=True)

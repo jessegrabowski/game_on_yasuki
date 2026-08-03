@@ -11,10 +11,7 @@ from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
-
-def _register(state: TableState, card):
-    state.cards_by_id[card.id] = card
-    return card
+from tests.yasuki_core.engine.builders import register
 
 
 def _p1_provinces(table: TableState):
@@ -26,7 +23,7 @@ def _p1_provinces(table: TableState):
 
 
 def _facedown_province(state: TableState, seat: PlayerId, card):
-    _register(state, card)
+    register(state, card)
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
     return card
@@ -52,19 +49,17 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
     hand_zone = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     for i in range(hand):
         hand_zone.add(
-            _register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
+            register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
         )
     deck = state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
     deck.cards = [
-        _register(
-            state, DynastyCard(id=f"P1-dd{i}", name="D", side=Side.DYNASTY, owner=PlayerId.P1)
-        )
+        register(state, DynastyCard(id=f"P1-dd{i}", name="D", side=Side.DYNASTY, owner=PlayerId.P1))
         for i in range(3)
     ]
     if legacy_in == "deck":
-        deck.cards.insert(0, _register(state, _legacy_holding(PlayerId.P1, "P1-leg")))
+        deck.cards.insert(0, register(state, _legacy_holding(PlayerId.P1, "P1-leg")))
     elif legacy_in == "province":
-        legacy = _register(state, _legacy_holding(PlayerId.P1, "P1-leg"))
+        legacy = register(state, _legacy_holding(PlayerId.P1, "P1-leg"))
         legacy.turn_face_down()  # only face-down province cards are searchable
         state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards = [legacy]
     return state
@@ -90,9 +85,7 @@ def test_legacy_candidates_finds_a_deck_or_face_down_province_card():
 
 def test_legacy_does_not_search_a_face_up_province_card():
     state = _table(legacy_in=None)
-    face_up_legacy = _register(
-        state, _legacy_holding(PlayerId.P1, "P1-shown")
-    )  # face-up by default
+    face_up_legacy = register(state, _legacy_holding(PlayerId.P1, "P1-shown"))  # face-up by default
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards = [face_up_legacy]
     game = GameState.start(state, PlayerId.P1)
 
@@ -193,7 +186,7 @@ def test_legacy_is_once_per_turn():
 def test_legacy_search_offers_every_found_card_to_choose_among():
     session = _dynasty_session(legacy_in="deck")  # seeds "P1-leg" in the deck
     deck = session.game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
-    deck.cards.insert(1, _register(session.game.table, _legacy_holding(PlayerId.P1, "P1-leg2")))
+    deck.cards.insert(1, register(session.game.table, _legacy_holding(PlayerId.P1, "P1-leg2")))
     session.act(PlayerId.P1, Legacy())
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
 
@@ -203,7 +196,7 @@ def test_legacy_search_offers_every_found_card_to_choose_among():
 def test_legacy_places_the_chosen_card_not_a_default():
     session = _dynasty_session(legacy_in="deck")  # "P1-leg" is first in search order
     deck = session.game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
-    deck.cards.insert(1, _register(session.game.table, _legacy_holding(PlayerId.P1, "P1-leg2")))
+    deck.cards.insert(1, register(session.game.table, _legacy_holding(PlayerId.P1, "P1-leg2")))
     session.act(PlayerId.P1, Legacy())
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
 

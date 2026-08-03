@@ -13,58 +13,57 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
-
-def _register(state, card):
-    state.cards_by_id[card.id] = card
-    return card
+from tests.yasuki_core.engine.builders import put_in_play, register
 
 
-def _modest_farm_game(*, target_keywords=(), target_cost=2, with_producer=True, producer_gp=8):
+def _modest_farm_game(
+    *,
+    target_keywords=(),
+    target_cost=2,
+    with_producer=True,
+    producer_gp=8,
+    target_printed_id="plain_holding",
+    extra_in_play=(),
+):
     """An Action-phase session: P1's Modest Farm and a face-up Holding in a province to recruit
     through Modest Farm's ability. With ``with_producer`` a gold Holding of ``producer_gp`` yield is
     also in play to pay the recruit; without it, only Modest Farm's own (forfeited) production
     remains."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
-            state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
-        )
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
     ]
     if with_producer:
-        state.battlefield.add(
-            _register(
-                state,
-                DynastyHolding(
-                    id="SH",
-                    name="SH",
-                    side=Side.DYNASTY,
-                    owner=PlayerId.P1,
-                    gold_production=producer_gp,
-                ),
-            )
-        )
-    state.battlefield.add(
-        _register(
+        put_in_play(
             state,
             DynastyHolding(
-                id="mf",
-                name="Modest Farm",
+                id="SH",
+                name="SH",
                 side=Side.DYNASTY,
                 owner=PlayerId.P1,
-                printed_id="modest_farm",
-                keywords=("Farm",),
-                gold_production=1,
+                gold_production=producer_gp,
             ),
         )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="mf",
+            name="Modest Farm",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="modest_farm",
+            keywords=("Farm",),
+            gold_production=1,
+        ),
     )
-    target = _register(
+    target = register(
         state,
         DynastyHolding(
             id="target",
             name="Target",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
-            printed_id="plain_holding",
+            printed_id=target_printed_id,
             keywords=target_keywords,
             gold_cost=target_cost,
             gold_production=2,
@@ -74,6 +73,8 @@ def _modest_farm_game(*, target_keywords=(), target_cost=2, with_producer=True, 
     province = ProvinceZone(owner=PlayerId.P1)
     province.add(target)
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    for card in extra_in_play:
+        put_in_play(state, card)
     return EngineSession.start(state, PlayerId.P1)  # Action phase
 
 
@@ -167,19 +168,13 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     # The general Renew rule: a normally-recruited card with the Renew keyword refills face-up.
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
-            state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
-        )
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
     ]
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(id="SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8),
     )
-    renewer = _register(
+    renewer = register(
         state,
         DynastyHolding(
             id="warrens",
@@ -202,3 +197,50 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     session.submit(PlayerId.P1, DecisionResponse(("SH",)))
     refill = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards[-1]
     assert refill.face_up
+
+
+def _decision_sequence(session, answers):
+    """Drive the session with ``answers`` and record every decision it paused on, as
+    ``(request type name, candidates)``."""
+    recorded = []
+    for answer in answers:
+        pending = session.game.pending
+        recorded.append((type(pending).__name__, tuple(pending.candidates)))
+        session.submit(PlayerId.P1, DecisionResponse(answer))
+    return recorded
+
+
+def test_modest_farm_recruit_puts_its_questions_in_a_fixed_order():
+    # A characterization test: the recruited card's own enter-play trait must resolve *before*
+    # Modest Farm offers its sacrifice. Both orderings leave the same final board, so only the
+    # question order distinguishes them.
+    session = _modest_farm_game(
+        target_keywords=("Farm",),
+        target_printed_id="wheat_farm",
+        # Must be dealt before the session starts: EngineSession.start snapshots the table into the
+        # log, so a card added afterwards is absent on replay.
+        extra_in_play=(
+            DynastyHolding(
+                id="other-farm",
+                name="Other Farm",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                keywords=("Farm",),
+            ),
+        ),
+    )
+
+    session.act(PlayerId.P1, ActivateAbility("mf"))
+    sequence = _decision_sequence(
+        session,
+        answers=[("target",), ("SH",), ("other-farm",), ("mf",)],
+    )
+
+    assert sequence == [
+        ("ChooseAbilityTarget", ("target",)),  # which Province Holding to recruit
+        ("ChoosePayment", ("SH",)),  # pay its cost
+        ("ChooseCards", ("mf", "other-farm")),  # Wheat Farm's own enter-play trait
+        ("ChooseCards", ("mf",)),  # only then: destroy Modest Farm to straighten it?
+    ]
+    assert session.game.pending is None
+    assert replay(session.log) == session.game  # the whole interleaving rebuilds from the tape

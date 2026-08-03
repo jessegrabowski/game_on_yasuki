@@ -14,10 +14,9 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
+from tests.yasuki_core.engine.builders import put_in_play, register
 
-def _register(state, card):
-    state.cards_by_id[card.id] = card
-    return card
+from tests.yasuki_core.engine.builders import province_card
 
 
 def _recruit_game(
@@ -27,23 +26,19 @@ def _recruit_game(
     ``sincerity`` tokens, sitting in a province ready to recruit."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
-            state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
-        )
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
     ]
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="SH",
-                name="SH",
-                side=Side.DYNASTY,
-                owner=PlayerId.P1,
-                gold_production=producer_gp,
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=producer_gp,
+        ),
     )
-    holding = _register(
+    holding = register(
         state,
         DynastyHolding(
             id=holding_id,
@@ -124,40 +119,13 @@ def test_a_sincerity_payoff_recruit_replays_and_round_trips():
 def _base_state():
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
-            state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
-        )
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
     ]
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(id="SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8),
     )
     return state
-
-
-def _province_card(state, card_id, printed_id, keywords, index, *, sincerity=0):
-    card = _register(
-        state,
-        DynastyHolding(
-            id=card_id,
-            name=card_id,
-            side=Side.DYNASTY,
-            owner=PlayerId.P1,
-            printed_id=printed_id,
-            keywords=keywords,
-            gold_cost=2,
-            counters={"sincerity": sincerity} if sincerity else {},
-        ),
-    )
-    card.turn_face_up()
-    province = ProvinceZone(owner=PlayerId.P1)
-    province.add(card)
-    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, index)] = province
-    return card
 
 
 def _to_dynasty(session):
@@ -167,8 +135,12 @@ def _to_dynasty(session):
 
 def test_training_court_seeds_a_sincerity_token_on_a_province_card():
     state = _base_state()
-    _province_card(state, "tc", "training_court", ("Court",), index=0)
-    _province_card(state, "target", "plain_sincerity", ("Sincerity",), index=1)
+    province_card(
+        state, "tc", printed_id="training_court", keywords=("Court",), index=0, gold_cost=2
+    )
+    province_card(
+        state, "target", printed_id="plain_sincerity", keywords=("Sincerity",), index=1, gold_cost=2
+    )
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 
@@ -183,8 +155,18 @@ def test_training_court_seeds_a_sincerity_token_on_a_province_card():
 
 def test_training_court_seeds_nothing_without_a_token_less_sincerity_card():
     state = _base_state()
-    _province_card(state, "tc", "training_court", ("Court",), index=0)
-    _province_card(state, "seeded", "plain_sincerity", ("Sincerity",), index=1, sincerity=1)
+    province_card(
+        state, "tc", printed_id="training_court", keywords=("Court",), index=0, gold_cost=2
+    )
+    province_card(
+        state,
+        "seeded",
+        printed_id="plain_sincerity",
+        keywords=("Sincerity",),
+        index=1,
+        gold_cost=2,
+        counters={"sincerity": 1},
+    )
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 
@@ -195,9 +177,15 @@ def test_training_court_seeds_nothing_without_a_token_less_sincerity_card():
 
 def test_training_court_seed_offers_every_token_less_sincerity_card():
     state = _base_state()
-    _province_card(state, "tc", "training_court", ("Court",), index=0)
-    _province_card(state, "a", "plain_sincerity", ("Sincerity",), index=1)
-    _province_card(state, "b", "plain_sincerity", ("Sincerity",), index=2)
+    province_card(
+        state, "tc", printed_id="training_court", keywords=("Court",), index=0, gold_cost=2
+    )
+    province_card(
+        state, "a", printed_id="plain_sincerity", keywords=("Sincerity",), index=1, gold_cost=2
+    )
+    province_card(
+        state, "b", printed_id="plain_sincerity", keywords=("Sincerity",), index=2, gold_cost=2
+    )
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 
@@ -208,8 +196,12 @@ def test_training_court_seed_offers_every_token_less_sincerity_card():
 
 def test_training_court_invest_applies_after_the_seed_choice_resolves():
     state = _base_state()
-    _province_card(state, "tc", "training_court", ("Court",), index=0)
-    _province_card(state, "target", "plain_sincerity", ("Sincerity",), index=1)
+    province_card(
+        state, "tc", printed_id="training_court", keywords=("Court",), index=0, gold_cost=2
+    )
+    province_card(
+        state, "target", printed_id="plain_sincerity", keywords=("Sincerity",), index=1, gold_cost=2
+    )
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 
@@ -225,8 +217,12 @@ def test_training_court_invest_applies_after_the_seed_choice_resolves():
 
 def test_training_court_seed_replays_and_round_trips():
     state = _base_state()
-    _province_card(state, "tc", "training_court", ("Court",), index=0)
-    _province_card(state, "target", "plain_sincerity", ("Sincerity",), index=1)
+    province_card(
+        state, "tc", printed_id="training_court", keywords=("Court",), index=0, gold_cost=2
+    )
+    province_card(
+        state, "target", printed_id="plain_sincerity", keywords=("Sincerity",), index=1, gold_cost=2
+    )
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
     session.act(PlayerId.P1, Recruit("tc"))
@@ -239,21 +235,21 @@ def test_training_court_seed_replays_and_round_trips():
 
 def test_shrine_of_sincerity_bows_to_seed_a_province_sincerity_card():
     state = _base_state()
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="shrine",
-                name="Shrine",
-                side=Side.DYNASTY,
-                owner=PlayerId.P1,
-                printed_id="shrine_of_sincerity",
-                keywords=("Temple",),
-                gold_production=2,
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="shrine",
+            name="Shrine",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="shrine_of_sincerity",
+            keywords=("Temple",),
+            gold_production=2,
+        ),
     )
-    _province_card(state, "target", "plain_sincerity", ("Sincerity",), index=0)
+    province_card(
+        state, "target", printed_id="plain_sincerity", keywords=("Sincerity",), index=0, gold_cost=2
+    )
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)  # Shrine's ability is a Dynasty action
 
@@ -268,21 +264,27 @@ def test_shrine_of_sincerity_bows_to_seed_a_province_sincerity_card():
 
 def test_shrine_is_not_activatable_without_a_token_less_sincerity_card():
     state = _base_state()
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="shrine",
-                name="Shrine",
-                side=Side.DYNASTY,
-                owner=PlayerId.P1,
-                printed_id="shrine_of_sincerity",
-                keywords=("Temple",),
-                gold_production=2,
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="shrine",
+            name="Shrine",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="shrine_of_sincerity",
+            keywords=("Temple",),
+            gold_production=2,
+        ),
     )
-    _province_card(state, "seeded", "plain_sincerity", ("Sincerity",), index=0, sincerity=1)
+    province_card(
+        state,
+        "seeded",
+        printed_id="plain_sincerity",
+        keywords=("Sincerity",),
+        index=0,
+        gold_cost=2,
+        counters={"sincerity": 1},
+    )
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 

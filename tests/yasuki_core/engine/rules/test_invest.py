@@ -10,33 +10,26 @@ from yasuki_core.engine.rules.decisions import ChooseInvestAmount, ChoosePayment
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
-
-def _register(state: TableState, card):
-    state.cards_by_id[card.id] = card
-    return card
+from tests.yasuki_core.engine.builders import put_in_play, register
 
 
 def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: int = 8):
     """A session in the Dynasty phase with a big producer and one face-up Invest holding to recruit."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
-            state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
-        )
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
     ]
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="SH",
-                name="SH",
-                side=Side.DYNASTY,
-                owner=PlayerId.P1,
-                gold_production=producer_gp,
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=producer_gp,
+        ),
     )
-    holding = _register(
+    holding = register(
         state,
         DynastyHolding(
             id=holding_id,

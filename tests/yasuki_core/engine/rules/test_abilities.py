@@ -1,8 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.fate import FateCard
+from yasuki_core.game_pieces.dynasty import DynastyPersonality
 from yasuki_core.engine.rules.abilities import Ability, _ABILITIES
 from yasuki_core.engine.rules.actions import ActivateAbility, Pass
 from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards, DecisionResponse
@@ -12,32 +11,18 @@ from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.triggers import AdjustCounter, Choose, choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.counters import WEALTH
-
-
-def _register(state: TableState, card):
-    state.cards_by_id[card.id] = card
-    return card
-
-
-def _farm(card_id: str, printed_id: str, gp: int) -> DynastyHolding:
-    return DynastyHolding(
-        id=card_id,
-        name="Farm",
-        side=Side.DYNASTY,
-        owner=PlayerId.P1,
-        printed_id=printed_id,
-        keywords=("Farm",),
-        gold_production=gp,
-    )
+from tests.yasuki_core.engine.builders import fate_card, holding, put_in_play, register
 
 
 def _game():
     """A session in the Action phase with P1's Millet Farm and one other Farm in play. Returns the
     live card objects, since ``EngineSession.start`` rebuilds the table from a snapshot."""
     state = TableState.empty_two_seat()
-    state.battlefield.add(_register(state, _farm("millet", "millet_farm", gp=1)))
-    state.battlefield.add(
-        _register(state, _farm("farm", "plain_farm", gp=2))
+    put_in_play(
+        state, holding("millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1)
+    )
+    put_in_play(
+        state, holding("farm", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
     )  # no trigger of its own
     session = EngineSession.start(state, PlayerId.P1)
     live = session.game.table.cards_by_id
@@ -117,22 +102,24 @@ def test_modifier_grant_fires_no_counter_trigger():
     # A GP grant is a modifier, not a Wealth token, so a wealth-specific trigger must stay silent.
     # Aoki draws on your Holding's Wealth gain; the +2GP grant must not wake it.
     state = TableState.empty_two_seat()
-    state.battlefield.add(_register(state, _farm("millet", "millet_farm", gp=1)))
-    state.battlefield.add(_register(state, _farm("farm", "plain_farm", gp=2)))
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyPersonality(
-                id="aoki",
-                name="Aoki",
-                side=Side.DYNASTY,
-                owner=PlayerId.P1,
-                printed_id="shosuro_aoki_yoritomo_kayoko_experienced",
-            ),
-        )
+    put_in_play(
+        state, holding("millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1)
+    )
+    put_in_play(
+        state, holding("farm", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
+    )
+    put_in_play(
+        state,
+        DynastyPersonality(
+            id="aoki",
+            name="Aoki",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="shosuro_aoki_yoritomo_kayoko_experienced",
+        ),
     )
     state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        _register(state, FateCard(id="fd", name="F", side=Side.FATE, owner=PlayerId.P1))
+        register(state, fate_card("fd", PlayerId.P1))
     ]
     session = EngineSession.start(state, PlayerId.P1)
     hand = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
@@ -145,25 +132,12 @@ def test_modifier_grant_fires_no_counter_trigger():
     assert len(hand.cards) == before  # Aoki did not draw — the grant is a modifier, not a token
 
 
-def _holding(card_id, printed_id, keywords=(), counters=None, gp=0):
-    return DynastyHolding(
-        id=card_id,
-        name=card_id,
-        side=Side.DYNASTY,
-        owner=PlayerId.P1,
-        printed_id=printed_id,
-        keywords=keywords,
-        gold_production=gp,
-        counters=counters or {},
-    )
-
-
 def _otokoshi_game():
     state = TableState.empty_two_seat()
-    state.battlefield.add(_register(state, _holding("oto", "otokoshi_district", gp=2)))
-    state.battlefield.add(_register(state, _holding("mkt", "market", keywords=("Market",), gp=1)))
+    put_in_play(state, holding("oto", printed_id="otokoshi_district", gold_production=2))
+    put_in_play(state, holding("mkt", printed_id="market", keywords=("Market",), gold_production=1))
     state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        _register(state, FateCard(id="fd", name="F", side=Side.FATE, owner=PlayerId.P1))
+        register(state, fate_card("fd", PlayerId.P1))
     ]
     return EngineSession.start(state, PlayerId.P1)
 
@@ -185,7 +159,7 @@ def test_otokoshi_destroys_itself_to_draw_and_seed_a_market():
 
 def test_otokoshi_is_not_activatable_without_a_market():
     state = TableState.empty_two_seat()
-    state.battlefield.add(_register(state, _holding("oto", "otokoshi_district", gp=2)))
+    put_in_play(state, holding("oto", printed_id="otokoshi_district", gold_production=2))
     session = EngineSession.start(state, PlayerId.P1)
     assert ActivateAbility("oto") not in session.legal_actions(PlayerId.P1)
 
@@ -200,12 +174,13 @@ def test_otokoshi_activation_replays_to_the_same_state():
 def _rural_market_game(wealth=1):
     state = TableState.empty_two_seat()
     counters = {"wealth": wealth} if wealth else {}
-    state.battlefield.add(
-        _register(
-            state, _holding("rm", "rural_market", keywords=("Farm", "Market"), counters=counters)
-        )
+    put_in_play(
+        state,
+        holding("rm", printed_id="rural_market", keywords=("Farm", "Market"), counters=counters),
     )
-    state.battlefield.add(_register(state, _holding("bf", "plain_farm", keywords=("Farm",), gp=2)))
+    put_in_play(
+        state, holding("bf", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
+    )
     session = EngineSession.start(state, PlayerId.P1)
     session.game.table.cards_by_id["bf"].bow()  # bow after the start-of-turn straighten
     return session
@@ -256,8 +231,10 @@ _ABILITIES["test_cost_pauses"] = Ability(
 
 def test_a_cost_that_pauses_resolves_before_the_ability_target():
     state = TableState.empty_two_seat()
-    state.battlefield.add(_register(state, _holding("src", "test_cost_pauses")))
-    state.battlefield.add(_register(state, _holding("tgt", "plain_farm", keywords=("Farm",), gp=2)))
+    put_in_play(state, holding("src", printed_id="test_cost_pauses"))
+    put_in_play(
+        state, holding("tgt", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
+    )
     session = EngineSession.start(state, PlayerId.P1)
 
     session.act(PlayerId.P1, ActivateAbility("src"))
@@ -278,12 +255,12 @@ def test_a_cost_that_pauses_resolves_before_the_ability_target():
 
 def _harvested_game(other_farms: int = 2) -> EngineSession:
     state = TableState.empty_two_seat()
-    state.battlefield.add(
-        _register(state, _holding("hl", "harvested_land", keywords=("Farm",), gp=2))
+    put_in_play(
+        state, holding("hl", printed_id="harvested_land", keywords=("Farm",), gold_production=2)
     )
     for i in range(other_farms):
-        state.battlefield.add(
-            _register(state, _holding(f"f{i}", "plain_farm", keywords=("Farm",), gp=2))
+        put_in_play(
+            state, holding(f"f{i}", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
         )
     return EngineSession.start(state, PlayerId.P1)
 
@@ -322,16 +299,16 @@ def test_harvested_land_activation_replays_to_the_same_state():
 
 def _ichiba_game(fate_cards: int = 1, ports: int = 1) -> EngineSession:
     state = TableState.empty_two_seat()
-    state.battlefield.add(
-        _register(state, _holding("ich", "ichiba_district", keywords=("Market",), gp=1))
+    put_in_play(
+        state, holding("ich", printed_id="ichiba_district", keywords=("Market",), gold_production=1)
     )
     for i in range(ports):
-        state.battlefield.add(
-            _register(state, _holding(f"port{i}", "island_wharf", keywords=("Port",), gp=2))
+        put_in_play(
+            state,
+            holding(f"port{i}", printed_id="island_wharf", keywords=("Port",), gold_production=2),
         )
     state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        _register(state, FateCard(id=f"fd{i}", name="F", side=Side.FATE, owner=PlayerId.P1))
-        for i in range(fate_cards)
+        register(state, fate_card(f"fd{i}", PlayerId.P1)) for i in range(fate_cards)
     ]
     return EngineSession.start(state, PlayerId.P1)
 

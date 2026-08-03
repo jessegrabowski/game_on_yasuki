@@ -43,7 +43,9 @@ include = ["src", "README.md", "tests", "pyproject.toml"]
 line-length = 100
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+# The repo root is on the path so the test packages can import their shared builders
+# (tests/yasuki_core/engine/builders.py); every tests/ directory already carries an __init__.py.
+pythonpath = ["src", "."]
 addopts = "-q"
 
 [tool.pixi.workspace]

@@ -2,13 +2,10 @@ import hashlib
 import json
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
-from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.snapshot import InitialRecord, encode_initial
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.rules.log import (
     GameLog,
@@ -21,28 +18,7 @@ from yasuki_core.engine.rules.log import (
 )
 
 
-def _register(state: TableState, card):
-    state.cards_by_id[card.id] = card
-    return card
-
-
-def _dealt_table() -> TableState:
-    """A two-seat table with stocked fate decks and a full P1 hand, so P1's turns end in a discard
-    while P2's do not."""
-    state = TableState.empty_two_seat()
-    for seat in PlayerId:
-        state.decks[DeckKey(seat, Side.FATE)].cards = [
-            _register(
-                state, FateCard(id=f"{seat.name}-fd{i}", name="F", side=Side.FATE, owner=seat)
-            )
-            for i in range(5)
-        ]
-    hand = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
-    for i in range(flow.MAX_HAND_SIZE):
-        hand.add(
-            _register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
-        )
-    return state
+from tests.yasuki_core.engine.builders import dealt_table
 
 
 def _discard_top_of_hand(game: GameState, log: GameLog) -> None:
@@ -82,7 +58,9 @@ def _fingerprint(game: GameState) -> str:
 
 def test_replay_is_deterministic_across_runs_and_serialization():
     log = GameLog(
-        initial=InitialRecord.from_state(_dealt_table()), first_player=PlayerId.P1, seed=42
+        initial=InitialRecord.from_state(dealt_table(fate_deck=5)),
+        first_player=PlayerId.P1,
+        seed=42,
     )
     live = build_game(log)
     _play_three_turns(live, log)
