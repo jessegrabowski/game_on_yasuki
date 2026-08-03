@@ -11,6 +11,7 @@ yasuki_core.engine.rules.work
     :toctree: generated/
 
     ApplyAbilityEffects
+    ApplyEffects
     FinishRecruit
     ModestFarmStraighten
     ResolveRecruit

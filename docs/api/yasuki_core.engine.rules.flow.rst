@@ -12,6 +12,7 @@ yasuki_core.engine.rules.flow
 
     activate
     advance
+    announce_recruit
     begin_game
     can_proclaim
     cancel
