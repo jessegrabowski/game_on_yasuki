@@ -1,15 +1,17 @@
 import inspect
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, dataclass
 
 import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import effects
+from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
+from yasuki_core.engine.rules.flow import submit
+from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     BanishTopFate,
     Bow,
-    Choose,
     Destroy,
     Effect,
     InterruptingEffect,
@@ -95,12 +97,6 @@ def test_banishing_needs_a_fate_card_to_banish():
     assert BanishTopFate(PlayerId.P1).is_payable(game) is True
 
 
-def test_choose_refuses_to_be_committed_directly():
-    choice = Choose(PlayerId.P1, ("a",), 0, 1, "resolver", "src")
-    with pytest.raises(RuntimeError, match="never applied directly"):
-        choice.perform(two_seat_game())
-
-
 def _vanished(game, card_id):
     """Drop a card from the id map while leaving it on the battlefield, as a mid-cascade destroy
     does to any effect that bound it earlier."""
@@ -126,3 +122,58 @@ def test_destroying_an_unowned_card_is_a_no_op():
     game = two_seat_game()
     card = put_in_play(game, holding("P1-h", owner=None))
     assert Destroy(card.id).perform(game) == []
+
+
+@dataclass(frozen=True, slots=True)
+class _AskToDiscard(InterruptingEffect):
+    """A second interrupting effect, defined only here. Nothing in the engine knows it exists."""
+
+    seat: PlayerId
+    candidates: tuple[str, ...]
+
+    def request(self, game) -> ChooseCards:
+        return ChooseCards(
+            seat=self.seat,
+            candidates=self.candidates,
+            minimum=0,
+            maximum=0,
+            resolver="test_ask_to_discard",
+            source_id="",
+        )
+
+
+@choice_resolver("test_ask_to_discard")
+def _ask_to_discard_resolved(game, source_id, chosen):
+    return []
+
+
+def test_a_new_interrupting_effect_pauses_the_cascade_without_engine_changes():
+    # The point of the category: the walker stashes on any InterruptingEffect, so an effect the
+    # engine has never heard of pauses the cascade correctly.
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h"))
+
+    resolve_effects(
+        game, [_AskToDiscard(PlayerId.P1, (card.id,)), AdjustCounter(card.id, WEALTH, 1)]
+    )
+
+    assert isinstance(game.pending, ChooseCards)
+    assert card.counters.get("wealth") is None  # the effect after it has not run yet
+
+
+def test_the_stashed_remainder_resumes_after_the_answer():
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h"))
+    resolve_effects(
+        game, [_AskToDiscard(PlayerId.P1, (card.id,)), AdjustCounter(card.id, WEALTH, 1)]
+    )
+
+    submit(game, DecisionResponse(()))
+
+    assert card.counters["wealth"] == 1  # the effect queued behind the pause ran on resume
+
+
+def test_an_interrupting_effect_refuses_to_be_committed_directly():
+    effect = _AskToDiscard(PlayerId.P1, ("a",))
+    with pytest.raises(RuntimeError, match="never applied directly"):
+        effect.perform(two_seat_game())
