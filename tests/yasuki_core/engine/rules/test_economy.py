@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.effects import (
+from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
     effective_gold_production,
     gold_handler,

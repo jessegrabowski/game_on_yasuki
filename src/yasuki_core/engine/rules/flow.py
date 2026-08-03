@@ -35,7 +35,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.effects import effective_gold_production, effective_recruit_discount
+from yasuki_core.engine.rules.economy import effective_gold_production, effective_recruit_discount
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules import abilities, triggers
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
