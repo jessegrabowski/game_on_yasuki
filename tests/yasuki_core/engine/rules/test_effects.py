@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
     Effect,
+    InterruptingEffect,
 )
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.constants import Side
@@ -22,11 +23,11 @@ from tests.yasuki_core.engine.builders import fate_card, holding, put_in_play, t
 
 def _effect_types():
     """Every concrete Effect the module defines. Discovered rather than listed, so a new effect is
-    covered by these tests the moment it is written."""
+    covered by these tests the moment it is written; abstract bases are excluded."""
     return [
         value
         for value in vars(effects).values()
-        if inspect.isclass(value) and issubclass(value, Effect) and value is not Effect
+        if inspect.isclass(value) and issubclass(value, Effect) and not inspect.isabstract(value)
     ]
 
 
@@ -43,6 +44,7 @@ def test_effect_discovery_finds_concrete_effects_and_excludes_the_base():
     # Guards the discovery above: if it silently found nothing, the other tests would pass vacuously.
     assert Bow in _effect_types()
     assert Effect not in _effect_types()
+    assert InterruptingEffect not in _effect_types()
 
 
 def test_effects_stay_frozen_hashable_and_slotted():
@@ -95,7 +97,7 @@ def test_banishing_needs_a_fate_card_to_banish():
 
 def test_choose_refuses_to_be_committed_directly():
     choice = Choose(PlayerId.P1, ("a",), 0, 1, "resolver", "src")
-    with pytest.raises(RuntimeError, match="pauses the trigger cascade"):
+    with pytest.raises(RuntimeError, match="never applied directly"):
         choice.perform(two_seat_game())
 
 

@@ -10,8 +10,8 @@ from yasuki_core.engine.rules.events import (
     GameEvent,
     TurnStarted,
 )
-from yasuki_core.engine.rules.decisions import ChooseCards
 from yasuki_core.engine.rules.effects import (
+    InterruptingEffect,
     AdjustCounter,
     Choose,
     Destroy,
@@ -119,17 +119,6 @@ def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
     return (card.owner.name if card.owner else "", card.id)
 
 
-def _choice_request(choice: Choose) -> ChooseCards:
-    return ChooseCards(
-        seat=choice.seat,
-        candidates=choice.candidates,
-        minimum=choice.minimum,
-        maximum=choice.maximum,
-        resolver=choice.resolver,
-        source_id=choice.source_id,
-    )
-
-
 def _advance(
     game: GameState,
     effects: tuple[Effect, ...],
@@ -142,16 +131,17 @@ def _advance(
     One resumable worklist machine, in three repeating steps: apply the ``effects`` in hand (each
     committing at once, its derived events joining ``queue``); then fire the next trigger still
     ``firing`` for ``event``, whose effects become the next ``effects`` in hand; then pop the next
-    event off ``queue`` and collect its triggers. A ``Choose`` among the effects pauses the machine:
-    it records the decision and stashes the exact remainder — the effects after it, the triggers not
-    yet fired, the event, and the queue — as a :class:`ResumeCascade`, so :func:`resume_cascade`
-    continues from precisely here once the choice is answered."""
+    event off ``queue`` and collect its triggers. An :class:`InterruptingEffect` among the effects
+    pauses the machine: it records that effect's decision and stashes the exact remainder (the
+    effects after it, the triggers not yet fired, the event, and the queue) as a
+    :class:`ResumeCascade`, so :func:`resume_cascade` continues from precisely here once the seat
+    answers."""
     resolved = 0
     firing = list(firing)
     while True:
         for index, effect in enumerate(effects):
-            if isinstance(effect, Choose):
-                game.pending = _choice_request(effect)
+            if isinstance(effect, InterruptingEffect):
+                game.pending = effect.request(game)
                 _stash(game, tuple(effects[index + 1 :]), firing, event, queue)
                 return
             queue.extend(apply_effect(game, effect))
@@ -182,8 +172,8 @@ def _stash(
 
 
 def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:
-    """Continue a cascade a choice paused, with ``produced`` — the effects the answered choice
-    produced — spliced in where the ``Choose`` stood, ahead of the effects, triggers, and events the
+    """Continue a cascade an interrupting effect paused, splicing ``produced`` (the effects the
+    answer produced) in where that effect stood, ahead of the effects, triggers, and events the
     pause stashed. Triggers whose card has since left play are dropped."""
     firing = [
         (game.table.cards_by_id[card_id], trigger)
