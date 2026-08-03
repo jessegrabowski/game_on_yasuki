@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
-from yasuki_core.engine.rules.effects import effective_gold_production
+from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.triggers import (
     AdjustCounter,

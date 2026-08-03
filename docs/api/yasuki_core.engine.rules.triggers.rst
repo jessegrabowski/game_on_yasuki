@@ -10,16 +10,6 @@ yasuki_core.engine.rules.triggers
 .. autosummary::
     :toctree: generated/
 
-    AdjustCounter
-    BanishTopFate
-    Bow
-    Choose
-    Destroy
-    DrawCard
-    GainGold
-    GrantModifier
-    IgnoreHonorRequirements
-    Straighten
     TriggerContext
 
 .. rubric:: Functions

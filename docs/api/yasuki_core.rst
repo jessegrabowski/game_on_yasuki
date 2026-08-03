@@ -41,6 +41,7 @@ yasuki_core
     yasuki_core.engine.rules.actions <yasuki_core.engine.rules.actions>
     yasuki_core.engine.rules.agents <yasuki_core.engine.rules.agents>
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
+    yasuki_core.engine.rules.economy <yasuki_core.engine.rules.economy>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
     yasuki_core.engine.rules.events <yasuki_core.engine.rules.events>
     yasuki_core.engine.rules.flow <yasuki_core.engine.rules.flow>

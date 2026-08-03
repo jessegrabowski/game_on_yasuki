@@ -5,7 +5,7 @@ from yasuki_core.game_pieces.dynasty import DynastyPersonality
 from yasuki_core.engine.rules.abilities import Ability, _ABILITIES
 from yasuki_core.engine.rules.actions import ActivateAbility, Pass
 from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards, DecisionResponse
-from yasuki_core.engine.rules.effects import effective_gold_production
+from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.triggers import AdjustCounter, Choose, choice_resolver

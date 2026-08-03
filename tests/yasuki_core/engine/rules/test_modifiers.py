@@ -1,7 +1,7 @@
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.effects import active_modifiers, effective_gold_production
+from yasuki_core.engine.rules.economy import active_modifiers, effective_gold_production
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 
