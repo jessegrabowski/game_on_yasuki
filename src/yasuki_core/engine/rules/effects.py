@@ -1,37 +1,86 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
 
+class Effect(ABC):
+    """One change to game state, described as data.
+
+    Triggers and activated abilities return lists of effects rather than mutating the board, and the
+    cascade commits each through :meth:`perform`. An effect that cannot be added without implementing
+    its own behavior cannot be added and then forgotten about at the commit site.
+    """
+
+    __slots__ = ()
+
+    @abstractmethod
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Commit this effect and return the events it raises, for the cascade to drain."""
+
+    def can_apply(self, game: GameState) -> bool:
+        """Whether this effect would do anything against the current state. Only effects with a
+        precondition an ability must satisfy before paying it override this."""
+        return True
+
+
 @dataclass(frozen=True, slots=True)
-class AdjustCounter:
+class AdjustCounter(Effect):
     """Add ``delta`` to a counter on a card (floored at zero by the card). A grant is a positive
     delta, a removal negative. The rules-side twin of the sandbox ``AdjustCounter`` intent, applied
-    through :func:`~yasuki_core.engine.rules.triggers.apply_effect` rather than ``apply_intent``."""
+    through :meth:`Effect.perform` rather than ``apply_intent``."""
 
     card_id: str
     counter: Counter
     delta: int
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None:
+            return []
+        before = card.counters.get(self.counter.key, 0)
+        card.adjust_counter(self.counter.key, self.delta)
+        gained = card.counters.get(self.counter.key, 0) - before
+        if gained > 0:
+            return [CounterGained(self.card_id, self.counter, gained)]
+        return []
+
 
 @dataclass(frozen=True, slots=True)
-class DrawCard:
+class DrawCard(Effect):
     """``seat`` draws a card from its fate deck."""
 
     seat: PlayerId
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        ops.draw_to_hand(game.table, self.seat)
+        return []
+
 
 @dataclass(frozen=True, slots=True)
-class Destroy:
+class Destroy(Effect):
     """Destroy a card, sending it to its owner's discard by side."""
 
     card_id: str
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None or card.owner is None:
+            return []
+        role = ZoneRole.DYNASTY_DISCARD if card.side is Side.DYNASTY else ZoneRole.FATE_DISCARD
+        ops.move_card(game.table, card, ZoneKey(card.owner, role))
+        return [Destroyed(self.card_id)]
+
 
 @dataclass(frozen=True, slots=True)
-class GrantModifier:
+class GrantModifier(Effect):
     """Record a continuous stat modifier: the ``source`` card grants ``target`` a change of
     ``amount`` to ``stat`` for ``duration``. The single created-effect entry point; a card's
     counters and attachments grant their bonuses without one (they are derived on read)."""
@@ -42,47 +91,79 @@ class GrantModifier:
     amount: int
     duration: Duration
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifiers.append(
+            Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
+        )
+        return []
+
 
 @dataclass(frozen=True, slots=True)
-class Bow:
+class Bow(Effect):
     """Bow a card."""
 
     card_id: str
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            card.bow()
+        return []
+
 
 @dataclass(frozen=True, slots=True)
-class Straighten:
+class Straighten(Effect):
     """Straighten (unbow) a card."""
 
     card_id: str
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            card.unbow()
+        return []
+
 
 @dataclass(frozen=True, slots=True)
-class BanishTopFate:
+class BanishTopFate(Effect):
     """Banish the top card of ``seat``'s Fate deck; a no-op if the deck is empty."""
 
     seat: PlayerId
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        deck = game.table.decks[DeckKey(self.seat, Side.FATE)]
+        if deck.cards:
+            ops.move_card(game.table, deck.cards[-1], ZoneKey(self.seat, ZoneRole.FATE_BANISH))
+        return []
+
 
 @dataclass(frozen=True, slots=True)
-class GainGold:
+class GainGold(Effect):
     """Add ``amount`` gold to ``seat``'s pool: gold produced outside a payment (a card that produces
     gold on entry), transient and cleared at the end of the phase."""
 
     seat: PlayerId
     amount: int
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.add_gold(self.seat, self.amount)
+        return []
+
 
 @dataclass(frozen=True, slots=True)
-class IgnoreHonorRequirements:
+class IgnoreHonorRequirements(Effect):
     """Grant ``seat`` the standing waiver of every Personality's Honor Requirement when
     recruiting."""
 
     seat: PlayerId
 
+    def perform(self, game: GameState) -> list[GameEvent]:
+        ops.set_ignore_honor_requirements(game.table, self.seat, True)
+        return []
+
 
 @dataclass(frozen=True, slots=True)
-class Choose:
+class Choose(Effect):
     """Pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of ``candidates``;
     the chosen ids feed the registered ``resolver``, whose effects apply on resume. The one
     interruption point in the effect vocabulary: every other effect commits at once, so a trigger
@@ -111,16 +192,5 @@ class Choose:
     resolver: str
     source_id: str
 
-
-Effect = (
-    AdjustCounter
-    | DrawCard
-    | Destroy
-    | GrantModifier
-    | Bow
-    | Straighten
-    | BanishTopFate
-    | GainGold
-    | IgnoreHonorRequirements
-    | Choose
-)
+    def perform(self, game: GameState) -> list[GameEvent]:
+        raise RuntimeError("a Choose pauses the trigger cascade; it is never applied directly")
