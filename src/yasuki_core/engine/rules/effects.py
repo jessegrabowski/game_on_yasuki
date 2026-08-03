@@ -41,6 +41,13 @@ class AdjustCounter(Effect):
     counter: Counter
     delta: int
 
+    def can_apply(self, game: GameState) -> bool:
+        """A removal needs the card to hold enough of the counter; a grant always applies."""
+        if self.delta >= 0:
+            return True
+        card = game.table.cards_by_id.get(self.card_id)
+        return card is not None and card.counters.get(self.counter.key, 0) >= -self.delta
+
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
@@ -104,6 +111,11 @@ class Bow(Effect):
 
     card_id: str
 
+    def can_apply(self, game: GameState) -> bool:
+        """An already-bowed card cannot bow again."""
+        card = game.table.cards_by_id.get(self.card_id)
+        return card is not None and not card.bowed
+
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
         if card is not None:
@@ -129,6 +141,10 @@ class BanishTopFate(Effect):
     """Banish the top card of ``seat``'s Fate deck; a no-op if the deck is empty."""
 
     seat: PlayerId
+
+    def can_apply(self, game: GameState) -> bool:
+        """An empty Fate deck has nothing to banish."""
+        return bool(game.table.decks[DeckKey(self.seat, Side.FATE)].cards)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         deck = game.table.decks[DeckKey(self.seat, Side.FATE)]
