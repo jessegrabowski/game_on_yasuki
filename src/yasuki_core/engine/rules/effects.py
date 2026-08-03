@@ -200,6 +200,28 @@ class IgnoreHonorRequirements(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class RecruitCard(InterruptingEffect):
+    """Bring a card into play from its controller's province, out of the normal recruit sequence.
+
+    Pauses for the payment its controller must cover, exactly as a Recruit action does. With
+    ``renew`` the vacated province refills face-up on top of whatever the card's own Renew keyword
+    grants.
+    """
+
+    card_id: str
+    renew: bool = False
+
+    def request(self, game: GameState) -> DecisionRequest:
+        # flow imports triggers, which imports this module, so the announce entry point is reached
+        # lazily rather than moving the module boundary.
+        from yasuki_core.engine.rules.flow import announce_recruit
+
+        card = game.table.cards_by_id[self.card_id]
+        assert card.owner is not None, f"{self.card_id} has no owner to recruit it"
+        return announce_recruit(game, card, card.owner, invest_amount=0, renew=self.renew)
+
+
+@dataclass(frozen=True, slots=True)
 class Then(Effect):
     """Defer ``effects`` until the current step has fully resolved, cascade included.
 

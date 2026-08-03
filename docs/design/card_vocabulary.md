@@ -15,6 +15,11 @@ whether an ability can pay the effect as a cost. Triggers and activated abilitie
 effects, and the cascade commits each in turn, draining the events they raise until no further
 events are produced.
 
+An `InterruptingEffect` pauses the cascade rather than committing. The walker records the decision
+its `request` returns, stashes the remainder of the cascade, and resumes once the seat answers. An
+effect cannot declare itself interrupting without supplying that decision, because `request` is
+abstract on the category.
+
 `Then` is the counterpart for sequencing. An effect placed inline runs before the events already
 queued behind it, so a step that must follow another card's reaction to what just happened is
 deferred through `Then` instead.
@@ -36,6 +41,7 @@ deferred through `Then` instead.
    GainGold
    GrantModifier
    IgnoreHonorRequirements
+   RecruitCard
    Then
    Choose
 ```
@@ -102,6 +108,7 @@ the action rather than by deserializing it.
    FinishRecruit
    SelectAbilityTarget
    ApplyAbilityEffects
+   ApplyEffects
    ResumeCascade
    ModestFarmStraighten
 ```

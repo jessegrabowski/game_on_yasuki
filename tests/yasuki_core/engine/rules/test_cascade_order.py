@@ -2,13 +2,18 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay
-from yasuki_core.engine.rules.effects import AdjustCounter, Then
-from yasuki_core.engine.rules.flow import run_stack
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.engine.rules.decisions import ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.effects import AdjustCounter, RecruitCard, Then
+from yasuki_core.engine.rules.flow import run_stack, submit
 from yasuki_core.engine.rules.triggers import fire, on, resolve_effects
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
 from tests.yasuki_core.engine.builders import (
     holding,
+    province_card,
+    register,
     put_in_play,
     two_seat_game,
 )
@@ -110,3 +115,48 @@ def test_then_defers_its_effects_until_the_cascade_has_finished_reacting():
     run_stack(game)
 
     assert source.counters["sincerity"] == 1
+
+
+def test_recruit_card_pauses_for_payment_and_brings_the_card_in():
+    game = two_seat_game()
+    put_in_play(game, holding("P1-gold", gold_production=8))
+    target = province_card(game, "P1-target", gold_cost=2)
+
+    resolve_effects(game, [RecruitCard(target.id)])
+
+    assert isinstance(game.pending, ChoosePayment)
+    assert game.pending.amount == 2  # the target's gold cost
+
+    submit(game, DecisionResponse(("P1-gold",)))
+
+    assert target in game.table.battlefield.cards
+
+
+def test_recruit_card_refills_the_vacated_province_face_up_with_renew():
+    game = two_seat_game()
+    put_in_play(game, holding("P1-gold", gold_production=8))
+    target = province_card(game, "P1-target", gold_cost=2)
+    game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        register(game.table, holding("P1-refill"))
+    ]
+
+    resolve_effects(game, [RecruitCard(target.id, renew=True)])
+    submit(game, DecisionResponse(("P1-gold",)))
+
+    refill = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards[-1]
+    assert refill.face_up
+
+
+def test_recruit_card_leaves_the_province_face_down_without_renew():
+    game = two_seat_game()
+    put_in_play(game, holding("P1-gold", gold_production=8))
+    target = province_card(game, "P1-target", gold_cost=2)
+    game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        register(game.table, holding("P1-refill"))
+    ]
+
+    resolve_effects(game, [RecruitCard(target.id)])
+    submit(game, DecisionResponse(("P1-gold",)))
+
+    refill = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards[-1]
+    assert not refill.face_up
