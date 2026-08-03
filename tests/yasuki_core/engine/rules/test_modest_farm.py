@@ -13,10 +13,7 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
-
-def _register(state, card):
-    state.cards_by_id[card.id] = card
-    return card
+from tests.yasuki_core.engine.builders import put_in_play, register
 
 
 def _modest_farm_game(*, target_keywords=(), target_cost=2, with_producer=True, producer_gp=8):
@@ -26,38 +23,32 @@ def _modest_farm_game(*, target_keywords=(), target_cost=2, with_producer=True, 
     remains."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
-            state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
-        )
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
     ]
     if with_producer:
-        state.battlefield.add(
-            _register(
-                state,
-                DynastyHolding(
-                    id="SH",
-                    name="SH",
-                    side=Side.DYNASTY,
-                    owner=PlayerId.P1,
-                    gold_production=producer_gp,
-                ),
-            )
-        )
-    state.battlefield.add(
-        _register(
+        put_in_play(
             state,
             DynastyHolding(
-                id="mf",
-                name="Modest Farm",
+                id="SH",
+                name="SH",
                 side=Side.DYNASTY,
                 owner=PlayerId.P1,
-                printed_id="modest_farm",
-                keywords=("Farm",),
-                gold_production=1,
+                gold_production=producer_gp,
             ),
         )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="mf",
+            name="Modest Farm",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="modest_farm",
+            keywords=("Farm",),
+            gold_production=1,
+        ),
     )
-    target = _register(
+    target = register(
         state,
         DynastyHolding(
             id="target",
@@ -167,19 +158,13 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     # The general Renew rule: a normally-recruited card with the Renew keyword refills face-up.
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        _register(
-            state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
-        )
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
     ]
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
-            ),
-        )
+    put_in_play(
+        state,
+        DynastyHolding(id="SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8),
     )
-    renewer = _register(
+    renewer = register(
         state,
         DynastyHolding(
             id="warrens",

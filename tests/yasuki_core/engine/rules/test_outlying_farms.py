@@ -9,12 +9,9 @@ from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
+from tests.yasuki_core.engine.builders import put_in_play, register
+
 P1 = PlayerId.P1
-
-
-def _register(state, card):
-    state.cards_by_id[card.id] = card
-    return card
 
 
 def _outlying_game(*, target_cost=2, with_producer=True):
@@ -22,30 +19,26 @@ def _outlying_game(*, target_cost=2, with_producer=True):
     and a face-up target Holding in a province to recruit."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
-        _register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=P1))
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=P1))
     ]
     if with_producer:
-        state.battlefield.add(
-            _register(
-                state,
-                DynastyHolding(id="sh", name="SH", side=Side.DYNASTY, owner=P1, gold_production=8),
-            )
-        )
-    state.battlefield.add(
-        _register(
+        put_in_play(
             state,
-            DynastyHolding(
-                id="of",
-                name="Outlying Farms",
-                side=Side.DYNASTY,
-                owner=P1,
-                printed_id="outlying_farms",
-                keywords=("Farm",),
-                gold_production=2,
-            ),
+            DynastyHolding(id="sh", name="SH", side=Side.DYNASTY, owner=P1, gold_production=8),
         )
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="of",
+            name="Outlying Farms",
+            side=Side.DYNASTY,
+            owner=P1,
+            printed_id="outlying_farms",
+            keywords=("Farm",),
+            gold_production=2,
+        ),
     )
-    target = _register(
+    target = register(
         state,
         DynastyHolding(
             id="target",
