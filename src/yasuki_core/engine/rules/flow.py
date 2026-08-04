@@ -38,6 +38,9 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.economy import effective_gold_production, effective_recruit_discount
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules import abilities, triggers
+
+# Imported for the registrations it performs; see rules/cards/__init__.py.
+from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.ruleset import SHATTERED_EMPIRE
