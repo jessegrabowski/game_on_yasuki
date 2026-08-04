@@ -5,18 +5,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
-    BanishForLegacy,
-    ChooseAbilityTarget,
-    ChooseCards,
     ChooseInvestAmount,
     ChooseLegacyCard,
     ChoosePayment,
-    DecisionRequest,
     DecisionResponse,
-    DiscardToHandSize,
-    PlaceLegacy,
 )
-from collections.abc import Iterable
 from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
@@ -36,37 +29,6 @@ LOCAL_DEBUG_OVERRIDE = False
 
 # How long the board lingers on "Opponent's turn" before the opponent's (AI-less) turn auto-runs.
 OPPONENT_TURN_DELAY_MS = 700
-
-
-def _describe_decision(
-    request: DecisionRequest, chosen: Iterable[str], boosted: Iterable[str] = ()
-) -> tuple[str, str]:
-    """A pending decision's prompt text and confirm-button label, given the cards chosen so far (and,
-    paying, the producers boosted). Raise on an unmapped decision so a new request type can't ship
-    without its prompt."""
-    if isinstance(request, DiscardToHandSize):
-        return f"discard {request.count} card(s)", "Discard"
-    if isinstance(request, ChoosePayment):
-        yields = dict(request.produced)
-        boost = dict(request.boostable)
-        boosted_set = set(boosted)
-        covered = request.available + sum(
-            yields[card_id] + (boost[card_id] if card_id in boosted_set else 0)
-            for card_id in chosen
-        )
-        remaining = max(0, request.amount - covered)
-        return f"Pay {remaining} gold for {request.label}", "Pay"
-    if isinstance(request, BanishForLegacy):
-        return "Banish a card from hand to search for a Legacy card", "Banish"
-    if isinstance(request, PlaceLegacy):
-        return "Choose a province to place the Legacy card, discarding the card there", "Place"
-    if isinstance(request, ChooseAbilityTarget):
-        return "Choose a target for the ability", "Confirm"
-    if isinstance(request, ChooseCards):
-        if request.minimum == 0:
-            return f"Choose up to {request.maximum} card(s)", "Confirm"
-        return f"Choose {request.minimum} to {request.maximum} card(s)", "Confirm"
-    raise ValueError(f"no prompt defined for {type(request).__name__}")
 
 
 def _action_button_label(action: Action) -> str:
@@ -140,7 +102,7 @@ def main() -> None:
             )
         elif isinstance(pending, ChooseLegacyCard):
             # Answered by the search dialog (opened in after_human_action), not the board.
-            prompt_box.show("Search your deck for a Legacy card", [])
+            prompt_box.show(pending.prompt(), [])
         elif isinstance(pending, ChooseInvestAmount):
             # An amount, not a board card — answered by one button per affordable amount.
             buttons = [
@@ -148,7 +110,7 @@ def main() -> None:
                 for amount in pending.candidates
             ]
             buttons.append(("Cancel", cancel_decision, True))
-            prompt_box.show("Choose how much to Invest", buttons)
+            prompt_box.show(pending.prompt(), buttons)
         elif isinstance(pending, ChoosePayment) and boost_producer is not None:
             extra = dict(pending.boostable).get(boost_producer, 0)
             prompt_box.show(
@@ -161,12 +123,11 @@ def main() -> None:
         elif pending is not None:
             chosen = tuple(field.selection)
             boosted = tuple(field.boosted)
-            prompt, button_label = _describe_decision(pending, chosen, boosted)
             can_confirm = pending.accepts(DecisionResponse(chosen, boosted))
-            buttons = [(button_label, confirm_decision, can_confirm)]
+            buttons = [(pending.confirm_label, confirm_decision, can_confirm)]
             if pending.cancellable:
                 buttons.append(("Cancel", cancel_decision, True))
-            prompt_box.show(prompt, buttons)
+            prompt_box.show(pending.prompt(chosen, boosted), buttons)
         else:
             whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
             # Pass is a button; a Recruit is invoked by clicking a holding on the board.
