@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
     Then,
 )
+from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.triggers import province_holdings, sincerity_seed_targets
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
@@ -74,10 +75,6 @@ class Ability:
     all_targets : bool
         Whether the ability hits every card ``targets`` returns rather than one chosen among them —
         an untargeted "your other Farms" grant instead of a single pick. Default False.
-    recruits_target : bool
-        Whether the ability recruits its chosen target (paying for it and bringing it into play)
-        rather than emitting ``effects`` against it — Modest Farm's out-of-sequence recruit. Default
-        False.
     """
 
     phase: Phase
@@ -86,7 +83,6 @@ class Ability:
     targets: Callable[[GameState, L5RCard], list[str]]
     effects: Callable[[L5RCard, L5RCard], list[Effect]]
     all_targets: bool = False
-    recruits_target: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -171,15 +167,22 @@ def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
     return sincerity_seed_targets(game, card.owner)
 
 
-def _province_holdings(game: GameState, card: L5RCard) -> list[str]:
-    return province_holdings(game, card.owner)
-
-
 def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:
-    # flow imports this module, so the affordability helper is reached lazily.
-    from yasuki_core.engine.rules.flow import recruitable_via_ability
+    """The face-up Province Holdings ``card``'s controller can afford to bring into play. The seat
+    pays each target's recruit cost from its pool and unbowed producers, minus ``card``'s own yield:
+    the ability bows or destroys ``card`` as its cost, so it can no longer produce toward the
+    recruit."""
+    # flow imports this module for the ability registry, so its gold helpers are reached lazily.
+    from yasuki_core.engine.rules.flow import reachable_gold, recruit_cost
 
-    return recruitable_via_ability(game, card)
+    seat = card.owner
+    affordable: list[str] = []
+    for target_id in province_holdings(game, seat):
+        target = game.table.cards_by_id[target_id]
+        forfeited = effective_gold_production(game, card, targets=(target,))
+        if recruit_cost(game, target) <= reachable_gold(game, seat, target) - forfeited:
+            affordable.append(target_id)
+    return affordable
 
 
 def _modest_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
