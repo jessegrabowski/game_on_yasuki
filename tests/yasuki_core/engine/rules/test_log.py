@@ -7,7 +7,13 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import Pass, Recruit
+from yasuki_core.engine.rules.actions import (
+    ActivateAbility,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.log import (
     GameLog,
@@ -290,3 +296,26 @@ def test_decode_action_rejects_an_unknown_kind():
     # A malformed log must fail loudly, not silently mis-decode as some default action.
     with pytest.raises(ValueError):
         _decode_action({"kind": "bogus"})
+
+
+@pytest.mark.parametrize(
+    "action",
+    [
+        Pass(),
+        Recruit("card"),
+        Recruit("card", invest=True),
+        Recruit("card", proclaim=True),
+        DynastyDiscard("card"),
+        Legacy(),
+        ActivateAbility("card"),
+    ],
+)
+def test_every_action_survives_a_json_round_trip(action):
+    # The log is the save format and the replay tape, so an action the codec cannot carry is an
+    # action that cannot be saved or replayed.
+    log = GameLog(initial=InitialRecord.from_state(dealt_table()), first_player=PlayerId.P1)
+    log.entries.append(Act(PlayerId.P1, action))
+
+    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
+
+    assert restored.entries[0].action == action

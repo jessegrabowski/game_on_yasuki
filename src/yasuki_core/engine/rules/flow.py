@@ -103,8 +103,8 @@ def advance(game: GameState) -> None:
 
 
 def perform(game: GameState, action: Action) -> None:
-    """Apply a chosen action: pass to end the phase, or recruit a card from a province. The single
-    action-apply dispatch, mirroring :func:`submit` for decisions."""
+    """Apply a chosen action, dispatching to its handler. The single action-apply dispatch,
+    mirroring :func:`submit` for decisions. Raise ``ValueError`` for an action with no handler."""
     match action:
         case Pass():
             advance(game)
@@ -116,6 +116,8 @@ def perform(game: GameState, action: Action) -> None:
             legacy(game)
         case ActivateAbility(card_id=card_id):
             activate(game, card_id)
+        case _:
+            raise ValueError(f"no handler for action {type(action).__name__}")
 
 
 def produce_gold(game: GameState, card_id: str, amount: int) -> None:
