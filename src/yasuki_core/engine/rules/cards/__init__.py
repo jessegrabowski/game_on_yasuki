@@ -13,5 +13,8 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     pre_imperial,
     promotional_emperor,
     rise_of_jigoku,
+    rise_of_otosan_uchi,
+    road_to_ruin,
     the_blackest_storm,
+    twenty_festivals,
 )

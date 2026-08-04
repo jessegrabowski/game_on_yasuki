@@ -1,4 +1,8 @@
+from yasuki_core.engine.rules.abilities import Ability, bow_cost, register_ability
 from yasuki_core.engine.rules.economy import PlayerState, gold_handler, recruit_discount
+from yasuki_core.engine.rules.effects import AdjustCounter, Effect
+from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.triggers import sincerity_seed_targets
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 
@@ -29,3 +33,26 @@ def _shrine_of_sincerity(
         else 0
     )
     return card.gold_production + bonus
+
+
+# --- Shrine of Sincerity ---
+
+
+def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
+    return sincerity_seed_targets(game, card.owner)
+
+
+def _seed_sincerity(source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [AdjustCounter(target.id, SINCERITY, 1)]
+
+
+register_ability(
+    "shrine_of_sincerity",
+    Ability(
+        phase=Phase.DYNASTY,
+        label="Bow: seed a Sincerity token onto a Province Sincerity card",
+        cost=bow_cost,
+        targets=_sincerity_seed_targets,
+        effects=_seed_sincerity,
+    ),
+)

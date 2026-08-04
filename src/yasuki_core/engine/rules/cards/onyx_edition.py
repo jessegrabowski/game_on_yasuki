@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.abilities import InvestAbility, one_wealth, register_invest
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose, Effect
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.state import GameState
@@ -28,3 +29,8 @@ def _training_court(ctx: TriggerContext) -> list[Effect]:
 @choice_resolver("sincerity_seed")
 def _sincerity_seed(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
     return [AdjustCounter(card_id, SINCERITY, 1) for card_id in chosen]
+
+
+# --- Training Court ---
+
+register_invest("training_court", InvestAbility(minimum=1, maximum=1, effect=one_wealth))

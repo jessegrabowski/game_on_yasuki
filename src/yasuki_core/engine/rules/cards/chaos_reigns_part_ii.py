@@ -1,6 +1,8 @@
-from yasuki_core.engine.rules.effects import AdjustCounter, Choose, DrawCard, Effect
+from yasuki_core.engine.rules.abilities import Ability, bow_cost, owned_holdings, register_ability
+from yasuki_core.engine.rules.effects import AdjustCounter, Choose, DrawCard, Effect, GrantModifier
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStarted
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
     at_cap,
@@ -8,6 +10,7 @@ from yasuki_core.engine.rules.triggers import (
     on,
     once_per_turn,
 )
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
@@ -64,3 +67,28 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
 @choice_resolver("wheat_farm")
 def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
+
+
+# --- Millet Farm ---
+
+
+def _owned_farms(game: GameState, card: L5RCard) -> list[str]:
+    return [farm.id for farm in owned_holdings(game, card.owner, "Farm")]
+
+
+def _millet_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [
+        GrantModifier(source.id, target.id, Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN)
+    ]
+
+
+register_ability(
+    "millet_farm",
+    Ability(
+        phase=Phase.ACTION,
+        label="Bow: give a Farm +2 Gold Production",
+        cost=bow_cost,
+        targets=_owned_farms,
+        effects=_millet_farm_effects,
+    ),
+)
