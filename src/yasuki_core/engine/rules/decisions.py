@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
@@ -52,6 +53,16 @@ class DecisionRequest(ABC):
         right shape, drawn from :attr:`candidates`. A well-formed answer may still be illegal
         against the game state; the rules layer makes that check separately."""
 
+    @abstractmethod
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        """The question to put to the seat. ``chosen`` and ``boosted`` are the selections made so
+        far, for a request whose wording depends on them; the rest ignore both."""
+
+    @property
+    def confirm_label(self) -> str:
+        """The confirm button's text. Requests answered another way never read it."""
+        return "Confirm"
+
     @property
     def cancellable(self) -> bool:
         """Whether the seat may back out of this decision, undoing the action that raised it. False
@@ -90,6 +101,20 @@ class ChoosePayment(DecisionRequest):
     label: str
     boostable: tuple[tuple[str, int], ...] = ()
 
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        yields = dict(self.produced)
+        boost = dict(self.boostable)
+        boosted_set = set(boosted)
+        covered = self.available + sum(
+            yields[card_id] + (boost[card_id] if card_id in boosted_set else 0)
+            for card_id in chosen
+        )
+        return f"Pay {max(0, self.amount - covered)} gold for {self.label}"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Pay"
+
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = response.choices
         distinct = set(chosen)
@@ -122,6 +147,13 @@ class DiscardToHandSize(DecisionRequest):
 
     count: int
 
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return f"discard {self.count} card(s)"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Discard"
+
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = set(response.choices)
         return (
@@ -141,6 +173,13 @@ class BanishForLegacy(DecisionRequest):
     seat's hand; the chosen card is removed from the game. Not cancellable — announcing Legacy
     commits to the cost."""
 
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Banish a card from hand to search for a Legacy card"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Banish"
+
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)
 
@@ -149,6 +188,9 @@ class BanishForLegacy(DecisionRequest):
 class ChooseLegacyCard(DecisionRequest):
     """The seat must choose which Legacy card its search found — the candidates are the Legacy cards
     in its dynasty deck and provinces. The chosen card is placed into a province next."""
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Search your deck for a Legacy card"
 
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)
@@ -168,6 +210,9 @@ class ChooseInvestAmount(DecisionRequest):
     """
 
     source_card_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Choose how much to Invest"
 
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)
@@ -190,6 +235,9 @@ class ChooseAbilityTarget(DecisionRequest):
     """
 
     source_card_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Choose a target for the ability"
 
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)
@@ -219,6 +267,11 @@ class ChooseCards(DecisionRequest):
     resolver: str
     source_id: str
 
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        if self.minimum == 0:
+            return f"Choose up to {self.maximum} card(s)"
+        return f"Choose {self.minimum} to {self.maximum} card(s)"
+
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = response.choices
         distinct = set(chosen)
@@ -241,6 +294,13 @@ class PlaceLegacy(DecisionRequest):
     """
 
     legacy_card_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Choose a province to place the Legacy card, discarding the card there"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Place"
 
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)

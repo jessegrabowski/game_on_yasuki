@@ -20,7 +20,13 @@ def _union_members(union) -> set[str]:
     args = typing.get_args(union)
     if args:
         return {arg.__name__ for arg in args}
-    return {subclass.__name__ for subclass in union.__subclasses__()}
+    # An ABC's subclass registry is global and process-wide, so a subclass declared anywhere else —
+    # including inside another test — would otherwise count as a member the dispatcher must handle.
+    return {
+        subclass.__name__
+        for subclass in union.__subclasses__()
+        if subclass.__module__ == union.__module__
+    }
 
 
 def _dispatched_names(dispatcher) -> set[str]:
