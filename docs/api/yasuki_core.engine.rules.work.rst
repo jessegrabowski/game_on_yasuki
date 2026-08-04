@@ -13,7 +13,6 @@ yasuki_core.engine.rules.work
     ApplyAbilityEffects
     ApplyEffects
     FinishRecruit
-    ModestFarmStraighten
     ResolveRecruit
     ResumeCascade
     SelectAbilityTarget

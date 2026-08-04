@@ -40,6 +40,7 @@ yasuki_core
     yasuki_core.engine.rules.abilities <yasuki_core.engine.rules.abilities>
     yasuki_core.engine.rules.actions <yasuki_core.engine.rules.actions>
     yasuki_core.engine.rules.agents <yasuki_core.engine.rules.agents>
+    yasuki_core.engine.rules.card_registry <yasuki_core.engine.rules.card_registry>
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.economy <yasuki_core.engine.rules.economy>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
@@ -65,6 +66,7 @@ yasuki_core
     yasuki_core.game_pieces.factory <yasuki_core.game_pieces.factory>
     yasuki_core.game_pieces.fate <yasuki_core.game_pieces.fate>
     yasuki_core.game_pieces.pregame <yasuki_core.game_pieces.pregame>
+    yasuki_core.install.card_index <yasuki_core.install.card_index>
     yasuki_core.install.format_metadata <yasuki_core.install.format_metadata>
     yasuki_core.install.images_to_sql <yasuki_core.install.images_to_sql>
     yasuki_core.install.install_db <yasuki_core.install.install_db>

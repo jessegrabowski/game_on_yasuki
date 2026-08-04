@@ -1,10 +1,7 @@
 import argparse
 from pathlib import Path
 
-import yaml
-
 from yasuki_core import DATABASE_DIR
-from yasuki_core.install.yaml_to_sql import card_slug
 
 DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
 DEFAULT_INDEX_PATH = DATABASE_DIR / "card_ids.txt"
@@ -33,6 +30,12 @@ def card_ids(cards_dir: Path) -> list[str]:
     ValueError
         If a file in ``cards_dir`` is not a set file, or if the directory yields no ids at all.
     """
+    # Imported here rather than at module scope: yaml_to_sql pulls in the Postgres driver, and
+    # read_index is on the pre-commit path, where the cost buys nothing.
+    import yaml
+
+    from yasuki_core.install.yaml_to_sql import card_slug
+
     ids: set[str] = set()
     for yaml_file in sorted(cards_dir.glob("*.yaml")):
         data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))

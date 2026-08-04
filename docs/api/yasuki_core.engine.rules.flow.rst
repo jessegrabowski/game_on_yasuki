@@ -30,6 +30,5 @@ yasuki_core.engine.rules.flow
     reachable_gold
     recruit
     recruit_cost
-    recruitable_via_ability
     run_stack
     submit
