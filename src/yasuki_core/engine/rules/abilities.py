@@ -10,9 +10,12 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Destroy,
     DrawCard,
+    Choose,
     Effect,
     GrantModifier,
+    RecruitCard,
     Straighten,
+    Then,
 )
 from yasuki_core.engine.rules.triggers import province_holdings, sincerity_seed_targets
 from yasuki_core.game_pieces.cards import L5RCard
@@ -172,8 +175,20 @@ def _province_holdings(game: GameState, card: L5RCard) -> list[str]:
     return province_holdings(game, card.owner)
 
 
-def _no_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
-    return []  # a recruits_target ability routes to the recruit flow, never to effects
+def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:
+    # flow imports this module, so the affordability helper is reached lazily.
+    from yasuki_core.engine.rules.flow import recruitable_via_ability
+
+    return recruitable_via_ability(game, card)
+
+
+def _modest_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Recruit the target out of sequence, then offer to destroy Modest Farm to straighten it. The
+    offer is deferred so it follows the recruit and anything the recruited card's entry causes."""
+    return [
+        RecruitCard(target.id, renew="Farm" in target.keywords),
+        Then((Choose(source.owner, (source.id,), 0, 1, "modest_farm_straighten", target.id),)),
+    ]
 
 
 def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
@@ -255,9 +270,8 @@ _ABILITIES: dict[str, Ability] = {
         phase=Phase.ACTION,
         label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
         cost=_bow,
-        targets=_province_holdings,
-        effects=_no_effects,
-        recruits_target=True,
+        targets=_affordable_province_holdings,
+        effects=_modest_farm_effects,
     ),
 }
 
