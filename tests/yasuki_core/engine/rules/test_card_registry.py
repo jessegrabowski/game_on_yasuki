@@ -2,7 +2,13 @@ import subprocess
 import sys
 
 from yasuki_core.engine.rules import abilities, economy, triggers
-from yasuki_core.engine.rules.card_registry import main, registered_card_ids, unregistered_card_ids
+from yasuki_core.engine.rules.card_registry import (
+    duplicate_registrations,
+    main,
+    registered_card_ids,
+    unregistered_card_ids,
+)
+from yasuki_core.engine.rules.events import EnteredPlay
 
 # Registry modules, and the per-card registries in them that card_registry validates. CHOICE_RESOLVERS
 # is the one module-level registry deliberately left out: it keys on the kind of a pending choice
@@ -74,6 +80,38 @@ def test_an_id_with_no_near_match_is_still_reported():
     ]
 
 
+def a_trigger(ctx):
+    return []
+
+
+def another_trigger(ctx):
+    return []
+
+
+def test_a_trigger_registered_twice_for_one_card_is_reported():
+    # _TRIGGERS appends rather than overwrites, so the duplicate does not shadow the original — both
+    # fire, and the card's effect happens twice.
+    problems = duplicate_registrations({EnteredPlay: {"millet_farm": [a_trigger, a_trigger]}})
+
+    assert problems == [
+        "triggers: millet_farm registers a_trigger for EnteredPlay 2 times",
+    ]
+
+
+def test_two_different_triggers_on_one_card_are_legitimate():
+    # A card may react to the same event in two ways; only the *same* handler twice is the defect.
+    assert (
+        duplicate_registrations({EnteredPlay: {"millet_farm": [a_trigger, another_trigger]}}) == []
+    )
+
+
+def test_the_same_trigger_on_two_cards_is_legitimate():
+    # Shared helpers are registered for many cards on purpose.
+    registry = {EnteredPlay: {"millet_farm": [a_trigger], "modest_farm": [a_trigger]}}
+
+    assert duplicate_registrations(registry) == []
+
+
 def test_no_registries_checks_nothing_rather_than_falling_back():
     # An empty mapping is a caller saying "check these", not "check the defaults". The two answers
     # coincide while the engine's own registries are clean, which is what makes the confusion durable.
@@ -87,10 +125,14 @@ def test_the_cli_is_silent_and_succeeds_when_every_id_is_real():
 
 def test_the_cli_writes_each_problem_to_stderr_and_fails(capsys):
     # pre-commit shows the developer whatever the hook writes, so the text is the contract, not just
-    # the exit code. Two bad ids, because reporting only the first would send someone back for a
-    # second round trip.
+    # the exit code. Reporting only the first would send someone back for a second round trip.
+    #
+    # Both kinds of problem, because the CLI is where they are joined and a dropped half would
+    # otherwise go unnoticed while the engine happens to be clean.
     registries = {"abilities": frozenset({"milet_farm"}), "triggers": frozenset({"rice_frm"})}
+    trigger_registry = {EnteredPlay: {"millet_farm": [a_trigger, a_trigger]}}
+    expected = unregistered_card_ids(registries) + duplicate_registrations(trigger_registry)
 
-    assert main(registries) == 1
-    assert capsys.readouterr().err.splitlines() == unregistered_card_ids(registries)
-    assert len(unregistered_card_ids(registries)) == 2
+    assert main(registries, trigger_registry) == 1
+    assert capsys.readouterr().err.splitlines() == expected
+    assert len(expected) == 3
