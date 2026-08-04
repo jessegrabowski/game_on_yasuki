@@ -1,7 +1,12 @@
 import pytest
 import yaml
 
-from yasuki_core.install.card_index import card_ids, read_index, write_index
+from yasuki_core.install.card_index import (
+    DEFAULT_CARDS_PATH,
+    card_ids,
+    read_index,
+    write_index,
+)
 
 
 def write_set(cards_dir, name, cards):
@@ -82,3 +87,17 @@ def test_the_index_is_one_id_per_line(tmp_path):
     write_index(tmp_path, index_path)
 
     assert index_path.read_text() == "ancestral_sword\nmodest_farm\n"
+
+
+@pytest.mark.slow
+def test_the_committed_index_matches_the_card_yaml():
+    # The index is a committed derivative of the YAML, so it can go stale silently: every check built
+    # on it would keep passing while naming cards that no longer exist. Reparsing costs ~8 s, which is
+    # why this is the only thing that pays it and why the fast readers never have to.
+    committed = read_index()
+    current = set(card_ids(DEFAULT_CARDS_PATH))
+
+    remedy = "run `pixi run card-index` and commit the result"
+
+    assert committed - current == set(), f"index names cards the YAML no longer has; {remedy}"
+    assert current - committed == set(), f"YAML has cards the index is missing; {remedy}"
