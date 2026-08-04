@@ -25,6 +25,37 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     }
 
 
+def duplicate_registrations(
+    trigger_registry: dict[type, dict[str, list[triggers.Trigger]]] | None = None,
+) -> list[str]:
+    """
+    One human-readable line per card id whose trigger is registered more than once.
+
+    Only ``_TRIGGERS`` can hold a duplicate. It appends, so a handler copy-pasted into a second module
+    makes the trigger fire twice — a wrong game state rather than a shadowed one. The dict registries
+    overwrite instead, and the three written as literals are covered by ruff's F601.
+
+    Parameters
+    ----------
+    trigger_registry : dict mapping event type to a dict of card id to triggers, optional
+        Defaults to the engine's own trigger registry.
+    """
+    if trigger_registry is None:
+        trigger_registry = triggers._TRIGGERS
+
+    problems = []
+    for event_type, by_card in sorted(trigger_registry.items(), key=lambda item: item[0].__name__):
+        for card_id, hooks in sorted(by_card.items()):
+            names = [hook.__qualname__ for hook in hooks]
+            repeated = sorted({name for name in names if names.count(name) > 1})
+            for name in repeated:
+                problems.append(
+                    f"triggers: {card_id} registers {name} for {event_type.__name__} "
+                    f"{names.count(name)} times"
+                )
+    return problems
+
+
 def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -> list[str]:
     """
     One human-readable line per handler keyed on an id no card has, each with a nearest-match hint.
@@ -56,8 +87,11 @@ def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -
     return problems
 
 
-def main(registries: dict[str, frozenset[str]] | None = None) -> int:
-    problems = unregistered_card_ids(registries)
+def main(
+    registries: dict[str, frozenset[str]] | None = None,
+    trigger_registry: dict[type, dict[str, list[triggers.Trigger]]] | None = None,
+) -> int:
+    problems = unregistered_card_ids(registries) + duplicate_registrations(trigger_registry)
     for problem in problems:
         print(problem, file=sys.stderr)
     return 1 if problems else 0

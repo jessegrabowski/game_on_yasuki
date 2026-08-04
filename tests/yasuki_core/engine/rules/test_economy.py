@@ -1,10 +1,14 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
+    RECRUIT_DISCOUNTS,
     effective_gold_production,
     gold_handler,
     opposing_states,
     player_state,
+    recruit_discount,
 )
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyPersonality
@@ -258,3 +262,35 @@ def test_teardrop_island_produces_three_for_mantis_two_otherwise():
         other, holding("to", owner=PlayerId.P1, printed_id="teardrop_island", gold_production=0)
     )
     assert effective_gold_production(other, off_clan) == 2
+
+
+def test_a_second_gold_handler_for_one_card_is_refused():
+    # The dict would overwrite, leaving no trace of the handler that lost — so the check has to be at
+    # registration, not on the registry afterwards.
+    @gold_handler("guard_probe")
+    def _first(card, me, opponents, targets):
+        return 0
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already has a gold handler"):
+
+            @gold_handler("guard_probe")
+            def _second(card, me, opponents, targets):
+                return 1
+    finally:
+        GOLD_HANDLERS.pop("guard_probe", None)
+
+
+def test_a_second_recruit_discount_for_one_card_is_refused():
+    @recruit_discount("guard_probe")
+    def _first(card, me, opponents):
+        return 0
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already has a recruit discount"):
+
+            @recruit_discount("guard_probe")
+            def _second(card, me, opponents):
+                return 1
+    finally:
+        RECRUIT_DISCOUNTS.pop("guard_probe", None)

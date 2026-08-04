@@ -74,6 +74,8 @@ def choice_resolver(key: str) -> Callable[[Resolver], Resolver]:
     """Register the decorated function as the choice resolver named ``key``."""
 
     def register(resolver: Resolver) -> Resolver:
+        if key in CHOICE_RESOLVERS:
+            raise ValueError(f"{key} already has a choice resolver")
         CHOICE_RESOLVERS[key] = resolver
         return resolver
 
