@@ -90,8 +90,17 @@ def test_a_file_that_is_not_a_set_names_itself_in_the_error(tmp_path):
         card_ids(tmp_path)
 
 
-def test_an_empty_directory_raises_rather_than_writing_an_empty_index(tmp_path):
+def test_a_directory_with_no_set_files_raises(tmp_path):
+    # A mistyped --cards path otherwise reads as "the database is empty", which every check built on
+    # the index would then agree with.
+    with pytest.raises(ValueError, match="No set files in"):
+        card_ids(tmp_path)
+
+
+def test_set_files_holding_no_cards_raise(tmp_path):
     # Silently emitting nothing would leave every registry check passing against no cards at all.
+    write_set(tmp_path, "imperial", [])
+
     with pytest.raises(ValueError, match="No card ids found"):
         card_ids(tmp_path)
 

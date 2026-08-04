@@ -1,5 +1,7 @@
 import argparse
+from collections.abc import Iterator
 from pathlib import Path
+from typing import NamedTuple
 
 from yasuki_core import DATABASE_DIR
 
@@ -7,13 +9,57 @@ DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
 DEFAULT_INDEX_PATH = DATABASE_DIR / "card_ids.txt"
 
 
-def card_ids(cards_dir: Path) -> list[str]:
+class SetEntry(NamedTuple):
+    source: Path
+    set_name: str
+    card_id: str
+    title: str
+
+
+def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
     """
-    Every distinct card id in the per-set YAML, sorted.
+    Every card entry in every set file, in filename order.
 
     Ids are derived exactly as :func:`yasuki_core.install.yaml_to_sql.load_cards` derives them: an
     explicit ``id``, or a slug of the extended title, with ``__back`` appended for the reverse face of
-    a double-faced card.
+    a double-faced card. Every consumer reads the data through here, so the derivation has one
+    definition and cannot drift between them.
+
+    Parameters
+    ----------
+    cards_dir : path
+        Directory of per-set YAML files.
+
+    Raises
+    ------
+    ValueError
+        If ``cards_dir`` holds no set files, or if one of them is not a set file.
+    """
+    # Imported here rather than at module scope: yaml_to_sql pulls in the Postgres driver, and
+    # read_index is on the pre-commit path, where the cost buys nothing.
+    import yaml
+
+    from yasuki_core.install.yaml_to_sql import card_slug
+
+    yaml_files = sorted(cards_dir.glob("*.yaml"))
+    if not yaml_files:
+        raise ValueError(f"No set files in {cards_dir}")
+
+    for yaml_file in yaml_files:
+        data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError(f"{yaml_file} is not a set file")
+        for entry in data.get("cards", []):
+            title = entry["title"]
+            card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
+            if entry.get("is_back"):
+                card_id += "__back"
+            yield SetEntry(yaml_file, data["set"], card_id, title)
+
+
+def card_ids(cards_dir: Path) -> list[str]:
+    """
+    Every distinct card id in the per-set YAML, sorted.
 
     Parameters
     ----------
@@ -28,33 +74,18 @@ def card_ids(cards_dir: Path) -> list[str]:
     Raises
     ------
     ValueError
-        If a file in ``cards_dir`` is not a set file, if two different cards claim one id, or if
-        the directory yields no ids at all.
+        If two different cards claim one id, or if the set files hold no cards at all.
     """
-    # Imported here rather than at module scope: yaml_to_sql pulls in the Postgres driver, and
-    # read_index is on the pre-commit path, where the cost buys nothing.
-    import yaml
-
-    from yasuki_core.install.yaml_to_sql import card_slug
-
     titles_by_id: dict[str, str] = {}
-    for yaml_file in sorted(cards_dir.glob("*.yaml")):
-        data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
-        if not isinstance(data, dict):
-            raise ValueError(f"{yaml_file} is not a set file")
-        for entry in data.get("cards", []):
-            title = entry["title"]
-            card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
-            if entry.get("is_back"):
-                card_id += "__back"
-            # Reprints repeat an id legitimately; two *different* cards sharing one never do. Token
-            # ids are stat-descriptive (`courtier_0_3_2`), so that is where a genuine clash is
-            # likeliest — and both this index and load_cards keep whichever came first, silently.
-            claimed = titles_by_id.setdefault(card_id, title)
-            if claimed != title:
-                raise ValueError(
-                    f"{yaml_file}: {claimed!r} and {title!r} both claim id {card_id!r}"
-                )
+    for entry in iter_set_entries(cards_dir):
+        # Reprints repeat an id legitimately; two *different* cards sharing one never do. Token ids
+        # are stat-descriptive (`courtier_0_3_2`), so that is where a genuine clash is likeliest —
+        # and both this index and load_cards keep whichever came first, silently.
+        claimed = titles_by_id.setdefault(entry.card_id, entry.title)
+        if claimed != entry.title:
+            raise ValueError(
+                f"{entry.source}: {claimed!r} and {entry.title!r} both claim id {entry.card_id!r}"
+            )
     if not titles_by_id:
         raise ValueError(f"No card ids found in {cards_dir}")
     return sorted(titles_by_id)
