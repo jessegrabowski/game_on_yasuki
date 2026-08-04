@@ -28,7 +28,8 @@ def card_ids(cards_dir: Path) -> list[str]:
     Raises
     ------
     ValueError
-        If a file in ``cards_dir`` is not a set file, or if the directory yields no ids at all.
+        If a file in ``cards_dir`` is not a set file, if two different cards claim one id, or if
+        the directory yields no ids at all.
     """
     # Imported here rather than at module scope: yaml_to_sql pulls in the Postgres driver, and
     # read_index is on the pre-commit path, where the cost buys nothing.
@@ -36,17 +37,27 @@ def card_ids(cards_dir: Path) -> list[str]:
 
     from yasuki_core.install.yaml_to_sql import card_slug
 
-    ids: set[str] = set()
+    titles_by_id: dict[str, str] = {}
     for yaml_file in sorted(cards_dir.glob("*.yaml")):
         data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
             raise ValueError(f"{yaml_file} is not a set file")
         for entry in data.get("cards", []):
-            card_id = entry.get("id") or card_slug(entry.get("extended_title") or entry["title"])
-            ids.add((card_id + "__back") if entry.get("is_back") else card_id)
-    if not ids:
+            title = entry["title"]
+            card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
+            if entry.get("is_back"):
+                card_id += "__back"
+            # Reprints repeat an id legitimately; two *different* cards sharing one never do. Token
+            # ids are stat-descriptive (`courtier_0_3_2`), so that is where a genuine clash is
+            # likeliest — and both this index and load_cards keep whichever came first, silently.
+            claimed = titles_by_id.setdefault(card_id, title)
+            if claimed != title:
+                raise ValueError(
+                    f"{yaml_file}: {claimed!r} and {title!r} both claim id {card_id!r}"
+                )
+    if not titles_by_id:
         raise ValueError(f"No card ids found in {cards_dir}")
-    return sorted(ids)
+    return sorted(titles_by_id)
 
 
 def write_index(cards_dir: Path = DEFAULT_CARDS_PATH, index_path: Path = DEFAULT_INDEX_PATH) -> int:
