@@ -110,7 +110,6 @@ the action rather than by deserializing it.
    ApplyAbilityEffects
    ApplyEffects
    ResumeCascade
-   ModestFarmStraighten
 ```
 
 ## Stats, durations, and counters
