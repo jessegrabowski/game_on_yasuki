@@ -70,6 +70,10 @@ def gold_handler(printed_id: str) -> Callable[[GoldHandler], GoldHandler]:
     """Register the decorated function as the gold-production handler for ``printed_id``."""
 
     def register(handler: GoldHandler) -> GoldHandler:
+        # Assignment would let the second registration shadow the first with no trace; by the time
+        # anything inspects the registry only the survivor is there.
+        if printed_id in GOLD_HANDLERS:
+            raise ValueError(f"{printed_id} already has a gold handler")
         GOLD_HANDLERS[printed_id] = handler
         return handler
 
@@ -146,6 +150,8 @@ def recruit_discount(printed_id: str) -> Callable[[DiscountHandler], DiscountHan
     """Register the decorated function as the recruit-discount handler for ``printed_id``."""
 
     def register(handler: DiscountHandler) -> DiscountHandler:
+        if printed_id in RECRUIT_DISCOUNTS:
+            raise ValueError(f"{printed_id} already has a recruit discount")
         RECRUIT_DISCOUNTS[printed_id] = handler
         return handler
 

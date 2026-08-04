@@ -1,9 +1,12 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.triggers import (
+    CHOICE_RESOLVERS,
     AdjustCounter,
     Choose,
     Destroy,
@@ -517,3 +520,20 @@ def test_effects_after_a_choice_in_the_same_trigger_still_resolve():
 
     # One token before the choice, one from the resolver, one after: none dropped at the pause.
     assert sandwich.counters == {"wealth": 3}
+
+
+def test_a_second_resolver_for_one_choice_kind_is_refused():
+    # A pending decision names its resolver by string; a silent overwrite would change what an
+    # already-paused choice resolves to.
+    @choice_resolver("guard_probe")
+    def _first(game, source_id, chosen):
+        return []
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already has a choice resolver"):
+
+            @choice_resolver("guard_probe")
+            def _second(game, source_id, chosen):
+                return []
+    finally:
+        CHOICE_RESOLVERS.pop("guard_probe", None)
