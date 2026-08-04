@@ -78,3 +78,27 @@ Card data is committed YAML — the full workflow (set YAML, image manifests, er
    `set_info.yaml`.
 2. Add the image manifest at `src/yasuki_core/assets/database/images/<slug>.yaml`.
 3. Reload the database: `pixi run install-db --force`.
+4. Regenerate the card-id index: `pixi run card-index`, and commit the result.
+
+## The Card-Id Index
+
+`src/yasuki_core/assets/database/card_ids.txt` lists every card id in the set YAML, one per line. It
+is generated, not hand-edited, and committed so that checks needing to know whether a card exists can
+read a file in a millisecond instead of reparsing 130 YAML files in eight seconds.
+
+Two things keep it honest:
+
+- A **pre-commit hook** (`card-registry`) asserts that every id the engine registers a handler on
+  names a real card. A handler keyed on a typo registers happily, never fires, and raises nothing —
+  the card is simply dead. The hook reports the registry, the id, and the nearest real id:
+
+  ```
+  abilities: no card has the id 'milet_farm' — did you mean millet_farm?
+  ```
+
+  Fix the id. The hook needs the project environment, so it does not run in CI; the same check runs
+  there as a test.
+
+- A **test** regenerates the index from the YAML and diffs it. If it fails, the index is stale: run
+  `pixi run card-index` and commit. It is marked `slow` and excluded from `pixi run test`; run it
+  with `pixi run pytest -m slow`.
