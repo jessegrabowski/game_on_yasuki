@@ -141,8 +141,11 @@ def _advance(
     while True:
         for index, effect in enumerate(effects):
             if isinstance(effect, InterruptingEffect):
-                game.pending = effect.request(game)
+                # Stash before asking for the request: the work stack is LIFO, and an effect whose
+                # request queues its own work (a recruit queues its resolution) must have that work
+                # run before the remainder of this cascade resumes.
                 _stash(game, tuple(effects[index + 1 :]), firing, event, queue)
+                game.pending = effect.request(game)
                 return
             queue.extend(apply_effect(game, effect))
         effects = ()

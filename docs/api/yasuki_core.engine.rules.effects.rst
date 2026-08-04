@@ -16,7 +16,11 @@ yasuki_core.engine.rules.effects
     Choose
     Destroy
     DrawCard
+    Effect
     GainGold
     GrantModifier
     IgnoreHonorRequirements
+    InterruptingEffect
+    RecruitCard
     Straighten
+    Then

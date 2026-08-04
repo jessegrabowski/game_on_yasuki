@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import (
+    ApplyEffects,
     ApplyAbilityEffects,
     FinishRecruit,
     ModestFarmStraighten,
@@ -209,11 +210,15 @@ def recruit(
     card = game.table.cards_by_id[card_id]
     seat = card.owner
     if not invest:
-        _announce_recruit(game, card, seat, invest_amount=0, renew=renew, proclaim=proclaim)
+        game.pending = announce_recruit(
+            game, card, seat, invest_amount=0, renew=renew, proclaim=proclaim
+        )
         return
     ability = abilities.invest_for(card)
     if ability.minimum == ability.maximum:
-        _announce_recruit(game, card, seat, invest_amount=ability.minimum, renew=renew)
+        game.pending = announce_recruit(
+            game, card, seat, invest_amount=ability.minimum, renew=renew
+        )
         return
     affordable = reachable_gold(game, seat, card) - recruit_cost(game, card)
     top = min(ability.maximum, affordable)
@@ -224,17 +229,18 @@ def recruit(
     )
 
 
-def _announce_recruit(
+def announce_recruit(
     game: GameState,
     card: L5RCard,
     seat: PlayerId,
     invest_amount: int,
     renew: bool = False,
     proclaim: bool = False,
-) -> None:
+) -> ChoosePayment:
+    """Queue the recruit and build the payment it must be paid with."""
     producers = gold_producers(game, seat)
     game.stack.append(ResolveRecruit(seat, card.id, invest_amount, renew, proclaim))
-    game.pending = ChoosePayment(
+    return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
         amount=recruit_cost(game, card) + invest_amount,
@@ -257,7 +263,7 @@ def _apply_invest_amount(
 ) -> None:
     card = game.table.cards_by_id[request.source_card_id]
     game.pending = None
-    _announce_recruit(game, card, card.owner, invest_amount=int(response.choices[0]))
+    game.pending = announce_recruit(game, card, card.owner, invest_amount=int(response.choices[0]))
 
 
 def submit(game: GameState, response: DecisionResponse) -> None:
@@ -359,6 +365,13 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             triggers.resolve_effects(game, effects)
         case FinishRecruit(card_id=card_id, invest_amount=invest_amount, proclaim=proclaim):
             _finish_recruit(game, card_id, invest_amount, proclaim=proclaim)
+        case ResumeCascade():
+            # An interrupting effect whose answer produces no effects of its own — a payment, say —
+            # leaves its stash here for the generic drain. A Choose is popped by its own handler,
+            # which splices the resolver's effects in.
+            triggers.resume_cascade(game, item, [])
+        case ApplyEffects(effects=effects):
+            triggers.resolve_effects(game, list(effects))
         case ModestFarmStraighten(modest_farm_id=modest_farm_id, target_id=target_id):
             owner = game.table.cards_by_id[target_id].owner
             triggers.resolve_effects(

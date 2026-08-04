@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest
 from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
@@ -195,6 +196,43 @@ class IgnoreHonorRequirements(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         ops.set_ignore_honor_requirements(game.table, self.seat, True)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class RecruitCard(InterruptingEffect):
+    """Bring a card into play from its controller's province, out of the normal recruit sequence.
+
+    Pauses for the payment its controller must cover, exactly as a Recruit action does. With
+    ``renew`` the vacated province refills face-up on top of whatever the card's own Renew keyword
+    grants.
+    """
+
+    card_id: str
+    renew: bool = False
+
+    def request(self, game: GameState) -> DecisionRequest:
+        # flow imports triggers, which imports this module, so the announce entry point is reached
+        # lazily rather than moving the module boundary.
+        from yasuki_core.engine.rules.flow import announce_recruit
+
+        card = game.table.cards_by_id[self.card_id]
+        assert card.owner is not None, f"{self.card_id} has no owner to recruit it"
+        return announce_recruit(game, card, card.owner, invest_amount=0, renew=self.renew)
+
+
+@dataclass(frozen=True, slots=True)
+class Then(Effect):
+    """Defer ``effects`` until the current step has fully resolved, cascade included.
+
+    Effects placed inline run before the events already queued behind them, so a step that must
+    follow another card's reaction to what just happened belongs here instead.
+    """
+
+    effects: tuple[Effect, ...]
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.stack.append(ApplyEffects(self.effects))
         return []
 
 
