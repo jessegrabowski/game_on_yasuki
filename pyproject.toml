@@ -47,6 +47,9 @@ line-length = 100
 # (tests/yasuki_core/engine/builders.py); every tests/ directory already carries an __init__.py.
 pythonpath = ["src", "."]
 addopts = "-q"
+markers = [
+    "slow: reparses the whole card database (~8 s); deselected by `pixi run test`, always run in CI",
+]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
@@ -112,13 +115,14 @@ docs = { features = ["docs"], no-default-feature = true }
 play = "python play.py"
 # The pytest-playwright plugin (greenlet) aborts in-process alongside the tkinter/PIL GUI tests, so
 # disable it for the unit suite; the e2e task below loads it on its own.
-test = "pytest tests/ --ignore=tests/e2e -p no:playwright"
+test = "pytest tests/ --ignore=tests/e2e -p no:playwright -m 'not slow'"
 test-js = "node --test tests/yasuki_web/deck_builder/*.test.js tests/yasuki_web/site/*.test.js"
 test-e2e = "pytest tests/e2e"
 e2e-setup = "playwright install chromium"
 install-db = "python -m yasuki_core.install.install_db"
 ensure-ro-role = "python -m yasuki_core.install.install_db --ensure-readonly-role"
 format-metadata = "python -m yasuki_core.install.install_db --format-metadata"
+card-index = "python -m yasuki_core.install.card_index"
 sync-images = "python scripts/sync_images.py"
 api = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'yasuki_web.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000'), '--proxy-headers', '--forwarded-allow-ips', os.environ.get('TRUSTED_PROXY_IPS', '127.0.0.1'), '--limit-concurrency', '100', '--limit-max-requests', '10000'])\""
 # Local development: same as `api` but loads .env (account secrets, dev login) via uvicorn's dotenv.
