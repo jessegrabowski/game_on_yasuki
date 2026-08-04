@@ -11,6 +11,8 @@ from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.log import GameInput
 from yasuki_core.engine.rules.work import WorkItem
 
+from tests.yasuki_core.engine.builders import two_seat_game
+
 
 def _union_members(union) -> set[str]:
     """The concrete member names of a closed union, whether written as ``A | B`` or as an ABC with
@@ -72,3 +74,13 @@ def test_the_helper_notices_a_missing_case():
                 pass
 
     assert _union_members(GameInput) - _dispatched_names(_incomplete) == {"Answer", "Cancel"}
+
+
+def test_an_unhandled_action_is_refused_rather_than_ignored():
+    # perform is the entry point for a player's chosen action. Falling through would accept the
+    # action and silently do nothing, which is indistinguishable from a legal no-op.
+    class Unregistered:
+        pass
+
+    with pytest.raises(ValueError, match="no handler for action"):
+        flow.perform(two_seat_game(), Unregistered())
