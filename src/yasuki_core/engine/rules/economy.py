@@ -5,7 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.counters import ALL_COUNTERS, SINCERITY
+from yasuki_core.game_pieces.counters import ALL_COUNTERS
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.game_pieces.pregame import StrongholdCard
 
@@ -167,86 +167,6 @@ def effective_recruit_discount(game: GameState, card: L5RCard) -> int:
     return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
 
 
-def _is_clan(me: PlayerState, clan: str) -> bool:
+def is_clan(me: PlayerState, clan: str) -> bool:
+    """Whether ``me`` is playing ``clan``, read from the stronghold."""
     return me.stronghold is not None and me.stronghold.clan == clan
-
-
-# Per-card gold-production handlers, registered on import of this module. The read-sites already
-# load it, so a handler is always in place by the time gold is produced.
-
-
-@gold_handler("ancestral_estate")
-def _ancestral_estate(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
-) -> int:
-    """+1 GP while you are the second player."""
-    return card.gold_production + (1 if me.went_second else 0)
-
-
-@gold_handler("dockside_market")
-def _dockside_market(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
-) -> int:
-    """+1 GP for controlling any Port, and +1 GP for controlling another Market."""
-    bonus = (1 if me.controls("Port") else 0) + (1 if me.controls("Market", other_than=card) else 0)
-    return card.gold_production + bonus
-
-
-@gold_handler("jade_works")
-def _jade_works(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
-) -> int:
-    """+2 GP when paying for a Jade card."""
-    bonus = 2 if any("Jade" in target.keywords for target in targets) else 0
-    return card.gold_production + bonus
-
-
-@gold_handler("teardrop_island")
-def _teardrop_island(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
-) -> int:
-    """Produce 2 Gold, or 3 while you are a Mantis Clan player."""
-    return 3 if _is_clan(me, "Mantis") else 2
-
-
-@gold_handler("shrine_of_sincerity")
-def _shrine_of_sincerity(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
-) -> int:
-    """+1 GP when paying for a Sincerity card that still carries Sincerity tokens."""
-    bonus = (
-        1
-        if any(
-            "Sincerity" in target.keywords and target.counters.get(SINCERITY.key, 0) > 0
-            for target in targets
-        )
-        else 0
-    )
-    return card.gold_production + bonus
-
-
-# Per-card recruit-discount handlers — the "enters play for N less Gold" holdings.
-
-
-@recruit_discount("colonial_farm")
-def _colonial_farm(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
-    """Enters play for 1 less Gold if you are a Lion Clan player."""
-    return 1 if _is_clan(me, "Lion") else 0
-
-
-@recruit_discount("fantastic_gardens")
-def _fantastic_gardens(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
-    """Enters play for 2 less Gold if you are a Crane Clan player."""
-    return 2 if _is_clan(me, "Crane") else 0
-
-
-@recruit_discount("moto_traders")
-def _moto_traders(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
-    """Enters play for 1 less Gold if you control another Merchant Caravan."""
-    return 1 if me.controls("Merchant Caravan", other_than=card) else 0
-
-
-@recruit_discount("shrine_of_courtesy")
-def _shrine_of_courtesy(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
-    """Courtesy grants -3 Gold Cost while you are the second player (you did not go first)."""
-    return 3 if me.went_second else 0
