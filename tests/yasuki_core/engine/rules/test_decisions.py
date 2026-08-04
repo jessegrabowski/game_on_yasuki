@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.decisions import (
+    DecisionRequest,
     ChooseCards,
     ChoosePayment,
     DecisionResponse,
@@ -37,9 +38,15 @@ def test_discard_of_zero_accepts_only_an_empty_answer():
     assert request.accepts(DecisionResponse(("a",))) is False
 
 
-def _payment(amount: int, available: int, produced) -> ChoosePayment:
+def _payment(amount: int, available: int, produced, boostable=()) -> ChoosePayment:
     return ChoosePayment(
-        PlayerId.P1, tuple(card for card, _ in produced), amount, available, tuple(produced), "Mine"
+        PlayerId.P1,
+        tuple(card for card, _ in produced),
+        amount,
+        available,
+        tuple(produced),
+        "Mine",
+        tuple(boostable),
     )
 
 
@@ -97,3 +104,52 @@ def test_choose_cards_rejects_duplicate_or_non_candidate_choices():
     request = _choose(minimum=0, maximum=2)
     assert request.accepts(DecisionResponse(("a", "a"))) is False
     assert request.accepts(DecisionResponse(("z",))) is False  # z is not a candidate
+
+
+def _every_request_type():
+    """The request types the engine defines. Scoped by module so a subclass declared inside a test
+    does not register itself into the set under inspection."""
+    return [
+        cls
+        for cls in DecisionRequest.__subclasses__()
+        if cls.__module__ == DecisionRequest.__module__
+    ]
+
+
+def test_every_decision_states_its_own_prompt():
+    abstract = [
+        cls.__name__
+        for cls in _every_request_type()
+        if getattr(cls.prompt, "__isabstractmethod__", False)
+    ]
+    assert abstract == []
+
+
+def test_payment_prompt_counts_down_as_producers_are_picked():
+    request = _payment(amount=5, available=1, produced=(("a", 2), ("b", 2)))
+    assert request.prompt() == "Pay 4 gold for Mine"
+    assert request.prompt(chosen=("a",)) == "Pay 2 gold for Mine"
+    assert request.prompt(chosen=("a", "b")) == "Pay 0 gold for Mine"
+    assert request.confirm_label == "Pay"
+
+
+def test_choose_cards_wording_distinguishes_optional_from_required():
+    assert _choose(minimum=0, maximum=2).prompt() == "Choose up to 2 card(s)"
+    assert _choose(minimum=1, maximum=2).prompt() == "Choose 1 to 2 card(s)"
+
+
+def test_confirm_label_defaults_to_confirm():
+    assert _choose(minimum=1, maximum=1).confirm_label == "Confirm"
+
+
+def test_payment_prompt_counts_a_boosted_producer_at_its_higher_yield():
+    # Bowing Outlying Farms plain leaves 2 owed; boosting it covers the whole cost.
+    request = _payment(amount=4, available=0, produced=[("of", 2)], boostable=[("of", 2)])
+    assert request.prompt(chosen=("of",)) == "Pay 2 gold for Mine"
+    assert request.prompt(chosen=("of",), boosted=("of",)) == "Pay 0 gold for Mine"
+
+
+def test_discard_prompt_names_the_count():
+    request = DiscardToHandSize(PlayerId.P1, ("a", "b"), count=1)
+    assert request.prompt() == "discard 1 card(s)"
+    assert request.confirm_label == "Discard"
