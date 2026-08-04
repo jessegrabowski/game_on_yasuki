@@ -8,7 +8,14 @@ from yasuki_core.engine.snapshot import (
     decode_initial,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Pass, Recruit
+from yasuki_core.engine.rules.actions import (
+    Action,
+    ActivateAbility,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow
 
@@ -215,6 +222,10 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "recruit", "card_id": card_id, "invest": invest, "proclaim": proclaim}
         case DynastyDiscard(card_id=card_id):
             return {"kind": "dynasty_discard", "card_id": card_id}
+        case Legacy():
+            return {"kind": "legacy"}
+        case ActivateAbility(card_id=card_id):
+            return {"kind": "activate_ability", "card_id": card_id}
     raise ValueError(f"no encoding for action {action!r}")
 
 
@@ -230,4 +241,8 @@ def _decode_action(payload: dict) -> Action:
         )
     if kind == "dynasty_discard":
         return DynastyDiscard(payload["card_id"])
+    if kind == "legacy":
+        return Legacy()
+    if kind == "activate_ability":
+        return ActivateAbility(payload["card_id"])
     raise ValueError(f"unknown action kind {kind!r}")
