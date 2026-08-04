@@ -19,7 +19,6 @@ from yasuki_core.engine.rules.work import (
     ApplyEffects,
     ApplyAbilityEffects,
     FinishRecruit,
-    ModestFarmStraighten,
     ResolveRecruit,
     ResumeCascade,
     SelectAbilityTarget,
@@ -372,16 +371,6 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             triggers.resume_cascade(game, item, [])
         case ApplyEffects(effects=effects):
             triggers.resolve_effects(game, list(effects))
-        case ModestFarmStraighten(modest_farm_id=modest_farm_id, target_id=target_id):
-            owner = game.table.cards_by_id[target_id].owner
-            triggers.resolve_effects(
-                game,
-                [
-                    triggers.Choose(
-                        owner, (modest_farm_id,), 0, 1, "modest_farm_straighten", target_id
-                    )
-                ],
-            )
         case _:
             raise ValueError(f"no resolver for work item {type(item).__name__}")
 
@@ -583,10 +572,7 @@ def activate(game: GameState, card_id: str) -> None:
     are the ones ``legal_actions`` validated, so the ability is never left with nothing to hit."""
     card = game.table.cards_by_id[card_id]
     ability = abilities.ability_for(card)
-    if ability.recruits_target:
-        targets = tuple(recruitable_via_ability(game, card))
-    else:
-        targets = tuple(ability.targets(game, card))
+    targets = tuple(ability.targets(game, card))
     deferred = (
         ApplyAbilityEffects(card_id, targets)
         if ability.all_targets
@@ -604,33 +590,7 @@ def _apply_ability_target(
     target = game.table.cards_by_id[response.choices[0]]
     ability = abilities.ability_for(source)
     game.pending = None
-    if ability.recruits_target:
-        _recruit_via_ability(game, source, target)
-    else:
-        triggers.resolve_effects(game, ability.effects(source, target))
-
-
-def recruitable_via_ability(game: GameState, source: L5RCard) -> list[str]:
-    """The face-up Province Holdings ``source``'s recruit ability can afford to bring into play. The
-    seat pays each target's :func:`recruit_cost` from its pool and unbowed producers, minus
-    ``source``'s own yield: the ability bows or destroys ``source`` as its cost, so ``source`` can no
-    longer produce toward the recruit."""
-    seat = source.owner
-    recruitable: list[str] = []
-    for card_id in triggers.province_holdings(game, seat):
-        card = game.table.cards_by_id[card_id]
-        forfeited = 0 if source.bowed else effective_gold_production(game, source, targets=(card,))
-        if recruit_cost(game, card) <= reachable_gold(game, seat, card) - forfeited:
-            recruitable.append(card_id)
-    return recruitable
-
-
-def _recruit_via_ability(game: GameState, source: L5RCard, target: L5RCard) -> None:
-    """Resolve Modest Farm's out-of-sequence recruit: pay for and bring the targeted Province Holding
-    into play (its province refills face-up if it is a Farm), then offer to destroy Modest Farm to
-    straighten it. The straighten offer is deferred behind the recruit's payment and entry."""
-    game.stack.append(ModestFarmStraighten(source.id, target.id))
-    recruit(game, target.id, renew="Farm" in target.keywords)  # Modest Farm grants a Farm Renew
+    triggers.resolve_effects(game, ability.effects(source, target))
 
 
 def _apply_card_choice(game: GameState, request: ChooseCards, response: DecisionResponse) -> None:

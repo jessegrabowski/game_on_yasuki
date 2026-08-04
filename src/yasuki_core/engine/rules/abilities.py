@@ -10,10 +10,14 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Destroy,
     DrawCard,
+    Choose,
     Effect,
     GrantModifier,
+    RecruitCard,
     Straighten,
+    Then,
 )
+from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.triggers import province_holdings, sincerity_seed_targets
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
@@ -71,10 +75,6 @@ class Ability:
     all_targets : bool
         Whether the ability hits every card ``targets`` returns rather than one chosen among them —
         an untargeted "your other Farms" grant instead of a single pick. Default False.
-    recruits_target : bool
-        Whether the ability recruits its chosen target (paying for it and bringing it into play)
-        rather than emitting ``effects`` against it — Modest Farm's out-of-sequence recruit. Default
-        False.
     """
 
     phase: Phase
@@ -83,7 +83,6 @@ class Ability:
     targets: Callable[[GameState, L5RCard], list[str]]
     effects: Callable[[L5RCard, L5RCard], list[Effect]]
     all_targets: bool = False
-    recruits_target: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -168,12 +167,31 @@ def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
     return sincerity_seed_targets(game, card.owner)
 
 
-def _province_holdings(game: GameState, card: L5RCard) -> list[str]:
-    return province_holdings(game, card.owner)
+def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:
+    """The face-up Province Holdings ``card``'s controller can afford to bring into play. The seat
+    pays each target's recruit cost from its pool and unbowed producers, minus ``card``'s own yield:
+    the ability bows or destroys ``card`` as its cost, so it can no longer produce toward the
+    recruit."""
+    # flow imports this module for the ability registry, so its gold helpers are reached lazily.
+    from yasuki_core.engine.rules.flow import reachable_gold, recruit_cost
+
+    seat = card.owner
+    affordable: list[str] = []
+    for target_id in province_holdings(game, seat):
+        target = game.table.cards_by_id[target_id]
+        forfeited = effective_gold_production(game, card, targets=(target,))
+        if recruit_cost(game, target) <= reachable_gold(game, seat, target) - forfeited:
+            affordable.append(target_id)
+    return affordable
 
 
-def _no_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
-    return []  # a recruits_target ability routes to the recruit flow, never to effects
+def _modest_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Recruit the target out of sequence, then offer to destroy Modest Farm to straighten it. The
+    offer is deferred so it follows the recruit and anything the recruited card's entry causes."""
+    return [
+        RecruitCard(target.id, renew="Farm" in target.keywords),
+        Then((Choose(source.owner, (source.id,), 0, 1, "modest_farm_straighten", target.id),)),
+    ]
 
 
 def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
@@ -255,9 +273,8 @@ _ABILITIES: dict[str, Ability] = {
         phase=Phase.ACTION,
         label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
         cost=_bow,
-        targets=_province_holdings,
-        effects=_no_effects,
-        recruits_target=True,
+        targets=_affordable_province_holdings,
+        effects=_modest_farm_effects,
     ),
 }
 
