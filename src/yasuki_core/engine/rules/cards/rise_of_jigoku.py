@@ -25,6 +25,26 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
 
+# --- Harvested Land ---
+
+
+def _other_farms(game: GameState, card: L5RCard) -> list[str]:
+    return [farm.id for farm in owned_holdings(game, card.owner, "Farm") if farm is not card]
+
+
+register_ability(
+    "harvested_land",
+    Ability(
+        phase=Phase.ACTION,
+        label="Bow, destroy: give your other Farms +1 Gold Production",
+        cost=bow_and_destroy,
+        targets=_other_farms,
+        effects=plus_one_gp_this_turn,
+        all_targets=True,
+    ),
+)
+
+
 # --- Mishime Sensei ---
 
 
@@ -49,65 +69,6 @@ def _modest_farm_straighten(
     if not chosen:
         return []
     return [Destroy(chosen[0]), Straighten(source_id)]
-
-
-# --- Rural Market ---
-
-
-@on(EnteredPlay, "rural_market")
-def _rural_market_enters_play(ctx: TriggerContext) -> list[Effect]:
-    """After this Holding enters play, give it a +1GP Wealth token."""
-    if ctx.event.card_id != ctx.card.id:
-        return []
-    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
-
-
-@on(Destroyed, "rural_market")
-def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
-    """After your Farm is destroyed, give this Holding a +1GP Wealth token."""
-    destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
-    if destroyed is None or destroyed.owner is not ctx.card.owner:
-        return []
-    if "Farm" not in destroyed.keywords:
-        return []
-    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
-
-
-# --- Sapphire Mine ---
-
-
-@on(EnteredPlay, "sapphire_mine")
-def _sapphire_mine(ctx: TriggerContext) -> list[Effect]:
-    """Sincerity: after this Holding enters play, if it accrued two or more Sincerity tokens, give it
-    a +1GP Wealth token."""
-    if ctx.event.card_id != ctx.card.id:
-        return []
-    if ctx.card.counters.get(SINCERITY.key, 0) < 2:
-        return []
-    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
-
-
-# --- Harvested Land ---
-
-
-def _other_farms(game: GameState, card: L5RCard) -> list[str]:
-    return [farm.id for farm in owned_holdings(game, card.owner, "Farm") if farm is not card]
-
-
-register_ability(
-    "harvested_land",
-    Ability(
-        phase=Phase.ACTION,
-        label="Bow, destroy: give your other Farms +1 Gold Production",
-        cost=bow_and_destroy,
-        targets=_other_farms,
-        effects=plus_one_gp_this_turn,
-        all_targets=True,
-    ),
-)
-
-
-# --- Modest Farm ---
 
 
 def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:
@@ -152,6 +113,25 @@ register_ability(
 # --- Rural Market ---
 
 
+@on(EnteredPlay, "rural_market")
+def _rural_market_enters_play(ctx: TriggerContext) -> list[Effect]:
+    """After this Holding enters play, give it a +1GP Wealth token."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+@on(Destroyed, "rural_market")
+def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
+    """After your Farm is destroyed, give this Holding a +1GP Wealth token."""
+    destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
+    if destroyed is None or destroyed.owner is not ctx.card.owner:
+        return []
+    if "Farm" not in destroyed.keywords:
+        return []
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
 def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
     # "Not produced Gold this turn" is satisfied for any bowed Farm: production only happens in the
     # Dynasty phase, after this Open ability's Action-phase window.
@@ -172,3 +152,17 @@ register_ability(
         effects=_rural_market_effects,
     ),
 )
+
+
+# --- Sapphire Mine ---
+
+
+@on(EnteredPlay, "sapphire_mine")
+def _sapphire_mine(ctx: TriggerContext) -> list[Effect]:
+    """Sincerity: after this Holding enters play, if it accrued two or more Sincerity tokens, give it
+    a +1GP Wealth token."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    if ctx.card.counters.get(SINCERITY.key, 0) < 2:
+        return []
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]

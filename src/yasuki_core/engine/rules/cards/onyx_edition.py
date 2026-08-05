@@ -31,6 +31,4 @@ def _sincerity_seed(game: GameState, source_id: str, chosen: tuple[str, ...]) ->
     return [AdjustCounter(card_id, SINCERITY, 1) for card_id in chosen]
 
 
-# --- Training Court ---
-
 register_invest("training_court", InvestAbility(minimum=1, maximum=1, effect=one_wealth))

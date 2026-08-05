@@ -35,9 +35,6 @@ def _shrine_of_sincerity(
     return card.gold_production + bonus
 
 
-# --- Shrine of Sincerity ---
-
-
 def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
     return sincerity_seed_targets(game, card.owner)
 

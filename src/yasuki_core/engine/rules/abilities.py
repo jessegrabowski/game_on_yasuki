@@ -101,7 +101,6 @@ class InvestAbility:
 
 _ABILITIES: dict[str, Ability] = {}
 _INVEST: dict[str, InvestAbility] = {}
-# themselves.
 _PRODUCTION_BOOST: dict[str, int] = {}
 
 
@@ -120,8 +119,8 @@ def register_invest(printed_id: str, value: InvestAbility) -> None:
 
 
 def register_production_boost(printed_id: str, extra_gold: int) -> None:
-    """Register ``printed_id`` as a producer that may bow for ``extra_gold`` more, then be
-    destroyed."""
+    """Register ``printed_id`` as a producer that may raise its yield by ``extra_gold`` as it bows to
+    pay, and is destroyed for having done so."""
     if printed_id in _PRODUCTION_BOOST:
         raise ValueError(f"{printed_id} already has a production boost")
     _PRODUCTION_BOOST[printed_id] = extra_gold
