@@ -13,6 +13,8 @@ Game on, Yasuki! is a personal, educational project, but contributions are welco
 New to the codebase? Start with [Setup](../getting_started/setup.md), then read
 [Design & Architecture](../design/index.md) for how the pieces fit together.
 
+Implementing a card is its own workflow: see [Adding a Card](adding_a_card.md).
+
 ## Running Tests
 
 ```bash
@@ -102,3 +104,9 @@ Two things keep it honest:
 - A **test** regenerates the index from the YAML and diffs it. If it fails, the index is stale: run
   `pixi run card-index` and commit. It is marked `slow` and excluded from `pixi run test`; run it
   with `pixi run pytest -m slow`.
+
+```{toctree}
+:hidden:
+
+adding_a_card
+```
