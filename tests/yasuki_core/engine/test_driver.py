@@ -143,3 +143,56 @@ def test_a_policy_chooses_a_recruit_and_an_agent_pays_for_it():
 
     assert recruited in game.table.battlefield.cards
     assert game.table.cards_by_id["mine"].bowed  # the agent bowed it to pay
+
+
+class _Turns:
+    """Records the turn number and active seat each time a turn begins."""
+
+    def __init__(self):
+        self.seen: list[tuple[int, PlayerId]] = []
+
+    def turn_began(self, game) -> None:
+        self.seen.append((game.turn, game.active))
+
+
+def test_the_observer_sees_every_turn_once():
+    observer = _Turns()
+
+    play_game(_session(), _passing(), turn_limit=4, observer=observer)
+
+    assert observer.seen == [(1, PlayerId.P1), (2, PlayerId.P2), (3, PlayerId.P1), (4, PlayerId.P2)]
+
+
+def test_a_seats_producers_are_straight_at_the_start_of_its_own_turn():
+    """Only the active seat straightens, so a producer bowed to pay stays bowed through the
+    opponent's whole turn. A metric sampling a seat's production on every turn would read it as
+    halved every other turn; it is canonical only at the start of that seat's own turn."""
+    bowed_by_turn: dict[int, bool] = {}
+
+    class Watcher:
+        def turn_began(self, game) -> None:
+            bowed_by_turn[game.turn] = game.table.cards_by_id["mine"].bowed
+
+    session = _session()
+    put_in_play(session.game, holding("mine", owner=PlayerId.P1, gold_production=4))
+    province_card(session.game, "target", seat=PlayerId.P1, gold_cost=3)
+
+    class RecruitFirst:
+        def choose(self, view: GameView, actions: list[Action]) -> Action:
+            return next((a for a in actions if isinstance(a, Recruit)), Pass())
+
+    controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
+    play_game(session, controls, turn_limit=3, observer=Watcher())
+
+    assert bowed_by_turn[1] is False  # P1's turn: straight, nothing spent yet
+    assert bowed_by_turn[2] is True  # P2's turn: still bowed from P1 paying
+    assert bowed_by_turn[3] is False  # P1's turn again: straightened
+
+
+def test_a_run_without_an_observer_plays_the_same_game():
+    watched, plain = _session(), _session()
+
+    play_game(watched, _random(9), turn_limit=6, observer=_Turns())
+    play_game(plain, _random(9), turn_limit=6)
+
+    assert watched.log.entries == plain.log.entries

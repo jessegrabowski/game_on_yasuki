@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-from typing import NamedTuple
+from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey
@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules.policies import Policy
 from yasuki_core.engine.rules.projection import GameView
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
 
 
@@ -172,8 +173,24 @@ class Controls(NamedTuple):
     agent: Agent
 
 
+class Observer(Protocol):
+    """Watches a driven game at the start of each turn.
+
+    The turn boundary is the sampling point because it is the only moment the board is canonical:
+    :func:`~yasuki_core.engine.rules.flow._begin_turn` has straightened the active seat, so nothing
+    it owns is mid-payment. Sampled after an action instead, a producer bowed to pay stops counting
+    and the reading depends on where in the turn it was taken.
+    """
+
+    def turn_began(self, game: GameState) -> None: ...
+
+
 def play_game(
-    session: EngineSession, controls: dict[PlayerId, Controls], *, turn_limit: int
+    session: EngineSession,
+    controls: dict[PlayerId, Controls],
+    *,
+    turn_limit: int,
+    observer: Observer | None = None,
 ) -> None:
     """
     Play ``session`` to its end or to ``turn_limit``, whichever comes first, mutating it in place.
@@ -190,6 +207,8 @@ def play_game(
     turn_limit : int
         The last turn to play. Games do not end on their own except by the Legacy whiff, so this
         is what bounds a run.
+    observer : Observer, optional
+        Told when each turn begins, including the first. Default None, which costs nothing.
 
     Raises
     ------
@@ -197,7 +216,11 @@ def play_game(
         If a seat has no legal action, or a policy returns one it was not offered.
     """
     game = session.game
+    watched: int | None = None
     while not game.game_over and game.turn <= turn_limit:
+        if observer is not None and game.turn != watched:
+            watched = game.turn
+            observer.turn_began(game)
         pending = game.pending
         if pending is not None:
             seat = pending.seat
