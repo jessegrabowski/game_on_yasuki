@@ -14,7 +14,6 @@ yasuki_gui
     yasuki_gui.controller <yasuki_gui.controller>
     yasuki_gui.field_view <yasuki_gui.field_view>
     yasuki_gui.layout <yasuki_gui.layout>
-    yasuki_gui.rules_runner <yasuki_gui.rules_runner>
     yasuki_gui.services.actions <yasuki_gui.services.actions>
     yasuki_gui.services.drag <yasuki_gui.services.drag>
     yasuki_gui.services.hittest <yasuki_gui.services.hittest>

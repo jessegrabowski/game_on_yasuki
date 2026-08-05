@@ -11,7 +11,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.pregame import StrongholdCard
-from yasuki_gui.rules_runner import GameRunner
+from yasuki_core.engine.runner import GameRunner
 
 PASS = Pass()
 

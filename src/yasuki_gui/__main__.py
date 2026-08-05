@@ -14,7 +14,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
-from yasuki_gui.rules_runner import GameRunner
+from yasuki_core.engine.runner import GameRunner
 from yasuki_core.game_setup import build_state_from_deck
 from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state
 from yasuki_gui.ui.dialogs import Dialogs
