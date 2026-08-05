@@ -36,8 +36,8 @@ from yasuki_core.engine.rules.decisions import (
     PlaceLegacy,
 )
 from yasuki_core.engine.rules.economy import effective_gold_production, effective_recruit_discount
-from yasuki_core.engine.rules.effects import AdjustCounter, Destroy
-from yasuki_core.engine.rules.modifiers import Duration
+from yasuki_core.engine.rules.effects import AdjustCounter, GrantModifier
+from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules import abilities, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
@@ -152,7 +152,7 @@ def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
         total += effective_gold_production(game, producer, targets=(card,))
         boost = abilities.production_boost_for(producer)
         if boost is not None:
-            total += boost
+            total += boost.amount
     return total
 
 
@@ -255,8 +255,9 @@ def announce_recruit(
             for producer in producers
         ),
         label=card.name,
+        target_id=card.id,
         boostable=tuple(
-            (producer.id, boost)
+            (producer.id, boost.amount)
             for producer in producers
             if (boost := abilities.production_boost_for(producer)) is not None
         ),
@@ -382,16 +383,34 @@ def _resolve(game: GameState, item: WorkItem) -> None:
 
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
-    """Bow the chosen producers to cover the cost. A producer the answer boosted yields its extra as
-    it bows and is then destroyed (Outlying Farms); the rest yield their plain amount."""
-    produced = dict(request.produced)
-    boost = dict(request.boostable)
+    """Bow the chosen producers to cover the cost.
+
+    Taking a boost is a stat change like any other: it grants the producer Gold Production for the
+    turn, and the yield is then read off the card the same way an unboosted producer's is. What the
+    boost costs is the card's own business, resolved once it has yielded.
+    """
+    target = game.table.cards_by_id.get(request.target_id)
+    targets = (target,) if target is not None else ()
     boosted = set(response.boosted)
     for card_id in response.choices:
-        extra = boost[card_id] if card_id in boosted else 0
-        produce_gold(game, card_id, produced[card_id] + extra)
-        if card_id in boosted:
-            triggers.resolve_effects(game, [Destroy(card_id)])
+        card = game.table.cards_by_id[card_id]
+        boost = abilities.production_boost_for(card) if card_id in boosted else None
+        if boost is not None:
+            triggers.resolve_effects(
+                game,
+                [
+                    GrantModifier(
+                        card_id,
+                        card_id,
+                        Stat.GOLD_PRODUCTION,
+                        boost.amount,
+                        Duration.UNTIL_END_OF_TURN,
+                    )
+                ],
+            )
+        produce_gold(game, card_id, effective_gold_production(game, card, targets=targets))
+        if boost is not None:
+            triggers.resolve_effects(game, boost.effects(card))
     game.spend_gold(request.seat, request.amount)
 
 
