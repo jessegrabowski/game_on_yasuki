@@ -36,8 +36,12 @@ from yasuki_core.engine.rules.decisions import (
     PlaceLegacy,
 )
 from yasuki_core.engine.rules.economy import effective_gold_production, effective_recruit_discount
+from yasuki_core.engine.rules.effects import AdjustCounter, Destroy
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules import abilities, triggers
+
+# Imported for the registrations it performs; see rules/cards/__init__.py.
+from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.ruleset import SHATTERED_EMPIRE
@@ -387,7 +391,7 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
         extra = boost[card_id] if card_id in boosted else 0
         produce_gold(game, card_id, produced[card_id] + extra)
         if card_id in boosted:
-            triggers.resolve_effects(game, [triggers.Destroy(card_id)])
+            triggers.resolve_effects(game, [Destroy(card_id)])
     game.spend_gold(request.seat, request.amount)
 
 
@@ -623,7 +627,7 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
     Sincerity token. A card that flushed (was recruited or discarded) or arrived face-down as a
     refill this turn is not face-up in a Province, so it does not accrue."""
     grants = [
-        triggers.AdjustCounter(card.id, SINCERITY, 1)
+        AdjustCounter(card.id, SINCERITY, 1)
         for key, zone in game.table.zones.items()
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards

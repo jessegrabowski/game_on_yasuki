@@ -1,7 +1,8 @@
+import pathlib
 import subprocess
 import sys
 
-from yasuki_core.engine.rules import abilities, economy, triggers
+from yasuki_core.engine.rules import abilities, cards, economy, triggers
 from yasuki_core.engine.rules.card_registry import (
     duplicate_registrations,
     main,
@@ -136,3 +137,14 @@ def test_the_cli_writes_each_problem_to_stderr_and_fails(capsys):
     assert main(registries, trigger_registry) == 1
     assert capsys.readouterr().err.splitlines() == expected
     assert len(expected) == 3
+
+
+def test_every_card_module_is_imported_by_the_package():
+    # cards/__init__.py lists its modules by hand rather than walking the directory, so a new set
+    # module added without its import line registers nothing. That failure is otherwise only visible
+    # if the new cards happen to have tests.
+    package = pathlib.Path(cards.__file__).parent
+    on_disk = {path.stem for path in package.glob("*.py")} - {"__init__"}
+    imported = {name for name in vars(cards) if not name.startswith("__")}
+
+    assert on_disk - imported == set(), "add these to cards/__init__.py"

@@ -2,6 +2,9 @@ import difflib
 import sys
 
 from yasuki_core.engine.rules import abilities, economy, triggers
+
+# Without this the registries are empty and every check below passes vacuously.
+from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.install.card_index import read_index
 
 

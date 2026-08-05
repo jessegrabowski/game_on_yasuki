@@ -1,14 +1,25 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyPersonality
-from yasuki_core.engine.rules.abilities import Ability, _ABILITIES
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    _ABILITIES,
+    _INVEST,
+    _PRODUCTION_BOOST,
+    register_ability,
+    register_invest,
+    register_production_boost,
+)
 from yasuki_core.engine.rules.actions import ActivateAbility, Pass
 from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.state import Phase
-from yasuki_core.engine.rules.triggers import AdjustCounter, Choose, choice_resolver
+from yasuki_core.engine.rules.effects import AdjustCounter, Choose
+from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.counters import WEALTH
 from tests.yasuki_core.engine.builders import fate_card, holding, put_in_play, register
@@ -343,3 +354,35 @@ def test_ichiba_activation_replays_to_the_same_state():
     session.act(PlayerId.P1, ActivateAbility("ich"))
     session.submit(PlayerId.P1, DecisionResponse(("port0",)))
     assert replay(session.log) == session.game
+
+
+def test_a_second_ability_for_one_card_is_refused():
+    # These three registries were dict literals until the card modules split them up, where a
+    # repeated key was ruff's F601 to catch. Registration-time checks replace that guard.
+    register_ability("guard_probe", _ABILITIES["millet_farm"])
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already has an ability"):
+            register_ability("guard_probe", _ABILITIES["millet_farm"])
+    finally:
+        _ABILITIES.pop("guard_probe", None)
+
+
+def test_a_second_invest_for_one_card_is_refused():
+    register_invest("guard_probe", _INVEST["training_court"])
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already has an invest ability"):
+            register_invest("guard_probe", _INVEST["training_court"])
+    finally:
+        _INVEST.pop("guard_probe", None)
+
+
+def test_a_second_production_boost_for_one_card_is_refused():
+    register_production_boost("guard_probe", 2)
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already has a production boost"):
+            register_production_boost("guard_probe", 2)
+    finally:
+        _PRODUCTION_BOOST.pop("guard_probe", None)

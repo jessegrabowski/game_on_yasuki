@@ -9,18 +9,11 @@ from yasuki_core.engine.rules.effects import (
     BanishTopFate,
     Bow,
     Destroy,
-    DrawCard,
-    Choose,
     Effect,
     GrantModifier,
-    RecruitCard,
-    Straighten,
-    Then,
 )
-from yasuki_core.engine.rules.economy import effective_gold_production
-from yasuki_core.engine.rules.triggers import province_holdings, sincerity_seed_targets
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
+from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 # A cost is the effects paid to activate an ability, applied to the source card before the ability's
@@ -29,23 +22,23 @@ from yasuki_core.game_pieces.dynasty import DynastyHolding
 Cost = Callable[[L5RCard], list[Effect]]
 
 
-def _bow(source: L5RCard) -> list[Effect]:
+def bow_cost(source: L5RCard) -> list[Effect]:
     return [Bow(source.id)]
 
 
-def _destroy(source: L5RCard) -> list[Effect]:
+def destroy_cost(source: L5RCard) -> list[Effect]:
     return [Destroy(source.id)]
 
 
-def _spend_wealth(source: L5RCard) -> list[Effect]:
+def spend_wealth(source: L5RCard) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, -1)]
 
 
-def _bow_and_destroy(source: L5RCard) -> list[Effect]:
+def bow_and_destroy(source: L5RCard) -> list[Effect]:
     return [Bow(source.id), Destroy(source.id)]
 
 
-def _banish_top_fate(source: L5RCard) -> list[Effect]:
+def banish_top_fate(source: L5RCard) -> list[Effect]:
     return [BanishTopFate(source.owner)]
 
 
@@ -106,6 +99,33 @@ class InvestAbility:
     effect: Callable[[L5RCard, int], list[Effect]]
 
 
+_ABILITIES: dict[str, Ability] = {}
+_INVEST: dict[str, InvestAbility] = {}
+_PRODUCTION_BOOST: dict[str, int] = {}
+
+
+def register_ability(printed_id: str, value: Ability) -> None:
+    """Register ``value`` as ``printed_id``'s activated ability."""
+    if printed_id in _ABILITIES:
+        raise ValueError(f"{printed_id} already has an ability")
+    _ABILITIES[printed_id] = value
+
+
+def register_invest(printed_id: str, value: InvestAbility) -> None:
+    """Register ``value`` as ``printed_id``'s Invest ability."""
+    if printed_id in _INVEST:
+        raise ValueError(f"{printed_id} already has an invest ability")
+    _INVEST[printed_id] = value
+
+
+def register_production_boost(printed_id: str, extra_gold: int) -> None:
+    """Register ``printed_id`` as a producer that may raise its yield by ``extra_gold`` as it bows to
+    pay, and is destroyed for having done so."""
+    if printed_id in _PRODUCTION_BOOST:
+        raise ValueError(f"{printed_id} already has a production boost")
+    _PRODUCTION_BOOST[printed_id] = extra_gold
+
+
 def ability_for(card: L5RCard) -> Ability | None:
     """The activated ability registered for ``card``'s printed id, or None."""
     return _ABILITIES.get(card.printed_id)
@@ -139,7 +159,7 @@ def activatable(game: GameState, seat: PlayerId, phase: Phase) -> list[L5RCard]:
     return ready
 
 
-def _owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[DynastyHolding]:
+def owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[DynastyHolding]:
     return [
         held
         for held in game.table.battlefield.cards
@@ -147,163 +167,11 @@ def _owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[Dyna
     ]
 
 
-def _owned_farms(game: GameState, card: L5RCard) -> list[str]:
-    return [farm.id for farm in _owned_holdings(game, card.owner, "Farm")]
-
-
-def _other_farms(game: GameState, card: L5RCard) -> list[str]:
-    return [farm.id for farm in _owned_holdings(game, card.owner, "Farm") if farm is not card]
-
-
-def _owned_markets(game: GameState, card: L5RCard) -> list[str]:
-    return [market.id for market in _owned_holdings(game, card.owner, "Market")]
-
-
-def _owned_ports(game: GameState, card: L5RCard) -> list[str]:
-    return [port.id for port in _owned_holdings(game, card.owner, "Port")]
-
-
-def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
-    return sincerity_seed_targets(game, card.owner)
-
-
-def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:
-    """The face-up Province Holdings ``card``'s controller can afford to bring into play. The seat
-    pays each target's recruit cost from its pool and unbowed producers, minus ``card``'s own yield:
-    the ability bows or destroys ``card`` as its cost, so it can no longer produce toward the
-    recruit."""
-    # flow imports this module for the ability registry, so its gold helpers are reached lazily.
-    from yasuki_core.engine.rules.flow import reachable_gold, recruit_cost
-
-    seat = card.owner
-    affordable: list[str] = []
-    for target_id in province_holdings(game, seat):
-        target = game.table.cards_by_id[target_id]
-        forfeited = effective_gold_production(game, card, targets=(target,))
-        if recruit_cost(game, target) <= reachable_gold(game, seat, target) - forfeited:
-            affordable.append(target_id)
-    return affordable
-
-
-def _modest_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Recruit the target out of sequence, then offer to destroy Modest Farm to straighten it. The
-    offer is deferred so it follows the recruit and anything the recruited card's entry causes."""
-    return [
-        RecruitCard(target.id, renew="Farm" in target.keywords),
-        Then((Choose(source.owner, (source.id,), 0, 1, "modest_farm_straighten", target.id),)),
-    ]
-
-
-def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
-    # "Not produced Gold this turn" is satisfied for any bowed Farm: production only happens in the
-    # Dynasty phase, after this Open ability's Action-phase window.
-    return [farm.id for farm in _owned_holdings(game, card.owner, "Farm") if farm.bowed]
-
-
-def _millet_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [
-        GrantModifier(source.id, target.id, Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN)
-    ]
-
-
-def _otokoshi_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [DrawCard(source.owner), AdjustCounter(target.id, WEALTH, 1)]
-
-
-def _rural_market_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [Straighten(target.id)]
-
-
-def _seed_sincerity(source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [AdjustCounter(target.id, SINCERITY, 1)]
-
-
-def _plus_one_gp_this_turn(source: L5RCard, target: L5RCard) -> list[Effect]:
+def plus_one_gp_this_turn(source: L5RCard, target: L5RCard) -> list[Effect]:
     return [
         GrantModifier(source.id, target.id, Stat.GOLD_PRODUCTION, 1, Duration.UNTIL_END_OF_TURN)
     ]
 
 
-# Per-card activated abilities, registered on import.
-_ABILITIES: dict[str, Ability] = {
-    "millet_farm": Ability(
-        phase=Phase.ACTION,
-        label="Bow: give a Farm +2 Gold Production",
-        cost=_bow,
-        targets=_owned_farms,
-        effects=_millet_farm_effects,
-    ),
-    "otokoshi_district": Ability(
-        phase=Phase.ACTION,
-        label="Destroy: draw a card and give a Market a wealth token",
-        cost=_destroy,
-        targets=_owned_markets,
-        effects=_otokoshi_effects,
-    ),
-    "rural_market": Ability(
-        phase=Phase.ACTION,
-        label="Spend a wealth token: straighten a Farm",
-        cost=_spend_wealth,
-        targets=_owned_bowed_farms,
-        effects=_rural_market_effects,
-    ),
-    "harvested_land": Ability(
-        phase=Phase.ACTION,
-        label="Bow, destroy: give your other Farms +1 Gold Production",
-        cost=_bow_and_destroy,
-        targets=_other_farms,
-        effects=_plus_one_gp_this_turn,
-        all_targets=True,
-    ),
-    "ichiba_district": Ability(
-        phase=Phase.ACTION,
-        label="Banish a Fate card: give a Port +1 Gold Production",
-        cost=_banish_top_fate,
-        targets=_owned_ports,
-        effects=_plus_one_gp_this_turn,
-    ),
-    "shrine_of_sincerity": Ability(
-        phase=Phase.DYNASTY,
-        label="Bow: seed a Sincerity token onto a Province Sincerity card",
-        cost=_bow,
-        targets=_sincerity_seed_targets,
-        effects=_seed_sincerity,
-    ),
-    "modest_farm": Ability(
-        phase=Phase.ACTION,
-        label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
-        cost=_bow,
-        targets=_affordable_province_holdings,
-        effects=_modest_farm_effects,
-    ),
-}
-
-
-def _invest_wealth(source: L5RCard, amount: int) -> list[Effect]:
-    """One +1GP Wealth token per gold invested — Rebuilt Harbor's variable payoff."""
-    return [AdjustCounter(source.id, WEALTH, amount)]
-
-
-def _two_wealth(source: L5RCard, amount: int) -> list[Effect]:
-    return [AdjustCounter(source.id, WEALTH, 2)]
-
-
-def _one_wealth(source: L5RCard, amount: int) -> list[Effect]:
+def one_wealth(source: L5RCard, amount: int) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, 1)]
-
-
-# Per-card Invest abilities, registered on import. Courts of Otosan Uchi also creates a Courtier
-# Personality, deferred until personalities are recruitable; only its Wealth token is modeled.
-_INVEST: dict[str, InvestAbility] = {
-    "questionable_market": InvestAbility(minimum=2, maximum=2, effect=_two_wealth),
-    "rebuilt_harbor": InvestAbility(minimum=1, maximum=3, effect=_invest_wealth),
-    "training_court": InvestAbility(minimum=1, maximum=1, effect=_one_wealth),
-    "courts_of_otosan_uchi": InvestAbility(minimum=2, maximum=2, effect=_one_wealth),
-}
-
-
-# Producers that may raise their yield as they bow to pay, mapped to the extra Gold, then destroy
-# themselves. Outlying Farms ("+2GP, then destroy it after it bows") is the sole arc case.
-_PRODUCTION_BOOST: dict[str, int] = {
-    "outlying_farms": 2,
-}
