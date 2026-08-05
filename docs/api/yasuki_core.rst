@@ -52,6 +52,7 @@ yasuki_core
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
     yasuki_core.engine.rules.work <yasuki_core.engine.rules.work>
+    yasuki_core.engine.runner <yasuki_core.engine.runner>
     yasuki_core.engine.serialization <yasuki_core.engine.serialization>
     yasuki_core.engine.session <yasuki_core.engine.session>
     yasuki_core.engine.setup <yasuki_core.engine.setup>
@@ -66,6 +67,7 @@ yasuki_core
     yasuki_core.game_pieces.factory <yasuki_core.game_pieces.factory>
     yasuki_core.game_pieces.fate <yasuki_core.game_pieces.fate>
     yasuki_core.game_pieces.pregame <yasuki_core.game_pieces.pregame>
+    yasuki_core.game_setup <yasuki_core.game_setup>
     yasuki_core.install.card_index <yasuki_core.install.card_index>
     yasuki_core.install.coverage_report <yasuki_core.install.coverage_report>
     yasuki_core.install.format_metadata <yasuki_core.install.format_metadata>

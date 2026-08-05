@@ -11,4 +11,3 @@ yasuki_gui.session
     :toctree: generated/
 
     build_demo_state
-    build_state_from_deck
