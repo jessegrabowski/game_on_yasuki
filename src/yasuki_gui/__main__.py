@@ -15,7 +15,8 @@ from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.rules_runner import GameRunner
-from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state, build_state_from_deck
+from yasuki_core.game_setup import build_state_from_deck
+from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state
 from yasuki_gui.ui.dialogs import Dialogs
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.info_box import PlayerInfoBox
@@ -73,7 +74,7 @@ def main() -> None:
     # Deal the bundled deck (needs the database); fall back to the DB-free placeholder deck so the
     # client still launches without a database or card images.
     try:
-        state, human_seat = build_state_from_deck()
+        state, human_seat = build_state_from_deck(DEMO_DECK_PATH, p1_name="You", p2_name="Opponent")
     except Exception as exc:
         logger.warning("Could not load the bundled deck, using the placeholder deck: %s", exc)
         state, human_seat = build_demo_state()
@@ -295,7 +296,9 @@ def main() -> None:
         """Start a fresh game with the human on the picked deck; the opponent keeps the default.
         Raise on a deck that fails to load so the menu can report it."""
         nonlocal session, runner, human_seat
-        state, human_seat = build_state_from_deck(path, opponent_deck_path=DEMO_DECK_PATH)
+        state, human_seat = build_state_from_deck(
+            path, opponent_deck_path=DEMO_DECK_PATH, p1_name="You", p2_name="Opponent"
+        )
         session = EngineSession.start(state, human_seat)
         runner = GameRunner(session, human_seat)
         field.state = session.game.table
