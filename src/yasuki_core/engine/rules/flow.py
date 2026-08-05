@@ -36,7 +36,7 @@ from yasuki_core.engine.rules.decisions import (
     PlaceLegacy,
 )
 from yasuki_core.engine.rules.economy import effective_gold_production, effective_recruit_discount
-from yasuki_core.engine.rules.effects import AdjustCounter, Destroy
+from yasuki_core.engine.rules.effects import AdjustCounter
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules import abilities, triggers
 
@@ -152,7 +152,7 @@ def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
         total += effective_gold_production(game, producer, targets=(card,))
         boost = abilities.production_boost_for(producer)
         if boost is not None:
-            total += boost
+            total += boost.amount
     return total
 
 
@@ -256,7 +256,7 @@ def announce_recruit(
         ),
         label=card.name,
         boostable=tuple(
-            (producer.id, boost)
+            (producer.id, boost.amount)
             for producer in producers
             if (boost := abilities.production_boost_for(producer)) is not None
         ),
@@ -383,15 +383,18 @@ def _resolve(game: GameState, item: WorkItem) -> None:
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
     """Bow the chosen producers to cover the cost. A producer the answer boosted yields its extra as
-    it bows and is then destroyed (Outlying Farms); the rest yield their plain amount."""
+    it bows, then pays whatever its own boost declares that costs; the rest yield their plain
+    amount."""
     produced = dict(request.produced)
-    boost = dict(request.boostable)
+    extras = dict(request.boostable)
     boosted = set(response.boosted)
     for card_id in response.choices:
-        extra = boost[card_id] if card_id in boosted else 0
+        extra = extras[card_id] if card_id in boosted else 0
         produce_gold(game, card_id, produced[card_id] + extra)
         if card_id in boosted:
-            triggers.resolve_effects(game, [Destroy(card_id)])
+            card = game.table.cards_by_id[card_id]
+            boost = abilities.production_boost_for(card)
+            triggers.resolve_effects(game, boost.effects(card))
     game.spend_gold(request.seat, request.amount)
 
 

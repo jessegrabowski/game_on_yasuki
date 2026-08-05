@@ -3,6 +3,11 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.engine.rules.abilities import (
+    _PRODUCTION_BOOST,
+    ProductionBoost,
+    register_production_boost,
+)
 from yasuki_core.engine.rules.actions import Pass, Recruit
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionResponse
@@ -138,3 +143,47 @@ def test_outlying_farms_boost_replays_to_the_same_state():
     session.act(P1, Recruit("target"))
     session.submit(P1, DecisionResponse(("of",), ("of",)))
     assert replay(session.log) == session.game
+
+
+def test_a_boost_that_declares_no_consequence_leaves_its_producer_alive():
+    """The payment path used to destroy any boosted producer, which is Outlying Farms' text applied
+    to every card that might ever boost. A boost that declares nothing must cost nothing."""
+    register_production_boost("free_boost_probe", ProductionBoost(3))
+
+    try:
+        state = TableState.empty_two_seat()
+        state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+            register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=P1))
+        ]
+        put_in_play(
+            state,
+            DynastyHolding(
+                id="fb",
+                name="Free Boost",
+                side=Side.DYNASTY,
+                owner=P1,
+                printed_id="free_boost_probe",
+                gold_production=2,
+            ),
+        )
+        target = register(
+            state,
+            DynastyHolding(id="tgt", name="T", side=Side.DYNASTY, owner=P1, gold_cost=5),
+        )
+        target.turn_face_up()
+        province = ProvinceZone(owner=P1)
+        province.add(target)
+        state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+
+        session = EngineSession.start(state, P1)
+        session.act(P1, Pass())
+        session.act(P1, Pass())
+        session.act(P1, Recruit("tgt"))
+        session.submit(P1, DecisionResponse(("fb",), ("fb",)))
+
+        probe = session.game.table.cards_by_id["fb"]
+
+        assert probe.bowed
+        assert probe in session.game.table.battlefield.cards
+    finally:
+        _PRODUCTION_BOOST.pop("free_boost_probe", None)

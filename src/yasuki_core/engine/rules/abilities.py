@@ -99,9 +99,35 @@ class InvestAbility:
     effect: Callable[[L5RCard, int], list[Effect]]
 
 
+def no_effects(card: L5RCard) -> list[Effect]:
+    """A boost that costs its producer nothing."""
+    return []
+
+
+@dataclass(frozen=True, slots=True)
+class ProductionBoost:
+    """A producer's optional extra Gold yield, taken as it bows to pay, and what that costs.
+
+    Three cards carry one and no two agree on the price, which is why the price belongs to the card
+    rather than to the payment path.
+
+    Attributes
+    ----------
+    amount : int
+        The extra Gold the producer adds when its controller takes the boost.
+    effects : callable, optional
+        Maps the producer to the price it pays for boosting — Outlying Farms destroys itself, Slave
+        Pits loses its controller 2 Honor. These resolve once the producer has yielded; a card whose
+        price must wait for the rest of the cascade returns a ``Then``. Default no effects.
+    """
+
+    amount: int
+    effects: Callable[[L5RCard], list[Effect]] = no_effects
+
+
 _ABILITIES: dict[str, Ability] = {}
 _INVEST: dict[str, InvestAbility] = {}
-_PRODUCTION_BOOST: dict[str, int] = {}
+_PRODUCTION_BOOST: dict[str, ProductionBoost] = {}
 
 
 def register_ability(printed_id: str, value: Ability) -> None:
@@ -118,12 +144,11 @@ def register_invest(printed_id: str, value: InvestAbility) -> None:
     _INVEST[printed_id] = value
 
 
-def register_production_boost(printed_id: str, extra_gold: int) -> None:
-    """Register ``printed_id`` as a producer that may raise its yield by ``extra_gold`` as it bows to
-    pay, and is destroyed for having done so."""
+def register_production_boost(printed_id: str, boost: ProductionBoost) -> None:
+    """Register ``boost`` as ``printed_id``'s optional bow-time yield increase."""
     if printed_id in _PRODUCTION_BOOST:
         raise ValueError(f"{printed_id} already has a production boost")
-    _PRODUCTION_BOOST[printed_id] = extra_gold
+    _PRODUCTION_BOOST[printed_id] = boost
 
 
 def ability_for(card: L5RCard) -> Ability | None:
@@ -136,9 +161,8 @@ def invest_for(card: L5RCard) -> InvestAbility | None:
     return _INVEST.get(card.printed_id)
 
 
-def production_boost_for(card: L5RCard) -> int | None:
-    """The extra Gold ``card`` may add as it bows to produce, or None if it has no boost. A boostable
-    producer is destroyed after it bows boosted — Outlying Farms is the sole case."""
+def production_boost_for(card: L5RCard) -> ProductionBoost | None:
+    """The boost ``card`` may take as it bows to produce, or None if it has none."""
     return _PRODUCTION_BOOST.get(card.printed_id)
 
 
