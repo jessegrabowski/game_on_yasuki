@@ -131,6 +131,9 @@ class _AskToDiscard(InterruptingEffect):
     seat: PlayerId
     candidates: tuple[str, ...]
 
+    def describe(self) -> str:
+        return f"{self.seat.name} is asked to discard"
+
     def request(self, game) -> ChooseCards:
         return ChooseCards(
             seat=self.seat,
