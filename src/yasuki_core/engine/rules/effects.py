@@ -31,6 +31,11 @@ class Effect(ABC):
         and always can."""
         return True
 
+    @abstractmethod
+    def describe(self) -> str:
+        """One short line naming what this effect does, for a cascade trace. Abstract so a new
+        effect cannot ship unreadable: the generated ``repr`` inlines whole nested dataclasses."""
+
 
 class InterruptingEffect(Effect, ABC):
     """An effect that pauses the cascade to put a question to a seat.
@@ -62,6 +67,9 @@ class AdjustCounter(Effect):
     counter: Counter
     delta: int
 
+    def describe(self) -> str:
+        return f"{self.delta:+d} {self.counter.name} on {self.card_id}"
+
     def is_payable(self, game: GameState) -> bool:
         """A removal needs the card to hold enough of the counter; a grant always applies."""
         if self.delta >= 0:
@@ -87,6 +95,9 @@ class DrawCard(Effect):
 
     seat: PlayerId
 
+    def describe(self) -> str:
+        return f"{self.seat.name} draws a card"
+
     def perform(self, game: GameState) -> list[GameEvent]:
         ops.draw_to_hand(game.table, self.seat)
         return []
@@ -97,6 +108,9 @@ class Destroy(Effect):
     """Destroy a card, sending it to its owner's discard by side."""
 
     card_id: str
+
+    def describe(self) -> str:
+        return f"destroy {self.card_id}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
@@ -119,6 +133,12 @@ class GrantModifier(Effect):
     amount: int
     duration: Duration
 
+    def describe(self) -> str:
+        return (
+            f"{self.source_id} grants {self.target_id} {self.amount:+d} "
+            f"{self.stat.name} ({self.duration.name})"
+        )
+
     def perform(self, game: GameState) -> list[GameEvent]:
         game.modifiers.append(
             Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
@@ -131,6 +151,9 @@ class Bow(Effect):
     """Bow a card."""
 
     card_id: str
+
+    def describe(self) -> str:
+        return f"bow {self.card_id}"
 
     def is_payable(self, game: GameState) -> bool:
         """An already-bowed card cannot bow again."""
@@ -150,6 +173,9 @@ class Straighten(Effect):
 
     card_id: str
 
+    def describe(self) -> str:
+        return f"straighten {self.card_id}"
+
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
         if card is not None:
@@ -162,6 +188,9 @@ class BanishTopFate(Effect):
     """Banish the top card of ``seat``'s Fate deck; a no-op if the deck is empty."""
 
     seat: PlayerId
+
+    def describe(self) -> str:
+        return f"banish the top of {self.seat.name}'s fate deck"
 
     def is_payable(self, game: GameState) -> bool:
         """An empty Fate deck has nothing to banish."""
@@ -182,6 +211,9 @@ class GainGold(Effect):
     seat: PlayerId
     amount: int
 
+    def describe(self) -> str:
+        return f"{self.seat.name} gains {self.amount} gold"
+
     def perform(self, game: GameState) -> list[GameEvent]:
         game.add_gold(self.seat, self.amount)
         return []
@@ -193,6 +225,9 @@ class IgnoreHonorRequirements(Effect):
     recruiting."""
 
     seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} ignores honor requirements"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         ops.set_ignore_honor_requirements(game.table, self.seat, True)
@@ -210,6 +245,10 @@ class RecruitCard(InterruptingEffect):
 
     card_id: str
     renew: bool = False
+
+    def describe(self) -> str:
+        renewed = ", renewing the province" if self.renew else ""
+        return f"recruit {self.card_id} out of sequence{renewed}"
 
     def request(self, game: GameState) -> DecisionRequest:
         # flow imports triggers, which imports this module, so the announce entry point is reached
@@ -230,6 +269,9 @@ class Then(Effect):
     """
 
     effects: tuple[Effect, ...]
+
+    def describe(self) -> str:
+        return f"then: {len(self.effects)} deferred"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.stack.append(ApplyEffects(self.effects))
@@ -263,6 +305,12 @@ class Choose(InterruptingEffect):
     maximum: int
     resolver: str
     source_id: str
+
+    def describe(self) -> str:
+        return (
+            f"{self.seat.name} chooses {self.minimum}-{self.maximum} of "
+            f"{len(self.candidates)} for {self.resolver}"
+        )
 
     def request(self, game: GameState) -> DecisionRequest:
         return ChooseCards(

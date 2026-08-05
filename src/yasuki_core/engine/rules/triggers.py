@@ -1,3 +1,4 @@
+import collections
 from collections.abc import Callable
 from dataclasses import dataclass
 
@@ -19,6 +20,13 @@ from yasuki_core.game_pieces.dynasty import DynastyHolding
 # A sanity bound on the fixpoint walk: a converging cascade drains in a handful of events, so far
 # more than this means a trigger re-emits an event that re-fires it — a card-logic bug, raised loudly.
 _MAX_CASCADE = 1000
+
+# The tail of the current walk, kept only to describe a cascade that fails to converge. Module-level
+# and bounded rather than carried on GameState: the history is derived (replay regenerates it), and
+# GameState compares by field, so storing it there would drag traces into every replay-equality
+# assertion. A deque of this size holds several cycles of any loop a human would need to read.
+_TRACE_LIMIT = 60
+_trace: collections.deque[str] = collections.deque(maxlen=_TRACE_LIMIT)
 
 # The keyword whose cards accrue and receive seeded Sincerity tokens.
 SINCERITY_KEYWORD = "Sincerity"
@@ -136,20 +144,44 @@ def _advance(
                 _stash(game, tuple(effects[index + 1 :]), firing, event, queue)
                 game.pending = effect.request(game)
                 return
+            _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
         effects = ()
         if firing:
             card, trigger = firing.pop(0)
+            _trace.append(f"  {card.printed_id} ({card.id}) reacts")
             effects = tuple(trigger(TriggerContext(game, card, event)))
             continue
         if not queue:
             return
         resolved += 1
         if resolved > _MAX_CASCADE:
-            raise RuntimeError(f"trigger cascade did not converge after {_MAX_CASCADE} events")
+            raise RuntimeError(
+                f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
+            )
         event = queue.pop(0)
+        _trace.append(type(event).__name__)
         firing = _collect(game, event)
         firing.sort(key=_canonical_order)
+
+
+def _render_trace() -> str:
+    """The tail of the walk as an indented trace, with any repeating cycle collapsed to one copy.
+
+    A non-converging cascade repeats the same handful of steps, so printing sixty of them buries the
+    answer. Naming the shortest repeating block and how many times it recurred is the diagnosis.
+    """
+    lines = list(_trace)
+    for length in range(1, len(lines) // 2 + 1):
+        cycle = lines[-length:]
+        repeats = 1
+        while lines[-length * (repeats + 1) : -length * repeats] == cycle:
+            repeats += 1
+        if repeats > 1:
+            return "\n".join(
+                [*cycle, f"  ... repeating, {repeats} times in the last {len(lines)} steps"]
+            )
+    return "\n".join(lines)
 
 
 def _stash(
