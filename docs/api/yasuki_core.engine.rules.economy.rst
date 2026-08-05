@@ -21,6 +21,7 @@ yasuki_core.engine.rules.economy
     effective_gold_production
     effective_recruit_discount
     gold_handler
+    is_clan
     opposing_states
     player_state
     recruit_discount

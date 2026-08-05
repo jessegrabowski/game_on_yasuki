@@ -117,6 +117,41 @@ jobs:
           name: coverage-${{ steps.matrix-id.outputs.id }}
           path: coverage/coverage-${{ steps.matrix-id.outputs.id }}.xml
 
+  docs:
+    name: "Docs"
+    needs: [pre-commit]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11 # v0.9.6
+        with:
+          pixi-version: v0.70.2
+          environments: docs
+          cache: true
+
+      # A green build does not imply current pages: autosummary lists what the .rst files name, so a
+      # module added or a helper made public goes unmentioned until docs-api is re-run.
+      - name: Check the API pages match the source
+        run: |
+          pixi run -e docs docs-api
+          if ! git diff --exit-code docs/api/; then
+            echo "::error::docs/api is out of date. Run 'pixi run docs-api' locally and commit the result."
+            exit 1
+          fi
+          if [ -n "$(git status --porcelain docs/api/)" ]; then
+            git status --porcelain docs/api/
+            echo "::error::docs-api produced new pages. Run it locally and commit them."
+            exit 1
+          fi
+
+      # -W so a broken reference fails here rather than shipping a page with a hole in it.
+      - name: Build the docs
+        run: pixi run -e docs sphinx-build -W -b html docs docs/_build/html
+
   js-test:
     name: "Deck Builder JS Tests"
     needs: [pre-commit]
@@ -169,10 +204,10 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: "All tests"
-    needs: [test, js-test, e2e-test]
+    needs: [test, js-test, e2e-test, docs]
     steps:
       - name: Check build matrix status
-        if: ${{ needs.test.result != 'success' || needs.js-test.result != 'success' || needs.e2e-test.result != 'success' }}
+        if: ${{ needs.test.result != 'success' || needs.js-test.result != 'success' || needs.e2e-test.result != 'success' || needs.docs.result != 'success' }}
         run: exit 1
 
   upload-coverage:

@@ -20,6 +20,17 @@ yasuki_core.engine.rules.abilities
 
     ability_for
     activatable
+    banish_top_fate
+    bow_and_destroy
+    bow_cost
     can_pay
+    destroy_cost
     invest_for
+    one_wealth
+    owned_holdings
+    plus_one_gp_this_turn
     production_boost_for
+    register_ability
+    register_invest
+    register_production_boost
+    spend_wealth
