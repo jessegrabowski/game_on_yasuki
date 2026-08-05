@@ -48,6 +48,7 @@ yasuki_core
     yasuki_core.engine.rules.flow <yasuki_core.engine.rules.flow>
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
+    yasuki_core.engine.rules.policies <yasuki_core.engine.rules.policies>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
