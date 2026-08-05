@@ -12,6 +12,7 @@ yasuki_core.engine.rules.abilities
 
     Ability
     InvestAbility
+    ProductionBoost
 
 .. rubric:: Functions
 
@@ -26,6 +27,7 @@ yasuki_core.engine.rules.abilities
     can_pay
     destroy_cost
     invest_for
+    no_effects
     one_wealth
     owned_holdings
     plus_one_gp_this_turn
