@@ -46,7 +46,8 @@ def _payment(amount: int, available: int, produced, boostable=()) -> ChoosePayme
         available,
         tuple(produced),
         "Mine",
-        tuple(boostable),
+        target_id="mine",
+        boostable=tuple(boostable),
     )
 
 

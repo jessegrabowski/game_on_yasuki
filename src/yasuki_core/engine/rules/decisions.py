@@ -89,16 +89,20 @@ class ChoosePayment(DecisionRequest):
         Each candidate producer paired with the gold it yields when bowed.
     label : str
         What the payment is for (e.g. the recruited card's name), shown in the prompt.
+    target_id : str
+        The card being paid for. Resolution recomputes each producer's yield against it, because a
+        producer's yield can depend on what it pays for.
     boostable : tuple of (str, int)
         Each producer that may raise its yield as it bows, paired with the extra gold its boost
-        adds. The seat opts in per producer via the answer's ``boosted``; a boosted producer counts
-        its extra toward the cost and is destroyed after bowing.
+        would add. The seat opts in per producer via the answer's ``boosted``; taking a boost grants
+        the producer that much Gold Production for the turn, and costs whatever its card says.
     """
 
     amount: int
     available: int
     produced: tuple[tuple[str, int], ...]
     label: str
+    target_id: str = ""
     boostable: tuple[tuple[str, int], ...] = ()
 
     def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:

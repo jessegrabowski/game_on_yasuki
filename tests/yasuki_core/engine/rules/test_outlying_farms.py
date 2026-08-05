@@ -187,3 +187,50 @@ def test_a_boost_that_declares_no_consequence_leaves_its_producer_alive():
         assert probe in session.game.table.battlefield.cards
     finally:
         _PRODUCTION_BOOST.pop("free_boost_probe", None)
+
+
+def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
+    """Jade Works yields +2 only when paying for a Jade card. Payment resolution recomputes each
+    producer's yield, so it has to recompute it against the same target the offer quoted."""
+    state = TableState.empty_two_seat()
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=P1))
+    ]
+    put_in_play(
+        state,
+        DynastyHolding(
+            id="jw",
+            name="Jade Works",
+            side=Side.DYNASTY,
+            owner=P1,
+            printed_id="jade_works",
+            gold_production=2,
+        ),
+    )
+    target = register(
+        state,
+        DynastyHolding(
+            id="jade",
+            name="Jade Thing",
+            side=Side.DYNASTY,
+            owner=P1,
+            gold_cost=4,
+            keywords=("Jade",),
+        ),
+    )
+    target.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(target)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+
+    session = EngineSession.start(state, P1)
+    session.act(P1, Pass())
+    session.act(P1, Pass())
+    session.act(P1, Recruit("jade"))
+    # The offer quotes 4 — base 2 plus the Jade bonus — and bowing it alone must cover the cost.
+    session.submit(P1, DecisionResponse(("jw",)))
+
+    # 4 produced (2 base + 2 Jade bonus) less the 4 spent. Recomputing without the target would
+    # yield 2 and leave the seat short, which asserting on the recruit alone would not notice.
+    assert session.game.gold[P1] == 0
+    assert _recruited(session, "jade")
