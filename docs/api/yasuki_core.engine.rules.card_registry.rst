@@ -10,6 +10,7 @@ yasuki_core.engine.rules.card_registry
 .. autosummary::
     :toctree: generated/
 
+    duplicate_registrations
     main
     registered_card_ids
     unregistered_card_ids

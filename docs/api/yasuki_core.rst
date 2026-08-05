@@ -67,6 +67,7 @@ yasuki_core
     yasuki_core.game_pieces.fate <yasuki_core.game_pieces.fate>
     yasuki_core.game_pieces.pregame <yasuki_core.game_pieces.pregame>
     yasuki_core.install.card_index <yasuki_core.install.card_index>
+    yasuki_core.install.coverage_report <yasuki_core.install.coverage_report>
     yasuki_core.install.format_metadata <yasuki_core.install.format_metadata>
     yasuki_core.install.images_to_sql <yasuki_core.install.images_to_sql>
     yasuki_core.install.install_db <yasuki_core.install.install_db>
