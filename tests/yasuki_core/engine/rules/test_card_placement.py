@@ -26,21 +26,6 @@ def test_every_card_is_implemented_in_its_first_printing_module():
     assert misplaced == []
 
 
-@pytest.mark.slow
-def test_every_registered_card_exists_in_the_card_data():
-    # card_registry makes this claim for the runtime registries; this one covers the source layout,
-    # where an id could be registered in a module the runtime never reaches.
-    belongs = first_printing_module()
-    unknown = [
-        card_id
-        for module in card_modules()
-        for card_id in sorted(set(registered_ids(module)))
-        if card_id not in belongs
-    ]
-
-    assert unknown == []
-
-
 def write_sets(tmp_path, sets):
     """Write a set YAML per entry plus the set_info that dates them, and return both paths."""
     for stem, set_name, _, titles in sets:

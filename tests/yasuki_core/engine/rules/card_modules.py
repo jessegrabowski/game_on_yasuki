@@ -1,6 +1,7 @@
 import ast
 import collections
 import datetime
+import functools
 import pathlib
 import re
 
@@ -14,8 +15,7 @@ CARDS_DIR = pathlib.Path(cards.__file__).parent
 DEFAULT_SET_INFO_PATH = DATABASE_DIR / "set_info.yaml"
 HEADER = re.compile(r"^# --- (.+) ---$", re.M)
 # Sorts after every real release date, so a set with no recorded date never wins a first-printing
-# comparison against one that has one. Four sets are undated, and moto_traders is printed in only one
-# of them — without this it would have no module at all.
+# comparison against one that has.
 UNDATED = datetime.date(9999, 1, 1)
 
 # Registrations that name a card id, by the form they take. Choice resolvers are absent: they key on
@@ -28,9 +28,9 @@ def card_modules() -> list[pathlib.Path]:
     return sorted(path for path in CARDS_DIR.glob("*.py") if path.name != "__init__.py")
 
 
-def registered_ids(module: pathlib.Path) -> list[str]:
-    """The card ids ``module`` registers a handler for, in source order, with repeats — a card that
-    registers three handlers appears three times."""
+@functools.cache
+def registered_ids(module: pathlib.Path) -> tuple[str, ...]:
+    """The card ids ``module`` registers a handler for, in source order and with repeats."""
     ids = []
     for node in ast.walk(ast.parse(module.read_text(encoding="utf-8"))):
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
@@ -39,12 +39,13 @@ def registered_ids(module: pathlib.Path) -> list[str]:
                 argument = node.args[-1] if node.func.id == "on" else node.args[0]
                 if isinstance(argument, ast.Constant) and isinstance(argument.value, str):
                     ids.append(argument.value)
-    return ids
+    return tuple(ids)
 
 
-def headers(module: pathlib.Path) -> list[str]:
+@functools.cache
+def headers(module: pathlib.Path) -> tuple[str, ...]:
     """The card titles ``module`` declares section headers for, in source order."""
-    return HEADER.findall(module.read_text(encoding="utf-8"))
+    return tuple(HEADER.findall(module.read_text(encoding="utf-8")))
 
 
 def first_printing_module(
