@@ -10,4 +10,12 @@ yasuki_core.engine.runner
 .. autosummary::
     :toctree: generated/
 
+    Controls
     GameRunner
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: generated/
+
+    play_game
