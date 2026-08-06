@@ -1,6 +1,9 @@
+import pytest
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Pass, Recruit
+from yasuki_core.engine.rules.actions import DynastyDiscard, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.log import Act, Cancel
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.policies import PassPolicy
 from yasuki_core.engine.runner import Controls, play_game
@@ -191,3 +194,179 @@ def test_recording_no_end_of_turn_metrics_leaves_the_samples_alone():
     play_game(_session(p1_production=3), _passing(), turn_limit=2, observer=recorder)
 
     assert [s.values for s in recorder.samples] == [{"gold": 3}, {"gold": 0}]
+
+
+class _DiscardFirst:
+    def choose(self, view, actions):
+        return next((a for a in actions if isinstance(a, DynastyDiscard)), Pass())
+
+
+def _counting(session: EngineSession) -> TurnRecorder:
+    return TurnRecorder(
+        {},
+        end_of_turn={"cleared": provinces_cleared},
+        actions={"bought": Recruit, "flushed": DynastyDiscard},
+        log=session.log,
+    )
+
+
+def test_a_recruit_and_a_discard_leave_the_same_board_and_are_told_apart_anyway():
+    """The whole point of counting actions. Both seats clear one province and end the turn looking
+    identical; only what they did says one bought a card and the other threw one away."""
+    # One province each, so both policies clear exactly it: a Dynasty Discard is free and
+    # repeatable, and given more it would empty every face-up province while the buyer paid for one.
+    buying, flushing = _buyable(provinces=1), _buyable(provinces=1)
+    buyer, flusher = _counting(buying), _counting(flushing)
+
+    play_game(
+        buying,
+        {s: Controls(_RecruitFirst(), AutoAgent()) for s in PlayerId},
+        turn_limit=1,
+        observer=buyer,
+    )
+    play_game(
+        flushing,
+        {s: Controls(_DiscardFirst(), AutoAgent()) for s in PlayerId},
+        turn_limit=1,
+        observer=flusher,
+    )
+
+    assert buyer.samples[0].values == {"cleared": 1, "bought": 1, "flushed": 0}
+    assert flusher.samples[0].values == {"cleared": 1, "bought": 0, "flushed": 1}
+
+
+def test_flushing_every_province_is_not_reported_as_buying_them_out():
+    """A seat with no gold can still empty all four provinces by discarding. Read off the board
+    alone that is indistinguishable from a seat that bought out its whole dynasty row."""
+    session = _session()  # no producers, so nothing is affordable
+    table = session.game.table
+    table.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+        register(table, holding(f"deck{i}", owner=P1, gold_cost=3)) for i in range(8)
+    ]
+    for index in range(4):
+        province_card(session.game, f"prov{index}", seat=P1, gold_cost=3, index=index)
+    recorder = _counting(session)
+
+    play_game(
+        session,
+        {s: Controls(_DiscardFirst(), AutoAgent()) for s in PlayerId},
+        turn_limit=1,
+        observer=recorder,
+    )
+
+    assert recorder.samples[0].values == {"cleared": 4, "bought": 0, "flushed": 4}
+
+
+def test_the_actions_a_seat_took_account_for_every_province_it_cleared():
+    """Recruit and DynastyDiscard both draw only from provinces, so across a plain game the split
+    adds back up to the board's own count. A shortfall would mean a card cleared a province by
+    itself — a Legacy search or an ability-driven recruit — rather than a miscount."""
+    session = _buyable()
+    recorder = _counting(session)
+
+    play_game(
+        session,
+        {s: Controls(_RecruitFirst(), AutoAgent()) for s in PlayerId},
+        turn_limit=6,
+        observer=recorder,
+    )
+
+    for sample in recorder.samples:
+        assert sample.values["bought"] + sample.values["flushed"] == sample.values["cleared"]
+
+
+def test_each_seats_actions_are_counted_against_its_own_turn():
+    session = _buyable()
+    recorder = _counting(session)
+    put_in_play(session.game, holding("theirs", owner=P2, gold_production=2))
+    province_card(session.game, "their_prov", seat=P2, gold_cost=2, index=0)
+
+    play_game(
+        session,
+        {s: Controls(_RecruitFirst(), AutoAgent()) for s in PlayerId},
+        turn_limit=2,
+        observer=recorder,
+    )
+
+    assert [(s.seat, s.values["bought"]) for s in recorder.samples] == [(P1, 1), (P2, 1)]
+
+
+def test_a_counted_action_that_never_happens_still_reports_zero():
+    # An absent key would make a caller's arithmetic raise rather than read a real zero.
+    session = _buyable()
+    recorder = _counting(session)
+
+    play_game(session, _passing(), turn_limit=2, observer=recorder)
+
+    assert [s.values for s in recorder.samples] == [
+        {"cleared": 0, "bought": 0, "flushed": 0},
+        {"cleared": 0, "bought": 0, "flushed": 0},
+    ]
+
+
+def test_counting_actions_without_the_log_they_live_on_is_refused():
+    # Silently recording zeros would look like a seat that never bought anything.
+    with pytest.raises(ValueError, match="needs the log"):
+        TurnRecorder({}, actions={"bought": Recruit})
+
+
+def test_a_cancelled_recruit_is_not_counted_as_a_purchase():
+    """Cancelling backs the action out, so it never happened. The tape keeps both the action and
+    the cancellation, which is what lets the count net them off."""
+    session = _buyable(provinces=1)
+    recorder = _counting(session)
+    recorder.turn_began(session.game)
+    session.act(P1, Pass())
+    session.act(P1, Pass())
+    session.act(P1, Recruit("prov0"))
+    session.cancel(P1)
+    recorder.turn_ended(session.game, P1)
+
+    assert recorder.samples[0].values["bought"] == 0
+
+
+def test_an_undone_discard_is_not_counted_as_a_flush():
+    """Undo drops the action from the tape outright, so nothing has to net it off."""
+    session = _buyable(provinces=1)
+    recorder = _counting(session)
+    recorder.turn_began(session.game)
+    session.act(P1, Pass())
+    session.act(P1, Pass())
+    session.act(P1, DynastyDiscard("prov0"))
+    assert session.undo_last(P1)
+    recorder.turn_ended(session.game, P1)
+
+    assert recorder.samples[0].values["flushed"] == 0
+
+
+def test_a_cancellation_only_undoes_a_counted_action_when_one_preceded_it():
+    """A cancelled action that was never counted must not drop the count of an earlier one that
+    was, or a turn's purchases would go missing whenever anything else got backed out."""
+    session = _buyable(provinces=1)
+    recorder = _counting(session)
+    recorder.turn_began(session.game)
+    session.log.entries.extend([Act(P1, Recruit("prov0")), Act(P1, Pass()), Cancel(P1)])
+    recorder.turn_ended(session.game, P1)
+
+    assert recorder.samples[0].values["bought"] == 1
+
+
+def test_an_action_the_engine_refused_never_reaches_the_count():
+    """A policy's choice is not a move. Only what the engine accepted lands on the tape."""
+
+    class Cheater:
+        def choose(self, view, actions):
+            return Legacy() if Legacy() not in actions else Pass()
+
+    session = _buyable()
+    recorder = _counting(session)
+
+    with pytest.raises(RuntimeError, match="not offered"):
+        play_game(
+            session,
+            {s: Controls(Cheater(), AutoAgent()) for s in PlayerId},
+            turn_limit=4,
+            observer=recorder,
+        )
+
+    assert all(s.values["bought"] == 0 for s in recorder.samples)
