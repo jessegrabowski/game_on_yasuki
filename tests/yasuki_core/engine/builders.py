@@ -104,6 +104,7 @@ def province_card(
     printed_id: str | None = None,
     keywords: tuple[str, ...] = (),
     gold_cost: int | None = None,
+    gold_production: int = 0,
     counters: dict[str, int] | None = None,
     face_up: bool = True,
     index: int = 0,
@@ -118,6 +119,7 @@ def province_card(
             owner=seat,
             keywords=keywords,
             gold_cost=gold_cost,
+            gold_production=gold_production,
             counters=counters,
         ),
     )
