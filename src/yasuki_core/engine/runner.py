@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-from typing import NamedTuple
+from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey
@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules.policies import Policy
 from yasuki_core.engine.rules.projection import GameView
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
 
 
@@ -172,8 +173,42 @@ class Controls(NamedTuple):
     agent: Agent
 
 
+class Observer(Protocol):
+    """Watches a driven game at both ends of each turn.
+
+    Turn boundaries are where the board is read, because they are the only moments it is canonical.
+    Read after an arbitrary action instead, a producer bowed to pay stops counting and the reading
+    depends on where in the turn it was taken.
+
+    Actions are not reported here — the game log already records every one with the seat that took
+    it, so an observer that wants them reads the tape between these two calls.
+
+    The two ends answer different questions. As a turn begins,
+    :func:`~yasuki_core.engine.rules.flow._begin_turn` has straightened the active seat and revealed
+    its provinces, so the board shows what it has to spend. As one ends, the board shows what it
+    did: producers bowed to pay are still bowed, and a province it cleared holds a face-down
+    replacement.
+    """
+
+    def turn_began(self, game: GameState) -> None:
+        """Called once ``game.active``'s turn has begun, with the board it starts from."""
+        ...
+
+    def turn_ended(self, game: GameState, seat: PlayerId) -> None:
+        """Called once ``seat``'s turn is over, with the board it left behind.
+
+        By then the next turn has already begun, but ``seat`` is no longer active and nothing has
+        touched what it owns — only the new active seat straightens and reveals.
+        """
+        ...
+
+
 def play_game(
-    session: EngineSession, controls: dict[PlayerId, Controls], *, turn_limit: int
+    session: EngineSession,
+    controls: dict[PlayerId, Controls],
+    *,
+    turn_limit: int,
+    observer: Observer | None = None,
 ) -> None:
     """
     Play ``session`` to its end or to ``turn_limit``, whichever comes first, mutating it in place.
@@ -190,6 +225,9 @@ def play_game(
     turn_limit : int
         The last turn to play. Games do not end on their own except by the Legacy whiff, so this
         is what bounds a run.
+    observer : Observer, optional
+        Told when each turn begins and ends, including the first and the last. Default None, which
+        costs nothing.
 
     Raises
     ------
@@ -197,7 +235,14 @@ def play_game(
         If a seat has no legal action, or a policy returns one it was not offered.
     """
     game = session.game
+    watched: int | None = None
+    playing: PlayerId | None = None
     while not game.game_over and game.turn <= turn_limit:
+        if observer is not None and game.turn != watched:
+            if playing is not None:
+                observer.turn_ended(game, playing)
+            watched, playing = game.turn, game.active
+            observer.turn_began(game)
         pending = game.pending
         if pending is not None:
             seat = pending.seat
@@ -213,3 +258,7 @@ def play_game(
         if chosen not in actions:
             raise RuntimeError(f"{seat.name}'s policy chose {chosen}, which was not offered")
         session.act(seat, chosen)
+
+    # The turn the run stopped on has begun but never been closed by the loop.
+    if observer is not None and playing is not None:
+        observer.turn_ended(game, playing)

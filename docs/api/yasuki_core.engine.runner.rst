@@ -12,6 +12,7 @@ yasuki_core.engine.runner
 
     Controls
     GameRunner
+    Observer
 
 .. rubric:: Functions
 
