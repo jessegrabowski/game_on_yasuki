@@ -190,7 +190,9 @@ class Observer(Protocol):
     replacement.
     """
 
-    def turn_began(self, game: GameState) -> None: ...
+    def turn_began(self, game: GameState) -> None:
+        """Called once ``game.active``'s turn has begun, with the board it starts from."""
+        ...
 
     def turn_ended(self, game: GameState, seat: PlayerId) -> None:
         """Called once ``seat``'s turn is over, with the board it left behind.
