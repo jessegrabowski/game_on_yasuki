@@ -1,4 +1,5 @@
 from collections.abc import Iterable
+from typing import NamedTuple
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey
@@ -14,6 +15,7 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
+from yasuki_core.engine.rules.policies import Policy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.session import EngineSession
 
@@ -152,3 +154,62 @@ class GameRunner:
                 self.session.submit(pending.seat, response)
             else:
                 self.session.act(game.active, Pass())
+
+
+class Controls(NamedTuple):
+    """What drives one seat with no human at it.
+
+    Attributes
+    ----------
+    policy : Policy
+        Chooses which action the seat takes.
+    agent : Agent
+        Answers the decisions those actions raise. May be the same object as ``policy`` when a
+        strategy wants its payments to agree with its choices.
+    """
+
+    policy: Policy
+    agent: Agent
+
+
+def play_game(
+    session: EngineSession, controls: dict[PlayerId, Controls], *, turn_limit: int
+) -> None:
+    """
+    Play ``session`` to its end or to ``turn_limit``, whichever comes first, mutating it in place.
+
+    Stops only on those two conditions. A driver that inferred its own stopping point would
+    silently truncate a run.
+
+    Parameters
+    ----------
+    session : EngineSession
+        The session to drive. Left at whatever state play reached.
+    controls : dict mapping PlayerId to Controls
+        What drives each seat. Every seat that could act must appear.
+    turn_limit : int
+        The last turn to play. Games do not end on their own except by the Legacy whiff, so this
+        is what bounds a run.
+
+    Raises
+    ------
+    RuntimeError
+        If a seat has no legal action, or a policy returns one it was not offered.
+    """
+    game = session.game
+    while not game.game_over and game.turn <= turn_limit:
+        pending = game.pending
+        if pending is not None:
+            seat = pending.seat
+            view = session.project(seat)
+            session.submit(seat, controls[seat].agent.decide(pending, view))
+            continue
+
+        seat = game.active
+        actions = session.legal_actions(seat)
+        if not actions:
+            raise RuntimeError(f"{seat.name} has no legal action in {game.phase}")
+        chosen = controls[seat].policy.choose(session.project(seat), actions)
+        if chosen not in actions:
+            raise RuntimeError(f"{seat.name}'s policy chose {chosen}, which was not offered")
+        session.act(seat, chosen)
