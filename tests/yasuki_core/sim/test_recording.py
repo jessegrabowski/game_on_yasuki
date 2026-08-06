@@ -351,22 +351,76 @@ def test_a_cancellation_only_undoes_a_counted_action_when_one_preceded_it():
     assert recorder.samples[0].values["bought"] == 1
 
 
-def test_an_action_the_engine_refused_never_reaches_the_count():
-    """A policy's choice is not a move. Only what the engine accepted lands on the tape."""
+class _Cheater:
+    def choose(self, view, actions):
+        return Legacy() if Legacy() not in actions else Pass()
 
-    class Cheater:
-        def choose(self, view, actions):
-            return Legacy() if Legacy() not in actions else Pass()
 
+def test_an_action_the_engine_refused_never_reaches_the_tape():
+    """A policy's choice is not a move. The counts read the log, so nothing the engine turned down
+    can reach them."""
+    session = _buyable()
+
+    with pytest.raises(RuntimeError, match="not offered"):
+        play_game(
+            session,
+            {s: Controls(_Cheater(), AutoAgent()) for s in PlayerId},
+            turn_limit=4,
+            observer=_counting(session),
+        )
+
+    assert not any(isinstance(e, Act) and isinstance(e.action, Legacy) for e in session.log.entries)
+
+
+def test_a_turn_whose_end_was_never_observed_is_not_recorded():
+    """A run that raises part-way through a turn has measured its start but not its end. Recording
+    it would put a row in the table with its end-of-turn columns missing, which a caller reading
+    those columns hits as a KeyError rather than a number."""
     session = _buyable()
     recorder = _counting(session)
 
     with pytest.raises(RuntimeError, match="not offered"):
         play_game(
             session,
-            {s: Controls(Cheater(), AutoAgent()) for s in PlayerId},
+            {s: Controls(_Cheater(), AutoAgent()) for s in PlayerId},
             turn_limit=4,
             observer=recorder,
         )
 
-    assert all(s.values["bought"] == 0 for s in recorder.samples)
+    assert recorder.samples == []
+
+
+def test_every_recorded_turn_carries_every_column():
+    """What makes the samples a table rather than a bag of dicts: a caller can read any name off
+    any row without guarding for its absence."""
+    session = _buyable()
+    recorder = _counting(session)
+
+    play_game(
+        session,
+        {s: Controls(_RecruitFirst(), AutoAgent()) for s in PlayerId},
+        turn_limit=5,
+        observer=recorder,
+    )
+
+    assert recorder.samples
+    assert all(set(s.values) == {"cleared", "bought", "flushed"} for s in recorder.samples)
+
+
+def test_ending_a_turn_that_never_began_is_refused():
+    # Reached by wiring the recorder to a driver that reports the two ends out of order.
+    recorder = TurnRecorder({})
+
+    with pytest.raises(RuntimeError, match="no turn had begun"):
+        recorder.turn_ended(_session().game, P1)
+
+
+def test_ending_the_same_turn_twice_is_refused():
+    # A duplicated row would double-count that turn in every aggregate taken over the samples.
+    session = _session()
+    recorder = TurnRecorder({})
+    recorder.turn_began(session.game)
+    recorder.turn_ended(session.game, P1)
+
+    with pytest.raises(RuntimeError, match="no turn had begun"):
+        recorder.turn_ended(session.game, P1)

@@ -9,7 +9,7 @@ from yasuki_core.sim.metrics import Metric
 
 @dataclass(frozen=True, slots=True)
 class Sample:
-    """One seat's metrics over one of its turns — read at either end, and counted across it."""
+    """One seat's completed turn: metrics read at either end of it, and actions counted across it."""
 
     turn: int
     seat: PlayerId
@@ -40,7 +40,9 @@ class TurnRecorder:
         The tape of the game being recorded, read between turn boundaries to count ``actions``.
         Default None, which is only valid when nothing is being counted.
     samples : list of Sample
-        What has been recorded so far, in turn order.
+        The turns recorded so far, in order. A turn appears once its end has been observed, so
+        every row carries every name — a run that raises part-way through a turn drops it rather
+        than reporting one with its end-of-turn columns missing.
 
     All three sources land in one sample per turn, so a name used in two of them would collide.
     """
@@ -50,6 +52,7 @@ class TurnRecorder:
     actions: dict[str, type[Action]] = field(default_factory=dict)
     log: GameLog | None = None
     samples: list[Sample] = field(default_factory=list)
+    _open: Sample | None = field(default=None, init=False)
     _log_offset: int = field(default=0, init=False)
 
     def __post_init__(self) -> None:
@@ -60,21 +63,25 @@ class TurnRecorder:
         seat = game.active
         values = {name: metric(game, seat) for name, metric in self.metrics.items()}
         values.update(dict.fromkeys(self.actions, 0))
-        self.samples.append(Sample(turn=game.turn, seat=seat, values=values))
+        self._open = Sample(turn=game.turn, seat=seat, values=values)
         if self.log is not None:
             self._log_offset = len(self.log.entries)
 
     def turn_ended(self, game: GameState, seat: PlayerId) -> None:
-        finished = self.samples[-1]
-        if finished.seat is not seat:
+        open_turn = self._open
+        if open_turn is None:
+            raise RuntimeError(f"{seat.name}'s turn ended, but no turn had begun")
+        if open_turn.seat is not seat:
             raise RuntimeError(
-                f"{seat.name}'s turn ended, but the open sample is {finished.seat}'s"
+                f"{seat.name}'s turn ended, but the open turn is {open_turn.seat.name}'s"
             )
-        finished.values.update(
+        open_turn.values.update(
             {name: metric(game, seat) for name, metric in self.end_of_turn.items()}
         )
         for name in self._acted(seat):
-            finished.values[name] += 1
+            open_turn.values[name] += 1
+        self.samples.append(open_turn)
+        self._open = None
 
     def _acted(self, seat: PlayerId) -> list[str]:
         """The counted name of each action ``seat`` took this turn, in order.
