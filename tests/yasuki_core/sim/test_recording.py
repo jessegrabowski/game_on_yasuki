@@ -17,7 +17,12 @@ from yasuki_core.sim.metrics import (
 )
 from yasuki_core.sim.recording import TurnRecorder
 
-from tests.yasuki_core.engine.policies import Cheater, DiscardFirst, RecruitFirst
+from tests.yasuki_core.engine.policies import (
+    Cheater,
+    DiscardFirst,
+    RecruitElseDiscard,
+    RecruitFirst,
+)
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
@@ -386,3 +391,31 @@ def test_ending_the_same_turn_twice_is_refused():
 
     with pytest.raises(RuntimeError, match="no turn had begun"):
         recorder.turn_ended(session.game, P1)
+
+
+def test_a_turn_that_buys_one_card_and_throws_another_away_counts_both():
+    """The row a real deck produces, and the only shape where the two counts can be confused for
+    each other. Every other counting test drives one kind of action, so a mismatch between an
+    action and the name it lands under would read the same either way."""
+    session = _buyable()
+    recorder = _counting(session)
+
+    play_game(
+        session,
+        {s: Controls(RecruitElseDiscard(), AutoAgent()) for s in PlayerId},
+        turn_limit=1,
+        observer=recorder,
+    )
+
+    assert recorder.samples[0].values == {"cleared": 2, "bought": 1, "flushed": 1}
+
+
+def test_ending_a_turn_for_the_wrong_seat_is_refused():
+    """Guards a driver reporting the two ends out of step. Silently attributing one seat's turnover
+    to the other would corrupt every per-seat series with nothing surfacing."""
+    session = _session()
+    recorder = TurnRecorder({})
+    recorder.turn_began(session.game)
+
+    with pytest.raises(RuntimeError, match="the open turn is P1's"):
+        recorder.turn_ended(session.game, P2)
