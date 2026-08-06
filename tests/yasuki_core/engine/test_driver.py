@@ -3,7 +3,7 @@ import random
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Action, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, Legacy, Pass
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionResponse, DiscardToHandSize
 from yasuki_core.engine.rules.policies import PassPolicy, RandomPolicy
@@ -12,6 +12,7 @@ from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import dealt_table, holding, province_card, put_in_play
+from tests.yasuki_core.engine.policies import Cheater, RecruitFirst
 
 
 def _session(seed: int = 1) -> EngineSession:
@@ -73,10 +74,6 @@ def test_a_driven_game_replays_to_the_same_state():
 
 
 def test_a_policy_cannot_take_an_action_it_was_not_offered():
-    class Cheater:
-        def choose(self, view: GameView, actions: list[Action]) -> Action:
-            return Legacy() if Legacy() not in actions else Pass()
-
     session = _session()
     controls = {seat: Controls(Cheater(), AutoAgent()) for seat in PlayerId}
 
@@ -124,10 +121,6 @@ def test_a_decision_goes_to_the_seat_that_owes_it():
 def test_a_policy_chooses_a_recruit_and_an_agent_pays_for_it():
     """The two protocols composing, which is the point of having both: the policy picks the action,
     the agent answers the payment that action raises."""
-
-    class RecruitFirst:
-        def choose(self, view: GameView, actions: list[Action]) -> Action:
-            return next((a for a in actions if isinstance(a, Recruit)), Pass())
 
     session = _session()
     game = session.game
@@ -185,10 +178,6 @@ def test_a_seats_producers_are_straight_at_the_start_of_its_own_turn():
     put_in_play(session.game, holding("mine", owner=PlayerId.P1, gold_production=4))
     province_card(session.game, "target", seat=PlayerId.P1, gold_cost=3)
 
-    class RecruitFirst:
-        def choose(self, view: GameView, actions: list[Action]) -> Action:
-            return next((a for a in actions if isinstance(a, Recruit)), Pass())
-
     controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
     play_game(session, controls, turn_limit=3, observer=Watcher())
 
@@ -231,10 +220,6 @@ def test_a_turn_ends_with_the_seat_that_played_it_still_untouched():
     session = _session()
     put_in_play(session.game, holding("mine", owner=PlayerId.P1, gold_production=4))
     province_card(session.game, "target", seat=PlayerId.P1, gold_cost=3)
-
-    class RecruitFirst:
-        def choose(self, view: GameView, actions: list[Action]) -> Action:
-            return next((a for a in actions if isinstance(a, Recruit)), Pass())
 
     controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
     play_game(session, controls, turn_limit=1, observer=Watcher())

@@ -17,6 +17,8 @@ from yasuki_core.sim.metrics import (
 )
 from yasuki_core.sim.recording import TurnRecorder
 
+from tests.yasuki_core.engine.policies import Cheater, DiscardFirst, RecruitFirst
+
 from tests.yasuki_core.engine.builders import (
     dealt_table,
     holding,
@@ -99,10 +101,6 @@ def test_a_seats_production_dips_while_the_opponent_plays_and_recovers_on_its_ow
     session = _session(p1_production=6)
     province_card(session.game, "target", seat=P1, gold_cost=4)
 
-    class RecruitFirst:
-        def choose(self, view, actions):
-            return next((a for a in actions if isinstance(a, Recruit)), Pass())
-
     recorder = TurnRecorder({"gold": potential_gold_production})
     controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
     play_game(session, controls, turn_limit=3, observer=recorder)
@@ -121,11 +119,6 @@ def test_honor_is_recorded_per_seat_across_a_game():
 
     assert recorder.series(P1, "honor") == [(1, 8), (3, 8)]
     assert recorder.series(P2, "honor") == [(2, 3), (4, 3)]
-
-
-class _RecruitFirst:
-    def choose(self, view, actions):
-        return next((a for a in actions if isinstance(a, Recruit)), Pass())
 
 
 def _buyable(gold_cost: int = 2, provinces: int = 2) -> EngineSession:
@@ -149,7 +142,7 @@ def test_a_cleared_province_reads_zero_at_turn_start_and_one_at_turn_end():
         {"cleared_at_start": provinces_cleared},
         end_of_turn={"cleared": provinces_cleared},
     )
-    controls = {seat: Controls(_RecruitFirst(), AutoAgent()) for seat in PlayerId}
+    controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
 
     play_game(_buyable(), controls, turn_limit=1, observer=recorder)
 
@@ -161,7 +154,7 @@ def test_the_count_resets_each_turn_rather_than_accumulating():
     """It measures one turn's buying, not the game's. The reveal at the start of each turn is what
     clears it, so a seat that buys one card a turn reads one every turn, never two."""
     recorder = TurnRecorder({}, end_of_turn={"cleared": provinces_cleared})
-    controls = {seat: Controls(_RecruitFirst(), AutoAgent()) for seat in PlayerId}
+    controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
 
     play_game(_buyable(), controls, turn_limit=5, observer=recorder)
 
@@ -196,11 +189,6 @@ def test_recording_no_end_of_turn_metrics_leaves_the_samples_alone():
     assert [s.values for s in recorder.samples] == [{"gold": 3}, {"gold": 0}]
 
 
-class _DiscardFirst:
-    def choose(self, view, actions):
-        return next((a for a in actions if isinstance(a, DynastyDiscard)), Pass())
-
-
 def _counting(session: EngineSession) -> TurnRecorder:
     return TurnRecorder(
         {},
@@ -220,13 +208,13 @@ def test_a_recruit_and_a_discard_leave_the_same_board_and_are_told_apart_anyway(
 
     play_game(
         buying,
-        {s: Controls(_RecruitFirst(), AutoAgent()) for s in PlayerId},
+        {s: Controls(RecruitFirst(), AutoAgent()) for s in PlayerId},
         turn_limit=1,
         observer=buyer,
     )
     play_game(
         flushing,
-        {s: Controls(_DiscardFirst(), AutoAgent()) for s in PlayerId},
+        {s: Controls(DiscardFirst(), AutoAgent()) for s in PlayerId},
         turn_limit=1,
         observer=flusher,
     )
@@ -249,7 +237,7 @@ def test_flushing_every_province_is_not_reported_as_buying_them_out():
 
     play_game(
         session,
-        {s: Controls(_DiscardFirst(), AutoAgent()) for s in PlayerId},
+        {s: Controls(DiscardFirst(), AutoAgent()) for s in PlayerId},
         turn_limit=1,
         observer=recorder,
     )
@@ -266,7 +254,7 @@ def test_the_actions_a_seat_took_account_for_every_province_it_cleared():
 
     play_game(
         session,
-        {s: Controls(_RecruitFirst(), AutoAgent()) for s in PlayerId},
+        {s: Controls(RecruitFirst(), AutoAgent()) for s in PlayerId},
         turn_limit=6,
         observer=recorder,
     )
@@ -283,7 +271,7 @@ def test_each_seats_actions_are_counted_against_its_own_turn():
 
     play_game(
         session,
-        {s: Controls(_RecruitFirst(), AutoAgent()) for s in PlayerId},
+        {s: Controls(RecruitFirst(), AutoAgent()) for s in PlayerId},
         turn_limit=2,
         observer=recorder,
     )
@@ -351,11 +339,6 @@ def test_a_cancellation_only_undoes_a_counted_action_when_one_preceded_it():
     assert recorder.samples[0].values["bought"] == 1
 
 
-class _Cheater:
-    def choose(self, view, actions):
-        return Legacy() if Legacy() not in actions else Pass()
-
-
 def test_an_action_the_engine_refused_never_reaches_the_tape():
     """A policy's choice is not a move. The counts read the log, so nothing the engine turned down
     can reach them."""
@@ -364,7 +347,7 @@ def test_an_action_the_engine_refused_never_reaches_the_tape():
     with pytest.raises(RuntimeError, match="not offered"):
         play_game(
             session,
-            {s: Controls(_Cheater(), AutoAgent()) for s in PlayerId},
+            {s: Controls(Cheater(), AutoAgent()) for s in PlayerId},
             turn_limit=4,
             observer=_counting(session),
         )
@@ -382,7 +365,7 @@ def test_a_turn_whose_end_was_never_observed_is_not_recorded():
     with pytest.raises(RuntimeError, match="not offered"):
         play_game(
             session,
-            {s: Controls(_Cheater(), AutoAgent()) for s in PlayerId},
+            {s: Controls(Cheater(), AutoAgent()) for s in PlayerId},
             turn_limit=4,
             observer=recorder,
         )
@@ -398,7 +381,7 @@ def test_every_recorded_turn_carries_every_column():
 
     play_game(
         session,
-        {s: Controls(_RecruitFirst(), AutoAgent()) for s in PlayerId},
+        {s: Controls(RecruitFirst(), AutoAgent()) for s in PlayerId},
         turn_limit=5,
         observer=recorder,
     )
