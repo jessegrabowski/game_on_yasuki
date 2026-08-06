@@ -50,7 +50,7 @@ class TurnRecorder:
     actions: dict[str, type[Action]] = field(default_factory=dict)
     log: GameLog | None = None
     samples: list[Sample] = field(default_factory=list)
-    _turn_start: int = field(default=0, init=False)
+    _log_offset: int = field(default=0, init=False)
 
     def __post_init__(self) -> None:
         if self.actions and self.log is None:
@@ -62,7 +62,7 @@ class TurnRecorder:
         values.update(dict.fromkeys(self.actions, 0))
         self.samples.append(Sample(turn=game.turn, seat=seat, values=values))
         if self.log is not None:
-            self._turn_start = len(self.log.entries)
+            self._log_offset = len(self.log.entries)
 
     def turn_ended(self, game: GameState, seat: PlayerId) -> None:
         finished = self.samples[-1]
@@ -86,18 +86,18 @@ class TurnRecorder:
         if not self.actions or self.log is None:
             return []
         taken: list[str] = []
-        latest: str | None = None
-        for entry in self.log.entries[self._turn_start :]:
+        last_counted: str | None = None
+        for entry in self.log.entries[self._log_offset :]:
             if isinstance(entry, Act) and entry.seat is seat:
-                latest = next(
+                last_counted = next(
                     (name for name, kind in self.actions.items() if isinstance(entry.action, kind)),
                     None,
                 )
-                if latest is not None:
-                    taken.append(latest)
-            elif isinstance(entry, Cancel) and entry.seat is seat and latest is not None:
+                if last_counted is not None:
+                    taken.append(last_counted)
+            elif isinstance(entry, Cancel) and entry.seat is seat and last_counted is not None:
                 taken.pop()
-                latest = None
+                last_counted = None
         return taken
 
     def series(self, seat: PlayerId, name: str) -> list[tuple[int, int]]:
