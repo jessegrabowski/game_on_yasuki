@@ -1,10 +1,10 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.flow import gold_producers
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.table import ZoneRole
+from yasuki_core.engine.table import Zone, ZoneRole
 
 # A metric answers one question about one seat at one moment.
 Metric = Callable[[GameState, PlayerId], int]
@@ -41,15 +41,49 @@ def family_honor(game: GameState, seat: PlayerId) -> int:
     return game.table.seats[seat].honor
 
 
+def provinces_held(game: GameState, seat: PlayerId) -> int:
+    """
+    How many provinces ``seat`` still has.
+
+    The denominator for the other two. Without it a seat holding four full provinces and a seat
+    holding none both report zero cleared and zero empty, which are opposite positions.
+    """
+    return sum(1 for _ in _provinces(game, seat))
+
+
+def provinces_cleared(game: GameState, seat: PlayerId) -> int:
+    """
+    How many of ``seat``'s provinces were emptied and refilled during its own turn.
+
+    A province is revealed face-up as its owner's turn begins. Vacating it refills it **face-down**
+    from the dynasty deck, so a face-down card at the end of a turn marks a province the seat
+    turned over, and a face-up one a card that sat there untouched.
+
+    This is the total, not a verdict on it: recruiting a card and discarding one leave identical
+    boards, and they are opposite signals — a deck delivering what was wanted versus one being dug
+    through.
+
+    Read this only for a seat whose turn has just ended: its own turn begins by revealing every
+    province, so during it the count is zero by construction.
+    """
+    return sum(1 for zone in _provinces(game, seat) if zone.cards and not zone.cards[0].face_up)
+
+
 def empty_provinces(game: GameState, seat: PlayerId) -> int:
     """
-    How many of ``seat``'s provinces hold no card.
+    How many of ``seat``'s provinces hold no card at all.
 
-    A province refills from the dynasty deck as it empties, so this counts only those it could not
-    refill — the seat has recruited or discarded faster than its deck can replace.
+    Vacating a province refills it from the dynasty deck, so this is not the ordinary measure of
+    buying one out — see :func:`provinces_cleared` for that. A province is only truly empty once
+    the dynasty deck has run dry, which makes this a late-game exhaustion signal.
     """
-    return sum(
-        1
+    return sum(1 for zone in _provinces(game, seat) if not zone.cards)
+
+
+def _provinces(game: GameState, seat: PlayerId) -> Iterator[Zone]:
+    """The province zones ``seat`` still holds."""
+    return (
+        zone
         for key, zone in game.table.zones.items()
-        if key.owner is seat and key.role is ZoneRole.PROVINCE and not zone.cards
+        if key.owner is seat and key.role is ZoneRole.PROVINCE
     )

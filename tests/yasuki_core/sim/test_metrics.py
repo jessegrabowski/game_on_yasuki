@@ -8,6 +8,8 @@ from yasuki_core.sim.metrics import (
     empty_provinces,
     family_honor,
     potential_gold_production,
+    provinces_cleared,
+    provinces_held,
 )
 
 from tests.yasuki_core.engine.builders import dealt_table, holding, province_card, put_in_play
@@ -111,6 +113,76 @@ def test_family_honor_can_be_negative():
     ops.set_honor(session.game.table, P1, delta=-7)
 
     assert family_honor(session.game, P1) == -5
+
+
+def test_provinces_held_counts_the_seats_provinces():
+    session = _game()
+    for index in range(3):
+        province_card(session.game, f"card{index}", seat=P1, index=index)
+
+    assert provinces_held(session.game, P1) == 3
+
+
+def test_a_province_emptied_by_an_exhausted_deck_is_still_held():
+    """Held counts the province, not the card in it. Otherwise the denominator would shrink exactly
+    as the numerator it normalizes grows, and a seat running out of dynasty deck would look intact."""
+    session = _game()
+    for index in range(3):
+        province_card(session.game, f"card{index}", seat=P1, index=index)
+    session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)].cards.clear()
+
+    assert provinces_held(session.game, P1) == 3
+    assert empty_provinces(session.game, P1) == 1
+
+
+def test_a_seat_holding_no_provinces_is_told_apart_from_one_holding_full_ones():
+    """The reason this metric exists. Both boards report zero cleared and zero empty; only the
+    denominator says one seat is intact and the other has nothing left."""
+    intact = _game()
+    for index in range(4):
+        province_card(intact.game, f"card{index}", seat=P1, index=index)
+    stripped = _game()
+
+    assert (provinces_held(intact.game, P1), provinces_held(stripped.game, P1)) == (4, 0)
+    assert provinces_cleared(intact.game, P1) == provinces_cleared(stripped.game, P1) == 0
+    assert empty_provinces(intact.game, P1) == empty_provinces(stripped.game, P1) == 0
+
+
+def test_a_face_down_province_card_counts_as_cleared():
+    # Vacating a province refills it face-down, so this is what a cleared one looks like afterwards.
+    session = _game()
+    province_card(session.game, "refilled", seat=P1, index=0, face_up=False)
+    province_card(session.game, "untouched", seat=P1, index=1)
+
+    assert provinces_cleared(session.game, P1) == 1
+
+
+def test_an_untouched_province_card_is_not_counted():
+    session = _game()
+    for index in range(3):
+        province_card(session.game, f"card{index}", seat=P1, index=index)
+
+    assert provinces_cleared(session.game, P1) == 0
+
+
+def test_an_empty_province_is_not_counted_as_cleared():
+    """The two are separate readings of separate situations: a province with nothing in it was not
+    turned over, it ran dry."""
+    session = _game()
+    province_card(session.game, "card", seat=P1, index=0)
+    session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)].cards.clear()
+
+    assert provinces_cleared(session.game, P1) == 0
+    assert empty_provinces(session.game, P1) == 1
+
+
+def test_the_opponents_cleared_provinces_are_not_counted():
+    session = _game()
+    province_card(session.game, "mine", seat=P1, index=0)
+    province_card(session.game, "theirs", seat=PlayerId.P2, index=0, face_up=False)
+
+    assert provinces_cleared(session.game, P1) == 0
+    assert provinces_cleared(session.game, PlayerId.P2) == 1
 
 
 def test_provinces_holding_cards_count_as_none_empty():
