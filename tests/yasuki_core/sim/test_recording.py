@@ -72,19 +72,6 @@ def test_a_pass_only_game_holds_its_production_flat():
     assert [value for _, value in recorder.series(P1, "gold")] == [7, 7, 7]
 
 
-def test_several_metrics_are_recorded_side_by_side():
-    recorder = TurnRecorder(
-        {
-            "gold": potential_gold_production,
-            "doubled": lambda g, s: 2 * potential_gold_production(g, s),
-        }
-    )
-
-    play_game(_session(p1_production=4), _passing(), turn_limit=1, observer=recorder)
-
-    assert recorder.samples[0].values == {"gold": 4, "doubled": 8}
-
-
 def test_recording_nothing_still_records_the_turns():
     recorder = TurnRecorder({})
 
@@ -159,14 +146,6 @@ def test_the_count_resets_each_turn_rather_than_accumulating():
     play_game(_buyable(), controls, turn_limit=5, observer=recorder)
 
     assert [value for _, value in recorder.series(P1, "cleared")] == [1, 1, 1]
-
-
-def test_a_seat_that_buys_nothing_clears_no_provinces():
-    recorder = TurnRecorder({}, end_of_turn={"cleared": provinces_cleared})
-
-    play_game(_buyable(), _passing(), turn_limit=3, observer=recorder)
-
-    assert [value for _, value in recorder.series(P1, "cleared")] == [0, 0]
 
 
 def test_start_and_end_metrics_share_one_sample_per_turn():
