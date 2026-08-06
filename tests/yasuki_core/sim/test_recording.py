@@ -5,10 +5,22 @@ from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.policies import PassPolicy
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.sim.metrics import family_honor, potential_gold_production
+from yasuki_core.engine.table import DeckKey
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.sim.metrics import (
+    family_honor,
+    potential_gold_production,
+    provinces_cleared,
+)
 from yasuki_core.sim.recording import TurnRecorder
 
-from tests.yasuki_core.engine.builders import dealt_table, holding, province_card, put_in_play
+from tests.yasuki_core.engine.builders import (
+    dealt_table,
+    holding,
+    province_card,
+    put_in_play,
+    register,
+)
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -106,3 +118,76 @@ def test_honor_is_recorded_per_seat_across_a_game():
 
     assert recorder.series(P1, "honor") == [(1, 8), (3, 8)]
     assert recorder.series(P2, "honor") == [(2, 3), (4, 3)]
+
+
+class _RecruitFirst:
+    def choose(self, view, actions):
+        return next((a for a in actions if isinstance(a, Recruit)), Pass())
+
+
+def _buyable(gold_cost: int = 2, provinces: int = 2) -> EngineSession:
+    """A session where P1 can afford one province card a turn, and the deck can refill behind it."""
+    session = _session(p1_production=gold_cost)
+    table = session.game.table
+    # Priced like the province cards, so one turn's production buys exactly one of them. Free
+    # refills would let a turn clear a province repeatedly and the per-turn count would drift up.
+    table.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+        register(table, holding(f"deck{i}", owner=P1, gold_cost=gold_cost)) for i in range(6)
+    ]
+    for index in range(provinces):
+        province_card(session.game, f"prov{index}", seat=P1, gold_cost=gold_cost, index=index)
+    return session
+
+
+def test_a_cleared_province_reads_zero_at_turn_start_and_one_at_turn_end():
+    """Why the metric needs the end-of-turn hook at all. A seat's turn begins by revealing every
+    province, so face-down — the mark of one cleared and refilled — cannot exist yet."""
+    recorder = TurnRecorder(
+        {"cleared_at_start": provinces_cleared},
+        end_of_turn={"cleared": provinces_cleared},
+    )
+    controls = {seat: Controls(_RecruitFirst(), AutoAgent()) for seat in PlayerId}
+
+    play_game(_buyable(), controls, turn_limit=1, observer=recorder)
+
+    assert recorder.series(P1, "cleared_at_start") == [(1, 0)]
+    assert recorder.series(P1, "cleared") == [(1, 1)]
+
+
+def test_the_count_resets_each_turn_rather_than_accumulating():
+    """It measures one turn's buying, not the game's. The reveal at the start of each turn is what
+    clears it, so a seat that buys one card a turn reads one every turn, never two."""
+    recorder = TurnRecorder({}, end_of_turn={"cleared": provinces_cleared})
+    controls = {seat: Controls(_RecruitFirst(), AutoAgent()) for seat in PlayerId}
+
+    play_game(_buyable(), controls, turn_limit=5, observer=recorder)
+
+    assert [value for _, value in recorder.series(P1, "cleared")] == [1, 1, 1]
+
+
+def test_a_seat_that_buys_nothing_clears_no_provinces():
+    recorder = TurnRecorder({}, end_of_turn={"cleared": provinces_cleared})
+
+    play_game(_buyable(), _passing(), turn_limit=3, observer=recorder)
+
+    assert [value for _, value in recorder.series(P1, "cleared")] == [0, 0]
+
+
+def test_start_and_end_metrics_share_one_sample_per_turn():
+    recorder = TurnRecorder(
+        {"gold": potential_gold_production},
+        end_of_turn={"cleared": provinces_cleared},
+    )
+
+    play_game(_session(p1_production=4), _passing(), turn_limit=1, observer=recorder)
+
+    assert len(recorder.samples) == 1
+    assert recorder.samples[0].values == {"gold": 4, "cleared": 0}
+
+
+def test_recording_no_end_of_turn_metrics_leaves_the_samples_alone():
+    recorder = TurnRecorder({"gold": potential_gold_production})
+
+    play_game(_session(p1_production=3), _passing(), turn_limit=2, observer=recorder)
+
+    assert [s.values for s in recorder.samples] == [{"gold": 3}, {"gold": 0}]

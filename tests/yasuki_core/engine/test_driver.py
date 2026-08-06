@@ -146,13 +146,18 @@ def test_a_policy_chooses_a_recruit_and_an_agent_pays_for_it():
 
 
 class _Turns:
-    """Records the turn number and active seat each time a turn begins."""
+    """Records the turn number and active seat each time a turn begins, and each seat as its turn
+    ends."""
 
     def __init__(self):
         self.seen: list[tuple[int, PlayerId]] = []
+        self.ended: list[PlayerId] = []
 
     def turn_began(self, game) -> None:
         self.seen.append((game.turn, game.active))
+
+    def turn_ended(self, game, seat: PlayerId) -> None:
+        self.ended.append(seat)
 
 
 def test_the_observer_sees_every_turn_once():
@@ -172,6 +177,9 @@ def test_a_seats_producers_are_straight_at_the_start_of_its_own_turn():
     class Watcher:
         def turn_began(self, game) -> None:
             bowed_by_turn[game.turn] = game.table.cards_by_id["mine"].bowed
+
+        def turn_ended(self, game, seat) -> None:
+            pass
 
     session = _session()
     put_in_play(session.game, holding("mine", owner=PlayerId.P1, gold_production=4))
@@ -196,3 +204,39 @@ def test_a_run_without_an_observer_plays_the_same_game():
     play_game(plain, _random(9), turn_limit=6)
 
     assert watched.log.entries == plain.log.entries
+
+
+def test_every_turn_that_began_also_ended():
+    observer = _Turns()
+
+    play_game(_session(), _passing(), turn_limit=4, observer=observer)
+
+    # Including the last: the loop exits with that turn begun but not yet closed, so a driver that
+    # only fired on the transition would drop the final turn's end-of-turn reading.
+    assert observer.ended == [seat for _, seat in observer.seen]
+
+
+def test_a_turn_ends_with_the_seat_that_played_it_still_untouched():
+    """What makes the hook usable: by the time it fires the next turn has begun, but only the new
+    active seat straightens, so the finished seat's board is exactly as it left it."""
+    ended_bowed: dict[PlayerId, bool] = {}
+
+    class Watcher:
+        def turn_began(self, game) -> None:
+            pass
+
+        def turn_ended(self, game, seat) -> None:
+            ended_bowed[seat] = game.table.cards_by_id["mine"].bowed
+
+    session = _session()
+    put_in_play(session.game, holding("mine", owner=PlayerId.P1, gold_production=4))
+    province_card(session.game, "target", seat=PlayerId.P1, gold_cost=3)
+
+    class RecruitFirst:
+        def choose(self, view: GameView, actions: list[Action]) -> Action:
+            return next((a for a in actions if isinstance(a, Recruit)), Pass())
+
+    controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
+    play_game(session, controls, turn_limit=1, observer=Watcher())
+
+    assert ended_bowed[PlayerId.P1] is True  # bowed to pay during the turn it just finished
