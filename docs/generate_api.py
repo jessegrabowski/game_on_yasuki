@@ -117,6 +117,11 @@ def main() -> int:
                 module = importlib.import_module(module_name)
             except Exception as exc:  # noqa: BLE001 - report, don't abort the sweep
                 failures.append((module_name, f"{type(exc).__name__}: {exc}"))
+                # A missing optional dependency must not prune the page it failed to import.
+                page = API_DIR / f"{module_name}.rst"
+                if page.exists():
+                    stale.discard(page)
+                    package_pages[pkg].append(module_name)
                 continue
             members = public_members(module)
             if not any(members):
@@ -160,6 +165,8 @@ def main() -> int:
         print(f"\n{len(failures)} module(s) failed to import:")
         for name, err in failures:
             print(f"  - {name}: {err}")
+        print("\nTheir pages are unchanged. Run in the docs environment: pixi run -e docs docs-api")
+        return 1
     return 0
 
 
