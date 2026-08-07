@@ -159,6 +159,9 @@ def test_a_run_records_the_metrics_it_was_given():
     for game in played:
         assert game.samples
         assert all(set(s.values) == {"cleared", "bought"} for s in game.samples)
+    # Recording the names is half of it; a run where nothing was ever bought would leave the action
+    # counting unexercised and this test green.
+    assert any(s.values["bought"] for game in played for s in game.samples)
 
 
 def test_a_recruiting_policy_clears_more_provinces_than_one_that_passes():
