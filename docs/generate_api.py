@@ -93,6 +93,40 @@ def write_if_changed(path: Path, text: str) -> None:
     path.write_text(text)
 
 
+def resolves(dotted: str) -> bool:
+    """Whether ``dotted`` still names something importable."""
+    parts = dotted.split(".")
+    for split in range(len(parts), 0, -1):
+        try:
+            obj = importlib.import_module(".".join(parts[:split]))
+        except Exception:  # noqa: BLE001 - any import failure means it is gone
+            continue
+        for attr in parts[split:]:
+            obj = getattr(obj, attr, None)
+            if obj is None:
+                return False
+        return True
+    return False
+
+
+def prune_stale_stubs() -> int:
+    """Delete autosummary stubs whose target no longer exists, and report how many went.
+
+    Sphinx reads every ``.rst`` under ``docs/``, so a stub left behind by a deleted symbol fails the
+    build rather than being ignored. They are gitignored build output, which is what lets them
+    survive a branch switch or a restored CI cache long enough to cause that.
+    """
+    generated = API_DIR / "generated"
+    if not generated.exists():
+        return 0
+    removed = 0
+    for stub in generated.rglob("*.rst"):
+        if not resolves(stub.stem):
+            stub.unlink()
+            removed += 1
+    return removed
+
+
 def main() -> int:
     API_DIR.mkdir(parents=True, exist_ok=True)
     stale = {path for path in API_DIR.glob("*.rst")}
@@ -151,7 +185,10 @@ def main() -> int:
         page.unlink()
 
     written = sum(len(m) for m in package_pages.values()) + len(PACKAGES)
+    pruned = prune_stale_stubs()
     print(f"Wrote {written} module pages under {API_DIR}")
+    if pruned:
+        print(f"Pruned {pruned} stale autosummary stub(s)")
     if failures:
         print(f"\n{len(failures)} module(s) failed to import:")
         for name, err in failures:
