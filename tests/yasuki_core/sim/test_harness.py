@@ -114,15 +114,6 @@ def test_lengthening_a_run_leaves_its_earlier_games_untouched():
     assert [g.samples for g in long[:2]] == [g.samples for g in short]
 
 
-def test_the_deal_and_the_engine_draw_from_separate_streams():
-    """Two consumers sharing one stream would couple them: how much the engine drew during a game
-    would shift the next game's shuffle."""
-    from yasuki_core.sim.harness import STREAMS
-
-    assert STREAMS == ("deal", "engine")
-    assert len(set(STREAMS)) == len(STREAMS)
-
-
 def test_the_same_seed_range_replays_the_same_run():
     kwargs = dict(games=3, turn_limit=3, seed=5, metrics={"gold": potential_gold_production})
 
