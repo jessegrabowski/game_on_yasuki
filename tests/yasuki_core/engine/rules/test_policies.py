@@ -1,4 +1,5 @@
-import random
+import numpy as np
+from numpy.random import default_rng
 
 import pytest
 
@@ -39,7 +40,7 @@ def test_pass_policy_takes_what_it_can_when_passing_is_not_offered():
 
 
 def test_random_policy_only_ever_returns_an_offered_action():
-    policy = RandomPolicy(random.Random(7))
+    policy = RandomPolicy(default_rng(7))
     view = _view()
 
     assert all(policy.choose(view, ACTIONS) in ACTIONS for _ in range(50))
@@ -50,8 +51,8 @@ def test_random_policy_with_the_same_seed_makes_the_same_choices():
     view = _view()
     # One policy drawing twenty times, not twenty policies drawing once — otherwise every draw is
     # the rng's first and the comparison holds for the wrong reason.
-    first = _draws(RandomPolicy(random.Random(3)), view, 20)
-    second = _draws(RandomPolicy(random.Random(3)), view, 20)
+    first = _draws(RandomPolicy(default_rng(3)), view, 20)
+    second = _draws(RandomPolicy(default_rng(3)), view, 20)
 
     assert first == second
     assert len(set(first)) > 1
@@ -60,28 +61,28 @@ def test_random_policy_with_the_same_seed_makes_the_same_choices():
 def test_random_policy_with_different_seeds_diverges():
     # Guards against a policy that ignores its rng and looks deterministic for the wrong reason.
     view = _view()
-    one = _draws(RandomPolicy(random.Random(1)), view, 20)
-    two = _draws(RandomPolicy(random.Random(2)), view, 20)
+    one = _draws(RandomPolicy(default_rng(1)), view, 20)
+    two = _draws(RandomPolicy(default_rng(2)), view, 20)
 
     assert one != two
 
 
-@pytest.mark.parametrize("rng", [random.Random(5), None], ids=["given", "self-seeded"])
+@pytest.mark.parametrize("rng", [default_rng(5), None], ids=["given", "self-seeded"])
 def test_random_policy_does_not_disturb_the_global_random_stream(rng):
-    # A policy reaching for the module-level rng would make every other seeded thing in the process
-    # depend on how many choices it happened to make. The self-seeded case is the one a policy
-    # built by name takes, where reaching for the global stream is the tempting shortcut.
-    random.seed(99)
-    expected = [random.random() for _ in range(3)]
-    random.seed(99)
+    # A policy reaching for a module-level generator would make every other seeded thing in the
+    # process depend on how many choices it happened to make. The self-seeded case is the one a
+    # policy built by name takes, where reaching for the global stream is the tempting shortcut.
+    np.random.seed(99)
+    expected = [float(np.random.random()) for _ in range(3)]
+    np.random.seed(99)
     policy = RandomPolicy(rng)
     for _ in range(10):
         policy.choose(_view(), ACTIONS)
 
-    assert [random.random() for _ in range(3)] == expected
+    assert [float(np.random.random()) for _ in range(3)] == expected
 
 
-@pytest.mark.parametrize("policy", [PassPolicy(), RandomPolicy(random.Random(0))])
+@pytest.mark.parametrize("policy", [PassPolicy(), RandomPolicy(default_rng(0))])
 def test_a_policy_never_invents_an_action(policy):
     view = _view()
 
