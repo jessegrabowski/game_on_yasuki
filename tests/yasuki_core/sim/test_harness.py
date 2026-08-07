@@ -61,6 +61,21 @@ def test_provenance_repeats_on_every_row_so_runs_concatenate():
     assert {row["seed"] for row in first + second} == {1, 2}
 
 
+def test_provenance_that_would_be_overwritten_is_refused():
+    """Silently keeping the turn's value and dropping the provenance would put a column in the
+    table that means one thing on some rows and another on the rest."""
+    played = [_game(0, (1, 2.0))]
+
+    with pytest.raises(ValueError, match="turn"):
+        list(sample_rows(played, turn=99))
+    with pytest.raises(ValueError, match="gold"):
+        list(sample_rows(played, gold=0.0))
+
+
+def test_a_provenance_name_no_row_uses_is_allowed():
+    assert list(sample_rows([_game(0, (1, 2.0))], turns=99))[0]["turns"] == 99
+
+
 def test_both_seats_are_written_not_just_one():
     played = [_game(0, (1, 2.0)), _game(1, (2, 9.0), seat=P2)]
 

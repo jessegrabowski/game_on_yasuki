@@ -138,8 +138,20 @@ def write_csv(path: Path | str, played: Sequence[Game], **run: object) -> None:
 def sample_rows(played: Sequence[Game], **run: object) -> Iterator[dict[str, object]]:
     """One flat row per recorded turn: the run's provenance, then the game, turn, seat and metrics.
 
-    Yields rows in the order the games were played, which is the order their seeds were spawned.
+    Rows come in the order the games were played, which is the order their seeds were spawned.
+
+    Raise ValueError if a ``run`` name is one a row already uses, since the row would keep the
+    turn's value and drop the provenance without saying so.
     """
+    sample = next((sample for game in played for sample in game.samples), None)
+    taken = {"game", "turn", "seat"} | (set(sample.values) if sample else set())
+    clashing = sorted(run.keys() & taken)
+    if clashing:
+        raise ValueError(f"provenance {clashing} would be overwritten by a row's own columns")
+    return _rows(played, run)
+
+
+def _rows(played: Sequence[Game], run: dict[str, object]) -> Iterator[dict[str, object]]:
     for game in played:
         for sample in game.samples:
             yield {
