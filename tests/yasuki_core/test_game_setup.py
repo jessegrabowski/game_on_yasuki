@@ -1,9 +1,5 @@
-import psycopg
-import pytest
-
 from numpy.random import default_rng
 
-from yasuki_core.database import get_connection_string
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -13,17 +9,9 @@ from yasuki_core.game_setup import build_state_from_deck
 # of its own, and inventing one to avoid the import would be a second thing to keep current.
 from yasuki_gui.session import DEMO_DECK_PATH
 
+from tests.yasuki_core.db_guard import requires_db
 
-def _db_available():
-    try:
-        conn = psycopg.connect(get_connection_string())
-        conn.close()
-        return True
-    except psycopg.OperationalError:
-        return False
-
-
-pytestmark = pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+pytestmark = requires_db
 
 
 def _hand_ids(state, seat: PlayerId = PlayerId.P1) -> tuple[str, ...]:

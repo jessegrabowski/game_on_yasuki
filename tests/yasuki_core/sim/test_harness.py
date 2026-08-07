@@ -10,6 +10,8 @@ from yasuki_core.sim.harness import Game, run_games, sample_rows, write_csv
 from yasuki_core.sim.metrics import potential_gold_production, provinces_cleared
 from yasuki_core.sim.recording import Sample
 
+from tests.yasuki_core.db_guard import requires_db
+
 P1, P2 = PlayerId.P1, PlayerId.P2
 DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
 
@@ -104,6 +106,7 @@ def test_writing_a_run_that_recorded_nothing_is_refused(tmp_path):
 # --- the runner, against real games -------------------------------------------------------------
 
 
+@requires_db
 def test_each_game_is_indexed_by_its_position_in_the_run():
     played = run_games(
         DECK,
@@ -118,6 +121,7 @@ def test_each_game_is_indexed_by_its_position_in_the_run():
     assert [game.index for game in played] == [0, 1, 2]
 
 
+@requires_db
 def test_lengthening_a_run_leaves_its_earlier_games_untouched():
     """The property spawning buys over deriving seeds in sequence: adding games appends streams
     rather than shifting them, so a longer run still contains the shorter one."""
@@ -129,6 +133,7 @@ def test_lengthening_a_run_leaves_its_earlier_games_untouched():
     assert [g.samples for g in long[:2]] == [g.samples for g in short]
 
 
+@requires_db
 def test_the_same_seed_range_replays_the_same_run():
     kwargs = dict(games=3, turn_limit=3, seed=5, metrics={"gold": potential_gold_production})
 
@@ -138,6 +143,7 @@ def test_the_same_seed_range_replays_the_same_run():
     assert [g.samples for g in first] == [g.samples for g in second]
 
 
+@requires_db
 def test_different_seeds_produce_different_games():
     """The point of varying the seed. Identical results would mean the shuffle never changed and
     the run measured one game N times."""
@@ -149,6 +155,7 @@ def test_different_seeds_produce_different_games():
     assert [g.samples for g in one] != [g.samples for g in two]
 
 
+@requires_db
 def test_a_run_records_the_metrics_it_was_given():
     played = run_games(
         DECK,
@@ -170,6 +177,7 @@ def test_a_run_records_the_metrics_it_was_given():
     assert any(s.values["bought"] for game in played for s in game.samples)
 
 
+@requires_db
 def test_a_recruiting_policy_clears_more_provinces_than_one_that_passes():
     """The end-to-end check that the harness measures something a deck-builder would act on."""
     kwargs = dict(games=3, turn_limit=6, seed=20, end_of_turn={"cleared": provinces_cleared})
@@ -184,6 +192,7 @@ def test_a_recruiting_policy_clears_more_provinces_than_one_that_passes():
     assert total(passive) == 0
 
 
+@requires_db
 def test_games_within_a_run_differ_from_each_other():
     """A run whose games are all identical reports a point mass dressed as a distribution. This is
     the property spawning exists to provide, and the one a shared stream would destroy."""
