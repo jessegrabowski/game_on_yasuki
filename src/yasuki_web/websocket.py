@@ -2,7 +2,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import asyncio
 import logging
 
-from numpy.random import default_rng
+from numpy.random import SeedSequence, default_rng
 import time
 from datetime import datetime, timezone, timedelta
 from urllib.parse import urlparse
@@ -109,6 +109,22 @@ class GameRoom:
         # came before. Capped to the most recent HISTORY_LIMIT of each.
         self.chat_history: list[dict] = []
         self.log_history: list[dict] = []
+        self._new_game_rng()
+
+    def _new_game_rng(self):
+        """Mint the seed this game's randomness descends from and split it per purpose.
+
+        The seed never reaches a client. A player holding it could derive every shuffle order and
+        coin flip still to come, which is the same cheat as picking them outright.
+        """
+        root = SeedSequence()
+        self.game_seed = root.entropy
+        deal_seed, intent_seed = root.spawn(2)
+        self._deal_rng = default_rng(deal_seed)
+        self._intent_rng = dict(
+            zip(PlayerId, default_rng(intent_seed).spawn(len(PlayerId)), strict=True)
+        )
+        logger.info("Room %s: new game seed %d", self.room_id, self.game_seed)
 
     def _free_seat(self) -> PlayerId | None:
         return next((s for s in PlayerId if s not in self.seats.values()), None)
@@ -222,7 +238,7 @@ class GameRoom:
             )
         else:
             try:
-                intent = intent_from_envelope(envelope)
+                intent = intent_from_envelope(envelope, self._intent_rng[seat])
             except (KeyError, ValueError, TypeError):
                 await ws.send_json(
                     ServerError(
@@ -347,6 +363,7 @@ class GameRoom:
         for seat in self.seats.values():
             self.state.seats[seat].connected = True
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
+        self._new_game_rng()
         self.setup_done = False
 
     async def _run_setup(self):
@@ -370,14 +387,10 @@ class GameRoom:
         creates_map, token_records = await asyncio.to_thread(get_creates_for_cards, card_ids)
         self.state.creatable_tokens = build_token_templates(token_records)
         self._token_names = {tid: tpl.name for tid, tpl in self.state.creatable_tokens.items()}
-        for seat, parsed in self.pending_decks.items():
+        deals = self._deal_rng.spawn(len(self.pending_decks))
+        for (seat, parsed), deal in zip(self.pending_decks.items(), deals, strict=True):
             resolved = resolve_decklist(parsed, records, seat, creates_map)
-            setup_seat(
-                self.state,
-                seat,
-                resolved,
-                rng=default_rng(),
-            )
+            setup_seat(self.state, seat, resolved, rng=deal)
         # In a two-player game the lower-honor seat goes second, its stronghold flipped to its back
         # face (when it has one). A goldfish/solo table (one seat) and an honor tie leave both
         # fronts.

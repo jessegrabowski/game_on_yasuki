@@ -123,8 +123,8 @@ def _script(state: TableState, log: ActionLog) -> None:
         (PlayerId.P1, Draw(DeckKey(PlayerId.P1, Side.FATE))),
         (PlayerId.P1, Draw(DeckKey(PlayerId.P1, Side.FATE))),
         (PlayerId.P1, SearchDeck(DeckKey(PlayerId.P1, Side.FATE))),  # read-only, still recorded
-        (PlayerId.P1, FlipCoin(seed=13)),  # read-only randomizer, still recorded
-        (PlayerId.P2, RollDice(seed=21, sides=20)),
+        (PlayerId.P1, FlipCoin("Heads")),  # read-only randomizer, still recorded
+        (PlayerId.P2, RollDice(12, sides=20)),
         (PlayerId.P2, Shuffle(DeckKey(PlayerId.P2, Side.DYNASTY), seed=99)),
         (PlayerId.P2, Draw(DeckKey(PlayerId.P2, Side.DYNASTY))),  # no province → battlefield
         (PlayerId.P1, SetHonor(delta=-2)),
@@ -200,9 +200,10 @@ def test_apply_and_log_entry_fields_match_application():
     assert entry.intent is intent
 
 
-@pytest.mark.parametrize("intent", [FlipCoin(seed=456), RollDice(seed=789, sides=20)])
-def test_a_read_only_randomizer_is_taped_with_what_reproduces_it(intent):
-    """A coin or die changes no piece, so the tape is the only record that it happened."""
+@pytest.mark.parametrize("intent", [FlipCoin("Heads"), RollDice(19, sides=20)])
+def test_a_read_only_randomizer_is_taped_with_its_outcome(intent):
+    """A coin or die changes no piece, so the tape is the only record that it happened — and it has
+    to carry the face, since nothing downstream can recompute one."""
     state = _start_state()
     log = ActionLog(initial=InitialRecord.from_state(state))
 

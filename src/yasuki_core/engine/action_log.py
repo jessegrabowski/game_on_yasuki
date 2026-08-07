@@ -28,7 +28,7 @@ class LogEntry:
     seat : PlayerId
         The seat that acted.
     intent : Intent
-        The original intent as submitted, not the resolved event; a randomizer's seed rides on
+        The original intent as submitted, not the resolved event; a randomizer's outcome rides on
         it, so the entry replays without further state.
     """
 

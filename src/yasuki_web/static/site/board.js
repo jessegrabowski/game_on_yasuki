@@ -441,33 +441,21 @@ const isTypingTarget = (el) =>
   !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
 // Draw the top card of a seat's deck; the server routes it (fate → hand, dynasty → province).
 export const drawIntent = (owner, side) => intentMessage({ op: 'DRAW', deck: { owner, side } });
-// The 31-bit space the client samples any randomizer's seed from (shuffle, coin, die), matching the
-// server's getrandbits(31).
-const SEED_SPACE = 2 ** 31;
-// The client picks the shuffle seed so the resulting order is reproducible from the action log; the
-// server reshuffles with it and the opponent only learns that a shuffle happened.
+// Randomizers (shuffle, coin, die) carry no seed: the server draws it from the acting seat's
+// stream, so the outcome is not the client's to choose. The opponent only learns that a shuffle
+// happened.
 export const shuffleIntent = (owner, side) =>
-  intentMessage({
-    op: 'SHUFFLE',
-    deck: { owner, side },
-    seed: Math.floor(Math.random() * SEED_SPACE),
-  });
+  intentMessage({ op: 'SHUFFLE', deck: { owner, side } });
 export const flipDeckTopIntent = (owner, side) =>
   intentMessage({ op: 'FLIP_DECK_TOP', deck: { owner, side } });
-// A coin flip and die roll are seeded like a shuffle: the client samples the seed so the outcome is
-// reproducible from the action log, and the server announces the same heads/tails or face to both
-// seats without changing anything on the table.
-export const coinFlipIntent = () =>
-  intentMessage({ op: 'FLIP_COIN', seed: Math.floor(Math.random() * SEED_SPACE) });
+// The server announces the same heads/tails or face to both seats without changing anything on the
+// table.
+export const coinFlipIntent = () => intentMessage({ op: 'FLIP_COIN' });
 export const DIE_SIDES = 6;
 // The fewest sides the server's RollDice accepts; the chooser guards against sending less.
 export const MIN_DIE_SIDES = 2;
 export const diceRollIntent = (sides = DIE_SIDES) =>
-  intentMessage({
-    op: 'ROLL_DICE',
-    seed: Math.floor(Math.random() * SEED_SPACE),
-    value: sides,
-  });
+  intentMessage({ op: 'ROLL_DICE', value: sides });
 // Reveal the deck to its owner: `value` carries the top-N count to log (null for a whole-deck search).
 export const searchDeckIntent = (owner, side, value = null) =>
   intentMessage({ op: 'SEARCH_DECK', deck: { owner, side }, value });
@@ -1345,8 +1333,8 @@ function openDeckSearchPrompt(owner, side, send) {
 }
 
 // The battlefield "Randomize…" chooser: flip a coin, or roll a die with a chosen number of sides
-// (the input defaults to a d6). Both are seeded client-side (see coinFlipIntent) and the server
-// announces the result to both seats. A "Calculate probabilities…" button opens the local draw-odds
+// (the input defaults to a d6). The server rolls both and announces the result to both seats. A
+// "Calculate probabilities…" button opens the local draw-odds
 // calculator as a nested popup, keeping that calculator off the top-level battlefield menu.
 function openRandomizePrompt(send) {
   const { modal, close } = openModalShell('Randomize');

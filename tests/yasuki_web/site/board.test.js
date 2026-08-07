@@ -2672,16 +2672,17 @@ describe('initBoardInteractions — context menu', () => {
     );
   });
 
-  it('flips a seeded coin from the Randomize chooser', () => {
+  it('flips a coin from the Randomize chooser without choosing the outcome', () => {
     openRandomize().children[1]._emit('click', {}); // "Flip a coin"
     assert.equal(sent.at(-1).intent.op, 'FLIP_COIN');
-    assert.equal(typeof sent.at(-1).intent.seed, 'number');
+    // A seed on the wire would be the client picking its own heads/tails.
+    assert.ok(!('seed' in sent.at(-1).intent));
   });
 
-  it('rolls a seeded d6 by default from the Randomize chooser', () => {
+  it('rolls a d6 by default from the Randomize chooser without choosing the face', () => {
     openRandomize().children[2].children[0]._emit('click', {}); // row > "Roll d"
     assert.equal(sent.at(-1).intent.op, 'ROLL_DICE');
-    assert.equal(typeof sent.at(-1).intent.seed, 'number');
+    assert.ok(!('seed' in sent.at(-1).intent));
     assert.equal(sent.at(-1).intent.value, 6);
   });
 

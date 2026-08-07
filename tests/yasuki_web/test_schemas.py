@@ -1,6 +1,10 @@
 import pytest
 from pydantic import ValidationError
 
+from numpy.random import default_rng
+
+from yasuki_core.engine.intents import flip_coin, roll_dice
+
 from yasuki_web.schemas import (
     ChatRequest,
     ClientMessage,
@@ -77,7 +81,9 @@ def test_intent_from_envelope_builds_a_core_intent():
     env = IntentEnvelope(
         op=IntentOp.MOVE_CARD, card_id="c1", to={"kind": "battlefield"}, position=[3.0, 4.0]
     )
-    assert intent_from_envelope(env) == MoveCard("c1", BATTLEFIELD, BoardPos(3.0, 4.0))
+    assert intent_from_envelope(env, default_rng(0)) == MoveCard(
+        "c1", BATTLEFIELD, BoardPos(3.0, 4.0)
+    )
 
 
 def test_move_deck_top_envelope_builds_a_core_intent():
@@ -87,7 +93,7 @@ def test_move_deck_top_envelope_builds_a_core_intent():
         to={"kind": "battlefield"},
         position=[1.0, 2.0],
     )
-    assert intent_from_envelope(env) == MoveDeckTop(
+    assert intent_from_envelope(env, default_rng(0)) == MoveDeckTop(
         DeckKey(PlayerId.P1, Side.FATE), BATTLEFIELD, BoardPos(1.0, 2.0)
     )
 
@@ -98,24 +104,28 @@ def test_move_deck_top_to_a_zone_destination():
         deck={"owner": "P2", "side": "DYNASTY"},
         to={"kind": "zone", "zone": {"owner": "P2", "role": "province", "idx": 0}},
     )
-    assert intent_from_envelope(env) == MoveDeckTop(
+    assert intent_from_envelope(env, default_rng(0)) == MoveDeckTop(
         DeckKey(PlayerId.P2, Side.DYNASTY), ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), None
     )
 
 
 def test_raise_envelope_builds_a_core_intent():
     env = IntentEnvelope(op=IntentOp.RAISE, card_id="c1")
-    assert intent_from_envelope(env) == Raise("c1")
+    assert intent_from_envelope(env, default_rng(0)) == Raise("c1")
 
 
 def test_search_deck_value_decodes_to_limit():
     env = IntentEnvelope(op=IntentOp.SEARCH_DECK, deck={"owner": "P1", "side": "DYNASTY"}, value=4)
-    assert intent_from_envelope(env) == SearchDeck(DeckKey(PlayerId.P1, Side.DYNASTY), limit=4)
+    assert intent_from_envelope(env, default_rng(0)) == SearchDeck(
+        DeckKey(PlayerId.P1, Side.DYNASTY), limit=4
+    )
 
 
 def test_search_deck_without_value_searches_the_whole_deck():
     env = IntentEnvelope(op=IntentOp.SEARCH_DECK, deck={"owner": "P1", "side": "FATE"})
-    assert intent_from_envelope(env) == SearchDeck(DeckKey(PlayerId.P1, Side.FATE), limit=None)
+    assert intent_from_envelope(env, default_rng(0)) == SearchDeck(
+        DeckKey(PlayerId.P1, Side.FATE), limit=None
+    )
 
 
 def test_duplicate_envelope_builds_a_source_spawn_with_a_minted_id():
@@ -129,7 +139,7 @@ def test_duplicate_envelope_builds_a_source_spawn_with_a_minted_id():
     assert msg.intent.source_card_id == "P1-3"
     # The server mints the card id; supplying one, the envelope decodes to a core SpawnCard intent.
     env = msg.intent.model_copy(update={"card_id": "spawn-1"})
-    assert intent_from_envelope(env) == SpawnCard(
+    assert intent_from_envelope(env, default_rng(0)) == SpawnCard(
         card_id="spawn-1", source_card_id="P1-3", position=BoardPos(1.0, 2.0)
     )
 
@@ -143,7 +153,7 @@ def test_create_token_envelope_builds_a_token_spawn():
         }
     )
     env = msg.intent.model_copy(update={"card_id": "spawn-1"})
-    assert intent_from_envelope(env) == SpawnCard(
+    assert intent_from_envelope(env, default_rng(0)) == SpawnCard(
         card_id="spawn-1", token_id="jackal_pack", position=BoardPos(1.0, 2.0)
     )
 
@@ -165,3 +175,69 @@ def test_server_deck_contents_serializes_top_first():
         "deck": {"owner": "P1", "side": "FATE"},
         "cards": [{"id": "t3", "name": "Card t3"}, {"id": "b1", "name": "Card b1"}],
     }
+
+
+# --- randomizers: the server decides, not the client ---------------------------------------------
+
+
+@pytest.mark.parametrize("op", [IntentOp.FLIP_COIN, IntentOp.ROLL_DICE, IntentOp.SHUFFLE])
+def test_a_client_supplied_seed_is_not_carried_on_the_envelope(op):
+    """The defect this replaced: a seat could send its own seed and pick its coin, die or shuffle
+    order. The field is gone from the wire, so an old client sending one is ignored."""
+    env = IntentEnvelope.model_validate({"op": op.value, "seed": 12345})
+
+    assert not hasattr(env, "seed")
+
+
+@pytest.mark.parametrize("stream_seed", [0, 1, 7])
+def test_a_coin_comes_from_the_generator(stream_seed):
+    env = IntentEnvelope(op=IntentOp.FLIP_COIN)
+
+    assert intent_from_envelope(env, default_rng(stream_seed)) == flip_coin(
+        default_rng(stream_seed)
+    )
+
+
+def test_a_die_comes_from_the_generator_and_keeps_the_requested_sides():
+    env = IntentEnvelope(op=IntentOp.ROLL_DICE, value=20)
+
+    rolled = intent_from_envelope(env, default_rng(3))
+
+    assert rolled == roll_dice(default_rng(3), 20)
+    assert rolled.sides == 20
+
+
+def test_a_die_without_a_requested_size_is_a_d6():
+    assert intent_from_envelope(IntentEnvelope(op=IntentOp.ROLL_DICE), default_rng(3)).sides == 6
+
+
+def test_a_die_with_too_few_sides_is_rejected():
+    # Surfaces as a rejected intent rather than a 500: the caller catches ValueError.
+    with pytest.raises(ValueError):
+        intent_from_envelope(IntentEnvelope(op=IntentOp.ROLL_DICE, value=1), default_rng(0))
+
+
+def test_two_shuffles_from_one_stream_draw_different_seeds():
+    """A stream that did not advance would deal the same order every time, which is the bug a
+    per-room generator is meant to remove rather than introduce."""
+    env = IntentEnvelope(op=IntentOp.SHUFFLE, deck={"owner": "P1", "side": "FATE"})
+    rng = default_rng(11)
+
+    first = intent_from_envelope(env, rng)
+    second = intent_from_envelope(env, rng)
+
+    assert first.seed != second.seed
+
+
+def test_a_non_randomizer_leaves_the_seat_stream_where_it_was():
+    """Only randomizers draw, so a seat's shuffles do not depend on how many cards it moved first —
+    the property that makes a room's randomness reproducible from its seed. Probed with a shuffle
+    seed rather than a coin, whose two faces would agree half the time by chance."""
+    shuffle = IntentEnvelope(op=IntentOp.SHUFFLE, deck={"owner": "P1", "side": "FATE"})
+    rng = default_rng(5)
+    intent_from_envelope(IntentEnvelope(op=IntentOp.CREATE_PROVINCE), rng)
+
+    assert (
+        intent_from_envelope(shuffle, rng).seed
+        == intent_from_envelope(shuffle, default_rng(5)).seed
+    )

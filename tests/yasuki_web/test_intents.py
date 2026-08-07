@@ -1,7 +1,9 @@
 import asyncio
 
 import pytest
+from numpy.random import SeedSequence
 
+from yasuki_web import websocket as ws_module
 from yasuki_web.websocket import GameRoom
 from yasuki_web.schemas import IntentEnvelope
 from yasuki_web.rooms import rooms
@@ -250,3 +252,55 @@ def test_chat_and_intents_share_one_ordered_tape(room):
         if not isinstance(entry, SessionEntry)
     ]
     assert kinds == ["intent", "chat", "intent"]
+
+
+# --- the room owns its randomness -----------------------------------------------------------------
+
+
+def _rolls(room, ws, count, sides=1000):
+    """Roll ``count`` dice through the public intent path and return the announced faces."""
+    faces = []
+    for _ in range(count):
+        asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.ROLL_DICE, value=sides)))
+        faces.append(room.log_history[-1]["parts"][-1]["text"])
+    return faces
+
+
+def test_a_seat_rolls_a_different_face_each_time(room):
+    """A generator rebuilt per intent instead of advanced would announce the same face forever, and
+    a d1000 makes that unmistakable rather than a plausible run of luck."""
+    ada, _ = _seat_two(room)
+
+    assert len(set(_rolls(room, ada, 10))) > 1
+
+
+def test_the_seats_do_not_draw_the_same_sequence(room):
+    """Spawned streams, not one seed copied per seat: two players rolling in lockstep would be
+    obvious at the table and is the failure mode a shared seed produces."""
+    ada, kenji = _seat_two(room)
+
+    assert _rolls(room, ada, 5) != _rolls(room, kenji, 5)
+
+
+def test_one_seat_rolling_does_not_move_the_other_seats_stream(monkeypatch, room):
+    """Why the seats get spawned streams rather than sharing one: an opponent's dice must not shift
+    the faces you were going to roll."""
+    monkeypatch.setattr(ws_module, "SeedSequence", lambda: SeedSequence(4321))
+
+    room._new_game_rng()
+    ada, kenji = _seat_two(room)
+    undisturbed = _rolls(room, kenji, 3)
+
+    room._new_game_rng()
+    _rolls(room, ada, 5)  # the opponent rolls first this time
+
+    assert _rolls(room, kenji, 3) == undisturbed
+
+
+def test_a_new_game_draws_a_new_seed(room):
+    """One seed per game: replaying a room's reset must not deal the same board again."""
+    first = room.game_seed
+
+    room._clear_table()
+
+    assert room.game_seed != first
