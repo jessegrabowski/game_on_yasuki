@@ -83,5 +83,6 @@ yasuki_core
     yasuki_core.search <yasuki_core.search>
     yasuki_core.search.boolean_query <yasuki_core.search.boolean_query>
     yasuki_core.search.parse_search <yasuki_core.search.parse_search>
+    yasuki_core.sim.harness <yasuki_core.sim.harness>
     yasuki_core.sim.metrics <yasuki_core.sim.metrics>
     yasuki_core.sim.recording <yasuki_core.sim.recording>
