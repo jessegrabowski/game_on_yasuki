@@ -13,7 +13,7 @@ class Sample:
 
     turn: int
     seat: PlayerId
-    values: dict[str, int]
+    values: dict[str, float]
 
 
 @dataclass(slots=True)
@@ -107,6 +107,6 @@ class TurnRecorder:
                 last_counted = None
         return taken
 
-    def series(self, seat: PlayerId, name: str) -> list[tuple[int, int]]:
+    def series(self, seat: PlayerId, name: str) -> list[tuple[int, float]]:
         """``(turn, value)`` for one seat and one metric, in turn order."""
         return [(s.turn, s.values[name]) for s in self.samples if s.seat is seat]

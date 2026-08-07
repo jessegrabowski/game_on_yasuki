@@ -6,8 +6,9 @@ from yasuki_core.engine.rules.flow import gold_producers
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import Zone, ZoneRole
 
-# A metric answers one question about one seat at one moment.
-Metric = Callable[[GameState, PlayerId], int]
+# A metric answers one question about one seat at one moment. Float rather than int so a
+# ratio — a share of provinces, a rate per turn — is expressible alongside a plain count.
+Metric = Callable[[GameState, PlayerId], float]
 
 
 def potential_gold_production(game: GameState, seat: PlayerId) -> int:

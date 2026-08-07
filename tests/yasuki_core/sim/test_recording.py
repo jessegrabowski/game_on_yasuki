@@ -14,6 +14,7 @@ from yasuki_core.sim.metrics import (
     family_honor,
     potential_gold_production,
     provinces_cleared,
+    provinces_held,
 )
 from yasuki_core.sim.recording import TurnRecorder
 
@@ -419,3 +420,24 @@ def test_ending_a_turn_for_the_wrong_seat_is_refused():
 
     with pytest.raises(RuntimeError, match="the open turn is P1's"):
         recorder.turn_ended(session.game, P2)
+
+
+def test_a_metric_may_report_a_fraction_rather_than_a_count():
+    """Shares and rates are the natural way to compare decks of different sizes, so a metric is not
+    limited to whole numbers. Recorded and returned unrounded — halving it here would be invisible
+    against an int-valued metric."""
+    session = _buyable()
+
+    def share_of_provinces_cleared(game, seat) -> float:
+        held = provinces_held(game, seat)
+        return provinces_cleared(game, seat) / held if held else 0.0
+
+    recorder = TurnRecorder({}, end_of_turn={"share": share_of_provinces_cleared})
+    play_game(
+        session,
+        {s: Controls(RecruitFirst(), AutoAgent()) for s in PlayerId},
+        turn_limit=1,
+        observer=recorder,
+    )
+
+    assert recorder.series(P1, "share") == [(1, 0.5)]
