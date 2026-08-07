@@ -101,7 +101,7 @@ game-on-yasuki = { path = ".", editable = true, extras = ["web", "gui", "docs"] 
 
 [tool.pixi.feature.docs.tasks]
 docs-api = "python docs/generate_api.py"
-docs-build = "sphinx-build -W -j auto -b html docs docs/_build/html"
+docs-build = "sphinx-build -W -b html docs docs/_build/html"
 docs-clean = "rm -rf docs/_build docs/api/generated"
 docs-serve = { cmd = "python -m http.server 8080 --directory docs/_build/html", depends-on = ["docs-build"] }
 
