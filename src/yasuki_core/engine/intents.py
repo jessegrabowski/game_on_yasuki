@@ -1,4 +1,4 @@
-import random
+from numpy.random import default_rng
 from dataclasses import dataclass
 from enum import Enum
 from typing import ClassVar
@@ -419,13 +419,13 @@ class RollDice:
 def coin_flip_outcome(seed: int) -> str:
     """Return the reproducible coin result, ``"Heads"`` or ``"Tails"``, for a flip's ``seed``. Pure
     in the seed so the handler, the game-log line, and a replay all agree."""
-    return "Heads" if random.Random(seed).getrandbits(1) else "Tails"
+    return "Heads" if default_rng(seed).integers(2) else "Tails"
 
 
 def dice_roll_outcome(seed: int, sides: int) -> int:
     """Return the reproducible die face, an int in ``1..sides``, for a roll's ``seed`` and
     ``sides``. Pure in its arguments, mirroring ``coin_flip_outcome``."""
-    return random.Random(seed).randint(1, sides)
+    return int(default_rng(seed).integers(1, sides + 1))
 
 
 Intent = (
@@ -782,7 +782,7 @@ def _draw(state: TableState, seat: PlayerId, intent: Draw) -> list[Event]:
 def _shuffle(state: TableState, seat: PlayerId, intent: Shuffle) -> list[Event]:
     if not owns_deck(state, seat, intent.deck):
         return []
-    state.decks[intent.deck].shuffle(seed=intent.seed)
+    state.decks[intent.deck].shuffle(default_rng(intent.seed))
     state.seq += 1
     return [Event(state.seq, seat, intent)]
 

@@ -1,3 +1,5 @@
+from numpy.random import Generator
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos
 from yasuki_core.engine.zones import ProvinceZone
@@ -17,12 +19,11 @@ def setup_seat(
     seat: PlayerId,
     resolved: ResolvedDeck,
     *,
-    dynasty_seed: int,
-    fate_seed: int,
+    rng: Generator,
 ) -> None:
     """Build ``seat``'s table slice from its resolved deck and deal its opening table.
 
-    Load the dynasty and fate cards into their decks face-down, shuffling each with the given seed,
+    Load the dynasty and fate cards into their decks face-down, shuffling each from the given generator,
     open the stronghold's provinces and fill each one face-down from the dynasty deck, draw the
     stronghold's ``starting_hand_size`` fate cards face-up into the hand, fold each sensei's
     gold-production and province-strength deltas into the stronghold, deal the pre-game permanents
@@ -38,13 +39,12 @@ def setup_seat(
         The seat being set up.
     resolved : ResolvedDeck
         The seat's cards, as produced by ``resolve_decklist``.
-    dynasty_seed : int
-        Seed for the dynasty deck shuffle.
-    fate_seed : int
-        Seed for the fate deck shuffle.
+    rng : numpy.random.Generator
+        Split into one stream per deck, so how far one shuffle draws cannot move the other.
     """
-    _load_deck(state, DeckKey(seat, Side.DYNASTY), resolved.dynasty, dynasty_seed)
-    _load_deck(state, DeckKey(seat, Side.FATE), resolved.fate, fate_seed)
+    dynasty_rng, fate_rng = rng.spawn(2)
+    _load_deck(state, DeckKey(seat, Side.DYNASTY), resolved.dynasty, dynasty_rng)
+    _load_deck(state, DeckKey(seat, Side.FATE), resolved.fate, fate_rng)
     for idx in range(_province_count(resolved)):
         state.zones[ZoneKey(seat, ZoneRole.PROVINCE, idx)] = ProvinceZone(owner=seat)
     _apply_sensei_modifiers(resolved)
@@ -175,10 +175,10 @@ def _place_pregame(state: TableState, seat: PlayerId, cards: list[L5RCard]) -> N
         state.positions[card.id] = PREGAME_UNPLACED
 
 
-def _load_deck(state: TableState, key: DeckKey, cards: list[L5RCard], seed: int) -> None:
+def _load_deck(state: TableState, key: DeckKey, cards: list[L5RCard], rng: Generator) -> None:
     for card in cards:
         card.turn_face_down()
         state.cards_by_id[card.id] = card
     deck = state.decks[key]
     deck.cards = list(cards)
-    deck.shuffle(seed)
+    deck.shuffle(rng)

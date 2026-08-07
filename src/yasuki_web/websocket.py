@@ -1,7 +1,8 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import asyncio
 import logging
-import random
+
+from numpy.random import default_rng
 import time
 from datetime import datetime, timezone, timedelta
 from urllib.parse import urlparse
@@ -375,8 +376,7 @@ class GameRoom:
                 self.state,
                 seat,
                 resolved,
-                dynasty_seed=random.getrandbits(31),
-                fate_seed=random.getrandbits(31),
+                rng=default_rng(),
             )
         # In a two-player game the lower-honor seat goes second, its stronghold flipped to its back
         # face (when it has one). A goldfish/solo table (one seat) and an honor tie leave both

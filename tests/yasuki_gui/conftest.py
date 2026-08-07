@@ -3,6 +3,8 @@ import gc
 import pytest
 import tkinter as tk
 
+from numpy.random import default_rng
+
 from yasuki_gui.config import Hotkeys
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.session import build_demo_state
@@ -51,7 +53,7 @@ def loaded(root):
     root.update_idletasks()
     root.update()
     f.configure_hotkeys(Hotkeys())
-    state, seat = build_demo_state()
+    state, seat = build_demo_state(default_rng(7))
     f.load_state(state, seat)
     return f, state
 

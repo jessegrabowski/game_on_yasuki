@@ -1,5 +1,6 @@
-import random
 from typing import Protocol
+
+from numpy.random import Generator, default_rng
 
 from yasuki_core.engine.rules.actions import Action, Pass, Recruit
 from yasuki_core.engine.redaction import HiddenCard
@@ -44,18 +45,18 @@ class PassPolicy:
 class RandomPolicy:
     """Picks uniformly among the offered actions.
 
-    Takes its own :class:`random.Random` rather than reaching for the module-level one, so two runs
-    of the same simulation with the same seed play the same game. Built without one it seeds itself,
-    which is fine for a smoke run and useless for a reproducible one.
+    Takes its own :class:`numpy.random.Generator` rather than reaching for a module-level one, so
+    two runs of the same simulation with the same seed play the same game. Built without one it
+    seeds itself, which is fine for a smoke run and useless for a reproducible one.
     """
 
     name = "random"
 
-    def __init__(self, rng: random.Random | None = None):
-        self._rng = random.Random() if rng is None else rng
+    def __init__(self, rng: Generator | None = None):
+        self._rng = default_rng() if rng is None else rng
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
-        return self._rng.choice(actions)
+        return actions[int(self._rng.integers(len(actions)))]
 
 
 class EconomicPolicy:
@@ -103,7 +104,7 @@ def make_policy(name: str) -> Policy:
     """Build the policy registered under ``name``.
 
     A stochastic policy seeds itself here; construct it directly with the run's
-    :class:`random.Random` when the run has to be reproducible.
+    :class:`numpy.random.Generator` when the run has to be reproducible.
 
     Raises
     ------

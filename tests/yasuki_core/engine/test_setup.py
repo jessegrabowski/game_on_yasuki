@@ -4,6 +4,8 @@ from yasuki_core.engine.setup import (
     PREGAME_UNPLACED,
 )
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
+from numpy.random import default_rng
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyCard
@@ -24,9 +26,9 @@ def _resolved(owner=PlayerId.P1, dynasty_n=10, fate_n=10):
     return ResolvedDeck(dynasty=dynasty, fate=fate)
 
 
-def _setup(owner=PlayerId.P1, dynasty_seed=1, fate_seed=2):
+def _setup(owner=PlayerId.P1, seed=1):
     state = TableState.empty_two_seat()
-    setup_seat(state, owner, _resolved(owner), dynasty_seed=dynasty_seed, fate_seed=fate_seed)
+    setup_seat(state, owner, _resolved(owner), rng=default_rng(seed))
     return state
 
 
@@ -67,7 +69,7 @@ def test_province_count_comes_from_the_stronghold():
     resolved.pre_game.append(
         StrongholdCard(id="sh", name="Wall", side=Side.STRONGHOLD, province_count=5)
     )
-    setup_seat(state, PlayerId.P1, resolved, dynasty_seed=1, fate_seed=2)
+    setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
     assert len(_provinces(state)) == 5
 
 
@@ -96,12 +98,12 @@ def test_starting_hand_size_comes_from_the_stronghold():
     resolved.pre_game.append(
         StrongholdCard(id="sh", name="Wall", side=Side.STRONGHOLD, starting_hand_size=3)
     )
-    setup_seat(state, PlayerId.P1, resolved, dynasty_seed=1, fate_seed=2)
+    setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
     assert len(state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards) == 3
 
 
 def test_shuffle_order_is_reproducible_for_a_seed():
-    assert _dynasty_order(_setup(dynasty_seed=7)) == _dynasty_order(_setup(dynasty_seed=7))
+    assert _dynasty_order(_setup(seed=7)) == _dynasty_order(_setup(seed=7))
 
 
 def test_pre_game_cards_are_dealt_face_up_as_loose_battlefield_cards():
@@ -111,7 +113,7 @@ def test_pre_game_cards_are_dealt_face_up_as_loose_battlefield_cards():
     sensei = SenseiCard(id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1)
     resolved.pre_game.extend([stronghold, sensei])
 
-    setup_seat(state, PlayerId.P1, resolved, dynasty_seed=1, fate_seed=2)
+    setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
 
     assert stronghold in state.battlefield.cards and sensei in state.battlefield.cards
     assert stronghold.face_up and sensei.face_up
@@ -126,7 +128,7 @@ def _setup_with_pregame(*pre_game):
     state = TableState.empty_two_seat()
     resolved = _resolved()
     resolved.pre_game.extend(pre_game)
-    setup_seat(state, PlayerId.P1, resolved, dynasty_seed=1, fate_seed=2)
+    setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
     return state
 
 
@@ -237,3 +239,15 @@ def test_a_single_faced_second_player_stronghold_is_dealt_front_up():
 
     assert second is PlayerId.P2
     assert p2_sh.showing_back is False
+
+
+def test_the_fate_shuffle_does_not_move_when_the_dynasty_deck_changes_size():
+    """What splitting the streams buys. Sharing one generator would make the dynasty shuffle's
+    length shift the fate shuffle, so adding a dynasty card would silently change opening hands."""
+
+    def fate_order(dynasty_n: int) -> list[str]:
+        state = TableState.empty_two_seat()
+        setup_seat(state, PlayerId.P1, _resolved(dynasty_n=dynasty_n), rng=default_rng(11))
+        return [card.id for card in state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards]
+
+    assert fate_order(10) == fate_order(14)

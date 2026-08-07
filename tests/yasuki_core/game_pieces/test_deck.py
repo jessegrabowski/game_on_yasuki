@@ -1,5 +1,7 @@
 import pytest
 
+from numpy.random import default_rng
+
 from yasuki_core.game_pieces.deck import Deck, FateDeck, DynastyDeck
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.dynasty import DynastyCard
@@ -39,8 +41,8 @@ def test_shuffle_is_deterministic_with_seed():
     cards = [mk_fate(i) for i in range(5)]
     d1 = Deck.build(cards)
     d2 = Deck.build(cards)
-    d1.shuffle(seed=123)
-    d2.shuffle(seed=123)
+    d1.shuffle(default_rng(123))
+    d2.shuffle(default_rng(123))
     assert [c.id for c in d1.cards] == [c.id for c in d2.cards]
 
 

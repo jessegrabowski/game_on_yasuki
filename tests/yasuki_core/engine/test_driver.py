@@ -1,4 +1,4 @@
-import random
+from numpy.random import default_rng
 
 import pytest
 
@@ -26,7 +26,7 @@ def _passing(seats=PlayerId) -> dict[PlayerId, Controls]:
 
 
 def _random(seed: int) -> dict[PlayerId, Controls]:
-    rng = random.Random(seed)
+    rng = default_rng(seed)
     return {seat: Controls(RandomPolicy(rng), AutoAgent()) for seat in PlayerId}
 
 
