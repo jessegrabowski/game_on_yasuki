@@ -8,7 +8,9 @@ from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionResponse, DiscardToHandSize
 from yasuki_core.engine.rules.policies import PassPolicy, RandomPolicy
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.runner import Controls, play_game
+from yasuki_core.engine.rules.log import Act, Answer
+from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.runner import Controls, play_game, run_game
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import dealt_table, holding, province_card, put_in_play
@@ -105,6 +107,8 @@ def test_a_decision_goes_to_the_seat_that_owes_it():
     asked: list[tuple[PlayerId, PlayerId]] = []
 
     class Recording:
+        name = "recording"
+
         def decide(self, request, view: GameView) -> DecisionResponse:
             asked.append((view.viewer, session.game.active))
             return DecisionResponse(())
@@ -225,3 +229,61 @@ def test_a_turn_ends_with_the_seat_that_played_it_still_untouched():
     play_game(session, controls, turn_limit=1, observer=Watcher())
 
     assert ended_bowed[PlayerId.P1] is True  # bowed to pay during the turn it just finished
+
+
+def test_stepping_yields_each_input_the_engine_accepted():
+    """The vocabulary is the log's, so a caller stepping a game sees exactly what the tape records."""
+    session = _session()
+
+    steps = list(run_game(session, _passing(), turn_limit=2))
+
+    assert steps == [e for e in session.log.entries if isinstance(e, (Act, Answer))]
+    assert all(isinstance(s, (Act, Answer)) for s in steps)
+
+
+def test_nothing_happens_until_the_iterator_is_advanced():
+    # A generator that ran on call would make "build the run, then decide" impossible.
+    session = _session()
+
+    run_game(session, _passing(), turn_limit=4)
+
+    assert session.game.turn == 1
+    assert session.log.entries == []
+
+
+def test_a_run_stopped_part_way_leaves_the_game_where_it_stopped():
+    """What an interactive caller needs: pause after N steps, inspect, and the board is mid-game
+    rather than played out."""
+    session = _session()
+
+    steps = run_game(session, _passing(), turn_limit=20)
+    for _ in range(3):
+        next(steps)
+    steps.close()
+
+    assert len(session.log.entries) == 3
+    assert not session.game.game_over
+    assert (session.game.turn, session.game.phase) == (1, Phase.DYNASTY)
+
+
+def test_an_abandoned_turn_is_never_closed():
+    """Stopping mid-turn leaves that turn unmeasured rather than half-measured, which is what keeps
+    a recorder's rows complete."""
+    observer = _Turns()
+
+    steps = run_game(_session(), _passing(), turn_limit=20, observer=observer)
+    next(steps)
+    steps.close()
+
+    assert observer.seen == [(1, PlayerId.P1)]
+    assert observer.ended == []
+
+
+def test_playing_and_stepping_reach_the_same_game():
+    played, stepped = _session(), _session()
+
+    play_game(played, _random(7), turn_limit=8)
+    for _ in run_game(stepped, _random(7), turn_limit=8):
+        pass
+
+    assert played.log.entries == stepped.log.entries

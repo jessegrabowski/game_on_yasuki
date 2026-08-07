@@ -10,6 +10,14 @@ yasuki_core.engine.rules.policies
 .. autosummary::
     :toctree: generated/
 
+    EconomicPolicy
     PassPolicy
     Policy
     RandomPolicy
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: generated/
+
+    make_policy

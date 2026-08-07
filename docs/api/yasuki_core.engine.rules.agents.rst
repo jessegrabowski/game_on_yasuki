@@ -12,3 +12,11 @@ yasuki_core.engine.rules.agents
 
     Agent
     AutoAgent
+    PayingAgent
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: generated/
+
+    make_agent

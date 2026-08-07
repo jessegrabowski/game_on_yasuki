@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
+from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.policies import Policy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.state import GameState
@@ -203,6 +204,77 @@ class Observer(Protocol):
         ...
 
 
+def run_game(
+    session: EngineSession,
+    controls: dict[PlayerId, Controls],
+    *,
+    turn_limit: int,
+    observer: Observer | None = None,
+) -> Iterator[Act | Answer]:
+    """
+    Play ``session`` a step at a time, yielding each input as the engine accepts it.
+
+    Nothing happens until the iterator is advanced, and stopping early leaves the game exactly where
+    it stopped — which is what lets a caller pause, inspect between steps, or cancel a run. A turn
+    abandoned that way is never closed, so an observer never sees it end and a recorder does not
+    report it.
+
+    Parameters
+    ----------
+    session : EngineSession
+        The session to drive. Left at whatever state play reached.
+    controls : dict mapping PlayerId to Controls
+        What drives each seat. Every seat that could act must appear.
+    turn_limit : int
+        The last turn to play. Games do not end on their own except by the Legacy whiff, so this
+        is what bounds a run.
+    observer : Observer, optional
+        Told when each turn begins and ends, including the first and the last. Default None, which
+        costs nothing.
+
+    Yields
+    ------
+    Act or Answer
+        The input just applied, in the vocabulary the game log records — an action a policy chose,
+        or a decision an agent answered.
+
+    Raises
+    ------
+    RuntimeError
+        If a seat has no legal action, or a policy returns one it was not offered.
+    """
+    game = session.game
+    watched: int | None = None
+    playing: PlayerId | None = None
+    while not game.game_over and game.turn <= turn_limit:
+        if observer is not None and game.turn != watched:
+            if playing is not None:
+                observer.turn_ended(game, playing)
+            watched, playing = game.turn, game.active
+            observer.turn_began(game)
+        pending = game.pending
+        if pending is not None:
+            seat = pending.seat
+            response = controls[seat].agent.decide(pending, session.project(seat))
+            session.submit(seat, response)
+            yield Answer(seat, response)
+            continue
+
+        seat = game.active
+        actions = session.legal_actions(seat)
+        if not actions:
+            raise RuntimeError(f"{seat.name} has no legal action in {game.phase}")
+        chosen = controls[seat].policy.choose(session.project(seat), actions)
+        if chosen not in actions:
+            raise RuntimeError(f"{seat.name}'s policy chose {chosen}, which was not offered")
+        session.act(seat, chosen)
+        yield Act(seat, chosen)
+
+    # The turn the run stopped on has begun but never been closed by the loop.
+    if observer is not None and playing is not None:
+        observer.turn_ended(game, playing)
+
+
 def play_game(
     session: EngineSession,
     controls: dict[PlayerId, Controls],
@@ -214,7 +286,8 @@ def play_game(
     Play ``session`` to its end or to ``turn_limit``, whichever comes first, mutating it in place.
 
     Stops only on those two conditions. A driver that inferred its own stopping point would
-    silently truncate a run.
+    silently truncate a run. Drives :func:`run_game` to exhaustion; take that instead when a caller
+    needs to act between steps.
 
     Parameters
     ----------
@@ -234,31 +307,5 @@ def play_game(
     RuntimeError
         If a seat has no legal action, or a policy returns one it was not offered.
     """
-    game = session.game
-    watched: int | None = None
-    playing: PlayerId | None = None
-    while not game.game_over and game.turn <= turn_limit:
-        if observer is not None and game.turn != watched:
-            if playing is not None:
-                observer.turn_ended(game, playing)
-            watched, playing = game.turn, game.active
-            observer.turn_began(game)
-        pending = game.pending
-        if pending is not None:
-            seat = pending.seat
-            view = session.project(seat)
-            session.submit(seat, controls[seat].agent.decide(pending, view))
-            continue
-
-        seat = game.active
-        actions = session.legal_actions(seat)
-        if not actions:
-            raise RuntimeError(f"{seat.name} has no legal action in {game.phase}")
-        chosen = controls[seat].policy.choose(session.project(seat), actions)
-        if chosen not in actions:
-            raise RuntimeError(f"{seat.name}'s policy chose {chosen}, which was not offered")
-        session.act(seat, chosen)
-
-    # The turn the run stopped on has begun but never been closed by the loop.
-    if observer is not None and playing is not None:
-        observer.turn_ended(game, playing)
+    for _ in run_game(session, controls, turn_limit=turn_limit, observer=observer):
+        pass
