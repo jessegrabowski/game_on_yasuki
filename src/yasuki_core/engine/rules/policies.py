@@ -1,4 +1,5 @@
 import random
+from collections.abc import Callable
 from typing import Protocol
 
 from yasuki_core.engine.rules.actions import Action, Pass, Recruit
@@ -18,7 +19,15 @@ class Policy(Protocol):
     Policies read the seat's :class:`GameView` rather than the game itself, so one cannot see the
     opponent's hand and works unchanged over a network. The view carries live card objects, so a
     policy weighing a card's Gold Production or Gold Cost has them to hand.
+
+    Attributes
+    ----------
+    name : str
+        How this policy is reported. A simulation's numbers describe a deck *under a policy*, so a
+        result quoted without one cannot be compared against anything.
     """
+
+    name: str
 
     def choose(self, view: GameView, actions: list[Action]) -> Action: ...
 
@@ -26,6 +35,8 @@ class Policy(Protocol):
 class PassPolicy:
     """Passes whenever it can. The baseline a metric is validated against: a game played this way
     barely changes, so its numbers are checkable by hand."""
+
+    name = "pass"
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
         return next((action for action in actions if isinstance(action, Pass)), actions[0])
@@ -37,6 +48,8 @@ class RandomPolicy:
     Takes its own :class:`random.Random` rather than reaching for the module-level one, so two runs
     of the same simulation with the same seed play the same game.
     """
+
+    name = "random"
 
     def __init__(self, rng: random.Random):
         self._rng = rng
@@ -66,6 +79,8 @@ class EconomicPolicy:
     the change incomparable.
     """
 
+    name = "economic"
+
     def choose(self, view: GameView, actions: list[Action]) -> Action:
         purchases = [
             action
@@ -76,6 +91,40 @@ class EconomicPolicy:
             return next((action for action in actions if isinstance(action, Pass)), actions[0])
         cards = _readable_province_cards(view)
         return min(purchases, key=lambda purchase: _rank(cards[purchase.card_id]))
+
+
+POLICIES: dict[str, Callable[[random.Random], Policy]] = {
+    PassPolicy.name: lambda rng: PassPolicy(),
+    RandomPolicy.name: RandomPolicy,
+    EconomicPolicy.name: lambda rng: EconomicPolicy(),
+}
+"""Every policy a run can be configured with, by name.
+
+Each entry takes the run's :class:`random.Random` so a caller picking a policy by name never has to
+know which ones are stochastic, and a seeded run stays reproducible whichever it picks.
+"""
+
+
+def make_policy(name: str, rng: random.Random) -> Policy:
+    """Build the policy registered under ``name``.
+
+    Parameters
+    ----------
+    name : str
+        A key of :data:`POLICIES`.
+    rng : random.Random
+        The run's source of randomness, passed to every policy whether or not it draws on it.
+
+    Raises
+    ------
+    KeyError
+        If no policy is registered under ``name``, listing those that are.
+    """
+    try:
+        build = POLICIES[name]
+    except KeyError:
+        raise KeyError(f"unknown policy {name!r}; known: {', '.join(sorted(POLICIES))}") from None
+    return build(rng)
 
 
 def _rank(card: DynastyCard) -> tuple[int, int, str]:
