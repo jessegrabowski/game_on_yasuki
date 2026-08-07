@@ -50,8 +50,8 @@ yasuki_core.engine.intents
 .. autosummary::
 
     apply_intent
-    coin_flip_outcome
-    dice_roll_outcome
+    flip_coin
+    roll_dice
 
 .. automodule:: yasuki_core.engine.intents
     :members:
