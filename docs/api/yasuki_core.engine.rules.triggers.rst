@@ -1,21 +1,17 @@
 yasuki_core.engine.rules.triggers
 =================================
 
-.. automodule:: yasuki_core.engine.rules.triggers
-
 .. currentmodule:: yasuki_core.engine.rules.triggers
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     TriggerContext
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     apply_effect
     at_cap
@@ -28,3 +24,7 @@ yasuki_core.engine.rules.triggers
     resolve_effects
     resume_cascade
     sincerity_seed_targets
+
+.. automodule:: yasuki_core.engine.rules.triggers
+    :members:
+    :undoc-members:

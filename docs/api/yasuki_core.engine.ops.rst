@@ -1,14 +1,11 @@
 yasuki_core.engine.ops
 ======================
 
-.. automodule:: yasuki_core.engine.ops
-
 .. currentmodule:: yasuki_core.engine.ops
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     attach
     bring_to_top
@@ -29,3 +26,7 @@ yasuki_core.engine.ops
     set_position
     spawn_token
     straighten
+
+.. automodule:: yasuki_core.engine.ops
+    :members:
+    :undoc-members:

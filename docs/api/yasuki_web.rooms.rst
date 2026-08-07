@@ -1,14 +1,11 @@
 yasuki_web.rooms
 ================
 
-.. automodule:: yasuki_web.rooms
-
 .. currentmodule:: yasuki_web.rooms
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     CreateRoomRequest
     JoinRoomRequest
@@ -16,7 +13,6 @@ yasuki_web.rooms
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     create_room
     delete_room
@@ -24,3 +20,7 @@ yasuki_web.rooms
     get_room_players
     list_rooms
     public_room
+
+.. automodule:: yasuki_web.rooms
+    :members:
+    :undoc-members:

@@ -1,8 +1,6 @@
 yasuki_core.search
 ==================
 
-.. automodule:: yasuki_core.search
-
 .. currentmodule:: yasuki_core.search
 
 .. rubric:: Re-exported
@@ -17,3 +15,7 @@ yasuki_core.search
     parse_search.parse_search_query
     parse_search.parse_token
     parse_search.tokenize_query
+
+.. automodule:: yasuki_core.search
+    :members:
+    :undoc-members:

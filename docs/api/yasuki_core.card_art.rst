@@ -1,21 +1,17 @@
 yasuki_core.card_art
 ====================
 
-.. automodule:: yasuki_core.card_art
-
 .. currentmodule:: yasuki_core.card_art
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     CustomPrint
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     art_rect
     back_era_for_set
@@ -28,3 +24,7 @@ yasuki_core.card_art
     mon_overlays
     overlays_for
     patches_for
+
+.. automodule:: yasuki_core.card_art
+    :members:
+    :undoc-members:

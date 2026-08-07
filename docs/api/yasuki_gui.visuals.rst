@@ -1,8 +1,6 @@
 yasuki_gui.visuals
 ==================
 
-.. automodule:: yasuki_gui.visuals
-
 .. currentmodule:: yasuki_gui.visuals
 
 .. rubric:: Re-exported
@@ -14,3 +12,7 @@ yasuki_gui.visuals
     sprite.CardSpriteVisual
     visual.MarqueeBoxVisual
     zone.ZoneVisual
+
+.. automodule:: yasuki_gui.visuals
+    :members:
+    :undoc-members:

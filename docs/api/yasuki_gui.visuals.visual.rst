@@ -1,14 +1,11 @@
 yasuki_gui.visuals.visual
 =========================
 
-.. automodule:: yasuki_gui.visuals.visual
-
 .. currentmodule:: yasuki_gui.visuals.visual
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     MarqueeBoxVisual
     Visual
@@ -16,6 +13,9 @@ yasuki_gui.visuals.visual
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     draw_count_pill
+
+.. automodule:: yasuki_gui.visuals.visual
+    :members:
+    :undoc-members:

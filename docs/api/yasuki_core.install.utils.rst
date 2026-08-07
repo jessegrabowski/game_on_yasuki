@@ -1,14 +1,11 @@
 yasuki_core.install.utils
 =========================
 
-.. automodule:: yasuki_core.install.utils
-
 .. currentmodule:: yasuki_core.install.utils
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     clean_string
     expected_card_image_path
@@ -18,3 +15,7 @@ yasuki_core.install.utils
     normalize_name
     process_string
     strip_title
+
+.. automodule:: yasuki_core.install.utils
+    :members:
+    :undoc-members:

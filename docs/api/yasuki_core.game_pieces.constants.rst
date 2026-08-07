@@ -1,14 +1,11 @@
 yasuki_core.game_pieces.constants
 =================================
 
-.. automodule:: yasuki_core.game_pieces.constants
-
 .. currentmodule:: yasuki_core.game_pieces.constants
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     AttachmentType
     DynastyType
@@ -18,3 +15,7 @@ yasuki_core.game_pieces.constants
     Side
     SpecialType
     Timing
+
+.. automodule:: yasuki_core.game_pieces.constants
+    :members:
+    :undoc-members:

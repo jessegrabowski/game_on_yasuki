@@ -1,16 +1,17 @@
 yasuki_core
 ===========
 
-.. automodule:: yasuki_core
-
 .. currentmodule:: yasuki_core
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     setup_logging
+
+.. automodule:: yasuki_core
+    :members:
+    :undoc-members:
 
 .. rubric:: Submodules
 

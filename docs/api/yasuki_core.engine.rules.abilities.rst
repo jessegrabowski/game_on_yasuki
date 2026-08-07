@@ -1,14 +1,11 @@
 yasuki_core.engine.rules.abilities
 ==================================
 
-.. automodule:: yasuki_core.engine.rules.abilities
-
 .. currentmodule:: yasuki_core.engine.rules.abilities
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     Ability
     InvestAbility
@@ -17,7 +14,6 @@ yasuki_core.engine.rules.abilities
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     ability_for
     activatable
@@ -36,3 +32,7 @@ yasuki_core.engine.rules.abilities
     register_invest
     register_production_boost
     spend_wealth
+
+.. automodule:: yasuki_core.engine.rules.abilities
+    :members:
+    :undoc-members:

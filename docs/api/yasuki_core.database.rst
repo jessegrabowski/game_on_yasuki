@@ -1,14 +1,11 @@
 yasuki_core.database
 ====================
 
-.. automodule:: yasuki_core.database
-
 .. currentmodule:: yasuki_core.database
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     all_card_ids
     apply_sslmode
@@ -48,3 +45,7 @@ yasuki_core.database
     query_types_by_deck
     query_types_with_stat
     search_cards
+
+.. automodule:: yasuki_core.database
+    :members:
+    :undoc-members:

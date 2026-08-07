@@ -1,14 +1,11 @@
 yasuki_web.cards
 ================
 
-.. automodule:: yasuki_web.cards
-
 .. currentmodule:: yasuki_web.cards
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     art_layout
     get_card
@@ -22,3 +19,7 @@ yasuki_web.cards
     list_sets
     lookup_cards_by_name
     random_cards
+
+.. automodule:: yasuki_web.cards
+    :members:
+    :undoc-members:

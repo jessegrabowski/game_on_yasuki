@@ -1,7 +1,6 @@
 import importlib
 import inspect
 import pkgutil
-import shutil
 import sys
 from pathlib import Path
 
@@ -62,31 +61,45 @@ def rst_for_module(module_name: str, classes, functions, reexported=()) -> str:
         module_name,
         "=" * len(module_name),
         "",
-        f".. automodule:: {module_name}",
-        "",
         f".. currentmodule:: {module_name}",
         "",
     ]
-    for rubric, names, toctree in (
-        ("Classes", classes, True),
-        ("Functions", functions, True),
-        ("Re-exported", reexported, False),
+    for rubric, names in (
+        ("Classes", classes),
+        ("Functions", functions),
+        ("Re-exported", reexported),
     ):
         if not names:
             continue
-        lines += [f".. rubric:: {rubric}", "", ".. autosummary::"]
-        if toctree:
-            lines.append("    :toctree: generated/")
-        lines.append("")
+        lines += [f".. rubric:: {rubric}", "", ".. autosummary::", ""]
         lines += [f"    {name}" for name in names]
         lines.append("")
+    # The members are documented here rather than on a page each: one page per module builds in a
+    # fraction of the time and still anchors every class, method and function for deep linking.
+    # undoc-members keeps a member without its own docstring from vanishing.
+    lines += [
+        f".. automodule:: {module_name}",
+        "    :members:",
+        "    :undoc-members:",
+        "",
+    ]
     return "\n".join(lines)
 
 
+def write_if_changed(path: Path, text: str) -> None:
+    """Write ``text`` to ``path`` only when it differs from what is already there.
+
+    Rewriting an identical page still bumps its mtime, which Sphinx reads as a change and rebuilds
+    every page that references it — turning an incremental build back into a full one.
+    """
+    if path.exists() and path.read_text() == text:
+        return
+    path.write_text(text)
+
+
 def main() -> int:
-    if API_DIR.exists():
-        shutil.rmtree(API_DIR)
-    API_DIR.mkdir(parents=True)
+    API_DIR.mkdir(parents=True, exist_ok=True)
+    stale = {path for path in API_DIR.glob("*.rst")}
 
     failures: list[tuple[str, str]] = []
 
@@ -108,14 +121,18 @@ def main() -> int:
             members = public_members(module)
             if not any(members):
                 continue
-            (API_DIR / f"{module_name}.rst").write_text(rst_for_module(module_name, *members))
+            page = API_DIR / f"{module_name}.rst"
+            write_if_changed(page, rst_for_module(module_name, *members))
+            stale.discard(page)
             package_pages[pkg].append(module_name)
 
     for pkg, modules in package_pages.items():
         body = rst_for_module(pkg, *public_members(importlib.import_module(pkg)))
         toc = ["", ".. rubric:: Submodules", "", ".. toctree::", "    :maxdepth: 1", ""]
         toc += [f"    {name} <{name}>" for name in sorted(modules)]
-        (API_DIR / f"{pkg}.rst").write_text(body + "\n".join(toc) + "\n")
+        page = API_DIR / f"{pkg}.rst"
+        write_if_changed(page, body + "\n".join(toc) + "\n")
+        stale.discard(page)
 
     index = [
         "API Reference",
@@ -128,7 +145,14 @@ def main() -> int:
         "",
     ]
     index += [f"    {pkg} <{pkg}>" for pkg in PACKAGES]
-    (API_DIR / "index.rst").write_text("\n".join(index) + "\n")
+    index_page = API_DIR / "index.rst"
+    write_if_changed(index_page, "\n".join(index) + "\n")
+    stale.discard(index_page)
+
+    # A module that has gone away leaves a page behind; autosummary's own stubs under generated/
+    # are Sphinx's to manage and are left alone.
+    for page in stale:
+        page.unlink()
 
     written = sum(len(m) for m in package_pages.values()) + len(PACKAGES)
     print(f"Wrote {written} module pages under {API_DIR}")
