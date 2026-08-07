@@ -84,6 +84,7 @@ def run_games(
     list of Game
         One entry per game, in seed order.
     """
+    controls = {seat: Controls(policy, agent) for seat in PlayerId}
     played: list[Game] = []
     for index, game_streams in enumerate(np.random.SeedSequence(seed).spawn(games)):
         streams = dict(zip(STREAMS, game_streams.spawn(len(STREAMS)), strict=True))
@@ -95,9 +96,8 @@ def run_games(
             metrics or {},
             end_of_turn=end_of_turn or {},
             actions=actions or {},
-            log=session.log if actions else None,
+            log=session.log,
         )
-        controls = {seat: Controls(policy, agent) for seat in PlayerId}
         play_game(session, controls, turn_limit=turn_limit, observer=recorder)
         played.append(Game(index=index, samples=recorder.samples))
     return played
