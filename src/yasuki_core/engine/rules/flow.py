@@ -567,7 +567,7 @@ def _apply_legacy_placement(
     legacy_card.turn_face_up()  # a placed Legacy card enters its province revealed
     game.pending = None
     if source_zone is None:
-        game.table.decks[DeckKey(seat, Side.DYNASTY)].shuffle(seed=game.seed + game.turn)
+        game.table.decks[DeckKey(seat, Side.DYNASTY)].shuffle(game.rng)
     else:
         ops.fill_province(game.table, seat, source_zone)
     triggers.fire(game, CardDiscarded(displaced.id, displaced.side, seat))

@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Any
 
+from numpy.random import Generator, default_rng
+
 from yasuki_core.database import get_cards_by_names
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.engine.players import PlayerId
@@ -11,15 +13,14 @@ from yasuki_core.game_pieces.factory import resolve_decklist
 # A parsed decklist: section names to their entries.
 Decklist = dict[str, Any]
 
-# Per-seat (dynasty, fate) shuffle seeds, so the same decklist deals the same board every time.
-DEFAULT_DEAL_SEEDS = {PlayerId.P1: (1001, 2001), PlayerId.P2: (1002, 2002)}
-
 
 def build_state_from_deck(
     deck_path: Path | str,
     opponent_deck_path: Path | str | None = None,
     p1_name: str = "P1",
     p2_name: str = "P2",
+    *,
+    rng: Generator | None = None,
 ) -> tuple[TableState, PlayerId]:
     """
     Build a two-seat table from decklist files, dealing ``deck_path`` to P1 and
@@ -35,6 +36,10 @@ def build_state_from_deck(
         P1's display name. Default 'P1'.
     p2_name : str, optional
         P2's display name. Default 'P2'.
+    rng : numpy.random.Generator, optional
+        Split into one stream per seat, so a caller holding a seeded generator lays out the same
+        board. Default None, which deals from system entropy — what a game wants, where a repeated
+        opening is a defect.
 
     Returns
     -------
@@ -43,6 +48,8 @@ def build_state_from_deck(
     """
     seats = ((PlayerId.P1, deck_path), (PlayerId.P2, opponent_deck_path or deck_path))
     state = TableState.empty_two_seat(p1_name, p2_name)
+    deal = default_rng() if rng is None else rng
+    seat_rngs = dict(zip((seat for seat, _ in seats), deal.spawn(len(seats)), strict=True))
     resolved_by_path: dict[str, tuple[Decklist, list[dict]]] = {}
     for seat, path in seats:
         key = str(path)
@@ -50,9 +57,8 @@ def build_state_from_deck(
             parsed = parse_deck_yaml(Path(path).read_text())
             resolved_by_path[key] = (parsed, get_cards_by_names(_deck_card_names(parsed)))
         parsed, records = resolved_by_path[key]
-        dynasty_seed, fate_seed = DEFAULT_DEAL_SEEDS[seat]
         resolved = resolve_decklist(parsed, records, seat)
-        setup_seat(state, seat, resolved, dynasty_seed=dynasty_seed, fate_seed=fate_seed)
+        setup_seat(state, seat, resolved, rng=seat_rngs[seat])
     state.validate()
     return state, PlayerId.P1
 

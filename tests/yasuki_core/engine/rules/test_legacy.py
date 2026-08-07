@@ -1,4 +1,6 @@
 from yasuki_core.engine import ops
+from numpy.random import default_rng
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
@@ -220,3 +222,21 @@ def test_a_completed_legacy_sequence_replays_to_the_same_state():
     # The fieldless action, both re-derived decisions, and the deterministic reshuffle must all
     # rebuild identically from the log.
     assert replay(session.log) == session.game
+
+
+def test_the_reshuffle_draws_on_the_games_own_generator():
+    """Seed 7 at turn 2 and seed 8 at turn 1 once collided, because the reshuffle seed was the sum
+    of the two. Drawing from the game's generator makes the turn irrelevant to which stream it is."""
+    orders = []
+    for seed, turn in ((7, 2), (8, 1)):
+        session = _dynasty_session(legacy_in="deck")
+        session.game.seed, session.game.turn = seed, turn
+        session.game.rng = default_rng(seed)
+        session.act(PlayerId.P1, Legacy())
+        session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+        session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
+        session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
+        deck = session.game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
+        orders.append(tuple(card.id for card in deck.cards))
+
+    assert orders[0] != orders[1]

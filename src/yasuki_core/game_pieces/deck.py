@@ -1,9 +1,10 @@
-from typing import TypeVar, Generic
-from collections.abc import Iterable, Callable
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass
+from typing import Generic, TypeVar
+
+from numpy.random import Generator
 
 from yasuki_core.game_pieces.cards import L5RCard
-from dataclasses import dataclass
-import random
 
 from yasuki_core.game_pieces.dynasty import DynastyCard
 from yasuki_core.game_pieces.fate import FateCard
@@ -24,8 +25,8 @@ class Deck(Generic[CardT]):
     def build(cls, cards: Iterable[CardT]) -> "Deck[CardT]":
         return cls(list(cards))
 
-    def shuffle(self, seed: int | None = None) -> None:
-        rng = random.Random(seed)
+    def shuffle(self, rng: Generator) -> None:
+        """Shuffle in place, drawing from ``rng`` so the caller owns the stream."""
         rng.shuffle(self.cards)
 
     def draw_one(self) -> CardT | None:

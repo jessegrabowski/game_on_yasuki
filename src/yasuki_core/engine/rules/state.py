@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from enum import Enum
 
+from numpy.random import Generator, default_rng
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.decisions import DecisionRequest
@@ -52,7 +54,10 @@ class GameState:
         Usage flags for once-per-turn and once-per-game abilities (the Inheritance Rule, Proclaim,
         ...), keyed by a caller-chosen string. Default empty.
     seed : int
-        The master RNG seed recorded for deterministic replay. Default 0.
+        The seed recorded for deterministic replay, from which ``rng`` is rebuilt. Default 0.
+    rng : numpy.random.Generator
+        Every draw the rules engine makes. Replay reconstructs it from ``seed``, so re-running the
+        same actions repeats the same draws.
     pending : DecisionRequest or None
         The decision the engine is paused on, awaiting an answer from one seat, or None when the
         engine is free to advance. Default None.
@@ -76,6 +81,9 @@ class GameState:
     loser: PlayerId | None = None
     once_per: set[str] = field(default_factory=set)
     seed: int = 0
+    # Excluded from equality: two Generator objects compare by identity, so a replayed game would
+    # never equal the one it replayed even with an identically seeded stream.
+    rng: Generator = field(default_factory=lambda: default_rng(0), compare=False, repr=False)
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
     modifiers: list[Modifier] = field(default_factory=list)
@@ -102,7 +110,8 @@ class GameState:
         first_player : PlayerId
             The seat taking the first turn.
         seed : int, optional
-            The master RNG seed for deterministic replay. Default 0.
+            Seeds the game's generator and is recorded in its log, which is what lets replay
+            rebuild an identical one. Default 0.
         """
         return cls(
             table=table,
@@ -112,6 +121,7 @@ class GameState:
             phase=Phase.ACTION,
             gold={seat: 0 for seat in table.seats},
             seed=seed,
+            rng=default_rng(seed),
         )
 
     def add_gold(self, seat: PlayerId, amount: int) -> None:

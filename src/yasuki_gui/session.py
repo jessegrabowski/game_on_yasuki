@@ -1,7 +1,8 @@
 from pathlib import Path
 
+from numpy.random import Generator, default_rng
+
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.game_setup import DEFAULT_DEAL_SEEDS
 from yasuki_core.engine.setup import setup_seat
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.constants import Side
@@ -89,21 +90,22 @@ def _resolved_demo_deck(seat: PlayerId) -> ResolvedDeck:
     return ResolvedDeck(pre_game=[stronghold], dynasty=dynasty, fate=fate)
 
 
-def build_demo_state() -> tuple[TableState, PlayerId]:
+def build_demo_state(rng: Generator | None = None) -> tuple[TableState, PlayerId]:
     """Build a fully set-up two-seat table from placeholder decks, returning it and the human seat.
 
     The human plays P1; P2 is the AI-reserved opponent, dealt the same way so the board is
-    populated on both sides. Shuffles use fixed seeds, so a fresh launch is reproducible.
+    populated on both sides.
+
+    Parameters
+    ----------
+    rng : numpy.random.Generator, optional
+        Split into one stream per seat, so a seeded generator lays out the same board — what a test
+        pins. Default None, which deals from system entropy, so each launch opens differently.
     """
     state = TableState.empty_two_seat("You", "Opponent")
+    deal = default_rng() if rng is None else rng
+    seat_rngs = dict(zip(PlayerId, deal.spawn(len(PlayerId)), strict=True))
     for seat in PlayerId:
-        dynasty_seed, fate_seed = DEFAULT_DEAL_SEEDS[seat]
-        setup_seat(
-            state,
-            seat,
-            _resolved_demo_deck(seat),
-            dynasty_seed=dynasty_seed,
-            fate_seed=fate_seed,
-        )
+        setup_seat(state, seat, _resolved_demo_deck(seat), rng=seat_rngs[seat])
     state.validate()
     return state, PlayerId.P1

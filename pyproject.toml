@@ -12,6 +12,7 @@ dependencies = [
   "psycopg>=3.1",
   "psycopg-pool>=3.1",
   "pydantic>=2.7",
+    "numpy>=2.0",
   "PyYAML>=6.0",
   "Pillow>=10.0",
   "unidecode>=1.4",
@@ -64,6 +65,9 @@ psycopg-c = ">=3.1"
 pillow = ">=10.0"
 pydantic = ">=2.7"
 pyyaml = ">=6.0"
+# The engine draws from a Generator threaded in by its caller, so a run derives every stream
+# from one spawned root rather than from arithmetic on a seed.
+numpy = ">=2.0"
 tk = "*"
 unidecode = ">=1.4.0,<2"
 fastapi = ">=0.135.1,<0.136"
