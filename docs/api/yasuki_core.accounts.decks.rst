@@ -1,14 +1,11 @@
 yasuki_core.accounts.decks
 ==========================
 
-.. automodule:: yasuki_core.accounts.decks
-
 .. currentmodule:: yasuki_core.accounts.decks
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     DeckCard
     DeckSummary
@@ -17,7 +14,6 @@ yasuki_core.accounts.decks
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     assert_card_ids_known
     build_name_index
@@ -29,3 +25,7 @@ yasuki_core.accounts.decks
     summarize
     to_rows
     to_yaml
+
+.. automodule:: yasuki_core.accounts.decks
+    :members:
+    :undoc-members:

@@ -1,9 +1,11 @@
 yasuki_gui
 ==========
 
-.. automodule:: yasuki_gui
-
 .. currentmodule:: yasuki_gui
+
+.. automodule:: yasuki_gui
+    :members:
+    :undoc-members:
 
 .. rubric:: Submodules
 

@@ -1,14 +1,11 @@
 yasuki_core.engine.rules.flow
 =============================
 
-.. automodule:: yasuki_core.engine.rules.flow
-
 .. currentmodule:: yasuki_core.engine.rules.flow
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     activate
     advance
@@ -32,3 +29,7 @@ yasuki_core.engine.rules.flow
     recruit_cost
     run_stack
     submit
+
+.. automodule:: yasuki_core.engine.rules.flow
+    :members:
+    :undoc-members:

@@ -1,14 +1,11 @@
 yasuki_core.engine.rules.log
 ============================
 
-.. automodule:: yasuki_core.engine.rules.log
-
 .. currentmodule:: yasuki_core.engine.rules.log
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     Act
     Answer
@@ -18,7 +15,6 @@ yasuki_core.engine.rules.log
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     act_and_log
     build_game
@@ -27,3 +23,7 @@ yasuki_core.engine.rules.log
     game_log_to_dict
     replay
     submit_and_log
+
+.. automodule:: yasuki_core.engine.rules.log
+    :members:
+    :undoc-members:

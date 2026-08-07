@@ -61,24 +61,28 @@ def rst_for_module(module_name: str, classes, functions, reexported=()) -> str:
         module_name,
         "=" * len(module_name),
         "",
-        f".. automodule:: {module_name}",
-        "",
         f".. currentmodule:: {module_name}",
         "",
     ]
-    for rubric, names, toctree in (
-        ("Classes", classes, True),
-        ("Functions", functions, True),
-        ("Re-exported", reexported, False),
+    for rubric, names in (
+        ("Classes", classes),
+        ("Functions", functions),
+        ("Re-exported", reexported),
     ):
         if not names:
             continue
-        lines += [f".. rubric:: {rubric}", "", ".. autosummary::"]
-        if toctree:
-            lines.append("    :toctree: generated/")
-        lines.append("")
+        lines += [f".. rubric:: {rubric}", "", ".. autosummary::", ""]
         lines += [f"    {name}" for name in names]
         lines.append("")
+    # The members are documented here rather than on a page each: one page per module builds in a
+    # fraction of the time and still anchors every class, method and function for deep linking.
+    # undoc-members keeps a member without its own docstring from vanishing.
+    lines += [
+        f".. automodule:: {module_name}",
+        "    :members:",
+        "    :undoc-members:",
+        "",
+    ]
     return "\n".join(lines)
 
 
@@ -114,7 +118,8 @@ def prune_stale_stubs() -> int:
 
     Sphinx reads every ``.rst`` under ``docs/``, so a stub left behind by a deleted symbol fails the
     build rather than being ignored. They are gitignored build output, which is what lets them
-    survive a branch switch or a restored CI cache long enough to cause that.
+    survive a branch switch long enough to cause that. The stubs come from the hand-written
+    vocabulary pages, which name their classes explicitly.
     """
     generated = API_DIR / "generated"
     if not generated.exists():

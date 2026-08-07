@@ -1,14 +1,11 @@
 yasuki_core.game_pieces.dynasty
 ===============================
 
-.. automodule:: yasuki_core.game_pieces.dynasty
-
 .. currentmodule:: yasuki_core.game_pieces.dynasty
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     DynastyCard
     DynastyCelestial
@@ -16,3 +13,7 @@ yasuki_core.game_pieces.dynasty
     DynastyHolding
     DynastyPersonality
     DynastyRegion
+
+.. automodule:: yasuki_core.game_pieces.dynasty
+    :members:
+    :undoc-members:

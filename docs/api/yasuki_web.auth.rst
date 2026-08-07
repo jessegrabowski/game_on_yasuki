@@ -1,14 +1,11 @@
 yasuki_web.auth
 ===============
 
-.. automodule:: yasuki_web.auth
-
 .. currentmodule:: yasuki_web.auth
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     AvatarRequest
     CropBox
@@ -19,7 +16,6 @@ yasuki_web.auth
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     admin_approve_user
     admin_ban_user
@@ -43,3 +39,7 @@ yasuki_web.auth
     set_my_avatar
     update_me
     user_for_websocket
+
+.. automodule:: yasuki_web.auth
+    :members:
+    :undoc-members:

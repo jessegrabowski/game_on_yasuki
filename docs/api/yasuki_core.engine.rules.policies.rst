@@ -1,14 +1,11 @@
 yasuki_core.engine.rules.policies
 =================================
 
-.. automodule:: yasuki_core.engine.rules.policies
-
 .. currentmodule:: yasuki_core.engine.rules.policies
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     EconomicPolicy
     PassPolicy
@@ -18,6 +15,9 @@ yasuki_core.engine.rules.policies
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     make_policy
+
+.. automodule:: yasuki_core.engine.rules.policies
+    :members:
+    :undoc-members:

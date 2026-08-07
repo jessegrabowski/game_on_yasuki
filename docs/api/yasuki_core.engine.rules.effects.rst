@@ -1,14 +1,11 @@
 yasuki_core.engine.rules.effects
 ================================
 
-.. automodule:: yasuki_core.engine.rules.effects
-
 .. currentmodule:: yasuki_core.engine.rules.effects
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     AdjustCounter
     BanishTopFate
@@ -24,3 +21,7 @@ yasuki_core.engine.rules.effects
     RecruitCard
     Straighten
     Then
+
+.. automodule:: yasuki_core.engine.rules.effects
+    :members:
+    :undoc-members:

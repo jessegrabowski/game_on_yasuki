@@ -1,14 +1,11 @@
 yasuki_web.schemas
 ==================
 
-.. automodule:: yasuki_web.schemas
-
 .. currentmodule:: yasuki_web.schemas
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     CardMove
     ChatRequest
@@ -27,6 +24,9 @@ yasuki_web.schemas
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     intent_from_envelope
+
+.. automodule:: yasuki_web.schemas
+    :members:
+    :undoc-members:

@@ -1,14 +1,11 @@
 yasuki_core.engine.rules.work
 =============================
 
-.. automodule:: yasuki_core.engine.rules.work
-
 .. currentmodule:: yasuki_core.engine.rules.work
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     ApplyAbilityEffects
     ApplyEffects
@@ -16,3 +13,7 @@ yasuki_core.engine.rules.work
     ResolveRecruit
     ResumeCascade
     SelectAbilityTarget
+
+.. automodule:: yasuki_core.engine.rules.work
+    :members:
+    :undoc-members:

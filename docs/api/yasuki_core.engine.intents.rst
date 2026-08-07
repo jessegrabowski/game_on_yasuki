@@ -1,14 +1,11 @@
 yasuki_core.engine.intents
 ==========================
 
-.. automodule:: yasuki_core.engine.intents
-
 .. currentmodule:: yasuki_core.engine.intents
 
 .. rubric:: Classes
 
 .. autosummary::
-    :toctree: generated/
 
     AdjustCounter
     Attach
@@ -51,8 +48,11 @@ yasuki_core.engine.intents
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     apply_intent
     coin_flip_outcome
     dice_roll_outcome
+
+.. automodule:: yasuki_core.engine.intents
+    :members:
+    :undoc-members:

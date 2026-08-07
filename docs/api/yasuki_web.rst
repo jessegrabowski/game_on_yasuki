@@ -1,9 +1,11 @@
 yasuki_web
 ==========
 
-.. automodule:: yasuki_web
-
 .. currentmodule:: yasuki_web
+
+.. automodule:: yasuki_web
+    :members:
+    :undoc-members:
 
 .. rubric:: Submodules
 

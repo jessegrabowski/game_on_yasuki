@@ -1,14 +1,11 @@
 yasuki_core.accounts.users
 ==========================
 
-.. automodule:: yasuki_core.accounts.users
-
 .. currentmodule:: yasuki_core.accounts.users
 
 .. rubric:: Functions
 
 .. autosummary::
-    :toctree: generated/
 
     ban_user
     delete_account
@@ -20,3 +17,7 @@ yasuki_core.accounts.users
     set_role
     unban_user
     upsert_user
+
+.. automodule:: yasuki_core.accounts.users
+    :members:
+    :undoc-members:
