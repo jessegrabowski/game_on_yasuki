@@ -28,7 +28,6 @@ deferred through `Then` instead.
 .. currentmodule:: yasuki_core.engine.rules.effects
 
 .. autosummary::
-   :toctree: ../api/generated
 
    Effect
    InterruptingEffect
@@ -56,7 +55,6 @@ further events are produced.
 .. currentmodule:: yasuki_core.engine.rules.events
 
 .. autosummary::
-   :toctree: ../api/generated
 
    TurnStarted
    EnteredPlay
@@ -76,7 +74,6 @@ Legality with respect to game state is checked separately.
 .. currentmodule:: yasuki_core.engine.rules.decisions
 
 .. autosummary::
-   :toctree: ../api/generated
 
    DecisionRequest
    DecisionResponse
@@ -102,7 +99,6 @@ the action rather than by deserializing it.
 .. currentmodule:: yasuki_core.engine.rules.work
 
 .. autosummary::
-   :toctree: ../api/generated
 
    ResolveRecruit
    FinishRecruit
@@ -122,7 +118,6 @@ Production without a modifier being recorded.
 .. currentmodule:: yasuki_core.engine.rules.modifiers
 
 .. autosummary::
-   :toctree: ../api/generated
 
    Stat
    Duration
@@ -133,7 +128,6 @@ Production without a modifier being recorded.
 .. currentmodule:: yasuki_core.game_pieces.counters
 
 .. autosummary::
-   :toctree: ../api/generated
 
    Counter
 ```
