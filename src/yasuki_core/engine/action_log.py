@@ -4,7 +4,7 @@ from collections.abc import Sequence
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.intents import Intent, Shuffle, FlipCoin, RollDice, Event, apply_intent
+from yasuki_core.engine.intents import Intent, Event, apply_intent
 from yasuki_core.engine.serialization import encode_intent, decode_intent
 from yasuki_core.engine.snapshot import (
     InitialRecord,
@@ -28,17 +28,14 @@ class LogEntry:
     seat : PlayerId
         The seat that acted.
     intent : Intent
-        The original intent as submitted, not the resolved event.
-    rng_seed : int, optional
-        The RNG seed carried by the intent, if any (the seeded ops: ``SHUFFLE``, ``FLIP_COIN``,
-        ``ROLL_DICE``). Default None.
+        The original intent as submitted, not the resolved event; a randomizer's seed rides on
+        it, so the entry replays without further state.
     """
 
     seq: int
     ts: float
     seat: PlayerId
     intent: Intent
-    rng_seed: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -121,10 +118,6 @@ class ActionLog:
         return replay(self.initial, self.entries)
 
 
-def _intent_seed(intent: Intent) -> int | None:
-    return intent.seed if isinstance(intent, (Shuffle, FlipCoin, RollDice)) else None
-
-
 def apply_and_log(
     state: TableState, log: ActionLog, seat: PlayerId, intent: Intent, ts: float
 ) -> list[Event]:
@@ -149,9 +142,7 @@ def apply_and_log(
     """
     events = apply_intent(state, seat, intent)
     if events:
-        log.append(
-            LogEntry(seq=state.seq, ts=ts, seat=seat, intent=intent, rng_seed=_intent_seed(intent))
-        )
+        log.append(LogEntry(seq=state.seq, ts=ts, seat=seat, intent=intent))
     return events
 
 
@@ -200,7 +191,6 @@ def _encode_entry(entry: LogEntry | ChatEntry | SessionEntry) -> dict:
         "ts": entry.ts,
         "seat": entry.seat.name,
         "intent": encode_intent(entry.intent),
-        "rng_seed": entry.rng_seed,
     }
 
 
@@ -220,7 +210,6 @@ def _decode_entry(payload: dict) -> LogEntry | ChatEntry | SessionEntry:
         ts=payload["ts"],
         seat=PlayerId[payload["seat"]],
         intent=decode_intent(payload["intent"]),
-        rng_seed=payload.get("rng_seed"),
     )
 
 

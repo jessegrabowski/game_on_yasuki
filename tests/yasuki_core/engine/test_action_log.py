@@ -184,7 +184,6 @@ def test_apply_and_log_records_only_accepted_intents():
     assert state.seq == seq_before
     assert len(log.entries) == 1
     assert log.entries[0].intent == CreateProvince()
-    assert log.entries[0].rng_seed is None  # only SHUFFLE carries a seed
 
 
 def test_apply_and_log_entry_fields_match_application():
@@ -199,17 +198,17 @@ def test_apply_and_log_entry_fields_match_application():
     assert entry.ts == 1717.5
     assert entry.seat is PlayerId.P1
     assert entry.intent is intent
-    assert entry.rng_seed == 123  # surfaced from the SHUFFLE intent
 
 
 @pytest.mark.parametrize("intent", [FlipCoin(seed=456), RollDice(seed=789, sides=20)])
-def test_apply_and_log_surfaces_the_seed_of_read_only_randomizers(intent):
+def test_a_read_only_randomizer_is_taped_with_what_reproduces_it(intent):
+    """A coin or die changes no piece, so the tape is the only record that it happened."""
     state = _start_state()
     log = ActionLog(initial=InitialRecord.from_state(state))
 
     apply_and_log(state, log, PlayerId.P1, intent, ts=1.0)
 
-    assert log.entries[0].rng_seed == intent.seed
+    assert log.entries[0].intent == intent
 
 
 def test_apply_and_log_entries_match_the_full_run():
