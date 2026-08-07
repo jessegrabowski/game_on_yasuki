@@ -133,17 +133,6 @@ jobs:
           environments: docs
           cache: true
 
-      # Sphinx rebuilds a page only when its source is newer than the cached doctree, so carrying
-      # both across runs turns a full build into an incremental one. docs-api prunes any stub the
-      # restored cache holds for a symbol that has since gone.
-      - uses: actions/cache@v4
-        with:
-          path: |
-            docs/_build/html/.doctrees
-            docs/api/generated
-          key: sphinx-${{ github.sha }}
-          restore-keys: sphinx-
-
       # A green build does not imply current pages: autosummary lists what the .rst files name, so a
       # module added or a helper made public goes unmentioned until docs-api is re-run.
       - name: Check the API pages match the source
