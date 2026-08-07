@@ -107,6 +107,8 @@ def test_a_decision_goes_to_the_seat_that_owes_it():
     asked: list[tuple[PlayerId, PlayerId]] = []
 
     class Recording:
+        name = "recording"
+
         def decide(self, request, view: GameView) -> DecisionResponse:
             asked.append((view.viewer, session.game.active))
             return DecisionResponse(())

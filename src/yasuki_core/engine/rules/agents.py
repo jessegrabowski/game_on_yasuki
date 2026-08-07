@@ -13,7 +13,16 @@ class Agent(Protocol):
 
     The human UI, the AI, a network peer, and test doubles are all Agents, so the engine never cares
     who answers a decision (KD3). A bot answers synchronously here; the human UI instead presents
-    the request and submits the answer through the session when the player acts."""
+    the request and submits the answer through the session when the player acts.
+
+    Attributes
+    ----------
+    name : str
+        How this agent is reported. A run is characterized by its policy and its agent together, so
+        naming only one of them describes half of what produced the numbers.
+    """
+
+    name: str
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse: ...
 
@@ -25,6 +34,8 @@ class AutoAgent:
 
     That generality has one hole: a prefix of candidates cannot express a bow-time production boost,
     so a cost only reachable by boosting has no answer here. :class:`PayingAgent` covers it."""
+
+    name = "auto"
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
         for size in range(len(request.candidates) + 1):
@@ -47,6 +58,8 @@ class PayingAgent:
     :meth:`~yasuki_core.engine.session.EngineSession.legal_actions` offers a recruit whose cost only
     a boost can reach, which an agent that could not boost would be unable to pay for at all.
     """
+
+    name = "paying"
 
     def __init__(self) -> None:
         self._fallback = AutoAgent()
@@ -77,3 +90,20 @@ class PayingAgent:
                 boosted.append(producer)
                 raised += boost[producer]
         return DecisionResponse(tuple(bowed), tuple(boosted))
+
+
+AGENTS: dict[str, type[Agent]] = {agent.name: agent for agent in (AutoAgent, PayingAgent)}
+"""Every agent a run can be configured with, by name."""
+
+
+def make_agent(name: str) -> Agent:
+    """Build the agent registered under ``name``.
+
+    Raises
+    ------
+    KeyError
+        If no agent is registered under ``name``, listing those that are.
+    """
+    if name not in AGENTS:
+        raise KeyError(f"unknown agent {name!r}; known: {', '.join(sorted(AGENTS))}")
+    return AGENTS[name]()
