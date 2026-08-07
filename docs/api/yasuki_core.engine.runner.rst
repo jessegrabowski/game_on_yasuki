@@ -20,3 +20,4 @@ yasuki_core.engine.runner
     :toctree: generated/
 
     play_game
+    run_game
