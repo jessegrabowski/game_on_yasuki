@@ -1,8 +1,7 @@
-from collections.abc import Sequence
+import csv
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from statistics import fmean, median, quantiles
-
 import numpy as np
 
 from yasuki_core.engine.players import PlayerId
@@ -104,93 +103,52 @@ def run_games(
     return played
 
 
-@dataclass(frozen=True, slots=True)
-class Summary:
-    """What a set of games said about one metric on one turn.
+def write_csv(path: Path | str, played: Sequence[Game], **run: object) -> None:
+    """
+    Write one row per recorded turn, so a run can be loaded and analysed with real tools.
 
-    Attributes
+    Every ``run`` keyword becomes a column repeated on each row — the deck, the policy, the seed,
+    whatever identifies the run. That is what lets two runs be concatenated and told apart later,
+    and it is why no aggregate is computed here: the numbers worth quoting depend on the question,
+    and the question is asked after the run.
+
+    Parameters
     ----------
-    games : int
-        How many games contributed a value.
-    mean : float
-        The average.
-    median : float
-        The middle value.
-    low : float
-        The 10th percentile.
-    high : float
-        The 90th percentile.
+    path : path or str
+        The CSV to write, overwritten if it exists.
+    played : sequence of Game
+        What :func:`run_games` returned.
+    **run
+        Provenance columns, written before the per-turn ones.
+
+    Raises
+    ------
+    ValueError
+        If ``played`` holds no samples, since the file would carry a header and nothing else.
     """
+    rows = list(sample_rows(played, **run))
+    if not rows:
+        raise ValueError("no turns were recorded, so there is nothing to write")
+    with Path(path).open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
 
-    games: int
-    mean: float
-    median: float
-    low: float
-    high: float
 
+def sample_rows(played: Sequence[Game], **run: object) -> Iterator[dict[str, object]]:
+    """One flat row per recorded turn: the run's provenance, then the game, turn, seat and metrics.
 
-def summarize(values: Sequence[float]) -> Summary:
+    Yields rows in the order the games were played, which is the order their seeds were spawned.
     """
-    Describe ``values`` as a distribution.
-
-    A single value reports itself as every percentile, which is what one game should say.
-
-    Raise ValueError if ``values`` is empty.
-    """
-    if not values:
-        raise ValueError("cannot summarize an empty set of games")
-    deciles = quantiles(values, n=10)
-    return Summary(
-        games=len(values),
-        mean=fmean(values),
-        median=median(values),
-        low=deciles[0],
-        high=deciles[-1],
-    )
-
-
-def per_turn(played: Sequence[Game], seat: PlayerId, name: str) -> dict[int, list[float]]:
-    """Every game's value for ``name`` on each of ``seat``'s turns, keyed by turn.
-
-    A turn some games never reached is reported from the games that did, so a late turn thins out
-    rather than disappearing — which is why :class:`Summary` carries its own game count.
-    """
-    columns: dict[int, list[float]] = {}
     for game in played:
         for sample in game.samples:
-            if sample.seat is seat:
-                columns.setdefault(sample.turn, []).append(sample.values[name])
-    return columns
-
-
-def summarize_per_turn(played: Sequence[Game], seat: PlayerId, name: str) -> dict[int, Summary]:
-    """``Summary`` of ``name`` for each of ``seat``'s turns, in turn order."""
-    columns = per_turn(played, seat, name)
-    return {turn: summarize(columns[turn]) for turn in sorted(columns)}
-
-
-def share_reaching(
-    played: Sequence[Game], seat: PlayerId, name: str, *, at_least: float, by_turn: int
-) -> float:
-    """
-    The fraction of games where ``seat``'s ``name`` reached ``at_least`` on or before ``by_turn``.
-
-    This is the shape of "probability of X by turn N". A game that ended before ``by_turn`` counts
-    against the fraction unless it had already reached the threshold, since not getting there is
-    the outcome being measured.
-
-    Raise ValueError if ``played`` is empty.
-    """
-    if not played:
-        raise ValueError("cannot take a share of no games")
-    reached = sum(
-        any(
-            sample.seat is seat and sample.turn <= by_turn and sample.values[name] >= at_least
-            for sample in game.samples
-        )
-        for game in played
-    )
-    return reached / len(played)
+            yield {
+                **run,
+                "game": game.index,
+                "turn": sample.turn,
+                "seat": sample.seat.name,
+                **sample.values,
+            }
 
 
 def _engine_seed(stream: np.random.SeedSequence) -> int:

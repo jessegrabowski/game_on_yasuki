@@ -1,17 +1,12 @@
+import csv
+
 import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.agents import PayingAgent
 from yasuki_core.engine.rules.policies import EconomicPolicy, PassPolicy
-from yasuki_core.sim.harness import (
-    Game,
-    per_turn,
-    run_games,
-    share_reaching,
-    summarize,
-    summarize_per_turn,
-)
+from yasuki_core.sim.harness import Game, run_games, sample_rows, write_csv
 from yasuki_core.sim.metrics import potential_gold_production, provinces_cleared
 from yasuki_core.sim.recording import Sample
 
@@ -27,76 +22,68 @@ def _game(index: int, *values: tuple[int, float], seat: PlayerId = P1) -> Game:
     )
 
 
-# --- aggregation, as pure functions -------------------------------------------------------------
+# --- writing the data out ------------------------------------------------------------------------
 
 
-def test_summarize_describes_the_spread():
-    values = list(range(1, 11))  # 1..10
+def test_rows_carry_the_run_and_the_turn():
+    played = [_game(0, (1, 2.0), (2, 5.0))]
 
-    result = summarize(values)
+    rows = list(sample_rows(played, deck="spider", policy="economic", seed=3))
 
-    assert result.games == 10
-    assert result.mean == 5.5
-    assert result.median == 5.5
-    assert result.low < result.median < result.high
-
-
-def test_a_single_game_has_no_spread():
-    """Percentiles of one point are that point. Interpolating instead would invent a range the run
-    never measured."""
-    result = summarize([4.0])
-
-    assert (result.games, result.mean, result.median) == (1, 4.0, 4.0)
-    assert result.low == result.high == 4.0
-
-
-def test_summarizing_no_games_is_refused():
-    # Returning zeros would read as "the deck produced nothing" rather than "nothing was run".
-    with pytest.raises(ValueError, match="empty set of games"):
-        summarize([])
-
-
-def test_per_turn_gathers_one_column_per_turn():
-    played = [_game(0, (1, 2.0), (3, 5.0)), _game(1, (1, 4.0), (3, 7.0))]
-
-    assert per_turn(played, P1, "gold") == {1: [2.0, 4.0], 3: [5.0, 7.0]}
+    assert rows == [
+        {
+            "deck": "spider",
+            "policy": "economic",
+            "seed": 3,
+            "game": 0,
+            "turn": 1,
+            "seat": "P1",
+            "gold": 2.0,
+        },
+        {
+            "deck": "spider",
+            "policy": "economic",
+            "seed": 3,
+            "game": 0,
+            "turn": 2,
+            "seat": "P1",
+            "gold": 5.0,
+        },
+    ]
 
 
-def test_a_turn_only_some_games_reached_is_summarized_from_those_games():
-    """Games end at different turns, so a late turn thins out. Its summary has to say how many
-    games it rests on, or a tail computed from two games reads like the rest."""
-    played = [_game(0, (1, 2.0), (3, 6.0)), _game(1, (1, 4.0))]
+def test_provenance_repeats_on_every_row_so_runs_concatenate():
+    """Two runs written to one table have to stay tellable apart, which a header comment would not
+    survive once the files are stacked."""
+    first = list(sample_rows([_game(0, (1, 1.0))], seed=1))
+    second = list(sample_rows([_game(0, (1, 1.0))], seed=2))
 
-    summaries = summarize_per_turn(played, P1, "gold")
-
-    assert summaries[1].games == 2
-    assert summaries[3].games == 1
+    assert {row["seed"] for row in first + second} == {1, 2}
 
 
-def test_the_opponents_turns_are_not_mixed_in():
+def test_both_seats_are_written_not_just_one():
     played = [_game(0, (1, 2.0)), _game(1, (2, 9.0), seat=P2)]
 
-    assert per_turn(played, P1, "gold") == {1: [2.0]}
+    assert {row["seat"] for row in sample_rows(played)} == {"P1", "P2"}
 
 
-def test_share_reaching_counts_games_not_turns():
-    """A game that crosses the threshold on several turns still counts once, or a long game would
-    outweigh a short one."""
-    played = [_game(0, (1, 1.0), (2, 5.0), (3, 5.0)), _game(1, (1, 1.0), (2, 1.0))]
+def test_written_csv_round_trips(tmp_path):
+    played = [_game(0, (1, 2.0), (2, 5.0)), _game(1, (1, 3.0))]
+    path = tmp_path / "run.csv"
 
-    assert share_reaching(played, P1, "gold", at_least=5.0, by_turn=3) == 0.5
+    write_csv(path, played, deck="spider", seed=3)
 
-
-def test_share_reaching_ignores_a_threshold_crossed_too_late():
-    played = [_game(0, (1, 1.0), (5, 9.0))]
-
-    assert share_reaching(played, P1, "gold", at_least=9.0, by_turn=3) == 0.0
-    assert share_reaching(played, P1, "gold", at_least=9.0, by_turn=5) == 1.0
+    with path.open() as handle:
+        rows = list(csv.DictReader(handle))
+    assert [r["game"] for r in rows] == ["0", "0", "1"]
+    assert [r["gold"] for r in rows] == ["2.0", "5.0", "3.0"]
+    assert {r["deck"] for r in rows} == {"spider"}
 
 
-def test_taking_a_share_of_no_games_is_refused():
-    with pytest.raises(ValueError, match="share of no games"):
-        share_reaching([], P1, "gold", at_least=1.0, by_turn=1)
+def test_writing_a_run_that_recorded_nothing_is_refused(tmp_path):
+    # A header with no rows reads as "the deck did nothing" rather than "nothing was recorded".
+    with pytest.raises(ValueError, match="nothing to write"):
+        write_csv(tmp_path / "empty.csv", [], seed=1)
 
 
 # --- the runner, against real games -------------------------------------------------------------
