@@ -4,7 +4,12 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import DynastyDiscard, Legacy, Pass
-from yasuki_core.engine.rules.policies import PassPolicy, RandomPolicy
+from yasuki_core.engine.rules.policies import (
+    POLICIES,
+    PassPolicy,
+    RandomPolicy,
+    make_policy,
+)
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import dealt_table
@@ -61,13 +66,15 @@ def test_random_policy_with_different_seeds_diverges():
     assert one != two
 
 
-def test_random_policy_does_not_disturb_the_global_random_stream():
+@pytest.mark.parametrize("rng", [random.Random(5), None], ids=["given", "self-seeded"])
+def test_random_policy_does_not_disturb_the_global_random_stream(rng):
     # A policy reaching for the module-level rng would make every other seeded thing in the process
-    # depend on how many choices it happened to make.
+    # depend on how many choices it happened to make. The self-seeded case is the one a policy
+    # built by name takes, where reaching for the global stream is the tempting shortcut.
     random.seed(99)
     expected = [random.random() for _ in range(3)]
     random.seed(99)
-    policy = RandomPolicy(random.Random(5))
+    policy = RandomPolicy(rng)
     for _ in range(10):
         policy.choose(_view(), ACTIONS)
 
@@ -79,3 +86,32 @@ def test_a_policy_never_invents_an_action(policy):
     view = _view()
 
     assert policy.choose(view, ACTIONS) in ACTIONS
+
+
+def test_every_policy_reports_a_name():
+    """A run's numbers describe a deck under a policy, so a result quoted without one cannot be
+    compared. The registry key and the policy's own name have to agree, or a report would name a
+    different policy than the one that played."""
+    assert {name: make_policy(name).name for name in POLICIES} == {n: n for n in POLICIES}
+
+
+def test_the_registry_covers_the_policies_that_ship():
+    assert set(POLICIES) == {"pass", "random", "economic"}
+
+
+def test_a_policy_built_by_name_chooses():
+    assert make_policy("pass").choose(_view(), ACTIONS) == Pass()
+
+
+def test_a_random_policy_seeds_itself_when_given_no_rng():
+    """Built by name it has no run to draw from, so it must still choose rather than fail. Such a
+    run is not reproducible — that needs the rng passed to the constructor."""
+    view = _view()
+
+    assert all(action in ACTIONS for action in _draws(RandomPolicy(), view, 20))
+
+
+def test_an_unknown_policy_name_says_what_is_available():
+    # A dashboard passing a stale name should read the fix off the error.
+    with pytest.raises(KeyError, match="economic"):
+        make_policy("greedy")

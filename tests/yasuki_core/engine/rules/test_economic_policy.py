@@ -1,16 +1,7 @@
-import random
-
-import pytest
-
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Action, Pass, Recruit
 from yasuki_core.engine.rules.agents import AutoAgent
-from yasuki_core.engine.rules.policies import (
-    POLICIES,
-    EconomicPolicy,
-    PassPolicy,
-    make_policy,
-)
+from yasuki_core.engine.rules.policies import EconomicPolicy, PassPolicy
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.sim.metrics import provinces_cleared
@@ -172,45 +163,3 @@ def test_a_card_printed_with_a_dash_cost_ranks_as_free():
     province_card(session.game, "priced", seat=P1, gold_cost=4, index=1)
 
     assert _choice(session) == Recruit("priced")
-
-
-def test_every_policy_reports_a_name():
-    """A run's numbers describe a deck under a policy, so a result quoted without one cannot be
-    compared. The registry key and the policy's own name have to agree, or a report would name a
-    different policy than the one that played."""
-    rng = random.Random(1)
-
-    assert {name: make_policy(name, rng).name for name in POLICIES} == {n: n for n in POLICIES}
-
-
-def test_the_registry_covers_the_policies_that_ship():
-    assert set(POLICIES) == {"pass", "random", "economic"}
-
-
-def test_a_policy_built_by_name_plays():
-    session = _dynasty_phase()
-    province_card(session.game, "affordable", seat=P1, gold_cost=3)
-    policy = make_policy("economic", random.Random(1))
-
-    assert policy.choose(session.project(P1), session.legal_actions(P1)) == Recruit("affordable")
-
-
-def test_a_stochastic_policy_takes_the_runs_own_randomness():
-    """Every factory takes the rng whether or not it draws on one, so a caller choosing by name
-    never has to know which policies are stochastic to keep a seeded run reproducible."""
-    first = make_policy("random", random.Random(4))
-    second = make_policy("random", random.Random(4))
-    session = _dynasty_phase()
-    for index in range(4):
-        province_card(session.game, f"prov{index}", seat=P1, gold_cost=1, index=index)
-    view, actions = session.project(P1), session.legal_actions(P1)
-
-    assert [first.choose(view, actions) for _ in range(6)] == [
-        second.choose(view, actions) for _ in range(6)
-    ]
-
-
-def test_an_unknown_policy_name_says_what_is_available():
-    # A dashboard passing a stale name should read the fix off the error.
-    with pytest.raises(KeyError, match="economic"):
-        make_policy("greedy", random.Random(1))

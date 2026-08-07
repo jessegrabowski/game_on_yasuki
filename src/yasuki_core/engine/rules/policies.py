@@ -1,5 +1,4 @@
 import random
-from collections.abc import Callable
 from typing import Protocol
 
 from yasuki_core.engine.rules.actions import Action, Pass, Recruit
@@ -46,13 +45,14 @@ class RandomPolicy:
     """Picks uniformly among the offered actions.
 
     Takes its own :class:`random.Random` rather than reaching for the module-level one, so two runs
-    of the same simulation with the same seed play the same game.
+    of the same simulation with the same seed play the same game. Built without one it seeds itself,
+    which is fine for a smoke run and useless for a reproducible one.
     """
 
     name = "random"
 
-    def __init__(self, rng: random.Random):
-        self._rng = rng
+    def __init__(self, rng: random.Random | None = None):
+        self._rng = random.Random() if rng is None else rng
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
         return self._rng.choice(actions)
@@ -93,38 +93,26 @@ class EconomicPolicy:
         return min(purchases, key=lambda purchase: _rank(cards[purchase.card_id]))
 
 
-POLICIES: dict[str, Callable[[random.Random], Policy]] = {
-    PassPolicy.name: lambda rng: PassPolicy(),
-    RandomPolicy.name: RandomPolicy,
-    EconomicPolicy.name: lambda rng: EconomicPolicy(),
+POLICIES: dict[str, type[Policy]] = {
+    policy.name: policy for policy in (PassPolicy, RandomPolicy, EconomicPolicy)
 }
-"""Every policy a run can be configured with, by name.
-
-Each entry takes the run's :class:`random.Random` so a caller picking a policy by name never has to
-know which ones are stochastic, and a seeded run stays reproducible whichever it picks.
-"""
+"""Every policy a run can be configured with, by name."""
 
 
-def make_policy(name: str, rng: random.Random) -> Policy:
+def make_policy(name: str) -> Policy:
     """Build the policy registered under ``name``.
 
-    Parameters
-    ----------
-    name : str
-        A key of :data:`POLICIES`.
-    rng : random.Random
-        The run's source of randomness, passed to every policy whether or not it draws on it.
+    A stochastic policy seeds itself here; construct it directly with the run's
+    :class:`random.Random` when the run has to be reproducible.
 
     Raises
     ------
     KeyError
         If no policy is registered under ``name``, listing those that are.
     """
-    try:
-        build = POLICIES[name]
-    except KeyError:
-        raise KeyError(f"unknown policy {name!r}; known: {', '.join(sorted(POLICIES))}") from None
-    return build(rng)
+    if name not in POLICIES:
+        raise KeyError(f"unknown policy {name!r}; known: {', '.join(sorted(POLICIES))}")
+    return POLICIES[name]()
 
 
 def _rank(card: DynastyCard) -> tuple[int, int, str]:
