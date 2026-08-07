@@ -3,8 +3,6 @@ from yasuki_core.engine.intents import (
     Intent,
     Event,
     IntentOp,
-    coin_flip_outcome,
-    dice_roll_outcome,
 )
 from yasuki_core.engine.redaction import card_identity_public
 
@@ -176,9 +174,8 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
         case IntentOp.REMOVE_CARD:
             return [lead, {"text": "removed a card"}]
         case IntentOp.FLIP_COIN:
-            return [lead, {"text": f"flipped a coin: {coin_flip_outcome(intent.seed)}"}]
+            return [lead, {"text": f"flipped a coin: {intent.result}"}]
         case IntentOp.ROLL_DICE:
-            face = dice_roll_outcome(intent.seed, intent.sides)
-            return [lead, {"text": f"rolled a {face} on a d{intent.sides}"}]
+            return [lead, {"text": f"rolled a {intent.face} on a d{intent.sides}"}]
         case _:
             return []

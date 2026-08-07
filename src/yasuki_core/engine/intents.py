@@ -1,4 +1,4 @@
-from numpy.random import default_rng
+from numpy.random import Generator, default_rng
 from dataclasses import dataclass
 from enum import Enum
 from typing import ClassVar
@@ -392,40 +392,48 @@ class Detach:
     op: ClassVar[IntentOp] = IntentOp.DETACH
 
 
+COIN_FACES = ("Heads", "Tails")
+
+
 @dataclass(frozen=True, slots=True)
 class FlipCoin:
-    """Flip a fair coin, its result reproducible from the explicit ``seed``. A read-only table event:
-    it changes no piece, only announcing heads or tails to both seats."""
+    """Announce an already-flipped fair coin, ``result`` being the face it landed on. A read-only
+    table event: it changes no piece. Build it with :func:`flip_coin` so the face is drawn rather
+    than chosen."""
 
-    seed: int
+    result: str
     op: ClassVar[IntentOp] = IntentOp.FLIP_COIN
+
+    def __post_init__(self):
+        if self.result not in COIN_FACES:
+            raise ValueError(f"FlipCoin result must be one of {COIN_FACES}")
 
 
 @dataclass(frozen=True, slots=True)
 class RollDice:
-    """Roll one ``sides``-sided die, its face reproducible from the explicit ``seed``. Like
-    ``FlipCoin`` a read-only table event: it changes no piece, only announcing the rolled face to
-    both seats. ``sides`` must be at least 2."""
+    """Announce an already-rolled ``sides``-sided die. Like :class:`FlipCoin` a read-only table
+    event: it changes no piece. ``sides`` must be at least 2 and ``face`` must land within them.
+    Build it with :func:`roll_dice` so the face is drawn rather than chosen."""
 
-    seed: int
+    face: int
     sides: int = 6
     op: ClassVar[IntentOp] = IntentOp.ROLL_DICE
 
     def __post_init__(self):
         if self.sides < 2:
             raise ValueError("RollDice requires at least 2 sides")
+        if not 1 <= self.face <= self.sides:
+            raise ValueError(f"RollDice face {self.face} is not on a d{self.sides}")
 
 
-def coin_flip_outcome(seed: int) -> str:
-    """Return the reproducible coin result, ``"Heads"`` or ``"Tails"``, for a flip's ``seed``. Pure
-    in the seed so the handler, the game-log line, and a replay all agree."""
-    return "Heads" if default_rng(seed).integers(2) else "Tails"
+def flip_coin(rng: Generator) -> FlipCoin:
+    """Flip a fair coin from ``rng`` and return the intent announcing it."""
+    return FlipCoin(COIN_FACES[rng.integers(2)])
 
 
-def dice_roll_outcome(seed: int, sides: int) -> int:
-    """Return the reproducible die face, an int in ``1..sides``, for a roll's ``seed`` and
-    ``sides``. Pure in its arguments, mirroring ``coin_flip_outcome``."""
-    return int(default_rng(seed).integers(1, sides + 1))
+def roll_dice(rng: Generator, sides: int = 6) -> RollDice:
+    """Roll one ``sides``-sided die from ``rng`` and return the intent announcing it."""
+    return RollDice(int(rng.integers(1, sides + 1)), sides)
 
 
 Intent = (
@@ -943,14 +951,13 @@ def _detach(state: TableState, seat: PlayerId, intent: Detach) -> list[Event]:
 
 
 def _flip_coin(state: TableState, seat: PlayerId, intent: FlipCoin) -> list[Event]:
-    # Read-only: the coin touches no piece, so state and seq are untouched. The accepted event carries
-    # the seed, from which the web layer derives the same heads/tails result for both seats.
+    # Read-only: the coin touches no piece, so state and seq are untouched. The result rides on the
+    # intent, so both seats and any replay show the same side.
     return [Event(state.seq, seat, intent)]
 
 
 def _roll_dice(state: TableState, seat: PlayerId, intent: RollDice) -> list[Event]:
-    # Read-only, mirroring _flip_coin: the die changes nothing; the event's seed and sides reproduce
-    # the face.
+    # Read-only, mirroring _flip_coin: the die changes nothing and the face rides on the intent.
     return [Event(state.seq, seat, intent)]
 
 

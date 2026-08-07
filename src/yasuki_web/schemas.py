@@ -1,8 +1,14 @@
 from pydantic import BaseModel, Field
 from typing import Annotated, Literal
 
-from yasuki_core.engine.intents import Intent, IntentOp
+from numpy.random import Generator
+
+from yasuki_core.engine.intents import Intent, IntentOp, flip_coin, roll_dice
 from yasuki_core.engine.serialization import decode_intent
+
+# A shuffle records the seed its order came from rather than the order itself. 31 bits because the
+# seed rides on the action log as a plain int.
+SEED_SPACE = 2**31
 
 
 class JoinRequest(BaseModel):
@@ -55,7 +61,6 @@ class IntentEnvelope(BaseModel):
     zone: dict | None = None
     x: float | None = None
     y: float | None = None
-    seed: int | None = None
     delta: int | None = None
     value: int | None = None
     # A card's free-text note (SET_NOTE); bounded so a note stays a short label, not a payload.
@@ -69,11 +74,29 @@ class IntentEnvelope(BaseModel):
     print_card_id: str | None = Field(None, max_length=64)
 
 
-def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
+def intent_from_envelope(envelope: IntentEnvelope, rng: Generator) -> Intent:
     """Build a core ``Intent`` from a validated envelope. Raises on a structurally malformed target
     (``KeyError``/``TypeError``) or an invalid combination (``ValueError``); the caller treats a
     raised error as a rejected intent.
+
+    Parameters
+    ----------
+    envelope : IntentEnvelope
+        The validated client message.
+    rng : numpy.random.Generator
+        The acting seat's stream. Every randomizer is resolved here rather than read off the wire,
+        so a player cannot choose their own shuffle order, coin or die face. Only a randomizer
+        draws, so the stream advances once per randomizer rather than once per intent.
     """
+    match envelope.op:
+        case IntentOp.FLIP_COIN:
+            return flip_coin(rng)
+        case IntentOp.ROLL_DICE:
+            return roll_dice(rng) if envelope.value is None else roll_dice(rng, envelope.value)
+        case IntentOp.SHUFFLE:
+            seed = int(rng.integers(SEED_SPACE))
+        case _:
+            seed = None
     return decode_intent(
         {
             "op": envelope.op.value,
@@ -88,7 +111,7 @@ def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
             "zone": envelope.zone,
             "x": envelope.x,
             "y": envelope.y,
-            "seed": envelope.seed,
+            "seed": seed,
             "delta": envelope.delta,
             "value": envelope.value,
             "text": envelope.text,

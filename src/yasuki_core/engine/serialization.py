@@ -327,9 +327,9 @@ def encode_intent(intent: Intent) -> dict:
         case IntentOp.DETACH:
             payload["card_id"] = intent.card_id
         case IntentOp.FLIP_COIN:
-            payload["seed"] = intent.seed
+            payload["result"] = intent.result
         case IntentOp.ROLL_DICE:
-            payload |= {"seed": intent.seed, "value": intent.sides}
+            payload |= {"face": intent.face, "value": intent.sides}
         case _:
             raise ValueError(f"unhandled intent op: {intent.op}")
     return payload
@@ -419,9 +419,10 @@ def decode_intent(payload: dict) -> Intent:
         case IntentOp.DETACH:
             return Detach(payload["card_id"])
         case IntentOp.FLIP_COIN:
-            return FlipCoin(payload["seed"])
+            return FlipCoin(payload["result"])
         case IntentOp.ROLL_DICE:
             sides = payload.get("value")
-            return RollDice(payload["seed"]) if sides is None else RollDice(payload["seed"], sides)
+            face = payload["face"]
+            return RollDice(face) if sides is None else RollDice(face, sides)
         case _:
             raise ValueError(f"unhandled intent op: {op}")

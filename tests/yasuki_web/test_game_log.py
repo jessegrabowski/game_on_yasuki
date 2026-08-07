@@ -14,8 +14,6 @@ from yasuki_core.engine.intents import (
     Shuffle,
     FlipCoin,
     RollDice,
-    coin_flip_outcome,
-    dice_roll_outcome,
     SetHonor,
     SpawnCard,
     RemoveCard,
@@ -319,17 +317,17 @@ def test_move_deck_top_to_battlefield_is_described_as_a_move():
     ]
 
 
-def test_flip_coin_announces_the_seeded_outcome():
+def test_flip_coin_announces_the_flipped_face():
     table = TableState.empty_two_seat()
-    assert _describe(table, FlipCoin(seed=5)) == [
+    assert _describe(table, FlipCoin("Tails")) == [
         {"text": "Ada "},
-        {"text": f"flipped a coin: {coin_flip_outcome(5)}"},
+        {"text": "flipped a coin: Tails"},
     ]
 
 
-def test_roll_dice_announces_the_seeded_face_and_die_size():
+def test_roll_dice_announces_the_face_and_die_size():
     table = TableState.empty_two_seat()
-    assert _describe(table, RollDice(seed=5, sides=20)) == [
+    assert _describe(table, RollDice(13, sides=20)) == [
         {"text": "Ada "},
-        {"text": f"rolled a {dice_roll_outcome(5, 20)} on a d20"},
+        {"text": "rolled a 13 on a d20"},
     ]

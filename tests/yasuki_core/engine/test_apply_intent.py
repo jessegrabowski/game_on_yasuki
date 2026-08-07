@@ -1,5 +1,7 @@
 import pytest
 
+from numpy.random import default_rng
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos, BATTLEFIELD
 from yasuki_core.engine.intents import (
@@ -26,8 +28,6 @@ from yasuki_core.engine.intents import (
     Shuffle,
     FlipCoin,
     RollDice,
-    coin_flip_outcome,
-    dice_roll_outcome,
     FlipDeckTop,
     SearchDeck,
     MoveDeckTop,
@@ -40,6 +40,8 @@ from yasuki_core.engine.intents import (
     SpawnCard,
     RemoveCard,
     apply_intent,
+    flip_coin,
+    roll_dice,
 )
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
@@ -1766,36 +1768,51 @@ def test_re_attaching_to_a_different_parent_updates_and_emits():
 
 def test_flip_coin_is_read_only_and_always_accepted():
     table = TableState.empty_two_seat()
-    events = apply_intent(table, PlayerId.P2, FlipCoin(seed=1))
+    events = apply_intent(table, PlayerId.P2, FlipCoin("Heads"))
     assert len(events) == 1
-    assert events[0].intent == FlipCoin(seed=1)
+    assert events[0].intent == FlipCoin("Heads")
     assert table.seq == 0  # read-only: the coin changes nothing
 
 
 def test_roll_dice_is_read_only_and_always_accepted():
     table = TableState.empty_two_seat()
-    events = apply_intent(table, PlayerId.P1, RollDice(seed=1, sides=20))
+    events = apply_intent(table, PlayerId.P1, RollDice(13, sides=20))
     assert len(events) == 1
-    assert events[0].intent == RollDice(seed=1, sides=20)
+    assert events[0].intent == RollDice(13, sides=20)
     assert table.seq == 0
 
 
 @pytest.mark.parametrize("sides", [1, 0, -3])
 def test_roll_dice_rejects_fewer_than_two_sides(sides):
     with pytest.raises(ValueError):
-        RollDice(seed=1, sides=sides)
+        RollDice(1, sides=sides)
 
 
 def test_roll_dice_accepts_the_two_sided_minimum():
-    assert RollDice(seed=1, sides=2).sides == 2
+    assert RollDice(1, sides=2).sides == 2
 
 
-def test_coin_flip_outcome_is_deterministic_and_covers_both_faces():
-    faces = {coin_flip_outcome(seed) for seed in range(20)}
+@pytest.mark.parametrize("face", [0, -1, 7])
+def test_roll_dice_rejects_a_face_that_is_not_on_the_die(face):
+    # A face off the die would announce an impossible roll, which no caller could detect downstream.
+    with pytest.raises(ValueError):
+        RollDice(face, sides=6)
+
+
+def test_flip_coin_rejects_a_result_that_is_not_a_face():
+    with pytest.raises(ValueError):
+        FlipCoin("Edge")
+
+
+def test_flip_coin_draws_both_faces_from_a_generator():
+    faces = {flip_coin(default_rng(seed)).result for seed in range(20)}
     assert faces == {"Heads", "Tails"}
-    assert coin_flip_outcome(7) == coin_flip_outcome(7)
 
 
-def test_dice_roll_outcome_covers_every_face_and_is_deterministic():
-    assert {dice_roll_outcome(seed, 6) for seed in range(50)} == {1, 2, 3, 4, 5, 6}
-    assert dice_roll_outcome(7, 6) == dice_roll_outcome(7, 6)
+def test_roll_dice_draws_every_face_from_a_generator():
+    rolled = {roll_dice(default_rng(seed), 6).face for seed in range(50)}
+    assert rolled == {1, 2, 3, 4, 5, 6}
+
+
+def test_a_rolled_die_reports_the_sides_it_was_rolled_on():
+    assert roll_dice(default_rng(0), 20).sides == 20
