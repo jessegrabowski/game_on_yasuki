@@ -1,4 +1,5 @@
 import tkinter as tk
+from collections.abc import Collection
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_gui import theme
@@ -19,7 +20,7 @@ class HandVisual(Visual):
         h: int,
         tag: str,
         images: ImageProvider | None = None,
-        selected_ids: frozenset[str] = frozenset(),
+        selected_ids: Collection[str] = (),
     ):
         self.cards = cards
         self.owner = owner

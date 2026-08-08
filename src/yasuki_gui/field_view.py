@@ -161,9 +161,9 @@ class FieldView(tk.Canvas):
         return self._selectable is not None
 
     @property
-    def selection(self) -> frozenset[str]:
-        """The ids currently selected for the pending decision."""
-        return frozenset(self._selection)
+    def selection(self) -> tuple[str, ...]:
+        """The ids currently selected for the pending decision, in the order they were picked."""
+        return tuple(self._selection)
 
     @property
     def boosted(self) -> frozenset[str]:

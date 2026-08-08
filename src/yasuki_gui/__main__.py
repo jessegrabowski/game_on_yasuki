@@ -122,7 +122,7 @@ def main() -> None:
                 ],
             )
         elif pending is not None:
-            chosen = tuple(field.selection)
+            chosen = field.selection
             boosted = tuple(field.boosted)
             can_confirm = pending.accepts(DecisionResponse(chosen, boosted))
             buttons = [(pending.confirm_label, confirm_decision, can_confirm)]

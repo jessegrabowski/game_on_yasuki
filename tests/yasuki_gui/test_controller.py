@@ -85,7 +85,7 @@ class TestDecisionSelection:
         field.begin_selection(["other-id"])  # P1-SH is not a candidate
         _at(field, card_tag("P1-SH"))
         field._controller.on_press(DummyEventNamespace(x=sp.x, y=sp.y))
-        assert field.selection == frozenset()
+        assert field.selection == ()
 
 
 class TestProvinceActivation:
