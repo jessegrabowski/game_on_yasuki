@@ -5,7 +5,7 @@ from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Legacy, Pass
+from yasuki_core.engine.rules.actions import Cycle, Legacy, Pass
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
@@ -250,25 +250,37 @@ def test_province_menu_labels_a_variable_invest_as_a_range():
     assert "Invest: Pay 2–4 gold" in labels  # base 1 plus 1 to 3 invested
 
 
-def test_deck_menu_offers_legacy_on_the_human_dynasty_deck_in_dynasty():
+def _runner_with_a_province(p1_hand: int = 0) -> GameRunner:
+    """A runner whose seat holds one face-up Province card, so Cycle has something to offer."""
+    state = _dealt_table(p1_hand)
+    _face_up_holding_in_province(state, "P1-pv", gold_cost=1)
+    return GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+
+
+def test_board_menu_offers_legacy_in_the_dynasty_phase():
+    # Asserted as label-and-action pairs: the menu pairs each ability with its own wording, and a
+    # swap would leave every action-only assertion passing while the player reads the wrong entry.
     runner = _runner(p1_hand=1)  # a hand card to pay the banish cost
     _to_dynasty(runner)
 
-    items = runner.deck_menu(DeckKey(PlayerId.P1, Side.DYNASTY))
-    assert [action for _, action in items] == [Legacy()]
+    assert runner.board_menu() == [("Legacy: banish a card to search for a Legacy card", Legacy())]
 
 
-def test_deck_menu_is_empty_outside_the_dynasty_phase():
-    runner = _runner(p1_hand=1)  # still the Action phase
-    assert runner.deck_menu(DeckKey(PlayerId.P1, Side.DYNASTY)) == []
+def test_board_menu_offers_cycle_on_the_opening_turn():
+    # Both rulebook abilities live here now, so the menu has to sort them by what is legal rather
+    # than by which zone was clicked — Cycle is the Action phase's, Legacy the Dynasty phase's.
+    runner = _runner_with_a_province()
+
+    assert runner.board_menu() == [
+        ("Cycle: put Province cards on the bottom of your deck", Cycle())
+    ]
 
 
-def test_deck_menu_is_empty_for_the_fate_deck_and_the_opponents_deck():
-    runner = _runner(p1_hand=1)
-    _to_dynasty(runner)
+def test_board_menu_is_empty_when_no_rulebook_ability_is_legal():
+    runner = _runner_with_a_province(p1_hand=1)
+    runner.act(PASS)  # Action -> Attack, which is neither ability's phase
 
-    assert runner.deck_menu(DeckKey(PlayerId.P1, Side.FATE)) == []
-    assert runner.deck_menu(DeckKey(PlayerId.P2, Side.DYNASTY)) == []
+    assert runner.board_menu() == []
 
 
 def _runner_with_in_play(card) -> GameRunner:

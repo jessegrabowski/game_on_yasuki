@@ -1,4 +1,6 @@
 import tkinter as tk
+from collections.abc import Collection
+
 from yasuki_gui import theme
 from yasuki_gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
 from yasuki_gui.visuals.cardface import RenderCard
@@ -17,6 +19,7 @@ class ZoneVisual(Visual):
         h: int,
         tag: str,
         images: ImageProvider | None = None,
+        selected_ids: Collection[str] = (),
     ):
         self.cards = cards
         self.is_province = is_province
@@ -27,6 +30,7 @@ class ZoneVisual(Visual):
         self.h = h
         self.tag = tag
         self.images = images
+        self.selected_ids = selected_ids
 
     @property
     def size(self) -> tuple[int, int]:
@@ -83,8 +87,15 @@ class ZoneVisual(Visual):
                         justify="center",
                         tags=(self.tag, "zone"),
                     )
+            selected = top.id in self.selected_ids
             canvas.create_rectangle(
-                x0, y0, x1, y1, outline=theme.CARD_BORDER, width=1, tags=(self.tag, "zone")
+                x0,
+                y0,
+                x1,
+                y1,
+                outline=theme.SELECT if selected else theme.CARD_BORDER,
+                width=3 if selected else 1,
+                tags=(self.tag, "zone"),
             )
             if not is_province and len(self.cards) > 1:
                 draw_count_pill(canvas, x1, y1, len(self.cards), self.tag)

@@ -53,6 +53,10 @@ class FieldController:
         v.bind("<Motion>", self.on_move)
         v.bind("<ButtonRelease-1>", self.on_release)
         v.bind("<Double-Button-1>", self.on_double_click)
+        # Aqua reports a right-click as Button-2 and the wheel click as Button-3; X11 and Windows
+        # swap them. Binding both is what the honor control already does.
+        v.bind("<Button-2>", self.on_context_click)
+        v.bind("<Button-3>", self.on_context_click)
         v.bind("<KeyPress-Escape>", self.on_escape)
         v.bind_all("<Control-t>", self.on_toggle_player)
 
@@ -380,6 +384,14 @@ class FieldController:
         self.view.dispatch(SetCardPos(d.card.id, pos.x, pos.y))
 
     # ----- double click / context / keys ------------------------------------
+
+    def on_context_click(self, e: tk.Event) -> None:
+        """Open the board menu on a right-click that hits no card or zone, in rules mode only."""
+        self._hide_card_view()
+        if not self.view.rules_mode or self.view.resolve_tag_at(e):
+            return
+        if self.view.on_board_menu is not None:
+            self.view.on_board_menu()
 
     def on_double_click(self, e: tk.Event) -> None:
         tag = self.view.resolve_tag_at(e)

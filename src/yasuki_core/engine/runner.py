@@ -2,12 +2,11 @@ from collections.abc import Iterable, Iterator
 from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey
-from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules import abilities, flow
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
+    Cycle,
     DynastyDiscard,
     Legacy,
     Pass,
@@ -96,14 +95,14 @@ class GameRunner:
                 return [(label, action)]
         return []
 
-    def deck_menu(self, deck_key: DeckKey) -> list[tuple[str, Action]]:
-        """The labeled actions for a left-click on a deck. The human's dynasty deck offers Legacy —
-        the Dynasty rulebook ability that searches it — when it is legal; empty otherwise."""
-        if deck_key.owner is not self.human or deck_key.side is not Side.DYNASTY:
-            return []
-        if Legacy() not in self.legal_actions():
-            return []
-        return [("Legacy: banish a card to search for a Legacy card", Legacy())]
+    def board_menu(self) -> list[tuple[str, Action]]:
+        """The labeled rulebook abilities, for a right-click on the empty board. These belong to no
+        card, so the board is the only place they can be offered. Empty when none is legal now."""
+        labels = {
+            Legacy(): "Legacy: banish a card to search for a Legacy card",
+            Cycle(): "Cycle: put Province cards on the bottom of your deck",
+        }
+        return [(labels[action], action) for action in self.legal_actions() if action in labels]
 
     def legacy_search_pool(self) -> list:
         """The cards the human's Legacy search looks through — its whole dynasty deck plus its

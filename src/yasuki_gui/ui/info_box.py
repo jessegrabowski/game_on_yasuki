@@ -79,17 +79,10 @@ class PlayerInfoBox(tk.Frame):
     sandbox; the rules engine owns honor during play.
     """
 
-    def __init__(
-        self,
-        master: tk.Misc,
-        field: FieldView,
-        owner: PlayerId,
-        on_deck_activated: Callable[[DeckKey], None] | None = None,
-    ):
+    def __init__(self, master: tk.Misc, field: FieldView, owner: PlayerId):
         super().__init__(master, bg=theme.PANEL)
         self.field = field
         self.owner = owner
-        self._on_deck_activated = on_deck_activated
         self._honor_text = tk.StringVar()
 
         self._avatar_canvas = tk.Canvas(
@@ -193,12 +186,7 @@ class PlayerInfoBox(tk.Frame):
 
     def _build_cells(self) -> None:
         for row, col, side, caption in _DECK_CELLS:
-            # The dynasty deck is clickable — it hosts the Legacy rulebook ability; other decks stay
-            # display-only. deck_menu gates the action to the human's own deck.
-            on_click = None
-            if side is Side.DYNASTY and self._on_deck_activated is not None:
-                on_click = partial(self._on_deck_activated, DeckKey(self.owner, side))
-            cell = _Cell(self._grid, caption, on_click=on_click)
+            cell = _Cell(self._grid, caption)
             cell.grid(row=row, column=col, padx=2, pady=2)
             self._deck_cells[side] = cell
         for row, col, role, caption in _PILE_CELLS:

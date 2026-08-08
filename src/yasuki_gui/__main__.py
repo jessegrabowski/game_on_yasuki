@@ -2,7 +2,6 @@ import logging
 import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
     ChooseInvestAmount,
@@ -227,10 +226,10 @@ def main() -> None:
         # through the board-selection path.
         popup_action_menu(runner.province_menu(card_id) + runner.ability_menu(card_id))
 
-    def on_deck_activated(deck_key: DeckKey) -> None:
-        # A left-click on the human's dynasty deck opens the Legacy rulebook ability, which searches
-        # that deck.
-        popup_action_menu(runner.deck_menu(deck_key))
+    def on_board_menu() -> None:
+        # A right-click on empty board opens the rulebook abilities. They act on whole zones rather
+        # than on a card, so there is no card to left-click for them.
+        popup_action_menu(runner.board_menu())
 
     def undo(_event=None) -> None:
         # Ctrl+Z: back out of an open boost question first, else while paying unbow the last producer
@@ -257,6 +256,7 @@ def main() -> None:
     field.on_boost_request = request_boost
     field.on_selection_changed = refresh
     field.on_card_activated = on_card_activated
+    field.on_board_menu = on_board_menu
     root.bind("<Control-z>", undo)
     root.bind("<Escape>", cancel_via_escape)
 
@@ -267,7 +267,7 @@ def main() -> None:
 
     # The left column runs opponent / prompt / you, top to bottom.
     opponent_panel = PlayerInfoBox(sidebar, field, PlayerId.P2)
-    human_panel = PlayerInfoBox(sidebar, field, PlayerId.P1, on_deck_activated=on_deck_activated)
+    human_panel = PlayerInfoBox(sidebar, field, PlayerId.P1)
     prompt_box = PromptBox(sidebar)
     prompt_box.grid(row=1, column=0, sticky="nsew")
     # Spacebar takes the primary offered action (Pass/Pay/Discard), never a secondary like Cancel.
