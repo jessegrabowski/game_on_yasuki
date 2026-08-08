@@ -167,6 +167,37 @@ def effective_recruit_discount(game: GameState, card: L5RCard) -> int:
     return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
 
 
+# A keyword handler names the keywords a card carries beyond the printed ones, from the card and its
+# controller's and opponents' views — the "this card has X" clauses gated on a readable condition.
+KeywordHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], tuple[str, ...]]
+KEYWORD_GRANTS: dict[str, KeywordHandler] = {}
+
+
+def keyword_grant(printed_id: str) -> Callable[[KeywordHandler], KeywordHandler]:
+    """Register the decorated function as the keyword-grant handler for ``printed_id``."""
+
+    def register(handler: KeywordHandler) -> KeywordHandler:
+        if printed_id in KEYWORD_GRANTS:
+            raise ValueError(f"{printed_id} already has a keyword grant")
+        KEYWORD_GRANTS[printed_id] = handler
+        return handler
+
+    return register
+
+
+def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
+    """``card``'s printed keywords plus any its own ability grants under current conditions.
+
+    A card with no owner — one not yet dealt to a seat — carries only its printed keywords, since a
+    grant reads the controller's position to decide.
+    """
+    handler = KEYWORD_GRANTS.get(card.printed_id)
+    if handler is None or card.owner is None:
+        return frozenset(card.keywords)
+    granted = handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    return frozenset(card.keywords).union(granted)
+
+
 def is_clan(me: PlayerState, clan: str) -> bool:
     """Whether ``me`` is playing ``clan``, read from the stronghold."""
     return me.stronghold is not None and me.stronghold.clan == clan

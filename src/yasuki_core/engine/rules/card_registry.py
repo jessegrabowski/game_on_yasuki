@@ -22,6 +22,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "production boosts": frozenset(abilities._PRODUCTION_BOOST),
         "gold handlers": frozenset(economy.GOLD_HANDLERS),
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),
+        "keyword grants": frozenset(economy.KEYWORD_GRANTS),
         "triggers": frozenset(
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),
