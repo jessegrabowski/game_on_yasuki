@@ -92,6 +92,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 deck=args.deck.stem,
                 policy=name,
                 seed=args.seed,
+                games=args.games,
                 turns=args.turns,
             )
         )

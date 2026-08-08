@@ -100,6 +100,6 @@ def test_a_written_run_reads_back_with_its_provenance(tmp_path):
     table = pq.read_table(out)
     assert table.num_rows > 0
     # Provenance first, so a table concatenated with another can be told apart later.
-    assert table.column_names[:4] == ["deck", "policy", "seed", "turns"]
+    assert table.column_names[:5] == ["deck", "policy", "seed", "games", "turns"]
     assert set(table.column("policy").to_pylist()) == {"economic"}
     assert set(table.column("deck").to_pylist()) == {"spider_oni_control"}
