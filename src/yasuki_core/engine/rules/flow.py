@@ -43,11 +43,14 @@ from yasuki_core.engine.rules.economy import (
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
+    Discard,
     Effect,
     GrantModifier,
     MoveToDeck,
+    PlaceInProvince,
     RefillProvince,
     RevealProvinces,
+    ShuffleDeck,
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
@@ -661,15 +664,20 @@ def _apply_legacy_placement(
     source_key = _province_key_holding(
         game, seat, legacy_card.id
     )  # None when it came from the deck
-    ops.move_card(game.table, displaced, ZoneKey(seat, ZoneRole.DYNASTY_DISCARD))
-    ops.move_card(game.table, legacy_card, target_key)
-    legacy_card.turn_face_up()  # a placed Legacy card enters its province revealed
     game.pending = None
-    if source_key is None:
-        game.table.decks[DeckKey(seat, Side.DYNASTY)].shuffle(game.rng)
-    else:
+    if source_key is not None:
         _defer_refill(game, source_key)
-    triggers.fire(game, CardDiscarded(displaced.id, displaced.side, seat))
+    # One effect per occurrence, so each announces itself where it happens. Inline effects resolve
+    # before the events queued behind them, so the placement still lands ahead of any reaction to
+    # the discard.
+    placing: list[Effect] = [
+        Discard(displaced.id, seat),
+        PlaceInProvince(legacy_card.id, target_key),
+    ]
+    if source_key is None:
+        # The found card came out of the deck, so the deck the search read is no longer secret.
+        placing.append(ShuffleDeck(DeckKey(seat, Side.DYNASTY)))
+    triggers.resolve_effects(game, placing)
 
 
 def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tuple[str, ...]:

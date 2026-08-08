@@ -4,13 +4,27 @@ from dataclasses import dataclass
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest
-from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent, Revealed
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.engine.rules.events import (
+    CardDiscarded,
+    CounterGained,
+    Destroyed,
+    GameEvent,
+    Revealed,
+)
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
+
+
+def _discard_pile(card: L5RCard) -> ZoneKey:
+    """The discard pile ``card`` belongs in, chosen by its side. Shared so a Fate card cannot end up
+    in the Dynasty discard through one path and not another."""
+    role = ZoneRole.DYNASTY_DISCARD if card.side is Side.DYNASTY else ZoneRole.FATE_DISCARD
+    return ZoneKey(card.owner, role)
 
 
 class Effect(ABC):
@@ -116,9 +130,69 @@ class Destroy(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None or card.owner is None:
             return []
-        role = ZoneRole.DYNASTY_DISCARD if card.side is Side.DYNASTY else ZoneRole.FATE_DISCARD
-        ops.move_card(game.table, card, ZoneKey(card.owner, role))
+        ops.move_card(game.table, card, _discard_pile(card))
         return [Destroyed(self.card_id)]
+
+
+@dataclass(frozen=True, slots=True)
+class Discard(Effect):
+    """Put a card in its owner's discard pile by side, announcing the discard.
+
+    Attributes
+    ----------
+    card_id : str
+        The card to discard.
+    by_seat : PlayerId
+        The seat whose action caused it, which a discard reaction reads to tell its own doing from
+        its opponent's.
+    """
+
+    card_id: str
+    by_seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.by_seat.name} discards {self.card_id}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None or card.owner is None:
+            return []
+        ops.move_card(game.table, card, _discard_pile(card))
+        return [CardDiscarded(self.card_id, card.side, self.by_seat)]
+
+
+@dataclass(frozen=True, slots=True)
+class PlaceInProvince(Effect):
+    """Put a card into a Province face-up. A no-op when the card is gone or the Province is full."""
+
+    card_id: str
+    zone: ZoneKey
+
+    def describe(self) -> str:
+        return f"place {self.card_id} in {self.zone.owner.name} province {self.zone.idx}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        province = game.table.zones.get(self.zone)
+        if card is None or province is None or not province.has_capacity():
+            return []
+        ops.move_card(game.table, card, self.zone)
+        card.turn_face_up()
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class ShuffleDeck(Effect):
+    """Shuffle a deck, drawing from the game's own stream so a replay shuffles the same way."""
+
+    deck: DeckKey
+
+    def describe(self) -> str:
+        return f"shuffle {self.deck.owner.name}'s {self.deck.side.name.lower()} deck"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.table.decks[self.deck].shuffle(game.rng)
+        return []
 
 
 @dataclass(frozen=True, slots=True)
