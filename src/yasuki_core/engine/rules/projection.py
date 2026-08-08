@@ -4,6 +4,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import redact, ViewSnapshot
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DecisionRequest
+from yasuki_core.engine.rules.flow import legacy_candidates
+from yasuki_core.game_pieces.cards import L5RCard
 
 
 @dataclass(frozen=True, slots=True)
@@ -35,6 +37,10 @@ class GameView:
     pending : DecisionRequest or None
         The decision the viewer must answer, or None when nothing is awaited from this viewer —
         including when the engine is instead waiting on the other seat.
+    legacy_pool : tuple of L5RCard
+        The viewer's own Legacy cards a search would still find, sorted by card id rather than left
+        in deck order. Empty means a Legacy search would whiff and lose the game. Never populated
+        for the other seat.
     """
 
     viewer: PlayerId
@@ -46,12 +52,13 @@ class GameView:
     gold: dict[PlayerId, int]
     favor_holder: PlayerId | None
     pending: DecisionRequest | None
+    legacy_pool: tuple[L5RCard, ...]
 
 
 def project(game: GameState, viewer: PlayerId) -> GameView:
     """Project ``game`` into the view ``viewer`` is entitled to: the board redacted for the viewer,
-    the public rules fields, and the pending decision only if this viewer is the one to answer
-    it."""
+    the public rules fields, the pending decision only if this viewer is the one to answer it, and
+    the Legacy cards the viewer's own search would find."""
     pending = game.pending if game.pending is not None and game.pending.seat is viewer else None
     return GameView(
         viewer=viewer,
@@ -63,4 +70,5 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
         gold=dict(game.gold),
         favor_holder=game.favor_holder,
         pending=pending,
+        legacy_pool=tuple(sorted(legacy_candidates(game, viewer), key=lambda card: card.id)),
     )
