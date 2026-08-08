@@ -4,7 +4,7 @@ from pathlib import Path
 
 import psycopg
 
-from yasuki_core.engine.rules.agents import PayingAgent
+from yasuki_core.engine.rules.agents import Agent, PayingAgent
 from yasuki_core.engine.rules.policies import POLICIES, make_policy
 from yasuki_core.sim.harness import run_games, sample_rows, write_rows
 from yasuki_core.sim.metrics import (
@@ -61,7 +61,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         policy = make_policy(name)
         # A policy that answers its own decisions is passed as both, so the cards it chooses over
         # are the cards it acts on; the rest lean on the generic paying agent.
-        agent = policy if hasattr(policy, "decide") else PayingAgent()
+        agent = policy if isinstance(policy, Agent) else PayingAgent()
         try:
             played = run_games(
                 args.deck,
