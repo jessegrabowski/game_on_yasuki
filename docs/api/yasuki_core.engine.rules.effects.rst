@@ -12,6 +12,7 @@ yasuki_core.engine.rules.effects
     Bow
     Choose
     Destroy
+    Discard
     DrawCard
     Effect
     GainGold
@@ -19,9 +20,11 @@ yasuki_core.engine.rules.effects
     IgnoreHonorRequirements
     InterruptingEffect
     MoveToDeck
+    PlaceInProvince
     RecruitCard
     RefillProvince
     RevealProvinces
+    ShuffleDeck
     Straighten
     Then
 

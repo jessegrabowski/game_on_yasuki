@@ -14,14 +14,23 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     Destroy,
+    Discard,
+    PlaceInProvince,
     Effect,
     InterruptingEffect,
 )
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 
-from tests.yasuki_core.engine.builders import fate_card, holding, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    fate_card,
+    holding,
+    province_card,
+    put_in_play,
+    two_seat_game,
+)
 
 
 def _effect_types():
@@ -116,6 +125,38 @@ def test_destroying_a_vanished_card_is_a_no_op():
     card = put_in_play(game, holding("P1-h"))
     _vanished(game, card.id)
     assert Destroy(card.id).perform(game) == []
+
+
+@pytest.mark.parametrize(
+    "side, role",
+    [(Side.FATE, ZoneRole.FATE_DISCARD), (Side.DYNASTY, ZoneRole.DYNASTY_DISCARD)],
+    ids=["fate", "dynasty"],
+)
+def test_a_discard_lands_in_the_pile_for_its_side(side, role):
+    # Destroy and Discard pick the pile the same way. Drift between them would strand a Fate card
+    # in the Dynasty discard, where nothing that searches for it would look.
+    game = two_seat_game()
+    card = fate_card("P1-f", PlayerId.P1) if side is Side.FATE else holding("P1-h")
+    put_in_play(game, card)
+
+    events = Discard(card.id, PlayerId.P1).perform(game)
+
+    assert card in game.table.zones[ZoneKey(PlayerId.P1, role)].cards
+    assert events == [CardDiscarded(card.id, side, PlayerId.P1)]
+
+
+def test_placing_into_a_full_province_is_a_no_op():
+    # The placement is deferred behind the reactions to the discard, so something can fill the
+    # Province in between. Checking capacity first is what keeps the card where it is: the move
+    # would take it out of play before the full Province refused it, leaving it nowhere at all.
+    game = two_seat_game()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    sitting = province_card(game, "P1-sitting", seat=PlayerId.P1)
+    card = put_in_play(game, holding("P1-late"))
+
+    assert PlaceInProvince(card.id, province).perform(game) == []
+    assert [c.id for c in game.table.zones[province].cards] == [sitting.id]
+    assert card in game.table.battlefield.cards  # not swallowed on the way
 
 
 def test_destroying_an_unowned_card_is_a_no_op():

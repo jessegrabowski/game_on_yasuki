@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.effects import (
     BanishTopFate,
     Bow,
     Choose,
+    Discard,
     Destroy,
     DrawCard,
     Effect,
@@ -17,8 +18,10 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     IgnoreHonorRequirements,
     MoveToDeck,
+    PlaceInProvince,
     RecruitCard,
     RevealProvinces,
+    ShuffleDeck,
     Straighten,
     Then,
 )
@@ -59,6 +62,12 @@ EFFECTS = [
         RefillProvince(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), face_up=True),
         "refill P2 province 0 face-up",
     ),
+    (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
+    (
+        PlaceInProvince("farm_1", ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 1)),
+        "place farm_1 in P2 province 1",
+    ),
+    (ShuffleDeck(DeckKey(PlayerId.P1, Side.DYNASTY)), "shuffle P1's dynasty deck"),
     (RevealProvinces(PlayerId.P1), "reveal P1's provinces"),
     (Then((Bow("a"), Destroy("b"))), "then: 2 deferred"),
     (
