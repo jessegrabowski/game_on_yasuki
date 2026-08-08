@@ -207,9 +207,10 @@ class BanishTopFate(Effect):
 class MoveToDeck(Effect):
     """Move a card into a deck at a stated depth, counting from whichever end names it.
 
-    Depths are zero-based: ``from_top=0`` is the top card, ``from_bottom=0`` the bottom. A depth
-    past the far end clamps to that end, so a deck of two asked for ``from_top=9`` takes the card at
-    the bottom rather than raising. A card that no longer exists is a no-op.
+    Give exactly one of ``from_top`` and ``from_bottom``. Depths are zero-based: ``from_top=0`` is
+    the top card, ``from_bottom=0`` the bottom. A depth past the far end clamps to that end, so a
+    deck of two asked for ``from_top=9`` takes the card at the bottom rather than raising. A card
+    that no longer exists is a no-op.
 
     Attributes
     ----------
@@ -218,8 +219,7 @@ class MoveToDeck(Effect):
     deck : DeckKey
         The deck it lands in.
     from_top : int, optional
-        Depth measured from the top of the deck. Give exactly one of this and ``from_bottom``.
-        Default None.
+        Depth measured from the top of the deck. Default None.
     from_bottom : int, optional
         Depth measured from the bottom of the deck. Default None.
     """
@@ -238,8 +238,9 @@ class MoveToDeck(Effect):
             raise ValueError(f"MoveToDeck depth cannot be negative, got {depth}")
 
     def describe(self) -> str:
-        end = "top" if self.from_top is not None else "bottom"
-        depth = self.from_top if self.from_top is not None else self.from_bottom
+        end, depth = (
+            ("top", self.from_top) if self.from_top is not None else ("bottom", self.from_bottom)
+        )
         side = self.deck.side.name.lower()
         return f"move {self.card_id} into {self.deck.owner.name}'s {side} deck, {depth} from {end}"
 
@@ -250,7 +251,7 @@ class MoveToDeck(Effect):
         # The card leaves wherever it is before it lands, so a card already in this deck must not
         # count itself when its depth is measured.
         cards = game.table.decks[self.deck].cards
-        landing_size = len(cards) - sum(1 for held in cards if held is card)
+        landing_size = len(cards) - (1 if any(held is card for held in cards) else 0)
         index = self.from_bottom if self.from_bottom is not None else landing_size - self.from_top
         ops.move_card(game.table, card, self.deck, deck_index=index)
         return []

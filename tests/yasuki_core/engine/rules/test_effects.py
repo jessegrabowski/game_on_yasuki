@@ -186,8 +186,8 @@ def _record_the_source(game, source_id, chosen):
 
 
 def test_a_choice_raised_by_no_card_reaches_its_resolver_with_none():
-    # A rulebook ability has no card to name. The empty string that used to stand in for one is a
-    # perfectly good card id that simply never matches, so a resolver could not tell "no source"
+    # A rulebook ability has no card to name, and no card id can stand in for one: every string is
+    # a perfectly good id that simply never matches, leaving a resolver unable to tell "no source"
     # from "a source I have not heard of".
     _SOURCES_SEEN.clear()
     game = two_seat_game()
