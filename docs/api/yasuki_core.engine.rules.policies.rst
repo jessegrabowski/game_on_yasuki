@@ -7,6 +7,7 @@ yasuki_core.engine.rules.policies
 
 .. autosummary::
 
+    EconomicCyclePolicy
     EconomicLegacyPolicy
     EconomicPolicy
     PassPolicy
@@ -17,6 +18,7 @@ yasuki_core.engine.rules.policies
 
 .. autosummary::
 
+    cards_to_cycle
     make_policy
 
 .. automodule:: yasuki_core.engine.rules.policies
