@@ -1,7 +1,6 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
-from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
@@ -40,7 +39,7 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter, GrantModifier
+from yasuki_core.engine.rules.effects import AdjustCounter, GrantModifier, RefillProvince
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules import abilities, triggers
 
@@ -329,7 +328,7 @@ def cancel(game: GameState) -> None:
     is even announced.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
-    cannot be cancelled.
+    cannot be canceled.
     """
     request = game.pending
     if request is None:
@@ -432,16 +431,17 @@ def _resolve_recruit(
     proclaim: bool = False,
 ) -> None:
     card = game.table.cards_by_id[card_id]
-    province = _province_of(game, seat, card_id)
+    # Read the Province before the move; afterwards no Province holds the card to look it up by.
+    province_key = _province_key_holding(game, seat, card_id)
     # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
     # rather than dropping it at the origin.
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     if isinstance(card, DynastyHolding):
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
-    if province is not None:
-        refill = ops.fill_province(game.table, seat, province)
-        if refill is not None and (renew or RENEW_KEYWORD in effective_keywords(game, card)):
-            refill.turn_face_up()  # Renew: the vacated Province refills face-up
+    if province_key is not None:
+        # Renew is read once the card has entered play, which is when the keyword speaks.
+        renews = renew or RENEW_KEYWORD in effective_keywords(game, card)
+        _defer_refill(game, province_key, face_up=renews)
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
     game.stack.append(FinishRecruit(card_id, invest_amount, proclaim))
     triggers.fire(game, EnteredPlay(card_id))
@@ -472,10 +472,10 @@ def dynasty_discard(game: GameState, card_id: str) -> None:
     Dynasty Discard action. It has no cost, so it resolves at once with no payment."""
     card = game.table.cards_by_id[card_id]
     seat = card.owner
-    province = _province_of(game, seat, card_id)
+    province_key = _province_key_holding(game, seat, card_id)
     ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.DYNASTY_DISCARD))
-    if province is not None:
-        ops.fill_province(game.table, seat, province)
+    if province_key is not None:
+        _defer_refill(game, province_key)
     triggers.fire(game, CardDiscarded(card_id, card.side, seat))
 
 
@@ -495,6 +495,15 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
     if seat_align is None or seat_align not in _card_alignments(card):
         return False
     return not game.has_used(proclaim_key(seat, game.turn))
+
+
+def _defer_refill(game: GameState, zone: ZoneKey, *, face_up: bool = False) -> None:
+    """Queue the refill of a Province a card has just left, behind the reactions to it leaving.
+
+    The rules put it there: the effects triggered by the card leaving or entering play resolve
+    first, and only then is the Province refilled — and only if it is still short.
+    """
+    game.stack.append(ApplyEffects((RefillProvince(zone, face_up=face_up),)))
 
 
 def legacy_key(seat: PlayerId, turn: int) -> str:
@@ -580,15 +589,17 @@ def _apply_legacy_placement(
     displaced = game.table.cards_by_id[response.choices[0]]
     legacy_card = game.table.cards_by_id[request.legacy_card_id]
     target_key = _province_key_of(game, seat, displaced.id)
-    source_zone = _province_of(game, seat, legacy_card.id)  # None when it came from the deck
+    source_key = _province_key_holding(
+        game, seat, legacy_card.id
+    )  # None when it came from the deck
     ops.move_card(game.table, displaced, ZoneKey(seat, ZoneRole.DYNASTY_DISCARD))
     ops.move_card(game.table, legacy_card, target_key)
     legacy_card.turn_face_up()  # a placed Legacy card enters its province revealed
     game.pending = None
-    if source_zone is None:
+    if source_key is None:
         game.table.decks[DeckKey(seat, Side.DYNASTY)].shuffle(game.rng)
     else:
-        ops.fill_province(game.table, seat, source_zone)
+        _defer_refill(game, source_key)
     triggers.fire(game, CardDiscarded(displaced.id, displaced.side, seat))
 
 
@@ -709,20 +720,22 @@ def _seat_clan(game: GameState, seat: PlayerId) -> str | None:
     return None
 
 
-def _province_of(game: GameState, seat: PlayerId, card_id: str) -> ProvinceZone | None:
-    for key, zone in game.table.zones.items():
-        if key.owner is seat and key.role is ZoneRole.PROVINCE:
-            if any(card.id == card_id for card in zone.cards):
-                return zone
-    return None
-
-
-def _province_key_of(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey:
+def _province_key_holding(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey | None:
+    """The Province of ``seat`` holding ``card_id``, or None when none does."""
     for key, zone in game.table.zones.items():
         if key.owner is seat and key.role is ZoneRole.PROVINCE:
             if any(card.id == card_id for card in zone.cards):
                 return key
-    raise ValueError(f"no province of {seat.name} holds card {card_id}")
+    return None
+
+
+def _province_key_of(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey:
+    """The Province of ``seat`` holding ``card_id``. Raise ValueError when none does — for callers
+    that already know the card is there and would otherwise carry an impossible None."""
+    key = _province_key_holding(game, seat, card_id)
+    if key is None:
+        raise ValueError(f"no province of {seat.name} holds card {card_id}")
+    return key
 
 
 def _other(seat: PlayerId) -> PlayerId:

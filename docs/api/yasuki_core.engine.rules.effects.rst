@@ -19,6 +19,7 @@ yasuki_core.engine.rules.effects
     IgnoreHonorRequirements
     InterruptingEffect
     RecruitCard
+    RefillProvince
     Straighten
     Then
 
