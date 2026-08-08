@@ -1,5 +1,10 @@
 from yasuki_core.engine.rules.abilities import Ability, bow_cost, register_ability
-from yasuki_core.engine.rules.economy import PlayerState, gold_handler, recruit_discount
+from yasuki_core.engine.rules.economy import (
+    PlayerState,
+    gold_handler,
+    keyword_grant,
+    recruit_discount,
+)
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.triggers import sincerity_seed_targets
@@ -14,6 +19,14 @@ from yasuki_core.game_pieces.counters import SINCERITY
 def _shrine_of_courtesy(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
     """Courtesy grants -3 Gold Cost while you are the second player (you did not go first)."""
     return 3 if me.went_second else 0
+
+
+@keyword_grant("shrine_of_courtesy")
+def _shrine_of_courtesy_keywords(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> tuple[str, ...]:
+    """The same Courtesy clause grants Legacy, so a second player can search this Holding out."""
+    return ("Legacy",) if me.went_second else ()
 
 
 # --- Shrine of Sincerity ---

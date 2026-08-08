@@ -35,7 +35,11 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.economy import effective_gold_production, effective_recruit_discount
+from yasuki_core.engine.rules.economy import (
+    effective_gold_production,
+    effective_keywords,
+    effective_recruit_discount,
+)
 from yasuki_core.engine.rules.effects import AdjustCounter, GrantModifier
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules import abilities, triggers
@@ -431,7 +435,7 @@ def _resolve_recruit(
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     if province is not None:
         refill = ops.fill_province(game.table, seat, province)
-        if refill is not None and (renew or RENEW_KEYWORD in card.keywords):
+        if refill is not None and (renew or RENEW_KEYWORD in effective_keywords(game, card)):
             refill.turn_face_up()  # Renew: the vacated Province refills face-up
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
     game.stack.append(FinishRecruit(card_id, invest_amount, proclaim))
@@ -494,9 +498,11 @@ def legacy_key(seat: PlayerId, turn: int) -> str:
     return f"legacy:{seat.name}:{turn}"
 
 
-def is_legacy_card(card: L5RCard) -> bool:
-    """Whether ``card`` carries the Legacy keyword, so the Legacy ability can search it out."""
-    return any(keyword.lower() == LEGACY_KEYWORD.lower() for keyword in card.keywords)
+def is_legacy_card(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` carries the Legacy keyword, printed or granted by its own ability (Shrine of
+    Courtesy grants itself Legacy for the second player), so the Legacy ability can search it out."""
+    wanted = LEGACY_KEYWORD.lower()
+    return any(keyword.lower() == wanted for keyword in effective_keywords(game, card))
 
 
 def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -513,7 +519,7 @@ def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
 def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
     Empty means a Legacy search would whiff and lose the game."""
-    return [card for card in legacy_search_pool(game, seat) if is_legacy_card(card)]
+    return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
 
 
 def legacy(game: GameState) -> None:
@@ -650,7 +656,7 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
         for key, zone in game.table.zones.items()
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
-        if card.face_up and triggers.SINCERITY_KEYWORD in card.keywords
+        if card.face_up and triggers.SINCERITY_KEYWORD in effective_keywords(game, card)
     ]
     triggers.resolve_effects(game, grants)
 

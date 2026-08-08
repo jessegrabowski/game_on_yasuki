@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -227,7 +228,7 @@ def sincerity_seed_targets(game: GameState, seat: PlayerId) -> list[str]:
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
         if card.face_up
-        and SINCERITY_KEYWORD in card.keywords
+        and SINCERITY_KEYWORD in effective_keywords(game, card)
         and card.counters.get(SINCERITY.key, 0) == 0
     ]
 

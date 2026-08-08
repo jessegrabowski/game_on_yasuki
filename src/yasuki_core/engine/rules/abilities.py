@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     BanishTopFate,
@@ -187,7 +188,9 @@ def owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[Dynas
     return [
         held
         for held in game.table.battlefield.cards
-        if held.owner is owner and isinstance(held, DynastyHolding) and keyword in held.keywords
+        if held.owner is owner
+        and isinstance(held, DynastyHolding)
+        and keyword in effective_keywords(game, held)
     ]
 
 

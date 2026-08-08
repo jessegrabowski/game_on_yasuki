@@ -1,11 +1,15 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities import owned_holdings
 from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
+    KEYWORD_GRANTS,
     RECRUIT_DISCOUNTS,
     effective_gold_production,
+    effective_keywords,
     gold_handler,
+    keyword_grant,
     opposing_states,
     player_state,
     recruit_discount,
@@ -294,3 +298,77 @@ def test_a_second_recruit_discount_for_one_card_is_refused():
                 return 1
     finally:
         RECRUIT_DISCOUNTS.pop("guard_probe", None)
+
+
+# --- conditionally granted keywords ----------------------------------------------------------------
+
+
+def _shrine_of_courtesy(seat):
+    return holding(
+        f"{seat.name}-courtesy",
+        owner=seat,
+        printed_id="shrine_of_courtesy",
+        keywords=("Temple", "Unique"),
+        gold_production=2,
+        gold_cost=4,
+    )
+
+
+def test_a_card_without_a_grant_carries_only_its_printed_keywords():
+    game = two_seat_game()
+    plain = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
+    assert effective_keywords(game, plain) == frozenset({"Farm"})
+
+
+def test_shrine_of_courtesy_gains_legacy_while_you_went_second():
+    game = two_seat_game()  # first_player is P1, so P2 went second
+    shrine = put_in_play(game, _shrine_of_courtesy(PlayerId.P2))
+    assert effective_keywords(game, shrine) == frozenset({"Temple", "Unique", "Legacy"})
+
+
+def test_shrine_of_courtesy_keeps_its_printed_keywords_while_you_went_first():
+    game = two_seat_game()
+    shrine = put_in_play(game, _shrine_of_courtesy(PlayerId.P1))
+    assert effective_keywords(game, shrine) == frozenset({"Temple", "Unique"})
+
+
+def test_an_ownerless_card_falls_back_to_its_printed_keywords():
+    # A grant reads its controller's position, which a card not yet dealt to a seat does not have.
+    game = two_seat_game()
+    orphan = holding("loose", owner=None, printed_id="shrine_of_courtesy", keywords=("Temple",))
+    assert effective_keywords(game, orphan) == frozenset({"Temple"})
+
+
+def test_a_second_keyword_grant_for_one_card_is_refused():
+    @keyword_grant("guard_probe")
+    def _first(card, me, opponents):
+        return ()
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already has a keyword grant"):
+
+            @keyword_grant("guard_probe")
+            def _second(card, me, opponents):
+                return ("Legacy",)
+    finally:
+        KEYWORD_GRANTS.pop("guard_probe", None)
+
+
+def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
+    """Keyword lookups read effective keywords, so a card whose own condition grants one is found by
+    the same searches as a card that prints it. Registered here rather than leaning on a real card:
+    today only Shrine of Courtesy grants anything, and it grants Legacy, which no lookup asks for."""
+    game = two_seat_game()
+    granted = put_in_play(game, holding("P1-docks", owner=PlayerId.P1, printed_id="keyword_probe"))
+    printed = put_in_play(game, holding("P1-quay", owner=PlayerId.P1, keywords=("Port",)))
+
+    assert owned_holdings(game, PlayerId.P1, "Port") == [printed]
+
+    @keyword_grant("keyword_probe")
+    def _grants_port(card, me, opponents):
+        return ("Port",)
+
+    try:
+        assert owned_holdings(game, PlayerId.P1, "Port") == [granted, printed]
+    finally:
+        KEYWORD_GRANTS.pop("keyword_probe", None)

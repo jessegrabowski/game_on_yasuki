@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.abilities import (
     spend_wealth,
     register_ability,
 )
-from yasuki_core.engine.rules.economy import effective_gold_production
+from yasuki_core.engine.rules.economy import effective_gold_production, effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
@@ -127,7 +127,7 @@ def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
     destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
     if destroyed is None or destroyed.owner is not ctx.card.owner:
         return []
-    if "Farm" not in destroyed.keywords:
+    if "Farm" not in effective_keywords(ctx.game, destroyed):
         return []
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
 

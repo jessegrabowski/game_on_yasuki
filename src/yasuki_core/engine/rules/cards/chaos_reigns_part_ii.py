@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.abilities import Ability, bow_cost, owned_holdings, register_ability
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose, DrawCard, Effect, GrantModifier
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStarted
@@ -82,7 +83,7 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
         if card.owner is ctx.card.owner
         and card is not ctx.card
         and isinstance(card, DynastyHolding)
-        and "Farm" in card.keywords
+        and "Farm" in effective_keywords(ctx.game, card)
     )
     if not others:
         return []
