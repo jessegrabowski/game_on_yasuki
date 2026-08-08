@@ -81,7 +81,7 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
     return [Choose(ctx.card.owner, others, 0, min(2, len(others)), "wheat_farm", ctx.card.id)]
 
 
-@choice_resolver("wheat_farm")
+@choice_resolver("wheat_farm", prompt="Give a Wealth token to other Farms you control")
 def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
 ```
@@ -89,6 +89,10 @@ def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) 
 The resolver is registered under a string rather than passed as a function, so a paused game stays
 replayable — a stored closure would not rebuild to an equal object. Return an empty candidate list
 when there is nothing to target: an ability with no legal target is not offered.
+
+Register the `prompt` alongside it. Without one the seat is asked "Choose up to 2 card(s)", which
+says how many cards to click and nothing about what for. Keep the wording free of counts — the same
+choice can offer one target or two.
 
 ### Sequencing: making a step wait
 

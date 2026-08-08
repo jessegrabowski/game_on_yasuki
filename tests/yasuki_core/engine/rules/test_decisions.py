@@ -1,4 +1,9 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
+
+# Imported for the prompt registrations the card modules perform on import.
+from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.decisions import (
     DecisionRequest,
     ChooseCards,
@@ -6,6 +11,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     DiscardToHandSize,
 )
+from yasuki_core.engine.rules.triggers import choice_resolver
 
 _HAND = ("a", "b", "c")
 
@@ -137,6 +143,38 @@ def test_payment_prompt_counts_down_as_producers_are_picked():
 def test_choose_cards_wording_distinguishes_optional_from_required():
     assert _choose(minimum=0, maximum=2).prompt() == "Choose up to 2 card(s)"
     assert _choose(minimum=1, maximum=2).prompt() == "Choose 1 to 2 card(s)"
+
+
+@choice_resolver("test_prompted", prompt="Bury a card at the bottom of your deck")
+def _prompted(game, source_id, chosen):
+    return []
+
+
+def test_a_registered_prompt_replaces_the_generic_wording():
+    # The generic line names a count and nothing else, which tells a player how many cards to click
+    # but never what the choice is for. The two are shown side by side because the fallback has to
+    # survive: most choices register no prompt.
+    prompted = ChooseCards(PlayerId.P1, _HAND, 0, 2, resolver="test_prompted")
+
+    assert prompted.prompt() == "Bury a card at the bottom of your deck"
+    assert _choose(minimum=0, maximum=2).prompt() == "Choose up to 2 card(s)"
+
+
+@pytest.mark.parametrize(
+    "resolver, expected",
+    [
+        ("wheat_farm", "Give a Wealth token to other Farms you control"),
+        ("sincerity_seed", "Seed a Sincerity token onto one of your Sincerity cards"),
+        ("modest_farm_straighten", "Destroy Modest Farm to straighten the card it recruited"),
+    ],
+)
+def test_a_shipped_choice_registers_its_own_wording(resolver, expected):
+    # Wording is what a hand-written registration gets wrong without failing anything, so each line
+    # is reviewed here rather than only in the diff that first wrote it. Asked through the request
+    # the player answers, so a prompt registered under a name nothing looks up still fails.
+    request = ChooseCards(PlayerId.P1, _HAND, 0, 2, resolver=resolver)
+
+    assert request.prompt() == expected
 
 
 def test_confirm_label_defaults_to_confirm():
