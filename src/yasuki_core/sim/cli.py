@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.agents import Agent, PayingAgent
 from yasuki_core.engine.rules.policies import POLICIES, make_policy
 from yasuki_core.sim.harness import run_games, sample_rows, write_rows
 from yasuki_core.sim.metrics import (
+    Metric,
     empty_provinces,
     family_honor,
     potential_gold_production,
@@ -16,15 +17,19 @@ from yasuki_core.sim.metrics import (
     provinces_held,
 )
 
+# The policy a run uses when none is named. A result quoted without its policy compares against
+# nothing, so the name rides along in the output either way.
+DEFAULT_POLICY = "economic"
+
 # Sampled as each turn begins, when the seat has just straightened and its board is canonical.
-TURN_START_METRICS = {
+TURN_START_METRICS: dict[str, Metric] = {
     "gold": potential_gold_production,
     "honor": family_honor,
     "provinces": provinces_held,
 }
 
 # Sampled as each turn ends, where a count of what the turn did is what matters.
-TURN_END_METRICS = {
+TURN_END_METRICS: dict[str, Metric] = {
     "cleared": provinces_cleared,
     "empty": empty_provinces,
 }
@@ -46,7 +51,7 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="NAME",
         help=(
             "policy to run, repeatable to sweep several into one table "
-            f"(one of: {', '.join(sorted(POLICIES))}). Default economic"
+            f"(one of: {', '.join(sorted(POLICIES))}). Default {DEFAULT_POLICY}"
         ),
     )
     return parser
@@ -55,7 +60,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the simulation described by ``argv`` and write its rows. Return a process exit code."""
     args = build_parser().parse_args(argv)
-    policies = args.policy or ["economic"]
+    # Not argparse's own default: with action="append" a default list is appended to rather
+    # than replaced, so naming one policy would silently run two.
+    policies = args.policy or [DEFAULT_POLICY]
 
     rows: list[dict[str, object]] = []
     for name in policies:
