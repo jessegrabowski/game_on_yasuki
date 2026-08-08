@@ -62,12 +62,16 @@ def move_card(
     position: BoardPos | None = None,
     to_bottom: bool = False,
     index: int | None = None,
+    deck_index: int | None = None,
 ) -> bool:
     """Move ``card`` to a zone, deck, or the shared battlefield, applying the destination's entry
     effects (a card faces up entering a hand or discard, unbows entering a province, and is scrubbed
     to a pristine library card entering a deck — face down, unbowed, uninverted, its note and every
     show/peek disclosure cleared). Returns whether the table changed — a move onto the zone the card
-    already occupies is a no-op."""
+    already occupies is a no-op.
+
+    ``deck_index`` lands the card at that depth in a deck's bottom-first list, clamped into range,
+    and takes precedence over ``to_bottom``."""
     if dest == BATTLEFIELD:
         pos = position or state.positions.get(card.id) or DEFAULT_BOARD_POS
         remove_from_location(state, card)
@@ -86,7 +90,9 @@ def move_card(
         card.unshow()
         card.clear_peekers()
         deck = state.decks[dest]
-        if to_bottom:
+        if deck_index is not None:
+            deck.cards.insert(max(0, min(deck_index, len(deck.cards))), card)
+        elif to_bottom:
             deck.add_to_bottom([card])
         else:
             deck.add_to_top([card])

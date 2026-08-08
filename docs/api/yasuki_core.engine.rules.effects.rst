@@ -18,6 +18,7 @@ yasuki_core.engine.rules.effects
     GrantModifier
     IgnoreHonorRequirements
     InterruptingEffect
+    MoveToDeck
     RecruitCard
     RefillProvince
     Straighten
