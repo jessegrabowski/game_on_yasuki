@@ -5,7 +5,10 @@ from yasuki_core.engine.redaction import redact, ViewSnapshot
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.flow import legacy_candidates
+from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.dynasty import DynastyCard
 
 
 @dataclass(frozen=True, slots=True)
@@ -41,6 +44,11 @@ class GameView:
         The viewer's own Legacy cards a search would still find, sorted by card id rather than left
         in deck order. Empty means a Legacy search would whiff and lose the game. Never populated
         for the other seat.
+    dynasty_deck : tuple of DynastyCard
+        The cards left in the viewer's own dynasty deck, sorted by card id rather than left in deck
+        order. A seat built its deck and so knows what remains in it; where those cards sit in the
+        shuffle is the part it must not learn, which is what the sort strips. Never populated for
+        the other seat.
     """
 
     viewer: PlayerId
@@ -53,12 +61,13 @@ class GameView:
     favor_holder: PlayerId | None
     pending: DecisionRequest | None
     legacy_pool: tuple[L5RCard, ...]
+    dynasty_deck: tuple[DynastyCard, ...]
 
 
 def project(game: GameState, viewer: PlayerId) -> GameView:
     """Project ``game`` into the view ``viewer`` is entitled to: the board redacted for the viewer,
     the public rules fields, the pending decision only if this viewer is the one to answer it, and
-    the Legacy cards the viewer's own search would find."""
+    the viewer's own Legacy pool and remaining dynasty deck."""
     pending = game.pending if game.pending is not None and game.pending.seat is viewer else None
     return GameView(
         viewer=viewer,
@@ -71,4 +80,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
         favor_holder=game.favor_holder,
         pending=pending,
         legacy_pool=tuple(sorted(legacy_candidates(game, viewer), key=lambda card: card.id)),
+        dynasty_deck=tuple(
+            sorted(game.table.decks[DeckKey(viewer, Side.DYNASTY)].cards, key=lambda card: card.id)
+        ),
     )

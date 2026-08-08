@@ -3,8 +3,10 @@ from typing import Protocol
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.engine.rules.actions import Action, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, Cycle, Legacy, Pass, Recruit
 from yasuki_core.engine.redaction import HiddenCard
+from yasuki_core.engine.rules.agents import PayingAgent
+from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
@@ -137,9 +139,70 @@ class EconomicLegacyPolicy:
         )
 
 
+def cards_to_cycle(view: GameView) -> tuple[str, ...]:
+    """The face-up Province cards worth putting on the bottom of the deck, by id.
+
+    A card is worth replacing when it produces less Gold than a card drawn off the deck would on
+    average, the deck being exactly the distribution a redraw samples from. A card with no Gold
+    Production stat — a Personality — counts as producing nothing, so an economic seat replaces it
+    whenever its deck produces at all.
+
+    Returns empty when the deck is empty — a redraw would hand the same cards straight back — or
+    when every face-up card already beats what the deck offers.
+    """
+    deck = view.dynasty_deck
+    if not deck:
+        return ()
+    average = sum(_production(card) for card in deck) / len(deck)
+    return tuple(
+        sorted(
+            card_id
+            for card_id, card in _readable_province_cards(view).items()
+            # Identifiable is not the same as face-up: a seat peeking its own face-down Province
+            # cards can read one Cycle would refuse to be given.
+            if card.face_up and _production(card) < average
+        )
+    )
+
+
+class EconomicCyclePolicy:
+    """Buys like :class:`EconomicPolicy`, and cycles an opening that its deck can beat.
+
+    Cycle is a first-turn-only rulebook ability: put one or more face-up Province cards on the
+    bottom of the dynasty deck, refill, and reveal. It is taken when :func:`cards_to_cycle` finds
+    anything worth replacing.
+
+    Answers its own Cycle decision as well as choosing it, so the cards put back are the ones the
+    choice was made over. Every other decision falls through to :class:`PayingAgent`.
+    """
+
+    name = "economic-cycle"
+
+    def __init__(self) -> None:
+        self._buying = EconomicPolicy()
+        self._answering = PayingAgent()
+
+    def choose(self, view: GameView, actions: list[Action]) -> Action:
+        cycle = next((action for action in actions if isinstance(action, Cycle)), None)
+        if cycle is not None and cards_to_cycle(view):
+            return cycle
+        return self._buying.choose(view, actions)
+
+    def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
+        if isinstance(request, ChooseCards) and request.resolver == "cycle":
+            return DecisionResponse(cards_to_cycle(view))
+        return self._answering.decide(request, view)
+
+
 POLICIES: dict[str, type[Policy]] = {
     policy.name: policy
-    for policy in (PassPolicy, RandomPolicy, EconomicPolicy, EconomicLegacyPolicy)
+    for policy in (
+        PassPolicy,
+        RandomPolicy,
+        EconomicPolicy,
+        EconomicLegacyPolicy,
+        EconomicCyclePolicy,
+    )
 }
 """Every policy a run can be configured with, by name."""
 

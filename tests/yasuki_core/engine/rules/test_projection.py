@@ -76,6 +76,11 @@ def _legacy_holding(card_id: str, owner=PlayerId.P1, production=3) -> DynastyHol
     )
 
 
+def _dynasty_holding(card_id: str, owner=PlayerId.P1) -> DynastyHolding:
+    """A plain Holding, for tests where the Legacy keyword would be a false signal."""
+    return DynastyHolding(id=card_id, name=f"Holding {card_id}", side=Side.DYNASTY, owner=owner)
+
+
 def _seed_deck(game: GameState, owner: PlayerId, *cards) -> None:
     game.table.decks[DeckKey(owner, Side.DYNASTY)].cards = list(cards)
     for card in cards:
@@ -120,6 +125,31 @@ def test_the_pool_is_sorted_rather_than_left_in_deck_order():
     _seed_deck(game, PlayerId.P1, first, second)  # deck order puts P1-2 ahead of P1-1
 
     assert [card.id for card in project(game, PlayerId.P1).legacy_pool] == ["P1-1", "P1-2"]
+
+
+def test_the_dynasty_deck_shows_the_seat_what_it_still_holds():
+    # A seat built its deck, so what remains in it is its own knowledge — the basis for judging
+    # whether a redraw beats the row it is looking at.
+    game = _game()
+    _seed_deck(game, PlayerId.P1, _dynasty_holding("P1-a"), _dynasty_holding("P1-b"))
+
+    assert [card.id for card in project(game, PlayerId.P1).dynasty_deck] == ["P1-a", "P1-b"]
+
+
+def test_the_dynasty_deck_never_reaches_the_other_seat():
+    game = _game()
+    _seed_deck(game, PlayerId.P1, _dynasty_holding("P1-a"))
+
+    assert project(game, PlayerId.P2).dynasty_deck == ()
+
+
+def test_the_dynasty_deck_is_sorted_rather_than_left_in_deck_order():
+    # Composition is the seat's knowledge; the shuffle is not. Leaving deck order in the view would
+    # hand a policy the next card to be drawn.
+    game = _game()
+    _seed_deck(game, PlayerId.P1, _dynasty_holding("P1-2"), _dynasty_holding("P1-1"))
+
+    assert [card.id for card in project(game, PlayerId.P1).dynasty_deck] == ["P1-1", "P1-2"]
 
 
 def test_a_face_down_province_card_is_still_findable():
