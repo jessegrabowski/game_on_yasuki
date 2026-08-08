@@ -64,8 +64,8 @@ class ActivateAbility:
 
 @dataclass(frozen=True, slots=True)
 class Cycle:
-    """Take the Cycle rulebook ability (Limited, your first turn only): bury one or more face-up
-    Province cards at the bottom of your dynasty deck, then refill and reveal your Provinces. Which
+    """Take the Cycle rulebook ability (Limited, your first turn only): put one or more face-up
+    Province cards on the bottom of your dynasty deck, then refill and reveal your Provinces. Which
     cards, and the order they go under in, are chosen through the decision the action raises."""
 
 

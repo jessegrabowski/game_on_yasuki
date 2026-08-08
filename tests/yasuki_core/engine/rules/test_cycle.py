@@ -99,7 +99,7 @@ def test_cycle_is_not_offered_outside_the_action_phase():
     assert Cycle() not in session.legal_actions(P1)
 
 
-def test_cycle_is_not_offered_with_nothing_face_up_to_bury():
+def test_cycle_is_not_offered_with_nothing_face_up_to_put_back():
     # The rule is "one or more", so a seat with no face-up Province card is not offered the action
     # rather than offered it and forced to pick nothing.
     assert Cycle() not in _session(provinces=0).legal_actions(P1)
@@ -121,12 +121,14 @@ def test_cycle_asks_for_at_least_one_card_and_offers_every_face_up_province():
     assert isinstance(pending, ChooseCards)
     assert pending.minimum == 1  # declining means not taking the action at all
     assert set(pending.candidates) == {"P1-pv0", "P1-pv1", "P1-pv2"}
-    assert pending.prompt() == "Bury face-up Province cards — the last one you pick lands deepest"
+    assert pending.prompt() == (
+        "Put face-up Province cards on the bottom of your deck — your last pick ends up lowest"
+    )
 
 
-def test_the_last_card_picked_lands_deepest():
-    # The order is the player's and it is load-bearing. Each card goes to the very bottom, pushing
-    # the one before it up, so the pick order reads back reversed from the bottom of the deck.
+def test_the_last_card_picked_ends_up_at_the_very_bottom():
+    # The order is the player's and it is load-bearing. Each card goes under the one before it, so
+    # the pick order reads back reversed from the bottom of the deck.
     session = _session()
     session.act(P1, Cycle())
 
@@ -135,7 +137,7 @@ def test_the_last_card_picked_lands_deepest():
     assert _deck_order(session)[:3] == ["P1-pv1", "P1-pv0", "P1-pv2"]
 
 
-def test_a_buried_province_refills_and_the_whole_row_ends_face_up():
+def test_a_vacated_province_refills_and_the_whole_row_ends_face_up():
     session = _session()
     session.act(P1, Cycle())
 
@@ -146,8 +148,8 @@ def test_a_buried_province_refills_and_the_whole_row_ends_face_up():
 
 
 def test_a_face_down_province_is_not_a_candidate_but_is_revealed_by_the_cycle():
-    # Two halves of the same rule: only face-up cards may be buried, and the reveal at the end turns
-    # everything in the row face-up regardless of what was buried.
+    # Two halves of the same rule: only face-up cards may be put back, and the reveal at the end
+    # turns everything in the row face-up regardless of what left.
     session = _session()
     hidden = session.game.table.cards_by_id["P1-pv2"]
     hidden.turn_face_down()
@@ -175,10 +177,10 @@ def test_the_reveal_announces_each_card_it_turns(reacting):
     assert seen == ["P1-dd2"]
 
 
-def test_burying_into_an_empty_deck_hands_the_card_straight_back():
-    # The refill draws from the deck the burial just fed, so a seat cycling against an empty deck
+def test_putting_a_card_into_an_empty_deck_hands_it_straight_back():
+    # The refill draws from the deck the move just fed, so a seat cycling against an empty deck
     # gets the same card back. Cycle moves no card out of the seat's own cards, which is why a
-    # Province can never be left empty by it however many are buried.
+    # Province can never be left empty by it however many go back.
     session = _session(deck=0)
     session.act(P1, Cycle())
 
@@ -188,10 +190,10 @@ def test_burying_into_an_empty_deck_hands_the_card_straight_back():
     assert _deck_order(session) == []
 
 
-def test_burying_the_whole_row_refills_it_from_the_top_of_the_deck():
-    # Burying everything is the case where the two orderings meet: the picks stack downward from
-    # the bottom while the refills come off the top, and both have to be right for the row and the
-    # deck to read as they do here.
+def test_putting_the_whole_row_back_refills_it_from_the_top_of_the_deck():
+    # Sending everything back is the case where the two orderings meet: the picks stack downward
+    # from the bottom while the refills come off the top, and both have to be right for the row and
+    # the deck to read as they do here.
     session = _session()
     session.act(P1, Cycle())
 

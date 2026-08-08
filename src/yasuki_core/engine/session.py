@@ -98,7 +98,7 @@ class EngineSession:
 
     def _cycle(self, seat: PlayerId) -> list[Action]:
         """The Cycle ability when the seat can take it: its first turn, not already used, and with a
-        face-up Province card to bury. The rule is "one or more", so declining is not taking the
+        face-up Province card to put back. The rule is "one or more", so declining is not taking the
         action at all rather than taking it and choosing nothing."""
         if not flow.is_first_turn(self.game, seat):
             return []

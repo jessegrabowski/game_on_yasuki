@@ -88,9 +88,9 @@ def test_a_card_already_in_the_deck_does_not_count_itself():
     assert _order(game) == ["middle", "bottom", "top"]
 
 
-def test_burying_in_pick_order_puts_the_last_card_deepest():
-    # Cycle's semantic: each card sent to the bottom pushes the one before it up, so the card
-    # chosen last ends up under the others.
+def test_moving_cards_in_order_puts_the_last_one_at_the_very_bottom():
+    # Each card sent to the bottom pushes the one before it up, so the card moved last ends up
+    # under the others.
     game = _game_with_a_three_card_deck()
     province_card(game, "second", seat=P1, index=1)
 

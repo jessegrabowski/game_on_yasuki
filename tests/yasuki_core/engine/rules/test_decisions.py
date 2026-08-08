@@ -145,7 +145,7 @@ def test_choose_cards_wording_distinguishes_optional_from_required():
     assert _choose(minimum=1, maximum=2).prompt() == "Choose 1 to 2 card(s)"
 
 
-@choice_resolver("test_prompted", prompt="Bury a card at the bottom of your deck")
+@choice_resolver("test_prompted", prompt="Put a card on the bottom of your deck")
 def _prompted(game, source_id, chosen):
     return []
 
@@ -156,7 +156,7 @@ def test_a_registered_prompt_replaces_the_generic_wording():
     # survive: most choices register no prompt.
     prompted = ChooseCards(PlayerId.P1, _HAND, 0, 2, resolver="test_prompted")
 
-    assert prompted.prompt() == "Bury a card at the bottom of your deck"
+    assert prompted.prompt() == "Put a card on the bottom of your deck"
     assert _choose(minimum=0, maximum=2).prompt() == "Choose up to 2 card(s)"
 
 

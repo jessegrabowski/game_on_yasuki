@@ -531,8 +531,9 @@ def is_first_turn(game: GameState, seat: PlayerId) -> bool:
 
 
 def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The cards ``seat`` may bury with Cycle — the face-up ones in its Provinces. A face-down card
-    is not eligible, so a Province nobody has revealed stays where it is."""
+    """The cards ``seat`` may put on the bottom of its deck with Cycle — the face-up ones in its
+    Provinces. A face-down card is not eligible, so a Province nobody has revealed stays where it
+    is."""
     return [
         card
         for key, zone in game.table.zones.items()
@@ -544,7 +545,7 @@ def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
 
 def cycle(game: GameState) -> None:
     """Announce the Cycle ability: claim its once-per-turn use and pause for the seat to pick which
-    face-up Province cards to bury. The burial, refill and reveal follow once the picks are in."""
+    face-up Province cards go back. The move, refill and reveal follow once the picks are in."""
     seat = game.active
     game.use_once(cycle_key(seat, game.turn))
     candidates = tuple(card.id for card in cycle_candidates(game, seat))
@@ -552,22 +553,26 @@ def cycle(game: GameState) -> None:
 
 
 @triggers.choice_resolver(
-    "cycle", prompt="Bury face-up Province cards — the last one you pick lands deepest"
+    "cycle",
+    prompt="Put face-up Province cards on the bottom of your deck — your last pick ends up lowest",
 )
-def _cycle_bury(game: GameState, source_id: str | None, chosen: tuple[str, ...]) -> list[Effect]:
-    """Bury each chosen card in pick order, then refill the Provinces they left and reveal them all.
+def _cycle_put_on_bottom(
+    game: GameState, source_id: str | None, chosen: tuple[str, ...]
+) -> list[Effect]:
+    """Put each chosen card on the bottom in pick order, then refill the Provinces they left and
+    reveal them all.
 
-    Each card goes to the very bottom, pushing the one before it up, so the last pick ends deepest —
-    the order the rule gives the player. The refill and the reveal are deferred together because the
-    rule reveals *after* refilling, and both wait on the reactions to the cards leaving.
+    Each card goes under the one before it, so the last pick ends up at the very bottom — the order
+    the rule gives the player. The refill and the reveal are deferred together because the rule
+    reveals *after* refilling, and both wait on the reactions to the cards leaving.
     """
     seat = game.table.cards_by_id[chosen[0]].owner
     # Read the Provinces before anything moves; afterwards none of them holds the card to find.
     vacated = [_province_key_holding(game, seat, card_id) for card_id in chosen]
     deck = DeckKey(seat, Side.DYNASTY)
-    buried = [MoveToDeck(card_id, deck, from_bottom=0) for card_id in chosen]
+    put_back = [MoveToDeck(card_id, deck, from_bottom=0) for card_id in chosen]
     refills = tuple(RefillProvince(key) for key in vacated if key is not None)
-    return [*buried, Then((*refills, RevealProvinces(seat)))]
+    return [*put_back, Then((*refills, RevealProvinces(seat)))]
 
 
 def legacy_key(seat: PlayerId, turn: int) -> str:
