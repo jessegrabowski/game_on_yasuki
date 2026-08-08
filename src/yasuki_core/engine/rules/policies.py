@@ -1,8 +1,9 @@
+from collections.abc import Iterable
 from typing import Protocol
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.engine.rules.actions import Action, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, Legacy, Pass, Recruit
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.table import ZoneRole
@@ -94,8 +95,51 @@ class EconomicPolicy:
         return min(purchases, key=lambda purchase: _rank(cards[purchase.card_id]))
 
 
+class EconomicLegacyPolicy:
+    """Buys like :class:`EconomicPolicy`, and takes the Legacy ability when it improves the board.
+
+    Legacy banishes a card from hand to search the seat's dynasty deck and face-down provinces for a
+    Legacy card, then places it face-up over a province card, discarding what was there. It is worth
+    taking only when the best producer it could find beats the best one already face-up in its own
+    provinces — otherwise it spends two cards to reach production the seat could simply buy.
+
+    Finding nothing loses the game outright, so an empty ``legacy_pool`` is a hard veto rather than a
+    weighing.
+
+    Two simplifications it makes, both of which flatter the ability. It ranks on printed Gold
+    Production, since a card not yet in play has no effective value to read. And it treats the
+    banished hand card as free, which it is under this policy — nothing here ever plays from hand.
+    """
+
+    name = "economic-legacy"
+
+    def __init__(self) -> None:
+        self._buying = EconomicPolicy()
+
+    def choose(self, view: GameView, actions: list[Action]) -> Action:
+        legacy = next((action for action in actions if isinstance(action, Legacy)), None)
+        if legacy is not None and self._worth_taking(view):
+            return legacy
+        return self._buying.choose(view, actions)
+
+    @staticmethod
+    def _worth_taking(view: GameView) -> bool:
+        """Whether the pool holds a better producer than any already face-up in the seat's
+        provinces. Affordability is not weighed: what a seat can pay for shifts within the turn as
+        it bows producers, while what sits in its provinces does not."""
+        if not view.legacy_pool:
+            # Unreachable while the comparison below is strict, since an empty pool produces 0 and
+            # no board produces less. Kept because loosening that comparison would otherwise turn
+            # an empty pool into a lost game.
+            return False
+        return _best_production(view.legacy_pool) > _best_production(
+            _readable_province_cards(view).values()
+        )
+
+
 POLICIES: dict[str, type[Policy]] = {
-    policy.name: policy for policy in (PassPolicy, RandomPolicy, EconomicPolicy)
+    policy.name: policy
+    for policy in (PassPolicy, RandomPolicy, EconomicPolicy, EconomicLegacyPolicy)
 }
 """Every policy a run can be configured with, by name."""
 
@@ -122,7 +166,7 @@ def _rank(card: DynastyCard) -> tuple[int, int, str]:
     Gold Production leads and Gold Cost breaks the tie, both negated so the larger wins. The card id
     settles anything still level, so the choice does not follow zone order.
     """
-    production = card.gold_production if isinstance(card, DynastyHolding) else 0
+    production = _production(card)
     cost = 0 if card.gold_cost is None else card.gold_cost
     return -production, -cost, card.id
 
@@ -130,9 +174,9 @@ def _rank(card: DynastyCard) -> tuple[int, int, str]:
 def _readable_province_cards(view: GameView) -> dict[str, DynastyCard]:
     """The viewer's province cards it can identify, by id — what a Recruit's ``card_id`` refers to.
 
-    Built by scanning rather than looked up, since a redacted view carries no id index. A province
-    that refilled face-down reaches even its owner as a :class:`HiddenCard`, which no Recruit can
-    name, so those are skipped rather than ranked.
+    Built by scanning rather than looked up, since a redacted view carries no id index. A card the
+    viewer cannot identify — a province refilled face-down, until something reveals it — is skipped
+    rather than ranked, since no Recruit can name it.
     """
     return {
         card.id: card
@@ -141,3 +185,12 @@ def _readable_province_cards(view: GameView) -> dict[str, DynastyCard]:
         for card in zone.cards
         if not isinstance(card, HiddenCard)
     }
+
+
+def _best_production(cards: Iterable[DynastyCard]) -> int:
+    """The largest printed Gold Production among ``cards``, or 0 when none of them produces."""
+    return max((_production(card) for card in cards), default=0)
+
+
+def _production(card: DynastyCard) -> int:
+    return card.gold_production if isinstance(card, DynastyHolding) else 0

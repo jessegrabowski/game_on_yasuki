@@ -7,6 +7,7 @@ yasuki_core.engine.rules.policies
 
 .. autosummary::
 
+    EconomicLegacyPolicy
     EconomicPolicy
     PassPolicy
     Policy

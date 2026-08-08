@@ -9,6 +9,7 @@ yasuki_core.engine.rules.agents
 
     Agent
     AutoAgent
+    LegacyAgent
     PayingAgent
 
 .. rubric:: Functions

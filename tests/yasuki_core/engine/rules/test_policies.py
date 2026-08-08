@@ -97,7 +97,7 @@ def test_every_policy_reports_a_name():
 
 
 def test_the_registry_covers_the_policies_that_ship():
-    assert set(POLICIES) == {"pass", "random", "economic"}
+    assert set(POLICIES) == {"pass", "random", "economic", "economic-legacy"}
 
 
 def test_a_policy_built_by_name_chooses():
