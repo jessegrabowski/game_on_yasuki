@@ -16,6 +16,7 @@ yasuki_core.sim.harness
     run_games
     sample_rows
     write_csv
+    write_rows
 
 .. automodule:: yasuki_core.sim.harness
     :members:
