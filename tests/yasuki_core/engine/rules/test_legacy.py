@@ -8,12 +8,17 @@ from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
 from yasuki_core.engine.rules.actions import Legacy, Pass
 from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, DecisionResponse
+from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import register
+from tests.yasuki_core.engine.builders import holding, put_in_play, register
+
+
+def _province(table: TableState, index: int):
+    return table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, index)]
 
 
 def _p1_provinces(table: TableState):
@@ -317,3 +322,28 @@ def test_the_search_does_not_show_the_pool_to_the_opponent():
     session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
 
     assert PlayerId.P2 not in buried.peekers
+
+
+def test_a_reaction_to_the_displaced_card_sees_the_province_it_left(reacting):
+    """The rules resolve what the displaced card leaving triggered before the Legacy card lands, so
+    a seat reacting to its own discard acts on the Province that discard emptied.
+
+    Doji Meiji is the card this is for — "after you discard Meiji from a Province, if you are Crane
+    Clan, take the Imperial Favor" should resolve while the Province is still the one Meiji left.
+    """
+    seen = []
+    reacting(
+        CardDiscarded,
+        "legacy_probe",
+        lambda ctx: seen.append([card.id for card in _province(ctx.game.table, 1).cards]) or [],
+    )
+    session = _dynasty_session(legacy_in="deck")
+    put_in_play(session.game, holding("P1-eyes", owner=PlayerId.P1, printed_id="legacy_probe"))
+
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
+
+    assert seen == [[]]  # the displaced card gone, the Legacy card not yet in its place
+    assert [c.id for c in _province(session.game.table, 1).cards] == ["P1-leg"]

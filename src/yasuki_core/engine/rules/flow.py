@@ -667,17 +667,15 @@ def _apply_legacy_placement(
     game.pending = None
     if source_key is not None:
         _defer_refill(game, source_key)
-    # One effect per occurrence, so each announces itself where it happens. Inline effects resolve
-    # before the events queued behind them, so the placement still lands ahead of any reaction to
-    # the discard.
-    placing: list[Effect] = [
-        Discard(displaced.id, seat),
-        PlaceInProvince(legacy_card.id, target_key),
-    ]
+    # One effect per occurrence, so each announces itself where it happens. The placement is
+    # deferred because the rules resolve what the displaced card leaving triggered before anything
+    # fills the Province behind it.
+    after_the_discard: list[Effect] = [PlaceInProvince(legacy_card.id, target_key)]
     if source_key is None:
-        # The found card came out of the deck, so the deck the search read is no longer secret.
-        placing.append(ShuffleDeck(DeckKey(seat, Side.DYNASTY)))
-    triggers.resolve_effects(game, placing)
+        # The found card came out of the deck, so the deck the search read is no longer secret. It
+        # shuffles behind the placement, which is what takes the card out of it.
+        after_the_discard.append(ShuffleDeck(DeckKey(seat, Side.DYNASTY)))
+    triggers.resolve_effects(game, [Discard(displaced.id, seat), Then(tuple(after_the_discard))])
 
 
 def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tuple[str, ...]:

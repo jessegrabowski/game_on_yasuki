@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
     Discard,
+    PlaceInProvince,
     Effect,
     InterruptingEffect,
 )
@@ -26,6 +27,7 @@ from yasuki_core.game_pieces.counters import WEALTH
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
+    province_card,
     put_in_play,
     two_seat_game,
 )
@@ -141,6 +143,20 @@ def test_a_discard_lands_in_the_pile_for_its_side(side, role):
 
     assert card in game.table.zones[ZoneKey(PlayerId.P1, role)].cards
     assert events == [CardDiscarded(card.id, side, PlayerId.P1)]
+
+
+def test_placing_into_a_full_province_is_a_no_op():
+    # The placement is deferred behind the reactions to the discard, so something can fill the
+    # Province in between. Checking capacity first is what keeps the card where it is: the move
+    # would take it out of play before the full Province refused it, leaving it nowhere at all.
+    game = two_seat_game()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    sitting = province_card(game, "P1-sitting", seat=PlayerId.P1)
+    card = put_in_play(game, holding("P1-late"))
+
+    assert PlaceInProvince(card.id, province).perform(game) == []
+    assert [c.id for c in game.table.zones[province].cards] == [sitting.id]
+    assert card in game.table.battlefield.cards  # not swallowed on the way
 
 
 def test_destroying_an_unowned_card_is_a_no_op():
