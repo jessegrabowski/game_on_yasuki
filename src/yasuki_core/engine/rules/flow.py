@@ -516,6 +516,13 @@ def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
     return pool
 
 
+def _reveal_search_pool(game: GameState, seat: PlayerId) -> None:
+    """Let ``seat`` identify every card its Legacy search looked through. A face-down Province card
+    is searched, so the seat has seen it by the time it chooses which Province to displace."""
+    for card in legacy_search_pool(game, seat):
+        card.add_peeker(seat)
+
+
 def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
     Empty means a Legacy search would whiff and lose the game."""
@@ -538,6 +545,7 @@ def _apply_legacy_banish(
     banished = game.table.cards_by_id[response.choices[0]]
     ops.move_card(game.table, banished, ZoneKey(seat, ZoneRole.FATE_BANISH))
     game.pending = None
+    _reveal_search_pool(game, seat)
     found = legacy_candidates(game, seat)
     if not found:
         game.loser = seat  # the whiff: failing to find a Legacy card loses the game

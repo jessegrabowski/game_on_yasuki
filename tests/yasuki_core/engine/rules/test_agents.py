@@ -26,7 +26,7 @@ def test_every_agent_reports_a_name():
 
 
 def test_the_registry_covers_the_agents_that_ship():
-    assert set(AGENTS) == {"auto", "paying"}
+    assert set(AGENTS) == {"auto", "paying", "legacy"}
 
 
 def test_an_agent_built_by_name_answers():

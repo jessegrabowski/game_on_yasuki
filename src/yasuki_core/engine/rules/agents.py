@@ -1,10 +1,14 @@
 from typing import Protocol
 
 from yasuki_core.engine.rules.decisions import (
+    BanishForLegacy,
+    ChooseLegacyCard,
     ChoosePayment,
     DecisionRequest,
     DecisionResponse,
+    PlaceLegacy,
 )
+from yasuki_core.engine.redaction import CardView, HiddenCard
 from yasuki_core.engine.rules.projection import GameView
 
 
@@ -92,7 +96,37 @@ class PayingAgent:
         return DecisionResponse(tuple(bowed), tuple(boosted))
 
 
-AGENTS: dict[str, type[Agent]] = {agent.name: agent for agent in (AutoAgent, PayingAgent)}
+class LegacyAgent:
+    """Answers the Legacy decisions for economic value, and everything else like
+    :class:`PayingAgent`.
+
+    Takes the biggest producer the search found, and displaces the province card worth least, both
+    ranked on printed Gold Production — the only figure a card outside play carries. Whether the
+    trade is worth making at all is the policy's call, not this agent's.
+
+    The banished hand card is chosen by id. A policy that never plays from hand loses nothing by it,
+    and pretending otherwise would invent a valuation this model does not have.
+    """
+
+    name = "legacy"
+
+    def __init__(self) -> None:
+        self._fallback = PayingAgent()
+
+    def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
+        match request:
+            case ChooseLegacyCard():
+                return DecisionResponse((_richest(request.candidates, view),))
+            case PlaceLegacy():
+                return DecisionResponse((_poorest(request.candidates, view),))
+            case BanishForLegacy():
+                return DecisionResponse((min(request.candidates),))
+        return self._fallback.decide(request, view)
+
+
+AGENTS: dict[str, type[Agent]] = {
+    agent.name: agent for agent in (AutoAgent, PayingAgent, LegacyAgent)
+}
 """Every agent a run can be configured with, by name."""
 
 
@@ -107,3 +141,48 @@ def make_agent(name: str) -> Agent:
     if name not in AGENTS:
         raise KeyError(f"unknown agent {name!r}; known: {', '.join(sorted(AGENTS))}")
     return AGENTS[name]()
+
+
+def _identified(candidates: tuple[str, ...], view: GameView) -> dict[str, CardView]:
+    """The candidate cards the viewer can identify, by id. One it cannot is omitted rather than
+    guessed at, and ranks as producing nothing."""
+    wanted = set(candidates)
+    found = {
+        card.id: card
+        for zone in view.table.zones.values()
+        for card in zone.cards
+        if not isinstance(card, HiddenCard) and card.id in wanted
+    }
+    found.update({card.id: card for card in view.legacy_pool if card.id in wanted})
+    return found
+
+
+def _richest(candidates: tuple[str, ...], view: GameView) -> str:
+    """The candidate to take: most Gold Production, then least Gold Cost, then lowest id.
+
+    Cheapest breaks the tie because the card still has to be paid for once it is placed, so between
+    equal producers the affordable one is likelier to reach play the turn it arrives.
+    """
+    known = _identified(candidates, view)
+
+    def rank(card_id: str) -> tuple[int, int, str]:
+        production, cost = _economics(known.get(card_id))
+        return -production, cost, card_id
+
+    return min(candidates, key=rank)
+
+
+def _poorest(candidates: tuple[str, ...], view: GameView) -> str:
+    """The candidate to give up: least Gold Production, then most Gold Cost, then lowest id."""
+    known = _identified(candidates, view)
+
+    def rank(card_id: str) -> tuple[int, int, str]:
+        production, cost = _economics(known.get(card_id))
+        return production, -cost, card_id
+
+    return min(candidates, key=rank)
+
+
+def _economics(card: CardView | None) -> tuple[int, int]:
+    """A card's printed Gold Production and Gold Cost, both 0 when it carries neither or is None."""
+    return getattr(card, "gold_production", 0) or 0, getattr(card, "gold_cost", 0) or 0
