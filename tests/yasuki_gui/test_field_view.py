@@ -272,12 +272,8 @@ class TestDecisionSelection:
 
     def test_selection_reaches_the_province_visual(self, loaded):
         # The same feed for Provinces, which is where a Cycle or a Dynasty Discard is picked.
-        field, state = loaded
-        province_tag = next(
-            tag
-            for tag, key in field._tag_to_key.items()
-            if isinstance(key, ZoneKey) and key.role is ZoneRole.PROVINCE
-        )
+        field, _ = loaded
+        province_tag = zone_tag(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0))
         card_id = field.zones[province_tag].cards[-1].id
 
         field.begin_selection([card_id])

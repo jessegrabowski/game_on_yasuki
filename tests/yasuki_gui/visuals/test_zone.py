@@ -7,7 +7,7 @@ from yasuki_core.game_pieces.constants import Side
 
 
 def _outlines(canvas: tk.Canvas, tag: str) -> list[str]:
-    """The outline colors of the rectangles drawn under ``tag``, in draw order."""
+    """The outline colors of the rectangles drawn under ``tag``."""
     return [
         canvas.itemcget(item, "outline")
         for item in canvas.find_withtag(tag)
