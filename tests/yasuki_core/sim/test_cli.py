@@ -31,8 +31,10 @@ def test_the_flags_reach_the_run(monkeypatch, tmp_path):
     assert cli.main([DECK, "--out", str(out), "--games", "7", "--turns", "3", "--seed", "11"]) == 0
 
     assert len(calls) == 1
+    assert str(calls[0]["deck"]) == DECK
     assert calls[0]["games"] == 7 and calls[0]["turn_limit"] == 3 and calls[0]["seed"] == 11
     assert isinstance(calls[0]["policy"], EconomicPolicy)  # the default when none is named
+    assert out.exists()
 
 
 def test_a_repeated_policy_flag_sweeps_into_one_table(monkeypatch, tmp_path):
@@ -85,9 +87,16 @@ def test_a_bug_in_the_run_keeps_its_traceback(monkeypatch, tmp_path):
         cli.main([DECK, "--out", str(tmp_path / "run.parquet")])
 
 
-def test_an_unknown_policy_is_refused_before_anything_runs(tmp_path):
+def test_an_unknown_policy_is_refused_before_anything_runs(monkeypatch, tmp_path):
+    # Refused by the parser, so a typo costs nothing. Asserting no run happened is the half the
+    # name claims and an exit code alone would not show.
+    calls = []
+    monkeypatch.setattr(cli, "run_games", _fake_run(calls))
+
     with pytest.raises(SystemExit):
         cli.main([DECK, "--out", str(tmp_path / "run.parquet"), "--policy", "nonesuch"])
+
+    assert calls == []
 
 
 @pytest.mark.slow
