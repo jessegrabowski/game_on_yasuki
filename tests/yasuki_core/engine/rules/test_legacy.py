@@ -240,3 +240,36 @@ def test_the_reshuffle_draws_on_the_games_own_generator():
         orders.append(tuple(card.id for card in deck.cards))
 
     assert orders[0] != orders[1]
+
+
+def _shrine_of_courtesy(seat: PlayerId) -> DynastyHolding:
+    """Shrine of Courtesy carries no printed Legacy keyword; its Courtesy clause grants one."""
+    return DynastyHolding(
+        id=f"{seat.name}-courtesy",
+        name="Shrine of Courtesy",
+        side=Side.DYNASTY,
+        owner=seat,
+        printed_id="shrine_of_courtesy",
+        keywords=("Temple", "Unique"),
+        gold_production=2,
+    )
+
+
+def test_a_search_finds_a_card_granted_legacy_by_its_own_ability():
+    """The search reads effective keywords: a Holding whose printed list omits Legacy is still
+    findable while its own condition grants it."""
+    state = _table(legacy_in=None)
+    shrine = register(state, _shrine_of_courtesy(PlayerId.P2))
+    state.decks[DeckKey(PlayerId.P2, Side.DYNASTY)].cards = [shrine]
+    game = GameState.start(state, PlayerId.P1)  # P1 first, so P2 has Courtesy
+
+    assert [c.id for c in flow.legacy_candidates(game, PlayerId.P2)] == ["P2-courtesy"]
+
+
+def test_a_conditional_grant_that_does_not_apply_leaves_the_card_unfindable():
+    state = _table(legacy_in=None)
+    shrine = register(state, _shrine_of_courtesy(PlayerId.P1))
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [shrine]
+    game = GameState.start(state, PlayerId.P1)  # P1 went first, so Courtesy grants nothing
+
+    assert flow.legacy_candidates(game, PlayerId.P1) == []

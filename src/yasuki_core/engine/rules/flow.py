@@ -35,7 +35,11 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.economy import effective_gold_production, effective_recruit_discount
+from yasuki_core.engine.rules.economy import (
+    effective_gold_production,
+    effective_keywords,
+    effective_recruit_discount,
+)
 from yasuki_core.engine.rules.effects import AdjustCounter, GrantModifier
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules import abilities, triggers
@@ -494,9 +498,11 @@ def legacy_key(seat: PlayerId, turn: int) -> str:
     return f"legacy:{seat.name}:{turn}"
 
 
-def is_legacy_card(card: L5RCard) -> bool:
-    """Whether ``card`` carries the Legacy keyword, so the Legacy ability can search it out."""
-    return any(keyword.lower() == LEGACY_KEYWORD.lower() for keyword in card.keywords)
+def is_legacy_card(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` carries the Legacy keyword, printed or granted by its own ability (Shrine of
+    Courtesy grants itself Legacy for the second player), so the Legacy ability can search it out."""
+    wanted = LEGACY_KEYWORD.lower()
+    return any(keyword.lower() == wanted for keyword in effective_keywords(game, card))
 
 
 def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -513,7 +519,7 @@ def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
 def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
     Empty means a Legacy search would whiff and lose the game."""
-    return [card for card in legacy_search_pool(game, seat) if is_legacy_card(card)]
+    return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
 
 
 def legacy(game: GameState) -> None:
