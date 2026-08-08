@@ -60,7 +60,9 @@ def _mishime_sensei_enters_play(ctx: TriggerContext) -> list[Effect]:
 # --- Modest Farm ---
 
 
-@choice_resolver("modest_farm_straighten")
+@choice_resolver(
+    "modest_farm_straighten", prompt="Destroy Modest Farm to straighten the card it recruited"
+)
 def _modest_farm_straighten(
     game: GameState, source_id: str, chosen: tuple[str, ...]
 ) -> list[Effect]:

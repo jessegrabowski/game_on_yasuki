@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest
-from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent
+from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent, Revealed
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ApplyEffects
@@ -204,6 +204,60 @@ class BanishTopFate(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class MoveToDeck(Effect):
+    """Move a card into a deck at a stated depth, counting from whichever end names it.
+
+    Give exactly one of ``from_top`` and ``from_bottom``. Depths are zero-based: ``from_top=0`` is
+    the top card, ``from_bottom=0`` the bottom. A depth past the far end clamps to that end, so a
+    deck of two asked for ``from_top=9`` takes the card at the bottom rather than raising. A card
+    that no longer exists is a no-op.
+
+    Attributes
+    ----------
+    card_id : str
+        The card to move.
+    deck : DeckKey
+        The deck it lands in.
+    from_top : int, optional
+        Depth measured from the top of the deck. Default None.
+    from_bottom : int, optional
+        Depth measured from the bottom of the deck. Default None.
+    """
+
+    card_id: str
+    deck: DeckKey
+    from_top: int | None = None
+    from_bottom: int | None = None
+
+    def __post_init__(self) -> None:
+        """Raise ValueError unless exactly one non-negative depth names an end."""
+        if (self.from_top is None) == (self.from_bottom is None):
+            raise ValueError("MoveToDeck takes exactly one of from_top or from_bottom")
+        depth = self.from_top if self.from_top is not None else self.from_bottom
+        if depth < 0:
+            raise ValueError(f"MoveToDeck depth cannot be negative, got {depth}")
+
+    def describe(self) -> str:
+        end, depth = (
+            ("top", self.from_top) if self.from_top is not None else ("bottom", self.from_bottom)
+        )
+        side = self.deck.side.name.lower()
+        return f"move {self.card_id} into {self.deck.owner.name}'s {side} deck, {depth} from {end}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None:
+            return []
+        # The card leaves wherever it is before it lands, so a card already in this deck must not
+        # count itself when its depth is measured.
+        cards = game.table.decks[self.deck].cards
+        landing_size = len(cards) - (1 if any(held is card for held in cards) else 0)
+        index = self.from_bottom if self.from_bottom is not None else landing_size - self.from_top
+        ops.move_card(game.table, card, self.deck, deck_index=index)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class GainGold(Effect):
     """Add ``amount`` gold to ``seat``'s pool: gold produced outside a payment (a card that produces
     gold on entry), transient and cleared at the end of the phase."""
@@ -292,6 +346,20 @@ class RefillProvince(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class RevealProvinces(Effect):
+    """Turn every face-down card in ``seat``'s Provinces face-up, announcing each one it turns. A
+    card already face-up raises nothing, since nothing turned."""
+
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"reveal {self.seat.name}'s provinces"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        return [Revealed(card_id) for card_id in ops.reveal_provinces(game.table, self.seat)]
+
+
+@dataclass(frozen=True, slots=True)
 class Then(Effect):
     """Defer ``effects`` until the current step has fully resolved, cascade included.
 
@@ -326,8 +394,10 @@ class Choose(InterruptingEffect):
         The most cards the seat may pick.
     resolver : str
         The registered choice resolver naming what the chosen ids do.
-    source_id : str
-        The card whose trigger raised the choice, passed to the resolver.
+    source_id : str, optional
+        A card id handed to the resolver as its context. Which card that is belongs to the resolver
+        — often the one whose trigger raised the choice, sometimes the card being acted on. None
+        when the rulebook raises the choice and there is no card to name. Default None.
     """
 
     seat: PlayerId
@@ -335,7 +405,7 @@ class Choose(InterruptingEffect):
     minimum: int
     maximum: int
     resolver: str
-    source_id: str
+    source_id: str | None = None
 
     def describe(self) -> str:
         return (

@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.actions import (
     Action,
     ActivateAbility,
+    Cycle,
     DynastyDiscard,
     Legacy,
     Pass,
@@ -224,6 +225,8 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "dynasty_discard", "card_id": card_id}
         case Legacy():
             return {"kind": "legacy"}
+        case Cycle():
+            return {"kind": "cycle"}
         case ActivateAbility(card_id=card_id):
             return {"kind": "activate_ability", "card_id": card_id}
     raise ValueError(f"no encoding for action {action!r}")
@@ -243,6 +246,8 @@ def _decode_action(payload: dict) -> Action:
         return DynastyDiscard(payload["card_id"])
     if kind == "legacy":
         return Legacy()
+    if kind == "cycle":
+        return Cycle()
     if kind == "activate_ability":
         return ActivateAbility(payload["card_id"])
     raise ValueError(f"unknown action kind {kind!r}")

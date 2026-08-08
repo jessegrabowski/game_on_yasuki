@@ -90,6 +90,6 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
     return [Choose(ctx.card.owner, others, 0, min(2, len(others)), "wheat_farm", ctx.card.id)]
 
 
-@choice_resolver("wheat_farm")
+@choice_resolver("wheat_farm", prompt="Give a Wealth token to other Farms you control")
 def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]

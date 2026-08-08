@@ -16,12 +16,15 @@ from yasuki_core.engine.rules.effects import (
     GainGold,
     GrantModifier,
     IgnoreHonorRequirements,
+    MoveToDeck,
     RecruitCard,
+    RevealProvinces,
     Straighten,
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 
 EFFECTS = [
@@ -38,6 +41,14 @@ EFFECTS = [
         GrantModifier("millet", "farm_1", Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN),
         "millet grants farm_1 +2 GOLD_PRODUCTION (UNTIL_END_OF_TURN)",
     ),
+    (
+        MoveToDeck("farm_1", DeckKey(PlayerId.P1, Side.DYNASTY), from_bottom=0),
+        "move farm_1 into P1's dynasty deck, 0 from bottom",
+    ),
+    (
+        MoveToDeck("farm_1", DeckKey(PlayerId.P2, Side.FATE), from_top=3),
+        "move farm_1 into P2's fate deck, 3 from top",
+    ),
     (RecruitCard("holding_1"), "recruit holding_1 out of sequence"),
     (
         RecruitCard("holding_1", renew=True),
@@ -48,6 +59,7 @@ EFFECTS = [
         RefillProvince(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), face_up=True),
         "refill P2 province 0 face-up",
     ),
+    (RevealProvinces(PlayerId.P1), "reveal P1's provinces"),
     (Then((Bow("a"), Destroy("b"))), "then: 2 deferred"),
     (
         Choose(PlayerId.P1, ("a", "b", "c"), 0, 2, "wheat_farm", "wheat_1"),

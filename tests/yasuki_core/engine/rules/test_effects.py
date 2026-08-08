@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     BanishTopFate,
     Bow,
+    Choose,
     Destroy,
     Effect,
     InterruptingEffect,
@@ -141,7 +142,6 @@ class _AskToDiscard(InterruptingEffect):
             minimum=0,
             maximum=0,
             resolver="test_ask_to_discard",
-            source_id="",
         )
 
 
@@ -174,6 +174,29 @@ def test_the_stashed_remainder_resumes_after_the_answer():
     submit(game, DecisionResponse(()))
 
     assert card.counters["wealth"] == 1  # the effect queued behind the pause ran on resume
+
+
+_SOURCES_SEEN: list[str | None] = []
+
+
+@choice_resolver("test_sourceless")
+def _record_the_source(game, source_id, chosen):
+    _SOURCES_SEEN.append(source_id)
+    return []
+
+
+def test_a_choice_raised_by_no_card_reaches_its_resolver_with_none():
+    # A rulebook ability has no card to name, and no card id can stand in for one: every string is
+    # a perfectly good id that simply never matches, leaving a resolver unable to tell "no source"
+    # from "a source I have not heard of".
+    _SOURCES_SEEN.clear()
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h"))
+
+    resolve_effects(game, [Choose(PlayerId.P1, (card.id,), 0, 1, "test_sourceless")])
+    submit(game, DecisionResponse((card.id,)))
+
+    assert _SOURCES_SEEN == [None]
 
 
 def test_an_interrupting_effect_refuses_to_be_committed_directly():

@@ -26,7 +26,7 @@ def _training_court(ctx: TriggerContext) -> list[Effect]:
     return [Choose(ctx.card.owner, targets, 1, 1, "sincerity_seed", ctx.card.id)]
 
 
-@choice_resolver("sincerity_seed")
+@choice_resolver("sincerity_seed", prompt="Seed a Sincerity token onto one of your Sincerity cards")
 def _sincerity_seed(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
     return [AdjustCounter(card_id, SINCERITY, 1) for card_id in chosen]
 

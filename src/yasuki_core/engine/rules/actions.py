@@ -62,5 +62,12 @@ class ActivateAbility:
     card_id: str
 
 
+@dataclass(frozen=True, slots=True)
+class Cycle:
+    """Take the Cycle rulebook ability (Limited, your first turn only): put one or more face-up
+    Province cards on the bottom of your dynasty deck, then refill and reveal your Provinces. Which
+    cards, and the order they go under in, are chosen through the decision the action raises."""
+
+
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
-Action = Pass | Recruit | DynastyDiscard | Legacy | ActivateAbility
+Action = Pass | Recruit | DynastyDiscard | Legacy | ActivateAbility | Cycle

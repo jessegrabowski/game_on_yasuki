@@ -9,6 +9,7 @@ from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
+    Cycle,
     DynastyDiscard,
     Legacy,
     Pass,
@@ -307,6 +308,7 @@ def test_decode_action_rejects_an_unknown_kind():
         Recruit("card", proclaim=True),
         DynastyDiscard("card"),
         Legacy(),
+        Cycle(),
         ActivateAbility("card"),
     ],
 )

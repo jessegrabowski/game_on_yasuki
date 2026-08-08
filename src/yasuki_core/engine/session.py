@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
+    Cycle,
     DynastyDiscard,
     Legacy,
     Pass,
@@ -79,7 +80,9 @@ class EngineSession:
             return []
         actions: list[Action] = [Pass()]
         actions.extend(self._abilities(seat))
-        if self.game.phase is Phase.DYNASTY:
+        if self.game.phase is Phase.ACTION:
+            actions.extend(self._cycle(seat))
+        elif self.game.phase is Phase.DYNASTY:
             actions.extend(self._recruits(seat))
             actions.extend(self._dynasty_discards(seat))
             actions.extend(self._legacy(seat))
@@ -92,6 +95,16 @@ class EngineSession:
             ActivateAbility(card.id)
             for card in abilities.activatable(self.game, seat, self.game.phase)
         ]
+
+    def _cycle(self, seat: PlayerId) -> list[Action]:
+        """The Cycle ability when the seat can take it: its first turn, not already used, and with a
+        face-up Province card to put back. The rule is "one or more", so declining is not taking the
+        action at all rather than taking it and choosing nothing."""
+        if not flow.is_first_turn(self.game, seat):
+            return []
+        if self.game.has_used(flow.cycle_key(seat, self.game.turn)):
+            return []
+        return [Cycle()] if flow.cycle_candidates(self.game, seat) else []
 
     def _legacy(self, seat: PlayerId) -> list[Action]:
         """The Legacy ability when the seat can take it: once per turn, and only with a card in hand

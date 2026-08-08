@@ -12,8 +12,9 @@ from yasuki_core.engine.rules.card_registry import (
 from yasuki_core.engine.rules.events import EnteredPlay
 
 # Registry modules, and the per-card registries in them that card_registry validates. CHOICE_RESOLVERS
-# is the one module-level registry deliberately left out: it keys on the kind of a pending choice
-# rather than on a card.
+# and CHOICE_PROMPTS are deliberately left out: both key on the kind of a pending choice rather than
+# on a card. CHOICE_PROMPTS lives in decisions and is visible here only because triggers imports it
+# to register into.
 REGISTRY_MODULES = (abilities, economy, triggers)
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
@@ -24,7 +25,7 @@ VALIDATED_REGISTRIES = {
     "KEYWORD_GRANTS",
     "_TRIGGERS",
 }
-NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS"}
+NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS", "CHOICE_PROMPTS"}
 
 
 def module_level_registries() -> set[str]:

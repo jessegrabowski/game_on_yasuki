@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.events import (
     GameEvent,
 )
+from yasuki_core.engine.rules.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     Effect,
@@ -62,17 +63,30 @@ def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
 # A choice resolver turns the ids a Choose collected into the effects the choice produces. Keyed by a
 # string so a paused ChooseCards names its resolver, keeping the pending decision replay-stable (a
 # stored closure would not rebuild to an equal object).
-Resolver = Callable[[GameState, str, tuple[str, ...]], list[Effect]]
+Resolver = Callable[[GameState, str | None, tuple[str, ...]], list[Effect]]
 CHOICE_RESOLVERS: dict[str, Resolver] = {}
 
 
-def choice_resolver(key: str) -> Callable[[Resolver], Resolver]:
-    """Register the decorated function as the choice resolver named ``key``."""
+def choice_resolver(key: str, *, prompt: str | None = None) -> Callable[[Resolver], Resolver]:
+    """Register the decorated function as the choice resolver named ``key``.
+
+    Parameters
+    ----------
+    key : str
+        The name a :class:`~yasuki_core.engine.rules.effects.Choose` uses to reach this resolver.
+    prompt : str, optional
+        Fixed wording to ask the seat with. It ignores what they have picked so far, so a line that
+        must track the selection belongs in a ``DecisionRequest.prompt`` override instead. A choice
+        with no registered wording falls back to a generic line naming only how many cards it
+        wants. Default None.
+    """
 
     def register(resolver: Resolver) -> Resolver:
         if key in CHOICE_RESOLVERS:
             raise ValueError(f"{key} already has a choice resolver")
         CHOICE_RESOLVERS[key] = resolver
+        if prompt is not None:
+            CHOICE_PROMPTS[key] = prompt
         return resolver
 
     return register

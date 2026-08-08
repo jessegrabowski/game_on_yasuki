@@ -8,6 +8,7 @@ from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
+    Cycle,
     DynastyDiscard,
     Legacy,
     Pass,
@@ -39,13 +40,22 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter, GrantModifier, RefillProvince
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Choose,
+    Effect,
+    GrantModifier,
+    MoveToDeck,
+    RefillProvince,
+    RevealProvinces,
+    Then,
+)
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules import abilities, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
 from yasuki_core.engine.rules import cards  # noqa: F401
-from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
+from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, Revealed, TurnStarted
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.ruleset import SHATTERED_EMPIRE
 
@@ -121,6 +131,8 @@ def perform(game: GameState, action: Action) -> None:
             dynasty_discard(game, card_id)
         case Legacy():
             legacy(game)
+        case Cycle():
+            cycle(game)
         case ActivateAbility(card_id=card_id):
             activate(game, card_id)
         case _:
@@ -506,6 +518,63 @@ def _defer_refill(game: GameState, zone: ZoneKey, *, face_up: bool = False) -> N
     game.stack.append(ApplyEffects((RefillProvince(zone, face_up=face_up),)))
 
 
+def cycle_key(seat: PlayerId, turn: int) -> str:
+    """The once-per-turn usage key for a seat's Cycle ability, scoped to the turn the way
+    :func:`legacy_key` is."""
+    return f"cycle:{seat.name}:{turn}"
+
+
+def is_first_turn(game: GameState, seat: PlayerId) -> bool:
+    """Whether the current turn is ``seat``'s first. The turn counter advances while the active seat
+    alternates, so the second player's first turn is turn 2."""
+    return game.turn == (1 if seat is game.first_player else 2)
+
+
+def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The cards ``seat`` may put on the bottom of its deck with Cycle — the face-up ones in its
+    Provinces. A face-down card is not eligible, so a Province nobody has revealed stays where it
+    is."""
+    return [
+        card
+        for key, zone in game.table.zones.items()
+        if key.owner is seat and key.role is ZoneRole.PROVINCE
+        for card in zone.cards
+        if card.face_up
+    ]
+
+
+def cycle(game: GameState) -> None:
+    """Announce the Cycle ability: claim its once-per-turn use and pause for the seat to pick which
+    face-up Province cards go back. The move, refill and reveal follow once the picks are in."""
+    seat = game.active
+    game.use_once(cycle_key(seat, game.turn))
+    candidates = tuple(card.id for card in cycle_candidates(game, seat))
+    triggers.resolve_effects(game, [Choose(seat, candidates, 1, len(candidates), "cycle")])
+
+
+@triggers.choice_resolver(
+    "cycle",
+    prompt="Put face-up Province cards on the bottom of your deck — your last pick ends up lowest",
+)
+def _cycle_put_on_bottom(
+    game: GameState, source_id: str | None, chosen: tuple[str, ...]
+) -> list[Effect]:
+    """Put each chosen card on the bottom in pick order, then refill the Provinces they left and
+    reveal them all.
+
+    Each card goes under the one before it, so the last pick ends up at the very bottom — the order
+    the rule gives the player. The refill and the reveal are deferred together because the rule
+    reveals *after* refilling, and both wait on the reactions to the cards leaving.
+    """
+    seat = game.table.cards_by_id[chosen[0]].owner
+    # Read the Provinces before anything moves; afterwards none of them holds the card to find.
+    vacated = [_province_key_holding(game, seat, card_id) for card_id in chosen]
+    deck = DeckKey(seat, Side.DYNASTY)
+    put_back = [MoveToDeck(card_id, deck, from_bottom=0) for card_id in chosen]
+    refills = tuple(RefillProvince(key) for key in vacated if key is not None)
+    return [*put_back, Then((*refills, RevealProvinces(seat)))]
+
+
 def legacy_key(seat: PlayerId, turn: int) -> str:
     """The once-per-turn usage key for a seat's Legacy ability, scoped to the turn so it resets each
     turn without clearing ``GameState.once_per``."""
@@ -697,7 +766,8 @@ def _begin_next_turn(game: GameState) -> None:
 
 def _begin_turn(game: GameState) -> None:
     ops.straighten(game.table, game.active)
-    ops.reveal_provinces(game.table, game.active)
+    for card_id in ops.reveal_provinces(game.table, game.active):
+        triggers.fire(game, Revealed(card_id))
     triggers.fire(game, TurnStarted(game.active))
 
 

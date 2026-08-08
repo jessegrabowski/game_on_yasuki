@@ -21,6 +21,7 @@ from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
+    province_card,
     put_in_play,
     two_seat_game,
 )
@@ -78,6 +79,21 @@ def test_turn_start_gives_the_rice_farm_a_wealth_token():
     fire(game, TurnStarted(PlayerId.P1))
 
     assert farm.counters == {"wealth": 1}
+
+
+def test_the_same_card_awaiting_recruitment_in_a_province_does_not_react():
+    # Triggers key on printed_id, so the unbought copy in a Province is indistinguishable from the
+    # one in play except by where collection looks — and Rice Farm's guard reads the seat and the
+    # cap, never whether it is in play. Scanning past the battlefield would accrue Gold Production
+    # on a card nobody paid for; a trigger would first have to declare where it functions.
+    game = two_seat_game()
+    in_play = _rice_farm(game, card_id="P1-farm")
+    unbought = province_card(game, "P1-unbought", seat=PlayerId.P1, printed_id="rice_farm")
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert in_play.counters == {"wealth": 1}
+    assert unbought.counters == {}
 
 
 def test_wealth_accrues_each_turn_up_to_the_cap_of_four():

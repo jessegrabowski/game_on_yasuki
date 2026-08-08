@@ -247,6 +247,12 @@ class ChooseAbilityTarget(DecisionRequest):
         return _chooses_exactly_one(self, response)
 
 
+# Resolver key -> the wording its choice asks with. Populated by the choice_resolver decorator and
+# read here rather than in triggers, because a prompt is only ever a property of the request the
+# seat sees, and decisions sits below triggers in the import order.
+CHOICE_PROMPTS: dict[str, str] = {}
+
+
 @dataclass(frozen=True, slots=True)
 class ChooseCards(DecisionRequest):
     """The seat must choose between ``minimum`` and ``maximum`` of the candidate cards — a
@@ -262,16 +268,21 @@ class ChooseCards(DecisionRequest):
         The most cards the seat may choose.
     resolver : str
         The registered choice resolver that turns the chosen ids into effects.
-    source_id : str
-        The card whose effect raised the choice, passed to the resolver.
+    source_id : str, optional
+        A card id handed to the resolver as its context. Which card that is belongs to the resolver
+        — often the one whose trigger raised the choice, sometimes the card being acted on. None
+        when the rulebook raises the choice and there is no card to name. Default None.
     """
 
     minimum: int
     maximum: int
     resolver: str
-    source_id: str
+    source_id: str | None = None
 
     def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        registered = CHOICE_PROMPTS.get(self.resolver)
+        if registered is not None:
+            return registered
         if self.minimum == 0:
             return f"Choose up to {self.maximum} card(s)"
         return f"Choose {self.minimum} to {self.maximum} card(s)"

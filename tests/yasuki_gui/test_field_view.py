@@ -90,29 +90,29 @@ class TestBoostSelection:
         field.on_boost_request = asked.append
         field.begin_selection(["sh", "of"], boostable=["of"])
         field.toggle_selection("of")
-        assert asked == ["of"] and field.selection == frozenset()  # not selected until answered
+        assert asked == ["of"] and field.selection == ()  # not selected until answered
         field.toggle_selection("sh")  # non-boostable selects directly, no request
-        assert asked == ["of"] and field.selection == frozenset({"sh"})
+        assert asked == ["of"] and field.selection == ("sh",)
 
     def test_resolving_the_boost_selects_and_records_when_taken(self, field):
         field.on_boost_request = lambda card_id: None
         field.begin_selection(["of"], boostable=["of"])
         field.resolve_boost("of", True)
-        assert field.selection == frozenset({"of"}) and field.boosted == frozenset({"of"})
+        assert field.selection == ("of",) and field.boosted == frozenset({"of"})
 
     def test_skipping_the_boost_selects_the_producer_unboosted(self, field):
         field.begin_selection(["of"], boostable=["of"])
         field.resolve_boost("of", False)
-        assert field.selection == frozenset({"of"}) and field.boosted == frozenset()
+        assert field.selection == ("of",) and field.boosted == frozenset()
 
     def test_deselecting_or_undoing_drops_the_boost(self, field):
         field.begin_selection(["of"], boostable=["of"])
         field.resolve_boost("of", True)
         field.toggle_selection("of")  # deselect
-        assert field.boosted == frozenset() and field.selection == frozenset()
+        assert field.boosted == frozenset() and field.selection == ()
         field.resolve_boost("of", True)  # re-boost, then undo
         field.undo_last_selection()
-        assert field.boosted == frozenset() and field.selection == frozenset()
+        assert field.boosted == frozenset() and field.selection == ()
 
 
 class TestHomeRow:
@@ -225,16 +225,37 @@ class TestDecisionSelection:
         assert field.selecting is True
         field.toggle_selection("c1")
         field.toggle_selection("c2")
-        assert field.selection == frozenset({"c1", "c2"})
+        assert field.selection == ("c1", "c2")
         field.toggle_selection("c1")  # clicking again deselects
-        assert field.selection == frozenset({"c2"})
+        assert field.selection == ("c2",)
         field.toggle_selection("nope")  # a non-candidate is ignored, no notification
-        assert field.selection == frozenset({"c2"})
+        assert field.selection == ("c2",)
         assert len(changes) == 3  # one notification per accepted toggle
 
         field.end_selection()
         assert field.selecting is False
-        assert field.selection == frozenset()
+        assert field.selection == ()
+
+    def test_selection_keeps_the_order_the_player_picked(self, loaded):
+        field, _ = loaded
+        field.begin_selection(["c1", "c2", "c3"])
+
+        field.toggle_selection("c3")
+        field.toggle_selection("c1")
+        field.toggle_selection("c2")
+
+        assert field.selection == ("c3", "c1", "c2")
+
+    def test_a_deselected_card_reenters_the_selection_at_the_end(self, loaded):
+        field, _ = loaded
+        field.begin_selection(["c1", "c2"])
+
+        field.toggle_selection("c1")
+        field.toggle_selection("c2")
+        field.toggle_selection("c1")  # off
+        field.toggle_selection("c1")  # and on again
+
+        assert field.selection == ("c2", "c1")
 
     def test_selection_reaches_the_human_hand_visual(self, loaded):
         field, _ = loaded
@@ -257,7 +278,7 @@ class TestPaymentSelection:
         field.toggle_selection("a")
         field.toggle_selection("b")
         field.undo_last_selection()
-        assert field.selection == frozenset({"a"})
+        assert field.selection == ("a",)
 
     def test_chosen_producer_previews_as_bowed_during_a_payment(self, loaded):
         field, _ = loaded
