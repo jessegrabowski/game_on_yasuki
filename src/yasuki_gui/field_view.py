@@ -437,6 +437,7 @@ class FieldView(tk.Canvas):
                 self._zones[tag] = zv
             zv.cards, zv.is_province, zv.name = cards, True, label
             zv.x, zv.y, zv.w, zv.h = px, py, CARD_W, CARD_H
+            zv.selected_ids = self.selection
             zv.draw(self)
         for tag in set(self._zones) - wanted_zones:
             self._zones.pop(tag, None)

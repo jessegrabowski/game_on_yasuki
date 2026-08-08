@@ -1,8 +1,18 @@
 import tkinter as tk
 
+from yasuki_gui import theme
 from yasuki_gui.visuals.zone import ZoneVisual
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+
+
+def _outlines(canvas: tk.Canvas, tag: str) -> list[str]:
+    """The outline colors of the rectangles drawn under ``tag``, in draw order."""
+    return [
+        canvas.itemcget(item, "outline")
+        for item in canvas.find_withtag(tag)
+        if canvas.type(item) == "rectangle"
+    ]
 
 
 def test_zone_bbox_and_empty_draw(root):
@@ -21,6 +31,38 @@ def test_zone_bbox_and_empty_draw(root):
     zv.draw(cv)
     after = len(cv.find_withtag("zone:1"))
     assert after >= before + 2  # rect + text for empty
+
+
+def test_a_province_card_picked_for_a_decision_is_ringed(root):
+    # Provinces are what Cycle asks the player to click, and an unringed one leaves them with no
+    # way to tell what they have picked.
+    cv = tk.Canvas(root, width=300, height=300)
+    cv.pack()
+    root.update_idletasks()
+    root.update()
+
+    card = L5RCard(id="z9", name="Z9", side=Side.DYNASTY)
+    zv = ZoneVisual([card], True, "Province", 80, 80, 120, 80, "zone:picked", selected_ids=["z9"])
+
+    zv.draw(cv)
+
+    assert theme.SELECT in _outlines(cv, "zone:picked")
+
+
+def test_an_unpicked_province_card_keeps_its_ordinary_border(root):
+    cv = tk.Canvas(root, width=300, height=300)
+    cv.pack()
+    root.update_idletasks()
+    root.update()
+
+    card = L5RCard(id="z8", name="Z8", side=Side.DYNASTY)
+    zv = ZoneVisual([card], True, "Province", 80, 80, 120, 80, "zone:plain", selected_ids=["z9"])
+
+    zv.draw(cv)
+
+    outlines = _outlines(cv, "zone:plain")
+    assert theme.SELECT not in outlines
+    assert theme.CARD_BORDER in outlines
 
 
 def test_zone_draw_with_top_card_front_and_back(root):
