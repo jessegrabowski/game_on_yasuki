@@ -62,7 +62,7 @@ def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
 # A choice resolver turns the ids a Choose collected into the effects the choice produces. Keyed by a
 # string so a paused ChooseCards names its resolver, keeping the pending decision replay-stable (a
 # stored closure would not rebuild to an equal object).
-Resolver = Callable[[GameState, str, tuple[str, ...]], list[Effect]]
+Resolver = Callable[[GameState, str | None, tuple[str, ...]], list[Effect]]
 CHOICE_RESOLVERS: dict[str, Resolver] = {}
 
 

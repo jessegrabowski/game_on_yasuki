@@ -379,8 +379,10 @@ class Choose(InterruptingEffect):
         The most cards the seat may pick.
     resolver : str
         The registered choice resolver naming what the chosen ids do.
-    source_id : str
-        The card whose trigger raised the choice, passed to the resolver.
+    source_id : str, optional
+        A card id handed to the resolver as its context. Which card that is belongs to the resolver
+        — often the one whose trigger raised the choice, sometimes the card being acted on. None
+        when the rulebook raises the choice and there is no card to name. Default None.
     """
 
     seat: PlayerId
@@ -388,7 +390,7 @@ class Choose(InterruptingEffect):
     minimum: int
     maximum: int
     resolver: str
-    source_id: str
+    source_id: str | None = None
 
     def describe(self) -> str:
         return (

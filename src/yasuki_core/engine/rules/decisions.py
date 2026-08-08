@@ -262,14 +262,16 @@ class ChooseCards(DecisionRequest):
         The most cards the seat may choose.
     resolver : str
         The registered choice resolver that turns the chosen ids into effects.
-    source_id : str
-        The card whose effect raised the choice, passed to the resolver.
+    source_id : str, optional
+        A card id handed to the resolver as its context. Which card that is belongs to the resolver
+        — often the one whose trigger raised the choice, sometimes the card being acted on. None
+        when the rulebook raises the choice and there is no card to name. Default None.
     """
 
     minimum: int
     maximum: int
     resolver: str
-    source_id: str
+    source_id: str | None = None
 
     def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
         if self.minimum == 0:
