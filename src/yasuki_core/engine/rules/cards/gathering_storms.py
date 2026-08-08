@@ -20,8 +20,17 @@ from yasuki_core.game_pieces.counters import WEALTH
 def _ancestral_estate(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
 ) -> int:
-    """+1 GP while you are the second player."""
-    return card.gold_production + (1 if me.went_second else 0)
+    """+1 GP while another player's Stronghold has higher Gold Production than yours.
+
+    Your own missing Stronghold counts as producing nothing; an opponent's missing Stronghold has
+    no production to compare and never grants the bonus.
+    """
+    own_production = me.stronghold.gold_production if me.stronghold is not None else 0
+    outproduced = any(
+        opponent.stronghold is not None and opponent.stronghold.gold_production > own_production
+        for opponent in opponents
+    )
+    return card.gold_production + (1 if outproduced else 0)
 
 
 # --- Ichiba District ---

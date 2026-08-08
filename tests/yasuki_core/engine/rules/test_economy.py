@@ -128,14 +128,55 @@ def _ancestral_estate(seat):
     )
 
 
-def test_ancestral_estate_gains_a_gold_for_the_second_player():
-    game = two_seat_game()  # first_player is P1, so P2 went second
-    estate = put_in_play(game, _ancestral_estate(PlayerId.P2))
+def test_ancestral_estate_gains_a_gold_while_outproduced():
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=3))
+    put_in_play(game, stronghold(PlayerId.P2, gold_production=5))
+    estate = put_in_play(game, _ancestral_estate(PlayerId.P1))
     assert effective_gold_production(game, estate) == 4
 
 
-def test_ancestral_estate_stays_at_base_for_the_first_player():
+def test_ancestral_estate_stays_at_base_against_an_equal_stronghold():
+    # "higher", not "at least as high": a mirror match grants nothing to either seat.
     game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=3))
+    put_in_play(game, stronghold(PlayerId.P2, gold_production=3))
+    estate = put_in_play(game, _ancestral_estate(PlayerId.P1))
+    assert effective_gold_production(game, estate) == 3
+
+
+def test_ancestral_estate_stays_at_base_while_outproducing():
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=6))
+    put_in_play(game, stronghold(PlayerId.P2, gold_production=2))
+    estate = put_in_play(game, _ancestral_estate(PlayerId.P1))
+    assert effective_gold_production(game, estate) == 3
+
+
+def test_ancestral_estate_ignores_turn_order():
+    """The bonus reads Stronghold production, not seating. P2 went second and gains nothing here."""
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=3))
+    put_in_play(game, stronghold(PlayerId.P2, gold_production=3))
+    estate = put_in_play(game, _ancestral_estate(PlayerId.P2))
+    assert effective_gold_production(game, estate) == 3
+
+
+def test_ancestral_estate_treats_a_missing_stronghold_as_producing_nothing():
+    game = two_seat_game()  # neither seat has a stronghold in play
+    estate = put_in_play(game, _ancestral_estate(PlayerId.P1))
+    assert effective_gold_production(game, estate) == 3
+
+    put_in_play(game, stronghold(PlayerId.P2, gold_production=1))
+    assert effective_gold_production(game, estate) == 4
+
+
+def test_an_opponent_without_a_stronghold_never_grants_the_bonus():
+    """A Sensei folds its Gold Production delta into the Stronghold, so a seat's own production can
+    be negative. An absent opponent Stronghold still has nothing to compare and must not read as
+    zero, which would clear a negative and grant the bonus."""
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=-1))  # P2 holds no stronghold
     estate = put_in_play(game, _ancestral_estate(PlayerId.P1))
     assert effective_gold_production(game, estate) == 3
 
@@ -237,9 +278,11 @@ def test_wealth_counters_raise_printed_production():
 
 def test_wealth_counters_stack_on_a_handler_card():
     game = two_seat_game()
-    estate = put_in_play(game, _ancestral_estate(PlayerId.P2))  # second player: handler grants +1
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=3))
+    put_in_play(game, stronghold(PlayerId.P2, gold_production=5))  # outproduces P1
+    estate = put_in_play(game, _ancestral_estate(PlayerId.P1))  # handler grants +1
     estate.adjust_counter("wealth", 1)
-    assert effective_gold_production(game, estate) == 5  # printed 3 + second-player 1 + wealth 1
+    assert effective_gold_production(game, estate) == 5  # printed 3 + outproduced 1 + wealth 1
 
 
 def _clan_stronghold(seat, clan):
