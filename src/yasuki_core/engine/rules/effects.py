@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest
-from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent
+from yasuki_core.engine.rules.events import CounterGained, Destroyed, GameEvent, Revealed
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ApplyEffects
@@ -342,6 +342,20 @@ class RefillProvince(Effect):
             return []
         ops.fill_province(game.table, self.zone.owner, province, face_up=self.face_up)
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class RevealProvinces(Effect):
+    """Turn every face-down card in ``seat``'s Provinces face-up, announcing each one it turns. A
+    card already face-up raises nothing, since nothing turned."""
+
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"reveal {self.seat.name}'s provinces"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        return [Revealed(card_id) for card_id in ops.reveal_provinces(game.table, self.seat)]
 
 
 @dataclass(frozen=True, slots=True)

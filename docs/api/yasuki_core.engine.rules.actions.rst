@@ -8,6 +8,7 @@ yasuki_core.engine.rules.actions
 .. autosummary::
 
     ActivateAbility
+    Cycle
     DynastyDiscard
     Legacy
     Pass

@@ -13,8 +13,12 @@ yasuki_core.engine.rules.flow
     begin_game
     can_proclaim
     cancel
+    cycle
+    cycle_candidates
+    cycle_key
     dynasty_discard
     gold_producers
+    is_first_turn
     is_legacy_card
     legacy
     legacy_candidates

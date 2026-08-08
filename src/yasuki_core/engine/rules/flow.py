@@ -8,6 +8,7 @@ from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
+    Cycle,
     DynastyDiscard,
     Legacy,
     Pass,
@@ -39,7 +40,16 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter, GrantModifier, RefillProvince
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Choose,
+    Effect,
+    GrantModifier,
+    MoveToDeck,
+    RefillProvince,
+    RevealProvinces,
+    Then,
+)
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules import abilities, triggers
 
@@ -121,6 +131,8 @@ def perform(game: GameState, action: Action) -> None:
             dynasty_discard(game, card_id)
         case Legacy():
             legacy(game)
+        case Cycle():
+            cycle(game)
         case ActivateAbility(card_id=card_id):
             activate(game, card_id)
         case _:
@@ -504,6 +516,58 @@ def _defer_refill(game: GameState, zone: ZoneKey, *, face_up: bool = False) -> N
     first, and only then is the Province refilled — and only if it is still short.
     """
     game.stack.append(ApplyEffects((RefillProvince(zone, face_up=face_up),)))
+
+
+def cycle_key(seat: PlayerId, turn: int) -> str:
+    """The once-per-turn usage key for a seat's Cycle ability, scoped to the turn the way
+    :func:`legacy_key` is."""
+    return f"cycle:{seat.name}:{turn}"
+
+
+def is_first_turn(game: GameState, seat: PlayerId) -> bool:
+    """Whether the current turn is ``seat``'s first. The turn counter advances while the active seat
+    alternates, so the second player's first turn is turn 2."""
+    return game.turn == (1 if seat is game.first_player else 2)
+
+
+def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The cards ``seat`` may bury with Cycle — the face-up ones in its Provinces. A face-down card
+    is not eligible, so a Province nobody has revealed stays where it is."""
+    return [
+        card
+        for key, zone in game.table.zones.items()
+        if key.owner is seat and key.role is ZoneRole.PROVINCE
+        for card in zone.cards
+        if card.face_up
+    ]
+
+
+def cycle(game: GameState) -> None:
+    """Announce the Cycle ability: claim its once-per-turn use and pause for the seat to pick which
+    face-up Province cards to bury. The burial, refill and reveal follow once the picks are in."""
+    seat = game.active
+    game.use_once(cycle_key(seat, game.turn))
+    candidates = tuple(card.id for card in cycle_candidates(game, seat))
+    triggers.resolve_effects(game, [Choose(seat, candidates, 1, len(candidates), "cycle")])
+
+
+@triggers.choice_resolver(
+    "cycle", prompt="Bury face-up Province cards — the last one you pick lands deepest"
+)
+def _cycle_bury(game: GameState, source_id: str | None, chosen: tuple[str, ...]) -> list[Effect]:
+    """Bury each chosen card in pick order, then refill the Provinces they left and reveal them all.
+
+    Each card goes to the very bottom, pushing the one before it up, so the last pick ends deepest —
+    the order the rule gives the player. The refill and the reveal are deferred together because the
+    rule reveals *after* refilling, and both wait on the reactions to the cards leaving.
+    """
+    seat = game.table.cards_by_id[chosen[0]].owner
+    # Read the Provinces before anything moves; afterwards none of them holds the card to find.
+    vacated = [_province_key_holding(game, seat, card_id) for card_id in chosen]
+    deck = DeckKey(seat, Side.DYNASTY)
+    buried = [MoveToDeck(card_id, deck, from_bottom=0) for card_id in chosen]
+    refills = tuple(RefillProvince(key) for key in vacated if key is not None)
+    return [*buried, Then((*refills, RevealProvinces(seat)))]
 
 
 def legacy_key(seat: PlayerId, turn: int) -> str:

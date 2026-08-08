@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     IgnoreHonorRequirements,
     MoveToDeck,
     RecruitCard,
+    RevealProvinces,
     Straighten,
     Then,
 )
@@ -58,6 +59,7 @@ EFFECTS = [
         RefillProvince(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), face_up=True),
         "refill P2 province 0 face-up",
     ),
+    (RevealProvinces(PlayerId.P1), "reveal P1's provinces"),
     (Then((Bow("a"), Destroy("b"))), "then: 2 deferred"),
     (
         Choose(PlayerId.P1, ("a", "b", "c"), 0, 2, "wheat_farm", "wheat_1"),

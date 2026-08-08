@@ -21,6 +21,7 @@ yasuki_core.engine.rules.effects
     MoveToDeck
     RecruitCard
     RefillProvince
+    RevealProvinces
     Straighten
     Then
 
