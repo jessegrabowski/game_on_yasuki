@@ -180,14 +180,25 @@ def reorder_in_pile(state: TableState, pile: DeckKey | ZoneKey, card_id: str, in
     return True
 
 
-def fill_province(state: TableState, seat: PlayerId, zone: ProvinceZone) -> L5RCard | None:
-    """Draw the seat's top dynasty card face-down into ``zone``; None if the dynasty deck is
-    empty."""
+def fill_province(
+    state: TableState, seat: PlayerId, zone: ProvinceZone, *, face_up: bool = False
+) -> L5RCard | None:
+    """Draw the seat's top dynasty card into ``zone``; None if the dynasty deck is empty.
+
+    Parameters
+    ----------
+    face_up : bool, optional
+        Whether the card arrives face-up, as a Renew refill does. It arrives in that state rather
+        than being turned into it, so a face-up arrival is never a reveal. Default False.
+    """
     card = state.decks[DeckKey(seat, Side.DYNASTY)].draw_one()
     if card is None:
         return None
     card.unbow()
-    card.turn_face_down()
+    if face_up:
+        card.turn_face_up()
+    else:
+        card.turn_face_down()
     zone.add(card)
     return card
 

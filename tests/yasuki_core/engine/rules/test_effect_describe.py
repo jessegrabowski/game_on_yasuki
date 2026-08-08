@@ -4,6 +4,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import (
+    RefillProvince,
     AdjustCounter,
     BanishTopFate,
     Bow,
@@ -20,6 +21,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.counters import WEALTH
 
 EFFECTS = [
@@ -40,6 +42,11 @@ EFFECTS = [
     (
         RecruitCard("holding_1", renew=True),
         "recruit holding_1 out of sequence, renewing the province",
+    ),
+    (RefillProvince(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 2)), "refill P1 province 2"),
+    (
+        RefillProvince(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), face_up=True),
+        "refill P2 province 0 face-up",
     ),
     (Then((Bow("a"), Destroy("b"))), "then: 2 deferred"),
     (

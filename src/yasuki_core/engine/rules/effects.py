@@ -261,6 +261,37 @@ class RecruitCard(InterruptingEffect):
 
 
 @dataclass(frozen=True, slots=True)
+class RefillProvince(Effect):
+    """Refill a Province that a card has left, if it is still short.
+
+    The conditional is the rule, not a guard: a Province is refilled "unless something else has
+    refilled it", so a reaction that filled the gap first leaves this a no-op. Deferred behind the
+    reactions to the card leaving, which is where the rules place it.
+
+    Attributes
+    ----------
+    zone : ZoneKey
+        The Province to refill.
+    face_up : bool, optional
+        Whether the card arrives face-up, as a Renew refill does. Default False.
+    """
+
+    zone: ZoneKey
+    face_up: bool = False
+
+    def describe(self) -> str:
+        face = " face-up" if self.face_up else ""
+        return f"refill {self.zone.owner.name} province {self.zone.idx}{face}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        province = game.table.zones.get(self.zone)
+        if province is None or not province.has_capacity():
+            return []
+        ops.fill_province(game.table, self.zone.owner, province, face_up=self.face_up)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class Then(Effect):
     """Defer ``effects`` until the current step has fully resolved, cascade included.
 
