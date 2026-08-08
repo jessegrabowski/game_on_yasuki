@@ -126,6 +126,9 @@ def perform(game: GameState, action: Action) -> None:
             activate(game, card_id)
         case _:
             raise ValueError(f"no handler for action {type(action).__name__}")
+    # An action resolves fully before the next input; one that paused for a decision leaves its
+    # remainder for the submit that answers it.
+    run_stack(game)
 
 
 def produce_gold(game: GameState, card_id: str, amount: int) -> None:
@@ -313,6 +316,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_invest_amount(game, request, response)
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
+    # Symmetric with `perform`: an answered decision resolves fully before the next input.
+    run_stack(game)
 
 
 def cancel(game: GameState) -> None:
