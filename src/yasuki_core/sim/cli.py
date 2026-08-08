@@ -1,4 +1,5 @@
 import argparse
+import sys
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -76,10 +77,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         except psycopg.OperationalError as exc:
             # The deck loader reads the card database; a psycopg traceback tells someone running a
             # simulation nothing. Every other failure is a bug and keeps its traceback.
-            print(f"cannot reach the card database, which {args.deck} must be built from: {exc}")
+            print(
+                f"cannot reach the card database, which {args.deck} must be built from: {exc}",
+                file=sys.stderr,
+            )
             return 1
         except FileNotFoundError as exc:
-            print(f"no such decklist: {exc.filename}")
+            print(f"no such decklist: {exc.filename}", file=sys.stderr)
             return 1
         # Every policy's rows carry the same seed, so a sweep compares them over the same deals.
         rows.extend(

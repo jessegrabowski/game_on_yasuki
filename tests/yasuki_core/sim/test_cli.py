@@ -69,7 +69,8 @@ def test_an_unreachable_database_is_reported_rather_than_traced(monkeypatch, tmp
     monkeypatch.setattr(cli, "run_games", unreachable)
 
     assert cli.main([DECK, "--out", str(tmp_path / "run.parquet")]) == 1
-    assert "cannot reach the card database" in capsys.readouterr().out
+    # On stderr, so a shell capturing the run's output does not swallow the reason it failed.
+    assert "cannot reach the card database" in capsys.readouterr().err
 
 
 def test_a_bug_in_the_run_keeps_its_traceback(monkeypatch, tmp_path):
