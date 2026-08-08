@@ -1,6 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities import owned_holdings
 from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
     KEYWORD_GRANTS,
@@ -351,3 +352,23 @@ def test_a_second_keyword_grant_for_one_card_is_refused():
                 return ("Legacy",)
     finally:
         KEYWORD_GRANTS.pop("guard_probe", None)
+
+
+def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
+    """Keyword lookups read effective keywords, so a card whose own condition grants one is found by
+    the same searches as a card that prints it. Registered here rather than leaning on a real card:
+    today only Shrine of Courtesy grants anything, and it grants Legacy, which no lookup asks for."""
+    game = two_seat_game()
+    granted = put_in_play(game, holding("P1-docks", owner=PlayerId.P1, printed_id="keyword_probe"))
+    printed = put_in_play(game, holding("P1-quay", owner=PlayerId.P1, keywords=("Port",)))
+
+    assert owned_holdings(game, PlayerId.P1, "Port") == [printed]
+
+    @keyword_grant("keyword_probe")
+    def _grants_port(card, me, opponents):
+        return ("Port",)
+
+    try:
+        assert owned_holdings(game, PlayerId.P1, "Port") == [granted, printed]
+    finally:
+        KEYWORD_GRANTS.pop("keyword_probe", None)

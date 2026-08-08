@@ -435,7 +435,7 @@ def _resolve_recruit(
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     if province is not None:
         refill = ops.fill_province(game.table, seat, province)
-        if refill is not None and (renew or RENEW_KEYWORD in card.keywords):
+        if refill is not None and (renew or RENEW_KEYWORD in effective_keywords(game, card)):
             refill.turn_face_up()  # Renew: the vacated Province refills face-up
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
     game.stack.append(FinishRecruit(card_id, invest_amount, proclaim))
@@ -656,7 +656,7 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
         for key, zone in game.table.zones.items()
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
-        if card.face_up and triggers.SINCERITY_KEYWORD in card.keywords
+        if card.face_up and triggers.SINCERITY_KEYWORD in effective_keywords(game, card)
     ]
     triggers.resolve_effects(game, grants)
 
