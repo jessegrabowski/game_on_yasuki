@@ -89,6 +89,8 @@ class FieldView(tk.Canvas):
         self.apply_profile_to_panels: Callable[[], None] | None = None
         self.on_selection_changed: Callable[[], None] | None = None
         self.on_card_activated: Callable[[str], None] | None = None
+        # Fires on a right-click that lands on empty board, for the rulebook abilities.
+        self.on_board_menu: Callable[[], None] | None = None
         # Fires when a boostable producer is picked, so the host can ask whether to boost it; the
         # host answers by calling resolve_boost.
         self.on_boost_request: Callable[[str], None] | None = None

@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Draw
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.tags import card_tag, zone_tag
@@ -10,6 +11,57 @@ from tests.yasuki_gui.conftest import DummyEventNamespace
 def _at(field, tag):
     """Monkeypatch-free tag resolver: make resolve_tag_at return ``tag`` for any event."""
     field.resolve_tag_at = lambda e: tag
+
+
+def _in_rules_mode(field):
+    """Put the field in rules mode, which is what gates the board menu."""
+    session = EngineSession.start(TableState.empty_two_seat(), PlayerId.P1)
+    field.render_snapshot(session.project(PlayerId.P1).table, PlayerId.P1)
+
+
+class TestBoardMenu:
+    def test_right_click_on_empty_board_opens_the_menu(self, loaded):
+        field, _ = loaded
+        opened = []
+        field.on_board_menu = lambda: opened.append("opened")
+        _in_rules_mode(field)
+        _at(field, None)
+
+        field._controller.on_context_click(DummyEventNamespace(x=10, y=10))
+
+        assert opened == ["opened"]
+
+    def test_right_click_on_a_card_leaves_the_board_menu_shut(self, loaded):
+        # The rulebook abilities act on whole zones, so a right-click that lands on a card is not
+        # asking for them — and a card's own actions are a left-click away.
+        field, _ = loaded
+        opened = []
+        field.on_board_menu = lambda: opened.append("opened")
+        _in_rules_mode(field)
+        _at(field, card_tag("P1-SH"))
+
+        field._controller.on_context_click(DummyEventNamespace(x=10, y=10))
+
+        assert opened == []
+
+    def test_both_right_click_buttons_are_bound(self, loaded):
+        # Aqua calls a right-click Button-2 and X11 calls it Button-3, so binding only one leaves
+        # the menu unreachable on half the platforms — and on the wrong one it fires on the wheel.
+        field, _ = loaded
+
+        assert {"<Button-2>", "<Button-3>"} <= set(field.bind())
+
+    def test_the_sandbox_has_no_board_menu(self, loaded):
+        # The manual surface has no rulebook abilities to offer, and right-click is free there.
+        field, _ = loaded
+        opened = []
+        field.on_board_menu = lambda: opened.append("opened")
+        _at(field, None)
+
+        field._controller.on_context_click(DummyEventNamespace(x=10, y=10))
+
+        assert field.rules_mode is False
+        assert opened == []
 
 
 class TestDoubleClick:
