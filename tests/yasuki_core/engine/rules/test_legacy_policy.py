@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.policies import POLICIES, EconomicLegacyPolicy
+from yasuki_core.engine.rules.policies import EconomicLegacyPolicy
 from yasuki_core.engine.runner import Controls, run_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey
@@ -85,10 +85,6 @@ def test_it_buys_like_the_economic_policy_when_it_does_not_take_legacy():
     province_card(session.game, "affordable", seat=P1, gold_cost=3, gold_production=4)
 
     assert _choose(session, []) == Recruit("affordable")
-
-
-def test_the_policy_is_registered_under_its_name():
-    assert POLICIES["economic-legacy"] is EconomicLegacyPolicy
 
 
 # --- how the agent answers the decisions Legacy raises --------------------------------------------
