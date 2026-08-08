@@ -45,7 +45,7 @@ from yasuki_core.engine.rules import abilities, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
 from yasuki_core.engine.rules import cards  # noqa: F401
-from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
+from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, Revealed, TurnStarted
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.ruleset import SHATTERED_EMPIRE
 
@@ -697,7 +697,8 @@ def _begin_next_turn(game: GameState) -> None:
 
 def _begin_turn(game: GameState) -> None:
     ops.straighten(game.table, game.active)
-    ops.reveal_provinces(game.table, game.active)
+    for card_id in ops.reveal_provinces(game.table, game.active):
+        triggers.fire(game, Revealed(card_id))
     triggers.fire(game, TurnStarted(game.active))
 
 

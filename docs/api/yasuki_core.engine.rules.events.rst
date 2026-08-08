@@ -11,6 +11,7 @@ yasuki_core.engine.rules.events
     CounterGained
     Destroyed
     EnteredPlay
+    Revealed
     TurnStarted
 
 .. automodule:: yasuki_core.engine.rules.events

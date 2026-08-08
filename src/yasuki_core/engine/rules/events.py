@@ -46,4 +46,12 @@ class EnteredPlay:
     card_id: str
 
 
-GameEvent = TurnStarted | CardDiscarded | CounterGained | Destroyed | EnteredPlay
+@dataclass(frozen=True, slots=True)
+class Revealed:
+    """A face-down card in a Province was turned face-up. A card that arrives already face-up raises
+    nothing — the event names the turn, not the resulting state."""
+
+    card_id: str
+
+
+GameEvent = TurnStarted | CardDiscarded | CounterGained | Destroyed | EnteredPlay | Revealed
