@@ -67,6 +67,14 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
     return state
 
 
+def _dynasty_session_from(state: TableState) -> EngineSession:
+    """A session on a prepared table, parked in the Dynasty phase where Legacy is on offer."""
+    session = EngineSession.start(state, PlayerId.P1, seed=7)
+    session.act(PlayerId.P1, Pass())  # Action -> Attack
+    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    return session
+
+
 def _dynasty_session(**kwargs) -> EngineSession:
     session = EngineSession.start(_table(**kwargs), PlayerId.P1, seed=7)
     session.act(PlayerId.P1, Pass())  # Action -> Attack
@@ -273,3 +281,39 @@ def test_a_conditional_grant_that_does_not_apply_leaves_the_card_unfindable():
     game = GameState.start(state, PlayerId.P1)  # P1 went first, so Courtesy grants nothing
 
     assert flow.legacy_candidates(game, PlayerId.P1) == []
+
+
+def _buried_province_card(session: EngineSession) -> DynastyHolding:
+    """Put a face-down card in a Province of the seat about to act, the state a Province is left in
+    when it refills after a recruit — the only way one is face-down during its owner's own turn."""
+    buried = DynastyHolding(
+        id="P1-buried", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=5
+    )
+    state = session.game.table
+    register(state, buried)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards = [buried]
+    buried.turn_face_down()
+    return buried
+
+
+def test_the_search_shows_the_seat_its_face_down_province_cards():
+    """You look through your Provinces to search, so by the time you pick one to displace you have
+    seen what is in each. Without it, a Province refilled face-down is a blind discard."""
+    session = _dynasty_session(legacy_in="deck")
+    buried = _buried_province_card(session)
+    assert buried.peekers == frozenset()  # unseen until the search runs
+
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
+
+    assert buried.peekers == frozenset({PlayerId.P1})
+
+
+def test_the_search_does_not_show_the_pool_to_the_opponent():
+    session = _dynasty_session(legacy_in="deck")
+    buried = _buried_province_card(session)
+
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
+
+    assert PlayerId.P2 not in buried.peekers
