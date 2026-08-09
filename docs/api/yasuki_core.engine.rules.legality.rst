@@ -13,6 +13,7 @@ yasuki_core.engine.rules.legality
     cycle_key
     gold_producers
     gold_reach
+    has_keyword
     is_first_turn
     is_legacy_card
     is_legal

@@ -329,11 +329,18 @@ def legacy_key(seat: PlayerId, turn: int) -> str:
     return f"legacy:{seat.name}:{turn}"
 
 
+def has_keyword(game: GameState, card: L5RCard, keyword: str) -> bool:
+    """Whether ``card`` carries ``keyword``, printed or granted by its own ability, matched without
+    regard to case."""
+    wanted = keyword.lower()
+    return any(carried.lower() == wanted for carried in effective_keywords(game, card))
+
+
 def is_legacy_card(game: GameState, card: L5RCard) -> bool:
-    """Whether ``card`` carries the Legacy keyword, printed or granted by its own ability (Shrine of
-    Courtesy grants itself Legacy for the second player), so the Legacy ability can search it out."""
-    wanted = LEGACY_KEYWORD.lower()
-    return any(keyword.lower() == wanted for keyword in effective_keywords(game, card))
+    """Whether ``card`` carries the Legacy keyword, so the Legacy ability can search it out. Shrine
+    of Courtesy grants itself Legacy for the second player, which is why this is not a printed
+    check."""
+    return has_keyword(game, card, LEGACY_KEYWORD)
 
 
 def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
