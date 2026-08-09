@@ -23,7 +23,8 @@ from yasuki_core.engine.rules.state import GameState, PHASE_TIMINGS
 from yasuki_core.engine.rules import abilities
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
+from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding, DynastyPersonality
+from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.ruleset import SHATTERED_EMPIRE
 
@@ -269,7 +270,7 @@ def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
     )
 
 
-def recruit_cost(game: GameState, card: L5RCard) -> int:
+def recruit_cost(game: GameState, card: DynastyCard | FateCard) -> int:
     """The gold a seat pays to recruit ``card``: its printed gold cost, plus the off-clan surcharge
     when the card has a Clan Alignment the seat does not share, less the card's own conditional
     recruit discount. Floored at zero."""
@@ -294,6 +295,8 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
     if not isinstance(card, DynastyPersonality):
         return False
     seat = card.owner
+    if seat is None:
+        return False
     seat_align = seat_alignment(game, seat)
     if seat_align is None or seat_align not in card_alignments(card):
         return False
