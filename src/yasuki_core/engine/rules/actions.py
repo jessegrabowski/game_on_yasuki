@@ -99,14 +99,29 @@ class Cycle:
 @dataclass(frozen=True, slots=True)
 class KharmicDraw:
     """Take the Fate Kharmic rulebook ability (Repeatable Open, 2 Gold): discard a Kharmic card from
-    hand to draw a card. Which card is discarded is chosen through the decision the action raises."""
+    hand to draw a card.
+
+    Attributes
+    ----------
+    card_id : str
+        The Kharmic card in hand to spend.
+    """
+
+    card_id: str
 
 
 @dataclass(frozen=True, slots=True)
 class KharmicRefill:
     """Take the Dynasty Kharmic rulebook ability (Repeatable Open, 2 Gold): discard a Kharmic card
-    from one of your Provinces and refill it face-up. Which card is discarded is chosen through the
-    decision the action raises."""
+    from one of your Provinces and refill it face-up.
+
+    Attributes
+    ----------
+    card_id : str
+        The face-up Kharmic card in a Province to spend.
+    """
+
+    card_id: str
 
 
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
