@@ -20,6 +20,8 @@ yasuki_core.engine.rules.legality
     legacy_key
     legacy_search_pool
     legal_actions
+    permits
+    permitted_timings
     proclaim_key
     province_cards
     province_key_holding

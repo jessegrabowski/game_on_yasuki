@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.state import GameState, PHASE_TIMINGS, Phase
+from yasuki_core.engine.rules.state import GameState, PHASE_TIMINGS
 from yasuki_core.engine.rules import abilities
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -57,6 +57,16 @@ def timing_of(game: GameState, action: Action) -> ActionTiming | None:
     if timing is None:
         raise ValueError(f"no designator for action {type(action).__name__}")
     return timing
+
+
+def permitted_timings(game: GameState) -> frozenset[ActionTiming]:
+    """The designators the Action Round open in the current phase permits."""
+    return PHASE_TIMINGS[game.phase]
+
+
+def permits(game: GameState, timing: ActionTiming) -> bool:
+    """Whether the Action Round open in the current phase permits ``timing``."""
+    return timing in permitted_timings(game)
 
 
 def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
@@ -116,7 +126,7 @@ def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> l
     a single card."""
     return [
         ActivateAbility(card.id)
-        for card in abilities.activatable(game, seat, PHASE_TIMINGS[game.phase])
+        for card in abilities.activatable(game, seat, permitted_timings(game))
         if only is None or card.id == only
     ]
 
@@ -125,7 +135,7 @@ def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
     """The Cycle ability when the seat can take it: its first turn, not already used, and with a
     face-up Province card to put back. The rule is "one or more", so declining is not taking the
     action at all rather than taking it and choosing nothing."""
-    if game.phase is not Phase.ACTION:
+    if not permits(game, ACTION_TIMINGS[Cycle]):
         return []
     if not is_first_turn(game, seat):
         return []
@@ -138,7 +148,7 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
     """The Legacy ability when the seat can take it: once per turn, and only with a card in hand to
     pay the banish cost. Offered even when no Legacy card can be found — the rules make the whiff a
     loss rather than hiding the option (which would leak face-down province contents)."""
-    if game.phase is not Phase.DYNASTY:
+    if not permits(game, ACTION_TIMINGS[Legacy]):
         return []
     if game.has_used(legacy_key(seat, game.turn)):
         return []
@@ -149,7 +159,7 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
 def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
     """A DynastyDiscard for each face-up card in the seat's provinces — the rule allows discarding
     any face-up province card, not only Holdings. ``only`` narrows to a single card."""
-    if game.phase is not Phase.DYNASTY:
+    if not permits(game, ACTION_TIMINGS[DynastyDiscard]):
         return []
     return [
         DynastyDiscard(card.id)
@@ -165,7 +175,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
     check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim variant
     when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest variant
     when the seat could also cover the card's Invest cost. ``only`` narrows to a single card."""
-    if game.phase is not Phase.DYNASTY:
+    if not permits(game, ACTION_TIMINGS[Recruit]):
         return []
     recruits: list[Action] = []
     seat_info = game.table.seats[seat]

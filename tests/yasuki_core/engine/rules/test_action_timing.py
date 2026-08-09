@@ -2,6 +2,8 @@ from typing import get_args
 
 import pytest
 
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import (
     ACTION_TIMINGS,
@@ -14,7 +16,29 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
+from yasuki_core.engine.session import EngineSession
+from tests.yasuki_core.engine.builders import (
+    holding,
+    province_card,
+    put_in_play,
+    two_seat_game,
+)
+
+
+def _phases_fixture():
+    """P1 holding one Open ability and one Dynasty ability, each with a legal target — Millet Farm
+    wants another Farm in play, the Shrine an untokened Sincerity card in a Province. Without those
+    an ability is withheld for a reason that has nothing to do with timing."""
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state, holding("millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1)
+    )
+    put_in_play(state, holding("shrine", printed_id="shrine_of_sincerity", gold_production=1))
+    put_in_play(
+        state, holding("farm", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
+    )
+    province_card(state, "sincere", printed_id="plain_sincerity", keywords=("Sincerity",))
+    return EngineSession.start(state, PlayerId.P1)
 
 
 def test_each_rulebook_action_reports_the_designator_the_cr_prints():
@@ -67,3 +91,37 @@ def test_timing_a_card_with_no_activated_ability_is_an_error():
 
     with pytest.raises(ValueError, match="no activated ability"):
         legality.timing_of(game, ActivateAbility("plain"))
+
+
+def test_each_phase_permits_only_the_designators_its_round_allows():
+    session = _phases_fixture()
+
+    assert legality.permits(session.game, ActionTiming.OPEN)
+    assert legality.permits(session.game, ActionTiming.LIMITED)
+    assert not legality.permits(session.game, ActionTiming.DYNASTY)
+
+    session.act(PlayerId.P1, Pass())  # Action -> Battle: battles own their own rounds
+    assert not any(legality.permits(session.game, t) for t in ActionTiming)
+
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    assert legality.permits(session.game, ActionTiming.DYNASTY)
+    assert not legality.permits(session.game, ActionTiming.OPEN)
+    assert not legality.permits(session.game, ActionTiming.LIMITED)
+
+
+def test_a_phase_offers_only_the_abilities_its_round_permits():
+    # Both cards are in play throughout, so what moves is the phase and nothing else.
+    session = _phases_fixture()
+
+    in_action = session.legal_actions(PlayerId.P1)
+    session.act(PlayerId.P1, Pass())
+    in_battle = session.legal_actions(PlayerId.P1)
+    session.act(PlayerId.P1, Pass())
+    in_dynasty = session.legal_actions(PlayerId.P1)
+
+    assert ActivateAbility("millet") in in_action
+    assert ActivateAbility("shrine") not in in_action
+    assert ActivateAbility("millet") not in in_battle
+    assert ActivateAbility("shrine") not in in_battle
+    assert ActivateAbility("millet") not in in_dynasty
+    assert ActivateAbility("shrine") in in_dynasty
