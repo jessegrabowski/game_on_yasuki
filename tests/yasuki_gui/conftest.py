@@ -24,6 +24,24 @@ def _reclaim_tk_cycles_on_main_thread():
     gc.collect()
 
 
+@pytest.fixture(autouse=True)
+def _keep_tk_windows_off_screen(monkeypatch):
+    """Withdraw every Tk root a GUI test builds, wherever it builds it.
+
+    A mapped window takes the keyboard focus from whatever the developer is doing, once per root,
+    and the suite makes dozens. Patching the constructor covers roots created inside a test body as
+    well as in a fixture, so a new test cannot reintroduce the problem by forgetting to withdraw.
+    """
+    real_tk = tk.Tk
+
+    def withdrawn(*args, **kwargs):
+        root = real_tk(*args, **kwargs)
+        root.withdraw()
+        return root
+
+    monkeypatch.setattr(tk, "Tk", withdrawn)
+
+
 @pytest.fixture
 def root():
     r = tk.Tk()
