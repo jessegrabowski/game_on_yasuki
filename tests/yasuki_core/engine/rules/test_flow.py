@@ -9,7 +9,7 @@ from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding, Dynasty
 from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules import flow, legality
 
 from tests.yasuki_core.engine.builders import put_in_play, register
 
@@ -164,8 +164,8 @@ def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
         id="h2", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crane"
     )
 
-    assert flow.recruit_cost(game, same) == 4
-    assert flow.recruit_cost(game, other) == 4 + flow.OFF_CLAN_SURCHARGE
+    assert legality.recruit_cost(game, same) == 4
+    assert legality.recruit_cost(game, other) == 4 + legality.OFF_CLAN_SURCHARGE
 
 
 def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
@@ -173,7 +173,7 @@ def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
     holding = DynastyHolding(
         id="h", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crane"
     )
-    assert flow.recruit_cost(game, holding) == 4  # no Stronghold clan to compare against
+    assert legality.recruit_cost(game, holding) == 4  # no Stronghold clan to compare against
 
 
 def _personality(clans: tuple[str, ...], **kwargs) -> DynastyPersonality:
@@ -193,46 +193,46 @@ def test_recruit_cost_reads_every_listed_clan_not_just_the_first():
     # Bayushi Aramoro is printed Ninja and Scorpion; the alignment that matters is second in the list.
     game = _game_with_stronghold_clan("Scorpion")
     aramoro = _personality(("Ninja", "Scorpion"))
-    assert flow.recruit_cost(game, aramoro) == 5
+    assert legality.recruit_cost(game, aramoro) == 5
 
 
 def test_recruit_cost_treats_naga_and_akasha_as_one_alignment():
     game = _game_with_stronghold_clan("Naga")
     akasha_personality = _personality(("Akasha",))
-    assert flow.recruit_cost(game, akasha_personality) == 5
+    assert legality.recruit_cost(game, akasha_personality) == 5
 
 
 def test_recruit_cost_charges_no_surcharge_for_an_unaligned_personality():
     game = _game_with_stronghold_clan("Scorpion")
     # A clan name that is not a legal alignment (a minor clan) leaves the card unaligned.
-    assert flow.recruit_cost(game, _personality(("Fox",))) == 5
-    assert flow.recruit_cost(game, _personality(())) == 5
+    assert legality.recruit_cost(game, _personality(("Fox",))) == 5
+    assert legality.recruit_cost(game, _personality(())) == 5
 
 
 def test_recruit_cost_surcharges_a_personality_aligned_to_another_clan():
     game = _game_with_stronghold_clan("Scorpion")
-    assert flow.recruit_cost(game, _personality(("Crane",))) == 5 + flow.OFF_CLAN_SURCHARGE
+    assert legality.recruit_cost(game, _personality(("Crane",))) == 5 + legality.OFF_CLAN_SURCHARGE
 
 
 def test_a_stronghold_with_no_legal_alignment_neither_surcharges_nor_proclaims():
     # A Shadowlands / minor-clan Stronghold has no legal Clan Alignment, so it has nothing to compare
     # against: an aligned Personality costs face value and none can be Proclaimed.
     game = _game_with_stronghold_clan("Shadowlands")
-    assert flow.recruit_cost(game, _personality(("Crab",))) == 5
-    assert not flow.can_proclaim(game, _personality(("Crab",)))
+    assert legality.recruit_cost(game, _personality(("Crab",))) == 5
+    assert not legality.can_proclaim(game, _personality(("Crab",)))
 
 
 def test_can_proclaim_accepts_any_shared_alignment_of_a_multi_clan_personality():
     doji = _personality(("Crane", "Mantis"))  # a legal Crane/Mantis Personality
-    assert flow.can_proclaim(_game_with_stronghold_clan("Crane"), doji)
-    assert flow.can_proclaim(_game_with_stronghold_clan("Mantis"), doji)
+    assert legality.can_proclaim(_game_with_stronghold_clan("Crane"), doji)
+    assert legality.can_proclaim(_game_with_stronghold_clan("Mantis"), doji)
 
 
 def test_can_proclaim_rejects_off_clan_and_unaligned_personalities():
     game = _game_with_stronghold_clan("Scorpion")
-    assert not flow.can_proclaim(game, _personality(("Crane",)))  # off-clan
-    assert not flow.can_proclaim(game, _personality(("Fox",)))  # unaligned (minor clan only)
-    assert not flow.can_proclaim(game, _personality(()))  # unaligned (no clan)
+    assert not legality.can_proclaim(game, _personality(("Crane",)))  # off-clan
+    assert not legality.can_proclaim(game, _personality(("Fox",)))  # unaligned (minor clan only)
+    assert not legality.can_proclaim(game, _personality(()))  # unaligned (no clan)
 
 
 def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
@@ -290,14 +290,14 @@ def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> Dynast
 
 def test_colonial_farm_discounts_one_for_a_lion_player():
     farm = _holding("colonial_farm", gold_cost=6)
-    assert flow.recruit_cost(_discount_game(clan="Lion"), farm) == 5
-    assert flow.recruit_cost(_discount_game(clan="Crab"), farm) == 6  # no discount off-clan
+    assert legality.recruit_cost(_discount_game(clan="Lion"), farm) == 5
+    assert legality.recruit_cost(_discount_game(clan="Crab"), farm) == 6  # no discount off-clan
 
 
 def test_fantastic_gardens_discounts_two_for_a_crane_player():
     gardens = _holding("fantastic_gardens", gold_cost=7)
-    assert flow.recruit_cost(_discount_game(clan="Crane"), gardens) == 5
-    assert flow.recruit_cost(_discount_game(clan="Lion"), gardens) == 7
+    assert legality.recruit_cost(_discount_game(clan="Crane"), gardens) == 5
+    assert legality.recruit_cost(_discount_game(clan="Lion"), gardens) == 7
 
 
 def test_moto_traders_discounts_with_another_merchant_caravan_in_play():
@@ -305,21 +305,21 @@ def test_moto_traders_discounts_with_another_merchant_caravan_in_play():
         id="mc", name="C", side=Side.DYNASTY, owner=PlayerId.P1, keywords=("Merchant Caravan",)
     )
     traders = _holding("moto_traders", gold_cost=5)
-    assert flow.recruit_cost(_discount_game(in_play=(caravan,)), traders) == 4
-    assert flow.recruit_cost(_discount_game(), traders) == 5
+    assert legality.recruit_cost(_discount_game(in_play=(caravan,)), traders) == 4
+    assert legality.recruit_cost(_discount_game(), traders) == 5
 
 
 def test_shrine_of_courtesy_discounts_three_when_you_went_second():
     shrine = _holding("shrine_of_courtesy", gold_cost=4)
     assert (
-        flow.recruit_cost(_discount_game(first_player=PlayerId.P2), shrine) == 1
+        legality.recruit_cost(_discount_game(first_player=PlayerId.P2), shrine) == 1
     )  # P1 went second
-    assert flow.recruit_cost(_discount_game(first_player=PlayerId.P1), shrine) == 4
+    assert legality.recruit_cost(_discount_game(first_player=PlayerId.P1), shrine) == 4
 
 
 def test_recruit_discount_floors_the_cost_at_zero():
     cheap = _holding("shrine_of_courtesy", gold_cost=2)  # a -3 discount would go negative
-    assert flow.recruit_cost(_discount_game(first_player=PlayerId.P2), cheap) == 0
+    assert legality.recruit_cost(_discount_game(first_player=PlayerId.P2), cheap) == 0
 
 
 def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
@@ -331,7 +331,7 @@ def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
         "moto_traders", gold_cost=5, clan="Unicorn"
     )  # off-clan from the Crab stronghold
     # Both apply and sum: +2 off-clan surcharge, -1 Merchant Caravan discount.
-    assert flow.recruit_cost(game, traders) == 5 + flow.OFF_CLAN_SURCHARGE - 1
+    assert legality.recruit_cost(game, traders) == 5 + legality.OFF_CLAN_SURCHARGE - 1
 
 
 def test_recruit_rejects_invest_and_proclaim_together():

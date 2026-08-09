@@ -2,7 +2,7 @@ from collections.abc import Callable, Iterator
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_gold_production
-from yasuki_core.engine.rules.flow import gold_producers
+from yasuki_core.engine.rules.legality import gold_producers
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import Zone, ZoneRole
 
@@ -19,7 +19,7 @@ def potential_gold_production(game: GameState, seat: PlayerId) -> int:
     cleared at the end of the phase, so it reads zero at every turn boundary.
 
     Two things are deliberately outside this number, and both make it smaller than
-    :func:`~yasuki_core.engine.rules.flow.reachable_gold` for the same board.
+    :func:`~yasuki_core.engine.rules.legality.reachable_gold` for the same board.
 
     A bow-time boost is excluded, because taking one has a price the card sets — Outlying Farms
     destroys itself — so counting it would report gold a seat may rationally decline. This measures

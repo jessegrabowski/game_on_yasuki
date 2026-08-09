@@ -2,7 +2,7 @@ from collections.abc import Iterable, Iterator
 from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import abilities, flow
+from yasuki_core.engine.rules import abilities, legality
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
@@ -66,7 +66,7 @@ class GameRunner:
                 continue
             if isinstance(action, Recruit):
                 if base is None:
-                    base = flow.recruit_cost(game, card)
+                    base = legality.recruit_cost(game, card)
                 if action.invest:
                     items.append((self._invest_label(card, base), action))
                 elif action.proclaim:
@@ -107,7 +107,7 @@ class GameRunner:
     def legacy_search_pool(self) -> list:
         """The cards the human's Legacy search looks through — its whole dynasty deck plus its
         face-down province cards — for a search dialog to display."""
-        return flow.legacy_search_pool(self.session.game, self.human)
+        return legality.legacy_search_pool(self.session.game, self.human)
 
     @property
     def loser(self) -> PlayerId | None:

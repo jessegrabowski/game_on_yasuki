@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.abilities import (
     register_ability,
 )
 from yasuki_core.engine.rules.economy import effective_gold_production, effective_keywords
+from yasuki_core.engine.rules.legality import reachable_gold, recruit_cost
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
@@ -78,9 +79,6 @@ def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:
     pays each target's recruit cost from its pool and unbowed producers, minus ``card``'s own yield:
     the ability bows or destroys ``card`` as its cost, so it can no longer produce toward the
     recruit."""
-    # flow imports this module for the ability registry, so its gold helpers are reached lazily.
-    from yasuki_core.engine.rules.flow import reachable_gold, recruit_cost
-
     seat = card.owner
     affordable: list[str] = []
     for target_id in province_holdings(game, seat):

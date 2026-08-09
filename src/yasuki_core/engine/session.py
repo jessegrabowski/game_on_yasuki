@@ -1,20 +1,15 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import TableState
 from yasuki_core.engine.snapshot import InitialRecord
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.actions import (
-    ActivateAbility,
     Action,
-    Cycle,
     DynastyDiscard,
-    Legacy,
-    Pass,
-    Recruit,
 )
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules import abilities, flow, projection
+from yasuki_core.engine.rules import legality, projection
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import (
     Act,
@@ -25,7 +20,6 @@ from yasuki_core.engine.rules.log import (
     cancel_and_log,
     replay,
 )
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 
 
 @dataclass(slots=True)
@@ -70,100 +64,13 @@ class EngineSession:
         return projection.project(self.game, seat)
 
     def legal_actions(self, seat: PlayerId) -> list[Action]:
-        """Return the free actions ``seat`` may take right now: always a pass, plus — in the Dynasty
-        phase — a Recruit for each face-up Holding or Personality in its provinces it could pay for.
-        Empty while a decision is pending and for any seat but the active one.
-
-        Gold is not a free action: it is produced only while paying a cost (rules-skeleton §7), so
-        it surfaces through the Recruit's ``ChoosePayment``, never here."""
-        if self.game.game_over or self.game.awaiting_decision or seat is not self.game.active:
-            return []
-        actions: list[Action] = [Pass()]
-        actions.extend(self._abilities(seat))
-        if self.game.phase is Phase.ACTION:
-            actions.extend(self._cycle(seat))
-        elif self.game.phase is Phase.DYNASTY:
-            actions.extend(self._recruits(seat))
-            actions.extend(self._dynasty_discards(seat))
-            actions.extend(self._legacy(seat))
-        return actions
-
-    def _abilities(self, seat: PlayerId) -> list[Action]:
-        """An ActivateAbility for each in-play card whose activated ability the seat can use in the
-        current phase: controlled, cost payable, and with at least one legal target."""
-        return [
-            ActivateAbility(card.id)
-            for card in abilities.activatable(self.game, seat, self.game.phase)
-        ]
-
-    def _cycle(self, seat: PlayerId) -> list[Action]:
-        """The Cycle ability when the seat can take it: its first turn, not already used, and with a
-        face-up Province card to put back. The rule is "one or more", so declining is not taking the
-        action at all rather than taking it and choosing nothing."""
-        if not flow.is_first_turn(self.game, seat):
-            return []
-        if self.game.has_used(flow.cycle_key(seat, self.game.turn)):
-            return []
-        return [Cycle()] if flow.cycle_candidates(self.game, seat) else []
-
-    def _legacy(self, seat: PlayerId) -> list[Action]:
-        """The Legacy ability when the seat can take it: once per turn, and only with a card in hand
-        to pay the banish cost. Offered even when no Legacy card can be found — the rules make the
-        whiff a loss rather than hiding the option (which would leak face-down province contents)."""
-        if self.game.has_used(flow.legacy_key(seat, self.game.turn)):
-            return []
-        hand = self.game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-        return [Legacy()] if hand.cards else []
-
-    def _dynasty_discards(self, seat: PlayerId) -> list[Action]:
-        """A DynastyDiscard for each face-up card in the seat's provinces — the rule allows
-        discarding any face-up province card, not only Holdings."""
-        discards: list[Action] = []
-        for key, zone in self.game.table.zones.items():
-            if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
-                continue
-            discards.extend(DynastyDiscard(card.id) for card in zone.cards if card.face_up)
-        return discards
-
-    def _recruits(self, seat: PlayerId) -> list[Action]:
-        """The Recruit actions ``seat`` can afford: each face-up Holding or Personality in its
-        provinces whose cost its pool plus its unbowed producers' gold could cover. A Personality is
-        withheld while its Honor Requirement is above the seat's Family Honor (a dash ``None`` never
-        withholds; the check is skipped entirely when the seat ignores Honor Requirements), and adds a
-        Proclaim variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds
-        an Invest variant when the seat could also cover the card's Invest cost."""
-        recruits: list[Action] = []
-        seat_info = self.game.table.seats[seat]
-        honor = seat_info.honor
-        enforce_honor = not seat_info.ignores_honor_requirements
-        for key, zone in self.game.table.zones.items():
-            if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
-                continue
-            for card in zone.cards:
-                if not (isinstance(card, (DynastyHolding, DynastyPersonality)) and card.face_up):
-                    continue
-                if (
-                    enforce_honor
-                    and isinstance(card, DynastyPersonality)
-                    and card.honor_requirement is not None
-                    and honor < card.honor_requirement
-                ):
-                    continue
-                affordable = flow.reachable_gold(self.game, seat, card)
-                base = flow.recruit_cost(self.game, card)
-                if base <= affordable:
-                    recruits.append(Recruit(card.id))
-                    if flow.can_proclaim(self.game, card):
-                        recruits.append(Recruit(card.id, proclaim=True))
-                invest = abilities.invest_for(card)
-                if invest is not None and base + invest.minimum <= affordable:
-                    recruits.append(Recruit(card.id, invest=True))
-        return recruits
+        """Return the free actions ``seat`` may take right now."""
+        return legality.legal_actions(self.game, seat)
 
     def act(self, seat: PlayerId, action: Action) -> None:
         """Perform ``action`` for ``seat`` and record it. Raise ``ValueError`` if it is not
         currently legal for that seat."""
-        if action not in self.legal_actions(seat):
+        if not legality.is_legal(self.game, seat, action):
             raise ValueError(f"{action} is not legal for {seat.name} right now")
         act_and_log(self.game, self.log, action)
 
