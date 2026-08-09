@@ -118,8 +118,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
 
 def _may_act(game: GameState, seat: PlayerId) -> bool:
     """Whether ``seat`` may take any action at all: the game is running, nothing is awaiting an
-    answer, and it is that seat's turn."""
-    return not (game.game_over or game.awaiting_decision) and seat is game.active
+    answer, and ``seat`` holds the opportunity in the open round."""
+    return not (game.game_over or game.awaiting_decision) and seat is game.round.priority
 
 
 def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
