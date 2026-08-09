@@ -27,6 +27,7 @@ from tests.yasuki_core.engine.policies import (
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
+    end_phase,
     holding,
     province_card,
     put_in_play,
@@ -289,8 +290,8 @@ def test_a_cancelled_recruit_is_not_counted_as_a_purchase():
     session = _buyable(provinces=1)
     recorder = _counting(session)
     recorder.turn_began(session.game)
-    session.act(P1, Pass())
-    session.act(P1, Pass())
+    end_phase(session)
+    end_phase(session)
     session.act(P1, Recruit("prov0"))
     session.cancel(P1)
     recorder.turn_ended(session.game, P1)
@@ -303,8 +304,8 @@ def test_an_undone_discard_is_not_counted_as_a_flush():
     session = _buyable(provinces=1)
     recorder = _counting(session)
     recorder.turn_began(session.game)
-    session.act(P1, Pass())
-    session.act(P1, Pass())
+    end_phase(session)
+    end_phase(session)
     session.act(P1, DynastyDiscard("prov0"))
     assert session.undo_last(P1)
     recorder.turn_ended(session.game, P1)

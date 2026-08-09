@@ -3,7 +3,7 @@ from numpy.random import default_rng
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Action, Legacy, Pass
+from yasuki_core.engine.rules.actions import Action, Legacy
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionResponse, DiscardToHandSize
 from yasuki_core.engine.rules.policies import PassPolicy, RandomPolicy
@@ -13,7 +13,13 @@ from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.runner import Controls, play_game, run_game
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import dealt_table, holding, province_card, put_in_play
+from tests.yasuki_core.engine.builders import (
+    dealt_table,
+    end_phase,
+    holding,
+    province_card,
+    put_in_play,
+)
 from tests.yasuki_core.engine.policies import Cheater, RecruitFirst
 
 
@@ -130,8 +136,8 @@ def test_a_policy_chooses_a_recruit_and_an_agent_pays_for_it():
     game = session.game
     put_in_play(game, holding("mine", owner=PlayerId.P1, gold_production=4))
     province_card(game, "target", seat=PlayerId.P1, gold_cost=3)
-    session.act(PlayerId.P1, Pass())  # Action -> Battle
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
 
     controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
     play_game(session, controls, turn_limit=1)

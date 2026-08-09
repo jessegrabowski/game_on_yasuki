@@ -6,7 +6,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
-from yasuki_core.engine.rules.actions import Legacy, Pass
+from yasuki_core.engine.rules.actions import Legacy
 from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, DecisionResponse
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState, Phase
@@ -14,7 +14,7 @@ from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, holding, put_in_play, register
 
 
 def _province(table: TableState, index: int):
@@ -75,15 +75,15 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
 def _dynasty_session_from(state: TableState) -> EngineSession:
     """A session on a prepared table, parked in the Dynasty phase where Legacy is on offer."""
     session = EngineSession.start(state, PlayerId.P1, seed=7)
-    session.act(PlayerId.P1, Pass())  # Action -> Battle
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
     return session
 
 
 def _dynasty_session(**kwargs) -> EngineSession:
     session = EngineSession.start(_table(**kwargs), PlayerId.P1, seed=7)
-    session.act(PlayerId.P1, Pass())  # Action -> Battle
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
     return session
 
 
@@ -143,6 +143,12 @@ def test_legacy_whiff_loses_the_game():
     assert session.game.loser is PlayerId.P1
     assert session.game.game_over
     assert session.legal_actions(PlayerId.P1) == []  # a lost game offers no further actions
+    # The losing action must not hand the opportunity on: a finished game's round stays exactly
+    # where it stopped rather than counting passes toward a round nobody can play.
+    assert session.game.phase is Phase.DYNASTY
+    assert session.game.turn == 1
+    assert session.game.round.priority is PlayerId.P1
+    assert session.game.round.passes == 0
 
 
 def test_legacy_banishes_the_chosen_hand_card():

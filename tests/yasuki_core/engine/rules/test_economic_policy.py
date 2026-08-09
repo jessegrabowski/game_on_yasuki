@@ -14,6 +14,7 @@ from yasuki_core.game_pieces.dynasty import DynastyPersonality
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
+    end_phase,
     holding,
     province_card,
     put_in_play,
@@ -28,8 +29,8 @@ def _dynasty_phase(production: int = 6) -> EngineSession:
     table = dealt_table()
     put_in_play(table, holding("purse", owner=P1, gold_production=production))
     session = EngineSession.start(table, P1, seed=1)
-    session.act(P1, Pass())
-    session.act(P1, Pass())
+    end_phase(session)
+    end_phase(session)
     return session
 
 

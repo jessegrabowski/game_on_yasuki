@@ -8,13 +8,13 @@ from yasuki_core.engine.rules.abilities import (
     ProductionBoost,
     register_production_boost,
 )
-from yasuki_core.engine.rules.actions import Pass, Recruit
+from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, put_in_play, register
 
 P1 = PlayerId.P1
 
@@ -60,8 +60,8 @@ def _outlying_game(*, target_cost=2, with_producer=True):
     province.add(target)
     state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
     session = EngineSession.start(state, P1)  # Action phase
-    session.act(P1, Pass())  # Action -> Battle
-    session.act(P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
     return session
 
 
@@ -176,8 +176,8 @@ def test_a_boost_that_declares_no_consequence_leaves_its_producer_alive():
         state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
 
         session = EngineSession.start(state, P1)
-        session.act(P1, Pass())
-        session.act(P1, Pass())
+        end_phase(session)
+        end_phase(session)
         session.act(P1, Recruit("tgt"))
         session.submit(P1, DecisionResponse(("fb",), ("fb",)))
 
@@ -224,8 +224,8 @@ def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
     state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
 
     session = EngineSession.start(state, P1)
-    session.act(P1, Pass())
-    session.act(P1, Pass())
+    end_phase(session)
+    end_phase(session)
     session.act(P1, Recruit("jade"))
     # The offer quotes 4 — base 2 plus the Jade bonus — and bowing it alone must cover the cost.
     session.submit(P1, DecisionResponse(("jw",)))

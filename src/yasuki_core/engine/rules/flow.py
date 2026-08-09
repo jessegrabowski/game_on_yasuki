@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
@@ -44,6 +46,7 @@ from yasuki_core.engine.rules.legality import (
     legacy_candidates,
     legacy_key,
     legacy_search_pool,
+    permitted_timings,
     proclaim_key,
     province_key_holding,
     province_key_of,
@@ -130,12 +133,34 @@ def open_round(game: GameState) -> None:
     game.round = ActionRound(timings=PHASE_TIMINGS[game.phase], priority=game.active)
 
 
+def yield_priority(game: GameState, *, passed: bool) -> None:
+    """Hand the opportunity to act to the next seat in turn order, closing the round once every seat
+    has passed consecutively.
+
+    A pass counts toward closing; taking an action resets the count. A seat the round permits nothing
+    never receives the opportunity, and counts as having passed.
+    """
+    seats = list(game.table.seats)
+    passes = game.round.passes + 1 if passed else 0
+    after = seats.index(game.round.priority) + 1
+    for seat in seats[after:] + seats[:after]:
+        if passes >= len(seats):
+            break
+        # Permitted-but-idle still gets asked: whether to decline a window is the seat's own call,
+        # and auto-passing on its behalf is a strategy its policy owns, not a rule of the round.
+        if permitted_timings(game, seat):
+            game.round = replace(game.round, priority=seat, passes=passes)
+            return
+        passes += 1
+    advance(game)
+
+
 def perform(game: GameState, action: Action) -> None:
     """Apply a chosen action, dispatching to its handler. The single action-apply dispatch,
     mirroring :func:`submit` for decisions. Raise ``ValueError`` for an action with no handler."""
     match action:
         case Pass():
-            advance(game)
+            yield_priority(game, passed=True)
         case Recruit(card_id=card_id, invest=invest, proclaim=proclaim):
             recruit(game, card_id, invest, proclaim=proclaim)
         case DynastyDiscard(card_id=card_id):
@@ -151,6 +176,8 @@ def perform(game: GameState, action: Action) -> None:
     # An action resolves fully before the next input; one that paused for a decision leaves its
     # remainder for the submit that answers it.
     run_stack(game)
+    if not isinstance(action, Pass):
+        _yield_after_action(game)
 
 
 def produce_gold(game: GameState, card_id: str, amount: int) -> None:
@@ -282,6 +309,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             raise ValueError(f"no handler for decision {type(request).__name__}")
     # Symmetric with `perform`: an answered decision resolves fully before the next input.
     run_stack(game)
+    # The end-of-turn discard is turn structure rather than an action, and the turn it belonged to
+    # is already over by now — yielding for it would step on the round the new turn just opened.
+    if not isinstance(request, DiscardToHandSize):
+        _yield_after_action(game)
 
 
 def cancel(game: GameState) -> None:
@@ -667,3 +698,11 @@ def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -
 
 def _other(seat: PlayerId) -> PlayerId:
     return PlayerId.P2 if seat is PlayerId.P1 else PlayerId.P1
+
+
+def _yield_after_action(game: GameState) -> None:
+    """Hand on the opportunity once an action has fully resolved. An action that paused for a
+    decision has not finished, and a game that has ended has no round left to run."""
+    if game.awaiting_decision or game.game_over:
+        return
+    yield_priority(game, passed=False)

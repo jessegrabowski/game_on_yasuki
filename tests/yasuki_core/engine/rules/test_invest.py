@@ -5,12 +5,12 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyHolding
-from yasuki_core.engine.rules.actions import Pass, Recruit
+from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, ChoosePayment, DecisionResponse
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, put_in_play, register
 
 
 def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: int = 8):
@@ -45,8 +45,8 @@ def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: 
     province.add(holding)
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
     session = EngineSession.start(state, PlayerId.P1)
-    session.act(PlayerId.P1, Pass())  # Action -> Battle
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
     return session
 
 

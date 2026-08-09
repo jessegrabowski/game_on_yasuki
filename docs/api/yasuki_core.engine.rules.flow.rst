@@ -22,6 +22,7 @@ yasuki_core.engine.rules.flow
     recruit
     run_stack
     submit
+    yield_priority
 
 .. automodule:: yasuki_core.engine.rules.flow
     :members:

@@ -36,8 +36,22 @@ def _face_up_holding_in_province(state, card_id, gold_cost, printed_id=""):
 
 
 def _to_dynasty(runner):
-    runner.act(PASS)  # Action -> Battle
-    runner.act(PASS)  # Battle -> Dynasty
+    """Walk the human to the Dynasty phase the way the client does — passing, and running the
+    opponent whenever it takes the opportunity back."""
+    while runner.view().phase is not Phase.DYNASTY:
+        if runner.opponent_holds_priority:
+            runner.run_opponent()
+        else:
+            runner.act(PASS)
+
+
+def _run_opponents_turn(runner):
+    """Play the opponent's whole turn, declining the human's Open window inside its Action phase."""
+    while runner.view().active is not runner.human:
+        if runner.opponent_holds_priority:
+            runner.run_opponent()
+        else:
+            runner.act(PASS)
 
 
 def _register(state, card):
@@ -67,42 +81,78 @@ def _runner(p1_hand: int = 0) -> GameRunner:
 def test_passing_walks_the_human_through_the_phases():
     runner = _runner()
     assert runner.view().phase is Phase.ACTION
+
     runner.act(PASS)
+    # The opponent may take Open actions in the human's Action phase, so the phase stays open until
+    # it has declined its window too.
+    assert runner.view().phase is Phase.ACTION
+    assert runner.opponent_holds_priority
+    runner.run_opponent()
     assert runner.view().phase is Phase.BATTLE
-    runner.act(PASS)
+
+    runner.act(PASS)  # nobody but the active seat may act in the Battle phase
     assert runner.view().phase is Phase.DYNASTY
 
 
 def test_passing_through_a_quiet_turn_hands_off_then_back():
     runner = _runner(p1_hand=0)  # no discard for either seat
-    for _ in range(3):  # Action -> Battle -> Dynasty -> end of P1's turn
-        runner.act(PASS)
+    _to_dynasty(runner)
+    runner.act(PASS)  # ends the Dynasty phase, and with it the turn
 
-    assert runner.is_opponent_turn  # control rests with the opponent, not yet run
+    assert runner.opponent_holds_priority  # control rests with the opponent, not yet run
     runner.run_opponent()
+
+    # The human holds an Open window inside the opponent's Action phase, so control comes back
+    # there rather than at the top of the human's next turn.
+    view = runner.view()
+    assert view.active is PlayerId.P2 and view.phase is Phase.ACTION
+    assert not runner.opponent_holds_priority
+
+    runner.act(PASS)  # decline it
+    runner.run_opponent()  # the rest of the opponent's turn
 
     view = runner.view()
     assert view.active is PlayerId.P1 and view.turn == 3 and view.phase is Phase.ACTION
-    assert not runner.is_opponent_turn
 
 
 def test_human_discard_is_left_pending_then_resolved():
     runner = _runner(p1_hand=flow.MAX_HAND_SIZE)  # 8 held + 1 drawn = 9 at end of turn
-    for _ in range(3):
-        runner.act(PASS)
+    _to_dynasty(runner)
+    runner.act(PASS)
 
     pending = runner.pending
     assert isinstance(pending, DiscardToHandSize) and pending.count == 1
-    assert not runner.is_opponent_turn  # still the human's turn while the discard is owed
+    assert not runner.opponent_holds_priority  # still the human's while the discard is owed
     assert runner.legal_actions() == []  # no free action offered until it is answered
 
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     runner.submit([hand[0].id])
 
     assert runner.pending is None
-    assert runner.is_opponent_turn  # the turn has passed; the caller now runs the opponent
-    runner.run_opponent()
+    assert runner.opponent_holds_priority  # the turn has passed; the caller runs the opponent
+    _run_opponents_turn(runner)
     assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
+
+
+def test_the_opponents_window_inside_the_humans_turn_is_not_a_hand_off():
+    # The client pauses on a turn hand-off so the board can be read, and must not pause for the
+    # window the opponent takes inside the human's own Action phase.
+    runner = _runner()
+    runner.act(PASS)
+
+    assert runner.opponent_holds_priority  # the opponent has the opportunity
+    assert not runner.is_opponent_turn  # but the turn is still the human's
+
+
+def test_running_the_opponent_stops_on_a_finished_game():
+    runner = _runner()
+    runner.act(PASS)  # hands the Action-phase window to the opponent
+    assert runner.opponent_holds_priority
+    runner.session.game.loser = PlayerId.P2  # the game ends while the opponent holds the window
+
+    runner.run_opponent()  # returns rather than spinning on a game that offers nobody an action
+
+    assert runner.opponent_holds_priority  # nothing moved
 
 
 def test_opponents_overfull_turn_auto_discards_without_prompting():
@@ -118,9 +168,9 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
         )
     runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
 
-    for _ in range(3):  # end P1's quiet turn
-        runner.act(PASS)
-    runner.run_opponent()  # P2's overfull turn auto-passes and auto-discards
+    _to_dynasty(runner)
+    runner.act(PASS)  # end P1's quiet turn
+    _run_opponents_turn(runner)  # P2's overfull turn auto-passes and auto-discards
 
     assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
     assert runner.pending is None  # the opponent's discard resolved without a prompt
@@ -130,11 +180,11 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
 
 def test_runner_inputs_stay_replayable():
     runner = _runner(p1_hand=flow.MAX_HAND_SIZE)
-    for _ in range(3):
-        runner.act(PASS)
+    _to_dynasty(runner)
+    runner.act(PASS)
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     runner.submit([hand[0].id])
-    runner.run_opponent()
+    _run_opponents_turn(runner)
 
     assert replay(runner.session.log) == runner.session.game
 

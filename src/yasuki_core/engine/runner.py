@@ -116,8 +116,16 @@ class GameRunner:
 
     @property
     def is_opponent_turn(self) -> bool:
-        """Whether control rests with the AI-reserved opponent, so the UI should run its turn."""
+        """Whether the turn itself belongs to the AI-reserved opponent — as opposed to the human
+        merely having handed the opportunity on inside a phase of its own turn."""
         return self.session.game.active is not self.human
+
+    @property
+    def opponent_holds_priority(self) -> bool:
+        """Whether the opportunity to act rests with the AI-reserved opponent, so the UI should run
+        it. True for the whole of the opponent's turn, and for its window inside each of the human's
+        Action phases."""
+        return self.session.game.round.priority is not self.human
 
     @property
     def pending(self) -> DecisionRequest | None:
@@ -127,7 +135,7 @@ class GameRunner:
 
     def act(self, action: Action) -> None:
         """Perform the human's chosen action. Does not run the opponent — the caller checks
-        :attr:`is_opponent_turn` afterwards and runs it so the turn change stays visible."""
+        :attr:`opponent_holds_priority` afterwards and runs it so the change stays visible."""
         self.session.act(self.human, action)
 
     def undo_last(self) -> bool:
@@ -145,16 +153,20 @@ class GameRunner:
         self.session.cancel(self.human)
 
     def run_opponent(self) -> None:
-        """Run the opponent's turn to completion: it passes each phase and lets its Agent answer any
-        decision it owes, until control returns to the human."""
+        """Act for the opponent until the opportunity returns to the human.
+
+        Covers both cases the same way: the opponent's own turn, and the window it holds inside the
+        human's Action phase. It passes every opportunity — it is driven by an :class:`Agent`, which
+        answers decisions rather than choosing actions — and lets that Agent answer anything it owes.
+        """
         game = self.session.game
-        while game.active is not self.human:
+        while game.round.priority is not self.human and not game.game_over:
             pending = game.pending
             if pending is not None:
                 response = self._opponent.decide(pending, self.session.project(pending.seat))
                 self.session.submit(pending.seat, response)
             else:
-                self.session.act(game.active, Pass())
+                self.session.act(game.round.priority, Pass())
 
 
 class Controls(NamedTuple):
@@ -259,7 +271,7 @@ def run_game(
             yield Answer(seat, response)
             continue
 
-        seat = game.active
+        seat = game.round.priority
         actions = session.legal_actions(seat)
         if not actions:
             raise RuntimeError(f"{seat.name} has no legal action in {game.phase}")

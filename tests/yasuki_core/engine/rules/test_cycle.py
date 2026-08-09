@@ -1,6 +1,6 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Cycle, Pass
+from yasuki_core.engine.rules.actions import Cycle
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.events import Revealed
 from yasuki_core.engine.session import EngineSession
@@ -8,7 +8,7 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyCard
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, holding, put_in_play, register
 
 P1 = PlayerId.P1
 P2 = PlayerId.P2
@@ -46,7 +46,7 @@ def _session(**kwargs) -> EngineSession:
 
 def _end_turn(session: EngineSession, seat: PlayerId) -> None:
     for _ in range(3):  # Action -> Battle -> Dynasty -> next turn
-        session.act(seat, Pass())
+        end_phase(session)
 
 
 def _deck_order(session: EngineSession, seat: PlayerId = P1) -> list[str]:
@@ -94,7 +94,7 @@ def test_the_second_seat_opens_on_turn_two():
 
 def test_cycle_is_not_offered_outside_the_action_phase():
     session = _session()
-    session.act(P1, Pass())  # Action -> Battle
+    end_phase(session)  # Action -> Battle
 
     assert Cycle() not in session.legal_actions(P1)
 

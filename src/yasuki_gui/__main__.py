@@ -171,9 +171,12 @@ def main() -> None:
             boostable = [pid for pid, _ in pending.boostable] if paying else ()
             field.begin_selection(pending.candidates, render_bowed=paying, boostable=boostable)
         refresh()
-        if pending is None and runner.is_opponent_turn:
-            # The board already shows "Opponent's turn"; run it after a beat so the hand-off shows.
-            root.after(OPPONENT_TURN_DELAY_MS, run_opponent)
+        if pending is None and runner.opponent_holds_priority:
+            # Pause only when the turn itself changes hands, so the board's "Opponent's turn" is
+            # readable. The opponent also takes a window inside each of the human's Action phases,
+            # and stalling on those would put the delay in the middle of the human's own turn.
+            beat = OPPONENT_TURN_DELAY_MS if runner.is_opponent_turn else 0
+            root.after(beat, run_opponent)
 
     def confirm_decision() -> None:
         runner.submit(field.selection, field.boosted)

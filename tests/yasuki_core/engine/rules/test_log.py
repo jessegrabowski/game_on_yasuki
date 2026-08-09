@@ -49,11 +49,14 @@ def _place_in_province(state: TableState, card):
 
 
 def _played_game_and_log() -> tuple:
-    """Play P1's full turn — three advances into the end-of-turn discard, then the discard —
-    recording every input to the log."""
+    """Play P1's full turn into the end-of-turn discard, then the discard, recording every input.
+
+    Four passes rather than three: the Action phase gives P2 an Open window it has to decline.
+    """
     log = GameLog(initial=InitialRecord.from_state(dealt_table()), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # P1 declines the Action phase
+    act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Pass())  # Dynasty -> end of turn, pauses for discard
     victim = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
@@ -68,8 +71,14 @@ def test_replay_reproduces_the_played_game():
 
 def test_log_records_each_input_in_order():
     _, log = _played_game_and_log()
-    assert [type(entry) for entry in log.entries] == [Act, Act, Act, Answer]
-    assert all(entry.seat is PlayerId.P1 for entry in log.entries)
+    assert [type(entry) for entry in log.entries] == [Act, Act, Act, Act, Answer]
+    assert [entry.seat for entry in log.entries] == [
+        PlayerId.P1,  # declines the Action phase
+        PlayerId.P2,  # declines its Open window
+        PlayerId.P1,  # Battle
+        PlayerId.P1,  # Dynasty
+        PlayerId.P1,  # the end-of-turn discard
+    ]
 
 
 def test_recruit_action_and_its_payment_replay_and_round_trip():
@@ -92,7 +101,8 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # P1 declines the Action phase
+    act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-buy"))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))
@@ -132,7 +142,8 @@ def test_proclaimed_recruit_replays_and_round_trips():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # P1 declines the Action phase
+    act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-person", proclaim=True))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))
@@ -170,7 +181,8 @@ def test_boosted_payment_round_trips_through_the_codec():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # P1 declines the Action phase
+    act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-buy"))
     submit_and_log(
@@ -223,7 +235,8 @@ def test_triggered_choice_replays_and_round_trips():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # P1 declines the Action phase
+    act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-wheat"))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))  # pays, then pauses for the choice
@@ -250,7 +263,8 @@ def test_cancelled_recruit_payment_replays_and_round_trips():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # P1 declines the Action phase
+    act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-buy"))  # pauses for payment
     cancel_and_log(game, log)  # backs out
@@ -272,7 +286,7 @@ def test_serialization_round_trips_then_replays():
 def test_submit_and_log_does_not_record_a_rejected_answer():
     log = GameLog(initial=InitialRecord.from_state(dealt_table()), first_player=PlayerId.P1)
     game = build_game(log)
-    for _ in range(3):
+    while not game.awaiting_decision:  # pass out the turn, into the end-of-turn discard
         act_and_log(game, log, Pass())
     entries_before = len(log.entries)
 

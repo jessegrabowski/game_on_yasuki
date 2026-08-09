@@ -5,7 +5,7 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyHolding
-from yasuki_core.engine.rules.actions import ActivateAbility, Pass, Recruit
+from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     ChooseCards,
@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, put_in_play, register
 
 from tests.yasuki_core.engine.builders import province_card
 
@@ -57,8 +57,8 @@ def _recruit_game(
     province.add(holding)
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
     session = EngineSession.start(state, PlayerId.P1)
-    session.act(PlayerId.P1, Pass())  # Action -> Battle
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
     return session
 
 
@@ -129,8 +129,8 @@ def _base_state():
 
 
 def _to_dynasty(session):
-    session.act(PlayerId.P1, Pass())  # Action -> Battle
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
 
 
 def test_training_court_seeds_a_sincerity_token_on_a_province_card():
