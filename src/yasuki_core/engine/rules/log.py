@@ -107,9 +107,9 @@ def build_game(log: GameLog) -> GameState:
 
 
 def act_and_log(game: GameState, log: GameLog, action: Action) -> None:
-    """Perform ``action`` for the active seat and record it. The acting seat is captured first, since
-    a pass may hand the turn to the other seat."""
-    seat = game.active
+    """Perform ``action`` for the seat holding the opportunity and record it. The acting seat is
+    captured first, since the action hands the opportunity on and may end the turn."""
+    seat = game.round.priority
     flow.perform(game, action)
     log.entries.append(Act(seat, action))
 
@@ -154,9 +154,10 @@ def replay(log: GameLog) -> GameState:
 def _apply(game: GameState, entry: GameInput) -> None:
     match entry:
         case Act(seat=seat, action=action):
-            if game.active is not seat:
+            if game.round.priority is not seat:
                 raise ValueError(
-                    f"log out of step: {seat.name} acted but {game.active.name} is active"
+                    f"log out of step: {seat.name} acted but the opportunity is "
+                    f"{game.round.priority.name}'s"
                 )
             flow.perform(game, action)
         case Answer(seat=seat, response=response):
