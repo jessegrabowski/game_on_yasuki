@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.economy import (
+    GOLD_HANDLERS,
     effective_gold_production,
     effective_keywords,
     effective_recruit_discount,
@@ -100,6 +101,7 @@ def _recruits(game: GameState, seat: PlayerId) -> list[Action]:
     seat_info = game.table.seats[seat]
     honor = seat_info.honor
     enforce_honor = not seat_info.ignores_honor_requirements
+    fixed, variable = gold_reach(game, seat)
     for key, zone in game.table.zones.items():
         if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
             continue
@@ -135,17 +137,42 @@ def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
     ]
 
 
+def gold_reach(game: GameState, seat: PlayerId) -> tuple[int, tuple[L5RCard, ...]]:
+    """What ``seat`` can raise before knowing what it is paying for, split from the producers that
+    still need to know.
+
+    Only a producer with a registered gold handler can read the cards being paid for; everything else
+    yields its printed Gold Production plus its modifiers whatever the target.
+
+    Returns
+    -------
+    fixed : int
+        The seat's pool, every target-independent producer's yield, and every bow-time boost a
+        producer could add if the seat opts in.
+    variable : tuple of L5RCard
+        The unbowed producers whose yield may still depend on what they pay for.
+    """
+    fixed = game.gold[seat]
+    variable: list[L5RCard] = []
+    for producer in gold_producers(game, seat):
+        boost = abilities.production_boost_for(producer)
+        if boost is not None:
+            fixed += boost.amount
+        if producer.printed_id in GOLD_HANDLERS:
+            variable.append(producer)
+        else:
+            fixed += effective_gold_production(game, producer)
+    return fixed, tuple(variable)
+
+
 def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
     """The gold ``seat`` could muster to recruit ``card``: its pool plus the yield of every unbowed
     producer — judged with ``card`` as the payment target since a producer's yield can depend on
     what it pays for — plus any bow-time boost a producer could add if the seat opts in."""
-    total = game.gold[seat]
-    for producer in gold_producers(game, seat):
-        total += effective_gold_production(game, producer, targets=(card,))
-        boost = abilities.production_boost_for(producer)
-        if boost is not None:
-            total += boost.amount
-    return total
+    fixed, variable = gold_reach(game, seat)
+    return fixed + sum(
+        effective_gold_production(game, producer, targets=(card,)) for producer in variable
+    )
 
 
 def recruit_cost(game: GameState, card: L5RCard) -> int:

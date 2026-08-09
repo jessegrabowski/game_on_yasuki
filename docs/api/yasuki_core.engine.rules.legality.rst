@@ -12,6 +12,7 @@ yasuki_core.engine.rules.legality
     cycle_candidates
     cycle_key
     gold_producers
+    gold_reach
     is_first_turn
     is_legacy_card
     legacy_candidates
