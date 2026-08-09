@@ -122,9 +122,9 @@ def _may_act(game: GameState, seat: PlayerId) -> bool:
 
 
 def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """An ActivateAbility for each in-play card whose activated ability the seat can use in the
-    current phase: controlled, cost payable, and with at least one legal target. ``only`` narrows to
-    a single card."""
+    """An ActivateAbility for each in-play card whose activated ability the seat can use now: its
+    designator permitted by the current round, controlled, cost payable, and with at least one legal
+    target. ``only`` narrows to a single card."""
     return [
         ActivateAbility(card.id)
         for card in abilities.activatable(game, seat, permitted_timings(game))
