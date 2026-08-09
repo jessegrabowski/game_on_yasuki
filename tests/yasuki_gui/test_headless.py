@@ -13,7 +13,7 @@ def test_a_root_built_inside_a_test_is_never_mapped():
         root.destroy()
 
 
-def test_a_toplevel_window_is_still_the_test_s_own_business():
+def test_a_toplevel_window_is_left_alone():
     # Only the root is forced out of sight. A Toplevel a widget opens for itself is untouched, so a
     # test that means to exercise a dialog still gets one.
     root = tk.Tk()
