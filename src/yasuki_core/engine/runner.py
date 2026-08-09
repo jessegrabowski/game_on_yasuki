@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.policies import Policy
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.session import EngineSession
 
 
@@ -185,6 +185,12 @@ class Controls(NamedTuple):
     agent: Agent
 
 
+# How many actions one Action Round may take before the run gives up. A round ends when every seat
+# passes consecutively, so a policy that always finds something to take keeps it open forever. No
+# legitimate round comes near this; it is a defect detector, not a rule of the game.
+MAX_ACTIONS_PER_ROUND = 200
+
+
 class Observer(Protocol):
     """Watches a driven game at both ends of each turn.
 
@@ -252,11 +258,16 @@ def run_game(
     Raises
     ------
     RuntimeError
-        If a seat has no legal action, or a policy returns one it was not offered.
+        If a seat has no legal action, a policy returns one it was not offered, or one Action Round
+        runs past :data:`MAX_ACTIONS_PER_ROUND` without closing.
     """
     game = session.game
     watched: int | None = None
     playing: PlayerId | None = None
+    round_actions = 0
+    # A round is identified by the phase of the turn it belongs to: the record itself is frozen and
+    # replaced on every yield, so it cannot be compared by identity.
+    open_round: tuple[int, Phase] | None = None
     while not game.game_over and game.turn <= turn_limit:
         if observer is not None and game.turn != watched:
             if playing is not None:
@@ -278,6 +289,14 @@ def run_game(
         chosen = controls[seat].policy.choose(session.project(seat), actions)
         if chosen not in actions:
             raise RuntimeError(f"{seat.name}'s policy chose {chosen}, which was not offered")
+        here = (game.turn, game.phase)
+        round_actions = round_actions + 1 if here == open_round else 1
+        open_round = here
+        if round_actions > MAX_ACTIONS_PER_ROUND:
+            raise RuntimeError(
+                f"an Action Round in {game.phase} ran past {MAX_ACTIONS_PER_ROUND} actions; "
+                f"{seat.name} last chose {chosen}"
+            )
         session.act(seat, chosen)
         yield Act(seat, chosen)
 

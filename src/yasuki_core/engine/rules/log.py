@@ -13,6 +13,8 @@ from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Cycle,
     DynastyDiscard,
+    KharmicDraw,
+    KharmicRefill,
     Legacy,
     Pass,
     Recruit,
@@ -228,6 +230,10 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "legacy"}
         case Cycle():
             return {"kind": "cycle"}
+        case KharmicDraw():
+            return {"kind": "kharmic_draw"}
+        case KharmicRefill():
+            return {"kind": "kharmic_refill"}
         case ActivateAbility(card_id=card_id):
             return {"kind": "activate_ability", "card_id": card_id}
     raise ValueError(f"no encoding for action {action!r}")
@@ -249,6 +255,10 @@ def _decode_action(payload: dict) -> Action:
         return Legacy()
     if kind == "cycle":
         return Cycle()
+    if kind == "kharmic_draw":
+        return KharmicDraw()
+    if kind == "kharmic_refill":
+        return KharmicRefill()
     if kind == "activate_ability":
         return ActivateAbility(payload["card_id"])
     raise ValueError(f"unknown action kind {kind!r}")

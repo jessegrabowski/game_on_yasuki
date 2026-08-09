@@ -9,6 +9,8 @@ from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Cycle,
     DynastyDiscard,
+    KharmicDraw,
+    KharmicRefill,
     Legacy,
     Pass,
     Recruit,
@@ -30,6 +32,10 @@ from yasuki_core.ruleset import SHATTERED_EMPIRE
 
 # The boldface keyword marking a card the Legacy rulebook ability can search out.
 LEGACY_KEYWORD = "Legacy"
+
+# The boldface keyword marking a card the Kharmic rulebook abilities can spend, and what they cost.
+KHARMIC_KEYWORD = "Kharmic"
+KHARMIC_COST = 2
 
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
 RULESET = SHATTERED_EMPIRE
@@ -88,6 +94,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_recruits(game, seat),
         *_dynasty_discards(game, seat),
         *_legacy(game, seat),
+        *_kharmic(game, seat),
     ]
 
 
@@ -112,6 +119,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _recruits(game, seat, only=card_id)
         case DynastyDiscard(card_id=card_id):
             return action in _dynasty_discards(game, seat, only=card_id)
+        case KharmicDraw() | KharmicRefill():
+            return action in _kharmic(game, seat)
         case _:
             raise ValueError(f"no legality rule for action {type(action).__name__}")
 
@@ -144,6 +153,41 @@ def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
     if game.has_used(cycle_key(seat, game.turn)):
         return []
     return [Cycle()] if cycle_candidates(game, seat) else []
+
+
+def _kharmic(game: GameState, seat: PlayerId) -> list[Action]:
+    """The Kharmic abilities the seat can take: whichever of the two has a Kharmic card to spend,
+    when the round permits Open actions and the seat can reach the cost. Both are Repeatable, so
+    neither claims a once-per-turn key."""
+    if not permits(game, seat, ACTION_TIMINGS[KharmicDraw]):
+        return []
+    if reachable_gold(game, seat) < KHARMIC_COST:
+        return []
+    actions: list[Action] = []
+    if kharmic_in_hand(game, seat):
+        actions.append(KharmicDraw())
+    if kharmic_in_provinces(game, seat):
+        actions.append(KharmicRefill())
+    return actions
+
+
+def is_kharmic_card(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` carries the Kharmic keyword, so a Kharmic ability can spend it."""
+    return has_keyword(game, card, KHARMIC_KEYWORD)
+
+
+def kharmic_in_hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The Kharmic cards ``seat`` holds, which the Fate Kharmic ability discards to draw."""
+    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
+    return [card for card in hand.cards if is_kharmic_card(game, card)]
+
+
+def kharmic_in_provinces(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The Kharmic cards face-up in ``seat``'s Provinces, which the Dynasty Kharmic ability discards
+    to refill face-up. A face-down Province card is unknown to its owner, so it cannot be named."""
+    return [
+        card for card in province_cards(game, seat) if card.face_up and is_kharmic_card(game, card)
+    ]
 
 
 def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
@@ -261,13 +305,20 @@ def gold_reach(game: GameState, seat: PlayerId) -> tuple[int, tuple[L5RCard, ...
     return fixed, tuple(variable)
 
 
-def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
-    """The gold ``seat`` could muster to recruit ``card``: its pool plus the yield of every unbowed
-    producer — judged with ``card`` as the payment target since a producer's yield can depend on
-    what it pays for — plus any bow-time boost a producer could add if the seat opts in."""
+def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard | None = None) -> int:
+    """The gold ``seat`` could muster: its pool plus the yield of every unbowed producer, plus any
+    bow-time boost a producer could add if the seat opts in.
+
+    Parameters
+    ----------
+    card : L5RCard, optional
+        The card being paid for, since a producer's yield can depend on what it pays for. Omit for a
+        rulebook cost, which prices no card. Default None.
+    """
+    targets = () if card is None else (card,)
     fixed, variable = gold_reach(game, seat)
     return fixed + sum(
-        effective_gold_production(game, producer, targets=(card,)) for producer in variable
+        effective_gold_production(game, producer, targets=targets) for producer in variable
     )
 
 
@@ -329,11 +380,18 @@ def legacy_key(seat: PlayerId, turn: int) -> str:
     return f"legacy:{seat.name}:{turn}"
 
 
+def has_keyword(game: GameState, card: L5RCard, keyword: str) -> bool:
+    """Whether ``card`` carries ``keyword``, printed or granted by its own ability, matched without
+    regard to case."""
+    wanted = keyword.lower()
+    return any(carried.lower() == wanted for carried in effective_keywords(game, card))
+
+
 def is_legacy_card(game: GameState, card: L5RCard) -> bool:
-    """Whether ``card`` carries the Legacy keyword, printed or granted by its own ability (Shrine of
-    Courtesy grants itself Legacy for the second player), so the Legacy ability can search it out."""
-    wanted = LEGACY_KEYWORD.lower()
-    return any(keyword.lower() == wanted for keyword in effective_keywords(game, card))
+    """Whether ``card`` carries the Legacy keyword, so the Legacy ability can search it out. Shrine
+    of Courtesy grants itself Legacy for the second player, which is why this is not a printed
+    check."""
+    return has_keyword(game, card, LEGACY_KEYWORD)
 
 
 def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:

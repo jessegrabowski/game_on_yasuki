@@ -13,6 +13,8 @@ from yasuki_core.engine.rules.actions import (
     Action,
     Cycle,
     DynastyDiscard,
+    KharmicDraw,
+    KharmicRefill,
     Legacy,
     Pass,
     Recruit,
@@ -40,11 +42,14 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.economy import effective_gold_production, effective_keywords
 from yasuki_core.engine.rules.legality import (
+    KHARMIC_COST,
     cycle_candidates,
     cycle_key,
     gold_producers,
     legacy_candidates,
     legacy_key,
+    kharmic_in_hand,
+    kharmic_in_provinces,
     legacy_search_pool,
     permitted_timings,
     proclaim_key,
@@ -57,6 +62,7 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
     Discard,
+    DrawCard,
     Effect,
     GrantModifier,
     MoveToDeck,
@@ -169,6 +175,10 @@ def perform(game: GameState, action: Action) -> None:
             legacy(game)
         case Cycle():
             cycle(game)
+        case KharmicDraw():
+            kharmic_draw(game)
+        case KharmicRefill():
+            kharmic_refill(game)
         case ActivateAbility(card_id=card_id):
             activate(game, card_id)
         case _:
@@ -262,6 +272,33 @@ def announce_recruit(
     )
 
 
+def announce_rulebook_cost(
+    game: GameState, seat: PlayerId, amount: int, label: str, effects: tuple[Effect, ...]
+) -> ChoosePayment:
+    """Queue ``effects`` behind a gold cost that no card stands behind, and build the payment.
+
+    A rulebook ability charges the player rather than pricing a card, so the payment carries no
+    target and every producer is quoted at what it makes for nobody in particular.
+    """
+    producers = gold_producers(game, seat)
+    game.stack.append(ApplyEffects(effects))
+    return ChoosePayment(
+        seat=seat,
+        candidates=tuple(producer.id for producer in producers),
+        amount=amount,
+        available=game.gold[seat],
+        produced=tuple(
+            (producer.id, effective_gold_production(game, producer)) for producer in producers
+        ),
+        label=label,
+        boostable=tuple(
+            (producer.id, boost.amount)
+            for producer in producers
+            if (boost := abilities.production_boost_for(producer)) is not None
+        ),
+    )
+
+
 def _apply_invest_amount(
     game: GameState, request: ChooseInvestAmount, response: DecisionResponse
 ) -> None:
@@ -318,10 +355,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
 def cancel(game: GameState) -> None:
     """Back out of the pending decision, undoing the action that raised it.
 
-    A Recruit's steps are cancellable, since nothing is committed until the payment is answered — no
-    gold spent, no producer bowed, the card still in its province. Cancelling a payment drops its
-    deferred :class:`ResolveRecruit`; cancelling an Invest amount drops the choice before the recruit
-    is even announced.
+    A payment is cancellable because nothing is committed until it is answered — no gold spent, no
+    producer bowed, nothing moved. Cancelling one drops the work it was queued in front of;
+    cancelling an Invest amount drops the choice before the recruit is even announced.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
     cannot be canceled.
@@ -331,16 +367,23 @@ def cancel(game: GameState) -> None:
         raise RuntimeError("no decision is pending")
     match request:
         case ChoosePayment():
-            _cancel_recruit_payment(game)
+            _cancel_payment(game)
         case ChooseInvestAmount():
             game.pending = None  # the recruit is not yet announced; nothing to undo
         case _:
             raise ValueError(f"{type(request).__name__} cannot be cancelled")
 
 
-def _cancel_recruit_payment(game: GameState) -> None:
-    if not game.stack or not isinstance(game.stack[-1], ResolveRecruit):
-        raise ValueError("the pending payment has no recruit to undo")
+def _cancel_payment(game: GameState) -> None:
+    """Drop the work the cancelled payment stands in front of, whatever queued it — a Recruit's
+    :class:`ResolveRecruit` or a rulebook cost's :class:`ApplyEffects`.
+
+    The item is always the top of the stack: announcing a cost pushes exactly one, and the engine is
+    paused on the payment from that moment until it is answered or cancelled, so nothing can have
+    pushed since.
+    """
+    if not game.stack:
+        raise ValueError("the pending payment has no queued work to undo")
     game.stack.pop()
     game.pending = None
 
@@ -514,6 +557,52 @@ def _cycle_put_on_bottom(
     put_back = [MoveToDeck(card_id, deck, from_bottom=0) for card_id in chosen]
     refills = tuple(RefillProvince(key) for key in vacated if key is not None)
     return [*put_back, Then((*refills, RevealProvinces(seat)))]
+
+
+def kharmic_draw(game: GameState) -> None:
+    """Announce the Fate Kharmic ability: discard a Kharmic card from hand to draw a card."""
+    seat = game.round.priority
+    _announce_kharmic(game, seat, kharmic_in_hand(game, seat), "kharmic-draw")
+
+
+def kharmic_refill(game: GameState) -> None:
+    """Announce the Dynasty Kharmic ability: discard a Kharmic card from a Province and refill it
+    face-up."""
+    seat = game.round.priority
+    _announce_kharmic(game, seat, kharmic_in_provinces(game, seat), "kharmic-refill")
+
+
+def _announce_kharmic(game: GameState, seat: PlayerId, pool: list[L5RCard], resolver: str) -> None:
+    """Pause for the gold cost both Kharmic forms share, then for which card of ``pool`` to spend.
+    Repeatable, so no once-per-turn key is claimed."""
+    game.pending = announce_rulebook_cost(
+        game,
+        seat,
+        KHARMIC_COST,
+        "Kharmic",
+        (Choose(seat, tuple(card.id for card in pool), 1, 1, resolver),),
+    )
+
+
+@triggers.choice_resolver("kharmic-draw", prompt="Discard a Kharmic card to draw a card")
+def _kharmic_discard_to_draw(
+    game: GameState, source_id: str | None, chosen: tuple[str, ...]
+) -> list[Effect]:
+    """Discard the chosen card, then draw."""
+    seat = game.table.cards_by_id[chosen[0]].owner
+    return [Discard(chosen[0], seat), Then((DrawCard(seat),))]
+
+
+@triggers.choice_resolver(
+    "kharmic-refill", prompt="Discard a Kharmic card from a Province to refill it face-up"
+)
+def _kharmic_discard_to_refill(
+    game: GameState, source_id: str | None, chosen: tuple[str, ...]
+) -> list[Effect]:
+    """Discard the chosen Province card, then refill the Province it left face-up."""
+    seat = game.table.cards_by_id[chosen[0]].owner
+    vacated = province_key_of(game, seat, chosen[0])
+    return [Discard(chosen[0], seat), Then((RefillProvince(vacated, face_up=True),))]
 
 
 def _reveal_search_pool(game: GameState, seat: PlayerId) -> None:

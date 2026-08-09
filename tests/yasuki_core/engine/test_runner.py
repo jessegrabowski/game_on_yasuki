@@ -1,8 +1,11 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
+from tests.yasuki_core.engine.builders import province_card
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import Cycle, Legacy, Pass
@@ -11,7 +14,10 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.pregame import StrongholdCard
-from yasuki_core.engine.runner import GameRunner
+from yasuki_core.engine import runner
+from yasuki_core.engine.rules.actions import DynastyDiscard
+from yasuki_core.engine.rules.agents import AutoAgent
+from yasuki_core.engine.runner import Controls, GameRunner, play_game
 
 PASS = Pass()
 
@@ -361,3 +367,27 @@ def test_ability_menu_is_empty_for_a_card_with_no_ability():
     )
     runner = _runner_with_in_play(plain)
     assert runner.ability_menu("plain") == []
+
+
+class _AlwaysDiscards:
+    """Takes a Dynasty Discard whenever one is offered. Stands in for any policy that keeps finding
+    something to do, which is what holds a round open."""
+
+    name = "always-discards"
+
+    def choose(self, view, actions):
+        return next((a for a in actions if isinstance(a, DynastyDiscard)), actions[0])
+
+
+def test_a_round_that_never_closes_raises_instead_of_running_forever(monkeypatch):
+    # A round ends only when every seat passes consecutively, so a policy that always acts keeps it
+    # open. Without the ceiling a Monte Carlo run wedges silently instead of failing.
+    monkeypatch.setattr(runner, "MAX_ACTIONS_PER_ROUND", 2)
+    state = _dealt_table(0)
+    for index in range(4):
+        province_card(state, f"prov{index}", printed_id="plain_holding", index=index)
+    session = EngineSession.start(state, PlayerId.P1)
+    controls = {seat: Controls(_AlwaysDiscards(), AutoAgent()) for seat in PlayerId}
+
+    with pytest.raises(RuntimeError, match="ran past 2 actions"):
+        play_game(session, controls, turn_limit=4)
