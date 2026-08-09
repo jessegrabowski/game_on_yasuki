@@ -3,6 +3,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
+import numpy as np
 import psycopg
 
 from yasuki_core.engine.rules.agents import Agent, PayingAgent
@@ -13,6 +14,7 @@ from yasuki_core.sim.metrics import (
     empty_provinces,
     family_honor,
     potential_gold_production,
+    province_clearance,
     provinces_cleared,
     provinces_held,
 )
@@ -21,12 +23,22 @@ from yasuki_core.sim.metrics import (
 # nothing, so the name rides along in the output either way.
 DEFAULT_POLICY = "economic"
 
-# Sampled as each turn begins, when the seat has just straightened and its board is canonical.
-TURN_START_METRICS: dict[str, Metric] = {
-    "gold": potential_gold_production,
-    "honor": family_honor,
-    "provinces": provinces_held,
-}
+# Hands dealt per turn to estimate the clearance probability. Its standard error is at worst one
+# point at this count, which is finer than the differences between decks the runs are asked about.
+CLEARANCE_SAMPLES = 500
+
+
+def turn_start_metrics(seed: int) -> dict[str, Metric]:
+    """The metrics read as each turn begins, when the seat has just straightened and its board is
+    canonical. Takes the run's seed because clearance is estimated by sampling, and a metric
+    reaching for the global random stream would make one run depend on the last."""
+    return {
+        "gold": potential_gold_production,
+        "honor": family_honor,
+        "provinces": provinces_held,
+        "clearance": province_clearance(np.random.default_rng(seed), samples=CLEARANCE_SAMPLES),
+    }
+
 
 # Sampled as each turn ends, where a count of what the turn did is what matters.
 TURN_END_METRICS: dict[str, Metric] = {
@@ -78,7 +90,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 games=args.games,
                 turn_limit=args.turns,
                 seed=args.seed,
-                metrics=TURN_START_METRICS,
+                metrics=turn_start_metrics(args.seed),
                 end_of_turn=TURN_END_METRICS,
             )
         except psycopg.OperationalError as exc:

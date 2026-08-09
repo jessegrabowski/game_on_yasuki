@@ -110,11 +110,22 @@ docs-build = "sphinx-build -W -b html docs docs/_build/html"
 docs-clean = "rm -rf docs/_build docs/api/generated"
 docs-serve = { cmd = "python -m http.server 8080 --directory docs/_build/html", depends-on = ["docs-build"] }
 
+[tool.pixi.feature.analysis.dependencies]
+python = ">=3.12,<3.14"
+arviz = "*"
+matplotlib = "*"
+pandas = "*"
+pyarrow = "*"
+
+[tool.pixi.feature.analysis.pypi-dependencies]
+game-on-yasuki = { path = ".", editable = true, extras = ["gui", "sim"] }
+
 [tool.pixi.environments]
 default = { features = ["dev"], solve-group = "default" }
 prod = { solve-group = "default" }
 lama = { features = ["lama"] }
 docs = { features = ["docs"], no-default-feature = true }
+analysis = { features = ["analysis"], no-default-feature = true }
 
 [tool.pixi.tasks]
 play = "python play.py"

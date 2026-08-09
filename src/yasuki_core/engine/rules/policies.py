@@ -1,12 +1,25 @@
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from typing import Protocol
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.engine.rules.actions import Action, Cycle, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.actions import (
+    Action,
+    ActivateAbility,
+    Cycle,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.agents import PayingAgent
-from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest, DecisionResponse
+from yasuki_core.engine.rules.decisions import (
+    ChooseAbilityTarget,
+    ChooseCards,
+    DecisionRequest,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.table import ZoneRole
@@ -196,6 +209,296 @@ class EconomicCyclePolicy:
         return self._answering.decide(request, view)
 
 
+class GoldRushPolicy:
+    """Drives for gold as hard as the rulebook allows: take Legacy, run the economy abilities on the
+    board, buy, else clear the way.
+
+    Five things in a fixed order of preference, each taken whenever it is offered. Cycle first: it
+    is the seat's first turn only, costs nothing, and reshapes the opening the rest of the turn is
+    decided against, so weighing anything before it would weigh a board about to be replaced. It
+    puts back what the Dynasty Discard would flush and nothing else — a first turn raises three or
+    four Gold, so the cheap producers a deck-average rule would bin are exactly the ones this policy
+    can afford to buy with it. Then Legacy, when the pool holds a better producer than the board —
+    it puts that card face-up in a Province where the same turn's Recruit can reach it. Then an
+    activated ability this policy has an economic model for, which :data:`ABILITY_HEURISTICS`
+    decides. Then the best purchase, ranked as :class:`EconomicPolicy` ranks it, which takes a
+    Personality once no Holding is within reach: gold left in the pool is cleared at the phase
+    change, and buying empties the Province either way. Then a Dynasty Discard of any face-up
+    Province card producing nothing, which costs nothing and refills the Province for next turn.
+
+    The discard is what separates this from :class:`EconomicPolicy`. Nothing else in the registry
+    ever takes it, so a Province holding a card the seat cannot afford stays held for the rest of
+    the game and the seat plays on with fewer slots than it has. One discard is one choice, so a
+    turn ending with three unaffordable Personalities flushes them over three windows and passes
+    only once the Provinces are clear.
+
+    Answers its own decisions as well as choosing, because an ability is only worth as much as the
+    answers behind it: which card it targets, and whether to pay an optional cost the resolution
+    offers. Everything it has no model for falls through to :class:`PayingAgent`.
+
+    A ceiling rather than a player: it prices every non-producing card at nothing, so it throws away
+    Personalities a real deck wins with. Its numbers bound what a deck's economy can do, and say
+    nothing about how the deck is meant to be played.
+    """
+
+    name = "gold-rush"
+
+    def __init__(self) -> None:
+        self._buying = EconomicPolicy()
+        self._answering = PayingAgent()
+
+    def choose(self, view: GameView, actions: list[Action]) -> Action:
+        cycle = next((action for action in actions if isinstance(action, Cycle)), None)
+        if cycle is not None and _barren_province_cards(view):
+            return cycle
+        legacy = next((action for action in actions if isinstance(action, Legacy)), None)
+        if legacy is not None and EconomicLegacyPolicy._worth_taking(view):
+            return legacy
+        ability = _worthwhile_ability(view, actions)
+        if ability is not None:
+            return ability
+        chosen = self._buying.choose(view, actions)
+        if not isinstance(chosen, Pass):
+            return chosen
+        flush = _flushable(view, actions)
+        return flush if flush is not None else chosen
+
+    def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
+        if isinstance(request, ChooseAbilityTarget):
+            return DecisionResponse((_best_ability_target(request, view),))
+        if isinstance(request, ChooseCards):
+            if request.resolver == "cycle":
+                return DecisionResponse(_barren_province_cards(view))
+            if request.resolver == MODEST_FARM_STRAIGHTEN:
+                return DecisionResponse(
+                    request.candidates if _worth_sacrificing(request, view) else ()
+                )
+        return self._answering.decide(request, view)
+
+
+# The activated abilities this policy has an economic model for, by printed id. An ability absent
+# here is never activated: a policy cannot read what a card does, and guessing at an unmodelled one
+# would spend a bow on an effect it has no way to value.
+ABILITY_HEURISTICS: dict[str, "Callable[[GameView, L5RCard], bool]"] = {}
+
+# Modest Farm's optional "you may destroy this Holding to straighten the target", by resolver name.
+MODEST_FARM_STRAIGHTEN = "modest_farm_straighten"
+
+# The Gold Production Millet Farm grants a Farm for the turn.
+MILLET_FARM_BOOST = 2
+
+# How much more a non-Farm target must produce than the Modest Farm spent to reach it, before the
+# chain is worth the face-down Province refill that recruiting a non-Farm costs.
+CHAIN_PAYOFF_RATIO = 3
+
+
+def _worthwhile_ability(view: GameView, actions: list[Action]) -> ActivateAbility | None:
+    """The lowest-id activation among ``actions`` whose heuristic says it is worth taking now, or
+    None when none of them is modelled or any modelled one declines."""
+    cards = _identifiable(view)
+    worthwhile = [
+        action
+        for action in actions
+        if isinstance(action, ActivateAbility)
+        and (card := cards.get(action.card_id)) is not None
+        and (heuristic := ABILITY_HEURISTICS.get(card.printed_id)) is not None
+        and heuristic(view, card)
+    ]
+    return min(worthwhile, key=lambda action: action.card_id, default=None)
+
+
+def _modest_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
+    """Whether Modest Farm should recruit out of sequence now.
+
+    Nothing caps how many cards a seat recruits in its Dynasty Phase, so an out-of-sequence recruit
+    is not an extra purchase on its own — the turn's production bounds the spending either way, and
+    Modest Farm bows itself out of that production to grant it. Two things do pay, and one of them
+    has to hold of some Holding the seat can reach once that yield is gone.
+
+    A Farm target is granted Renew, which refills the vacated Province face-up. Any other target
+    refills it face-down, leaving the seat choosing from three live Provinces for the rest of the
+    turn — a real cost, and one only a payoff elsewhere covers.
+
+    That payoff is the chain. Destroying Modest Farm straightens the card it just recruited, so a
+    big producer is spendable the moment it lands; when that Gold reaches a second producer the seat
+    could not otherwise pay for, the recruit funds the recruit after it. Both halves are demanded of
+    the chain — a target worth :data:`CHAIN_PAYOFF_RATIO` times the Farm being spent, and a producer
+    on the other side of it. Firing on any purchase at all costs more in face-down refills than the
+    chain returns.
+    """
+    reach = _spendable(view) - _production(view, source)
+    cards = _readable_province_cards(view)
+    for card in cards.values():
+        cost = view.stat(card, Stat.GOLD_COST)
+        if not card.face_up or cost > reach:
+            continue
+        if "Farm" in card.keywords:
+            return True
+        if _production(view, card) < CHAIN_PAYOFF_RATIO * max(_production(view, source), 1):
+            continue
+        left = reach - cost
+        if any(
+            other.face_up
+            and other.id != card.id
+            and _production(view, other) > 0
+            and left < view.stat(other, Stat.GOLD_COST) <= left + _production(view, card)
+            for other in cards.values()
+        ):
+            return True
+    return False
+
+
+def _millet_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
+    """Whether Millet Farm should grant its Farm bonus now.
+
+    The grant lasts until end of turn and Millet Farm bows itself to give it, so the seat nets
+    :data:`MILLET_FARM_BOOST` less whatever Millet Farm would have yielded — and only on a Farm
+    still straight enough to be bowed for it. Taken when that net puts a Province card in reach
+    that is out of it, and declined otherwise: an unspent bonus expires at end of turn.
+    """
+    straight_farms = any(
+        card.id != source.id and not card.bowed and "Farm" in card.keywords
+        for card in _in_play(view)
+    )
+    if not straight_farms:
+        return False
+    before = _spendable(view)
+    return _newly_affordable(view, before, before - _production(view, source) + MILLET_FARM_BOOST)
+
+
+ABILITY_HEURISTICS.update(
+    {
+        "modest_farm": _modest_farm_worth_activating,
+        "millet_farm": _millet_farm_worth_activating,
+    }
+)
+
+
+def _best_ability_target(request: ChooseAbilityTarget, view: GameView) -> str:
+    """Which of ``request``'s candidates the ability should hit.
+
+    Modest Farm takes a Farm ahead of anything else, because only a Farm target is granted the Renew
+    that refills the vacated Province face-up; among equals it ranks them as purchases. Millet Farm's
+    bonus is only collected by bowing the Farm that receives it, so it wants a straight one, and the
+    largest — the bonus is flat, and the yield beside it is not. Anything else takes the first
+    candidate, which is what a generic agent would have answered.
+    """
+    cards = _identifiable(view)
+    source = cards.get(request.source_card_id)
+    printed_id = None if source is None else source.printed_id
+    if printed_id == "modest_farm":
+        return min(
+            request.candidates,
+            key=lambda card_id: (
+                "Farm" not in cards[card_id].keywords,
+                _rank(view, cards[card_id]),
+            ),
+        )
+    if printed_id == "millet_farm":
+        return min(
+            request.candidates,
+            key=lambda card_id: (
+                cards[card_id].bowed,
+                -_production(view, cards[card_id]),
+                card_id,
+            ),
+        )
+    return request.candidates[0]
+
+
+def _worth_sacrificing(request: ChooseCards, view: GameView) -> bool:
+    """Whether to destroy Modest Farm to straighten the card it just recruited.
+
+    Modest Farm is an engine rather than a producer: it straightens every turn its owner's turn
+    begins, and each straightening is another out-of-sequence recruit. Trading that for one turn of
+    the target being straight is only worth it when that turn buys something — the recruit enters
+    play bowed, so straightening it is worth exactly the Gold it could still raise this turn.
+
+    Taken when that Gold puts a Province card in reach that is out of it, and declined otherwise,
+    which keeps the engine.
+    """
+    target = _identifiable(view).get(request.source_id or "")
+    if target is None:
+        return False
+    before = _spendable(view)
+    return _newly_affordable(view, before, before + _production(view, target))
+
+
+def _barren_province_cards(view: GameView) -> tuple[str, ...]:
+    """The viewer's face-up Province cards producing no Gold, by id, sorted so a run reproduces.
+
+    What both this policy's Cycle and its Dynasty Discard act on: it prices a card at its Gold
+    Production, so a card with none is one it would rather redraw. Empty when the dynasty deck is —
+    a redraw would hand the same cards straight back.
+    """
+    if not view.dynasty_deck:
+        return ()
+    return tuple(
+        sorted(
+            card_id
+            for card_id, card in _readable_province_cards(view).items()
+            if card.face_up and _production(view, card) == 0
+        )
+    )
+
+
+def _flushable(view: GameView, actions: list[Action]) -> DynastyDiscard | None:
+    """The lowest-id Dynasty Discard among ``actions`` that clears a Province card producing no
+    Gold, or None when every discard on offer would throw away production.
+
+    A card the viewer cannot identify is left alone: a discard is irreversible, and a seat that
+    cannot read a card cannot know it is worthless.
+    """
+    cards = _readable_province_cards(view)
+    junk = [
+        action
+        for action in actions
+        if isinstance(action, DynastyDiscard)
+        and action.card_id in cards
+        and _production(view, cards[action.card_id]) == 0
+    ]
+    return min(junk, key=lambda action: action.card_id, default=None)
+
+
+def _in_play(view: GameView) -> Iterable[L5RCard]:
+    """The viewer's own cards on the battlefield that it can identify."""
+    return (
+        entry.card
+        for entry in view.table.battlefield
+        if not isinstance(entry.card, HiddenCard) and entry.card.owner is view.viewer
+    )
+
+
+def _identifiable(view: GameView) -> dict[str, L5RCard]:
+    """Every card the viewer can name, by id — its own board and its own readable Province cards,
+    which between them cover what an ability offers as a target."""
+    cards: dict[str, L5RCard] = {card.id: card for card in _in_play(view)}
+    cards.update(_readable_province_cards(view))
+    return cards
+
+
+def _spendable(view: GameView) -> int:
+    """The Gold the viewer could raise right now by bowing what is straight, plus its pool."""
+    return view.gold[view.viewer] + sum(
+        _production(view, card) for card in _in_play(view) if not card.bowed
+    )
+
+
+def _newly_affordable(view: GameView, before: int, after: int, exclude: str | None = None) -> bool:
+    """Whether any face-up Province card costs more than ``before`` and no more than ``after`` — the
+    test of whether extra Gold buys anything rather than merely existing.
+
+    Pass ``exclude`` when the Gold in question comes from recruiting one of those cards, so the card
+    being bought is not also counted as what the purchase pays for.
+    """
+    if after <= before:
+        return False
+    return any(
+        card.face_up and card.id != exclude and before < view.stat(card, Stat.GOLD_COST) <= after
+        for card in _readable_province_cards(view).values()
+    )
+
+
 POLICIES: dict[str, type[Policy]] = {
     policy.name: policy
     for policy in (
@@ -204,6 +507,7 @@ POLICIES: dict[str, type[Policy]] = {
         EconomicPolicy,
         EconomicLegacyPolicy,
         EconomicCyclePolicy,
+        GoldRushPolicy,
     )
 }
 """Every policy a run can be configured with, by name."""

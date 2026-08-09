@@ -9,6 +9,7 @@ yasuki_core.sim.cli
 
     build_parser
     main
+    turn_start_metrics
 
 .. automodule:: yasuki_core.sim.cli
     :members:

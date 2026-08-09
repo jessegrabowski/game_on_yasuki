@@ -10,6 +10,7 @@ yasuki_core.sim.metrics
     empty_provinces
     family_honor
     potential_gold_production
+    province_clearance
     provinces_cleared
     provinces_held
 

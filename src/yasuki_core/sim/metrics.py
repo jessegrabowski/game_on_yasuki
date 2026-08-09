@@ -1,10 +1,14 @@
 from collections.abc import Callable, Iterator
 
+import numpy as np
+from numpy.random import Generator
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_gold_production
-from yasuki_core.engine.rules.legality import gold_producers
+from yasuki_core.engine.rules.legality import gold_producers, recruit_cost
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.table import Zone, ZoneRole
+from yasuki_core.engine.table import DeckKey, Zone, ZoneRole
+from yasuki_core.game_pieces.constants import Side
 
 # A metric answers one question about one seat at one moment. Float rather than int so a
 # ratio — a share of provinces, a rate per turn — is expressible alongside a plain count.
@@ -29,6 +33,60 @@ def potential_gold_production(game: GameState, seat: PlayerId) -> int:
     and a metric has no payment in flight, so such a producer reports its unconditional base.
     """
     return sum(effective_gold_production(game, card) for card in gold_producers(game, seat))
+
+
+def province_clearance(rng: Generator, *, samples: int = 500, slots: int = 4) -> Metric:
+    r"""
+    Build a metric giving the chance ``seat`` could buy out a fresh flop of ``slots`` province
+    cards with what it can produce right now.
+
+    A deck is judged on reaching the speed at which what it flips stops constraining it, and that
+    is a property of the pair (economy, curve) rather than of either alone: the same production is
+    plenty against a deck of Farms and nothing against a deck of five-cost Personalities. What the
+    board happens to be showing this turn is a single draw from that distribution, so it is
+    resampled instead — ``samples`` hands of ``slots`` cards are dealt without replacement from the
+    seat's dynasty deck, each priced with :func:`~yasuki_core.engine.rules.legality.recruit_cost`,
+    and the metric is the share whose total the seat's production covers.
+
+    The deck is the right urn even though the seat's live provinces are not in it: those cards are
+    where the flop came from, not where the next one comes from. It shrinks over a game, so the
+    estimate tracks a seat digging toward the bottom of its own list.
+
+    Affording every card is not the same as buying every card — one Recruit per province per turn,
+    and a gold-producing purchase pays for the ones after it — so this reads as a ceiling on
+    clearance rather than the rate itself.
+
+    Parameters
+    ----------
+    rng : numpy.random.Generator
+        Draws the hands. Held by the metric rather than spawned per call, so a run reproduces from
+        its seed and a longer run leaves the turns it already had alone.
+    samples : int, optional
+        Hands dealt per call. The estimate is a mean of Bernoullis, so its standard error is at
+        worst :math:`1 / (2\sqrt{n})` — under one point at 500. Default 500.
+    slots : int, optional
+        Cards per hand, which is how many provinces a seat starts with. Default 4.
+
+    Returns
+    -------
+    Metric
+        Callable of ``(game, seat)`` returning a probability in :math:`[0, 1]`.
+    """
+
+    def clearance(game: GameState, seat: PlayerId) -> float:
+        deck = game.table.decks[DeckKey(seat, Side.DYNASTY)].cards
+        if len(deck) < slots:
+            # Fewer cards left than provinces to fill, so no flop of this shape exists to price.
+            return float("nan")
+        costs = np.fromiter(
+            (recruit_cost(game, card) for card in deck), dtype=np.int64, count=len(deck)
+        )
+        # argpartition over one random matrix deals every hand at once, and without replacement
+        # within a hand — which sampling `slots` indices independently would not give.
+        hands = np.argpartition(rng.random((samples, costs.size)), slots - 1, axis=1)[:, :slots]
+        return float((costs[hands].sum(axis=1) <= potential_gold_production(game, seat)).mean())
+
+    return clearance
 
 
 def family_honor(game: GameState, seat: PlayerId) -> int:
