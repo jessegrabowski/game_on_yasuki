@@ -3,8 +3,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
@@ -200,7 +201,7 @@ def recruit(
 
 def announce_recruit(
     game: GameState,
-    card: L5RCard,
+    card: DynastyCard | FateCard,
     seat: PlayerId,
     invest_amount: int,
     renew: bool = False,
