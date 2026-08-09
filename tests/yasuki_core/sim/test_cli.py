@@ -7,6 +7,8 @@ from yasuki_core.sim import cli
 from yasuki_core.sim.harness import Game
 from yasuki_core.sim.recording import Sample
 
+from tests.yasuki_core.db_guard import requires_db
+
 DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
 
 
@@ -99,6 +101,7 @@ def test_an_unknown_policy_is_refused_before_anything_runs(monkeypatch, tmp_path
     assert calls == []
 
 
+@requires_db
 @pytest.mark.slow
 def test_a_written_run_reads_back_with_its_provenance(tmp_path):
     pq = pytest.importorskip("pyarrow.parquet")
