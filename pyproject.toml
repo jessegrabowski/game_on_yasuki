@@ -21,6 +21,7 @@ dependencies = [
 [project.optional-dependencies]
 web = ["fastapi>=0.115", "uvicorn>=0.30", "slowapi>=0.1.9", "PyJWT[crypto]>=2.8", "httpx>=0.27"]
 gui = ["reportlab>=4.0"]
+sim = ["pyarrow>=17"]
 docs = ["sphinx>=8.1", "numpydoc>=1.8", "myst-parser>=4.0", "pydata-sphinx-theme>=0.16", "sphinx-design>=0.6", "sphinx-copybutton>=0.5"]
 all = ["game-on-yasuki[web]"]
 
@@ -68,6 +69,9 @@ pyyaml = ">=6.0"
 # The engine draws from a Generator threaded in by its caller, so a run derives every stream
 # from one spawned root rather than from arithmetic on a seed.
 numpy = ">=2.0"
+# The simulation writes its per-turn rows as Parquet, so a run keeps its dtypes and a sweep
+# stays one file. Only yasuki_core.sim imports it; the published package keeps it an extra.
+pyarrow = ">=17"
 tk = "*"
 unidecode = ">=1.4.0,<2"
 fastapi = ">=0.135.1,<0.136"
@@ -128,6 +132,7 @@ ensure-ro-role = "python -m yasuki_core.install.install_db --ensure-readonly-rol
 format-metadata = "python -m yasuki_core.install.install_db --format-metadata"
 card-index = "python -m yasuki_core.install.card_index"
 card-coverage = "python -m yasuki_core.install.coverage_report"
+sim = "python -m yasuki_core.sim.cli"
 sync-images = "python scripts/sync_images.py"
 api = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'yasuki_web.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000'), '--proxy-headers', '--forwarded-allow-ips', os.environ.get('TRUSTED_PROXY_IPS', '127.0.0.1'), '--limit-concurrency', '100', '--limit-max-requests', '10000'])\""
 # Local development: same as `api` but loads .env (account secrets, dev login) via uvicorn's dotenv.

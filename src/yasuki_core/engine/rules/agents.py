@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
@@ -12,6 +12,7 @@ from yasuki_core.engine.redaction import CardView, HiddenCard
 from yasuki_core.engine.rules.projection import GameView
 
 
+@runtime_checkable
 class Agent(Protocol):
     """Answers a :class:`DecisionRequest` with a :class:`DecisionResponse`.
 

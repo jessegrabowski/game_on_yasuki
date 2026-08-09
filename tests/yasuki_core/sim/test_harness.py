@@ -6,7 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.agents import PayingAgent
 from yasuki_core.engine.rules.policies import EconomicPolicy, PassPolicy
-from yasuki_core.sim.harness import Game, run_games, sample_rows, write_csv
+from yasuki_core.sim.harness import Game, run_games, sample_rows, write_csv, write_rows
 from yasuki_core.sim.metrics import potential_gold_production, provinces_cleared
 from yasuki_core.sim.recording import Sample
 
@@ -101,6 +101,33 @@ def test_writing_a_run_that_recorded_nothing_is_refused(tmp_path):
     # A header with no rows reads as "the deck did nothing" rather than "nothing was recorded".
     with pytest.raises(ValueError, match="nothing to write"):
         write_csv(tmp_path / "empty.csv", [], seed=1)
+
+
+@pytest.mark.parametrize(
+    "name, reader",
+    [("run.csv", "csv"), ("run.parquet", "parquet"), ("run", "parquet")],
+    ids=["csv suffix", "parquet suffix", "no suffix"],
+)
+def test_the_suffix_picks_the_format_and_parquet_is_the_default(tmp_path, name, reader):
+    # Parquet unless the path says .csv, so a run keeps its column types unless someone opts out.
+    # The no-suffix case is the one that decides which way the rule points.
+    pq = pytest.importorskip("pyarrow.parquet")
+    rows = list(sample_rows([_game(0, (1, 2.0))], deck="spider"))
+    path = tmp_path / name
+
+    write_rows(path, rows)
+
+    if reader == "csv":
+        with path.open() as handle:
+            assert [r["gold"] for r in csv.DictReader(handle)] == ["2.0"]
+    else:
+        assert pq.read_table(path).column("gold").to_pylist() == [2.0]
+
+
+def test_writing_no_rows_is_refused_whatever_the_format(tmp_path):
+    # Same reason as the CSV writer: a file carrying only a schema reads as a run that did nothing.
+    with pytest.raises(ValueError, match="nothing to write"):
+        write_rows(tmp_path / "empty.parquet", [])
 
 
 # --- the runner, against real games -------------------------------------------------------------

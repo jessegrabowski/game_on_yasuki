@@ -129,7 +129,41 @@ def write_csv(path: Path | str, played: Sequence[Game], **run: object) -> None:
     rows = list(sample_rows(played, **run))
     if not rows:
         raise ValueError("no turns were recorded, so there is nothing to write")
-    with Path(path).open("w", newline="") as handle:
+    _write_csv_rows(Path(path), rows)
+
+
+def write_rows(path: Path | str, rows: Sequence[dict[str, object]]) -> None:
+    """Write already-shaped rows, as Parquet unless ``path`` ends ``.csv``.
+
+    Takes rows rather than games so a sweep can concatenate several runs into one table, told apart
+    by the provenance columns each carries. Parquet is the default because a run's columns are
+    typed and a reader should get those types back.
+
+    Raises
+    ------
+    ValueError
+        If ``rows`` is empty, since the file would carry a header and nothing under it.
+    ModuleNotFoundError
+        If Parquet is asked for and pyarrow is not installed, naming the extra that provides it.
+    """
+    if not rows:
+        raise ValueError("no turns were recorded, so there is nothing to write")
+    path = Path(path)
+    if path.suffix == ".csv":
+        _write_csv_rows(path, rows)
+        return
+    try:
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "writing Parquet needs pyarrow: install the 'sim' extra, or name a .csv file instead"
+        ) from exc
+    pq.write_table(pa.Table.from_pylist(list(rows)), path)
+
+
+def _write_csv_rows(path: Path, rows: Sequence[dict[str, object]]) -> None:
+    with path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
