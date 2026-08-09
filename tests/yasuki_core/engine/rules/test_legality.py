@@ -24,8 +24,8 @@ DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
 
 
 def _board():
-    """P1 with two producers and two face-up Province Holdings — enough that the Dynasty phase
-    offers several Recruits and a Discard for each, so narrowing to one card is observable."""
+    """P1 with three gold producers and two face-up Province Holdings — enough that the Dynasty
+    phase offers several Recruits and a Discard for each, so narrowing to one card is observable."""
     state = TableState.empty_two_seat()
     put_in_play(state, holding("sh", printed_id="plain_stronghold", gold_production=5))
     put_in_play(
@@ -45,26 +45,41 @@ def _dynasty(session):
     return session
 
 
-# Well-formed actions that must never be legal in the states below: a card that is not there, and a
-# purchase variant no card offers.
-NEVER_LEGAL = (
+# Well-formed actions naming a card no board holds — never legal anywhere.
+UNKNOWN_CARD = (
     Recruit("nonexistent"),
     DynastyDiscard("nonexistent"),
     ActivateAbility("nonexistent"),
-    Recruit("cheap", proclaim=True),  # a Holding cannot be Proclaimed
 )
 
+# Plus one that names a real card in a mode it does not offer. Tied to _board's ids, so it only
+# means anything against that fixture.
+NEVER_LEGAL = (*UNKNOWN_CARD, Recruit("cheap", proclaim=True))  # a Holding cannot be Proclaimed
 
-def test_is_legal_accepts_exactly_what_the_enumeration_offers():
+
+@pytest.mark.parametrize(
+    "open_phase", [_board, lambda: _dynasty(_board())], ids=["action", "dynasty"]
+)
+def test_is_legal_accepts_exactly_what_the_enumeration_offers(open_phase):
     # is_legal and legal_actions answer the same question by different routes, so the failure worth
     # guarding is drift between them.
-    for session in (_board(), _dynasty(_board())):
-        offered = legality.legal_actions(session.game, PlayerId.P1)
-        assert offered, "fixture should offer something in both phases"
-        for action in offered:
-            assert legality.is_legal(session.game, PlayerId.P1, action), action
-        for action in NEVER_LEGAL:
-            assert not legality.is_legal(session.game, PlayerId.P1, action), action
+    session = open_phase()
+    offered = legality.legal_actions(session.game, PlayerId.P1)
+
+    assert offered, "fixture should offer something in this phase"
+    for action in offered:
+        assert legality.is_legal(session.game, PlayerId.P1, action), action
+    for action in NEVER_LEGAL:
+        assert not legality.is_legal(session.game, PlayerId.P1, action), action
+
+
+def test_an_action_with_no_legality_rule_raises():
+    # Action is a closed union and every member is handled, so this is only reachable by adding one
+    # without a rule here — which would otherwise read as a rules bug rather than a missing case.
+    game = _board().game
+
+    with pytest.raises(ValueError, match="no legality rule"):
+        legality.is_legal(game, PlayerId.P1, object())
 
 
 def test_is_legal_rejects_an_action_belonging_to_another_phase():
@@ -106,7 +121,7 @@ def test_is_legal_and_the_enumeration_agree_across_a_driven_game():
             offered = legality.legal_actions(session.game, seat)
             for action in offered:
                 assert legality.is_legal(session.game, seat, action), (seat, action)
-            for action in (*NEVER_LEGAL, Legacy(), Cycle()):
+            for action in (*UNKNOWN_CARD, Legacy(), Cycle()):
                 if action not in offered:
                     assert not legality.is_legal(session.game, seat, action), (seat, action)
             checked += len(offered)
@@ -157,14 +172,10 @@ def test_gold_reach_leaves_a_producer_that_reads_its_target_variable():
 
 
 @pytest.mark.parametrize("card_id", ["cheap", "dear"])
-def test_reachable_gold_is_unchanged_by_the_fixed_variable_split(card_id):
-    # reachable_gold is public and used outside legality; the split must be invisible through it.
+def test_reachable_gold_ignores_the_target_when_no_producer_reads_it(card_id):
+    # reachable_gold is public and used outside legality, so the split has to stay invisible through
+    # it. With nothing in the variable half, every candidate must reach the same total.
     game = _dynasty(_board()).game
     card = game.table.cards_by_id[card_id]
 
-    fixed, variable = legality.gold_reach(game, PlayerId.P1)
-    rebuilt = fixed + sum(
-        legality.effective_gold_production(game, producer, targets=(card,)) for producer in variable
-    )
-
-    assert legality.reachable_gold(game, PlayerId.P1, card) == rebuilt == 8
+    assert legality.reachable_gold(game, PlayerId.P1, card) == 5 + 1 + 2
