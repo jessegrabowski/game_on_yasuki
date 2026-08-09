@@ -48,8 +48,6 @@ from yasuki_core.engine.rules.legality import (
     gold_producers,
     legacy_candidates,
     legacy_key,
-    kharmic_in_hand,
-    kharmic_in_provinces,
     legacy_search_pool,
     permitted_timings,
     proclaim_key,
@@ -175,10 +173,10 @@ def perform(game: GameState, action: Action) -> None:
             legacy(game)
         case Cycle():
             cycle(game)
-        case KharmicDraw():
-            kharmic_draw(game)
-        case KharmicRefill():
-            kharmic_refill(game)
+        case KharmicDraw(card_id=card_id):
+            kharmic_draw(game, card_id)
+        case KharmicRefill(card_id=card_id):
+            kharmic_refill(game, card_id)
         case ActivateAbility(card_id=card_id):
             activate(game, card_id)
         case _:
@@ -559,50 +557,26 @@ def _cycle_put_on_bottom(
     return [*put_back, Then((*refills, RevealProvinces(seat)))]
 
 
-def kharmic_draw(game: GameState) -> None:
-    """Announce the Fate Kharmic ability: discard a Kharmic card from hand to draw a card."""
+def kharmic_draw(game: GameState, card_id: str) -> None:
+    """Announce the Fate Kharmic ability: discard ``card_id`` from hand to draw a card."""
     seat = game.round.priority
-    _announce_kharmic(game, seat, kharmic_in_hand(game, seat), "kharmic-draw")
+    _announce_kharmic(game, seat, (Discard(card_id, seat), Then((DrawCard(seat),))))
 
 
-def kharmic_refill(game: GameState) -> None:
-    """Announce the Dynasty Kharmic ability: discard a Kharmic card from a Province and refill it
-    face-up."""
+def kharmic_refill(game: GameState, card_id: str) -> None:
+    """Announce the Dynasty Kharmic ability: discard ``card_id`` from its Province and refill that
+    Province face-up."""
     seat = game.round.priority
-    _announce_kharmic(game, seat, kharmic_in_provinces(game, seat), "kharmic-refill")
-
-
-def _announce_kharmic(game: GameState, seat: PlayerId, pool: list[L5RCard], resolver: str) -> None:
-    """Pause for the gold cost both Kharmic forms share, then for which card of ``pool`` to spend.
-    Repeatable, so no once-per-turn key is claimed."""
-    game.pending = announce_rulebook_cost(
-        game,
-        seat,
-        KHARMIC_COST,
-        "Kharmic",
-        (Choose(seat, tuple(card.id for card in pool), 1, 1, resolver),),
+    vacated = province_key_of(game, seat, card_id)
+    _announce_kharmic(
+        game, seat, (Discard(card_id, seat), Then((RefillProvince(vacated, face_up=True),)))
     )
 
 
-@triggers.choice_resolver("kharmic-draw", prompt="Discard a Kharmic card to draw a card")
-def _kharmic_discard_to_draw(
-    game: GameState, source_id: str | None, chosen: tuple[str, ...]
-) -> list[Effect]:
-    """Discard the chosen card, then draw."""
-    seat = game.table.cards_by_id[chosen[0]].owner
-    return [Discard(chosen[0], seat), Then((DrawCard(seat),))]
-
-
-@triggers.choice_resolver(
-    "kharmic-refill", prompt="Discard a Kharmic card from a Province to refill it face-up"
-)
-def _kharmic_discard_to_refill(
-    game: GameState, source_id: str | None, chosen: tuple[str, ...]
-) -> list[Effect]:
-    """Discard the chosen Province card, then refill the Province it left face-up."""
-    seat = game.table.cards_by_id[chosen[0]].owner
-    vacated = province_key_of(game, seat, chosen[0])
-    return [Discard(chosen[0], seat), Then((RefillProvince(vacated, face_up=True),))]
+def _announce_kharmic(game: GameState, seat: PlayerId, effects: tuple[Effect, ...]) -> None:
+    """Pause for the gold cost both Kharmic forms share, queueing ``effects`` behind it. Repeatable,
+    so no once-per-turn key is claimed."""
+    game.pending = announce_rulebook_cost(game, seat, KHARMIC_COST, "Kharmic", effects)
 
 
 def _reveal_search_pool(game: GameState, seat: PlayerId) -> None:

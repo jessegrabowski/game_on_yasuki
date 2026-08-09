@@ -230,10 +230,10 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "legacy"}
         case Cycle():
             return {"kind": "cycle"}
-        case KharmicDraw():
-            return {"kind": "kharmic_draw"}
-        case KharmicRefill():
-            return {"kind": "kharmic_refill"}
+        case KharmicDraw(card_id=card_id):
+            return {"kind": "kharmic_draw", "card_id": card_id}
+        case KharmicRefill(card_id=card_id):
+            return {"kind": "kharmic_refill", "card_id": card_id}
         case ActivateAbility(card_id=card_id):
             return {"kind": "activate_ability", "card_id": card_id}
     raise ValueError(f"no encoding for action {action!r}")
@@ -256,9 +256,9 @@ def _decode_action(payload: dict) -> Action:
     if kind == "cycle":
         return Cycle()
     if kind == "kharmic_draw":
-        return KharmicDraw()
+        return KharmicDraw(payload["card_id"])
     if kind == "kharmic_refill":
-        return KharmicRefill()
+        return KharmicRefill(payload["card_id"])
     if kind == "activate_ability":
         return ActivateAbility(payload["card_id"])
     raise ValueError(f"unknown action kind {kind!r}")

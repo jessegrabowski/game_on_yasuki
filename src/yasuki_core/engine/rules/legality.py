@@ -119,8 +119,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _recruits(game, seat, only=card_id)
         case DynastyDiscard(card_id=card_id):
             return action in _dynasty_discards(game, seat, only=card_id)
-        case KharmicDraw() | KharmicRefill():
-            return action in _kharmic(game, seat)
+        case KharmicDraw(card_id=card_id) | KharmicRefill(card_id=card_id):
+            return action in _kharmic(game, seat, only=card_id)
         case _:
             raise ValueError(f"no legality rule for action {type(action).__name__}")
 
@@ -155,19 +155,25 @@ def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
     return [Cycle()] if cycle_candidates(game, seat) else []
 
 
-def _kharmic(game: GameState, seat: PlayerId) -> list[Action]:
-    """The Kharmic abilities the seat can take: whichever of the two has a Kharmic card to spend,
-    when the round permits Open actions and the seat can reach the cost. Both are Repeatable, so
-    neither claims a once-per-turn key."""
-    if not permits(game, seat, ACTION_TIMINGS[KharmicDraw]):
-        return []
+def _kharmic(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
+    """A Kharmic action for each card the seat could spend — from hand to draw, or from a Province
+    to refill it face-up — when the round permits Open actions and the seat can reach the cost. Both
+    are Repeatable, so neither claims a once-per-turn key. ``only`` narrows to a single card."""
     if reachable_gold(game, seat) < KHARMIC_COST:
         return []
     actions: list[Action] = []
-    if kharmic_in_hand(game, seat):
-        actions.append(KharmicDraw())
-    if kharmic_in_provinces(game, seat):
-        actions.append(KharmicRefill())
+    if permits(game, seat, ACTION_TIMINGS[KharmicDraw]):
+        actions.extend(
+            KharmicDraw(card.id)
+            for card in kharmic_in_hand(game, seat)
+            if only is None or card.id == only
+        )
+    if permits(game, seat, ACTION_TIMINGS[KharmicRefill]):
+        actions.extend(
+            KharmicRefill(card.id)
+            for card in kharmic_in_provinces(game, seat)
+            if only is None or card.id == only
+        )
     return actions
 
 

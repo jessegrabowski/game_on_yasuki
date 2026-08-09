@@ -6,15 +6,23 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
 from tests.yasuki_core.engine.builders import province_card
+from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Cycle, Legacy, Pass
+from yasuki_core.engine.rules.actions import (
+    Cycle,
+    KharmicDraw,
+    KharmicRefill,
+    Legacy,
+    Pass,
+)
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.engine import runner
+from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import DynastyDiscard
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.runner import Controls, GameRunner, play_game
@@ -391,3 +399,50 @@ def test_a_round_that_never_closes_raises_instead_of_running_forever(monkeypatch
 
     with pytest.raises(RuntimeError, match="ran past 2 actions"):
         play_game(session, controls, turn_limit=4)
+
+
+def test_each_kharmic_form_hangs_off_the_card_it_spends():
+    # The click that opens the menu is the choice of card, so the Fate form belongs to a hand card
+    # and the Dynasty form to a Province card — neither to the board.
+    game_runner = GameRunner(EngineSession.start(_kharmic_table(), PlayerId.P1), PlayerId.P1)
+
+    hand = game_runner.hand_menu("P1-k0")
+    province = game_runner.province_menu("P1-pk0")
+
+    assert [action for _, action in hand] == [KharmicDraw("P1-k0")]
+    assert KharmicRefill("P1-pk0") in [action for _, action in province]
+    # Kharmic stays a rulebook action in the engine, matching the CR. Where it surfaces is a client
+    # decision, and it spends a card the player names — so it belongs on that card, not on the board
+    # with Cycle and Legacy, which act on whole zones.
+    board = [action for _, action in game_runner.board_menu()]
+    assert not any(isinstance(action, (KharmicDraw, KharmicRefill)) for action in board)
+    # The menu has to say what it costs; tracked against the constant so the two cannot drift.
+    assert all(f"{legality.KHARMIC_COST} gold" in label for label, _ in hand)
+
+
+def test_a_hand_card_offers_nothing_when_kharmic_is_unaffordable():
+    state = _kharmic_table(production=1)
+    game_runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
+
+    assert game_runner.hand_menu("P1-k0") == []
+
+
+def test_a_menu_only_offers_the_card_it_was_opened_on():
+    # The menus filter by card id; without that a click on one Kharmic card would offer to spend
+    # every other one too.
+    state = _kharmic_table(hand_kharmic=2, production=4)
+    game_runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
+
+    assert [action for _, action in game_runner.hand_menu("P1-k1")] == [KharmicDraw("P1-k1")]
+
+
+def test_a_card_without_the_keyword_offers_no_kharmic():
+    # Kharmic spends a Kharmic card. A plain card in the same zone must not carry the offer, or the
+    # menu would invite an action the engine rejects.
+    state = _kharmic_table()
+    province_card(state, "P1-plain", printed_id="plain_holding", index=2)
+    game_runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
+
+    offered = [action for _, action in game_runner.province_menu("P1-plain")]
+
+    assert not any(isinstance(action, (KharmicDraw, KharmicRefill)) for action in offered)
