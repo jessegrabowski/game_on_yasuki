@@ -16,6 +16,7 @@ yasuki_core.engine.rules.flow
     dynasty_discard
     legacy
     next_phase
+    open_round
     perform
     produce_gold
     recruit

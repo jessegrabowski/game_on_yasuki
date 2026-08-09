@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
+from yasuki_core.engine.rules.state import ActionRound, GameState, PHASE_TIMINGS, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
     ApplyAbilityEffects,
@@ -120,8 +120,14 @@ def advance(game: GameState) -> None:
     following = next_phase(game.phase)
     if following is not None:
         game.phase = following
+        open_round(game)
         return
     _end_turn(game)
+
+
+def open_round(game: GameState) -> None:
+    """Open the Action Round for the current phase, giving the active seat the first opportunity."""
+    game.round = ActionRound(timings=PHASE_TIMINGS[game.phase], priority=game.active)
 
 
 def perform(game: GameState, action: Action) -> None:
@@ -640,6 +646,7 @@ def _begin_next_turn(game: GameState) -> None:
 
 
 def _begin_turn(game: GameState) -> None:
+    open_round(game)
     ops.straighten(game.table, game.active)
     for card_id in ops.reveal_provinces(game.table, game.active):
         triggers.fire(game, Revealed(card_id))

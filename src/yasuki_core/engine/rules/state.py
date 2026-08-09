@@ -21,14 +21,57 @@ class Phase(Enum):
 # ends with the fate draw and play passes to the next seat (handled by the flow layer).
 TURN_PHASES: tuple[Phase, ...] = (Phase.ACTION, Phase.BATTLE, Phase.DYNASTY)
 
-# The action timings each phase's Action Round permits. The Battle phase permits none of its own:
-# battles are declared there and their Engage and Combat Segments are Action Rounds in their own
-# right.
-PHASE_TIMINGS: dict[Phase, frozenset[ActionTiming]] = {
-    Phase.ACTION: frozenset({ActionTiming.OPEN, ActionTiming.LIMITED}),
-    Phase.BATTLE: frozenset(),
-    Phase.DYNASTY: frozenset({ActionTiming.DYNASTY}),
+
+@dataclass(frozen=True, slots=True)
+class RoundTimings:
+    """What an Action Round permits, split the way the CR splits it — the active player and everyone
+    else are allowed different designators in the same round.
+
+    Attributes
+    ----------
+    active : frozenset of ActionTiming
+        What the active player may take.
+    others : frozenset of ActionTiming
+        What every other player may take. Empty means they hold no opportunity in this round at all.
+    """
+
+    active: frozenset[ActionTiming]
+    others: frozenset[ActionTiming]
+
+
+# What each phase's Action Round permits. The Battle phase permits nothing of its own: battles are
+# declared there and their Engage and Combat Segments are Action Rounds in their own right.
+PHASE_TIMINGS: dict[Phase, RoundTimings] = {
+    Phase.ACTION: RoundTimings(
+        active=frozenset({ActionTiming.OPEN, ActionTiming.LIMITED}),
+        others=frozenset({ActionTiming.OPEN}),
+    ),
+    Phase.BATTLE: RoundTimings(active=frozenset(), others=frozenset()),
+    Phase.DYNASTY: RoundTimings(active=frozenset({ActionTiming.DYNASTY}), others=frozenset()),
 }
+
+
+@dataclass(frozen=True, slots=True)
+class ActionRound:
+    """The Action Round currently open — the CR's unit of "who may act now, and when this ends".
+
+    A round runs until every seat has passed consecutively; taking an action resets that count and
+    hands the opportunity on. Every phase opens one, and a battle's Engage and Combat Segments will
+    open their own.
+
+    Attributes
+    ----------
+    timings : RoundTimings
+        The designators this round permits, per seat. A pass carries none and is always allowed.
+    priority : PlayerId
+        The seat holding the opportunity to act.
+    passes : int
+        How many seats have passed in a row. Default 0.
+    """
+
+    timings: RoundTimings
+    priority: PlayerId
+    passes: int = 0
 
 
 @dataclass(slots=True)
@@ -52,6 +95,9 @@ class GameState:
         The turn counter, starting at 1 and incremented on each new player-turn.
     phase : Phase
         The current phase of the active player's turn.
+    round : ActionRound
+        The Action Round open in that phase: who holds the opportunity to act, and how close the
+        round is to closing.
     gold : dict mapping PlayerId to int
         Each seat's transient gold pool. Gold produced during a cost payment pools here for further
         costs in the same phase and is cleared at the end of every phase.
@@ -86,6 +132,7 @@ class GameState:
     active: PlayerId
     turn: int
     phase: Phase
+    round: ActionRound
     gold: dict[PlayerId, int]
     favor_holder: PlayerId | None = None
     loser: PlayerId | None = None
@@ -129,6 +176,7 @@ class GameState:
             active=first_player,
             turn=1,
             phase=Phase.ACTION,
+            round=ActionRound(PHASE_TIMINGS[Phase.ACTION], priority=first_player),
             gold={seat: 0 for seat in table.seats},
             seed=seed,
             rng=default_rng(seed),
