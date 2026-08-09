@@ -98,3 +98,13 @@ class Cycle:
 
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
 Action = Pass | Recruit | DynastyDiscard | Legacy | ActivateAbility | Cycle
+
+# The designator each rulebook action is taken under. Pass is absent because it is the alternative
+# to taking an action rather than one, and ActivateAbility because it reads its designator off the
+# card — the same action is Open on one Holding and Dynasty on another.
+ACTION_TIMINGS: dict[type, ActionTiming] = {
+    Cycle: ActionTiming.LIMITED,
+    Recruit: ActionTiming.DYNASTY,
+    DynastyDiscard: ActionTiming.DYNASTY,
+    Legacy: ActionTiming.DYNASTY,
+}

@@ -3,7 +3,9 @@ from collections.abc import Iterator
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.actions import (
+    ACTION_TIMINGS,
     Action,
+    ActionTiming,
     ActivateAbility,
     Cycle,
     DynastyDiscard,
@@ -31,6 +33,30 @@ LEGACY_KEYWORD = "Legacy"
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
 RULESET = SHATTERED_EMPIRE
 OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
+
+
+def timing_of(game: GameState, action: Action) -> ActionTiming | None:
+    """The designator ``action`` is taken under, or None for a pass.
+
+    A pass is the CR's alternative to taking an action rather than an action itself, so it carries
+    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designator off
+    the card, which is why this is a query rather than a table: the same action is Open on one
+    Holding and Dynasty on another.
+
+    Raise ValueError for an action with no designator rule, and for an ``ActivateAbility`` naming a
+    card that has no activated ability.
+    """
+    if isinstance(action, Pass):
+        return None
+    if isinstance(action, ActivateAbility):
+        ability = abilities.ability_for(game.table.cards_by_id[action.card_id])
+        if ability is None:
+            raise ValueError(f"card {action.card_id} has no activated ability to time")
+        return ability.timing
+    timing = ACTION_TIMINGS.get(type(action))
+    if timing is None:
+        raise ValueError(f"no designator for action {type(action).__name__}")
+    return timing
 
 
 def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:

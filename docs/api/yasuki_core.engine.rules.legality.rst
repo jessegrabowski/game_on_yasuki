@@ -29,6 +29,7 @@ yasuki_core.engine.rules.legality
     recruit_cost
     seat_alignment
     seat_clan
+    timing_of
 
 .. automodule:: yasuki_core.engine.rules.legality
     :members:
