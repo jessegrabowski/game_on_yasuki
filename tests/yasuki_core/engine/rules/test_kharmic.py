@@ -207,6 +207,26 @@ def test_paying_on_the_opponents_turn_leaves_the_producer_bowed_into_your_own():
     assert not session.game.table.cards_by_id["P2-sh"].bowed
 
 
+def test_cancelling_the_cost_backs_the_ability_out():
+    # A payment advertises itself as cancellable, and the undo used to demand a Recruit behind it —
+    # so cancelling a rulebook cost raised instead of backing out. Nothing is committed until the
+    # payment is answered, so the board must be exactly as it was.
+    session = EngineSession.start(_table(), PlayerId.P1)
+    before = [
+        card.id for card in session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
+    ]
+
+    session.act(PlayerId.P1, KharmicDraw())
+    session.cancel(PlayerId.P1)
+
+    assert session.game.pending is None
+    assert session.game.stack == []
+    assert not session.game.table.cards_by_id["P1-sh"].bowed
+    hand = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    assert [card.id for card in hand.cards] == before
+    assert KharmicDraw() in session.legal_actions(PlayerId.P1)  # and it can be taken again
+
+
 def test_a_kharmic_card_is_recognized_by_its_keyword():
     game = EngineSession.start(_table(), PlayerId.P1).game
     kharmic = game.table.cards_by_id["P1-k0"]

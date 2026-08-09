@@ -355,10 +355,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
 def cancel(game: GameState) -> None:
     """Back out of the pending decision, undoing the action that raised it.
 
-    A Recruit's steps are cancellable, since nothing is committed until the payment is answered — no
-    gold spent, no producer bowed, the card still in its province. Cancelling a payment drops its
-    deferred :class:`ResolveRecruit`; cancelling an Invest amount drops the choice before the recruit
-    is even announced.
+    A payment is cancellable because nothing is committed until it is answered — no gold spent, no
+    producer bowed, nothing moved. Cancelling one drops the work it was queued in front of;
+    cancelling an Invest amount drops the choice before the recruit is even announced.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
     cannot be canceled.
@@ -368,16 +367,23 @@ def cancel(game: GameState) -> None:
         raise RuntimeError("no decision is pending")
     match request:
         case ChoosePayment():
-            _cancel_recruit_payment(game)
+            _cancel_payment(game)
         case ChooseInvestAmount():
             game.pending = None  # the recruit is not yet announced; nothing to undo
         case _:
             raise ValueError(f"{type(request).__name__} cannot be cancelled")
 
 
-def _cancel_recruit_payment(game: GameState) -> None:
-    if not game.stack or not isinstance(game.stack[-1], ResolveRecruit):
-        raise ValueError("the pending payment has no recruit to undo")
+def _cancel_payment(game: GameState) -> None:
+    """Drop the work the cancelled payment stands in front of, whatever queued it — a Recruit's
+    :class:`ResolveRecruit` or a rulebook cost's :class:`ApplyEffects`.
+
+    The item is always the top of the stack: announcing a cost pushes exactly one, and the engine is
+    paused on the payment from that moment until it is answered or cancelled, so nothing can have
+    pushed since.
+    """
+    if not game.stack:
+        raise ValueError("the pending payment has no queued work to undo")
     game.stack.pop()
     game.pending = None
 
