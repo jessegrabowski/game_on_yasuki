@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import (
+    end_phase,
     holding,
     province_card,
     put_in_play,
@@ -96,17 +97,17 @@ def test_timing_a_card_with_no_activated_ability_is_an_error():
 def test_each_phase_permits_only_the_designators_its_round_allows():
     session = _phases_fixture()
 
-    assert legality.permits(session.game, ActionTiming.OPEN)
-    assert legality.permits(session.game, ActionTiming.LIMITED)
-    assert not legality.permits(session.game, ActionTiming.DYNASTY)
+    assert legality.permits(session.game, PlayerId.P1, ActionTiming.OPEN)
+    assert legality.permits(session.game, PlayerId.P1, ActionTiming.LIMITED)
+    assert not legality.permits(session.game, PlayerId.P1, ActionTiming.DYNASTY)
 
-    session.act(PlayerId.P1, Pass())  # Action -> Battle: battles own their own rounds
-    assert not any(legality.permits(session.game, t) for t in ActionTiming)
+    end_phase(session)  # Action -> Battle: battles own their own rounds
+    assert not any(legality.permits(session.game, PlayerId.P1, t) for t in ActionTiming)
 
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
-    assert legality.permits(session.game, ActionTiming.DYNASTY)
-    assert not legality.permits(session.game, ActionTiming.OPEN)
-    assert not legality.permits(session.game, ActionTiming.LIMITED)
+    end_phase(session)  # Battle -> Dynasty
+    assert legality.permits(session.game, PlayerId.P1, ActionTiming.DYNASTY)
+    assert not legality.permits(session.game, PlayerId.P1, ActionTiming.OPEN)
+    assert not legality.permits(session.game, PlayerId.P1, ActionTiming.LIMITED)
 
 
 def test_a_phase_offers_only_the_abilities_its_round_permits():
@@ -114,9 +115,9 @@ def test_a_phase_offers_only_the_abilities_its_round_permits():
     session = _phases_fixture()
 
     in_action = session.legal_actions(PlayerId.P1)
-    session.act(PlayerId.P1, Pass())
+    end_phase(session)
     in_battle = session.legal_actions(PlayerId.P1)
-    session.act(PlayerId.P1, Pass())
+    end_phase(session)
     in_dynasty = session.legal_actions(PlayerId.P1)
 
     assert ActivateAbility("millet") in in_action

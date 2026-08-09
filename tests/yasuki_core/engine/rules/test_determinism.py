@@ -26,14 +26,18 @@ def _discard_top_of_hand(game: GameState, log: GameLog) -> None:
     submit_and_log(game, log, DecisionResponse((victim,)))
 
 
+def _end_turn(game: GameState, log: GameLog) -> None:
+    """Pass for whoever holds the opportunity until the turn rolls over or a decision interrupts."""
+    turn = game.turn
+    while game.turn == turn and game.pending is None:
+        act_and_log(game, log, Pass())
+
+
 def _play_three_turns(game: GameState, log: GameLog) -> None:
-    for _ in range(3):  # P1 turn 1: into the end-of-turn discard
-        act_and_log(game, log, Pass())
+    _end_turn(game, log)  # P1 turn 1: into the end-of-turn discard
     _discard_top_of_hand(game, log)
-    for _ in range(3):  # P2 turn 2: small hand, no discard
-        act_and_log(game, log, Pass())
-    for _ in range(3):  # P1 turn 3: discards again
-        act_and_log(game, log, Pass())
+    _end_turn(game, log)  # P2 turn 2: small hand, no discard
+    _end_turn(game, log)  # P1 turn 3: discards again
     _discard_top_of_hand(game, log)
 
 

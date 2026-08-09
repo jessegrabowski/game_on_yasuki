@@ -18,7 +18,7 @@ from yasuki_core.engine.runner import Controls, run_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_setup import build_state_from_deck
 from tests.yasuki_core.db_guard import requires_db
-from tests.yasuki_core.engine.builders import holding, province_card, put_in_play
+from tests.yasuki_core.engine.builders import end_phase, holding, province_card, put_in_play
 
 DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
 
@@ -40,8 +40,8 @@ def _board():
 
 
 def _dynasty(session):
-    session.act(PlayerId.P1, Pass())
-    session.act(PlayerId.P1, Pass())
+    end_phase(session)
+    end_phase(session)
     return session
 
 

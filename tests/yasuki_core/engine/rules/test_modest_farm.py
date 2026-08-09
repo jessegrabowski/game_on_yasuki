@@ -3,7 +3,7 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyHolding
-from yasuki_core.engine.rules.actions import ActivateAbility, Pass, Recruit
+from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     ChooseCards,
@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, put_in_play, register
 
 
 def _modest_farm_game(
@@ -190,8 +190,8 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     province.add(renewer)
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
     session = EngineSession.start(state, PlayerId.P1)
-    session.act(PlayerId.P1, Pass())  # Action -> Battle
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
 
     session.act(PlayerId.P1, Recruit("warrens"))
     session.submit(PlayerId.P1, DecisionResponse(("SH",)))

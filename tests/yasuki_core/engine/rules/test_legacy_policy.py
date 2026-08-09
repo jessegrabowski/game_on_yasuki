@@ -1,7 +1,7 @@
 from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Legacy, Pass, Recruit
+from yasuki_core.engine.rules.actions import Legacy, Recruit
 from yasuki_core.engine.rules.agents import LegacyAgent, PayingAgent
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
@@ -18,6 +18,7 @@ from yasuki_core.game_pieces.constants import Side
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
+    end_phase,
     holding,
     province_card,
     put_in_play,
@@ -32,8 +33,8 @@ def _dynasty_phase(production: int = 6) -> EngineSession:
     table = dealt_table()
     put_in_play(table, holding("purse", owner=P1, gold_production=production))
     session = EngineSession.start(table, P1, seed=1)
-    session.act(P1, Pass())
-    session.act(P1, Pass())
+    end_phase(session)
+    end_phase(session)
     return session
 
 

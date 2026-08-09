@@ -8,11 +8,10 @@ from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.counters import SINCERITY, counter_from_key
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import two_seat_game
+from tests.yasuki_core.engine.builders import end_phase, two_seat_game
 
 from tests.yasuki_core.engine.builders import province_card
 
@@ -101,7 +100,7 @@ def test_sincerity_accrual_replays_through_a_full_turn():
 
     session = EngineSession.start(state, PlayerId.P1)
     for _ in range(3):  # Action -> Battle -> Dynasty -> end of P1's turn
-        session.act(PlayerId.P1, Pass())
+        end_phase(session)
 
     assert session.game.table.cards_by_id["s"].counters == {"sincerity": 1}
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))

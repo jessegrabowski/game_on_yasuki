@@ -7,8 +7,10 @@ yasuki_core.engine.rules.state
 
 .. autosummary::
 
+    ActionRound
     GameState
     Phase
+    RoundTimings
 
 .. automodule:: yasuki_core.engine.rules.state
     :members:

@@ -1,5 +1,6 @@
 import pytest
 
+from tests.yasuki_core.engine.builders import end_phase
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.engine.zones import ProvinceZone
@@ -37,7 +38,7 @@ def _dealt_table() -> TableState:
 
 def _to_pending_discard(session: EngineSession) -> None:
     for _ in range(3):  # Action -> Battle -> Dynasty -> end of turn (pauses for discard)
-        session.act(PlayerId.P1, Pass())
+        end_phase(session)
 
 
 def test_start_opens_a_playable_first_turn():
@@ -97,8 +98,8 @@ def _holding_in_province(
 
 
 def _in_dynasty(session: EngineSession) -> None:
-    session.act(PlayerId.P1, Pass())  # Action -> Battle
-    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
     assert session.project(PlayerId.P1).phase is Phase.DYNASTY
 
 
@@ -287,11 +288,11 @@ def test_proclaim_is_available_again_on_the_seats_next_turn():
     session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
     assert Recruit("P1-second", proclaim=True) not in session.legal_actions(PlayerId.P1)
 
-    session.act(PlayerId.P1, Pass())  # end P1's turn; the full hand + fate draw forces a discard
+    end_phase(session)  # end P1's turn; the full hand + fate draw forces a discard
     discard = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
     session.submit(PlayerId.P1, DecisionResponse((discard,)))
     for _ in range(3):  # P2's empty turn passes straight back
-        session.act(PlayerId.P2, Pass())
+        end_phase(session)
     _in_dynasty(session)
 
     assert Recruit("P1-second", proclaim=True) in session.legal_actions(PlayerId.P1)
@@ -488,11 +489,11 @@ def test_cancel_of_a_forced_end_of_turn_discard_is_rejected():
     assert isinstance(session.game.pending, DiscardToHandSize)  # still owed
 
 
-def test_act_pass_moves_the_phase_and_rejects_an_illegal_actor():
+def test_act_pass_moves_the_phase_and_rejects_an_actor_without_the_opportunity():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
-    session.act(PlayerId.P1, Pass())
+    end_phase(session)
     assert session.project(PlayerId.P1).phase is Phase.BATTLE
-    # The inactive seat has no legal action, so acting raises.
+    # Nobody but the active seat may act in the Battle phase, so P2 holds no opportunity there.
     with pytest.raises(ValueError):
         session.act(PlayerId.P2, Pass())
 

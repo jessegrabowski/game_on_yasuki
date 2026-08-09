@@ -1,6 +1,6 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Pass, Recruit
+from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -12,7 +12,13 @@ from yasuki_core.sim.metrics import (
     provinces_held,
 )
 
-from tests.yasuki_core.engine.builders import dealt_table, holding, province_card, put_in_play
+from tests.yasuki_core.engine.builders import (
+    dealt_table,
+    end_phase,
+    holding,
+    province_card,
+    put_in_play,
+)
 
 P1 = PlayerId.P1
 
@@ -53,8 +59,8 @@ def test_potential_production_is_not_the_gold_pool():
 def test_a_producer_bowed_to_pay_stops_counting():
     session = _game(4, 2)
     province_card(session.game, "target", seat=P1, gold_cost=3)
-    session.act(P1, Pass())
-    session.act(P1, Pass())
+    end_phase(session)
+    end_phase(session)
     session.act(P1, Recruit("target"))
     agent = AutoAgent()
     while session.game.pending is not None:

@@ -1,6 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
@@ -131,3 +133,20 @@ def province_card(
     zone.add(card)
     state.zones[ZoneKey(seat, ZoneRole.PROVINCE, index)] = zone
     return card
+
+
+def end_phase(session: EngineSession) -> None:
+    """Pass for whoever holds the opportunity until the round closes and the phase moves on.
+
+    A round ends when every seat entitled to act in it has passed consecutively, so how many passes
+    that takes depends on the phase — two in the Action phase, where the inactive seat may take Open
+    actions, one everywhere else. Tests that want the next phase should say so rather than counting.
+    Stops early if the engine pauses for a decision, such as the end-of-turn discard.
+    """
+    started = (session.game.phase, session.game.turn)
+    while (
+        (session.game.phase, session.game.turn) == started
+        and not session.game.game_over
+        and not session.game.awaiting_decision
+    ):
+        session.act(session.game.round.priority, Pass())
