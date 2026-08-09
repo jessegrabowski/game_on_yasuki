@@ -1,4 +1,6 @@
+import re
 import tkinter as tk
+from pathlib import Path
 
 
 def test_a_root_built_inside_a_test_is_never_mapped():
@@ -24,3 +26,18 @@ def test_a_toplevel_window_is_left_alone():
         dialog.destroy()
     finally:
         root.destroy()
+
+
+def test_no_gui_test_binds_tk_past_the_guard():
+    # The guard patches ``tkinter.Tk``, so every ``tk.Tk()`` call goes through it. ``from tkinter
+    # import Tk`` binds the name at import time, before any fixture runs, and would map a window
+    # again — invisibly, since the suite would still pass.
+    binds_tk = re.compile(r"^\s*from tkinter import .*\bTk\b", re.MULTILINE)
+    suite = Path(__file__).parent
+    offenders = sorted(
+        str(path.relative_to(suite))
+        for path in suite.rglob("*.py")
+        if binds_tk.search(path.read_text())
+    )
+
+    assert offenders == []
