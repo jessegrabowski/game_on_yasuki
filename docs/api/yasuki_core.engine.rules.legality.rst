@@ -17,6 +17,7 @@ yasuki_core.engine.rules.legality
     legacy_candidates
     legacy_key
     legacy_search_pool
+    legal_actions
     proclaim_key
     province_key_holding
     province_key_of

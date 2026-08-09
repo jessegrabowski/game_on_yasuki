@@ -1,15 +1,24 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.rules.actions import (
+    Action,
+    ActivateAbility,
+    Cycle,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.economy import (
     effective_gold_production,
     effective_keywords,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules import abilities
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyPersonality
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.ruleset import SHATTERED_EMPIRE
 
@@ -19,6 +28,101 @@ LEGACY_KEYWORD = "Legacy"
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
 RULESET = SHATTERED_EMPIRE
 OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
+
+
+def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
+    """The free actions ``seat`` may take right now: always a pass, plus — in the Dynasty phase — a
+    Recruit for each face-up Holding or Personality in its provinces it could pay for. Empty while a
+    decision is pending and for any seat but the active one.
+
+    Gold is not a free action: it is produced only while paying a cost (rules-skeleton §7), so it
+    surfaces through the Recruit's ``ChoosePayment``, never here.
+    """
+    if game.game_over or game.awaiting_decision or seat is not game.active:
+        return []
+    actions: list[Action] = [Pass()]
+    actions.extend(_abilities(game, seat))
+    if game.phase is Phase.ACTION:
+        actions.extend(_cycle(game, seat))
+    elif game.phase is Phase.DYNASTY:
+        actions.extend(_recruits(game, seat))
+        actions.extend(_dynasty_discards(game, seat))
+        actions.extend(_legacy(game, seat))
+    return actions
+
+
+def _abilities(game: GameState, seat: PlayerId) -> list[Action]:
+    """An ActivateAbility for each in-play card whose activated ability the seat can use in the
+    current phase: controlled, cost payable, and with at least one legal target."""
+    return [ActivateAbility(card.id) for card in abilities.activatable(game, seat, game.phase)]
+
+
+def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
+    """The Cycle ability when the seat can take it: its first turn, not already used, and with a
+    face-up Province card to put back. The rule is "one or more", so declining is not taking the
+    action at all rather than taking it and choosing nothing."""
+    if not is_first_turn(game, seat):
+        return []
+    if game.has_used(cycle_key(seat, game.turn)):
+        return []
+    return [Cycle()] if cycle_candidates(game, seat) else []
+
+
+def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
+    """The Legacy ability when the seat can take it: once per turn, and only with a card in hand to
+    pay the banish cost. Offered even when no Legacy card can be found — the rules make the whiff a
+    loss rather than hiding the option (which would leak face-down province contents)."""
+    if game.has_used(legacy_key(seat, game.turn)):
+        return []
+    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
+    return [Legacy()] if hand.cards else []
+
+
+def _dynasty_discards(game: GameState, seat: PlayerId) -> list[Action]:
+    """A DynastyDiscard for each face-up card in the seat's provinces — the rule allows discarding
+    any face-up province card, not only Holdings."""
+    discards: list[Action] = []
+    for key, zone in game.table.zones.items():
+        if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
+            continue
+        discards.extend(DynastyDiscard(card.id) for card in zone.cards if card.face_up)
+    return discards
+
+
+def _recruits(game: GameState, seat: PlayerId) -> list[Action]:
+    """The Recruit actions ``seat`` can afford: each face-up Holding or Personality in its provinces
+    whose cost its pool plus its unbowed producers' gold could cover. A Personality is withheld while
+    its Honor Requirement is above the seat's Family Honor (a dash ``None`` never withholds; the
+    check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim variant
+    when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest variant
+    when the seat could also cover the card's Invest cost."""
+    recruits: list[Action] = []
+    seat_info = game.table.seats[seat]
+    honor = seat_info.honor
+    enforce_honor = not seat_info.ignores_honor_requirements
+    for key, zone in game.table.zones.items():
+        if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
+            continue
+        for card in zone.cards:
+            if not (isinstance(card, (DynastyHolding, DynastyPersonality)) and card.face_up):
+                continue
+            if (
+                enforce_honor
+                and isinstance(card, DynastyPersonality)
+                and card.honor_requirement is not None
+                and honor < card.honor_requirement
+            ):
+                continue
+            affordable = reachable_gold(game, seat, card)
+            base = recruit_cost(game, card)
+            if base <= affordable:
+                recruits.append(Recruit(card.id))
+                if can_proclaim(game, card):
+                    recruits.append(Recruit(card.id, proclaim=True))
+            invest = abilities.invest_for(card)
+            if invest is not None and base + invest.minimum <= affordable:
+                recruits.append(Recruit(card.id, invest=True))
+    return recruits
 
 
 def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
