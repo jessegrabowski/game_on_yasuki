@@ -3,7 +3,8 @@ from yasuki_core.engine.rules.abilities import Ability, bow_cost, owned_holdings
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose, DrawCard, Effect, GrantModifier
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
     at_cap,
@@ -32,7 +33,7 @@ def _millet_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
 register_ability(
     "millet_farm",
     Ability(
-        phase=Phase.ACTION,
+        timing=ActionTiming.OPEN,
         label="Bow: give a Farm +2 Gold Production",
         cost=bow_cost,
         targets=_owned_farms,

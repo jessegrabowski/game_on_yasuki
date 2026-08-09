@@ -5,6 +5,7 @@ from numpy.random import Generator, default_rng
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
+from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.modifiers import Modifier
 from yasuki_core.engine.rules.work import WorkItem
@@ -19,6 +20,15 @@ class Phase(Enum):
 # The phases of a turn in the order the active player works through them. After DYNASTY the turn
 # ends with the fate draw and play passes to the next seat (handled by the flow layer).
 TURN_PHASES: tuple[Phase, ...] = (Phase.ACTION, Phase.BATTLE, Phase.DYNASTY)
+
+# The action timings each phase's Action Round permits. The Battle phase permits none of its own:
+# battles are declared there and their Engage and Combat Segments are Action Rounds in their own
+# right.
+PHASE_TIMINGS: dict[Phase, frozenset[ActionTiming]] = {
+    Phase.ACTION: frozenset({ActionTiming.OPEN, ActionTiming.LIMITED}),
+    Phase.BATTLE: frozenset(),
+    Phase.DYNASTY: frozenset({ActionTiming.DYNASTY}),
+}
 
 
 @dataclass(slots=True)

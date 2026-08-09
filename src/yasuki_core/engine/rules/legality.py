@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.state import GameState, PHASE_TIMINGS, Phase
 from yasuki_core.engine.rules import abilities
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -90,7 +90,7 @@ def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> l
     a single card."""
     return [
         ActivateAbility(card.id)
-        for card in abilities.activatable(game, seat, game.phase)
+        for card in abilities.activatable(game, seat, PHASE_TIMINGS[game.phase])
         if only is None or card.id == only
     ]
 
