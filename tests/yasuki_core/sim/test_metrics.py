@@ -66,7 +66,7 @@ def test_a_producer_bowed_to_pay_stops_counting():
 
 
 def test_a_bow_time_boost_is_not_counted():
-    """Outlying Farms could raise 4 by boosting, and flow.reachable_gold says so. This metric says
+    """Outlying Farms could raise 4 by boosting, and legality.reachable_gold says so. This metric says
     2, because the boost costs the card its life. Sustainable output is what a deck is judged on,
     and the two functions disagreeing is the intent rather than a bug in either."""
     session = _game()

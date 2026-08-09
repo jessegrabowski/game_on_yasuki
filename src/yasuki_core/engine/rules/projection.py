@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import redact, ViewSnapshot
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DecisionRequest
-from yasuki_core.engine.rules.flow import legacy_candidates
+from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side

@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules import abilities, flow, projection
+from yasuki_core.engine.rules import abilities, legality, projection
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import (
     Act,
@@ -100,17 +100,17 @@ class EngineSession:
         """The Cycle ability when the seat can take it: its first turn, not already used, and with a
         face-up Province card to put back. The rule is "one or more", so declining is not taking the
         action at all rather than taking it and choosing nothing."""
-        if not flow.is_first_turn(self.game, seat):
+        if not legality.is_first_turn(self.game, seat):
             return []
-        if self.game.has_used(flow.cycle_key(seat, self.game.turn)):
+        if self.game.has_used(legality.cycle_key(seat, self.game.turn)):
             return []
-        return [Cycle()] if flow.cycle_candidates(self.game, seat) else []
+        return [Cycle()] if legality.cycle_candidates(self.game, seat) else []
 
     def _legacy(self, seat: PlayerId) -> list[Action]:
         """The Legacy ability when the seat can take it: once per turn, and only with a card in hand
         to pay the banish cost. Offered even when no Legacy card can be found — the rules make the
         whiff a loss rather than hiding the option (which would leak face-down province contents)."""
-        if self.game.has_used(flow.legacy_key(seat, self.game.turn)):
+        if self.game.has_used(legality.legacy_key(seat, self.game.turn)):
             return []
         hand = self.game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
         return [Legacy()] if hand.cards else []
@@ -149,11 +149,11 @@ class EngineSession:
                     and honor < card.honor_requirement
                 ):
                     continue
-                affordable = flow.reachable_gold(self.game, seat, card)
-                base = flow.recruit_cost(self.game, card)
+                affordable = legality.reachable_gold(self.game, seat, card)
+                base = legality.recruit_cost(self.game, card)
                 if base <= affordable:
                     recruits.append(Recruit(card.id))
-                    if flow.can_proclaim(self.game, card):
+                    if legality.can_proclaim(self.game, card):
                         recruits.append(Recruit(card.id, proclaim=True))
                 invest = abilities.invest_for(card)
                 if invest is not None and base + invest.minimum <= affordable:

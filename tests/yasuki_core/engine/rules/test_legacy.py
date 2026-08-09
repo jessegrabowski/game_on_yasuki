@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.actions import Legacy, Pass
 from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, DecisionResponse
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState, Phase
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
@@ -93,9 +93,9 @@ def test_legacy_candidates_finds_a_deck_or_face_down_province_card():
     game_prov = GameState.start(_table(legacy_in="province"), PlayerId.P1)
     game_none = GameState.start(_table(legacy_in=None), PlayerId.P1)
 
-    assert [c.id for c in flow.legacy_candidates(game_deck, PlayerId.P1)] == ["P1-leg"]
-    assert [c.id for c in flow.legacy_candidates(game_prov, PlayerId.P1)] == ["P1-leg"]
-    assert flow.legacy_candidates(game_none, PlayerId.P1) == []
+    assert [c.id for c in legality.legacy_candidates(game_deck, PlayerId.P1)] == ["P1-leg"]
+    assert [c.id for c in legality.legacy_candidates(game_prov, PlayerId.P1)] == ["P1-leg"]
+    assert legality.legacy_candidates(game_none, PlayerId.P1) == []
 
 
 def test_legacy_does_not_search_a_face_up_province_card():
@@ -105,13 +105,13 @@ def test_legacy_does_not_search_a_face_up_province_card():
     game = GameState.start(state, PlayerId.P1)
 
     assert (
-        flow.legacy_candidates(game, PlayerId.P1) == []
+        legality.legacy_candidates(game, PlayerId.P1) == []
     )  # a revealed province card is not searched
 
 
 def test_legacy_search_pool_is_the_whole_deck_plus_face_down_provinces():
     game = GameState.start(_table(), PlayerId.P1)
-    pool = flow.legacy_search_pool(game, PlayerId.P1)
+    pool = legality.legacy_search_pool(game, PlayerId.P1)
     pool_ids = {card.id for card in pool}
 
     deck_ids = {c.id for c in game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards}
@@ -276,7 +276,7 @@ def test_a_search_finds_a_card_granted_legacy_by_its_own_ability():
     state.decks[DeckKey(PlayerId.P2, Side.DYNASTY)].cards = [shrine]
     game = GameState.start(state, PlayerId.P1)  # P1 first, so P2 has Courtesy
 
-    assert [c.id for c in flow.legacy_candidates(game, PlayerId.P2)] == ["P2-courtesy"]
+    assert [c.id for c in legality.legacy_candidates(game, PlayerId.P2)] == ["P2-courtesy"]
 
 
 def test_a_conditional_grant_that_does_not_apply_leaves_the_card_unfindable():
@@ -285,7 +285,7 @@ def test_a_conditional_grant_that_does_not_apply_leaves_the_card_unfindable():
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [shrine]
     game = GameState.start(state, PlayerId.P1)  # P1 went first, so Courtesy grants nothing
 
-    assert flow.legacy_candidates(game, PlayerId.P1) == []
+    assert legality.legacy_candidates(game, PlayerId.P1) == []
 
 
 def _buried_province_card(session: EngineSession) -> DynastyHolding:
