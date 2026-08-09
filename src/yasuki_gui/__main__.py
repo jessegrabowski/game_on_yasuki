@@ -225,9 +225,11 @@ def main() -> None:
 
     def on_card_activated(card_id: str) -> None:
         # A left-click opens what the card offers: a face-up province card's Recruit / Dynasty
-        # Discard, or an in-play card's activated ability. The ensuing target/payment is picked
-        # through the board-selection path.
-        popup_action_menu(runner.province_menu(card_id) + runner.ability_menu(card_id))
+        # Discard, a hand card's Kharmic, or an in-play card's activated ability. The ensuing
+        # target/payment is picked through the board-selection path.
+        popup_action_menu(
+            runner.province_menu(card_id) + runner.hand_menu(card_id) + runner.ability_menu(card_id)
+        )
 
     def on_board_menu() -> None:
         # A right-click on empty board opens the rulebook abilities. They act on whole zones rather
