@@ -15,6 +15,8 @@ yasuki_core.engine.rules.flow
     cancel
     cycle
     dynasty_discard
+    kharmic_draw
+    kharmic_refill
     legacy
     next_phase
     open_round

@@ -15,8 +15,11 @@ yasuki_core.engine.rules.legality
     gold_reach
     has_keyword
     is_first_turn
+    is_kharmic_card
     is_legacy_card
     is_legal
+    kharmic_in_hand
+    kharmic_in_provinces
     legacy_candidates
     legacy_key
     legacy_search_pool

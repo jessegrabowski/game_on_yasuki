@@ -11,6 +11,8 @@ yasuki_core.engine.rules.actions
     ActivateAbility
     Cycle
     DynastyDiscard
+    KharmicDraw
+    KharmicRefill
     Legacy
     Pass
     Recruit

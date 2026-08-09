@@ -96,14 +96,31 @@ class Cycle:
     cards, and the order they go under in, are chosen through the decision the action raises."""
 
 
+@dataclass(frozen=True, slots=True)
+class KharmicDraw:
+    """Take the Fate Kharmic rulebook ability (Repeatable Open, 2 Gold): discard a Kharmic card from
+    hand to draw a card. Which card is discarded is chosen through the decision the action raises."""
+
+
+@dataclass(frozen=True, slots=True)
+class KharmicRefill:
+    """Take the Dynasty Kharmic rulebook ability (Repeatable Open, 2 Gold): discard a Kharmic card
+    from one of your Provinces and refill it face-up. Which card is discarded is chosen through the
+    decision the action raises."""
+
+
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
-Action = Pass | Recruit | DynastyDiscard | Legacy | ActivateAbility | Cycle
+Action = (
+    Pass | Recruit | DynastyDiscard | Legacy | ActivateAbility | Cycle | KharmicDraw | KharmicRefill
+)
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
 # to taking an action rather than one, and ActivateAbility because it reads its designator off the
 # card — the same action is Open on one Holding and Dynasty on another.
 ACTION_TIMINGS: dict[type, ActionTiming] = {
     Cycle: ActionTiming.LIMITED,
+    KharmicDraw: ActionTiming.OPEN,
+    KharmicRefill: ActionTiming.OPEN,
     Recruit: ActionTiming.DYNASTY,
     DynastyDiscard: ActionTiming.DYNASTY,
     Legacy: ActionTiming.DYNASTY,
