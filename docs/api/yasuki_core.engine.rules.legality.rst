@@ -21,8 +21,10 @@ yasuki_core.engine.rules.legality
     legacy_search_pool
     legal_actions
     proclaim_key
+    province_cards
     province_key_holding
     province_key_of
+    province_zones
     reachable_gold
     recruit_cost
     seat_alignment

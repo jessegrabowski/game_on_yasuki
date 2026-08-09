@@ -1,5 +1,7 @@
+from collections.abc import Iterator
+
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.actions import (
     Action,
     ActivateAbility,
@@ -123,16 +125,11 @@ def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = Non
     any face-up province card, not only Holdings. ``only`` narrows to a single card."""
     if game.phase is not Phase.DYNASTY:
         return []
-    discards: list[Action] = []
-    for key, zone in game.table.zones.items():
-        if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
-            continue
-        discards.extend(
-            DynastyDiscard(card.id)
-            for card in zone.cards
-            if card.face_up and (only is None or card.id == only)
-        )
-    return discards
+    return [
+        DynastyDiscard(card.id)
+        for card in province_cards(game, seat)
+        if card.face_up and (only is None or card.id == only)
+    ]
 
 
 def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
@@ -149,33 +146,43 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
     honor = seat_info.honor
     enforce_honor = not seat_info.ignores_honor_requirements
     fixed, variable = gold_reach(game, seat)
-    for key, zone in game.table.zones.items():
-        if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
+    for card in province_cards(game, seat):
+        if only is not None and card.id != only:
             continue
-        for card in zone.cards:
-            if only is not None and card.id != only:
-                continue
-            if not (isinstance(card, (DynastyHolding, DynastyPersonality)) and card.face_up):
-                continue
-            if (
-                enforce_honor
-                and isinstance(card, DynastyPersonality)
-                and card.honor_requirement is not None
-                and honor < card.honor_requirement
-            ):
-                continue
-            affordable = fixed + sum(
-                effective_gold_production(game, producer, targets=(card,)) for producer in variable
-            )
-            base = recruit_cost(game, card)
-            if base <= affordable:
-                recruits.append(Recruit(card.id))
-                if can_proclaim(game, card):
-                    recruits.append(Recruit(card.id, proclaim=True))
-            invest = abilities.invest_for(card)
-            if invest is not None and base + invest.minimum <= affordable:
-                recruits.append(Recruit(card.id, invest=True))
+        if not (isinstance(card, (DynastyHolding, DynastyPersonality)) and card.face_up):
+            continue
+        if (
+            enforce_honor
+            and isinstance(card, DynastyPersonality)
+            and card.honor_requirement is not None
+            and honor < card.honor_requirement
+        ):
+            continue
+        affordable = fixed + sum(
+            effective_gold_production(game, producer, targets=(card,)) for producer in variable
+        )
+        base = recruit_cost(game, card)
+        if base <= affordable:
+            recruits.append(Recruit(card.id))
+            if can_proclaim(game, card):
+                recruits.append(Recruit(card.id, proclaim=True))
+        invest = abilities.invest_for(card)
+        if invest is not None and base + invest.minimum <= affordable:
+            recruits.append(Recruit(card.id, invest=True))
     return recruits
+
+
+def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Zone]]:
+    """Each of ``seat``'s Province zones with its key, in table order."""
+    for key, zone in game.table.zones.items():
+        if key.owner is seat and key.role is ZoneRole.PROVINCE:
+            yield key, zone
+
+
+def province_cards(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
+    """Every card in ``seat``'s Provinces, face-up or not, in Province order."""
+    for _, zone in province_zones(game, seat):
+        yield from zone.cards
 
 
 def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -273,13 +280,7 @@ def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The cards ``seat`` may put on the bottom of its deck with Cycle — the face-up ones in its
     Provinces. A face-down card is not eligible, so a Province nobody has revealed stays where it
     is."""
-    return [
-        card
-        for key, zone in game.table.zones.items()
-        if key.owner is seat and key.role is ZoneRole.PROVINCE
-        for card in zone.cards
-        if card.face_up
-    ]
+    return [card for card in province_cards(game, seat) if card.face_up]
 
 
 def legacy_key(seat: PlayerId, turn: int) -> str:
@@ -300,9 +301,7 @@ def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
     (unrevealed) cards in its provinces. Face-up province cards are already recruitable and are not
     searched. This is the pool a search dialog shows."""
     pool = list(game.table.decks[DeckKey(seat, Side.DYNASTY)].cards)
-    for key, zone in game.table.zones.items():
-        if key.owner is seat and key.role is ZoneRole.PROVINCE:
-            pool.extend(card for card in zone.cards if not card.face_up)
+    pool.extend(card for card in province_cards(game, seat) if not card.face_up)
     return pool
 
 
@@ -344,10 +343,9 @@ def _clan_names(card: L5RCard) -> tuple[str, ...]:
 
 def province_key_holding(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey | None:
     """The Province of ``seat`` holding ``card_id``, or None when none does."""
-    for key, zone in game.table.zones.items():
-        if key.owner is seat and key.role is ZoneRole.PROVINCE:
-            if any(card.id == card_id for card in zone.cards):
-                return key
+    for key, zone in province_zones(game, seat):
+        if any(card.id == card_id for card in zone.cards):
+            return key
     return None
 
 
