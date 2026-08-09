@@ -60,8 +60,8 @@ def _outlying_game(*, target_cost=2, with_producer=True):
     province.add(target)
     state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
     session = EngineSession.start(state, P1)  # Action phase
-    session.act(P1, Pass())  # Action -> Attack
-    session.act(P1, Pass())  # Attack -> Dynasty
+    session.act(P1, Pass())  # Action -> Battle
+    session.act(P1, Pass())  # Battle -> Dynasty
     return session
 
 

@@ -36,7 +36,7 @@ def _dealt_table() -> TableState:
 
 
 def _to_pending_discard(session: EngineSession) -> None:
-    for _ in range(3):  # Action -> Attack -> Dynasty -> end of turn (pauses for discard)
+    for _ in range(3):  # Action -> Battle -> Dynasty -> end of turn (pauses for discard)
         session.act(PlayerId.P1, Pass())
 
 
@@ -97,8 +97,8 @@ def _holding_in_province(
 
 
 def _in_dynasty(session: EngineSession) -> None:
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
-    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
     assert session.project(PlayerId.P1).phase is Phase.DYNASTY
 
 
@@ -491,7 +491,7 @@ def test_cancel_of_a_forced_end_of_turn_discard_is_rejected():
 def test_act_pass_moves_the_phase_and_rejects_an_illegal_actor():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
     session.act(PlayerId.P1, Pass())
-    assert session.project(PlayerId.P1).phase is Phase.ATTACK
+    assert session.project(PlayerId.P1).phase is Phase.BATTLE
     # The inactive seat has no legal action, so acting raises.
     with pytest.raises(ValueError):
         session.act(PlayerId.P2, Pass())

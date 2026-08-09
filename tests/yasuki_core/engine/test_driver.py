@@ -130,8 +130,8 @@ def test_a_policy_chooses_a_recruit_and_an_agent_pays_for_it():
     game = session.game
     put_in_play(game, holding("mine", owner=PlayerId.P1, gold_production=4))
     province_card(game, "target", seat=PlayerId.P1, gold_cost=3)
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
-    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
 
     controls = {seat: Controls(RecruitFirst(), AutoAgent()) for seat in PlayerId}
     play_game(session, controls, turn_limit=1)

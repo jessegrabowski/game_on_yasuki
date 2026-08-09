@@ -25,11 +25,11 @@ def _view(phase: Phase):
 
 def test_only_the_current_phase_is_highlighted(root):
     bar = PhaseBar(root)
-    bar.refresh(_view(Phase.ATTACK))
+    bar.refresh(_view(Phase.BATTLE))
 
     chips = bar._chips
-    assert chips[Phase.ATTACK].cget("text").endswith("Attack")
-    assert chips[Phase.ATTACK].cget("text").startswith("▶")  # the active marker
+    assert chips[Phase.BATTLE].cget("text").endswith("Battle")
+    assert chips[Phase.BATTLE].cget("text").startswith("▶")  # the active marker
     assert chips[Phase.ACTION].cget("text") == "Action"  # dimmed, unmarked
     # The active chip is filled; the others are not.
-    assert chips[Phase.ATTACK].cget("bg") != chips[Phase.ACTION].cget("bg")
+    assert chips[Phase.BATTLE].cget("bg") != chips[Phase.ACTION].cget("bg")

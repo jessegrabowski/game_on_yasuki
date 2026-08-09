@@ -75,15 +75,15 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
 def _dynasty_session_from(state: TableState) -> EngineSession:
     """A session on a prepared table, parked in the Dynasty phase where Legacy is on offer."""
     session = EngineSession.start(state, PlayerId.P1, seed=7)
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
-    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
     return session
 
 
 def _dynasty_session(**kwargs) -> EngineSession:
     session = EngineSession.start(_table(**kwargs), PlayerId.P1, seed=7)
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
-    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
     return session
 
 

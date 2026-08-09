@@ -36,8 +36,8 @@ def _face_up_holding_in_province(state, card_id, gold_cost, printed_id=""):
 
 
 def _to_dynasty(runner):
-    runner.act(PASS)  # Action -> Attack
-    runner.act(PASS)  # Attack -> Dynasty
+    runner.act(PASS)  # Action -> Battle
+    runner.act(PASS)  # Battle -> Dynasty
 
 
 def _register(state, card):
@@ -68,14 +68,14 @@ def test_passing_walks_the_human_through_the_phases():
     runner = _runner()
     assert runner.view().phase is Phase.ACTION
     runner.act(PASS)
-    assert runner.view().phase is Phase.ATTACK
+    assert runner.view().phase is Phase.BATTLE
     runner.act(PASS)
     assert runner.view().phase is Phase.DYNASTY
 
 
 def test_passing_through_a_quiet_turn_hands_off_then_back():
     runner = _runner(p1_hand=0)  # no discard for either seat
-    for _ in range(3):  # Action -> Attack -> Dynasty -> end of P1's turn
+    for _ in range(3):  # Action -> Battle -> Dynasty -> end of P1's turn
         runner.act(PASS)
 
     assert runner.is_opponent_turn  # control rests with the opponent, not yet run
@@ -278,7 +278,7 @@ def test_board_menu_offers_cycle_on_the_opening_turn():
 
 def test_board_menu_is_empty_when_no_rulebook_ability_is_legal():
     runner = _runner_with_a_province(p1_hand=1)
-    runner.act(PASS)  # Action -> Attack, which is neither ability's phase
+    runner.act(PASS)  # Action -> Battle, which is neither ability's phase
 
     assert runner.board_menu() == []
 

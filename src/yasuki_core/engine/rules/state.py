@@ -12,13 +12,13 @@ from yasuki_core.engine.rules.work import WorkItem
 
 class Phase(Enum):
     ACTION = "action"
-    ATTACK = "attack"
+    BATTLE = "battle"
     DYNASTY = "dynasty"
 
 
 # The phases of a turn in the order the active player works through them. After DYNASTY the turn
 # ends with the fate draw and play passes to the next seat (handled by the flow layer).
-TURN_PHASES: tuple[Phase, ...] = (Phase.ACTION, Phase.ATTACK, Phase.DYNASTY)
+TURN_PHASES: tuple[Phase, ...] = (Phase.ACTION, Phase.BATTLE, Phase.DYNASTY)
 
 
 @dataclass(slots=True)
