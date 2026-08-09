@@ -20,7 +20,8 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on, province_holdings
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
@@ -36,7 +37,7 @@ def _other_farms(game: GameState, card: L5RCard) -> list[str]:
 register_ability(
     "harvested_land",
     Ability(
-        phase=Phase.ACTION,
+        timing=ActionTiming.OPEN,
         label="Bow, destroy: give your other Farms +1 Gold Production",
         cost=bow_and_destroy,
         targets=_other_farms,
@@ -101,7 +102,7 @@ def _modest_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
 register_ability(
     "modest_farm",
     Ability(
-        phase=Phase.ACTION,
+        timing=ActionTiming.OPEN,
         label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
         cost=bow_cost,
         targets=_affordable_province_holdings,
@@ -145,7 +146,7 @@ def _rural_market_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
 register_ability(
     "rural_market",
     Ability(
-        phase=Phase.ACTION,
+        timing=ActionTiming.OPEN,
         label="Spend a wealth token: straighten a Farm",
         cost=spend_wealth,
         targets=_owned_bowed_farms,

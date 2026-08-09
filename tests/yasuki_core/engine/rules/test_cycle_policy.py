@@ -148,8 +148,8 @@ def test_it_buys_like_the_economic_policy_when_cycle_is_not_on_offer():
     session = EngineSession.start(dealt_table(), P1, seed=1)
     put_in_play(session.game, holding("purse", owner=P1, gold_production=6))
     province_card(session.game, "buyme", seat=P1, gold_cost=3, gold_production=4, index=0)
-    session.act(P1, Pass())  # Action -> Attack
-    session.act(P1, Pass())  # Attack -> Dynasty
+    session.act(P1, Pass())  # Action -> Battle
+    session.act(P1, Pass())  # Battle -> Dynasty
 
     chosen = EconomicCyclePolicy().choose(session.project(P1), session.legal_actions(P1))
 

@@ -1,4 +1,31 @@
 from dataclasses import dataclass
+from enum import Enum
+
+
+class ActionTiming(Enum):
+    """When an action may be taken, and by whom — the designator printed ahead of an ability's text.
+
+    Each names an Action Round and a first actor:
+
+    - ``OPEN`` — the Action Phase, by any player
+    - ``LIMITED`` — the Action Phase, only by the active player
+    - ``DYNASTY`` — the Dynasty phase, only by the active player
+    - ``ENGAGE`` — a battle's Engage Segment, by any player, the Defender acting first
+    - ``BATTLE`` — a battle's Combat Segment, by any player, the Defender acting first
+    - ``INTERRUPT`` — the Interrupt step of another action, by any player
+    - ``RESPONSE`` — the Response step of another action, by any player [ShE]
+
+    Repeatability is a separate axis: a designator says *when*, and whether an ability may be used
+    more than once in that window is the once-per-turn key its own handler claims.
+    """
+
+    OPEN = "open"
+    LIMITED = "limited"
+    DYNASTY = "dynasty"
+    ENGAGE = "engage"
+    BATTLE = "battle"
+    INTERRUPT = "interrupt"
+    RESPONSE = "response"
 
 
 @dataclass(frozen=True, slots=True)
@@ -71,3 +98,13 @@ class Cycle:
 
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
 Action = Pass | Recruit | DynastyDiscard | Legacy | ActivateAbility | Cycle
+
+# The designator each rulebook action is taken under. Pass is absent because it is the alternative
+# to taking an action rather than one, and ActivateAbility because it reads its designator off the
+# card — the same action is Open on one Holding and Dynasty on another.
+ACTION_TIMINGS: dict[type, ActionTiming] = {
+    Cycle: ActionTiming.LIMITED,
+    Recruit: ActionTiming.DYNASTY,
+    DynastyDiscard: ActionTiming.DYNASTY,
+    Legacy: ActionTiming.DYNASTY,
+}

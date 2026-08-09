@@ -20,6 +20,8 @@ yasuki_core.engine.rules.legality
     legacy_key
     legacy_search_pool
     legal_actions
+    permits
+    permitted_timings
     proclaim_key
     province_cards
     province_key_holding
@@ -29,6 +31,7 @@ yasuki_core.engine.rules.legality
     recruit_cost
     seat_alignment
     seat_clan
+    timing_of
 
 .. automodule:: yasuki_core.engine.rules.legality
     :members:

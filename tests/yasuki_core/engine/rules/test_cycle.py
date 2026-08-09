@@ -45,7 +45,7 @@ def _session(**kwargs) -> EngineSession:
 
 
 def _end_turn(session: EngineSession, seat: PlayerId) -> None:
-    for _ in range(3):  # Action -> Attack -> Dynasty -> next turn
+    for _ in range(3):  # Action -> Battle -> Dynasty -> next turn
         session.act(seat, Pass())
 
 
@@ -94,7 +94,7 @@ def test_the_second_seat_opens_on_turn_two():
 
 def test_cycle_is_not_offered_outside_the_action_phase():
     session = _session()
-    session.act(P1, Pass())  # Action -> Attack
+    session.act(P1, Pass())  # Action -> Battle
 
     assert Cycle() not in session.legal_actions(P1)
 

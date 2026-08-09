@@ -45,8 +45,8 @@ def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: 
     province.add(holding)
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
     session = EngineSession.start(state, PlayerId.P1)
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
-    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
     return session
 
 

@@ -3,7 +3,9 @@ from collections.abc import Iterator
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.actions import (
+    ACTION_TIMINGS,
     Action,
+    ActionTiming,
     ActivateAbility,
     Cycle,
     DynastyDiscard,
@@ -17,11 +19,12 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.state import GameState, PHASE_TIMINGS
 from yasuki_core.engine.rules import abilities
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
+from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding, DynastyPersonality
+from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.ruleset import SHATTERED_EMPIRE
 
@@ -31,6 +34,40 @@ LEGACY_KEYWORD = "Legacy"
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
 RULESET = SHATTERED_EMPIRE
 OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
+
+
+def timing_of(game: GameState, action: Action) -> ActionTiming | None:
+    """The designator ``action`` is taken under, or None for a pass.
+
+    A pass is the CR's alternative to taking an action rather than an action itself, so it carries
+    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designator off
+    the card, which is why this is a query rather than a table: the same action is Open on one
+    Holding and Dynasty on another.
+
+    Raise ValueError for an action with no designator rule, and for an ``ActivateAbility`` naming a
+    card that has no activated ability.
+    """
+    if isinstance(action, Pass):
+        return None
+    if isinstance(action, ActivateAbility):
+        ability = abilities.ability_for(game.table.cards_by_id[action.card_id])
+        if ability is None:
+            raise ValueError(f"card {action.card_id} has no activated ability to time")
+        return ability.timing
+    timing = ACTION_TIMINGS.get(type(action))
+    if timing is None:
+        raise ValueError(f"no designator for action {type(action).__name__}")
+    return timing
+
+
+def permitted_timings(game: GameState) -> frozenset[ActionTiming]:
+    """The designators the Action Round open in the current phase permits."""
+    return PHASE_TIMINGS[game.phase]
+
+
+def permits(game: GameState, timing: ActionTiming) -> bool:
+    """Whether the Action Round open in the current phase permits ``timing``."""
+    return timing in permitted_timings(game)
 
 
 def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
@@ -85,12 +122,12 @@ def _may_act(game: GameState, seat: PlayerId) -> bool:
 
 
 def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """An ActivateAbility for each in-play card whose activated ability the seat can use in the
-    current phase: controlled, cost payable, and with at least one legal target. ``only`` narrows to
-    a single card."""
+    """An ActivateAbility for each in-play card whose activated ability the seat can use now: its
+    designator permitted by the current round, controlled, cost payable, and with at least one legal
+    target. ``only`` narrows to a single card."""
     return [
         ActivateAbility(card.id)
-        for card in abilities.activatable(game, seat, game.phase)
+        for card in abilities.activatable(game, seat, permitted_timings(game))
         if only is None or card.id == only
     ]
 
@@ -99,7 +136,7 @@ def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
     """The Cycle ability when the seat can take it: its first turn, not already used, and with a
     face-up Province card to put back. The rule is "one or more", so declining is not taking the
     action at all rather than taking it and choosing nothing."""
-    if game.phase is not Phase.ACTION:
+    if not permits(game, ACTION_TIMINGS[Cycle]):
         return []
     if not is_first_turn(game, seat):
         return []
@@ -112,7 +149,7 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
     """The Legacy ability when the seat can take it: once per turn, and only with a card in hand to
     pay the banish cost. Offered even when no Legacy card can be found — the rules make the whiff a
     loss rather than hiding the option (which would leak face-down province contents)."""
-    if game.phase is not Phase.DYNASTY:
+    if not permits(game, ACTION_TIMINGS[Legacy]):
         return []
     if game.has_used(legacy_key(seat, game.turn)):
         return []
@@ -123,7 +160,7 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
 def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
     """A DynastyDiscard for each face-up card in the seat's provinces — the rule allows discarding
     any face-up province card, not only Holdings. ``only`` narrows to a single card."""
-    if game.phase is not Phase.DYNASTY:
+    if not permits(game, ACTION_TIMINGS[DynastyDiscard]):
         return []
     return [
         DynastyDiscard(card.id)
@@ -139,7 +176,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
     check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim variant
     when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest variant
     when the seat could also cover the card's Invest cost. ``only`` narrows to a single card."""
-    if game.phase is not Phase.DYNASTY:
+    if not permits(game, ACTION_TIMINGS[Recruit]):
         return []
     recruits: list[Action] = []
     seat_info = game.table.seats[seat]
@@ -233,7 +270,7 @@ def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
     )
 
 
-def recruit_cost(game: GameState, card: L5RCard) -> int:
+def recruit_cost(game: GameState, card: DynastyCard | FateCard) -> int:
     """The gold a seat pays to recruit ``card``: its printed gold cost, plus the off-clan surcharge
     when the card has a Clan Alignment the seat does not share, less the card's own conditional
     recruit discount. Floored at zero."""
@@ -258,6 +295,8 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
     if not isinstance(card, DynastyPersonality):
         return False
     seat = card.owner
+    if seat is None:
+        return False
     seat_align = seat_alignment(game, seat)
     if seat_align is None or seat_align not in card_alignments(card):
         return False

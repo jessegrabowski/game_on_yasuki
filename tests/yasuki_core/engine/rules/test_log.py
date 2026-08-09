@@ -53,8 +53,8 @@ def _played_game_and_log() -> tuple:
     recording every input to the log."""
     log = GameLog(initial=InitialRecord.from_state(dealt_table()), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Attack
-    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Pass())  # Dynasty -> end of turn, pauses for discard
     victim = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
     submit_and_log(game, log, DecisionResponse((victim,)))
@@ -92,8 +92,8 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Attack
-    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-buy"))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))
 
@@ -132,8 +132,8 @@ def test_proclaimed_recruit_replays_and_round_trips():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Attack
-    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-person", proclaim=True))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))
 
@@ -170,8 +170,8 @@ def test_boosted_payment_round_trips_through_the_codec():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Attack
-    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-buy"))
     submit_and_log(
         game, log, DecisionResponse(("P1-of",), ("P1-of",))
@@ -223,8 +223,8 @@ def test_triggered_choice_replays_and_round_trips():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Attack
-    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-wheat"))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))  # pays, then pauses for the choice
     submit_and_log(game, log, DecisionResponse(("P1-other",)))  # give the other Farm a token
@@ -250,8 +250,8 @@ def test_cancelled_recruit_payment_replays_and_round_trips():
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
     game = build_game(log)
-    act_and_log(game, log, Pass())  # Action -> Attack
-    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Pass())  # Action -> Battle
+    act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-buy"))  # pauses for payment
     cancel_and_log(game, log)  # backs out
 

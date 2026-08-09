@@ -32,8 +32,8 @@ def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
 
 
 def _advance_to_end_of_turn(game: GameState) -> None:
-    flow.advance(game)  # Action -> Attack
-    flow.advance(game)  # Attack -> Dynasty
+    flow.advance(game)  # Action -> Battle
+    flow.advance(game)  # Battle -> Dynasty
     flow.advance(game)  # Dynasty -> end of turn
 
 
@@ -41,7 +41,7 @@ def test_advance_walks_the_three_phases():
     game = _game()
     assert game.phase is Phase.ACTION
     flow.advance(game)
-    assert game.phase is Phase.ATTACK
+    assert game.phase is Phase.BATTLE
     flow.advance(game)
     assert game.phase is Phase.DYNASTY
 

@@ -13,11 +13,10 @@ from yasuki_core.engine.rules.abilities import (
     register_invest,
     register_production_boost,
 )
-from yasuki_core.engine.rules.actions import ActivateAbility, Pass
+from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Pass
 from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.log import replay
-from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
@@ -53,7 +52,7 @@ def test_millet_farm_is_not_activatable_while_bowed():
 
 def test_millet_farm_is_not_activatable_outside_the_action_phase():
     session, millet, _ = _game()
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
     assert ActivateAbility(millet.id) not in session.legal_actions(PlayerId.P1)
 
 
@@ -104,7 +103,7 @@ def test_millet_farm_grant_expires_at_end_of_turn():
     session.submit(PlayerId.P1, DecisionResponse((farm.id,)))
     assert effective_gold_production(session.game, farm) == 4  # +2 this turn
 
-    for _ in range(3):  # Action -> Attack -> Dynasty -> end of P1's turn
+    for _ in range(3):  # Action -> Battle -> Dynasty -> end of P1's turn
         session.act(PlayerId.P1, Pass())
     assert effective_gold_production(session.game, farm) == 2  # the UEOT modifier is gone
 
@@ -228,7 +227,7 @@ def _test_cost_grant(game, source_id, chosen):
 # cost's own decision must resolve before the ability's target is asked, neither clobbering the
 # other. No real card pays a cost that pauses yet.
 _ABILITIES["test_cost_pauses"] = Ability(
-    phase=Phase.ACTION,
+    timing=ActionTiming.OPEN,
     label="test",
     cost=lambda source: [Choose(source.owner, (source.id,), 0, 1, "test_cost_pauses", source.id)],
     targets=lambda game, card: [

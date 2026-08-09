@@ -3,7 +3,8 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -55,8 +56,8 @@ class Ability:
 
     Attributes
     ----------
-    phase : Phase
-        The phase the ability may be used in.
+    timing : ActionTiming
+        The designator printed on the card, saying when the ability may be used and by whom.
     label : str
         A short human description for the activation menu.
     cost : callable
@@ -71,7 +72,7 @@ class Ability:
         an untargeted "your other Farms" grant instead of a single pick. Default False.
     """
 
-    phase: Phase
+    timing: ActionTiming
     label: str
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
@@ -167,15 +168,17 @@ def production_boost_for(card: L5RCard) -> ProductionBoost | None:
     return _PRODUCTION_BOOST.get(card.printed_id)
 
 
-def activatable(game: GameState, seat: PlayerId, phase: Phase) -> list[L5RCard]:
-    """The in-play cards ``seat`` may activate an ability on right now: controlled, its ability legal
-    in ``phase``, its cost payable, and with at least one legal target."""
+def activatable(
+    game: GameState, seat: PlayerId, permitted: frozenset[ActionTiming]
+) -> list[L5RCard]:
+    """The in-play cards ``seat`` may activate an ability on right now: controlled, its ability's
+    designator among ``permitted``, its cost payable, and with at least one legal target."""
     ready: list[L5RCard] = []
     for card in game.table.battlefield.cards:
         if card.owner is not seat:
             continue
         ability = _ABILITIES.get(card.printed_id)
-        if ability is None or ability.phase is not phase:
+        if ability is None or ability.timing not in permitted:
             continue
         if not can_pay(game, card, ability.cost):
             continue

@@ -6,7 +6,7 @@ from yasuki_gui import theme
 
 _PHASE_LABELS: dict[Phase, str] = {
     Phase.ACTION: "Action",
-    Phase.ATTACK: "Attack",
+    Phase.BATTLE: "Battle",
     Phase.DYNASTY: "Dynasty",
 }
 

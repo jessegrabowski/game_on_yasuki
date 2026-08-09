@@ -100,7 +100,7 @@ def test_sincerity_accrual_replays_through_a_full_turn():
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
 
     session = EngineSession.start(state, PlayerId.P1)
-    for _ in range(3):  # Action -> Attack -> Dynasty -> end of P1's turn
+    for _ in range(3):  # Action -> Battle -> Dynasty -> end of P1's turn
         session.act(PlayerId.P1, Pass())
 
     assert session.game.table.cards_by_id["s"].counters == {"sincerity": 1}

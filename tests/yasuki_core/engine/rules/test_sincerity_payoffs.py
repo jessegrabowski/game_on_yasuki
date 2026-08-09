@@ -57,8 +57,8 @@ def _recruit_game(
     province.add(holding)
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
     session = EngineSession.start(state, PlayerId.P1)
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
-    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
     return session
 
 
@@ -129,8 +129,8 @@ def _base_state():
 
 
 def _to_dynasty(session):
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
-    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
 
 
 def test_training_court_seeds_a_sincerity_token_on_a_province_card():

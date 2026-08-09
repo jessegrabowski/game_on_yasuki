@@ -190,8 +190,8 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     province.add(renewer)
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
     session = EngineSession.start(state, PlayerId.P1)
-    session.act(PlayerId.P1, Pass())  # Action -> Attack
-    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    session.act(PlayerId.P1, Pass())  # Action -> Battle
+    session.act(PlayerId.P1, Pass())  # Battle -> Dynasty
 
     session.act(PlayerId.P1, Recruit("warrens"))
     session.submit(PlayerId.P1, DecisionResponse(("SH",)))
