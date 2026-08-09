@@ -32,36 +32,73 @@ OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
 
 
 def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
-    """The free actions ``seat`` may take right now: always a pass, plus — in the Dynasty phase — a
-    Recruit for each face-up Holding or Personality in its provinces it could pay for. Empty while a
-    decision is pending and for any seat but the active one.
+    """The free actions ``seat`` may take right now: always a pass, plus every rulebook action and
+    card ability whose own conditions it meets in the current phase. Empty while a decision is
+    pending and for any seat but the active one.
 
     Gold is not a free action: it is produced only while paying a cost (rules-skeleton §7), so it
     surfaces through the Recruit's ``ChoosePayment``, never here.
     """
-    if game.game_over or game.awaiting_decision or seat is not game.active:
+    if not _may_act(game, seat):
         return []
-    actions: list[Action] = [Pass()]
-    actions.extend(_abilities(game, seat))
-    if game.phase is Phase.ACTION:
-        actions.extend(_cycle(game, seat))
-    elif game.phase is Phase.DYNASTY:
-        actions.extend(_recruits(game, seat))
-        actions.extend(_dynasty_discards(game, seat))
-        actions.extend(_legacy(game, seat))
-    return actions
+    return [
+        Pass(),
+        *_abilities(game, seat),
+        *_cycle(game, seat),
+        *_recruits(game, seat),
+        *_dynasty_discards(game, seat),
+        *_legacy(game, seat),
+    ]
 
 
-def _abilities(game: GameState, seat: PlayerId) -> list[Action]:
+def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
+    """Whether ``seat`` may take exactly ``action`` right now — what membership in
+    :func:`legal_actions` answers, scoped to one action.
+
+    Raise ValueError for an action carrying no legality rule.
+    """
+    if not _may_act(game, seat):
+        return False
+    match action:
+        case Pass():
+            return True
+        case Cycle():
+            return bool(_cycle(game, seat))
+        case Legacy():
+            return bool(_legacy(game, seat))
+        case ActivateAbility(card_id=card_id):
+            return action in _abilities(game, seat, only=card_id)
+        case Recruit(card_id=card_id):
+            return action in _recruits(game, seat, only=card_id)
+        case DynastyDiscard(card_id=card_id):
+            return action in _dynasty_discards(game, seat, only=card_id)
+        case _:
+            raise ValueError(f"no legality rule for action {type(action).__name__}")
+
+
+def _may_act(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` may take any action at all: the game is running, nothing is awaiting an
+    answer, and it is that seat's turn."""
+    return not (game.game_over or game.awaiting_decision) and seat is game.active
+
+
+def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
     """An ActivateAbility for each in-play card whose activated ability the seat can use in the
-    current phase: controlled, cost payable, and with at least one legal target."""
-    return [ActivateAbility(card.id) for card in abilities.activatable(game, seat, game.phase)]
+    current phase: controlled, cost payable, and with at least one legal target. ``only`` narrows to
+    a single card."""
+    return [
+        ActivateAbility(card.id)
+        for card in abilities.activatable(game, seat, game.phase)
+        if only is None or card.id == only
+    ]
 
 
 def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
     """The Cycle ability when the seat can take it: its first turn, not already used, and with a
     face-up Province card to put back. The rule is "one or more", so declining is not taking the
     action at all rather than taking it and choosing nothing."""
+    if game.phase is not Phase.ACTION:
+        return []
     if not is_first_turn(game, seat):
         return []
     if game.has_used(cycle_key(seat, game.turn)):
@@ -73,30 +110,40 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
     """The Legacy ability when the seat can take it: once per turn, and only with a card in hand to
     pay the banish cost. Offered even when no Legacy card can be found — the rules make the whiff a
     loss rather than hiding the option (which would leak face-down province contents)."""
+    if game.phase is not Phase.DYNASTY:
+        return []
     if game.has_used(legacy_key(seat, game.turn)):
         return []
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     return [Legacy()] if hand.cards else []
 
 
-def _dynasty_discards(game: GameState, seat: PlayerId) -> list[Action]:
+def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
     """A DynastyDiscard for each face-up card in the seat's provinces — the rule allows discarding
-    any face-up province card, not only Holdings."""
+    any face-up province card, not only Holdings. ``only`` narrows to a single card."""
+    if game.phase is not Phase.DYNASTY:
+        return []
     discards: list[Action] = []
     for key, zone in game.table.zones.items():
         if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
             continue
-        discards.extend(DynastyDiscard(card.id) for card in zone.cards if card.face_up)
+        discards.extend(
+            DynastyDiscard(card.id)
+            for card in zone.cards
+            if card.face_up and (only is None or card.id == only)
+        )
     return discards
 
 
-def _recruits(game: GameState, seat: PlayerId) -> list[Action]:
+def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
     """The Recruit actions ``seat`` can afford: each face-up Holding or Personality in its provinces
     whose cost its pool plus its unbowed producers' gold could cover. A Personality is withheld while
     its Honor Requirement is above the seat's Family Honor (a dash ``None`` never withholds; the
     check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim variant
     when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest variant
-    when the seat could also cover the card's Invest cost."""
+    when the seat could also cover the card's Invest cost. ``only`` narrows to a single card."""
+    if game.phase is not Phase.DYNASTY:
+        return []
     recruits: list[Action] = []
     seat_info = game.table.seats[seat]
     honor = seat_info.honor
@@ -106,6 +153,8 @@ def _recruits(game: GameState, seat: PlayerId) -> list[Action]:
         if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
             continue
         for card in zone.cards:
+            if only is not None and card.id != only:
+                continue
             if not (isinstance(card, (DynastyHolding, DynastyPersonality)) and card.face_up):
                 continue
             if (
@@ -115,7 +164,9 @@ def _recruits(game: GameState, seat: PlayerId) -> list[Action]:
                 and honor < card.honor_requirement
             ):
                 continue
-            affordable = reachable_gold(game, seat, card)
+            affordable = fixed + sum(
+                effective_gold_production(game, producer, targets=(card,)) for producer in variable
+            )
             base = recruit_cost(game, card)
             if base <= affordable:
                 recruits.append(Recruit(card.id))

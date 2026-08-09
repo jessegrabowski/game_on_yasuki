@@ -1,11 +1,26 @@
+import numpy as np
 import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.actions import Pass
+from yasuki_core.engine.rules.actions import (
+    ActivateAbility,
+    Cycle,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
+from yasuki_core.engine.rules.agents import make_agent
+from yasuki_core.engine.rules.policies import make_policy
+from yasuki_core.engine.runner import Controls, run_game
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.game_setup import build_state_from_deck
+from tests.yasuki_core.db_guard import requires_db
 from tests.yasuki_core.engine.builders import holding, province_card, put_in_play
+
+DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
 
 
 def _board():
@@ -28,6 +43,75 @@ def _dynasty(session):
     session.act(PlayerId.P1, Pass())
     session.act(PlayerId.P1, Pass())
     return session
+
+
+# Well-formed actions that must never be legal in the states below: a card that is not there, and a
+# purchase variant no card offers.
+NEVER_LEGAL = (
+    Recruit("nonexistent"),
+    DynastyDiscard("nonexistent"),
+    ActivateAbility("nonexistent"),
+    Recruit("cheap", proclaim=True),  # a Holding cannot be Proclaimed
+)
+
+
+def test_is_legal_accepts_exactly_what_the_enumeration_offers():
+    # is_legal and legal_actions answer the same question by different routes, so the failure worth
+    # guarding is drift between them.
+    for session in (_board(), _dynasty(_board())):
+        offered = legality.legal_actions(session.game, PlayerId.P1)
+        assert offered, "fixture should offer something in both phases"
+        for action in offered:
+            assert legality.is_legal(session.game, PlayerId.P1, action), action
+        for action in NEVER_LEGAL:
+            assert not legality.is_legal(session.game, PlayerId.P1, action), action
+
+
+def test_is_legal_rejects_an_action_belonging_to_another_phase():
+    action_phase = _board()
+    dynasty = _dynasty(_board())
+
+    assert not legality.is_legal(action_phase.game, PlayerId.P1, Recruit("cheap"))
+    assert not legality.is_legal(action_phase.game, PlayerId.P1, DynastyDiscard("cheap"))
+    assert legality.is_legal(dynasty.game, PlayerId.P1, Recruit("cheap"))
+    assert not legality.is_legal(dynasty.game, PlayerId.P1, Cycle())
+
+
+def test_is_legal_rejects_every_action_from_the_seat_that_is_not_active():
+    session = _dynasty(_board())
+
+    assert not legality.is_legal(session.game, PlayerId.P2, Pass())
+    assert not legality.is_legal(session.game, PlayerId.P2, Recruit("cheap"))
+
+
+def test_is_legal_rejects_every_action_while_a_decision_is_pending():
+    session = _board()
+    session.act(PlayerId.P1, ActivateAbility("millet"))
+
+    assert session.game.awaiting_decision
+    assert not legality.is_legal(session.game, PlayerId.P1, Pass())
+
+
+@requires_db
+def test_is_legal_and_the_enumeration_agree_across_a_driven_game():
+    # The fixtures above are hand-built and shallow. This walks real boards — refills, bowed
+    # producers, spent gold, a used Legacy — and checks the two never diverge on any of them.
+    table, first = build_state_from_deck(DECK, rng=np.random.default_rng(11))
+    session = EngineSession.start(table, first, seed=11)
+    controls = {seat: Controls(make_policy("economic"), make_agent("paying")) for seat in PlayerId}
+
+    checked = 0
+    for _ in run_game(session, controls, turn_limit=8):
+        for seat in PlayerId:
+            offered = legality.legal_actions(session.game, seat)
+            for action in offered:
+                assert legality.is_legal(session.game, seat, action), (seat, action)
+            for action in (*NEVER_LEGAL, Legacy(), Cycle()):
+                if action not in offered:
+                    assert not legality.is_legal(session.game, seat, action), (seat, action)
+            checked += len(offered)
+
+    assert checked > 100, f"only {checked} actions checked — the walk is not exercising much"
 
 
 def test_gold_reach_holds_a_target_independent_producer_in_its_fixed_part():

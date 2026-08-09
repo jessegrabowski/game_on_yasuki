@@ -15,6 +15,7 @@ yasuki_core.engine.rules.legality
     gold_reach
     is_first_turn
     is_legacy_card
+    is_legal
     legacy_candidates
     legacy_key
     legacy_search_pool

@@ -70,7 +70,7 @@ class EngineSession:
     def act(self, seat: PlayerId, action: Action) -> None:
         """Perform ``action`` for ``seat`` and record it. Raise ``ValueError`` if it is not
         currently legal for that seat."""
-        if action not in self.legal_actions(seat):
+        if not legality.is_legal(self.game, seat, action):
             raise ValueError(f"{action} is not legal for {seat.name} right now")
         act_and_log(self.game, self.log, action)
 
