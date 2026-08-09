@@ -261,13 +261,20 @@ def gold_reach(game: GameState, seat: PlayerId) -> tuple[int, tuple[L5RCard, ...
     return fixed, tuple(variable)
 
 
-def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
-    """The gold ``seat`` could muster to recruit ``card``: its pool plus the yield of every unbowed
-    producer — judged with ``card`` as the payment target since a producer's yield can depend on
-    what it pays for — plus any bow-time boost a producer could add if the seat opts in."""
+def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard | None = None) -> int:
+    """The gold ``seat`` could muster: its pool plus the yield of every unbowed producer, plus any
+    bow-time boost a producer could add if the seat opts in.
+
+    Parameters
+    ----------
+    card : L5RCard, optional
+        The card being paid for, since a producer's yield can depend on what it pays for. Omit for a
+        rulebook cost, which prices no card. Default None.
+    """
+    targets = () if card is None else (card,)
     fixed, variable = gold_reach(game, seat)
     return fixed + sum(
-        effective_gold_production(game, producer, targets=(card,)) for producer in variable
+        effective_gold_production(game, producer, targets=targets) for producer in variable
     )
 
 

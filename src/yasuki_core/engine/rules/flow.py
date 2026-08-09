@@ -262,6 +262,33 @@ def announce_recruit(
     )
 
 
+def announce_rulebook_cost(
+    game: GameState, seat: PlayerId, amount: int, label: str, effects: tuple[Effect, ...]
+) -> ChoosePayment:
+    """Queue ``effects`` behind a gold cost that no card stands behind, and build the payment.
+
+    A rulebook ability charges the player rather than pricing a card, so the payment carries no
+    target and every producer is quoted at what it makes for nobody in particular.
+    """
+    producers = gold_producers(game, seat)
+    game.stack.append(ApplyEffects(effects))
+    return ChoosePayment(
+        seat=seat,
+        candidates=tuple(producer.id for producer in producers),
+        amount=amount,
+        available=game.gold[seat],
+        produced=tuple(
+            (producer.id, effective_gold_production(game, producer)) for producer in producers
+        ),
+        label=label,
+        boostable=tuple(
+            (producer.id, boost.amount)
+            for producer in producers
+            if (boost := abilities.production_boost_for(producer)) is not None
+        ),
+    )
+
+
 def _apply_invest_amount(
     game: GameState, request: ChooseInvestAmount, response: DecisionResponse
 ) -> None:

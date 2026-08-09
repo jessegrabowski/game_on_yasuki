@@ -10,6 +10,7 @@ yasuki_core.engine.rules.flow
     activate
     advance
     announce_recruit
+    announce_rulebook_cost
     begin_game
     cancel
     cycle
