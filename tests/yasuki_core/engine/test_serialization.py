@@ -1,5 +1,6 @@
 import json
 from dataclasses import dataclass, fields
+from pathlib import Path
 
 import pytest
 
@@ -229,6 +230,67 @@ def test_a_payload_carries_exactly_the_pinned_fields():
     payload = encode_card(holding)
 
     assert set(payload) == {"__type__", *_PERSISTED_FIELDS["DynastyHolding"]}
+
+
+GOLDEN = Path(__file__).parent / "golden" / "cards.json"
+
+
+def _golden_cards() -> dict[str, L5RCard]:
+    """One card per value-encoding path the codec has: enum, tuple, frozenset, dict, Path, None,
+    and a nested card. Two shapes rather than fifteen, because the classes differ only in extra
+    scalars while ``_encode_value`` is shared — these two reach every branch of it."""
+    holding = DynastyHolding(
+        id="P1-7",
+        name="Modest Farm",
+        side=Side.DYNASTY,
+        printed_id="modest_farm",
+        clan="crab",
+        clans=("crab", "crane"),
+        keywords=("Farm",),
+        card_type="Holding",
+        creates=("token_a",),
+        text="Open: bow.",
+        is_unique=True,
+        bowed=True,
+        face_up=False,
+        inverted=True,
+        counters={"wealth": 2},
+        image_front=Path("sets/roj/farm.png"),
+        owner=PlayerId.P1,
+        shown=True,
+        peekers=frozenset({PlayerId.P2}),
+        is_token=True,
+        art_swap={"rect": [1, 2, 3, 4]},
+        note="a note",
+        gold_cost=1,
+        gold_production=2,
+    )
+    back = StrongholdCard(id="sh__back", name="Kyuden", side=Side.STRONGHOLD, starting_honor=8)
+    front = StrongholdCard(
+        id="P1-sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        back_card_id="sh__back",
+        back=back,
+        showing_back=True,
+        starting_honor=6,
+    )
+    return {"holding": holding, "flip_stronghold": front}
+
+
+def test_the_encoded_bytes_are_what_was_checked_in():
+    """The only check that does not derive its expectation from the code under test. A change to
+    how any value type encodes shows up here as a diff rather than as a log nobody can replay."""
+    encoded = {name: encode_card(card) for name, card in _golden_cards().items()}
+
+    assert encoded == json.loads(GOLDEN.read_text())
+
+
+def test_the_checked_in_payloads_decode_to_the_cards_they_came_from():
+    stored = json.loads(GOLDEN.read_text())
+
+    for name, card in _golden_cards().items():
+        assert decode_card(stored[name]) == card
 
 
 def test_a_cards_art_swap_survives_the_round_trip():
