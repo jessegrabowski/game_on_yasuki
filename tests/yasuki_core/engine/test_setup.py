@@ -405,3 +405,42 @@ def test_a_sensei_leaving_play_takes_its_gold_with_it():
     game.table.battlefield.remove(sensei)
 
     assert effective_gold_production(game, stronghold) == 3
+
+
+def test_a_sensei_modifies_only_its_own_seats_stronghold():
+    """Every other case here seats one player, so nothing yet proves the grant follows ownership
+    rather than landing on whichever stronghold it finds first."""
+    state = TableState.empty_two_seat()
+    mine = StrongholdCard(
+        id="p1-sh", name="Mine", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    )
+    theirs = StrongholdCard(
+        id="p2-sh", name="Theirs", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P2
+    )
+    sensei = SenseiCard(
+        id="p2-se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P2
+    )
+    # The sensei belongs to the seat set up *second*, so "its own stronghold" and "the first
+    # stronghold found" are different cards and a grant that ignores ownership lands visibly wrong.
+    for seat, pre_game in ((PlayerId.P1, (mine,)), (PlayerId.P2, (theirs, sensei))):
+        resolved = _resolved(seat)
+        resolved.pre_game.extend(pre_game)
+        setup_seat(state, seat, resolved, rng=default_rng(1))
+    game = GameState.start(state, PlayerId.P1)
+    begin_game(game)
+
+    assert effective_gold_production(game, theirs) == 5
+    assert effective_gold_production(game, mine) == 3
+
+
+def test_a_sensei_with_nothing_to_give_grants_nothing():
+    """A zero delta is not a modifier of zero. Recording one would leave the list carrying entries
+    that change no number and have to be reasoned past by anyone reading it."""
+    stronghold = StrongholdCard(
+        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    )
+    sensei = SenseiCard(id="se", name="Blank", side=Side.FATE, owner=PlayerId.P1)
+
+    game = _begun(_setup_with_pregame(stronghold, sensei))
+
+    assert game.modifiers == []
