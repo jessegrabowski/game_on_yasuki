@@ -99,7 +99,7 @@ _PREGAME_PERMANENTS = (StrongholdCard, SenseiCard, WindCard)
 # The sensei characteristics granted to the stronghold as modifiers rather than folded into its
 # printed stats. Starting Honor is not here: it is a seat scalar read once at setup, not a card stat
 # anything reads again.
-SENSEI_MODIFIERS = (Stat.GOLD_PRODUCTION,)
+SENSEI_MODIFIERS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
 
 
 def begin_game(game: GameState) -> None:

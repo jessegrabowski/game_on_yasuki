@@ -8,8 +8,9 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import effective_gold_production
+from yasuki_core.engine.rules.economy import active_modifiers, effective_gold_production
 from yasuki_core.engine.rules.flow import begin_game
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.legality import gold_producers
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.constants import Side
@@ -129,6 +130,13 @@ def test_pre_game_cards_are_dealt_face_up_as_loose_battlefield_cards():
     state.validate()  # raises on any structural violation
 
 
+def _granted(game: GameState, card, stat: Stat) -> int:
+    """The total a card's modifiers add to ``stat``. Province Strength has no effective-read
+    function yet — nothing asks for it until battle exists — so a grant over it is only assertable
+    here, which is weaker coverage than the Gold Production cases get."""
+    return sum(m.amount for m in active_modifiers(game, card, stat))
+
+
 def _begun(state) -> GameState:
     """The game the rules layer sees, with the game-start pass run — which is where a sensei's
     characteristics are granted to the stronghold."""
@@ -201,9 +209,12 @@ def test_a_negative_sensei_delta_lowers_the_stronghold():
     state = _setup_with_pregame(stronghold, sensei)
     game = _begun(state)
 
-    assert stronghold.province_strength == 6  # folded
-    assert stronghold.gold_production == 8  # printed, untouched
-    assert effective_gold_production(game, stronghold) == 7  # granted
+    assert (stronghold.gold_production, stronghold.province_strength) == (
+        8,
+        5,
+    )  # printed, untouched
+    assert effective_gold_production(game, stronghold) == 7
+    assert _granted(game, stronghold, Stat.PROVINCE_STRENGTH) == 1
 
 
 def test_every_sensei_delta_moves_onto_the_stronghold():
@@ -227,17 +238,17 @@ def test_every_sensei_delta_moves_onto_the_stronghold():
     )
     state = _setup_with_pregame(stronghold, sensei)
 
-    assert {stat: getattr(stronghold, stat) for stat in SENSEI_DELTAS} == {
-        "starting_honor": 15,
-        "province_strength": 5,
-    }
+    assert {stat: getattr(stronghold, stat) for stat in SENSEI_DELTAS} == {"starting_honor": 15}
     assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == dict.fromkeys(
         SENSEI_DELTAS, 0
     )
     assert state.seats[PlayerId.P1].honor == 15
-    # Gold Production is the one that arrives as a modifier, so the printed stats stay put.
+    # The other two arrive as modifiers, so their printed stats stay put on both cards.
     assert (stronghold.gold_production, sensei.gold_production) == (3, 2)
-    assert effective_gold_production(_begun(state), stronghold) == 5
+    assert (stronghold.province_strength, sensei.province_strength) == (4, 1)
+    game = _begun(state)
+    assert effective_gold_production(game, stronghold) == 5
+    assert _granted(game, stronghold, Stat.PROVINCE_STRENGTH) == 1
 
 
 def test_deltas_from_several_senseis_all_fold_in():
@@ -306,10 +317,7 @@ def test_a_sensei_with_no_stronghold_to_fold_onto_contributes_nothing():
 
     assert state.seats[PlayerId.P1].honor == 0
     # Nothing folded, so nothing cleared, and no grant either.
-    assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == {
-        "starting_honor": 5,
-        "province_strength": 1,
-    }
+    assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == {"starting_honor": 5}
     assert _begun(state).modifiers == []
 
 
