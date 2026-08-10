@@ -7,6 +7,8 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.legality import gold_producers
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyCard
 from yasuki_core.game_pieces.fate import FateCard
@@ -178,6 +180,26 @@ def test_sensei_gold_and_province_deltas_fold_into_the_stronghold():
     _setup_with_pregame(stronghold, sensei)
     assert stronghold.gold_production == 7
     assert stronghold.province_strength == 6
+
+
+def test_a_sensei_that_adds_gold_does_not_also_produce_it():
+    """Folding the delta into the stronghold leaves the sensei itself on the battlefield, so a
+    sensei still carrying its printed production would be counted a second time and offered as a
+    source to bow. The Emperor's Legions is the live case: +1 Gold onto a Lion stronghold reads as
+    two extra Gold and an extra producer."""
+    stronghold = StrongholdCard(
+        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    )
+    sensei = SenseiCard(
+        id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+    )
+    state = _setup_with_pregame(stronghold, sensei)
+    game = GameState.start(state, PlayerId.P1)
+
+    assert stronghold.gold_production == 5
+    producers = gold_producers(game, PlayerId.P1)
+    assert producers == [stronghold]
+    assert sum(card.gold_production for card in producers) == 5
 
 
 def test_a_stronghold_without_a_sensei_keeps_its_printed_stats():

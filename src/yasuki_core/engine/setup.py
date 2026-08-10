@@ -93,6 +93,10 @@ def _apply_sensei_modifiers(resolved: ResolvedDeck) -> None:
         object.__setattr__(stronghold, "gold_production", stronghold.gold_production + gold)
     if province:
         object.__setattr__(stronghold, "province_strength", stronghold.province_strength + province)
+    # The delta now lives on the stronghold, and the sensei stays on the battlefield, so leaving it
+    # on the sensei too would count it twice and offer the sensei as a producer to bow.
+    for sensei in senseis:
+        object.__setattr__(sensei, "gold_production", 0)
 
 
 def _starting_hand_size(resolved: ResolvedDeck) -> int:
