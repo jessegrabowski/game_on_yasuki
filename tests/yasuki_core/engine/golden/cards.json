@@ -1,0 +1,188 @@
+{
+  "holding": {
+    "__type__": "DynastyHolding",
+    "id": "P1-7",
+    "name": "Modest Farm",
+    "side": {
+      "__enum__": "Side",
+      "value": "DYNASTY"
+    },
+    "printed_id": "modest_farm",
+    "clan": "crab",
+    "clans": {
+      "__tuple__": [
+        "crab",
+        "crane"
+      ]
+    },
+    "keywords": {
+      "__tuple__": [
+        "Farm"
+      ]
+    },
+    "traits": {
+      "__tuple__": []
+    },
+    "card_type": "Holding",
+    "creates": {
+      "__tuple__": [
+        "token_a"
+      ]
+    },
+    "text": "Open: bow.",
+    "is_unique": true,
+    "bowed": true,
+    "face_up": false,
+    "inverted": true,
+    "counters": {
+      "__dict__": {
+        "wealth": 2
+      }
+    },
+    "image_front": {
+      "__path__": "sets/roj/farm.png"
+    },
+    "image_back": {
+      "__path__": "backs/dynasty.jpg"
+    },
+    "owner": {
+      "__enum__": "PlayerId",
+      "value": 1
+    },
+    "shown": true,
+    "peekers": {
+      "__frozenset__": [
+        {
+          "__enum__": "PlayerId",
+          "value": 2
+        }
+      ]
+    },
+    "back_card_id": null,
+    "back": null,
+    "showing_back": false,
+    "is_token": true,
+    "art_swap": {
+      "__dict__": {
+        "rect": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    "note": "a note",
+    "gold_cost": 1,
+    "gold_production": 2
+  },
+  "flip_stronghold": {
+    "__type__": "StrongholdCard",
+    "id": "P1-sh",
+    "name": "Kyuden",
+    "side": {
+      "__enum__": "Side",
+      "value": "STRONGHOLD"
+    },
+    "printed_id": null,
+    "clan": null,
+    "clans": {
+      "__tuple__": []
+    },
+    "keywords": {
+      "__tuple__": []
+    },
+    "traits": {
+      "__tuple__": []
+    },
+    "card_type": null,
+    "creates": {
+      "__tuple__": []
+    },
+    "text": "",
+    "is_unique": false,
+    "bowed": false,
+    "face_up": true,
+    "inverted": false,
+    "counters": {
+      "__dict__": {}
+    },
+    "image_front": {
+      "__path__": "sets/she/kyuden.png"
+    },
+    "image_back": {
+      "__path__": "backs/stronghold.jpg"
+    },
+    "owner": null,
+    "shown": false,
+    "peekers": {
+      "__frozenset__": []
+    },
+    "back_card_id": "sh__back",
+    "back": {
+      "__card__": {
+        "__type__": "StrongholdCard",
+        "id": "sh__back",
+        "name": "Kyuden",
+        "side": {
+          "__enum__": "Side",
+          "value": "STRONGHOLD"
+        },
+        "printed_id": null,
+        "clan": null,
+        "clans": {
+          "__tuple__": []
+        },
+        "keywords": {
+          "__tuple__": []
+        },
+        "traits": {
+          "__tuple__": []
+        },
+        "card_type": null,
+        "creates": {
+          "__tuple__": []
+        },
+        "text": "",
+        "is_unique": false,
+        "bowed": false,
+        "face_up": true,
+        "inverted": false,
+        "counters": {
+          "__dict__": {}
+        },
+        "image_front": {
+          "__path__": "sets/she/kyuden_back.png"
+        },
+        "image_back": {
+          "__path__": "backs/stronghold.jpg"
+        },
+        "owner": null,
+        "shown": false,
+        "peekers": {
+          "__frozenset__": []
+        },
+        "back_card_id": null,
+        "back": null,
+        "showing_back": false,
+        "is_token": false,
+        "art_swap": null,
+        "note": null,
+        "starting_honor": 8,
+        "gold_production": 0,
+        "province_strength": 0,
+        "province_count": 4,
+        "starting_hand_size": 5
+      }
+    },
+    "showing_back": true,
+    "is_token": false,
+    "art_swap": null,
+    "note": null,
+    "starting_honor": 6,
+    "gold_production": 0,
+    "province_strength": 0,
+    "province_count": 4,
+    "starting_hand_size": 5
+  }
+}
