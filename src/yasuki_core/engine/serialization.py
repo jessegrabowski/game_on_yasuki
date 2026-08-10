@@ -185,6 +185,10 @@ def _encode_value(value):
         return {"__path__": str(value)}
     if isinstance(value, tuple):
         return {"__tuple__": [_encode_value(item) for item in value]}
+    # A plain list stays a plain JSON array, which is what distinguishes it from a tuple on the way
+    # back. Reached through art_swap, whose payload the card factory builds with a list of keywords.
+    if isinstance(value, list):
+        return [_encode_value(item) for item in value]
     if isinstance(value, frozenset):
         return {"__frozenset__": [_encode_value(item) for item in value]}
     if isinstance(value, dict):
@@ -210,6 +214,8 @@ def _decode_value(value):
             return {key: _decode_value(item) for key, item in value["__dict__"].items()}
         if "__card__" in value:
             return decode_card(value["__card__"])
+    if isinstance(value, list):
+        return [_decode_value(item) for item in value]
     return value
 
 

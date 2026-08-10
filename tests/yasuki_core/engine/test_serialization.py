@@ -231,6 +231,43 @@ def test_a_payload_carries_exactly_the_pinned_fields():
     assert set(payload) == {"__type__", *_PERSISTED_FIELDS["DynastyHolding"]}
 
 
+def test_a_cards_art_swap_survives_the_round_trip():
+    """`factory._art_swap` builds its payload with a list of keywords, and the codec had no list
+    branch — so every card borrowing another printing's art raised on encode. 44 of the 164 cards
+    in the bundled Spider deck carry one."""
+    swapped = DynastyHolding(
+        id="h",
+        name="Repairing the Ruins",
+        side=Side.DYNASTY,
+        art_swap={
+            "donor_img": "sets/se/wall.png",
+            "donor_era": "samurai",
+            "donor_layout": "wide",
+            "era": "ivory",
+            "layout": "tall",
+            "keywords": ["Farm", "Temple"],
+        },
+    )
+
+    rebuilt = decode_card(json.loads(json.dumps(encode_card(swapped))))
+
+    assert rebuilt.art_swap == swapped.art_swap
+    assert rebuilt.art_swap["keywords"] == ["Farm", "Temple"]  # a list, not a tuple
+
+
+def test_a_list_stays_a_list_and_a_tuple_stays_a_tuple():
+    # The two encode differently on purpose; collapsing them would round-trip art_swap's keywords
+    # into a tuple and quietly change what the browser receives.
+    holding = DynastyHolding(
+        id="h2", name="X", side=Side.DYNASTY, keywords=("Farm",), art_swap={"keywords": ["Farm"]}
+    )
+
+    rebuilt = decode_card(json.loads(json.dumps(encode_card(holding))))
+
+    assert isinstance(rebuilt.keywords, tuple)
+    assert isinstance(rebuilt.art_swap["keywords"], list)
+
+
 def test_the_pinned_list_is_the_format_not_the_dataclass():
     """The two agree today and `test_persisted_fields_match_the_classes` keeps them that way, so
     nothing else can tell which one `encode_card` reads. This forces the list out of step for one
