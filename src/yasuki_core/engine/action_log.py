@@ -231,13 +231,14 @@ def action_log_from_dict(payload: dict) -> ActionLog:
 
 @runtime_checkable
 class FlushSink(Protocol):
-    """Where a persisted log lands. A future DB or object-store backend implements ``write`` to
-    accept the plain-dict payload from ``action_log_to_dict``. No concrete sink ships yet."""
+    """Where a persisted log lands. A database or object-store backend implements ``write`` to take
+    the plain-dict payload from :func:`action_log_to_dict`. Nothing implements it yet, so a log is
+    never written anywhere."""
 
     def write(self, payload: dict) -> None: ...
 
 
 def flush(log: ActionLog, sink: FlushSink) -> None:
-    """Serialize ``log`` and hand it to ``sink``. The single attach point for persistence; with no
-    sink wired in the runtime, nothing calls this yet."""
+    """Serialize ``log`` and hand it to ``sink`` — the one place persistence attaches. Nothing calls
+    this yet, since nothing implements :class:`FlushSink`."""
     sink.write(action_log_to_dict(log))
