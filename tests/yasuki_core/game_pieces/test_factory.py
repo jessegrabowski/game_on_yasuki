@@ -3,7 +3,18 @@ import pytest
 
 from yasuki_core.database import get_connection_string, get_creates_for_cards
 from yasuki_core.decklist import parse_deck_yaml
+from dataclasses import fields
+
+from yasuki_core.game_pieces import cards as cards_mod
+from yasuki_core.game_pieces import dynasty, fate, pregame
+from yasuki_core.game_pieces import prints as prints_mod
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.paths import DYNASTY_BACK, FATE_BACK
 from yasuki_core.game_pieces.factory import (
+    _PRINT_FOR,
+    _build_print,
+    _select_print,
     resolve_decklist,
     build_token_templates,
     build_token_card,
@@ -444,3 +455,63 @@ def test_resolve_decklist_stamps_creates_on_creator_cards():
 
     # Without a creates map, creator cards carry no creations.
     assert _resolve().dynasty[0].creates == ()
+
+
+# --- the print behind each card --------------------------------------------------------------------
+
+
+def test_a_resolved_card_keeps_its_deck_back():
+    """Deck-back art is a default of the card's type rather than anything the record carries, so it
+    survives only if the print declares it too. Nothing else asserts image_back."""
+    resolved = _resolve()
+
+    assert resolved.dynasty[0].image_back == DYNASTY_BACK
+    assert resolved.fate[0].image_back == FATE_BACK
+
+
+def test_a_card_carries_exactly_what_its_print_says():
+    """The card still declares the printed characteristics itself, so the two can drift. Until the
+    card reads through to its print, this is what holds them together."""
+    record = next(r for r in RECORDS if r["card_id"] == "kuni_yori")
+    printed = _build_print(record, _select_print(record, "Pearl Edition"), "dynasty")
+    card = _resolve().dynasty[0]
+
+    mismatched = {
+        name: (value, getattr(card, name))
+        for name, value in printed.as_card_fields().items()
+        if getattr(card, name) != value
+    }
+
+    assert mismatched == {}
+
+
+def test_every_card_class_has_a_print_that_covers_it():
+    """The two hierarchies mirror each other by hand while both exist. A card class added without a
+    print fails at deck load with a KeyError far from the cause; a print field the card cannot take
+    fails the same way.
+
+    Both sides come from the modules that declare them rather than from ``__subclasses__``. A
+    ``slots=True`` dataclass cannot be modified in place, so the decorator returns a replacement
+    class and leaves the original in its base's subclass list — every card and print class is in
+    there twice, and only the one the module binds is the one anything else uses.
+    """
+
+    def declared(module, base):
+        return {
+            value
+            for value in vars(module).values()
+            if isinstance(value, type) and issubclass(value, base)
+        }
+
+    cards = set().union(*(declared(m, L5RCard) for m in (cards_mod, dynasty, fate, pregame)))
+    prints = declared(prints_mod, CardPrint)
+
+    assert cards - set(_PRINT_FOR) == set()
+    assert prints - set(_PRINT_FOR.values()) == set()
+    uncovered = {
+        card_cls.__name__: sorted(
+            {f.name for f in fields(print_cls)} - {f.name for f in fields(card_cls)}
+        )
+        for card_cls, print_cls in _PRINT_FOR.items()
+    }
+    assert {k: v for k, v in uncovered.items() if v} == {}
