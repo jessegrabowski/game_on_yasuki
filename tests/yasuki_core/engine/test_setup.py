@@ -2,6 +2,7 @@ from yasuki_core.engine.setup import (
     setup_seat,
     flip_second_player_stronghold,
     PREGAME_UNPLACED,
+    SENSEI_DELTAS,
 )
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from numpy.random import default_rng
@@ -170,7 +171,7 @@ def test_a_deck_without_a_stronghold_starts_at_zero_honor():
     assert _setup().seats[PlayerId.P1].honor == 0
 
 
-def test_sensei_gold_and_province_deltas_fold_into_the_stronghold():
+def test_a_negative_sensei_delta_lowers_the_stronghold():
     stronghold = StrongholdCard(
         id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=8, province_strength=5
     )
@@ -182,11 +183,56 @@ def test_sensei_gold_and_province_deltas_fold_into_the_stronghold():
     assert stronghold.province_strength == 6
 
 
-def test_a_sensei_that_adds_gold_does_not_also_produce_it():
-    """Folding the delta into the stronghold leaves the sensei itself on the battlefield, so a
-    sensei still carrying its printed production would be counted a second time and offered as a
-    source to bow. The Emperor's Legions is the live case: +1 Gold onto a Lion stronghold reads as
-    two extra Gold and an extra producer."""
+def test_every_sensei_delta_moves_onto_the_stronghold():
+    stronghold = StrongholdCard(
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        starting_honor=10,
+        gold_production=3,
+        province_strength=4,
+    )
+    sensei = SenseiCard(
+        id="se",
+        name="Sensei",
+        side=Side.FATE,
+        starting_honor=5,
+        gold_production=2,
+        province_strength=1,
+    )
+    state = _setup_with_pregame(stronghold, sensei)
+
+    assert {stat: getattr(stronghold, stat) for stat in SENSEI_DELTAS} == {
+        "starting_honor": 15,
+        "gold_production": 5,
+        "province_strength": 5,
+    }
+    assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == dict.fromkeys(
+        SENSEI_DELTAS, 0
+    )
+    assert state.seats[PlayerId.P1].honor == 15
+
+
+def test_deltas_from_several_senseis_all_fold_in():
+    """Deck legality is not enforced here, so the fold has to cover every sensei it is handed
+    rather than the one the rules would allow."""
+    stronghold = StrongholdCard(
+        id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10, gold_production=3
+    )
+    senseis = [
+        SenseiCard(id="se1", name="One", side=Side.FATE, starting_honor=5, gold_production=2),
+        SenseiCard(id="se2", name="Two", side=Side.FATE, starting_honor=1, gold_production=4),
+    ]
+    state = _setup_with_pregame(stronghold, *senseis)
+
+    assert stronghold.starting_honor == 16
+    assert stronghold.gold_production == 9
+    assert all(getattr(sensei, stat) == 0 for sensei in senseis for stat in SENSEI_DELTAS)
+    assert state.seats[PlayerId.P1].honor == 16
+
+
+def test_a_folded_sensei_is_not_a_second_gold_producer():
+    """Why the clearing matters: a sensei still holding Gold is a second card the seat can bow."""
     stronghold = StrongholdCard(
         id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
     )
@@ -194,12 +240,30 @@ def test_a_sensei_that_adds_gold_does_not_also_produce_it():
         id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
     )
     state = _setup_with_pregame(stronghold, sensei)
-    game = GameState.start(state, PlayerId.P1)
 
-    assert stronghold.gold_production == 5
-    producers = gold_producers(game, PlayerId.P1)
-    assert producers == [stronghold]
-    assert sum(card.gold_production for card in producers) == 5
+    assert gold_producers(GameState.start(state, PlayerId.P1), PlayerId.P1) == [stronghold]
+
+
+def test_a_sensei_with_no_stronghold_to_fold_onto_contributes_nothing():
+    """Nothing to fold onto means nothing applied — honor included."""
+    sensei = SenseiCard(
+        id="se",
+        name="Sensei",
+        side=Side.FATE,
+        starting_honor=5,
+        gold_production=2,
+        province_strength=1,
+        owner=PlayerId.P1,
+    )
+    state = _setup_with_pregame(sensei)
+
+    assert state.seats[PlayerId.P1].honor == 0
+    # Nothing folded, so nothing cleared.
+    assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == {
+        "starting_honor": 5,
+        "gold_production": 2,
+        "province_strength": 1,
+    }
 
 
 def test_a_stronghold_without_a_sensei_keeps_its_printed_stats():
