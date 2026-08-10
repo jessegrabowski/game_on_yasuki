@@ -1,4 +1,5 @@
 import json
+from dataclasses import dataclass, fields
 
 import pytest
 
@@ -45,6 +46,8 @@ from yasuki_core.engine.serialization import (
     decode_intent,
     encode_card,
     decode_card,
+    _CARD_REGISTRY,
+    _PERSISTED_FIELDS,
     encode_zone_key,
     decode_zone_key,
     encode_deck_key,
@@ -54,7 +57,8 @@ from yasuki_core.engine.serialization import (
 )
 from yasuki_core.game_pieces.constants import Side, Element
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.dynasty import DynastyPersonality
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.fate import FateRing
 from yasuki_core.game_pieces.pregame import StrongholdCard
 
@@ -185,3 +189,59 @@ def test_deck_key_round_trips(key):
 def test_seat_round_trips():
     info = SeatInfo(name="Ada", honor=7, ready=True, connected=True)
     assert decode_seat(encode_seat(info)) == info
+
+
+# --- the persisted card format ---------------------------------------------------------------------
+
+
+def test_persisted_fields_match_the_classes():
+    """The pinned lists are the format; the dataclasses happen to agree today. Adding a field to a
+    card class fails here until someone decides whether it belongs on disk, which is the whole
+    reason the lists exist rather than being derived."""
+    mismatched = {
+        name: (tuple(f.name for f in fields(cls)), _PERSISTED_FIELDS.get(name))
+        for name, cls in _CARD_REGISTRY.items()
+        if tuple(f.name for f in fields(cls)) != _PERSISTED_FIELDS.get(name)
+    }
+
+    assert mismatched == {}
+
+
+def test_every_card_class_has_a_persisted_field_list():
+    assert set(_PERSISTED_FIELDS) == set(_CARD_REGISTRY)
+
+
+def test_encoding_a_card_class_with_no_list_says_so():
+    """A card class that can be built but not saved fails at the save, far from the cause. Naming
+    it here is the difference between a one-line fix and an afternoon."""
+
+    @dataclass(frozen=True, slots=True)
+    class UnknownCard(L5RCard):
+        pass
+
+    with pytest.raises(KeyError, match="UnknownCard has no persisted-field list"):
+        encode_card(UnknownCard(id="u", name="U", side=Side.DYNASTY))
+
+
+def test_a_payload_carries_exactly_the_pinned_fields():
+    holding = DynastyHolding(id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
+
+    payload = encode_card(holding)
+
+    assert set(payload) == {"__type__", *_PERSISTED_FIELDS["DynastyHolding"]}
+
+
+def test_the_pinned_list_is_the_format_not_the_dataclass():
+    """The two agree today and `test_persisted_fields_match_the_classes` keeps them that way, so
+    nothing else can tell which one `encode_card` reads. This forces the list out of step for one
+    call to prove the format follows it — that is the property the whole pin exists for, and the
+    one that matters on the day a field moves off the card."""
+    original = _PERSISTED_FIELDS["DynastyHolding"]
+    holding = DynastyHolding(id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
+    _PERSISTED_FIELDS["DynastyHolding"] = ("id", "name", "side")
+    try:
+        payload = encode_card(holding)
+    finally:
+        _PERSISTED_FIELDS["DynastyHolding"] = original
+
+    assert set(payload) == {"__type__", "id", "name", "side"}

@@ -1,6 +1,5 @@
 from enum import Enum
 from pathlib import Path
-from dataclasses import fields
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
@@ -101,6 +100,62 @@ _CARD_REGISTRY: dict[str, type[L5RCard]] = {
     )
 }
 
+# What a card of each class persists, in payload order. This is the format, and the dataclass is
+# an implementation detail that currently agrees with it — `test_persisted_fields_match_the_classes`
+# is what holds the two together, so a field added to a card fails loudly until someone decides
+# whether it belongs on disk. Composed along the hierarchy because every subclass extends the base
+# list rather than reordering it.
+_BASE_FIELDS = (
+    "id",
+    "name",
+    "side",
+    "printed_id",
+    "clan",
+    "clans",
+    "keywords",
+    "traits",
+    "card_type",
+    "creates",
+    "text",
+    "is_unique",
+    "bowed",
+    "face_up",
+    "inverted",
+    "counters",
+    "image_front",
+    "image_back",
+    "owner",
+    "shown",
+    "peekers",
+    "back_card_id",
+    "back",
+    "showing_back",
+    "is_token",
+    "art_swap",
+    "note",
+)
+_FATE_FIELDS = _BASE_FIELDS + ("focus", "gold_cost")
+_DYNASTY_FIELDS = _BASE_FIELDS + ("gold_cost",)
+_PREGAME_STATS = ("starting_honor", "gold_production", "province_strength")
+
+_PERSISTED_FIELDS: dict[str, tuple[str, ...]] = {
+    "L5RCard": _BASE_FIELDS,
+    "FateCard": _FATE_FIELDS,
+    "FateAction": _FATE_FIELDS + ("timings",),
+    "FateAttachment": _FATE_FIELDS + ("attachment_type", "attach_restrictions"),
+    "FateRing": _FATE_FIELDS + ("element",),
+    "FateAncestor": _FATE_FIELDS,
+    "DynastyCard": _DYNASTY_FIELDS,
+    "DynastyPersonality": _DYNASTY_FIELDS + ("force", "chi", "personal_honor", "honor_requirement"),
+    "DynastyHolding": _DYNASTY_FIELDS + ("gold_production",),
+    "DynastyEvent": _DYNASTY_FIELDS,
+    "DynastyRegion": _DYNASTY_FIELDS,
+    "DynastyCelestial": _DYNASTY_FIELDS,
+    "StrongholdCard": _BASE_FIELDS + _PREGAME_STATS + ("province_count", "starting_hand_size"),
+    "SenseiCard": _BASE_FIELDS + _PREGAME_STATS,
+    "WindCard": _BASE_FIELDS,
+}
+
 _FLAG_CLASSES: dict[IntentOp, type[CardFlagIntent]] = {
     IntentOp.BOW: Bow,
     IntentOp.UNBOW: Unbow,
@@ -160,10 +215,23 @@ def _decode_value(value):
 
 def encode_card(card: L5RCard) -> dict:
     """Encode an ``L5RCard`` (any subclass) to JSON-ready plain data, tagged with its concrete type
-    so ``decode_card`` rebuilds the same class."""
-    payload = {"__type__": type(card).__name__}
-    for f in fields(card):
-        payload[f.name] = _encode_value(getattr(card, f.name))
+    so ``decode_card`` rebuilds the same class.
+
+    Writes the fields :data:`_PERSISTED_FIELDS` names for that class rather than whatever the
+    dataclass declares, so the persisted format is a decision rather than a consequence.
+
+    Raises
+    ------
+    KeyError
+        If ``card``'s class has no persisted-field list, naming it — a card class that can be built
+        but not saved is a worse failure later than here.
+    """
+    name = type(card).__name__
+    if name not in _PERSISTED_FIELDS:
+        raise KeyError(f"{name} has no persisted-field list; add one to _PERSISTED_FIELDS")
+    payload = {"__type__": name}
+    for field_name in _PERSISTED_FIELDS[name]:
+        payload[field_name] = _encode_value(getattr(card, field_name))
     return payload
 
 
