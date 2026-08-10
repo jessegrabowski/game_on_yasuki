@@ -4,6 +4,23 @@ from pathlib import Path
 from yasuki_core.card_art import classify
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    AncestorPrint,
+    AttachmentPrint,
+    CardPrint,
+    CelestialPrint,
+    DynastyPrint,
+    EventPrint,
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    RegionPrint,
+    RingPrint,
+    SenseiPrint,
+    StrongholdPrint,
+    WindPrint,
+)
 from yasuki_core.game_pieces.constants import Side, AttachmentType
 from yasuki_core.game_pieces.dynasty import (
     DynastyCard,
@@ -176,6 +193,27 @@ def _name_index(records: list[dict]) -> dict[str, dict]:
     return index
 
 
+# Which print describes each card class. The card still declares its own characteristics, so the
+# print is built first and handed over; the next step is for the card to read through to it instead.
+_PRINT_FOR: dict[type, type[CardPrint]] = {
+    L5RCard: CardPrint,
+    DynastyCard: DynastyPrint,
+    DynastyPersonality: PersonalityPrint,
+    DynastyHolding: HoldingPrint,
+    DynastyEvent: EventPrint,
+    DynastyRegion: RegionPrint,
+    DynastyCelestial: CelestialPrint,
+    FateCard: FatePrint,
+    FateAction: ActionPrint,
+    FateAttachment: AttachmentPrint,
+    FateRing: RingPrint,
+    FateAncestor: AncestorPrint,
+    StrongholdCard: StrongholdPrint,
+    SenseiCard: SenseiPrint,
+    WindCard: WindPrint,
+}
+
+
 def _classify(section: str, card_type: str | None) -> tuple[type, Side]:
     if section == "dynasty":
         return _DYNASTY_BY_TYPE.get(card_type, DynastyCard), Side.DYNASTY
@@ -290,18 +328,45 @@ def _construct_face(
     back: L5RCard | None,
     creates: tuple[str, ...] = (),
 ) -> L5RCard:
+    card_cls, side = _classify(section, (record.get("types") or [None])[0])
+    printed = _build_print(record, print_info, section, back_card_id=back_card_id, creates=creates)
+    return card_cls(id=card_id, owner=owner, back=back, **printed.as_card_fields())
+
+
+def _build_print(
+    record: dict,
+    print_info: dict | None,
+    section: str,
+    *,
+    back_card_id: str | None = None,
+    creates: tuple[str, ...] = (),
+) -> CardPrint:
+    """The printed card a database record describes, as the deck entry resolved it.
+
+    Parameters
+    ----------
+    record : dict
+        A card record as ``database.get_cards_by_names`` returns it.
+    print_info : dict, optional
+        The printing chosen for this entry, whose art the print wears. Default None, which leaves
+        the print with no front image.
+    section : str
+        The decklist section the entry was filed under, which decides the card's side.
+    back_card_id : str, optional
+        The other face's printed id, for a double-faced card. Default None.
+    creates : tuple of str, optional
+        Token ids this card can create in play. Default empty.
+    """
     card_type = (record.get("types") or [None])[0]
     card_cls, side = _classify(section, card_type)
     # image_front is the database-relative print path; the web client resolves it against the image
-    # base URL. The subclasses' local default art is for the desktop/PDF renderers, not the wire.
+    # base URL. The card classes' local default art is for the desktop/PDF renderers, not the wire.
     image_path = print_info.get("image_path") if print_info else None
     clans = record.get("clans") or []
-    return card_cls(
-        id=card_id,
-        printed_id=record.get("card_id"),
+    return _PRINT_FOR[card_cls](
         name=record.get("extended_title") or record["name"],
         side=side,
-        owner=owner,
+        printed_id=record.get("card_id"),
         clan=clans[0] if clans else None,
         clans=tuple(clans),
         keywords=tuple(record.get("keywords") or ()),
@@ -311,16 +376,15 @@ def _construct_face(
         is_unique=bool(record.get("is_unique")),
         image_front=Path(image_path) if image_path else None,
         back_card_id=back_card_id,
-        back=back,
-        **_stat_fields(card_cls, card_type, record),
+        **_stat_fields(_PRINT_FOR[card_cls], card_type, record),
     )
 
 
-def _stat_fields(card_cls: type, card_type: str | None, record: dict) -> dict:
-    """The numeric and category stats a given card subclass holds, drawn from the database record."""
-    if issubclass(card_cls, DynastyCard):
+def _stat_fields(print_cls: type[CardPrint], card_type: str | None, record: dict) -> dict:
+    """The numeric and category stats a given print subclass holds, drawn from the database record."""
+    if issubclass(print_cls, DynastyPrint):
         fields = {"gold_cost": record.get("gold_cost")}
-        if card_cls is DynastyPersonality:
+        if print_cls is PersonalityPrint:
             # A dash Honor Requirement (absent, or the non-numeric "*") stays None; only a real
             # integer (possibly 0 or negative) is a threshold.
             hr = record.get("honor_requirement")
@@ -330,21 +394,17 @@ def _stat_fields(card_cls: type, card_type: str | None, record: dict) -> dict:
                 personal_honor=record.get("personal_honor") or 0,
                 honor_requirement=hr if isinstance(hr, int) else None,
             )
-        elif card_cls is DynastyHolding:
+        elif print_cls is HoldingPrint:
             fields["gold_production"] = record.get("gold_production") or 0
         return fields
-    if issubclass(card_cls, FateCard):
+    if issubclass(print_cls, FatePrint):
         fields = {"focus": record.get("focus"), "gold_cost": record.get("gold_cost")}
-        if card_cls is FateAttachment:
+        if print_cls is AttachmentPrint:
             fields["attachment_type"] = AttachmentType(card_type)
         return fields
-    if card_cls is StrongholdCard:
-        return {
-            "starting_honor": record.get("starting_honor") or 0,
-            "gold_production": record.get("gold_production") or 0,
-            "province_strength": record.get("province_strength") or 0,
-        }
-    if card_cls is SenseiCard:
+    # A sensei's are deltas the stronghold receives rather than its own characteristics, but the
+    # record columns and the stats read off them are the same three.
+    if print_cls in (StrongholdPrint, SenseiPrint):
         return {
             "starting_honor": record.get("starting_honor") or 0,
             "gold_production": record.get("gold_production") or 0,

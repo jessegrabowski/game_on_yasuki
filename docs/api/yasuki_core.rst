@@ -70,6 +70,7 @@ yasuki_core
     yasuki_core.game_pieces.factory <yasuki_core.game_pieces.factory>
     yasuki_core.game_pieces.fate <yasuki_core.game_pieces.fate>
     yasuki_core.game_pieces.pregame <yasuki_core.game_pieces.pregame>
+    yasuki_core.game_pieces.prints <yasuki_core.game_pieces.prints>
     yasuki_core.game_setup <yasuki_core.game_setup>
     yasuki_core.install.card_index <yasuki_core.install.card_index>
     yasuki_core.install.coverage_report <yasuki_core.install.coverage_report>
