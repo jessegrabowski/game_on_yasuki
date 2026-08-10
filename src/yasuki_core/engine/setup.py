@@ -13,8 +13,9 @@ from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 # which a drag gives it a real on-board position.
 PREGAME_UNPLACED = BoardPos(-1.0, -1.0)
 
-# The characteristics a sensei contributes, each folded onto the stronghold at setup.
-SENSEI_DELTAS = ("starting_honor", "gold_production", "province_strength")
+# The characteristics a sensei folds onto the stronghold at setup. Gold Production is not here: the
+# rules layer grants it as a modifier the sensei sources, so nothing writes that printed stat.
+SENSEI_DELTAS = ("starting_honor", "province_strength")
 
 
 def setup_seat(

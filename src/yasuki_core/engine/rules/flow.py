@@ -96,13 +96,52 @@ def next_phase(phase: Phase) -> Phase | None:
 # The pre-game permanents that get their enters-play effect fired as the game begins.
 _PREGAME_PERMANENTS = (StrongholdCard, SenseiCard, WindCard)
 
+# The sensei characteristics granted to the stronghold as modifiers rather than folded into its
+# printed stats. Starting Honor is not here: it is a seat scalar read once at setup, not a card stat
+# anything reads again.
+SENSEI_MODIFIERS = (Stat.GOLD_PRODUCTION,)
+
 
 def begin_game(game: GameState) -> None:
     """Run the game-start pass once after :meth:`GameState.start`, before the active player acts:
     fire each pre-game permanent's enters-play effect, then the first turn's housekeeping. Re-runs on
     every replay, so those effects must be idempotent."""
     _begin_pregame(game)
+    _grant_sensei_modifiers(game)
     _begin_turn(game)
+
+
+def _grant_sensei_modifiers(game: GameState) -> None:
+    """Grant each sensei's characteristics to its seat's stronghold, sourced from the sensei.
+
+    A sensei is a live face-up card for the whole game, which is exactly the
+    :attr:`~yasuki_core.engine.rules.modifiers.Duration.WHILE_SOURCE_IN_PLAY` contract — so the
+    stronghold reads its effective characteristics without anything writing to its printed ones.
+    """
+    grants: list[Effect] = []
+    for seat in game.table.seats:
+        stronghold = next(
+            (
+                card
+                for card in game.table.battlefield.cards
+                if isinstance(card, StrongholdCard) and card.owner is seat
+            ),
+            None,
+        )
+        if stronghold is None:
+            continue  # nothing to grant onto, so the sensei contributes nothing
+        for card in game.table.battlefield.cards:
+            if not isinstance(card, SenseiCard) or card.owner is not seat:
+                continue
+            for stat in SENSEI_MODIFIERS:
+                delta = getattr(card, stat.value)
+                if delta:
+                    grants.append(
+                        GrantModifier(
+                            card.id, stronghold.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY
+                        )
+                    )
+    triggers.resolve_effects(game, grants)
 
 
 def _begin_pregame(game: GameState) -> None:
