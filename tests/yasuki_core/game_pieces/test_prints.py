@@ -19,9 +19,11 @@ def test_a_print_normalizes_its_collections():
     assert printed.clans == ("crab",) and printed.keywords == ("Farm",)
 
 
-def test_two_prints_of_the_same_card_compare_equal():
-    """Copies share one print object, but a rebuilt table compares by value — replay asserts the
-    game it replayed equals the original, and the print is part of every card in it."""
+def test_borrowed_art_is_not_part_of_a_prints_identity():
+    """Two copies of a card differ only in whose art they wear, and replay compares a rebuilt game
+    to the original by value — so the swap payload has to stay out of equality the way it does on
+    the card."""
     made = dict(name="Farm", side=Side.DYNASTY, printed_id="modest_farm", gold_production=1)
 
-    assert HoldingPrint(**made) == HoldingPrint(**made)
+    assert HoldingPrint(**made, art_swap={"donor_img": "a.png"}) == HoldingPrint(**made)
+    assert HoldingPrint(**made) != HoldingPrint(**{**made, "gold_production": 2})
