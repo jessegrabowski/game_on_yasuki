@@ -2,7 +2,6 @@ from yasuki_core.engine.setup import (
     setup_seat,
     flip_second_player_stronghold,
     PREGAME_UNPLACED,
-    SENSEI_DELTAS,
 )
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from numpy.random import default_rng
@@ -189,7 +188,7 @@ def test_a_deck_without_a_stronghold_starts_at_zero_honor():
     assert _setup().seats[PlayerId.P1].honor == 0
 
 
-def test_a_negative_sensei_delta_lowers_the_stronghold():
+def test_a_negative_sensei_delta_lowers_what_the_stronghold_reads():
     stronghold = StrongholdCard(
         id="sh",
         name="Kyuden",
@@ -217,7 +216,7 @@ def test_a_negative_sensei_delta_lowers_the_stronghold():
     assert _granted(game, stronghold, Stat.PROVINCE_STRENGTH) == 1
 
 
-def test_every_sensei_delta_moves_onto_the_stronghold():
+def test_every_sensei_characteristic_reaches_the_seat():
     stronghold = StrongholdCard(
         id="sh",
         name="Kyuden",
@@ -238,12 +237,10 @@ def test_every_sensei_delta_moves_onto_the_stronghold():
     )
     state = _setup_with_pregame(stronghold, sensei)
 
-    assert {stat: getattr(stronghold, stat) for stat in SENSEI_DELTAS} == {"starting_honor": 15}
-    assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == dict.fromkeys(
-        SENSEI_DELTAS, 0
-    )
     assert state.seats[PlayerId.P1].honor == 15
-    # The other two arrive as modifiers, so their printed stats stay put on both cards.
+    # Nothing is written to a printed stat any more: honor is summed into the seat, and the other
+    # two arrive as modifiers, so both cards keep exactly what they were printed with.
+    assert (stronghold.starting_honor, sensei.starting_honor) == (10, 5)
     assert (stronghold.gold_production, sensei.gold_production) == (3, 2)
     assert (stronghold.province_strength, sensei.province_strength) == (4, 1)
     game = _begun(state)
@@ -251,9 +248,9 @@ def test_every_sensei_delta_moves_onto_the_stronghold():
     assert _granted(game, stronghold, Stat.PROVINCE_STRENGTH) == 1
 
 
-def test_deltas_from_several_senseis_all_fold_in():
-    """Deck legality is not enforced here, so the fold has to cover every sensei it is handed
-    rather than the one the rules would allow."""
+def test_several_senseis_all_contribute():
+    """Deck legality is not enforced here, so both the sum and the grant have to cover every sensei
+    they are handed rather than the one the rules would allow."""
     stronghold = StrongholdCard(
         id="sh",
         name="Kyuden",
@@ -282,9 +279,8 @@ def test_deltas_from_several_senseis_all_fold_in():
     ]
     state = _setup_with_pregame(stronghold, *senseis)
 
-    assert stronghold.starting_honor == 16
-    assert all(getattr(sensei, stat) == 0 for sensei in senseis for stat in SENSEI_DELTAS)
     assert state.seats[PlayerId.P1].honor == 16
+    assert stronghold.starting_honor == 10  # printed, untouched
     assert effective_gold_production(_begun(state), stronghold) == 9
 
 
@@ -302,8 +298,9 @@ def test_a_sensei_is_not_a_second_gold_producer():
     assert gold_producers(GameState.start(state, PlayerId.P1), PlayerId.P1) == [stronghold]
 
 
-def test_a_sensei_with_no_stronghold_to_fold_onto_contributes_nothing():
-    """Nothing to fold onto means nothing applied — honor included."""
+def test_a_sensei_with_no_stronghold_contributes_nothing():
+    """A sensei modifies a stronghold; with none to modify it contributes nothing, and that holds
+    for honor as much as for the two characteristics that arrive as grants."""
     sensei = SenseiCard(
         id="se",
         name="Sensei",
@@ -316,8 +313,6 @@ def test_a_sensei_with_no_stronghold_to_fold_onto_contributes_nothing():
     state = _setup_with_pregame(sensei)
 
     assert state.seats[PlayerId.P1].honor == 0
-    # Nothing folded, so nothing cleared, and no grant either.
-    assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == {"starting_honor": 5}
     assert _begun(state).modifiers == []
 
 
