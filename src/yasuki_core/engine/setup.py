@@ -13,9 +13,6 @@ from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 # which a drag gives it a real on-board position.
 PREGAME_UNPLACED = BoardPos(-1.0, -1.0)
 
-# The characteristics a sensei contributes, each folded onto the stronghold at setup.
-SENSEI_DELTAS = ("starting_honor", "gold_production", "province_strength")
-
 
 def setup_seat(
     state: TableState,
@@ -28,10 +25,10 @@ def setup_seat(
 
     Load the dynasty and fate cards into their decks face-down, shuffling each from the given generator,
     open the stronghold's provinces and fill each one face-down from the dynasty deck, draw the
-    stronghold's ``starting_hand_size`` fate cards face-up into the hand, fold every sensei delta
-    into the stronghold, deal the pre-game permanents (stronghold, sensei, wind) face-up onto the
-    battlefield as loose cards, set the seat's starting honor from its stronghold, and register
-    every card in the table's identity map. The
+    stronghold's ``starting_hand_size`` fate cards face-up into the hand, deal the pre-game
+    permanents (stronghold, sensei, wind) face-up onto the battlefield as loose cards, set the
+    seat's starting honor from its stronghold and senseis, and register every card in the table's
+    identity map. The
     discards and banishes stay empty, and no deck legality is enforced (a manual sandbox).
 
     Parameters
@@ -50,7 +47,6 @@ def setup_seat(
     _load_deck(state, DeckKey(seat, Side.FATE), resolved.fate, fate_rng)
     for idx in range(_province_count(resolved)):
         state.zones[ZoneKey(seat, ZoneRole.PROVINCE, idx)] = ProvinceZone(owner=seat)
-    _fold_sensei_deltas(resolved)
     _place_pregame(state, seat, resolved.pre_game)
     state.seats[seat].honor = _starting_honor(resolved)
     _fill_provinces(state, seat)
@@ -71,30 +67,19 @@ def _province_count(resolved: ResolvedDeck) -> int:
 
 
 def _starting_honor(resolved: ResolvedDeck) -> int:
-    """The seat's opening honor, taken from the stronghold after the sensei fold."""
-    stronghold = _stronghold(resolved)
-    return stronghold.starting_honor if stronghold is not None else 0
+    """The seat's opening honor: its stronghold's, raised or lowered by every sensei.
 
-
-def _fold_sensei_deltas(resolved: ResolvedDeck) -> None:
-    """Move each of :data:`SENSEI_DELTAS` onto the stronghold and clear it from the sensei.
-
-    The sensei stays face-up all game, so a delta left on both cards would be counted twice. Senseis
-    in a deck with no stronghold contribute nothing.
-
-    TODO: migrate these deltas to WHILE_SOURCE_IN_PLAY modifiers (engine/rules/modifiers.py) once an
-    attachment model exists — the Sensei is a live battlefield card, so it should be a modifier
-    source like any attachment rather than a baked printed-stat mutation."""
+    Honor is a seat scalar read once here, not a card stat anything reads again, so it is summed
+    rather than granted the way the sensei's other characteristics are. A deck with no stronghold
+    opens at zero, which is the same rule those grants follow — a sensei with nothing to modify
+    contributes nothing.
+    """
     stronghold = _stronghold(resolved)
     if stronghold is None:
-        return
-    for sensei in (card for card in resolved.pre_game if isinstance(card, SenseiCard)):
-        for stat in SENSEI_DELTAS:
-            delta = getattr(sensei, stat)
-            if not delta:
-                continue
-            object.__setattr__(stronghold, stat, getattr(stronghold, stat) + delta)
-            object.__setattr__(sensei, stat, 0)
+        return 0
+    return stronghold.starting_honor + sum(
+        card.starting_honor for card in resolved.pre_game if isinstance(card, SenseiCard)
+    )
 
 
 def _starting_hand_size(resolved: ResolvedDeck) -> int:

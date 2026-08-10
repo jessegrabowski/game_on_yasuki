@@ -4,10 +4,16 @@ from enum import Enum
 
 class Stat(Enum):
     """A card stat a modifier can adjust. Each member's value is the card attribute it reads, so a
-    derived source can look it up with ``getattr(card, stat.value)``. Only Gold Production is
-    computed at runtime today; more stats join as the rules engine grows."""
+    derived source can look it up with ``getattr(card, stat.value)``. More stats join as the rules
+    engine grows.
+
+    Province Strength has no effective-read function yet, because nothing asks for it until battle
+    exists. Modifiers over it are recorded all the same, by a sensei's grant and by the counters that
+    carry a per-count delta.
+    """
 
     GOLD_PRODUCTION = "gold_production"
+    PROVINCE_STRENGTH = "province_strength"
 
 
 class Duration(Enum):

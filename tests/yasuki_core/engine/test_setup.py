@@ -2,12 +2,14 @@ from yasuki_core.engine.setup import (
     setup_seat,
     flip_second_player_stronghold,
     PREGAME_UNPLACED,
-    SENSEI_DELTAS,
 )
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.economy import active_modifiers, effective_gold_production
+from yasuki_core.engine.rules.flow import begin_game
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.legality import gold_producers
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.constants import Side
@@ -127,6 +129,21 @@ def test_pre_game_cards_are_dealt_face_up_as_loose_battlefield_cards():
     state.validate()  # raises on any structural violation
 
 
+def _granted(game: GameState, card, stat: Stat) -> int:
+    """The total a card's modifiers add to ``stat``. Province Strength has no effective-read
+    function yet — nothing asks for it until battle exists — so a grant over it is only assertable
+    here, which is weaker coverage than the Gold Production cases get."""
+    return sum(m.amount for m in active_modifiers(game, card, stat))
+
+
+def _begun(state) -> GameState:
+    """The game the rules layer sees, with the game-start pass run — which is where a sensei's
+    characteristics are granted to the stronghold."""
+    game = GameState.start(state, PlayerId.P1)
+    begin_game(game)
+    return game
+
+
 def _setup_with_pregame(*pre_game):
     state = TableState.empty_two_seat()
     resolved = _resolved()
@@ -171,19 +188,35 @@ def test_a_deck_without_a_stronghold_starts_at_zero_honor():
     assert _setup().seats[PlayerId.P1].honor == 0
 
 
-def test_a_negative_sensei_delta_lowers_the_stronghold():
+def test_a_negative_sensei_delta_lowers_what_the_stronghold_reads():
     stronghold = StrongholdCard(
-        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=8, province_strength=5
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        gold_production=8,
+        province_strength=5,
+        owner=PlayerId.P1,
     )
     sensei = SenseiCard(
-        id="se", name="Sensei", side=Side.FATE, gold_production=-1, province_strength=1
+        id="se",
+        name="Sensei",
+        side=Side.FATE,
+        gold_production=-1,
+        province_strength=1,
+        owner=PlayerId.P1,
     )
-    _setup_with_pregame(stronghold, sensei)
-    assert stronghold.gold_production == 7
-    assert stronghold.province_strength == 6
+    state = _setup_with_pregame(stronghold, sensei)
+    game = _begun(state)
+
+    assert (stronghold.gold_production, stronghold.province_strength) == (
+        8,
+        5,
+    )  # printed, untouched
+    assert effective_gold_production(game, stronghold) == 7
+    assert _granted(game, stronghold, Stat.PROVINCE_STRENGTH) == 1
 
 
-def test_every_sensei_delta_moves_onto_the_stronghold():
+def test_every_sensei_characteristic_reaches_the_seat():
     stronghold = StrongholdCard(
         id="sh",
         name="Kyuden",
@@ -191,6 +224,7 @@ def test_every_sensei_delta_moves_onto_the_stronghold():
         starting_honor=10,
         gold_production=3,
         province_strength=4,
+        owner=PlayerId.P1,
     )
     sensei = SenseiCard(
         id="se",
@@ -199,40 +233,60 @@ def test_every_sensei_delta_moves_onto_the_stronghold():
         starting_honor=5,
         gold_production=2,
         province_strength=1,
+        owner=PlayerId.P1,
     )
     state = _setup_with_pregame(stronghold, sensei)
 
-    assert {stat: getattr(stronghold, stat) for stat in SENSEI_DELTAS} == {
-        "starting_honor": 15,
-        "gold_production": 5,
-        "province_strength": 5,
-    }
-    assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == dict.fromkeys(
-        SENSEI_DELTAS, 0
-    )
     assert state.seats[PlayerId.P1].honor == 15
+    # Nothing is written to a printed stat any more: honor is summed into the seat, and the other
+    # two arrive as modifiers, so both cards keep exactly what they were printed with.
+    assert (stronghold.starting_honor, sensei.starting_honor) == (10, 5)
+    assert (stronghold.gold_production, sensei.gold_production) == (3, 2)
+    assert (stronghold.province_strength, sensei.province_strength) == (4, 1)
+    game = _begun(state)
+    assert effective_gold_production(game, stronghold) == 5
+    assert _granted(game, stronghold, Stat.PROVINCE_STRENGTH) == 1
 
 
-def test_deltas_from_several_senseis_all_fold_in():
-    """Deck legality is not enforced here, so the fold has to cover every sensei it is handed
-    rather than the one the rules would allow."""
+def test_several_senseis_all_contribute():
+    """Deck legality is not enforced here, so both the sum and the grant have to cover every sensei
+    they are handed rather than the one the rules would allow."""
     stronghold = StrongholdCard(
-        id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10, gold_production=3
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        starting_honor=10,
+        gold_production=3,
+        owner=PlayerId.P1,
     )
     senseis = [
-        SenseiCard(id="se1", name="One", side=Side.FATE, starting_honor=5, gold_production=2),
-        SenseiCard(id="se2", name="Two", side=Side.FATE, starting_honor=1, gold_production=4),
+        SenseiCard(
+            id="se1",
+            name="One",
+            side=Side.FATE,
+            starting_honor=5,
+            gold_production=2,
+            owner=PlayerId.P1,
+        ),
+        SenseiCard(
+            id="se2",
+            name="Two",
+            side=Side.FATE,
+            starting_honor=1,
+            gold_production=4,
+            owner=PlayerId.P1,
+        ),
     ]
     state = _setup_with_pregame(stronghold, *senseis)
 
-    assert stronghold.starting_honor == 16
-    assert stronghold.gold_production == 9
-    assert all(getattr(sensei, stat) == 0 for sensei in senseis for stat in SENSEI_DELTAS)
     assert state.seats[PlayerId.P1].honor == 16
+    assert stronghold.starting_honor == 10  # printed, untouched
+    assert effective_gold_production(_begun(state), stronghold) == 9
 
 
-def test_a_folded_sensei_is_not_a_second_gold_producer():
-    """Why the clearing matters: a sensei still holding Gold is a second card the seat can bow."""
+def test_a_sensei_is_not_a_second_gold_producer():
+    """A sensei's printed Gold Production is a delta the stronghold receives, not gold the sensei
+    makes — offering it as a source to bow would pay the seat twice for one characteristic."""
     stronghold = StrongholdCard(
         id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
     )
@@ -244,8 +298,9 @@ def test_a_folded_sensei_is_not_a_second_gold_producer():
     assert gold_producers(GameState.start(state, PlayerId.P1), PlayerId.P1) == [stronghold]
 
 
-def test_a_sensei_with_no_stronghold_to_fold_onto_contributes_nothing():
-    """Nothing to fold onto means nothing applied — honor included."""
+def test_a_sensei_with_no_stronghold_contributes_nothing():
+    """A sensei modifies a stronghold; with none to modify it contributes nothing, and that holds
+    for honor as much as for the two characteristics that arrive as grants."""
     sensei = SenseiCard(
         id="se",
         name="Sensei",
@@ -258,12 +313,7 @@ def test_a_sensei_with_no_stronghold_to_fold_onto_contributes_nothing():
     state = _setup_with_pregame(sensei)
 
     assert state.seats[PlayerId.P1].honor == 0
-    # Nothing folded, so nothing cleared.
-    assert {stat: getattr(sensei, stat) for stat in SENSEI_DELTAS} == {
-        "starting_honor": 5,
-        "gold_production": 2,
-        "province_strength": 1,
-    }
+    assert _begun(state).modifiers == []
 
 
 def test_a_stronghold_without_a_sensei_keeps_its_printed_stats():
@@ -337,3 +387,60 @@ def test_the_fate_shuffle_does_not_move_when_the_dynasty_deck_changes_size():
         return [card.id for card in state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards]
 
     assert fate_order(10) == fate_order(14)
+
+
+def test_a_sensei_leaving_play_takes_its_gold_with_it():
+    """What a modifier buys over a baked stat: the grant is sourced from the sensei, so it lasts
+    exactly as long as the sensei is on the table. Nothing removes a sensei today, which is why this
+    asserts through the modifier rather than through a rule."""
+    stronghold = StrongholdCard(
+        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    )
+    sensei = SenseiCard(
+        id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+    )
+    game = _begun(_setup_with_pregame(stronghold, sensei))
+    assert effective_gold_production(game, stronghold) == 5
+
+    game.table.battlefield.remove(sensei)
+
+    assert effective_gold_production(game, stronghold) == 3
+
+
+def test_a_sensei_modifies_only_its_own_seats_stronghold():
+    """Every other case here seats one player, so nothing yet proves the grant follows ownership
+    rather than landing on whichever stronghold it finds first."""
+    state = TableState.empty_two_seat()
+    mine = StrongholdCard(
+        id="p1-sh", name="Mine", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    )
+    theirs = StrongholdCard(
+        id="p2-sh", name="Theirs", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P2
+    )
+    sensei = SenseiCard(
+        id="p2-se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P2
+    )
+    # The sensei belongs to the seat set up *second*, so "its own stronghold" and "the first
+    # stronghold found" are different cards and a grant that ignores ownership lands visibly wrong.
+    for seat, pre_game in ((PlayerId.P1, (mine,)), (PlayerId.P2, (theirs, sensei))):
+        resolved = _resolved(seat)
+        resolved.pre_game.extend(pre_game)
+        setup_seat(state, seat, resolved, rng=default_rng(1))
+    game = GameState.start(state, PlayerId.P1)
+    begin_game(game)
+
+    assert effective_gold_production(game, theirs) == 5
+    assert effective_gold_production(game, mine) == 3
+
+
+def test_a_sensei_with_nothing_to_give_grants_nothing():
+    """A zero delta is not a modifier of zero. Recording one would leave the list carrying entries
+    that change no number and have to be reasoned past by anyone reading it."""
+    stronghold = StrongholdCard(
+        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    )
+    sensei = SenseiCard(id="se", name="Blank", side=Side.FATE, owner=PlayerId.P1)
+
+    game = _begun(_setup_with_pregame(stronghold, sensei))
+
+    assert game.modifiers == []

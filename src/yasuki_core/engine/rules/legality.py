@@ -27,7 +27,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.pregame import SenseiCard, StrongholdCard
 from yasuki_core.ruleset import SHATTERED_EMPIRE
 
 # The boldface keyword marking a card the Legacy rulebook ability can search out.
@@ -275,11 +275,18 @@ def province_cards(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
 
 def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The unbowed gold producers ``seat`` controls in play — its Stronghold and gold Holdings —
-    each a source it may bow for gold (KD6, stat-derived)."""
+    each a source it may bow for gold (KD6, stat-derived).
+
+    A Sensei is never one of them. Its printed Gold Production is a delta the Stronghold receives,
+    not gold the Sensei makes, so counting it would pay the seat twice for the same characteristic.
+    """
     return [
         card
         for card in game.table.battlefield.cards
-        if card.owner is seat and not card.bowed and effective_gold_production(game, card) > 0
+        if card.owner is seat
+        and not card.bowed
+        and not isinstance(card, SenseiCard)
+        and effective_gold_production(game, card) > 0
     ]
 
 
