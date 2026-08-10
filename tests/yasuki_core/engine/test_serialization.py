@@ -236,9 +236,9 @@ GOLDEN = Path(__file__).parent / "golden" / "cards.json"
 
 
 def _golden_cards() -> dict[str, L5RCard]:
-    """One card per value-encoding path the codec has: enum, tuple, frozenset, dict, Path, None,
-    and a nested card. Two shapes rather than fifteen, because the classes differ only in extra
-    scalars while ``_encode_value`` is shared — these two reach every branch of it."""
+    """Two cards reaching every branch of ``_encode_value``: enum, tuple, list, frozenset, dict,
+    Path, None, and a nested card. Two rather than fifteen because the classes differ only in extra
+    scalars, and the value encoding they share is what a golden payload is for."""
     holding = DynastyHolding(
         id="P1-7",
         name="Modest Farm",
@@ -294,9 +294,8 @@ def test_the_checked_in_payloads_decode_to_the_cards_they_came_from():
 
 
 def test_a_cards_art_swap_survives_the_round_trip():
-    """`factory._art_swap` builds its payload with a list of keywords, and the codec had no list
-    branch — so every card borrowing another printing's art raised on encode. 44 of the 164 cards
-    in the bundled Spider deck carry one."""
+    """A card borrowing another printing's art carries the payload ``factory._art_swap`` builds,
+    whose keywords are a list — the one place a card field holds one."""
     swapped = DynastyHolding(
         id="h",
         name="Repairing the Ruins",

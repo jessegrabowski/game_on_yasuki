@@ -100,11 +100,10 @@ _CARD_REGISTRY: dict[str, type[L5RCard]] = {
     )
 }
 
-# What a card of each class persists, in payload order. This is the format, and the dataclass is
-# an implementation detail that currently agrees with it — `test_persisted_fields_match_the_classes`
-# is what holds the two together, so a field added to a card fails loudly until someone decides
-# whether it belongs on disk. Composed along the hierarchy because every subclass extends the base
-# list rather than reordering it.
+# What a card of each class persists, in payload order. This is the format; that the dataclasses
+# currently agree with it is held by a test, so a field added to a card fails until someone decides
+# whether it belongs on disk. Composed along the hierarchy, which every subclass extends rather
+# than reorders.
 _BASE_FIELDS = (
     "id",
     "name",
@@ -136,7 +135,7 @@ _BASE_FIELDS = (
 )
 _FATE_FIELDS = _BASE_FIELDS + ("focus", "gold_cost")
 _DYNASTY_FIELDS = _BASE_FIELDS + ("gold_cost",)
-_PREGAME_STATS = ("starting_honor", "gold_production", "province_strength")
+_PREGAME_FIELDS = _BASE_FIELDS + ("starting_honor", "gold_production", "province_strength")
 
 _PERSISTED_FIELDS: dict[str, tuple[str, ...]] = {
     "L5RCard": _BASE_FIELDS,
@@ -151,8 +150,8 @@ _PERSISTED_FIELDS: dict[str, tuple[str, ...]] = {
     "DynastyEvent": _DYNASTY_FIELDS,
     "DynastyRegion": _DYNASTY_FIELDS,
     "DynastyCelestial": _DYNASTY_FIELDS,
-    "StrongholdCard": _BASE_FIELDS + _PREGAME_STATS + ("province_count", "starting_hand_size"),
-    "SenseiCard": _BASE_FIELDS + _PREGAME_STATS,
+    "StrongholdCard": _PREGAME_FIELDS + ("province_count", "starting_hand_size"),
+    "SenseiCard": _PREGAME_FIELDS,
     "WindCard": _BASE_FIELDS,
 }
 
@@ -229,8 +228,7 @@ def encode_card(card: L5RCard) -> dict:
     Raises
     ------
     KeyError
-        If ``card``'s class has no persisted-field list, naming it — a card class that can be built
-        but not saved is a worse failure later than here.
+        If ``card``'s class has no persisted-field list, naming the class.
     """
     name = type(card).__name__
     if name not in _PERSISTED_FIELDS:
