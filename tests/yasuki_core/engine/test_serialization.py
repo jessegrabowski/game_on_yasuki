@@ -246,7 +246,12 @@ GOLDEN = Path(__file__).parent / "golden" / "cards.json"
 def _golden_cards() -> dict[str, L5RCard]:
     """Two cards reaching every branch of ``_encode_value``: enum, tuple, list, frozenset, dict,
     Path, None, and a nested card. Two rather than fifteen because the classes differ only in extra
-    scalars, and the value encoding they share is what a golden payload is for."""
+    scalars, and the value encoding they share is what a golden payload is for.
+
+    Every image path is set explicitly, including the ones the card classes default. Those defaults
+    are absolute and derived from the install location, so leaving them would bake this machine's
+    filesystem into the checked-in bytes.
+    """
     holding = DynastyHolding(
         id="P1-7",
         name="Modest Farm",
@@ -264,6 +269,7 @@ def _golden_cards() -> dict[str, L5RCard]:
         inverted=True,
         counters={"wealth": 2},
         image_front=Path("sets/roj/farm.png"),
+        image_back=Path("backs/dynasty.jpg"),
         owner=PlayerId.P1,
         shown=True,
         peekers=frozenset({PlayerId.P2}),
@@ -273,7 +279,14 @@ def _golden_cards() -> dict[str, L5RCard]:
         gold_cost=1,
         gold_production=2,
     )
-    back = StrongholdCard(id="sh__back", name="Kyuden", side=Side.STRONGHOLD, starting_honor=8)
+    back = StrongholdCard(
+        id="sh__back",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        starting_honor=8,
+        image_front=Path("sets/she/kyuden_back.png"),
+        image_back=Path("backs/stronghold.jpg"),
+    )
     front = StrongholdCard(
         id="P1-sh",
         name="Kyuden",
@@ -282,6 +295,8 @@ def _golden_cards() -> dict[str, L5RCard]:
         back=back,
         showing_back=True,
         starting_honor=6,
+        image_front=Path("sets/she/kyuden.png"),
+        image_back=Path("backs/stronghold.jpg"),
     )
     return {"holding": holding, "flip_stronghold": front}
 
@@ -378,3 +393,23 @@ def test_a_card_the_factory_built_encodes():
 
     assert card.art_swap is not None  # the shape under test, not an incidental None
     assert decode_card(json.loads(json.dumps(encode_card(card)))) == card
+
+
+def test_no_checked_in_path_is_absolute():
+    """A card's image paths default to the install location, so a golden built without overriding
+    them bakes one machine's filesystem into the repository and fails everywhere else."""
+
+    def paths(node):
+        if isinstance(node, dict):
+            if "__path__" in node:
+                yield node["__path__"]
+            else:
+                for value in node.values():
+                    yield from paths(value)
+        elif isinstance(node, list):
+            for value in node:
+                yield from paths(value)
+
+    absolute = [p for p in paths(json.loads(GOLDEN.read_text())) if p.startswith("/")]
+
+    assert absolute == []

@@ -43,7 +43,7 @@
       "__path__": "sets/roj/farm.png"
     },
     "image_back": {
-      "__path__": "/Users/jessegrabowski/Documents/Python/game_on_yasuki/src/yasuki_core/assets/images/dynasty_back_new.jpg"
+      "__path__": "backs/dynasty.jpg"
     },
     "owner": {
       "__enum__": "PlayerId",
@@ -108,9 +108,11 @@
       "__dict__": {}
     },
     "image_front": {
-      "__path__": "/Users/jessegrabowski/Documents/Python/game_on_yasuki/src/yasuki_core/assets/images/defaults/generic_stronghold.jpg"
+      "__path__": "sets/she/kyuden.png"
     },
-    "image_back": null,
+    "image_back": {
+      "__path__": "backs/stronghold.jpg"
+    },
     "owner": null,
     "shown": false,
     "peekers": {
@@ -150,9 +152,11 @@
           "__dict__": {}
         },
         "image_front": {
-          "__path__": "/Users/jessegrabowski/Documents/Python/game_on_yasuki/src/yasuki_core/assets/images/defaults/generic_stronghold.jpg"
+          "__path__": "sets/she/kyuden_back.png"
         },
-        "image_back": null,
+        "image_back": {
+          "__path__": "backs/stronghold.jpg"
+        },
         "owner": null,
         "shown": false,
         "peekers": {
