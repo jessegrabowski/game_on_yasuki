@@ -4,6 +4,9 @@ from pathlib import Path
 
 import pytest
 
+from tests.conftest import _db_available
+from tests.yasuki_core.game_pieces.test_factory import RECORDS
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey, BoardPos, BATTLEFIELD, SeatInfo
 from yasuki_core.engine.intents import (
@@ -58,7 +61,9 @@ from yasuki_core.engine.serialization import (
 )
 from yasuki_core.game_pieces.constants import Side, Element
 from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.factory import resolve_decklist
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.fate import FateRing
 from yasuki_core.game_pieces.pregame import StrongholdCard
@@ -208,8 +213,11 @@ def test_persisted_fields_match_the_classes():
     assert mismatched == {}
 
 
-def test_every_card_class_has_a_persisted_field_list():
-    assert set(_PERSISTED_FIELDS) == set(_CARD_REGISTRY)
+def test_no_persisted_field_list_outlives_its_class():
+    """The test above already fails for a class with no list. This is the other direction: a list
+    left behind after its class was renamed or dropped, which would otherwise sit there forever
+    describing a format nothing writes."""
+    assert set(_PERSISTED_FIELDS) - set(_CARD_REGISTRY) == set()
 
 
 def test_encoding_a_card_class_with_no_list_says_so():
@@ -343,3 +351,30 @@ def test_the_pinned_list_is_the_format_not_the_dataclass():
         _PERSISTED_FIELDS["DynastyHolding"] = original
 
     assert set(payload) == {"__type__", "id", "name", "side"}
+
+
+def test_decoding_an_unknown_card_type_says_which():
+    """The mirror of the encode guard. A payload written by a newer build names a class this one
+    has never heard of, and the failure should name it rather than surfacing as a bare key."""
+    with pytest.raises(KeyError, match="MysteryCard"):
+        decode_card({"__type__": "MysteryCard", "id": "x", "name": "X"})
+
+
+def test_re_encoding_a_decoded_payload_reproduces_it():
+    """Encoding is idempotent through a decode, which is the property that lets a log written by one
+    build be read, replayed and written again by another without drifting."""
+    stored = json.loads(GOLDEN.read_text())
+
+    assert {name: encode_card(decode_card(p)) for name, p in stored.items()} == stored
+
+
+@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+def test_a_card_the_factory_built_encodes():
+    """The hand-built art-swap case above pins a shape this test proves is the real one — the codec
+    could not encode a factory-built card at all until the list branch landed, and no test held the
+    two together because none of them ever encoded a card the factory made."""
+    yaml = "name: T\nDynasty:\n  - Kuni Yori [Pearl Edition] {art: Ambush [Lotus Edition]}"
+    card = resolve_decklist(parse_deck_yaml(yaml), RECORDS, PlayerId.P1).dynasty[0]
+
+    assert card.art_swap is not None  # the shape under test, not an incidental None
+    assert decode_card(json.loads(json.dumps(encode_card(card)))) == card
