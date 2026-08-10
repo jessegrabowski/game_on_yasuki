@@ -8,8 +8,8 @@ class Stat(Enum):
     engine grows.
 
     Province Strength has no effective-read function yet, because nothing asks for it until battle
-    exists. Modifiers over it are still recorded correctly — a sensei grants one, and four counters
-    carry a per-count delta — so the reader can be written without revisiting its sources.
+    exists. Modifiers over it are recorded all the same, by a sensei's grant and by the counters that
+    carry a per-count delta.
     """
 
     GOLD_PRODUCTION = "gold_production"

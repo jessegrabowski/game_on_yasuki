@@ -96,10 +96,9 @@ def next_phase(phase: Phase) -> Phase | None:
 # The pre-game permanents that get their enters-play effect fired as the game begins.
 _PREGAME_PERMANENTS = (StrongholdCard, SenseiCard, WindCard)
 
-# The sensei characteristics granted to the stronghold as modifiers rather than folded into its
-# printed stats. Starting Honor is not here: it is a seat scalar read once at setup, not a card stat
-# anything reads again.
-SENSEI_MODIFIERS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
+# The stats a sensei grants its stronghold rather than folding into its printed ones. Starting Honor
+# is not here: it is a seat scalar read once at setup, not a card stat anything reads again.
+SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
 
 
 def begin_game(game: GameState) -> None:
@@ -111,6 +110,14 @@ def begin_game(game: GameState) -> None:
     _begin_turn(game)
 
 
+def _begin_pregame(game: GameState) -> None:
+    """Fire EnteredPlay for each pre-game permanent on the battlefield, so a Stronghold or Sensei with
+    an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
+    for card in list(game.table.battlefield.cards):
+        if isinstance(card, _PREGAME_PERMANENTS):
+            triggers.fire(game, EnteredPlay(card.id))
+
+
 def _grant_sensei_modifiers(game: GameState) -> None:
     """Grant each sensei's characteristics to its seat's stronghold, sourced from the sensei.
 
@@ -118,38 +125,25 @@ def _grant_sensei_modifiers(game: GameState) -> None:
     :attr:`~yasuki_core.engine.rules.modifiers.Duration.WHILE_SOURCE_IN_PLAY` contract — so the
     stronghold reads its effective characteristics without anything writing to its printed ones.
     """
+    strongholds = {
+        card.owner: card
+        for card in game.table.battlefield.cards
+        if isinstance(card, StrongholdCard) and card.owner is not None
+    }
     grants: list[Effect] = []
-    for seat in game.table.seats:
-        stronghold = next(
-            (
-                card
-                for card in game.table.battlefield.cards
-                if isinstance(card, StrongholdCard) and card.owner is seat
-            ),
-            None,
-        )
+    for card in game.table.battlefield.cards:
+        stronghold = strongholds.get(card.owner) if isinstance(card, SenseiCard) else None
         if stronghold is None:
-            continue  # nothing to grant onto, so the sensei contributes nothing
-        for card in game.table.battlefield.cards:
-            if not isinstance(card, SenseiCard) or card.owner is not seat:
-                continue
-            for stat in SENSEI_MODIFIERS:
-                delta = getattr(card, stat.value)
-                if delta:
-                    grants.append(
-                        GrantModifier(
-                            card.id, stronghold.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY
-                        )
+            continue  # not a sensei, or a sensei with no stronghold to modify
+        for stat in SENSEI_GRANTED_STATS:
+            delta = getattr(card, stat.value)
+            if delta:
+                grants.append(
+                    GrantModifier(
+                        card.id, stronghold.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY
                     )
+                )
     triggers.resolve_effects(game, grants)
-
-
-def _begin_pregame(game: GameState) -> None:
-    """Fire EnteredPlay for each pre-game permanent on the battlefield, so a Stronghold or Sensei with
-    an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
-    for card in list(game.table.battlefield.cards):
-        if isinstance(card, _PREGAME_PERMANENTS):
-            triggers.fire(game, EnteredPlay(card.id))
 
 
 def advance(game: GameState) -> None:
