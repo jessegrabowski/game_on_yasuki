@@ -67,7 +67,7 @@ def resolve_decklist(
 
     Each entry's section (not the record's deck field) decides the card family, so a player's manual
     placement is honored; the record's first type refines the print. One instance is built per
-    physical copy, with a card id unique across both seats.
+    physical copy, with a card id unique across both seats; the copies of one entry share its print.
 
     Parameters
     ----------
@@ -98,18 +98,22 @@ def resolve_decklist(
             if record is None:
                 resolved.unresolved.append(entry["name"])
                 continue
+            printed, back_printed = _entry_prints(
+                record,
+                entry.get("set_name"),
+                section,
+                by_id,
+                art=entry.get("art"),
+                name_index=index,
+                creates=tuple(creates_map.get(record["card_id"], ())) if creates_map else (),
+            )
             for _ in range(entry["count"]):
                 target.append(
-                    _build_card(
-                        record,
-                        entry.get("set_name"),
-                        section,
-                        by_id,
+                    _mint(
+                        printed,
+                        back_printed,
                         owner=owner,
                         card_id=f"{owner.name}-{next_id}",
-                        art=entry.get("art"),
-                        name_index=index,
-                        creates_map=creates_map,
                     )
                 )
                 next_id += 1
@@ -139,15 +143,9 @@ def build_token_card(record: dict) -> L5RCard:
         The built card, owner-less and keyed by its own card id.
     """
     card_type = (record.get("types") or [None])[0]
-    return _construct_face(
-        record,
-        {"image_path": record.get("image_path")},
-        _section_for_type(card_type),
-        owner=None,
-        card_id=record["card_id"],
-        back_card_id=None,
-        back=None,
-    )
+    section = _section_for_type(card_type)
+    printed = _build_print(record, {"image_path": record.get("image_path")}, section)
+    return L5RCard(id=record["card_id"], printed=printed, owner=None)
 
 
 def build_token_templates(token_records: dict[str, dict]) -> dict[str, L5RCard]:
@@ -224,80 +222,86 @@ def _art_swap(
     }
 
 
-def _build_card(
+def _entry_prints(
     record: dict,
     set_name: str | None,
     section: str,
     by_id: dict[str, dict],
     *,
-    owner: PlayerId,
-    card_id: str,
     art: dict | None = None,
     name_index: dict[str, dict] | None = None,
-    creates_map: dict[str, list[str]] | None = None,
-) -> L5RCard:
-    """Build the front face of a card. For a double-faced card, nest its back face: the fully built
-    back when its record is on hand, else one synthesised from the front carrying the back art the
-    front's print records, so a flip shows the other side. With neither, only the ``back_card_id``
-    link is carried."""
+    creates: tuple[str, ...] = (),
+) -> tuple[CardPrint, CardPrint | None]:
+    """The print a deck entry's cards present, and the print of their back face if they have one.
+
+    Built once per entry, so every copy the entry produces shares them.
+
+    Parameters
+    ----------
+    record : dict
+        A card record as ``database.get_cards_by_names`` returns it.
+    set_name : str, optional
+        The printing the entry asked for, whose art the print wears. Default none, which takes the
+        record's first printing.
+    section : str
+        The decklist section the entry was filed under, which decides the card's side.
+    by_id : dict mapping str to dict
+        Every resolved record by card id, for looking up a double-faced card's back.
+    art : dict, optional
+        The entry's borrowed-art request, as ``{name, set_name}``. Default none.
+    name_index : dict mapping str to dict, optional
+        The case-insensitive name index, for resolving the art donor. Default none.
+    creates : tuple of str, optional
+        Token ids this card can create in play. Default empty.
+
+    Returns
+    -------
+    printed : CardPrint
+        The front print.
+    back_printed : CardPrint or None
+        The back face's print: the back record's own when the deck query returned it, else one
+        derived from the front carrying the back art the front's printing records. None when the
+        card has no other face.
+    """
     back_card_id = record.get("back_card_id")
     front_print = _select_print(record, set_name)
-    back = None
+    printed = _build_print(record, front_print, section, back_card_id=back_card_id, creates=creates)
+    back_printed = None
     if back_card_id and back_card_id in by_id:
         back_record = by_id[back_card_id]
-        back = _construct_face(
-            back_record,
-            _select_print(back_record, set_name),
-            section,
-            owner=owner,
-            card_id=back_card_id,
-            back_card_id=None,
-            back=None,
+        back_printed = _build_print(back_record, _select_print(back_record, set_name), section)
+    elif back_card_id and front_print and front_print.get("back_image_path"):
+        # The back-face row is excluded from deck queries (is_back), so there is usually no back
+        # record to build from. The front's printing still records the back art, which is the only
+        # field the manual table needs to draw the flipped side.
+        back_printed = replace(
+            printed, image_front=Path(front_print["back_image_path"]), back_card_id=None
         )
-    front = _construct_face(
-        record,
-        front_print,
-        section,
-        owner=owner,
-        card_id=card_id,
-        back_card_id=back_card_id,
-        back=back,
-        creates=tuple(creates_map.get(record["card_id"], ())) if creates_map else (),
-    )
-    # The back-face row is excluded from deck queries (is_back), so there is usually no back record
-    # to nest. The front's print still records the back art, so synthesise a back face from the
-    # front carrying that art — the only field the manual table needs to draw the flipped side.
-    if back is None and back_card_id and front_print and front_print.get("back_image_path"):
-        synthetic_back = replace(
-            front,
-            id=back_card_id,
-            printed=replace(
-                front.printed,
-                image_front=Path(front_print["back_image_path"]),
-                back_card_id=None,
-            ),
-            back=None,
-        )
-        front = replace(front, back=synthetic_back)
+    # After the back is derived, so borrowed art dresses the front alone.
     if art and front_print and name_index is not None:
         art_swap = _art_swap(record, front_print, art, name_index)
         if art_swap is not None:
-            front = replace(front, printed=replace(front.printed, art_swap=art_swap))
-    return front
+            printed = replace(printed, art_swap=art_swap)
+    return printed, back_printed
 
 
-def _construct_face(
-    record: dict,
-    print_info: dict | None,
-    section: str,
+def _mint(
+    printed: CardPrint,
+    back_printed: CardPrint | None,
     *,
-    owner: PlayerId,
+    owner: PlayerId | None,
     card_id: str,
-    back_card_id: str | None,
-    back: L5RCard | None,
-    creates: tuple[str, ...] = (),
 ) -> L5RCard:
-    printed = _build_print(record, print_info, section, back_card_id=back_card_id, creates=creates)
+    """One copy of the card ``printed`` describes, with its own back face when it has one.
+
+    The back face is keyed by the printed id the front links it under, which is the only name a
+    face that never entered a deck has.
+    """
+    back = (
+        None
+        if back_printed is None
+        else L5RCard(id=printed.back_card_id, printed=back_printed, owner=owner)
+    )
     return L5RCard(id=card_id, printed=printed, owner=owner, back=back)
 
 

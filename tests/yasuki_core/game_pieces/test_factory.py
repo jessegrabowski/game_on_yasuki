@@ -353,6 +353,7 @@ def test_double_faced_card_nests_its_back_when_the_record_is_present():
     deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni")
     sh = resolve_decklist(deck, [FLIP_FRONT, FLIP_BACK], PlayerId.P1).pre_game[0]
     assert sh.back_card_id == "kyuden_kuni__back"
+    assert sh.back.id == "kyuden_kuni__back"  # the only name a face that never entered a deck has
     assert isinstance(sh.back.printed, StrongholdPrint)
     # Each face is a distinct card, so it carries its own printed_id — the back dispatches to its own
     # effect handler, not the front's.
@@ -361,6 +362,37 @@ def test_double_faced_card_nests_its_back_when_the_record_is_present():
     assert sh.back.starting_honor == 8
     assert sh.back.image_front.as_posix() == "sets/goc/kk_b.png"
     assert sh.back.back is None  # the back face carries no further face
+
+
+def test_two_copies_of_a_flip_card_share_a_back_print_but_not_a_back_card():
+    """The back print is entry-level like the front's, but each copy needs its own back card — a
+    face is a card in play with its own state."""
+    deck = parse_deck_yaml("name: T\nPre-Game:\n  - 2x Kyuden Kuni")
+    first, second = resolve_decklist(deck, [FLIP_FRONT, FLIP_BACK], PlayerId.P1).pre_game
+
+    assert first.back is not second.back
+    assert first.back.printed is second.back.printed
+
+
+def test_borrowed_art_dresses_the_front_alone():
+    """A synthesised back is derived from the front before borrowed art is applied, so flipping a
+    card with swapped art shows its own back rather than the donor payload."""
+    front = {
+        **FLIP_FRONT,
+        "prints": [
+            {
+                "print_id": 70,
+                "set_name": "Gates of Chaos",
+                "image_path": "sets/goc/kk_a.png",
+                "back_image_path": "sets/goc/kk_b.png",
+            }
+        ],
+    }
+    deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni {art: Ambush [Lotus Edition]}")
+    sh = resolve_decklist(deck, [front, *RECORDS], PlayerId.P1).pre_game[0]
+
+    assert sh.art_swap is not None
+    assert sh.back.art_swap is None
 
 
 def test_double_faced_card_keeps_only_the_link_when_back_record_is_absent():
@@ -477,13 +509,12 @@ def test_a_resolved_card_presents_the_print_its_record_describes():
     assert card.printed == _build_print(record, _select_print(record, "Pearl Edition"), "dynasty")
 
 
-def test_two_copies_of_a_card_are_distinct_but_present_equal_prints():
-    """Two copies of one entry are separate cards carrying their own state. They get a print each
-    rather than one between them, which costs memory but not correctness, since a print is frozen
-    and the two are equal."""
+def test_two_copies_of_a_card_share_one_print():
+    """A print is built per deck entry, so the copies it produces share it. Sharing is safe because
+    a print is frozen; each copy still carries its own state."""
     first, second = _resolve().dynasty
 
     assert first is not second
-    assert first.printed == second.printed
+    assert first.printed is second.printed
     first.bow()
     assert not second.bowed
