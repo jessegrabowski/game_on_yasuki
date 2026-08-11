@@ -292,7 +292,7 @@ def reveal_provinces(state: TableState, seat: PlayerId) -> list[str]:
 
 
 def spawn_token(
-    state: TableState, new_id: str, printed: CardPrint, position: BoardPos, owner: PlayerId | None
+    state: TableState, new_id: str, printed: CardPrint, position: BoardPos, owner: PlayerId
 ) -> L5RCard:
     """Place a fresh face-up token presenting ``printed`` onto the battlefield at ``position``.
 

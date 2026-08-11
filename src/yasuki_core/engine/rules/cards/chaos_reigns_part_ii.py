@@ -61,7 +61,7 @@ def _shosuro_aoki(ctx: TriggerContext) -> list[Effect]:
     """After your Holding gains any Wealth tokens, once per turn, draw a card."""
     if ctx.event.counter is not WEALTH:
         return []
-    gainer = ctx.game.table.cards_by_id.get(ctx.event.card_id)
+    gainer = ctx.game.table.cards_by_id[ctx.event.card_id]
     if not isinstance(gainer.printed, HoldingPrint) or gainer.owner is not ctx.card.owner:
         return []
     if not once_per_turn(ctx.game, ctx.card, "aoki_draw"):

@@ -34,7 +34,7 @@ P1 = PlayerId.P1
 
 def _board_card(table, card_id="c1", name="Hida Kisada", face_up=True):
     card = L5RCard.of(
-        CardPrint, id=card_id, name=name, side=Side.DYNASTY, owner=None, face_up=face_up
+        CardPrint, id=card_id, name=name, side=Side.DYNASTY, owner=PlayerId.P1, face_up=face_up
     )
     table.battlefield.add(card)
     table.cards_by_id[card_id] = card

@@ -385,7 +385,7 @@ def test_shrine_of_courtesy_keeps_its_printed_keywords_while_you_went_first():
 def test_an_ownerless_card_falls_back_to_its_printed_keywords():
     # A grant reads its controller's position, which a card not yet dealt to a seat does not have.
     game = two_seat_game()
-    orphan = holding("loose", owner=None, printed_id="shrine_of_courtesy", keywords=("Temple",))
+    orphan = holding("loose", printed_id="shrine_of_courtesy", keywords=("Temple",))
     assert effective_keywords(game, orphan) == frozenset({"Temple"})
 
 

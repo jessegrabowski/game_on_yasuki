@@ -79,14 +79,7 @@ _PUBLIC_ROLES: Final = frozenset(
 
 
 def _hide(card: L5RCard) -> HiddenCard:
-    # Only an owned card's show is a real disclosure (a public card's show reveals to nobody), and the
-    # owner alone ever sees a stub of their own shown card — so gate the marker on ownership.
-    return HiddenCard(
-        card_id=card.id,
-        side=card.side,
-        owner=card.owner,
-        shown=card.shown and card.owner is not None,
-    )
+    return HiddenCard(card_id=card.id, side=card.side, owner=card.owner, shown=card.shown)
 
 
 def _opponent(seat: PlayerId) -> PlayerId:
@@ -97,7 +90,7 @@ def _opponent(seat: PlayerId) -> PlayerId:
 def _shown_to(card: L5RCard, viewer: PlayerId) -> bool:
     """Whether ``card`` is shown to ``viewer`` as the owner's opponent — the disclosure a face-down
     card's owner makes to the other seat without turning the card face up."""
-    return card.shown and card.owner is not None and viewer == _opponent(card.owner)
+    return card.shown and viewer == _opponent(card.owner)
 
 
 def _default_visible(card: L5RCard, viewer: PlayerId, role: ZoneRole | None) -> bool:

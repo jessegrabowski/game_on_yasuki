@@ -159,13 +159,6 @@ def test_placing_into_a_full_province_is_a_no_op():
     assert card in game.table.battlefield.cards  # not swallowed on the way
 
 
-def test_destroying_an_unowned_card_is_a_no_op():
-    # A card with no owner has no discard pile to go to.
-    game = two_seat_game()
-    card = put_in_play(game, holding("P1-h", owner=None))
-    assert Destroy(card.id).perform(game) == []
-
-
 @dataclass(frozen=True, slots=True)
 class _AskToDiscard(InterruptingEffect):
     """A second interrupting effect, defined only here. Nothing in the engine knows it exists."""

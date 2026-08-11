@@ -126,7 +126,7 @@ def _grant_sensei_modifiers(game: GameState) -> None:
     strongholds = {
         card.owner: card
         for card in game.table.battlefield.cards
-        if isinstance(card.printed, StrongholdPrint) and card.owner is not None
+        if isinstance(card.printed, StrongholdPrint)
     }
     grants: list[Effect] = []
     for card in game.table.battlefield.cards:

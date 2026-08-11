@@ -643,8 +643,7 @@ def _adjust_counter(state: TableState, seat: PlayerId, intent: AdjustCounter) ->
 
 def _give_control(state: TableState, seat: PlayerId, intent: GiveControl) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    # Only the controller may give a face-up card away, matching the client gate: a public (owner-less)
-    # card has no controller to transfer, so it is refused as well.
+    # Only the controller may give a face-up card away, matching the client gate.
     if card is None or not card.face_up or card.owner != seat:
         return []
     # Only a card on the shared battlefield may change hands; reassigning one held in an owned zone

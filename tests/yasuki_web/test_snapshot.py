@@ -95,7 +95,7 @@ def test_battlefield_card_carries_art_and_position():
         id="t1",
         name="Token",
         side=Side.DYNASTY,
-        owner=None,
+        owner=P1,
         face_up=True,
         image_front=Path("sets/x/token.jpg"),
     )
@@ -158,7 +158,7 @@ def test_double_faced_card_shows_the_active_face_and_flip_link():
         id="sh",
         name="Stronghold",
         side=Side.STRONGHOLD,
-        owner=None,
+        owner=P1,
         face_up=True,
         image_front=Path("sets/x/a.jpg"),
         back_card_id="sh__back",
@@ -224,11 +224,11 @@ def test_token_card_is_flagged_in_the_snapshot():
         id="tok1",
         name="Bushi",
         side=Side.DYNASTY,
-        owner=None,
+        owner=P1,
         face_up=True,
         is_token=True,
     )
-    real = L5RCard.of(CardPrint, id="c1", name="Hida", side=Side.DYNASTY, owner=None, face_up=True)
+    real = L5RCard.of(CardPrint, id="c1", name="Hida", side=Side.DYNASTY, owner=P1, face_up=True)
     for card in (token, real):
         table.battlefield.cards.append(card)
         table.positions[card.id] = BoardPos(0.0, 0.0)
@@ -286,7 +286,7 @@ def test_seat_avatar_is_public():
 
 def test_a_plain_visible_card_carries_shown_and_peeked_false():
     table = TableState.empty_two_seat()
-    card = L5RCard.of(CardPrint, id="t1", name="Token", side=Side.DYNASTY, owner=None, face_up=True)
+    card = L5RCard.of(CardPrint, id="t1", name="Token", side=Side.DYNASTY, owner=P1, face_up=True)
     table.battlefield.cards.append(card)
     table.positions["t1"] = BoardPos(0.0, 0.0)
     table.cards_by_id["t1"] = card
@@ -327,21 +327,6 @@ def test_shown_face_down_card_reveals_to_the_opponent_and_cues_the_owner():
     assert "name" not in owner
 
 
-def test_public_shown_face_down_card_cues_no_one():
-    # A show on an owner-less card reveals to nobody, so neither seat's back stub carries the marker —
-    # otherwise both would draw a spurious reveal outline on a card neither can identify.
-    table = TableState.empty_two_seat()
-    card = L5RCard.of(
-        CardPrint, id="t1", name="Token", side=Side.FATE, owner=None, face_up=False, shown=True
-    )
-    table.battlefield.cards.append(card)
-    table.positions["t1"] = BoardPos(0.0, 0.0)
-
-    for viewer in (P1, P2):
-        stub = _serialized(table, viewer)["battlefield"][0]
-        assert stub["hidden"] is True and stub["shown"] is False
-
-
 def test_peeked_card_is_flagged_peeked_for_the_peeker_only():
     table = TableState.empty_two_seat()
     card = L5RCard.of(
@@ -349,7 +334,7 @@ def test_peeked_card_is_flagged_peeked_for_the_peeker_only():
         id="d1",
         name="Gold Mine",
         side=Side.DYNASTY,
-        owner=None,
+        owner=P1,
         face_up=False,
         peekers=frozenset({P2}),
     )
@@ -377,7 +362,7 @@ def test_card_serializes_creates_for_the_menu():
         id="c1",
         name="Curse of the Jackal",
         side=Side.FATE,
-        owner=None,
+        owner=P1,
         face_up=True,
         creates=("jackal_pack",),
     )

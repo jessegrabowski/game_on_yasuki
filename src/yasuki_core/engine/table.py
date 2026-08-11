@@ -236,12 +236,12 @@ AttachTarget = str | ZoneKey
 
 
 def owns_card(state: TableState, seat: PlayerId, card_id: str) -> bool:
-    """Return whether ``seat`` may act on the card. True for the card's owner and for public
-    (owner-less) cards; False if the card is unknown or belongs to the other seat."""
+    """Return whether ``seat`` may act on the card: True for its owner, False if the card is unknown
+    or belongs to the other seat."""
     card = state.cards_by_id.get(card_id)
     if card is None:
         return False
-    return card.owner is None or card.owner == seat
+    return card.owner == seat
 
 
 def owns_zone(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> bool:
@@ -262,9 +262,9 @@ def owns_deck(state: TableState, seat: PlayerId, deck_key: DeckKey) -> bool:
 
 
 def zone_owned_by_card(zone: Zone, card: L5RCard) -> bool:
-    """Return whether the card and zone owners are compatible: True unless both are set and differ.
+    """Return whether the card may sit in the zone: True for a public zone or the card owner's own.
     Guards against placing one seat's card into the other seat's owned zone."""
-    return zone.owner is None or card.owner is None or zone.owner == card.owner
+    return zone.owner is None or zone.owner == card.owner
 
 
 def zone_accepts(zone: Zone, card: L5RCard) -> bool:

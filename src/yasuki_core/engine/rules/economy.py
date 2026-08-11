@@ -185,13 +185,9 @@ def keyword_grant(printed_id: str) -> Callable[[KeywordHandler], KeywordHandler]
 
 
 def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
-    """``card``'s printed keywords plus any its own ability grants under current conditions.
-
-    A card with no owner — one not yet dealt to a seat — carries only its printed keywords, since a
-    grant reads the controller's position to decide.
-    """
+    """``card``'s printed keywords plus any its own ability grants under current conditions."""
     handler = KEYWORD_GRANTS.get(card.printed_id)
-    if handler is None or card.owner is None:
+    if handler is None:
         return frozenset(card.keywords)
     granted = handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
     return frozenset(card.keywords).union(granted)

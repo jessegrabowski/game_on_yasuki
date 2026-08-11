@@ -16,9 +16,10 @@ class L5RCard:
     are one card with one identity rather than a card nested inside another.
     """
 
+    # Every copy on the table belongs to a seat: dealt from that seat's deck, or spawned by it.
     id: str
     printed: CardPrint
-    owner: PlayerId | None = None
+    owner: PlayerId
     bowed: bool = False
     face_up: bool = True
     inverted: bool = False
@@ -104,7 +105,7 @@ class L5RCard:
     def set_note(self, text: str | None) -> None:
         object.__setattr__(self, "note", text or None)
 
-    def set_owner(self, owner: PlayerId | None) -> None:
+    def set_owner(self, owner: PlayerId) -> None:
         object.__setattr__(self, "owner", owner)
 
     def turn_face_up(self) -> None:

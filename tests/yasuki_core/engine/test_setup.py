@@ -73,7 +73,14 @@ def test_province_count_comes_from_the_stronghold():
     state = TableState.empty_two_seat()
     resolved = _resolved()
     resolved.pre_game.append(
-        L5RCard.of(StrongholdPrint, id="sh", name="Wall", side=Side.STRONGHOLD, province_count=5)
+        L5RCard.of(
+            StrongholdPrint,
+            id="sh",
+            name="Wall",
+            side=Side.STRONGHOLD,
+            province_count=5,
+            owner=PlayerId.P1,
+        )
     )
     setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
     assert len(_provinces(state)) == 5
@@ -103,7 +110,12 @@ def test_starting_hand_size_comes_from_the_stronghold():
     resolved = _resolved()
     resolved.pre_game.append(
         L5RCard.of(
-            StrongholdPrint, id="sh", name="Wall", side=Side.STRONGHOLD, starting_hand_size=3
+            StrongholdPrint,
+            id="sh",
+            name="Wall",
+            side=Side.STRONGHOLD,
+            starting_hand_size=3,
+            owner=PlayerId.P1,
         )
     )
     setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
@@ -160,9 +172,16 @@ def _setup_with_pregame(*pre_game):
 def test_starting_honor_sums_stronghold_and_sensei():
     state = _setup_with_pregame(
         L5RCard.of(
-            StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10
+            StrongholdPrint,
+            id="sh",
+            name="Kyuden",
+            side=Side.STRONGHOLD,
+            starting_honor=10,
+            owner=PlayerId.P1,
         ),
-        L5RCard.of(SenseiPrint, id="se", name="Sensei", side=Side.FATE, starting_honor=5),
+        L5RCard.of(
+            SenseiPrint, id="se", name="Sensei", side=Side.FATE, starting_honor=5, owner=PlayerId.P1
+        ),
     )
     assert state.seats[PlayerId.P1].honor == 15
 
@@ -188,7 +207,14 @@ def test_a_sensei_without_a_stronghold_is_not_attached():
 
 def test_starting_honor_from_a_stronghold_alone_is_its_base():
     state = _setup_with_pregame(
-        L5RCard.of(StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10)
+        L5RCard.of(
+            StrongholdPrint,
+            id="sh",
+            name="Kyuden",
+            side=Side.STRONGHOLD,
+            starting_honor=10,
+            owner=PlayerId.P1,
+        )
     )
     assert state.seats[PlayerId.P1].honor == 10
 
@@ -346,6 +372,7 @@ def test_a_stronghold_without_a_sensei_keeps_its_printed_stats():
         side=Side.STRONGHOLD,
         gold_production=8,
         province_strength=5,
+        owner=PlayerId.P1,
     )
     _setup_with_pregame(stronghold)
     assert stronghold.gold_production == 8

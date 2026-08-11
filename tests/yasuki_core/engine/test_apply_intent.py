@@ -1828,14 +1828,3 @@ def test_roll_dice_draws_every_face_from_a_generator():
 
 def test_a_rolled_die_reports_the_sides_it_was_rolled_on():
     assert roll_dice(default_rng(0), 20).sides == 20
-
-
-def test_give_control_is_rejected_on_a_public_card():
-    # A public (owner-less) card has no controller to transfer; only a card you own may be given away.
-    table = TableState.empty_two_seat()
-    card = _fate("f1", owner=None)
-    _on_battlefield(table, card)
-
-    events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
-
-    assert events == [] and card.owner is None
