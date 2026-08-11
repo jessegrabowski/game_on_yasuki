@@ -10,7 +10,7 @@ from yasuki_core.game_pieces.factory import (
     _select_print,
     resolve_decklist,
     build_token_templates,
-    build_token_card,
+    build_token_print,
 )
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side, AttachmentType
@@ -260,7 +260,7 @@ def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
     # The token record carries the get_card_by_id shape the factory builds a live token from.
     assert record["card_id"] == "bird_of_prey"
     assert "image_path" in record and record.get("types")
-    assert build_token_card(record).side is not None
+    assert build_token_print(record).side is not None
 
 
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
@@ -349,29 +349,28 @@ def test_unknown_name_is_reported_and_not_built():
     assert r.fate == []
 
 
-def test_double_faced_card_nests_its_back_when_the_record_is_present():
+def test_double_faced_card_carries_its_back_print_when_the_record_is_present():
     deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni")
     sh = resolve_decklist(deck, [FLIP_FRONT, FLIP_BACK], PlayerId.P1).pre_game[0]
     assert sh.back_card_id == "kyuden_kuni__back"
-    assert sh.back.id == "kyuden_kuni__back"  # the only name a face that never entered a deck has
-    assert isinstance(sh.back.printed, StrongholdPrint)
-    # Each face is a distinct card, so it carries its own printed_id — the back dispatches to its own
+    assert isinstance(sh.back_printed, StrongholdPrint)
+    # Each face is its own print, so it carries its own printed_id — the back dispatches to its own
     # effect handler, not the front's.
     assert sh.printed_id == "kyuden_kuni"
-    assert sh.back.printed_id == "kyuden_kuni__back"
-    assert sh.back.starting_honor == 8
-    assert sh.back.image_front.as_posix() == "sets/goc/kk_b.png"
-    assert sh.back.back is None  # the back face carries no further face
+    assert sh.back_printed.printed_id == "kyuden_kuni__back"
+    assert sh.back_printed.starting_honor == 8
+    assert sh.back_printed.image_front.as_posix() == "sets/goc/kk_b.png"
 
 
-def test_two_copies_of_a_flip_card_share_a_back_print_but_not_a_back_card():
-    """The back print is entry-level like the front's, but each copy needs its own back card — a
-    face is a card in play with its own state."""
+def test_two_copies_of_a_flip_card_share_both_prints():
+    """Both faces are entry-level, so the copies share them. A face is a print, not a second card,
+    so there is no per-copy back to keep apart."""
     deck = parse_deck_yaml("name: T\nPre-Game:\n  - 2x Kyuden Kuni")
     first, second = resolve_decklist(deck, [FLIP_FRONT, FLIP_BACK], PlayerId.P1).pre_game
 
-    assert first.back is not second.back
-    assert first.back.printed is second.back.printed
+    assert first is not second
+    assert first.printed is second.printed
+    assert first.back_printed is second.back_printed
 
 
 def test_borrowed_art_dresses_the_front_alone():
@@ -392,14 +391,14 @@ def test_borrowed_art_dresses_the_front_alone():
     sh = resolve_decklist(deck, [front, *RECORDS], PlayerId.P1).pre_game[0]
 
     assert sh.art_swap is not None
-    assert sh.back.art_swap is None
+    assert sh.back_printed.art_swap is None
 
 
 def test_double_faced_card_keeps_only_the_link_when_back_record_is_absent():
     deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni")
     sh = resolve_decklist(deck, [FLIP_FRONT], PlayerId.P1).pre_game[0]
     assert sh.back_card_id == "kyuden_kuni__back"
-    assert sh.back is None
+    assert sh.back_printed is None
 
 
 def test_double_faced_card_synthesises_its_back_from_the_front_print_back_art():
@@ -416,10 +415,9 @@ def test_double_faced_card_synthesises_its_back_from_the_front_print_back_art():
     }
     deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni")
     sh = resolve_decklist(deck, [front], PlayerId.P1).pre_game[0]
-    assert sh.back is not None
-    assert sh.back.id == "kyuden_kuni__back"
-    assert sh.back.image_front.as_posix() == "sets/goc/kk_b.png"
-    assert sh.back.back is None
+    assert sh.back_printed is not None
+    assert sh.back_printed.image_front.as_posix() == "sets/goc/kk_b.png"
+    assert sh.back_printed.back_card_id is None  # the back face links no further face
     sh.flip_face()
     assert sh.active_face.image_front.as_posix() == "sets/goc/kk_b.png"
 
@@ -463,18 +461,17 @@ JACKAL_TOKEN = {
 }
 
 
-def test_build_token_templates_builds_full_typed_cards():
+def test_build_token_templates_builds_full_typed_prints():
     templates = build_token_templates({"ghul": GHUL_TOKEN, "jackal_pack": JACKAL_TOKEN})
 
     ghul = templates["ghul"]
-    assert isinstance(ghul.printed, PersonalityPrint)
+    assert isinstance(ghul, PersonalityPrint)
     assert (ghul.force, ghul.chi, ghul.personal_honor) == (2, 2, 0)
     assert ghul.keywords == ("Ghul", "Shadowlands", "Undead")
     assert ghul.image_front.as_posix() == "sets/tokens/ghul.png"
-    assert ghul.owner is None
 
     jackal = templates["jackal_pack"]
-    assert isinstance(jackal.printed, AttachmentPrint)
+    assert isinstance(jackal, AttachmentPrint)
     assert jackal.attachment_type.value == "Follower"
     assert jackal.keywords == ("Cavalry", "Jackal", "Nonhuman")
 

@@ -79,8 +79,8 @@ def _card(
         card["showing_back"] = view.showing_back
     if face.art_swap is not None:
         card["art"] = face.art_swap
-    if face.note:
-        card["note"] = face.note
+    if view.note:
+        card["note"] = view.note
     if token_names and view.creates:
         card["creates"] = [{"id": tid, "name": token_names.get(tid, tid)} for tid in view.creates]
     return card

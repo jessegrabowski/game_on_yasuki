@@ -1,5 +1,3 @@
-from dataclasses import replace
-
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
     BATTLEFIELD,
@@ -15,6 +13,7 @@ from yasuki_core.engine.table import (
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import CardPrint
 
 # The fundamental table mutations: pure, in-place changes to a TableState with no ownership gates,
 # no version bump, and no event building. The manual sim (intents.apply_intent) wraps these with
@@ -293,28 +292,15 @@ def reveal_provinces(state: TableState, seat: PlayerId) -> list[str]:
 
 
 def spawn_token(
-    state: TableState, new_id: str, template: L5RCard, position: BoardPos, owner: PlayerId | None
+    state: TableState, new_id: str, printed: CardPrint, position: BoardPos, owner: PlayerId | None
 ) -> L5RCard:
-    """Place a fresh face-up token onto the battlefield at ``position``, controlled by ``owner``.
+    """Place a fresh face-up token presenting ``printed`` onto the battlefield at ``position``.
 
-    The token is a copy of ``template`` (a full card, so it carries the template's type, stats,
-    keywords, and text) under a new id, stripped of any per-instance state and marked a token. It is
-    face up, so both seats see it; ``owner`` gates who may move or remove it, not who may see it, and
-    ``None`` leaves it public — either seat may act on it.
+    The token carries the print's type, stats, keywords, and text under a new id, with no per-copy
+    state. It is face up, so both seats see it; ``owner`` gates who may move or remove it, not who
+    may see it.
     """
-    card = replace(
-        template,
-        id=new_id,
-        owner=owner,
-        is_token=True,
-        face_up=True,
-        bowed=False,
-        inverted=False,
-        shown=False,
-        peekers=frozenset(),
-        showing_back=False,
-        note=None,
-    )
+    card = L5RCard(id=new_id, printed=printed, owner=owner, is_token=True)
     state.cards_by_id[card.id] = card
     state.battlefield.add(card)
     state.positions[card.id] = position

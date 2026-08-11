@@ -26,6 +26,7 @@ from yasuki_core.engine.table import (
     zone_accepts,
     zone_owned_by_card,
 )
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 class IntentOp(str, Enum):
@@ -344,9 +345,9 @@ class SpawnCard:
     """Put a new public, face-up token on the shared battlefield, copied from a source card.
 
     The card id is assigned by the caller and recorded, so a replay reproduces the same card. The
-    source is exactly one of: ``token_id`` (a creatable-token template on the table), ``source_card_id``
-    (a visible in-play card to duplicate), or ``card`` (a card the web layer pre-resolved, e.g. a
-    database search result). The spawned card is owned by the acting seat: face up and visible to both,
+    source is exactly one of: ``token_id`` (a creatable-token print on the table), ``source_card_id``
+    (a visible in-play card, whose presented face is copied), or ``printed`` (a print the web layer
+    pre-resolved, e.g. a database search result). The spawned card is owned by the acting seat: face up and visible to both,
     but only its creator may move or remove it (control can later be handed over with GiveControl).
     """
 
@@ -354,7 +355,7 @@ class SpawnCard:
     position: BoardPos
     token_id: str | None = None
     source_card_id: str | None = None
-    card: L5RCard | None = None
+    printed: CardPrint | None = None
     op: ClassVar[IntentOp] = IntentOp.SPAWN_CARD
 
 
@@ -887,7 +888,7 @@ def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Ev
             return []
         source = src.active_face
     else:
-        source = intent.card
+        source = intent.printed
     if source is None:
         return []
     card = ops.spawn_token(state, intent.card_id, source, intent.position, owner=seat)

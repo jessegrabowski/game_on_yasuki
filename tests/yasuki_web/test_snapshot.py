@@ -147,11 +147,10 @@ def test_no_attachments_serializes_an_empty_map():
 
 def test_double_faced_card_shows_the_active_face_and_flip_link():
     table = TableState.empty_two_seat()
-    back = L5RCard.of(
-        CardPrint,
-        id="sh__back",
+    back = CardPrint(
         name="Defiled",
         side=Side.STRONGHOLD,
+        printed_id="sh__back",
         image_front=Path("sets/x/b.jpg"),
     )
     card = L5RCard.of(
@@ -163,7 +162,7 @@ def test_double_faced_card_shows_the_active_face_and_flip_link():
         face_up=True,
         image_front=Path("sets/x/a.jpg"),
         back_card_id="sh__back",
-        back=back,
+        back_printed=back,
         showing_back=True,
     )
     table.battlefield.cards.append(card)
@@ -191,6 +190,7 @@ def test_link_only_card_shows_the_front_but_still_signals_the_flip():
         image_front=Path("sets/x/a.jpg"),
         back_card_id="sh__back",
         showing_back=True,
+        owner=PlayerId.P1,
     )
     table.battlefield.cards.append(card)
     table.positions["sh"] = BoardPos(0.0, 0.0)
@@ -205,7 +205,9 @@ def test_link_only_card_shows_the_front_but_still_signals_the_flip():
 
 def test_single_faced_card_omits_the_flip_keys():
     table = TableState.empty_two_seat()
-    card = L5RCard.of(CardPrint, id="t1", name="Token", side=Side.DYNASTY, face_up=True)
+    card = L5RCard.of(
+        CardPrint, id="t1", name="Token", side=Side.DYNASTY, face_up=True, owner=PlayerId.P1
+    )
     table.battlefield.cards.append(card)
     table.positions["t1"] = BoardPos(0.0, 0.0)
     table.cards_by_id["t1"] = card
@@ -347,7 +349,7 @@ def test_peeked_card_is_flagged_peeked_for_the_peeker_only():
         id="d1",
         name="Gold Mine",
         side=Side.DYNASTY,
-        owner=P1,
+        owner=None,
         face_up=False,
         peekers=frozenset({P2}),
     )
@@ -431,21 +433,21 @@ def test_card_fields_covers_every_serialized_key():
     # The client's CARD_FIELDS (board.js) must list every key _card emits, or a newly serialized field
     # would silently never re-patch its card on the board. Anchor the JS list to the real serializer.
     table = TableState.empty_two_seat()
-    back = L5RCard.of(
-        CardPrint, id="c1__back", name="Back", side=Side.DYNASTY, image_front=Path("sets/x/b.jpg")
+    back = CardPrint(
+        name="Back", side=Side.DYNASTY, printed_id="c1__back", image_front=Path("sets/x/b.jpg")
     )
     card = L5RCard.of(
         CardPrint,
         id="c1",
         name="Full",
         side=Side.DYNASTY,
-        owner=None,
+        owner=P1,
         face_up=True,
         image_front=Path("sets/x/a.jpg"),
         art_swap={"donor_img": "d.png", "era": "x", "layout": "y", "keywords": []},
         note="dead",
         back_card_id="c1__back",
-        back=back,
+        back_printed=back,
         showing_back=False,
         creates=("tok1",),
     )

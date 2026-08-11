@@ -41,7 +41,7 @@ from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
 from yasuki_core.game_pieces.factory import (
     resolve_decklist,
     build_token_templates,
-    build_token_card,
+    build_token_print,
 )
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.database import get_cards_by_names, get_creates_for_cards, get_card_by_id
@@ -234,7 +234,7 @@ class GameRoom:
             intent = SpawnCard(
                 card_id=envelope.card_id,
                 position=BoardPos(*envelope.position),
-                card=build_token_card(record),
+                printed=build_token_print(record),
             )
         else:
             try:

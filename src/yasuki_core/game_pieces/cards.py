@@ -11,6 +11,9 @@ class L5RCard:
     ``printed``, which every copy of that card shares and none of them mutates. Reads forward, so
     ``card.gold_production`` answers from the print, but ``isinstance`` does not: ask
     ``isinstance(card.printed, HoldingPrint)`` for the card's type.
+
+    A double-faced card carries both prints and flips by choosing between them, so its two faces
+    are one card with one identity rather than a card nested inside another.
     """
 
     id: str
@@ -29,10 +32,10 @@ class L5RCard:
     # peeking at the card — each may identify it, nobody else learns what they saw.
     shown: bool = False
     peekers: frozenset[PlayerId] = frozenset()
-    # The other face of a double-faced card, held as a resolved card when available; ``showing_back``
-    # selects which face is presented. Distinct from face_up, which conceals a card behind its
-    # generic deck back.
-    back: "L5RCard | None" = None
+    # The other face of a double-faced card, when its print could be resolved; ``showing_back``
+    # selects which face this copy presents. Distinct from face_up, which conceals a card behind
+    # its generic deck back.
+    back_printed: CardPrint | None = None
     showing_back: bool = False
     # A sandbox piece spawned onto the table (SpawnCard), not a card drawn from a deck. Only tokens
     # may be removed from the table; a real card is never destroyed outright.
@@ -148,8 +151,8 @@ class L5RCard:
             object.__setattr__(self, "showing_back", not self.showing_back)
 
     @property
-    def active_face(self) -> "L5RCard":
-        """The face currently presented: the back card when flipped to it, otherwise this card."""
-        if self.showing_back and self.back is not None:
-            return self.back
-        return self
+    def active_face(self) -> CardPrint:
+        """The print currently presented: the back one when flipped to it, otherwise this copy's."""
+        if self.showing_back and self.back_printed is not None:
+            return self.back_printed
+        return self.printed

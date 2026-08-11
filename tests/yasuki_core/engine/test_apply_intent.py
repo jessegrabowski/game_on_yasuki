@@ -338,17 +338,6 @@ def test_give_control_is_rejected_on_a_face_down_card():
     assert events == [] and card.owner == PlayerId.P1
 
 
-def test_give_control_is_rejected_on_a_public_card():
-    # A public (owner-less) card has no controller to transfer; only a card you own may be given away.
-    table = TableState.empty_two_seat()
-    card = _fate("f1", owner=None)
-    _on_battlefield(table, card)
-
-    events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
-
-    assert events == [] and card.owner is None
-
-
 def test_give_control_is_rejected_off_the_battlefield():
     # Reassigning a card held in an owned zone would break the zone/owner invariant, so it's refused.
     table = TableState.empty_two_seat()
@@ -868,9 +857,15 @@ def test_flip_clears_a_peek_so_turning_the_card_back_down_yields_a_plain_back():
 
 def test_flip_face_toggles_a_double_faced_card():
     table = TableState.empty_two_seat()
-    back = L5RCard.of(CardPrint, id="sh__back", name="Back", side=Side.STRONGHOLD)
+    back = CardPrint(name="Back", side=Side.STRONGHOLD, printed_id="sh__back")
     card = L5RCard.of(
-        CardPrint, id="sh", name="Front", side=Side.STRONGHOLD, back_card_id="sh__back", back=back
+        CardPrint,
+        id="sh",
+        name="Front",
+        side=Side.STRONGHOLD,
+        back_card_id="sh__back",
+        back_printed=back,
+        owner=PlayerId.P1,
     )
     _on_battlefield(table, card)
 
@@ -898,7 +893,12 @@ def test_flip_face_toggles_with_only_the_back_link():
     # The common runtime case: the server has the back link but not the resolved back face.
     table = TableState.empty_two_seat()
     card = L5RCard.of(
-        CardPrint, id="sh", name="Front", side=Side.STRONGHOLD, back_card_id="sh__back"
+        CardPrint,
+        id="sh",
+        name="Front",
+        side=Side.STRONGHOLD,
+        back_card_id="sh__back",
+        owner=PlayerId.P1,
     )
     _on_battlefield(table, card)
 
@@ -1242,7 +1242,9 @@ def test_spawn_card_creates_a_face_up_token_owned_by_the_creator():
     table = TableState.empty_two_seat()
     intent = SpawnCard(
         card_id="tok1",
-        card=L5RCard.of(CardPrint, id="src", name="Bushi Token", side=Side.DYNASTY),
+        printed=L5RCard.of(
+            CardPrint, id="src", name="Bushi Token", side=Side.DYNASTY, owner=PlayerId.P1
+        ),
         position=BoardPos(5.0, 6.0),
     )
 
@@ -1259,9 +1261,7 @@ def test_spawn_card_creates_a_face_up_token_owned_by_the_creator():
 
 def test_spawn_card_with_token_id_copies_the_full_template():
     table = TableState.empty_two_seat()
-    table.creatable_tokens["ghul"] = L5RCard.of(
-        PersonalityPrint,
-        id="ghul",
+    table.creatable_tokens["ghul"] = PersonalityPrint(
         name="Ghul",
         side=Side.DYNASTY,
         force=2,
@@ -1291,7 +1291,9 @@ def test_spawned_token_is_interactable_only_by_its_creator():
         PlayerId.P1,
         SpawnCard(
             card_id="tok1",
-            card=L5RCard.of(CardPrint, id="src", name="Bushi Token", side=Side.DYNASTY),
+            printed=L5RCard.of(
+                CardPrint, id="src", name="Bushi Token", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
             position=BoardPos(5.0, 6.0),
         ),
     )
@@ -1361,7 +1363,7 @@ def test_spawn_card_rejects_a_duplicate_id():
     table = TableState.empty_two_seat()
     intent = SpawnCard(
         card_id="tok1",
-        card=L5RCard.of(CardPrint, id="src", name="X", side=Side.FATE),
+        printed=L5RCard.of(CardPrint, id="src", name="X", side=Side.FATE, owner=PlayerId.P1),
         position=BoardPos(0.0, 0.0),
     )
     apply_intent(table, PlayerId.P1, intent)
@@ -1376,7 +1378,7 @@ def test_remove_card_takes_a_spawned_token_off_the_table():
         PlayerId.P1,
         SpawnCard(
             card_id="tok1",
-            card=L5RCard.of(CardPrint, id="src", name="X", side=Side.FATE),
+            printed=L5RCard.of(CardPrint, id="src", name="X", side=Side.FATE, owner=PlayerId.P1),
             position=BoardPos(0.0, 0.0),
         ),
     )
@@ -1826,3 +1828,14 @@ def test_roll_dice_draws_every_face_from_a_generator():
 
 def test_a_rolled_die_reports_the_sides_it_was_rolled_on():
     assert roll_dice(default_rng(0), 20).sides == 20
+
+
+def test_give_control_is_rejected_on_a_public_card():
+    # A public (owner-less) card has no controller to transfer; only a card you own may be given away.
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=None)
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
+
+    assert events == [] and card.owner is None

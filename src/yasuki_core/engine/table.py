@@ -17,6 +17,7 @@ from yasuki_core.engine.zones import (
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.deck import Deck, FateDeck, DynastyDeck
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 class ZoneRole(str, Enum):
@@ -94,7 +95,7 @@ class TableState:
         battlefield drops its entry and detaches whatever is hung off it.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
-    creatable_tokens : dict mapping str to L5RCard
+    creatable_tokens : dict mapping str to CardPrint
         Token templates the loaded decks can create, keyed by token card id, resolved at deck load.
     seq : int
         Monotonic view version, bumped on every state change: by ``apply_intent`` for game intents
@@ -113,7 +114,7 @@ class TableState:
     cards_by_id: dict[str, L5RCard] = field(default_factory=dict)
     # A SpawnCard naming a token_id copies the matching template onto the battlefield, so spawning a
     # creatable token needs no live database call.
-    creatable_tokens: dict[str, L5RCard] = field(default_factory=dict)
+    creatable_tokens: dict[str, CardPrint] = field(default_factory=dict)
     seq: int = 0
 
     @classmethod

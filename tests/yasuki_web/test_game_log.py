@@ -208,7 +208,7 @@ def test_spawn_links_the_new_card():
     _board_card(table, "tok1", "Token")
     intent = SpawnCard(
         card_id="tok1",
-        card=L5RCard.of(CardPrint, id="src", name="Token", side=Side.DYNASTY),
+        printed=L5RCard.of(CardPrint, id="src", name="Token", side=Side.DYNASTY, owner=PlayerId.P1),
         position=BoardPos(0.0, 0.0),
     )
     assert _describe(table, intent, ("tok1",))[-1] == {"card_id": "tok1", "name": "Token"}

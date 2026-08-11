@@ -356,7 +356,7 @@ def test_replay_reproduces_spawned_and_removed_cards():
         PlayerId.P1,
         SpawnCard(
             card_id="t1",
-            card=L5RCard.of(CardPrint, id="src-a", name="A", side=Side.FATE),
+            printed=CardPrint(name="A", side=Side.FATE),
             position=BoardPos(1.0, 2.0),
         ),
         ts=1.0,
@@ -367,7 +367,7 @@ def test_replay_reproduces_spawned_and_removed_cards():
         PlayerId.P2,
         SpawnCard(
             card_id="t2",
-            card=L5RCard.of(CardPrint, id="src-b", name="B", side=Side.DYNASTY),
+            printed=CardPrint(name="B", side=Side.DYNASTY),
             position=BoardPos(3.0, 4.0),
         ),
         ts=2.0,
@@ -472,7 +472,7 @@ def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
         SetHonor(value=-1),
         SpawnCard(
             card_id="tok1",
-            card=L5RCard.of(CardPrint, id="src", name="Token", side=Side.DYNASTY),
+            printed=CardPrint(name="Token", side=Side.DYNASTY),
             position=BoardPos(5.0, 6.0),
         ),
         SpawnCard(card_id="tok2", token_id="some_token", position=BoardPos(0.0, 0.0)),
@@ -501,14 +501,8 @@ def test_creatable_tokens_survive_serialization():
     # The initial record carries the deck's creatable-token templates, so a replayed token spawn
     # needs no database — the templates round-trip through the tape intact.
     state = _start_state()
-    state.creatable_tokens["ghul"] = L5RCard.of(
-        PersonalityPrint,
-        id="ghul",
-        name="Ghul",
-        side=Side.DYNASTY,
-        force=2,
-        chi=2,
-        keywords=("Undead",),
+    state.creatable_tokens["ghul"] = PersonalityPrint(
+        name="Ghul", side=Side.DYNASTY, force=2, chi=2, keywords=("Undead",)
     )
 
     restored = action_log_from_dict(
@@ -516,14 +510,14 @@ def test_creatable_tokens_survive_serialization():
     )
 
     token = restored.initial.creatable_tokens["ghul"]
-    assert isinstance(token.printed, PersonalityPrint)
+    assert isinstance(token, PersonalityPrint)
     assert token.force == 2 and token.keywords == ("Undead",)
 
 
 def test_replay_reproduces_a_creatable_token_spawn():
     state = _start_state()
-    state.creatable_tokens["ghul"] = L5RCard.of(
-        PersonalityPrint, id="ghul", name="Ghul", side=Side.DYNASTY, force=2, chi=2
+    state.creatable_tokens["ghul"] = PersonalityPrint(
+        name="Ghul", side=Side.DYNASTY, force=2, chi=2
     )
     log = ActionLog(initial=InitialRecord.from_state(state))
     apply_and_log(
@@ -556,17 +550,17 @@ def test_card_subclass_fields_survive_serialization():
     assert isinstance(ring.printed, RingPrint) and ring.element is Element.FIRE
 
 
-def test_nested_back_face_survives_serialization():
-    back = L5RCard.of(
-        StrongholdPrint, id="kk__back", name="Defiled", side=Side.STRONGHOLD, starting_honor=8
-    )
+def test_a_back_face_survives_serialization():
     front = L5RCard.of(
         StrongholdPrint,
         id="kk",
         name="Kyuden Kuni",
         side=Side.STRONGHOLD,
         back_card_id="kk__back",
-        back=back,
+        back_printed=StrongholdPrint(
+            name="Defiled", side=Side.STRONGHOLD, printed_id="kk__back", starting_honor=8
+        ),
+        owner=PlayerId.P1,
     )
     key = DeckKey(PlayerId.P1, Side.DYNASTY)
     log = ActionLog(initial=InitialRecord(seats={}, decklists={key: [front]}))

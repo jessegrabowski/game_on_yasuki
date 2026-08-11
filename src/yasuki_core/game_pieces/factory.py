@@ -126,8 +126,8 @@ def _section_for_type(card_type: str | None) -> str:
     return "dynasty" if card_type in _DYNASTY_BY_TYPE else "fate"
 
 
-def build_token_card(record: dict) -> L5RCard:
-    """Build one live, owner-less card from a record, for the spawn to copy onto the battlefield.
+def build_token_print(record: dict) -> CardPrint:
+    """The print a spawn stamps a token from.
 
     The record has the ``get_card_by_id`` shape (the image as an ``image_path`` column, not a
     ``prints`` list), as returned by ``database.get_creates_for_cards`` and ``get_card_by_id``.
@@ -136,20 +136,15 @@ def build_token_card(record: dict) -> L5RCard:
     ----------
     record : dict
         The card's full database record.
-
-    Returns
-    -------
-    card : L5RCard
-        The built card, owner-less and keyed by its own card id.
     """
     card_type = (record.get("types") or [None])[0]
-    section = _section_for_type(card_type)
-    printed = _build_print(record, {"image_path": record.get("image_path")}, section)
-    return L5RCard(id=record["card_id"], printed=printed, owner=None)
+    return _build_print(
+        record, {"image_path": record.get("image_path")}, _section_for_type(card_type)
+    )
 
 
-def build_token_templates(token_records: dict[str, dict]) -> dict[str, L5RCard]:
-    """Build a live token card from each record, keyed by token card id.
+def build_token_templates(token_records: dict[str, dict]) -> dict[str, CardPrint]:
+    """Build a token print from each record, keyed by token card id.
 
     Used once at deck load to populate ``TableState.creatable_tokens`` from
     ``database.get_creates_for_cards``.
@@ -161,10 +156,10 @@ def build_token_templates(token_records: dict[str, dict]) -> dict[str, L5RCard]:
 
     Returns
     -------
-    templates : dict mapping str to L5RCard
-        Each token card id to a built token card.
+    templates : dict mapping str to CardPrint
+        Each token card id to the print a spawn stamps it from.
     """
-    return {token_id: build_token_card(record) for token_id, record in token_records.items()}
+    return {token_id: build_token_print(record) for token_id, record in token_records.items()}
 
 
 def _name_index(records: list[dict]) -> dict[str, dict]:
@@ -292,17 +287,8 @@ def _mint(
     owner: PlayerId | None,
     card_id: str,
 ) -> L5RCard:
-    """One copy of the card ``printed`` describes, with its own back face when it has one.
-
-    The back face is keyed by the printed id the front links it under, which is the only name a
-    face that never entered a deck has.
-    """
-    back = (
-        None
-        if back_printed is None
-        else L5RCard(id=printed.back_card_id, printed=back_printed, owner=owner)
-    )
-    return L5RCard(id=card_id, printed=printed, owner=owner, back=back)
+    """One copy of the card ``printed`` describes, carrying its other face when it has one."""
+    return L5RCard(id=card_id, printed=printed, owner=owner, back_printed=back_printed)
 
 
 def _build_print(

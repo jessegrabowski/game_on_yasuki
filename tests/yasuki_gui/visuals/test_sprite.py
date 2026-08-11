@@ -4,10 +4,11 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint
 import tkinter as tk
+from yasuki_core.engine.players import PlayerId
 
 
 def test_size_and_bbox_flip_with_bowed(root):
-    c = L5RCard.of(CardPrint, id="s1", name="Sprite", side=Side.FATE)
+    c = L5RCard.of(CardPrint, id="s1", name="Sprite", side=Side.FATE, owner=PlayerId.P1)
     sv = CardSpriteVisual(c, x=100, y=100, tag="card:1")
     w, h = sv.size
     assert w > 0 and h > 0
@@ -19,7 +20,7 @@ def test_size_and_bbox_flip_with_bowed(root):
 
 
 def test_draw_creates_canvas_items(root):
-    c = L5RCard.of(CardPrint, id="s2", name="SpriteDraw", side=Side.DYNASTY)
+    c = L5RCard.of(CardPrint, id="s2", name="SpriteDraw", side=Side.DYNASTY, owner=PlayerId.P1)
     sv = CardSpriteVisual(c, x=80, y=60, tag="card:2")
     _ = root.nametowidget(root._w)  # root is a Tk; but we need a Canvas to draw on
 
@@ -43,12 +44,17 @@ def test_wealth_counter_draws_a_badge(root):
     cv.pack()
     root.update_idletasks()
 
-    plain = L5RCard.of(CardPrint, id="p1", name="Plain", side=Side.DYNASTY)
+    plain = L5RCard.of(CardPrint, id="p1", name="Plain", side=Side.DYNASTY, owner=PlayerId.P1)
     CardSpriteVisual(plain, x=60, y=60, tag="card:p").draw(cv)
     assert cv.find_withtag("card:p:counter") == ()  # no counters, no badge
 
     rich = L5RCard.of(
-        CardPrint, id="w1", name="Rice Farm", side=Side.DYNASTY, counters={"wealth": 2}
+        CardPrint,
+        id="w1",
+        name="Rice Farm",
+        side=Side.DYNASTY,
+        counters={"wealth": 2},
+        owner=PlayerId.P1,
     )
     CardSpriteVisual(rich, x=140, y=60, tag="card:w").draw(cv)
     assert cv.find_withtag("card:w:counter")  # the wealth badge (disc + count) is drawn
@@ -61,7 +67,12 @@ def test_styled_counters_draw_their_own_colours(root):
 
     # Wealth and Sincerity carry hand-picked badge styles, so a card holding both reads them apart.
     card = L5RCard.of(
-        CardPrint, id="c1", name="C", side=Side.DYNASTY, counters={"wealth": 1, "sincerity": 2}
+        CardPrint,
+        id="c1",
+        name="C",
+        side=Side.DYNASTY,
+        counters={"wealth": 1, "sincerity": 2},
+        owner=PlayerId.P1,
     )
     CardSpriteVisual(card, x=100, y=100, tag="card:c").draw(cv)
 
@@ -83,6 +94,7 @@ def test_badges_scale_with_the_cards_counters_not_the_catalogue(root):
         name="C",
         side=Side.DYNASTY,
         counters={"fire": 1, "poison": 3, "wealth": 2},
+        owner=PlayerId.P1,
     )
     CardSpriteVisual(card, x=100, y=100, tag="card:d").draw(cv)
     discs = [i for i in cv.find_withtag("card:d:counter") if cv.type(i) == "oval"]

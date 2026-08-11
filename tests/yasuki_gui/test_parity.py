@@ -14,7 +14,6 @@ def _tokens(state):
 
 
 def _inject_double_faced(state, owner=PlayerId.P1):
-    back = L5RCard.of(CardPrint, id="DF-back", name="Back Face", side=Side.DYNASTY)
     front = L5RCard.of(
         CardPrint,
         id="DF",
@@ -22,7 +21,7 @@ def _inject_double_faced(state, owner=PlayerId.P1):
         side=Side.DYNASTY,
         owner=owner,
         back_card_id="DF-back",
-        back=back,
+        back_printed=CardPrint(name="Back Face", side=Side.DYNASTY, printed_id="DF-back"),
     )
     state.cards_by_id["DF"] = front
     state.battlefield.add(front)
@@ -100,7 +99,7 @@ class TestFlipFace:
         field, state = loaded
         front = _inject_double_faced(state)
         field.reconcile_all()
-        assert front.active_face is front
+        assert front.active_face is front.printed
         field.dispatch(FlipFace((front.id,)))
         assert front.showing_back is True
-        assert front.active_face is front.back
+        assert front.active_face is front.back_printed
