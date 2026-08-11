@@ -1,7 +1,11 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.players import PlayerId
+
+if TYPE_CHECKING:
+    from yasuki_core.game_pieces.prints import CardPrint
 
 
 @dataclass(frozen=True, slots=True)
@@ -60,6 +64,19 @@ class L5RCard:
     # A free-text annotation a player wrote on the face-up card (e.g. "dead"), shown over its art. It
     # rides along while the card stays public — including into a discard — and clears on entering a deck.
     note: str | None = field(default=None, compare=False)
+
+    @classmethod
+    def of(cls, print_cls: "type[CardPrint]", **fields) -> "L5RCard":
+        """Build a copy of the card ``print_cls`` describes, from one flat set of keyword arguments.
+
+        Parameters
+        ----------
+        print_cls : type of CardPrint
+            The print class describing the card, which picks the type built.
+        **fields
+            The card's printed characteristics and its per-copy state, in one namespace.
+        """
+        return print_cls.CARD(**fields)
 
     def __post_init__(self):
         # Normalize collections to tuples for consistent immutability

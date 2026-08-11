@@ -1,7 +1,25 @@
 from dataclasses import dataclass, field, fields
 from pathlib import Path
+from typing import ClassVar
 
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Element, Side, Timing
+from yasuki_core.game_pieces.dynasty import (
+    DynastyCard,
+    DynastyCelestial,
+    DynastyEvent,
+    DynastyHolding,
+    DynastyPersonality,
+    DynastyRegion,
+)
+from yasuki_core.game_pieces.fate import (
+    FateAction,
+    FateAncestor,
+    FateAttachment,
+    FateCard,
+    FateRing,
+)
+from yasuki_core.game_pieces.pregame import SenseiCard, StrongholdCard, WindCard
 from yasuki_core.paths import (
     DEFAULT_CELESTIAL,
     DEFAULT_EVENT,
@@ -31,6 +49,8 @@ class CardPrint:
     wears and which deck section it was filed under are chosen per entry, so two decks naming the
     same card get their own prints.
     """
+
+    CARD: ClassVar[type] = L5RCard
 
     name: str
     side: Side
@@ -67,12 +87,16 @@ class CardPrint:
 
 @dataclass(frozen=True, slots=True)
 class DynastyPrint(CardPrint):
+    CARD: ClassVar[type] = DynastyCard
+
     gold_cost: int | None = None
     image_back: Path | None = DYNASTY_BACK
 
 
 @dataclass(frozen=True, slots=True)
 class PersonalityPrint(DynastyPrint):
+    CARD: ClassVar[type] = DynastyPersonality
+
     image_front: Path | None = DEFAULT_PERSONALITY
     force: int = 0
     chi: int = 0
@@ -83,27 +107,37 @@ class PersonalityPrint(DynastyPrint):
 
 @dataclass(frozen=True, slots=True)
 class HoldingPrint(DynastyPrint):
+    CARD: ClassVar[type] = DynastyHolding
+
     image_front: Path | None = DEFAULT_HOLDING
     gold_production: int = 0
 
 
 @dataclass(frozen=True, slots=True)
 class EventPrint(DynastyPrint):
+    CARD: ClassVar[type] = DynastyEvent
+
     image_front: Path | None = DEFAULT_EVENT
 
 
 @dataclass(frozen=True, slots=True)
 class RegionPrint(DynastyPrint):
+    CARD: ClassVar[type] = DynastyRegion
+
     image_front: Path | None = DEFAULT_REGION
 
 
 @dataclass(frozen=True, slots=True)
 class CelestialPrint(DynastyPrint):
+    CARD: ClassVar[type] = DynastyCelestial
+
     image_front: Path | None = DEFAULT_CELESTIAL
 
 
 @dataclass(frozen=True, slots=True)
 class FatePrint(CardPrint):
+    CARD: ClassVar[type] = FateCard
+
     focus: int | None = None
     gold_cost: int | None = None
     image_back: Path | None = FATE_BACK
@@ -111,6 +145,8 @@ class FatePrint(CardPrint):
 
 @dataclass(frozen=True, slots=True)
 class ActionPrint(FatePrint):
+    CARD: ClassVar[type] = FateAction
+
     image_front: Path | None = DEFAULT_STRATEGY
     timings: tuple[Timing, ...] = ()
 
@@ -122,6 +158,8 @@ class ActionPrint(FatePrint):
 
 @dataclass(frozen=True, slots=True)
 class AttachmentPrint(FatePrint):
+    CARD: ClassVar[type] = FateAttachment
+
     image_front: Path | None = DEFAULT_ITEM
     attachment_type: AttachmentType = AttachmentType.ITEM
     attach_restrictions: tuple[str, ...] = ()
@@ -134,17 +172,21 @@ class AttachmentPrint(FatePrint):
 
 @dataclass(frozen=True, slots=True)
 class RingPrint(FatePrint):
+    CARD: ClassVar[type] = FateRing
+
     image_front: Path | None = DEFAULT_RING
     element: Element = Element.VOID
 
 
 @dataclass(frozen=True, slots=True)
 class AncestorPrint(FatePrint):
-    pass
+    CARD: ClassVar[type] = FateAncestor
 
 
 @dataclass(frozen=True, slots=True)
 class StrongholdPrint(CardPrint):
+    CARD: ClassVar[type] = StrongholdCard
+
     image_front: Path | None = DEFAULT_STRONGHOLD
     starting_honor: int = 0
     gold_production: int = 0
@@ -155,6 +197,8 @@ class StrongholdPrint(CardPrint):
 
 @dataclass(frozen=True, slots=True)
 class SenseiPrint(CardPrint):
+    CARD: ClassVar[type] = SenseiCard
+
     image_front: Path | None = DEFAULT_SENSEI
     starting_honor: int = 0
     gold_production: int = 0
@@ -163,4 +207,6 @@ class SenseiPrint(CardPrint):
 
 @dataclass(frozen=True, slots=True)
 class WindPrint(CardPrint):
+    CARD: ClassVar[type] = WindCard
+
     image_front: Path | None = DEFAULT_WIND

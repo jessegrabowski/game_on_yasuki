@@ -12,7 +12,6 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint
 from yasuki_core.paths import DYNASTY_BACK, FATE_BACK
 from yasuki_core.game_pieces.factory import (
-    _PRINT_FOR,
     _build_print,
     _select_print,
     resolve_decklist,
@@ -486,9 +485,9 @@ def test_a_card_carries_exactly_what_its_print_says():
 
 
 def test_every_card_class_has_a_print_that_covers_it():
-    """The two hierarchies mirror each other by hand while both exist. A card class added without a
-    print fails at deck load with a KeyError far from the cause; a print field the card cannot take
-    fails the same way.
+    """The two hierarchies mirror each other by hand while both exist. A card class no print names
+    is one nothing can build; a print field the card it names cannot take fails at deck load, far
+    from the cause.
 
     Both sides come from the modules that declare them rather than from ``__subclasses__``. A
     ``slots=True`` dataclass cannot be modified in place, so the decorator returns a replacement
@@ -506,12 +505,23 @@ def test_every_card_class_has_a_print_that_covers_it():
     cards = set().union(*(declared(m, L5RCard) for m in (cards_mod, dynasty, fate, pregame)))
     prints = declared(prints_mod, CardPrint)
 
-    assert cards - set(_PRINT_FOR) == set()
-    assert prints - set(_PRINT_FOR.values()) == set()
+    def defaults(cls, names):
+        return {f.name: f.default for f in fields(cls) if f.name in names}
+
+    assert {print_cls.CARD for print_cls in prints} == cards
     uncovered = {
-        card_cls.__name__: sorted(
-            {f.name for f in fields(print_cls)} - {f.name for f in fields(card_cls)}
+        print_cls.__name__: sorted(
+            {f.name for f in fields(print_cls)} - {f.name for f in fields(print_cls.CARD)}
         )
-        for card_cls, print_cls in _PRINT_FOR.items()
+        for print_cls in prints
     }
     assert {k: v for k, v in uncovered.items() if v} == {}
+    # Covering the fields is not enough on its own: two prints of the same shape could name each
+    # other's card and still pass. Their default art is what tells such a pair apart.
+    art = ("image_front", "image_back")
+    mismatched = {
+        print_cls.__name__: (defaults(print_cls, art), defaults(print_cls.CARD, art))
+        for print_cls in prints
+        if defaults(print_cls, art) != defaults(print_cls.CARD, art)
+    }
+    assert mismatched == {}
