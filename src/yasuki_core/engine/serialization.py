@@ -51,24 +51,25 @@ from yasuki_core.engine.intents import (
     RollDice,
 )
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    AncestorPrint,
+    AttachmentPrint,
+    CardPrint,
+    CelestialPrint,
+    DynastyPrint,
+    EventPrint,
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    RegionPrint,
+    RingPrint,
+    SenseiPrint,
+    StrongholdPrint,
+    WindPrint,
+)
 from yasuki_core.game_pieces.constants import Side, Element, Timing, AttachmentType
 from yasuki_core.game_pieces.counters import counter_from_key
-from yasuki_core.game_pieces.dynasty import (
-    DynastyCard,
-    DynastyPersonality,
-    DynastyHolding,
-    DynastyEvent,
-    DynastyRegion,
-    DynastyCelestial,
-)
-from yasuki_core.game_pieces.fate import (
-    FateCard,
-    FateAction,
-    FateAttachment,
-    FateRing,
-    FateAncestor,
-)
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 
 # The shared JSON codec: plain-dict (JSON-ready) round-trips for the engine's value types — cards,
 # zone/deck keys, seats, and intents. One canonical wire shape, consumed by the persisted action
@@ -79,31 +80,31 @@ _ENUM_REGISTRY: dict[str, type[Enum]] = {
     cls.__name__: cls for cls in (Side, Element, Timing, AttachmentType, PlayerId)
 }
 
-_CARD_REGISTRY: dict[str, type[L5RCard]] = {
+_PRINT_REGISTRY: dict[str, type[CardPrint]] = {
     cls.__name__: cls
     for cls in (
-        L5RCard,
-        FateCard,
-        FateAction,
-        FateAttachment,
-        FateRing,
-        DynastyCard,
-        DynastyPersonality,
-        DynastyHolding,
-        DynastyEvent,
-        DynastyRegion,
-        DynastyCelestial,
-        FateAncestor,
-        StrongholdCard,
-        SenseiCard,
-        WindCard,
+        CardPrint,
+        FatePrint,
+        ActionPrint,
+        AttachmentPrint,
+        RingPrint,
+        AncestorPrint,
+        DynastyPrint,
+        PersonalityPrint,
+        HoldingPrint,
+        EventPrint,
+        RegionPrint,
+        CelestialPrint,
+        StrongholdPrint,
+        SenseiPrint,
+        WindPrint,
     )
 }
 
 # What a card of each class persists, in payload order. This is the format; that the dataclasses
 # currently agree with it is held by a test, so a field added to a card fails until someone decides
-# whether it belongs on disk. Composed along the hierarchy, which every subclass extends rather
-# than reorders.
+# whether it belongs on disk. Composed along the print hierarchy, which every print extends
+# rather than reorders.
 _BASE_FIELDS = (
     "id",
     "name",
@@ -138,21 +139,21 @@ _DYNASTY_FIELDS = _BASE_FIELDS + ("gold_cost",)
 _PREGAME_FIELDS = _BASE_FIELDS + ("starting_honor", "gold_production", "province_strength")
 
 _PERSISTED_FIELDS: dict[str, tuple[str, ...]] = {
-    "L5RCard": _BASE_FIELDS,
-    "FateCard": _FATE_FIELDS,
-    "FateAction": _FATE_FIELDS + ("timings",),
-    "FateAttachment": _FATE_FIELDS + ("attachment_type", "attach_restrictions"),
-    "FateRing": _FATE_FIELDS + ("element",),
-    "FateAncestor": _FATE_FIELDS,
-    "DynastyCard": _DYNASTY_FIELDS,
-    "DynastyPersonality": _DYNASTY_FIELDS + ("force", "chi", "personal_honor", "honor_requirement"),
-    "DynastyHolding": _DYNASTY_FIELDS + ("gold_production",),
-    "DynastyEvent": _DYNASTY_FIELDS,
-    "DynastyRegion": _DYNASTY_FIELDS,
-    "DynastyCelestial": _DYNASTY_FIELDS,
-    "StrongholdCard": _PREGAME_FIELDS + ("province_count", "starting_hand_size"),
-    "SenseiCard": _PREGAME_FIELDS,
-    "WindCard": _BASE_FIELDS,
+    "CardPrint": _BASE_FIELDS,
+    "FatePrint": _FATE_FIELDS,
+    "ActionPrint": _FATE_FIELDS + ("timings",),
+    "AttachmentPrint": _FATE_FIELDS + ("attachment_type", "attach_restrictions"),
+    "RingPrint": _FATE_FIELDS + ("element",),
+    "AncestorPrint": _FATE_FIELDS,
+    "DynastyPrint": _DYNASTY_FIELDS,
+    "PersonalityPrint": _DYNASTY_FIELDS + ("force", "chi", "personal_honor", "honor_requirement"),
+    "HoldingPrint": _DYNASTY_FIELDS + ("gold_production",),
+    "EventPrint": _DYNASTY_FIELDS,
+    "RegionPrint": _DYNASTY_FIELDS,
+    "CelestialPrint": _DYNASTY_FIELDS,
+    "StrongholdPrint": _PREGAME_FIELDS + ("province_count", "starting_hand_size"),
+    "SenseiPrint": _PREGAME_FIELDS,
+    "WindPrint": _BASE_FIELDS,
 }
 
 _FLAG_CLASSES: dict[IntentOp, type[CardFlagIntent]] = {
@@ -219,18 +220,18 @@ def _decode_value(value):
 
 
 def encode_card(card: L5RCard) -> dict:
-    """Encode an ``L5RCard`` (any subclass) to JSON-ready plain data, tagged with its concrete type
-    so ``decode_card`` rebuilds the same class.
+    """Encode a card to JSON-ready plain data, tagged with the print it presents so ``decode_card``
+    rebuilds the same one.
 
-    Writes the fields :data:`_PERSISTED_FIELDS` names for that class rather than whatever the
-    dataclass declares, so the persisted format is a decision rather than a consequence.
+    Writes the fields :data:`_PERSISTED_FIELDS` names for that print rather than whatever the
+    dataclasses declare, so the persisted format is a decision rather than a consequence.
 
     Raises
     ------
     KeyError
-        If ``card``'s class has no persisted-field list, naming the class.
+        If the card's print has no persisted-field list, naming the print.
     """
-    name = type(card).__name__
+    name = type(card.printed).__name__
     if name not in _PERSISTED_FIELDS:
         raise KeyError(f"{name} has no persisted-field list; add one to _PERSISTED_FIELDS")
     payload = {"__type__": name}
@@ -240,10 +241,11 @@ def encode_card(card: L5RCard) -> dict:
 
 
 def decode_card(payload: dict) -> L5RCard:
-    """Rebuild the card encoded by ``encode_card``, dispatching on its ``__type__`` tag."""
-    cls = _CARD_REGISTRY[payload["__type__"]]
+    """Rebuild the card encoded by ``encode_card``, dispatching on its ``__type__`` tag, which
+    names the print it presents."""
+    print_cls = _PRINT_REGISTRY[payload["__type__"]]
     kwargs = {key: _decode_value(value) for key, value in payload.items() if key != "__type__"}
-    return cls(**kwargs)
+    return L5RCard.of(print_cls, **kwargs)
 
 
 def encode_zone_key(key: ZoneKey) -> dict:

@@ -66,10 +66,7 @@ yasuki_core
     yasuki_core.game_pieces.constants <yasuki_core.game_pieces.constants>
     yasuki_core.game_pieces.counters <yasuki_core.game_pieces.counters>
     yasuki_core.game_pieces.deck <yasuki_core.game_pieces.deck>
-    yasuki_core.game_pieces.dynasty <yasuki_core.game_pieces.dynasty>
     yasuki_core.game_pieces.factory <yasuki_core.game_pieces.factory>
-    yasuki_core.game_pieces.fate <yasuki_core.game_pieces.fate>
-    yasuki_core.game_pieces.pregame <yasuki_core.game_pieces.pregame>
     yasuki_core.game_pieces.prints <yasuki_core.game_pieces.prints>
     yasuki_core.game_setup <yasuki_core.game_setup>
     yasuki_core.install.card_index <yasuki_core.install.card_index>

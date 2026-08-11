@@ -216,6 +216,23 @@ class TestRulesModeRender:
         assert tag in field.sprites  # the card still renders so it can be animated
         assert isinstance(field.sprites[tag].card, HiddenFace)  # but as a back to P1
 
+    def test_an_unplaced_hidden_card_still_lands_in_a_home_row(self, loaded):
+        """A redacted card renders as a HiddenFace, which carries no print. The home row sorts each
+        unplaced card by whether it is a personality, and must not assume it can answer."""
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        secret = L5RCard.of(
+            CardPrint, id="P2-bf", name="Ambush", side=Side.DYNASTY, owner=PlayerId.P2
+        )
+        secret.turn_face_down()
+        state.cards_by_id["P2-bf"] = secret
+        state.battlefield.add(secret)
+        state.positions["P2-bf"] = UNPLACED_BOARD_POS
+        session = EngineSession.start(state, PlayerId.P1)
+        field.render_snapshot(session.project(PlayerId.P1).table, PlayerId.P1)
+
+        assert isinstance(field.sprites[card_tag("P2-bf")].card, HiddenFace)
+
     def test_dispatch_is_a_noop_in_rules_mode(self, loaded):
         field = self._rules_field(loaded)
         assert field.dispatch(Bow(("P2-bf",))) == []

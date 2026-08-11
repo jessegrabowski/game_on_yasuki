@@ -6,7 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Event, Intent, apply_intent
 from yasuki_core.engine.redaction import ViewSnapshot
-from yasuki_core.game_pieces.dynasty import DynastyPersonality
+from yasuki_core.game_pieces.prints import PersonalityPrint
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import CARD_H, CARD_W, HOME_STACK_OFFSET
@@ -498,7 +498,11 @@ class FieldView(tk.Canvas):
         for rc, pos in rendered:
             if pos is None or pos.x < 0 or pos.y < 0:
                 key = getattr(rc, "printed_id", None) or rc.id
-                bucket = personalities if isinstance(rc, DynastyPersonality) else holdings
+                bucket = (
+                    personalities
+                    if isinstance(getattr(rc, "printed", None), PersonalityPrint)
+                    else holdings
+                )
                 bucket.setdefault(rc.owner, []).append((rc.id, key))
         positions: dict[str, tuple[int, int]] = {}
         for personality_row, by_owner in ((False, holdings), (True, personalities)):

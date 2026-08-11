@@ -47,16 +47,14 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality
-from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.prints import CardPrint, DynastyPrint, FatePrint, PersonalityPrint
 
 
-def _fate(card_id: str, owner: PlayerId = PlayerId.P1) -> FateCard:
+def _fate(card_id: str, owner: PlayerId = PlayerId.P1) -> L5RCard:
     return L5RCard.of(FatePrint, id=card_id, name=card_id, side=Side.FATE, owner=owner)
 
 
-def _dynasty(card_id: str, owner: PlayerId = PlayerId.P1) -> DynastyCard:
+def _dynasty(card_id: str, owner: PlayerId = PlayerId.P1) -> L5RCard:
     return L5RCard.of(DynastyPrint, id=card_id, name=card_id, side=Side.DYNASTY, owner=owner)
 
 
@@ -1279,7 +1277,7 @@ def test_spawn_card_with_token_id_copies_the_full_template():
     assert events[0].cards == ("spawn-1",)
     assert card.is_token and card.owner is PlayerId.P1 and card.face_up is True
     # The spawned token is the full typed template, not a name/image stub.
-    assert isinstance(card, DynastyPersonality)
+    assert isinstance(card.printed, PersonalityPrint)
     assert (card.force, card.chi) == (2, 2)
     assert card.keywords == ("Shadowlands", "Ghul", "Undead")
     assert table.positions["spawn-1"] == BoardPos(1.0, 2.0)
@@ -1335,7 +1333,7 @@ def test_spawn_card_with_source_card_id_duplicates_a_full_in_play_card():
     apply_intent(table, PlayerId.P2, intent)  # a public card is duplicable by either seat
 
     copy = table.cards_by_id["spawn-1"]
-    assert isinstance(copy, DynastyPersonality)
+    assert isinstance(copy.printed, PersonalityPrint)
     assert (copy.force, copy.chi) == (3, 2) and copy.keywords == ("Lion",)
     assert copy.is_token and copy.owner is PlayerId.P2 and copy.id != source.id
     table.validate()

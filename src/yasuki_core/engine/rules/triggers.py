@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter, SINCERITY
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.prints import HoldingPrint
 
 # A sanity bound on the fixpoint walk: a converging cascade drains in a handful of events, so far
 # more than this means a trigger re-emits an event that re-fires it — a card-logic bug, raised loudly.
@@ -255,5 +255,5 @@ def province_holdings(game: GameState, seat: PlayerId) -> list[str]:
         for key, zone in game.table.zones.items()
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
-        if card.face_up and isinstance(card, DynastyHolding)
+        if card.face_up and isinstance(card.printed, HoldingPrint)
     ]

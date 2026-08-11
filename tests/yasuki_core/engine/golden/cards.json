@@ -1,6 +1,6 @@
 {
   "holding": {
-    "__type__": "DynastyHolding",
+    "__type__": "HoldingPrint",
     "id": "P1-7",
     "name": "Modest Farm",
     "side": {
@@ -77,7 +77,7 @@
     "gold_production": 2
   },
   "flip_stronghold": {
-    "__type__": "StrongholdCard",
+    "__type__": "StrongholdPrint",
     "id": "P1-sh",
     "name": "Kyuden",
     "side": {
@@ -121,7 +121,7 @@
     "back_card_id": "sh__back",
     "back": {
       "__card__": {
-        "__type__": "StrongholdCard",
+        "__type__": "StrongholdPrint",
         "id": "sh__back",
         "name": "Kyuden",
         "side": {

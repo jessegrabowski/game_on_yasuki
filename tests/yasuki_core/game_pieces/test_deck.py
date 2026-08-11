@@ -3,18 +3,16 @@ import pytest
 from numpy.random import default_rng
 
 from yasuki_core.game_pieces.deck import Deck, FateDeck, DynastyDeck
-from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.dynasty import DynastyCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint
 
 
-def mk_fate(i: int) -> FateCard:
+def mk_fate(i: int) -> L5RCard:
     return L5RCard.of(FatePrint, id=f"f{i}", name=f"Fate {i}", side=Side.FATE)
 
 
-def mk_dyn(i: int) -> DynastyCard:
+def mk_dyn(i: int) -> L5RCard:
     return L5RCard.of(DynastyPrint, id=f"d{i}", name=f"Dyn {i}", side=Side.DYNASTY)
 
 

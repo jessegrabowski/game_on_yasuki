@@ -50,7 +50,7 @@ from yasuki_core.engine.serialization import (
     decode_intent,
     encode_card,
     decode_card,
-    _CARD_REGISTRY,
+    _PRINT_REGISTRY,
     _PERSISTED_FIELDS,
     encode_zone_key,
     decode_zone_key,
@@ -63,9 +63,9 @@ from yasuki_core.game_pieces.constants import Side, Element
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.game_pieces.factory import resolve_decklist
-from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
+    CardPrint,
     HoldingPrint,
     PersonalityPrint,
     RingPrint,
@@ -148,7 +148,7 @@ def test_decoding_an_unknown_counter_is_rejected():
         decode_intent({"op": "ADJUST_COUNTER", "card_id": "c1", "name": "bogus", "delta": 1})
 
 
-def test_card_subclass_and_typed_fields_survive_round_trip():
+def test_card_print_and_typed_fields_survive_round_trip():
     personality = L5RCard.of(
         PersonalityPrint, id="dp1", name="Bushi", side=Side.DYNASTY, force=3, chi=2
     )
@@ -157,7 +157,7 @@ def test_card_subclass_and_typed_fields_survive_round_trip():
     for card in (personality, ring):
         rebuilt = decode_card(json.loads(json.dumps(encode_card(card))))
         assert rebuilt == card
-        assert type(rebuilt) is type(card)  # the concrete subclass, not bare L5RCard
+        assert type(rebuilt.printed) is type(card.printed)  # the print, not a bare CardPrint
 
 
 def test_card_counters_survive_a_json_round_trip():
@@ -189,7 +189,7 @@ def test_nested_back_face_survives_round_trip():
     rebuilt = decode_card(json.loads(json.dumps(encode_card(front))))
 
     assert rebuilt == front  # dataclass eq compares the nested back face recursively
-    assert isinstance(rebuilt.back, StrongholdCard)
+    assert isinstance(rebuilt.back.printed, StrongholdPrint)
 
 
 @pytest.mark.parametrize(
@@ -221,12 +221,20 @@ def test_seat_round_trips():
 
 def test_persisted_fields_match_the_classes():
     """The pinned lists are the format; the dataclasses happen to agree today. Adding a field to a
-    card class fails here until someone decides whether it belongs on disk, which is the whole
-    reason the lists exist rather than being derived."""
+    print or to the card fails here until someone decides whether it belongs on disk, which is the
+    whole reason the lists exist rather than being derived.
+
+    A payload is flat, so each list covers both halves at once. ``printed`` is the reference that
+    joins them and is the one card field with nothing to persist — the tag records which print it
+    pointed at."""
+    instance = {f.name for f in fields(L5RCard)} - {"printed"}
     mismatched = {
-        name: (tuple(f.name for f in fields(cls)), _PERSISTED_FIELDS.get(name))
-        for name, cls in _CARD_REGISTRY.items()
-        if tuple(f.name for f in fields(cls)) != _PERSISTED_FIELDS.get(name)
+        name: (
+            sorted({f.name for f in fields(cls)} | instance),
+            sorted(_PERSISTED_FIELDS.get(name, ())),
+        )
+        for name, cls in _PRINT_REGISTRY.items()
+        if {f.name for f in fields(cls)} | instance != set(_PERSISTED_FIELDS.get(name, ()))
     }
 
     assert mismatched == {}
@@ -236,19 +244,19 @@ def test_no_persisted_field_list_outlives_its_class():
     """The test above already fails for a class with no list. This is the other direction: a list
     left behind after its class was renamed or dropped, which would otherwise sit there forever
     describing a format nothing writes."""
-    assert set(_PERSISTED_FIELDS) - set(_CARD_REGISTRY) == set()
+    assert set(_PERSISTED_FIELDS) - set(_PRINT_REGISTRY) == set()
 
 
-def test_encoding_a_card_class_with_no_list_says_so():
-    """A card class that can be built but not saved fails at the save, far from the cause. Naming
-    it here is the difference between a one-line fix and an afternoon."""
+def test_encoding_a_print_with_no_list_says_so():
+    """A card that can be built but not saved fails at the save, far from the cause. Naming the
+    print here is the difference between a one-line fix and an afternoon."""
 
     @dataclass(frozen=True, slots=True)
-    class UnknownCard(L5RCard):
+    class UnknownPrint(CardPrint):
         pass
 
-    with pytest.raises(KeyError, match="UnknownCard has no persisted-field list"):
-        encode_card(UnknownCard(id="u", name="U", side=Side.DYNASTY))
+    with pytest.raises(KeyError, match="UnknownPrint has no persisted-field list"):
+        encode_card(L5RCard.of(UnknownPrint, id="u", name="U", side=Side.DYNASTY))
 
 
 def test_a_payload_carries_exactly_the_pinned_fields():
@@ -256,7 +264,7 @@ def test_a_payload_carries_exactly_the_pinned_fields():
 
     payload = encode_card(holding)
 
-    assert set(payload) == {"__type__", *_PERSISTED_FIELDS["DynastyHolding"]}
+    assert set(payload) == {"__type__", *_PERSISTED_FIELDS["HoldingPrint"]}
 
 
 GOLDEN = Path(__file__).parent / "golden" / "cards.json"
@@ -267,9 +275,8 @@ def _golden_cards() -> dict[str, L5RCard]:
     Path, None, and a nested card. Two rather than fifteen because the classes differ only in extra
     scalars, and the value encoding they share is what a golden payload is for.
 
-    Every image path is set explicitly, including the ones the card classes default. Those defaults
-    are absolute and derived from the install location, so leaving them would bake this machine's
-    filesystem into the checked-in bytes.
+    Every image path is set explicitly, including the ones a print's type defaults, so the checked-in
+    bytes do not depend on what those defaults happen to be.
     """
     holding = L5RCard.of(
         HoldingPrint,
@@ -385,13 +392,13 @@ def test_the_pinned_list_is_the_format_not_the_dataclass():
     nothing else can tell which one `encode_card` reads. This forces the list out of step for one
     call to prove the format follows it — that is the property the whole pin exists for, and the
     one that matters on the day a field moves off the card."""
-    original = _PERSISTED_FIELDS["DynastyHolding"]
+    original = _PERSISTED_FIELDS["HoldingPrint"]
     holding = L5RCard.of(HoldingPrint, id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
-    _PERSISTED_FIELDS["DynastyHolding"] = ("id", "name", "side")
+    _PERSISTED_FIELDS["HoldingPrint"] = ("id", "name", "side")
     try:
         payload = encode_card(holding)
     finally:
-        _PERSISTED_FIELDS["DynastyHolding"] = original
+        _PERSISTED_FIELDS["HoldingPrint"] = original
 
     assert set(payload) == {"__type__", "id", "name", "side"}
 

@@ -25,10 +25,13 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules import abilities
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.pregame import SenseiCard, StrongholdCard
 from yasuki_core.ruleset import SHATTERED_EMPIRE
+from yasuki_core.game_pieces.prints import (
+    HoldingPrint,
+    PersonalityPrint,
+    SenseiPrint,
+    StrongholdPrint,
+)
 
 # The boldface keyword marking a card the Legacy rulebook ability can search out.
 LEGACY_KEYWORD = "Legacy"
@@ -237,11 +240,11 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
     for card in province_cards(game, seat):
         if only is not None and card.id != only:
             continue
-        if not (isinstance(card, (DynastyHolding, DynastyPersonality)) and card.face_up):
+        if not (isinstance(card.printed, (HoldingPrint, PersonalityPrint)) and card.face_up):
             continue
         if (
             enforce_honor
-            and isinstance(card, DynastyPersonality)
+            and isinstance(card.printed, PersonalityPrint)
             and card.honor_requirement is not None
             and honor < card.honor_requirement
         ):
@@ -285,7 +288,7 @@ def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
         for card in game.table.battlefield.cards
         if card.owner is seat
         and not card.bowed
-        and not isinstance(card, SenseiCard)
+        and not isinstance(card.printed, SenseiPrint)
         and effective_gold_production(game, card) > 0
     ]
 
@@ -335,7 +338,7 @@ def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard | None = None)
     )
 
 
-def recruit_cost(game: GameState, card: DynastyCard | FateCard) -> int:
+def recruit_cost(game: GameState, card: L5RCard | L5RCard) -> int:
     """The gold a seat pays to recruit ``card``: its printed gold cost, plus the off-clan surcharge
     when the card has a Clan Alignment the seat does not share, less the card's own conditional
     recruit discount. Floored at zero."""
@@ -357,7 +360,7 @@ def proclaim_key(seat: PlayerId, turn: int) -> str:
 def can_proclaim(game: GameState, card: L5RCard) -> bool:
     """Whether recruiting ``card`` could be Proclaimed by its seat: a Personality carrying the seat's
     Clan Alignment that the seat has not yet Proclaimed against this turn."""
-    if not isinstance(card, DynastyPersonality):
+    if not isinstance(card.printed, PersonalityPrint):
         return False
     seat = card.owner
     if seat is None:
@@ -425,7 +428,7 @@ def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
 def seat_clan(game: GameState, seat: PlayerId | None) -> str | None:
     """The clan printed on ``seat``'s Stronghold, or None when it has none in play."""
     for card in game.table.battlefield.cards:
-        if card.owner is seat and isinstance(card, StrongholdCard):
+        if card.owner is seat and isinstance(card.printed, StrongholdPrint):
             return card.clan
     return None
 

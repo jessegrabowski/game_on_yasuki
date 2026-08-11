@@ -40,8 +40,6 @@ from yasuki_core.engine.intents import (
 )
 from yasuki_core.game_pieces.constants import Side, Element, Timing
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality
-from yasuki_core.game_pieces.fate import FateCard, FateRing
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.action_log import (
     LogEntry,
@@ -69,7 +67,7 @@ from yasuki_core.game_pieces.prints import (
 )
 
 
-def _fate_deck(owner: PlayerId) -> list[FateCard]:
+def _fate_deck(owner: PlayerId) -> list[L5RCard]:
     tag = owner.name.lower()
     return [
         L5RCard.of(
@@ -95,7 +93,7 @@ def _fate_deck(owner: PlayerId) -> list[FateCard]:
     ]
 
 
-def _dynasty_deck(owner: PlayerId) -> list[DynastyCard]:
+def _dynasty_deck(owner: PlayerId) -> list[L5RCard]:
     tag = owner.name.lower()
     return [
         L5RCard.of(
@@ -518,7 +516,7 @@ def test_creatable_tokens_survive_serialization():
     )
 
     token = restored.initial.creatable_tokens["ghul"]
-    assert isinstance(token, DynastyPersonality)
+    assert isinstance(token.printed, PersonalityPrint)
     assert token.force == 2 and token.keywords == ("Undead",)
 
 
@@ -540,7 +538,7 @@ def test_replay_reproduces_a_creatable_token_spawn():
 
     assert rebuilt == state
     spawned = rebuilt.cards_by_id["spawn-1"]
-    assert isinstance(spawned, DynastyPersonality) and spawned.force == 2 and spawned.is_token
+    assert isinstance(spawned.printed, PersonalityPrint) and spawned.force == 2 and spawned.is_token
 
 
 def test_card_subclass_fields_survive_serialization():
@@ -553,9 +551,9 @@ def test_card_subclass_fields_survive_serialization():
     rebuilt = {c.id: c for cards in restored.initial.decklists.values() for c in cards}
     assert rebuilt == original
     bushi = rebuilt["p1_dp1"]
-    assert isinstance(bushi, DynastyPersonality) and bushi.force == 3 and bushi.chi == 2
+    assert isinstance(bushi.printed, PersonalityPrint) and bushi.force == 3 and bushi.chi == 2
     ring = rebuilt["p1_fr"]
-    assert isinstance(ring, FateRing) and ring.element is Element.FIRE
+    assert isinstance(ring.printed, RingPrint) and ring.element is Element.FIRE
 
 
 def test_nested_back_face_survives_serialization():

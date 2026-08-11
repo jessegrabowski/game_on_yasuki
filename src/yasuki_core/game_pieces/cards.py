@@ -1,37 +1,21 @@
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import TYPE_CHECKING
-from yasuki_core.game_pieces.constants import Side
+from dataclasses import dataclass, field, fields as dataclass_fields
 from yasuki_core.engine.players import PlayerId
-
-if TYPE_CHECKING:
-    from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 @dataclass(frozen=True, slots=True)
 class L5RCard:
+    """One physical copy of a card in a game: its identity, its state, and the print it presents.
+
+    Characteristics — name, keywords, printed stats — belong to the :class:`CardPrint` in
+    ``printed``, which every copy of that card shares and none of them mutates. Reads forward, so
+    ``card.gold_production`` answers from the print, but ``isinstance`` does not: ask
+    ``isinstance(card.printed, HoldingPrint)`` for the card's type.
+    """
+
     id: str
-    name: str
-    side: Side
-    # The card's stable printed identity — the database card slug (e.g. "ancestral_estate"), shared
-    # by every copy and printing, distinct from the per-instance ``id``. Per-card effect handlers key
-    # off it; None for fabricated demo cards and spawned tokens, which fall back to plain behavior.
-    printed_id: str | None = None
-    clan: str | None = None
-    # All Clan names printed on the card (the card_clans relation); ``clan`` is only the first.
-    # Recruit's off-clan and Proclaim rules test alignment membership against the full list.
-    clans: tuple[str, ...] = ()
-    keywords: tuple[str, ...] = ()
-    traits: tuple[str, ...] = ()
-    # The card's primary printed type (e.g. "Item", "Personality"), kept so the web client can pick a
-    # type-default placeholder image for a print with no scanned art yet.
-    card_type: str | None = None
-    # Token card ids this card can create in play (the card_creates relation), resolved once at deck
-    # load. The context menu offers a "Create" item per id; the spawn resolves the id against
-    # TableState.creatable_tokens to build a full token card.
-    creates: tuple[str, ...] = ()
-    text: str = ""
-    is_unique: bool = False
+    printed: CardPrint
+    owner: PlayerId | None = None
     bowed: bool = False
     face_up: bool = True
     inverted: bool = False
@@ -39,55 +23,57 @@ class L5RCard:
     # (docs/engine/counters-vs-cards.md). In equality — replay checks must see counter drift — but
     # out of the generated hash, which a dict cannot join.
     counters: dict[str, int] = field(default_factory=dict, hash=False)
-    image_front: Path | None = None
-    image_back: Path | None = None
-    owner: PlayerId | None = None
     # Two distinct disclosures, both narrower than turning the card face up. ``shown`` marks a card the
     # owner has revealed to their opponent: a face-down card the opponent may then identify while its
     # owner still sees a back, or a hand card made public to all. ``peekers`` holds the seats privately
     # peeking at the card — each may identify it, nobody else learns what they saw.
     shown: bool = False
     peekers: frozenset[PlayerId] = frozenset()
-    # Double-faced cards (e.g. flip strongholds): back_card_id links the other face, back holds it as
-    # a resolved card when available, and showing_back selects which face is presented. Distinct from
-    # face_up, which conceals a card behind its generic deck back.
-    back_card_id: str | None = None
+    # The other face of a double-faced card, held as a resolved card when available; ``showing_back``
+    # selects which face is presented. Distinct from face_up, which conceals a card behind its
+    # generic deck back.
     back: "L5RCard | None" = None
     showing_back: bool = False
     # A sandbox piece spawned onto the table (SpawnCard), not a card drawn from a deck. Only tokens
     # may be removed from the table; a real card is never destroyed outright.
     is_token: bool = False
-    # An art-swap payload when the deck entry borrows another printing's art for the front: the donor
-    # image and both frames' (era, layout) plus the recipient keywords, all the browser canvas needs to
-    # recomposite it. Pure client-render metadata, so it stays out of card identity (compare=False).
-    art_swap: dict | None = field(default=None, compare=False)
     # A free-text annotation a player wrote on the face-up card (e.g. "dead"), shown over its art. It
     # rides along while the card stays public — including into a discard — and clears on entering a deck.
     note: str | None = field(default=None, compare=False)
 
     @classmethod
-    def of(cls, print_cls: "type[CardPrint]", **fields) -> "L5RCard":
+    def of(cls, print_cls: type[CardPrint], **fields) -> "L5RCard":
         """Build a copy of the card ``print_cls`` describes, from one flat set of keyword arguments.
 
         Parameters
         ----------
         print_cls : type of CardPrint
-            The print class describing the card, which picks the type built.
+            The print class describing the card, which picks the print built.
         **fields
-            The card's printed characteristics and its per-copy state, in one namespace.
+            The card's printed characteristics and its per-copy state, in one namespace. Each name
+            goes to whichever half declares it.
         """
-        return print_cls.CARD(**fields)
+        printed_names = {f.name for f in dataclass_fields(print_cls)}
+        printed = {name: fields.pop(name) for name in list(fields) if name in printed_names}
+        return cls(printed=print_cls(**printed), **fields)
+
+    def __getattr__(self, name: str):
+        """Answer a printed characteristic off the print this copy presents."""
+        # printed lives in a slot, so it is missing until __init__ sets it; without this guard a
+        # read during construction would recurse here forever.
+        try:
+            printed = object.__getattribute__(self, "printed")
+        except AttributeError:
+            raise AttributeError(name) from None
+        try:
+            return getattr(printed, name)
+        except AttributeError:
+            # Reported against the card, not the print: whoever hit this was reading a card.
+            raise AttributeError(
+                f"{type(self).__name__!r} object has no attribute {name!r}"
+            ) from None
 
     def __post_init__(self):
-        # Normalize collections to tuples for consistent immutability
-        if not isinstance(self.clans, tuple):
-            object.__setattr__(self, "clans", tuple(self.clans))
-        if not isinstance(self.keywords, tuple):
-            object.__setattr__(self, "keywords", tuple(self.keywords))
-        if not isinstance(self.traits, tuple):
-            object.__setattr__(self, "traits", tuple(self.traits))
-        if not isinstance(self.creates, tuple):
-            object.__setattr__(self, "creates", tuple(self.creates))
         if not isinstance(self.peekers, frozenset):
             object.__setattr__(self, "peekers", frozenset(self.peekers))
         # Always copy: replace()-built cards (e.g. synthetic back faces) must not share the mutable
@@ -158,7 +144,7 @@ class L5RCard:
             object.__setattr__(self, "peekers", frozenset())
 
     def flip_face(self) -> None:
-        if self.back_card_id is not None:
+        if self.printed.back_card_id is not None:
             object.__setattr__(self, "showing_back", not self.showing_back)
 
     @property

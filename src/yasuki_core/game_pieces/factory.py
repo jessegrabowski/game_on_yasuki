@@ -66,7 +66,7 @@ def resolve_decklist(
     """Resolve a parsed decklist into typed card instances owned by ``owner``.
 
     Each entry's section (not the record's deck field) decides the card family, so a player's manual
-    placement is honored; the record's first type refines the subclass. One instance is built per
+    placement is honored; the record's first type refines the print. One instance is built per
     physical copy, with a card id unique across both seats.
 
     Parameters
@@ -117,8 +117,8 @@ def resolve_decklist(
 
 
 def _section_for_type(card_type: str | None) -> str:
-    """The deck family a token of ``card_type`` belongs to, for the factory's subclass classification.
-    A token carries no deck section of its own, so it is inferred from its type."""
+    """The deck family a token of ``card_type`` belongs to, which picks its print. A token carries no
+    deck section of its own, so it is inferred from its type."""
     return "dynasty" if card_type in _DYNASTY_BY_TYPE else "fate"
 
 
@@ -271,15 +271,18 @@ def _build_card(
         synthetic_back = replace(
             front,
             id=back_card_id,
-            image_front=Path(front_print["back_image_path"]),
-            back_card_id=None,
+            printed=replace(
+                front.printed,
+                image_front=Path(front_print["back_image_path"]),
+                back_card_id=None,
+            ),
             back=None,
         )
         front = replace(front, back=synthetic_back)
     if art and front_print and name_index is not None:
         art_swap = _art_swap(record, front_print, art, name_index)
         if art_swap is not None:
-            front = replace(front, art_swap=art_swap)
+            front = replace(front, printed=replace(front.printed, art_swap=art_swap))
     return front
 
 
@@ -295,7 +298,7 @@ def _construct_face(
     creates: tuple[str, ...] = (),
 ) -> L5RCard:
     printed = _build_print(record, print_info, section, back_card_id=back_card_id, creates=creates)
-    return L5RCard.of(type(printed), id=card_id, owner=owner, back=back, **printed.as_card_fields())
+    return L5RCard(id=card_id, printed=printed, owner=owner, back=back)
 
 
 def _build_print(

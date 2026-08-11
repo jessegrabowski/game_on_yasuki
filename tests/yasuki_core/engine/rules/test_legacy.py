@@ -4,7 +4,6 @@ from numpy.random import default_rng
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint
 from yasuki_core.engine.rules.actions import Legacy
@@ -37,7 +36,7 @@ def _facedown_province(state: TableState, seat: PlayerId, card):
     return card
 
 
-def _legacy_holding(seat: PlayerId, card_id: str) -> DynastyHolding:
+def _legacy_holding(seat: PlayerId, card_id: str) -> L5RCard:
     return L5RCard.of(
         HoldingPrint,
         id=card_id,
@@ -277,7 +276,7 @@ def test_the_reshuffle_draws_on_the_games_own_generator():
     assert orders[0] != orders[1]
 
 
-def _shrine_of_courtesy(seat: PlayerId) -> DynastyHolding:
+def _shrine_of_courtesy(seat: PlayerId) -> L5RCard:
     """Shrine of Courtesy carries no printed Legacy keyword; its Courtesy clause grants one."""
     return L5RCard.of(
         HoldingPrint,
@@ -311,7 +310,7 @@ def test_a_conditional_grant_that_does_not_apply_leaves_the_card_unfindable():
     assert legality.legacy_candidates(game, PlayerId.P1) == []
 
 
-def _buried_province_card(session: EngineSession) -> DynastyHolding:
+def _buried_province_card(session: EngineSession) -> L5RCard:
     """Put a face-down card in a Province of the seat about to act, the state a Province is left in
     when it refills after a recruit — the only way one is face-down during its owner's own turn."""
     buried = L5RCard.of(

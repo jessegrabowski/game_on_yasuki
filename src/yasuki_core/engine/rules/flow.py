@@ -5,9 +5,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
-from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
@@ -77,6 +74,7 @@ from yasuki_core.engine.rules import abilities, triggers
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, Revealed, TurnStarted
 from yasuki_core.game_pieces.counters import SINCERITY
+from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint, WindPrint
 
 # The keyword that refills a card's vacated Province face-up when it enters play (rather than the
 # usual face-down), so the next card is recruitable the same turn.
@@ -94,7 +92,7 @@ def next_phase(phase: Phase) -> Phase | None:
 
 
 # The pre-game permanents that get their enters-play effect fired as the game begins.
-_PREGAME_PERMANENTS = (StrongholdCard, SenseiCard, WindCard)
+_PREGAME_PERMANENTS = (StrongholdPrint, SenseiPrint, WindPrint)
 
 # The stats a sensei grants its stronghold rather than folding into its printed ones. Starting Honor
 # is not here: it is a seat scalar read once at setup, not a card stat anything reads again.
@@ -114,7 +112,7 @@ def _begin_pregame(game: GameState) -> None:
     """Fire EnteredPlay for each pre-game permanent on the battlefield, so a Stronghold or Sensei with
     an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
     for card in list(game.table.battlefield.cards):
-        if isinstance(card, _PREGAME_PERMANENTS):
+        if isinstance(card.printed, _PREGAME_PERMANENTS):
             triggers.fire(game, EnteredPlay(card.id))
 
 
@@ -128,11 +126,11 @@ def _grant_sensei_modifiers(game: GameState) -> None:
     strongholds = {
         card.owner: card
         for card in game.table.battlefield.cards
-        if isinstance(card, StrongholdCard) and card.owner is not None
+        if isinstance(card.printed, StrongholdPrint) and card.owner is not None
     }
     grants: list[Effect] = []
     for card in game.table.battlefield.cards:
-        stronghold = strongholds.get(card.owner) if isinstance(card, SenseiCard) else None
+        stronghold = strongholds.get(card.owner) if isinstance(card.printed, SenseiPrint) else None
         if stronghold is None:
             continue  # not a sensei, or a sensei with no stronghold to modify
         for stat in SENSEI_GRANTED_STATS:
@@ -275,7 +273,7 @@ def recruit(
 
 def announce_recruit(
     game: GameState,
-    card: DynastyCard | FateCard,
+    card: L5RCard | L5RCard,
     seat: PlayerId,
     invest_amount: int,
     renew: bool = False,
@@ -506,7 +504,7 @@ def _resolve_recruit(
     # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
     # rather than dropping it at the origin.
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
-    if isinstance(card, DynastyHolding):
+    if isinstance(card.printed, HoldingPrint):
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     if province_key is not None:
         # Renew is read once the card has entered play, which is when the keyword speaks.

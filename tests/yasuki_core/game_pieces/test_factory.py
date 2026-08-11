@@ -3,13 +3,7 @@ import pytest
 
 from yasuki_core.database import get_connection_string, get_creates_for_cards
 from yasuki_core.decklist import parse_deck_yaml
-from dataclasses import fields
 
-from yasuki_core.game_pieces import cards as cards_mod
-from yasuki_core.game_pieces import dynasty, fate, pregame
-from yasuki_core.game_pieces import prints as prints_mod
-from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import CardPrint
 from yasuki_core.paths import DYNASTY_BACK, FATE_BACK
 from yasuki_core.game_pieces.factory import (
     _build_print,
@@ -19,10 +13,16 @@ from yasuki_core.game_pieces.factory import (
     build_token_card,
 )
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.game_pieces.dynasty import DynastyPersonality
-from yasuki_core.game_pieces.fate import FateAction, FateAncestor, FateAttachment
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 from yasuki_core.game_pieces.constants import Side, AttachmentType
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    AncestorPrint,
+    AttachmentPrint,
+    PersonalityPrint,
+    SenseiPrint,
+    StrongholdPrint,
+    WindPrint,
+)
 
 # Records shaped like database.get_cards_by_names output: a card row plus an ordered `prints` list.
 RECORDS = [
@@ -152,16 +152,16 @@ def _resolve(yaml=DECK, owner=PlayerId.P1):
 
 def test_each_section_resolves_to_the_right_subclass():
     r = _resolve()
-    assert [type(c) for c in r.pre_game] == [StrongholdCard, SenseiCard, WindCard]
-    assert all(isinstance(c, DynastyPersonality) for c in r.dynasty)
-    assert all(isinstance(c, FateAction) for c in r.fate)
+    assert [type(c.printed) for c in r.pre_game] == [StrongholdPrint, SenseiPrint, WindPrint]
+    assert all(isinstance(c.printed, PersonalityPrint) for c in r.dynasty)
+    assert all(isinstance(c.printed, ActionPrint) for c in r.fate)
 
 
 def test_ancestor_in_the_fate_section_resolves_to_a_fate_ancestor():
     r = resolve_decklist(
         parse_deck_yaml("name: T\nFate:\n  - Ancestral Blade"), RECORDS, PlayerId.P1
     )
-    assert isinstance(r.fate[0], FateAncestor)
+    assert isinstance(r.fate[0].printed, AncestorPrint)
     assert r.fate[0].side is Side.FATE
 
 
@@ -353,7 +353,7 @@ def test_double_faced_card_nests_its_back_when_the_record_is_present():
     deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni")
     sh = resolve_decklist(deck, [FLIP_FRONT, FLIP_BACK], PlayerId.P1).pre_game[0]
     assert sh.back_card_id == "kyuden_kuni__back"
-    assert isinstance(sh.back, StrongholdCard)
+    assert isinstance(sh.back.printed, StrongholdPrint)
     # Each face is a distinct card, so it carries its own printed_id — the back dispatches to its own
     # effect handler, not the front's.
     assert sh.printed_id == "kyuden_kuni"
@@ -435,14 +435,14 @@ def test_build_token_templates_builds_full_typed_cards():
     templates = build_token_templates({"ghul": GHUL_TOKEN, "jackal_pack": JACKAL_TOKEN})
 
     ghul = templates["ghul"]
-    assert isinstance(ghul, DynastyPersonality)
+    assert isinstance(ghul.printed, PersonalityPrint)
     assert (ghul.force, ghul.chi, ghul.personal_honor) == (2, 2, 0)
     assert ghul.keywords == ("Ghul", "Shadowlands", "Undead")
     assert ghul.image_front.as_posix() == "sets/tokens/ghul.png"
     assert ghul.owner is None
 
     jackal = templates["jackal_pack"]
-    assert isinstance(jackal, FateAttachment)
+    assert isinstance(jackal.printed, AttachmentPrint)
     assert jackal.attachment_type.value == "Follower"
     assert jackal.keywords == ("Cavalry", "Jackal", "Nonhuman")
 
@@ -468,60 +468,22 @@ def test_a_resolved_card_keeps_its_deck_back():
     assert resolved.fate[0].image_back == FATE_BACK
 
 
-def test_a_card_carries_exactly_what_its_print_says():
-    """The card still declares the printed characteristics itself, so the two can drift. Until the
-    card reads through to its print, this is what holds them together."""
+def test_a_resolved_card_presents_the_print_its_record_describes():
+    """Resolving a decklist and building a print from the same record are two paths to the same
+    print; a card reads all its characteristics through whichever one it got."""
     record = next(r for r in RECORDS if r["card_id"] == "kuni_yori")
-    printed = _build_print(record, _select_print(record, "Pearl Edition"), "dynasty")
     card = _resolve().dynasty[0]
 
-    mismatched = {
-        name: (value, getattr(card, name))
-        for name, value in printed.as_card_fields().items()
-        if getattr(card, name) != value
-    }
-
-    assert mismatched == {}
+    assert card.printed == _build_print(record, _select_print(record, "Pearl Edition"), "dynasty")
 
 
-def test_every_card_class_has_a_print_that_covers_it():
-    """The two hierarchies mirror each other by hand while both exist. A card class no print names
-    is one nothing can build; a print field the card it names cannot take fails at deck load, far
-    from the cause.
+def test_two_copies_of_a_card_are_distinct_but_present_equal_prints():
+    """Two copies of one entry are separate cards carrying their own state. They get a print each
+    rather than one between them, which costs memory but not correctness, since a print is frozen
+    and the two are equal."""
+    first, second = _resolve().dynasty
 
-    Both sides come from the modules that declare them rather than from ``__subclasses__``. A
-    ``slots=True`` dataclass cannot be modified in place, so the decorator returns a replacement
-    class and leaves the original in its base's subclass list — every card and print class is in
-    there twice, and only the one the module binds is the one anything else uses.
-    """
-
-    def declared(module, base):
-        return {
-            value
-            for value in vars(module).values()
-            if isinstance(value, type) and issubclass(value, base)
-        }
-
-    cards = set().union(*(declared(m, L5RCard) for m in (cards_mod, dynasty, fate, pregame)))
-    prints = declared(prints_mod, CardPrint)
-
-    def defaults(cls, names):
-        return {f.name: f.default for f in fields(cls) if f.name in names}
-
-    assert {print_cls.CARD for print_cls in prints} == cards
-    uncovered = {
-        print_cls.__name__: sorted(
-            {f.name for f in fields(print_cls)} - {f.name for f in fields(print_cls.CARD)}
-        )
-        for print_cls in prints
-    }
-    assert {k: v for k, v in uncovered.items() if v} == {}
-    # Covering the fields is not enough on its own: two prints of the same shape could name each
-    # other's card and still pass. Their default art is what tells such a pair apart.
-    art = ("image_front", "image_back")
-    mismatched = {
-        print_cls.__name__: (defaults(print_cls, art), defaults(print_cls.CARD, art))
-        for print_cls in prints
-        if defaults(print_cls, art) != defaults(print_cls.CARD, art)
-    }
-    assert mismatched == {}
+    assert first is not second
+    assert first.printed == second.printed
+    first.bow()
+    assert not second.bowed

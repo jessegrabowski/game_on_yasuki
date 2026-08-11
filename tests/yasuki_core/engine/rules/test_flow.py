@@ -4,7 +4,6 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     DynastyPrint,
@@ -220,7 +219,7 @@ def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
     assert legality.recruit_cost(game, holding) == 4  # no Stronghold clan to compare against
 
 
-def _personality(clans: tuple[str, ...], **kwargs) -> DynastyPersonality:
+def _personality(clans: tuple[str, ...], **kwargs) -> L5RCard:
     return L5RCard.of(
         PersonalityPrint,
         id="p",
@@ -330,7 +329,7 @@ def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
     return GameState.start(state, first_player)
 
 
-def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> DynastyHolding:
+def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> L5RCard:
     return L5RCard.of(
         HoldingPrint,
         id=f"{printed_id}-inst",

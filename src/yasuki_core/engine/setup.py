@@ -6,7 +6,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import ResolvedDeck
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
+from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 
 # Pre-game permanents start as loose, face-up battlefield cards at a negative sentinel position; the
 # client recognises an unplaced pre-game card and lays it out next to that seat's dynasty deck, after
@@ -53,9 +53,11 @@ def setup_seat(
     _draw_starting_hand(state, seat, _starting_hand_size(resolved))
 
 
-def _stronghold(resolved: ResolvedDeck) -> StrongholdCard | None:
+def _stronghold(resolved: ResolvedDeck) -> L5RCard | None:
     """The deck's stronghold pre-game card, or None if it has none."""
-    return next((card for card in resolved.pre_game if isinstance(card, StrongholdCard)), None)
+    return next(
+        (card for card in resolved.pre_game if isinstance(card.printed, StrongholdPrint)), None
+    )
 
 
 def _province_count(resolved: ResolvedDeck) -> int:
@@ -63,7 +65,7 @@ def _province_count(resolved: ResolvedDeck) -> int:
     stronghold = _stronghold(resolved)
     if stronghold is not None:
         return stronghold.province_count
-    return StrongholdCard.__dataclass_fields__["province_count"].default
+    return StrongholdPrint.__dataclass_fields__["province_count"].default
 
 
 def _starting_honor(resolved: ResolvedDeck) -> int:
@@ -78,7 +80,7 @@ def _starting_honor(resolved: ResolvedDeck) -> int:
     if stronghold is None:
         return 0
     return stronghold.starting_honor + sum(
-        card.starting_honor for card in resolved.pre_game if isinstance(card, SenseiCard)
+        card.starting_honor for card in resolved.pre_game if isinstance(card.printed, SenseiPrint)
     )
 
 
@@ -87,7 +89,7 @@ def _starting_hand_size(resolved: ResolvedDeck) -> int:
     stronghold = _stronghold(resolved)
     if stronghold is not None:
         return stronghold.starting_hand_size
-    return StrongholdCard.__dataclass_fields__["starting_hand_size"].default
+    return StrongholdPrint.__dataclass_fields__["starting_hand_size"].default
 
 
 def _fill_provinces(state: TableState, seat: PlayerId) -> None:
@@ -148,7 +150,7 @@ def _find_stronghold(state: TableState, seat: PlayerId) -> L5RCard | None:
         (
             card
             for card in state.battlefield.cards
-            if isinstance(card, StrongholdCard) and card.owner == seat
+            if isinstance(card.printed, StrongholdPrint) and card.owner == seat
         ),
         None,
     )

@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.triggers import (
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.prints import HoldingPrint
 
 
 # --- Millet Farm ---
@@ -62,7 +62,7 @@ def _shosuro_aoki(ctx: TriggerContext) -> list[Effect]:
     if ctx.event.counter is not WEALTH:
         return []
     gainer = ctx.game.table.cards_by_id.get(ctx.event.card_id)
-    if not isinstance(gainer, DynastyHolding) or gainer.owner is not ctx.card.owner:
+    if not isinstance(gainer.printed, HoldingPrint) or gainer.owner is not ctx.card.owner:
         return []
     if not once_per_turn(ctx.game, ctx.card, "aoki_draw"):
         return []
@@ -83,7 +83,7 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
         for card in ctx.game.table.battlefield.cards
         if card.owner is ctx.card.owner
         and card is not ctx.card
-        and isinstance(card, DynastyHolding)
+        and isinstance(card.printed, HoldingPrint)
         and "Farm" in effective_keywords(ctx.game, card)
     )
     if not others:

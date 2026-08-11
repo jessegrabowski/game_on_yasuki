@@ -11,8 +11,6 @@ from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import DynastyDiscard, Pass, Recruit
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     FatePrint,
@@ -67,7 +65,7 @@ def test_legal_actions_offers_pass_to_the_active_seat_only():
     assert session.legal_actions(PlayerId.P2) == []
 
 
-def _gold_source(state, card_id: str, amount: int, owner=PlayerId.P1) -> DynastyHolding:
+def _gold_source(state, card_id: str, amount: int, owner=PlayerId.P1) -> L5RCard:
     holding = _register(
         state,
         L5RCard.of(
@@ -94,7 +92,7 @@ def test_gold_is_not_a_free_action_outside_a_payment():
 
 def _holding_in_province(
     state, card_id: str, *, gold_cost: int, idx: int = 0, keywords=()
-) -> DynastyHolding:
+) -> L5RCard:
     holding = _register(
         state,
         L5RCard.of(
@@ -149,7 +147,7 @@ def _personality_in_province(
     clan: str | None = None,
     personal_honor: int = 0,
     honor_requirement: int | None = 0,
-) -> DynastyPersonality:
+) -> L5RCard:
     person = _register(
         state,
         L5RCard.of(
@@ -171,7 +169,7 @@ def _personality_in_province(
     return person
 
 
-def _stronghold(state, clan: str) -> StrongholdCard:
+def _stronghold(state, clan: str) -> L5RCard:
     """A zero-production stronghold in play, giving P1 a clan alignment for Proclaim."""
     stronghold = _register(
         state,

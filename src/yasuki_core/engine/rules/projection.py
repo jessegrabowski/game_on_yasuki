@@ -8,7 +8,6 @@ from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyCard
 
 
 @dataclass(frozen=True, slots=True)
@@ -44,7 +43,7 @@ class GameView:
         The viewer's own Legacy cards a search would still find, sorted by card id rather than left
         in deck order. Empty means a Legacy search would whiff and lose the game. Never populated
         for the other seat.
-    dynasty_deck : tuple of DynastyCard
+    dynasty_deck : tuple of L5RCard
         The cards left in the viewer's own dynasty deck, sorted by card id rather than left in deck
         order. A seat built its deck and so knows what remains in it; where those cards sit in the
         shuffle is the part it must not learn, which is what the sort strips. Never populated for
@@ -61,7 +60,7 @@ class GameView:
     favor_holder: PlayerId | None
     pending: DecisionRequest | None
     legacy_pool: tuple[L5RCard, ...]
-    dynasty_deck: tuple[DynastyCard, ...]
+    dynasty_deck: tuple[L5RCard, ...]
 
 
 def project(game: GameState, viewer: PlayerId) -> GameView:

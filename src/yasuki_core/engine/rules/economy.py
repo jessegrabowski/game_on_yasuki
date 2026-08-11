@@ -6,8 +6,7 @@ from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import ALL_COUNTERS
-from yasuki_core.game_pieces.dynasty import DynastyHolding
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.prints import HoldingPrint, StrongholdPrint
 
 
 @dataclass(frozen=True, slots=True)
@@ -16,16 +15,16 @@ class PlayerState:
     stronghold, the cards it controls in play, and its current gold and honor."""
 
     seat: PlayerId
-    stronghold: StrongholdCard | None
+    stronghold: L5RCard | None
     in_play: tuple[L5RCard, ...]
     gold: int
     honor: int
     went_second: bool
 
     @property
-    def holdings(self) -> tuple[DynastyHolding, ...]:
+    def holdings(self) -> tuple[L5RCard, ...]:
         """The Holdings the seat controls in play."""
-        return tuple(card for card in self.in_play if isinstance(card, DynastyHolding))
+        return tuple(card for card in self.in_play if isinstance(card.printed, HoldingPrint))
 
     def controls(self, keyword: str, *, other_than: L5RCard | None = None) -> bool:
         """Whether the seat controls an in-play card carrying ``keyword``, optionally excluding one
@@ -44,7 +43,7 @@ class PlayerState:
 def player_state(game: GameState, seat: PlayerId) -> PlayerState:
     """Build the read-only :class:`PlayerState` view for ``seat`` from the live game."""
     in_play = tuple(card for card in game.table.battlefield.cards if card.owner is seat)
-    stronghold = next((card for card in in_play if isinstance(card, StrongholdCard)), None)
+    stronghold = next((card for card in in_play if isinstance(card.printed, StrongholdPrint)), None)
     return PlayerState(
         seat=seat,
         stronghold=stronghold,

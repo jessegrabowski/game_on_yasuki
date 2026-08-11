@@ -1,7 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.zones import ProvinceZone
@@ -66,7 +65,7 @@ def test_gold_view_is_decoupled_from_the_live_pool():
 # --- the viewer's own Legacy pool -----------------------------------------------------------------
 
 
-def _legacy_holding(card_id: str, owner=PlayerId.P1, production=3) -> DynastyHolding:
+def _legacy_holding(card_id: str, owner=PlayerId.P1, production=3) -> L5RCard:
     return L5RCard.of(
         HoldingPrint,
         id=card_id,
@@ -78,7 +77,7 @@ def _legacy_holding(card_id: str, owner=PlayerId.P1, production=3) -> DynastyHol
     )
 
 
-def _dynasty_holding(card_id: str, owner=PlayerId.P1) -> DynastyHolding:
+def _dynasty_holding(card_id: str, owner=PlayerId.P1) -> L5RCard:
     """A plain Holding, for tests where the Legacy keyword would be a false signal."""
     return L5RCard.of(
         HoldingPrint, id=card_id, name=f"Holding {card_id}", side=Side.DYNASTY, owner=owner
@@ -193,7 +192,7 @@ def test_a_conditionally_granted_legacy_card_is_findable():
     """Shrine of Courtesy grants itself Legacy while its controller went second, so a search that
     read printed keywords alone would never surface it."""
 
-    def shrine(owner: PlayerId) -> DynastyHolding:
+    def shrine(owner: PlayerId) -> L5RCard:
         return L5RCard.of(
             HoldingPrint,
             id=f"{owner.name}-4",
