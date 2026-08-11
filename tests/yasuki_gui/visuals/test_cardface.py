@@ -3,10 +3,11 @@ from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.visuals.cardface import HiddenFace, to_render_card
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 def test_real_card_passes_through_unchanged():
-    card = L5RCard(id="c1", name="Bushi", side=Side.DYNASTY, owner=PlayerId.P1)
+    card = L5RCard.of(CardPrint, id="c1", name="Bushi", side=Side.DYNASTY, owner=PlayerId.P1)
     assert to_render_card(card) is card
 
 

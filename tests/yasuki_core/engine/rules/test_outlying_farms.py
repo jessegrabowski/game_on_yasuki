@@ -2,7 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.abilities import (
     _PRODUCTION_BOOST,
     ProductionBoost,
@@ -24,16 +25,21 @@ def _outlying_game(*, target_cost=2, with_producer=True):
     and a face-up target Holding in a province to recruit."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
-        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=P1))
+        register(
+            state, L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1)
+        )
     ]
     if with_producer:
         put_in_play(
             state,
-            DynastyHolding(id="sh", name="SH", side=Side.DYNASTY, owner=P1, gold_production=8),
+            L5RCard.of(
+                HoldingPrint, id="sh", name="SH", side=Side.DYNASTY, owner=P1, gold_production=8
+            ),
         )
     put_in_play(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="of",
             name="Outlying Farms",
             side=Side.DYNASTY,
@@ -45,7 +51,8 @@ def _outlying_game(*, target_cost=2, with_producer=True):
     )
     target = register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="target",
             name="Target",
             side=Side.DYNASTY,
@@ -153,11 +160,14 @@ def test_a_boost_that_declares_no_consequence_leaves_its_producer_alive():
     try:
         state = TableState.empty_two_seat()
         state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
-            register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=P1))
+            register(
+                state, L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1)
+            )
         ]
         put_in_play(
             state,
-            DynastyHolding(
+            L5RCard.of(
+                HoldingPrint,
                 id="fb",
                 name="Free Boost",
                 side=Side.DYNASTY,
@@ -168,7 +178,7 @@ def test_a_boost_that_declares_no_consequence_leaves_its_producer_alive():
         )
         target = register(
             state,
-            DynastyHolding(id="tgt", name="T", side=Side.DYNASTY, owner=P1, gold_cost=5),
+            L5RCard.of(HoldingPrint, id="tgt", name="T", side=Side.DYNASTY, owner=P1, gold_cost=5),
         )
         target.turn_face_up()
         province = ProvinceZone(owner=P1)
@@ -194,11 +204,14 @@ def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
     producer's yield, so it has to recompute it against the same target the offer quoted."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
-        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=P1))
+        register(
+            state, L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1)
+        )
     ]
     put_in_play(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="jw",
             name="Jade Works",
             side=Side.DYNASTY,
@@ -209,7 +222,8 @@ def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
     )
     target = register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="jade",
             name="Jade Thing",
             side=Side.DYNASTY,

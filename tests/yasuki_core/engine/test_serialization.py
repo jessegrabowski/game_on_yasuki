@@ -62,11 +62,15 @@ from yasuki_core.engine.serialization import (
 from yasuki_core.game_pieces.constants import Side, Element
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.decklist import parse_deck_yaml
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.factory import resolve_decklist
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.fate import FateRing
 from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    HoldingPrint,
+    PersonalityPrint,
+    RingPrint,
+    StrongholdPrint,
+)
 
 
 @pytest.mark.parametrize(
@@ -116,7 +120,9 @@ from yasuki_core.game_pieces.pregame import StrongholdCard
         SetHonor(value=-1),
         SpawnCard(
             card_id="tok1",
-            card=DynastyPersonality(id="src", name="Token", side=Side.DYNASTY, force=2, chi=2),
+            card=L5RCard.of(
+                PersonalityPrint, id="src", name="Token", side=Side.DYNASTY, force=2, chi=2
+            ),
             position=BoardPos(5.0, 6.0),
         ),
         SpawnCard(card_id="tok2", token_id="some_token", position=BoardPos(0.0, 0.0)),
@@ -143,8 +149,10 @@ def test_decoding_an_unknown_counter_is_rejected():
 
 
 def test_card_subclass_and_typed_fields_survive_round_trip():
-    personality = DynastyPersonality(id="dp1", name="Bushi", side=Side.DYNASTY, force=3, chi=2)
-    ring = FateRing(id="fr", name="Ring of Fire", side=Side.FATE, element=Element.FIRE)
+    personality = L5RCard.of(
+        PersonalityPrint, id="dp1", name="Bushi", side=Side.DYNASTY, force=3, chi=2
+    )
+    ring = L5RCard.of(RingPrint, id="fr", name="Ring of Fire", side=Side.FATE, element=Element.FIRE)
 
     for card in (personality, ring):
         rebuilt = decode_card(json.loads(json.dumps(encode_card(card))))
@@ -153,8 +161,12 @@ def test_card_subclass_and_typed_fields_survive_round_trip():
 
 
 def test_card_counters_survive_a_json_round_trip():
-    personality = DynastyPersonality(
-        id="dp2", name="Magistrate", side=Side.DYNASTY, counters={"wealth": 2, "honor": 1}
+    personality = L5RCard.of(
+        PersonalityPrint,
+        id="dp2",
+        name="Magistrate",
+        side=Side.DYNASTY,
+        counters={"wealth": 2, "honor": 1},
     )
     rebuilt = decode_card(json.loads(json.dumps(encode_card(personality))))
     assert rebuilt == personality
@@ -162,9 +174,16 @@ def test_card_counters_survive_a_json_round_trip():
 
 
 def test_nested_back_face_survives_round_trip():
-    back = StrongholdCard(id="kk__back", name="Defiled", side=Side.STRONGHOLD, starting_honor=8)
-    front = StrongholdCard(
-        id="kk", name="Kyuden Kuni", side=Side.STRONGHOLD, back_card_id="kk__back", back=back
+    back = L5RCard.of(
+        StrongholdPrint, id="kk__back", name="Defiled", side=Side.STRONGHOLD, starting_honor=8
+    )
+    front = L5RCard.of(
+        StrongholdPrint,
+        id="kk",
+        name="Kyuden Kuni",
+        side=Side.STRONGHOLD,
+        back_card_id="kk__back",
+        back=back,
     )
 
     rebuilt = decode_card(json.loads(json.dumps(encode_card(front))))
@@ -233,7 +252,7 @@ def test_encoding_a_card_class_with_no_list_says_so():
 
 
 def test_a_payload_carries_exactly_the_pinned_fields():
-    holding = DynastyHolding(id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
+    holding = L5RCard.of(HoldingPrint, id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
 
     payload = encode_card(holding)
 
@@ -252,7 +271,8 @@ def _golden_cards() -> dict[str, L5RCard]:
     are absolute and derived from the install location, so leaving them would bake this machine's
     filesystem into the checked-in bytes.
     """
-    holding = DynastyHolding(
+    holding = L5RCard.of(
+        HoldingPrint,
         id="P1-7",
         name="Modest Farm",
         side=Side.DYNASTY,
@@ -279,7 +299,8 @@ def _golden_cards() -> dict[str, L5RCard]:
         gold_cost=1,
         gold_production=2,
     )
-    back = StrongholdCard(
+    back = L5RCard.of(
+        StrongholdPrint,
         id="sh__back",
         name="Kyuden",
         side=Side.STRONGHOLD,
@@ -287,7 +308,8 @@ def _golden_cards() -> dict[str, L5RCard]:
         image_front=Path("sets/she/kyuden_back.png"),
         image_back=Path("backs/stronghold.jpg"),
     )
-    front = StrongholdCard(
+    front = L5RCard.of(
+        StrongholdPrint,
         id="P1-sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
@@ -319,7 +341,8 @@ def test_the_checked_in_payloads_decode_to_the_cards_they_came_from():
 def test_a_cards_art_swap_survives_the_round_trip():
     """A card borrowing another printing's art carries the payload ``factory._art_swap`` builds,
     whose keywords are a list — the one place a card field holds one."""
-    swapped = DynastyHolding(
+    swapped = L5RCard.of(
+        HoldingPrint,
         id="h",
         name="Repairing the Ruins",
         side=Side.DYNASTY,
@@ -342,8 +365,13 @@ def test_a_cards_art_swap_survives_the_round_trip():
 def test_a_list_stays_a_list_and_a_tuple_stays_a_tuple():
     # The two encode differently on purpose; collapsing them would round-trip art_swap's keywords
     # into a tuple and quietly change what the browser receives.
-    holding = DynastyHolding(
-        id="h2", name="X", side=Side.DYNASTY, keywords=("Farm",), art_swap={"keywords": ["Farm"]}
+    holding = L5RCard.of(
+        HoldingPrint,
+        id="h2",
+        name="X",
+        side=Side.DYNASTY,
+        keywords=("Farm",),
+        art_swap={"keywords": ["Farm"]},
     )
 
     rebuilt = decode_card(json.loads(json.dumps(encode_card(holding))))
@@ -358,7 +386,7 @@ def test_the_pinned_list_is_the_format_not_the_dataclass():
     call to prove the format follows it — that is the property the whole pin exists for, and the
     one that matters on the day a field moves off the card."""
     original = _PERSISTED_FIELDS["DynastyHolding"]
-    holding = DynastyHolding(id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
+    holding = L5RCard.of(HoldingPrint, id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
     _PERSISTED_FIELDS["DynastyHolding"] = ("id", "name", "side")
     try:
         payload = encode_card(holding)

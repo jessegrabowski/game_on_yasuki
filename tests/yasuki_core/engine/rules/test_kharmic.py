@@ -7,7 +7,8 @@ from yasuki_core.engine.rules.actions import KharmicDraw, KharmicRefill, Pass
 from yasuki_core.engine.rules.decisions import ChoosePayment, DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import FatePrint
 from tests.yasuki_core.engine.builders import (
     end_phase,
     fate_card,
@@ -34,7 +35,8 @@ def _table(*, hand_kharmic=1, province_kharmic=1, production=2, seat=PlayerId.P1
         hand.add(
             register(
                 state,
-                FateCard(
+                L5RCard.of(
+                    FatePrint,
                     id=f"{seat.name}-k{index}",
                     name="Kharmic Fate",
                     side=Side.FATE,

@@ -2,7 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
@@ -31,12 +32,16 @@ def _modest_farm_game(
     remains."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
+        register(
+            state,
+            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1),
+        )
     ]
     if with_producer:
         put_in_play(
             state,
-            DynastyHolding(
+            L5RCard.of(
+                HoldingPrint,
                 id="SH",
                 name="SH",
                 side=Side.DYNASTY,
@@ -46,7 +51,8 @@ def _modest_farm_game(
         )
     put_in_play(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="mf",
             name="Modest Farm",
             side=Side.DYNASTY,
@@ -58,7 +64,8 @@ def _modest_farm_game(
     )
     target = register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="target",
             name="Target",
             side=Side.DYNASTY,
@@ -168,15 +175,26 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     # The general Renew rule: a normally-recruited card with the Renew keyword refills face-up.
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
+        register(
+            state,
+            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1),
+        )
     ]
     put_in_play(
         state,
-        DynastyHolding(id="SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8),
+        L5RCard.of(
+            HoldingPrint,
+            id="SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=8,
+        ),
     )
     renewer = register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="warrens",
             name="W",
             side=Side.DYNASTY,
@@ -220,7 +238,8 @@ def test_modest_farm_recruit_puts_its_questions_in_a_fixed_order():
         # Must be dealt before the session starts: EngineSession.start snapshots the table into the
         # log, so a card added afterwards is absent on replay.
         extra_in_play=(
-            DynastyHolding(
+            L5RCard.of(
+                HoldingPrint,
                 id="other-farm",
                 name="Other Farm",
                 side=Side.DYNASTY,

@@ -13,19 +13,20 @@ from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.legality import gold_producers
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyCard
-from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 from yasuki_core.game_pieces.factory import ResolvedDeck
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, SenseiPrint, StrongholdPrint
 
 
 def _resolved(owner=PlayerId.P1, dynasty_n=10, fate_n=10):
     dynasty = [
-        DynastyCard(id=f"{owner.name}-d{i}", name=f"D{i}", side=Side.DYNASTY, owner=owner)
+        L5RCard.of(
+            DynastyPrint, id=f"{owner.name}-d{i}", name=f"D{i}", side=Side.DYNASTY, owner=owner
+        )
         for i in range(dynasty_n)
     ]
     fate = [
-        FateCard(id=f"{owner.name}-f{i}", name=f"F{i}", side=Side.FATE, owner=owner)
+        L5RCard.of(FatePrint, id=f"{owner.name}-f{i}", name=f"F{i}", side=Side.FATE, owner=owner)
         for i in range(fate_n)
     ]
     return ResolvedDeck(dynasty=dynasty, fate=fate)
@@ -72,7 +73,7 @@ def test_province_count_comes_from_the_stronghold():
     state = TableState.empty_two_seat()
     resolved = _resolved()
     resolved.pre_game.append(
-        StrongholdCard(id="sh", name="Wall", side=Side.STRONGHOLD, province_count=5)
+        L5RCard.of(StrongholdPrint, id="sh", name="Wall", side=Side.STRONGHOLD, province_count=5)
     )
     setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
     assert len(_provinces(state)) == 5
@@ -101,7 +102,9 @@ def test_starting_hand_size_comes_from_the_stronghold():
     state = TableState.empty_two_seat()
     resolved = _resolved()
     resolved.pre_game.append(
-        StrongholdCard(id="sh", name="Wall", side=Side.STRONGHOLD, starting_hand_size=3)
+        L5RCard.of(
+            StrongholdPrint, id="sh", name="Wall", side=Side.STRONGHOLD, starting_hand_size=3
+        )
     )
     setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
     assert len(state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards) == 3
@@ -114,8 +117,10 @@ def test_shuffle_order_is_reproducible_for_a_seed():
 def test_pre_game_cards_are_dealt_face_up_as_loose_battlefield_cards():
     state = TableState.empty_two_seat()
     resolved = _resolved()
-    stronghold = StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
-    sensei = SenseiCard(id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1)
+    stronghold = L5RCard.of(
+        StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1
+    )
+    sensei = L5RCard.of(SenseiPrint, id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1)
     resolved.pre_game.extend([stronghold, sensei])
 
     setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
@@ -154,15 +159,19 @@ def _setup_with_pregame(*pre_game):
 
 def test_starting_honor_sums_stronghold_and_sensei():
     state = _setup_with_pregame(
-        StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10),
-        SenseiCard(id="se", name="Sensei", side=Side.FATE, starting_honor=5),
+        L5RCard.of(
+            StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10
+        ),
+        L5RCard.of(SenseiPrint, id="se", name="Sensei", side=Side.FATE, starting_honor=5),
     )
     assert state.seats[PlayerId.P1].honor == 15
 
 
 def test_a_stronghold_without_a_sensei_starts_unattached():
     state = _setup_with_pregame(
-        StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1),
+        L5RCard.of(
+            StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1
+        ),
     )
     assert state.attachments == {}
     state.validate()
@@ -171,7 +180,7 @@ def test_a_stronghold_without_a_sensei_starts_unattached():
 def test_a_sensei_without_a_stronghold_is_not_attached():
     # No stronghold to hang on: the sensei is left loose rather than attached to nothing (a crash).
     state = _setup_with_pregame(
-        SenseiCard(id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1),
+        L5RCard.of(SenseiPrint, id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1),
     )
     assert state.attachments == {}
     state.validate()
@@ -179,7 +188,7 @@ def test_a_sensei_without_a_stronghold_is_not_attached():
 
 def test_starting_honor_from_a_stronghold_alone_is_its_base():
     state = _setup_with_pregame(
-        StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10)
+        L5RCard.of(StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10)
     )
     assert state.seats[PlayerId.P1].honor == 10
 
@@ -189,7 +198,8 @@ def test_a_deck_without_a_stronghold_starts_at_zero_honor():
 
 
 def test_a_negative_sensei_delta_lowers_what_the_stronghold_reads():
-    stronghold = StrongholdCard(
+    stronghold = L5RCard.of(
+        StrongholdPrint,
         id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
@@ -197,7 +207,8 @@ def test_a_negative_sensei_delta_lowers_what_the_stronghold_reads():
         province_strength=5,
         owner=PlayerId.P1,
     )
-    sensei = SenseiCard(
+    sensei = L5RCard.of(
+        SenseiPrint,
         id="se",
         name="Sensei",
         side=Side.FATE,
@@ -217,7 +228,8 @@ def test_a_negative_sensei_delta_lowers_what_the_stronghold_reads():
 
 
 def test_every_sensei_characteristic_reaches_the_seat():
-    stronghold = StrongholdCard(
+    stronghold = L5RCard.of(
+        StrongholdPrint,
         id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
@@ -226,7 +238,8 @@ def test_every_sensei_characteristic_reaches_the_seat():
         province_strength=4,
         owner=PlayerId.P1,
     )
-    sensei = SenseiCard(
+    sensei = L5RCard.of(
+        SenseiPrint,
         id="se",
         name="Sensei",
         side=Side.FATE,
@@ -251,7 +264,8 @@ def test_every_sensei_characteristic_reaches_the_seat():
 def test_several_senseis_all_contribute():
     """Deck legality is not enforced here, so both the sum and the grant have to cover every sensei
     they are handed rather than the one the rules would allow."""
-    stronghold = StrongholdCard(
+    stronghold = L5RCard.of(
+        StrongholdPrint,
         id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
@@ -260,7 +274,8 @@ def test_several_senseis_all_contribute():
         owner=PlayerId.P1,
     )
     senseis = [
-        SenseiCard(
+        L5RCard.of(
+            SenseiPrint,
             id="se1",
             name="One",
             side=Side.FATE,
@@ -268,7 +283,8 @@ def test_several_senseis_all_contribute():
             gold_production=2,
             owner=PlayerId.P1,
         ),
-        SenseiCard(
+        L5RCard.of(
+            SenseiPrint,
             id="se2",
             name="Two",
             side=Side.FATE,
@@ -287,11 +303,16 @@ def test_several_senseis_all_contribute():
 def test_a_sensei_is_not_a_second_gold_producer():
     """A sensei's printed Gold Production is a delta the stronghold receives, not gold the sensei
     makes — offering it as a source to bow would pay the seat twice for one characteristic."""
-    stronghold = StrongholdCard(
-        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    stronghold = L5RCard.of(
+        StrongholdPrint,
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        gold_production=3,
+        owner=PlayerId.P1,
     )
-    sensei = SenseiCard(
-        id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+    sensei = L5RCard.of(
+        SenseiPrint, id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
     )
     state = _setup_with_pregame(stronghold, sensei)
 
@@ -301,7 +322,8 @@ def test_a_sensei_is_not_a_second_gold_producer():
 def test_a_sensei_with_no_stronghold_contributes_nothing():
     """A sensei modifies a stronghold; with none to modify it contributes nothing, and that holds
     for honor as much as for the two characteristics that arrive as grants."""
-    sensei = SenseiCard(
+    sensei = L5RCard.of(
+        SenseiPrint,
         id="se",
         name="Sensei",
         side=Side.FATE,
@@ -317,8 +339,13 @@ def test_a_sensei_with_no_stronghold_contributes_nothing():
 
 
 def test_a_stronghold_without_a_sensei_keeps_its_printed_stats():
-    stronghold = StrongholdCard(
-        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=8, province_strength=5
+    stronghold = L5RCard.of(
+        StrongholdPrint,
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        gold_production=8,
+        province_strength=5,
     )
     _setup_with_pregame(stronghold)
     assert stronghold.gold_production == 8
@@ -334,10 +361,16 @@ def _two_seat_table(p1_honor, p2_honor, *, p2_has_back=True):
     state = TableState.empty_two_seat()
     state.seats[PlayerId.P1].honor = p1_honor
     state.seats[PlayerId.P2].honor = p2_honor
-    p1_sh = StrongholdCard(
-        id="p1sh", name="Front1", side=Side.STRONGHOLD, owner=PlayerId.P1, back_card_id="p1sh__back"
+    p1_sh = L5RCard.of(
+        StrongholdPrint,
+        id="p1sh",
+        name="Front1",
+        side=Side.STRONGHOLD,
+        owner=PlayerId.P1,
+        back_card_id="p1sh__back",
     )
-    p2_sh = StrongholdCard(
+    p2_sh = L5RCard.of(
+        StrongholdPrint,
         id="p2sh",
         name="Front2",
         side=Side.STRONGHOLD,
@@ -393,11 +426,16 @@ def test_a_sensei_leaving_play_takes_its_gold_with_it():
     """What a modifier buys over a baked stat: the grant is sourced from the sensei, so it lasts
     exactly as long as the sensei is on the table. Nothing removes a sensei today, which is why this
     asserts through the modifier rather than through a rule."""
-    stronghold = StrongholdCard(
-        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    stronghold = L5RCard.of(
+        StrongholdPrint,
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        gold_production=3,
+        owner=PlayerId.P1,
     )
-    sensei = SenseiCard(
-        id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+    sensei = L5RCard.of(
+        SenseiPrint, id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
     )
     game = _begun(_setup_with_pregame(stronghold, sensei))
     assert effective_gold_production(game, stronghold) == 5
@@ -411,14 +449,24 @@ def test_a_sensei_modifies_only_its_own_seats_stronghold():
     """Every other case here seats one player, so nothing yet proves the grant follows ownership
     rather than landing on whichever stronghold it finds first."""
     state = TableState.empty_two_seat()
-    mine = StrongholdCard(
-        id="p1-sh", name="Mine", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    mine = L5RCard.of(
+        StrongholdPrint,
+        id="p1-sh",
+        name="Mine",
+        side=Side.STRONGHOLD,
+        gold_production=3,
+        owner=PlayerId.P1,
     )
-    theirs = StrongholdCard(
-        id="p2-sh", name="Theirs", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P2
+    theirs = L5RCard.of(
+        StrongholdPrint,
+        id="p2-sh",
+        name="Theirs",
+        side=Side.STRONGHOLD,
+        gold_production=3,
+        owner=PlayerId.P2,
     )
-    sensei = SenseiCard(
-        id="p2-se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P2
+    sensei = L5RCard.of(
+        SenseiPrint, id="p2-se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P2
     )
     # The sensei belongs to the seat set up *second*, so "its own stronghold" and "the first
     # stronghold found" are different cards and a grant that ignores ownership lands visibly wrong.
@@ -436,10 +484,15 @@ def test_a_sensei_modifies_only_its_own_seats_stronghold():
 def test_a_sensei_with_nothing_to_give_grants_nothing():
     """A zero delta is not a modifier of zero. Recording one would leave the list carrying entries
     that change no number and have to be reasoned past by anyone reading it."""
-    stronghold = StrongholdCard(
-        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=3, owner=PlayerId.P1
+    stronghold = L5RCard.of(
+        StrongholdPrint,
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        gold_production=3,
+        owner=PlayerId.P1,
     )
-    sensei = SenseiCard(id="se", name="Blank", side=Side.FATE, owner=PlayerId.P1)
+    sensei = L5RCard.of(SenseiPrint, id="se", name="Blank", side=Side.FATE, owner=PlayerId.P1)
 
     game = _begun(_setup_with_pregame(stronghold, sensei))
 

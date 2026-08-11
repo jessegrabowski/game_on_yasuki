@@ -5,10 +5,12 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 def test_l5rcard_normalizes_keywords_and_traits_to_tuples():
-    c = L5RCard(
+    c = L5RCard.of(
+        CardPrint,
         id="c1",
         name="Card",
         side=Side.FATE,
@@ -34,6 +36,6 @@ def test_of_rejects_a_field_neither_half_declares():
 
 
 def test_l5rcard_is_frozen():
-    c = L5RCard(id="c1", name="Card", side=Side.FATE)
+    c = L5RCard.of(CardPrint, id="c1", name="Card", side=Side.FATE)
     with pytest.raises(FrozenInstanceError):
         c.name = "New Name"  # type: ignore[assignment]

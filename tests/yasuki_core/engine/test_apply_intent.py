@@ -49,14 +49,15 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality
 from yasuki_core.game_pieces.fate import FateCard
+from yasuki_core.game_pieces.prints import CardPrint, DynastyPrint, FatePrint, PersonalityPrint
 
 
 def _fate(card_id: str, owner: PlayerId = PlayerId.P1) -> FateCard:
-    return FateCard(id=card_id, name=card_id, side=Side.FATE, owner=owner)
+    return L5RCard.of(FatePrint, id=card_id, name=card_id, side=Side.FATE, owner=owner)
 
 
 def _dynasty(card_id: str, owner: PlayerId = PlayerId.P1) -> DynastyCard:
-    return DynastyCard(id=card_id, name=card_id, side=Side.DYNASTY, owner=owner)
+    return L5RCard.of(DynastyPrint, id=card_id, name=card_id, side=Side.DYNASTY, owner=owner)
 
 
 def _on_battlefield(table: TableState, card: L5RCard, pos: BoardPos = BoardPos(0.0, 0.0)) -> None:
@@ -869,8 +870,10 @@ def test_flip_clears_a_peek_so_turning_the_card_back_down_yields_a_plain_back():
 
 def test_flip_face_toggles_a_double_faced_card():
     table = TableState.empty_two_seat()
-    back = L5RCard(id="sh__back", name="Back", side=Side.STRONGHOLD)
-    card = L5RCard(id="sh", name="Front", side=Side.STRONGHOLD, back_card_id="sh__back", back=back)
+    back = L5RCard.of(CardPrint, id="sh__back", name="Back", side=Side.STRONGHOLD)
+    card = L5RCard.of(
+        CardPrint, id="sh", name="Front", side=Side.STRONGHOLD, back_card_id="sh__back", back=back
+    )
     _on_battlefield(table, card)
 
     apply_intent(table, PlayerId.P1, FlipFace(("sh",)))
@@ -896,7 +899,9 @@ def test_flip_face_is_rejected_for_a_single_faced_card():
 def test_flip_face_toggles_with_only_the_back_link():
     # The common runtime case: the server has the back link but not the resolved back face.
     table = TableState.empty_two_seat()
-    card = L5RCard(id="sh", name="Front", side=Side.STRONGHOLD, back_card_id="sh__back")
+    card = L5RCard.of(
+        CardPrint, id="sh", name="Front", side=Side.STRONGHOLD, back_card_id="sh__back"
+    )
     _on_battlefield(table, card)
 
     apply_intent(table, PlayerId.P1, FlipFace(("sh",)))
@@ -1239,7 +1244,7 @@ def test_spawn_card_creates_a_face_up_token_owned_by_the_creator():
     table = TableState.empty_two_seat()
     intent = SpawnCard(
         card_id="tok1",
-        card=L5RCard(id="src", name="Bushi Token", side=Side.DYNASTY),
+        card=L5RCard.of(CardPrint, id="src", name="Bushi Token", side=Side.DYNASTY),
         position=BoardPos(5.0, 6.0),
     )
 
@@ -1256,7 +1261,8 @@ def test_spawn_card_creates_a_face_up_token_owned_by_the_creator():
 
 def test_spawn_card_with_token_id_copies_the_full_template():
     table = TableState.empty_two_seat()
-    table.creatable_tokens["ghul"] = DynastyPersonality(
+    table.creatable_tokens["ghul"] = L5RCard.of(
+        PersonalityPrint,
         id="ghul",
         name="Ghul",
         side=Side.DYNASTY,
@@ -1287,7 +1293,7 @@ def test_spawned_token_is_interactable_only_by_its_creator():
         PlayerId.P1,
         SpawnCard(
             card_id="tok1",
-            card=L5RCard(id="src", name="Bushi Token", side=Side.DYNASTY),
+            card=L5RCard.of(CardPrint, id="src", name="Bushi Token", side=Side.DYNASTY),
             position=BoardPos(5.0, 6.0),
         ),
     )
@@ -1310,7 +1316,8 @@ def test_spawn_card_with_unknown_token_id_is_rejected():
 
 def test_spawn_card_with_source_card_id_duplicates_a_full_in_play_card():
     table = TableState.empty_two_seat()
-    source = DynastyPersonality(
+    source = L5RCard.of(
+        PersonalityPrint,
         id="hero",
         name="Hero",
         side=Side.DYNASTY,
@@ -1336,8 +1343,13 @@ def test_spawn_card_with_source_card_id_duplicates_a_full_in_play_card():
 
 def test_spawn_card_duplicating_a_non_public_source_is_rejected():
     table = TableState.empty_two_seat()
-    hidden = DynastyPersonality(
-        id="facedown", name="Hidden", side=Side.DYNASTY, owner=PlayerId.P1, face_up=False
+    hidden = L5RCard.of(
+        PersonalityPrint,
+        id="facedown",
+        name="Hidden",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        face_up=False,
     )
     table.cards_by_id["facedown"] = hidden
     table.battlefield.cards.append(hidden)
@@ -1351,7 +1363,7 @@ def test_spawn_card_rejects_a_duplicate_id():
     table = TableState.empty_two_seat()
     intent = SpawnCard(
         card_id="tok1",
-        card=L5RCard(id="src", name="X", side=Side.FATE),
+        card=L5RCard.of(CardPrint, id="src", name="X", side=Side.FATE),
         position=BoardPos(0.0, 0.0),
     )
     apply_intent(table, PlayerId.P1, intent)
@@ -1366,7 +1378,7 @@ def test_remove_card_takes_a_spawned_token_off_the_table():
         PlayerId.P1,
         SpawnCard(
             card_id="tok1",
-            card=L5RCard(id="src", name="X", side=Side.FATE),
+            card=L5RCard.of(CardPrint, id="src", name="X", side=Side.FATE),
             position=BoardPos(0.0, 0.0),
         ),
     )
@@ -1690,7 +1702,7 @@ def test_destroying_a_province_detaches_a_side_without_a_discard_in_place():
     table = TableState.empty_two_seat()
     province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
     table.zones[province] = ProvinceZone(owner=PlayerId.P1)
-    keep = L5RCard(id="keep", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
+    keep = L5RCard.of(CardPrint, id="keep", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
     _on_battlefield(table, keep)
     apply_intent(table, PlayerId.P1, Attach("keep", province))
 

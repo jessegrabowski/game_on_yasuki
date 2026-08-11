@@ -6,7 +6,8 @@ from yasuki_core.engine.rules.flow import begin_game
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import DynastyPrint
 
 from tests.yasuki_core.engine.builders import holding, province_card, put_in_play, two_seat_game
 
@@ -55,7 +56,9 @@ def test_a_card_arriving_face_up_is_not_a_reveal(reacting):
     reacting(Revealed, "reveal_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
     game = _watching_game()
     game.table.zones[PROVINCE] = ProvinceZone(owner=P1)
-    arriving = DynastyCard(id="P1-renewed", name="Renewed", side=Side.DYNASTY, owner=P1)
+    arriving = L5RCard.of(
+        DynastyPrint, id="P1-renewed", name="Renewed", side=Side.DYNASTY, owner=P1
+    )
     game.table.cards_by_id[arriving.id] = arriving
     game.table.decks[DeckKey(P1, Side.DYNASTY)].cards = [arriving]
 

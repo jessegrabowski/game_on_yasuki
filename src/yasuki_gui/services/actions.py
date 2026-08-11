@@ -22,6 +22,7 @@ from yasuki_core.engine.intents import (
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import CardPrint
 from yasuki_gui.config import DEFAULT_HOTKEYS as HK
 from yasuki_gui.ui.dialogs import Dialogs
 from yasuki_gui.ui.images import ImageProvider
@@ -301,7 +302,9 @@ def fresh_token_id(state) -> str:
 
 def spawn_token(view: HasView, name: str, side: Side, pos: BoardPos) -> None:
     token_id = fresh_token_id(view.state)
-    view.dispatch(SpawnCard(token_id, pos, card=L5RCard(id=token_id, name=name, side=side)))
+    view.dispatch(
+        SpawnCard(token_id, pos, card=L5RCard.of(CardPrint, id=token_id, name=name, side=side))
+    )
 
 
 def duplicate_card(view: HasView, card_id: str) -> None:

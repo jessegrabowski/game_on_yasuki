@@ -5,7 +5,8 @@ from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.flow import dynasty_discard, recruit, run_stack, submit
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import DynastyPrint
 
 from tests.yasuki_core.engine.builders import holding, province_card, put_in_play, two_seat_game
 
@@ -20,7 +21,7 @@ def _game(spares: int = 1):
     put_in_play(game, holding("P1-eyes", owner=P1, printed_id="refill_probe"))
     province_card(game, "P1-victim", seat=P1, gold_cost=0)
     deck = [
-        DynastyCard(id=f"P1-spare{index}", name="Spare", side=Side.DYNASTY, owner=P1)
+        L5RCard.of(DynastyPrint, id=f"P1-spare{index}", name="Spare", side=Side.DYNASTY, owner=P1)
         for index in range(spares)
     ]
     game.table.decks[DYNASTY].cards = deck

@@ -6,6 +6,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.services import actions
 from yasuki_gui.services.actions import REGISTRY as ACTIONS, ActionContext
 from yasuki_gui.tags import card_tag
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 def _tokens(state):
@@ -13,8 +14,9 @@ def _tokens(state):
 
 
 def _inject_double_faced(state, owner=PlayerId.P1):
-    back = L5RCard(id="DF-back", name="Back Face", side=Side.DYNASTY)
-    front = L5RCard(
+    back = L5RCard.of(CardPrint, id="DF-back", name="Back Face", side=Side.DYNASTY)
+    front = L5RCard.of(
+        CardPrint,
         id="DF",
         name="Front Face",
         side=Side.DYNASTY,

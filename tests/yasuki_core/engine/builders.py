@@ -6,9 +6,8 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
-from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, StrongholdPrint
 
 # Only shapes duplicated across two or more test modules belong here; one that would have to contort
 # to serve a single caller belongs in that caller's module.
@@ -40,9 +39,10 @@ def holding(
     gold_cost: int | None = None,
     clan: str | None = None,
     counters: dict[str, int] | None = None,
-) -> DynastyHolding:
+) -> L5RCard:
     """A Dynasty Holding. ``name`` defaults to ``card_id``, which keeps failure output readable."""
-    return DynastyHolding(
+    return L5RCard.of(
+        HoldingPrint,
         id=card_id,
         name=name or card_id,
         side=Side.DYNASTY,
@@ -62,8 +62,9 @@ def stronghold(
     gold_production: int = 0,
     clan: str | None = None,
     starting_honor: int = 0,
-) -> StrongholdCard:
-    return StrongholdCard(
+) -> L5RCard:
+    return L5RCard.of(
+        StrongholdPrint,
         id=f"{owner.name}-SH",
         name="SH",
         side=Side.STRONGHOLD,
@@ -74,8 +75,8 @@ def stronghold(
     )
 
 
-def fate_card(card_id: str, owner: PlayerId, *, name: str = "F") -> FateCard:
-    return FateCard(id=card_id, name=name, side=Side.FATE, owner=owner)
+def fate_card(card_id: str, owner: PlayerId, *, name: str = "F") -> L5RCard:
+    return L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=owner)
 
 
 def two_seat_game(first_player: PlayerId = PlayerId.P1) -> GameState:
@@ -110,7 +111,7 @@ def province_card(
     counters: dict[str, int] | None = None,
     face_up: bool = True,
     index: int = 0,
-) -> DynastyHolding:
+) -> L5RCard:
     """Put a Holding into ``seat``'s province at ``index``, replacing whatever zone was there."""
     state = target.table if isinstance(target, GameState) else target
     card = register(

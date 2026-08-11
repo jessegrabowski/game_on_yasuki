@@ -16,7 +16,8 @@ from yasuki_core.engine.rules.triggers import (
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
 
 from tests.yasuki_core.engine.builders import (
     fate_card,
@@ -209,7 +210,8 @@ def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
 
 
 def _aoki(game, seat=PlayerId.P1, card_id="P1-aoki"):
-    aoki = DynastyPersonality(
+    aoki = L5RCard.of(
+        PersonalityPrint,
         id=card_id,
         printed_id="shosuro_aoki_yoritomo_kayoko_experienced",
         name="Shosuro Aoki",
@@ -496,8 +498,13 @@ def test_wheat_farm_caps_the_choice_at_two_farms():
 
 
 def _probe(game, seat=PlayerId.P1, card_id="P1-z-probe"):
-    probe = DynastyHolding(
-        id=card_id, printed_id="test_probe", name="Probe", side=Side.DYNASTY, owner=seat
+    probe = L5RCard.of(
+        HoldingPrint,
+        id=card_id,
+        printed_id="test_probe",
+        name="Probe",
+        side=Side.DYNASTY,
+        owner=seat,
     )
     put_in_play(game, probe)
     return probe

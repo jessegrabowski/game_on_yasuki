@@ -3,12 +3,13 @@ from yasuki_core.engine.zones import (
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 def test_zone_add_remove_and_constraints():
     hand = HandZone()
-    fate_card = L5RCard(id="f1", name="Fate", side=Side.FATE)
-    dynasty_card = L5RCard(id="d1", name="Dynasty", side=Side.DYNASTY)
+    fate_card = L5RCard.of(CardPrint, id="f1", name="Fate", side=Side.FATE)
+    dynasty_card = L5RCard.of(CardPrint, id="d1", name="Dynasty", side=Side.DYNASTY)
 
     hand.add(fate_card)
     assert len(hand) == 1

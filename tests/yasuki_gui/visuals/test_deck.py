@@ -1,8 +1,9 @@
 import tkinter as tk
 
 from yasuki_gui.visuals.deck import DeckVisual
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 def test_size_bbox_and_draw_empty_fallback(root):
@@ -22,7 +23,7 @@ def test_size_bbox_and_draw_empty_fallback(root):
 
 
 def test_draw_with_top_card_uses_back_image_or_fallback(root):
-    c = L5RCard(id="d1", name="C1", side=Side.FATE)
+    c = L5RCard.of(CardPrint, id="d1", name="C1", side=Side.FATE)
     dv = DeckVisual(1, c, x=60, y=60, tag="deck:2", label="Fate Deck")
 
     cv = tk.Canvas(root, width=200, height=200)

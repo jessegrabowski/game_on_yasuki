@@ -11,8 +11,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey, BoardPos
 from yasuki_core.engine.intents import IntentOp
 from yasuki_core.engine.action_log import ChatEntry, SessionEntry
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import CardPrint
 
 from tests.yasuki_web._support import account
 
@@ -42,7 +43,7 @@ def _seat_two(room):
 
 
 def _hand_card(room, seat, card_id="f1", name="Secret"):
-    card = L5RCard(id=card_id, name=name, side=Side.FATE, owner=seat, face_up=False)
+    card = L5RCard.of(CardPrint, id=card_id, name=name, side=Side.FATE, owner=seat, face_up=False)
     room.state.zones[ZoneKey(seat, ZoneRole.HAND)].cards.append(card)
     room.state.cards_by_id[card_id] = card
     return card
@@ -120,7 +121,9 @@ def test_opponent_targeting_intent_is_rejected_and_unlogged(room):
 def test_move_deck_top_routes_through_the_websocket(room):
     ada, _ = _seat_two(room)
     deck = room.state.decks[DeckKey(PlayerId.P1, Side.FATE)]
-    top = L5RCard(id="t1", name="Top", side=Side.FATE, owner=PlayerId.P1, face_up=False)
+    top = L5RCard.of(
+        CardPrint, id="t1", name="Top", side=Side.FATE, owner=PlayerId.P1, face_up=False
+    )
     deck.cards.append(top)
     room.state.cards_by_id["t1"] = top
 
@@ -144,7 +147,9 @@ def test_move_deck_top_routes_through_the_websocket(room):
 
 def test_play_face_down_hides_the_card_from_the_opponent_but_not_its_owner(room):
     ada, kenji = _seat_two(room)
-    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=PlayerId.P1, face_up=True)
+    card = L5RCard.of(
+        CardPrint, id="f1", name="Secret", side=Side.FATE, owner=PlayerId.P1, face_up=True
+    )
     room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards.append(card)
     room.state.cards_by_id["f1"] = card
     kenji.sent.clear()
@@ -183,7 +188,9 @@ def test_play_face_down_hides_the_card_from_the_opponent_but_not_its_owner(room)
 
 
 def _battlefield_card(room, card_id, seat=PlayerId.P1):
-    card = L5RCard(id=card_id, name=card_id, side=Side.DYNASTY, owner=seat, face_up=True)
+    card = L5RCard.of(
+        CardPrint, id=card_id, name=card_id, side=Side.DYNASTY, owner=seat, face_up=True
+    )
     room.state.battlefield.cards.append(card)
     room.state.positions[card_id] = BoardPos(0.0, 0.0)
     room.state.cards_by_id[card_id] = card

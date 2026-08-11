@@ -1,15 +1,19 @@
-from yasuki_core.game_pieces.fate import FateAction, FateAttachment, FateRing
 from yasuki_core.game_pieces.constants import Side, AttachmentType, Timing, Element
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import ActionPrint, AttachmentPrint, RingPrint
 
 
 def test_fateaction_timings_normalized():
-    a = FateAction(id="fa1", name="Act", side=Side.FATE, timings=[Timing.OPEN, Timing.BATTLE])  # type: ignore[list-item]
+    a = L5RCard.of(
+        ActionPrint, id="fa1", name="Act", side=Side.FATE, timings=[Timing.OPEN, Timing.BATTLE]
+    )  # type: ignore[list-item]
     assert isinstance(a.timings, tuple)
     assert a.timings == (Timing.OPEN, Timing.BATTLE)
 
 
 def test_fateattachment_restrictions_normalized_to_tuple():
-    att = FateAttachment(
+    att = L5RCard.of(
+        AttachmentPrint,
         id="fa2",
         name="Katana",
         side=Side.FATE,
@@ -21,5 +25,5 @@ def test_fateattachment_restrictions_normalized_to_tuple():
 
 
 def test_fatering_element_default():
-    ring = FateRing(id="r1", name="Ring of the Void", side=Side.FATE)
+    ring = L5RCard.of(RingPrint, id="r1", name="Ring of the Void", side=Side.FATE)
     assert ring.element is Element.VOID

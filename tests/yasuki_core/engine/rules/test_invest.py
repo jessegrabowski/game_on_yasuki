@@ -4,7 +4,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, ChoosePayment, DecisionResponse
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
@@ -17,11 +18,15 @@ def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: 
     """A session in the Dynasty phase with a big producer and one face-up Invest holding to recruit."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
+        register(
+            state,
+            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1),
+        )
     ]
     put_in_play(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="SH",
             name="SH",
             side=Side.DYNASTY,
@@ -31,7 +36,8 @@ def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: 
     )
     holding = register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id=holding_id,
             name=holding_id,
             side=Side.DYNASTY,

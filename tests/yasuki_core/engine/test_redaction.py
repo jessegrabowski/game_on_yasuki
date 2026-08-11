@@ -8,12 +8,14 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import CardPrint
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 def _card(card_id, side=Side.FATE, owner=P1, face_up=False, shown=False, peekers=frozenset()):
-    return L5RCard(
+    return L5RCard.of(
+        CardPrint,
         id=card_id,
         name=f"name-{card_id}",
         side=side,

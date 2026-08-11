@@ -8,6 +8,7 @@ from yasuki_core.engine.redaction import redact
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_web.snapshot import serialize_snapshot
+from yasuki_core.game_pieces.prints import CardPrint
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -18,7 +19,7 @@ def _serialized(table, viewer, token_names=None):
 
 def test_opponent_hand_card_is_a_back_stub_with_no_identity():
     table = TableState.empty_two_seat("Ada", "Kenji")
-    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False)
+    card = L5RCard.of(CardPrint, id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False)
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
     table.cards_by_id["f1"] = card
 
@@ -38,7 +39,7 @@ def test_opponent_hand_card_is_a_back_stub_with_no_identity():
 
 def test_owner_sees_their_own_hand_card_in_full():
     table = TableState.empty_two_seat()
-    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False)
+    card = L5RCard.of(CardPrint, id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False)
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
     table.cards_by_id["f1"] = card
 
@@ -57,7 +58,7 @@ def test_a_visible_card_carries_its_art_swap_payload_to_the_client():
         "donor_era": "1995-99",
         "donor_layout": "Strategy",
     }
-    card = L5RCard(id="f1", name="Kuni Yori", side=Side.FATE, owner=P1, art_swap=swap)
+    card = L5RCard.of(CardPrint, id="f1", name="Kuni Yori", side=Side.FATE, owner=P1, art_swap=swap)
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
     table.cards_by_id["f1"] = card
 
@@ -66,7 +67,7 @@ def test_a_visible_card_carries_its_art_swap_payload_to_the_client():
 
 def test_a_card_without_an_art_swap_omits_the_art_key():
     table = TableState.empty_two_seat()
-    card = L5RCard(id="f1", name="Plain", side=Side.FATE, owner=P1)
+    card = L5RCard.of(CardPrint, id="f1", name="Plain", side=Side.FATE, owner=P1)
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
     table.cards_by_id["f1"] = card
 
@@ -75,8 +76,8 @@ def test_a_card_without_an_art_swap_omits_the_art_key():
 
 def test_a_visible_card_carries_its_note_and_an_unnoted_one_omits_it():
     table = TableState.empty_two_seat()
-    noted = L5RCard(id="f1", name="Doomed", side=Side.FATE, owner=P1, note="dead")
-    plain = L5RCard(id="f2", name="Plain", side=Side.FATE, owner=P1)
+    noted = L5RCard.of(CardPrint, id="f1", name="Doomed", side=Side.FATE, owner=P1, note="dead")
+    plain = L5RCard.of(CardPrint, id="f2", name="Plain", side=Side.FATE, owner=P1)
     hand = table.zones[ZoneKey(P1, ZoneRole.HAND)]
     for card in (noted, plain):
         hand.cards.append(card)
@@ -89,7 +90,8 @@ def test_a_visible_card_carries_its_note_and_an_unnoted_one_omits_it():
 
 def test_battlefield_card_carries_art_and_position():
     table = TableState.empty_two_seat()
-    card = L5RCard(
+    card = L5RCard.of(
+        CardPrint,
         id="t1",
         name="Token",
         side=Side.DYNASTY,
@@ -109,7 +111,9 @@ def test_battlefield_card_carries_art_and_position():
 
 
 def _on_battlefield(table, card_id, owner=P1):
-    card = L5RCard(id=card_id, name=card_id, side=Side.DYNASTY, owner=owner, face_up=True)
+    card = L5RCard.of(
+        CardPrint, id=card_id, name=card_id, side=Side.DYNASTY, owner=owner, face_up=True
+    )
     table.battlefield.cards.append(card)
     table.positions[card_id] = BoardPos(0.0, 0.0)
     table.cards_by_id[card_id] = card
@@ -143,10 +147,15 @@ def test_no_attachments_serializes_an_empty_map():
 
 def test_double_faced_card_shows_the_active_face_and_flip_link():
     table = TableState.empty_two_seat()
-    back = L5RCard(
-        id="sh__back", name="Defiled", side=Side.STRONGHOLD, image_front=Path("sets/x/b.jpg")
+    back = L5RCard.of(
+        CardPrint,
+        id="sh__back",
+        name="Defiled",
+        side=Side.STRONGHOLD,
+        image_front=Path("sets/x/b.jpg"),
     )
-    card = L5RCard(
+    card = L5RCard.of(
+        CardPrint,
         id="sh",
         name="Stronghold",
         side=Side.STRONGHOLD,
@@ -173,7 +182,8 @@ def test_link_only_card_shows_the_front_but_still_signals_the_flip():
     # back_card_id set without a resolved back: the front art is sent, but the flip signals let the
     # client fetch and show the other face by id.
     table = TableState.empty_two_seat()
-    card = L5RCard(
+    card = L5RCard.of(
+        CardPrint,
         id="sh",
         name="Front",
         side=Side.STRONGHOLD,
@@ -195,7 +205,7 @@ def test_link_only_card_shows_the_front_but_still_signals_the_flip():
 
 def test_single_faced_card_omits_the_flip_keys():
     table = TableState.empty_two_seat()
-    card = L5RCard(id="t1", name="Token", side=Side.DYNASTY, face_up=True)
+    card = L5RCard.of(CardPrint, id="t1", name="Token", side=Side.DYNASTY, face_up=True)
     table.battlefield.cards.append(card)
     table.positions["t1"] = BoardPos(0.0, 0.0)
     table.cards_by_id["t1"] = card
@@ -207,10 +217,16 @@ def test_single_faced_card_omits_the_flip_keys():
 
 def test_token_card_is_flagged_in_the_snapshot():
     table = TableState.empty_two_seat()
-    token = L5RCard(
-        id="tok1", name="Bushi", side=Side.DYNASTY, owner=None, face_up=True, is_token=True
+    token = L5RCard.of(
+        CardPrint,
+        id="tok1",
+        name="Bushi",
+        side=Side.DYNASTY,
+        owner=None,
+        face_up=True,
+        is_token=True,
     )
-    real = L5RCard(id="c1", name="Hida", side=Side.DYNASTY, owner=None, face_up=True)
+    real = L5RCard.of(CardPrint, id="c1", name="Hida", side=Side.DYNASTY, owner=None, face_up=True)
     for card in (token, real):
         table.battlefield.cards.append(card)
         table.positions[card.id] = BoardPos(0.0, 0.0)
@@ -226,7 +242,9 @@ def test_deck_reports_count_only_when_face_down():
     table = TableState.empty_two_seat()
     deck = table.decks[DeckKey(P1, Side.FATE)]
     for i in range(3):
-        card = L5RCard(id=f"f{i}", name=f"f{i}", side=Side.FATE, owner=P1, face_up=False)
+        card = L5RCard.of(
+            CardPrint, id=f"f{i}", name=f"f{i}", side=Side.FATE, owner=P1, face_up=False
+        )
         deck.cards.append(card)
         table.cards_by_id[card.id] = card
 
@@ -266,7 +284,7 @@ def test_seat_avatar_is_public():
 
 def test_a_plain_visible_card_carries_shown_and_peeked_false():
     table = TableState.empty_two_seat()
-    card = L5RCard(id="t1", name="Token", side=Side.DYNASTY, owner=None, face_up=True)
+    card = L5RCard.of(CardPrint, id="t1", name="Token", side=Side.DYNASTY, owner=None, face_up=True)
     table.battlefield.cards.append(card)
     table.positions["t1"] = BoardPos(0.0, 0.0)
     table.cards_by_id["t1"] = card
@@ -278,7 +296,9 @@ def test_a_plain_visible_card_carries_shown_and_peeked_false():
 
 def test_shown_hand_card_is_flagged_shown_for_both_seats():
     table = TableState.empty_two_seat()
-    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=True, shown=True)
+    card = L5RCard.of(
+        CardPrint, id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=True, shown=True
+    )
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
     table.cards_by_id["f1"] = card
 
@@ -289,8 +309,8 @@ def test_shown_hand_card_is_flagged_shown_for_both_seats():
 
 def test_shown_face_down_card_reveals_to_the_opponent_and_cues_the_owner():
     table = TableState.empty_two_seat()
-    card = L5RCard(
-        id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False, shown=True
+    card = L5RCard.of(
+        CardPrint, id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False, shown=True
     )
     table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
     table.cards_by_id["d1"] = card
@@ -309,7 +329,9 @@ def test_public_shown_face_down_card_cues_no_one():
     # A show on an owner-less card reveals to nobody, so neither seat's back stub carries the marker —
     # otherwise both would draw a spurious reveal outline on a card neither can identify.
     table = TableState.empty_two_seat()
-    card = L5RCard(id="t1", name="Token", side=Side.FATE, owner=None, face_up=False, shown=True)
+    card = L5RCard.of(
+        CardPrint, id="t1", name="Token", side=Side.FATE, owner=None, face_up=False, shown=True
+    )
     table.battlefield.cards.append(card)
     table.positions["t1"] = BoardPos(0.0, 0.0)
 
@@ -320,7 +342,8 @@ def test_public_shown_face_down_card_cues_no_one():
 
 def test_peeked_card_is_flagged_peeked_for_the_peeker_only():
     table = TableState.empty_two_seat()
-    card = L5RCard(
+    card = L5RCard.of(
+        CardPrint,
         id="d1",
         name="Gold Mine",
         side=Side.DYNASTY,
@@ -347,7 +370,8 @@ def test_province_key_serializes_with_its_index():
 
 def test_card_serializes_creates_for_the_menu():
     table = TableState.empty_two_seat()
-    card = L5RCard(
+    card = L5RCard.of(
+        CardPrint,
         id="c1",
         name="Curse of the Jackal",
         side=Side.FATE,
@@ -370,7 +394,8 @@ def test_realms_merge_in_province_serializes_creates_but_concealed_face_down():
     # — a creator that never reaches the battlefield, so its Create menu lives in the province.
     table = TableState.empty_two_seat()
     names = {"oni_hatchling": "Oni Hatchling", "zombie": "Zombie"}
-    revealed = L5RCard(
+    revealed = L5RCard.of(
+        CardPrint,
         id="c1",
         name="The Realms Merge",
         side=Side.DYNASTY,
@@ -387,7 +412,8 @@ def test_realms_merge_in_province_serializes_creates_but_concealed_face_down():
     ]
 
     # A face-down province card is a HiddenCard stub to the opponent, so its creations never leak.
-    hidden = L5RCard(
+    hidden = L5RCard.of(
+        CardPrint,
         id="c2",
         name="The Realms Merge",
         side=Side.DYNASTY,
@@ -405,8 +431,11 @@ def test_card_fields_covers_every_serialized_key():
     # The client's CARD_FIELDS (board.js) must list every key _card emits, or a newly serialized field
     # would silently never re-patch its card on the board. Anchor the JS list to the real serializer.
     table = TableState.empty_two_seat()
-    back = L5RCard(id="c1__back", name="Back", side=Side.DYNASTY, image_front=Path("sets/x/b.jpg"))
-    card = L5RCard(
+    back = L5RCard.of(
+        CardPrint, id="c1__back", name="Back", side=Side.DYNASTY, image_front=Path("sets/x/b.jpg")
+    )
+    card = L5RCard.of(
+        CardPrint,
         id="c1",
         name="Full",
         side=Side.DYNASTY,

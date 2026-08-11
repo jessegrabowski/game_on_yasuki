@@ -11,9 +11,9 @@ from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, 
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_gui.tags import card_tag, deck_tag, zone_tag
 from yasuki_gui.visuals.cardface import HiddenFace
+from yasuki_core.game_pieces.prints import CardPrint, HoldingPrint, PersonalityPrint
 
 
 def _province_keys(state, seat):
@@ -119,7 +119,9 @@ class TestHomeRow:
     def test_unplaced_cards_get_distinct_positions(self, loaded):
         field, state = loaded
         # P1's stronghold starts unplaced; add a second unplaced P1 card beside it.
-        extra = L5RCard(id="P1-extra", name="Sensei", side=Side.DYNASTY, owner=PlayerId.P1)
+        extra = L5RCard.of(
+            CardPrint, id="P1-extra", name="Sensei", side=Side.DYNASTY, owner=PlayerId.P1
+        )
         state.cards_by_id["P1-extra"] = extra
         state.battlefield.add(extra)
         state.positions["P1-extra"] = UNPLACED_BOARD_POS
@@ -131,9 +133,11 @@ class TestHomeRow:
 
     def test_recruited_personality_sits_in_front_of_a_holding(self, loaded):
         field, state = loaded
-        holding = DynastyHolding(id="P1-hold", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1)
-        personality = DynastyPersonality(
-            id="P1-pers", name="Bushi", side=Side.DYNASTY, owner=PlayerId.P1
+        holding = L5RCard.of(
+            HoldingPrint, id="P1-hold", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1
+        )
+        personality = L5RCard.of(
+            PersonalityPrint, id="P1-pers", name="Bushi", side=Side.DYNASTY, owner=PlayerId.P1
         )
         for card in (holding, personality):
             state.cards_by_id[card.id] = card
@@ -172,10 +176,10 @@ class TestOffBoardReads:
         state = TableState.empty_two_seat()
         deck = state.decks[DeckKey(PlayerId.P2, Side.FATE)]
         for i in range(3):
-            card = L5RCard(id=f"P2-f{i}", name="F", side=Side.FATE, owner=PlayerId.P2)
+            card = L5RCard.of(CardPrint, id=f"P2-f{i}", name="F", side=Side.FATE, owner=PlayerId.P2)
             state.cards_by_id[card.id] = card
             deck.cards.append(card)
-        held = L5RCard(id="P2-h", name="Secret", side=Side.FATE, owner=PlayerId.P2)
+        held = L5RCard.of(CardPrint, id="P2-h", name="Secret", side=Side.FATE, owner=PlayerId.P2)
         state.cards_by_id["P2-h"] = held
         state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(held)
         session = EngineSession.start(state, PlayerId.P1)
@@ -195,7 +199,9 @@ class TestRulesModeRender:
         on the battlefield, projected for P1."""
         field, _ = loaded
         state = TableState.empty_two_seat()
-        secret = L5RCard(id="P2-bf", name="Ambush", side=Side.DYNASTY, owner=PlayerId.P2)
+        secret = L5RCard.of(
+            CardPrint, id="P2-bf", name="Ambush", side=Side.DYNASTY, owner=PlayerId.P2
+        )
         secret.turn_face_down()
         state.cards_by_id["P2-bf"] = secret
         state.battlefield.add(secret)

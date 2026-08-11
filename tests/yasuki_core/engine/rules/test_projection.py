@@ -1,8 +1,9 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.state import GameState, Phase
@@ -42,7 +43,7 @@ def test_pending_decision_reaches_only_the_answerer():
 
 def test_table_is_redacted_for_the_viewer():
     game = _game()
-    secret = FateCard(id="P1-secret", name="Ambush", side=Side.FATE, owner=PlayerId.P1)
+    secret = L5RCard.of(FatePrint, id="P1-secret", name="Ambush", side=Side.FATE, owner=PlayerId.P1)
     game.table.cards_by_id[secret.id] = secret
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(secret)
 
@@ -66,7 +67,8 @@ def test_gold_view_is_decoupled_from_the_live_pool():
 
 
 def _legacy_holding(card_id: str, owner=PlayerId.P1, production=3) -> DynastyHolding:
-    return DynastyHolding(
+    return L5RCard.of(
+        HoldingPrint,
         id=card_id,
         name=f"Estate {card_id}",
         side=Side.DYNASTY,
@@ -78,7 +80,9 @@ def _legacy_holding(card_id: str, owner=PlayerId.P1, production=3) -> DynastyHol
 
 def _dynasty_holding(card_id: str, owner=PlayerId.P1) -> DynastyHolding:
     """A plain Holding, for tests where the Legacy keyword would be a false signal."""
-    return DynastyHolding(id=card_id, name=f"Holding {card_id}", side=Side.DYNASTY, owner=owner)
+    return L5RCard.of(
+        HoldingPrint, id=card_id, name=f"Holding {card_id}", side=Side.DYNASTY, owner=owner
+    )
 
 
 def _seed_deck(game: GameState, owner: PlayerId, *cards) -> None:
@@ -90,8 +94,13 @@ def _seed_deck(game: GameState, owner: PlayerId, *cards) -> None:
 def test_the_pool_holds_the_viewers_findable_legacy_cards():
     game = _game()
     estate = _legacy_holding("P1-9")
-    plain = DynastyHolding(
-        id="P1-1", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=2
+    plain = L5RCard.of(
+        HoldingPrint,
+        id="P1-1",
+        name="Mine",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_production=2,
     )
     _seed_deck(game, PlayerId.P1, plain, estate)
 
@@ -103,7 +112,7 @@ def test_the_pool_is_empty_when_no_legacy_card_remains():
     _seed_deck(
         game,
         PlayerId.P1,
-        DynastyHolding(id="P1-1", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1),
+        L5RCard.of(HoldingPrint, id="P1-1", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1),
     )
 
     assert project(game, PlayerId.P1).legacy_pool == ()
@@ -185,7 +194,8 @@ def test_a_conditionally_granted_legacy_card_is_findable():
     read printed keywords alone would never surface it."""
 
     def shrine(owner: PlayerId) -> DynastyHolding:
-        return DynastyHolding(
+        return L5RCard.of(
+            HoldingPrint,
             id=f"{owner.name}-4",
             name="Shrine of Courtesy",
             side=Side.DYNASTY,
