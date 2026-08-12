@@ -373,6 +373,7 @@ def test_two_copies_of_a_flip_card_share_both_prints():
     assert first.back_printed is second.back_printed
 
 
+@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
 def test_borrowed_art_dresses_the_front_alone():
     """A synthesised back is derived from the front before borrowed art is applied, so flipping a
     card with swapped art shows its own back rather than the donor payload."""

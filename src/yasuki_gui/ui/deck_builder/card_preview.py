@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 
 from yasuki_core import paths as asset_paths
 from yasuki_core.card_art import back_era_for_set
-from yasuki_core.paths import resolve_set_image_path
+from yasuki_core.paths import resolve_card_image_path, resolve_set_image_path
 from yasuki_gui.constants import CARD_W, CARD_H
 
 logger = logging.getLogger(__name__)
@@ -48,6 +48,15 @@ DEFAULT_BY_TYPE: dict[str, Path] = {
 }
 
 
+def _default_art(card: dict) -> Path | None:
+    """The placeholder art for a card with no scanned print, resolved to a file on disk."""
+    types = card.get("types") or []
+    ctype = types[0].lower() if types else ""
+    if ctype == "personality":
+        return resolve_card_image_path(asset_paths.default_personality_image(card.get("clans")))
+    return resolve_card_image_path(DEFAULT_BY_TYPE.get(ctype))
+
+
 def front_image_source(card: dict, print_info: dict, repository):
     """A printable front for a print: the custom composite (PIL image), the print's own image, or
     the card-type default (both as a Path). None only when nothing resolves.
@@ -65,11 +74,7 @@ def front_image_source(card: dict, print_info: dict, repository):
     if resolved and resolved.exists():
         return resolved
 
-    types = card.get("types") or []
-    ctype = types[0].lower() if types else ""
-    if ctype == "personality":
-        return asset_paths.default_personality_image(card.get("clans"))
-    return DEFAULT_BY_TYPE.get(ctype)
+    return _default_art(card)
 
 
 def back_image_source(print_info: dict):
@@ -384,11 +389,10 @@ class CardPreviewController:
             if composite is not None:
                 resized = composite.resize((PREVIEW_CARD_W, PREVIEW_CARD_H), Image.LANCZOS)
                 return ImageTk.PhotoImage(resized, master=self.master)
-            return self._load_back_image(card, print_info)
-
-        img_path = self._resolve_image_path(card, print_info)
-        if img_path and img_path.exists():
-            return load_large_image(img_path, self.master)
+        else:
+            img_path = self._resolve_image_path(card, print_info)
+            if img_path and img_path.exists():
+                return load_large_image(img_path, self.master)
 
         return self._load_back_image(card, print_info)
 
@@ -399,11 +403,7 @@ class CardPreviewController:
         if resolved and resolved.exists():
             return resolved
 
-        types = card.get("types") or []
-        ctype = types[0].lower() if types else ""
-        if ctype == "personality":
-            return asset_paths.default_personality_image(card.get("clans"))
-        return DEFAULT_BY_TYPE.get(ctype)
+        return _default_art(card)
 
     def _load_back_image(
         self, card: dict, print_info: dict | None = None
@@ -417,7 +417,9 @@ class CardPreviewController:
         era = back_era_for_set(set_name) if set_name else "new"
         back_path = _card_back_path(deck, era)
         if back_path is None:
-            back_path = asset_paths.FATE_BACK if deck == "Fate" else asset_paths.DYNASTY_BACK
+            back_path = resolve_card_image_path(
+                asset_paths.FATE_BACK if deck == "Fate" else asset_paths.DYNASTY_BACK
+            )
         return load_large_image(back_path, self.master)
 
     def current_recipient(self) -> dict | None:

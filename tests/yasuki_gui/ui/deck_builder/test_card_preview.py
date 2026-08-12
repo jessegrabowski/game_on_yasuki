@@ -3,6 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from yasuki_core.paths import resolve_card_image_path
 from yasuki_gui.ui.deck_builder.card_preview import (
     DEFAULT_BY_TYPE,
     back_image_source,
@@ -15,19 +16,32 @@ from yasuki_gui.ui.deck_builder.card_preview import (
 def test_front_image_source_falls_back_to_type_default_when_image_missing():
     card = {"types": ["Strategy"]}
     print_info = {"image_path": "sets/nope/missing.jpg"}
-    assert front_image_source(card, print_info, repository=None) == DEFAULT_BY_TYPE["strategy"]
+    art = front_image_source(card, print_info, repository=None)
+    assert art == resolve_card_image_path(DEFAULT_BY_TYPE["strategy"])
+
+
+def test_every_type_default_resolves_to_a_file_on_disk():
+    """A card with no scanned print draws its type's placeholder, and the caller decides by asking
+    whether the path exists. An unresolved one silently falls through to the generic deck back."""
+    missing = {
+        ctype: art
+        for ctype, art in DEFAULT_BY_TYPE.items()
+        if not resolve_card_image_path(art).exists()
+    }
+
+    assert missing == {}
 
 
 def test_front_image_source_uses_clan_frame_for_personality():
     card = {"types": ["Personality"], "clans": ["Crane"]}
     result = front_image_source(card, {"image_path": None}, repository=None)
-    assert result.name == "generic_personality_crane.jpg"
+    assert result.name == "generic_personality_crane.jpg" and result.exists()
 
 
 def test_front_image_source_unaligned_personality_falls_back_to_base_frame():
     card = {"types": ["Personality"], "clans": ["Ratling"]}
     result = front_image_source(card, {"image_path": None}, repository=None)
-    assert result.name == "generic_personality.jpg"
+    assert result.name == "generic_personality.jpg" and result.exists()
 
 
 def test_back_image_source_none_for_single_sided_print():
