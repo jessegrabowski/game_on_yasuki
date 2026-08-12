@@ -42,7 +42,12 @@ function personalityFallback(card) {
   return DEFAULT_BY_TYPE.personality;
 }
 
+// A proxy shows the token back rather than its type's frame, matching the site's card-common.js
+// and TOKEN_BACK in yasuki_core/paths.py.
+const TOKEN_BACK = 'dynasty_back_token.jpg';
+
 function fallbackSrc(card) {
+  if (card.is_proxy) return _imgBase + '/' + TOKEN_BACK;
   const type = ((card.types || [])[0] || '').toLowerCase();
   const path = type === 'personality' ? personalityFallback(card) : DEFAULT_BY_TYPE[type];
   return path ? _imgBase + '/' + path : null;

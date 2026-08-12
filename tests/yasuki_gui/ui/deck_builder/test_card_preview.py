@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from yasuki_core.paths import resolve_card_image_path
+from yasuki_core.paths import TOKEN_BACK, resolve_card_image_path
 from yasuki_gui.ui.deck_builder.card_preview import (
     DEFAULT_BY_TYPE,
     back_image_source,
@@ -18,6 +18,17 @@ def test_front_image_source_falls_back_to_type_default_when_image_missing():
     print_info = {"image_path": "sets/nope/missing.jpg"}
     art = front_image_source(card, print_info, repository=None)
     assert art == resolve_card_image_path(DEFAULT_BY_TYPE["strategy"])
+
+
+def test_a_proxy_shows_the_token_back_rather_than_its_type_frame():
+    """A proxy stands in for a card that was never printed, so it should read as a proxy before it
+    reads as an Item — the type frame would make it look like a real card."""
+    proxy = {"types": ["Item", "Proxy"], "decks": ["Other"], "is_proxy": True}
+
+    art = front_image_source(proxy, {"image_path": "sets/nope/missing.jpg"}, repository=None)
+
+    assert art == resolve_card_image_path(TOKEN_BACK) and art.exists()
+    assert art != resolve_card_image_path(DEFAULT_BY_TYPE["item"])
 
 
 def test_every_type_default_resolves_to_a_file_on_disk():

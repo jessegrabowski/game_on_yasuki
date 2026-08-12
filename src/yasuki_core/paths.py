@@ -13,6 +13,9 @@ FONTS_DIR = _PACKAGE_DIR / "assets" / "fonts"
 # baked into every snapshot and logged spawn, tying a saved game to the machine that wrote it.
 FATE_BACK = Path("fate_back_new.jpg")
 DYNASTY_BACK = Path("dynasty_back_new.jpg")
+# The red back a proxy wears. A proxy stands in for a card that was never printed, so it shows this
+# rather than its type's frame — it should read as a proxy before it reads as an Item.
+TOKEN_BACK = Path("dynasty_back_token.jpg")
 
 _DEFAULT_SETS_DIR = Path.cwd() / "sets"
 SETS_DIR: Path = Path(os.environ.get("YASUKI_SETS_DIR", str(_DEFAULT_SETS_DIR)))

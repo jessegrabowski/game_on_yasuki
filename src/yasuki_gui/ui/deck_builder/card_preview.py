@@ -50,6 +50,9 @@ DEFAULT_BY_TYPE: dict[str, Path] = {
 
 def _default_art(card: dict) -> Path | None:
     """The placeholder art for a card with no scanned print, resolved to a file on disk."""
+    # A proxy reads as a proxy before it reads as an Item, so its back beats its type's frame.
+    if card.get("is_proxy"):
+        return resolve_card_image_path(asset_paths.TOKEN_BACK)
     types = card.get("types") or []
     ctype = types[0].lower() if types else ""
     if ctype == "personality":
