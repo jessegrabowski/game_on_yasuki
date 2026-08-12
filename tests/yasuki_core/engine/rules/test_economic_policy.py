@@ -10,7 +10,8 @@ from yasuki_core.sim.recording import TurnRecorder
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyPersonality
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import PersonalityPrint
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
@@ -144,7 +145,9 @@ def test_a_personality_is_ranked_without_gold_production():
     session = _dynasty_phase()
     hero = register(
         session.game.table,
-        DynastyPersonality(id="hero", name="Hero", side=Side.DYNASTY, owner=P1, gold_cost=5),
+        L5RCard.of(
+            PersonalityPrint, id="hero", name="Hero", side=Side.DYNASTY, owner=P1, gold_cost=5
+        ),
     )
     hero.turn_face_up()
     zone = ProvinceZone(owner=P1)

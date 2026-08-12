@@ -51,24 +51,25 @@ from yasuki_core.engine.intents import (
     RollDice,
 )
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    AncestorPrint,
+    AttachmentPrint,
+    CardPrint,
+    CelestialPrint,
+    DynastyPrint,
+    EventPrint,
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    RegionPrint,
+    RingPrint,
+    SenseiPrint,
+    StrongholdPrint,
+    WindPrint,
+)
 from yasuki_core.game_pieces.constants import Side, Element, Timing, AttachmentType
 from yasuki_core.game_pieces.counters import counter_from_key
-from yasuki_core.game_pieces.dynasty import (
-    DynastyCard,
-    DynastyPersonality,
-    DynastyHolding,
-    DynastyEvent,
-    DynastyRegion,
-    DynastyCelestial,
-)
-from yasuki_core.game_pieces.fate import (
-    FateCard,
-    FateAction,
-    FateAttachment,
-    FateRing,
-    FateAncestor,
-)
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 
 # The shared JSON codec: plain-dict (JSON-ready) round-trips for the engine's value types — cards,
 # zone/deck keys, seats, and intents. One canonical wire shape, consumed by the persisted action
@@ -79,33 +80,31 @@ _ENUM_REGISTRY: dict[str, type[Enum]] = {
     cls.__name__: cls for cls in (Side, Element, Timing, AttachmentType, PlayerId)
 }
 
-_CARD_REGISTRY: dict[str, type[L5RCard]] = {
+_PRINT_REGISTRY: dict[str, type[CardPrint]] = {
     cls.__name__: cls
     for cls in (
-        L5RCard,
-        FateCard,
-        FateAction,
-        FateAttachment,
-        FateRing,
-        DynastyCard,
-        DynastyPersonality,
-        DynastyHolding,
-        DynastyEvent,
-        DynastyRegion,
-        DynastyCelestial,
-        FateAncestor,
-        StrongholdCard,
-        SenseiCard,
-        WindCard,
+        CardPrint,
+        FatePrint,
+        ActionPrint,
+        AttachmentPrint,
+        RingPrint,
+        AncestorPrint,
+        DynastyPrint,
+        PersonalityPrint,
+        HoldingPrint,
+        EventPrint,
+        RegionPrint,
+        CelestialPrint,
+        StrongholdPrint,
+        SenseiPrint,
+        WindPrint,
     )
 }
 
-# What a card of each class persists, in payload order. This is the format; that the dataclasses
-# currently agree with it is held by a test, so a field added to a card fails until someone decides
-# whether it belongs on disk. Composed along the hierarchy, which every subclass extends rather
-# than reorders.
-_BASE_FIELDS = (
-    "id",
+# What a card persists, in payload order. This is the format; that the dataclasses currently agree
+# with it is held by a test, so a field added to a print or to the card fails until someone decides
+# whether it belongs on disk. A payload is flat: the print's fields, then the copy's.
+_BASE_PRINT_FIELDS = (
     "name",
     "side",
     "printed_id",
@@ -117,42 +116,57 @@ _BASE_FIELDS = (
     "creates",
     "text",
     "is_unique",
+    "image_front",
+    "image_back",
+    "back_card_id",
+    "art_swap",
+)
+_FATE_PRINT_FIELDS = _BASE_PRINT_FIELDS + ("focus", "gold_cost")
+_DYNASTY_PRINT_FIELDS = _BASE_PRINT_FIELDS + ("gold_cost",)
+_PREGAME_PRINT_FIELDS = _BASE_PRINT_FIELDS + (
+    "starting_honor",
+    "gold_production",
+    "province_strength",
+)
+
+_PERSISTED_PRINT_FIELDS: dict[str, tuple[str, ...]] = {
+    "CardPrint": _BASE_PRINT_FIELDS,
+    "FatePrint": _FATE_PRINT_FIELDS,
+    "ActionPrint": _FATE_PRINT_FIELDS + ("timings",),
+    "AttachmentPrint": _FATE_PRINT_FIELDS + ("attachment_type", "attach_restrictions"),
+    "RingPrint": _FATE_PRINT_FIELDS + ("element",),
+    "AncestorPrint": _FATE_PRINT_FIELDS,
+    "DynastyPrint": _DYNASTY_PRINT_FIELDS,
+    "PersonalityPrint": _DYNASTY_PRINT_FIELDS
+    + ("force", "chi", "personal_honor", "honor_requirement"),
+    "HoldingPrint": _DYNASTY_PRINT_FIELDS + ("gold_production",),
+    "EventPrint": _DYNASTY_PRINT_FIELDS,
+    "RegionPrint": _DYNASTY_PRINT_FIELDS,
+    "CelestialPrint": _DYNASTY_PRINT_FIELDS,
+    "StrongholdPrint": _PREGAME_PRINT_FIELDS + ("province_count", "starting_hand_size"),
+    "SenseiPrint": _PREGAME_PRINT_FIELDS,
+    "WindPrint": _BASE_PRINT_FIELDS,
+}
+
+# The per-copy half, identical whichever print a card presents. ``printed`` is the one card field
+# with nothing to persist: the payload's ``__type__`` records which print it pointed at.
+_INSTANCE_FIELDS = (
+    "id",
+    "owner",
     "bowed",
     "face_up",
     "inverted",
     "counters",
-    "image_front",
-    "image_back",
-    "owner",
     "shown",
     "peekers",
-    "back_card_id",
-    "back",
+    "back_printed",
     "showing_back",
     "is_token",
-    "art_swap",
     "note",
 )
-_FATE_FIELDS = _BASE_FIELDS + ("focus", "gold_cost")
-_DYNASTY_FIELDS = _BASE_FIELDS + ("gold_cost",)
-_PREGAME_FIELDS = _BASE_FIELDS + ("starting_honor", "gold_production", "province_strength")
 
 _PERSISTED_FIELDS: dict[str, tuple[str, ...]] = {
-    "L5RCard": _BASE_FIELDS,
-    "FateCard": _FATE_FIELDS,
-    "FateAction": _FATE_FIELDS + ("timings",),
-    "FateAttachment": _FATE_FIELDS + ("attachment_type", "attach_restrictions"),
-    "FateRing": _FATE_FIELDS + ("element",),
-    "FateAncestor": _FATE_FIELDS,
-    "DynastyCard": _DYNASTY_FIELDS,
-    "DynastyPersonality": _DYNASTY_FIELDS + ("force", "chi", "personal_honor", "honor_requirement"),
-    "DynastyHolding": _DYNASTY_FIELDS + ("gold_production",),
-    "DynastyEvent": _DYNASTY_FIELDS,
-    "DynastyRegion": _DYNASTY_FIELDS,
-    "DynastyCelestial": _DYNASTY_FIELDS,
-    "StrongholdCard": _PREGAME_FIELDS + ("province_count", "starting_hand_size"),
-    "SenseiCard": _PREGAME_FIELDS,
-    "WindCard": _BASE_FIELDS,
+    name: fields + _INSTANCE_FIELDS for name, fields in _PERSISTED_PRINT_FIELDS.items()
 }
 
 _FLAG_CLASSES: dict[IntentOp, type[CardFlagIntent]] = {
@@ -194,8 +208,8 @@ def _encode_value(value):
         if not all(isinstance(key, str) for key in value):
             raise TypeError("card dict fields need str keys; JSON would silently coerce others")
         return {"__dict__": {key: _encode_value(item) for key, item in value.items()}}
-    if isinstance(value, L5RCard):
-        return {"__card__": encode_card(value)}
+    if isinstance(value, CardPrint):
+        return {"__print__": encode_print(value)}
     raise TypeError(f"cannot serialize card field of type {type(value).__name__}")
 
 
@@ -211,26 +225,26 @@ def _decode_value(value):
             return frozenset(_decode_value(item) for item in value["__frozenset__"])
         if "__dict__" in value:
             return {key: _decode_value(item) for key, item in value["__dict__"].items()}
-        if "__card__" in value:
-            return decode_card(value["__card__"])
+        if "__print__" in value:
+            return decode_print(value["__print__"])
     if isinstance(value, list):
         return [_decode_value(item) for item in value]
     return value
 
 
 def encode_card(card: L5RCard) -> dict:
-    """Encode an ``L5RCard`` (any subclass) to JSON-ready plain data, tagged with its concrete type
-    so ``decode_card`` rebuilds the same class.
+    """Encode a card to JSON-ready plain data, tagged with the print it presents so ``decode_card``
+    rebuilds the same one.
 
-    Writes the fields :data:`_PERSISTED_FIELDS` names for that class rather than whatever the
-    dataclass declares, so the persisted format is a decision rather than a consequence.
+    Writes the fields :data:`_PERSISTED_FIELDS` names for that print rather than whatever the
+    dataclasses declare, so the persisted format is a decision rather than a consequence.
 
     Raises
     ------
     KeyError
-        If ``card``'s class has no persisted-field list, naming the class.
+        If the card's print has no persisted-field list, naming the print.
     """
-    name = type(card).__name__
+    name = type(card.printed).__name__
     if name not in _PERSISTED_FIELDS:
         raise KeyError(f"{name} has no persisted-field list; add one to _PERSISTED_FIELDS")
     payload = {"__type__": name}
@@ -239,11 +253,37 @@ def encode_card(card: L5RCard) -> dict:
     return payload
 
 
+def encode_print(printed: CardPrint) -> dict:
+    """Encode a print to JSON-ready plain data, tagged with its class.
+
+    Raises
+    ------
+    KeyError
+        If the print has no persisted-field list, naming the print.
+    """
+    name = type(printed).__name__
+    if name not in _PERSISTED_PRINT_FIELDS:
+        raise KeyError(f"{name} has no persisted-field list; add one to _PERSISTED_PRINT_FIELDS")
+    payload = {"__type__": name}
+    for field_name in _PERSISTED_PRINT_FIELDS[name]:
+        payload[field_name] = _encode_value(getattr(printed, field_name))
+    return payload
+
+
+def decode_print(payload: dict) -> CardPrint:
+    """Rebuild the print encoded by :func:`encode_print`, dispatching on its ``__type__`` tag."""
+    print_cls = _PRINT_REGISTRY[payload["__type__"]]
+    return print_cls(
+        **{key: _decode_value(value) for key, value in payload.items() if key != "__type__"}
+    )
+
+
 def decode_card(payload: dict) -> L5RCard:
-    """Rebuild the card encoded by ``encode_card``, dispatching on its ``__type__`` tag."""
-    cls = _CARD_REGISTRY[payload["__type__"]]
+    """Rebuild the card encoded by ``encode_card``, dispatching on its ``__type__`` tag, which
+    names the print it presents."""
+    print_cls = _PRINT_REGISTRY[payload["__type__"]]
     kwargs = {key: _decode_value(value) for key, value in payload.items() if key != "__type__"}
-    return cls(**kwargs)
+    return L5RCard.of(print_cls, **kwargs)
 
 
 def encode_zone_key(key: ZoneKey) -> dict:
@@ -389,7 +429,7 @@ def encode_intent(intent: Intent) -> dict:
                 "card_id": intent.card_id,
                 "token_id": intent.token_id,
                 "source_card_id": intent.source_card_id,
-                "card": encode_card(intent.card) if intent.card is not None else None,
+                "printed": encode_print(intent.printed) if intent.printed is not None else None,
                 "position": [intent.position.x, intent.position.y],
             }
         case IntentOp.REMOVE_CARD:
@@ -476,13 +516,13 @@ def decode_intent(payload: dict) -> Intent:
         case IntentOp.SET_HONOR:
             return SetHonor(delta=payload["delta"], value=payload["value"])
         case IntentOp.SPAWN_CARD:
-            encoded_card = payload.get("card")
+            encoded_print = payload.get("printed")
             return SpawnCard(
                 card_id=payload["card_id"],
                 position=BoardPos(*payload["position"]),
                 token_id=payload.get("token_id"),
                 source_card_id=payload.get("source_card_id"),
-                card=decode_card(encoded_card) if encoded_card else None,
+                printed=decode_print(encoded_print) if encoded_print else None,
             )
         case IntentOp.REMOVE_CARD:
             return RemoveCard(payload["card_id"])

@@ -4,8 +4,8 @@ from numpy.random import default_rng
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint
 from yasuki_core.engine.rules.actions import Legacy
 from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, DecisionResponse
 from yasuki_core.engine.rules.events import CardDiscarded
@@ -36,9 +36,14 @@ def _facedown_province(state: TableState, seat: PlayerId, card):
     return card
 
 
-def _legacy_holding(seat: PlayerId, card_id: str) -> DynastyHolding:
-    return DynastyHolding(
-        id=card_id, name="Ancestral Shrine", side=Side.DYNASTY, owner=seat, keywords=("Legacy",)
+def _legacy_holding(seat: PlayerId, card_id: str) -> L5RCard:
+    return L5RCard.of(
+        HoldingPrint,
+        id=card_id,
+        name="Ancestral Shrine",
+        side=Side.DYNASTY,
+        owner=seat,
+        keywords=("Legacy",),
     )
 
 
@@ -51,16 +56,26 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
         _facedown_province(
             state,
             PlayerId.P1,
-            DynastyCard(id=f"P1-pv{i}", name="P", side=Side.DYNASTY, owner=PlayerId.P1),
+            L5RCard.of(
+                DynastyPrint, id=f"P1-pv{i}", name="P", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     hand_zone = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     for i in range(hand):
         hand_zone.add(
-            register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
+            register(
+                state,
+                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+            )
         )
     deck = state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
     deck.cards = [
-        register(state, DynastyCard(id=f"P1-dd{i}", name="D", side=Side.DYNASTY, owner=PlayerId.P1))
+        register(
+            state,
+            L5RCard.of(
+                DynastyPrint, id=f"P1-dd{i}", name="D", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
+        )
         for i in range(3)
     ]
     if legacy_in == "deck":
@@ -261,9 +276,10 @@ def test_the_reshuffle_draws_on_the_games_own_generator():
     assert orders[0] != orders[1]
 
 
-def _shrine_of_courtesy(seat: PlayerId) -> DynastyHolding:
+def _shrine_of_courtesy(seat: PlayerId) -> L5RCard:
     """Shrine of Courtesy carries no printed Legacy keyword; its Courtesy clause grants one."""
-    return DynastyHolding(
+    return L5RCard.of(
+        HoldingPrint,
         id=f"{seat.name}-courtesy",
         name="Shrine of Courtesy",
         side=Side.DYNASTY,
@@ -294,11 +310,16 @@ def test_a_conditional_grant_that_does_not_apply_leaves_the_card_unfindable():
     assert legality.legacy_candidates(game, PlayerId.P1) == []
 
 
-def _buried_province_card(session: EngineSession) -> DynastyHolding:
+def _buried_province_card(session: EngineSession) -> L5RCard:
     """Put a face-down card in a Province of the seat about to act, the state a Province is left in
     when it refills after a recruit — the only way one is face-down during its owner's own turn."""
-    buried = DynastyHolding(
-        id="P1-buried", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=5
+    buried = L5RCard.of(
+        HoldingPrint,
+        id="P1-buried",
+        name="Mine",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_production=5,
     )
     state = session.game.table
     register(state, buried)

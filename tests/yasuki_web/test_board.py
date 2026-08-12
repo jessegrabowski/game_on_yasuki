@@ -10,7 +10,7 @@ from yasuki_core.engine.table import BoardPos
 from yasuki_core.engine.intents import IntentOp
 from yasuki_core.engine.action_log import SessionEntry
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyPersonality
+from yasuki_core.game_pieces.prints import PersonalityPrint
 
 from tests.yasuki_web._support import account
 
@@ -43,9 +43,7 @@ def _room_with_seat():
 
 def _spawn(room, ws, **overrides):
     # Seed a creatable-token template so a token_id spawn resolves with no database call.
-    room.state.creatable_tokens.setdefault(
-        "hida", DynastyPersonality(id="hida", name="Hida", side=Side.DYNASTY)
-    )
+    room.state.creatable_tokens.setdefault("hida", PersonalityPrint(name="Hida", side=Side.DYNASTY))
     fields = {"token_id": "hida", "position": [10, 20], **overrides}
     asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.SPAWN_CARD, **fields)))
     return room.state.battlefield.cards[-1].id
@@ -157,8 +155,8 @@ def test_spawn_round_trips_over_the_socket(client):
         ws.receive_json()  # HELLO
         ws.receive_json()  # SNAPSHOT
         ws.receive_json()  # LOG "Ada joined"
-        active_game_rooms[room_id].state.creatable_tokens["x"] = DynastyPersonality(
-            id="x", name="X", side=Side.DYNASTY
+        active_game_rooms[room_id].state.creatable_tokens["x"] = PersonalityPrint(
+            name="X", side=Side.DYNASTY
         )
         ws.send_json(
             {

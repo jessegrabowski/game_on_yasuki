@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from yasuki_core.game_pieces.constants import AttachmentType, Element, Side, Timing
@@ -23,9 +23,9 @@ from yasuki_core.paths import (
 class CardPrint:
     """A printed card: everything identical on every copy of it.
 
-    One is built per resolved deck entry and shared by every copy that entry produces, so it is
-    never mutated — a change to one copy in play must not reach another. The subclasses carry the
-    printed stats and mirror the card classes they describe.
+    A print is frozen and never mutated, so copies may share one — a change to one card in play
+    must not reach another. The subclasses carry the printed stats, and which subclass a print is
+    is what gives a card in play its type.
 
     "Resolved deck entry" rather than "database row" is deliberate. Which printing's art a card
     wears and which deck section it was filed under are chosen per entry, so two decks naming the
@@ -59,10 +59,6 @@ class CardPrint:
             value = getattr(self, name)
             if not isinstance(value, tuple):
                 object.__setattr__(self, name, tuple(value))
-
-    def as_card_fields(self) -> dict:
-        """This print's characteristics as the keyword arguments a card class takes for them."""
-        return {f.name: getattr(self, f.name) for f in fields(self)}
 
 
 @dataclass(frozen=True, slots=True)

@@ -50,7 +50,7 @@ from yasuki_core.engine.serialization import (
     decode_intent,
     encode_card,
     decode_card,
-    _CARD_REGISTRY,
+    _PRINT_REGISTRY,
     _PERSISTED_FIELDS,
     encode_zone_key,
     decode_zone_key,
@@ -62,11 +62,15 @@ from yasuki_core.engine.serialization import (
 from yasuki_core.game_pieces.constants import Side, Element
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.decklist import parse_deck_yaml
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.factory import resolve_decklist
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.fate import FateRing
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    CardPrint,
+    HoldingPrint,
+    PersonalityPrint,
+    RingPrint,
+    StrongholdPrint,
+)
 
 
 @pytest.mark.parametrize(
@@ -116,7 +120,7 @@ from yasuki_core.game_pieces.pregame import StrongholdCard
         SetHonor(value=-1),
         SpawnCard(
             card_id="tok1",
-            card=DynastyPersonality(id="src", name="Token", side=Side.DYNASTY, force=2, chi=2),
+            printed=PersonalityPrint(name="Token", side=Side.DYNASTY, force=2, chi=2),
             position=BoardPos(5.0, 6.0),
         ),
         SpawnCard(card_id="tok2", token_id="some_token", position=BoardPos(0.0, 0.0)),
@@ -142,35 +146,63 @@ def test_decoding_an_unknown_counter_is_rejected():
         decode_intent({"op": "ADJUST_COUNTER", "card_id": "c1", "name": "bogus", "delta": 1})
 
 
-def test_card_subclass_and_typed_fields_survive_round_trip():
-    personality = DynastyPersonality(id="dp1", name="Bushi", side=Side.DYNASTY, force=3, chi=2)
-    ring = FateRing(id="fr", name="Ring of Fire", side=Side.FATE, element=Element.FIRE)
+def test_card_print_and_typed_fields_survive_round_trip():
+    personality = L5RCard.of(
+        PersonalityPrint,
+        id="dp1",
+        name="Bushi",
+        side=Side.DYNASTY,
+        force=3,
+        chi=2,
+        owner=PlayerId.P1,
+    )
+    ring = L5RCard.of(
+        RingPrint,
+        id="fr",
+        name="Ring of Fire",
+        side=Side.FATE,
+        element=Element.FIRE,
+        owner=PlayerId.P1,
+    )
 
     for card in (personality, ring):
         rebuilt = decode_card(json.loads(json.dumps(encode_card(card))))
         assert rebuilt == card
-        assert type(rebuilt) is type(card)  # the concrete subclass, not bare L5RCard
+        assert type(rebuilt.printed) is type(card.printed)  # the print, not a bare CardPrint
 
 
 def test_card_counters_survive_a_json_round_trip():
-    personality = DynastyPersonality(
-        id="dp2", name="Magistrate", side=Side.DYNASTY, counters={"wealth": 2, "honor": 1}
+    personality = L5RCard.of(
+        PersonalityPrint,
+        id="dp2",
+        name="Magistrate",
+        side=Side.DYNASTY,
+        counters={"wealth": 2, "honor": 1},
+        owner=PlayerId.P1,
     )
     rebuilt = decode_card(json.loads(json.dumps(encode_card(personality))))
     assert rebuilt == personality
     assert rebuilt.counters == {"wealth": 2, "honor": 1}
 
 
-def test_nested_back_face_survives_round_trip():
-    back = StrongholdCard(id="kk__back", name="Defiled", side=Side.STRONGHOLD, starting_honor=8)
-    front = StrongholdCard(
-        id="kk", name="Kyuden Kuni", side=Side.STRONGHOLD, back_card_id="kk__back", back=back
+def test_a_back_face_survives_round_trip():
+    front = L5RCard.of(
+        StrongholdPrint,
+        id="kk",
+        name="Kyuden Kuni",
+        side=Side.STRONGHOLD,
+        back_card_id="kk__back",
+        back_printed=StrongholdPrint(
+            name="Defiled", side=Side.STRONGHOLD, printed_id="kk__back", starting_honor=8
+        ),
+        owner=PlayerId.P1,
     )
 
     rebuilt = decode_card(json.loads(json.dumps(encode_card(front))))
 
-    assert rebuilt == front  # dataclass eq compares the nested back face recursively
-    assert isinstance(rebuilt.back, StrongholdCard)
+    assert rebuilt == front  # dataclass eq compares the nested back print recursively
+    assert isinstance(rebuilt.back_printed, StrongholdPrint)
+    assert rebuilt.back_printed.starting_honor == 8
 
 
 @pytest.mark.parametrize(
@@ -202,12 +234,20 @@ def test_seat_round_trips():
 
 def test_persisted_fields_match_the_classes():
     """The pinned lists are the format; the dataclasses happen to agree today. Adding a field to a
-    card class fails here until someone decides whether it belongs on disk, which is the whole
-    reason the lists exist rather than being derived."""
+    print or to the card fails here until someone decides whether it belongs on disk, which is the
+    whole reason the lists exist rather than being derived.
+
+    A payload is flat, so each list covers both halves at once. ``printed`` is the reference that
+    joins them and is the one card field with nothing to persist — the tag records which print it
+    pointed at."""
+    instance = {f.name for f in fields(L5RCard)} - {"printed"}
     mismatched = {
-        name: (tuple(f.name for f in fields(cls)), _PERSISTED_FIELDS.get(name))
-        for name, cls in _CARD_REGISTRY.items()
-        if tuple(f.name for f in fields(cls)) != _PERSISTED_FIELDS.get(name)
+        name: (
+            sorted({f.name for f in fields(cls)} | instance),
+            sorted(_PERSISTED_FIELDS.get(name, ())),
+        )
+        for name, cls in _PRINT_REGISTRY.items()
+        if {f.name for f in fields(cls)} | instance != set(_PERSISTED_FIELDS.get(name, ()))
     }
 
     assert mismatched == {}
@@ -217,27 +257,31 @@ def test_no_persisted_field_list_outlives_its_class():
     """The test above already fails for a class with no list. This is the other direction: a list
     left behind after its class was renamed or dropped, which would otherwise sit there forever
     describing a format nothing writes."""
-    assert set(_PERSISTED_FIELDS) - set(_CARD_REGISTRY) == set()
+    assert set(_PERSISTED_FIELDS) - set(_PRINT_REGISTRY) == set()
 
 
-def test_encoding_a_card_class_with_no_list_says_so():
-    """A card class that can be built but not saved fails at the save, far from the cause. Naming
-    it here is the difference between a one-line fix and an afternoon."""
+def test_encoding_a_print_with_no_list_says_so():
+    """A card that can be built but not saved fails at the save, far from the cause. Naming the
+    print here is the difference between a one-line fix and an afternoon."""
 
     @dataclass(frozen=True, slots=True)
-    class UnknownCard(L5RCard):
+    class UnknownPrint(CardPrint):
         pass
 
-    with pytest.raises(KeyError, match="UnknownCard has no persisted-field list"):
-        encode_card(UnknownCard(id="u", name="U", side=Side.DYNASTY))
+    with pytest.raises(KeyError, match="UnknownPrint has no persisted-field list"):
+        encode_card(
+            L5RCard.of(UnknownPrint, id="u", name="U", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
 
 
 def test_a_payload_carries_exactly_the_pinned_fields():
-    holding = DynastyHolding(id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
+    holding = L5RCard.of(
+        HoldingPrint, id="h", name="Farm", side=Side.DYNASTY, gold_production=2, owner=PlayerId.P1
+    )
 
     payload = encode_card(holding)
 
-    assert set(payload) == {"__type__", *_PERSISTED_FIELDS["DynastyHolding"]}
+    assert set(payload) == {"__type__", *_PERSISTED_FIELDS["HoldingPrint"]}
 
 
 GOLDEN = Path(__file__).parent / "golden" / "cards.json"
@@ -245,14 +289,14 @@ GOLDEN = Path(__file__).parent / "golden" / "cards.json"
 
 def _golden_cards() -> dict[str, L5RCard]:
     """Two cards reaching every branch of ``_encode_value``: enum, tuple, list, frozenset, dict,
-    Path, None, and a nested card. Two rather than fifteen because the classes differ only in extra
+    Path, None, and a nested print. Two rather than fifteen because the classes differ only in extra
     scalars, and the value encoding they share is what a golden payload is for.
 
-    Every image path is set explicitly, including the ones the card classes default. Those defaults
-    are absolute and derived from the install location, so leaving them would bake this machine's
-    filesystem into the checked-in bytes.
+    Every image path is set explicitly, including the ones a print's type defaults, so the checked-in
+    bytes do not depend on what those defaults happen to be.
     """
-    holding = DynastyHolding(
+    holding = L5RCard.of(
+        HoldingPrint,
         id="P1-7",
         name="Modest Farm",
         side=Side.DYNASTY,
@@ -279,24 +323,26 @@ def _golden_cards() -> dict[str, L5RCard]:
         gold_cost=1,
         gold_production=2,
     )
-    back = StrongholdCard(
-        id="sh__back",
+    back = StrongholdPrint(
         name="Kyuden",
         side=Side.STRONGHOLD,
+        printed_id="sh__back",
         starting_honor=8,
         image_front=Path("sets/she/kyuden_back.png"),
         image_back=Path("backs/stronghold.jpg"),
     )
-    front = StrongholdCard(
+    front = L5RCard.of(
+        StrongholdPrint,
         id="P1-sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         back_card_id="sh__back",
-        back=back,
+        back_printed=back,
         showing_back=True,
         starting_honor=6,
         image_front=Path("sets/she/kyuden.png"),
         image_back=Path("backs/stronghold.jpg"),
+        owner=PlayerId.P1,
     )
     return {"holding": holding, "flip_stronghold": front}
 
@@ -319,7 +365,8 @@ def test_the_checked_in_payloads_decode_to_the_cards_they_came_from():
 def test_a_cards_art_swap_survives_the_round_trip():
     """A card borrowing another printing's art carries the payload ``factory._art_swap`` builds,
     whose keywords are a list — the one place a card field holds one."""
-    swapped = DynastyHolding(
+    swapped = L5RCard.of(
+        HoldingPrint,
         id="h",
         name="Repairing the Ruins",
         side=Side.DYNASTY,
@@ -331,6 +378,7 @@ def test_a_cards_art_swap_survives_the_round_trip():
             "layout": "tall",
             "keywords": ["Farm", "Temple"],
         },
+        owner=PlayerId.P1,
     )
 
     rebuilt = decode_card(json.loads(json.dumps(encode_card(swapped))))
@@ -342,8 +390,14 @@ def test_a_cards_art_swap_survives_the_round_trip():
 def test_a_list_stays_a_list_and_a_tuple_stays_a_tuple():
     # The two encode differently on purpose; collapsing them would round-trip art_swap's keywords
     # into a tuple and quietly change what the browser receives.
-    holding = DynastyHolding(
-        id="h2", name="X", side=Side.DYNASTY, keywords=("Farm",), art_swap={"keywords": ["Farm"]}
+    holding = L5RCard.of(
+        HoldingPrint,
+        id="h2",
+        name="X",
+        side=Side.DYNASTY,
+        keywords=("Farm",),
+        art_swap={"keywords": ["Farm"]},
+        owner=PlayerId.P1,
     )
 
     rebuilt = decode_card(json.loads(json.dumps(encode_card(holding))))
@@ -357,13 +411,15 @@ def test_the_pinned_list_is_the_format_not_the_dataclass():
     nothing else can tell which one `encode_card` reads. This forces the list out of step for one
     call to prove the format follows it — that is the property the whole pin exists for, and the
     one that matters on the day a field moves off the card."""
-    original = _PERSISTED_FIELDS["DynastyHolding"]
-    holding = DynastyHolding(id="h", name="Farm", side=Side.DYNASTY, gold_production=2)
-    _PERSISTED_FIELDS["DynastyHolding"] = ("id", "name", "side")
+    original = _PERSISTED_FIELDS["HoldingPrint"]
+    holding = L5RCard.of(
+        HoldingPrint, id="h", name="Farm", side=Side.DYNASTY, gold_production=2, owner=PlayerId.P1
+    )
+    _PERSISTED_FIELDS["HoldingPrint"] = ("id", "name", "side")
     try:
         payload = encode_card(holding)
     finally:
-        _PERSISTED_FIELDS["DynastyHolding"] = original
+        _PERSISTED_FIELDS["HoldingPrint"] = original
 
     assert set(payload) == {"__type__", "id", "name", "side"}
 

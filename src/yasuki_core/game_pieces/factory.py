@@ -22,42 +22,28 @@ from yasuki_core.game_pieces.prints import (
     WindPrint,
 )
 from yasuki_core.game_pieces.constants import Side, AttachmentType
-from yasuki_core.game_pieces.dynasty import (
-    DynastyCard,
-    DynastyPersonality,
-    DynastyHolding,
-    DynastyEvent,
-    DynastyRegion,
-    DynastyCelestial,
-)
-from yasuki_core.game_pieces.fate import (
-    FateCard,
-    FateAction,
-    FateAttachment,
-    FateRing,
-    FateAncestor,
-)
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 
-_DYNASTY_BY_TYPE = {
-    "Personality": DynastyPersonality,
-    "Holding": DynastyHolding,
-    "Event": DynastyEvent,
-    "Region": DynastyRegion,
-    "Celestial": DynastyCelestial,
+# The print each database card type resolves to, per deck section. A section the record's type is
+# unknown in falls back to that section's base print.
+_DYNASTY_BY_TYPE: dict[str, type[CardPrint]] = {
+    "Personality": PersonalityPrint,
+    "Holding": HoldingPrint,
+    "Event": EventPrint,
+    "Region": RegionPrint,
+    "Celestial": CelestialPrint,
 }
-_FATE_BY_TYPE = {
-    "Strategy": FateAction,
-    "Ring": FateRing,
-    "Ancestor": FateAncestor,
-    "Item": FateAttachment,
-    "Follower": FateAttachment,
-    "Spell": FateAttachment,
+_FATE_BY_TYPE: dict[str, type[CardPrint]] = {
+    "Strategy": ActionPrint,
+    "Ring": RingPrint,
+    "Ancestor": AncestorPrint,
+    "Item": AttachmentPrint,
+    "Follower": AttachmentPrint,
+    "Spell": AttachmentPrint,
 }
-_PREGAME_BY_TYPE = {
-    "Stronghold": (StrongholdCard, Side.STRONGHOLD),
-    "Sensei": (SenseiCard, Side.FATE),
-    "Wind": (WindCard, Side.FATE),
+_PREGAME_BY_TYPE: dict[str, tuple[type[CardPrint], Side]] = {
+    "Stronghold": (StrongholdPrint, Side.STRONGHOLD),
+    "Sensei": (SenseiPrint, Side.FATE),
+    "Wind": (WindPrint, Side.FATE),
 }
 
 
@@ -66,8 +52,8 @@ class ResolvedDeck:
     """A decklist resolved to live card instances for one seat, plus the names that did not resolve."""
 
     pre_game: list[L5RCard] = field(default_factory=list)
-    dynasty: list[DynastyCard] = field(default_factory=list)
-    fate: list[FateCard] = field(default_factory=list)
+    dynasty: list[L5RCard] = field(default_factory=list)
+    fate: list[L5RCard] = field(default_factory=list)
     unresolved: list[str] = field(default_factory=list)
 
 
@@ -80,8 +66,8 @@ def resolve_decklist(
     """Resolve a parsed decklist into typed card instances owned by ``owner``.
 
     Each entry's section (not the record's deck field) decides the card family, so a player's manual
-    placement is honored; the record's first type refines the subclass. One instance is built per
-    physical copy, with a card id unique across both seats.
+    placement is honored; the record's first type refines the print. One instance is built per
+    physical copy, with a card id unique across both seats; the copies of one entry share its print.
 
     Parameters
     ----------
@@ -112,18 +98,22 @@ def resolve_decklist(
             if record is None:
                 resolved.unresolved.append(entry["name"])
                 continue
+            printed, back_printed = _entry_prints(
+                record,
+                entry.get("set_name"),
+                section,
+                by_id,
+                art=entry.get("art"),
+                name_index=index,
+                creates=tuple(creates_map.get(record["card_id"], ())) if creates_map else (),
+            )
             for _ in range(entry["count"]):
                 target.append(
-                    _build_card(
-                        record,
-                        entry.get("set_name"),
-                        section,
-                        by_id,
+                    _mint(
+                        printed,
+                        back_printed,
                         owner=owner,
                         card_id=f"{owner.name}-{next_id}",
-                        art=entry.get("art"),
-                        name_index=index,
-                        creates_map=creates_map,
                     )
                 )
                 next_id += 1
@@ -131,13 +121,13 @@ def resolve_decklist(
 
 
 def _section_for_type(card_type: str | None) -> str:
-    """The deck family a token of ``card_type`` belongs to, for the factory's subclass classification.
-    A token carries no deck section of its own, so it is inferred from its type."""
+    """The deck family a token of ``card_type`` belongs to, which picks its print. A token carries no
+    deck section of its own, so it is inferred from its type."""
     return "dynasty" if card_type in _DYNASTY_BY_TYPE else "fate"
 
 
-def build_token_card(record: dict) -> L5RCard:
-    """Build one live, owner-less card from a record, for the spawn to copy onto the battlefield.
+def build_token_print(record: dict) -> CardPrint:
+    """The print a spawn stamps a token from.
 
     The record has the ``get_card_by_id`` shape (the image as an ``image_path`` column, not a
     ``prints`` list), as returned by ``database.get_creates_for_cards`` and ``get_card_by_id``.
@@ -146,26 +136,15 @@ def build_token_card(record: dict) -> L5RCard:
     ----------
     record : dict
         The card's full database record.
-
-    Returns
-    -------
-    card : L5RCard
-        The built card, owner-less and keyed by its own card id.
     """
     card_type = (record.get("types") or [None])[0]
-    return _construct_face(
-        record,
-        {"image_path": record.get("image_path")},
-        _section_for_type(card_type),
-        owner=None,
-        card_id=record["card_id"],
-        back_card_id=None,
-        back=None,
+    return _build_print(
+        record, {"image_path": record.get("image_path")}, _section_for_type(card_type)
     )
 
 
-def build_token_templates(token_records: dict[str, dict]) -> dict[str, L5RCard]:
-    """Build a live token card from each record, keyed by token card id.
+def build_token_templates(token_records: dict[str, dict]) -> dict[str, CardPrint]:
+    """Build a token print from each record, keyed by token card id.
 
     Used once at deck load to populate ``TableState.creatable_tokens`` from
     ``database.get_creates_for_cards``.
@@ -177,10 +156,10 @@ def build_token_templates(token_records: dict[str, dict]) -> dict[str, L5RCard]:
 
     Returns
     -------
-    templates : dict mapping str to L5RCard
-        Each token card id to a built token card.
+    templates : dict mapping str to CardPrint
+        Each token card id to the print a spawn stamps it from.
     """
-    return {token_id: build_token_card(record) for token_id, record in token_records.items()}
+    return {token_id: build_token_print(record) for token_id, record in token_records.items()}
 
 
 def _name_index(records: list[dict]) -> dict[str, dict]:
@@ -193,33 +172,13 @@ def _name_index(records: list[dict]) -> dict[str, dict]:
     return index
 
 
-# Which print describes each card class. The card still declares its own characteristics, so the
-# print is built first and handed over; the next step is for the card to read through to it instead.
-_PRINT_FOR: dict[type, type[CardPrint]] = {
-    L5RCard: CardPrint,
-    DynastyCard: DynastyPrint,
-    DynastyPersonality: PersonalityPrint,
-    DynastyHolding: HoldingPrint,
-    DynastyEvent: EventPrint,
-    DynastyRegion: RegionPrint,
-    DynastyCelestial: CelestialPrint,
-    FateCard: FatePrint,
-    FateAction: ActionPrint,
-    FateAttachment: AttachmentPrint,
-    FateRing: RingPrint,
-    FateAncestor: AncestorPrint,
-    StrongholdCard: StrongholdPrint,
-    SenseiCard: SenseiPrint,
-    WindCard: WindPrint,
-}
-
-
-def _classify(section: str, card_type: str | None) -> tuple[type, Side]:
+def _classify(section: str, card_type: str | None) -> tuple[type[CardPrint], Side]:
+    """The print class a record of ``card_type`` filed under ``section`` describes, and its side."""
     if section == "dynasty":
-        return _DYNASTY_BY_TYPE.get(card_type, DynastyCard), Side.DYNASTY
+        return _DYNASTY_BY_TYPE.get(card_type, DynastyPrint), Side.DYNASTY
     if section == "fate":
-        return _FATE_BY_TYPE.get(card_type, FateCard), Side.FATE
-    return _PREGAME_BY_TYPE.get(card_type, (L5RCard, Side.STRONGHOLD))
+        return _FATE_BY_TYPE.get(card_type, FatePrint), Side.FATE
+    return _PREGAME_BY_TYPE.get(card_type, (CardPrint, Side.STRONGHOLD))
 
 
 def _select_print(record: dict, set_name: str | None) -> dict | None:
@@ -258,79 +217,78 @@ def _art_swap(
     }
 
 
-def _build_card(
+def _entry_prints(
     record: dict,
     set_name: str | None,
     section: str,
     by_id: dict[str, dict],
     *,
-    owner: PlayerId,
-    card_id: str,
     art: dict | None = None,
     name_index: dict[str, dict] | None = None,
-    creates_map: dict[str, list[str]] | None = None,
-) -> L5RCard:
-    """Build the front face of a card. For a double-faced card, nest its back face: the fully built
-    back when its record is on hand, else one synthesised from the front carrying the back art the
-    front's print records, so a flip shows the other side. With neither, only the ``back_card_id``
-    link is carried."""
+    creates: tuple[str, ...] = (),
+) -> tuple[CardPrint, CardPrint | None]:
+    """The print a deck entry's cards present, and the print of their back face if they have one.
+
+    Built once per entry, so every copy the entry produces shares them.
+
+    Parameters
+    ----------
+    record : dict
+        A card record as ``database.get_cards_by_names`` returns it.
+    set_name : str, optional
+        The printing the entry asked for, whose art the print wears. Default none, which takes the
+        record's first printing.
+    section : str
+        The decklist section the entry was filed under, which decides the card's side.
+    by_id : dict mapping str to dict
+        Every resolved record by card id, for looking up a double-faced card's back.
+    art : dict, optional
+        The entry's borrowed-art request, as ``{name, set_name}``. Default none.
+    name_index : dict mapping str to dict, optional
+        The case-insensitive name index, for resolving the art donor. Default none.
+    creates : tuple of str, optional
+        Token ids this card can create in play. Default empty.
+
+    Returns
+    -------
+    printed : CardPrint
+        The front print.
+    back_printed : CardPrint or None
+        The back face's print: the back record's own when the deck query returned it, else one
+        derived from the front carrying the back art the front's printing records. None when the
+        card has no other face.
+    """
     back_card_id = record.get("back_card_id")
     front_print = _select_print(record, set_name)
-    back = None
+    printed = _build_print(record, front_print, section, back_card_id=back_card_id, creates=creates)
+    back_printed = None
     if back_card_id and back_card_id in by_id:
         back_record = by_id[back_card_id]
-        back = _construct_face(
-            back_record,
-            _select_print(back_record, set_name),
-            section,
-            owner=owner,
-            card_id=back_card_id,
-            back_card_id=None,
-            back=None,
+        back_printed = _build_print(back_record, _select_print(back_record, set_name), section)
+    elif back_card_id and front_print and front_print.get("back_image_path"):
+        # The back-face row is excluded from deck queries (is_back), so there is usually no back
+        # record to build from. The front's printing still records the back art, which is the only
+        # field the manual table needs to draw the flipped side.
+        back_printed = replace(
+            printed, image_front=Path(front_print["back_image_path"]), back_card_id=None
         )
-    front = _construct_face(
-        record,
-        front_print,
-        section,
-        owner=owner,
-        card_id=card_id,
-        back_card_id=back_card_id,
-        back=back,
-        creates=tuple(creates_map.get(record["card_id"], ())) if creates_map else (),
-    )
-    # The back-face row is excluded from deck queries (is_back), so there is usually no back record
-    # to nest. The front's print still records the back art, so synthesise a back face from the
-    # front carrying that art — the only field the manual table needs to draw the flipped side.
-    if back is None and back_card_id and front_print and front_print.get("back_image_path"):
-        synthetic_back = replace(
-            front,
-            id=back_card_id,
-            image_front=Path(front_print["back_image_path"]),
-            back_card_id=None,
-            back=None,
-        )
-        front = replace(front, back=synthetic_back)
+    # After the back is derived, so borrowed art dresses the front alone.
     if art and front_print and name_index is not None:
         art_swap = _art_swap(record, front_print, art, name_index)
         if art_swap is not None:
-            front = replace(front, art_swap=art_swap)
-    return front
+            printed = replace(printed, art_swap=art_swap)
+    return printed, back_printed
 
 
-def _construct_face(
-    record: dict,
-    print_info: dict | None,
-    section: str,
+def _mint(
+    printed: CardPrint,
+    back_printed: CardPrint | None,
     *,
-    owner: PlayerId,
+    owner: PlayerId | None,
     card_id: str,
-    back_card_id: str | None,
-    back: L5RCard | None,
-    creates: tuple[str, ...] = (),
 ) -> L5RCard:
-    card_cls, side = _classify(section, (record.get("types") or [None])[0])
-    printed = _build_print(record, print_info, section, back_card_id=back_card_id, creates=creates)
-    return card_cls(id=card_id, owner=owner, back=back, **printed.as_card_fields())
+    """One copy of the card ``printed`` describes, carrying its other face when it has one."""
+    return L5RCard(id=card_id, printed=printed, owner=owner, back_printed=back_printed)
 
 
 def _build_print(
@@ -358,12 +316,12 @@ def _build_print(
         Token ids this card can create in play. Default empty.
     """
     card_type = (record.get("types") or [None])[0]
-    card_cls, side = _classify(section, card_type)
+    print_cls, side = _classify(section, card_type)
     # image_front is the database-relative print path; the web client resolves it against the image
-    # base URL. The card classes' local default art is for the desktop/PDF renderers, not the wire.
+    # base URL. A print subclass' default art is for the desktop/PDF renderers, not the wire.
     image_path = print_info.get("image_path") if print_info else None
     clans = record.get("clans") or []
-    return _PRINT_FOR[card_cls](
+    return print_cls(
         name=record.get("extended_title") or record["name"],
         side=side,
         printed_id=record.get("card_id"),
@@ -376,7 +334,7 @@ def _build_print(
         is_unique=bool(record.get("is_unique")),
         image_front=Path(image_path) if image_path else None,
         back_card_id=back_card_id,
-        **_stat_fields(_PRINT_FOR[card_cls], card_type, record),
+        **_stat_fields(print_cls, card_type, record),
     )
 
 

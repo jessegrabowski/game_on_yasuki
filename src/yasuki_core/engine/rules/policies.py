@@ -9,7 +9,8 @@ from yasuki_core.engine.rules.agents import PayingAgent
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.table import ZoneRole
-from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import HoldingPrint
 
 
 class Policy(Protocol):
@@ -223,7 +224,7 @@ def make_policy(name: str) -> Policy:
     return POLICIES[name]()
 
 
-def _rank(card: DynastyCard) -> tuple[int, int, str]:
+def _rank(card: L5RCard) -> tuple[int, int, str]:
     """How a province card sorts for purchase, lowest first.
 
     Gold Production leads and Gold Cost breaks the tie, both negated so the larger wins. The card id
@@ -234,7 +235,7 @@ def _rank(card: DynastyCard) -> tuple[int, int, str]:
     return -production, -cost, card.id
 
 
-def _readable_province_cards(view: GameView) -> dict[str, DynastyCard]:
+def _readable_province_cards(view: GameView) -> dict[str, L5RCard]:
     """The viewer's province cards it can identify, by id — what a Recruit's ``card_id`` refers to.
 
     Built by scanning rather than looked up, since a redacted view carries no id index. A card the
@@ -250,10 +251,10 @@ def _readable_province_cards(view: GameView) -> dict[str, DynastyCard]:
     }
 
 
-def _best_production(cards: Iterable[DynastyCard]) -> int:
+def _best_production(cards: Iterable[L5RCard]) -> int:
     """The largest printed Gold Production among ``cards``, or 0 when none of them produces."""
     return max((_production(card) for card in cards), default=0)
 
 
-def _production(card: DynastyCard) -> int:
-    return card.gold_production if isinstance(card, DynastyHolding) else 0
+def _production(card: L5RCard) -> int:
+    return card.gold_production if isinstance(card.printed, HoldingPrint) else 0

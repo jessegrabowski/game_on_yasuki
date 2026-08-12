@@ -1,9 +1,9 @@
 from yasuki_core.engine.redaction import ViewSnapshot, HiddenCard
 from yasuki_core.engine.table import ZoneKey, DeckKey, AttachTarget
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
+from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint, WindPrint
 
-_PREGAME_TYPES = (StrongholdCard, SenseiCard, WindCard)
+_PREGAME_PRINTS = (StrongholdPrint, SenseiPrint, WindPrint)
 
 
 def _zone_key_str(key: ZoneKey) -> str:
@@ -64,8 +64,8 @@ def _card(
         "img": face.image_front.as_posix() if face.image_front is not None else None,
         "card_type": face.card_type,
         "side": face.side.value,
-        "owner": view.owner.name if view.owner is not None else None,
-        "pregame": isinstance(view, _PREGAME_TYPES),
+        "owner": view.owner.name,
+        "pregame": isinstance(view.printed, _PREGAME_PRINTS),
         "token": view.is_token,
         "bowed": view.bowed,
         "face_up": view.face_up,
@@ -79,8 +79,8 @@ def _card(
         card["showing_back"] = view.showing_back
     if face.art_swap is not None:
         card["art"] = face.art_swap
-    if face.note:
-        card["note"] = face.note
+    if view.note:
+        card["note"] = view.note
     if token_names and view.creates:
         card["creates"] = [{"id": tid, "name": token_names.get(tid, tid)} for tid in view.creates]
     return card

@@ -51,6 +51,14 @@ describe('fallbackSrc', () => {
     );
   });
 
+  it('shows the token back for a proxy rather than its type frame', () => {
+    // A proxy stands in for a card that was never printed; the type frame would make it look real.
+    assert.equal(
+      fallbackSrc({ types: ['Item', 'Proxy'], is_proxy: true }, '/images'),
+      '/images/dynasty_back_token.jpg',
+    );
+  });
+
   it('returns null for an unknown type', () => {
     assert.equal(fallbackSrc({ types: ['Mystery'] }, '/images'), null);
   });

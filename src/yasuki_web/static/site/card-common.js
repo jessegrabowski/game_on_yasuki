@@ -16,6 +16,11 @@ export const DEFAULT_BY_TYPE = {
   wind: 'defaults/generic_wind.jpg',
 };
 
+// A proxy stands in for a card that was never printed, so it shows the token back rather than its
+// type's frame — it should read as a proxy before it reads as an Item. Mirrors TOKEN_BACK in
+// yasuki_core/paths.py.
+export const TOKEN_BACK = 'dynasty_back_token.jpg';
+
 export const esc = (s) =>
   String(s ?? '')
     .replace(/&/g, '&amp;')
@@ -44,6 +49,7 @@ function personalityFallback(card) {
 }
 
 export function fallbackSrc(card, imgBase) {
+  if (card.is_proxy) return `${imgBase}/${TOKEN_BACK}`;
   const type = ((card.types || [])[0] || '').toLowerCase();
   const path = type === 'personality' ? personalityFallback(card) : DEFAULT_BY_TYPE[type];
   return path ? `${imgBase}/${path}` : null;

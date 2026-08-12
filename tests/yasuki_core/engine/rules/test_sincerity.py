@@ -4,9 +4,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
-from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.counters import SINCERITY, counter_from_key
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
@@ -60,8 +60,13 @@ def test_every_lingering_sincerity_card_accrues_across_provinces():
 
 def test_a_sincerity_card_in_play_does_not_accrue():
     game = two_seat_game()
-    card = DynastyHolding(
-        id="s", name="s", side=Side.DYNASTY, owner=PlayerId.P1, keywords=("Sincerity",)
+    card = L5RCard.of(
+        HoldingPrint,
+        id="s",
+        name="s",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        keywords=("Sincerity",),
     )
     card.turn_face_up()
     game.table.cards_by_id["s"] = card
@@ -86,11 +91,16 @@ def test_sincerity_accrues_only_on_the_owners_own_turns():
 def test_sincerity_accrual_replays_through_a_full_turn():
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        FateCard(id="fd", name="F", side=Side.FATE, owner=PlayerId.P1)
+        L5RCard.of(FatePrint, id="fd", name="F", side=Side.FATE, owner=PlayerId.P1)
     ]
     state.cards_by_id["fd"] = state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards[0]
-    card = DynastyHolding(
-        id="s", name="s", side=Side.DYNASTY, owner=PlayerId.P1, keywords=("Sincerity",)
+    card = L5RCard.of(
+        HoldingPrint,
+        id="s",
+        name="s",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        keywords=("Sincerity",),
     )
     card.turn_face_up()
     state.cards_by_id["s"] = card

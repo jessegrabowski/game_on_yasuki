@@ -5,6 +5,8 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.table import TableState, SeatInfo, ZoneKey, DeckKey, BoardPos
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.serialization import (
+    encode_print,
+    decode_print,
     encode_card,
     decode_card,
     encode_zone_key,
@@ -16,6 +18,7 @@ from yasuki_core.engine.serialization import (
     encode_attach_target,
     decode_attach_target,
 )
+from yasuki_core.game_pieces.prints import CardPrint
 
 # The start-of-game table snapshot: a deep-copied capture of a dealt table, the rebuild that turns
 # it back into a live TableState, and its JSON codec. Product-neutral foundation — the manual sim's
@@ -44,7 +47,7 @@ class InitialRecord:
         Battlefield card positions, keyed by card id.
     attachments : dict mapping str to (str or ZoneKey)
         The attachment graph, keyed by attached card id, mapping to a parent card id or province.
-    creatable_tokens : dict mapping str to L5RCard
+    creatable_tokens : dict mapping str to CardPrint
         Token templates the loaded decks can create, keyed by token card id, so a replayed token
         spawn resolves against the same templates without a database call.
     setup_seeds : dict mapping str to int
@@ -57,7 +60,7 @@ class InitialRecord:
     battlefield: list[L5RCard] = field(default_factory=list)
     positions: dict[str, BoardPos] = field(default_factory=dict)
     attachments: dict[str, str | ZoneKey] = field(default_factory=dict)
-    creatable_tokens: dict[str, L5RCard] = field(default_factory=dict)
+    creatable_tokens: dict[str, CardPrint] = field(default_factory=dict)
     setup_seeds: dict[str, int] = field(default_factory=dict)
 
     @classmethod
@@ -85,7 +88,7 @@ class InitialRecord:
             battlefield=[replace(card) for card in state.battlefield.cards],
             positions=dict(state.positions),
             attachments=dict(state.attachments),
-            creatable_tokens={tid: replace(card) for tid, card in state.creatable_tokens.items()},
+            creatable_tokens=dict(state.creatable_tokens),
             setup_seeds=dict(setup_seeds or {}),
         )
 
@@ -108,7 +111,7 @@ def build_initial_state(initial: InitialRecord) -> TableState:
     state.battlefield.cards = _restore_cards(state, initial.battlefield)
     state.positions = dict(initial.positions)
     state.attachments = dict(initial.attachments)
-    state.creatable_tokens = {tid: replace(card) for tid, card in initial.creatable_tokens.items()}
+    state.creatable_tokens = dict(initial.creatable_tokens)
     return state
 
 
@@ -139,7 +142,7 @@ def encode_initial(initial: InitialRecord) -> dict:
             card_id: encode_attach_target(target) for card_id, target in initial.attachments.items()
         },
         "creatable_tokens": {
-            tid: encode_card(card) for tid, card in initial.creatable_tokens.items()
+            tid: encode_print(printed) for tid, printed in initial.creatable_tokens.items()
         },
         "setup_seeds": dict(initial.setup_seeds),
     }
@@ -163,7 +166,7 @@ def decode_initial(payload: dict) -> InitialRecord:
         for card_id, target in payload.get("attachments", {}).items()
     }
     creatable_tokens = {
-        tid: decode_card(card) for tid, card in payload.get("creatable_tokens", {}).items()
+        tid: decode_print(printed) for tid, printed in payload.get("creatable_tokens", {}).items()
     }
     return InitialRecord(
         seats=seats,

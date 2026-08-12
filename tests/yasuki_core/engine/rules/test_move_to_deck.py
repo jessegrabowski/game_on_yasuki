@@ -5,7 +5,8 @@ from yasuki_core.engine.rules.effects import MoveToDeck
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import DynastyPrint
 
 from tests.yasuki_core.engine.builders import province_card, two_seat_game
 
@@ -18,7 +19,7 @@ def _game_with_a_three_card_deck():
     game = two_seat_game()
     province_card(game, "mover", seat=P1)
     resident = [
-        DynastyCard(id=name, name=name, side=Side.DYNASTY, owner=P1)
+        L5RCard.of(DynastyPrint, id=name, name=name, side=Side.DYNASTY, owner=P1)
         for name in ("bottom", "middle", "top")
     ]
     game.table.cards_by_id.update({card.id: card for card in resident})

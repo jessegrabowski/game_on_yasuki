@@ -1,22 +1,35 @@
 import pytest
 
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint, WindPrint
 from yasuki_core.paths import DEFAULT_STRONGHOLD, DEFAULT_SENSEI, DEFAULT_WIND
+from yasuki_core.engine.players import PlayerId
 
 
 @pytest.mark.parametrize(
-    "card_cls, side, expected_art",
+    "print_cls, side, expected_art",
     [
-        (StrongholdCard, Side.STRONGHOLD, DEFAULT_STRONGHOLD),
-        (SenseiCard, Side.FATE, DEFAULT_SENSEI),
-        (WindCard, Side.FATE, DEFAULT_WIND),
+        (StrongholdPrint, Side.STRONGHOLD, DEFAULT_STRONGHOLD),
+        (SenseiPrint, Side.FATE, DEFAULT_SENSEI),
+        (WindPrint, Side.FATE, DEFAULT_WIND),
     ],
 )
-def test_each_pre_game_card_wires_its_default_art(card_cls, side, expected_art):
-    assert card_cls(id="c", name="C", side=side).image_front == expected_art
+def test_each_pre_game_card_wires_its_default_art(print_cls, side, expected_art):
+    assert (
+        L5RCard.of(print_cls, id="c", name="C", side=side, owner=PlayerId.P1).image_front
+        == expected_art
+    )
 
 
 def test_honor_bearing_pre_game_cards_default_to_zero_honor():
-    assert StrongholdCard(id="sh", name="S", side=Side.STRONGHOLD).starting_honor == 0
-    assert SenseiCard(id="se", name="S", side=Side.FATE).starting_honor == 0
+    assert (
+        L5RCard.of(
+            StrongholdPrint, id="sh", name="S", side=Side.STRONGHOLD, owner=PlayerId.P1
+        ).starting_honor
+        == 0
+    )
+    assert (
+        L5RCard.of(SenseiPrint, id="se", name="S", side=Side.FATE, owner=PlayerId.P1).starting_honor
+        == 0
+    )

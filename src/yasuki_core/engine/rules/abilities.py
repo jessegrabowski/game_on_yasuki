@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.prints import HoldingPrint
 
 # A cost is the effects paid to activate an ability, applied to the source card before the ability's
 # own effects. Bow / destroy / spend-a-token are all just effects targeting the source, so costs and
@@ -187,12 +187,12 @@ def activatable(
     return ready
 
 
-def owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[DynastyHolding]:
+def owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[L5RCard]:
     return [
         held
         for held in game.table.battlefield.cards
         if held.owner is owner
-        and isinstance(held, DynastyHolding)
+        and isinstance(held.printed, HoldingPrint)
         and keyword in effective_keywords(game, held)
     ]
 

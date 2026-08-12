@@ -8,8 +8,9 @@ from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.intents import IntentOp
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import CardPrint
 
 from tests.yasuki_web._support import account
 
@@ -42,7 +43,9 @@ def _stock_deck(room, seat, side, card_ids):
     # Cards are stored bottom-first; the last appended is the top of the deck (the next draw).
     deck = room.state.decks[DeckKey(seat, side)]
     for card_id in card_ids:
-        card = L5RCard(id=card_id, name=f"Card {card_id}", side=side, owner=seat, face_up=False)
+        card = L5RCard.of(
+            CardPrint, id=card_id, name=f"Card {card_id}", side=side, owner=seat, face_up=False
+        )
         deck.cards.append(card)
         room.state.cards_by_id[card_id] = card
     return deck

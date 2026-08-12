@@ -5,6 +5,8 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint, StrongholdPrint
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import (
@@ -30,8 +32,6 @@ from yasuki_core.engine.rules.log import (
     game_log_from_dict,
     _decode_action,
 )
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.pregame import StrongholdCard
 
 from tests.yasuki_core.engine.builders import put_in_play, register
 
@@ -85,18 +85,28 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
     state = dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
-            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     ]
     put_in_play(
         state,
-        DynastyHolding(
-            id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+        L5RCard.of(
+            HoldingPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=8,
         ),
     )
     _place_in_province(
         state,
-        DynastyHolding(id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5),
+        L5RCard.of(
+            HoldingPrint, id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5
+        ),
     )
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
@@ -117,19 +127,30 @@ def test_proclaimed_recruit_replays_and_round_trips():
     state = dealt_table()
     put_in_play(
         state,
-        StrongholdCard(
-            id="P1-strong", name="Keep", side=Side.STRONGHOLD, owner=PlayerId.P1, clan="Crab"
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-strong",
+            name="Keep",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            clan="Crab",
         ),
     )
     put_in_play(
         state,
-        DynastyHolding(
-            id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+        L5RCard.of(
+            HoldingPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=8,
         ),
     )
     _place_in_province(
         state,
-        DynastyPersonality(
+        L5RCard.of(
+            PersonalityPrint,
             id="P1-person",
             name="Hero",
             side=Side.DYNASTY,
@@ -158,12 +179,16 @@ def test_boosted_payment_round_trips_through_the_codec():
     state = dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
-            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     ]
     outlying = register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="P1-of",
             name="Outlying Farms",
             side=Side.DYNASTY,
@@ -176,7 +201,9 @@ def test_boosted_payment_round_trips_through_the_codec():
     state.battlefield.add(outlying)
     _place_in_province(
         state,
-        DynastyHolding(id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4),
+        L5RCard.of(
+            HoldingPrint, id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4
+        ),
     )
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
@@ -200,18 +227,27 @@ def test_triggered_choice_replays_and_round_trips():
     state = dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
-            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     ]
     put_in_play(
         state,
-        DynastyHolding(
-            id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+        L5RCard.of(
+            HoldingPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=8,
         ),
     )
     put_in_play(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="P1-other",
             name="Other Farm",
             side=Side.DYNASTY,
@@ -222,7 +258,8 @@ def test_triggered_choice_replays_and_round_trips():
     )
     _place_in_province(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="P1-wheat",
             name="Wheat Farm",
             side=Side.DYNASTY,
@@ -252,13 +289,20 @@ def test_cancelled_recruit_payment_replays_and_round_trips():
     state = dealt_table()
     put_in_play(
         state,
-        DynastyHolding(
-            id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+        L5RCard.of(
+            HoldingPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=8,
         ),
     )
     _place_in_province(
         state,
-        DynastyHolding(id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5),
+        L5RCard.of(
+            HoldingPrint, id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5
+        ),
     )
 
     log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)

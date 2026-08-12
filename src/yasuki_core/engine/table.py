@@ -17,6 +17,7 @@ from yasuki_core.engine.zones import (
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.deck import Deck, FateDeck, DynastyDeck
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 class ZoneRole(str, Enum):
@@ -94,7 +95,7 @@ class TableState:
         battlefield drops its entry and detaches whatever is hung off it.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
-    creatable_tokens : dict mapping str to L5RCard
+    creatable_tokens : dict mapping str to CardPrint
         Token templates the loaded decks can create, keyed by token card id, resolved at deck load.
     seq : int
         Monotonic view version, bumped on every state change: by ``apply_intent`` for game intents
@@ -113,7 +114,7 @@ class TableState:
     cards_by_id: dict[str, L5RCard] = field(default_factory=dict)
     # A SpawnCard naming a token_id copies the matching template onto the battlefield, so spawning a
     # creatable token needs no live database call.
-    creatable_tokens: dict[str, L5RCard] = field(default_factory=dict)
+    creatable_tokens: dict[str, CardPrint] = field(default_factory=dict)
     seq: int = 0
 
     @classmethod
@@ -235,12 +236,12 @@ AttachTarget = str | ZoneKey
 
 
 def owns_card(state: TableState, seat: PlayerId, card_id: str) -> bool:
-    """Return whether ``seat`` may act on the card. True for the card's owner and for public
-    (owner-less) cards; False if the card is unknown or belongs to the other seat."""
+    """Return whether ``seat`` may act on the card: True for its owner, False if the card is unknown
+    or belongs to the other seat."""
     card = state.cards_by_id.get(card_id)
     if card is None:
         return False
-    return card.owner is None or card.owner == seat
+    return card.owner == seat
 
 
 def owns_zone(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> bool:
@@ -261,9 +262,9 @@ def owns_deck(state: TableState, seat: PlayerId, deck_key: DeckKey) -> bool:
 
 
 def zone_owned_by_card(zone: Zone, card: L5RCard) -> bool:
-    """Return whether the card and zone owners are compatible: True unless both are set and differ.
+    """Return whether the card may sit in the zone: True for a public zone or the card owner's own.
     Guards against placing one seat's card into the other seat's owned zone."""
-    return zone.owner is None or card.owner is None or zone.owner == card.owner
+    return zone.owner is None or zone.owner == card.owner
 
 
 def zone_accepts(zone: Zone, card: L5RCard) -> bool:

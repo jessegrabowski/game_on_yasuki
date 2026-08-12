@@ -5,15 +5,19 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import DynastyDiscard, Pass, Recruit
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    StrongholdPrint,
+)
 
 
 def _register(state: TableState, card):
@@ -26,12 +30,17 @@ def _dealt_table() -> TableState:
     discard."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        _register(state, FateCard(id="P1-fd", name="F", side=Side.FATE, owner=PlayerId.P1))
+        _register(
+            state, L5RCard.of(FatePrint, id="P1-fd", name="F", side=Side.FATE, owner=PlayerId.P1)
+        )
     ]
     hand = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     for i in range(flow.MAX_HAND_SIZE):
         hand.add(
-            _register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
+            _register(
+                state,
+                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+            )
         )
     return state
 
@@ -56,11 +65,16 @@ def test_legal_actions_offers_pass_to_the_active_seat_only():
     assert session.legal_actions(PlayerId.P2) == []
 
 
-def _gold_source(state, card_id: str, amount: int, owner=PlayerId.P1) -> DynastyHolding:
+def _gold_source(state, card_id: str, amount: int, owner=PlayerId.P1) -> L5RCard:
     holding = _register(
         state,
-        DynastyHolding(
-            id=card_id, name="Gold Mine", side=Side.DYNASTY, owner=owner, gold_production=amount
+        L5RCard.of(
+            HoldingPrint,
+            id=card_id,
+            name="Gold Mine",
+            side=Side.DYNASTY,
+            owner=owner,
+            gold_production=amount,
         ),
     )
     state.battlefield.add(holding)
@@ -78,10 +92,11 @@ def test_gold_is_not_a_free_action_outside_a_payment():
 
 def _holding_in_province(
     state, card_id: str, *, gold_cost: int, idx: int = 0, keywords=()
-) -> DynastyHolding:
+) -> L5RCard:
     holding = _register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id=card_id,
             name="Holding",
             side=Side.DYNASTY,
@@ -132,10 +147,11 @@ def _personality_in_province(
     clan: str | None = None,
     personal_honor: int = 0,
     honor_requirement: int | None = 0,
-) -> DynastyPersonality:
+) -> L5RCard:
     person = _register(
         state,
-        DynastyPersonality(
+        L5RCard.of(
+            PersonalityPrint,
             id=card_id,
             name="Hero",
             side=Side.DYNASTY,
@@ -153,12 +169,17 @@ def _personality_in_province(
     return person
 
 
-def _stronghold(state, clan: str) -> StrongholdCard:
+def _stronghold(state, clan: str) -> L5RCard:
     """A zero-production stronghold in play, giving P1 a clan alignment for Proclaim."""
     stronghold = _register(
         state,
-        StrongholdCard(
-            id="P1-strong", name="Keep", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-strong",
+            name="Keep",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            clan=clan,
         ),
     )
     state.battlefield.add(stronghold)
@@ -169,7 +190,10 @@ def test_recruit_pays_then_brings_the_personality_into_play_unbowed_and_refills(
     state = _dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         _register(
-            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     ]
     _gold_source(state, "P1-SH", 8)
@@ -318,7 +342,10 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     state = _dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         _register(
-            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     ]
     _gold_source(state, "P1-SH", 8)
@@ -351,8 +378,13 @@ def test_dynasty_discard_is_offered_for_any_face_up_province_card_in_dynasty():
     _holding_in_province(state, "P1-junk", gold_cost=9)  # too expensive to recruit
     person = _register(
         state,
-        DynastyPersonality(
-            id="P1-person", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=0
+        L5RCard.of(
+            PersonalityPrint,
+            id="P1-person",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=0,
         ),
     )
     person.turn_face_up()
@@ -375,7 +407,10 @@ def test_dynasty_discard_moves_the_card_to_the_discard_and_refills():
     state = _dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         _register(
-            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     ]
     _holding_in_province(state, "P1-junk", gold_cost=9)
@@ -396,7 +431,10 @@ def test_dynasty_discard_survives_a_replay():
     state = _dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         _register(
-            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     ]
     _holding_in_province(state, "P1-junk", gold_cost=9)
@@ -413,7 +451,8 @@ def test_jade_works_funds_and_pays_a_jade_recruit_at_its_premium_rate():
     state = _dealt_table()
     works = _register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="P1-jadeworks",
             printed_id="jade_works",
             name="Jade Works",
@@ -546,7 +585,10 @@ def test_undo_last_reverses_a_dynasty_discard_and_cannot_repeat():
     state = _dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         _register(
-            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
         )
     ]
     _holding_in_province(state, "P1-junk", gold_cost=9)

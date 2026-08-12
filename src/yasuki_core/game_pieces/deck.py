@@ -5,9 +5,8 @@ from typing import Generic, TypeVar
 from numpy.random import Generator
 
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint
 
-from yasuki_core.game_pieces.dynasty import DynastyCard
-from yasuki_core.game_pieces.fate import FateCard
 
 CardT = TypeVar("CardT", bound=L5RCard)
 
@@ -59,20 +58,20 @@ class Deck(Generic[CardT]):
 
 
 @dataclass
-class FateDeck(Deck[FateCard]):
+class FateDeck(Deck[L5RCard]):
     @classmethod
-    def build(cls, cards: Iterable[FateCard]) -> "FateDeck":
+    def build(cls, cards: Iterable[L5RCard]) -> "FateDeck":
         cards = list(cards)
-        if not all(isinstance(c, FateCard) for c in cards):
-            raise ValueError("All cards must be FateCard instances")
+        if not all(isinstance(c.printed, FatePrint) for c in cards):
+            raise ValueError("Every card must present a Fate print")
         return cls(cards)
 
 
 @dataclass
-class DynastyDeck(Deck[DynastyCard]):
+class DynastyDeck(Deck[L5RCard]):
     @classmethod
-    def build(cls, cards: Iterable[DynastyCard]) -> "DynastyDeck":
+    def build(cls, cards: Iterable[L5RCard]) -> "DynastyDeck":
         cards = list(cards)
-        if not all(isinstance(c, DynastyCard) for c in cards):
-            raise ValueError("All cards must be DynastyCard instances")
+        if not all(isinstance(c.printed, DynastyPrint) for c in cards):
+            raise ValueError("Every card must present a Dynasty print")
         return cls(cards)

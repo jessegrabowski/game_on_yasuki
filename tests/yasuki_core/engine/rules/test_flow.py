@@ -4,9 +4,15 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    DynastyPrint,
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    SenseiPrint,
+    StrongholdPrint,
+)
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow, legality
@@ -20,13 +26,21 @@ def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
     state = TableState.empty_two_seat()
     for seat in PlayerId:
         state.decks[DeckKey(seat, Side.FATE)].cards = [
-            register(state, FateCard(id=f"{seat.name}-fd{i}", name="F", side=Side.FATE, owner=seat))
+            register(
+                state,
+                L5RCard.of(
+                    FatePrint, id=f"{seat.name}-fd{i}", name="F", side=Side.FATE, owner=seat
+                ),
+            )
             for i in range(fate_deck)
         ]
     hand_zone = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     for i in range(hand):
         hand_zone.add(
-            register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
+            register(
+                state,
+                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+            )
         )
     return GameState.start(state, PlayerId.P1)
 
@@ -118,14 +132,18 @@ def test_submit_rejects_a_malformed_or_illegal_answer():
 
 
 def _bowed_on_battlefield(state: TableState, seat: PlayerId, card_id: str):
-    card = register(state, DynastyCard(id=card_id, name="B", side=Side.DYNASTY, owner=seat))
+    card = register(
+        state, L5RCard.of(DynastyPrint, id=card_id, name="B", side=Side.DYNASTY, owner=seat)
+    )
     card.bow()
     state.battlefield.add(card)
     return card
 
 
 def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
-    card = register(state, DynastyCard(id=card_id, name="P", side=Side.DYNASTY, owner=seat))
+    card = register(
+        state, L5RCard.of(DynastyPrint, id=card_id, name="P", side=Side.DYNASTY, owner=seat)
+    )
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
     return card
@@ -150,18 +168,37 @@ def _game_with_stronghold_clan(clan: str | None) -> GameState:
     state = TableState.empty_two_seat()
     put_in_play(
         state,
-        StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan),
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            clan=clan,
+        ),
     )
     return GameState.start(state, PlayerId.P1)
 
 
 def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
     game = _game_with_stronghold_clan("crab")
-    same = DynastyHolding(
-        id="h1", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crab"
+    same = L5RCard.of(
+        HoldingPrint,
+        id="h1",
+        name="H",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_cost=4,
+        clan="crab",
     )
-    other = DynastyHolding(
-        id="h2", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crane"
+    other = L5RCard.of(
+        HoldingPrint,
+        id="h2",
+        name="H",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_cost=4,
+        clan="crane",
     )
 
     assert legality.recruit_cost(game, same) == 4
@@ -170,14 +207,21 @@ def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
 
 def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
     game = _game_with_stronghold_clan(None)
-    holding = DynastyHolding(
-        id="h", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crane"
+    holding = L5RCard.of(
+        HoldingPrint,
+        id="h",
+        name="H",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_cost=4,
+        clan="crane",
     )
     assert legality.recruit_cost(game, holding) == 4  # no Stronghold clan to compare against
 
 
-def _personality(clans: tuple[str, ...], **kwargs) -> DynastyPersonality:
-    return DynastyPersonality(
+def _personality(clans: tuple[str, ...], **kwargs) -> L5RCard:
+    return L5RCard.of(
+        PersonalityPrint,
         id="p",
         name="P",
         side=Side.DYNASTY,
@@ -238,11 +282,13 @@ def test_can_proclaim_rejects_off_clan_and_unaligned_personalities():
 def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
     state = TableState.empty_two_seat()
     put_in_play(
-        state, StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1)
+        state,
+        L5RCard.of(StrongholdPrint, id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1),
     )
     put_in_play(
         state,
-        SenseiCard(
+        L5RCard.of(
+            SenseiPrint,
             id="P1-SE",
             name="Sensei",
             side=Side.FATE,
@@ -269,15 +315,23 @@ def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
     state = TableState.empty_two_seat()
     put_in_play(
         state,
-        StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan),
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            clan=clan,
+        ),
     )
     for card in in_play:
         put_in_play(state, card)
     return GameState.start(state, first_player)
 
 
-def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> DynastyHolding:
-    return DynastyHolding(
+def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> L5RCard:
+    return L5RCard.of(
+        HoldingPrint,
         id=f"{printed_id}-inst",
         name="H",
         side=Side.DYNASTY,
@@ -301,8 +355,13 @@ def test_fantastic_gardens_discounts_two_for_a_crane_player():
 
 
 def test_moto_traders_discounts_with_another_merchant_caravan_in_play():
-    caravan = DynastyHolding(
-        id="mc", name="C", side=Side.DYNASTY, owner=PlayerId.P1, keywords=("Merchant Caravan",)
+    caravan = L5RCard.of(
+        HoldingPrint,
+        id="mc",
+        name="C",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        keywords=("Merchant Caravan",),
     )
     traders = _holding("moto_traders", gold_cost=5)
     assert legality.recruit_cost(_discount_game(in_play=(caravan,)), traders) == 4
@@ -323,8 +382,13 @@ def test_recruit_discount_floors_the_cost_at_zero():
 
 
 def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
-    caravan = DynastyHolding(
-        id="mc", name="C", side=Side.DYNASTY, owner=PlayerId.P1, keywords=("Merchant Caravan",)
+    caravan = L5RCard.of(
+        HoldingPrint,
+        id="mc",
+        name="C",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        keywords=("Merchant Caravan",),
     )
     game = _discount_game(clan="Crab", in_play=(caravan,))
     traders = _holding(

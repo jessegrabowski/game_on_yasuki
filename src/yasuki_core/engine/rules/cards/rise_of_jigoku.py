@@ -54,7 +54,7 @@ register_ability(
 def _mishime_sensei_enters_play(ctx: TriggerContext) -> list[Effect]:
     """Mishime Sensei: grant its controller the ignore-Honor-Requirements waiver as it enters
     play."""
-    if ctx.event.card_id != ctx.card.id or ctx.card.owner is None:
+    if ctx.event.card_id != ctx.card.id:
         return []
     return [IgnoreHonorRequirements(ctx.card.owner)]
 

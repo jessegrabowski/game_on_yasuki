@@ -2,14 +2,15 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey
 from yasuki_core.engine.intents import Shuffle, apply_intent
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import FatePrint
 
 
 def _table_with_fate_deck(n: int = 20) -> TableState:
     table = TableState.empty_two_seat()
     deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
     for i in range(n):
-        card = FateCard(id=f"f{i}", name=f"f{i}", side=Side.FATE, owner=PlayerId.P1)
+        card = L5RCard.of(FatePrint, id=f"f{i}", name=f"f{i}", side=Side.FATE, owner=PlayerId.P1)
         table.cards_by_id[card.id] = card
         deck.cards.append(card)
     return table

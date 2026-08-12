@@ -128,7 +128,7 @@ class Destroy(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is None or card.owner is None:
+        if card is None:
             return []
         ops.move_card(game.table, card, _discard_pile(card))
         return [Destroyed(self.card_id)]
@@ -155,7 +155,7 @@ class Discard(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is None or card.owner is None:
+        if card is None:
             return []
         ops.move_card(game.table, card, _discard_pile(card))
         return [CardDiscarded(self.card_id, card.side, self.by_seat)]
@@ -384,7 +384,6 @@ class RecruitCard(InterruptingEffect):
         from yasuki_core.engine.rules.flow import announce_recruit
 
         card = game.table.cards_by_id[self.card_id]
-        assert card.owner is not None, f"{self.card_id} has no owner to recruit it"
         return announce_recruit(game, card, card.owner, invest_amount=0, renew=self.renew)
 
 

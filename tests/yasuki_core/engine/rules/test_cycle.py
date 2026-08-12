@@ -6,7 +6,8 @@ from yasuki_core.engine.rules.events import Revealed
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import DynastyPrint
 
 from tests.yasuki_core.engine.builders import end_phase, holding, put_in_play, register
 
@@ -25,14 +26,26 @@ def _table(*, provinces: int = 3, deck: int = 3, second_seat_provinces: int = 0)
         for index in range(count):
             card = register(
                 state,
-                DynastyCard(id=f"{seat.name}-pv{index}", name="P", side=Side.DYNASTY, owner=seat),
+                L5RCard.of(
+                    DynastyPrint,
+                    id=f"{seat.name}-pv{index}",
+                    name="P",
+                    side=Side.DYNASTY,
+                    owner=seat,
+                ),
             )
             card.turn_face_down()
             state.zones[ops.create_province(state, seat)].add(card)
         state.decks[DeckKey(seat, Side.DYNASTY)].cards = [
             register(
                 state,
-                DynastyCard(id=f"{seat.name}-dd{index}", name="D", side=Side.DYNASTY, owner=seat),
+                L5RCard.of(
+                    DynastyPrint,
+                    id=f"{seat.name}-dd{index}",
+                    name="D",
+                    side=Side.DYNASTY,
+                    owner=seat,
+                ),
             )
             for index in range(deck)
         ]

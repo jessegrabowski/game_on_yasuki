@@ -3,7 +3,6 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyPersonality
 from yasuki_core.engine.rules.abilities import (
     Ability,
     _ABILITIES,
@@ -21,6 +20,8 @@ from yasuki_core.engine.rules.effects import AdjustCounter, Choose
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import PersonalityPrint
 from tests.yasuki_core.engine.builders import end_phase, fate_card, holding, put_in_play, register
 
 
@@ -120,7 +121,8 @@ def test_modifier_grant_fires_no_counter_trigger():
     )
     put_in_play(
         state,
-        DynastyPersonality(
+        L5RCard.of(
+            PersonalityPrint,
             id="aoki",
             name="Aoki",
             side=Side.DYNASTY,

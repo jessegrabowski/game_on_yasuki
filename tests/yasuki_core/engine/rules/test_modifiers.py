@@ -1,12 +1,12 @@
-from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.economy import active_modifiers, effective_gold_production
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
+from yasuki_core.game_pieces.cards import L5RCard
 
 
-def _game(card: DynastyHolding, modifiers=()) -> GameState:
+def _game(card: L5RCard, modifiers=()) -> GameState:
     game = two_seat_game()
     put_in_play(game, card)
     game.modifiers.extend(modifiers)

@@ -3,7 +3,13 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    StrongholdPrint,
+)
 from yasuki_core.engine.rules.state import Phase
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
@@ -19,8 +25,6 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
-from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.engine import runner
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import DynastyDiscard
@@ -33,7 +37,8 @@ PASS = Pass()
 def _face_up_holding_in_province(state, card_id, gold_cost, printed_id=""):
     holding = _register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id=card_id,
             name="H",
             side=Side.DYNASTY,
@@ -77,12 +82,18 @@ def _dealt_table(p1_hand: int) -> TableState:
     state = TableState.empty_two_seat()
     for seat in PlayerId:
         state.decks[DeckKey(seat, Side.FATE)].cards = [
-            _register(state, FateCard(id=f"{seat.name}-fd", name="F", side=Side.FATE, owner=seat))
+            _register(
+                state,
+                L5RCard.of(FatePrint, id=f"{seat.name}-fd", name="F", side=Side.FATE, owner=seat),
+            )
         ]
     hand = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     for i in range(p1_hand):
         hand.add(
-            _register(state, FateCard(id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1))
+            _register(
+                state,
+                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+            )
         )
     return state
 
@@ -173,12 +184,18 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
     state = TableState.empty_two_seat()
     for seat in PlayerId:
         state.decks[DeckKey(seat, Side.FATE)].cards = [
-            _register(state, FateCard(id=f"{seat.name}-fd", name="F", side=Side.FATE, owner=seat))
+            _register(
+                state,
+                L5RCard.of(FatePrint, id=f"{seat.name}-fd", name="F", side=Side.FATE, owner=seat),
+            )
         ]
     p2_hand = state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
     for i in range(flow.MAX_HAND_SIZE):
         p2_hand.add(
-            _register(state, FateCard(id=f"P2-h{i}", name="H", side=Side.FATE, owner=PlayerId.P2))
+            _register(
+                state,
+                L5RCard.of(FatePrint, id=f"P2-h{i}", name="H", side=Side.FATE, owner=PlayerId.P2),
+            )
         )
     runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
 
@@ -208,8 +225,13 @@ def test_province_menu_offers_recruit_with_cost_and_dynasty_discard():
     state.battlefield.add(
         _register(
             state,
-            StrongholdCard(
-                id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, gold_production=8
+            L5RCard.of(
+                StrongholdPrint,
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=PlayerId.P1,
+                gold_production=8,
             ),
         )
     )
@@ -226,7 +248,8 @@ def test_province_menu_offers_proclaim_for_an_own_clan_personality():
     state.battlefield.add(
         _register(
             state,
-            StrongholdCard(
+            L5RCard.of(
+                StrongholdPrint,
                 id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
@@ -238,7 +261,8 @@ def test_province_menu_offers_proclaim_for_an_own_clan_personality():
     )
     person = _register(
         state,
-        DynastyPersonality(
+        L5RCard.of(
+            PersonalityPrint,
             id="P1-person",
             name="Hero",
             side=Side.DYNASTY,
@@ -279,7 +303,9 @@ def test_province_menu_is_empty_for_a_stronghold():
     state.battlefield.add(
         _register(
             state,
-            StrongholdCard(id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1),
+            L5RCard.of(
+                StrongholdPrint, id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1
+            ),
         )
     )
     runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
@@ -291,8 +317,13 @@ def _dynasty_runner_with_producer(card_id, printed_id, gold_cost):
     state.battlefield.add(
         _register(
             state,
-            StrongholdCard(
-                id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, gold_production=8
+            L5RCard.of(
+                StrongholdPrint,
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=PlayerId.P1,
+                gold_production=8,
             ),
         )
     )
@@ -354,7 +385,8 @@ def _runner_with_in_play(card) -> GameRunner:
 
 
 def test_ability_menu_offers_millet_farm_activation_in_play():
-    millet = DynastyHolding(
+    millet = L5RCard.of(
+        HoldingPrint,
         id="millet",
         name="Millet Farm",
         side=Side.DYNASTY,
@@ -370,8 +402,13 @@ def test_ability_menu_offers_millet_farm_activation_in_play():
 
 
 def test_ability_menu_is_empty_for_a_card_with_no_ability():
-    plain = DynastyHolding(
-        id="plain", name="Plain", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=2
+    plain = L5RCard.of(
+        HoldingPrint,
+        id="plain",
+        name="Plain",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_production=2,
     )
     runner = _runner_with_in_play(plain)
     assert runner.ability_menu("plain") == []

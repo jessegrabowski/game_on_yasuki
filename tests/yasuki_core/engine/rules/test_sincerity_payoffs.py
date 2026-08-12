@@ -4,7 +4,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
@@ -26,11 +27,15 @@ def _recruit_game(
     ``sincerity`` tokens, sitting in a province ready to recruit."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
+        register(
+            state,
+            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1),
+        )
     ]
     put_in_play(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="SH",
             name="SH",
             side=Side.DYNASTY,
@@ -40,7 +45,8 @@ def _recruit_game(
     )
     holding = register(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id=holding_id,
             name=holding_id,
             side=Side.DYNASTY,
@@ -119,11 +125,21 @@ def test_a_sincerity_payoff_recruit_replays_and_round_trips():
 def _base_state():
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-        register(state, DynastyHolding(id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1))
+        register(
+            state,
+            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1),
+        )
     ]
     put_in_play(
         state,
-        DynastyHolding(id="SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8),
+        L5RCard.of(
+            HoldingPrint,
+            id="SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=8,
+        ),
     )
     return state
 
@@ -237,7 +253,8 @@ def test_shrine_of_sincerity_bows_to_seed_a_province_sincerity_card():
     state = _base_state()
     put_in_play(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="shrine",
             name="Shrine",
             side=Side.DYNASTY,
@@ -266,7 +283,8 @@ def test_shrine_is_not_activatable_without_a_token_less_sincerity_card():
     state = _base_state()
     put_in_play(
         state,
-        DynastyHolding(
+        L5RCard.of(
+            HoldingPrint,
             id="shrine",
             name="Shrine",
             side=Side.DYNASTY,

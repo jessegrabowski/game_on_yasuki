@@ -15,8 +15,8 @@ from yasuki_core.engine.rules.economy import (
     recruit_discount,
 )
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyPersonality
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import PersonalityPrint, StrongholdPrint
 
 from tests.yasuki_core.engine.builders import two_seat_game
 
@@ -88,7 +88,9 @@ def test_a_non_producer_yields_zero_with_or_without_wealth_counters():
     game = two_seat_game()
     hero = put_in_play(
         game,
-        DynastyPersonality(id="P1-hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1),
+        L5RCard.of(
+            PersonalityPrint, id="P1-hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1
+        ),
     )
     assert effective_gold_production(game, hero) == 0  # personalities have no gold_production
 
@@ -290,8 +292,13 @@ def test_wealth_counters_stack_on_a_handler_card():
 
 
 def _clan_stronghold(seat, clan):
-    return StrongholdCard(
-        id=f"{seat.name}-SH", name="SH", side=Side.STRONGHOLD, owner=seat, clan=clan
+    return L5RCard.of(
+        StrongholdPrint,
+        id=f"{seat.name}-SH",
+        name="SH",
+        side=Side.STRONGHOLD,
+        owner=seat,
+        clan=clan,
     )
 
 
@@ -378,7 +385,7 @@ def test_shrine_of_courtesy_keeps_its_printed_keywords_while_you_went_first():
 def test_an_ownerless_card_falls_back_to_its_printed_keywords():
     # A grant reads its controller's position, which a card not yet dealt to a seat does not have.
     game = two_seat_game()
-    orphan = holding("loose", owner=None, printed_id="shrine_of_courtesy", keywords=("Temple",))
+    orphan = holding("loose", printed_id="shrine_of_courtesy", keywords=("Temple",))
     assert effective_keywords(game, orphan) == frozenset({"Temple"})
 
 

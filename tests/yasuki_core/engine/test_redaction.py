@@ -8,12 +8,14 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import CardPrint
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 def _card(card_id, side=Side.FATE, owner=P1, face_up=False, shown=False, peekers=frozenset()):
-    return L5RCard(
+    return L5RCard.of(
+        CardPrint,
         id=card_id,
         name=f"name-{card_id}",
         side=side,
@@ -214,7 +216,7 @@ def _random_table(rng):
         card = _card(
             f"c{i}",
             side=rng.choice([Side.FATE, Side.DYNASTY]),
-            owner=rng.choice([P1, P2, None]),
+            owner=rng.choice([P1, P2]),
             face_up=rng.random() < 0.5,
             shown=rng.random() < 0.3,
             peekers=peekers,
@@ -254,7 +256,7 @@ def _expected_visible(card, viewer, location):
         default = card.owner == viewer
     else:
         default = card.face_up
-    shown_to_opponent = card.shown and card.owner is not None and viewer == _opponent(card.owner)
+    shown_to_opponent = card.shown and viewer == _opponent(card.owner)
     return default or shown_to_opponent or viewer in card.peekers
 
 
