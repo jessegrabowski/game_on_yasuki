@@ -367,7 +367,7 @@ cards:
   - Modern
   rarity: Promo
   artist: Jorge Matar
-  flavor_text: "<i>â€œThis has gone on long enough. It is time we put Shosuroâ€™s shame to a final rest.â€\x9D\
+  flavor_text: "<i>“This has gone on long enough. It is time we put Shosuro’s shame to a final rest.”\
     </i>"
 - title: Bisento-do
   types:
@@ -664,8 +664,8 @@ cards:
   - Modern
   rarity: Promo
   artist: Edwin David
-  flavor_text: "<i>â€œAre you certain of this course, my friend?â€\x9D Makoto asked. â€œIâ€™d much prefer\
-    \ we simply enjoy the sunset.â€\x9D</i>"
+  flavor_text: "<i>“Are you certain of this course, my friend?” Makoto asked. “I’d much prefer\
+    \ we simply enjoy the sunset.”</i>"
 - title: Encircled Terrain
   types:
   - Strategy
@@ -985,7 +985,7 @@ cards:
   - Modern
   rarity: Promo
   artist: Calderon Studio
-  flavor_text: "<i>â€œAnswer? No, I have the question you seek.â€\x9D</i>"
+  flavor_text: "<i>“Answer? No, I have the question you seek.”</i>"
 - title: Moto Naleesh, the Living Goddess
   types:
   - Personality
@@ -1023,7 +1023,7 @@ cards:
   - Modern
   rarity: Promo
   artist: Tony Foti
-  flavor_text: "<i>â€œNone are too far for the Unicorn to protect or punish.â€\x9D</i>"
+  flavor_text: "<i>“None are too far for the Unicorn to protect or punish.”</i>"
 - title: Mystical Augmentation
   types:
   - Spell
@@ -1274,7 +1274,7 @@ cards:
   - A Brother's Destiny (Ivory Edition)
   - Legacy
   - Modern
-  story: 2012 Level 20 Make a Stronghold - Toni Morcillo UrmÃ¡n
+  story: 2012 Level 20 Make a Stronghold - Toni Morcillo Urmán
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Promo
   artist: Alayna Lemmer
