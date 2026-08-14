@@ -4995,7 +4995,7 @@ cards:
   - Magistrate
   - Samurai
   - Soul of Kitsuki Kaagi
-  text: <b>Reapeatable Reaction, :bow::</b> After another player's Personality refuses a challenge, target
+  text: <b>Repeatable Reaction, :bow::</b> After another player's Personality refuses a challenge, target
     him. Iweko challenges the target. Destroy the loser.
   gold_cost: 7
   force: 1

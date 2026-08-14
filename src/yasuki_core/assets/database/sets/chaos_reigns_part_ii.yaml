@@ -2120,7 +2120,7 @@ cards:
   - Berserker
   text: 'Invest :gc1:: Permanently give this Follower Cavalry. After Kichigai enters play, lose 1 Honor unless it
     is attached to a Berserker. While Kichigai is opposed at the current battlefield, after you pass your opportunity
-    to take a Battle action, give its :melee: +1 strength to a maximum of 3 and give it +1F. Battle, :bow::melee:
+    to take a Battle action, give its :melee: +1 strength to a maximum of 3 and give it +1F. Battle, :bow:: :melee:
     2.'
   gold_cost: 3
   focus: 1

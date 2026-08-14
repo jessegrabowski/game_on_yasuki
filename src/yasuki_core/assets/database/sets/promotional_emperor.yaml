@@ -1708,7 +1708,7 @@ cards:
   - Ronin
   - Samurai
   - Unaligned
-  text: '<b>Iaijustu Limited:</b> Target another player''s Personality: Fusako challenges the target.
+  text: '<b>Iaijutsu Limited:</b> Target another player''s Personality: Fusako challenges the target.
     His controller may bow him; if he is now bowed, he may refuse the duel. Destroy the duel''s loser.'
   gold_cost: 7
   force: 3

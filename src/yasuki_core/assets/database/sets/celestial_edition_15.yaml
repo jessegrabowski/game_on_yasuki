@@ -2825,7 +2825,7 @@ cards:
   - Pre-Game
   clans:
   - Crane
-  text: Your Samurai have +1F while defending.<br><b>Tirless Battle:</b> Bow your chosen performing Personality
+  text: Your Samurai have +1F while defending.<br><b>Tireless Battle:</b> Bow your chosen performing Personality
     to make a Ranged Attack with strength equal to his Force. Gain 2 Honor.
   province_strength: 7
   starting_honor: 6
