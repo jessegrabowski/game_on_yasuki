@@ -625,3 +625,47 @@ def test_a_decision_over_amounts_is_not_mistaken_for_a_search():
 
     assert runner_.pending.candidates == ("1", "2", "3")  # amounts, not cards
     assert runner_.search_view() is None
+
+
+def test_an_ability_targeting_a_province_card_stays_a_board_selection():
+    """Shrine of Sincerity acts from play but targets a Sincerity card sitting in a Province. The
+    seat picks that Province on the board, so widening the search dialog to cover anything off the
+    battlefield would wrongly pull this card into it."""
+    state = _dealt_table(0)
+    state.battlefield.add(
+        _register(
+            state,
+            L5RCard.of(
+                StrongholdPrint,
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=PlayerId.P1,
+                gold_production=8,
+            ),
+        )
+    )
+    state.battlefield.add(
+        _register(
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id="shrine",
+                name="Shrine",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                printed_id="shrine_of_sincerity",
+                keywords=("Temple",),
+                gold_production=2,
+            ),
+        )
+    )
+    province_card(
+        state, "target", printed_id="plain_sincerity", keywords=("Sincerity",), index=0, gold_cost=2
+    )
+    runner_ = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    _to_dynasty(runner_)  # the Shrine's ability is a Dynasty action
+    runner_.act(ActivateAbility("shrine"))
+
+    assert runner_.pending.candidates == ("target",)  # a card in a Province, not on the field
+    assert runner_.search_view() is None
