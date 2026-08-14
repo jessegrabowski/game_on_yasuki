@@ -66,7 +66,8 @@ class Ability:
         Maps ``(game, source_card)`` to the ids of the cards the ability may target — empty when
         none are legal, which also means the ability can't be offered.
     effects : callable
-        Maps ``(source_card, target_card)`` to the effects the ability emits against a target.
+        Maps ``(game, source_card, target_card)`` to the effects the ability emits against a
+        target.
     all_targets : bool
         Whether the ability hits every card ``targets`` returns rather than one chosen among them —
         an untargeted "your other Farms" grant instead of a single pick. Default False.
@@ -76,7 +77,7 @@ class Ability:
     label: str
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
-    effects: Callable[[L5RCard, L5RCard], list[Effect]]
+    effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]]
     all_targets: bool = False
 
 
@@ -197,7 +198,7 @@ def owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[L5RCa
     ]
 
 
-def plus_one_gp_this_turn(source: L5RCard, target: L5RCard) -> list[Effect]:
+def plus_one_gp_this_turn(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [
         GrantModifier(source.id, target.id, Stat.GOLD_PRODUCTION, 1, Duration.UNTIL_END_OF_TURN)
     ]

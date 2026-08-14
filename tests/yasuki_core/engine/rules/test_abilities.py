@@ -237,7 +237,7 @@ _ABILITIES["test_cost_pauses"] = Ability(
         for c in game.table.battlefield.cards
         if c.owner is card.owner and c is not card and "Farm" in c.keywords
     ],
-    effects=lambda source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
 )
 
 

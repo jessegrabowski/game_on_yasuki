@@ -90,7 +90,7 @@ def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:
     return affordable
 
 
-def _modest_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
+def _modest_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Recruit the target out of sequence, then offer to destroy Modest Farm to straighten it. The
     offer is deferred so it follows the recruit and anything the recruited card's entry causes."""
     return [
@@ -139,7 +139,7 @@ def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
     return [farm.id for farm in owned_holdings(game, card.owner, "Farm") if farm.bowed]
 
 
-def _rural_market_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
+def _rural_market_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [Straighten(target.id)]
 
 
