@@ -124,6 +124,25 @@ def strip_markup(text: str) -> str:
     return re.sub(r'"\s+(?=\S)', hug, plain).strip()
 
 
+def _outside_parens(text: str, pos: int) -> bool:
+    """Whether ``pos`` falls outside parentheses — a bracket holding two sentences is one aside, so
+    cutting between them would leave both halves unclosed."""
+    before = text[:pos]
+    return before.count("(") == before.count(")")
+
+
+def _segments(text: str) -> list[str]:
+    """The card's printed lines. A break inside a parenthetical does not start a line: the aside
+    simply runs across two of them, and cutting there leaves both halves unclosed."""
+    out, start = [], 0
+    for match in _BREAK.finditer(text):
+        if _outside_parens(text, match.start()):
+            out.append(text[start : match.start()])
+            start = match.end()
+    out.append(text[start:])
+    return out
+
+
 def _outside_quotes(text: str, pos: int) -> bool:
     """Whether ``pos`` falls outside quotation marks — inside them the text is granted, not the
     card's own, so no split may happen there."""
@@ -153,7 +172,7 @@ def _abilities(text: str) -> list[Ability]:
     """Abilities segment on ``<br>`` exactly as traits do, so a break the card prints is a boundary
     the prefix match can see."""
     out: list[Ability] = []
-    for segment in _BREAK.split(text):
+    for segment in _segments(text):
         out.extend(_segment_abilities(strip_markup(segment)))
     return out
 
@@ -232,7 +251,7 @@ def ability_keywords(text: str) -> tuple[str, ...]:
 
 def _traits(text: str) -> list[str]:
     traits: list[str] = []
-    for segment in _BREAK.split(text):
+    for segment in _segments(text):
         plain = strip_markup(segment)
         stop = min([m.start() for m in _anchors(plain)], default=len(plain))
         lead = plain[:stop].strip().rstrip(":").strip()
@@ -257,7 +276,11 @@ def _split_named(chunk: str) -> list[str]:
 
 
 def _split_sentences(chunk: str) -> list[str]:
-    cuts = [m.end() for m in _SENTENCE.finditer(chunk) if _outside_quotes(chunk, m.start())]
+    cuts = [
+        m.end()
+        for m in _SENTENCE.finditer(chunk)
+        if _outside_quotes(chunk, m.start()) and _outside_parens(chunk, m.start())
+    ]
     bounds = sorted({0, *cuts, len(chunk)})
     return [t for t in (chunk[a:b].strip() for a, b in zip(bounds, bounds[1:])) if t]
 

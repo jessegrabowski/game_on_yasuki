@@ -293,6 +293,24 @@ def test_a_qualifier_in_parentheses_is_not_reminder_text():
     assert box.traits[0] == "Destroy a Terrain (if able)."
 
 
+def test_a_parenthetical_holding_two_sentences_stays_one_chunk():
+    """Cutting between them would leave one half opening a bracket it never closes and the other
+    closing one it never opened."""
+    text = "Bow a target. (The Military District may now be destroyed. All players lose 1 Honor.)"
+
+    assert traits(text) == [text]
+
+
+def test_a_break_inside_a_parenthetical_does_not_start_a_line():
+    """The aside runs across two printed lines; the break is typesetting, not a boundary."""
+    text = "Bow a target.<br>(The Districts may now be destroyed.<br>The Naga player draws a card.)"
+
+    assert traits(text) == [
+        "Bow a target.",
+        "(The Districts may now be destroyed. The Naga player draws a card.)",
+    ]
+
+
 def test_a_clause_closing_paren_does_not_end_a_sentence():
     text = "Refill this Province with your target discarded (not dead) Personality."
 
