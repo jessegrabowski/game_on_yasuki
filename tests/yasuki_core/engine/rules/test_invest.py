@@ -8,6 +8,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.economy import effective_gold_cost
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
@@ -148,3 +149,48 @@ def test_variable_invest_recruit_replays_and_round_trips():
 
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
     assert restored.replay() == session.game
+
+
+def test_investing_permanently_raises_the_holdings_gold_cost():
+    """ "Entering play, permanently increase the Gold Cost by the Invest cost to get the effect." The
+    rise is what pays for the effect, so a card that got the effect must show it."""
+    session = _invest_game("qm", "questionable_market", gold_cost=1)
+    session.act(PlayerId.P1, Recruit("qm", invest=True))
+    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+
+    qm = session.game.table.cards_by_id["qm"]
+    assert qm.gold_cost == 1  # printed, untouched
+    assert effective_gold_cost(session.game, qm) == 1 + 2  # plus the Invest paid
+
+
+def test_recruiting_without_investing_leaves_the_gold_cost_alone():
+    session = _invest_game("qm", "questionable_market", gold_cost=1)
+    session.act(PlayerId.P1, Recruit("qm"))
+    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+
+    qm = session.game.table.cards_by_id["qm"]
+    assert effective_gold_cost(session.game, qm) == 1
+
+
+def test_a_variable_invest_raises_the_cost_by_what_was_actually_paid():
+    session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
+    session.act(PlayerId.P1, Recruit("rh", invest=True))
+    session.submit(PlayerId.P1, DecisionResponse(("3",)))
+    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+
+    rh = session.game.table.cards_by_id["rh"]
+    assert effective_gold_cost(session.game, rh) == 1 + 3
+
+
+def test_the_invest_rise_survives_the_turn_that_bought_it():
+    """Permanent, not until-end-of-turn: the modifier has to still be there next turn."""
+    session = _invest_game("qm", "questionable_market", gold_cost=1)
+    session.act(PlayerId.P1, Recruit("qm", invest=True))
+    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    bought_on = session.game.turn
+    for _ in range(4):
+        end_phase(session)
+    assert session.game.turn > bought_on  # the turn really did roll over
+
+    qm = session.game.table.cards_by_id["qm"]
+    assert effective_gold_cost(session.game, qm) == 3

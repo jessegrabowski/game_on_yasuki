@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
+    effective_gold_cost,
     effective_gold_production,
     effective_keywords,
     effective_recruit_discount,
@@ -135,9 +136,9 @@ def _may_act(game: GameState, seat: PlayerId) -> bool:
 
 
 def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """An ActivateAbility for each in-play card whose activated ability the seat can use now: its
-    designator permitted by the current round, controlled, cost payable, and with at least one legal
-    target. ``only`` narrows to a single card."""
+    """An ActivateAbility for each card whose activated ability the seat can use now: sitting
+    somewhere that ability acts from, its designator permitted by the current round, controlled,
+    cost payable, and with at least one legal target. ``only`` narrows to a single card."""
     return [
         ActivateAbility(card.id)
         for card in abilities.activatable(game, seat, permitted_timings(game, seat))
@@ -338,11 +339,11 @@ def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard | None = None)
     )
 
 
-def recruit_cost(game: GameState, card: L5RCard | L5RCard) -> int:
-    """The gold a seat pays to recruit ``card``: its printed gold cost, plus the off-clan surcharge
-    when the card has a Clan Alignment the seat does not share, less the card's own conditional
-    recruit discount. Floored at zero."""
-    cost = card.gold_cost or 0
+def recruit_cost(game: GameState, card: L5RCard) -> int:
+    """The gold a seat pays to recruit ``card``: its gold cost with modifiers, plus the off-clan
+    surcharge when the card has a Clan Alignment the seat does not share, less the card's own
+    conditional recruit discount. Floored at zero."""
+    cost = effective_gold_cost(game, card)
     seat_align = seat_alignment(game, card.owner)
     card_aligns = card_alignments(card)
     if seat_align is not None and card_aligns and seat_align not in card_aligns:

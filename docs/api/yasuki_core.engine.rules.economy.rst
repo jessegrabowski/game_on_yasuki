@@ -14,6 +14,7 @@ yasuki_core.engine.rules.economy
 .. autosummary::
 
     active_modifiers
+    effective_gold_cost
     effective_gold_production
     effective_keywords
     effective_recruit_discount

@@ -16,6 +16,7 @@ class Counter:
     name: str = ""
     force: int = 0
     chi: int = 0
+    gold_cost: int = 0
     gold_production: int = 0
     province_strength: int = 0
     personal_honor: int = 0

@@ -53,7 +53,7 @@ def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
     return sincerity_seed_targets(game, card.owner)
 
 
-def _seed_sincerity(source: L5RCard, target: L5RCard) -> list[Effect]:
+def _seed_sincerity(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [AdjustCounter(target.id, SINCERITY, 1)]
 
 

@@ -2,6 +2,62 @@ from abc import ABC, abstractmethod
 import tkinter as tk
 
 from yasuki_gui import theme
+from yasuki_gui.constants import COUNTER_BADGE_R
+from yasuki_gui.visuals.cardface import RenderCard
+from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
+
+# Per-counter badge colors — (fill, count-text) — so a card carrying more than one kind reads at
+# a glance. Light text on the dark gold, dark text on the light powder blue.
+_COUNTER_STYLE = {
+    WEALTH.key: (theme.GOLD, theme.ON_DARK),
+    SINCERITY.key: (theme.POWDER_BLUE, theme.INK),
+}
+_DEFAULT_COUNTER_STYLE = (theme.GOLD, theme.ON_DARK)
+
+
+def draw_counter_badges(
+    canvas: tk.Canvas, card: RenderCard, bbox: tuple[int, int, int, int], tags: tuple[str, ...]
+) -> None:
+    """Draw a badge per counter kind in the card's top-right corner, coloured by kind with the count
+    inside, stacking downward in a fixed order.
+
+    Parameters
+    ----------
+    canvas : tkinter.Canvas
+        The canvas drawn onto.
+    card : L5RCard or HiddenFace
+        The card whose counters are shown. A redacted back carries none and draws nothing.
+    bbox : tuple of int
+        The card's rectangle as ``(x0, y0, x1, y1)``; the badges hang off its top-right.
+    tags : tuple of str
+        The canvas tags every badge item is created under, so the caller can erase them as a group.
+    """
+    counters = getattr(card, "counters", None)
+    if not counters:
+        return
+    _, top, right, _ = bbox
+    cx = right - COUNTER_BADGE_R - 2
+    cy = top + COUNTER_BADGE_R + 2
+    # Iterate the counters actually on the card (sorted for a stable stack), not the whole registry
+    # — so the badge system doesn't scale with the catalogue's size.
+    for key, count in sorted(counters.items()):
+        if count <= 0:
+            continue
+        fill, text_fill = _COUNTER_STYLE.get(key, _DEFAULT_COUNTER_STYLE)
+        canvas.create_oval(
+            cx - COUNTER_BADGE_R,
+            cy - COUNTER_BADGE_R,
+            cx + COUNTER_BADGE_R,
+            cy + COUNTER_BADGE_R,
+            fill=fill,
+            outline=theme.CARD_BORDER,
+            width=1,
+            tags=tags,
+        )
+        canvas.create_text(
+            cx, cy, text=str(count), fill=text_fill, font=theme.serif(9, "bold"), tags=tags
+        )
+        cy += 2 * COUNTER_BADGE_R + 2
 
 
 def draw_count_pill(canvas: tk.Canvas, x1: int, y1: int, count: int, tag: str) -> None:

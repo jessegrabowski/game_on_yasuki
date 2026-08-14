@@ -16,6 +16,8 @@ from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import (
+    ActivateAbility,
+    Recruit,
     Cycle,
     KharmicDraw,
     KharmicRefill,
@@ -336,7 +338,11 @@ def _dynasty_runner_with_producer(card_id, printed_id, gold_cost):
 def test_province_menu_offers_invest_as_a_second_option():
     runner = _dynasty_runner_with_producer("qm", "questionable_market", gold_cost=1)
     labels = [label for label, _ in runner.province_menu("qm")]
-    assert labels == ["Recruit: Pay 1 gold", "Invest: Pay 3 gold", "Discard from province"]
+    assert labels == [
+        "Recruit: Pay 1 gold",
+        "Invest: Pay 3 gold",
+        "Discard from province",
+    ]
 
 
 def test_province_menu_labels_a_variable_invest_as_a_range():
@@ -483,3 +489,183 @@ def test_a_card_without_the_keyword_offers_no_kharmic():
     offered = [action for _, action in game_runner.province_menu("P1-plain")]
 
     assert not any(isinstance(action, (KharmicDraw, KharmicRefill)) for action in offered)
+
+
+def _ruins_runner() -> GameRunner:
+    """A runner with Repairing the Ruins face-up in a Province, and in each pile it searches one
+    Holding it can find plus a Unique one it cannot."""
+    state = TableState.empty_two_seat()
+    province_card(state, "ruins", printed_id="repairing_the_ruins")
+
+    def holding(card_id, *, unique=False):
+        return _register(
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id=card_id,
+                name=card_id,
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                printed_id=card_id,
+                gold_cost=2,
+                is_unique=unique,
+            ),
+        )
+
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        holding("mine"),
+        holding("unique-deck", unique=True),
+    ]
+    discard = state.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)]
+    discard.add(holding("kobune"))
+    discard.add(holding("unique-discard", unique=True))
+    return GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+
+
+def test_a_search_through_hidden_piles_is_presented_as_a_dialog_not_a_board_selection():
+    """Repairing the Ruins' candidates sit in a deck and a discard pile, so there is nothing on the
+    board to click — without a search view the ability is unanswerable."""
+    runner_ = _ruins_runner()
+    runner_.act(ActivateAbility("ruins"))
+
+    search = runner_.search_view()
+    assert search is not None
+    assert search.panes["Provinces"] == []  # offered by the nav bar, but disabled
+    assert search.choosable == {"mine", "kobune"}
+
+
+def test_a_search_shows_every_card_in_the_piles_it_looked_through():
+    """The seat sees what it passed over: each pile is listed whole, with only the legal cards
+    takeable. Listing the candidates alone would hide the rest of the deck."""
+    runner_ = _ruins_runner()
+    runner_.act(ActivateAbility("ruins"))
+
+    search = runner_.search_view()
+    assert [card.id for card in search.panes["Deck"]] == ["mine", "unique-deck"]
+    assert [card.id for card in search.panes["Discard"]] == ["kobune", "unique-discard"]
+    assert search.choosable == {"mine", "kobune"}  # the Unique ones show but cannot be taken
+
+
+def test_a_board_targeting_ability_takes_no_search_dialog():
+    millet = L5RCard.of(
+        HoldingPrint,
+        id="millet",
+        name="Millet Farm",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        printed_id="millet_farm",
+        keywords=("Farm",),
+        gold_production=1,
+    )
+    runner_ = _runner_with_in_play(millet)
+    runner_.act(ActivateAbility("millet"))
+
+    assert runner_.pending is not None  # it is asking for a target
+    assert runner_.search_view() is None  # but the board carries the selection
+
+
+def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
+    """Legacy shows the whole searched pile with only the Legacy cards takeable, so its pool is
+    broader than its candidates — the derived routing must not narrow it to the candidates."""
+    state = _dealt_table(p1_hand=1)  # a hand card pays the banish cost
+    deck = state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
+    for index, (card_id, keywords) in enumerate([("legacy-card", ("Legacy",)), ("plain-card", ())]):
+        deck.cards.append(
+            _register(
+                state,
+                L5RCard.of(
+                    HoldingPrint,
+                    id=card_id,
+                    name=card_id,
+                    side=Side.DYNASTY,
+                    owner=PlayerId.P1,
+                    keywords=keywords,
+                    gold_cost=index,
+                ),
+            )
+        )
+    # A face-down Province card: the Legacy placement sacrifices one, and it is picked by where it
+    # sits rather than by what it is.
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(
+        _register(
+            state,
+            L5RCard.of(
+                HoldingPrint, id="pv", name="P", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=1
+            ),
+        )
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+
+    runner_ = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    runner_.session.game.table.cards_by_id["pv"].turn_face_down()
+    _to_dynasty(runner_)
+    runner_.act(Legacy())
+
+    # The banish cost is paid from hand, which the board shows — that stays a board selection.
+    assert runner_.search_view() is None
+    runner_.submit(["P1-h0"])
+
+    search = runner_.search_view()
+    assert search is not None
+    assert "plain-card" in {card.id for card in search.panes["Deck"]}  # shown, but not takeable
+    assert search.choosable == {"legacy-card"}
+
+    # Choosing it asks which Province to sacrifice — a board pick, not a second search dialog.
+    runner_.submit(["legacy-card"])
+    assert runner_.pending is not None
+    assert runner_.search_view() is None
+
+
+def test_a_decision_over_amounts_is_not_mistaken_for_a_search():
+    """A variable Invest asks for a number, so its candidates are amounts rather than card ids.
+    Looking them up as cards would raise instead of leaving the prompt to answer itself."""
+    runner_ = _dynasty_runner_with_producer("rh", "rebuilt_harbor", gold_cost=1)
+    runner_.act(Recruit("rh", invest=True))
+
+    assert runner_.pending.candidates == ("1", "2", "3")  # amounts, not cards
+    assert runner_.search_view() is None
+
+
+def test_an_ability_targeting_a_province_card_stays_a_board_selection():
+    """Shrine of Sincerity acts from play but targets a Sincerity card sitting in a Province. The
+    seat picks that Province on the board, so widening the search dialog to cover anything off the
+    battlefield would wrongly pull this card into it."""
+    state = _dealt_table(0)
+    state.battlefield.add(
+        _register(
+            state,
+            L5RCard.of(
+                StrongholdPrint,
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=PlayerId.P1,
+                gold_production=8,
+            ),
+        )
+    )
+    state.battlefield.add(
+        _register(
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id="shrine",
+                name="Shrine",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                printed_id="shrine_of_sincerity",
+                keywords=("Temple",),
+                gold_production=2,
+            ),
+        )
+    )
+    province_card(
+        state, "target", printed_id="plain_sincerity", keywords=("Sincerity",), index=0, gold_cost=2
+    )
+    runner_ = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    _to_dynasty(runner_)  # the Shrine's ability is a Dynasty action
+    runner_.act(ActivateAbility("shrine"))
+
+    assert runner_.pending.candidates == ("target",)  # a card in a Province, not on the field
+    assert runner_.search_view() is None

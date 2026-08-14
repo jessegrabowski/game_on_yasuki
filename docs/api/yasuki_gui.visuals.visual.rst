@@ -15,6 +15,7 @@ yasuki_gui.visuals.visual
 .. autosummary::
 
     draw_count_pill
+    draw_counter_badges
 
 .. automodule:: yasuki_gui.visuals.visual
     :members:

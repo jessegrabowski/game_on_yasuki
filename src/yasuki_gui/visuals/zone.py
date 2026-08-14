@@ -4,7 +4,7 @@ from collections.abc import Collection
 from yasuki_gui import theme
 from yasuki_gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
 from yasuki_gui.visuals.cardface import RenderCard
-from yasuki_gui.visuals.visual import Visual, draw_count_pill
+from yasuki_gui.visuals.visual import Visual, draw_count_pill, draw_counter_badges
 
 
 class ZoneVisual(Visual):
@@ -97,6 +97,9 @@ class ZoneVisual(Visual):
                 width=3 if selected else 1,
                 tags=(self.tag, "zone"),
             )
+            if face_up:
+                # Face-down, the card's counters are not public and must not show through the back.
+                draw_counter_badges(canvas, top, (x0, y0, x1, y1), (self.tag, "zone"))
             if not is_province and len(self.cards) > 1:
                 draw_count_pill(canvas, x1, y1, len(self.cards), self.tag)
             return

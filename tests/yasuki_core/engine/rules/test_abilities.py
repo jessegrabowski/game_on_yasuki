@@ -2,9 +2,12 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.abilities import (
+    CardLocation,
     Ability,
+    ProductionBoost,
     _ABILITIES,
     _INVEST,
     _PRODUCTION_BOOST,
@@ -12,212 +15,22 @@ from yasuki_core.engine.rules.abilities import (
     register_invest,
     register_production_boost,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Recruit
 from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards, DecisionResponse
-from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import PersonalityPrint
-from tests.yasuki_core.engine.builders import end_phase, fate_card, holding, put_in_play, register
-
-
-def _game():
-    """A session in the Action phase with P1's Millet Farm and one other Farm in play. Returns the
-    live card objects, since ``EngineSession.start`` rebuilds the table from a snapshot."""
-    state = TableState.empty_two_seat()
-    put_in_play(
-        state, holding("millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1)
-    )
-    put_in_play(
-        state, holding("farm", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
-    )  # no trigger of its own
-    session = EngineSession.start(state, PlayerId.P1)
-    live = session.game.table.cards_by_id
-    return session, live["millet"], live["farm"]
-
-
-def test_millet_farm_is_activatable_in_the_action_phase():
-    session, millet, _ = _game()
-    assert ActivateAbility(millet.id) in session.legal_actions(PlayerId.P1)
-
-
-def test_millet_farm_is_not_activatable_while_bowed():
-    session, millet, _ = _game()
-    millet.bow()
-    assert ActivateAbility(millet.id) not in session.legal_actions(PlayerId.P1)
-
-
-def test_millet_farm_is_not_activatable_outside_the_action_phase():
-    session, millet, _ = _game()
-    end_phase(session)  # Action -> Battle
-    assert ActivateAbility(millet.id) not in session.legal_actions(PlayerId.P1)
-
-
-def test_activating_millet_farm_bows_it_and_asks_for_a_farm_target():
-    session, millet, farm = _game()
-    session.act(PlayerId.P1, ActivateAbility(millet.id))
-
-    assert millet.bowed
-    pending = session.game.pending
-    assert isinstance(pending, ChooseAbilityTarget)
-    assert set(pending.candidates) == {
-        millet.id,
-        farm.id,
-    }  # every Farm you control, itself included
-
-
-def test_millet_farm_gives_its_target_two_gold_production():
-    session, millet, farm = _game()
-    session.act(PlayerId.P1, ActivateAbility(millet.id))
-    session.submit(PlayerId.P1, DecisionResponse((farm.id,)))
-
-    assert session.game.pending is None
-    assert effective_gold_production(session.game, farm) == 2 + 2  # base 2 + the +2GP grant
-
-
-def test_ability_activation_replays_to_the_same_state():
-    session, millet, farm = _game()
-    session.act(PlayerId.P1, ActivateAbility(millet.id))
-    session.submit(PlayerId.P1, DecisionResponse((farm.id,)))
-
-    assert replay(session.log) == session.game
-
-
-def test_modifier_clear_replays_across_the_turn_boundary():
-    session, millet, farm = _game()
-    session.act(PlayerId.P1, ActivateAbility(millet.id))
-    session.submit(PlayerId.P1, DecisionResponse((farm.id,)))
-    for _ in range(3):  # end P1's turn, dropping the UEOT modifier
-        end_phase(session)
-
-    assert session.game.modifiers == []  # the grant was cleared
-    assert replay(session.log) == session.game  # and the clear rebuilds deterministically
-
-
-def test_millet_farm_grant_expires_at_end_of_turn():
-    session, millet, farm = _game()
-    session.act(PlayerId.P1, ActivateAbility(millet.id))
-    session.submit(PlayerId.P1, DecisionResponse((farm.id,)))
-    assert effective_gold_production(session.game, farm) == 4  # +2 this turn
-
-    for _ in range(3):  # Action -> Battle -> Dynasty -> end of P1's turn
-        end_phase(session)
-    assert effective_gold_production(session.game, farm) == 2  # the UEOT modifier is gone
-
-
-def test_modifier_grant_fires_no_counter_trigger():
-    # A GP grant is a modifier, not a Wealth token, so a wealth-specific trigger must stay silent.
-    # Aoki draws on your Holding's Wealth gain; the +2GP grant must not wake it.
-    state = TableState.empty_two_seat()
-    put_in_play(
-        state, holding("millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1)
-    )
-    put_in_play(
-        state, holding("farm", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
-    )
-    put_in_play(
-        state,
-        L5RCard.of(
-            PersonalityPrint,
-            id="aoki",
-            name="Aoki",
-            side=Side.DYNASTY,
-            owner=PlayerId.P1,
-            printed_id="shosuro_aoki_yoritomo_kayoko_experienced",
-        ),
-    )
-    state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        register(state, fate_card("fd", PlayerId.P1))
-    ]
-    session = EngineSession.start(state, PlayerId.P1)
-    hand = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
-    before = len(hand.cards)
-
-    session.act(PlayerId.P1, ActivateAbility("millet"))
-    session.submit(PlayerId.P1, DecisionResponse(("farm",)))
-
-    assert effective_gold_production(session.game, session.game.table.cards_by_id["farm"]) == 4
-    assert len(hand.cards) == before  # Aoki did not draw — the grant is a modifier, not a token
-
-
-def _otokoshi_game():
-    state = TableState.empty_two_seat()
-    put_in_play(state, holding("oto", printed_id="otokoshi_district", gold_production=2))
-    put_in_play(state, holding("mkt", printed_id="market", keywords=("Market",), gold_production=1))
-    state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        register(state, fate_card("fd", PlayerId.P1))
-    ]
-    return EngineSession.start(state, PlayerId.P1)
-
-
-def test_otokoshi_destroys_itself_to_draw_and_seed_a_market():
-    session = _otokoshi_game()
-    hand = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
-    before = len(hand.cards)
-
-    session.act(PlayerId.P1, ActivateAbility("oto"))
-    session.submit(PlayerId.P1, DecisionResponse(("mkt",)))
-
-    table = session.game.table
-    discard = table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)]
-    assert "oto" in {c.id for c in discard.cards}  # destroyed itself as the cost
-    assert len(hand.cards) == before + 1  # drew a card
-    assert table.cards_by_id["mkt"].counters.get("wealth") == 1  # market seeded a wealth token
-
-
-def test_otokoshi_is_not_activatable_without_a_market():
-    state = TableState.empty_two_seat()
-    put_in_play(state, holding("oto", printed_id="otokoshi_district", gold_production=2))
-    session = EngineSession.start(state, PlayerId.P1)
-    assert ActivateAbility("oto") not in session.legal_actions(PlayerId.P1)
-
-
-def test_otokoshi_activation_replays_to_the_same_state():
-    session = _otokoshi_game()
-    session.act(PlayerId.P1, ActivateAbility("oto"))
-    session.submit(PlayerId.P1, DecisionResponse(("mkt",)))
-    assert replay(session.log) == session.game
-
-
-def _rural_market_game(wealth=1):
-    state = TableState.empty_two_seat()
-    counters = {"wealth": wealth} if wealth else {}
-    put_in_play(
-        state,
-        holding("rm", printed_id="rural_market", keywords=("Farm", "Market"), counters=counters),
-    )
-    put_in_play(
-        state, holding("bf", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
-    )
-    session = EngineSession.start(state, PlayerId.P1)
-    session.game.table.cards_by_id["bf"].bow()  # bow after the start-of-turn straighten
-    return session
-
-
-def test_rural_market_spends_a_wealth_token_to_straighten_a_farm():
-    session = _rural_market_game(wealth=1)
-    session.act(PlayerId.P1, ActivateAbility("rm"))
-    session.submit(PlayerId.P1, DecisionResponse(("bf",)))
-
-    table = session.game.table
-    assert not table.cards_by_id["bf"].bowed  # straightened
-    assert table.cards_by_id["rm"].counters.get("wealth", 0) == 0  # the token was spent
-
-
-def test_rural_market_is_not_activatable_without_a_wealth_token():
-    session = _rural_market_game(wealth=0)
-    assert ActivateAbility("rm") not in session.legal_actions(PlayerId.P1)
-
-
-def test_a_non_bow_ability_is_activatable_while_bowed():
-    # Tireless: a destroy/spend cost does not require an unbowed card (unlike a bow cost).
-    session = _otokoshi_game()
-    session.game.table.cards_by_id["oto"].bow()
-    assert ActivateAbility("oto") in session.legal_actions(PlayerId.P1)
+from yasuki_core.game_pieces.prints import HoldingPrint
+from tests.yasuki_core.engine.builders import (
+    end_phase,
+    holding,
+    province_card,
+    put_in_play,
+    register,
+)
 
 
 @choice_resolver("test_cost_pauses")
@@ -237,7 +50,7 @@ _ABILITIES["test_cost_pauses"] = Ability(
         for c in game.table.battlefield.cards
         if c.owner is card.owner and c is not card and "Farm" in c.keywords
     ],
-    effects=lambda source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
 )
 
 
@@ -263,98 +76,6 @@ def test_a_cost_that_pauses_resolves_before_the_ability_target():
     assert session.game.pending is None
     assert session.game.table.cards_by_id["tgt"].counters == {"wealth": 1}  # ability effect applied
     assert replay(session.log) == session.game  # the deferred-cost chain replays deterministically
-
-
-def _harvested_game(other_farms: int = 2) -> EngineSession:
-    state = TableState.empty_two_seat()
-    put_in_play(
-        state, holding("hl", printed_id="harvested_land", keywords=("Farm",), gold_production=2)
-    )
-    for i in range(other_farms):
-        put_in_play(
-            state, holding(f"f{i}", printed_id="plain_farm", keywords=("Farm",), gold_production=2)
-        )
-    return EngineSession.start(state, PlayerId.P1)
-
-
-def test_harvested_land_destroys_itself_to_boost_your_other_farms():
-    session = _harvested_game(other_farms=2)
-    session.act(PlayerId.P1, ActivateAbility("hl"))
-
-    table = session.game.table
-    assert session.game.pending is None  # untargeted — it hits every other Farm, no choice
-    assert "hl" in {c.id for c in table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards}
-    assert effective_gold_production(session.game, table.cards_by_id["f0"]) == 3  # base 2 + 1
-    assert effective_gold_production(session.game, table.cards_by_id["f1"]) == 3
-
-
-def test_harvested_land_is_not_offered_without_another_farm():
-    session = _harvested_game(other_farms=0)
-    assert ActivateAbility("hl") not in session.legal_actions(PlayerId.P1)
-
-
-def test_harvested_land_boost_expires_at_end_of_turn():
-    session = _harvested_game(other_farms=1)
-    session.act(PlayerId.P1, ActivateAbility("hl"))
-    assert effective_gold_production(session.game, session.game.table.cards_by_id["f0"]) == 3
-
-    for _ in range(3):  # end P1's turn — the boost outlives its destroyed source but not the turn
-        end_phase(session)
-    assert effective_gold_production(session.game, session.game.table.cards_by_id["f0"]) == 2
-
-
-def test_harvested_land_activation_replays_to_the_same_state():
-    session = _harvested_game(other_farms=2)
-    session.act(PlayerId.P1, ActivateAbility("hl"))
-    assert replay(session.log) == session.game
-
-
-def _ichiba_game(fate_cards: int = 1, ports: int = 1) -> EngineSession:
-    state = TableState.empty_two_seat()
-    put_in_play(
-        state, holding("ich", printed_id="ichiba_district", keywords=("Market",), gold_production=1)
-    )
-    for i in range(ports):
-        put_in_play(
-            state,
-            holding(f"port{i}", printed_id="island_wharf", keywords=("Port",), gold_production=2),
-        )
-    state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        register(state, fate_card(f"fd{i}", PlayerId.P1)) for i in range(fate_cards)
-    ]
-    return EngineSession.start(state, PlayerId.P1)
-
-
-def test_ichiba_banishes_the_top_fate_card_then_boosts_a_target_port():
-    session = _ichiba_game(fate_cards=2, ports=1)
-    session.act(PlayerId.P1, ActivateAbility("ich"))
-
-    pending = session.game.pending
-    assert isinstance(pending, ChooseAbilityTarget) and pending.candidates == ("port0",)
-    table = session.game.table
-    banished = table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH)]
-    assert [c.id for c in banished.cards] == ["fd1"]  # the top (drawn end), not the bottom
-    assert [c.id for c in table.decks[DeckKey(PlayerId.P1, Side.FATE)].cards] == ["fd0"]  # the rest
-
-    session.submit(PlayerId.P1, DecisionResponse(("port0",)))
-    assert effective_gold_production(session.game, table.cards_by_id["port0"]) == 3  # base 2 + 1
-
-
-def test_ichiba_is_not_activatable_with_an_empty_fate_deck():
-    session = _ichiba_game(fate_cards=0, ports=1)
-    assert ActivateAbility("ich") not in session.legal_actions(PlayerId.P1)
-
-
-def test_ichiba_is_not_activatable_without_a_port():
-    session = _ichiba_game(fate_cards=1, ports=0)
-    assert ActivateAbility("ich") not in session.legal_actions(PlayerId.P1)
-
-
-def test_ichiba_activation_replays_to_the_same_state():
-    session = _ichiba_game(fate_cards=2, ports=1)
-    session.act(PlayerId.P1, ActivateAbility("ich"))
-    session.submit(PlayerId.P1, DecisionResponse(("port0",)))
-    assert replay(session.log) == session.game
 
 
 def test_a_second_ability_for_one_card_is_refused():
@@ -387,3 +108,142 @@ def test_a_second_production_boost_for_one_card_is_refused():
             register_production_boost("guard_probe", 2)
     finally:
         _PRODUCTION_BOOST.pop("guard_probe", None)
+
+
+# An ability that acts from a Province rather than from play — the shape every Event needs. It
+# targets its own source, so the test needs nothing else there.
+_ABILITIES["test_acts_from_province"] = Ability(
+    timing=ActionTiming.OPEN,
+    label="test",
+    cost=lambda source: [],
+    targets=lambda game, card: [card.id],
+    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    located_at=(CardLocation.PROVINCE,),
+)
+
+
+def test_an_ability_that_acts_from_a_province_is_offered_there():
+    state = TableState.empty_two_seat()
+    card = province_card(state, "event", printed_id="test_acts_from_province")
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility(card.id) in session.legal_actions(PlayerId.P1)
+
+
+def test_an_ability_that_acts_from_a_province_is_not_offered_face_down():
+    """Face-down the card has not been revealed, so it is not offering anything yet. Setup reveals
+    what starts in a Province, so this is the state a refill leaves behind mid-game."""
+    state = TableState.empty_two_seat()
+    province_card(state, "event", printed_id="test_acts_from_province")
+    session = EngineSession.start(state, PlayerId.P1)
+    session.game.table.cards_by_id["event"].turn_face_down()
+
+    assert ActivateAbility("event") not in session.legal_actions(PlayerId.P1)
+
+
+def test_an_ability_that_acts_from_a_province_is_not_offered_in_play():
+    """The scope says where the card acts from, so it excludes as well as it includes."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("event", printed_id="test_acts_from_province"))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility("event") not in session.legal_actions(PlayerId.P1)
+
+
+def test_a_province_ability_is_not_offered_for_another_seats_card():
+    """Asked from the seat holding priority, so it fails if the scan stops filtering by owner —
+    asking P2 instead would pass on P2 having no actions at all."""
+    state = TableState.empty_two_seat()
+    province_card(state, "event", printed_id="test_acts_from_province", seat=PlayerId.P2)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility("event") not in session.legal_actions(PlayerId.P1)
+
+
+def test_an_ability_in_play_is_not_offered_from_a_province():
+    """The default scope is the battlefield, so a Holding sitting face-up in a Province offers
+    nothing — which is what keeps every existing registration behaving as it did."""
+    state = TableState.empty_two_seat()
+    card = province_card(
+        state, "millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1
+    )
+    put_in_play(state, holding("farm", printed_id="plain_farm", keywords=("Farm",)))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility(card.id) not in session.legal_actions(PlayerId.P1)
+
+
+# A card that acts from either place. The scope is a tuple so an ability can name more than one, and
+# nothing else pins that.
+_ABILITIES["test_acts_from_either"] = Ability(
+    timing=ActionTiming.OPEN,
+    label="test",
+    cost=lambda source: [],
+    targets=lambda game, card: [card.id],
+    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    located_at=(CardLocation.BATTLEFIELD, CardLocation.PROVINCE),
+)
+
+
+@pytest.mark.parametrize("in_play", [True, False])
+def test_an_ability_may_act_from_more_than_one_place(in_play):
+    state = TableState.empty_two_seat()
+    if in_play:
+        put_in_play(state, holding("event", printed_id="test_acts_from_either"))
+    else:
+        province_card(state, "event", printed_id="test_acts_from_either")
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility("event") in session.legal_actions(PlayerId.P1)
+
+
+def test_a_boost_that_declares_no_consequence_leaves_its_producer_alive():
+    """The payment path used to destroy any boosted producer, which is Outlying Farms' text applied
+    to every card that might ever boost. A boost that declares nothing must cost nothing."""
+    register_production_boost("free_boost_probe", ProductionBoost(3))
+
+    try:
+        state = TableState.empty_two_seat()
+        state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+            register(
+                state,
+                L5RCard.of(
+                    HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                ),
+            )
+        ]
+        put_in_play(
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id="fb",
+                name="Free Boost",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                printed_id="free_boost_probe",
+                gold_production=2,
+            ),
+        )
+        target = register(
+            state,
+            L5RCard.of(
+                HoldingPrint, id="tgt", name="T", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5
+            ),
+        )
+        target.turn_face_up()
+        province = ProvinceZone(owner=PlayerId.P1)
+        province.add(target)
+        state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+
+        session = EngineSession.start(state, PlayerId.P1)
+        end_phase(session)
+        end_phase(session)
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, DecisionResponse(("fb",), ("fb",)))
+
+        probe = session.game.table.cards_by_id["fb"]
+
+        assert probe.bowed
+        assert probe in session.game.table.battlefield.cards
+    finally:
+        _PRODUCTION_BOOST.pop("free_boost_probe", None)

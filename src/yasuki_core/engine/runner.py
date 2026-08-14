@@ -15,12 +15,39 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
-from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
+from yasuki_core.engine.rules.decisions import (
+    ChooseLegacyCard,
+    DecisionRequest,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.policies import Policy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.game_pieces.cards import L5RCard
+
+# The places a search can look. Every search dialog offers all three, and disables the ones the
+# search in hand does not reach.
+PROVINCES_PANE, DECK_PANE, DISCARD_PANE = "Provinces", "Deck", "Discard"
+SEARCH_PANES = (PROVINCES_PANE, DECK_PANE, DISCARD_PANE)
+
+
+class SearchView(NamedTuple):
+    """A pending choice presented as a search through the piles rather than a board selection.
+
+    Attributes
+    ----------
+    panes : dict mapping str to list of L5RCard
+        The cards each of :data:`SEARCH_PANES` offers, in that order. A pane the search does not
+        reach maps to an empty list, and the dialog shows it disabled rather than hiding it.
+    choosable : set of str
+        The ids across every pane the seat may actually take.
+    """
+
+    panes: dict[str, list[L5RCard]]
+    choosable: set[str]
 
 
 class GameRunner:
@@ -126,6 +153,88 @@ class GameRunner:
         """The cards the human's Legacy search looks through — its whole dynasty deck plus its
         face-down province cards — for a search dialog to display."""
         return legality.legacy_search_pool(self.session.game, self.human)
+
+    def search_view(self) -> SearchView | None:
+        """How to present the pending decision when its candidates are not on the board, or None
+        when they all are and the board can carry the selection.
+
+        A choice reaching into a deck or a discard pile has nothing for the player to click, so it
+        needs a dialog listing the piles instead. Picking a Province is excepted: the seat points at
+        a board position, which it can do whether or not the card sitting there is face-up.
+        """
+        pending = self.pending
+        if pending is None or not pending.candidates:
+            return None
+        table = self.session.game.table
+        if any(card_id not in table.cards_by_id for card_id in pending.candidates):
+            return None  # not cards at all — an Invest amount is answered by buttons
+        legacy = isinstance(pending, ChooseLegacyCard)
+        if not legacy:
+            reachable = self._on_the_board()
+            if all(card_id in reachable for card_id in pending.candidates):
+                return None
+        candidates = set(pending.candidates)
+        # Legacy names its own pool: it searches face-down Provinces too, which hold no candidate
+        # unless a Legacy card happens to be sitting there.
+        pool = self.legacy_search_pool() if legacy else self._piles_holding(candidates)
+        return SearchView(self._panes(pool), candidates)
+
+    def _piles_holding(self, candidates: set[str]) -> list[L5RCard]:
+        """Every card in each of the human's piles that holds a candidate. The whole pile is shown
+        so the seat sees what it passed over, and only the candidates in it can be taken."""
+        table = self.session.game.table
+        pool: list[L5RCard] = []
+        for deck_key, deck in table.decks.items():
+            if deck_key.owner is self.human and any(card.id in candidates for card in deck.cards):
+                pool.extend(deck.cards)
+        for zone_key, zone in table.zones.items():
+            if zone_key.owner is self.human and any(card.id in candidates for card in zone.cards):
+                pool.extend(zone.cards)
+        # A candidate somewhere no pile covers would otherwise drop out of the dialog entirely.
+        found = {card.id for card in pool}
+        pool.extend(table.cards_by_id[card_id] for card_id in candidates - found)
+        return pool
+
+    def _province_card_ids(self) -> set[str]:
+        """Every card sitting in one of the human's Provinces, face-up or not."""
+        table = self.session.game.table
+        return {
+            card.id
+            for key, zone in table.zones.items()
+            if key.owner is self.human and key.role is ZoneRole.PROVINCE
+            for card in zone.cards
+        }
+
+    def _on_the_board(self) -> set[str]:
+        """The human's cards a click can reach: what is in play, what is in hand, and whatever sits
+        in a Province. A Province card counts face-down as well as face-up — the seat picks the
+        Province by where it is, not by knowing what is in it."""
+        table = self.session.game.table
+        return (
+            {card.id for card in table.battlefield.cards}
+            | {card.id for card in table.zones[ZoneKey(self.human, ZoneRole.HAND)].cards}
+            | self._province_card_ids()
+        )
+
+    def _panes(self, pool: Iterable[L5RCard]) -> dict[str, list[L5RCard]]:
+        """``pool`` bucketed into the three panes a search dialog offers, by where each card sits.
+        A pane nothing was found in stays present and empty, so the dialog can disable it."""
+        table = self.session.game.table
+        provinces = self._province_card_ids()
+        discards = {
+            card.id
+            for role in (ZoneRole.DYNASTY_DISCARD, ZoneRole.FATE_DISCARD)
+            for card in table.zones[ZoneKey(self.human, role)].cards
+        }
+        panes: dict[str, list[L5RCard]] = {name: [] for name in SEARCH_PANES}
+        for card in pool:
+            if card.id in provinces:
+                panes[PROVINCES_PANE].append(card)
+            elif card.id in discards:
+                panes[DISCARD_PANE].append(card)
+            else:
+                panes[DECK_PANE].append(card)
+        return panes
 
     @property
     def loser(self) -> PlayerId | None:

@@ -1,6 +1,10 @@
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.economy import active_modifiers, effective_gold_production
+from yasuki_core.engine.rules.economy import (
+    active_modifiers,
+    effective_gold_cost,
+    effective_gold_production,
+)
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 from yasuki_core.game_pieces.cards import L5RCard
@@ -50,3 +54,29 @@ def test_while_source_in_play_modifier_is_ignored_when_its_source_is_absent():
     )
 
     assert effective_gold_production(game, farm) == 2 + 4  # the WHILE_SOURCE one drops out
+
+
+def test_effective_gold_cost_sums_the_printed_cost_and_recorded_modifiers():
+    mine = holding("m", gold_cost=3)
+    rider = Modifier("src", "m", Stat.GOLD_COST, 1, Duration.PERMANENT)
+    game = _game(mine, [rider])
+
+    assert effective_gold_cost(game, mine) == 4
+
+
+def test_effective_gold_cost_floors_at_zero():
+    mine = holding("m", gold_cost=2)
+    discount = Modifier("src", "m", Stat.GOLD_COST, -5, Duration.UNTIL_END_OF_TURN)
+    game = _game(mine, [discount])
+
+    assert effective_gold_cost(game, mine) == 0
+
+
+def test_a_card_printing_no_gold_cost_is_free_and_takes_no_modifier():
+    """A dash Gold Cost is an absent stat, and an absent stat has nothing to modify."""
+    mine = holding("m")
+    rider = Modifier("src", "m", Stat.GOLD_COST, 3, Duration.PERMANENT)
+    game = _game(mine, [rider])
+
+    assert mine.gold_cost is None
+    assert effective_gold_cost(game, mine) == 0

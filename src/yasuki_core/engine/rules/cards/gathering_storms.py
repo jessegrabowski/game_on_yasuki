@@ -60,7 +60,7 @@ def _owned_markets(game: GameState, card: L5RCard) -> list[str]:
     return [market.id for market in owned_holdings(game, card.owner, "Market")]
 
 
-def _otokoshi_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
+def _otokoshi_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [DrawCard(source.owner), AdjustCounter(target.id, WEALTH, 1)]
 
 

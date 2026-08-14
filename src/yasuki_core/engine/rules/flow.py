@@ -442,7 +442,7 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             effects = [
                 effect
                 for target_id in target_ids
-                for effect in ability.effects(source, game.table.cards_by_id[target_id])
+                for effect in ability.effects(game, source, game.table.cards_by_id[target_id])
             ]
             triggers.resolve_effects(game, effects)
         case FinishRecruit(card_id=card_id, invest_amount=invest_amount, proclaim=proclaim):
@@ -524,7 +524,14 @@ def _finish_recruit(
         game.use_once(proclaim_key(card.owner, game.turn))
         ops.set_honor(game.table, card.owner, delta=card.personal_honor)
     if invest_amount:
-        triggers.resolve_effects(game, abilities.invest_for(card).effect(card, invest_amount))
+        # "Entering play, permanently increase the Gold Cost by the Invest cost to get the effect."
+        triggers.resolve_effects(
+            game,
+            [
+                GrantModifier(card.id, card.id, Stat.GOLD_COST, invest_amount, Duration.PERMANENT),
+                *abilities.invest_for(card).effect(card, invest_amount),
+            ],
+        )
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:
@@ -720,7 +727,7 @@ def _apply_ability_target(
     target = game.table.cards_by_id[response.choices[0]]
     ability = abilities.ability_for(source)
     game.pending = None
-    triggers.resolve_effects(game, ability.effects(source, target))
+    triggers.resolve_effects(game, ability.effects(game, source, target))
 
 
 def _apply_card_choice(game: GameState, request: ChooseCards, response: DecisionResponse) -> None:

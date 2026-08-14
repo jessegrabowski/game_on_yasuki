@@ -24,7 +24,7 @@ def _owned_farms(game: GameState, card: L5RCard) -> list[str]:
     return [farm.id for farm in owned_holdings(game, card.owner, "Farm")]
 
 
-def _millet_farm_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
+def _millet_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [
         GrantModifier(source.id, target.id, Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN)
     ]

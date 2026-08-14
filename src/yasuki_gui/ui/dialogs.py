@@ -109,20 +109,44 @@ class Dialogs:
 
     def card_search(
         self,
-        cards: list[L5RCard],
+        panes: dict[str, list[L5RCard]],
         choosable: set[str],
-        label: str,
         on_pick: Callable[[str], None],
     ) -> None:
-        """Search a pile the way the web deck dialog does: the whole pile listed by title and
-        filterable, with a live preview of the selection. ``cards`` is the pool shown; only cards in
-        ``choosable`` can be taken (the others show but stay disabled), and taking one calls
-        ``on_pick`` with its id. The window requires a pick — the search is a committed cost."""
+        """Search the piles the way the web deck dialog does: one pile listed at a time, filterable,
+        with a live preview of the selection.
+
+        ``panes`` maps each pile name to the cards it offers, and a nav bar switches between them —
+        a pile this search does not reach is shown disabled rather than hidden, so the bar reads the
+        same every time. Only cards in ``choosable`` can be taken (the rest show but stay disabled),
+        and taking one calls ``on_pick`` with its id. The window requires a pick — the search is a
+        committed cost.
+        """
         win = tk.Toplevel(self.toplevel)
-        win.title(f"Search - {label}")
+        win.title("Search")
         win.transient(self.toplevel)
         win.grab_set()
         win.protocol("WM_DELETE_WINDOW", lambda: None)  # a pick is required; no dismiss
+
+        opened = next((name for name, cards in panes.items() if cards), next(iter(panes)))
+        pane = tk.StringVar(value=opened)
+
+        nav = tk.Frame(win, bg=theme.PANEL)
+        nav.pack(fill="x", padx=8, pady=(8, 0))
+        for name, cards in panes.items():
+            tk.Radiobutton(
+                nav,
+                text=f"{name} ({len(cards)})",
+                value=name,
+                variable=pane,
+                indicatoron=False,
+                state="normal" if cards else "disabled",
+                bg=theme.PANEL,
+                fg=theme.INK,
+                selectcolor=theme.LINE_SOFT,
+                padx=10,
+                pady=3,
+            ).pack(side="left", padx=(0, 4))
 
         query = tk.StringVar()
         header = tk.Frame(win, bg=theme.PANEL)
@@ -168,7 +192,7 @@ class Dialogs:
         def rebuild(*_args) -> None:
             needle = query.get().strip().lower()
             shown.clear()
-            shown.extend(card for card in cards if needle in (card.name or "").lower())
+            shown.extend(card for card in panes[pane.get()] if needle in (card.name or "").lower())
             listbox.delete(0, "end")
             for card in shown:
                 mark = "★ " if card.id in choosable else "   "
@@ -186,6 +210,7 @@ class Dialogs:
 
         listbox.bind("<<ListboxSelect>>", refresh_preview)
         query.trace_add("write", rebuild)
+        pane.trace_add("write", rebuild)
         choose_btn.configure(command=pick)
         rebuild()
         filter_entry.focus_set()
