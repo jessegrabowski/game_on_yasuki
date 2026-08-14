@@ -29,7 +29,9 @@ def test_a_cost_with_no_designator_is_still_an_ability():
 
 
 def test_an_ability_may_carry_two_designators():
-    assert abilities("Battle/Open: Gain 1 Honor.")[0][1] == ("Battle", "Open")
+    ability = split_text_box("Battle/Open: Gain 1 Honor.").abilities[0]
+
+    assert ability.designators == ("Battle", "Open")
 
 
 def test_a_named_trait_opens_a_new_trait():
@@ -232,15 +234,20 @@ def test_a_bracket_holds_one_reminder_per_keyword_the_card_carries():
     box = split_text_box(text)
 
     assert box.traits == ("Kageharu has +1F.",)
-    assert len(box.reminders) == 1
+    assert box.reminders == (
+        "(Loyal Personalities will not join other Clans. Once a turn, the Attacker gets the first "
+        "Battle action, if it's from a Naval Personality's unit. Shugenja may attach and cast "
+        "Spells.)",
+    )
 
 
-def test_a_bracket_mixing_a_reminder_with_the_card_s_own_words_is_kept():
+def test_a_bracket_mixing_a_reminder_with_the_cards_own_words_is_kept():
     """Dropping it would take the card's own rule with it, so all of it stays."""
     text = "Bow a target. (Shugenja may attach and cast Spells. Nothing happens to the loser.)"
+    box = split_text_box(text)
 
-    assert split_text_box(text).reminders == ()
-    assert "Nothing happens to the loser." in " ".join(split_text_box(text).traits)
+    assert box.reminders == ()
+    assert " ".join(box.traits) == text
 
 
 def test_a_card_keeps_a_parenthetical_the_rulebook_does_not_own():
@@ -251,7 +258,31 @@ def test_a_card_keeps_a_parenthetical_the_rulebook_does_not_own():
     )
 
     assert box.reminders == ()
-    assert "(Nothing happens to the loser.)" in " ".join(box.traits)
+    assert box.traits == (
+        "Your target Personality challenges another. (Nothing happens to the loser.)",
+    )
+
+
+@pytest.mark.parametrize(
+    ("printed", "separated"),
+    [
+        # Named for the card, so no fixed wording can list it.
+        ("(Bayushi Nomen is not Unique.)", True),
+        ("(Tsukimi is not Unique)", True),
+        # Numbered for the cost, likewise.
+        ("(Pay 0 Gold to play, then remove from the game, this Discipline in your discard.)", True),
+        ("(Pay 2 Gold to play, then remove from the game, this Discipline in your discard.)", True),
+        # Shaped alike and says something else: the pattern must not reach it.
+        ("(Kaagi is not a Duelist.)", False),
+        ("(Pay 2 Gold to draw a card.)", False),
+    ],
+)
+def test_a_reminder_naming_a_card_or_a_cost_is_matched_by_pattern(printed, separated):
+    """These vary per card, so they are recognised by shape rather than by a listed wording — which
+    means the shape has to be tight enough to leave a card's own words alone."""
+    box = split_text_box(f"Bow a target. {printed}")
+
+    assert box.reminders == ((printed,) if separated else ())
 
 
 def test_a_qualifier_in_parentheses_is_not_reminder_text():
