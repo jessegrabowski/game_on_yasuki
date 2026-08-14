@@ -5,7 +5,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
     ChooseInvestAmount,
-    ChooseLegacyCard,
     ChoosePayment,
     DecisionResponse,
 )
@@ -13,7 +12,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
-from yasuki_core.engine.runner import GameRunner
+from yasuki_core.engine.runner import GameRunner, SearchView
 from yasuki_core.game_setup import build_state_from_deck
 from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state
 from yasuki_gui.ui.dialogs import Dialogs
@@ -100,7 +99,7 @@ def main() -> None:
             prompt_box.show(
                 "You lose (failed Legacy)" if lost else "Opponent loses (failed Legacy)", []
             )
-        elif isinstance(pending, ChooseLegacyCard):
+        elif pending is not None and runner.search_view() is not None:
             # Answered by the search dialog (opened in after_human_action), not the board.
             prompt_box.show(pending.prompt(), [])
         elif isinstance(pending, ChooseInvestAmount):
@@ -144,24 +143,22 @@ def main() -> None:
         runner.run_opponent()
         refresh()
 
-    def open_legacy_search(pending: ChooseLegacyCard) -> None:
-        # The search runs over the deck (and face-down provinces), off the board, so a modal search
-        # dialog presents the whole pool; only the Legacy cards in it are choosable.
-        pool = runner.legacy_search_pool()
-        choosable = set(pending.candidates)
-
+    def open_search(search: SearchView) -> None:
         def on_pick(card_id: str) -> None:
             runner.submit([card_id])
             after_human_action()
 
-        Dialogs(root, ImageProvider(root)).card_search(pool, choosable, "Dynasty deck", on_pick)
+        Dialogs(root, ImageProvider(root)).card_search(search.panes, search.choosable, on_pick)
 
     def after_human_action() -> None:
         nonlocal boost_producer
         boost_producer = None
         pending = runner.pending
-        if isinstance(pending, ChooseLegacyCard):
-            open_legacy_search(pending)
+        search = runner.search_view()
+        if search is not None:
+            # The candidates are in a deck or a discard pile, so there is nothing on the board to
+            # click; a modal dialog lists the pile instead.
+            open_search(search)
             refresh()
             return
         if pending is not None and not isinstance(pending, ChooseInvestAmount):
