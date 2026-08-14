@@ -4,6 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.abilities import (
+    CardLocation,
     Ability,
     _ABILITIES,
     _INVEST,
@@ -22,7 +23,14 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
-from tests.yasuki_core.engine.builders import end_phase, fate_card, holding, put_in_play, register
+from tests.yasuki_core.engine.builders import (
+    end_phase,
+    fate_card,
+    holding,
+    province_card,
+    put_in_play,
+    register,
+)
 
 
 def _game():
@@ -387,3 +395,90 @@ def test_a_second_production_boost_for_one_card_is_refused():
             register_production_boost("guard_probe", 2)
     finally:
         _PRODUCTION_BOOST.pop("guard_probe", None)
+
+
+# An ability that acts from a Province rather than from play — the shape every Event needs, and the
+# one nothing could express before. It targets its own source, so the test needs nothing else there.
+_ABILITIES["test_acts_from_province"] = Ability(
+    timing=ActionTiming.OPEN,
+    label="test",
+    cost=lambda source: [],
+    targets=lambda game, card: [card.id],
+    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    located_at=(CardLocation.PROVINCE,),
+)
+
+
+def test_an_ability_that_acts_from_a_province_is_offered_there():
+    state = TableState.empty_two_seat()
+    card = province_card(state, "event", printed_id="test_acts_from_province")
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility(card.id) in session.legal_actions(PlayerId.P1)
+
+
+def test_an_ability_that_acts_from_a_province_is_not_offered_face_down():
+    """Face-down the card has not been revealed, so it is not offering anything yet. Setup reveals
+    what starts in a Province, so this is the state a refill leaves behind mid-game."""
+    state = TableState.empty_two_seat()
+    province_card(state, "event", printed_id="test_acts_from_province")
+    session = EngineSession.start(state, PlayerId.P1)
+    session.game.table.cards_by_id["event"].turn_face_down()
+
+    assert ActivateAbility("event") not in session.legal_actions(PlayerId.P1)
+
+
+def test_an_ability_that_acts_from_a_province_is_not_offered_in_play():
+    """The scope says where the card acts from, so it excludes as well as it includes."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("event", printed_id="test_acts_from_province"))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility("event") not in session.legal_actions(PlayerId.P1)
+
+
+def test_a_province_ability_is_not_offered_for_another_seats_card():
+    """Asked from the seat holding priority, so it fails if the scan stops filtering by owner —
+    asking P2 instead would pass on P2 having no actions at all."""
+    state = TableState.empty_two_seat()
+    province_card(state, "event", printed_id="test_acts_from_province", seat=PlayerId.P2)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility("event") not in session.legal_actions(PlayerId.P1)
+
+
+def test_an_ability_in_play_is_not_offered_from_a_province():
+    """The default scope is the battlefield, so a Holding sitting face-up in a Province offers
+    nothing — which is what keeps every existing registration behaving as it did."""
+    state = TableState.empty_two_seat()
+    card = province_card(
+        state, "millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1
+    )
+    put_in_play(state, holding("farm", printed_id="plain_farm", keywords=("Farm",)))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility(card.id) not in session.legal_actions(PlayerId.P1)
+
+
+# A card that acts from either place. The scope is a tuple so an ability can name more than one, and
+# nothing else pins that.
+_ABILITIES["test_acts_from_either"] = Ability(
+    timing=ActionTiming.OPEN,
+    label="test",
+    cost=lambda source: [],
+    targets=lambda game, card: [card.id],
+    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    located_at=(CardLocation.BATTLEFIELD, CardLocation.PROVINCE),
+)
+
+
+@pytest.mark.parametrize("in_play", [True, False])
+def test_an_ability_may_act_from_more_than_one_place(in_play):
+    state = TableState.empty_two_seat()
+    if in_play:
+        put_in_play(state, holding("event", printed_id="test_acts_from_either"))
+    else:
+        province_card(state, "event", printed_id="test_acts_from_either")
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility("event") in session.legal_actions(PlayerId.P1)

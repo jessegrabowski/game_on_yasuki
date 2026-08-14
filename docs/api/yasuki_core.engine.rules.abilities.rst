@@ -8,6 +8,7 @@ yasuki_core.engine.rules.abilities
 .. autosummary::
 
     Ability
+    CardLocation
     InvestAbility
     ProductionBoost
 

@@ -1,7 +1,9 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
+from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import ZoneRole
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
@@ -50,9 +52,17 @@ def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:
     return all(effect.is_payable(game) for effect in cost(card))
 
 
+class CardLocation(str, Enum):
+    """Where a card must be for its behavior to be offered. Distinct from ``ZoneRole``, which
+    cannot name the battlefield — that is a field of its own on the table, not a keyed zone."""
+
+    BATTLEFIELD = "battlefield"
+    PROVINCE = "province"
+
+
 @dataclass(frozen=True, slots=True)
 class Ability:
-    """An activated ability on an in-play card.
+    """An activated ability, on a card in play or on one waiting face-up in a Province.
 
     Attributes
     ----------
@@ -71,6 +81,9 @@ class Ability:
     all_targets : bool
         Whether the ability hits every card ``targets`` returns rather than one chosen among them —
         an untargeted "your other Farms" grant instead of a single pick. Default False.
+    located_at : tuple of CardLocation, optional
+        Where the card has to be for the ability to be offered. An Event acts from the Province it
+        sits face-up in, never from play. Default the battlefield alone.
     """
 
     timing: ActionTiming
@@ -79,6 +92,7 @@ class Ability:
     targets: Callable[[GameState, L5RCard], list[str]]
     effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]]
     all_targets: bool = False
+    located_at: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,)
 
 
 @dataclass(frozen=True, slots=True)
@@ -169,17 +183,30 @@ def production_boost_for(card: L5RCard) -> ProductionBoost | None:
     return _PRODUCTION_BOOST.get(card.printed_id)
 
 
+def _seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, L5RCard]]:
+    """Every card ``seat`` could activate something on, with where it is sitting."""
+    for card in game.table.battlefield.cards:
+        if card.owner is seat:
+            yield CardLocation.BATTLEFIELD, card
+    for key, zone in game.table.zones.items():
+        if key.owner is seat and key.role is ZoneRole.PROVINCE:
+            for card in zone.cards:
+                if card.face_up:  # face-down, what the card is has not been revealed
+                    yield CardLocation.PROVINCE, card
+
+
 def activatable(
     game: GameState, seat: PlayerId, permitted: frozenset[ActionTiming]
 ) -> list[L5RCard]:
-    """The in-play cards ``seat`` may activate an ability on right now: controlled, its ability's
-    designator among ``permitted``, its cost payable, and with at least one legal target."""
+    """The cards ``seat`` may activate an ability on right now: controlled, sitting somewhere the
+    ability acts from, its designator among ``permitted``, its cost payable, and with at least one
+    legal target."""
     ready: list[L5RCard] = []
-    for card in game.table.battlefield.cards:
-        if card.owner is not seat:
-            continue
+    for location, card in _seat_cards(game, seat):
         ability = _ABILITIES.get(card.printed_id)
         if ability is None or ability.timing not in permitted:
+            continue
+        if location not in ability.located_at:
             continue
         if not can_pay(game, card, ability.cost):
             continue
