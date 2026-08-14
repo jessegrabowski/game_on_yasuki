@@ -492,36 +492,33 @@ def test_a_card_without_the_keyword_offers_no_kharmic():
 
 
 def _ruins_runner() -> GameRunner:
-    """A runner with Repairing the Ruins face-up in a Province and a findable Holding in each of the
-    two piles it searches."""
+    """A runner with Repairing the Ruins face-up in a Province, and in each pile it searches one
+    Holding it can find plus a Unique one it cannot."""
     state = TableState.empty_two_seat()
     province_card(state, "ruins", printed_id="repairing_the_ruins")
-    mine = _register(
-        state,
-        L5RCard.of(
-            HoldingPrint,
-            id="mine",
-            name="Mine",
-            side=Side.DYNASTY,
-            owner=PlayerId.P1,
-            printed_id="mine",
-            gold_cost=2,
-        ),
-    )
-    kobune = _register(
-        state,
-        L5RCard.of(
-            HoldingPrint,
-            id="kobune",
-            name="Kobune",
-            side=Side.DYNASTY,
-            owner=PlayerId.P1,
-            printed_id="kobune",
-            gold_cost=2,
-        ),
-    )
-    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [mine]
-    state.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].add(kobune)
+
+    def holding(card_id, *, unique=False):
+        return _register(
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id=card_id,
+                name=card_id,
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                printed_id=card_id,
+                gold_cost=2,
+                is_unique=unique,
+            ),
+        )
+
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        holding("mine"),
+        holding("unique-deck", unique=True),
+    ]
+    discard = state.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)]
+    discard.add(holding("kobune"))
+    discard.add(holding("unique-discard", unique=True))
     return GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
 
 
@@ -533,10 +530,20 @@ def test_a_search_through_hidden_piles_is_presented_as_a_dialog_not_a_board_sele
 
     search = runner_.search_view()
     assert search is not None
-    assert [card.id for card in search.panes["Deck"]] == ["mine"]
-    assert [card.id for card in search.panes["Discard"]] == ["kobune"]
     assert search.panes["Provinces"] == []  # offered by the nav bar, but disabled
     assert search.choosable == {"mine", "kobune"}
+
+
+def test_a_search_shows_every_card_in_the_piles_it_looked_through():
+    """The seat sees what it passed over: each pile is listed whole, with only the legal cards
+    takeable. Listing the candidates alone would hide the rest of the deck."""
+    runner_ = _ruins_runner()
+    runner_.act(ActivateAbility("ruins"))
+
+    search = runner_.search_view()
+    assert [card.id for card in search.panes["Deck"]] == ["mine", "unique-deck"]
+    assert [card.id for card in search.panes["Discard"]] == ["kobune", "unique-discard"]
+    assert search.choosable == {"mine", "kobune"}  # the Unique ones show but cannot be taken
 
 
 def test_a_board_targeting_ability_takes_no_search_dialog():

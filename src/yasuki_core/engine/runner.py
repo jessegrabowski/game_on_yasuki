@@ -173,14 +173,27 @@ class GameRunner:
             reachable = self._on_the_board()
             if all(card_id in reachable for card_id in pending.candidates):
                 return None
-        # The Legacy pool is wider than its candidates: every card searched is shown, and only the
-        # Legacy cards among them can be taken.
-        pool = (
-            self.legacy_search_pool()
-            if legacy
-            else [table.cards_by_id[card_id] for card_id in pending.candidates]
-        )
-        return SearchView(self._panes(pool), set(pending.candidates))
+        candidates = set(pending.candidates)
+        # Legacy names its own pool: it searches face-down Provinces too, which hold no candidate
+        # unless a Legacy card happens to be sitting there.
+        pool = self.legacy_search_pool() if legacy else self._piles_holding(candidates)
+        return SearchView(self._panes(pool), candidates)
+
+    def _piles_holding(self, candidates: set[str]) -> list[L5RCard]:
+        """Every card in each of the human's piles that holds a candidate. The whole pile is shown
+        so the seat sees what it passed over, and only the candidates in it can be taken."""
+        table = self.session.game.table
+        pool: list[L5RCard] = []
+        for deck_key, deck in table.decks.items():
+            if deck_key.owner is self.human and any(card.id in candidates for card in deck.cards):
+                pool.extend(deck.cards)
+        for zone_key, zone in table.zones.items():
+            if zone_key.owner is self.human and any(card.id in candidates for card in zone.cards):
+                pool.extend(zone.cards)
+        # A candidate somewhere no pile covers would otherwise drop out of the dialog entirely.
+        found = {card.id for card in pool}
+        pool.extend(table.cards_by_id[card_id] for card_id in candidates - found)
+        return pool
 
     def _province_card_ids(self) -> set[str]:
         """Every card sitting in one of the human's Provinces, face-up or not."""
