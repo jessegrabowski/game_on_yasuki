@@ -87,3 +87,53 @@ def test_zone_draw_with_top_card_front_and_back(root):
     )
     zv2.draw(cv)
     assert cv.find_withtag("zone:3")
+
+
+def _badges(canvas: tk.Canvas, tag: str) -> list[int]:
+    """The counter-badge discs drawn under ``tag``."""
+    return [item for item in canvas.find_withtag(tag) if canvas.type(item) == "oval"]
+
+
+def test_a_sincerity_token_on_a_province_card_is_visible(root):
+    """A token seeded onto a card still in a Province has to show there. Drawing counters only for
+    cards in play left a seeded Sincerity card looking untouched."""
+    cv = tk.Canvas(root, width=200, height=200)
+    cv.pack()
+    root.update_idletasks()
+
+    card = L5RCard.of(
+        CardPrint,
+        id="seeded",
+        name="Hasty Memorial",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        counters={"sincerity": 1},
+    )
+    card.turn_face_up()
+    ZoneVisual([card], True, "Province", 80, 80, 120, 80, "zone:seeded").draw(cv)
+
+    assert len(_badges(cv, "zone:seeded")) == 1
+    counts = [
+        cv.itemcget(i, "text") for i in cv.find_withtag("zone:seeded") if cv.type(i) == "text"
+    ]
+    assert "1" in counts
+
+
+def test_a_face_down_province_card_shows_no_badge(root):
+    """Face-down the card's state is not public, so its counters must not leak through the back."""
+    cv = tk.Canvas(root, width=200, height=200)
+    cv.pack()
+    root.update_idletasks()
+
+    card = L5RCard.of(
+        CardPrint,
+        id="hidden",
+        name="Hidden",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        counters={"sincerity": 2},
+    )
+    card.turn_face_down()  # cards are face-up by default; a Province refill leaves them down
+    ZoneVisual([card], True, "Province", 80, 80, 120, 80, "zone:hidden").draw(cv)
+
+    assert _badges(cv, "zone:hidden") == []
