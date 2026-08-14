@@ -22,8 +22,15 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 
 # A cost is the effects paid to activate an ability, applied to the source card before the ability's
 # own effects. Bow / destroy / spend-a-token are all just effects targeting the source, so costs and
-# effects share one vocabulary — there is no separate cost taxonomy.
+# effects share one vocabulary — there is no separate cost taxonomy. What a card calls a cost is one
+# here only when it must be paid before resolution; anything the card's own text sequences is an
+# effect.
 Cost = Callable[[L5RCard], list[Effect]]
+
+
+def no_cost(source: L5RCard) -> list[Effect]:
+    """An ability that costs nothing to announce."""
+    return []
 
 
 def bow_cost(source: L5RCard) -> list[Effect]:

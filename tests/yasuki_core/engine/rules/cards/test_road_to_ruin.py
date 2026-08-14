@@ -1,9 +1,13 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import Recruit
+from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.economy import effective_gold_cost
+from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
@@ -12,11 +16,131 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
+    holding,
+    province_card,
     put_in_play,
     register,
 )
 
 P1 = PlayerId.P1
+
+
+def _ruins_game(*, in_deck=("mine",), in_discard=(), in_play=(), unique=()):
+    """A session with P1's Repairing the Ruins face-up in a Province, and Holdings salted through
+    the zones it searches. Ids double as printed ids, so a card in play blocks the copy of itself."""
+    state = TableState.empty_two_seat()
+    province_card(state, "ruins", printed_id="repairing_the_ruins")
+
+    def a_holding(card_id):
+        if card_id in unique:
+            return L5RCard.of(
+                HoldingPrint,
+                id=card_id,
+                name=card_id,
+                side=Side.DYNASTY,
+                owner=P1,
+                printed_id=card_id,
+                is_unique=True,
+            )
+        return holding(card_id, printed_id=card_id, gold_production=3, gold_cost=2)
+
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+        register(state, a_holding(card_id)) for card_id in in_deck
+    ]
+    discard = state.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
+    for card_id in in_discard:
+        discard.add(register(state, a_holding(card_id)))
+    for card_id in in_play:
+        put_in_play(state, a_holding(card_id))
+    return EngineSession.start(state, P1)
+
+
+def test_repairing_the_ruins_is_offered_from_its_province():
+    """The card acts from the Province it sits face-up in, and never enters play."""
+    session = _ruins_game()
+    assert ActivateAbility("ruins") in session.legal_actions(P1)
+
+
+def test_it_searches_the_dynasty_deck_and_the_discard_pile():
+    session = _ruins_game(in_deck=("mine",), in_discard=("kobune",))
+    session.act(P1, ActivateAbility("ruins"))
+
+    assert set(session.game.pending.candidates) == {"mine", "kobune"}
+
+
+def test_it_rebuilds_its_own_province_with_the_holding_it_finds():
+    session = _ruins_game()
+    session.act(P1, ActivateAbility("ruins"))
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
+
+    assert [card.id for card in province.cards] == ["mine"]
+    assert session.game.table.cards_by_id["mine"].face_up
+    assert "ruins" in {card.id for card in discard.cards}
+
+
+def test_a_different_holding_in_play_blocks_nothing():
+    """ "…of which you do not control any copies." Control is judged per printed id, so an unrelated
+    Holding in play leaves the deck's copy findable."""
+    session = _ruins_game(in_deck=("mine",), in_play=("mine_copy",))
+    session.act(P1, ActivateAbility("ruins"))
+    assert set(session.game.pending.candidates) == {"mine"}
+
+
+def test_it_will_not_find_a_holding_a_copy_of_which_is_in_play():
+    session = _ruins_game(in_deck=("mine",), in_play=("mine",))
+    assert ActivateAbility("ruins") not in session.legal_actions(P1)
+
+
+def test_it_will_not_find_a_unique_holding():
+    session = _ruins_game(in_deck=("mine",), unique=("mine",))
+    assert ActivateAbility("ruins") not in session.legal_actions(P1)
+
+
+def test_it_is_not_offered_with_nothing_left_to_find():
+    """An ability with no legal target is never offered, so the Event is not spent for nothing."""
+    session = _ruins_game(in_deck=())
+    assert ActivateAbility("ruins") not in session.legal_actions(P1)
+
+
+def test_rebuilding_a_province_replays_to_the_same_state():
+    session = _ruins_game()
+    session.act(P1, ActivateAbility("ruins"))
+    session.submit(P1, DecisionResponse(("mine",)))
+    assert replay(session.log) == session.game
+
+
+def test_a_holding_pulled_from_the_deck_is_permanently_dearer():
+    """ "…and permanently give it +1 Gold Cost if it was not from your discard pile." """
+    session = _ruins_game(in_deck=("mine",))
+    session.act(P1, ActivateAbility("ruins"))
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    mine = session.game.table.cards_by_id["mine"]
+    assert mine.gold_cost == 2  # printed, untouched
+    assert effective_gold_cost(session.game, mine) == 3
+
+
+@pytest.mark.parametrize("chosen, cost", [("mine", 3), ("kobune", 2)])
+def test_the_rider_follows_the_chosen_cards_own_zone(chosen, cost):
+    """Both zones are stocked, so reading "is the discard pile empty" rather than "is this card in
+    it" would price the two the same."""
+    session = _ruins_game(in_deck=("mine",), in_discard=("kobune",))
+    session.act(P1, ActivateAbility("ruins"))
+    session.submit(P1, DecisionResponse((chosen,)))
+
+    assert effective_gold_cost(session.game, session.game.table.cards_by_id[chosen]) == cost
+
+
+def test_the_rebuilt_holding_still_has_to_be_recruited_at_the_dearer_price():
+    """The Holding lands face-up in the Province, not in play, so the rider is what the seat pays."""
+    session = _ruins_game(in_deck=("mine",))
+    session.act(P1, ActivateAbility("ruins"))
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    assert recruit_cost(session.game, session.game.table.cards_by_id["mine"]) == 3
 
 
 def _outlying_game(*, target_cost=2, with_producer=True):

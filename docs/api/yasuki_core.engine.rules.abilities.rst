@@ -24,6 +24,7 @@ yasuki_core.engine.rules.abilities
     can_pay
     destroy_cost
     invest_for
+    no_cost
     no_effects
     one_wealth
     owned_holdings
