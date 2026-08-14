@@ -105,6 +105,31 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
         yield modifier
 
 
+def effective_gold_cost(game: GameState, card: L5RCard) -> int:
+    """What ``card`` costs before the seat's own discounts and surcharges: its printed gold cost plus
+    every active Gold Cost modifier on it, floored at zero. A card printing no gold cost has none to
+    modify, so it stays at zero (CR, Absent Stats).
+
+    Parameters
+    ----------
+    game : GameState
+        The live game the modifiers are read from.
+    card : L5RCard
+        The card being priced.
+
+    Returns
+    -------
+    cost : int
+        The modified gold cost.
+    """
+    if card.gold_cost is None:
+        return 0
+    total = card.gold_cost + sum(
+        modifier.amount for modifier in active_modifiers(game, card, Stat.GOLD_COST)
+    )
+    return max(0, total)
+
+
 def effective_gold_production(
     game: GameState, card: L5RCard, targets: tuple[L5RCard, ...] = ()
 ) -> int:

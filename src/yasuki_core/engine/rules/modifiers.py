@@ -12,6 +12,7 @@ class Stat(Enum):
     carry a per-count delta.
     """
 
+    GOLD_COST = "gold_cost"
     GOLD_PRODUCTION = "gold_production"
     PROVINCE_STRENGTH = "province_strength"
 
