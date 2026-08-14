@@ -12,20 +12,10 @@ from yasuki_gui.constants import (
     LABEL_TAG,
     NOTE_TAG,
     COUNTER_TAG,
-    COUNTER_BADGE_R,
 )
 from yasuki_gui.ui.images import load_image, load_back_image, ImageProvider
-from yasuki_gui.visuals.visual import Visual
-from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
+from yasuki_gui.visuals.visual import Visual, draw_counter_badges
 import tkinter as tk
-
-# Per-counter badge colors — (fill, count-text) — so a card carrying more than one kind reads at a
-# glance. Light text on the dark gold, dark text on the light powder blue.
-_COUNTER_STYLE = {
-    WEALTH.key: (theme.GOLD, theme.ON_DARK),
-    SINCERITY.key: (theme.POWDER_BLUE, theme.INK),
-}
-_DEFAULT_COUNTER_STYLE = (theme.GOLD, theme.ON_DARK)
 
 
 @dataclass
@@ -173,39 +163,9 @@ class CardSpriteVisual(Visual):
         )
 
     def _draw_counters(self, canvas: tk.Canvas) -> None:
-        # A badge per counter kind in the top-right corner, coloured by kind, with the count inside;
-        # badges stack downward in a fixed order so a card's counters read consistently.
-        counters = getattr(self.card, "counters", None)
-        if not counters:
-            return
-        w, h = self.size
-        cx = self.x + w // 2 - COUNTER_BADGE_R - 2
-        cy = self.y - h // 2 + COUNTER_BADGE_R + 2
-        # Iterate the counters actually on the card (sorted for a stable stack), not the whole
-        # registry — so the badge system doesn't scale with the catalogue's size.
-        for key, count in sorted(counters.items()):
-            if count <= 0:
-                continue
-            fill, text_fill = _COUNTER_STYLE.get(key, _DEFAULT_COUNTER_STYLE)
-            canvas.create_oval(
-                cx - COUNTER_BADGE_R,
-                cy - COUNTER_BADGE_R,
-                cx + COUNTER_BADGE_R,
-                cy + COUNTER_BADGE_R,
-                fill=fill,
-                outline=theme.CARD_BORDER,
-                width=1,
-                tags=(self.tag, CARD_TAG, self._subtag(COUNTER_TAG)),
-            )
-            canvas.create_text(
-                cx,
-                cy,
-                text=str(count),
-                fill=text_fill,
-                font=theme.serif(9, "bold"),
-                tags=(self.tag, CARD_TAG, self._subtag(COUNTER_TAG)),
-            )
-            cy += 2 * COUNTER_BADGE_R + 2
+        draw_counter_badges(
+            canvas, self.card, self.bbox, (self.tag, CARD_TAG, self._subtag(COUNTER_TAG))
+        )
 
     def _draw_selection(self, canvas: tk.Canvas, selected: bool) -> None:
         canvas.delete(self._subtag(SELECT_TAG))
