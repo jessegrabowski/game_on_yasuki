@@ -74,7 +74,9 @@ yasuki_core
     yasuki_core.install.format_metadata <yasuki_core.install.format_metadata>
     yasuki_core.install.images_to_sql <yasuki_core.install.images_to_sql>
     yasuki_core.install.install_db <yasuki_core.install.install_db>
+    yasuki_core.install.reminders <yasuki_core.install.reminders>
     yasuki_core.install.sets_to_sql <yasuki_core.install.sets_to_sql>
+    yasuki_core.install.text_split <yasuki_core.install.text_split>
     yasuki_core.install.utils <yasuki_core.install.utils>
     yasuki_core.install.yaml_to_sql <yasuki_core.install.yaml_to_sql>
     yasuki_core.paths <yasuki_core.paths>
