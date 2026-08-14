@@ -524,7 +524,14 @@ def _finish_recruit(
         game.use_once(proclaim_key(card.owner, game.turn))
         ops.set_honor(game.table, card.owner, delta=card.personal_honor)
     if invest_amount:
-        triggers.resolve_effects(game, abilities.invest_for(card).effect(card, invest_amount))
+        # "Entering play, permanently increase the Gold Cost by the Invest cost to get the effect."
+        triggers.resolve_effects(
+            game,
+            [
+                GrantModifier(card.id, card.id, Stat.GOLD_COST, invest_amount, Duration.PERMANENT),
+                *abilities.invest_for(card).effect(card, invest_amount),
+            ],
+        )
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:
