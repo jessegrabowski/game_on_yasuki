@@ -389,7 +389,7 @@ cards:
   - Dragon Clan
   - Magistrate
   - Toturi's Army
-  text: <b>Reapeatable Reaction, :bow::</b> After another player's Personality refuses a challenge, Kaagi
+  text: <b>Repeatable Reaction, :bow::</b> After another player's Personality refuses a challenge, Kaagi
     challenges him. Destroy the loser.
   gold_cost: 7
   force: 1

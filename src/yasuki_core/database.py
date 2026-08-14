@@ -182,7 +182,10 @@ _CARD_COLUMNS = """
             AS types,
         (SELECT array_agg(clan ORDER BY clan) FROM card_clans cl WHERE cl.card_id = c.card_id)
             AS clans,
-        (SELECT array_agg(keyword ORDER BY keyword) FROM card_keywords k WHERE k.card_id = c.card_id)
+        -- The type line shows what the card prints. A keyword inherited from one of its abilities
+        -- is searchable but not printed, so it is not rendered here.
+        (SELECT array_agg(keyword ORDER BY keyword) FROM card_keywords k
+            WHERE k.card_id = c.card_id AND k.printed)
             AS keywords,
         c.rules_text AS text,
         c.story,

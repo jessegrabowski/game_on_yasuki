@@ -75,9 +75,13 @@ CREATE TABLE keywords (
   keyword TEXT PRIMARY KEY
 );
 
+-- `printed` separates what the card shows on its type line from what it inherits from its own
+-- abilities: the CR reads a Strategy with a Political ability as a Political Strategy, so the card
+-- is Political for a search while its type line still says only Strategy.
 CREATE TABLE card_keywords (
   card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
   keyword TEXT NOT NULL REFERENCES keywords(keyword) ON DELETE CASCADE,
+  printed BOOLEAN NOT NULL DEFAULT TRUE,
   PRIMARY KEY (card_id, keyword)
 );
 

@@ -2648,8 +2648,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  keywords:
-  - Economic
   text: <b>Economic Battle, :gstar::</b> Move home a target Personality with Chi less than or equal to
     the amount paid. Lose 1 Honor.
   focus: 2

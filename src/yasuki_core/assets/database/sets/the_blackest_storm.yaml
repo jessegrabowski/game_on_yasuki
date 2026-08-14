@@ -1757,7 +1757,7 @@ cards:
   - Earth
   - Shugenja
   - Experienced
-  text: <b>Interrupt, {8):</b> After Beiko enters play, create and Recruit <i>(without further cost)</i>
+  text: <b>Interrupt, :g8::</b> After Beiko enters play, create and Recruit <i>(without further cost)</i>
     a 5F/2C/8GC/3PH Bear • Nonhuman • Spirit Mantis Clan Personality with the ability, "<b>Battle, :bow::</b>
     Melee 3 Attack. You may target and bow your Kitsune Beiko at any location to straighten this Personality.".
   gold_cost: 3

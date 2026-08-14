@@ -221,7 +221,7 @@ cards:
   decks:
   - Dynasty
   text: ':bow:: When paying for non-Unique Armor or a non-Unique Weapon, produce 3 Gold which may only
-    pay for that card.<br><b>Repeatabe Battle/Open, :bow::</b> Give a target Follower +2F.'
+    pay for that card.<br><b>Repeatable Battle/Open, :bow::</b> Give a target Follower +2F.'
   gold_cost: 4
   legality:
   - Clan Wars (Imperial)
