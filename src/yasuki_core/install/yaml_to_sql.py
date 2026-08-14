@@ -12,6 +12,7 @@ from psycopg.types.json import Json
 from yasuki_core.game_pieces.counters import ALL_COUNTERS
 from yasuki_core.install.format_metadata import populate_format_metadata
 from yasuki_core.install.sets_to_sql import coerce_date
+from yasuki_core.install.text_split import ability_keywords
 from yasuki_core.install.utils import normalize_name
 
 _COUNTER_KEYS = frozenset(counter.key for counter in ALL_COUNTERS)
@@ -361,6 +362,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     deck_links: set[tuple[str, str]] = set()
     keywords: set[str] = set()
     keyword_links: set[tuple[str, str]] = set()
+    inherited_links: set[tuple[str, str]] = set()
     creates_links: set[tuple[str, str]] = set()
     grants_links: set[tuple[str, str]] = set()
     formats: set[str] = set()
@@ -411,6 +413,13 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                     for kw in entry.get("keywords", []):
                         keywords.add(kw)
                         keyword_links.add((card_id, kw))
+                    # The CR reads a Strategy with a Political ability as a Political Strategy, so
+                    # an ability's keyword classifies its card. Kept apart from the printed ones
+                    # until every printing has been read, since a later set may print what an
+                    # earlier one only implied.
+                    for kw in ability_keywords(entry.get("text") or ""):
+                        keywords.add(kw)
+                        inherited_links.add((card_id, kw))
                     for fmt in entry.get("legality", []):
                         formats.add(fmt)
                         legality_links.add((card_id, fmt))
@@ -474,6 +483,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             deck_links,
             keywords,
             keyword_links,
+            inherited_links,
             creates_links,
             grants_links,
             formats,
@@ -501,6 +511,7 @@ def _insert_all(
     deck_links,
     keywords,
     keyword_links,
+    inherited_links,
     creates_links,
     grants_links,
     formats,
@@ -567,8 +578,10 @@ def _insert_all(
         list(deck_links),
     )
     cur.executemany(
-        "INSERT INTO card_keywords (card_id, keyword) VALUES (%s, %s) ON CONFLICT DO NOTHING",
-        list(keyword_links),
+        "INSERT INTO card_keywords (card_id, keyword, printed) VALUES (%s, %s, %s) "
+        "ON CONFLICT DO NOTHING",
+        [(card_id, kw, True) for card_id, kw in keyword_links]
+        + [(card_id, kw, False) for card_id, kw in inherited_links - keyword_links],
     )
     cur.executemany(
         "INSERT INTO card_legalities (card_id, format_name) VALUES (%s, %s) ON CONFLICT DO NOTHING",
