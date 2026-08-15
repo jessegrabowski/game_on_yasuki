@@ -10,16 +10,21 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint
 
-from tests.yasuki_core.engine.builders import province_card, register
+from tests.yasuki_core.engine.builders import holding, province_card, register
 
 P1 = PlayerId.P1
 
 
-def _gift_game(*, items=("katana",), plain=("strategy",)) -> EngineSession:
+def _gift_game(*, items=("katana",), plain=("strategy",), dynasty=("next-card",)) -> EngineSession:
     """A session with Imperial Gift face-up in P1's Province and a Fate deck holding ``items`` Items
-    alongside ``plain`` non-Items, so the search has to pick the Items out."""
+    alongside ``plain`` non-Items, so the search has to pick the Items out. ``dynasty`` stocks the
+    Dynasty deck the vacated Province refills from."""
     state = TableState.empty_two_seat()
     province_card(state, "gift", printed_id="imperial_gift", name="Imperial Gift")
+    for card_id in dynasty:
+        state.decks[DeckKey(P1, Side.DYNASTY)].cards.append(
+            register(state, holding(card_id, owner=P1))
+        )
     deck = state.decks[DeckKey(P1, Side.FATE)]
     for card_id in plain:
         deck.cards.append(
@@ -118,6 +123,26 @@ def test_a_fate_deck_with_no_item_still_gains_the_honor():
 
     assert session.game.table.seats[P1].honor == before + 2
     assert session.game.pending is None  # no dead prompt over an empty pile
+
+
+def test_the_province_refills_behind_the_spent_event():
+    """An Event that spends itself out of a Province leaves it short, and a Province that is short
+    refills — otherwise the seat is down a Province for the rest of the game."""
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(("katana",)))
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [c.id for c in province.cards] == ["next-card"]
+    assert not province.cards[0].face_up  # a refill arrives face-down
+
+
+def test_the_province_refills_even_when_the_search_finds_nothing():
+    session = _gift_game(items=())
+    session.act(P1, ActivateAbility("gift"))
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [c.id for c in province.cards] == ["next-card"]
 
 
 def test_the_gift_replays_to_the_same_state():

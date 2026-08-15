@@ -10,14 +10,15 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
-from tests.yasuki_core.engine.builders import province_card, register
+from tests.yasuki_core.engine.builders import holding, province_card, register
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
 
-def _panda_game(fate_cards: int = 2) -> EngineSession:
+def _panda_game(fate_cards: int = 2, *, dynasty: tuple[str, ...] = ()) -> EngineSession:
     """A session with Blessings of the Red Panda Spirit face-up in P1's Province and a stocked Fate
-    deck for each seat, so both have something to draw."""
+    deck for each seat, so both have something to draw. ``dynasty`` stocks P1's Dynasty deck; it is
+    empty by default so a test that does not care about the refill sees no card arrive."""
     state = TableState.empty_two_seat()
     province_card(
         state,
@@ -25,6 +26,10 @@ def _panda_game(fate_cards: int = 2) -> EngineSession:
         printed_id="blessings_of_the_red_panda_spirit",
         name="Blessings of the Red Panda Spirit",
     )
+    for card_id in dynasty:
+        state.decks[DeckKey(P1, Side.DYNASTY)].cards.append(
+            register(state, holding(card_id, owner=P1))
+        )
     for seat in (P1, P2):
         state.decks[DeckKey(seat, Side.FATE)].cards = [
             register(
@@ -75,14 +80,19 @@ def test_it_asks_whether_to_keep_the_event_rather_than_offering_it_as_a_target()
 
 
 def test_answering_yes_shuffles_the_event_back_into_the_dynasty_deck():
+    """With the Dynasty deck otherwise empty the Event is the only card in it, so the refill of the
+    Province it just left draws it straight back — face-down, as a refill arrives. That round trip
+    is the sharpest evidence it went to the deck rather than the discard; a stocked deck makes the
+    return a chance rather than a certainty."""
     session = _panda_game()
     session.act(P1, ActivateAbility("panda"))
     session.submit(P1, DecisionResponse(("panda",)))
 
-    deck = session.game.table.decks[DeckKey(P1, Side.DYNASTY)]
     discard = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
-    assert "panda" in {card.id for card in deck.cards}
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
     assert "panda" not in {card.id for card in discard.cards}
+    assert [card.id for card in province.cards] == ["panda"]
+    assert not province.cards[0].face_up
 
 
 def test_answering_no_discards_the_event():
@@ -97,14 +107,27 @@ def test_answering_no_discards_the_event():
     assert "panda" not in {card.id for card in deck.cards}
 
 
-def test_the_event_leaves_its_province_either_way():
-    for answer in (("panda",), ()):
-        session = _panda_game()
-        session.act(P1, ActivateAbility("panda"))
-        session.submit(P1, DecisionResponse(answer))
+def test_the_province_refills_when_the_event_is_discarded():
+    session = _panda_game(dynasty=("next-card",))
+    session.act(P1, ActivateAbility("panda"))
+    session.submit(P1, DecisionResponse(()))
 
-        province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
-        assert "panda" not in {card.id for card in province.cards}
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [card.id for card in province.cards] == ["next-card"]
+    assert not province.cards[0].face_up
+
+
+def test_the_province_refills_when_the_event_is_shuffled_back_instead():
+    """The refill follows the Event leaving rather than the Event being discarded, so the branch
+    that puts it back in the deck refills too. Which card arrives is not asserted: the Event is in
+    the shuffled deck it refills from and may be the one drawn."""
+    session = _panda_game(dynasty=("next-card",))
+    session.act(P1, ActivateAbility("panda"))
+    session.submit(P1, DecisionResponse(("panda",)))
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert len(province.cards) == 1
+    assert not province.cards[0].face_up  # never the face-up Event, still there to use again
 
 
 def test_using_the_blessing_replays_to_the_same_state():
