@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
+    Confirm,
     ChooseInvestAmount,
     ChooseLegacyCard,
     ChoosePayment,
@@ -368,6 +369,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         case ChooseAbilityTarget():
             _apply_ability_target(game, request, response)
         case ChooseCards():
+            _apply_card_choice(game, request, response)
+        # One case per union member, so the exhaustiveness guard can read them off the AST.
+        case Confirm():
             _apply_card_choice(game, request, response)
         case ChooseInvestAmount():
             _apply_invest_amount(game, request, response)
@@ -730,7 +734,9 @@ def _apply_ability_target(
     triggers.resolve_effects(game, ability.effects(game, source, target))
 
 
-def _apply_card_choice(game: GameState, request: ChooseCards, response: DecisionResponse) -> None:
+def _apply_card_choice(
+    game: GameState, request: ChooseCards | Confirm, response: DecisionResponse
+) -> None:
     game.pending = None
     item = game.stack.pop()  # the ResumeCascade this choice paused, always stacked atop it
     if not isinstance(item, ResumeCascade):

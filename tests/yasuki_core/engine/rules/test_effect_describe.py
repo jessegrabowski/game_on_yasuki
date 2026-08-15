@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     BanishTopFate,
     Bow,
+    Ask,
     Choose,
     Discard,
     Destroy,
@@ -73,6 +74,10 @@ EFFECTS = [
     (
         Choose(PlayerId.P1, ("a", "b", "c"), 0, 2, "wheat_farm", "wheat_1"),
         "P1 chooses 0-2 of 3 for wheat_farm",
+    ),
+    (
+        Ask(PlayerId.P1, "Destroy Rice Farm to straighten Kobune?", "rice_farm", ("rice_1",)),
+        "P1 is asked: Destroy Rice Farm to straighten Kobune?",
     ),
 ]
 

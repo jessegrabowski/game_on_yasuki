@@ -254,6 +254,36 @@ CHOICE_PROMPTS: dict[str, str] = {}
 
 
 @dataclass(frozen=True, slots=True)
+class Confirm(DecisionRequest):
+    """The seat must answer a yes/no question naming what it is being asked to do.
+
+    An optional effect whose subject is already settled — "destroy this Farm to straighten the card
+    it recruited" — reads as a question rather than as a card selection. Answering yes returns the
+    candidates, answering no returns none, so this is an optional :class:`ChooseCards` in every
+    respect but how a client puts it: a question with two buttons instead of a board selection.
+
+    Attributes
+    ----------
+    question : str
+        The question as the seat reads it, naming the cards it concerns.
+    resolver : str
+        The registered choice resolver that turns the answer into effects.
+    source_id : str, optional
+        A card id handed to the resolver as its context, as for :class:`ChooseCards`. Default None.
+    """
+
+    question: str
+    resolver: str
+    source_id: str | None = None
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return self.question
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return response.choices in ((), self.candidates)
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseCards(DecisionRequest):
     """The seat must choose between ``minimum`` and ``maximum`` of the candidate cards — a
     variable-count target, as when a triggered effect targets "zero to two" cards. The chosen ids

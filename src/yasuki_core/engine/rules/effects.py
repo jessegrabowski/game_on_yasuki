@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest
+from yasuki_core.engine.rules.decisions import ChooseCards, Confirm, DecisionRequest
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
@@ -448,6 +448,47 @@ class Then(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.stack.append(ApplyEffects(self.effects))
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class Ask(InterruptingEffect):
+    """Put a yes/no question to a seat, and hand ``subjects`` to the resolver if it answers yes.
+
+    The question names what is being asked so the seat reads it rather than inferring it from a
+    board selection. Use this for an optional effect whose subject is already settled; a genuine
+    pick among several cards is a :class:`Choose`.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat answering.
+    question : str
+        The question as the seat reads it, naming the cards it concerns.
+    resolver : str
+        The registered choice resolver naming what a yes does.
+    subjects : tuple of str
+        The card ids passed to the resolver on yes; it receives none on no.
+    source_id : str, optional
+        A card id handed to the resolver as its context. Default None.
+    """
+
+    seat: PlayerId
+    question: str
+    resolver: str
+    subjects: tuple[str, ...] = ()
+    source_id: str | None = None
+
+    def describe(self) -> str:
+        return f"{self.seat.name} is asked: {self.question}"
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return Confirm(
+            seat=self.seat,
+            candidates=self.subjects,
+            question=self.question,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
 
 
 @dataclass(frozen=True, slots=True)

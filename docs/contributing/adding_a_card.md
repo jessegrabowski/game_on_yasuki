@@ -100,9 +100,20 @@ Effects returned inline run before the events already queued behind them. When a
 *after* other cards have reacted to what just happened, defer it with `Then`:
 
 ```python
+question = f"Destroy {source.name} to straighten {target.name}?"
 return [
     RecruitCard(target.id, renew="Farm" in target.keywords),
-    Then((Choose(source.owner, (source.id,), 0, 1, "modest_farm_straighten", target.id),)),
+    Then(
+        (
+            Ask(
+                source.owner,
+                question,
+                "modest_farm_straighten",
+                subjects=(source.id,),
+                source_id=target.id,
+            ),
+        )
+    ),
 ]
 ```
 

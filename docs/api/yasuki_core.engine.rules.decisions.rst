@@ -13,6 +13,7 @@ yasuki_core.engine.rules.decisions
     ChooseInvestAmount
     ChooseLegacyCard
     ChoosePayment
+    Confirm
     DecisionRequest
     DecisionResponse
     DiscardToHandSize

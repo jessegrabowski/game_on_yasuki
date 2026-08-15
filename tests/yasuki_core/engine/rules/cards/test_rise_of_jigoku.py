@@ -4,7 +4,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
-    ChooseCards,
+    Confirm,
     ChoosePayment,
     DecisionResponse,
 )
@@ -176,7 +176,10 @@ def _drive_to_straighten_choice(session):
     assert isinstance(pending, ChoosePayment) and pending.amount == 2  # X = the target's cost
     session.submit(P1, DecisionResponse(("SH",)))
     pending = session.game.pending
-    assert isinstance(pending, ChooseCards) and pending.candidates == ("mf",)  # may destroy MF
+    # Asked as a question naming both cards, not as a card to click on the board.
+    assert isinstance(pending, Confirm)
+    assert pending.prompt() == "Destroy Modest Farm to straighten Target?"
+    assert pending.candidates == ("mf",)  # answering yes returns them; no returns none
 
 
 def test_modest_farm_is_activatable_with_a_province_holding():
@@ -341,7 +344,7 @@ def test_modest_farm_recruit_puts_its_questions_in_a_fixed_order():
         ("ChooseAbilityTarget", ("target",)),  # which Province Holding to recruit
         ("ChoosePayment", ("SH",)),  # pay its cost
         ("ChooseCards", ("mf", "other-farm")),  # Wheat Farm's own enter-play trait
-        ("ChooseCards", ("mf",)),  # only then: destroy Modest Farm to straighten it?
+        ("Confirm", ("mf",)),  # only then: destroy Modest Farm to straighten it?
     ]
     assert session.game.pending is None
     assert replay(session.log) == session.game  # the whole interleaving rebuilds from the tape
