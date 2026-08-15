@@ -348,6 +348,23 @@ class GainGold(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class GainHonor(Effect):
+    """Move ``seat``'s Family Honor by ``amount``. Negative loses honor; the two directions are one
+    effect because the rules treat them as one dial."""
+
+    seat: PlayerId
+    amount: int
+
+    def describe(self) -> str:
+        verb = "gains" if self.amount >= 0 else "loses"
+        return f"{self.seat.name} {verb} {abs(self.amount)} honor"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        ops.set_honor(game.table, self.seat, delta=self.amount)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class IgnoreHonorRequirements(Effect):
     """Grant ``seat`` the standing waiver of every Personality's Honor Requirement when
     recruiting."""

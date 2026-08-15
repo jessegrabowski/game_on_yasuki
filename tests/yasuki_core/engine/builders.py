@@ -105,6 +105,7 @@ def province_card(
     *,
     seat: PlayerId = PlayerId.P1,
     printed_id: str | None = None,
+    name: str | None = None,
     keywords: tuple[str, ...] = (),
     gold_cost: int | None = None,
     gold_production: int = 0,
@@ -119,6 +120,7 @@ def province_card(
         holding(
             card_id,
             printed_id=printed_id,
+            name=name,
             owner=seat,
             keywords=keywords,
             gold_cost=gold_cost,

@@ -17,6 +17,7 @@ yasuki_core.engine.rules.effects
     DrawCard
     Effect
     GainGold
+    GainHonor
     GrantModifier
     IgnoreHonorRequirements
     InterruptingEffect

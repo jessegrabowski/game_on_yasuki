@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     InterruptingEffect,
     GainGold,
+    GainHonor,
     GrantModifier,
     IgnoreHonorRequirements,
     MoveToDeck,
@@ -40,6 +41,8 @@ EFFECTS = [
     (Straighten("farm_1"), "straighten farm_1"),
     (BanishTopFate(PlayerId.P2), "banish the top of P2's fate deck"),
     (GainGold(PlayerId.P2, 3), "P2 gains 3 gold"),
+    (GainHonor(PlayerId.P1, 2), "P1 gains 2 honor"),
+    (GainHonor(PlayerId.P2, -4), "P2 loses 4 honor"),
     (IgnoreHonorRequirements(PlayerId.P1), "P1 ignores honor requirements"),
     (
         GrantModifier("millet", "farm_1", Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN),
