@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     rise_of_jigoku,
     rise_of_otosan_uchi,
     road_to_ruin,
+    shattered_empire,
     the_blackest_storm,
     twenty_festivals,
 )
