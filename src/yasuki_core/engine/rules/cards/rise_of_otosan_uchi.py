@@ -1,3 +1,4 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
@@ -32,14 +33,13 @@ from yasuki_core.game_pieces.counters import WEALTH
 
 @choice_resolver("red_panda_spirit_keep")
 def _red_panda_spirit_keep(
-    game: GameState, source_id: str, chosen: tuple[str, ...]
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Reshuffle the Event into its owner's Dynasty deck, or discard it. Declining is not doing
     nothing — the Event leaves its Province either way, and only where it goes is the seat's."""
-    owner = game.table.cards_by_id[source_id].owner
     if not chosen:
-        return [Discard(source_id, owner)]
-    deck = DeckKey(owner, Side.DYNASTY)
+        return [Discard(source_id, seat)]
+    deck = DeckKey(seat, Side.DYNASTY)
     return [MoveToDeck(source_id, deck, from_top=0), ShuffleDeck(deck)]
 
 

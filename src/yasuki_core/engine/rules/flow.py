@@ -580,7 +580,7 @@ def cycle(game: GameState) -> None:
     prompt="Put face-up Province cards on the bottom of your deck — your last pick ends up lowest",
 )
 def _cycle_put_on_bottom(
-    game: GameState, source_id: str | None, chosen: tuple[str, ...]
+    game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Put each chosen card on the bottom in pick order, then refill the Provinces they left and
     reveal them all.
@@ -741,7 +741,9 @@ def _apply_card_choice(
     if not isinstance(item, ResumeCascade):
         raise RuntimeError("a card choice resumed without its stashed cascade")
     resolver = triggers.CHOICE_RESOLVERS[request.resolver]
-    triggers.resume_cascade(game, item, resolver(game, request.source_id, response.choices))
+    triggers.resume_cascade(
+        game, item, resolver(game, request.source_id, response.choices, request.seat)
+    )
     run_stack(game)  # finish any work deferred behind the choice, unless it paused again
 
 

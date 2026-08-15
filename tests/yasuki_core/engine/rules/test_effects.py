@@ -180,7 +180,7 @@ class _AskToDiscard(InterruptingEffect):
 
 
 @choice_resolver("test_ask_to_discard")
-def _ask_to_discard_resolved(game, source_id, chosen):
+def _ask_to_discard_resolved(game, source_id, chosen, seat):
     return []
 
 
@@ -214,7 +214,7 @@ _SOURCES_SEEN: list[str | None] = []
 
 
 @choice_resolver("test_sourceless")
-def _record_the_source(game, source_id, chosen):
+def _record_the_source(game, source_id, chosen, seat):
     _SOURCES_SEEN.append(source_id)
     return []
 
@@ -231,6 +231,28 @@ def test_a_choice_raised_by_no_card_reaches_its_resolver_with_none():
     submit(game, DecisionResponse((card.id,)))
 
     assert _SOURCES_SEEN == [None]
+
+
+_SEATS_SEEN: list[PlayerId] = []
+
+
+@choice_resolver("test_answering_seat")
+def _record_the_seat(game, source_id, chosen, seat):
+    _SEATS_SEEN.append(seat)
+    return []
+
+
+def test_a_resolver_is_told_which_seat_answered():
+    """A choice can be put to a seat other than the one whose action raised it, and a declining
+    answer names no card — so the seat cannot be recovered from the source or the chosen ids."""
+    _SEATS_SEEN.clear()
+    game = two_seat_game()
+    card = put_in_play(game, holding("P2-h", owner=PlayerId.P2))
+
+    resolve_effects(game, [Choose(PlayerId.P2, (card.id,), 0, 1, "test_answering_seat")])
+    submit(game, DecisionResponse(()))  # declined: nothing chosen to infer a seat from
+
+    assert _SEATS_SEEN == [PlayerId.P2]
 
 
 def test_an_interrupting_effect_refuses_to_be_committed_directly():

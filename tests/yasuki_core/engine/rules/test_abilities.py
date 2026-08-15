@@ -34,7 +34,7 @@ from tests.yasuki_core.engine.builders import (
 
 
 @choice_resolver("test_cost_pauses")
-def _test_cost_grant(game, source_id, chosen):
+def _test_cost_grant(game, source_id, chosen, seat):
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
 
 

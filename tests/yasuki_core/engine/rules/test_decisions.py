@@ -147,7 +147,7 @@ def test_choose_cards_wording_distinguishes_optional_from_required():
 
 
 @choice_resolver("test_prompted", prompt="Put a card on the bottom of your deck")
-def _prompted(game, source_id, chosen):
+def _prompted(game, source_id, chosen, seat):
     return []
 
 

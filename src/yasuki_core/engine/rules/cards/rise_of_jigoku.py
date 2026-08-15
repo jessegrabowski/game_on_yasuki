@@ -1,3 +1,4 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     bow_cost,
@@ -66,7 +67,7 @@ def _mishime_sensei_enters_play(ctx: TriggerContext) -> list[Effect]:
     "modest_farm_straighten", prompt="Destroy Modest Farm to straighten the card it recruited"
 )
 def _modest_farm_straighten(
-    game: GameState, source_id: str, chosen: tuple[str, ...]
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     # source_id is the recruited target; chosen holds Modest Farm's id when its controller sacrifices
     # it to straighten the target.

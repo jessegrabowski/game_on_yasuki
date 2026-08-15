@@ -48,7 +48,7 @@ def _sandwich_around_a_choice(ctx):
 
 
 @choice_resolver("test_sandwich")
-def _sandwich_grant(game, source_id, chosen):
+def _sandwich_grant(game, source_id, chosen, seat):
     return [AdjustCounter(source_id, WEALTH, 1)]
 
 
@@ -546,14 +546,14 @@ def test_a_second_resolver_for_one_choice_kind_is_refused():
     # A pending decision names its resolver by string; a silent overwrite would change what an
     # already-paused choice resolves to.
     @choice_resolver("guard_probe")
-    def _first(game, source_id, chosen):
+    def _first(game, source_id, chosen, seat):
         return []
 
     try:
         with pytest.raises(ValueError, match="guard_probe already has a choice resolver"):
 
             @choice_resolver("guard_probe")
-            def _second(game, source_id, chosen):
+            def _second(game, source_id, chosen, seat):
                 return []
     finally:
         CHOICE_RESOLVERS.pop("guard_probe", None)

@@ -1,3 +1,4 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.abilities import Ability, bow_cost, owned_holdings, register_ability
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose, DrawCard, Effect, GrantModifier
@@ -92,5 +93,7 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
 
 
 @choice_resolver("wheat_farm", prompt="Give a Wealth token to other Farms you control")
-def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
+def _wheat_farm_grant(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
