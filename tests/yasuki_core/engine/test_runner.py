@@ -8,6 +8,7 @@ from yasuki_core.game_pieces.prints import (
     FatePrint,
     HoldingPrint,
     PersonalityPrint,
+    RingPrint,
     StrongholdPrint,
 )
 from yasuki_core.engine.rules.state import Phase
@@ -689,3 +690,81 @@ def test_a_yes_no_question_never_becomes_a_search_dialog():
     )
 
     assert runner_.search_view() is None
+
+
+def _wisdom_runner() -> GameRunner:
+    """The human holding Wisdom Gained face-up in a Province, with a Ring findable by each seat and
+    a Dynasty deck to refill from."""
+    state = _dealt_table(0)
+    province_card(state, "wisdom", printed_id="wisdom_gained", name="Wisdom Gained")
+    for seat in PlayerId:
+        state.decks[DeckKey(seat, Side.FATE)].cards.append(
+            _register(
+                state,
+                L5RCard.of(
+                    RingPrint, id=f"{seat.name}-ring", name="Ring", side=Side.FATE, owner=seat
+                ),
+            )
+        )
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state,
+            L5RCard.of(
+                HoldingPrint, id="spare", name="Spare", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
+        )
+    ]
+    return GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+
+
+def test_the_opponent_is_run_for_a_decision_it_owes_inside_the_humans_turn():
+    """A card can put a question to the opponent while the human keeps priority. Nothing else will
+    answer it: the human has no legal action while the engine is paused, and priority never moves,
+    so a runner that only ran the opponent when it held priority left the game stuck for good."""
+    runner_ = _wisdom_runner()
+    runner_.act(ActivateAbility("wisdom"))
+    runner_.submit(["wisdom"])  # the human searches
+    runner_.submit(["P1-ring"])  # and takes its Ring
+
+    assert runner_.pending is None  # the question is not the human's to answer
+    assert not runner_.opponent_holds_priority  # nor has priority moved
+    assert runner_.legal_actions() == []  # so the human is stuck until the opponent answers
+    assert runner_.opponent_owes_decision
+
+    runner_.run_opponent()
+
+    assert runner_.session.game.pending is None
+    assert runner_.legal_actions() == [PASS]
+
+
+def test_running_the_opponent_never_answers_a_decision_owed_by_the_human():
+    """The opponent runs while it holds priority, and a decision owed by the human can be live at
+    that moment. Answering it would play the human's card for them — silently, with the agent's
+    choice — so the run stops instead and leaves the question standing."""
+    runner_ = _runner()
+    runner_.act(PASS)  # hand the Action-phase window to the opponent
+    assert runner_.opponent_holds_priority
+    asked = Confirm(
+        seat=PlayerId.P1, candidates=("P1-fd",), question="Answer this?", resolver="probe"
+    )
+    runner_.session.game.pending = asked
+
+    runner_.run_opponent()
+
+    assert runner_.session.game.pending is asked
+    assert runner_.opponent_holds_priority  # and the opponent's window is still open
+
+
+def test_the_province_a_spent_event_left_refills_once_the_opponent_has_answered():
+    """The Province the Event spent itself out of stands short until the board settles, which it
+    cannot do while a decision is owed."""
+    runner_ = _wisdom_runner()
+    province = runner_.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)]
+    runner_.act(ActivateAbility("wisdom"))
+    runner_.submit(["wisdom"])
+    runner_.submit(["P1-ring"])
+    assert province.cards == []
+
+    runner_.run_opponent()
+
+    assert [card.id for card in province.cards] == ["spare"]

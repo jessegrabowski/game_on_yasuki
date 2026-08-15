@@ -180,7 +180,10 @@ def main() -> None:
             boostable = [pid for pid, _ in pending.boostable] if paying else ()
             field.begin_selection(pending.candidates, render_bowed=paying, boostable=boostable)
         refresh()
-        if pending is None and runner.opponent_holds_priority:
+        # An owed decision counts as well as held priority: a card can put a question to the
+        # opponent while the human keeps priority, and the engine is paused until it is answered.
+        opponent_to_move = runner.opponent_holds_priority or runner.opponent_owes_decision
+        if pending is None and opponent_to_move:
             # Pause only when the turn itself changes hands, so the board's "Opponent's turn" is
             # readable. The opponent also takes a window inside each of the human's Action phases,
             # and stalling on those would put the delay in the middle of the human's own turn.
