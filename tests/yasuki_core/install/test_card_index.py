@@ -123,7 +123,6 @@ def test_the_index_is_one_id_per_line(tmp_path):
     assert index_path.read_text() == "ancestral_sword\nmodest_farm\n"
 
 
-@pytest.mark.slow
 def test_the_committed_index_matches_the_card_yaml():
     # The index is a committed derivative of the YAML, so it can go stale silently: every check built
     # on it would keep passing while naming cards that no longer exist. Reparsing costs ~8 s, which is
