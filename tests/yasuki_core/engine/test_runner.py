@@ -13,7 +13,7 @@ from yasuki_core.game_pieces.prints import (
 from yasuki_core.engine.rules.state import Phase
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
-from yasuki_core.engine.rules.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.decisions import Confirm, DiscardToHandSize
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
@@ -668,4 +668,24 @@ def test_an_ability_targeting_a_province_card_stays_a_board_selection():
     runner_.act(ActivateAbility("shrine"))
 
     assert runner_.pending.candidates == ("target",)  # a card in a Province, not on the field
+    assert runner_.search_view() is None
+
+
+def test_a_yes_no_question_never_becomes_a_search_dialog():
+    """A Confirm is answered by its buttons wherever its subjects sit. Routing on candidate location
+    alone would send a question about a card in a deck to the search dialog instead of asking it."""
+    state = _dealt_table(0)
+    buried = _register(
+        state,
+        L5RCard.of(HoldingPrint, id="buried", name="Buried", side=Side.DYNASTY, owner=PlayerId.P1),
+    )
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [buried]
+    runner_ = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    runner_.session.game.pending = Confirm(
+        seat=PlayerId.P1,
+        candidates=("buried",),
+        question="Shuffle Buried into your deck?",
+        resolver="probe",
+    )
+
     assert runner_.search_view() is None

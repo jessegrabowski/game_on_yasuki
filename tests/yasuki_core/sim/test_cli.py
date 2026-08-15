@@ -102,7 +102,6 @@ def test_an_unknown_policy_is_refused_before_anything_runs(monkeypatch, tmp_path
 
 
 @requires_db
-@pytest.mark.slow
 def test_a_written_run_reads_back_with_its_provenance(tmp_path):
     pq = pytest.importorskip("pyarrow.parquet")
     out = tmp_path / "run.parquet"

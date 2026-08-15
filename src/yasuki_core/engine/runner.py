@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import (
     ChooseLegacyCard,
+    Confirm,
     DecisionRequest,
     DecisionResponse,
 )
@@ -165,6 +166,8 @@ class GameRunner:
         pending = self.pending
         if pending is None or not pending.candidates:
             return None
+        if isinstance(pending, Confirm):
+            return None  # a question is answered yes or no, wherever its subjects happen to sit
         table = self.session.game.table
         if any(card_id not in table.cards_by_id for card_id in pending.candidates):
             return None  # not cards at all — an Invest amount is answered by buttons

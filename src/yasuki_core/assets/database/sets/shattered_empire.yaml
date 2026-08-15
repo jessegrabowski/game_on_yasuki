@@ -4056,8 +4056,8 @@ cards:
   keywords:
   - Unique
   - Imperial
-  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
-    one of them, gain 2 Honor and search your Fate deck for an Item, show it, and put it into your hand.
+  text: '<b>Open:</b> Gain 2 Honor and search your Fate deck for an Item, show it, and put it in your
+    hand.'
   is_unique: true
   legality:
   - Age of Conquest (Emperor)
@@ -9826,8 +9826,8 @@ cards:
   - Dynasty
   keywords:
   - Unique
-  text: <b>Open:</b> Starting with you, each player may search his discard pile and Fate deck for a Ring,
-    show it, and put it in his hand.
+  text: <b>Open:</b> Starting with you, each player may search their discard pile and Fate deck for a
+    Ring, show it, and put it in their hand.
   is_unique: true
   legality:
   - A Brother's Destiny (Ivory Edition)

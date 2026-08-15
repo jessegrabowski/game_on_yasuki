@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
+    Confirm,
     ChooseInvestAmount,
     ChooseLegacyCard,
     ChoosePayment,
@@ -369,6 +370,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_ability_target(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
+        # One case per union member, so the exhaustiveness guard can read them off the AST.
+        case Confirm():
+            _apply_card_choice(game, request, response)
         case ChooseInvestAmount():
             _apply_invest_amount(game, request, response)
         case _:
@@ -382,11 +386,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
 
 
 def cancel(game: GameState) -> None:
-    """Back out of the pending decision, undoing the action that raised it.
+    """Replay a recorded ``Cancel``, dropping the work the decision was queued in front of.
 
-    A payment is cancellable because nothing is committed until it is answered — no gold spent, no
-    producer bowed, nothing moved. Cancelling one drops the work it was queued in front of;
-    cancelling an Invest amount drops the choice before the recruit is even announced.
+    Live play does not reach this: :meth:`EngineSession.abort` unwinds by truncating the tape, so no
+    new ``Cancel`` is ever written. It stays to replay tapes that already hold one.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
     cannot be canceled.
@@ -577,7 +580,7 @@ def cycle(game: GameState) -> None:
     prompt="Put face-up Province cards on the bottom of your deck — your last pick ends up lowest",
 )
 def _cycle_put_on_bottom(
-    game: GameState, source_id: str | None, chosen: tuple[str, ...]
+    game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Put each chosen card on the bottom in pick order, then refill the Provinces they left and
     reveal them all.
@@ -730,13 +733,17 @@ def _apply_ability_target(
     triggers.resolve_effects(game, ability.effects(game, source, target))
 
 
-def _apply_card_choice(game: GameState, request: ChooseCards, response: DecisionResponse) -> None:
+def _apply_card_choice(
+    game: GameState, request: ChooseCards | Confirm, response: DecisionResponse
+) -> None:
     game.pending = None
     item = game.stack.pop()  # the ResumeCascade this choice paused, always stacked atop it
     if not isinstance(item, ResumeCascade):
         raise RuntimeError("a card choice resumed without its stashed cascade")
     resolver = triggers.CHOICE_RESOLVERS[request.resolver]
-    triggers.resume_cascade(game, item, resolver(game, request.source_id, response.choices))
+    triggers.resume_cascade(
+        game, item, resolver(game, request.source_id, response.choices, request.seat)
+    )
     run_stack(game)  # finish any work deferred behind the choice, unless it paused again
 
 

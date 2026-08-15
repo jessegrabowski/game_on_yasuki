@@ -5,6 +5,7 @@ from yasuki_core.engine.players import PlayerId
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.decisions import (
+    Confirm,
     DecisionRequest,
     ChooseCards,
     ChoosePayment,
@@ -146,7 +147,7 @@ def test_choose_cards_wording_distinguishes_optional_from_required():
 
 
 @choice_resolver("test_prompted", prompt="Put a card on the bottom of your deck")
-def _prompted(game, source_id, chosen):
+def _prompted(game, source_id, chosen, seat):
     return []
 
 
@@ -192,3 +193,31 @@ def test_discard_prompt_names_the_count():
     request = DiscardToHandSize(PlayerId.P1, ("a", "b"), count=1)
     assert request.prompt() == "discard 1 card(s)"
     assert request.confirm_label == "Discard"
+
+
+def test_a_confirm_takes_yes_as_its_subjects_and_no_as_none():
+    """The answer is the subjects or nothing, which is what an optional card choice already hands a
+    resolver — so asking a question instead of offering a selection changes no resolver."""
+    ask = Confirm(
+        seat=PlayerId.P1,
+        candidates=("farm",),
+        question="Destroy Modest Farm to straighten Kobune?",
+        resolver="modest_farm_straighten",
+    )
+
+    assert ask.accepts(DecisionResponse(("farm",)))  # yes
+    assert ask.accepts(DecisionResponse(()))  # no
+    assert not ask.accepts(DecisionResponse(("someone-else",)))
+    assert not ask.accepts(DecisionResponse(("farm", "farm")))
+
+
+def test_a_confirm_asks_its_question_verbatim():
+    """The wording names the cards, so it is built per use rather than registered per resolver."""
+    ask = Confirm(
+        seat=PlayerId.P1,
+        candidates=("event",),
+        question="Shuffle Blessings of the Red Panda Spirit into your deck?",
+        resolver="red_panda_reshuffle",
+    )
+
+    assert ask.prompt() == "Shuffle Blessings of the Red Panda Spirit into your deck?"

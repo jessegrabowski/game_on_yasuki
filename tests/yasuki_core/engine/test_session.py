@@ -1,6 +1,7 @@
 import pytest
 
 from tests.yasuki_core.engine.builders import end_phase
+from tests.yasuki_core.engine.rules.cards.test_rise_of_jigoku import _modest_farm_game
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.engine.zones import ProvinceZone
@@ -8,8 +9,8 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import DynastyDiscard, Pass, Recruit
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.rules.actions import ActivateAbility, DynastyDiscard, Pass, Recruit
+from yasuki_core.engine.rules.log import Answer, replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
@@ -623,3 +624,30 @@ def test_undo_last_does_not_reverse_a_recruit():
 
     assert session.undo_last(PlayerId.P1) is False  # undo only reverses a Dynasty Discard
     assert session.game.table.cards_by_id["P1-buy"] in session.game.table.battlefield.cards
+
+
+def test_an_intervening_seat_closes_the_abort_window():
+    """Once another seat has resolved a step of its own, the unwind would erase that too, so the
+    window closes rather than reaching past it."""
+    session = _modest_farm_game()
+    session.act(PlayerId.P1, ActivateAbility("mf"))
+    session.submit(PlayerId.P1, DecisionResponse(("target",)))
+
+    # Poked onto the tape directly: no card reacts to a bow yet, so a real intervening step cannot
+    # be produced. What the guard reads is the tape, and this is the shape it reads.
+    session.log.entries.append(Answer(PlayerId.P2, DecisionResponse(())))
+
+    assert session.abort(PlayerId.P1) is False
+    assert session.game.table.cards_by_id["mf"].bowed  # nothing was unwound
+
+
+def test_a_finished_action_is_not_in_flight_and_cannot_be_aborted():
+    """The window closes when the action resolves, not when the seat next acts."""
+    session = _modest_farm_game()
+    session.act(PlayerId.P1, ActivateAbility("mf"))
+    session.submit(PlayerId.P1, DecisionResponse(("target",)))
+    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    session.submit(PlayerId.P1, DecisionResponse(()))  # decline the destroy question
+
+    assert session.game.pending is None
+    assert session.abort(PlayerId.P1) is False  # the action is done, not in flight

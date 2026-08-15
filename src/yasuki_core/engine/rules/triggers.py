@@ -60,10 +60,10 @@ def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
     return register
 
 
-# A choice resolver turns the ids a Choose collected into the effects the choice produces. Keyed by a
-# string so a paused ChooseCards names its resolver, keeping the pending decision replay-stable (a
-# stored closure would not rebuild to an equal object).
-Resolver = Callable[[GameState, str | None, tuple[str, ...]], list[Effect]]
+# A choice resolver turns the ids a Choose collected into the effects the choice produces, given the
+# seat that answered. Keyed by a string so a paused ChooseCards names its resolver, keeping the
+# pending decision replay-stable (a stored closure would not rebuild to an equal object).
+Resolver = Callable[[GameState, str | None, tuple[str, ...], PlayerId], list[Effect]]
 CHOICE_RESOLVERS: dict[str, Resolver] = {}
 
 

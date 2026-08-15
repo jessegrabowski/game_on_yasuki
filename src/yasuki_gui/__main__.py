@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
     ChooseInvestAmount,
     ChoosePayment,
+    Confirm,
     DecisionResponse,
 )
 from yasuki_core.engine.session import EngineSession
@@ -102,6 +103,16 @@ def main() -> None:
         elif pending is not None and runner.search_view() is not None:
             # Answered by the search dialog (opened in after_human_action), not the board.
             prompt_box.show(pending.prompt(), [])
+        elif isinstance(pending, Confirm):
+            # A question, not a selection: the subjects are already settled, so the seat answers it
+            # rather than picking them off the board.
+            prompt_box.show(
+                pending.prompt(),
+                [
+                    ("Yes", lambda asked=pending: submit_answer(asked.candidates), True),
+                    ("No", lambda: submit_answer(()), True),
+                ],
+            )
         elif isinstance(pending, ChooseInvestAmount):
             # An amount, not a board card — answered by one button per affordable amount.
             buttons = [
@@ -161,9 +172,10 @@ def main() -> None:
             open_search(search)
             refresh()
             return
-        if pending is not None and not isinstance(pending, ChooseInvestAmount):
-            # A payment's candidate producers become selectable and preview as bowed when picked; an
-            # Invest amount is answered by prompt buttons, so it takes no board selection.
+        if pending is not None and not isinstance(pending, ChooseInvestAmount | Confirm):
+            # A payment's candidate producers become selectable and preview as bowed when picked. An
+            # Invest amount and a yes/no question are answered by prompt buttons, so neither puts
+            # the board into selection mode.
             paying = isinstance(pending, ChoosePayment)
             boostable = [pid for pid, _ in pending.boostable] if paying else ()
             field.begin_selection(pending.candidates, render_bowed=paying, boostable=boostable)
@@ -195,6 +207,10 @@ def main() -> None:
 
     def submit_invest(amount: str) -> None:
         runner.submit([amount])
+        after_human_action()
+
+    def submit_answer(choices: tuple[str, ...]) -> None:
+        runner.submit(list(choices))
         after_human_action()
 
     def cancel_decision() -> None:

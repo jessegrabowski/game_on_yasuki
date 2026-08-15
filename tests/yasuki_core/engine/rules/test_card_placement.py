@@ -1,6 +1,5 @@
 import datetime
 
-import pytest
 import yaml
 
 from tests.yasuki_core.engine.rules.card_modules import (
@@ -10,7 +9,6 @@ from tests.yasuki_core.engine.rules.card_modules import (
 )
 
 
-@pytest.mark.slow
 def test_every_card_is_implemented_in_its_first_printing_module():
     # A reprint is implemented once. Without this, a card printed in five sets could be implemented
     # in any of them — or, worse, in two — and the module layout would stop mirroring the card data.

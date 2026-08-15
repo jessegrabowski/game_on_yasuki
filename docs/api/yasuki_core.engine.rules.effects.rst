@@ -8,22 +8,27 @@ yasuki_core.engine.rules.effects
 .. autosummary::
 
     AdjustCounter
+    Ask
     BanishTopFate
     Bow
     Choose
     Destroy
+    DestroyProvince
     Discard
     DrawCard
     Effect
     GainGold
+    GainHonor
     GrantModifier
     IgnoreHonorRequirements
     InterruptingEffect
     MoveToDeck
+    MoveToHand
     PlaceInProvince
     RecruitCard
     RefillProvince
     RevealProvinces
+    Show
     ShuffleDeck
     Straighten
     Then

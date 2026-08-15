@@ -49,9 +49,6 @@ line-length = 100
 # (tests/yasuki_core/engine/builders.py); every tests/ directory already carries an __init__.py.
 pythonpath = ["src", "."]
 addopts = "-q"
-markers = [
-    "slow: reparses the whole card database (~8 s); deselected by `pixi run test`, always run in CI",
-]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
@@ -123,7 +120,7 @@ docs = { features = ["docs"], no-default-feature = true }
 play = "python play.py"
 # The pytest-playwright plugin (greenlet) aborts in-process alongside the tkinter/PIL GUI tests, so
 # disable it for the unit suite; the e2e task below loads it on its own.
-test = "pytest tests/ --ignore=tests/e2e -p no:playwright -m 'not slow'"
+test = "pytest tests/ --ignore=tests/e2e -p no:playwright"
 test-js = "node --test tests/yasuki_web/deck_builder/*.test.js tests/yasuki_web/site/*.test.js"
 test-e2e = "pytest tests/e2e"
 e2e-setup = "playwright install chromium"

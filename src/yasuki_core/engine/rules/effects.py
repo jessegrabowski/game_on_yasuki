@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest
+from yasuki_core.engine.rules.decisions import ChooseCards, Confirm, DecisionRequest
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
@@ -118,6 +118,41 @@ class DrawCard(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class Show(Effect):
+    """Reveal ``card_id`` to the other seats. Narrower than turning it face up: its owner is telling
+    the table what it is, and they go on knowing once it is hidden again."""
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"show {self.card_id}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            card.show()
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class MoveToHand(Effect):
+    """Put ``card_id`` into ``seat``'s hand from wherever it is. A card that no longer exists is a
+    no-op."""
+
+    card_id: str
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.card_id} to {self.seat.name}'s hand"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            ops.move_card(game.table, card, ZoneKey(self.seat, ZoneRole.HAND))
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class Destroy(Effect):
     """Destroy a card, sending it to its owner's discard by side."""
 
@@ -159,6 +194,33 @@ class Discard(Effect):
             return []
         ops.move_card(game.table, card, _discard_pile(card))
         return [CardDiscarded(self.card_id, card.side, self.by_seat)]
+
+
+@dataclass(frozen=True, slots=True)
+class DestroyProvince(Effect):
+    """Destroy ``seat``'s Province ``zone``: its contents go to the discard face-up and the Province
+    itself leaves the board. A Province already gone is a no-op.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat destroying it, whose discard takes any card with no pile of its own.
+    zone : ZoneKey
+        The Province to destroy.
+    """
+
+    seat: PlayerId
+    zone: ZoneKey
+
+    def describe(self) -> str:
+        return f"destroy {self.seat.name}'s province {self.zone.idx}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        if self.zone not in game.table.zones:
+            return []
+        moved = ops.destroy_province(game.table, self.seat, self.zone)
+        cards = game.table.cards_by_id
+        return [CardDiscarded(card_id, cards[card_id].side, self.seat) for card_id in moved]
 
 
 @dataclass(frozen=True, slots=True)
@@ -348,6 +410,23 @@ class GainGold(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class GainHonor(Effect):
+    """Move ``seat``'s Family Honor by ``amount``. Negative loses honor; the two directions are one
+    effect because the rules treat them as one dial."""
+
+    seat: PlayerId
+    amount: int
+
+    def describe(self) -> str:
+        verb = "gains" if self.amount >= 0 else "loses"
+        return f"{self.seat.name} {verb} {abs(self.amount)} honor"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        ops.set_honor(game.table, self.seat, delta=self.amount)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class IgnoreHonorRequirements(Effect):
     """Grant ``seat`` the standing waiver of every Personality's Honor Requirement when
     recruiting."""
@@ -448,6 +527,47 @@ class Then(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.stack.append(ApplyEffects(self.effects))
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class Ask(InterruptingEffect):
+    """Put a yes/no question to a seat, and hand ``subjects`` to the resolver if it answers yes.
+
+    The question names what is being asked so the seat reads it rather than inferring it from a
+    board selection. Use this for an optional effect whose subject is already settled; a genuine
+    pick among several cards is a :class:`Choose`.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat answering.
+    question : str
+        The question as the seat reads it, naming the cards it concerns.
+    resolver : str
+        The registered choice resolver naming what a yes does.
+    subjects : tuple of str
+        The card ids passed to the resolver on yes; it receives none on no.
+    source_id : str, optional
+        A card id handed to the resolver as its context. Default None.
+    """
+
+    seat: PlayerId
+    question: str
+    resolver: str
+    subjects: tuple[str, ...] = ()
+    source_id: str | None = None
+
+    def describe(self) -> str:
+        return f"{self.seat.name} is asked: {self.question}"
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return Confirm(
+            seat=self.seat,
+            candidates=self.subjects,
+            question=self.question,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
 
 
 @dataclass(frozen=True, slots=True)

@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 
+
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
