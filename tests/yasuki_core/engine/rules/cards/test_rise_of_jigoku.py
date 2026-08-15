@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.actions import ActivateAbility, Pass, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     Confirm,
@@ -348,3 +348,40 @@ def test_modest_farm_recruit_puts_its_questions_in_a_fixed_order():
     ]
     assert session.game.pending is None
     assert replay(session.log) == session.game  # the whole interleaving rebuilds from the tape
+
+
+def test_backing_out_of_modest_farm_unwinds_the_bow_it_already_paid():
+    """The cost is paid before the target is chosen, so backing out at any later step has to undo
+    it. Leaving the Farm bowed charged the seat for an ability that never resolved."""
+    session = _modest_farm_game()
+    session.act(P1, ActivateAbility("mf"))
+    session.submit(P1, DecisionResponse(("target",)))  # past the target, into the payment
+    assert session.game.table.cards_by_id["mf"].bowed
+
+    session.cancel(P1)
+
+    assert not session.game.table.cards_by_id["mf"].bowed
+    assert session.game.pending is None
+    assert ActivateAbility("mf") in session.legal_actions(P1)  # and it can be announced again
+
+
+def test_backing_out_leaves_no_half_resolved_cascade_behind():
+    """The deferred question outlived a cancelled payment and fired on the next action, offering to
+    destroy the Farm to straighten a card that was never recruited."""
+    session = _modest_farm_game()
+    session.act(P1, ActivateAbility("mf"))
+    session.submit(P1, DecisionResponse(("target",)))
+    session.cancel(P1)
+
+    assert session.game.stack == []
+    session.act(P1, Pass())
+    assert session.game.pending is None
+
+
+def test_backing_out_of_the_first_step_unwinds_it_too():
+    session = _modest_farm_game()
+    session.act(P1, ActivateAbility("mf"))
+    session.cancel(P1)  # at the target choice, before anything was picked
+
+    assert not session.game.table.cards_by_id["mf"].bowed
+    assert "target" not in {c.id for c in session.game.table.battlefield.cards}

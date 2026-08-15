@@ -246,6 +246,11 @@ class ChooseAbilityTarget(DecisionRequest):
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)
 
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the whole action that raised it, cost included."""
+        return True
+
 
 # Resolver key -> the wording its choice asks with. Populated by the choice_resolver decorator and
 # read here rather than in triggers, because a prompt is only ever a property of the request the
@@ -281,6 +286,11 @@ class Confirm(DecisionRequest):
 
     def accepts(self, response: DecisionResponse) -> bool:
         return response.choices in ((), self.candidates)
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the whole action that raised it, cost included."""
+        return True
 
 
 @dataclass(frozen=True, slots=True)
@@ -325,6 +335,11 @@ class ChooseCards(DecisionRequest):
             and self.minimum <= len(chosen) <= self.maximum
             and distinct <= set(self.candidates)
         )
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the whole action that raised it, cost included."""
+        return True
 
 
 @dataclass(frozen=True, slots=True)

@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse
@@ -110,3 +112,21 @@ def test_using_the_blessing_replays_to_the_same_state():
     session.act(P1, ActivateAbility("panda"))
     session.submit(P1, DecisionResponse(("panda",)))
     assert replay(session.log) == session.game
+
+
+def test_it_cannot_be_backed_out_of_once_the_opponent_has_been_given_something():
+    """Every other modeled card emits at its own owner, so this is the only one whose abort can
+    reach across the table — and it must not. P2 has seen the card it drew, and taking the card back
+    does not take back the seeing."""
+    session = _panda_game()
+    session.act(P1, ActivateAbility("panda"))
+    assert (_honor(session, P2), len(_hand(session, P2))) == (1, 1)  # the gift landed
+    drawn = _hand(session, P2)[0]
+
+    assert session.abort(P1) is False
+    with pytest.raises(ValueError, match="nothing left to unwind"):
+        session.cancel(P1)
+
+    assert _honor(session, P2) == 1  # still theirs
+    assert _hand(session, P2) == [drawn]
+    assert isinstance(session.game.pending, Confirm)  # and the question is still owed

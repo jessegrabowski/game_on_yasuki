@@ -386,11 +386,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
 
 
 def cancel(game: GameState) -> None:
-    """Back out of the pending decision, undoing the action that raised it.
+    """Replay a recorded ``Cancel``, dropping the work the decision was queued in front of.
 
-    A payment is cancellable because nothing is committed until it is answered — no gold spent, no
-    producer bowed, nothing moved. Cancelling one drops the work it was queued in front of;
-    cancelling an Invest amount drops the choice before the recruit is even announced.
+    Live play does not reach this: :meth:`EngineSession.abort` unwinds by truncating the tape, so no
+    new ``Cancel`` is ever written. It stays to replay tapes that already hold one.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
     cannot be canceled.

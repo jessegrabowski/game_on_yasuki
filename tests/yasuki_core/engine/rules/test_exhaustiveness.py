@@ -48,8 +48,8 @@ def _dispatched_names(dispatcher) -> set[str]:
 # The dispatchers that are exhaustive *by contract* — every member of their union must have a case
 # — paired with the union they dispatch. Two match statements are deliberately absent:
 #
-#   flow.cancel     partial by design. Only ChoosePayment and ChooseInvestAmount are cancellable;
-#                   every other decision must raise. Adding it here would assert the opposite.
+#   flow.cancel     partial by design, and replay-only — it handles the two decisions that legacy
+#                   tapes recorded a Cancel for. Live backing-out truncates the tape instead.
 #   log._decode_action  dispatches on a string kind rather than a type, so there is no case pattern
 #                   to read. The round-trip test in test_log.py covers it end to end.
 DISPATCH_SITES = [
