@@ -381,8 +381,7 @@ cards:
   - Dynasty
   keywords:
   - Unique
-  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
-    one of them, you may destroy this Province to draw three cards.
+  text: '<b>Open:</b> Destroy this Province to draw 3 cards.'
   is_unique: true
   legality:
   - Age of Conquest (Emperor)
