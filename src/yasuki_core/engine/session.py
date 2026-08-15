@@ -143,14 +143,18 @@ class EngineSession:
 
         Refuse once the action has moved anything another seat holds. Taking back a card an opponent
         has already drawn does not take back their having seen it, so an action that reached across
-        the table is committed the moment it did. Refuse likewise for a decision the rules force,
-        for an action already complete, and once another seat has resolved a step of its own.
+        the table is committed the moment it did. Refuse likewise for a decision the rules force, for
+        an action already complete, once another seat has resolved a step of its own, and while
+        another seat is the one being asked — an action that has handed the question on is past the
+        point where its announcer may take it back.
 
         Return whether anything was unwound.
         """
         pending = self.game.pending
         if pending is None or not pending.cancellable:
             return False  # nothing in flight, or a decision the seat is not allowed to back out of
+        if pending.seat is not seat:
+            return False  # another seat is mid-decision; the question is not this seat's to erase
         entries = self.log.entries
         cut = len(entries)
         while cut and isinstance(entries[cut - 1], Answer) and entries[cut - 1].seat is seat:

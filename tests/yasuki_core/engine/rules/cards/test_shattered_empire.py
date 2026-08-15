@@ -221,6 +221,15 @@ def test_taking_a_ring_shows_it_and_shuffles_the_deck_it_was_read_from():
     assert after != [c for c in before if c != "ring1"]  # re-ordered, not merely shortened
 
 
+def test_the_opponents_offer_cannot_be_unwound_by_the_controller():
+    """Once the offer has passed to the opponent the window is theirs; P1 has nothing in flight."""
+    session = _wisdom_game()
+    session.act(P1, ActivateAbility("wisdom"))
+    session.submit(P1, DecisionResponse(()))
+
+    assert session.abort(P1) is False
+
+
 def test_wisdom_gained_replays_to_the_same_state():
     session = _wisdom_game()
     session.act(P1, ActivateAbility("wisdom"))
