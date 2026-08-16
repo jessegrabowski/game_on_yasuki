@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.actions import Action, Cycle, Legacy, Pass, Recrui
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.agents import PayingAgent
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionRequest, DecisionResponse
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -95,7 +96,7 @@ class EconomicPolicy:
         if not purchases:
             return next((action for action in actions if isinstance(action, Pass)), actions[0])
         cards = _readable_province_cards(view)
-        return min(purchases, key=lambda purchase: _rank(cards[purchase.card_id]))
+        return min(purchases, key=lambda purchase: _rank(view, cards[purchase.card_id]))
 
 
 class EconomicLegacyPolicy:
@@ -135,8 +136,8 @@ class EconomicLegacyPolicy:
             # no board produces less. Kept because loosening that comparison would otherwise turn
             # an empty pool into a lost game.
             return False
-        return _best_production(view.legacy_pool) > _best_production(
-            _readable_province_cards(view).values()
+        return _best_production(view, view.legacy_pool) > _best_production(
+            view, _readable_province_cards(view).values()
         )
 
 
@@ -154,14 +155,14 @@ def cards_to_cycle(view: GameView) -> tuple[str, ...]:
     deck = view.dynasty_deck
     if not deck:
         return ()
-    average = sum(_production(card) for card in deck) / len(deck)
+    average = sum(_production(view, card) for card in deck) / len(deck)
     return tuple(
         sorted(
             card_id
             for card_id, card in _readable_province_cards(view).items()
             # Identifiable is not the same as face-up: a seat peeking its own face-down Province
             # cards can read one Cycle would refuse to be given.
-            if card.face_up and _production(card) < average
+            if card.face_up and _production(view, card) < average
         )
     )
 
@@ -224,15 +225,15 @@ def make_policy(name: str) -> Policy:
     return POLICIES[name]()
 
 
-def _rank(card: L5RCard) -> tuple[int, int, str]:
+def _rank(view: GameView, card: L5RCard) -> tuple[int, int, str]:
     """How a province card sorts for purchase, lowest first.
 
     Gold Production leads and Gold Cost breaks the tie, both negated so the larger wins. The card id
-    settles anything still level, so the choice does not follow zone order.
+    settles anything still level, so the choice does not follow zone order. Both stats are read
+    through the view, so a modified card ranks on its current value.
     """
-    production = _production(card)
-    cost = 0 if card.gold_cost is None else card.gold_cost
-    return -production, -cost, card.id
+    production = _production(view, card)
+    return -production, -view.stat(card, Stat.GOLD_COST), card.id
 
 
 def _readable_province_cards(view: GameView) -> dict[str, L5RCard]:
@@ -251,10 +252,13 @@ def _readable_province_cards(view: GameView) -> dict[str, L5RCard]:
     }
 
 
-def _best_production(cards: Iterable[L5RCard]) -> int:
-    """The largest printed Gold Production among ``cards``, or 0 when none of them produces."""
-    return max((_production(card) for card in cards), default=0)
+def _best_production(view: GameView, cards: Iterable[L5RCard]) -> int:
+    """The largest Gold Production among ``cards``, or 0 when none of them produces."""
+    return max((_production(view, card) for card in cards), default=0)
 
 
-def _production(card: L5RCard) -> int:
-    return card.gold_production if isinstance(card.printed, HoldingPrint) else 0
+def _production(view: GameView, card: L5RCard) -> int:
+    """What ``card`` produces right now, or 0 for a card that is not a Holding at all."""
+    if not isinstance(card.printed, HoldingPrint):
+        return 0
+    return view.stat(card, Stat.GOLD_PRODUCTION)

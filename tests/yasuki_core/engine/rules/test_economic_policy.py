@@ -167,3 +167,15 @@ def test_a_card_printed_with_a_dash_cost_ranks_as_free():
     province_card(session.game, "priced", seat=P1, gold_cost=4, index=1)
 
     assert _choice(session) == Recruit("priced")
+
+
+def test_a_province_card_is_ranked_on_what_it_produces_now_not_what_it_printed():
+    """The policy sees only a view, and a view used to carry no modifiers at all — so a card
+    carrying Wealth was weighed at its printed number and passed over for a card that is worth
+    less."""
+    session = _dynasty_phase()
+    province_card(session.game, "boosted", seat=P1, gold_cost=2, gold_production=1, index=0)
+    province_card(session.game, "plain", seat=P1, gold_cost=2, gold_production=2, index=1)
+    session.game.table.cards_by_id["boosted"].adjust_counter("wealth", 3)
+
+    assert _choice(session) == Recruit("boosted")  # 1 printed + 3 Wealth beats a printed 2

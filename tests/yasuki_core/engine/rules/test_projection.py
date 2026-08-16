@@ -1,3 +1,5 @@
+from dataclasses import fields, is_dataclass
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
@@ -7,7 +9,16 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.projection import project
+
+from tests.yasuki_core.engine.builders import (
+    holding,
+    province_card,
+    put_in_play,
+    register,
+    two_seat_game,
+)
 
 
 def _game() -> GameState:
@@ -212,3 +223,127 @@ def test_a_conditionally_granted_legacy_card_is_findable():
     # The same Holding stays unfindable for the seat that went first: the grant is conditional.
     _seed_deck(game, PlayerId.P1, shrine(PlayerId.P1))
     assert project(game, PlayerId.P1).legacy_pool == ()
+
+
+def test_a_modified_cards_effective_stats_reach_the_view():
+    """A view is all a Policy or a client gets, and modifiers live on the game rather than on the
+    card, so without this the only readable number is the printed one."""
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm", gold_production=2, counters={"wealth": 2}))
+
+    view = project(game, PlayerId.P1)
+
+    assert view.stat(farm, Stat.GOLD_PRODUCTION) == 4  # printed 2, +1 per Wealth
+    assert farm.gold_production == 2  # the card itself still answers what it was printed at
+
+
+def test_a_card_no_modifier_reaches_falls_back_to_its_printed_stat():
+    """Materializing every card in the game would be work to arrive where the card already is, so
+    only modified cards are carried and the rest read through."""
+    game = two_seat_game()
+    plain = put_in_play(game, holding("plain", gold_production=3))
+
+    view = project(game, PlayerId.P1)
+
+    assert plain.id not in view.stats
+    assert view.stat(plain, Stat.GOLD_PRODUCTION) == 3
+
+
+def test_a_stat_printed_as_a_dash_reads_zero_through_the_view():
+    game = two_seat_game()
+    free = put_in_play(game, holding("free", gold_cost=None))
+
+    assert project(game, PlayerId.P1).stat(free, Stat.GOLD_COST) == 0
+
+
+def _cards_reachable(node, path="view", seen=None):
+    """Every full L5RCard reachable from ``node``, with the attribute path that reached it.
+
+    Walks dataclasses, dicts and sequences generically rather than naming the view's fields, so a
+    field added later is swept without anyone remembering to add it here.
+    """
+    seen = set() if seen is None else seen
+    if id(node) in seen:
+        return
+    seen.add(id(node))
+    if isinstance(node, L5RCard):
+        yield path, node
+    elif isinstance(node, HiddenCard):
+        return
+    elif is_dataclass(node):
+        for f in fields(node):
+            yield from _cards_reachable(getattr(node, f.name), f"{path}.{f.name}", seen)
+    elif isinstance(node, dict):
+        for key, value in node.items():
+            yield from _cards_reachable(value, f"{path}[{key!r}]", seen)
+    elif isinstance(node, list | tuple | set | frozenset):
+        for index, value in enumerate(node):
+            yield from _cards_reachable(value, f"{path}[{index}]", seen)
+
+
+# P2's cards that P1 must never be able to identify, one per place P2 can hide one. The card P2
+# leaves in the open is deliberately not among them: it is the sweep's positive control.
+HIDDEN_FROM_P1 = frozenset({"P2-hand", "P2-facedown", "P2-indeck"})
+
+
+def _hiding_game() -> GameState:
+    """A game with one of P2's cards in each hiding place, and one in the open."""
+    game = two_seat_game()
+    in_hand = register(game.table, holding("P2-hand", owner=PlayerId.P2, gold_production=7))
+    game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(in_hand)
+    in_hand.adjust_counter("wealth", 1)  # so it qualifies for the stats materialization
+
+    province_card(game, "P2-facedown", seat=PlayerId.P2, gold_production=1, face_up=False)
+    game.modifiers.append(
+        Modifier("src", "P2-facedown", Stat.GOLD_PRODUCTION, 4, Duration.PERMANENT)
+    )
+
+    in_deck = register(game.table, holding("P2-indeck", owner=PlayerId.P2, gold_production=9))
+    in_deck.turn_face_down()
+    game.table.decks[DeckKey(PlayerId.P2, Side.DYNASTY)].cards.append(in_deck)
+
+    put_in_play(game, holding("P2-inplay", owner=PlayerId.P2, gold_production=3))
+    return game
+
+
+def test_no_card_the_viewer_cannot_identify_reaches_the_view():
+    """The board channels are safe by construction — a snapshot holds a ``CardView``, so redaction
+    is a decision the type forces. A field of plain values is not, and this sweeps the whole view so
+    the next one added is covered whether or not it carries cards."""
+    game = _hiding_game()
+
+    view = project(game, PlayerId.P1)
+
+    leaked = [
+        f"{path} -> {card.id}" for path, card in _cards_reachable(view) if card.id in HIDDEN_FROM_P1
+    ]
+    assert leaked == []
+    assert not HIDDEN_FROM_P1 & set(view.stats)
+
+
+def test_the_sweep_still_sees_what_the_viewer_is_entitled_to():
+    """The positive control for the sweep above: a card in the open reaches the view, and reaches it
+    with its stats. Without this, a view that carried nothing at all would pass."""
+    game = _hiding_game()
+    game.table.cards_by_id["P2-inplay"].adjust_counter("wealth", 2)
+
+    view = project(game, PlayerId.P1)
+
+    assert "P2-inplay" in {card.id for _, card in _cards_reachable(view)}
+    assert view.stat(game.table.cards_by_id["P2-inplay"], Stat.GOLD_PRODUCTION) == 5
+
+
+def test_the_viewers_own_hidden_card_still_carries_its_stats_to_them():
+    """The mirror of the leak sweep. Entitlement is per-seat, not per-secrecy: a card in the
+    viewer's own hand is hidden from the opponent and fully theirs to read, so filtering the stats
+    by what the *snapshot* shows must not cost a seat its own cards."""
+    game = _game()
+    mine = L5RCard.of(
+        FatePrint, id="P1-inhand", name="Mine", side=Side.FATE, owner=PlayerId.P1, gold_cost=4
+    )
+    game.table.cards_by_id[mine.id] = mine
+    assert game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(mine)
+    game.modifiers.append(Modifier("src", mine.id, Stat.GOLD_COST, 2, Duration.PERMANENT))
+
+    assert project(game, PlayerId.P1).stat(mine, Stat.GOLD_COST) == 6
+    assert "P1-inhand" not in project(game, PlayerId.P2).stats  # and stays the opponent's secret
