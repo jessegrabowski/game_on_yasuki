@@ -121,6 +121,8 @@ class AttachmentPrint(FatePrint):
     image_front: Path | None = DEFAULT_ITEM
     attachment_type: AttachmentType = AttachmentType.ITEM
     attach_restrictions: tuple[str, ...] = ()
+    force: int = 0
+    chi: int = 0
 
     def __post_init__(self):
         CardPrint.__post_init__(self)

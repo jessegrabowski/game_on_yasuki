@@ -359,6 +359,8 @@ def _stat_fields(print_cls: type[CardPrint], card_type: str | None, record: dict
         fields = {"focus": record.get("focus"), "gold_cost": record.get("gold_cost")}
         if print_cls is AttachmentPrint:
             fields["attachment_type"] = AttachmentType(card_type)
+            # A card type printing neither reads zero for both (CR, Absent Stats).
+            fields.update(force=record.get("force") or 0, chi=record.get("chi") or 0)
         return fields
     # A sensei's are deltas the stronghold receives rather than its own characteristics, but the
     # record columns and the stats read off them are the same three.

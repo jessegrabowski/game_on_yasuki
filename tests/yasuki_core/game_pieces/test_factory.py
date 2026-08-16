@@ -93,6 +93,18 @@ RECORDS = [
         "prints": [{"print_id": 60, "set_name": "Gold Edition", "image_path": "sets/ge/egg.png"}],
     },
     {
+        "card_id": "ashigaru_spearmen",
+        "name": "Ashigaru Spearmen",
+        "extended_title": "Ashigaru Spearmen",
+        "types": ["Follower"],
+        "decks": ["Fate"],
+        "focus": 1,
+        "gold_cost": 2,
+        "force": 1,
+        "chi": 0,
+        "prints": [{"print_id": 70, "set_name": "Gold Edition", "image_path": "sets/ge/spear.png"}],
+    },
+    {
         "card_id": "ancestral_blade",
         "name": "Ancestral Blade",
         "extended_title": "Ancestral Blade",
@@ -216,6 +228,15 @@ def test_base_identity_and_unique_flag_are_carried():
     assert personality.keywords == ("Shadowlands", "Berserker")
     assert personality.text == "Tainted."
     assert personality.is_unique is True
+
+
+def test_an_attachment_carries_the_force_and_chi_it_prints():
+    """A Follower's Force is the stat it exists to lend its Personality; dropping it at build time
+    leaves the card in play with nothing to contribute."""
+    r = resolve_decklist(
+        parse_deck_yaml("name: T\nFate:\n  - Ashigaru Spearmen"), RECORDS, PlayerId.P1
+    )
+    assert (r.fate[0].force, r.fate[0].chi) == (1, 0)
 
 
 def test_attachment_type_is_derived_from_the_card_type():
