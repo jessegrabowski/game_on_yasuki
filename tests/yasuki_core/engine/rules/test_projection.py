@@ -9,6 +9,8 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.projection import project
 
@@ -347,3 +349,17 @@ def test_the_viewers_own_hidden_card_still_carries_its_stats_to_them():
 
     assert project(game, PlayerId.P1).stat(mine, Stat.GOLD_COST) == 6
     assert "P1-inhand" not in project(game, PlayerId.P2).stats  # and stays the opponent's secret
+
+
+def test_a_discarded_card_reports_the_stats_it_prints():
+    """The symptom that surfaced the token bug: a card keeping its counters past the battlefield
+    kept reporting the stats they bought, so a destroyed Holding still looked like a producer to
+    every policy and client reading the view."""
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm", gold_production=2))
+    farm.adjust_counter("wealth", 3)
+    assert project(game, PlayerId.P1).stat(farm, Stat.GOLD_PRODUCTION) == 5
+
+    triggers.resolve_effects(game, [Discard("farm", PlayerId.P1)])
+
+    assert project(game, PlayerId.P1).stat(farm, Stat.GOLD_PRODUCTION) == 2

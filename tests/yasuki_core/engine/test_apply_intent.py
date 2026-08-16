@@ -1828,3 +1828,65 @@ def test_roll_dice_draws_every_face_from_a_generator():
 
 def test_a_rolled_die_reports_the_sides_it_was_rolled_on():
     assert roll_dice(default_rng(0), 20).sides == 20
+
+
+def test_a_card_leaving_play_loses_its_counters():
+    """CR, Tokens: "Tokens cannot exist on cards out of play. If a card or Province leaves play, all
+    tokens on it are removed from the game. They do not come back if the card re-enters play." A
+    card can be recruited back out of a discard, so tokens surviving the trip would ride back in."""
+    table = TableState.empty_two_seat()
+    farm = _dynasty("farm")
+    _on_battlefield(table, farm)
+    farm.adjust_counter(WEALTH.key, 3)
+
+    apply_intent(
+        table, PlayerId.P1, MoveCard("farm", ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD))
+    )
+
+    assert farm.counters == {}
+
+
+def test_a_card_moving_around_the_battlefield_keeps_its_counters():
+    """Only leaving play empties them. A reposition is still in play, and so is being moved back
+    onto the battlefield from wherever it sat."""
+    table = TableState.empty_two_seat()
+    farm = _dynasty("farm")
+    _on_battlefield(table, farm)
+    farm.adjust_counter(WEALTH.key, 2)
+
+    apply_intent(table, PlayerId.P1, MoveCard("farm", BATTLEFIELD))
+
+    assert farm.counters == {WEALTH.key: 2}
+
+
+def test_a_card_leaving_a_province_keeps_its_counters():
+    """A Province is not play, so a card moving out of one never left play. Shattered Empire relies
+    on that: "give each Sincerity card in your Provinces a Sincerity token. After a card with
+    Sincerity tokens on it enters play, remove those tokens" (ShE datasheet, Sincerity) — clearing
+    on any zone change would empty the token before the card that reads it ever arrives."""
+    table = TableState.empty_two_seat()
+    province = ProvinceZone(owner=PlayerId.P1)
+    card = _dynasty("waiting")
+    table.cards_by_id[card.id] = card
+    province.add(card)
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    card.adjust_counter(WEALTH.key, 1)
+
+    apply_intent(
+        table, PlayerId.P1, MoveCard("waiting", ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD))
+    )
+
+    assert card.counters == {WEALTH.key: 1}
+
+
+def test_a_card_returned_to_a_deck_loses_its_counters():
+    """The deck branch scrubs a card back to a library card, and its counters go with the rest.
+    Blessings of the Red Panda Spirit shuffles itself back in, so this is a path cards really take."""
+    table = TableState.empty_two_seat()
+    farm = _dynasty("farm")
+    _on_battlefield(table, farm)
+    farm.adjust_counter(WEALTH.key, 2)
+
+    apply_intent(table, PlayerId.P1, MoveCard("farm", DeckKey(PlayerId.P1, Side.DYNASTY)))
+
+    assert farm.counters == {}

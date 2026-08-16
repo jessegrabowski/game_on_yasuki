@@ -69,8 +69,14 @@ def move_card(
     show/peek disclosure cleared). Returns whether the table changed — a move onto the zone the card
     already occupies is a no-op.
 
+    A card leaving the battlefield loses its counters: tokens cannot exist on a card out of play,
+    and they do not come back if it re-enters (CR, Tokens).
+
     ``deck_index`` lands the card at that depth in a deck's bottom-first list, clamped into range,
     and takes precedence over ``to_bottom``."""
+    if dest != BATTLEFIELD and any(held is card for held in state.battlefield.cards):
+        card.clear_counters()
+
     if dest == BATTLEFIELD:
         pos = position or state.positions.get(card.id) or DEFAULT_BOARD_POS
         remove_from_location(state, card)
