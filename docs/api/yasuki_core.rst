@@ -53,6 +53,7 @@ yasuki_core
     yasuki_core.engine.rules.policies <yasuki_core.engine.rules.policies>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
+    yasuki_core.engine.rules.state_rules <yasuki_core.engine.rules.state_rules>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
     yasuki_core.engine.rules.work <yasuki_core.engine.rules.work>
     yasuki_core.engine.runner <yasuki_core.engine.runner>

@@ -529,6 +529,10 @@ def _resolve_recruit(
         # Renew is read once the card has entered play, which is when the keyword speaks.
         renews = renew or RENEW_KEYWORD in effective_keywords(game, card)
         _defer_refill(game, province_key, face_up=renews)
+    # A card reaching the battlefield can make the board illegal, and the board is made legal
+    # before anything is told the card arrived — a trigger that reads a state the rules say cannot
+    # exist is deciding on a board that never legally existed.
+    triggers.enforce_state_rules(game)
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
     game.stack.append(FinishRecruit(card_id, invest_amount, proclaim))
     triggers.fire(game, EnteredPlay(card_id))
@@ -794,6 +798,9 @@ def _begin_next_turn(game: GameState) -> None:
     # Drop until-end-of-turn modifiers as the turn ends; the comprehension keeps creation order so
     # the list rebuilds identically under replay.
     game.modifiers = [m for m in game.modifiers if m.duration is not Duration.UNTIL_END_OF_TURN]
+    # Modifiers expiring can make the board illegal on their own, with no effect committing and so
+    # no cascade to catch it. Settle that before the new turn starts and anything reads the board.
+    triggers.enforce_state_rules(game)
     game.turn += 1
     game.active = _other(game.active)
     game.phase = Phase.ACTION
