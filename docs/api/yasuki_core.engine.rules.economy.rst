@@ -14,10 +14,13 @@ yasuki_core.engine.rules.economy
 .. autosummary::
 
     active_modifiers
+    effective_chi
+    effective_force
     effective_gold_cost
     effective_gold_production
     effective_keywords
     effective_recruit_discount
+    effective_stat
     gold_handler
     is_clan
     keyword_grant

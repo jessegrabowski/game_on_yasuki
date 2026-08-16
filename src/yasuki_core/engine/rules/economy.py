@@ -104,6 +104,47 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
         yield modifier
 
 
+def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
+    """``card``'s ``stat`` right now: its printed value plus every active modifier on it, floored at
+    zero.
+
+    The order is the CR's (Calculating Stats): modifiers sum first and the minimum applies to the
+    total, so a 2F card penalised -3F and then given +2F reads 1 rather than 2. A stat absent from
+    the card type, and one printed as a dash, both read zero and take no modifiers at all (CR,
+    Absent Stats).
+
+    Parameters
+    ----------
+    game : GameState
+        The live game the modifiers are read from.
+    card : L5RCard
+        The card being read.
+    stat : Stat
+        Which stat to total.
+
+    Returns
+    -------
+    value : int
+        The modified stat.
+    """
+    base = getattr(card, stat.value, None)
+    if base is None:
+        return 0
+    return max(0, base + sum(modifier.amount for modifier in active_modifiers(game, card, stat)))
+
+
+def effective_force(game: GameState, card: L5RCard) -> int:
+    """``card``'s Force right now, counters and granted modifiers included."""
+    return effective_stat(game, card, Stat.FORCE)
+
+
+def effective_chi(game: GameState, card: L5RCard) -> int:
+    """``card``'s Chi right now, counters and granted modifiers included. Zero is a meaningful
+    answer for a Personality rather than merely a floor: the Chi Death Rule destroys one whose Chi
+    is ever zero."""
+    return effective_stat(game, card, Stat.CHI)
+
+
 def effective_gold_cost(game: GameState, card: L5RCard) -> int:
     """What ``card`` costs before the seat's own discounts and surcharges: its printed gold cost plus
     every active Gold Cost modifier on it, floored at zero. A card printing no gold cost has none to
@@ -121,12 +162,7 @@ def effective_gold_cost(game: GameState, card: L5RCard) -> int:
     cost : int
         The modified gold cost.
     """
-    if card.gold_cost is None:
-        return 0
-    total = card.gold_cost + sum(
-        modifier.amount for modifier in active_modifiers(game, card, Stat.GOLD_COST)
-    )
-    return max(0, total)
+    return effective_stat(game, card, Stat.GOLD_COST)
 
 
 def effective_gold_production(
