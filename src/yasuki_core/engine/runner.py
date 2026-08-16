@@ -263,6 +263,16 @@ class GameRunner:
         pending = self.session.game.pending
         return pending if pending is not None and pending.seat is self.human else None
 
+    @property
+    def opponent_owes_decision(self) -> bool:
+        """Whether the engine is waiting on an answer from the AI-reserved opponent.
+
+        A card can put a question to the opponent while priority stays with the human, which is the
+        case :attr:`opponent_holds_priority` does not cover. The engine is paused until it is
+        answered, so a caller driving the opponent has to check both."""
+        pending = self.session.game.pending
+        return pending is not None and pending.seat is not self.human
+
     def act(self, action: Action) -> None:
         """Perform the human's chosen action. Does not run the opponent — the caller checks
         :attr:`opponent_holds_priority` afterwards and runs it so the change stays visible."""
@@ -283,20 +293,28 @@ class GameRunner:
         self.session.cancel(self.human)
 
     def run_opponent(self) -> None:
-        """Act for the opponent until the opportunity returns to the human.
+        """Act and answer for the opponent until the engine wants the human again.
 
-        Covers both cases the same way: the opponent's own turn, and the window it holds inside the
-        human's Action phase. It passes every opportunity — it is driven by an :class:`Agent`, which
-        answers decisions rather than choosing actions — and lets that Agent answer anything it owes.
+        Three cases, all of them the opponent's to clear: its own turn, the window it holds inside
+        the human's Action phase, and a decision a card put to it while the human kept priority. It
+        passes every opportunity — it is driven by an :class:`Agent`, which answers decisions rather
+        than choosing actions — and lets that Agent answer anything it owes.
+
+        Returns as soon as the human owes an answer or holds priority with nothing pending, so the
+        caller renders between the opponent's work and the human's.
         """
         game = self.session.game
-        while game.round.priority is not self.human and not game.game_over:
+        while not game.game_over:
             pending = game.pending
             if pending is not None:
+                if pending.seat is self.human:
+                    return
                 response = self._opponent.decide(pending, self.session.project(pending.seat))
                 self.session.submit(pending.seat, response)
-            else:
+            elif game.round.priority is not self.human:
                 self.session.act(game.round.priority, Pass())
+            else:
+                return
 
 
 class Controls(NamedTuple):

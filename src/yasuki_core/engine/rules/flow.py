@@ -423,9 +423,25 @@ def _cancel_payment(game: GameState) -> None:
 def run_stack(game: GameState) -> None:
     """Drain deferred work, running each item until the stack empties or one pauses for a decision.
     A work item may itself emit a decision (setting ``pending``), so resolution stops there and
-    resumes on the next :func:`submit`."""
+    resumes on the next :func:`submit`. Once the board settles, every Province standing short
+    refills.
+    """
     while game.stack and game.pending is None:
         _resolve(game, game.stack.pop())
+    if game.pending is None:
+        _refill_short_provinces(game)
+
+
+def _refill_short_provinces(game: GameState) -> None:
+    """Refill every Province standing short, face-down, as far as the Dynasty decks reach.
+
+    A Province refills because it is empty, whatever emptied it. The refills the rules time
+    explicitly — a Renew's face-up arrival, Kharmic's — resolve inside the cascade and land first,
+    leaving nothing short here.
+    """
+    for key, zone in game.table.zones.items():
+        if key.role is ZoneRole.PROVINCE and zone.has_capacity():
+            ops.fill_province(game.table, key.owner, zone)
 
 
 def _resolve(game: GameState, item: WorkItem) -> None:

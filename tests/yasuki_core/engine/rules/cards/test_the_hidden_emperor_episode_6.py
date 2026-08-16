@@ -8,7 +8,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import RingPrint
 
-from tests.yasuki_core.engine.builders import province_card, register
+from tests.yasuki_core.engine.builders import holding, province_card, register
 
 P1 = PlayerId.P1
 
@@ -20,10 +20,17 @@ def _ring(state, card_id, seat):
     )
 
 
-def _wisdom_game(*, p1_deck=("ring1",), p1_discard=(), p2_deck=("ring2",)) -> EngineSession:
-    """Wisdom Gained face-up in P1's Province, with Rings salted through each seat's Fate piles."""
+def _wisdom_game(
+    *, p1_deck=("ring1",), p1_discard=(), p2_deck=("ring2",), dynasty=("next-card",)
+) -> EngineSession:
+    """Wisdom Gained face-up in P1's Province, with Rings salted through each seat's Fate piles.
+    ``dynasty`` stocks the Dynasty deck the vacated Province refills from."""
     state = TableState.empty_two_seat()
     province_card(state, "wisdom", printed_id="wisdom_gained", name="Wisdom Gained")
+    for card_id in dynasty:
+        state.decks[DeckKey(P1, Side.DYNASTY)].cards.append(
+            register(state, holding(card_id, owner=P1))
+        )
     for card_id in p1_deck:
         state.decks[DeckKey(P1, Side.FATE)].cards.append(_ring(state, card_id, P1))
     for card_id in p1_discard:
@@ -111,6 +118,20 @@ def test_the_opponents_offer_cannot_be_unwound_by_the_controller():
     session.submit(P1, DecisionResponse(()))
 
     assert session.abort(P1) is False
+
+
+def test_the_province_the_event_spent_itself_from_refills():
+    """The Event takes its own Province with it when it resolves, and nothing in the card says to
+    put a card back — the Province refills because the board settles short, once the last seat has
+    answered the offer that kept it in flight."""
+    session = _wisdom_game()
+    session.act(P1, ActivateAbility("wisdom"))
+    session.submit(P1, DecisionResponse(()))  # P1 declines
+    session.submit(PlayerId.P2, DecisionResponse(()))  # and so does P2
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [c.id for c in province.cards] == ["next-card"]
+    assert not province.cards[0].face_up
 
 
 def test_wisdom_gained_replays_to_the_same_state():

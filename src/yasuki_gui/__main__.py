@@ -101,7 +101,7 @@ def main() -> None:
                 "You lose (failed Legacy)" if lost else "Opponent loses (failed Legacy)", []
             )
         elif pending is not None and runner.search_view() is not None:
-            # Answered by the search dialog (opened in after_human_action), not the board.
+            # Answered by the search dialog (opened in present_pending), not the board.
             prompt_box.show(pending.prompt(), [])
         elif isinstance(pending, Confirm):
             # A question, not a selection: the subjects are already settled, so the seat answers it
@@ -152,16 +152,20 @@ def main() -> None:
 
     def run_opponent() -> None:
         runner.run_opponent()
-        refresh()
+        present_pending()
 
     def open_search(search: SearchView) -> None:
         def on_pick(card_id: str) -> None:
             runner.submit([card_id])
-            after_human_action()
+            present_pending()
 
         Dialogs(root, ImageProvider(root)).card_search(search.panes, search.choosable, on_pick)
 
-    def after_human_action() -> None:
+    def present_pending() -> None:
+        """Set the client up for whatever the engine wants next: the dialog or selection mode the
+        human's decision is answered through, or a hand-back to the opponent when the move is not
+        the human's. Every path that advances the game ends here, since either seat's input can
+        leave a decision owed by either seat."""
         nonlocal boost_producer
         boost_producer = None
         pending = runner.pending
@@ -180,7 +184,13 @@ def main() -> None:
             boostable = [pid for pid, _ in pending.boostable] if paying else ()
             field.begin_selection(pending.candidates, render_bowed=paying, boostable=boostable)
         refresh()
-        if pending is None and runner.opponent_holds_priority:
+        # An owed decision counts as well as held priority: a card can put a question to the
+        # opponent while the human keeps priority, and the engine is paused until it is answered.
+        opponent_to_move = runner.opponent_holds_priority or runner.opponent_owes_decision
+        if pending is None and runner.loser is None and opponent_to_move:
+            # A finished game is excluded because the opponent can hold priority on one while
+            # running it moves nothing, which would reschedule this forever.
+            #
             # Pause only when the turn itself changes hands, so the board's "Opponent's turn" is
             # readable. The opponent also takes a window inside each of the human's Action phases,
             # and stalling on those would put the delay in the middle of the human's own turn.
@@ -190,7 +200,7 @@ def main() -> None:
     def confirm_decision() -> None:
         runner.submit(field.selection, field.boosted)
         field.end_selection()
-        after_human_action()
+        present_pending()
 
     def request_boost(producer_id: str) -> None:
         # A boostable producer was picked to pay: put its boost question in the prompt box.
@@ -207,21 +217,21 @@ def main() -> None:
 
     def submit_invest(amount: str) -> None:
         runner.submit([amount])
-        after_human_action()
+        present_pending()
 
     def submit_answer(choices: tuple[str, ...]) -> None:
         runner.submit(list(choices))
-        after_human_action()
+        present_pending()
 
     def cancel_decision() -> None:
         # Back out of a pending payment: drop the announced Recruit and clear the gold selection.
         runner.cancel()
         field.end_selection()
-        after_human_action()
+        present_pending()
 
     def on_action(action: Action) -> None:
         runner.act(action)
-        after_human_action()
+        present_pending()
 
     def popup_action_menu(items: list[tuple[str, Action]]) -> None:
         """Pop up a left-click action menu at the pointer; each entry performs its action. No-op
