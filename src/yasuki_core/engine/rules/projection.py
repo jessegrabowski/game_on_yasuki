@@ -1,7 +1,10 @@
+from collections.abc import Iterator
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import redact, ViewSnapshot
+from yasuki_core.engine.rules.economy import effective_stat
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
@@ -48,6 +51,10 @@ class GameView:
         order. A seat built its deck and so knows what remains in it; where those cards sit in the
         shuffle is the part it must not learn, which is what the sort strips. Never populated for
         the other seat.
+    stats : dict mapping str to dict
+        Each modified card's effective stats by id, the inner dict keyed by :class:`Stat`. Read it
+        through :meth:`stat` rather than directly — a card no modifier reaches is absent, and the
+        method supplies its printed value.
     """
 
     viewer: PlayerId
@@ -61,16 +68,62 @@ class GameView:
     pending: DecisionRequest | None
     legacy_pool: tuple[L5RCard, ...]
     dynasty_deck: tuple[L5RCard, ...]
+    stats: dict[str, dict[Stat, int]]
+
+    def stat(self, card: L5RCard, stat: Stat) -> int:
+        """``card``'s effective ``stat`` — counters, granted modifiers and all. Reading the card's
+        own attribute instead yields the printed number, since modifiers live on the game.
+        """
+        modified = self.stats.get(card.id)
+        if modified is not None:
+            return modified[stat]
+        printed = getattr(card, stat.value, None)
+        return 0 if printed is None else printed  # absent, or printed as a dash
+
+
+def _identifiable_ids(table: ViewSnapshot) -> set[str]:
+    """The ids ``table`` lets its viewer identify. A card redacted to a :class:`HiddenCard`, and one
+    the snapshot omits, are both absent — the snapshot has already decided entitlement, and reading
+    it back is what keeps that decision in one place."""
+    ids = {
+        card.id for zone in table.zones.values() for card in zone.cards if isinstance(card, L5RCard)
+    }
+    ids.update(entry.card.id for entry in table.battlefield if isinstance(entry.card, L5RCard))
+    ids.update(deck.top.id for deck in table.decks.values() if deck.top is not None)
+    return ids
+
+
+def _modified_cards(game: GameState, identifiable: set[str]) -> Iterator[L5RCard]:
+    """Every identifiable card a counter or a recorded modifier reaches.
+
+    A card neither touches has only its printed stats, which :meth:`GameView.stat` reads straight
+    off it. A card the viewer may not identify is skipped: its stats would say what it is, and a
+    view carries only what its seat is entitled to.
+    """
+    seen: set[str] = set()
+    for card in game.table.cards_by_id.values():
+        if card.counters and card.id in identifiable:
+            seen.add(card.id)
+            yield card
+    for modifier in game.modifiers:
+        if modifier.target_id in seen or modifier.target_id not in identifiable:
+            continue
+        target = game.table.cards_by_id.get(modifier.target_id)
+        if target is not None:
+            seen.add(target.id)
+            yield target
 
 
 def project(game: GameState, viewer: PlayerId) -> GameView:
     """Project ``game`` into the view ``viewer`` is entitled to: the board redacted for the viewer,
-    the public rules fields, the pending decision only if this viewer is the one to answer it, and
-    the viewer's own Legacy pool and remaining dynasty deck."""
+    the public rules fields, the pending decision only if this viewer is the one to answer it, the
+    viewer's own Legacy pool and remaining dynasty deck, and the effective stats of every card
+    carrying a modifier."""
     pending = game.pending if game.pending is not None and game.pending.seat is viewer else None
+    table = redact(game.table, viewer)
     return GameView(
         viewer=viewer,
-        table=redact(game.table, viewer),
+        table=table,
         turn=game.turn,
         active=game.active,
         phase=game.phase,
@@ -82,4 +135,8 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
         dynasty_deck=tuple(
             sorted(game.table.decks[DeckKey(viewer, Side.DYNASTY)].cards, key=lambda card: card.id)
         ),
+        stats={
+            card.id: {stat: effective_stat(game, card, stat) for stat in Stat}
+            for card in _modified_cards(game, _identifiable_ids(table))
+        },
     )
