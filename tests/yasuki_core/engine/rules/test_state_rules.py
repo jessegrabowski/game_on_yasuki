@@ -3,7 +3,14 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.paths import DATABASE_DIR
 from yasuki_core.engine.rules import state_rules, triggers
-from yasuki_core.engine.rules.effects import AdjustCounter, Choose, GainHonor, GrantModifier
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Choose,
+    GainHonor,
+    GrantModifier,
+    Then,
+)
+from yasuki_core.engine.rules.flow import run_stack
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.actions import Recruit
@@ -307,3 +314,64 @@ def test_the_rule_reaches_the_opponents_personalities_too():
     triggers.enforce_state_rules(game)
 
     assert _battlefield(game) == set()
+
+
+def test_work_deferred_behind_the_death_still_runs():
+    """``Then`` defers onto ``game.stack`` rather than into the cascade, so it resolves after the
+    death rather than being cancelled by it. Only what needed the dead Personality is skipped, and
+    a step that never mentioned him is not."""
+    samurai = _personality("doomed", chi=1)
+    game = _in_play(samurai)
+    before = game.table.seats[P1].honor
+
+    triggers.resolve_effects(
+        game,
+        [
+            GrantModifier("src", "doomed", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN),
+            Then((GainHonor(P1, 3),)),
+        ],
+    )
+    run_stack(game)
+
+    assert "doomed" not in _battlefield(game)
+    assert game.table.seats[P1].honor == before + 3
+
+
+def test_proclaiming_a_personality_who_dies_on_arrival_still_gains_the_honor():
+    """CR, Proclaim: "after the Personality enters play, add the Personality's Personal Honor to the
+    player's Family Honor." The honor keys off entering play, and he did — dying immediately
+    afterwards does not take it back."""
+    table = dealt_table(hand=0)
+    put_in_play(table, stronghold(P1, gold_production=8, clan="Crab"))
+    doomed = L5RCard.of(
+        PersonalityPrint,
+        id="P1-doomed",
+        name="P1-doomed",
+        side=Side.DYNASTY,
+        owner=P1,
+        force=2,
+        chi=0,
+        clan="Crab",
+        personal_honor=3,
+        gold_cost=0,
+        honor_requirement=0,
+    )
+    doomed.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(register(table, doomed))
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(table, P1, seed=4)
+    end_phase(session)
+    end_phase(session)
+    before = session.game.table.seats[P1].honor
+
+    proclaim = next(
+        action
+        for action in session.legal_actions(P1)
+        if isinstance(action, Recruit) and action.proclaim
+    )
+    session.act(P1, proclaim)
+    session.submit(P1, DecisionResponse(()))
+
+    assert "P1-doomed" not in _battlefield(session.game)
+    assert session.game.table.seats[P1].honor == before + 3
