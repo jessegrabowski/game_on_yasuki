@@ -17,6 +17,7 @@ yasuki_core.engine.rules.triggers
     at_cap
     caused_by
     choice_resolver
+    enforce_state_rules
     fire
     on
     once_per_turn

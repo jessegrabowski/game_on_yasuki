@@ -148,6 +148,7 @@ def _personality_in_province(
     clan: str | None = None,
     personal_honor: int = 0,
     honor_requirement: int | None = 0,
+    chi: int = 2,
 ) -> L5RCard:
     person = _register(
         state,
@@ -161,6 +162,7 @@ def _personality_in_province(
             clan=clan,
             personal_honor=personal_honor,
             honor_requirement=honor_requirement,
+            chi=chi,  # a Personality at 0 Chi is destroyed on sight (CR, Chi Death Rule)
         ),
     )
     person.turn_face_up()
@@ -386,6 +388,7 @@ def test_dynasty_discard_is_offered_for_any_face_up_province_card_in_dynasty():
             side=Side.DYNASTY,
             owner=PlayerId.P1,
             gold_cost=0,
+            chi=2,
         ),
     )
     person.turn_face_up()

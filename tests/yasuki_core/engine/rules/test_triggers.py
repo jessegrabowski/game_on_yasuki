@@ -217,6 +217,7 @@ def _aoki(game, seat=PlayerId.P1, card_id="P1-aoki"):
         name="Shosuro Aoki",
         side=Side.DYNASTY,
         owner=seat,
+        chi=3,
     )
     put_in_play(game, aoki)
     return aoki

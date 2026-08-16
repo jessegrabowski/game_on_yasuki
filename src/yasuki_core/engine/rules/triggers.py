@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     Effect,
 )
+from yasuki_core.engine.rules import state_rules
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.work import ResumeCascade
@@ -161,6 +162,7 @@ def _advance(
                 return
             _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
+            _enforce_state_rules(game, queue)
         effects = ()
         if firing:
             card, trigger = firing.pop(0)
@@ -168,7 +170,11 @@ def _advance(
             effects = tuple(trigger(TriggerContext(game, card, event)))
             continue
         if not queue:
-            return
+            # A last sweep for board changes the walk did not cause — an until-end-of-turn modifier
+            # expiring, say, which drops a card's Chi without any effect committing.
+            _enforce_state_rules(game, queue)
+            if not queue:
+                return
         resolved += 1
         if resolved > _MAX_CASCADE:
             raise RuntimeError(
@@ -178,6 +184,46 @@ def _advance(
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
         firing.sort(key=_canonical_order)
+
+
+def enforce_state_rules(game: GameState) -> None:
+    """Satisfy the state-based rules against the board as it stands, resolving what that raises.
+
+    For the board changes the cascade does not make — a card placed on the battlefield by ``flow``,
+    a modifier expiring at a turn boundary. The walk enforces the rules after each effect it
+    commits; this is how a caller that mutated the board directly gets the same guarantee.
+    """
+    queue: list[GameEvent] = []
+    _enforce_state_rules(game, queue)
+    if queue:
+        _advance(game, (), [], None, queue)
+
+
+def _enforce_state_rules(game: GameState, queue: list[GameEvent]) -> None:
+    """Satisfy every state-based rule before anything else happens, queueing what the enforcement
+    raises.
+
+    These rules are conditions the board must satisfy at all times rather than reactions to an
+    event, so the ordering is the rule: enforced after each committed effect rather than once the
+    cascade settles, an illegal board never survives long enough for anything to read it. Nothing
+    commits behind the change that broke a condition, no trigger fires on the broken state, and the
+    walk cannot pause for a decision while it stands, because the pause is tested before an effect
+    applies and every applied effect has already been judged.
+
+    Enforcement runs to its own fixpoint: satisfying one condition can break another, and the CR's
+    conditions chain that way by design — a destroyed card can orphan what was attached to it, and
+    a seat losing its last Province loses the game.
+    """
+    for _ in range(_MAX_CASCADE):
+        demanded = state_rules.demanded(game)
+        if not demanded:
+            return
+        for effect in demanded:
+            _trace.append(f"    {effect.describe()} (state rule)")
+            queue.extend(apply_effect(game, effect))
+    raise RuntimeError(
+        f"state rules did not settle after {_MAX_CASCADE} rounds:\n{_render_trace()}"
+    )
 
 
 def _render_trace() -> str:
