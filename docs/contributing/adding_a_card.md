@@ -154,8 +154,11 @@ these needs a core extension, not just a card module:
 - **Anything targeting an opponent's cards.** Effects address a card id, but nothing models the
   permission question — whose cards may this touch?
 - **More than one ability on a card.** The ability registries hold one entry per card id.
-- **Abilities usable from hand or province.** Triggers collect from the battlefield only.
-- **Attachments.** No attach/detach model; a card cannot modify another by being attached to it.
+- **Abilities usable from hand.** An ability is offered from the battlefield or from a Province
+  (`located_at`); a card in hand is out of reach.
+- **Attachments.** `TableState` tracks the attachment graph and the manual surface can attach a card,
+  but the rules layer reads none of it: nothing asks what a card is attached to, and an attached card
+  contributes nothing to the card it hangs on.
 - **Combat.** No attack, assignment, or resolution machinery.
 - **Modal effects** — "choose one" where the modes are different *kinds* of effect. `Choose` picks
   cards, not modes.
