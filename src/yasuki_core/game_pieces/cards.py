@@ -102,6 +102,10 @@ class L5RCard:
         else:
             self.counters.pop(name, None)
 
+    def clear_counters(self) -> None:
+        """Drop every counter the card holds."""
+        self.counters.clear()
+
     def set_note(self, text: str | None) -> None:
         object.__setattr__(self, "note", text or None)
 
