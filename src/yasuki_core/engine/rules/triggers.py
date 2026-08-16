@@ -20,8 +20,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter, SINCERITY
 from yasuki_core.game_pieces.prints import HoldingPrint
 
-# A sanity bound on the fixpoint walk: a converging cascade drains in a handful of events, so far
-# more than this means a trigger re-emits an event that re-fires it — a card-logic bug, raised loudly.
+# A sanity bound on both fixpoint walks: a converging cascade drains in a handful of events, and
+# the state rules settle in a handful of rounds, so far more than this means a trigger re-emits an
+# event that re-fires it or a rule demands what does not satisfy it — a bug, raised loudly.
 _MAX_CASCADE = 1000
 
 # The tail of the current walk, kept only to describe a cascade that fails to converge. Module-level
@@ -162,7 +163,7 @@ def _advance(
                 return
             _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
-            _enforce_state_rules(game, queue)
+            _settle_state_rules(game, queue)
         effects = ()
         if firing:
             card, trigger = firing.pop(0)
@@ -170,9 +171,9 @@ def _advance(
             effects = tuple(trigger(TriggerContext(game, card, event)))
             continue
         if not queue:
-            # A last sweep for board changes the walk did not cause — an until-end-of-turn modifier
-            # expiring, say, which drops a card's Chi without any effect committing.
-            _enforce_state_rules(game, queue)
+            # The walk can be entered on a board something else already made illegal, and with
+            # nothing to commit the per-effect check never runs. Judge it before returning.
+            _settle_state_rules(game, queue)
             if not queue:
                 return
         resolved += 1
@@ -194,12 +195,12 @@ def enforce_state_rules(game: GameState) -> None:
     commits; this is how a caller that mutated the board directly gets the same guarantee.
     """
     queue: list[GameEvent] = []
-    _enforce_state_rules(game, queue)
+    _settle_state_rules(game, queue)
     if queue:
         _advance(game, (), [], None, queue)
 
 
-def _enforce_state_rules(game: GameState, queue: list[GameEvent]) -> None:
+def _settle_state_rules(game: GameState, queue: list[GameEvent]) -> None:
     """Satisfy every state-based rule before anything else happens, queueing what the enforcement
     raises.
 

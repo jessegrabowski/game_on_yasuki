@@ -16,8 +16,7 @@ StateRule = Callable[[GameState], list[Effect]]
 # The cards whose own text exempts them from the Chi Death Rule, by printed id. Each says so
 # plainly — "Stone Breaker will not be destroyed for having 0 Chi" — which the CR permits as a
 # continuous effect. Listed here rather than registered from the set modules because it is data
-# about a card, not behavior: the exemption belongs on the print alongside the Chi it modifies,
-# and moves there with the rest of [[rule-modification/step-01-scalar-restrictions]].
+# about a card rather than behavior; it belongs on the print, alongside the Chi it qualifies.
 #
 # Two cards that mention 0 Chi are deliberately absent. Moto Chagatai and Moto Soro read "unless
 # his Chi is 0 after all penalties that last until your turn ends wear off" — a deferred check
@@ -40,21 +39,20 @@ def chi_death(game: GameState) -> list[Effect]:
     """Destroy every Personality in play whose Chi is zero (CR, Chi Death Rule).
 
     Zero is the whole condition: the stat floors there, so a Personality penalised past zero reads
-    zero and dies. A card whose own text exempts it is skipped — the CR allows only a continuous
-    effect to work against Chi death, which is what that text is.
+    zero and dies. A card whose own text exempts it is skipped, which the CR permits because that
+    text is a continuous effect and only those work against Chi death.
     """
     return [
         Destroy(card.id)
         for card in game.table.battlefield.cards
         if isinstance(card.printed, PersonalityPrint)
         and effective_chi(game, card) == 0
-        and not _exempt_from_chi_death(game, card)
+        and not _exempt_from_chi_death(card)
     ]
 
 
-def _exempt_from_chi_death(game: GameState, card: L5RCard) -> bool:
-    """Whether ``card``'s own text spares it the Chi Death Rule. The CR allows only a continuous
-    effect to work against Chi death, and for these cards that effect is printed on them."""
+def _exempt_from_chi_death(card: L5RCard) -> bool:
+    """Whether ``card``'s own text spares it the Chi Death Rule."""
     return card.printed_id in CHI_DEATH_EXEMPT
 
 
