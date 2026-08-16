@@ -5,7 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.counters import ALL_COUNTERS
+from yasuki_core.game_pieces.counters import counter_from_key
 from yasuki_core.game_pieces.prints import HoldingPrint, StrongholdPrint
 
 
@@ -90,9 +90,8 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
     battlefield."""
     # A counter's source is the card itself, in play by construction here (this is only reached for
     # an in-play card), so no source-in-play check is needed for the derived modifiers.
-    for counter in ALL_COUNTERS:
-        per_count = getattr(counter, stat.value, 0)
-        count = card.counters.get(counter.key, 0)
+    for key, count in card.counters.items():
+        per_count = getattr(counter_from_key(key), stat.value, 0)
         if per_count and count:
             yield Modifier(card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY)
     for modifier in game.modifiers:
