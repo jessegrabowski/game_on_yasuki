@@ -8,10 +8,13 @@ yasuki_core.engine.ops
 .. autosummary::
 
     attach
+    attach_to_personality
+    attach_to_province
     bring_to_top
     create_province
     destroy_province
     detach
+    detach_from_parent
     discard_province
     draw_to_hand
     fill_province

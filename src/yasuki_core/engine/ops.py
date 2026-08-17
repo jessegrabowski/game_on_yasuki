@@ -13,7 +13,7 @@ from yasuki_core.engine.table import (
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
 
 # The fundamental table mutations: pure, in-place changes to a TableState with no ownership gates,
 # no version bump, and no event building. The manual sim (intents.apply_intent) wraps these with
@@ -34,13 +34,17 @@ def remove_from_location(state: TableState, card: L5RCard) -> None:
                 return
 
 
-def _clear_attachment(state: TableState, card_id: str) -> None:
-    """Drop ``card_id`` from the attachment graph in both roles: its own link to a parent, and any
-    children hung off it. Called when the card leaves the battlefield, so no attachment ever dangles
-    on a card that is no longer in play."""
+def _clear_relations(state: TableState, card_id: str) -> None:
+    """Drop ``card_id`` from every relation in both roles: its own link to a parent, and anything
+    hung off it. Called when the card leaves the battlefield, so nothing ever references a card that
+    is no longer in play."""
     state.attachments.pop(card_id, None)
     for child in [c for c, parent in state.attachments.items() if parent == card_id]:
         del state.attachments[child]
+    state.units.pop(card_id, None)
+    for member in [c for c, personality in state.units.items() if personality == card_id]:
+        del state.units[member]
+    state.province_attachments.pop(card_id, None)
 
 
 def bring_to_top(state: TableState, card: L5RCard) -> None:
@@ -86,7 +90,7 @@ def move_card(
 
     if isinstance(dest, DeckKey):
         remove_from_location(state, card)
-        _clear_attachment(state, card.id)
+        _clear_relations(state, card.id)
         # Anonymize the card for the shuffle back into the library — no seat may read a deck card.
         card.turn_face_down()
         card.unbow()
@@ -107,7 +111,7 @@ def move_card(
     if any(held is card for held in zone.cards):
         return False
     remove_from_location(state, card)
-    _clear_attachment(state, card.id)
+    _clear_relations(state, card.id)
     if dest.role is ZoneRole.HAND:
         card.turn_face_up()
         card.unbow()
@@ -136,12 +140,54 @@ def set_position(state: TableState, card: L5RCard, x: float, y: float) -> bool:
 
 
 def attach(state: TableState, card: L5RCard, target: AttachTarget) -> bool:
-    """Attach ``card`` to ``target`` — a parent card id or province zone key — so it rides behind
-    that parent. Returns whether the graph changed; re-attaching to the same target is a no-op."""
+    """Stack ``card`` behind ``target`` — a card id or province zone key — so it renders behind that
+    parent. Returns whether the graph changed; re-stacking on the same target is a no-op.
+
+    Presentation only. A card in a unit joins it through :func:`attach_to_personality`, which is what
+    the rules layer reads.
+    """
     if state.attachments.get(card.id) == target:
         return False
     state.attachments[card.id] = target
     return True
+
+
+def attach_to_personality(state: TableState, card: L5RCard, personality: L5RCard) -> bool:
+    """Attach ``card`` to ``personality``, putting it in his unit. Returns whether the relation
+    changed; re-attaching to the same Personality is a no-op.
+
+    Raises
+    ------
+    ValueError
+        If ``personality`` is not a Personality. Attachments are the only card type that may attach
+        to a Personality and a Personality is the only thing they may attach to (CR, Attachments), so
+        a wrong parent is a caller bug rather than a board state to represent.
+    """
+    if not isinstance(personality.printed, PersonalityPrint):
+        raise ValueError(f"cannot attach {card.id!r} to non-Personality {personality.id!r}")
+    if state.units.get(card.id) == personality.id:
+        return False
+    state.units[card.id] = personality.id
+    state.province_attachments.pop(card.id, None)
+    return True
+
+
+def attach_to_province(state: TableState, card: L5RCard, zone_key: ZoneKey) -> bool:
+    """Attach ``card`` to a province, where Regions and Fortifications sit. Returns whether the
+    relation changed."""
+    if state.province_attachments.get(card.id) == zone_key:
+        return False
+    state.province_attachments[card.id] = zone_key
+    state.units.pop(card.id, None)
+    return True
+
+
+def detach_from_parent(state: TableState, card: L5RCard) -> bool:
+    """Break ``card``'s attachment to whichever Personality or province holds it, leaving its
+    stacking alone. Returns whether it was attached to either."""
+    in_unit = state.units.pop(card.id, None) is not None
+    on_province = state.province_attachments.pop(card.id, None) is not None
+    return in_unit or on_province
 
 
 def detach(state: TableState, card: L5RCard) -> bool:
@@ -241,7 +287,12 @@ def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> li
     # A card attached to the province follows it off the board into its own side's discard; move_card
     # turns it face up and clears the attachment. Only fate/dynasty cards have a discard — a pregame
     # side (stronghold/sensei/wind) has none, so it just detaches rather than vanishing off the board.
-    for child_id in [child for child, parent in state.attachments.items() if parent == zone_key]:
+    stacked = [child for child, parent in state.attachments.items() if parent == zone_key]
+    attached = [child for child, parent in state.province_attachments.items() if parent == zone_key]
+    # A card can be both stacked behind the province and attached to it; it follows the province off
+    # the board once.
+    children = dict.fromkeys(stacked + attached)
+    for child_id in children:
         child = state.cards_by_id[child_id]
         if child.side is Side.FATE:
             role = ZoneRole.FATE_DISCARD
@@ -249,6 +300,7 @@ def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> li
             role = ZoneRole.DYNASTY_DISCARD
         else:
             state.attachments.pop(child_id, None)
+            state.province_attachments.pop(child_id, None)
             continue
         move_card(state, child, ZoneKey(child.owner or seat, role))
         moved.append(child_id)
@@ -317,7 +369,7 @@ def remove_card(state: TableState, card: L5RCard) -> None:
     """Take ``card`` off the table entirely, wherever it sits."""
     del state.cards_by_id[card.id]
     remove_from_location(state, card)
-    _clear_attachment(state, card.id)
+    _clear_relations(state, card.id)
 
 
 def set_honor(
