@@ -46,7 +46,12 @@ class InitialRecord:
     positions : dict mapping str to BoardPos
         Battlefield card positions, keyed by card id.
     attachments : dict mapping str to (str or ZoneKey)
-        The attachment graph, keyed by attached card id, mapping to a parent card id or province.
+        Presentation stacking, keyed by the card on top, mapping to the card or province it sits
+        behind.
+    units : dict mapping str to str
+        Unit membership, keyed by attached card id and naming the Personality it is attached to.
+    province_attachments : dict mapping str to ZoneKey
+        Regions and Fortifications attached to a province, keyed by card id.
     creatable_tokens : dict mapping str to CardPrint
         Token templates the loaded decks can create, keyed by token card id, so a replayed token
         spawn resolves against the same templates without a database call.
@@ -60,6 +65,8 @@ class InitialRecord:
     battlefield: list[L5RCard] = field(default_factory=list)
     positions: dict[str, BoardPos] = field(default_factory=dict)
     attachments: dict[str, str | ZoneKey] = field(default_factory=dict)
+    units: dict[str, str] = field(default_factory=dict)
+    province_attachments: dict[str, ZoneKey] = field(default_factory=dict)
     creatable_tokens: dict[str, CardPrint] = field(default_factory=dict)
     setup_seeds: dict[str, int] = field(default_factory=dict)
 
@@ -88,6 +95,8 @@ class InitialRecord:
             battlefield=[replace(card) for card in state.battlefield.cards],
             positions=dict(state.positions),
             attachments=dict(state.attachments),
+            units=dict(state.units),
+            province_attachments=dict(state.province_attachments),
             creatable_tokens=dict(state.creatable_tokens),
             setup_seeds=dict(setup_seeds or {}),
         )
@@ -111,6 +120,8 @@ def build_initial_state(initial: InitialRecord) -> TableState:
     state.battlefield.cards = _restore_cards(state, initial.battlefield)
     state.positions = dict(initial.positions)
     state.attachments = dict(initial.attachments)
+    state.units = dict(initial.units)
+    state.province_attachments = dict(initial.province_attachments)
     state.creatable_tokens = dict(initial.creatable_tokens)
     return state
 
@@ -141,6 +152,10 @@ def encode_initial(initial: InitialRecord) -> dict:
         "attachments": {
             card_id: encode_attach_target(target) for card_id, target in initial.attachments.items()
         },
+        "units": dict(initial.units),
+        "province_attachments": {
+            card_id: encode_zone_key(zone) for card_id, zone in initial.province_attachments.items()
+        },
         "creatable_tokens": {
             tid: encode_print(printed) for tid, printed in initial.creatable_tokens.items()
         },
@@ -165,6 +180,13 @@ def decode_initial(payload: dict) -> InitialRecord:
         card_id: decode_attach_target(target)
         for card_id, target in payload.get("attachments", {}).items()
     }
+    # Absent from a log written before the relations were split, which replays as an empty unit map
+    # — correct, because nothing could attach in the rules layer then.
+    units = dict(payload.get("units", {}))
+    province_attachments = {
+        card_id: decode_zone_key(zone)
+        for card_id, zone in payload.get("province_attachments", {}).items()
+    }
     creatable_tokens = {
         tid: decode_print(printed) for tid, printed in payload.get("creatable_tokens", {}).items()
     }
@@ -175,6 +197,8 @@ def decode_initial(payload: dict) -> InitialRecord:
         battlefield=battlefield,
         positions=positions,
         attachments=attachments,
+        units=units,
+        province_attachments=province_attachments,
         creatable_tokens=creatable_tokens,
         setup_seeds=dict(payload["setup_seeds"]),
     )

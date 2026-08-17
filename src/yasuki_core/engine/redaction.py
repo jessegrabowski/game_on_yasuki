@@ -65,6 +65,10 @@ class ViewSnapshot:
     # ``ZoneKey``. Passed through verbatim — card ids are public, so an attachment referencing a card
     # the viewer cannot identify still resolves by id against the (hidden) card in the same snapshot.
     attachments: dict[str, "str | ZoneKey"] = field(default_factory=dict)
+    # Unit membership, keyed by attached card id and naming its Personality. Public for the same
+    # reason and passed through the same way.
+    units: dict[str, str] = field(default_factory=dict)
+    province_attachments: dict[str, "ZoneKey"] = field(default_factory=dict)
 
 
 # Zones whose contents are public to both seats.
@@ -201,4 +205,6 @@ def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
         battlefield=tuple(battlefield_views),
         peeked_ids=frozenset(peeked_ids),
         attachments=dict(state.attachments),
+        units=dict(state.units),
+        province_attachments=dict(state.province_attachments),
     )
