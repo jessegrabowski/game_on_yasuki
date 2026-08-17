@@ -15,11 +15,18 @@ def attached_to(game: GameState, card: L5RCard) -> L5RCard | None:
 
     A Fortification or Region attached to a Province also reads None: the question this answers is
     which *card* carries it, and a Province is not one.
+
+    Raises
+    ------
+    KeyError
+        If the graph names a parent card that has left the table, which the substrate's own
+        bookkeeping rules out. Reading it as "attached to nothing" would hide the broken invariant
+        behind the answer a Province attachment legitimately gives.
     """
     parent = game.table.attachments.get(card.id)
     if not isinstance(parent, str):
         return None
-    return game.table.cards_by_id.get(parent)
+    return game.table.cards_by_id[parent]
 
 
 def attachments_of(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:

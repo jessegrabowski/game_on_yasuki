@@ -88,6 +88,19 @@ def test_a_card_attached_to_a_province_hangs_on_no_card():
     assert attached_to(game, wall) is None
 
 
+def test_a_parent_that_left_the_table_is_loud_rather_than_silent():
+    """`ops` drops the edge when a card leaves the battlefield, so this state is unreachable — and
+    answering None for it would read exactly like the Province case above, hiding the broken
+    invariant behind a legitimate answer."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    item = attached(game, attachment("item"), "hero")
+    del game.table.cards_by_id[hero.id]
+
+    with pytest.raises(KeyError):
+        attached_to(game, item)
+
+
 def test_an_attachments_modifier_reaches_the_personality():
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=2, chi=3))
