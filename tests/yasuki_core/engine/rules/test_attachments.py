@@ -1,7 +1,11 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
-from yasuki_core.engine.rules.economy import effective_chi, effective_force
+from yasuki_core.engine.rules.economy import (
+    effective_chi,
+    effective_force,
+    effective_personal_honor,
+)
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -162,3 +166,13 @@ def test_penalties_are_summed_before_the_floor_applies():
     attached(game, attachment("curse", chi_modifier=-1), "hero")
 
     assert effective_chi(game, hero) == 0
+
+
+def test_a_personal_honor_counter_reaches_the_cards_honor():
+    """The +1PH and +2PH counters have declared their delta all along; Personal Honor becoming a
+    readable stat is what lets anything ask."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    hero.adjust_counter("plus2ph", 1)
+
+    assert effective_personal_honor(game, hero) == 2

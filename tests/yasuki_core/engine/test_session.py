@@ -654,3 +654,21 @@ def test_a_finished_action_is_not_in_flight_and_cannot_be_aborted():
 
     assert session.game.pending is None
     assert session.abort(PlayerId.P1) is False  # the action is done, not in flight
+
+
+def test_proclaim_gains_the_honor_the_personality_is_worth_now():
+    """A Personality wearing a +2PH counter is worth more than he prints, and Proclaim gains what he
+    is worth rather than what the card says."""
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _stronghold(state, "Crab")
+    person = _personality_in_province(state, "P1-person", clan="Crab", personal_honor=2)
+    person.adjust_counter("plus2ph", 1)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+    before = session.game.table.seats[PlayerId.P1].honor
+
+    session.act(PlayerId.P1, Recruit("P1-person", proclaim=True))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    assert session.game.table.seats[PlayerId.P1].honor == before + 4

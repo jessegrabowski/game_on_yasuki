@@ -154,6 +154,12 @@ def effective_chi(game: GameState, card: L5RCard) -> int:
     return effective_stat(game, card, Stat.CHI)
 
 
+def effective_personal_honor(game: GameState, card: L5RCard) -> int:
+    """``card``'s Personal Honor right now — what Proclaiming him gains, and what an effect reading
+    his honor sees. The +1PH and +2PH counters carry their delta here."""
+    return effective_stat(game, card, Stat.PERSONAL_HONOR)
+
+
 def effective_gold_cost(game: GameState, card: L5RCard) -> int:
     """What ``card`` costs before the seat's own discounts and surcharges: its printed gold cost plus
     every active Gold Cost modifier on it, floored at zero. A card printing no gold cost has none to

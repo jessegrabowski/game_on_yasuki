@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionRequest,
     DecisionResponse,
 )
+from yasuki_core.engine.rules.economy import effective_personal_honor
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.policies import Policy
 from yasuki_core.engine.rules.projection import GameView
@@ -100,7 +101,8 @@ class GameRunner:
                 if action.invest:
                     items.append((self._invest_label(card, base), action))
                 elif action.proclaim:
-                    label = f"Recruit & Proclaim: Pay {base} gold, gain {card.personal_honor} honor"
+                    honor = effective_personal_honor(game, card)
+                    label = f"Recruit & Proclaim: Pay {base} gold, gain {honor} honor"
                     items.append((label, action))
                 else:
                     items.append((f"Recruit: Pay {base} gold", action))

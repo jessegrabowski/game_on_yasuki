@@ -16,6 +16,7 @@ class Stat(Enum):
     FORCE = "force"
     GOLD_COST = "gold_cost"
     GOLD_PRODUCTION = "gold_production"
+    PERSONAL_HONOR = "personal_honor"
     PROVINCE_STRENGTH = "province_strength"
 
 
