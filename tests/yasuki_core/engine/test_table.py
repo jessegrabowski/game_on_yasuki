@@ -5,7 +5,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, Boa
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
 
 
 def test_empty_two_seat_has_both_seats_and_fixed_zones():
@@ -139,6 +139,64 @@ def _put_on_battlefield(table: TableState, card_id: str) -> L5RCard:
     table.positions[card_id] = BoardPos(0.0, 0.0)
     table.cards_by_id[card_id] = card
     return card
+
+
+def _put_personality_on_battlefield(table: TableState, card_id: str) -> L5RCard:
+    card = L5RCard.of(
+        PersonalityPrint, id=card_id, name=card_id, side=Side.DYNASTY, owner=PlayerId.P1
+    )
+    table.battlefield.add(card)
+    table.positions[card_id] = BoardPos(0.0, 0.0)
+    table.cards_by_id[card_id] = card
+    return card
+
+
+def test_validate_accepts_a_unit_and_a_province_attachment():
+    table = TableState.empty_two_seat()
+    _put_personality_on_battlefield(table, "hero")
+    _put_on_battlefield(table, "item")
+    _put_on_battlefield(table, "fort")
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    table.units = {"item": "hero"}
+    table.province_attachments = {"fort": province}
+
+    table.validate()
+
+
+def test_validate_rejects_a_unit_parent_that_is_not_a_personality():
+    """Attachments are the only card type that may attach to a Personality, and a Personality is the
+    only thing they may attach to (CR, Attachments) — so a Follower parent is not a board state to
+    tolerate, it is a broken relation."""
+    table = TableState.empty_two_seat()
+    _put_on_battlefield(table, "follower")
+    _put_on_battlefield(table, "item")
+    table.units = {"item": "follower"}
+
+    with pytest.raises(ValueError, match="not a Personality"):
+        table.validate()
+
+
+def test_validate_rejects_a_unit_member_off_the_battlefield():
+    table = TableState.empty_two_seat()
+    _put_personality_on_battlefield(table, "hero")
+    table.units = {"ghost": "hero"}
+
+    with pytest.raises(ValueError, match="unit member not on battlefield"):
+        table.validate()
+
+
+def test_validate_rejects_a_card_both_in_a_unit_and_on_a_province():
+    table = TableState.empty_two_seat()
+    _put_personality_on_battlefield(table, "hero")
+    _put_on_battlefield(table, "item")
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    table.units = {"item": "hero"}
+    table.province_attachments = {"item": province}
+
+    with pytest.raises(ValueError, match="in a unit and on a province"):
+        table.validate()
 
 
 def test_validate_accepts_card_and_province_attachments():
