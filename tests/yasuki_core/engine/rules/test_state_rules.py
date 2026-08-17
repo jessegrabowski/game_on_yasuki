@@ -129,7 +129,7 @@ def test_a_destroyed_personality_takes_his_unit_with_him():
         game, attachment("infantry", attachment_type=AttachmentType.FOLLOWER, force=5), "doomed"
     )
 
-    events = Destroy("doomed").perform(game)
+    events = Destroy("doomed", P1).perform(game)
 
     # Each leaves by destruction, which is what separates this from the orphan rule sweeping up
     # afterwards — that reaches the same board by discarding what the cascade would have taken.

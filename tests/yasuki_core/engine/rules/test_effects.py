@@ -124,7 +124,7 @@ def test_destroying_a_vanished_card_is_a_no_op():
     game = two_seat_game()
     card = put_in_play(game, holding("P1-h"))
     _vanished(game, card.id)
-    assert Destroy(card.id).perform(game) == []
+    assert Destroy(card.id, PlayerId.P1).perform(game) == []
 
 
 @pytest.mark.parametrize(

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
@@ -14,12 +14,13 @@ class TurnStarted:
 
 @dataclass(frozen=True, slots=True)
 class CardDiscarded:
-    """A card entered a discard pile. ``by_seat`` is the seat whose action caused it, ``side`` the
-    discarded card's side — the two facts a discard-reaction reads ("your action, a Fate card")."""
+    """A card entered a discard pile. ``cause`` is who or what put it there and ``side`` the card's
+    side — the two facts a discard-reaction reads ("your action, a Fate card"). A ``Rulebook`` cause
+    means no player chose it, so a reaction guarded on a seat correctly ignores it."""
 
     card_id: str
     side: Side
-    by_seat: PlayerId
+    cause: Cause
 
 
 @dataclass(frozen=True, slots=True)
@@ -34,9 +35,12 @@ class CounterGained:
 @dataclass(frozen=True, slots=True)
 class Destroyed:
     """A card was destroyed — sent to a discard by destruction, distinct from being discarded from
-    hand."""
+    hand. ``cause`` names who or what destroyed it, which cards ask about: several react only to a
+    Personality destroyed for having zero Chi, and others only to a destruction that was not their
+    own doing."""
 
     card_id: str
+    cause: Cause
 
 
 @dataclass(frozen=True, slots=True)

@@ -73,7 +73,7 @@ def _modest_farm_straighten(
     # it to straighten the target.
     if not chosen:
         return []
-    return [Destroy(chosen[0]), Straighten(source_id)]
+    return [Destroy(chosen[0], seat), Straighten(source_id)]
 
 
 def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:

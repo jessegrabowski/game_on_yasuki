@@ -101,8 +101,9 @@ def at_cap(card: L5RCard, counter: Counter, cap: int) -> bool:
 
 def caused_by(ctx: TriggerContext, seat: PlayerId) -> bool:
     """Whether ``seat``'s own action caused the event — the "if the action was yours" guard. Reads
-    the event's ``by_seat``; only meaningful for events that carry one."""
-    return ctx.event.by_seat is seat
+    the event's ``cause``; only meaningful for events that carry one. False when the rulebook caused
+    it, since no seat did."""
+    return ctx.event.cause is seat
 
 
 def once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:

@@ -38,7 +38,7 @@ def bow_cost(source: L5RCard) -> list[Effect]:
 
 
 def destroy_cost(source: L5RCard) -> list[Effect]:
-    return [Destroy(source.id)]
+    return [Destroy(source.id, source.owner)]
 
 
 def spend_wealth(source: L5RCard) -> list[Effect]:
@@ -46,7 +46,7 @@ def spend_wealth(source: L5RCard) -> list[Effect]:
 
 
 def bow_and_destroy(source: L5RCard) -> list[Effect]:
-    return [Bow(source.id), Destroy(source.id)]
+    return [Bow(source.id), Destroy(source.id, source.owner)]
 
 
 def banish_top_fate(source: L5RCard) -> list[Effect]:

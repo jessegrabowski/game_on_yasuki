@@ -313,9 +313,9 @@ def test_destroy_effect_discards_the_card_and_emits_destroyed():
     game = two_seat_game()
     farm = _keyworded_farm(game)
 
-    events = apply_effect(game, Destroy(farm.id))
+    events = apply_effect(game, Destroy(farm.id, PlayerId.P1))
 
-    assert events == [Destroyed(farm.id)]
+    assert events == [Destroyed(farm.id, PlayerId.P1)]
     assert farm not in game.table.battlefield.cards
     assert farm in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
 
@@ -325,7 +325,7 @@ def test_destroy_routes_a_fate_card_to_the_fate_discard():
     follower = fate_card("P1-follower", PlayerId.P1)
     put_in_play(game, follower)
 
-    apply_effect(game, Destroy(follower.id))
+    apply_effect(game, Destroy(follower.id, PlayerId.P1))
 
     assert follower in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
 
@@ -335,7 +335,7 @@ def test_destroying_your_farm_gives_rural_market_a_wealth_token():
     rural = _rural_market(game)
     farm = _keyworded_farm(game)
 
-    fire(game, Destroyed(farm.id))
+    fire(game, Destroyed(farm.id, PlayerId.P1))
 
     assert rural.counters == {"wealth": 1}
 
@@ -345,7 +345,7 @@ def test_rural_market_ignores_a_non_farm_destruction():
     rural = _rural_market(game)
     holding = _caravansary(game)  # a Holding, but not a Farm
 
-    fire(game, Destroyed(holding.id))
+    fire(game, Destroyed(holding.id, PlayerId.P1))
 
     assert rural.counters == {}
 
@@ -355,7 +355,7 @@ def test_rural_market_ignores_an_opponents_farm():
     rural = _rural_market(game, seat=PlayerId.P1)
     farm = _keyworded_farm(game, seat=PlayerId.P2, card_id="P2-a-farm")
 
-    fire(game, Destroyed(farm.id))
+    fire(game, Destroyed(farm.id, PlayerId.P1))
 
     assert rural.counters == {}
 
