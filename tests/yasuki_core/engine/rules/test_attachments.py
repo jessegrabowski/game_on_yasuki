@@ -105,6 +105,36 @@ def test_a_card_on_a_province_is_in_no_unit():
     assert attached_to(game, wall) is None
 
 
+def test_attaching_to_one_parent_releases_the_other():
+    """A card is in a unit or on a province, never both — `validate` refuses the overlap, so the
+    mutators have to clear the relation they are leaving rather than let it accumulate."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    province = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    game.table.zones[province] = ProvinceZone(owner=P1)
+    card = put_in_play(game, attachment("wall"))
+
+    ops.attach_to_province(game.table, card, province)
+    ops.attach_to_personality(game.table, card, hero)
+    game.table.validate()
+
+    assert attachments_of(game, hero) == (card,)
+    assert card.id not in game.table.province_attachments
+
+
+def test_a_personality_leaving_play_empties_his_unit():
+    """`ops` drops the members' entries when he goes, which is what leaves them unattached in play
+    for the orphan rule to find. Without it they would name a Personality that is gone."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    item = attached(game, attachment("item"), "hero")
+
+    ops.move_card(game.table, hero, ZoneKey(P1, ZoneRole.DYNASTY_DISCARD))
+
+    assert game.table.units == {}
+    assert attached_to(game, item) is None
+
+
 def test_a_parent_that_left_the_table_is_loud_rather_than_silent():
     """`ops` drops the entry when a card leaves the battlefield, so this state is unreachable — and
     answering None for it would read exactly like an unattached card, hiding a broken invariant
