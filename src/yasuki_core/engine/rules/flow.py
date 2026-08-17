@@ -1,7 +1,7 @@
 from dataclasses import replace
 
 from yasuki_core.engine import ops
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -820,6 +820,12 @@ def _begin_turn(game: GameState) -> None:
 
 
 def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:
+    """Discard down to the maximum hand size at the end of the turn.
+
+    The rulebook trims the hand, so the discard names no seat as its cause: it is a step of the turn
+    rather than an action (CR, Drawing and Discarding Fate Cards), and a card reacting to "if the
+    action was yours" has no action to claim.
+    """
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     by_id = {card.id: card for card in hand.cards}
     missing = [card_id for card_id in card_ids if card_id not in by_id]
@@ -828,7 +834,7 @@ def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -
     for card_id in card_ids:
         card = by_id[card_id]
         ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.FATE_DISCARD))
-        triggers.fire(game, CardDiscarded(card_id, card.side, seat))
+        triggers.fire(game, CardDiscarded(card_id, card.side, Rulebook.MAXIMUM_HAND_SIZE))
 
 
 def _other(seat: PlayerId) -> PlayerId:

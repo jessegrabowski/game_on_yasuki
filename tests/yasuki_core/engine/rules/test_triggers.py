@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production
@@ -33,6 +33,14 @@ from tests.yasuki_core.engine.builders import (
 # pairs with Wheat Farm to do.
 @on(EnteredPlay, "test_probe")
 def _probe_gains_wealth(ctx):
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+# A test-only trigger that takes a Wealth token for any discard at all, whatever caused it. The
+# real discard-watcher, Caravansary, filters on the cause, so it cannot double as a probe for
+# whether the event fired.
+@on(CardDiscarded, "test_discard_probe")
+def _probe_sees_any_discard(ctx):
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
 
 
@@ -177,6 +185,17 @@ def test_caravansary_ignores_an_opponents_discard():
     assert caravansary.counters == {}
 
 
+def test_caravansary_ignores_a_discard_no_player_made():
+    """Trimming to the maximum hand size is a step of the turn, not an action (CR, Drawing and
+    Discarding Fate Cards), so "if the action was yours" has no action to claim."""
+    game = two_seat_game()
+    caravansary = _caravansary(game)
+
+    fire(game, CardDiscarded("some-fate", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE))
+
+    assert caravansary.counters == {}
+
+
 def test_caravansary_ignores_a_dynasty_discard():
     game = two_seat_game()
     caravansary = _caravansary(game)
@@ -199,14 +218,15 @@ def test_caravansary_wealth_caps_at_three():
 def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
     # The wiring test: _apply_discard moves a hand card to the discard and must fire CardDiscarded.
     game = two_seat_game()
-    caravansary = _caravansary(game)
+    probe = holding("P1-probe", printed_id="test_discard_probe", owner=PlayerId.P1)
+    put_in_play(game, probe)
     fate = fate_card("P1-f", PlayerId.P1)
     game.table.cards_by_id[fate.id] = fate
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(fate)
 
     flow._apply_discard(game, PlayerId.P1, ("P1-f",))
 
-    assert caravansary.counters == {"wealth": 1}
+    assert probe.counters == {"wealth": 1}
 
 
 def _aoki(game, seat=PlayerId.P1, card_id="P1-aoki"):

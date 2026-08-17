@@ -14,6 +14,7 @@ class Rulebook(Enum):
     player at all". Battle and duel resolution join when battle exists."""
 
     CHI_DEATH = "chi_death"
+    MAXIMUM_HAND_SIZE = "maximum_hand_size"
     ORPHANED_ATTACHMENT = "orphaned_attachment"
 
 
