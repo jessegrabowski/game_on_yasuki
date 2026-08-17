@@ -2,6 +2,7 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -84,16 +85,24 @@ def _on_battlefield(game: GameState, card_id: str) -> bool:
 
 
 def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
-    """Every modifier adjusting ``card``'s ``stat`` right now: one derived from each counter it holds
-    (each counter is a source that grants its per-count stat while in play), plus the recorded
-    modifiers targeting it — a ``WHILE_SOURCE_IN_PLAY`` one only while its source is on the
-    battlefield."""
+    """Every modifier adjusting ``card``'s ``stat`` right now, from three sources: each counter it
+    holds, which grants its per-count stat while in play; each card attached to it, for the modifier
+    that card prints; and the recorded modifiers targeting it, a
+    ``WHILE_SOURCE_IN_PLAY`` one only while its source is on the battlefield.
+
+    An attachment's modifier is derived from the graph rather than recorded, so it lasts exactly as
+    long as the card stays attached."""
     # A counter's source is the card itself, in play by construction here (this is only reached for
     # an in-play card), so no source-in-play check is needed for the derived modifiers.
     for key, count in card.counters.items():
         per_count = getattr(counter_from_key(key), stat.value, 0)
         if per_count and count:
             yield Modifier(card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY)
+    printed_modifier = f"{stat.value}_modifier"
+    for attached in attachments_of(game, card):
+        amount = getattr(attached, printed_modifier, 0)
+        if amount:
+            yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
     for modifier in game.modifiers:
         if modifier.target_id != card.id or modifier.stat is not stat:
             continue

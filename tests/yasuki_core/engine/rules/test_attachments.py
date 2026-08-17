@@ -1,5 +1,7 @@
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
+from yasuki_core.engine.rules.economy import effective_chi, effective_force
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -73,3 +75,90 @@ def test_a_card_attached_to_a_province_hangs_on_no_card():
     wall = attached(game, attachment("wall"), ZoneKey(P1, ZoneRole.PROVINCE, 0))
 
     assert attached_to(game, wall) is None
+
+
+def test_an_attachments_modifier_reaches_the_personality():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=2, chi=3))
+    attached(game, attachment("item", force_modifier=1, chi_modifier=2), "hero")
+
+    assert effective_force(game, hero) == 3
+    assert effective_chi(game, hero) == 5
+
+
+def test_a_stat_the_attachment_has_of_its_own_stays_with_it():
+    """A Follower's Force stands in the unit and totals into the army at step 4. Folding it into the
+    Personality's own Force here would double-count it there."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=2))
+    attached(
+        game,
+        attachment("follower", attachment_type=AttachmentType.FOLLOWER, force=5),
+        "hero",
+    )
+
+    assert effective_force(game, hero) == 2
+
+
+def test_one_card_can_have_a_stat_and_grant_a_modifier_at_once():
+    """The two halves are independent fields, so a card carrying a Force of its own can still move
+    the Personality's Chi."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=2, chi=3))
+    attached(
+        game,
+        attachment("follower", attachment_type=AttachmentType.FOLLOWER, force=2, chi_modifier=-1),
+        "hero",
+    )
+
+    assert effective_force(game, hero) == 2
+    assert effective_chi(game, hero) == 2
+
+
+def test_a_modifier_stops_at_the_card_it_hangs_on():
+    """An Item on a Follower moves the Follower's stats, not the Personality's. Walking the chain
+    would let a modifier reach a card it was never attached to."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=2))
+    follower = attached(
+        game,
+        attachment("follower", attachment_type=AttachmentType.FOLLOWER, force=5),
+        "hero",
+    )
+    attached(game, attachment("item", force_modifier=2), "follower")
+
+    assert effective_force(game, hero) == 2
+    assert effective_force(game, follower) == 7
+
+
+def test_the_modifier_leaves_with_the_card():
+    """It is derived from the graph, so detaching removes it without anything having to revoke it —
+    which is what makes the manual surface's `ops`-level attach safe."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=2))
+    item = attached(game, attachment("item", force_modifier=1), "hero")
+    assert effective_force(game, hero) == 3
+
+    ops.detach(game.table, item)
+
+    assert effective_force(game, hero) == 2
+
+
+def test_modifiers_from_several_attachments_stack():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=2))
+    attached(game, attachment("item", force_modifier=1), "hero")
+    attached(game, attachment("armor", force_modifier=3), "hero")
+
+    assert effective_force(game, hero) == 6
+
+
+def test_penalties_are_summed_before_the_floor_applies():
+    """Two penalties against a Chi of 1 total -1, which reads as 0 — the sum floors once, rather than
+    each penalty flooring on its own (CR, Calculating Stats)."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", chi=1))
+    attached(game, attachment("item", chi_modifier=-1), "hero")
+    attached(game, attachment("curse", chi_modifier=-1), "hero")
+
+    assert effective_chi(game, hero) == 0
