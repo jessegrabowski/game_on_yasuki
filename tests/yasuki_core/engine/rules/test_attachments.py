@@ -73,7 +73,7 @@ def test_a_unit_is_flat_however_the_table_renders_it():
         game, attachment("follower", attachment_type=AttachmentType.FOLLOWER, force=5), "hero"
     )
     item = attached(game, attachment("item", force_modifier=2), "hero")
-    ops.attach(game.table, item, follower.id)  # renders behind the Follower, rules-irrelevant
+    ops.stack(game.table, item, follower.id)  # renders behind the Follower; no rules meaning
 
     assert attachments_of(game, hero) == (follower, item)
     assert attached_to(game, item) is hero
@@ -164,7 +164,7 @@ def test_the_modifier_leaves_with_the_card():
     item = attached(game, attachment("item", force_modifier=1), "hero")
     assert effective_force(game, hero) == 3
 
-    ops.detach_from_parent(game.table, item)
+    ops.detach(game.table, item)
 
     assert effective_force(game, hero) == 2
 

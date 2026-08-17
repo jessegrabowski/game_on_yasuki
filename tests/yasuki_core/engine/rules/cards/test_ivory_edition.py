@@ -26,6 +26,6 @@ def test_the_granted_honor_leaves_when_the_armor_does():
     hero = put_in_play(game, personality("hero", force=2, personal_honor=2))
     armor = attached(game, attachment("armor", printed_id="haramaki_do", force_modifier=2), "hero")
 
-    ops.detach_from_parent(game.table, armor)
+    ops.detach(game.table, armor)
 
     assert effective_personal_honor(game, hero) == 2

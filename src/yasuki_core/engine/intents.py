@@ -934,7 +934,7 @@ def _attach(state: TableState, seat: PlayerId, intent: Attach) -> list[Event]:
             if cursor == intent.card_id:
                 return []
             cursor = state.attachments.get(cursor)
-    if not ops.attach(state, child, target):
+    if not ops.stack(state, child, target):
         return []
     state.seq += 1
     return [Event(state.seq, seat, intent, (child.id,))]
@@ -944,7 +944,7 @@ def _detach(state: TableState, seat: PlayerId, intent: Detach) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
     if card is None or not owns_card(state, seat, intent.card_id):
         return []
-    if not ops.detach(state, card):
+    if not ops.unstack(state, card):
         return []
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]

@@ -139,17 +139,22 @@ def set_position(state: TableState, card: L5RCard, x: float, y: float) -> bool:
     return True
 
 
-def attach(state: TableState, card: L5RCard, target: AttachTarget) -> bool:
+def stack(state: TableState, card: L5RCard, target: AttachTarget) -> bool:
     """Stack ``card`` behind ``target`` — a card id or province zone key — so it renders behind that
     parent. Returns whether the graph changed; re-stacking on the same target is a no-op.
 
-    Presentation only. A card in a unit joins it through :func:`attach_to_personality`, which is what
-    the rules layer reads.
+    Rendering only; :func:`attach_to_personality` is what puts a card in a unit.
     """
     if state.attachments.get(card.id) == target:
         return False
     state.attachments[card.id] = target
     return True
+
+
+def unstack(state: TableState, card: L5RCard) -> bool:
+    """Unstack ``card`` from the card or province it renders behind, leaving anything stacked on it
+    in place. Returns whether it was stacked."""
+    return state.attachments.pop(card.id, None) is not None
 
 
 def attach_to_personality(state: TableState, card: L5RCard, personality: L5RCard) -> bool:
@@ -182,18 +187,12 @@ def attach_to_province(state: TableState, card: L5RCard, zone_key: ZoneKey) -> b
     return True
 
 
-def detach_from_parent(state: TableState, card: L5RCard) -> bool:
+def detach(state: TableState, card: L5RCard) -> bool:
     """Break ``card``'s attachment to whichever Personality or province holds it, leaving its
     stacking alone. Returns whether it was attached to either."""
     in_unit = state.units.pop(card.id, None) is not None
     on_province = state.province_attachments.pop(card.id, None) is not None
     return in_unit or on_province
-
-
-def detach(state: TableState, card: L5RCard) -> bool:
-    """Break ``card``'s own attachment to its parent, leaving anything hung off ``card`` in place.
-    Returns whether it was attached."""
-    return state.attachments.pop(card.id, None) is not None
 
 
 def reorder_in_hand(state: TableState, seat: PlayerId, card_id: str, index: int) -> bool:
