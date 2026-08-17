@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
@@ -338,6 +339,39 @@ def _build_print(
     )
 
 
+def _printed_stat(record: dict, stat: str) -> int:
+    """The number printed for ``stat``, taken from its integer column or from the ``<col>_raw`` text
+    the install pipeline keeps when the printed value would not fit one.
+
+    A card type that prints the stat at all but leaves it empty reads zero (CR, Absent Stats). A
+    trailing ``*`` marks a value the card computes (``"2*"``, ``"+1*"``); the number before it is
+    taken and the variability is not modeled, so such a card reads its printed floor.
+    """
+    column = record.get(stat)
+    if column is not None:
+        return column
+    raw = (record.get("extra") or {}).get(f"{stat}_raw")
+    if not raw:
+        return 0
+    match = re.match(r"[+-]?\d+", raw)
+    return int(match.group()) if match else 0
+
+
+def _attachment_stats(attachment_type: AttachmentType, record: dict) -> dict[str, int]:
+    """Split an attachment's printed Force and Chi between the stats it brings to the unit and the
+    modifiers it hands the Personality it joins.
+
+    A Follower's Force is its own — it stands in the unit and totals into the army (CR, Unit and Army
+    Force) — while its Chi modifies the Personality, a Follower having no Chi of its own. An Item or
+    Spell has neither stat of its own, so both of its numbers are modifiers.
+    """
+    force = _printed_stat(record, "force")
+    chi = _printed_stat(record, "chi")
+    if attachment_type is AttachmentType.FOLLOWER:
+        return {"force": force, "chi": 0, "force_modifier": 0, "chi_modifier": chi}
+    return {"force": 0, "chi": 0, "force_modifier": force, "chi_modifier": chi}
+
+
 def _stat_fields(print_cls: type[CardPrint], card_type: str | None, record: dict) -> dict:
     """The numeric and category stats a given print subclass holds, drawn from the database record."""
     if issubclass(print_cls, DynastyPrint):
@@ -358,9 +392,9 @@ def _stat_fields(print_cls: type[CardPrint], card_type: str | None, record: dict
     if issubclass(print_cls, FatePrint):
         fields = {"focus": record.get("focus"), "gold_cost": record.get("gold_cost")}
         if print_cls is AttachmentPrint:
-            fields["attachment_type"] = AttachmentType(card_type)
-            # A card type printing neither reads zero for both (CR, Absent Stats).
-            fields.update(force=record.get("force") or 0, chi=record.get("chi") or 0)
+            attachment_type = AttachmentType(card_type)
+            fields["attachment_type"] = attachment_type
+            fields.update(_attachment_stats(attachment_type, record))
         return fields
     # A sensei's are deltas the stronghold receives rather than its own characteristics, but the
     # record columns and the stats read off them are the same three.

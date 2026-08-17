@@ -134,7 +134,7 @@ _PERSISTED_PRINT_FIELDS: dict[str, tuple[str, ...]] = {
     "FatePrint": _FATE_PRINT_FIELDS,
     "ActionPrint": _FATE_PRINT_FIELDS + ("timings",),
     "AttachmentPrint": _FATE_PRINT_FIELDS
-    + ("attachment_type", "attach_restrictions", "force", "chi"),
+    + ("attachment_type", "attach_restrictions", "force", "chi", "force_modifier", "chi_modifier"),
     "RingPrint": _FATE_PRINT_FIELDS + ("element",),
     "AncestorPrint": _FATE_PRINT_FIELDS,
     "DynastyPrint": _DYNASTY_PRINT_FIELDS,

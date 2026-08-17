@@ -121,8 +121,14 @@ class AttachmentPrint(FatePrint):
     image_front: Path | None = DEFAULT_ITEM
     attachment_type: AttachmentType = AttachmentType.ITEM
     attach_restrictions: tuple[str, ...] = ()
+    # What the card brings to the unit it joins, against what it hands the Personality. A Follower
+    # stands in the unit and so has a Force of its own, but no Chi; an Item or Spell has neither, and
+    # both of its numbers are modifiers. Shadowlands Ambassador does both — Force 2 to the unit, -1
+    # Chi to the Personality — so these are separate fields rather than one number.
     force: int = 0
     chi: int = 0
+    force_modifier: int = 0
+    chi_modifier: int = 0
 
     def __post_init__(self):
         CardPrint.__post_init__(self)
