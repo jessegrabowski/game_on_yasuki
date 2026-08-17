@@ -173,8 +173,7 @@ class Destroy(Effect):
     card_id : str
         The card to destroy.
     cause : PlayerId or Rulebook
-        Who or what destroyed it — the seat whose card did, or the rule that demanded it. Required
-        rather than defaulted, so a new destruction has to say.
+        Who or what destroyed it — the seat whose card did, or the rule that demanded it.
     """
 
     card_id: str
