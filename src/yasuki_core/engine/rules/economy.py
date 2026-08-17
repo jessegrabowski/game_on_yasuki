@@ -2,7 +2,7 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.attachments import attachments_of, granted_stat
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -87,7 +87,7 @@ def _on_battlefield(game: GameState, card_id: str) -> bool:
 def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
     """Every modifier adjusting ``card``'s ``stat`` right now, from three sources: each counter it
     holds, which grants its per-count stat while in play; each card attached to it, for the modifier
-    that card prints; and the recorded modifiers targeting it, a
+    that card prints plus whatever its own text grants; and the recorded modifiers targeting it, a
     ``WHILE_SOURCE_IN_PLAY`` one only while its source is on the battlefield.
 
     An attachment's modifier is derived from the graph rather than recorded, so it lasts exactly as
@@ -100,7 +100,7 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
             yield Modifier(card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY)
     printed_modifier = f"{stat.value}_modifier"
     for attached in attachments_of(game, card):
-        amount = getattr(attached, printed_modifier, 0)
+        amount = getattr(attached, printed_modifier, 0) + granted_stat(game, attached, card, stat)
         if amount:
             yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
     for modifier in game.modifiers:
