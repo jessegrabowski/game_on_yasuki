@@ -23,9 +23,10 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.engine import ops
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import counter_from_key
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.prints import PersonalityPrint, RegionPrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -140,6 +141,46 @@ def test_a_destroyed_personality_takes_his_unit_with_him():
     assert samurai.id in {
         card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].cards
     }
+
+
+def test_an_attachment_left_with_no_personality_is_discarded():
+    """ "Attachments are discarded if in play and not attached to a Personality" (CR, Attachments).
+    The cascade covers a Personality leaving; this catches every other route."""
+    game = two_seat_game()
+    stray = put_in_play(game, attachment("stray"))
+
+    triggers.enforce_state_rules(game)
+
+    assert _battlefield(game) == set()
+    discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == [stray.id]
+
+
+def test_an_attached_card_is_not_swept_by_the_orphan_rule():
+    game = two_seat_game()
+    put_in_play(game, _personality("hero"))
+    attached(game, attachment("yari"), "hero")
+
+    triggers.enforce_state_rules(game)
+
+    assert _battlefield(game) == {"hero", "yari"}
+
+
+def test_a_card_on_a_province_is_not_swept_by_the_orphan_rule():
+    """A Region sits on a Province, which is a relation of its own — reading "not in a unit" as
+    "orphaned" would discard it on sight."""
+    game = two_seat_game()
+    province = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    game.table.zones[province] = ProvinceZone(owner=P1)
+    region = put_in_play(
+        game,
+        L5RCard.of(RegionPrint, id="region", name="region", side=Side.DYNASTY, owner=P1),
+    )
+    ops.attach_to_province(game.table, region, province)
+
+    triggers.enforce_state_rules(game)
+
+    assert _battlefield(game) == {"region"}
 
 
 def test_a_discarded_personality_takes_his_unit_the_same_way():
