@@ -6,12 +6,14 @@ from yasuki_core.engine.rules import state_rules, triggers
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
+    Destroy,
+    Discard,
     GainHonor,
     GrantModifier,
     Then,
 )
 from yasuki_core.engine.rules.flow import run_stack
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
@@ -21,11 +23,14 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.engine import ops
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import counter_from_key
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.prints import PersonalityPrint, RegionPrint
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     dealt_table,
     end_phase,
     holding,
@@ -111,6 +116,100 @@ def test_a_card_whose_own_text_exempts_it_survives_zero_chi():
 
     assert "breaker" in _battlefield(game)
     assert "mortal" not in _battlefield(game)
+
+
+def test_a_destroyed_personality_takes_his_unit_with_him():
+    """ "If a Personality leaves play, all cards in the unit leave play in the same way" (CR, Unit).
+    The relation is cleared as he goes, so the unit has to be read before the move, and each member
+    announces its own destruction so a reaction sees more than the Personality."""
+    samurai = _personality("doomed", chi=2)
+    game = _in_play(samurai)
+    yari = attached(game, attachment("yari", force_modifier=1), "doomed")
+    infantry = attached(
+        game, attachment("infantry", attachment_type=AttachmentType.FOLLOWER, force=5), "doomed"
+    )
+
+    events = Destroy("doomed").perform(game)
+
+    # Each leaves by destruction, which is what separates this from the orphan rule sweeping up
+    # afterwards — that reaches the same board by discarding what the cascade would have taken.
+    assert [event.card_id for event in events] == ["doomed", yari.id, infantry.id]
+    assert all(isinstance(event, Destroyed) for event in events)
+    assert _battlefield(game) == set()
+    discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
+    assert {card.id for card in discard} == {yari.id, infantry.id}
+    assert samurai.id in {
+        card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].cards
+    }
+
+
+def test_an_attachment_left_with_no_personality_is_discarded():
+    """ "Attachments are discarded if in play and not attached to a Personality" (CR, Attachments).
+    The cascade covers a Personality leaving; this catches every other route."""
+    game = two_seat_game()
+    stray = put_in_play(game, attachment("stray"))
+
+    triggers.enforce_state_rules(game)
+
+    assert _battlefield(game) == set()
+    discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == [stray.id]
+
+
+def test_an_attached_card_is_not_swept_by_the_orphan_rule():
+    game = two_seat_game()
+    put_in_play(game, _personality("hero"))
+    attached(game, attachment("yari"), "hero")
+
+    triggers.enforce_state_rules(game)
+
+    assert _battlefield(game) == {"hero", "yari"}
+
+
+def test_a_card_on_a_province_is_not_swept_by_the_orphan_rule():
+    """A Region sits on a Province, which is a relation of its own — reading "not in a unit" as
+    "orphaned" would discard it on sight."""
+    game = two_seat_game()
+    province = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    game.table.zones[province] = ProvinceZone(owner=P1)
+    region = put_in_play(
+        game,
+        L5RCard.of(RegionPrint, id="region", name="region", side=Side.DYNASTY, owner=P1),
+    )
+    ops.attach_to_province(game.table, region, province)
+
+    triggers.enforce_state_rules(game)
+
+    assert _battlefield(game) == {"region"}
+
+
+def test_a_discarded_personality_takes_his_unit_the_same_way():
+    """Leaving play "in the same way" (CR, Unit) means the manner carries: a discarded Personality's
+    attachments are discarded and announce a discard, not a destruction."""
+    samurai = _personality("leaving", chi=2)
+    game = _in_play(samurai)
+    yari = attached(game, attachment("yari"), "leaving")
+
+    events = Discard("leaving", P1).perform(game)
+
+    assert _battlefield(game) == set()
+    assert [event.card_id for event in events] == ["leaving", yari.id]
+    assert all(isinstance(event, CardDiscarded) for event in events)
+
+
+def test_chi_death_clears_the_whole_unit_off_the_board():
+    """The realistic route, where nothing calls `Destroy` directly and the state rule does. It pins
+    the rule reaching the cascade at all, not the manner: with the cascade gone the orphan rule
+    reaches the same board by discarding what it strands."""
+    samurai = _personality("doomed", chi=2)
+    game = _in_play(samurai)
+    attached(game, attachment("yari", force_modifier=1), "doomed")
+    game.modifiers.append(Modifier("src", "doomed", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
+
+    triggers.enforce_state_rules(game)
+
+    assert _battlefield(game) == set()
+    assert game.table.units == {}
 
 
 def test_one_death_causing_another_resolves_and_terminates():

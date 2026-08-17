@@ -1,10 +1,10 @@
 from collections.abc import Callable
 
 from yasuki_core.engine.rules.economy import effective_chi
-from yasuki_core.engine.rules.effects import Destroy, Effect
+from yasuki_core.engine.rules.effects import Destroy, Discard, Effect
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
 # A state rule reads the board and returns the effects the rules demand of it. Unlike a trigger it
 # answers to no event: the CR states these as conditions that hold at all times rather than as
@@ -56,9 +56,27 @@ def _exempt_from_chi_death(card: L5RCard) -> bool:
     return card.printed_id in CHI_DEATH_EXEMPT
 
 
+def orphaned_attachments(game: GameState) -> list[Effect]:
+    """Discard every attachment in play that is attached to no Personality (CR, Attachments).
+
+    A Follower, Item or Spell exists in play only as part of a unit, so one left on the battlefield
+    without a Personality is not a board state the rules allow. The destruction cascade already takes
+    a unit with its Personality; this catches every other route by which a card comes loose.
+    """
+    # No card is spared this yet. Street to Street will be the first: it detaches every Follower at a
+    # battlefield and leaves them in play "though not in units" until the Terrain goes or the Combat
+    # Segment ends. That is a granted, time-bounded suspension of the rule rather than a property of
+    # a card, so it needs a duration vocabulary this layer does not have, and it needs battle.
+    return [
+        Discard(card.id, card.owner)
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, AttachmentPrint) and card.id not in game.table.units
+    ]
+
+
 # Every state rule, in the order they are checked. Closed by design: this is the rulebook's list of
 # conditions the board must satisfy, not an extension point cards register into.
-STATE_RULES: tuple[StateRule, ...] = (chi_death,)
+STATE_RULES: tuple[StateRule, ...] = (chi_death, orphaned_attachments)
 
 
 def demanded(game: GameState) -> list[Effect]:

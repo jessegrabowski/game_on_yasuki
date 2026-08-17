@@ -9,6 +9,7 @@ yasuki_core.engine.rules.state_rules
 
     chi_death
     demanded
+    orphaned_attachments
 
 .. automodule:: yasuki_core.engine.rules.state_rules
     :members:
