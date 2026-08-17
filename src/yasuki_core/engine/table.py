@@ -17,7 +17,7 @@ from yasuki_core.engine.zones import (
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.deck import Deck, FateDeck, DynastyDeck
-from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
 
 
 class ZoneRole(str, Enum):
@@ -89,10 +89,20 @@ class TableState:
     positions : dict mapping str to BoardPos
         Table coordinates for battlefield cards, keyed by card id.
     attachments : dict mapping str to (str or ZoneKey)
-        The attachment graph, keyed by the attached (child) card id. A value is either a parent card
-        id — the child sits behind that battlefield card — or a province ``ZoneKey`` a fortification
-        or region is attached to. Only battlefield cards appear as children; a card leaving the
-        battlefield drops its entry and detaches whatever is hung off it.
+        Which card or province a card sits behind on the table, keyed by the card on top. This is
+        presentation, not rules: the manual sandbox lets a player stack anything on anything, so a
+        Follower parked behind a Stronghold is a legal entry here and means nothing to the rules
+        layer, which never reads it. Only battlefield cards appear as children; a card leaving the
+        battlefield drops its entry and unstacks whatever sits on it.
+    units : dict mapping str to str
+        Unit membership, keyed by the attached card id and naming the Personality it is attached to.
+        A Personality together with the cards attached to him makes up a unit (CR, Unit), and
+        attachments are the only card type that may attach to a Personality — so unlike
+        ``attachments`` this relation is flat, and a parent is always a Personality.
+    province_attachments : dict mapping str to ZoneKey
+        The Regions and Fortifications attached to a province, keyed by card id. A separate relation
+        from ``units`` because it is a separate relation in the rules: nothing attaches to both, and
+        one map holding either would be unable to say so.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
     creatable_tokens : dict mapping str to CardPrint
@@ -109,8 +119,12 @@ class TableState:
     battlefield: BattlefieldZone
     # L5RCard is frozen, so battlefield positions live here, keyed by card id, not on the card.
     positions: dict[str, BoardPos] = field(default_factory=dict)
-    # The child->parent attachment graph, external to the frozen card. See the class docstring.
+    # Presentation stacking, external to the frozen card. See the class docstring.
     attachments: dict[str, "AttachTarget"] = field(default_factory=dict)
+    # The two rules relations. Kept apart because they are apart in the rules — one map with a
+    # `str | ZoneKey` value cannot express that a Follower may never be a parent.
+    units: dict[str, str] = field(default_factory=dict)
+    province_attachments: dict[str, ZoneKey] = field(default_factory=dict)
     cards_by_id: dict[str, L5RCard] = field(default_factory=dict)
     # A SpawnCard naming a token_id copies the matching template onto the battlefield, so spawning a
     # creatable token needs no live database call.
@@ -186,7 +200,8 @@ class TableState:
                     raise ValueError(f"attachment references missing province: {target}")
             elif target not in battlefield_ids:
                 raise ValueError(f"attachment references non-battlefield card: {target!r}")
-        # No card-to-card cycles: walking parents from any child must terminate.
+        # No card-to-card cycles: walking parents from any child must terminate. Only the stacking
+        # relation can chain, so only it can loop.
         for start in self.attachments:
             seen = {start}
             cursor = self.attachments.get(start)
@@ -195,6 +210,22 @@ class TableState:
                     raise ValueError(f"attachment cycle involving {start!r}")
                 seen.add(cursor)
                 cursor = self.attachments.get(cursor)
+
+        for card_id, personality_id in self.units.items():
+            if card_id not in battlefield_ids:
+                raise ValueError(f"unit member not on battlefield: {card_id!r}")
+            if personality_id not in battlefield_ids:
+                raise ValueError(f"unit references non-battlefield Personality: {personality_id!r}")
+            if not isinstance(self.cards_by_id[personality_id].printed, PersonalityPrint):
+                raise ValueError(f"unit parent is not a Personality: {personality_id!r}")
+            if card_id in self.province_attachments:
+                raise ValueError(f"card is in a unit and on a province: {card_id!r}")
+
+        for card_id, zone_key in self.province_attachments.items():
+            if card_id not in battlefield_ids:
+                raise ValueError(f"province attachment not on battlefield: {card_id!r}")
+            if not isinstance(self.zones.get(zone_key), ProvinceZone):
+                raise ValueError(f"province attachment references missing province: {zone_key}")
 
         for key, zone in self.zones.items():
             if key.owner not in self.seats:

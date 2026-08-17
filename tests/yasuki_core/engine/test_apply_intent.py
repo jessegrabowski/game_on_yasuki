@@ -1521,6 +1521,25 @@ def test_attach_records_a_card_to_card_relationship():
     table.validate()
 
 
+def test_attach_stacks_for_rendering_and_builds_no_unit():
+    """The manual surface has no rules interpretation: stacking a card behind a Personality on the
+    table does not put it in his unit, so nothing the sandbox does can reach the rules layer."""
+    table = TableState.empty_two_seat()
+    hero = L5RCard.of(
+        PersonalityPrint, id="hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1
+    )
+    item = _fate("item")
+    _on_battlefield(table, hero)
+    _on_battlefield(table, item)
+
+    apply_intent(table, PlayerId.P1, Attach("item", "hero"))
+
+    assert table.attachments == {"item": "hero"}
+    assert table.units == {}
+    assert table.province_attachments == {}
+    table.validate()
+
+
 def test_attach_to_a_province_zone():
     table = TableState.empty_two_seat()
     province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)

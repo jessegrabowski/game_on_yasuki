@@ -301,21 +301,25 @@ def test_full_snapshot_survives_serialization():
 
 
 def _attached_state() -> TableState:
-    """Two battlefield permanents with one attached to the other, plus a fortification on a
-    province — exercises both attachment-target kinds in a snapshot."""
+    """Every relation at once: a card stacked behind another for rendering, a unit, and a
+    fortification on a province — so a snapshot that drops one of the three fails here."""
     state = _post_setup_state()
+    hero = L5RCard.of(
+        PersonalityPrint, id="hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     follower = L5RCard.of(
         DynastyPrint, id="foll", name="Follower", side=Side.DYNASTY, owner=PlayerId.P1
     )
     fort = L5RCard.of(
         DynastyPrint, id="fort", name="Fortification", side=Side.DYNASTY, owner=PlayerId.P1
     )
-    for card in (follower, fort):
+    for card in (hero, follower, fort):
         state.battlefield.cards.append(card)
         state.positions[card.id] = BoardPos(7.0, 8.0)
         state.cards_by_id[card.id] = card
-    state.attachments["foll"] = "sh"  # rides behind the stronghold permanent
-    state.attachments["fort"] = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    state.attachments["foll"] = "sh"  # renders behind the stronghold permanent; no rules meaning
+    state.units["foll"] = "hero"
+    state.province_attachments["fort"] = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
     state.validate()
     return state
 
@@ -331,6 +335,8 @@ def test_attachments_survive_serialization():
     restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
     assert restored.replay() == state
     assert restored.initial.attachments == state.attachments
+    assert restored.initial.units == state.units
+    assert restored.initial.province_attachments == state.province_attachments
 
 
 def test_replay_reproduces_live_state_bit_for_bit():

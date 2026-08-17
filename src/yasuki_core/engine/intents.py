@@ -369,14 +369,14 @@ class RemoveCard:
 
 @dataclass(frozen=True, slots=True)
 class Attach:
-    """Attach a battlefield card to another card or to a province, so it rides behind the parent.
+    """Stack a battlefield card behind another card or a province, so it renders behind the parent.
 
-    ``to`` is either the parent card id — the child (a follower, item, or spell) sits behind that
-    battlefield card, shifted so its title still reads — or a province ``ZoneKey``, for a
-    fortification or region hung on a province. Owner-gated on the child alone: you may attach any
-    card you control to any target. The child keeps its own board position; the vertical shift that
-    stacks it behind the parent is a rendering concern, not stored here. Re-attaching to the same
-    target, a self-attach, or one that would form a cycle produces no event.
+    Presentation only, and deliberately unconstrained: the manual surface has no rules
+    interpretation, so any card you control may be stacked behind any target, and doing so puts
+    nothing in a unit. ``to`` is a parent card id or a province ``ZoneKey``. The child keeps its own
+    board position; the vertical shift that stacks it behind the parent is a rendering concern, not
+    stored here. Re-stacking on the same target, a self-attach, or one that would form a cycle
+    produces no event.
     """
 
     card_id: str
@@ -386,8 +386,8 @@ class Attach:
 
 @dataclass(frozen=True, slots=True)
 class Detach:
-    """Break a card's own attachment to its parent in place, leaving anything hung off it attached.
-    Owner-gated. A card that is not attached produces no event."""
+    """Unstack a card from the parent it renders behind, leaving anything stacked on it in place.
+    Owner-gated. A card that is not stacked produces no event."""
 
     card_id: str
     op: ClassVar[IntentOp] = IntentOp.DETACH
@@ -934,7 +934,7 @@ def _attach(state: TableState, seat: PlayerId, intent: Attach) -> list[Event]:
             if cursor == intent.card_id:
                 return []
             cursor = state.attachments.get(cursor)
-    if not ops.attach(state, child, target):
+    if not ops.stack(state, child, target):
         return []
     state.seq += 1
     return [Event(state.seq, seat, intent, (child.id,))]
@@ -944,7 +944,7 @@ def _detach(state: TableState, seat: PlayerId, intent: Detach) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
     if card is None or not owns_card(state, seat, intent.card_id):
         return []
-    if not ops.detach(state, card):
+    if not ops.unstack(state, card):
         return []
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]

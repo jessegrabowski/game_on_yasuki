@@ -90,11 +90,15 @@ def attachment(
 
 
 def attached(target: GameState | TableState, card: L5RCard, parent: AttachTarget) -> L5RCard:
-    """Put ``card`` into play attached to ``parent`` — a card id or a Province ``ZoneKey`` — through
-    the same ops the manual surface uses, so a test never hand-builds the graph."""
+    """Put ``card`` into play attached to ``parent`` — a Personality's card id, or a Province
+    ``ZoneKey`` for a Region or Fortification — through the same ops the rules layer uses, so a test
+    never hand-builds the relation."""
     state = target.table if isinstance(target, GameState) else target
     put_in_play(state, card)
-    ops.attach(state, card, parent)
+    if isinstance(parent, ZoneKey):
+        ops.attach_to_province(state, card, parent)
+    else:
+        ops.attach_to_personality(state, card, state.cards_by_id[parent])
     return card
 
 

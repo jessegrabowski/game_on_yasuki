@@ -63,24 +63,41 @@ def test_a_personality_with_nothing_on_him_lists_nothing():
     assert attachments_of(game, hero) == ()
 
 
-def test_only_the_cards_directly_attached_are_listed():
-    """An Item on a Follower belongs to the Follower. Step 4's unit total is what walks the chain;
-    this reader deliberately does not, so a caller cannot double-count by accident."""
+def test_a_unit_is_flat_however_the_table_renders_it():
+    """Everything in a unit attaches to the Personality (CR, Attachments). A card stacked behind a
+    Follower for rendering is still the Personality's, and the rules layer reads the relation rather
+    than the stacking."""
     game = two_seat_game()
-    hero = put_in_play(game, personality("hero"))
+    hero = put_in_play(game, personality("hero", force=1))
+    follower = attached(
+        game, attachment("follower", attachment_type=AttachmentType.FOLLOWER, force=5), "hero"
+    )
+    item = attached(game, attachment("item", force_modifier=2), "hero")
+    ops.stack(game.table, item, follower.id)  # renders behind the Follower; no rules meaning
+
+    assert attachments_of(game, hero) == (follower, item)
+    assert attached_to(game, item) is hero
+    assert attachments_of(game, follower) == ()
+    assert effective_force(game, hero) == 3
+
+
+def test_a_non_personality_cannot_be_attached_to():
+    """The relation cannot represent it, so the mistake is refused where it is made rather than
+    surviving as a board state the rules layer has to defend against."""
+    game = two_seat_game()
+    put_in_play(game, personality("hero"))
     follower = attached(
         game, attachment("follower", attachment_type=AttachmentType.FOLLOWER), "hero"
     )
-    item = attached(game, attachment("item"), "follower")
+    item = put_in_play(game, attachment("item"))
 
-    assert attachments_of(game, hero) == (follower,)
-    assert attachments_of(game, follower) == (item,)
-    assert attached_to(game, item) is follower
+    with pytest.raises(ValueError, match="non-Personality"):
+        ops.attach_to_personality(game.table, item, follower)
 
 
-def test_a_card_attached_to_a_province_hangs_on_no_card():
-    """The graph holds Province attachments too — a Fortification or Region sits on a `ZoneKey`, not
-    a card — so a reader that assumed every parent was a card id would raise here."""
+def test_a_card_on_a_province_is_in_no_unit():
+    """A Region or Fortification is attached to a Province, which is its own relation. Reading it
+    through the unit relation must not find a Personality, and must not raise."""
     game = two_seat_game()
     game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1)
     wall = attached(game, attachment("wall"), ZoneKey(P1, ZoneRole.PROVINCE, 0))
@@ -88,10 +105,40 @@ def test_a_card_attached_to_a_province_hangs_on_no_card():
     assert attached_to(game, wall) is None
 
 
+def test_attaching_to_one_parent_releases_the_other():
+    """A card is in a unit or on a province, never both — `validate` refuses the overlap, so the
+    mutators have to clear the relation they are leaving rather than let it accumulate."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    province = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    game.table.zones[province] = ProvinceZone(owner=P1)
+    card = put_in_play(game, attachment("wall"))
+
+    ops.attach_to_province(game.table, card, province)
+    ops.attach_to_personality(game.table, card, hero)
+    game.table.validate()
+
+    assert attachments_of(game, hero) == (card,)
+    assert card.id not in game.table.province_attachments
+
+
+def test_a_personality_leaving_play_empties_his_unit():
+    """`ops` drops the members' entries when he goes, which is what leaves them unattached in play
+    for the orphan rule to find. Without it they would name a Personality that is gone."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    item = attached(game, attachment("item"), "hero")
+
+    ops.move_card(game.table, hero, ZoneKey(P1, ZoneRole.DYNASTY_DISCARD))
+
+    assert game.table.units == {}
+    assert attached_to(game, item) is None
+
+
 def test_a_parent_that_left_the_table_is_loud_rather_than_silent():
-    """`ops` drops the edge when a card leaves the battlefield, so this state is unreachable — and
-    answering None for it would read exactly like the Province case above, hiding the broken
-    invariant behind a legitimate answer."""
+    """`ops` drops the entry when a card leaves the battlefield, so this state is unreachable — and
+    answering None for it would read exactly like an unattached card, hiding a broken invariant
+    behind a legitimate answer."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero"))
     item = attached(game, attachment("item"), "hero")
@@ -139,25 +186,9 @@ def test_one_card_can_have_a_stat_and_grant_a_modifier_at_once():
     assert effective_chi(game, hero) == 2
 
 
-def test_a_modifier_stops_at_the_card_it_hangs_on():
-    """An Item on a Follower moves the Follower's stats, not the Personality's. Walking the chain
-    would let a modifier reach a card it was never attached to."""
-    game = two_seat_game()
-    hero = put_in_play(game, personality("hero", force=2))
-    follower = attached(
-        game,
-        attachment("follower", attachment_type=AttachmentType.FOLLOWER, force=5),
-        "hero",
-    )
-    attached(game, attachment("item", force_modifier=2), "follower")
-
-    assert effective_force(game, hero) == 2
-    assert effective_force(game, follower) == 7
-
-
 def test_the_modifier_leaves_with_the_card():
-    """It is derived from the graph, so detaching removes it without anything having to revoke it —
-    which is what makes the manual surface's `ops`-level attach safe."""
+    """It is derived from the relation, so detaching removes it without anything having to revoke
+    it."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=2))
     item = attached(game, attachment("item", force_modifier=1), "hero")

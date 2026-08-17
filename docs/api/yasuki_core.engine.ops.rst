@@ -7,7 +7,8 @@ yasuki_core.engine.ops
 
 .. autosummary::
 
-    attach
+    attach_to_personality
+    attach_to_province
     bring_to_top
     create_province
     destroy_province
@@ -25,7 +26,9 @@ yasuki_core.engine.ops
     set_ignore_honor_requirements
     set_position
     spawn_token
+    stack
     straighten
+    unstack
 
 .. automodule:: yasuki_core.engine.ops
     :members:
