@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.attachments import unit_of
 from yasuki_core.engine.rules.decisions import ChooseCards, Confirm, DecisionRequest
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.events import (
@@ -152,9 +153,20 @@ class MoveToHand(Effect):
         return []
 
 
+def _discard_unit(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
+    """Send ``card`` and everything attached to him to their own discards by side, returning the unit
+    that left so the caller can announce each departure in its own words (CR, Unit)."""
+    unit = unit_of(game, card)
+    for member in unit:
+        ops.move_card(game.table, member, _discard_pile(member))
+    return unit
+
+
 @dataclass(frozen=True, slots=True)
 class Destroy(Effect):
-    """Destroy a card, sending it to its owner's discard by side."""
+    """Destroy a card, sending it to its owner's discard by side. A Personality takes his unit with
+    him: everything attached leaves play the same way he does (CR, Unit), each announcing its own
+    destruction."""
 
     card_id: str
 
@@ -165,8 +177,7 @@ class Destroy(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
-        ops.move_card(game.table, card, _discard_pile(card))
-        return [Destroyed(self.card_id)]
+        return [Destroyed(member.id) for member in _discard_unit(game, card)]
 
 
 @dataclass(frozen=True, slots=True)
@@ -192,8 +203,8 @@ class Discard(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
-        ops.move_card(game.table, card, _discard_pile(card))
-        return [CardDiscarded(self.card_id, card.side, self.by_seat)]
+        unit = _discard_unit(game, card)
+        return [CardDiscarded(member.id, member.side, self.by_seat) for member in unit]
 
 
 @dataclass(frozen=True, slots=True)

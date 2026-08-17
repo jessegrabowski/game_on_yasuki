@@ -41,6 +41,16 @@ def attachments_of(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
     )
 
 
+def unit_of(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
+    """``card`` and the cards attached to him, in attach order — his unit (CR, Unit). A card with
+    nothing attached is a unit of one, so a caller need not ask whether it is a Personality.
+
+    Read the unit before moving the card: leaving the battlefield clears the relation, so a caller
+    that moves first finds a unit of one.
+    """
+    return (card, *attachments_of(game, card))
+
+
 # What an attachment grants the card it hangs on, beyond the modifier it prints. Haramaki-do prints
 # +2F and says "This Personality has +1PH" in its text; the printed half is a stat on the print, the
 # written half is this. Keyed by printed id like the other per-card registries.

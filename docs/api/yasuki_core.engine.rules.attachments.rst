@@ -11,6 +11,7 @@ yasuki_core.engine.rules.attachments
     attachment_grant
     attachments_of
     granted_stat
+    unit_of
 
 .. automodule:: yasuki_core.engine.rules.attachments
     :members:
