@@ -102,15 +102,6 @@ def attached(target: GameState | TableState, card: L5RCard, parent: AttachTarget
     return card
 
 
-def stacked(target: GameState | TableState, card: L5RCard, parent: AttachTarget) -> L5RCard:
-    """Put ``card`` into play sitting behind ``parent`` on the table, the way the manual sandbox
-    stacks cards. Carries no rules meaning — see :func:`attached` for unit membership."""
-    state = target.table if isinstance(target, GameState) else target
-    put_in_play(state, card)
-    ops.attach(state, card, parent)
-    return card
-
-
 def holding(
     card_id: str,
     *,
