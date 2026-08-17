@@ -10,8 +10,10 @@ from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
     apply_effect,
     choice_resolver,
+    enforce_state_rules,
     fire,
     on,
+    resolve_effects,
 )
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -42,6 +44,16 @@ def _probe_gains_wealth(ctx):
 @on(CardDiscarded, "test_discard_probe")
 def _probe_sees_any_discard(ctx):
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+# A test-only trigger writing what caused each destruction onto its own card, the way the probes
+# above do observable work on theirs. No shipped card reads the cause yet — the one Destroyed
+# subscriber, Rural Market, filters on the destroyed card's owner — and a Personality cannot watch
+# its own death while triggers are collected from the battlefield.
+@on(Destroyed, "test_death_probe")
+def _probe_records_the_cause(ctx):
+    ctx.card.set_note(ctx.event.cause.name)
+    return []
 
 
 # A test-only trigger returning effects on both sides of a Choose: a token to itself, the choice,
@@ -578,3 +590,29 @@ def test_a_second_resolver_for_one_choice_kind_is_refused():
                 return []
     finally:
         CHOICE_RESOLVERS.pop("guard_probe", None)
+
+
+def test_chi_death_names_the_rule_rather_than_a_seat():
+    """No player killed him, so nothing that asks "was this my doing?" may claim it."""
+    game = two_seat_game()
+    probe = put_in_play(game, holding("P1-probe", printed_id="test_death_probe", owner=PlayerId.P1))
+    doomed = L5RCard.of(
+        PersonalityPrint, id="doomed", name="doomed", side=Side.DYNASTY, owner=PlayerId.P1, chi=0
+    )
+    put_in_play(game, doomed)
+
+    enforce_state_rules(game)
+
+    assert probe.note == Rulebook.CHI_DEATH.name
+
+
+def test_a_card_driven_destruction_names_the_seat_whose_card_did_it():
+    """The other half: a destruction someone chose still says who, which is what separates it from
+    the rulebook's."""
+    game = two_seat_game()
+    probe = put_in_play(game, holding("P1-probe", printed_id="test_death_probe", owner=PlayerId.P1))
+    victim = put_in_play(game, holding("victim", owner=PlayerId.P2))
+
+    resolve_effects(game, [Destroy(victim.id, PlayerId.P1)])
+
+    assert probe.note == PlayerId.P1.name
