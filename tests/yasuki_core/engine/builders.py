@@ -1,13 +1,20 @@
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import AttachTarget, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    StrongholdPrint,
+)
 
 # Only shapes duplicated across two or more test modules belong here; one that would have to contort
 # to serve a single caller belongs in that caller's module.
@@ -25,6 +32,69 @@ def put_in_play(target: GameState | TableState, card):
     state = target.table if isinstance(target, GameState) else target
     register(state, card)
     state.battlefield.add(card)
+    return card
+
+
+def personality(
+    card_id: str,
+    *,
+    owner: PlayerId = PlayerId.P1,
+    name: str | None = None,
+    force: int = 2,
+    chi: int = 3,
+    personal_honor: int = 0,
+    keywords: tuple[str, ...] = (),
+) -> L5RCard:
+    """A Personality. ``chi`` defaults live because a Personality at zero Chi is destroyed on sight
+    (CR, Chi Death Rule), which would otherwise remove the card a test just built."""
+    return L5RCard.of(
+        PersonalityPrint,
+        id=card_id,
+        name=name or card_id,
+        side=Side.DYNASTY,
+        owner=owner,
+        force=force,
+        chi=chi,
+        personal_honor=personal_honor,
+        keywords=keywords,
+    )
+
+
+def attachment(
+    card_id: str,
+    *,
+    owner: PlayerId = PlayerId.P1,
+    name: str | None = None,
+    printed_id: str | None = None,
+    attachment_type: AttachmentType = AttachmentType.ITEM,
+    force: int = 0,
+    chi: int = 0,
+    force_modifier: int = 0,
+    chi_modifier: int = 0,
+) -> L5RCard:
+    """An Item, Follower or Spell. ``force``/``chi`` are the card's own stats, which it brings to a
+    unit; the ``_modifier`` pair is what it hands to the Personality it attaches to."""
+    return L5RCard.of(
+        AttachmentPrint,
+        id=card_id,
+        name=name or card_id,
+        side=Side.FATE,
+        owner=owner,
+        printed_id=printed_id,
+        attachment_type=attachment_type,
+        force=force,
+        chi=chi,
+        force_modifier=force_modifier,
+        chi_modifier=chi_modifier,
+    )
+
+
+def attached(target: GameState | TableState, card: L5RCard, parent: AttachTarget) -> L5RCard:
+    """Put ``card`` into play attached to ``parent`` — a card id or a Province ``ZoneKey`` — through
+    the same ops the manual surface uses, so a test never hand-builds the graph."""
+    state = target.table if isinstance(target, GameState) else target
+    put_in_play(state, card)
+    ops.attach(state, card, parent)
     return card
 
 

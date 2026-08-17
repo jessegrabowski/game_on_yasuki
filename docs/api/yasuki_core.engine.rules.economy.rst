@@ -19,6 +19,7 @@ yasuki_core.engine.rules.economy
     effective_gold_cost
     effective_gold_production
     effective_keywords
+    effective_personal_honor
     effective_recruit_discount
     effective_stat
     gold_handler

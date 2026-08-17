@@ -239,6 +239,73 @@ def test_an_attachment_carries_the_force_and_chi_it_prints():
     assert (r.fate[0].force, r.fate[0].chi) == (1, 0)
 
 
+ATTACHMENT_RECORDS = [
+    # An Item's two numbers are signed text the pipeline could not store as integers.
+    {
+        "card_id": "signed_item",
+        "name": "Signed Item",
+        "extended_title": "Signed Item",
+        "types": ["Item"],
+        "decks": ["Fate"],
+        "extra": {"force_raw": "+1", "chi_raw": "+2"},
+        "prints": [{"print_id": 1, "set_name": "Gold Edition", "image_path": "sets/ge/i.png"}],
+    },
+    # A Follower whose Chi penalty is a plain YAML integer, so nothing about the stored value says
+    # it is a modifier. Shadowlands Ambassador is printed exactly this way.
+    {
+        "card_id": "penalty_follower",
+        "name": "Penalty Follower",
+        "extended_title": "Penalty Follower",
+        "types": ["Follower"],
+        "decks": ["Fate"],
+        "force": 2,
+        "chi": -1,
+        "prints": [{"print_id": 2, "set_name": "Gold Edition", "image_path": "sets/ge/f.png"}],
+    },
+    # A Follower whose Force the card computes, kept as text with the star intact.
+    {
+        "card_id": "variable_follower",
+        "name": "Variable Follower",
+        "extended_title": "Variable Follower",
+        "types": ["Follower"],
+        "decks": ["Fate"],
+        "chi": 0,
+        "extra": {"force_raw": "2*"},
+        "prints": [{"print_id": 3, "set_name": "Gold Edition", "image_path": "sets/ge/v.png"}],
+    },
+]
+
+
+def test_the_card_type_decides_which_printed_stats_are_modifiers():
+    """An Item has no Force or Chi of its own, so both of its numbers modify the Personality; a
+    Follower's Force is its own and only its Chi modifies. Card type decides, not the sign of the
+    printed value: a negative Chi is a plain integer in the YAML, so a sign-based rule reads it as a
+    stat the Follower has and never moves the Personality's Chi at all."""
+    item, follower = resolve_decklist(
+        parse_deck_yaml("name: T\nFate:\n  - Signed Item\n  - Penalty Follower"),
+        ATTACHMENT_RECORDS,
+        PlayerId.P1,
+    ).fate
+
+    assert (item.force, item.chi) == (0, 0)
+    assert (item.force_modifier, item.chi_modifier) == (1, 2)
+    assert (follower.force, follower.chi) == (2, 0)
+    assert (follower.force_modifier, follower.chi_modifier) == (0, -1)
+
+
+def test_a_variable_printed_stat_reads_its_floor():
+    """A Force of "2*" is a value the card computes. The pipeline cannot store that as an integer so
+    it survives as text; the number in front of the star is taken and the variability is not
+    modeled."""
+    r = resolve_decklist(
+        parse_deck_yaml("name: T\nFate:\n  - Variable Follower"),
+        ATTACHMENT_RECORDS,
+        PlayerId.P1,
+    )
+
+    assert (r.fate[0].force, r.fate[0].force_modifier) == (2, 0)
+
+
 def test_attachment_type_is_derived_from_the_card_type():
     r = resolve_decklist(
         parse_deck_yaml("name: T\nFate:\n  - The Egg of P'an Ku"), RECORDS, PlayerId.P1

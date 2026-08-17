@@ -38,7 +38,11 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.economy import effective_gold_production, effective_keywords
+from yasuki_core.engine.rules.economy import (
+    effective_gold_production,
+    effective_keywords,
+    effective_personal_honor,
+)
 from yasuki_core.engine.rules.legality import (
     KHARMIC_COST,
     cycle_candidates,
@@ -545,7 +549,7 @@ def _finish_recruit(
     _clear_sincerity(game, card)
     if proclaim:
         game.use_once(proclaim_key(card.owner, game.turn))
-        ops.set_honor(game.table, card.owner, delta=card.personal_honor)
+        ops.set_honor(game.table, card.owner, delta=effective_personal_honor(game, card))
     if invest_amount:
         # "Entering play, permanently increase the Gold Cost by the Invest cost to get the effect."
         triggers.resolve_effects(
