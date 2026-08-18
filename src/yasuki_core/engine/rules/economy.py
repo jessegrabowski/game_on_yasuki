@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import counter_from_key
-from yasuki_core.game_pieces.prints import HoldingPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint
 
 
 @dataclass(frozen=True, slots=True)
@@ -84,14 +84,32 @@ def _on_battlefield(game: GameState, card_id: str) -> bool:
     return any(card.id == card_id for card in game.table.battlefield.cards)
 
 
-def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
-    """Every modifier adjusting ``card``'s ``stat`` right now, from three sources: each counter it
-    holds, which grants its per-count stat while in play; each card attached to it, for the modifier
-    that card prints plus whatever its own text grants; and the recorded modifiers targeting it, a
-    ``WHILE_SOURCE_IN_PLAY`` one only while its source is on the battlefield.
+# What a Sensei grants the Stronghold rather than folding into its printed stats (CR, Sensei: the
+# modifiers "are continually applied to the Stronghold's stats" and are "treated like any other
+# modifier"). Starting Family Honor is absent: it is a seat scalar read once at setup, not a card
+# stat anything reads again.
+_SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
 
-    An attachment's modifier is derived from the graph rather than recorded, so it lasts exactly as
-    long as the card stays attached."""
+
+def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
+    """The Senseis ``seat`` has in play. A Sensei bows and acts on its own (CR, Sensei), so it is a
+    modifier source beside the Stronghold rather than part of it."""
+    return (
+        card
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, SenseiPrint) and card.owner is seat
+    )
+
+
+def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
+    """Every modifier adjusting ``card``'s ``stat`` right now: one from each counter it holds, which
+    grants its per-count stat while in play; one from each card attached to it, for the modifier that
+    card prints plus whatever its own text grants; one from each Sensei its seat controls, when
+    ``card`` is a Stronghold; and the recorded modifiers targeting it, a ``WHILE_SOURCE_IN_PLAY`` one
+    only while its source is on the battlefield.
+
+    Everything but the recorded modifiers is read off the board, so a derived grant lasts exactly as
+    long as the card granting it stays in play, whenever that card arrived."""
     # A counter's source is the card itself, in play by construction here (this is only reached for
     # an in-play card), so no source-in-play check is needed for the derived modifiers.
     for key, count in card.counters.items():
@@ -103,6 +121,11 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
         amount = getattr(attached, printed_modifier, 0) + granted_stat(game, attached, card, stat)
         if amount:
             yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
+    if stat in _SENSEI_GRANTED_STATS and isinstance(card.printed, StrongholdPrint):
+        for sensei in _senseis_of(game, card.owner):
+            delta = getattr(sensei, stat.value)
+            if delta:
+                yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
     for modifier in game.modifiers:
         if modifier.target_id != card.id or modifier.stat is not stat:
             continue

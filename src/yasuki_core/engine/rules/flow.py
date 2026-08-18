@@ -99,17 +99,12 @@ def next_phase(phase: Phase) -> Phase | None:
 # The pre-game permanents that get their enters-play effect fired as the game begins.
 _PREGAME_PERMANENTS = (StrongholdPrint, SenseiPrint, WindPrint)
 
-# The stats a sensei grants its stronghold rather than folding into its printed ones. Starting Honor
-# is not here: it is a seat scalar read once at setup, not a card stat anything reads again.
-SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
-
 
 def begin_game(game: GameState) -> None:
     """Run the game-start pass once after :meth:`GameState.start`, before the active player acts:
     fire each pre-game permanent's enters-play effect, then the first turn's housekeeping. Re-runs on
     every replay, so those effects must be idempotent."""
     _begin_pregame(game)
-    _grant_sensei_modifiers(game)
     _begin_turn(game)
 
 
@@ -119,34 +114,6 @@ def _begin_pregame(game: GameState) -> None:
     for card in list(game.table.battlefield.cards):
         if isinstance(card.printed, _PREGAME_PERMANENTS):
             triggers.fire(game, EnteredPlay(card.id))
-
-
-def _grant_sensei_modifiers(game: GameState) -> None:
-    """Grant each sensei's characteristics to its seat's stronghold, sourced from the sensei.
-
-    A sensei is a live face-up card for the whole game, which is exactly the
-    :attr:`~yasuki_core.engine.rules.modifiers.Duration.WHILE_SOURCE_IN_PLAY` contract — so the
-    stronghold reads its effective characteristics without anything writing to its printed ones.
-    """
-    strongholds = {
-        card.owner: card
-        for card in game.table.battlefield.cards
-        if isinstance(card.printed, StrongholdPrint)
-    }
-    grants: list[Effect] = []
-    for card in game.table.battlefield.cards:
-        stronghold = strongholds.get(card.owner) if isinstance(card.printed, SenseiPrint) else None
-        if stronghold is None:
-            continue  # not a sensei, or a sensei with no stronghold to modify
-        for stat in SENSEI_GRANTED_STATS:
-            delta = getattr(card, stat.value)
-            if delta:
-                grants.append(
-                    GrantModifier(
-                        card.id, stronghold.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY
-                    )
-                )
-    triggers.resolve_effects(game, grants)
 
 
 def advance(game: GameState) -> None:
