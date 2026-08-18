@@ -15,7 +15,13 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import ResolvedDeck
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, SenseiPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import (
+    DynastyPrint,
+    FatePrint,
+    HoldingPrint,
+    SenseiPrint,
+    StrongholdPrint,
+)
 
 
 def _resolved(owner=PlayerId.P1, dynasty_n=10, fate_n=10):
@@ -451,8 +457,7 @@ def test_the_fate_shuffle_does_not_move_when_the_dynasty_deck_changes_size():
 
 def test_a_sensei_leaving_play_takes_its_gold_with_it():
     """What a modifier buys over a baked stat: the grant is sourced from the sensei, so it lasts
-    exactly as long as the sensei is on the table. Nothing removes a sensei today, which is why this
-    asserts through the modifier rather than through a rule."""
+    exactly as long as the sensei is on the table."""
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
@@ -470,6 +475,60 @@ def test_a_sensei_leaving_play_takes_its_gold_with_it():
     game.table.battlefield.remove(sensei)
 
     assert effective_gold_production(game, stronghold) == 3
+
+
+def test_a_sensei_reaching_the_table_after_setup_still_grants():
+    """The grant is read off the board rather than recorded as the game begins, so a sensei that was
+    not there at setup is not skipped. Nothing puts one into play mid-game yet; Temples of the Crow
+    is the card that would."""
+    stronghold = L5RCard.of(
+        StrongholdPrint,
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        gold_production=3,
+        owner=PlayerId.P1,
+    )
+    game = _begun(_setup_with_pregame(stronghold))
+    assert effective_gold_production(game, stronghold) == 3
+
+    latecomer = L5RCard.of(
+        SenseiPrint, id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+    )
+    game.table.battlefield.add(latecomer)
+    game.table.cards_by_id[latecomer.id] = latecomer
+
+    assert effective_gold_production(game, stronghold) == 5
+
+
+def test_a_sensei_grants_to_the_stronghold_and_nothing_else():
+    """The grant is read off the board for whatever asks, so the Stronghold check is the only thing
+    keeping a Holding from collecting it too."""
+    stronghold = L5RCard.of(
+        StrongholdPrint,
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        gold_production=3,
+        owner=PlayerId.P1,
+    )
+    sensei = L5RCard.of(
+        SenseiPrint, id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+    )
+    game = _begun(_setup_with_pregame(stronghold, sensei))
+    mine = L5RCard.of(
+        HoldingPrint,
+        id="farm",
+        name="Farm",
+        side=Side.DYNASTY,
+        gold_production=1,
+        owner=PlayerId.P1,
+    )
+    game.table.battlefield.add(mine)
+    game.table.cards_by_id[mine.id] = mine
+
+    assert effective_gold_production(game, stronghold) == 5
+    assert effective_gold_production(game, mine) == 1
 
 
 def test_a_sensei_modifies_only_its_own_seats_stronghold():
