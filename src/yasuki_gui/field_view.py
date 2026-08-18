@@ -9,7 +9,7 @@ from yasuki_core.engine.redaction import ViewSnapshot
 from yasuki_core.game_pieces.prints import PersonalityPrint
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
-from yasuki_gui.constants import CARD_H, CARD_W, HOME_STACK_OFFSET
+from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W, HOME_STACK_OFFSET
 from yasuki_gui.controller import FieldController
 from yasuki_gui.layout import (
     divider_y,
@@ -470,12 +470,17 @@ class FieldView(tk.Canvas):
     def _reconcile_sprites(self) -> None:
         w, h = self._canvas_size()
         wanted: set[str] = set()
-        rendered = list(self._render_battlefield())
+        rendered = self._unit_draw_order(list(self._render_battlefield()))
         home = self._home_positions(rendered, w, h)
+        placed = {
+            rc.id: home.get(rc.id) or to_canvas(pos, flipped=self._flipped, canvas_w=w, canvas_h=h)
+            for rc, pos in rendered
+        }
+        placed.update(self._unit_positions(placed))
         for rc, pos in rendered:
             tag = card_tag(rc.id)
             wanted.add(tag)
-            x, y = home.get(rc.id) or to_canvas(pos, flipped=self._flipped, canvas_w=w, canvas_h=h)
+            x, y = placed[rc.id]
             sp = self._sprites.get(tag)
             if sp is None:
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
@@ -488,14 +493,68 @@ class FieldView(tk.Canvas):
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
 
+    def _units(self) -> dict[str, str]:
+        """Unit membership from whichever source is rendering: attached card id to Personality."""
+        return self._snapshot.units if self._snapshot is not None else self.state.units
+
+    def _unit_members(self) -> dict[str, list[str]]:
+        """Each Personality's attached cards, in attach order."""
+        members: dict[str, list[str]] = {}
+        for card_id, personality_id in self._units().items():
+            members.setdefault(personality_id, []).append(card_id)
+        return members
+
+    def _unit_draw_order(self, rendered: list[tuple]) -> list[tuple]:
+        """``rendered`` with each attachment moved directly ahead of the Personality it hangs on, so
+        he draws over it and only its title bar shows — the card is placed *under* him (CR,
+        Attachments)."""
+        units = self._units()
+        if not units:
+            return rendered
+        held: dict[str, list[tuple]] = {}
+        loose: list[tuple] = []
+        for entry in rendered:
+            personality_id = units.get(entry[0].id)
+            if personality_id is None:
+                loose.append(entry)
+            else:
+                held.setdefault(personality_id, []).append(entry)
+        ordered: list[tuple] = []
+        for entry in loose:
+            ordered.extend(held.pop(entry[0].id, ()))
+            ordered.append(entry)
+        for stranded in held.values():  # its Personality is not on this board
+            ordered.extend(stranded)
+        return ordered
+
+    def _unit_positions(self, placed: dict[str, tuple[int, int]]) -> dict[str, tuple[int, int]]:
+        """Where each attached card sits: fanned up behind the Personality it hangs on, so each
+        title bar clears the card riding it. A unit is the game's own grouping, so the board shows
+        one rather than filing the attachment away with the Holdings."""
+        positions: dict[str, tuple[int, int]] = {}
+        for personality_id, members in self._unit_members().items():
+            if personality_id not in placed:
+                continue
+            x, y = placed[personality_id]
+            for step, card_id in enumerate(members, start=1):
+                if card_id in placed:
+                    positions[card_id] = (x, y - step * ATTACH_STACK_OFFSET)
+        return positions
+
     def _home_positions(self, rendered, w: int, h: int) -> dict[str, tuple[int, int]]:
         """Stacked home-row positions for the unplaced cards among ``rendered``, grouped per owner:
         copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``, while the
         stronghold, sensei, and distinct holdings each take their own column. Personalities lay out
-        in the front (personalities) row; everything else in the holdings row."""
+        in the front (personalities) row; everything else in the holdings row. Attached cards are
+        left out — :meth:`_unit_positions` places them on their Personality."""
         holdings: dict[PlayerId | None, list[tuple[str, object]]] = {}
         personalities: dict[PlayerId | None, list[tuple[str, object]]] = {}
+        # An attachment rides its Personality wherever he stands, so it takes no column of its own —
+        # giving it one would shove the real Holdings sideways to make room.
+        units = self._units()
         for rc, pos in rendered:
+            if rc.id in units:
+                continue
             if pos is None or pos.x < 0 or pos.y < 0:
                 key = getattr(rc, "printed_id", None) or rc.id
                 bucket = (
