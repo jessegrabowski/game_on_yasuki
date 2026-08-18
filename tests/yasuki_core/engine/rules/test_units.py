@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.units import followers_of, unit_force
+from yasuki_core.engine.rules.units import followers_of, unit_force, unit_keywords
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.builders import (
@@ -108,3 +108,55 @@ def test_every_follower_counts_and_each_at_its_own_effective_force():
     )
 
     assert unit_force(game, hero) == 9  # 3 + 5 + (4 - 3)
+
+
+def test_a_unit_has_a_keyword_when_every_follower_shares_it():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", keywords=("Cavalry", "Samurai")))
+    attached(
+        game,
+        attachment("a", attachment_type=AttachmentType.FOLLOWER, keywords=("Cavalry", "Samurai")),
+        "hero",
+    )
+    attached(
+        game,
+        attachment("b", attachment_type=AttachmentType.FOLLOWER, keywords=("Cavalry",)),
+        "hero",
+    )
+
+    assert "Cavalry" in unit_keywords(game, hero)
+    assert "Samurai" not in unit_keywords(game, hero)  # the second Follower lacks it
+
+
+def test_one_follower_without_the_keyword_takes_it_from_the_unit():
+    """The rule that makes a unit Infantry: not a keyword of its own, just Cavalry gone missing."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", keywords=("Cavalry",)))
+    attached(game, attachment("foot", attachment_type=AttachmentType.FOLLOWER, keywords=()), "hero")
+
+    keywords = unit_keywords(game, hero)
+    assert "Cavalry" not in keywords
+    assert "Infantry" not in keywords  # derived from Cavalry's absence, never stored
+
+
+def test_a_personality_with_no_followers_gives_the_unit_his_own_keywords():
+    """The CR's "if any" clause — a lone Personality is a Cavalry unit if he is Cavalry."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", keywords=("Cavalry",)))
+
+    assert "Cavalry" in unit_keywords(game, hero)
+
+
+def test_items_take_no_part_in_a_units_keywords():
+    """The rule quantifies over the Personality and Followers; an Item without the keyword would
+    otherwise silently dismount the unit."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", keywords=("Cavalry",)))
+    attached(
+        game,
+        attachment("horse", attachment_type=AttachmentType.FOLLOWER, keywords=("Cavalry",)),
+        "hero",
+    )
+    attached(game, attachment("katana", keywords=()), "hero")
+
+    assert "Cavalry" in unit_keywords(game, hero)

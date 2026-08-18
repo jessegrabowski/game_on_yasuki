@@ -1,5 +1,5 @@
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.economy import effective_force
+from yasuki_core.engine.rules.economy import effective_force, effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -47,3 +47,17 @@ def unit_force(game: GameState, personality: L5RCard, *, in_battle_resolution: b
     return total + sum(
         effective_force(game, follower) for follower in followers if not follower.bowed
     )
+
+
+def unit_keywords(game: GameState, personality: L5RCard) -> frozenset[str]:
+    """The keywords ``personality``'s unit has: the ones he and every Follower share (CR, Unit
+    keywords). A Personality with no Followers gives the unit his own.
+
+    Items and Spells take no part — the rule quantifies over the Personality and Followers alone.
+    Infantry is never a member: it is the absence of Cavalry rather than a keyword of its own, so a
+    unit is Infantry exactly when Cavalry is missing here.
+    """
+    shared = effective_keywords(game, personality)
+    for follower in followers_of(game, personality):
+        shared &= effective_keywords(game, follower)
+    return shared
