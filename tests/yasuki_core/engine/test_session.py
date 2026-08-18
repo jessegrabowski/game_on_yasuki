@@ -7,13 +7,26 @@ from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, Zo
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.state import Phase
-from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
+from yasuki_core.engine.rules.decisions import (
+    ChooseEquipTarget,
+    ChoosePayment,
+    DiscardToHandSize,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import ActivateAbility, DynastyDiscard, Pass, Recruit
+from yasuki_core.engine import ops
+from yasuki_core.engine.rules.actions import (
+    ActivateAbility,
+    DynastyDiscard,
+    Equip,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.log import Answer, replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
     FatePrint,
     HoldingPrint,
     PersonalityPrint,
@@ -672,3 +685,146 @@ def test_proclaim_gains_the_honor_the_personality_is_worth_now():
     session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
 
     assert session.game.table.seats[PlayerId.P1].honor == before + 4
+
+
+def _personality_in_play(state, card_id: str, *, keywords=(), owner=PlayerId.P1) -> L5RCard:
+    """A Personality on the battlefield. Chi is nonzero because a Personality at zero Chi is
+    destroyed on sight, which would silently empty the board a test is trying to set up."""
+    hero = _register(
+        state,
+        L5RCard.of(
+            PersonalityPrint,
+            id=card_id,
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=owner,
+            force=2,
+            chi=3,
+            keywords=keywords,
+        ),
+    )
+    state.battlefield.add(hero)
+    return hero
+
+
+def _attachment_in_hand(state, card_id: str, *, gold_cost: int, keywords=()) -> L5RCard:
+    card = _register(
+        state,
+        L5RCard.of(
+            AttachmentPrint,
+            id=card_id,
+            name="Katana",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            gold_cost=gold_cost,
+            keywords=keywords,
+        ),
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+    return card
+
+
+def test_equip_pays_then_attaches_the_card_from_hand():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    hero = _personality_in_play(state, "P1-hero")
+    _attachment_in_hand(state, "P1-katana", gold_cost=3, keywords=("Weapon",))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    session.act(PlayerId.P1, Equip("P1-katana"))
+    target = session.project(PlayerId.P1).pending
+    assert isinstance(target, ChooseEquipTarget) and target.candidates == ("P1-hero",)
+    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
+
+    pending = session.project(PlayerId.P1).pending
+    assert isinstance(pending, ChoosePayment) and pending.amount == 3
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    katana = game.table.cards_by_id["P1-katana"]
+    assert katana in game.table.battlefield.cards
+    assert game.table.units == {"P1-katana": hero.id}
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
+    assert katana not in hand
+
+
+def test_equip_is_withheld_when_the_seat_cannot_cover_the_cost():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 1)
+    _personality_in_play(state, "P1-hero")
+    _attachment_in_hand(state, "P1-katana", gold_cost=3, keywords=("Weapon",))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert Equip("P1-katana") not in session.legal_actions(PlayerId.P1)
+
+
+def test_equip_is_not_offered_onto_an_opponents_personality():
+    """ "A player may only attach attachments to a Personality he or she controls" (CR)."""
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_play(state, "P2-hero", owner=PlayerId.P2)
+    _attachment_in_hand(state, "P1-katana", gold_cost=3, keywords=("Weapon",))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert Equip("P1-katana") not in session.legal_actions(PlayerId.P1)
+
+
+def test_a_second_weapon_is_offered_only_to_a_kensai():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_play(state, "P1-plain")
+    _personality_in_play(state, "P1-kensai", keywords=("Kensai",))
+    _attachment_in_hand(state, "P1-second", gold_cost=1, keywords=("Weapon",))
+    for holder in ("P1-plain", "P1-kensai"):
+        first = _attachment_in_hand(state, f"{holder}-first", gold_cost=1, keywords=("Weapon",))
+        state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards.remove(first)
+        state.battlefield.add(first)
+        ops.attach_to_personality(state, first, state.cards_by_id[holder])
+    session = EngineSession.start(state, PlayerId.P1)
+
+    session.act(PlayerId.P1, Equip("P1-second"))
+    target = session.project(PlayerId.P1).pending
+
+    assert isinstance(target, ChooseEquipTarget)
+    assert target.candidates == ("P1-kensai",)
+
+
+def test_only_an_attachment_is_offered_for_equip():
+    """Attachments are the only card type that enters play by attaching (CR), so a Strategy sitting
+    in the same hand is not an Equip candidate."""
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_play(state, "P1-hero")
+    strategy = _register(
+        state,
+        L5RCard.of(FatePrint, id="P1-strategy", name="S", side=Side.FATE, owner=PlayerId.P1),
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(strategy)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert Equip("P1-strategy") not in session.legal_actions(PlayerId.P1)
+
+
+def test_equip_is_an_open_action():
+    """ "Repeatable Open" (CR, Equip) — so it is taken in the Action phase, not held back to Dynasty
+    the way Recruit is."""
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_play(state, "P1-hero")
+    _attachment_in_hand(state, "P1-katana", gold_cost=3, keywords=("Weapon",))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert Equip("P1-katana") in session.legal_actions(PlayerId.P1)
+
+
+def test_an_equip_replays_to_the_same_board():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_play(state, "P1-hero")
+    _attachment_in_hand(state, "P1-katana", gold_cost=3, keywords=("Weapon",))
+    session = EngineSession.start(state, PlayerId.P1)
+    session.act(PlayerId.P1, Equip("P1-katana"))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    assert replay(session.log).table == session.game.table

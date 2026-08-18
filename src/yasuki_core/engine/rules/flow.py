@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.actions import (
     Action,
     Cycle,
     DynastyDiscard,
+    Equip,
     KharmicDraw,
     KharmicRefill,
     Legacy,
@@ -21,6 +22,7 @@ from yasuki_core.engine.rules.work import (
     ApplyEffects,
     ApplyAbilityEffects,
     FinishRecruit,
+    ResolveEquip,
     ResolveRecruit,
     ResumeCascade,
     SelectAbilityTarget,
@@ -30,6 +32,7 @@ from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
+    ChooseEquipTarget,
     Confirm,
     ChooseInvestAmount,
     ChooseLegacyCard,
@@ -38,7 +41,9 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
+from yasuki_core.engine.rules.equip import equip_targets
 from yasuki_core.engine.rules.economy import (
+    effective_gold_cost,
     effective_gold_production,
     effective_keywords,
     effective_personal_honor,
@@ -170,6 +175,8 @@ def perform(game: GameState, action: Action) -> None:
             yield_priority(game, passed=True)
         case Recruit(card_id=card_id, invest=invest, proclaim=proclaim):
             recruit(game, card_id, invest, proclaim=proclaim)
+        case Equip(card_id=card_id):
+            equip(game, card_id)
         case DynastyDiscard(card_id=card_id):
             dynasty_discard(game, card_id)
         case Legacy():
@@ -273,6 +280,56 @@ def announce_recruit(
     )
 
 
+def equip(game: GameState, card_id: str) -> None:
+    """Announce an Equip by asking which Personality the card joins. Answering that raises the cost.
+
+    Equip is the rulebook action, with a cost and a target. An effect that merely *attaches* a card
+    reaches the same board without paying (CR, Equip), so the two do not share a path.
+    """
+    card = game.table.cards_by_id[card_id]
+    game.pending = ChooseEquipTarget(
+        seat=card.owner,
+        candidates=tuple(target.id for target in equip_targets(game, card)),
+        source_card_id=card_id,
+    )
+
+
+def _apply_equip_target(
+    game: GameState, request: ChooseEquipTarget, response: DecisionResponse
+) -> None:
+    """Take the chosen Personality and put the Equip's cost to the seat."""
+    card = game.table.cards_by_id[request.source_card_id]
+    game.pending = announce_equip(game, card, card.owner, response.choices[0])
+
+
+def announce_equip(game: GameState, card: L5RCard, seat: PlayerId, target_id: str) -> ChoosePayment:
+    """Queue the attach and build the payment it must be paid with."""
+    producers = gold_producers(game, seat)
+    game.stack.append(ResolveEquip(card.id, target_id))
+    return ChoosePayment(
+        seat=seat,
+        candidates=tuple(producer.id for producer in producers),
+        amount=effective_gold_cost(game, card),
+        available=game.gold[seat],
+        produced=tuple(
+            (producer.id, effective_gold_production(game, producer, targets=(card,)))
+            for producer in producers
+        ),
+        label=card.name,
+        target_id=card.id,
+    )
+
+
+def _resolve_equip(game: GameState, card_id: str, target_id: str) -> None:
+    """Bring the paid-for attachment out of hand and onto its Personality."""
+    card = game.table.cards_by_id[card_id]
+    ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
+    ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
+    # Legal before anything is told it arrived, for the reason _put_into_play gives.
+    triggers.enforce_state_rules(game)
+    pass
+
+
 def announce_rulebook_cost(
     game: GameState, seat: PlayerId, amount: int, label: str, effects: tuple[Effect, ...]
 ) -> ChoosePayment:
@@ -339,6 +396,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_legacy_placement(game, request, response)
         case ChooseAbilityTarget():
             _apply_ability_target(game, request, response)
+        case ChooseEquipTarget():
+            _apply_equip_target(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
         # One case per union member, so the exhaustiveness guard can read them off the AST.
@@ -421,6 +480,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             seat=seat, card_id=card_id, invest_amount=invest_amount, renew=renew, proclaim=proclaim
         ):
             _resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
+        case ResolveEquip(card_id=card_id, target_id=target_id):
+            _resolve_equip(game, card_id, target_id)
         case SelectAbilityTarget(card_id=card_id, candidates=candidates):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(

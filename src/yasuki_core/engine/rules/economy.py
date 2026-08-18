@@ -91,6 +91,11 @@ def _on_battlefield(game: GameState, card_id: str) -> bool:
 _SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
 
 
+# A Kensai Personality may attach two Weapons rather than one (CR, Kensai), which is a larger limit
+# rather than an exemption — Two-Handed still binds him, and that rule is checked separately.
+KENSAI_KEYWORD = "Kensai"
+
+
 def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
     """The Senseis ``seat`` has in play. A Sensei bows and acts on its own (CR, Sensei), so it is a
     modifier source beside the Stronghold rather than part of it."""
@@ -121,6 +126,8 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
         amount = getattr(attached, printed_modifier, 0) + granted_stat(game, attached, card, stat)
         if amount:
             yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
+    if stat is Stat.WEAPON_LIMIT and KENSAI_KEYWORD in effective_keywords(game, card):
+        yield Modifier(card.id, card.id, stat, 1, Duration.WHILE_SOURCE_IN_PLAY)
     if stat in _SENSEI_GRANTED_STATS and isinstance(card.printed, StrongholdPrint):
         for sensei in _senseis_of(game, card.owner):
             delta = getattr(sensei, stat.value)
@@ -181,6 +188,12 @@ def effective_personal_honor(game: GameState, card: L5RCard) -> int:
     """``card``'s Personal Honor right now — what Proclaiming him gains, and what an effect reading
     his honor sees. The +1PH and +2PH counters carry their delta here."""
     return effective_stat(game, card, Stat.PERSONAL_HONOR)
+
+
+def effective_weapon_limit(game: GameState, card: L5RCard) -> int:
+    """How many Weapon Items may be attached to ``card`` (CR, Weapon). One by default, two for a
+    Kensai, and whatever a card's own modifiers make it."""
+    return effective_stat(game, card, Stat.WEAPON_LIMIT)
 
 
 def effective_gold_cost(game: GameState, card: L5RCard) -> int:

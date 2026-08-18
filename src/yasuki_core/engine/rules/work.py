@@ -116,6 +116,23 @@ class ApplyAbilityEffects:
 
 
 @dataclass(frozen=True, slots=True)
+class ResolveEquip:
+    """Finish an Equip once its cost is paid: move the attachment from its owner's hand onto the
+    battlefield and attach it to the target Personality.
+
+    Attributes
+    ----------
+    card_id : str
+        The attachment leaving hand for play.
+    target_id : str
+        The Personality it attaches to.
+    """
+
+    card_id: str
+    target_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class ApplyEffects:
     """Resolve ``effects`` once the current step finishes. The generic deferral: an effect that must
     wait for what precedes it to resolve fully — including any cascade it raises — is queued here
@@ -135,6 +152,7 @@ class ApplyEffects:
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
 WorkItem = (
     ResolveRecruit
+    | ResolveEquip
     | ResumeCascade
     | SelectAbilityTarget
     | ApplyAbilityEffects

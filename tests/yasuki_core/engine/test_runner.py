@@ -5,6 +5,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
     FatePrint,
     HoldingPrint,
     PersonalityPrint,
@@ -20,6 +21,7 @@ from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Recruit,
     Cycle,
+    Equip,
     KharmicDraw,
     KharmicRefill,
     Legacy,
@@ -478,6 +480,56 @@ def test_a_menu_only_offers_the_card_it_was_opened_on():
     game_runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
 
     assert [action for _, action in game_runner.hand_menu("P1-k1")] == [KharmicDraw("P1-k1")]
+
+
+def test_a_hand_attachment_offers_equip_priced_at_its_gold_cost():
+    # Equipping is reached by clicking the card in hand, so the offer has to hang off the hand menu
+    # and has to say the price — the player commits to the target before seeing the payment prompt.
+    state = _dealt_table(0)
+    state.battlefield.add(
+        _register(
+            state,
+            L5RCard.of(
+                StrongholdPrint,
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=PlayerId.P1,
+                gold_production=8,
+            ),
+        )
+    )
+    state.battlefield.add(
+        _register(
+            state,
+            L5RCard.of(
+                PersonalityPrint,
+                id="P1-hero",
+                name="Hero",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                force=2,
+                chi=3,
+            ),
+        )
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(
+        _register(
+            state,
+            L5RCard.of(
+                AttachmentPrint,
+                id="P1-katana",
+                name="Katana",
+                side=Side.FATE,
+                owner=PlayerId.P1,
+                gold_cost=3,
+                keywords=("Weapon",),
+            ),
+        )
+    )
+    game_runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+
+    assert game_runner.hand_menu("P1-katana") == [("Equip: Pay 3 gold", Equip("P1-katana"))]
 
 
 def test_a_card_without_the_keyword_offers_no_kharmic():

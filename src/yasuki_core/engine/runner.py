@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.actions import (
     Action,
     Cycle,
     DynastyDiscard,
+    Equip,
     KharmicDraw,
     KharmicRefill,
     Legacy,
@@ -21,7 +22,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionRequest,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.economy import effective_personal_honor
+from yasuki_core.engine.rules.economy import effective_gold_cost, effective_personal_honor
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.policies import Policy
 from yasuki_core.engine.rules.projection import GameView
@@ -118,13 +119,23 @@ class GameRunner:
         return items
 
     def hand_menu(self, card_id: str) -> list[tuple[str, Action]]:
-        """The labeled actions offered for one of the human's hand cards, for its left-click menu.
-        Empty when the card offers nothing right now."""
-        return [
-            (f"Kharmic: Pay {legality.KHARMIC_COST} gold to draw a card", action)
-            for action in self.legal_actions()
-            if isinstance(action, KharmicDraw) and action.card_id == card_id
-        ]
+        """The labeled actions offered for one of the human's hand cards, for its left-click menu:
+        the Kharmic ability that spends it, and an Equip for an attachment. Empty when the card
+        offers nothing right now.
+
+        Equipping names no target here — choosing it puts the board into selection over the
+        Personalities that would take the card, then into the payment."""
+        game = self.session.game
+        items: list[tuple[str, Action]] = []
+        for action in self.legal_actions():
+            if getattr(action, "card_id", None) != card_id:
+                continue
+            if isinstance(action, KharmicDraw):
+                items.append((f"Kharmic: Pay {legality.KHARMIC_COST} gold to draw a card", action))
+            elif isinstance(action, Equip):
+                cost = effective_gold_cost(game, game.table.cards_by_id[card_id])
+                items.append((f"Equip: Pay {cost} gold", action))
+        return items
 
     @staticmethod
     def _invest_label(card, base: int) -> str:

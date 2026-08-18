@@ -252,6 +252,32 @@ class ChooseAbilityTarget(DecisionRequest):
         return True
 
 
+@dataclass(frozen=True, slots=True)
+class ChooseEquipTarget(DecisionRequest):
+    """The seat must choose which Personality the attachment it is Equipping joins. The candidates
+    are the Personalities it controls that will accept the card, all in play, so a client renders
+    them as board selections.
+
+    Attributes
+    ----------
+    source_card_id : str
+        The attachment being Equipped, still in hand until the cost is paid.
+    """
+
+    source_card_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Choose a Personality to equip"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out abandons the Equip before anything is paid."""
+        return True
+
+
 # Resolver key -> the wording its choice asks with. Populated by the choice_resolver decorator and
 # read here rather than in triggers, because a prompt is only ever a property of the request the
 # seat sees, and decisions sits below triggers in the import order.

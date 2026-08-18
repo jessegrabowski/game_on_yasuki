@@ -22,6 +22,7 @@ yasuki_core.engine.rules.economy
     effective_personal_honor
     effective_recruit_discount
     effective_stat
+    effective_weapon_limit
     gold_handler
     is_clan
     keyword_grant

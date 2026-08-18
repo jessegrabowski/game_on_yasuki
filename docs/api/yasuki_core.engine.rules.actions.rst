@@ -11,6 +11,7 @@ yasuki_core.engine.rules.actions
     ActivateAbility
     Cycle
     DynastyDiscard
+    Equip
     KharmicDraw
     KharmicRefill
     Legacy

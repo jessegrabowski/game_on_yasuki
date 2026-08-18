@@ -139,7 +139,7 @@ _PERSISTED_PRINT_FIELDS: dict[str, tuple[str, ...]] = {
     "AncestorPrint": _FATE_PRINT_FIELDS,
     "DynastyPrint": _DYNASTY_PRINT_FIELDS,
     "PersonalityPrint": _DYNASTY_PRINT_FIELDS
-    + ("force", "chi", "personal_honor", "honor_requirement"),
+    + ("force", "chi", "personal_honor", "honor_requirement", "weapon_limit"),
     "HoldingPrint": _DYNASTY_PRINT_FIELDS + ("gold_production",),
     "EventPrint": _DYNASTY_PRINT_FIELDS,
     "RegionPrint": _DYNASTY_PRINT_FIELDS,

@@ -76,6 +76,22 @@ class Legacy:
 
 
 @dataclass(frozen=True, slots=True)
+class Equip:
+    """Attach a Follower, Item or Spell from hand to a Personality you control, paying its Gold Cost.
+
+    The Personality is chosen through the decision the action raises rather than named here, the way
+    an activated ability picks its target.
+
+    Attributes
+    ----------
+    card_id : str
+        The attachment in hand.
+    """
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class ActivateAbility:
     """Activate the activated ability on an in-play card, bowing it as the cost. The ability's target
     is chosen through the decision the action raises.
@@ -126,7 +142,15 @@ class KharmicRefill:
 
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
 Action = (
-    Pass | Recruit | DynastyDiscard | Legacy | ActivateAbility | Cycle | KharmicDraw | KharmicRefill
+    Pass
+    | Recruit
+    | Equip
+    | DynastyDiscard
+    | Legacy
+    | ActivateAbility
+    | Cycle
+    | KharmicDraw
+    | KharmicRefill
 )
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
@@ -137,6 +161,8 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     KharmicDraw: ActionTiming.OPEN,
     KharmicRefill: ActionTiming.OPEN,
     Recruit: ActionTiming.DYNASTY,
+    # Repeatable Open, not Dynasty (CR, Equip) — it is taken in the Action phase like Kharmic.
+    Equip: ActionTiming.OPEN,
     DynastyDiscard: ActionTiming.DYNASTY,
     Legacy: ActionTiming.DYNASTY,
 }

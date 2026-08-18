@@ -13,7 +13,12 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.tags import card_tag, deck_tag, zone_tag
 from yasuki_gui.visuals.cardface import HiddenFace
-from yasuki_core.game_pieces.prints import CardPrint, HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
+    CardPrint,
+    HoldingPrint,
+    PersonalityPrint,
+)
 
 
 def _province_keys(state, seat):
@@ -215,6 +220,74 @@ class TestRulesModeRender:
         tag = card_tag("P2-bf")
         assert tag in field.sprites  # the card still renders so it can be animated
         assert isinstance(field.sprites[tag].card, HiddenFace)  # but as a back to P1
+
+    def test_an_attached_card_renders_with_its_personality(self, loaded):
+        """A unit is the game's own grouping, so the board shows one. Without this the attachment
+        is an unplaced non-Personality and files itself with the Holdings, rows away from the
+        Personality carrying it."""
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        hero = L5RCard.of(
+            PersonalityPrint,
+            id="P1-hero",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            force=2,
+            chi=3,
+        )
+        katana = L5RCard.of(
+            AttachmentPrint, id="P1-katana", name="Katana", side=Side.FATE, owner=PlayerId.P1
+        )
+        for card in (hero, katana):
+            state.cards_by_id[card.id] = card
+            state.battlefield.add(card)
+            state.positions[card.id] = UNPLACED_BOARD_POS
+        state.units["P1-katana"] = "P1-hero"
+        session = EngineSession.start(state, PlayerId.P1)
+        field.render_snapshot(session.project(PlayerId.P1).table, PlayerId.P1)
+
+        hero_sprite = field.sprites[card_tag("P1-hero")]
+        katana_sprite = field.sprites[card_tag("P1-katana")]
+        assert katana_sprite.x == hero_sprite.x
+        # Fanned up so its title bar clears the Personality riding it, matching the web board.
+        assert katana_sprite.y < hero_sprite.y
+
+        drawn = [entry[0].id for entry in field._unit_draw_order(list(field._render_battlefield()))]
+        assert drawn.index("P1-katana") < drawn.index("P1-hero")
+
+    def test_an_attachment_takes_no_column_from_the_holdings_row(self, loaded):
+        """The attachment is unplaced and is not a Personality, so the home row would file it with
+        the Holdings and shove the real ones sideways to make room for a column nothing draws in."""
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        hero = L5RCard.of(
+            PersonalityPrint,
+            id="P1-hero",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            force=2,
+            chi=3,
+        )
+        holding = L5RCard.of(
+            HoldingPrint, id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1
+        )
+        katana = L5RCard.of(
+            AttachmentPrint, id="P1-katana", name="Katana", side=Side.FATE, owner=PlayerId.P1
+        )
+        for card in (hero, holding, katana):
+            state.cards_by_id[card.id] = card
+            state.battlefield.add(card)
+            state.positions[card.id] = UNPLACED_BOARD_POS
+        state.units["P1-katana"] = "P1-hero"
+        session = EngineSession.start(state, PlayerId.P1)
+        field.render_snapshot(session.project(PlayerId.P1).table, PlayerId.P1)
+
+        rendered = list(field._render_battlefield())
+        home = field._home_positions(rendered, *field._canvas_size())
+        assert "P1-katana" not in home
+        assert {"P1-hero", "P1-mine"} <= set(home)
 
     def test_an_unplaced_hidden_card_still_lands_in_a_home_row(self, loaded):
         """A redacted card renders as a HiddenFace, which carries no print. The home row sorts each

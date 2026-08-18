@@ -5,6 +5,9 @@ CARD_H = 104
 # Copies of one holding stack in a single home column, each offset down by this much so every copy
 # stays visible and clickable.
 HOME_STACK_OFFSET = 26
+# Pixels an attached card is shifted up per slot, so its title bar clears the card it rides and each
+# further attachment fans a little higher. Matches the web board's ATTACH_STACK_OFFSET.
+ATTACH_STACK_OFFSET = 24
 # Slightly reduced spacing for draw placement
 DRAW_OFFSET = 16
 

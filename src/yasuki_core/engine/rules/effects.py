@@ -10,13 +10,14 @@ from yasuki_core.engine.rules.events import (
     CardDiscarded,
     CounterGained,
     Destroyed,
+    EnteredPlay,
     GameEvent,
     Revealed,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ApplyEffects
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
@@ -300,6 +301,40 @@ class GrantModifier(Effect):
             Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
         )
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class AttachCard(Effect):
+    """Attach a card to a Personality, from wherever it is.
+
+    The other half of the Equip distinction: a card that says "attach" reaches the same board as the
+    Equip action without its cost, its timing or its legality (CR, Equip). A card already in play
+    moves units; one elsewhere arrives on the battlefield first.
+
+    Attributes
+    ----------
+    card_id : str
+        The card to attach.
+    target_id : str
+        The Personality it attaches to.
+    """
+
+    card_id: str
+    target_id: str
+
+    def describe(self) -> str:
+        return f"attach {self.card_id} to {self.target_id}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        personality = game.table.cards_by_id.get(self.target_id)
+        if card is None or personality is None:
+            return []
+        entering = not any(held is card for held in game.table.battlefield.cards)
+        if entering:
+            ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
+        ops.attach_to_personality(game.table, card, personality)
+        return [EnteredPlay(self.card_id)] if entering else []
 
 
 @dataclass(frozen=True, slots=True)
