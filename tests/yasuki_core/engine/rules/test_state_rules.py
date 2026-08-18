@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.paths import DATABASE_DIR
 from yasuki_core.engine.rules import state_rules, triggers
 from yasuki_core.engine.rules.effects import (
@@ -129,7 +129,7 @@ def test_a_destroyed_personality_takes_his_unit_with_him():
         game, attachment("infantry", attachment_type=AttachmentType.FOLLOWER, force=5), "doomed"
     )
 
-    events = Destroy("doomed").perform(game)
+    events = Destroy("doomed", P1).perform(game)
 
     # Each leaves by destruction, which is what separates this from the orphan rule sweeping up
     # afterwards — that reaches the same board by discarding what the cascade would have taken.
@@ -154,6 +154,17 @@ def test_an_attachment_left_with_no_personality_is_discarded():
     assert _battlefield(game) == set()
     discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
     assert [card.id for card in discard] == [stray.id]
+
+
+def test_the_orphan_rule_names_itself_rather_than_the_cards_owner():
+    """No player discarded it, and naming the owner would pay a card that reacts to "if the action
+    was yours" for an action they never took."""
+    game = two_seat_game()
+    put_in_play(game, attachment("stray"))
+
+    demanded = state_rules.orphaned_attachments(game)
+
+    assert [effect.cause for effect in demanded] == [Rulebook.ORPHANED_ATTACHMENT]
 
 
 def test_an_attached_card_is_not_swept_by_the_orphan_rule():
@@ -181,6 +192,19 @@ def test_a_card_on_a_province_is_not_swept_by_the_orphan_rule():
     triggers.enforce_state_rules(game)
 
     assert _battlefield(game) == {"region"}
+
+
+def test_every_card_leaving_with_the_unit_names_the_same_cause():
+    """A member leaves because the Personality did, so it names whoever destroyed him — not its own
+    controller, and not the rulebook."""
+    samurai = _personality("doomed", chi=2)
+    game = _in_play(samurai)
+    attached(game, attachment("yari"), "doomed")
+    attached(game, attachment("armor"), "doomed")
+
+    events = Destroy("doomed", PlayerId.P2).perform(game)
+
+    assert {event.cause for event in events} == {PlayerId.P2}
 
 
 def test_a_discarded_personality_takes_his_unit_the_same_way():

@@ -1,5 +1,6 @@
 from collections.abc import Callable
 
+from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.rules.economy import effective_chi
 from yasuki_core.engine.rules.effects import Destroy, Discard, Effect
 from yasuki_core.game_pieces.cards import L5RCard
@@ -43,7 +44,7 @@ def chi_death(game: GameState) -> list[Effect]:
     text is a continuous effect and only those work against Chi death.
     """
     return [
-        Destroy(card.id)
+        Destroy(card.id, Rulebook.CHI_DEATH)
         for card in game.table.battlefield.cards
         if isinstance(card.printed, PersonalityPrint)
         and effective_chi(game, card) == 0
@@ -68,7 +69,7 @@ def orphaned_attachments(game: GameState) -> list[Effect]:
     # Segment ends. That is a granted, time-bounded suspension of the rule rather than a property of
     # a card, so it needs a duration vocabulary this layer does not have, and it needs battle.
     return [
-        Discard(card.id, card.owner)
+        Discard(card.id, Rulebook.ORPHANED_ATTACHMENT)
         for card in game.table.battlefield.cards
         if isinstance(card.printed, AttachmentPrint) and card.id not in game.table.units
     ]

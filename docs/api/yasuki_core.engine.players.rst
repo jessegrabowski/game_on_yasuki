@@ -8,6 +8,7 @@ yasuki_core.engine.players
 .. autosummary::
 
     PlayerId
+    Rulebook
 
 .. automodule:: yasuki_core.engine.players
     :members:

@@ -39,7 +39,7 @@ EFFECTS = [
     (AdjustCounter("rural_market_1", WEALTH, 2), "+2 Wealth on rural_market_1"),
     (AdjustCounter("rural_market_1", WEALTH, -1), "-1 Wealth on rural_market_1"),
     (DrawCard(PlayerId.P1), "P1 draws a card"),
-    (Destroy("farm_1"), "destroy farm_1"),
+    (Destroy("farm_1", PlayerId.P1), "destroy farm_1"),
     (Bow("farm_1"), "bow farm_1"),
     (Straighten("farm_1"), "straighten farm_1"),
     (BanishTopFate(PlayerId.P2), "banish the top of P2's fate deck"),
@@ -82,7 +82,7 @@ EFFECTS = [
     ),
     (ShuffleDeck(DeckKey(PlayerId.P1, Side.DYNASTY)), "shuffle P1's dynasty deck"),
     (RevealProvinces(PlayerId.P1), "reveal P1's provinces"),
-    (Then((Bow("a"), Destroy("b"))), "then: 2 deferred"),
+    (Then((Bow("a"), Destroy("b", PlayerId.P1))), "then: 2 deferred"),
     (
         Choose(PlayerId.P1, ("a", "b", "c"), 0, 2, "wheat_farm", "wheat_1"),
         "P1 chooses 0-2 of 3 for wheat_farm",
@@ -117,7 +117,7 @@ def test_nesting_deferrals_does_not_grow_the_line():
     # Then is the deferral primitive, so it is the effect most likely to nest — and a cascade that
     # fails to converge is where nesting runs deepest. Inlining children would put the longest line
     # exactly where the trace matters most; the renderer nests them by depth instead.
-    inner = Then((Bow("a"), Destroy("b"), AdjustCounter("c", WEALTH, 1)))
+    inner = Then((Bow("a"), Destroy("b", PlayerId.P1), AdjustCounter("c", WEALTH, 1)))
 
     assert Then((inner, inner, inner)).describe() == "then: 3 deferred"
 

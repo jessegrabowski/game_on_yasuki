@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow, legality
 
-from tests.yasuki_core.engine.builders import put_in_play, register
+from tests.yasuki_core.engine.builders import holding, put_in_play, register
 
 
 def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
@@ -87,6 +87,22 @@ def test_advance_empties_the_gold_pool_on_each_phase_change():
     game.add_gold(PlayerId.P1, 5)
     flow.advance(game)
     assert game.gold[PlayerId.P1] == 0
+
+
+def test_the_end_of_turn_discard_is_not_the_seats_own_action():
+    """A card that pays its controller "if the action was yours and discarded a Fate card" must not
+    be paid for the rulebook trimming their hand — there was no action."""
+    game = _game(hand=flow.MAX_HAND_SIZE, fate_deck=1)
+    caravansary = holding(
+        "P1-caravansary", printed_id="caravansary", name="Caravansary", owner=PlayerId.P1
+    )
+    put_in_play(game, caravansary)
+
+    _advance_to_end_of_turn(game)
+    victim = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
+    flow.submit(game, DecisionResponse((victim,)))
+
+    assert caravansary.counters == {}
 
 
 def test_overfull_hand_pauses_for_discard_then_resumes():

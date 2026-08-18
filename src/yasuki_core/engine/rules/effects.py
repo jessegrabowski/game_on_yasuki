@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from yasuki_core.engine import ops
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
 from yasuki_core.engine.rules.decisions import ChooseCards, Confirm, DecisionRequest
 from yasuki_core.game_pieces.cards import L5RCard
@@ -166,9 +166,18 @@ def _discard_unit(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
 class Destroy(Effect):
     """Destroy a card, sending it to its owner's discard by side. A Personality takes his unit with
     him: everything attached leaves play the same way he does (CR, Unit), each announcing its own
-    destruction."""
+    destruction and naming the same cause.
+
+    Attributes
+    ----------
+    card_id : str
+        The card to destroy.
+    cause : PlayerId or Rulebook
+        Who or what destroyed it — the seat whose card did, or the rule that demanded it.
+    """
 
     card_id: str
+    cause: Cause
 
     def describe(self) -> str:
         return f"destroy {self.card_id}"
@@ -177,7 +186,7 @@ class Destroy(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
-        return [Destroyed(member.id) for member in _discard_unit(game, card)]
+        return [Destroyed(member.id, self.cause) for member in _discard_unit(game, card)]
 
 
 @dataclass(frozen=True, slots=True)
@@ -188,23 +197,23 @@ class Discard(Effect):
     ----------
     card_id : str
         The card to discard.
-    by_seat : PlayerId
-        The seat whose action caused it, which a discard reaction reads to tell its own doing from
-        its opponent's.
+    cause : PlayerId or Rulebook
+        Who or what discarded it — the seat whose action did, which a discard reaction reads to tell
+        its own doing from its opponent's, or the rule that demanded it.
     """
 
     card_id: str
-    by_seat: PlayerId
+    cause: Cause
 
     def describe(self) -> str:
-        return f"{self.by_seat.name} discards {self.card_id}"
+        return f"{self.cause.name} discards {self.card_id}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
         unit = _discard_unit(game, card)
-        return [CardDiscarded(member.id, member.side, self.by_seat) for member in unit]
+        return [CardDiscarded(member.id, member.side, self.cause) for member in unit]
 
 
 @dataclass(frozen=True, slots=True)

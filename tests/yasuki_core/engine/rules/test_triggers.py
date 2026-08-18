@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production
@@ -10,8 +10,10 @@ from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
     apply_effect,
     choice_resolver,
+    enforce_state_rules,
     fire,
     on,
+    resolve_effects,
 )
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -34,6 +36,24 @@ from tests.yasuki_core.engine.builders import (
 @on(EnteredPlay, "test_probe")
 def _probe_gains_wealth(ctx):
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+# A test-only trigger that takes a Wealth token for any discard at all, whatever caused it. The
+# real discard-watcher, Caravansary, filters on the cause, so it cannot double as a probe for
+# whether the event fired.
+@on(CardDiscarded, "test_discard_probe")
+def _probe_sees_any_discard(ctx):
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+# A test-only trigger writing what caused each destruction onto its own card, the way the probes
+# above do observable work on theirs. No shipped card reads the cause yet — the one Destroyed
+# subscriber, Rural Market, filters on the destroyed card's owner — and a Personality cannot watch
+# its own death while triggers are collected from the battlefield.
+@on(Destroyed, "test_death_probe")
+def _probe_records_the_cause(ctx):
+    ctx.card.set_note(ctx.event.cause.name)
+    return []
 
 
 # A test-only trigger returning effects on both sides of a Choose: a token to itself, the choice,
@@ -177,6 +197,17 @@ def test_caravansary_ignores_an_opponents_discard():
     assert caravansary.counters == {}
 
 
+def test_caravansary_ignores_a_discard_no_player_made():
+    """Trimming to the maximum hand size is a step of the turn, not an action (CR, Drawing and
+    Discarding Fate Cards), so "if the action was yours" has no action to claim."""
+    game = two_seat_game()
+    caravansary = _caravansary(game)
+
+    fire(game, CardDiscarded("some-fate", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE))
+
+    assert caravansary.counters == {}
+
+
 def test_caravansary_ignores_a_dynasty_discard():
     game = two_seat_game()
     caravansary = _caravansary(game)
@@ -199,14 +230,15 @@ def test_caravansary_wealth_caps_at_three():
 def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
     # The wiring test: _apply_discard moves a hand card to the discard and must fire CardDiscarded.
     game = two_seat_game()
-    caravansary = _caravansary(game)
+    probe = holding("P1-probe", printed_id="test_discard_probe", owner=PlayerId.P1)
+    put_in_play(game, probe)
     fate = fate_card("P1-f", PlayerId.P1)
     game.table.cards_by_id[fate.id] = fate
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(fate)
 
     flow._apply_discard(game, PlayerId.P1, ("P1-f",))
 
-    assert caravansary.counters == {"wealth": 1}
+    assert probe.counters == {"wealth": 1}
 
 
 def _aoki(game, seat=PlayerId.P1, card_id="P1-aoki"):
@@ -313,9 +345,9 @@ def test_destroy_effect_discards_the_card_and_emits_destroyed():
     game = two_seat_game()
     farm = _keyworded_farm(game)
 
-    events = apply_effect(game, Destroy(farm.id))
+    events = apply_effect(game, Destroy(farm.id, PlayerId.P1))
 
-    assert events == [Destroyed(farm.id)]
+    assert events == [Destroyed(farm.id, PlayerId.P1)]
     assert farm not in game.table.battlefield.cards
     assert farm in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
 
@@ -325,7 +357,7 @@ def test_destroy_routes_a_fate_card_to_the_fate_discard():
     follower = fate_card("P1-follower", PlayerId.P1)
     put_in_play(game, follower)
 
-    apply_effect(game, Destroy(follower.id))
+    apply_effect(game, Destroy(follower.id, PlayerId.P1))
 
     assert follower in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
 
@@ -335,7 +367,7 @@ def test_destroying_your_farm_gives_rural_market_a_wealth_token():
     rural = _rural_market(game)
     farm = _keyworded_farm(game)
 
-    fire(game, Destroyed(farm.id))
+    fire(game, Destroyed(farm.id, PlayerId.P1))
 
     assert rural.counters == {"wealth": 1}
 
@@ -345,7 +377,7 @@ def test_rural_market_ignores_a_non_farm_destruction():
     rural = _rural_market(game)
     holding = _caravansary(game)  # a Holding, but not a Farm
 
-    fire(game, Destroyed(holding.id))
+    fire(game, Destroyed(holding.id, PlayerId.P1))
 
     assert rural.counters == {}
 
@@ -355,7 +387,7 @@ def test_rural_market_ignores_an_opponents_farm():
     rural = _rural_market(game, seat=PlayerId.P1)
     farm = _keyworded_farm(game, seat=PlayerId.P2, card_id="P2-a-farm")
 
-    fire(game, Destroyed(farm.id))
+    fire(game, Destroyed(farm.id, PlayerId.P1))
 
     assert rural.counters == {}
 
@@ -558,3 +590,29 @@ def test_a_second_resolver_for_one_choice_kind_is_refused():
                 return []
     finally:
         CHOICE_RESOLVERS.pop("guard_probe", None)
+
+
+def test_chi_death_names_the_rule_rather_than_a_seat():
+    """No player killed him, so nothing that asks "was this my doing?" may claim it."""
+    game = two_seat_game()
+    probe = put_in_play(game, holding("P1-probe", printed_id="test_death_probe", owner=PlayerId.P1))
+    doomed = L5RCard.of(
+        PersonalityPrint, id="doomed", name="doomed", side=Side.DYNASTY, owner=PlayerId.P1, chi=0
+    )
+    put_in_play(game, doomed)
+
+    enforce_state_rules(game)
+
+    assert probe.note == Rulebook.CHI_DEATH.name
+
+
+def test_a_card_driven_destruction_names_the_seat_whose_card_did_it():
+    """The other half: a destruction someone chose still says who, which is what separates it from
+    the rulebook's."""
+    game = two_seat_game()
+    probe = put_in_play(game, holding("P1-probe", printed_id="test_death_probe", owner=PlayerId.P1))
+    victim = put_in_play(game, holding("victim", owner=PlayerId.P2))
+
+    resolve_effects(game, [Destroy(victim.id, PlayerId.P1)])
+
+    assert probe.note == PlayerId.P1.name
