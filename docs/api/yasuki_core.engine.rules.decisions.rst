@@ -10,6 +10,7 @@ yasuki_core.engine.rules.decisions
     BanishForLegacy
     ChooseAbilityTarget
     ChooseCards
+    ChooseEquipTarget
     ChooseInvestAmount
     ChooseLegacyCard
     ChoosePayment

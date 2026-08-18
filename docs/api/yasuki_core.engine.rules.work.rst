@@ -10,6 +10,7 @@ yasuki_core.engine.rules.work
     ApplyAbilityEffects
     ApplyEffects
     FinishRecruit
+    ResolveEquip
     ResolveRecruit
     ResumeCascade
     SelectAbilityTarget

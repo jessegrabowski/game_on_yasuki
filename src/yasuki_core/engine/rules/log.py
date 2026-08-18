@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Cycle,
     DynastyDiscard,
+    Equip,
     KharmicDraw,
     KharmicRefill,
     Legacy,
@@ -224,6 +225,8 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "pass"}
         case Recruit(card_id=card_id, invest=invest, proclaim=proclaim):
             return {"kind": "recruit", "card_id": card_id, "invest": invest, "proclaim": proclaim}
+        case Equip(card_id=card_id):
+            return {"kind": "equip", "card_id": card_id}
         case DynastyDiscard(card_id=card_id):
             return {"kind": "dynasty_discard", "card_id": card_id}
         case Legacy():
@@ -249,6 +252,8 @@ def _decode_action(payload: dict) -> Action:
             invest=payload.get("invest", False),
             proclaim=payload.get("proclaim", False),
         )
+    if kind == "equip":
+        return Equip(payload["card_id"])
     if kind == "dynasty_discard":
         return DynastyDiscard(payload["card_id"])
     if kind == "legacy":

@@ -9,12 +9,14 @@ yasuki_core.engine.rules.flow
 
     activate
     advance
+    announce_equip
     announce_recruit
     announce_rulebook_cost
     begin_game
     cancel
     cycle
     dynasty_discard
+    equip
     kharmic_draw
     kharmic_refill
     legacy

@@ -2,6 +2,7 @@ from collections.abc import Iterator
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole
+from yasuki_core.engine.rules.equip import equip_targets
 from yasuki_core.engine.rules.actions import (
     ACTION_TIMINGS,
     Action,
@@ -9,6 +10,7 @@ from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Cycle,
     DynastyDiscard,
+    Equip,
     KharmicDraw,
     KharmicRefill,
     Legacy,
@@ -28,6 +30,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.ruleset import SHATTERED_EMPIRE
 from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
     HoldingPrint,
     PersonalityPrint,
     SenseiPrint,
@@ -96,6 +99,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_abilities(game, seat),
         *_cycle(game, seat),
         *_recruits(game, seat),
+        *_equips(game, seat),
         *_dynasty_discards(game, seat),
         *_legacy(game, seat),
         *_kharmic(game, seat),
@@ -121,6 +125,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _abilities(game, seat, only=card_id)
         case Recruit(card_id=card_id):
             return action in _recruits(game, seat, only=card_id)
+        case Equip(card_id=card_id):
+            return action in _equips(game, seat, only=card_id)
         case DynastyDiscard(card_id=card_id):
             return action in _dynasty_discards(game, seat, only=card_id)
         case KharmicDraw(card_id=card_id) | KharmicRefill(card_id=card_id):
@@ -262,6 +268,33 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
         if invest is not None and base + invest.minimum <= affordable:
             recruits.append(Recruit(card.id, invest=True))
     return recruits
+
+
+def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
+    """The Equip actions ``seat`` can take: each attachment in hand it can afford that some
+    Personality it controls would accept.
+
+    An attachment enters play only by attaching, so hand is a hard filter; the Personality is chosen
+    through the decision the action raises, and the action is withheld unless at least one would take
+    the card. ``only`` narrows to a single card."""
+    if not permits(game, seat, ACTION_TIMINGS[Equip]):
+        return []
+    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
+    fixed, variable = gold_reach(game, seat)
+    equips: list[Action] = []
+    for card in hand:
+        if only is not None and card.id != only:
+            continue
+        if not isinstance(card.printed, AttachmentPrint):
+            continue
+        affordable = fixed + sum(
+            effective_gold_production(game, producer, targets=(card,)) for producer in variable
+        )
+        if effective_gold_cost(game, card) > affordable:
+            continue
+        if equip_targets(game, card):
+            equips.append(Equip(card.id))
+    return equips
 
 
 def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Zone]]:
