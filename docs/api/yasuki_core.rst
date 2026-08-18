@@ -56,6 +56,7 @@ yasuki_core
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_rules <yasuki_core.engine.rules.state_rules>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
+    yasuki_core.engine.rules.units <yasuki_core.engine.rules.units>
     yasuki_core.engine.rules.work <yasuki_core.engine.rules.work>
     yasuki_core.engine.runner <yasuki_core.engine.runner>
     yasuki_core.engine.serialization <yasuki_core.engine.serialization>

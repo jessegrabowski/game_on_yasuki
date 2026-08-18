@@ -1,0 +1,15 @@
+yasuki_core.engine.rules.units
+==============================
+
+.. currentmodule:: yasuki_core.engine.rules.units
+
+.. rubric:: Functions
+
+.. autosummary::
+
+    followers_of
+    unit_force
+
+.. automodule:: yasuki_core.engine.rules.units
+    :members:
+    :undoc-members:
