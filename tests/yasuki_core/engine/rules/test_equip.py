@@ -1,7 +1,9 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_weapon_limit
+from yasuki_core.engine.rules.effects import AttachCard
 from yasuki_core.engine.rules.equip import equip_targets, may_attach_weapon, weapons_on
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.builders import (
@@ -121,3 +123,52 @@ def test_an_effect_can_raise_the_limit_like_any_other_characteristic():
 
     assert effective_weapon_limit(game, hero) == 2
     assert may_attach_weapon(game, hero, _weapon("wakizashi")) is True
+
+
+def test_attaching_as_an_effect_costs_nothing_and_asks_nothing():
+    """The distinction the CR draws: an effect that "attaches" reaches the same board as the Equip
+    action without its cost, its timing or its legality. Collapsing the two would silently charge
+    gold for every card that says "attach"."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    katana = attachment("katana", keywords=("Weapon",))
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(katana)
+    game.table.cards_by_id[katana.id] = katana
+    gold_before = dict(game.gold)
+
+    events = AttachCard(katana.id, hero.id).perform(game)
+
+    assert game.table.units == {katana.id: hero.id}
+    assert katana in game.table.battlefield.cards
+    assert game.gold == gold_before
+    assert [event.card_id for event in events] == [katana.id]
+
+
+def test_attaching_a_card_already_in_play_moves_it_without_re_entering():
+    """A card changing units has not entered play, so nothing may react as though it had."""
+    game = two_seat_game()
+    first = put_in_play(game, personality("first"))
+    second = put_in_play(game, personality("second"))
+    katana = attached(game, attachment("katana", keywords=("Weapon",)), "first")
+
+    events = AttachCard(katana.id, second.id).perform(game)
+
+    assert game.table.units == {katana.id: second.id}
+    assert events == []
+    assert first is not None  # the old host keeps its place on the board
+
+
+def test_attaching_ignores_the_weapon_limit_that_equip_enforces():
+    """`AttachCard` is the mechanical result, not the procedure: the restrictions live in Equip's
+    legality, so an effect reaching past it is doing what the card told it to."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    attached(game, attachment("first", keywords=("Weapon",)), "hero")
+    second = attachment("second", keywords=("Weapon",))
+    game.table.cards_by_id[second.id] = second
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(second)
+    assert may_attach_weapon(game, hero, second) is False
+
+    AttachCard(second.id, hero.id).perform(game)
+
+    assert game.table.units == {"first": hero.id, "second": hero.id}

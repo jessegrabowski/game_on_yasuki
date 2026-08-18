@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,
+    AttachCard,
     BanishTopFate,
     Bow,
     Ask,
@@ -76,6 +77,7 @@ EFFECTS = [
         "refill P2 province 0 face-up",
     ),
     (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
+    (AttachCard("katana", "hero"), "attach katana to hero"),
     (
         PlaceInProvince("farm_1", ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 1)),
         "place farm_1 in P2 province 1",
