@@ -46,6 +46,7 @@ yasuki_core
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.economy <yasuki_core.engine.rules.economy>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
+    yasuki_core.engine.rules.equip <yasuki_core.engine.rules.equip>
     yasuki_core.engine.rules.events <yasuki_core.engine.rules.events>
     yasuki_core.engine.rules.flow <yasuki_core.engine.rules.flow>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>

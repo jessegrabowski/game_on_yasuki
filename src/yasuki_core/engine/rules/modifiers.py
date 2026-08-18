@@ -18,6 +18,7 @@ class Stat(Enum):
     GOLD_PRODUCTION = "gold_production"
     PERSONAL_HONOR = "personal_honor"
     PROVINCE_STRENGTH = "province_strength"
+    WEAPON_LIMIT = "weapon_limit"
 
 
 class Duration(Enum):

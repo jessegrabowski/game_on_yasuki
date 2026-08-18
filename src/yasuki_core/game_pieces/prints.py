@@ -75,6 +75,10 @@ class PersonalityPrint(DynastyPrint):
     personal_honor: int = 0
     # None is the printed dash: below any number, so the card recruits at any Family Honor.
     honor_requirement: int | None = None
+    # How many Weapon Items may hang on him (CR, Weapon). One is the rulebook's default rather than
+    # anything a card prints, and it sits here so the limit reads like any other characteristic —
+    # Kensai raises it with a modifier instead of exempting him from a rule.
+    weapon_limit: int = 1
 
 
 @dataclass(frozen=True, slots=True)

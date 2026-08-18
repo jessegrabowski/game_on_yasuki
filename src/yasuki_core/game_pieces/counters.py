@@ -20,6 +20,7 @@ class Counter:
     gold_production: int = 0
     province_strength: int = 0
     personal_honor: int = 0
+    weapon_limit: int = 0
 
 
 _CATALOG_PATH = DATABASE_DIR / "counters.yaml"
