@@ -20,43 +20,44 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.prints import HoldingPrint
 
-# A cost is the effects paid to activate an ability, applied to the source card before the ability's
-# own effects. Bow / destroy / spend-a-token are all just effects targeting the source, so costs and
-# effects share one vocabulary — there is no separate cost taxonomy. What a card calls a cost is one
-# here only when it must be paid before resolution; anything the card's own text sequences is an
-# effect.
-Cost = Callable[[L5RCard], list[Effect]]
+# A cost is the effects paid to activate an ability, applied before the ability's own effects. Bow /
+# destroy / spend-a-token are all just effects targeting a card, so costs and effects share one
+# vocabulary — there is no separate cost taxonomy. What a card calls a cost is one here only when it
+# must be paid before resolution; anything the card's own text sequences is an effect. A cost takes
+# the board as well as the source because it may be paid by a card the source did not choose: an
+# attachment's cost is usually paid by the Personality it hangs on, which only the graph can name.
+Cost = Callable[[GameState, L5RCard], list[Effect]]
 
 
-def no_cost(source: L5RCard) -> list[Effect]:
+def no_cost(game: GameState, source: L5RCard) -> list[Effect]:
     """An ability that costs nothing to announce."""
     return []
 
 
-def bow_cost(source: L5RCard) -> list[Effect]:
+def bow_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [Bow(source.id)]
 
 
-def destroy_cost(source: L5RCard) -> list[Effect]:
+def destroy_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [Destroy(source.id, source.owner)]
 
 
-def spend_wealth(source: L5RCard) -> list[Effect]:
+def spend_wealth(game: GameState, source: L5RCard) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, -1)]
 
 
-def bow_and_destroy(source: L5RCard) -> list[Effect]:
+def bow_and_destroy(game: GameState, source: L5RCard) -> list[Effect]:
     return [Bow(source.id), Destroy(source.id, source.owner)]
 
 
-def banish_top_fate(source: L5RCard) -> list[Effect]:
+def banish_top_fate(game: GameState, source: L5RCard) -> list[Effect]:
     return [BanishTopFate(source.owner)]
 
 
 def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:
     """Whether ``card`` can pay ``cost``: every effect it spends is payable against the current
     state. Each effect owns its own precondition, so a new cost effect needs no change here."""
-    return all(effect.is_payable(game) for effect in cost(card))
+    return all(effect.is_payable(game) for effect in cost(game, card))
 
 
 class CardLocation(str, Enum):
@@ -78,7 +79,8 @@ class Ability:
     label : str
         A short human description for the activation menu.
     cost : callable
-        Maps the source card to the effects paid to activate — applied before the ability's own.
+        Maps ``(game, source_card)`` to the effects paid to activate — applied before the ability's
+        own.
     targets : callable
         Maps ``(game, source_card)`` to the ids of the cards the ability may target — empty when
         none are legal, which also means the ability can't be offered.
