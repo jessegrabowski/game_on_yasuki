@@ -482,9 +482,9 @@ def test_a_menu_only_offers_the_card_it_was_opened_on():
     assert [action for _, action in game_runner.hand_menu("P1-k1")] == [KharmicDraw("P1-k1")]
 
 
-def test_a_hand_attachment_offers_equip_priced_at_its_gold_cost():
-    # Equipping is reached by clicking the card in hand, so the offer has to hang off the hand menu
-    # and has to say the price — the player commits to the target before seeing the payment prompt.
+def _equip_runner(*, printed_id: str | None = None) -> GameRunner:
+    """A runner with a Personality in play and one attachment in P1's hand, gold enough for both it
+    and any Invest it prints. ``printed_id`` names the card the registries key on."""
     state = _dealt_table(0)
     state.battlefield.add(
         _register(
@@ -504,8 +504,8 @@ def test_a_hand_attachment_offers_equip_priced_at_its_gold_cost():
             state,
             L5RCard.of(
                 PersonalityPrint,
-                id="P1-hero",
-                name="Hero",
+                id="P1-bearer",
+                name="Bearer",
                 side=Side.DYNASTY,
                 owner=PlayerId.P1,
                 force=2,
@@ -522,14 +522,32 @@ def test_a_hand_attachment_offers_equip_priced_at_its_gold_cost():
                 name="Katana",
                 side=Side.FATE,
                 owner=PlayerId.P1,
+                printed_id=printed_id,
                 gold_cost=3,
                 keywords=("Weapon",),
             ),
         )
     )
-    game_runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    return GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
 
-    assert game_runner.hand_menu("P1-katana") == [("Equip: Pay 3 gold", Equip("P1-katana"))]
+
+def test_a_hand_attachment_offers_equip_priced_at_its_gold_cost():
+    # Equipping is reached by clicking the card in hand, so the offer has to hang off the hand menu
+    # and has to say the price — the player commits to the target before seeing the payment prompt.
+    assert _equip_runner().hand_menu("P1-katana") == [("Equip: Pay 3 gold", Equip("P1-katana"))]
+
+
+def test_an_investable_attachment_prices_its_two_equips_apart():
+    # Equip and Equip-with-Invest are two legal actions on one card, so the menu shows two entries.
+    # Labelled off the bare Gold Cost they render identically, and the player picks blind.
+    game_runner = _equip_runner(printed_id="stockpiled_weapon")
+
+    menu = game_runner.hand_menu("P1-katana")
+
+    assert menu == [
+        ("Equip: Pay 3 gold", Equip("P1-katana")),
+        ("Equip & Invest: Pay 4 gold", Equip("P1-katana", invest=True)),
+    ]
 
 
 def test_a_card_without_the_keyword_offers_no_kharmic():
