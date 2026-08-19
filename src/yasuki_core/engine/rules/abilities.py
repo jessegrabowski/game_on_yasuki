@@ -48,6 +48,12 @@ def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [Bow(parent.id)]
 
 
+def bow_parent_and_destroy(game: GameState, source: L5RCard) -> list[Effect]:
+    """Bow the Personality ``source`` is attached to and destroy ``source``. Unpayable while it is
+    attached to none."""
+    return [*bow_parent_cost(game, source), Destroy(source.id, source.owner)]
+
+
 def destroy_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [Destroy(source.id, source.owner)]
 

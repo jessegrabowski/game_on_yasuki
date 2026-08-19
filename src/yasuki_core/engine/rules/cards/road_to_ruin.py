@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
     Destroy,
     Discard,
     Effect,
@@ -20,7 +21,42 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.counters import MINUS_1F
+from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
+
+
+# --- Dull Tanto ---
+
+
+def _get_dull_tanto_valid_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Every Personality on the board. The card says "a target Personality" and narrows it no
+    further, so the controller's own are legal targets."""
+    return [
+        card.id
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, PersonalityPrint)
+    ]
+
+
+def _resolve_dull_tanto_effect(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Two -1F tokens on the target, then destroy this Item. Two separate tokens rather than one
+    worth -2F, so an effect that removes a single token removes only 1 Force."""
+    return [
+        AdjustCounter(target.id, MINUS_1F, 2),
+        Destroy(source.id, source.owner),
+    ]
+
+
+register_ability(
+    "dull_tanto",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: give a Personality two -1F tokens and destroy this Item",
+        cost=no_cost,
+        targets=_get_dull_tanto_valid_targets,
+        effects=_resolve_dull_tanto_effect,
+    ),
+)
 
 
 # --- Outlying Farms ---

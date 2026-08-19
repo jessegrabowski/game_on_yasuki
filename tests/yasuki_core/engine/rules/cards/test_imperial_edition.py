@@ -10,7 +10,16 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint
 
-from tests.yasuki_core.engine.builders import holding, province_card, register
+from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
+    holding,
+    personality,
+    province_card,
+    put_in_play,
+    register,
+    two_seat_game,
+)
 
 P1 = PlayerId.P1
 
@@ -150,3 +159,79 @@ def test_the_gift_replays_to_the_same_state():
     session.act(P1, ActivateAbility("gift"))
     session.submit(P1, DecisionResponse(("katana",)))
     assert replay(session.log) == session.game
+
+
+# --- Touch of Death ---
+
+
+def _touch_game(*, caster_chi=3, victims=((4, True),)):
+    """P1's Touch of Death on a Shugenja, against ``victims`` of ``(chi, bowed)`` owned by P2.
+
+    A victim bowed here stays bowed: the turn-start straighten reaches the active player's cards
+    only, and P1 is active.
+    """
+    game = two_seat_game()
+    put_in_play(game, personality("caster", force=2, chi=caster_chi))
+    for index, (chi, bowed) in enumerate(victims):
+        victim = put_in_play(
+            game, personality(f"victim{index}", force=2, chi=chi, owner=PlayerId.P2)
+        )
+        if bowed:
+            victim.bow()
+    attached(game, attachment("spell", printed_id="touch_of_death"), "caster")
+    return game
+
+
+def test_touch_of_death_destroys_a_bowed_personality_with_lower_chi():
+    game = _touch_game(caster_chi=4, victims=((3, True),))
+    session = EngineSession.start(game.table, P1)
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("victim0",)))
+
+    table = session.game.table
+    assert table.cards_by_id["victim0"] not in table.battlefield.cards
+    assert table.cards_by_id["caster"].bowed is True  # half the cost
+    assert table.cards_by_id["spell"] not in table.battlefield.cards  # the other half
+
+
+def test_touch_of_death_does_not_target_a_personality_with_higher_chi():
+    """ "Equal or lower" is measured against the caster, so a hardier Personality is out of reach."""
+    game = _touch_game(caster_chi=2)  # the victim's Chi 4 is above it
+    session = EngineSession.start(game.table, P1)
+
+    assert ActivateAbility("spell") not in session.legal_actions(P1)
+
+
+def test_touch_of_death_targets_a_personality_with_equal_chi():
+    """The boundary the card names. An off-by-one here would exclude every equal-Chi target."""
+    game = _touch_game(caster_chi=3, victims=((3, True),))
+    session = EngineSession.start(game.table, P1)
+
+    assert ActivateAbility("spell") in session.legal_actions(P1)
+
+
+def test_touch_of_death_does_not_target_an_unbowed_personality():
+    # Chi 4 against a caster of 5 — only the standing is what puts him out of reach.
+    game = _touch_game(caster_chi=5, victims=((4, False),))
+    session = EngineSession.start(game.table, P1)
+
+    assert ActivateAbility("spell") not in session.legal_actions(P1)
+
+
+def test_touch_of_death_is_withheld_while_its_shugenja_is_bowed():
+    """His bow is the cost, so an already-bowed Shugenja cannot pay it whatever the target's Chi."""
+    game = _touch_game(caster_chi=5)
+    session = EngineSession.start(game.table, P1)
+    session.game.table.cards_by_id["caster"].bow()
+
+    assert ActivateAbility("spell") not in session.legal_actions(P1)
+
+
+def test_touch_of_death_replays_to_the_same_board():
+    game = _touch_game(caster_chi=4, victims=((3, True),))
+    session = EngineSession.start(game.table, P1)
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("victim0",)))
+
+    assert replay(session.log).table == session.game.table

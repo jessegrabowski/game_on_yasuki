@@ -6,20 +6,25 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules.economy import effective_gold_cost
+from yasuki_core.engine.rules.economy import effective_force, effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.counters import MINUS_1F
 from yasuki_core.game_pieces.prints import HoldingPrint
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     end_phase,
     holding,
+    personality,
     province_card,
     put_in_play,
     register,
+    two_seat_game,
 )
 
 P1 = PlayerId.P1
@@ -273,3 +278,49 @@ def test_outlying_farms_boost_replays_to_the_same_state():
     session.act(P1, Recruit("target"))
     session.submit(P1, DecisionResponse(("of",), ("of",)))
     assert replay(session.log) == session.game
+
+
+# --- Dull Tanto ---
+
+
+def _tanto_game(*, target_owner=P1):
+    """P1's Dull Tanto attached to his own Personality, with a second Personality to target."""
+    game = two_seat_game()
+    put_in_play(game, personality("bearer", force=3, chi=3))
+    put_in_play(game, personality("victim", force=4, chi=3, owner=target_owner))
+    attached(game, attachment("tanto", printed_id="dull_tanto", keywords=("Weapon",)), "bearer")
+    return EngineSession.start(game.table, P1)
+
+
+def test_dull_tanto_gives_the_target_two_minus_one_force_tokens():
+    session = _tanto_game(target_owner=PlayerId.P2)
+
+    session.act(P1, ActivateAbility("tanto"))
+    session.submit(P1, DecisionResponse(("victim",)))
+
+    victim = session.game.table.cards_by_id["victim"]
+    assert victim.counters[MINUS_1F.key] == 2
+    assert effective_force(session.game, victim) == 2  # printed 4, two -1F tokens
+    assert session.game.table.cards_by_id["tanto"] not in session.game.table.battlefield.cards
+
+
+def test_dull_tanto_may_target_its_own_bearer():
+    """The card says "a target Personality" and narrows it no further, so the Personality carrying
+    the Item is a legal target."""
+    session = _tanto_game()
+
+    assert ActivateAbility("tanto") in session.legal_actions(P1)
+    session.act(P1, ActivateAbility("tanto"))
+
+    assert "bearer" in session.project(P1).pending.candidates
+
+
+def test_dull_tanto_does_not_bow_the_personality_carrying_it():
+    """Its cost is nothing at all: destroying the Item is an effect the ability emits, not a price
+    paid to announce it."""
+    session = _tanto_game(target_owner=PlayerId.P2)
+
+    session.act(P1, ActivateAbility("tanto"))
+    session.submit(P1, DecisionResponse(("victim",)))
+
+    assert session.game.table.cards_by_id["bearer"].bowed is False
