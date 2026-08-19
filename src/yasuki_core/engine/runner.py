@@ -133,16 +133,22 @@ class GameRunner:
             if isinstance(action, KharmicDraw):
                 items.append((f"Kharmic: Pay {legality.KHARMIC_COST} gold to draw a card", action))
             elif isinstance(action, Equip):
-                cost = effective_gold_cost(game, game.table.cards_by_id[card_id])
-                items.append((f"Equip: Pay {cost} gold", action))
+                card = game.table.cards_by_id[card_id]
+                cost = effective_gold_cost(game, card)
+                if action.invest:
+                    items.append((self._invest_label(card, cost, "Equip & Invest"), action))
+                else:
+                    items.append((f"Equip: Pay {cost} gold", action))
         return items
 
     @staticmethod
-    def _invest_label(card, base: int) -> str:
+    def _invest_label(card: L5RCard, base: int, verb: str = "Invest") -> str:
+        """The menu wording for taking ``card``'s Invest on top of ``base``, as a single price or as
+        the range the payer chooses within."""
         invest = abilities.invest_for(card)
         if invest.minimum == invest.maximum:
-            return f"Invest: Pay {base + invest.minimum} gold"
-        return f"Invest: Pay {base + invest.minimum}–{base + invest.maximum} gold"
+            return f"{verb}: Pay {base + invest.minimum} gold"
+        return f"{verb}: Pay {base + invest.minimum}–{base + invest.maximum} gold"
 
     def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The activated-ability action offered for an in-play card the human controls, labelled with

@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import effective_keywords, effective_weapon_limit
 from yasuki_core.engine.rules.state import GameState
@@ -33,9 +35,34 @@ def may_attach_weapon(game: GameState, personality: L5RCard, weapon: L5RCard) ->
     return not any(TWO_HANDED_KEYWORD in effective_keywords(game, card) for card in held)
 
 
+# What a card's own text says it will hang on — "Can only attach to a Samurai" and its kin. Keyed by
+# printed id like the other per-card registries. The rulebook's restrictions live in this module as
+# code; a restriction only one card states lives with that card.
+AttachRestriction = Callable[[GameState, L5RCard, L5RCard], bool]
+ATTACH_RESTRICTIONS: dict[str, AttachRestriction] = {}
+
+
+def attach_restriction(printed_id: str) -> Callable[[AttachRestriction], AttachRestriction]:
+    """Register the decorated predicate as ``printed_id``'s limit on what it will attach to."""
+
+    def register(restriction: AttachRestriction) -> AttachRestriction:
+        if printed_id in ATTACH_RESTRICTIONS:
+            raise ValueError(f"{printed_id} already has an attach restriction")
+        ATTACH_RESTRICTIONS[printed_id] = restriction
+        return restriction
+
+    return register
+
+
 def may_attach(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
-    """Whether ``card`` may attach to ``personality``. Only Weapons answer to the Weapon rules —
-    a Follower or a plain Item is limited by neither the count nor Two-Handed exclusivity."""
+    """Whether ``card`` may attach to ``personality``, by its own text and by the Weapon rules.
+
+    Only Weapons answer to the Weapon rules — a Follower or a plain Item is limited by neither the
+    count nor Two-Handed exclusivity.
+    """
+    restriction = ATTACH_RESTRICTIONS.get(card.printed_id)
+    if restriction is not None and not restriction(game, personality, card):
+        return False
     if WEAPON_KEYWORD not in effective_keywords(game, card):
         return True
     return may_attach_weapon(game, personality, card)

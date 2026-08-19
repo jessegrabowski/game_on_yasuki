@@ -11,6 +11,7 @@ from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, 
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_gui.constants import ATTACH_STACK_OFFSET
 from yasuki_gui.tags import card_tag, deck_tag, zone_tag
 from yasuki_gui.visuals.cardface import HiddenFace
 from yasuki_core.game_pieces.prints import (
@@ -255,6 +256,79 @@ class TestRulesModeRender:
 
         drawn = [entry[0].id for entry in field._unit_draw_order(list(field._render_battlefield()))]
         assert drawn.index("P1-katana") < drawn.index("P1-hero")
+
+    def _unit_board(self, owner, attachments):
+        """A board with one Personality owned by ``owner`` and ``attachments`` cards hung on him."""
+        state = TableState.empty_two_seat()
+        hero = L5RCard.of(
+            PersonalityPrint,
+            id="hero",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=owner,
+            force=2,
+            chi=3,
+        )
+        cards = [hero] + [
+            L5RCard.of(AttachmentPrint, id=card_id, name=card_id, side=Side.FATE, owner=owner)
+            for card_id in attachments
+        ]
+        for card in cards:
+            state.cards_by_id[card.id] = card
+            state.battlefield.add(card)
+            state.positions[card.id] = UNPLACED_BOARD_POS
+        for card_id in attachments:
+            state.units[card_id] = "hero"
+        return state
+
+    def test_a_second_attachment_draws_behind_the_first(self, loaded):
+        """The stack fans up, so each card must cover the one it rides: the higher a card sits, the
+        further back it draws. Drawn in attach order instead, the second attachment lands on top of
+        the first and hides the title the fan exists to expose."""
+        field, _ = loaded
+        seat = field.seat
+        state = self._unit_board(seat, ("katana", "banner"))
+        field.render_snapshot(EngineSession.start(state, seat).project(seat).table, seat)
+
+        drawn = [entry[0].id for entry in field._unit_draw_order(list(field._render_battlefield()))]
+        assert drawn == ["banner", "katana", "hero"]
+
+        # ...and each one sits a step higher than the card it rides.
+        y_of = {card_id: field.sprites[card_tag(card_id)].y for card_id in state.cards_by_id}
+        assert y_of["banner"] < y_of["katana"] < y_of["hero"]
+
+    def test_a_unit_grows_down_from_where_its_personality_stood(self, loaded):
+        """Both seats' Personalities stand against the divider, so a stack fanning up off the near
+        seat's row climbs into the opponent's half. The unit sinks by its own height instead, which
+        leaves the top of the stack where the Personality was and keeps it on his own side."""
+        field, _ = loaded
+        seat = field.seat
+
+        bare = self._unit_board(seat, ())
+        field.render_snapshot(EngineSession.start(bare, seat).project(seat).table, seat)
+        alone = field.sprites[card_tag("hero")].y
+
+        laden = self._unit_board(seat, ("katana", "banner"))
+        field.render_snapshot(EngineSession.start(laden, seat).project(seat).table, seat)
+
+        assert field.sprites[card_tag("hero")].y == alone + 2 * ATTACH_STACK_OFFSET
+        assert field.sprites[card_tag("banner")].y == alone  # the stack tops out where he stood
+
+    def test_the_opposing_seats_unit_is_left_where_it_is(self, loaded):
+        """Its row sits on the far side of the divider, so fanning up already carries the stack away
+        from the near seat rather than across at it."""
+        field, _ = loaded
+        seat = field.seat
+        far = next(other for other in PlayerId if other is not seat)
+
+        bare = self._unit_board(far, ())
+        field.render_snapshot(EngineSession.start(bare, seat).project(seat).table, seat)
+        alone = field.sprites[card_tag("hero")].y
+
+        laden = self._unit_board(far, ("katana", "banner"))
+        field.render_snapshot(EngineSession.start(laden, seat).project(seat).table, seat)
+
+        assert field.sprites[card_tag("hero")].y == alone
 
     def test_an_attachment_takes_no_column_from_the_holdings_row(self, loaded):
         """The attachment is unplaced and is not a Personality, so the home row would file it with

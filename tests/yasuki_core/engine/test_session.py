@@ -22,7 +22,9 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
+from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.log import Answer, replay
+from yasuki_core.engine.rules.triggers import on
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
@@ -707,7 +709,9 @@ def _personality_in_play(state, card_id: str, *, keywords=(), owner=PlayerId.P1)
     return hero
 
 
-def _attachment_in_hand(state, card_id: str, *, gold_cost: int, keywords=()) -> L5RCard:
+def _attachment_in_hand(
+    state, card_id: str, *, gold_cost: int, keywords=(), printed_id: str | None = None
+) -> L5RCard:
     card = _register(
         state,
         L5RCard.of(
@@ -718,6 +722,7 @@ def _attachment_in_hand(state, card_id: str, *, gold_cost: int, keywords=()) -> 
             owner=PlayerId.P1,
             gold_cost=gold_cost,
             keywords=keywords,
+            printed_id=printed_id,
         ),
     )
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
@@ -828,3 +833,32 @@ def test_an_equip_replays_to_the_same_board():
     session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# A probe that records how it arrived. Equipping a card has to announce it the way Recruiting does,
+# or an attachment with an enters-play trigger silently never fires it.
+_EQUIP_ARRIVALS: list[bool] = []
+
+
+@on(EnteredPlay, "records_its_arrival")
+def _record_arrival(ctx):
+    _EQUIP_ARRIVALS.append(ctx.event.from_hand)
+    return []
+
+
+def test_equipping_announces_that_the_card_entered_play():
+    _EQUIP_ARRIVALS.clear()
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_play(state, "P1-hero")
+    # The trigger is keyed on printed id, so the probe has to wear it.
+    _attachment_in_hand(
+        state, "P1-katana", gold_cost=3, keywords=("Weapon",), printed_id="records_its_arrival"
+    )
+    session = EngineSession.start(state, PlayerId.P1)
+
+    session.act(PlayerId.P1, Equip("P1-katana"))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    assert _EQUIP_ARRIVALS == [True]  # and it came from hand, which some cards distinguish

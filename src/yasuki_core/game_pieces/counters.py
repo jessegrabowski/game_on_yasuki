@@ -41,6 +41,7 @@ _BY_KEY = {counter.key: counter for counter in ALL_COUNTERS}
 # Named handles for the counters the rules engine references directly (triggers, abilities, flow).
 WEALTH = _BY_KEY["wealth"]
 SINCERITY = _BY_KEY["sincerity"]
+MINUS_1F = _BY_KEY["minus1f"]
 
 
 def counter_from_key(key: str) -> Counter:

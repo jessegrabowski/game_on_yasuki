@@ -7,6 +7,7 @@ yasuki_core.engine.rules.equip
 
 .. autosummary::
 
+    attach_restriction
     equip_targets
     may_attach
     may_attach_weapon

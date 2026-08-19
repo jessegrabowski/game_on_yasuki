@@ -45,9 +45,21 @@ class Destroyed:
 
 @dataclass(frozen=True, slots=True)
 class EnteredPlay:
-    """A card entered play on the battlefield."""
+    """A card entered play on the battlefield.
+
+    Attributes
+    ----------
+    card_id : str
+        The card that arrived.
+    from_hand : bool
+        Whether it came from its owner's hand. An attachment reaches the battlefield from hand by
+        Equip and from anywhere else by an effect that attaches it, and cards distinguish the two:
+        "after this Follower enters play from your hand". Default False, which is what everything
+        arriving from a Province reports.
+    """
 
     card_id: str
+    from_hand: bool = False
 
 
 @dataclass(frozen=True, slots=True)

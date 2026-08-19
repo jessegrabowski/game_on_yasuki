@@ -262,9 +262,12 @@ class ChooseEquipTarget(DecisionRequest):
     ----------
     source_card_id : str
         The attachment being Equipped, still in hand until the cost is paid.
+    invest_amount : int
+        The Invest cost being paid alongside the Gold Cost, or zero for none.
     """
 
     source_card_id: str
+    invest_amount: int = 0
 
     def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
         return "Choose a Personality to equip"

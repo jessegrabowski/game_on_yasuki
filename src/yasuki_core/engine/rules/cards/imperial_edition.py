@@ -2,13 +2,16 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
+    bow_parent_and_destroy,
     no_cost,
     register_ability,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import PlayerState, is_clan, recruit_discount
+from yasuki_core.engine.rules.attachments import attached_to
+from yasuki_core.engine.rules.economy import PlayerState, effective_chi, is_clan, recruit_discount
 from yasuki_core.engine.rules.effects import (
     Choose,
+    Destroy,
     Discard,
     Effect,
     GainHonor,
@@ -22,7 +25,7 @@ from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.prints import AttachmentPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
 
 # --- Fantastic Gardens ---
@@ -88,5 +91,45 @@ register_ability(
         effects=_imperial_gift_effects,
         all_targets=True,
         located_at=(CardLocation.PROVINCE,),
+    ),
+)
+
+
+# --- Touch of Death ---
+
+
+def _get_touch_of_death_valid_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Bowed Personalities whose Chi does not exceed the Shugenja carrying this Spell.
+
+    "Equal or lower" names no referent; the comparison is against the caster. The caster is never
+    among these, since he has to be unbowed to pay the cost that bows him.
+    """
+    caster = attached_to(game, source)
+    if caster is None:
+        return []
+    ceiling = effective_chi(game, caster)
+    return [
+        card.id
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, PersonalityPrint)
+        and card.bowed
+        and effective_chi(game, card) <= ceiling
+    ]
+
+
+def _resolve_touch_of_death_effect(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [Destroy(target.id, source.owner)]
+
+
+register_ability(
+    "touch_of_death",
+    Ability(
+        timing=ActionTiming.LIMITED,
+        label="Limited: destroy a bowed Personality with Chi no higher than this Shugenja's",
+        cost=bow_parent_and_destroy,
+        targets=_get_touch_of_death_valid_targets,
+        effects=_resolve_touch_of_death_effect,
     ),
 )

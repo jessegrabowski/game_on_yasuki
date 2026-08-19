@@ -20,7 +20,14 @@ UNDATED = datetime.date(9999, 1, 1)
 
 # Registrations that name a card id, by the form they take. Choice resolvers are absent: they key on
 # the name of a step in a sequence rather than on a card, so they carry no id to place or order.
-_DECORATORS = {"on", "gold_handler", "recruit_discount", "keyword_grant", "attachment_grant"}
+_DECORATORS = {
+    "on",
+    "gold_handler",
+    "recruit_discount",
+    "keyword_grant",
+    "attachment_grant",
+    "attach_restriction",
+}
 _CALLS = {"register_ability", "register_invest", "register_production_boost"}
 
 

@@ -290,10 +290,13 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         affordable = fixed + sum(
             effective_gold_production(game, producer, targets=(card,)) for producer in variable
         )
-        if effective_gold_cost(game, card) > affordable:
+        base = effective_gold_cost(game, card)
+        if base > affordable or not equip_targets(game, card):
             continue
-        if equip_targets(game, card):
-            equips.append(Equip(card.id))
+        equips.append(Equip(card.id))
+        invest = abilities.fixed_invest_amount(card)
+        if invest is not None and base + invest <= affordable:
+            equips.append(Equip(card.id, invest=True))
     return equips
 
 
