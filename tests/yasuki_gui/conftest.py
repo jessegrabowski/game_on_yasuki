@@ -26,11 +26,17 @@ def _reclaim_tk_cycles_on_main_thread():
 
 @pytest.fixture(autouse=True)
 def _keep_tk_windows_off_screen(monkeypatch):
-    """Withdraw every Tk root a GUI test builds, wherever it builds it.
+    """Withdraw every Tk window a GUI test builds — roots and Toplevels alike, wherever it builds
+    them.
 
-    A mapped window takes the keyboard focus from whatever the developer is doing, once per root,
-    and the suite makes dozens. Patching the constructor covers roots created inside a test body as
-    well as in a fixture, so a new test cannot reintroduce the problem by forgetting to withdraw.
+    A mapped window takes the keyboard focus from whatever the developer is doing, and the suite
+    makes dozens. Patching the constructors covers windows created inside a test body as well as in
+    a fixture, so a new test cannot reintroduce the problem by forgetting to withdraw.
+
+    Toplevels are included because a dialog maps as soon as anything pumps the event loop — which
+    a dialog sizing its own scroll region does — and the test that opened it has no handle to close
+    it again. Withdrawing costs nothing: geometry is still computed on idle, so the widgets under
+    test measure exactly as they would on screen.
     """
     real_tk = tk.Tk
 
@@ -39,7 +45,15 @@ def _keep_tk_windows_off_screen(monkeypatch):
         root.withdraw()
         return root
 
+    real_toplevel = tk.Toplevel
+
+    def withdrawn_toplevel(*args, **kwargs):
+        win = real_toplevel(*args, **kwargs)
+        win.withdraw()
+        return win
+
     monkeypatch.setattr(tk, "Tk", withdrawn)
+    monkeypatch.setattr(tk, "Toplevel", withdrawn_toplevel)
 
 
 @pytest.fixture
