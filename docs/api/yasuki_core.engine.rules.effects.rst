@@ -17,6 +17,7 @@ yasuki_core.engine.rules.effects
     BanishTopFate
     Bow
     Choose
+    CounterOnAttachedProvince
     CreateToken
     Destroy
     DestroyProvince

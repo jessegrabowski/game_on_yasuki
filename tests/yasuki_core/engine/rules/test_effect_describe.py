@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.effects import (
     BanishTopFate,
     Bow,
     Ask,
+    CounterOnAttachedProvince,
     Unpayable,
     Choose,
     CreateToken,
@@ -42,7 +43,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.game_pieces.counters import WALL, WEALTH
 
 EFFECTS = [
     (AdjustCounter("rural_market_1", WEALTH, 2), "+2 Wealth on rural_market_1"),
@@ -109,6 +110,7 @@ EFFECTS = [
     ),
     (Banish("oni"), "banish oni"),
     (PayGold(PlayerId.P2, 3, "Colonial Farm"), "P2 pays 3 gold for Colonial Farm"),
+    (CounterOnAttachedProvince("wall", WALL, 1), "+1 Wall on wall's province"),
     (
         Unpayable("katana is attached to no Personality"),
         "unpayable: katana is attached to no Personality",

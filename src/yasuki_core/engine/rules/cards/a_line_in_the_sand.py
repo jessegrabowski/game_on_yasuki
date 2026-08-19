@@ -1,11 +1,64 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import InvestAbility, register_invest
-from yasuki_core.engine.rules.effects import Choose, Effect, MoveToHand, Show, ShuffleDeck
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    InvestAbility,
+    bow_cost,
+    register_ability,
+    register_invest,
+)
+from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.economy import effective_keywords
+from yasuki_core.engine.rules.effects import (
+    Choose,
+    CounterOnAttachedProvince,
+    Effect,
+    MoveToHand,
+    RecruitCard,
+    Show,
+    ShuffleDeck,
+    Then,
+)
+from yasuki_core.engine.rules.equip import FORTIFICATION_KEYWORD
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.counters import WALL
+
+
+# --- Agasha Beiru ---
+
+
+def _get_agasha_beiru_valid_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Fortifications in the seat's Dynasty discard pile."""
+    discard = game.table.zones[ZoneKey(source.owner, ZoneRole.DYNASTY_DISCARD)].cards
+    return [card.id for card in discard if FORTIFICATION_KEYWORD in effective_keywords(game, card)]
+
+
+def _resolve_agasha_beiru_effect(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Recruit the Fortification out of the discard pile, then wall the Province it landed on.
+
+    Entering play from anywhere but a Province, it asks its controller which Province to attach to
+    (CR, Fortification) — so the token names the card rather than a Province, and finds the answer
+    once the choice has been made.
+    """
+    return [
+        RecruitCard(target.id),
+        Then((CounterOnAttachedProvince(target.id, WALL, 1),)),
+    ]
+
+
+register_ability(
+    "agasha_beiru",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: recruit a Fortification from your discard pile and wall its Province",
+        cost=bow_cost,
+        targets=_get_agasha_beiru_valid_targets,
+        effects=_resolve_agasha_beiru_effect,
+    ),
+)
 
 
 # --- Stockpiled Weapon ---
