@@ -20,6 +20,7 @@ yasuki_core.engine.rules.economy
     effective_gold_production
     effective_keywords
     effective_personal_honor
+    effective_province_strength
     effective_recruit_discount
     effective_stat
     effective_weapon_limit
@@ -28,6 +29,7 @@ yasuki_core.engine.rules.economy
     keyword_grant
     opposing_states
     player_state
+    province_strength_grant
     recruit_discount
 
 .. automodule:: yasuki_core.engine.rules.economy

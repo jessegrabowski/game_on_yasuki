@@ -23,6 +23,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "gold handlers": frozenset(economy.GOLD_HANDLERS),
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),
         "keyword grants": frozenset(economy.KEYWORD_GRANTS),
+        "province strength grants": frozenset(economy.PROVINCE_STRENGTH_GRANTS),
         "attachment grants": frozenset(attachments.ATTACHMENT_GRANTS),
         "attach restrictions": frozenset(equip.ATTACH_RESTRICTIONS),
         "triggers": frozenset(
