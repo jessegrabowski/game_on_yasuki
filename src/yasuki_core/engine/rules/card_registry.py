@@ -1,7 +1,7 @@
 import difflib
 import sys
 
-from yasuki_core.engine.rules import abilities, economy, triggers
+from yasuki_core.engine.rules import abilities, attachments, economy, equip, triggers
 
 # Without this the registries are empty and every check below passes vacuously.
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -23,6 +23,8 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "gold handlers": frozenset(economy.GOLD_HANDLERS),
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),
         "keyword grants": frozenset(economy.KEYWORD_GRANTS),
+        "attachment grants": frozenset(attachments.ATTACHMENT_GRANTS),
+        "attach restrictions": frozenset(equip.ATTACH_RESTRICTIONS),
         "triggers": frozenset(
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),
