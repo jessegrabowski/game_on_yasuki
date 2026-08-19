@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import effective_keywords
+from yasuki_core.engine.rules.economy import PlayerState, effective_keywords, keyword_grant
 from yasuki_core.engine.rules.abilities import Ability, bow_cost, owned_holdings, register_ability
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose, DrawCard, Effect, GrantModifier
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStarted
@@ -16,6 +16,22 @@ from yasuki_core.engine.rules.triggers import (
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.prints import HoldingPrint
+
+
+# --- Fortified Farmlands ---
+
+
+@keyword_grant("fortified_farmlands")
+def _fortified_farmlands_keywords(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> tuple[str, ...]:
+    """Grant Renew while its controller has another Farm Holding in play.
+
+    Read whenever the keyword is asked for, so it comes and goes with the other Farm rather than
+    being granted once. The card's Response half is not modeled: no Action Round opens a Response
+    step for it to be taken in.
+    """
+    return ("Renew",) if me.controls("Farm", other_than=card) else ()
 
 
 # --- Millet Farm ---

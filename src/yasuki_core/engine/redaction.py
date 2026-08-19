@@ -69,6 +69,7 @@ class ViewSnapshot:
     # reason and passed through the same way.
     units: dict[str, str] = field(default_factory=dict)
     province_attachments: dict[str, "ZoneKey"] = field(default_factory=dict)
+    province_counters: dict["ZoneKey", dict[str, int]] = field(default_factory=dict)
 
 
 # Zones whose contents are public to both seats.
@@ -207,4 +208,5 @@ def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
         attachments=dict(state.attachments),
         units=dict(state.units),
         province_attachments=dict(state.province_attachments),
+        province_counters={key: dict(held) for key, held in state.province_counters.items()},
     )

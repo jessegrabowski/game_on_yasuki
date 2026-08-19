@@ -15,14 +15,17 @@ def test_a_root_built_inside_a_test_is_never_mapped():
         root.destroy()
 
 
-def test_a_toplevel_window_is_left_alone():
-    # Only the root is forced out of sight. A Toplevel a widget opens for itself is untouched, so a
-    # test that means to exercise a dialog still gets one.
+def test_a_dialog_window_is_never_mapped_either():
+    # A dialog maps the moment anything pumps the event loop, and the test that opened it usually
+    # has no handle to close it again — so one left open sits on the developer's screen for the rest
+    # of the run. Withdrawing it changes nothing the widgets measure.
     root = tk.Tk()
     try:
         dialog = tk.Toplevel(root)
         root.update_idletasks()
-        assert dialog.state() == "normal"
+
+        assert dialog.winfo_viewable() == 0
+        assert dialog.state() == "withdrawn"
         dialog.destroy()
     finally:
         root.destroy()

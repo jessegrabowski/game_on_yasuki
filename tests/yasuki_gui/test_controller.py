@@ -103,6 +103,10 @@ class TestMarquee:
         assert card_tag("P1-SH") in field._selected
 
 
+def _is_own_province(key, seat) -> bool:
+    return isinstance(key, ZoneKey) and key.role is ZoneRole.PROVINCE and key.owner is seat
+
+
 class TestDecisionSelection:
     def test_clicking_a_candidate_hand_card_toggles_it(self, loaded):
         field, _ = loaded
@@ -129,6 +133,35 @@ class TestDecisionSelection:
         _at(field, card_tag("P1-SH"))
         field._controller.on_press(DummyEventNamespace(x=sp.x, y=sp.y))
         assert "P1-SH" in field.selection
+
+    def test_clicking_your_own_province_toggles_the_slot_when_it_is_a_candidate(self, loaded):
+        """A Fortification attaches to the Province slot, so a decision names the slot rather than
+        the card standing in it — and an empty Province has to be as clickable as a full one."""
+        field, _ = loaded
+        key = next(k for k in field._tag_to_key.values() if _is_own_province(k, field.seat))
+        tag = zone_tag(key)
+        zv = field.zones[tag]
+
+        field.begin_selection([key.token])
+        _at(field, tag)
+        field._controller.on_press(DummyEventNamespace(x=zv.x, y=zv.y))
+
+        assert field.selection == (key.token,)
+
+    def test_a_province_click_still_picks_the_card_when_the_card_is_the_candidate(self, loaded):
+        """Only a slot-token candidate claims the click; a decision over province cards is
+        unaffected."""
+        field, _ = loaded
+        key = next(k for k in field._tag_to_key.values() if _is_own_province(k, field.seat))
+        tag = zone_tag(key)
+        zv = field.zones[tag]
+        card_id = zv.cards[-1].id
+
+        field.begin_selection([card_id])
+        _at(field, tag)
+        field._controller.on_press(DummyEventNamespace(x=zv.x, y=zv.y))
+
+        assert field.selection == (card_id,)
 
     def test_non_candidate_click_is_ignored_while_selecting(self, loaded):
         field, _ = loaded
