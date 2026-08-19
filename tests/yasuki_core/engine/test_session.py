@@ -862,3 +862,64 @@ def test_equipping_announces_that_the_card_entered_play():
     session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
 
     assert _EQUIP_ARRIVALS == [True]  # and it came from hand, which some cards distinguish
+
+
+def test_recruiting_a_fortification_attaches_it_to_the_province_it_came_from():
+    """ "Holdings with the Fortification keyword are attached to the Province they entered play
+    from" (CR, Fortification). Without it the card lands loose on the battlefield and the client
+    files it with the ordinary Holdings, rows away from the Province it defends."""
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _holding_in_province(state, "P1-wall", gold_cost=2, keywords=("Fortification",))
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, Recruit("P1-wall"))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    assert game.table.province_attachments == {"P1-wall": province}
+    assert game.table.cards_by_id["P1-wall"] in game.table.battlefield.cards
+    assert game.table.cards_by_id["P1-wall"].bowed  # Fortifications enter play bowed
+
+
+def test_a_plain_holding_is_not_attached_to_its_province():
+    """The relation is the Fortification keyword's, not every Holding's — an ordinary Holding
+    leaves its Province behind and stands on its own."""
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _holding_in_province(state, "P1-farm", gold_cost=2)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, Recruit("P1-farm"))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    assert session.game.table.province_attachments == {}
+
+
+def test_a_fortification_stays_on_its_province_when_the_slot_refills_behind_it():
+    """The relation names the Province slot, not the card in it. The slot refills the moment the
+    Fortification leaves, and a card-to-card relation would follow the wrong card or come loose."""
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state,
+            L5RCard.of(
+                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
+        )
+    ]
+    _gold_source(state, "P1-SH", 8)
+    _holding_in_province(state, "P1-wall", gold_cost=2, keywords=("Fortification",))
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, Recruit("P1-wall"))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    assert [card.id for card in game.table.zones[province].cards] == ["P1-refill"]
+    assert game.table.province_attachments == {"P1-wall": province}

@@ -56,7 +56,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.equip import equip_targets
+from yasuki_core.engine.rules.equip import FORTIFICATION_KEYWORD, equip_targets
 from yasuki_core.engine.rules.economy import (
     effective_gold_cost,
     effective_gold_production,
@@ -699,6 +699,8 @@ def _resolve_recruit(
     if isinstance(card.printed, HoldingPrint):
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     if province_key is not None:
+        if FORTIFICATION_KEYWORD in effective_keywords(game, card):
+            ops.attach_to_province(game.table, card, province_key)
         # Renew is read once the card has entered play, which is when the keyword speaks.
         renews = renew or keywords.RENEW in effective_keywords(game, card)
         _defer_refill(game, province_key, face_up=renews)
