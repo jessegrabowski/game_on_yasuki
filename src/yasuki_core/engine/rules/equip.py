@@ -8,6 +8,11 @@ from yasuki_core.game_pieces.prints import PersonalityPrint
 
 WEAPON_KEYWORD = "Weapon"
 TWO_HANDED_KEYWORD = "Two-Handed"
+# A Holding carrying this attaches to the Province it entered play from — or to one its controller
+# picks, if it did not come from a Province — and is destroyed with it (CR, Fortification). The
+# relation names the Province *slot*, not the card standing in it: the slot refills the moment the
+# Fortification leaves, and the Fortification stays where it is.
+FORTIFICATION_KEYWORD = "Fortification"
 
 
 def weapons_on(game: GameState, personality: L5RCard) -> tuple[L5RCard, ...]:
