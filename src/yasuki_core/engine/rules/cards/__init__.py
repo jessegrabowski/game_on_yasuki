@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     road_to_ruin,
     second_city,
     the_blackest_storm,
+    the_hidden_city,
     the_hidden_emperor_episode_6,
     twenty_festivals,
 )
