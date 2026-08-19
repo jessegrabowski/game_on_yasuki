@@ -12,10 +12,12 @@ from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.decisions import ChooseDistribution, DecisionResponse
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.constants import ATTACH_STACK_OFFSET
 from yasuki_gui.field_view import ALLOCATION_TAG
+from yasuki_gui.layout import province_positions
 from yasuki_gui.tags import allocation_tag, card_tag, deck_tag, zone_tag
 from yasuki_gui.visuals.cardface import HiddenFace
 
@@ -340,6 +342,46 @@ class TestRulesModeRender:
         field.render_snapshot(EngineSession.start(laden, seat).project(seat).table, seat)
 
         assert field.sprites[card_tag("hero")].y == alone
+
+    def test_a_fortification_renders_on_the_province_it_defends(self, loaded):
+        """A Fortification attaches to a Province slot rather than to a card, so it has no
+        Personality to ride and no business in the Holdings row. It fans inboard from the slot,
+        because a Province is its seat's outermost row and a stack growing outward leaves the
+        board."""
+        field, _ = loaded
+        seat = field.seat
+        state = TableState.empty_two_seat()
+        wall = L5RCard.of(
+            HoldingPrint,
+            id="wall",
+            name="Wall",
+            side=Side.DYNASTY,
+            owner=seat,
+            keywords=("Fortification",),
+        )
+        state.cards_by_id[wall.id] = wall
+        state.battlefield.add(wall)
+        state.positions[wall.id] = UNPLACED_BOARD_POS
+        province = ZoneKey(seat, ZoneRole.PROVINCE, 0)
+        for index in range(4):  # empty_two_seat builds no Provinces; the layout needs the row
+            state.zones[ZoneKey(seat, ZoneRole.PROVINCE, index)] = ProvinceZone(owner=seat)
+        state.province_attachments[wall.id] = province
+        field.render_snapshot(EngineSession.start(state, seat).project(seat).table, seat)
+
+        rendered = list(field._render_battlefield())
+        assert "wall" not in field._home_positions(rendered, *field._canvas_size())
+
+        w, h = field._canvas_size()
+        slot_x, slot_y = province_positions(w, h, 4, seat_at_bottom=True)[0]
+        assert field.sprites[card_tag("wall")].x == slot_x
+        # Inboard from the near seat's outermost row is toward the divider, so upward.
+        assert field.sprites[card_tag("wall")].y == slot_y - ATTACH_STACK_OFFSET
+
+        # ...and tucked under the Province tableau, the way it sits under the card on the table.
+        stacking = field.find_all()
+        fortification = max(stacking.index(item) for item in field.find_withtag(card_tag("wall")))
+        province = min(stacking.index(item) for item in field.find_withtag(zone_tag(province)))
+        assert fortification < province
 
     def test_an_attachment_takes_no_column_from_the_holdings_row(self, loaded):
         """The attachment is unplaced and is not a Personality, so the home row would file it with
