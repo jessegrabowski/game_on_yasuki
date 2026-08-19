@@ -477,6 +477,7 @@ class FieldView(tk.Canvas):
             for rc, pos in rendered
         }
         placed.update(self._unit_positions(placed, {rc.id: rc.owner for rc, _ in rendered}))
+        placed.update(self._province_attachment_positions(w, h))
         for rc, pos in rendered:
             tag = card_tag(rc.id)
             wanted.add(tag)
@@ -489,6 +490,7 @@ class FieldView(tk.Canvas):
             chosen = rc.id in self._selection
             sp.bowed_preview = chosen and self._selection_bows
             sp.draw(self, selected=tag in self._selected or chosen)
+        self._sink_province_attachments()
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
@@ -501,6 +503,49 @@ class FieldView(tk.Canvas):
     def _units(self) -> dict[str, str]:
         """Unit membership from whichever source is rendering: attached card id to Personality."""
         return self._snapshot.units if self._snapshot is not None else self.state.units
+
+    def _sink_province_attachments(self) -> None:
+        """Push each Fortification below the Province tableau, so the card standing in the slot
+        covers it and only the fanned-out part shows.
+
+        Zones are drawn before sprites, which would otherwise leave a Fortification sitting on top
+        of the Province it defends — the reverse of the table, where it is tucked underneath.
+        """
+        for card_id in self._province_attachments():
+            tag = card_tag(card_id)
+            if self.find_withtag(tag):
+                self.tag_lower(tag, "zone")
+
+    def _province_attachments(self) -> dict[str, ZoneKey]:
+        """Province membership from whichever source is rendering: card id to the Province slot."""
+        source = self._snapshot if self._snapshot is not None else self.state
+        return source.province_attachments
+
+    def _province_attachment_positions(self, w: int, h: int) -> dict[str, tuple[int, int]]:
+        """Where each Fortification sits: fanned inboard from the Province slot it defends.
+
+        Inboard rather than up, because a Province is the outermost row of its seat and a stack
+        growing outward would leave the board. The slot itself holds a Dynasty card that refills
+        behind the Fortification, so the fan starts one step off the slot rather than on it.
+        """
+        attached = self._province_attachments()
+        if not attached:
+            return {}
+        by_slot: dict[ZoneKey, list[str]] = {}
+        for card_id, key in attached.items():
+            by_slot.setdefault(key, []).append(card_id)
+        positions: dict[str, tuple[int, int]] = {}
+        for owner, ordered in self._province_keys_by_owner().items():
+            inboard = -1 if self._at_bottom(owner) else 1
+            slots = province_positions(w, h, len(ordered), seat_at_bottom=self._at_bottom(owner))
+            for index, key in enumerate(ordered):
+                members = by_slot.get(key)
+                if not members:
+                    continue
+                x, y = slots[index]
+                for step, card_id in enumerate(members, start=1):
+                    positions[card_id] = (x, y + inboard * step * ATTACH_STACK_OFFSET)
+        return positions
 
     def _unit_members(self) -> dict[str, list[str]]:
         """Each Personality's attached cards, in attach order."""
@@ -568,14 +613,15 @@ class FieldView(tk.Canvas):
         copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``, while the
         stronghold, sensei, and distinct holdings each take their own column. Personalities lay out
         in the front (personalities) row; everything else in the holdings row. Attached cards are
-        left out — :meth:`_unit_positions` places them on their Personality."""
+        left out — :meth:`_unit_positions` and :meth:`_province_attachment_positions` place them on
+        what they hang from."""
         holdings: dict[PlayerId | None, list[tuple[str, object]]] = {}
         personalities: dict[PlayerId | None, list[tuple[str, object]]] = {}
-        # An attachment rides its Personality wherever he stands, so it takes no column of its own —
-        # giving it one would shove the real Holdings sideways to make room.
-        units = self._units()
+        # An attachment rides its Personality or its Province wherever that stands, so it takes no
+        # column of its own — giving it one would shove the real Holdings sideways to make room.
+        attached = self._units().keys() | self._province_attachments().keys()
         for rc, pos in rendered:
-            if rc.id in units:
+            if rc.id in attached:
                 continue
             if pos is None or pos.x < 0 or pos.y < 0:
                 key = getattr(rc, "printed_id", None) or rc.id
