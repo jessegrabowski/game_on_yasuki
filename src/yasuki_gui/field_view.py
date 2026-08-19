@@ -505,9 +505,12 @@ class FieldView(tk.Canvas):
         return members
 
     def _unit_draw_order(self, rendered: list[tuple]) -> list[tuple]:
-        """``rendered`` with each attachment moved directly ahead of the Personality it hangs on, so
-        he draws over it and only its title bar shows — the card is placed *under* him (CR,
-        Attachments)."""
+        """``rendered`` with each Personality's attachments moved directly ahead of him, highest
+        first, so every card in the stack covers the one it rides and only title bars show.
+
+        The stack fans up, so the last attachment sits highest and furthest back and has to be drawn
+        before the rest of the tower — matching the web board's ``drawTower``.
+        """
         units = self._units()
         if not units:
             return rendered
@@ -521,7 +524,8 @@ class FieldView(tk.Canvas):
                 held.setdefault(personality_id, []).append(entry)
         ordered: list[tuple] = []
         for entry in loose:
-            ordered.extend(held.pop(entry[0].id, ()))
+            card, _ = entry
+            ordered.extend(reversed(held.pop(card.id, ())))
             ordered.append(entry)
         for stranded in held.values():  # its Personality is not on this board
             ordered.extend(stranded)

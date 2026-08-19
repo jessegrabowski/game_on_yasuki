@@ -256,6 +256,46 @@ class TestRulesModeRender:
         drawn = [entry[0].id for entry in field._unit_draw_order(list(field._render_battlefield()))]
         assert drawn.index("P1-katana") < drawn.index("P1-hero")
 
+    def _unit_board(self, owner, attachments):
+        """A board with one Personality owned by ``owner`` and ``attachments`` cards hung on him."""
+        state = TableState.empty_two_seat()
+        hero = L5RCard.of(
+            PersonalityPrint,
+            id="hero",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=owner,
+            force=2,
+            chi=3,
+        )
+        cards = [hero] + [
+            L5RCard.of(AttachmentPrint, id=card_id, name=card_id, side=Side.FATE, owner=owner)
+            for card_id in attachments
+        ]
+        for card in cards:
+            state.cards_by_id[card.id] = card
+            state.battlefield.add(card)
+            state.positions[card.id] = UNPLACED_BOARD_POS
+        for card_id in attachments:
+            state.units[card_id] = "hero"
+        return state
+
+    def test_a_second_attachment_draws_behind_the_first(self, loaded):
+        """The stack fans up, so each card must cover the one it rides: the higher a card sits, the
+        further back it draws. Drawn in attach order instead, the second attachment lands on top of
+        the first and hides the title the fan exists to expose."""
+        field, _ = loaded
+        seat = field.seat
+        state = self._unit_board(seat, ("katana", "banner"))
+        field.render_snapshot(EngineSession.start(state, seat).project(seat).table, seat)
+
+        drawn = [entry[0].id for entry in field._unit_draw_order(list(field._render_battlefield()))]
+        assert drawn == ["banner", "katana", "hero"]
+
+        # ...and each one sits a step higher than the card it rides.
+        y_of = {card_id: field.sprites[card_tag(card_id)].y for card_id in state.cards_by_id}
+        assert y_of["banner"] < y_of["katana"] < y_of["hero"]
+
     def test_an_attachment_takes_no_column_from_the_holdings_row(self, loaded):
         """The attachment is unplaced and is not a Personality, so the home row would file it with
         the Holdings and shove the real ones sideways to make room for a column nothing draws in."""
