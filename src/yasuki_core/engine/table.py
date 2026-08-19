@@ -149,6 +149,10 @@ class TableState:
         The Regions and Fortifications attached to a province, keyed by card id. A separate relation
         from ``units`` because it is a separate relation in the rules: nothing attaches to both, and
         one map holding either would be unable to say so.
+    province_counters : dict mapping ZoneKey to a dict of str to int
+        Counters resting on a Province rather than on a card, keyed by the Province's zone key. A
+        Province is a slot rather than a card, so a "+1 strength Wall token" has nowhere else to
+        live — the card sitting in the slot is refilled and destroyed independently of it.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
     creatable_tokens : dict mapping str to CardPrint
@@ -174,6 +178,7 @@ class TableState:
     # `str | ZoneKey` value cannot express that a Follower may never be a parent.
     units: dict[str, str] = field(default_factory=dict)
     province_attachments: dict[str, ZoneKey] = field(default_factory=dict)
+    province_counters: dict["ZoneKey", dict[str, int]] = field(default_factory=dict)
     cards_by_id: dict[str, L5RCard] = field(default_factory=dict)
     # A SpawnCard naming a token_id copies the matching template onto the battlefield, so spawning a
     # creatable token needs no live database call.

@@ -7,6 +7,7 @@ yasuki_core.engine.ops
 
 .. autosummary::
 
+    adjust_province_counter
     assign
     attach_to_personality
     attach_to_province

@@ -73,6 +73,7 @@ class ViewSnapshot:
     # assignment happens in the open, and a location names no card whose id the viewer cannot
     # already see.
     locations: dict[str, "Location"] = field(default_factory=dict)
+    province_counters: dict["ZoneKey", dict[str, int]] = field(default_factory=dict)
 
 
 # Zones whose contents are public to both seats.
@@ -212,4 +213,5 @@ def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
         units=dict(state.units),
         province_attachments=dict(state.province_attachments),
         locations=dict(state.locations),
+        province_counters={key: dict(held) for key, held in state.province_counters.items()},
     )

@@ -351,6 +351,7 @@ def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> li
         discard.add(card)
         moved.append(card.id)
     del state.zones[zone_key]
+    state.province_counters.pop(zone_key, None)  # the slot is gone; nothing rests on it
     # A card attached to the province follows it off the board into its own side's discard; move_card
     # turns it face up and clears the attachment. Only fate/dynasty cards have a discard — a pregame
     # side (stronghold/sensei/wind) has none, so it just detaches rather than vanishing off the board.
@@ -372,6 +373,20 @@ def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> li
         move_card(state, child, ZoneKey(child.owner or seat, role))
         moved.append(child_id)
     return moved
+
+
+def adjust_province_counter(state: TableState, zone_key: ZoneKey, name: str, delta: int) -> int:
+    """Add ``delta`` counters of ``name`` to a Province, floored at zero, and return the new count.
+    A Province holding none of a counter carries no entry for it."""
+    held = state.province_counters.setdefault(zone_key, {})
+    count = max(0, held.get(name, 0) + delta)
+    if count:
+        held[name] = count
+    else:
+        held.pop(name, None)
+        if not held:
+            state.province_counters.pop(zone_key, None)
+    return count
 
 
 def discard_province(state: TableState, seat: PlayerId, zone: ProvinceZone) -> L5RCard | None:
