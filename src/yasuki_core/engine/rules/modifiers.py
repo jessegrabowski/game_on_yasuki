@@ -30,7 +30,8 @@ class Duration(Enum):
         Active only while the modifier's source is on the battlefield — counters, attachments, and
         continuous auras.
     PERMANENT
-        Lasts the rest of the game regardless of its source.
+        Outlives its source leaving play. Like every modifier it ends when its *target* leaves the
+        table, because a card that leaves play ceases to exist.
     """
 
     UNTIL_END_OF_TURN = "until_end_of_turn"

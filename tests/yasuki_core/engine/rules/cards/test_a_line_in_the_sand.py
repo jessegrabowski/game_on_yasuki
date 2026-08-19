@@ -2,6 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Equip
 from yasuki_core.engine.rules.decisions import ChooseCards, ChoosePayment, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_cost
+from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -128,3 +130,20 @@ def test_the_invest_is_withheld_when_only_the_bare_cost_is_affordable():
     offered = [a for a in session.legal_actions(P1) if isinstance(a, Equip)]
 
     assert offered == [Equip("weapon")]
+
+
+def test_the_invested_cost_dies_with_the_card():
+    """The Invest raises the Gold Cost stat, which Hired Killer and its kin read off a unit. The
+    card ceasing to exist takes the raise with it, so a copy that comes back is priced as printed."""
+    session = _sand_game()
+    session.act(P1, Equip("weapon", invest=True))
+    session.submit(P1, DecisionResponse(("bearer",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    session.submit(P1, DecisionResponse(("spare",)))
+    weapon = session.game.table.cards_by_id["weapon"]
+    assert effective_gold_cost(session.game, weapon) == 4
+
+    resolve_effects(session.game, [Destroy("weapon", P1)])
+
+    assert effective_gold_cost(session.game, weapon) == 3
+    assert session.game.modifiers == []

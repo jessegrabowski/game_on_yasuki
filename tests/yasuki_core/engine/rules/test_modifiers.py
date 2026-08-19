@@ -1,4 +1,9 @@
+from yasuki_core.engine import ops
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import enforce_state_rules, resolve_effects
+from yasuki_core.engine.table import BATTLEFIELD
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.economy import (
     active_modifiers,
@@ -6,7 +11,13 @@ from yasuki_core.engine.rules.economy import (
     effective_gold_production,
 )
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    holding,
+    personality,
+    province_card,
+    put_in_play,
+    two_seat_game,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -80,3 +91,59 @@ def test_a_card_printing_no_gold_cost_is_free_and_takes_no_modifier():
 
     assert mine.gold_cost is None
     assert effective_gold_cost(game, mine) == 0
+
+
+def test_a_permanent_modifier_is_forgotten_when_its_target_leaves_play():
+    """A card that leaves play ceases to exist (CR), so nothing granted to it survives. PERMANENT
+    outlives its *source* going away, which is a different thing."""
+    mine = holding("m", gold_cost=3)
+    game = _game(mine, [Modifier("src", "m", Stat.GOLD_COST, 1, Duration.PERMANENT)])
+    assert effective_gold_cost(game, mine) == 4
+
+    resolve_effects(game, [Destroy("m", PlayerId.P1)])
+
+    assert effective_gold_cost(game, mine) == 3
+    assert game.modifiers == []  # forgotten, not merely skipped while it is away
+
+
+def test_a_card_waiting_in_a_province_keeps_its_modifiers():
+    """A Province card has not left play — it has not entered yet. Repairing the Ruins raises a
+    Holding's Gold Cost while it waits in one, so sweeping it off the table would erase the card."""
+    game = two_seat_game()
+    waiting = province_card(game.table, "m", printed_id="m", gold_cost=3, index=0)
+    game.modifiers.append(Modifier("src", "m", Stat.GOLD_COST, 1, Duration.PERMANENT))
+
+    enforce_state_rules(game)
+
+    assert effective_gold_cost(game, waiting) == 4
+
+
+def test_a_province_cards_modifier_survives_the_move_into_play():
+    """The raised cost is what the seat pays to Recruit it, so it has to cross province to play."""
+    game = two_seat_game()
+    waiting = province_card(game.table, "m", printed_id="m", gold_cost=3, index=0)
+    game.modifiers.append(Modifier("src", "m", Stat.GOLD_COST, 1, Duration.PERMANENT))
+    enforce_state_rules(game)
+
+    ops.move_card(game.table, waiting, BATTLEFIELD)
+    enforce_state_rules(game)
+
+    assert effective_gold_cost(game, waiting) == 4
+
+
+def test_a_card_a_state_rule_destroys_loses_its_modifiers_in_the_same_enforcement():
+    """The sweep and the state rules share a fixpoint, so a Personality killed by the Chi Death Rule
+    has his modifiers gone before enforcement returns rather than at whatever happens next."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=2, chi=1))
+    game.modifiers.extend(
+        [
+            Modifier("src", hero.id, Stat.CHI, -1, Duration.PERMANENT),
+            Modifier("src", hero.id, Stat.FORCE, 3, Duration.PERMANENT),
+        ]
+    )
+
+    enforce_state_rules(game)
+
+    assert hero not in game.table.battlefield.cards
+    assert game.modifiers == []
