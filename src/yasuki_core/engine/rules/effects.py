@@ -569,6 +569,38 @@ class RevealProvinces(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class CounterOnAttachedProvince(Effect):
+    """Put counters on whichever Province ``card_id`` is attached to.
+
+    The Province is read when this resolves rather than named up front: a card that says "give its
+    Province a token" is played before its Fortification has one, and which Province that is may be
+    a choice the seat has not made yet. Does nothing if the card is attached to none.
+
+    Attributes
+    ----------
+    card_id : str
+        The Fortification whose Province takes the counters.
+    counter : Counter
+        The counter to add.
+    delta : int
+        How many to add.
+    """
+
+    card_id: str
+    counter: Counter
+    delta: int
+
+    def describe(self) -> str:
+        return f"{self.delta:+d} {self.counter.name} on {self.card_id}'s province"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        province = game.table.province_attachments.get(self.card_id)
+        if province is not None:
+            ops.adjust_province_counter(game.table, province, self.counter.key, self.delta)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class Unpayable(Effect):
     """A cost that can never be paid, so the ability holding it is never offered. Resolving one
     raises — reaching it means the legality check that should have withheld the ability did not run.
