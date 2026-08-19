@@ -1,8 +1,9 @@
 # Card Vocabulary
 
 A card's behavior is expressed entirely in a closed set of data types. Cards do not mutate the board;
-they return *effects*, which a single boundary applies. This page is generated from the source, so it
-remains consistent with what the engine accepts.
+they return *effects*, which a single boundary applies. The listings below name every member of each
+category, and a test fails when the engine gains one this page does not list — so a type missing
+here is a bug in the page rather than a type you may not use.
 
 The runtime relationships between these types (the trigger cascade, decision handling, and the turn
 machine) are described in [the engine design](engine.md).
@@ -29,20 +30,33 @@ deferred through `Then` instead.
 
 .. autosummary::
 
-   Effect
-   InterruptingEffect
    AdjustCounter
-   Bow
-   Straighten
-   Destroy
-   DrawCard
+   Ask
+   AttachCard
    BanishTopFate
+   Bow
+   Choose
+   Destroy
+   DestroyProvince
+   Discard
+   DrawCard
+   Effect
    GainGold
+   GainHonor
    GrantModifier
    IgnoreHonorRequirements
+   InterruptingEffect
+   MoveToDeck
+   MoveToHand
+   PlaceInProvince
    RecruitCard
+   RefillProvince
+   RevealProvinces
+   Show
+   ShuffleDeck
+   Straighten
    Then
-   Choose
+   Unpayable
 ```
 
 ## Events
@@ -56,11 +70,12 @@ further events are produced.
 
 .. autosummary::
 
-   TurnStarted
-   EnteredPlay
    CardDiscarded
    CounterGained
    Destroyed
+   EnteredPlay
+   Revealed
+   TurnStarted
 ```
 
 ## Decisions
@@ -75,15 +90,17 @@ Legality with respect to game state is checked separately.
 
 .. autosummary::
 
-   DecisionRequest
-   DecisionResponse
-   ChoosePayment
+   BanishForLegacy
    ChooseAbilityTarget
    ChooseCards
+   ChooseEquipTarget
    ChooseInvestAmount
-   DiscardToHandSize
-   BanishForLegacy
    ChooseLegacyCard
+   ChoosePayment
+   Confirm
+   DecisionRequest
+   DecisionResponse
+   DiscardToHandSize
    PlaceLegacy
 ```
 
@@ -100,12 +117,13 @@ the action rather than by deserializing it.
 
 .. autosummary::
 
-   ResolveRecruit
-   FinishRecruit
-   SelectAbilityTarget
    ApplyAbilityEffects
    ApplyEffects
+   FinishRecruit
+   ResolveEquip
+   ResolveRecruit
    ResumeCascade
+   SelectAbilityTarget
 ```
 
 ## Stats, durations, and counters

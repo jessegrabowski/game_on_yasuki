@@ -18,10 +18,13 @@ Read the card's text and find the shape:
 | "After X happens…" | `@on(Event, id)` | Rice Farm |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | Millet Farm |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | Rebuilt Harbor |
+| Carries a keyword only sometimes | `@keyword_grant(id)` | Fortified Farmlands |
+| Gives the Personality it hangs on a stat | `@attachment_grant(id)` | Haramaki-do |
+| Limits what it will attach to | `@attach_restriction(id)` | Brothers in Arms |
 
-Five events exist to react to: `EnteredPlay`, `Destroyed`, `CardDiscarded`, `CounterGained`, and
-`TurnStarted`. If the moment your card cares about is not one of these, it needs a new event — see
-[what the vocabulary cannot express](#what-the-vocabulary-cannot-express-yet).
+Six events exist to react to: `EnteredPlay`, `Destroyed`, `CardDiscarded`, `CounterGained`,
+`Revealed`, and `TurnStarted`. If the moment your card cares about is not one of these, it needs a
+new event — see [what the vocabulary cannot express](#what-the-vocabulary-cannot-express-yet).
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
 id no card has, and tells you the nearest real one.
@@ -61,8 +64,16 @@ def _rice_farm(ctx: TriggerContext) -> list[Effect]:
 ```
 
 Two things to copy. **Guard first**: a trigger fires for every copy of the card in play, so check the
-event is about *your* card before doing anything. **Return, don't mutate**: the list of effects is the
-whole output.
+event is about *your* card before doing anything. Which check depends on the event — Rice Farm
+asks whose turn started, while a card reacting to its own arrival compares ids, since `EnteredPlay`
+reaches every copy in play and not only the one that entered:
+
+```python
+    if ctx.event.card_id != ctx.card.id:
+        return []
+```
+
+**Return, don't mutate**: the list of effects is the whole output.
 
 ### A choice: pausing for the player
 
@@ -121,6 +132,52 @@ That is Modest Farm: recruit a Holding out of sequence, and *then* — once the 
 enter-play trait has resolved — offer to sacrifice the Farm to straighten it. Without `Then`, the
 sacrifice would be offered before the recruited card had finished entering play.
 
+## Cards that attach
+
+A Follower, Item or Spell is not a fifth rung — Touch of Death is an activated ability like any
+other, and Brothers in Arms is a trigger. What sets an attachment apart is that it acts *through*
+the Personality carrying it, and three registries cover the ways it does.
+
+**Reaching the Personality.** `attached_to(game, card)` returns it, or None when the card hangs on
+nobody. Most often a cost needs it: an attachment's ability usually spends its Personality's bow
+rather than its own.
+
+```python
+        cost=bow_parent_and_destroy,
+```
+
+Watch the two bow costs — they are different. The `:bow:` icon in an ability's cost line means bow
+*the card the ability is on*, which is `bow_cost`. Only the written-out "Bow this Shugenja" reaches
+the Personality. Every Shattered Empire card paying with its parent is a Spell using that wording.
+
+**Giving the Personality a stat** it does not print. Haramaki-do prints +2F and reads "This
+Personality has +1PH"; the printed half is a number on the card, the written half is a grant:
+
+```python
+@attachment_grant("haramaki_do")
+def _haramaki_do(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
+    """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
+    return {Stat.PERSONAL_HONOR: 1}
+```
+
+**Limiting what it will hang on.** The rulebook's own restrictions — one Weapon, Two-Handed
+exclusivity — live in `equip.py` as code. A restriction only one card states lives with that card:
+
+```python
+@attach_restriction("brothers_in_arms")
+def _brothers_in_arms_attaches_only_to_a_samurai(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> bool:
+    return SAMURAI_KEYWORD in effective_keywords(game, personality)
+```
+
+Two things an attachment gets for free, so do not write handlers for them: a card leaving play takes
+its attachments with it, and a state rule discards an attachment left with no Personality.
+
+**Battle is still out of reach**, and for attachments that is most of the corpus — 1,284 of the
+abilities printed on Follower, Item and Spell cards are Battle abilities. An attachment card whose
+text begins "Battle:" cannot be implemented today no matter which rung it would otherwise sit on.
+
 ## Where the code goes
 
 Find the set that printed the card first, and open the module of the same name as its YAML file. Add
@@ -151,19 +208,22 @@ registration — every implemented card is covered, and that is not an accident.
 Knowing a card is out of reach before you start is worth more than any amount of reference. Each of
 these needs a core extension, not just a card module:
 
-- **Anything targeting an opponent's cards.** Effects address a card id, but nothing models the
-  permission question — whose cards may this touch?
+- **A general rule about whose cards you may touch.** A card *can* target an opponent's — Touch of
+  Death destroys any bowed Personality with Chi no higher than its caster's — but each handler
+  filters by owner itself. There is no permission model to ask, so a card whose restriction is a
+  rulebook one rather than its own text has nowhere to read it from.
 - **More than one ability on a card.** The ability registries hold one entry per card id.
 - **Abilities usable from hand.** An ability is offered from the battlefield or from a Province
   (`located_at`); a card in hand is out of reach.
-- **Attachments.** `TableState` tracks the attachment graph and the manual surface can attach a card,
-  but the rules layer reads none of it: nothing asks what a card is attached to, and an attached card
-  contributes nothing to the card it hangs on.
 - **Combat.** No attack, assignment, or resolution machinery.
 - **Modal effects** — "choose one" where the modes are different *kinds* of effect. `Choose` picks
   cards, not modes.
 - **Suppression** — one card turning another's ability off.
 
-This list is measured, not guessed: a survey of a single arc found 109 cards with attachments, 27
-targeting an opponent's cards, and 20 modal. If your card needs one of these, the honest next step is
-a design discussion, not a workaround.
+- **Interrupt and Response abilities.** Both designators exist and no Action Round grants either,
+  so an ability carrying one is never offered. Response is a Shattered Empire addition, and the
+  largest single gap in the vocabulary.
+
+This list is measured, not guessed: a survey of a single arc found 27 cards targeting an opponent's
+cards and 20 modal. If your card needs one of these, the honest next step is a design discussion,
+not a workaround.
