@@ -26,6 +26,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     return {
         "abilities": frozenset(abilities._ABILITIES),
         "invest abilities": frozenset(abilities._INVEST),
+        "enters unbowed": frozenset(abilities._ENTERS_UNBOWED),
         "production boosts": frozenset(abilities._PRODUCTION_BOOST),
         "gold handlers": frozenset(economy.GOLD_HANDLERS),
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),

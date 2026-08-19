@@ -9,9 +9,11 @@ from yasuki_core.engine.rules.abilities import (
     Ability,
     ProductionBoost,
     _ABILITIES,
+    _ENTERS_UNBOWED,
     _INVEST,
     _PRODUCTION_BOOST,
     register_ability,
+    register_enters_unbowed,
     register_invest,
     register_production_boost,
 )
@@ -100,6 +102,18 @@ def test_a_second_invest_for_one_card_is_refused():
             register_invest("guard_probe", _INVEST["training_court"])
     finally:
         _INVEST.pop("guard_probe", None)
+
+
+def test_a_second_enters_unbowed_for_one_card_is_refused():
+    # A set absorbs a repeated registration where the dict registries raise, so without this guard a
+    # card listed from two set modules would be invisible rather than loud.
+    register_enters_unbowed("guard_probe")
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already enters play unbowed"):
+            register_enters_unbowed("guard_probe")
+    finally:
+        _ENTERS_UNBOWED.discard("guard_probe")
 
 
 def test_a_second_production_boost_for_one_card_is_refused():
