@@ -96,7 +96,7 @@ register_invest("courts_of_otosan_uchi", InvestAbility(minimum=2, maximum=2, eff
 # --- Rebuilt Harbor ---
 
 
-def _invest_wealth(source: L5RCard, amount: int) -> list[Effect]:
+def _invest_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
     """One +1GP Wealth token per gold invested — Rebuilt Harbor's variable payoff."""
     return [AdjustCounter(source.id, WEALTH, amount)]
 

@@ -1,6 +1,7 @@
 # Every card module must be listed: registration happens at import, so one left out contributes no
 # cards. Its own tests fail when that happens.
 from yasuki_core.engine.rules.cards import (  # noqa: F401
+    a_line_in_the_sand,
     chaos_reigns_part_i,
     chaos_reigns_part_ii,
     chaos_reigns_part_iii,

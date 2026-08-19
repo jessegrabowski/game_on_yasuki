@@ -175,8 +175,8 @@ def perform(game: GameState, action: Action) -> None:
             yield_priority(game, passed=True)
         case Recruit(card_id=card_id, invest=invest, proclaim=proclaim):
             recruit(game, card_id, invest, proclaim=proclaim)
-        case Equip(card_id=card_id):
-            equip(game, card_id)
+        case Equip(card_id=card_id, invest=invest):
+            equip(game, card_id, invest=invest)
         case DynastyDiscard(card_id=card_id):
             dynasty_discard(game, card_id)
         case Legacy():
@@ -280,18 +280,49 @@ def announce_recruit(
     )
 
 
-def equip(game: GameState, card_id: str) -> None:
+def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
     """Announce an Equip by asking which Personality the card joins. Answering that raises the cost.
 
     Equip is the rulebook action, with a cost and a target. An effect that merely *attaches* a card
     reaches the same board without paying (CR, Equip), so the two do not share a path.
+
+    Raise ``ValueError`` if ``invest`` names an Invest whose amount the player chooses. Every
+    attachment printing one prints a fixed cost, so the amount is settled here rather than through a
+    decision, and a variable one would need a step this path does not have.
     """
     card = game.table.cards_by_id[card_id]
     game.pending = ChooseEquipTarget(
         seat=card.owner,
         candidates=tuple(target.id for target in equip_targets(game, card)),
         source_card_id=card_id,
+        invest_amount=_equip_invest_amount(game, card) if invest else 0,
     )
+
+
+def _finish_invest(game: GameState, card: L5RCard, invest_amount: int) -> None:
+    """Charge ``card``'s Invest against itself and run what it bought. Does nothing for a zero
+    amount, so a caller need not ask whether the player took the option.
+
+    Invest belongs to a card entering play rather than to the action that brought it (CR, Invest),
+    so Recruit and Equip reach this by the same road.
+    """
+    if not invest_amount:
+        return
+    triggers.resolve_effects(
+        game,
+        [
+            GrantModifier(card.id, card.id, Stat.GOLD_COST, invest_amount, Duration.PERMANENT),
+            *abilities.invest_for(card).effect(game, card, invest_amount),
+        ],
+    )
+
+
+def _equip_invest_amount(game: GameState, card: L5RCard) -> int:
+    """The Invest cost ``card`` charges to Equip with."""
+    amount = abilities.fixed_invest_amount(card)
+    if amount is None:
+        raise ValueError(f"{card.id} prints no fixed Invest for Equip to charge")
+    return amount
 
 
 def _apply_equip_target(
@@ -299,17 +330,21 @@ def _apply_equip_target(
 ) -> None:
     """Take the chosen Personality and put the Equip's cost to the seat."""
     card = game.table.cards_by_id[request.source_card_id]
-    game.pending = announce_equip(game, card, card.owner, response.choices[0])
+    game.pending = announce_equip(
+        game, card, card.owner, response.choices[0], invest_amount=request.invest_amount
+    )
 
 
-def announce_equip(game: GameState, card: L5RCard, seat: PlayerId, target_id: str) -> ChoosePayment:
+def announce_equip(
+    game: GameState, card: L5RCard, seat: PlayerId, target_id: str, invest_amount: int = 0
+) -> ChoosePayment:
     """Queue the attach and build the payment it must be paid with."""
     producers = gold_producers(game, seat)
-    game.stack.append(ResolveEquip(card.id, target_id))
+    game.stack.append(ResolveEquip(card.id, target_id, invest_amount))
     return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
-        amount=effective_gold_cost(game, card),
+        amount=effective_gold_cost(game, card) + invest_amount,
         available=game.gold[seat],
         produced=tuple(
             (producer.id, effective_gold_production(game, producer, targets=(card,)))
@@ -320,7 +355,7 @@ def announce_equip(game: GameState, card: L5RCard, seat: PlayerId, target_id: st
     )
 
 
-def _resolve_equip(game: GameState, card_id: str, target_id: str) -> None:
+def _resolve_equip(game: GameState, card_id: str, target_id: str, invest_amount: int = 0) -> None:
     """Bring the paid-for attachment out of hand and onto its Personality."""
     card = game.table.cards_by_id[card_id]
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
@@ -328,6 +363,7 @@ def _resolve_equip(game: GameState, card_id: str, target_id: str) -> None:
     # Legal before anything is told it arrived, for the reason _put_into_play gives.
     triggers.enforce_state_rules(game)
     triggers.fire(game, EnteredPlay(card_id, from_hand=True))
+    _finish_invest(game, card, invest_amount)
 
 
 def announce_rulebook_cost(
@@ -480,8 +516,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             seat=seat, card_id=card_id, invest_amount=invest_amount, renew=renew, proclaim=proclaim
         ):
             _resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
-        case ResolveEquip(card_id=card_id, target_id=target_id):
-            _resolve_equip(game, card_id, target_id)
+        case ResolveEquip(card_id=card_id, target_id=target_id, invest_amount=invest_amount):
+            _resolve_equip(game, card_id, target_id, invest_amount)
         case SelectAbilityTarget(card_id=card_id, candidates=candidates):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(
@@ -578,15 +614,7 @@ def _finish_recruit(
     if proclaim:
         game.use_once(proclaim_key(card.owner, game.turn))
         ops.set_honor(game.table, card.owner, delta=effective_personal_honor(game, card))
-    if invest_amount:
-        # "Entering play, permanently increase the Gold Cost by the Invest cost to get the effect."
-        triggers.resolve_effects(
-            game,
-            [
-                GrantModifier(card.id, card.id, Stat.GOLD_COST, invest_amount, Duration.PERMANENT),
-                *abilities.invest_for(card).effect(card, invest_amount),
-            ],
-        )
+    _finish_invest(game, card, invest_amount)
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:

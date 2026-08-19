@@ -86,9 +86,14 @@ class Equip:
     ----------
     card_id : str
         The attachment in hand.
+    invest : bool
+        Whether to pay the card's Invest cost on top of its Gold Cost. Invest belongs to a card
+        entering play rather than to the action that brought it, so Equip offers it exactly as
+        Recruit does. Default False.
     """
 
     card_id: str
+    invest: bool = False
 
 
 @dataclass(frozen=True, slots=True)

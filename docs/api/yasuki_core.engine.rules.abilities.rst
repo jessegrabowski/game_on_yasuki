@@ -25,6 +25,7 @@ yasuki_core.engine.rules.abilities
     bow_parent_cost
     can_pay
     destroy_cost
+    fixed_invest_amount
     invest_for
     no_cost
     no_effects

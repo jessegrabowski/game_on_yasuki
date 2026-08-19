@@ -126,10 +126,13 @@ class ResolveEquip:
         The attachment leaving hand for play.
     target_id : str
         The Personality it attaches to.
+    invest_amount : int
+        The Invest cost paid, applied once the card is in play. Zero for none.
     """
 
     card_id: str
     target_id: str
+    invest_amount: int = 0
 
 
 @dataclass(frozen=True, slots=True)

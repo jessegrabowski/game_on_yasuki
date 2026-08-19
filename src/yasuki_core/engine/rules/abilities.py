@@ -133,12 +133,13 @@ class InvestAbility:
         The most gold the Invest may cost; above ``minimum`` for a variable Invest whose amount the
         recruiting seat chooses.
     effect : callable
-        Maps ``(source_card, amount_paid)`` to the effects the Invest emits once the card enters play.
+        Maps ``(game, source_card, amount_paid)`` to the effects the Invest emits once the card
+        enters play. It takes the board because an Invest may search a zone for what it fetches.
     """
 
     minimum: int
     maximum: int
-    effect: Callable[[L5RCard, int], list[Effect]]
+    effect: Callable[[GameState, L5RCard, int], list[Effect]]
 
 
 def no_effects(card: L5RCard) -> list[Effect]:
@@ -191,6 +192,15 @@ def register_production_boost(printed_id: str, boost: ProductionBoost) -> None:
     if printed_id in _PRODUCTION_BOOST:
         raise ValueError(f"{printed_id} already has a production boost")
     _PRODUCTION_BOOST[printed_id] = boost
+
+
+def fixed_invest_amount(card: L5RCard) -> int | None:
+    """The Invest cost ``card`` charges when that cost is fixed, or None when it prints no Invest or
+    lets the payer size one. A caller that cannot raise a "how much?" decision treats both alike."""
+    ability = _INVEST.get(card.printed_id)
+    if ability is None or ability.minimum != ability.maximum:
+        return None
+    return ability.minimum
 
 
 def ability_for(card: L5RCard) -> Ability | None:
@@ -256,5 +266,5 @@ def plus_one_gp_this_turn(game: GameState, source: L5RCard, target: L5RCard) -> 
     ]
 
 
-def one_wealth(source: L5RCard, amount: int) -> list[Effect]:
+def one_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, 1)]
