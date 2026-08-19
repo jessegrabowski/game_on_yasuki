@@ -567,6 +567,29 @@ class RevealProvinces(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class Unpayable(Effect):
+    """A cost that can never be paid, so the ability holding it is never offered. Resolving one
+    raises — reaching it means the legality check that should have withheld the ability did not run.
+
+    Attributes
+    ----------
+    reason : str
+        Why the cost cannot be met, for the cascade trace.
+    """
+
+    reason: str
+
+    def describe(self) -> str:
+        return f"unpayable: {self.reason}"
+
+    def is_payable(self, game: GameState) -> bool:
+        return False
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        raise RuntimeError(f"resolved an unpayable cost: {self.reason}")
+
+
+@dataclass(frozen=True, slots=True)
 class Then(Effect):
     """Defer ``effects`` until the current step has fully resolved, cascade included.
 

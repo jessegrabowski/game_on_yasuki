@@ -33,6 +33,7 @@ yasuki_core.engine.rules.effects
     ShuffleDeck
     Straighten
     Then
+    Unpayable
 
 .. automodule:: yasuki_core.engine.rules.effects
     :members:

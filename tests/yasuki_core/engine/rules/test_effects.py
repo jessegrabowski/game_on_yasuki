@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     Effect,
     InterruptingEffect,
+    Unpayable,
 )
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
@@ -259,3 +260,10 @@ def test_an_interrupting_effect_refuses_to_be_committed_directly():
     effect = _AskToDiscard(PlayerId.P1, ("a",))
     with pytest.raises(RuntimeError, match="never applied directly"):
         effect.perform(two_seat_game())
+
+
+def test_an_unpayable_cost_refuses_to_resolve():
+    # It exists to be refused by can_pay, so resolving one means a legality check was skipped. That
+    # has to be loud: silently doing nothing would let an ability fire for free.
+    with pytest.raises(RuntimeError, match="unpayable cost"):
+        Unpayable("hero has left play").perform(two_seat_game())
