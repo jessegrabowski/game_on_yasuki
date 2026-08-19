@@ -16,8 +16,10 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
     gold_handler,
     keyword_grant,
+    province_strength_grant,
 )
 from yasuki_core.engine.rules.legality import reachable_gold, recruit_cost
+from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -62,6 +64,16 @@ register_ability(
         all_targets=True,
     ),
 )
+
+
+# --- Makeshift Fortifications ---
+
+
+@province_strength_grant("makeshift_fortifications")
+def _makeshift_fortifications_strength(game: GameState, card: L5RCard, province: ZoneKey) -> int:
+    """ "This Province has +3PS." A continuous grant read off the board, so it lasts exactly as long
+    as the Fortification stays attached and needs no bookkeeping when it leaves."""
+    return 3
 
 
 # --- Mishime Sensei ---

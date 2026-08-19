@@ -30,6 +30,7 @@ _DECORATORS = {
     "keyword_grant",
     "attachment_grant",
     "attach_restriction",
+    "province_strength_grant",
 }
 _CALLS = {
     "register_ability",

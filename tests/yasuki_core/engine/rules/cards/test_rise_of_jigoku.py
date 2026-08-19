@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.economy import (
     effective_chi,
     effective_force,
     effective_gold_production,
+    effective_province_strength,
 )
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.log import replay
@@ -23,7 +24,7 @@ from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint
 
 from tests.yasuki_core.engine.builders import (
     attachment,
@@ -674,3 +675,50 @@ def test_the_mine_pays_its_printed_rate_with_no_target():
     game, mine, _ = _mine_and_item(gold_cost=3)
 
     assert effective_gold_production(game, mine) == 2
+# --- Makeshift Fortifications ---
+
+
+def test_makeshift_fortifications_walls_the_province_it_was_recruited_from():
+    """The card is the join between the two halves: Recruiting a Fortification attaches it to the
+    Province it left, and being attached is what makes its "+3PS" reach that Province."""
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        register(
+            state,
+            L5RCard.of(
+                StrongholdPrint,
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=P1,
+                gold_production=8,
+                province_strength=4,
+            ),
+        ),
+    )
+    first = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    wall = register(
+        state,
+        holding(
+            "wall",
+            printed_id="makeshift_fortifications",
+            gold_cost=6,
+            owner=P1,
+            keywords=("Fortification",),
+        ),
+    )
+    wall.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(wall)
+    state.zones[first] = province
+    session = EngineSession.start(state, P1)
+    assert effective_province_strength(session.game, first) == 4
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+
+    session.act(P1, Recruit("wall"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert session.game.table.province_attachments == {"wall": first}
+    assert effective_province_strength(session.game, first) == 7
