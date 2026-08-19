@@ -44,7 +44,9 @@ def _test_cost_grant(game, source_id, chosen, seat):
 _ABILITIES["test_cost_pauses"] = Ability(
     timing=ActionTiming.OPEN,
     label="test",
-    cost=lambda source: [Choose(source.owner, (source.id,), 0, 1, "test_cost_pauses", source.id)],
+    cost=lambda game, source: [
+        Choose(source.owner, (source.id,), 0, 1, "test_cost_pauses", source.id)
+    ],
     targets=lambda game, card: [
         c.id
         for c in game.table.battlefield.cards
@@ -115,7 +117,7 @@ def test_a_second_production_boost_for_one_card_is_refused():
 _ABILITIES["test_acts_from_province"] = Ability(
     timing=ActionTiming.OPEN,
     label="test",
-    cost=lambda source: [],
+    cost=lambda game, source: [],
     targets=lambda game, card: [card.id],
     effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
     located_at=(CardLocation.PROVINCE,),
@@ -178,7 +180,7 @@ def test_an_ability_in_play_is_not_offered_from_a_province():
 _ABILITIES["test_acts_from_either"] = Ability(
     timing=ActionTiming.OPEN,
     label="test",
-    cost=lambda source: [],
+    cost=lambda game, source: [],
     targets=lambda game, card: [card.id],
     effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
     located_at=(CardLocation.BATTLEFIELD, CardLocation.PROVINCE),

@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.effects import (
     BanishTopFate,
     Bow,
     Ask,
+    Unpayable,
     Choose,
     Discard,
     Destroy,
@@ -78,6 +79,10 @@ EFFECTS = [
     ),
     (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
     (AttachCard("katana", "hero"), "attach katana to hero"),
+    (
+        Unpayable("katana is attached to no Personality"),
+        "unpayable: katana is attached to no Personality",
+    ),
     (
         PlaceInProvince("farm_1", ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 1)),
         "place farm_1 in P2 province 1",

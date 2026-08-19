@@ -771,7 +771,7 @@ def activate(game: GameState, card_id: str) -> None:
         else SelectAbilityTarget(card_id, targets)
     )
     game.stack.append(deferred)
-    triggers.resolve_effects(game, ability.cost(card))
+    triggers.resolve_effects(game, ability.cost(game, card))
     run_stack(game)  # resolve the target, unless the cost's cascade paused for a decision first
 
 
