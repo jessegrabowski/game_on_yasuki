@@ -113,7 +113,7 @@ from yasuki_core.engine.rules.events import (
     TurnStarted,
 )
 from yasuki_core.game_pieces.counters import SINCERITY
-from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint, WindPrint
+from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint, WindPrint
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -700,7 +700,7 @@ def _resolve_recruit(
     # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
     # rather than dropping it at the origin.
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
-    if isinstance(card.printed, HoldingPrint):
+    if abilities.enters_play_bowed(card):
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     fortification = FORTIFICATION_KEYWORD in effective_keywords(game, card)
     if province_key is not None:

@@ -26,6 +26,7 @@ yasuki_core.engine.rules.abilities
     bow_waiver
     can_pay
     destroy_cost
+    enters_play_bowed
     fixed_invest_amount
     invest_amounts
     invest_for
@@ -40,6 +41,7 @@ yasuki_core.engine.rules.abilities
     plus_one_gp_this_turn
     production_boost_for
     register_ability
+    register_enters_unbowed
     register_invest
     register_production_boost
     spend_wealth

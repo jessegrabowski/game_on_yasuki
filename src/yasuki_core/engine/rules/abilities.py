@@ -249,6 +249,10 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 _ABILITIES: dict[str, Ability] = {}
 _INVEST: dict[str, InvestAbility] = {}
 _PRODUCTION_BOOST: dict[str, ProductionBoost] = {}
+# The Holdings whose own text overrides the rule that a Holding enters play bowed. Registered from
+# the set module the card lives in, like everything else a card does, rather than listed centrally —
+# so the layout guard scans it and the card index checks it.
+_ENTERS_UNBOWED: set[str] = set()
 
 
 def register_ability(printed_id: str, value: Ability) -> None:
@@ -256,6 +260,18 @@ def register_ability(printed_id: str, value: Ability) -> None:
     if printed_id in _ABILITIES:
         raise ValueError(f"{printed_id} already has an ability")
     _ABILITIES[printed_id] = value
+
+
+def register_enters_unbowed(printed_id: str) -> None:
+    """Register ``printed_id`` as a card that enters play unbowed despite being a Holding."""
+    if printed_id in _ENTERS_UNBOWED:
+        raise ValueError(f"{printed_id} already enters play unbowed")
+    _ENTERS_UNBOWED.add(printed_id)
+
+
+def enters_play_bowed(card: L5RCard) -> bool:
+    """Whether ``card`` bows as it enters play — every Holding but the few that say otherwise."""
+    return isinstance(card.printed, HoldingPrint) and card.printed_id not in _ENTERS_UNBOWED
 
 
 def register_invest(printed_id: str, value: InvestAbility) -> None:
