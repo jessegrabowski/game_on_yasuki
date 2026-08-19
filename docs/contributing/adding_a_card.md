@@ -19,8 +19,8 @@ Read the card's text and find the shape:
 | An activated ability with a cost | `register_ability(id, Ability(...))` | Millet Farm |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | Rebuilt Harbor |
 
-Five events exist to react to: `EnteredPlay`, `Destroyed`, `CardDiscarded`, `CounterGained`, and
-`TurnStarted`. If the moment your card cares about is not one of these, it needs a new event — see
+Six events exist to react to: `EnteredPlay`, `Destroyed`, `CardDiscarded`, `CounterGained`,
+`Revealed`, and `TurnStarted`. If the moment your card cares about is not one of these, it needs a new event — see
 [what the vocabulary cannot express](#what-the-vocabulary-cannot-express-yet).
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
@@ -61,8 +61,16 @@ def _rice_farm(ctx: TriggerContext) -> list[Effect]:
 ```
 
 Two things to copy. **Guard first**: a trigger fires for every copy of the card in play, so check the
-event is about *your* card before doing anything. **Return, don't mutate**: the list of effects is the
-whole output.
+event is about *your* card before doing anything. Which check depends on the event — Rice Farm
+asks whose turn started, while a card reacting to its own arrival compares ids, since `EnteredPlay`
+reaches every copy in play and not only the one that entered:
+
+```python
+    if ctx.event.card_id != ctx.card.id:
+        return []
+```
+
+**Return, don't mutate**: the list of effects is the whole output.
 
 ### A choice: pausing for the player
 
@@ -151,19 +159,22 @@ registration — every implemented card is covered, and that is not an accident.
 Knowing a card is out of reach before you start is worth more than any amount of reference. Each of
 these needs a core extension, not just a card module:
 
-- **Anything targeting an opponent's cards.** Effects address a card id, but nothing models the
-  permission question — whose cards may this touch?
+- **A general rule about whose cards you may touch.** A card *can* target an opponent's — Touch of
+  Death destroys any bowed Personality with Chi no higher than its caster's — but each handler
+  filters by owner itself. There is no permission model to ask, so a card whose restriction is a
+  rulebook one rather than its own text has nowhere to read it from.
 - **More than one ability on a card.** The ability registries hold one entry per card id.
 - **Abilities usable from hand.** An ability is offered from the battlefield or from a Province
   (`located_at`); a card in hand is out of reach.
-- **Attachments.** `TableState` tracks the attachment graph and the manual surface can attach a card,
-  but the rules layer reads none of it: nothing asks what a card is attached to, and an attached card
-  contributes nothing to the card it hangs on.
 - **Combat.** No attack, assignment, or resolution machinery.
 - **Modal effects** — "choose one" where the modes are different *kinds* of effect. `Choose` picks
   cards, not modes.
 - **Suppression** — one card turning another's ability off.
 
-This list is measured, not guessed: a survey of a single arc found 109 cards with attachments, 27
-targeting an opponent's cards, and 20 modal. If your card needs one of these, the honest next step is
-a design discussion, not a workaround.
+- **Interrupt and Response abilities.** Both designators exist and no Action Round grants either,
+  so an ability carrying one is never offered. Response is a Shattered Empire addition, and the
+  largest single gap in the vocabulary.
+
+This list is measured, not guessed: a survey of a single arc found 27 cards targeting an opponent's
+cards and 20 modal. If your card needs one of these, the honest next step is a design discussion,
+not a workaround.
