@@ -7,6 +7,7 @@ yasuki_core.engine.rules.card_registry
 
 .. autosummary::
 
+    card_keyed_data
     duplicate_registrations
     main
     registered_card_ids

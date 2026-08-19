@@ -9,9 +9,11 @@ from yasuki_core.engine.rules import (
     economy,
     equip,
     policies,
+    state_rules,
     triggers,
 )
 from yasuki_core.engine.rules.card_registry import (
+    card_keyed_data,
     duplicate_registrations,
     main,
     registered_card_ids,
@@ -23,7 +25,7 @@ from yasuki_core.engine.rules.events import EnteredPlay
 # and CHOICE_PROMPTS are deliberately left out: both key on the kind of a pending choice rather than
 # on a card. CHOICE_PROMPTS lives in decisions and is visible here only because triggers imports it
 # to register into. POLICIES is the policy registry, keyed by policy name rather than by card.
-REGISTRY_MODULES = (abilities, attachments, economy, equip, policies, triggers)
+REGISTRY_MODULES = (abilities, attachments, economy, equip, policies, state_rules, triggers)
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "MAY_REMAIN_BOWED",
@@ -36,6 +38,7 @@ VALIDATED_REGISTRIES = {
     "KEYWORD_GRANTS",
     "PROVINCE_STRENGTH_GRANTS",
     "ABILITY_HEURISTICS",
+    "CHI_DEATH_EXEMPT",
     "ATTACHMENT_GRANTS",
     "ATTACH_RESTRICTIONS",
     "_TRIGGERS",
@@ -44,14 +47,14 @@ NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS", "CHOICE_PROMPTS", "POLICIES"}
 
 
 def module_level_registries() -> set[str]:
-    """Every per-card registry the registry modules hold. Sets count as well as dicts: a registry
-    recording a card's permission rather than its handler is still a place a misspelled id can
-    hide."""
+    """Every per-card registry the registry modules hold. Any collection counts, not only dicts: a
+    registry recording a card's permission rather than its handler is still a place a misspelled id
+    can hide, and a frozenset hides one as well as a set does."""
     return {
         name
         for module in REGISTRY_MODULES
         for name, value in vars(module).items()
-        if isinstance(value, dict | set) and not name.startswith("__")
+        if isinstance(value, dict | set | frozenset) and not name.startswith("__")
     }
 
 
@@ -79,13 +82,23 @@ def test_no_per_card_registry_escapes_validation():
 
     assert discovered - VALIDATED_REGISTRIES == NOT_KEYED_BY_CARD
     assert VALIDATED_REGISTRIES - discovered == set()
-    assert len(registered_card_ids()) == len(VALIDATED_REGISTRIES)
+    assert len(registered_card_ids()) + len(card_keyed_data()) == len(VALIDATED_REGISTRIES)
+
+
+def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():
+    # These ids name cards but no set module registers them — a card excepted from a rulebook rule
+    # is listed beside the rule. Folded into registered_card_ids() they would read as registrations
+    # the source scan cannot find, and that guard would fail for a card that is behaving correctly.
+    assert card_keyed_data().keys().isdisjoint(registered_card_ids())
+    assert unregistered_card_ids(card_keyed_data()) == []
 
 
 def test_no_registry_reports_as_empty():
     # An empty frozenset here means card_registry read an attribute that is no longer the registry,
-    # which looks exactly like a clean bill of health.
+    # which looks exactly like a clean bill of health. The data lists answer to it too — one emptied
+    # by a rename would report every card in it as validated.
     assert all(registered_card_ids().values())
+    assert all(card_keyed_data().values())
 
 
 def test_a_misspelled_id_is_reported_with_its_registry_and_a_suggestion():
