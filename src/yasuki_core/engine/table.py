@@ -45,6 +45,18 @@ class ZoneKey(NamedTuple):
     role: ZoneRole
     idx: int | None = None  # set only for PROVINCE; None otherwise
 
+    @property
+    def token(self) -> str:
+        """A string naming this zone, for the places that carry one beside card ids — a decision's
+        candidates are strings, and a Province is chosen as a slot rather than as the card in it."""
+        return f"{self.owner.name}:{self.role.value}:{'' if self.idx is None else self.idx}"
+
+    @classmethod
+    def from_token(cls, token: str) -> "ZoneKey":
+        """The zone :attr:`token` names. Raise ``ValueError`` if it names none."""
+        owner, role, idx = token.split(":")
+        return cls(PlayerId[owner], ZoneRole(role), int(idx) if idx else None)
+
 
 class DeckKey(NamedTuple):
     owner: PlayerId
