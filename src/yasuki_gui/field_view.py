@@ -232,6 +232,10 @@ class FieldView(tk.Canvas):
         self._allocation = None
         self.delete(ALLOCATION_TAG)
 
+    def is_selectable(self, candidate: str) -> bool:
+        """Whether ``candidate`` — a card id or a zone token — is one the pending decision offers."""
+        return self._selectable is not None and candidate in self._selectable
+
     def toggle_selection(self, card_id: str) -> None:
         """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener. Picking
         a boostable producer instead defers to :attr:`on_boost_request`; it enters the selection only
@@ -479,6 +483,7 @@ class FieldView(tk.Canvas):
             zv.cards, zv.is_province, zv.name = cards, True, label
             zv.x, zv.y, zv.w, zv.h = px, py, CARD_W, CARD_H
             zv.selected_ids = self.selection
+            zv.slot_selected = key.token in self.selection
             zv.draw(self)
         for tag in set(self._zones) - wanted_zones:
             self._zones.pop(tag, None)

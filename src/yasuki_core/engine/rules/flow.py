@@ -47,6 +47,7 @@ from yasuki_core.engine.rules.decisions import (
     ChooseCards,
     ChooseDistribution,
     ChooseEquipTarget,
+    ChooseFortificationProvince,
     ChooseInheritanceTarget,
     Confirm,
     ChooseInvestAmount,
@@ -76,6 +77,7 @@ from yasuki_core.engine.rules.legality import (
     inheritance_key,
     proclaim_key,
     province_key_holding,
+    province_zones,
     province_key_of,
     reachable_gold,
     recruit_cost,
@@ -533,6 +535,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_equip_target(game, request, response)
         case ChooseInheritanceTarget():
             _apply_inheritance_target(game, request, response)
+        case ChooseFortificationProvince():
+            _apply_fortification_province(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
         case ChooseAmount():
@@ -698,12 +702,49 @@ def _resolve_recruit(
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     if isinstance(card.printed, HoldingPrint):
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
+    fortification = FORTIFICATION_KEYWORD in effective_keywords(game, card)
     if province_key is not None:
-        if FORTIFICATION_KEYWORD in effective_keywords(game, card):
+        if fortification:
             ops.attach_to_province(game.table, card, province_key)
         # Renew is read once the card has entered play, which is when the keyword speaks.
         renews = renew or keywords.RENEW in effective_keywords(game, card)
         _defer_refill(game, province_key, face_up=renews)
+    elif fortification:
+        # Brought in from somewhere other than a Province, so its controller picks one (CR,
+        # Fortification). Nothing is told it arrived until it has a Province to have arrived at.
+        game.pending = ChooseFortificationProvince(
+            seat=seat,
+            candidates=_province_slots(game, seat),
+            source_card_id=card_id,
+            invest_amount=invest_amount,
+            proclaim=proclaim,
+        )
+        return
+    _announce_entering_play(game, card_id, invest_amount, proclaim)
+
+
+def _province_slots(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """Every one of ``seat``'s Provinces, named by slot. A Province is a slot rather than the card
+    standing in it, so an empty one is as attachable as any other (CR, Fortification)."""
+    return tuple(key.token for key, _ in province_zones(game, seat))
+
+
+def _apply_fortification_province(
+    game: GameState, request: ChooseFortificationProvince, response: DecisionResponse
+) -> None:
+    """Attach the waiting Fortification to the Province the seat named, then let it arrive."""
+    card = game.table.cards_by_id[request.source_card_id]
+    province = ZoneKey.from_token(response.choices[0])
+    game.pending = None
+    ops.attach_to_province(game.table, card, province)
+    _announce_entering_play(game, card.id, request.invest_amount, request.proclaim)
+
+
+def _announce_entering_play(
+    game: GameState, card_id: str, invest_amount: int, proclaim: bool
+) -> None:
+    """The tail every recruited card shares: make the board legal, queue the post-entry steps, and
+    announce the arrival."""
     # A card reaching the battlefield can make the board illegal, and the board is made legal
     # before anything is told the card arrived — a trigger that reads a state the rules say cannot
     # exist is deciding on a board that never legally existed.

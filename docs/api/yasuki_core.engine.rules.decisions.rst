@@ -13,6 +13,7 @@ yasuki_core.engine.rules.decisions
     ChooseCards
     ChooseDistribution
     ChooseEquipTarget
+    ChooseFortificationProvince
     ChooseInheritanceTarget
     ChooseInvestAmount
     ChooseLegacyCard

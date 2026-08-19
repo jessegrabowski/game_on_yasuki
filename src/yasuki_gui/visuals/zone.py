@@ -20,6 +20,7 @@ class ZoneVisual(Visual):
         tag: str,
         images: ImageProvider | None = None,
         selected_ids: Collection[str] = (),
+        slot_selected: bool = False,
     ):
         self.cards = cards
         self.is_province = is_province
@@ -31,6 +32,9 @@ class ZoneVisual(Visual):
         self.tag = tag
         self.images = images
         self.selected_ids = selected_ids
+        # A decision may name this zone rather than a card in it — a Fortification attaches to the
+        # slot, so an empty one is as pickable as an occupied one and has to show it.
+        self.slot_selected = slot_selected
 
     @property
     def size(self) -> tuple[int, int]:
@@ -87,7 +91,7 @@ class ZoneVisual(Visual):
                         justify="center",
                         tags=(self.tag, "zone"),
                     )
-            selected = top.id in self.selected_ids
+            selected = self.slot_selected or top.id in self.selected_ids
             canvas.create_rectangle(
                 x0,
                 y0,
@@ -110,8 +114,8 @@ class ZoneVisual(Visual):
             x1,
             y1,
             fill=theme.LINE_SOFT if is_province else theme.SURFACE,
-            outline=theme.LINE,
-            width=1,
+            outline=theme.SELECT if self.slot_selected else theme.LINE,
+            width=3 if self.slot_selected else 1,
             dash=(4, 2) if is_province else (),
             tags=(self.tag, "zone"),
         )
