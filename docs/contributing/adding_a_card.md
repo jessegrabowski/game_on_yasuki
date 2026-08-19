@@ -18,10 +18,13 @@ Read the card's text and find the shape:
 | "After X happens…" | `@on(Event, id)` | Rice Farm |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | Millet Farm |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | Rebuilt Harbor |
+| Carries a keyword only sometimes | `@keyword_grant(id)` | Fortified Farmlands |
+| Gives the Personality it hangs on a stat | `@attachment_grant(id)` | Haramaki-do |
+| Limits what it will attach to | `@attach_restriction(id)` | Brothers in Arms |
 
 Six events exist to react to: `EnteredPlay`, `Destroyed`, `CardDiscarded`, `CounterGained`,
-`Revealed`, and `TurnStarted`. If the moment your card cares about is not one of these, it needs a new event — see
-[what the vocabulary cannot express](#what-the-vocabulary-cannot-express-yet).
+`Revealed`, and `TurnStarted`. If the moment your card cares about is not one of these, it needs a
+new event — see [what the vocabulary cannot express](#what-the-vocabulary-cannot-express-yet).
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
 id no card has, and tells you the nearest real one.
@@ -128,6 +131,52 @@ return [
 That is Modest Farm: recruit a Holding out of sequence, and *then* — once the recruited card's own
 enter-play trait has resolved — offer to sacrifice the Farm to straighten it. Without `Then`, the
 sacrifice would be offered before the recruited card had finished entering play.
+
+## Cards that attach
+
+A Follower, Item or Spell is not a fifth rung — Touch of Death is an activated ability like any
+other, and Brothers in Arms is a trigger. What sets an attachment apart is that it acts *through*
+the Personality carrying it, and three registries cover the ways it does.
+
+**Reaching the Personality.** `attached_to(game, card)` returns it, or None when the card hangs on
+nobody. Most often a cost needs it: an attachment's ability usually spends its Personality's bow
+rather than its own.
+
+```python
+        cost=bow_parent_and_destroy,
+```
+
+Watch the two bow costs — they are different. The `:bow:` icon in an ability's cost line means bow
+*the card the ability is on*, which is `bow_cost`. Only the written-out "Bow this Shugenja" reaches
+the Personality. Every Shattered Empire card paying with its parent is a Spell using that wording.
+
+**Giving the Personality a stat** it does not print. Haramaki-do prints +2F and reads "This
+Personality has +1PH"; the printed half is a number on the card, the written half is a grant:
+
+```python
+@attachment_grant("haramaki_do")
+def _haramaki_do(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
+    """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
+    return {Stat.PERSONAL_HONOR: 1}
+```
+
+**Limiting what it will hang on.** The rulebook's own restrictions — one Weapon, Two-Handed
+exclusivity — live in `equip.py` as code. A restriction only one card states lives with that card:
+
+```python
+@attach_restriction("brothers_in_arms")
+def _brothers_in_arms_attaches_only_to_a_samurai(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> bool:
+    return SAMURAI_KEYWORD in effective_keywords(game, personality)
+```
+
+Two things an attachment gets for free, so do not write handlers for them: a card leaving play takes
+its attachments with it, and a state rule discards an attachment left with no Personality.
+
+**Battle is still out of reach**, and for attachments that is most of the corpus — 1,284 of the
+abilities printed on Follower, Item and Spell cards are Battle abilities. An attachment card whose
+text begins "Battle:" cannot be implemented today no matter which rung it would otherwise sit on.
 
 ## Where the code goes
 
