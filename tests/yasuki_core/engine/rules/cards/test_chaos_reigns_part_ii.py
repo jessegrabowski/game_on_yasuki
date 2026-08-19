@@ -7,7 +7,11 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import HIYAMAKOS_CLAW, NAGA_FOLLOWER
-from yasuki_core.engine.rules.economy import effective_force, effective_gold_production
+from yasuki_core.engine.rules.economy import (
+    effective_force,
+    effective_gold_production,
+    effective_keywords,
+)
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
@@ -304,3 +308,38 @@ def test_another_personality_arriving_arms_nobody():
 
     assert attachments_of(game, game.table.cards_by_id["hiyamako"]) == ()
     assert attachments_of(game, game.table.cards_by_id["bystander"]) == ()
+# --- Fortified Farmlands ---
+
+
+def _farmlands_game(*, other_farms: int = 1):
+    """Fortified Farmlands in play, beside ``other_farms`` other Farm Holdings."""
+    game = two_seat_game()
+    put_in_play(game, holding("farmlands", printed_id="fortified_farmlands", keywords=("Farm",)))
+    for index in range(other_farms):
+        put_in_play(game, holding(f"farm{index}", keywords=("Farm",)))
+    return game
+
+
+def test_fortified_farmlands_has_renew_beside_another_farm():
+    game = _farmlands_game()
+
+    assert "Renew" in effective_keywords(game, game.table.cards_by_id["farmlands"])
+
+
+def test_fortified_farmlands_has_no_renew_on_its_own():
+    """ "Another Farm" excludes the card asking, so a lone Fortified Farmlands does not count itself
+    — it carries the Farm keyword and would otherwise always satisfy its own condition."""
+    game = _farmlands_game(other_farms=0)
+
+    assert "Renew" not in effective_keywords(game, game.table.cards_by_id["farmlands"])
+
+
+def test_fortified_farmlands_loses_renew_when_the_other_farm_goes():
+    """The grant is read whenever the keyword is asked for, so it comes and goes with the board."""
+    game = _farmlands_game()
+    farmlands = game.table.cards_by_id["farmlands"]
+    assert "Renew" in effective_keywords(game, farmlands)
+
+    game.table.battlefield.remove(game.table.cards_by_id["farm0"])
+
+    assert "Renew" not in effective_keywords(game, farmlands)
