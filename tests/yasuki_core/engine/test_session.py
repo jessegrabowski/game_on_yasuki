@@ -835,14 +835,14 @@ def test_an_equip_replays_to_the_same_board():
     assert replay(session.log).table == session.game.table
 
 
-# A probe that records the arrivals it is told about. Equipping a card has to announce it the way
-# Recruiting does, or an attachment with an enters-play trigger silently never fires it.
-_EQUIP_ARRIVALS: list[str] = []
+# A probe that records how it arrived. Equipping a card has to announce it the way Recruiting does,
+# or an attachment with an enters-play trigger silently never fires it.
+_EQUIP_ARRIVALS: list[bool] = []
 
 
 @on(EnteredPlay, "records_its_arrival")
 def _record_arrival(ctx):
-    _EQUIP_ARRIVALS.append(ctx.event.card_id)
+    _EQUIP_ARRIVALS.append(ctx.event.from_hand)
     return []
 
 
@@ -861,4 +861,4 @@ def test_equipping_announces_that_the_card_entered_play():
     session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
 
-    assert _EQUIP_ARRIVALS == ["P1-katana"]
+    assert _EQUIP_ARRIVALS == [True]  # and it came from hand, which some cards distinguish

@@ -327,7 +327,7 @@ def _resolve_equip(game: GameState, card_id: str, target_id: str) -> None:
     ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
     # Legal before anything is told it arrived, for the reason _put_into_play gives.
     triggers.enforce_state_rules(game)
-    triggers.fire(game, EnteredPlay(card_id))
+    triggers.fire(game, EnteredPlay(card_id, from_hand=True))
 
 
 def announce_rulebook_cost(

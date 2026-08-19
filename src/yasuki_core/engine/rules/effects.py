@@ -331,10 +331,12 @@ class AttachCard(Effect):
         if card is None or personality is None:
             return []
         entering = not any(held is card for held in game.table.battlefield.cards)
+        hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
+        from_hand = any(held is card for held in hand.cards)
         if entering:
             ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
         ops.attach_to_personality(game.table, card, personality)
-        return [EnteredPlay(self.card_id)] if entering else []
+        return [EnteredPlay(self.card_id, from_hand=from_hand)] if entering else []
 
 
 @dataclass(frozen=True, slots=True)
