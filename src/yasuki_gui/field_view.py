@@ -476,7 +476,7 @@ class FieldView(tk.Canvas):
             rc.id: home.get(rc.id) or to_canvas(pos, flipped=self._flipped, canvas_w=w, canvas_h=h)
             for rc, pos in rendered
         }
-        placed.update(self._unit_positions(placed))
+        placed.update(self._unit_positions(placed, {rc.id: rc.owner for rc, _ in rendered}))
         for rc, pos in rendered:
             tag = card_tag(rc.id)
             wanted.add(tag)
@@ -492,6 +492,11 @@ class FieldView(tk.Canvas):
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
+
+    def _at_bottom(self, owner: PlayerId | None) -> bool:
+        """Whether ``owner``'s cards lay out along the near edge. An ownerless card sits with the
+        viewer's, which is where the board puts anything it cannot attribute."""
+        return (owner or self.seat) is self.seat
 
     def _units(self) -> dict[str, str]:
         """Unit membership from whichever source is rendering: attached card id to Personality."""
@@ -531,15 +536,28 @@ class FieldView(tk.Canvas):
             ordered.extend(stranded)
         return ordered
 
-    def _unit_positions(self, placed: dict[str, tuple[int, int]]) -> dict[str, tuple[int, int]]:
-        """Where each attached card sits: fanned up behind the Personality it hangs on, so each
-        title bar clears the card riding it. A unit is the game's own grouping, so the board shows
-        one rather than filing the attachment away with the Holdings."""
+    def _unit_positions(
+        self, placed: dict[str, tuple[int, int]], owners: dict[str, PlayerId | None]
+    ) -> dict[str, tuple[int, int]]:
+        """Where a unit's cards sit: the attachments fanned up behind their Personality, so each
+        title bar clears the card riding it, and the Personality dropped by the height they add.
+
+        Both seats' Personalities stand against the divider, so a stack fanning up off the near
+        seat's row would climb into the opponent's half. Sinking the Personality by the tower's own
+        height leaves the top of the stack where he stood and grows the unit downward instead. The
+        far seat's row already fans away from the divider, so its units stay put.
+
+        Returns a position per attachment, plus the Personality's when he moves. A caller overlays
+        these on the home-row placement.
+        """
         positions: dict[str, tuple[int, int]] = {}
         for personality_id, members in self._unit_members().items():
             if personality_id not in placed:
                 continue
             x, y = placed[personality_id]
+            if self._at_bottom(owners.get(personality_id)):
+                y += len(members) * ATTACH_STACK_OFFSET
+                positions[personality_id] = (x, y)
             for step, card_id in enumerate(members, start=1):
                 if card_id in placed:
                     positions[card_id] = (x, y - step * ATTACH_STACK_OFFSET)
@@ -570,7 +588,7 @@ class FieldView(tk.Canvas):
         positions: dict[str, tuple[int, int]] = {}
         for personality_row, by_owner in ((False, holdings), (True, personalities)):
             for owner, unplaced in by_owner.items():
-                seat_at_bottom = (owner or self.seat) is self.seat
+                seat_at_bottom = self._at_bottom(owner)
                 positions.update(
                     home_stack_positions(
                         unplaced,
