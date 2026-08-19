@@ -7,6 +7,7 @@ from yasuki_core.engine.table import ZoneRole
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.attachments import attached_to
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -15,6 +16,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Effect,
     GrantModifier,
+    Unpayable,
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
@@ -36,6 +38,14 @@ def no_cost(game: GameState, source: L5RCard) -> list[Effect]:
 
 def bow_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [Bow(source.id)]
+
+
+def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Bow the Personality ``source`` is attached to. Unpayable while it is attached to none."""
+    parent = attached_to(game, source)
+    if parent is None:
+        return [Unpayable(f"{source.id} is attached to no Personality")]
+    return [Bow(parent.id)]
 
 
 def destroy_cost(game: GameState, source: L5RCard) -> list[Effect]:
