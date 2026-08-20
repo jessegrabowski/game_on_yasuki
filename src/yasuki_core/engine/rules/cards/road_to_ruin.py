@@ -1,3 +1,4 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
@@ -9,15 +10,21 @@ from yasuki_core.engine.rules.abilities import (
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Choose,
+    CreateToken,
     Destroy,
     Discard,
     Effect,
+    GainHonor,
     GrantModifier,
     PlaceInProvince,
 )
+from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.events import Destroyed, EnteredPlay
 from yasuki_core.engine.rules.legality import province_key_holding
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -122,3 +129,38 @@ register_ability(
         located_at=(CardLocation.PROVINCE,),
     ),
 )
+
+
+# --- The Forgotten ---
+
+FORGOTTEN_DEAD = "forgotten_dead"
+FORGOTTEN_HONOR_LOSS = 2
+
+
+def _the_forgotten_raises_another(ctx: TriggerContext) -> list[Effect]:
+    """Lose 2 Honor and Equip another of the dead to a Personality.
+
+    The Honor is lost whether or not there is anyone left to carry them, since the card asks for no
+    target before charging it.
+    """
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    seat = ctx.card.owner
+    dead = ctx.game.table.creatable_tokens[FORGOTTEN_DEAD]
+    effects: list[Effect] = [GainHonor(seat, -FORGOTTEN_HONOR_LOSS)]
+    bearers = tuple(bearer.id for bearer in creation_targets(ctx.game, seat, dead))
+    if bearers:
+        effects.append(Choose(seat, bearers, 1, 1, "the_forgotten", ctx.card.id))
+    return effects
+
+
+# "After this Follower enters play or is destroyed" — one clause, so one handler on both events.
+on(EnteredPlay, "the_forgotten")(_the_forgotten_raises_another)
+on(Destroyed, "the_forgotten")(_the_forgotten_raises_another)
+
+
+@choice_resolver("the_forgotten", prompt="Equip the dead to one of your Personalities")
+def _resolve_the_forgotten(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [CreateToken(FORGOTTEN_DEAD, seat, source_id, attach_to=chosen[0])]
