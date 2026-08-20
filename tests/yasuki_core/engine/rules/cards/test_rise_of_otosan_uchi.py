@@ -2,9 +2,12 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, Pass
-from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import EXPENDABLE_SERVANT
+from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
+    EXPENDABLE_SERVANT,
+    LION_ANCESTOR,
+)
 from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse
-from yasuki_core.engine.rules.economy import effective_chi
+from yasuki_core.engine.rules.economy import effective_chi, effective_force
 from yasuki_core.engine.rules.effects import Straighten
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.log import replay
@@ -17,10 +20,12 @@ from yasuki_core.game_pieces.prints import FatePrint
 from tests.yasuki_core.engine.builders import (
     end_turn,
     holding,
+    personality,
     province_card,
     put_in_play,
     register,
     token_template,
+    two_seat_game,
 )
 
 P1, P2 = PlayerId.P1, PlayerId.P2
@@ -284,5 +289,76 @@ def test_culling_grounds_is_withheld_while_bowed():
 def test_culling_grounds_replays_to_the_same_board():
     session = _culling_game()
     session.act(P1, ActivateAbility("grounds"))
+
+    assert replay(session.log).table == session.game.table
+
+
+# --- Kitsu Watanabe ---
+
+
+def _watanabe_game():
+    """Watanabe in play with two Holdings he could spend and an opponent's he could not."""
+    game = two_seat_game()
+    token_template(
+        game,
+        LION_ANCESTOR,
+        name="Lion Ancestor",
+        card_type="Personality",
+        keywords=("Ancestor", "Lion Clan", "Samurai", "Spirit"),
+        force=2,
+        chi=2,
+    )
+    put_in_play(
+        game,
+        personality("watanabe", printed_id="kitsu_watanabe_experienced", force=3, chi=3),
+    )
+    put_in_play(game, holding("shrine", gold_production=2))
+    put_in_play(game, holding("dojo", gold_production=1))
+    put_in_play(game, holding("theirs", owner=P2, gold_production=2))
+    return EngineSession.start(game.table, P1)
+
+
+def _ancestor_of(session):
+    return next(card for card in session.game.table.battlefield.cards if card.is_token)
+
+
+def test_kitsu_watanabe_spends_a_holding_to_call_an_ancestor():
+    session = _watanabe_game()
+
+    session.act(P1, ActivateAbility("watanabe"))
+    session.submit(P1, DecisionResponse(("shrine",)))
+
+    game = session.game
+    ancestor = _ancestor_of(session)
+    assert ancestor.name == "Lion Ancestor"
+    assert effective_force(game, ancestor) == 2
+    assert game.table.cards_by_id["shrine"] not in game.table.battlefield.cards
+
+
+def test_kitsu_watanabe_only_spends_his_own_holdings():
+    session = _watanabe_game()
+
+    session.act(P1, ActivateAbility("watanabe"))
+
+    assert set(session.game.pending.candidates) == {"shrine", "dojo"}
+
+
+def test_kitsu_watanabe_is_withheld_with_no_holding_to_spend():
+    game = two_seat_game()
+    token_template(
+        game, LION_ANCESTOR, name="Lion Ancestor", card_type="Personality", force=2, chi=2
+    )
+    put_in_play(
+        game, personality("watanabe", printed_id="kitsu_watanabe_experienced", force=3, chi=3)
+    )
+    session = EngineSession.start(game.table, P1)
+
+    assert ActivateAbility("watanabe") not in session.legal_actions(P1)
+
+
+def test_kitsu_watanabe_replays_to_the_same_board():
+    session = _watanabe_game()
+    session.act(P1, ActivateAbility("watanabe"))
+    session.submit(P1, DecisionResponse(("shrine",)))
 
     assert replay(session.log).table == session.game.table

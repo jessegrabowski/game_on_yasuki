@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.abilities import (
     may_remain_bowed,
     no_cost,
     one_wealth,
+    owned_holdings,
     register_ability,
     register_invest,
 )
@@ -17,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     Ask,
     Banish,
     CreateToken,
+    Destroy,
     Discard,
     DrawCard,
     Effect,
@@ -138,6 +140,35 @@ register_ability(
         targets=itself,
         effects=_culling_grounds_effects,
         all_targets=True,
+    ),
+)
+
+
+# --- Kitsu Watanabe (Experienced) ---
+
+LION_ANCESTOR = "lion_ancestor"
+
+
+def _own_holdings(game: GameState, source: L5RCard) -> list[str]:
+    return [holding.id for holding in owned_holdings(game, source.owner)]
+
+
+def _kitsu_watanabe_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The Holding is spent on the summons, so it goes before the Ancestor answers."""
+    return [
+        Destroy(target.id, source.owner),
+        CreateToken(LION_ANCESTOR, source.owner, source.id),
+    ]
+
+
+register_ability(
+    "kitsu_watanabe_experienced",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Destroy your Holding to call up a 2F/2C/3PH Lion Ancestor",
+        cost=no_cost,
+        targets=_own_holdings,
+        effects=_kitsu_watanabe_effects,
     ),
 )
 
