@@ -27,10 +27,12 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
     Then,
 )
+from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.events import Straightened
+from yasuki_core.engine.rules.events import EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
@@ -182,3 +184,21 @@ def _invest_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect
 
 
 register_invest("rebuilt_harbor", InvestAbility(minimum=1, maximum=3, effect=_invest_wealth))
+
+
+# --- Shinjo Saeki, Clan Champion (Experienced 2) ---
+
+CAVALRY_FOLLOWER = "cavalry"
+
+
+@on(EnteredPlay, "shinjo_saeki_clan_champion_experienced_2")
+def _shinjo_saeki_mounts_the_clan(ctx: TriggerContext) -> list[Effect]:
+    """After Saeki enters play, create and Equip a 1F Cavalry Follower to each of your Cavalry
+    Personalities — himself among them, since he carries the keyword."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    cavalry = ctx.game.table.creatable_tokens[CAVALRY_FOLLOWER]
+    return [
+        CreateToken(CAVALRY_FOLLOWER, ctx.card.owner, ctx.card.id, attach_to=rider.id)
+        for rider in creation_targets(ctx.game, ctx.card.owner, cavalry, keyword=keywords.CAVALRY)
+    ]

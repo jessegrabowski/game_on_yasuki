@@ -3,13 +3,16 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, Pass
 from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
+    CAVALRY_FOLLOWER,
     EXPENDABLE_SERVANT,
     LION_ANCESTOR,
 )
 from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse
+from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import effective_chi, effective_force
+from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.effects import Straighten
-from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -362,3 +365,58 @@ def test_kitsu_watanabe_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("shrine",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Shinjo Saeki, Clan Champion ---
+
+
+def _saeki_game():
+    """Saeki about to arrive among one mounted Personality and one on foot."""
+    game = two_seat_game()
+    token_template(
+        game, CAVALRY_FOLLOWER, name="Cavalry", card_type="Follower", keywords=("Cavalry",), force=1
+    )
+    put_in_play(
+        game,
+        personality(
+            "saeki",
+            printed_id="shinjo_saeki_clan_champion_experienced_2",
+            force=5,
+            chi=4,
+            keywords=("Cavalry", "Samurai"),
+        ),
+    )
+    put_in_play(game, personality("rider", force=2, chi=2, keywords=("Cavalry",)))
+    put_in_play(game, personality("footman", force=2, chi=2, keywords=("Infantry",)))
+    put_in_play(game, personality("theirs", owner=P2, force=2, chi=2, keywords=("Cavalry",)))
+    return game
+
+
+def test_shinjo_saeki_mounts_every_cavalry_personality_he_finds():
+    game = _saeki_game()
+
+    fire(game, EnteredPlay("saeki"))
+
+    mounted = {
+        card_id: [
+            follower.name for follower in attachments_of(game, game.table.cards_by_id[card_id])
+        ]
+        for card_id in ("saeki", "rider", "footman", "theirs")
+    }
+
+    # Saeki carries Cavalry himself, so he is among "each of your Cavalry Personalities"; the
+    # Infantry Personality and the opponent's rider are not.
+    assert mounted == {
+        "saeki": ["Cavalry"],
+        "rider": ["Cavalry"],
+        "footman": [],
+        "theirs": [],
+    }
+
+
+def test_another_arrival_does_not_mount_the_clan():
+    game = _saeki_game()
+
+    fire(game, EnteredPlay("rider"))
+
+    assert attachments_of(game, game.table.cards_by_id["rider"]) == ()
