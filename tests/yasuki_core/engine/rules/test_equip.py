@@ -1,10 +1,16 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_weapon_limit
 from yasuki_core.engine.rules.effects import AttachCard
-from yasuki_core.engine.rules.equip import equip_targets, may_attach_weapon, weapons_on
+from yasuki_core.engine.rules.equip import (
+    creation_targets,
+    equip_targets,
+    may_attach_weapon,
+    weapons_on,
+)
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_core.game_pieces.constants import AttachmentType
+from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.prints import AttachmentPrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -107,6 +113,66 @@ def test_a_follower_is_not_held_back_by_a_weapon_the_personality_already_carries
 
     assert equip_targets(game, attachment("ashigaru", keywords=("Follower",))) == (hero,)
     assert equip_targets(game, _weapon("wakizashi")) == ()
+
+
+def _weapon_print(*, two_handed: bool = False) -> AttachmentPrint:
+    """The template a card creates a Weapon from — what the Weapon rules have to judge before there
+    is a card to ask."""
+    keywords = ("Weapon", "Two-Handed") if two_handed else ("Weapon",)
+    return AttachmentPrint(
+        name="Created Sword",
+        side=Side.FATE,
+        printed_id="created_sword",
+        attachment_type=AttachmentType.ITEM,
+        keywords=keywords,
+        force_modifier=2,
+    )
+
+
+def test_a_created_weapon_answers_to_the_same_limit_as_a_drawn_one():
+    """The rule is about the Personality's hands, not about where the Weapon came from, so a card
+    that creates one has to be judged before it exists."""
+    game = two_seat_game()
+    free = put_in_play(game, personality("free"))
+    put_in_play(game, personality("laden"))
+    attached(game, _weapon("katana"), "laden")
+
+    assert creation_targets(game, P1, _weapon_print()) == (free,)
+
+
+def test_a_created_weapon_cannot_join_a_two_handed_one_even_for_a_kensai():
+    """The Kensai's second slot is open, and Two-Handed exclusivity closes it anyway (CR,
+    Two-Handed) — the branch a one-Weapon limit alone would never reach."""
+    game = two_seat_game()
+    kensai = put_in_play(game, personality("kensai", keywords=("Kensai",)))
+    attached(game, _weapon("no_dachi", two_handed=True), "kensai")
+
+    assert effective_weapon_limit(game, kensai) == 2
+    assert creation_targets(game, P1, _weapon_print()) == ()
+
+
+def test_a_created_follower_is_not_held_back_by_a_weapon():
+    """A Follower answers to neither Weapon rule, however full the Personality's hands are."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    attached(game, _weapon("katana"), "hero")
+    ashigaru = AttachmentPrint(
+        name="Ashigaru",
+        side=Side.FATE,
+        printed_id="ashigaru_2",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=1,
+    )
+
+    assert creation_targets(game, P1, ashigaru) == (hero,)
+
+
+def test_a_creation_only_reaches_its_own_seats_personalities():
+    game = two_seat_game()
+    mine = put_in_play(game, personality("mine"))
+    put_in_play(game, personality("theirs", owner=PlayerId.P2))
+
+    assert creation_targets(game, P1, _weapon_print()) == (mine,)
 
 
 def test_an_effect_can_raise_the_limit_like_any_other_characteristic():

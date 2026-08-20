@@ -31,6 +31,7 @@ yasuki_core.engine.rules.abilities
     no_effects
     one_wealth
     owned_holdings
+    owned_personalities
     plus_one_gp_this_turn
     production_boost_for
     register_ability

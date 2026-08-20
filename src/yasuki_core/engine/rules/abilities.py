@@ -20,7 +20,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
 
 # A cost is the effects paid to activate an ability, applied before the ability's own effects. Bow /
 # destroy / spend-a-token are all just effects targeting a card, so costs and effects share one
@@ -248,6 +248,16 @@ def activatable(
         if ability.targets(game, card):
             ready.append(card)
     return ready
+
+
+def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]:
+    """The Personalities ``owner`` has in play — the pool almost every "your target Personality"
+    starts from, before the card's own condition narrows it."""
+    return tuple(
+        card
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, PersonalityPrint) and card.owner is owner
+    )
 
 
 def owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[L5RCard]:
