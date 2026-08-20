@@ -7,7 +7,6 @@ from yasuki_core.engine.rules.abilities import (
     itself,
     may_remain_bowed,
     no_cost,
-    one_wealth,
     owned_holdings,
     register_ability,
     register_invest,
@@ -28,6 +27,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.legality import seat_alignment_name
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.events import EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
@@ -100,7 +100,23 @@ register_ability(
 
 # --- Courts of Otosan Uchi ---
 
-register_invest("courts_of_otosan_uchi", InvestAbility(minimum=2, maximum=2, effect=one_wealth))
+COURTIER = "courtier_personality_0_2_2"
+
+
+def _courts_of_otosan_uchi_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
+    """A Wealth token and a Courtier who joins the Clan the Holding's controller plays."""
+    return [
+        AdjustCounter(source.id, WEALTH, 1),
+        CreateToken(
+            COURTIER, source.owner, source.id, clan=seat_alignment_name(game, source.owner)
+        ),
+    ]
+
+
+register_invest(
+    "courts_of_otosan_uchi",
+    InvestAbility(minimum=2, maximum=2, effect=_courts_of_otosan_uchi_invest),
+)
 
 
 # --- Culling Grounds ---

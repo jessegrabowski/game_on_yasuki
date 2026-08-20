@@ -1,9 +1,10 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility, Pass
+from yasuki_core.engine.rules.actions import ActivateAbility, Pass, Recruit
 from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     CAVALRY_FOLLOWER,
+    COURTIER,
     EXPENDABLE_SERVANT,
     LION_ANCESTOR,
 )
@@ -13,14 +14,19 @@ from yasuki_core.engine.rules.economy import effective_chi, effective_force
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.effects import Straighten
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
+from yasuki_core.engine.rules.legality import card_alignments, seat_alignment
 from yasuki_core.engine.rules.log import replay
+from yasuki_core import ruleset
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import (
+    stronghold,
+    end_phase,
     end_turn,
     holding,
     personality,
@@ -172,6 +178,100 @@ def test_it_cannot_be_backed_out_of_once_the_opponent_has_been_given_something()
     assert _honor(session, P2) == 1  # still theirs
     assert _hand(session, P2) == [drawn]
     assert isinstance(session.game.pending, Confirm)  # and the question is still owed
+
+
+# --- Courts of Otosan Uchi ---
+
+
+def _courts_game(*, clan: str | None = "Lion"):
+    """The Courts face-up in a Province with the Invest affordable, under a Stronghold of ``clan``."""
+    state = TableState.empty_two_seat()
+    token_template(
+        state,
+        COURTIER,
+        name="Courtier",
+        card_type="Personality",
+        keywords=("Courtier",),
+        force=0,
+        chi=2,
+    )
+    put_in_play(state, stronghold(P1, gold_production=8, clan=clan))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    courts = register(
+        state, holding("courts", printed_id="courts_of_otosan_uchi", gold_cost=1, name="Courts")
+    )
+    courts.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(courts)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+    return session
+
+
+def _courtier_of(session):
+    return next(card for card in session.game.table.battlefield.cards if card.is_token)
+
+
+def test_the_courts_invest_buys_a_wealth_token_and_a_courtier():
+    session = _courts_game()
+
+    session.act(P1, Recruit("courts", invest=True))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    courtier = _courtier_of(session)
+    assert courtier.name == "Courtier"
+    assert game.table.cards_by_id["courts"].counters == {"wealth": 1}
+
+
+def test_the_courtier_joins_the_clan_his_patron_plays():
+    """ "With your Clan Alignment" — he is a Lion because his patron is, not because the token says
+    so; the template carries no clan at all."""
+    session = _courts_game(clan="Lion")
+
+    session.act(P1, Recruit("courts", invest=True))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    courtier = _courtier_of(session)
+    assert courtier.clan == "Lion"
+    assert seat_alignment(session.game, P1) == ruleset.LION
+    assert card_alignments(courtier) == {ruleset.LION}
+
+
+def test_an_unaligned_patron_has_no_alignment_to_give():
+    """A Stronghold whose clan is no alignment in this arc grants none, and the Courtier arrives as
+    the template printed him."""
+    session = _courts_game(clan="Ninja")
+
+    session.act(P1, Recruit("courts", invest=True))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    courtier = _courtier_of(session)
+    assert courtier.clan is None
+    assert card_alignments(courtier) == set()
+
+
+def test_the_courts_invest_replays_to_the_same_board():
+    """The Courtier's id is minted as it is created, so a tape that replayed to a differently named
+    board would not resolve the ids its own log carries."""
+    session = _courts_game()
+    session.act(P1, Recruit("courts", invest=True))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert replay(session.log).table == session.game.table
+
+
+def test_recruiting_the_courts_without_investing_buys_neither():
+    session = _courts_game()
+
+    session.act(P1, Recruit("courts"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    assert game.table.cards_by_id["courts"].counters == {}
+    assert not [card for card in game.table.battlefield.cards if card.is_token]
 
 
 # --- Culling Grounds ---

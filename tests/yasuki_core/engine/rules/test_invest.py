@@ -124,12 +124,15 @@ def test_cancelling_the_invest_amount_leaves_the_holding_in_its_province():
     assert restored.replay() == session.game  # the cancelled Invest choice replays
 
 
-def test_training_court_and_courts_each_invest_for_one_token():
-    for holding_id, printed_id in [("tc", "training_court"), ("co", "courts_of_otosan_uchi")]:
-        session = _invest_game(holding_id, printed_id, gold_cost=1)
-        session.act(PlayerId.P1, Recruit(holding_id, invest=True))
-        session.submit(PlayerId.P1, DecisionResponse(("SH",)))
-        assert session.game.table.cards_by_id[holding_id].counters == {"wealth": 1}
+def test_training_court_invests_for_one_token():
+    # Courts of Otosan Uchi pays the same Invest for the same token and a Courtier besides, so it is
+    # tested with the card rather than here, where the fixture loads no token templates.
+    session = _invest_game("tc", "training_court", gold_cost=1)
+
+    session.act(PlayerId.P1, Recruit("tc", invest=True))
+    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+
+    assert session.game.table.cards_by_id["tc"].counters == {"wealth": 1}
 
 
 def test_fixed_invest_recruit_replays_and_round_trips():
