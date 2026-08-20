@@ -39,23 +39,32 @@ class Ruleset:
         return slug if slug in self.clan_alignments else None
 
 
+# The clans the engine names, as canonical :func:`normalize_clan` slugs. A clan is card text like a
+# keyword is, so it is spelled once here rather than at each call site — and here rather than beside
+# the keywords because which of these count as Clan Alignments is arc config, and a ruleset below
+# builds its set from these names so the two cannot drift.
+AKASHA = "akasha"
+CRAB = "crab"
+CRANE = "crane"
+DRAGON = "dragon"
+LION = "lion"
+MANTIS = "mantis"
+# Naga is a clan a card can carry but not an alignment of its own: it resolves to Akasha below.
+NAGA = "naga"
+PHOENIX = "phoenix"
+SCORPION = "scorpion"
+SPIDER = "spider"
+UNICORN = "unicorn"
+
 # Onyx Edition / Shattered Empire: the ten legal Clan Alignments the rulebook enumerates. Naga is the
 # same alignment as Akasha and resolves to it. Every other clan name a card carries -- minor clans,
 # Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
 SHATTERED_EMPIRE = Ruleset(
     clan_alignments=frozenset(
-        {
-            "akasha",
-            "crab",
-            "crane",
-            "dragon",
-            "lion",
-            "mantis",
-            "phoenix",
-            "scorpion",
-            "spider",
-            "unicorn",
-        }
+        {AKASHA, CRAB, CRANE, DRAGON, LION, MANTIS, PHOENIX, SCORPION, SPIDER, UNICORN}
     ),
-    clan_aliases={"naga": "akasha"},
+    clan_aliases={NAGA: AKASHA},
 )
+
+# The ruleset the engine plays under. Named once so no module decides for itself which arc is live.
+ACTIVE = SHATTERED_EMPIRE

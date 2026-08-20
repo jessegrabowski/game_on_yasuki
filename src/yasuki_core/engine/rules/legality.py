@@ -29,7 +29,7 @@ from yasuki_core.engine.rules import abilities
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.ruleset import SHATTERED_EMPIRE
+from yasuki_core import ruleset
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     HoldingPrint,
@@ -42,7 +42,7 @@ from yasuki_core.game_pieces.prints import (
 KHARMIC_COST = 2
 
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
-RULESET = SHATTERED_EMPIRE
+RULESET = ruleset.ACTIVE
 OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
 
 

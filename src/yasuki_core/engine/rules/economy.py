@@ -1,6 +1,7 @@
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import attachments_of, granted_stat
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
@@ -303,5 +304,13 @@ def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
 
 
 def is_clan(me: PlayerState, clan: str) -> bool:
-    """Whether ``me`` is playing ``clan``, read from the stronghold."""
-    return me.stronghold is not None and me.stronghold.clan == clan
+    """Whether ``me`` is playing ``clan``, read from the stronghold.
+
+    Compared as Clan Alignments rather than as strings: a stronghold printed "Lion Clan" answers to
+    Lion, and the arc's equal alignments answer to each other (a Naga stronghold is an Akasha
+    player). A clan that is no alignment in this arc matches nothing, including itself.
+    """
+    if me.stronghold is None or me.stronghold.clan is None:
+        return False
+    alignment = ruleset.ACTIVE.alignment(clan)
+    return alignment is not None and ruleset.ACTIVE.alignment(me.stronghold.clan) == alignment

@@ -1,3 +1,4 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.rules.abilities import Ability, register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.economy import PlayerState, is_clan, recruit_discount
@@ -16,7 +17,7 @@ ASHIGARU_COST = 3
 @recruit_discount("colonial_farm")
 def _colonial_farm(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
     """Enters play for 1 less Gold if you are a Lion Clan player."""
-    return 1 if is_clan(me, "Lion") else 0
+    return 1 if is_clan(me, ruleset.LION) else 0
 
 
 def _colonial_farm_cost(game: GameState, source: L5RCard) -> list[Effect]:

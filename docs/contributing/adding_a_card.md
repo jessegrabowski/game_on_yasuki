@@ -43,7 +43,7 @@ only thing specific to the card, so the whole implementation is the condition:
 @recruit_discount("colonial_farm")
 def _colonial_farm(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
     """Enters play for 1 less Gold if you are a Lion Clan player."""
-    return 1 if is_clan(me, "Lion") else 0
+    return 1 if is_clan(me, ruleset.LION) else 0
 ```
 
 `is_clan` is shared, in `economy.py`. Look there before writing a predicate — most clan and keyword

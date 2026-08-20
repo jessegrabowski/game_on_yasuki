@@ -1,3 +1,4 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
@@ -34,7 +35,7 @@ from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 @recruit_discount("fantastic_gardens")
 def _fantastic_gardens(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
     """Enters play for 2 less Gold if you are a Crane Clan player."""
-    return 2 if is_clan(me, "Crane") else 0
+    return 2 if is_clan(me, ruleset.CRANE) else 0
 
 
 # --- Imperial Gift ---

@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import owned_holdings
 from yasuki_core.engine.rules.economy import (
@@ -11,6 +12,7 @@ from yasuki_core.engine.rules.economy import (
     gold_handler,
     keyword_grant,
     opposing_states,
+    is_clan,
     player_state,
     recruit_discount,
 )
@@ -39,6 +41,41 @@ def test_player_state_exposes_stronghold_holdings_gold_and_honor():
     assert me.holdings == (market,)
     assert me.gold == 3 and me.honor == 12
     assert set(me.in_play) == {sh, market}
+
+
+@pytest.mark.parametrize(
+    "printed, asked, expected",
+    [
+        ("Lion", ruleset.LION, True),
+        ("Lion Clan", ruleset.LION, True),
+        ("Naga", ruleset.AKASHA, True),
+        ("Akasha", ruleset.NAGA, True),
+        ("Lion", ruleset.CRANE, False),
+        ("Fox", "fox", False),
+    ],
+    ids=[
+        "plain",
+        "spelled-in-full",
+        "naga-is-akasha",
+        "akasha-is-naga",
+        "other-clan",
+        "no-alignment",
+    ],
+)
+def test_is_clan_compares_alignments_rather_than_strings(printed, asked, expected):
+    # Two cards print their clan as "Lion Clan" where 555 print "Lion", and the arc holds Naga and
+    # Akasha to be one alignment. A string comparison would read all three as different clans, and
+    # a discount keyed on one would quietly never apply.
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, clan=printed))
+
+    assert is_clan(player_state(game, PlayerId.P1), asked) is expected
+
+
+def test_a_seat_with_no_stronghold_plays_no_clan():
+    game = two_seat_game()
+
+    assert is_clan(player_state(game, PlayerId.P1), ruleset.LION) is False
 
 
 def test_went_second_is_true_only_for_the_non_first_player():
