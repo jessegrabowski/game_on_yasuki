@@ -78,6 +78,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.payments import payment_request
 from yasuki_core.engine.rules import abilities, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
@@ -374,23 +375,8 @@ def announce_rulebook_cost(
     A rulebook ability charges the player rather than pricing a card, so the payment carries no
     target and every producer is quoted at what it makes for nobody in particular.
     """
-    producers = gold_producers(game, seat)
     game.stack.append(ApplyEffects(effects))
-    return ChoosePayment(
-        seat=seat,
-        candidates=tuple(producer.id for producer in producers),
-        amount=amount,
-        available=game.gold[seat],
-        produced=tuple(
-            (producer.id, effective_gold_production(game, producer)) for producer in producers
-        ),
-        label=label,
-        boostable=tuple(
-            (producer.id, boost.amount)
-            for producer in producers
-            if (boost := abilities.production_boost_for(producer)) is not None
-        ),
-    )
+    return payment_request(game, seat, amount, label)
 
 
 def _apply_invest_amount(

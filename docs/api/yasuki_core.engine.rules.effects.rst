@@ -26,6 +26,7 @@ yasuki_core.engine.rules.effects
     InterruptingEffect
     MoveToDeck
     MoveToHand
+    PayGold
     PlaceInProvince
     RecruitCard
     RefillProvince

@@ -397,6 +397,45 @@ class CreateToken(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class PayGold(InterruptingEffect):
+    """Pay gold, bowing producers to raise what the seat's pool does not already cover.
+
+    The cost a card charges in Gold, as opposed to the Gold a Recruit charges for the card itself:
+    both raise the same payment, and this one carries no card being paid for. It pauses the cascade
+    for the seat to pick which producers to bow, so it resolves before whatever an ability's text
+    sequences behind it.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat being charged.
+    amount : int
+        The gold to raise.
+    label : str
+        What the payment is for, shown in the prompt.
+    """
+
+    seat: PlayerId
+    amount: int
+    label: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} pays {self.amount} gold for {self.label}"
+
+    # Imported where they are used: pricing a payment reads the production-boost registry, whose
+    # module imports this one.
+    def is_payable(self, game: GameState) -> bool:
+        from yasuki_core.engine.rules.payments import can_raise
+
+        return can_raise(game, self.seat, self.amount)
+
+    def request(self, game: GameState) -> DecisionRequest:
+        from yasuki_core.engine.rules.payments import payment_request
+
+        return payment_request(game, self.seat, self.amount, self.label)
+
+
+@dataclass(frozen=True, slots=True)
 class Bow(Effect):
     """Bow a card."""
 

@@ -49,6 +49,7 @@ deferred through `Then` instead.
    InterruptingEffect
    MoveToDeck
    MoveToHand
+   PayGold
    PlaceInProvince
    RecruitCard
    RefillProvince
