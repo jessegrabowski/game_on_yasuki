@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import Cause, PlayerId
@@ -405,16 +405,26 @@ class CreateToken(Effect):
     attach_to : str or None
         The Personality it arrives attached to, or None to arrive on its own. A card that names a
         target Personality creates nothing when that Personality has left play in the meantime.
+    stats : tuple of (Stat, int)
+        Stats the creating card fixes, which the template prints as variable — Mishime Sensei's Oni
+        has "Force equal to the target's Chi", and the token print carries a ``*`` there. Each pair
+        replaces that stat on the print the created card presents, so the card genuinely has the
+        number rather than carrying a modifier over a printed zero. Default none, for a template
+        whose whole stat line is printed.
     """
 
     token_id: str
     owner: PlayerId
     creator_id: str
     attach_to: str | None = None
+    stats: tuple[tuple[Stat, int], ...] = ()
 
     def describe(self) -> str:
+        stats = ", ".join(f"{stat.name} {value}" for stat, value in self.stats)
         where = "" if self.attach_to is None else f" on {self.attach_to}"
-        return f"{self.owner.name} creates {self.token_id}{where}"
+        return f"{self.owner.name} creates {self.token_id}{where}" + (
+            f" with {stats}" if stats else ""
+        )
 
     def perform(self, game: GameState) -> list[GameEvent]:
         personality = None
@@ -425,6 +435,8 @@ class CreateToken(Effect):
         # A KeyError here is a deck that reached the table without its token templates, not a card
         # doing something unusual — the load resolves every token the deck's cards can create.
         printed = game.table.creatable_tokens[self.token_id]
+        if self.stats:
+            printed = replace(printed, **{stat.value: value for stat, value in self.stats})
         card = ops.spawn_token(
             game.table, game.mint_token_id(), printed, UNPLACED_BOARD_POS, self.owner
         )
