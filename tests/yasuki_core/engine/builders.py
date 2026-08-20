@@ -42,9 +42,11 @@ def personality(
     *,
     owner: PlayerId = PlayerId.P1,
     name: str | None = None,
+    printed_id: str | None = None,
     force: int = 2,
     chi: int = 3,
     personal_honor: int = 0,
+    gold_cost: int | None = None,
     keywords: tuple[str, ...] = (),
 ) -> L5RCard:
     """A Personality. ``chi`` defaults live because a Personality at zero Chi is destroyed on sight
@@ -55,9 +57,11 @@ def personality(
         name=name or card_id,
         side=Side.DYNASTY,
         owner=owner,
+        printed_id=printed_id,
         force=force,
         chi=chi,
         personal_honor=personal_honor,
+        gold_cost=gold_cost,
         keywords=keywords,
     )
 
