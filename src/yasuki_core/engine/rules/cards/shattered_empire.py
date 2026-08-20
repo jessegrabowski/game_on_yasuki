@@ -1,9 +1,28 @@
-from yasuki_core.engine.rules.abilities import Ability, bow_cost, register_ability
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    InvestAbility,
+    bow_cost,
+    register_ability,
+    register_invest,
+)
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import CreateToken, Effect
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
+
+
+# --- Hida Sanjiro ---
+
+SANJIROS_ARMOR = "armor_item_plus2f"
+
+
+def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
+    """A +2F Armor Item, made and worn as he arrives."""
+    return [CreateToken(SANJIROS_ARMOR, source.owner, source.id, attach_to=source.id)]
+
+
+register_invest("hida_sanjiro", InvestAbility(minimum=2, maximum=2, effect=_hida_sanjiro_invest))
 
 
 # --- Weapon Artist ---

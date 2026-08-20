@@ -1,21 +1,26 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility
+from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.economy import effective_force
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.log import replay
-from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD
+from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.game_pieces.constants import Side
 
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
     holding,
+    end_phase,
     personality,
     put_in_play,
+    register,
+    stronghold,
     token_template,
     two_seat_game,
 )
@@ -126,3 +131,52 @@ def test_weapon_artist_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("hero",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Hida Sanjiro ---
+
+
+def _sanjiro_game():
+    """A Dynasty phase with Sanjiro face-up in a Province and gold enough for his Invest."""
+    state = TableState.empty_two_seat()
+    token_template(
+        state, SANJIROS_ARMOR, name="Armor", card_type="Item", keywords=("Armor",), force=2
+    )
+    put_in_play(state, stronghold(P1, gold_production=8))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    sanjiro = register(
+        state, personality("sanjiro", force=4, chi=2, printed_id="hida_sanjiro", gold_cost=6)
+    )
+    sanjiro.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(sanjiro)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+    return session
+
+
+def test_hida_sanjiro_invests_in_his_own_armour():
+    """The Invest resolves as he arrives, so the Armor is on him the moment he is in play."""
+    session = _sanjiro_game()
+
+    session.act(P1, Recruit("sanjiro", invest=True))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    sanjiro = game.table.cards_by_id["sanjiro"]
+    armour = attachments_of(game, sanjiro)[0]
+    assert armour.name == "Armor"
+    assert armour.is_token is True
+    assert effective_force(game, sanjiro) == 6  # 4 printed, +2 worn
+
+
+def test_hida_sanjiro_recruited_plainly_wears_nothing():
+    """The Armor is the Invest's payoff, not part of him arriving."""
+    session = _sanjiro_game()
+
+    session.act(P1, Recruit("sanjiro"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert attachments_of(session.game, session.game.table.cards_by_id["sanjiro"]) == ()
