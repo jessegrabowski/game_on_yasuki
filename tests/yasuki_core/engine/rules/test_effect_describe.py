@@ -82,17 +82,17 @@ EFFECTS = [
     ),
     (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
     (AttachCard("katana", "hero"), "attach katana to hero"),
+    (CreateToken("ashigaru_2", PlayerId.P1, "farm_1"), "P1 creates ashigaru_2"),
+    (
+        CreateToken("ashigaru_2", PlayerId.P1, "farm_1", attach_to="hero"),
+        "P1 creates ashigaru_2 on hero",
+    ),
     (
         CreateToken("oni", PlayerId.P2, "mishime", stats=((Stat.FORCE, 4),)),
         "P2 creates oni with FORCE 4",
     ),
     (Banish("oni"), "banish oni"),
     (PayGold(PlayerId.P2, 3, "Colonial Farm"), "P2 pays 3 gold for Colonial Farm"),
-    (CreateToken("ashigaru_2", PlayerId.P1, "farm_1"), "P1 creates ashigaru_2"),
-    (
-        CreateToken("ashigaru_2", PlayerId.P1, "farm_1", attach_to="hero"),
-        "P1 creates ashigaru_2 on hero",
-    ),
     (
         Unpayable("katana is attached to no Personality"),
         "unpayable: katana is attached to no Personality",
