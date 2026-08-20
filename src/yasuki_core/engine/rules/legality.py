@@ -481,6 +481,17 @@ def card_alignments(card: L5RCard) -> set[str]:
     return {slug for name in _clan_names(card) if (slug := RULESET.alignment(name)) is not None}
 
 
+def seat_alignment_name(game: GameState, seat: PlayerId | None) -> str | None:
+    """The clan a card created "with your Clan Alignment" takes: the name printed on ``seat``'s
+    Stronghold, or None when that clan is no legal alignment — an unaligned seat has none to give.
+
+    The printed name rather than :func:`seat_alignment`'s slug, because the created card carries it
+    the way any card carries its clan.
+    """
+    clan = seat_clan(game, seat)
+    return clan if clan is not None and RULESET.alignment(clan) is not None else None
+
+
 def _clan_names(card: L5RCard) -> tuple[str, ...]:
     """The card's printed clan names: its :attr:`clans` list, or the lone ``clan`` when that is
     empty."""

@@ -1,5 +1,5 @@
 import inspect
-from dataclasses import FrozenInstanceError, dataclass
+from dataclasses import FrozenInstanceError, dataclass, replace
 
 import pytest
 
@@ -187,6 +187,34 @@ def _token_game():
         force=2,
     )
     return game
+
+
+def test_a_clan_stamped_on_one_creation_does_not_follow_the_template():
+    """The template is shared by every card that creates from it and by both seats, so a stamped
+    clan has to land on a copy. Mutating it in place would hand the next creation the last
+    controller's clan."""
+    game = _token_game()
+
+    CreateToken("scout", PlayerId.P1, "maker", clan="Lion").perform(game)
+    CreateToken("scout", PlayerId.P2, "maker", clan="Crab").perform(game)
+
+    lion, crab = (card for card in game.table.battlefield.cards if card.is_token)
+    assert (lion.clan, crab.clan) == ("Lion", "Crab")
+    assert game.table.creatable_tokens["scout"].clan is None  # the template is untouched
+
+
+def test_a_creation_takes_the_clan_on_both_the_name_and_the_list():
+    """A reader of a card's clans takes the list when it has one, so stamping only the singular
+    would leave the card aligned to whatever the template printed."""
+    game = _token_game()
+    game.table.creatable_tokens["ninja"] = replace(
+        game.table.creatable_tokens["scout"], printed_id="ninja", clan="Ninja", clans=("Ninja",)
+    )
+
+    CreateToken("ninja", PlayerId.P1, "maker", clan="Crane").perform(game)
+
+    made = next(card for card in game.table.battlefield.cards if card.is_token)
+    assert (made.clan, made.clans) == ("Crane", ("Crane",))
 
 
 def test_creating_onto_a_personality_who_has_left_play_creates_nothing():

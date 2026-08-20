@@ -91,6 +91,14 @@ EFFECTS = [
         CreateToken("oni", PlayerId.P2, "mishime", stats=((Stat.FORCE, 4),)),
         "P2 creates oni with FORCE 4",
     ),
+    (
+        CreateToken("courtier", PlayerId.P1, "courts", clan="Lion"),
+        "P1 creates courtier with Lion",
+    ),
+    (
+        CreateToken("oni", PlayerId.P2, "mishime", clan="Crab", stats=((Stat.FORCE, 4),)),
+        "P2 creates oni with Crab, FORCE 4",
+    ),
     (Banish("oni"), "banish oni"),
     (PayGold(PlayerId.P2, 3, "Colonial Farm"), "P2 pays 3 gold for Colonial Farm"),
     (

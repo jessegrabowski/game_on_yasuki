@@ -412,6 +412,10 @@ class CreateToken(Effect):
         replaces that stat on the print the created card presents, so the card genuinely has the
         number rather than carrying a modifier over a printed zero. Default none, for a template
         whose whole stat line is printed.
+    clan : str or None
+        The clan the created card carries, for the "with your Clan Alignment" a card grants its
+        creation. None leaves the template's own printed clan alone, which is what an unaligned
+        controller has to give. Default None.
     banish_at_turn_end : bool
         Whether the created card is banished before the turn ends. A creation the card lends the
         player for a turn ("banish it unless you destroyed the target") is recorded as it is made,
@@ -423,14 +427,15 @@ class CreateToken(Effect):
     creator_id: str
     attach_to: str | None = None
     stats: tuple[tuple[Stat, int], ...] = ()
+    clan: str | None = None
     banish_at_turn_end: bool = False
 
     def describe(self) -> str:
-        stats = ", ".join(f"{stat.name} {value}" for stat, value in self.stats)
+        fixed = [self.clan] if self.clan else []
+        fixed += [f"{stat.name} {value}" for stat, value in self.stats]
         where = "" if self.attach_to is None else f" on {self.attach_to}"
-        return f"{self.owner.name} creates {self.token_id}{where}" + (
-            f" with {stats}" if stats else ""
-        )
+        given = f" with {', '.join(fixed)}" if fixed else ""
+        return f"{self.owner.name} creates {self.token_id}{where}{given}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         personality = None
@@ -443,6 +448,10 @@ class CreateToken(Effect):
         printed = game.table.creatable_tokens[self.token_id]
         if self.stats:
             printed = replace(printed, **{stat.value: value for stat, value in self.stats})
+        if self.clan is not None:
+            # Both fields: a reader of a card's clans takes the list when it has one, so leaving it
+            # behind would keep the template aligned to whatever it was printed as.
+            printed = replace(printed, clan=self.clan, clans=(self.clan,))
         card = ops.spawn_token(
             game.table, game.mint_token_id(), printed, UNPLACED_BOARD_POS, self.owner
         )

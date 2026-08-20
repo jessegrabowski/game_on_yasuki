@@ -34,6 +34,7 @@ yasuki_core.engine.rules.legality
     reachable_gold
     recruit_cost
     seat_alignment
+    seat_alignment_name
     seat_clan
     timing_of
 
