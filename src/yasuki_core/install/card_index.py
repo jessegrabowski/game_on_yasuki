@@ -14,6 +14,7 @@ class SetEntry(NamedTuple):
     set_name: str
     card_id: str
     title: str
+    keywords: tuple[str, ...]
 
 
 def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
@@ -54,7 +55,8 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
             card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
             if entry.get("is_back"):
                 card_id += "__back"
-            yield SetEntry(yaml_file, data["set"], card_id, title)
+            keywords = tuple(entry.get("keywords") or ())
+            yield SetEntry(yaml_file, data["set"], card_id, title, keywords)
 
 
 def card_ids(cards_dir: Path) -> list[str]:

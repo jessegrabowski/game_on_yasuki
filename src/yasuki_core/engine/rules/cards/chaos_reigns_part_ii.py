@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.triggers import (
     on,
     once_per_turn,
 )
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.prints import HoldingPrint
@@ -22,7 +23,7 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 
 
 def _owned_farms(game: GameState, card: L5RCard) -> list[str]:
-    return [farm.id for farm in owned_holdings(game, card.owner, "Farm")]
+    return [farm.id for farm in owned_holdings(game, card.owner, keywords.FARM)]
 
 
 def _millet_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -85,7 +86,7 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
         if card.owner is ctx.card.owner
         and card is not ctx.card
         and isinstance(card.printed, HoldingPrint)
-        and "Farm" in effective_keywords(ctx.game, card)
+        and keywords.FARM in effective_keywords(ctx.game, card)
     )
     if not others:
         return []

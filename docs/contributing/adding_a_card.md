@@ -113,7 +113,7 @@ Effects returned inline run before the events already queued behind them. When a
 ```python
 question = f"Destroy {source.name} to straighten {target.name}?"
 return [
-    RecruitCard(target.id, renew="Farm" in target.keywords),
+    RecruitCard(target.id, renew=keywords.FARM in target.keywords),
     Then(
         (
             Ask(
@@ -168,7 +168,7 @@ exclusivity — live in `equip.py` as code. A restriction only one card states l
 def _brothers_in_arms_attaches_only_to_a_samurai(
     game: GameState, personality: L5RCard, card: L5RCard
 ) -> bool:
-    return SAMURAI_KEYWORD in effective_keywords(game, personality)
+    return keywords.SAMURAI in effective_keywords(game, personality)
 ```
 
 Two things an attachment gets for free, so do not write handlers for them: a card leaving play takes

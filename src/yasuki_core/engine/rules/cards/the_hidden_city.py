@@ -6,20 +6,19 @@ from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 
 
 # --- Brothers in Arms ---
 
-SAMURAI_KEYWORD = "Samurai"
-
 
 @attach_restriction("brothers_in_arms")
 def _brothers_in_arms_attaches_only_to_a_samurai(
     game: GameState, personality: L5RCard, card: L5RCard
 ) -> bool:
-    return SAMURAI_KEYWORD in effective_keywords(game, personality)
+    return keywords.SAMURAI in effective_keywords(game, personality)
 
 
 def _brothers_in_arms_copies(game: GameState, seat: PlayerId) -> tuple[str, ...]:

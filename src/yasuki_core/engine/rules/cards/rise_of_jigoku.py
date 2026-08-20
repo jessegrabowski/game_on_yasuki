@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on, province_holdings
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
@@ -41,7 +42,7 @@ from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
 
 def _other_farms(game: GameState, card: L5RCard) -> list[str]:
-    return [farm.id for farm in owned_holdings(game, card.owner, "Farm") if farm is not card]
+    return [farm.id for farm in owned_holdings(game, card.owner, keywords.FARM) if farm is not card]
 
 
 register_ability(
@@ -179,7 +180,7 @@ def _modest_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> l
     offer is deferred so it follows the recruit and anything the recruited card's entry causes."""
     question = f"Destroy {source.name} to straighten {target.name}?"
     return [
-        RecruitCard(target.id, renew="Farm" in target.keywords),
+        RecruitCard(target.id, renew=keywords.FARM in target.keywords),
         Then(
             (
                 Ask(
@@ -223,7 +224,7 @@ def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
     destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
     if destroyed is None or destroyed.owner is not ctx.card.owner:
         return []
-    if "Farm" not in effective_keywords(ctx.game, destroyed):
+    if keywords.FARM not in effective_keywords(ctx.game, destroyed):
         return []
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
 
@@ -231,7 +232,7 @@ def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
 def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
     # "Not produced Gold this turn" is satisfied for any bowed Farm: production only happens in the
     # Dynasty phase, after this Open ability's Action-phase window.
-    return [farm.id for farm in owned_holdings(game, card.owner, "Farm") if farm.bowed]
+    return [farm.id for farm in owned_holdings(game, card.owner, keywords.FARM) if farm.bowed]
 
 
 def _rural_market_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

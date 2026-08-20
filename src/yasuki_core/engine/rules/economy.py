@@ -5,6 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import attachments_of, granted_stat
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import counter_from_key
 from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint
@@ -91,11 +92,6 @@ def _on_battlefield(game: GameState, card_id: str) -> bool:
 _SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
 
 
-# A Kensai Personality may attach two Weapons rather than one (CR, Kensai), which is a larger limit
-# rather than an exemption — Two-Handed still binds him, and that rule is checked separately.
-KENSAI_KEYWORD = "Kensai"
-
-
 def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
     """The Senseis ``seat`` has in play. A Sensei bows and acts on its own (CR, Sensei), so it is a
     modifier source beside the Stronghold rather than part of it."""
@@ -126,7 +122,9 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
         amount = getattr(attached, printed_modifier, 0) + granted_stat(game, attached, card, stat)
         if amount:
             yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
-    if stat is Stat.WEAPON_LIMIT and KENSAI_KEYWORD in effective_keywords(game, card):
+    # Kensai raises the limit rather than exempting him from it: Two-Handed still binds a
+    # Kensai, and that rule is checked separately.
+    if stat is Stat.WEAPON_LIMIT and keywords.KENSAI in effective_keywords(game, card):
         yield Modifier(card.id, card.id, stat, 1, Duration.WHILE_SOURCE_IN_PLAY)
     if stat in _SENSEI_GRANTED_STATS and isinstance(card.printed, StrongholdPrint):
         for sensei in _senseis_of(game, card.owner):

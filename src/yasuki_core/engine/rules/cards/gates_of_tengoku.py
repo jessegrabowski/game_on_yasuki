@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.effects import AdjustCounter, Effect
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import sincerity_seed_targets
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 
@@ -27,7 +28,7 @@ def _shrine_of_courtesy_keywords(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
 ) -> tuple[str, ...]:
     """The same Courtesy clause grants Legacy, so a second player can search this Holding out."""
-    return ("Legacy",) if me.went_second else ()
+    return (keywords.LEGACY,) if me.went_second else ()
 
 
 # --- Shrine of Sincerity ---
@@ -41,7 +42,7 @@ def _shrine_of_sincerity(
     bonus = (
         1
         if any(
-            "Sincerity" in target.keywords and target.counters.get(SINCERITY.key, 0) > 0
+            keywords.SINCERITY in target.keywords and target.counters.get(SINCERITY.key, 0) > 0
             for target in targets
         )
         else 0

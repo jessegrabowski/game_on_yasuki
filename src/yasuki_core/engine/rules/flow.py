@@ -3,6 +3,7 @@ from dataclasses import replace
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.actions import (
@@ -93,10 +94,6 @@ from yasuki_core.engine.rules.events import (
 )
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint, WindPrint
-
-# The keyword that refills a card's vacated Province face-up when it enters play (rather than the
-# usual face-down), so the next card is recruitable the same turn.
-RENEW_KEYWORD = "Renew"
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -588,7 +585,7 @@ def _resolve_recruit(
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     if province_key is not None:
         # Renew is read once the card has entered play, which is when the keyword speaks.
-        renews = renew or RENEW_KEYWORD in effective_keywords(game, card)
+        renews = renew or keywords.RENEW in effective_keywords(game, card)
         _defer_refill(game, province_key, face_up=renews)
     # A card reaching the battlefield can make the board illegal, and the board is made legal
     # before anything is told the card arrived — a trigger that reads a state the rules say cannot
@@ -690,7 +687,7 @@ def kharmic_refill(game: GameState, card_id: str) -> None:
 def _announce_kharmic(game: GameState, seat: PlayerId, effects: tuple[Effect, ...]) -> None:
     """Pause for the gold cost both Kharmic forms share, queueing ``effects`` behind it. Repeatable,
     so no once-per-turn key is claimed."""
-    game.pending = announce_rulebook_cost(game, seat, KHARMIC_COST, "Kharmic", effects)
+    game.pending = announce_rulebook_cost(game, seat, KHARMIC_COST, keywords.KHARMIC, effects)
 
 
 def _reveal_search_pool(game: GameState, seat: PlayerId) -> None:
@@ -856,7 +853,7 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
         for key, zone in game.table.zones.items()
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
-        if card.face_up and triggers.SINCERITY_KEYWORD in effective_keywords(game, card)
+        if card.face_up and keywords.SINCERITY in effective_keywords(game, card)
     ]
     triggers.resolve_effects(game, grants)
 

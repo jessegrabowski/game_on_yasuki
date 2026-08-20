@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter, SINCERITY
 from yasuki_core.game_pieces.prints import HoldingPrint
@@ -31,9 +32,6 @@ _MAX_CASCADE = 1000
 # assertion. A deque of this size holds several cycles of any loop a human would need to read.
 _TRACE_LIMIT = 60
 _trace: collections.deque[str] = collections.deque(maxlen=_TRACE_LIMIT)
-
-# The keyword whose cards accrue and receive seeded Sincerity tokens.
-SINCERITY_KEYWORD = "Sincerity"
 
 
 @dataclass(frozen=True, slots=True)
@@ -312,7 +310,7 @@ def sincerity_seed_targets(game: GameState, seat: PlayerId) -> list[str]:
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
         if card.face_up
-        and SINCERITY_KEYWORD in effective_keywords(game, card)
+        and keywords.SINCERITY in effective_keywords(game, card)
         and card.counters.get(SINCERITY.key, 0) == 0
     ]
 

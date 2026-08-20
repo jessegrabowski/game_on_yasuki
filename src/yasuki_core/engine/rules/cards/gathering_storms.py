@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 
@@ -42,7 +43,7 @@ def _ancestral_estate(
 
 
 def _owned_ports(game: GameState, card: L5RCard) -> list[str]:
-    return [port.id for port in owned_holdings(game, card.owner, "Port")]
+    return [port.id for port in owned_holdings(game, card.owner, keywords.PORT)]
 
 
 register_ability(
@@ -61,7 +62,7 @@ register_ability(
 
 
 def _owned_markets(game: GameState, card: L5RCard) -> list[str]:
-    return [market.id for market in owned_holdings(game, card.owner, "Market")]
+    return [market.id for market in owned_holdings(game, card.owner, keywords.MARKET)]
 
 
 def _otokoshi_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.economy import (
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules import abilities
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.ruleset import SHATTERED_EMPIRE
@@ -37,11 +38,7 @@ from yasuki_core.game_pieces.prints import (
     StrongholdPrint,
 )
 
-# The boldface keyword marking a card the Legacy rulebook ability can search out.
-LEGACY_KEYWORD = "Legacy"
-
-# The boldface keyword marking a card the Kharmic rulebook abilities can spend, and what they cost.
-KHARMIC_KEYWORD = "Kharmic"
+# What the Kharmic rulebook abilities cost to use.
 KHARMIC_COST = 2
 
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
@@ -189,7 +186,7 @@ def _kharmic(game: GameState, seat: PlayerId, *, only: str | None = None) -> lis
 
 def is_kharmic_card(game: GameState, card: L5RCard) -> bool:
     """Whether ``card`` carries the Kharmic keyword, so a Kharmic ability can spend it."""
-    return has_keyword(game, card, KHARMIC_KEYWORD)
+    return has_keyword(game, card, keywords.KHARMIC)
 
 
 def kharmic_in_hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -444,7 +441,7 @@ def is_legacy_card(game: GameState, card: L5RCard) -> bool:
     """Whether ``card`` carries the Legacy keyword, so the Legacy ability can search it out. Shrine
     of Courtesy grants itself Legacy for the second player, which is why this is not a printed
     check."""
-    return has_keyword(game, card, LEGACY_KEYWORD)
+    return has_keyword(game, card, keywords.LEGACY)
 
 
 def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
