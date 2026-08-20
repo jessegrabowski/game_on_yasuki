@@ -14,8 +14,10 @@ from yasuki_core.engine.rules.economy import (
     effective_force,
     effective_gold_production,
 )
+from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
@@ -30,6 +32,7 @@ from tests.yasuki_core.engine.builders import (
     register,
     stronghold,
     token_template,
+    two_seat_game,
 )
 
 P1 = PlayerId.P1
@@ -48,6 +51,31 @@ def _rural_market_game(wealth=1):
     session = EngineSession.start(state, P1)
     session.game.table.cards_by_id["bf"].bow()  # bow after the start-of-turn straighten
     return session
+
+
+def test_rural_market_pays_itself_for_another_farm_going_down():
+    game = two_seat_game()
+    market = put_in_play(
+        game, holding("rm", printed_id="rural_market", keywords=("Farm", "Market"))
+    )
+    other = put_in_play(game, holding("bf", printed_id="plain_farm", keywords=("Farm",)))
+
+    resolve_effects(game, [Destroy(other.id, P1)])
+
+    assert market.counters == {"wealth": 1}
+
+
+def test_rural_market_pays_itself_nothing_for_its_own_destruction():
+    """It carries Farm itself and now hears its own destruction announced, but the token would land
+    on a Holding already in the discard, which can hold none (CR, Tokens)."""
+    game = two_seat_game()
+    market = put_in_play(
+        game, holding("rm", printed_id="rural_market", keywords=("Farm", "Market"))
+    )
+
+    resolve_effects(game, [Destroy(market.id, P1)])
+
+    assert market.counters == {}
 
 
 def test_rural_market_spends_a_wealth_token_to_straighten_a_farm():

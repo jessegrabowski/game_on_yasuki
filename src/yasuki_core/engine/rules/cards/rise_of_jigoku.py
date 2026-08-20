@@ -221,6 +221,10 @@ def _rural_market_enters_play(ctx: TriggerContext) -> list[Effect]:
 @on(Destroyed, "rural_market")
 def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
     """After your Farm is destroyed, give this Holding a +1GP Wealth token."""
+    if ctx.event.card_id == ctx.card.id:
+        # Rural Market carries Farm itself, and a Holding in a discard pile can hold no token
+        # (CR, Tokens), so its own destruction pays it nothing.
+        return []
     destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
     if destroyed is None or destroyed.owner is not ctx.card.owner:
         return []

@@ -4,6 +4,8 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.events import (
+    CardDiscarded,
+    Destroyed,
     GameEvent,
 )
 from yasuki_core.engine.rules.decisions import CHOICE_PROMPTS
@@ -116,15 +118,39 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
     return effect.perform(game)
 
 
+def _departed_subject(game: GameState, event: GameEvent) -> L5RCard | None:
+    """The card whose own departure ``event`` announces, once it has left the battlefield.
+
+    A card is already in its discard by the time its destruction is announced, so this is the only
+    way "after this card is destroyed" can ever fire.
+
+    Departures only. A card off the battlefield takes no part in anything else that names it —
+    a Personality killed by a state rule as he arrived must not go on to take his enter-play trait,
+    which is the whole point of settling those rules before the arrival is announced. A *created*
+    card is never here either: it leaves the table outright, taking its printed id with it.
+    """
+    if not isinstance(event, Destroyed | CardDiscarded):
+        return None
+    card = game.table.cards_by_id.get(event.card_id)
+    if card is None or any(held is card for held in game.table.battlefield.cards):
+        return None
+    return card
+
+
 def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
     by_id = _TRIGGERS.get(type(event))
     if not by_id:
         return []
-    return [
+    firing = [
         (card, trigger)
         for card in game.table.battlefield.cards
         for trigger in by_id.get(card.printed_id, ())
     ]
+    # A departed card answers only for its own leaving, and for nothing that happens after.
+    departed = _departed_subject(game, event)
+    if departed is not None:
+        firing.extend((departed, trigger) for trigger in by_id.get(departed.printed_id, ()))
+    return firing
 
 
 def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
