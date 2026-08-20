@@ -1,13 +1,17 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import ZOMBIE_FOLLOWER
+from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import FUSHICHO, ZOMBIE_FOLLOWER
 from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.economy import effective_force
 from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     end_turn,
     holding,
     personality,
@@ -77,3 +81,64 @@ def test_kengun_grounds_is_withheld_on_another_seats_turn():
 
     assert session.game.active is P2
     assert ActivateAbility("grounds") not in session.legal_actions(P1)
+
+
+# --- Walk with Tengoku ---
+
+
+def _tengoku_game():
+    """The Spell on a Shugenja, ready to bow."""
+    game = two_seat_game()
+    token_template(
+        game,
+        FUSHICHO,
+        name="Fushicho",
+        card_type="Personality",
+        keywords=("Cavalry", "Fire", "Fushicho", "Nonhuman"),
+        force=3,
+        chi=2,
+    )
+    put_in_play(game, personality("shugenja", force=1, chi=4, keywords=("Shugenja",)))
+    attached(game, attachment("spell", printed_id="walk_with_tengoku"), "shugenja")
+    return EngineSession.start(game.table, P1)
+
+
+def _fushicho_of(session):
+    return next(card for card in session.game.table.battlefield.cards if card.is_token)
+
+
+def test_walk_with_tengoku_calls_a_fushicho():
+    session = _tengoku_game()
+
+    session.act(P1, ActivateAbility("spell"))
+
+    fushicho = _fushicho_of(session)
+    assert fushicho.name == "Fushicho"
+    assert effective_force(session.game, fushicho) == 3
+    assert session.game.table.cards_by_id["spell"].bowed is True  # the cost bows the Spell
+
+
+def test_the_fushicho_burns_out_before_the_turn_ends():
+    session = _tengoku_game()
+
+    session.act(P1, ActivateAbility("spell"))
+    fushicho = _fushicho_of(session)
+    end_turn(session)
+
+    assert fushicho.id not in session.game.table.cards_by_id
+
+
+def test_walk_with_tengoku_asks_for_no_target():
+    """The Spell names none, so announcing it resolves the whole thing."""
+    session = _tengoku_game()
+
+    session.act(P1, ActivateAbility("spell"))
+
+    assert session.game.pending is None
+
+
+def test_walk_with_tengoku_replays_to_the_same_board():
+    session = _tengoku_game()
+    session.act(P1, ActivateAbility("spell"))
+
+    assert replay(session.log).table == session.game.table

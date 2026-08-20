@@ -1,4 +1,4 @@
-from yasuki_core.engine.rules.abilities import Ability, bow_cost, register_ability
+from yasuki_core.engine.rules.abilities import Ability, bow_cost, itself, register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.economy import PlayerState, effective_keywords, recruit_discount
 from yasuki_core.engine.rules.effects import CreateToken, Effect, GainHonor
@@ -63,3 +63,26 @@ register_ability(
 def _moto_traders(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
     """Enters play for 1 less Gold if you control another Merchant Caravan."""
     return 1 if me.controls(keywords.MERCHANT_CARAVAN, other_than=card) else 0
+
+
+# --- Walk with Tengoku ---
+
+FUSHICHO = "fushicho_personality_3_2_3"
+
+
+def _walk_with_tengoku_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """A Fushicho for the turn: it burns out before the turn ends however the turn goes."""
+    return [CreateToken(FUSHICHO, source.owner, source.id, banish_at_turn_end=True)]
+
+
+register_ability(
+    "walk_with_tengoku",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Bow to call a 3F/2C/3PH Fushicho for the turn",
+        cost=bow_cost,
+        targets=itself,
+        effects=_walk_with_tengoku_effects,
+        all_targets=True,
+    ),
+)
