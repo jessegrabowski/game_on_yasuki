@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.flow import submit
 from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Banish,
     BanishTopFate,
     CreateToken,
     Bow,
@@ -146,6 +147,33 @@ def test_a_discard_lands_in_the_pile_for_its_side(side, role):
 
     assert card in game.table.zones[ZoneKey(PlayerId.P1, role)].cards
     assert events == [CardDiscarded(card.id, side, PlayerId.P1)]
+
+
+@pytest.mark.parametrize(
+    "side, role",
+    [(Side.FATE, ZoneRole.FATE_BANISH), (Side.DYNASTY, ZoneRole.DYNASTY_BANISH)],
+    ids=["fate", "dynasty"],
+)
+def test_a_banish_lands_in_the_pile_for_its_side(side, role):
+    # A banish picks its pile the same way a discard does, one row over. A card banished into a
+    # discard pile would be recurrable by everything the banish was meant to put it out of reach of.
+    game = two_seat_game()
+    card = fate_card("P1-f", PlayerId.P1) if side is Side.FATE else holding("P1-h")
+    put_in_play(game, card)
+
+    Banish(card.id).perform(game)
+
+    assert card in game.table.zones[ZoneKey(PlayerId.P1, role)].cards
+
+
+def test_banishing_a_card_that_is_already_gone_does_nothing():
+    # What a delayed banish finds when something destroyed the card first. Raising here would take
+    # the turn's end down with it.
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h"))
+    _vanished(game, card.id)
+
+    assert Banish(card.id).perform(game) == []
 
 
 def _token_game():

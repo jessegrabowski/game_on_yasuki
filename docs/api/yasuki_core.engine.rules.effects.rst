@@ -10,6 +10,7 @@ yasuki_core.engine.rules.effects
     AdjustCounter
     Ask
     AttachCard
+    Banish
     BanishTopFate
     Bow
     Choose

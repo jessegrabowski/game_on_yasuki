@@ -33,6 +33,7 @@ deferred through `Then` instead.
    AdjustCounter
    Ask
    AttachCard
+   Banish
    BanishTopFate
    Bow
    Choose

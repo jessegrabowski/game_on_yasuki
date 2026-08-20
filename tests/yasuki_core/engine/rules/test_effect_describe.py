@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,
     AttachCard,
+    Banish,
     BanishTopFate,
     Bow,
     Ask,
@@ -81,6 +82,7 @@ EFFECTS = [
     ),
     (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
     (AttachCard("katana", "hero"), "attach katana to hero"),
+    (Banish("oni"), "banish oni"),
     (PayGold(PlayerId.P2, 3, "Colonial Farm"), "P2 pays 3 gold for Colonial Farm"),
     (CreateToken("ashigaru_2", PlayerId.P1, "farm_1"), "P1 creates ashigaru_2"),
     (

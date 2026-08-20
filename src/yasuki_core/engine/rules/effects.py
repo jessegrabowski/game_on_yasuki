@@ -22,10 +22,18 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
 
-def _discard_pile(card: L5RCard) -> ZoneKey:
-    """The discard pile ``card`` belongs in, chosen by its side. Shared so a Fate card cannot end up
-    in the Dynasty discard through one path and not another."""
-    role = ZoneRole.DYNASTY_DISCARD if card.side is Side.DYNASTY else ZoneRole.FATE_DISCARD
+def _pile(card: L5RCard, *, banished: bool = False) -> ZoneKey:
+    """The pile ``card`` belongs in when it leaves play: its owner's, on the card's own side, and its
+    banish rather than its discard when ``banished``.
+
+    Anything not on the Dynasty side is filed with the Fate cards, which is where a Stronghold or a
+    Sensei goes for want of a pile of its own. Shared so a Dynasty card cannot reach a Fate pile
+    through one path and not another.
+    """
+    if card.side is Side.DYNASTY:
+        role = ZoneRole.DYNASTY_BANISH if banished else ZoneRole.DYNASTY_DISCARD
+    else:
+        role = ZoneRole.FATE_BANISH if banished else ZoneRole.FATE_DISCARD
     return ZoneKey(card.owner, role)
 
 
@@ -154,17 +162,18 @@ class MoveToHand(Effect):
         return []
 
 
-def _discard_unit(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
-    """Send ``card`` and everything attached to him to their own discards by side, returning the unit
-    that left so the caller can announce each departure in its own words (CR, Unit).
+def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> tuple[L5RCard, ...]:
+    """Send ``card`` and everything attached to him out of play — to their discards, or to their
+    banishes when ``banished`` — returning the unit that left so the caller can announce each
+    departure in its own words (CR, Unit).
 
-    A created card among them has no discard pile and is taken off the table instead, which the move
-    itself sees to (CR, Create). It still announces its departure, because a card reacting to a
-    Follower being destroyed does not care where the Follower came from.
+    A created card among them has no pile of either kind and is taken off the table instead, which
+    the move itself sees to (CR, Create). It still announces its departure, because a card reacting
+    to a Follower being destroyed does not care where the Follower came from.
     """
     unit = unit_of(game, card)
     for member in unit:
-        ops.move_card(game.table, member, _discard_pile(member))
+        ops.move_card(game.table, member, _pile(member, banished=banished))
     return unit
 
 
@@ -192,7 +201,7 @@ class Destroy(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
-        return [Destroyed(member.id, self.cause) for member in _discard_unit(game, card)]
+        return [Destroyed(member.id, self.cause) for member in _remove_unit(game, card)]
 
 
 @dataclass(frozen=True, slots=True)
@@ -218,8 +227,37 @@ class Discard(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
-        unit = _discard_unit(game, card)
+        unit = _remove_unit(game, card)
         return [CardDiscarded(member.id, member.side, self.cause) for member in unit]
+
+
+@dataclass(frozen=True, slots=True)
+class Banish(Effect):
+    """Take a card out of the game, to its owner's banish pile by side.
+
+    Banishing is not a destruction and not a discard: nothing reacts to it and the card is out of
+    reach of anything that recurs from a discard pile. A Personality takes his unit with him, as he
+    does however he leaves (CR, Unit), and a created card leaves the table entirely — banishing one
+    and destroying one come to the same thing, since neither pile can hold it.
+
+    Attributes
+    ----------
+    card_id : str
+        The card to banish. A card already gone is a no-op, which is what a delayed banish finds
+        when something else got there first.
+    """
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"banish {self.card_id}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None:
+            return []
+        _remove_unit(game, card, banished=True)
+        return []
 
 
 @dataclass(frozen=True, slots=True)
