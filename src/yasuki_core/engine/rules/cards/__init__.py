@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     chaos_reigns_part_i,
     chaos_reigns_part_ii,
     chaos_reigns_part_iii,
+    code_of_bushido,
     empire_at_war,
     gates_of_tengoku,
     gathering_storms,
