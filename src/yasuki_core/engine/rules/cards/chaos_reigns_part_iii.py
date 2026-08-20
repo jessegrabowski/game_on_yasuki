@@ -1,6 +1,59 @@
-from yasuki_core.engine.rules.economy import PlayerState, recruit_discount
+from yasuki_core.engine.rules.abilities import Ability, bow_cost, register_ability
+from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.economy import PlayerState, effective_keywords, recruit_discount
+from yasuki_core.engine.rules.effects import CreateToken, Effect, GainHonor
+from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import TriggerContext, on
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
+
+
+# --- Kengun Grounds ---
+
+ZOMBIE_FOLLOWER = "zombie_follower"
+ARRIVAL_HONOR_LOSS = 2
+UNTAINTED_HONOR_LOSS = 5
+
+
+@on(EnteredPlay, "kengun_grounds")
+def _kengun_grounds_arrives_at_a_price(ctx: TriggerContext) -> list[Effect]:
+    """After this Holding enters play, lose 2 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -ARRIVAL_HONOR_LOSS)]
+
+
+def _kengun_grounds_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Nobody while it is not the controller's turn — the ability's own condition, read before it is
+    offered rather than resolving into nothing."""
+    if game.active is not source.owner:
+        return []
+    zombie = game.table.creatable_tokens[ZOMBIE_FOLLOWER]
+    return [target.id for target in creation_targets(game, source.owner, zombie)]
+
+
+def _kengun_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The dead serve anyone; a Personality untouched by the Shadowlands pays for the company."""
+    effects: list[Effect] = [
+        CreateToken(ZOMBIE_FOLLOWER, source.owner, source.id, attach_to=target.id)
+    ]
+    if keywords.SHADOWLANDS not in effective_keywords(game, target):
+        effects.append(GainHonor(source.owner, -UNTAINTED_HONOR_LOSS))
+    return effects
+
+
+register_ability(
+    "kengun_grounds",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Bow to Equip a 1F Undead Follower to your Personality",
+        cost=bow_cost,
+        targets=_kengun_grounds_targets,
+        effects=_kengun_grounds_effects,
+    ),
+)
 
 
 # --- Moto Traders ---
