@@ -5,19 +5,25 @@ from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     DecisionResponse,
 )
+from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import NAGA_FOLLOWER
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
 from tests.yasuki_core.engine.builders import (
+    attachment,
     end_phase,
     fate_card,
     holding,
+    personality,
     put_in_play,
     register,
+    token_template,
+    two_seat_game,
 )
 
 P1 = PlayerId.P1
@@ -138,3 +144,97 @@ def test_modifier_grant_fires_no_counter_trigger():
 
     assert effective_gold_production(session.game, session.game.table.cards_by_id["farm"]) == 4
     assert len(hand.cards) == before  # Aoki did not draw — the grant is a modifier, not a token
+
+
+# --- Tarkasha ---
+
+
+def _tarkasha_game(*, fallen=("dead_naga",), spare_follower=False):
+    """Tarkasha in play with ``fallen`` Naga Followers in the Fate discard to reshuffle."""
+    game = two_seat_game()
+    token_template(
+        game,
+        NAGA_FOLLOWER,
+        name="Naga",
+        card_type="Follower",
+        keywords=("Naga", "Nonhuman"),
+        force=1,
+    )
+    put_in_play(
+        game,
+        personality(
+            "tarkasha", printed_id="tarkasha", force=4, chi=2, keywords=("Commander", "Naga")
+        ),
+    )
+    put_in_play(game, personality("scout", force=1, chi=2, keywords=("Naga",)))
+    discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    for card_id in fallen:
+        discard.add(
+            register(
+                game.table,
+                attachment(
+                    card_id,
+                    attachment_type=AttachmentType.FOLLOWER,
+                    keywords=("Naga", "Nonhuman"),
+                ),
+            )
+        )
+    if spare_follower:
+        discard.add(
+            register(
+                game.table,
+                attachment(
+                    "ashigaru", attachment_type=AttachmentType.FOLLOWER, keywords=("Ashigaru",)
+                ),
+            )
+        )
+    return EngineSession.start(game.table, P1)
+
+
+def test_tarkasha_reshuffles_a_fallen_naga_to_raise_a_new_one():
+    session = _tarkasha_game()
+
+    session.act(P1, ActivateAbility("tarkasha"))
+    session.submit(P1, DecisionResponse(("dead_naga",)))  # the price, paid first
+    session.submit(P1, DecisionResponse(("tarkasha",)))
+
+    game = session.game
+    raised = attachments_of(game, game.table.cards_by_id["tarkasha"])[0]
+    assert raised.name == "Naga"
+    assert [card.id for card in game.table.decks[DeckKey(P1, Side.FATE)].cards] == ["dead_naga"]
+    assert game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards == []
+
+
+def test_tarkasha_only_reshuffles_naga_followers():
+    """The discard holds an Ashigaru too, and it is no Naga."""
+    session = _tarkasha_game(spare_follower=True)
+
+    session.act(P1, ActivateAbility("tarkasha"))
+
+    assert session.game.pending.candidates == ("dead_naga",)
+
+
+def test_tarkasha_only_mounts_a_commander():
+    """ "Your target Commander" — the plain Naga scout does not lead."""
+    session = _tarkasha_game()
+
+    session.act(P1, ActivateAbility("tarkasha"))
+    session.submit(P1, DecisionResponse(("dead_naga",)))
+
+    assert session.game.pending.candidates == ("tarkasha",)
+
+
+def test_tarkasha_is_withheld_with_no_fallen_naga_to_reshuffle():
+    """The reshuffle is the price, so an empty discard leaves nothing to pay with."""
+    session = _tarkasha_game(fallen=())
+
+    assert ActivateAbility("tarkasha") not in session.legal_actions(P1)
+
+
+def test_tarkasha_replays_to_the_same_board():
+    session = _tarkasha_game()
+    session.act(P1, ActivateAbility("tarkasha"))
+    session.submit(P1, DecisionResponse(("dead_naga",)))
+    session.submit(P1, DecisionResponse(("tarkasha",)))
+
+    assert replay(session.log).table == session.game.table

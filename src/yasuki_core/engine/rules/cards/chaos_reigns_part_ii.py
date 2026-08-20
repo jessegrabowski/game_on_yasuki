@@ -1,7 +1,18 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.abilities import Ability, bow_cost, owned_holdings, register_ability
-from yasuki_core.engine.rules.effects import AdjustCounter, Choose, DrawCard, Effect, GrantModifier
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Choose,
+    CreateToken,
+    DrawCard,
+    Effect,
+    GrantModifier,
+    MoveToDeck,
+    ShuffleDeck,
+    Unpayable,
+)
+from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
@@ -13,10 +24,12 @@ from yasuki_core.engine.rules.triggers import (
     on,
     once_per_turn,
 )
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint
 
 
 # --- Millet Farm ---
@@ -69,6 +82,60 @@ def _shosuro_aoki(ctx: TriggerContext) -> list[Effect]:
     if not once_per_turn(ctx.game, ctx.card, "aoki_draw"):
         return []
     return [DrawCard(ctx.card.owner)]
+
+
+# --- Tarkasha ---
+
+NAGA_FOLLOWER = "naga"
+
+
+def _fallen_naga_followers(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The Naga Followers in ``seat``'s Fate discard, which is the only pile a Follower reaches."""
+    return tuple(
+        card.id
+        for card in game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards
+        if isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type is AttachmentType.FOLLOWER
+        and keywords.NAGA in card.keywords
+    )
+
+
+def _tarkasha_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Reshuffling one of the fallen is the price, so with none to reshuffle there is no ability."""
+    fallen = _fallen_naga_followers(game, source.owner)
+    if not fallen:
+        return [Unpayable(f"{source.owner.name} has no Naga Follower in their discard pile")]
+    return [Choose(source.owner, fallen, 1, 1, "tarkasha", source.id)]
+
+
+@choice_resolver("tarkasha", prompt="Reshuffle a Naga Follower into your Fate deck")
+def _resolve_tarkasha_reshuffle(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    deck = DeckKey(seat, Side.FATE)
+    return [MoveToDeck(chosen[0], deck, from_top=0), ShuffleDeck(deck)]
+
+
+def _tarkasha_targets(game: GameState, source: L5RCard) -> list[str]:
+    naga = game.table.creatable_tokens[NAGA_FOLLOWER]
+    commanders = creation_targets(game, source.owner, naga, keyword=keywords.COMMANDER)
+    return [commander.id for commander in commanders]
+
+
+def _tarkasha_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [CreateToken(NAGA_FOLLOWER, source.owner, source.id, attach_to=target.id)]
+
+
+register_ability(
+    "tarkasha",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Reshuffle a fallen Naga to Equip a 1F Naga Follower to your Commander",
+        cost=_tarkasha_cost,
+        targets=_tarkasha_targets,
+        effects=_tarkasha_effects,
+    ),
+)
 
 
 # --- Wheat Farm ---
