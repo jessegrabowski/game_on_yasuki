@@ -63,6 +63,14 @@ class EnteredPlay:
 
 
 @dataclass(frozen=True, slots=True)
+class Straightened:
+    """A bowed card was straightened, whether by the start of its controller's turn or by an effect.
+    The event names the change, so a card already standing raises nothing."""
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class Revealed:
     """A face-down card in a Province was turned face-up. A card that arrives already face-up raises
     nothing — the event names the turn, not the resulting state."""
@@ -70,4 +78,6 @@ class Revealed:
     card_id: str
 
 
-GameEvent = TurnStarted | CardDiscarded | CounterGained | Destroyed | EnteredPlay | Revealed
+GameEvent = (
+    TurnStarted | CardDiscarded | CounterGained | Destroyed | EnteredPlay | Revealed | Straightened
+)

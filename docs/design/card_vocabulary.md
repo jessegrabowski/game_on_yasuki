@@ -78,6 +78,7 @@ further events are produced.
    Destroyed
    EnteredPlay
    Revealed
+   Straightened
    TurnStarted
 ```
 

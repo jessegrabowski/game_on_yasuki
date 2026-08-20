@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.events import (
     EnteredPlay,
     GameEvent,
     Revealed,
+    Straightened,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
@@ -515,7 +516,8 @@ class Bow(Effect):
 
 @dataclass(frozen=True, slots=True)
 class Straighten(Effect):
-    """Straighten (unbow) a card."""
+    """Straighten (unbow) a card. Announces the change, which a card that watches for its own
+    straightening reads; one already standing announces nothing."""
 
     card_id: str
 
@@ -524,9 +526,10 @@ class Straighten(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is not None:
-            card.unbow()
-        return []
+        if card is None or not card.bowed:
+            return []
+        card.unbow()
+        return [Straightened(self.card_id)]
 
 
 @dataclass(frozen=True, slots=True)
