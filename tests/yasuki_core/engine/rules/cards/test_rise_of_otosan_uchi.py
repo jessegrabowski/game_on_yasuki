@@ -1,8 +1,12 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility
+from yasuki_core.engine.rules.actions import ActivateAbility, Pass
+from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import EXPENDABLE_SERVANT
 from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse
+from yasuki_core.engine.rules.economy import effective_chi
+from yasuki_core.engine.rules.effects import Straighten
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -10,7 +14,14 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
-from tests.yasuki_core.engine.builders import holding, province_card, register
+from tests.yasuki_core.engine.builders import (
+    end_turn,
+    holding,
+    province_card,
+    put_in_play,
+    register,
+    token_template,
+)
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -153,3 +164,125 @@ def test_it_cannot_be_backed_out_of_once_the_opponent_has_been_given_something()
     assert _honor(session, P2) == 1  # still theirs
     assert _hand(session, P2) == [drawn]
     assert isinstance(session.game.pending, Confirm)  # and the question is still owed
+
+
+# --- Culling Grounds ---
+
+
+def _culling_game():
+    """P1's Culling Grounds in play, unbowed and ready to trade Honor for a body."""
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        holding(
+            "grounds",
+            printed_id="culling_grounds",
+            name="Culling Grounds",
+            keywords=("Maho", "Shadowlands"),
+            gold_production=2,
+        ),
+    )
+    token_template(
+        state,
+        EXPENDABLE_SERVANT,
+        name="Expendable Servant",
+        card_type="Personality",
+        keywords=("Expendable",),
+        force=0,
+        chi=2,
+    )
+    return EngineSession.start(state, P1)
+
+
+def _servant_of(session):
+    return next(card for card in session.game.table.battlefield.cards if card.is_token)
+
+
+def test_culling_grounds_bows_for_a_personality_and_an_honor():
+    session = _culling_game()
+
+    session.act(P1, ActivateAbility("grounds"))
+
+    servant = _servant_of(session)
+    assert servant.name == "Expendable Servant"
+    assert effective_chi(session.game, servant) == 2
+    assert session.game.table.cards_by_id["grounds"].bowed is True
+    assert session.game.table.seats[P1].honor == -1
+
+
+def test_culling_grounds_asks_nobody_to_pick_a_target():
+    """The ability names no target, so announcing it resolves the whole thing."""
+    session = _culling_game()
+
+    session.act(P1, ActivateAbility("grounds"))
+
+    assert session.game.pending is None
+
+
+def test_the_servant_survives_the_turn_because_the_holding_stays_bowed():
+    """ "May remain bowed": the straighten at the start of the next turn passes the Holding over, so
+    nothing unbows it and the servant is safe. The plain Farm beside it is the control — the skip has
+    to be for this card, not for the seat."""
+    session = _culling_game()
+    farm = put_in_play(session.game.table, holding("farm", printed_id="plain_farm"))
+    session.act(P1, ActivateAbility("grounds"))
+    servant = _servant_of(session)
+    farm.bow()
+
+    end_turn(session)
+    end_turn(session)  # back around to P1, whose straighten would otherwise reach it
+
+    assert session.game.table.cards_by_id["grounds"].bowed is True
+    assert farm.bowed is False
+    assert servant.id in session.game.table.cards_by_id
+
+
+def test_straightening_the_holding_banishes_the_servant():
+    session = _culling_game()
+    session.act(P1, ActivateAbility("grounds"))
+    servant = _servant_of(session)
+
+    resolve_effects(session.game, [Straighten("grounds")])
+
+    assert session.game.table.cards_by_id["grounds"].bowed is False
+    assert servant.id not in session.game.table.cards_by_id
+
+
+def test_a_second_servant_is_only_at_risk_of_its_own_bargain():
+    """The banish reaches what the Holding still has out, not every servant it ever made."""
+    session = _culling_game()
+    session.act(P1, ActivateAbility("grounds"))
+    first = _servant_of(session)
+    resolve_effects(session.game, [Straighten("grounds")])
+    session.act(P2, Pass())  # hand the opportunity back after the first activation
+    session.act(P1, ActivateAbility("grounds"))
+    second = _servant_of(session)
+
+    assert first.id not in session.game.table.cards_by_id
+    assert second.id in session.game.table.cards_by_id
+    assert session.game.table.seats[P1].honor == -2
+
+
+def test_straightening_another_card_leaves_the_servant_alone():
+    session = _culling_game()
+    put_in_play(session.game.table, holding("farm", printed_id="plain_farm", gold_production=2))
+    session.act(P1, ActivateAbility("grounds"))
+    servant = _servant_of(session)
+
+    resolve_effects(session.game, [Straighten("farm")])
+
+    assert servant.id in session.game.table.cards_by_id
+
+
+def test_culling_grounds_is_withheld_while_bowed():
+    session = _culling_game()
+    session.act(P1, ActivateAbility("grounds"))
+
+    assert ActivateAbility("grounds") not in session.legal_actions(P1)
+
+
+def test_culling_grounds_replays_to_the_same_board():
+    session = _culling_game()
+    session.act(P1, ActivateAbility("grounds"))
+
+    assert replay(session.log).table == session.game.table

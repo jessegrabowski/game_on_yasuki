@@ -3,6 +3,9 @@ from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
     InvestAbility,
+    bow_cost,
+    itself,
+    may_remain_bowed,
     no_cost,
     one_wealth,
     register_ability,
@@ -12,6 +15,8 @@ from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
+    Banish,
+    CreateToken,
     Discard,
     DrawCard,
     Effect,
@@ -21,7 +26,8 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.events import Straightened
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -91,6 +97,49 @@ register_ability(
 # --- Courts of Otosan Uchi ---
 
 register_invest("courts_of_otosan_uchi", InvestAbility(minimum=2, maximum=2, effect=one_wealth))
+
+
+# --- Culling Grounds ---
+
+EXPENDABLE_SERVANT = "expendable_personality_0_2_1"
+
+
+may_remain_bowed("culling_grounds")
+
+
+@on(Straightened, "culling_grounds")
+def _culling_grounds_gives_up_its_servant(ctx: TriggerContext) -> list[Effect]:
+    """Until the game ends, if this Holding is ever unbowed, banish the Personality.
+
+    Which is why the Holding may remain bowed: standing it up again to produce Gold is what costs
+    the servant. Nothing it created earlier and lost is chased, so a second servant is only ever at
+    risk of the same bargain.
+    """
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [Banish(created) for created in ctx.game.creations_of(ctx.card.id)]
+
+
+def _culling_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Create and Recruit the servant, ignoring Gold Cost — nothing is paid for it, so there is no
+    payment to raise; the Honor is the price."""
+    return [
+        CreateToken(EXPENDABLE_SERVANT, source.owner, source.id),
+        GainHonor(source.owner, -1),
+    ]
+
+
+register_ability(
+    "culling_grounds",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Bow and lose 1 Honor to recruit a 0F/2C Expendable Personality",
+        cost=bow_cost,
+        targets=itself,
+        effects=_culling_grounds_effects,
+        all_targets=True,
+    ),
+)
 
 
 # --- Rebuilt Harbor ---

@@ -142,6 +142,13 @@ class InvestAbility:
     effect: Callable[[GameState, L5RCard, int], list[Effect]]
 
 
+def itself(game: GameState, source: L5RCard) -> list[str]:
+    """The target list of an ability that names no target: its own card. Paired with
+    ``all_targets``, so the ability resolves against itself without asking the seat to pick the only
+    card it could mean."""
+    return [source.id]
+
+
 def no_effects(card: L5RCard) -> list[Effect]:
     """A boost that costs its producer nothing."""
     return []
@@ -166,6 +173,26 @@ class ProductionBoost:
 
     amount: int
     effects: Callable[[L5RCard], list[Effect]] = no_effects
+
+
+# Cards their controller may leave bowed rather than straightening at the start of their turn (the
+# printed "May remain bowed"), by printed id. A flag rather than a handler: the card states the
+# permission and says nothing about when it is worth taking, which is the controller's business.
+MAY_REMAIN_BOWED: set[str] = set()
+
+
+def may_remain_bowed(printed_id: str) -> None:
+    """Register ``printed_id`` as a card the turn-start straighten passes over."""
+    MAY_REMAIN_BOWED.add(printed_id)
+
+
+def left_bowed(game: GameState, seat: PlayerId) -> frozenset[str]:
+    """The cards ``seat`` controls that the turn-start straighten leaves alone."""
+    return frozenset(
+        card.id
+        for card in game.table.battlefield.cards
+        if card.owner is seat and card.printed_id in MAY_REMAIN_BOWED
+    )
 
 
 _ABILITIES: dict[str, Ability] = {}

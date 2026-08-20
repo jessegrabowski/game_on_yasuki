@@ -28,7 +28,12 @@ _DECORATORS = {
     "attachment_grant",
     "attach_restriction",
 }
-_CALLS = {"register_ability", "register_invest", "register_production_boost"}
+_CALLS = {
+    "register_ability",
+    "register_invest",
+    "register_production_boost",
+    "may_remain_bowed",
+}
 
 
 def card_modules() -> list[pathlib.Path]:

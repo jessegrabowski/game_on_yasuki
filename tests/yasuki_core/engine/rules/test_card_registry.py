@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.events import EnteredPlay
 REGISTRY_MODULES = (abilities, economy, triggers)
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
+    "MAY_REMAIN_BOWED",
     "_INVEST",
     "_PRODUCTION_BOOST",
     "GOLD_HANDLERS",
@@ -29,11 +30,14 @@ NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS", "CHOICE_PROMPTS"}
 
 
 def module_level_registries() -> set[str]:
+    """Every per-card registry the registry modules hold. Sets count as well as dicts: a registry
+    recording a card's permission rather than its handler is still a place a misspelled id can
+    hide."""
     return {
         name
         for module in REGISTRY_MODULES
         for name, value in vars(module).items()
-        if isinstance(value, dict) and not name.startswith("__")
+        if isinstance(value, dict | set) and not name.startswith("__")
     }
 
 

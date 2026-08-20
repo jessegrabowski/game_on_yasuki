@@ -1,3 +1,5 @@
+from collections.abc import Container
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
     BATTLEFIELD,
@@ -334,11 +336,13 @@ def create_province(state: TableState, seat: PlayerId) -> ZoneKey:
     return key
 
 
-def straighten(state: TableState, seat: PlayerId) -> list[str]:
-    """Unbow every card ``seat`` controls on the battlefield; returns the straightened card ids."""
+def straighten(state: TableState, seat: PlayerId, skip: Container[str] = ()) -> list[str]:
+    """Unbow every card ``seat`` controls on the battlefield, other than the ids in ``skip``;
+    returns the straightened card ids. What may be left bowed is the rules layer's to decide, so the
+    caller names the cards rather than this reading a card's text."""
     straightened = []
     for card in state.battlefield.cards:
-        if card.owner == seat and card.bowed:
+        if card.owner == seat and card.bowed and card.id not in skip:
             card.unbow()
             straightened.append(card.id)
     return straightened

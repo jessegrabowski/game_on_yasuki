@@ -27,6 +27,9 @@ yasuki_core.engine.rules.abilities
     destroy_cost
     fixed_invest_amount
     invest_for
+    itself
+    left_bowed
+    may_remain_bowed
     no_cost
     no_effects
     one_wealth

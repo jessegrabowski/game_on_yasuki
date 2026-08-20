@@ -876,7 +876,10 @@ def _begin_next_turn(game: GameState) -> None:
 
 def _begin_turn(game: GameState) -> None:
     open_round(game)
-    for card_id in ops.straighten(game.table, game.active):
+    # A card that may remain bowed is passed over rather than asked about here: its own text says
+    # so, and the card that wants straightening anyway offers that as its own turn-start question.
+    straightened = ops.straighten(game.table, game.active, abilities.left_bowed(game, game.active))
+    for card_id in straightened:
         triggers.fire(game, Straightened(card_id))
     for card_id in ops.reveal_provinces(game.table, game.active):
         triggers.fire(game, Revealed(card_id))
