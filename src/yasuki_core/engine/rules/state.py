@@ -129,6 +129,10 @@ class GameState:
         How many tokens the game has created, which names the next one. Ephemeral and rebuilt by
         replay like ``stack``; it counts creations rather than tokens on the board, so an id is
         never reused by a token created after an earlier one has gone. Default 0.
+    banish_at_turn_end : list of str
+        Created cards to banish before the current turn ends — the ones lent to a player for a turn.
+        Emptied as the turn ends, whether or not the cards are still there to banish. Ephemeral and
+        rebuilt by replay. Default empty.
     created_by : dict mapping str to str
         Each created card to the card that created it, kept for the life of the game so a card can
         still name what it made after the fact. Ephemeral and rebuilt by replay. Default empty.
@@ -153,6 +157,7 @@ class GameState:
     modifiers: list[Modifier] = field(default_factory=list)
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
+    banish_at_turn_end: list[str] = field(default_factory=list)
 
     @property
     def awaiting_decision(self) -> bool:

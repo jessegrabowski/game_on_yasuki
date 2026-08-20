@@ -411,6 +411,10 @@ class CreateToken(Effect):
         replaces that stat on the print the created card presents, so the card genuinely has the
         number rather than carrying a modifier over a printed zero. Default none, for a template
         whose whole stat line is printed.
+    banish_at_turn_end : bool
+        Whether the created card is banished before the turn ends. A creation the card lends the
+        player for a turn ("banish it unless you destroyed the target") is recorded as it is made,
+        because by the time the turn ends there is nothing left to decide. Default False.
     """
 
     token_id: str
@@ -418,6 +422,7 @@ class CreateToken(Effect):
     creator_id: str
     attach_to: str | None = None
     stats: tuple[tuple[Stat, int], ...] = ()
+    banish_at_turn_end: bool = False
 
     def describe(self) -> str:
         stats = ", ".join(f"{stat.name} {value}" for stat, value in self.stats)
@@ -441,6 +446,8 @@ class CreateToken(Effect):
             game.table, game.mint_token_id(), printed, UNPLACED_BOARD_POS, self.owner
         )
         game.created_by[card.id] = self.creator_id
+        if self.banish_at_turn_end:
+            game.banish_at_turn_end.append(card.id)
         if personality is not None:
             ops.attach_to_personality(game.table, card, personality)
         return [EnteredPlay(card.id, from_hand=False)]

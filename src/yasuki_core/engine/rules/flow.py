@@ -65,6 +65,7 @@ from yasuki_core.engine.rules.legality import (
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Banish,
     Choose,
     Discard,
     DrawCard,
@@ -815,6 +816,7 @@ def _apply_card_choice(
 
 def _end_turn(game: GameState) -> None:
     seat = game.active
+    _banish_lent_creations(game)
     _accrue_sincerity(game, seat)
     ops.draw_to_hand(game.table, seat)
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
@@ -824,6 +826,19 @@ def _end_turn(game: GameState) -> None:
         game.pending = DiscardToHandSize(seat, candidates, count=excess)
         return
     _begin_next_turn(game)
+
+
+def _banish_lent_creations(game: GameState) -> None:
+    """Banish the cards created for this turn only, before it ends.
+
+    The list is cleared whatever happens to the cards, so one destroyed or banished earlier in the
+    turn is not chased into the next: the loan was for this turn, and it is over either way.
+    """
+    lent = game.banish_at_turn_end
+    if not lent:
+        return
+    game.banish_at_turn_end = []
+    triggers.resolve_effects(game, [Banish(card_id) for card_id in lent])
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
