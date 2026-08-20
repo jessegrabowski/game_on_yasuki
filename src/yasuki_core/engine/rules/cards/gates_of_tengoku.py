@@ -5,13 +5,27 @@ from yasuki_core.engine.rules.economy import (
     keyword_grant,
     recruit_discount,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter, Effect
+from yasuki_core.engine.rules.effects import AdjustCounter, CreateToken, Effect
+from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import sincerity_seed_targets
+from yasuki_core.engine.rules.triggers import TriggerContext, on, sincerity_seed_targets
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
+
+
+# --- Sasada, Pearl Champion (Experienced) ---
+
+SASADAS_OROCHI = "orochi_follower_2f"
+
+
+@on(EnteredPlay, "sasada_pearl_champion_experienced")
+def _sasada_calls_her_orochi(ctx: TriggerContext) -> list[Effect]:
+    """After Sasada enters play, create and attach a 2F Orochi Follower to her."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [CreateToken(SASADAS_OROCHI, ctx.card.owner, ctx.card.id, attach_to=ctx.card.id)]
 
 
 # --- Shrine of Courtesy ---
