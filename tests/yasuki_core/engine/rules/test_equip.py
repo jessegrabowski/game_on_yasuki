@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import effective_weapon_limit
+from yasuki_core.engine.rules.economy import KEYWORD_GRANTS, effective_weapon_limit, keyword_grant
 from yasuki_core.engine.rules.effects import AttachCard
 from yasuki_core.engine.rules.equip import (
     creation_targets,
@@ -165,6 +165,45 @@ def test_a_created_follower_is_not_held_back_by_a_weapon():
     )
 
     assert creation_targets(game, P1, ashigaru) == (hero,)
+
+
+def test_a_creation_can_be_narrowed_to_the_keyword_the_card_names():
+    """ "Your target Samurai Personality" is how half the creating cards read, so the filter belongs
+    beside the attachment rules rather than spelled out at each of them."""
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai", keywords=("Samurai",)))
+    put_in_play(game, personality("courtier", keywords=("Courtier",)))
+
+    assert creation_targets(game, P1, _weapon_print(), keyword="Samurai") == (samurai,)
+    assert len(creation_targets(game, P1, _weapon_print())) == 2
+
+
+def test_a_narrowed_creation_still_answers_to_the_weapon_rules():
+    """The keyword narrows the Personalities; it does not excuse one from the rules that decide
+    whether the Weapon fits."""
+    game = two_seat_game()
+    laden = put_in_play(game, personality("laden", keywords=("Samurai",)))
+    attached(game, _weapon("katana"), "laden")
+
+    assert laden not in creation_targets(game, P1, _weapon_print(), keyword="Samurai")
+
+
+def test_a_narrowed_creation_reads_a_keyword_the_card_grants_itself():
+    """The filter goes through effective keywords, so a Personality who is a Samurai only by his own
+    ability is as good a target as one who prints it."""
+    game = two_seat_game()
+    granted = put_in_play(game, personality("ronin", printed_id="samurai_probe"))
+
+    assert creation_targets(game, P1, _weapon_print(), keyword="Samurai") == ()
+
+    @keyword_grant("samurai_probe")
+    def _grants_samurai(card, me, opponents):
+        return ("Samurai",)
+
+    try:
+        assert creation_targets(game, P1, _weapon_print(), keyword="Samurai") == (granted,)
+    finally:
+        KEYWORD_GRANTS.pop("samurai_probe", None)
 
 
 def test_a_creation_only_reaches_its_own_seats_personalities():

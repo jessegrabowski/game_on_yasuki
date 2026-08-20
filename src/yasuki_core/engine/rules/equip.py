@@ -90,14 +90,29 @@ def may_attach_created(game: GameState, personality: L5RCard, printed: CardPrint
     return may_hold_weapon(game, personality, printed_keywords)
 
 
-def creation_targets(game: GameState, seat: PlayerId, printed: CardPrint) -> tuple[L5RCard, ...]:
+def creation_targets(
+    game: GameState, seat: PlayerId, printed: CardPrint, *, keyword: str | None = None
+) -> tuple[L5RCard, ...]:
     """The Personalities ``seat`` may create a card from ``printed`` onto — its own, that the
-    attachment rules still admit. A player creates onto their own, as they attach (CR,
-    Attachments)."""
+    attachment rules still admit. A player creates onto their own, as they attach (CR, Attachments).
+
+    Parameters
+    ----------
+    game : GameState
+        The live game the board is read from.
+    seat : PlayerId
+        The seat creating the card.
+    printed : CardPrint
+        The template the created card is stamped from, judged by the attachment rules.
+    keyword : str, optional
+        Narrows the Personalities to those carrying it — the "your target Samurai Personality" a
+        card names. Default None, which offers them all.
+    """
     return tuple(
         personality
         for personality in owned_personalities(game, seat)
         if may_attach_created(game, personality, printed)
+        and (keyword is None or keyword in effective_keywords(game, personality))
     )
 
 
