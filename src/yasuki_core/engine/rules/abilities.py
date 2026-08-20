@@ -287,13 +287,15 @@ def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]
     )
 
 
-def owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[L5RCard]:
+def owned_holdings(game: GameState, owner: PlayerId, keyword: str | None = None) -> list[L5RCard]:
+    """The Holdings ``owner`` has in play, narrowed to those carrying ``keyword`` when one is given.
+    Default None, which takes them all."""
     return [
         held
         for held in game.table.battlefield.cards
         if held.owner is owner
         and isinstance(held.printed, HoldingPrint)
-        and keyword in effective_keywords(game, held)
+        and (keyword is None or keyword in effective_keywords(game, held))
     ]
 
 

@@ -441,6 +441,18 @@ def test_a_second_keyword_grant_for_one_card_is_refused():
         KEYWORD_GRANTS.pop("guard_probe", None)
 
 
+def test_owned_holdings_without_a_keyword_takes_them_all():
+    """Kitsu Watanabe spends "your target Holding", any of them, so the lookup answers that too
+    rather than making the card scan the battlefield for itself."""
+    game = two_seat_game()
+    quay = put_in_play(game, holding("P1-quay", owner=PlayerId.P1, keywords=("Port",)))
+    plain = put_in_play(game, holding("P1-plain", owner=PlayerId.P1))
+    put_in_play(game, holding("P2-theirs", owner=PlayerId.P2))
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=5))
+
+    assert owned_holdings(game, PlayerId.P1) == [quay, plain]
+
+
 def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
     """Keyword lookups read effective keywords, so a card whose own condition grants one is found by
     the same searches as a card that prints it. Registered here rather than leaning on a real card:
