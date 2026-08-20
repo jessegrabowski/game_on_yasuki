@@ -36,6 +36,7 @@ deferred through `Then` instead.
    BanishTopFate
    Bow
    Choose
+   CreateToken
    Destroy
    DestroyProvince
    Discard

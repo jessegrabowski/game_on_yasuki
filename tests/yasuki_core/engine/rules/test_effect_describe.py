@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.effects import (
     Ask,
     Unpayable,
     Choose,
+    CreateToken,
     Discard,
     Destroy,
     DestroyProvince,
@@ -79,6 +80,11 @@ EFFECTS = [
     ),
     (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
     (AttachCard("katana", "hero"), "attach katana to hero"),
+    (CreateToken("ashigaru_2", PlayerId.P1, "farm_1"), "P1 creates ashigaru_2"),
+    (
+        CreateToken("ashigaru_2", PlayerId.P1, "farm_1", attach_to="hero"),
+        "P1 creates ashigaru_2 on hero",
+    ),
     (
         Unpayable("katana is attached to no Personality"),
         "unpayable: katana is attached to no Personality",

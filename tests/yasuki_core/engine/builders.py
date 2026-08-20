@@ -8,8 +8,10 @@ from yasuki_core.engine.table import AttachTarget, DeckKey, TableState, ZoneKey,
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.factory import build_token_print
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
+    CardPrint,
     FatePrint,
     HoldingPrint,
     PersonalityPrint,
@@ -89,6 +91,38 @@ def attachment(
         chi_modifier=chi_modifier,
         keywords=keywords,
     )
+
+
+def token_template(
+    target: GameState | TableState,
+    card_id: str,
+    *,
+    name: str,
+    card_type: str,
+    keywords: tuple[str, ...] = (),
+    force: int | None = None,
+    chi: int | None = None,
+) -> CardPrint:
+    """Load a creatable-token template onto the table and return it.
+
+    Built from a card record through the same factory a deck load uses, so a test's token splits its
+    printed Force and Chi between its own stats and the ones it hands its Personality exactly as the
+    database-loaded one does.
+    """
+    state = target.table if isinstance(target, GameState) else target
+    printed = build_token_print(
+        {
+            "card_id": card_id,
+            "name": name,
+            "types": [card_type, "Proxy"],
+            "keywords": list(keywords),
+            "force": force,
+            "chi": chi,
+            "gold_cost": 0,
+        }
+    )
+    state.creatable_tokens[card_id] = printed
+    return printed
 
 
 def attached(target: GameState | TableState, card: L5RCard, parent: AttachTarget) -> L5RCard:

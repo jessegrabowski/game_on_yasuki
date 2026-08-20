@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     BanishTopFate,
+    CreateToken,
     Bow,
     Choose,
     Destroy,
@@ -22,7 +23,8 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.prints import AttachmentPrint
 from yasuki_core.game_pieces.counters import WEALTH
 
 from tests.yasuki_core.engine.builders import (
@@ -144,6 +146,40 @@ def test_a_discard_lands_in_the_pile_for_its_side(side, role):
 
     assert card in game.table.zones[ZoneKey(PlayerId.P1, role)].cards
     assert events == [CardDiscarded(card.id, side, PlayerId.P1)]
+
+
+def _token_game():
+    """A game whose deck load resolved one token template — a 2F Follower to create."""
+    game = two_seat_game()
+    game.table.creatable_tokens["scout"] = AttachmentPrint(
+        name="Scout",
+        side=Side.FATE,
+        printed_id="scout",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=2,
+    )
+    return game
+
+
+def test_creating_onto_a_personality_who_has_left_play_creates_nothing():
+    # The target is fixed when the ability is announced, and anything can happen to him before the
+    # creation resolves. A homeless attachment would be destroyed by the state rules on sight.
+    game = _token_game()
+
+    events = CreateToken("scout", PlayerId.P1, "maker", attach_to="gone").perform(game)
+
+    assert events == []
+    assert game.table.battlefield.cards == []
+    assert game.created_by == {}
+
+
+def test_creating_from_a_template_the_deck_load_never_resolved_is_an_error():
+    # A card that can create names its token in the database, so a missing template means the table
+    # was built without them. Failing loudly beats a card that silently does nothing.
+    game = _token_game()
+
+    with pytest.raises(KeyError):
+        CreateToken("no_such_token", PlayerId.P1, "maker").perform(game)
 
 
 def test_placing_into_a_full_province_is_a_no_op():

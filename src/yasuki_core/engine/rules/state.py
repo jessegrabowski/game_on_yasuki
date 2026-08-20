@@ -125,6 +125,13 @@ class GameState:
         The active recorded stat modifiers — created continuous effects (an ability's grant), kept in
         creation order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike
         it may be non-empty at rest within a turn, so its order is load-bearing. Default empty.
+    tokens_created : int
+        How many tokens the game has created, which names the next one. Ephemeral and rebuilt by
+        replay like ``stack``; it counts creations rather than tokens on the board, so an id is
+        never reused by a token created after an earlier one has gone. Default 0.
+    created_by : dict mapping str to str
+        Each created card to the card that created it, kept for the life of the game so a card can
+        still name what it made after the fact. Ephemeral and rebuilt by replay. Default empty.
     """
 
     table: TableState
@@ -144,6 +151,8 @@ class GameState:
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
     modifiers: list[Modifier] = field(default_factory=list)
+    tokens_created: int = 0
+    created_by: dict[str, str] = field(default_factory=dict)
 
     @property
     def awaiting_decision(self) -> bool:
@@ -198,6 +207,23 @@ class GameState:
         """Empty every seat's gold pool, as happens at the end of each phase."""
         for seat in self.gold:
             self.gold[seat] = 0
+
+    def mint_token_id(self) -> str:
+        """Claim the next id for a token about to be created.
+
+        Counted rather than drawn from the game's generator, so replaying a tape names the same
+        tokens the live game did and every id a projection or a log line carries still resolves.
+        """
+        self.tokens_created += 1
+        return f"token-{self.tokens_created}"
+
+    def creations_of(self, card_id: str) -> tuple[str, ...]:
+        """The cards ``card_id`` created that are still on the table, oldest first."""
+        return tuple(
+            created
+            for created, creator in self.created_by.items()
+            if creator == card_id and created in self.table.cards_by_id
+        )
 
     def use_once(self, key: str) -> bool:
         """Claim the one-time use named ``key``. Return True the first time and record it; return

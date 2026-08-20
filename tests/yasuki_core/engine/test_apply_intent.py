@@ -2,6 +2,7 @@ import pytest
 
 from numpy.random import default_rng
 
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos, BATTLEFIELD
 from yasuki_core.engine.intents import (
@@ -1305,6 +1306,60 @@ def test_spawned_token_is_interactable_only_by_its_creator():
     assert apply_intent(table, PlayerId.P1, SetCardPos("tok1", 9.0, 9.0))
     assert table.positions["tok1"] == BoardPos(9.0, 9.0)
     table.validate()
+
+
+@pytest.mark.parametrize(
+    "dest",
+    [
+        ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD),
+        ZoneKey(PlayerId.P1, ZoneRole.HAND),
+        DeckKey(PlayerId.P1, Side.DYNASTY),
+    ],
+    ids=["discard", "hand", "deck"],
+)
+def test_a_token_leaving_the_battlefield_ceases_to_exist(dest):
+    # Every route off the battlefield goes through move_card, and a created card may take none of
+    # them: one filed in a discard could be recurred and one shuffled into a deck would be drawn as
+    # though it had always been real.
+    table = TableState.empty_two_seat()
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="tok1",
+            printed=L5RCard.of(
+                CardPrint, id="src", name="Bushi Token", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
+            position=BoardPos(5.0, 6.0),
+        ),
+    )
+
+    ops.move_card(table, table.cards_by_id["tok1"], dest)
+
+    assert "tok1" not in table.cards_by_id
+    assert "tok1" not in table.positions
+    table.validate()
+
+
+def test_a_token_moved_around_the_battlefield_stays_on_the_table():
+    # The other half of the rule: it ceases to exist on *leaving play*, not on being nudged.
+    table = TableState.empty_two_seat()
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="tok1",
+            printed=L5RCard.of(
+                CardPrint, id="src", name="Bushi Token", side=Side.DYNASTY, owner=PlayerId.P1
+            ),
+            position=BoardPos(5.0, 6.0),
+        ),
+    )
+
+    ops.move_card(table, table.cards_by_id["tok1"], BATTLEFIELD, position=BoardPos(1.0, 2.0))
+
+    assert table.cards_by_id["tok1"] in table.battlefield.cards
+    assert table.positions["tok1"] == BoardPos(1.0, 2.0)
 
 
 def test_spawn_card_with_unknown_token_id_is_rejected():

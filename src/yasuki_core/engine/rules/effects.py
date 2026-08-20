@@ -156,7 +156,12 @@ class MoveToHand(Effect):
 
 def _discard_unit(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
     """Send ``card`` and everything attached to him to their own discards by side, returning the unit
-    that left so the caller can announce each departure in its own words (CR, Unit)."""
+    that left so the caller can announce each departure in its own words (CR, Unit).
+
+    A created card among them has no discard pile and is taken off the table instead, which the move
+    itself sees to (CR, Create). It still announces its departure, because a card reacting to a
+    Follower being destroyed does not care where the Follower came from.
+    """
     unit = unit_of(game, card)
     for member in unit:
         ops.move_card(game.table, member, _discard_pile(member))
@@ -337,6 +342,58 @@ class AttachCard(Effect):
             ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
         ops.attach_to_personality(game.table, card, personality)
         return [EnteredPlay(self.card_id, from_hand=from_hand)] if entering else []
+
+
+@dataclass(frozen=True, slots=True)
+class CreateToken(Effect):
+    """Create a card that was never in a deck — the "create a 1F Ashigaru Follower", the "create a
+    Personality with Force equal to the target's Chi" — and put it into play.
+
+    What it is comes from the token template the deck load resolved, so the created card carries the
+    stats, keywords and art the printed text describes rather than a stat line spelled out at the
+    creation site. A created card is not a copy of anything: it enters play fresh, and leaving play
+    removes it from the game rather than filling a discard pile.
+
+    Attributes
+    ----------
+    token_id : str
+        The template to stamp it from, by token card id.
+    owner : PlayerId
+        The seat that will control it.
+    creator_id : str
+        The card creating it, which the created card is remembered by. A card that speaks about what
+        it made later — "if this Holding is ever unbowed, banish the Personality" — reads the
+        relation rather than hunting the board for something that looks right.
+    attach_to : str or None
+        The Personality it arrives attached to, or None to arrive on its own. A card that names a
+        target Personality creates nothing when that Personality has left play in the meantime.
+    """
+
+    token_id: str
+    owner: PlayerId
+    creator_id: str
+    attach_to: str | None = None
+
+    def describe(self) -> str:
+        where = "" if self.attach_to is None else f" on {self.attach_to}"
+        return f"{self.owner.name} creates {self.token_id}{where}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        personality = None
+        if self.attach_to is not None:
+            personality = game.table.cards_by_id.get(self.attach_to)
+            if personality is None:
+                return []
+        # A KeyError here is a deck that reached the table without its token templates, not a card
+        # doing something unusual — the load resolves every token the deck's cards can create.
+        printed = game.table.creatable_tokens[self.token_id]
+        card = ops.spawn_token(
+            game.table, game.mint_token_id(), printed, UNPLACED_BOARD_POS, self.owner
+        )
+        game.created_by[card.id] = self.creator_id
+        if personality is not None:
+            ops.attach_to_personality(game.table, card, personality)
+        return [EnteredPlay(card.id, from_hand=False)]
 
 
 @dataclass(frozen=True, slots=True)
