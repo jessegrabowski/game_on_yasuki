@@ -8,18 +8,28 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.economy import effective_gold_production
+from yasuki_core.engine.rules.cards.rise_of_jigoku import MISHIMES_ONI
+from yasuki_core.engine.rules.economy import (
+    effective_chi,
+    effective_force,
+    effective_gold_production,
+)
 from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
+    end_turn,
     holding,
+    personality,
     put_in_play,
     register,
+    stronghold,
+    token_template,
 )
 
 P1 = PlayerId.P1
@@ -385,3 +395,111 @@ def test_backing_out_of_the_first_step_unwinds_it_too():
 
     assert not session.game.table.cards_by_id["mf"].bowed
     assert "target" not in {c.id for c in session.game.table.battlefield.cards}
+
+
+# --- Mishime Sensei ---
+
+
+def _mishime_game(*, chi=3, stronghold_production=6):
+    """P1's Mishime Sensei in play with a Personality to feed it and a Stronghold that can raise the
+    five gold the ability charges."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, gold_production=stronghold_production))
+    put_in_play(
+        state,
+        L5RCard.of(
+            SenseiPrint,
+            id="sensei",
+            name="Mishime Sensei",
+            side=Side.FATE,
+            owner=P1,
+            printed_id="mishime_sensei",
+        ),
+    )
+    put_in_play(state, personality("victim", force=1, chi=chi))
+    token_template(
+        state,
+        MISHIMES_ONI,
+        name="Mishime's Oni",
+        card_type="Personality",
+        keywords=("Shadowlands", "Nonhuman", "Oni"),
+        chi=2,
+    )
+    return EngineSession.start(state, P1)
+
+
+def _summon_oni(session, *, destroy: bool):
+    """Run the whole ability: pay, pick the Personality, then answer the destroy question."""
+    session.act(P1, ActivateAbility("sensei"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))  # bow the Stronghold for the five gold
+    session.submit(P1, DecisionResponse(("victim",)))
+    session.submit(P1, DecisionResponse(("victim",) if destroy else ()))
+    return next(card for card in session.game.table.battlefield.cards if card.is_token)
+
+
+def test_the_oni_takes_its_force_from_the_personality_it_was_made_from():
+    """The token prints its Force as "*"; only the card creating it knows the number."""
+    session = _mishime_game(chi=4)
+
+    oni = _summon_oni(session, destroy=True)
+
+    assert oni.name == "Mishime's Oni"
+    assert effective_force(session.game, oni) == 4
+    assert effective_chi(session.game, oni) == 2  # printed on the token, not copied
+
+
+def test_destroying_the_personality_keeps_the_oni_past_the_turn():
+    session = _mishime_game(chi=4)
+
+    oni = _summon_oni(session, destroy=True)
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
+    assert [card.id for card in discard.cards] == ["victim"]
+    end_turn(session)
+
+    assert oni.id in session.game.table.cards_by_id
+
+
+def test_sparing_the_personality_lends_the_oni_for_one_turn():
+    """ "Banish it unless you destroyed the target" — the Personality lives, bowed, and the Oni goes
+    before the turn it arrived in ends."""
+    session = _mishime_game(chi=4)
+
+    oni = _summon_oni(session, destroy=False)
+    assert session.game.table.cards_by_id["victim"].bowed is True
+    end_turn(session)
+
+    assert oni.id not in session.game.table.cards_by_id
+    assert session.game.table.cards_by_id["victim"] in session.game.table.battlefield.cards
+
+
+def test_the_oni_copies_the_chi_the_target_has_rather_than_the_chi_he_prints():
+    """ "Force equal to the target's Chi" is his Chi as the board has it, so a Personality carrying a
+    Chi bonus makes a bigger Oni than his printed line would."""
+    session = _mishime_game(chi=3)
+    session.game.modifiers.append(
+        Modifier("sensei", "victim", Stat.CHI, 2, Duration.WHILE_SOURCE_IN_PLAY)
+    )
+
+    oni = _summon_oni(session, destroy=True)
+
+    assert effective_force(session.game, oni) == 5
+
+
+def test_mishime_is_withheld_when_the_seat_cannot_raise_five_gold():
+    session = _mishime_game(stronghold_production=4)
+
+    assert ActivateAbility("sensei") not in session.legal_actions(P1)
+
+
+def test_mishime_does_not_target_a_bowed_personality():
+    session = _mishime_game()
+    session.game.table.cards_by_id["victim"].bow()
+
+    assert ActivateAbility("sensei") not in session.legal_actions(P1)
+
+
+def test_mishime_replays_to_the_same_board():
+    session = _mishime_game(chi=4)
+    _summon_oni(session, destroy=False)
+
+    assert replay(session.log).table == session.game.table

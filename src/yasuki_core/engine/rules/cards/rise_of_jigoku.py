@@ -4,24 +4,33 @@ from yasuki_core.engine.rules.abilities import (
     bow_cost,
     bow_and_destroy,
     owned_holdings,
+    owned_personalities,
     plus_one_gp_this_turn,
     spend_wealth,
     register_ability,
 )
-from yasuki_core.engine.rules.economy import effective_gold_production, effective_keywords
+from yasuki_core.engine.rules.economy import (
+    effective_chi,
+    effective_gold_production,
+    effective_keywords,
+)
 from yasuki_core.engine.rules.legality import reachable_gold, recruit_cost
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
+    Bow,
+    CreateToken,
     Destroy,
     Effect,
     IgnoreHonorRequirements,
+    PayGold,
     RecruitCard,
     Straighten,
     Then,
 )
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay
 from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on, province_holdings
 from yasuki_core.game_pieces.cards import L5RCard
@@ -50,6 +59,9 @@ register_ability(
 
 # --- Mishime Sensei ---
 
+MISHIMES_ONI = "oni_personality_variable_chi"
+ONI_COST = 5
+
 
 @on(EnteredPlay, "mishime_sensei")
 def _mishime_sensei_enters_play(ctx: TriggerContext) -> list[Effect]:
@@ -58,6 +70,77 @@ def _mishime_sensei_enters_play(ctx: TriggerContext) -> list[Effect]:
     if ctx.event.card_id != ctx.card.id:
         return []
     return [IgnoreHonorRequirements(ctx.card.owner)]
+
+
+def _mishime_sensei_of(game: GameState, seat: PlayerId) -> L5RCard:
+    """The Sensei whose ability is resolving. The question it asked carries the Personality rather
+    than the Sensei, and a seat has the one Sensei, in play since it bowed to pay."""
+    return next(
+        card
+        for card in game.table.battlefield.cards
+        if card.printed_id == "mishime_sensei" and card.owner is seat
+    )
+
+
+@choice_resolver("mishime_sensei")
+def _resolve_mishime_sensei_sacrifice(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Destroy the bowed Personality if the seat said yes, then make the Oni either way.
+
+    The Oni's Force is read here rather than baked into the question, but still before the
+    destruction resolves: the Chi it copies belongs to a Personality who is about to stop having
+    one. Sparing the Personality only lends the Oni for the turn.
+    """
+    target = game.table.cards_by_id[source_id]
+    sensei = _mishime_sensei_of(game, seat)
+    destroyed = bool(chosen)
+    effects: list[Effect] = [Destroy(source_id, seat)] if destroyed else []
+    effects.append(
+        CreateToken(
+            MISHIMES_ONI,
+            seat,
+            sensei.id,
+            stats=((Stat.FORCE, effective_chi(game, target)),),
+            banish_at_turn_end=not destroyed,
+        )
+    )
+    return effects
+
+
+def _mishime_sensei_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [Bow(source.id), PayGold(source.owner, ONI_COST, source.name)]
+
+
+def _own_unbowed_personalities(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in owned_personalities(game, source.owner) if not card.bowed]
+
+
+def _mishime_sensei_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Bow the target, then ask whether to finish him. Both answers make the Oni, so the question
+    settles how long it stays rather than whether it arrives."""
+    return [
+        Bow(target.id),
+        Ask(
+            source.owner,
+            f"Destroy {target.name} to keep the Oni past this turn?",
+            "mishime_sensei",
+            subjects=(target.id,),
+            source_id=target.id,
+        ),
+    ]
+
+
+register_ability(
+    "mishime_sensei",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label=f"Open: Bow and pay {ONI_COST} gold to bow your Personality for an Oni of his Chi",
+        cost=_mishime_sensei_cost,
+        targets=_own_unbowed_personalities,
+        effects=_mishime_sensei_effects,
+    ),
+)
 
 
 # --- Modest Farm ---

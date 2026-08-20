@@ -263,3 +263,18 @@ def end_phase(session: EngineSession) -> None:
         and not session.game.awaiting_decision
     ):
         session.act(session.game.round.priority, Pass())
+
+
+def end_turn(session: EngineSession) -> None:
+    """Pass through the rest of the active player's turn, until the next one begins.
+
+    Stops early if the engine pauses for a decision or the game ends, so a test that wanted the turn
+    over asserts on a board that says why it is not.
+    """
+    turn = session.game.turn
+    while (
+        session.game.turn == turn
+        and not session.game.game_over
+        and not session.game.awaiting_decision
+    ):
+        end_phase(session)
