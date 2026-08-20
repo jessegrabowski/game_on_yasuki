@@ -3,12 +3,12 @@ from typing import Any
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.database import get_cards_by_names
+from yasuki_core.database import get_cards_by_names, get_creates_for_cards
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.setup import setup_seat
 from yasuki_core.engine.table import TableState
-from yasuki_core.game_pieces.factory import resolve_decklist
+from yasuki_core.game_pieces.factory import build_token_templates, resolve_decklist
 
 # A parsed decklist: section names to their entries.
 Decklist = dict[str, Any]
@@ -50,14 +50,20 @@ def build_state_from_deck(
     state = TableState.empty_two_seat(p1_name, p2_name)
     deal = default_rng() if rng is None else rng
     seat_rngs = dict(zip((seat for seat, _ in seats), deal.spawn(len(seats)), strict=True))
-    resolved_by_path: dict[str, tuple[Decklist, list[dict]]] = {}
+    resolved_by_path: dict[str, tuple[Decklist, list[dict], dict[str, list[str]]]] = {}
     for seat, path in seats:
         key = str(path)
         if key not in resolved_by_path:
             parsed = parse_deck_yaml(Path(path).read_text())
-            resolved_by_path[key] = (parsed, get_cards_by_names(_deck_card_names(parsed)))
-        parsed, records = resolved_by_path[key]
-        resolved = resolve_decklist(parsed, records, seat)
+            records = get_cards_by_names(_deck_card_names(parsed))
+            # One relational pull of every token the deck can create, so a card that creates one
+            # mid-game needs no live database call — the templates sit on the table for the rest of
+            # the game.
+            creates, tokens = get_creates_for_cards([record["card_id"] for record in records])
+            state.creatable_tokens.update(build_token_templates(tokens))
+            resolved_by_path[key] = (parsed, records, creates)
+        parsed, records, creates = resolved_by_path[key]
+        resolved = resolve_decklist(parsed, records, seat, creates)
         setup_seat(state, seat, resolved, rng=seat_rngs[seat])
     state.validate()
     return state, PlayerId.P1
