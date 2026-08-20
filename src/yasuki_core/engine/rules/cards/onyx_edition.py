@@ -1,6 +1,15 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import InvestAbility, one_wealth, register_invest
-from yasuki_core.engine.rules.effects import AdjustCounter, Choose, Effect
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    InvestAbility,
+    bow_cost,
+    one_wealth,
+    register_ability,
+    register_invest,
+)
+from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.effects import AdjustCounter, Choose, CreateToken, Effect
+from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
@@ -9,6 +18,8 @@ from yasuki_core.engine.rules.triggers import (
     on,
     sincerity_seed_targets,
 )
+from yasuki_core.game_pieces import keywords
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 
 
@@ -35,3 +46,30 @@ def _sincerity_seed(
 
 
 register_invest("training_court", InvestAbility(minimum=1, maximum=1, effect=one_wealth))
+
+
+# --- Utaku Gorou, Stablemaster ---
+
+CAVALRY_FOLLOWER = "cavalry"
+
+
+def _utaku_gorou_targets(game: GameState, source: L5RCard) -> list[str]:
+    cavalry = game.table.creatable_tokens[CAVALRY_FOLLOWER]
+    riders = creation_targets(game, source.owner, cavalry, keyword=keywords.SAMURAI)
+    return [rider.id for rider in riders]
+
+
+def _utaku_gorou_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [CreateToken(CAVALRY_FOLLOWER, source.owner, source.id, attach_to=target.id)]
+
+
+register_ability(
+    "utaku_gorou_stablemaster",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Bow to Equip a 1F Cavalry Follower to your Samurai",
+        cost=bow_cost,
+        targets=_utaku_gorou_targets,
+        effects=_utaku_gorou_effects,
+    ),
+)
