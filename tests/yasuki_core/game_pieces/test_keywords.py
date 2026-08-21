@@ -74,9 +74,9 @@ def test_no_rules_module_spells_a_keyword_for_itself():
 
 
 def test_the_constant_scan_reads_the_rules_layer():
-    # Guards the test above, which passed from any working directory but the repository root while
-    # its path was relative: an empty scan finds no offenders and reports success. Anchored on the
-    # layer rather than on any one card, so implementing or removing a card cannot silence it.
+    # Guards the test above: an empty scan finds no offenders and reports success, so the scan has
+    # to be shown to have read something. Anchored on the layer rather than on any one card, so
+    # implementing or removing a card cannot silence it.
     assert len(list(RULES_DIR.rglob("*.py"))) > 20
     assert any(module.startswith("cards/") for module, _, _, _ in rules_constants())
 

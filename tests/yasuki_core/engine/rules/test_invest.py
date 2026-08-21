@@ -221,8 +221,8 @@ def test_the_invest_rise_survives_the_turn_that_bought_it():
 
 
 def test_a_free_invest_still_buys_what_the_invest_buys():
-    """Zero is a price, not a refusal. The amount used to double as the flag for whether the option
-    was taken, which a card whose own text drops its Invest to nothing would have silenced."""
+    """Zero is a price, not a refusal: a card whose own text drops its Invest to nothing still buys
+    what the Invest buys."""
     invested: list[int] = []
 
     @_register_free_invest("free_invest_probe")

@@ -596,8 +596,7 @@ def test_the_servant_survives_when_you_choose_to_leave_the_holding_bowed():
 
 
 def test_declining_to_stay_bowed_straightens_it_and_costs_the_servant():
-    """The other half of the bargain, and the half that was unreachable while the straighten passed
-    the Holding over unconditionally: standing it back up banishes what it made."""
+    """The other half of the bargain: standing the Holding back up banishes what it made."""
     session = _culling_game()
     session.act(P1, ActivateAbility("grounds"))
     servant = _servant_of(session)

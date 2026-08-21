@@ -116,8 +116,8 @@ ROLES = frozenset(
 @pytest.mark.parametrize("module", card_modules(), ids=lambda path: path.stem)
 def test_every_handler_is_named_for_its_card_and_its_job(module):
     # One shape, so a card's whole implementation answers a grep for its id and a reader can tell a
-    # gold handler from a trigger without opening the registration. Names that read as prose
-    # instead — _sasada_calls_her_orochi — say neither which card nor which of the roles they fill.
+    # gold handler from a trigger without opening the registration. A name that reads as prose —
+    # one describing what the card does — says neither which card nor which of the roles it fills.
     offenders = [
         f"{function.card_id}: {function.name}"
         for function in card_functions(module)
@@ -130,7 +130,7 @@ def test_every_handler_is_named_for_its_card_and_its_job(module):
 def test_the_function_scan_finds_handlers_to_check():
     # Guards the check above twice over. A scan that read no functions passes it without reading a
     # name; so does one that classifies every function as an unregistered helper, since a helper is
-    # only asked to carry its card's id and a prose name like _sasada_calls_her_orochi already does.
+    # only asked to carry its card's id, which a prose name already does.
     scanned = [function for module in card_modules() for function in card_functions(module)]
 
     assert len(scanned) > 50

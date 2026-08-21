@@ -52,8 +52,8 @@ def _fantastic_gardens_effects(game: GameState, source: L5RCard, target: L5RCard
 register_ability(
     "fantastic_gardens",
     Ability(
-        # Repeatable, so it claims no once-per-turn key: bowing is the only thing rationing it, and
-        # a Gardens straightened again may bow for another two Honor.
+        # Repeatable: bowing is the only thing rationing it, so a Gardens straightened again may
+        # bow for another two Honor.
         timing=ActionTiming.LIMITED,
         label=f"Limited: Bow to gain {GARDENS_HONOR} Honor",
         cost=bow_cost,

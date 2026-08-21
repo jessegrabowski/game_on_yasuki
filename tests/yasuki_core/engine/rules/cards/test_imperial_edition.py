@@ -46,8 +46,8 @@ def test_bowing_the_gardens_gains_two_honor():
 
 
 def test_the_gardens_may_be_bowed_again_the_same_turn():
-    """Repeatable: the ability claims no once-per-turn key, so bowing is the only thing rationing
-    it and a Gardens straightened again pays out a second time."""
+    """Repeatable: bowing is the only thing rationing it, so a Gardens straightened again pays out
+    a second time."""
     session = _gardens_game()
 
     session.act(P1, ActivateAbility("gardens"))
@@ -184,8 +184,8 @@ def test_the_fate_deck_is_shuffled_after_the_search_reads_it():
 
 
 def test_a_fate_deck_with_no_item_still_gains_the_honor():
-    """Making the Items the ability's targets would have withheld the honor from a deck holding
-    none, since an ability with no legal target is never offered."""
+    """The honor is unconditional: the Items are searched for during resolution rather than
+    targeted, so a deck holding none still pays out."""
     session = _gift_game(items=())
     before = session.game.table.seats[P1].honor
     assert ActivateAbility("gift") in session.legal_actions(P1)
