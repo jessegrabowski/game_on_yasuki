@@ -17,6 +17,7 @@ Read the card's text and find the shape:
 | Costs less to bring into play, conditionally | `@recruit_discount(id)` | Colonial Farm |
 | "After X happens…" | `@on(Event, id)` | Rice Farm |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | Millet Farm |
+| "Response: after X…" | `register_ability(id, Ability(timing=ActionTiming.RESPONSE, ...))` | Caravansary |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | Rebuilt Harbor |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | Fortified Farmlands |
 | Gives the Personality it hangs on a stat | `@attachment_grant(id)` | Haramaki-do |
@@ -354,9 +355,9 @@ these needs a core extension, not just a card module:
   cards, not modes.
 - **Suppression** — one card turning another's ability off.
 
-- **Interrupt and Response abilities.** Both designators exist and no Action Round grants either,
-  so an ability carrying one is never offered. Response is a Shattered Empire addition, and the
-  largest single gap in the vocabulary.
+- **Interrupt abilities.** The designator exists and no Action Round grants it, so an ability
+  carrying it is never offered. Response, the other half of the pair, is served by the Response
+  Step.
 
 This list is measured, not guessed: a survey of a single arc found 27 cards targeting an opponent's
 cards and 20 modal. If your card needs one of these, the honest next step is a design discussion,
