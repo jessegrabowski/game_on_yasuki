@@ -6,8 +6,11 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import NAGA_FOLLOWER
-from yasuki_core.engine.rules.economy import effective_gold_production
+from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import HIYAMAKOS_CLAW, NAGA_FOLLOWER
+from yasuki_core.engine.rules.economy import effective_force, effective_gold_production
+from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -244,3 +247,60 @@ def test_tarkasha_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("dead_naga",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Tetsuo Hiyamako (Experienced) ---
+
+
+def _hiyamako_game():
+    game = two_seat_game()
+    token_template(
+        game,
+        HIYAMAKOS_CLAW,
+        name="Hiyamako's Claw",
+        card_type="Item",
+        keywords=("Claw", "One-Handed", "Weapon"),
+        force=1,
+    )
+    put_in_play(
+        game,
+        personality(
+            "hiyamako", printed_id="tetsuo_hiyamako_experienced", force=2, chi=2, gold_cost=6
+        ),
+    )
+    return game
+
+
+def test_hiyamako_arrives_holding_two_claws():
+    """Two Weapons where the rules allow one: her text says so, and card text beats the rules (CR,
+    Cardinal Rule 1)."""
+    game = _hiyamako_game()
+
+    fire(game, EnteredPlay("hiyamako"))
+
+    hiyamako = game.table.cards_by_id["hiyamako"]
+    claws = attachments_of(game, hiyamako)
+    assert [claw.name for claw in claws] == ["Hiyamako's Claw", "Hiyamako's Claw"]
+    assert effective_force(game, hiyamako) == 4  # her two, and one from each Claw
+
+
+def test_her_claws_are_two_distinct_cards():
+    """Each is created in its own right, so destroying one leaves the other."""
+    game = _hiyamako_game()
+    fire(game, EnteredPlay("hiyamako"))
+    first, second = attachments_of(game, game.table.cards_by_id["hiyamako"])
+
+    resolve_effects(game, [Destroy(first.id, P1)])
+
+    assert first.id not in game.table.cards_by_id
+    assert attachments_of(game, game.table.cards_by_id["hiyamako"]) == (second,)
+
+
+def test_another_personality_arriving_arms_nobody():
+    game = _hiyamako_game()
+    put_in_play(game, personality("bystander", force=2, chi=2))
+
+    fire(game, EnteredPlay("bystander"))
+
+    assert attachments_of(game, game.table.cards_by_id["hiyamako"]) == ()
+    assert attachments_of(game, game.table.cards_by_id["bystander"]) == ()

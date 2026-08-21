@@ -147,6 +147,28 @@ register_ability(
 )
 
 
+# --- Tetsuo Hiyamako (Experienced) ---
+
+HIYAMAKOS_CLAW = "weapon_item_claw_plus1f"
+CLAW_COUNT = 2
+
+
+@on(EnteredPlay, "tetsuo_hiyamako_experienced")
+def _tetsuo_hiyamako_experienced_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After Hiyamako enters play, create two +1F Claws and attach them to her.
+
+    Two Weapons on one Personality, where the rules allow one (CR, Weapon). Her text says so, and
+    card text beats the rules (CR, Cardinal Rule 1) — which is also why they are attached rather
+    than Equipped: the Weapon limit belongs to Equip's legality, and nothing here is Equipping.
+    """
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [
+        CreateToken(HIYAMAKOS_CLAW, ctx.card.owner, ctx.card.id, attach_to=ctx.card.id)
+        for _ in range(CLAW_COUNT)
+    ]
+
+
 # --- Wheat Farm ---
 
 
