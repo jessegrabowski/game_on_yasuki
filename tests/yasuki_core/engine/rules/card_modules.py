@@ -26,6 +26,7 @@ _DECORATORS = {
     "on",
     "gold_handler",
     "recruit_discount",
+    "invest_discount",
     "keyword_grant",
     "attachment_grant",
     "attach_restriction",

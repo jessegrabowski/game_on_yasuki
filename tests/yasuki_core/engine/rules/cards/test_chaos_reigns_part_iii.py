@@ -1,21 +1,36 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility
+from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import FUSHICHO, ZOMBIE_FOLLOWER
+from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
+    FUSHICHO,
+    IKARICHIS_UNDEAD,
+    KANPEKI_DYNASTY,
+    ZOMBIE_FOLLOWER,
+)
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.economy import effective_force
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import WindPrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    end_phase,
     end_turn,
     holding,
     personality,
     put_in_play,
+    register,
+    stronghold,
     token_template,
     two_seat_game,
 )
@@ -81,6 +96,102 @@ def test_kengun_grounds_is_withheld_on_another_seats_turn():
 
     assert session.game.active is P2
     assert ActivateAbility("grounds") not in session.legal_actions(P1)
+
+
+# --- Moto Ikarichi, Bloodseeker ---
+
+
+def _ikarichi_game(*, wind: str | None = None):
+    """Ikarichi face-up in a Province with the Invest affordable, under ``wind`` if a Wind is in
+    play."""
+    state = TableState.empty_two_seat()
+    token_template(
+        state,
+        IKARICHIS_UNDEAD,
+        name="Ikarichi's Undead",
+        card_type="Follower",
+        keywords=("Cavalry", "Nonhuman", "Shadowlands", "Undead"),
+        force=2,
+    )
+    put_in_play(state, stronghold(P1, gold_production=8))
+    if wind is not None:
+        put_in_play(
+            state,
+            L5RCard.of(
+                WindPrint, id="P1-wind", name="Wind", side=Side.FATE, owner=P1, printed_id=wind
+            ),
+        )
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    ikarichi = register(
+        state,
+        personality(
+            "ikarichi", printed_id="moto_ikarichi_bloodseeker", force=3, chi=2, gold_cost=5
+        ),
+    )
+    ikarichi.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(ikarichi)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+    return session
+
+
+def test_ikarichi_invests_two_gold_for_an_undead_outrider():
+    session = _ikarichi_game()
+
+    session.act(P1, Recruit("ikarichi", invest=True))
+    payment = session.game.pending
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    assert payment.amount == 7  # his five Gold Cost, plus the two the Invest charges
+    outrider = attachments_of(game, game.table.cards_by_id["ikarichi"])[0]
+    assert outrider.name == "Ikarichi's Undead"
+
+
+def test_the_kanpeki_dynasty_rides_him_in_for_nothing():
+    """ "Invest :g2:, or :g0: if your Wind is The Kanpeki Dynasty" — the Wind is a card in play, so
+    the Invest reads the board rather than a printed number alone."""
+    session = _ikarichi_game(wind=KANPEKI_DYNASTY)
+
+    session.act(P1, Recruit("ikarichi", invest=True))
+    payment = session.game.pending
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    assert payment.amount == 5  # his Gold Cost alone
+    outrider = attachments_of(game, game.table.cards_by_id["ikarichi"])[0]
+    assert outrider.name == "Ikarichi's Undead"  # paid nothing, and still got the Follower
+
+
+def test_another_wind_leaves_the_invest_at_its_printed_price():
+    session = _ikarichi_game(wind="some_other_wind")
+
+    session.act(P1, Recruit("ikarichi", invest=True))
+
+    assert session.game.pending.amount == 7
+
+
+@pytest.mark.parametrize("invest", [False, True], ids=["plain", "invested"])
+def test_ikarichi_costs_two_honor_however_he_arrives(invest):
+    """The Honor is his entry's price, not the Invest's, so it is charged once either way."""
+    session = _ikarichi_game()
+
+    session.act(P1, Recruit("ikarichi", invest=invest))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert session.game.table.seats[P1].honor == -2
+
+
+def test_ikarichi_replays_to_the_same_board():
+    """His Invest mints a card mid-recruit, and a replayed game has to mint the same one."""
+    session = _ikarichi_game()
+    session.act(P1, Recruit("ikarichi", invest=True))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert replay(session.log).table == session.game.table
 
 
 # --- Walk with Tengoku ---

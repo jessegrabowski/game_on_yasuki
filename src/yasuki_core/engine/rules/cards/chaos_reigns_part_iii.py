@@ -1,6 +1,18 @@
-from yasuki_core.engine.rules.abilities import Ability, bow_cost, itself, register_ability
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    InvestAbility,
+    bow_cost,
+    itself,
+    register_ability,
+    register_invest,
+)
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import PlayerState, effective_keywords, recruit_discount
+from yasuki_core.engine.rules.economy import (
+    PlayerState,
+    effective_keywords,
+    invest_discount,
+    recruit_discount,
+)
 from yasuki_core.engine.rules.effects import CreateToken, Effect, GainHonor
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import EnteredPlay
@@ -13,7 +25,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 # --- Kengun Grounds ---
 
 ZOMBIE_FOLLOWER = "zombie_follower"
-ARRIVAL_HONOR_LOSS = 2
+KENGUN_HONOR_LOSS = 2
 UNTAINTED_HONOR_LOSS = 5
 
 
@@ -22,7 +34,7 @@ def _kengun_grounds_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Holding enters play, lose 2 Honor."""
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [GainHonor(ctx.card.owner, -ARRIVAL_HONOR_LOSS)]
+    return [GainHonor(ctx.card.owner, -KENGUN_HONOR_LOSS)]
 
 
 def _kengun_grounds_targets(game: GameState, source: L5RCard) -> list[str]:
@@ -54,6 +66,46 @@ register_ability(
         effects=_kengun_grounds_effects,
     ),
 )
+
+
+# --- Moto Ikarichi, Bloodseeker ---
+
+IKARICHIS_UNDEAD = "undead_cavalry_follower_2f"
+KANPEKI_DYNASTY = "the_kanpeki_dynasty_hantei_xl"
+IKARICHI_HONOR_LOSS = 2
+IKARICHI_INVEST = 2
+
+
+@invest_discount("moto_ikarichi_bloodseeker")
+def _moto_ikarichi_bloodseeker_invest_discount(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> int:
+    """His Invest costs nothing under the Kanpeki Dynasty, and its printed two Gold under any other
+    Wind."""
+    return IKARICHI_INVEST if any(held.printed_id == KANPEKI_DYNASTY for held in me.in_play) else 0
+
+
+def _moto_ikarichi_bloodseeker_invest(
+    game: GameState, source: L5RCard, amount: int
+) -> list[Effect]:
+    """A 2F Undead outrider, made and mounted as he arrives."""
+    return [CreateToken(IKARICHIS_UNDEAD, source.owner, source.id, attach_to=source.id)]
+
+
+register_invest(
+    "moto_ikarichi_bloodseeker",
+    InvestAbility(
+        minimum=IKARICHI_INVEST, maximum=IKARICHI_INVEST, effect=_moto_ikarichi_bloodseeker_invest
+    ),
+)
+
+
+@on(EnteredPlay, "moto_ikarichi_bloodseeker")
+def _moto_ikarichi_bloodseeker_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After Ikarichi enters play, lose 2 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -IKARICHI_HONOR_LOSS)]
 
 
 # --- Moto Traders ---

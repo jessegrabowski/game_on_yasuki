@@ -276,6 +276,31 @@ def effective_recruit_discount(game: GameState, card: L5RCard) -> int:
     return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
 
 
+# The same shape one step along: a reduction on a card's Invest rather than on its Gold Cost, for
+# the "Invest :g2:, or :g0: if ..." a card prints.
+INVEST_DISCOUNTS: dict[str, DiscountHandler] = {}
+
+
+def invest_discount(printed_id: str) -> Callable[[DiscountHandler], DiscountHandler]:
+    """Register the decorated function as the Invest-discount handler for ``printed_id``."""
+
+    def register(handler: DiscountHandler) -> DiscountHandler:
+        if printed_id in INVEST_DISCOUNTS:
+            raise ValueError(f"{printed_id} already has an invest discount")
+        INVEST_DISCOUNTS[printed_id] = handler
+        return handler
+
+    return register
+
+
+def effective_invest_discount(game: GameState, card: L5RCard) -> int:
+    """The gold ``card``'s Invest costs less from its own conditional reduction, or 0 with none."""
+    handler = INVEST_DISCOUNTS.get(card.printed_id)
+    if handler is None:
+        return 0
+    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+
+
 # A keyword handler names the keywords a card carries beyond the printed ones, from the card and its
 # controller's and opponents' views — the "this card has X" clauses gated on a readable condition.
 KeywordHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], tuple[str, ...]]

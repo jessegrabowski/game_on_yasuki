@@ -261,8 +261,8 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
             recruits.append(Recruit(card.id))
             if can_proclaim(game, card):
                 recruits.append(Recruit(card.id, proclaim=True))
-        invest = abilities.invest_for(card)
-        if invest is not None and base + invest.minimum <= affordable:
+        invest = abilities.invest_range(game, card)
+        if invest is not None and base + invest[0] <= affordable:
             recruits.append(Recruit(card.id, invest=True))
     return recruits
 
@@ -291,7 +291,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         if base > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
-        invest = abilities.fixed_invest_amount(card)
+        invest = abilities.fixed_invest_amount(game, card)
         if invest is not None and base + invest <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips

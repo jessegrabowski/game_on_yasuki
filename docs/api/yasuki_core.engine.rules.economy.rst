@@ -18,12 +18,14 @@ yasuki_core.engine.rules.economy
     effective_force
     effective_gold_cost
     effective_gold_production
+    effective_invest_discount
     effective_keywords
     effective_personal_honor
     effective_recruit_discount
     effective_stat
     effective_weapon_limit
     gold_handler
+    invest_discount
     is_clan
     keyword_grant
     opposing_states

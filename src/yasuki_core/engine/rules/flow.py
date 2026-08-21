@@ -240,17 +240,15 @@ def recruit(
             game, card, seat, invest_amount=None, renew=renew, proclaim=proclaim
         )
         return
-    ability = abilities.invest_for(card)
-    if ability.minimum == ability.maximum:
-        game.pending = announce_recruit(
-            game, card, seat, invest_amount=ability.minimum, renew=renew
-        )
+    least, most = abilities.invest_range(game, card)
+    if least == most:
+        game.pending = announce_recruit(game, card, seat, invest_amount=least, renew=renew)
         return
     affordable = reachable_gold(game, seat, card) - recruit_cost(game, card)
-    top = min(ability.maximum, affordable)
+    top = min(most, affordable)
     game.pending = ChooseInvestAmount(
         seat=seat,
-        candidates=tuple(str(amount) for amount in range(ability.minimum, top + 1)),
+        candidates=tuple(str(amount) for amount in range(least, top + 1)),
         source_card_id=card_id,
     )
 
@@ -325,7 +323,7 @@ def _finish_invest(game: GameState, card: L5RCard, invest_amount: int | None) ->
 
 def _equip_invest_amount(game: GameState, card: L5RCard) -> int:
     """The Invest cost ``card`` charges to Equip with."""
-    amount = abilities.fixed_invest_amount(card)
+    amount = abilities.fixed_invest_amount(game, card)
     if amount is None:
         raise ValueError(f"{card.id} prints no fixed Invest for Equip to charge")
     return amount

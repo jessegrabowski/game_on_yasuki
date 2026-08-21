@@ -27,6 +27,7 @@ yasuki_core.engine.rules.abilities
     destroy_cost
     fixed_invest_amount
     invest_for
+    invest_range
     itself
     left_bowed
     may_remain_bowed

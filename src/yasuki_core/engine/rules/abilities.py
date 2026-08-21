@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.attachments import attached_to
-from yasuki_core.engine.rules.economy import effective_keywords
+from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     BanishTopFate,
@@ -221,13 +221,30 @@ def register_production_boost(printed_id: str, boost: ProductionBoost) -> None:
     _PRODUCTION_BOOST[printed_id] = boost
 
 
-def fixed_invest_amount(card: L5RCard) -> int | None:
+def invest_range(game: GameState, card: L5RCard) -> tuple[int, int] | None:
+    """The Invest ``card`` charges now — its printed range less whatever its own text discounts,
+    floored at zero — or None when it prints no Invest.
+
+    Returns
+    -------
+    tuple of (int, int) or None
+        The least and the most the payer may spend, equal for a fixed Invest, or None when the
+        card prints no Invest.
+    """
+    ability = _INVEST.get(card.printed_id)
+    if ability is None:
+        return None
+    discount = effective_invest_discount(game, card)
+    return max(0, ability.minimum - discount), max(0, ability.maximum - discount)
+
+
+def fixed_invest_amount(game: GameState, card: L5RCard) -> int | None:
     """The Invest cost ``card`` charges when that cost is fixed, or None when it prints no Invest or
     lets the payer size one. A caller that cannot raise a "how much?" decision treats both alike."""
-    ability = _INVEST.get(card.printed_id)
-    if ability is None or ability.minimum != ability.maximum:
+    amounts = invest_range(game, card)
+    if amounts is None or amounts[0] != amounts[1]:
         return None
-    return ability.minimum
+    return amounts[0]
 
 
 def ability_for(card: L5RCard) -> Ability | None:
