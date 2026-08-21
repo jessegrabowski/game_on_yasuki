@@ -41,7 +41,7 @@ from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 # --- Harvested Land ---
 
 
-def _other_farms(game: GameState, card: L5RCard) -> list[str]:
+def _harvested_land_targets(game: GameState, card: L5RCard) -> list[str]:
     return [farm.id for farm in owned_holdings(game, card.owner, keywords.FARM) if farm is not card]
 
 
@@ -51,7 +51,7 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Bow, destroy: give your other Farms +1 Gold Production",
         cost=bow_and_destroy,
-        targets=_other_farms,
+        targets=_harvested_land_targets,
         effects=plus_one_gp_this_turn,
         all_targets=True,
     ),
@@ -65,7 +65,7 @@ ONI_COST = 5
 
 
 @on(EnteredPlay, "mishime_sensei")
-def _mishime_sensei_enters_play(ctx: TriggerContext) -> list[Effect]:
+def _mishime_sensei_entered_play(ctx: TriggerContext) -> list[Effect]:
     """Mishime Sensei: grant its controller the ignore-Honor-Requirements waiver as it enters
     play."""
     if ctx.event.card_id != ctx.card.id:
@@ -84,7 +84,7 @@ def _mishime_sensei_of(game: GameState, seat: PlayerId) -> L5RCard:
 
 
 @choice_resolver("mishime_sensei")
-def _resolve_mishime_sensei_sacrifice(
+def _resolve_mishime_sensei(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Destroy the bowed Personality if the seat said yes, then make the Oni either way.
@@ -113,7 +113,7 @@ def _mishime_sensei_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [Bow(source.id), PayGold(source.owner, ONI_COST, source.name)]
 
 
-def _own_unbowed_personalities(game: GameState, source: L5RCard) -> list[str]:
+def _mishime_sensei_targets(game: GameState, source: L5RCard) -> list[str]:
     return [card.id for card in owned_personalities(game, source.owner) if not card.bowed]
 
 
@@ -138,7 +138,7 @@ register_ability(
         timing=ActionTiming.OPEN,
         label=f"Open: Bow and pay {ONI_COST} gold to bow your Personality for an Oni of his Chi",
         cost=_mishime_sensei_cost,
-        targets=_own_unbowed_personalities,
+        targets=_mishime_sensei_targets,
         effects=_mishime_sensei_effects,
     ),
 )
@@ -150,7 +150,7 @@ register_ability(
 @choice_resolver(
     "modest_farm_straighten", prompt="Destroy Modest Farm to straighten the card it recruited"
 )
-def _modest_farm_straighten(
+def _resolve_modest_farm_straighten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     # source_id is the recruited target; chosen holds Modest Farm's id when its controller sacrifices
@@ -160,7 +160,7 @@ def _modest_farm_straighten(
     return [Destroy(chosen[0], seat), Straighten(source_id)]
 
 
-def _affordable_province_holdings(game: GameState, card: L5RCard) -> list[str]:
+def _modest_farm_targets(game: GameState, card: L5RCard) -> list[str]:
     """The face-up Province Holdings ``card``'s controller can afford to bring into play. The seat
     pays each target's recruit cost from its pool and unbowed producers, minus ``card``'s own yield:
     the ability bows or destroys ``card`` as its cost, so it can no longer produce toward the
@@ -201,7 +201,7 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
         cost=bow_cost,
-        targets=_affordable_province_holdings,
+        targets=_modest_farm_targets,
         effects=_modest_farm_effects,
     ),
 )
@@ -211,7 +211,7 @@ register_ability(
 
 
 @on(EnteredPlay, "rural_market")
-def _rural_market_enters_play(ctx: TriggerContext) -> list[Effect]:
+def _rural_market_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Holding enters play, give it a +1GP Wealth token."""
     if ctx.event.card_id != ctx.card.id:
         return []
@@ -219,7 +219,7 @@ def _rural_market_enters_play(ctx: TriggerContext) -> list[Effect]:
 
 
 @on(Destroyed, "rural_market")
-def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
+def _rural_market_destroyed(ctx: TriggerContext) -> list[Effect]:
     """After your Farm is destroyed, give this Holding a +1GP Wealth token."""
     if ctx.event.card_id == ctx.card.id:
         # Rural Market carries Farm itself, and a Holding in a discard pile can hold no token
@@ -233,7 +233,7 @@ def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
 
 
-def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
+def _rural_market_targets(game: GameState, card: L5RCard) -> list[str]:
     # "Not produced Gold this turn" is satisfied for any bowed Farm: production only happens in the
     # Dynasty phase, after this Open ability's Action-phase window.
     return [farm.id for farm in owned_holdings(game, card.owner, keywords.FARM) if farm.bowed]
@@ -249,7 +249,7 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Spend a wealth token: straighten a Farm",
         cost=spend_wealth,
-        targets=_owned_bowed_farms,
+        targets=_rural_market_targets,
         effects=_rural_market_effects,
     ),
 )
@@ -259,7 +259,7 @@ register_ability(
 
 
 @on(EnteredPlay, "sapphire_mine")
-def _sapphire_mine(ctx: TriggerContext) -> list[Effect]:
+def _sapphire_mine_entered_play(ctx: TriggerContext) -> list[Effect]:
     """Sincerity: after this Holding enters play, if it accrued two or more Sincerity tokens, give it
     a +1GP Wealth token."""
     if ctx.event.card_id != ctx.card.id:

@@ -12,7 +12,7 @@ MEDIUM_FOLLOWER = "medium_follower"
 
 
 @on(EnteredPlay, "ichiro_yojimbo")
-def _ichiro_yojimbo_brings_a_second(ctx: TriggerContext) -> list[Effect]:
+def _ichiro_yojimbo_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Follower enters play, create another and attach it to a Personality.
 
     Which Personality is a real choice: the second Follower need not join the one Ichiro himself

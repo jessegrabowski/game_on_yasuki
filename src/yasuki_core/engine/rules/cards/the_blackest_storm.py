@@ -8,7 +8,7 @@ from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
 
 @on(EnteredPlay, "pawnbroker")
-def _pawnbroker(ctx: TriggerContext) -> list[Effect]:
+def _pawnbroker_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Holding enters play, turn each Sincerity token it accrued into a +1GP Wealth
     token."""
     if ctx.event.card_id != ctx.card.id:
@@ -23,7 +23,7 @@ def _pawnbroker(ctx: TriggerContext) -> list[Effect]:
 
 
 @on(EnteredPlay, "the_kurai_district_court")
-def _kurai_district_court(ctx: TriggerContext) -> list[Effect]:
+def _the_kurai_district_court_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Holding enters play, produce one Gold for each Sincerity token it accrued."""
     if ctx.event.card_id != ctx.card.id:
         return []

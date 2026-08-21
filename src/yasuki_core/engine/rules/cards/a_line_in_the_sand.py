@@ -12,7 +12,7 @@ from yasuki_core.game_pieces.constants import Side
 
 
 @choice_resolver("stockpiled_weapon", prompt="Search your Fate deck for a Stockpiled Weapon")
-def _resolve_stockpiled_weapon_search(
+def _resolve_stockpiled_weapon(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [

@@ -42,7 +42,7 @@ from yasuki_core.game_pieces.counters import WEALTH
 
 
 @choice_resolver("red_panda_spirit_keep")
-def _red_panda_spirit_keep(
+def _resolve_red_panda_spirit_keep(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Reshuffle the Event into its owner's Dynasty deck, or discard it. Declining is not doing
@@ -53,14 +53,16 @@ def _red_panda_spirit_keep(
     return [MoveToDeck(source_id, deck, from_top=0), ShuffleDeck(deck)]
 
 
-def _red_panda_spirit_targets(game: GameState, card: L5RCard) -> list[str]:
+def _blessings_of_the_red_panda_spirit_targets(game: GameState, card: L5RCard) -> list[str]:
     """The Event itself. The ability names no card at all, but an ability whose candidates are empty
     is never offered, so it stands as its own — paired with ``all_targets`` so the seat is not asked
     to pick the only thing there is."""
     return [card.id]
 
 
-def _red_panda_spirit_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+def _blessings_of_the_red_panda_spirit_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
     """A gift to the table, then a question. Every seat gains and draws in seat order; the reshuffle
     is deferred so it follows the draws, which is the order the card states."""
     gifts: list[Effect] = []
@@ -90,8 +92,8 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Each player gains 1 Honor and draws a card",
         cost=no_cost,
-        targets=_red_panda_spirit_targets,
-        effects=_red_panda_spirit_effects,
+        targets=_blessings_of_the_red_panda_spirit_targets,
+        effects=_blessings_of_the_red_panda_spirit_effects,
         all_targets=True,
         located_at=(CardLocation.PROVINCE,),
     ),
@@ -128,7 +130,7 @@ may_remain_bowed("culling_grounds")
 
 
 @on(Straightened, "culling_grounds")
-def _culling_grounds_gives_up_its_servant(ctx: TriggerContext) -> list[Effect]:
+def _culling_grounds_straightened(ctx: TriggerContext) -> list[Effect]:
     """Until the game ends, if this Holding is ever unbowed, banish the Personality.
 
     Which is why the Holding may remain bowed: standing it up again to produce Gold is what costs
@@ -167,11 +169,13 @@ register_ability(
 LION_ANCESTOR = "lion_ancestor"
 
 
-def _own_holdings(game: GameState, source: L5RCard) -> list[str]:
+def _kitsu_watanabe_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
     return [holding.id for holding in owned_holdings(game, source.owner)]
 
 
-def _kitsu_watanabe_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+def _kitsu_watanabe_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
     """The Holding is spent on the summons, so it goes before the Ancestor answers."""
     return [
         Destroy(target.id, source.owner),
@@ -185,8 +189,8 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Open: Destroy your Holding to call up a 2F/2C/3PH Lion Ancestor",
         cost=no_cost,
-        targets=_own_holdings,
-        effects=_kitsu_watanabe_effects,
+        targets=_kitsu_watanabe_experienced_targets,
+        effects=_kitsu_watanabe_experienced_effects,
     ),
 )
 
@@ -194,12 +198,14 @@ register_ability(
 # --- Rebuilt Harbor ---
 
 
-def _invest_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
+def _rebuilt_harbor_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
     """One +1GP Wealth token per gold invested — Rebuilt Harbor's variable payoff."""
     return [AdjustCounter(source.id, WEALTH, amount)]
 
 
-register_invest("rebuilt_harbor", InvestAbility(minimum=1, maximum=3, effect=_invest_wealth))
+register_invest(
+    "rebuilt_harbor", InvestAbility(minimum=1, maximum=3, effect=_rebuilt_harbor_invest)
+)
 
 
 # --- Shinjo Saeki, Clan Champion (Experienced 2) ---
@@ -208,7 +214,7 @@ CAVALRY_FOLLOWER = "cavalry"
 
 
 @on(EnteredPlay, "shinjo_saeki_clan_champion_experienced_2")
-def _shinjo_saeki_mounts_the_clan(ctx: TriggerContext) -> list[Effect]:
+def _shinjo_saeki_clan_champion_experienced_2_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After Saeki enters play, create and Equip a 1F Cavalry Follower to each of your Cavalry
     Personalities — himself among them, since he carries the keyword."""
     if ctx.event.card_id != ctx.card.id:

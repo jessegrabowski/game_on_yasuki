@@ -23,7 +23,7 @@ from yasuki_core.game_pieces.counters import WEALTH
 
 
 @gold_handler("ancestral_estate")
-def _ancestral_estate(
+def _ancestral_estate_gold(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
 ) -> int:
     """+1 GP while another player's Stronghold has higher Gold Production than yours.
@@ -42,7 +42,7 @@ def _ancestral_estate(
 # --- Ichiba District ---
 
 
-def _owned_ports(game: GameState, card: L5RCard) -> list[str]:
+def _ichiba_district_targets(game: GameState, card: L5RCard) -> list[str]:
     return [port.id for port in owned_holdings(game, card.owner, keywords.PORT)]
 
 
@@ -52,7 +52,7 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Banish a Fate card: give a Port +1 Gold Production",
         cost=banish_top_fate,
-        targets=_owned_ports,
+        targets=_ichiba_district_targets,
         effects=plus_one_gp_this_turn,
     ),
 )
@@ -61,11 +61,11 @@ register_ability(
 # --- Otokoshi District ---
 
 
-def _owned_markets(game: GameState, card: L5RCard) -> list[str]:
+def _otokoshi_district_targets(game: GameState, card: L5RCard) -> list[str]:
     return [market.id for market in owned_holdings(game, card.owner, keywords.MARKET)]
 
 
-def _otokoshi_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+def _otokoshi_district_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [DrawCard(source.owner), AdjustCounter(target.id, WEALTH, 1)]
 
 
@@ -75,7 +75,7 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Destroy: draw a card and give a Market a wealth token",
         cost=destroy_cost,
-        targets=_owned_markets,
-        effects=_otokoshi_effects,
+        targets=_otokoshi_district_targets,
+        effects=_otokoshi_district_effects,
     ),
 )

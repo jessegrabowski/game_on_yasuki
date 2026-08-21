@@ -56,7 +56,7 @@ existing event (`TurnStarted`), so only the condition is new:
 
 ```python
 @on(TurnStarted, "rice_farm")
-def _rice_farm(ctx: TriggerContext) -> list[Effect]:
+def _rice_farm_turn_started(ctx: TriggerContext) -> list[Effect]:
     """After your turn begins, give this Holding a +1GP Wealth token (max four)."""
     if ctx.card.owner is not ctx.event.seat or at_cap(ctx.card, WEALTH, 4):
         return []
@@ -83,7 +83,7 @@ and a resolver turns the answer into effects:
 
 ```python
 @on(EnteredPlay, "wheat_farm")
-def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
+def _wheat_farm_entered_play(ctx: TriggerContext) -> list[Effect]:
     if ctx.event.card_id != ctx.card.id:
         return []
     others = tuple(...)          # the legal targets
@@ -93,7 +93,7 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
 
 
 @choice_resolver("wheat_farm", prompt="Give a Wealth token to other Farms you control")
-def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
+def _resolve_wheat_farm(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
 ```
 
@@ -155,7 +155,7 @@ Personality has +1PH"; the printed half is a number on the card, the written hal
 
 ```python
 @attachment_grant("haramaki_do")
-def _haramaki_do(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
+def _haramaki_do_attachment_grant(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
     """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
     return {Stat.PERSONAL_HONOR: 1}
 ```
@@ -165,7 +165,7 @@ exclusivity — live in `equip.py` as code. A restriction only one card states l
 
 ```python
 @attach_restriction("brothers_in_arms")
-def _brothers_in_arms_attaches_only_to_a_samurai(
+def _brothers_in_arms_attach_restriction(
     game: GameState, personality: L5RCard, card: L5RCard
 ) -> bool:
     return keywords.SAMURAI in effective_keywords(game, personality)
@@ -254,7 +254,7 @@ start or an effect did it, so the drawback is an ordinary trigger:
 
 ```python
 @on(Straightened, "culling_grounds")
-def _culling_grounds_gives_up_its_servant(ctx: TriggerContext) -> list[Effect]:
+def _culling_grounds_straightened(ctx: TriggerContext) -> list[Effect]:
     ...
     return [Banish(created) for created in ctx.game.creations_of(ctx.card.id)]
 ```
@@ -279,6 +279,16 @@ the card in id order under a header:
 Everything the card does goes in that one block: its triggers, its target predicates, its effects
 helper, its registration. Tests assert the ordering, the one-header-per-card rule, and that the
 header names the card the block registers.
+
+Name every function in the block for the card and the job it does — `_<card id>_<role>`, where the
+role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
+`keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
+`production_boost`), or the event a trigger answers (`entered_play`, `destroyed`, `straightened`,
+`turn_started`, `counter_gained`, `card_discarded`). A choice resolver is named for the choice
+instead, `_resolve_<the string it is registered under>`. Helpers the block calls but never registers
+only need the card's id in front. The point is grep: a card's whole implementation answers a search
+for its id, and every handler of a kind answers a search for its role. A test enforces it, and
+`ROLES` in `test_card_layout.py` is where a genuinely new role gets added.
 
 A brand new set module needs a line in `cards/__init__.py`; a test will tell you if you forget.
 

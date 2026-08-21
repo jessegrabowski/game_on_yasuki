@@ -35,7 +35,7 @@ from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
 # --- Dull Tanto ---
 
 
-def _get_dull_tanto_valid_targets(game: GameState, source: L5RCard) -> list[str]:
+def _dull_tanto_targets(game: GameState, source: L5RCard) -> list[str]:
     """Every Personality on the board. The card says "a target Personality" and narrows it no
     further, so the controller's own are legal targets."""
     return [
@@ -45,7 +45,7 @@ def _get_dull_tanto_valid_targets(game: GameState, source: L5RCard) -> list[str]
     ]
 
 
-def _resolve_dull_tanto_effect(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+def _dull_tanto_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Two -1F tokens on the target, then destroy this Item. Two separate tokens rather than one
     worth -2F, so an effect that removes a single token removes only 1 Force."""
     return [
@@ -60,8 +60,8 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Open: give a Personality two -1F tokens and destroy this Item",
         cost=no_cost,
-        targets=_get_dull_tanto_valid_targets,
-        effects=_resolve_dull_tanto_effect,
+        targets=_dull_tanto_targets,
+        effects=_dull_tanto_effects,
     ),
 )
 
@@ -69,19 +69,19 @@ register_ability(
 # --- Outlying Farms ---
 
 
-def _destroy_for_boosting(card: L5RCard) -> list[Effect]:
+def _outlying_farms_production_boost(card: L5RCard) -> list[Effect]:
     """ "...if you did, destroy it after it bows." The destruction is this card's price for the
     boost; Jade Mine and Slave Pits pay different ones."""
     return [Destroy(card.id, card.owner)]
 
 
-register_production_boost("outlying_farms", ProductionBoost(2, _destroy_for_boosting))
+register_production_boost("outlying_farms", ProductionBoost(2, _outlying_farms_production_boost))
 
 
 # --- Repairing the Ruins ---
 
 
-def _rebuildable_holdings(game: GameState, source: L5RCard) -> list[str]:
+def _repairing_the_ruins_targets(game: GameState, source: L5RCard) -> list[str]:
     """Non-Unique Holdings in the seat's Dynasty deck or discard pile that they control no copy of."""
     seat = source.owner
     held = {
@@ -102,7 +102,7 @@ def _rebuildable_holdings(game: GameState, source: L5RCard) -> list[str]:
     ]
 
 
-def _rebuild_the_province(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+def _repairing_the_ruins_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Discard the Event and put the found Holding in the Province it vacated, permanently +1 Gold
     Cost unless it came from the discard pile."""
     province = province_key_holding(game, source.owner, source.id)
@@ -124,8 +124,8 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Discard: rebuild this Province with a Holding you do not control",
         cost=no_cost,
-        targets=_rebuildable_holdings,
-        effects=_rebuild_the_province,
+        targets=_repairing_the_ruins_targets,
+        effects=_repairing_the_ruins_effects,
         located_at=(CardLocation.PROVINCE,),
     ),
 )
@@ -137,7 +137,7 @@ FORGOTTEN_DEAD = "forgotten_dead"
 FORGOTTEN_HONOR_LOSS = 2
 
 
-def _the_forgotten_raises_another(ctx: TriggerContext) -> list[Effect]:
+def _the_forgotten_entered_play_or_destroyed(ctx: TriggerContext) -> list[Effect]:
     """Lose 2 Honor and Equip another of the dead to a Personality.
 
     The Honor is lost whether or not there is anyone left to carry them, since the card asks for no
@@ -155,8 +155,8 @@ def _the_forgotten_raises_another(ctx: TriggerContext) -> list[Effect]:
 
 
 # "After this Follower enters play or is destroyed" — one clause, so one handler on both events.
-on(EnteredPlay, "the_forgotten")(_the_forgotten_raises_another)
-on(Destroyed, "the_forgotten")(_the_forgotten_raises_another)
+on(EnteredPlay, "the_forgotten")(_the_forgotten_entered_play_or_destroyed)
+on(Destroyed, "the_forgotten")(_the_forgotten_entered_play_or_destroyed)
 
 
 @choice_resolver("the_forgotten", prompt="Equip the dead to one of your Personalities")

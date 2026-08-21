@@ -21,7 +21,7 @@ SASADAS_OROCHI = "orochi_follower_2f"
 
 
 @on(EnteredPlay, "sasada_pearl_champion_experienced")
-def _sasada_calls_her_orochi(ctx: TriggerContext) -> list[Effect]:
+def _sasada_pearl_champion_experienced_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After Sasada enters play, create and attach a 2F Orochi Follower to her."""
     if ctx.event.card_id != ctx.card.id:
         return []
@@ -32,7 +32,9 @@ def _sasada_calls_her_orochi(ctx: TriggerContext) -> list[Effect]:
 
 
 @recruit_discount("shrine_of_courtesy")
-def _shrine_of_courtesy(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+def _shrine_of_courtesy_recruit_discount(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> int:
     """Courtesy grants -3 Gold Cost while you are the second player (you did not go first)."""
     return 3 if me.went_second else 0
 
@@ -49,7 +51,7 @@ def _shrine_of_courtesy_keywords(
 
 
 @gold_handler("shrine_of_sincerity")
-def _shrine_of_sincerity(
+def _shrine_of_sincerity_gold(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
 ) -> int:
     """+1 GP when paying for a Sincerity card that still carries Sincerity tokens."""
@@ -64,11 +66,11 @@ def _shrine_of_sincerity(
     return card.gold_production + bonus
 
 
-def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
+def _shrine_of_sincerity_targets(game: GameState, card: L5RCard) -> list[str]:
     return sincerity_seed_targets(game, card.owner)
 
 
-def _seed_sincerity(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+def _shrine_of_sincerity_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [AdjustCounter(target.id, SINCERITY, 1)]
 
 
@@ -78,7 +80,7 @@ register_ability(
         timing=ActionTiming.DYNASTY,
         label="Bow: seed a Sincerity token onto a Province Sincerity card",
         cost=bow_cost,
-        targets=_sincerity_seed_targets,
-        effects=_seed_sincerity,
+        targets=_shrine_of_sincerity_targets,
+        effects=_shrine_of_sincerity_effects,
     ),
 )

@@ -15,7 +15,9 @@ ASHIGARU_COST = 3
 
 
 @recruit_discount("colonial_farm")
-def _colonial_farm(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+def _colonial_farm_recruit_discount(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> int:
     """Enters play for 1 less Gold if you are a Lion Clan player."""
     return 1 if is_clan(me, ruleset.LION) else 0
 

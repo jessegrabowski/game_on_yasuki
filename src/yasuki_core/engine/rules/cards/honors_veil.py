@@ -7,7 +7,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 @gold_handler("teardrop_island")
-def _teardrop_island(
+def _teardrop_island_gold(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
 ) -> int:
     """Produce 2 Gold, or 3 while you are a Mantis Clan player."""

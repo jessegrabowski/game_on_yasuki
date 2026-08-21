@@ -10,7 +10,7 @@ KAXT = "kaxt"
 
 
 @on(Destroyed, "goju_kaxt")
-def _goju_kaxt_returns_as_himself(ctx: TriggerContext) -> list[Effect]:
+def _goju_kaxt_destroyed(ctx: TriggerContext) -> list[Effect]:
     """After this Follower is destroyed, a 4F/3C/0PH Ninja of his controller's Clan Alignment takes
     his place — the Follower announces his own death from the discard pile."""
     if ctx.event.card_id != ctx.card.id:

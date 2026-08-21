@@ -18,7 +18,7 @@ UNTAINTED_HONOR_LOSS = 5
 
 
 @on(EnteredPlay, "kengun_grounds")
-def _kengun_grounds_arrives_at_a_price(ctx: TriggerContext) -> list[Effect]:
+def _kengun_grounds_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Holding enters play, lose 2 Honor."""
     if ctx.event.card_id != ctx.card.id:
         return []
@@ -60,7 +60,9 @@ register_ability(
 
 
 @recruit_discount("moto_traders")
-def _moto_traders(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+def _moto_traders_recruit_discount(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> int:
     """Enters play for 1 less Gold if you control another Merchant Caravan."""
     return 1 if me.controls(keywords.MERCHANT_CARAVAN, other_than=card) else 0
 

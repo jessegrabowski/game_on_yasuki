@@ -35,7 +35,7 @@ from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint
 # --- Millet Farm ---
 
 
-def _owned_farms(game: GameState, card: L5RCard) -> list[str]:
+def _millet_farm_targets(game: GameState, card: L5RCard) -> list[str]:
     return [farm.id for farm in owned_holdings(game, card.owner, keywords.FARM)]
 
 
@@ -51,7 +51,7 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Bow: give a Farm +2 Gold Production",
         cost=bow_cost,
-        targets=_owned_farms,
+        targets=_millet_farm_targets,
         effects=_millet_farm_effects,
     ),
 )
@@ -61,7 +61,7 @@ register_ability(
 
 
 @on(TurnStarted, "rice_farm")
-def _rice_farm(ctx: TriggerContext) -> list[Effect]:
+def _rice_farm_turn_started(ctx: TriggerContext) -> list[Effect]:
     """After your turn begins, give this Holding a +1GP Wealth token (max four)."""
     if ctx.card.owner is not ctx.event.seat or at_cap(ctx.card, WEALTH, 4):
         return []
@@ -72,7 +72,7 @@ def _rice_farm(ctx: TriggerContext) -> list[Effect]:
 
 
 @on(CounterGained, "shosuro_aoki_yoritomo_kayoko_experienced")
-def _shosuro_aoki(ctx: TriggerContext) -> list[Effect]:
+def _shosuro_aoki_yoritomo_kayoko_experienced_counter_gained(ctx: TriggerContext) -> list[Effect]:
     """After your Holding gains any Wealth tokens, once per turn, draw a card."""
     if ctx.event.counter is not WEALTH:
         return []
@@ -89,7 +89,7 @@ def _shosuro_aoki(ctx: TriggerContext) -> list[Effect]:
 NAGA_FOLLOWER = "naga"
 
 
-def _fallen_naga_followers(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+def _tarkasha_fallen_naga_followers(game: GameState, seat: PlayerId) -> tuple[str, ...]:
     """The Naga Followers in ``seat``'s Fate discard, which is the only pile a Follower reaches."""
     return tuple(
         card.id
@@ -102,14 +102,14 @@ def _fallen_naga_followers(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 
 def _tarkasha_cost(game: GameState, source: L5RCard) -> list[Effect]:
     """Reshuffling one of the fallen is the price, so with none to reshuffle there is no ability."""
-    fallen = _fallen_naga_followers(game, source.owner)
+    fallen = _tarkasha_fallen_naga_followers(game, source.owner)
     if not fallen:
         return [Unpayable(f"{source.owner.name} has no Naga Follower in their discard pile")]
     return [Choose(source.owner, fallen, 1, 1, "tarkasha", source.id)]
 
 
 @choice_resolver("tarkasha", prompt="Reshuffle a Naga Follower into your Fate deck")
-def _resolve_tarkasha_reshuffle(
+def _resolve_tarkasha(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     deck = DeckKey(seat, Side.FATE)
@@ -142,7 +142,7 @@ register_ability(
 
 
 @on(EnteredPlay, "wheat_farm")
-def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
+def _wheat_farm_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Holding enters play, let its controller give zero to two other Farms they control a
     +1GP Wealth token."""
     if ctx.event.card_id != ctx.card.id:
@@ -161,7 +161,7 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
 
 
 @choice_resolver("wheat_farm", prompt="Give a Wealth token to other Farms you control")
-def _wheat_farm_grant(
+def _resolve_wheat_farm(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]

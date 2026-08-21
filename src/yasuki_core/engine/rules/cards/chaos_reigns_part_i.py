@@ -9,7 +9,7 @@ from yasuki_core.game_pieces.counters import WEALTH
 
 
 @on(CardDiscarded, "caravansary")
-def _caravansary(ctx: TriggerContext) -> list[Effect]:
+def _caravansary_card_discarded(ctx: TriggerContext) -> list[Effect]:
     """If your action discarded a Fate card, give this Holding a +1GP Wealth token (max three)."""
     if not caused_by(ctx, ctx.card.owner) or ctx.event.side is not Side.FATE:
         return []

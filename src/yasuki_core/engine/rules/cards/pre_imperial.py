@@ -7,7 +7,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 @gold_handler("jade_works")
-def _jade_works(
+def _jade_works_gold(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
 ) -> int:
     """+2 GP when paying for a Jade card."""

@@ -27,7 +27,7 @@ from yasuki_core.game_pieces.counters import SINCERITY
 
 
 @on(EnteredPlay, "training_court")
-def _training_court(ctx: TriggerContext) -> list[Effect]:
+def _training_court_entered_play(ctx: TriggerContext) -> list[Effect]:
     """Political Tireless Response: after Training Court enters play, seed a Sincerity token onto one
     of its controller's token-less Sincerity cards still in a Province."""
     if ctx.event.card_id != ctx.card.id:
@@ -39,7 +39,7 @@ def _training_court(ctx: TriggerContext) -> list[Effect]:
 
 
 @choice_resolver("sincerity_seed", prompt="Seed a Sincerity token onto one of your Sincerity cards")
-def _sincerity_seed(
+def _resolve_sincerity_seed(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [AdjustCounter(card_id, SINCERITY, 1) for card_id in chosen]
@@ -53,13 +53,15 @@ register_invest("training_court", InvestAbility(minimum=1, maximum=1, effect=one
 CAVALRY_FOLLOWER = "cavalry"
 
 
-def _utaku_gorou_targets(game: GameState, source: L5RCard) -> list[str]:
+def _utaku_gorou_stablemaster_targets(game: GameState, source: L5RCard) -> list[str]:
     cavalry = game.table.creatable_tokens[CAVALRY_FOLLOWER]
     riders = creation_targets(game, source.owner, cavalry, keyword=keywords.SAMURAI)
     return [rider.id for rider in riders]
 
 
-def _utaku_gorou_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+def _utaku_gorou_stablemaster_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
     return [CreateToken(CAVALRY_FOLLOWER, source.owner, source.id, attach_to=target.id)]
 
 
@@ -69,7 +71,7 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Open: Bow to Equip a 1F Cavalry Follower to your Samurai",
         cost=bow_cost,
-        targets=_utaku_gorou_targets,
-        effects=_utaku_gorou_effects,
+        targets=_utaku_gorou_stablemaster_targets,
+        effects=_utaku_gorou_stablemaster_effects,
     ),
 )
