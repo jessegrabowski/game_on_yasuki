@@ -3,7 +3,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Draw
 from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.tags import card_tag, zone_tag
+from yasuki_gui.tags import allocation_tag, card_tag, zone_tag
 
 from tests.yasuki_gui.conftest import DummyEventNamespace
 
@@ -152,3 +152,29 @@ class TestProvinceActivation:
         field, _ = loaded
         tag = zone_tag(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0))
         assert field._controller._card_at(tag, DummyEventNamespace(x=0, y=0)) is None
+
+
+class TestAllocationArrows:
+    def test_a_click_on_an_arrow_moves_one_creation_rather_than_dropping_the_card(self, loaded):
+        # The arrow sits on top of the card it belongs to, so the two clicks are told apart by the
+        # tag alone; reading the card first would deselect it every time an arrow was pressed.
+        field, _ = loaded
+        field.begin_allocation(["a", "b"], 4)
+        field.toggle_selection("a")
+        field.toggle_selection("b")
+        _at(field, allocation_tag("a", 1))
+
+        field._controller.on_press(DummyEventNamespace(x=10, y=10))
+
+        assert field.selection == ("a", "a", "a", "b")
+
+    def test_a_click_on_the_card_still_takes_it_out_of_the_division(self, loaded):
+        field, _ = loaded
+        field.begin_allocation(["a", "b"], 4)
+        field.toggle_selection("a")
+        field.toggle_selection("b")
+        _at(field, card_tag("b"))
+
+        field._controller.on_press(DummyEventNamespace(x=10, y=10))
+
+        assert field.selection == ("a", "a", "a", "a")

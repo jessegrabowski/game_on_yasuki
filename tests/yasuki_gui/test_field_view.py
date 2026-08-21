@@ -8,12 +8,23 @@ from yasuki_core.engine.table import (
     ZoneRole,
 )
 from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, MoveCard
+from yasuki_core.engine.rules.actions import ActivateAbility
+from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.decisions import ChooseDistribution, DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.constants import ATTACH_STACK_OFFSET
-from yasuki_gui.tags import card_tag, deck_tag, zone_tag
+from yasuki_gui.field_view import ALLOCATION_TAG
+from yasuki_gui.tags import allocation_tag, card_tag, deck_tag, zone_tag
 from yasuki_gui.visuals.cardface import HiddenFace
+
+from tests.yasuki_core.engine.builders import (
+    personality,
+    put_in_play,
+    token_template,
+    two_seat_game,
+)
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     CardPrint,
@@ -453,6 +464,135 @@ class TestDecisionSelection:
         assert card_id in field.zones[province_tag].selected_ids
 
 
+class TestAllocationSelection:
+    def _two_personalities(self, field, state):
+        """A second P1 card on the board, so a division has two cards to trade a creation between."""
+        extra = L5RCard.of(
+            CardPrint, id="P1-extra", name="Bearer", side=Side.DYNASTY, owner=PlayerId.P1
+        )
+        state.cards_by_id["P1-extra"] = extra
+        state.battlefield.add(extra)
+        state.positions["P1-extra"] = UNPLACED_BOARD_POS
+        field.reconcile_all()
+        return "P1-SH", "P1-extra"
+
+    def test_one_chosen_card_takes_every_creation(self, loaded):
+        field, _ = loaded
+        field.begin_allocation(["a", "b"], 3)
+
+        field.toggle_selection("a")
+
+        # The answer repeats the card once per creation, which is what the engine reads as "three
+        # of them go here".
+        assert field.selection == ("a", "a", "a")
+
+    def test_choosing_a_second_card_splits_the_creations_between_them(self, loaded):
+        field, _ = loaded
+        field.begin_allocation(["a", "b"], 4)
+
+        field.toggle_selection("a")
+        field.toggle_selection("b")
+
+        assert field.selection == ("a", "a", "b", "b")
+
+    def test_an_arrow_moves_one_creation_across_and_notifies(self, loaded):
+        field, _ = loaded
+        changes = []
+        field.on_selection_changed = lambda: changes.append(1)
+        field.begin_allocation(["a", "b"], 4)
+        field.toggle_selection("a")
+        field.toggle_selection("b")
+
+        field.adjust_allocation("a", 1)
+
+        assert field.selection == ("a", "a", "a", "b")
+        assert len(changes) == 3  # two picks and the arrow
+
+    def test_an_arrow_never_empties_a_card_that_is_down_to_one(self, loaded):
+        """Carrying nothing is what unchosen means, so the down arrow stops at one; the player
+        clicks the card itself to take it out of the division."""
+        field, _ = loaded
+        field.begin_allocation(["a", "b"], 2)
+        field.toggle_selection("a")
+        field.toggle_selection("b")
+
+        field.adjust_allocation("a", -1)
+
+        assert field.selection == ("a", "b")
+
+    def test_a_spinner_is_drawn_only_on_the_cards_taking_a_share(self, loaded):
+        field, state = loaded
+        first, second = self._two_personalities(field, state)
+        field.begin_allocation([first, second], 4)
+
+        field.toggle_selection(first)
+        field.reconcile_all()
+
+        assert field.find_withtag(f"{ALLOCATION_TAG}&&{card_tag(first)}")
+        assert not field.find_withtag(f"{ALLOCATION_TAG}&&{card_tag(second)}")
+
+    def test_the_arrows_are_click_targets_once_there_is_something_to_trade(self, loaded):
+        field, state = loaded
+        first, second = self._two_personalities(field, state)
+        field.begin_allocation([first, second], 4)
+
+        field.toggle_selection(first)
+        field.toggle_selection(second)
+        field.reconcile_all()
+
+        assert field.find_withtag(allocation_tag(first, 1))
+        assert field.find_withtag(allocation_tag(first, -1))
+
+    def test_an_arrow_with_nothing_to_trade_is_drawn_but_inert(self, loaded):
+        # A lone chosen card already holds everything, so its arrows do nothing. They stay untagged
+        # rather than falling through to the card, which would quietly undo the division.
+        field, state = loaded
+        first, _ = self._two_personalities(field, state)
+        field.begin_allocation([first], 3)
+
+        field.toggle_selection(first)
+        field.reconcile_all()
+
+        assert field.find_withtag(ALLOCATION_TAG)  # the count is still shown
+        assert not field.find_withtag(allocation_tag(first, 1))
+
+    def test_leaving_the_decision_clears_the_spinners(self, loaded):
+        field, state = loaded
+        first, _ = self._two_personalities(field, state)
+        field.begin_allocation([first], 3)
+        field.toggle_selection(first)
+        field.reconcile_all()
+
+        field.end_selection()
+
+        assert field.selection == ()
+        assert not field.find_withtag(ALLOCATION_TAG)
+
+    def test_an_untouched_division_is_not_yet_a_confirmable_answer(self, loaded):
+        """What gates the Confirm button: the presenter offers it only while ``accepts`` holds, and
+        a player who has clicked nothing has placed none of the creations."""
+        field, _ = loaded
+        request = ChooseDistribution(
+            PlayerId.P1, ("a", "b"), count=3, resolver="split", source_id="source"
+        )
+        field.begin_allocation(request.candidates, request.count)
+        assert request.accepts(DecisionResponse(field.selection)) is False
+
+        field.toggle_selection("a")
+
+        assert request.accepts(DecisionResponse(field.selection)) is True
+
+    def test_a_later_plain_selection_is_not_still_dividing(self, loaded):
+        field, _ = loaded
+        field.begin_allocation(["a"], 3)
+        field.toggle_selection("a")
+
+        field.begin_selection(["a"])
+        field.toggle_selection("a")
+
+        assert field.selection == ("a",)
+
+
 class TestPaymentSelection:
     def test_undo_last_drops_only_the_most_recent_pick(self, loaded):
         field, _ = loaded
@@ -485,3 +625,37 @@ class TestDebugSeatFlip:
         field.reconcile_all()
         assert field._flipped is True
         assert card_tag("P2-SH") in field.sprites
+
+
+class TestDividingCreationsOnTheBoard:
+    def test_the_board_answers_a_division_the_engine_paused_for(self, field):
+        """End to end over the new decision: the engine pauses to ask how three created Followers
+        are divided, the player clicks two Personalities and an arrow, and what the board hands back
+        is an answer the engine takes."""
+        game = two_seat_game()
+        token_template(
+            game,
+            "suiteirus_podling",
+            name="Suiteiru's Podling",
+            card_type="Follower",
+            keywords=("Oni",),
+            force=1,
+        )
+        put_in_play(game, personality("suiteiru", printed_id="suiteiru_no_oni", force=5, chi=3))
+        put_in_play(game, personality("victim", chi=3))
+        put_in_play(game, personality("bearer", chi=2))
+        session = EngineSession.start(game.table, PlayerId.P1)
+        session.act(PlayerId.P1, ActivateAbility("suiteiru"))
+        session.submit(PlayerId.P1, DecisionResponse(("victim",)))
+        pending = session.game.pending
+        field.render_snapshot(session.project(PlayerId.P1).table, PlayerId.P1)
+
+        field.begin_allocation(pending.candidates, pending.count)
+        field.toggle_selection("suiteiru")
+        field.toggle_selection("bearer")  # an even split of three: two and one
+        field.adjust_allocation("bearer", 1)  # the arrow moves one across
+        session.submit(PlayerId.P1, DecisionResponse(field.selection))
+
+        game = session.game
+        assert len(attachments_of(game, game.table.cards_by_id["bearer"])) == 2
+        assert len(attachments_of(game, game.table.cards_by_id["suiteiru"])) == 1

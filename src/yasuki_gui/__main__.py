@@ -4,6 +4,7 @@ import tkinter as tk
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
+    ChooseDistribution,
     ChooseInvestAmount,
     ChoosePayment,
     Confirm,
@@ -181,7 +182,11 @@ def main() -> None:
             open_search(search)
             refresh()
             return
-        if pending is not None and not isinstance(pending, ChooseInvestAmount | Confirm):
+        if isinstance(pending, ChooseDistribution):
+            # A division is answered by how many go where, not by which cards were picked, so each
+            # chosen card carries a spinner rather than only a selection ring.
+            field.begin_allocation(pending.candidates, pending.count)
+        elif pending is not None and not isinstance(pending, ChooseInvestAmount | Confirm):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
             # Invest amount and a yes/no question are answered by prompt buttons, so neither puts
             # the board into selection mode.
