@@ -41,7 +41,9 @@ only thing specific to the card, so the whole implementation is the condition:
 
 ```python
 @recruit_discount("colonial_farm")
-def _colonial_farm(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+def _colonial_farm_recruit_discount(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> int:
     """Enters play for 1 less Gold if you are a Lion Clan player."""
     return 1 if is_clan(me, ruleset.LION) else 0
 ```
@@ -93,7 +95,9 @@ def _wheat_farm_entered_play(ctx: TriggerContext) -> list[Effect]:
 
 
 @choice_resolver("wheat_farm", prompt="Give a Wealth token to other Farms you control")
-def _resolve_wheat_farm(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
+def _resolve_wheat_farm(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
 ```
 
