@@ -237,7 +237,7 @@ def recruit(
     seat = card.owner
     if not invest:
         game.pending = announce_recruit(
-            game, card, seat, invest_amount=0, renew=renew, proclaim=proclaim
+            game, card, seat, invest_amount=None, renew=renew, proclaim=proclaim
         )
         return
     ability = abilities.invest_for(card)
@@ -259,7 +259,7 @@ def announce_recruit(
     game: GameState,
     card: L5RCard | L5RCard,
     seat: PlayerId,
-    invest_amount: int,
+    invest_amount: int | None,
     renew: bool = False,
     proclaim: bool = False,
 ) -> ChoosePayment:
@@ -269,7 +269,7 @@ def announce_recruit(
     return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
-        amount=recruit_cost(game, card) + invest_amount,
+        amount=recruit_cost(game, card) + (invest_amount or 0),
         available=game.gold[seat],
         produced=tuple(
             (producer.id, effective_gold_production(game, producer, targets=(card,)))
@@ -300,18 +300,19 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
         seat=card.owner,
         candidates=tuple(target.id for target in equip_targets(game, card)),
         source_card_id=card_id,
-        invest_amount=_equip_invest_amount(game, card) if invest else 0,
+        invest_amount=_equip_invest_amount(game, card) if invest else None,
     )
 
 
-def _finish_invest(game: GameState, card: L5RCard, invest_amount: int) -> None:
-    """Charge ``card``'s Invest against itself and run what it bought. Does nothing for a zero
-    amount, so a caller need not ask whether the player took the option.
+def _finish_invest(game: GameState, card: L5RCard, invest_amount: int | None) -> None:
+    """Charge ``card``'s Invest against itself and run what it bought. None is a card recruited
+    without the option, which a free Invest is not — a card whose own text drops its Invest to zero
+    still buys what the Invest buys.
 
     Invest belongs to a card entering play rather than to the action that brought it (CR, Invest),
     so Recruit and Equip reach this by the same road.
     """
-    if not invest_amount:
+    if invest_amount is None:
         return
     triggers.resolve_effects(
         game,
@@ -341,7 +342,7 @@ def _apply_equip_target(
 
 
 def announce_equip(
-    game: GameState, card: L5RCard, seat: PlayerId, target_id: str, invest_amount: int = 0
+    game: GameState, card: L5RCard, seat: PlayerId, target_id: str, invest_amount: int | None = None
 ) -> ChoosePayment:
     """Queue the attach and build the payment it must be paid with."""
     producers = gold_producers(game, seat)
@@ -349,7 +350,7 @@ def announce_equip(
     return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
-        amount=effective_gold_cost(game, card) + invest_amount,
+        amount=effective_gold_cost(game, card) + (invest_amount or 0),
         available=game.gold[seat],
         produced=tuple(
             (producer.id, effective_gold_production(game, producer, targets=(card,)))
@@ -360,7 +361,9 @@ def announce_equip(
     )
 
 
-def _resolve_equip(game: GameState, card_id: str, target_id: str, invest_amount: int = 0) -> None:
+def _resolve_equip(
+    game: GameState, card_id: str, target_id: str, invest_amount: int | None = None
+) -> None:
     """Bring the paid-for attachment out of hand and onto its Personality."""
     card = game.table.cards_by_id[card_id]
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
@@ -571,7 +574,7 @@ def _resolve_recruit(
     game: GameState,
     seat: PlayerId,
     card_id: str,
-    invest_amount: int = 0,
+    invest_amount: int | None = None,
     renew: bool = False,
     proclaim: bool = False,
 ) -> None:
@@ -597,7 +600,7 @@ def _resolve_recruit(
 
 
 def _finish_recruit(
-    game: GameState, card_id: str, invest_amount: int, proclaim: bool = False
+    game: GameState, card_id: str, invest_amount: int | None, proclaim: bool = False
 ) -> None:
     card = game.table.cards_by_id[card_id]
     _clear_sincerity(game, card)

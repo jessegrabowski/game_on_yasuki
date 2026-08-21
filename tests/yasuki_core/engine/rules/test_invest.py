@@ -1,11 +1,14 @@
 import json
 
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.engine.rules.abilities import InvestAbility, _INVEST, register_invest
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, ChoosePayment, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_cost
@@ -13,6 +16,24 @@ from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import end_phase, put_in_play, register
+
+
+@pytest.fixture(autouse=True)
+def _clear_probe_registrations():
+    """The Invest registry is module-global, so a probe registered here would price a real card in
+    every later test in the process."""
+    yield
+    _INVEST.pop("free_invest_probe", None)
+
+
+def _register_free_invest(printed_id: str):
+    """Register a zero-cost Invest for ``printed_id``, returning the decorated effect."""
+
+    def register(effect):
+        register_invest(printed_id, InvestAbility(minimum=0, maximum=0, effect=effect))
+        return effect
+
+    return register
 
 
 def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: int = 8):
@@ -197,3 +218,36 @@ def test_the_invest_rise_survives_the_turn_that_bought_it():
 
     qm = session.game.table.cards_by_id["qm"]
     assert effective_gold_cost(session.game, qm) == 3
+
+
+def test_a_free_invest_still_buys_what_the_invest_buys():
+    """Zero is a price, not a refusal. The amount used to double as the flag for whether the option
+    was taken, which a card whose own text drops its Invest to nothing would have silenced."""
+    invested: list[int] = []
+
+    @_register_free_invest("free_invest_probe")
+    def _effect(game, source, amount):
+        invested.append(amount)
+        return []
+
+    session = _invest_game("fi", "free_invest_probe", gold_cost=1)
+    session.act(PlayerId.P1, Recruit("fi", invest=True))
+    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+
+    assert invested == [0]
+
+
+def test_a_recruit_without_the_option_runs_no_invest_at_all():
+    """The other side of the same distinction: no Invest is None, and None runs nothing."""
+    invested: list[int] = []
+
+    @_register_free_invest("free_invest_probe")
+    def _effect(game, source, amount):
+        invested.append(amount)
+        return []
+
+    session = _invest_game("fi", "free_invest_probe", gold_cost=1)
+    session.act(PlayerId.P1, Recruit("fi"))
+    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+
+    assert invested == []

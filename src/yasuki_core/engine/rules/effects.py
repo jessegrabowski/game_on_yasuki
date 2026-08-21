@@ -685,7 +685,7 @@ class RecruitCard(InterruptingEffect):
         from yasuki_core.engine.rules.flow import announce_recruit
 
         card = game.table.cards_by_id[self.card_id]
-        return announce_recruit(game, card, card.owner, invest_amount=0, renew=self.renew)
+        return announce_recruit(game, card, card.owner, invest_amount=None, renew=self.renew)
 
 
 @dataclass(frozen=True, slots=True)

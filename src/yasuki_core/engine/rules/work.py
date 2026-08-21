@@ -15,9 +15,10 @@ class ResolveRecruit:
         The recruiting seat.
     card_id : str
         The card leaving its province for play.
-    invest_amount : int
-        The gold Invested while recruiting, driving the card's one-time Invest effect on entry, or 0
-        when not Invested. Default 0.
+    invest_amount : int or None
+        The gold Invested while recruiting, driving the card's one-time Invest effect on entry, or
+        None when the recruit took no Invest. A free Invest is an amount of zero, not None. Default
+        None.
     renew : bool
         Whether to refill the vacated province face-up (a granted Renew), on top of the card's own
         Renew keyword. Default False.
@@ -28,7 +29,7 @@ class ResolveRecruit:
 
     seat: PlayerId
     card_id: str
-    invest_amount: int = 0
+    invest_amount: int | None = None
     renew: bool = False
     proclaim: bool = False
 
@@ -86,15 +87,16 @@ class FinishRecruit:
     ----------
     card_id : str
         The card that entered play.
-    invest_amount : int
-        The gold Invested while recruiting, driving the Invest effect, or 0 when not Invested.
+    invest_amount : int or None
+        The gold Invested while recruiting, driving the Invest effect, or None when the recruit took
+        no Invest. A free Invest is an amount of zero, not None.
     proclaim : bool
         Whether the recruit was Proclaimed, so entry claims the once-per-turn Proclaim and adds the
         Personality's Personal Honor to its seat's Family Honor. Default False.
     """
 
     card_id: str
-    invest_amount: int
+    invest_amount: int | None
     proclaim: bool = False
 
 
@@ -126,13 +128,14 @@ class ResolveEquip:
         The attachment leaving hand for play.
     target_id : str
         The Personality it attaches to.
-    invest_amount : int
-        The Invest cost paid, applied once the card is in play. Zero for none.
+    invest_amount : int or None
+        The Invest cost paid, applied once the card is in play, or None when the Equip took no
+        Invest. Default None.
     """
 
     card_id: str
     target_id: str
-    invest_amount: int = 0
+    invest_amount: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
