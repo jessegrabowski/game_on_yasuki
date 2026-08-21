@@ -1,10 +1,18 @@
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import attachments_of, granted_stat
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import (
+    Duration,
+    KeywordGrant,
+    Modifier,
+    OngoingEffect,
+    Stat,
+)
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import counter_from_key
 from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint
@@ -91,11 +99,6 @@ def _on_battlefield(game: GameState, card_id: str) -> bool:
 _SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
 
 
-# A Kensai Personality may attach two Weapons rather than one (CR, Kensai), which is a larger limit
-# rather than an exemption — Two-Handed still binds him, and that rule is checked separately.
-KENSAI_KEYWORD = "Kensai"
-
-
 def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
     """The Senseis ``seat`` has in play. A Sensei bows and acts on its own (CR, Sensei), so it is a
     modifier source beside the Stronghold rather than part of it."""
@@ -126,7 +129,9 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
         amount = getattr(attached, printed_modifier, 0) + granted_stat(game, attached, card, stat)
         if amount:
             yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
-    if stat is Stat.WEAPON_LIMIT and KENSAI_KEYWORD in effective_keywords(game, card):
+    # Kensai raises the limit rather than exempting him from it: Two-Handed still binds a
+    # Kensai, and that rule is checked separately.
+    if stat is Stat.WEAPON_LIMIT and keywords.KENSAI in effective_keywords(game, card):
         yield Modifier(card.id, card.id, stat, 1, Duration.WHILE_SOURCE_IN_PLAY)
     if stat in _SENSEI_GRANTED_STATS and isinstance(card.printed, StrongholdPrint):
         for sensei in _senseis_of(game, card.owner):
@@ -134,13 +139,27 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
             if delta:
                 yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
     for modifier in game.modifiers:
-        if modifier.target_id != card.id or modifier.stat is not stat:
+        if not isinstance(modifier, Modifier) or modifier.target_id != card.id:
             continue
-        if modifier.duration is Duration.WHILE_SOURCE_IN_PLAY and not _on_battlefield(
-            game, modifier.source_id
-        ):
+        if modifier.stat is not stat or not _grant_applies(game, modifier):
             continue
         yield modifier
+
+
+def _grant_applies(game: GameState, recorded: OngoingEffect) -> bool:
+    """Whether a recorded ongoing effect is in force — a ``WHILE_SOURCE_IN_PLAY`` one only while
+    the card it came from is still on the battlefield."""
+    return recorded.duration is not Duration.WHILE_SOURCE_IN_PLAY or _on_battlefield(
+        game, recorded.source_id
+    )
+
+
+def granted_keywords(game: GameState, card: L5RCard) -> Iterator[str]:
+    """Every keyword another card's recorded grant gives ``card`` right now."""
+    for grant in game.modifiers:
+        if isinstance(grant, KeywordGrant) and grant.target_id == card.id:
+            if _grant_applies(game, grant):
+                yield grant.keyword
 
 
 def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
@@ -277,6 +296,31 @@ def effective_recruit_discount(game: GameState, card: L5RCard) -> int:
     return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
 
 
+# The same shape one step along: a reduction on a card's Invest rather than on its Gold Cost, for
+# the "Invest :g2:, or :g0: if ..." a card prints.
+INVEST_DISCOUNTS: dict[str, DiscountHandler] = {}
+
+
+def invest_discount(printed_id: str) -> Callable[[DiscountHandler], DiscountHandler]:
+    """Register the decorated function as the Invest-discount handler for ``printed_id``."""
+
+    def register(handler: DiscountHandler) -> DiscountHandler:
+        if printed_id in INVEST_DISCOUNTS:
+            raise ValueError(f"{printed_id} already has an invest discount")
+        INVEST_DISCOUNTS[printed_id] = handler
+        return handler
+
+    return register
+
+
+def effective_invest_discount(game: GameState, card: L5RCard) -> int:
+    """The gold ``card``'s Invest costs less from its own conditional reduction, or 0 with none."""
+    handler = INVEST_DISCOUNTS.get(card.printed_id)
+    if handler is None:
+        return 0
+    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+
+
 # A keyword handler names the keywords a card carries beyond the printed ones, from the card and its
 # controller's and opponents' views — the "this card has X" clauses gated on a readable condition.
 KeywordHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], tuple[str, ...]]
@@ -296,14 +340,28 @@ def keyword_grant(printed_id: str) -> Callable[[KeywordHandler], KeywordHandler]
 
 
 def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
-    """``card``'s printed keywords plus any its own ability grants under current conditions."""
+    """``card``'s printed keywords, plus any its own ability grants under current conditions, plus
+    any another card's ongoing effect has given it."""
+    carried = frozenset(card.keywords).union(granted_keywords(game, card))
     handler = KEYWORD_GRANTS.get(card.printed_id)
     if handler is None:
-        return frozenset(card.keywords)
+        return carried
     granted = handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
-    return frozenset(card.keywords).union(granted)
+    return carried.union(granted)
 
 
 def is_clan(me: PlayerState, clan: str) -> bool:
-    """Whether ``me`` is playing ``clan``, read from the stronghold."""
-    return me.stronghold is not None and me.stronghold.clan == clan
+    """Whether ``me`` is playing ``clan``, read from the stronghold.
+
+    Compared as Clan Alignments rather than as strings: a stronghold printed "Lion Clan" answers to
+    Lion, and the arc's equal alignments answer to each other (a Naga stronghold is an Akasha
+    player). A clan that is no alignment in this arc matches nothing, including itself. A stronghold
+    printing several clans plays them all.
+    """
+    if me.stronghold is None:
+        return False
+    alignment = ruleset.ACTIVE.alignment(clan)
+    if alignment is None:
+        return False
+    printed = me.stronghold.clans or ((me.stronghold.clan,) if me.stronghold.clan else ())
+    return any(ruleset.ACTIVE.alignment(name) == alignment for name in printed)

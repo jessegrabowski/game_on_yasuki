@@ -1,5 +1,5 @@
 import inspect
-from dataclasses import FrozenInstanceError, dataclass
+from dataclasses import FrozenInstanceError, dataclass, replace
 
 import pytest
 
@@ -10,7 +10,10 @@ from yasuki_core.engine.rules.flow import submit
 from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    AskDistribution,
+    Banish,
     BanishTopFate,
+    CreateToken,
     Bow,
     Choose,
     Destroy,
@@ -22,7 +25,8 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.prints import AttachmentPrint
 from yasuki_core.game_pieces.counters import WEALTH
 
 from tests.yasuki_core.engine.builders import (
@@ -146,6 +150,95 @@ def test_a_discard_lands_in_the_pile_for_its_side(side, role):
     assert events == [CardDiscarded(card.id, side, PlayerId.P1)]
 
 
+@pytest.mark.parametrize(
+    "side, role",
+    [(Side.FATE, ZoneRole.FATE_BANISH), (Side.DYNASTY, ZoneRole.DYNASTY_BANISH)],
+    ids=["fate", "dynasty"],
+)
+def test_a_banish_lands_in_the_pile_for_its_side(side, role):
+    # A banish picks its pile the same way a discard does, one row over. A card banished into a
+    # discard pile would be recurrable by everything the banish was meant to put it out of reach of.
+    game = two_seat_game()
+    card = fate_card("P1-f", PlayerId.P1) if side is Side.FATE else holding("P1-h")
+    put_in_play(game, card)
+
+    Banish(card.id).perform(game)
+
+    assert card in game.table.zones[ZoneKey(PlayerId.P1, role)].cards
+
+
+def test_banishing_a_card_that_is_already_gone_does_nothing():
+    # What a delayed banish finds when something destroyed the card first. Raising here would take
+    # the turn's end down with it.
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h"))
+    _vanished(game, card.id)
+
+    assert Banish(card.id).perform(game) == []
+
+
+def _token_game():
+    """A game whose deck load resolved one token template — a 2F Follower to create."""
+    game = two_seat_game()
+    game.table.creatable_tokens["scout"] = AttachmentPrint(
+        name="Scout",
+        side=Side.FATE,
+        printed_id="scout",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=2,
+    )
+    return game
+
+
+def test_a_clan_stamped_on_one_creation_does_not_follow_the_template():
+    """The template is shared by every card that creates from it and by both seats, so a stamped
+    clan has to land on a copy. Mutating it in place would hand the next creation the last
+    controller's clan."""
+    game = _token_game()
+
+    CreateToken("scout", PlayerId.P1, "maker", clan="Lion").perform(game)
+    CreateToken("scout", PlayerId.P2, "maker", clan="Crab").perform(game)
+
+    lion, crab = (card for card in game.table.battlefield.cards if card.is_token)
+    assert (lion.clan, crab.clan) == ("Lion", "Crab")
+    assert game.table.creatable_tokens["scout"].clan is None  # the template is untouched
+
+
+def test_a_creation_takes_the_clan_on_both_the_name_and_the_list():
+    """A reader of a card's clans takes the list when it has one, so stamping only the singular
+    would leave the card aligned to whatever the template printed."""
+    game = _token_game()
+    game.table.creatable_tokens["ninja"] = replace(
+        game.table.creatable_tokens["scout"], printed_id="ninja", clan="Ninja", clans=("Ninja",)
+    )
+
+    CreateToken("ninja", PlayerId.P1, "maker", clan="Crane").perform(game)
+
+    made = next(card for card in game.table.battlefield.cards if card.is_token)
+    assert (made.clan, made.clans) == ("Crane", ("Crane",))
+
+
+def test_creating_onto_a_personality_who_has_left_play_creates_nothing():
+    # The target is fixed when the ability is announced, and anything can happen to him before the
+    # creation resolves. A homeless attachment would be destroyed by the state rules on sight.
+    game = _token_game()
+
+    events = CreateToken("scout", PlayerId.P1, "maker", attach_to="gone").perform(game)
+
+    assert events == []
+    assert game.table.battlefield.cards == []
+    assert game.created_by == {}
+
+
+def test_creating_from_a_template_the_deck_load_never_resolved_is_an_error():
+    # A card that can create names its token in the database, so a missing template means the table
+    # was built without them. Failing loudly beats a card that silently does nothing.
+    game = _token_game()
+
+    with pytest.raises(KeyError):
+        CreateToken("no_such_token", PlayerId.P1, "maker").perform(game)
+
+
 def test_placing_into_a_full_province_is_a_no_op():
     # The placement is deferred behind the reactions to the discard, so something can fill the
     # Province in between. Checking capacity first is what keeps the card where it is: the move
@@ -267,3 +360,19 @@ def test_an_unpayable_cost_refuses_to_resolve():
     # has to be loud: silently doing nothing would let an ability fire for free.
     with pytest.raises(RuntimeError, match="unpayable cost"):
         Unpayable("hero has left play").perform(two_seat_game())
+
+
+@pytest.mark.parametrize(
+    "candidates, count",
+    [
+        pytest.param((), 2, id="nowhere-to-put-them"),
+        pytest.param(("a",), 0, id="nothing-to-divide"),
+    ],
+)
+def test_a_division_that_cannot_be_answered_is_refused_rather_than_asked(candidates, count):
+    # The cascade pauses on every interrupting effect, so asking either way would stop the game on a
+    # question with no answer: no exception, no log, a client waiting forever.
+    ask = AskDistribution(PlayerId.P1, candidates, count, "split", "source")
+
+    with pytest.raises(ValueError, match="cannot divide"):
+        ask.request(two_seat_game())

@@ -7,10 +7,12 @@ from yasuki_core.engine.table import ZoneRole
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.attachments import attached_to
-from yasuki_core.engine.rules.economy import effective_keywords
+from yasuki_core.engine.rules.attachments import attached_to, attachments_of
+from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
+from yasuki_core.engine.rules.triggers import choice_resolver, once_per_turn, used_this_turn
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Ask,
     BanishTopFate,
     Bow,
     Destroy,
@@ -20,7 +22,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
 
 # A cost is the effects paid to activate an ability, applied before the ability's own effects. Bow /
 # destroy / spend-a-token are all just effects targeting a card, so costs and effects share one
@@ -36,8 +38,55 @@ def no_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return []
 
 
+# Attachments offering the Personality they are on a once-per-turn waiver of the cost of bowing to
+# pay for one of his own abilities, keyed on the attachment's printed id.
+BOW_WAIVERS: set[str] = set()
+WAIVER_TAG = "bow_waiver"
+
+
+def bow_waiver(printed_id: str) -> None:
+    """Register ``printed_id`` as an attachment whose Personality may ignore a bow cost once a
+    turn."""
+    BOW_WAIVERS.add(printed_id)
+
+
+def _waiver_on(game: GameState, card: L5RCard) -> L5RCard | None:
+    """An attachment on ``card`` whose bow waiver is still unspent this turn, or None for none."""
+    for attached in attachments_of(game, card):
+        if attached.printed_id in BOW_WAIVERS and not used_this_turn(game, attached, WAIVER_TAG):
+            return attached
+    return None
+
+
 def bow_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    return [Bow(source.id)]
+    """Bow ``source`` to pay for its own ability, offering any waiver it carries first.
+
+    The waiver is only worth asking about while ``source`` still stands: what it buys is a
+    Personality who has not bowed, and one already bowed cannot pay a bow cost at all (CR, Costs).
+    """
+    waiver = _waiver_on(game, source)
+    if waiver is None or source.bowed:
+        return [Bow(source.id)]
+    return [
+        Ask(
+            source.owner,
+            f"Ignore the cost of bowing {source.name}?",
+            WAIVER_TAG,
+            subjects=(waiver.id,),
+            source_id=source.id,
+        )
+    ]
+
+
+@choice_resolver(WAIVER_TAG)
+def _resolve_bow_waiver(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Taking the waiver spends it and nothing bows; declining pays the cost as printed."""
+    if not chosen:
+        return [Bow(source_id)]
+    once_per_turn(game, game.table.cards_by_id[chosen[0]], WAIVER_TAG)
+    return []
 
 
 def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
@@ -127,19 +176,24 @@ class InvestAbility:
 
     Attributes
     ----------
-    minimum : int
-        The least gold the Invest may cost; equals ``maximum`` for a fixed Invest.
-    maximum : int
-        The most gold the Invest may cost; above ``minimum`` for a variable Invest whose amount the
-        recruiting seat chooses.
+    amounts : tuple of int
+        Every sum the Invest may be paid for, least first. A single entry is a fixed Invest; several
+        are the choice the recruiting seat makes, which a card prints either as a span ("Invest
+        :g1: to :g3:") or as separate prices that buy different things ("Invest :g2: or :g6:").
     effect : callable
         Maps ``(game, source_card, amount_paid)`` to the effects the Invest emits once the card
         enters play. It takes the board because an Invest may search a zone for what it fetches.
     """
 
-    minimum: int
-    maximum: int
+    amounts: tuple[int, ...]
     effect: Callable[[GameState, L5RCard, int], list[Effect]]
+
+
+def itself(game: GameState, source: L5RCard) -> list[str]:
+    """The target list of an ability that names no target: its own card. Paired with
+    ``all_targets``, so the ability resolves against itself without asking the seat to pick the only
+    card it could mean."""
+    return [source.id]
 
 
 def no_effects(card: L5RCard) -> list[Effect]:
@@ -168,6 +222,30 @@ class ProductionBoost:
     effects: Callable[[L5RCard], list[Effect]] = no_effects
 
 
+# Cards their controller may leave bowed rather than straightening at the start of their turn (the
+# printed "May remain bowed"), by printed id. A flag rather than a handler: the card states the
+# permission and says nothing about when it is worth taking, which is the controller's business.
+MAY_REMAIN_BOWED: set[str] = set()
+
+
+def may_remain_bowed(printed_id: str) -> None:
+    """Register ``printed_id`` as a card the turn-start straighten passes over."""
+    MAY_REMAIN_BOWED.add(printed_id)
+
+
+def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The bowed cards ``seat`` controls that it may choose to keep bowed rather than straighten.
+
+    Only the bowed ones: the choice is made before a card straightens, so one already standing has
+    nothing to decline (CR, May Remain Bowed).
+    """
+    return tuple(
+        card.id
+        for card in game.table.battlefield.cards
+        if card.owner is seat and card.bowed and card.printed_id in MAY_REMAIN_BOWED
+    )
+
+
 _ABILITIES: dict[str, Ability] = {}
 _INVEST: dict[str, InvestAbility] = {}
 _PRODUCTION_BOOST: dict[str, ProductionBoost] = {}
@@ -194,13 +272,34 @@ def register_production_boost(printed_id: str, boost: ProductionBoost) -> None:
     _PRODUCTION_BOOST[printed_id] = boost
 
 
-def fixed_invest_amount(card: L5RCard) -> int | None:
+def invest_amounts(game: GameState, card: L5RCard) -> tuple[int, ...] | None:
+    """The sums ``card``'s Invest may be paid for now — its printed amounts less whatever its own
+    text discounts, floored at zero — or None when it prints no Invest.
+
+    Two printed amounts a discount drives to the same price collapse to one, since paying it once
+    can only buy one of the two things.
+
+    Returns
+    -------
+    tuple of int or None
+        The payable sums, least first, or None when the card prints no Invest.
+    """
+    ability = _INVEST.get(card.printed_id)
+    if ability is None:
+        return None
+    discount = effective_invest_discount(game, card)
+    if not discount:
+        return ability.amounts
+    return tuple(dict.fromkeys(max(0, amount - discount) for amount in ability.amounts))
+
+
+def fixed_invest_amount(game: GameState, card: L5RCard) -> int | None:
     """The Invest cost ``card`` charges when that cost is fixed, or None when it prints no Invest or
     lets the payer size one. A caller that cannot raise a "how much?" decision treats both alike."""
-    ability = _INVEST.get(card.printed_id)
-    if ability is None or ability.minimum != ability.maximum:
+    amounts = invest_amounts(game, card)
+    if amounts is None or len(amounts) != 1:
         return None
-    return ability.minimum
+    return amounts[0]
 
 
 def ability_for(card: L5RCard) -> Ability | None:
@@ -241,6 +340,8 @@ def activatable(
         ability = _ABILITIES.get(card.printed_id)
         if ability is None or ability.timing not in permitted:
             continue
+        if ability.timing is ActionTiming.RESPONSE and card.id in game.responded:
+            continue
         if location not in ability.located_at:
             continue
         if not can_pay(game, card, ability.cost):
@@ -250,13 +351,25 @@ def activatable(
     return ready
 
 
-def owned_holdings(game: GameState, owner: PlayerId, keyword: str) -> list[L5RCard]:
+def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]:
+    """The Personalities ``owner`` has in play — the pool almost every "your target Personality"
+    starts from, before the card's own condition narrows it."""
+    return tuple(
+        card
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, PersonalityPrint) and card.owner is owner
+    )
+
+
+def owned_holdings(game: GameState, owner: PlayerId, keyword: str | None = None) -> list[L5RCard]:
+    """The Holdings ``owner`` has in play, narrowed to those carrying ``keyword`` when one is given.
+    Default None, which takes them all."""
     return [
         held
         for held in game.table.battlefield.cards
         if held.owner is owner
         and isinstance(held.printed, HoldingPrint)
-        and keyword in effective_keywords(game, held)
+        and (keyword is None or keyword in effective_keywords(game, held))
     ]
 
 

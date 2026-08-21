@@ -9,7 +9,6 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
-    ChooseCards,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
@@ -97,6 +96,39 @@ def test_sapphire_mine_banks_nothing_below_two_sincerity():
     assert session.game.table.cards_by_id["sm"].counters == {}  # 1 < 2: tokens gone, no wealth
 
 
+def _refill(session):
+    return session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards[-1]
+
+
+def test_sapphire_mine_renews_its_province_while_it_holds_any_sincerity():
+    """ "This Holding has Renew while it has any Sincerity tokens" — one is any, and Renew refills
+    the vacated Province face-up, so the next card is recruitable the same turn."""
+    session = _recruit_game("sm", "sapphire_mine", sincerity=1, keywords=("Mine", "Sincerity"))
+
+    _recruit(session, "sm")
+
+    assert _refill(session).face_up
+
+
+def test_sapphire_mine_renews_on_the_tokens_it_is_about_to_spend():
+    """The keyword is read as the Mine enters play and its Sincerity is cleared afterwards, so the
+    tokens that earn the refill are gone by the time anyone could look for them."""
+    session = _recruit_game("sm", "sapphire_mine", sincerity=2, keywords=("Mine", "Sincerity"))
+
+    _recruit(session, "sm")
+
+    assert _refill(session).face_up
+    assert session.game.table.cards_by_id["sm"].counters == {"wealth": 1}  # sincerity spent
+
+
+def test_sapphire_mine_without_sincerity_leaves_its_province_face_down():
+    session = _recruit_game("sm", "sapphire_mine", sincerity=0, keywords=("Mine", "Sincerity"))
+
+    _recruit(session, "sm")
+
+    assert not _refill(session).face_up
+
+
 def test_the_kurai_district_court_produces_gold_from_its_sincerity_on_entry():
     session = _recruit_game(
         "kd",
@@ -163,8 +195,9 @@ def test_training_court_seeds_a_sincerity_token_on_a_province_card():
     session.act(PlayerId.P1, Recruit("tc"))
     session.submit(PlayerId.P1, DecisionResponse(("SH",)))  # pay the base cost
 
+    session.act(PlayerId.P1, ActivateAbility("tc"))
     pending = session.game.pending
-    assert isinstance(pending, ChooseCards) and pending.candidates == ("target",)
+    assert isinstance(pending, ChooseAbilityTarget) and pending.candidates == ("target",)
     session.submit(PlayerId.P1, DecisionResponse(("target",)))
     assert session.game.table.cards_by_id["target"].counters == {"sincerity": 1}
 
@@ -188,7 +221,8 @@ def test_training_court_seeds_nothing_without_a_token_less_sincerity_card():
 
     session.act(PlayerId.P1, Recruit("tc"))
     session.submit(PlayerId.P1, DecisionResponse(("SH",)))
-    assert session.game.pending is None  # the only Sincerity card already has a token
+    # The only Sincerity card already has a token, so the Response is never offered.
+    assert ActivateAbility("tc") not in session.legal_actions(PlayerId.P1)
 
 
 def test_training_court_seed_offers_every_token_less_sincerity_card():
@@ -207,10 +241,13 @@ def test_training_court_seed_offers_every_token_less_sincerity_card():
 
     session.act(PlayerId.P1, Recruit("tc"))
     session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    session.act(PlayerId.P1, ActivateAbility("tc"))
     assert set(session.game.pending.candidates) == {"a", "b"}  # both token-less cards offered
 
 
-def test_training_court_invest_applies_after_the_seed_choice_resolves():
+def test_training_court_invest_lands_before_its_response_is_offered():
+    """The Invest resolves inside the Recruit and the Response Step follows the whole action, so the
+    Wealth token is already banked by the time the seed is on the table."""
     state = _base_state()
     province_card(
         state, "tc", printed_id="training_court", keywords=("Court",), index=0, gold_cost=2
@@ -223,12 +260,12 @@ def test_training_court_invest_applies_after_the_seed_choice_resolves():
 
     session.act(PlayerId.P1, Recruit("tc", invest=True))
     session.submit(PlayerId.P1, DecisionResponse(("SH",)))  # pay base + Invest 1
-    assert isinstance(session.game.pending, ChooseCards)  # the seed pauses before the Invest effect
+    assert session.game.table.cards_by_id["tc"].counters == {"wealth": 1}  # Invest already landed
+
+    session.act(PlayerId.P1, ActivateAbility("tc"))
     session.submit(PlayerId.P1, DecisionResponse(("target",)))
 
-    table = session.game.table
-    assert table.cards_by_id["target"].counters == {"sincerity": 1}  # the seed resolved
-    assert table.cards_by_id["tc"].counters == {"wealth": 1}  # Invest still landed, after the seed
+    assert session.game.table.cards_by_id["target"].counters == {"sincerity": 1}
 
 
 def test_training_court_seed_replays_and_round_trips():
@@ -243,6 +280,7 @@ def test_training_court_seed_replays_and_round_trips():
     _to_dynasty(session)
     session.act(PlayerId.P1, Recruit("tc"))
     session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    session.act(PlayerId.P1, ActivateAbility("tc"))
     session.submit(PlayerId.P1, DecisionResponse(("target",)))
 
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))

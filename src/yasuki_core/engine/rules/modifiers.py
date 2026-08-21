@@ -65,3 +65,33 @@ class Modifier:
     stat: Stat
     amount: int
     duration: Duration
+
+
+@dataclass(frozen=True, slots=True)
+class KeywordGrant:
+    """A continuous effect that gives one card a keyword while active.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the grant comes from — used to expire a ``WHILE_SOURCE_IN_PLAY`` grant when it
+        leaves play and to attribute the effect.
+    target_id : str
+        The card that carries the keyword while the grant lasts.
+    keyword : str
+        The keyword gained, spelled as the card database spells it.
+    duration : Duration
+        When the grant stops applying.
+    """
+
+    source_id: str
+    target_id: str
+    keyword: str
+    duration: Duration
+
+
+# A recorded ongoing effect of either kind. The CR files a keyword change beside a stat change —
+# both are ongoing, both last to the end of the turn unless the card says otherwise, and both are
+# forgotten when their target leaves the table — so the two are recorded in one list and expire
+# together (CR, Duration of Effects).
+OngoingEffect = Modifier | KeywordGrant

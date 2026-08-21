@@ -1,8 +1,11 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
+    bow_cost,
     bow_parent_and_destroy,
+    itself,
     no_cost,
     register_ability,
 )
@@ -30,17 +33,41 @@ from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
 # --- Fantastic Gardens ---
 
+GARDENS_HONOR = 2
+
 
 @recruit_discount("fantastic_gardens")
-def _fantastic_gardens(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+def _fantastic_gardens_recruit_discount(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> int:
     """Enters play for 2 less Gold if you are a Crane Clan player."""
-    return 2 if is_clan(me, "Crane") else 0
+    return 2 if is_clan(me, ruleset.CRANE) else 0
+
+
+def _fantastic_gardens_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Gain 2 Honor."""
+    return [GainHonor(source.owner, GARDENS_HONOR)]
+
+
+register_ability(
+    "fantastic_gardens",
+    Ability(
+        # Repeatable: bowing is the only thing rationing it, so a Gardens straightened again may
+        # bow for another two Honor.
+        timing=ActionTiming.LIMITED,
+        label=f"Limited: Bow to gain {GARDENS_HONOR} Honor",
+        cost=bow_cost,
+        targets=itself,
+        effects=_fantastic_gardens_effects,
+        all_targets=True,
+    ),
+)
 
 
 # --- Imperial Gift ---
 
 
-def _fate_deck_items(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+def _imperial_gift_fate_deck_items(game: GameState, seat: PlayerId) -> tuple[str, ...]:
     """The Items in ``seat``'s Fate deck — what the search may turn up."""
     return tuple(
         card.id
@@ -51,7 +78,7 @@ def _fate_deck_items(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 
 
 @choice_resolver("imperial_gift_item", prompt="Search your Fate deck for an Item")
-def _imperial_gift_item(
+def _resolve_imperial_gift_item(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Show the Item to the table, put it in hand, then shuffle the deck the search read. The
@@ -75,7 +102,7 @@ def _imperial_gift_effects(game: GameState, source: L5RCard, target: L5RCard) ->
     finds, so the search is skipped only when the deck holds no Item at all."""
     seat = source.owner
     spent: list[Effect] = [GainHonor(seat, 2), Discard(source.id, seat)]
-    items = _fate_deck_items(game, seat)
+    items = _imperial_gift_fate_deck_items(game, seat)
     if not items:
         return spent
     return [*spent, Then((Choose(seat, items, 1, 1, "imperial_gift_item", source.id),))]
@@ -98,7 +125,7 @@ register_ability(
 # --- Touch of Death ---
 
 
-def _get_touch_of_death_valid_targets(game: GameState, source: L5RCard) -> list[str]:
+def _touch_of_death_targets(game: GameState, source: L5RCard) -> list[str]:
     """Bowed Personalities whose Chi does not exceed the Shugenja carrying this Spell.
 
     "Equal or lower" names no referent; the comparison is against the caster. The caster is never
@@ -117,9 +144,7 @@ def _get_touch_of_death_valid_targets(game: GameState, source: L5RCard) -> list[
     ]
 
 
-def _resolve_touch_of_death_effect(
-    game: GameState, source: L5RCard, target: L5RCard
-) -> list[Effect]:
+def _touch_of_death_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [Destroy(target.id, source.owner)]
 
 
@@ -129,7 +154,7 @@ register_ability(
         timing=ActionTiming.LIMITED,
         label="Limited: destroy a bowed Personality with Chi no higher than this Shugenja's",
         cost=bow_parent_and_destroy,
-        targets=_get_touch_of_death_valid_targets,
-        effects=_resolve_touch_of_death_effect,
+        targets=_touch_of_death_targets,
+        effects=_touch_of_death_effects,
     ),
 )

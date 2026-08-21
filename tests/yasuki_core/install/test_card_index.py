@@ -4,6 +4,7 @@ import yaml
 from yasuki_core.install.card_index import (
     DEFAULT_CARDS_PATH,
     card_ids,
+    iter_set_entries,
     read_index,
     write_index,
 )
@@ -121,6 +122,19 @@ def test_the_index_is_one_id_per_line(tmp_path):
     write_index(tmp_path, index_path)
 
     assert index_path.read_text() == "ancestral_sword\nmodest_farm\n"
+
+
+def test_a_local_set_file_stays_out_of_the_index(tmp_path):
+    """A set file one machine holds must not reach the committed index, or every other checkout
+    disagrees with it."""
+    (tmp_path / "real.yaml").write_text("set: Real\ncards:\n- title: Real Card\n", encoding="utf-8")
+    (tmp_path / "fixture.local.yaml").write_text(
+        "set: Fixture\ncards:\n- title: Local Card\n", encoding="utf-8"
+    )
+
+    scanned = {entry.card_id for entry in iter_set_entries(tmp_path)}
+
+    assert scanned == {"real_card"}
 
 
 def test_the_committed_index_matches_the_card_yaml():

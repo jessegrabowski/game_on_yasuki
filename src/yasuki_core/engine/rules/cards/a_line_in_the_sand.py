@@ -12,7 +12,7 @@ from yasuki_core.game_pieces.constants import Side
 
 
 @choice_resolver("stockpiled_weapon", prompt="Search your Fate deck for a Stockpiled Weapon")
-def _resolve_stockpiled_weapon_search(
+def _resolve_stockpiled_weapon(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [
@@ -33,4 +33,4 @@ def _stockpiled_weapon_invest(game: GameState, source: L5RCard, amount: int) -> 
     return [Choose(seat, copies, 1, 1, "stockpiled_weapon", source.id)]
 
 
-register_invest("stockpiled_weapon", InvestAbility(1, 1, _stockpiled_weapon_invest))
+register_invest("stockpiled_weapon", InvestAbility((1,), _stockpiled_weapon_invest))

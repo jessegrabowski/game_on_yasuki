@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.decisions import (
     Confirm,
     DecisionRequest,
     ChooseCards,
+    ChooseDistribution,
     ChoosePayment,
     DecisionResponse,
     DiscardToHandSize,
@@ -165,7 +166,6 @@ def test_a_registered_prompt_replaces_the_generic_wording():
     "resolver, expected",
     [
         ("wheat_farm", "Give a Wealth token to other Farms you control"),
-        ("sincerity_seed", "Seed a Sincerity token onto one of your Sincerity cards"),
         ("modest_farm_straighten", "Destroy Modest Farm to straighten the card it recruited"),
     ],
 )
@@ -221,3 +221,53 @@ def test_a_confirm_asks_its_question_verbatim():
     )
 
     assert ask.prompt() == "Shuffle Blessings of the Red Panda Spirit into your deck?"
+
+
+def _distribution(count: int) -> ChooseDistribution:
+    return ChooseDistribution(PlayerId.P1, _HAND, count=count, resolver="test_split", source_id="s")
+
+
+def test_a_distribution_takes_a_candidate_once_per_creation_it_gets():
+    # The point of the shape: two on "a" and one on "b" is three ids, not a set of two.
+    assert _distribution(3).accepts(DecisionResponse(("a", "a", "b"))) is True
+
+
+def test_a_distribution_may_heap_everything_on_one_candidate():
+    """ "One or more" is a floor, not a spread: naming a single card is a legal division."""
+    assert _distribution(3).accepts(DecisionResponse(("a", "a", "a"))) is True
+
+
+def test_a_distribution_rejects_an_answer_that_places_the_wrong_number():
+    # All of them are placed — the seat divides the creations, it does not decline any.
+    request = _distribution(3)
+    assert request.accepts(DecisionResponse(("a", "b"))) is False
+    assert request.accepts(DecisionResponse(("a", "a", "b", "b"))) is False
+    assert request.accepts(DecisionResponse(())) is False
+
+
+def test_a_distribution_rejects_a_candidate_it_never_offered():
+    assert _distribution(2).accepts(DecisionResponse(("a", "z"))) is False
+
+
+@choice_resolver("test_split", prompt="Attach them to one or more of your Personalities")
+def _split(game, source_id, chosen, seat):
+    return []
+
+
+def test_a_distribution_prompt_counts_down_as_the_creations_are_placed():
+    # A division is answered by clicking one card repeatedly, so the count left is the only thing
+    # telling the player they are not finished.
+    request = _distribution(3)
+
+    assert request.prompt() == "Attach them to one or more of your Personalities (3 of 3 left)"
+    assert request.prompt(chosen=("a", "a")) == (
+        "Attach them to one or more of your Personalities (1 of 3 left)"
+    )
+
+
+def test_a_distribution_with_no_registered_wording_still_says_what_it_wants():
+    request = ChooseDistribution(
+        PlayerId.P1, _HAND, count=2, resolver="unregistered", source_id="s"
+    )
+
+    assert request.prompt() == "Divide them among one or more cards (2 of 2 left)"

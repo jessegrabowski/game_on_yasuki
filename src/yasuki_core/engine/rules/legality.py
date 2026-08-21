@@ -26,9 +26,10 @@ from yasuki_core.engine.rules.economy import (
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules import abilities
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.ruleset import SHATTERED_EMPIRE
+from yasuki_core import ruleset
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     HoldingPrint,
@@ -37,15 +38,11 @@ from yasuki_core.game_pieces.prints import (
     StrongholdPrint,
 )
 
-# The boldface keyword marking a card the Legacy rulebook ability can search out.
-LEGACY_KEYWORD = "Legacy"
-
-# The boldface keyword marking a card the Kharmic rulebook abilities can spend, and what they cost.
-KHARMIC_KEYWORD = "Kharmic"
+# What the Kharmic rulebook abilities cost to use.
 KHARMIC_COST = 2
 
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
-RULESET = SHATTERED_EMPIRE
+RULESET = ruleset.ACTIVE
 OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
 
 
@@ -189,7 +186,7 @@ def _kharmic(game: GameState, seat: PlayerId, *, only: str | None = None) -> lis
 
 def is_kharmic_card(game: GameState, card: L5RCard) -> bool:
     """Whether ``card`` carries the Kharmic keyword, so a Kharmic ability can spend it."""
-    return has_keyword(game, card, KHARMIC_KEYWORD)
+    return has_keyword(game, card, keywords.KHARMIC)
 
 
 def kharmic_in_hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -264,8 +261,8 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
             recruits.append(Recruit(card.id))
             if can_proclaim(game, card):
                 recruits.append(Recruit(card.id, proclaim=True))
-        invest = abilities.invest_for(card)
-        if invest is not None and base + invest.minimum <= affordable:
+        invest = abilities.invest_amounts(game, card)
+        if invest is not None and base + min(invest) <= affordable:
             recruits.append(Recruit(card.id, invest=True))
     return recruits
 
@@ -294,7 +291,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         if base > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
-        invest = abilities.fixed_invest_amount(card)
+        invest = abilities.fixed_invest_amount(game, card)
         if invest is not None and base + invest <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips
@@ -380,9 +377,9 @@ def recruit_cost(game: GameState, card: L5RCard) -> int:
     surcharge when the card has a Clan Alignment the seat does not share, less the card's own
     conditional recruit discount. Floored at zero."""
     cost = effective_gold_cost(game, card)
-    seat_align = seat_alignment(game, card.owner)
+    seat_aligns = seat_alignments(game, card.owner)
     card_aligns = card_alignments(card)
-    if seat_align is not None and card_aligns and seat_align not in card_aligns:
+    if seat_aligns and card_aligns and seat_aligns.isdisjoint(card_aligns):
         cost += OFF_CLAN_SURCHARGE
     cost -= effective_recruit_discount(game, card)
     return max(0, cost)
@@ -402,8 +399,7 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
     seat = card.owner
     if seat is None:
         return False
-    seat_align = seat_alignment(game, seat)
-    if seat_align is None or seat_align not in card_alignments(card):
+    if seat_alignments(game, seat).isdisjoint(card_alignments(card)):
         return False
     return not game.has_used(proclaim_key(seat, game.turn))
 
@@ -444,7 +440,7 @@ def is_legacy_card(game: GameState, card: L5RCard) -> bool:
     """Whether ``card`` carries the Legacy keyword, so the Legacy ability can search it out. Shrine
     of Courtesy grants itself Legacy for the second player, which is why this is not a printed
     check."""
-    return has_keyword(game, card, LEGACY_KEYWORD)
+    return has_keyword(game, card, keywords.LEGACY)
 
 
 def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -462,19 +458,33 @@ def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
 
 
-def seat_clan(game: GameState, seat: PlayerId | None) -> str | None:
-    """The clan printed on ``seat``'s Stronghold, or None when it has none in play."""
+def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
+    """``seat``'s Stronghold, or None when it has none in play."""
     for card in game.table.battlefield.cards:
         if card.owner is seat and isinstance(card.printed, StrongholdPrint):
-            return card.clan
+            return card
     return None
 
 
-def seat_alignment(game: GameState, seat: PlayerId | None) -> str | None:
-    """The seat's Clan Alignment slug, taken from its Stronghold, or None when the Stronghold carries
-    no legal alignment (an unaligned seat)."""
-    clan = seat_clan(game, seat)
-    return RULESET.alignment(clan) if clan is not None else None
+def seat_clan(game: GameState, seat: PlayerId | None) -> str | None:
+    """The clan printed on ``seat``'s Stronghold, or None when it has none in play. The first, for a
+    Stronghold printing several."""
+    stronghold = seat_stronghold(game, seat)
+    if stronghold is None:
+        return None
+    names = _clan_names(stronghold)
+    return names[0] if names else None
+
+
+def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:
+    """Every Clan Alignment slug ``seat`` plays, taken from its Stronghold. Empty for an unaligned
+    seat and for one with no Stronghold in play.
+
+    A set for the same reason :func:`card_alignments` is one: a card may print more than one clan,
+    and a Stronghold is a card.
+    """
+    stronghold = seat_stronghold(game, seat)
+    return card_alignments(stronghold) if stronghold is not None else set()
 
 
 def card_alignments(card: L5RCard) -> set[str]:
@@ -482,6 +492,22 @@ def card_alignments(card: L5RCard) -> set[str]:
     alignments in the active ruleset (minor clans, Shadowlands, "Unaligned", ...). Empty for an
     unaligned card."""
     return {slug for name in _clan_names(card) if (slug := RULESET.alignment(name)) is not None}
+
+
+def seat_alignment_name(game: GameState, seat: PlayerId | None) -> str | None:
+    """The clan a card created "with your Clan Alignment" takes: the name printed on ``seat``'s
+    Stronghold, or None when that clan is no legal alignment — an unaligned seat has none to give.
+
+    The printed name rather than :func:`seat_alignments`' slug, because the created card carries it
+    the way any card carries its clan. The first legal one, for a Stronghold printing several.
+    """
+    stronghold = seat_stronghold(game, seat)
+    if stronghold is None:
+        return None
+    for name in _clan_names(stronghold):
+        if RULESET.alignment(name) is not None:
+            return name
+    return None
 
 
 def _clan_names(card: L5RCard) -> tuple[str, ...]:

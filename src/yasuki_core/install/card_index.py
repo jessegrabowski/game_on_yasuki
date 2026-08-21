@@ -6,6 +6,10 @@ from typing import NamedTuple
 from yasuki_core import DATABASE_DIR
 
 DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
+# Set files a developer keeps on their own machine and does not commit — a fixture Stronghold, a
+# set being transcribed. They are absent from a fresh clone, so nothing committed may depend on
+# them: the card index skips them, and they register their own set metadata as they load.
+LOCAL_SET_SUFFIX = ".local.yaml"
 DEFAULT_INDEX_PATH = DATABASE_DIR / "card_ids.txt"
 
 
@@ -14,6 +18,8 @@ class SetEntry(NamedTuple):
     set_name: str
     card_id: str
     title: str
+    keywords: tuple[str, ...]
+    creates: tuple[str, ...]
 
 
 def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
@@ -24,6 +30,9 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
     explicit ``id``, or a slug of the extended title, with ``__back`` appended for the reverse face of
     a double-faced card. Every consumer reads the data through here, so the derivation has one
     definition and cannot drift between them.
+
+    Local set files are skipped. The committed index has to match a fresh clone, which holds none of
+    them, so a card only one machine has must not reach it.
 
     Parameters
     ----------
@@ -41,7 +50,9 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
 
     from yasuki_core.install.yaml_to_sql import card_slug
 
-    yaml_files = sorted(cards_dir.glob("*.yaml"))
+    yaml_files = sorted(
+        path for path in cards_dir.glob("*.yaml") if not path.name.endswith(LOCAL_SET_SUFFIX)
+    )
     if not yaml_files:
         raise ValueError(f"No set files in {cards_dir}")
 
@@ -54,7 +65,9 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
             card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
             if entry.get("is_back"):
                 card_id += "__back"
-            yield SetEntry(yaml_file, data["set"], card_id, title)
+            keywords = tuple(entry.get("keywords") or ())
+            creates = tuple(entry.get("creates") or ())
+            yield SetEntry(yaml_file, data["set"], card_id, title, keywords, creates)
 
 
 def card_ids(cards_dir: Path) -> list[str]:

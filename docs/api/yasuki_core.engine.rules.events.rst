@@ -12,6 +12,7 @@ yasuki_core.engine.rules.events
     Destroyed
     EnteredPlay
     Revealed
+    Straightened
     TurnStarted
 
 .. automodule:: yasuki_core.engine.rules.events

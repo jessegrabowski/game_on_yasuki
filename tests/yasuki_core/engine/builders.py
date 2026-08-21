@@ -8,8 +8,10 @@ from yasuki_core.engine.table import AttachTarget, DeckKey, TableState, ZoneKey,
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.factory import build_token_print
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
+    CardPrint,
     FatePrint,
     HoldingPrint,
     PersonalityPrint,
@@ -40,9 +42,11 @@ def personality(
     *,
     owner: PlayerId = PlayerId.P1,
     name: str | None = None,
+    printed_id: str | None = None,
     force: int = 2,
     chi: int = 3,
     personal_honor: int = 0,
+    gold_cost: int | None = None,
     keywords: tuple[str, ...] = (),
 ) -> L5RCard:
     """A Personality. ``chi`` defaults live because a Personality at zero Chi is destroyed on sight
@@ -53,9 +57,11 @@ def personality(
         name=name or card_id,
         side=Side.DYNASTY,
         owner=owner,
+        printed_id=printed_id,
         force=force,
         chi=chi,
         personal_honor=personal_honor,
+        gold_cost=gold_cost,
         keywords=keywords,
     )
 
@@ -71,6 +77,7 @@ def attachment(
     chi: int = 0,
     force_modifier: int = 0,
     chi_modifier: int = 0,
+    gold_cost: int = 0,
     keywords: tuple[str, ...] = (),
 ) -> L5RCard:
     """An Item, Follower or Spell. ``force``/``chi`` are the card's own stats, which it brings to a
@@ -87,8 +94,41 @@ def attachment(
         chi=chi,
         force_modifier=force_modifier,
         chi_modifier=chi_modifier,
+        gold_cost=gold_cost,
         keywords=keywords,
     )
+
+
+def token_template(
+    target: GameState | TableState,
+    card_id: str,
+    *,
+    name: str,
+    card_type: str,
+    keywords: tuple[str, ...] = (),
+    force: int | None = None,
+    chi: int | None = None,
+) -> CardPrint:
+    """Load a creatable-token template onto the table and return it.
+
+    Built from a card record through the same factory a deck load uses, so a test's token splits its
+    printed Force and Chi between its own stats and the ones it hands its Personality exactly as the
+    database-loaded one does.
+    """
+    state = target.table if isinstance(target, GameState) else target
+    printed = build_token_print(
+        {
+            "card_id": card_id,
+            "name": name,
+            "types": [card_type, "Proxy"],
+            "keywords": list(keywords),
+            "force": force,
+            "chi": chi,
+            "gold_cost": 0,
+        }
+    )
+    state.creatable_tokens[card_id] = printed
+    return printed
 
 
 def attached(target: GameState | TableState, card: L5RCard, parent: AttachTarget) -> L5RCard:
@@ -137,6 +177,7 @@ def stronghold(
     *,
     gold_production: int = 0,
     clan: str | None = None,
+    clans: tuple[str, ...] = (),
     starting_honor: int = 0,
 ) -> L5RCard:
     return L5RCard.of(
@@ -147,6 +188,7 @@ def stronghold(
         owner=owner,
         gold_production=gold_production,
         clan=clan,
+        clans=clans,
         starting_honor=starting_honor,
     )
 
@@ -229,3 +271,18 @@ def end_phase(session: EngineSession) -> None:
         and not session.game.awaiting_decision
     ):
         session.act(session.game.round.priority, Pass())
+
+
+def end_turn(session: EngineSession) -> None:
+    """Pass through the rest of the active player's turn, until the next one begins.
+
+    Stops early if the engine pauses for a decision or the game ends, so a test that wanted the turn
+    over asserts on a board that says why it is not.
+    """
+    turn = session.game.turn
+    while (
+        session.game.turn == turn
+        and not session.game.game_over
+        and not session.game.awaiting_decision
+    ):
+        end_phase(session)

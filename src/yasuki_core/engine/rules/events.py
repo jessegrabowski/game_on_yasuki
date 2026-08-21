@@ -14,13 +14,27 @@ class TurnStarted:
 
 @dataclass(frozen=True, slots=True)
 class CardDiscarded:
-    """A card entered a discard pile. ``cause`` is who or what put it there and ``side`` the card's
-    side — the two facts a discard-reaction reads ("your action, a Fate card"). A ``Rulebook`` cause
-    means no player chose it, so a reaction guarded on a seat correctly ignores it."""
+    """A card entered a discard pile.
+
+    Attributes
+    ----------
+    card_id : str
+        The card that reached the pile.
+    side : Side
+        The card's side, one of the two facts a discard-reaction reads ("your action, a Fate card").
+    cause : Cause
+        Who or what put it there. A ``Rulebook`` cause means no player chose it, so a reaction
+        guarded on a seat correctly ignores it.
+    from_hand_or_deck : bool
+        Whether it was discarded without ever reaching play, which is how cards name the pair of
+        hidden zones together: "after this Follower is discarded from your hand or deck". Default
+        False, which is what a card discarded out of play or out of a Province reports.
+    """
 
     card_id: str
     side: Side
     cause: Cause
+    from_hand_or_deck: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,6 +77,14 @@ class EnteredPlay:
 
 
 @dataclass(frozen=True, slots=True)
+class Straightened:
+    """A bowed card was straightened, whether by the start of its controller's turn or by an effect.
+    The event names the change, so a card already standing raises nothing."""
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class Revealed:
     """A face-down card in a Province was turned face-up. A card that arrives already face-up raises
     nothing — the event names the turn, not the resulting state."""
@@ -70,4 +92,6 @@ class Revealed:
     card_id: str
 
 
-GameEvent = TurnStarted | CardDiscarded | CounterGained | Destroyed | EnteredPlay | Revealed
+GameEvent = (
+    TurnStarted | CardDiscarded | CounterGained | Destroyed | EnteredPlay | Revealed | Straightened
+)

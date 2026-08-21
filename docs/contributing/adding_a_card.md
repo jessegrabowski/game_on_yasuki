@@ -17,6 +17,7 @@ Read the card's text and find the shape:
 | Costs less to bring into play, conditionally | `@recruit_discount(id)` | Colonial Farm |
 | "After X happens…" | `@on(Event, id)` | Rice Farm |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | Millet Farm |
+| "Response: after X…" | `register_ability(id, Ability(timing=ActionTiming.RESPONSE, ...))` | Caravansary |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | Rebuilt Harbor |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | Fortified Farmlands |
 | Gives the Personality it hangs on a stat | `@attachment_grant(id)` | Haramaki-do |
@@ -41,9 +42,11 @@ only thing specific to the card, so the whole implementation is the condition:
 
 ```python
 @recruit_discount("colonial_farm")
-def _colonial_farm(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+def _colonial_farm_recruit_discount(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+) -> int:
     """Enters play for 1 less Gold if you are a Lion Clan player."""
-    return 1 if is_clan(me, "Lion") else 0
+    return 1 if is_clan(me, ruleset.LION) else 0
 ```
 
 `is_clan` is shared, in `economy.py`. Look there before writing a predicate — most clan and keyword
@@ -56,7 +59,7 @@ existing event (`TurnStarted`), so only the condition is new:
 
 ```python
 @on(TurnStarted, "rice_farm")
-def _rice_farm(ctx: TriggerContext) -> list[Effect]:
+def _rice_farm_turn_started(ctx: TriggerContext) -> list[Effect]:
     """After your turn begins, give this Holding a +1GP Wealth token (max four)."""
     if ctx.card.owner is not ctx.event.seat or at_cap(ctx.card, WEALTH, 4):
         return []
@@ -83,7 +86,7 @@ and a resolver turns the answer into effects:
 
 ```python
 @on(EnteredPlay, "wheat_farm")
-def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
+def _wheat_farm_entered_play(ctx: TriggerContext) -> list[Effect]:
     if ctx.event.card_id != ctx.card.id:
         return []
     others = tuple(...)          # the legal targets
@@ -93,7 +96,9 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
 
 
 @choice_resolver("wheat_farm", prompt="Give a Wealth token to other Farms you control")
-def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
+def _resolve_wheat_farm(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
 ```
 
@@ -105,6 +110,37 @@ Register the `prompt` alongside it. Without one the seat is asked "Choose up to 
 says how many cards to click and nothing about what for. Keep the wording free of counts — the same
 choice can offer one target or two.
 
+### A division: how many go where
+
+Suiteiru no Oni creates a Follower per point of the Chi of the Personality he destroys, and attaches
+them "to one or more of your Personalities". The seat picks the bearers *and* how many each takes, so
+a `Choose` — which reads its answer as a set — cannot say it. `AskDistribution` can: the answer names
+a card once per creation it takes, and the resolver reads that tally.
+
+```python
+return [
+    Destroy(target.id, source.owner),
+    AskDistribution(source.owner, bearers, podlings, "suiteiru_no_oni", source.id),
+]
+
+
+@choice_resolver(
+    "suiteiru_no_oni", prompt="Attach the Oni Followers to one or more of your Personalities"
+)
+def _resolve_suiteiru_no_oni(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [
+        *(CreateToken(SUITEIRUS_PODLING, seat, source_id, attach_to=bearer) for bearer in chosen),
+        GainHonor(seat, -len(chosen)),
+    ]
+```
+
+Everything offered is placed — the seat divides the creations rather than declining any — so raise
+the question only when there is both something to divide and somewhere to put it. The client draws a
+count and a pair of arrows on each card the seat picks, and the prompt counts down as they are
+placed; the registered wording carries no number for that reason.
+
 ### Sequencing: making a step wait
 
 Effects returned inline run before the events already queued behind them. When a step must happen
@@ -113,7 +149,7 @@ Effects returned inline run before the events already queued behind them. When a
 ```python
 question = f"Destroy {source.name} to straighten {target.name}?"
 return [
-    RecruitCard(target.id, renew="Farm" in target.keywords),
+    RecruitCard(target.id, renew=keywords.FARM in target.keywords),
     Then(
         (
             Ask(
@@ -155,7 +191,7 @@ Personality has +1PH"; the printed half is a number on the card, the written hal
 
 ```python
 @attachment_grant("haramaki_do")
-def _haramaki_do(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
+def _haramaki_do_attachment_grant(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
     """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
     return {Stat.PERSONAL_HONOR: 1}
 ```
@@ -165,10 +201,10 @@ exclusivity — live in `equip.py` as code. A restriction only one card states l
 
 ```python
 @attach_restriction("brothers_in_arms")
-def _brothers_in_arms_attaches_only_to_a_samurai(
+def _brothers_in_arms_attach_restriction(
     game: GameState, personality: L5RCard, card: L5RCard
 ) -> bool:
-    return SAMURAI_KEYWORD in effective_keywords(game, personality)
+    return keywords.SAMURAI in effective_keywords(game, personality)
 ```
 
 Two things an attachment gets for free, so do not write handlers for them: a card leaving play takes
@@ -177,6 +213,95 @@ its attachments with it, and a state rule discards an attachment left with no Pe
 **Battle is still out of reach**, and for attachments that is most of the corpus — 1,284 of the
 abilities printed on Follower, Item and Spell cards are Battle abilities. An attachment card whose
 text begins "Battle:" cannot be implemented today no matter which rung it would otherwise sit on.
+
+## Cards that create
+
+Weapon Artist makes a sword out of nothing; Colonial Farm makes an Ashigaru; Mishime Sensei makes an
+Oni. What they create is a card in its own right — the "Proxy" prints in the database, reached by
+token card id — so its stats, keywords and art come off that print rather than being spelled out at
+the creation site. The deck load resolves every token the deck's cards can create and parks the
+templates on the table, which is why a card names one by id and nothing else:
+
+```python
+FINE_SWORD = "weapon_item_sword_plus2f_plus1c"
+```
+
+Creating is one effect, and creating-and-attaching is still one, because the created card has no id
+until it exists:
+
+```python
+    return [CreateToken(FINE_SWORD, source.owner, source.id, attach_to=target.id)]
+```
+
+The third argument is the card doing the creating. It is remembered, so a card that speaks about
+what it made — "if this Holding is ever unbowed, banish the Personality" — can ask for it later
+rather than hunting the board for something that looks right.
+
+**Attachment targets** are the catch. The rules that decide where an attachment may hang — one
+Weapon per Personality, Two-Handed exclusivity — have to be answered before there is a card to ask
+about, so `creation_targets` judges the template instead:
+
+```python
+    sword = game.table.creatable_tokens[FINE_SWORD]
+    return [target.id for target in creation_targets(game, source.owner, sword)]
+```
+
+**A variable stat line** — "a Personality with Force equal to the target's Chi" — is printed on the
+token as `*` and supplied by the card creating it. Pass the numbers it fixes and the created card
+genuinely has them, rather than carrying a modifier over a printed zero:
+
+```python
+        CreateToken(
+            MISHIMES_ONI,
+            seat,
+            sensei.id,
+            stats=((Stat.FORCE, effective_chi(game, target)),),
+            banish_at_turn_end=not destroyed,
+        )
+```
+
+`banish_at_turn_end` is the other half of that card: a creation lent to its owner for one turn is
+recorded as it is made, because by the time the turn ends there is nothing left to decide.
+
+A created card is not a copy of a real one: it exists only in play, and destroying it, banishing it,
+or destroying the Personality carrying it takes it off the table rather than into a pile. That is
+handled for you.
+
+A cost paid in Gold rather than a bow is an effect like any other, and raises the same payment a
+Recruit does:
+
+```python
+    return [PayGold(source.owner, ASHIGARU_COST, source.name)]
+```
+
+## Cards that watch their own bow
+
+Culling Grounds trades an Honor and a bow for a Personality, and keeps it only while the Holding
+stays bowed. Two registrations carry that. The first is the printed "May remain bowed", which takes
+the card out of the turn-start straighten — a flag, since the card grants the permission and says
+nothing about when taking it is worth it:
+
+```python
+may_remain_bowed("culling_grounds")
+```
+
+The second is what happens when it does straighten. Straightening announces itself, whether the turn
+start or an effect did it, so the drawback is an ordinary trigger:
+
+```python
+@on(Straightened, "culling_grounds")
+def _culling_grounds_straightened(ctx: TriggerContext) -> list[Effect]:
+    ...
+    return [Banish(created) for created in ctx.game.creations_of(ctx.card.id)]
+```
+
+Its ability names no target at all. An ability still needs one to be offered, so it takes its own
+card and hits it without asking:
+
+```python
+        targets=itself,
+        all_targets=True,
+```
 
 ## Where the code goes
 
@@ -190,6 +315,16 @@ the card in id order under a header:
 Everything the card does goes in that one block: its triggers, its target predicates, its effects
 helper, its registration. Tests assert the ordering, the one-header-per-card rule, and that the
 header names the card the block registers.
+
+Name every function in the block for the card and the job it does — `_<card id>_<role>`, where the
+role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
+`keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
+`production_boost`), or the event a trigger answers (`entered_play`, `destroyed`, `straightened`,
+`turn_started`, `counter_gained`, `card_discarded`). A choice resolver is named for the choice
+instead, `_resolve_<the string it is registered under>`. Helpers the block calls but never registers
+only need the card's id in front. The point is grep: a card's whole implementation answers a search
+for its id, and every handler of a kind answers a search for its role. A test enforces it, and
+`ROLES` in `test_card_layout.py` is where a genuinely new role gets added.
 
 A brand new set module needs a line in `cards/__init__.py`; a test will tell you if you forget.
 
@@ -220,9 +355,9 @@ these needs a core extension, not just a card module:
   cards, not modes.
 - **Suppression** — one card turning another's ability off.
 
-- **Interrupt and Response abilities.** Both designators exist and no Action Round grants either,
-  so an ability carrying one is never offered. Response is a Shattered Empire addition, and the
-  largest single gap in the vocabulary.
+- **Interrupt abilities.** The designator exists and no Action Round grants it, so an ability
+  carrying it is never offered. Response, the other half of the pair, is served by the Response
+  Step.
 
 This list is measured, not guessed: a survey of a single arc found 27 cards targeting an opponent's
 cards and 20 modal. If your card needs one of these, the honest next step is a design discussion,

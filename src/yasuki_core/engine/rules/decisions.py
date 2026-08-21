@@ -167,6 +167,32 @@ class DiscardToHandSize(DecisionRequest):
         )
 
 
+@dataclass(frozen=True, slots=True)
+class LeaveBowed(DecisionRequest):
+    """The seat must say which of its bowed cards to keep bowed as its turn begins.
+
+    "May remain bowed" is a choice its controller makes before each straightening rather than a
+    standing exemption (CR, May Remain Bowed), so the turn start asks. The candidates are the cards
+    offering it; those chosen stay bowed and the rest straighten with everything else.
+    """
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Choose cards to leave bowed"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Leave bowed"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        chosen = set(response.choices)
+        return len(chosen) == len(response.choices) and chosen <= set(self.candidates)
+
+    @property
+    def cancellable(self) -> bool:
+        """The turn beginning is not an action to back out of."""
+        return False
+
+
 def _chooses_exactly_one(request: "DecisionRequest", response: DecisionResponse) -> bool:
     return len(response.choices) == 1 and response.choices[0] in request.candidates
 
@@ -227,6 +253,76 @@ class ChooseInvestAmount(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseAmount(DecisionRequest):
+    """The seat must say how much Gold to spend on an action whose cost block prints a variable
+    amount — the ``:X:`` whose effects scale with what is paid (CR, Costs).
+
+    The candidates are the amounts the seat could pay, rendered as strings; the answer feeds the
+    named resolver, which prices the payment and shapes what the amount bought. A client shows a
+    number, not a board selection.
+
+    Attributes
+    ----------
+    question : str
+        What the amount is for, as the seat reads it.
+    resolver : str
+        The registered choice resolver the chosen amount is handed to.
+    source_id : str
+        The card charging the cost, handed to the resolver as its context.
+    """
+
+    question: str
+    resolver: str
+    source_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return self.question
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the action; nothing is paid until the amount is settled."""
+        return True
+
+
+@dataclass(frozen=True, slots=True)
+class ChooseOption(DecisionRequest):
+    """The seat must pick one of the outcomes an ability spells out — the "gain or lose", "this
+    player or that" a card leaves to the player rather than reading off the board.
+
+    The candidates are the outcomes as the seat reads them; the answer feeds the named resolver,
+    which turns the chosen label back into effects. A client shows a list of wordings, not a board
+    selection and not a number.
+
+    Attributes
+    ----------
+    question : str
+        What is being chosen, as the seat reads it.
+    resolver : str
+        The registered choice resolver the chosen option is handed to.
+    source_id : str
+        The card offering the choice, handed to the resolver as its context.
+    """
+
+    question: str
+    resolver: str
+    source_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return self.question
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the action: the choice is the whole of what it does."""
+        return True
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseAbilityTarget(DecisionRequest):
     """The seat must choose the target of an activated ability it has announced. The candidates are
     the cards the ability may legally target — all in play, so a client renders them as board
@@ -262,12 +358,13 @@ class ChooseEquipTarget(DecisionRequest):
     ----------
     source_card_id : str
         The attachment being Equipped, still in hand until the cost is paid.
-    invest_amount : int
-        The Invest cost being paid alongside the Gold Cost, or zero for none.
+    invest_amount : int or None
+        The Invest cost being paid alongside the Gold Cost, or None when the Equip takes no Invest.
+        A free Invest is an amount of zero, not None.
     """
 
     source_card_id: str
-    invest_amount: int = 0
+    invest_amount: int | None = None
 
     def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
         return "Choose a Personality to equip"
@@ -364,6 +461,44 @@ class ChooseCards(DecisionRequest):
             and self.minimum <= len(chosen) <= self.maximum
             and distinct <= set(self.candidates)
         )
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the whole action that raised it, cost included."""
+        return True
+
+
+@dataclass(frozen=True, slots=True)
+class ChooseDistribution(DecisionRequest):
+    """The seat must divide ``count`` identical creations among one or more of the candidates — the
+    "create N Followers and attach them to one or more of your Personalities" a card hands to its
+    controller rather than reading off the board.
+
+    The answer names a candidate once per creation it takes, so an id appearing twice takes two and
+    one left out takes none. That keeps the answer the tuple of ids every other decision carries,
+    and it says "one or more" without a second count: a card getting nothing is simply not named.
+
+    Attributes
+    ----------
+    count : int
+        How many creations there are to divide. All of them are placed — the seat chooses where
+        they go, not whether they arrive.
+    resolver : str
+        The registered choice resolver that turns the division into effects.
+    source_id : str
+        The card dividing them, handed to the resolver as its context.
+    """
+
+    count: int
+    resolver: str
+    source_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        wording = CHOICE_PROMPTS.get(self.resolver, "Divide them among one or more cards")
+        return f"{wording} ({self.count - len(chosen)} of {self.count} left)"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return len(response.choices) == self.count and set(response.choices) <= set(self.candidates)
 
     @property
     def cancellable(self) -> bool:

@@ -1,10 +1,17 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
-from yasuki_core.engine.rules.decisions import ChooseCards, Confirm, DecisionRequest
+from yasuki_core.engine.rules.decisions import (
+    ChooseAmount,
+    ChooseCards,
+    ChooseDistribution,
+    ChooseOption,
+    Confirm,
+    DecisionRequest,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
@@ -13,8 +20,9 @@ from yasuki_core.engine.rules.events import (
     EnteredPlay,
     GameEvent,
     Revealed,
+    Straightened,
 )
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
@@ -22,10 +30,18 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
 
-def _discard_pile(card: L5RCard) -> ZoneKey:
-    """The discard pile ``card`` belongs in, chosen by its side. Shared so a Fate card cannot end up
-    in the Dynasty discard through one path and not another."""
-    role = ZoneRole.DYNASTY_DISCARD if card.side is Side.DYNASTY else ZoneRole.FATE_DISCARD
+def _pile(card: L5RCard, *, banished: bool = False) -> ZoneKey:
+    """The pile ``card`` belongs in when it leaves play: its owner's, on the card's own side, and its
+    banish rather than its discard when ``banished``.
+
+    Anything not on the Dynasty side is filed with the Fate cards, which is where a Stronghold or a
+    Sensei goes for want of a pile of its own. Shared so a Dynasty card cannot reach a Fate pile
+    through one path and not another.
+    """
+    if card.side is Side.DYNASTY:
+        role = ZoneRole.DYNASTY_BANISH if banished else ZoneRole.DYNASTY_DISCARD
+    else:
+        role = ZoneRole.FATE_BANISH if banished else ZoneRole.FATE_DISCARD
     return ZoneKey(card.owner, role)
 
 
@@ -154,12 +170,18 @@ class MoveToHand(Effect):
         return []
 
 
-def _discard_unit(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
-    """Send ``card`` and everything attached to him to their own discards by side, returning the unit
-    that left so the caller can announce each departure in its own words (CR, Unit)."""
+def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> tuple[L5RCard, ...]:
+    """Send ``card`` and everything attached to him out of play — to their discards, or to their
+    banishes when ``banished`` — returning the unit that left so the caller can announce each
+    departure in its own words (CR, Unit).
+
+    A created card among them has no pile of either kind and is taken off the table instead, which
+    the move itself sees to (CR, Create). It still announces its departure, because a card reacting
+    to a Follower being destroyed does not care where the Follower came from.
+    """
     unit = unit_of(game, card)
     for member in unit:
-        ops.move_card(game.table, member, _discard_pile(member))
+        ops.move_card(game.table, member, _pile(member, banished=banished))
     return unit
 
 
@@ -187,7 +209,7 @@ class Destroy(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
-        return [Destroyed(member.id, self.cause) for member in _discard_unit(game, card)]
+        return [Destroyed(member.id, self.cause) for member in _remove_unit(game, card)]
 
 
 @dataclass(frozen=True, slots=True)
@@ -213,8 +235,37 @@ class Discard(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
-        unit = _discard_unit(game, card)
+        unit = _remove_unit(game, card)
         return [CardDiscarded(member.id, member.side, self.cause) for member in unit]
+
+
+@dataclass(frozen=True, slots=True)
+class Banish(Effect):
+    """Take a card out of the game, to its owner's banish pile by side.
+
+    Banishing is not a destruction and not a discard: nothing reacts to it and the card is out of
+    reach of anything that recurs from a discard pile. A Personality takes his unit with him, as he
+    does however he leaves (CR, Unit), and a created card leaves the table entirely — banishing one
+    and destroying one come to the same thing, since neither pile can hold it.
+
+    Attributes
+    ----------
+    card_id : str
+        The card to banish. A card already gone is a no-op, which is what a delayed banish finds
+        when something else got there first.
+    """
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"banish {self.card_id}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None:
+            return []
+        _remove_unit(game, card, banished=True)
+        return []
 
 
 @dataclass(frozen=True, slots=True)
@@ -304,6 +355,30 @@ class GrantModifier(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class GrantKeyword(Effect):
+    """Record a keyword grant: the ``source`` card gives ``target`` ``keyword`` for ``duration``.
+
+    The keyword counterpart of :class:`GrantModifier`, for the "give your target Personality
+    Cavalry" a card prints. A keyword a card carries by its own text needs no grant — that is a
+    keyword handler, read off the board.
+    """
+
+    source_id: str
+    target_id: str
+    keyword: str
+    duration: Duration
+
+    def describe(self) -> str:
+        return f"{self.source_id} gives {self.target_id} {self.keyword} ({self.duration.name})"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifiers.append(
+            KeywordGrant(self.source_id, self.target_id, self.keyword, self.duration)
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class AttachCard(Effect):
     """Attach a card to a Personality, from wherever it is.
 
@@ -340,6 +415,217 @@ class AttachCard(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class CreateToken(Effect):
+    """Create a card that was never in a deck — the "create a 1F Ashigaru Follower", the "create a
+    Personality with Force equal to the target's Chi" — and put it into play.
+
+    What it is comes from the token template the deck load resolved, so the created card carries the
+    stats, keywords and art the printed text describes rather than a stat line spelled out at the
+    creation site. A created card is not a copy of anything: it enters play fresh, and leaving play
+    removes it from the game rather than filling a discard pile.
+
+    Attributes
+    ----------
+    token_id : str
+        The template to stamp it from, by token card id.
+    owner : PlayerId
+        The seat that will control it.
+    creator_id : str
+        The card creating it, which the created card is remembered by. A card that speaks about what
+        it made later — "if this Holding is ever unbowed, banish the Personality" — reads the
+        relation rather than hunting the board for something that looks right.
+    attach_to : str or None
+        The Personality it arrives attached to, or None to arrive on its own. A card that names a
+        target Personality creates nothing when that Personality has left play in the meantime.
+    stats : tuple of (Stat, int)
+        Stats the creating card fixes, which the template prints as variable — Mishime Sensei's Oni
+        has "Force equal to the target's Chi", and the token print carries a ``*`` there. Each pair
+        replaces that stat on the print the created card presents, so the card genuinely has the
+        number rather than carrying a modifier over a printed zero. Default none, for a template
+        whose whole stat line is printed.
+    clan : str or None
+        The clan the created card carries, for the "with your Clan Alignment" a card grants its
+        creation. None leaves the template's own printed clan alone, which is what an unaligned
+        controller has to give. Default None.
+    banish_at_turn_end : bool
+        Whether the created card is banished before the turn ends. A creation the card lends the
+        player for a turn ("banish it unless you destroyed the target") is recorded as it is made,
+        because by the time the turn ends there is nothing left to decide. Default False.
+    """
+
+    token_id: str
+    owner: PlayerId
+    creator_id: str
+    attach_to: str | None = None
+    stats: tuple[tuple[Stat, int], ...] = ()
+    clan: str | None = None
+    banish_at_turn_end: bool = False
+
+    def describe(self) -> str:
+        fixed = [self.clan] if self.clan else []
+        fixed += [f"{stat.name} {value}" for stat, value in self.stats]
+        where = "" if self.attach_to is None else f" on {self.attach_to}"
+        given = f" with {', '.join(fixed)}" if fixed else ""
+        return f"{self.owner.name} creates {self.token_id}{where}{given}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        personality = None
+        if self.attach_to is not None:
+            personality = game.table.cards_by_id.get(self.attach_to)
+            if personality is None:
+                return []
+        # A KeyError here is a deck that reached the table without its token templates, not a card
+        # doing something unusual — the load resolves every token the deck's cards can create.
+        printed = game.table.creatable_tokens[self.token_id]
+        if self.stats:
+            printed = replace(printed, **{stat.value: value for stat, value in self.stats})
+        if self.clan is not None:
+            # Both fields: a reader of a card's clans takes the list when it has one, so leaving it
+            # behind would keep the template aligned to whatever it was printed as.
+            printed = replace(printed, clan=self.clan, clans=(self.clan,))
+        card = ops.spawn_token(
+            game.table, game.mint_token_id(), printed, UNPLACED_BOARD_POS, self.owner
+        )
+        game.created_by[card.id] = self.creator_id
+        if self.banish_at_turn_end:
+            game.banish_at_turn_end.append(card.id)
+        if personality is not None:
+            ops.attach_to_personality(game.table, card, personality)
+        return [EnteredPlay(card.id, from_hand=False)]
+
+
+@dataclass(frozen=True, slots=True)
+class PayGold(InterruptingEffect):
+    """Pay gold, bowing producers to raise what the seat's pool does not already cover.
+
+    The cost a card charges in Gold, as opposed to the Gold a Recruit charges for the card itself:
+    both raise the same payment, and this one carries no card being paid for. It pauses the cascade
+    for the seat to pick which producers to bow, so it resolves before whatever an ability's text
+    sequences behind it.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat being charged.
+    amount : int
+        The gold to raise.
+    label : str
+        What the payment is for, shown in the prompt.
+    """
+
+    seat: PlayerId
+    amount: int
+    label: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} pays {self.amount} gold for {self.label}"
+
+    # Imported where they are used: pricing a payment reads the production-boost registry, whose
+    # module imports this one.
+    def is_payable(self, game: GameState) -> bool:
+        from yasuki_core.engine.rules.payments import can_raise
+
+        return can_raise(game, self.seat, self.amount)
+
+    def request(self, game: GameState) -> DecisionRequest:
+        from yasuki_core.engine.rules.payments import payment_request
+
+        return payment_request(game, self.seat, self.amount, self.label)
+
+
+@dataclass(frozen=True, slots=True)
+class AskAmount(InterruptingEffect):
+    """Pause for the seat to say how much Gold it spends on a variable cost, then hand the amount to
+    a resolver.
+
+    The ``:X:`` in a cost block: the amount is settled during the Pay Costs step and everything the
+    action does is shaped by it, so the resolver both charges it and reads it (CR, Action Sequence;
+    Good Faith).
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat choosing and paying.
+    amounts : tuple of int
+        The amounts on offer, which the caller has already narrowed to what the seat can raise and
+        what would leave the action something legal to do.
+    question : str
+        What the amount is for, as the seat reads it.
+    resolver : str
+        The registered choice resolver the chosen amount is handed to.
+    source_id : str
+        The card charging the cost.
+    """
+
+    seat: PlayerId
+    amounts: tuple[int, ...]
+    question: str
+    resolver: str
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} is asked: {self.question}"
+
+    def is_payable(self, game: GameState) -> bool:
+        """Nothing to choose from is nothing to pay."""
+        return bool(self.amounts)
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return ChooseAmount(
+            seat=self.seat,
+            candidates=tuple(str(amount) for amount in self.amounts),
+            question=self.question,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class AskOption(InterruptingEffect):
+    """Pause for the seat to pick one of the outcomes a card spells out, then hand the choice to a
+    resolver.
+
+    For the "gain or lose", "a target player" a card leaves to its controller: the board cannot
+    settle it, so the seat is asked and the resolver turns the answer back into effects.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat choosing.
+    options : tuple of str
+        The outcomes on offer, as the seat reads them.
+    question : str
+        What is being chosen.
+    resolver : str
+        The registered choice resolver the chosen option is handed to.
+    source_id : str
+        The card offering the choice.
+    """
+
+    seat: PlayerId
+    options: tuple[str, ...]
+    question: str
+    resolver: str
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} is asked: {self.question}"
+
+    def is_payable(self, game: GameState) -> bool:
+        """Nothing to choose from is nothing to choose."""
+        return bool(self.options)
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return ChooseOption(
+            seat=self.seat,
+            candidates=self.options,
+            question=self.question,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class Bow(Effect):
     """Bow a card."""
 
@@ -362,7 +648,8 @@ class Bow(Effect):
 
 @dataclass(frozen=True, slots=True)
 class Straighten(Effect):
-    """Straighten (unbow) a card."""
+    """Straighten (unbow) a card. Announces the change, which a card that watches for its own
+    straightening reads; one already standing announces nothing."""
 
     card_id: str
 
@@ -371,9 +658,10 @@ class Straighten(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is not None:
-            card.unbow()
-        return []
+        if card is None or not card.bowed:
+            return []
+        card.unbow()
+        return [Straightened(self.card_id)]
 
 
 @dataclass(frozen=True, slots=True)
@@ -520,7 +808,7 @@ class RecruitCard(InterruptingEffect):
         from yasuki_core.engine.rules.flow import announce_recruit
 
         card = game.table.cards_by_id[self.card_id]
-        return announce_recruit(game, card, card.owner, invest_amount=0, renew=self.renew)
+        return announce_recruit(game, card, card.owner, invest_amount=None, renew=self.renew)
 
 
 @dataclass(frozen=True, slots=True)
@@ -692,6 +980,55 @@ class Choose(InterruptingEffect):
             candidates=self.candidates,
             minimum=self.minimum,
             maximum=self.maximum,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class AskDistribution(InterruptingEffect):
+    """Pause the cascade so ``seat`` divides ``count`` creations among ``candidates``, then hand the
+    division to a resolver.
+
+    For the "attach them to one or more of your Personalities" a card leaves to its controller: how
+    many go where is the whole of the choice, so the resolver reads the answer as a tally rather
+    than as a set — a candidate named twice takes two.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat dividing them.
+    candidates : tuple of str
+        The card ids the creations may be divided among.
+    count : int
+        How many there are to divide.
+    resolver : str
+        The registered choice resolver naming what the division does.
+    source_id : str
+        The card dividing them.
+    """
+
+    seat: PlayerId
+    candidates: tuple[str, ...]
+    count: int
+    resolver: str
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} divides {self.count} among {len(self.candidates)} for {self.resolver}"
+
+    def request(self, game: GameState) -> DecisionRequest:
+        """Raise ValueError if there is nothing to divide or nowhere to put it. The cascade pauses
+        on every interrupting effect, so a caller that asks either way would stop the game on a
+        question its seat can never finish answering."""
+        if not self.count or not self.candidates:
+            raise ValueError(
+                f"{self.source_id} cannot divide {self.count} among {len(self.candidates)} cards"
+            )
+        return ChooseDistribution(
+            seat=self.seat,
+            candidates=self.candidates,
+            count=self.count,
             resolver=self.resolver,
             source_id=self.source_id,
         )

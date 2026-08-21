@@ -33,8 +33,10 @@ yasuki_core.engine.rules.legality
     province_zones
     reachable_gold
     recruit_cost
-    seat_alignment
+    seat_alignment_name
+    seat_alignments
     seat_clan
+    seat_stronghold
     timing_of
 
 .. automodule:: yasuki_core.engine.rules.legality

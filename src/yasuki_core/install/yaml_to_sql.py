@@ -11,7 +11,8 @@ from psycopg.types.json import Json
 
 from yasuki_core.game_pieces.counters import ALL_COUNTERS
 from yasuki_core.install.format_metadata import populate_format_metadata
-from yasuki_core.install.sets_to_sql import coerce_date
+from yasuki_core.install.card_index import LOCAL_SET_SUFFIX
+from yasuki_core.install.sets_to_sql import coerce_date, set_slug
 from yasuki_core.install.text_split import ability_keywords
 from yasuki_core.install.utils import normalize_name
 
@@ -335,6 +336,25 @@ def mrp_text(dated_texts: list[tuple[datetime.date | None, str]]) -> str | None:
     return max(dated_texts, key=lambda dt: dt[0] or datetime.date.min)[1]
 
 
+def _register_local_set(cur, set_name: str) -> tuple:
+    """Give a local-only set its own ``l5r_sets`` row and return the columns ``load_cards`` reads.
+
+    A local set is absent from the committed set metadata by definition, so it registers itself here
+    rather than being listed there. Filed under a ``Local`` arc and marked digital, which keeps it
+    out of the arc-ordered format lists a real set appears in.
+    """
+    cur.execute(
+        """
+        INSERT INTO l5r_sets (set_name, set_slug, arc, digital)
+        VALUES (%s, %s, 'Local', TRUE)
+        ON CONFLICT (set_name) DO UPDATE SET set_slug = EXCLUDED.set_slug
+        RETURNING set_id, set_slug, release_date
+        """,
+        (set_name, set_slug(set_name)),
+    )
+    return cur.fetchone()
+
+
 def load_cards(cards_dir: Path, dsn: str) -> None:
     """
     Load every per-set YAML file into the card tables.
@@ -386,6 +406,8 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
             set_name = data["set"]
             resolved = set_map.get(set_name)
+            if resolved is None and yaml_file.name.endswith(LOCAL_SET_SUFFIX):
+                resolved = set_map[set_name] = _register_local_set(cur, set_name)
             if resolved is None:
                 logger.warning("Set %r not in l5r_sets; skipping %s", set_name, yaml_file.name)
                 continue

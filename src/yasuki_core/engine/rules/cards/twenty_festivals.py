@@ -8,8 +8,10 @@ from yasuki_core.game_pieces.counters import WEALTH
 # --- Questionable Market ---
 
 
-def _two_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
+def _questionable_market_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, 2)]
 
 
-register_invest("questionable_market", InvestAbility(minimum=2, maximum=2, effect=_two_wealth))
+register_invest(
+    "questionable_market", InvestAbility(amounts=(2,), effect=_questionable_market_invest)
+)

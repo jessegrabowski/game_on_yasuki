@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import owned_holdings
 from yasuki_core.engine.rules.economy import (
@@ -11,9 +12,11 @@ from yasuki_core.engine.rules.economy import (
     gold_handler,
     keyword_grant,
     opposing_states,
+    is_clan,
     player_state,
     recruit_discount,
 )
+from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint, StrongholdPrint
@@ -39,6 +42,41 @@ def test_player_state_exposes_stronghold_holdings_gold_and_honor():
     assert me.holdings == (market,)
     assert me.gold == 3 and me.honor == 12
     assert set(me.in_play) == {sh, market}
+
+
+@pytest.mark.parametrize(
+    "printed, asked, expected",
+    [
+        ("Lion", ruleset.LION, True),
+        ("Lion Clan", ruleset.LION, True),
+        ("Naga", ruleset.AKASHA, True),
+        ("Akasha", ruleset.NAGA, True),
+        ("Lion", ruleset.CRANE, False),
+        ("Fox", "fox", False),
+    ],
+    ids=[
+        "plain",
+        "spelled-in-full",
+        "naga-is-akasha",
+        "akasha-is-naga",
+        "other-clan",
+        "no-alignment",
+    ],
+)
+def test_is_clan_compares_alignments_rather_than_strings(printed, asked, expected):
+    # Two cards print their clan as "Lion Clan" where 555 print "Lion", and the arc holds Naga and
+    # Akasha to be one alignment. A string comparison would read all three as different clans, and
+    # a discount keyed on one would quietly never apply.
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, clan=printed))
+
+    assert is_clan(player_state(game, PlayerId.P1), asked) is expected
+
+
+def test_a_seat_with_no_stronghold_plays_no_clan():
+    game = two_seat_game()
+
+    assert is_clan(player_state(game, PlayerId.P1), ruleset.LION) is False
 
 
 def test_went_second_is_true_only_for_the_non_first_player():
@@ -370,6 +408,39 @@ def test_a_card_without_a_grant_carries_only_its_printed_keywords():
     assert effective_keywords(game, plain) == frozenset({"Farm"})
 
 
+def test_a_stronghold_printing_several_clans_plays_them_all():
+    """A Stronghold is a card, and a card may print more than one clan — so the seat answers to each
+    of them, the way a multi-clan Personality answers to each of its own."""
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, clans=("Lion", "Crane")))
+    me = player_state(game, PlayerId.P1)
+
+    assert is_clan(me, "Lion")
+    assert is_clan(me, "Crane")
+    assert not is_clan(me, "Scorpion")
+
+
+def test_a_recorded_grant_gives_a_card_a_keyword_it_does_not_print():
+    game = two_seat_game()
+    plain = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
+    game.modifiers.append(
+        KeywordGrant("P1-source", plain.id, "Cavalry", Duration.UNTIL_END_OF_TURN)
+    )
+
+    assert effective_keywords(game, plain) == frozenset({"Farm", "Cavalry"})
+
+
+def test_a_while_source_in_play_keyword_grant_drops_when_its_source_leaves():
+    """The same lifetime a stat modifier gets: the CR files both under ongoing effects."""
+    game = two_seat_game()
+    plain = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
+    game.modifiers.append(
+        KeywordGrant("gone", plain.id, "Cavalry", Duration.WHILE_SOURCE_IN_PLAY)
+    )  # "gone" was never put into play
+
+    assert effective_keywords(game, plain) == frozenset({"Farm"})
+
+
 def test_shrine_of_courtesy_gains_legacy_while_you_went_second():
     game = two_seat_game()  # first_player is P1, so P2 went second
     shrine = put_in_play(game, _shrine_of_courtesy(PlayerId.P2))
@@ -402,6 +473,18 @@ def test_a_second_keyword_grant_for_one_card_is_refused():
                 return ("Legacy",)
     finally:
         KEYWORD_GRANTS.pop("guard_probe", None)
+
+
+def test_owned_holdings_without_a_keyword_takes_them_all():
+    """Kitsu Watanabe spends "your target Holding", any of them, so the lookup answers that too
+    rather than making the card scan the battlefield for itself."""
+    game = two_seat_game()
+    quay = put_in_play(game, holding("P1-quay", owner=PlayerId.P1, keywords=("Port",)))
+    plain = put_in_play(game, holding("P1-plain", owner=PlayerId.P1))
+    put_in_play(game, holding("P2-theirs", owner=PlayerId.P2))
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=5))
+
+    assert owned_holdings(game, PlayerId.P1) == [quay, plain]
 
 
 def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():

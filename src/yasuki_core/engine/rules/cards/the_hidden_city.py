@@ -6,20 +6,19 @@ from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 
 
 # --- Brothers in Arms ---
 
-SAMURAI_KEYWORD = "Samurai"
-
 
 @attach_restriction("brothers_in_arms")
-def _brothers_in_arms_attaches_only_to_a_samurai(
+def _brothers_in_arms_attach_restriction(
     game: GameState, personality: L5RCard, card: L5RCard
 ) -> bool:
-    return SAMURAI_KEYWORD in effective_keywords(game, personality)
+    return keywords.SAMURAI in effective_keywords(game, personality)
 
 
 def _brothers_in_arms_copies(game: GameState, seat: PlayerId) -> tuple[str, ...]:
@@ -37,7 +36,7 @@ def _brothers_in_arms_copies(game: GameState, seat: PlayerId) -> tuple[str, ...]
 
 
 @choice_resolver("brothers_in_arms", prompt="Take another Brothers in Arms")
-def _resolve_brothers_in_arms_search(
+def _resolve_brothers_in_arms(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Show the copy and take it. A copy pulled out of the deck costs a shuffle; one lifted off the
@@ -51,7 +50,7 @@ def _resolve_brothers_in_arms_search(
 
 
 @on(EnteredPlay, "brothers_in_arms")
-def _brothers_in_arms_fetches_its_twin(ctx) -> list[Effect]:
+def _brothers_in_arms_entered_play(ctx) -> list[Effect]:
     """Fetch another copy, but only on the arrival the card names: this card's own, "from your
     hand".
 

@@ -2,7 +2,7 @@ import pathlib
 import subprocess
 import sys
 
-from yasuki_core.engine.rules import abilities, cards, economy, triggers
+from yasuki_core.engine.rules import abilities, attachments, cards, economy, equip, triggers
 from yasuki_core.engine.rules.card_registry import (
     duplicate_registrations,
     main,
@@ -15,25 +15,33 @@ from yasuki_core.engine.rules.events import EnteredPlay
 # and CHOICE_PROMPTS are deliberately left out: both key on the kind of a pending choice rather than
 # on a card. CHOICE_PROMPTS lives in decisions and is visible here only because triggers imports it
 # to register into.
-REGISTRY_MODULES = (abilities, economy, triggers)
+REGISTRY_MODULES = (abilities, attachments, economy, equip, triggers)
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
+    "MAY_REMAIN_BOWED",
+    "BOW_WAIVERS",
     "_INVEST",
     "_PRODUCTION_BOOST",
     "GOLD_HANDLERS",
     "RECRUIT_DISCOUNTS",
+    "INVEST_DISCOUNTS",
     "KEYWORD_GRANTS",
+    "ATTACHMENT_GRANTS",
+    "ATTACH_RESTRICTIONS",
     "_TRIGGERS",
 }
 NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS", "CHOICE_PROMPTS"}
 
 
 def module_level_registries() -> set[str]:
+    """Every per-card registry the registry modules hold. Sets count as well as dicts: a registry
+    recording a card's permission rather than its handler is still a place a misspelled id can
+    hide."""
     return {
         name
         for module in REGISTRY_MODULES
         for name, value in vars(module).items()
-        if isinstance(value, dict) and not name.startswith("__")
+        if isinstance(value, dict | set) and not name.startswith("__")
     }
 
 

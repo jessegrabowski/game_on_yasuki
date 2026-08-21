@@ -3,11 +3,13 @@ from dataclasses import replace
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
+    ActionTiming,
     Cycle,
     DynastyDiscard,
     Equip,
@@ -17,7 +19,14 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.state import ActionRound, GameState, PHASE_TIMINGS, Phase, TURN_PHASES
+from yasuki_core.engine.rules.state import (
+    ActionRound,
+    GameState,
+    PHASE_TIMINGS,
+    Phase,
+    RESPONSE_TIMINGS,
+    TURN_PHASES,
+)
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
     ApplyAbilityEffects,
@@ -29,9 +38,13 @@ from yasuki_core.engine.rules.work import (
     WorkItem,
 )
 from yasuki_core.engine.rules.decisions import (
+    ChooseAmount,
+    ChooseOption,
+    LeaveBowed,
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
+    ChooseDistribution,
     ChooseEquipTarget,
     Confirm,
     ChooseInvestAmount,
@@ -65,6 +78,7 @@ from yasuki_core.engine.rules.legality import (
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Banish,
     Choose,
     Discard,
     DrawCard,
@@ -78,17 +92,20 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.payments import payment_request
 from yasuki_core.engine.rules import abilities, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
 from yasuki_core.engine.rules import cards  # noqa: F401
-from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, Revealed, TurnStarted
+from yasuki_core.engine.rules.events import (
+    CardDiscarded,
+    EnteredPlay,
+    Revealed,
+    Straightened,
+    TurnStarted,
+)
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint, WindPrint
-
-# The keyword that refills a card's vacated Province face-up when it enters play (rather than the
-# usual face-down), so the next card is recruitable the same turn.
-RENEW_KEYWORD = "Renew"
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -140,8 +157,20 @@ def advance(game: GameState) -> None:
     _end_turn(game)
 
 
+def forget_action(game: GameState) -> None:
+    """Drop the record of the action last resolved, so nothing outside one is read back as one.
+
+    A Response asks what the action it follows did. Anything still recorded across a turn or phase
+    boundary is not that, and would let a Step open on an action two turns gone.
+    """
+    game.action_events.clear()
+    game.action_taken = ""
+
+
 def open_round(game: GameState) -> None:
     """Open the Action Round for the current phase, giving the active seat the first opportunity."""
+    game.round_stack.clear()
+    forget_action(game)
     game.round = ActionRound(timings=PHASE_TIMINGS[game.phase], priority=game.active)
 
 
@@ -164,12 +193,39 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
             game.round = replace(game.round, priority=seat, passes=passes)
             return
         passes += 1
+    if game.round_stack:
+        close_response_window(game)
+        return
     advance(game)
+
+
+# How each action reads when a Response Step names the thing it answers. A Response is taken against
+# an action, so the wording is the action's rather than any one effect it had.
+_ACTION_WORDING: dict[type, str] = {
+    Recruit: "the Recruit of",
+    Equip: "the Equip of",
+    ActivateAbility: "the ability on",
+    DynastyDiscard: "the discard of",
+    KharmicDraw: "the Kharmic draw on",
+    KharmicRefill: "the Kharmic refill on",
+    Legacy: "Legacy",
+    Cycle: "Cycle",
+}
+
+
+def describe_action(game: GameState, action: Action) -> str:
+    """``action`` worded for a player — "the Recruit of Courts of Otosan Uchi"."""
+    wording = _ACTION_WORDING.get(type(action), type(action).__name__)
+    card = game.table.cards_by_id.get(getattr(action, "card_id", ""))
+    return f"{wording} {card.name}" if card is not None else wording
 
 
 def perform(game: GameState, action: Action) -> None:
     """Apply a chosen action, dispatching to its handler. The single action-apply dispatch,
     mirroring :func:`submit` for decisions. Raise ``ValueError`` for an action with no handler."""
+    if not isinstance(action, Pass) and not game.round_stack:
+        game.action_events.clear()
+        game.action_taken = describe_action(game, action)
     match action:
         case Pass():
             yield_priority(game, passed=True)
@@ -232,20 +288,18 @@ def recruit(
     seat = card.owner
     if not invest:
         game.pending = announce_recruit(
-            game, card, seat, invest_amount=0, renew=renew, proclaim=proclaim
+            game, card, seat, invest_amount=None, renew=renew, proclaim=proclaim
         )
         return
-    ability = abilities.invest_for(card)
-    if ability.minimum == ability.maximum:
-        game.pending = announce_recruit(
-            game, card, seat, invest_amount=ability.minimum, renew=renew
-        )
-        return
+    amounts = abilities.invest_amounts(game, card)
     affordable = reachable_gold(game, seat, card) - recruit_cost(game, card)
-    top = min(ability.maximum, affordable)
+    payable = tuple(amount for amount in amounts if amount <= affordable)
+    if len(payable) == 1:
+        game.pending = announce_recruit(game, card, seat, invest_amount=payable[0], renew=renew)
+        return
     game.pending = ChooseInvestAmount(
         seat=seat,
-        candidates=tuple(str(amount) for amount in range(ability.minimum, top + 1)),
+        candidates=tuple(str(amount) for amount in payable),
         source_card_id=card_id,
     )
 
@@ -254,7 +308,7 @@ def announce_recruit(
     game: GameState,
     card: L5RCard | L5RCard,
     seat: PlayerId,
-    invest_amount: int,
+    invest_amount: int | None,
     renew: bool = False,
     proclaim: bool = False,
 ) -> ChoosePayment:
@@ -264,7 +318,7 @@ def announce_recruit(
     return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
-        amount=recruit_cost(game, card) + invest_amount,
+        amount=recruit_cost(game, card) + (invest_amount or 0),
         available=game.gold[seat],
         produced=tuple(
             (producer.id, effective_gold_production(game, producer, targets=(card,)))
@@ -295,18 +349,19 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
         seat=card.owner,
         candidates=tuple(target.id for target in equip_targets(game, card)),
         source_card_id=card_id,
-        invest_amount=_equip_invest_amount(game, card) if invest else 0,
+        invest_amount=_equip_invest_amount(game, card) if invest else None,
     )
 
 
-def _finish_invest(game: GameState, card: L5RCard, invest_amount: int) -> None:
-    """Charge ``card``'s Invest against itself and run what it bought. Does nothing for a zero
-    amount, so a caller need not ask whether the player took the option.
+def _finish_invest(game: GameState, card: L5RCard, invest_amount: int | None) -> None:
+    """Charge ``card``'s Invest against itself and run what it bought. None is a card recruited
+    without the option, which a free Invest is not — a card whose own text drops its Invest to zero
+    still buys what the Invest buys.
 
     Invest belongs to a card entering play rather than to the action that brought it (CR, Invest),
     so Recruit and Equip reach this by the same road.
     """
-    if not invest_amount:
+    if invest_amount is None:
         return
     triggers.resolve_effects(
         game,
@@ -319,7 +374,7 @@ def _finish_invest(game: GameState, card: L5RCard, invest_amount: int) -> None:
 
 def _equip_invest_amount(game: GameState, card: L5RCard) -> int:
     """The Invest cost ``card`` charges to Equip with."""
-    amount = abilities.fixed_invest_amount(card)
+    amount = abilities.fixed_invest_amount(game, card)
     if amount is None:
         raise ValueError(f"{card.id} prints no fixed Invest for Equip to charge")
     return amount
@@ -336,7 +391,7 @@ def _apply_equip_target(
 
 
 def announce_equip(
-    game: GameState, card: L5RCard, seat: PlayerId, target_id: str, invest_amount: int = 0
+    game: GameState, card: L5RCard, seat: PlayerId, target_id: str, invest_amount: int | None = None
 ) -> ChoosePayment:
     """Queue the attach and build the payment it must be paid with."""
     producers = gold_producers(game, seat)
@@ -344,7 +399,7 @@ def announce_equip(
     return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
-        amount=effective_gold_cost(game, card) + invest_amount,
+        amount=effective_gold_cost(game, card) + (invest_amount or 0),
         available=game.gold[seat],
         produced=tuple(
             (producer.id, effective_gold_production(game, producer, targets=(card,)))
@@ -355,7 +410,9 @@ def announce_equip(
     )
 
 
-def _resolve_equip(game: GameState, card_id: str, target_id: str, invest_amount: int = 0) -> None:
+def _resolve_equip(
+    game: GameState, card_id: str, target_id: str, invest_amount: int | None = None
+) -> None:
     """Bring the paid-for attachment out of hand and onto its Personality."""
     card = game.table.cards_by_id[card_id]
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
@@ -374,23 +431,8 @@ def announce_rulebook_cost(
     A rulebook ability charges the player rather than pricing a card, so the payment carries no
     target and every producer is quoted at what it makes for nobody in particular.
     """
-    producers = gold_producers(game, seat)
     game.stack.append(ApplyEffects(effects))
-    return ChoosePayment(
-        seat=seat,
-        candidates=tuple(producer.id for producer in producers),
-        amount=amount,
-        available=game.gold[seat],
-        produced=tuple(
-            (producer.id, effective_gold_production(game, producer)) for producer in producers
-        ),
-        label=label,
-        boostable=tuple(
-            (producer.id, boost.amount)
-            for producer in producers
-            if (boost := abilities.production_boost_for(producer)) is not None
-        ),
-    )
+    return payment_request(game, seat, amount, label)
 
 
 def _apply_invest_amount(
@@ -399,6 +441,12 @@ def _apply_invest_amount(
     card = game.table.cards_by_id[request.source_card_id]
     game.pending = None
     game.pending = announce_recruit(game, card, card.owner, invest_amount=int(response.choices[0]))
+
+
+# The decisions that are steps of the turn rather than actions taken in a round: the end-of-turn
+# discard, and the turn-start choice of what to leave bowed. Every new DecisionRequest owes an
+# answer to which of the two it is.
+_TURN_STRUCTURE = (DiscardToHandSize, LeaveBowed)
 
 
 def submit(game: GameState, response: DecisionResponse) -> None:
@@ -420,6 +468,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_discard(game, request.seat, response.choices)
             game.pending = None
             _begin_next_turn(game)
+        case LeaveBowed():
+            game.pending = None
+            _open_turn(game, frozenset(response.choices))
         case ChoosePayment():
             _apply_payment(game, request, response)
             game.pending = None
@@ -436,6 +487,12 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_equip_target(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
+        case ChooseAmount():
+            _apply_card_choice(game, request, response)
+        case ChooseOption():
+            _apply_card_choice(game, request, response)
+        case ChooseDistribution():
+            _apply_card_choice(game, request, response)
         # One case per union member, so the exhaustiveness guard can read them off the AST.
         case Confirm():
             _apply_card_choice(game, request, response)
@@ -445,9 +502,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             raise ValueError(f"no handler for decision {type(request).__name__}")
     # Symmetric with `perform`: an answered decision resolves fully before the next input.
     run_stack(game)
-    # The end-of-turn discard is turn structure rather than an action, and the turn it belonged to
-    # is already over by now — yielding for it would step on the round the new turn just opened.
-    if not isinstance(request, DiscardToHandSize):
+    # Turn structure is not an action: the round these resolve into is not one an action would
+    # yield in, because the turn they belong to is either already over or has not opened yet.
+    if not isinstance(request, _TURN_STRUCTURE):
         _yield_after_action(game)
 
 
@@ -581,7 +638,7 @@ def _resolve_recruit(
     game: GameState,
     seat: PlayerId,
     card_id: str,
-    invest_amount: int = 0,
+    invest_amount: int | None = None,
     renew: bool = False,
     proclaim: bool = False,
 ) -> None:
@@ -595,7 +652,7 @@ def _resolve_recruit(
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     if province_key is not None:
         # Renew is read once the card has entered play, which is when the keyword speaks.
-        renews = renew or RENEW_KEYWORD in effective_keywords(game, card)
+        renews = renew or keywords.RENEW in effective_keywords(game, card)
         _defer_refill(game, province_key, face_up=renews)
     # A card reaching the battlefield can make the board illegal, and the board is made legal
     # before anything is told the card arrived — a trigger that reads a state the rules say cannot
@@ -607,7 +664,7 @@ def _resolve_recruit(
 
 
 def _finish_recruit(
-    game: GameState, card_id: str, invest_amount: int, proclaim: bool = False
+    game: GameState, card_id: str, invest_amount: int | None, proclaim: bool = False
 ) -> None:
     card = game.table.cards_by_id[card_id]
     _clear_sincerity(game, card)
@@ -697,7 +754,7 @@ def kharmic_refill(game: GameState, card_id: str) -> None:
 def _announce_kharmic(game: GameState, seat: PlayerId, effects: tuple[Effect, ...]) -> None:
     """Pause for the gold cost both Kharmic forms share, queueing ``effects`` behind it. Repeatable,
     so no once-per-turn key is claimed."""
-    game.pending = announce_rulebook_cost(game, seat, KHARMIC_COST, "Kharmic", effects)
+    game.pending = announce_rulebook_cost(game, seat, KHARMIC_COST, keywords.KHARMIC, effects)
 
 
 def _reveal_search_pool(game: GameState, seat: PlayerId) -> None:
@@ -798,6 +855,8 @@ def activate(game: GameState, card_id: str) -> None:
         if ability.all_targets
         else SelectAbilityTarget(card_id, targets)
     )
+    if ability.timing is ActionTiming.RESPONSE:
+        game.responded.add(card_id)
     game.stack.append(deferred)
     triggers.resolve_effects(game, ability.cost(game, card))
     run_stack(game)  # resolve the target, unless the cost's cascade paused for a decision first
@@ -814,7 +873,9 @@ def _apply_ability_target(
 
 
 def _apply_card_choice(
-    game: GameState, request: ChooseCards | Confirm, response: DecisionResponse
+    game: GameState,
+    request: ChooseCards | ChooseAmount | ChooseOption | ChooseDistribution | Confirm,
+    response: DecisionResponse,
 ) -> None:
     game.pending = None
     item = game.stack.pop()  # the ResumeCascade this choice paused, always stacked atop it
@@ -829,6 +890,7 @@ def _apply_card_choice(
 
 def _end_turn(game: GameState) -> None:
     seat = game.active
+    _banish_lent_creations(game)
     _accrue_sincerity(game, seat)
     ops.draw_to_hand(game.table, seat)
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
@@ -840,6 +902,19 @@ def _end_turn(game: GameState) -> None:
     _begin_next_turn(game)
 
 
+def _banish_lent_creations(game: GameState) -> None:
+    """Banish the cards created for this turn only, before it ends.
+
+    The list is cleared whatever happens to the cards, so one destroyed or banished earlier in the
+    turn is not chased into the next: the loan was for this turn, and it is over either way.
+    """
+    lent = game.banish_at_turn_end
+    if not lent:
+        return
+    game.banish_at_turn_end = []
+    triggers.resolve_effects(game, [Banish(card_id) for card_id in lent])
+
+
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
     """Before ``seat``'s turn ends, give each face-up Sincerity card lingering in its Provinces a
     Sincerity token. A card that flushed (was recruited or discarded) or arrived face-down as a
@@ -849,7 +924,7 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
         for key, zone in game.table.zones.items()
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
-        if card.face_up and triggers.SINCERITY_KEYWORD in effective_keywords(game, card)
+        if card.face_up and keywords.SINCERITY in effective_keywords(game, card)
     ]
     triggers.resolve_effects(game, grants)
 
@@ -868,11 +943,30 @@ def _begin_next_turn(game: GameState) -> None:
 
 
 def _begin_turn(game: GameState) -> None:
+    """Open the turn: straighten, reveal the Provinces, and announce that the turn has begun.
+
+    A card that may remain bowed is asked about first, since that is a choice its controller makes
+    before each straightening (CR, May Remain Bowed). Pausing here leaves the rest of the turn's
+    opening for the submit that answers.
+    """
     open_round(game)
-    ops.straighten(game.table, game.active)
+    offering = abilities.may_stay_bowed(game, game.active)
+    if offering:
+        game.pending = LeaveBowed(seat=game.active, candidates=offering)
+        return
+    _open_turn(game, frozenset())
+
+
+def _open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
+    """Straighten everything but ``staying_bowed``, reveal the Provinces, and open the turn."""
+    straightened = ops.straighten(game.table, game.active, staying_bowed)
+    for card_id in straightened:
+        triggers.fire(game, Straightened(card_id))
     for card_id in ops.reveal_provinces(game.table, game.active):
         triggers.fire(game, Revealed(card_id))
     triggers.fire(game, TurnStarted(game.active))
+    # Opening the turn is not an action, so what it just raised is nobody's to respond to.
+    forget_action(game)
 
 
 def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:
@@ -890,7 +984,10 @@ def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -
     for card_id in card_ids:
         card = by_id[card_id]
         ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.FATE_DISCARD))
-        triggers.fire(game, CardDiscarded(card_id, card.side, Rulebook.MAXIMUM_HAND_SIZE))
+        triggers.fire(
+            game,
+            CardDiscarded(card_id, card.side, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True),
+        )
 
 
 def _other(seat: PlayerId) -> PlayerId:
@@ -899,7 +996,43 @@ def _other(seat: PlayerId) -> PlayerId:
 
 def _yield_after_action(game: GameState) -> None:
     """Hand on the opportunity once an action has fully resolved. An action that paused for a
-    decision has not finished, and a game that has ended has no round left to run."""
+    decision has not finished, and a game that has ended has no round left to run.
+
+    A Response Step comes first when the action left anyone something to respond with.
+    """
     if game.awaiting_decision or game.game_over:
         return
+    if open_response_window(game):
+        return
+    yield_priority(game, passed=False)
+
+
+def _responders(game: GameState) -> list[PlayerId]:
+    """Every seat holding a Response it could take against the action just resolved."""
+    responding = frozenset({ActionTiming.RESPONSE})
+    return [seat for seat in game.table.seats if abilities.activatable(game, seat, responding)]
+
+
+def open_response_window(game: GameState) -> bool:
+    """Open the Response Step over the round the action was taken in, and report whether it opened.
+
+    Only when a seat actually holds a Response: a step nobody could act in is a pass nobody needs to
+    be asked for. A Response is itself an action, and one taken inside the step opens no step of its
+    own — the window that is already open is the one it belongs to.
+    """
+    if game.round_stack:
+        return False
+    # Cleared before the seats are polled, not after: a card still marked from the last Step would
+    # not count as a responder, and so could never open another one.
+    game.responded.clear()
+    if not _responders(game):
+        return False
+    game.round_stack.append(game.round)
+    game.round = ActionRound(timings=RESPONSE_TIMINGS, priority=game.active)
+    return True
+
+
+def close_response_window(game: GameState) -> None:
+    """Close the Response Step and hand the opportunity on from the round it suspended."""
+    game.round = game.round_stack.pop()
     yield_priority(game, passed=False)

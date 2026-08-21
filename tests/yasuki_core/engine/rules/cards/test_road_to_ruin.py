@@ -4,6 +4,10 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
+from yasuki_core.engine.rules.effects import AttachCard, Destroy
+from yasuki_core.engine.rules.flow import submit
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.economy import effective_force, effective_gold_cost
@@ -24,6 +28,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    token_template,
     two_seat_game,
 )
 
@@ -324,3 +329,78 @@ def test_dull_tanto_does_not_bow_the_personality_carrying_it():
     session.submit(P1, DecisionResponse(("victim",)))
 
     assert session.game.table.cards_by_id["bearer"].bowed is False
+
+
+# --- The Forgotten ---
+
+
+def _forgotten_game(*, bearers=("bearer",)):
+    """The Forgotten waiting in hand, with ``bearers`` Personalities to carry what it raises."""
+    game = two_seat_game()
+    token_template(
+        game,
+        FORGOTTEN_DEAD,
+        name="Forgotten Dead",
+        card_type="Follower",
+        keywords=("Nonhuman", "Shadowlands", "Undead"),
+        force=1,
+    )
+    for card_id in bearers:
+        put_in_play(game, personality(card_id, force=2, chi=3))
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    hand.add(register(game.table, attachment("forgotten", printed_id="the_forgotten", force=1)))
+    return game
+
+
+def _dead_of(game):
+    return [card for card in game.table.battlefield.cards if card.is_token]
+
+
+def test_the_forgotten_raises_another_of_the_dead_as_it_arrives():
+    game = _forgotten_game()
+
+    resolve_effects(game, [AttachCard("forgotten", "bearer")])
+    submit(game, DecisionResponse(("bearer",)))
+
+    assert [card.name for card in _dead_of(game)] == ["Forgotten Dead"]
+    assert game.table.seats[PlayerId.P1].honor == -2
+
+
+def test_the_forgotten_raises_another_when_it_falls():
+    """The half that needs a card to hear its own destruction announced from the discard pile."""
+    game = _forgotten_game(bearers=("bearer", "spare"))
+    resolve_effects(game, [AttachCard("forgotten", "bearer")])
+    submit(game, DecisionResponse(("bearer",)))
+
+    resolve_effects(game, [Destroy("forgotten", PlayerId.P1)])
+    submit(game, DecisionResponse(("spare",)))
+
+    assert len(_dead_of(game)) == 2  # one for the arrival, one for the fall
+    assert game.table.seats[PlayerId.P1].honor == -4
+
+
+def test_the_forgotten_pays_the_honor_even_with_nobody_left_to_carry_them():
+    """It charges before it asks for a target, so a board with no Personality still costs 2."""
+    game = _forgotten_game(bearers=())
+    put_in_play(game, personality("doomed", force=2, chi=3))
+    resolve_effects(game, [AttachCard("forgotten", "doomed")])
+    submit(game, DecisionResponse(("doomed",)))
+
+    resolve_effects(game, [Destroy("doomed", PlayerId.P1)])  # the unit goes down together
+
+    assert game.table.seats[PlayerId.P1].honor == -4
+    assert game.pending is None  # nobody was asked, because nobody was left
+
+
+def test_another_follower_falling_raises_nothing():
+    game = _forgotten_game()
+    resolve_effects(game, [AttachCard("forgotten", "bearer")])
+    submit(game, DecisionResponse(("bearer",)))
+    spear = register(game.table, attachment("spear", force=1))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(spear)
+    resolve_effects(game, [AttachCard("spear", "bearer")])
+
+    resolve_effects(game, [Destroy("spear", PlayerId.P1)])
+
+    assert len(_dead_of(game)) == 1
+    assert game.table.seats[PlayerId.P1].honor == -2

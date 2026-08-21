@@ -4,6 +4,8 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.events import (
+    CardDiscarded,
+    Destroyed,
     GameEvent,
 )
 from yasuki_core.engine.rules.decisions import CHOICE_PROMPTS
@@ -16,6 +18,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter, SINCERITY
 from yasuki_core.game_pieces.prints import HoldingPrint
@@ -31,9 +34,6 @@ _MAX_CASCADE = 1000
 # assertion. A deque of this size holds several cycles of any loop a human would need to read.
 _TRACE_LIMIT = 60
 _trace: collections.deque[str] = collections.deque(maxlen=_TRACE_LIMIT)
-
-# The keyword whose cards accrue and receive seeded Sincerity tokens.
-SINCERITY_KEYWORD = "Sincerity"
 
 
 @dataclass(frozen=True, slots=True)
@@ -106,10 +106,24 @@ def caused_by(ctx: TriggerContext, seat: PlayerId) -> bool:
     return ctx.event.cause is seat
 
 
+def once_key(card: L5RCard, tag: str, turn: int) -> str:
+    """The usage key for ``card``'s ``tag`` this turn — turn-scoped, so it resets each turn without
+    clearing ``GameState.once_per``."""
+    return f"{card.id}:{tag}:t{turn}"
+
+
 def once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
-    """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then False.
-    Turn-scoped, so it resets each turn without clearing ``GameState.once_per``."""
-    return game.use_once(f"{card.id}:{tag}:t{game.turn}")
+    """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then False."""
+    return game.use_once(once_key(card, tag, game.turn))
+
+
+def used_this_turn(game: GameState, card: L5RCard, tag: str) -> bool:
+    """Whether ``card``'s ``tag`` has been claimed this turn, without claiming it.
+
+    What a cost has to ask. A cost is evaluated to decide whether an action is legal as well as to
+    pay for one, so spending the use merely by looking would spend it on every legality check.
+    """
+    return game.has_used(once_key(card, tag, game.turn))
 
 
 def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
@@ -118,15 +132,39 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
     return effect.perform(game)
 
 
+def _departed_subject(game: GameState, event: GameEvent) -> L5RCard | None:
+    """The card whose own departure ``event`` announces, once it has left the battlefield.
+
+    A card is already in its discard by the time its destruction is announced, so this is the only
+    way "after this card is destroyed" can ever fire.
+
+    Departures only. A card off the battlefield takes no part in anything else that names it —
+    a Personality killed by a state rule as he arrived must not go on to take his enter-play trait,
+    which is the whole point of settling those rules before the arrival is announced. A *created*
+    card is never here either: it leaves the table outright, taking its printed id with it.
+    """
+    if not isinstance(event, Destroyed | CardDiscarded):
+        return None
+    card = game.table.cards_by_id.get(event.card_id)
+    if card is None or any(held is card for held in game.table.battlefield.cards):
+        return None
+    return card
+
+
 def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
     by_id = _TRIGGERS.get(type(event))
     if not by_id:
         return []
-    return [
+    firing = [
         (card, trigger)
         for card in game.table.battlefield.cards
         for trigger in by_id.get(card.printed_id, ())
     ]
+    # A departed card answers only for its own leaving, and for nothing that happens after.
+    departed = _departed_subject(game, event)
+    if departed is not None:
+        firing.extend((departed, trigger) for trigger in by_id.get(departed.printed_id, ()))
+    return firing
 
 
 def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
@@ -183,6 +221,8 @@ def _advance(
                 f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
             )
         event = queue.pop(0)
+        # Kept for the Response Step, which asks what the action it follows actually did.
+        game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
         firing.sort(key=_canonical_order)
@@ -303,6 +343,15 @@ def resolve_effects(game: GameState, effects: list[Effect]) -> None:
     _advance(game, tuple(effects), [], None, [])
 
 
+def action_did(game: GameState, kind: type[GameEvent]) -> tuple[GameEvent, ...]:
+    """Every event of ``kind`` the action now resolving has produced, in the order it happened.
+
+    What a Response reads to know what it is answering: "discarded a Fate card" and "Recruits this
+    Holding" are facts about the action rather than about the board it leaves behind.
+    """
+    return tuple(event for event in game.action_events if isinstance(event, kind))
+
+
 def sincerity_seed_targets(game: GameState, seat: PlayerId) -> list[str]:
     """The seat's face-up Sincerity cards still in a Province with no Sincerity tokens — the legal
     recipients of a seeded Sincerity token."""
@@ -312,7 +361,7 @@ def sincerity_seed_targets(game: GameState, seat: PlayerId) -> list[str]:
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
         if card.face_up
-        and SINCERITY_KEYWORD in effective_keywords(game, card)
+        and keywords.SINCERITY in effective_keywords(game, card)
         and card.counters.get(SINCERITY.key, 0) == 0
     ]
 

@@ -9,10 +9,15 @@ yasuki_core.engine.rules.effects
 
     AdjustCounter
     Ask
+    AskAmount
+    AskDistribution
+    AskOption
     AttachCard
+    Banish
     BanishTopFate
     Bow
     Choose
+    CreateToken
     Destroy
     DestroyProvince
     Discard
@@ -20,11 +25,13 @@ yasuki_core.engine.rules.effects
     Effect
     GainGold
     GainHonor
+    GrantKeyword
     GrantModifier
     IgnoreHonorRequirements
     InterruptingEffect
     MoveToDeck
     MoveToHand
+    PayGold
     PlaceInProvince
     RecruitCard
     RefillProvince

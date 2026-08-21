@@ -5,7 +5,13 @@ from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay, TurnStarted
-from yasuki_core.engine.rules.effects import AdjustCounter, Choose, Destroy, IgnoreHonorRequirements
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Choose,
+    Destroy,
+    Discard,
+    IgnoreHonorRequirements,
+)
 from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
     apply_effect,
@@ -177,54 +183,6 @@ def _caravansary(game, seat=PlayerId.P1, card_id="P1-caravansary"):
     )
     put_in_play(game, caravansary)
     return caravansary
-
-
-def test_caravansary_gains_wealth_when_you_discard_a_fate_card():
-    game = two_seat_game()
-    caravansary = _caravansary(game)
-
-    fire(game, CardDiscarded("some-fate", Side.FATE, PlayerId.P1))
-
-    assert caravansary.counters == {"wealth": 1}
-
-
-def test_caravansary_ignores_an_opponents_discard():
-    game = two_seat_game()
-    caravansary = _caravansary(game)  # owned by P1
-
-    fire(game, CardDiscarded("some-fate", Side.FATE, PlayerId.P2))  # not your action
-
-    assert caravansary.counters == {}
-
-
-def test_caravansary_ignores_a_discard_no_player_made():
-    """Trimming to the maximum hand size is a step of the turn, not an action (CR, Drawing and
-    Discarding Fate Cards), so "if the action was yours" has no action to claim."""
-    game = two_seat_game()
-    caravansary = _caravansary(game)
-
-    fire(game, CardDiscarded("some-fate", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE))
-
-    assert caravansary.counters == {}
-
-
-def test_caravansary_ignores_a_dynasty_discard():
-    game = two_seat_game()
-    caravansary = _caravansary(game)
-
-    fire(game, CardDiscarded("some-dynasty", Side.DYNASTY, PlayerId.P1))  # not a Fate card
-
-    assert caravansary.counters == {}
-
-
-def test_caravansary_wealth_caps_at_three():
-    game = two_seat_game()
-    caravansary = _caravansary(game)
-
-    for _ in range(5):
-        fire(game, CardDiscarded("some-fate", Side.FATE, PlayerId.P1))
-
-    assert caravansary.counters == {"wealth": 3}
 
 
 def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
@@ -616,3 +574,61 @@ def test_a_card_driven_destruction_names_the_seat_whose_card_did_it():
     resolve_effects(game, [Destroy(victim.id, PlayerId.P1)])
 
     assert probe.note == PlayerId.P1.name
+
+
+def test_a_card_reacts_to_its_own_destruction(reacting):
+    """ "After this card is destroyed" is only reachable from the discard pile: the unit leaves play
+    before the destruction is announced, so a card gone from the battlefield still has to be
+    gathered for the event that named it."""
+    game = two_seat_game()
+    doomed = put_in_play(game, holding("P1-doomed", printed_id="departure_probe"))
+    seen: list[str] = []
+    reacting(Destroyed, "departure_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
+
+    resolve_effects(game, [Destroy(doomed.id, PlayerId.P1)])
+
+    assert seen == [doomed.id]
+
+
+def test_a_card_reacts_to_its_own_discard(reacting):
+    """The other departure: a discard announces itself the same way a destruction does."""
+    game = two_seat_game()
+    doomed = put_in_play(game, holding("P1-doomed", printed_id="departure_probe"))
+    seen: list[str] = []
+    reacting(CardDiscarded, "departure_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
+
+    resolve_effects(game, [Discard(doomed.id, PlayerId.P1)])
+
+    assert seen == [doomed.id]
+
+
+def test_a_departed_card_reacts_to_nothing_but_its_own_leaving(reacting):
+    """It answers for its own departure and stops there. A card in a discard pile is out of the
+    game's business, and a rule that let it keep watching the board would pay it for destructions it
+    is in no position to see."""
+    game = two_seat_game()
+    gone = put_in_play(game, holding("P1-gone", printed_id="departure_probe"))
+    bystander = put_in_play(game, holding("P1-other", printed_id="plain_holding"))
+    seen: list[str] = []
+    reacting(Destroyed, "departure_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
+    resolve_effects(game, [Destroy(gone.id, PlayerId.P1)])
+    seen.clear()
+
+    resolve_effects(game, [Destroy(bystander.id, PlayerId.P1)])
+
+    assert seen == []
+
+
+def test_a_card_killed_as_it_arrives_still_takes_no_enter_play_trigger(reacting):
+    """The narrowness is the point: only a departure reaches a card off the battlefield. An arrival
+    does not, so a Personality a state rule killed on sight cannot go on to take his enter-play
+    trait — which is what settling those rules before announcing the arrival is for."""
+    game = two_seat_game()
+    doomed = put_in_play(game, holding("P1-doomed", printed_id="departure_probe"))
+    seen: list[str] = []
+    reacting(EnteredPlay, "departure_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
+    resolve_effects(game, [Destroy(doomed.id, PlayerId.P1)])
+
+    fire(game, EnteredPlay(doomed.id))
+
+    assert seen == []

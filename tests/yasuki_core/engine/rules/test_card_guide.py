@@ -3,11 +3,14 @@ import re
 
 from tests.yasuki_core.engine.rules.card_modules import card_modules
 
-GUIDE = pathlib.Path("docs/contributing/adding_a_card.md")
+# Anchored on this file rather than the working directory, so the suite reads the guide wherever
+# pytest is run from.
+GUIDE = pathlib.Path(__file__).parents[4] / "docs" / "contributing" / "adding_a_card.md"
 PYTHON_FENCE = re.compile(r"^```python\n(.*?)^```", re.M | re.S)
 # Lines a sample may carry that are not meant to be found in the tree: blank lines, whole-line
-# comments, and any line carrying a "..." elision.
-ELIDED = re.compile(r"^\s*(#|$)|\.\.\.")
+# comments, and any line carrying a "..." standing in for omitted code. An ellipsis inside a type
+# annotation is code rather than an elision, so "tuple[X, ...]" stays checked.
+ELIDED = re.compile(r"^\s*(#|$)|(?<!, )\.\.\.")
 
 
 def sample_lines() -> list[str]:

@@ -6,7 +6,13 @@ import pytest
 
 from yasuki_core.install.yaml_to_sql import card_slug
 
-from tests.yasuki_core.engine.rules.card_modules import card_modules, headers, registered_ids
+from tests.yasuki_core.engine.rules.card_modules import (
+    CardFunction,
+    card_functions,
+    card_modules,
+    headers,
+    registered_ids,
+)
 
 
 @pytest.mark.parametrize("module", card_modules(), ids=lambda path: path.stem)
@@ -75,3 +81,69 @@ def test_the_source_scan_sees_every_registration_the_engine_holds():
     from_source = {card_id for module in card_modules() for card_id in registered_ids(module)}
 
     assert at_runtime - from_source == set(), "add the new registration form to card_modules.py"
+
+
+# The jobs a card's handler can hold, spelled the way its name has to end. A handler's name is its
+# card's id and one of these, so a card's whole implementation answers a grep for its id and every
+# function of a kind answers a grep for its role.
+ROLES = frozenset(
+    {
+        # the three parts of an activated ability
+        "cost",
+        "targets",
+        "effects",
+        # the per-registry hooks
+        "invest",
+        "gold",
+        "recruit_discount",
+        "invest_discount",
+        "keywords",
+        "attachment_grant",
+        "attach_restriction",
+        "production_boost",
+        # triggers, named for the event they answer
+        "entered_play",
+        "destroyed",
+        "straightened",
+        "turn_started",
+        "counter_gained",
+        "card_discarded",
+        "entered_play_or_destroyed",
+    }
+)
+
+
+@pytest.mark.parametrize("module", card_modules(), ids=lambda path: path.stem)
+def test_every_handler_is_named_for_its_card_and_its_job(module):
+    # One shape, so a card's whole implementation answers a grep for its id and a reader can tell a
+    # gold handler from a trigger without opening the registration. A name that reads as prose —
+    # one describing what the card does — says neither which card nor which of the roles it fills.
+    offenders = [
+        f"{function.card_id}: {function.name}"
+        for function in card_functions(module)
+        if not _named_conventionally(function)
+    ]
+
+    assert offenders == []
+
+
+def test_the_function_scan_finds_handlers_to_check():
+    # Guards the check above twice over. A scan that read no functions passes it without reading a
+    # name; so does one that classifies every function as an unregistered helper, since a helper is
+    # only asked to carry its card's id, which a prose name already does.
+    scanned = [function for module in card_modules() for function in card_functions(module)]
+
+    assert len(scanned) > 50
+    assert sum(function.registered for function in scanned) > 25
+    assert any(function.resolves is not None for function in scanned)
+
+
+def _named_conventionally(function: CardFunction) -> bool:
+    """A resolver is named for the choice it resolves, a handler for its card and its role, and a
+    helper only has to carry its card's id."""
+    if function.resolves is not None:
+        return function.name == f"_resolve_{function.resolves}"
+    prefix = f"_{function.card_id}_"
+    if not function.name.startswith(prefix):
+        return False
+    return not function.registered or function.name.removeprefix(prefix) in ROLES

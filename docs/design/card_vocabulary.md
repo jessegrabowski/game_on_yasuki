@@ -32,10 +32,15 @@ deferred through `Then` instead.
 
    AdjustCounter
    Ask
+   AskAmount
+   AskDistribution
+   AskOption
    AttachCard
+   Banish
    BanishTopFate
    Bow
    Choose
+   CreateToken
    Destroy
    DestroyProvince
    Discard
@@ -43,11 +48,13 @@ deferred through `Then` instead.
    Effect
    GainGold
    GainHonor
+   GrantKeyword
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
    MoveToDeck
    MoveToHand
+   PayGold
    PlaceInProvince
    RecruitCard
    RefillProvince
@@ -75,6 +82,7 @@ further events are produced.
    Destroyed
    EnteredPlay
    Revealed
+   Straightened
    TurnStarted
 ```
 
@@ -92,9 +100,13 @@ Legality with respect to game state is checked separately.
 
    BanishForLegacy
    ChooseAbilityTarget
+   ChooseAmount
    ChooseCards
+   ChooseDistribution
    ChooseEquipTarget
    ChooseInvestAmount
+   ChooseOption
+   LeaveBowed
    ChooseLegacyCard
    ChoosePayment
    Confirm
@@ -139,6 +151,7 @@ Production without a modifier being recorded.
 
    Stat
    Duration
+   KeywordGrant
    Modifier
 ```
 

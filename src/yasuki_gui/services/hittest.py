@@ -28,6 +28,6 @@ def resolve_tag_at(view, event: tk.Event) -> str | None:
         return None
     tags = view.gettags(item[0])
     for t in tags:
-        if t.startswith("card:") or t.startswith("zone:"):
+        if t.startswith(("card:", "zone:", "alloc:")):
             return t
     return None

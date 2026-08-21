@@ -7,7 +7,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
-from yasuki_core.engine.rules.modifiers import Modifier
+from yasuki_core.engine.rules.events import GameEvent
+from yasuki_core.engine.rules.modifiers import OngoingEffect
 from yasuki_core.engine.rules.work import WorkItem
 
 
@@ -49,6 +50,14 @@ PHASE_TIMINGS: dict[Phase, RoundTimings] = {
     Phase.BATTLE: RoundTimings(active=frozenset(), others=frozenset()),
     Phase.DYNASTY: RoundTimings(active=frozenset({ActionTiming.DYNASTY}), others=frozenset()),
 }
+
+# The Response Step, which the ShE datasheet inserts after an action finishes resolving and before
+# the last step of the Action Sequence. It is a round of its own, open to every seat, and it permits
+# nothing but Responses: no one may take an Open action in the middle of someone else's action.
+RESPONSE_TIMINGS = RoundTimings(
+    active=frozenset({ActionTiming.RESPONSE}),
+    others=frozenset({ActionTiming.RESPONSE}),
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -121,10 +130,37 @@ class GameState:
         Deferred engine work — the later steps of an action sequence, run once the current decision
         clears. Ephemeral: replay rebuilds it by re-running the engine, so it is never serialized.
         Default empty.
-    modifiers : list of Modifier
-        The active recorded stat modifiers — created continuous effects (an ability's grant), kept in
+    modifiers : list of Modifier or KeywordGrant
+        The active recorded ongoing effects — created continuous stat and keyword grants, kept in
         creation order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike
         it may be non-empty at rest within a turn, so its order is load-bearing. Default empty.
+    tokens_created : int
+        How many tokens the game has created, which names the next one. Ephemeral and rebuilt by
+        replay like ``stack``; it counts creations rather than tokens on the board, so an id is
+        never reused by a token created after an earlier one has gone. Default 0.
+    created_by : dict mapping str to str
+        Each created card to the card that created it, kept for the life of the game so a card can
+        still name what it made after the fact. Ephemeral and rebuilt by replay. Default empty.
+    banish_at_turn_end : list of str
+        Created cards to banish before the current turn ends — the ones lent to a player for a turn.
+        Emptied as the turn ends, whether or not the cards are still there to banish. Ephemeral and
+        rebuilt by replay. Default empty.
+    round_stack : list of ActionRound
+        The rounds a Response Step has suspended, innermost last. A Response Step opens a round of
+        its own over the round the action was taken in, and closing it puts that round back.
+        Ephemeral and rebuilt by replay. Default empty.
+    responded : set of str
+        The cards that have already taken a Response in the Response Step now open. A card answers a
+        given Step once; nothing else rations a Response, which costs no bow. Cleared as each Step
+        opens. Ephemeral and rebuilt by replay. Default empty.
+    action_taken : str
+        What the action now resolving is, worded for a player — what a Response Step names as the
+        thing it is answering. Empty outside an action. Ephemeral and rebuilt by replay.
+    action_events : list of GameEvent
+        What the action now resolving has done so far, in the order it happened, cleared as the next
+        action begins. A Response reads it to ask what it is responding to — "discarded a Fate card"
+        is a fact about the action rather than about the board it left behind. Ephemeral and rebuilt
+        by replay. Default empty.
     """
 
     table: TableState
@@ -143,7 +179,14 @@ class GameState:
     rng: Generator = field(default_factory=lambda: default_rng(0), compare=False, repr=False)
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
-    modifiers: list[Modifier] = field(default_factory=list)
+    modifiers: list[OngoingEffect] = field(default_factory=list)
+    tokens_created: int = 0
+    created_by: dict[str, str] = field(default_factory=dict)
+    banish_at_turn_end: list[str] = field(default_factory=list)
+    round_stack: list[ActionRound] = field(default_factory=list)
+    responded: set[str] = field(default_factory=set)
+    action_taken: str = ""
+    action_events: list[GameEvent] = field(default_factory=list)
 
     @property
     def awaiting_decision(self) -> bool:
@@ -198,6 +241,23 @@ class GameState:
         """Empty every seat's gold pool, as happens at the end of each phase."""
         for seat in self.gold:
             self.gold[seat] = 0
+
+    def mint_token_id(self) -> str:
+        """Claim the next id for a token about to be created.
+
+        Counted rather than drawn from the game's generator, so replaying a tape names the same
+        tokens the live game did and every id a projection or a log line carries still resolves.
+        """
+        self.tokens_created += 1
+        return f"token-{self.tokens_created}"
+
+    def creations_of(self, card_id: str) -> tuple[str, ...]:
+        """The cards ``card_id`` created that are still on the table, oldest first."""
+        return tuple(
+            created
+            for created, creator in self.created_by.items()
+            if creator == card_id and created in self.table.cards_by_id
+        )
 
     def use_once(self, key: str) -> bool:
         """Claim the one-time use named ``key``. Return True the first time and record it; return

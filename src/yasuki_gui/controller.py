@@ -22,7 +22,7 @@ from yasuki_gui.services.hittest import (
     resolve_drop_target as hittest_resolve_drop_target,
 )
 from yasuki_gui.services.permissions import can_interact
-from yasuki_gui.tags import card_tag
+from yasuki_gui.tags import allocation_step_for_tag, card_tag
 from yasuki_gui.ui.images import load_back_image as _lbi, load_image as _li
 from yasuki_gui.visuals import MarqueeBoxVisual
 
@@ -172,7 +172,14 @@ class FieldController:
 
     def _toggle_selection_at(self, tag: str | None, e: tk.Event) -> None:
         """While the engine awaits a choice, a click on a candidate card toggles its selection
-        (the field ignores non-candidates); clicks elsewhere do nothing."""
+        (the field ignores non-candidates); clicks elsewhere do nothing.
+
+        An arrow of a division's spinner sits over the card it belongs to, so it is read first: a
+        click there moves one creation rather than dropping the card out of the division."""
+        arrow = allocation_step_for_tag(tag) if tag else None
+        if arrow is not None:
+            self.view.adjust_allocation(*arrow)
+            return
         card_id = self._card_at(tag, e)
         if card_id is not None:
             self.view.toggle_selection(card_id)

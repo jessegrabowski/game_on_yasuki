@@ -9,15 +9,19 @@ yasuki_core.engine.rules.decisions
 
     BanishForLegacy
     ChooseAbilityTarget
+    ChooseAmount
     ChooseCards
+    ChooseDistribution
     ChooseEquipTarget
     ChooseInvestAmount
     ChooseLegacyCard
+    ChooseOption
     ChoosePayment
     Confirm
     DecisionRequest
     DecisionResponse
     DiscardToHandSize
+    LeaveBowed
     PlaceLegacy
 
 .. automodule:: yasuki_core.engine.rules.decisions

@@ -17,6 +17,7 @@ yasuki_gui
     yasuki_gui.field_view <yasuki_gui.field_view>
     yasuki_gui.layout <yasuki_gui.layout>
     yasuki_gui.services.actions <yasuki_gui.services.actions>
+    yasuki_gui.services.allocation <yasuki_gui.services.allocation>
     yasuki_gui.services.drag <yasuki_gui.services.drag>
     yasuki_gui.services.hittest <yasuki_gui.services.hittest>
     yasuki_gui.services.permissions <yasuki_gui.services.permissions>

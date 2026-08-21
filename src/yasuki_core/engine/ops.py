@@ -1,3 +1,5 @@
+from collections.abc import Container
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
     BATTLEFIELD,
@@ -74,11 +76,19 @@ def move_card(
     already occupies is a no-op.
 
     A card leaving the battlefield loses its counters: tokens cannot exist on a card out of play,
-    and they do not come back if it re-enters (CR, Tokens).
+    and they do not come back if it re-enters (CR, Tokens). A *created* card leaving the battlefield
+    goes nowhere at all — it ceases to exist (CR, Create) — so ``dest`` is ignored for one and the
+    card is taken off the table instead.
 
     ``deck_index`` lands the card at that depth in a deck's bottom-first list, clamped into range,
     and takes precedence over ``to_bottom``."""
     if dest != BATTLEFIELD and any(held is card for held in state.battlefield.cards):
+        # Enforced here rather than at each call site: every route off the battlefield funnels
+        # through this one, and a created card filed in a discard or shuffled into a deck would be
+        # drawn again as if it had always been real.
+        if card.is_token:
+            remove_card(state, card)
+            return True
         card.clear_counters()
 
     if dest == BATTLEFIELD:
@@ -326,11 +336,13 @@ def create_province(state: TableState, seat: PlayerId) -> ZoneKey:
     return key
 
 
-def straighten(state: TableState, seat: PlayerId) -> list[str]:
-    """Unbow every card ``seat`` controls on the battlefield; returns the straightened card ids."""
+def straighten(state: TableState, seat: PlayerId, skip: Container[str] = ()) -> list[str]:
+    """Unbow every card ``seat`` controls on the battlefield, other than the ids in ``skip``;
+    returns the straightened card ids. What may be left bowed is the rules layer's to decide, so the
+    caller names the cards rather than this reading a card's text."""
     straightened = []
     for card in state.battlefield.cards:
-        if card.owner == seat and card.bowed:
+        if card.owner == seat and card.bowed and card.id not in skip:
             card.unbow()
             straightened.append(card.id)
     return straightened

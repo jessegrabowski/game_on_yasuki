@@ -7,6 +7,8 @@ yasuki_gui.tags
 
 .. autosummary::
 
+    allocation_step_for_tag
+    allocation_tag
     card_id_for_tag
     card_tag
     deck_tag

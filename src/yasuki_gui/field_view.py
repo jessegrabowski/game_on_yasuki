@@ -19,8 +19,9 @@ from yasuki_gui.layout import (
     province_positions,
     to_canvas,
 )
+from yasuki_gui.services.allocation import Allocation
 from yasuki_gui.services.hittest import resolve_tag_at as hittest_resolve_tag_at
-from yasuki_gui.tags import card_id_for_tag, card_tag, zone_tag
+from yasuki_gui.tags import allocation_tag, card_id_for_tag, card_tag, zone_tag
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.visuals import CardSpriteVisual, HandVisual, ZoneVisual
 from yasuki_gui.visuals.cardface import RenderCard, to_render_card
@@ -37,6 +38,13 @@ _ZONE_LABELS: dict[ZoneRole, str] = {
 
 def _zone_label(key: ZoneKey) -> str:
     return _ZONE_LABELS.get(key.role, key.role.value)
+
+
+# The spinner drawn on a card taking a share of a division: a count and the two arrows that trade
+# one creation with the other chosen cards.
+ALLOCATION_TAG = "allocation"
+SPINNER_W = 46
+SPINNER_H = 30
 
 
 class FieldView(tk.Canvas):
@@ -83,6 +91,9 @@ class FieldView(tk.Canvas):
         # Producers whose yield can be boosted as they bow, and the subset the player boosted.
         self._boostable: frozenset[str] = frozenset()
         self._boosted: list[str] = []
+        # Set instead of a plain selection when the decision divides a fixed number of creations
+        # among the cards picked; it holds how many each carries, drawn as a spinner on the card.
+        self._allocation: Allocation | None = None
 
         # Optional UI callbacks the host app installs.
         self.on_local_player_changed: Callable[[], None] | None = None
@@ -164,7 +175,10 @@ class FieldView(tk.Canvas):
 
     @property
     def selection(self) -> tuple[str, ...]:
-        """The ids currently selected for the pending decision, in the order they were picked."""
+        """The ids currently selected for the pending decision, in the order they were picked. A
+        division repeats an id once per creation the card carries."""
+        if self._allocation is not None:
+            return self._allocation.choices
         return tuple(self._selection)
 
     @property
@@ -187,6 +201,26 @@ class FieldView(tk.Canvas):
         self._selection_bows = render_bowed
         self._boostable = frozenset(boostable)
         self._boosted = []
+        self._allocation = None
+
+    def begin_allocation(self, candidates: Iterable[str], total: int) -> None:
+        """Enter selection mode to divide ``total`` creations among ``candidates``: clicking one
+        takes it into the division, and a spinner on each shows how many it carries."""
+        self.begin_selection(candidates)
+        self._allocation = Allocation(total)
+
+    def adjust_allocation(self, card_id: str, step: int) -> None:
+        """Move one creation onto ``card_id`` (``step`` above zero) or off it, and notify the
+        listener. Taking one from a card that carries a single creation is refused: unchosen is what
+        carrying none means, and the click that says so is the one on the card itself."""
+        if self._allocation is None:
+            return
+        if step > 0:
+            self._allocation.increase(card_id)
+        else:
+            self._allocation.decrease(card_id)
+        if self.on_selection_changed is not None:
+            self.on_selection_changed()
 
     def end_selection(self) -> None:
         """Leave selection mode and clear the selection."""
@@ -195,12 +229,19 @@ class FieldView(tk.Canvas):
         self._selection_bows = False
         self._boostable = frozenset()
         self._boosted = []
+        self._allocation = None
+        self.delete(ALLOCATION_TAG)
 
     def toggle_selection(self, card_id: str) -> None:
         """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener. Picking
         a boostable producer instead defers to :attr:`on_boost_request`; it enters the selection only
         once its boost question is answered through :meth:`resolve_boost`."""
         if self._selectable is None or card_id not in self._selectable:
+            return
+        if self._allocation is not None:
+            self._allocation.toggle(card_id)
+            if self.on_selection_changed is not None:
+                self.on_selection_changed()
             return
         if card_id in self._selection:
             self._selection.remove(card_id)
@@ -486,12 +527,84 @@ class FieldView(tk.Canvas):
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
                 self._sprites[tag] = sp
             sp.card, sp.x, sp.y = rc, x, y
-            chosen = rc.id in self._selection
+            chosen = self._is_chosen(rc.id)
             sp.bowed_preview = chosen and self._selection_bows
             sp.draw(self, selected=tag in self._selected or chosen)
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
+        self._draw_allocation()
+
+    def _is_chosen(self, card_id: str) -> bool:
+        """Whether ``card_id`` is part of the answer being assembled for the pending decision."""
+        if self._allocation is not None:
+            return self._allocation.amount(card_id) > 0
+        return card_id in self._selection
+
+    def _draw_allocation(self) -> None:
+        """Draw a spinner on each card taking a share of a division: how many it carries, and the
+        two arrows that trade one with the other chosen cards.
+
+        Drawn over the sprites rather than by them, because it belongs to the decision being
+        answered rather than to the card, and it has to sit above a unit's stacked attachments. It
+        runs last in the sprite pass for the same reason: a sprite redraws by clearing its whole
+        card tag, which the spinner shares so that a click on the count still reaches the card.
+        """
+        self.delete(ALLOCATION_TAG)
+        if self._allocation is None:
+            return
+        for card_id in self._allocation.chosen:
+            sprite = self._sprites.get(card_tag(card_id))
+            if sprite is not None:
+                self._draw_spinner(self._allocation, card_id, sprite.x, sprite.y)
+
+    def _draw_spinner(self, allocation: Allocation, card_id: str, x: int, y: int) -> None:
+        left, right = x - SPINNER_W // 2, x + SPINNER_W // 2
+        top, bottom = y - SPINNER_H // 2, y + SPINNER_H // 2
+        arrow_left = x + SPINNER_W // 6  # the box splits into a count and a column of two arrows
+        # The box covers the middle of the card it sits on, so it carries the card's own tag: a
+        # click on the count still reads as a click on the card, which is how it leaves the division.
+        on_card = (ALLOCATION_TAG, card_tag(card_id))
+        self.create_rectangle(
+            left, top, right, bottom, fill=theme.COUNT_BG, outline=theme.SELECT, tags=on_card
+        )
+        self.create_text(
+            (left + arrow_left) // 2,
+            y,
+            text=str(allocation.amount(card_id)),
+            fill=theme.COUNT_FG,
+            font=theme.serif(13, "bold"),
+            tags=on_card,
+        )
+        arrows = (
+            ("\u25b2", 1, allocation.may_increase(card_id)),
+            ("\u25bc", -1, allocation.may_decrease(card_id)),
+        )
+        for glyph, step, enabled in arrows:
+            arrow_top = top if step > 0 else y
+            arrow_bottom = y if step > 0 else bottom
+            # An arrow with nothing to trade is drawn dim and left untagged, so it is inert rather
+            # than falling through to the card and quietly undoing the division.
+            tags = (ALLOCATION_TAG, allocation_tag(card_id, step)) if enabled else (ALLOCATION_TAG,)
+            # A rectangle behind the glyph, so the whole half of the box is a click target rather
+            # than the few pixels the arrow itself covers.
+            self.create_rectangle(
+                arrow_left,
+                arrow_top,
+                right,
+                arrow_bottom,
+                fill=theme.COUNT_BG,
+                outline="",
+                tags=tags,
+            )
+            self.create_text(
+                (arrow_left + right) // 2,
+                (arrow_top + arrow_bottom) // 2,
+                text=glyph,
+                fill=theme.COUNT_FG if enabled else theme.INK_DIM,
+                font=theme.serif(9),
+                tags=tags,
+            )
 
     def _at_bottom(self, owner: PlayerId | None) -> bool:
         """Whether ``owner``'s cards lay out along the near edge. An ownerless card sits with the

@@ -6,12 +6,17 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,
+    AskAmount,
+    AskDistribution,
+    AskOption,
     AttachCard,
+    Banish,
     BanishTopFate,
     Bow,
     Ask,
     Unpayable,
     Choose,
+    CreateToken,
     Discard,
     Destroy,
     DestroyProvince,
@@ -21,7 +26,9 @@ from yasuki_core.engine.rules.effects import (
     GainGold,
     GainHonor,
     MoveToHand,
+    GrantKeyword,
     GrantModifier,
+    PayGold,
     IgnoreHonorRequirements,
     MoveToDeck,
     PlaceInProvince,
@@ -60,6 +67,10 @@ EFFECTS = [
         "millet grants farm_1 +2 GOLD_PRODUCTION (UNTIL_END_OF_TURN)",
     ),
     (
+        GrantKeyword("fields", "shinjo_1", "Cavalry", Duration.UNTIL_END_OF_TURN),
+        "fields gives shinjo_1 Cavalry (UNTIL_END_OF_TURN)",
+    ),
+    (
         MoveToDeck("farm_1", DeckKey(PlayerId.P1, Side.DYNASTY), from_bottom=0),
         "move farm_1 into P1's dynasty deck, 0 from bottom",
     ),
@@ -79,6 +90,25 @@ EFFECTS = [
     ),
     (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
     (AttachCard("katana", "hero"), "attach katana to hero"),
+    (CreateToken("ashigaru_2", PlayerId.P1, "farm_1"), "P1 creates ashigaru_2"),
+    (
+        CreateToken("ashigaru_2", PlayerId.P1, "farm_1", attach_to="hero"),
+        "P1 creates ashigaru_2 on hero",
+    ),
+    (
+        CreateToken("oni", PlayerId.P2, "mishime", stats=((Stat.FORCE, 4),)),
+        "P2 creates oni with FORCE 4",
+    ),
+    (
+        CreateToken("courtier", PlayerId.P1, "courts", clan="Lion"),
+        "P1 creates courtier with Lion",
+    ),
+    (
+        CreateToken("oni", PlayerId.P2, "mishime", clan="Crab", stats=((Stat.FORCE, 4),)),
+        "P2 creates oni with Crab, FORCE 4",
+    ),
+    (Banish("oni"), "banish oni"),
+    (PayGold(PlayerId.P2, 3, "Colonial Farm"), "P2 pays 3 gold for Colonial Farm"),
     (
         Unpayable("katana is attached to no Personality"),
         "unpayable: katana is attached to no Personality",
@@ -97,6 +127,18 @@ EFFECTS = [
     (
         Ask(PlayerId.P1, "Destroy Rice Farm to straighten Kobune?", "rice_farm", ("rice_1",)),
         "P1 is asked: Destroy Rice Farm to straighten Kobune?",
+    ),
+    (
+        AskAmount(PlayerId.P1, (2, 4), "How much blood?", "bound_in_blood", "spell_1"),
+        "P1 is asked: How much blood?",
+    ),
+    (
+        AskOption(PlayerId.P1, ("P1 gains 1 Honor",), "Whose Honor moves?", "courts", "courts_1"),
+        "P1 is asked: Whose Honor moves?",
+    ),
+    (
+        AskDistribution(PlayerId.P1, ("hero", "rival"), 3, "suiteiru_no_oni", "oni_1"),
+        "P1 divides 3 among 2 for suiteiru_no_oni",
     ),
 ]
 

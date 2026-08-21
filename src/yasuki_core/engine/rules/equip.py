@@ -1,13 +1,13 @@
 from collections.abc import Callable
 
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities import owned_personalities
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import effective_keywords, effective_weapon_limit
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import PersonalityPrint
-
-WEAPON_KEYWORD = "Weapon"
-TWO_HANDED_KEYWORD = "Two-Handed"
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 def weapons_on(game: GameState, personality: L5RCard) -> tuple[L5RCard, ...]:
@@ -15,24 +15,33 @@ def weapons_on(game: GameState, personality: L5RCard) -> tuple[L5RCard, ...]:
     return tuple(
         card
         for card in attachments_of(game, personality)
-        if WEAPON_KEYWORD in effective_keywords(game, card)
+        if keywords.WEAPON in effective_keywords(game, card)
     )
 
 
-def may_attach_weapon(game: GameState, personality: L5RCard, weapon: L5RCard) -> bool:
-    """Whether ``weapon`` may join ``personality`` under the Weapon rules.
+def may_hold_weapon(game: GameState, personality: L5RCard, weapon_keywords: frozenset[str]) -> bool:
+    """Whether ``personality`` has room for a Weapon carrying ``weapon_keywords`` under the Weapon
+    rules.
 
     Two rules, independent of each other. How many Weapons fit is a characteristic — one by default,
     two for a Kensai — so raising it is a modifier rather than an exemption from a rule. Two-Handed
     is exclusive on top of that: a Personality, "even a Kensai", cannot hold a Two-Handed Weapon
     beside any other Weapon, in either order (CR, Weapon; Kensai; Two-Handed).
+
+    Takes the keywords rather than the Weapon so a card about to be created can be judged before it
+    exists.
     """
     held = weapons_on(game, personality)
     if len(held) >= effective_weapon_limit(game, personality):
         return False
-    if TWO_HANDED_KEYWORD in effective_keywords(game, weapon):
+    if keywords.TWO_HANDED in weapon_keywords:
         return not held
-    return not any(TWO_HANDED_KEYWORD in effective_keywords(game, card) for card in held)
+    return not any(keywords.TWO_HANDED in effective_keywords(game, card) for card in held)
+
+
+def may_attach_weapon(game: GameState, personality: L5RCard, weapon: L5RCard) -> bool:
+    """Whether ``weapon`` may join ``personality`` under the Weapon rules."""
+    return may_hold_weapon(game, personality, effective_keywords(game, weapon))
 
 
 # What a card's own text says it will hang on — "Can only attach to a Samurai" and its kin. Keyed by
@@ -63,9 +72,48 @@ def may_attach(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
     restriction = ATTACH_RESTRICTIONS.get(card.printed_id)
     if restriction is not None and not restriction(game, personality, card):
         return False
-    if WEAPON_KEYWORD not in effective_keywords(game, card):
+    if keywords.WEAPON not in effective_keywords(game, card):
         return True
     return may_attach_weapon(game, personality, card)
+
+
+def may_attach_created(game: GameState, personality: L5RCard, printed: CardPrint) -> bool:
+    """Whether a card created from ``printed`` may attach to ``personality``.
+
+    The card does not exist yet, so its keywords come off the print rather than through the grants a
+    card in play reads. Only the rulebook's rules apply: an attach restriction is a card's own text,
+    and a created card carries the plain proxy print of what it is.
+    """
+    printed_keywords = frozenset(printed.keywords)
+    if keywords.WEAPON not in printed_keywords:
+        return True
+    return may_hold_weapon(game, personality, printed_keywords)
+
+
+def creation_targets(
+    game: GameState, seat: PlayerId, printed: CardPrint, *, keyword: str | None = None
+) -> tuple[L5RCard, ...]:
+    """The Personalities ``seat`` may create a card from ``printed`` onto — its own, that the
+    attachment rules still admit. A player creates onto their own, as they attach (CR, Attachments).
+
+    Parameters
+    ----------
+    game : GameState
+        The live game the board is read from.
+    seat : PlayerId
+        The seat creating the card.
+    printed : CardPrint
+        The template the created card is stamped from, judged by the attachment rules.
+    keyword : str, optional
+        Narrows the Personalities to those carrying it — the "your target Samurai Personality" a
+        card names. Default None, which offers them all.
+    """
+    return tuple(
+        personality
+        for personality in owned_personalities(game, seat)
+        if may_attach_created(game, personality, printed)
+        and (keyword is None or keyword in effective_keywords(game, personality))
+    )
 
 
 def equip_targets(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
@@ -73,8 +121,6 @@ def equip_targets(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
     attachment rules still admit. A player may only attach to their own (CR, Attachments)."""
     return tuple(
         personality
-        for personality in game.table.battlefield.cards
-        if isinstance(personality.printed, PersonalityPrint)
-        and personality.owner is card.owner
-        and may_attach(game, personality, card)
+        for personality in owned_personalities(game, card.owner)
+        if may_attach(game, personality, card)
     )

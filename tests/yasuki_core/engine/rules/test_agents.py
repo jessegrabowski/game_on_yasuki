@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.agents import AGENTS, AutoAgent, make_agent
-from yasuki_core.engine.rules.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.decisions import ChooseDistribution, DiscardToHandSize
 
 
 def test_auto_agent_answers_with_the_shortest_accepting_prefix():
@@ -17,6 +17,19 @@ def test_auto_agent_handles_a_zero_count():
     response = AutoAgent().decide(request, view=None)
     assert response.choices == ()
     assert request.accepts(response)
+
+
+def test_auto_agent_heaps_a_division_onto_one_candidate():
+    """A prefix of distinct candidates cannot name one twice, so a division of three among two would
+    have no prefix that answers it — the agent would raise on a decision a player answers easily."""
+    request = ChooseDistribution(
+        PlayerId.P1, ("a", "b"), count=3, resolver="split", source_id="source"
+    )
+
+    response = AutoAgent().decide(request, view=None)
+
+    assert request.accepts(response)
+    assert response.choices == ("a", "a", "a")
 
 
 def test_every_agent_reports_a_name():

@@ -8,6 +8,7 @@ yasuki_core.engine.rules.modifiers
 .. autosummary::
 
     Duration
+    KeywordGrant
     Modifier
     Stat
 

@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility
+from yasuki_core.engine.rules.actions import ActivateAbility, Pass
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
@@ -12,6 +12,7 @@ from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
+    end_turn,
     attachment,
     holding,
     personality,
@@ -22,6 +23,67 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1 = PlayerId.P1
+
+
+# --- Fantastic Gardens ---
+
+
+def _gardens_game():
+    """The Gardens in play, in the Action phase a Limited ability is taken in."""
+    game = two_seat_game()
+    put_in_play(game, holding("gardens", printed_id="fantastic_gardens", name="the Gardens"))
+    return EngineSession.start(game.table, P1)
+
+
+def test_bowing_the_gardens_gains_two_honor():
+    session = _gardens_game()
+
+    session.act(P1, ActivateAbility("gardens"))
+
+    game = session.game
+    assert game.table.seats[P1].honor == 2
+    assert game.table.cards_by_id["gardens"].bowed is True
+
+
+def test_the_gardens_may_be_bowed_again_the_same_turn():
+    """Repeatable: bowing is the only thing rationing it, so a Gardens straightened again pays out
+    a second time."""
+    session = _gardens_game()
+
+    session.act(P1, ActivateAbility("gardens"))
+    session.game.table.cards_by_id["gardens"].unbow()
+    session.act(PlayerId.P2, Pass())  # priority alternates; the turn is still P1's
+
+    session.act(P1, ActivateAbility("gardens"))
+
+    assert session.game.table.seats[P1].honor == 4
+
+
+def test_the_gardens_are_withheld_while_bowed():
+    session = _gardens_game()
+    session.game.table.cards_by_id["gardens"].bow()
+
+    assert ActivateAbility("gardens") not in session.legal_actions(P1)
+
+
+def test_the_gardens_are_withheld_on_another_seats_turn():
+    """Limited rather than Open: only the active player may take it, so its own controller cannot
+    use it while the turn belongs to someone else."""
+    session = _gardens_game()
+    end_turn(session)
+
+    assert session.game.active is PlayerId.P2
+    assert ActivateAbility("gardens") not in session.legal_actions(P1)
+
+
+def test_the_gardens_replay_to_the_same_board():
+    session = _gardens_game()
+    session.act(P1, ActivateAbility("gardens"))
+
+    assert replay(session.log).table == session.game.table
+
+
+# --- Imperial Gift ---
 
 
 def _gift_game(*, items=("katana",), plain=("strategy",), dynasty=("next-card",)) -> EngineSession:
@@ -122,8 +184,8 @@ def test_the_fate_deck_is_shuffled_after_the_search_reads_it():
 
 
 def test_a_fate_deck_with_no_item_still_gains_the_honor():
-    """Making the Items the ability's targets would have withheld the honor from a deck holding
-    none, since an ability with no legal target is never offered."""
+    """The honor is unconditional: the Items are searched for during resolution rather than
+    targeted, so a deck holding none still pays out."""
     session = _gift_game(items=())
     before = session.game.table.seats[P1].honor
     assert ActivateAbility("gift") in session.legal_actions(P1)
