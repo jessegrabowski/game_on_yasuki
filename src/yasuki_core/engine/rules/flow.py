@@ -40,6 +40,7 @@ from yasuki_core.engine.rules.work import (
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
     ChooseOption,
+    LeaveBowed,
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
@@ -418,6 +419,12 @@ def _apply_invest_amount(
     game.pending = announce_recruit(game, card, card.owner, invest_amount=int(response.choices[0]))
 
 
+# The decisions that are steps of the turn rather than actions taken in a round: the end-of-turn
+# discard, and the turn-start choice of what to leave bowed. Every new DecisionRequest owes an
+# answer to which of the two it is.
+_TURN_STRUCTURE = (DiscardToHandSize, LeaveBowed)
+
+
 def submit(game: GameState, response: DecisionResponse) -> None:
     """Answer the pending decision and resume the engine.
 
@@ -437,6 +444,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_discard(game, request.seat, response.choices)
             game.pending = None
             _begin_next_turn(game)
+        case LeaveBowed():
+            game.pending = None
+            _open_turn(game, frozenset(response.choices))
         case ChoosePayment():
             _apply_payment(game, request, response)
             game.pending = None
@@ -466,9 +476,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             raise ValueError(f"no handler for decision {type(request).__name__}")
     # Symmetric with `perform`: an answered decision resolves fully before the next input.
     run_stack(game)
-    # The end-of-turn discard is turn structure rather than an action, and the turn it belonged to
-    # is already over by now — yielding for it would step on the round the new turn just opened.
-    if not isinstance(request, DiscardToHandSize):
+    # Turn structure is not an action: the round these resolve into is not one an action would
+    # yield in, because the turn they belong to is either already over or has not opened yet.
+    if not isinstance(request, _TURN_STRUCTURE):
         _yield_after_action(game)
 
 
@@ -907,10 +917,23 @@ def _begin_next_turn(game: GameState) -> None:
 
 
 def _begin_turn(game: GameState) -> None:
+    """Open the turn: straighten, reveal the Provinces, and announce that the turn has begun.
+
+    A card that may remain bowed is asked about first, since that is a choice its controller makes
+    before each straightening (CR, May Remain Bowed). Pausing here leaves the rest of the turn's
+    opening for the submit that answers.
+    """
     open_round(game)
-    # A card that may remain bowed is passed over rather than asked about here: its own text says
-    # so, and the card that wants straightening anyway offers that as its own turn-start question.
-    straightened = ops.straighten(game.table, game.active, abilities.left_bowed(game, game.active))
+    offering = abilities.may_stay_bowed(game, game.active)
+    if offering:
+        game.pending = LeaveBowed(seat=game.active, candidates=offering)
+        return
+    _open_turn(game, frozenset())
+
+
+def _open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
+    """Straighten everything but ``staying_bowed``, reveal the Provinces, and open the turn."""
+    straightened = ops.straighten(game.table, game.active, staying_bowed)
     for card_id in straightened:
         triggers.fire(game, Straightened(card_id))
     for card_id in ops.reveal_provinces(game.table, game.active):

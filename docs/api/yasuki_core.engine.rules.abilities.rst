@@ -30,8 +30,8 @@ yasuki_core.engine.rules.abilities
     invest_amounts
     invest_for
     itself
-    left_bowed
     may_remain_bowed
+    may_stay_bowed
     no_cost
     no_effects
     one_wealth

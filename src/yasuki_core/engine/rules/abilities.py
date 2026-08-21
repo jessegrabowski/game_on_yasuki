@@ -233,12 +233,16 @@ def may_remain_bowed(printed_id: str) -> None:
     MAY_REMAIN_BOWED.add(printed_id)
 
 
-def left_bowed(game: GameState, seat: PlayerId) -> frozenset[str]:
-    """The cards ``seat`` controls that the turn-start straighten leaves alone."""
-    return frozenset(
+def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The bowed cards ``seat`` controls that it may choose to keep bowed rather than straighten.
+
+    Only the bowed ones: the choice is made before a card straightens, so one already standing has
+    nothing to decline (CR, May Remain Bowed).
+    """
+    return tuple(
         card.id
         for card in game.table.battlefield.cards
-        if card.owner is seat and card.printed_id in MAY_REMAIN_BOWED
+        if card.owner is seat and card.bowed and card.printed_id in MAY_REMAIN_BOWED
     )
 
 

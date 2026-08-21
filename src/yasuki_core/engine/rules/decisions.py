@@ -167,6 +167,32 @@ class DiscardToHandSize(DecisionRequest):
         )
 
 
+@dataclass(frozen=True, slots=True)
+class LeaveBowed(DecisionRequest):
+    """The seat must say which of its bowed cards to keep bowed as its turn begins.
+
+    "May remain bowed" is a choice its controller makes before each straightening rather than a
+    standing exemption (CR, May Remain Bowed), so the turn start asks. The candidates are the cards
+    offering it; those chosen stay bowed and the rest straighten with everything else.
+    """
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Choose cards to leave bowed"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Leave bowed"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        chosen = set(response.choices)
+        return len(chosen) == len(response.choices) and chosen <= set(self.candidates)
+
+    @property
+    def cancellable(self) -> bool:
+        """The turn beginning is not an action to back out of."""
+        return False
+
+
 def _chooses_exactly_one(request: "DecisionRequest", response: DecisionResponse) -> bool:
     return len(response.choices) == 1 and response.choices[0] in request.candidates
 

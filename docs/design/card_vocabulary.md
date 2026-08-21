@@ -104,6 +104,7 @@ Legality with respect to game state is checked separately.
    ChooseEquipTarget
    ChooseInvestAmount
    ChooseOption
+   LeaveBowed
    ChooseLegacyCard
    ChoosePayment
    Confirm

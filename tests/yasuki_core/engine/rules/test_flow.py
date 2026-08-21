@@ -15,7 +15,7 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming, Pass
 from yasuki_core.engine.rules.state import GameState, Phase, RESPONSE_TIMINGS
-from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
+from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse, LeaveBowed
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.events import CardDiscarded, Straightened
 
@@ -554,3 +554,19 @@ def test_opening_a_turn_records_none_of_its_own_events_as_an_action():
     flow._begin_turn(game)
 
     assert game.action_events == []
+
+
+def test_answering_the_turn_start_question_keeps_your_own_first_opportunity():
+    """Turn structure is not an action. Answering it must not hand the opportunity on, or a seat
+    holding a card that may remain bowed forfeits the opening action of each of its own turns."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("grounds", printed_id="culling_grounds", owner=PlayerId.P1))
+    game = GameState.start(state, PlayerId.P1)
+    game.table.cards_by_id["grounds"].bow()
+    flow._begin_turn(game)
+    assert isinstance(game.pending, LeaveBowed)
+
+    flow.submit(game, DecisionResponse(("grounds",)))
+
+    assert game.active is PlayerId.P1
+    assert game.round.priority is PlayerId.P1

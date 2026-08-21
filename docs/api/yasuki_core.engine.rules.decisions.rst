@@ -20,6 +20,7 @@ yasuki_core.engine.rules.decisions
     DecisionRequest
     DecisionResponse
     DiscardToHandSize
+    LeaveBowed
     PlaceLegacy
 
 .. automodule:: yasuki_core.engine.rules.decisions
