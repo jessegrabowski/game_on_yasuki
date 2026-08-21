@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
     AskAmount,
+    AskOption,
     Banish,
     Bow,
     Choose,
@@ -31,13 +32,17 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
     Then,
 )
-from yasuki_core.engine.rules.economy import effective_chi, effective_gold_cost
+from yasuki_core.engine.rules.economy import (
+    effective_chi,
+    effective_gold_cost,
+    effective_keywords,
+)
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.legality import reachable_gold, seat_alignment_name
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.events import EnteredPlay, Straightened
-from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -202,6 +207,80 @@ def _courts_of_otosan_uchi_invest(game: GameState, source: L5RCard, amount: int)
             COURTIER, source.owner, source.id, clan=seat_alignment_name(game, source.owner)
         ),
     ]
+
+
+COURTS_HONOR = 1
+
+
+def _courts_of_otosan_uchi_courtiers(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The seat's unbowed Courtiers — the ones there is still a bow to spend."""
+    return tuple(
+        personality.id
+        for personality in owned_personalities(game, seat)
+        if not personality.bowed and keywords.COURTIER in effective_keywords(game, personality)
+    )
+
+
+def _courts_of_otosan_uchi_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The controller's unbowed Courtiers, once the action just resolved was the one that Recruited
+    this Holding. Bowing one is what the Honor swing costs, so a bowed Courtier is no Courtier.
+
+    The Courtier this Holding's own Invest buys is among them: a Response is taken after the action
+    has finished resolving, and the Invest resolves inside it.
+    """
+    if not any(event.card_id == source.id for event in action_did(game, EnteredPlay)):
+        return []
+    return list(_courts_of_otosan_uchi_courtiers(game, source.owner))
+
+
+def _courts_of_otosan_uchi_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Bow the named Courtier, then ask whose Honor moves and which way."""
+    return [
+        Bow(target.id),
+        AskOption(
+            source.owner,
+            tuple(_courts_of_otosan_uchi_swings(game)),
+            "Whose Honor moves, and which way?",
+            "courts_of_otosan_uchi_honor",
+            source.id,
+        ),
+    ]
+
+
+register_ability(
+    "courts_of_otosan_uchi",
+    Ability(
+        timing=ActionTiming.RESPONSE,
+        label="Response: bow your Courtier to move a player's Honor",
+        cost=no_cost,
+        targets=_courts_of_otosan_uchi_targets,
+        effects=_courts_of_otosan_uchi_effects,
+    ),
+)
+
+
+def _courts_of_otosan_uchi_swings(game: GameState) -> dict[str, tuple[PlayerId, int]]:
+    """Each Honor swing on offer, by the wording the seat reads and picks it out by.
+
+    One mapping serves both halves of the choice, so the wording offered and the wording answered
+    can never drift apart. The seat's enum name keeps a label stable whatever a player calls
+    themselves.
+    """
+    return {
+        f"{player.name} {verb} {COURTS_HONOR} Honor": (player, delta)
+        for player in game.table.seats
+        for verb, delta in (("gains", COURTS_HONOR), ("loses", -COURTS_HONOR))
+    }
+
+
+@choice_resolver("courts_of_otosan_uchi_honor")
+def _resolve_courts_of_otosan_uchi_honor(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    moved, delta = _courts_of_otosan_uchi_swings(game)[chosen[0]]
+    return [GainHonor(moved, delta)]
 
 
 register_invest(

@@ -7,6 +7,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
+from yasuki_core.engine.rules.events import GameEvent
 from yasuki_core.engine.rules.modifiers import OngoingEffect
 from yasuki_core.engine.rules.work import WorkItem
 
@@ -49,6 +50,14 @@ PHASE_TIMINGS: dict[Phase, RoundTimings] = {
     Phase.BATTLE: RoundTimings(active=frozenset(), others=frozenset()),
     Phase.DYNASTY: RoundTimings(active=frozenset({ActionTiming.DYNASTY}), others=frozenset()),
 }
+
+# The Response Step, which the ShE datasheet inserts after an action finishes resolving and before
+# the last step of the Action Sequence. It is a round of its own, open to every seat, and it permits
+# nothing but Responses: no one may take an Open action in the middle of someone else's action.
+RESPONSE_TIMINGS = RoundTimings(
+    active=frozenset({ActionTiming.RESPONSE}),
+    others=frozenset({ActionTiming.RESPONSE}),
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -136,6 +145,19 @@ class GameState:
         Created cards to banish before the current turn ends — the ones lent to a player for a turn.
         Emptied as the turn ends, whether or not the cards are still there to banish. Ephemeral and
         rebuilt by replay. Default empty.
+    round_stack : list of ActionRound
+        The rounds a Response Step has suspended, innermost last. A Response Step opens a round of
+        its own over the round the action was taken in, and closing it puts that round back.
+        Ephemeral and rebuilt by replay. Default empty.
+    responded : set of str
+        The cards that have already taken a Response in the Response Step now open. A card answers a
+        given Step once; nothing else rations a Response, which costs no bow. Cleared as each Step
+        opens. Ephemeral and rebuilt by replay. Default empty.
+    action_events : list of GameEvent
+        What the action now resolving has done so far, in the order it happened, cleared as the next
+        action begins. A Response reads it to ask what it is responding to — "discarded a Fate card"
+        is a fact about the action rather than about the board it left behind. Ephemeral and rebuilt
+        by replay. Default empty.
     """
 
     table: TableState
@@ -158,6 +180,9 @@ class GameState:
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
     banish_at_turn_end: list[str] = field(default_factory=list)
+    round_stack: list[ActionRound] = field(default_factory=list)
+    responded: set[str] = field(default_factory=set)
+    action_events: list[GameEvent] = field(default_factory=list)
 
     @property
     def awaiting_decision(self) -> bool:

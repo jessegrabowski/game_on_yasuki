@@ -13,10 +13,11 @@ from yasuki_core.game_pieces.prints import (
     SenseiPrint,
     StrongholdPrint,
 )
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.actions import ActionTiming, Pass
+from yasuki_core.engine.rules.state import GameState, Phase, RESPONSE_TIMINGS
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow, legality
-from yasuki_core.engine.rules.events import Straightened
+from yasuki_core.engine.rules.events import CardDiscarded, Straightened
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, register
 
@@ -465,3 +466,91 @@ def test_recruit_rejects_invest_and_proclaim_together():
     holding = register(game.table, _holding("teahouse", gold_cost=2))
     with pytest.raises(ValueError, match="Invest and Proclaim"):
         flow.recruit(game, holding.id, invest=True, proclaim=True)
+
+
+# --- the Response Step ---
+
+
+def _responder_game() -> GameState:
+    """A game whose active seat holds one Response — a Caravansary answering its own Fate discard."""
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        holding(
+            "caravansary",
+            printed_id="caravansary",
+            name="Caravansary",
+            owner=PlayerId.P1,
+            gold_production=2,
+        ),
+    )
+    game = GameState.start(state, PlayerId.P1)
+    game.action_events[:] = [CardDiscarded("some-fate", Side.FATE, PlayerId.P1)]
+    return game
+
+
+def test_a_response_step_opens_only_when_a_seat_holds_a_response():
+    """A Step nobody could act in is a pass nobody needs to be asked for."""
+    game = _responder_game()
+    game.action_events.clear()  # the discard the Caravansary answers never happened
+
+    assert flow.open_response_window(game) is False
+    assert game.round_stack == []
+
+
+def test_a_response_step_is_open_to_every_seat_and_to_nothing_else():
+    """Any player may respond, and no one may take an Open action inside someone else's Step."""
+    game = _responder_game()
+
+    assert flow.open_response_window(game) is True
+
+    assert game.round.timings == RESPONSE_TIMINGS
+    for seat in PlayerId:
+        assert legality.permits(game, seat, ActionTiming.RESPONSE)
+        assert not legality.permits(game, seat, ActionTiming.OPEN)
+
+
+def test_passing_a_response_step_returns_to_the_round_it_suspended():
+    """The Step is a round over a round: passing it out closes it and hands the opportunity back,
+    rather than passing the phase out from under the action that opened it."""
+    game = _responder_game()
+    suspended = game.round
+    flow.open_response_window(game)
+
+    for _ in PlayerId:
+        flow.perform(game, Pass())
+
+    assert game.phase is Phase.ACTION
+    assert game.round_stack == []
+    assert game.round.timings == suspended.timings
+
+
+def test_a_new_phase_leaves_no_response_step_open():
+    game = _responder_game()
+    flow.open_response_window(game)
+
+    flow.open_round(game)
+
+    assert game.round_stack == []
+
+
+def test_a_turn_boundary_forgets_the_action_a_response_would_answer():
+    """A Step opens on what the action just resolved did. An event still recorded a turn later is
+    not that, and would open a Step on an action long gone."""
+    game = _responder_game()
+    game.action_taken = "the Recruit of something"
+
+    flow._begin_turn(game)
+
+    assert game.action_events == []
+    assert game.action_taken == ""
+    assert flow.open_response_window(game) is False
+
+
+def test_opening_a_turn_records_none_of_its_own_events_as_an_action():
+    """Straightening and revealing are steps of the turn, not something a seat may respond to."""
+    game = _responder_game()
+
+    flow._begin_turn(game)
+
+    assert game.action_events == []

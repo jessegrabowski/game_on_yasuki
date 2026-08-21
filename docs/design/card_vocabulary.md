@@ -33,6 +33,7 @@ deferred through `Then` instead.
    AdjustCounter
    Ask
    AskAmount
+   AskOption
    AttachCard
    Banish
    BanishTopFate
@@ -102,6 +103,7 @@ Legality with respect to game state is checked separately.
    ChooseCards
    ChooseEquipTarget
    ChooseInvestAmount
+   ChooseOption
    ChooseLegacyCard
    ChoosePayment
    Confirm

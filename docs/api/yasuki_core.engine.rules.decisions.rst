@@ -14,6 +14,7 @@ yasuki_core.engine.rules.decisions
     ChooseEquipTarget
     ChooseInvestAmount
     ChooseLegacyCard
+    ChooseOption
     ChoosePayment
     Confirm
     DecisionRequest

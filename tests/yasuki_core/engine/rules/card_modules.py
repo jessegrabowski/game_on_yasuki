@@ -36,6 +36,7 @@ _CALLS = {
     "register_invest",
     "register_production_boost",
     "may_remain_bowed",
+    "bow_waiver",
 }
 
 

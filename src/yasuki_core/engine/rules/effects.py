@@ -4,7 +4,13 @@ from dataclasses import dataclass, replace
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
-from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseCards, Confirm, DecisionRequest
+from yasuki_core.engine.rules.decisions import (
+    ChooseAmount,
+    ChooseCards,
+    ChooseOption,
+    Confirm,
+    DecisionRequest,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
@@ -567,6 +573,51 @@ class AskAmount(InterruptingEffect):
         return ChooseAmount(
             seat=self.seat,
             candidates=tuple(str(amount) for amount in self.amounts),
+            question=self.question,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class AskOption(InterruptingEffect):
+    """Pause for the seat to pick one of the outcomes a card spells out, then hand the choice to a
+    resolver.
+
+    For the "gain or lose", "a target player" a card leaves to its controller: the board cannot
+    settle it, so the seat is asked and the resolver turns the answer back into effects.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat choosing.
+    options : tuple of str
+        The outcomes on offer, as the seat reads them.
+    question : str
+        What is being chosen.
+    resolver : str
+        The registered choice resolver the chosen option is handed to.
+    source_id : str
+        The card offering the choice.
+    """
+
+    seat: PlayerId
+    options: tuple[str, ...]
+    question: str
+    resolver: str
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} is asked: {self.question}"
+
+    def is_payable(self, game: GameState) -> bool:
+        """Nothing to choose from is nothing to choose."""
+        return bool(self.options)
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return ChooseOption(
+            seat=self.seat,
+            candidates=self.options,
             question=self.question,
             resolver=self.resolver,
             source_id=self.source_id,

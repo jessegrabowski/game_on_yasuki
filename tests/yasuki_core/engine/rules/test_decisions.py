@@ -165,7 +165,6 @@ def test_a_registered_prompt_replaces_the_generic_wording():
     "resolver, expected",
     [
         ("wheat_farm", "Give a Wealth token to other Farms you control"),
-        ("sincerity_seed", "Seed a Sincerity token onto one of your Sincerity cards"),
         ("modest_farm_straighten", "Destroy Modest Farm to straighten the card it recruited"),
     ],
 )

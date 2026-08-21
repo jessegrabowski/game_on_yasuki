@@ -3,6 +3,7 @@ from yasuki_core.engine.rules.abilities import (
     Ability,
     InvestAbility,
     bow_cost,
+    no_cost,
     one_wealth,
     register_ability,
     register_invest,
@@ -14,6 +15,7 @@ from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
+    action_did,
     choice_resolver,
     on,
     sincerity_seed_targets,
@@ -84,24 +86,30 @@ def _resolve_spearmen_of_the_akasha(
 # --- Training Court ---
 
 
-@on(EnteredPlay, "training_court")
-def _training_court_entered_play(ctx: TriggerContext) -> list[Effect]:
-    """Political Tireless Response: after Training Court enters play, seed a Sincerity token onto one
-    of its controller's token-less Sincerity cards still in a Province."""
-    if ctx.event.card_id != ctx.card.id:
+def _training_court_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The controller's token-less Sincerity cards still in a Province, once the action just
+    resolved was the one that Recruited this Holding."""
+    if not any(event.card_id == source.id for event in action_did(game, EnteredPlay)):
         return []
-    targets = tuple(sincerity_seed_targets(ctx.game, ctx.card.owner))
-    if not targets:
-        return []
-    return [Choose(ctx.card.owner, targets, 1, 1, "sincerity_seed", ctx.card.id)]
+    return sincerity_seed_targets(game, source.owner)
 
 
-@choice_resolver("sincerity_seed", prompt="Seed a Sincerity token onto one of your Sincerity cards")
-def _resolve_sincerity_seed(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [AdjustCounter(card_id, SINCERITY, 1) for card_id in chosen]
+def _training_court_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [AdjustCounter(target.id, SINCERITY, 1)]
 
+
+register_ability(
+    "training_court",
+    Ability(
+        # Tireless, so it asks nothing of the Holding it is on: a Response costs no bow, and this
+        # one is taken in the Step that follows the Recruit which brought the Holding into play.
+        timing=ActionTiming.RESPONSE,
+        label="Response: seed a Sincerity token onto one of your Sincerity cards",
+        cost=no_cost,
+        targets=_training_court_targets,
+        effects=_training_court_effects,
+    ),
+)
 
 register_invest("training_court", InvestAbility(amounts=(1,), effect=one_wealth))
 

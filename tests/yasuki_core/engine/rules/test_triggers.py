@@ -185,54 +185,6 @@ def _caravansary(game, seat=PlayerId.P1, card_id="P1-caravansary"):
     return caravansary
 
 
-def test_caravansary_gains_wealth_when_you_discard_a_fate_card():
-    game = two_seat_game()
-    caravansary = _caravansary(game)
-
-    fire(game, CardDiscarded("some-fate", Side.FATE, PlayerId.P1))
-
-    assert caravansary.counters == {"wealth": 1}
-
-
-def test_caravansary_ignores_an_opponents_discard():
-    game = two_seat_game()
-    caravansary = _caravansary(game)  # owned by P1
-
-    fire(game, CardDiscarded("some-fate", Side.FATE, PlayerId.P2))  # not your action
-
-    assert caravansary.counters == {}
-
-
-def test_caravansary_ignores_a_discard_no_player_made():
-    """Trimming to the maximum hand size is a step of the turn, not an action (CR, Drawing and
-    Discarding Fate Cards), so "if the action was yours" has no action to claim."""
-    game = two_seat_game()
-    caravansary = _caravansary(game)
-
-    fire(game, CardDiscarded("some-fate", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE))
-
-    assert caravansary.counters == {}
-
-
-def test_caravansary_ignores_a_dynasty_discard():
-    game = two_seat_game()
-    caravansary = _caravansary(game)
-
-    fire(game, CardDiscarded("some-dynasty", Side.DYNASTY, PlayerId.P1))  # not a Fate card
-
-    assert caravansary.counters == {}
-
-
-def test_caravansary_wealth_caps_at_three():
-    game = two_seat_game()
-    caravansary = _caravansary(game)
-
-    for _ in range(5):
-        fire(game, CardDiscarded("some-fate", Side.FATE, PlayerId.P1))
-
-    assert caravansary.counters == {"wealth": 3}
-
-
 def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
     # The wiring test: _apply_discard moves a hand card to the discard and must fire CardDiscarded.
     game = two_seat_game()

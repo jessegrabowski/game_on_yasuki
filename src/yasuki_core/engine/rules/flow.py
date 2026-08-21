@@ -9,6 +9,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
+    ActionTiming,
     Cycle,
     DynastyDiscard,
     Equip,
@@ -18,7 +19,14 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.state import ActionRound, GameState, PHASE_TIMINGS, Phase, TURN_PHASES
+from yasuki_core.engine.rules.state import (
+    ActionRound,
+    GameState,
+    PHASE_TIMINGS,
+    Phase,
+    RESPONSE_TIMINGS,
+    TURN_PHASES,
+)
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
     ApplyAbilityEffects,
@@ -31,6 +39,7 @@ from yasuki_core.engine.rules.work import (
 )
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
+    ChooseOption,
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
@@ -146,8 +155,19 @@ def advance(game: GameState) -> None:
     _end_turn(game)
 
 
+def forget_action(game: GameState) -> None:
+    """Drop the record of the action last resolved, so nothing outside one is read back as one.
+
+    A Response asks what the action it follows did. Anything still recorded across a turn or phase
+    boundary is not that, and would let a Step open on an action two turns gone.
+    """
+    game.action_events.clear()
+
+
 def open_round(game: GameState) -> None:
     """Open the Action Round for the current phase, giving the active seat the first opportunity."""
+    game.round_stack.clear()
+    forget_action(game)
     game.round = ActionRound(timings=PHASE_TIMINGS[game.phase], priority=game.active)
 
 
@@ -170,12 +190,17 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
             game.round = replace(game.round, priority=seat, passes=passes)
             return
         passes += 1
+    if game.round_stack:
+        close_response_window(game)
+        return
     advance(game)
 
 
 def perform(game: GameState, action: Action) -> None:
     """Apply a chosen action, dispatching to its handler. The single action-apply dispatch,
     mirroring :func:`submit` for decisions. Raise ``ValueError`` for an action with no handler."""
+    if not isinstance(action, Pass) and not game.round_stack:
+        game.action_events.clear()
     match action:
         case Pass():
             yield_priority(game, passed=True)
@@ -429,6 +454,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         case ChooseCards():
             _apply_card_choice(game, request, response)
         case ChooseAmount():
+            _apply_card_choice(game, request, response)
+        case ChooseOption():
             _apply_card_choice(game, request, response)
         # One case per union member, so the exhaustiveness guard can read them off the AST.
         case Confirm():
@@ -792,6 +819,8 @@ def activate(game: GameState, card_id: str) -> None:
         if ability.all_targets
         else SelectAbilityTarget(card_id, targets)
     )
+    if ability.timing is ActionTiming.RESPONSE:
+        game.responded.add(card_id)
     game.stack.append(deferred)
     triggers.resolve_effects(game, ability.cost(game, card))
     run_stack(game)  # resolve the target, unless the cost's cascade paused for a decision first
@@ -808,7 +837,9 @@ def _apply_ability_target(
 
 
 def _apply_card_choice(
-    game: GameState, request: ChooseCards | ChooseAmount | Confirm, response: DecisionResponse
+    game: GameState,
+    request: ChooseCards | ChooseAmount | ChooseOption | Confirm,
+    response: DecisionResponse,
 ) -> None:
     game.pending = None
     item = game.stack.pop()  # the ResumeCascade this choice paused, always stacked atop it
@@ -885,6 +916,8 @@ def _begin_turn(game: GameState) -> None:
     for card_id in ops.reveal_provinces(game.table, game.active):
         triggers.fire(game, Revealed(card_id))
     triggers.fire(game, TurnStarted(game.active))
+    # Opening the turn is not an action, so what it just raised is nobody's to respond to.
+    forget_action(game)
 
 
 def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:
@@ -914,7 +947,43 @@ def _other(seat: PlayerId) -> PlayerId:
 
 def _yield_after_action(game: GameState) -> None:
     """Hand on the opportunity once an action has fully resolved. An action that paused for a
-    decision has not finished, and a game that has ended has no round left to run."""
+    decision has not finished, and a game that has ended has no round left to run.
+
+    A Response Step comes first when the action left anyone something to respond with.
+    """
     if game.awaiting_decision or game.game_over:
         return
+    if open_response_window(game):
+        return
+    yield_priority(game, passed=False)
+
+
+def _responders(game: GameState) -> list[PlayerId]:
+    """Every seat holding a Response it could take against the action just resolved."""
+    responding = frozenset({ActionTiming.RESPONSE})
+    return [seat for seat in game.table.seats if abilities.activatable(game, seat, responding)]
+
+
+def open_response_window(game: GameState) -> bool:
+    """Open the Response Step over the round the action was taken in, and report whether it opened.
+
+    Only when a seat actually holds a Response: a step nobody could act in is a pass nobody needs to
+    be asked for. A Response is itself an action, and one taken inside the step opens no step of its
+    own — the window that is already open is the one it belongs to.
+    """
+    if game.round_stack:
+        return False
+    # Cleared before the seats are polled, not after: a card still marked from the last Step would
+    # not count as a responder, and so could never open another one.
+    game.responded.clear()
+    if not _responders(game):
+        return False
+    game.round_stack.append(game.round)
+    game.round = ActionRound(timings=RESPONSE_TIMINGS, priority=game.active)
+    return True
+
+
+def close_response_window(game: GameState) -> None:
+    """Close the Response Step and hand the opportunity on from the round it suspended."""
+    game.round = game.round_stack.pop()
     yield_priority(game, passed=False)

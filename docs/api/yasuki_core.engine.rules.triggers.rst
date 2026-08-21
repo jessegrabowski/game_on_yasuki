@@ -13,6 +13,7 @@ yasuki_core.engine.rules.triggers
 
 .. autosummary::
 
+    action_did
     apply_effect
     at_cap
     caused_by

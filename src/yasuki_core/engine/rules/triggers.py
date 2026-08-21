@@ -207,6 +207,8 @@ def _advance(
                 f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
             )
         event = queue.pop(0)
+        # Kept for the Response Step, which asks what the action it follows actually did.
+        game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
         firing.sort(key=_canonical_order)
@@ -325,6 +327,15 @@ def resolve_effects(game: GameState, effects: list[Effect]) -> None:
     """Apply ``effects`` — an ability's or a choice resolver's output — and run the derived-event
     cascade the same way :func:`fire` does, so a triggered reaction to those effects still resolves."""
     _advance(game, tuple(effects), [], None, [])
+
+
+def action_did(game: GameState, kind: type[GameEvent]) -> tuple[GameEvent, ...]:
+    """Every event of ``kind`` the action now resolving has produced, in the order it happened.
+
+    What a Response reads to know what it is answering: "discarded a Fate card" and "Recruits this
+    Holding" are facts about the action rather than about the board it leaves behind.
+    """
+    return tuple(event for event in game.action_events if isinstance(event, kind))
 
 
 def sincerity_seed_targets(game: GameState, seat: PlayerId) -> list[str]:

@@ -287,6 +287,8 @@ def activatable(
         ability = _ABILITIES.get(card.printed_id)
         if ability is None or ability.timing not in permitted:
             continue
+        if ability.timing is ActionTiming.RESPONSE and card.id in game.responded:
+            continue
         if location not in ability.located_at:
             continue
         if not can_pay(game, card, ability.cost):

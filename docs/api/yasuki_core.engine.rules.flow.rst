@@ -14,13 +14,16 @@ yasuki_core.engine.rules.flow
     announce_rulebook_cost
     begin_game
     cancel
+    close_response_window
     cycle
     dynasty_discard
     equip
+    forget_action
     kharmic_draw
     kharmic_refill
     legacy
     next_phase
+    open_response_window
     open_round
     perform
     produce_gold

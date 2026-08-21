@@ -262,6 +262,41 @@ class ChooseAmount(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseOption(DecisionRequest):
+    """The seat must pick one of the outcomes an ability spells out — the "gain or lose", "this
+    player or that" a card leaves to the player rather than reading off the board.
+
+    The candidates are the outcomes as the seat reads them; the answer feeds the named resolver,
+    which turns the chosen label back into effects. A client shows a list of wordings, not a board
+    selection and not a number.
+
+    Attributes
+    ----------
+    question : str
+        What is being chosen, as the seat reads it.
+    resolver : str
+        The registered choice resolver the chosen option is handed to.
+    source_id : str
+        The card offering the choice, handed to the resolver as its context.
+    """
+
+    question: str
+    resolver: str
+    source_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return self.question
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the action: the choice is the whole of what it does."""
+        return True
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseAbilityTarget(DecisionRequest):
     """The seat must choose the target of an activated ability it has announced. The candidates are
     the cards the ability may legally target — all in play, so a client renders them as board

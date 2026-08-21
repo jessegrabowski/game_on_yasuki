@@ -41,6 +41,7 @@ WEAPON = "Weapon"
 
 CAVALRY = "Cavalry"
 COMMANDER = "Commander"
+COURTIER = "Courtier"
 FARM = "Farm"
 JADE = "Jade"
 MARKET = "Market"

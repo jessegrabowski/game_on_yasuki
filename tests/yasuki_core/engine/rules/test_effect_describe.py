@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,
     AskAmount,
+    AskOption,
     AttachCard,
     Banish,
     BanishTopFate,
@@ -129,6 +130,10 @@ EFFECTS = [
     (
         AskAmount(PlayerId.P1, (2, 4), "How much blood?", "bound_in_blood", "spell_1"),
         "P1 is asked: How much blood?",
+    ),
+    (
+        AskOption(PlayerId.P1, ("P1 gains 1 Honor",), "Whose Honor moves?", "courts", "courts_1"),
+        "P1 is asked: Whose Honor moves?",
     ),
 ]
 

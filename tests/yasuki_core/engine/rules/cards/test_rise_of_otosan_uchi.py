@@ -9,7 +9,12 @@ from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     EXPENDABLE_SERVANT,
     LION_ANCESTOR,
 )
-from yasuki_core.engine.rules.decisions import ChooseAmount, Confirm, DecisionResponse
+from yasuki_core.engine.rules.decisions import (
+    ChooseAmount,
+    ChooseOption,
+    Confirm,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import effective_chi, effective_force, effective_gold_cost
 from yasuki_core.engine.rules.events import EnteredPlay
@@ -308,8 +313,11 @@ def test_bound_in_blood_replays_to_the_same_board():
 # --- Courts of Otosan Uchi ---
 
 
-def _courts_game(*, clan: str | None = "Lion"):
-    """The Courts face-up in a Province with the Invest affordable, under a Stronghold of ``clan``."""
+def _courts_game(*, clan: str | None = "Lion", envoy: bool = False, envoy_bowed: bool = False):
+    """The Courts face-up in a Province with the Invest affordable, under a Stronghold of ``clan``.
+
+    ``envoy`` puts a Courtier on the board beforehand, which is what the entry Response spends.
+    """
     state = TableState.empty_two_seat()
     token_template(
         state,
@@ -329,14 +337,115 @@ def _courts_game(*, clan: str | None = "Lion"):
     province = ProvinceZone(owner=P1)
     province.add(courts)
     state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    if envoy:
+        put_in_play(state, personality("envoy", force=0, chi=2, keywords=("Courtier",)))
     session = EngineSession.start(state, P1)
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty
+    if envoy_bowed:
+        # After the turn-start straighten, which would otherwise stand him back up.
+        session.game.table.cards_by_id["envoy"].bow()
     return session
 
 
 def _courtier_of(session):
     return next(card for card in session.game.table.battlefield.cards if card.is_token)
+
+
+def _courts_with_an_envoy(*, bowed=False):
+    """The Courts ready to recruit, with a Courtier already on the board to spend."""
+    return _courts_game(envoy=True, envoy_bowed=bowed)
+
+
+def test_recruiting_the_courts_opens_a_response_step_rather_than_acting():
+    """A Response is an action: the Recruit resolves, then the Step offers it. Nothing has happened
+    to the Courtier until the seat takes it."""
+    session = _courts_with_an_envoy()
+
+    session.act(P1, Recruit("courts"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert session.game.pending is None
+    assert ActivateAbility("courts") in session.legal_actions(P1)
+    assert session.game.table.cards_by_id["envoy"].bowed is False
+
+
+def test_bowing_the_courtier_costs_a_player_an_honor():
+    session = _courts_with_an_envoy()
+
+    session.act(P1, Recruit("courts"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    session.act(P1, ActivateAbility("courts"))
+    session.submit(P1, DecisionResponse(("envoy",)))
+    assert isinstance(session.game.pending, ChooseOption)
+    session.submit(P1, DecisionResponse(("P2 loses 1 Honor",)))
+
+    game = session.game
+    assert game.table.seats[PlayerId.P2].honor == -1
+    assert game.table.cards_by_id["envoy"].bowed is True
+
+
+def test_the_swing_may_favour_you_instead():
+    """ "Gain or lose" and "a target player" are both the controller's call."""
+    session = _courts_with_an_envoy()
+
+    session.act(P1, Recruit("courts"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    session.act(P1, ActivateAbility("courts"))
+    session.submit(P1, DecisionResponse(("envoy",)))
+    session.submit(P1, DecisionResponse(("P1 gains 1 Honor",)))
+
+    assert session.game.table.seats[P1].honor == 1
+
+
+def test_passing_the_response_step_leaves_the_courtier_standing():
+    """A missed Response is a missed Response: passing the Step declines the swing."""
+    session = _courts_with_an_envoy()
+
+    session.act(P1, Recruit("courts"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    session.act(P1, Pass())
+
+    game = session.game
+    assert game.table.cards_by_id["envoy"].bowed is False
+    assert game.table.seats[P1].honor == 0
+
+
+def test_a_bowed_courtier_is_no_courtier_to_spend():
+    session = _courts_with_an_envoy(bowed=True)
+
+    session.act(P1, Recruit("courts"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert ActivateAbility("courts") not in session.legal_actions(P1)
+
+
+def test_the_courtier_the_invest_buys_can_be_bowed_by_the_response():
+    """The Step opens after the action has finished resolving, and the Invest resolves inside it —
+    so the Holding pays for its own Response with the Courtier it just bought."""
+    session = _courts_game()  # no Courtier in play beforehand
+
+    session.act(P1, Recruit("courts", invest=True))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    courtier = _courtier_of(session)
+    session.act(P1, ActivateAbility("courts"))
+    session.submit(P1, DecisionResponse((courtier.id,)))
+    session.submit(P1, DecisionResponse(("P2 loses 1 Honor",)))
+
+    game = session.game
+    assert game.table.cards_by_id[courtier.id].bowed is True
+    assert game.table.seats[PlayerId.P2].honor == -1
+
+
+def test_the_courts_response_replays_to_the_same_board():
+    session = _courts_with_an_envoy()
+    session.act(P1, Recruit("courts"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    session.act(P1, ActivateAbility("courts"))
+    session.submit(P1, DecisionResponse(("envoy",)))
+    session.submit(P1, DecisionResponse(("P2 loses 1 Honor",)))
+
+    assert replay(session.log).table == session.game.table
 
 
 def test_the_courts_invest_buys_a_wealth_token_and_a_courtier():
@@ -452,10 +561,10 @@ def test_culling_grounds_asks_nobody_to_pick_a_target():
     assert session.game.pending is None
 
 
-def test_the_servant_survives_the_turn_because_the_holding_stays_bowed():
-    """ "May remain bowed": the straighten at the start of the next turn passes the Holding over, so
-    nothing unbows it and the servant is safe. The plain Farm beside it is the control — the skip has
-    to be for this card, not for the seat."""
+def test_the_servant_survives_when_you_choose_to_leave_the_holding_bowed():
+    """ "May remain bowed" is a choice made before each straightening (CR), so the turn start asks.
+    Keeping it bowed keeps the servant. The plain Farm beside it is the control — the choice has to
+    be for this card, not for the seat."""
     session = _culling_game()
     farm = put_in_play(session.game.table, holding("farm", printed_id="plain_farm"))
     session.act(P1, ActivateAbility("grounds"))
@@ -463,11 +572,30 @@ def test_the_servant_survives_the_turn_because_the_holding_stays_bowed():
     farm.bow()
 
     end_turn(session)
-    end_turn(session)  # back around to P1, whose straighten would otherwise reach it
+    end_turn(session)  # back around to P1, whose turn start puts the question
+    assert session.game.pending.candidates == ("grounds",)
+    session.submit(P1, DecisionResponse(("grounds",)))  # leave it bowed
 
-    assert session.game.table.cards_by_id["grounds"].bowed is True
+    game = session.game
+    assert game.table.cards_by_id["grounds"].bowed is True
     assert farm.bowed is False
-    assert servant.id in session.game.table.cards_by_id
+    assert servant.id in game.table.cards_by_id  # the bargain held
+
+
+def test_declining_to_stay_bowed_straightens_it_and_costs_the_servant():
+    """The other half of the bargain, and the half that was unreachable while the straighten passed
+    the Holding over unconditionally: standing it back up banishes what it made."""
+    session = _culling_game()
+    session.act(P1, ActivateAbility("grounds"))
+    servant = _servant_of(session)
+
+    end_turn(session)
+    end_turn(session)
+    session.submit(P1, DecisionResponse(()))  # straighten it after all
+
+    game = session.game
+    assert game.table.cards_by_id["grounds"].bowed is False
+    assert servant.id not in game.table.cards_by_id  # banished by its own trait
 
 
 def test_straightening_the_holding_banishes_the_servant():
