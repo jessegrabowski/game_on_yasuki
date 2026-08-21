@@ -21,11 +21,12 @@ from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint
 
 from tests.yasuki_core.engine.builders import (
+    attachment,
     end_phase,
     end_turn,
     holding,
@@ -627,3 +628,49 @@ def test_shinjo_fields_replays_to_the_same_board():
     _give_cavalry(session, destroy=True)
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Sapphire Mine (the Item clause) ---
+
+
+def _mine_and_item(*, gold_cost, attachment_type=AttachmentType.ITEM):
+    game = two_seat_game()
+    mine = put_in_play(
+        game, holding("mine", printed_id="sapphire_mine", gold_production=2, name="the Mine")
+    )
+    item = attachment("relic", attachment_type=attachment_type, gold_cost=gold_cost)
+    return game, mine, item
+
+
+def test_the_mine_adds_a_gold_for_a_single_item():
+    game, mine, item = _mine_and_item(gold_cost=3)
+
+    assert effective_gold_production(game, mine, targets=(item,)) == 3  # printed 2, +1
+
+
+def test_the_mine_adds_two_for_an_item_costing_six_or_more():
+    game, mine, item = _mine_and_item(gold_cost=6)
+
+    assert effective_gold_production(game, mine, targets=(item,)) == 4  # printed 2, +1, +1
+
+
+def test_the_mine_pays_its_printed_rate_for_a_follower():
+    """ "A single Item only" — a Follower is an attachment, but it is not an Item."""
+    game, mine, item = _mine_and_item(gold_cost=6, attachment_type=AttachmentType.FOLLOWER)
+
+    assert effective_gold_production(game, mine, targets=(item,)) == 2
+
+
+def test_the_mine_pays_its_printed_rate_for_two_cards_at_once():
+    """ "Only" is about the whole payment: an Item bought alongside anything else is not a single
+    Item on its own."""
+    game, mine, item = _mine_and_item(gold_cost=3)
+    other = attachment("second", gold_cost=1)
+
+    assert effective_gold_production(game, mine, targets=(item, other)) == 2
+
+
+def test_the_mine_pays_its_printed_rate_with_no_target():
+    game, mine, _ = _mine_and_item(gold_cost=3)
+
+    assert effective_gold_production(game, mine) == 2

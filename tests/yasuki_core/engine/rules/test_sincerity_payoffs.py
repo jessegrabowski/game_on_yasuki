@@ -97,6 +97,39 @@ def test_sapphire_mine_banks_nothing_below_two_sincerity():
     assert session.game.table.cards_by_id["sm"].counters == {}  # 1 < 2: tokens gone, no wealth
 
 
+def _refill(session):
+    return session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards[-1]
+
+
+def test_sapphire_mine_renews_its_province_while_it_holds_any_sincerity():
+    """ "This Holding has Renew while it has any Sincerity tokens" — one is any, and Renew refills
+    the vacated Province face-up, so the next card is recruitable the same turn."""
+    session = _recruit_game("sm", "sapphire_mine", sincerity=1, keywords=("Mine", "Sincerity"))
+
+    _recruit(session, "sm")
+
+    assert _refill(session).face_up
+
+
+def test_sapphire_mine_renews_on_the_tokens_it_is_about_to_spend():
+    """The keyword is read as the Mine enters play and its Sincerity is cleared afterwards, so the
+    tokens that earn the refill are gone by the time anyone could look for them."""
+    session = _recruit_game("sm", "sapphire_mine", sincerity=2, keywords=("Mine", "Sincerity"))
+
+    _recruit(session, "sm")
+
+    assert _refill(session).face_up
+    assert session.game.table.cards_by_id["sm"].counters == {"wealth": 1}  # sincerity spent
+
+
+def test_sapphire_mine_without_sincerity_leaves_its_province_face_down():
+    session = _recruit_game("sm", "sapphire_mine", sincerity=0, keywords=("Mine", "Sincerity"))
+
+    _recruit(session, "sm")
+
+    assert not _refill(session).face_up
+
+
 def test_the_kurai_district_court_produces_gold_from_its_sincerity_on_entry():
     session = _recruit_game(
         "kd",

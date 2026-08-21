@@ -77,6 +77,7 @@ def attachment(
     chi: int = 0,
     force_modifier: int = 0,
     chi_modifier: int = 0,
+    gold_cost: int = 0,
     keywords: tuple[str, ...] = (),
 ) -> L5RCard:
     """An Item, Follower or Spell. ``force``/``chi`` are the card's own stats, which it brings to a
@@ -93,6 +94,7 @@ def attachment(
         chi=chi,
         force_modifier=force_modifier,
         chi_modifier=chi_modifier,
+        gold_cost=gold_cost,
         keywords=keywords,
     )
 
