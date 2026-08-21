@@ -14,13 +14,27 @@ class TurnStarted:
 
 @dataclass(frozen=True, slots=True)
 class CardDiscarded:
-    """A card entered a discard pile. ``cause`` is who or what put it there and ``side`` the card's
-    side — the two facts a discard-reaction reads ("your action, a Fate card"). A ``Rulebook`` cause
-    means no player chose it, so a reaction guarded on a seat correctly ignores it."""
+    """A card entered a discard pile.
+
+    Attributes
+    ----------
+    card_id : str
+        The card that reached the pile.
+    side : Side
+        The card's side, one of the two facts a discard-reaction reads ("your action, a Fate card").
+    cause : Cause
+        Who or what put it there. A ``Rulebook`` cause means no player chose it, so a reaction
+        guarded on a seat correctly ignores it.
+    from_hand_or_deck : bool
+        Whether it was discarded without ever reaching play, which is how cards name the pair of
+        hidden zones together: "after this Follower is discarded from your hand or deck". Default
+        False, which is what a card discarded out of play or out of a Province reports.
+    """
 
     card_id: str
     side: Side
     cause: Cause
+    from_hand_or_deck: bool = False
 
 
 @dataclass(frozen=True, slots=True)

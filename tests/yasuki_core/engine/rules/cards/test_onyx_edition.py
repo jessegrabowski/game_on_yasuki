@@ -1,13 +1,20 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.cards.onyx_edition import CAVALRY_FOLLOWER
+from yasuki_core.engine.rules.cards.onyx_edition import CAVALRY_FOLLOWER, NAGA_FOLLOWER
+from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.units import unit_force
 from yasuki_core.engine.session import EngineSession
 
+from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import AttachmentType, Side
+
 from tests.yasuki_core.engine.builders import (
+    attachment,
     personality,
     put_in_play,
     token_template,
@@ -15,6 +22,93 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1 = PlayerId.P1
+
+
+# --- Spearmen of the Akasha ---
+
+
+def _spearmen_game(*, bearer_keywords=("Naga",)):
+    """The Spearmen sitting in hand, beside a Personality carrying ``bearer_keywords``."""
+    game = two_seat_game()
+    token_template(
+        game,
+        NAGA_FOLLOWER,
+        name="Naga",
+        card_type="Follower",
+        keywords=("Naga", "Nonhuman"),
+        force=1,
+    )
+    if bearer_keywords is not None:
+        put_in_play(game, personality("shahai", force=2, chi=2, keywords=bearer_keywords))
+    spearmen = attachment(
+        "spearmen",
+        printed_id="spearmen_of_the_akasha",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=2,
+        keywords=("Naga", "Nonhuman", "Kharmic"),
+    )
+    game.table.cards_by_id[spearmen.id] = spearmen
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(spearmen)
+    return game
+
+
+def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
+    """The end-of-turn trim is the discard the card names, and it reaches a card in hand."""
+    game = _spearmen_game()
+
+    flow._apply_discard(game, P1, ("spearmen",))
+
+    assert game.pending.candidates == ("shahai",)
+
+
+def test_banishing_the_spearmen_equips_the_naga_follower():
+    game = _spearmen_game()
+
+    flow._apply_discard(game, P1, ("spearmen",))
+    flow.submit(game, DecisionResponse(("shahai",)))
+
+    follower = attachments_of(game, game.table.cards_by_id["shahai"])[0]
+    assert follower.name == "Naga"
+    banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)]
+    assert [card.id for card in banished.cards] == ["spearmen"]
+
+
+def test_declining_leaves_the_spearmen_lying_in_the_discard():
+    """Banishing is the price of the Follower, so a seat that takes neither keeps the card."""
+    game = _spearmen_game()
+
+    flow._apply_discard(game, P1, ("spearmen",))
+    flow.submit(game, DecisionResponse(()))
+
+    assert attachments_of(game, game.table.cards_by_id["shahai"]) == ()
+    discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    assert [card.id for card in discard.cards] == ["spearmen"]
+
+
+def test_only_a_naga_personality_is_offered():
+    game = _spearmen_game()
+    put_in_play(game, personality("bushi", force=3, chi=2, keywords=("Samurai",)))
+
+    flow._apply_discard(game, P1, ("spearmen",))
+
+    assert game.pending.candidates == ("shahai",)
+
+
+def test_nothing_is_offered_with_nobody_to_carry_the_follower():
+    game = _spearmen_game(bearer_keywords=None)
+
+    flow._apply_discard(game, P1, ("spearmen",))
+
+    assert game.pending is None
+
+
+def test_a_discard_from_play_raises_nothing():
+    """ "From your hand or deck" — a Follower that reached the discard off the board is not it."""
+    game = _spearmen_game()
+
+    fire(game, CardDiscarded("spearmen", Side.FATE, P1))
+
+    assert game.pending is None
 
 
 # --- Utaku Gorou, Stablemaster ---

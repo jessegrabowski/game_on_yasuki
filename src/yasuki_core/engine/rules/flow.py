@@ -902,7 +902,10 @@ def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -
     for card_id in card_ids:
         card = by_id[card_id]
         ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.FATE_DISCARD))
-        triggers.fire(game, CardDiscarded(card_id, card.side, Rulebook.MAXIMUM_HAND_SIZE))
+        triggers.fire(
+            game,
+            CardDiscarded(card_id, card.side, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True),
+        )
 
 
 def _other(seat: PlayerId) -> PlayerId:

@@ -8,9 +8,9 @@ from yasuki_core.engine.rules.abilities import (
     register_invest,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.effects import AdjustCounter, Choose, CreateToken, Effect
+from yasuki_core.engine.rules.effects import AdjustCounter, Banish, Choose, CreateToken, Effect
 from yasuki_core.engine.rules.equip import creation_targets
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
@@ -21,6 +21,41 @@ from yasuki_core.engine.rules.triggers import (
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
+
+
+# --- Spearmen of the Akasha ---
+
+NAGA_FOLLOWER = "naga"
+
+
+@on(CardDiscarded, "spearmen_of_the_akasha")
+def _spearmen_of_the_akasha_card_discarded(ctx: TriggerContext) -> list[Effect]:
+    """After the Spearmen reach the discard from hand or deck, offer to banish them for a 1F Naga
+    Follower on one of the seat's Naga Personalities.
+
+    Nothing is offered with nobody to carry it. The Follower is the whole of what banishing buys, so
+    a board with no Naga Personality leaves the card nothing it could do.
+    """
+    if ctx.event.card_id != ctx.card.id or not ctx.event.from_hand_or_deck:
+        return []
+    seat = ctx.card.owner
+    naga = ctx.game.table.creatable_tokens[NAGA_FOLLOWER]
+    bearers = tuple(
+        bearer.id for bearer in creation_targets(ctx.game, seat, naga, keyword=keywords.NAGA)
+    )
+    if not bearers:
+        return []
+    return [Choose(seat, bearers, 0, 1, "spearmen_of_the_akasha", ctx.card.id)]
+
+
+@choice_resolver("spearmen_of_the_akasha", prompt="Banish the Spearmen to Equip a Naga Follower")
+def _resolve_spearmen_of_the_akasha(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Banishing is what buys the Follower, so declining leaves the Spearmen lying in the discard."""
+    if not chosen:
+        return []
+    return [Banish(source_id), CreateToken(NAGA_FOLLOWER, seat, source_id, attach_to=chosen[0])]
 
 
 # --- Training Court ---
