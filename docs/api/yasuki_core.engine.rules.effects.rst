@@ -10,6 +10,7 @@ yasuki_core.engine.rules.effects
     AdjustCounter
     Ask
     AskAmount
+    AskDistribution
     AskOption
     AttachCard
     Banish

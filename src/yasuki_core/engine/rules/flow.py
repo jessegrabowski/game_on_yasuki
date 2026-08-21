@@ -44,6 +44,7 @@ from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
+    ChooseDistribution,
     ChooseEquipTarget,
     Confirm,
     ChooseInvestAmount,
@@ -490,6 +491,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_card_choice(game, request, response)
         case ChooseOption():
             _apply_card_choice(game, request, response)
+        case ChooseDistribution():
+            _apply_card_choice(game, request, response)
         # One case per union member, so the exhaustiveness guard can read them off the AST.
         case Confirm():
             _apply_card_choice(game, request, response)
@@ -871,7 +874,7 @@ def _apply_ability_target(
 
 def _apply_card_choice(
     game: GameState,
-    request: ChooseCards | ChooseAmount | ChooseOption | Confirm,
+    request: ChooseCards | ChooseAmount | ChooseOption | ChooseDistribution | Confirm,
     response: DecisionResponse,
 ) -> None:
     game.pending = None

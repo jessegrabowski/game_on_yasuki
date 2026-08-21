@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.attachments import unit_of
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
     ChooseCards,
+    ChooseDistribution,
     ChooseOption,
     Confirm,
     DecisionRequest,
@@ -979,6 +980,55 @@ class Choose(InterruptingEffect):
             candidates=self.candidates,
             minimum=self.minimum,
             maximum=self.maximum,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class AskDistribution(InterruptingEffect):
+    """Pause the cascade so ``seat`` divides ``count`` creations among ``candidates``, then hand the
+    division to a resolver.
+
+    For the "attach them to one or more of your Personalities" a card leaves to its controller: how
+    many go where is the whole of the choice, so the resolver reads the answer as a tally rather
+    than as a set — a candidate named twice takes two.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat dividing them.
+    candidates : tuple of str
+        The card ids the creations may be divided among.
+    count : int
+        How many there are to divide.
+    resolver : str
+        The registered choice resolver naming what the division does.
+    source_id : str
+        The card dividing them.
+    """
+
+    seat: PlayerId
+    candidates: tuple[str, ...]
+    count: int
+    resolver: str
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} divides {self.count} among {len(self.candidates)} for {self.resolver}"
+
+    def request(self, game: GameState) -> DecisionRequest:
+        """Raise ValueError if there is nothing to divide or nowhere to put it. The cascade pauses
+        on every interrupting effect, so a caller that asks either way would stop the game on a
+        question its seat can never finish answering."""
+        if not self.count or not self.candidates:
+            raise ValueError(
+                f"{self.source_id} cannot divide {self.count} among {len(self.candidates)} cards"
+            )
+        return ChooseDistribution(
+            seat=self.seat,
+            candidates=self.candidates,
+            count=self.count,
             resolver=self.resolver,
             source_id=self.source_id,
         )

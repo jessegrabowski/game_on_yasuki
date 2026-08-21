@@ -2,6 +2,7 @@ from typing import Protocol, runtime_checkable
 
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
+    ChooseDistribution,
     ChooseLegacyCard,
     ChoosePayment,
     DecisionRequest,
@@ -37,12 +38,16 @@ class AutoAgent:
     candidates that the request accepts (the whole list for an ordering). Generic by construction —
     it leans on the request's own ``accepts`` rather than knowing the decision type.
 
-    That generality has one hole: a prefix of candidates cannot express a bow-time production boost,
-    so a cost only reachable by boosting has no answer here. :class:`PayingAgent` covers it."""
+    Two answers a prefix of distinct candidates cannot express are handled rather than left to fail.
+    A division names one candidate several times, and is answered here by heaping the whole of it
+    onto the first; a bow-time production boost cannot be expressed at all, and :class:`PayingAgent`
+    covers it."""
 
     name = "auto"
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
+        if isinstance(request, ChooseDistribution):
+            return DecisionResponse(request.candidates[:1] * request.count)
         for size in range(len(request.candidates) + 1):
             response = DecisionResponse(request.candidates[:size])
             if request.accepts(response):

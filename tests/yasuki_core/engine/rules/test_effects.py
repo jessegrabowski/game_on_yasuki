@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.flow import submit
 from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    AskDistribution,
     Banish,
     BanishTopFate,
     CreateToken,
@@ -359,3 +360,19 @@ def test_an_unpayable_cost_refuses_to_resolve():
     # has to be loud: silently doing nothing would let an ability fire for free.
     with pytest.raises(RuntimeError, match="unpayable cost"):
         Unpayable("hero has left play").perform(two_seat_game())
+
+
+@pytest.mark.parametrize(
+    "candidates, count",
+    [
+        pytest.param((), 2, id="nowhere-to-put-them"),
+        pytest.param(("a",), 0, id="nothing-to-divide"),
+    ],
+)
+def test_a_division_that_cannot_be_answered_is_refused_rather_than_asked(candidates, count):
+    # The cascade pauses on every interrupting effect, so asking either way would stop the game on a
+    # question with no answer: no exception, no log, a client waiting forever.
+    ask = AskDistribution(PlayerId.P1, candidates, count, "split", "source")
+
+    with pytest.raises(ValueError, match="cannot divide"):
+        ask.request(two_seat_game())

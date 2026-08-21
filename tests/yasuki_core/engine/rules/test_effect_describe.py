@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,
     AskAmount,
+    AskDistribution,
     AskOption,
     AttachCard,
     Banish,
@@ -134,6 +135,10 @@ EFFECTS = [
     (
         AskOption(PlayerId.P1, ("P1 gains 1 Honor",), "Whose Honor moves?", "courts", "courts_1"),
         "P1 is asked: Whose Honor moves?",
+    ),
+    (
+        AskDistribution(PlayerId.P1, ("hero", "rival"), 3, "suiteiru_no_oni", "oni_1"),
+        "P1 divides 3 among 2 for suiteiru_no_oni",
     ),
 ]
 

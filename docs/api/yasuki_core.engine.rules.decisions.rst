@@ -11,6 +11,7 @@ yasuki_core.engine.rules.decisions
     ChooseAbilityTarget
     ChooseAmount
     ChooseCards
+    ChooseDistribution
     ChooseEquipTarget
     ChooseInvestAmount
     ChooseLegacyCard

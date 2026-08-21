@@ -469,6 +469,44 @@ class ChooseCards(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseDistribution(DecisionRequest):
+    """The seat must divide ``count`` identical creations among one or more of the candidates — the
+    "create N Followers and attach them to one or more of your Personalities" a card hands to its
+    controller rather than reading off the board.
+
+    The answer names a candidate once per creation it takes, so an id appearing twice takes two and
+    one left out takes none. That keeps the answer the tuple of ids every other decision carries,
+    and it says "one or more" without a second count: a card getting nothing is simply not named.
+
+    Attributes
+    ----------
+    count : int
+        How many creations there are to divide. All of them are placed — the seat chooses where
+        they go, not whether they arrive.
+    resolver : str
+        The registered choice resolver that turns the division into effects.
+    source_id : str
+        The card dividing them, handed to the resolver as its context.
+    """
+
+    count: int
+    resolver: str
+    source_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        wording = CHOICE_PROMPTS.get(self.resolver, "Divide them among one or more cards")
+        return f"{wording} ({self.count - len(chosen)} of {self.count} left)"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return len(response.choices) == self.count and set(response.choices) <= set(self.candidates)
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the whole action that raised it, cost included."""
+        return True
+
+
+@dataclass(frozen=True, slots=True)
 class PlaceLegacy(DecisionRequest):
     """The seat must choose which province to place the found Legacy card into, discarding the card
     already there. The candidates are the province cards eligible to be displaced.

@@ -33,6 +33,7 @@ deferred through `Then` instead.
    AdjustCounter
    Ask
    AskAmount
+   AskDistribution
    AskOption
    AttachCard
    Banish
@@ -101,6 +102,7 @@ Legality with respect to game state is checked separately.
    ChooseAbilityTarget
    ChooseAmount
    ChooseCards
+   ChooseDistribution
    ChooseEquipTarget
    ChooseInvestAmount
    ChooseOption
