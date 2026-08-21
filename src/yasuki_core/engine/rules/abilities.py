@@ -7,10 +7,12 @@ from yasuki_core.engine.table import ZoneRole
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.attachments import attached_to
+from yasuki_core.engine.rules.attachments import attached_to, attachments_of
 from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
+from yasuki_core.engine.rules.triggers import choice_resolver, once_per_turn, used_this_turn
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Ask,
     BanishTopFate,
     Bow,
     Destroy,
@@ -36,8 +38,55 @@ def no_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return []
 
 
+# Attachments offering the Personality they are on a once-per-turn waiver of the cost of bowing to
+# pay for one of his own abilities, keyed on the attachment's printed id.
+BOW_WAIVERS: set[str] = set()
+WAIVER_TAG = "bow_waiver"
+
+
+def bow_waiver(printed_id: str) -> None:
+    """Register ``printed_id`` as an attachment whose Personality may ignore a bow cost once a
+    turn."""
+    BOW_WAIVERS.add(printed_id)
+
+
+def _waiver_on(game: GameState, card: L5RCard) -> L5RCard | None:
+    """An attachment on ``card`` whose bow waiver is still unspent this turn, or None for none."""
+    for attached in attachments_of(game, card):
+        if attached.printed_id in BOW_WAIVERS and not used_this_turn(game, attached, WAIVER_TAG):
+            return attached
+    return None
+
+
 def bow_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    return [Bow(source.id)]
+    """Bow ``source`` to pay for its own ability, offering any waiver it carries first.
+
+    The waiver is only worth asking about while ``source`` still stands: what it buys is a
+    Personality who has not bowed, and one already bowed cannot pay a bow cost at all (CR, Costs).
+    """
+    waiver = _waiver_on(game, source)
+    if waiver is None or source.bowed:
+        return [Bow(source.id)]
+    return [
+        Ask(
+            source.owner,
+            f"Ignore the cost of bowing {source.name}?",
+            WAIVER_TAG,
+            subjects=(waiver.id,),
+            source_id=source.id,
+        )
+    ]
+
+
+@choice_resolver(WAIVER_TAG)
+def _resolve_bow_waiver(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Taking the waiver spends it and nothing bows; declining pays the cost as printed."""
+    if not chosen:
+        return [Bow(source_id)]
+    once_per_turn(game, game.table.cards_by_id[chosen[0]], WAIVER_TAG)
+    return []
 
 
 def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:

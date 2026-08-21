@@ -19,6 +19,7 @@ REGISTRY_MODULES = (abilities, attachments, economy, equip, triggers)
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "MAY_REMAIN_BOWED",
+    "BOW_WAIVERS",
     "_INVEST",
     "_PRODUCTION_BOOST",
     "GOLD_HANDLERS",
