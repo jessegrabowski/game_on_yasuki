@@ -2,6 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     InvestAbility,
+    invest_amounts,
     bow_cost,
     no_cost,
     one_wealth,
@@ -33,12 +34,15 @@ TWO_ANCESTORS = 6
 
 
 def _kitsu_hayako_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
-    """One 2F/2C/3PH Lion Ancestor for two Gold, and a second for six.
+    """One 2F/2C/3PH Lion Ancestor for the lower of his two prices, and a second for the higher.
+
+    Which price was paid, not how much: a discount moves both prices down together, so the second
+    Ancestor goes with whichever price is higher at the time.
 
     Both come from the one proxy: each creation mints its own card, so the pair are two Ancestors
     rather than one counted twice.
     """
-    ancestors = 2 if amount >= TWO_ANCESTORS else 1
+    ancestors = 2 if amount == max(invest_amounts(game, source)) else 1
     return [CreateToken(LION_ANCESTOR, source.owner, source.id) for _ in range(ancestors)]
 
 

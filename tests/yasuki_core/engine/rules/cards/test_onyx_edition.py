@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.attachments import attachments_of
@@ -7,7 +9,9 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
     NAGA_FOLLOWER,
 )
 from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.abilities import invest_amounts
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, DecisionResponse
+from yasuki_core.engine.rules.economy import INVEST_DISCOUNTS, invest_discount
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.log import replay
@@ -101,6 +105,42 @@ def test_six_gold_raises_two_of_them():
     ancestors = _ancestors(session)
     assert [card.name for card in ancestors] == ["Lion Ancestor", "Lion Ancestor"]
     assert len({card.id for card in ancestors}) == 2  # two Ancestors, not one counted twice
+
+
+@pytest.fixture
+def _discounted_hayako():
+    """Two Gold off his Invest, so his two prices become :g0: and :g4:."""
+
+    @invest_discount("kitsu_hayako")
+    def _two_less(card, me, opponents):
+        return 2
+
+    yield
+    INVEST_DISCOUNTS.pop("kitsu_hayako", None)
+
+
+def test_a_discount_moves_both_prices_and_takes_the_second_ancestor_with_it(_discounted_hayako):
+    """The second Ancestor goes with whichever price is higher, not with the printed six: paying the
+    top price buys what the top price buys, even after a discount."""
+    session = _hayako_game()
+    hayako = session.game.table.cards_by_id["hayako"]
+    assert invest_amounts(session.game, hayako) == (0, 4)
+
+    session.act(P1, Recruit("hayako", invest=True))
+    session.submit(P1, DecisionResponse(("4",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert [card.name for card in _ancestors(session)] == ["Lion Ancestor", "Lion Ancestor"]
+
+
+def test_a_discount_still_leaves_the_cheaper_price_buying_one(_discounted_hayako):
+    session = _hayako_game()
+
+    session.act(P1, Recruit("hayako", invest=True))
+    session.submit(P1, DecisionResponse(("0",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert [card.name for card in _ancestors(session)] == ["Lion Ancestor"]
 
 
 def test_the_dearer_price_is_not_offered_out_of_reach():
