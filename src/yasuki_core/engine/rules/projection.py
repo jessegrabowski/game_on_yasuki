@@ -51,6 +51,10 @@ class GameView:
         order. A seat built its deck and so knows what remains in it; where those cards sit in the
         shuffle is the part it must not learn, which is what the sort strips. Never populated for
         the other seat.
+    responding_to : str or None
+        The action an open Response Step answers, worded for a player, or None when no Step is open.
+        A seat holding no Response still sees it: the Step is the whole table's, and a seat is
+        passing on something it should be told the name of.
     stats : dict mapping str to dict
         Each modified card's effective stats by id, the inner dict keyed by :class:`Stat`. Read it
         through :meth:`stat` rather than directly — a card no modifier reaches is absent, and the
@@ -66,6 +70,7 @@ class GameView:
     gold: dict[PlayerId, int]
     favor_holder: PlayerId | None
     pending: DecisionRequest | None
+    responding_to: str | None
     legacy_pool: tuple[L5RCard, ...]
     dynasty_deck: tuple[L5RCard, ...]
     stats: dict[str, dict[Stat, int]]
@@ -131,6 +136,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
         gold=dict(game.gold),
         favor_holder=game.favor_holder,
         pending=pending,
+        responding_to=game.action_taken if game.round_stack else None,
         legacy_pool=tuple(sorted(legacy_candidates(game, viewer), key=lambda card: card.id)),
         dynasty_deck=tuple(
             sorted(game.table.decks[DeckKey(viewer, Side.DYNASTY)].cards, key=lambda card: card.id)

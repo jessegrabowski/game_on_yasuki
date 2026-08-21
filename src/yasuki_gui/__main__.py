@@ -139,7 +139,12 @@ def main() -> None:
                 buttons.append(("Cancel", cancel_decision, True))
             prompt_box.show(pending.prompt(chosen, boosted), buttons)
         else:
-            whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
+            if view.responding_to is not None:
+                # A Response Step: say what is being answered, or the Pass button asks the seat to
+                # decline something it was never told the name of.
+                whose = f"Responses to {view.responding_to}"
+            else:
+                whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
             # Pass is a button; a Recruit is invoked by clicking a holding on the board.
             buttons = [
                 (_action_button_label(action), lambda chosen=action: on_action(chosen), True)

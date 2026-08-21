@@ -153,6 +153,9 @@ class GameState:
         The cards that have already taken a Response in the Response Step now open. A card answers a
         given Step once; nothing else rations a Response, which costs no bow. Cleared as each Step
         opens. Ephemeral and rebuilt by replay. Default empty.
+    action_taken : str
+        What the action now resolving is, worded for a player — what a Response Step names as the
+        thing it is answering. Empty outside an action. Ephemeral and rebuilt by replay.
     action_events : list of GameEvent
         What the action now resolving has done so far, in the order it happened, cleared as the next
         action begins. A Response reads it to ask what it is responding to — "discarded a Fate card"
@@ -182,6 +185,7 @@ class GameState:
     banish_at_turn_end: list[str] = field(default_factory=list)
     round_stack: list[ActionRound] = field(default_factory=list)
     responded: set[str] = field(default_factory=set)
+    action_taken: str = ""
     action_events: list[GameEvent] = field(default_factory=list)
 
     @property

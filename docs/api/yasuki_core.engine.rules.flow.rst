@@ -16,6 +16,7 @@ yasuki_core.engine.rules.flow
     cancel
     close_response_window
     cycle
+    describe_action
     dynasty_discard
     equip
     forget_action

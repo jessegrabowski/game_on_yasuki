@@ -163,6 +163,7 @@ def forget_action(game: GameState) -> None:
     boundary is not that, and would let a Step open on an action two turns gone.
     """
     game.action_events.clear()
+    game.action_taken = ""
 
 
 def open_round(game: GameState) -> None:
@@ -197,11 +198,33 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
     advance(game)
 
 
+# How each action reads when a Response Step names the thing it answers. A Response is taken against
+# an action, so the wording is the action's rather than any one effect it had.
+_ACTION_WORDING: dict[type, str] = {
+    Recruit: "the Recruit of",
+    Equip: "the Equip of",
+    ActivateAbility: "the ability on",
+    DynastyDiscard: "the discard of",
+    KharmicDraw: "the Kharmic draw on",
+    KharmicRefill: "the Kharmic refill on",
+    Legacy: "Legacy",
+    Cycle: "Cycle",
+}
+
+
+def describe_action(game: GameState, action: Action) -> str:
+    """``action`` worded for a player — "the Recruit of Courts of Otosan Uchi"."""
+    wording = _ACTION_WORDING.get(type(action), type(action).__name__)
+    card = game.table.cards_by_id.get(getattr(action, "card_id", ""))
+    return f"{wording} {card.name}" if card is not None else wording
+
+
 def perform(game: GameState, action: Action) -> None:
     """Apply a chosen action, dispatching to its handler. The single action-apply dispatch,
     mirroring :func:`submit` for decisions. Raise ``ValueError`` for an action with no handler."""
     if not isinstance(action, Pass) and not game.round_stack:
         game.action_events.clear()
+        game.action_taken = describe_action(game, action)
     match action:
         case Pass():
             yield_priority(game, passed=True)

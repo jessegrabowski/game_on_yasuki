@@ -13,10 +13,11 @@ from yasuki_core.game_pieces.prints import (
     SenseiPrint,
     StrongholdPrint,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, Pass
+from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Pass
 from yasuki_core.engine.rules.state import GameState, Phase, RESPONSE_TIMINGS
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse, LeaveBowed
 from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.events import CardDiscarded, Straightened
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, register
@@ -534,6 +535,40 @@ def test_a_new_phase_leaves_no_response_step_open():
     assert game.round_stack == []
 
 
+def test_a_response_step_names_the_action_it_answers():
+    """The Step is passed with a button, so the seat has to be told what it is declining."""
+    game = _responder_game()
+    caravansary = game.table.cards_by_id["caravansary"]
+    game.action_taken = flow.describe_action(game, ActivateAbility(caravansary.id))
+
+    flow.open_response_window(game)
+
+    for seat in PlayerId:
+        assert project(game, seat).responding_to == "the ability on Caravansary"
+
+
+def test_no_response_step_leaves_the_view_naming_nothing():
+    game = _responder_game()
+
+    assert project(game, PlayerId.P1).responding_to is None
+
+
+def test_answering_the_turn_start_question_keeps_your_own_first_opportunity():
+    """Turn structure is not an action. Answering it must not hand the opportunity on, or a seat
+    holding a card that may remain bowed forfeits the opening action of each of its own turns."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("grounds", printed_id="culling_grounds", owner=PlayerId.P1))
+    game = GameState.start(state, PlayerId.P1)
+    game.table.cards_by_id["grounds"].bow()
+    flow._begin_turn(game)
+    assert isinstance(game.pending, LeaveBowed)
+
+    flow.submit(game, DecisionResponse(("grounds",)))
+
+    assert game.active is PlayerId.P1
+    assert game.round.priority is PlayerId.P1
+
+
 def test_a_turn_boundary_forgets_the_action_a_response_would_answer():
     """A Step opens on what the action just resolved did. An event still recorded a turn later is
     not that, and would open a Step on an action long gone."""
@@ -554,19 +589,3 @@ def test_opening_a_turn_records_none_of_its_own_events_as_an_action():
     flow._begin_turn(game)
 
     assert game.action_events == []
-
-
-def test_answering_the_turn_start_question_keeps_your_own_first_opportunity():
-    """Turn structure is not an action. Answering it must not hand the opportunity on, or a seat
-    holding a card that may remain bowed forfeits the opening action of each of its own turns."""
-    state = TableState.empty_two_seat()
-    put_in_play(state, holding("grounds", printed_id="culling_grounds", owner=PlayerId.P1))
-    game = GameState.start(state, PlayerId.P1)
-    game.table.cards_by_id["grounds"].bow()
-    flow._begin_turn(game)
-    assert isinstance(game.pending, LeaveBowed)
-
-    flow.submit(game, DecisionResponse(("grounds",)))
-
-    assert game.active is PlayerId.P1
-    assert game.round.priority is PlayerId.P1
