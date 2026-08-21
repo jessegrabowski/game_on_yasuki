@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.effects import (
     GainGold,
     GainHonor,
     MoveToHand,
+    GrantKeyword,
     GrantModifier,
     PayGold,
     IgnoreHonorRequirements,
@@ -62,6 +63,10 @@ EFFECTS = [
     (
         GrantModifier("millet", "farm_1", Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN),
         "millet grants farm_1 +2 GOLD_PRODUCTION (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantKeyword("fields", "shinjo_1", "Cavalry", Duration.UNTIL_END_OF_TURN),
+        "fields gives shinjo_1 Cavalry (UNTIL_END_OF_TURN)",
     ),
     (
         MoveToDeck("farm_1", DeckKey(PlayerId.P1, Side.DYNASTY), from_bottom=0),

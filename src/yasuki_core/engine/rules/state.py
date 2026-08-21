@@ -7,7 +7,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
-from yasuki_core.engine.rules.modifiers import Modifier
+from yasuki_core.engine.rules.modifiers import OngoingEffect
 from yasuki_core.engine.rules.work import WorkItem
 
 
@@ -121,8 +121,8 @@ class GameState:
         Deferred engine work — the later steps of an action sequence, run once the current decision
         clears. Ephemeral: replay rebuilds it by re-running the engine, so it is never serialized.
         Default empty.
-    modifiers : list of Modifier
-        The active recorded stat modifiers — created continuous effects (an ability's grant), kept in
+    modifiers : list of Modifier or KeywordGrant
+        The active recorded ongoing effects — created continuous stat and keyword grants, kept in
         creation order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike
         it may be non-empty at rest within a turn, so its order is load-bearing. Default empty.
     tokens_created : int
@@ -154,7 +154,7 @@ class GameState:
     rng: Generator = field(default_factory=lambda: default_rng(0), compare=False, repr=False)
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
-    modifiers: list[Modifier] = field(default_factory=list)
+    modifiers: list[OngoingEffect] = field(default_factory=list)
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
     banish_at_turn_end: list[str] = field(default_factory=list)

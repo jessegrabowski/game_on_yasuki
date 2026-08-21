@@ -46,6 +46,7 @@ deferred through `Then` instead.
    Effect
    GainGold
    GainHonor
+   GrantKeyword
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
@@ -145,6 +146,7 @@ Production without a modifier being recorded.
 
    Stat
    Duration
+   KeywordGrant
    Modifier
 ```
 

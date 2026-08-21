@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Destroy,
     Effect,
+    GrantKeyword,
     IgnoreHonorRequirements,
     PayGold,
     RecruitCard,
@@ -30,7 +31,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on, province_holdings
 from yasuki_core.game_pieces import keywords
@@ -267,3 +268,54 @@ def _sapphire_mine_entered_play(ctx: TriggerContext) -> list[Effect]:
     if ctx.card.counters.get(SINCERITY.key, 0) < 2:
         return []
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+# --- Shinjo Fields ---
+
+CAVALRY_FOLLOWER = "cavalry"
+
+
+def _shinjo_fields_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [personality.id for personality in owned_personalities(game, source.owner)]
+
+
+def _shinjo_fields_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Cavalry for the rest of the turn, then the offer to spend the Holding on a rider to match.
+
+    The keyword is given whatever the seat says next: only the Follower is optional.
+    """
+    return [
+        GrantKeyword(source.id, target.id, keywords.CAVALRY, Duration.UNTIL_END_OF_TURN),
+        Ask(
+            source.owner,
+            f"Destroy {source.name} to Equip a Cavalry Follower to {target.name}?",
+            "shinjo_fields",
+            subjects=(target.id,),
+            source_id=source.id,
+        ),
+    ]
+
+
+@choice_resolver("shinjo_fields")
+def _resolve_shinjo_fields(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The Holding is what the Follower costs, so it goes before the rider arrives."""
+    if not chosen:
+        return []
+    return [
+        Destroy(source_id, seat),
+        CreateToken(CAVALRY_FOLLOWER, seat, source_id, attach_to=chosen[0]),
+    ]
+
+
+register_ability(
+    "shinjo_fields",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Bow to give your Personality Cavalry, and may destroy this for a Follower",
+        cost=bow_cost,
+        targets=_shinjo_fields_targets,
+        effects=_shinjo_fields_effects,
+    ),
+)

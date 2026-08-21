@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.events import (
     Revealed,
     Straightened,
 )
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
@@ -343,6 +343,30 @@ class GrantModifier(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.modifiers.append(
             Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantKeyword(Effect):
+    """Record a keyword grant: the ``source`` card gives ``target`` ``keyword`` for ``duration``.
+
+    The keyword counterpart of :class:`GrantModifier`, for the "give your target Personality
+    Cavalry" a card prints. A keyword a card carries by its own text needs no grant — that is a
+    keyword handler, read off the board.
+    """
+
+    source_id: str
+    target_id: str
+    keyword: str
+    duration: Duration
+
+    def describe(self) -> str:
+        return f"{self.source_id} gives {self.target_id} {self.keyword} ({self.duration.name})"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifiers.append(
+            KeywordGrant(self.source_id, self.target_id, self.keyword, self.duration)
         )
         return []
 

@@ -25,6 +25,7 @@ yasuki_core.engine.rules.economy
     effective_stat
     effective_weapon_limit
     gold_handler
+    granted_keywords
     invest_discount
     is_clan
     keyword_grant

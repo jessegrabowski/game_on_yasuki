@@ -8,7 +8,9 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.cards.rise_of_jigoku import MISHIMES_ONI
+from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.cards.rise_of_jigoku import CAVALRY_FOLLOWER, MISHIMES_ONI
+from yasuki_core.engine.rules.economy import effective_keywords as keywords_of
 from yasuki_core.engine.rules.economy import (
     effective_chi,
     effective_force,
@@ -529,5 +531,99 @@ def test_mishime_does_not_target_a_bowed_personality():
 def test_mishime_replays_to_the_same_board():
     session = _mishime_game(chi=4)
     _summon_oni(session, destroy=False)
+
+    assert replay(session.log).table == session.game.table
+
+
+# --- Shinjo Fields ---
+
+
+def _fields_game():
+    """The Fields in play beside a Personality with no Cavalry of his own."""
+    state = TableState.empty_two_seat()
+    token_template(
+        state,
+        CAVALRY_FOLLOWER,
+        name="Cavalry",
+        card_type="Follower",
+        keywords=("Cavalry",),
+        force=1,
+    )
+    put_in_play(state, stronghold(P1, gold_production=4))
+    put_in_play(state, holding("fields", printed_id="shinjo_fields", name="the Fields"))
+    put_in_play(state, personality("rider", force=2, chi=2, keywords=("Samurai",)))
+    return EngineSession.start(state, P1)
+
+
+def _give_cavalry(session, *, destroy: bool):
+    """Bow the Fields, name the Personality, then answer the offer to spend the Holding."""
+    session.act(P1, ActivateAbility("fields"))
+    session.submit(P1, DecisionResponse(("rider",)))
+    session.submit(P1, DecisionResponse(("rider",) if destroy else ()))
+
+
+def test_the_fields_give_your_personality_cavalry():
+    session = _fields_game()
+
+    _give_cavalry(session, destroy=False)
+
+    rider = session.game.table.cards_by_id["rider"]
+    assert "Cavalry" in keywords_of(session.game, rider)
+
+
+def test_the_granted_cavalry_lapses_when_the_turn_ends():
+    """An ongoing effect naming no duration lasts to the end of the turn and no further (CR,
+    Duration of Effects)."""
+    session = _fields_game()
+    _give_cavalry(session, destroy=False)
+
+    end_turn(session)
+
+    rider = session.game.table.cards_by_id["rider"]
+    assert "Cavalry" not in keywords_of(session.game, rider)
+
+
+def test_destroying_the_fields_equips_a_cavalry_follower():
+    session = _fields_game()
+
+    _give_cavalry(session, destroy=True)
+
+    game = session.game
+    rider = game.table.cards_by_id["rider"]
+    assert attachments_of(game, rider)[0].name == "Cavalry"
+    assert game.table.cards_by_id["fields"] not in game.table.battlefield.cards
+
+
+def test_the_cavalry_outlives_the_fields_that_gave_it():
+    """The grant is dated to the turn, not to the Holding, so spending the Holding does not take
+    the keyword back with it."""
+    session = _fields_game()
+
+    _give_cavalry(session, destroy=True)
+
+    rider = session.game.table.cards_by_id["rider"]
+    assert "Cavalry" in keywords_of(session.game, rider)
+
+
+def test_declining_keeps_the_fields_and_grants_no_follower():
+    session = _fields_game()
+
+    _give_cavalry(session, destroy=False)
+
+    game = session.game
+    assert attachments_of(game, game.table.cards_by_id["rider"]) == ()
+    assert game.table.cards_by_id["fields"] in game.table.battlefield.cards
+
+
+def test_the_fields_are_withheld_while_bowed():
+    session = _fields_game()
+    session.game.table.cards_by_id["fields"].bow()
+
+    assert ActivateAbility("fields") not in session.legal_actions(P1)
+
+
+def test_shinjo_fields_replays_to_the_same_board():
+    session = _fields_game()
+    _give_cavalry(session, destroy=True)
 
     assert replay(session.log).table == session.game.table

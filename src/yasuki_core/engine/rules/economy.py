@@ -4,7 +4,13 @@ from dataclasses import dataclass
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import attachments_of, granted_stat
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import (
+    Duration,
+    KeywordGrant,
+    Modifier,
+    OngoingEffect,
+    Stat,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -133,13 +139,27 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
             if delta:
                 yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
     for modifier in game.modifiers:
-        if modifier.target_id != card.id or modifier.stat is not stat:
+        if not isinstance(modifier, Modifier) or modifier.target_id != card.id:
             continue
-        if modifier.duration is Duration.WHILE_SOURCE_IN_PLAY and not _on_battlefield(
-            game, modifier.source_id
-        ):
+        if modifier.stat is not stat or not _grant_applies(game, modifier):
             continue
         yield modifier
+
+
+def _grant_applies(game: GameState, recorded: OngoingEffect) -> bool:
+    """Whether a recorded ongoing effect is in force — a ``WHILE_SOURCE_IN_PLAY`` one only while
+    the card it came from is still on the battlefield."""
+    return recorded.duration is not Duration.WHILE_SOURCE_IN_PLAY or _on_battlefield(
+        game, recorded.source_id
+    )
+
+
+def granted_keywords(game: GameState, card: L5RCard) -> Iterator[str]:
+    """Every keyword another card's recorded grant gives ``card`` right now."""
+    for grant in game.modifiers:
+        if isinstance(grant, KeywordGrant) and grant.target_id == card.id:
+            if _grant_applies(game, grant):
+                yield grant.keyword
 
 
 def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
@@ -320,12 +340,14 @@ def keyword_grant(printed_id: str) -> Callable[[KeywordHandler], KeywordHandler]
 
 
 def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
-    """``card``'s printed keywords plus any its own ability grants under current conditions."""
+    """``card``'s printed keywords, plus any its own ability grants under current conditions, plus
+    any another card's ongoing effect has given it."""
+    carried = frozenset(card.keywords).union(granted_keywords(game, card))
     handler = KEYWORD_GRANTS.get(card.printed_id)
     if handler is None:
-        return frozenset(card.keywords)
+        return carried
     granted = handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
-    return frozenset(card.keywords).union(granted)
+    return carried.union(granted)
 
 
 def is_clan(me: PlayerState, clan: str) -> bool:
