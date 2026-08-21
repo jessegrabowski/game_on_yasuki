@@ -3,7 +3,9 @@ import re
 
 from tests.yasuki_core.engine.rules.card_modules import card_modules
 
-GUIDE = pathlib.Path("docs/contributing/adding_a_card.md")
+# Anchored on this file rather than the working directory, so the suite reads the guide wherever
+# pytest is run from.
+GUIDE = pathlib.Path(__file__).parents[4] / "docs" / "contributing" / "adding_a_card.md"
 PYTHON_FENCE = re.compile(r"^```python\n(.*?)^```", re.M | re.S)
 # Lines a sample may carry that are not meant to be found in the tree: blank lines, whole-line
 # comments, and any line carrying a "..." elision.
