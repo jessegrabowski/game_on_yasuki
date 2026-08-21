@@ -241,15 +241,15 @@ def recruit(
             game, card, seat, invest_amount=None, renew=renew, proclaim=proclaim
         )
         return
-    least, most = abilities.invest_range(game, card)
-    if least == most:
-        game.pending = announce_recruit(game, card, seat, invest_amount=least, renew=renew)
-        return
+    amounts = abilities.invest_amounts(game, card)
     affordable = reachable_gold(game, seat, card) - recruit_cost(game, card)
-    top = min(most, affordable)
+    payable = tuple(amount for amount in amounts if amount <= affordable)
+    if len(payable) == 1:
+        game.pending = announce_recruit(game, card, seat, invest_amount=payable[0], renew=renew)
+        return
     game.pending = ChooseInvestAmount(
         seat=seat,
-        candidates=tuple(str(amount) for amount in range(least, top + 1)),
+        candidates=tuple(str(amount) for amount in payable),
         source_card_id=card_id,
     )
 

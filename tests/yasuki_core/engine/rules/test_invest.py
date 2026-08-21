@@ -30,7 +30,7 @@ def _register_free_invest(printed_id: str):
     """Register a zero-cost Invest for ``printed_id``, returning the decorated effect."""
 
     def register(effect):
-        register_invest(printed_id, InvestAbility(minimum=0, maximum=0, effect=effect))
+        register_invest(printed_id, InvestAbility(amounts=(0,), effect=effect))
         return effect
 
     return register

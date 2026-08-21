@@ -100,7 +100,7 @@ class GameRunner:
                 if base is None:
                     base = legality.recruit_cost(game, card)
                 if action.invest:
-                    items.append((self._invest_label(card, base), action))
+                    items.append((self._invest_label(game, card, base), action))
                 elif action.proclaim:
                     honor = effective_personal_honor(game, card)
                     label = f"Recruit & Proclaim: Pay {base} gold, gain {honor} honor"
@@ -136,19 +136,24 @@ class GameRunner:
                 card = game.table.cards_by_id[card_id]
                 cost = effective_gold_cost(game, card)
                 if action.invest:
-                    items.append((self._invest_label(card, cost, "Equip & Invest"), action))
+                    items.append((self._invest_label(game, card, cost, "Equip & Invest"), action))
                 else:
                     items.append((f"Equip: Pay {cost} gold", action))
         return items
 
     @staticmethod
-    def _invest_label(card: L5RCard, base: int, verb: str = "Invest") -> str:
-        """The menu wording for taking ``card``'s Invest on top of ``base``, as a single price or as
-        the range the payer chooses within."""
-        invest = abilities.invest_for(card)
-        if invest.minimum == invest.maximum:
-            return f"{verb}: Pay {base + invest.minimum} gold"
-        return f"{verb}: Pay {base + invest.minimum}–{base + invest.maximum} gold"
+    def _invest_label(game: GameState, card: L5RCard, base: int, verb: str = "Invest") -> str:
+        """The menu wording for taking ``card``'s Invest on top of ``base``: one price, or the
+        prices the payer chooses among. Read off the board, so a card discounting its own Invest is
+        offered at what it will actually charge."""
+        prices = [base + amount for amount in abilities.invest_amounts(game, card)]
+        if len(prices) == 1:
+            return f"{verb}: Pay {prices[0]} gold"
+        # A span reads as one, the way the card prints it; separate prices are listed as separate.
+        if len(prices) == prices[-1] - prices[0] + 1:
+            return f"{verb}: Pay {prices[0]}\u2013{prices[-1]} gold"
+        listed = ", ".join(str(price) for price in prices[:-1])
+        return f"{verb}: Pay {listed} or {prices[-1]} gold"
 
     def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The activated-ability action offered for an in-play card the human controls, labelled with

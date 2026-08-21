@@ -1,27 +1,131 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility
+from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.cards.onyx_edition import CAVALRY_FOLLOWER, NAGA_FOLLOWER
+from yasuki_core.engine.rules.cards.onyx_edition import (
+    CAVALRY_FOLLOWER,
+    LION_ANCESTOR,
+    NAGA_FOLLOWER,
+)
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.decisions import ChooseInvestAmount, DecisionResponse
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.units import unit_force
 from yasuki_core.engine.session import EngineSession
 
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 
 from tests.yasuki_core.engine.builders import (
     attachment,
+    end_phase,
+    holding,
     personality,
+    register,
+    stronghold,
     put_in_play,
     token_template,
     two_seat_game,
 )
 
 P1 = PlayerId.P1
+
+
+# --- Kitsu Hayako ---
+
+
+def _hayako_game(*, gold_production=12):
+    """Hayako face-up in a Province, under a Stronghold making ``gold_production``."""
+    state = TableState.empty_two_seat()
+    token_template(
+        state,
+        LION_ANCESTOR,
+        name="Lion Ancestor",
+        card_type="Personality",
+        keywords=("Ancestor", "Lion Clan", "Samurai", "Spirit"),
+        force=2,
+        chi=2,
+    )
+    put_in_play(state, stronghold(P1, gold_production=gold_production))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    hayako = register(
+        state, personality("hayako", printed_id="kitsu_hayako", force=2, chi=3, gold_cost=4)
+    )
+    hayako.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(hayako)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+    return session
+
+
+def _ancestors(session):
+    return [card for card in session.game.table.battlefield.cards if card.is_token]
+
+
+def test_the_offer_names_the_two_prices_and_nothing_between():
+    """ "Invest :g2: or :g6:" is a pair of prices, not a span: three, four and five buy nothing."""
+    session = _hayako_game()
+
+    session.act(P1, Recruit("hayako", invest=True))
+
+    assert isinstance(session.game.pending, ChooseInvestAmount)
+    assert session.game.pending.candidates == ("2", "6")
+
+
+def test_two_gold_raises_one_ancestor():
+    session = _hayako_game()
+
+    session.act(P1, Recruit("hayako", invest=True))
+    session.submit(P1, DecisionResponse(("2",)))
+    payment = session.game.pending
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert payment.amount == 6  # his four Gold Cost and the two Invested
+    assert [card.name for card in _ancestors(session)] == ["Lion Ancestor"]
+
+
+def test_six_gold_raises_two_of_them():
+    session = _hayako_game()
+
+    session.act(P1, Recruit("hayako", invest=True))
+    session.submit(P1, DecisionResponse(("6",)))
+    payment = session.game.pending
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert payment.amount == 10  # his four Gold Cost and the six Invested
+    ancestors = _ancestors(session)
+    assert [card.name for card in ancestors] == ["Lion Ancestor", "Lion Ancestor"]
+    assert len({card.id for card in ancestors}) == 2  # two Ancestors, not one counted twice
+
+
+def test_the_dearer_price_is_not_offered_out_of_reach():
+    """With only the cheaper price payable there is nothing to choose, so nothing is asked."""
+    session = _hayako_game(gold_production=6)  # four for Hayako leaves two, not six
+
+    session.act(P1, Recruit("hayako", invest=True))
+
+    assert session.game.pending.amount == 6  # straight to paying his cost plus the two
+
+
+def test_hayako_is_not_offered_an_invest_he_cannot_pay_for():
+    session = _hayako_game(gold_production=5)  # four for Hayako leaves one
+
+    assert Recruit("hayako", invest=True) not in session.legal_actions(P1)
+    assert Recruit("hayako") in session.legal_actions(P1)
+
+
+def test_kitsu_hayako_replays_to_the_same_board():
+    session = _hayako_game()
+    session.act(P1, Recruit("hayako", invest=True))
+    session.submit(P1, DecisionResponse(("6",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert replay(session.log).table == session.game.table
 
 
 # --- Spearmen of the Akasha ---

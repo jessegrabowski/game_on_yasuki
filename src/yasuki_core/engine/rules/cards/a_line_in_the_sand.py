@@ -33,4 +33,4 @@ def _stockpiled_weapon_invest(game: GameState, source: L5RCard, amount: int) -> 
     return [Choose(seat, copies, 1, 1, "stockpiled_weapon", source.id)]
 
 
-register_invest("stockpiled_weapon", InvestAbility(1, 1, _stockpiled_weapon_invest))
+register_invest("stockpiled_weapon", InvestAbility((1,), _stockpiled_weapon_invest))

@@ -23,6 +23,29 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 
 
+# --- Kitsu Hayako ---
+
+LION_ANCESTOR = "lion_ancestor"
+ONE_ANCESTOR = 2
+TWO_ANCESTORS = 6
+
+
+def _kitsu_hayako_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
+    """One 2F/2C/3PH Lion Ancestor for two Gold, and a second for six.
+
+    Both come from the one proxy: each creation mints its own card, so the pair are two Ancestors
+    rather than one counted twice.
+    """
+    ancestors = 2 if amount >= TWO_ANCESTORS else 1
+    return [CreateToken(LION_ANCESTOR, source.owner, source.id) for _ in range(ancestors)]
+
+
+register_invest(
+    "kitsu_hayako",
+    InvestAbility(amounts=(ONE_ANCESTOR, TWO_ANCESTORS), effect=_kitsu_hayako_invest),
+)
+
+
 # --- Spearmen of the Akasha ---
 
 NAGA_FOLLOWER = "naga"
@@ -80,7 +103,7 @@ def _resolve_sincerity_seed(
     return [AdjustCounter(card_id, SINCERITY, 1) for card_id in chosen]
 
 
-register_invest("training_court", InvestAbility(minimum=1, maximum=1, effect=one_wealth))
+register_invest("training_court", InvestAbility(amounts=(1,), effect=one_wealth))
 
 
 # --- Utaku Gorou, Stablemaster ---

@@ -13,5 +13,5 @@ def _questionable_market_invest(game: GameState, source: L5RCard, amount: int) -
 
 
 register_invest(
-    "questionable_market", InvestAbility(minimum=2, maximum=2, effect=_questionable_market_invest)
+    "questionable_market", InvestAbility(amounts=(2,), effect=_questionable_market_invest)
 )

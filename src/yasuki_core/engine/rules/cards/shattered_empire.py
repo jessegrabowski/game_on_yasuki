@@ -22,7 +22,7 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
     return [CreateToken(SANJIROS_ARMOR, source.owner, source.id, attach_to=source.id)]
 
 
-register_invest("hida_sanjiro", InvestAbility(minimum=2, maximum=2, effect=_hida_sanjiro_invest))
+register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
 
 
 # --- Weapon Artist ---

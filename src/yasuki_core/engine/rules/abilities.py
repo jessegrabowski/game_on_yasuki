@@ -127,18 +127,16 @@ class InvestAbility:
 
     Attributes
     ----------
-    minimum : int
-        The least gold the Invest may cost; equals ``maximum`` for a fixed Invest.
-    maximum : int
-        The most gold the Invest may cost; above ``minimum`` for a variable Invest whose amount the
-        recruiting seat chooses.
+    amounts : tuple of int
+        Every sum the Invest may be paid for, least first. A single entry is a fixed Invest; several
+        are the choice the recruiting seat makes, which a card prints either as a span ("Invest
+        :g1: to :g3:") or as separate prices that buy different things ("Invest :g2: or :g6:").
     effect : callable
         Maps ``(game, source_card, amount_paid)`` to the effects the Invest emits once the card
         enters play. It takes the board because an Invest may search a zone for what it fetches.
     """
 
-    minimum: int
-    maximum: int
+    amounts: tuple[int, ...]
     effect: Callable[[GameState, L5RCard, int], list[Effect]]
 
 
@@ -221,28 +219,32 @@ def register_production_boost(printed_id: str, boost: ProductionBoost) -> None:
     _PRODUCTION_BOOST[printed_id] = boost
 
 
-def invest_range(game: GameState, card: L5RCard) -> tuple[int, int] | None:
-    """The Invest ``card`` charges now — its printed range less whatever its own text discounts,
-    floored at zero — or None when it prints no Invest.
+def invest_amounts(game: GameState, card: L5RCard) -> tuple[int, ...] | None:
+    """The sums ``card``'s Invest may be paid for now — its printed amounts less whatever its own
+    text discounts, floored at zero — or None when it prints no Invest.
+
+    Two printed amounts a discount drives to the same price collapse to one, since paying it once
+    can only buy one of the two things.
 
     Returns
     -------
-    tuple of (int, int) or None
-        The least and the most the payer may spend, equal for a fixed Invest, or None when the
-        card prints no Invest.
+    tuple of int or None
+        The payable sums, least first, or None when the card prints no Invest.
     """
     ability = _INVEST.get(card.printed_id)
     if ability is None:
         return None
     discount = effective_invest_discount(game, card)
-    return max(0, ability.minimum - discount), max(0, ability.maximum - discount)
+    if not discount:
+        return ability.amounts
+    return tuple(dict.fromkeys(max(0, amount - discount) for amount in ability.amounts))
 
 
 def fixed_invest_amount(game: GameState, card: L5RCard) -> int | None:
     """The Invest cost ``card`` charges when that cost is fixed, or None when it prints no Invest or
     lets the payer size one. A caller that cannot raise a "how much?" decision treats both alike."""
-    amounts = invest_range(game, card)
-    if amounts is None or amounts[0] != amounts[1]:
+    amounts = invest_amounts(game, card)
+    if amounts is None or len(amounts) != 1:
         return None
     return amounts[0]
 

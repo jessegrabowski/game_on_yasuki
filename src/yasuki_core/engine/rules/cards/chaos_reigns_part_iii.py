@@ -94,9 +94,7 @@ def _moto_ikarichi_bloodseeker_invest(
 
 register_invest(
     "moto_ikarichi_bloodseeker",
-    InvestAbility(
-        minimum=IKARICHI_INVEST, maximum=IKARICHI_INVEST, effect=_moto_ikarichi_bloodseeker_invest
-    ),
+    InvestAbility(amounts=(IKARICHI_INVEST,), effect=_moto_ikarichi_bloodseeker_invest),
 )
 
 

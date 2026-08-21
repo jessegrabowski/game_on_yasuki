@@ -206,7 +206,7 @@ def _courts_of_otosan_uchi_invest(game: GameState, source: L5RCard, amount: int)
 
 register_invest(
     "courts_of_otosan_uchi",
-    InvestAbility(minimum=2, maximum=2, effect=_courts_of_otosan_uchi_invest),
+    InvestAbility(amounts=(2,), effect=_courts_of_otosan_uchi_invest),
 )
 
 
@@ -292,9 +292,7 @@ def _rebuilt_harbor_invest(game: GameState, source: L5RCard, amount: int) -> lis
     return [AdjustCounter(source.id, WEALTH, amount)]
 
 
-register_invest(
-    "rebuilt_harbor", InvestAbility(minimum=1, maximum=3, effect=_rebuilt_harbor_invest)
-)
+register_invest("rebuilt_harbor", InvestAbility(amounts=(1, 2, 3), effect=_rebuilt_harbor_invest))
 
 
 # --- Shinjo Saeki, Clan Champion (Experienced 2) ---

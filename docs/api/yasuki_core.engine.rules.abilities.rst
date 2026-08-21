@@ -26,8 +26,8 @@ yasuki_core.engine.rules.abilities
     can_pay
     destroy_cost
     fixed_invest_amount
+    invest_amounts
     invest_for
-    invest_range
     itself
     left_bowed
     may_remain_bowed
