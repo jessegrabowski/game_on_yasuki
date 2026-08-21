@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.work import (
     WorkItem,
 )
 from yasuki_core.engine.rules.decisions import (
+    ChooseAmount,
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
@@ -427,6 +428,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_equip_target(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
+        case ChooseAmount():
+            _apply_card_choice(game, request, response)
         # One case per union member, so the exhaustiveness guard can read them off the AST.
         case Confirm():
             _apply_card_choice(game, request, response)
@@ -805,7 +808,7 @@ def _apply_ability_target(
 
 
 def _apply_card_choice(
-    game: GameState, request: ChooseCards | Confirm, response: DecisionResponse
+    game: GameState, request: ChooseCards | ChooseAmount | Confirm, response: DecisionResponse
 ) -> None:
     game.pending = None
     item = game.stack.pop()  # the ResumeCascade this choice paused, always stacked atop it

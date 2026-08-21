@@ -4,7 +4,7 @@ from dataclasses import dataclass, replace
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
-from yasuki_core.engine.rules.decisions import ChooseCards, Confirm, DecisionRequest
+from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseCards, Confirm, DecisionRequest
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
@@ -500,6 +500,53 @@ class PayGold(InterruptingEffect):
         from yasuki_core.engine.rules.payments import payment_request
 
         return payment_request(game, self.seat, self.amount, self.label)
+
+
+@dataclass(frozen=True, slots=True)
+class AskAmount(InterruptingEffect):
+    """Pause for the seat to say how much Gold it spends on a variable cost, then hand the amount to
+    a resolver.
+
+    The ``:X:`` in a cost block: the amount is settled during the Pay Costs step and everything the
+    action does is shaped by it, so the resolver both charges it and reads it (CR, Action Sequence;
+    Good Faith).
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat choosing and paying.
+    amounts : tuple of int
+        The amounts on offer, which the caller has already narrowed to what the seat can raise and
+        what would leave the action something legal to do.
+    question : str
+        What the amount is for, as the seat reads it.
+    resolver : str
+        The registered choice resolver the chosen amount is handed to.
+    source_id : str
+        The card charging the cost.
+    """
+
+    seat: PlayerId
+    amounts: tuple[int, ...]
+    question: str
+    resolver: str
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} is asked: {self.question}"
+
+    def is_payable(self, game: GameState) -> bool:
+        """Nothing to choose from is nothing to pay."""
+        return bool(self.amounts)
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return ChooseAmount(
+            seat=self.seat,
+            candidates=tuple(str(amount) for amount in self.amounts),
+            question=self.question,
+            resolver=self.resolver,
+            source_id=self.source_id,
+        )
 
 
 @dataclass(frozen=True, slots=True)

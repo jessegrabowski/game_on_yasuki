@@ -32,6 +32,7 @@ deferred through `Then` instead.
 
    AdjustCounter
    Ask
+   AskAmount
    AttachCard
    Banish
    BanishTopFate
@@ -96,6 +97,7 @@ Legality with respect to game state is checked separately.
 
    BanishForLegacy
    ChooseAbilityTarget
+   ChooseAmount
    ChooseCards
    ChooseEquipTarget
    ChooseInvestAmount

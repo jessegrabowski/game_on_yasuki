@@ -227,6 +227,41 @@ class ChooseInvestAmount(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseAmount(DecisionRequest):
+    """The seat must say how much Gold to spend on an action whose cost block prints a variable
+    amount — the ``:X:`` whose effects scale with what is paid (CR, Costs).
+
+    The candidates are the amounts the seat could pay, rendered as strings; the answer feeds the
+    named resolver, which prices the payment and shapes what the amount bought. A client shows a
+    number, not a board selection.
+
+    Attributes
+    ----------
+    question : str
+        What the amount is for, as the seat reads it.
+    resolver : str
+        The registered choice resolver the chosen amount is handed to.
+    source_id : str
+        The card charging the cost, handed to the resolver as its context.
+    """
+
+    question: str
+    resolver: str
+    source_id: str
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return self.question
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the action; nothing is paid until the amount is settled."""
+        return True
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseAbilityTarget(DecisionRequest):
     """The seat must choose the target of an activated ability it has announced. The candidates are
     the cards the ability may legally target — all in play, so a client renders them as board

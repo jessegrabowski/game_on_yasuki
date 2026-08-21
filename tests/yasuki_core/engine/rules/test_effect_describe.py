@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,
+    AskAmount,
     AttachCard,
     Banish,
     BanishTopFate,
@@ -119,6 +120,10 @@ EFFECTS = [
     (
         Ask(PlayerId.P1, "Destroy Rice Farm to straighten Kobune?", "rice_farm", ("rice_1",)),
         "P1 is asked: Destroy Rice Farm to straighten Kobune?",
+    ),
+    (
+        AskAmount(PlayerId.P1, (2, 4), "How much blood?", "bound_in_blood", "spell_1"),
+        "P1 is asked: How much blood?",
     ),
 ]
 
