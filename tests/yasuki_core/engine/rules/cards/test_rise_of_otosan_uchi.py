@@ -4,13 +4,14 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, Pass, Recruit
 from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     CAVALRY_FOLLOWER,
+    HORROR,
     COURTIER,
     EXPENDABLE_SERVANT,
     LION_ANCESTOR,
 )
-from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse
+from yasuki_core.engine.rules.decisions import ChooseAmount, Confirm, DecisionResponse
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.economy import effective_chi, effective_force
+from yasuki_core.engine.rules.economy import effective_chi, effective_force, effective_gold_cost
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.effects import Straighten
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
@@ -25,6 +26,8 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import (
+    attachment,
+    attached,
     stronghold,
     end_phase,
     end_turn,
@@ -178,6 +181,128 @@ def test_it_cannot_be_backed_out_of_once_the_opponent_has_been_given_something()
     assert _honor(session, P2) == 1  # still theirs
     assert _hand(session, P2) == [drawn]
     assert isinstance(session.game.pending, Confirm)  # and the question is still owed
+
+
+# --- Bound in Blood ---
+
+
+def _blood_game(*, bodies=(("acolyte", 3, 2), ("novice", 2, 1)), gold_production=12):
+    """The Spell on a Shugenja, with ``bodies`` of (id, gold cost, chi) to bind besides him."""
+    game = two_seat_game()
+    token_template(
+        game,
+        HORROR,
+        name="Horror",
+        card_type="Personality",
+        keywords=("Horror", "Nonhuman", "Shadowlands"),
+    )
+    put_in_play(game, stronghold(P1, gold_production=gold_production))
+    put_in_play(game, personality("shugenja", force=1, chi=4, keywords=("Shugenja",)))
+    for card_id, gold_cost, chi in bodies:
+        put_in_play(game, personality(card_id, force=1, chi=chi, gold_cost=gold_cost))
+    attached(game, attachment("spell", printed_id="bound_in_blood"), "shugenja")
+    return EngineSession.start(game.table, P1)
+
+
+def _horror_of(session):
+    return next(card for card in session.game.table.battlefield.cards if card.is_token)
+
+
+def test_bound_in_blood_offers_two_gold_for_every_body_it_could_take():
+    """Nothing smaller is on the table: an amount that buys no Personality could not be announced
+    (CR, Good Faith), and the offer stops at the Personalities the seat actually has."""
+    session = _blood_game()
+
+    session.act(P1, ActivateAbility("spell"))
+
+    assert isinstance(session.game.pending, ChooseAmount)
+    assert session.game.pending.candidates == ("2", "4", "6")  # the Shugenja counts as a third
+
+
+def test_the_offer_stops_at_four_however_many_could_be_bound():
+    """Four is the card's own ceiling, so a sixth Personality adds nothing to spend Gold on."""
+    session = _blood_game(
+        bodies=(("a", 1, 1), ("b", 1, 1), ("c", 1, 1), ("d", 1, 1), ("e", 1, 1)),
+        gold_production=30,
+    )
+
+    session.act(P1, ActivateAbility("spell"))
+
+    assert session.game.pending.candidates == ("2", "4", "6", "8")
+
+
+def test_the_offer_stops_at_what_the_seat_can_raise():
+    """Five Gold reaches four but not six, so the third body is not on the table to be priced."""
+    session = _blood_game(gold_production=5)  # the two bodies and the Shugenja make three
+
+    session.act(P1, ActivateAbility("spell"))
+
+    assert session.game.pending.candidates == ("2", "4")
+
+
+def test_bound_in_blood_measures_the_horror_against_what_it_bound():
+    session = _blood_game()
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("4",)))  # four Gold binds two
+    session.submit(P1, DecisionResponse(("P1-SH",)))  # bow the Stronghold to pay
+    session.submit(P1, DecisionResponse(("acolyte", "novice")))
+
+    game = session.game
+    horror = _horror_of(session)
+    assert effective_gold_cost(game, horror) == 5  # their three and two
+    assert effective_force(game, horror) == 3  # their Chi, two and one
+    assert effective_chi(game, horror) == 2  # one for each bound
+
+
+def test_the_bound_are_banished_and_the_spell_destroyed():
+    session = _blood_game()
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("4",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    session.submit(P1, DecisionResponse(("acolyte", "novice")))
+
+    game = session.game
+    banished = game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_BANISH)]
+    assert {card.id for card in banished.cards} == {"acolyte", "novice"}
+    assert game.table.cards_by_id["spell"] not in game.table.battlefield.cards
+
+
+def test_the_amount_settles_how_many_may_be_bound():
+    """The count is priced, not chosen: two Gold binds exactly one."""
+    session = _blood_game()
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("2",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert session.game.pending.minimum == 1
+    assert session.game.pending.maximum == 1
+
+
+def test_bound_in_blood_is_withheld_when_no_amount_buys_a_body():
+    """A Stronghold making one Gold cannot reach the two a single Personality costs."""
+    session = _blood_game(gold_production=1)
+
+    assert ActivateAbility("spell") not in session.legal_actions(P1)
+
+
+def test_bound_in_blood_is_withheld_while_the_spell_is_bowed():
+    session = _blood_game()
+    session.game.table.cards_by_id["spell"].bow()
+
+    assert ActivateAbility("spell") not in session.legal_actions(P1)
+
+
+def test_bound_in_blood_replays_to_the_same_board():
+    session = _blood_game()
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("4",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    session.submit(P1, DecisionResponse(("acolyte", "novice")))
+
+    assert replay(session.log).table == session.game.table
 
 
 # --- Courts of Otosan Uchi ---

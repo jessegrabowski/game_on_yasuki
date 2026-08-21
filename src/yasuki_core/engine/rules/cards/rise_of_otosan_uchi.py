@@ -1,6 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
+    owned_personalities,
     CardLocation,
     InvestAbility,
     bow_cost,
@@ -15,7 +16,10 @@ from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
+    AskAmount,
     Banish,
+    Bow,
+    Choose,
     CreateToken,
     Destroy,
     Discard,
@@ -23,11 +27,14 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GainHonor,
     MoveToDeck,
+    PayGold,
     ShuffleDeck,
     Then,
 )
+from yasuki_core.engine.rules.economy import effective_chi, effective_gold_cost
 from yasuki_core.engine.rules.equip import creation_targets
-from yasuki_core.engine.rules.legality import seat_alignment_name
+from yasuki_core.engine.rules.legality import reachable_gold, seat_alignment_name
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.events import EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
@@ -96,6 +103,88 @@ register_ability(
         effects=_blessings_of_the_red_panda_spirit_effects,
         all_targets=True,
         located_at=(CardLocation.PROVINCE,),
+    ),
+)
+
+
+# --- Bound in Blood ---
+
+HORROR = "horror_shadowlands_personality"
+GOLD_PER_SACRIFICE = 2
+MOST_SACRIFICES = 4
+
+
+def _bound_in_blood_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]:
+    """The sums worth spending: two Gold buys one Personality and every two more buys another, up to
+    four or however many the seat has, and never more than it can raise.
+
+    Nothing smaller is offered. An action whose targeting is priced by a variable Gold cost may only
+    be announced for an amount that buys a legal target (CR, Good Faith).
+    """
+    seat = source.owner
+    bodies = min(MOST_SACRIFICES, len(owned_personalities(game, seat)))
+    affordable = reachable_gold(game, seat) // GOLD_PER_SACRIFICE
+    return tuple(count * GOLD_PER_SACRIFICE for count in range(1, min(bodies, affordable) + 1))
+
+
+def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Bow the Spell, then settle the :X: — both are printed in the cost block, so both are paid
+    before the Personalities are chosen (CR, Action Sequence)."""
+    return [
+        Bow(source.id),
+        AskAmount(
+            source.owner,
+            _bound_in_blood_amounts(game, source),
+            "How much Gold do you spend binding blood?",
+            "bound_in_blood",
+            source.id,
+        ),
+    ]
+
+
+@choice_resolver("bound_in_blood")
+def _resolve_bound_in_blood(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Pay what was named, then take the bodies it bought."""
+    spent = int(chosen[0])
+    bodies = min(MOST_SACRIFICES, spent // GOLD_PER_SACRIFICE)
+    offered = tuple(card.id for card in owned_personalities(game, seat))
+    return [
+        PayGold(seat, spent, "Bound in Blood"),
+        Choose(seat, offered, bodies, bodies, "bound_in_blood_sacrifice", source_id),
+    ]
+
+
+@choice_resolver("bound_in_blood_sacrifice", prompt="Choose the Personalities to bind")
+def _resolve_bound_in_blood_sacrifice(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The Horror is measured against the bound before they are banished, since it is made of what
+    they were."""
+    bound = [game.table.cards_by_id[card_id] for card_id in chosen]
+    horror = CreateToken(
+        HORROR,
+        seat,
+        source_id,
+        stats=(
+            (Stat.GOLD_COST, sum(effective_gold_cost(game, card) for card in bound)),
+            (Stat.FORCE, sum(effective_chi(game, card) for card in bound)),
+            (Stat.CHI, len(bound)),
+        ),
+    )
+    return [horror, *(Banish(card.id) for card in bound), Destroy(source_id, seat)]
+
+
+register_ability(
+    "bound_in_blood",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Bow and spend Gold to bind your Personalities into a Horror",
+        cost=_bound_in_blood_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        all_targets=True,
     ),
 )
 
