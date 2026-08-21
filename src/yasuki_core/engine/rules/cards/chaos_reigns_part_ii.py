@@ -1,6 +1,12 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_keywords
-from yasuki_core.engine.rules.abilities import Ability, bow_cost, owned_holdings, register_ability
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    bow_cost,
+    no_cost,
+    owned_holdings,
+    register_ability,
+)
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
@@ -10,7 +16,6 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     MoveToDeck,
     ShuffleDeck,
-    Unpayable,
 )
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStarted
@@ -100,14 +105,6 @@ def _tarkasha_fallen_naga_followers(game: GameState, seat: PlayerId) -> tuple[st
     )
 
 
-def _tarkasha_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    """Reshuffling one of the fallen is the price, so with none to reshuffle there is no ability."""
-    fallen = _tarkasha_fallen_naga_followers(game, source.owner)
-    if not fallen:
-        return [Unpayable(f"{source.owner.name} has no Naga Follower in their discard pile")]
-    return [Choose(source.owner, fallen, 1, 1, "tarkasha", source.id)]
-
-
 @choice_resolver("tarkasha", prompt="Reshuffle a Naga Follower into your Fate deck")
 def _resolve_tarkasha(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
@@ -123,7 +120,19 @@ def _tarkasha_targets(game: GameState, source: L5RCard) -> list[str]:
 
 
 def _tarkasha_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [CreateToken(NAGA_FOLLOWER, source.owner, source.id, attach_to=target.id)]
+    """Reshuffle one of the fallen, then raise a new one onto the Commander.
+
+    The reshuffle is written into the card's text rather than printed in its cost block, so it is an
+    effect and not a cost (CR, Action Sequence: only the bowing and Gold icons are costs). With none
+    to reshuffle the effects stop there and nothing is raised.
+    """
+    fallen = _tarkasha_fallen_naga_followers(game, source.owner)
+    if not fallen:
+        return []
+    return [
+        Choose(source.owner, fallen, 1, 1, "tarkasha", source.id),
+        CreateToken(NAGA_FOLLOWER, source.owner, source.id, attach_to=target.id),
+    ]
 
 
 register_ability(
@@ -131,7 +140,7 @@ register_ability(
     Ability(
         timing=ActionTiming.OPEN,
         label="Open: Reshuffle a fallen Naga to Equip a 1F Naga Follower to your Commander",
-        cost=_tarkasha_cost,
+        cost=no_cost,
         targets=_tarkasha_targets,
         effects=_tarkasha_effects,
     ),

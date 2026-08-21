@@ -195,8 +195,8 @@ def test_tarkasha_reshuffles_a_fallen_naga_to_raise_a_new_one():
     session = _tarkasha_game()
 
     session.act(P1, ActivateAbility("tarkasha"))
-    session.submit(P1, DecisionResponse(("dead_naga",)))  # the price, paid first
-    session.submit(P1, DecisionResponse(("tarkasha",)))
+    session.submit(P1, DecisionResponse(("tarkasha",)))  # the Commander, chosen at targeting
+    session.submit(P1, DecisionResponse(("dead_naga",)))  # then the reshuffle its text calls for
 
     game = session.game
     raised = attachments_of(game, game.table.cards_by_id["tarkasha"])[0]
@@ -210,6 +210,7 @@ def test_tarkasha_only_reshuffles_naga_followers():
     session = _tarkasha_game(spare_follower=True)
 
     session.act(P1, ActivateAbility("tarkasha"))
+    session.submit(P1, DecisionResponse(("tarkasha",)))
 
     assert session.game.pending.candidates == ("dead_naga",)
 
@@ -219,22 +220,27 @@ def test_tarkasha_only_mounts_a_commander():
     session = _tarkasha_game()
 
     session.act(P1, ActivateAbility("tarkasha"))
-    session.submit(P1, DecisionResponse(("dead_naga",)))
 
     assert session.game.pending.candidates == ("tarkasha",)
 
 
-def test_tarkasha_is_withheld_with_no_fallen_naga_to_reshuffle():
-    """The reshuffle is the price, so an empty discard leaves nothing to pay with."""
+def test_tarkasha_raises_nothing_with_no_fallen_naga_to_reshuffle():
+    """The reshuffle is written into the text, so it is an effect rather than a cost: the ability is
+    announced as normal and stops when it finds nothing to reshuffle (CR, Action Sequence)."""
     session = _tarkasha_game(fallen=())
 
-    assert ActivateAbility("tarkasha") not in session.legal_actions(P1)
+    session.act(P1, ActivateAbility("tarkasha"))
+    session.submit(P1, DecisionResponse(("tarkasha",)))
+
+    game = session.game
+    assert game.pending is None
+    assert attachments_of(game, game.table.cards_by_id["tarkasha"]) == ()
 
 
 def test_tarkasha_replays_to_the_same_board():
     session = _tarkasha_game()
     session.act(P1, ActivateAbility("tarkasha"))
-    session.submit(P1, DecisionResponse(("dead_naga",)))
     session.submit(P1, DecisionResponse(("tarkasha",)))
+    session.submit(P1, DecisionResponse(("dead_naga",)))
 
     assert replay(session.log).table == session.game.table
