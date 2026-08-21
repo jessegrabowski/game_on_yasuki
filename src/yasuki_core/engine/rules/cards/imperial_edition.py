@@ -3,7 +3,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
+    bow_cost,
     bow_parent_and_destroy,
+    itself,
     no_cost,
     register_ability,
 )
@@ -31,6 +33,8 @@ from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
 # --- Fantastic Gardens ---
 
+GARDENS_HONOR = 2
+
 
 @recruit_discount("fantastic_gardens")
 def _fantastic_gardens_recruit_discount(
@@ -38,6 +42,26 @@ def _fantastic_gardens_recruit_discount(
 ) -> int:
     """Enters play for 2 less Gold if you are a Crane Clan player."""
     return 2 if is_clan(me, ruleset.CRANE) else 0
+
+
+def _fantastic_gardens_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Gain 2 Honor."""
+    return [GainHonor(source.owner, GARDENS_HONOR)]
+
+
+register_ability(
+    "fantastic_gardens",
+    Ability(
+        # Repeatable, so it claims no once-per-turn key: bowing is the only thing rationing it, and
+        # a Gardens straightened again may bow for another two Honor.
+        timing=ActionTiming.LIMITED,
+        label=f"Limited: Bow to gain {GARDENS_HONOR} Honor",
+        cost=bow_cost,
+        targets=itself,
+        effects=_fantastic_gardens_effects,
+        all_targets=True,
+    ),
+)
 
 
 # --- Imperial Gift ---
