@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     ivory_edition,
     onyx_edition,
     pre_imperial,
+    promotional_diamond,
     promotional_emperor,
     rise_of_jigoku,
     rise_of_otosan_uchi,
