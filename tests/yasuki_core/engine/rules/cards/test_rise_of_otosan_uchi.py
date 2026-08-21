@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.economy import effective_chi, effective_force, eff
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.effects import Straighten
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
-from yasuki_core.engine.rules.legality import card_alignments, seat_alignment
+from yasuki_core.engine.rules.legality import card_alignments, seat_alignments
 from yasuki_core.engine.rules.log import replay
 from yasuki_core import ruleset
 from yasuki_core.engine.session import EngineSession
@@ -361,7 +361,7 @@ def test_the_courtier_joins_the_clan_his_patron_plays():
 
     courtier = _courtier_of(session)
     assert courtier.clan == "Lion"
-    assert seat_alignment(session.game, P1) == ruleset.LION
+    assert seat_alignments(session.game, P1) == {ruleset.LION}
     assert card_alignments(courtier) == {ruleset.LION}
 
 

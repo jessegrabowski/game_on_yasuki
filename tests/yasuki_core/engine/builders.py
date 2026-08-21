@@ -175,6 +175,7 @@ def stronghold(
     *,
     gold_production: int = 0,
     clan: str | None = None,
+    clans: tuple[str, ...] = (),
     starting_honor: int = 0,
 ) -> L5RCard:
     return L5RCard.of(
@@ -185,6 +186,7 @@ def stronghold(
         owner=owner,
         gold_production=gold_production,
         clan=clan,
+        clans=clans,
         starting_honor=starting_honor,
     )
 

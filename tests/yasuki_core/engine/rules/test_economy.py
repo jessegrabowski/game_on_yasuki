@@ -408,6 +408,18 @@ def test_a_card_without_a_grant_carries_only_its_printed_keywords():
     assert effective_keywords(game, plain) == frozenset({"Farm"})
 
 
+def test_a_stronghold_printing_several_clans_plays_them_all():
+    """A Stronghold is a card, and a card may print more than one clan — so the seat answers to each
+    of them, the way a multi-clan Personality answers to each of its own."""
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, clans=("Lion", "Crane")))
+    me = player_state(game, PlayerId.P1)
+
+    assert is_clan(me, "Lion")
+    assert is_clan(me, "Crane")
+    assert not is_clan(me, "Scorpion")
+
+
 def test_a_recorded_grant_gives_a_card_a_keyword_it_does_not_print():
     game = two_seat_game()
     plain = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))

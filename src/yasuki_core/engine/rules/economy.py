@@ -355,9 +355,13 @@ def is_clan(me: PlayerState, clan: str) -> bool:
 
     Compared as Clan Alignments rather than as strings: a stronghold printed "Lion Clan" answers to
     Lion, and the arc's equal alignments answer to each other (a Naga stronghold is an Akasha
-    player). A clan that is no alignment in this arc matches nothing, including itself.
+    player). A clan that is no alignment in this arc matches nothing, including itself. A stronghold
+    printing several clans plays them all.
     """
-    if me.stronghold is None or me.stronghold.clan is None:
+    if me.stronghold is None:
         return False
     alignment = ruleset.ACTIVE.alignment(clan)
-    return alignment is not None and ruleset.ACTIVE.alignment(me.stronghold.clan) == alignment
+    if alignment is None:
+        return False
+    printed = me.stronghold.clans or ((me.stronghold.clan,) if me.stronghold.clan else ())
+    return any(ruleset.ACTIVE.alignment(name) == alignment for name in printed)

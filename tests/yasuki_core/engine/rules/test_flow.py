@@ -294,6 +294,30 @@ def test_recruit_cost_surcharges_a_personality_aligned_to_another_clan():
     assert legality.recruit_cost(game, _personality(("Crane",))) == 5 + legality.OFF_CLAN_SURCHARGE
 
 
+def test_a_stronghold_printing_several_clans_surcharges_none_of_them():
+    """A Stronghold is a card, and a card may print more than one clan (the debug fixture prints all
+    ten). Every alignment it carries is one the seat plays, so none of them is off-clan."""
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            clans=("Lion", "Crane"),
+        ),
+    )
+    game = GameState.start(state, PlayerId.P1)
+
+    assert legality.recruit_cost(game, _personality(("Lion",))) == 5
+    assert legality.recruit_cost(game, _personality(("Crane",))) == 5
+    assert (
+        legality.recruit_cost(game, _personality(("Scorpion",))) == 5 + legality.OFF_CLAN_SURCHARGE
+    )
+
+
 def test_a_stronghold_with_no_legal_alignment_neither_surcharges_nor_proclaims():
     # A Shadowlands / minor-clan Stronghold has no legal Clan Alignment, so it has nothing to compare
     # against: an aligned Personality costs face value and none can be Proclaimed.

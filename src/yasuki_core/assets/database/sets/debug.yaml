@@ -1,0 +1,28 @@
+set: Debug
+cards:
+- title: Yasuki Debug Stronghold
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  - Crane
+  - Dragon
+  - Lion
+  - Mantis
+  - Naga
+  - Phoenix
+  - Scorpion
+  - Spider
+  - Unicorn
+  text: 'Not a real card. A testing fixture: it plays every Clan Alignment at once, so every
+    own-clan clause reads true and nothing is charged the off-clan surcharge; it produces enough
+    Gold that no cost is ever out of reach; and it starts high enough on Family Honor to meet any
+    Honor Requirement.'
+  province_strength: 20
+  starting_honor: 20
+  gold_production: 100
+  legality:
+  - Not Legal (Debug)
+  rarity: Fixed
