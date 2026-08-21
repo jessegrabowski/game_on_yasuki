@@ -23,6 +23,7 @@ from yasuki_core.game_pieces.prints import WindPrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
+    fate_card,
     attachment,
     end_phase,
     end_turn,
@@ -251,5 +252,49 @@ def test_walk_with_tengoku_asks_for_no_target():
 def test_walk_with_tengoku_replays_to_the_same_board():
     session = _tengoku_game()
     session.act(P1, ActivateAbility("spell"))
+
+    assert replay(session.log).table == session.game.table
+
+
+# --- Moto Traders ---
+
+
+def _traders_game(*, in_deck=2):
+    """The Traders in play with ``in_deck`` cards to draw from."""
+    game = two_seat_game()
+    put_in_play(
+        game,
+        holding("traders", printed_id="moto_traders", gold_production=5, name="the Traders"),
+    )
+    game.table.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(game.table, fate_card(f"f{index}", P1)) for index in range(in_deck)
+    ]
+    return EngineSession.start(game.table, P1)
+
+
+def _hand_size(session):
+    return len(session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards)
+
+
+def test_bowing_the_traders_draws_a_card():
+    session = _traders_game()
+    before = _hand_size(session)
+
+    session.act(P1, ActivateAbility("traders"))
+
+    assert _hand_size(session) == before + 1
+    assert session.game.table.cards_by_id["traders"].bowed is True
+
+
+def test_the_traders_are_withheld_while_bowed():
+    session = _traders_game()
+    session.game.table.cards_by_id["traders"].bow()
+
+    assert ActivateAbility("traders") not in session.legal_actions(P1)
+
+
+def test_the_traders_replay_to_the_same_board():
+    session = _traders_game()
+    session.act(P1, ActivateAbility("traders"))
 
     assert replay(session.log).table == session.game.table

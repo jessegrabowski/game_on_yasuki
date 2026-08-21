@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.economy import (
     invest_discount,
     recruit_discount,
 )
-from yasuki_core.engine.rules.effects import CreateToken, Effect, GainHonor
+from yasuki_core.engine.rules.effects import CreateToken, DrawCard, Effect, GainHonor
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.state import GameState
@@ -115,6 +115,24 @@ def _moto_traders_recruit_discount(
 ) -> int:
     """Enters play for 1 less Gold if you control another Merchant Caravan."""
     return 1 if me.controls(keywords.MERCHANT_CARAVAN, other_than=card) else 0
+
+
+def _moto_traders_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Draw a card."""
+    return [DrawCard(source.owner)]
+
+
+register_ability(
+    "moto_traders",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Open: Bow to draw a card",
+        cost=bow_cost,
+        targets=itself,
+        effects=_moto_traders_effects,
+        all_targets=True,
+    ),
+)
 
 
 # --- Walk with Tengoku ---
