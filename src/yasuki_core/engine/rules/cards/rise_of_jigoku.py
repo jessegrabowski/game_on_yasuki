@@ -264,14 +264,14 @@ register_ability(
 # --- Sapphire Mine ---
 
 
-DEAR_ITEM = 6
+EXPENSIVE_ITEM = 6
 
 
 @gold_handler("sapphire_mine")
 def _sapphire_mine_gold(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
 ) -> int:
-    """+1GP when paying for a single Item and nothing else, and +1GP more for a dear one.
+    """+1GP when paying for a single Item and nothing else, and +1GP more when it costs 6 or more.
 
     "A single Item only" is the whole payment rather than the Mine's share of it: paying for two
     cards at once, or for anything that is not an Item, leaves the Mine at its printed rate.
@@ -284,7 +284,7 @@ def _sapphire_mine_gold(
         or item.attachment_type is not AttachmentType.ITEM
     ):
         return card.gold_production
-    return card.gold_production + 1 + (1 if item.gold_cost >= DEAR_ITEM else 0)
+    return card.gold_production + 1 + (1 if item.gold_cost >= EXPENSIVE_ITEM else 0)
 
 
 @keyword_grant("sapphire_mine")

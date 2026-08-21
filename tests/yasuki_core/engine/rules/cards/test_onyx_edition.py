@@ -143,7 +143,7 @@ def test_a_discount_still_leaves_the_cheaper_price_buying_one(_discounted_hayako
     assert [card.name for card in _ancestors(session)] == ["Lion Ancestor"]
 
 
-def test_the_dearer_price_is_not_offered_out_of_reach():
+def test_the_higher_price_is_not_offered_out_of_reach():
     """With only the cheaper price payable there is nothing to choose, so nothing is asked."""
     session = _hayako_game(gold_production=6)  # four for Hayako leaves two, not six
 
