@@ -13442,7 +13442,6 @@ yasuki_baiko
 yasuki_daiki
 yasuki_daisuki
 yasuki_daito
-yasuki_debug_stronghold
 yasuki_dokansuto
 yasuki_gakuto
 yasuki_hachi

@@ -715,8 +715,3 @@ arcs:
   - set_name: Tokens
     digital: true
     notes: Synthetic home for created-card and marker token proxies; not a real product.
-- name: Debug
-  sets:
-  - set_name: Debug
-    digital: true
-    notes: Synthetic home for testing fixtures; not a real product, and not legal in any arc.

@@ -6,6 +6,10 @@ from typing import NamedTuple
 from yasuki_core import DATABASE_DIR
 
 DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
+# Set files a developer keeps on their own machine and does not commit — a fixture Stronghold, a
+# set being transcribed. They are absent from a fresh clone, so nothing committed may depend on
+# them: the card index skips them, and they register their own set metadata as they load.
+LOCAL_SET_SUFFIX = ".local.yaml"
 DEFAULT_INDEX_PATH = DATABASE_DIR / "card_ids.txt"
 
 
@@ -27,6 +31,9 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
     a double-faced card. Every consumer reads the data through here, so the derivation has one
     definition and cannot drift between them.
 
+    Local set files are skipped. The committed index has to match a fresh clone, which holds none of
+    them, so a card only one machine has must not reach it.
+
     Parameters
     ----------
     cards_dir : path
@@ -43,7 +50,9 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
 
     from yasuki_core.install.yaml_to_sql import card_slug
 
-    yaml_files = sorted(cards_dir.glob("*.yaml"))
+    yaml_files = sorted(
+        path for path in cards_dir.glob("*.yaml") if not path.name.endswith(LOCAL_SET_SUFFIX)
+    )
     if not yaml_files:
         raise ValueError(f"No set files in {cards_dir}")
 
