@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.effects import Straighten
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.legality import card_alignments, seat_alignments
 from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.rules.projection import project
 from yasuki_core import ruleset
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -368,6 +369,18 @@ def test_recruiting_the_courts_opens_a_response_step_rather_than_acting():
     assert session.game.pending is None
     assert ActivateAbility("courts") in session.legal_actions(P1)
     assert session.game.table.cards_by_id["envoy"].bowed is False
+
+
+def test_the_response_step_names_the_recruit_that_opened_it():
+    """End to end: the Recruit records its own wording, and both seats read it off the view — the
+    Step is declined with a button, so it has to say what is being declined."""
+    session = _courts_with_an_envoy()
+
+    session.act(P1, Recruit("courts"))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    for seat in PlayerId:
+        assert project(session.game, seat).responding_to == "the Recruit of Courts"
 
 
 def test_bowing_the_courtier_costs_a_player_an_honor():

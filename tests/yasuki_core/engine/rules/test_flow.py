@@ -13,7 +13,7 @@ from yasuki_core.game_pieces.prints import (
     SenseiPrint,
     StrongholdPrint,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Pass
+from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.state import GameState, Phase, RESPONSE_TIMINGS
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse, LeaveBowed
 from yasuki_core.engine.rules import flow, legality
@@ -535,16 +535,16 @@ def test_a_new_phase_leaves_no_response_step_open():
     assert game.round_stack == []
 
 
-def test_a_response_step_names_the_action_it_answers():
-    """The Step is passed with a button, so the seat has to be told what it is declining."""
+def test_an_action_is_worded_for_the_seat_that_must_answer_it():
+    """What the Step's banner says. Each action names itself and the card it was taken on, so a seat
+    passing the Step is told what it is declining."""
     game = _responder_game()
-    caravansary = game.table.cards_by_id["caravansary"]
-    game.action_taken = flow.describe_action(game, ActivateAbility(caravansary.id))
 
-    flow.open_response_window(game)
-
-    for seat in PlayerId:
-        assert project(game, seat).responding_to == "the ability on Caravansary"
+    assert flow.describe_action(game, Recruit("caravansary")) == "the Recruit of Caravansary"
+    assert (
+        flow.describe_action(game, ActivateAbility("caravansary")) == "the ability on Caravansary"
+    )
+    assert flow.describe_action(game, Legacy()) == "Legacy"
 
 
 def test_no_response_step_leaves_the_view_naming_nothing():
