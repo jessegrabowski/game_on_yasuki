@@ -109,6 +109,37 @@ Register the `prompt` alongside it. Without one the seat is asked "Choose up to 
 says how many cards to click and nothing about what for. Keep the wording free of counts — the same
 choice can offer one target or two.
 
+### A division: how many go where
+
+Suiteiru no Oni creates a Follower per point of the Chi of the Personality he destroys, and attaches
+them "to one or more of your Personalities". The seat picks the bearers *and* how many each takes, so
+a `Choose` — which reads its answer as a set — cannot say it. `AskDistribution` can: the answer names
+a card once per creation it takes, and the resolver reads that tally.
+
+```python
+return [
+    Destroy(target.id, source.owner),
+    AskDistribution(source.owner, bearers, podlings, "suiteiru_no_oni", source.id),
+]
+
+
+@choice_resolver(
+    "suiteiru_no_oni", prompt="Attach the Oni Followers to one or more of your Personalities"
+)
+def _resolve_suiteiru_no_oni(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [
+        *(CreateToken(SUITEIRUS_PODLING, seat, source_id, attach_to=bearer) for bearer in chosen),
+        GainHonor(seat, -len(chosen)),
+    ]
+```
+
+Everything offered is placed — the seat divides the creations rather than declining any — so raise
+the question only when there is both something to divide and somewhere to put it. The client draws a
+count and a pair of arrows on each card the seat picks, and the prompt counts down as they are
+placed; the registered wording carries no number for that reason.
+
 ### Sequencing: making a step wait
 
 Effects returned inline run before the events already queued behind them. When a step must happen
