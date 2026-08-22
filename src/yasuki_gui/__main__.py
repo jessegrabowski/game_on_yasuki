@@ -10,11 +10,12 @@ from yasuki_core.engine.rules.decisions import (
     Confirm,
     DecisionResponse,
 )
+from yasuki_core.engine.rules.policies import GoldRushPolicy
 from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
-from yasuki_core.engine.runner import GameRunner, SearchView
+from yasuki_core.engine.runner import Controls, GameRunner, SearchView
 from yasuki_core.game_setup import build_state_from_deck
 from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state
 from yasuki_gui.ui.dialogs import Dialogs
@@ -28,8 +29,15 @@ logger = logging.getLogger(__name__)
 
 LOCAL_DEBUG_OVERRIDE = False
 
-# How long the board lingers on "Opponent's turn" before the opponent's (AI-less) turn auto-runs.
+# How long the board lingers on "Opponent's turn" before the opponent's turn auto-runs.
 OPPONENT_TURN_DELAY_MS = 700
+
+
+def _opponent_controls() -> Controls:
+    """What drives the AI opponent. One :class:`GoldRushPolicy` fills both halves, so the gold it
+    chooses to raise and the payments it agrees to come from the same strategy."""
+    policy = GoldRushPolicy()
+    return Controls(policy, policy)
 
 
 def _action_button_label(action: Action) -> str:
@@ -80,7 +88,7 @@ def main() -> None:
         state, human_seat = build_demo_state()
 
     session = EngineSession.start(state, human_seat)
-    runner = GameRunner(session, human_seat)
+    runner = GameRunner(session, human_seat, _opponent_controls())
 
     field = FieldView(content, width=canvas_w, height=canvas_h)
     # The table backs panel and dialog reads; the board itself renders from the redacted projection.
@@ -338,7 +346,7 @@ def main() -> None:
             path, opponent_deck_path=DEMO_DECK_PATH, p1_name="You", p2_name="Opponent"
         )
         session = EngineSession.start(state, human_seat)
-        runner = GameRunner(session, human_seat)
+        runner = GameRunner(session, human_seat, _opponent_controls())
         field.state = session.game.table
         field.seat = human_seat
         field.end_selection()

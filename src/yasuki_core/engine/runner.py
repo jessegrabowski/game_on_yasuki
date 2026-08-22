@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.economy import effective_gold_cost, effective_personal_honor
 from yasuki_core.engine.rules.log import Act, Answer
-from yasuki_core.engine.rules.policies import Policy
+from yasuki_core.engine.rules.policies import PassPolicy, Policy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.session import EngineSession
@@ -53,6 +53,22 @@ class SearchView(NamedTuple):
     choosable: set[str]
 
 
+class Controls(NamedTuple):
+    """What drives one seat with no human at it.
+
+    Attributes
+    ----------
+    policy : Policy
+        Chooses which action the seat takes.
+    agent : Agent
+        Answers the decisions those actions raise. May be the same object as ``policy`` when a
+        strategy wants its payments to agree with its choices.
+    """
+
+    policy: Policy
+    agent: Agent
+
+
 class GameRunner:
     """Drives a single-player rules game through an :class:`EngineSession`.
 
@@ -68,10 +84,10 @@ class GameRunner:
         The seat the human plays.
     """
 
-    def __init__(self, session: EngineSession, human: PlayerId, opponent: Agent | None = None):
+    def __init__(self, session: EngineSession, human: PlayerId, opponent: Controls | None = None):
         self.session = session
         self.human = human
-        self._opponent = opponent or AutoAgent()
+        self._opponent = opponent or Controls(PassPolicy(), AutoAgent())
 
     def view(self) -> GameView:
         """Return the human's projection — what the board, phase bar, and panels render."""
@@ -320,41 +336,43 @@ class GameRunner:
         """Act and answer for the opponent until the engine wants the human again.
 
         Three cases, all of them the opponent's to clear: its own turn, the window it holds inside
-        the human's Action phase, and a decision a card put to it while the human kept priority. It
-        passes every opportunity — it is driven by an :class:`Agent`, which answers decisions rather
-        than choosing actions — and lets that Agent answer anything it owes.
+        the human's Action phase, and a decision a card put to it while the human kept priority. Its
+        :class:`Controls` supply both halves — the policy picks each action, the agent answers the
+        decisions those actions raise.
 
         Returns as soon as the human owes an answer or holds priority with nothing pending, so the
         caller renders between the opponent's work and the human's.
+
+        Raises
+        ------
+        RuntimeError
+            If one Action Round runs past :data:`MAX_ACTIONS_PER_ROUND`. A round closes only once
+            every seat passes consecutively, so a policy that always finds something to take would
+            otherwise hang the caller.
         """
         game = self.session.game
+        round_actions = 0
         while not game.game_over:
             pending = game.pending
             if pending is not None:
                 if pending.seat is self.human:
                     return
-                response = self._opponent.decide(pending, self.session.project(pending.seat))
+                response = self._opponent.agent.decide(pending, self.session.project(pending.seat))
                 self.session.submit(pending.seat, response)
             elif game.round.priority is not self.human:
-                self.session.act(game.round.priority, Pass())
+                seat = game.round.priority
+                chosen = self._opponent.policy.choose(
+                    self.session.project(seat), self.session.legal_actions(seat)
+                )
+                round_actions = 0 if isinstance(chosen, Pass) else round_actions + 1
+                if round_actions > MAX_ACTIONS_PER_ROUND:
+                    raise RuntimeError(
+                        f"an Action Round in {game.phase} ran past {MAX_ACTIONS_PER_ROUND} "
+                        f"actions; {seat.name} last chose {chosen}"
+                    )
+                self.session.act(seat, chosen)
             else:
                 return
-
-
-class Controls(NamedTuple):
-    """What drives one seat with no human at it.
-
-    Attributes
-    ----------
-    policy : Policy
-        Chooses which action the seat takes.
-    agent : Agent
-        Answers the decisions those actions raise. May be the same object as ``policy`` when a
-        strategy wants its payments to agree with its choices.
-    """
-
-    policy: Policy
-    agent: Agent
 
 
 # How many actions one Action Round may take before the run gives up. A round ends when every seat
