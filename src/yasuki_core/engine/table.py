@@ -51,6 +51,47 @@ class DeckKey(NamedTuple):
     side: Side  # FATE or DYNASTY
 
 
+class Location(NamedTuple):
+    """Where a card in play stands: in a seat's home, or at a battlefield.
+
+    The rules' answer to "where is this card", as against :class:`BoardPos`, which is a table
+    coordinate a player may drag a card to and means nothing to the rules.
+
+    Exactly one field is set. Build the two shapes with :meth:`home` and :meth:`at_battlefield`
+    rather than by hand, and ask which one you hold with :attr:`is_home`.
+
+    Attributes
+    ----------
+    seat : PlayerId, optional
+        The seat whose home the card stands in. None at a battlefield.
+    battlefield : int, optional
+        The index of the battlefield the card stands at, matching its position in the attack's
+        battlefield tuple. None at home.
+    """
+
+    seat: PlayerId | None = None
+    battlefield: int | None = None
+
+    @classmethod
+    def home(cls, seat: PlayerId) -> "Location":
+        """The home of ``seat``."""
+        return cls(seat=seat)
+
+    @classmethod
+    def at_battlefield(cls, index: int) -> "Location":
+        """The battlefield at ``index``."""
+        return cls(battlefield=index)
+
+    @property
+    def is_home(self) -> bool:
+        """Whether this is a home rather than a battlefield."""
+        return self.battlefield is None
+
+    def is_well_formed(self) -> bool:
+        """Whether exactly one of the two fields is set, which every stored location must be."""
+        return (self.seat is None) != (self.battlefield is None)
+
+
 class BoardPos(NamedTuple):
     x: float
     y: float
@@ -88,6 +129,11 @@ class TableState:
         Shared, public play area; member cards have a position in ``positions``.
     positions : dict mapping str to BoardPos
         Table coordinates for battlefield cards, keyed by card id.
+    locations : dict mapping str to Location
+        Where each card in play stands — a seat's home, or a battlefield — keyed by card id. Unlike
+        ``positions`` this is rules truth, not presentation. Partial: a card with no entry is at its
+        owner's home, which :func:`location_of` supplies, so a board on which nothing has ever
+        assigned carries an empty map.
     attachments : dict mapping str to (str or ZoneKey)
         Which card or province a card sits behind on the table, keyed by the card on top. This is
         presentation, not rules: the manual sandbox lets a player stack anything on anything, so a
@@ -119,6 +165,9 @@ class TableState:
     battlefield: BattlefieldZone
     # L5RCard is frozen, so battlefield positions live here, keyed by card id, not on the card.
     positions: dict[str, BoardPos] = field(default_factory=dict)
+    # Rules truth about where a card in play stands, and partial: absent means "at its owner's
+    # home". See the class docstring, and read it through location_of rather than directly.
+    locations: dict[str, Location] = field(default_factory=dict)
     # Presentation stacking, external to the frozen card. See the class docstring.
     attachments: dict[str, "AttachTarget"] = field(default_factory=dict)
     # The two rules relations. Kept apart because they are apart in the rules — one map with a
@@ -175,9 +224,10 @@ class TableState:
         """Check the table's structural invariants, raising ``ValueError`` on the first violation.
 
         Verifies that card ids are unique across the whole table, that ``cards_by_id`` indexes
-        exactly the located cards, that battlefield positions reference only battlefield cards, and
-        that every zone and deck key is well-formed (known owner, province-only ``idx``, matching
-        zone owner, fate/dynasty deck side).
+        exactly the located cards, that battlefield positions and locations reference only
+        battlefield cards, that every stored location names either a home or a battlefield, and that
+        every zone and deck key is well-formed (known owner, province-only ``idx``, matching zone
+        owner, fate/dynasty deck side).
         """
         located: dict[str, L5RCard] = {}
         for card in self.iter_all_cards():
@@ -191,6 +241,15 @@ class TableState:
         stray = set(self.positions) - battlefield_ids
         if stray:
             raise ValueError(f"positions reference non-battlefield cards: {sorted(stray)}")
+
+        stray_locations = set(self.locations) - battlefield_ids
+        if stray_locations:
+            raise ValueError(f"locations reference cards not in play: {sorted(stray_locations)}")
+        for card_id, location in self.locations.items():
+            if not location.is_well_formed():
+                raise ValueError(f"location for {card_id!r} names neither a home nor a battlefield")
+            if location.seat is not None and location.seat not in self.seats:
+                raise ValueError(f"location for {card_id!r} has unknown seat: {location.seat}")
 
         for child_id, target in self.attachments.items():
             if child_id not in battlefield_ids:
@@ -262,8 +321,33 @@ MoveDest = ZoneKey | DeckKey | Literal["battlefield"]
 AttachTarget = str | ZoneKey
 
 
-# Ownership and zone predicates — pure read-only queries on the table, shared by the manual sim
-# (intents.py) and the rules engine. A None owner means public (any seat may act).
+# Ownership, zone and location predicates — pure read-only queries on the table, shared by the
+# manual sim (intents.py) and the rules engine. A None owner means public (any seat may act).
+
+
+def location_of(state: TableState, card: L5RCard) -> Location:
+    """Where ``card`` stands, supplying its owner's home when the table records nothing.
+
+    Read locations through this rather than off ``state.locations``, which is partial. Home is the
+    owner's until the engine models control separately from ownership.
+    """
+    recorded = state.locations.get(card.id)
+    return Location.home(card.owner) if recorded is None else recorded
+
+
+def unit_members(state: TableState, card: L5RCard) -> list[L5RCard]:
+    """``card`` and every card attached to it, the Personality first.
+
+    A Personality together with the cards attached to him makes up a unit (CR, Unit); a card with
+    nothing attached is a unit of one, so this answers for any card, not only a Personality.
+    """
+    members = [card]
+    members.extend(
+        state.cards_by_id[member_id]
+        for member_id, personality_id in state.units.items()
+        if personality_id == card.id
+    )
+    return members
 
 
 def owns_card(state: TableState, seat: PlayerId, card_id: str) -> bool:

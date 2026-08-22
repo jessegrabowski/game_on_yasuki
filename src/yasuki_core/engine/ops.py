@@ -7,10 +7,13 @@ from yasuki_core.engine.table import (
     AttachTarget,
     BoardPos,
     DeckKey,
+    Location,
     MoveDest,
     TableState,
     ZoneKey,
     ZoneRole,
+    location_of,
+    unit_members,
 )
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
@@ -26,13 +29,14 @@ from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
 
 def remove_from_location(state: TableState, card: L5RCard) -> None:
     """Remove ``card`` (by identity) from whatever zone, deck, or the battlefield holds it, dropping
-    any battlefield position."""
+    any battlefield position and location."""
     for container in (*state.zones.values(), *state.decks.values(), state.battlefield):
         cards = container.cards
         for i, held in enumerate(cards):
             if held is card:
                 del cards[i]
                 state.positions.pop(card.id, None)
+                state.locations.pop(card.id, None)
                 return
 
 
@@ -93,9 +97,14 @@ def move_card(
 
     if dest == BATTLEFIELD:
         pos = position or state.positions.get(card.id) or DEFAULT_BOARD_POS
+        # Read before the removal drops it: repositioning on the table is presentation, and must
+        # not send an assigned unit home from its battlefield.
+        location = state.locations.get(card.id)
         remove_from_location(state, card)
         state.battlefield.add(card)
         state.positions[card.id] = pos
+        if location is not None:
+            state.locations[card.id] = location
         return True
 
     if isinstance(dest, DeckKey):
@@ -149,6 +158,52 @@ def set_position(state: TableState, card: L5RCard, x: float, y: float) -> bool:
     return True
 
 
+def set_location(state: TableState, card: L5RCard, location: Location) -> bool:
+    """Record where ``card`` stands, returning whether it moved.
+
+    A card at its own owner's home is stored as no entry at all, so each board position has one
+    representation. Read it back through :func:`~yasuki_core.engine.table.location_of`. Raise
+    ``ValueError`` on a location naming neither a home nor a battlefield.
+    """
+    if not location.is_well_formed():
+        raise ValueError(f"location names neither a home nor a battlefield: {location}")
+    default = Location.home(card.owner)
+    recorded = state.locations.get(card.id)
+    if location == default:
+        state.locations.pop(card.id, None)
+    else:
+        state.locations[card.id] = location
+    return location != (default if recorded is None else recorded)
+
+
+def assign(state: TableState, card: L5RCard, battlefield: int) -> bool:
+    """Assign ``card``'s whole unit to the battlefield at index ``battlefield``; returns whether it
+    moved.
+
+    Assigning is *not* movement (CR, Assign), so nothing here goes through :func:`move_card` — the
+    cards stay where they are in play and only their location changes. Attached cards go with their
+    Personality (CR, Unit).
+    """
+    return _relocate_unit(state, card, Location.at_battlefield(battlefield))
+
+
+def return_home(state: TableState, card: L5RCard) -> bool:
+    """Send ``card``'s whole unit home; returns whether it moved.
+
+    Home is the unit's — its Personality's owner's — so an attached card owned by the other seat
+    goes where its Personality goes.
+    """
+    return _relocate_unit(state, card, Location.home(card.owner))
+
+
+def _relocate_unit(state: TableState, card: L5RCard, location: Location) -> bool:
+    moved = False
+    for member in unit_members(state, card):
+        if set_location(state, member, location):
+            moved = True
+    return moved
+
+
 def stack(state: TableState, card: L5RCard, target: AttachTarget) -> bool:
     """Stack ``card`` behind ``target`` — a card id or province zone key — so it renders behind that
     parent. Returns whether the graph changed; re-stacking on the same target is a no-op.
@@ -180,6 +235,9 @@ def attach_to_personality(state: TableState, card: L5RCard, personality: L5RCard
     """
     if not isinstance(personality.printed, PersonalityPrint):
         raise ValueError(f"cannot attach {card.id!r} to non-Personality {personality.id!r}")
+    # A card in a unit stands where its Personality stands (CR, Unit), so one equipped to a
+    # Personality already at a battlefield is at that battlefield rather than at home.
+    set_location(state, card, location_of(state, personality))
     if state.units.get(card.id) == personality.id:
         return False
     state.units[card.id] = personality.id

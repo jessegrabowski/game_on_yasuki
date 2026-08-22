@@ -1,7 +1,15 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos
+from yasuki_core.engine.table import (
+    TableState,
+    ZoneKey,
+    ZoneRole,
+    DeckKey,
+    BoardPos,
+    Location,
+    unit_members,
+)
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -246,3 +254,80 @@ def test_validate_rejects_an_attachment_cycle():
 
     with pytest.raises(ValueError, match="cycle"):
         table.validate()
+
+
+def test_validate_accepts_a_unit_at_a_battlefield():
+    table = TableState.empty_two_seat()
+    _put_personality_on_battlefield(table, "hero")
+    _put_on_battlefield(table, "ashigaru")
+    table.units = {"ashigaru": "hero"}
+    table.locations = {
+        "hero": Location.at_battlefield(0),
+        "ashigaru": Location.at_battlefield(0),
+    }
+
+    table.validate()
+
+
+def test_validate_rejects_a_location_for_a_card_not_in_play():
+    table = TableState.empty_two_seat()
+    table.locations = {"ghost": Location.at_battlefield(0)}
+
+    with pytest.raises(ValueError, match="locations reference cards not in play"):
+        table.validate()
+
+
+@pytest.mark.parametrize(
+    "location",
+    [Location(), Location(seat=PlayerId.P1, battlefield=0)],
+    ids=["neither", "both"],
+)
+def test_validate_rejects_a_location_naming_neither_or_both(location):
+    table = TableState.empty_two_seat()
+    _put_personality_on_battlefield(table, "hero")
+    table.locations = {"hero": location}
+
+    with pytest.raises(ValueError, match="names neither a home nor a battlefield"):
+        table.validate()
+
+
+def test_validate_rejects_a_home_belonging_to_no_seat():
+    """A location may name a home the table has no seat for — a stale seat left behind by a table
+    rebuilt with different players — and that is a broken relation rather than a card at home."""
+    table = TableState.empty_two_seat()
+    _put_personality_on_battlefield(table, "hero")
+    del table.seats[PlayerId.P2]
+    table.locations = {"hero": Location.home(PlayerId.P2)}
+
+    with pytest.raises(ValueError, match="has unknown seat"):
+        table.validate()
+
+
+def test_unit_members_lead_with_the_personality():
+    table = TableState.empty_two_seat()
+    hero = _put_personality_on_battlefield(table, "hero")
+    _put_on_battlefield(table, "ashigaru")
+    _put_on_battlefield(table, "blade")
+    table.units = {"ashigaru": "hero", "blade": "hero"}
+
+    members = unit_members(table, hero)
+
+    assert members[0] is hero
+    assert {card.id for card in members} == {"hero", "ashigaru", "blade"}
+
+
+def test_unit_members_of_a_bare_card_is_that_card_alone():
+    table = TableState.empty_two_seat()
+    hero = _put_personality_on_battlefield(table, "hero")
+
+    assert unit_members(table, hero) == [hero]
+
+
+def test_unit_members_excludes_another_personalitys_attachments():
+    table = TableState.empty_two_seat()
+    hero = _put_personality_on_battlefield(table, "hero")
+    _put_personality_on_battlefield(table, "rival")
+    _put_on_battlefield(table, "theirs")
+    table.units = {"theirs": "rival"}
+
+    assert unit_members(table, hero) == [hero]

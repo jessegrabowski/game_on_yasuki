@@ -3,7 +3,7 @@ import random
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos, Location
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.game_pieces.cards import L5RCard
@@ -296,3 +296,43 @@ def test_no_identity_leaks_across_random_tables():
                 if deck_view.top is not None:
                     # only an exposed top is ever a full card, and only when flipped face up
                     assert deck_view.top.face_up
+
+
+def test_both_seats_see_the_same_locations():
+    """Assignment happens in the open, so a location is public — and a location naming a card the
+    viewer cannot identify still resolves, because ids survive redaction either way."""
+    table = TableState.empty_two_seat()
+    mine = _card("mine", side=Side.DYNASTY, owner=P1, face_up=True)
+    theirs = _card("theirs", side=Side.DYNASTY, owner=P2)  # face down: a back to P1
+    for card in (mine, theirs):
+        table.battlefield.cards.append(card)
+        table.cards_by_id[card.id] = card
+    table.locations = {"mine": Location.at_battlefield(0), "theirs": Location.at_battlefield(0)}
+
+    seen_by_p1 = redact(table, P1)
+
+    assert seen_by_p1.locations == table.locations
+    assert redact(table, P2).locations == table.locations
+    assert _hidden(seen_by_p1.battlefield[1].card)  # located, and still unidentifiable to P1
+
+
+def test_a_board_with_nothing_assigned_carries_no_locations():
+    table = TableState.empty_two_seat()
+    card = _card("c", side=Side.DYNASTY, owner=P1, face_up=True)
+    table.battlefield.cards.append(card)
+    table.cards_by_id[card.id] = card
+
+    assert redact(table, P1).locations == {}
+
+
+def test_the_snapshots_locations_are_a_copy():
+    table = TableState.empty_two_seat()
+    card = _card("c", side=Side.DYNASTY, owner=P1, face_up=True)
+    table.battlefield.cards.append(card)
+    table.cards_by_id[card.id] = card
+    table.locations = {"c": Location.at_battlefield(1)}
+
+    snapshot = redact(table, P1)
+    table.locations["c"] = Location.at_battlefield(2)
+
+    assert snapshot.locations == {"c": Location.at_battlefield(1)}

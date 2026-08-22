@@ -7,6 +7,7 @@ yasuki_core.engine.ops
 
 .. autosummary::
 
+    assign
     attach_to_personality
     attach_to_province
     bring_to_top
@@ -21,9 +22,11 @@ yasuki_core.engine.ops
     remove_from_location
     reorder_in_hand
     reorder_in_pile
+    return_home
     reveal_provinces
     set_honor
     set_ignore_honor_requirements
+    set_location
     set_position
     spawn_token
     stack

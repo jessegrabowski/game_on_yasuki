@@ -1,9 +1,19 @@
 import json
+from dataclasses import fields
 
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos, BATTLEFIELD
+from yasuki_core.engine import ops
+from yasuki_core.engine.table import (
+    TableState,
+    ZoneKey,
+    ZoneRole,
+    DeckKey,
+    BoardPos,
+    BATTLEFIELD,
+    Location,
+)
 from yasuki_core.engine.intents import (
     MoveCard,
     SetCardPos,
@@ -53,7 +63,12 @@ from yasuki_core.engine.action_log import (
     decode_intent,
     flush,
 )
-from yasuki_core.engine.snapshot import InitialRecord, build_initial_state
+from yasuki_core.engine.snapshot import (
+    InitialRecord,
+    build_initial_state,
+    encode_initial,
+    decode_initial,
+)
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AttachmentPrint,
@@ -337,6 +352,48 @@ def test_attachments_survive_serialization():
     assert restored.initial.attachments == state.attachments
     assert restored.initial.units == state.units
     assert restored.initial.province_attachments == state.province_attachments
+
+
+def _assigned_state() -> TableState:
+    """The unit of `_attached_state` assigned to a battlefield, so the location map is non-empty —
+    an empty one round-trips whether or not the snapshot carries it."""
+    state = _attached_state()
+    ops.assign(state, state.cards_by_id["hero"], 1)
+    state.validate()
+    return state
+
+
+def test_full_snapshot_round_trips_locations():
+    state = _assigned_state()
+    assert build_initial_state(InitialRecord.from_state(state)) == state
+
+
+def test_locations_survive_serialization():
+    state = _assigned_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+
+    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+
+    assert restored.replay() == state
+    assert restored.initial.locations == {
+        "hero": Location.at_battlefield(1),
+        "foll": Location.at_battlefield(1),
+    }
+
+
+def test_encode_initial_covers_every_field():
+    """A record field the encoder forgets is silent corruption — the replay rebuilds a table missing
+    it and nothing raises. Pin the payload's keys to the dataclass so a new field fails here."""
+    payload = encode_initial(InitialRecord.from_state(_assigned_state()))
+
+    assert set(payload) == {f.name for f in fields(InitialRecord)}
+
+
+def test_a_log_written_before_locations_existed_decodes_to_none_assigned():
+    payload = encode_initial(InitialRecord.from_state(_assigned_state()))
+    del payload["locations"]
+
+    assert decode_initial(payload).locations == {}
 
 
 def test_replay_reproduces_live_state_bit_for_bit():

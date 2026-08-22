@@ -8,6 +8,7 @@ from yasuki_core.engine.table import (
     ZoneRole,
     DeckKey,
     BoardPos,
+    Location,
     MoveDest,
     BATTLEFIELD,
 )
@@ -295,6 +296,21 @@ def encode_zone_key(key: ZoneKey) -> dict:
 def decode_zone_key(payload: dict) -> ZoneKey:
     """Rebuild the ``ZoneKey`` encoded by ``encode_zone_key``."""
     return ZoneKey(PlayerId[payload["owner"]], ZoneRole(payload["role"]), payload["idx"])
+
+
+def encode_location(location: Location) -> dict:
+    """Encode a ``Location`` to JSON-ready plain data."""
+    seat = location.seat
+    return {"seat": seat.name if seat is not None else None, "battlefield": location.battlefield}
+
+
+def decode_location(payload: dict) -> Location:
+    """Rebuild the ``Location`` encoded by ``encode_location``."""
+    seat = payload["seat"]
+    return Location(
+        seat=PlayerId[seat] if seat is not None else None,
+        battlefield=payload["battlefield"],
+    )
 
 
 def encode_deck_key(key: DeckKey) -> dict:
