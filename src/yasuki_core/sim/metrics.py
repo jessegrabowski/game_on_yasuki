@@ -70,7 +70,8 @@ def province_clearance(rng: Generator, *, samples: int = 500, slots: int = 4) ->
     Returns
     -------
     Metric
-        Callable of ``(game, seat)`` returning a probability in :math:`[0, 1]`.
+        Callable of ``(game, seat)`` returning a probability in :math:`[0, 1]`, or NaN once the
+        dynasty deck holds fewer than ``slots`` cards and no flop of this shape can be priced.
     """
 
     def clearance(game: GameState, seat: PlayerId) -> float:
