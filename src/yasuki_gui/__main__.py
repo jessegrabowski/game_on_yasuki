@@ -1,5 +1,6 @@
 import logging
 import tkinter as tk
+from pathlib import Path
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Action, Pass
@@ -342,7 +343,7 @@ def main() -> None:
     relayout_panels()
     refresh()  # render the opening projection and phase bar
 
-    decks = {"human": DEMO_DECK_PATH, "opponent": DEMO_DECK_PATH}
+    decks: dict[str, Path] = {"human": DEMO_DECK_PATH, "opponent": DEMO_DECK_PATH}
 
     def restart_game() -> None:
         """Start a fresh game on the currently picked decks. Raise on a deck that fails to load so
@@ -366,7 +367,7 @@ def main() -> None:
         """Deal ``path`` to ``slot`` and restart. A deck that fails to load leaves the slot as it
         was, so a bad pick does not strand the next restart on it."""
         previous = decks[slot]
-        decks[slot] = path
+        decks[slot] = Path(path)
         try:
             restart_game()
         except Exception:
