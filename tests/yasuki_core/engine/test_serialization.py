@@ -8,7 +8,15 @@ from tests.conftest import _db_available
 from tests.yasuki_core.game_pieces.test_factory import RECORDS
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey, BoardPos, BATTLEFIELD, SeatInfo
+from yasuki_core.engine.table import (
+    ZoneKey,
+    ZoneRole,
+    DeckKey,
+    BoardPos,
+    BATTLEFIELD,
+    Location,
+    SeatInfo,
+)
 from yasuki_core.engine.intents import (
     MoveCard,
     SetCardPos,
@@ -58,6 +66,8 @@ from yasuki_core.engine.serialization import (
     decode_deck_key,
     encode_seat,
     decode_seat,
+    encode_location,
+    decode_location,
 )
 from yasuki_core.game_pieces.constants import Side, Element
 from yasuki_core.game_pieces.counters import WEALTH
@@ -222,6 +232,23 @@ def test_zone_key_round_trips(key):
 )
 def test_deck_key_round_trips(key):
     assert decode_deck_key(encode_deck_key(key)) == key
+
+
+@pytest.mark.parametrize(
+    "location",
+    [Location.home(PlayerId.P1), Location.home(PlayerId.P2), Location.at_battlefield(0)],
+    ids=["p1-home", "p2-home", "battlefield"],
+)
+def test_location_round_trips(location):
+    assert decode_location(encode_location(location)) == location
+
+
+def test_an_encoded_location_is_json_ready():
+    """The enum member has to travel as its name; a raw PlayerId would not survive ``json.dumps``."""
+    payload = encode_location(Location.home(PlayerId.P2))
+
+    assert json.loads(json.dumps(payload)) == payload
+    assert decode_location(json.loads(json.dumps(payload))) == Location.home(PlayerId.P2)
 
 
 def test_seat_round_trips():

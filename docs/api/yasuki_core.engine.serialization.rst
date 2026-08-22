@@ -11,6 +11,7 @@ yasuki_core.engine.serialization
     decode_card
     decode_deck_key
     decode_intent
+    decode_location
     decode_move_dest
     decode_print
     decode_seat
@@ -19,6 +20,7 @@ yasuki_core.engine.serialization
     encode_card
     encode_deck_key
     encode_intent
+    encode_location
     encode_move_dest
     encode_print
     encode_seat
