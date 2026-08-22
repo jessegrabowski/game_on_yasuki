@@ -173,6 +173,45 @@ def test_a_unit_returns_to_its_personalitys_home_not_each_owners():
     assert location_of(state, gift) == Location.home(PlayerId.P1)
 
 
+def test_attaching_to_an_assigned_personality_joins_him_at_the_battlefield():
+    """A card in a unit stands where its Personality stands (CR, Unit). Equipping into a battle is a
+    real move — the Reserve rulebook ability equips "at the current battlefield" — so an attachment
+    that stayed home would leave its unit split across two locations."""
+    state = TableState.empty_two_seat()
+    hero = put_in_play(state, personality("hero"))
+    ops.assign(state, hero, 0)
+
+    reserve = attached(
+        state, attachment("reserve", attachment_type=AttachmentType.FOLLOWER), hero.id
+    )
+
+    assert location_of(state, reserve) == Location.at_battlefield(0)
+    state.validate()
+
+
+def test_attaching_to_a_personality_at_home_records_no_location():
+    state = TableState.empty_two_seat()
+    hero = put_in_play(state, personality("hero"))
+
+    attached(state, attachment("blade", attachment_type=AttachmentType.ITEM), hero.id)
+
+    assert state.locations == {}
+
+
+def test_a_unit_joined_at_a_battlefield_returns_home_whole():
+    state = TableState.empty_two_seat()
+    hero = put_in_play(state, personality("hero"))
+    ops.assign(state, hero, 0)
+    reserve = attached(
+        state, attachment("reserve", attachment_type=AttachmentType.FOLLOWER), hero.id
+    )
+
+    ops.return_home(state, hero)
+
+    assert location_of(state, reserve) == Location.home(PlayerId.P1)
+    assert state.locations == {}
+
+
 def test_assigning_a_lone_card_is_a_unit_of_one():
     state = TableState.empty_two_seat()
     solo = put_in_play(state, personality("solo"))

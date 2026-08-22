@@ -12,6 +12,7 @@ from yasuki_core.engine.table import (
     TableState,
     ZoneKey,
     ZoneRole,
+    location_of,
     unit_members,
 )
 from yasuki_core.engine.zones import ProvinceZone
@@ -234,6 +235,9 @@ def attach_to_personality(state: TableState, card: L5RCard, personality: L5RCard
     """
     if not isinstance(personality.printed, PersonalityPrint):
         raise ValueError(f"cannot attach {card.id!r} to non-Personality {personality.id!r}")
+    # A card in a unit stands where its Personality stands (CR, Unit), so one equipped to a
+    # Personality already at a battlefield is at that battlefield rather than at home.
+    set_location(state, card, location_of(state, personality))
     if state.units.get(card.id) == personality.id:
         return False
     state.units[card.id] = personality.id
