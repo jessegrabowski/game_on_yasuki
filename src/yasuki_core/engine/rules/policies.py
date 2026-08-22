@@ -135,23 +135,23 @@ class EconomicLegacyPolicy:
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
         legacy = next((action for action in actions if isinstance(action, Legacy)), None)
-        if legacy is not None and self._worth_taking(view):
+        if legacy is not None and _legacy_worth_taking(view):
             return legacy
         return self._buying.choose(view, actions)
 
-    @staticmethod
-    def _worth_taking(view: GameView) -> bool:
-        """Whether the pool holds a better producer than any already face-up in the seat's
-        provinces. Affordability is not weighed: what a seat can pay for shifts within the turn as
-        it bows producers, while what sits in its provinces does not."""
-        if not view.legacy_pool:
-            # Unreachable while the comparison below is strict, since an empty pool produces 0 and
-            # no board produces less. Kept because loosening that comparison would otherwise turn
-            # an empty pool into a lost game.
-            return False
-        return _best_production(view, view.legacy_pool) > _best_production(
-            view, _readable_province_cards(view).values()
-        )
+
+def _legacy_worth_taking(view: GameView) -> bool:
+    """Whether the Legacy pool holds a better producer than any already face-up in the seat's
+    provinces. Affordability is not weighed: what a seat can pay for shifts within the turn as it
+    bows producers, while what sits in its provinces does not."""
+    if not view.legacy_pool:
+        # Unreachable while the comparison below is strict, since an empty pool produces 0 and no
+        # board produces less. Kept because loosening that comparison would otherwise turn an empty
+        # pool into a lost game.
+        return False
+    return _best_production(view, view.legacy_pool) > _best_production(
+        view, _readable_province_cards(view).values()
+    )
 
 
 def cards_to_cycle(view: GameView) -> tuple[str, ...]:
@@ -252,7 +252,7 @@ class GoldRushPolicy:
         if cycle is not None and _barren_province_cards(view):
             return cycle
         legacy = next((action for action in actions if isinstance(action, Legacy)), None)
-        if legacy is not None and EconomicLegacyPolicy._worth_taking(view):
+        if legacy is not None and _legacy_worth_taking(view):
             return legacy
         ability = _worthwhile_ability(view, actions)
         if ability is not None:
@@ -312,8 +312,8 @@ def _modest_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
 
     Nothing caps how many cards a seat recruits in its Dynasty Phase, so an out-of-sequence recruit
     is not an extra purchase on its own — the turn's production bounds the spending either way, and
-    Modest Farm bows itself out of that production to grant it. Two things do pay, and one of them
-    has to hold of some Holding the seat can reach once that yield is gone.
+    Modest Farm bows itself out of that production to grant it. Two things do pay for it, and one
+    of them has to be true of some Holding the seat can still reach once that yield is gone.
 
     A Farm target is granted Renew, which refills the vacated Province face-up. Any other target
     refills it face-down, leaving the seat choosing from three live Provinces for the rest of the
