@@ -33,11 +33,11 @@ def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
     # Deck menu: load deck and open deck builder
     deck_menu = tk.Menu(menubar, tearoff=0)
 
-    def on_load_deck() -> None:
-        # Allow user to pick a deck file; call hook on field_view if available
+    def pick_deck(title: str, hook: str) -> None:
+        """Ask for a decklist and hand it to ``field_view``'s ``hook``, reporting a failed load."""
         path = filedialog.askopenfilename(
             parent=root,
-            title="Load Deck",
+            title=title,
             initialdir=str(Path(__file__).resolve().parent.parent / "assets" / "decks"),
             filetypes=[
                 ("Deck lists", ".yaml .yml"),
@@ -46,15 +46,15 @@ def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
         )
         if not path:
             return
-        loader = getattr(field_view, "load_deck_from_file", None)
+        loader = getattr(field_view, hook, None)
         if callable(loader):
             try:
                 loader(path)
             except Exception as exc:
-                messagebox.showerror("Load Deck", f"Failed to load deck:\n{exc}", parent=root)
+                messagebox.showerror(title, f"Failed to load deck:\n{exc}", parent=root)
         else:
             messagebox.showinfo(
-                "Load Deck",
+                title,
                 f"Selected deck file:\n{path}\n\n(Loading not yet implemented)",
                 parent=root,
             )
@@ -63,7 +63,14 @@ def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
         # Open the full deck builder UI
         _open_deck_builder(root)
 
-    deck_menu.add_command(label="Load Deck…", command=on_load_deck)
+    deck_menu.add_command(
+        label="Load Deck…", command=lambda: pick_deck("Load Deck", "load_deck_from_file")
+    )
+    deck_menu.add_command(
+        label="Load Opponent Deck…",
+        command=lambda: pick_deck("Load Opponent Deck", "load_opponent_deck_from_file"),
+    )
+    deck_menu.add_separator()
     deck_menu.add_command(label="Deck Builder…", command=open_deck_builder)
     menubar.add_cascade(label="Deck", menu=deck_menu)
 

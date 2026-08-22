@@ -338,12 +338,17 @@ def main() -> None:
     relayout_panels()
     refresh()  # render the opening projection and phase bar
 
-    def load_deck_from_path(path: str) -> None:
-        """Start a fresh game with the human on the picked deck; the opponent keeps the default.
-        Raise on a deck that fails to load so the menu can report it."""
+    decks = {"human": DEMO_DECK_PATH, "opponent": DEMO_DECK_PATH}
+
+    def restart_game() -> None:
+        """Start a fresh game on the currently picked decks. Raise on a deck that fails to load so
+        the menu can report it."""
         nonlocal session, runner, human_seat
         state, human_seat = build_state_from_deck(
-            path, opponent_deck_path=DEMO_DECK_PATH, p1_name="You", p2_name="Opponent"
+            decks["human"],
+            opponent_deck_path=decks["opponent"],
+            p1_name="You",
+            p2_name="Opponent",
         )
         session = EngineSession.start(state, human_seat)
         runner = GameRunner(session, human_seat, _opponent_controls())
@@ -353,7 +358,19 @@ def main() -> None:
         relayout_panels()
         refresh()
 
-    field.load_deck_from_file = load_deck_from_path
+    def _load_into(slot: str, path: str) -> None:
+        """Deal ``path`` to ``slot`` and restart. A deck that fails to load leaves the slot as it
+        was, so a bad pick does not strand the next restart on it."""
+        previous = decks[slot]
+        decks[slot] = path
+        try:
+            restart_game()
+        except Exception:
+            decks[slot] = previous
+            raise
+
+    field.load_deck_from_file = lambda path: _load_into("human", path)
+    field.load_opponent_deck_from_file = lambda path: _load_into("opponent", path)
 
     menubar = build_menubar(root, field)
     root.config(menu=menubar)
