@@ -9,6 +9,7 @@ yasuki_core.engine.table
 
     BoardPos
     DeckKey
+    Location
     SeatInfo
     TableState
     ZoneKey
@@ -18,9 +19,11 @@ yasuki_core.engine.table
 
 .. autosummary::
 
+    location_of
     owns_card
     owns_deck
     owns_zone
+    unit_members
     zone_accepts
     zone_owned_by_card
 
