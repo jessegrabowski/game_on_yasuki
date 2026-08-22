@@ -24,6 +24,11 @@ from yasuki_core.game_pieces.prints import (
 )
 
 
+# Honor decides these outright, so the tie-break never draws — the generator only satisfies the
+# signature.
+UNDRAWN = default_rng(0)
+
+
 def _resolved(owner=PlayerId.P1, dynasty_n=10, fate_n=10):
     dynasty = [
         L5RCard.of(
@@ -419,25 +424,53 @@ def _two_seat_table(p1_honor, p2_honor, *, p2_has_back=True):
 def test_lower_honor_player_goes_second_and_their_stronghold_flips():
     state, p1_sh, p2_sh = _two_seat_table(10, 4)
 
-    second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2))
+    second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2), rng=UNDRAWN)
 
     assert second is PlayerId.P2  # lower honor → second
     assert p2_sh.showing_back is True
     assert p1_sh.showing_back is False  # the first player's stronghold stays front-up
 
 
-def test_an_honor_tie_flips_no_stronghold():
+def test_an_honor_tie_is_settled_by_a_draw():
+    """Equal honor is not a reason for the seat on the left to go first every game."""
     state, p1_sh, p2_sh = _two_seat_table(7, 7)
 
-    assert flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2)) is None
-    assert p1_sh.showing_back is False and p2_sh.showing_back is False
+    second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2), rng=default_rng(0))
+
+    assert second in (PlayerId.P1, PlayerId.P2)
+    flipped = {PlayerId.P1: p1_sh, PlayerId.P2: p2_sh}[second]
+    assert flipped.showing_back is True
+    assert sum(sh.showing_back for sh in (p1_sh, p2_sh)) == 1
+
+
+def test_the_tie_break_reproduces_from_its_seed():
+    """One generator, one answer — what lets a seeded deal replay to the same opening."""
+    drawn = {
+        flip_second_player_stronghold(
+            _two_seat_table(7, 7)[0], (PlayerId.P1, PlayerId.P2), rng=default_rng(3)
+        )
+        for _ in range(5)
+    }
+
+    assert len(drawn) == 1
+
+
+def test_an_honor_tie_can_fall_either_way():
+    seconds = set()
+    for seed in range(20):
+        state, _, _ = _two_seat_table(7, 7)
+        seconds.add(
+            flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2), rng=default_rng(seed))
+        )
+
+    assert seconds == {PlayerId.P1, PlayerId.P2}
 
 
 def test_a_single_faced_second_player_stronghold_is_dealt_front_up():
     # The lower-honor seat goes second, but a stronghold with no back face is left front-up.
     state, _, p2_sh = _two_seat_table(10, 4, p2_has_back=False)
 
-    second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2))
+    second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2), rng=UNDRAWN)
 
     assert second is PlayerId.P2
     assert p2_sh.showing_back is False

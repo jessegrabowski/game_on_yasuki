@@ -117,14 +117,13 @@ def _draw_starting_hand(state: TableState, seat: PlayerId, count: int) -> None:
 
 
 def flip_second_player_stronghold(
-    state: TableState, seats: tuple[PlayerId, PlayerId]
-) -> PlayerId | None:
+    state: TableState, seats: tuple[PlayerId, PlayerId], *, rng: Generator
+) -> PlayerId:
     """Resolve turn order by honor and flip the second player's stronghold to its back face.
 
     The lower-honor seat goes second; flip its stronghold to the back side, but only when that
-    stronghold actually has a back face (single-faced strongholds are left front-up). On an honor
-    tie, no seat is demoted and nothing is flipped. Return the seat that goes second, or None on a
-    tie.
+    stronghold actually has a back face (single-faced strongholds are left front-up). Two seats on
+    equal honor are separated by a draw. Return the seat that goes second.
 
     Parameters
     ----------
@@ -132,12 +131,15 @@ def flip_second_player_stronghold(
         The table, already set up for both seats.
     seats : tuple of PlayerId
         The two seated players to compare.
+    rng : numpy.random.Generator
+        Breaks an honor tie.
     """
     first, second = seats
     honor_first, honor_second = state.seats[first].honor, state.seats[second].honor
     if honor_first == honor_second:
-        return None
-    loser = first if honor_first < honor_second else second
+        loser = seats[int(rng.integers(len(seats)))]
+    else:
+        loser = first if honor_first < honor_second else second
     stronghold = _find_stronghold(state, loser)
     if stronghold is not None and stronghold.back_card_id is not None:
         stronghold.flip_face()
