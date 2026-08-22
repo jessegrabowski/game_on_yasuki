@@ -2,7 +2,15 @@ import pathlib
 import subprocess
 import sys
 
-from yasuki_core.engine.rules import abilities, attachments, cards, economy, equip, triggers
+from yasuki_core.engine.rules import (
+    abilities,
+    attachments,
+    cards,
+    economy,
+    equip,
+    policies,
+    triggers,
+)
 from yasuki_core.engine.rules.card_registry import (
     duplicate_registrations,
     main,
@@ -14,8 +22,8 @@ from yasuki_core.engine.rules.events import EnteredPlay
 # Registry modules, and the per-card registries in them that card_registry validates. CHOICE_RESOLVERS
 # and CHOICE_PROMPTS are deliberately left out: both key on the kind of a pending choice rather than
 # on a card. CHOICE_PROMPTS lives in decisions and is visible here only because triggers imports it
-# to register into.
-REGISTRY_MODULES = (abilities, attachments, economy, equip, triggers)
+# to register into. POLICIES is the policy registry, keyed by policy name rather than by card.
+REGISTRY_MODULES = (abilities, attachments, economy, equip, policies, triggers)
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "MAY_REMAIN_BOWED",
@@ -26,11 +34,12 @@ VALIDATED_REGISTRIES = {
     "RECRUIT_DISCOUNTS",
     "INVEST_DISCOUNTS",
     "KEYWORD_GRANTS",
+    "ABILITY_HEURISTICS",
     "ATTACHMENT_GRANTS",
     "ATTACH_RESTRICTIONS",
     "_TRIGGERS",
 }
-NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS", "CHOICE_PROMPTS"}
+NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS", "CHOICE_PROMPTS", "POLICIES"}
 
 
 def module_level_registries() -> set[str]:
