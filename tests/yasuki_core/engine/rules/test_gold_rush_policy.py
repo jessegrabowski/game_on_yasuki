@@ -4,6 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import (
     Action,
     ActivateAbility,
+    Cycle,
     DynastyDiscard,
     Legacy,
     Pass,
@@ -402,3 +403,63 @@ def test_it_declines_a_chain_that_only_unlocks_a_card_producing_nothing():
 
     assert ActivateAbility("mf") in session.legal_actions(P1)
     assert _choice(session) != ActivateAbility("mf")
+
+
+def _opening(*productions: int) -> EngineSession:
+    """A session on P1's opening turn in the Action phase, one face-up Province card per
+    production. Cycle is on offer here and nowhere else."""
+    session = EngineSession.start(dealt_table(), P1, seed=1)
+    for index, production in enumerate(productions):
+        province_card(session.game, f"pv{index}", seat=P1, gold_production=production, index=index)
+    return session
+
+
+def _opening_view(session: EngineSession, deck: int = 1):
+    """P1's opening view with ``deck`` stand-in cards left in the dynasty deck, which is what makes
+    a redraw worth taking."""
+    return replace(
+        session.project(P1),
+        dynasty_deck=tuple(holding(f"deck{index}", owner=P1) for index in range(deck)),
+    )
+
+
+def test_it_cycles_when_a_province_card_produces_nothing():
+    """Cycle is the policy's first preference and its cheapest: the first turn only, no cost, and it
+    reshapes the opening every later choice is made against."""
+    session = _opening(0, 2)
+
+    assert GoldRushPolicy().choose(_opening_view(session), session.legal_actions(P1)) == Cycle()
+
+
+def test_it_declines_cycle_when_every_province_card_produces():
+    session = _opening(2, 3)
+
+    chosen = GoldRushPolicy().choose(_opening_view(session), session.legal_actions(P1))
+
+    assert chosen != Cycle()
+
+
+def test_it_declines_cycle_with_an_empty_dynasty_deck():
+    """A redraw with nothing left to draw hands the same cards straight back."""
+    session = _opening(0, 0)
+
+    chosen = GoldRushPolicy().choose(_opening_view(session, deck=0), session.legal_actions(P1))
+
+    assert chosen != Cycle()
+
+
+def test_it_bins_exactly_the_barren_cards_when_asked_what_to_cycle():
+    """The answer behind the action: it puts back what its Dynasty Discard would flush and nothing
+    else, so the cheap producers a first turn's gold can actually buy stay on the board."""
+    session = _opening(0, 2, 0)
+    request = ChooseCards(
+        seat=P1,
+        candidates=("pv0", "pv1", "pv2"),
+        minimum=0,
+        maximum=3,
+        resolver="cycle",
+    )
+
+    response = GoldRushPolicy().decide(request, _opening_view(session))
+
+    assert response.choices == ("pv0", "pv2")
