@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Final
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos, Location
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 
@@ -69,6 +69,10 @@ class ViewSnapshot:
     # reason and passed through the same way.
     units: dict[str, str] = field(default_factory=dict)
     province_attachments: dict[str, "ZoneKey"] = field(default_factory=dict)
+    # Where each card in play stands, carried verbatim from the table. Public for the same reason:
+    # assignment happens in the open, and a location names no card whose id the viewer cannot
+    # already see.
+    locations: dict[str, "Location"] = field(default_factory=dict)
 
 
 # Zones whose contents are public to both seats.
@@ -207,4 +211,5 @@ def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
         attachments=dict(state.attachments),
         units=dict(state.units),
         province_attachments=dict(state.province_attachments),
+        locations=dict(state.locations),
     )
