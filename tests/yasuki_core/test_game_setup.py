@@ -3,6 +3,7 @@ from numpy.random import default_rng
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import StrongholdPrint
 from yasuki_core.game_setup import build_state_from_deck
 
 # The only real decklist in the repo is the one the desktop client bundles. Core has no deck asset
@@ -12,6 +13,8 @@ from yasuki_gui.session import DEMO_DECK_PATH
 from tests.yasuki_core.db_guard import requires_db
 
 pytestmark = requires_db
+
+DECKS = DEMO_DECK_PATH.parent
 
 
 def _hand_ids(state, seat: PlayerId = PlayerId.P1) -> tuple[str, ...]:
@@ -23,8 +26,7 @@ def _provinces(state, seat):
 
 
 def test_bundled_deck_deals_both_seats():
-    state, human = build_state_from_deck(DEMO_DECK_PATH, rng=default_rng(7))
-    assert human is PlayerId.P1
+    state, _ = build_state_from_deck(DEMO_DECK_PATH, rng=default_rng(7))
     for seat in PlayerId:
         assert len(_provinces(state, seat)) == 4
         assert state.zones[ZoneKey(seat, ZoneRole.HAND)].cards
@@ -35,10 +37,9 @@ def test_bundled_deck_deals_both_seats():
 def test_a_separate_opponent_deck_still_deals_both_seats():
     # The two decks resolve independently; passing the opponent path explicitly (here the same
     # bundled deck) still yields a fully dealt two-seat table.
-    state, human = build_state_from_deck(
+    state, _ = build_state_from_deck(
         DEMO_DECK_PATH, opponent_deck_path=DEMO_DECK_PATH, rng=default_rng(7)
     )
-    assert human is PlayerId.P1
     for seat in PlayerId:
         assert len(_provinces(state, seat)) == 4
         assert state.decks[DeckKey(seat, Side.DYNASTY)].cards
@@ -70,10 +71,12 @@ def test_bundled_deck_resolves_art_swaps():
 
 
 def test_the_same_seed_deals_the_same_board():
-    first, _ = build_state_from_deck(DEMO_DECK_PATH, rng=default_rng(42))
-    second, _ = build_state_from_deck(DEMO_DECK_PATH, rng=default_rng(42))
+    first, first_leads = build_state_from_deck(DEMO_DECK_PATH, rng=default_rng(42))
+    second, second_leads = build_state_from_deck(DEMO_DECK_PATH, rng=default_rng(42))
 
     assert _hand_ids(first) == _hand_ids(second)
+    # Turn order is drawn from the same generator, so it reproduces with the hands or not at all.
+    assert first_leads is second_leads
 
 
 def test_a_different_seed_deals_a_different_board():
@@ -91,3 +94,38 @@ def test_dealing_without_a_seed_varies_between_games():
     deals = {_hand_ids(build_state_from_deck(DEMO_DECK_PATH)[0]) for _ in range(10)}
 
     assert len(deals) > 1
+
+
+def _stronghold(state, seat):
+    return next(
+        card
+        for card in state.battlefield.cards
+        if card.owner is seat and isinstance(card.printed, StrongholdPrint)
+    )
+
+
+def test_the_lower_honor_seat_goes_second_with_its_stronghold_flipped():
+    """Turn order belongs to the deal, not to whichever client happens to run it, so both the
+    desktop and the web surface get it from here."""
+    lion = DECKS / "lion_deathseeker_farms.yaml"
+    state, first = build_state_from_deck(
+        DEMO_DECK_PATH, opponent_deck_path=lion, rng=default_rng(7)
+    )
+
+    second = PlayerId.P2 if first is PlayerId.P1 else PlayerId.P1
+    assert state.seats[second].honor < state.seats[first].honor
+    assert _stronghold(state, second).showing_back
+    assert not _stronghold(state, first).showing_back
+
+
+def test_a_mirror_match_still_settles_turn_order():
+    """Equal honor is the common case for a mirror, and it is drawn rather than defaulted — so one
+    seat still goes second with its stronghold flipped."""
+    state, first = build_state_from_deck(
+        DEMO_DECK_PATH, opponent_deck_path=DEMO_DECK_PATH, rng=default_rng(7)
+    )
+
+    second = PlayerId.P2 if first is PlayerId.P1 else PlayerId.P1
+    assert state.seats[first].honor == state.seats[second].honor
+    assert _stronghold(state, second).showing_back
+    assert not _stronghold(state, first).showing_back

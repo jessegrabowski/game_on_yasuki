@@ -79,15 +79,19 @@ def main() -> None:
 
         gui_config.DEBUG_MODE = True
 
+    # The human always sits at P1; who takes the first turn is decided by Family Honor at deal.
+    human_seat = PlayerId.P1
     # Deal the bundled deck (needs the database); fall back to the DB-free placeholder deck so the
     # client still launches without a database or card images.
     try:
-        state, human_seat = build_state_from_deck(DEMO_DECK_PATH, p1_name="You", p2_name="Opponent")
+        state, first_player = build_state_from_deck(
+            DEMO_DECK_PATH, p1_name="You", p2_name="Opponent"
+        )
     except Exception as exc:
         logger.warning("Could not load the bundled deck, using the placeholder deck: %s", exc)
-        state, human_seat = build_demo_state()
+        state, first_player = build_demo_state()
 
-    session = EngineSession.start(state, human_seat)
+    session = EngineSession.start(state, first_player)
     runner = GameRunner(session, human_seat, _opponent_controls())
 
     field = FieldView(content, width=canvas_w, height=canvas_h)
@@ -343,14 +347,14 @@ def main() -> None:
     def restart_game() -> None:
         """Start a fresh game on the currently picked decks. Raise on a deck that fails to load so
         the menu can report it."""
-        nonlocal session, runner, human_seat
-        state, human_seat = build_state_from_deck(
+        nonlocal session, runner
+        state, first_player = build_state_from_deck(
             decks["human"],
             opponent_deck_path=decks["opponent"],
             p1_name="You",
             p2_name="Opponent",
         )
-        session = EngineSession.start(state, human_seat)
+        session = EngineSession.start(state, first_player)
         runner = GameRunner(session, human_seat, _opponent_controls())
         field.state = session.game.table
         field.seat = human_seat
