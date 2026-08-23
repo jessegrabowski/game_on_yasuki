@@ -7,6 +7,7 @@ yasuki_gui.ui.game_window
 
 .. autosummary::
 
+    ClientBindings
     GameWindow
 
 .. automodule:: yasuki_gui.ui.game_window

@@ -91,6 +91,10 @@ class FieldView(tk.Canvas):
         # Producers whose yield can be boosted as they bow, and the subset the player boosted.
         self._boostable: frozenset[str] = frozenset()
         self._boosted: list[str] = []
+        # The boostable producer picked but not yet answered for. Picking one suspends the toggle
+        # until resolve_boost or cancel_boost, so the board remembers what it is waiting on rather
+        # than making its host hold that for it.
+        self._pending_boost: str | None = None
         # Set instead of a plain selection when the decision divides a fixed number of creations
         # among the cards picked; it holds how many each carries, drawn as a spinner on the card.
         self._allocation: Allocation | None = None
@@ -102,8 +106,12 @@ class FieldView(tk.Canvas):
         self.on_card_activated: Callable[[str], None] | None = None
         # Fires on a right-click that lands on empty board, for the rulebook abilities.
         self.on_board_menu: Callable[[], None] | None = None
+        # Fire when the menu bar picks a decklist for either seat. The menu looks them up by name,
+        # so they are declared here rather than left to whoever assigns them.
+        self.load_deck_from_file: Callable[[str], None] | None = None
+        self.load_opponent_deck_from_file: Callable[[str], None] | None = None
         # Fires when a boostable producer is picked, so the host can ask whether to boost it; the
-        # host answers by calling resolve_boost.
+        # host reads pending_boost for which one and answers by calling resolve_boost.
         self.on_boost_request: Callable[[str], None] | None = None
 
         self._controller = FieldController(self)
@@ -186,6 +194,13 @@ class FieldView(tk.Canvas):
         """The selected producers whose bow-time boost the player took."""
         return frozenset(self._boosted)
 
+    @property
+    def pending_boost(self) -> str | None:
+        """The producer whose boost question is open, or None. Set when picking a boostable
+        producer suspends the toggle, and cleared by :meth:`resolve_boost`, :meth:`cancel_boost`,
+        and either end of selection mode."""
+        return self._pending_boost
+
     def begin_selection(
         self,
         candidates: Iterable[str],
@@ -201,6 +216,7 @@ class FieldView(tk.Canvas):
         self._selection_bows = render_bowed
         self._boostable = frozenset(boostable)
         self._boosted = []
+        self._pending_boost = None
         self._allocation = None
 
     def begin_allocation(self, candidates: Iterable[str], total: int) -> None:
@@ -229,6 +245,7 @@ class FieldView(tk.Canvas):
         self._selection_bows = False
         self._boostable = frozenset()
         self._boosted = []
+        self._pending_boost = None
         self._allocation = None
         self.delete(ALLOCATION_TAG)
 
@@ -251,6 +268,7 @@ class FieldView(tk.Canvas):
             self._selection.remove(card_id)
             self._forget_boost(card_id)
         elif card_id in self._boostable and self.on_boost_request is not None:
+            self._pending_boost = card_id
             self.on_boost_request(card_id)
             return
         else:
@@ -267,8 +285,15 @@ class FieldView(tk.Canvas):
             self._selection.append(card_id)
         if take and card_id not in self._boosted:
             self._boosted.append(card_id)
+        self._pending_boost = None
         if self.on_selection_changed is not None:
             self.on_selection_changed()
+
+    def cancel_boost(self) -> None:
+        """Drop the open boost question, leaving its producer out of the selection. Silent, unlike
+        the rest of the boost group: its callers re-render once they have finished changing the
+        board, and notifying here would draw a half-changed one."""
+        self._pending_boost = None
 
     def undo_last_selection(self) -> None:
         """Drop the most recently selected id (Ctrl+Z while paying), and notify the listener."""

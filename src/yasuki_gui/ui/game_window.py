@@ -1,6 +1,9 @@
 import tkinter as tk
+from collections.abc import Callable, Iterable
+from typing import Protocol
 
 import yasuki_gui.config as gui_config
+from yasuki_gui.config import load_hotkeys
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_gui import theme
@@ -9,6 +12,21 @@ from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
 from yasuki_gui.ui.prompt_box import PromptBox
+
+
+class ClientBindings(Protocol):
+    """What a window wires its widgets to. Declared here rather than imported so the widget layer
+    does not depend on the service layer that drives it."""
+
+    def refresh(self) -> None: ...
+    def request_boost(self, producer_id: str, /) -> None: ...
+    def on_card_activated(self, card_id: str, /) -> None: ...
+    def on_board_menu(self) -> None: ...
+    def load_human_deck(self, path: str, /) -> None: ...
+    def load_opponent_deck(self, path: str, /) -> None: ...
+    def undo(self, event=None, /) -> None: ...
+    def cancel_via_escape(self, event=None, /) -> None: ...
+
 
 # Flip by hand to play with the debug affordances against a release build of the config.
 LOCAL_DEBUG_OVERRIDE = False
@@ -91,6 +109,7 @@ class GameWindow:
         canvas_h = max(300, self.root.winfo_height())
 
         self.field = FieldView(self.content, width=canvas_w, height=canvas_h)
+        self.field.configure_hotkeys(load_hotkeys())
         # The table backs panel and dialog reads; the board itself renders from the redacted
         # projection the client pushes in later.
         self.field.state = table
@@ -139,3 +158,38 @@ class GameWindow:
             getattr(self.field, "profile_avatar", None),
         )
         self.root.update_idletasks()
+
+    def bind_to(self, presenter: ClientBindings) -> None:
+        """Point every widget hook and key binding at ``presenter``.
+
+        Bindings live here rather than at the assembly point because they name widgets, and the
+        widgets are all built by the time this can be called — so a hook cannot be attached to one
+        that does not exist yet.
+        """
+        # Re-render (board borders + confirm-button state) as the player toggles candidates.
+        self.field.on_selection_changed = presenter.refresh
+        self.field.on_boost_request = presenter.request_boost
+        self.field.on_card_activated = presenter.on_card_activated
+        self.field.on_board_menu = presenter.on_board_menu
+        self.field.load_deck_from_file = presenter.load_human_deck
+        self.field.load_opponent_deck_from_file = presenter.load_opponent_deck
+        self.root.bind("<Control-z>", presenter.undo)
+        self.root.bind("<Escape>", presenter.cancel_via_escape)
+
+    def popup_at_pointer(self, entries: Iterable[tuple[str, Callable[[], None]]]) -> None:
+        """Pop up a menu of labelled commands where the pointer is. No-op when there is nothing to
+        offer, so a caller can hand over whatever a click turned up without checking first."""
+        commands = list(entries)
+        if not commands:
+            return
+        menu = tk.Menu(self.root, tearoff=0)
+        for label, command in commands:
+            menu.add_command(label=label, command=command)
+        try:
+            menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
+        finally:
+            menu.grab_release()
+
+    def run(self) -> None:
+        """Enter the Tk event loop. Everything is built and presented before this is called."""
+        self.root.mainloop()

@@ -22,6 +22,7 @@ yasuki_gui
     yasuki_gui.services.game_host <yasuki_gui.services.game_host>
     yasuki_gui.services.hittest <yasuki_gui.services.hittest>
     yasuki_gui.services.permissions <yasuki_gui.services.permissions>
+    yasuki_gui.services.presenter <yasuki_gui.services.presenter>
     yasuki_gui.session <yasuki_gui.session>
     yasuki_gui.tags <yasuki_gui.tags>
     yasuki_gui.theme <yasuki_gui.theme>

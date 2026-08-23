@@ -5,8 +5,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Cycle, Pass
 from yasuki_core.game_pieces.prints import StrongholdPrint
 
-import yasuki_gui.__main__ as client_mod
-from yasuki_gui.__main__ import Client, build_client
+import yasuki_gui.services.presenter as presenter_mod
+from yasuki_gui.__main__ import build_client
+from yasuki_gui.services.presenter import Presenter
 from yasuki_gui.session import DEMO_DECK_PATH
 
 from tests.yasuki_core.db_guard import requires_db
@@ -23,13 +24,13 @@ LOW_HONOR = DEMO_DECK_PATH
 HIGH_HONOR = DEMO_DECK_PATH.parent / "crane_dishonor.yaml"
 
 
-def _build(monkeypatch, *, human_leads: bool) -> Client:
+def _build(monkeypatch, *, human_leads: bool) -> Presenter:
     """A client dealt so the human leads or does not, never entered into its event loop.
 
     The opponent hand-off is scheduled with ``root.after``, so a test pumps the event queue to let
     it run; the delay is zeroed so pumping is instant rather than a real 700ms wait.
     """
-    monkeypatch.setattr(client_mod, "OPPONENT_TURN_DELAY_MS", 0)
+    monkeypatch.setattr(presenter_mod, "OPPONENT_TURN_DELAY_MS", 0)
     return build_client(
         human_deck=HIGH_HONOR if human_leads else LOW_HONOR,
         opponent_deck=LOW_HONOR if human_leads else HIGH_HONOR,
@@ -46,15 +47,15 @@ def client(monkeypatch):
         built.window.root.destroy()
 
 
-def _status(client: Client) -> str:
+def _status(client: Presenter) -> str:
     return client.window.prompt_box._status.cget("text")
 
 
-def _buttons(client: Client) -> list[str]:
+def _buttons(client: Presenter) -> list[str]:
     return [button.cget("text") for button in client.window.prompt_box._buttons]
 
 
-def _pump(client: Client, steps: int = 200) -> None:
+def _pump(client: Presenter, steps: int = 200) -> None:
     """Run queued Tk callbacks until the human has something to do, or ``steps`` have passed."""
     for _ in range(steps):
         client.window.root.update()
@@ -97,7 +98,7 @@ def test_passing_advances_the_phase(client):
     assert client.host.runner.view().phase is not before
 
 
-def _stronghold_name(client: Client, seat) -> str:
+def _stronghold_name(client: Presenter, seat) -> str:
     game = client.host.session.game
     return next(
         card.name
