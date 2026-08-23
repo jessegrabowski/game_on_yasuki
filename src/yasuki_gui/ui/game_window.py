@@ -1,4 +1,5 @@
 import tkinter as tk
+from collections.abc import Callable, Iterable
 
 import yasuki_gui.config as gui_config
 from yasuki_core.engine.players import PlayerId
@@ -139,3 +140,21 @@ class GameWindow:
             getattr(self.field, "profile_avatar", None),
         )
         self.root.update_idletasks()
+
+    def popup_at_pointer(self, entries: Iterable[tuple[str, Callable[[], None]]]) -> None:
+        """Pop up a menu of labelled commands where the pointer is. No-op when there is nothing to
+        offer, so a caller can hand over whatever a click turned up without checking first."""
+        entries = list(entries)
+        if not entries:
+            return
+        menu = tk.Menu(self.root, tearoff=0)
+        for label, command in entries:
+            menu.add_command(label=label, command=command)
+        try:
+            menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
+        finally:
+            menu.grab_release()
+
+    def run(self) -> None:
+        """Enter the Tk event loop. Everything is built and presented before this is called."""
+        self.root.mainloop()
