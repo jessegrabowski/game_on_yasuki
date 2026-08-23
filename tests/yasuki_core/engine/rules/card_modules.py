@@ -6,12 +6,11 @@ import pathlib
 import re
 import typing
 
-import yaml
-
 from yasuki_core import DATABASE_DIR
 from yasuki_core.engine.rules import cards
 from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, iter_set_entries
 from yasuki_core.install.yaml_to_sql import card_slug
+from yasuki_core.yaml_io import read_yaml
 
 CARDS_DIR = pathlib.Path(cards.__file__).parent
 DEFAULT_SET_INFO_PATH = DATABASE_DIR / "set_info.yaml"
@@ -257,7 +256,7 @@ def first_printing_module(
     dict mapping str to str
         Card id to the module stem it belongs in.
     """
-    metadata = yaml.safe_load(set_info_path.read_text(encoding="utf-8"))
+    metadata = read_yaml(set_info_path)
     released = {
         entry["set_name"]: entry.get("release_date") or UNDATED
         for arc in metadata["arcs"]

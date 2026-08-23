@@ -93,3 +93,4 @@ yasuki_core
     yasuki_core.sim.harness <yasuki_core.sim.harness>
     yasuki_core.sim.metrics <yasuki_core.sim.metrics>
     yasuki_core.sim.recording <yasuki_core.sim.recording>
+    yasuki_core.yaml_io <yasuki_core.yaml_io>

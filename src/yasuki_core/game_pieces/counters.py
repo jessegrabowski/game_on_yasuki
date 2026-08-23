@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 
-import yaml
-
 from yasuki_core.paths import DATABASE_DIR
+from yasuki_core.yaml_io import read_yaml
 
 
 @dataclass(frozen=True, slots=True)
@@ -27,7 +26,7 @@ _CATALOG_PATH = DATABASE_DIR / "counters.yaml"
 
 
 def _load_catalog() -> tuple[Counter, ...]:
-    data = yaml.safe_load(_CATALOG_PATH.read_text(encoding="utf-8"))
+    data = read_yaml(_CATALOG_PATH)
     counters = tuple(Counter(**entry) for entry in data["counters"])
     if len({counter.key for counter in counters}) != len(counters):
         raise ValueError("counters.yaml has duplicate keys")

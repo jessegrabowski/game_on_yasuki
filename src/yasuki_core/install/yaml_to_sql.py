@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import NamedTuple
 
 import psycopg
-import yaml
 from psycopg.types.json import Json
 
 from yasuki_core.game_pieces.counters import ALL_COUNTERS
@@ -14,6 +13,7 @@ from yasuki_core.install.format_metadata import populate_format_metadata
 from yasuki_core.install.card_index import LOCAL_SET_SUFFIX
 from yasuki_core.install.sets_to_sql import coerce_date, set_slug
 from yasuki_core.install.text_split import ability_keywords
+from yasuki_core.yaml_io import read_yaml
 from yasuki_core.install.utils import normalize_name
 
 _COUNTER_KEYS = frozenset(counter.key for counter in ALL_COUNTERS)
@@ -403,7 +403,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
         set_map = {name: (set_id, slug, date) for name, set_id, slug, date in cur.fetchall()}
 
         for yaml_file in yaml_files:
-            data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
+            data = read_yaml(yaml_file)
             set_name = data["set"]
             resolved = set_map.get(set_name)
             if resolved is None and yaml_file.name.endswith(LOCAL_SET_SUFFIX):

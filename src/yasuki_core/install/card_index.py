@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from yasuki_core import DATABASE_DIR
+from yasuki_core.yaml_io import read_yaml
 
 DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
 # Set files a developer keeps on their own machine and does not commit — a fixture Stronghold, a
@@ -46,8 +47,6 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
     """
     # Imported here rather than at module scope: yaml_to_sql pulls in the Postgres driver, and
     # read_index is on the pre-commit path, where the cost buys nothing.
-    import yaml
-
     from yasuki_core.install.yaml_to_sql import card_slug
 
     yaml_files = sorted(
@@ -57,7 +56,7 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
         raise ValueError(f"No set files in {cards_dir}")
 
     for yaml_file in yaml_files:
-        data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
+        data = read_yaml(yaml_file)
         if not isinstance(data, dict):
             raise ValueError(f"{yaml_file} is not a set file")
         for entry in data.get("cards", []):

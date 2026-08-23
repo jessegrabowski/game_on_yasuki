@@ -5,7 +5,8 @@ import sys
 from pathlib import Path
 
 import psycopg
-import yaml
+
+from yasuki_core.yaml_io import read_yaml
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +65,7 @@ def load_l5r_sets(set_info_path: Path, dsn: str) -> None:
     dsn : str
         PostgreSQL connection string.
     """
-    data = yaml.safe_load(set_info_path.read_text(encoding="utf-8"))
+    data = read_yaml(set_info_path)
     rows: dict[str, tuple] = {}
     for arc in data["arcs"]:
         for entry in arc.get("sets") or []:
