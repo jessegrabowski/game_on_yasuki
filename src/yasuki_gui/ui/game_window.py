@@ -1,6 +1,6 @@
 import tkinter as tk
 from collections.abc import Callable, Iterable
-from typing import TYPE_CHECKING
+from typing import Protocol
 
 import yasuki_gui.config as gui_config
 from yasuki_gui.config import load_hotkeys
@@ -13,8 +13,20 @@ from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
 from yasuki_gui.ui.prompt_box import PromptBox
 
-if TYPE_CHECKING:
-    from yasuki_gui.services.presenter import Presenter
+
+class ClientBindings(Protocol):
+    """What a window wires its widgets to. Declared here rather than imported so the widget layer
+    does not depend on the service layer that drives it."""
+
+    def refresh(self) -> None: ...
+    def request_boost(self, producer_id: str, /) -> None: ...
+    def on_card_activated(self, card_id: str, /) -> None: ...
+    def on_board_menu(self) -> None: ...
+    def load_human_deck(self, path: str, /) -> None: ...
+    def load_opponent_deck(self, path: str, /) -> None: ...
+    def undo(self, event=None, /) -> None: ...
+    def cancel_via_escape(self, event=None, /) -> None: ...
+
 
 # Flip by hand to play with the debug affordances against a release build of the config.
 LOCAL_DEBUG_OVERRIDE = False
@@ -146,7 +158,7 @@ class GameWindow:
         )
         self.root.update_idletasks()
 
-    def bind_to(self, presenter: "Presenter") -> None:
+    def bind_to(self, presenter: ClientBindings) -> None:
         """Point every widget hook and key binding at ``presenter``.
 
         Bindings live here rather than at the assembly point because they name widgets, and the
