@@ -133,6 +133,48 @@ class TestBoostSelection:
         field.undo_last_selection()
         assert field.boosted == frozenset() and field.selection == ()
 
+    def test_the_board_names_the_producer_it_is_waiting_on(self, field):
+        # Picking a boostable producer suspends the toggle, so the board has to say what it stopped
+        # on — the host answers the question, and asks the board which one it is about.
+        field.on_boost_request = lambda card_id: None
+        field.begin_selection(["sh", "of"], boostable=["of"])
+        assert field.pending_boost is None
+
+        field.toggle_selection("of")
+
+        assert field.pending_boost == "of"
+
+    def test_answering_the_boost_closes_the_question(self, field):
+        field.on_boost_request = lambda card_id: None
+        field.begin_selection(["of"], boostable=["of"])
+        field.toggle_selection("of")
+
+        field.resolve_boost("of", True)
+
+        assert field.pending_boost is None
+
+    def test_backing_out_leaves_the_producer_unselected(self, field):
+        # Ctrl+Z on an open boost question drops the question, not the producer's candidacy: it was
+        # never taken into the selection, and it stays clickable.
+        field.on_boost_request = lambda card_id: None
+        field.begin_selection(["of"], boostable=["of"])
+        field.toggle_selection("of")
+
+        field.cancel_boost()
+
+        assert field.pending_boost is None
+        assert field.selection == ()
+
+    def test_leaving_selection_mode_forgets_an_open_question(self, field):
+        # A cancelled payment must not leave the next one answering the last one's question.
+        field.on_boost_request = lambda card_id: None
+        field.begin_selection(["of"], boostable=["of"])
+        field.toggle_selection("of")
+
+        field.end_selection()
+
+        assert field.pending_boost is None
+
 
 class TestHomeRow:
     def test_unplaced_cards_get_distinct_positions(self, loaded):
