@@ -64,11 +64,13 @@ def test_construction_seats_the_human_at_the_bottom(window):
 
 
 def test_relayout_swaps_the_panels_when_the_viewed_seat_changes(window):
-    """The debug seat toggle moves the seat being played to the bottom of the column."""
+    """The debug seat toggle moves the seat being played to the bottom of the column. Driven
+    through the board's hook rather than the method, since the toggle reaches the window only if
+    the window installed itself there."""
     before = _rows(window)
     window.field.seat = PlayerId.P2
 
-    window.relayout_panels()
+    window.field.on_local_player_changed()
 
     assert _rows(window) == before[::-1]
 
@@ -84,10 +86,11 @@ def test_relayout_resyncs_the_panels_against_the_board(window):
 
 
 def test_the_profile_lands_on_the_panel_of_the_seat_being_played(window):
+    """Driven through the board's hook, which is how the preferences dialog reaches the panels."""
     window.field.profile_name = "Ada"
     window.field.profile_avatar = None
 
-    window.apply_profile_to_panels()
+    window.field.apply_profile_to_panels()
 
     assert window.human_panel._name_label.cget("text") == "Ada"
 
@@ -99,7 +102,7 @@ def test_the_profile_follows_the_toggled_seat(window):
     window.field.profile_name = "Ada"
     window.field.profile_avatar = None
 
-    window.apply_profile_to_panels()
+    window.field.apply_profile_to_panels()
 
     assert window.opponent_panel._name_label.cget("text") == "Ada"
 
