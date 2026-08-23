@@ -61,13 +61,14 @@ def test_it_flushes_a_card_that_produces_nothing_when_it_cannot_buy():
     assert _choice(session) == DynastyDiscard("barren")
 
 
-def test_it_keeps_a_producer_it_cannot_yet_afford():
-    # Discarding here would throw away the production the policy exists to chase; the card is
-    # bought a turn later once the board can reach it.
+def test_it_flushes_a_producer_priced_beyond_what_it_can_raise():
+    # The production is only worth chasing if the seat can pay for it. Raising 1 against a cost of 9
+    # never gets there — Gold does not carry between turns, and the board grows only by buying — so
+    # holding the card keeps a Province dead for the rest of the game.
     session = _dynasty_phase(production=1)
     province_card(session.game, "dear-farm", seat=P1, gold_cost=9, gold_production=4)
 
-    assert _choice(session) == Pass()
+    assert _choice(session) == DynastyDiscard("dear-farm")
 
 
 def test_it_buys_before_it_flushes():
@@ -99,6 +100,17 @@ def test_it_takes_legacy_ahead_of_a_purchase_when_the_pool_beats_the_board():
     assert _choice(session, [buried]) == Legacy()
 
 
+def test_it_takes_legacy_over_a_board_it_cannot_pay_for():
+    # A card the seat cannot buy is not an alternative to searching, so it must not set the bar the
+    # pool has to clear. Benchmarking against one holds the ability back for the whole game, which
+    # is what a Province jammed with an unaffordable producer does.
+    session = _dynasty_phase(production=2)
+    province_card(session.game, "unreachable", seat=P1, gold_cost=9, gold_production=8)
+    buried = holding("buried", owner=P1, keywords=("Legacy",), gold_production=3, gold_cost=2)
+
+    assert _choice(session, [buried]) == Legacy()
+
+
 def test_it_declines_legacy_the_board_already_beats():
     session = _dynasty_phase()
     province_card(session.game, "onboard", seat=P1, gold_cost=3, gold_production=5)
@@ -107,9 +119,14 @@ def test_it_declines_legacy_the_board_already_beats():
     assert _choice(session, [buried]) == Recruit("onboard")
 
 
-def test_it_passes_when_it_can_neither_buy_nor_usefully_flush():
+def test_it_passes_when_its_provinces_hold_nothing_it_can_read():
+    # A face-down card is not a candidate for anything: a discard is irreversible, and a seat that
+    # cannot read a card cannot know it is worthless. Priced beyond reach and unaffordable either
+    # way, it is still left alone.
     session = _dynasty_phase(production=1)
-    province_card(session.game, "dear-farm", seat=P1, gold_cost=9, gold_production=4, index=0)
+    for index in range(4):
+        session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, index)] = ProvinceZone(owner=P1)
+    province_card(session.game, "hidden", seat=P1, gold_cost=9, gold_production=4, face_up=False)
 
     assert _choice(session) == Pass()
 
