@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.abilities import Ability, register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Ask, Bow, CreateToken, Effect, PayGold, Unpayable
 from yasuki_core.engine.rules.equip import creation_targets
-from yasuki_core.engine.rules.payments import can_raise
+from yasuki_core.engine.rules.payments import can_afford
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
@@ -24,7 +24,7 @@ def _militia_training_ground_cost(game: GameState, source: L5RCard) -> list[Effe
     """
     seat = source.owner
     may_bow = not source.bowed
-    may_pay = can_raise(game, seat, GOLD_INSTEAD_OF_BOWING)
+    may_pay = can_afford(game, seat, GOLD_INSTEAD_OF_BOWING)
     if may_bow and may_pay:
         return [
             Ask(
