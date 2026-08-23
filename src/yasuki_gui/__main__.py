@@ -15,14 +15,12 @@ from yasuki_core.engine.rules.decisions import (
     Confirm,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.policies import GoldRushPolicy
-from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
-from yasuki_core.engine.runner import Controls, GameRunner, SearchView
-from yasuki_core.game_setup import build_state_from_deck
-from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state
+from yasuki_gui.services.game_host import GameHost
+from yasuki_core.engine.runner import SearchView
+from yasuki_gui.session import DEMO_DECK_PATH
 from yasuki_gui.ui.dialogs import Dialogs
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.info_box import PlayerInfoBox
@@ -36,13 +34,6 @@ LOCAL_DEBUG_OVERRIDE = False
 
 # How long the board lingers on "Opponent's turn" before the opponent's turn auto-runs.
 OPPONENT_TURN_DELAY_MS = 700
-
-
-def _opponent_controls() -> Controls:
-    """What drives the AI opponent. One :class:`GoldRushPolicy` fills both halves, so the gold it
-    chooses to raise and the payments it agrees to come from the same strategy."""
-    policy = GoldRushPolicy()
-    return Controls(policy, policy)
 
 
 def _action_button_label(action: Action) -> str:
@@ -69,9 +60,9 @@ class Client:
         The sidebar prompt, which is what a test reads to see what the client is asking.
     phase_bar : PhaseBar
         The turn and phase strip along the bottom.
-    current_runner : callable
-        Returns the live :class:`GameRunner`. A callable rather than the runner itself because
-        loading a deck starts a new game and rebinds it.
+    host : GameHost
+        The live game — the decks it was dealt from, the session, and the runner driving it. Held
+        rather than the runner itself, which a deck load replaces.
     present : callable
         Sets the client up for whatever the engine wants next. Every path that advances the game
         ends here.
@@ -91,7 +82,7 @@ class Client:
     field: FieldView
     prompt_box: PromptBox
     phase_bar: PhaseBar
-    current_runner: Callable[[], GameRunner]
+    host: GameHost
     present: Callable[[], None]
     act: Callable[[Action], None]
     load_human_deck: Callable[[str], None]
@@ -154,44 +145,28 @@ def build_client(
         gui_config.DEBUG_MODE = True
 
     # The human always sits at P1; who takes the first turn is decided by Family Honor at deal.
-    human_seat = PlayerId.P1
-    # Deal the bundled deck (needs the database); fall back to the DB-free placeholder deck so the
-    # client still launches without a database or card images.
-    try:
-        state, first_player = build_state_from_deck(
-            human_deck,
-            opponent_deck_path=opponent_deck,
-            p1_name="You",
-            p2_name="Opponent",
-            rng=rng,
-        )
-    except Exception as exc:
-        logger.warning("Could not load the bundled deck, using the placeholder deck: %s", exc)
-        state, first_player = build_demo_state()
-
-    session = EngineSession.start(state, first_player)
-    runner = GameRunner(session, human_seat, _opponent_controls())
+    host = GameHost(human_deck, opponent_deck, rng=rng)
 
     field = FieldView(content, width=canvas_w, height=canvas_h)
     # The table backs panel and dialog reads; the board itself renders from the redacted projection.
-    field.state = session.game.table
-    field.seat = human_seat
+    field.state = host.session.game.table
+    field.seat = host.human_seat
 
     # The producer awaiting a boost answer mid-payment, or None; its prompt pre-empts the payment.
     boost_producer: str | None = None
 
     def refresh() -> None:
-        view = runner.view()
+        view = host.runner.view()
         field.gold = view.gold[view.viewer]
-        field.render_snapshot(view.table, human_seat)
+        field.render_snapshot(view.table, host.human_seat)
         phase_bar.refresh(view)
-        pending = runner.pending
-        if runner.loser is not None:
-            lost = runner.loser is human_seat
+        pending = host.runner.pending
+        if host.runner.loser is not None:
+            lost = host.runner.loser is host.human_seat
             prompt_box.show(
                 "You lose (failed Legacy)" if lost else "Opponent loses (failed Legacy)", []
             )
-        elif pending is not None and runner.search_view() is not None:
+        elif pending is not None and host.runner.search_view() is not None:
             # Answered by the search dialog (opened in present_pending), not the board.
             prompt_box.show(pending.prompt(), [])
         elif isinstance(pending, Confirm):
@@ -239,7 +214,7 @@ def build_client(
             # Pass is a button; a Recruit is invoked by clicking a holding on the board.
             buttons = [
                 (_action_button_label(action), lambda chosen=action: on_action(chosen), True)
-                for action in runner.legal_actions()
+                for action in host.runner.legal_actions()
                 if isinstance(action, Pass)
             ]
             prompt_box.show(whose, buttons)
@@ -247,12 +222,12 @@ def build_client(
         human_panel.refresh()
 
     def run_opponent() -> None:
-        runner.run_opponent()
+        host.runner.run_opponent()
         present_pending()
 
     def open_search(search: SearchView) -> None:
         def on_pick(card_id: str) -> None:
-            runner.submit([card_id])
+            host.runner.submit([card_id])
             present_pending()
 
         Dialogs(root, ImageProvider(root)).card_search(search.panes, search.choosable, on_pick)
@@ -264,8 +239,8 @@ def build_client(
         leave a decision owed by either seat."""
         nonlocal boost_producer
         boost_producer = None
-        pending = runner.pending
-        search = runner.search_view()
+        pending = host.runner.pending
+        search = host.runner.search_view()
         if search is not None:
             # The candidates are in a deck or a discard pile, so there is nothing on the board to
             # click; a modal dialog lists the pile instead.
@@ -286,19 +261,19 @@ def build_client(
         refresh()
         # An owed decision counts as well as held priority: a card can put a question to the
         # opponent while the human keeps priority, and the engine is paused until it is answered.
-        opponent_to_move = runner.opponent_holds_priority or runner.opponent_owes_decision
-        if pending is None and runner.loser is None and opponent_to_move:
+        opponent_to_move = host.runner.opponent_holds_priority or host.runner.opponent_owes_decision
+        if pending is None and host.runner.loser is None and opponent_to_move:
             # A finished game is excluded because the opponent can hold priority on one while
             # running it moves nothing, which would reschedule this forever.
             #
             # Pause only when the turn itself changes hands, so the board's "Opponent's turn" is
             # readable. The opponent also takes a window inside each of the human's Action phases,
             # and stalling on those would put the delay in the middle of the human's own turn.
-            beat = OPPONENT_TURN_DELAY_MS if runner.is_opponent_turn else 0
+            beat = OPPONENT_TURN_DELAY_MS if host.runner.is_opponent_turn else 0
             root.after(beat, run_opponent)
 
     def confirm_decision() -> None:
-        runner.submit(field.selection, field.boosted)
+        host.runner.submit(field.selection, field.boosted)
         field.end_selection()
         present_pending()
 
@@ -316,21 +291,21 @@ def build_client(
             field.resolve_boost(producer_id, take)  # adds it to the selection, then refreshes
 
     def submit_invest(amount: str) -> None:
-        runner.submit([amount])
+        host.runner.submit([amount])
         present_pending()
 
     def submit_answer(choices: tuple[str, ...]) -> None:
-        runner.submit(list(choices))
+        host.runner.submit(list(choices))
         present_pending()
 
     def cancel_decision() -> None:
         # Back out of a pending payment: drop the announced Recruit and clear the gold selection.
-        runner.cancel()
+        host.runner.cancel()
         field.end_selection()
         present_pending()
 
     def on_action(action: Action) -> None:
-        runner.act(action)
+        host.runner.act(action)
         present_pending()
 
     def popup_action_menu(items: list[tuple[str, Action]]) -> None:
@@ -351,16 +326,16 @@ def build_client(
         # Discard, a hand card's Kharmic, or an in-play card's activated ability. The ensuing
         # target/payment is picked through the board-selection path.
         popup_action_menu(
-            runner.province_menu(card_id)
-            + runner.hand_menu(card_id)
-            + runner.ability_menu(card_id)
-            + runner.inheritance_menu(card_id)
+            host.runner.province_menu(card_id)
+            + host.runner.hand_menu(card_id)
+            + host.runner.ability_menu(card_id)
+            + host.runner.inheritance_menu(card_id)
         )
 
     def on_board_menu() -> None:
         # A right-click on empty board opens the rulebook abilities. They act on whole zones rather
         # than on a card, so there is no card to left-click for them.
-        popup_action_menu(runner.board_menu())
+        popup_action_menu(host.runner.board_menu())
 
     def undo(_event=None) -> None:
         # Ctrl+Z: back out of an open boost question first, else while paying unbow the last producer
@@ -369,17 +344,17 @@ def build_client(
         if boost_producer is not None:
             boost_producer = None
             refresh()
-        elif isinstance(runner.pending, ChoosePayment):
+        elif isinstance(host.runner.pending, ChoosePayment):
             field.undo_last_selection()
-        elif runner.undo_last():
-            field.state = session.game.table
+        elif host.runner.undo_last():
+            field.state = host.session.game.table
             field.end_selection()
             refresh()
 
     def cancel_via_escape(_event=None) -> None:
         # Escape backs out of a cancellable pending decision (a recruit payment); no effect
         # otherwise, leaving the board's own Escape (clear selection) untouched.
-        pending = runner.pending
+        pending = host.runner.pending
         if pending is not None and pending.cancellable:
             cancel_decision()
 
@@ -425,40 +400,24 @@ def build_client(
     # whose first turn is not the human's.
     present_pending()
 
-    decks: dict[str, Path] = {"human": human_deck, "opponent": opponent_deck}
-
-    def restart_game() -> None:
-        """Start a fresh game on the currently picked decks. Raise on a deck that fails to load so
-        the menu can report it."""
-        nonlocal session, runner
-        state, first_player = build_state_from_deck(
-            decks["human"],
-            opponent_deck_path=decks["opponent"],
-            p1_name="You",
-            p2_name="Opponent",
-            rng=rng,
-        )
-        session = EngineSession.start(state, first_player)
-        runner = GameRunner(session, human_seat, _opponent_controls())
-        field.state = session.game.table
-        field.seat = human_seat
+    def show_new_game() -> None:
+        """Render the game the host just dealt. Every deck load ends here."""
+        field.state = host.session.game.table
+        field.seat = host.human_seat
         field.end_selection()
         relayout_panels()
         present_pending()
 
-    def _load_into(slot: str, path: str) -> None:
-        """Deal ``path`` to ``slot`` and restart. A deck that fails to load leaves the slot as it
-        was, so a bad pick does not strand the next restart on it."""
-        previous = decks[slot]
-        decks[slot] = Path(path)
-        try:
-            restart_game()
-        except Exception:
-            decks[slot] = previous
-            raise
+    def load_human_deck(path: str) -> None:
+        host.load_human_deck(path)
+        show_new_game()
 
-    field.load_deck_from_file = lambda path: _load_into("human", path)
-    field.load_opponent_deck_from_file = lambda path: _load_into("opponent", path)
+    def load_opponent_deck(path: str) -> None:
+        host.load_opponent_deck(path)
+        show_new_game()
+
+    field.load_deck_from_file = load_human_deck
+    field.load_opponent_deck_from_file = load_opponent_deck
 
     menubar = build_menubar(root, field)
     root.config(menu=menubar)
@@ -477,11 +436,11 @@ def build_client(
         field=field,
         prompt_box=prompt_box,
         phase_bar=phase_bar,
-        current_runner=lambda: runner,
+        host=host,
         present=present_pending,
         act=on_action,
-        load_human_deck=lambda path: _load_into("human", path),
-        load_opponent_deck=lambda path: _load_into("opponent", path),
+        load_human_deck=load_human_deck,
+        load_opponent_deck=load_opponent_deck,
         confirm=confirm_decision,
         cancel=cancel_decision,
     )

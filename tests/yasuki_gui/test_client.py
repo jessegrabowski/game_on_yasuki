@@ -51,12 +51,12 @@ def _pump(client: Client, steps: int = 200) -> None:
     """Run queued Tk callbacks until the human has something to do, or ``steps`` have passed."""
     for _ in range(steps):
         client.root.update()
-        if client.current_runner().legal_actions():
+        if client.host.runner.legal_actions():
             return
 
 
 def test_the_higher_honor_deck_takes_the_first_turn(client):
-    runner = client.current_runner()
+    runner = client.host.runner
 
     assert runner.session.game.first_player is runner.human
 
@@ -71,27 +71,27 @@ def test_a_game_the_opponent_leads_hands_over_and_comes_back(monkeypatch):
     leaving the human an empty prompt and nothing to click."""
     ai_first = _build(monkeypatch, human_leads=False)
     try:
-        runner = ai_first.current_runner()
+        runner = ai_first.host.runner
         assert runner.session.game.first_player is not runner.human
 
         _pump(ai_first)
 
-        assert ai_first.current_runner().legal_actions()
+        assert ai_first.host.runner.legal_actions()
         assert "Pass" in _buttons(ai_first)
     finally:
         ai_first.root.destroy()
 
 
 def test_passing_advances_the_phase(client):
-    before = client.current_runner().view().phase
+    before = client.host.runner.view().phase
     client.act(Pass())
     _pump(client)
 
-    assert client.current_runner().view().phase is not before
+    assert client.host.runner.view().phase is not before
 
 
 def _stronghold_name(client: Client, seat) -> str:
-    game = client.current_runner().session.game
+    game = client.host.session.game
     return next(
         card.name
         for card in game.table.battlefield.cards
@@ -102,31 +102,33 @@ def _stronghold_name(client: Client, seat) -> str:
 def test_loading_a_deck_restarts_the_game_on_it(client):
     """A new session is not enough — it has to be dealt from the deck that was picked, which the
     opponent's Stronghold is the cheapest way to see."""
-    opponent = PlayerId.P2 if client.current_runner().human is PlayerId.P1 else PlayerId.P1
+    opponent = PlayerId.P2 if client.host.runner.human is PlayerId.P1 else PlayerId.P1
     before = _stronghold_name(client, opponent)
 
     client.load_opponent_deck(str(HIGH_HONOR))
 
     assert _stronghold_name(client, opponent) != before
+    # The board has to be re-pointed at the new game, not left rendering the old one.
+    assert client.field.state is client.host.session.game.table
 
 
 def test_a_deck_that_fails_to_load_leaves_the_game_running(client):
-    before = client.current_runner().session.game
+    before = client.host.session.game
 
     with pytest.raises(FileNotFoundError):
         client.load_opponent_deck(str(DEMO_DECK_PATH.parent / "no_such_deck.yaml"))
 
-    assert client.current_runner().session.game is before
+    assert client.host.session.game is before
 
 
 def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
     """Cycle is the human's first-turn Limited action and it asks which Province cards to bury, so
     it is the cheapest way to reach a pending decision from a fresh game."""
-    assert Cycle() in client.current_runner().legal_actions()
+    assert Cycle() in client.host.runner.legal_actions()
 
     client.act(Cycle())
 
-    pending = client.current_runner().pending
+    pending = client.host.runner.pending
     assert pending is not None
     assert _status(client) == pending.prompt()
     assert client.field.selecting
@@ -134,20 +136,24 @@ def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
 
 def test_backing_out_of_a_decision_leaves_the_board_alone(client):
     client.act(Cycle())
-    assert client.current_runner().pending is not None
+    assert client.host.runner.pending is not None
 
     client.cancel()
 
-    assert client.current_runner().pending is None
+    assert client.host.runner.pending is None
     assert not client.field.selecting
 
 
 def test_confirming_a_decision_resolves_it(client):
     client.act(Cycle())
-    pending = client.current_runner().pending
+    pending = client.host.runner.pending
     client.field.toggle_selection(pending.candidates[0])
 
     client.confirm()
 
-    assert client.current_runner().pending is None
+    assert client.host.runner.pending is None
     assert not client.field.selecting
+
+
+def test_the_opening_board_renders_the_game_that_was_dealt(client):
+    assert client.field.state is client.host.session.game.table
