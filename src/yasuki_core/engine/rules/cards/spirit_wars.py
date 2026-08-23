@@ -16,13 +16,13 @@ from yasuki_core.game_pieces.cards import L5RCard
 register_enters_unbowed("poorly_placed_garden")
 
 
-def _get_poorly_placed_garden_valid_targets(game: GameState, source: L5RCard) -> list[str]:
+def _poorly_placed_garden_targets(game: GameState, source: L5RCard) -> list[str]:
     """The Holding itself. The honor is unconditional, so the ability targets nothing but its own
     source and the board offers no choice."""
     return [source.id]
 
 
-def _resolve_poorly_placed_garden_effect(
+def _poorly_placed_garden_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     return [GainHonor(source.owner, 2)]
@@ -34,8 +34,8 @@ register_ability(
         timing=ActionTiming.LIMITED,
         label="Limited: bow this Holding to gain 2 Honor",
         cost=bow_cost,
-        targets=_get_poorly_placed_garden_valid_targets,
-        effects=_resolve_poorly_placed_garden_effect,
+        targets=_poorly_placed_garden_targets,
+        effects=_poorly_placed_garden_effects,
         all_targets=True,
     ),
 )

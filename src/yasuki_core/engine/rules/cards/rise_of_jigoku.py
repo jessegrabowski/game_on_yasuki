@@ -70,7 +70,9 @@ register_ability(
 
 
 @province_strength_grant("makeshift_fortifications")
-def _makeshift_fortifications_strength(game: GameState, card: L5RCard, province: ZoneKey) -> int:
+def _makeshift_fortifications_province_strength(
+    game: GameState, card: L5RCard, province: ZoneKey
+) -> int:
     """ "This Province has +3PS." A continuous grant read off the board, so it lasts exactly as long
     as the Fortification stays attached and needs no bookkeeping when it leaves."""
     return 3

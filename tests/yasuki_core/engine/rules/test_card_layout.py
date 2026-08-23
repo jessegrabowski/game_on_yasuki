@@ -101,6 +101,7 @@ ROLES = frozenset(
         "attachment_grant",
         "attach_restriction",
         "production_boost",
+        "province_strength",
         # triggers, named for the event they answer
         "entered_play",
         "destroyed",

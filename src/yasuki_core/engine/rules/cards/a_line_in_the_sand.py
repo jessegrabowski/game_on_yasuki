@@ -30,13 +30,13 @@ from yasuki_core.game_pieces.counters import WALL
 # --- Agasha Beiru ---
 
 
-def _get_agasha_beiru_valid_targets(game: GameState, source: L5RCard) -> list[str]:
+def _agasha_beiru_targets(game: GameState, source: L5RCard) -> list[str]:
     """Fortifications in the seat's Dynasty discard pile."""
     discard = game.table.zones[ZoneKey(source.owner, ZoneRole.DYNASTY_DISCARD)].cards
     return [card.id for card in discard if keywords.FORTIFICATION in effective_keywords(game, card)]
 
 
-def _resolve_agasha_beiru_effect(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+def _agasha_beiru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Recruit the Fortification out of the discard pile, then wall the Province it landed on.
 
     Entering play from anywhere but a Province, it asks its controller which Province to attach to
@@ -55,8 +55,8 @@ register_ability(
         timing=ActionTiming.OPEN,
         label="Open: recruit a Fortification from your discard pile and wall its Province",
         cost=bow_cost,
-        targets=_get_agasha_beiru_valid_targets,
-        effects=_resolve_agasha_beiru_effect,
+        targets=_agasha_beiru_targets,
+        effects=_agasha_beiru_effects,
     ),
 )
 
