@@ -9,6 +9,13 @@ import yasuki_gui.__main__ as client_mod
 from yasuki_gui.__main__ import Client, build_client
 from yasuki_gui.session import DEMO_DECK_PATH
 
+from tests.yasuki_core.db_guard import requires_db
+
+# Every test here builds a client, and building one deals the chosen decks out of Postgres. Without
+# it the deal degrades to the placeholder deck, where both seats tie on Family Honor and turn order
+# is never resolved — so these would not fail honestly, they would assert against a different game.
+pytestmark = requires_db
+
 # Turn order goes to the higher Family Honor, so a pairing that differs on it decides who leads
 # outright. The bundled Spider deck opens at -2 and the Crane deck at 5; a mirror match ties and
 # draws for it, which is right for a game and useless for a test.
