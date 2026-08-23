@@ -106,6 +106,10 @@ class FieldView(tk.Canvas):
         self.on_card_activated: Callable[[str], None] | None = None
         # Fires on a right-click that lands on empty board, for the rulebook abilities.
         self.on_board_menu: Callable[[], None] | None = None
+        # Fire when the menu bar picks a decklist for either seat. The menu looks them up by name,
+        # so they are declared here rather than left to whoever assigns them.
+        self.load_deck_from_file: Callable[[str], None] | None = None
+        self.load_opponent_deck_from_file: Callable[[str], None] | None = None
         # Fires when a boostable producer is picked, so the host can ask whether to boost it; the
         # host reads pending_boost for which one and answers by calling resolve_boost.
         self.on_boost_request: Callable[[str], None] | None = None
