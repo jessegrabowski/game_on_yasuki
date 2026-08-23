@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.actions import (
     Equip,
     KharmicDraw,
     KharmicRefill,
+    Inheritance,
     Legacy,
     Pass,
     Recruit,
@@ -40,6 +41,9 @@ from yasuki_core.game_pieces.prints import (
 
 # What the Kharmic rulebook abilities cost to use.
 KHARMIC_COST = 2
+
+# The Gold Production the Inheritance ability grants the Holding it targets (ShE).
+INHERITANCE_PRODUCTION = 3
 
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
 RULESET = ruleset.ACTIVE
@@ -100,6 +104,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_dynasty_discards(game, seat),
         *_legacy(game, seat),
         *_kharmic(game, seat),
+        *_inheritance(game, seat),
     ]
 
 
@@ -118,6 +123,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return bool(_cycle(game, seat))
         case Legacy():
             return bool(_legacy(game, seat))
+        case Inheritance():
+            return bool(_inheritance(game, seat))
         case ActivateAbility(card_id=card_id):
             return action in _abilities(game, seat, only=card_id)
         case Recruit(card_id=card_id):
@@ -213,6 +220,38 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
         return []
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     return [Legacy()] if hand.cards else []
+
+
+def inheritance_key(seat: PlayerId) -> str:
+    """The once-per-*game* usage key for a seat's Inheritance ability. Unscoped by turn, unlike
+    :func:`legacy_key` and :func:`cycle_key`, because the ability is spent for the whole game."""
+    return f"inheritance:{seat.name}"
+
+
+def seat_holdings(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """``seat``'s Holdings in play, which is what Inheritance may raise."""
+    return [
+        card
+        for card in game.table.battlefield.cards
+        if card.owner is seat and isinstance(card.printed, HoldingPrint)
+    ]
+
+
+def _inheritance(game: GameState, seat: PlayerId) -> list[Action]:
+    """The Inheritance ability when the seat can take it (ShE): only for the seat that did not go
+    first, once per game, and only with a Stronghold to turn over and a Holding to raise."""
+    if not permits(game, seat, ACTION_TIMINGS[Inheritance]):
+        return []
+    if seat is game.first_player or game.has_used(inheritance_key(seat)):
+        return []
+    stronghold = seat_stronghold(game, seat)
+    # Turning the Stronghold over is what pays for the grant, and flip_face is a no-op without a
+    # back face.
+    if stronghold is None or stronghold.back_card_id is None:
+        return []
+    if not seat_holdings(game, seat):
+        return []
+    return [Inheritance()]
 
 
 def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:

@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.actions import (
     Cycle,
     DynastyDiscard,
     Equip,
+    Inheritance,
     KharmicDraw,
     KharmicRefill,
     Legacy,
@@ -23,6 +24,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.economy import effective_gold_cost, effective_personal_honor
+from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.policies import PassPolicy, Policy
 from yasuki_core.engine.rules.projection import GameView
@@ -180,6 +182,18 @@ class GameRunner:
                 label = ability.label if ability is not None else "Activate ability"
                 return [(label, action)]
         return []
+
+    def inheritance_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The Inheritance action offered on the human's own Stronghold, when it is legal now. Empty
+        for any other card, and for a seat that went first or has already spent it."""
+        stronghold = legality.seat_stronghold(self.session.game, self.human)
+        if stronghold is None or stronghold.id != card_id:
+            return []
+        return [
+            (f"Inheritance: turn over for +{INHERITANCE_PRODUCTION}GP", action)
+            for action in self.legal_actions()
+            if isinstance(action, Inheritance)
+        ]
 
     def board_menu(self) -> list[tuple[str, Action]]:
         """The labeled rulebook abilities, for a right-click on the empty board. These belong to no

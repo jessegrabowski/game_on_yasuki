@@ -274,7 +274,10 @@ def main() -> None:
         # Discard, a hand card's Kharmic, or an in-play card's activated ability. The ensuing
         # target/payment is picked through the board-selection path.
         popup_action_menu(
-            runner.province_menu(card_id) + runner.hand_menu(card_id) + runner.ability_menu(card_id)
+            runner.province_menu(card_id)
+            + runner.hand_menu(card_id)
+            + runner.ability_menu(card_id)
+            + runner.inheritance_menu(card_id)
         )
 
     def on_board_menu() -> None:
@@ -341,7 +344,9 @@ def main() -> None:
 
     field.on_local_player_changed = relayout_panels
     relayout_panels()
-    refresh()  # render the opening projection and phase bar
+    # Renders the opening board and hands over to the opponent, which is what moves a game
+    # whose first turn is not the human's.
+    present_pending()
 
     decks: dict[str, Path] = {"human": DEMO_DECK_PATH, "opponent": DEMO_DECK_PATH}
 
@@ -361,7 +366,7 @@ def main() -> None:
         field.seat = human_seat
         field.end_selection()
         relayout_panels()
-        refresh()
+        present_pending()
 
     def _load_into(slot: str, path: str) -> None:
         """Deal ``path`` to ``slot`` and restart. A deck that fails to load leaves the slot as it

@@ -528,3 +528,20 @@ class PlaceLegacy(DecisionRequest):
 
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)
+
+
+@dataclass(frozen=True, slots=True)
+class ChooseInheritanceTarget(DecisionRequest):
+    """The seat must choose which Holding its Inheritance ability raises. The candidates are the
+    Holdings it controls in play, so a client renders them as board selections."""
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Choose a Holding to give +3 Gold Production"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        """Backing out unwinds the whole action that raised it."""
+        return True

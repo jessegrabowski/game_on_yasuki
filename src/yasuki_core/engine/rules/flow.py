@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.actions import (
     Cycle,
     DynastyDiscard,
     Equip,
+    Inheritance,
     KharmicDraw,
     KharmicRefill,
     Legacy,
@@ -46,6 +47,7 @@ from yasuki_core.engine.rules.decisions import (
     ChooseCards,
     ChooseDistribution,
     ChooseEquipTarget,
+    ChooseInheritanceTarget,
     Confirm,
     ChooseInvestAmount,
     ChooseLegacyCard,
@@ -62,6 +64,7 @@ from yasuki_core.engine.rules.economy import (
     effective_personal_honor,
 )
 from yasuki_core.engine.rules.legality import (
+    INHERITANCE_PRODUCTION,
     KHARMIC_COST,
     cycle_candidates,
     cycle_key,
@@ -70,11 +73,14 @@ from yasuki_core.engine.rules.legality import (
     legacy_key,
     legacy_search_pool,
     permitted_timings,
+    inheritance_key,
     proclaim_key,
     province_key_holding,
     province_key_of,
     reachable_gold,
     recruit_cost,
+    seat_holdings,
+    seat_stronghold,
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -237,6 +243,8 @@ def perform(game: GameState, action: Action) -> None:
             dynasty_discard(game, card_id)
         case Legacy():
             legacy(game)
+        case Inheritance():
+            inheritance(game)
         case Cycle():
             cycle(game)
         case KharmicDraw(card_id=card_id):
@@ -380,6 +388,44 @@ def _equip_invest_amount(game: GameState, card: L5RCard) -> int:
     return amount
 
 
+def inheritance(game: GameState) -> None:
+    """Announce the Inheritance ability by asking which Holding it raises. ``legal_actions`` has
+    already checked the seat did not go first, has not spent the ability, and has both a Stronghold
+    to turn over and a Holding to raise."""
+    seat = game.active
+    game.pending = ChooseInheritanceTarget(
+        seat=seat,
+        candidates=tuple(card.id for card in seat_holdings(game, seat)),
+    )
+
+
+def _apply_inheritance_target(
+    game: GameState, request: ChooseInheritanceTarget, response: DecisionResponse
+) -> None:
+    """Spend the once-per-game use, turn the Stronghold over, and raise the chosen Holding.
+
+    The Stronghold turns over rather than to a named face: a seat whose Stronghold a card has
+    already flipped turns it back (ShE, The Inheritance Rule).
+    """
+    seat = request.seat
+    game.pending = None
+    game.use_once(inheritance_key(seat))
+    stronghold = seat_stronghold(game, seat)
+    stronghold.flip_face()
+    triggers.resolve_effects(
+        game,
+        [
+            GrantModifier(
+                source_id=stronghold.id,
+                target_id=response.choices[0],
+                stat=Stat.GOLD_PRODUCTION,
+                amount=INHERITANCE_PRODUCTION,
+                duration=Duration.UNTIL_END_OF_TURN,
+            )
+        ],
+    )
+
+
 def _apply_equip_target(
     game: GameState, request: ChooseEquipTarget, response: DecisionResponse
 ) -> None:
@@ -485,6 +531,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_ability_target(game, request, response)
         case ChooseEquipTarget():
             _apply_equip_target(game, request, response)
+        case ChooseInheritanceTarget():
+            _apply_inheritance_target(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
         case ChooseAmount():
