@@ -76,6 +76,13 @@ class Legacy:
 
 
 @dataclass(frozen=True, slots=True)
+class Inheritance:
+    """Take the Inheritance rulebook ability (Dynasty, once per game, only if you did not go first):
+    turn your Stronghold over to give a Holding you control +3 Gold Production for the turn. The
+    Holding is chosen through the decision the action raises. [ShE]"""
+
+
+@dataclass(frozen=True, slots=True)
 class Equip:
     """Attach a Follower, Item or Spell from hand to a Personality you control, paying its Gold Cost.
 
@@ -156,6 +163,7 @@ Action = (
     | Cycle
     | KharmicDraw
     | KharmicRefill
+    | Inheritance
 )
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
@@ -170,4 +178,5 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     Equip: ActionTiming.OPEN,
     DynastyDiscard: ActionTiming.DYNASTY,
     Legacy: ActionTiming.DYNASTY,
+    Inheritance: ActionTiming.DYNASTY,
 }

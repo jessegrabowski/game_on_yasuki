@@ -12,6 +12,7 @@ yasuki_core.engine.rules.actions
     Cycle
     DynastyDiscard
     Equip
+    Inheritance
     KharmicDraw
     KharmicRefill
     Legacy

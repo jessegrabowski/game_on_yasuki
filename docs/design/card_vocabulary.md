@@ -104,6 +104,7 @@ Legality with respect to game state is checked separately.
    ChooseCards
    ChooseDistribution
    ChooseEquipTarget
+   ChooseInheritanceTarget
    ChooseInvestAmount
    ChooseOption
    LeaveBowed

@@ -20,6 +20,7 @@ yasuki_core.engine.rules.flow
     dynasty_discard
     equip
     forget_action
+    inheritance
     kharmic_draw
     kharmic_refill
     legacy

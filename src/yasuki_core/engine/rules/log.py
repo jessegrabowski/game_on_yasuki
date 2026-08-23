@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.actions import (
     Equip,
     KharmicDraw,
     KharmicRefill,
+    Inheritance,
     Legacy,
     Pass,
     Recruit,
@@ -231,6 +232,8 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "dynasty_discard", "card_id": card_id}
         case Legacy():
             return {"kind": "legacy"}
+        case Inheritance():
+            return {"kind": "inheritance"}
         case Cycle():
             return {"kind": "cycle"}
         case KharmicDraw(card_id=card_id):
@@ -258,6 +261,8 @@ def _decode_action(payload: dict) -> Action:
         return DynastyDiscard(payload["card_id"])
     if kind == "legacy":
         return Legacy()
+    if kind == "inheritance":
+        return Inheritance()
     if kind == "cycle":
         return Cycle()
     if kind == "kharmic_draw":

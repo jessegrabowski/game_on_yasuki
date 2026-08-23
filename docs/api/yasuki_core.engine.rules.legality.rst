@@ -14,6 +14,7 @@ yasuki_core.engine.rules.legality
     gold_producers
     gold_reach
     has_keyword
+    inheritance_key
     is_first_turn
     is_kharmic_card
     is_legacy_card
@@ -36,6 +37,7 @@ yasuki_core.engine.rules.legality
     seat_alignment_name
     seat_alignments
     seat_clan
+    seat_holdings
     seat_stronghold
     timing_of
 
