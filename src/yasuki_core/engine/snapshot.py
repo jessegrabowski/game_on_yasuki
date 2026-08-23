@@ -56,6 +56,8 @@ class InitialRecord:
         Regions and Fortifications attached to a province, keyed by card id.
     locations : dict mapping str to Location
         Where each card in play stands, keyed by card id.
+    province_counters : dict mapping ZoneKey to a dict of str to int
+        Counters resting on a Province rather than on a card, keyed by the Province's zone key.
     creatable_tokens : dict mapping str to CardPrint
         Token templates the loaded decks can create, keyed by token card id, so a replayed token
         spawn resolves against the same templates without a database call.
@@ -72,6 +74,7 @@ class InitialRecord:
     units: dict[str, str] = field(default_factory=dict)
     province_attachments: dict[str, ZoneKey] = field(default_factory=dict)
     locations: dict[str, Location] = field(default_factory=dict)
+    province_counters: dict[ZoneKey, dict[str, int]] = field(default_factory=dict)
     creatable_tokens: dict[str, CardPrint] = field(default_factory=dict)
     setup_seeds: dict[str, int] = field(default_factory=dict)
 
@@ -103,6 +106,7 @@ class InitialRecord:
             units=dict(state.units),
             province_attachments=dict(state.province_attachments),
             locations=dict(state.locations),
+            province_counters={key: dict(held) for key, held in state.province_counters.items()},
             creatable_tokens=dict(state.creatable_tokens),
             setup_seeds=dict(setup_seeds or {}),
         )
@@ -129,6 +133,7 @@ def build_initial_state(initial: InitialRecord) -> TableState:
     state.units = dict(initial.units)
     state.province_attachments = dict(initial.province_attachments)
     state.locations = dict(initial.locations)
+    state.province_counters = {key: dict(held) for key, held in initial.province_counters.items()}
     state.creatable_tokens = dict(initial.creatable_tokens)
     return state
 
@@ -166,6 +171,9 @@ def encode_initial(initial: InitialRecord) -> dict:
         "locations": {
             card_id: encode_location(location) for card_id, location in initial.locations.items()
         },
+        "province_counters": [
+            [encode_zone_key(key), dict(held)] for key, held in initial.province_counters.items()
+        ],
         "creatable_tokens": {
             tid: encode_print(printed) for tid, printed in initial.creatable_tokens.items()
         },
@@ -201,6 +209,11 @@ def decode_initial(payload: dict) -> InitialRecord:
         card_id: decode_location(location)
         for card_id, location in payload.get("locations", {}).items()
     }
+    # A list of pairs rather than an object: a ZoneKey has no string form that round-trips as a
+    # JSON key without inventing one.
+    province_counters = {
+        decode_zone_key(key): dict(held) for key, held in payload.get("province_counters", [])
+    }
     creatable_tokens = {
         tid: decode_print(printed) for tid, printed in payload.get("creatable_tokens", {}).items()
     }
@@ -214,6 +227,7 @@ def decode_initial(payload: dict) -> InitialRecord:
         units=units,
         province_attachments=province_attachments,
         locations=locations,
+        province_counters=province_counters,
         creatable_tokens=creatable_tokens,
         setup_seeds=dict(payload["setup_seeds"]),
     )

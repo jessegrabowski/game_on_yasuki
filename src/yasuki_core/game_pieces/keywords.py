@@ -14,6 +14,10 @@
 
 # --- Keywords the rulebook itself reads ---
 
+# A Holding carrying this attaches to the Province it entered play from — or to one its controller
+# picks, if it came from elsewhere — and is destroyed with it (CR, Fortification).
+FORTIFICATION = "Fortification"
+
 # A Kensai Personality may attach two Weapons rather than one (CR, Kensai).
 KENSAI = "Kensai"
 

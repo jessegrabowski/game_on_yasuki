@@ -40,6 +40,7 @@ deferred through `Then` instead.
    BanishTopFate
    Bow
    Choose
+   CounterOnAttachedProvince
    CreateToken
    Destroy
    DestroyProvince
@@ -104,6 +105,7 @@ Legality with respect to game state is checked separately.
    ChooseCards
    ChooseDistribution
    ChooseEquipTarget
+   ChooseFortificationProvince
    ChooseInheritanceTarget
    ChooseInvestAmount
    ChooseOption

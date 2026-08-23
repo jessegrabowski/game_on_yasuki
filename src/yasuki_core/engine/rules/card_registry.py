@@ -1,7 +1,15 @@
 import difflib
 import sys
 
-from yasuki_core.engine.rules import abilities, attachments, economy, equip, policies, triggers
+from yasuki_core.engine.rules import (
+    abilities,
+    attachments,
+    economy,
+    equip,
+    policies,
+    state_rules,
+    triggers,
+)
 
 # Without this the registries are empty and every check below passes vacuously.
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -19,6 +27,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     return {
         "abilities": frozenset(abilities._ABILITIES),
         "invest abilities": frozenset(abilities._INVEST),
+        "enters unbowed": frozenset(abilities._ENTERS_UNBOWED),
         "production boosts": frozenset(abilities._PRODUCTION_BOOST),
         "may remain bowed": frozenset(abilities.MAY_REMAIN_BOWED),
         "bow waivers": frozenset(abilities.BOW_WAIVERS),
@@ -26,6 +35,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),
         "invest discounts": frozenset(economy.INVEST_DISCOUNTS),
         "keyword grants": frozenset(economy.KEYWORD_GRANTS),
+        "province strength grants": frozenset(economy.PROVINCE_STRENGTH_GRANTS),
         "ability heuristics": frozenset(policies.ABILITY_HEURISTICS),
         "attachment grants": frozenset(attachments.ATTACHMENT_GRANTS),
         "attach restrictions": frozenset(equip.ATTACH_RESTRICTIONS),
@@ -33,6 +43,18 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),
     }
+
+
+def card_keyed_data() -> dict[str, frozenset[str]]:
+    """Every card id the engine names as *data* rather than as a handler, grouped by the list
+    holding it.
+
+    Kept apart from :func:`registered_card_ids` because these ids do not live in a set module — a
+    card excepted from a rulebook rule is a property of the card, listed beside the rule it excepts,
+    and the layout scan would report every one of them as a registration it could not find. They are
+    validated against the card index all the same.
+    """
+    return {"chi death exemptions": state_rules.CHI_DEATH_EXEMPT}
 
 
 def duplicate_registrations(
@@ -85,7 +107,7 @@ def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -
         Sorted problem descriptions, empty when every registered id names a real card.
     """
     if registries is None:
-        registries = registered_card_ids()
+        registries = registered_card_ids() | card_keyed_data()
 
     known = read_index()
     problems: list[str] = []

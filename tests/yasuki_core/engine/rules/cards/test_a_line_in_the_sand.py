@@ -1,16 +1,22 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Equip
-from yasuki_core.engine.rules.decisions import ChooseCards, ChoosePayment, DecisionResponse
-from yasuki_core.engine.rules.economy import effective_gold_cost
+from yasuki_core.engine.rules.actions import ActivateAbility, Equip
+from yasuki_core.engine.rules.decisions import (
+    ChooseCards,
+    ChooseFortificationProvince,
+    ChoosePayment,
+    DecisionResponse,
+)
+from yasuki_core.engine.rules.economy import effective_gold_cost, effective_province_strength
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, StrongholdPrint
 
-from tests.yasuki_core.engine.builders import register
+from tests.yasuki_core.engine.builders import holding, province_card, register
 
 P1 = PlayerId.P1
 
@@ -147,3 +153,116 @@ def test_the_invested_cost_dies_with_the_card():
 
     assert effective_gold_cost(session.game, weapon) == 3
     assert session.game.modifiers == []
+
+
+# --- Agasha Beiru ---
+
+
+def _beiru_game(*, provinces=("keep",), discarded=("wall",)):
+    """Beiru in play, Fortifications in the Dynasty discard, and occupied Provinces to attach to."""
+    state = TableState.empty_two_seat()
+    state.battlefield.add(
+        register(
+            state,
+            L5RCard.of(
+                StrongholdPrint,
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=P1,
+                gold_production=8,
+                province_strength=3,
+            ),
+        )
+    )
+    state.battlefield.add(
+        register(
+            state,
+            L5RCard.of(
+                PersonalityPrint,
+                id="beiru",
+                name="Agasha Beiru",
+                side=Side.DYNASTY,
+                owner=P1,
+                printed_id="agasha_beiru",
+                force=1,
+                chi=3,
+                keywords=("Earth", "Shugenja"),
+            ),
+        )
+    )
+    for index, card_id in enumerate(provinces):
+        province_card(state, card_id, printed_id=card_id, gold_cost=1, index=index)
+    discard = state.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
+    for card_id in discarded:
+        discard.add(
+            register(
+                state,
+                holding(card_id, printed_id=card_id, gold_cost=2, keywords=("Fortification",)),
+            )
+        )
+    return EngineSession.start(state, P1)
+
+
+def test_beiru_walls_the_province_he_attaches_the_fortification_to():
+    """ "Recruit a target Fortification in your discard pile (attach it to any of your Provinces).
+    Give its Province a +1 strength Wall token." The Fortification never sat in a Province, so the
+    CR hands its controller the choice — and the token follows wherever that lands."""
+    session = _beiru_game()
+
+    session.act(P1, ActivateAbility("beiru"))
+    session.submit(P1, DecisionResponse(("wall",)))  # the Fortification to recruit
+    session.submit(P1, DecisionResponse(("P1-SH",)))  # pay for it
+    pending = session.project(P1).pending
+    assert isinstance(pending, ChooseFortificationProvince)
+    # Provinces are named by slot rather than by the card standing in one.
+    assert pending.candidates == (ZoneKey(P1, ZoneRole.PROVINCE, 0).token,)
+    session.submit(P1, DecisionResponse((ZoneKey(P1, ZoneRole.PROVINCE, 0).token,)))
+
+    game = session.game
+    first = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    assert game.table.province_attachments == {"wall": first}
+    assert game.table.province_counters == {first: {"wall": 1}}
+    assert effective_province_strength(game, first) == 4  # 3 printed, +1 walled
+    assert game.table.cards_by_id["beiru"].bowed  # his bow is the cost
+
+
+def test_beiru_offers_the_seat_every_province():
+    session = _beiru_game(provinces=("keep", "farm"))
+
+    session.act(P1, ActivateAbility("beiru"))
+    session.submit(P1, DecisionResponse(("wall",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+
+    assert set(session.project(P1).pending.candidates) == {
+        ZoneKey(P1, ZoneRole.PROVINCE, index).token for index in range(2)
+    }
+
+
+def test_beiru_can_wall_an_empty_province():
+    """A Province is a slot, so one standing empty takes a Fortification like any other. Named by
+    the card in it instead, an empty Province is unpickable and the paid-for recruit deadlocks."""
+    game_state = _beiru_game(provinces=()).game.table
+    empty = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    game_state.zones[empty] = ProvinceZone(owner=P1)
+    session = EngineSession.start(game_state, P1)
+
+    session.act(P1, ActivateAbility("beiru"))
+    session.submit(P1, DecisionResponse(("wall",)))
+    session.submit(P1, DecisionResponse(("P1-SH",)))
+    assert session.project(P1).pending.candidates == (empty.token,)
+    session.submit(P1, DecisionResponse((empty.token,)))
+
+    assert session.game.table.province_attachments == {"wall": empty}
+    assert session.game.table.province_counters == {empty: {"wall": 1}}
+
+
+def test_beiru_is_not_offered_without_a_fortification_to_raise():
+    """A plain Holding in the discard pile is not a target; the ability needs the keyword."""
+    session = _beiru_game(discarded=())
+    state = session.game.table
+    state.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].add(
+        register(state, holding("farm", printed_id="farm", gold_cost=2))
+    )
+
+    assert ActivateAbility("beiru") not in session.legal_actions(P1)

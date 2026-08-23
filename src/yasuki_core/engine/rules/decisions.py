@@ -385,6 +385,39 @@ CHOICE_PROMPTS: dict[str, str] = {}
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseFortificationProvince(DecisionRequest):
+    """The seat must choose which of its Provinces a Fortification attaches to.
+
+    Raised only when the card was brought into play from somewhere other than a Province, which the
+    CR gives its controller the choice for. The candidates are zone tokens rather than card ids: a
+    Province is a slot, and an empty one takes a Fortification as readily as an occupied one.
+
+    Attributes
+    ----------
+    source_card_id : str
+        The Fortification, already on the battlefield and waiting to be attached.
+    invest_amount : int
+        The Invest cost paid for it, applied once it has entered play.
+    proclaim : bool
+        Whether the recruit was a Proclaim.
+    """
+
+    source_card_id: str
+    invest_amount: int = 0
+    proclaim: bool = False
+
+    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+        return "Choose a Province for the Fortification"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Attach"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+
+@dataclass(frozen=True, slots=True)
 class Confirm(DecisionRequest):
     """The seat must answer a yes/no question naming what it is being asked to do.
 

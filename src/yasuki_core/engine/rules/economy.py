@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.modifiers import (
     Stat,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import ZoneKey
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import counter_from_key
@@ -213,6 +214,49 @@ def effective_weapon_limit(game: GameState, card: L5RCard) -> int:
     """How many Weapon Items may be attached to ``card`` (CR, Weapon). One by default, two for a
     Kensai, and whatever a card's own modifiers make it."""
     return effective_stat(game, card, Stat.WEAPON_LIMIT)
+
+
+# What a card attached to a Province gives it, beyond anything it prints. Makeshift Fortifications
+# reads "This Province has +3PS"; a Fortification carries no Province Strength stat of its own, so
+# the grant is text rather than a number on the print. Keyed by printed id like the other registries.
+ProvinceGrant = Callable[[GameState, L5RCard, ZoneKey], int]
+PROVINCE_STRENGTH_GRANTS: dict[str, ProvinceGrant] = {}
+
+
+def province_strength_grant(printed_id: str) -> Callable[[ProvinceGrant], ProvinceGrant]:
+    """Register the decorated function as ``printed_id``'s Province Strength grant."""
+
+    def register(grant: ProvinceGrant) -> ProvinceGrant:
+        if printed_id in PROVINCE_STRENGTH_GRANTS:
+            raise ValueError(f"{printed_id} already grants Province Strength")
+        PROVINCE_STRENGTH_GRANTS[printed_id] = grant
+        return grant
+
+    return register
+
+
+def effective_province_strength(game: GameState, province: ZoneKey) -> int:
+    """How strong ``province`` is right now, floored at zero.
+
+    Three sources, summed: the owning seat's Stronghold prints the strength every one of its
+    Provinces starts at — a stat of a Stronghold *or* of a Province (CR, Province Strength) — then
+    the counters resting on this slot, then what the Fortifications attached to it grant. A seat
+    with no Stronghold in play contributes no printed base.
+    """
+    stronghold = player_state(game, province.owner).stronghold
+    total = (
+        effective_stat(game, stronghold, Stat.PROVINCE_STRENGTH) if stronghold is not None else 0
+    )
+    for name, count in game.table.province_counters.get(province, {}).items():
+        total += counter_from_key(name).province_strength * count
+    for card_id, holds in game.table.province_attachments.items():
+        if holds != province:
+            continue
+        fortification = game.table.cards_by_id[card_id]
+        grant = PROVINCE_STRENGTH_GRANTS.get(fortification.printed_id)
+        if grant is not None:
+            total += grant(game, fortification, province)
+    return max(0, total)
 
 
 def effective_gold_cost(game: GameState, card: L5RCard) -> int:
