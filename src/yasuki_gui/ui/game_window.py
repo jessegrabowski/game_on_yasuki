@@ -109,6 +109,7 @@ class GameWindow:
         canvas_h = max(300, self.root.winfo_height())
 
         self.field = FieldView(self.content, width=canvas_w, height=canvas_h)
+        self.field.configure_hotkeys(load_hotkeys())
         # The table backs panel and dialog reads; the board itself renders from the redacted
         # projection the client pushes in later.
         self.field.state = table
@@ -174,16 +175,15 @@ class GameWindow:
         self.field.load_opponent_deck_from_file = presenter.load_opponent_deck
         self.root.bind("<Control-z>", presenter.undo)
         self.root.bind("<Escape>", presenter.cancel_via_escape)
-        self.field.configure_hotkeys(load_hotkeys())
 
     def popup_at_pointer(self, entries: Iterable[tuple[str, Callable[[], None]]]) -> None:
         """Pop up a menu of labelled commands where the pointer is. No-op when there is nothing to
         offer, so a caller can hand over whatever a click turned up without checking first."""
-        entries = list(entries)
-        if not entries:
+        commands = list(entries)
+        if not commands:
             return
         menu = tk.Menu(self.root, tearoff=0)
-        for label, command in entries:
+        for label, command in commands:
             menu.add_command(label=label, command=command)
         try:
             menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
