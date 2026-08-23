@@ -344,7 +344,9 @@ def main() -> None:
 
     field.on_local_player_changed = relayout_panels
     relayout_panels()
-    refresh()  # render the opening projection and phase bar
+    # present_pending rather than refresh: it draws the opening board *and* hands over to the
+    # opponent, which is the only thing that moves a game whose first turn is not the human's.
+    present_pending()
 
     decks: dict[str, Path] = {"human": DEMO_DECK_PATH, "opponent": DEMO_DECK_PATH}
 
@@ -364,7 +366,7 @@ def main() -> None:
         field.seat = human_seat
         field.end_selection()
         relayout_panels()
-        refresh()
+        present_pending()
 
     def _load_into(slot: str, path: str) -> None:
         """Deal ``path`` to ``slot`` and restart. A deck that fails to load leaves the slot as it
