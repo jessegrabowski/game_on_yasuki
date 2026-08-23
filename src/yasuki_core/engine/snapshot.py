@@ -208,6 +208,7 @@ def decode_initial(payload: dict) -> InitialRecord:
     locations = {
         card_id: decode_location(location)
         for card_id, location in payload.get("locations", {}).items()
+    }
     # A list of pairs rather than an object: a ZoneKey has no string form that round-trips as a
     # JSON key without inventing one.
     province_counters = {

@@ -675,6 +675,8 @@ def test_the_mine_pays_its_printed_rate_with_no_target():
     game, mine, _ = _mine_and_item(gold_cost=3)
 
     assert effective_gold_production(game, mine) == 2
+
+
 # --- Makeshift Fortifications ---
 
 

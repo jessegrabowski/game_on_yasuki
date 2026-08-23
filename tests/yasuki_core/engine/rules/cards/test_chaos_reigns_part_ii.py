@@ -308,6 +308,8 @@ def test_another_personality_arriving_arms_nobody():
 
     assert attachments_of(game, game.table.cards_by_id["hiyamako"]) == ()
     assert attachments_of(game, game.table.cards_by_id["bystander"]) == ()
+
+
 # --- Fortified Farmlands ---
 
 
