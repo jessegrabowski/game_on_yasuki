@@ -1,5 +1,7 @@
 import logging
 import tkinter as tk
+from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
 
 from yasuki_core.engine.players import PlayerId
@@ -48,7 +50,60 @@ def _action_button_label(action: Action) -> str:
     raise ValueError(f"no button label for {type(action).__name__}")
 
 
-def main() -> None:
+@dataclass(frozen=True, slots=True)
+class Client:
+    """A built desktop client, handed back so a caller can run it and a test can drive it.
+
+    Scaffolding, and temporary: it exposes the state the entry point shares between its callbacks
+    so a caller can reach it, and each field leaves as its real owner arrives.
+
+    Attributes
+    ----------
+    root : tkinter.Tk
+        The toplevel window, held so :meth:`run` can enter its event loop.
+    field : FieldView
+        The board canvas.
+    prompt_box : PromptBox
+        The sidebar prompt, which is what a test reads to see what the client is asking.
+    phase_bar : PhaseBar
+        The turn and phase strip along the bottom.
+    current_runner : callable
+        Returns the live :class:`GameRunner`. A callable rather than the runner itself because
+        loading a deck starts a new game and rebinds it.
+    present : callable
+        Sets the client up for whatever the engine wants next. Every path that advances the game
+        ends here.
+    act : callable
+        Takes one :class:`Action` on the human's behalf.
+    load_human_deck : callable
+        Deals the decklist at the given path to the human and restarts the game.
+    load_opponent_deck : callable
+        Deals the decklist at the given path to the AI opponent and restarts the game.
+    confirm : callable
+        Answers the pending decision with the board's current selection.
+    cancel : callable
+        Backs out of the pending decision, when it allows it.
+    """
+
+    root: tk.Tk
+    field: FieldView
+    prompt_box: PromptBox
+    phase_bar: PhaseBar
+    current_runner: Callable[[], GameRunner]
+    present: Callable[[], None]
+    act: Callable[[Action], None]
+    load_human_deck: Callable[[str], None]
+    load_opponent_deck: Callable[[str], None]
+    confirm: Callable[[], None]
+    cancel: Callable[[], None]
+
+    def run(self) -> None:
+        """Enter the event loop. The client is already built and has presented its opening state."""
+        self.root.mainloop()
+
+
+def build_client() -> Client:
+    """Build the client and hand it back unrun."""
     debug_enabled = GUI_DEBUG_MODE or LOCAL_DEBUG_OVERRIDE
 
     root = tk.Tk()
@@ -394,7 +449,23 @@ def main() -> None:
 
     field.apply_profile_to_panels = apply_profile_to_panels
 
-    root.mainloop()
+    return Client(
+        root=root,
+        field=field,
+        prompt_box=prompt_box,
+        phase_bar=phase_bar,
+        current_runner=lambda: runner,
+        present=present_pending,
+        act=on_action,
+        load_human_deck=lambda path: _load_into("human", path),
+        load_opponent_deck=lambda path: _load_into("opponent", path),
+        confirm=confirm_decision,
+        cancel=cancel_decision,
+    )
+
+
+def main() -> None:
+    build_client().run()
 
 
 if __name__ == "__main__":
