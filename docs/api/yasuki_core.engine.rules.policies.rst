@@ -10,6 +10,7 @@ yasuki_core.engine.rules.policies
     EconomicCyclePolicy
     EconomicLegacyPolicy
     EconomicPolicy
+    GoldRushPolicy
     PassPolicy
     Policy
     RandomPolicy

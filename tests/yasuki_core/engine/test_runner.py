@@ -13,6 +13,9 @@ from yasuki_core.game_pieces.prints import (
     StrongholdPrint,
 )
 from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.rules.agents import AutoAgent
+from yasuki_core.engine import runner as runner_module
+from yasuki_core.engine.runner import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.decisions import Confirm, DiscardToHandSize
@@ -33,8 +36,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine import runner
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import DynastyDiscard
-from yasuki_core.engine.rules.agents import AutoAgent
-from yasuki_core.engine.runner import Controls, GameRunner, play_game
+from yasuki_core.engine.runner import GameRunner, play_game
 
 PASS = Pass()
 
@@ -838,3 +840,73 @@ def test_the_province_a_spent_event_left_refills_once_the_opponent_has_answered(
     runner_.run_opponent()
 
     assert [card.id for card in province.cards] == ["spare"]
+
+
+def _end_humans_turn(runner):
+    """Pass the human through its three phases, declining the opponent's window in each."""
+    while runner.view().active is runner.human:
+        if runner.opponent_holds_priority:
+            runner.run_opponent()
+        else:
+            runner.act(PASS)
+
+
+class _AlwaysRecruits:
+    """A policy that takes the first Recruit it is offered and otherwise passes."""
+
+    name = "always-recruits"
+
+    def choose(self, view, actions):
+        return next((action for action in actions if isinstance(action, Recruit)), PASS)
+
+
+class _NeverPasses:
+    """A policy that never passes, which is what the round guard exists to stop."""
+
+    name = "never-passes"
+
+    def choose(self, view, actions):
+        return next((action for action in actions if not isinstance(action, Pass)), PASS)
+
+
+def test_the_opponent_takes_the_actions_its_policy_chooses():
+    """Its Controls supply both halves; without a policy the opponent passed every window and never
+    built a board, so nothing it was offered ever reached the table."""
+    session = EngineSession.start(_dealt_table(0), PlayerId.P1, seed=3)
+    province_card(session.game, "farm", seat=PlayerId.P2, gold_cost=0, gold_production=2)
+    runner = GameRunner(session, PlayerId.P1, Controls(_AlwaysRecruits(), AutoAgent()))
+
+    _end_humans_turn(runner)
+    _run_opponents_turn(runner)  # the opponent's own Dynasty phase, where a Recruit is on offer
+
+    assert "farm" in {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_the_opponent_still_passes_without_a_policy():
+    """The default Controls keep the pre-policy behavior, which every other test here relies on."""
+    runner = _runner()
+
+    runner.act(PASS)
+    runner.run_opponent()
+
+    assert runner.view().phase is Phase.BATTLE
+
+
+def test_a_policy_that_never_passes_is_stopped_rather_than_spinning(monkeypatch):
+    """A round closes only once every seat passes consecutively, so a policy that always finds
+    something to take keeps it open forever and hangs the caller with no way out.
+
+    The ceiling is lowered rather than reached: driving 200 real actions needs a board that can pay
+    for 200, which tests the board rather than the guard.
+    """
+    monkeypatch.setattr(runner_module, "MAX_ACTIONS_PER_ROUND", 0)
+    state = _kharmic_table(seat=PlayerId.P2)  # Kharmic is Repeatable Open, so P2 can act here
+    runner = GameRunner(
+        EngineSession.start(state, PlayerId.P1, seed=3),
+        PlayerId.P1,
+        Controls(_NeverPasses(), AutoAgent()),
+    )
+    runner.act(PASS)  # hands the opponent its window inside the human's Action phase
+
+    with pytest.raises(RuntimeError, match="ran past"):
+        runner.run_opponent()

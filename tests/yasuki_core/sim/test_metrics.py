@@ -1,13 +1,18 @@
+import numpy as np
+from numpy.random import default_rng
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.sim.metrics import (
     empty_provinces,
     family_honor,
     potential_gold_production,
+    province_clearance,
     provinces_cleared,
     provinces_held,
 )
@@ -17,7 +22,9 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     holding,
     province_card,
+    stronghold,
     put_in_play,
+    register,
 )
 
 P1 = PlayerId.P1
@@ -216,3 +223,86 @@ def test_the_opponents_empty_provinces_are_not_counted():
     session.game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)].cards.clear()
 
     assert empty_provinces(session.game, P1) == 0
+
+
+def _with_deck(production: int, costs: list[int]) -> EngineSession:
+    """A seat producing ``production``, whose dynasty deck holds exactly one card per entry in
+    ``costs``."""
+    session = _game(production)
+    deck = session.game.table.decks[DeckKey(P1, Side.DYNASTY)]
+    deck.cards = [
+        register(session.game.table, holding(f"d{index}", owner=P1, gold_cost=cost))
+        for index, cost in enumerate(costs)
+    ]
+    return session
+
+
+def test_a_deck_it_can_always_clear_reads_one():
+    session = _with_deck(production=20, costs=[1, 1, 1, 1, 1, 1])
+
+    assert province_clearance(default_rng(0))(session.game, P1) == 1.0
+
+
+def test_a_deck_it_can_never_clear_reads_zero():
+    session = _with_deck(production=3, costs=[5, 5, 5, 5, 5, 5])
+
+    assert province_clearance(default_rng(0))(session.game, P1) == 0.0
+
+
+def test_exactly_covering_the_flop_counts_as_clearing_it():
+    # The boundary the whole metric turns on: a seat with the price in hand buys the card.
+    session = _with_deck(production=8, costs=[2, 2, 2, 2])
+
+    assert province_clearance(default_rng(0))(session.game, P1) == 1.0
+
+
+def test_a_hand_never_deals_the_same_card_twice():
+    """A flop is four different cards, so the only hand this deck offers costs nine and the seat
+    cannot afford it. Sampling with replacement would deal all-zero hands and report a real chance
+    of clearing a board that does not exist."""
+    session = _with_deck(production=8, costs=[0, 0, 0, 9])
+
+    assert province_clearance(default_rng(0))(session.game, P1) == 0.0
+
+
+def test_it_lands_between_the_extremes_when_the_deck_is_mixed():
+    session = _with_deck(production=8, costs=[1, 1, 1, 1, 5, 5, 5, 5])
+
+    assert 0.0 < province_clearance(default_rng(0), samples=2000)(session.game, P1) < 1.0
+
+
+def test_a_deck_too_short_to_fill_the_provinces_has_no_flop_to_price():
+    """Late enough in a game the deck cannot deal four cards, and there is no such thing as the
+    probability of clearing a board it could not produce. Reporting zero would read as a seat that
+    had run out of gold rather than out of cards."""
+    session = _with_deck(production=20, costs=[1, 1, 1])
+
+    assert np.isnan(province_clearance(default_rng(0))(session.game, P1))
+
+
+def test_it_prices_what_the_seat_would_pay_rather_than_the_printed_cost():
+    """Costs come from recruit_cost, so an off-clan card is priced with its surcharge. Reading the
+    printed cost would flatter every deck playing outside its own clan."""
+    table = dealt_table()
+    put_in_play(table, holding("purse", owner=P1, gold_production=8))
+    put_in_play(
+        table,
+        stronghold(owner=P1, clan="crab"),
+    )
+    session = EngineSession.start(table, P1, seed=1)
+    session.game.table.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+        register(session.game.table, holding(f"d{index}", owner=P1, gold_cost=2, clan="crane"))
+        for index in range(4)
+    ]
+
+    assert province_clearance(default_rng(0))(session.game, P1) == 0.0
+
+
+def test_the_same_generator_gives_the_same_estimate():
+    # A run has to reproduce from its seed, and the sampling is the only thing here that could
+    # break that.
+    session = _with_deck(production=8, costs=[1, 1, 1, 1, 5, 5, 5, 5])
+    metric = province_clearance(default_rng(0))
+    twin = province_clearance(default_rng(0))
+
+    assert metric(session.game, P1) == twin(session.game, P1)

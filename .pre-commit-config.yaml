@@ -5,6 +5,9 @@ repos:
     -   id: check-merge-conflict
     -   id: check-toml
     -   id: check-yaml
+        # Decklists only borrow the extension: parse_deck_yaml reads them line by line, so a card
+        # whose name carries a colon is legal there and not YAML.
+        exclude: ^src/yasuki_gui/assets/decks/
     -   id: debug-statements
     -   id: end-of-file-fixer
     -   id: no-commit-to-branch

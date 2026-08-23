@@ -1,5 +1,6 @@
 import logging
 import tkinter as tk
+from pathlib import Path
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Action, Pass
@@ -10,11 +11,12 @@ from yasuki_core.engine.rules.decisions import (
     Confirm,
     DecisionResponse,
 )
+from yasuki_core.engine.rules.policies import GoldRushPolicy
 from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
-from yasuki_core.engine.runner import GameRunner, SearchView
+from yasuki_core.engine.runner import Controls, GameRunner, SearchView
 from yasuki_core.game_setup import build_state_from_deck
 from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state
 from yasuki_gui.ui.dialogs import Dialogs
@@ -28,8 +30,15 @@ logger = logging.getLogger(__name__)
 
 LOCAL_DEBUG_OVERRIDE = False
 
-# How long the board lingers on "Opponent's turn" before the opponent's (AI-less) turn auto-runs.
+# How long the board lingers on "Opponent's turn" before the opponent's turn auto-runs.
 OPPONENT_TURN_DELAY_MS = 700
+
+
+def _opponent_controls() -> Controls:
+    """What drives the AI opponent. One :class:`GoldRushPolicy` fills both halves, so the gold it
+    chooses to raise and the payments it agrees to come from the same strategy."""
+    policy = GoldRushPolicy()
+    return Controls(policy, policy)
 
 
 def _action_button_label(action: Action) -> str:
@@ -71,16 +80,20 @@ def main() -> None:
 
         gui_config.DEBUG_MODE = True
 
+    # The human always sits at P1; who takes the first turn is decided by Family Honor at deal.
+    human_seat = PlayerId.P1
     # Deal the bundled deck (needs the database); fall back to the DB-free placeholder deck so the
     # client still launches without a database or card images.
     try:
-        state, human_seat = build_state_from_deck(DEMO_DECK_PATH, p1_name="You", p2_name="Opponent")
+        state, first_player = build_state_from_deck(
+            DEMO_DECK_PATH, p1_name="You", p2_name="Opponent"
+        )
     except Exception as exc:
         logger.warning("Could not load the bundled deck, using the placeholder deck: %s", exc)
-        state, human_seat = build_demo_state()
+        state, first_player = build_demo_state()
 
-    session = EngineSession.start(state, human_seat)
-    runner = GameRunner(session, human_seat)
+    session = EngineSession.start(state, first_player)
+    runner = GameRunner(session, human_seat, _opponent_controls())
 
     field = FieldView(content, width=canvas_w, height=canvas_h)
     # The table backs panel and dialog reads; the board itself renders from the redacted projection.
@@ -330,22 +343,39 @@ def main() -> None:
     relayout_panels()
     refresh()  # render the opening projection and phase bar
 
-    def load_deck_from_path(path: str) -> None:
-        """Start a fresh game with the human on the picked deck; the opponent keeps the default.
-        Raise on a deck that fails to load so the menu can report it."""
-        nonlocal session, runner, human_seat
-        state, human_seat = build_state_from_deck(
-            path, opponent_deck_path=DEMO_DECK_PATH, p1_name="You", p2_name="Opponent"
+    decks: dict[str, Path] = {"human": DEMO_DECK_PATH, "opponent": DEMO_DECK_PATH}
+
+    def restart_game() -> None:
+        """Start a fresh game on the currently picked decks. Raise on a deck that fails to load so
+        the menu can report it."""
+        nonlocal session, runner
+        state, first_player = build_state_from_deck(
+            decks["human"],
+            opponent_deck_path=decks["opponent"],
+            p1_name="You",
+            p2_name="Opponent",
         )
-        session = EngineSession.start(state, human_seat)
-        runner = GameRunner(session, human_seat)
+        session = EngineSession.start(state, first_player)
+        runner = GameRunner(session, human_seat, _opponent_controls())
         field.state = session.game.table
         field.seat = human_seat
         field.end_selection()
         relayout_panels()
         refresh()
 
-    field.load_deck_from_file = load_deck_from_path
+    def _load_into(slot: str, path: str) -> None:
+        """Deal ``path`` to ``slot`` and restart. A deck that fails to load leaves the slot as it
+        was, so a bad pick does not strand the next restart on it."""
+        previous = decks[slot]
+        decks[slot] = Path(path)
+        try:
+            restart_game()
+        except Exception:
+            decks[slot] = previous
+            raise
+
+    field.load_deck_from_file = lambda path: _load_into("human", path)
+    field.load_opponent_deck_from_file = lambda path: _load_into("opponent", path)
 
     menubar = build_menubar(root, field)
     root.config(menu=menubar)

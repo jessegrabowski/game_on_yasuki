@@ -396,7 +396,7 @@ class GameRoom:
         # fronts.
         seats = tuple(self.pending_decks)
         if len(seats) == 2:
-            flip_second_player_stronghold(self.state, seats)
+            flip_second_player_stronghold(self.state, seats, rng=self._deal_rng)
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
 
     async def _send_snapshot(self, ws: WebSocket, seat: PlayerId):
