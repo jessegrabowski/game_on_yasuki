@@ -158,9 +158,11 @@ class TableState:
         attachments are the only card type that may attach to a Personality — so unlike
         ``attachments`` this relation is flat, and a parent is always a Personality.
     province_attachments : dict mapping str to ZoneKey
-        The Regions and Fortifications attached to a province, keyed by card id. A separate relation
-        from ``units`` because it is a separate relation in the rules: nothing attaches to both, and
-        one map holding either would be unable to say so.
+        The Regions and Fortifications attached to a province, keyed by card id. The value names the
+        Province *slot*, not the card standing in it: the slot refills the moment the attachment
+        leaves, and the attachment stays where it is. A separate relation from ``units`` because it
+        is a separate relation in the rules: nothing attaches to both, and one map holding either
+        would be unable to say so.
     province_counters : dict mapping ZoneKey to a dict of str to int
         Counters resting on a Province rather than on a card, keyed by the Province's zone key. A
         Province is a slot rather than a card, so a "+1 strength Wall token" has nowhere else to

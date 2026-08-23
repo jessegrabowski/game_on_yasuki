@@ -57,7 +57,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.equip import FORTIFICATION_KEYWORD, equip_targets
+from yasuki_core.engine.rules.equip import equip_targets
 from yasuki_core.engine.rules.economy import (
     effective_gold_cost,
     effective_gold_production,
@@ -702,7 +702,7 @@ def _resolve_recruit(
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     if abilities.enters_play_bowed(card):
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
-    fortification = FORTIFICATION_KEYWORD in effective_keywords(game, card)
+    fortification = keywords.FORTIFICATION in effective_keywords(game, card)
     if province_key is not None:
         if fortification:
             ops.attach_to_province(game.table, card, province_key)

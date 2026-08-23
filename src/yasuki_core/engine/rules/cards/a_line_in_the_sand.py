@@ -18,10 +18,10 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
     Then,
 )
-from yasuki_core.engine.rules.equip import FORTIFICATION_KEYWORD
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WALL
@@ -33,7 +33,7 @@ from yasuki_core.game_pieces.counters import WALL
 def _get_agasha_beiru_valid_targets(game: GameState, source: L5RCard) -> list[str]:
     """Fortifications in the seat's Dynasty discard pile."""
     discard = game.table.zones[ZoneKey(source.owner, ZoneRole.DYNASTY_DISCARD)].cards
-    return [card.id for card in discard if FORTIFICATION_KEYWORD in effective_keywords(game, card)]
+    return [card.id for card in discard if keywords.FORTIFICATION in effective_keywords(game, card)]
 
 
 def _resolve_agasha_beiru_effect(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
