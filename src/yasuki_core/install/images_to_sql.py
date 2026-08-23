@@ -3,7 +3,8 @@ import sys
 from pathlib import Path
 
 import psycopg
-import yaml
+
+from yasuki_core.yaml_io import read_yaml
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,7 @@ def load_print_images(images_dir: Path, dsn: str) -> None:
         print_ids = {(card_id, pid): print_id for print_id, card_id, pid in cur.fetchall()}
 
         for manifest in manifests:
-            data = yaml.safe_load(manifest.read_text(encoding="utf-8"))
+            data = read_yaml(manifest)
             set_slug = manifest.stem
             for image in data.get("images", []):
                 print_id = print_ids.get((image["card_id"], image["printing_id"]))

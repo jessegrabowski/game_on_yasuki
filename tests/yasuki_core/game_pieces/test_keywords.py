@@ -3,7 +3,9 @@ import pathlib
 
 from yasuki_core.engine.rules import cards
 from yasuki_core.game_pieces import keywords
-from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, iter_set_entries
+from yasuki_core.install.card_index import DEFAULT_CARDS_PATH
+
+from tests.yasuki_core.card_corpus import set_entries
 
 # Derived from the imported package rather than written as a path from the repository root: a
 # relative path resolves against the working directory, and pytest run from anywhere else would
@@ -21,7 +23,7 @@ def engine_keywords() -> dict[str, str]:
 
 
 def printed_keywords(cards_dir: pathlib.Path = DEFAULT_CARDS_PATH) -> set[str]:
-    return {keyword for entry in iter_set_entries(cards_dir) for keyword in entry.keywords}
+    return {keyword for entry in set_entries(cards_dir) for keyword in entry.keywords}
 
 
 def test_every_keyword_the_engine_names_is_printed_on_a_card():
@@ -98,3 +100,10 @@ def test_no_clan_word_is_named_without_saying_which_sense_it_means():
 def test_the_vocabulary_has_keywords_to_check():
     # Guards the checks above: an empty vocabulary would satisfy them vacuously.
     assert len(engine_keywords()) > 10
+
+
+def test_the_card_scan_reads_the_printed_keywords():
+    # Guards the two checks that look for offenders *against* the printed set: finding no cards
+    # finds no offenders and reports success. A floor rather than a count, so printing a new keyword
+    # does not fail it.
+    assert len(printed_keywords()) > 500

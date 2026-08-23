@@ -3,9 +3,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import yaml
-
 from yasuki_core import DEFAULT_DSN
+from yasuki_core.yaml_io import load_yaml
 
 # Global debug flag
 DEBUG_MODE: bool = False
@@ -39,7 +38,7 @@ def _load_config_data(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
     try:
-        data = yaml.safe_load(path.read_text()) or {}
+        data = load_yaml(path.read_text()) or {}
     except Exception:
         return {}
     return data if isinstance(data, dict) else {}

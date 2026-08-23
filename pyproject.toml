@@ -62,7 +62,11 @@ psycopg-pool = ">=3.1"
 psycopg-c = ">=3.1"
 pillow = ">=10.0"
 pydantic = ">=2.7"
-pyyaml = ">=6.0"
+# The compiled build, not the pure-Python noarch one the solver otherwise prefers: parsing the
+# committed card YAML is ~99% of the corpus scan, and libyaml does it several times faster. The
+# build glob is what tells them apart — a compiled build carries the Python version (``py313h*``),
+# the noarch build does not (``pyh*``).
+pyyaml = { version = ">=6.0", build = "py3*" }
 # The engine draws from a Generator threaded in by its caller, so a run derives every stream
 # from one spawned root rather than from arithmetic on a seed.
 numpy = ">=2.0"
