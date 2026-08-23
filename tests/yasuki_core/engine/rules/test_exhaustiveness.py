@@ -5,7 +5,7 @@ import typing
 
 import pytest
 
-from yasuki_core.engine.rules import flow, log
+from yasuki_core.engine.rules import flow, legality, log
 from yasuki_core.engine.rules.actions import Action
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.log import GameInput
@@ -39,10 +39,21 @@ def _dispatched_names(dispatcher) -> set[str]:
     tree = ast.parse(textwrap.dedent(inspect.getsource(dispatcher)))
     return {
         # last segment, so `case work.ResolveRecruit()` reads the same as `case ResolveRecruit()`
-        ast.unparse(node.pattern.cls).rsplit(".", 1)[-1]
+        ast.unparse(pattern.cls).rsplit(".", 1)[-1]
         for node in ast.walk(tree)
-        if isinstance(node, ast.match_case) and isinstance(node.pattern, ast.MatchClass)
+        if isinstance(node, ast.match_case)
+        for pattern in _class_patterns(node.pattern)
     }
+
+
+def _class_patterns(pattern: ast.pattern) -> list[ast.MatchClass]:
+    """The class patterns one ``case`` names — one for a plain pattern, several for an alternation
+    like ``case KharmicDraw(...) | KharmicRefill(...)``, whose members are dispatched together."""
+    if isinstance(pattern, ast.MatchClass):
+        return [pattern]
+    if isinstance(pattern, ast.MatchOr):
+        return [alt for alt in pattern.patterns if isinstance(alt, ast.MatchClass)]
+    return []
 
 
 # The dispatchers that are exhaustive *by contract* — every member of their union must have a case
@@ -56,6 +67,7 @@ DISPATCH_SITES = [
     pytest.param(WorkItem, flow._resolve, id="WorkItem/_resolve"),
     pytest.param(DecisionRequest, flow.submit, id="DecisionRequest/submit"),
     pytest.param(Action, flow.perform, id="Action/perform"),
+    pytest.param(Action, legality.is_legal, id="Action/is_legal"),
     pytest.param(Action, log._encode_action, id="Action/_encode_action"),
     pytest.param(GameInput, log._apply, id="GameInput/_apply"),
 ]
