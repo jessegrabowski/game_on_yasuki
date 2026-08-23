@@ -213,3 +213,30 @@ def test_the_opponent_losing_reads_from_the_human_seat(board):
     presenter.refresh()
 
     assert _status(window) == "Opponent loses (failed Legacy)"
+
+
+def test_the_window_wires_every_board_hook_to_the_presenter(board):
+    """The bindings are the least-tested surface in the client: the characterization tests call the
+    presenter directly, and nothing dispatches a real Tk event, so a hook left unassigned would
+    reach nobody and fail nothing."""
+    presenter, window, _ = board
+
+    window.bind_to(presenter)
+
+    field = window.field
+    assert field.on_selection_changed == presenter.refresh
+    assert field.on_boost_request == presenter.request_boost
+    assert field.on_card_activated == presenter.on_card_activated
+    assert field.on_board_menu == presenter.on_board_menu
+    assert field.load_deck_from_file == presenter.load_human_deck
+    assert field.load_opponent_deck_from_file == presenter.load_opponent_deck
+
+
+def test_the_window_binds_undo_and_escape_to_the_presenter(board):
+    """Both are keyboard-only, so nothing else in the suite would notice them going unbound."""
+    presenter, window, _ = board
+
+    window.bind_to(presenter)
+
+    assert window.root.bind("<Control-z>")
+    assert window.root.bind("<Escape>")
