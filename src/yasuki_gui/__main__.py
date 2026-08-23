@@ -1,4 +1,3 @@
-import logging
 import tkinter as tk
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -21,8 +20,6 @@ from yasuki_gui.session import DEMO_DECK_PATH
 from yasuki_gui.ui.dialogs import Dialogs
 from yasuki_gui.ui.game_window import GameWindow
 from yasuki_gui.ui.images import ImageProvider
-
-logger = logging.getLogger(__name__)
 
 # How long the board lingers on "Opponent's turn" before the opponent's turn auto-runs.
 OPPONENT_TURN_DELAY_MS = 700
