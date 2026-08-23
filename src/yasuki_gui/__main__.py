@@ -274,7 +274,10 @@ def main() -> None:
         # Discard, a hand card's Kharmic, or an in-play card's activated ability. The ensuing
         # target/payment is picked through the board-selection path.
         popup_action_menu(
-            runner.province_menu(card_id) + runner.hand_menu(card_id) + runner.ability_menu(card_id)
+            runner.province_menu(card_id)
+            + runner.hand_menu(card_id)
+            + runner.ability_menu(card_id)
+            + runner.inheritance_menu(card_id)
         )
 
     def on_board_menu() -> None:

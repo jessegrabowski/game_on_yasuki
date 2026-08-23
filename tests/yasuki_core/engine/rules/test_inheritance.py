@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.actions import ActionTiming, Inheritance
 from yasuki_core.engine.rules.decisions import ChooseInheritanceTarget, DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
@@ -162,6 +163,35 @@ def test_inheritance_is_taken_under_the_dynasty_designator():
     session = _second_players_turn()
 
     assert legality.timing_of(session.game, Inheritance()) is ActionTiming.DYNASTY
+
+
+def test_the_menu_offers_inheritance_on_the_seats_own_stronghold():
+    """What the desktop client hangs off the Stronghold's context menu."""
+    session = _second_players_turn()
+
+    labels = [label for label, _ in GameRunner(session, P2).inheritance_menu("P2-SH")]
+
+    assert labels == ["Inheritance: turn over for +3GP"]
+
+
+def test_the_menu_offers_nothing_on_another_card():
+    session = _second_players_turn()
+
+    assert GameRunner(session, P2).inheritance_menu("P2-farm") == []
+
+
+def test_the_menu_offers_nothing_on_the_opponents_stronghold():
+    session = _second_players_turn()
+
+    assert GameRunner(session, P2).inheritance_menu("P1-SH") == []
+
+
+def test_the_menu_closes_once_the_ability_is_spent():
+    session = _second_players_turn()
+    session.act(P2, Inheritance())
+    session.submit(P2, DecisionResponse(("P2-farm",)))
+
+    assert GameRunner(session, P2).inheritance_menu("P2-SH") == []
 
 
 def test_it_is_not_offered_outside_the_dynasty_phase():
