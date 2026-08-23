@@ -5,7 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Cycle, Pass
 from yasuki_core.game_pieces.prints import StrongholdPrint
 
-import yasuki_gui.__main__ as client_mod
+import yasuki_gui.services.presenter as presenter_mod
 from yasuki_gui.__main__ import Client, build_client
 from yasuki_gui.session import DEMO_DECK_PATH
 
@@ -29,7 +29,7 @@ def _build(monkeypatch, *, human_leads: bool) -> Client:
     The opponent hand-off is scheduled with ``root.after``, so a test pumps the event queue to let
     it run; the delay is zeroed so pumping is instant rather than a real 700ms wait.
     """
-    monkeypatch.setattr(client_mod, "OPPONENT_TURN_DELAY_MS", 0)
+    monkeypatch.setattr(presenter_mod, "OPPONENT_TURN_DELAY_MS", 0)
     return build_client(
         human_deck=HIGH_HONOR if human_leads else LOW_HONOR,
         opponent_deck=LOW_HONOR if human_leads else HIGH_HONOR,
@@ -91,7 +91,7 @@ def test_a_game_the_opponent_leads_hands_over_and_comes_back(monkeypatch):
 
 def test_passing_advances_the_phase(client):
     before = client.host.runner.view().phase
-    client.act(Pass())
+    client.presenter.act(Pass())
     _pump(client)
 
     assert client.host.runner.view().phase is not before
@@ -133,7 +133,7 @@ def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
     it is the cheapest way to reach a pending decision from a fresh game."""
     assert Cycle() in client.host.runner.legal_actions()
 
-    client.act(Cycle())
+    client.presenter.act(Cycle())
 
     pending = client.host.runner.pending
     assert pending is not None
@@ -142,21 +142,21 @@ def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
 
 
 def test_backing_out_of_a_decision_leaves_the_board_alone(client):
-    client.act(Cycle())
+    client.presenter.act(Cycle())
     assert client.host.runner.pending is not None
 
-    client.cancel()
+    client.presenter.cancel()
 
     assert client.host.runner.pending is None
     assert not client.window.field.selecting
 
 
 def test_confirming_a_decision_resolves_it(client):
-    client.act(Cycle())
+    client.presenter.act(Cycle())
     pending = client.host.runner.pending
     client.window.field.toggle_selection(pending.candidates[0])
 
-    client.confirm()
+    client.presenter.confirm()
 
     assert client.host.runner.pending is None
     assert not client.window.field.selecting
