@@ -6,7 +6,8 @@ from yasuki_core.engine.rules.actions import Cycle, Pass
 from yasuki_core.game_pieces.prints import StrongholdPrint
 
 import yasuki_gui.services.presenter as presenter_mod
-from yasuki_gui.__main__ import Client, build_client
+from yasuki_gui.__main__ import build_client
+from yasuki_gui.services.presenter import Presenter
 from yasuki_gui.session import DEMO_DECK_PATH
 
 from tests.yasuki_core.db_guard import requires_db
@@ -23,7 +24,7 @@ LOW_HONOR = DEMO_DECK_PATH
 HIGH_HONOR = DEMO_DECK_PATH.parent / "crane_dishonor.yaml"
 
 
-def _build(monkeypatch, *, human_leads: bool) -> Client:
+def _build(monkeypatch, *, human_leads: bool) -> Presenter:
     """A client dealt so the human leads or does not, never entered into its event loop.
 
     The opponent hand-off is scheduled with ``root.after``, so a test pumps the event queue to let
@@ -46,15 +47,15 @@ def client(monkeypatch):
         built.window.root.destroy()
 
 
-def _status(client: Client) -> str:
+def _status(client: Presenter) -> str:
     return client.window.prompt_box._status.cget("text")
 
 
-def _buttons(client: Client) -> list[str]:
+def _buttons(client: Presenter) -> list[str]:
     return [button.cget("text") for button in client.window.prompt_box._buttons]
 
 
-def _pump(client: Client, steps: int = 200) -> None:
+def _pump(client: Presenter, steps: int = 200) -> None:
     """Run queued Tk callbacks until the human has something to do, or ``steps`` have passed."""
     for _ in range(steps):
         client.window.root.update()
@@ -91,13 +92,13 @@ def test_a_game_the_opponent_leads_hands_over_and_comes_back(monkeypatch):
 
 def test_passing_advances_the_phase(client):
     before = client.host.runner.view().phase
-    client.presenter.act(Pass())
+    client.act(Pass())
     _pump(client)
 
     assert client.host.runner.view().phase is not before
 
 
-def _stronghold_name(client: Client, seat) -> str:
+def _stronghold_name(client: Presenter, seat) -> str:
     game = client.host.session.game
     return next(
         card.name
@@ -133,7 +134,7 @@ def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
     it is the cheapest way to reach a pending decision from a fresh game."""
     assert Cycle() in client.host.runner.legal_actions()
 
-    client.presenter.act(Cycle())
+    client.act(Cycle())
 
     pending = client.host.runner.pending
     assert pending is not None
@@ -142,21 +143,21 @@ def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
 
 
 def test_backing_out_of_a_decision_leaves_the_board_alone(client):
-    client.presenter.act(Cycle())
+    client.act(Cycle())
     assert client.host.runner.pending is not None
 
-    client.presenter.cancel()
+    client.cancel()
 
     assert client.host.runner.pending is None
     assert not client.window.field.selecting
 
 
 def test_confirming_a_decision_resolves_it(client):
-    client.presenter.act(Cycle())
+    client.act(Cycle())
     pending = client.host.runner.pending
     client.window.field.toggle_selection(pending.candidates[0])
 
-    client.presenter.confirm()
+    client.confirm()
 
     assert client.host.runner.pending is None
     assert not client.window.field.selecting
