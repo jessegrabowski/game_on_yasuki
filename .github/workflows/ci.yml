@@ -358,17 +358,27 @@ jobs:
           pixi-version: v0.70.2
           cache: true
 
+      - name: Install and start xvfb for the GUI tests
+        run: |
+          sudo apt-get update && sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1024x768x24 &
+          sleep 1
+
       - name: Initialize database
         env:
           YASUKI_DATABASE_URL: postgresql://yasuki:yasuki@localhost:5432/yasuki
         run: pixi run install-db
 
       - name: Run tests
+        # The GUI subset runs here rather than only in the bare GUI job: the desktop client's
+        # characterization tests deal a real decklist, so Postgres is what makes them run at all
+        # instead of skipping on requires_db.
         env:
           YASUKI_DATABASE_URL: postgresql://yasuki:yasuki@localhost:5432/yasuki
+          DISPLAY: ":99"
         run: |
-          pixi run pytest tests/ --ignore=tests/yasuki_gui/ --ignore=tests/e2e -p no:playwright \
-            --cov=yasuki_core --cov=yasuki_web \
+          pixi run pytest tests/ --ignore=tests/e2e -p no:playwright \
+            --cov=yasuki_core --cov=yasuki_web --cov=yasuki_gui \
             --cov-report=xml:coverage/coverage-web.xml --no-cov-on-fail
 
       - name: Upload coverage file

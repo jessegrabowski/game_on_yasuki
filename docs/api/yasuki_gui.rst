@@ -19,6 +19,7 @@ yasuki_gui
     yasuki_gui.services.actions <yasuki_gui.services.actions>
     yasuki_gui.services.allocation <yasuki_gui.services.allocation>
     yasuki_gui.services.drag <yasuki_gui.services.drag>
+    yasuki_gui.services.game_host <yasuki_gui.services.game_host>
     yasuki_gui.services.hittest <yasuki_gui.services.hittest>
     yasuki_gui.services.permissions <yasuki_gui.services.permissions>
     yasuki_gui.session <yasuki_gui.session>
@@ -36,6 +37,7 @@ yasuki_gui
     yasuki_gui.ui.deck_builder.filter_dialog <yasuki_gui.ui.deck_builder.filter_dialog>
     yasuki_gui.ui.deck_builder.search_help <yasuki_gui.ui.deck_builder.search_help>
     yasuki_gui.ui.dialogs <yasuki_gui.ui.dialogs>
+    yasuki_gui.ui.game_window <yasuki_gui.ui.game_window>
     yasuki_gui.ui.images <yasuki_gui.ui.images>
     yasuki_gui.ui.info_box <yasuki_gui.ui.info_box>
     yasuki_gui.ui.menus <yasuki_gui.ui.menus>

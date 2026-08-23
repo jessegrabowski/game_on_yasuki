@@ -1,0 +1,141 @@
+import tkinter as tk
+
+import yasuki_gui.config as gui_config
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import TableState
+from yasuki_gui import theme
+from yasuki_gui.field_view import FieldView
+from yasuki_gui.ui.info_box import PlayerInfoBox
+from yasuki_gui.ui.menus import build_menubar
+from yasuki_gui.ui.phase_bar import PhaseBar
+from yasuki_gui.ui.prompt_box import PromptBox
+
+# Flip by hand to play with the debug affordances against a release build of the config.
+LOCAL_DEBUG_OVERRIDE = False
+
+SIDEBAR_WIDTH = 190
+
+
+class GameWindow:
+    """Every widget the desktop client draws, built in one pass over the table it opens on.
+
+    Construction is total: each attribute below holds a live widget once ``__init__`` returns, so a
+    collaborator takes what it needs as an argument and cannot read a widget that does not exist
+    yet.
+
+    Renders a game rather than owning one — whoever deals keeps the session, and a deck load
+    reassigns ``field.state`` and calls :meth:`relayout_panels` rather than building a new window.
+
+    Attributes
+    ----------
+    root : tkinter.Tk
+        The toplevel window, sized to the screen.
+    sidebar : tkinter.Frame
+        The fixed-width left column holding the two panels and the prompt.
+    content : tkinter.Frame
+        The right column holding the board and the phase strip.
+    field : FieldView
+        The board canvas.
+    phase_bar : PhaseBar
+        The turn and phase strip along the bottom of the content column.
+    prompt_box : PromptBox
+        The sidebar prompt, which is what the client asks its questions through.
+    opponent_panel : PlayerInfoBox
+        The pile counts and honor of the seat the human is not playing.
+    human_panel : PlayerInfoBox
+        The pile counts and honor of the seat the human is playing.
+    menubar : tkinter.Menu
+        The application menu, installed on the root.
+    debug : bool
+        Whether the debug affordances are live, from the config or from
+        :data:`LOCAL_DEBUG_OVERRIDE`.
+    """
+
+    def __init__(self, table: TableState, seat: PlayerId = PlayerId.P1) -> None:
+        """Build every widget over an opening board.
+
+        Parameters
+        ----------
+        table : TableState
+            The board the client opens on. Required rather than optional because a
+            :class:`PlayerInfoBox` reads its seat's name as it is constructed.
+        seat : PlayerId, optional
+            The seat being played, which decides which panel sits at the bottom of the sidebar.
+            Default P1.
+        """
+        self.debug = gui_config.DEBUG_MODE or LOCAL_DEBUG_OVERRIDE
+        if self.debug:
+            # A local override has to reach the modules that read the flag rather than import it.
+            gui_config.DEBUG_MODE = True
+
+        self.root = tk.Tk()
+        self.root.title("!! DEBUG DEBUG DEBUG !!" if self.debug else "Game on, Yasuki!")
+        self.root.geometry(f"{self.root.winfo_screenwidth()}x{self.root.winfo_screenheight()}+0+0")
+
+        container = tk.Frame(self.root)
+        container.pack(fill="both", expand=True)
+        self.sidebar = tk.Frame(container, width=SIDEBAR_WIDTH, bg=theme.PANEL)
+        self.sidebar.pack(side="left", fill="y")
+        self.sidebar.grid_propagate(False)  # hold the fixed width; the prompt row takes the slack
+        self.sidebar.grid_columnconfigure(0, weight=1)
+        self.sidebar.grid_rowconfigure(0, weight=0)  # top info box (sized to content)
+        self.sidebar.grid_rowconfigure(1, weight=1)  # prompt box (fills the middle)
+        self.sidebar.grid_rowconfigure(2, weight=0)  # bottom info box (sized to content)
+        self.content = tk.Frame(container)
+        self.content.pack(side="left", fill="both", expand=True)
+
+        # The geometry above is still pending, so the canvas would size against a 1x1 root without
+        # this.
+        self.root.update_idletasks()
+        canvas_w = max(400, self.root.winfo_width() - SIDEBAR_WIDTH)
+        canvas_h = max(300, self.root.winfo_height())
+
+        self.field = FieldView(self.content, width=canvas_w, height=canvas_h)
+        # The table backs panel and dialog reads; the board itself renders from the redacted
+        # projection the client pushes in later.
+        self.field.state = table
+        self.field.seat = seat
+        self.phase_bar = PhaseBar(self.content)
+        self.phase_bar.pack(side="bottom", fill="x")
+        self.field.pack(side="top", fill="both", expand=True)
+
+        # A panel reads the board through the FieldView it is handed, so the field is built first.
+        self.opponent_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P2)
+        self.human_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P1)
+        self.prompt_box = PromptBox(self.sidebar)
+        self.prompt_box.grid(row=1, column=0, sticky="nsew")
+        # Spacebar takes the primary offered action (Pass/Pay/Discard), never a secondary like
+        # Cancel.
+        self.field.bind("<space>", lambda _event: self.prompt_box.invoke_primary())
+
+        self.menubar = build_menubar(self.root, self.field)
+        self.root.config(menu=self.menubar)
+
+        self.field.on_local_player_changed = self.relayout_panels
+        self.field.apply_profile_to_panels = self.apply_profile_to_panels
+        self.relayout_panels()
+
+    def relayout_panels(self) -> None:
+        """Move the seat being played to the bottom of the sidebar and resync both panels against
+        the board. Driven by the debug seat toggle, and by a deck load, which changes the table the
+        panels count."""
+        self.opponent_panel.grid_forget()
+        self.human_panel.grid_forget()
+        top, bottom = (
+            (self.opponent_panel, self.human_panel)
+            if self.field.seat is PlayerId.P1
+            else (self.human_panel, self.opponent_panel)
+        )
+        top.grid(row=0, column=0, sticky="new")
+        bottom.grid(row=2, column=0, sticky="sew")
+        self.opponent_panel.refresh()
+        self.human_panel.refresh()
+
+    def apply_profile_to_panels(self) -> None:
+        """Push the player profile stored on the board onto whichever panel is the human's."""
+        panel = self.human_panel if self.field.seat is PlayerId.P1 else self.opponent_panel
+        panel.set_profile(
+            getattr(self.field, "profile_name", None),
+            getattr(self.field, "profile_avatar", None),
+        )
+        self.root.update_idletasks()
