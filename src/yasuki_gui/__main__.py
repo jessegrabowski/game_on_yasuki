@@ -4,6 +4,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
+from numpy.random import Generator
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
@@ -102,8 +104,24 @@ class Client:
         self.root.mainloop()
 
 
-def build_client() -> Client:
-    """Build the client and hand it back unrun."""
+def build_client(
+    *,
+    human_deck: Path = DEMO_DECK_PATH,
+    opponent_deck: Path = DEMO_DECK_PATH,
+    rng: Generator | None = None,
+) -> Client:
+    """Build the client and hand it back unrun.
+
+    Parameters
+    ----------
+    human_deck : pathlib.Path, optional
+        The decklist dealt to the human. Default the bundled deck.
+    opponent_deck : pathlib.Path, optional
+        The decklist dealt to the AI opponent. Default the bundled deck, a mirror match.
+    rng : numpy.random.Generator, optional
+        Deals every game this client starts, including the ones a deck load restarts. Default None,
+        which deals from system entropy — what a game wants, where a repeated opening is a defect.
+    """
     debug_enabled = GUI_DEBUG_MODE or LOCAL_DEBUG_OVERRIDE
 
     root = tk.Tk()
@@ -141,7 +159,11 @@ def build_client() -> Client:
     # client still launches without a database or card images.
     try:
         state, first_player = build_state_from_deck(
-            DEMO_DECK_PATH, p1_name="You", p2_name="Opponent"
+            human_deck,
+            opponent_deck_path=opponent_deck,
+            p1_name="You",
+            p2_name="Opponent",
+            rng=rng,
         )
     except Exception as exc:
         logger.warning("Could not load the bundled deck, using the placeholder deck: %s", exc)
@@ -403,7 +425,7 @@ def build_client() -> Client:
     # whose first turn is not the human's.
     present_pending()
 
-    decks: dict[str, Path] = {"human": DEMO_DECK_PATH, "opponent": DEMO_DECK_PATH}
+    decks: dict[str, Path] = {"human": human_deck, "opponent": opponent_deck}
 
     def restart_game() -> None:
         """Start a fresh game on the currently picked decks. Raise on a deck that fails to load so
@@ -414,6 +436,7 @@ def build_client() -> Client:
             opponent_deck_path=decks["opponent"],
             p1_name="You",
             p2_name="Opponent",
+            rng=rng,
         )
         session = EngineSession.start(state, first_player)
         runner = GameRunner(session, human_seat, _opponent_controls())
