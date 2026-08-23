@@ -344,8 +344,8 @@ def main() -> None:
 
     field.on_local_player_changed = relayout_panels
     relayout_panels()
-    # present_pending rather than refresh: it draws the opening board *and* hands over to the
-    # opponent, which is the only thing that moves a game whose first turn is not the human's.
+    # Renders the opening board and hands over to the opponent, which is what moves a game
+    # whose first turn is not the human's.
     present_pending()
 
     decks: dict[str, Path] = {"human": DEMO_DECK_PATH, "opponent": DEMO_DECK_PATH}
