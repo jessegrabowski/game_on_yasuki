@@ -7,7 +7,7 @@ yasuki_core.engine.rules.payments
 
 .. autosummary::
 
-    can_raise
+    can_afford
     payment_request
 
 .. automodule:: yasuki_core.engine.rules.payments

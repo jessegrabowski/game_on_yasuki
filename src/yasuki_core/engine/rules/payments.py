@@ -43,7 +43,7 @@ def payment_request(game: GameState, seat: PlayerId, amount: int, label: str) ->
     )
 
 
-def can_raise(game: GameState, seat: PlayerId, amount: int) -> bool:
+def can_afford(game: GameState, seat: PlayerId, amount: int) -> bool:
     """Whether ``seat`` could cover ``amount``: its pool plus everything its unbowed producers make,
     boosts included. Answered before a payment is offered, so an ability whose gold cost the seat
     cannot meet is never announced."""

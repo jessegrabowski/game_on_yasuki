@@ -141,17 +141,23 @@ class EconomicLegacyPolicy:
 
 
 def _legacy_worth_taking(view: GameView) -> bool:
-    """Whether the Legacy pool holds a better producer than any already face-up in the seat's
-    provinces. Affordability is not weighed: what a seat can pay for shifts within the turn as it
-    bows producers, while what sits in its provinces does not."""
+    """Whether the Legacy pool holds a better producer than any the seat could actually buy.
+
+    Measured against the Province cards within reach this turn: one the seat cannot pay for is no
+    alternative to searching, it is a slot the seat is stuck with.
+    """
     if not view.legacy_pool:
         # Unreachable while the comparison below is strict, since an empty pool produces 0 and no
         # board produces less. Kept because loosening that comparison would otherwise turn an empty
         # pool into a lost game.
         return False
-    return _best_production(view, view.legacy_pool) > _best_production(
-        view, _readable_province_cards(view).values()
-    )
+    reach = _spendable(view)
+    within_reach = [
+        card
+        for card in _readable_province_cards(view).values()
+        if view.stat(card, Stat.GOLD_COST) <= reach
+    ]
+    return _best_production(view, view.legacy_pool) > _best_production(view, within_reach)
 
 
 def cards_to_cycle(view: GameView) -> tuple[str, ...]:
@@ -224,13 +230,14 @@ class GoldRushPolicy:
     decides. Then the best purchase, ranked as :class:`EconomicPolicy` ranks it, which takes a
     Personality once no Holding is within reach: gold left in the pool is cleared at the phase
     change, and buying empties the Province either way. Then a Dynasty Discard of any face-up
-    Province card producing nothing, which costs nothing and refills the Province for next turn.
+    Province card it has no use for — one producing nothing, or one priced beyond what it could
+    raise — which costs nothing and refills the Province for next turn.
 
     The discard is what separates this from :class:`EconomicPolicy`. Nothing else in the registry
-    ever takes it, so a Province holding a card the seat cannot afford stays held for the rest of
-    the game and the seat plays on with fewer slots than it has. One discard is one choice, so a
-    turn ending with three unaffordable Personalities flushes them over three windows and passes
-    only once the Provinces are clear.
+    ever takes it, so a Province holding a card the seat cannot afford would stay held for the rest
+    of the game and the seat would play on with fewer slots than it has. One discard is one choice,
+    so a turn ending with three unaffordable Personalities flushes them over three windows and
+    passes only once the Provinces are clear.
 
     Answers its own decisions as well as choosing, because an ability is only worth as much as the
     answers behind it: which card it targets, and whether to pay an optional cost the resolution
@@ -443,19 +450,27 @@ def _barren_province_cards(view: GameView) -> tuple[str, ...]:
 
 
 def _flushable(view: GameView, actions: list[Action]) -> DynastyDiscard | None:
-    """The lowest-id Dynasty Discard among ``actions`` that clears a Province card producing no
-    Gold, or None when every discard on offer would throw away production.
+    """The lowest-id Dynasty Discard among ``actions`` that clears a Province card the seat has no
+    use for — one producing no Gold, or one costing more than it could raise — or None when every
+    discard on offer would throw away a producer it can buy.
+
+    An unaffordable card counts as junk because the slot is what matters: held, it produces nothing
+    and blocks the refill.
 
     A card the viewer cannot identify is left alone: a discard is irreversible, and a seat that
     cannot read a card cannot know it is worthless.
     """
     cards = _readable_province_cards(view)
+    reach = _spendable(view)
     junk = [
         action
         for action in actions
         if isinstance(action, DynastyDiscard)
         and action.card_id in cards
-        and _production(view, cards[action.card_id]) == 0
+        and (
+            _production(view, cards[action.card_id]) == 0
+            or view.stat(cards[action.card_id], Stat.GOLD_COST) > reach
+        )
     ]
     return min(junk, key=lambda action: action.card_id, default=None)
 

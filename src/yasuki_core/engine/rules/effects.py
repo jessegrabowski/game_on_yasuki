@@ -523,9 +523,9 @@ class PayGold(InterruptingEffect):
     # Imported where they are used: pricing a payment reads the production-boost registry, whose
     # module imports this one.
     def is_payable(self, game: GameState) -> bool:
-        from yasuki_core.engine.rules.payments import can_raise
+        from yasuki_core.engine.rules.payments import can_afford
 
-        return can_raise(game, self.seat, self.amount)
+        return can_afford(game, self.seat, self.amount)
 
     def request(self, game: GameState) -> DecisionRequest:
         from yasuki_core.engine.rules.payments import payment_request
