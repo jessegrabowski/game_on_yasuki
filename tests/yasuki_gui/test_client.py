@@ -36,21 +36,21 @@ def client(monkeypatch):
     try:
         yield built
     finally:
-        built.root.destroy()
+        built.window.root.destroy()
 
 
 def _status(client: Client) -> str:
-    return client.prompt_box._status.cget("text")
+    return client.window.prompt_box._status.cget("text")
 
 
 def _buttons(client: Client) -> list[str]:
-    return [button.cget("text") for button in client.prompt_box._buttons]
+    return [button.cget("text") for button in client.window.prompt_box._buttons]
 
 
 def _pump(client: Client, steps: int = 200) -> None:
     """Run queued Tk callbacks until the human has something to do, or ``steps`` have passed."""
     for _ in range(steps):
-        client.root.update()
+        client.window.root.update()
         if client.host.runner.legal_actions():
             return
 
@@ -79,7 +79,7 @@ def test_a_game_the_opponent_leads_hands_over_and_comes_back(monkeypatch):
         assert ai_first.host.runner.legal_actions()
         assert "Pass" in _buttons(ai_first)
     finally:
-        ai_first.root.destroy()
+        ai_first.window.root.destroy()
 
 
 def test_passing_advances_the_phase(client):
@@ -109,7 +109,7 @@ def test_loading_a_deck_restarts_the_game_on_it(client):
 
     assert _stronghold_name(client, opponent) != before
     # The board has to be re-pointed at the new game, not left rendering the old one.
-    assert client.field.state is client.host.session.game.table
+    assert client.window.field.state is client.host.session.game.table
 
 
 def test_a_deck_that_fails_to_load_leaves_the_game_running(client):
@@ -131,7 +131,7 @@ def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
     pending = client.host.runner.pending
     assert pending is not None
     assert _status(client) == pending.prompt()
-    assert client.field.selecting
+    assert client.window.field.selecting
 
 
 def test_backing_out_of_a_decision_leaves_the_board_alone(client):
@@ -141,19 +141,19 @@ def test_backing_out_of_a_decision_leaves_the_board_alone(client):
     client.cancel()
 
     assert client.host.runner.pending is None
-    assert not client.field.selecting
+    assert not client.window.field.selecting
 
 
 def test_confirming_a_decision_resolves_it(client):
     client.act(Cycle())
     pending = client.host.runner.pending
-    client.field.toggle_selection(pending.candidates[0])
+    client.window.field.toggle_selection(pending.candidates[0])
 
     client.confirm()
 
     assert client.host.runner.pending is None
-    assert not client.field.selecting
+    assert not client.window.field.selecting
 
 
 def test_the_opening_board_renders_the_game_that_was_dealt(client):
-    assert client.field.state is client.host.session.game.table
+    assert client.window.field.state is client.host.session.game.table
