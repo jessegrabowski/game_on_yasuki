@@ -8,9 +8,11 @@ import typing
 
 from yasuki_core import DATABASE_DIR
 from yasuki_core.engine.rules import cards
-from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, iter_set_entries
+from yasuki_core.install.card_index import DEFAULT_CARDS_PATH
 from yasuki_core.install.yaml_to_sql import card_slug
 from yasuki_core.yaml_io import read_yaml
+
+from tests.yasuki_core.card_corpus import set_entries
 
 CARDS_DIR = pathlib.Path(cards.__file__).parent
 DEFAULT_SET_INFO_PATH = DATABASE_DIR / "set_info.yaml"
@@ -264,6 +266,6 @@ def first_printing_module(
     }
 
     printings = collections.defaultdict(set)
-    for entry in iter_set_entries(cards_dir):
+    for entry in set_entries(cards_dir):
         printings[entry.card_id].add((released.get(entry.set_name, UNDATED), entry.source.stem))
     return {card_id: min(dated)[1] for card_id, dated in printings.items()}

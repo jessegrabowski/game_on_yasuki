@@ -3,7 +3,9 @@ import pathlib
 
 import pytest
 
-from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, iter_set_entries, read_index
+from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, read_index
+
+from tests.yasuki_core.card_corpus import set_entries
 
 from tests.yasuki_core.engine.rules.card_modules import card_modules, created_tokens
 
@@ -12,7 +14,7 @@ def creations_by_card(cards_dir: pathlib.Path = DEFAULT_CARDS_PATH) -> dict[str,
     """Each card id to the tokens its ``creates:`` entries name, pooled across its printings the way
     the install pipeline pools them."""
     creates: dict[str, set[str]] = collections.defaultdict(set)
-    for entry in iter_set_entries(cards_dir):
+    for entry in set_entries(cards_dir):
         creates[entry.card_id].update(entry.creates)
     return creates
 
