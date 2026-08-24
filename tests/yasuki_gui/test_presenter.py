@@ -136,7 +136,8 @@ def test_picking_a_boostable_producer_pre_empts_the_payment_prompt(paying):
     window.field.toggle_selection("of")
 
     assert _buttons(window) == ["Boost", "Skip"]
-    assert "+2 Gold" in _status(window)
+    # Wording and price both come off the decision, so the client states neither of its own.
+    assert _status(window) == "Boost this Holding as it bows? +2 Gold, then it is destroyed."
 
 
 def test_taking_the_boost_resumes_the_payment_with_the_producer_chosen(paying):

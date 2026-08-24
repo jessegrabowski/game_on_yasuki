@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.flow import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine.rules.decisions import (
+    BoostOffer,
     ChoosePayment,
     DecisionResponse,
     PaymentResponse,
@@ -221,7 +222,7 @@ def _in_dynasty_discard(session, card_id):
 def test_outlying_farms_is_flagged_boostable_in_the_payment_offer():
     session = _outlying_game()
     session.act(P1, Recruit("target"))
-    assert session.game.pending.boostable == (("of", 2),)
+    assert session.game.pending.boostable == (BoostOffer("of", 2, "then it is destroyed"),)
 
 
 def test_boost_makes_the_extra_gold_needed_to_afford_a_recruit():

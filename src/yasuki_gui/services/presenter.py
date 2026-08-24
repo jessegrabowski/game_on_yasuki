@@ -63,7 +63,7 @@ class Presenter:
             # Invest amount and a yes/no question are answered by prompt buttons, so neither puts
             # the board into selection mode.
             paying = isinstance(pending, ChoosePayment)
-            boostable = [pid for pid, _ in pending.boostable] if paying else ()
+            boostable = [offer.card_id for offer in pending.boostable] if paying else ()
             field.begin_selection(pending.candidates, render_bowed=paying, boostable=boostable)
         self.refresh()
         # An owed decision counts as well as held priority: a card can put a question to the
@@ -117,8 +117,7 @@ class Presenter:
             ]
             return pending.prompt(), [*amounts, ("Cancel", self.cancel, True)]
         if isinstance(pending, ChoosePayment) and field.pending_boost is not None:
-            extra = dict(pending.boostable).get(field.pending_boost, 0)
-            return f"Boost this Holding as it bows? +{extra} Gold, then it is destroyed.", [
+            return pending.boost_prompt(field.pending_boost), [
                 ("Boost", lambda: self.answer_boost(True), True),
                 ("Skip", lambda: self.answer_boost(False), True),
             ]

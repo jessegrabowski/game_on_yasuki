@@ -5,6 +5,7 @@ from yasuki_core.engine.players import PlayerId
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.decisions import (
+    BoostOffer,
     Confirm,
     DecisionRequest,
     ChooseCards,
@@ -56,7 +57,7 @@ def _payment(amount: int, available: int, produced, boostable=()) -> ChoosePayme
         tuple(produced),
         "Mine",
         target_id="mine",
-        boostable=tuple(boostable),
+        boostable=tuple(BoostOffer(card, amount) for card, amount in boostable),
     )
 
 
@@ -192,6 +193,28 @@ def test_a_payment_reads_no_boosts_off_an_answer_that_names_none():
     assert ChoosePayment.boosts_taken(DecisionResponse(("of",))) == frozenset()
     assert ChoosePayment.boosts_taken(PaymentResponse(("of",), ("of",))) == frozenset({"of"})
     assert request.accepts(DecisionResponse(("of",)))
+
+
+def test_the_boost_question_quotes_the_gold_and_the_price_the_card_names():
+    # The wording belongs to the decision, so a client asks it without knowing which card is being
+    # bowed or what boosting there costs.
+    request = ChoosePayment(
+        PlayerId.P1,
+        ("of", "mine"),
+        4,
+        0,
+        (("of", 2), ("mine", 2)),
+        "Mine",
+        boostable=(BoostOffer("of", 2, "then it is destroyed"), BoostOffer("mine", 3)),
+    )
+
+    assert (
+        request.boost_prompt("of")
+        == "Boost this Holding as it bows? +2 Gold, then it is destroyed."
+    )
+    assert request.boost_prompt("mine") == "Boost this Holding as it bows? +3 Gold."
+    with pytest.raises(KeyError):
+        request.boost_prompt("nothing")
 
 
 def test_payment_prompt_counts_a_boosted_producer_at_its_higher_yield():

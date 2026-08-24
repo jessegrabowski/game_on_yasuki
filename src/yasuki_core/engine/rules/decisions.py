@@ -87,6 +87,26 @@ class DecisionRequest(ABC):
 
 
 @dataclass(frozen=True, slots=True)
+class BoostOffer:
+    """One producer's bow-time boost, as the payment that offers it has snapshotted it.
+
+    Attributes
+    ----------
+    card_id : str
+        The producer that may boost.
+    amount : int
+        The extra Gold it adds when the seat takes the boost.
+    price : str
+        What the boost costs, worded for the seat — "then it is destroyed". Empty when it is free.
+        Default empty.
+    """
+
+    card_id: str
+    amount: int
+    price: str = ""
+
+
+@dataclass(frozen=True, slots=True)
 class ChoosePayment(DecisionRequest):
     """The seat must cover a gold cost, bowing gold producers to make up what its pool lacks. The
     candidates are the seat's unbowed producers; choosing some bows them, and their production plus
@@ -108,10 +128,10 @@ class ChoosePayment(DecisionRequest):
     target_id : str
         The card being paid for. Resolution recomputes each producer's yield against it, because a
         producer's yield can depend on what it pays for.
-    boostable : tuple of (str, int)
-        Each producer that may raise its yield as it bows, paired with the extra gold its boost
-        would add. The seat opts in per producer via the answer's ``boosted``; taking a boost grants
-        the producer that much Gold Production for the turn, and costs whatever its card says.
+    boostable : tuple of BoostOffer
+        Each producer that may raise its yield as it bows, with the extra gold its boost would add
+        and what that costs. The seat opts in per producer through a :class:`PaymentResponse`;
+        taking a boost grants the producer that much Gold Production for the turn.
     """
 
     amount: int
@@ -119,7 +139,7 @@ class ChoosePayment(DecisionRequest):
     produced: tuple[tuple[str, int], ...]
     label: str
     target_id: str = ""
-    boostable: tuple[tuple[str, int], ...] = ()
+    boostable: tuple[BoostOffer, ...] = ()
 
     @staticmethod
     def boosts_taken(response: DecisionResponse) -> frozenset[str]:
@@ -127,9 +147,18 @@ class ChoosePayment(DecisionRequest):
         how an answer that takes no boost is spelled."""
         return frozenset(response.boosted) if isinstance(response, PaymentResponse) else frozenset()
 
+    def boost_prompt(self, card_id: str) -> str:
+        """The question to put to the seat when it picks ``card_id``, a producer that may boost.
+        Raise ``KeyError`` if the producer offers no boost."""
+        for offer in self.boostable:
+            if offer.card_id == card_id:
+                price = f", {offer.price}" if offer.price else ""
+                return f"Boost this Holding as it bows? +{offer.amount} Gold{price}."
+        raise KeyError(card_id)
+
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         yields = dict(self.produced)
-        boost = dict(self.boostable)
+        boost = self._boost_amounts()
         boosted = self.boosts_taken(partial)
         covered = self.available + sum(
             yields[card_id] + (boost[card_id] if card_id in boosted else 0)
@@ -146,13 +175,16 @@ class ChoosePayment(DecisionRequest):
         distinct = set(chosen)
         if len(distinct) != len(chosen) or not distinct <= set(self.candidates):
             return False
-        boost = dict(self.boostable)
+        boost = self._boost_amounts()
         boosted = self.boosts_taken(response)
         if not boosted <= (distinct & boost.keys()):
             return False
         yields = dict(self.produced)
         covered = sum(yields[c] + (boost[c] if c in boosted else 0) for c in distinct)
         return self.available + covered >= self.amount
+
+    def _boost_amounts(self) -> dict[str, int]:
+        return {offer.card_id: offer.amount for offer in self.boostable}
 
     @property
     def cancellable(self) -> bool:

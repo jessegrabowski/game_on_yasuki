@@ -102,6 +102,7 @@ naming the producers it boosts alongside the ones it bows.
 .. autosummary::
 
    BanishForLegacy
+   BoostOffer
    ChooseAbilityTarget
    ChooseAmount
    ChooseCards

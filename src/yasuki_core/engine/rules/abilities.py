@@ -216,10 +216,14 @@ class ProductionBoost:
         Maps the producer to the price it pays for boosting — Outlying Farms destroys itself, Slave
         Pits loses its controller 2 Honor. These resolve once the producer has yielded; a card whose
         price must wait for the rest of the cascade returns a ``Then``. Default no effects.
+    price : str, optional
+        The same price worded for the seat, which the payment quotes when it offers the boost —
+        "then it is destroyed". Default empty, for a boost that costs nothing.
     """
 
     amount: int
     effects: Callable[[L5RCard], list[Effect]] = no_effects
+    price: str = ""
 
 
 # Cards their controller may leave bowed rather than straightening at the start of their turn (the

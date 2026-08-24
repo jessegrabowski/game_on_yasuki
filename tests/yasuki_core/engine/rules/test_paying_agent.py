@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.agents import AutoAgent, PayingAgent
-from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize
+from yasuki_core.engine.rules.decisions import BoostOffer, ChoosePayment, DiscardToHandSize
 from yasuki_core.engine.rules.policies import EconomicPolicy
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
@@ -50,7 +50,7 @@ def test_it_covers_only_what_the_pool_does_not_already_hold():
 def test_a_boost_is_left_alone_when_plain_production_covers_the_cost():
     """A boost costs the producer whatever its card names, so it is never taken for convenience."""
     chosen, boosted = _answer(
-        amount=2, available=0, produced=(("farm", 2),), boostable=(("farm", 2),)
+        amount=2, available=0, produced=(("farm", 2),), boostable=(BoostOffer("farm", 2),)
     )
 
     assert chosen == ("farm",)
@@ -59,7 +59,7 @@ def test_a_boost_is_left_alone_when_plain_production_covers_the_cost():
 
 def test_a_boost_is_taken_when_nothing_else_reaches_the_cost():
     chosen, boosted = _answer(
-        amount=4, available=0, produced=(("farm", 2),), boostable=(("farm", 2),)
+        amount=4, available=0, produced=(("farm", 2),), boostable=(BoostOffer("farm", 2),)
     )
 
     assert chosen == ("farm",)

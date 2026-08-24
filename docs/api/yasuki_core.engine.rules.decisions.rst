@@ -8,6 +8,7 @@ yasuki_core.engine.rules.decisions
 .. autosummary::
 
     BanishForLegacy
+    BoostOffer
     ChooseAbilityTarget
     ChooseAmount
     ChooseCards
