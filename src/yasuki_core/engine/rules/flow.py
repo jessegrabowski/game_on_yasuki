@@ -451,6 +451,7 @@ def announce_equip(
         ),
         label=card.name,
         target_id=card.id,
+        boostable=boost_offers_for(producers),
     )
 
 

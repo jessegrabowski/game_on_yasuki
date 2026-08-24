@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.abilities import (
     register_production_boost,
 )
 from yasuki_core.engine.rules.decisions import (
+    BoostOffer,
     DiscardToHandSize,
     DecisionResponse,
     LeaveBowed,
@@ -36,11 +37,14 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 
 from tests.yasuki_core.engine.builders import (
+    attachment,
     dealt_table,
     end_phase,
     holding,
+    personality,
     put_in_play,
     register,
+    two_seat_game,
 )
 
 
@@ -676,3 +680,22 @@ def test_a_payment_that_cannot_cover_its_cost_raises():
     finally:
         _PRODUCTION_BOOST.pop("self_destroying_probe", None)
         GOLD_HANDLERS.pop("paired_probe", None)
+
+
+def test_an_equip_offers_every_boost_its_legality_counted():
+    """`_equips` gates on `gold_reach`, which counts every bow-time boost the seat could opt into.
+    A payment that leaves one out can be unanswerable for a cost the legality check allowed."""
+    game = two_seat_game()
+    put_in_play(
+        game, holding("of", owner=PlayerId.P1, printed_id="outlying_farms", gold_production=2)
+    )
+    hero = put_in_play(game, personality("hero", owner=PlayerId.P1))
+    blade = attachment("blade", owner=PlayerId.P1, gold_cost=4)
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(register(game.table, blade))
+
+    payment = flow.announce_equip(game, blade, PlayerId.P1, hero.id)
+
+    assert BoostOffer("of", 2, "then it is destroyed") in payment.boostable
+    # The point of offering it: the cost is 4 and the Farm makes 2, so only the boost can pay.
+    assert payment.accepts(PaymentResponse(("of",), ("of",)))
+    assert not payment.accepts(DecisionResponse(("of",)))
