@@ -4,13 +4,13 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import KharmicDraw, KharmicRefill, Pass
-from yasuki_core.engine.rules.decisions import ChoosePayment, DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint
 from tests.yasuki_core.engine.builders import (
     end_phase,
+    pay,
     fate_card,
     holding,
     province_card,
@@ -62,13 +62,6 @@ def _table(*, hand_kharmic=1, province_kharmic=1, production=2, seat=PlayerId.P1
         for i in range(3)
     ]
     return state
-
-
-def _pay(session, seat=PlayerId.P1):
-    """Answer the Kharmic gold cost by bowing whatever the payment offers."""
-    pending = session.game.pending
-    assert isinstance(pending, ChoosePayment)
-    session.submit(seat, DecisionResponse(pending.candidates))
 
 
 def test_both_kharmic_abilities_are_offered_in_the_action_phase():
@@ -145,7 +138,7 @@ def test_the_fate_form_discards_a_kharmic_card_and_draws():
     before = len(deck.cards)
 
     session.act(PlayerId.P1, KharmicDraw("P1-k0"))
-    _pay(session)
+    pay(session, PlayerId.P1)
 
     discard = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)]
     assert [card.id for card in discard.cards] == ["P1-k0"]
@@ -157,7 +150,7 @@ def test_the_dynasty_form_discards_from_a_province_and_refills_it_face_up():
     session = EngineSession.start(_table(), PlayerId.P1)
 
     session.act(PlayerId.P1, KharmicRefill("P1-pk0"))
-    _pay(session)
+    pay(session, PlayerId.P1)
 
     province = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)]
     discard = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)]
@@ -172,7 +165,7 @@ def test_kharmic_is_repeatable_within_one_turn():
     session = EngineSession.start(_table(hand_kharmic=2, production=4), PlayerId.P1)
 
     session.act(PlayerId.P1, KharmicDraw("P1-k0"))
-    _pay(session)
+    pay(session, PlayerId.P1)
     session.act(PlayerId.P2, Pass())  # the action handed the window on; P2 declines it
 
     # The spent card is gone, so what proves repeatability is the second one still being offered.
@@ -200,7 +193,7 @@ def test_paying_on_the_opponents_turn_leaves_the_producer_bowed_into_your_own():
     session = EngineSession.start(state, PlayerId.P1)
     session.act(PlayerId.P1, Pass())
     session.act(PlayerId.P2, KharmicDraw("P2-k0"))
-    _pay(session, PlayerId.P2)
+    pay(session, PlayerId.P2)
 
     assert session.game.table.cards_by_id["P2-sh"].bowed
 

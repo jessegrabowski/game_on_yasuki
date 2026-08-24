@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import end_phase, put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, pay, put_in_play, register
 
 from tests.yasuki_core.engine.builders import province_card
 
@@ -69,7 +69,7 @@ def _recruit_game(
 
 def _recruit(session, holding_id):
     session.act(PlayerId.P1, Recruit(holding_id))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))  # bow the stronghold to pay
+    pay(session, PlayerId.P1)  # bow the stronghold to pay
 
 
 def test_sincerity_tokens_are_removed_when_the_card_enters_play():
@@ -193,7 +193,7 @@ def test_training_court_seeds_a_sincerity_token_on_a_province_card():
     _to_dynasty(session)
 
     session.act(PlayerId.P1, Recruit("tc"))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))  # pay the base cost
+    pay(session, PlayerId.P1)  # pay the base cost
 
     session.act(PlayerId.P1, ActivateAbility("tc"))
     pending = session.game.pending
@@ -220,7 +220,7 @@ def test_training_court_seeds_nothing_without_a_token_less_sincerity_card():
     _to_dynasty(session)
 
     session.act(PlayerId.P1, Recruit("tc"))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
     # The only Sincerity card already has a token, so the Response is never offered.
     assert ActivateAbility("tc") not in session.legal_actions(PlayerId.P1)
 
@@ -240,7 +240,7 @@ def test_training_court_seed_offers_every_token_less_sincerity_card():
     _to_dynasty(session)
 
     session.act(PlayerId.P1, Recruit("tc"))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
     session.act(PlayerId.P1, ActivateAbility("tc"))
     assert set(session.game.pending.candidates) == {"a", "b"}  # both token-less cards offered
 
@@ -259,7 +259,7 @@ def test_training_court_invest_lands_before_its_response_is_offered():
     _to_dynasty(session)
 
     session.act(PlayerId.P1, Recruit("tc", invest=True))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))  # pay base + Invest 1
+    pay(session, PlayerId.P1)  # pay base + Invest 1
     assert session.game.table.cards_by_id["tc"].counters == {"wealth": 1}  # Invest already landed
 
     session.act(PlayerId.P1, ActivateAbility("tc"))
@@ -279,7 +279,7 @@ def test_training_court_seed_replays_and_round_trips():
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
     session.act(PlayerId.P1, Recruit("tc"))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
     session.act(PlayerId.P1, ActivateAbility("tc"))
     session.submit(PlayerId.P1, DecisionResponse(("target",)))
 

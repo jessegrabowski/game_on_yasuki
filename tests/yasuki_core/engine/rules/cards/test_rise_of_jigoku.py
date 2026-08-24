@@ -31,6 +31,7 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     end_turn,
     holding,
+    pay,
     personality,
     put_in_play,
     register,
@@ -216,7 +217,7 @@ def _drive_to_straighten_choice(session):
     session.submit(P1, DecisionResponse(("target",)))
     pending = session.game.pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 2  # X = the target's cost
-    session.submit(P1, DecisionResponse(("SH",)))
+    pay(session, P1)
     pending = session.game.pending
     # Asked as a question naming both cards, not as a card to click on the board.
     assert isinstance(pending, Confirm)
@@ -339,7 +340,7 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     end_phase(session)  # Battle -> Dynasty
 
     session.act(P1, Recruit("warrens"))
-    session.submit(P1, DecisionResponse(("SH",)))
+    pay(session, P1)
     refill = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)].cards[-1]
     assert refill.face_up
 
@@ -463,7 +464,7 @@ def _mishime_game(*, chi=3, stronghold_production=6):
 def _summon_oni(session, *, destroy: bool):
     """Run the whole ability: pay, pick the Personality, then answer the destroy question."""
     session.act(P1, ActivateAbility("sensei"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))  # bow the Stronghold for the five gold
+    pay(session, P1)  # bow the Stronghold for the five gold
     session.submit(P1, DecisionResponse(("victim",)))
     session.submit(P1, DecisionResponse(("victim",) if destroy else ()))
     return next(card for card in session.game.table.battlefield.cards if card.is_token)
@@ -720,7 +721,7 @@ def test_makeshift_fortifications_walls_the_province_it_was_recruited_from():
     end_phase(session)  # Battle -> Dynasty
 
     session.act(P1, Recruit("wall"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert session.game.table.province_attachments == {"wall": first}
     assert effective_province_strength(session.game, first) == 7

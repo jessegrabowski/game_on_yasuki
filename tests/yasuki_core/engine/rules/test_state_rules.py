@@ -16,7 +16,6 @@ from yasuki_core.engine.rules.flow import run_stack
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.actions import Recruit
-from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
@@ -34,6 +33,7 @@ from tests.yasuki_core.engine.builders import (
     dealt_table,
     end_phase,
     holding,
+    pay,
     put_in_play,
     register,
     stronghold,
@@ -374,7 +374,7 @@ def test_a_game_in_which_a_personality_dies_of_zero_chi_replays_to_the_same_stat
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty, where a Recruit is on offer
     session.act(P1, Recruit("P1-doomed"))
-    session.submit(P1, DecisionResponse(()))  # nothing to pay, but the offer is still made
+    pay(session, P1)  # nothing to pay, but the offer is still made
 
     discard = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
     assert "P1-doomed" not in _battlefield(session.game)
@@ -405,7 +405,7 @@ def test_an_arriving_personality_dies_before_its_own_enter_play_trigger_runs(rea
     end_phase(session)
     end_phase(session)
     session.act(P1, Recruit("P1-doji"))
-    session.submit(P1, DecisionResponse(()))
+    pay(session, P1)
 
     assert "P1-doji" not in _battlefield(session.game)
     assert session.game.table.cards_by_id["P1-doji"].counters == {}  # never got its tokens
@@ -494,7 +494,7 @@ def test_proclaiming_a_personality_who_dies_on_arrival_still_gains_the_honor():
         if isinstance(action, Recruit) and action.proclaim
     )
     session.act(P1, proclaim)
-    session.submit(P1, DecisionResponse(()))
+    pay(session, P1)
 
     assert "P1-doomed" not in _battlefield(session.game)
     assert session.game.table.seats[P1].honor == before + 3

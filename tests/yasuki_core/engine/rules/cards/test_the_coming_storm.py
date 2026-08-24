@@ -1,6 +1,5 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Recruit
-from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production, effective_province_strength
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -9,7 +8,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import StrongholdPrint
 
-from tests.yasuki_core.engine.builders import end_phase, holding, put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, holding, pay, put_in_play, register
 
 P1 = PlayerId.P1
 FIRST = ZoneKey(P1, ZoneRole.PROVINCE, 0)
@@ -59,7 +58,7 @@ def test_defensive_memorial_adds_two_to_the_province_it_defends():
     assert effective_province_strength(session.game, FIRST) == 3
 
     session.act(P1, Recruit("memorial"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert session.game.table.province_attachments == {"memorial": FIRST}
     assert effective_province_strength(session.game, FIRST) == 5
@@ -71,7 +70,7 @@ def test_defensive_memorial_enters_bowed_and_still_produces_its_gold():
     session = _memorial_game()
 
     session.act(P1, Recruit("memorial"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     memorial = session.game.table.cards_by_id["memorial"]
     assert memorial.bowed

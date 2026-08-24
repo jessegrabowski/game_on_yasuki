@@ -16,7 +16,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, StrongholdPrint
 
-from tests.yasuki_core.engine.builders import holding, province_card, register
+from tests.yasuki_core.engine.builders import holding, pay, province_card, register
 
 P1 = PlayerId.P1
 
@@ -96,7 +96,7 @@ def test_investing_fetches_another_copy_out_of_the_fate_deck():
     session = _sand_game()
     session.act(P1, Equip("weapon", invest=True))
     session.submit(P1, DecisionResponse(("bearer",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     pending = session.project(P1).pending
     assert isinstance(pending, ChooseCards)
@@ -113,7 +113,7 @@ def test_investing_raises_the_cards_gold_cost_permanently():
     session = _sand_game()
     session.act(P1, Equip("weapon", invest=True))
     session.submit(P1, DecisionResponse(("bearer",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.submit(P1, DecisionResponse(("spare",)))
 
     weapon = session.game.table.cards_by_id["weapon"]
@@ -124,7 +124,7 @@ def test_equipping_without_the_invest_leaves_the_cost_and_the_deck_alone():
     session = _sand_game()
     session.act(P1, Equip("weapon"))
     session.submit(P1, DecisionResponse(("bearer",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert session.project(P1).pending is None  # no search was raised
     assert effective_gold_cost(session.game, session.game.table.cards_by_id["weapon"]) == 3
@@ -144,7 +144,7 @@ def test_the_invested_cost_dies_with_the_card():
     session = _sand_game()
     session.act(P1, Equip("weapon", invest=True))
     session.submit(P1, DecisionResponse(("bearer",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.submit(P1, DecisionResponse(("spare",)))
     weapon = session.game.table.cards_by_id["weapon"]
     assert effective_gold_cost(session.game, weapon) == 4
@@ -212,7 +212,7 @@ def test_beiru_walls_the_province_he_attaches_the_fortification_to():
 
     session.act(P1, ActivateAbility("beiru"))
     session.submit(P1, DecisionResponse(("wall",)))  # the Fortification to recruit
-    session.submit(P1, DecisionResponse(("P1-SH",)))  # pay for it
+    pay(session, P1)  # pay for it
     pending = session.project(P1).pending
     assert isinstance(pending, ChooseFortificationProvince)
     # Provinces are named by slot rather than by the card standing in one.
@@ -232,7 +232,7 @@ def test_beiru_offers_the_seat_every_province():
 
     session.act(P1, ActivateAbility("beiru"))
     session.submit(P1, DecisionResponse(("wall",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert set(session.project(P1).pending.candidates) == {
         ZoneKey(P1, ZoneRole.PROVINCE, index).token for index in range(2)
@@ -249,7 +249,7 @@ def test_beiru_can_wall_an_empty_province():
 
     session.act(P1, ActivateAbility("beiru"))
     session.submit(P1, DecisionResponse(("wall",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     assert session.project(P1).pending.candidates == (empty.token,)
     session.submit(P1, DecisionResponse((empty.token,)))
 

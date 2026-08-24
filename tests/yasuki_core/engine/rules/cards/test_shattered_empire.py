@@ -15,8 +15,9 @@ from yasuki_core.game_pieces.constants import Side
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
-    holding,
     end_phase,
+    holding,
+    pay,
     personality,
     put_in_play,
     register,
@@ -162,7 +163,7 @@ def test_hida_sanjiro_invests_in_his_own_armour():
     session = _sanjiro_game()
 
     session.act(P1, Recruit("sanjiro", invest=True))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     game = session.game
     sanjiro = game.table.cards_by_id["sanjiro"]
@@ -177,6 +178,6 @@ def test_hida_sanjiro_recruited_plainly_wears_nothing():
     session = _sanjiro_game()
 
     session.act(P1, Recruit("sanjiro"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert attachments_of(session.game, session.game.table.cards_by_id["sanjiro"]) == ()
