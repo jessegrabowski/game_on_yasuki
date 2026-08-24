@@ -656,6 +656,10 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     Taking a boost is a stat change like any other: it grants the producer Gold Production for the
     turn, and the yield is then read off the card the same way an unboosted producer's is. What the
     boost costs is the card's own business, resolved once it has yielded.
+
+    Raise ``RuntimeError`` if the bowed producers do not cover the cost: the answer was accepted
+    against the yields the request quoted, so falling short is an engine fault rather than a legal
+    move.
     """
     target = game.table.cards_by_id.get(request.target_id)
     targets = (target,) if target is not None else ()
@@ -679,7 +683,11 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
         produce_gold(game, card_id, effective_gold_production(game, card, targets=targets))
         if boost is not None:
             triggers.resolve_effects(game, boost.effects(card))
-    game.spend_gold(request.seat, request.amount)
+    if not game.spend_gold(request.seat, request.amount):
+        raise RuntimeError(
+            f"{request.seat.name} cannot cover {request.amount} for {request.label}: "
+            f"the pool holds {game.gold[request.seat]}"
+        )
 
 
 def _resolve_recruit(
