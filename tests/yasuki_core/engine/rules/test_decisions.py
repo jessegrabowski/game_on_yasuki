@@ -57,7 +57,7 @@ def _payment(amount: int, available: int, produced, boostable=()) -> ChoosePayme
         tuple(produced),
         "Mine",
         target_id="mine",
-        boostable=tuple(BoostOffer(card, amount) for card, amount in boostable),
+        boostable=tuple(boostable),
     )
 
 
@@ -188,7 +188,7 @@ def test_a_payment_reads_no_boosts_off_an_answer_that_names_none():
     # A plain response is how every non-payment decision answers, and how a payment that takes no
     # boost answers. Neither carries the field, so the payment has to read them as empty rather than
     # as missing.
-    request = _payment(amount=2, available=0, produced=[("of", 2)], boostable=[("of", 2)])
+    request = _payment(amount=2, available=0, produced=[("of", 2)], boostable=[BoostOffer("of", 2)])
 
     assert ChoosePayment.boosts_taken(DecisionResponse(("of",))) == frozenset()
     assert ChoosePayment.boosts_taken(PaymentResponse(("of",), ("of",))) == frozenset({"of"})
@@ -198,14 +198,11 @@ def test_a_payment_reads_no_boosts_off_an_answer_that_names_none():
 def test_the_boost_question_quotes_the_gold_and_the_price_the_card_names():
     # The wording belongs to the decision, so a client asks it without knowing which card is being
     # bowed or what boosting there costs.
-    request = ChoosePayment(
-        PlayerId.P1,
-        ("of", "mine"),
-        4,
-        0,
-        (("of", 2), ("mine", 2)),
-        "Mine",
-        boostable=(BoostOffer("of", 2, "then it is destroyed"), BoostOffer("mine", 3)),
+    request = _payment(
+        amount=4,
+        available=0,
+        produced=[("of", 2), ("mine", 2)],
+        boostable=[BoostOffer("of", 2, "then it is destroyed"), BoostOffer("mine", 3)],
     )
 
     assert (
@@ -219,7 +216,7 @@ def test_the_boost_question_quotes_the_gold_and_the_price_the_card_names():
 
 def test_payment_prompt_counts_a_boosted_producer_at_its_higher_yield():
     # Bowing Outlying Farms plain leaves 2 owed; boosting it covers the whole cost.
-    request = _payment(amount=4, available=0, produced=[("of", 2)], boostable=[("of", 2)])
+    request = _payment(amount=4, available=0, produced=[("of", 2)], boostable=[BoostOffer("of", 2)])
     assert request.prompt(DecisionResponse(("of",))) == "Pay 2 gold for Mine"
     assert request.prompt(PaymentResponse(("of",), ("of",))) == "Pay 0 gold for Mine"
 
