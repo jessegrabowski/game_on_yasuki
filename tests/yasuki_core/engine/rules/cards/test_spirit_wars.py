@@ -1,6 +1,5 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
-from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -8,7 +7,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import StrongholdPrint
 
-from tests.yasuki_core.engine.builders import end_phase, holding, put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, holding, pay, put_in_play, register
 
 P1 = PlayerId.P1
 FIRST = ZoneKey(P1, ZoneRole.PROVINCE, 0)
@@ -45,7 +44,7 @@ def _garden_game(printed_id: str = "poorly_placed_garden") -> EngineSession:
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty
     session.act(P1, Recruit("garden"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     return session
 
 

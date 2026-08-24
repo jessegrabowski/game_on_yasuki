@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.economy import effective_gold_cost
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import end_phase, put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, pay, put_in_play, register
 
 
 @pytest.fixture(autouse=True)
@@ -91,7 +91,7 @@ def test_investing_in_questionable_market_pays_the_invest_cost_for_two_tokens():
 
     pending = session.game.pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 3  # base 1 + Invest 2
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     qm = session.game.table.cards_by_id["qm"]
     assert qm in session.game.table.battlefield.cards
@@ -121,7 +121,7 @@ def test_rebuilt_harbor_grants_wealth_tokens_equal_to_the_amount_invested():
 
     pending = session.game.pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 4  # base 1 + chosen 3
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
     assert session.game.table.cards_by_id["rh"].counters == {"wealth": 3}
 
 
@@ -151,7 +151,7 @@ def test_training_court_invests_for_one_token():
     session = _invest_game("tc", "training_court", gold_cost=1)
 
     session.act(PlayerId.P1, Recruit("tc", invest=True))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     assert session.game.table.cards_by_id["tc"].counters == {"wealth": 1}
 
@@ -159,7 +159,7 @@ def test_training_court_invests_for_one_token():
 def test_fixed_invest_recruit_replays_and_round_trips():
     session = _invest_game("qm", "questionable_market", gold_cost=1)
     session.act(PlayerId.P1, Recruit("qm", invest=True))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
     assert restored.replay() == session.game
@@ -169,7 +169,7 @@ def test_variable_invest_recruit_replays_and_round_trips():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
     session.act(PlayerId.P1, Recruit("rh", invest=True))
     session.submit(PlayerId.P1, DecisionResponse(("2",)))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
     assert restored.replay() == session.game
@@ -180,7 +180,7 @@ def test_investing_permanently_raises_the_holdings_gold_cost():
     rise is what pays for the effect, so a card that got the effect must show it."""
     session = _invest_game("qm", "questionable_market", gold_cost=1)
     session.act(PlayerId.P1, Recruit("qm", invest=True))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     qm = session.game.table.cards_by_id["qm"]
     assert qm.gold_cost == 1  # printed, untouched
@@ -190,7 +190,7 @@ def test_investing_permanently_raises_the_holdings_gold_cost():
 def test_recruiting_without_investing_leaves_the_gold_cost_alone():
     session = _invest_game("qm", "questionable_market", gold_cost=1)
     session.act(PlayerId.P1, Recruit("qm"))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     qm = session.game.table.cards_by_id["qm"]
     assert effective_gold_cost(session.game, qm) == 1
@@ -200,7 +200,7 @@ def test_a_variable_invest_raises_the_cost_by_what_was_actually_paid():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
     session.act(PlayerId.P1, Recruit("rh", invest=True))
     session.submit(PlayerId.P1, DecisionResponse(("3",)))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     rh = session.game.table.cards_by_id["rh"]
     assert effective_gold_cost(session.game, rh) == 1 + 3
@@ -210,7 +210,7 @@ def test_the_invest_rise_survives_the_turn_that_bought_it():
     """Permanent, not until-end-of-turn: the modifier has to still be there next turn."""
     session = _invest_game("qm", "questionable_market", gold_cost=1)
     session.act(PlayerId.P1, Recruit("qm", invest=True))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
     bought_on = session.game.turn
     for _ in range(4):
         end_phase(session)
@@ -232,7 +232,7 @@ def test_a_free_invest_still_buys_what_the_invest_buys():
 
     session = _invest_game("fi", "free_invest_probe", gold_cost=1)
     session.act(PlayerId.P1, Recruit("fi", invest=True))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     assert invested == [0]
 
@@ -248,6 +248,6 @@ def test_a_recruit_without_the_option_runs_no_invest_at_all():
 
     session = _invest_game("fi", "free_invest_probe", gold_cost=1)
     session.act(PlayerId.P1, Recruit("fi"))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
 
     assert invested == []

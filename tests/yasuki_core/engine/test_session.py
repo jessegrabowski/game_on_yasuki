@@ -1,6 +1,6 @@
 import pytest
 
-from tests.yasuki_core.engine.builders import end_phase
+from tests.yasuki_core.engine.builders import end_phase, pay
 from tests.yasuki_core.engine.rules.cards.test_rise_of_jigoku import _modest_farm_game
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, ZoneRole, DeckKey
@@ -223,7 +223,7 @@ def test_recruit_pays_then_brings_the_personality_into_play_unbowed_and_refills(
     session.act(PlayerId.P1, Recruit("P1-person"))
     pending = session.project(PlayerId.P1).pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 5
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     game = session.game
     bought = game.table.cards_by_id["P1-person"]
@@ -308,7 +308,7 @@ def test_proclaim_adds_personal_honor_and_is_once_per_turn():
     _in_dynasty(session)
 
     session.act(PlayerId.P1, Recruit("P1-first", proclaim=True))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     game = session.game
     assert game.table.cards_by_id["P1-first"] in game.table.battlefield.cards
@@ -327,7 +327,7 @@ def test_proclaim_is_available_again_on_the_seats_next_turn():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
     session.act(PlayerId.P1, Recruit("P1-first", proclaim=True))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
     assert Recruit("P1-second", proclaim=True) not in session.legal_actions(PlayerId.P1)
 
     end_phase(session)  # end P1's turn; the full hand + fate draw forces a discard
@@ -375,7 +375,7 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     pending = session.project(PlayerId.P1).pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 5
     assert pending.label == "Holding"  # the prompt names the card being bought
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     game = session.game
     bought = game.table.cards_by_id["P1-buy"]
@@ -638,7 +638,7 @@ def test_undo_last_does_not_reverse_a_recruit():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
     session.act(PlayerId.P1, Recruit("P1-buy"))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))  # pay -> the holding enters play
+    pay(session, PlayerId.P1)  # pay -> the holding enters play
 
     assert session.undo_last(PlayerId.P1) is False  # undo only reverses a Dynasty Discard
     assert session.game.table.cards_by_id["P1-buy"] in session.game.table.battlefield.cards
@@ -664,7 +664,7 @@ def test_a_finished_action_is_not_in_flight_and_cannot_be_aborted():
     session = _modest_farm_game()
     session.act(PlayerId.P1, ActivateAbility("mf"))
     session.submit(PlayerId.P1, DecisionResponse(("target",)))
-    session.submit(PlayerId.P1, DecisionResponse(("SH",)))
+    pay(session, PlayerId.P1)
     session.submit(PlayerId.P1, DecisionResponse(()))  # decline the destroy question
 
     assert session.game.pending is None
@@ -684,7 +684,7 @@ def test_proclaim_gains_the_honor_the_personality_is_worth_now():
     before = session.game.table.seats[PlayerId.P1].honor
 
     session.act(PlayerId.P1, Recruit("P1-person", proclaim=True))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     assert session.game.table.seats[PlayerId.P1].honor == before + 4
 
@@ -743,7 +743,7 @@ def test_equip_pays_then_attaches_the_card_from_hand():
 
     pending = session.project(PlayerId.P1).pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 3
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     game = session.game
     katana = game.table.cards_by_id["P1-katana"]
@@ -830,7 +830,7 @@ def test_an_equip_replays_to_the_same_board():
     session = EngineSession.start(state, PlayerId.P1)
     session.act(PlayerId.P1, Equip("P1-katana"))
     session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     assert replay(session.log).table == session.game.table
 
@@ -859,7 +859,7 @@ def test_equipping_announces_that_the_card_entered_play():
 
     session.act(PlayerId.P1, Equip("P1-katana"))
     session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     assert _EQUIP_ARRIVALS == [True]  # and it came from hand, which some cards distinguish
 
@@ -875,7 +875,7 @@ def test_recruiting_a_fortification_attaches_it_to_the_province_it_came_from():
     _in_dynasty(session)
 
     session.act(PlayerId.P1, Recruit("P1-wall"))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     game = session.game
     province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
@@ -894,7 +894,7 @@ def test_a_plain_holding_is_not_attached_to_its_province():
     _in_dynasty(session)
 
     session.act(PlayerId.P1, Recruit("P1-farm"))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     assert session.game.table.province_attachments == {}
 
@@ -917,7 +917,7 @@ def test_a_fortification_stays_on_its_province_when_the_slot_refills_behind_it()
     _in_dynasty(session)
 
     session.act(PlayerId.P1, Recruit("P1-wall"))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+    pay(session, PlayerId.P1)
 
     game = session.game
     province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)

@@ -2,9 +2,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import Recruit
-from yasuki_core.engine.rules.decisions import (
-    DecisionResponse,
-)
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
@@ -12,6 +9,7 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
+    pay,
     put_in_play,
     register,
 )
@@ -66,7 +64,7 @@ def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
     end_phase(session)
     session.act(P1, Recruit("jade"))
     # The offer quotes 4 — base 2 plus the Jade bonus — and bowing it alone must cover the cost.
-    session.submit(P1, DecisionResponse(("jw",)))
+    pay(session, P1)
 
     # 4 produced (2 base + 2 Jade bonus) less the 4 spent. Recomputing without the target would
     # yield 2 and leave the seat short, which asserting on the recruit alone would not notice.

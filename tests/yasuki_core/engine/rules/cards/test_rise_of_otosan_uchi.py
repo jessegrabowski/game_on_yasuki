@@ -32,16 +32,17 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import (
-    attachment,
     attached,
-    stronghold,
+    attachment,
     end_phase,
     end_turn,
     holding,
+    pay,
     personality,
     province_card,
     put_in_play,
     register,
+    stronghold,
     token_template,
     two_seat_game,
 )
@@ -251,7 +252,7 @@ def test_bound_in_blood_measures_the_horror_against_what_it_bound():
 
     session.act(P1, ActivateAbility("spell"))
     session.submit(P1, DecisionResponse(("4",)))  # four Gold binds two
-    session.submit(P1, DecisionResponse(("P1-SH",)))  # bow the Stronghold to pay
+    pay(session, P1)  # bow the Stronghold to pay
     session.submit(P1, DecisionResponse(("acolyte", "novice")))
 
     game = session.game
@@ -266,7 +267,7 @@ def test_the_bound_are_banished_and_the_spell_destroyed():
 
     session.act(P1, ActivateAbility("spell"))
     session.submit(P1, DecisionResponse(("4",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.submit(P1, DecisionResponse(("acolyte", "novice")))
 
     game = session.game
@@ -281,7 +282,7 @@ def test_the_amount_settles_how_many_may_be_bound():
 
     session.act(P1, ActivateAbility("spell"))
     session.submit(P1, DecisionResponse(("2",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert session.game.pending.minimum == 1
     assert session.game.pending.maximum == 1
@@ -305,7 +306,7 @@ def test_bound_in_blood_replays_to_the_same_board():
     session = _blood_game()
     session.act(P1, ActivateAbility("spell"))
     session.submit(P1, DecisionResponse(("4",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.submit(P1, DecisionResponse(("acolyte", "novice")))
 
     assert replay(session.log).table == session.game.table
@@ -364,7 +365,7 @@ def test_recruiting_the_courts_opens_a_response_step_rather_than_acting():
     session = _courts_with_an_envoy()
 
     session.act(P1, Recruit("courts"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert session.game.pending is None
     assert ActivateAbility("courts") in session.legal_actions(P1)
@@ -377,7 +378,7 @@ def test_the_response_step_names_the_recruit_that_opened_it():
     session = _courts_with_an_envoy()
 
     session.act(P1, Recruit("courts"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     for seat in PlayerId:
         assert project(session.game, seat).responding_to == "the Recruit of Courts"
@@ -387,7 +388,7 @@ def test_bowing_the_courtier_costs_a_player_an_honor():
     session = _courts_with_an_envoy()
 
     session.act(P1, Recruit("courts"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
     assert isinstance(session.game.pending, ChooseOption)
@@ -403,7 +404,7 @@ def test_the_swing_may_favour_you_instead():
     session = _courts_with_an_envoy()
 
     session.act(P1, Recruit("courts"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
     session.submit(P1, DecisionResponse(("P1 gains 1 Honor",)))
@@ -416,7 +417,7 @@ def test_passing_the_response_step_leaves_the_courtier_standing():
     session = _courts_with_an_envoy()
 
     session.act(P1, Recruit("courts"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.act(P1, Pass())
 
     game = session.game
@@ -428,7 +429,7 @@ def test_a_bowed_courtier_is_no_courtier_to_spend():
     session = _courts_with_an_envoy(bowed=True)
 
     session.act(P1, Recruit("courts"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert ActivateAbility("courts") not in session.legal_actions(P1)
 
@@ -439,7 +440,7 @@ def test_the_courtier_the_invest_buys_can_be_bowed_by_the_response():
     session = _courts_game()  # no Courtier in play beforehand
 
     session.act(P1, Recruit("courts", invest=True))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     courtier = _courtier_of(session)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse((courtier.id,)))
@@ -453,7 +454,7 @@ def test_the_courtier_the_invest_buys_can_be_bowed_by_the_response():
 def test_the_courts_response_replays_to_the_same_board():
     session = _courts_with_an_envoy()
     session.act(P1, Recruit("courts"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
     session.submit(P1, DecisionResponse(("P2 loses 1 Honor",)))
@@ -465,7 +466,7 @@ def test_the_courts_invest_buys_a_wealth_token_and_a_courtier():
     session = _courts_game()
 
     session.act(P1, Recruit("courts", invest=True))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     game = session.game
     courtier = _courtier_of(session)
@@ -479,7 +480,7 @@ def test_the_courtier_joins_the_clan_his_patron_plays():
     session = _courts_game(clan="Lion")
 
     session.act(P1, Recruit("courts", invest=True))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     courtier = _courtier_of(session)
     assert courtier.clan == "Lion"
@@ -493,7 +494,7 @@ def test_an_unaligned_patron_has_no_alignment_to_give():
     session = _courts_game(clan="Ninja")
 
     session.act(P1, Recruit("courts", invest=True))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     courtier = _courtier_of(session)
     assert courtier.clan is None
@@ -505,7 +506,7 @@ def test_the_courts_invest_replays_to_the_same_board():
     board would not resolve the ids its own log carries."""
     session = _courts_game()
     session.act(P1, Recruit("courts", invest=True))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert replay(session.log).table == session.game.table
 
@@ -514,7 +515,7 @@ def test_recruiting_the_courts_without_investing_buys_neither():
     session = _courts_game()
 
     session.act(P1, Recruit("courts"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     game = session.game
     assert game.table.cards_by_id["courts"].counters == {}

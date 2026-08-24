@@ -8,6 +8,7 @@ from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
     holding,
+    pay,
     personality,
     put_in_play,
     stronghold,
@@ -59,7 +60,7 @@ def test_paying_the_gold_leaves_the_grounds_standing():
     session.act(P1, ActivateAbility("grounds"))
     session.submit(P1, DecisionResponse(("grounds",)))  # yes: pay instead
     assert isinstance(session.game.pending, ChoosePayment)
-    session.submit(P1, DecisionResponse(("P1-SH",)))  # bow the Stronghold for the gold
+    pay(session, P1)  # bow the Stronghold for the gold
     session.submit(P1, DecisionResponse(("hero",)))
 
     game = session.game
@@ -90,7 +91,7 @@ def test_the_grounds_replay_to_the_same_board():
     session = _militia_game()
     session.act(P1, ActivateAbility("grounds"))
     session.submit(P1, DecisionResponse(("grounds",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.submit(P1, DecisionResponse(("hero",)))
 
     assert replay(session.log).table == session.game.table

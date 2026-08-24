@@ -10,6 +10,7 @@ from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
     holding,
+    pay,
     personality,
     put_in_play,
     stronghold,
@@ -40,7 +41,7 @@ def test_colonial_farm_creates_an_ashigaru_on_the_chosen_personality():
     session = EngineSession.start(_farm_game().table, P1)
 
     session.act(P1, ActivateAbility("farm"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))  # bow the Stronghold for the three gold
+    pay(session, P1)  # bow the Stronghold for the three gold
     session.submit(P1, DecisionResponse(("hero",)))
 
     game = session.game
@@ -69,6 +70,8 @@ def test_colonial_farm_leaves_the_change_from_its_payment_in_the_pool():
     session = EngineSession.start(_farm_game().table, P1)
 
     session.act(P1, ActivateAbility("farm"))
+    # Named rather than paid through the helper: the leftover is this producer's five less the
+    # cost, so the assertion depends on which one bowed.
     session.submit(P1, DecisionResponse(("P1-SH",)))
 
     assert session.game.gold[P1] == 2
@@ -107,7 +110,7 @@ def test_colonial_farm_charges_everyone_else_full_price():
 def test_colonial_farm_replays_to_the_same_board():
     session = EngineSession.start(_farm_game().table, P1)
     session.act(P1, ActivateAbility("farm"))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
     session.submit(P1, DecisionResponse(("hero",)))
 
     assert replay(session.log).table == session.game.table

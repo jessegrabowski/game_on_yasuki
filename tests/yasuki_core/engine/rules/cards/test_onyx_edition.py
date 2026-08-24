@@ -26,10 +26,11 @@ from tests.yasuki_core.engine.builders import (
     attachment,
     end_phase,
     holding,
+    pay,
     personality,
+    put_in_play,
     register,
     stronghold,
-    put_in_play,
     token_template,
     two_seat_game,
 )
@@ -87,7 +88,7 @@ def test_two_gold_raises_one_ancestor():
     session.act(P1, Recruit("hayako", invest=True))
     session.submit(P1, DecisionResponse(("2",)))
     payment = session.game.pending
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert payment.amount == 6  # his four Gold Cost and the two Invested
     assert [card.name for card in _ancestors(session)] == ["Lion Ancestor"]
@@ -99,7 +100,7 @@ def test_six_gold_raises_two_of_them():
     session.act(P1, Recruit("hayako", invest=True))
     session.submit(P1, DecisionResponse(("6",)))
     payment = session.game.pending
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert payment.amount == 10  # his four Gold Cost and the six Invested
     ancestors = _ancestors(session)
@@ -128,7 +129,7 @@ def test_a_discount_moves_both_prices_and_takes_the_second_ancestor_with_it(_dis
 
     session.act(P1, Recruit("hayako", invest=True))
     session.submit(P1, DecisionResponse(("4",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert [card.name for card in _ancestors(session)] == ["Lion Ancestor", "Lion Ancestor"]
 
@@ -138,7 +139,7 @@ def test_a_discount_still_leaves_the_cheaper_price_buying_one(_discounted_hayako
 
     session.act(P1, Recruit("hayako", invest=True))
     session.submit(P1, DecisionResponse(("0",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert [card.name for card in _ancestors(session)] == ["Lion Ancestor"]
 
@@ -163,7 +164,7 @@ def test_kitsu_hayako_replays_to_the_same_board():
     session = _hayako_game()
     session.act(P1, Recruit("hayako", invest=True))
     session.submit(P1, DecisionResponse(("6",)))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert replay(session.log).table == session.game.table
 

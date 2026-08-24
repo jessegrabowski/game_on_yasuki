@@ -23,11 +23,12 @@ from yasuki_core.game_pieces.prints import WindPrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
-    fate_card,
     attachment,
     end_phase,
     end_turn,
+    fate_card,
     holding,
+    pay,
     personality,
     put_in_play,
     register,
@@ -144,7 +145,7 @@ def test_ikarichi_invests_two_gold_for_an_undead_outrider():
 
     session.act(P1, Recruit("ikarichi", invest=True))
     payment = session.game.pending
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     game = session.game
     assert payment.amount == 7  # his five Gold Cost, plus the two the Invest charges
@@ -159,7 +160,7 @@ def test_the_kanpeki_dynasty_rides_him_in_for_nothing():
 
     session.act(P1, Recruit("ikarichi", invest=True))
     payment = session.game.pending
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     game = session.game
     assert payment.amount == 5  # his Gold Cost alone
@@ -181,7 +182,7 @@ def test_ikarichi_costs_two_honor_however_he_arrives(invest):
     session = _ikarichi_game()
 
     session.act(P1, Recruit("ikarichi", invest=invest))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert session.game.table.seats[P1].honor == -2
 
@@ -190,7 +191,7 @@ def test_ikarichi_replays_to_the_same_board():
     """His Invest mints a card mid-recruit, and a replayed game has to mint the same one."""
     session = _ikarichi_game()
     session.act(P1, Recruit("ikarichi", invest=True))
-    session.submit(P1, DecisionResponse(("P1-SH",)))
+    pay(session, P1)
 
     assert replay(session.log).table == session.game.table
 
