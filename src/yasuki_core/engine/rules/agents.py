@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionRequest,
     DecisionResponse,
+    PaymentResponse,
     PlaceLegacy,
 )
 from yasuki_core.engine.redaction import CardView, HiddenCard
@@ -91,15 +92,15 @@ class PayingAgent:
                 break
             bowed.append(producer)
             raised += yields
-        boost = dict(request.boostable)
+        offers = request.boost_offers()
         boosted: list[str] = []
         for producer in bowed:
             if raised >= shortfall:
                 break
-            if producer in boost:
+            if producer in offers:
                 boosted.append(producer)
-                raised += boost[producer]
-        return DecisionResponse(tuple(bowed), tuple(boosted))
+                raised += offers[producer].amount
+        return PaymentResponse(tuple(bowed), tuple(boosted))
 
 
 class LegacyAgent:

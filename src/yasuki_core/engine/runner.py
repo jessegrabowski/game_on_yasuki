@@ -337,10 +337,10 @@ class GameRunner:
         Return whether anything was undone, so the caller can re-render only when it did."""
         return self.session.undo_last(self.human)
 
-    def submit(self, choices: Iterable[str], boosted: Iterable[str] = ()) -> None:
-        """Answer the human's pending decision with the chosen ids, and the subset whose bow-time
-        production boost was taken (Outlying Farms paying boosted)."""
-        self.session.submit(self.human, DecisionResponse(tuple(choices), tuple(boosted)))
+    def submit(self, response: DecisionResponse) -> None:
+        """Answer the human's pending decision. A request whose answer carries more than the chosen
+        ids — a payment and its boosts — is answered with that request's own response type."""
+        self.session.submit(self.human, response)
 
     def cancel(self) -> None:
         """Back out of the human's pending decision, undoing the action that raised it."""

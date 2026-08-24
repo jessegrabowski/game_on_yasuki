@@ -47,6 +47,7 @@ from yasuki_core.engine.rules.decisions import (
     ChooseCards,
     ChooseDistribution,
     ChooseEquipTarget,
+    BoostOffer,
     ChooseFortificationProvince,
     ChooseInheritanceTarget,
     Confirm,
@@ -337,7 +338,7 @@ def announce_recruit(
         label=card.name,
         target_id=card.id,
         boostable=tuple(
-            (producer.id, boost.amount)
+            BoostOffer(producer.id, boost.amount, boost.price)
             for producer in producers
             if (boost := abilities.production_boost_for(producer)) is not None
         ),
@@ -663,7 +664,7 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     """
     target = game.table.cards_by_id.get(request.target_id)
     targets = (target,) if target is not None else ()
-    boosted = set(response.boosted)
+    boosted = request.boosts_taken(response)
     for card_id in response.choices:
         card = game.table.cards_by_id[card_id]
         boost = abilities.production_boost_for(card) if card_id in boosted else None

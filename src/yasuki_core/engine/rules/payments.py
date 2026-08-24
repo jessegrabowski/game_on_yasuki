@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import abilities
-from yasuki_core.engine.rules.decisions import ChoosePayment
+from yasuki_core.engine.rules.decisions import BoostOffer, ChoosePayment
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.legality import gold_producers
 from yasuki_core.engine.rules.state import GameState
@@ -36,7 +36,7 @@ def payment_request(game: GameState, seat: PlayerId, amount: int, label: str) ->
         ),
         label=label,
         boostable=tuple(
-            (producer.id, boost.amount)
+            BoostOffer(producer.id, boost.amount, boost.price)
             for producer in producers
             if (boost := abilities.production_boost_for(producer)) is not None
         ),

@@ -18,7 +18,12 @@ from yasuki_core.engine.rules.abilities import (
     register_production_boost,
 )
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Recruit
-from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards, DecisionResponse
+from yasuki_core.engine.rules.decisions import (
+    ChooseAbilityTarget,
+    ChooseCards,
+    DecisionResponse,
+    PaymentResponse,
+)
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose
 from yasuki_core.engine.rules.triggers import choice_resolver
@@ -255,7 +260,7 @@ def test_a_boost_that_declares_no_consequence_leaves_its_producer_alive():
         end_phase(session)
         end_phase(session)
         session.act(PlayerId.P1, Recruit("tgt"))
-        session.submit(PlayerId.P1, DecisionResponse(("fb",), ("fb",)))
+        session.submit(PlayerId.P1, PaymentResponse(("fb",), ("fb",)))
 
         probe = session.game.table.cards_by_id["fb"]
 

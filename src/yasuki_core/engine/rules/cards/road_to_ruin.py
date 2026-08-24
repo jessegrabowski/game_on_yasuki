@@ -75,7 +75,10 @@ def _outlying_farms_production_boost(card: L5RCard) -> list[Effect]:
     return [Destroy(card.id, card.owner)]
 
 
-register_production_boost("outlying_farms", ProductionBoost(2, _outlying_farms_production_boost))
+register_production_boost(
+    "outlying_farms",
+    ProductionBoost(2, _outlying_farms_production_boost, price="then it is destroyed"),
+)
 
 
 # --- Repairing the Ruins ---

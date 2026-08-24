@@ -92,7 +92,9 @@ further events are produced.
 A decision request is a question the engine puts to a single seat. The engine runs until it requires
 input, records the request, and returns control; the seat replies with a `DecisionResponse`, and
 execution resumes. The `accepts` method verifies that a response is structurally well formed.
-Legality with respect to game state is checked separately.
+Legality with respect to game state is checked separately. A request whose answer carries more than
+the chosen ids replies with its own response subclass — a payment answers with a `PaymentResponse`,
+naming the producers it boosts alongside the ones it bows.
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.decisions
@@ -100,6 +102,7 @@ Legality with respect to game state is checked separately.
 .. autosummary::
 
    BanishForLegacy
+   BoostOffer
    ChooseAbilityTarget
    ChooseAmount
    ChooseCards
@@ -116,6 +119,7 @@ Legality with respect to game state is checked separately.
    DecisionRequest
    DecisionResponse
    DiscardToHandSize
+   PaymentResponse
    PlaceLegacy
 ```
 

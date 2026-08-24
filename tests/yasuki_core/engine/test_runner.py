@@ -18,7 +18,7 @@ from yasuki_core.engine import runner as runner_module
 from yasuki_core.engine.runner import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
-from yasuki_core.engine.rules.decisions import Confirm, DiscardToHandSize
+from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse, DiscardToHandSize
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
@@ -158,7 +158,7 @@ def test_human_discard_is_left_pending_then_resolved():
     assert runner.legal_actions() == []  # no free action offered until it is answered
 
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
-    runner.submit([hand[0].id])
+    runner.submit(DecisionResponse((hand[0].id,)))
 
     assert runner.pending is None
     assert runner.opponent_holds_priority  # the turn has passed; the caller runs the opponent
@@ -221,7 +221,7 @@ def test_runner_inputs_stay_replayable():
     _to_dynasty(runner)
     runner.act(PASS)
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
-    runner.submit([hand[0].id])
+    runner.submit(DecisionResponse((hand[0].id,)))
     _run_opponents_turn(runner)
 
     assert replay(runner.session.log) == runner.session.game
@@ -677,7 +677,7 @@ def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
 
     # The banish cost is paid from hand, which the board shows — that stays a board selection.
     assert runner_.search_view() is None
-    runner_.submit(["P1-h0"])
+    runner_.submit(DecisionResponse(("P1-h0",)))
 
     search = runner_.search_view()
     assert search is not None
@@ -685,7 +685,7 @@ def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
     assert search.choosable == {"legacy-card"}
 
     # Choosing it asks which Province to sacrifice — a board pick, not a second search dialog.
-    runner_.submit(["legacy-card"])
+    runner_.submit(DecisionResponse(("legacy-card",)))
     assert runner_.pending is not None
     assert runner_.search_view() is None
 
@@ -795,8 +795,8 @@ def test_the_opponent_is_run_for_a_decision_it_owes_inside_the_humans_turn():
     so a runner that only ran the opponent when it held priority left the game stuck for good."""
     runner_ = _wisdom_runner()
     runner_.act(ActivateAbility("wisdom"))
-    runner_.submit(["wisdom"])  # the human searches
-    runner_.submit(["P1-ring"])  # and takes its Ring
+    runner_.submit(DecisionResponse(("wisdom",)))  # the human searches
+    runner_.submit(DecisionResponse(("P1-ring",)))  # and takes its Ring
 
     assert runner_.pending is None  # the question is not the human's to answer
     assert not runner_.opponent_holds_priority  # nor has priority moved
@@ -833,8 +833,8 @@ def test_the_province_a_spent_event_left_refills_once_the_opponent_has_answered(
     runner_ = _wisdom_runner()
     province = runner_.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)]
     runner_.act(ActivateAbility("wisdom"))
-    runner_.submit(["wisdom"])
-    runner_.submit(["P1-ring"])
+    runner_.submit(DecisionResponse(("wisdom",)))
+    runner_.submit(DecisionResponse(("P1-ring",)))
     assert province.cards == []
 
     runner_.run_opponent()

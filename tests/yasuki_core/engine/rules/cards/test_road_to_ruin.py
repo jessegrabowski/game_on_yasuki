@@ -9,7 +9,12 @@ from yasuki_core.engine.rules.effects import AttachCard, Destroy
 from yasuki_core.engine.rules.flow import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.agents import AutoAgent
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.decisions import (
+    BoostOffer,
+    ChoosePayment,
+    DecisionResponse,
+    PaymentResponse,
+)
 from yasuki_core.engine.rules.economy import effective_force, effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.log import replay
@@ -217,7 +222,7 @@ def _in_dynasty_discard(session, card_id):
 def test_outlying_farms_is_flagged_boostable_in_the_payment_offer():
     session = _outlying_game()
     session.act(P1, Recruit("target"))
-    assert session.game.pending.boostable == (("of", 2),)
+    assert session.game.pending.boostable == (BoostOffer("of", 2, "then it is destroyed"),)
 
 
 def test_boost_makes_the_extra_gold_needed_to_afford_a_recruit():
@@ -229,9 +234,9 @@ def test_boost_makes_the_extra_gold_needed_to_afford_a_recruit():
     session.act(P1, Recruit("target"))
     pending = session.game.pending
     assert not pending.accepts(DecisionResponse(("of",)))  # base 2 < 4
-    assert pending.accepts(DecisionResponse(("of",), ("of",)))  # boosted 4 >= 4
+    assert pending.accepts(PaymentResponse(("of",), ("of",)))  # boosted 4 >= 4
 
-    session.submit(P1, DecisionResponse(("of",), ("of",)))
+    session.submit(P1, PaymentResponse(("of",), ("of",)))
     assert _recruited(session, "target")
     assert _in_dynasty_discard(session, "of")  # destroyed after bowing boosted
     assert session.game.gold[P1] == 0
@@ -240,7 +245,7 @@ def test_boost_makes_the_extra_gold_needed_to_afford_a_recruit():
 def test_boosting_banks_the_extra_gold_and_destroys_outlying_farms():
     session = _outlying_game(target_cost=2, with_producer=False)
     session.act(P1, Recruit("target"))
-    session.submit(P1, DecisionResponse(("of",), ("of",)))  # boost though 2 already covers
+    session.submit(P1, PaymentResponse(("of",), ("of",)))  # boost though 2 already covers
 
     assert _recruited(session, "target")
     assert _in_dynasty_discard(session, "of")
@@ -262,9 +267,9 @@ def test_a_payment_can_only_boost_a_bowed_boostable_producer():
     session = _outlying_game()
     session.act(P1, Recruit("target"))
     pending = session.game.pending
-    assert not pending.accepts(DecisionResponse(("sh",), ("of",)))  # boosted a producer not bowed
+    assert not pending.accepts(PaymentResponse(("sh",), ("of",)))  # boosted a producer not bowed
     assert not pending.accepts(
-        DecisionResponse(("sh",), ("sh",))
+        PaymentResponse(("sh",), ("sh",))
     )  # boosted a non-boostable producer
 
 
@@ -275,13 +280,13 @@ def test_the_auto_agent_never_boosts_so_outlying_farms_survives():
     session.act(P1, Recruit("target"))
 
     answer = AutoAgent().decide(session.game.pending, session.project(P1))
-    assert answer.boosted == ()
+    assert ChoosePayment.boosts_taken(answer) == frozenset()
 
 
 def test_outlying_farms_boost_replays_to_the_same_state():
     session = _outlying_game(target_cost=4, with_producer=False)
     session.act(P1, Recruit("target"))
-    session.submit(P1, DecisionResponse(("of",), ("of",)))
+    session.submit(P1, PaymentResponse(("of",), ("of",)))
     assert replay(session.log) == session.game
 
 
