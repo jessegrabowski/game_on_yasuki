@@ -108,6 +108,8 @@ from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
     EnteredPlay,
+    ProducedGold,
+    ProducingGold,
     Revealed,
     Straightened,
     TurnStarted,
@@ -264,13 +266,24 @@ def perform(game: GameState, action: Action) -> None:
         _yield_after_action(game)
 
 
-def produce_gold(game: GameState, card_id: str, amount: int) -> None:
-    """Bow the card and add ``amount`` gold to its owner's pool — the yield the payment offer quoted
-    for it (KD6). Gold is only produced while paying a cost (rules-skeleton §7), so a payment drives
-    this."""
+def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()) -> None:
+    """Open the producer's window, then bow it and add its yield to its owner's pool (KD6).
+
+    Gold is only produced while paying a cost (rules-skeleton §7), so a payment drives this. The
+    yield is read after the window rather than quoted up front, because a trait firing there can
+    raise it, and announced through ``ProducedGold`` afterwards, because a price payable once the
+    card has bowed cannot resolve while the yield is still unread.
+
+    A window trait that pauses for a decision is not supported: this runs inside a payment's
+    producer loop, which cannot suspend part-way through.
+    """
     card = game.table.cards_by_id[card_id]
+    triggers.fire(game, ProducingGold(card_id, card.owner))
+    targets = tuple(game.table.cards_by_id[tid] for tid in target_ids)
+    amount = effective_gold_production(game, card, targets=targets)
     card.bow()
     game.add_gold(card.owner, amount)
+    triggers.fire(game, ProducedGold(card_id, card.owner, amount))
 
 
 def recruit(
@@ -664,8 +677,7 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     against the yields the request quoted, so falling short is an engine fault rather than a legal
     move.
     """
-    target = game.table.cards_by_id.get(request.target_id)
-    targets = (target,) if target is not None else ()
+    target_ids = (request.target_id,) if request.target_id in game.table.cards_by_id else ()
     boosted = request.boosts_taken(response)
     for card_id in response.choices:
         card = game.table.cards_by_id[card_id]
@@ -683,7 +695,7 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
                     )
                 ],
             )
-        produce_gold(game, card_id, effective_gold_production(game, card, targets=targets))
+        produce_gold(game, card_id, target_ids)
         if boost is not None:
             triggers.resolve_effects(game, boost.effects(card))
     if not game.spend_gold(request.seat, request.amount):

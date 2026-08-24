@@ -92,6 +92,55 @@ class Revealed:
     card_id: str
 
 
+@dataclass(frozen=True, slots=True)
+class ProducingGold:
+    """A card is about to bow and produce Gold, before its yield is read.
+
+    The window a producer's own trait acts in: a grant made here counts toward the production it
+    interrupts, which is what "before this Holding bows" and "when this Holding produces" both need.
+
+    Attributes
+    ----------
+    card_id : str
+        The producer about to bow.
+    seat : PlayerId
+        The seat it produces for.
+    """
+
+    card_id: str
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
+class ProducedGold:
+    """A card has bowed and its Gold has reached the pool.
+
+    What a producer owes for a grant it took in the window lands here, since a price payable "after
+    it bows" cannot resolve while the yield is still unread.
+
+    Attributes
+    ----------
+    card_id : str
+        The producer that bowed.
+    seat : PlayerId
+        The seat whose pool the Gold reached.
+    amount : int
+        The Gold it yielded, after whatever the window granted it.
+    """
+
+    card_id: str
+    seat: PlayerId
+    amount: int
+
+
 GameEvent = (
-    TurnStarted | CardDiscarded | CounterGained | Destroyed | EnteredPlay | Revealed | Straightened
+    TurnStarted
+    | CardDiscarded
+    | CounterGained
+    | Destroyed
+    | EnteredPlay
+    | ProducedGold
+    | ProducingGold
+    | Revealed
+    | Straightened
 )

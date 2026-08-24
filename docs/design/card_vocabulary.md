@@ -71,7 +71,9 @@ deferred through `Then` instead.
 
 An event records a state change that has already been committed. A trigger subscribes to one event
 type and one card's `printed_id`. The cascade drains the events raised by its effects until no
-further events are produced.
+further events are produced. `ProducingGold` is the exception to "already committed": it opens the
+window *before* a producer's yield is read, so a trait firing there still counts toward the
+production it interrupts, and `ProducedGold` announces the result once the Gold has landed.
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.events
@@ -82,6 +84,8 @@ further events are produced.
    CounterGained
    Destroyed
    EnteredPlay
+   ProducedGold
+   ProducingGold
    Revealed
    Straightened
    TurnStarted

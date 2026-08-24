@@ -14,6 +14,7 @@ from yasuki_core.game_pieces.prints import (
     StrongholdPrint,
 )
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState, Phase, RESPONSE_TIMINGS
 from yasuki_core.engine.rules.abilities import (
     _PRODUCTION_BOOST,
@@ -29,10 +30,16 @@ from yasuki_core.engine.rules.decisions import (
     PaymentResponse,
 )
 from yasuki_core.engine.rules.economy import GOLD_HANDLERS, gold_handler
-from yasuki_core.engine.rules.effects import Ask, Destroy
+from yasuki_core.engine.rules.effects import Ask, Destroy, GrantModifier
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.projection import project
-from yasuki_core.engine.rules.events import CardDiscarded, Straightened
+from yasuki_core.engine.rules.events import (
+    CardDiscarded,
+    ProducedGold,
+    ProducingGold,
+    Straightened,
+)
+from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
@@ -735,3 +742,118 @@ def test_an_equip_offers_every_boost_its_legality_counted():
     # The point of offering it: the cost is 4 and the Farm makes 2, so only the boost can pay.
     assert payment.accepts(PaymentResponse(("of",), ("of",)))
     assert not payment.accepts(DecisionResponse(("of",)))
+
+
+# --- the production window ---
+
+
+def test_producing_gold_fires_before_the_yield_is_read():
+    """The window is the whole point: a grant made there has to count toward the production it
+    interrupts, or no card can raise its own yield as it bows."""
+
+    try:
+
+        @triggers.on(ProducingGold, "granting_probe")
+        def _grant(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [
+                GrantModifier(
+                    ctx.card.id, ctx.card.id, Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN
+                )
+            ]
+
+        # Prints 2 for a cost of 2. The change left in the pool is the measurement: four produced
+        # means the window's grant landed before the yield was read, zero means it did not.
+        # The cost stays inside the printed yield because affordability cannot see the grant:
+        # `gold_reach` has no way to project what a window trigger would give.
+        session = _dynasty_phase(
+            [holding("gp", owner=PlayerId.P1, printed_id="granting_probe", gold_production=2)],
+            cost=2,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, DecisionResponse(("gp",)))
+
+        assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
+        assert session.game.gold[PlayerId.P1] == 2  # produced 4, spent 2
+    finally:
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("granting_probe", None)
+
+
+def test_a_price_on_produced_gold_resolves_after_the_bow():
+    """Outlying Farms' shape without Outlying Farms: raise the yield in the window, then pay for
+    having done so once the Gold has landed. The price must not cost the card its own production."""
+
+    try:
+
+        @triggers.on(ProducingGold, "self_pricing_probe")
+        def _grant(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [
+                GrantModifier(
+                    ctx.card.id, ctx.card.id, Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN
+                )
+            ]
+
+        announced: list[int] = []
+
+        @triggers.on(ProducedGold, "self_pricing_probe")
+        def _price(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            announced.append(ctx.event.amount)
+            return [Destroy(ctx.card.id, ctx.card.owner)]
+
+        session = _dynasty_phase(
+            [holding("sp", owner=PlayerId.P1, printed_id="self_pricing_probe", gold_production=2)],
+            cost=2,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, DecisionResponse(("sp",)))
+
+        table = session.game.table
+        assert table.cards_by_id["tgt"] in table.battlefield.cards
+        assert session.game.gold[PlayerId.P1] == 2  # its raised yield still counted
+        assert announced == [4]  # the event reports what it made, not what it prints
+        assert table.cards_by_id["sp"] not in table.battlefield.cards  # and it paid for it
+    finally:
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("self_pricing_probe", None)
+        triggers._TRIGGERS.get(ProducedGold, {}).pop("self_pricing_probe", None)
+
+
+def test_production_raises_its_events_once_per_producer():
+    """A payment that bows two producers opens two windows and announces two yields, each naming its
+    own card — not one pair for the payment."""
+    opened: list[str] = []
+    landed: list[tuple[str, int]] = []
+
+    try:
+
+        @triggers.on(ProducingGold, "counting_probe")
+        def _opened(ctx):
+            if ctx.event.card_id == ctx.card.id:
+                opened.append(ctx.event.card_id)
+            return []
+
+        @triggers.on(ProducedGold, "counting_probe")
+        def _landed(ctx):
+            if ctx.event.card_id == ctx.card.id:
+                landed.append((ctx.event.card_id, ctx.event.amount))
+            return []
+
+        session = _dynasty_phase(
+            [
+                holding("c1", owner=PlayerId.P1, printed_id="counting_probe", gold_production=2),
+                holding("c2", owner=PlayerId.P1, printed_id="counting_probe", gold_production=3),
+            ],
+            cost=5,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, DecisionResponse(("c1", "c2")))
+
+        assert opened == ["c1", "c2"]
+        assert landed == [("c1", 2), ("c2", 3)]
+    finally:
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("counting_probe", None)
+        triggers._TRIGGERS.get(ProducedGold, {}).pop("counting_probe", None)
