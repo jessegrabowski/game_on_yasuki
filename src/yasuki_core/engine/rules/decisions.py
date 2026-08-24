@@ -112,8 +112,11 @@ class ChoosePayment(DecisionRequest):
     candidates are the seat's unbowed producers; choosing some bows them, and their production plus
     the pool must reach the cost. Excess stays in the pool.
 
-    The request snapshots everything :meth:`accepts` needs, so validity is structural: the cost, the
-    pool on hand when the cost arose, and each producer's yield.
+    The request snapshots what it quotes for: the cost, the pool on hand when the cost arose, and
+    each producer's yield. :meth:`accepts` asks whether the cost is still *reachable* after the
+    answer rather than whether the answer already covers it: bowing some producers now and the rest
+    when the payment comes back round is legal, but an answer that leaves the cost out of reach is
+    not — it would strand the payment with the board already changed.
 
     Attributes
     ----------
@@ -181,9 +184,20 @@ class ChoosePayment(DecisionRequest):
         boosted = self.boosts_taken(response)
         if not boosted <= (distinct & offers.keys()):
             return False
+        # Bowing nothing is an answer only when the pool already covers the cost; otherwise it makes
+        # no progress, and a payment that accepted it would ask the same question forever.
+        if not distinct and self.available < self.amount:
+            return False
+        # A chosen producer counts its boost only if the answer took it, an unchosen one counts its
+        # boost regardless: the seat has decided for the first and may still decide for the second.
         yields = dict(self.produced)
-        covered = sum(yields[c] + (offers[c].amount if c in boosted else 0) for c in distinct)
-        return self.available + covered >= self.amount
+        raised = sum(yields[c] + (offers[c].amount if c in boosted else 0) for c in distinct)
+        still_offered = sum(
+            yields[c] + (offers[c].amount if c in offers else 0)
+            for c in yields
+            if c not in distinct
+        )
+        return self.available + raised + still_offered >= self.amount
 
     @property
     def cancellable(self) -> bool:

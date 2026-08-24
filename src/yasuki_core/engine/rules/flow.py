@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.state import (
 )
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
+    ContinuePayment,
     ApplyAbilityEffects,
     FinishRecruit,
     ResolveEquip,
@@ -68,6 +69,7 @@ from yasuki_core.engine.rules.legality import (
     INHERITANCE_PRODUCTION,
     KHARMIC_COST,
     cycle_candidates,
+    gold_producers,
     cycle_key,
     legacy_candidates,
     legacy_key,
@@ -630,6 +632,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             triggers.resolve_effects(game, effects)
         case FinishRecruit(card_id=card_id, invest_amount=invest_amount, proclaim=proclaim):
             _finish_recruit(game, card_id, invest_amount, proclaim=proclaim)
+        case ContinuePayment(seat=seat, amount=amount, label=label, target_id=target_id):
+            _continue_payment(game, seat, amount, label, target_id)
         case ResumeCascade():
             # An interrupting effect whose answer produces no effects of its own — a payment, say —
             # leaves its stash here for the generic drain. A Choose is popped by its own handler,
@@ -642,15 +646,16 @@ def _resolve(game: GameState, item: WorkItem) -> None:
 
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
-    """Bow the chosen producers to cover the cost.
+    """Bow the chosen producers, adding what they make to the seat's pool.
 
     Taking a boost is a stat change like any other: it grants the producer Gold Production for the
     turn, and the yield is then read off the card the same way an unboosted producer's is. What the
     boost costs is the card's own business, resolved once it has yielded.
 
-    Raise ``RuntimeError`` if the bowed producers do not cover the cost: the answer was accepted
-    against the yields the request quoted, so falling short is an engine fault rather than a legal
-    move.
+    An answer may name several producers, and each one's window opens as it bows. A window trait
+    that pauses for a decision is therefore only safe while an answer names one producer: the second
+    producer's window would overwrite the first one's pending question. Nothing registers on the
+    window yet, so nothing can reach that today.
     """
     target_ids = (request.target_id,) if request.target_id in game.table.cards_by_id else ()
     boosted = request.boosts_taken(response)
@@ -673,11 +678,28 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
         produce_gold(game, card_id, target_ids)
         if boost is not None:
             triggers.resolve_effects(game, boost.effects(card))
-    if not game.spend_gold(request.seat, request.amount):
+
+
+def _continue_payment(
+    game: GameState, seat: PlayerId, amount: int, label: str, target_id: str
+) -> None:
+    """Spend once ``seat``'s pool covers ``amount``, or ask it to bow more producers.
+
+    Raise ``RuntimeError`` if the pool falls short with nothing left to bow. Affordability decided
+    the action could be paid for before it was announced, so running dry means that projection was
+    wrong — an engine fault rather than a legal move, and one that would otherwise hand the seat
+    whatever it was paying for at no charge.
+    """
+    if game.gold[seat] >= amount:
+        game.spend_gold(seat, amount)
+        return
+    if not gold_producers(game, seat):
         raise RuntimeError(
-            f"{request.seat.name} cannot cover {request.amount} for {request.label}: "
-            f"the pool holds {game.gold[request.seat]}"
+            f"{seat.name} cannot cover {amount} for {label}: the pool holds {game.gold[seat]} "
+            f"and no producer is left to bow"
         )
+    target = game.table.cards_by_id.get(target_id)
+    game.pending = payment_request(game, seat, amount, label, target=target)
 
 
 def _resolve_recruit(

@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.decisions import (
     BoostOffer,
+    ChoosePayment,
     Confirm,
     DiscardToHandSize,
     DecisionResponse,
@@ -41,6 +42,7 @@ from yasuki_core.engine.rules.events import (
 )
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.work import ContinuePayment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 
@@ -624,9 +626,6 @@ def test_opening_a_turn_records_none_of_its_own_events_as_an_action():
     assert game.action_events == []
 
 
-# --- payment resolution ---
-
-
 def _dynasty_phase(producers: list[L5RCard], *, cost: int) -> EngineSession:
     """A Dynasty phase with ``producers`` in play and one face-up target costing ``cost``."""
     state = dealt_table()
@@ -644,6 +643,9 @@ def _dynasty_phase(producers: list[L5RCard], *, cost: int) -> EngineSession:
     end_phase(session)
     end_phase(session)
     return session
+
+
+# --- payment resolution ---
 
 
 def test_a_payment_that_cannot_cover_its_cost_raises():
@@ -857,3 +859,103 @@ def test_production_raises_its_events_once_per_producer():
     finally:
         triggers._TRIGGERS.get(ProducingGold, {}).pop("counting_probe", None)
         triggers._TRIGGERS.get(ProducedGold, {}).pop("counting_probe", None)
+
+
+def test_a_covering_answer_still_pays_in_one_step():
+    """The transition property: an answer naming every producer the cost needs resolves without the
+    payment coming back round, which is why the loop lands without touching the suite."""
+    session = _dynasty_phase(
+        [
+            holding("a", owner=PlayerId.P1, gold_production=2),
+            holding("b", owner=PlayerId.P1, gold_production=3),
+        ],
+        cost=5,
+    )
+    session.act(PlayerId.P1, Recruit("tgt"))
+    session.submit(PlayerId.P1, DecisionResponse(("a", "b")))
+
+    assert session.game.pending is None
+    assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
+
+
+def test_a_partial_payment_re_raises_for_the_remainder():
+    session = _dynasty_phase(
+        [
+            holding("a", owner=PlayerId.P1, gold_production=2),
+            holding("b", owner=PlayerId.P1, gold_production=3),
+        ],
+        cost=5,
+    )
+    session.act(PlayerId.P1, Recruit("tgt"))
+    session.submit(PlayerId.P1, DecisionResponse(("a",)))
+
+    again = session.game.pending
+    assert isinstance(again, ChoosePayment)
+    assert again.available == 2  # what the first producer put in the pool
+    assert again.candidates == ("b",)  # and only what is left to bow
+
+    session.submit(PlayerId.P1, DecisionResponse(("b",)))
+    assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
+
+
+def test_a_payment_that_runs_out_of_producers_raises():
+    """`accepts` refuses an answer that would strand a payment, so reaching this means affordability
+    was wrong before the action was ever announced. Louder than handing the seat the card for free.
+    """
+    game = two_seat_game()
+    game.stack.append(ContinuePayment(PlayerId.P1, amount=3, label="probe"))
+
+    with pytest.raises(RuntimeError, match="no producer is left to bow"):
+        flow.run_stack(game)
+
+
+def test_a_rulebook_cost_resolves_its_effects_after_a_partial_payment():
+    """The completion is queued above whatever the announcing action left on the stack, so a cost
+    that buys effects rather than a card still resolves them once the pool catches up."""
+    game = two_seat_game()
+    put_in_play(game, holding("a", owner=PlayerId.P1, gold_production=1))
+    put_in_play(game, holding("b", owner=PlayerId.P1, gold_production=2))
+    victim = put_in_play(game, holding("victim", owner=PlayerId.P1))
+
+    game.pending = flow.announce_rulebook_cost(
+        game, PlayerId.P1, 3, "probe", (Destroy("victim", PlayerId.P1),)
+    )
+    flow.submit(game, DecisionResponse(("a",)))  # one of the three
+
+    assert isinstance(game.pending, ChoosePayment)
+    assert victim in game.table.battlefield.cards  # the effects wait for the rest
+
+    flow.submit(game, DecisionResponse(("b",)))
+    assert victim not in game.table.battlefield.cards
+
+
+def test_a_trigger_fired_by_the_first_producer_changes_the_second_yield():
+    """What the loop is for: a producer's own window opens between one bow and the next, so what it
+    grants can reach a producer that has not bowed yet."""
+
+    try:
+
+        @triggers.on(ProducingGold, "raising_probe")
+        def _raise_the_other(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [GrantModifier("b", "b", Stat.GOLD_PRODUCTION, 3, Duration.UNTIL_END_OF_TURN)]
+
+        session = _dynasty_phase(
+            [
+                holding("a", owner=PlayerId.P1, printed_id="raising_probe", gold_production=2),
+                holding("b", owner=PlayerId.P1, gold_production=1),
+            ],
+            # Inside the printed 2 + 1, because affordability cannot see what the window would give.
+            cost=3,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, DecisionResponse(("a",)))  # a's window raises b to 4
+
+        again = session.game.pending
+        assert dict(again.produced)["b"] == 4  # quoted at what a's window made it worth
+        session.submit(PlayerId.P1, DecisionResponse(("b",)))
+        assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
+        assert session.game.gold[PlayerId.P1] == 3  # 2 + 4 produced, 3 spent
+    finally:
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("raising_probe", None)

@@ -153,11 +153,40 @@ class ApplyEffects:
     effects: tuple[object, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class ContinuePayment:
+    """Carry on covering a gold cost until the seat's pool reaches it.
+
+    Owns the solvency question the request cannot answer alone: an answer names producers to bow,
+    and only once they have produced is it known whether the cost is met. Re-raises the payment for
+    whatever is still owed, spends when the pool covers it, and is what lets a producer's own trait
+    fire between one bow and the next.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat being charged.
+    amount : int
+        The cost to cover, unchanged as the pool fills toward it.
+    label : str
+        What the payment is for, shown in the prompt.
+    target_id : str
+        The card being paid for, since a producer's yield can depend on what it pays for. Empty for
+        a rulebook cost that prices no card.
+    """
+
+    seat: PlayerId
+    amount: int
+    label: str
+    target_id: str = ""
+
+
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
 WorkItem = (
-    ResolveRecruit
+    ContinuePayment
+    | ResolveRecruit
     | ResolveEquip
     | ResumeCascade
     | SelectAbilityTarget

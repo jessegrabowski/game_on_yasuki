@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.decisions import BoostOffer, ChoosePayment
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.legality import gold_producers
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.work import ContinuePayment
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -31,6 +32,10 @@ def payment_request(
     along with the boost each may take as it bows. The pool the seat already holds counts toward the
     cost before anything bows.
 
+    The completion is pushed onto the stack before the request is raised, so it sits above whatever
+    the announcing action queued and resolves first — bowing what the answer names, then re-raising
+    for the remainder or spending once the pool covers the cost.
+
     Parameters
     ----------
     game : GameState
@@ -48,6 +53,7 @@ def payment_request(
     producers = gold_producers(game, seat)
     targets = () if target is None else (target,)
     target_id = "" if target is None else target.id
+    game.stack.append(ContinuePayment(seat, amount, label, target_id))
     return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
