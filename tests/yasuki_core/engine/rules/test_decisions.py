@@ -61,16 +61,26 @@ def _payment(amount: int, available: int, produced, boostable=()) -> ChoosePayme
     )
 
 
-def test_payment_accepts_when_pool_plus_bowed_producers_cover_the_cost():
+def test_payment_accepts_an_answer_that_covers_the_cost_outright():
     request = _payment(amount=5, available=1, produced=[("sh", 8), ("mine", 2)])
     assert request.accepts(DecisionResponse(("sh",))) is True  # 1 + 8 >= 5
     assert request.accepts(DecisionResponse(("sh", "mine"))) is True  # 1 + 8 + 2 >= 5
-    assert request.accepts(DecisionResponse(("mine",))) is False  # 1 + 2 < 5
 
 
-def test_payment_rejects_when_chosen_producers_fall_short():
+def test_payment_accepts_a_part_of_the_cost_while_a_producer_is_left():
+    """Bowing some now and the rest when the payment comes back round is legal: the answer only has
+    to leave the cost reachable, not meet it."""
+    request = _payment(amount=5, available=1, produced=[("sh", 8), ("mine", 2)])
+
+    assert request.accepts(DecisionResponse(("mine",))) is True  # 1 + 2 now, sh still to bow
+
+
+def test_payment_rejects_an_answer_that_puts_the_cost_out_of_reach():
+    """The other side of it: an answer with nothing left to bow afterwards would strand the payment
+    with the board already changed, so it is refused before anything bows."""
     request = _payment(amount=5, available=1, produced=[("mine", 2)])
-    assert request.accepts(DecisionResponse(("mine",))) is False  # 1 + 2 < 5
+
+    assert request.accepts(DecisionResponse(("mine",))) is False  # 1 + 2 < 5, nothing else offered
     assert request.accepts(DecisionResponse(())) is False  # 1 < 5
 
 

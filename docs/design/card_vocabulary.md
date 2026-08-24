@@ -142,6 +142,7 @@ the action rather than by deserializing it.
 
    ApplyAbilityEffects
    ApplyEffects
+   ContinuePayment
    FinishRecruit
    ResolveEquip
    ResolveRecruit
