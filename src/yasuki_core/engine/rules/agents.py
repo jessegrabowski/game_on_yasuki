@@ -92,14 +92,14 @@ class PayingAgent:
                 break
             bowed.append(producer)
             raised += yields
-        boost = {offer.card_id: offer.amount for offer in request.boostable}
+        offers = request.boost_offers()
         boosted: list[str] = []
         for producer in bowed:
             if raised >= shortfall:
                 break
-            if producer in boost:
+            if producer in offers:
                 boosted.append(producer)
-                raised += boost[producer]
+                raised += offers[producer].amount
         return PaymentResponse(tuple(bowed), tuple(boosted))
 
 

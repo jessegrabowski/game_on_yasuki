@@ -147,21 +147,23 @@ class ChoosePayment(DecisionRequest):
         how an answer that takes no boost is spelled."""
         return frozenset(response.boosted) if isinstance(response, PaymentResponse) else frozenset()
 
+    def boost_offers(self) -> dict[str, BoostOffer]:
+        """The boost each candidate offers, keyed by producer."""
+        return {offer.card_id: offer for offer in self.boostable}
+
     def boost_prompt(self, card_id: str) -> str:
         """The question to put to the seat when it picks ``card_id``, a producer that may boost.
         Raise ``KeyError`` if the producer offers no boost."""
-        for offer in self.boostable:
-            if offer.card_id == card_id:
-                price = f", {offer.price}" if offer.price else ""
-                return f"Boost this Holding as it bows? +{offer.amount} Gold{price}."
-        raise KeyError(card_id)
+        offer = self.boost_offers()[card_id]
+        price = f", {offer.price}" if offer.price else ""
+        return f"Boost this Holding as it bows? +{offer.amount} Gold{price}."
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         yields = dict(self.produced)
-        boost = self._boost_amounts()
+        offers = self.boost_offers()
         boosted = self.boosts_taken(partial)
         covered = self.available + sum(
-            yields[card_id] + (boost[card_id] if card_id in boosted else 0)
+            yields[card_id] + (offers[card_id].amount if card_id in boosted else 0)
             for card_id in partial.choices
         )
         return f"Pay {max(0, self.amount - covered)} gold for {self.label}"
@@ -175,16 +177,13 @@ class ChoosePayment(DecisionRequest):
         distinct = set(chosen)
         if len(distinct) != len(chosen) or not distinct <= set(self.candidates):
             return False
-        boost = self._boost_amounts()
+        offers = self.boost_offers()
         boosted = self.boosts_taken(response)
-        if not boosted <= (distinct & boost.keys()):
+        if not boosted <= (distinct & offers.keys()):
             return False
         yields = dict(self.produced)
-        covered = sum(yields[c] + (boost[c] if c in boosted else 0) for c in distinct)
+        covered = sum(yields[c] + (offers[c].amount if c in boosted else 0) for c in distinct)
         return self.available + covered >= self.amount
-
-    def _boost_amounts(self) -> dict[str, int]:
-        return {offer.card_id: offer.amount for offer in self.boostable}
 
     @property
     def cancellable(self) -> bool:
