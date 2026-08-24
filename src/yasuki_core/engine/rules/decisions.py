@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from collections.abc import Sequence
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
@@ -11,19 +10,36 @@ class DecisionResponse:
 
     Carries the chosen identifiers — card ids, gold-source ids, or an ordering — interpreted by
     the request being answered. One uniform shape so the decision log, the save format, and the
-    netcode all serialize answers the same way.
+    netcode all serialize answers the same way. A request whose answer needs a second dimension
+    subclasses this rather than widening it, so a mechanic only one decision reads stays off the
+    type every decision shares.
 
     Attributes
     ----------
     choices : tuple of str
         The chosen identifiers, in the order the seat picked them. Default empty.
-    boosted : tuple of str
-        The subset of ``choices`` whose bow-time production boost the seat took — a boostable
-        producer raised to its higher yield as it bows, then destroyed. Only meaningful answering a
-        :class:`ChoosePayment`. Default empty.
     """
 
     choices: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
+class PaymentResponse(DecisionResponse):
+    """A seat's answer to a :class:`ChoosePayment`: the producers it bows, and which of those it
+    boosts as they bow.
+
+    The boosts ride with the selection rather than arriving after it because legality reads both at
+    once — a producer making 2 that boosts to 4 covers a cost of 4 only boosted, so
+    :meth:`ChoosePayment.accepts` cannot judge the choices without them.
+
+    Attributes
+    ----------
+    boosted : tuple of str
+        The subset of ``choices`` whose bow-time production boost the seat took — a boostable
+        producer raised to its higher yield as it bows, at whatever price its card names. Default
+        empty.
+    """
+
     boosted: tuple[str, ...] = ()
 
 
@@ -54,9 +70,9 @@ class DecisionRequest(ABC):
         against the game state; the rules layer makes that check separately."""
 
     @abstractmethod
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
-        """The question to put to the seat. ``chosen`` and ``boosted`` are the selections made so
-        far, for a request whose wording depends on them; the rest ignore both."""
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        """The question to put to the seat. ``partial`` is the answer as it stands, for a request
+        whose wording tracks the selection being made; the rest ignore it."""
 
     @property
     def confirm_label(self) -> str:
@@ -105,13 +121,19 @@ class ChoosePayment(DecisionRequest):
     target_id: str = ""
     boostable: tuple[tuple[str, int], ...] = ()
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    @staticmethod
+    def boosts_taken(response: DecisionResponse) -> frozenset[str]:
+        """The producers ``response`` boosts. Empty for a plain :class:`DecisionResponse`, which is
+        how an answer that takes no boost is spelled."""
+        return frozenset(response.boosted) if isinstance(response, PaymentResponse) else frozenset()
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         yields = dict(self.produced)
         boost = dict(self.boostable)
-        boosted_set = set(boosted)
+        boosted = self.boosts_taken(partial)
         covered = self.available + sum(
-            yields[card_id] + (boost[card_id] if card_id in boosted_set else 0)
-            for card_id in chosen
+            yields[card_id] + (boost[card_id] if card_id in boosted else 0)
+            for card_id in partial.choices
         )
         return f"Pay {max(0, self.amount - covered)} gold for {self.label}"
 
@@ -125,7 +147,7 @@ class ChoosePayment(DecisionRequest):
         if len(distinct) != len(chosen) or not distinct <= set(self.candidates):
             return False
         boost = dict(self.boostable)
-        boosted = set(response.boosted)
+        boosted = self.boosts_taken(response)
         if not boosted <= (distinct & boost.keys()):
             return False
         yields = dict(self.produced)
@@ -151,7 +173,7 @@ class DiscardToHandSize(DecisionRequest):
 
     count: int
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return f"discard {self.count} card(s)"
 
     @property
@@ -176,7 +198,7 @@ class LeaveBowed(DecisionRequest):
     offering it; those chosen stay bowed and the rest straighten with everything else.
     """
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose cards to leave bowed"
 
     @property
@@ -203,7 +225,7 @@ class BanishForLegacy(DecisionRequest):
     seat's hand; the chosen card is removed from the game. Not cancellable — announcing Legacy
     commits to the cost."""
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Banish a card from hand to search for a Legacy card"
 
     @property
@@ -219,7 +241,7 @@ class ChooseLegacyCard(DecisionRequest):
     """The seat must choose which Legacy card its search found — the candidates are the Legacy cards
     in its dynasty deck and provinces. The chosen card is placed into a province next."""
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Search your deck for a Legacy card"
 
     def accepts(self, response: DecisionResponse) -> bool:
@@ -241,7 +263,7 @@ class ChooseInvestAmount(DecisionRequest):
 
     source_card_id: str
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose how much to Invest"
 
     def accepts(self, response: DecisionResponse) -> bool:
@@ -275,7 +297,7 @@ class ChooseAmount(DecisionRequest):
     resolver: str
     source_id: str
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question
 
     def accepts(self, response: DecisionResponse) -> bool:
@@ -310,7 +332,7 @@ class ChooseOption(DecisionRequest):
     resolver: str
     source_id: str
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question
 
     def accepts(self, response: DecisionResponse) -> bool:
@@ -336,7 +358,7 @@ class ChooseAbilityTarget(DecisionRequest):
 
     source_card_id: str
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose a target for the ability"
 
     def accepts(self, response: DecisionResponse) -> bool:
@@ -366,7 +388,7 @@ class ChooseEquipTarget(DecisionRequest):
     source_card_id: str
     invest_amount: int | None = None
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose a Personality to equip"
 
     def accepts(self, response: DecisionResponse) -> bool:
@@ -406,7 +428,7 @@ class ChooseFortificationProvince(DecisionRequest):
     invest_amount: int = 0
     proclaim: bool = False
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose a Province for the Fortification"
 
     @property
@@ -440,7 +462,7 @@ class Confirm(DecisionRequest):
     resolver: str
     source_id: str | None = None
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question
 
     def accepts(self, response: DecisionResponse) -> bool:
@@ -478,7 +500,7 @@ class ChooseCards(DecisionRequest):
     resolver: str
     source_id: str | None = None
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         registered = CHOICE_PROMPTS.get(self.resolver)
         if registered is not None:
             return registered
@@ -526,9 +548,9 @@ class ChooseDistribution(DecisionRequest):
     resolver: str
     source_id: str
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         wording = CHOICE_PROMPTS.get(self.resolver, "Divide them among one or more cards")
-        return f"{wording} ({self.count - len(chosen)} of {self.count} left)"
+        return f"{wording} ({self.count - len(partial.choices)} of {self.count} left)"
 
     def accepts(self, response: DecisionResponse) -> bool:
         return len(response.choices) == self.count and set(response.choices) <= set(self.candidates)
@@ -552,7 +574,7 @@ class PlaceLegacy(DecisionRequest):
 
     legacy_card_id: str
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose a province to place the Legacy card, discarding the card there"
 
     @property
@@ -568,7 +590,7 @@ class ChooseInheritanceTarget(DecisionRequest):
     """The seat must choose which Holding its Inheritance ability raises. The candidates are the
     Holdings it controls in play, so a client renders them as board selections."""
 
-    def prompt(self, chosen: Sequence[str] = (), boosted: Sequence[str] = ()) -> str:
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose a Holding to give +3 Gold Production"
 
     def accepts(self, response: DecisionResponse) -> bool:

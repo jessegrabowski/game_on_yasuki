@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionRequest,
     DecisionResponse,
+    PaymentResponse,
     PlaceLegacy,
 )
 from yasuki_core.engine.redaction import CardView, HiddenCard
@@ -99,7 +100,7 @@ class PayingAgent:
             if producer in boost:
                 boosted.append(producer)
                 raised += boost[producer]
-        return DecisionResponse(tuple(bowed), tuple(boosted))
+        return PaymentResponse(tuple(bowed), tuple(boosted))
 
 
 class LegacyAgent:

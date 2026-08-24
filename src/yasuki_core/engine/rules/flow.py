@@ -663,7 +663,7 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     """
     target = game.table.cards_by_id.get(request.target_id)
     targets = (target,) if target is not None else ()
-    boosted = set(response.boosted)
+    boosted = request.boosts_taken(response)
     for card_id in response.choices:
         card = game.table.cards_by_id[card_id]
         boost = abilities.production_boost_for(card) if card_id in boosted else None

@@ -15,7 +15,7 @@ P1 = PlayerId.P1
 def _answer(**kwargs) -> tuple[tuple[str, ...], tuple[str, ...]]:
     request = ChoosePayment(P1, (), label="x", **kwargs)
     response = PayingAgent().decide(request, view=None)
-    return response.choices, response.boosted
+    return response.choices, tuple(sorted(ChoosePayment.boosts_taken(response)))
 
 
 def test_a_cost_already_in_the_pool_bows_nothing():

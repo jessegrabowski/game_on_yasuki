@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.decisions import DecisionResponse, PaymentResponse
 from yasuki_core.engine.rules.log import (
     GameLog,
     Act,
@@ -212,13 +212,17 @@ def test_boosted_payment_round_trips_through_the_codec():
     act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-buy"))
-    submit_and_log(
-        game, log, DecisionResponse(("P1-of",), ("P1-of",))
-    )  # bow Outlying Farms boosted
+    submit_and_log(game, log, PaymentResponse(("P1-of",), ("P1-of",)))  # bow Outlying Farms boosted
 
     assert outlying not in game.table.battlefield.cards  # destroyed after bowing boosted
-    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
+    encoded = game_log_to_dict(log)
+    restored = game_log_from_dict(json.loads(json.dumps(encoded)))
     assert restored.replay() == game
+    # Only the payment carries boosts, so only its entry writes the field: an answer that takes
+    # none is a plain response and encodes as one.
+    assert [entry for entry in encoded["entries"] if "boosted" in entry] == [
+        {"kind": "answer", "seat": "P1", "choices": ["P1-of"], "boosted": ["P1-of"]}
+    ]
 
 
 def test_triggered_choice_replays_and_round_trips():

@@ -21,7 +21,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.decisions import DecisionResponse, PaymentResponse
 from yasuki_core.engine.rules import flow
 
 
@@ -205,7 +205,7 @@ def _encode_input(entry: GameInput) -> dict:
             "seat": entry.seat.name,
             "choices": list(entry.response.choices),
         }
-        if entry.response.boosted:
+        if isinstance(entry.response, PaymentResponse) and entry.response.boosted:
             payload["boosted"] = list(entry.response.boosted)
         return payload
     return {"kind": "cancel", "seat": entry.seat.name}
@@ -215,7 +215,13 @@ def _decode_input(payload: dict) -> GameInput:
     if payload["kind"] == "act":
         return Act(PlayerId[payload["seat"]], _decode_action(payload["action"]))
     if payload["kind"] == "answer":
-        response = DecisionResponse(tuple(payload["choices"]), tuple(payload.get("boosted", ())))
+        choices = tuple(payload["choices"])
+        boosted = payload.get("boosted")
+        response = (
+            DecisionResponse(choices)
+            if boosted is None
+            else PaymentResponse(choices, tuple(boosted))
+        )
         return Answer(PlayerId[payload["seat"]], response)
     return Cancel(PlayerId[payload["seat"]])
 

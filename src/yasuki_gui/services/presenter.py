@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     Confirm,
     DecisionResponse,
+    PaymentResponse,
 )
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.runner import SearchView
@@ -122,13 +123,12 @@ class Presenter:
                 ("Skip", lambda: self.answer_boost(False), True),
             ]
         if pending is not None:
-            chosen = field.selection
-            boosted = tuple(field.boosted)
-            can_confirm = pending.accepts(DecisionResponse(chosen, boosted))
+            answer = self._board_answer()
+            can_confirm = pending.accepts(answer)
             buttons: list[ButtonSpec] = [(pending.confirm_label, self.confirm, can_confirm)]
             if pending.cancellable:
                 buttons.append(("Cancel", self.cancel, True))
-            return pending.prompt(chosen, boosted), buttons
+            return pending.prompt(answer), buttons
         if view.responding_to is not None:
             # A Response Step: say what is being answered, or the Pass button asks the seat to
             # decline something it was never told the name of.
@@ -149,9 +149,8 @@ class Presenter:
 
     def confirm(self) -> None:
         """Answer the pending decision with the board's current selection."""
-        field = self.window.field
-        self.host.runner.submit(field.selection, field.boosted)
-        field.end_selection()
+        self.host.runner.submit(self._board_answer())
+        self.window.field.end_selection()
         self.present()
 
     def cancel(self) -> None:
@@ -162,13 +161,21 @@ class Presenter:
 
     def submit_answer(self, choices: tuple[str, ...]) -> None:
         """Answer a yes/no question with the cards it settled on, or nothing for no."""
-        self.host.runner.submit(list(choices))
+        self.host.runner.submit(DecisionResponse(choices))
         self.present()
 
     def submit_invest(self, amount: str) -> None:
         """Answer an Invest decision with the amount the seat picked."""
-        self.host.runner.submit([amount])
+        self.host.runner.submit(DecisionResponse((amount,)))
         self.present()
+
+    def _board_answer(self) -> DecisionResponse:
+        """The board's selection as the pending decision's own response type — a payment carries
+        the boosts taken, everything else answers with the choices alone."""
+        field = self.window.field
+        if isinstance(self.host.runner.pending, ChoosePayment):
+            return PaymentResponse(field.selection, tuple(field.boosted))
+        return DecisionResponse(field.selection)
 
     def request_boost(self, _producer_id: str) -> None:
         """Put the board's open boost question in the prompt box. The board records which producer
@@ -255,7 +262,7 @@ class Presenter:
         """Open the modal pile-search dialog and submit whichever card is picked."""
 
         def on_pick(card_id: str) -> None:
-            self.host.runner.submit([card_id])
+            self.host.runner.submit(DecisionResponse((card_id,)))
             self.present()
 
         root = self.window.root

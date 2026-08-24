@@ -24,6 +24,7 @@ yasuki_core.engine.rules.decisions
     DecisionResponse
     DiscardToHandSize
     LeaveBowed
+    PaymentResponse
     PlaceLegacy
 
 .. automodule:: yasuki_core.engine.rules.decisions
