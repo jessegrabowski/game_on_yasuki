@@ -89,7 +89,7 @@ def paying():
     host = FakeHost(runner)
     window = GameWindow(session.game.table, P1)
     presenter = Presenter(host, window)
-    window.field.on_boost_request = presenter.request_boost
+    window.field.on_extra_request = presenter.request_extra
     window.field.on_selection_changed = presenter.refresh
     try:
         runner.act(Recruit("target"))
@@ -144,10 +144,10 @@ def test_taking_the_boost_resumes_the_payment_with_the_producer_chosen(paying):
     presenter, window = paying
     window.field.toggle_selection("of")
 
-    presenter.answer_boost(True)
+    presenter.answer_extra(True)
 
     assert window.field.selection == ("of",)
-    assert window.field.boosted == frozenset({"of"})
+    assert window.field.extras_taken == frozenset({"of"})
     assert _buttons(window) != ["Boost", "Skip"]
 
 
@@ -155,21 +155,21 @@ def test_skipping_the_boost_resumes_the_payment_unboosted(paying):
     presenter, window = paying
     window.field.toggle_selection("of")
 
-    presenter.answer_boost(False)
+    presenter.answer_extra(False)
 
     assert window.field.selection == ("of",)
-    assert window.field.boosted == frozenset()
+    assert window.field.extras_taken == frozenset()
 
 
 def test_answering_a_question_nobody_asked_does_nothing(paying):
-    """``answer_boost`` reads the producer off the board, so a stray call with no question open has
+    """``answer_extra`` reads the producer off the board, so a stray call with no question open has
     none to answer rather than a stale one."""
     presenter, window = paying
 
-    presenter.answer_boost(True)
+    presenter.answer_extra(True)
 
     assert window.field.selection == ()
-    assert window.field.boosted == frozenset()
+    assert window.field.extras_taken == frozenset()
 
 
 def test_a_yes_no_question_is_asked_by_its_buttons(board):
@@ -226,7 +226,7 @@ def test_the_window_wires_every_board_hook_to_the_presenter(board):
 
     field = window.field
     assert field.on_selection_changed == presenter.refresh
-    assert field.on_boost_request == presenter.request_boost
+    assert field.on_extra_request == presenter.request_extra
     assert field.on_card_activated == presenter.on_card_activated
     assert field.on_board_menu == presenter.on_board_menu
     assert field.load_deck_from_file == presenter.load_human_deck

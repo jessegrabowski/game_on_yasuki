@@ -103,77 +103,81 @@ class TestDispatchReconcile:
         assert field.dispatch(FlipDeckTop(empty)) == []
 
 
-class TestBoostSelection:
-    def test_picking_a_boostable_producer_defers_to_the_boost_request(self, field):
+class TestExtraSelection:
+    """A candidate the decision offers something extra for — a producer that may boost as it bows —
+    is answered for before it joins the selection. The board holds the mechanism and none of the
+    meaning: what the extra is belongs to the decision that offered it."""
+
+    def test_picking_a_candidate_offering_an_extra_defers_to_the_request(self, field):
         asked = []
-        field.on_boost_request = asked.append
-        field.begin_selection(["sh", "of"], boostable=["of"])
+        field.on_extra_request = asked.append
+        field.begin_selection(["sh", "of"], offers_extra=["of"])
         field.toggle_selection("of")
         assert asked == ["of"] and field.selection == ()  # not selected until answered
-        field.toggle_selection("sh")  # non-boostable selects directly, no request
+        field.toggle_selection("sh")  # a plain candidate selects directly, no request
         assert asked == ["of"] and field.selection == ("sh",)
 
-    def test_resolving_the_boost_selects_and_records_when_taken(self, field):
-        field.on_boost_request = lambda card_id: None
-        field.begin_selection(["of"], boostable=["of"])
-        field.resolve_boost("of", True)
-        assert field.selection == ("of",) and field.boosted == frozenset({"of"})
+    def test_resolving_selects_and_records_when_the_extra_is_taken(self, field):
+        field.on_extra_request = lambda card_id: None
+        field.begin_selection(["of"], offers_extra=["of"])
+        field.resolve_extra("of", True)
+        assert field.selection == ("of",) and field.extras_taken == frozenset({"of"})
 
-    def test_skipping_the_boost_selects_the_producer_unboosted(self, field):
-        field.begin_selection(["of"], boostable=["of"])
-        field.resolve_boost("of", False)
-        assert field.selection == ("of",) and field.boosted == frozenset()
+    def test_skipping_selects_the_candidate_without_the_extra(self, field):
+        field.begin_selection(["of"], offers_extra=["of"])
+        field.resolve_extra("of", False)
+        assert field.selection == ("of",) and field.extras_taken == frozenset()
 
-    def test_deselecting_or_undoing_drops_the_boost(self, field):
-        field.begin_selection(["of"], boostable=["of"])
-        field.resolve_boost("of", True)
+    def test_deselecting_or_undoing_drops_the_extra(self, field):
+        field.begin_selection(["of"], offers_extra=["of"])
+        field.resolve_extra("of", True)
         field.toggle_selection("of")  # deselect
-        assert field.boosted == frozenset() and field.selection == ()
-        field.resolve_boost("of", True)  # re-boost, then undo
+        assert field.extras_taken == frozenset() and field.selection == ()
+        field.resolve_extra("of", True)  # re-take, then undo
         field.undo_last_selection()
-        assert field.boosted == frozenset() and field.selection == ()
+        assert field.extras_taken == frozenset() and field.selection == ()
 
-    def test_the_board_names_the_producer_it_is_waiting_on(self, field):
-        # Picking a boostable producer suspends the toggle, so the board has to say what it stopped
-        # on — the host answers the question, and asks the board which one it is about.
-        field.on_boost_request = lambda card_id: None
-        field.begin_selection(["sh", "of"], boostable=["of"])
-        assert field.pending_boost is None
+    def test_the_board_names_the_candidate_it_is_waiting_on(self, field):
+        # Picking one suspends the toggle, so the board has to say what it stopped on — the host
+        # answers the question, and asks the board which one it is about.
+        field.on_extra_request = lambda card_id: None
+        field.begin_selection(["sh", "of"], offers_extra=["of"])
+        assert field.pending_extra is None
 
         field.toggle_selection("of")
 
-        assert field.pending_boost == "of"
+        assert field.pending_extra == "of"
 
-    def test_answering_the_boost_closes_the_question(self, field):
-        field.on_boost_request = lambda card_id: None
-        field.begin_selection(["of"], boostable=["of"])
+    def test_answering_closes_the_question(self, field):
+        field.on_extra_request = lambda card_id: None
+        field.begin_selection(["of"], offers_extra=["of"])
         field.toggle_selection("of")
 
-        field.resolve_boost("of", True)
+        field.resolve_extra("of", True)
 
-        assert field.pending_boost is None
+        assert field.pending_extra is None
 
-    def test_backing_out_leaves_the_producer_unselected(self, field):
-        # Ctrl+Z on an open boost question drops the question, not the producer's candidacy: it was
-        # never taken into the selection, and it stays clickable.
-        field.on_boost_request = lambda card_id: None
-        field.begin_selection(["of"], boostable=["of"])
+    def test_backing_out_leaves_the_candidate_unselected(self, field):
+        # Ctrl+Z on an open question drops the question, not the candidacy: it was never taken into
+        # the selection, and it stays clickable.
+        field.on_extra_request = lambda card_id: None
+        field.begin_selection(["of"], offers_extra=["of"])
         field.toggle_selection("of")
 
-        field.cancel_boost()
+        field.cancel_extra()
 
-        assert field.pending_boost is None
+        assert field.pending_extra is None
         assert field.selection == ()
 
     def test_leaving_selection_mode_forgets_an_open_question(self, field):
         # A cancelled payment must not leave the next one answering the last one's question.
-        field.on_boost_request = lambda card_id: None
-        field.begin_selection(["of"], boostable=["of"])
+        field.on_extra_request = lambda card_id: None
+        field.begin_selection(["of"], offers_extra=["of"])
         field.toggle_selection("of")
 
         field.end_selection()
 
-        assert field.pending_boost is None
+        assert field.pending_extra is None
 
 
 class TestHomeRow:

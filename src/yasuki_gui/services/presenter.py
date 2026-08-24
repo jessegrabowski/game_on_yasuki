@@ -45,7 +45,7 @@ class Presenter:
         leave a decision owed by either seat."""
         runner, field = self.host.runner, self.window.field
         # A presentation starts with no question of its own open, whatever the last one left.
-        field.cancel_boost()
+        field.cancel_extra()
         pending = runner.pending
         search = runner.search_view()
         if search is not None:
@@ -63,8 +63,10 @@ class Presenter:
             # Invest amount and a yes/no question are answered by prompt buttons, so neither puts
             # the board into selection mode.
             paying = isinstance(pending, ChoosePayment)
-            boostable = [offer.card_id for offer in pending.boostable] if paying else ()
-            field.begin_selection(pending.candidates, render_bowed=paying, boostable=boostable)
+            offers_extra = [offer.card_id for offer in pending.boostable] if paying else ()
+            field.begin_selection(
+                pending.candidates, render_bowed=paying, offers_extra=offers_extra
+            )
         self.refresh()
         # An owed decision counts as well as held priority: a card can put a question to the
         # opponent while the human keeps priority, and the engine is paused until it is answered.
@@ -116,10 +118,10 @@ class Presenter:
                 for amount in pending.candidates
             ]
             return pending.prompt(), [*amounts, ("Cancel", self.cancel, True)]
-        if isinstance(pending, ChoosePayment) and field.pending_boost is not None:
-            return pending.boost_prompt(field.pending_boost), [
-                ("Boost", lambda: self.answer_boost(True), True),
-                ("Skip", lambda: self.answer_boost(False), True),
+        if isinstance(pending, ChoosePayment) and field.pending_extra is not None:
+            return pending.boost_prompt(field.pending_extra), [
+                ("Boost", lambda: self.answer_extra(True), True),
+                ("Skip", lambda: self.answer_extra(False), True),
             ]
         if pending is not None:
             answer = self._board_answer()
@@ -170,24 +172,24 @@ class Presenter:
 
     def _board_answer(self) -> DecisionResponse:
         """The board's selection as the pending decision's own response type — a payment carries
-        the boosts taken, everything else answers with the choices alone."""
+        the extras taken as its boosts, everything else answers with the choices alone."""
         field = self.window.field
         if isinstance(self.host.runner.pending, ChoosePayment):
-            return PaymentResponse(field.selection, tuple(field.boosted))
+            return PaymentResponse(field.selection, tuple(field.extras_taken))
         return DecisionResponse(field.selection)
 
-    def request_boost(self, _producer_id: str) -> None:
-        """Put the board's open boost question in the prompt box. The board records which producer
-        it stopped on, so the id the hook passes is read from there rather than from here."""
+    def request_extra(self, _card_id: str) -> None:
+        """Put the board's open question in the prompt box. The board records which candidate it
+        stopped on, so the id the hook passes is read from there rather than from here."""
         self.refresh()
 
-    def answer_boost(self, take: bool) -> None:
-        """Take or skip the boost on the producer the board is waiting on, which then enters the
+    def answer_extra(self, take: bool) -> None:
+        """Take or skip the extra on the candidate the board is waiting on, which then enters the
         selection."""
-        producer_id = self.window.field.pending_boost
-        if producer_id is not None:
+        card_id = self.window.field.pending_extra
+        if card_id is not None:
             # Adds it to the selection, then refreshes through on_selection_changed.
-            self.window.field.resolve_boost(producer_id, take)
+            self.window.field.resolve_extra(card_id, take)
 
     def run_opponent(self) -> None:
         """Let the AI take its move, then present whatever the engine wants next."""
@@ -212,11 +214,12 @@ class Presenter:
         self._offer(self.host.runner.board_menu())
 
     def undo(self, _event=None) -> None:
-        """Ctrl+Z: back out of an open boost question, else unbow the last producer tapped for gold
-        while paying, else undo a just-made Dynasty Discard if nothing has happened since."""
+        """Ctrl+Z: back out of a question the board is holding open, else unbow the last producer
+        tapped for gold while paying, else undo a just-made Dynasty Discard if nothing has happened
+        since."""
         field = self.window.field
-        if field.pending_boost is not None:
-            field.cancel_boost()
+        if field.pending_extra is not None:
+            field.cancel_extra()
             self.refresh()
         elif isinstance(self.host.runner.pending, ChoosePayment):
             field.undo_last_selection()
