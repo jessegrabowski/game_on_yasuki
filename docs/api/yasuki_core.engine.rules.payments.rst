@@ -7,6 +7,7 @@ yasuki_core.engine.rules.payments
 
 .. autosummary::
 
+    boost_offers_for
     can_afford
     payment_request
 

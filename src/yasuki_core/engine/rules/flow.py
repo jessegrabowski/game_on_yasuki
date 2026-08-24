@@ -47,7 +47,6 @@ from yasuki_core.engine.rules.decisions import (
     ChooseCards,
     ChooseDistribution,
     ChooseEquipTarget,
-    BoostOffer,
     ChooseFortificationProvince,
     ChooseInheritanceTarget,
     Confirm,
@@ -101,7 +100,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.payments import payment_request
+from yasuki_core.engine.rules.payments import boost_offers_for, payment_request
 from yasuki_core.engine.rules import abilities, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
@@ -337,11 +336,7 @@ def announce_recruit(
         ),
         label=card.name,
         target_id=card.id,
-        boostable=tuple(
-            BoostOffer(producer.id, boost.amount, boost.price)
-            for producer in producers
-            if (boost := abilities.production_boost_for(producer)) is not None
-        ),
+        boostable=boost_offers_for(producers),
     )
 
 
