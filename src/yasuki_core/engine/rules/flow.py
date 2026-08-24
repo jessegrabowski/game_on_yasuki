@@ -69,7 +69,6 @@ from yasuki_core.engine.rules.legality import (
     KHARMIC_COST,
     cycle_candidates,
     cycle_key,
-    gold_producers,
     legacy_candidates,
     legacy_key,
     legacy_search_pool,
@@ -100,7 +99,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.payments import boost_offers_for, payment_request
+from yasuki_core.engine.rules.payments import payment_request
 from yasuki_core.engine.rules import abilities, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
@@ -336,21 +335,9 @@ def announce_recruit(
     proclaim: bool = False,
 ) -> ChoosePayment:
     """Queue the recruit and build the payment it must be paid with."""
-    producers = gold_producers(game, seat)
     game.stack.append(ResolveRecruit(seat, card.id, invest_amount, renew, proclaim))
-    return ChoosePayment(
-        seat=seat,
-        candidates=tuple(producer.id for producer in producers),
-        amount=recruit_cost(game, card) + (invest_amount or 0),
-        available=game.gold[seat],
-        produced=tuple(
-            (producer.id, effective_gold_production(game, producer, targets=(card,)))
-            for producer in producers
-        ),
-        label=card.name,
-        target_id=card.id,
-        boostable=boost_offers_for(producers),
-    )
+    amount = recruit_cost(game, card) + (invest_amount or 0)
+    return payment_request(game, seat, amount, card.name, target=card)
 
 
 def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
@@ -451,21 +438,9 @@ def announce_equip(
     game: GameState, card: L5RCard, seat: PlayerId, target_id: str, invest_amount: int | None = None
 ) -> ChoosePayment:
     """Queue the attach and build the payment it must be paid with."""
-    producers = gold_producers(game, seat)
     game.stack.append(ResolveEquip(card.id, target_id, invest_amount))
-    return ChoosePayment(
-        seat=seat,
-        candidates=tuple(producer.id for producer in producers),
-        amount=effective_gold_cost(game, card) + (invest_amount or 0),
-        available=game.gold[seat],
-        produced=tuple(
-            (producer.id, effective_gold_production(game, producer, targets=(card,)))
-            for producer in producers
-        ),
-        label=card.name,
-        target_id=card.id,
-        boostable=boost_offers_for(producers),
-    )
+    amount = effective_gold_cost(game, card) + (invest_amount or 0)
+    return payment_request(game, seat, amount, card.name, target=card)
 
 
 def _resolve_equip(

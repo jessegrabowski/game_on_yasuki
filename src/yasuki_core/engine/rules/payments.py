@@ -18,13 +18,18 @@ def boost_offers_for(producers: Iterable[L5RCard]) -> tuple[BoostOffer, ...]:
     )
 
 
-def payment_request(game: GameState, seat: PlayerId, amount: int, label: str) -> ChoosePayment:
-    """Build the payment that raises ``amount`` gold from ``seat``, for a cost that prices no card.
+def payment_request(
+    game: GameState,
+    seat: PlayerId,
+    amount: int,
+    label: str,
+    target: L5RCard | None = None,
+) -> ChoosePayment:
+    """Queue the payment's completion and build the first request for ``amount`` gold from ``seat``.
 
-    Every unbowed producer the seat controls is offered, quoted at what it makes for nobody in
-    particular, along with the boost each one may take as it bows. The pool the seat already holds
-    counts toward the cost before anything bows. A Recruit and an Equip build their own payment
-    instead: those price a card, and a producer's yield can depend on the card it pays for.
+    Every unbowed producer the seat controls is offered, quoted at what it makes for ``target``,
+    along with the boost each may take as it bows. The pool the seat already holds counts toward the
+    cost before anything bows.
 
     Parameters
     ----------
@@ -36,17 +41,24 @@ def payment_request(game: GameState, seat: PlayerId, amount: int, label: str) ->
         The gold to raise.
     label : str
         What the payment is for, shown in the prompt.
+    target : L5RCard, optional
+        The card being paid for, for a producer whose yield depends on what it pays for. Omit for a
+        rulebook cost, which prices no card. Default None.
     """
     producers = gold_producers(game, seat)
+    targets = () if target is None else (target,)
+    target_id = "" if target is None else target.id
     return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
         amount=amount,
         available=game.gold[seat],
         produced=tuple(
-            (producer.id, effective_gold_production(game, producer)) for producer in producers
+            (producer.id, effective_gold_production(game, producer, targets=targets))
+            for producer in producers
         ),
         label=label,
+        target_id=target_id,
         boostable=boost_offers_for(producers),
     )
 
