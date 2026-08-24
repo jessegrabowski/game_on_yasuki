@@ -17,7 +17,11 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse, PaymentResponse
+from yasuki_core.engine.rules.decisions import (
+    ChoosePayment,
+    DecisionResponse,
+    PaymentResponse,
+)
 from yasuki_core.engine.rules.log import (
     GameLog,
     Act,
@@ -172,6 +176,24 @@ def test_proclaimed_recruit_replays_and_round_trips():
     assert game.table.seats[PlayerId.P1].honor == 2
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
     assert restored.replay() == game
+
+
+def test_a_payment_that_takes_no_boost_encodes_as_a_plain_answer():
+    """The codec writes ``boosted`` only when a boost was taken, so an unboosted payment comes back
+    as a plain response rather than an empty PaymentResponse. Nothing downstream may distinguish
+    them: ChoosePayment.boosts_taken reads both as no boosts, and that is what keeps replay honest.
+    """
+    log = GameLog(initial=InitialRecord.from_state(dealt_table()), first_player=PlayerId.P1)
+    log.entries.append(Answer(PlayerId.P1, PaymentResponse(("P1-SH",), ())))
+
+    encoded = game_log_to_dict(log)
+    assert "boosted" not in encoded["entries"][0]
+
+    restored = game_log_from_dict(json.loads(json.dumps(encoded)))
+    answer = restored.entries[0]
+    assert isinstance(answer, Answer)
+    assert answer.response.choices == ("P1-SH",)
+    assert ChoosePayment.boosts_taken(answer.response) == frozenset()
 
 
 def test_boosted_payment_round_trips_through_the_codec():
