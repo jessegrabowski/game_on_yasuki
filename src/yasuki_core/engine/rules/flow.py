@@ -517,8 +517,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             game.pending = None
             _open_turn(game, frozenset(response.choices))
         case ChoosePayment():
-            _apply_payment(game, request, response)
+            # Cleared first: paying resolves the boost prices, and one that asks a question leaves
+            # its decision on `pending` for the seat to answer next.
             game.pending = None
+            _apply_payment(game, request, response)
             run_stack(game)
         case BanishForLegacy():
             _apply_legacy_banish(game, request, response)

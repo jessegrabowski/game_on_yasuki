@@ -22,17 +22,18 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.decisions import (
     BoostOffer,
+    Confirm,
     DiscardToHandSize,
     DecisionResponse,
     LeaveBowed,
     PaymentResponse,
 )
 from yasuki_core.engine.rules.economy import GOLD_HANDLERS, gold_handler
-from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.effects import Ask, Destroy
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.events import CardDiscarded, Straightened
-
+from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 
@@ -680,6 +681,41 @@ def test_a_payment_that_cannot_cover_its_cost_raises():
     finally:
         _PRODUCTION_BOOST.pop("self_destroying_probe", None)
         GOLD_HANDLERS.pop("paired_probe", None)
+
+
+@choice_resolver("test_boost_price_question")
+def _boost_price_question(game, source_id, chosen, seat):
+    return []
+
+
+def test_a_boost_price_that_asks_a_question_keeps_its_decision():
+    """A boost's price is resolved inside the payment, and an interrupting one leaves a decision
+    pending. Clearing the payment's own decision afterwards must not erase it."""
+    try:
+        register_production_boost(
+            "asking_probe",
+            ProductionBoost(
+                2,
+                lambda card: [
+                    Ask(card.owner, "Answer this?", "test_boost_price_question", (card.id,))
+                ],
+            ),
+        )
+
+        session = _dynasty_phase(
+            [holding("ap", owner=PlayerId.P1, printed_id="asking_probe", gold_production=2)],
+            cost=4,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, PaymentResponse(("ap",), ("ap",)))
+
+        assert isinstance(session.game.pending, Confirm)
+        assert session.game.pending.question == "Answer this?"
+
+        session.submit(PlayerId.P1, DecisionResponse(("ap",)))
+        assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
+    finally:
+        _PRODUCTION_BOOST.pop("asking_probe", None)
 
 
 def test_an_equip_offers_every_boost_its_legality_counted():
