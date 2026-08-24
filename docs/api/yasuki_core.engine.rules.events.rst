@@ -11,6 +11,8 @@ yasuki_core.engine.rules.events
     CounterGained
     Destroyed
     EnteredPlay
+    ProducedGold
+    ProducingGold
     Revealed
     Straightened
     TurnStarted
