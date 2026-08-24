@@ -47,7 +47,6 @@ from yasuki_core.engine.rules.decisions import (
     ChooseCards,
     ChooseDistribution,
     ChooseEquipTarget,
-    BoostOffer,
     ChooseFortificationProvince,
     ChooseInheritanceTarget,
     Confirm,
@@ -101,7 +100,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.payments import payment_request
+from yasuki_core.engine.rules.payments import boost_offers_for, payment_request
 from yasuki_core.engine.rules import abilities, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
@@ -337,11 +336,7 @@ def announce_recruit(
         ),
         label=card.name,
         target_id=card.id,
-        boostable=tuple(
-            BoostOffer(producer.id, boost.amount, boost.price)
-            for producer in producers
-            if (boost := abilities.production_boost_for(producer)) is not None
-        ),
+        boostable=boost_offers_for(producers),
     )
 
 
@@ -456,6 +451,7 @@ def announce_equip(
         ),
         label=card.name,
         target_id=card.id,
+        boostable=boost_offers_for(producers),
     )
 
 
@@ -521,8 +517,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             game.pending = None
             _open_turn(game, frozenset(response.choices))
         case ChoosePayment():
-            _apply_payment(game, request, response)
+            # Cleared first: paying resolves the boost prices, and one that asks a question leaves
+            # its decision on `pending` for the seat to answer next.
             game.pending = None
+            _apply_payment(game, request, response)
             run_stack(game)
         case BanishForLegacy():
             _apply_legacy_banish(game, request, response)
@@ -661,6 +659,10 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     Taking a boost is a stat change like any other: it grants the producer Gold Production for the
     turn, and the yield is then read off the card the same way an unboosted producer's is. What the
     boost costs is the card's own business, resolved once it has yielded.
+
+    Raise ``RuntimeError`` if the bowed producers do not cover the cost: the answer was accepted
+    against the yields the request quoted, so falling short is an engine fault rather than a legal
+    move.
     """
     target = game.table.cards_by_id.get(request.target_id)
     targets = (target,) if target is not None else ()
@@ -684,7 +686,11 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
         produce_gold(game, card_id, effective_gold_production(game, card, targets=targets))
         if boost is not None:
             triggers.resolve_effects(game, boost.effects(card))
-    game.spend_gold(request.seat, request.amount)
+    if not game.spend_gold(request.seat, request.amount):
+        raise RuntimeError(
+            f"{request.seat.name} cannot cover {request.amount} for {request.label}: "
+            f"the pool holds {game.gold[request.seat]}"
+        )
 
 
 def _resolve_recruit(

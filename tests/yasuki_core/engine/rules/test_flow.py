@@ -15,12 +15,38 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.state import GameState, Phase, RESPONSE_TIMINGS
-from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse, LeaveBowed
+from yasuki_core.engine.rules.abilities import (
+    _PRODUCTION_BOOST,
+    ProductionBoost,
+    register_production_boost,
+)
+from yasuki_core.engine.rules.decisions import (
+    BoostOffer,
+    Confirm,
+    DiscardToHandSize,
+    DecisionResponse,
+    LeaveBowed,
+    PaymentResponse,
+)
+from yasuki_core.engine.rules.economy import GOLD_HANDLERS, gold_handler
+from yasuki_core.engine.rules.effects import Ask, Destroy
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.events import CardDiscarded, Straightened
+from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.zones import ProvinceZone
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, register
+from tests.yasuki_core.engine.builders import (
+    attachment,
+    dealt_table,
+    end_phase,
+    holding,
+    personality,
+    put_in_play,
+    register,
+    two_seat_game,
+)
 
 
 def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
@@ -589,3 +615,123 @@ def test_opening_a_turn_records_none_of_its_own_events_as_an_action():
     flow._begin_turn(game)
 
     assert game.action_events == []
+
+
+# --- payment resolution ---
+
+
+def _dynasty_phase(producers: list[L5RCard], *, cost: int) -> EngineSession:
+    """A Dynasty phase with ``producers`` in play and one face-up target costing ``cost``."""
+    state = dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        register(state, holding("refill", owner=PlayerId.P1))
+    ]
+    for producer in producers:
+        put_in_play(state, producer)
+    target = register(state, holding("tgt", owner=PlayerId.P1, gold_cost=cost))
+    target.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(target)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, PlayerId.P1)
+    end_phase(session)
+    end_phase(session)
+    return session
+
+
+def test_a_payment_that_cannot_cover_its_cost_raises():
+    """`accepts` judges the answer against a snapshot while resolution recomputes each yield live,
+    so a producer destroyed as a boost's price can leave a later producer worth less than it was
+    quoted. Spending has to notice: the alternative is a card entering play for nothing."""
+    try:
+        register_production_boost(
+            "self_destroying_probe", ProductionBoost(2, lambda card: [Destroy(card.id, card.owner)])
+        )
+
+        @gold_handler("paired_probe")
+        def _paired(card, me, opponents, targets):
+            return card.gold_production + (1 if me.controls("Probe", other_than=card) else 0)
+
+        # Quoted 4 (sd boosted) + 3 (pp paired with sd) = 7. Live, sd destroys itself as its boost's
+        # price, so pp yields 2 and the pool reaches 6.
+        session = _dynasty_phase(
+            [
+                holding(
+                    "sd",
+                    owner=PlayerId.P1,
+                    printed_id="self_destroying_probe",
+                    keywords=("Probe",),
+                    gold_production=2,
+                ),
+                holding(
+                    "pp",
+                    owner=PlayerId.P1,
+                    printed_id="paired_probe",
+                    keywords=("Probe",),
+                    gold_production=2,
+                ),
+            ],
+            cost=7,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        assert session.game.pending.accepts(PaymentResponse(("sd", "pp"), ("sd",)))
+
+        with pytest.raises(RuntimeError, match="cover"):
+            session.submit(PlayerId.P1, PaymentResponse(("sd", "pp"), ("sd",)))
+    finally:
+        _PRODUCTION_BOOST.pop("self_destroying_probe", None)
+        GOLD_HANDLERS.pop("paired_probe", None)
+
+
+@choice_resolver("test_boost_price_question")
+def _boost_price_question(game, source_id, chosen, seat):
+    return []
+
+
+def test_a_boost_price_that_asks_a_question_keeps_its_decision():
+    """A boost's price is resolved inside the payment, and an interrupting one leaves a decision
+    pending. Clearing the payment's own decision afterwards must not erase it."""
+    try:
+        register_production_boost(
+            "asking_probe",
+            ProductionBoost(
+                2,
+                lambda card: [
+                    Ask(card.owner, "Answer this?", "test_boost_price_question", (card.id,))
+                ],
+            ),
+        )
+
+        session = _dynasty_phase(
+            [holding("ap", owner=PlayerId.P1, printed_id="asking_probe", gold_production=2)],
+            cost=4,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, PaymentResponse(("ap",), ("ap",)))
+
+        assert isinstance(session.game.pending, Confirm)
+        assert session.game.pending.question == "Answer this?"
+
+        session.submit(PlayerId.P1, DecisionResponse(("ap",)))
+        assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
+    finally:
+        _PRODUCTION_BOOST.pop("asking_probe", None)
+
+
+def test_an_equip_offers_every_boost_its_legality_counted():
+    """`_equips` gates on `gold_reach`, which counts every bow-time boost the seat could opt into.
+    A payment that leaves one out can be unanswerable for a cost the legality check allowed."""
+    game = two_seat_game()
+    put_in_play(
+        game, holding("of", owner=PlayerId.P1, printed_id="outlying_farms", gold_production=2)
+    )
+    hero = put_in_play(game, personality("hero", owner=PlayerId.P1))
+    blade = attachment("blade", owner=PlayerId.P1, gold_cost=4)
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(register(game.table, blade))
+
+    payment = flow.announce_equip(game, blade, PlayerId.P1, hero.id)
+
+    assert BoostOffer("of", 2, "then it is destroyed") in payment.boostable
+    # The point of offering it: the cost is 4 and the Farm makes 2, so only the boost can pay.
+    assert payment.accepts(PaymentResponse(("of",), ("of",)))
+    assert not payment.accepts(DecisionResponse(("of",)))

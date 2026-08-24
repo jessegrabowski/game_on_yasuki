@@ -1,9 +1,21 @@
+from collections.abc import Iterable
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import abilities
 from yasuki_core.engine.rules.decisions import BoostOffer, ChoosePayment
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.legality import gold_producers
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.game_pieces.cards import L5RCard
+
+
+def boost_offers_for(producers: Iterable[L5RCard]) -> tuple[BoostOffer, ...]:
+    """The bow-time boosts ``producers`` offer, for the payment that will quote them."""
+    return tuple(
+        BoostOffer(producer.id, boost.amount, boost.price)
+        for producer in producers
+        if (boost := abilities.production_boost_for(producer)) is not None
+    )
 
 
 def payment_request(game: GameState, seat: PlayerId, amount: int, label: str) -> ChoosePayment:
@@ -35,11 +47,7 @@ def payment_request(game: GameState, seat: PlayerId, amount: int, label: str) ->
             (producer.id, effective_gold_production(game, producer)) for producer in producers
         ),
         label=label,
-        boostable=tuple(
-            BoostOffer(producer.id, boost.amount, boost.price)
-            for producer in producers
-            if (boost := abilities.production_boost_for(producer)) is not None
-        ),
+        boostable=boost_offers_for(producers),
     )
 
 
