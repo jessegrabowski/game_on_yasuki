@@ -645,9 +645,6 @@ def _dynasty_phase(producers: list[L5RCard], *, cost: int) -> EngineSession:
     return session
 
 
-# --- payment resolution ---
-
-
 def test_a_payment_that_cannot_cover_its_cost_raises():
     """`accepts` judges the answer against a snapshot while resolution recomputes each yield live,
     so a producer destroyed as a boost's price can leave a later producer worth less than it was
@@ -744,9 +741,6 @@ def test_an_equip_offers_every_boost_its_legality_counted():
     # The point of offering it: the cost is 4 and the Farm makes 2, so only the boost can pay.
     assert payment.accepts(PaymentResponse(("of",), ("of",)))
     assert not payment.accepts(DecisionResponse(("of",)))
-
-
-# --- the production window ---
 
 
 def test_producing_gold_fires_before_the_yield_is_read():
