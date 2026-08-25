@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.actions import (
     ActionTiming,
     ActivateAbility,
     Cycle,
+    DeclareAttack,
     DynastyDiscard,
     Equip,
     KharmicDraw,
@@ -106,6 +107,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_legacy(game, seat),
         *_kharmic(game, seat),
         *_inheritance(game, seat),
+        *_declare_attack(game, seat),
     ]
 
 
@@ -136,6 +138,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _dynasty_discards(game, seat, only=card_id)
         case KharmicDraw(card_id=card_id) | KharmicRefill(card_id=card_id):
             return action in _kharmic(game, seat, only=card_id)
+        case DeclareAttack():
+            return bool(_declare_attack(game, seat))
         case _:
             raise ValueError(f"no legality rule for action {type(action).__name__}")
 
@@ -253,6 +257,17 @@ def _inheritance(game: GameState, seat: PlayerId) -> list[Action]:
     if not seat_holdings(game, seat):
         return []
     return [Inheritance()]
+
+
+def _declare_attack(game: GameState, seat: PlayerId) -> list[Action]:
+    """A DeclareAttack when the Attack Phase's round permits it and no attack stands yet.
+
+    One declaration per phase: the CR gives the active player a single opportunity to create an
+    attack.
+    """
+    if game.attack is not None or not permits(game, seat, ActionTiming.ATTACK):
+        return []
+    return [DeclareAttack()]
 
 
 def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:

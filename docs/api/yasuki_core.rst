@@ -42,6 +42,7 @@ yasuki_core
     yasuki_core.engine.rules.actions <yasuki_core.engine.rules.actions>
     yasuki_core.engine.rules.agents <yasuki_core.engine.rules.agents>
     yasuki_core.engine.rules.attachments <yasuki_core.engine.rules.attachments>
+    yasuki_core.engine.rules.battle <yasuki_core.engine.rules.battle>
     yasuki_core.engine.rules.card_registry <yasuki_core.engine.rules.card_registry>
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.economy <yasuki_core.engine.rules.economy>

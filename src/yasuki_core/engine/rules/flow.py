@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.actions import (
     Action,
     ActionTiming,
     Cycle,
+    DeclareAttack,
     DynastyDiscard,
     Equip,
     Inheritance,
@@ -102,7 +103,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.payments import payment_request
-from yasuki_core.engine.rules import abilities, triggers
+from yasuki_core.engine.rules import abilities, battle, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -239,6 +240,7 @@ _ACTION_WORDING: dict[type, str] = {
     KharmicRefill: "the Kharmic refill on",
     Legacy: "Legacy",
     Cycle: "Cycle",
+    DeclareAttack: "the attack",
 }
 
 
@@ -276,6 +278,8 @@ def perform(game: GameState, action: Action) -> None:
             kharmic_refill(game, card_id)
         case ActivateAbility(card_id=card_id):
             activate(game, card_id)
+        case DeclareAttack():
+            battle.declare_attack(game)
         case _:
             raise ValueError(f"no handler for action {type(action).__name__}")
     # An action resolves fully before the next input; one that paused for a decision leaves its

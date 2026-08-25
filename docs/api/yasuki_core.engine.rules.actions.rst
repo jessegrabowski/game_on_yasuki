@@ -10,6 +10,7 @@ yasuki_core.engine.rules.actions
     ActionTiming
     ActivateAbility
     Cycle
+    DeclareAttack
     DynastyDiscard
     Equip
     Inheritance

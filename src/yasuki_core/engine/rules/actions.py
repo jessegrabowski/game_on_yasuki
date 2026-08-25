@@ -10,6 +10,7 @@ class ActionTiming(Enum):
     - ``OPEN`` — the Action Phase, by any player
     - ``LIMITED`` — the Action Phase, only by the active player
     - ``DYNASTY`` — the Dynasty phase, only by the active player
+    - ``ATTACK`` — the Attack Phase's Declaration Segment, only by the active player
     - ``ENGAGE`` — a battle's Engage Segment, by any player, the Defender acting first
     - ``BATTLE`` — a battle's Combat Segment, by any player, the Defender acting first
     - ``INTERRUPT`` — the Interrupt step of another action, by any player
@@ -22,6 +23,7 @@ class ActionTiming(Enum):
     OPEN = "open"
     LIMITED = "limited"
     DYNASTY = "dynasty"
+    ATTACK = "attack"
     ENGAGE = "engage"
     BATTLE = "battle"
     INTERRUPT = "interrupt"
@@ -152,6 +154,17 @@ class KharmicRefill:
     card_id: str
 
 
+@dataclass(frozen=True, slots=True)
+class DeclareAttack:
+    """Declare an attack in the Attack Phase, creating a battlefield at each of the Defender's
+    Provinces (CR, Declare an Attack).
+
+    The CR makes this a choice rather than a prompt — the active player *"may now optionally
+    create"* an attack — so it is an action the seat takes rather than a decision the engine raises.
+    Passing the Attack Phase instead is how a seat declines.
+    """
+
+
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
 Action = (
     Pass
@@ -164,6 +177,7 @@ Action = (
     | KharmicDraw
     | KharmicRefill
     | Inheritance
+    | DeclareAttack
 )
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
@@ -179,4 +193,5 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     DynastyDiscard: ActionTiming.DYNASTY,
     Legacy: ActionTiming.DYNASTY,
     Inheritance: ActionTiming.DYNASTY,
+    DeclareAttack: ActionTiming.ATTACK,
 }

@@ -42,14 +42,14 @@ class RoundTimings:
     others: frozenset[ActionTiming]
 
 
-# What each phase's Action Round permits. The Battle phase permits nothing of its own: battles are
-# declared there and their Engage and Combat Segments are Action Rounds in their own right.
+# What each phase's Action Round permits. The Battle phase permits only the declaration: a battle's
+# own Engage and Combat Segments will open rounds of their own.
 PHASE_TIMINGS: dict[Phase, RoundTimings] = {
     Phase.ACTION: RoundTimings(
         active=frozenset({ActionTiming.OPEN, ActionTiming.LIMITED}),
         others=frozenset({ActionTiming.OPEN}),
     ),
-    Phase.BATTLE: RoundTimings(active=frozenset(), others=frozenset()),
+    Phase.BATTLE: RoundTimings(active=frozenset({ActionTiming.ATTACK}), others=frozenset()),
     Phase.DYNASTY: RoundTimings(active=frozenset({ActionTiming.DYNASTY}), others=frozenset()),
 }
 

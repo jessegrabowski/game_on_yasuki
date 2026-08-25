@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.actions import (
     Action,
     ActivateAbility,
     Cycle,
+    DeclareAttack,
     DynastyDiscard,
     Equip,
     Inheritance,
@@ -382,6 +383,7 @@ ROUND_TRIPPED_ACTIONS = [
     KharmicDraw("card"),
     KharmicRefill("card"),
     ActivateAbility("card"),
+    DeclareAttack(),
 ]
 
 

@@ -101,8 +101,13 @@ def test_each_phase_permits_only_the_designators_its_round_allows():
     assert legality.permits(session.game, PlayerId.P1, ActionTiming.LIMITED)
     assert not legality.permits(session.game, PlayerId.P1, ActionTiming.DYNASTY)
 
-    end_phase(session)  # Action -> Battle: battles own their own rounds
-    assert not any(legality.permits(session.game, PlayerId.P1, t) for t in ActionTiming)
+    end_phase(session)  # Action -> Battle: the declaration only, since battles own their own rounds
+    assert legality.permits(session.game, PlayerId.P1, ActionTiming.ATTACK)
+    assert not any(
+        legality.permits(session.game, PlayerId.P1, t)
+        for t in ActionTiming
+        if t is not ActionTiming.ATTACK
+    )
 
     end_phase(session)  # Battle -> Dynasty
     assert legality.permits(session.game, PlayerId.P1, ActionTiming.DYNASTY)
