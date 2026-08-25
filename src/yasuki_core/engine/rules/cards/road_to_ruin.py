@@ -2,6 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
+    bow_cost,
     no_cost,
     register_ability,
 )
@@ -17,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantModifier,
     PlaceInProvince,
+    Straighten,
 )
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay, ProducedGold, ProducingGold
@@ -199,3 +201,36 @@ def _resolve_the_forgotten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [CreateToken(FORGOTTEN_DEAD, seat, source_id, attach_to=chosen[0])]
+
+
+# --- Verdant Wilds ---
+
+
+def _verdant_wilds_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The controller's own bowed cards in play: "your target card" is one this seat owns.
+
+    Narrowed to the bowed because straightening presupposes one, and no further. A card another card
+    forbids to straighten stays on the list — that prohibition is the other card's to enforce when
+    the effect resolves, not this one's to read while choosing targets.
+    """
+    return [
+        card.id
+        for card in game.table.battlefield.cards
+        if card.owner is source.owner and card.bowed
+    ]
+
+
+def _verdant_wilds_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Straighten(target.id)]
+
+
+register_ability(
+    "verdant_wilds",
+    Ability(
+        timing=ActionTiming.OPEN,
+        label="Bow: straighten your target card",
+        cost=bow_cost,
+        targets=_verdant_wilds_targets,
+        effects=_verdant_wilds_effects,
+    ),
+)

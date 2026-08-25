@@ -5,7 +5,7 @@ from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
-from yasuki_core.engine.rules.effects import AttachCard, Destroy
+from yasuki_core.engine.rules.effects import AttachCard, DelayStraighten, Destroy
 from yasuki_core.engine.rules.flow import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.decisions import DecisionResponse
@@ -457,3 +457,52 @@ def test_another_follower_falling_raises_nothing():
 
     assert len(_dead_of(game)) == 1
     assert game.table.seats[PlayerId.P1].honor == -2
+
+
+# --- Verdant Wilds ---
+
+
+def _wilds_game():
+    """P1's Verdant Wilds unbowed, with a bowed Holding of its own seat's and one of P2's to aim at."""
+    game = two_seat_game()
+    put_in_play(game, holding("wilds", owner=P1, printed_id="verdant_wilds", gold_production=5))
+    session = EngineSession.start(game.table, P1)
+    # Bowed after the turn opens: its straighten step would stand them back up.
+    put_in_play(session.game, holding("mine", owner=P1)).bow()
+    put_in_play(session.game, holding("theirs", owner=PlayerId.P2)).bow()
+    return session
+
+
+def test_verdant_wilds_aims_only_at_its_own_seats_bowed_cards():
+    """ "Your target card" is one this seat owns, and straightening presupposes a bowed one. The
+    Wilds is not on its own list: it bows to pay, so straightening itself would undo the cost."""
+    session = _wilds_game()
+
+    session.act(P1, ActivateAbility("wilds"))
+
+    assert session.project(P1).pending.candidates == ("mine",)
+
+
+def test_verdant_wilds_straightens_the_card_it_targets():
+    session = _wilds_game()
+
+    session.act(P1, ActivateAbility("wilds"))
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    assert not session.game.table.cards_by_id["mine"].bowed
+    assert session.game.table.cards_by_id["wilds"].bowed  # it paid its own bow
+
+
+def test_verdant_wilds_cannot_straighten_a_card_forbidden_to_straighten():
+    """A granted Jade Mine may not straighten until after its next Action Phase, and an ability that
+    would straighten it finds it immovable. Failing to move it does not lift the prohibition, and it
+    stays a legal target — the ban belongs to the Mine, not to whatever aims at it."""
+    session = _wilds_game()
+    resolve_effects(session.game, [DelayStraighten("mine")])
+
+    session.act(P1, ActivateAbility("wilds"))
+    assert session.project(P1).pending.candidates == ("mine",)
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    assert session.game.table.cards_by_id["mine"].bowed
+    assert "mine" in session.game.straighten_delayed
