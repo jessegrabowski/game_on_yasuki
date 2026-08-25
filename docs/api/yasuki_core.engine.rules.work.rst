@@ -9,6 +9,7 @@ yasuki_core.engine.rules.work
 
     ApplyAbilityEffects
     ApplyEffects
+    CompleteProduction
     ContinuePayment
     FinishRecruit
     ResolveEquip

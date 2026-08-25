@@ -949,3 +949,45 @@ def test_a_trigger_fired_by_the_first_producer_changes_the_second_yield():
         assert session.game.gold[PlayerId.P1] == 3  # 2 + 4 produced, 3 spent
     finally:
         triggers._TRIGGERS.get(ProducingGold, {}).pop("raising_probe", None)
+
+
+@choice_resolver("test_window_grant")
+def _window_grant(game, source_id, chosen, seat):
+    if not chosen:
+        return []
+    return [
+        GrantModifier(chosen[0], chosen[0], Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN)
+    ]
+
+
+def test_a_production_window_trigger_may_pause_for_a_decision():
+    """The capability the narrowing exists for. A producer's trait asks its controller a question as
+    it bows, and the yield is read on the far side of the answer — so what the seat says still
+    counts toward the production it interrupted."""
+    try:
+
+        @triggers.on(ProducingGold, "asking_window_probe")
+        def _ask(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [Ask(ctx.card.owner, "Raise this?", "test_window_grant", (ctx.card.id,))]
+
+        session = _dynasty_phase(
+            [holding("aw", owner=PlayerId.P1, printed_id="asking_window_probe", gold_production=2)],
+            cost=2,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, DecisionResponse(("aw",)))
+
+        asked = session.game.pending
+        assert isinstance(asked, Confirm)
+        assert asked.question == "Raise this?"
+        assert not session.game.table.cards_by_id["aw"].bowed  # the yield is not read yet
+
+        session.submit(PlayerId.P1, DecisionResponse(("aw",)))  # yes
+
+        table = session.game.table
+        assert table.cards_by_id["tgt"] in table.battlefield.cards
+        assert session.game.gold[PlayerId.P1] == 2  # produced 4 after the grant, spent 2
+    finally:
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("asking_window_probe", None)
