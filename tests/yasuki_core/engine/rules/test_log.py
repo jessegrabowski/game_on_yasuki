@@ -1,4 +1,5 @@
 import json
+import typing
 
 import pytest
 
@@ -10,9 +11,14 @@ from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint, Stron
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import (
+    Action,
     ActivateAbility,
     Cycle,
     DynastyDiscard,
+    Equip,
+    Inheritance,
+    KharmicDraw,
+    KharmicRefill,
     Legacy,
     Pass,
     Recruit,
@@ -362,19 +368,31 @@ def test_decode_action_rejects_an_unknown_kind():
         _decode_action({"kind": "bogus"})
 
 
-@pytest.mark.parametrize(
-    "action",
-    [
-        Pass(),
-        Recruit("card"),
-        Recruit("card", invest=True),
-        Recruit("card", proclaim=True),
-        DynastyDiscard("card"),
-        Legacy(),
-        Cycle(),
-        ActivateAbility("card"),
-    ],
-)
+ROUND_TRIPPED_ACTIONS = [
+    Pass(),
+    Recruit("card"),
+    Recruit("card", invest=True),
+    Recruit("card", proclaim=True),
+    Equip("card"),
+    Equip("card", invest=True),
+    DynastyDiscard("card"),
+    Legacy(),
+    Inheritance(),
+    Cycle(),
+    KharmicDraw("card"),
+    KharmicRefill("card"),
+    ActivateAbility("card"),
+]
+
+
+def test_every_action_kind_is_round_tripped():
+    # The list above is hand-written, so an action added to the union without a case here would
+    # ship a codec nothing exercises — and only fail when someone saved a game.
+    covered = {type(action) for action in ROUND_TRIPPED_ACTIONS}
+    assert set(typing.get_args(Action)) - covered == set()
+
+
+@pytest.mark.parametrize("action", ROUND_TRIPPED_ACTIONS)
 def test_every_action_survives_a_json_round_trip(action):
     # The log is the save format and the replay tape, so an action the codec cannot carry is an
     # action that cannot be saved or replayed.
