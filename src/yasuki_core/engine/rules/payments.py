@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.decisions import ChoosePayment
+from yasuki_core.engine.rules.effects import Ask, Effect
 from yasuki_core.engine.rules.economy import (
     effective_gold_production,
     maximum_gold_production,
@@ -7,6 +8,7 @@ from yasuki_core.engine.rules.economy import (
 )
 from yasuki_core.engine.rules.legality import gold_producers, reachable_gold
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import TriggerContext
 from yasuki_core.engine.rules.work import ContinuePayment
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -113,3 +115,36 @@ def payment_in_flight(game: GameState, seat: PlayerId) -> ContinuePayment | None
         ),
         None,
     )
+
+
+def offer_self_grant(ctx: TriggerContext, question: str, resolver: str) -> list[Effect]:
+    """The offer a card makes in the window it opens as it bows: ``question``, answered by
+    ``resolver``, for the card whose window is firing.
+
+    How much is on offer comes from the same projection affordability counts, so the two cannot
+    disagree — a window offering less than affordability promised would strand the purchase it made
+    reachable. Offers nothing when the event names another card, or when this one has nothing left
+    to give this turn.
+
+    Parameters
+    ----------
+    ctx : TriggerContext
+        The firing trigger's context, whose card is the producer being asked about.
+    question : str
+        The offer as the seat reads it, naming what taking it costs.
+    resolver : str
+        The registered choice resolver that grants the Gold and charges the card's own price.
+    """
+    offered = untaken_self_grant(ctx.game, ctx.card)
+    if ctx.event.card_id != ctx.card.id or not offered:
+        return []
+    return [
+        Ask(
+            ctx.card.owner,
+            question,
+            resolver,
+            (ctx.card.id,),
+            source_id=ctx.card.id,
+            declinable=not refusal_would_strand(ctx.game, ctx.card.owner, offered),
+        )
+    ]

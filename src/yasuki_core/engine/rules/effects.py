@@ -649,7 +649,7 @@ class Bow(Effect):
 @dataclass(frozen=True, slots=True)
 class Straighten(Effect):
     """Straighten (unbow) a card. Announces the change, which a card that watches for its own
-    straightening reads; one already standing announces nothing."""
+    straightening reads; one already standing, or forbidden to straighten, announces nothing."""
 
     card_id: str
 
@@ -658,7 +658,7 @@ class Straighten(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is None or not card.bowed:
+        if card is None or not card.bowed or self.card_id in game.straighten_delayed:
             return []
         card.unbow()
         return [Straightened(self.card_id)]
@@ -768,6 +768,24 @@ class GainHonor(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         ops.set_honor(game.table, self.seat, delta=self.amount)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class DelayStraighten(Effect):
+    """Forbid ``card_id`` from straightening until its controller's next Action Phase has ended.
+
+    A prohibition rather than a skipped step: nothing straightens the card while it holds, an effect
+    that tries no more than the turn-start straighten. Imposed rather than offered, unlike the
+    printed "May remain bowed" its controller chooses each turn."""
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"{self.card_id} may not straighten until after its next Action Phase"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.straighten_delayed[self.card_id] = game.turn
         return []
 
 

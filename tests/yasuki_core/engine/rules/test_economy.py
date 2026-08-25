@@ -517,7 +517,7 @@ def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
 
 def test_maximum_gold_production_adds_the_declared_grant():
     """What affordability asks: the most a card could yield if its controller took what it offers."""
-    GOLD_SELF_GRANT["granting_probe"] = 2
+    register_self_grant("granting_probe", 2)
 
     try:
         game = two_seat_game()
@@ -532,7 +532,7 @@ def test_maximum_gold_production_adds_the_declared_grant():
 def test_maximum_gold_production_composes_with_a_counter():
     """The declared number is a delta over what the card is worth now, not a ceiling of its own. A
     flat total would under-report the moment anything else raised the card."""
-    GOLD_SELF_GRANT["granting_probe"] = 2
+    register_self_grant("granting_probe", 2)
 
     try:
         game = two_seat_game()
@@ -573,7 +573,7 @@ def test_a_target_dependent_producer_needs_no_declaration():
 def test_maximum_gold_production_stops_adding_a_grant_already_taken():
     """Once the card has granted itself, that Gold is inside what it is worth now. Adding the delta
     again would report a ceiling it cannot reach."""
-    GOLD_SELF_GRANT["granting_probe"] = 2
+    register_self_grant("granting_probe", 2)
 
     try:
         game = two_seat_game()
@@ -590,7 +590,7 @@ def test_maximum_gold_production_stops_adding_a_grant_already_taken():
 def test_a_straightened_producer_does_not_regrant_itself():
     """The reason the tag is asked rather than `card.bowed`: a producer that bowed, granted itself
     and was straightened again is unbowed with the grant still live, and has nothing left to give."""
-    GOLD_SELF_GRANT["granting_probe"] = 2
+    register_self_grant("granting_probe", 2)
 
     try:
         game = two_seat_game()
@@ -625,8 +625,11 @@ def test_every_declared_self_grant_matches_what_its_trigger_grants(printed_id):
     Derived on a board built for the test and thrown away, never on the live game. A trigger may
     claim a once-per-turn use as it fires, which is why affordability reads the declaration at
     runtime instead of deriving it — asking would spend the use.
+
+    The owner went second so that a Courtesy card offers its grant at all; a board that failed a
+    card's condition would compare nothing against nothing and pass whatever the card did.
     """
-    game = two_seat_game()
+    game = two_seat_game(first_player=PlayerId.P2)
     producer = put_in_play(game, holding("probe", owner=PlayerId.P1, printed_id=printed_id))
 
     granted = 0
@@ -645,7 +648,11 @@ def test_every_declared_self_grant_matches_what_its_trigger_grants(printed_id):
             and e.target_id == producer.id
         )
 
-    assert granted == GOLD_SELF_GRANT[printed_id]
+    declared = GOLD_SELF_GRANT[printed_id](
+        producer, player_state(game, PlayerId.P1), opposing_states(game, PlayerId.P1)
+    )
+    assert declared > 0, "the board does not satisfy this card's condition, so it proves nothing"
+    assert granted == declared
 
 
 def _window_effects(game, producer):

@@ -42,6 +42,7 @@ deferred through `Then` instead.
    Choose
    CounterOnAttachedProvince
    CreateToken
+   DelayStraighten
    Destroy
    DestroyProvince
    Discard

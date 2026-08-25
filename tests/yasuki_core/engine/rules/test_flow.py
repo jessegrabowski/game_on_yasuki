@@ -29,7 +29,13 @@ from yasuki_core.engine.rules.economy import (
     gold_handler,
     register_self_grant,
 )
-from yasuki_core.engine.rules.effects import Ask, Destroy, GrantModifier
+from yasuki_core.engine.rules.effects import (
+    Ask,
+    DelayStraighten,
+    Destroy,
+    GrantModifier,
+    Straighten,
+)
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.events import (
@@ -1048,3 +1054,68 @@ def test_a_production_window_trigger_may_pause_for_a_decision():
         assert session.game.gold[PlayerId.P1] == 2  # produced 4 after the grant, spent 2
     finally:
         triggers._TRIGGERS.get(ProducingGold, {}).pop("asking_window_probe", None)
+
+
+def test_a_straighten_delay_lifts_after_its_own_controller_s_action_phase():
+    """The card may not straighten "until after your next Action Phase", so the prohibition outlives
+    the straighten step it blocks and belongs to its controller's turn rather than to whoever is
+    playing. Lifting it on the wrong seat's phase would stand the card up a turn early.
+    """
+    # P2 goes first, so the next straighten to run is P1's rather than the delayed card's owner's.
+    session = EngineSession.start(dealt_table(hand=0), PlayerId.P2)
+    mine = put_in_play(session.game, holding("mine", owner=PlayerId.P2))
+    mine.bow()
+    triggers.resolve_effects(session.game, [DelayStraighten("mine")])
+
+    _advance_turns(session, 1)  # P1's turn: neither its straighten nor its Action Phase is P2's
+    assert "mine" in session.game.straighten_delayed
+    assert session.game.table.cards_by_id["mine"].bowed
+
+    _advance_turns(session, 1)  # P2's turn opens; the straighten it is forbidden to take
+    assert "mine" in session.game.straighten_delayed
+    assert session.game.table.cards_by_id["mine"].bowed
+
+    end_phase(session)  # and P2's Action Phase ends, which is when the prohibition lifts
+    assert "mine" not in session.game.straighten_delayed
+    assert session.game.table.cards_by_id["mine"].bowed  # nothing straightens it until the step
+
+    _advance_turns(session, 2)
+    assert not session.game.table.cards_by_id["mine"].bowed
+
+
+def test_a_card_forbidden_to_straighten_is_not_straightened_by_an_effect():
+    """ "Will not straighten" is a prohibition, not a skipped step: an ability that straightens a
+    target card finds this one immovable, and does not spend the prohibition by trying."""
+    session = EngineSession.start(dealt_table(hand=0), PlayerId.P1)
+    mine = put_in_play(session.game, holding("mine", owner=PlayerId.P1))
+    mine.bow()
+    triggers.resolve_effects(session.game, [DelayStraighten("mine")])
+
+    triggers.resolve_effects(session.game, [Straighten("mine")])
+
+    assert session.game.table.cards_by_id["mine"].bowed
+    assert "mine" in session.game.straighten_delayed
+
+
+def test_a_straighten_delay_leaves_with_the_card_it_forbids():
+    """A token can be banished off the table while a delay is on it. Reading the delay back through
+    a card registry that no longer holds it takes the game down on the next phase change."""
+    session = EngineSession.start(dealt_table(hand=0), PlayerId.P1)
+    mine = put_in_play(session.game, holding("mine", owner=PlayerId.P1))
+    mine.bow()
+    triggers.resolve_effects(session.game, [DelayStraighten("mine")])
+    ops.remove_card(session.game.table, mine)
+
+    end_phase(session)  # the Action phase ends, which is when delays are read
+
+    assert session.game.straighten_delayed == {}
+
+
+def _advance_turns(session, count: int) -> None:
+    """Pass until ``count`` further turns have opened."""
+    target = session.game.turn + count
+    for _ in range(4 * count + 4):
+        if session.game.turn == target:
+            return
+        end_phase(session)
+    raise AssertionError(f"stuck on turn {session.game.turn}, wanted {target}")

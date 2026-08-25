@@ -19,6 +19,7 @@ yasuki_core.engine.rules.effects
     Choose
     CounterOnAttachedProvince
     CreateToken
+    DelayStraighten
     Destroy
     DestroyProvince
     Discard

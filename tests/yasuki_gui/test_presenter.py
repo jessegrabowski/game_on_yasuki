@@ -148,9 +148,7 @@ def test_bowing_a_producer_puts_its_window_question_in_the_prompt_box(paying):
     presenter.confirm()
 
     assert _buttons(window) == ["Yes", "No", "Cancel"]
-    assert (
-        _status(window) == "Give Outlying Farms +2 Gold Production? It is destroyed after it bows."
-    )
+    assert _status(window) == "Give Outlying Farms +2GP? It is destroyed after it bows."
     assert not window.field.selecting  # a question, not a board selection
 
 

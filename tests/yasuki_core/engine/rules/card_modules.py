@@ -69,16 +69,21 @@ def card_modules() -> list[pathlib.Path]:
 
 @functools.cache
 def registered_ids(module: pathlib.Path) -> tuple[str, ...]:
-    """The card ids ``module`` registers a handler for, in source order and with repeats."""
-    ids = []
+    """The card ids ``module`` registers a handler for, in source order and with repeats.
+
+    Sorted by position rather than taken in walk order: ``ast.walk`` is breadth-first, so a bare
+    ``register_ability(...)`` statement is reached before a decorator further up the file, and the
+    ids would come back interleaved by nesting depth instead of by line.
+    """
+    found = []
     for node in ast.walk(ast.parse(module.read_text(encoding="utf-8"))):
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
             if node.func.id in _DECORATORS or node.func.id in _CALLS:
                 # @on(Event, "id") puts the id last; every other form puts it first.
                 argument = node.args[-1] if node.func.id == "on" else node.args[0]
                 if isinstance(argument, ast.Constant) and isinstance(argument.value, str):
-                    ids.append(argument.value)
-    return tuple(ids)
+                    found.append((argument.lineno, argument.col_offset, argument.value))
+    return tuple(value for _, _, value in sorted(found))
 
 
 def _sections(source: str) -> list[tuple[int, str]]:

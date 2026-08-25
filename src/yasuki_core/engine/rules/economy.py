@@ -312,14 +312,31 @@ def effective_gold_production(
     return max(0, total)
 
 
-# The Gold Production a card can grant itself as it bows, by printed id. A delta over whatever the
-# card is worth at the time rather than a total: counters and granted modifiers feed the same stat,
-# so a flat ceiling would under-report the moment anything else raised the card.
-GOLD_SELF_GRANT: dict[str, int] = {}
+# What a card can grant its own Gold Production as it bows, computed from the card and its
+# controller's and opponents' views. A delta over whatever the card is worth at the time rather than
+# a total: counters and granted modifiers feed the same stat, so a flat ceiling would under-report
+# the moment anything else raised the card. A handler rather than a number because a card may gate
+# its grant on a condition — Slave Pits offers nothing to the player who went first — and a grant
+# affordability counts but the card refuses would strand the payment it made reachable.
+SelfGrantHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], int]
+GOLD_SELF_GRANT: dict[str, SelfGrantHandler] = {}
 
 # The once-per-turn tag a card claims as it grants itself. Read here to tell a grant still to come
 # from one `effective_gold_production` is already carrying, and by the trait that prices it.
 SELF_GRANT = "gold_self_grant"
+
+
+def self_grant(printed_id: str) -> Callable[[SelfGrantHandler], SelfGrantHandler]:
+    """Register the decorated function as ``printed_id``'s self-grant, for a card whose own
+    conditions decide how much it offers, or whether it offers anything at all."""
+
+    def register(handler: SelfGrantHandler) -> SelfGrantHandler:
+        if printed_id in GOLD_SELF_GRANT:
+            raise ValueError(f"{printed_id} already grants itself Gold Production")
+        GOLD_SELF_GRANT[printed_id] = handler
+        return handler
+
+    return register
 
 
 def register_self_grant(printed_id: str, amount: int) -> None:
@@ -327,11 +344,10 @@ def register_self_grant(printed_id: str, amount: int) -> None:
 
     What the card's window trigger grants, told to affordability separately so a purchase only the
     grant can reach is still offered. The trigger is what makes the grant happen; this is what makes
-    it countable before anyone is asked.
+    it countable before anyone is asked. Use :func:`self_grant` for a card that offers its grant only
+    under a condition.
     """
-    if printed_id in GOLD_SELF_GRANT:
-        raise ValueError(f"{printed_id} already grants itself Gold Production")
-    GOLD_SELF_GRANT[printed_id] = amount
+    self_grant(printed_id)(lambda card, me, opponents: amount)
 
 
 def maximum_gold_production(
@@ -364,11 +380,12 @@ def maximum_gold_production(
 
 
 def untaken_self_grant(game: GameState, card: L5RCard) -> int:
-    """What ``card`` can still grant itself this turn, or nothing once it has."""
-    amount = GOLD_SELF_GRANT.get(card.printed_id, 0)
-    if not amount or used_this_turn(game, card, SELF_GRANT):
+    """What ``card`` can still grant itself this turn, or nothing once it has or its card declines
+    to offer under current conditions."""
+    handler = GOLD_SELF_GRANT.get(card.printed_id)
+    if handler is None or used_this_turn(game, card, SELF_GRANT):
         return 0
-    return amount
+    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
 
 
 # A recruit-discount handler computes the gold reduction on recruiting a card, from the card being

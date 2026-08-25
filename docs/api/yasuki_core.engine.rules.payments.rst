@@ -8,6 +8,7 @@ yasuki_core.engine.rules.payments
 .. autosummary::
 
     can_afford
+    offer_self_grant
     payment_in_flight
     payment_request
     refusal_would_strand

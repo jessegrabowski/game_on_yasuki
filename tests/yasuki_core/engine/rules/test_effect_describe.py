@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     Unpayable,
     Choose,
     CreateToken,
+    DelayStraighten,
     Discard,
     Destroy,
     DestroyProvince,
@@ -120,6 +121,7 @@ EFFECTS = [
         "place farm_1 in P2 province 1",
     ),
     (ShuffleDeck(DeckKey(PlayerId.P1, Side.DYNASTY)), "shuffle P1's dynasty deck"),
+    (DelayStraighten("jade_1"), "jade_1 may not straighten until after its next Action Phase"),
     (RevealProvinces(PlayerId.P1), "reveal P1's provinces"),
     (Then((Bow("a"), Destroy("b", PlayerId.P1))), "then: 2 deferred"),
     (
