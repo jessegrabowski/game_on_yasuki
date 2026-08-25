@@ -149,3 +149,20 @@ def _named_conventionally(function: CardFunction) -> bool:
     if not function.name.startswith(prefix):
         return False
     return not function.registered or function.name.removeprefix(prefix) in ROLES
+
+
+def test_registered_ids_reads_a_module_in_line_order(tmp_path):
+    """Every guard here compares against this order, so reading it wrong makes them agree with each
+    other and with nothing else.
+
+    The probe registers one card by calling the decorator directly, which is how a module puts two
+    events on one handler. That nests the ``on(...)`` call a level deeper than a plain registration
+    statement, and ``ast.walk`` is breadth-first, so walk order returns it last however early it
+    appears.
+    """
+    module = tmp_path / "probe.py"
+    module.write_text(
+        'on(EnteredPlay, "alpha")(_alpha_entered_play)\nregister_ability("beta", None)\n'
+    )
+
+    assert registered_ids(module) == ("alpha", "beta")
