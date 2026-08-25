@@ -25,9 +25,11 @@ def potential_gold_production(game: GameState, seat: PlayerId) -> int:
     Two things are deliberately outside this number, and both make it smaller than
     :func:`~yasuki_core.engine.rules.legality.reachable_gold` for the same board.
 
-    A bow-time boost is excluded, because taking one has a price the card sets — Outlying Farms
-    destroys itself — so counting it would report gold a seat may rationally decline. This measures
-    sustainable output, which is what a deck is being judged on.
+    A card's own bow-time grant is excluded, because taking one has a price the card sets — Outlying
+    Farms destroys itself — so counting it would report gold a seat may rationally decline. This
+    measures sustainable output, which is what a deck is being judged on. That is the same reason
+    ``policies._spendable`` leaves it out, and the opposite of what
+    :func:`~yasuki_core.engine.rules.economy.maximum_gold_production` answers for affordability.
 
     A producer's yield can depend on what it pays for (Jade Works yields more against a Jade card),
     and a metric has no payment in flight, so such a producer reports its unconditional base.

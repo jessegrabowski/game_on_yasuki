@@ -493,7 +493,17 @@ def _identifiable(view: GameView) -> dict[str, L5RCard]:
 
 
 def _spendable(view: GameView) -> int:
-    """The Gold the viewer could raise right now by bowing what is straight, plus its pool."""
+    """The Gold the viewer could raise right now by bowing what is straight, plus its pool.
+
+    Deliberately smaller than what affordability reaches: a card that can raise its own yield does
+    so at a price it sets, and a policy weighing whether a purchase is *worth* making should not
+    count Gold it would rather not pay for. `legality.reachable_gold` must count it, because
+    withholding a legal action is worse than offering one the seat declines.
+
+    A policy also cannot ask :func:`~yasuki_core.engine.rules.economy.maximum_gold_production`: it
+    sees a redacted :class:`GameView` rather than the live game, which is what keeps a policy from
+    reading anything its seat is not entitled to.
+    """
     return view.gold[view.viewer] + sum(
         _production(view, card) for card in _in_play(view) if not card.bowed
     )
