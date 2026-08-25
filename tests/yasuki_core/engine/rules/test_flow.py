@@ -16,21 +16,19 @@ from yasuki_core.game_pieces.prints import (
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState, Phase, RESPONSE_TIMINGS
-from yasuki_core.engine.rules.abilities import (
-    _PRODUCTION_BOOST,
-    ProductionBoost,
-    register_production_boost,
-)
 from yasuki_core.engine.rules.decisions import (
-    BoostOffer,
     ChoosePayment,
     Confirm,
     DiscardToHandSize,
     DecisionResponse,
     LeaveBowed,
-    PaymentResponse,
 )
-from yasuki_core.engine.rules.economy import GOLD_HANDLERS, gold_handler
+from yasuki_core.engine.rules.economy import (
+    GOLD_HANDLERS,
+    GOLD_SELF_GRANT,
+    gold_handler,
+    register_self_grant,
+)
 from yasuki_core.engine.rules.effects import Ask, Destroy, GrantModifier
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.projection import project
@@ -646,22 +644,36 @@ def _dynasty_phase(producers: list[L5RCard], *, cost: int) -> EngineSession:
 
 
 def test_a_payment_stranded_by_its_own_answer_raises():
-    """Affordability sums yields that cannot all be realised: destroying one producer as a boost's
-    price drops what another is worth. Answering one producer at a time re-quotes the rest, so the
-    shortfall surfaces here rather than silently underpaying — and it has to be loud, because the
-    alternative is a seat holding a question with no legal answer and no way to know why.
+    """Affordability sums yields that cannot all be realised: destroying one producer as the price
+    of its own grant drops what another is worth. Answering one producer at a time re-quotes the
+    rest, so the shortfall surfaces here rather than silently underpaying — and it has to be loud,
+    because the alternative is a seat holding a question with no legal answer and no way to know why.
     """
     try:
-        register_production_boost(
-            "self_destroying_probe", ProductionBoost(2, lambda card: [Destroy(card.id, card.owner)])
-        )
+        register_self_grant("self_destroying_probe", 2)
+
+        @triggers.on(ProducingGold, "self_destroying_probe")
+        def _grant(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [
+                GrantModifier(
+                    ctx.card.id, ctx.card.id, Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN
+                )
+            ]
+
+        @triggers.on(ProducedGold, "self_destroying_probe")
+        def _price(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [Destroy(ctx.card.id, ctx.card.owner)]
 
         @gold_handler("paired_probe")
         def _paired(card, me, opponents, targets):
             return card.gold_production + (1 if me.controls("Probe", other_than=card) else 0)
 
-        # Quoted 4 (sd boosted) + 3 (pp, paired with sd) = 7. Once sd has destroyed itself, pp is
-        # worth 2 and the pool can only reach 6.
+        # Quoted 4 (sd with its own grant) + 3 (pp, paired with sd) = 7. Once sd has destroyed
+        # itself, pp is worth 2 and the pool can only reach 6.
         session = _dynasty_phase(
             [
                 holding(
@@ -684,37 +696,49 @@ def test_a_payment_stranded_by_its_own_answer_raises():
         session.act(PlayerId.P1, Recruit("tgt"))
 
         with pytest.raises(RuntimeError, match="cannot make up the difference"):
-            session.submit(PlayerId.P1, PaymentResponse(("sd",), ("sd",)))
+            session.submit(PlayerId.P1, DecisionResponse(("sd",)))
     finally:
-        _PRODUCTION_BOOST.pop("self_destroying_probe", None)
+        GOLD_SELF_GRANT.pop("self_destroying_probe", None)
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("self_destroying_probe", None)
+        triggers._TRIGGERS.get(ProducedGold, {}).pop("self_destroying_probe", None)
         GOLD_HANDLERS.pop("paired_probe", None)
 
 
-@choice_resolver("test_boost_price_question")
-def _boost_price_question(game, source_id, chosen, seat):
+@choice_resolver("test_grant_price_question")
+def _grant_price_question(game, source_id, chosen, seat):
     return []
 
 
-def test_a_boost_price_that_asks_a_question_keeps_its_decision():
-    """A boost's price is resolved inside the payment, and an interrupting one leaves a decision
+def test_a_price_that_asks_a_question_keeps_its_decision():
+    """A grant's price resolves inside the payment, and an interrupting one leaves a decision
     pending. Clearing the payment's own decision afterwards must not erase it."""
     try:
-        register_production_boost(
-            "asking_probe",
-            ProductionBoost(
-                2,
-                lambda card: [
-                    Ask(card.owner, "Answer this?", "test_boost_price_question", (card.id,))
-                ],
-            ),
-        )
+        register_self_grant("asking_probe", 2)
+
+        @triggers.on(ProducingGold, "asking_probe")
+        def _grant(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [
+                GrantModifier(
+                    ctx.card.id, ctx.card.id, Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN
+                )
+            ]
+
+        @triggers.on(ProducedGold, "asking_probe")
+        def _price(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [
+                Ask(ctx.card.owner, "Answer this?", "test_grant_price_question", (ctx.card.id,))
+            ]
 
         session = _dynasty_phase(
             [holding("ap", owner=PlayerId.P1, printed_id="asking_probe", gold_production=2)],
             cost=4,
         )
         session.act(PlayerId.P1, Recruit("tgt"))
-        session.submit(PlayerId.P1, PaymentResponse(("ap",), ("ap",)))
+        session.submit(PlayerId.P1, DecisionResponse(("ap",)))
 
         assert isinstance(session.game.pending, Confirm)
         assert session.game.pending.question == "Answer this?"
@@ -722,12 +746,45 @@ def test_a_boost_price_that_asks_a_question_keeps_its_decision():
         session.submit(PlayerId.P1, DecisionResponse(("ap",)))
         assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
     finally:
-        _PRODUCTION_BOOST.pop("asking_probe", None)
+        GOLD_SELF_GRANT.pop("asking_probe", None)
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("asking_probe", None)
+        triggers._TRIGGERS.get(ProducedGold, {}).pop("asking_probe", None)
 
 
-def test_an_equip_offers_every_boost_its_legality_counted():
-    """`_equips` gates on `gold_reach`, which counts every bow-time boost the seat could opt into.
-    A payment that leaves one out can be unanswerable for a cost the legality check allowed."""
+def test_a_producer_that_grants_itself_nothing_is_not_made_to_pay():
+    """The payment path exacts no price of its own. A card that raises its own yield and names no
+    consequence keeps its production and stays in play — Outlying Farms' text is Outlying Farms'."""
+    try:
+        register_self_grant("free_grant_probe", 3)
+
+        @triggers.on(ProducingGold, "free_grant_probe")
+        def _grant(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [
+                GrantModifier(
+                    ctx.card.id, ctx.card.id, Stat.GOLD_PRODUCTION, 3, Duration.UNTIL_END_OF_TURN
+                )
+            ]
+
+        session = _dynasty_phase(
+            [holding("fg", owner=PlayerId.P1, printed_id="free_grant_probe", gold_production=2)],
+            cost=5,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, DecisionResponse(("fg",)))
+
+        probe = session.game.table.cards_by_id["fg"]
+        assert probe.bowed
+        assert probe in session.game.table.battlefield.cards
+    finally:
+        GOLD_SELF_GRANT.pop("free_grant_probe", None)
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("free_grant_probe", None)
+
+
+def test_an_equip_offers_every_grant_its_legality_counted():
+    """`_equips` gates on `gold_reach`, which counts what each producer could raise itself to. A
+    payment that leaves that out can be unanswerable for a cost the legality check allowed."""
     game = two_seat_game()
     put_in_play(
         game, holding("of", owner=PlayerId.P1, printed_id="outlying_farms", gold_production=2)
@@ -738,10 +795,10 @@ def test_an_equip_offers_every_boost_its_legality_counted():
 
     payment = flow.announce_equip(game, blade, PlayerId.P1, hero.id)
 
-    assert BoostOffer("of", 2, "then it is destroyed") in payment.boostable
-    # The point of offering it: the cost is 4 and the Farm makes 2, so only the boost can pay.
-    assert payment.accepts(PaymentResponse(("of",), ("of",)))
-    assert not payment.accepts(DecisionResponse(("of",)))
+    # The cost is 4 and the Farm makes 2, so the payment is answerable only because it quotes the
+    # ceiling the Farm can still reach for itself.
+    assert payment.grantable == (("of", 2),)
+    assert payment.accepts(DecisionResponse(("of",)))
 
 
 def test_producing_gold_fires_before_the_yield_is_read():

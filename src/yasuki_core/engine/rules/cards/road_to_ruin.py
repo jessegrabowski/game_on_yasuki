@@ -2,14 +2,14 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
-    ProductionBoost,
     no_cost,
     register_ability,
-    register_production_boost,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.economy import SELF_GRANT, register_self_grant
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Ask,
     Choose,
     CreateToken,
     Destroy,
@@ -20,10 +20,11 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
 )
 from yasuki_core.engine.rules.equip import creation_targets
-from yasuki_core.engine.rules.events import Destroyed, EnteredPlay
+from yasuki_core.engine.rules.events import Destroyed, EnteredPlay, ProducedGold, ProducingGold
 from yasuki_core.engine.rules.legality import province_key_holding
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.payments import refusal_would_strand
+from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -69,16 +70,56 @@ register_ability(
 # --- Outlying Farms ---
 
 
-def _outlying_farms_production_boost(card: L5RCard) -> list[Effect]:
-    """ "...if you did, destroy it after it bows." The destruction is this card's price for the
-    boost; Jade Mine and Slave Pits pay different ones."""
-    return [Destroy(card.id, card.owner)]
+OUTLYING_FARMS_GRANT = 2
+
+register_self_grant("outlying_farms", OUTLYING_FARMS_GRANT)
 
 
-register_production_boost(
-    "outlying_farms",
-    ProductionBoost(2, _outlying_farms_production_boost, price="then it is destroyed"),
-)
+@on(ProducingGold, "outlying_farms")
+def _outlying_farms_producing_gold(ctx: TriggerContext) -> list[Effect]:
+    """ "Before this Holding bows to produce Gold, you may give it +2GP." Offered in the window, so
+    the grant is inside the yield the bow reads."""
+    if ctx.event.card_id != ctx.card.id or used_this_turn(ctx.game, ctx.card, SELF_GRANT):
+        return []
+    return [
+        Ask(
+            ctx.card.owner,
+            f"Give Outlying Farms +{OUTLYING_FARMS_GRANT} Gold Production? "
+            "It is destroyed after it bows.",
+            "outlying_farms_grant",
+            (ctx.card.id,),
+            source_id=ctx.card.id,
+            declinable=not refusal_would_strand(ctx.game, ctx.card.owner, OUTLYING_FARMS_GRANT),
+        )
+    ]
+
+
+@choice_resolver("outlying_farms_grant")
+def _resolve_outlying_farms_grant(
+    game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    if not chosen:
+        return []
+    card = game.table.cards_by_id[chosen[0]]
+    once_per_turn(game, card, SELF_GRANT)
+    return [
+        GrantModifier(
+            card.id,
+            card.id,
+            Stat.GOLD_PRODUCTION,
+            OUTLYING_FARMS_GRANT,
+            Duration.UNTIL_END_OF_TURN,
+        )
+    ]
+
+
+@on(ProducedGold, "outlying_farms")
+def _outlying_farms_produced_gold(ctx: TriggerContext) -> list[Effect]:
+    """ "...if you did, destroy it after it bows." The price waits for the bow, so the Gold the grant
+    bought reaches the pool before the card leaves play."""
+    if ctx.event.card_id != ctx.card.id or not used_this_turn(ctx.game, ctx.card, SELF_GRANT):
+        return []
+    return [Destroy(ctx.card.id, ctx.card.owner)]
 
 
 # --- Repairing the Ruins ---

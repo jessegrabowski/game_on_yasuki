@@ -2,8 +2,8 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import Pass
-from yasuki_core.engine.rules.agents import PayingAgent
-from yasuki_core.engine.rules.decisions import ChoosePayment
+from yasuki_core.engine.rules.agents import PayingAgent, is_production_window
+from yasuki_core.engine.rules.decisions import ChoosePayment, Confirm
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import AttachTarget, DeckKey, TableState, ZoneKey, ZoneRole
@@ -261,8 +261,9 @@ def province_card(
 def pay(session: EngineSession, seat: PlayerId) -> None:
     """Cover the gold cost ``seat`` owes, however many answers that takes.
 
-    Bows producers the way :class:`PayingAgent` does — smallest first, boosting only when nothing
-    else reaches the cost. A test that cares *which* producers bow answers the decision itself.
+    Bows producers the way :class:`PayingAgent` does — smallest first — and answers the window each
+    one opens as it bows, taking a producer's own grant only when nothing else reaches the cost. A
+    test that cares *which* producers bow, or how a window was answered, answers the decision itself.
 
     Raise ``AssertionError`` unless ``seat`` owes a payment right now, so a test that has drifted
     past the one it meant to answer fails here rather than somewhere downstream.
@@ -273,8 +274,14 @@ def pay(session: EngineSession, seat: PlayerId) -> None:
     )
     assert pending.seat is seat, f"the pending payment is {pending.seat.name}'s, not {seat.name}'s"
     agent = PayingAgent()
-    while isinstance(pending, ChoosePayment) and pending.seat is seat:
-        session.submit(seat, agent.decide(pending, session.project(seat)))
+    while pending is not None and pending.seat is seat:
+        view = session.project(seat)
+        part_of_the_payment = isinstance(pending, ChoosePayment) or (
+            isinstance(pending, Confirm) and is_production_window(pending, view)
+        )
+        if not part_of_the_payment:
+            return
+        session.submit(seat, agent.decide(pending, view))
         pending = session.game.pending
 
 

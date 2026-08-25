@@ -7,9 +7,10 @@ yasuki_core.engine.rules.payments
 
 .. autosummary::
 
-    boost_offers_for
     can_afford
+    payment_in_flight
     payment_request
+    refusal_would_strand
 
 .. automodule:: yasuki_core.engine.rules.payments
     :members:

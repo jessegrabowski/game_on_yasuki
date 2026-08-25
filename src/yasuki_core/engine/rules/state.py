@@ -5,6 +5,7 @@ from numpy.random import Generator, default_rng
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.events import GameEvent
@@ -270,3 +271,23 @@ class GameState:
     def has_used(self, key: str) -> bool:
         """Return whether the one-time use named ``key`` has already been claimed."""
         return key in self.once_per
+
+
+def once_key(card: L5RCard, tag: str, turn: int) -> str:
+    """The usage key for ``card``'s ``tag`` this turn — turn-scoped, so it resets each turn without
+    clearing ``GameState.once_per``."""
+    return f"{card.id}:{tag}:t{turn}"
+
+
+def once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
+    """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then False."""
+    return game.use_once(once_key(card, tag, game.turn))
+
+
+def used_this_turn(game: GameState, card: L5RCard, tag: str) -> bool:
+    """Whether ``card``'s ``tag`` has been claimed this turn, without claiming it.
+
+    What a cost has to ask. A cost is evaluated to decide whether an action is legal as well as to
+    pay for one, so spending the use merely by looking would spend it on every legality check.
+    """
+    return game.has_used(once_key(card, tag, game.turn))

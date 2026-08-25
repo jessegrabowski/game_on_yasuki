@@ -88,14 +88,10 @@ class FieldView(tk.Canvas):
         self._selection: list[str] = []
         # When choosing how to pay, selected producers preview as bowed (tapped for gold).
         self._selection_bows: bool = False
-        # Candidates that offer the seat something extra for picking them, and the subset whose
-        # extra was taken. What the extra is belongs to the decision, not to the board.
-        self._offers_extra: frozenset[str] = frozenset()
-        self._extras_taken: list[str] = []
-        # The candidate picked but not yet answered for. Picking one suspends the toggle until
-        # resolve_extra or cancel_extra, so the board remembers what it is waiting on rather than
-        # making its host hold that for it.
-        self._pending_extra: str | None = None
+        # Picks the player has finished making but the engine has not been told about yet. A payment
+        # is answered one producer at a time so each can open its own window, and the queue is what
+        # lets the player pick the whole payment in one go regardless.
+        self._committed: list[str] = []
         # Set instead of a plain selection when the decision divides a fixed number of creations
         # among the cards picked; it holds how many each carries, drawn as a spinner on the card.
         self._allocation: Allocation | None = None
@@ -111,9 +107,6 @@ class FieldView(tk.Canvas):
         # so they are declared here rather than left to whoever assigns them.
         self.load_deck_from_file: Callable[[str], None] | None = None
         self.load_opponent_deck_from_file: Callable[[str], None] | None = None
-        # Fires when a candidate offering an extra is picked, so the host can put the decision's
-        # question; the host reads pending_extra for which one and answers through resolve_extra.
-        self.on_extra_request: Callable[[str], None] | None = None
 
         self._controller = FieldController(self)
         self._images = ImageProvider(self)
@@ -191,33 +184,34 @@ class FieldView(tk.Canvas):
         return tuple(self._selection)
 
     @property
-    def extras_taken(self) -> frozenset[str]:
-        """The selected candidates whose offered extra the player took."""
-        return frozenset(self._extras_taken)
+    def committed(self) -> tuple[str, ...]:
+        """The picks the player has finished making, in the order they were picked, still waiting to
+        be sent."""
+        return tuple(self._committed)
 
-    @property
-    def pending_extra(self) -> str | None:
-        """The candidate whose extra is being asked about, or None. Set when picking one suspends
-        the toggle, and cleared by :meth:`resolve_extra`, :meth:`cancel_extra`, and either end of
-        selection mode."""
-        return self._pending_extra
+    def commit_selection(self) -> None:
+        """Close the selection: the player has picked everything it means to. The picks move to the
+        queue, which survives the rounds of selection mode that answering them takes."""
+        self._committed = list(self._selection)
+        self._selection = []
 
-    def begin_selection(
-        self,
-        candidates: Iterable[str],
-        *,
-        render_bowed: bool = False,
-        offers_extra: Iterable[str] = (),
-    ) -> None:
+    def take_committed(self) -> str | None:
+        """Pop the next queued pick, or None when the queue is spent."""
+        return self._committed.pop(0) if self._committed else None
+
+    def drop_committed(self) -> None:
+        """Discard whatever is left in the queue, for a payment that ended before it was spent."""
+        self._committed = []
+
+    def begin_selection(self, candidates: Iterable[str], *, render_bowed: bool = False) -> None:
         """Enter selection mode: only ``candidates`` are selectable, none chosen yet. When
-        ``render_bowed`` is set, selected cards preview as bowed (a producer tapped to pay). Picking
-        one of ``offers_extra`` defers to :attr:`on_extra_request` before it enters the selection."""
+        ``render_bowed`` is set, selected cards preview as bowed (a producer tapped to pay).
+
+        The committed queue is left alone: each round of a payment re-enters selection mode, and
+        clearing it here would spend only the first pick the player made."""
         self._selectable = frozenset(candidates)
         self._selection = []
         self._selection_bows = render_bowed
-        self._offers_extra = frozenset(offers_extra)
-        self._extras_taken = []
-        self._pending_extra = None
         self._allocation = None
 
     def begin_allocation(self, candidates: Iterable[str], total: int) -> None:
@@ -240,13 +234,11 @@ class FieldView(tk.Canvas):
             self.on_selection_changed()
 
     def end_selection(self) -> None:
-        """Leave selection mode and clear the selection."""
+        """Leave selection mode and clear the selection. The committed queue is left alone: a
+        payment leaves selection mode between rounds and still has picks to spend."""
         self._selectable = None
         self._selection = []
         self._selection_bows = False
-        self._offers_extra = frozenset()
-        self._extras_taken = []
-        self._pending_extra = None
         self._allocation = None
         self.delete(ALLOCATION_TAG)
 
@@ -255,58 +247,25 @@ class FieldView(tk.Canvas):
         return self._selectable is not None and candidate in self._selectable
 
     def toggle_selection(self, card_id: str) -> None:
-        """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener. Picking
-        a candidate that offers an extra instead defers to :attr:`on_extra_request`; it enters the
-        selection only once that question is answered through :meth:`resolve_extra`."""
+        """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener."""
         if self._selectable is None or card_id not in self._selectable:
             return
         if self._allocation is not None:
             self._allocation.toggle(card_id)
-            if self.on_selection_changed is not None:
-                self.on_selection_changed()
-            return
-        if card_id in self._selection:
+        elif card_id in self._selection:
             self._selection.remove(card_id)
-            self._forget_extra(card_id)
-        elif card_id in self._offers_extra and self.on_extra_request is not None:
-            self._pending_extra = card_id
-            self.on_extra_request(card_id)
-            return
         else:
             self._selection.append(card_id)
         if self.on_selection_changed is not None:
             self.on_selection_changed()
 
-    def resolve_extra(self, card_id: str, take: bool) -> None:
-        """Add a candidate to the selection once the question its extra raised is answered, taking
-        the extra when ``take``."""
-        if self._selectable is None or card_id not in self._selectable:
-            return
-        if card_id not in self._selection:
-            self._selection.append(card_id)
-        if take and card_id not in self._extras_taken:
-            self._extras_taken.append(card_id)
-        self._pending_extra = None
-        if self.on_selection_changed is not None:
-            self.on_selection_changed()
-
-    def cancel_extra(self) -> None:
-        """Drop the open question, leaving its candidate out of the selection. Silent, unlike the
-        rest of the group: its callers re-render once they have finished changing the board, and
-        notifying here would draw a half-changed one."""
-        self._pending_extra = None
-
     def undo_last_selection(self) -> None:
         """Drop the most recently selected id (Ctrl+Z while paying), and notify the listener."""
         if not self._selection:
             return
-        self._forget_extra(self._selection.pop())
+        self._selection.pop()
         if self.on_selection_changed is not None:
             self.on_selection_changed()
-
-    def _forget_extra(self, card_id: str) -> None:
-        if card_id in self._extras_taken:
-            self._extras_taken.remove(card_id)
 
     def configure_hotkeys(self, hotkeys: Hotkeys) -> None:
         self._hotkeys = hotkeys

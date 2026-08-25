@@ -16,6 +16,7 @@ yasuki_core.engine.rules.agents
 
 .. autosummary::
 
+    is_production_window
     make_agent
 
 .. automodule:: yasuki_core.engine.rules.agents

@@ -9,7 +9,8 @@ from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
 from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
-from yasuki_core.engine.rules.triggers import choice_resolver, once_per_turn, used_this_turn
+from yasuki_core.engine.rules.state import once_per_turn, used_this_turn
+from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -196,36 +197,6 @@ def itself(game: GameState, source: L5RCard) -> list[str]:
     return [source.id]
 
 
-def no_effects(card: L5RCard) -> list[Effect]:
-    """A boost that costs its producer nothing."""
-    return []
-
-
-@dataclass(frozen=True, slots=True)
-class ProductionBoost:
-    """A producer's optional extra Gold yield, taken as it bows to pay, and what that costs.
-
-    Three cards carry one and no two agree on the price, which is why the price belongs to the card
-    rather than to the payment path.
-
-    Attributes
-    ----------
-    amount : int
-        The extra Gold the producer adds when its controller takes the boost.
-    effects : callable, optional
-        Maps the producer to the price it pays for boosting — Outlying Farms destroys itself, Slave
-        Pits loses its controller 2 Honor. These resolve once the producer has yielded; a card whose
-        price must wait for the rest of the cascade returns a ``Then``. Default no effects.
-    price : str, optional
-        The same price worded for the seat, which the payment quotes when it offers the boost —
-        "then it is destroyed". Default empty, for a boost that costs nothing.
-    """
-
-    amount: int
-    effects: Callable[[L5RCard], list[Effect]] = no_effects
-    price: str = ""
-
-
 # Cards their controller may leave bowed rather than straightening at the start of their turn (the
 # printed "May remain bowed"), by printed id. A flag rather than a handler: the card states the
 # permission and says nothing about when it is worth taking, which is the controller's business.
@@ -252,7 +223,6 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 
 _ABILITIES: dict[str, Ability] = {}
 _INVEST: dict[str, InvestAbility] = {}
-_PRODUCTION_BOOST: dict[str, ProductionBoost] = {}
 # The Holdings whose own text overrides the rule that a Holding enters play bowed. Registered from
 # the set module the card lives in, like everything else a card does, rather than listed centrally —
 # so the layout guard scans it and the card index checks it.
@@ -283,13 +253,6 @@ def register_invest(printed_id: str, value: InvestAbility) -> None:
     if printed_id in _INVEST:
         raise ValueError(f"{printed_id} already has an invest ability")
     _INVEST[printed_id] = value
-
-
-def register_production_boost(printed_id: str, boost: ProductionBoost) -> None:
-    """Register ``boost`` as ``printed_id``'s optional bow-time yield increase."""
-    if printed_id in _PRODUCTION_BOOST:
-        raise ValueError(f"{printed_id} already has a production boost")
-    _PRODUCTION_BOOST[printed_id] = boost
 
 
 def invest_amounts(game: GameState, card: L5RCard) -> tuple[int, ...] | None:
@@ -330,11 +293,6 @@ def ability_for(card: L5RCard) -> Ability | None:
 def invest_for(card: L5RCard) -> InvestAbility | None:
     """The Invest ability registered for ``card``'s printed id, or None."""
     return _INVEST.get(card.printed_id)
-
-
-def production_boost_for(card: L5RCard) -> ProductionBoost | None:
-    """The boost ``card`` may take as it bows to produce, or None if it has none."""
-    return _PRODUCTION_BOOST.get(card.printed_id)
 
 
 def _seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, L5RCard]]:

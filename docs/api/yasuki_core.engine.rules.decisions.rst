@@ -8,7 +8,6 @@ yasuki_core.engine.rules.decisions
 .. autosummary::
 
     BanishForLegacy
-    BoostOffer
     ChooseAbilityTarget
     ChooseAmount
     ChooseCards
@@ -25,7 +24,6 @@ yasuki_core.engine.rules.decisions
     DecisionResponse
     DiscardToHandSize
     LeaveBowed
-    PaymentResponse
     PlaceLegacy
 
 .. automodule:: yasuki_core.engine.rules.decisions

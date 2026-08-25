@@ -1,42 +1,32 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
-from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.abilities import (
     CardLocation,
     Ability,
-    ProductionBoost,
     _ABILITIES,
     _ENTERS_UNBOWED,
     _INVEST,
-    _PRODUCTION_BOOST,
     register_ability,
     register_enters_unbowed,
     register_invest,
-    register_production_boost,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Recruit
+from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     ChooseCards,
     DecisionResponse,
-    PaymentResponse,
 )
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint
 from tests.yasuki_core.engine.builders import (
-    end_phase,
     holding,
     province_card,
     put_in_play,
-    register,
 )
 
 
@@ -119,16 +109,6 @@ def test_a_second_enters_unbowed_for_one_card_is_refused():
             register_enters_unbowed("guard_probe")
     finally:
         _ENTERS_UNBOWED.discard("guard_probe")
-
-
-def test_a_second_production_boost_for_one_card_is_refused():
-    register_production_boost("guard_probe", 2)
-
-    try:
-        with pytest.raises(ValueError, match="guard_probe already has a production boost"):
-            register_production_boost("guard_probe", 2)
-    finally:
-        _PRODUCTION_BOOST.pop("guard_probe", None)
 
 
 # An ability that acts from a Province rather than from play — the shape every Event needs. It
@@ -216,55 +196,3 @@ def test_an_ability_may_act_from_more_than_one_place(in_play):
     session = EngineSession.start(state, PlayerId.P1)
 
     assert ActivateAbility("event") in session.legal_actions(PlayerId.P1)
-
-
-def test_a_boost_that_declares_no_consequence_leaves_its_producer_alive():
-    """The payment path used to destroy any boosted producer, which is Outlying Farms' text applied
-    to every card that might ever boost. A boost that declares nothing must cost nothing."""
-    register_production_boost("free_boost_probe", ProductionBoost(3))
-
-    try:
-        state = TableState.empty_two_seat()
-        state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
-            register(
-                state,
-                L5RCard.of(
-                    HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
-                ),
-            )
-        ]
-        put_in_play(
-            state,
-            L5RCard.of(
-                HoldingPrint,
-                id="fb",
-                name="Free Boost",
-                side=Side.DYNASTY,
-                owner=PlayerId.P1,
-                printed_id="free_boost_probe",
-                gold_production=2,
-            ),
-        )
-        target = register(
-            state,
-            L5RCard.of(
-                HoldingPrint, id="tgt", name="T", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5
-            ),
-        )
-        target.turn_face_up()
-        province = ProvinceZone(owner=PlayerId.P1)
-        province.add(target)
-        state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
-
-        session = EngineSession.start(state, PlayerId.P1)
-        end_phase(session)
-        end_phase(session)
-        session.act(PlayerId.P1, Recruit("tgt"))
-        session.submit(PlayerId.P1, PaymentResponse(("fb",), ("fb",)))
-
-        probe = session.game.table.cards_by_id["fb"]
-
-        assert probe.bowed
-        assert probe in session.game.table.battlefield.cards
-    finally:
-        _PRODUCTION_BOOST.pop("free_boost_probe", None)

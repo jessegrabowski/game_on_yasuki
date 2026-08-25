@@ -1,22 +1,14 @@
-from collections.abc import Iterable
-
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import abilities
-from yasuki_core.engine.rules.decisions import BoostOffer, ChoosePayment
-from yasuki_core.engine.rules.economy import effective_gold_production
-from yasuki_core.engine.rules.legality import gold_producers
+from yasuki_core.engine.rules.decisions import ChoosePayment
+from yasuki_core.engine.rules.economy import (
+    effective_gold_production,
+    maximum_gold_production,
+    untaken_self_grant,
+)
+from yasuki_core.engine.rules.legality import gold_producers, reachable_gold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ContinuePayment
 from yasuki_core.game_pieces.cards import L5RCard
-
-
-def boost_offers_for(producers: Iterable[L5RCard]) -> tuple[BoostOffer, ...]:
-    """The bow-time boosts ``producers`` offer, for the payment that will quote them."""
-    return tuple(
-        BoostOffer(producer.id, boost.amount, boost.price)
-        for producer in producers
-        if (boost := abilities.production_boost_for(producer)) is not None
-    )
 
 
 def payment_request(
@@ -28,9 +20,10 @@ def payment_request(
 ) -> ChoosePayment:
     """Queue the payment's completion and build the first request for ``amount`` gold from ``seat``.
 
-    Every unbowed producer the seat controls is offered, quoted at what it makes for ``target``,
-    along with the boost each may take as it bows. The pool the seat already holds counts toward the
-    cost before anything bows.
+    Every unbowed producer the seat controls is offered, quoted at what it makes for ``target`` right
+    now. A producer whose own trait can raise that quotes the lower figure and asks in its window as
+    it bows, so the answer the seat gives here is only which card to bow. The pool the seat already
+    holds counts toward the cost before anything bows.
 
     The completion is pushed onto the stack before the request is raised, so it sits above whatever
     the announcing action queued and resolves first — bowing what the answer names, then re-raising
@@ -65,18 +58,58 @@ def payment_request(
         ),
         label=label,
         target_id=target_id,
-        boostable=boost_offers_for(producers),
+        grantable=tuple(
+            (producer.id, extra)
+            for producer in producers
+            if (extra := untaken_self_grant(game, producer))
+        ),
     )
 
 
 def can_afford(game: GameState, seat: PlayerId, amount: int) -> bool:
-    """Whether ``seat`` could cover ``amount``: its pool plus everything its unbowed producers make,
-    boosts included. Answered before a payment is offered, so an ability whose gold cost the seat
+    """Whether ``seat`` could cover ``amount``: its pool plus the most every unbowed producer it
+    controls could make. Answered before a payment is offered, so an ability whose gold cost the seat
     cannot meet is never announced."""
-    total = game.gold[seat]
-    for producer in gold_producers(game, seat):
-        total += effective_gold_production(game, producer)
-        boost = abilities.production_boost_for(producer)
-        if boost is not None:
-            total += boost.amount
-    return total >= amount
+    return (
+        game.gold[seat]
+        + sum(maximum_gold_production(game, producer) for producer in gold_producers(game, seat))
+        >= amount
+    )
+
+
+def refusal_would_strand(game: GameState, seat: PlayerId, extra: int) -> bool:
+    """Whether declining ``extra`` gold leaves the payment ``seat`` is in the middle of unable to
+    reach its cost.
+
+    Affordability counts what a producer can grant itself, so a seat offered a purchase only that
+    grant reaches has committed to taking it by announcing the purchase. Declining is then not a way
+    out and cancelling is, which the question says by refusing no as an answer.
+
+    Parameters
+    ----------
+    game : GameState
+        The live game the pool and the producers are read from.
+    seat : PlayerId
+        The seat being asked.
+    extra : int
+        The gold the seat is being offered and could refuse.
+    """
+    owed = payment_in_flight(game, seat)
+    if owed is None:
+        return False
+    target = game.table.cards_by_id.get(owed.target_id)
+    return reachable_gold(game, seat, target) - extra < owed.amount
+
+
+def payment_in_flight(game: GameState, seat: PlayerId) -> ContinuePayment | None:
+    """The cost ``seat`` is part way through covering, or None when it owes nothing.
+
+    The innermost one, since a cost paid to resolve an ability can itself be interrupted."""
+    return next(
+        (
+            item
+            for item in reversed(game.stack)
+            if isinstance(item, ContinuePayment) and item.seat is seat
+        ),
+        None,
+    )

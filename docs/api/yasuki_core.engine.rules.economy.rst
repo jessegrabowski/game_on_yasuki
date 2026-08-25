@@ -30,10 +30,13 @@ yasuki_core.engine.rules.economy
     invest_discount
     is_clan
     keyword_grant
+    maximum_gold_production
     opposing_states
     player_state
     province_strength_grant
     recruit_discount
+    register_self_grant
+    untaken_self_grant
 
 .. automodule:: yasuki_core.engine.rules.economy
     :members:

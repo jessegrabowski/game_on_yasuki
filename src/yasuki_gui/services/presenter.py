@@ -5,7 +5,6 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     Confirm,
     DecisionResponse,
-    PaymentResponse,
 )
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.runner import SearchView
@@ -44,8 +43,7 @@ class Presenter:
         the human's. Every path that advances the game ends here, since either seat's input can
         leave a decision owed by either seat."""
         runner, field = self.host.runner, self.window.field
-        # A presentation starts with no question of its own open, whatever the last one left.
-        field.cancel_extra()
+        self._spend_committed()
         pending = runner.pending
         search = runner.search_view()
         if search is not None:
@@ -62,11 +60,11 @@ class Presenter:
             # A payment's candidate producers become selectable and preview as bowed when picked. An
             # Invest amount and a yes/no question are answered by prompt buttons, so neither puts
             # the board into selection mode.
-            paying = isinstance(pending, ChoosePayment)
-            offers_extra = [offer.card_id for offer in pending.boostable] if paying else ()
             field.begin_selection(
-                pending.candidates, render_bowed=paying, offers_extra=offers_extra
+                pending.candidates, render_bowed=isinstance(pending, ChoosePayment)
             )
+        else:
+            field.end_selection()
         self.refresh()
         # An owed decision counts as well as held priority: a card can put a question to the
         # opponent while the human keeps priority, and the engine is paused until it is answered.
@@ -96,7 +94,7 @@ class Presenter:
     def _prompt(self, view: GameView) -> tuple[str, list[ButtonSpec]]:
         """What the prompt box should say, and the buttons it should offer, for whatever the engine
         is waiting on."""
-        runner, field = self.host.runner, self.window.field
+        runner = self.host.runner
         pending = runner.pending
         if runner.loser is not None:
             lost = runner.loser is self.host.human_seat
@@ -106,11 +104,15 @@ class Presenter:
             return pending.prompt(), []
         if isinstance(pending, Confirm):
             # A question, not a selection: the subjects are already settled, so the seat answers it
-            # rather than picking them off the board.
-            return pending.prompt(), [
+            # rather than picking them off the board. No is greyed when the question refuses it,
+            # which leaves cancelling as the way out of an option the seat is committed to.
+            buttons: list[ButtonSpec] = [
                 ("Yes", lambda asked=pending: self.submit_answer(asked.candidates), True),
-                ("No", lambda: self.submit_answer(()), True),
+                ("No", lambda: self.submit_answer(()), pending.accepts(DecisionResponse())),
             ]
+            if pending.cancellable:
+                buttons.append(("Cancel", self.cancel, True))
+            return pending.prompt(), buttons
         if isinstance(pending, ChooseInvestAmount):
             # An amount, not a board card — answered by one button per affordable amount.
             amounts: list[ButtonSpec] = [
@@ -118,18 +120,19 @@ class Presenter:
                 for amount in pending.candidates
             ]
             return pending.prompt(), [*amounts, ("Cancel", self.cancel, True)]
-        if isinstance(pending, ChoosePayment) and field.pending_extra is not None:
-            return pending.boost_prompt(field.pending_extra), [
-                ("Boost", lambda: self.answer_extra(True), True),
-                ("Skip", lambda: self.answer_extra(False), True),
-            ]
         if pending is not None:
             answer = self._board_answer()
-            can_confirm = pending.accepts(answer)
-            buttons: list[ButtonSpec] = [(pending.confirm_label, self.confirm, can_confirm)]
+            # A payment is picked whole and answered one producer at a time, so what makes it
+            # finishable is whether the picks cover the cost — not whether this is one legal answer.
+            ready = (
+                pending.covers_cost(answer)
+                if isinstance(pending, ChoosePayment)
+                else pending.accepts(answer)
+            )
+            board_buttons: list[ButtonSpec] = [(pending.confirm_label, self.confirm, ready)]
             if pending.cancellable:
-                buttons.append(("Cancel", self.cancel, True))
-            return pending.prompt(answer), buttons
+                board_buttons.append(("Cancel", self.cancel, True))
+            return pending.prompt(answer), board_buttons
         if view.responding_to is not None:
             # A Response Step: say what is being answered, or the Pass button asks the seat to
             # decline something it was never told the name of.
@@ -149,14 +152,41 @@ class Presenter:
         self.present()
 
     def confirm(self) -> None:
-        """Answer the pending decision with the board's current selection."""
+        """Answer the pending decision with the board's current selection.
+
+        A payment is queued rather than sent: the seat picks every producer it means to bow in one
+        go, and :meth:`_spend_committed` feeds them to the engine one answer at a time.
+        """
+        if isinstance(self.host.runner.pending, ChoosePayment):
+            self.window.field.commit_selection()
+            self.present()
+            return
         self.host.runner.submit(self._board_answer())
         self.window.field.end_selection()
         self.present()
 
+    def _spend_committed(self) -> None:
+        """Bow the producers the seat has queued, one answer each, until the payment stops asking.
+
+        It stops early whenever a producer's own window interrupts, so the seat answers that and the
+        rest of the queue is spent on the way back through. Anything still queued once the payment
+        is over is dropped — only a question can pause a payment, so anything else pending means the
+        payment this queue belonged to has finished.
+        """
+        runner, field = self.host.runner, self.window.field
+        while field.committed and isinstance(runner.pending, ChoosePayment):
+            producer = field.take_committed()
+            # A queued producer can stop being on offer: another's price destroyed it, or the cost
+            # was already covered and this is a different payment's request.
+            if producer in runner.pending.candidates:
+                runner.submit(DecisionResponse((producer,)))
+        if not isinstance(runner.pending, Confirm):
+            field.drop_committed()
+
     def cancel(self) -> None:
         """Back out of a pending payment: drop the announced Recruit and clear the gold selection."""
         self.host.runner.cancel()
+        self.window.field.drop_committed()
         self.window.field.end_selection()
         self.present()
 
@@ -171,25 +201,8 @@ class Presenter:
         self.present()
 
     def _board_answer(self) -> DecisionResponse:
-        """The board's selection as the pending decision's own response type — a payment carries
-        the extras taken as its boosts, everything else answers with the choices alone."""
-        field = self.window.field
-        if isinstance(self.host.runner.pending, ChoosePayment):
-            return PaymentResponse(field.selection, tuple(field.extras_taken))
-        return DecisionResponse(field.selection)
-
-    def request_extra(self, _card_id: str) -> None:
-        """Put the board's open question in the prompt box. The board records which candidate it
-        stopped on, so the id the hook passes is read from there rather than from here."""
-        self.refresh()
-
-    def answer_extra(self, take: bool) -> None:
-        """Take or skip the extra on the candidate the board is waiting on, which then enters the
-        selection."""
-        card_id = self.window.field.pending_extra
-        if card_id is not None:
-            # Adds it to the selection, then refreshes through on_selection_changed.
-            self.window.field.resolve_extra(card_id, take)
+        """The board's selection, as the answer to whatever decision is open."""
+        return DecisionResponse(self.window.field.selection)
 
     def run_opponent(self) -> None:
         """Let the AI take its move, then present whatever the engine wants next."""
@@ -214,14 +227,10 @@ class Presenter:
         self._offer(self.host.runner.board_menu())
 
     def undo(self, _event=None) -> None:
-        """Ctrl+Z: back out of a question the board is holding open, else unbow the last producer
-        tapped for gold while paying, else undo a just-made Dynasty Discard if nothing has happened
-        since."""
+        """Ctrl+Z: unbow the last producer tapped for gold while paying, else undo a just-made
+        Dynasty Discard if nothing has happened since."""
         field = self.window.field
-        if field.pending_extra is not None:
-            field.cancel_extra()
-            self.refresh()
-        elif isinstance(self.host.runner.pending, ChoosePayment):
+        if isinstance(self.host.runner.pending, ChoosePayment):
             field.undo_last_selection()
         elif self.host.runner.undo_last():
             field.state = self.host.session.game.table

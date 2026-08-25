@@ -37,7 +37,6 @@ _CALLS = {
     "register_ability",
     "register_enters_unbowed",
     "register_invest",
-    "register_production_boost",
     "may_remain_bowed",
     "bow_waiver",
 }
@@ -152,10 +151,9 @@ _REGISTRARS = {
     "on",
     "register_ability",
     "register_invest",
-    "register_production_boost",
+    "register_self_grant",
     "Ability",
     "InvestAbility",
-    "ProductionBoost",
 }
 
 

@@ -318,9 +318,9 @@ header names the card the block registers.
 
 Name every function in the block for the card and the job it does — `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
-`keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
-`production_boost`), or the event a trigger answers (`entered_play`, `destroyed`, `straightened`,
-`turn_started`, `counter_gained`, `card_discarded`). A choice resolver is named for the choice
+`keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`), or the
+event a trigger answers (`entered_play`, `destroyed`, `straightened`, `turn_started`,
+`counter_gained`, `card_discarded`, `producing_gold`, `produced_gold`). A choice resolver is named for the choice
 instead, `_resolve_<the string it is registered under>`. Helpers the block calls but never registers
 only need the card's id in front. The point is grep: a card's whole implementation answers a search
 for its id, and every handler of a kind answers a search for its role. A test enforces it, and

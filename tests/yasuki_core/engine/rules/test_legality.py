@@ -142,7 +142,7 @@ def test_gold_reach_holds_a_target_independent_producer_in_its_fixed_part():
 def test_gold_reach_counts_a_bow_time_boost_the_seat_could_opt_into():
     # Outlying Farms yields 2 more if the seat destroys it as it bows. That is optional, so it does
     # not change what the producer makes — but it does change what the seat can reach, which is what
-    # decides whether a Recruit is offered at all.
+    # decides whether a Recruit is offered at all. `maximum_gold_production` is where that lives.
     state = TableState.empty_two_seat()
     put_in_play(state, holding("outlying", printed_id="outlying_farms", gold_production=3))
     game = EngineSession.start(state, PlayerId.P1).game
@@ -179,3 +179,18 @@ def test_reachable_gold_ignores_the_target_when_no_producer_reads_it(card_id):
     card = game.table.cards_by_id[card_id]
 
     assert legality.reachable_gold(game, PlayerId.P1, card) == 5 + 1 + 2
+
+
+def test_a_recruit_reachable_only_by_a_self_grant_is_still_offered():
+    """The sentinel for the whole projection. A card that can raise its own yield makes purchases
+    legal that its printed production cannot reach, and withholding one is silent: the action simply
+    is not in the list, the board gives no reason, and a policy never sees it."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("outlying", printed_id="outlying_farms", gold_production=2))
+    session = EngineSession.start(state, PlayerId.P1)
+    province_card(session.game, "target", seat=PlayerId.P1, gold_cost=4)
+    end_phase(session)
+    end_phase(session)
+
+    # Printed 2 against a cost of 4; only the grant reaches it.
+    assert Recruit("target") in session.legal_actions(PlayerId.P1)
