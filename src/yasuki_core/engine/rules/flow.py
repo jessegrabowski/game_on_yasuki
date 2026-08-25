@@ -659,31 +659,12 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     An answer names at most one — none when the pool already covers the cost — and the payment comes
     back round for whatever is still owed.
 
-    Taking a boost is a stat change like any other: it grants the producer Gold Production for the
-    turn, and the yield is then read off the card the same way an unboosted producer's is. What the
-    boost costs is the card's own business, resolved once it has yielded.
+    Nothing here knows what a producer is worth. A card that can raise its own yield is asked in the
+    window :func:`produce_gold` opens, and what it owes for saying yes is settled on the far side of
+    the bow — both the card's own business, neither the payment's.
     """
     target_ids = (request.target_id,) if request.target_id in game.table.cards_by_id else ()
-    boosted = request.boosts_taken(response)
     for card_id in response.choices:
-        card = game.table.cards_by_id[card_id]
-        boost = abilities.production_boost_for(card) if card_id in boosted else None
-        if boost is not None:
-            triggers.resolve_effects(
-                game,
-                [
-                    GrantModifier(
-                        card_id,
-                        card_id,
-                        Stat.GOLD_PRODUCTION,
-                        boost.amount,
-                        Duration.UNTIL_END_OF_TURN,
-                    )
-                ],
-            )
-            # Queued before the yield is, so LIFO resolves the price on the far side of it: a card
-            # that destroys itself for the boost still makes the Gold it was boosted to.
-            game.stack.append(ApplyEffects(tuple(boost.effects(card))))
         produce_gold(game, card_id, target_ids)
 
 

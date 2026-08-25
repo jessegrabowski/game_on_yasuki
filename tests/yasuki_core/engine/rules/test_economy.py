@@ -3,7 +3,10 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import owned_holdings
+from yasuki_core.engine.rules.effects import Ask, GrantModifier
+from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.state import once_per_turn
+from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
 from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
     GOLD_SELF_GRANT,
@@ -21,7 +24,7 @@ from yasuki_core.engine.rules.economy import (
     recruit_discount,
     register_self_grant,
 )
-from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant
+from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Stat
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint, StrongholdPrint
@@ -612,3 +615,44 @@ def test_a_second_self_grant_for_one_card_is_refused():
             register_self_grant("guard_probe", 3)
     finally:
         GOLD_SELF_GRANT.pop("guard_probe", None)
+
+
+@pytest.mark.parametrize("printed_id", sorted(GOLD_SELF_GRANT))
+def test_every_declared_self_grant_matches_what_its_trigger_grants(printed_id):
+    """The declared delta is a cached derivation, and this is what keeps the cache honest: run the
+    card's own window trigger, answer its question yes, and sum what it actually grants.
+
+    Derived on a board built for the test and thrown away, never on the live game. A trigger may
+    claim a once-per-turn use as it fires, which is why affordability reads the declaration at
+    runtime instead of deriving it — asking would spend the use.
+    """
+    game = two_seat_game()
+    producer = put_in_play(game, holding("probe", owner=PlayerId.P1, printed_id=printed_id))
+
+    granted = 0
+    for effect in _window_effects(game, producer):
+        if isinstance(effect, Ask):
+            effects = CHOICE_RESOLVERS[effect.resolver](
+                game, effect.source_id, effect.subjects, effect.seat
+            )
+        else:
+            effects = [effect]
+        granted += sum(
+            e.amount
+            for e in effects
+            if isinstance(e, GrantModifier)
+            and e.stat is Stat.GOLD_PRODUCTION
+            and e.target_id == producer.id
+        )
+
+    assert granted == GOLD_SELF_GRANT[printed_id]
+
+
+def _window_effects(game, producer):
+    """What ``producer``'s registered ``ProducingGold`` triggers return for its own window."""
+    event = ProducingGold(producer.id, producer.owner)
+    return [
+        effect
+        for trigger in _TRIGGERS.get(ProducingGold, {}).get(producer.printed_id, [])
+        for effect in trigger(TriggerContext(game, producer, event))
+    ]

@@ -27,8 +27,8 @@ P1 = PlayerId.P1
 
 class FakeHost:
     """What the presenter reads off a :class:`~yasuki_gui.services.game_host.GameHost`. Real here
-    would mean dealing a decklist out of Postgres, and the boost path needs a board built card by
-    card rather than whatever a deck happens to hold."""
+    would mean dealing a decklist out of Postgres, and these boards are built card by card rather
+    than from whatever a deck happens to hold."""
 
     def __init__(self, runner: GameRunner):
         self.runner = runner
@@ -39,11 +39,11 @@ class FakeHost:
         return self.runner.session
 
 
-def _boostable_board() -> EngineSession:
-    """A Dynasty phase where the one Holding on offer is affordable only by boosting.
+def _grant_board() -> EngineSession:
+    """A Dynasty phase where the one Holding on offer is affordable only through a producer's grant.
 
-    Outlying Farms produces 2 and boosts to 4, so recruiting the cost-4 target means taking the
-    boost — which is what makes the client ask the question at all.
+    Outlying Farms produces 2 and can raise itself to 4, so recruiting the cost-4 target means
+    taking that grant — which is what puts the window question in front of the client.
     """
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
@@ -89,14 +89,13 @@ def _boostable_board() -> EngineSession:
 
 @pytest.fixture
 def paying():
-    """A presenter over a game paused on a boostable payment, with the board already in selection
-    mode — the state the client is in when the player is about to pick a producer."""
-    session = _boostable_board()
+    """A presenter over a game paused on a payment only a producer's own grant can cover, with the
+    board already in selection mode — the state the client is in when the player is about to pick a
+    producer."""
+    session = _grant_board()
     runner = GameRunner(session, P1)
-    host = FakeHost(runner)
     window = GameWindow(session.game.table, P1)
-    presenter = Presenter(host, window)
-    window.field.on_extra_request = presenter.request_extra
+    presenter = Presenter(FakeHost(runner), window)
     window.field.on_selection_changed = presenter.refresh
     try:
         runner.act(Recruit("target"))
@@ -110,7 +109,7 @@ def paying():
 def board():
     """A presenter over a game with nothing pending, so a test can put the decision it wants in
     front of it. The runner tests build a request and assign it the same way."""
-    session = _boostable_board()
+    session = _grant_board()
     runner = GameRunner(session, P1)
     window = GameWindow(session.game.table, P1)
     presenter = Presenter(FakeHost(runner), window)
@@ -140,48 +139,31 @@ def test_the_payment_prompt_asks_which_producers_to_bow(paying):
     assert window.field.selecting
 
 
-def test_picking_a_boostable_producer_pre_empts_the_payment_prompt(paying):
-    """The board suspends the toggle and asks the presenter; the presenter turns that into the
-    boost question, naming the extra gold the decision offers rather than a number of its own."""
-    _, window = paying
-
-    window.field.toggle_selection("of")
-
-    assert _buttons(window) == ["Boost", "Skip"]
-    # Wording and price both come off the decision, so the client states neither of its own.
-    assert _status(window) == "Boost this Holding as it bows? +2 Gold, then it is destroyed."
-
-
-def test_taking_the_boost_resumes_the_payment_with_the_producer_chosen(paying):
+def test_bowing_a_producer_puts_its_window_question_in_the_prompt_box(paying):
+    """The window arrives as an ordinary yes/no question, so the client renders it through the same
+    branch as any other — the wording is the card's and the client states none of its own."""
     presenter, window = paying
     window.field.toggle_selection("of")
 
-    presenter.answer_extra(True)
+    presenter.confirm()
 
-    assert window.field.selection == ("of",)
-    assert window.field.extras_taken == frozenset({"of"})
-    assert _buttons(window) != ["Boost", "Skip"]
+    assert _buttons(window) == ["Yes", "No"]
+    assert (
+        _status(window) == "Give Outlying Farms +2 Gold Production? It is destroyed after it bows."
+    )
+    assert not window.field.selecting  # a question, not a board selection
 
 
-def test_skipping_the_boost_resumes_the_payment_unboosted(paying):
+def test_answering_the_window_finishes_the_payment_from_the_client(paying):
     presenter, window = paying
     window.field.toggle_selection("of")
+    presenter.confirm()
 
-    presenter.answer_extra(False)
+    presenter.submit_answer(("of",))  # yes
 
-    assert window.field.selection == ("of",)
-    assert window.field.extras_taken == frozenset()
-
-
-def test_answering_a_question_nobody_asked_does_nothing(paying):
-    """``answer_extra`` reads the producer off the board, so a stray call with no question open has
-    none to answer rather than a stale one."""
-    presenter, window = paying
-
-    presenter.answer_extra(True)
-
-    assert window.field.selection == ()
-    assert window.field.extras_taken == frozenset()
+    session = presenter.host.session
+    assert session.game.pending is None
+    assert session.game.table.cards_by_id["target"] in session.game.table.battlefield.cards
 
 
 def test_a_yes_no_question_is_asked_by_its_buttons(board):
@@ -238,7 +220,6 @@ def test_the_window_wires_every_board_hook_to_the_presenter(board):
 
     field = window.field
     assert field.on_selection_changed == presenter.refresh
-    assert field.on_extra_request == presenter.request_extra
     assert field.on_card_activated == presenter.on_card_activated
     assert field.on_board_menu == presenter.on_board_menu
     assert field.load_deck_from_file == presenter.load_human_deck

@@ -17,11 +17,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.decisions import (
-    ChoosePayment,
-    DecisionResponse,
-    PaymentResponse,
-)
+from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.log import (
     GameLog,
     Act,
@@ -178,26 +174,9 @@ def test_proclaimed_recruit_replays_and_round_trips():
     assert restored.replay() == game
 
 
-def test_a_payment_that_takes_no_boost_encodes_as_a_plain_answer():
-    """The codec writes ``boosted`` only when a boost was taken, so an unboosted payment comes back
-    as a plain response rather than an empty PaymentResponse. Nothing downstream may distinguish
-    them: ChoosePayment.boosts_taken reads both as no boosts, and that is what keeps replay honest.
-    """
-    log = GameLog(initial=InitialRecord.from_state(dealt_table()), first_player=PlayerId.P1)
-    log.entries.append(Answer(PlayerId.P1, PaymentResponse(("P1-SH",), ())))
-
-    encoded = game_log_to_dict(log)
-    assert "boosted" not in encoded["entries"][0]
-
-    restored = game_log_from_dict(json.loads(json.dumps(encoded)))
-    answer = restored.entries[0]
-    assert isinstance(answer, Answer)
-    assert answer.response.choices == ("P1-SH",)
-    assert ChoosePayment.boosts_taken(answer.response) == frozenset()
-
-
-def test_boosted_payment_round_trips_through_the_codec():
-    # The payment answer carries which producers were boosted; that must survive JSON encode/decode.
+def test_a_grant_taken_in_a_production_window_round_trips_through_the_codec():
+    """The grant is an answer to its own question, not a field on the payment, so what has to
+    survive the codec is the extra entry on the tape rather than anything the payment carries."""
     state = dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
@@ -234,16 +213,16 @@ def test_boosted_payment_round_trips_through_the_codec():
     act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
     act_and_log(game, log, Recruit("P1-buy"))
-    submit_and_log(game, log, PaymentResponse(("P1-of",), ("P1-of",)))  # bow Outlying Farms boosted
+    submit_and_log(game, log, DecisionResponse(("P1-of",)))  # bow Outlying Farms
+    submit_and_log(game, log, DecisionResponse(("P1-of",)))  # take its grant in the window
 
-    assert outlying not in game.table.battlefield.cards  # destroyed after bowing boosted
+    assert outlying not in game.table.battlefield.cards  # destroyed after bowing granted
     encoded = game_log_to_dict(log)
     restored = game_log_from_dict(json.loads(json.dumps(encoded)))
     assert restored.replay() == game
-    # Only the payment carries boosts, so only its entry writes the field: an answer that takes
-    # none is a plain response and encodes as one.
-    assert [entry for entry in encoded["entries"] if "boosted" in entry] == [
-        {"kind": "answer", "seat": "P1", "choices": ["P1-of"], "boosted": ["P1-of"]}
+    assert encoded["entries"][-2:] == [
+        {"kind": "answer", "seat": "P1", "choices": ["P1-of"]},
+        {"kind": "answer", "seat": "P1", "choices": ["P1-of"]},
     ]
 
 

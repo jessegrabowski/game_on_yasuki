@@ -5,7 +5,6 @@ from yasuki_core.engine.players import PlayerId
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.decisions import (
-    BoostOffer,
     Confirm,
     DecisionRequest,
     ChooseCards,
@@ -13,7 +12,6 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionResponse,
     DiscardToHandSize,
-    PaymentResponse,
 )
 from yasuki_core.engine.rules.triggers import choice_resolver
 
@@ -48,7 +46,7 @@ def test_discard_of_zero_accepts_only_an_empty_answer():
     assert request.accepts(DecisionResponse(("a",))) is False
 
 
-def _payment(amount: int, available: int, produced, boostable=()) -> ChoosePayment:
+def _payment(amount: int, available: int, produced, grantable=()) -> ChoosePayment:
     return ChoosePayment(
         PlayerId.P1,
         tuple(card for card, _ in produced),
@@ -57,7 +55,7 @@ def _payment(amount: int, available: int, produced, boostable=()) -> ChoosePayme
         tuple(produced),
         "Mine",
         target_id="mine",
-        boostable=tuple(boostable),
+        grantable=tuple(grantable),
     )
 
 
@@ -201,41 +199,26 @@ def test_confirm_label_defaults_to_confirm():
     assert _choose(minimum=1, maximum=1).confirm_label == "Confirm"
 
 
-def test_a_payment_reads_no_boosts_off_an_answer_that_names_none():
-    # A plain response is how every non-payment decision answers, and how a payment that takes no
-    # boost answers. Neither carries the field, so the payment has to read them as empty rather than
-    # as missing.
-    request = _payment(amount=2, available=0, produced=[("of", 2)], boostable=[BoostOffer("of", 2)])
+def test_a_cost_only_a_producers_own_grant_reaches_is_still_answerable():
+    """Outlying Farms makes 2 and can raise itself to 4. The seat is asked for the grant in the
+    window, as the Farm bows, so naming it here must not be refused for falling short."""
+    request = _payment(amount=4, available=0, produced=[("of", 2)], grantable=[("of", 2)])
 
-    assert ChoosePayment.boosts_taken(DecisionResponse(("of",))) == frozenset()
-    assert ChoosePayment.boosts_taken(PaymentResponse(("of",), ("of",))) == frozenset({"of"})
     assert request.accepts(DecisionResponse(("of",)))
 
 
-def test_the_boost_question_quotes_the_gold_and_the_price_the_card_names():
-    # The wording belongs to the decision, so a client asks it without knowing which card is being
-    # bowed or what boosting there costs.
-    request = _payment(
-        amount=4,
-        available=0,
-        produced=[("of", 2), ("mine", 2)],
-        boostable=[BoostOffer("of", 2, "then it is destroyed"), BoostOffer("mine", 3)],
-    )
+def test_a_cost_beyond_every_ceiling_is_refused():
+    request = _payment(amount=5, available=0, produced=[("of", 2)], grantable=[("of", 2)])
 
-    assert (
-        request.boost_prompt("of")
-        == "Boost this Holding as it bows? +2 Gold, then it is destroyed."
-    )
-    assert request.boost_prompt("mine") == "Boost this Holding as it bows? +3 Gold."
-    with pytest.raises(KeyError):
-        request.boost_prompt("nothing")
+    assert not request.accepts(DecisionResponse(("of",)))
 
 
-def test_payment_prompt_counts_a_boosted_producer_at_its_higher_yield():
-    # Bowing Outlying Farms plain leaves 2 owed; boosting it covers the whole cost.
-    request = _payment(amount=4, available=0, produced=[("of", 2)], boostable=[BoostOffer("of", 2)])
+def test_the_payment_prompt_quotes_what_a_producer_makes_now_not_what_it_could():
+    """Clicking previews the bow, and the grant is not part of it — the seat has not been asked yet,
+    and quoting the higher figure would promise gold it may decline."""
+    request = _payment(amount=4, available=0, produced=[("of", 2)], grantable=[("of", 2)])
+
     assert request.prompt(DecisionResponse(("of",))) == "Pay 2 gold for Mine"
-    assert request.prompt(PaymentResponse(("of",), ("of",))) == "Pay 0 gold for Mine"
 
 
 def test_discard_prompt_names_the_count():

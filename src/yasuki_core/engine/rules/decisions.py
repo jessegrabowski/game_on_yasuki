@@ -24,26 +24,6 @@ class DecisionResponse:
 
 
 @dataclass(frozen=True, slots=True)
-class PaymentResponse(DecisionResponse):
-    """A seat's answer to a :class:`ChoosePayment`: the producers it bows, and which of those it
-    boosts as they bow.
-
-    The boosts ride with the selection rather than arriving after it because legality reads both at
-    once — a producer making 2 that boosts to 4 covers a cost of 4 only boosted, so
-    :meth:`ChoosePayment.accepts` cannot judge the choices without them.
-
-    Attributes
-    ----------
-    boosted : tuple of str
-        The subset of ``choices`` whose bow-time production boost the seat took — a boostable
-        producer raised to its higher yield as it bows, at whatever price its card names. Default
-        empty.
-    """
-
-    boosted: tuple[str, ...] = ()
-
-
-@dataclass(frozen=True, slots=True)
 class DecisionRequest(ABC):
     """A question the engine pauses to put to one seat.
 
@@ -87,26 +67,6 @@ class DecisionRequest(ABC):
 
 
 @dataclass(frozen=True, slots=True)
-class BoostOffer:
-    """One producer's bow-time boost, as the payment that offers it has snapshotted it.
-
-    Attributes
-    ----------
-    card_id : str
-        The producer that may boost.
-    amount : int
-        The extra Gold it adds when the seat takes the boost.
-    price : str
-        What the boost costs, worded for the seat — "then it is destroyed". Empty when it is free.
-        Default empty.
-    """
-
-    card_id: str
-    amount: int
-    price: str = ""
-
-
-@dataclass(frozen=True, slots=True)
 class ChoosePayment(DecisionRequest):
     """The seat must cover a gold cost, bowing gold producers to make up what its pool lacks. The
     candidates are the seat's unbowed producers; choosing some bows them, and their production plus
@@ -134,10 +94,10 @@ class ChoosePayment(DecisionRequest):
     target_id : str
         The card being paid for. Resolution recomputes each producer's yield against it, because a
         producer's yield can depend on what it pays for.
-    boostable : tuple of BoostOffer
-        Each producer that may raise its yield as it bows, with the extra gold its boost would add
-        and what that costs. The seat opts in per producer through a :class:`PaymentResponse`;
-        taking a boost grants the producer that much Gold Production for the turn.
+    grantable : tuple of (str, int)
+        Each producer that can still raise its own yield this turn, paired with the extra Gold it
+        would add. What it costs and how it asks are the card's business, settled in the window it
+        opens as it bows; only the figure is here, because reachability cannot be judged without it.
     """
 
     amount: int
@@ -145,33 +105,11 @@ class ChoosePayment(DecisionRequest):
     produced: tuple[tuple[str, int], ...]
     label: str
     target_id: str = ""
-    boostable: tuple[BoostOffer, ...] = ()
-
-    @staticmethod
-    def boosts_taken(response: DecisionResponse) -> frozenset[str]:
-        """The producers ``response`` boosts. Empty for a plain :class:`DecisionResponse`, which is
-        how an answer that takes no boost is spelled."""
-        return frozenset(response.boosted) if isinstance(response, PaymentResponse) else frozenset()
-
-    def boost_offers(self) -> dict[str, BoostOffer]:
-        """The boost each candidate offers, keyed by producer."""
-        return {offer.card_id: offer for offer in self.boostable}
-
-    def boost_prompt(self, card_id: str) -> str:
-        """The question to put to the seat when it picks ``card_id``, a producer that may boost.
-        Raise ``KeyError`` if the producer offers no boost."""
-        offer = self.boost_offers()[card_id]
-        price = f", {offer.price}" if offer.price else ""
-        return f"Boost this Holding as it bows? +{offer.amount} Gold{price}."
+    grantable: tuple[tuple[str, int], ...] = ()
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         yields = dict(self.produced)
-        offers = self.boost_offers()
-        boosted = self.boosts_taken(partial)
-        covered = self.available + sum(
-            yields[card_id] + (offers[card_id].amount if card_id in boosted else 0)
-            for card_id in partial.choices
-        )
+        covered = self.available + sum(yields[card_id] for card_id in partial.choices)
         return f"Pay {max(0, self.amount - covered)} gold for {self.label}"
 
     @property
@@ -185,10 +123,6 @@ class ChoosePayment(DecisionRequest):
         distinct = set(chosen)
         if not distinct <= set(self.candidates):
             return False
-        offers = self.boost_offers()
-        boosted = self.boosts_taken(response)
-        if not boosted <= (distinct & offers.keys()):
-            return False
         # Bowing nothing is an answer only when the pool already covers the cost; otherwise it makes
         # no progress, and a payment that accepted it would ask the same question forever.
         if not distinct and self.available < self.amount:
@@ -197,16 +131,10 @@ class ChoosePayment(DecisionRequest):
         # sending it. `flow._continue_payment` asks the live board, and is the authority when they
         # disagree — an answer can change what another producer is worth.
         #
-        # A chosen producer counts its boost only if the answer took it, an unchosen one counts its
-        # boost regardless: the seat has decided for the first and may still decide for the second.
-        yields = dict(self.produced)
-        raised = sum(yields[c] + (offers[c].amount if c in boosted else 0) for c in distinct)
-        still_offered = sum(
-            yields[c] + (offers[c].amount if c in offers else 0)
-            for c in yields
-            if c not in distinct
-        )
-        return self.available + raised + still_offered >= self.amount
+        # Every producer counts at its ceiling, the one being bowed included: it is asked for its own
+        # grant in the window it opens, so naming it does not decide against that grant.
+        ceiling = sum(made for _, made in self.produced) + sum(extra for _, extra in self.grantable)
+        return self.available + ceiling >= self.amount
 
     @property
     def cancellable(self) -> bool:

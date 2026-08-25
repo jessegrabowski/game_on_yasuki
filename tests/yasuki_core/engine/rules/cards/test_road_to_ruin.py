@@ -8,14 +8,11 @@ from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
 from yasuki_core.engine.rules.effects import AttachCard, Destroy
 from yasuki_core.engine.rules.flow import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
-from yasuki_core.engine.rules.agents import AutoAgent
-from yasuki_core.engine.rules.decisions import (
-    BoostOffer,
-    ChoosePayment,
-    DecisionResponse,
-    PaymentResponse,
+from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.economy import (
+    effective_force,
+    effective_gold_cost,
 )
-from yasuki_core.engine.rules.economy import effective_force, effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
@@ -219,43 +216,79 @@ def _in_dynasty_discard(session, card_id):
     return card_id in {c.id for c in discard.cards}
 
 
-def test_outlying_farms_is_flagged_boostable_in_the_payment_offer():
+def test_the_payment_quotes_outlying_farms_at_its_plain_yield_and_its_ceiling():
+    """The payment carries the extra separately from what the Farm makes now, because the seat has
+    not been asked yet — the question comes in the window, as it bows."""
     session = _outlying_game()
     session.act(P1, Recruit("target"))
-    assert session.game.pending.boostable == (BoostOffer("of", 2, "then it is destroyed"),)
+
+    pending = session.game.pending
+    assert dict(pending.produced)["of"] == 2
+    assert pending.grantable == (("of", 2),)
 
 
-def test_boost_makes_the_extra_gold_needed_to_afford_a_recruit():
-    # The whole point: Outlying Farms alone (base 2) covers a cost-4 recruit only boosted (to 4). The
-    # recruit is offered, the unboosted answer is rejected, and boosting pays and destroys it.
+def test_bowing_outlying_farms_opens_its_window_before_the_yield_is_read():
+    session = _outlying_game(with_producer=False)
+    session.act(P1, Recruit("target"))
+
+    session.submit(P1, DecisionResponse(("of",)))
+
+    pending = session.game.pending
+    assert pending.question == (
+        "Give Outlying Farms +2 Gold Production? It is destroyed after it bows."
+    )
+    assert pending.candidates == ("of",)
+    assert not session.game.table.cards_by_id["of"].bowed  # the yield is still unread
+
+
+def test_backing_out_at_the_window_leaves_the_board_as_it_was():
+    """The seat announced a Recruit and only then learned the price was the Farm. Cancelling has to
+    put back everything the announcement moved, not just the question."""
+    session = _outlying_game(target_cost=4, with_producer=False)
+    session.act(P1, Recruit("target"))
+    session.submit(P1, DecisionResponse(("of",)))
+
+    session.cancel(P1)
+
+    of = session.game.table.cards_by_id["of"]
+    assert of in session.game.table.battlefield.cards and not of.bowed
+    assert not _recruited(session, "target")
+    assert session.game.table.cards_by_id["target"].face_up  # still on offer in its province
+    assert session.game.pending is None
+    assert session.game.gold[P1] == 0
+
+
+def test_the_grant_makes_the_extra_gold_needed_to_afford_a_recruit():
+    # The whole point: Outlying Farms alone (base 2) covers a cost-4 recruit only if it grants
+    # itself. The recruit is offered, bowing it opens the window, and yes pays and destroys it.
     session = _outlying_game(target_cost=4, with_producer=False)
     assert Recruit("target") in session.legal_actions(P1)
 
     session.act(P1, Recruit("target"))
-    pending = session.game.pending
-    assert not pending.accepts(DecisionResponse(("of",)))  # base 2 < 4
-    assert pending.accepts(PaymentResponse(("of",), ("of",)))  # boosted 4 >= 4
+    session.submit(P1, DecisionResponse(("of",)))
+    session.submit(P1, DecisionResponse(("of",)))  # yes
 
-    session.submit(P1, PaymentResponse(("of",), ("of",)))
     assert _recruited(session, "target")
-    assert _in_dynasty_discard(session, "of")  # destroyed after bowing boosted
+    assert _in_dynasty_discard(session, "of")  # destroyed after bowing granted
     assert session.game.gold[P1] == 0
 
 
-def test_boosting_banks_the_extra_gold_and_destroys_outlying_farms():
+def test_the_grant_is_banked_and_outlying_farms_destroyed_even_when_unneeded():
     session = _outlying_game(target_cost=2, with_producer=False)
     session.act(P1, Recruit("target"))
-    session.submit(P1, PaymentResponse(("of",), ("of",)))  # boost though 2 already covers
+    session.submit(P1, DecisionResponse(("of",)))
+    session.submit(P1, DecisionResponse(("of",)))  # yes, though 2 already covers
 
     assert _recruited(session, "target")
     assert _in_dynasty_discard(session, "of")
     assert session.game.gold[P1] == 2  # 4 produced, 2 spent, 2 excess banked
 
 
-def test_declining_the_boost_bows_outlying_farms_for_its_plain_yield():
+def test_declining_bows_outlying_farms_for_its_plain_yield():
     session = _outlying_game(target_cost=2, with_producer=False)
     session.act(P1, Recruit("target"))
-    session.submit(P1, DecisionResponse(("of",)))  # no boost
+    session.submit(P1, DecisionResponse(("of",)))
+    session.submit(P1, DecisionResponse(()))  # no
 
     assert _recruited(session, "target")
     of = session.game.table.cards_by_id["of"]
@@ -263,30 +296,24 @@ def test_declining_the_boost_bows_outlying_farms_for_its_plain_yield():
     assert session.game.gold[P1] == 0
 
 
-def test_a_payment_can_only_boost_a_bowed_boostable_producer():
-    session = _outlying_game()
+def test_the_price_is_not_paid_by_a_farm_that_was_never_asked():
+    """The destruction is the price of the grant, not of bowing. A Farm bowed while some other
+    producer covers the cost keeps its window, answers no, and lives."""
+    session = _outlying_game(target_cost=10)
     session.act(P1, Recruit("target"))
-    pending = session.game.pending
-    assert not pending.accepts(PaymentResponse(("sh",), ("of",)))  # boosted a producer not bowed
-    assert not pending.accepts(
-        PaymentResponse(("sh",), ("sh",))
-    )  # boosted a non-boostable producer
+    session.submit(P1, DecisionResponse(("of",)))
+    session.submit(P1, DecisionResponse(()))  # no
+    session.submit(P1, DecisionResponse(("sh",)))
+
+    assert _recruited(session, "target")
+    assert not _in_dynasty_discard(session, "of")
 
 
-def test_the_auto_agent_never_boosts_so_outlying_farms_survives():
-    # Regression: the boost must never be forced. The generic agent leaves boosted empty, so a
-    # base-covering payment never sacrifices Outlying Farms.
-    session = _outlying_game(target_cost=2)
-    session.act(P1, Recruit("target"))
-
-    answer = AutoAgent().decide(session.game.pending, session.project(P1))
-    assert ChoosePayment.boosts_taken(answer) == frozenset()
-
-
-def test_outlying_farms_boost_replays_to_the_same_state():
+def test_the_outlying_farms_grant_replays_to_the_same_state():
     session = _outlying_game(target_cost=4, with_producer=False)
     session.act(P1, Recruit("target"))
-    session.submit(P1, PaymentResponse(("of",), ("of",)))
+    session.submit(P1, DecisionResponse(("of",)))
+    session.submit(P1, DecisionResponse(("of",)))
     assert replay(session.log) == session.game
 
 

@@ -5,11 +5,12 @@ from yasuki_core.engine.rules.decisions import (
     ChooseDistribution,
     ChooseLegacyCard,
     ChoosePayment,
+    Confirm,
     DecisionRequest,
     DecisionResponse,
-    PaymentResponse,
     PlaceLegacy,
 )
+from yasuki_core.engine.rules.economy import GOLD_SELF_GRANT
 from yasuki_core.engine.redaction import CardView, HiddenCard
 from yasuki_core.engine.rules.projection import GameView
 
@@ -39,10 +40,9 @@ class AutoAgent:
     candidates that the request accepts (the whole list for an ordering). Generic by construction —
     it leans on the request's own ``accepts`` rather than knowing the decision type.
 
-    Two answers a prefix of distinct candidates cannot express are handled rather than left to fail.
-    A division names one candidate several times, and is answered here by heaping the whole of it
-    onto the first; a bow-time production boost cannot be expressed at all, and :class:`PayingAgent`
-    covers it."""
+    One answer a prefix of distinct candidates cannot express is handled rather than left to fail: a
+    division names one candidate several times, and is answered here by heaping the whole of it onto
+    the first."""
 
     name = "auto"
 
@@ -64,34 +64,53 @@ class PayingAgent:
     than a search for the cheapest covering set — a cost of 4 met from yields of 1, 2 and 5 bows all
     three.
 
-    A boost is a last resort. Taking one grants the producer extra Gold Production for the turn at
-    whatever price its card names — Outlying Farms destroys itself — so it is used only when the
-    plain production of every producer still falls short. That matters because
+    A producer's own grant is a last resort. Raising a yield costs whatever the card names — Outlying
+    Farms destroys itself — so the offer is taken only when what every producer plainly makes still
+    falls short. That matters because
     :meth:`~yasuki_core.engine.session.EngineSession.legal_actions` offers a recruit whose cost only
-    a boost can reach, which an agent that could not boost would be unable to pay for at all.
+    a grant can reach, which an agent that always declined would be unable to pay for at all.
+
+    Whether to take one is settled while answering the payment, since that is where the shortfall is
+    visible; the window that asks for it opens later, one producer at a time, and carries no figures
+    of its own.
     """
 
     name = "paying"
 
     def __init__(self) -> None:
         self._fallback = AutoAgent()
+        self._needs_a_grant = False
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
         if isinstance(request, ChoosePayment):
             return self._pay(request)
+        if isinstance(request, Confirm) and is_production_window(request, view):
+            return DecisionResponse(request.candidates if self._needs_a_grant else ())
         return self._fallback.decide(request, view)
 
-    @staticmethod
-    def _pay(request: ChoosePayment) -> DecisionResponse:
-        shortfall = request.amount - request.available
-        if shortfall <= 0:
+    def _pay(self, request: ChoosePayment) -> DecisionResponse:
+        plain = sum(made for _, made in request.produced)
+        self._needs_a_grant = request.available + plain < request.amount
+        if request.amount <= request.available:
             return DecisionResponse(())
         producer, _ = min(request.produced, key=lambda pair: pair[1])
-        offers = request.boost_offers()
-        plain = sum(yields for _, yields in request.produced)
-        needs_boost = request.available + plain < request.amount
-        boosted = (producer,) if needs_boost and producer in offers else ()
-        return PaymentResponse((producer,), boosted)
+        return DecisionResponse((producer,))
+
+
+def is_production_window(request: Confirm, view: GameView) -> bool:
+    """Whether a yes/no question is a producer's bow-time window rather than some other card's.
+
+    Recognized by the card asking, not by the resolver: every card that can raise its own Gold
+    Production declares the amount, so the registry is the list of cards whose window this could be.
+    """
+    if request.source_id is None:
+        return False
+    return any(
+        not isinstance(entry.card, HiddenCard)
+        and entry.card.id == request.source_id
+        and entry.card.printed_id in GOLD_SELF_GRANT
+        for entry in view.table.battlefield
+    )
 
 
 class LegacyAgent:
