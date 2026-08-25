@@ -234,9 +234,7 @@ def test_bowing_outlying_farms_opens_its_window_before_the_yield_is_read():
     session.submit(P1, DecisionResponse(("of",)))
 
     pending = session.game.pending
-    assert pending.question == (
-        "Give Outlying Farms +2 Gold Production? It is destroyed after it bows."
-    )
+    assert pending.question == ("Give Outlying Farms +2GP? It is destroyed after it bows.")
     assert pending.candidates == ("of",)
     assert not session.game.table.cards_by_id["of"].bowed  # the yield is still unread
 

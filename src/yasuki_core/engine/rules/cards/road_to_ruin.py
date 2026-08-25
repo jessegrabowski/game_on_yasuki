@@ -9,7 +9,6 @@ from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.economy import SELF_GRANT, register_self_grant
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    Ask,
     Choose,
     CreateToken,
     Destroy,
@@ -23,7 +22,7 @@ from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay, ProducedGold, ProducingGold
 from yasuki_core.engine.rules.legality import province_key_holding
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.payments import refusal_would_strand
+from yasuki_core.engine.rules.payments import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
@@ -79,19 +78,11 @@ register_self_grant("outlying_farms", OUTLYING_FARMS_GRANT)
 def _outlying_farms_producing_gold(ctx: TriggerContext) -> list[Effect]:
     """ "Before this Holding bows to produce Gold, you may give it +2GP." Offered in the window, so
     the grant is inside the yield the bow reads."""
-    if ctx.event.card_id != ctx.card.id or used_this_turn(ctx.game, ctx.card, SELF_GRANT):
-        return []
-    return [
-        Ask(
-            ctx.card.owner,
-            f"Give Outlying Farms +{OUTLYING_FARMS_GRANT} Gold Production? "
-            "It is destroyed after it bows.",
-            "outlying_farms_grant",
-            (ctx.card.id,),
-            source_id=ctx.card.id,
-            declinable=not refusal_would_strand(ctx.game, ctx.card.owner, OUTLYING_FARMS_GRANT),
-        )
-    ]
+    return offer_self_grant(
+        ctx,
+        f"Give Outlying Farms +{OUTLYING_FARMS_GRANT}GP? It is destroyed after it bows.",
+        "outlying_farms_grant",
+    )
 
 
 @choice_resolver("outlying_farms_grant")
