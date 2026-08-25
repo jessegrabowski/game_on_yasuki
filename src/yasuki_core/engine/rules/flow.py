@@ -163,6 +163,8 @@ def advance(game: GameState) -> None:
     game.clear_gold()
     if game.phase is Phase.ACTION:
         _lift_straighten_delays(game)
+    elif game.phase is Phase.BATTLE:
+        battle.end_attack_phase(game)
     following = next_phase(game.phase)
     if following is not None:
         game.phase = following

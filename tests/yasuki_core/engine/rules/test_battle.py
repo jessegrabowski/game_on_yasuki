@@ -124,6 +124,28 @@ def test_a_passed_attack_phase_declares_nothing():
     assert session.game.attack is None
 
 
+def test_battlefields_cease_to_exist_when_the_phase_ends():
+    session = _to_battle(_session())
+    session.act(PlayerId.P1, DeclareAttack())
+    assert session.game.attack is not None
+
+    end_phase(session)
+
+    assert session.game.phase is Phase.DYNASTY
+    assert session.game.attack is None
+
+
+def test_an_attack_does_not_survive_into_the_next_turn():
+    session = _to_battle(_session())
+    session.act(PlayerId.P1, DeclareAttack())
+
+    while session.game.turn == 1 and not session.game.awaiting_decision:
+        end_phase(session)
+
+    assert session.game.turn == 2  # the loop ran out of turn, not out of patience
+    assert session.game.attack is None
+
+
 def test_a_declared_attack_replays_from_the_log():
     session = _to_battle(_session())
     session.act(PlayerId.P1, DeclareAttack())

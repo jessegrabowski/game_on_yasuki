@@ -32,3 +32,9 @@ def declare_attack(game: GameState) -> None:
         defender=defender,
         battlefields=tuple(BattlefieldInfo(province=province) for province in provinces),
     )
+
+
+def end_attack_phase(game: GameState) -> None:
+    """Clear the attack and the battlefields it created, which the CR has cease to exist immediately
+    before the Attack Phase ends."""
+    game.attack = None
