@@ -1,13 +1,26 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities import (
+    _PRODUCTION_BOOST,
+    ProductionBoost,
+    register_production_boost,
+)
 from yasuki_core.engine.rules.agents import AutoAgent, PayingAgent
 from yasuki_core.engine.rules.decisions import BoostOffer, ChoosePayment, DiscardToHandSize
+from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.policies import EconomicPolicy
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 
-from tests.yasuki_core.engine.builders import dealt_table, holding, province_card, put_in_play
+from tests.yasuki_core.engine.builders import (
+    dealt_table,
+    end_phase,
+    holding,
+    pay,
+    province_card,
+    put_in_play,
+)
 
 P1 = PlayerId.P1
 
@@ -22,29 +35,15 @@ def test_a_cost_already_in_the_pool_bows_nothing():
     assert _answer(amount=3, available=3, produced=(("mine", 4),)) == ((), ())
 
 
-def test_it_bows_the_smallest_producers_that_cover_the_cost():
-    """Smallest first, so the largest producer stays straight for a second purchase this turn."""
+def test_it_bows_the_smallest_producer_first():
+    """Smallest first, so the larger producers stay straight for a second purchase this turn. The
+    answer names one; the payment comes back round for the rest."""
     chosen, boosted = _answer(
         amount=3, available=0, produced=(("big", 5), ("small", 1), ("mid", 2))
     )
 
-    assert set(chosen) == {"small", "mid"}
+    assert chosen == ("small",)
     assert boosted == ()
-
-
-def test_it_bows_everything_when_everything_is_needed():
-    chosen, boosted = _answer(amount=8, available=0, produced=(("a", 3), ("b", 5)))
-
-    assert set(chosen) == {"a", "b"}
-    assert boosted == ()
-
-
-def test_it_covers_only_what_the_pool_does_not_already_hold():
-    """Gold left over from an earlier payment stays in the pool, so a later cost is only partly
-    borne by producers. Charging the full amount against them would bow one more than needed."""
-    chosen, _ = _answer(amount=5, available=2, produced=(("a", 3), ("b", 3)))
-
-    assert len(chosen) == 1
 
 
 def test_a_boost_is_left_alone_when_plain_production_covers_the_cost():
@@ -125,10 +124,68 @@ def test_a_boosted_recruit_is_paid_for_and_completes():
     assert table.cards_by_id["of"] not in table.battlefield.cards
 
 
-def test_it_keeps_bowing_when_the_running_total_lands_just_short():
-    """Three one-gold producers against a cost of three. Any off-by-one in the stopping condition
-    under-pays here while covering every cost met in a single larger jump."""
-    chosen, boosted = _answer(amount=3, available=0, produced=(("a", 1), ("b", 1), ("c", 1)))
+def test_it_keeps_answering_until_the_cost_is_met():
+    """Three one-gold producers against a cost of three, driven end to end. Any off-by-one in the
+    loop's stopping condition under-pays here while covering every cost met in a single larger
+    jump. The agent picks one each round; knowing when to stop is the payment's job, not its."""
+    state = dealt_table()
+    for name in ("a", "b", "c"):
+        put_in_play(state, holding(name, owner=P1, gold_production=1))
+    session = EngineSession.start(state, P1)
+    province_card(session.game, "target", seat=P1, gold_cost=3)
+    end_phase(session)
+    end_phase(session)
+    session.act(P1, Recruit("target"))
 
-    assert set(chosen) == {"a", "b", "c"}
-    assert boosted == ()
+    pay(session, P1)
+
+    table = session.game.table
+    assert table.cards_by_id["target"] in table.battlefield.cards
+    assert all(table.cards_by_id[name].bowed for name in ("a", "b", "c"))
+
+
+def test_it_stops_as_soon_as_the_pool_covers_the_cost():
+    """Gold left over from an earlier payment stays in the pool, so a later cost is only partly
+    borne by producers. Bowing a second producer here would be one more than needed."""
+    state = dealt_table()
+    for name in ("a", "b"):
+        put_in_play(state, holding(name, owner=P1, gold_production=3))
+    session = EngineSession.start(state, P1)
+    province_card(session.game, "target", seat=P1, gold_cost=5)
+    end_phase(session)
+    end_phase(session)
+    session.act(P1, Recruit("target"))
+    session.game.gold[P1] = 2  # left over from an earlier payment this phase
+
+    pay(session, P1)
+
+    table = session.game.table
+    assert table.cards_by_id["target"] in table.battlefield.cards
+    assert sum(table.cards_by_id[name].bowed for name in ("a", "b")) == 1
+
+
+def test_it_boosts_the_producer_that_can_when_the_smallest_cannot():
+    """The greedy pick and the boostable card need not be the same one. Bowing smallest-first hands
+    over a producer with nothing to give, and the boost has to still be taken on the next round or
+    the payment strands one Gold short."""
+    register_production_boost("boostable_probe", ProductionBoost(2))
+
+    try:
+        state = dealt_table()
+        put_in_play(state, holding("small", owner=P1, gold_production=1))
+        put_in_play(
+            state, holding("big", owner=P1, printed_id="boostable_probe", gold_production=2)
+        )
+        session = EngineSession.start(state, P1)
+        province_card(session.game, "target", seat=P1, gold_cost=5)
+        end_phase(session)
+        end_phase(session)
+        session.act(P1, Recruit("target"))
+
+        pay(session, P1)
+
+        table = session.game.table
+        assert table.cards_by_id["target"] in table.battlefield.cards
+        assert table.cards_by_id["small"].bowed and table.cards_by_id["big"].bowed
+    finally:
+        _PRODUCTION_BOOST.pop("boostable_probe", None)

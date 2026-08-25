@@ -112,11 +112,14 @@ class ChoosePayment(DecisionRequest):
     candidates are the seat's unbowed producers; choosing some bows them, and their production plus
     the pool must reach the cost. Excess stays in the pool.
 
+    An answer names one producer, and the payment comes back round for whatever is still owed. That
+    is what lets a producer's own trait pause to ask its controller a question as it bows: with two
+    producers in one answer, the second one's question would overwrite the first's.
+
     The request snapshots what it quotes for: the cost, the pool on hand when the cost arose, and
     each producer's yield. :meth:`accepts` asks whether the cost is still *reachable* after the
-    answer rather than whether the answer already covers it: bowing some producers now and the rest
-    when the payment comes back round is legal, but an answer that leaves the cost out of reach is
-    not — it would strand the payment with the board already changed.
+    answer rather than whether the answer already covers it — an answer that leaves the cost out of
+    reach is refused, because it would strand the payment with the board already changed.
 
     Attributes
     ----------
@@ -177,8 +180,10 @@ class ChoosePayment(DecisionRequest):
 
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = response.choices
+        if len(chosen) > 1:
+            return False  # one producer per answer; the payment comes back round for the rest
         distinct = set(chosen)
-        if len(distinct) != len(chosen) or not distinct <= set(self.candidates):
+        if not distinct <= set(self.candidates):
             return False
         offers = self.boost_offers()
         boosted = self.boosts_taken(response)
@@ -188,6 +193,10 @@ class ChoosePayment(DecisionRequest):
         # no progress, and a payment that accepted it would ask the same question forever.
         if not distinct and self.available < self.amount:
             return False
+        # Reachability against this request's own snapshot, so a client can refuse the answer before
+        # sending it. `flow._continue_payment` asks the live board, and is the authority when they
+        # disagree — an answer can change what another producer is worth.
+        #
         # A chosen producer counts its boost only if the answer took it, an unchosen one counts its
         # boost regardless: the seat has decided for the first and may still decide for the second.
         yields = dict(self.produced)

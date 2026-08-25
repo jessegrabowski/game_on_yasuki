@@ -59,9 +59,10 @@ class AutoAgent:
 class PayingAgent:
     """Covers a gold cost by bowing producers, and answers everything else like :class:`AutoAgent`.
 
-    Bows the smallest producers first, so the largest stay straight for a second purchase in the
-    same turn. This is a greedy rule rather than a search for the cheapest covering set — a cost of
-    4 met from yields of 1, 2 and 5 bows all three here.
+    Bows the smallest producer first, so the largest stay straight for a second purchase in the same
+    turn, and answers again each time the payment comes back round. This is a greedy rule rather
+    than a search for the cheapest covering set — a cost of 4 met from yields of 1, 2 and 5 bows all
+    three.
 
     A boost is a last resort. Taking one grants the producer extra Gold Production for the turn at
     whatever price its card names — Outlying Farms destroys itself — so it is used only when the
@@ -85,22 +86,12 @@ class PayingAgent:
         shortfall = request.amount - request.available
         if shortfall <= 0:
             return DecisionResponse(())
-        bowed: list[str] = []
-        raised = 0
-        for producer, yields in sorted(request.produced, key=lambda pair: pair[1]):
-            if raised >= shortfall:
-                break
-            bowed.append(producer)
-            raised += yields
+        producer, _ = min(request.produced, key=lambda pair: pair[1])
         offers = request.boost_offers()
-        boosted: list[str] = []
-        for producer in bowed:
-            if raised >= shortfall:
-                break
-            if producer in offers:
-                boosted.append(producer)
-                raised += offers[producer].amount
-        return PaymentResponse(tuple(bowed), tuple(boosted))
+        plain = sum(yields for _, yields in request.produced)
+        needs_boost = request.available + plain < request.amount
+        boosted = (producer,) if needs_boost and producer in offers else ()
+        return PaymentResponse((producer,), boosted)
 
 
 class LegacyAgent:

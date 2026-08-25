@@ -847,7 +847,8 @@ def test_production_raises_its_events_once_per_producer():
             cost=5,
         )
         session.act(PlayerId.P1, Recruit("tgt"))
-        session.submit(PlayerId.P1, DecisionResponse(("c1", "c2")))
+        session.submit(PlayerId.P1, DecisionResponse(("c1",)))
+        session.submit(PlayerId.P1, DecisionResponse(("c2",)))
 
         assert opened == ["c1", "c2"]
         assert landed == [("c1", 2), ("c2", 3)]
@@ -856,18 +857,12 @@ def test_production_raises_its_events_once_per_producer():
         triggers._TRIGGERS.get(ProducedGold, {}).pop("counting_probe", None)
 
 
-def test_a_covering_answer_still_pays_in_one_step():
-    """The transition property: an answer naming every producer the cost needs resolves without the
-    payment coming back round, which is why the loop lands without touching the suite."""
-    session = _dynasty_phase(
-        [
-            holding("a", owner=PlayerId.P1, gold_production=2),
-            holding("b", owner=PlayerId.P1, gold_production=3),
-        ],
-        cost=5,
-    )
+def test_a_single_producer_that_covers_the_cost_pays_in_one_step():
+    """One answer is still enough when one producer covers the whole cost — the payment only comes
+    back round while something is still owed."""
+    session = _dynasty_phase([holding("a", owner=PlayerId.P1, gold_production=5)], cost=5)
     session.act(PlayerId.P1, Recruit("tgt"))
-    session.submit(PlayerId.P1, DecisionResponse(("a", "b")))
+    session.submit(PlayerId.P1, DecisionResponse(("a",)))
 
     assert session.game.pending is None
     assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
