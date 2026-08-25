@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.state import (
 )
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
+    CompleteProduction,
     ContinuePayment,
     ApplyAbilityEffects,
     FinishRecruit,
@@ -69,7 +70,6 @@ from yasuki_core.engine.rules.legality import (
     INHERITANCE_PRODUCTION,
     KHARMIC_COST,
     cycle_candidates,
-    gold_producers,
     cycle_key,
     legacy_candidates,
     legacy_key,
@@ -275,11 +275,17 @@ def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()
     raise it, and announced through ``ProducedGold`` afterwards, because a price payable once the
     card has bowed cannot resolve while the yield is still unread.
 
-    A window trait that pauses for a decision is not supported: this runs inside a payment's
-    producer loop, which cannot suspend part-way through.
+    The read is deferred onto the stack rather than run inline so that a window trait may pause for
+    a decision: the yield is then taken on the far side of whatever the seat answers.
     """
     card = game.table.cards_by_id[card_id]
+    game.stack.append(CompleteProduction(card_id, target_ids))
     triggers.fire(game, ProducingGold(card_id, card.owner))
+
+
+def _complete_production(game: GameState, card_id: str, target_ids: tuple[str, ...]) -> None:
+    """Bow the producer for whatever it is worth now, and announce what it made."""
+    card = game.table.cards_by_id[card_id]
     targets = tuple(game.table.cards_by_id[tid] for tid in target_ids)
     amount = effective_gold_production(game, card, targets=targets)
     card.bow()
@@ -632,6 +638,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             triggers.resolve_effects(game, effects)
         case FinishRecruit(card_id=card_id, invest_amount=invest_amount, proclaim=proclaim):
             _finish_recruit(game, card_id, invest_amount, proclaim=proclaim)
+        case CompleteProduction(card_id=card_id, target_ids=target_ids):
+            _complete_production(game, card_id, target_ids)
         case ContinuePayment(seat=seat, amount=amount, label=label, target_id=target_id):
             _continue_payment(game, seat, amount, label, target_id)
         case ResumeCascade():
@@ -646,16 +654,14 @@ def _resolve(game: GameState, item: WorkItem) -> None:
 
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
-    """Bow the chosen producers, adding what they make to the seat's pool.
+    """Bow the producer the answer names, adding what it makes to the seat's pool.
+
+    An answer names at most one — none when the pool already covers the cost — and the payment comes
+    back round for whatever is still owed.
 
     Taking a boost is a stat change like any other: it grants the producer Gold Production for the
     turn, and the yield is then read off the card the same way an unboosted producer's is. What the
     boost costs is the card's own business, resolved once it has yielded.
-
-    An answer may name several producers, and each one's window opens as it bows. A window trait
-    that pauses for a decision is therefore only safe while an answer names one producer: the second
-    producer's window would overwrite the first one's pending question. Nothing registers on the
-    window yet, so nothing can reach that today.
     """
     target_ids = (request.target_id,) if request.target_id in game.table.cards_by_id else ()
     boosted = request.boosts_taken(response)
@@ -675,9 +681,10 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
                     )
                 ],
             )
+            # Queued before the yield is, so LIFO resolves the price on the far side of it: a card
+            # that destroys itself for the boost still makes the Gold it was boosted to.
+            game.stack.append(ApplyEffects(tuple(boost.effects(card))))
         produce_gold(game, card_id, target_ids)
-        if boost is not None:
-            triggers.resolve_effects(game, boost.effects(card))
 
 
 def _continue_payment(
@@ -685,20 +692,23 @@ def _continue_payment(
 ) -> None:
     """Spend once ``seat``'s pool covers ``amount``, or ask it to bow more producers.
 
-    Raise ``RuntimeError`` if the pool falls short with nothing left to bow. Affordability decided
-    the action could be paid for before it was announced, so running dry means that projection was
-    wrong — an engine fault rather than a legal move, and one that would otherwise hand the seat
-    whatever it was paying for at no charge.
+    Raise ``RuntimeError`` if what is left unbowed can no longer reach the cost. Affordability
+    decided the action was payable before it was announced, so arriving here means that projection
+    was wrong — the alternative is a seat stranded on a question with no legal answer, or handed
+    what it was paying for at no charge.
     """
     if game.gold[seat] >= amount:
         game.spend_gold(seat, amount)
         return
-    if not gold_producers(game, seat):
+    # The authoritative reachability check. `ChoosePayment.accepts` asks the same question of its
+    # own snapshot, which is what greys out an answer before it is sent; this one asks the live
+    # board, and the two can differ when an answer changes what another producer is worth.
+    target = game.table.cards_by_id.get(target_id)
+    if reachable_gold(game, seat, target) < amount:
         raise RuntimeError(
             f"{seat.name} cannot cover {amount} for {label}: the pool holds {game.gold[seat]} "
-            f"and no producer is left to bow"
+            f"and everything still unbowed cannot make up the difference"
         )
-    target = game.table.cards_by_id.get(target_id)
     game.pending = payment_request(game, seat, amount, label, target=target)
 
 

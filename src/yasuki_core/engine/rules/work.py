@@ -181,11 +181,33 @@ class ContinuePayment:
     target_id: str = ""
 
 
+@dataclass(frozen=True, slots=True)
+class CompleteProduction:
+    """Read a producer's yield and bow it, once the window it opened has closed.
+
+    Deferred rather than run inline because a trait firing in that window may pause for a decision,
+    and the yield has to be read after whatever the seat answers. Only safe because a payment answer
+    names one producer: two would open two windows before either was answered.
+
+    Attributes
+    ----------
+    card_id : str
+        The producer to bow.
+    target_ids : tuple of str
+        The cards being paid for, since a producer's yield can depend on what it pays for. Empty for
+        a cost that prices no card.
+    """
+
+    card_id: str
+    target_ids: tuple[str, ...] = ()
+
+
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
 WorkItem = (
-    ContinuePayment
+    CompleteProduction
+    | ContinuePayment
     | ResolveRecruit
     | ResolveEquip
     | ResumeCascade

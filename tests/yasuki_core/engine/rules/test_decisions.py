@@ -64,7 +64,14 @@ def _payment(amount: int, available: int, produced, boostable=()) -> ChoosePayme
 def test_payment_accepts_an_answer_that_covers_the_cost_outright():
     request = _payment(amount=5, available=1, produced=[("sh", 8), ("mine", 2)])
     assert request.accepts(DecisionResponse(("sh",))) is True  # 1 + 8 >= 5
-    assert request.accepts(DecisionResponse(("sh", "mine"))) is True  # 1 + 8 + 2 >= 5
+
+
+def test_payment_takes_one_producer_at_a_time():
+    """Two in one answer would open two production windows before either could be answered, so the
+    second producer's question would overwrite the first's."""
+    request = _payment(amount=5, available=1, produced=[("sh", 8), ("mine", 2)])
+
+    assert request.accepts(DecisionResponse(("sh", "mine"))) is False
 
 
 def test_payment_accepts_a_part_of_the_cost_while_a_producer_is_left():

@@ -645,10 +645,12 @@ def _dynasty_phase(producers: list[L5RCard], *, cost: int) -> EngineSession:
     return session
 
 
-def test_a_payment_that_cannot_cover_its_cost_raises():
-    """`accepts` judges the answer against a snapshot while resolution recomputes each yield live,
-    so a producer destroyed as a boost's price can leave a later producer worth less than it was
-    quoted. Spending has to notice: the alternative is a card entering play for nothing."""
+def test_a_payment_stranded_by_its_own_answer_raises():
+    """Affordability sums yields that cannot all be realised: destroying one producer as a boost's
+    price drops what another is worth. Answering one producer at a time re-quotes the rest, so the
+    shortfall surfaces here rather than silently underpaying — and it has to be loud, because the
+    alternative is a seat holding a question with no legal answer and no way to know why.
+    """
     try:
         register_production_boost(
             "self_destroying_probe", ProductionBoost(2, lambda card: [Destroy(card.id, card.owner)])
@@ -658,8 +660,8 @@ def test_a_payment_that_cannot_cover_its_cost_raises():
         def _paired(card, me, opponents, targets):
             return card.gold_production + (1 if me.controls("Probe", other_than=card) else 0)
 
-        # Quoted 4 (sd boosted) + 3 (pp paired with sd) = 7. Live, sd destroys itself as its boost's
-        # price, so pp yields 2 and the pool reaches 6.
+        # Quoted 4 (sd boosted) + 3 (pp, paired with sd) = 7. Once sd has destroyed itself, pp is
+        # worth 2 and the pool can only reach 6.
         session = _dynasty_phase(
             [
                 holding(
@@ -680,10 +682,9 @@ def test_a_payment_that_cannot_cover_its_cost_raises():
             cost=7,
         )
         session.act(PlayerId.P1, Recruit("tgt"))
-        assert session.game.pending.accepts(PaymentResponse(("sd", "pp"), ("sd",)))
 
-        with pytest.raises(RuntimeError, match="cover"):
-            session.submit(PlayerId.P1, PaymentResponse(("sd", "pp"), ("sd",)))
+        with pytest.raises(RuntimeError, match="cannot make up the difference"):
+            session.submit(PlayerId.P1, PaymentResponse(("sd",), ("sd",)))
     finally:
         _PRODUCTION_BOOST.pop("self_destroying_probe", None)
         GOLD_HANDLERS.pop("paired_probe", None)
@@ -846,7 +847,8 @@ def test_production_raises_its_events_once_per_producer():
             cost=5,
         )
         session.act(PlayerId.P1, Recruit("tgt"))
-        session.submit(PlayerId.P1, DecisionResponse(("c1", "c2")))
+        session.submit(PlayerId.P1, DecisionResponse(("c1",)))
+        session.submit(PlayerId.P1, DecisionResponse(("c2",)))
 
         assert opened == ["c1", "c2"]
         assert landed == [("c1", 2), ("c2", 3)]
@@ -855,18 +857,12 @@ def test_production_raises_its_events_once_per_producer():
         triggers._TRIGGERS.get(ProducedGold, {}).pop("counting_probe", None)
 
 
-def test_a_covering_answer_still_pays_in_one_step():
-    """The transition property: an answer naming every producer the cost needs resolves without the
-    payment coming back round, which is why the loop lands without touching the suite."""
-    session = _dynasty_phase(
-        [
-            holding("a", owner=PlayerId.P1, gold_production=2),
-            holding("b", owner=PlayerId.P1, gold_production=3),
-        ],
-        cost=5,
-    )
+def test_a_single_producer_that_covers_the_cost_pays_in_one_step():
+    """One answer is still enough when one producer covers the whole cost — the payment only comes
+    back round while something is still owed."""
+    session = _dynasty_phase([holding("a", owner=PlayerId.P1, gold_production=5)], cost=5)
     session.act(PlayerId.P1, Recruit("tgt"))
-    session.submit(PlayerId.P1, DecisionResponse(("a", "b")))
+    session.submit(PlayerId.P1, DecisionResponse(("a",)))
 
     assert session.game.pending is None
     assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
@@ -899,7 +895,7 @@ def test_a_payment_that_runs_out_of_producers_raises():
     game = two_seat_game()
     game.stack.append(ContinuePayment(PlayerId.P1, amount=3, label="probe"))
 
-    with pytest.raises(RuntimeError, match="no producer is left to bow"):
+    with pytest.raises(RuntimeError, match="cannot make up the difference"):
         flow.run_stack(game)
 
 
@@ -953,3 +949,45 @@ def test_a_trigger_fired_by_the_first_producer_changes_the_second_yield():
         assert session.game.gold[PlayerId.P1] == 3  # 2 + 4 produced, 3 spent
     finally:
         triggers._TRIGGERS.get(ProducingGold, {}).pop("raising_probe", None)
+
+
+@choice_resolver("test_window_grant")
+def _window_grant(game, source_id, chosen, seat):
+    if not chosen:
+        return []
+    return [
+        GrantModifier(chosen[0], chosen[0], Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN)
+    ]
+
+
+def test_a_production_window_trigger_may_pause_for_a_decision():
+    """The capability the narrowing exists for. A producer's trait asks its controller a question as
+    it bows, and the yield is read on the far side of the answer — so what the seat says still
+    counts toward the production it interrupted."""
+    try:
+
+        @triggers.on(ProducingGold, "asking_window_probe")
+        def _ask(ctx):
+            if ctx.event.card_id != ctx.card.id:
+                return []
+            return [Ask(ctx.card.owner, "Raise this?", "test_window_grant", (ctx.card.id,))]
+
+        session = _dynasty_phase(
+            [holding("aw", owner=PlayerId.P1, printed_id="asking_window_probe", gold_production=2)],
+            cost=2,
+        )
+        session.act(PlayerId.P1, Recruit("tgt"))
+        session.submit(PlayerId.P1, DecisionResponse(("aw",)))
+
+        asked = session.game.pending
+        assert isinstance(asked, Confirm)
+        assert asked.question == "Raise this?"
+        assert not session.game.table.cards_by_id["aw"].bowed  # the yield is not read yet
+
+        session.submit(PlayerId.P1, DecisionResponse(("aw",)))  # yes
+
+        table = session.game.table
+        assert table.cards_by_id["tgt"] in table.battlefield.cards
+        assert session.game.gold[PlayerId.P1] == 2  # produced 4 after the grant, spent 2
+    finally:
+        triggers._TRIGGERS.get(ProducingGold, {}).pop("asking_window_probe", None)
