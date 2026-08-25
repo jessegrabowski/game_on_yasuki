@@ -36,6 +36,7 @@ yasuki_core.engine.rules.economy
     province_strength_grant
     recruit_discount
     register_self_grant
+    self_grant
     untaken_self_grant
 
 .. automodule:: yasuki_core.engine.rules.economy
