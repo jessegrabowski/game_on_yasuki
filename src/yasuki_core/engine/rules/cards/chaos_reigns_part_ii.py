@@ -22,12 +22,12 @@ from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStar
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import once_per_turn
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
     at_cap,
     choice_resolver,
     on,
-    once_per_turn,
 )
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces import keywords

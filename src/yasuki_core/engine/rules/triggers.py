@@ -106,26 +106,6 @@ def caused_by(ctx: TriggerContext, seat: PlayerId) -> bool:
     return ctx.event.cause is seat
 
 
-def once_key(card: L5RCard, tag: str, turn: int) -> str:
-    """The usage key for ``card``'s ``tag`` this turn — turn-scoped, so it resets each turn without
-    clearing ``GameState.once_per``."""
-    return f"{card.id}:{tag}:t{turn}"
-
-
-def once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
-    """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then False."""
-    return game.use_once(once_key(card, tag, game.turn))
-
-
-def used_this_turn(game: GameState, card: L5RCard, tag: str) -> bool:
-    """Whether ``card``'s ``tag`` has been claimed this turn, without claiming it.
-
-    What a cost has to ask. A cost is evaluated to decide whether an action is legal as well as to
-    pay for one, so spending the use merely by looking would spend it on every legality check.
-    """
-    return game.has_used(once_key(card, tag, game.turn))
-
-
 def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
     """Commit one effect and return the events it raises, for the fixpoint walk to drain. This is
     the single mutation boundary; triggers themselves never mutate."""
