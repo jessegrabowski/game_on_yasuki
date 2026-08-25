@@ -949,6 +949,9 @@ class Ask(InterruptingEffect):
         The card ids passed to the resolver on yes; it receives none on no.
     source_id : str, optional
         A card id handed to the resolver as its context. Default None.
+    declinable : bool, optional
+        Whether no is an answer, for an option the seat has already committed to by acting. Default
+        True.
     """
 
     seat: PlayerId
@@ -956,6 +959,7 @@ class Ask(InterruptingEffect):
     resolver: str
     subjects: tuple[str, ...] = ()
     source_id: str | None = None
+    declinable: bool = True
 
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
@@ -967,6 +971,7 @@ class Ask(InterruptingEffect):
             question=self.question,
             resolver=self.resolver,
             source_id=self.source_id,
+            declinable=self.declinable,
         )
 
 

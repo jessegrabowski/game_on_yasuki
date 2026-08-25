@@ -147,11 +147,23 @@ def test_bowing_a_producer_puts_its_window_question_in_the_prompt_box(paying):
 
     presenter.confirm()
 
-    assert _buttons(window) == ["Yes", "No"]
+    assert _buttons(window) == ["Yes", "No", "Cancel"]
     assert (
         _status(window) == "Give Outlying Farms +2 Gold Production? It is destroyed after it bows."
     )
     assert not window.field.selecting  # a question, not a board selection
+
+
+def test_a_grant_the_payment_cannot_do_without_greys_out_its_no(paying):
+    """The Farm is the only way to cover the cost, so declining would strand a payment the seat has
+    already committed to. Backing the whole action out is the way out, and it is on offer."""
+    presenter, window = paying
+    window.field.toggle_selection("of")
+
+    presenter.confirm()
+
+    enabled = [str(button.cget("state")) == "normal" for button in window.prompt_box._buttons]
+    assert dict(zip(_buttons(window), enabled)) == {"Yes": True, "No": False, "Cancel": True}
 
 
 def test_answering_the_window_finishes_the_payment_from_the_client(paying):
@@ -177,7 +189,7 @@ def test_a_yes_no_question_is_asked_by_its_buttons(board):
     presenter.refresh()
 
     assert _status(window) == "Destroy the Farm?"
-    assert _buttons(window) == ["Yes", "No"]
+    assert _buttons(window) == ["Yes", "No", "Cancel"]
 
 
 def test_an_invest_decision_offers_a_button_per_affordable_amount(board):

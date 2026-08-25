@@ -438,17 +438,24 @@ class Confirm(DecisionRequest):
         The registered choice resolver that turns the answer into effects.
     source_id : str, optional
         A card id handed to the resolver as its context, as for :class:`ChooseCards`. Default None.
+    declinable : bool, optional
+        Whether no is an answer. False when refusing would strand something the seat is already
+        committed to, which leaves cancelling as its only way out rather than declining. Default
+        True.
     """
 
     question: str
     resolver: str
     source_id: str | None = None
+    declinable: bool = True
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question
 
     def accepts(self, response: DecisionResponse) -> bool:
-        return response.choices in ((), self.candidates)
+        if not response.choices:
+            return self.declinable
+        return response.choices == self.candidates
 
     @property
     def cancellable(self) -> bool:

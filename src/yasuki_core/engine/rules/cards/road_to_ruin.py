@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay, ProducedGold, ProducingGold
 from yasuki_core.engine.rules.legality import province_key_holding
 from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.payments import refusal_would_strand
 from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
@@ -88,6 +89,7 @@ def _outlying_farms_producing_gold(ctx: TriggerContext) -> list[Effect]:
             "outlying_farms_grant",
             (ctx.card.id,),
             source_id=ctx.card.id,
+            declinable=not refusal_would_strand(ctx.game, ctx.card.owner, OUTLYING_FARMS_GRANT),
         )
     ]
 

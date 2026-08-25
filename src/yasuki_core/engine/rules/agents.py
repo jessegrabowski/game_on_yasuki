@@ -72,7 +72,8 @@ class PayingAgent:
 
     Whether to take one is settled while answering the payment, since that is where the shortfall is
     visible; the window that asks for it opens later, one producer at a time, and carries no figures
-    of its own.
+    of its own. A window that refuses no overrides that judgment — the seat committed to the grant by
+    announcing the purchase, so there is nothing left to weigh.
     """
 
     name = "paying"
@@ -85,7 +86,10 @@ class PayingAgent:
         if isinstance(request, ChoosePayment):
             return self._pay(request)
         if isinstance(request, Confirm) and is_production_window(request, view):
-            return DecisionResponse(request.candidates if self._needs_a_grant else ())
+            declined = DecisionResponse()
+            if self._needs_a_grant or not request.accepts(declined):
+                return DecisionResponse(request.candidates)
+            return declined
         return self._fallback.decide(request, view)
 
     def _pay(self, request: ChoosePayment) -> DecisionResponse:

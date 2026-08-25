@@ -101,11 +101,15 @@ class Presenter:
             return pending.prompt(), []
         if isinstance(pending, Confirm):
             # A question, not a selection: the subjects are already settled, so the seat answers it
-            # rather than picking them off the board.
-            return pending.prompt(), [
+            # rather than picking them off the board. No is greyed when the question refuses it,
+            # which leaves cancelling as the way out of an option the seat is committed to.
+            buttons: list[ButtonSpec] = [
                 ("Yes", lambda asked=pending: self.submit_answer(asked.candidates), True),
-                ("No", lambda: self.submit_answer(()), True),
+                ("No", lambda: self.submit_answer(()), pending.accepts(DecisionResponse())),
             ]
+            if pending.cancellable:
+                buttons.append(("Cancel", self.cancel, True))
+            return pending.prompt(), buttons
         if isinstance(pending, ChooseInvestAmount):
             # An amount, not a board card — answered by one button per affordable amount.
             amounts: list[ButtonSpec] = [

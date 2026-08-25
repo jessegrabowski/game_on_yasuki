@@ -1,5 +1,3 @@
-import pytest
-
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.agents import AutoAgent, PayingAgent, is_production_window
 from yasuki_core.engine.rules.decisions import ChoosePayment, Confirm, DiscardToHandSize
@@ -87,15 +85,18 @@ def _grant_only_game() -> EngineSession:
     return session
 
 
-def test_the_placeholder_agent_declines_a_grant_it_needs_and_strands_the_payment():
-    """Pins why this agent exists. The engine offers the recruit because the grant reaches it; the
-    placeholder answers the window with the shortest answer that fits, which is no, and the payment
-    it has already committed to can no longer be covered."""
+def test_a_grant_the_payment_needs_cannot_be_declined():
+    """The engine offers the recruit because the grant reaches it, so announcing it commits the seat
+    to taking it. The window refuses no, which is what stops even the placeholder agent — whose rule
+    is the shortest answer that fits — from stranding a payment it already committed to."""
     session = _grant_only_game()
     controls = {seat: Controls(EconomicPolicy(), AutoAgent()) for seat in PlayerId}
 
-    with pytest.raises(RuntimeError, match="cannot make up the difference"):
-        play_game(session, controls, turn_limit=1)
+    play_game(session, controls, turn_limit=1)
+
+    table = session.game.table
+    assert table.cards_by_id["target"] in table.battlefield.cards
+    assert table.cards_by_id["of"] not in table.battlefield.cards
 
 
 def test_a_recruit_only_a_grant_reaches_is_paid_for_and_completes():

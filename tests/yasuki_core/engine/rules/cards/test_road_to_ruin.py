@@ -241,6 +241,29 @@ def test_bowing_outlying_farms_opens_its_window_before_the_yield_is_read():
     assert not session.game.table.cards_by_id["of"].bowed  # the yield is still unread
 
 
+def test_a_grant_the_payment_cannot_do_without_refuses_no_as_an_answer():
+    """Affordability counted the grant to offer the recruit, so announcing it commits the seat. The
+    question stops saying no is an option, leaving cancelling as the way out."""
+    session = _outlying_game(target_cost=4, with_producer=False)
+    session.act(P1, Recruit("target"))
+    session.submit(P1, DecisionResponse(("of",)))
+
+    pending = session.game.pending
+    assert not pending.accepts(DecisionResponse(()))
+    assert pending.accepts(DecisionResponse(("of",)))
+    assert pending.cancellable
+
+
+def test_a_grant_the_payment_does_not_need_can_still_be_declined():
+    """Nothing is committed when another producer covers the cost, so the Farm's window is the plain
+    optional question the card prints."""
+    session = _outlying_game(target_cost=10)
+    session.act(P1, Recruit("target"))
+    session.submit(P1, DecisionResponse(("of",)))
+
+    assert session.game.pending.accepts(DecisionResponse(()))
+
+
 def test_backing_out_at_the_window_leaves_the_board_as_it_was():
     """The seat announced a Recruit and only then learned the price was the Farm. Cancelling has to
     put back everything the announcement moved, not just the question."""
