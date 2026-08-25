@@ -160,12 +160,30 @@ def advance(game: GameState) -> None:
     if game.awaiting_decision:
         raise RuntimeError("cannot advance while a decision is pending")
     game.clear_gold()
+    if game.phase is Phase.ACTION:
+        _lift_straighten_delays(game)
     following = next_phase(game.phase)
     if following is not None:
         game.phase = following
         open_round(game)
         return
     _end_turn(game)
+
+
+def _lift_straighten_delays(game: GameState) -> None:
+    """Free the active seat's cards that were forbidden to straighten, now its Action Phase is over.
+
+    Only a *later* Action Phase than the one the delay began on counts: a card bowed to pay for an
+    Action is forbidden until the seat's next Action Phase, not the rest of this one. A card that has
+    left the table takes its delay with it — nothing it could be forbidden from is left.
+    """
+    by_id = game.table.cards_by_id
+    game.straighten_delayed = {
+        card_id: imposed
+        for card_id, imposed in game.straighten_delayed.items()
+        if (card := by_id.get(card_id)) is not None
+        and not (card.owner is game.active and game.turn > imposed)
+    }
 
 
 def forget_action(game: GameState) -> None:
@@ -1056,8 +1074,15 @@ def _begin_turn(game: GameState) -> None:
 
 
 def _open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
-    """Straighten everything but ``staying_bowed``, reveal the Provinces, and open the turn."""
-    straightened = ops.straighten(game.table, game.active, staying_bowed)
+    """Straighten everything but ``staying_bowed`` and whatever may not straighten yet, reveal the
+    Provinces, and open the turn.
+
+    The prohibition outlives this step — it lifts when the Action Phase this straighten precedes has
+    ended — so nothing is spent here.
+    """
+    straightened = ops.straighten(
+        game.table, game.active, staying_bowed | game.straighten_delayed.keys()
+    )
     for card_id in straightened:
         triggers.fire(game, Straightened(card_id))
     for card_id in ops.reveal_provinces(game.table, game.active):
