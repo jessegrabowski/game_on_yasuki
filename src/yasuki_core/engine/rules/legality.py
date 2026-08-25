@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
     effective_gold_cost,
     effective_gold_production,
+    maximum_gold_production,
     effective_keywords,
     effective_recruit_discount,
 )
@@ -293,7 +294,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
         ):
             continue
         affordable = fixed + sum(
-            effective_gold_production(game, producer, targets=(card,)) for producer in variable
+            maximum_gold_production(game, producer, targets=(card,)) for producer in variable
         )
         base = recruit_cost(game, card)
         if base <= affordable:
@@ -324,7 +325,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         if not isinstance(card.printed, AttachmentPrint):
             continue
         affordable = fixed + sum(
-            effective_gold_production(game, producer, targets=(card,)) for producer in variable
+            maximum_gold_production(game, producer, targets=(card,)) for producer in variable
         )
         base = effective_gold_cost(game, card)
         if base > affordable or not equip_targets(game, card):
@@ -384,13 +385,10 @@ def gold_reach(game: GameState, seat: PlayerId) -> tuple[int, tuple[L5RCard, ...
     fixed = game.gold[seat]
     variable: list[L5RCard] = []
     for producer in gold_producers(game, seat):
-        boost = abilities.production_boost_for(producer)
-        if boost is not None:
-            fixed += boost.amount
         if producer.printed_id in GOLD_HANDLERS:
             variable.append(producer)
         else:
-            fixed += effective_gold_production(game, producer)
+            fixed += maximum_gold_production(game, producer)
     return fixed, tuple(variable)
 
 
@@ -407,7 +405,7 @@ def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard | None = None)
     targets = () if card is None else (card,)
     fixed, variable = gold_reach(game, seat)
     return fixed + sum(
-        effective_gold_production(game, producer, targets=targets) for producer in variable
+        maximum_gold_production(game, producer, targets=targets) for producer in variable
     )
 
 

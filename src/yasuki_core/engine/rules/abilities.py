@@ -8,7 +8,11 @@ from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
-from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
+from yasuki_core.engine.rules.economy import (
+    effective_invest_discount,
+    effective_keywords,
+    register_self_grant,
+)
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -290,6 +294,7 @@ def register_production_boost(printed_id: str, boost: ProductionBoost) -> None:
     if printed_id in _PRODUCTION_BOOST:
         raise ValueError(f"{printed_id} already has a production boost")
     _PRODUCTION_BOOST[printed_id] = boost
+    register_self_grant(printed_id, boost.amount)
 
 
 def invest_amounts(game: GameState, card: L5RCard) -> tuple[int, ...] | None:

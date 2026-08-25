@@ -3,18 +3,23 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import owned_holdings
+from yasuki_core.engine.rules.state import once_per_turn
 from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
+    GOLD_SELF_GRANT,
+    SELF_GRANT,
     KEYWORD_GRANTS,
     RECRUIT_DISCOUNTS,
     effective_gold_production,
     effective_keywords,
     gold_handler,
+    maximum_gold_production,
     keyword_grant,
     opposing_states,
     is_clan,
     player_state,
     recruit_discount,
+    register_self_grant,
 )
 from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant
 from yasuki_core.game_pieces.constants import Side
@@ -505,3 +510,105 @@ def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
         assert owned_holdings(game, PlayerId.P1, "Port") == [granted, printed]
     finally:
         KEYWORD_GRANTS.pop("keyword_probe", None)
+
+
+def test_maximum_gold_production_adds_the_declared_grant():
+    """What affordability asks: the most a card could yield if its controller took what it offers."""
+    GOLD_SELF_GRANT["granting_probe"] = 2
+
+    try:
+        game = two_seat_game()
+        producer = put_in_play(game, holding("gp", printed_id="granting_probe", gold_production=2))
+
+        assert effective_gold_production(game, producer) == 2
+        assert maximum_gold_production(game, producer) == 4
+    finally:
+        GOLD_SELF_GRANT.pop("granting_probe", None)
+
+
+def test_maximum_gold_production_composes_with_a_counter():
+    """The declared number is a delta over what the card is worth now, not a ceiling of its own. A
+    flat total would under-report the moment anything else raised the card."""
+    GOLD_SELF_GRANT["granting_probe"] = 2
+
+    try:
+        game = two_seat_game()
+        producer = put_in_play(
+            game,
+            holding("gp", printed_id="granting_probe", gold_production=2, counters={"wealth": 1}),
+        )
+
+        assert effective_gold_production(game, producer) == 3  # printed 2, plus the token
+        assert maximum_gold_production(game, producer) == 5  # and the grant on top of that
+    finally:
+        GOLD_SELF_GRANT.pop("granting_probe", None)
+
+
+def test_maximum_gold_production_matches_effective_for_a_card_that_declares_nothing():
+    """Which is every producer but the handful that can raise their own yield."""
+    game = two_seat_game()
+    producer = put_in_play(game, holding("plain", gold_production=3))
+
+    assert maximum_gold_production(game, producer) == effective_gold_production(game, producer)
+
+
+def test_a_target_dependent_producer_needs_no_declaration():
+    """Jade Works looks like the hard case and is not one: its yield varies with what it pays for,
+    which `effective_gold_production` already handles, so its ceiling is that and nothing more."""
+    game = two_seat_game()
+    works = put_in_play(game, holding("jw", printed_id="jade_works", gold_production=2))
+    jade = holding("jade", keywords=("Jade",))
+
+    assert maximum_gold_production(game, works, targets=(jade,)) == effective_gold_production(
+        game, works, targets=(jade,)
+    )
+    assert maximum_gold_production(game, works, targets=(jade,)) > maximum_gold_production(
+        game, works
+    )
+
+
+def test_maximum_gold_production_stops_adding_a_grant_already_taken():
+    """Once the card has granted itself, that Gold is inside what it is worth now. Adding the delta
+    again would report a ceiling it cannot reach."""
+    GOLD_SELF_GRANT["granting_probe"] = 2
+
+    try:
+        game = two_seat_game()
+        producer = put_in_play(game, holding("gp", printed_id="granting_probe", gold_production=2))
+        assert maximum_gold_production(game, producer) == 4
+
+        once_per_turn(game, producer, SELF_GRANT)
+
+        assert maximum_gold_production(game, producer) == 2
+    finally:
+        GOLD_SELF_GRANT.pop("granting_probe", None)
+
+
+def test_a_straightened_producer_does_not_regrant_itself():
+    """The reason the tag is asked rather than `card.bowed`: a producer that bowed, granted itself
+    and was straightened again is unbowed with the grant still live, and has nothing left to give."""
+    GOLD_SELF_GRANT["granting_probe"] = 2
+
+    try:
+        game = two_seat_game()
+        producer = put_in_play(game, holding("gp", printed_id="granting_probe", gold_production=2))
+        once_per_turn(game, producer, SELF_GRANT)
+        producer.bow()
+        producer.unbow()
+
+        assert not producer.bowed
+        assert maximum_gold_production(game, producer) == 2
+    finally:
+        GOLD_SELF_GRANT.pop("granting_probe", None)
+
+
+def test_a_second_self_grant_for_one_card_is_refused():
+    # A silent overwrite would leave affordability quoting whichever registration won the import
+    # race, with no trace of the other.
+    register_self_grant("guard_probe", 2)
+
+    try:
+        with pytest.raises(ValueError, match="guard_probe already grants itself"):
+            register_self_grant("guard_probe", 3)
+    finally:
+        GOLD_SELF_GRANT.pop("guard_probe", None)

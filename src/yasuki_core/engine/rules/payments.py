@@ -3,7 +3,10 @@ from collections.abc import Iterable
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import abilities
 from yasuki_core.engine.rules.decisions import BoostOffer, ChoosePayment
-from yasuki_core.engine.rules.economy import effective_gold_production
+from yasuki_core.engine.rules.economy import (
+    effective_gold_production,
+    maximum_gold_production,
+)
 from yasuki_core.engine.rules.legality import gold_producers
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ContinuePayment
@@ -70,13 +73,11 @@ def payment_request(
 
 
 def can_afford(game: GameState, seat: PlayerId, amount: int) -> bool:
-    """Whether ``seat`` could cover ``amount``: its pool plus everything its unbowed producers make,
-    boosts included. Answered before a payment is offered, so an ability whose gold cost the seat
+    """Whether ``seat`` could cover ``amount``: its pool plus the most every unbowed producer it
+    controls could make. Answered before a payment is offered, so an ability whose gold cost the seat
     cannot meet is never announced."""
-    total = game.gold[seat]
-    for producer in gold_producers(game, seat):
-        total += effective_gold_production(game, producer)
-        boost = abilities.production_boost_for(producer)
-        if boost is not None:
-            total += boost.amount
-    return total >= amount
+    return (
+        game.gold[seat]
+        + sum(maximum_gold_production(game, producer) for producer in gold_producers(game, seat))
+        >= amount
+    )

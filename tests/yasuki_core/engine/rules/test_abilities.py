@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.abilities import (
     register_production_boost,
 )
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Recruit
+from yasuki_core.engine.rules.economy import GOLD_SELF_GRANT
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     ChooseCards,
@@ -122,13 +123,14 @@ def test_a_second_enters_unbowed_for_one_card_is_refused():
 
 
 def test_a_second_production_boost_for_one_card_is_refused():
-    register_production_boost("guard_probe", 2)
+    register_production_boost("guard_probe", ProductionBoost(2))
 
     try:
         with pytest.raises(ValueError, match="guard_probe already has a production boost"):
-            register_production_boost("guard_probe", 2)
+            register_production_boost("guard_probe", ProductionBoost(2))
     finally:
         _PRODUCTION_BOOST.pop("guard_probe", None)
+        GOLD_SELF_GRANT.pop("guard_probe", None)
 
 
 # An ability that acts from a Province rather than from play — the shape every Event needs. It
