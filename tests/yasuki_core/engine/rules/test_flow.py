@@ -645,10 +645,12 @@ def _dynasty_phase(producers: list[L5RCard], *, cost: int) -> EngineSession:
     return session
 
 
-def test_a_payment_that_cannot_cover_its_cost_raises():
-    """`accepts` judges the answer against a snapshot while resolution recomputes each yield live,
-    so a producer destroyed as a boost's price can leave a later producer worth less than it was
-    quoted. Spending has to notice: the alternative is a card entering play for nothing."""
+def test_a_payment_stranded_by_its_own_answer_raises():
+    """Affordability sums yields that cannot all be realised: destroying one producer as a boost's
+    price drops what another is worth. Answering one producer at a time re-quotes the rest, so the
+    shortfall surfaces here rather than silently underpaying — and it has to be loud, because the
+    alternative is a seat holding a question with no legal answer and no way to know why.
+    """
     try:
         register_production_boost(
             "self_destroying_probe", ProductionBoost(2, lambda card: [Destroy(card.id, card.owner)])
@@ -658,8 +660,8 @@ def test_a_payment_that_cannot_cover_its_cost_raises():
         def _paired(card, me, opponents, targets):
             return card.gold_production + (1 if me.controls("Probe", other_than=card) else 0)
 
-        # Quoted 4 (sd boosted) + 3 (pp paired with sd) = 7. Live, sd destroys itself as its boost's
-        # price, so pp yields 2 and the pool reaches 6.
+        # Quoted 4 (sd boosted) + 3 (pp, paired with sd) = 7. Once sd has destroyed itself, pp is
+        # worth 2 and the pool can only reach 6.
         session = _dynasty_phase(
             [
                 holding(
@@ -680,10 +682,9 @@ def test_a_payment_that_cannot_cover_its_cost_raises():
             cost=7,
         )
         session.act(PlayerId.P1, Recruit("tgt"))
-        assert session.game.pending.accepts(PaymentResponse(("sd", "pp"), ("sd",)))
 
-        with pytest.raises(RuntimeError, match="cover"):
-            session.submit(PlayerId.P1, PaymentResponse(("sd", "pp"), ("sd",)))
+        with pytest.raises(RuntimeError, match="cannot make up the difference"):
+            session.submit(PlayerId.P1, PaymentResponse(("sd",), ("sd",)))
     finally:
         _PRODUCTION_BOOST.pop("self_destroying_probe", None)
         GOLD_HANDLERS.pop("paired_probe", None)
@@ -899,7 +900,7 @@ def test_a_payment_that_runs_out_of_producers_raises():
     game = two_seat_game()
     game.stack.append(ContinuePayment(PlayerId.P1, amount=3, label="probe"))
 
-    with pytest.raises(RuntimeError, match="no producer is left to bow"):
+    with pytest.raises(RuntimeError, match="cannot make up the difference"):
         flow.run_stack(game)
 
 

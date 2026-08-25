@@ -69,7 +69,6 @@ from yasuki_core.engine.rules.legality import (
     INHERITANCE_PRODUCTION,
     KHARMIC_COST,
     cycle_candidates,
-    gold_producers,
     cycle_key,
     legacy_candidates,
     legacy_key,
@@ -685,20 +684,23 @@ def _continue_payment(
 ) -> None:
     """Spend once ``seat``'s pool covers ``amount``, or ask it to bow more producers.
 
-    Raise ``RuntimeError`` if the pool falls short with nothing left to bow. Affordability decided
-    the action could be paid for before it was announced, so running dry means that projection was
-    wrong — an engine fault rather than a legal move, and one that would otherwise hand the seat
-    whatever it was paying for at no charge.
+    Raise ``RuntimeError`` if what is left unbowed can no longer reach the cost. Affordability
+    decided the action was payable before it was announced, so arriving here means that projection
+    was wrong — the alternative is a seat stranded on a question with no legal answer, or handed
+    what it was paying for at no charge.
     """
     if game.gold[seat] >= amount:
         game.spend_gold(seat, amount)
         return
-    if not gold_producers(game, seat):
+    # The authoritative reachability check. `ChoosePayment.accepts` asks the same question of its
+    # own snapshot, which is what greys out an answer before it is sent; this one asks the live
+    # board, and the two can differ when an answer changes what another producer is worth.
+    target = game.table.cards_by_id.get(target_id)
+    if reachable_gold(game, seat, target) < amount:
         raise RuntimeError(
             f"{seat.name} cannot cover {amount} for {label}: the pool holds {game.gold[seat]} "
-            f"and no producer is left to bow"
+            f"and everything still unbowed cannot make up the difference"
         )
-    target = game.table.cards_by_id.get(target_id)
     game.pending = payment_request(game, seat, amount, label, target=target)
 
 
