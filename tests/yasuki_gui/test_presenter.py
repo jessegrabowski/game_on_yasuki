@@ -166,6 +166,18 @@ def test_a_grant_the_payment_cannot_do_without_greys_out_its_no(paying):
     assert dict(zip(_buttons(window), enabled)) == {"Yes": True, "No": False, "Cancel": True}
 
 
+def test_pay_lights_on_a_grant_the_producer_has_not_been_asked_for_yet(paying):
+    """The Farm makes 2 against a cost of 4 and can raise itself to 4 in its window. The figure the
+    seat reads is what the Farm makes now — promising the higher one would promise Gold it may still
+    decline — but Pay is live, because there is a way to finish from here."""
+    _, window = paying
+
+    window.field.toggle_selection("of")
+
+    assert _status(window) == "Pay 2 gold for Target"
+    assert _primary_enabled(window)
+
+
 def test_answering_the_window_finishes_the_payment_from_the_client(paying):
     presenter, window = paying
     window.field.toggle_selection("of")
@@ -324,17 +336,140 @@ def test_undo_takes_back_a_click_not_a_bow(two_producers):
     assert _status(window) == "Pay 5 gold for tgt"
 
 
-def test_the_pay_button_is_dead_until_a_producer_is_picked(two_producers):
-    """Spacebar invokes the first button, and a payment is now several rounds. It cannot run away:
-    each round starts with nothing picked, and an answer naming nothing is not one the payment
-    accepts while it is still short."""
+def test_the_pay_button_lights_only_once_the_picks_cover_the_cost(two_producers):
+    """Spacebar invokes the first button, so it must not be live on a payment the seat has not
+    finished picking. Two producers at 2 and 3 against a cost of 5: neither alone is enough."""
     presenter, window, _ = two_producers
 
     assert _buttons(window)[0] == "Pay"
     assert not _primary_enabled(window)
 
     window.field.toggle_selection("a")
-    assert _primary_enabled(window)
+    assert not _primary_enabled(window)  # 2 of 5
+
+    window.field.toggle_selection("b")
+    assert _primary_enabled(window)  # 5 of 5
+
+    presenter.confirm()
+    assert "Pay" not in _buttons(window)  # paid; there is nothing left to press
+
+
+def test_picking_both_producers_pays_in_one_click(two_producers):
+    """The seat picks its whole payment and presses Pay once. The engine still takes one producer
+    per answer, so the board feeds them to it — that is not the player's problem."""
+    presenter, window, session = two_producers
+
+    window.field.toggle_selection("a")
+    window.field.toggle_selection("b")
     presenter.confirm()
 
-    assert not _primary_enabled(window)
+    table = session.game.table
+    assert session.game.pending is None
+    assert table.cards_by_id["tgt"] in table.battlefield.cards
+    assert table.cards_by_id["a"].bowed and table.cards_by_id["b"].bowed
+
+
+def test_the_remaining_cost_counts_down_as_producers_are_picked(two_producers):
+    """Clicking previews the bow: the figure falls by what that producer makes, before anything has
+    actually bowed."""
+    _, window, _ = two_producers
+
+    assert _status(window) == "Pay 5 gold for tgt"
+    window.field.toggle_selection("a")
+    assert _status(window) == "Pay 3 gold for tgt"
+    window.field.toggle_selection("b")
+    assert _status(window) == "Pay 0 gold for tgt"
+
+
+@pytest.fixture
+def farm_and_a_helper():
+    """A payment needing Outlying Farms' grant *and* a second producer, so the queue has something
+    left in it when the Farm's window interrupts."""
+    state = dealt_table()
+    put_in_play(state, holding("of", owner=P1, printed_id="outlying_farms", gold_production=2))
+    put_in_play(state, holding("small", owner=P1, gold_production=1))
+    session = EngineSession.start(state, P1)
+    province_card(session.game, "tgt", seat=P1, gold_cost=5)
+    end_phase(session)
+    end_phase(session)
+
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    window.field.on_selection_changed = presenter.refresh
+    try:
+        runner.act(Recruit("tgt"))
+        presenter.present()
+        yield presenter, window, session
+    finally:
+        window.root.destroy()
+
+
+def test_a_window_pauses_the_queue_and_answering_it_spends_the_rest(farm_and_a_helper):
+    """The seat picks both producers and presses Pay once. The Farm's window stops the queue mid-way
+    so the seat can answer it; the producer still queued behind it is spent on the way back."""
+    presenter, window, session = farm_and_a_helper
+    window.field.toggle_selection("of")
+    window.field.toggle_selection("small")
+
+    presenter.confirm()
+
+    assert isinstance(session.game.pending, Confirm)  # paused on the Farm's window
+    assert window.field.committed == ("small",)  # and the rest of the payment is still queued
+
+    presenter.submit_answer(("of",))  # yes
+
+    table = session.game.table
+    assert session.game.pending is None
+    assert table.cards_by_id["tgt"] in table.battlefield.cards
+    assert table.cards_by_id["small"].bowed
+    assert table.cards_by_id["of"] not in table.battlefield.cards  # it paid its price
+
+
+def test_cancelling_a_payment_forgets_what_was_queued(farm_and_a_helper):
+    """Backing out at the window unwinds the announced Recruit, so the picks behind it must not be
+    waiting to bow into whatever the seat does next."""
+    presenter, window, session = farm_and_a_helper
+    window.field.toggle_selection("of")
+    window.field.toggle_selection("small")
+    presenter.confirm()
+
+    presenter.cancel()
+
+    assert window.field.committed == ()
+    table = session.game.table
+    assert not table.cards_by_id["small"].bowed
+    assert table.cards_by_id["of"] in table.battlefield.cards
+
+
+def test_a_producer_queued_behind_a_grant_that_covered_the_cost_never_bows():
+    """The seat picked more than it turned out to need: the Farm's grant covered the whole cost, so
+    the engine stopped asking. What was still queued is spared, and dropped — a pick left waiting
+    would bow into whatever the seat paid for next."""
+    state = dealt_table()
+    put_in_play(state, holding("of", owner=P1, printed_id="outlying_farms", gold_production=2))
+    put_in_play(state, holding("spare", owner=P1, gold_production=3))
+    session = EngineSession.start(state, P1)
+    province_card(session.game, "tgt", seat=P1, gold_cost=4)
+    end_phase(session)
+    end_phase(session)
+
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    window.field.on_selection_changed = presenter.refresh
+    try:
+        runner.act(Recruit("tgt"))
+        presenter.present()
+        window.field.toggle_selection("of")
+        window.field.toggle_selection("spare")
+        presenter.confirm()
+        presenter.submit_answer(("of",))  # yes: the Farm makes 4, which is the whole cost
+
+        table = session.game.table
+        assert session.game.pending is None
+        assert table.cards_by_id["tgt"] in table.battlefield.cards
+        assert not table.cards_by_id["spare"].bowed
+        assert window.field.committed == ()
+    finally:
+        window.root.destroy()

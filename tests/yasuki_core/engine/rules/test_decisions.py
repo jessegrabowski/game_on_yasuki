@@ -213,6 +213,44 @@ def test_a_cost_beyond_every_ceiling_is_refused():
     assert not request.accepts(DecisionResponse(("of",)))
 
 
+def test_a_payment_is_finishable_once_the_picks_reach_the_cost():
+    request = _payment(amount=5, available=1, produced=[("sh", 2), ("mine", 2)])
+
+    assert not request.covers_cost(DecisionResponse(("sh",)))  # 1 + 2 of 5
+    assert request.covers_cost(DecisionResponse(("sh", "mine")))  # 1 + 4 of 5
+
+
+def test_a_pick_may_reach_the_cost_through_its_own_grant():
+    """The seat has not been asked for the grant yet, but it will be, in the window that pick opens
+    as it bows. Refusing to let it finish would leave a legal purchase unbuyable."""
+    request = _payment(amount=4, available=0, produced=[("of", 2)], grantable=[("of", 2)])
+
+    assert request.covers_cost(DecisionResponse(("of",)))
+
+
+def test_a_grant_belongs_to_the_producer_that_offers_it():
+    """Only a producer being bowed is asked for its grant. Counting an unpicked one would light the
+    finish button on a payment the seat has not actually covered."""
+    request = _payment(
+        amount=4, available=0, produced=[("of", 2), ("mine", 2)], grantable=[("of", 2)]
+    )
+
+    assert not request.covers_cost(DecisionResponse(("mine",)))  # 2 of 4; of's grant is not mine's
+    assert request.covers_cost(DecisionResponse(("of",)))
+
+
+def test_finishable_and_answerable_are_different_questions():
+    """A seat picks its whole payment and the engine bows one producer per answer, so what a client
+    may offer as finished and what the engine takes as one answer count different sets. Collapsing
+    them is what makes a finish button light on the first of several picks."""
+    request = _payment(amount=5, available=0, produced=[("sh", 3), ("mine", 2)])
+    both = DecisionResponse(("sh", "mine"))
+    one = DecisionResponse(("sh",))
+
+    assert request.covers_cost(both) and not request.accepts(both)
+    assert request.accepts(one) and not request.covers_cost(one)
+
+
 def test_the_payment_prompt_quotes_what_a_producer_makes_now_not_what_it_could():
     """Clicking previews the bow, and the grant is not part of it — the seat has not been asked yet,
     and quoting the higher figure would promise gold it may decline."""

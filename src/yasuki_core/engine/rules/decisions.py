@@ -108,9 +108,26 @@ class ChoosePayment(DecisionRequest):
     grantable: tuple[tuple[str, int], ...] = ()
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return f"Pay {self.shortfall(partial)} gold for {self.label}"
+
+    def shortfall(self, partial: DecisionResponse = DecisionResponse()) -> int:
+        """The gold still owed once every producer ``partial`` names has bowed for what it makes
+        right now. What the seat reads as it picks, so a producer that can raise its own yield
+        counts at the lower figure until its window has actually granted it."""
         yields = dict(self.produced)
         covered = self.available + sum(yields[card_id] for card_id in partial.choices)
-        return f"Pay {max(0, self.amount - covered)} gold for {self.label}"
+        return max(0, self.amount - covered)
+
+    def covers_cost(self, partial: DecisionResponse) -> bool:
+        """Whether the producers ``partial`` names meet the cost between them, counting what each
+        can still grant itself in the window it opens as it bows.
+
+        What a client asks to decide whether the seat has picked enough to finish. It differs from
+        :meth:`accepts`, which judges one answer the engine is actually sent: a seat picks its whole
+        payment at once and the engine bows one producer per answer, so the two count different
+        sets."""
+        grants = dict(self.grantable)
+        return self.shortfall(partial) <= sum(grants.get(card_id, 0) for card_id in partial.choices)
 
     @property
     def confirm_label(self) -> str:

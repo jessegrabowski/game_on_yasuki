@@ -88,6 +88,10 @@ class FieldView(tk.Canvas):
         self._selection: list[str] = []
         # When choosing how to pay, selected producers preview as bowed (tapped for gold).
         self._selection_bows: bool = False
+        # Picks the player has finished making but the engine has not been told about yet. A payment
+        # is answered one producer at a time so each can open its own window, and the queue is what
+        # lets the player pick the whole payment in one go regardless.
+        self._committed: list[str] = []
         # Set instead of a plain selection when the decision divides a fixed number of creations
         # among the cards picked; it holds how many each carries, drawn as a spinner on the card.
         self._allocation: Allocation | None = None
@@ -179,9 +183,32 @@ class FieldView(tk.Canvas):
             return self._allocation.choices
         return tuple(self._selection)
 
+    @property
+    def committed(self) -> tuple[str, ...]:
+        """The picks the player has finished making, in the order they were picked, still waiting to
+        be sent."""
+        return tuple(self._committed)
+
+    def commit_selection(self) -> None:
+        """Close the selection: the player has picked everything it means to. The picks move to the
+        queue, which survives the rounds of selection mode that answering them takes."""
+        self._committed = list(self._selection)
+        self._selection = []
+
+    def take_committed(self) -> str | None:
+        """Pop the next queued pick, or None when the queue is spent."""
+        return self._committed.pop(0) if self._committed else None
+
+    def drop_committed(self) -> None:
+        """Discard whatever is left in the queue, for a payment that ended before it was spent."""
+        self._committed = []
+
     def begin_selection(self, candidates: Iterable[str], *, render_bowed: bool = False) -> None:
         """Enter selection mode: only ``candidates`` are selectable, none chosen yet. When
-        ``render_bowed`` is set, selected cards preview as bowed (a producer tapped to pay)."""
+        ``render_bowed`` is set, selected cards preview as bowed (a producer tapped to pay).
+
+        The committed queue is left alone: each round of a payment re-enters selection mode, and
+        clearing it here would spend only the first pick the player made."""
         self._selectable = frozenset(candidates)
         self._selection = []
         self._selection_bows = render_bowed
@@ -207,7 +234,8 @@ class FieldView(tk.Canvas):
             self.on_selection_changed()
 
     def end_selection(self) -> None:
-        """Leave selection mode and clear the selection."""
+        """Leave selection mode and clear the selection. The committed queue is left alone: a
+        payment leaves selection mode between rounds and still has picks to spend."""
         self._selectable = None
         self._selection = []
         self._selection_bows = False

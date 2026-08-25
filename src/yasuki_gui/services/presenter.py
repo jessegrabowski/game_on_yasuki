@@ -43,6 +43,7 @@ class Presenter:
         the human's. Every path that advances the game ends here, since either seat's input can
         leave a decision owed by either seat."""
         runner, field = self.host.runner, self.window.field
+        self._spend_committed()
         pending = runner.pending
         search = runner.search_view()
         if search is not None:
@@ -62,6 +63,8 @@ class Presenter:
             field.begin_selection(
                 pending.candidates, render_bowed=isinstance(pending, ChoosePayment)
             )
+        else:
+            field.end_selection()
         self.refresh()
         # An owed decision counts as well as held priority: a card can put a question to the
         # opponent while the human keeps priority, and the engine is paused until it is answered.
@@ -119,8 +122,14 @@ class Presenter:
             return pending.prompt(), [*amounts, ("Cancel", self.cancel, True)]
         if pending is not None:
             answer = self._board_answer()
-            can_confirm = pending.accepts(answer)
-            board_buttons: list[ButtonSpec] = [(pending.confirm_label, self.confirm, can_confirm)]
+            # A payment is picked whole and answered one producer at a time, so what makes it
+            # finishable is whether the picks cover the cost — not whether this is one legal answer.
+            ready = (
+                pending.covers_cost(answer)
+                if isinstance(pending, ChoosePayment)
+                else pending.accepts(answer)
+            )
+            board_buttons: list[ButtonSpec] = [(pending.confirm_label, self.confirm, ready)]
             if pending.cancellable:
                 board_buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(answer), board_buttons
@@ -143,14 +152,41 @@ class Presenter:
         self.present()
 
     def confirm(self) -> None:
-        """Answer the pending decision with the board's current selection."""
+        """Answer the pending decision with the board's current selection.
+
+        A payment is queued rather than sent: the seat picks every producer it means to bow in one
+        go, and :meth:`_spend_committed` feeds them to the engine one answer at a time.
+        """
+        if isinstance(self.host.runner.pending, ChoosePayment):
+            self.window.field.commit_selection()
+            self.present()
+            return
         self.host.runner.submit(self._board_answer())
         self.window.field.end_selection()
         self.present()
 
+    def _spend_committed(self) -> None:
+        """Bow the producers the seat has queued, one answer each, until the payment stops asking.
+
+        It stops early whenever a producer's own window interrupts, so the seat answers that and the
+        rest of the queue is spent on the way back through. Anything still queued once the payment
+        is over is dropped — only a question can pause a payment, so anything else pending means the
+        payment this queue belonged to has finished.
+        """
+        runner, field = self.host.runner, self.window.field
+        while field.committed and isinstance(runner.pending, ChoosePayment):
+            producer = field.take_committed()
+            # A queued producer can stop being on offer: another's price destroyed it, or the cost
+            # was already covered and this is a different payment's request.
+            if producer in runner.pending.candidates:
+                runner.submit(DecisionResponse((producer,)))
+        if not isinstance(runner.pending, Confirm):
+            field.drop_committed()
+
     def cancel(self) -> None:
         """Back out of a pending payment: drop the announced Recruit and clear the gold selection."""
         self.host.runner.cancel()
+        self.window.field.drop_committed()
         self.window.field.end_selection()
         self.present()
 
