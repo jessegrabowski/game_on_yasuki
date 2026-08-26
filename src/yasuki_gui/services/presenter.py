@@ -1,10 +1,14 @@
-from yasuki_core.engine.rules.actions import Action, Pass
+from yasuki_core.engine.rules.actions import Action, DeclareAttack, Pass
 from yasuki_core.engine.rules.decisions import (
+    AssignUnits,
+    ChooseBattlefield,
     ChooseDistribution,
     ChooseInvestAmount,
     ChoosePayment,
     Confirm,
     DecisionResponse,
+    assignment,
+    assignment_token,
 )
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.runner import SearchView
@@ -18,24 +22,35 @@ from yasuki_gui.ui.prompt_box import ButtonSpec
 OPPONENT_TURN_DELAY_MS = 700
 
 
-def _action_button_label(action: Action) -> str:
-    """The prompt-box button label for a non-card action. Raise on an unmapped one."""
-    if isinstance(action, Pass):
-        return "Pass"
-    raise ValueError(f"no button label for {type(action).__name__}")
+# The prompt-box label for each action a seat takes from a button rather than by clicking a card.
+# An action absent here is not offered: a Recruit is invoked from the board, and an action with no
+# wording has no way to describe itself to the player.
+_ACTION_LABELS: dict[type, str] = {
+    Pass: "Pass",
+    DeclareAttack: "Declare an attack",
+}
+
+
+def _button_actions(actions: list[Action]) -> list[Action]:
+    """The actions the prompt box offers, in the order it lists them."""
+    return [action for action in actions if type(action) in _ACTION_LABELS]
 
 
 class Presenter:
     """Turns what the engine wants next into what the player sees, and the player's answers back
     into engine calls.
 
-    Holds no state of its own. What the board is waiting on lives on the board and what the game is
-    waiting on lives in the session, so there is no third copy here to fall out of step with either.
+    What the board is waiting on lives on the board and what the game is waiting on lives in the
+    session, so there is no third copy of either here. The one thing it does keep is which army is
+    part-way through being assigned: that spans two clicks and belongs to neither.
     """
 
     def __init__(self, host: GameHost, window: GameWindow) -> None:
         self.host = host
         self.window = window
+        # Which army is waiting on a Province, or None. The one piece of state the presenter
+        # keeps: it spans two clicks and belongs to neither the board nor the engine.
+        self._assigning: int | None = None
 
     def present(self) -> None:
         """Set the client up for whatever the engine wants next: the dialog or selection mode the
@@ -56,7 +71,15 @@ class Presenter:
             # A division is answered by how many go where, not by which cards were picked, so each
             # chosen card carries a spinner rather than only a selection ring.
             field.begin_allocation(pending.candidates, pending.count)
-        elif pending is not None and not isinstance(pending, ChooseInvestAmount | Confirm):
+        elif isinstance(pending, AssignUnits):
+            if self._assigning is None:
+                field.begin_selection(
+                    {assignment(token)[0] for token in pending.candidates}
+                    - set(field.assigned_units())
+                )
+        elif pending is not None and not isinstance(
+            pending, ChooseInvestAmount | Confirm | ChooseBattlefield
+        ):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
             # Invest amount and a yes/no question are answered by prompt buttons, so neither puts
             # the board into selection mode.
@@ -113,6 +136,23 @@ class Presenter:
             if pending.cancellable:
                 buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(), buttons
+        if isinstance(pending, ChooseBattlefield):
+            # A battlefield is a place rather than a card, so it is picked from a button.
+            return pending.prompt(), [
+                (f"Battlefield {int(index) + 1}", lambda i=index: self.submit_answer((i,)), True)
+                for index in pending.candidates
+            ]
+        if isinstance(pending, AssignUnits):
+            # Assigning is a process, and the board carries it: units are gathered into an army
+            # from the card menu, the army is sent to a Province, and the whole map goes over as
+            # the one answer the CR's simultaneous assignment calls for.
+            field = self.window.field
+            if self._assigning is not None:
+                return "Click one of the Defender's Provinces, then Attack here", [
+                    ("Attack here", self.send_army, bool(field.selection)),
+                    ("Cancel", self.cancel_army_assignment, True),
+                ]
+            return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
         if isinstance(pending, ChooseInvestAmount):
             # An amount, not a board card — answered by one button per affordable amount.
             amounts: list[ButtonSpec] = [
@@ -139,11 +179,10 @@ class Presenter:
             whose = f"Responses to {view.responding_to}"
         else:
             whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
-        # Pass is a button; a Recruit is invoked by clicking a holding on the board.
+        # Pass and Declare are buttons; a Recruit is invoked by clicking a holding on the board.
         return whose, [
-            (_action_button_label(action), lambda chosen=action: self.act(chosen), True)
-            for action in runner.legal_actions()
-            if isinstance(action, Pass)
+            (_ACTION_LABELS[type(action)], lambda chosen=action: self.act(chosen), True)
+            for action in _button_actions(runner.legal_actions())
         ]
 
     def act(self, action: Action) -> None:
@@ -197,6 +236,103 @@ class Presenter:
         self.window.field.end_selection()
         self.present()
 
+    def _army_menu(self, card_id: str) -> list[ButtonSpec]:
+        """What ``card_id`` can do about armies right now, each entry saying whether it is available.
+
+        Every entry is shown whatever its state, so the four steps of assigning read as a sequence
+        the player can see the shape of before any of it is reachable.
+        """
+        field = self.window.field
+        army = field.army_of(card_id)
+        sent = army is not None and field.battlefield_of_army(army) is not None
+        return [
+            ("Add to army", lambda: self.form_army(card_id), bool(field.selection) and not sent),
+            ("Remove from army", lambda: self.leave_army(card_id), army is not None and not sent),
+            (
+                "Assign army",
+                lambda: self.assign_army(card_id),
+                army is not None and not sent,
+            ),
+            ("Unassign army", lambda: self.recall_army(card_id), sent),
+        ]
+
+    def form_army(self, card_id: str) -> None:
+        """Bring the board's selection into ``card_id``'s army, forming one if it has none."""
+        field = self.window.field
+        army = field.army_of(card_id)
+        if army is None:
+            # A list, and the clicked card last: a set would order the army by string hash, which
+            # varies between runs and would show the same picks in a different order each time.
+            picked = list(field.selection)
+            field.form_army(picked + ([card_id] if card_id not in picked else []))
+        else:
+            field.join_army(army, field.selection)
+        self.present()
+
+    def leave_army(self, card_id: str) -> None:
+        """Take ``card_id`` out of its army."""
+        self.window.field.leave_army(card_id)
+        self.present()
+
+    def recall_army(self, card_id: str) -> None:
+        """Bring ``card_id``'s army home, leaving it grouped."""
+        field = self.window.field
+        army = field.army_of(card_id)
+        if army is not None:
+            field.recall_army(army)
+        self.present()
+
+    def assign_army(self, card_id: str) -> None:
+        """Ask which Province ``card_id``'s army attacks, by making the Provinces clickable."""
+        army = self.window.field.army_of(card_id)
+        if army is None:
+            return
+        self._assigning = army
+        self.window.field.begin_selection(self._battlefield_tokens())
+        self.refresh()
+
+    def send_army(self) -> None:
+        """Send the army being assigned to the Province the board has selected."""
+        field, army = self.window.field, self._assigning
+        chosen = field.selection
+        self._assigning = None
+        field.end_selection()
+        if army is not None and chosen:
+            field.send_army(army, self._battlefield_tokens().index(chosen[0]))
+        self.present()
+
+    def cancel_army_assignment(self) -> None:
+        """Back out of choosing a Province, leaving the army grouped and at home."""
+        self._assigning = None
+        self.window.field.end_selection()
+        self.present()
+
+    def _battlefield_tokens(self) -> tuple[str, ...]:
+        """The Defender's Province slots, in battlefield order — what a battlefield is drawn as."""
+        attack = self.host.session.game.attack
+        return tuple(info.province.token for info in attack.battlefields)
+
+    def _assignment_prompt(self) -> str:
+        """The next thing to do, not a description of the state - this is the step the player has no
+        other guide through."""
+        field = self.window.field
+        if field.selection:
+            return f"{len(field.selection)} picked - right-click one to add them to an army"
+        if not field.armies:
+            return "Click the Personalities you want to attack with, then right-click one"
+        if any(field.battlefield_of_army(i) is None for i in range(len(field.armies))):
+            return "Right-click an army to assign it to a Province"
+        return "Every army is assigned - press Done assigning to fight the battles"
+
+    def submit_assignment(self) -> None:
+        """Answer the assignment with every army that was sent somewhere. An army left at home is
+        not assigned, and no armies at all keeps the whole force home, which the CR allows."""
+        placed = self.window.field.assigned_units()
+        self.window.field.disband_armies()
+        self.submit_answer(
+            tuple(assignment_token(card_id, index) for card_id, index in placed.items())
+        )
+
     def submit_answer(self, choices: tuple[str, ...]) -> None:
         """Answer a yes/no question with the cards it settled on, or nothing for no."""
         self.host.runner.submit(DecisionResponse(choices))
@@ -219,8 +355,15 @@ class Presenter:
     def on_card_activated(self, card_id: str) -> None:
         """Offer what a left-clicked card can do: a face-up Province card's Recruit or Dynasty
         Discard, a hand card's Kharmic, an in-play card's ability, or the Inheritance flip. The
-        target or payment that follows is picked through the board-selection path."""
+        target or payment that follows is picked through the board-selection path.
+
+        While an assignment is open the card menu is the army menu instead — grouping units and
+        sending them is the only thing a Personality does in the Maneuvers Segment.
+        """
         runner = self.host.runner
+        if isinstance(runner.pending, AssignUnits):
+            self.window.popup_at_pointer(self._army_menu(card_id))
+            return
         self._offer(
             runner.province_menu(card_id)
             + runner.hand_menu(card_id)

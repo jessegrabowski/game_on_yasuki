@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, Confirm
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -16,6 +16,7 @@ from yasuki_gui.ui.game_window import GameWindow
 from tests.yasuki_core.engine.builders import (
     dealt_table,
     end_phase,
+    personality,
     holding,
     province_card,
     put_in_play,
@@ -535,3 +536,217 @@ def test_pay_with_nothing_picked_leaves_a_payment_that_still_owes_gold_open(two_
 
     assert session.game.pending is not None
     assert session.game.gold[P1] == 0
+
+
+@pytest.fixture
+def a_battle():
+    """A presenter in the Attack Phase, with a Personality to send and two Provinces to send it at."""
+    state = TableState.empty_two_seat()
+    for index in range(2):
+        province_card(state, f"p2-prov{index}", seat=PlayerId.P2, index=index)
+    province_card(state, "p1-prov0", seat=P1, index=0)
+    put_in_play(state, personality("hero", owner=P1, force=5))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    window.field.on_selection_changed = presenter.refresh
+    try:
+        presenter.present()
+        yield presenter, window, session
+    finally:
+        window.root.destroy()
+
+
+def _specs(presenter) -> list:
+    """The prompt box's button specs — label, callback and whether it is enabled."""
+    return presenter._prompt(presenter.host.runner.view())[1]
+
+
+def _press(presenter, label: str) -> None:
+    """Press the prompt-box button reading ``label``, and present whatever the engine wants next."""
+    for text, action, ready in _specs(presenter):
+        if text == label:
+            assert ready, f"{label!r} is disabled"
+            action()
+            presenter.present()
+            return
+    raise AssertionError(f"no {label!r} button; offered {[spec[0] for spec in _specs(presenter)]}")
+
+
+def _picked(window) -> str:
+    """A card in the board's current selection — whichever one the player would right-click."""
+    return window.field.selection[0]
+
+
+def _army_menu(presenter, card_id: str) -> dict[str, bool]:
+    """The card menu's entries while an assignment is open, to whether each is available."""
+    return {label: enabled for label, _, enabled in presenter._army_menu(card_id)}
+
+
+def _send_army(presenter, window, card_id: str, battlefield: int) -> None:
+    """Assign ``card_id``'s army the way the player does: ask for a Province, click one, confirm."""
+    presenter.assign_army(card_id)
+    window.field.toggle_selection(presenter._battlefield_tokens()[battlefield])
+    _press(presenter, "Attack here")
+
+
+def test_the_attack_phase_offers_the_declaration_as_a_button(a_battle):
+    """Declaring is an action with no card to click, so the prompt box is the only place it can be
+    taken from."""
+    presenter, _, session = a_battle
+
+    _press(presenter, "Declare an attack")
+
+    assert session.game.attack is not None
+
+
+def test_the_army_menu_shows_every_step_before_any_is_reachable(a_battle):
+    """All four entries are listed and greyed, so the sequence is visible before it can be walked."""
+    presenter, _, _ = a_battle
+    _press(presenter, "Declare an attack")
+
+    assert _army_menu(presenter, "hero") == {
+        "Add to army": False,
+        "Remove from army": False,
+        "Assign army": False,
+        "Unassign army": False,
+    }
+
+
+def test_picking_units_lights_up_gathering_them_into_an_army(a_battle):
+    presenter, window, _ = a_battle
+    put_in_play(presenter.host.session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+
+    window.field.toggle_selection("second")
+
+    assert _army_menu(presenter, "hero")["Add to army"] is True
+
+
+def test_an_army_is_closed_to_editing_once_it_has_been_sent(a_battle):
+    presenter, window, _ = a_battle
+    put_in_play(presenter.host.session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    window.field.toggle_selection("second")
+
+    presenter.form_army("hero")
+    assert window.field.armies == (("second", "hero"),)  # picked first, clicked last
+    assert _army_menu(presenter, "hero")["Assign army"] is True
+
+    _send_army(presenter, window, "hero", 1)
+    menu = _army_menu(presenter, "hero")
+    assert menu["Unassign army"] is True
+    assert menu["Assign army"] is False  # a sent army is closed until it is brought home
+
+    presenter.recall_army("hero")
+    assert _army_menu(presenter, "hero")["Assign army"] is True
+
+
+def test_leaving_an_army_disbands_one_it_empties(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+
+    presenter.leave_army("hero")
+
+    assert window.field.armies == ()
+    assert _army_menu(presenter, "hero")["Remove from army"] is False
+
+
+def test_two_armies_go_to_two_provinces_in_one_answer(a_battle):
+    """The CR has a seat assign simultaneously, so however many armies it gathers, the engine is
+    told once."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    _send_army(presenter, window, "hero", 0)
+    presenter.form_army("second")
+    _send_army(presenter, window, "second", 1)
+
+    _press(presenter, "Done assigning")
+
+    table = session.game.table
+    assert location_of(table, table.cards_by_id["hero"]).battlefield == 0
+    assert location_of(table, table.cards_by_id["second"]).battlefield == 1
+
+
+def test_an_army_left_at_home_is_not_assigned(a_battle):
+    """Gathering an army is not committing it: only one that was sent somewhere is in the answer."""
+    presenter, window, session = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+
+    _press(presenter, "Done assigning")
+
+    assert location_of(session.game.table, session.game.table.cards_by_id["hero"]).is_home
+
+
+def test_cancelling_a_province_choice_leaves_the_army_gathered_and_home(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    presenter.assign_army("hero")
+
+    _press(presenter, "Cancel")
+
+    assert window.field.armies == (("hero",),)
+    assert window.field.battlefield_of_army(0) is None
+
+
+def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
+    """The whole loop: declare, gather, send, assign, then choose where to fight until the phase
+    runs out — which is what makes a battle playable rather than merely reachable."""
+    presenter, window, session = a_battle
+    runner = presenter.host.runner
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    _send_army(presenter, window, "hero", 0)
+    _press(presenter, "Done assigning")
+    runner.run_opponent()
+    presenter.present()
+
+    _press(presenter, "Battlefield 1")
+    _press(presenter, "Battlefield 2")
+
+    assert session.game.attack.fought == frozenset({0, 1})
+    assert session.game.table.cards_by_id["hero"].bowed  # After Resolution bows the attackers
+
+
+def test_the_prompt_box_names_the_next_step_at_every_point(a_battle):
+    """The board carries the interaction, so the prompt box has to carry the instructions — a player
+    who does not already know the flow has nothing else to read."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    said = [presenter._prompt(presenter.host.runner.view())[0]]
+
+    window.field.toggle_selection("hero")
+    said.append(presenter._prompt(presenter.host.runner.view())[0])
+    presenter.form_army(_picked(window))
+    said.append(presenter._prompt(presenter.host.runner.view())[0])
+    presenter.assign_army("hero")
+    said.append(presenter._prompt(presenter.host.runner.view())[0])
+
+    assert said == [
+        "Click the Personalities you want to attack with, then right-click one",
+        "1 picked - right-click one to add them to an army",
+        "Right-click an army to assign it to a Province",
+        "Click one of the Defender's Provinces, then Attack here",
+    ]
+
+
+def test_the_prompt_box_only_confirms_cancels_and_finishes(a_battle):
+    """The card menu carries the army work. The prompt box says what to do next and offers the
+    three answers that are not about any one card."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    assert [label for label, _, _ in _specs(presenter)] == ["Done assigning"]
+
+    presenter.form_army("hero")
+    assert [label for label, _, _ in _specs(presenter)] == ["Done assigning"]
+
+    presenter.assign_army("hero")
+    assert [label for label, _, _ in _specs(presenter)] == ["Attack here", "Cancel"]

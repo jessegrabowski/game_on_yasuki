@@ -92,6 +92,8 @@ class FieldView(tk.Canvas):
         # is answered one producer at a time so each can open its own window, and the queue is what
         # lets the player pick the whole payment in one go regardless.
         self._committed: list[str] = []
+        self._armies: list[list[str]] = []
+        self._army_at: dict[int, int] = {}
         # Set instead of a plain selection when the decision divides a fixed number of creations
         # among the cards picked; it holds how many each carries, drawn as a spinner on the card.
         self._allocation: Allocation | None = None
@@ -202,6 +204,84 @@ class FieldView(tk.Canvas):
     def drop_committed(self) -> None:
         """Discard whatever is left in the queue, for a payment that ended before it was spent."""
         self._committed = []
+
+    @property
+    def armies(self) -> tuple[tuple[str, ...], ...]:
+        """The armies the player has grouped, in the order they were formed.
+
+        Assigning is a process: units are gathered into an army, the army is sent to a Province, and
+        both halves can be undone until the whole map goes to the engine as one answer.
+        """
+        return tuple(tuple(army) for army in self._armies)
+
+    def army_of(self, card_id: str) -> int | None:
+        """Which army ``card_id`` belongs to, or None if it is not in one."""
+        return next((index for index, army in enumerate(self._armies) if card_id in army), None)
+
+    def battlefield_of_army(self, index: int) -> int | None:
+        """Where army ``index`` has been sent, or None while it is still at home."""
+        return self._army_at.get(index)
+
+    def join_army(self, index: int, card_ids: Iterable[str]) -> None:
+        """Bring ``card_ids`` into army ``index``, taking each out of whatever army held it."""
+        joining = [card_id for card_id in card_ids if self.army_of(card_id) != index]
+        for card_id in joining:
+            self.leave_army(card_id)
+        self._armies[index].extend(joining)
+        self._selection = []
+
+    def form_army(self, card_ids: Iterable[str]) -> None:
+        """Gather ``card_ids`` into an army, and clear the selection ready for the next one.
+
+        Units already in an army leave it first, so a unit belongs to exactly one — the engine
+        refuses the same unit at two battlefields, and an army is what carries it to one.
+        """
+        joining = list(dict.fromkeys(card_ids))
+        for card_id in joining:
+            self.leave_army(card_id)
+        if joining:
+            self._armies.append(joining)
+        self._selection = []
+
+    def leave_army(self, card_id: str) -> None:
+        """Take ``card_id`` out of whatever army holds it, disbanding an army left empty."""
+        index = self.army_of(card_id)
+        if index is None:
+            return
+        self._armies[index].remove(card_id)
+        if not self._armies[index]:
+            self._disband(index)
+
+    def _disband(self, index: int) -> None:
+        """Drop army ``index``, keeping the remaining armies' battlefields with them."""
+        self._armies.pop(index)
+        self._army_at = {
+            (army - 1 if army > index else army): battlefield
+            for army, battlefield in self._army_at.items()
+            if army != index
+        }
+
+    def send_army(self, index: int, battlefield: int) -> None:
+        """Send army ``index`` to ``battlefield``."""
+        self._army_at[index] = battlefield
+
+    def recall_army(self, index: int) -> None:
+        """Bring army ``index`` home, leaving it grouped."""
+        self._army_at.pop(index, None)
+
+    def assigned_units(self) -> dict[str, int]:
+        """Each unit in an army that has been sent somewhere, to the battlefield it was sent to.
+        Units in an army still at home are not assigned and stay out of the answer."""
+        return {
+            card_id: battlefield
+            for index, battlefield in self._army_at.items()
+            for card_id in self._armies[index]
+        }
+
+    def disband_armies(self) -> None:
+        """Forget every army, for an assignment that ended or was started over."""
+        self._armies = []
+        self._army_at = {}
 
     def begin_selection(self, candidates: Iterable[str], *, render_bowed: bool = False) -> None:
         """Enter selection mode: only ``candidates`` are selectable, none chosen yet. When
