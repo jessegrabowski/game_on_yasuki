@@ -38,10 +38,19 @@ def defender_of(game: GameState, attacker: PlayerId) -> PlayerId:
     return opponents[0]
 
 
-def declare_attack(game: GameState) -> None:
-    """Declare the active player's attack, creating a battlefield at each Defender Province, in
-    Province order."""
-    attacker = game.active
+def declare_attack(game: GameState, attacker: PlayerId | None = None) -> None:
+    """Declare an attack, creating a battlefield at each Defender Province, in Province order.
+
+    Parameters
+    ----------
+    game : GameState
+        The game to declare in.
+    attacker : PlayerId, optional
+        The seat attacking. Defaults to the active player, which is who the Attack Phase's
+        Declaration Segment offers the choice to; an attack a card creates names its own attacker,
+        and need not be the seat whose turn it is.
+    """
+    attacker = game.active if attacker is None else attacker
     defender = defender_of(game, attacker)
     # By Province index rather than by the order the zones were created in: a destroyed Province is
     # replaced at the lowest free index, and the CR makes battlefields at adjacent Provinces

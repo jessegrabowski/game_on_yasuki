@@ -472,3 +472,16 @@ def test_a_seat_with_nothing_to_assign_is_still_asked():
 
     assert isinstance(session.game.pending, AssignUnits)
     assert session.game.pending.seat is PlayerId.P2
+
+
+def test_an_attack_can_name_an_attacker_other_than_the_active_seat():
+    # The Declaration Segment always offers it to the active player, but a card that creates an
+    # attack names its own Attacker — a Counterattack has the seat that just defended attacking.
+    session = _to_battle(_session(defender_provinces=1))
+
+    battle.declare_attack(session.game, PlayerId.P2)
+
+    attack = session.game.attack
+    assert attack.attacker is PlayerId.P2
+    assert attack.defender is PlayerId.P1
+    assert [info.province.owner for info in attack.battlefields] == [PlayerId.P1]
