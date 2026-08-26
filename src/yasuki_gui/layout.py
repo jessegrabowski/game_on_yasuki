@@ -1,5 +1,5 @@
 from yasuki_core.engine.table import BoardPos
-from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W
 
 # How far each seat's province row sits from its edge. The human band (bottom) leaves room for the
 # hand strip below it; the opponent (top) draws no hand, so its provinces tuck right up against the
@@ -19,7 +19,9 @@ _DIVIDER_FRAC = 0.42
 _ROW_GAP = 16
 _CARD_GAP = 8
 _ROW_STEP = CARD_H + _ROW_GAP
-_COLUMN_STEP = CARD_W + _CARD_GAP
+# Card-to-card spacing along a row. Public because the battle window lays its lanes out to the
+# same rhythm as the board's home rows.
+COLUMN_STEP = CARD_W + _CARD_GAP
 
 
 def _row_y(canvas_h: int, seat_at_bottom: bool) -> int:
@@ -54,6 +56,62 @@ def hand_box(canvas_w: int, canvas_h: int, *, seat_at_bottom: bool) -> tuple[int
     return canvas_w // 2, _hand_y(canvas_h, seat_at_bottom), canvas_w - 200, 108
 
 
+def centered_row(center_x: int, count: int, *, step: int = COLUMN_STEP) -> list[int]:
+    """The x centres for ``count`` cards laid in a row centred on ``center_x``.
+
+    Every row of cards the client draws is spaced this way — a seat's provinces, its personalities,
+    and each army in the battle window — so they share one function and improving the spacing
+    improves all of them at once.
+
+    Parameters
+    ----------
+    center_x : int
+        The x the row is centred on.
+    count : int
+        How many cards are in the row.
+    step : int, optional
+        Distance between neighbouring centres. Default :data:`COLUMN_STEP`, one card plus its gap;
+        a caller with less room than that needs may pass a smaller step to overlap the row.
+    """
+    if count <= 0:
+        return []
+    return [int(center_x + (index - (count - 1) / 2) * step) for index in range(count)]
+
+
+def unit_tower_positions(
+    x: int, y: int, count: int, *, sink: bool
+) -> tuple[tuple[int, int], list[tuple[int, int]]]:
+    """Where a unit's cards sit: its Personality, and ``count`` attachments fanned up behind him so
+    each title bar clears the card riding it.
+
+    Both the board and the battle window stack a unit this way, so they share this and a change to
+    the fan moves both.
+
+    Parameters
+    ----------
+    x : int
+        The column the unit stands in.
+    y : int
+        Where the Personality would stand with nothing attached.
+    count : int
+        How many cards are attached to him.
+    sink : bool
+        Whether to drop the Personality by the tower's own height. Set it for a unit whose row has
+        something directly above it — the near seat's row on the board, the attacking side of a
+        lane — so the stack grows downward instead of climbing into what is there.
+
+    Returns
+    -------
+    leader : tuple of int
+        The Personality's position.
+    attached : list of tuple of int
+        One position per attachment, innermost first.
+    """
+    if sink:
+        y += count * ATTACH_STACK_OFFSET
+    return (x, y), [(x, y - step * ATTACH_STACK_OFFSET) for step in range(1, count + 1)]
+
+
 def province_positions(
     canvas_w: int, canvas_h: int, count: int, *, seat_at_bottom: bool
 ) -> list[tuple[int, int]]:
@@ -65,11 +123,10 @@ def province_positions(
     if count <= 0:
         return []
     y = _row_y(canvas_h, seat_at_bottom)
-    center_x = canvas_w // 2
-    offsets = [(i - (count - 1) / 2) * _COLUMN_STEP for i in range(count)]
+    xs = centered_row(canvas_w // 2, count)
     if not seat_at_bottom:
-        offsets.reverse()
-    return [(int(center_x + off), y) for off in offsets]
+        xs.reverse()
+    return [(x, y) for x in xs]
 
 
 # Where a seat's home row of unplaced cards (its stronghold, sensei, and freshly recruited holdings)
@@ -82,7 +139,7 @@ def home_slot(canvas_w: int, canvas_h: int, index: int, *, seat_at_bottom: bool)
     """Position for the ``index``-th unplaced card in a seat's home (holdings) row, laid left to
     right from inside the seat's edge. The stronghold, sensei, and freshly recruited holdings park
     here in battlefield order until a drag gives them a board spot."""
-    return _HOME_X0 + index * _COLUMN_STEP, _holding_row_y(canvas_h, seat_at_bottom)
+    return _HOME_X0 + index * COLUMN_STEP, _holding_row_y(canvas_h, seat_at_bottom)
 
 
 def home_stack_positions(
@@ -108,12 +165,9 @@ def home_stack_positions(
         columns.setdefault(key, len(columns))
 
     if personality_row:  # centre-justified across the canvas, like the provinces
-        center_x = canvas_w // 2
         row_y = _personality_row_y(canvas_h, seat_at_bottom)
-        base = {
-            col: (int(center_x + (col - (len(columns) - 1) / 2) * _COLUMN_STEP), row_y)
-            for col in columns.values()
-        }
+        xs = centered_row(canvas_w // 2, len(columns))
+        base = {col: (xs[col], row_y) for col in columns.values()}
     else:  # left-justified in the holdings row, behind the stronghold
         base = {
             col: home_slot(canvas_w, canvas_h, col, seat_at_bottom=seat_at_bottom)

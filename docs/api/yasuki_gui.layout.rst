@@ -8,6 +8,7 @@ yasuki_gui.layout
 .. autosummary::
 
     card_view_placement
+    centered_row
     divider_y
     from_canvas
     hand_box
@@ -15,6 +16,7 @@ yasuki_gui.layout
     home_stack_positions
     province_positions
     to_canvas
+    unit_tower_positions
 
 .. automodule:: yasuki_gui.layout
     :members:

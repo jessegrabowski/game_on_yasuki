@@ -18,6 +18,7 @@ from yasuki_gui.layout import (
     home_stack_positions,
     province_positions,
     to_canvas,
+    unit_tower_positions,
 )
 from yasuki_gui.services.allocation import Allocation
 from yasuki_gui.services.hittest import resolve_tag_at as hittest_resolve_tag_at
@@ -790,12 +791,13 @@ class FieldView(tk.Canvas):
             if personality_id not in placed:
                 continue
             x, y = placed[personality_id]
-            if self._at_bottom(owners.get(personality_id)):
-                y += len(members) * ATTACH_STACK_OFFSET
-                positions[personality_id] = (x, y)
-            for step, card_id in enumerate(members, start=1):
+            sink = self._at_bottom(owners.get(personality_id))
+            leader, attached = unit_tower_positions(x, y, len(members), sink=sink)
+            if sink:
+                positions[personality_id] = leader
+            for card_id, spot in zip(members, attached):
                 if card_id in placed:
-                    positions[card_id] = (x, y - step * ATTACH_STACK_OFFSET)
+                    positions[card_id] = spot
         return positions
 
     def _home_positions(self, rendered, w: int, h: int) -> dict[str, tuple[int, int]]:
