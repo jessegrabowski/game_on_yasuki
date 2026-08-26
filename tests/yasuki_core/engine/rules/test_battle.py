@@ -383,6 +383,24 @@ def test_assigning_takes_the_whole_unit_along():
     assert location_of(session.game.table, follower).battlefield == 0
 
 
+def test_an_assignment_names_the_window_it_happened_in():
+    # Cards ask which maneuvers window a unit came in on, not merely where it ended up. There is one
+    # window under these rules, so every entry names it.
+    session, heroes = _declared(defender_provinces=1)
+
+    session.submit(PlayerId.P1, DecisionResponse((assignment_token(heroes[0], 0),)))
+
+    assert session.game.attack.assigned_in == {heroes[0]: battle.MANEUVERS_WINDOW}
+
+
+def test_a_unit_that_stayed_home_names_no_window():
+    session, heroes = _declared(defender_provinces=1)
+
+    session.submit(PlayerId.P1, DecisionResponse())
+
+    assert heroes[0] not in session.game.attack.assigned_in
+
+
 def test_both_seats_assign_to_the_same_battlefield():
     session, heroes = _declared(defender_provinces=1)
     session.submit(PlayerId.P1, DecisionResponse((assignment_token(heroes[0], 0),)))

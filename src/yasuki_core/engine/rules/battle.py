@@ -12,6 +12,11 @@ from yasuki_core.engine.rules.state import AttackPhase, BattlefieldInfo, GameSta
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
+# The single maneuvers window the current rules run. Gold through Emperor Edition ran two, Infantry
+# Maneuvers then Cavalry Maneuvers, and cards still ask which of them a unit assigned in; this is
+# the name there is to record while there is one.
+MANEUVERS_WINDOW = "maneuvers"
+
 
 def _declared_attack(game: GameState) -> AttackPhase:
     """The attack in progress. Raise ``ValueError`` outside one, since every caller here is a step
@@ -113,6 +118,7 @@ def apply_assignment(game: GameState, request: AssignUnits, response: DecisionRe
     for token in response.choices:
         card_id, battlefield = assignment(token)
         ops.assign(game.table, game.table.cards_by_id[card_id], battlefield)
+        attack.assigned_in[card_id] = MANEUVERS_WINDOW
     game.pending = None
     if request.seat is attack.attacker:
         _ask_to_assign(game, attack.defender)
