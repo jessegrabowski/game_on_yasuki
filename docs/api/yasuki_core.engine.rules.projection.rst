@@ -7,7 +7,10 @@ yasuki_core.engine.rules.projection
 
 .. autosummary::
 
+    AttackView
+    BattlefieldView
     GameView
+    UnitView
 
 .. rubric:: Functions
 
