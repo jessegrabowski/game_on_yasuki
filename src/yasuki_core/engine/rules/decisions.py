@@ -405,6 +405,36 @@ class ChooseEquipTarget(DecisionRequest):
 CHOICE_PROMPTS: dict[str, str] = {}
 
 
+ASSIGNMENT_SEPARATOR = "@"
+
+
+def assignment_token(card_id: str, battlefield: int) -> str:
+    """The candidate string pairing the Personality ``card_id`` with the battlefield at index
+    ``battlefield`` — how :class:`AssignUnits` names one place a unit could go."""
+    return f"{card_id}{ASSIGNMENT_SEPARATOR}{battlefield}"
+
+
+def assignment(token: str) -> tuple[str, int]:
+    """The Personality and battlefield index :func:`assignment_token` encoded.
+
+    Returns
+    -------
+    card_id : str
+        The Personality leading the assigned unit.
+    battlefield : int
+        Where it goes, indexing the attack's battlefields.
+
+    Raises
+    ------
+    ValueError
+        If ``token`` names neither.
+    """
+    card_id, separator, index = token.rpartition(ASSIGNMENT_SEPARATOR)
+    if not separator or not card_id or not index.isdigit():
+        raise ValueError(f"not an assignment token: {token!r}")
+    return card_id, int(index)
+
+
 @dataclass(frozen=True, slots=True)
 class ChooseFortificationProvince(DecisionRequest):
     """The seat must choose which of its Provinces a Fortification attaches to.

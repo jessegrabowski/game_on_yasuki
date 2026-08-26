@@ -26,6 +26,13 @@ yasuki_core.engine.rules.decisions
     LeaveBowed
     PlaceLegacy
 
+.. rubric:: Functions
+
+.. autosummary::
+
+    assignment
+    assignment_token
+
 .. automodule:: yasuki_core.engine.rules.decisions
     :members:
     :undoc-members:

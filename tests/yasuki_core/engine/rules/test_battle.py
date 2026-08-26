@@ -4,6 +4,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import battle
 from yasuki_core.engine.rules.actions import ActionTiming, DeclareAttack, Pass
+from yasuki_core.engine.rules.decisions import assignment, assignment_token
 from yasuki_core.engine.rules.policies import EconomicPolicy, GoldRushPolicy
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.session import EngineSession
@@ -183,3 +184,20 @@ def test_a_seat_with_no_opponent_has_no_defender():
 
     with pytest.raises(ValueError, match="0 opponents"):
         battle.defender_of(game, PlayerId.P1)
+
+
+def test_a_token_names_a_card_and_a_battlefield():
+    # The literal pins the wire format, so changing the separator fails here rather than silently
+    # in a saved game; the round trip pins the pair of functions against each other.
+    assert assignment("hero-1@3") == ("hero-1", 3)
+    assert assignment(assignment_token("a_card_id", 0)) == ("a_card_id", 0)
+
+
+@pytest.mark.parametrize(
+    "bogus",
+    ["hero-1", "@2", "hero-1@", "hero-1@x"],
+    ids=["no separator", "no card", "no index", "index is not a number"],
+)
+def test_a_token_naming_no_battlefield_is_refused(bogus):
+    with pytest.raises(ValueError, match="not an assignment token"):
+        assignment(bogus)
