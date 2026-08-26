@@ -471,3 +471,67 @@ def test_a_producer_queued_behind_a_grant_that_covered_the_cost_never_bows():
         assert window.field.committed == ()
     finally:
         window.root.destroy()
+
+
+@pytest.fixture
+def gold_already_in_the_pool():
+    """A presenter on a second purchase the floating pool alone covers, so the payment offers no
+    producers at all."""
+    state = dealt_table()
+    put_in_play(state, holding("big", owner=P1, gold_production=8))
+    session = EngineSession.start(state, P1)
+    province_card(session.game, "first", seat=P1, gold_cost=3, index=0)
+    province_card(session.game, "second", seat=P1, gold_cost=4, index=1)
+    end_phase(session)
+    end_phase(session)
+
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    window.field.on_selection_changed = presenter.refresh
+    try:
+        runner.act(Recruit("first"))
+        presenter.present()
+        window.field.toggle_selection("big")
+        presenter.confirm()  # bows the 8-producer for a 3 cost, leaving 5 in the pool
+        assert session.game.gold[P1] == 5
+        runner.act(Recruit("second"))
+        presenter.present()
+        yield presenter, window, session
+    finally:
+        window.root.destroy()
+
+
+def test_pay_spends_the_floating_pool_when_no_producer_is_on_offer(gold_already_in_the_pool):
+    """The payment's only legal answer is to bow nothing, and the board has nothing to queue for it.
+    Without an empty answer the seat is stuck on a lit Pay button that never resolves."""
+    presenter, _, session = gold_already_in_the_pool
+
+    presenter.confirm()
+
+    table = session.game.table
+    assert session.game.pending is None
+    assert table.cards_by_id["second"] in table.battlefield.cards
+    assert session.game.gold[P1] == 1
+
+
+def test_a_pool_covered_payment_is_not_answered_until_pay_is_pressed(gold_already_in_the_pool):
+    """Presenting must not spend on the seat's behalf: the payment is cancellable, and backing out
+    of the Recruit is only possible while it is still pending."""
+    presenter, _, session = gold_already_in_the_pool
+
+    presenter.present()
+
+    assert session.game.pending is not None
+    assert session.game.gold[P1] == 5
+
+
+def test_pay_with_nothing_picked_leaves_a_payment_that_still_owes_gold_open(two_producers):
+    """The empty answer means "bow nothing", which is only true when the pool covers the cost. A
+    payment still short of it must stay open rather than be sent an answer the engine refuses."""
+    presenter, _, session = two_producers
+
+    presenter.confirm()
+
+    assert session.game.pending is not None
+    assert session.game.gold[P1] == 0
