@@ -104,6 +104,7 @@ Legality with respect to game state is checked separately.
 
 .. autosummary::
 
+   AssignUnits
    BanishForLegacy
    ChooseAbilityTarget
    ChooseAmount

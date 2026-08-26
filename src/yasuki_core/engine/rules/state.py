@@ -85,6 +85,14 @@ class ActionRound:
     passes: int = 0
 
 
+class Segment(Enum):
+    """The Attack Phase's segments, in the order the CR walks them."""
+
+    DECLARATION = "declaration"
+    MANEUVERS = "maneuvers"
+    FIGHT = "fight"
+
+
 class BattlefieldInfo(NamedTuple):
     """A battlefield an attack created, and the Defender Province it is associated with.
 
@@ -113,11 +121,14 @@ class AttackPhase:
     battlefields : tuple of BattlefieldInfo
         One per Defender Province, in Province order. A card at a battlefield indexes into this
         tuple, so the order is load-bearing and fixed for the life of the attack.
+    segment : Segment
+        Which segment of the phase is open. Default ``Segment.DECLARATION``.
     """
 
     attacker: PlayerId
     defender: PlayerId
     battlefields: tuple[BattlefieldInfo, ...]
+    segment: Segment = Segment.DECLARATION
 
 
 @dataclass(slots=True)

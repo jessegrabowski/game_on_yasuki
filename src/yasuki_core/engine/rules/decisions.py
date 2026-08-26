@@ -436,6 +436,42 @@ def assignment(token: str) -> tuple[str, int]:
 
 
 @dataclass(frozen=True, slots=True)
+class AssignUnits(DecisionRequest):
+    """The seat must assign any number of its unbowed Personalities from home to battlefields.
+
+    A candidate pairs a unit with a battlefield rather than naming either alone, because assigning is
+    a choice of *where* and one Personality may go to any battlefield the attack made. Read a choice
+    through :func:`assignment` rather than splitting the string. The whole seat answers at once: the
+    CR has each seat assign simultaneously, so this is one request per seat rather than one per unit.
+
+    Assigning nothing is a well-formed answer — the CR lets a seat keep some or all of its
+    Personalities at home.
+
+    Attributes
+    ----------
+    battlefields : int
+        How many battlefields the attack created, which the candidates index into.
+    """
+
+    battlefields: int
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return f"Assign units to battlefields ({len(partial.choices)} assigned)"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Assign"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        if not set(response.choices) <= set(self.candidates):
+            return False
+        # A unit stands at one battlefield. Two tokens for the same Personality is not a richer
+        # answer than one, it is a contradiction, and picking either would be arbitrary.
+        assigned = [assignment(token)[0] for token in response.choices]
+        return len(set(assigned)) == len(assigned)
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseFortificationProvince(DecisionRequest):
     """The seat must choose which of its Provinces a Fortification attaches to.
 

@@ -13,6 +13,7 @@ yasuki_core.engine.rules.state
     GameState
     Phase
     RoundTimings
+    Segment
 
 .. rubric:: Functions
 

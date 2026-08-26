@@ -7,6 +7,7 @@ yasuki_core.engine.rules.decisions
 
 .. autosummary::
 
+    AssignUnits
     BanishForLegacy
     ChooseAbilityTarget
     ChooseAmount
