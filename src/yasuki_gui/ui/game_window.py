@@ -174,15 +174,27 @@ class GameWindow:
         self.root.bind("<Control-z>", presenter.undo)
         self.root.bind("<Escape>", presenter.cancel_via_escape)
 
-    def popup_at_pointer(self, entries: Iterable[tuple[str, Callable[[], None]]]) -> None:
+    def popup_at_pointer(
+        self,
+        entries: Iterable[tuple[str, Callable[[], None]] | tuple[str, Callable[[], None], bool]],
+    ) -> None:
         """Pop up a menu of labelled commands where the pointer is. No-op when there is nothing to
-        offer, so a caller can hand over whatever a click turned up without checking first."""
+        offer, so a caller can hand over whatever a click turned up without checking first.
+
+        An entry may carry a third element saying whether it is available. A greyed entry is shown
+        rather than hidden: it tells the player the step exists and is not reachable yet, which a
+        menu that silently omits it cannot.
+        """
         commands = list(entries)
         if not commands:
             return
         menu = tk.Menu(self.root, tearoff=0)
-        for label, command in commands:
-            menu.add_command(label=label, command=command)
+        for entry in commands:
+            label, command = entry[0], entry[1]
+            enabled = entry[2] if len(entry) > 2 else True
+            menu.add_command(
+                label=label, command=command, state=tk.NORMAL if enabled else tk.DISABLED
+            )
         try:
             menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
         finally:
