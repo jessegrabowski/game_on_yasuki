@@ -5,12 +5,13 @@ from typing import NamedTuple
 from numpy.random import Generator, default_rng
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.events import GameEvent
 from yasuki_core.engine.rules.modifiers import OngoingEffect
+from yasuki_core.engine.rules.victory import VictoryRule
 from yasuki_core.engine.rules.work import WorkItem
 
 
@@ -144,6 +145,19 @@ class AttackPhase:
     assigned_in: dict[str, str] = field(default_factory=dict)
 
 
+def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:
+    """The victory rules ``seat`` begins subject to: every one its board can support.
+
+    A seat dealt no Provinces cannot lose the ones it does not have, and dealing is the one moment
+    that is distinguishable from having lost them all — afterwards the board looks the same either
+    way. A hand-built board therefore excuses itself rather than losing on the first check.
+    """
+    rules = set(VictoryRule)
+    if not any(key.owner is seat and key.role is ZoneRole.PROVINCE for key in table.zones):
+        rules.discard(VictoryRule.MILITARY_LOSS)
+    return frozenset(rules)
+
+
 @dataclass(slots=True)
 class GameState:
     """The mutable state of one rules-driven game.
@@ -176,6 +190,11 @@ class GameState:
     loser : PlayerId or None
         The seat that has lost the game, or None while the game is ongoing. Set when a loss
         condition fires (currently a failed Legacy search). Default None.
+    active_rules : dict mapping PlayerId to frozenset of VictoryRule
+        The ways each seat can win or lose. :meth:`start` fills it from :func:`rules_at_start`;
+        dropping a rule from a seat's set afterwards excuses that seat alone, which is how a card
+        reading "you will not lose, or be eliminated, by Dishonor" is expressed. A seat absent from
+        the dict is held to nothing. Default empty.
     attack : AttackPhase or None
         The attack declared in the Attack Phase now open, or None — outside that phase, and inside
         it until the active player declares. Ephemeral and rebuilt by replay. Default None.
@@ -242,6 +261,7 @@ class GameState:
     gold: dict[PlayerId, int]
     favor_holder: PlayerId | None = None
     loser: PlayerId | None = None
+    active_rules: dict[PlayerId, frozenset[VictoryRule]] = field(default_factory=dict)
     attack: AttackPhase | None = None
     once_per: set[str] = field(default_factory=set)
     straighten_delayed: dict[str, int] = field(default_factory=dict)
@@ -293,6 +313,7 @@ class GameState:
             phase=Phase.ACTION,
             round=ActionRound(PHASE_TIMINGS[Phase.ACTION], priority=first_player),
             gold={seat: 0 for seat in table.seats},
+            active_rules={seat: rules_at_start(table, seat) for seat in table.seats},
             seed=seed,
             rng=default_rng(seed),
         )
