@@ -106,6 +106,11 @@ class TestMarquee:
         assert card_tag("P1-SH") in field._selected
 
 
+def _is_province(key) -> bool:
+    """Whether ``key`` names a Province, either seat's."""
+    return isinstance(key, ZoneKey) and key.role is ZoneRole.PROVINCE
+
+
 def _is_own_province(key, seat) -> bool:
     return isinstance(key, ZoneKey) and key.role is ZoneRole.PROVINCE and key.owner is seat
 
@@ -147,6 +152,40 @@ class TestDecisionSelection:
 
         field.begin_selection([key.token])
         _at(field, tag)
+        field._controller.on_press(DummyEventNamespace(x=zv.x, y=zv.y))
+
+        assert field.selection == (key.token,)
+
+    def test_the_opponents_province_is_a_candidate_when_the_decision_offers_it(self, loaded):
+        """A battlefield stands at one of the Defender's Provinces, so an attack picks a slot that
+        is not yours. Which slots may be picked is the decision's business, not the seat's."""
+        field, _ = loaded
+        key = next(
+            k for k in field._tag_to_key.values() if _is_province(k) and k.owner is not field.seat
+        )
+        tag = zone_tag(key)
+        zv = field.zones[tag]
+
+        field.begin_selection([key.token])
+        _at(field, tag)
+        field._controller.on_press(DummyEventNamespace(x=zv.x, y=zv.y))
+
+        assert field.selection == (key.token,)
+
+    def test_a_card_standing_in_a_candidate_province_picks_the_province_under_it(self, loaded):
+        """The card covers the slot, so a click meant for the Province lands on the card. When the
+        card is not itself on offer, the slot beneath it is what the click meant."""
+        field, _ = loaded
+        key = next(
+            k
+            for k in field._tag_to_key.values()
+            if _is_province(k) and field.zones[zone_tag(k)].cards
+        )
+        card = field.zones[zone_tag(key)].cards[-1]
+        zv = field.zones[zone_tag(key)]
+
+        field.begin_selection([key.token])  # the slot is offered; the card on it is not
+        _at(field, card_tag(card.id))
         field._controller.on_press(DummyEventNamespace(x=zv.x, y=zv.y))
 
         assert field.selection == (key.token,)

@@ -185,22 +185,42 @@ class FieldController:
         if arrow is not None:
             self.view.adjust_allocation(*arrow)
             return
-        province = self._own_province_at(tag)
+        province = self._province_at(tag)
         if province is not None and self.view.is_selectable(province.token):
             self.view.toggle_selection(province.token)
             return
         card_id = self._card_at(tag, e)
-        if card_id is not None:
-            self.view.toggle_selection(card_id)
+        if card_id is None:
+            return
+        if not self.view.is_selectable(card_id):
+            # The card is standing in a Province the decision offers, and covers it: an attack picks
+            # the Province the card is in, not the card. The slot is what the click meant.
+            holding = self._province_holding(card_id)
+            if holding is not None and self.view.is_selectable(holding.token):
+                self.view.toggle_selection(holding.token)
+                return
+        self.view.toggle_selection(card_id)
 
-    def _own_province_at(self, tag: str | None) -> ZoneKey | None:
-        """The key of your own Province ``tag`` names, or None when it names something else."""
+    def _province_at(self, tag: str | None) -> ZoneKey | None:
+        """The key of the Province ``tag`` names, or None when it names something else.
+
+        Either seat's: a Fortification attaches to one of your own, and an attack is declared at one
+        of the Defender's. Which of them may be picked is the pending decision's business, and the
+        field already refuses a slot it did not offer.
+        """
         if not tag or not tag.startswith("zone:"):
             return None
         key = self.view.key_for_tag(tag)
         if not isinstance(key, ZoneKey) or key.role is not ZoneRole.PROVINCE:
             return None
-        return key if key.owner is self.view.seat else None
+        return key
+
+    def _province_holding(self, card_id: str) -> ZoneKey | None:
+        """The Province ``card_id`` is standing in, or None when it is not in one."""
+        for key, zone in self.view.state.zones.items():
+            if key.role is ZoneRole.PROVINCE and any(card.id == card_id for card in zone.cards):
+                return key
+        return None
 
     def _card_at(self, tag: str | None, e: tk.Event) -> str | None:
         """The id of the card clicked — a battlefield sprite, one of your own hand cards, or the
@@ -224,7 +244,8 @@ class FieldController:
     def _province_card_at(self, tag: str) -> str | None:
         """The id of the card in your own province ``tag``, or None if it is not your province or is
         empty."""
-        if self._own_province_at(tag) is None:
+        province = self._province_at(tag)
+        if province is None or province.owner is not self.view.seat:
             return None
         zv = self.view.zones.get(tag)
         return zv.cards[-1].id if zv is not None and zv.cards else None
