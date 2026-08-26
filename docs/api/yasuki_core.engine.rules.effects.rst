@@ -31,6 +31,7 @@ yasuki_core.engine.rules.effects
     GrantModifier
     IgnoreHonorRequirements
     InterruptingEffect
+    LoseGame
     MoveToDeck
     MoveToHand
     PayGold

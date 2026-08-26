@@ -144,3 +144,11 @@ GameEvent = (
     | Revealed
     | Straightened
 )
+
+
+@dataclass(frozen=True, slots=True)
+class GameLost:
+    """A seat lost the game. ``reason`` is worded for a player."""
+
+    seat: PlayerId
+    reason: str

@@ -50,6 +50,7 @@ deferred through `Then` instead.
    Effect
    GainGold
    GainHonor
+   LoseGame
    GrantKeyword
    GrantModifier
    IgnoreHonorRequirements
@@ -84,6 +85,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    CardDiscarded
    CounterGained
    Destroyed
+   GameLost
    EnteredPlay
    ProducedGold
    ProducingGold

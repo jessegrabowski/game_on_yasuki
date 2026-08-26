@@ -2,9 +2,11 @@ from collections.abc import Callable
 
 from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.rules.economy import effective_chi
-from yasuki_core.engine.rules.effects import Destroy, Discard, Effect
+from yasuki_core.engine.rules.effects import Destroy, Discard, Effect, LoseGame
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.victory import VictoryRule
+from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
 # A state rule reads the board and returns the effects the rules demand of it. Unlike a trigger it
@@ -75,9 +77,28 @@ def orphaned_attachments(game: GameState) -> list[Effect]:
     ]
 
 
-# Every state rule, in the order they are checked. Closed by design: this is the rulebook's list of
-# conditions the board must satisfy, not an extension point cards register into.
-STATE_RULES: tuple[StateRule, ...] = (chi_death, orphaned_attachments)
+def lost_last_province(game: GameState) -> list[Effect]:
+    """Lose the game for a seat with no Provinces remaining (CR, Military Loss/Victory).
+
+    The CR loses it immediately rather than at any particular step, so a Province destroyed by a
+    card ends the game exactly as one destroyed by an army does.
+
+    Only seats held to :attr:`~yasuki_core.engine.rules.victory.VictoryRule.MILITARY_LOSS` lose
+    this way, which is what excuses a seat a card has spared and a board that was never dealt
+    Provinces to lose.
+    """
+    if game.loser is not None:
+        return []
+    holders = {key.owner for key in game.table.zones if key.role is ZoneRole.PROVINCE}
+    return [
+        LoseGame(seat, "no Provinces remaining")
+        for seat, rules in game.active_rules.items()
+        if VictoryRule.MILITARY_LOSS in rules and seat not in holders
+    ]
+
+
+# The rulebook's own list, in the order they are checked.
+STATE_RULES: tuple[StateRule, ...] = (chi_death, orphaned_attachments, lost_last_province)
 
 
 def demanded(game: GameState) -> list[Effect]:
