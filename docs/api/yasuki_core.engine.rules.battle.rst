@@ -7,13 +7,20 @@ yasuki_core.engine.rules.battle
 
 .. autosummary::
 
+    after_resolution
     apply_assignment
+    army_force
     assignable_units
     assignment_candidates
+    begin_fight
     declare_attack
     defender_of
     end_attack_phase
+    fight_battle
+    fight_next_battle
     open_maneuvers
+    resolution_effects
+    units_at
 
 .. automodule:: yasuki_core.engine.rules.battle
     :members:

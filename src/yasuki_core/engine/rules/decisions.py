@@ -472,6 +472,25 @@ class AssignUnits(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseBattlefield(DecisionRequest):
+    """The Attacker must choose where the next battle is fought.
+
+    The candidates are the indices of the battlefields no battle has been fought at yet, as strings.
+    Exactly one battle happens at each, so the choice is the order rather than the set.
+    """
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return "Choose a battlefield to fight at"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Fight"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseFortificationProvince(DecisionRequest):
     """The seat must choose which of its Provinces a Fortification attaches to.
 

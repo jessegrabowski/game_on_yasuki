@@ -202,6 +202,16 @@ class CompleteProduction:
     target_ids: tuple[str, ...] = ()
 
 
+@dataclass(frozen=True, slots=True)
+class FightNextBattle:
+    """Fight the next battlefield the Attacker has not fought at yet, or end the Attack Phase's
+    Fight Segment once every one has been.
+
+    A work item rather than a loop because choosing where to fight is a decision: the procedure has
+    to pause for the answer and pick up where it left off.
+    """
+
+
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
@@ -215,4 +225,5 @@ WorkItem = (
     | ApplyAbilityEffects
     | ApplyEffects
     | FinishRecruit
+    | FightNextBattle
 )

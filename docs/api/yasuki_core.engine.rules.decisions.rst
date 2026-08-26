@@ -11,6 +11,7 @@ yasuki_core.engine.rules.decisions
     BanishForLegacy
     ChooseAbilityTarget
     ChooseAmount
+    ChooseBattlefield
     ChooseCards
     ChooseDistribution
     ChooseEquipTarget

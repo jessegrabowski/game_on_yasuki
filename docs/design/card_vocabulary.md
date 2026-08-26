@@ -105,6 +105,7 @@ Legality with respect to game state is checked separately.
 .. autosummary::
 
    AssignUnits
+   ChooseBattlefield
    BanishForLegacy
    ChooseAbilityTarget
    ChooseAmount
@@ -142,6 +143,7 @@ the action rather than by deserializing it.
    ApplyEffects
    CompleteProduction
    ContinuePayment
+   FightNextBattle
    FinishRecruit
    ResolveEquip
    ResolveRecruit

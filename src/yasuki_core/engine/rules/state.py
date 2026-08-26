@@ -123,6 +123,11 @@ class AttackPhase:
         tuple, so the order is load-bearing and fixed for the life of the attack.
     segment : Segment
         Which segment of the phase is open. Default ``Segment.DECLARATION``.
+    fought : frozenset of int
+        The battlefields a battle has already been fought at. Exactly one battle happens at each,
+        so this is what the fight loop counts down. Default empty.
+    current : int or None
+        The battlefield a battle is being fought at, or None between battles. Default None.
     assigned_in : dict mapping str to str
         Each assigned Personality to the maneuvers window it assigned in. The current rules run one
         window, so every entry names the same one; earlier editions ran Infantry Maneuvers and
@@ -134,6 +139,8 @@ class AttackPhase:
     defender: PlayerId
     battlefields: tuple[BattlefieldInfo, ...]
     segment: Segment = Segment.DECLARATION
+    fought: frozenset[int] = frozenset()
+    current: int | None = None
     assigned_in: dict[str, str] = field(default_factory=dict)
 
 
