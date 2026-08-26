@@ -21,6 +21,7 @@ yasuki_core.engine.rules.state
 
     once_key
     once_per_turn
+    rules_at_start
     used_this_turn
 
 .. automodule:: yasuki_core.engine.rules.state

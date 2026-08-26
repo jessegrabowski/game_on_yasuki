@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.policies import EconomicPolicy, GoldRushPolicy
 from yasuki_core.engine.rules.state import Phase, Segment
+from yasuki_core.engine.rules.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces import keywords
@@ -107,15 +108,18 @@ def _one_battlefield(
     defenders: dict[str, int],
     *,
     province_strength: int = 0,
+    defender_provinces: int = 1,
 ) -> EngineSession:
     """An attack on a single Province, with the named Personalities assigned to it at the Force each
     is given. Paused on the Attacker's choice of where to fight, which has only one answer.
 
     ``province_strength`` is printed on the Defender's Stronghold, which is where every one of its
-    Provinces takes its base from.
+    Provinces takes its base from. Only the battlefield at its first Province is fought over.
     """
     state = TableState.empty_two_seat()
-    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    for index in range(defender_provinces):
+        province_card(state, f"def-prov{index}", seat=PlayerId.P2, index=index)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
     put_in_play(state, stronghold(PlayerId.P2, province_strength=province_strength))
     for card_id, force in {**attackers, **defenders}.items():
         owner = PlayerId.P1 if card_id in attackers else PlayerId.P2
@@ -792,3 +796,37 @@ def test_a_tie_never_destroys_the_province():
 
     assert not _in_play(session, "a") and not _in_play(session, "d")
     assert ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0) in session.game.table.zones
+
+
+def test_losing_the_last_province_loses_the_game():
+    # CR, Military Loss/Victory: a player loses immediately with no Provinces remaining.
+    session = _one_battlefield({"a": 6}, {"d": 2}, province_strength=3)
+    assert session.game.loser is None
+
+    _fight_one_battle(session)
+
+    assert session.game.loser is PlayerId.P2
+    assert session.game.game_over
+
+
+def test_losing_a_province_that_is_not_the_last_does_not_end_the_game():
+    session = _one_battlefield({"a": 6}, {}, defender_provinces=2)
+
+    _fight_one_battle(session)
+
+    assert ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0) not in session.game.table.zones
+    assert session.game.loser is None
+
+
+def test_a_seat_not_held_to_the_military_loss_keeps_playing_without_provinces():
+    # The per-seat hatch a card like Hidden Catacombs of the Scorpion needs — "You will not lose,
+    # or be eliminated, by Dishonor" is the same shape, one seat excused from one rule.
+    session = _one_battlefield({"a": 6}, {"d": 2}, province_strength=3)
+    # Dropping the one rule rather than all of them: with a second member these stop being the same
+    # answer, and the test would quietly start asserting something weaker.
+    session.game.active_rules[PlayerId.P2] = frozenset(VictoryRule) - {VictoryRule.MILITARY_LOSS}
+
+    _fight_one_battle(session)
+
+    assert ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0) not in session.game.table.zones
+    assert session.game.loser is None

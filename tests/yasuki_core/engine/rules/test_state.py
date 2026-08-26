@@ -1,7 +1,10 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.state import GameState, Phase, rules_at_start
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.victory import VictoryRule
+
+from tests.yasuki_core.engine.builders import province_card
 
 
 def _game(seed: int = 0) -> GameState:
@@ -63,3 +66,29 @@ def test_use_once_is_claimed_exactly_once():
     # A second claim is refused; a different key is independent.
     assert game.use_once("inheritance") is False
     assert game.use_once("proclaim") is True
+
+
+def test_a_seat_dealt_provinces_can_lose_them_all():
+    state = TableState.empty_two_seat()
+    province_card(state, "prov", seat=PlayerId.P1, index=0)
+
+    assert VictoryRule.MILITARY_LOSS in rules_at_start(state, PlayerId.P1)
+
+
+def test_a_seat_dealt_no_provinces_is_not_held_to_the_military_loss():
+    # Otherwise a board built card by card loses on the first check, before it has been dealt a
+    # game to lose — and after dealing, "never had any" and "lost them all" look identical.
+    state = TableState.empty_two_seat()
+    province_card(state, "prov", seat=PlayerId.P1, index=0)
+
+    assert VictoryRule.MILITARY_LOSS not in rules_at_start(state, PlayerId.P2)
+
+
+def test_a_started_game_records_the_rules_each_seat_plays_under():
+    state = TableState.empty_two_seat()
+    province_card(state, "prov", seat=PlayerId.P1, index=0)
+
+    game = GameState.start(state, PlayerId.P1)
+
+    assert set(game.active_rules) == set(PlayerId)
+    assert game.active_rules[PlayerId.P1] == rules_at_start(state, PlayerId.P1)

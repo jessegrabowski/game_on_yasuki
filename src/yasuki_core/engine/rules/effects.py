@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.events import (
     Destroyed,
     EnteredPlay,
     GameEvent,
+    GameLost,
     Revealed,
     Straightened,
 )
@@ -752,6 +753,29 @@ class GainGold(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.add_gold(self.seat, self.amount)
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class LoseGame(Effect):
+    """End the game, with ``seat`` the loser.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that has lost.
+    reason : str
+        Why, worded for a player.
+    """
+
+    seat: PlayerId
+    reason: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} loses: {self.reason}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.loser = self.seat
+        return [GameLost(self.seat, self.reason)]
 
 
 @dataclass(frozen=True, slots=True)

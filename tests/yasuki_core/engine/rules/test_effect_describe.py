@@ -27,6 +27,7 @@ from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     GainGold,
     GainHonor,
+    LoseGame,
     MoveToHand,
     GrantKeyword,
     GrantModifier,
@@ -57,6 +58,7 @@ EFFECTS = [
     (GainGold(PlayerId.P2, 3), "P2 gains 3 gold"),
     (GainHonor(PlayerId.P1, 2), "P1 gains 2 honor"),
     (GainHonor(PlayerId.P2, -4), "P2 loses 4 honor"),
+    (LoseGame(PlayerId.P2, "no Provinces remaining"), "P2 loses: no Provinces remaining"),
     (
         DestroyProvince(PlayerId.P1, ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 2)),
         "destroy P1's province 2",
