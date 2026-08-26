@@ -31,18 +31,21 @@ class TestBoardMenu:
 
         assert opened == ["opened"]
 
-    def test_right_click_on_a_card_leaves_the_board_menu_shut(self, loaded):
+    def test_right_click_on_a_card_opens_that_cards_menu_not_the_boards(self, loaded):
         # The rulebook abilities act on whole zones, so a right-click that lands on a card is not
-        # asking for them — and a card's own actions are a left-click away.
+        # asking for them. It is asking what that card can do, which is what a player reaches for
+        # right-click to find out.
         field, _ = loaded
-        opened = []
+        opened, activated = [], []
         field.on_board_menu = lambda: opened.append("opened")
+        field.on_card_activated = activated.append
         _in_rules_mode(field)
         _at(field, card_tag("P1-SH"))
 
         field._controller.on_context_click(DummyEventNamespace(x=10, y=10))
 
         assert opened == []
+        assert activated == ["P1-SH"]
 
     def test_both_right_click_buttons_are_bound(self, loaded):
         # Aqua calls a right-click Button-2 and X11 calls it Button-3, so binding only one leaves

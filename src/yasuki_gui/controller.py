@@ -408,9 +408,18 @@ class FieldController:
     # ----- double click / context / keys ------------------------------------
 
     def on_context_click(self, e: tk.Event) -> None:
-        """Open the board menu on a right-click that hits no card or zone, in rules mode only."""
+        """Open a menu on a right-click, in rules mode only: the card's if the click hit one, the
+        board's if it hit nothing.
+
+        A right-click is what a player reaches for to ask a card what it can do, so it opens the
+        same menu a double-click does rather than being reserved for empty board.
+        """
         self._hide_card_view()
-        if not self.view.rules_mode or self.view.resolve_tag_at(e):
+        if not self.view.rules_mode:
+            return
+        tag = self.view.resolve_tag_at(e)
+        if tag:
+            self._activate_card_at(tag, e)
             return
         if self.view.on_board_menu is not None:
             self.view.on_board_menu()
