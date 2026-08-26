@@ -155,10 +155,17 @@ class Presenter:
         """Answer the pending decision with the board's current selection.
 
         A payment is queued rather than sent: the seat picks every producer it means to bow in one
-        go, and :meth:`_spend_committed` feeds them to the engine one answer at a time.
+        go, and :meth:`_spend_committed` feeds them to the engine one answer at a time. A payment the
+        pool already covers offers no producers, so there is nothing to queue and it is answered
+        here, with the empty answer that bows nothing.
         """
-        if isinstance(self.host.runner.pending, ChoosePayment):
+        pending = self.host.runner.pending
+        if isinstance(pending, ChoosePayment):
             self.window.field.commit_selection()
+            # Guarded rather than unconditional: a payment that still owes gold and has no producer
+            # picked stays open for the seat to pick one.
+            if not self.window.field.committed and pending.accepts(DecisionResponse()):
+                self.host.runner.submit(DecisionResponse())
             self.present()
             return
         self.host.runner.submit(self._board_answer())
