@@ -773,3 +773,36 @@ def test_a_unit_in_no_army_has_no_ring(a_battle):
     _press(presenter, "Declare an attack")
 
     assert window.field._army_ring("hero") is None
+
+
+def test_the_battle_window_opens_with_an_attack_and_closes_with_it(a_battle):
+    """It is display only, so it lives exactly as long as there is an attack to display."""
+    presenter, window, session = a_battle
+    assert presenter._battle_window is None
+
+    _press(presenter, "Declare an attack")
+    assert presenter._battle_window is not None
+
+    _press(presenter, "Done assigning")
+    presenter.host.runner.run_opponent()
+    presenter.present()
+    _press(presenter, "Battlefield 1")
+    _press(presenter, "Battlefield 2")
+    _press(presenter, "Pass")  # the Attack Phase ends, and the battlefields cease to exist
+
+    assert session.game.attack is None
+    assert presenter._battle_window is None
+
+
+def test_the_battle_window_shows_what_has_been_assigned_so_far(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    _send_army(presenter, window, "hero", 1)
+
+    canvas = presenter._battle_window.canvas
+    texts = [
+        canvas.itemcget(item, "text") for item in canvas.find_all() if canvas.type(item) == "text"
+    ]
+
+    assert "sending hero" in texts

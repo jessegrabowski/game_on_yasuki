@@ -485,12 +485,28 @@ class FieldView(tk.Canvas):
                 yield key, [to_render_card(card) for card in zone.cards]
 
     def _render_battlefield(self):
+        """The cards the board draws in play: everything standing at home.
+
+        A unit assigned to a battlefield is drawn there instead — by the battle window, which is the
+        only surface that can show four battlefields legibly — so the board leaves it out rather than
+        drawing it in two places at once.
+        """
         if self._snapshot is not None:
             for bf_view in self._snapshot.battlefield:
-                yield to_render_card(bf_view.card), bf_view.pos
+                # Through the render card, since a redacted card carries its id under another name.
+                rendered = to_render_card(bf_view.card)
+                if not self._at_home(rendered.id):
+                    continue
+                yield rendered, bf_view.pos
         else:
             for card in self.state.battlefield.cards:
                 yield to_render_card(card), self.state.positions.get(card.id)
+
+    def _at_home(self, card_id: str) -> bool:
+        """Whether ``card_id`` stands in a seat's home rather than at a battlefield. A card with no
+        recorded location is at home, which is what every card is until an attack moves it."""
+        location = self._snapshot.locations.get(card_id) if self._snapshot is not None else None
+        return location is None or location.is_home
 
     def _render_seats(self):
         return self._snapshot.seats if self._snapshot is not None else self.state.seats
