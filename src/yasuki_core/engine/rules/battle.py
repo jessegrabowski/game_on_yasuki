@@ -9,13 +9,14 @@ from yasuki_core.engine.rules.decisions import (
     assignment,
     assignment_token,
 )
-from yasuki_core.engine.rules.economy import effective_province_strength
+from yasuki_core.engine.rules.economy import effective_keywords, effective_province_strength
 from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor
 from yasuki_core.engine.rules.units import unit_force
 from yasuki_core.engine.rules.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.legality import province_zones
 from yasuki_core.engine.rules.state import AttackPhase, BattlefieldInfo, GameState, Segment
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
@@ -218,17 +219,17 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     """Send the survivors home (CR, After Resolution).
 
     Attacking units at this battlefield bow and then return home, both as effects of the
-    resolution and neither as movement, and every card in the unit bows. Once the Attack Phase's last
+    resolution and neither as movement; every card in the unit bows, and a Conqueror Personality
+    exempts his whole unit from the bow but not from the trip home. Once the Attack Phase's last
     battle is over, defending units return home without bowing — every one of them, at every
     battlefield, since until then they hold the ground they defended.
     """
     attack = _declared_attack(game)
     for personality in units_at(game, battlefield, attack.attacker):
-        # Every card in the unit bows, not just its leader: Conqueror's exemption is worded as
-        # "cards in a Conqueror Personality's unit do not bow", so that is what it exempts them from.
-        personality.bow()
-        for attached in attachments_of(game, personality):
-            attached.bow()
+        if keywords.CONQUEROR not in effective_keywords(game, personality):
+            personality.bow()
+            for attached in attachments_of(game, personality):
+                attached.bow()
         ops.return_home(game.table, personality)
     if last_battle:
         # Not scoped to this battlefield, unlike the attackers above: the CR qualifies 0.1 with "at

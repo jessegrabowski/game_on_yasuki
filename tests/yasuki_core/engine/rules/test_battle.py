@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.policies import EconomicPolicy, GoldRushPolicy
 from yasuki_core.engine.rules.state import Phase, Segment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.builders import (
@@ -135,6 +136,33 @@ def _fight_one_battle(session: EngineSession) -> None:
     pending = session.game.pending
     assert isinstance(pending, ChooseBattlefield)
     session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+
+
+def _attacker_with_keywords(
+    *, personality_keywords: tuple[str, ...] = (), follower_keywords: tuple[str, ...] = ()
+) -> EngineSession:
+    """A one-battlefield attack the Attacker wins uncontested, its single unit a Personality and one
+    Follower carrying the given keywords."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    put_in_play(
+        state, personality("hero", owner=PlayerId.P1, force=3, keywords=personality_keywords)
+    )
+    session = _to_battle(EngineSession.start(state, PlayerId.P1))
+    attached(
+        session.game,
+        attachment(
+            "retainer",
+            owner=PlayerId.P1,
+            attachment_type=AttachmentType.FOLLOWER,
+            keywords=follower_keywords,
+        ),
+        "hero",
+    )
+    session.act(PlayerId.P1, DeclareAttack())
+    session.submit(PlayerId.P1, DecisionResponse((assignment_token("hero", 0),)))
+    session.submit(PlayerId.P2, DecisionResponse())
+    return session
 
 
 def test_a_game_starts_with_no_attack():
@@ -693,6 +721,39 @@ def test_the_defender_holds_its_battlefield_until_the_last_battle():
 
     assert location_of(session.game.table, holder).is_home
     assert not holder.bowed
+
+
+def test_a_conqueror_unit_goes_home_without_bowing():
+    session = _attacker_with_keywords(personality_keywords=(keywords.CONQUEROR,))
+    cards = session.game.table.cards_by_id
+
+    _fight_one_battle(session)
+
+    assert location_of(session.game.table, cards["hero"]).is_home
+    assert not cards["hero"].bowed
+    # "Cards in a Conqueror Personality's unit" — the Follower is exempt too.
+    assert not cards["retainer"].bowed
+
+
+def test_conqueror_on_a_follower_exempts_nobody():
+    # The CR keys the exemption on the Personality, not on the unit. Reading it as a unit keyword
+    # would let one Conqueror Follower stand a whole army up.
+    session = _attacker_with_keywords(follower_keywords=(keywords.CONQUEROR,))
+    cards = session.game.table.cards_by_id
+
+    _fight_one_battle(session)
+
+    assert cards["hero"].bowed
+    assert cards["retainer"].bowed
+
+
+def test_a_unit_without_conqueror_bows_every_card_in_it():
+    session = _attacker_with_keywords()
+    cards = session.game.table.cards_by_id
+
+    _fight_one_battle(session)
+
+    assert cards["hero"].bowed and cards["retainer"].bowed
 
 
 def test_an_attack_can_name_an_attacker_other_than_the_active_seat():
