@@ -85,6 +85,14 @@ class ActionRound:
     passes: int = 0
 
 
+class Segment(Enum):
+    """The Attack Phase's segments, in the order the CR walks them."""
+
+    DECLARATION = "declaration"
+    MANEUVERS = "maneuvers"
+    FIGHT = "fight"
+
+
 class BattlefieldInfo(NamedTuple):
     """A battlefield an attack created, and the Defender Province it is associated with.
 
@@ -113,11 +121,20 @@ class AttackPhase:
     battlefields : tuple of BattlefieldInfo
         One per Defender Province, in Province order. A card at a battlefield indexes into this
         tuple, so the order is load-bearing and fixed for the life of the attack.
+    segment : Segment
+        Which segment of the phase is open. Default ``Segment.DECLARATION``.
+    assigned_in : dict mapping str to str
+        Each assigned Personality to the maneuvers window it assigned in. The current rules run one
+        window, so every entry names the same one; earlier editions ran Infantry Maneuvers and
+        Cavalry Maneuvers as two, and cards ask which of them a unit came in on. Recording where a
+        unit ended up would not answer that. Default empty.
     """
 
     attacker: PlayerId
     defender: PlayerId
     battlefields: tuple[BattlefieldInfo, ...]
+    segment: Segment = Segment.DECLARATION
+    assigned_in: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass(slots=True)

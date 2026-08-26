@@ -42,6 +42,7 @@ from yasuki_core.engine.rules.work import (
     WorkItem,
 )
 from yasuki_core.engine.rules.decisions import (
+    AssignUnits,
     ChooseAmount,
     ChooseOption,
     LeaveBowed,
@@ -282,6 +283,7 @@ def perform(game: GameState, action: Action) -> None:
             activate(game, card_id)
         case DeclareAttack():
             battle.declare_attack(game)
+            battle.open_maneuvers(game)
         case _:
             raise ValueError(f"no handler for action {type(action).__name__}")
     # An action resolves fully before the next input; one that paused for a decision leaves its
@@ -569,6 +571,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_card_choice(game, request, response)
         case ChooseInvestAmount():
             _apply_invest_amount(game, request, response)
+        case AssignUnits():
+            battle.apply_assignment(game, request, response)
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
     # Symmetric with `perform`: an answered decision resolves fully before the next input.

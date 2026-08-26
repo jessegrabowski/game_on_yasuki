@@ -7,6 +7,7 @@ yasuki_core.engine.rules.decisions
 
 .. autosummary::
 
+    AssignUnits
     BanishForLegacy
     ChooseAbilityTarget
     ChooseAmount
@@ -25,6 +26,13 @@ yasuki_core.engine.rules.decisions
     DiscardToHandSize
     LeaveBowed
     PlaceLegacy
+
+.. rubric:: Functions
+
+.. autosummary::
+
+    assignment
+    assignment_token
 
 .. automodule:: yasuki_core.engine.rules.decisions
     :members:
