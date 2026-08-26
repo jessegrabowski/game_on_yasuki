@@ -8,6 +8,8 @@ yasuki_core.engine.rules.state
 .. autosummary::
 
     ActionRound
+    AttackPhase
+    BattlefieldInfo
     GameState
     Phase
     RoundTimings

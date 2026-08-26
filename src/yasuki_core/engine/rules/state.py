@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import NamedTuple
 
 from numpy.random import Generator, default_rng
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState
+from yasuki_core.engine.table import TableState, ZoneKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
@@ -41,14 +42,14 @@ class RoundTimings:
     others: frozenset[ActionTiming]
 
 
-# What each phase's Action Round permits. The Battle phase permits nothing of its own: battles are
-# declared there and their Engage and Combat Segments are Action Rounds in their own right.
+# What each phase's Action Round permits. The Battle phase permits only the declaration: a battle's
+# own Engage and Combat Segments will open rounds of their own.
 PHASE_TIMINGS: dict[Phase, RoundTimings] = {
     Phase.ACTION: RoundTimings(
         active=frozenset({ActionTiming.OPEN, ActionTiming.LIMITED}),
         others=frozenset({ActionTiming.OPEN}),
     ),
-    Phase.BATTLE: RoundTimings(active=frozenset(), others=frozenset()),
+    Phase.BATTLE: RoundTimings(active=frozenset({ActionTiming.ATTACK}), others=frozenset()),
     Phase.DYNASTY: RoundTimings(active=frozenset({ActionTiming.DYNASTY}), others=frozenset()),
 }
 
@@ -84,6 +85,41 @@ class ActionRound:
     passes: int = 0
 
 
+class BattlefieldInfo(NamedTuple):
+    """A battlefield an attack created, and the Defender Province it is associated with.
+
+    Attributes
+    ----------
+    province : ZoneKey
+        The Province this battlefield sits at.
+    """
+
+    province: ZoneKey
+
+
+@dataclass(slots=True)
+class AttackPhase:
+    """The attack the active player declared this turn, and the battlefields it created.
+
+    A card standing at a battlefield names it by the index it has in :attr:`battlefields`, which is
+    what its :class:`~yasuki_core.engine.table.Location` carries.
+
+    Attributes
+    ----------
+    attacker : PlayerId
+        The seat that declared, which is always the active player.
+    defender : PlayerId
+        The seat being attacked, at whose Provinces the battlefields stand.
+    battlefields : tuple of BattlefieldInfo
+        One per Defender Province, in Province order. A card at a battlefield indexes into this
+        tuple, so the order is load-bearing and fixed for the life of the attack.
+    """
+
+    attacker: PlayerId
+    defender: PlayerId
+    battlefields: tuple[BattlefieldInfo, ...]
+
+
 @dataclass(slots=True)
 class GameState:
     """The mutable state of one rules-driven game.
@@ -116,6 +152,9 @@ class GameState:
     loser : PlayerId or None
         The seat that has lost the game, or None while the game is ongoing. Set when a loss
         condition fires (currently a failed Legacy search). Default None.
+    attack : AttackPhase or None
+        The attack declared in the Attack Phase now open, or None — outside that phase, and inside
+        it until the active player declares. Ephemeral and rebuilt by replay. Default None.
     once_per : set of str
         Usage flags for once-per-turn and once-per-game abilities (the Inheritance Rule, Proclaim,
         ...), keyed by a caller-chosen string. Default empty.
@@ -179,6 +218,7 @@ class GameState:
     gold: dict[PlayerId, int]
     favor_holder: PlayerId | None = None
     loser: PlayerId | None = None
+    attack: AttackPhase | None = None
     once_per: set[str] = field(default_factory=set)
     straighten_delayed: dict[str, int] = field(default_factory=dict)
     seed: int = 0
