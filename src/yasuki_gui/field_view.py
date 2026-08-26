@@ -600,12 +600,19 @@ class FieldView(tk.Canvas):
             sp.card, sp.x, sp.y = rc, x, y
             chosen = self._is_chosen(rc.id)
             sp.bowed_preview = chosen and self._selection_bows
+            sp.army_ring = self._army_ring(rc.id)
             sp.draw(self, selected=tag in self._selected or chosen)
         self._sink_province_attachments()
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
         self._draw_allocation()
+
+    def _army_ring(self, card_id: str) -> str | None:
+        """The colour of the army ``card_id`` is gathered into, or None when it is in none. Colours
+        cycle, so a seat that gathers more armies than there are still tells them apart locally."""
+        army = self.army_of(card_id)
+        return None if army is None else theme.ARMY_RINGS[army % len(theme.ARMY_RINGS)]
 
     def _is_chosen(self, card_id: str) -> bool:
         """Whether ``card_id`` is part of the answer being assembled for the pending decision."""

@@ -750,3 +750,26 @@ def test_the_prompt_box_only_confirms_cancels_and_finishes(a_battle):
 
     presenter.assign_army("hero")
     assert [label for label, _, _ in _specs(presenter)] == ["Attack here", "Cancel"]
+
+
+def test_units_in_the_same_army_share_a_ring_and_different_armies_do_not(a_battle):
+    """The ring is the only thing on the board that says which units travel together."""
+    presenter, window, session = a_battle
+    for name in ("second", "third"):
+        put_in_play(session.game, personality(name, owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    window.field.toggle_selection("second")
+    presenter.form_army("hero")
+    presenter.form_army("third")
+
+    rings = {name: window.field._army_ring(name) for name in ("hero", "second", "third")}
+
+    assert rings["hero"] == rings["second"]
+    assert rings["third"] not in (None, rings["hero"])
+
+
+def test_a_unit_in_no_army_has_no_ring(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+
+    assert window.field._army_ring("hero") is None
