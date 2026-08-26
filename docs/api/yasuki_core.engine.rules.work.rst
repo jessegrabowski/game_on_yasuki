@@ -11,6 +11,7 @@ yasuki_core.engine.rules.work
     ApplyEffects
     CompleteProduction
     ContinuePayment
+    FightNextBattle
     FinishRecruit
     ResolveEquip
     ResolveRecruit

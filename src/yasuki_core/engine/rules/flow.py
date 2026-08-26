@@ -31,6 +31,7 @@ from yasuki_core.engine.rules.state import (
 )
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
+    FightNextBattle,
     CompleteProduction,
     ContinuePayment,
     ApplyAbilityEffects,
@@ -44,6 +45,7 @@ from yasuki_core.engine.rules.work import (
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
     ChooseAmount,
+    ChooseBattlefield,
     ChooseOption,
     LeaveBowed,
     BanishForLegacy,
@@ -573,6 +575,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_invest_amount(game, request, response)
         case AssignUnits():
             battle.apply_assignment(game, request, response)
+        case ChooseBattlefield():
+            game.pending = None
+            battle.fight_battle(game, int(response.choices[0]))
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
     # Symmetric with `perform`: an answered decision resolves fully before the next input.
@@ -677,6 +682,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             triggers.resume_cascade(game, item, [])
         case ApplyEffects(effects=effects):
             triggers.resolve_effects(game, list(effects))
+        case FightNextBattle():
+            battle.fight_next_battle(game)
         case _:
             raise ValueError(f"no resolver for work item {type(item).__name__}")
 

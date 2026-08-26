@@ -14,6 +14,11 @@
 
 # --- Keywords the rulebook itself reads ---
 
+# No card in a Conqueror Personality's unit bows before returning home after a battle's resolution
+# (CR, Conqueror). It is the Personality's keyword rather than the unit's: a Follower carrying it
+# exempts nobody, not even itself.
+CONQUEROR = "Conqueror"
+
 # A Holding carrying this attaches to the Province it entered play from — or to one its controller
 # picks, if it came from elsewhere — and is destroyed with it (CR, Fortification).
 FORTIFICATION = "Fortification"
