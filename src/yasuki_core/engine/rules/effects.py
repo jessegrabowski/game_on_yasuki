@@ -774,7 +774,7 @@ class LoseGame(Effect):
         return f"{self.seat.name} loses: {self.reason}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.loser = self.seat
+        game.lose(self.seat, self.reason)
         return [GameLost(self.seat, self.reason)]
 
 

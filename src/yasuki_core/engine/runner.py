@@ -299,6 +299,11 @@ class GameRunner:
         return self.session.game.loser
 
     @property
+    def loss_reason(self) -> str | None:
+        """Why that seat lost, worded for a player, or None while the game is ongoing."""
+        return self.session.game.loss_reason
+
+    @property
     def is_opponent_turn(self) -> bool:
         """Whether the turn itself belongs to the AI-reserved opponent — as opposed to the human
         merely having handed the opportunity on inside a phase of its own turn."""

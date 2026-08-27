@@ -135,8 +135,8 @@ class Presenter:
         runner = self.host.runner
         pending = runner.pending
         if runner.loser is not None:
-            lost = runner.loser is self.host.human_seat
-            return ("You lose (failed Legacy)" if lost else "Opponent loses (failed Legacy)"), []
+            whose = "You lose" if runner.loser is self.host.human_seat else "Opponent loses"
+            return f"{whose} ({runner.loss_reason})", []
         if pending is not None and runner.search_view() is not None:
             # Answered by the search dialog (opened in present), not the board.
             return pending.prompt(), []

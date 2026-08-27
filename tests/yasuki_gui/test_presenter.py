@@ -214,9 +214,21 @@ def test_an_invest_decision_offers_a_button_per_affordable_amount(board):
     assert _buttons(window) == ["Invest 1", "Invest 2", "Invest 3", "Cancel"]
 
 
+def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_battle):
+    """Every loss used to be announced as a failed Legacy, so a seat overrun said the one thing that
+    had not happened to it."""
+    presenter, _, session = a_battle
+    session.game.lose(PlayerId.P2, "no Provinces remaining")
+
+    status, buttons = presenter._prompt(presenter.host.runner.view())
+
+    assert status == "Opponent loses (no Provinces remaining)"
+    assert buttons == []
+
+
 def test_a_finished_game_says_who_lost_and_offers_nothing(board):
     presenter, window, session = board
-    session.game.loser = P1
+    session.game.lose(P1, "failed Legacy")
 
     presenter.refresh()
 
@@ -226,7 +238,7 @@ def test_a_finished_game_says_who_lost_and_offers_nothing(board):
 
 def test_the_opponent_losing_reads_from_the_human_seat(board):
     presenter, window, session = board
-    session.game.loser = PlayerId.P2
+    session.game.lose(PlayerId.P2, "failed Legacy")
 
     presenter.refresh()
 
