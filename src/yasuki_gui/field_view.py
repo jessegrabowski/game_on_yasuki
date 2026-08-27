@@ -18,6 +18,7 @@ from yasuki_gui.layout import (
     home_stack_positions,
     province_positions,
     to_canvas,
+    unit_tower_positions,
 )
 from yasuki_gui.services.allocation import Allocation
 from yasuki_gui.services.hittest import resolve_tag_at as hittest_resolve_tag_at
@@ -92,6 +93,8 @@ class FieldView(tk.Canvas):
         # is answered one producer at a time so each can open its own window, and the queue is what
         # lets the player pick the whole payment in one go regardless.
         self._committed: list[str] = []
+        self._armies: list[list[str]] = []
+        self._army_at: dict[int, int] = {}
         # Set instead of a plain selection when the decision divides a fixed number of creations
         # among the cards picked; it holds how many each carries, drawn as a spinner on the card.
         self._allocation: Allocation | None = None
@@ -202,6 +205,84 @@ class FieldView(tk.Canvas):
     def drop_committed(self) -> None:
         """Discard whatever is left in the queue, for a payment that ended before it was spent."""
         self._committed = []
+
+    @property
+    def armies(self) -> tuple[tuple[str, ...], ...]:
+        """The armies the player has grouped, in the order they were formed.
+
+        Assigning is a process: units are gathered into an army, the army is sent to a Province, and
+        both halves can be undone until the whole map goes to the engine as one answer.
+        """
+        return tuple(tuple(army) for army in self._armies)
+
+    def army_of(self, card_id: str) -> int | None:
+        """Which army ``card_id`` belongs to, or None if it is not in one."""
+        return next((index for index, army in enumerate(self._armies) if card_id in army), None)
+
+    def battlefield_of_army(self, index: int) -> int | None:
+        """Where army ``index`` has been sent, or None while it is still at home."""
+        return self._army_at.get(index)
+
+    def join_army(self, index: int, card_ids: Iterable[str]) -> None:
+        """Bring ``card_ids`` into army ``index``, taking each out of whatever army held it."""
+        joining = [card_id for card_id in card_ids if self.army_of(card_id) != index]
+        for card_id in joining:
+            self.leave_army(card_id)
+        self._armies[index].extend(joining)
+        self._selection = []
+
+    def form_army(self, card_ids: Iterable[str]) -> None:
+        """Gather ``card_ids`` into an army, and clear the selection ready for the next one.
+
+        Units already in an army leave it first, so a unit belongs to exactly one — the engine
+        refuses the same unit at two battlefields, and an army is what carries it to one.
+        """
+        joining = list(dict.fromkeys(card_ids))
+        for card_id in joining:
+            self.leave_army(card_id)
+        if joining:
+            self._armies.append(joining)
+        self._selection = []
+
+    def leave_army(self, card_id: str) -> None:
+        """Take ``card_id`` out of whatever army holds it, disbanding an army left empty."""
+        index = self.army_of(card_id)
+        if index is None:
+            return
+        self._armies[index].remove(card_id)
+        if not self._armies[index]:
+            self._disband(index)
+
+    def _disband(self, index: int) -> None:
+        """Drop army ``index``, keeping the remaining armies' battlefields with them."""
+        self._armies.pop(index)
+        self._army_at = {
+            (army - 1 if army > index else army): battlefield
+            for army, battlefield in self._army_at.items()
+            if army != index
+        }
+
+    def send_army(self, index: int, battlefield: int) -> None:
+        """Send army ``index`` to ``battlefield``."""
+        self._army_at[index] = battlefield
+
+    def recall_army(self, index: int) -> None:
+        """Bring army ``index`` home, leaving it grouped."""
+        self._army_at.pop(index, None)
+
+    def assigned_units(self) -> dict[str, int]:
+        """Each unit in an army that has been sent somewhere, to the battlefield it was sent to.
+        Units in an army still at home are not assigned and stay out of the answer."""
+        return {
+            card_id: battlefield
+            for index, battlefield in self._army_at.items()
+            for card_id in self._armies[index]
+        }
+
+    def disband_armies(self) -> None:
+        """Forget every army, for an assignment that ended or was started over."""
+        self._armies = []
+        self._army_at = {}
 
     def begin_selection(self, candidates: Iterable[str], *, render_bowed: bool = False) -> None:
         """Enter selection mode: only ``candidates`` are selectable, none chosen yet. When
@@ -404,12 +485,34 @@ class FieldView(tk.Canvas):
                 yield key, [to_render_card(card) for card in zone.cards]
 
     def _render_battlefield(self):
+        """The cards the board draws in play: everything standing at home.
+
+        A unit assigned to a battlefield is drawn there instead — by the battle view, which is the
+        only surface that can show four battlefields legibly — so the board leaves it out rather than
+        drawing it in two places at once.
+        """
         if self._snapshot is not None:
             for bf_view in self._snapshot.battlefield:
-                yield to_render_card(bf_view.card), bf_view.pos
+                # Through the render card, since a redacted card carries its id under another name.
+                rendered = to_render_card(bf_view.card)
+                if not self._at_home(rendered.id):
+                    continue
+                yield rendered, bf_view.pos
         else:
             for card in self.state.battlefield.cards:
                 yield to_render_card(card), self.state.positions.get(card.id)
+
+    def _at_home(self, card_id: str) -> bool:
+        """Whether ``card_id`` stands in a seat's home rather than at a battlefield.
+
+        A card with no recorded location is at home, which is what every card is until an attack
+        moves it — unless the player has sent it to a battlefield and the engine has not been told
+        yet, which is a decision already made and so already a card the board has given up.
+        """
+        if self.army_of(card_id) is not None and card_id in self.assigned_units():
+            return False
+        location = self._snapshot.locations.get(card_id) if self._snapshot is not None else None
+        return location is None or location.is_home
 
     def _render_seats(self):
         return self._snapshot.seats if self._snapshot is not None else self.state.seats
@@ -520,12 +623,19 @@ class FieldView(tk.Canvas):
             sp.card, sp.x, sp.y = rc, x, y
             chosen = self._is_chosen(rc.id)
             sp.bowed_preview = chosen and self._selection_bows
+            sp.army_ring = self._army_ring(rc.id)
             sp.draw(self, selected=tag in self._selected or chosen)
         self._sink_province_attachments()
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
         self._draw_allocation()
+
+    def _army_ring(self, card_id: str) -> str | None:
+        """The colour of the army ``card_id`` is gathered into, or None when it is in none. Colours
+        cycle, so a seat that gathers more armies than there are still tells them apart locally."""
+        army = self.army_of(card_id)
+        return None if army is None else theme.ARMY_RINGS[army % len(theme.ARMY_RINGS)]
 
     def _is_chosen(self, card_id: str) -> bool:
         """Whether ``card_id`` is part of the answer being assembled for the pending decision."""
@@ -703,12 +813,13 @@ class FieldView(tk.Canvas):
             if personality_id not in placed:
                 continue
             x, y = placed[personality_id]
-            if self._at_bottom(owners.get(personality_id)):
-                y += len(members) * ATTACH_STACK_OFFSET
-                positions[personality_id] = (x, y)
-            for step, card_id in enumerate(members, start=1):
+            sink = self._at_bottom(owners.get(personality_id))
+            leader, attached = unit_tower_positions(x, y, len(members), sink=sink)
+            if sink:
+                positions[personality_id] = leader
+            for card_id, spot in zip(members, attached):
                 if card_id in placed:
-                    positions[card_id] = (x, y - step * ATTACH_STACK_OFFSET)
+                    positions[card_id] = spot
         return positions
 
     def _home_positions(self, rendered, w: int, h: int) -> dict[str, tuple[int, int]]:

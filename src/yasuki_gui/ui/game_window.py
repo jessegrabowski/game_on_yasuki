@@ -5,9 +5,13 @@ from typing import Protocol
 import yasuki_gui.config as gui_config
 from yasuki_gui.config import load_hotkeys
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.projection import AttackView
 from yasuki_core.engine.table import TableState
 from yasuki_gui import theme
 from yasuki_gui.field_view import FieldView
+from yasuki_gui.layout import divider_y
+from yasuki_gui.ui.geometry import widget_size
+from yasuki_gui.ui.battle_view import BattleView, LaneButton, PendingArmy
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
@@ -53,6 +57,8 @@ class GameWindow:
         The right column holding the board and the phase strip.
     field : FieldView
         The board canvas.
+    battle_view : BattleView
+        The attack in progress, floating over the board while there is one.
     phase_bar : PhaseBar
         The turn and phase strip along the bottom of the content column.
     prompt_box : PromptBox
@@ -116,6 +122,9 @@ class GameWindow:
         self.phase_bar = PhaseBar(self.content)
         self.phase_bar.pack(side="bottom", fill="x")
         self.field.pack(side="top", fill="both", expand=True)
+        # Floats over the board rather than beside it, so it is built on the same parent and only
+        # placed once there is an attack to show.
+        self.battle_view = BattleView(self.field)
 
         # A panel reads the board through the FieldView it is handed, so the field is built first.
         self.opponent_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P2)
@@ -132,6 +141,26 @@ class GameWindow:
         self.field.on_local_player_changed = self.relayout_panels
         self.field.apply_profile_to_panels = self.apply_profile_to_panels
         self.relayout_panels()
+
+    def show_battle(
+        self,
+        attack: AttackView | None,
+        pending: dict[int, PendingArmy] | None = None,
+        buttons: dict[int, LaneButton] | None = None,
+    ) -> None:
+        """Float the battle over the board while ``attack`` is on, and take it away when it ends.
+
+        It opens over the opponent's half and stays wherever the player has since dragged it. The
+        arguments are :meth:`BattleView.refresh`'s and are passed straight through.
+        """
+        if attack is None:
+            self.battle_view.close()
+            return
+        # The opponent's half rather than the middle, so the seat being played can see its own units
+        # at home while it decides where to send them. A starting place, not a dock.
+        board_w, board_h = widget_size(self.field)
+        self.battle_view.open_over(0, 0, board_w, divider_y(board_h))
+        self.battle_view.refresh(attack, pending, buttons)
 
     def relayout_panels(self) -> None:
         """Move the seat being played to the bottom of the sidebar and resync both panels against
@@ -171,18 +200,31 @@ class GameWindow:
         self.field.on_board_menu = presenter.on_board_menu
         self.field.load_deck_from_file = presenter.load_human_deck
         self.field.load_opponent_deck_from_file = presenter.load_opponent_deck
+        self.battle_view.on_card_menu = presenter.on_card_activated
         self.root.bind("<Control-z>", presenter.undo)
         self.root.bind("<Escape>", presenter.cancel_via_escape)
 
-    def popup_at_pointer(self, entries: Iterable[tuple[str, Callable[[], None]]]) -> None:
+    def popup_at_pointer(
+        self,
+        entries: Iterable[tuple[str, Callable[[], None]] | tuple[str, Callable[[], None], bool]],
+    ) -> None:
         """Pop up a menu of labelled commands where the pointer is. No-op when there is nothing to
-        offer, so a caller can hand over whatever a click turned up without checking first."""
+        offer, so a caller can hand over whatever a click turned up without checking first.
+
+        An entry may carry a third element saying whether it is available. A greyed entry is shown
+        rather than hidden: it tells the player the step exists and is not reachable yet, which a
+        menu that silently omits it cannot.
+        """
         commands = list(entries)
         if not commands:
             return
         menu = tk.Menu(self.root, tearoff=0)
-        for label, command in commands:
-            menu.add_command(label=label, command=command)
+        for entry in commands:
+            label, command = entry[0], entry[1]
+            enabled = entry[2] if len(entry) > 2 else True
+            menu.add_command(
+                label=label, command=command, state=tk.NORMAL if enabled else tk.DISABLED
+            )
         try:
             menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
         finally:

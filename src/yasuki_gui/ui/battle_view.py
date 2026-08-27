@@ -1,0 +1,363 @@
+import tkinter as tk
+from collections.abc import Callable
+from dataclasses import dataclass
+
+from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
+from yasuki_gui import theme
+from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.layout import COLUMN_STEP, centered_row, unit_tower_positions
+from yasuki_gui.ui.floating_panel import BORDER, FloatingPanel, TITLEBAR_H
+from yasuki_gui.ui.geometry import widget_size
+from yasuki_gui.visuals.cardface import RenderCard, to_render_card
+from yasuki_gui.visuals.sprite import CardSpriteVisual
+
+# What a unit's sprite is tagged with here, and what a right-click reads back off it.
+_CARD_TAG = "battle:"
+# The Defender's Province card, tagged apart because it is not a unit: it belongs to the seat
+# being attacked, and nothing the player can do to a unit applies to it.
+_PROVINCE_TAG = "province:"
+# How wide a lane is once collapsed: enough for its number, and no more.
+COLLAPSED_W = 34
+LANE_GAP = 6
+# The lane's name and the Province Strength under it, which is the number the battle is about.
+HEADER_H = 74
+# The strip along the bottom holding the lane's own button.
+FOOTER_H = 36
+# How far each side's Force total sits in from the corner it marks.
+FORCE_INSET = 12
+# The least a lane steps between its rows of cards. The step normally comes out of the height, so
+# this only binds on a lane crushed shorter than three cards can be stacked in at all — small enough
+# that it does not push the bottom row over the lane's button on any lane worth reading.
+MIN_ROW_STEP = 16
+# The tightest a row of units compresses before cards start hiding each other entirely.
+MIN_STEP = 22
+# The narrowest an open lane goes, however many of them are competing for the width.
+MIN_LANE_W = CARD_W + 10
+# The size the panel is built at, which is what its canvas asks for before Tk lays it out. What it
+# actually opens over is the board's own, decided by whoever shows it.
+PANEL_W = 900
+PANEL_H = 600
+
+
+@dataclass(frozen=True, slots=True)
+class LaneButton:
+    """A lane's own button: what it says, and what pressing it does.
+
+    Carried per lane rather than named by the view, because what a battlefield offers depends on
+    what the engine is asking — a place to send an army during assignment, a battle to fight after.
+
+    Attributes
+    ----------
+    label : str
+        What the button reads.
+    press : callable
+        Taken with no arguments when the button is clicked.
+    """
+
+    label: str
+    press: Callable[[], None]
+
+
+@dataclass(frozen=True, slots=True)
+class PendingArmy:
+    """Units the player has sent to a battlefield but not yet answered the engine with.
+
+    Attributes
+    ----------
+    units : tuple of UnitView
+        The units standing there, drawn exactly as an assigned one is.
+    force : int
+        Their Force, totalled the way resolution would, so the lane's number does not jump when the
+        assignment is answered and the engine starts counting them itself.
+    """
+
+    units: tuple[UnitView, ...]
+    force: int
+
+
+def _rows(height: int) -> tuple[int, int, int, int]:
+    """Where a lane's three rows of cards sit, and where the divider between the sides goes.
+
+    The Province, the Defender's units and the Attacker's fill the space between the header and the
+    footer. A lane with room for all three spreads them apart; a shorter one steps them closer until
+    they overlap, each row keeping enough of itself showing to be read, rather than pushing the last
+    row out of sight. Cards are a fixed size, so the rows moving is the only give there is.
+
+    Returns
+    -------
+    province : int
+        The centre line of the Province's own card.
+    defending : int
+        The centre line of the Defender's units.
+    divider : int
+        Where the line between the two sides is drawn.
+    attacking : int
+        The centre line of the Attacker's units.
+    """
+    band = height - FOOTER_H - HEADER_H
+    step = max((band - CARD_H) // 2, MIN_ROW_STEP)
+    province = HEADER_H + CARD_H // 2
+    defending = province + step
+    return province, defending, defending + step // 2, defending + step
+
+
+class BattleView(FloatingPanel):
+    """The attack in progress, drawn as one vertical lane per battlefield.
+
+    The board draws two whole tableaux and cannot show four battlefields legibly, so this is where
+    an attack is read: each lane leads with the Province Strength the attackers have to clear, marks
+    each side's Force in its own corner, and draws the units standing there with the same sprites the
+    board uses. A lane collapses to a strip when the player wants to concentrate on one battlefield.
+
+    A window inside the game rather than one the desktop puts beside it: it floats over the board,
+    and the player drags it clear of whatever they want to look at underneath.
+    """
+
+    def __init__(self, master: tk.Misc):
+        super().__init__(master, "Attack", width=PANEL_W, height=PANEL_H)
+        # Sized to the panel it fills, so the layout it computes before Tk maps it is the one it
+        # ends up with.
+        self.canvas = tk.Canvas(
+            self.body,
+            bg=theme.SURFACE,
+            highlightthickness=0,
+            width=PANEL_W - 2 * BORDER,
+            height=PANEL_H - TITLEBAR_H - 2 * BORDER,
+        )
+        self.canvas.pack(fill="both", expand=True)
+        # A unit in a lane is still the player's to recall, and the lane is now the only place it
+        # is drawn — so the menu the board gives its cards has to be reachable from here too.
+        self.on_card_menu: Callable[[str], None] | None = None
+        self._collapsed: set[int] = set()
+        self._attack: AttackView | None = None
+        self._pending: dict[int, PendingArmy] = {}
+        self._buttons: dict[int, LaneButton] = {}
+        self._lane_spans: dict[int, tuple[int, int]] = {}
+        self.canvas.bind("<Configure>", lambda _event: self._redraw())
+        self.canvas.bind("<Button-1>", self._on_click)
+        # Aqua reports a right-click as Button-2, X11 and Windows as Button-3, as on the board.
+        self.canvas.bind("<Button-2>", self._on_context_click)
+        self.canvas.bind("<Button-3>", self._on_context_click)
+
+    def refresh(
+        self,
+        attack: AttackView | None,
+        pending: dict[int, PendingArmy] | None = None,
+        buttons: dict[int, LaneButton] | None = None,
+    ) -> None:
+        """Redraw for ``attack``, or empty the view when there is none.
+
+        Parameters
+        ----------
+        attack : AttackView, optional
+            The attack in progress, or None outside one.
+        pending : dict mapping int to PendingArmy, optional
+            Units sent to a battlefield but not yet assigned, by battlefield. They draw at the
+            battlefield like any assigned unit. Default None.
+        buttons : dict mapping int to LaneButton, optional
+            What each battlefield offers the player right now. Only these lanes show a button.
+            Default None.
+        """
+        self._attack = attack
+        self._pending = pending or {}
+        self._buttons = buttons or {}
+        if attack is not None:
+            self._collapsed &= set(range(len(attack.battlefields)))
+        self._redraw()
+
+    def toggle_lane(self, index: int) -> None:
+        """Collapse ``index``'s lane to a strip, or open it back up."""
+        self._collapsed ^= {index}
+        self._redraw()
+
+    def lane_at(self, x: int) -> int | None:
+        """Which lane the canvas x-coordinate ``x`` falls in, or None between lanes."""
+        for index, (left, right) in self._lane_spans.items():
+            if left <= x < right:
+                return index
+        return None
+
+    def _on_click(self, event: tk.Event) -> None:
+        """Route a click to the lane it landed in: its header collapses it, its button resolves it."""
+        index = self.lane_at(event.x)
+        if index is None:
+            return
+        if event.y <= HEADER_H:
+            self.toggle_lane(index)
+            return
+        if index in self._collapsed:
+            # A collapsed lane draws no button, and a strip that answers one anyway would fight a
+            # battle at a battlefield the player cannot see.
+            return
+        button = self._buttons.get(index)
+        if button is not None and event.y >= self._height() - FOOTER_H:
+            button.press()
+
+    def _on_context_click(self, event: tk.Event) -> None:
+        """Offer the card menu for a unit standing in a lane, so one sent here can be brought back."""
+        card_id = self._card_at(event)
+        if card_id is not None and self.on_card_menu:
+            self.on_card_menu(card_id)
+
+    def _card_at(self, event: tk.Event) -> str | None:
+        """The id of the unit card under the pointer, or None on bare lane or the Province card."""
+        for item in self.canvas.find_overlapping(event.x, event.y, event.x, event.y):
+            for tag in self.canvas.gettags(item):
+                if tag.startswith(_CARD_TAG):
+                    return tag[len(_CARD_TAG) :]
+        return None
+
+    def _redraw(self) -> None:
+        self.canvas.delete("all")
+        self._lane_spans = {}
+        if self._attack is None:
+            return
+        attack = self._attack
+        for index, span in self._lane_layout(len(attack.battlefields)).items():
+            self._lane_spans[index] = span
+            self._draw_lane(
+                index, attack.battlefields[index], span, current=index == attack.current
+            )
+
+    def _lane_layout(self, count: int) -> dict[int, tuple[int, int]]:
+        """Each of ``count`` battlefields' left and right edge. Collapsed lanes take a fixed strip
+        and the open ones share what is left, so opening one never pushes another off the canvas."""
+        width, _ = widget_size(self.canvas)
+        open_lanes = [index for index in range(count) if index not in self._collapsed]
+        spare = width - LANE_GAP * (count + 1) - COLLAPSED_W * (count - len(open_lanes))
+        each = max(spare // len(open_lanes), MIN_LANE_W) if open_lanes else 0
+        spans, x = {}, LANE_GAP
+        for index in range(count):
+            lane_w = COLLAPSED_W if index in self._collapsed else each
+            spans[index] = (x, x + lane_w)
+            x += lane_w + LANE_GAP
+        return spans
+
+    def _height(self) -> int:
+        """The canvas height to lay out into."""
+        return widget_size(self.canvas)[1]
+
+    def _draw_lane(
+        self, index: int, view: BattlefieldView, span: tuple[int, int], *, current: bool
+    ) -> None:
+        """One lane: its panel, its header, the two armies facing each other across a divider, and
+        the button that fights the battle here. ``current`` picks out the battlefield a battle is
+        being fought at."""
+        left, right = span
+        height = self._height()
+        self.canvas.create_rectangle(
+            left,
+            0,
+            right,
+            height,
+            fill=theme.PANEL,
+            outline=theme.GOLD if current else theme.PANEL,
+            width=2,
+        )
+        if index in self._collapsed:
+            self._draw_collapsed(index, span)
+            return
+        self._draw_header(index, view, span)
+
+        pending = self._pending.get(index)
+        attacking = view.attacking + (pending.units if pending else ())
+        attacking_force = view.attacking_force + (pending.force if pending else 0)
+        field_bottom = height - FOOTER_H
+        province_y, defending_y, middle, attacking_y = _rows(height)
+        if view.occupant is not None:
+            # Above the Defender's own units, at the head of the side it belongs to: it is what they
+            # are standing in front of.
+            self._draw_card(
+                to_render_card(view.occupant), ((left + right) // 2, province_y), _PROVINCE_TAG
+            )
+        self._draw_army(view.defending, span, defending_y, sink=False)
+        self.canvas.create_line(left + 6, middle, right - 6, middle, fill=theme.INK_DIM)
+        self._draw_army(attacking, span, attacking_y, sink=True)
+        # After the cards, so a crowded army cannot bury the total that says how it is doing.
+        self._draw_force(view.defending_force, left + FORCE_INSET, HEADER_H + FORCE_INSET, "nw")
+        self._draw_force(attacking_force, left + FORCE_INSET, field_bottom - FORCE_INSET, "sw")
+        self._draw_footer(index, span, height)
+
+    def _draw_collapsed(self, index: int, span: tuple[int, int]) -> None:
+        """A collapsed lane, which is its number and nothing else."""
+        left, right = span
+        self.canvas.create_text(
+            (left + right) // 2,
+            HEADER_H,
+            text=str(index + 1),
+            fill=theme.INK,
+            font=theme.serif(12, "bold"),
+        )
+
+    def _draw_header(self, index: int, view: BattlefieldView, span: tuple[int, int]) -> None:
+        """The lane's name and, in the largest type in the lane, the Province Strength the attackers
+        have to beat."""
+        left, right = span
+        centre = (left + right) // 2
+        heading = f"Battlefield {index + 1}"
+        if view.fought:
+            heading += "  (fought)"
+        self.canvas.create_text(
+            centre, 14, text=heading, fill=theme.INK_DIM, font=theme.serif(10, "bold")
+        )
+        self.canvas.create_text(
+            centre, 32, text="PROVINCE STRENGTH", fill=theme.INK_DIM, font=theme.serif(8)
+        )
+        self.canvas.create_text(
+            centre, 56, text=str(view.strength), fill=theme.INK, font=theme.serif(26, "bold")
+        )
+
+    def _draw_force(self, force: int, x: int, y: int, anchor: str) -> None:
+        """One side's Force, in its own corner of the half of the lane that side holds."""
+        self.canvas.create_text(
+            x, y, text=str(force), anchor=anchor, fill=theme.GOLD, font=theme.serif(22, "bold")
+        )
+
+    def _draw_footer(self, index: int, span: tuple[int, int], height: int) -> None:
+        """The lane's own button, when this battlefield offers one. Under the battlefield it acts
+        on, rather than in the prompt box, so the choice is made where it can be seen."""
+        button = self._buttons.get(index)
+        if button is None:
+            return
+        left, right = span
+        top = height - FOOTER_H + 6
+        self.canvas.create_rectangle(
+            left + 8,
+            top,
+            right - 8,
+            height - 8,
+            fill=theme.GOLD,
+            outline=theme.GOLD_HOVER,
+            width=1,
+        )
+        self.canvas.create_text(
+            (left + right) // 2,
+            (top + height - 8) // 2,
+            text=button.label,
+            fill=theme.ON_DARK,
+            font=theme.serif(11, "bold"),
+        )
+
+    def _draw_army(
+        self, army: tuple[UnitView, ...], span: tuple[int, int], y: int, *, sink: bool
+    ) -> None:
+        """One side's units, in a centred row at the board's own spacing, each stacked as a tower.
+
+        The step tightens when the row is wider than the lane, so a large army overlaps into a fan
+        rather than spilling over the lane beside it.
+        """
+        if not army:
+            return
+        left, right = span
+        usable = right - left - CARD_W - 2 * LANE_GAP
+        step = min(COLUMN_STEP, max(usable // max(len(army) - 1, 1), MIN_STEP))
+        for x, unit in zip(centered_row((left + right) // 2, len(army), step=step), army):
+            leader, attached = unit_tower_positions(x, y, len(unit.attached), sink=sink)
+            # Outermost attachment first and the Personality last, so the tower stacks the way it
+            # is positioned: each card tucked behind the one in front, and the Personality whole.
+            for card, spot in reversed(list(zip(unit.attached, attached))):
+                self._draw_card(card, spot)
+            self._draw_card(unit.leader, leader)
+
+    def _draw_card(self, card: RenderCard, at: tuple[int, int], tag: str = _CARD_TAG) -> None:
+        CardSpriteVisual(card, at[0], at[1], f"{tag}{card.id}").draw(self.canvas)

@@ -189,7 +189,10 @@ class GameState:
         The seat holding the Imperial Favor, or None if no one holds it. Default None.
     loser : PlayerId or None
         The seat that has lost the game, or None while the game is ongoing. Set when a loss
-        condition fires (currently a failed Legacy search). Default None.
+        condition fires. Default None.
+    loss_reason : str or None
+        Why that seat lost, worded for a player, or None while the game is ongoing. Set with
+        ``loser`` by :meth:`lose`. Default None.
     active_rules : dict mapping PlayerId to frozenset of VictoryRule
         The ways each seat can win or lose. :meth:`start` fills it from :func:`rules_at_start`;
         dropping a rule from a seat's set afterwards excuses that seat alone, which is how a card
@@ -261,6 +264,7 @@ class GameState:
     gold: dict[PlayerId, int]
     favor_holder: PlayerId | None = None
     loser: PlayerId | None = None
+    loss_reason: str | None = None
     active_rules: dict[PlayerId, frozenset[VictoryRule]] = field(default_factory=dict)
     attack: AttackPhase | None = None
     once_per: set[str] = field(default_factory=set)
@@ -317,6 +321,14 @@ class GameState:
             seed=seed,
             rng=default_rng(seed),
         )
+
+    def lose(self, seat: PlayerId, reason: str) -> None:
+        """End the game with ``seat`` the loser, for ``reason`` worded for a player.
+
+        The only way to record a loss: a client announcing the end of the game reads both.
+        """
+        self.loser = seat
+        self.loss_reason = reason
 
     def add_gold(self, seat: PlayerId, amount: int) -> None:
         """Add ``amount`` produced gold to ``seat``'s pool."""

@@ -2,15 +2,96 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.redaction import redact, ViewSnapshot
-from yasuki_core.engine.rules.economy import effective_stat
+from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
+from yasuki_core.engine.rules import battle
+from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.economy import (
+    effective_province_strength,
+    effective_stat,
+)
 from yasuki_core.engine.rules.modifiers import Stat
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.state import GameState, Phase, Segment
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.table import DeckKey, ZoneKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+
+
+@dataclass(frozen=True, slots=True)
+class UnitView:
+    """A Personality and the cards attached to him — the CR's unit, as a seat sees it.
+
+    Attributes
+    ----------
+    leader : L5RCard
+        The Personality the unit is built around.
+    attached : tuple of L5RCard
+        His Followers, Items and Spells, in the order they were attached.
+    """
+
+    leader: L5RCard
+    attached: tuple[L5RCard, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class BattlefieldView:
+    """One battlefield of a declared attack, and the two armies standing at it.
+
+    Attributes
+    ----------
+    province : ZoneKey
+        The Defender Province the battlefield sits at.
+    occupant : L5RCard or HiddenCard or None
+        The card standing in that Province, redacted like any other — a face-down Dynasty card is a
+        back to the seat attacking it. None when the Province is empty.
+    strength : int
+        The Province's effective Strength, which the attacking Force must clear to destroy it.
+    attacking : tuple of UnitView
+        The Attacker's units here.
+    defending : tuple of UnitView
+        The Defender's units here.
+    attacking_force : int
+        The attacking army's Force as resolution would total it.
+    defending_force : int
+        The defending army's Force as resolution would total it.
+    fought : bool
+        Whether a battle has already been fought here.
+    """
+
+    province: ZoneKey
+    occupant: L5RCard | HiddenCard | None
+    strength: int
+    attacking: tuple[UnitView, ...]
+    defending: tuple[UnitView, ...]
+    attacking_force: int
+    defending_force: int
+    fought: bool
+
+
+@dataclass(frozen=True, slots=True)
+class AttackView:
+    """The attack in progress, as a seat sees it.
+
+    Attributes
+    ----------
+    attacker : PlayerId
+        The seat that declared.
+    defender : PlayerId
+        The seat being attacked.
+    segment : Segment
+        Which segment of the Attack Phase is open.
+    current : int or None
+        The battlefield a battle is being fought at, or None between battles.
+    battlefields : tuple of BattlefieldView
+        One per Defender Province, in Province order.
+    """
+
+    attacker: PlayerId
+    defender: PlayerId
+    segment: Segment
+    current: int | None
+    battlefields: tuple[BattlefieldView, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,6 +136,10 @@ class GameView:
         The action an open Response Step answers, worded for a player, or None when no Step is open.
         A seat holding no Response still sees it: the Step is the whole table's, and a seat is
         passing on something it should be told the name of.
+    attack : AttackView or None
+        The attack in progress, or None outside one. Public to both seats: who is attacking
+        whom, and which units stand where, is on the table for everyone to see. A Province's
+        occupant is redacted like any other card.
     stats : dict mapping str to dict
         Each modified card's effective stats by id, the inner dict keyed by :class:`Stat`. Read it
         through :meth:`stat` rather than directly — a card no modifier reaches is absent, and the
@@ -73,6 +158,7 @@ class GameView:
     responding_to: str | None
     legacy_pool: tuple[L5RCard, ...]
     dynasty_deck: tuple[L5RCard, ...]
+    attack: AttackView | None
     stats: dict[str, dict[Stat, int]]
 
     def stat(self, card: L5RCard, stat: Stat) -> int:
@@ -126,6 +212,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
     carrying a modifier."""
     pending = game.pending if game.pending is not None and game.pending.seat is viewer else None
     table = redact(game.table, viewer)
+    attack = _project_attack(game, table)
     return GameView(
         viewer=viewer,
         table=table,
@@ -141,8 +228,61 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
         dynasty_deck=tuple(
             sorted(game.table.decks[DeckKey(viewer, Side.DYNASTY)].cards, key=lambda card: card.id)
         ),
+        attack=attack,
         stats={
             card.id: {stat: effective_stat(game, card, stat) for stat in Stat}
             for card in _modified_cards(game, _identifiable_ids(table))
         },
+    )
+
+
+def unit_view(game: GameState, personality: L5RCard) -> UnitView:
+    """``personality`` and the cards attached to him, as a client draws the unit."""
+    return UnitView(leader=personality, attached=tuple(attachments_of(game, personality)))
+
+
+def _units(game: GameState, battlefield: int, seat: PlayerId) -> tuple[UnitView, ...]:
+    """``seat``'s units at ``battlefield``, each with the cards attached to its Personality."""
+    return tuple(
+        unit_view(game, personality) for personality in battle.units_at(game, battlefield, seat)
+    )
+
+
+def _occupant(table: ViewSnapshot, province: ZoneKey) -> L5RCard | HiddenCard | None:
+    """The card standing in ``province`` as the snapshot's viewer sees it, or None if it is empty.
+
+    Read out of the redacted snapshot rather than the table, so a face-down Dynasty card reaches the
+    seat attacking it as a back.
+    """
+    zone = table.zones.get(province)
+    return zone.cards[0] if zone is not None and zone.cards else None
+
+
+def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
+    """The attack in progress as ``table``'s viewer sees it, or None outside one.
+
+    The Force totals are the ones resolution would use, so a client showing them shows what the
+    battle is actually about to do rather than a figure of its own.
+    """
+    attack = game.attack
+    if attack is None:
+        return None
+    return AttackView(
+        attacker=attack.attacker,
+        defender=attack.defender,
+        segment=attack.segment,
+        current=attack.current,
+        battlefields=tuple(
+            BattlefieldView(
+                province=info.province,
+                occupant=_occupant(table, info.province),
+                strength=effective_province_strength(game, info.province),
+                attacking=_units(game, index, attack.attacker),
+                defending=_units(game, index, attack.defender),
+                attacking_force=battle.army_force(game, index, attack.attacker),
+                defending_force=battle.army_force(game, index, attack.defender),
+                fought=index in attack.fought,
+            )
+            for index, info in enumerate(attack.battlefields)
+        ),
     )

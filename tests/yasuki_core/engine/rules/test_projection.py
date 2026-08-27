@@ -9,7 +9,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
-from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules import battle, triggers
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.projection import project
@@ -363,3 +363,39 @@ def test_a_discarded_card_reports_the_stats_it_prints():
     triggers.resolve_effects(game, [Discard("farm", PlayerId.P1)])
 
     assert project(game, PlayerId.P1).stat(farm, Stat.GOLD_PRODUCTION) == 2
+
+
+def _attack_between(face_up: bool) -> GameState:
+    """P1 attacking P2, whose one Province holds a card turned ``face_up`` or not."""
+    game = two_seat_game()
+    province_card(game, "p2-holding", seat=PlayerId.P2, index=0, face_up=face_up)
+    battle.declare_attack(game, PlayerId.P1)
+    return game
+
+
+def test_a_face_up_province_card_reaches_the_attacker_by_name():
+    game = _attack_between(face_up=True)
+
+    view = project(game, PlayerId.P1)
+
+    assert view.attack.battlefields[0].occupant.id == "p2-holding"
+
+
+def test_a_face_down_province_card_reaches_the_attacker_as_a_back():
+    """The attack is public, but what is sitting in the Province is not — projecting it out of the
+    table rather than the snapshot would hand the attacker the Defender's face-down card."""
+    game = _attack_between(face_up=False)
+
+    view = project(game, PlayerId.P1)
+
+    assert isinstance(view.attack.battlefields[0].occupant, HiddenCard)
+
+
+def test_the_defender_sees_its_own_face_down_province_card_as_a_back_too():
+    """Redaction hides a face-down card from its owner as well, and the attack view is the same
+    projection — so it says the same thing rather than a second opinion."""
+    game = _attack_between(face_up=False)
+
+    view = project(game, PlayerId.P2)
+
+    assert isinstance(view.attack.battlefields[0].occupant, HiddenCard)
