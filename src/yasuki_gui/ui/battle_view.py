@@ -4,6 +4,8 @@ from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, Uni
 from yasuki_gui import theme
 from yasuki_gui.constants import CARD_H, CARD_W
 from yasuki_gui.layout import COLUMN_STEP, centered_row, unit_tower_positions
+from yasuki_gui.ui.floating_panel import BORDER, FloatingPanel, TITLEBAR_H
+from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_gui.visuals.sprite import CardSpriteVisual
 
@@ -15,9 +17,12 @@ HEADER_H = 60
 MIN_STEP = 22
 # The narrowest an open lane goes, however many of them are competing for the width.
 MIN_LANE_W = CARD_W + 10
+# How large the panel opens. The player drags it to whatever suits them from there.
+PANEL_W = 900
+PANEL_H = 440
 
 
-class BattleWindow(tk.Toplevel):
+class BattleView(FloatingPanel):
     """The attack in progress, drawn as one vertical lane per battlefield.
 
     The board draws two whole tableaux and cannot show four battlefields legibly, so this is where
@@ -25,16 +30,22 @@ class BattleWindow(tk.Toplevel):
     draws the units standing there with the same sprites the board uses. A lane collapses to a strip
     when the player wants to concentrate on one battlefield.
 
-    Display only. Nothing is answered here, so closing the window costs the player nothing.
+    A window inside the game rather than one the desktop puts beside it: it floats over the board,
+    and the player drags it clear of whatever they want to look at underneath. Display only —
+    nothing is answered here.
     """
 
     def __init__(self, master: tk.Misc):
-        super().__init__(master)
-        self.title("Attack")
-        self.configure(bg=theme.SURFACE)
-        self.geometry("900x520")
-        self.minsize(320, 260)
-        self.canvas = tk.Canvas(self, bg=theme.SURFACE, highlightthickness=0, width=880, height=460)
+        super().__init__(master, "Attack", width=PANEL_W, height=PANEL_H)
+        # Sized to the panel it fills, so the layout it computes before Tk maps it is the one it
+        # ends up with.
+        self.canvas = tk.Canvas(
+            self.body,
+            bg=theme.SURFACE,
+            highlightthickness=0,
+            width=PANEL_W - 2 * BORDER,
+            height=PANEL_H - TITLEBAR_H - 2 * BORDER,
+        )
         self.canvas.pack(fill="both", expand=True)
         self._collapsed: set[int] = set()
         self._attack: AttackView | None = None
@@ -46,7 +57,7 @@ class BattleWindow(tk.Toplevel):
     def refresh(
         self, attack: AttackView | None, pending: dict[int, tuple[str, ...]] | None = None
     ) -> None:
-        """Redraw for ``attack``, or empty the window when there is none.
+        """Redraw for ``attack``, or empty the view when there is none.
 
         Parameters
         ----------
@@ -92,9 +103,7 @@ class BattleWindow(tk.Toplevel):
     def _lane_layout(self, count: int) -> dict[int, tuple[int, int]]:
         """Each of ``count`` battlefields' left and right edge. Collapsed lanes take a fixed strip
         and the open ones share what is left, so opening one never pushes another off the canvas."""
-        # A canvas that has not been mapped yet reports one pixel; its requested width is what it
-        # will be once it is, and laying out into 1px would collapse every lane to the floor.
-        width = max(self.canvas.winfo_width(), self.canvas.winfo_reqwidth(), 1)
+        width, _ = widget_size(self.canvas)
         open_lanes = [index for index in range(count) if index not in self._collapsed]
         spare = width - LANE_GAP * (count + 1) - COLLAPSED_W * (count - len(open_lanes))
         each = max(spare // len(open_lanes), MIN_LANE_W) if open_lanes else 0
@@ -106,9 +115,8 @@ class BattleWindow(tk.Toplevel):
         return spans
 
     def _height(self) -> int:
-        """The canvas height to lay out into, falling back to its requested one before it is
-        mapped."""
-        return max(self.canvas.winfo_height(), self.canvas.winfo_reqheight(), 1)
+        """The canvas height to lay out into."""
+        return widget_size(self.canvas)[1]
 
     def _draw_lane(
         self, index: int, view: BattlefieldView, span: tuple[int, int], *, current: bool

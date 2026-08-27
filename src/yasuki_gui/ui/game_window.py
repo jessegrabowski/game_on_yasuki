@@ -5,9 +5,11 @@ from typing import Protocol
 import yasuki_gui.config as gui_config
 from yasuki_gui.config import load_hotkeys
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.projection import AttackView
 from yasuki_core.engine.table import TableState
 from yasuki_gui import theme
 from yasuki_gui.field_view import FieldView
+from yasuki_gui.ui.battle_view import BattleView
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
@@ -53,6 +55,8 @@ class GameWindow:
         The right column holding the board and the phase strip.
     field : FieldView
         The board canvas.
+    battle_view : BattleView
+        The attack in progress, floating over the board while there is one.
     phase_bar : PhaseBar
         The turn and phase strip along the bottom of the content column.
     prompt_box : PromptBox
@@ -116,6 +120,9 @@ class GameWindow:
         self.phase_bar = PhaseBar(self.content)
         self.phase_bar.pack(side="bottom", fill="x")
         self.field.pack(side="top", fill="both", expand=True)
+        # Floats over the board rather than beside it, so it is built on the same parent and only
+        # placed once there is an attack to show.
+        self.battle_view = BattleView(self.field)
 
         # A panel reads the board through the FieldView it is handed, so the field is built first.
         self.opponent_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P2)
@@ -132,6 +139,26 @@ class GameWindow:
         self.field.on_local_player_changed = self.relayout_panels
         self.field.apply_profile_to_panels = self.apply_profile_to_panels
         self.relayout_panels()
+
+    def show_battle(
+        self, attack: AttackView | None, pending: dict[int, tuple[str, ...]] | None = None
+    ) -> None:
+        """Float the battle over the board while ``attack`` is on, and take it away when it ends.
+
+        It opens centred on the board and stays wherever the player has since dragged it.
+
+        Parameters
+        ----------
+        attack : AttackView, optional
+            The attack in progress, or None outside one.
+        pending : dict mapping int to tuple of str, optional
+            Units sent to a battlefield but not yet assigned, by battlefield. Default None.
+        """
+        if attack is None:
+            self.battle_view.close()
+            return
+        self.battle_view.open_centered()
+        self.battle_view.refresh(attack, pending)
 
     def relayout_panels(self) -> None:
         """Move the seat being played to the bottom of the sidebar and resync both panels against

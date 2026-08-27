@@ -26,7 +26,7 @@ yasuki_gui
     yasuki_gui.session <yasuki_gui.session>
     yasuki_gui.tags <yasuki_gui.tags>
     yasuki_gui.theme <yasuki_gui.theme>
-    yasuki_gui.ui.battle_window <yasuki_gui.ui.battle_window>
+    yasuki_gui.ui.battle_view <yasuki_gui.ui.battle_view>
     yasuki_gui.ui.deck_builder <yasuki_gui.ui.deck_builder>
     yasuki_gui.ui.deck_builder.art_swap <yasuki_gui.ui.deck_builder.art_swap>
     yasuki_gui.ui.deck_builder.card_preview <yasuki_gui.ui.deck_builder.card_preview>

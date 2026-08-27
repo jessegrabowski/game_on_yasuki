@@ -14,7 +14,6 @@ from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.ui.dialogs import Dialogs
-from yasuki_gui.ui.battle_window import BattleWindow
 from yasuki_gui.ui.game_window import GameWindow
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.prompt_box import ButtonSpec
@@ -52,9 +51,6 @@ class Presenter:
         # Which army is waiting on a Province, or None. The one piece of state the presenter
         # keeps: it spans two clicks and belongs to neither the board nor the engine.
         self._assigning: int | None = None
-        # Open only while an attack is, and closed with it. Display only — nothing is answered
-        # here, so losing it costs the player nothing.
-        self._battle_window: BattleWindow | None = None
 
     def present(self) -> None:
         """Set the client up for whatever the engine wants next: the dialog or selection mode the
@@ -106,17 +102,6 @@ class Presenter:
             beat = OPPONENT_TURN_DELAY_MS if runner.is_opponent_turn else 0
             self.window.root.after(beat, self.run_opponent)
 
-    def _show_battle(self, view: GameView) -> None:
-        """Open the battle window while an attack is in progress, and close it when one ends."""
-        if view.attack is None:
-            if self._battle_window is not None:
-                self._battle_window.destroy()
-                self._battle_window = None
-            return
-        if self._battle_window is None:
-            self._battle_window = BattleWindow(self.window.root)
-        self._battle_window.refresh(view.attack, self._pending_armies())
-
     def _pending_armies(self) -> dict[int, tuple[str, ...]]:
         """The units the player has sent to each battlefield but not yet assigned, by battlefield.
 
@@ -139,7 +124,8 @@ class Presenter:
         window.phase_bar.refresh(view)
         status, buttons = self._prompt(view)
         window.prompt_box.show(status, buttons)
-        self._show_battle(view)
+        pending = self._pending_armies() if view.attack is not None else None
+        window.show_battle(view.attack, pending)
         window.opponent_panel.refresh()
         window.human_panel.refresh()
 

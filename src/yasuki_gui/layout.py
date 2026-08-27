@@ -19,7 +19,7 @@ _DIVIDER_FRAC = 0.42
 _ROW_GAP = 16
 _CARD_GAP = 8
 _ROW_STEP = CARD_H + _ROW_GAP
-# Card-to-card spacing along a row. Public because the battle window lays its lanes out to the
+# Card-to-card spacing along a row. Public because the battle view lays its lanes out to the
 # same rhythm as the board's home rows.
 COLUMN_STEP = CARD_W + _CARD_GAP
 
@@ -60,7 +60,7 @@ def centered_row(center_x: int, count: int, *, step: int = COLUMN_STEP) -> list[
     """The x centres for ``count`` cards laid in a row centred on ``center_x``.
 
     Every row of cards the client draws is spaced this way — a seat's provinces, its personalities,
-    and each army in the battle window — so they share one function and improving the spacing
+    and each army in the battle view — so they share one function and improving the spacing
     improves all of them at once.
 
     Parameters
@@ -84,7 +84,7 @@ def unit_tower_positions(
     """Where a unit's cards sit: its Personality, and ``count`` attachments fanned up behind him so
     each title bar clears the card riding it.
 
-    Both the board and the battle window stack a unit this way, so they share this and a change to
+    Both the board and the battle view stack a unit this way, so they share this and a change to
     the fan moves both.
 
     Parameters

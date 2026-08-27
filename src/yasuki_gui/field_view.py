@@ -487,7 +487,7 @@ class FieldView(tk.Canvas):
     def _render_battlefield(self):
         """The cards the board draws in play: everything standing at home.
 
-        A unit assigned to a battlefield is drawn there instead — by the battle window, which is the
+        A unit assigned to a battlefield is drawn there instead — by the battle view, which is the
         only surface that can show four battlefields legibly — so the board leaves it out rather than
         drawing it in two places at once.
         """
