@@ -178,6 +178,21 @@ def test_an_ended_attack_empties_the_view(view):
     assert view.canvas.find_all() == ()
 
 
+def test_a_personality_is_drawn_over_the_cards_attached_to_him(view):
+    """The tower fans up behind him, so he has to be the last thing drawn — otherwise a Follower
+    covers the face of the Personality carrying it."""
+    unit = UnitView(
+        leader=personality("hida"),
+        attached=(attachment("banner", attachment_type=AttachmentType.FOLLOWER),),
+    )
+    view.refresh(_attack(_battlefield(0, defending=(unit,))))
+
+    order = view.canvas.find_all()
+    assert order.index(view.canvas.find_withtag("battle:hida")[0]) > order.index(
+        view.canvas.find_withtag("battle:banner")[0]
+    )
+
+
 def test_an_army_is_laid_out_in_a_row_at_the_boards_own_spacing(view):
     """Units at a battlefield stand side by side, spaced the way the board spaces a home row —
     the same function lays out both, so improving one improves the other."""

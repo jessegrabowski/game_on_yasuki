@@ -198,9 +198,11 @@ class BattleView(FloatingPanel):
         step = min(COLUMN_STEP, max(usable // max(len(army) - 1, 1), MIN_STEP))
         for x, unit in zip(centered_row((left + right) // 2, len(army), step=step), army):
             leader, attached = unit_tower_positions(x, y, len(unit.attached), sink=sink)
-            self._draw_card(unit.leader, leader)
-            for card, spot in zip(unit.attached, attached):
+            # Outermost attachment first and the Personality last, so the tower stacks the way it
+            # is positioned: each card tucked behind the one in front, and the Personality whole.
+            for card, spot in reversed(list(zip(unit.attached, attached))):
                 self._draw_card(card, spot)
+            self._draw_card(unit.leader, leader)
 
     def _draw_card(self, card: RenderCard, at: tuple[int, int]) -> None:
         CardSpriteVisual(card, at[0], at[1], f"battle:{card.id}").draw(self.canvas)
