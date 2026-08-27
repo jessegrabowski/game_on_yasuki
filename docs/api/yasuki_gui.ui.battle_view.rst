@@ -8,6 +8,8 @@ yasuki_gui.ui.battle_view
 .. autosummary::
 
     BattleView
+    LaneButton
+    PendingArmy
 
 .. automodule:: yasuki_gui.ui.battle_view
     :members:

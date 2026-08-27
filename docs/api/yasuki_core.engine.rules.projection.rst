@@ -17,6 +17,7 @@ yasuki_core.engine.rules.projection
 .. autosummary::
 
     project
+    unit_view
 
 .. automodule:: yasuki_core.engine.rules.projection
     :members:

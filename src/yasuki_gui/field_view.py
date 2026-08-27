@@ -503,8 +503,14 @@ class FieldView(tk.Canvas):
                 yield to_render_card(card), self.state.positions.get(card.id)
 
     def _at_home(self, card_id: str) -> bool:
-        """Whether ``card_id`` stands in a seat's home rather than at a battlefield. A card with no
-        recorded location is at home, which is what every card is until an attack moves it."""
+        """Whether ``card_id`` stands in a seat's home rather than at a battlefield.
+
+        A card with no recorded location is at home, which is what every card is until an attack
+        moves it — unless the player has sent it to a battlefield and the engine has not been told
+        yet, which is a decision already made and so already a card the board has given up.
+        """
+        if self.army_of(card_id) is not None and card_id in self.assigned_units():
+            return False
         location = self._snapshot.locations.get(card_id) if self._snapshot is not None else None
         return location is None or location.is_home
 

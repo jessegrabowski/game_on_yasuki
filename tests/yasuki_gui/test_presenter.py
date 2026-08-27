@@ -13,7 +13,11 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_gui.services.presenter import Presenter
 from yasuki_gui.ui.game_window import GameWindow
 
+from yasuki_core.game_pieces.constants import AttachmentType
+
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     dealt_table,
     end_phase,
     personality,
@@ -212,18 +216,6 @@ def test_an_invest_decision_offers_a_button_per_affordable_amount(board):
     presenter.refresh()
 
     assert _buttons(window) == ["Invest 1", "Invest 2", "Invest 3", "Cancel"]
-
-
-def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_battle):
-    """Every loss used to be announced as a failed Legacy, so a seat overrun said the one thing that
-    had not happened to it."""
-    presenter, _, session = a_battle
-    session.game.lose(PlayerId.P2, "no Provinces remaining")
-
-    status, buttons = presenter._prompt(presenter.host.runner.view())
-
-    assert status == "Opponent loses (no Provinces remaining)"
-    assert buttons == []
 
 
 def test_a_finished_game_says_who_lost_and_offers_nothing(board):
@@ -564,7 +556,9 @@ def a_battle():
     runner = GameRunner(session, P1)
     window = GameWindow(session.game.table, P1)
     presenter = Presenter(FakeHost(runner), window)
-    window.field.on_selection_changed = presenter.refresh
+    # The real wiring rather than a hand-picked hook, since the battle is played through several of
+    # them now — the board's, and the lane buttons' in the battle view.
+    window.bind_to(presenter)
     try:
         presenter.present()
         yield presenter, window, session
@@ -598,11 +592,25 @@ def _army_menu(presenter, card_id: str) -> dict[str, bool]:
     return {label: enabled for label, _, enabled in presenter._army_menu(card_id)}
 
 
+def _press_lane(presenter, battlefield: int, label: str) -> None:
+    """Press ``battlefield``'s own button, the way the player answers a question about a place now
+    that both of them are asked under the lane they are about."""
+    buttons = presenter._lane_buttons()
+    assert battlefield in buttons, f"battlefield {battlefield} offers no button; {buttons}"
+    assert buttons[battlefield].label == label, f"reads {buttons[battlefield].label!r}"
+    buttons[battlefield].press()
+
+
+def _fight_at(presenter, window, battlefield: int) -> None:
+    """Fight the battle at ``battlefield`` from its lane."""
+    _press_lane(presenter, battlefield, "Fight here")
+
+
 def _send_army(presenter, window, card_id: str, battlefield: int) -> None:
-    """Assign ``card_id``'s army the way the player does: ask for a Province, click one, confirm."""
+    """Assign ``card_id``'s army the way the player does: ask where it goes, then press the button
+    under the battlefield."""
     presenter.assign_army(card_id)
-    window.field.toggle_selection(presenter._battlefield_tokens()[battlefield])
-    _press(presenter, "Attack here")
+    _press_lane(presenter, battlefield, "Assign here")
 
 
 def test_the_attack_phase_offers_the_declaration_as_a_button(a_battle):
@@ -721,8 +729,8 @@ def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
     runner.run_opponent()
     presenter.present()
 
-    _press(presenter, "Battlefield 1")
-    _press(presenter, "Battlefield 2")
+    _fight_at(presenter, window, 0)
+    _fight_at(presenter, window, 1)
 
     assert session.game.attack.fought == frozenset({0, 1})
     assert session.game.table.cards_by_id["hero"].bowed  # After Resolution bows the attackers
@@ -745,8 +753,8 @@ def test_the_prompt_box_names_the_next_step_at_every_point(a_battle):
     assert said == [
         "Click the Personalities you want to attack with, then right-click one",
         "1 picked - right-click one to add them to an army",
-        "Right-click an army to assign it to a Province",
-        "Click one of the Defender's Provinces, then Attack here",
+        "Right-click an army to assign it to a battlefield",
+        "Press Assign here under the battlefield you want",
     ]
 
 
@@ -761,7 +769,42 @@ def test_the_prompt_box_only_confirms_cancels_and_finishes(a_battle):
     assert [label for label, _, _ in _specs(presenter)] == ["Done assigning"]
 
     presenter.assign_army("hero")
-    assert [label for label, _, _ in _specs(presenter)] == ["Attack here", "Cancel"]
+    assert [label for label, _, _ in _specs(presenter)] == ["Cancel"]
+
+
+def test_choosing_where_an_army_goes_puts_a_button_under_every_battlefield(a_battle):
+    """The destination is a place, so it is picked in the lanes rather than off a list of names in
+    the prompt box."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+
+    presenter.assign_army("hero")
+
+    assert [button.label for button in presenter._lane_buttons().values()] == [
+        "Assign here",
+        "Assign here",
+    ]
+
+
+def test_no_battlefield_offers_a_button_until_an_army_is_waiting_on_one(a_battle):
+    """A button on every lane at all times would say the game is asking something it is not."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+
+    assert presenter._lane_buttons() == {}
+
+
+def test_cancelling_takes_the_buttons_back_off_the_lanes(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    presenter.assign_army("hero")
+
+    _press(presenter, "Cancel")
+
+    assert presenter._lane_buttons() == {}
 
 
 def test_units_in_the_same_army_share_a_ring_and_different_armies_do_not(a_battle):
@@ -787,6 +830,18 @@ def test_a_unit_in_no_army_has_no_ring(a_battle):
     assert window.field._army_ring("hero") is None
 
 
+def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_battle):
+    """Every loss used to be announced as a failed Legacy, so a seat overrun said the one thing that
+    had not happened to it."""
+    presenter, _, session = a_battle
+    session.game.lose(PlayerId.P2, "no Provinces remaining")
+
+    status, buttons = presenter._prompt(presenter.host.runner.view())
+
+    assert status == "Opponent loses (no Provinces remaining)"
+    assert buttons == []
+
+
 def test_the_battle_floats_over_the_board_with_an_attack_and_leaves_with_it(a_battle):
     """It is display only, so it is on the board exactly as long as there is an attack to show."""
     presenter, window, session = a_battle
@@ -798,23 +853,72 @@ def test_the_battle_floats_over_the_board_with_an_attack_and_leaves_with_it(a_ba
     _press(presenter, "Done assigning")
     presenter.host.runner.run_opponent()
     presenter.present()
-    _press(presenter, "Battlefield 1")
-    _press(presenter, "Battlefield 2")
+    _fight_at(presenter, window, 0)
+    _fight_at(presenter, window, 1)
     _press(presenter, "Pass")  # the Attack Phase ends, and the battlefields cease to exist
 
     assert session.game.attack is None
     assert not window.battle_view.showing
 
 
-def test_the_battle_view_shows_what_has_been_assigned_so_far(a_battle):
+def test_a_unit_sent_to_a_battlefield_stands_there_before_the_engine_is_told(a_battle):
+    """The player has decided; the engine hearing about it on Done assigning is bookkeeping they
+    should not have to watch for."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
     presenter.form_army("hero")
     _send_army(presenter, window, "hero", 1)
 
     canvas = window.battle_view.canvas
-    texts = [
-        canvas.itemcget(item, "text") for item in canvas.find_all() if canvas.type(item) == "text"
-    ]
+    tags = {tag for item in canvas.find_all() for tag in canvas.gettags(item)}
 
-    assert "sending hero" in texts
+    assert "battle:hero" in tags
+
+
+def test_a_unit_sent_to_a_battlefield_leaves_the_board(a_battle):
+    """It is drawn in the lane now, and drawing it in both places would say it is in two."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    _send_army(presenter, window, "hero", 1)
+
+    assert not window.field._at_home("hero")
+
+
+def test_the_force_a_lane_shows_does_not_move_when_the_assignment_is_answered(a_battle):
+    """The player sees the total the moment they send the army; the engine being told is bookkeeping,
+    and a figure that jumps at that point reads as something having changed.
+
+    The Personality carries a Follower, so a total taken off his printed Force rather than his
+    unit's is a different number and this notices.
+    """
+    presenter, window, session = a_battle
+    attached(
+        session.game,
+        attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=4, owner=P1),
+        "hero",
+    )
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    _send_army(presenter, window, "hero", 1)
+    while_pending = presenter._pending_armies()[1].force
+
+    _press(presenter, "Done assigning")
+
+    view = presenter.host.runner.view()
+    assert while_pending == 9  # the Personality's 5 and his Follower's 4
+    assert view.attack.battlefields[1].attacking_force == while_pending
+
+
+def test_a_unit_sent_to_a_battlefield_can_still_be_recalled(a_battle):
+    """The lane is the only place it is drawn, so the menu the board gave it has to be reachable
+    from there or the player has no way back."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    _send_army(presenter, window, "hero", 1)
+
+    presenter.recall_army("hero")
+
+    assert window.field._at_home("hero")
+    assert window.field.assigned_units() == {}

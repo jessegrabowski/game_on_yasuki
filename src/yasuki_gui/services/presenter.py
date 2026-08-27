@@ -10,9 +10,12 @@ from yasuki_core.engine.rules.decisions import (
     assignment,
     assignment_token,
 )
-from yasuki_core.engine.rules.projection import GameView
+from yasuki_core.engine.rules.projection import GameView, unit_view
+from yasuki_core.engine.rules.units import unit_force
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.runner import SearchView
 from yasuki_gui.services.game_host import GameHost
+from yasuki_gui.ui.battle_view import LaneButton, PendingArmy
 from yasuki_gui.ui.dialogs import Dialogs
 from yasuki_gui.ui.game_window import GameWindow
 from yasuki_gui.ui.images import ImageProvider
@@ -102,18 +105,50 @@ class Presenter:
             beat = OPPONENT_TURN_DELAY_MS if runner.is_opponent_turn else 0
             self.window.root.after(beat, self.run_opponent)
 
-    def _pending_armies(self) -> dict[int, tuple[str, ...]]:
+    def _pending_armies(self) -> dict[int, PendingArmy]:
         """The units the player has sent to each battlefield but not yet assigned, by battlefield.
 
         Board state rather than engine state: an army is sent from the card menu and the engine is
-        told once, so until then this is the only place the intention exists.
+        told once, so until then this is the only place the intention exists — and the player has
+        already decided, so the battle view draws them standing where they were sent.
         """
-        field = self.window.field
-        waiting: dict[int, list[str]] = {}
-        for card_id, battlefield in field.assigned_units().items():
-            card = field.state.cards_by_id.get(card_id) if field.state is not None else None
-            waiting.setdefault(battlefield, []).append(card.name if card is not None else card_id)
-        return {index: tuple(names) for index, names in waiting.items()}
+        game = self.host.session.game
+        waiting: dict[int, list[L5RCard]] = {}
+        for card_id, battlefield in self.window.field.assigned_units().items():
+            personality = game.table.cards_by_id.get(card_id)
+            if personality is not None:
+                waiting.setdefault(battlefield, []).append(personality)
+        return {
+            index: PendingArmy(
+                units=tuple(unit_view(game, card) for card in cards),
+                # The total resolution would reach, so the lane's Force does not jump when the
+                # assignment is answered and the engine starts counting these itself.
+                force=sum(unit_force(game, card, in_battle_resolution=True) for card in cards),
+            )
+            for index, cards in waiting.items()
+        }
+
+    def _lane_buttons(self) -> dict[int, LaneButton]:
+        """What each battlefield offers the player right now.
+
+        Both questions the Attack Phase asks are about a place, so both are answered under the lane
+        that place is drawn in. Empty the rest of the time, which is what keeps a button off a lane
+        whenever pressing it would not be a legal move.
+        """
+        pending = self.host.runner.pending
+        if isinstance(pending, ChooseBattlefield):
+            return {
+                int(token): LaneButton(
+                    "Fight here", lambda chosen=token: self.submit_answer((chosen,))
+                )
+                for token in pending.candidates
+            }
+        if isinstance(pending, AssignUnits) and self._assigning is not None:
+            return {
+                index: LaneButton("Assign here", lambda at=index: self.send_army(at))
+                for index in range(self._battlefield_count())
+            }
+        return {}
 
     def refresh(self) -> None:
         """Redraw the board and rewrite the prompt from the current state, without advancing it."""
@@ -124,8 +159,10 @@ class Presenter:
         window.phase_bar.refresh(view)
         status, buttons = self._prompt(view)
         window.prompt_box.show(status, buttons)
-        pending = self._pending_armies() if view.attack is not None else None
-        window.show_battle(view.attack, pending)
+        if view.attack is None:
+            window.show_battle(None)
+        else:
+            window.show_battle(view.attack, self._pending_armies(), self._lane_buttons())
         window.opponent_panel.refresh()
         window.human_panel.refresh()
 
@@ -152,19 +189,15 @@ class Presenter:
                 buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(), buttons
         if isinstance(pending, ChooseBattlefield):
-            # A battlefield is a place rather than a card, so it is picked from a button.
-            return pending.prompt(), [
-                (f"Battlefield {int(index) + 1}", lambda i=index: self.submit_answer((i,)), True)
-                for index in pending.candidates
-            ]
+            # Answered by the button under the lane it picks, not from here — the choice is about
+            # the battlefields, and they are what the player is looking at when it is asked.
+            return pending.prompt(), []
         if isinstance(pending, AssignUnits):
             # Assigning is a process, and the board carries it: units are gathered into an army
             # from the card menu, the army is sent to a Province, and the whole map goes over as
             # the one answer the CR's simultaneous assignment calls for.
-            field = self.window.field
             if self._assigning is not None:
-                return "Click one of the Defender's Provinces, then Attack here", [
-                    ("Attack here", self.send_army, bool(field.selection)),
+                return "Press Assign here under the battlefield you want", [
                     ("Cancel", self.cancel_army_assignment, True),
                 ]
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
@@ -298,34 +331,30 @@ class Presenter:
         self.present()
 
     def assign_army(self, card_id: str) -> None:
-        """Ask which Province ``card_id``'s army attacks, by making the Provinces clickable."""
+        """Ask where ``card_id``'s army attacks, by putting a button under every battlefield."""
         army = self.window.field.army_of(card_id)
         if army is None:
             return
         self._assigning = army
-        self.window.field.begin_selection(self._battlefield_tokens())
         self.refresh()
 
-    def send_army(self) -> None:
-        """Send the army being assigned to the Province the board has selected."""
-        field, army = self.window.field, self._assigning
-        chosen = field.selection
+    def send_army(self, battlefield: int) -> None:
+        """Send the army being assigned to ``battlefield``."""
+        army = self._assigning
         self._assigning = None
-        field.end_selection()
-        if army is not None and chosen:
-            field.send_army(army, self._battlefield_tokens().index(chosen[0]))
+        if army is not None:
+            self.window.field.send_army(army, battlefield)
         self.present()
 
     def cancel_army_assignment(self) -> None:
-        """Back out of choosing a Province, leaving the army grouped and at home."""
+        """Back out of choosing a battlefield, leaving the army grouped and at home."""
         self._assigning = None
-        self.window.field.end_selection()
         self.present()
 
-    def _battlefield_tokens(self) -> tuple[str, ...]:
-        """The Defender's Province slots, in battlefield order — what a battlefield is drawn as."""
+    def _battlefield_count(self) -> int:
+        """How many battlefields the declared attack has."""
         attack = self.host.session.game.attack
-        return tuple(info.province.token for info in attack.battlefields)
+        return len(attack.battlefields)
 
     def _assignment_prompt(self) -> str:
         """The next thing to do, not a description of the state - this is the step the player has no
@@ -336,7 +365,7 @@ class Presenter:
         if not field.armies:
             return "Click the Personalities you want to attack with, then right-click one"
         if any(field.battlefield_of_army(i) is None for i in range(len(field.armies))):
-            return "Right-click an army to assign it to a Province"
+            return "Right-click an army to assign it to a battlefield"
         return "Every army is assigned - press Done assigning to fight the battles"
 
     def submit_assignment(self) -> None:

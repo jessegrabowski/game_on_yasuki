@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.projection import AttackView
 from yasuki_core.engine.table import TableState
 from yasuki_gui import theme
 from yasuki_gui.field_view import FieldView
-from yasuki_gui.ui.battle_view import BattleView
+from yasuki_gui.ui.battle_view import BattleView, LaneButton, PendingArmy
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
@@ -141,24 +141,21 @@ class GameWindow:
         self.relayout_panels()
 
     def show_battle(
-        self, attack: AttackView | None, pending: dict[int, tuple[str, ...]] | None = None
+        self,
+        attack: AttackView | None,
+        pending: dict[int, PendingArmy] | None = None,
+        buttons: dict[int, LaneButton] | None = None,
     ) -> None:
         """Float the battle over the board while ``attack`` is on, and take it away when it ends.
 
-        It opens centred on the board and stays wherever the player has since dragged it.
-
-        Parameters
-        ----------
-        attack : AttackView, optional
-            The attack in progress, or None outside one.
-        pending : dict mapping int to tuple of str, optional
-            Units sent to a battlefield but not yet assigned, by battlefield. Default None.
+        It opens centred on the board and stays wherever the player has since dragged it. The
+        arguments are :meth:`BattleView.refresh`'s and are passed straight through.
         """
         if attack is None:
             self.battle_view.close()
             return
         self.battle_view.open_centered()
-        self.battle_view.refresh(attack, pending)
+        self.battle_view.refresh(attack, pending, buttons)
 
     def relayout_panels(self) -> None:
         """Move the seat being played to the bottom of the sidebar and resync both panels against
@@ -198,6 +195,7 @@ class GameWindow:
         self.field.on_board_menu = presenter.on_board_menu
         self.field.load_deck_from_file = presenter.load_human_deck
         self.field.load_opponent_deck_from_file = presenter.load_opponent_deck
+        self.battle_view.on_card_menu = presenter.on_card_activated
         self.root.bind("<Control-z>", presenter.undo)
         self.root.bind("<Escape>", presenter.cancel_via_escape)
 

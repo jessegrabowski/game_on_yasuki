@@ -2,7 +2,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.redaction import redact, ViewSnapshot
+from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
 from yasuki_core.engine.rules import battle
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import (
@@ -42,6 +42,9 @@ class BattlefieldView:
     ----------
     province : ZoneKey
         The Defender Province the battlefield sits at.
+    occupant : L5RCard or HiddenCard or None
+        The card standing in that Province, redacted like any other — a face-down Dynasty card is a
+        back to the seat attacking it. None when the Province is empty.
     strength : int
         The Province's effective Strength, which the attacking Force must clear to destroy it.
     attacking : tuple of UnitView
@@ -57,6 +60,7 @@ class BattlefieldView:
     """
 
     province: ZoneKey
+    occupant: L5RCard | HiddenCard | None
     strength: int
     attacking: tuple[UnitView, ...]
     defending: tuple[UnitView, ...]
@@ -134,7 +138,8 @@ class GameView:
         passing on something it should be told the name of.
     attack : AttackView or None
         The attack in progress, or None outside one. Public to both seats: who is attacking
-        whom, and which units stand where, is on the table for everyone to see.
+        whom, and which units stand where, is on the table for everyone to see. A Province's
+        occupant is redacted like any other card.
     stats : dict mapping str to dict
         Each modified card's effective stats by id, the inner dict keyed by :class:`Stat`. Read it
         through :meth:`stat` rather than directly — a card no modifier reaches is absent, and the
@@ -207,7 +212,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
     carrying a modifier."""
     pending = game.pending if game.pending is not None and game.pending.seat is viewer else None
     table = redact(game.table, viewer)
-    attack = _project_attack(game)
+    attack = _project_attack(game, table)
     return GameView(
         viewer=viewer,
         table=table,
@@ -231,16 +236,30 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
     )
 
 
+def unit_view(game: GameState, personality: L5RCard) -> UnitView:
+    """``personality`` and the cards attached to him, as a client draws the unit."""
+    return UnitView(leader=personality, attached=tuple(attachments_of(game, personality)))
+
+
 def _units(game: GameState, battlefield: int, seat: PlayerId) -> tuple[UnitView, ...]:
     """``seat``'s units at ``battlefield``, each with the cards attached to its Personality."""
     return tuple(
-        UnitView(leader=personality, attached=tuple(attachments_of(game, personality)))
-        for personality in battle.units_at(game, battlefield, seat)
+        unit_view(game, personality) for personality in battle.units_at(game, battlefield, seat)
     )
 
 
-def _project_attack(game: GameState) -> AttackView | None:
-    """The attack in progress as both seats see it, or None outside one.
+def _occupant(table: ViewSnapshot, province: ZoneKey) -> L5RCard | HiddenCard | None:
+    """The card standing in ``province`` as the snapshot's viewer sees it, or None if it is empty.
+
+    Read out of the redacted snapshot rather than the table, so a face-down Dynasty card reaches the
+    seat attacking it as a back.
+    """
+    zone = table.zones.get(province)
+    return zone.cards[0] if zone is not None and zone.cards else None
+
+
+def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
+    """The attack in progress as ``table``'s viewer sees it, or None outside one.
 
     The Force totals are the ones resolution would use, so a client showing them shows what the
     battle is actually about to do rather than a figure of its own.
@@ -256,6 +275,7 @@ def _project_attack(game: GameState) -> AttackView | None:
         battlefields=tuple(
             BattlefieldView(
                 province=info.province,
+                occupant=_occupant(table, info.province),
                 strength=effective_province_strength(game, info.province),
                 attacking=_units(game, index, attack.attacker),
                 defending=_units(game, index, attack.defender),
