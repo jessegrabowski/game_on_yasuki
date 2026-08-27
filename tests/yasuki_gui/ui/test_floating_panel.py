@@ -324,21 +324,46 @@ def test_a_panel_stranded_off_the_board_is_recovered_rather_than_reopened_off_it
     assert (x, y) == (400 - KEEP_VISIBLE, 300 - ROLLED_H)
 
 
-def test_opening_centred_puts_the_panel_in_the_middle_of_the_board(board):
+def test_opening_over_a_box_takes_that_box(board):
     panel = FloatingPanel(board, "Attack", width=400, height=300)
 
-    panel.open_centered()
+    panel.open_over(0, 0, 800, 250)
 
-    assert _geometry(panel)[:2] == ((800 - 400) // 2, (600 - 300) // 2)
+    assert _geometry(panel) == (0, 0, 800, 250)
 
 
-def test_a_panel_built_larger_than_its_board_opens_fitted_to_it(board):
-    """Otherwise it opens with its resize corner past the edge and cannot be shrunk to fit."""
-    panel = FloatingPanel(board, "Attack", width=2000, height=1500)
+def test_a_box_larger_than_the_board_is_trimmed_to_it(board):
+    """Otherwise the panel opens with its resize corner past the edge and cannot be shrunk to fit."""
+    panel = FloatingPanel(board, "Attack", width=400, height=300)
 
-    panel.open_centered()
+    panel.open_over(0, 0, 2000, 1500)
 
     assert _geometry(panel) == (0, 0, 800, 600)
+
+
+def test_opening_over_a_box_does_not_resize_a_panel_already_on_the_board(board):
+    """Opening is said on every refresh, so a box applied each time would snap the panel back out
+    from under a player who has just resized it."""
+    panel = FloatingPanel(board, "Attack", width=400, height=300)
+    panel.open_over(0, 0, 400, 250)
+
+    panel.open_over(0, 0, 700, 500)
+
+    assert _geometry(panel) == (0, 0, 400, 250)
+
+
+def test_opening_over_a_box_leaves_a_panel_the_player_has_already_placed_alone(board):
+    """The box is where it starts, not where it belongs — a size the player chose is theirs, and an
+    attack ending is no reason to take it back."""
+    panel = FloatingPanel(board, "Attack", width=400, height=300)
+    panel.open_over(0, 0, 400, 250)  # narrower than the board, so there is room to grow
+    panel._grab(_drag(500, 500))
+    panel._resize(_drag(560, 530))
+    panel.close()
+
+    panel.open_over(0, 0, 400, 250)
+
+    assert _geometry(panel)[2:] == (460, 280)
 
 
 def test_the_title_bar_is_what_carries_the_drag(board):

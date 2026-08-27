@@ -10,7 +10,10 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_gui.layout import divider_y
 from yasuki_gui.services.presenter import Presenter
+from yasuki_gui.ui.floating_panel import MIN_H
+from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.ui.game_window import GameWindow
 
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -840,6 +843,21 @@ def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_ba
 
     assert status == "Opponent loses (no Provinces remaining)"
     assert buttons == []
+
+
+def test_the_battle_opens_clear_of_the_half_the_player_is_seated_at(a_battle):
+    """Assigning means reading your own units at home and pressing a button in the panel, so a panel
+    that opens over your half puts the two halves of one task on top of each other."""
+    presenter, window, _ = a_battle
+
+    _press(presenter, "Declare an attack")
+
+    placed = window.battle_view.place_info()
+    _, board_h = widget_size(window.field)
+    assert int(placed["y"]) == 0
+    # The opponent's half, unless that half is shorter than a panel can usefully be — a board too
+    # small to dock in is one where the panel has to overrun to stay worth showing at all.
+    assert int(placed["height"]) == max(divider_y(board_h), MIN_H)
 
 
 def test_the_battle_floats_over_the_board_with_an_attack_and_leaves_with_it(a_battle):

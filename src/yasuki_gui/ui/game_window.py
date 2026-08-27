@@ -9,6 +9,8 @@ from yasuki_core.engine.rules.projection import AttackView
 from yasuki_core.engine.table import TableState
 from yasuki_gui import theme
 from yasuki_gui.field_view import FieldView
+from yasuki_gui.layout import divider_y
+from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.ui.battle_view import BattleView, LaneButton, PendingArmy
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
@@ -148,13 +150,16 @@ class GameWindow:
     ) -> None:
         """Float the battle over the board while ``attack`` is on, and take it away when it ends.
 
-        It opens centred on the board and stays wherever the player has since dragged it. The
+        It opens over the opponent's half and stays wherever the player has since dragged it. The
         arguments are :meth:`BattleView.refresh`'s and are passed straight through.
         """
         if attack is None:
             self.battle_view.close()
             return
-        self.battle_view.open_centered()
+        # The opponent's half rather than the middle, so the seat being played can see its own units
+        # at home while it decides where to send them. A starting place, not a dock.
+        board_w, board_h = widget_size(self.field)
+        self.battle_view.open_over(0, 0, board_w, divider_y(board_h))
         self.battle_view.refresh(attack, pending, buttons)
 
     def relayout_panels(self) -> None:

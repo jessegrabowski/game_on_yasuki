@@ -137,14 +137,26 @@ class FloatingPanel(tk.Frame):
             self._ever_opened = True
         self._apply()
 
-    def open_centered(self) -> None:
-        """Lay the panel over the middle of the board, or where the player has since put it.
+    def open_over(self, left: int, top: int, width: int, height: int) -> None:
+        """Lay the panel over the given box the first time, or where the player has since put it.
 
-        The panel is fitted to the board it opens on, so one built larger than the board it lands
-        over does not open with its resize corner past the edge.
+        A starting place rather than a dock: the panel is free to be dragged and resized off the box
+        afterwards, and opening again keeps wherever it was left.
+
+        Parameters
+        ----------
+        left : int
+            The box's left edge, in the coordinates of what the panel floats over.
+        top : int
+            The box's top edge.
+        width : int
+            How wide to open. Trimmed to the board by :meth:`_clamp` if it does not fit.
+        height : int
+            How tall to open, title bar included.
         """
-        board_w, board_h = widget_size(self.master)
-        self.open_at((board_w - self._panel_width) // 2, (board_h - self._panel_height) // 2)
+        if not self._ever_opened:
+            self._panel_width, self._panel_height = width, height
+        self.open_at(left, top)
 
     def close(self) -> None:
         """Take the panel off the board. Its size and position survive for the next open."""
