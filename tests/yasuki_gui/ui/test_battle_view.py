@@ -43,7 +43,15 @@ def _force(army: tuple[UnitView, ...]) -> int:
 
 
 def _battlefield(
-    index: int, *, attacking=(), defending=(), strength=2, fought=False, occupant=None
+    index: int,
+    *,
+    attacking=(),
+    defending=(),
+    strength=2,
+    fought=False,
+    occupant=None,
+    outcome=None,
+    destroyed_names=(),
 ):
     return BattlefieldView(
         province=ZoneKey(P2, ZoneRole.PROVINCE, index),
@@ -54,6 +62,8 @@ def _battlefield(
         attacking_force=_force(attacking),
         defending_force=_force(defending),
         fought=fought,
+        outcome=outcome,
+        destroyed_names=destroyed_names,
     )
 
 

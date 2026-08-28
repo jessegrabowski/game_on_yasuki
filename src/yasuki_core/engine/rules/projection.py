@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.economy import (
     effective_stat,
 )
 from yasuki_core.engine.rules.modifiers import Stat
-from yasuki_core.engine.rules.state import GameState, Phase, Segment
+from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase, Segment
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.table import DeckKey, ZoneKey
@@ -57,6 +57,12 @@ class BattlefieldView:
         The defending army's Force as resolution would total it.
     fought : bool
         Whether a battle has already been fought here.
+    outcome : BattleOutcome or None
+        What the battle fought here did, or None until one has been.
+    destroyed_names : tuple of str
+        The names of the cards that battle destroyed, in the order they went. Named apart from
+        ``outcome.destroyed``, which carries the same cards as ids; public because a destroyed card
+        is sitting in a discard both seats may read.
     """
 
     province: ZoneKey
@@ -67,6 +73,8 @@ class BattlefieldView:
     attacking_force: int
     defending_force: int
     fought: bool
+    outcome: BattleOutcome | None
+    destroyed_names: tuple[str, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -258,6 +266,14 @@ def _occupant(table: ViewSnapshot, province: ZoneKey) -> L5RCard | HiddenCard | 
     return zone.cards[0] if zone is not None and zone.cards else None
 
 
+def _destroyed_names(game: GameState, outcome: BattleOutcome | None) -> tuple[str, ...]:
+    """The names of the cards ``outcome`` destroyed, or nothing when no battle has been fought."""
+    if outcome is None:
+        return ()
+    cards = game.table.cards_by_id
+    return tuple(cards[card_id].name for card_id in outcome.destroyed if card_id in cards)
+
+
 def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
     """The attack in progress as ``table``'s viewer sees it, or None outside one.
 
@@ -282,6 +298,8 @@ def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
                 attacking_force=battle.army_force(game, index, attack.attacker),
                 defending_force=battle.army_force(game, index, attack.defender),
                 fought=index in attack.fought,
+                outcome=info.outcome,
+                destroyed_names=_destroyed_names(game, info.outcome),
             )
             for index, info in enumerate(attack.battlefields)
         ),

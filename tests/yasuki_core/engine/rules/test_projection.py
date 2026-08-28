@@ -7,7 +7,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules import battle, triggers
 from yasuki_core.engine.rules.effects import Discard
@@ -399,3 +399,37 @@ def test_the_defender_sees_its_own_face_down_province_card_as_a_back_too():
     view = project(game, PlayerId.P2)
 
     assert isinstance(view.attack.battlefields[0].occupant, HiddenCard)
+
+
+def test_the_attack_view_names_the_cards_a_battle_destroyed():
+    """The outcome carries ids; a client has to show names, and a destroyed card is in a discard
+    both seats may read."""
+    game = two_seat_game()
+    # A name that is not the id, so the assertion cannot pass by echoing what it was given.
+    province_card(game, "p2-holding", seat=PlayerId.P2, index=0, name="Kyuden Bayushi")
+    battle.declare_attack(game, PlayerId.P1)
+    attack = game.attack
+    attack.battlefields = (
+        attack.battlefields[0]._replace(
+            outcome=BattleOutcome(
+                winner=PlayerId.P1,
+                destroyed=("p2-holding",),
+                province_destroyed=False,
+                honor={},
+            )
+        ),
+    ) + attack.battlefields[1:]
+
+    view = project(game, PlayerId.P1)
+
+    assert view.attack.battlefields[0].destroyed_names == ("Kyuden Bayushi",)
+
+
+def test_a_battlefield_with_no_outcome_names_nothing_destroyed():
+    game = two_seat_game()
+    province_card(game, "p2-holding", seat=PlayerId.P2, index=0)
+    battle.declare_attack(game, PlayerId.P1)
+
+    view = project(game, PlayerId.P1)
+
+    assert view.attack.battlefields[0].destroyed_names == ()
