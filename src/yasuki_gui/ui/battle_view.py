@@ -1,8 +1,11 @@
 import tkinter as tk
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import NamedTuple
 
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
+from yasuki_core.engine.rules.state import BattleOutcome
 from yasuki_gui import theme
 from yasuki_gui.constants import CARD_H, CARD_W
 from yasuki_gui.layout import COLUMN_STEP, centered_row, unit_tower_positions
@@ -29,6 +32,8 @@ FORCE_INSET = 12
 # this only binds on a lane crushed shorter than three cards can be stacked in at all — small enough
 # that it does not push the bottom row over the lane's button on any lane worth reading.
 MIN_ROW_STEP = 16
+# How tall a line of the outcome block is.
+OUTCOME_LINE_H = 16
 # The tightest a row of units compresses before cards start hiding each other entirely.
 MIN_STEP = 22
 # The narrowest an open lane goes, however many of them are competing for the width.
@@ -44,7 +49,7 @@ class LaneButton:
     """A lane's own button: what it says, and what pressing it does.
 
     Carried per lane rather than named by the view, because what a battlefield offers depends on
-    what the engine is asking — a place to send an army during assignment, a battle to fight after.
+    what the engine is asking — a place to send units during assignment, a battle to fight after.
 
     Attributes
     ----------
@@ -52,10 +57,14 @@ class LaneButton:
         What the button reads.
     press : callable
         Taken with no arguments when the button is clicked.
+    enabled : bool
+        Whether pressing it does anything. A disabled button is still drawn, so a battlefield the
+        player could send units to says so before they have picked any. Default True.
     """
 
     label: str
     press: Callable[[], None]
+    enabled: bool = True
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,6 +110,35 @@ def _rows(height: int) -> tuple[int, int, int, int]:
     return province, defending, defending + step // 2, defending + step
 
 
+class _OutcomeLine(NamedTuple):
+    """One line of the outcome block, and whether it is the kind that gets the loud type."""
+
+    text: str
+    emphatic: bool
+
+
+def _outcome_lines(
+    outcome: BattleOutcome, destroyed_names: tuple[str, ...], attacker: PlayerId
+) -> list[_OutcomeLine]:
+    """What the outcome block says, one line at a time, each flagged as emphatic or not.
+
+    A battle where nothing happened still says so — a lane that reports nothing is one the player
+    cannot tell from a lane that has not been fought at.
+    """
+    if outcome.winner is None:
+        headline = "Tied" if outcome.destroyed else "Nothing happened"
+    else:
+        headline = "Attacker wins" if outcome.winner is attacker else "Defender wins"
+    lines = [_OutcomeLine(headline, True)]
+    if outcome.province_destroyed:
+        lines.append(_OutcomeLine("Province destroyed", True))
+    if destroyed_names:
+        lines.append(_OutcomeLine(f"Destroyed: {', '.join(destroyed_names)}", False))
+    for seat, delta in sorted(outcome.honor.items(), key=lambda item: item[0].name):
+        lines.append(_OutcomeLine(f"{seat.name} honor {delta:+d}", False))
+    return lines
+
+
 class BattleView(FloatingPanel):
     """The attack in progress, drawn as one vertical lane per battlefield.
 
@@ -126,11 +164,13 @@ class BattleView(FloatingPanel):
         )
         self.canvas.pack(fill="both", expand=True)
         # A unit in a lane is still the player's to recall, and the lane is now the only place it
-        # is drawn — so the menu the board gives its cards has to be reachable from here too.
+        # is drawn — so the picking and the menu the board gives its cards are reachable here too.
         self.on_card_menu: Callable[[str], None] | None = None
+        self.on_card_click: Callable[[str], None] | None = None
         self._collapsed: set[int] = set()
         self._attack: AttackView | None = None
         self._pending: dict[int, PendingArmy] = {}
+        self._selected: frozenset[str] = frozenset()
         self._buttons: dict[int, LaneButton] = {}
         self._lane_spans: dict[int, tuple[int, int]] = {}
         self.canvas.bind("<Configure>", lambda _event: self._redraw())
@@ -144,6 +184,7 @@ class BattleView(FloatingPanel):
         attack: AttackView | None,
         pending: dict[int, PendingArmy] | None = None,
         buttons: dict[int, LaneButton] | None = None,
+        selected: frozenset[str] = frozenset(),
     ) -> None:
         """Redraw for ``attack``, or empty the view when there is none.
 
@@ -157,10 +198,13 @@ class BattleView(FloatingPanel):
         buttons : dict mapping int to LaneButton, optional
             What each battlefield offers the player right now. Only these lanes show a button.
             Default None.
+        selected : frozenset of str, optional
+            The ids of the cards the player has picked, drawn with a selection ring. Default empty.
         """
         self._attack = attack
         self._pending = pending or {}
         self._buttons = buttons or {}
+        self._selected = selected
         if attack is not None:
             self._collapsed &= set(range(len(attack.battlefields)))
         self._redraw()
@@ -191,7 +235,12 @@ class BattleView(FloatingPanel):
             return
         button = self._buttons.get(index)
         if button is not None and event.y >= self._height() - FOOTER_H:
-            button.press()
+            if button.enabled:
+                button.press()
+            return
+        card_id = self._card_at(event)
+        if card_id is not None and self.on_card_click:
+            self.on_card_click(card_id)
 
     def _on_context_click(self, event: tk.Event) -> None:
         """Offer the card menu for a unit standing in a lane, so one sent here can be brought back."""
@@ -200,8 +249,12 @@ class BattleView(FloatingPanel):
             self.on_card_menu(card_id)
 
     def _card_at(self, event: tk.Event) -> str | None:
-        """The id of the unit card under the pointer, or None on bare lane or the Province card."""
-        for item in self.canvas.find_overlapping(event.x, event.y, event.x, event.y):
+        """The id of the unit card under the pointer, or None on bare lane or the Province card.
+
+        Topmost first, because a unit is drawn as a tower: taking the bottommost would answer a
+        click on a Personality with the Follower fanned out behind him.
+        """
+        for item in reversed(self.canvas.find_overlapping(event.x, event.y, event.x, event.y)):
             for tag in self.canvas.gettags(item):
                 if tag.startswith(_CARD_TAG):
                     return tag[len(_CARD_TAG) :]
@@ -216,7 +269,11 @@ class BattleView(FloatingPanel):
         for index, span in self._lane_layout(len(attack.battlefields)).items():
             self._lane_spans[index] = span
             self._draw_lane(
-                index, attack.battlefields[index], span, current=index == attack.current
+                index,
+                attack.battlefields[index],
+                span,
+                current=index == attack.current,
+                attacker=attack.attacker,
             )
 
     def _lane_layout(self, count: int) -> dict[int, tuple[int, int]]:
@@ -238,11 +295,17 @@ class BattleView(FloatingPanel):
         return widget_size(self.canvas)[1]
 
     def _draw_lane(
-        self, index: int, view: BattlefieldView, span: tuple[int, int], *, current: bool
+        self,
+        index: int,
+        view: BattlefieldView,
+        span: tuple[int, int],
+        *,
+        current: bool,
+        attacker: PlayerId,
     ) -> None:
         """One lane: its panel, its header, the two armies facing each other across a divider, and
         the button that fights the battle here. ``current`` picks out the battlefield a battle is
-        being fought at."""
+        being fought at; ``attacker`` is which side an outcome's winner was."""
         left, right = span
         height = self._height()
         self.canvas.create_rectangle(
@@ -263,7 +326,7 @@ class BattleView(FloatingPanel):
         attacking = view.attacking + (pending.units if pending else ())
         attacking_force = view.attacking_force + (pending.force if pending else 0)
         field_bottom = height - FOOTER_H
-        province_y, defending_y, middle, attacking_y = _rows(height)
+        province_y, defending_y, divider, attacking_y = _rows(height)
         if view.occupant is not None:
             # Above the Defender's own units, at the head of the side it belongs to: it is what they
             # are standing in front of.
@@ -271,8 +334,14 @@ class BattleView(FloatingPanel):
                 to_render_card(view.occupant), ((left + right) // 2, province_y), _PROVINCE_TAG
             )
         self._draw_army(view.defending, span, defending_y, sink=False)
-        self.canvas.create_line(left + 6, middle, right - 6, middle, fill=theme.INK_DIM)
+        self.canvas.create_line(left + 6, divider, right - 6, divider, fill=theme.INK_DIM)
         self._draw_army(attacking, span, attacking_y, sink=True)
+        if view.outcome is not None:
+            # Over the rows rather than beside them: the armies have gone home by now, so the space
+            # they were drawn in is what the lane has to say what happened in it.
+            self._draw_outcome(
+                _outcome_lines(view.outcome, view.destroyed_names, attacker), span, divider
+            )
         # After the cards, so a crowded army cannot bury the total that says how it is doing.
         self._draw_force(view.defending_force, left + FORCE_INSET, HEADER_H + FORCE_INSET, "nw")
         self._draw_force(attacking_force, left + FORCE_INSET, field_bottom - FORCE_INSET, "sw")
@@ -307,6 +376,31 @@ class BattleView(FloatingPanel):
             centre, 56, text=str(view.strength), fill=theme.INK, font=theme.serif(26, "bold")
         )
 
+    def _draw_outcome(self, lines: list[_OutcomeLine], span: tuple[int, int], divider: int) -> None:
+        """What the battle fought here did, once one has been. Stays on the lane for the rest of the
+        Attack Phase, since a result the player has to catch as it goes past teaches them nothing."""
+        left, right = span
+        centre = (left + right) // 2
+        top = divider - (len(lines) * OUTCOME_LINE_H) // 2
+        self.canvas.create_rectangle(
+            left + 6,
+            top - 8,
+            right - 6,
+            top + len(lines) * OUTCOME_LINE_H + 2,
+            fill=theme.PANEL,
+            outline=theme.GOLD,
+            width=2,
+        )
+        for index, line in enumerate(lines):
+            self.canvas.create_text(
+                centre,
+                top + index * OUTCOME_LINE_H + OUTCOME_LINE_H // 2,
+                text=line.text,
+                fill=theme.INK if line.emphatic else theme.INK_DIM,
+                font=theme.serif(11, "bold") if line.emphatic else theme.serif(9),
+                width=right - left - 20,
+            )
+
     def _draw_force(self, force: int, x: int, y: int, anchor: str) -> None:
         """One side's Force, in its own corner of the half of the lane that side holds."""
         self.canvas.create_text(
@@ -326,15 +420,15 @@ class BattleView(FloatingPanel):
             top,
             right - 8,
             height - 8,
-            fill=theme.GOLD,
-            outline=theme.GOLD_HOVER,
+            fill=theme.GOLD if button.enabled else theme.LINE,
+            outline=theme.GOLD_HOVER if button.enabled else theme.LINE,
             width=1,
         )
         self.canvas.create_text(
             (left + right) // 2,
             (top + height - 8) // 2,
             text=button.label,
-            fill=theme.ON_DARK,
+            fill=theme.ON_DARK if button.enabled else theme.INK_DIM,
             font=theme.serif(11, "bold"),
         )
 
@@ -360,4 +454,6 @@ class BattleView(FloatingPanel):
             self._draw_card(unit.leader, leader)
 
     def _draw_card(self, card: RenderCard, at: tuple[int, int], tag: str = _CARD_TAG) -> None:
-        CardSpriteVisual(card, at[0], at[1], f"{tag}{card.id}").draw(self.canvas)
+        CardSpriteVisual(card, at[0], at[1], f"{tag}{card.id}").draw(
+            self.canvas, selected=card.id in self._selected
+        )

@@ -830,3 +830,104 @@ def test_a_seat_not_held_to_the_military_loss_keeps_playing_without_provinces():
 
     assert ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0) not in session.game.table.zones
     assert session.game.loser is None
+
+
+def _outcome(session: EngineSession, battlefield: int = 0):
+    """What the battle at ``battlefield`` recorded, once one has been fought there."""
+    return session.game.attack.battlefields[battlefield].outcome
+
+
+def test_a_battlefield_has_no_outcome_until_a_battle_is_fought_there():
+    session = _one_battlefield({"a": 4}, {"d": 2})
+
+    assert _outcome(session) is None
+
+
+def test_a_won_battle_records_the_winner_and_what_it_destroyed():
+    session = _one_battlefield({"a": 4}, {"d": 2})
+
+    _fight_one_battle(session)
+
+    outcome = _outcome(session)
+    assert outcome.winner is PlayerId.P1
+    assert outcome.destroyed == ("d",)
+    assert outcome.honor == {PlayerId.P1: 2}  # twice the one card it destroyed
+
+
+def test_a_tied_battle_records_no_winner_and_both_armies_destroyed():
+    session = _one_battlefield({"a": 4}, {"d": 4})
+
+    _fight_one_battle(session)
+
+    outcome = _outcome(session)
+    assert outcome.winner is None
+    assert set(outcome.destroyed) == {"a", "d"}
+
+
+def test_an_outcome_says_whether_the_province_fell():
+    session = _one_battlefield({"a": 9}, {"d": 2}, province_strength=3)
+
+    _fight_one_battle(session)
+
+    assert _outcome(session).province_destroyed
+
+
+def test_an_outcome_says_the_province_stood_when_the_force_fell_short():
+    session = _one_battlefield({"a": 5}, {"d": 2}, province_strength=3)
+
+    _fight_one_battle(session)
+
+    assert not _outcome(session).province_destroyed
+
+
+def test_a_battle_that_did_nothing_records_an_outcome_saying_so():
+    """A tie on zero Force with a side empty is an outcome, and an empty one — distinct from a
+    battlefield nobody has fought at yet."""
+    session = _one_battlefield({}, {"d": 0})
+
+    _fight_one_battle(session)
+
+    outcome = _outcome(session)
+    assert outcome is not None
+    assert outcome.winner is None
+    assert outcome.destroyed == ()
+    assert outcome.honor == {}
+
+
+def test_an_outcome_reads_the_honor_that_actually_moved():
+    """Off the board either side of resolution rather than off the honor the effects asked for, so
+    the figure still matches once a card can move honor of its own during a battle."""
+    session = _one_battlefield({"a": 4}, {"d": 2})
+    before = session.game.table.seats[PlayerId.P1].honor
+
+    _fight_one_battle(session)
+
+    after = session.game.table.seats[PlayerId.P1].honor
+    assert _outcome(session).honor[PlayerId.P1] == after - before
+
+
+def test_each_battlefield_records_only_its_own_casualties():
+    """Two battles in one Attack Phase, so an outcome built from the events of the whole action
+    rather than of its own battle would report the first battle's dead at the second."""
+    state = TableState.empty_two_seat()
+    for index in range(2):
+        province_card(state, f"def-prov{index}", seat=PlayerId.P2, index=index)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, stronghold(PlayerId.P2, province_strength=0))
+    for index in range(2):
+        put_in_play(state, personality(f"atk{index}", owner=PlayerId.P1, force=4))
+        put_in_play(state, personality(f"def{index}", owner=PlayerId.P2, force=2))
+    session = _to_battle(EngineSession.start(state, PlayerId.P1))
+    session.act(PlayerId.P1, DeclareAttack())
+    session.submit(
+        PlayerId.P1, DecisionResponse(tuple(assignment_token(f"atk{i}", i) for i in range(2)))
+    )
+    session.submit(
+        PlayerId.P2, DecisionResponse(tuple(assignment_token(f"def{i}", i) for i in range(2)))
+    )
+
+    _fight_every_battlefield(session)
+
+    battlefields = session.game.attack.battlefields
+    assert battlefields[0].outcome.destroyed == ("def0",)
+    assert battlefields[1].outcome.destroyed == ("def1",)

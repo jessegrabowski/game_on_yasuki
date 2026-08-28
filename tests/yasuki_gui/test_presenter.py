@@ -580,7 +580,6 @@ def _press(presenter, label: str) -> None:
         if text == label:
             assert ready, f"{label!r} is disabled"
             action()
-            presenter.present()
             return
     raise AssertionError(f"no {label!r} button; offered {[spec[0] for spec in _specs(presenter)]}")
 
@@ -590,9 +589,17 @@ def _picked(window) -> str:
     return window.field.selection[0]
 
 
-def _army_menu(presenter, card_id: str) -> dict[str, bool]:
+def _menu_on(presenter, window, card_id: str) -> dict[str, bool]:
+    """Right-click ``card_id`` and read the menu it offers."""
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.append(list(entries))
+    presenter.on_card_activated(card_id)
+    return {label: enabled for label, _, enabled in offered[0]}
+
+
+def _assignment_menu(presenter) -> dict[str, bool]:
     """The card menu's entries while an assignment is open, to whether each is available."""
-    return {label: enabled for label, _, enabled in presenter._army_menu(card_id)}
+    return {label: enabled for label, _, enabled in presenter._assignment_menu()}
 
 
 def _press_lane(presenter, battlefield: int, label: str) -> None:
@@ -601,6 +608,7 @@ def _press_lane(presenter, battlefield: int, label: str) -> None:
     buttons = presenter._lane_buttons()
     assert battlefield in buttons, f"battlefield {battlefield} offers no button; {buttons}"
     assert buttons[battlefield].label == label, f"reads {buttons[battlefield].label!r}"
+    assert buttons[battlefield].enabled, f"battlefield {battlefield}'s button is greyed"
     buttons[battlefield].press()
 
 
@@ -609,10 +617,10 @@ def _fight_at(presenter, window, battlefield: int) -> None:
     _press_lane(presenter, battlefield, "Fight here")
 
 
-def _send_army(presenter, window, card_id: str, battlefield: int) -> None:
-    """Assign ``card_id``'s army the way the player does: ask where it goes, then press the button
-    under the battlefield."""
-    presenter.assign_army(card_id)
+def _send(presenter, window, card_ids, battlefield: int) -> None:
+    """Send units the way the player does: pick them, then press the button under the battlefield."""
+    for card_id in card_ids:
+        window.field.toggle_selection(card_id)
     _press_lane(presenter, battlefield, "Assign here")
 
 
@@ -626,57 +634,170 @@ def test_the_attack_phase_offers_the_declaration_as_a_button(a_battle):
     assert session.game.attack is not None
 
 
-def test_the_army_menu_shows_every_step_before_any_is_reachable(a_battle):
-    """All four entries are listed and greyed, so the sequence is visible before it can be walked."""
+def test_the_assignment_menu_shows_its_entry_before_it_is_reachable(a_battle):
+    """It is listed and greyed, so the way back is visible before there is anything to take."""
     presenter, _, _ = a_battle
     _press(presenter, "Declare an attack")
 
-    assert _army_menu(presenter, "hero") == {
-        "Add to army": False,
-        "Remove from army": False,
-        "Assign army": False,
-        "Unassign army": False,
-    }
+    assert _assignment_menu(presenter) == {"Unassign units": False}
 
 
-def test_picking_units_lights_up_gathering_them_into_an_army(a_battle):
+def test_picking_units_at_home_leaves_unassigning_out_of_reach(a_battle):
+    """Sending them is the lane's button; the menu is only for bringing them back."""
     presenter, window, _ = a_battle
-    put_in_play(presenter.host.session.game, personality("second", owner=P1, force=3))
     _press(presenter, "Declare an attack")
+
+    window.field.toggle_selection("hero")
+
+    assert _assignment_menu(presenter)["Unassign units"] is False
+
+
+def test_picking_units_at_a_battlefield_lights_up_bringing_them_back(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+
+    presenter.on_lane_card_clicked("hero")
+
+    assert _assignment_menu(presenter)["Unassign units"] is True
+
+
+def test_right_clicking_a_unit_picks_it(a_battle):
+    """Sending a unit clears the picks, so the menu opened on the unit just sent would be greyed
+    every time if right-clicking did not pick what it was opened on."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+    assert window.field.selection == ()
+
+    offered = _menu_on(presenter, window, "hero")
+
+    assert window.field.selection == ("hero",)
+    assert offered["Unassign units"] is True
+
+
+def test_right_clicking_a_unit_at_home_picks_it_too(a_battle):
+    """Right-click means "this one" wherever it is done, so it readies the lanes' buttons as well as
+    the menu."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    assert not any(button.enabled for button in presenter._lane_buttons().values())
+
+    _menu_on(presenter, window, "hero")
+
+    assert window.field.selection == ("hero",)
+    assert all(button.enabled for button in presenter._lane_buttons().values())
+
+
+def test_right_clicking_a_unit_already_picked_keeps_the_rest_of_the_picks(a_battle):
+    """Otherwise opening the menu on one of several picked units would throw the others away."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero", "second"], 1)
+    presenter.on_lane_card_clicked("hero")
+    presenter.on_lane_card_clicked("second")
+
+    _menu_on(presenter, window, "hero")
+
+    assert set(window.field.selection) == {"hero", "second"}
+
+
+def test_clicking_a_follower_picks_the_unit_it_belongs_to(a_battle):
+    """A unit answers as one card. A Follower is not an assignment candidate, so a click that named
+    it would select nothing at all and leave every menu entry greyed."""
+    presenter, window, session = a_battle
+    attached(
+        session.game,
+        attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=2, owner=P1),
+        "hero",
+    )
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+
+    presenter.on_lane_card_clicked("banner")
+
+    assert window.field.selection == ("hero",)
+    assert _assignment_menu(presenter)["Unassign units"] is True
+
+
+def test_a_selection_belongs_to_one_place_at_a_time(a_battle):
+    """Picking somewhere else drops the old picks rather than mixing two places in one answer."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+    presenter.on_lane_card_clicked("hero")
+    assert window.field.selection == ("hero",)
 
     window.field.toggle_selection("second")
 
-    assert _army_menu(presenter, "hero")["Add to army"] is True
+    assert window.field.selection == ("second",)
+    assert window.field.selection_zone is None
 
 
-def test_an_army_is_closed_to_editing_once_it_has_been_sent(a_battle):
-    presenter, window, _ = a_battle
-    put_in_play(presenter.host.session.game, personality("second", owner=P1, force=3))
+def test_picking_at_one_battlefield_drops_picks_at_another(a_battle):
+    """Two battlefields are as different as home and a battlefield: an answer names one place."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
     _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 0)
+    _send(presenter, window, ["second"], 1)
+    presenter.on_lane_card_clicked("hero")
+    assert window.field.selection_zone == 0
+
+    presenter.on_lane_card_clicked("second")
+
+    assert window.field.selection == ("second",)
+    assert window.field.selection_zone == 1
+
+
+def test_changing_the_picks_while_choosing_a_battlefield_sends_the_new_ones(a_battle):
+    """The board stays pickable while the destination is being chosen, so what it highlights has to
+    be what gets sent."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    window.field.toggle_selection("hero")
+
     window.field.toggle_selection("second")
+    _press_lane(presenter, 1, "Assign here")
 
-    presenter.form_army("hero")
-    assert window.field.armies == (("second", "hero"),)  # picked first, clicked last
-    assert _army_menu(presenter, "hero")["Assign army"] is True
-
-    _send_army(presenter, window, "hero", 1)
-    menu = _army_menu(presenter, "hero")
-    assert menu["Unassign army"] is True
-    assert menu["Assign army"] is False  # a sent army is closed until it is brought home
-
-    presenter.recall_army("hero")
-    assert _army_menu(presenter, "hero")["Assign army"] is True
+    assert window.field.assigned_units() == {"hero": 1, "second": 1}
 
 
-def test_leaving_an_army_disbands_one_it_empties(a_battle):
+def test_several_units_go_to_a_battlefield_in_one_step(a_battle):
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+
+    _send(presenter, window, ["hero", "second"], 1)
+
+    assert window.field.assigned_units() == {"hero": 1, "second": 1}
+
+
+def test_unassigning_brings_back_every_unit_picked_at_that_battlefield(a_battle):
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero", "second"], 1)
+    presenter.on_lane_card_clicked("hero")
+    presenter.on_lane_card_clicked("second")
+
+    presenter.unassign_units()
+
+    assert window.field.assigned_units() == {}
+
+
+def test_sending_a_unit_somewhere_else_moves_it(a_battle):
+    """There is no army to leave first — where a unit stands is the whole of the model."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
+    _send(presenter, window, ["hero"], 0)
 
-    presenter.leave_army("hero")
+    _send(presenter, window, ["hero"], 1)
 
-    assert window.field.armies == ()
-    assert _army_menu(presenter, "hero")["Remove from army"] is False
+    assert window.field.assigned_units() == {"hero": 1}
 
 
 def test_two_armies_go_to_two_provinces_in_one_answer(a_battle):
@@ -685,10 +806,8 @@ def test_two_armies_go_to_two_provinces_in_one_answer(a_battle):
     presenter, window, session = a_battle
     put_in_play(session.game, personality("second", owner=P1, force=3))
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-    _send_army(presenter, window, "hero", 0)
-    presenter.form_army("second")
-    _send_army(presenter, window, "second", 1)
+    _send(presenter, window, ["hero"], 0)
+    _send(presenter, window, ["second"], 1)
 
     _press(presenter, "Done assigning")
 
@@ -697,27 +816,31 @@ def test_two_armies_go_to_two_provinces_in_one_answer(a_battle):
     assert location_of(table, table.cards_by_id["second"]).battlefield == 1
 
 
-def test_an_army_left_at_home_is_not_assigned(a_battle):
-    """Gathering an army is not committing it: only one that was sent somewhere is in the answer."""
+def test_a_unit_left_at_home_is_not_assigned(a_battle):
+    """Picking a unit is not committing it: only one that was sent somewhere is in the answer."""
     presenter, window, session = a_battle
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
+    window.field.toggle_selection("hero")
 
     _press(presenter, "Done assigning")
 
     assert location_of(session.game.table, session.game.table.cards_by_id["hero"]).is_home
 
 
-def test_cancelling_a_province_choice_leaves_the_army_gathered_and_home(a_battle):
+def test_the_assign_buttons_go_away_once_the_assignment_is_answered(a_battle):
+    """They are the gesture for a question that is over; what the lanes offer next is the battle."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-    presenter.assign_army("hero")
+    _send(presenter, window, ["hero"], 0)
 
-    _press(presenter, "Cancel")
+    _press(presenter, "Done assigning")
+    presenter.host.runner.run_opponent()
+    presenter.present()
 
-    assert window.field.armies == (("hero",),)
-    assert window.field.battlefield_of_army(0) is None
+    assert [button.label for button in presenter._lane_buttons().values()] == [
+        "Fight here",
+        "Fight here",
+    ]
 
 
 def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
@@ -726,8 +849,7 @@ def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
     presenter, window, session = a_battle
     runner = presenter.host.runner
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-    _send_army(presenter, window, "hero", 0)
+    _send(presenter, window, ["hero"], 0)
     _press(presenter, "Done assigning")
     runner.run_opponent()
     presenter.present()
@@ -748,89 +870,41 @@ def test_the_prompt_box_names_the_next_step_at_every_point(a_battle):
 
     window.field.toggle_selection("hero")
     said.append(presenter._prompt(presenter.host.runner.view())[0])
-    presenter.form_army(_picked(window))
-    said.append(presenter._prompt(presenter.host.runner.view())[0])
-    presenter.assign_army("hero")
+    _press_lane(presenter, 0, "Assign here")
     said.append(presenter._prompt(presenter.host.runner.view())[0])
 
     assert said == [
-        "Click the Personalities you want to attack with, then right-click one",
-        "1 picked - right-click one to add them to an army",
-        "Right-click an army to assign it to a battlefield",
-        "Press Assign here under the battlefield you want",
+        "Click the Personalities you want to attack with, then press a battlefield's button",
+        "1 picked at home - press Assign here under the battlefield you want",
+        "Click more Personalities to send, or press Done assigning to fight the battles",
     ]
 
 
-def test_the_prompt_box_only_confirms_cancels_and_finishes(a_battle):
-    """The card menu carries the army work. The prompt box says what to do next and offers the
-    three answers that are not about any one card."""
+def test_the_prompt_box_only_says_what_to_do_and_finishes(a_battle):
+    """The lanes carry the assigning. The prompt box says what to do next and offers the one answer
+    that is not about any battlefield."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
     assert [label for label, _, _ in _specs(presenter)] == ["Done assigning"]
 
-    presenter.form_army("hero")
+    window.field.toggle_selection("hero")
+
     assert [label for label, _, _ in _specs(presenter)] == ["Done assigning"]
 
-    presenter.assign_army("hero")
-    assert [label for label, _, _ in _specs(presenter)] == ["Cancel"]
 
-
-def test_choosing_where_an_army_goes_puts_a_button_under_every_battlefield(a_battle):
-    """The destination is a place, so it is picked in the lanes rather than off a list of names in
-    the prompt box."""
-    presenter, window, _ = a_battle
-    _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-
-    presenter.assign_army("hero")
-
-    assert [button.label for button in presenter._lane_buttons().values()] == [
-        "Assign here",
-        "Assign here",
-    ]
-
-
-def test_no_battlefield_offers_a_button_until_an_army_is_waiting_on_one(a_battle):
-    """A button on every lane at all times would say the game is asking something it is not."""
-    presenter, window, _ = a_battle
-    _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-
-    assert presenter._lane_buttons() == {}
-
-
-def test_cancelling_takes_the_buttons_back_off_the_lanes(a_battle):
-    presenter, window, _ = a_battle
-    _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-    presenter.assign_army("hero")
-
-    _press(presenter, "Cancel")
-
-    assert presenter._lane_buttons() == {}
-
-
-def test_units_in_the_same_army_share_a_ring_and_different_armies_do_not(a_battle):
-    """The ring is the only thing on the board that says which units travel together."""
-    presenter, window, session = a_battle
-    for name in ("second", "third"):
-        put_in_play(session.game, personality(name, owner=P1, force=3))
-    _press(presenter, "Declare an attack")
-    window.field.toggle_selection("second")
-    presenter.form_army("hero")
-    presenter.form_army("third")
-
-    rings = {name: window.field._army_ring(name) for name in ("hero", "second", "third")}
-
-    assert rings["hero"] == rings["second"]
-    assert rings["third"] not in (None, rings["hero"])
-
-
-def test_a_unit_in_no_army_has_no_ring(a_battle):
+def test_every_battlefield_offers_its_button_for_as_long_as_the_question_is_open(a_battle):
+    """Where units could go is visible before any are picked, so the player is not hunting for the
+    gesture that sends them."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
 
-    assert window.field._army_ring("hero") is None
+    greyed = presenter._lane_buttons()
+    assert [button.label for button in greyed.values()] == ["Assign here", "Assign here"]
+    assert not any(button.enabled for button in greyed.values())
+
+    window.field.toggle_selection("hero")
+
+    assert all(button.enabled for button in presenter._lane_buttons().values())
 
 
 def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_battle):
@@ -843,6 +917,85 @@ def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_ba
 
     assert status == "Opponent loses (no Provinces remaining)"
     assert buttons == []
+
+
+def test_undo_takes_back_the_last_step_of_an_assignment(a_battle):
+    """Setting up an attack is scratch work — nothing reaches the engine until the whole map is
+    answered — so each step comes back one at a time."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 0)
+    _send(presenter, window, ["second"], 1)
+    assert window.field.assigned_units() == {"hero": 0, "second": 1}
+
+    presenter.undo()
+
+    assert window.field.assigned_units() == {"hero": 0}
+
+
+def test_undo_brings_a_sent_unit_back_home(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+    assert window.field.assigned_units() == {"hero": 1}
+
+    presenter.undo()
+
+    assert window.field.assigned_units() == {}
+
+
+def test_undo_puts_an_unassigned_unit_back_at_its_battlefield(a_battle):
+    """Unassigning is a step like any other; the symmetric case to undoing a send."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+    presenter.on_lane_card_clicked("hero")
+    presenter.unassign_units()
+    assert window.field.assigned_units() == {}
+
+    presenter.undo()
+
+    assert window.field.assigned_units() == {"hero": 1}
+
+
+def test_undo_walks_back_one_step_at_a_time(a_battle):
+    """Each step is its own entry, so a history that only remembered the last one would take the
+    player straight to the start."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 0)
+    _send(presenter, window, ["second"], 1)
+
+    presenter.undo()
+    assert window.field.assigned_units() == {"hero": 0}  # the second send is taken back
+
+    presenter.undo()
+    assert window.field.assigned_units() == {}  # then the first
+
+
+def test_undo_at_the_start_of_an_assignment_does_nothing(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+
+    presenter.undo()
+
+    assert window.field.assigned_units() == {}
+
+
+def test_an_answered_assignment_is_no_longer_the_players_to_take_back(a_battle):
+    """Once the map is answered the Defender assigns against it, so the steps that built it stop
+    being scratch work."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+
+    _press(presenter, "Done assigning")
+    presenter.undo()
+
+    assert window.field.assigned_units() == {}
+    assert window.field._assignment_history == []
 
 
 def test_the_battle_opens_clear_of_the_half_the_player_is_seated_at(a_battle):
@@ -884,8 +1037,7 @@ def test_a_unit_sent_to_a_battlefield_stands_there_before_the_engine_is_told(a_b
     should not have to watch for."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-    _send_army(presenter, window, "hero", 1)
+    _send(presenter, window, ["hero"], 1)
 
     canvas = window.battle_view.canvas
     tags = {tag for item in canvas.find_all() for tag in canvas.gettags(item)}
@@ -897,8 +1049,7 @@ def test_a_unit_sent_to_a_battlefield_leaves_the_board(a_battle):
     """It is drawn in the lane now, and drawing it in both places would say it is in two."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-    _send_army(presenter, window, "hero", 1)
+    _send(presenter, window, ["hero"], 1)
 
     assert not window.field._at_home("hero")
 
@@ -917,8 +1068,7 @@ def test_the_force_a_lane_shows_does_not_move_when_the_assignment_is_answered(a_
         "hero",
     )
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-    _send_army(presenter, window, "hero", 1)
+    _send(presenter, window, ["hero"], 1)
     while_pending = presenter._pending_armies()[1].force
 
     _press(presenter, "Done assigning")
@@ -928,15 +1078,32 @@ def test_the_force_a_lane_shows_does_not_move_when_the_assignment_is_answered(a_
     assert view.attack.battlefields[1].attacking_force == while_pending
 
 
-def test_a_unit_sent_to_a_battlefield_can_still_be_recalled(a_battle):
+def test_a_unit_sent_to_a_battlefield_takes_its_followers_off_the_board(a_battle):
+    """Only the Personality is named in an assignment, so a board that asks each card whether it was
+    sent leaves his Followers behind — drawn at home while the same cards are drawn in the lane."""
+    presenter, window, session = a_battle
+    attached(
+        session.game,
+        attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=2, owner=P1),
+        "hero",
+    )
+    _press(presenter, "Declare an attack")
+
+    _send(presenter, window, ["hero"], 1)
+
+    assert not window.field._at_home("hero")
+    assert not window.field._at_home("banner")
+
+
+def test_a_unit_sent_to_a_battlefield_can_still_be_unassigned(a_battle):
     """The lane is the only place it is drawn, so the menu the board gave it has to be reachable
     from there or the player has no way back."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
-    presenter.form_army("hero")
-    _send_army(presenter, window, "hero", 1)
+    _send(presenter, window, ["hero"], 1)
 
-    presenter.recall_army("hero")
+    presenter.on_lane_card_clicked("hero")
+    presenter.unassign_units()
 
     assert window.field._at_home("hero")
     assert window.field.assigned_units() == {}

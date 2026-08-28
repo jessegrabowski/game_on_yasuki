@@ -94,6 +94,27 @@ class Segment(Enum):
     FIGHT = "fight"
 
 
+class BattleOutcome(NamedTuple):
+    """What resolving a battle did, recorded as it happened.
+
+    Attributes
+    ----------
+    winner : PlayerId or None
+        The seat whose Force was higher, or None if the battle was tied.
+    destroyed : tuple of str
+        The ids of the cards destroyed, in the order they went.
+    province_destroyed : bool
+        Whether the Province the battle was fought at was destroyed.
+    honor : dict mapping PlayerId to int
+        How far each seat's Family Honor moved. A seat that neither gained nor lost is absent.
+    """
+
+    winner: PlayerId | None
+    destroyed: tuple[str, ...]
+    province_destroyed: bool
+    honor: dict[PlayerId, int]
+
+
 class BattlefieldInfo(NamedTuple):
     """A battlefield an attack created, and the Defender Province it is associated with.
 
@@ -101,9 +122,12 @@ class BattlefieldInfo(NamedTuple):
     ----------
     province : ZoneKey
         The Province this battlefield sits at.
+    outcome : BattleOutcome or None
+        What the battle fought here did, or None until one has been.
     """
 
     province: ZoneKey
+    outcome: BattleOutcome | None = None
 
 
 @dataclass(slots=True)

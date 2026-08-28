@@ -9,6 +9,7 @@ yasuki_core.engine.rules.state
 
     ActionRound
     AttackPhase
+    BattleOutcome
     BattlefieldInfo
     GameState
     Phase
