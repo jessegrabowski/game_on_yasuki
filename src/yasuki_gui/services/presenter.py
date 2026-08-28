@@ -374,6 +374,13 @@ class Presenter:
         """
         runner = self.host.runner
         if isinstance(runner.pending, AssignUnits):
+            # Right-clicking a card the player has not picked picks it, the way a file manager does:
+            # the menu acts on the selection, and a menu that needed an invisible click first would
+            # be greyed every time it was opened on the obvious card.
+            leader = self.window.field.unit_leader(card_id)
+            if leader not in self.window.field.selection:
+                self.window.field.toggle_selection(leader)
+                self.refresh()
             self.window.popup_at_pointer(self._assignment_menu())
             return
         self._offer(

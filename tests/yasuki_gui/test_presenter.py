@@ -589,6 +589,14 @@ def _picked(window) -> str:
     return window.field.selection[0]
 
 
+def _menu_on(presenter, window, card_id: str) -> dict[str, bool]:
+    """Right-click ``card_id`` and read the menu it offers."""
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.append(list(entries))
+    presenter.on_card_activated(card_id)
+    return {label: enabled for label, _, enabled in offered[0]}
+
+
 def _assignment_menu(presenter) -> dict[str, bool]:
     """The card menu's entries while an assignment is open, to whether each is available."""
     return {label: enabled for label, _, enabled in presenter._assignment_menu()}
@@ -652,6 +660,47 @@ def test_picking_units_at_a_battlefield_lights_up_bringing_them_back(a_battle):
     presenter.on_lane_card_clicked("hero")
 
     assert _assignment_menu(presenter)["Unassign units"] is True
+
+
+def test_right_clicking_a_unit_picks_it(a_battle):
+    """Sending a unit clears the picks, so the menu opened on the unit just sent would be greyed
+    every time if right-clicking did not pick what it was opened on."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+    assert window.field.selection == ()
+
+    offered = _menu_on(presenter, window, "hero")
+
+    assert window.field.selection == ("hero",)
+    assert offered["Unassign units"] is True
+
+
+def test_right_clicking_a_unit_at_home_picks_it_too(a_battle):
+    """Right-click means "this one" wherever it is done, so it readies the lanes' buttons as well as
+    the menu."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    assert not any(button.enabled for button in presenter._lane_buttons().values())
+
+    _menu_on(presenter, window, "hero")
+
+    assert window.field.selection == ("hero",)
+    assert all(button.enabled for button in presenter._lane_buttons().values())
+
+
+def test_right_clicking_a_unit_already_picked_keeps_the_rest_of_the_picks(a_battle):
+    """Otherwise opening the menu on one of several picked units would throw the others away."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero", "second"], 1)
+    presenter.on_lane_card_clicked("hero")
+    presenter.on_lane_card_clicked("second")
+
+    _menu_on(presenter, window, "hero")
+
+    assert set(window.field.selection) == {"hero", "second"}
 
 
 def test_clicking_a_follower_picks_the_unit_it_belongs_to(a_battle):
