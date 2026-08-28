@@ -292,6 +292,21 @@ def test_pressing_a_lane_button_takes_that_lane_action(view):
     assert pressed == [1]
 
 
+def test_a_greyed_lane_button_is_drawn_but_does_nothing(view):
+    """It says the battlefield is somewhere units could go, before any are picked to send."""
+    pressed = []
+    view.refresh(
+        _attack(_battlefield(0)),
+        buttons={0: LaneButton("Assign here", lambda: pressed.append(0), enabled=False)},
+    )
+    left, right = view._lane_spans[0]
+
+    view._on_click(_click((left + right) // 2, view._height() - 4))
+
+    assert "Assign here" in _texts(view)
+    assert pressed == []
+
+
 def test_a_click_under_a_lane_with_no_button_does_nothing(view):
     pressed = []
     view.refresh(

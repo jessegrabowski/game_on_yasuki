@@ -57,10 +57,14 @@ class LaneButton:
         What the button reads.
     press : callable
         Taken with no arguments when the button is clicked.
+    enabled : bool
+        Whether pressing it does anything. A disabled button is still drawn, so a battlefield the
+        player could send units to says so before they have picked any. Default True.
     """
 
     label: str
     press: Callable[[], None]
+    enabled: bool = True
 
 
 @dataclass(frozen=True, slots=True)
@@ -231,7 +235,8 @@ class BattleView(FloatingPanel):
             return
         button = self._buttons.get(index)
         if button is not None and event.y >= self._height() - FOOTER_H:
-            button.press()
+            if button.enabled:
+                button.press()
             return
         card_id = self._card_at(event)
         if card_id is not None and self.on_card_click:
@@ -411,15 +416,15 @@ class BattleView(FloatingPanel):
             top,
             right - 8,
             height - 8,
-            fill=theme.GOLD,
-            outline=theme.GOLD_HOVER,
+            fill=theme.GOLD if button.enabled else theme.LINE,
+            outline=theme.GOLD_HOVER if button.enabled else theme.LINE,
             width=1,
         )
         self.canvas.create_text(
             (left + right) // 2,
             (top + height - 8) // 2,
             text=button.label,
-            fill=theme.ON_DARK,
+            fill=theme.ON_DARK if button.enabled else theme.INK_DIM,
             font=theme.serif(11, "bold"),
         )
 

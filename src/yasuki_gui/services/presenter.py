@@ -139,10 +139,13 @@ class Presenter:
                 for token in pending.candidates
             }
         if isinstance(pending, AssignUnits):
-            # Every battlefield offers the button for as long as the question is open, so where
-            # units could go is visible before any are picked.
+            # Every battlefield offers the button for as long as the question is open, greyed until
+            # units are picked, so where they could go is visible before any are.
+            picked = bool(self.window.field.selection)
             return {
-                index: LaneButton("Assign here", lambda at=index: self.assign_units(at))
+                index: LaneButton(
+                    "Assign here", lambda at=index: self.assign_units(at), enabled=picked
+                )
                 for index in range(self._battlefield_count())
             }
         return {}

@@ -600,6 +600,7 @@ def _press_lane(presenter, battlefield: int, label: str) -> None:
     buttons = presenter._lane_buttons()
     assert battlefield in buttons, f"battlefield {battlefield} offers no button; {buttons}"
     assert buttons[battlefield].label == label, f"reads {buttons[battlefield].label!r}"
+    assert buttons[battlefield].enabled, f"battlefield {battlefield}'s button is greyed"
     buttons[battlefield].press()
 
 
@@ -840,6 +841,21 @@ def test_the_prompt_box_only_says_what_to_do_and_finishes(a_battle):
     window.field.toggle_selection("hero")
 
     assert [label for label, _, _ in _specs(presenter)] == ["Done assigning"]
+
+
+def test_every_battlefield_offers_its_button_for_as_long_as_the_question_is_open(a_battle):
+    """Where units could go is visible before any are picked, so the player is not hunting for the
+    gesture that sends them."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+
+    greyed = presenter._lane_buttons()
+    assert [button.label for button in greyed.values()] == ["Assign here", "Assign here"]
+    assert not any(button.enabled for button in greyed.values())
+
+    window.field.toggle_selection("hero")
+
+    assert all(button.enabled for button in presenter._lane_buttons().values())
 
 
 def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_battle):
