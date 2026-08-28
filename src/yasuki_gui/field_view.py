@@ -829,20 +829,23 @@ class FieldView(tk.Canvas):
     def _home_positions(self, rendered, w: int, h: int) -> dict[str, tuple[int, int]]:
         """Stacked home-row positions for the unplaced cards among ``rendered``, grouped per owner:
         copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``, while the
-        stronghold, sensei, and distinct holdings each take their own column. Personalities lay out
-        in the front (personalities) row; everything else in the holdings row. Attached cards are
-        left out — :meth:`_unit_positions` and :meth:`_province_attachment_positions` place them on
-        what they hang from."""
+        stronghold, sensei, and distinct holdings each take their own column, and so does any copy
+        that has stopped being interchangeable with the rest (see :meth:`_stack_key`). Personalities
+        lay out in the front (personalities) row; everything else in the holdings row. Attached
+        cards are left out — :meth:`_unit_positions` and :meth:`_province_attachment_positions`
+        place them on what they hang from."""
         holdings: dict[PlayerId | None, list[tuple[str, object]]] = {}
         personalities: dict[PlayerId | None, list[tuple[str, object]]] = {}
         # An attachment rides its Personality or its Province wherever that stands, so it takes no
         # column of its own — giving it one would shove the real Holdings sideways to make room.
-        attached = self._units().keys() | self._province_attachments().keys()
+        units = self._units()
+        attached = units.keys() | self._province_attachments().keys()
+        leaders = set(units.values())
         for rc, pos in rendered:
             if rc.id in attached:
                 continue
             if pos is None or pos.x < 0 or pos.y < 0:
-                key = getattr(rc, "printed_id", None) or rc.id
+                key = self._stack_key(rc, leaders)
                 bucket = (
                     personalities
                     if isinstance(getattr(rc, "printed", None), PersonalityPrint)
@@ -864,6 +867,34 @@ class FieldView(tk.Canvas):
                     )
                 )
         return positions
+
+    def _stack_key(self, card: RenderCard, leaders: set[str]) -> str:
+        """What ``card`` shares a home column with: its printed card, or itself.
+
+        Copies stack so four Rice Fields cost one column rather than four, and a stack shows only
+        the top strip of every copy but the last. So a copy carrying something that strip hides —
+        an attachment, counters, a note — steps out and takes a column of its own.
+
+        What the strip does show stays in the stack, however different it makes the card look. A
+        bowed card is drawn on its side, and a modified Force or Chi is stamped in the top corners,
+        clear of the copy in front. Moving either one would slide the whole row sideways every time
+        a Holding was tapped for gold, to say something already on screen.
+
+        Parameters
+        ----------
+        card : L5RCard or HiddenFace
+            The card being placed.
+        leaders : set of str
+            The ids of the cards something is attached to, passed in rather than derived per card
+            so the membership set is built once for the row.
+        """
+        if (
+            card.id in leaders
+            or card.note
+            or getattr(card, "counters", None)  # a redacted back carries none
+        ):
+            return card.id
+        return getattr(card, "printed_id", None) or card.id
 
     def _province_keys_by_owner(self) -> dict[PlayerId, list[ZoneKey]]:
         by_owner: dict[PlayerId, list[ZoneKey]] = {seat: [] for seat in self._render_seats()}
