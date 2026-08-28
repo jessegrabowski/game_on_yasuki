@@ -44,16 +44,13 @@ class Presenter:
     into engine calls.
 
     What the board is waiting on lives on the board and what the game is waiting on lives in the
-    session, so there is no third copy of either here. The one thing it does keep is which army is
+    session, so there is no third copy of either here. The one thing it does keep is which units are
     part-way through being assigned: that spans two clicks and belongs to neither.
     """
 
     def __init__(self, host: GameHost, window: GameWindow) -> None:
         self.host = host
         self.window = window
-        # Which army is waiting on a Province, or None. The one piece of state the presenter
-        # keeps: it spans two clicks and belongs to neither the board nor the engine.
-        self._assigning: int | None = None
 
     def present(self) -> None:
         """Set the client up for whatever the engine wants next: the dialog or selection mode the
@@ -75,11 +72,9 @@ class Presenter:
             # chosen card carries a spinner rather than only a selection ring.
             field.begin_allocation(pending.candidates, pending.count)
         elif isinstance(pending, AssignUnits):
-            if self._assigning is None:
-                field.begin_selection(
-                    {assignment(token)[0] for token in pending.candidates}
-                    - set(field.assigned_units())
-                )
+            # Units already sent stay pickable: the lane is where they are, and picking them there
+            # is how they are brought home or sent somewhere else.
+            field.begin_selection({assignment(token)[0] for token in pending.candidates})
         elif pending is not None and not isinstance(
             pending, ChooseInvestAmount | Confirm | ChooseBattlefield
         ):
@@ -108,7 +103,7 @@ class Presenter:
     def _pending_armies(self) -> dict[int, PendingArmy]:
         """The units the player has sent to each battlefield but not yet assigned, by battlefield.
 
-        Board state rather than engine state: an army is sent from the card menu and the engine is
+        Board state rather than engine state: units are sent from the card menu and the engine is
         told once, so until then this is the only place the intention exists — and the player has
         already decided, so the battle view draws them standing where they were sent.
         """
@@ -143,9 +138,11 @@ class Presenter:
                 )
                 for token in pending.candidates
             }
-        if isinstance(pending, AssignUnits) and self._assigning is not None:
+        if isinstance(pending, AssignUnits):
+            # Every battlefield offers the button for as long as the question is open, so where
+            # units could go is visible before any are picked.
             return {
-                index: LaneButton("Assign here", lambda at=index: self.send_army(at))
+                index: LaneButton("Assign here", lambda at=index: self.assign_units(at))
                 for index in range(self._battlefield_count())
             }
         return {}
@@ -162,7 +159,12 @@ class Presenter:
         if view.attack is None:
             window.show_battle(None)
         else:
-            window.show_battle(view.attack, self._pending_armies(), self._lane_buttons())
+            window.show_battle(
+                view.attack,
+                self._pending_armies(),
+                self._lane_buttons(),
+                frozenset(window.field.selection),
+            )
         window.opponent_panel.refresh()
         window.human_panel.refresh()
 
@@ -193,13 +195,9 @@ class Presenter:
             # the battlefields, and they are what the player is looking at when it is asked.
             return pending.prompt(), []
         if isinstance(pending, AssignUnits):
-            # Assigning is a process, and the board carries it: units are gathered into an army
-            # from the card menu, the army is sent to a Province, and the whole map goes over as
-            # the one answer the CR's simultaneous assignment calls for.
-            if self._assigning is not None:
-                return "Press Assign here under the battlefield you want", [
-                    ("Cancel", self.cancel_army_assignment, True),
-                ]
+            # Assigning is a process, and the board carries it: units are picked, sent to a
+            # battlefield, and the whole map goes over as the one answer the CR's simultaneous
+            # assignment calls for.
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
         if isinstance(pending, ChooseInvestAmount):
             # An amount, not a board card — answered by one button per affordable amount.
@@ -284,75 +282,33 @@ class Presenter:
         self.window.field.end_selection()
         self.present()
 
-    def _army_menu(self, card_id: str) -> list[ButtonSpec]:
-        """What ``card_id`` can do about armies right now, each entry saying whether it is available.
+    def _assignment_menu(self) -> list[ButtonSpec]:
+        """What the picked units can do right now, each entry saying whether it is available.
 
-        Every entry is shown whatever its state, so the four steps of assigning read as a sequence
-        the player can see the shape of before any of it is reachable.
+        It acts on the selection rather than on the card the menu was opened from, because picking
+        is how a group is expressed.
         """
         field = self.window.field
-        army = field.army_of(card_id)
-        sent = army is not None and field.battlefield_of_army(army) is not None
         return [
-            ("Add to army", lambda: self.form_army(card_id), bool(field.selection) and not sent),
-            ("Remove from army", lambda: self.leave_army(card_id), army is not None and not sent),
             (
-                "Assign army",
-                lambda: self.assign_army(card_id),
-                army is not None and not sent,
+                "Unassign units",
+                self.unassign_units,
+                bool(field.selection) and field.selection_zone is not None,
             ),
-            ("Unassign army", lambda: self.recall_army(card_id), sent),
         ]
 
-    def form_army(self, card_id: str) -> None:
-        """Bring the board's selection into ``card_id``'s army, forming one if it has none."""
+    def assign_units(self, battlefield: int) -> None:
+        """Send the picked units to ``battlefield``."""
         field = self.window.field
-        field.remember_armies()
-        army = field.army_of(card_id)
-        if army is None:
-            # A list, and the clicked card last: a set would order the army by string hash, which
-            # varies between runs and would show the same picks in a different order each time.
-            picked = list(field.selection)
-            field.form_army(picked + ([card_id] if card_id not in picked else []))
-        else:
-            field.join_army(army, field.selection)
+        field.remember_assignment()
+        field.assign_units(field.selection, battlefield)
         self.present()
 
-    def leave_army(self, card_id: str) -> None:
-        """Take ``card_id`` out of its army."""
-        self.window.field.remember_armies()
-        self.window.field.leave_army(card_id)
-        self.present()
-
-    def recall_army(self, card_id: str) -> None:
-        """Bring ``card_id``'s army home, leaving it grouped."""
+    def unassign_units(self) -> None:
+        """Bring the picked units home from the battlefield they were sent to."""
         field = self.window.field
-        field.remember_armies()
-        army = field.army_of(card_id)
-        if army is not None:
-            field.recall_army(army)
-        self.present()
-
-    def assign_army(self, card_id: str) -> None:
-        """Ask where ``card_id``'s army attacks, by putting a button under every battlefield."""
-        army = self.window.field.army_of(card_id)
-        if army is None:
-            return
-        self._assigning = army
-        self.refresh()
-
-    def send_army(self, battlefield: int) -> None:
-        """Send the army being assigned to ``battlefield``."""
-        self.window.field.remember_armies()
-        army = self._assigning
-        self._assigning = None
-        if army is not None:
-            self.window.field.send_army(army, battlefield)
-        self.present()
-
-    def cancel_army_assignment(self) -> None:
-        """Back out of choosing a battlefield, leaving the army grouped and at home."""
-        self._assigning = None
+        field.remember_assignment()
+        field.unassign_units(field.selection)
         self.present()
 
     def _battlefield_count(self) -> int:
@@ -364,19 +320,23 @@ class Presenter:
         """The next thing to do, not a description of the state - this is the step the player has no
         other guide through."""
         field = self.window.field
+        if field.selection and field.selection_zone is None:
+            picked = len(field.selection)
+            return f"{picked} picked at home - press Assign here under the battlefield you want"
         if field.selection:
-            return f"{len(field.selection)} picked - right-click one to add them to an army"
-        if not field.armies:
-            return "Click the Personalities you want to attack with, then right-click one"
-        if any(field.battlefield_of_army(i) is None for i in range(len(field.armies))):
-            return "Right-click an army to assign it to a battlefield"
-        return "Every army is assigned - press Done assigning to fight the battles"
+            picked = len(field.selection)
+            return f"{picked} picked at the battlefield - right-click one to recall them"
+        if not field.assigned_units():
+            return (
+                "Click the Personalities you want to attack with, then press a battlefield's button"
+            )
+        return "Click more Personalities to send, or press Done assigning to fight the battles"
 
     def submit_assignment(self) -> None:
-        """Answer the assignment with every army that was sent somewhere. An army left at home is
-        not assigned, and no armies at all keeps the whole force home, which the CR allows."""
+        """Answer the assignment with every unit that was sent somewhere. Sending nothing keeps the
+        whole force home, which the CR allows."""
         placed = self.window.field.assigned_units()
-        self.window.field.disband_armies()
+        self.window.field.forget_assignment()
         self.submit_answer(
             tuple(assignment_token(card_id, index) for card_id, index in placed.items())
         )
@@ -405,12 +365,13 @@ class Presenter:
         Discard, a hand card's Kharmic, an in-play card's ability, or the Inheritance flip. The
         target or payment that follows is picked through the board-selection path.
 
-        While an assignment is open the card menu is the army menu instead — grouping units and
-        sending them is the only thing a Personality does in the Maneuvers Segment.
+        While an assignment is open the card menu is the assignment menu instead — sending units to
+        a battlefield and bringing them back is the only thing a Personality does in the Maneuvers
+        Segment.
         """
         runner = self.host.runner
         if isinstance(runner.pending, AssignUnits):
-            self.window.popup_at_pointer(self._army_menu(card_id))
+            self.window.popup_at_pointer(self._assignment_menu())
             return
         self._offer(
             runner.province_menu(card_id)
@@ -418,6 +379,13 @@ class Presenter:
             + runner.ability_menu(card_id)
             + runner.inheritance_menu(card_id)
         )
+
+    def on_lane_card_clicked(self, card_id: str) -> None:
+        """Pick or unpick a unit standing at a battlefield. The board and the lanes share one
+        selection, so picking here drops anything picked at home."""
+        field = self.window.field
+        field.toggle_selection(field.unit_leader(card_id))
+        self.refresh()
 
     def on_board_menu(self) -> None:
         """Offer the rulebook abilities. They act on whole zones rather than on a card, so there is
@@ -428,14 +396,11 @@ class Presenter:
         """Ctrl+Z: take back the last step of an assignment, unbow the last producer tapped for gold
         while paying, or undo a just-made Dynasty Discard if nothing has happened since.
 
-        An assignment's steps come back one at a time, and choosing where to send an army is taken
-        back before the sending of it.
+        An assignment's steps come back one at a time.
         """
         field = self.window.field
         if isinstance(self.host.runner.pending, AssignUnits):
-            if self._assigning is not None:
-                self.cancel_army_assignment()
-            elif field.undo_armies():
+            if field.undo_assignment():
                 self.present()
         elif isinstance(self.host.runner.pending, ChoosePayment):
             field.undo_last_selection()

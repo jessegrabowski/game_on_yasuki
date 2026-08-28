@@ -11,6 +11,7 @@ from yasuki_gui.ui.battle_view import (
     BattleView,
     _outcome_lines,
     FOOTER_H,
+    HEADER_H,
     LaneButton,
     MIN_ROW_STEP,
     PendingArmy,
@@ -510,6 +511,42 @@ def test_a_unit_in_a_lane_is_a_card_the_player_can_act_on(view):
     view._on_context_click(_click((left + right) // 2, (top + bottom) // 2))
 
     assert asked == ["hida"]
+
+
+def test_clicking_a_unit_in_a_lane_picks_it(view):
+    """The lane is where a sent unit is, so it is where the player picks it to unassign or re-send."""
+    picked = []
+    view.on_card_click = picked.append
+    view.refresh(_attack(_battlefield(0, defending=(_unit("hida"),))))
+    left, top, right, bottom = view.canvas.bbox("battle:hida")
+
+    view._on_click(_click((left + right) // 2, (top + bottom) // 2))
+
+    assert picked == ["hida"]
+
+
+def test_clicking_bare_lane_picks_nothing(view):
+    picked = []
+    view.on_card_click = picked.append
+    view.refresh(_attack(_battlefield(0, defending=(_unit("hida"),))))
+    left, right = view._lane_spans[0]
+
+    view._on_click(_click(left + 2, HEADER_H + 4))
+
+    assert picked == []
+
+
+def test_a_picked_unit_is_drawn_picked(view):
+    """The ring is the only thing saying which units a Recall or an Assign would act on."""
+    view.refresh(
+        _attack(_battlefield(0, defending=(_unit("hida"), _unit("kisada")))),
+        selected=frozenset({"hida"}),
+    )
+
+    tags = {tag for item in view.canvas.find_all() for tag in view.canvas.gettags(item)}
+    assert any(tag.startswith("battle:hida:") and "select" in tag for tag in tags), sorted(
+        tag for tag in tags if tag.startswith("battle:hida")
+    )
 
 
 def test_a_collapsed_lane_does_not_answer_the_button_it_is_not_showing(view):

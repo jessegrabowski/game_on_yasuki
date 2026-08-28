@@ -27,10 +27,6 @@ REVEAL = "#2563eb"  # a card shown to the opponent
 WARN = "#9c4a35"
 SELECT = "#2bb8c9"  # selection ring / marquee
 
-# One ring colour per army while units are being assigned, cycled if a seat gathers more than
-# there are colours. Distinct from SELECT, which means "picked right now" rather than "grouped".
-ARMY_RINGS = ("#c9552b", "#2bc95f", "#a12bc9", "#c9b52b", "#2b6ec9")
-
 # Cards
 CARD_BORDER = "#6e5a37"
 CARD_BACK = "#6b4d27"

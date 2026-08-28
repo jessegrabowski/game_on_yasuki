@@ -24,6 +24,7 @@ class ClientBindings(Protocol):
 
     def refresh(self) -> None: ...
     def on_card_activated(self, card_id: str, /) -> None: ...
+    def on_lane_card_clicked(self, card_id: str, /) -> None: ...
     def on_board_menu(self) -> None: ...
     def load_human_deck(self, path: str, /) -> None: ...
     def load_opponent_deck(self, path: str, /) -> None: ...
@@ -147,6 +148,7 @@ class GameWindow:
         attack: AttackView | None,
         pending: dict[int, PendingArmy] | None = None,
         buttons: dict[int, LaneButton] | None = None,
+        selected: frozenset[str] = frozenset(),
     ) -> None:
         """Float the battle over the board while ``attack`` is on, and take it away when it ends.
 
@@ -160,7 +162,7 @@ class GameWindow:
         # at home while it decides where to send them. A starting place, not a dock.
         board_w, board_h = widget_size(self.field)
         self.battle_view.open_over(0, 0, board_w, divider_y(board_h))
-        self.battle_view.refresh(attack, pending, buttons)
+        self.battle_view.refresh(attack, pending, buttons, selected)
 
     def relayout_panels(self) -> None:
         """Move the seat being played to the bottom of the sidebar and resync both panels against
@@ -201,6 +203,7 @@ class GameWindow:
         self.field.load_deck_from_file = presenter.load_human_deck
         self.field.load_opponent_deck_from_file = presenter.load_opponent_deck
         self.battle_view.on_card_menu = presenter.on_card_activated
+        self.battle_view.on_card_click = presenter.on_lane_card_clicked
         self.root.bind("<Control-z>", presenter.undo)
         self.root.bind("<Escape>", presenter.cancel_via_escape)
 

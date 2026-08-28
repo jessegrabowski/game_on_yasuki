@@ -1,7 +1,6 @@
 import tkinter as tk
 from collections.abc import Callable, Iterable
 from types import MappingProxyType
-from typing import NamedTuple
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
@@ -49,25 +48,6 @@ SPINNER_W = 46
 SPINNER_H = 30
 
 
-class _AssignmentStep(NamedTuple):
-    """The armies as they stood before one step of an assignment, for undo to put back.
-
-    The board's selection is not part of a step: an undo re-presents the assignment, which rebuilds
-    selection mode from the decision's own candidates, so any selection restored here would be
-    cleared before the player saw it.
-
-    Attributes
-    ----------
-    armies : list of list of str
-        Each army's card ids.
-    placements : dict mapping int to int
-        Which battlefield each army had been sent to.
-    """
-
-    armies: list[list[str]]
-    placements: dict[int, int]
-
-
 class FieldView(tk.Canvas):
     """Tkinter canvas that renders a single authoritative ``TableState`` and drives it through
     ``apply_intent``.
@@ -107,18 +87,23 @@ class FieldView(tk.Canvas):
         # Selection order is tracked so the last pick can be undone (Ctrl+Z during a payment).
         self._selectable: frozenset[str] | None = None
         self._selection: list[str] = []
+        # Which battlefield the current selection is picked from, or None for the seat's home.
+        # Picking is scoped to one place at a time, so a click somewhere else starts over.
+        self._selection_zone: int | None = None
         # When choosing how to pay, selected producers preview as bowed (tapped for gold).
         self._selection_bows: bool = False
         # Picks the player has finished making but the engine has not been told about yet. A payment
         # is answered one producer at a time so each can open its own window, and the queue is what
         # lets the player pick the whole payment in one go regardless.
         self._committed: list[str] = []
-        self._armies: list[list[str]] = []
-        self._army_at: dict[int, int] = {}
-        # One entry per undoable step of an assignment. Gathering an army and sending it are
-        # scratch work with no consequence in the game until the whole map is answered, so the
-        # client is where the steps are remembered and nothing about them reaches the engine.
-        self._army_history: list[_AssignmentStep] = []
+        # Where the player has sent each unit, by card id. An army is not a thing the player
+        # builds: the CR's army is whichever units stand at a battlefield, so sending a unit
+        # somewhere is the whole of the model.
+        self._assigned: dict[str, int] = {}
+        # One entry per undoable step. Sending a unit is scratch work with no consequence in the
+        # game until the whole map is answered, so the steps are remembered here and nothing about
+        # them reaches the engine.
+        self._assignment_history: list[dict[str, int]] = []
         # Set instead of a plain selection when the decision divides a fixed number of creations
         # among the cards picked; it holds how many each carries, drawn as a spinner on the card.
         self._allocation: Allocation | None = None
@@ -203,6 +188,11 @@ class FieldView(tk.Canvas):
         return self._selectable is not None
 
     @property
+    def selection_zone(self) -> int | None:
+        """The battlefield the current selection is picked from, or None for the seat's home."""
+        return self._selection_zone
+
+    @property
     def selection(self) -> tuple[str, ...]:
         """The ids currently selected for the pending decision, in the order they were picked. A
         division repeats an id once per creation the card carries."""
@@ -230,104 +220,45 @@ class FieldView(tk.Canvas):
         """Discard whatever is left in the queue, for a payment that ended before it was spent."""
         self._committed = []
 
-    @property
-    def armies(self) -> tuple[tuple[str, ...], ...]:
-        """The armies the player has grouped, in the order they were formed.
-
-        Assigning is a process: units are gathered into an army, the army is sent to a Province, and
-        both halves can be undone until the whole map goes to the engine as one answer.
-        """
-        return tuple(tuple(army) for army in self._armies)
-
-    def army_of(self, card_id: str) -> int | None:
-        """Which army ``card_id`` belongs to, or None if it is not in one."""
-        return next((index for index, army in enumerate(self._armies) if card_id in army), None)
-
-    def battlefield_of_army(self, index: int) -> int | None:
-        """Where army ``index`` has been sent, or None while it is still at home."""
-        return self._army_at.get(index)
-
-    def join_army(self, index: int, card_ids: Iterable[str]) -> None:
-        """Bring ``card_ids`` into army ``index``, taking each out of whatever army held it."""
-        joining = [card_id for card_id in card_ids if self.army_of(card_id) != index]
-        for card_id in joining:
-            self.leave_army(card_id)
-        self._armies[index].extend(joining)
-        self._selection = []
-
-    def form_army(self, card_ids: Iterable[str]) -> None:
-        """Gather ``card_ids`` into an army, and clear the selection ready for the next one.
-
-        Units already in an army leave it first, so a unit belongs to exactly one — the engine
-        refuses the same unit at two battlefields, and an army is what carries it to one.
-        """
-        joining = list(dict.fromkeys(card_ids))
-        for card_id in joining:
-            self.leave_army(card_id)
-        if joining:
-            self._armies.append(joining)
-        self._selection = []
-
-    def leave_army(self, card_id: str) -> None:
-        """Take ``card_id`` out of whatever army holds it, disbanding an army left empty."""
-        index = self.army_of(card_id)
-        if index is None:
-            return
-        self._armies[index].remove(card_id)
-        if not self._armies[index]:
-            self._disband(index)
-
-    def _disband(self, index: int) -> None:
-        """Drop army ``index``, keeping the remaining armies' battlefields with them."""
-        self._armies.pop(index)
-        self._army_at = {
-            (army - 1 if army > index else army): battlefield
-            for army, battlefield in self._army_at.items()
-            if army != index
-        }
-
-    def send_army(self, index: int, battlefield: int) -> None:
-        """Send army ``index`` to ``battlefield``."""
-        self._army_at[index] = battlefield
-
-    def recall_army(self, index: int) -> None:
-        """Bring army ``index`` home, leaving it grouped."""
-        self._army_at.pop(index, None)
+    def unit_leader(self, card_id: str) -> str:
+        """The Personality whose unit ``card_id`` belongs to, or ``card_id`` itself when it leads a
+        unit or is in none. A unit answers as one card, so a click on a Follower is a click on him."""
+        return self._units().get(card_id, card_id)
 
     def assigned_units(self) -> dict[str, int]:
-        """Each unit in an army that has been sent somewhere, to the battlefield it was sent to.
-        Units in an army still at home are not assigned and stay out of the answer."""
-        return {
-            card_id: battlefield
-            for index, battlefield in self._army_at.items()
-            for card_id in self._armies[index]
-        }
+        """Each unit the player has sent somewhere, to the battlefield it was sent to."""
+        return dict(self._assigned)
 
-    def remember_armies(self) -> None:
-        """Record the armies as they stand, so the step about to be taken can be undone."""
-        self._army_history.append(
-            _AssignmentStep(
-                armies=[list(army) for army in self._armies], placements=dict(self._army_at)
-            )
-        )
+    def assign_units(self, card_ids: Iterable[str], battlefield: int) -> None:
+        """Send every unit in ``card_ids`` to ``battlefield``, moving any already sent elsewhere."""
+        for card_id in card_ids:
+            self._assigned[card_id] = battlefield
 
-    def undo_armies(self) -> bool:
-        """Put the armies back as they were before the last remembered step, and say whether there
+    def unassign_units(self, card_ids: Iterable[str]) -> None:
+        """Bring every unit in ``card_ids`` home from wherever it was sent."""
+        for card_id in card_ids:
+            self._assigned.pop(card_id, None)
+
+    def remember_assignment(self) -> None:
+        """Record the assignment as it stands, so the step about to be taken can be undone."""
+        self._assignment_history.append(dict(self._assigned))
+
+    def undo_assignment(self) -> bool:
+        """Put the assignment back as it was before the last remembered step, and say whether there
         was one to go back to."""
-        if not self._army_history:
+        if not self._assignment_history:
             return False
-        self._armies, self._army_at = self._army_history.pop()
+        self._assigned = self._assignment_history.pop()
         return True
 
-    def disband_armies(self) -> None:
-        """Forget every army, for an assignment that ended or was started over.
+    def forget_assignment(self) -> None:
+        """Forget where every unit was sent, for an assignment that ended or was started over.
 
-        The history goes with them: once the assignment is answered its steps are no longer the
+        The history goes with it: once the assignment is answered its steps are no longer the
         player's to take back.
         """
-        self._armies = []
-        self._army_at = {}
-        self._army_history = []
+        self._assigned = {}
+        self._assignment_history = []
 
     def begin_selection(self, candidates: Iterable[str], *, render_bowed: bool = False) -> None:
         """Enter selection mode: only ``candidates`` are selectable, none chosen yet. When
@@ -337,6 +268,7 @@ class FieldView(tk.Canvas):
         clearing it here would spend only the first pick the player made."""
         self._selectable = frozenset(candidates)
         self._selection = []
+        self._selection_zone = None
         self._selection_bows = render_bowed
         self._allocation = None
 
@@ -364,6 +296,7 @@ class FieldView(tk.Canvas):
         payment leaves selection mode between rounds and still has picks to spend."""
         self._selectable = None
         self._selection = []
+        self._selection_zone = None
         self._selection_bows = False
         self._allocation = None
         self.delete(ALLOCATION_TAG)
@@ -373,9 +306,18 @@ class FieldView(tk.Canvas):
         return self._selectable is not None and candidate in self._selectable
 
     def toggle_selection(self, card_id: str) -> None:
-        """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener."""
+        """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener.
+
+        A selection belongs to one place. Picking a card somewhere else — a unit at home while units
+        at a battlefield are picked, or the reverse — drops the old picks rather than mixing two
+        places in one answer.
+        """
         if self._selectable is None or card_id not in self._selectable:
             return
+        zone = self._assigned.get(card_id)
+        if zone != self._selection_zone:
+            self._selection = []
+            self._selection_zone = zone
         if self._allocation is not None:
             self._allocation.toggle(card_id)
         elif card_id in self._selection:
@@ -551,10 +493,12 @@ class FieldView(tk.Canvas):
         """Whether ``card_id`` stands in a seat's home rather than at a battlefield.
 
         A card with no recorded location is at home, which is what every card is until an attack
-        moves it — unless the player has sent it to a battlefield and the engine has not been told
-        yet, which is a decision already made and so already a card the board has given up.
+        moves it — unless the unit it belongs to has been sent to a battlefield and the engine has
+        not been told yet, which is a decision already made and so already a card the board has
+        given up. Asked of the unit rather than the card, because only a Personality is ever sent
+        and his Followers go with him.
         """
-        if self.army_of(card_id) is not None and card_id in self.assigned_units():
+        if self.unit_leader(card_id) in self._assigned:
             return False
         location = self._snapshot.locations.get(card_id) if self._snapshot is not None else None
         return location is None or location.is_home
@@ -668,19 +612,12 @@ class FieldView(tk.Canvas):
             sp.card, sp.x, sp.y = rc, x, y
             chosen = self._is_chosen(rc.id)
             sp.bowed_preview = chosen and self._selection_bows
-            sp.army_ring = self._army_ring(rc.id)
             sp.draw(self, selected=tag in self._selected or chosen)
         self._sink_province_attachments()
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
         self._draw_allocation()
-
-    def _army_ring(self, card_id: str) -> str | None:
-        """The colour of the army ``card_id`` is gathered into, or None when it is in none. Colours
-        cycle, so a seat that gathers more armies than there are still tells them apart locally."""
-        army = self.army_of(card_id)
-        return None if army is None else theme.ARMY_RINGS[army % len(theme.ARMY_RINGS)]
 
     def _is_chosen(self, card_id: str) -> bool:
         """Whether ``card_id`` is part of the answer being assembled for the pending decision."""

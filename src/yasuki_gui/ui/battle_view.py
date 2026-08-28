@@ -49,7 +49,7 @@ class LaneButton:
     """A lane's own button: what it says, and what pressing it does.
 
     Carried per lane rather than named by the view, because what a battlefield offers depends on
-    what the engine is asking — a place to send an army during assignment, a battle to fight after.
+    what the engine is asking — a place to send units during assignment, a battle to fight after.
 
     Attributes
     ----------
@@ -160,11 +160,13 @@ class BattleView(FloatingPanel):
         )
         self.canvas.pack(fill="both", expand=True)
         # A unit in a lane is still the player's to recall, and the lane is now the only place it
-        # is drawn — so the menu the board gives its cards has to be reachable from here too.
+        # is drawn — so the picking and the menu the board gives its cards are reachable here too.
         self.on_card_menu: Callable[[str], None] | None = None
+        self.on_card_click: Callable[[str], None] | None = None
         self._collapsed: set[int] = set()
         self._attack: AttackView | None = None
         self._pending: dict[int, PendingArmy] = {}
+        self._selected: frozenset[str] = frozenset()
         self._buttons: dict[int, LaneButton] = {}
         self._lane_spans: dict[int, tuple[int, int]] = {}
         self.canvas.bind("<Configure>", lambda _event: self._redraw())
@@ -178,6 +180,7 @@ class BattleView(FloatingPanel):
         attack: AttackView | None,
         pending: dict[int, PendingArmy] | None = None,
         buttons: dict[int, LaneButton] | None = None,
+        selected: frozenset[str] = frozenset(),
     ) -> None:
         """Redraw for ``attack``, or empty the view when there is none.
 
@@ -191,10 +194,13 @@ class BattleView(FloatingPanel):
         buttons : dict mapping int to LaneButton, optional
             What each battlefield offers the player right now. Only these lanes show a button.
             Default None.
+        selected : frozenset of str, optional
+            The ids of the cards the player has picked, drawn with a selection ring. Default empty.
         """
         self._attack = attack
         self._pending = pending or {}
         self._buttons = buttons or {}
+        self._selected = selected
         if attack is not None:
             self._collapsed &= set(range(len(attack.battlefields)))
         self._redraw()
@@ -226,6 +232,10 @@ class BattleView(FloatingPanel):
         button = self._buttons.get(index)
         if button is not None and event.y >= self._height() - FOOTER_H:
             button.press()
+            return
+        card_id = self._card_at(event)
+        if card_id is not None and self.on_card_click:
+            self.on_card_click(card_id)
 
     def _on_context_click(self, event: tk.Event) -> None:
         """Offer the card menu for a unit standing in a lane, so one sent here can be brought back."""
@@ -435,4 +445,6 @@ class BattleView(FloatingPanel):
             self._draw_card(unit.leader, leader)
 
     def _draw_card(self, card: RenderCard, at: tuple[int, int], tag: str = _CARD_TAG) -> None:
-        CardSpriteVisual(card, at[0], at[1], f"{tag}{card.id}").draw(self.canvas)
+        CardSpriteVisual(card, at[0], at[1], f"{tag}{card.id}").draw(
+            self.canvas, selected=card.id in self._selected
+        )

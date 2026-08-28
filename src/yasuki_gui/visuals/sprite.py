@@ -9,7 +9,6 @@ from yasuki_gui.constants import (
     ART_TAG,
     BORDER_TAG,
     SELECT_TAG,
-    ARMY_TAG,
     LABEL_TAG,
     NOTE_TAG,
     COUNTER_TAG,
@@ -29,9 +28,6 @@ class CardSpriteVisual(Visual):
     # Show the card as bowed before the engine commits it — used to preview a producer being tapped
     # for gold during a payment, so the bow is undoable until the player confirms.
     bowed_preview: bool = False
-    # The colour of the army this unit is gathered into while an assignment is open, or None
-    # when it is in none. Rings the card so a group reads at a glance.
-    army_ring: str | None = None
     # Keep a strong reference to the last PhotoImage used when drawing art
     _last_image: object | None = None
 
@@ -187,23 +183,6 @@ class CardSpriteVisual(Visual):
             tags=(self.tag, CARD_TAG, self._subtag(SELECT_TAG)),
         )
 
-    def _draw_army(self, canvas: tk.Canvas) -> None:
-        """Ring the card in its army's colour, so the group it belongs to reads at a glance."""
-        canvas.delete(self._subtag(ARMY_TAG))
-        if self.army_ring is None:
-            return
-        x, y = self.x, self.y
-        w, h = self.size
-        canvas.create_rectangle(
-            x - w // 2 - 3,
-            y - h // 2 - 3,
-            x + w // 2 + 3,
-            y + h // 2 + 3,
-            outline=self.army_ring,
-            width=3,
-            tags=(self.tag, CARD_TAG, self._subtag(ARMY_TAG)),
-        )
-
     def draw(self, canvas: tk.Canvas, selected: bool = False) -> None:
         canvas.delete(self.tag)
 
@@ -212,7 +191,6 @@ class CardSpriteVisual(Visual):
         self._draw_note(canvas)
         self._draw_counters(canvas)
         self._draw_selection(canvas, selected)
-        self._draw_army(canvas)
 
         canvas.tag_raise(self._subtag(SELECT_TAG))
 
