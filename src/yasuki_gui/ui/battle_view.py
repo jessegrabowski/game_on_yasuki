@@ -249,8 +249,12 @@ class BattleView(FloatingPanel):
             self.on_card_menu(card_id)
 
     def _card_at(self, event: tk.Event) -> str | None:
-        """The id of the unit card under the pointer, or None on bare lane or the Province card."""
-        for item in self.canvas.find_overlapping(event.x, event.y, event.x, event.y):
+        """The id of the unit card under the pointer, or None on bare lane or the Province card.
+
+        Topmost first, because a unit is drawn as a tower: taking the bottommost would answer a
+        click on a Personality with the Follower fanned out behind him.
+        """
+        for item in reversed(self.canvas.find_overlapping(event.x, event.y, event.x, event.y)):
             for tag in self.canvas.gettags(item):
                 if tag.startswith(_CARD_TAG):
                     return tag[len(_CARD_TAG) :]

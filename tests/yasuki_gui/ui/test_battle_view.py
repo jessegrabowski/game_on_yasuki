@@ -540,6 +540,23 @@ def test_clicking_a_unit_in_a_lane_picks_it(view):
     assert picked == ["hida"]
 
 
+def test_clicking_a_personality_carrying_a_follower_picks_the_personality(view):
+    """A unit is drawn as a tower, so answering with the bottommost card would hand back the
+    Follower fanned out behind him — and a Follower is not a card an assignment can name."""
+    picked = []
+    view.on_card_click = picked.append
+    unit = UnitView(
+        leader=personality("hida"),
+        attached=(attachment("banner", attachment_type=AttachmentType.FOLLOWER),),
+    )
+    view.refresh(_attack(_battlefield(0, defending=(unit,))))
+    left, top, right, bottom = view.canvas.bbox("battle:hida")
+
+    view._on_click(_click((left + right) // 2, (top + bottom) // 2))
+
+    assert picked == ["hida"]
+
+
 def test_clicking_bare_lane_picks_nothing(view):
     picked = []
     view.on_card_click = picked.append
