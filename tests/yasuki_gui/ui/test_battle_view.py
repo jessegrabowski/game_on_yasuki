@@ -4,11 +4,12 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
-from yasuki_core.engine.rules.state import Segment
+from yasuki_core.engine.rules.state import BattleOutcome, Segment
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_gui.constants import CARD_H, CARD_W
 from yasuki_gui.ui.battle_view import (
     BattleView,
+    _outcome_lines,
     FOOTER_H,
     LaneButton,
     MIN_ROW_STEP,
@@ -360,6 +361,115 @@ def test_a_short_lane_steps_its_rows_closer_rather_than_dropping_one(view):
     assert attacking - defending < CARD_H  # overlapping, which is the give
     assert defending - province >= MIN_ROW_STEP
     assert attacking + CARD_H // 2 <= 260 - FOOTER_H  # the button underneath stays uncovered
+
+
+def _outcome(winner=P1, destroyed=(), province_destroyed=False, honor=None):
+    return BattleOutcome(
+        winner=winner,
+        destroyed=destroyed,
+        province_destroyed=province_destroyed,
+        honor=honor or {},
+    )
+
+
+def test_a_lane_says_who_won_the_battle_fought_there(view):
+    view.refresh(_attack(_battlefield(0, fought=True, outcome=_outcome(winner=P1))))
+
+    assert "Attacker wins" in _texts(view)
+
+
+def test_a_lane_says_when_the_defender_held_it(view):
+    view.refresh(_attack(_battlefield(0, fought=True, outcome=_outcome(winner=P2))))
+
+    assert "Defender wins" in _texts(view)
+
+
+def test_a_tied_battle_says_so_rather_than_naming_a_winner(view):
+    view.refresh(
+        _attack(_battlefield(0, fought=True, outcome=_outcome(winner=None, destroyed=("a", "d"))))
+    )
+
+    assert "Tied" in _texts(view)
+
+
+def test_a_battle_where_nothing_happened_says_that_much(view):
+    """Distinct from a tie that destroyed both armies, and from a lane nobody has fought at — a
+    lane that reports nothing cannot be told apart from one still to come."""
+    view.refresh(_attack(_battlefield(0, fought=True, outcome=_outcome(winner=None))))
+
+    assert "Nothing happened" in _texts(view)
+
+
+def test_a_lane_reports_the_province_falling(view):
+    view.refresh(_attack(_battlefield(0, fought=True, outcome=_outcome(province_destroyed=True))))
+
+    assert "Province destroyed" in _texts(view)
+
+
+def test_a_lane_names_the_cards_the_battle_destroyed(view):
+    view.refresh(
+        _attack(
+            _battlefield(
+                0, fought=True, outcome=_outcome(destroyed=("d",)), destroyed_names=("Hida Kisada",)
+            )
+        )
+    )
+
+    assert "Destroyed: Hida Kisada" in _texts(view)
+
+
+def test_a_lane_reports_the_honor_that_moved(view):
+    view.refresh(_attack(_battlefield(0, fought=True, outcome=_outcome(honor={P1: 4, P2: -2}))))
+
+    texts = _texts(view)
+    assert "P1 honor +4" in texts
+    assert "P2 honor -2" in texts
+
+
+def test_an_outcome_is_drawn_in_the_lane_it_belongs_to(view):
+    """Every lane keeps its result for the rest of the phase, so a block on the wrong lane reports
+    one battlefield's battle as another's."""
+    view.refresh(
+        _attack(_battlefield(0), _battlefield(1, fought=True, outcome=_outcome(winner=P1)))
+    )
+
+    left, right = view._lane_spans[1]
+    assert left <= _text_at(view, "Attacker wins")[0] <= right
+
+
+def test_the_outcome_block_leads_with_the_result_and_ends_with_the_honor():
+    """The reading order is the design: who won, then what it cost the Province, then the dead, then
+    the honor. Asserted against the lines rather than the canvas, since it is the order that is the
+    decision and not where the text landed."""
+    lines = _outcome_lines(
+        _outcome(winner=P1, destroyed=("d",), province_destroyed=True, honor={P1: 4}),
+        destroyed_names=("Hida Kisada",),
+        attacker=P1,
+    )
+
+    assert [line.text for line in lines] == [
+        "Attacker wins",
+        "Province destroyed",
+        "Destroyed: Hida Kisada",
+        "P1 honor +4",
+    ]
+
+
+def test_the_outcome_block_shouts_only_the_result_and_the_province():
+    """Emphasis is what separates what happened from the accounting of it."""
+    lines = _outcome_lines(
+        _outcome(winner=P1, destroyed=("d",), province_destroyed=True, honor={P1: 4}),
+        destroyed_names=("Hida Kisada",),
+        attacker=P1,
+    )
+
+    assert [line.emphatic for line in lines] == [True, True, False, False]
+
+
+def test_a_lane_nobody_has_fought_at_reports_nothing(view):
+    view.refresh(_attack(_battlefield(0)))
+
+    assert not [text for text in _texts(view) if "wins" in text or "honor" in text]
 
 
 def test_an_empty_province_draws_no_card(view):
