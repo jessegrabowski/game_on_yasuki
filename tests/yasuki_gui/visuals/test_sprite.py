@@ -5,6 +5,8 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
 from yasuki_core.engine.rules.modifiers import Stat
 import tkinter as tk
+
+import pytest
 from yasuki_core.engine.players import PlayerId
 
 
@@ -136,3 +138,28 @@ def test_refreshing_a_face_replaces_the_stamps_rather_than_adding_to_them(root):
     sprite.refresh_face_state(cv)
 
     assert _stamped(cv, "card:h") == ["4", "9"]
+
+
+def test_moving_a_sprite_takes_every_layer_with_it(root):
+    """`move_to` shifts a named list of layers rather than the sprite's whole tag, so a layer left
+    off that list stays behind at the old spot while the card slides away from it."""
+    cv = tk.Canvas(root, width=400, height=400)
+    card = L5RCard.of(
+        PersonalityPrint,
+        id="h",
+        name="Hero",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        force=3,
+        chi=4,
+        counters={"wealth": 1},
+    )
+    card.set_note("dishonored")
+    sprite = CardSpriteVisual(card, x=100, y=100, tag="card:h", stats={})
+    sprite.draw(cv)
+    before = {item: cv.coords(item)[:2] for item in cv.find_withtag("card:h")}
+
+    sprite.move_to(cv, 200, 100)
+
+    for item, (x, _) in before.items():
+        assert cv.coords(item)[0] - x == pytest.approx(100), f"{cv.type(item)} was left behind"

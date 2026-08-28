@@ -223,7 +223,7 @@ class CardSpriteVisual(Visual):
             return
         self.x, self.y = x, y
         # Move layers together; no redraw
-        for layer in (ART_TAG, BORDER_TAG, SELECT_TAG, LABEL_TAG, STAT_TAG):
+        for layer in (ART_TAG, BORDER_TAG, SELECT_TAG, LABEL_TAG, NOTE_TAG, COUNTER_TAG, STAT_TAG):
             canvas.move(self._subtag(layer), dx, dy)
         # Also move top-level tag to keep bbox queries consistent
         canvas.move(self.tag, 0, 0)  # no-op but keeps tag grouping predictable
