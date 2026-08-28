@@ -6,6 +6,7 @@ from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
 from yasuki_core.engine.rules import battle
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import (
+    active_modifiers,
     effective_province_strength,
     effective_stat,
 )
@@ -193,24 +194,25 @@ def _identifiable_ids(table: ViewSnapshot) -> set[str]:
 
 
 def _modified_cards(game: GameState, identifiable: set[str]) -> Iterator[L5RCard]:
-    """Every identifiable card a counter or a recorded modifier reaches.
+    """Every identifiable card any active modifier reaches.
 
-    A card neither touches has only its printed stats, which :meth:`GameView.stat` reads straight
-    off it. A card the viewer may not identify is skipped: its stats would say what it is, and a
-    view carries only what its seat is entitled to.
+    Only some modifier sources are recorded on the game: a counter and a granted effect are, while
+    an attachment's printed modifier, a Sensei's grant to its Stronghold and a Kensai's raised
+    weapon limit are derived from the board as it stands. :func:`active_modifiers` is what knows
+    about all of them, so it is what decides.
+
+    A card no modifier reaches has only its printed stats, which :meth:`GameView.stat` reads
+    straight off it. A card the viewer may not identify is skipped: its stats would say what it is,
+    and a view carries only what its seat is entitled to.
     """
-    seen: set[str] = set()
     for card in game.table.cards_by_id.values():
-        if card.counters and card.id in identifiable:
-            seen.add(card.id)
+        if card.id in identifiable and _is_modified(game, card):
             yield card
-    for modifier in game.modifiers:
-        if modifier.target_id in seen or modifier.target_id not in identifiable:
-            continue
-        target = game.table.cards_by_id.get(modifier.target_id)
-        if target is not None:
-            seen.add(target.id)
-            yield target
+
+
+def _is_modified(game: GameState, card: L5RCard) -> bool:
+    """Whether any active modifier reaches ``card``, over any stat."""
+    return any(next(active_modifiers(game, card, stat), None) is not None for stat in Stat)
 
 
 def project(game: GameState, viewer: PlayerId) -> GameView:
