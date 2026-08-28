@@ -845,6 +845,94 @@ def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_ba
     assert buttons == []
 
 
+def test_undo_takes_back_the_last_step_of_an_assignment(a_battle):
+    """Setting up an attack is scratch work — nothing reaches the engine until the whole map is
+    answered — so each step comes back one at a time."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    presenter.form_army("second")
+    assert len(window.field.armies) == 2
+
+    presenter.undo()
+
+    assert window.field.armies == (("hero",),)
+
+
+def test_undo_brings_a_sent_army_back_home(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    _send_army(presenter, window, "hero", 1)
+    assert window.field.assigned_units() == {"hero": 1}
+
+    presenter.undo()
+
+    assert window.field.assigned_units() == {}
+    assert window.field.armies == (("hero",),)  # still gathered, just not sent
+
+
+def test_undo_takes_back_choosing_a_destination_before_the_army(a_battle):
+    """Asking where an army goes is itself a step, and the one the player is most likely to have
+    started by mistake."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    presenter.assign_army("hero")
+    assert presenter._assigning is not None
+
+    presenter.undo()
+
+    assert presenter._assigning is None
+    assert window.field.armies == (("hero",),)  # the army survives; only the asking is undone
+
+
+def test_undo_walks_back_one_step_at_a_time(a_battle):
+    """Each step is its own entry, so a history that only remembered the last one would take the
+    player straight to the start."""
+    presenter, window, session = a_battle
+    put_in_play(session.game, personality("second", owner=P1, force=3))
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    presenter.form_army("second")
+    _send_army(presenter, window, "second", 1)
+
+    presenter.undo()
+    assert window.field.assigned_units() == {}  # the send is taken back
+    assert len(window.field.armies) == 2
+
+    presenter.undo()
+    assert window.field.armies == (("hero",),)  # then the second army
+
+    presenter.undo()
+    assert window.field.armies == ()  # then the first
+
+
+def test_undo_at_the_start_of_an_assignment_does_nothing(a_battle):
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+
+    presenter.undo()
+
+    assert window.field.armies == ()
+
+
+def test_an_answered_assignment_is_no_longer_the_players_to_take_back(a_battle):
+    """Once the map is answered the Defender assigns against it, so the steps that built it stop
+    being scratch work."""
+    presenter, window, _ = a_battle
+    _press(presenter, "Declare an attack")
+    presenter.form_army("hero")
+    _send_army(presenter, window, "hero", 1)
+
+    _press(presenter, "Done assigning")
+    presenter.undo()
+
+    assert window.field.armies == ()
+    assert window.field._army_history == []
+
+
 def test_the_battle_opens_clear_of_the_half_the_player_is_seated_at(a_battle):
     """Assigning means reading your own units at home and pressing a button in the panel, so a panel
     that opens over your half puts the two halves of one task on top of each other."""

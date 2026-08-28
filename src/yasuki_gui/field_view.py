@@ -1,6 +1,7 @@
 import tkinter as tk
 from collections.abc import Callable, Iterable
 from types import MappingProxyType
+from typing import NamedTuple
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
@@ -46,6 +47,25 @@ def _zone_label(key: ZoneKey) -> str:
 ALLOCATION_TAG = "allocation"
 SPINNER_W = 46
 SPINNER_H = 30
+
+
+class _AssignmentStep(NamedTuple):
+    """The armies as they stood before one step of an assignment, for undo to put back.
+
+    The board's selection is not part of a step: an undo re-presents the assignment, which rebuilds
+    selection mode from the decision's own candidates, so any selection restored here would be
+    cleared before the player saw it.
+
+    Attributes
+    ----------
+    armies : list of list of str
+        Each army's card ids.
+    placements : dict mapping int to int
+        Which battlefield each army had been sent to.
+    """
+
+    armies: list[list[str]]
+    placements: dict[int, int]
 
 
 class FieldView(tk.Canvas):
@@ -95,6 +115,10 @@ class FieldView(tk.Canvas):
         self._committed: list[str] = []
         self._armies: list[list[str]] = []
         self._army_at: dict[int, int] = {}
+        # One entry per undoable step of an assignment. Gathering an army and sending it are
+        # scratch work with no consequence in the game until the whole map is answered, so the
+        # client is where the steps are remembered and nothing about them reaches the engine.
+        self._army_history: list[_AssignmentStep] = []
         # Set instead of a plain selection when the decision divides a fixed number of creations
         # among the cards picked; it holds how many each carries, drawn as a spinner on the card.
         self._allocation: Allocation | None = None
@@ -279,10 +303,31 @@ class FieldView(tk.Canvas):
             for card_id in self._armies[index]
         }
 
+    def remember_armies(self) -> None:
+        """Record the armies as they stand, so the step about to be taken can be undone."""
+        self._army_history.append(
+            _AssignmentStep(
+                armies=[list(army) for army in self._armies], placements=dict(self._army_at)
+            )
+        )
+
+    def undo_armies(self) -> bool:
+        """Put the armies back as they were before the last remembered step, and say whether there
+        was one to go back to."""
+        if not self._army_history:
+            return False
+        self._armies, self._army_at = self._army_history.pop()
+        return True
+
     def disband_armies(self) -> None:
-        """Forget every army, for an assignment that ended or was started over."""
+        """Forget every army, for an assignment that ended or was started over.
+
+        The history goes with them: once the assignment is answered its steps are no longer the
+        player's to take back.
+        """
         self._armies = []
         self._army_at = {}
+        self._army_history = []
 
     def begin_selection(self, candidates: Iterable[str], *, render_bowed: bool = False) -> None:
         """Enter selection mode: only ``candidates`` are selectable, none chosen yet. When

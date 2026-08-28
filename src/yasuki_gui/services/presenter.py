@@ -307,6 +307,7 @@ class Presenter:
     def form_army(self, card_id: str) -> None:
         """Bring the board's selection into ``card_id``'s army, forming one if it has none."""
         field = self.window.field
+        field.remember_armies()
         army = field.army_of(card_id)
         if army is None:
             # A list, and the clicked card last: a set would order the army by string hash, which
@@ -319,12 +320,14 @@ class Presenter:
 
     def leave_army(self, card_id: str) -> None:
         """Take ``card_id`` out of its army."""
+        self.window.field.remember_armies()
         self.window.field.leave_army(card_id)
         self.present()
 
     def recall_army(self, card_id: str) -> None:
         """Bring ``card_id``'s army home, leaving it grouped."""
         field = self.window.field
+        field.remember_armies()
         army = field.army_of(card_id)
         if army is not None:
             field.recall_army(army)
@@ -340,6 +343,7 @@ class Presenter:
 
     def send_army(self, battlefield: int) -> None:
         """Send the army being assigned to ``battlefield``."""
+        self.window.field.remember_armies()
         army = self._assigning
         self._assigning = None
         if army is not None:
@@ -421,10 +425,19 @@ class Presenter:
         self._offer(self.host.runner.board_menu())
 
     def undo(self, _event=None) -> None:
-        """Ctrl+Z: unbow the last producer tapped for gold while paying, else undo a just-made
-        Dynasty Discard if nothing has happened since."""
+        """Ctrl+Z: take back the last step of an assignment, unbow the last producer tapped for gold
+        while paying, or undo a just-made Dynasty Discard if nothing has happened since.
+
+        An assignment's steps come back one at a time, and choosing where to send an army is taken
+        back before the sending of it.
+        """
         field = self.window.field
-        if isinstance(self.host.runner.pending, ChoosePayment):
+        if isinstance(self.host.runner.pending, AssignUnits):
+            if self._assigning is not None:
+                self.cancel_army_assignment()
+            elif field.undo_armies():
+                self.present()
+        elif isinstance(self.host.runner.pending, ChoosePayment):
             field.undo_last_selection()
         elif self.host.runner.undo_last():
             field.state = self.host.session.game.table
