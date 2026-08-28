@@ -7,6 +7,7 @@ yasuki_gui.theme
 
 .. autosummary::
 
+    numerals
     serif
 
 .. automodule:: yasuki_gui.theme

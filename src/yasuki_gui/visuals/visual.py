@@ -18,8 +18,11 @@ _DEFAULT_COUNTER_STYLE = (theme.GOLD, theme.ON_DARK)
 def draw_counter_badges(
     canvas: tk.Canvas, card: RenderCard, bbox: tuple[int, int, int, int], tags: tuple[str, ...]
 ) -> None:
-    """Draw a badge per counter kind in the card's top-right corner, coloured by kind with the count
-    inside, stacking downward in a fixed order.
+    """Draw a badge per counter kind in the card's bottom-right corner, coloured by kind with the
+    count inside, stacking upward in a fixed order.
+
+    Bottom rather than top: a card prints its Chi in the top-right, and the live stat is stamped
+    over it.
 
     Parameters
     ----------
@@ -28,16 +31,16 @@ def draw_counter_badges(
     card : L5RCard or HiddenFace
         The card whose counters are shown. A redacted back carries none and draws nothing.
     bbox : tuple of int
-        The card's rectangle as ``(x0, y0, x1, y1)``; the badges hang off its top-right.
+        The card's rectangle as ``(x0, y0, x1, y1)``; the badges hang off its bottom-right.
     tags : tuple of str
         The canvas tags every badge item is created under, so the caller can erase them as a group.
     """
     counters = getattr(card, "counters", None)
     if not counters:
         return
-    _, top, right, _ = bbox
+    _, _, right, bottom = bbox
     cx = right - COUNTER_BADGE_R - 2
-    cy = top + COUNTER_BADGE_R + 2
+    cy = bottom - COUNTER_BADGE_R - 2
     # Iterate the counters actually on the card (sorted for a stable stack), not the whole registry
     # — so the badge system doesn't scale with the catalogue's size.
     for key, count in sorted(counters.items()):
@@ -57,7 +60,7 @@ def draw_counter_badges(
         canvas.create_text(
             cx, cy, text=str(count), fill=text_fill, font=theme.serif(9, "bold"), tags=tags
         )
-        cy += 2 * COUNTER_BADGE_R + 2
+        cy -= 2 * COUNTER_BADGE_R + 2
 
 
 def draw_count_pill(canvas: tk.Canvas, x1: int, y1: int, count: int, tag: str) -> None:

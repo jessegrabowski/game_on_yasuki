@@ -11,11 +11,12 @@ from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, 
 from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.decisions import ChooseDistribution, DecisionResponse
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.constants import ATTACH_STACK_OFFSET
+from yasuki_gui.constants import ATTACH_STACK_OFFSET, HOME_STACK_OFFSET
 from yasuki_gui.field_view import ALLOCATION_TAG
 from yasuki_gui.layout import province_positions
 from yasuki_gui.tags import allocation_tag, card_tag, deck_tag, zone_tag
@@ -384,6 +385,214 @@ class TestRulesModeRender:
         home = field._home_positions(rendered, *field._canvas_size())
         assert "P1-katana" not in home
         assert {"P1-hero", "P1-mine"} <= set(home)
+
+    def _two_copies(self, field, **modified):
+        """Two copies of one printed Personality in play, the second given whatever ``modified``
+        says. Returns their home positions.
+
+        Each keyword trips exactly one of the reasons a copy leaves the stack, so a test using it
+        fails for its own reason rather than for a neighbour's: the Item grants no stat, and the
+        counter is one that carries none.
+
+        The modifications land after the session starts, because starting one straightens the board
+        and would undo a bow applied before it.
+        """
+        state = TableState.empty_two_seat()
+        for card_id in ("P1-a", "P1-b"):
+            copy = L5RCard.of(
+                PersonalityPrint,
+                id=card_id,
+                name="Hero",
+                printed_id="hero",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                force=2,
+                chi=3,
+            )
+            state.cards_by_id[copy.id] = copy
+            state.battlefield.add(copy)
+            state.positions[copy.id] = UNPLACED_BOARD_POS
+
+        session = EngineSession.start(state, PlayerId.P1)
+        table = session.game.table
+        if modified.get("attached"):
+            charm = L5RCard.of(
+                AttachmentPrint, id="P1-charm", name="Charm", side=Side.FATE, owner=PlayerId.P1
+            )
+            table.cards_by_id[charm.id] = charm
+            table.battlefield.add(charm)
+            table.units["P1-charm"] = "P1-b"
+        if modified.get("counter"):
+            table.cards_by_id["P1-b"].adjust_counter("affection", 1)
+        if modified.get("bowed"):
+            table.cards_by_id["P1-b"].bow()
+        if modified.get("note"):
+            table.cards_by_id["P1-b"].set_note("dishonored")
+        if modified.get("granted"):
+            session.game.modifiers.append(
+                Modifier("effect", "P1-b", Stat.FORCE, 2, Duration.UNTIL_END_OF_TURN)
+            )
+
+        view = session.project(PlayerId.P1)
+        field.render_snapshot(view.table, PlayerId.P1, view.stats)
+        rendered = list(field._render_battlefield())
+        return field._home_positions(rendered, *field._canvas_size())
+
+    @staticmethod
+    def _positions(home):
+        """The two copies' positions, in the order they were put into play."""
+        return home["P1-a"], home["P1-b"]
+
+    def test_two_untouched_copies_share_a_column(self, loaded):
+        """Four Rice Fields cost one column rather than four, which is what stacking is for. The
+        control for the tests below: without it, a rule that unstacked everything would pass all
+        of them."""
+        field, _ = loaded
+
+        first, second = self._positions(self._two_copies(field))
+
+        assert second[0] == first[0]
+        assert second[1] - first[1] == HOME_STACK_OFFSET  # one steps down behind the other
+
+    def test_a_copy_carrying_an_attachment_takes_a_column_of_its_own(self, loaded):
+        """Stacked, the copy behind shows only its top strip, so the Charm hanging off it is drawn
+        where nothing reveals it. The Charm grants no stat, so nothing but the attachment itself
+        can be what moves the copy out."""
+        field, _ = loaded
+
+        first, second = self._positions(self._two_copies(field, attached=True))
+
+        assert second[0] != first[0]
+
+    def test_a_copy_carrying_a_counter_takes_a_column_of_its_own(self, loaded):
+        """Affection grants no stat, so the counter is the only thing telling the two apart."""
+        field, _ = loaded
+
+        first, second = self._positions(self._two_copies(field, counter=True))
+
+        assert second[0] != first[0]
+
+    def test_a_copy_with_a_modified_stat_keeps_its_place_in_the_stack(self, loaded):
+        """Its Force and Chi are stamped in the top corners, which is the strip a stack leaves
+        showing — so the number is already legible and moving the copy says nothing new."""
+        field, _ = loaded
+
+        first, second = self._positions(self._two_copies(field, granted=True))
+
+        assert second[0] == first[0]
+        assert second[1] - first[1] == HOME_STACK_OFFSET
+
+    def test_a_bowed_copy_keeps_its_place_in_the_stack(self, loaded):
+        """Bowing is drawn on the card itself and happens every turn, so it must not move anything.
+        Giving a bowed copy its own column slid the whole row sideways each time a Holding was
+        tapped for gold, and back when it straightened."""
+        field, _ = loaded
+
+        first, second = self._positions(self._two_copies(field, bowed=True))
+
+        assert second[0] == first[0]
+        assert second[1] - first[1] == HOME_STACK_OFFSET
+
+    def test_a_copy_carrying_a_note_takes_a_column_of_its_own(self, loaded):
+        """The note is painted over the card's bottom half, which the stack covers."""
+        field, _ = loaded
+
+        first, second = self._positions(self._two_copies(field, note=True))
+
+        assert second[0] != first[0]
+
+    def test_only_the_changed_copy_leaves_the_stack(self, loaded):
+        """Three copies and a note on one. Keying the whole printed card out rather than the copy
+        would scatter the two that are still interchangeable across columns of their own."""
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        for card_id in ("P1-a", "P1-b", "P1-c"):
+            copy = L5RCard.of(
+                PersonalityPrint,
+                id=card_id,
+                name="Hero",
+                printed_id="hero",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                force=2,
+                chi=3,
+            )
+            state.cards_by_id[copy.id] = copy
+            state.battlefield.add(copy)
+            state.positions[copy.id] = UNPLACED_BOARD_POS
+        session = EngineSession.start(state, PlayerId.P1)
+        session.game.table.cards_by_id["P1-b"].set_note("dishonored")
+        view = session.project(PlayerId.P1)
+        field.render_snapshot(view.table, PlayerId.P1, view.stats)
+
+        home = field._home_positions(list(field._render_battlefield()), *field._canvas_size())
+
+        assert home["P1-a"][0] == home["P1-c"][0]  # still one column between them
+        assert home["P1-b"][0] != home["P1-a"][0]
+
+    def test_bowing_a_holding_leaves_the_rest_of_the_row_where_it_was(self, loaded):
+        """A producer bows for gold every turn. If that reflows the row, every other Holding jumps
+        sideways and back once a turn — which is the whole board moving, to say something the
+        card's own rotation already says."""
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        for card_id, printed_id in (
+            ("mine-1", "jade_mine"),
+            ("mine-2", "jade_mine"),
+            ("farm", "rice_farm"),
+        ):
+            copy = L5RCard.of(
+                HoldingPrint,
+                id=card_id,
+                name=printed_id,
+                printed_id=printed_id,
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                gold_production=2,
+            )
+            state.cards_by_id[copy.id] = copy
+            state.battlefield.add(copy)
+            state.positions[copy.id] = UNPLACED_BOARD_POS
+        session = EngineSession.start(state, PlayerId.P1)
+
+        def row():
+            view = session.project(PlayerId.P1)
+            field.render_snapshot(view.table, PlayerId.P1, view.stats)
+            return field._home_positions(list(field._render_battlefield()), *field._canvas_size())
+
+        straight = row()
+        session.game.table.cards_by_id["mine-1"].bow()
+
+        assert row() == straight
+
+    def test_two_changed_copies_take_a_column_each(self, loaded):
+        """Not one column between them. Keying a changed copy by what changed rather than by which
+        copy it is would stack the two of them together and hide both."""
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        for card_id in ("P1-a", "P1-b"):
+            copy = L5RCard.of(
+                PersonalityPrint,
+                id=card_id,
+                name="Hero",
+                printed_id="hero",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                force=2,
+                chi=3,
+            )
+            state.cards_by_id[copy.id] = copy
+            state.battlefield.add(copy)
+            state.positions[copy.id] = UNPLACED_BOARD_POS
+        session = EngineSession.start(state, PlayerId.P1)
+        for card_id in ("P1-a", "P1-b"):
+            session.game.table.cards_by_id[card_id].set_note("dishonored")
+        view = session.project(PlayerId.P1)
+        field.render_snapshot(view.table, PlayerId.P1, view.stats)
+
+        home = field._home_positions(list(field._render_battlefield()), *field._canvas_size())
+
+        assert home["P1-a"][0] != home["P1-b"][0]
 
     def test_an_unplaced_hidden_card_still_lands_in_a_home_row(self, loaded):
         """A redacted card renders as a HiddenFace, which carries no print. The home row sorts each

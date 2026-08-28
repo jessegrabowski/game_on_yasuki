@@ -3,6 +3,7 @@ from collections.abc import Callable, Iterable
 from types import MappingProxyType
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Event, Intent, apply_intent
 from yasuki_core.engine.redaction import ViewSnapshot
@@ -67,6 +68,9 @@ class FieldView(tk.Canvas):
         # When set (rules mode), the board renders from this redacted projection instead of the raw
         # table; the manual sandbox leaves it None and renders the full TableState directly.
         self._snapshot: ViewSnapshot | None = None
+        # Each modified card's effective stats by id, as the projection carries them, or None in
+        # the sandbox — which has no rules engine and so cannot say what any card's stats come to.
+        self._stats: dict[str, dict[Stat, int]] | None = None
         self.seat: PlayerId = PlayerId.P1
         # The viewer's gold pool, drawn as a coin in the battlefield corner; set by the host before
         # each render. The rules engine owns the real value.
@@ -168,10 +172,27 @@ class FieldView(tk.Canvas):
             self.reconcile_all()
         return events
 
-    def render_snapshot(self, snapshot: ViewSnapshot, seat: PlayerId) -> None:
-        """Render the board from a redacted projection (rules mode), viewed from ``seat``."""
+    def render_snapshot(
+        self,
+        snapshot: ViewSnapshot,
+        seat: PlayerId,
+        stats: dict[str, dict[Stat, int]] | None = None,
+    ) -> None:
+        """Render the board from a redacted projection (rules mode), viewed from ``seat``.
+
+        Parameters
+        ----------
+        snapshot : ViewSnapshot
+            The viewer's redacted board.
+        seat : PlayerId
+            Whose view this is.
+        stats : dict mapping str to dict, optional
+            :attr:`GameView.stats` — each modified card's effective stats, stamped on the cards
+            that carry them. Default None, which draws every card at its printed numbers.
+        """
         self._snapshot = snapshot
         self.seat = seat
+        self._stats = stats or {}
         self.reconcile_all()
 
     @property
@@ -610,6 +631,7 @@ class FieldView(tk.Canvas):
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
                 self._sprites[tag] = sp
             sp.card, sp.x, sp.y = rc, x, y
+            sp.stats = self._stats
             chosen = self._is_chosen(rc.id)
             sp.bowed_preview = chosen and self._selection_bows
             sp.draw(self, selected=tag in self._selected or chosen)
@@ -807,20 +829,23 @@ class FieldView(tk.Canvas):
     def _home_positions(self, rendered, w: int, h: int) -> dict[str, tuple[int, int]]:
         """Stacked home-row positions for the unplaced cards among ``rendered``, grouped per owner:
         copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``, while the
-        stronghold, sensei, and distinct holdings each take their own column. Personalities lay out
-        in the front (personalities) row; everything else in the holdings row. Attached cards are
-        left out — :meth:`_unit_positions` and :meth:`_province_attachment_positions` place them on
-        what they hang from."""
+        stronghold, sensei, and distinct holdings each take their own column, and so does any copy
+        that has stopped being interchangeable with the rest (see :meth:`_stack_key`). Personalities
+        lay out in the front (personalities) row; everything else in the holdings row. Attached
+        cards are left out — :meth:`_unit_positions` and :meth:`_province_attachment_positions`
+        place them on what they hang from."""
         holdings: dict[PlayerId | None, list[tuple[str, object]]] = {}
         personalities: dict[PlayerId | None, list[tuple[str, object]]] = {}
         # An attachment rides its Personality or its Province wherever that stands, so it takes no
         # column of its own — giving it one would shove the real Holdings sideways to make room.
-        attached = self._units().keys() | self._province_attachments().keys()
+        units = self._units()
+        attached = units.keys() | self._province_attachments().keys()
+        leaders = set(units.values())
         for rc, pos in rendered:
             if rc.id in attached:
                 continue
             if pos is None or pos.x < 0 or pos.y < 0:
-                key = getattr(rc, "printed_id", None) or rc.id
+                key = self._stack_key(rc, leaders)
                 bucket = (
                     personalities
                     if isinstance(getattr(rc, "printed", None), PersonalityPrint)
@@ -842,6 +867,34 @@ class FieldView(tk.Canvas):
                     )
                 )
         return positions
+
+    def _stack_key(self, card: RenderCard, leaders: set[str]) -> str:
+        """What ``card`` shares a home column with: its printed card, or itself.
+
+        Copies stack so four Rice Fields cost one column rather than four, and a stack shows only
+        the top strip of every copy but the last. So a copy carrying something that strip hides —
+        an attachment, counters, a note — steps out and takes a column of its own.
+
+        What the strip does show stays in the stack, however different it makes the card look. A
+        bowed card is drawn on its side, and a modified Force or Chi is stamped in the top corners,
+        clear of the copy in front. Moving either one would slide the whole row sideways every time
+        a Holding was tapped for gold, to say something already on screen.
+
+        Parameters
+        ----------
+        card : L5RCard or HiddenFace
+            The card being placed.
+        leaders : set of str
+            The ids of the cards something is attached to, passed in rather than derived per card
+            so the membership set is built once for the row.
+        """
+        if (
+            card.id in leaders
+            or card.note
+            or getattr(card, "counters", None)  # a redacted back carries none
+        ):
+            return card.id
+        return getattr(card, "printed_id", None) or card.id
 
     def _province_keys_by_owner(self) -> dict[PlayerId, list[ZoneKey]]:
         by_owner: dict[PlayerId, list[ZoneKey]] = {seat: [] for seat in self._render_seats()}

@@ -2,7 +2,7 @@ from dataclasses import fields, is_dataclass
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.zones import ProvinceZone
@@ -15,7 +15,10 @@ from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.projection import project
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     holding,
+    personality,
     province_card,
     put_in_play,
     register,
@@ -237,6 +240,23 @@ def test_a_modified_cards_effective_stats_reach_the_view():
 
     assert view.stat(farm, Stat.GOLD_PRODUCTION) == 4  # printed 2, +1 per Wealth
     assert farm.gold_production == 2  # the card itself still answers what it was printed at
+
+
+def test_an_attachments_bonus_reaches_the_view():
+    """An Item's Force is a modifier derived from the board rather than one recorded on the game, so
+    a view that carries only the recorded ones reports the Personality at his printed Force while
+    the engine fights the battle at his real one."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", owner=PlayerId.P1, force=5))
+    attached(
+        game,
+        attachment(
+            "blade", attachment_type=AttachmentType.ITEM, force_modifier=2, owner=PlayerId.P1
+        ),
+        "hero",
+    )
+
+    assert project(game, PlayerId.P1).stat(hero, Stat.FORCE) == 7
 
 
 def test_a_card_no_modifier_reaches_falls_back_to_its_printed_stat():
