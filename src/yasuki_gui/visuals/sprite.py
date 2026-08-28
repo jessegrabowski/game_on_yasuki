@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from yasuki_core.engine.rules.modifiers import Stat
+
 from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_gui import theme
 from yasuki_gui.constants import (
@@ -12,8 +14,10 @@ from yasuki_gui.constants import (
     LABEL_TAG,
     NOTE_TAG,
     COUNTER_TAG,
+    STAT_TAG,
 )
 from yasuki_gui.ui.images import load_image, load_back_image, ImageProvider
+from yasuki_gui.visuals.stats import draw_stat_stamps
 from yasuki_gui.visuals.visual import Visual, draw_counter_badges
 import tkinter as tk
 
@@ -28,6 +32,10 @@ class CardSpriteVisual(Visual):
     # Show the card as bowed before the engine commits it — used to preview a producer being tapped
     # for gold during a payment, so the bow is undoable until the player confirms.
     bowed_preview: bool = False
+    # Each modified card's effective stats by id, as GameView carries them, or None where no rules
+    # game is driving the board. The card's live Force and Chi are stamped from it over the numerals
+    # it prints them in; the sandbox has no engine to ask and so stamps nothing.
+    stats: dict[str, dict[Stat, int]] | None = None
     # Keep a strong reference to the last PhotoImage used when drawing art
     _last_image: object | None = None
 
@@ -167,6 +175,16 @@ class CardSpriteVisual(Visual):
             canvas, self.card, self.bbox, (self.tag, CARD_TAG, self._subtag(COUNTER_TAG))
         )
 
+    def _draw_stats(self, canvas: tk.Canvas) -> None:
+        draw_stat_stamps(
+            canvas,
+            self.card,
+            self.bbox,
+            self.stats,
+            (self.tag, CARD_TAG, self._subtag(STAT_TAG)),
+            bowed=self._bowed,
+        )
+
     def _draw_selection(self, canvas: tk.Canvas, selected: bool) -> None:
         canvas.delete(self._subtag(SELECT_TAG))
         if not selected:
@@ -189,6 +207,7 @@ class CardSpriteVisual(Visual):
         self._draw_art(canvas)
         self._draw_border(canvas)
         self._draw_note(canvas)
+        self._draw_stats(canvas)
         self._draw_counters(canvas)
         self._draw_selection(canvas, selected)
 
@@ -204,7 +223,7 @@ class CardSpriteVisual(Visual):
             return
         self.x, self.y = x, y
         # Move layers together; no redraw
-        for layer in (ART_TAG, BORDER_TAG, SELECT_TAG, LABEL_TAG):
+        for layer in (ART_TAG, BORDER_TAG, SELECT_TAG, LABEL_TAG, STAT_TAG):
             canvas.move(self._subtag(layer), dx, dy)
         # Also move top-level tag to keep bbox queries consistent
         canvas.move(self.tag, 0, 0)  # no-op but keeps tag grouping predictable
@@ -218,12 +237,14 @@ class CardSpriteVisual(Visual):
         canvas.delete(self._subtag(BORDER_TAG))
         canvas.delete(self._subtag(LABEL_TAG))
         canvas.delete(self._subtag(NOTE_TAG))
+        canvas.delete(self._subtag(STAT_TAG))
         canvas.delete(self._subtag(COUNTER_TAG))
         canvas.delete(self._subtag(SELECT_TAG))
         # Redraw art and border
         self._draw_art(canvas)
         self._draw_border(canvas)
         self._draw_note(canvas)
+        self._draw_stats(canvas)
         self._draw_counters(canvas)
         # Recreate selection overlay if it was present
         if had_selection:

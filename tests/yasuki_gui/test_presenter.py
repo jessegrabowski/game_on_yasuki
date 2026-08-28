@@ -3,6 +3,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, Confirm
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
@@ -1052,6 +1053,42 @@ def test_a_unit_sent_to_a_battlefield_leaves_the_board(a_battle):
     _send(presenter, window, ["hero"], 1)
 
     assert not window.field._at_home("hero")
+
+
+def _stat_stamps(canvas, card_id: str) -> set[str]:
+    """The numbers stamped on ``card_id``'s sprite."""
+    return {
+        canvas.itemcget(item, "text")
+        for item in canvas.find_withtag(f"{card_id}:stat")
+        if canvas.type(item) == "text"
+    }
+
+
+def test_a_card_on_the_board_is_stamped_with_the_force_the_engine_would_use(a_battle):
+    """Not the printed number. A granted modifier that the board does not report leaves the player
+    adding up an army from figures the engine disagrees with."""
+    presenter, window, session = a_battle
+    session.game.modifiers.append(
+        Modifier("test", "hero", Stat.FORCE, 4, Duration.UNTIL_END_OF_TURN)
+    )
+
+    presenter.present()
+
+    assert "9" in _stat_stamps(window.field, "card:hero")  # printed 5, granted +4
+
+
+def test_a_unit_in_a_lane_is_stamped_with_the_same_number(a_battle):
+    """The lane draws the same sprites the board does, and a unit whose Force reads one way at home
+    and another at the battlefield is worse than one that reports neither."""
+    presenter, window, session = a_battle
+    session.game.modifiers.append(
+        Modifier("test", "hero", Stat.FORCE, 4, Duration.UNTIL_END_OF_TURN)
+    )
+    _press(presenter, "Declare an attack")
+
+    _send(presenter, window, ["hero"], 1)
+
+    assert "9" in _stat_stamps(window.battle_view.canvas, "battle:hero")
 
 
 def test_the_force_a_lane_shows_does_not_move_when_the_assignment_is_answered(a_battle):

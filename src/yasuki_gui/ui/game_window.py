@@ -5,6 +5,7 @@ from typing import Protocol
 import yasuki_gui.config as gui_config
 from yasuki_gui.config import load_hotkeys
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView
 from yasuki_core.engine.table import TableState
 from yasuki_gui import theme
@@ -149,6 +150,7 @@ class GameWindow:
         pending: dict[int, PendingArmy] | None = None,
         buttons: dict[int, LaneButton] | None = None,
         selected: frozenset[str] = frozenset(),
+        stats: dict[str, dict[Stat, int]] | None = None,
     ) -> None:
         """Float the battle over the board while ``attack`` is on, and take it away when it ends.
 
@@ -162,7 +164,7 @@ class GameWindow:
         # at home while it decides where to send them. A starting place, not a dock.
         board_w, board_h = widget_size(self.field)
         self.battle_view.open_over(0, 0, board_w, divider_y(board_h))
-        self.battle_view.refresh(attack, pending, buttons, selected)
+        self.battle_view.refresh(attack, pending, buttons, selected=selected, stats=stats)
 
     def relayout_panels(self) -> None:
         """Move the seat being played to the bottom of the sidebar and resync both panels against

@@ -3,6 +3,7 @@ from collections.abc import Callable, Iterable
 from types import MappingProxyType
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Event, Intent, apply_intent
 from yasuki_core.engine.redaction import ViewSnapshot
@@ -67,6 +68,9 @@ class FieldView(tk.Canvas):
         # When set (rules mode), the board renders from this redacted projection instead of the raw
         # table; the manual sandbox leaves it None and renders the full TableState directly.
         self._snapshot: ViewSnapshot | None = None
+        # Each modified card's effective stats by id, as the projection carries them, or None in
+        # the sandbox — which has no rules engine and so cannot say what any card's stats come to.
+        self._stats: dict[str, dict[Stat, int]] | None = None
         self.seat: PlayerId = PlayerId.P1
         # The viewer's gold pool, drawn as a coin in the battlefield corner; set by the host before
         # each render. The rules engine owns the real value.
@@ -168,10 +172,27 @@ class FieldView(tk.Canvas):
             self.reconcile_all()
         return events
 
-    def render_snapshot(self, snapshot: ViewSnapshot, seat: PlayerId) -> None:
-        """Render the board from a redacted projection (rules mode), viewed from ``seat``."""
+    def render_snapshot(
+        self,
+        snapshot: ViewSnapshot,
+        seat: PlayerId,
+        stats: dict[str, dict[Stat, int]] | None = None,
+    ) -> None:
+        """Render the board from a redacted projection (rules mode), viewed from ``seat``.
+
+        Parameters
+        ----------
+        snapshot : ViewSnapshot
+            The viewer's redacted board.
+        seat : PlayerId
+            Whose view this is.
+        stats : dict mapping str to dict, optional
+            :attr:`GameView.stats` — each modified card's effective stats, stamped on the cards
+            that carry them. Default None, which draws every card at its printed numbers.
+        """
         self._snapshot = snapshot
         self.seat = seat
+        self._stats = stats or {}
         self.reconcile_all()
 
     @property
@@ -610,6 +631,7 @@ class FieldView(tk.Canvas):
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
                 self._sprites[tag] = sp
             sp.card, sp.x, sp.y = rc, x, y
+            sp.stats = self._stats
             chosen = self._is_chosen(rc.id)
             sp.bowed_preview = chosen and self._selection_bows
             sp.draw(self, selected=tag in self._selected or chosen)

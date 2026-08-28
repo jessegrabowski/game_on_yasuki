@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import NamedTuple
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
 from yasuki_core.engine.rules.state import BattleOutcome
 from yasuki_gui import theme
@@ -19,6 +20,9 @@ _CARD_TAG = "battle:"
 # The Defender's Province card, tagged apart because it is not a unit: it belongs to the seat
 # being attacked, and nothing the player can do to a unit applies to it.
 _PROVINCE_TAG = "province:"
+# The lane's own army total, tagged apart from the per-card stamps so a reader — and a test —
+# can tell an army's Force from the Force of one card standing in it.
+_ARMY_FORCE_TAG = "army-force"
 # How wide a lane is once collapsed: enough for its number, and no more.
 COLLAPSED_W = 34
 LANE_GAP = 6
@@ -171,6 +175,7 @@ class BattleView(FloatingPanel):
         self._attack: AttackView | None = None
         self._pending: dict[int, PendingArmy] = {}
         self._selected: frozenset[str] = frozenset()
+        self._stats: dict[str, dict[Stat, int]] = {}
         self._buttons: dict[int, LaneButton] = {}
         self._lane_spans: dict[int, tuple[int, int]] = {}
         self.canvas.bind("<Configure>", lambda _event: self._redraw())
@@ -185,6 +190,7 @@ class BattleView(FloatingPanel):
         pending: dict[int, PendingArmy] | None = None,
         buttons: dict[int, LaneButton] | None = None,
         selected: frozenset[str] = frozenset(),
+        stats: dict[str, dict[Stat, int]] | None = None,
     ) -> None:
         """Redraw for ``attack``, or empty the view when there is none.
 
@@ -200,11 +206,15 @@ class BattleView(FloatingPanel):
             Default None.
         selected : frozenset of str, optional
             The ids of the cards the player has picked, drawn with a selection ring. Default empty.
+        stats : dict mapping str to dict, optional
+            :attr:`GameView.stats`, so a unit in a lane reports the same Force the lane's total was
+            built from. Default None.
         """
         self._attack = attack
         self._pending = pending or {}
         self._buttons = buttons or {}
         self._selected = selected
+        self._stats = stats or {}
         if attack is not None:
             self._collapsed &= set(range(len(attack.battlefields)))
         self._redraw()
@@ -404,7 +414,13 @@ class BattleView(FloatingPanel):
     def _draw_force(self, force: int, x: int, y: int, anchor: str) -> None:
         """One side's Force, in its own corner of the half of the lane that side holds."""
         self.canvas.create_text(
-            x, y, text=str(force), anchor=anchor, fill=theme.GOLD, font=theme.serif(22, "bold")
+            x,
+            y,
+            text=str(force),
+            anchor=anchor,
+            fill=theme.GOLD,
+            font=theme.serif(22, "bold"),
+            tags=(_ARMY_FORCE_TAG,),
         )
 
     def _draw_footer(self, index: int, span: tuple[int, int], height: int) -> None:
@@ -454,6 +470,6 @@ class BattleView(FloatingPanel):
             self._draw_card(unit.leader, leader)
 
     def _draw_card(self, card: RenderCard, at: tuple[int, int], tag: str = _CARD_TAG) -> None:
-        CardSpriteVisual(card, at[0], at[1], f"{tag}{card.id}").draw(
+        CardSpriteVisual(card, at[0], at[1], f"{tag}{card.id}", stats=self._stats).draw(
             self.canvas, selected=card.id in self._selected
         )

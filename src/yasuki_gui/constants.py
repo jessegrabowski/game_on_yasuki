@@ -39,9 +39,23 @@ SELECT_TAG = "select"
 LABEL_TAG = "label"
 NOTE_TAG = "note"
 COUNTER_TAG = "counter"
+STAT_TAG = "stat"
 
-# Radius of a counter badge (e.g. a wealth token) drawn in a card's top-right corner.
+# Radius of a counter badge (e.g. a wealth token). It hangs off the card's bottom-right; the
+# top-right is where a card prints its Chi, and the live stat is stamped over that.
 COUNTER_BADGE_R = 9
+
+# Where a card prints its Force and Chi, as a fraction of the card — the median bounding-box centre
+# of the numerals over 40 Twenty Festivals Personalities. The live stat is stamped over the printed
+# one rather than inset from a corner, so it lands where the eye already goes for that number.
+FORCE_ANCHOR = (0.1107, 0.0714)
+CHI_ANCHOR = (0.8887, 0.0705)
+# The stamp's box. Fixed rather than measured off the glyphs, so every card carries the same shape
+# and a bowed card rotates that shape rather than whatever its own digits happened to make.
+STAT_FONT_PX = 12
+STAT_BOX_H = 13
+STAT_BOX_W = 13  # one digit; each further digit adds STAT_DIGIT_W
+STAT_DIGIT_W = 9  # the widest digit's advance, so the margin holds however long the number runs
 
 # Honor counter limits
 MIN_HONOR = -20

@@ -155,7 +155,7 @@ class Presenter:
         window = self.window
         view = self.host.runner.view()
         window.field.gold = view.gold[view.viewer]
-        window.field.render_snapshot(view.table, self.host.human_seat)
+        window.field.render_snapshot(view.table, self.host.human_seat, view.stats)
         window.phase_bar.refresh(view)
         status, buttons = self._prompt(view)
         window.prompt_box.show(status, buttons)
@@ -166,7 +166,8 @@ class Presenter:
                 view.attack,
                 self._pending_armies(),
                 self._lane_buttons(),
-                frozenset(window.field.selection),
+                selected=frozenset(window.field.selection),
+                stats=view.stats,
             )
         window.opponent_panel.refresh()
         window.human_panel.refresh()

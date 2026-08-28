@@ -2,7 +2,8 @@ from yasuki_gui.visuals.sprite import CardSpriteVisual
 from yasuki_gui.visuals.visual import MarqueeBoxVisual
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
+from yasuki_core.engine.rules.modifiers import Stat
 import tkinter as tk
 from yasuki_core.engine.players import PlayerId
 
@@ -99,3 +100,39 @@ def test_badges_scale_with_the_cards_counters_not_the_catalogue(root):
     CardSpriteVisual(card, x=100, y=100, tag="card:d").draw(cv)
     discs = [i for i in cv.find_withtag("card:d:counter") if cv.type(i) == "oval"]
     assert len(discs) == 3
+
+
+def _stamped(canvas, tag):
+    """The numbers stamped on the sprite tagged ``tag``."""
+    return sorted(
+        canvas.itemcget(i, "text")
+        for i in canvas.find_withtag(f"{tag}:stat")
+        if canvas.type(i) == "text"
+    )
+
+
+def test_a_sprite_stamps_the_stats_it_was_given(root):
+    cv = tk.Canvas(root, width=200, height=200)
+    hero = L5RCard.of(
+        PersonalityPrint, id="h", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, force=3, chi=4
+    )
+
+    CardSpriteVisual(hero, x=100, y=100, tag="card:h", stats={"h": {Stat.FORCE: 7}}).draw(cv)
+
+    assert _stamped(cv, "card:h") == ["4", "7"]
+
+
+def test_refreshing_a_face_replaces_the_stamps_rather_than_adding_to_them(root):
+    """`refresh_face_state` erases its layers by name, so a layer left off that list survives the
+    redraw — and a Personality whose Force just changed would carry both numbers at once."""
+    cv = tk.Canvas(root, width=200, height=200)
+    hero = L5RCard.of(
+        PersonalityPrint, id="h", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, force=3, chi=4
+    )
+    sprite = CardSpriteVisual(hero, x=100, y=100, tag="card:h")
+    sprite.draw(cv)
+
+    sprite.stats = {"h": {Stat.FORCE: 9}}
+    sprite.refresh_face_state(cv)
+
+    assert _stamped(cv, "card:h") == ["4", "9"]

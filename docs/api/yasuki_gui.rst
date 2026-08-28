@@ -52,5 +52,6 @@ yasuki_gui
     yasuki_gui.visuals.deck <yasuki_gui.visuals.deck>
     yasuki_gui.visuals.hand <yasuki_gui.visuals.hand>
     yasuki_gui.visuals.sprite <yasuki_gui.visuals.sprite>
+    yasuki_gui.visuals.stats <yasuki_gui.visuals.stats>
     yasuki_gui.visuals.visual <yasuki_gui.visuals.visual>
     yasuki_gui.visuals.zone <yasuki_gui.visuals.zone>

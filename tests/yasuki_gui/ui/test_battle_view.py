@@ -83,9 +83,13 @@ def _font_size(font: str) -> int:
     raise AssertionError(f"no size in font spec {font!r}")
 
 
-def _text_at(view, text: str) -> tuple[float, float]:
-    """Where the canvas item reading ``text`` sits."""
-    for item in view.canvas.find_all():
+def _text_at(view, text: str, tag: str | None = None) -> tuple[float, float]:
+    """Where the canvas item reading ``text`` sits, optionally only among those tagged ``tag``.
+
+    The tag matters wherever a number appears twice over: an army of one reads the same as the card
+    standing in it, and without it a test about the army total can pass on the card's stamp.
+    """
+    for item in view.canvas.find_withtag(tag) if tag else view.canvas.find_all():
         if view.canvas.type(item) == "text" and view.canvas.itemcget(item, "text") == text:
             return tuple(view.canvas.coords(item))
     raise AssertionError(f"no {text!r} on the canvas; got {_texts(view)}")
@@ -178,8 +182,8 @@ def test_each_sides_force_sits_in_the_corner_of_its_own_half(view):
     )
 
     left, _ = view._lane_spans[0]
-    defending = _text_at(view, "6")
-    attacking = _text_at(view, "3")
+    defending = _text_at(view, "6", "army-force")
+    attacking = _text_at(view, "3", "army-force")
     assert defending[0] < left + CARD_W  # both hug the lane's own edge
     assert attacking[0] < left + CARD_W
     assert defending[1] < attacking[1]  # the defenders hold the top half
