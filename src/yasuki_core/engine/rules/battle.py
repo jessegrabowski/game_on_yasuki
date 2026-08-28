@@ -15,7 +15,14 @@ from yasuki_core.engine.rules.units import unit_force
 from yasuki_core.engine.rules.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.legality import province_zones
-from yasuki_core.engine.rules.state import AttackPhase, BattlefieldInfo, GameState, Segment
+from yasuki_core.engine.rules.events import Destroyed
+from yasuki_core.engine.rules.state import (
+    AttackPhase,
+    BattleOutcome,
+    BattlefieldInfo,
+    GameState,
+    Segment,
+)
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
@@ -269,13 +276,89 @@ def fight_battle(game: GameState, battlefield: int) -> None:
     attack.current = battlefield
     attack.fought |= {battlefield}
     last_battle = len(attack.fought) == len(attack.battlefields)
-    # Read before anything is applied: the honor gain counts the cards in the enemy army, and once
-    # resolution has run there is no army left to count.
+    # All three read before anything is applied: resolution destroys the armies the effects and the
+    # winner are read off, and moves the honor the outcome reports the movement of.
     effects = resolution_effects(game, battlefield)
+    winner = _winner(game, battlefield)
+    honor_before = _honor(game)
+    # Where this battle's events start. Every battle of an Attack Phase runs inside one action, so
+    # an outcome reading the action's events rather than its own would collect its predecessors'.
+    events_before = len(game.action_events)
+
     triggers.resolve_effects(game, effects)
+    outcome = _outcome(
+        game,
+        battlefield,
+        winner=winner,
+        honor_before=honor_before,
+        events_before=events_before,
+    )
+    attack.battlefields = _with_outcome(attack.battlefields, battlefield, outcome)
     after_resolution(game, battlefield, last_battle=last_battle)
     attack.current = None
     game.stack.append(FightNextBattle())
+
+
+def _winner(game: GameState, battlefield: int) -> PlayerId | None:
+    """Which side took ``battlefield``, or None if the battle was tied.
+
+    Decided before resolution runs, because resolution destroys the armies whose Force decides it.
+    """
+    attack = _declared_attack(game)
+    attacking = army_force(game, battlefield, attack.attacker)
+    defending = army_force(game, battlefield, attack.defender)
+    if attacking == defending:
+        return None
+    return attack.attacker if attacking > defending else attack.defender
+
+
+def _honor(game: GameState) -> dict[PlayerId, int]:
+    """Each seat's Family Honor as it stands."""
+    return {seat: info.honor for seat, info in game.table.seats.items()}
+
+
+def _outcome(
+    game: GameState,
+    battlefield: int,
+    *,
+    winner: PlayerId | None,
+    honor_before: dict[PlayerId, int],
+    events_before: int,
+) -> BattleOutcome:
+    """What the battle at ``battlefield`` turned out to have done.
+
+    Destruction and the Province's fate are read off the board rather than off the effects
+    resolution set out to apply, so a card that prevents one leaves an outcome that still matches
+    the board. Honor is the difference across resolution, which is exact while nothing can act
+    inside a resolution and will over-report once something can — there is no honor event to
+    attribute a movement to a cause with.
+    """
+    province = _declared_attack(game).battlefields[battlefield].province
+    return BattleOutcome(
+        winner=winner,
+        destroyed=tuple(
+            event.card_id
+            for event in game.action_events[events_before:]
+            if isinstance(event, Destroyed) and event.cause is Rulebook.BATTLE_RESOLUTION
+        ),
+        province_destroyed=province not in game.table.zones,
+        honor={
+            seat: honor - honor_before[seat]
+            for seat, honor in _honor(game).items()
+            if honor != honor_before[seat]
+        },
+    )
+
+
+def _with_outcome(
+    battlefields: tuple[BattlefieldInfo, ...], battlefield: int, outcome: BattleOutcome
+) -> tuple[BattlefieldInfo, ...]:
+    """``battlefields`` with ``battlefield``'s outcome recorded."""
+    # A NamedTuple, so this is a replacement rather than an assignment.
+    return tuple(
+        info._replace(outcome=outcome) if index == battlefield else info
+        for index, info in enumerate(battlefields)
+    )
 
 
 def end_attack_phase(game: GameState) -> None:
