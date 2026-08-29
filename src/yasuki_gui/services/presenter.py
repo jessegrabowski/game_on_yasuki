@@ -11,7 +11,6 @@ from yasuki_core.engine.rules.decisions import (
     assignment_token,
 )
 from yasuki_core.engine.rules.projection import GameView, unit_view
-from yasuki_core.engine.rules.units import unit_force
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.runner import SearchView
 from yasuki_gui.services.game_host import GameHost
@@ -100,12 +99,19 @@ class Presenter:
             beat = OPPONENT_TURN_DELAY_MS if runner.is_opponent_turn else 0
             self.window.root.after(beat, self.run_opponent)
 
-    def _pending_armies(self) -> dict[int, PendingArmy]:
+    def _pending_armies(self, view: GameView) -> dict[int, PendingArmy]:
         """The units the player has sent to each battlefield but not yet assigned, by battlefield.
 
         Board state rather than engine state: units are sent from the card menu and the engine is
         told once, so until then this is the only place the intention exists — and the player has
         already decided, so the battle view draws them standing where they were sent.
+
+        Parameters
+        ----------
+        view : GameView
+            The projection the board is being drawn from, read for each unit's Force. The game is
+            still read for the cards themselves, which the view indexes by id but does not hand
+            back.
         """
         game = self.host.session.game
         waiting: dict[int, list[L5RCard]] = {}
@@ -118,7 +124,7 @@ class Presenter:
                 units=tuple(unit_view(game, card) for card in cards),
                 # The total resolution would reach, so the lane's Force does not jump when the
                 # assignment is answered and the engine starts counting these itself.
-                force=sum(unit_force(game, card, in_battle_resolution=True) for card in cards),
+                force=sum(view.unit_force.get(card.id, 0) for card in cards),
             )
             for index, cards in waiting.items()
         }
@@ -164,7 +170,7 @@ class Presenter:
         else:
             window.show_battle(
                 view.attack,
-                self._pending_armies(),
+                self._pending_armies(view),
                 self._lane_buttons(),
                 selected=frozenset(window.field.selection),
                 stats=view.stats,

@@ -1106,7 +1106,7 @@ def test_the_force_a_lane_shows_does_not_move_when_the_assignment_is_answered(a_
     )
     _press(presenter, "Declare an attack")
     _send(presenter, window, ["hero"], 1)
-    while_pending = presenter._pending_armies()[1].force
+    while_pending = presenter._pending_armies(presenter.host.runner.view())[1].force
 
     _press(presenter, "Done assigning")
 

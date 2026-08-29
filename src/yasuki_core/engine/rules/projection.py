@@ -14,9 +14,11 @@ from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase, Segment
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
+from yasuki_core.engine.rules.units import unit_force
 from yasuki_core.engine.table import DeckKey, ZoneKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import PersonalityPrint
 
 
 @dataclass(frozen=True, slots=True)
@@ -153,6 +155,12 @@ class GameView:
         Each modified card's effective stats by id, the inner dict keyed by :class:`Stat`. Read it
         through :meth:`stat` rather than directly — a card no modifier reaches is absent, and the
         method supplies its printed value.
+    unit_force : dict mapping str to int
+        Each identifiable in-play Personality's unit Force by his card id, totalled the way a battle
+        resolves it: a bowed Personality contributes nothing, a bowed Follower drops out, and an
+        Item's modifier rides on the Personality either way. It says what a unit would contribute,
+        not whether it may be sent — a bowed Personality cannot be assigned at all, and his entry
+        still counts his unbowed Followers. A seat's army is the sum over the units it may assign.
     """
 
     viewer: PlayerId
@@ -169,6 +177,7 @@ class GameView:
     dynasty_deck: tuple[L5RCard, ...]
     attack: AttackView | None
     stats: dict[str, dict[Stat, int]]
+    unit_force: dict[str, int]
 
     def stat(self, card: L5RCard, stat: Stat) -> int:
         """``card``'s effective ``stat`` — counters, granted modifiers and all. Reading the card's
@@ -243,7 +252,23 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
             card.id: {stat: effective_stat(game, card, stat) for stat in Stat}
             for card in _modified_cards(game, _identifiable_ids(table))
         },
+        unit_force=_unit_forces(game, _identifiable_ids(table)),
     )
+
+
+def _unit_forces(game: GameState, identifiable: set[str]) -> dict[str, int]:
+    """Every identifiable in-play Personality's unit Force, as a battle would count it.
+
+    Taken from :func:`~yasuki_core.engine.rules.units.unit_force` rather than summed from
+    :attr:`GameView.stats`, because a unit's total is not a sum of its cards' Force: a Follower
+    brings its own, an Item brings a modifier already inside the Personality's, and bowing removes
+    some of them and not others.
+    """
+    return {
+        card.id: unit_force(game, card, in_battle_resolution=True)
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, PersonalityPrint) and card.id in identifiable
+    }
 
 
 def unit_view(game: GameState, personality: L5RCard) -> UnitView:
