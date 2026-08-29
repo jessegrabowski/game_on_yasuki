@@ -1,15 +1,24 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import battle
+from yasuki_core.engine.rules.actions import DeclareAttack
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
+    ChooseBattlefield,
     assignment,
     assignment_token,
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.policies import GoldRushPolicy, MilitaryPolicy, POLICIES
+from yasuki_core.engine.rules.agents import AutoAgent
+from yasuki_core.engine.rules.policies import (
+    GoldRushPolicy,
+    MilitaryPolicy,
+    PassPolicy,
+    POLICIES,
+)
 from yasuki_core.engine.rules.projection import project
+from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import location_of, TableState
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -173,6 +182,181 @@ class TestDefending:
         assert _defend(session, {"raider": 0}) == ()
 
 
+def _attack_answer(session, seat=ATTACKER) -> tuple[str, ...]:
+    """Declare, then ask the policy where the Attacker's units go."""
+    game = session.game
+    battle.declare_attack(game, seat)
+    request = AssignUnits(
+        seat=seat,
+        candidates=battle.assignment_candidates(game, seat),
+        battlefields=len(game.attack.battlefields),
+    )
+    answer = MilitaryPolicy().decide(request, project(game, seat))
+    assert request.accepts(answer), "the policy answered with something the engine would refuse"
+    return answer.choices
+
+
+class TestDeclaring:
+    def test_it_attacks_when_it_holds_more_force(self):
+        session = _attacked(defenders={"guard": 1}, attackers={"raider": 5})
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert isinstance(chosen, DeclareAttack)
+
+    def test_it_passes_when_it_is_outmatched(self):
+        session = _attacked(defenders={"guard": 9}, attackers={"raider": 1})
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert not isinstance(chosen, DeclareAttack)
+
+    def test_it_counts_only_what_it_could_send(self):
+        """A bowed Personality may not be assigned, so counting his unit would have the seat declare
+        an attack it cannot make.
+
+        He carries an unbowed Follower, which is what makes the case visible: a bowed Personality
+        contributes nothing on his own, but the CR totals an army over unbowed Personalities *and*
+        Followers, so his Follower's Force is still in his unit's total.
+        """
+        session = _attacked(defenders={"guard": 3}, attackers={"bowed": 1, "ready": 1})
+        attached(
+            session.game,
+            attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=9, owner=ATTACKER),
+            "bowed",
+        )
+        session.game.table.cards_by_id["bowed"].bow()
+        view = project(session.game, ATTACKER)
+        assert view.unit_force["bowed"] == 9, "the Follower still counts toward the unit"
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert not isinstance(chosen, DeclareAttack)
+
+    def test_it_does_not_attack_on_even_force(self):
+        """Even armies take nothing: a Province falls only to a Force that exceeds the defense plus
+        its Strength, so an attack that merely matches spends an army for no ground."""
+        session = _attacked(defenders={"guard": 4}, attackers={"raider": 4})
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert not isinstance(chosen, DeclareAttack)
+
+    def test_it_does_not_declare_against_provinces_it_cannot_reach(self):
+        """No Province's Strength is readable before an attack exists, but the Defender's Stronghold
+        is, and every Province is at least that strong. A seat that cannot beat the floor takes
+        nothing, so declaring only opens a phase it must then decline.
+
+        Its Force matches the floor exactly, which is the case that separates reading the
+        Stronghold's Strength from reading anything near it."""
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=7))
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "prov0", seat=DEFENDER, index=0)
+        put_in_play(state, personality("host", owner=ATTACKER, force=7))
+        session = EngineSession.start(state, ATTACKER)
+        end_phase(session)
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert not isinstance(chosen, DeclareAttack)
+
+    def test_it_declares_once_it_can_clear_the_strongholds_floor(self):
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=7))
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "prov0", seat=DEFENDER, index=0)
+        for name in ("host-a", "host-b"):
+            put_in_play(state, personality(name, owner=ATTACKER, force=5))
+        session = EngineSession.start(state, ATTACKER)
+        end_phase(session)
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert isinstance(chosen, DeclareAttack)
+
+    def test_it_does_not_declare_a_second_attack(self):
+        """`legality` withholds the action once an attack stands, so the policy must take what it is
+        offered rather than what it would prefer."""
+        session = _attacked(defenders={"guard": 1}, attackers={"raider": 5})
+        battle.declare_attack(session.game, ATTACKER)
+        view = project(session.game, ATTACKER)
+        actions = session.legal_actions(ATTACKER)
+        assert not any(isinstance(action, DeclareAttack) for action in actions)
+
+        assert not isinstance(MilitaryPolicy().choose(view, actions), DeclareAttack)
+
+
+class TestAttacking:
+    def test_it_takes_a_province_it_can_take_whatever_the_defense_does(self):
+        """The Defender assigns after this answer, so a Province is only worth committing to when
+        the attack beats its Strength plus everything the Defender could still bring."""
+        session = _attacked(defenders={"guard": 2}, attackers={"host": 5}, provinces=1)
+
+        assert _sent_to(_attack_answer(session)) == {0: {"host"}}
+
+    def test_it_leaves_a_province_the_defense_could_hold(self):
+        """Exactly enough to beat the defense is not enough — a tie leaves the Province standing and
+        destroys both armies."""
+        session = _attacked(defenders={"guard": 5}, attackers={"host": 5}, provinces=1)
+
+        assert _attack_answer(session) == ()
+
+    def test_it_counts_province_strength_against_it(self):
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=4))
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "prov0", seat=DEFENDER, index=0)
+        put_in_play(state, personality("guard", owner=DEFENDER, force=1))
+        put_in_play(state, personality("host", owner=ATTACKER, force=5))
+        session = EngineSession.start(state, ATTACKER)
+        end_phase(session)
+
+        assert _attack_answer(session) == ()
+
+    def test_it_spreads_across_the_provinces_it_can_take(self):
+        """Two Provinces it can each take, and force for both — a rule that stopped at the first
+        would leave the second standing for no reason."""
+        session = _attacked(
+            defenders={"guard": 1}, attackers={"host-a": 3, "host-b": 3}, provinces=2
+        )
+
+        places = _sent_to(_attack_answer(session))
+
+        # Which host goes where is a tie-break, not the behavior under test.
+        assert set(places) == {0, 1}
+        assert all(len(units) == 1 for units in places.values())
+
+    def test_it_never_sends_the_same_unit_to_two_provinces(self):
+        session = _attacked(defenders={"guard": 1}, attackers={"host": 9}, provinces=2)
+
+        places = _sent_to(_attack_answer(session))
+
+        assert sum(len(units) for units in places.values()) == 1
+
+
+class TestFightOrder:
+    def test_it_fights_the_battle_it_leads_by_the_most(self):
+        session = _attacked(
+            defenders={"guard": 3}, attackers={"host-a": 9, "host-b": 4}, provinces=2
+        )
+        game = session.game
+        battle.declare_attack(game, ATTACKER)
+        ops.assign(game.table, game.table.cards_by_id["host-a"], 1)
+        ops.assign(game.table, game.table.cards_by_id["host-b"], 0)
+        request = ChooseBattlefield(seat=ATTACKER, candidates=("0", "1"))
+
+        answer = MilitaryPolicy().decide(request, project(game, ATTACKER))
+
+        assert request.accepts(answer)
+        assert answer.choices == ("1",)  # the battlefield it leads 9-0 rather than 4-0
+
+
 class TestDelegation:
     def test_it_leaves_the_attacker_s_assignment_alone(self):
         """The Attacker answers the same request class. Sending its units where the defense rule
@@ -232,3 +416,31 @@ def test_a_driven_defense_puts_units_on_the_battlefield():
 
     assert location_of(game.table, game.table.cards_by_id["guard"]).battlefield == 0
     assert battle.army_force(game, 0, DEFENDER) == 4
+
+
+def test_a_military_policy_wins_by_destroying_every_province():
+    """The first game in the suite that ends in a victory rather than at a turn limit. The military
+    path has been complete on the rules side since battle resolution landed, and nothing had ever
+    walked it — no shipped policy chooses `DeclareAttack`, so every driven game ended on the clock.
+    """
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    for index in range(2):
+        province_card(state, f"prov{index}", seat=DEFENDER, index=index)
+    for name in ("host-a", "host-b"):
+        put_in_play(state, personality(name, owner=ATTACKER, force=6))
+    session = EngineSession.start(state, ATTACKER)
+
+    military = MilitaryPolicy()
+    passive = PassPolicy()
+    play_game(
+        session,
+        {
+            ATTACKER: Controls(military, military),
+            DEFENDER: Controls(passive, AutoAgent()),
+        },
+        turn_limit=12,
+    )
+
+    assert session.game.loser is DEFENDER
+    assert session.game.loss_reason == "no Provinces remaining"

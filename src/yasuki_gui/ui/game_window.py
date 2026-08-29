@@ -164,7 +164,9 @@ class GameWindow:
         # at home while it decides where to send them. A starting place, not a dock.
         board_w, board_h = widget_size(self.field)
         self.battle_view.open_over(0, 0, board_w, divider_y(board_h))
-        self.battle_view.refresh(attack, pending, buttons, selected=selected, stats=stats)
+        self.battle_view.refresh(
+            attack, pending, buttons, selected=selected, stats=stats, viewer=self.field.seat
+        )
 
     def relayout_panels(self) -> None:
         """Move the seat being played to the bottom of the sidebar and resync both panels against

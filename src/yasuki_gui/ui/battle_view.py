@@ -26,10 +26,16 @@ _ARMY_FORCE_TAG = "army-force"
 # How wide a lane is once collapsed: enough for its number, and no more.
 COLLAPSED_W = 34
 LANE_GAP = 6
-# The lane's name and the Province Strength under it, which is the number the battle is about.
+# The band holding the lane's name and the Province Strength under it, which is the number the
+# battle is about. It sits on the Province's own side of the lane, so mirroring moves it to the foot,
+# where it stacks above the button rather than displacing it.
 HEADER_H = 74
-# The strip along the bottom holding the lane's own button.
+# The strip along the bottom holding the lane's own button, whichever way the lane faces: a control
+# that moved with the orientation would be somewhere new every time the seat changed roles.
 FOOTER_H = 36
+# What a mirrored lane leaves above its topmost row, standing in for the heading band that is no
+# longer up there to space the cards off the panel's edge.
+LANE_MARGIN = 10
 # How far each side's Force total sits in from the corner it marks.
 FORCE_INSET = 12
 # The least a lane steps between its rows of cards. The step normally comes out of the height, so
@@ -88,13 +94,93 @@ class PendingArmy:
     force: int
 
 
-def _rows(height: int) -> tuple[int, int, int, int]:
+class _Army(NamedTuple):
+    """One side of a battlefield as the lane draws it.
+
+    Attributes
+    ----------
+    units : tuple of UnitView
+        The units standing there, whether the engine has been told about them or not.
+    force : int
+        Their Force, totalled the way resolution would.
+    """
+
+    units: tuple[UnitView, ...]
+    force: int
+
+
+def _armies(
+    view: BattlefieldView, sent: PendingArmy | None, *, viewer_defends: bool
+) -> tuple[_Army, _Army]:
+    """The two sides of ``view``, with anything sent but not yet assigned already standing in.
+
+    A player sends only their own units, so what is waiting joins the side they are on.
+
+    Parameters
+    ----------
+    view : BattlefieldView
+        The battlefield as the engine reports it.
+    sent : PendingArmy or None
+        Units picked for this battlefield and not yet answered for. None when there are none.
+    viewer_defends : bool
+        Whether the seat being played is the one under attack, which is whose units ``sent`` holds.
+
+    Returns
+    -------
+    defence : _Army
+        The Defender's side.
+    offence : _Army
+        The Attacker's side.
+    """
+    defence = _Army(view.defending, view.defending_force)
+    offence = _Army(view.attacking, view.attacking_force)
+    if sent is None:
+        return defence, offence
+    if viewer_defends:
+        return _Army(defence.units + sent.units, defence.force + sent.force), offence
+    return defence, _Army(offence.units + sent.units, offence.force + sent.force)
+
+
+def _bands(height: int, *, mirrored: bool = False) -> tuple[int, int]:
+    """The space a lane lays its cards out in: what the heading band and the button band leave.
+
+    The heading belongs beside the Province it names and so changes ends with the lane; the button
+    keeps the foot, so a mirrored lane carries both there.
+
+    Parameters
+    ----------
+    height : int
+        The lane's height in pixels.
+    mirrored : bool, optional
+        Whether the lane is turned over. Default False.
+
+    Returns
+    -------
+    top : int
+        The first row's ceiling.
+    bottom : int
+        The last row's floor.
+    """
+    if mirrored:
+        return LANE_MARGIN, height - FOOTER_H - HEADER_H
+    return HEADER_H, height - FOOTER_H
+
+
+def _rows(height: int, *, mirrored: bool = False) -> tuple[int, int, int, int]:
     """Where a lane's three rows of cards sit, and where the divider between the sides goes.
 
-    The Province, the Defender's units and the Attacker's fill the space between the header and the
-    footer. A lane with room for all three spreads them apart; a shorter one steps them closer until
-    they overlap, each row keeping enough of itself showing to be read, rather than pushing the last
-    row out of sight. Cards are a fixed size, so the rows moving is the only give there is.
+    The Province, the Defender's units and the Attacker's fill the space :func:`_bands` leaves. A
+    lane with room for all three spreads them apart; a shorter one steps them closer until they
+    overlap, each row keeping enough of itself showing to be read, rather than pushing the last row
+    out of sight. Cards are a fixed size, so the rows moving is the only give there is.
+
+    Parameters
+    ----------
+    height : int
+        The lane's height in pixels.
+    mirrored : bool, optional
+        Whether to reflect the rows so the Defender's side is the lower one. Default False, which
+        puts the Province at the head of the lane.
 
     Returns
     -------
@@ -107,11 +193,15 @@ def _rows(height: int) -> tuple[int, int, int, int]:
     attacking : int
         The centre line of the Attacker's units.
     """
-    band = height - FOOTER_H - HEADER_H
-    step = max((band - CARD_H) // 2, MIN_ROW_STEP)
-    province = HEADER_H + CARD_H // 2
+    top, bottom = _bands(height, mirrored=mirrored)
+    step = max((bottom - top - CARD_H) // 2, MIN_ROW_STEP)
+    province = top + CARD_H // 2
     defending = province + step
-    return province, defending, defending + step // 2, defending + step
+    divider, attacking = defending + step // 2, defending + step
+    if not mirrored:
+        return province, defending, divider, attacking
+    band = top + bottom
+    return band - province, band - defending, band - divider, band - attacking
 
 
 class _OutcomeLine(NamedTuple):
@@ -176,6 +266,9 @@ class BattleView(FloatingPanel):
         self._pending: dict[int, PendingArmy] = {}
         self._selected: frozenset[str] = frozenset()
         self._stats: dict[str, dict[Stat, int]] = {}
+        # Whose side of the lane is the near one, following the board's habit of drawing the
+        # seat being played at the bottom. None outside a seated game, where the Attacker is near.
+        self._viewer: PlayerId | None = None
         self._buttons: dict[int, LaneButton] = {}
         self._lane_spans: dict[int, tuple[int, int]] = {}
         self.canvas.bind("<Configure>", lambda _event: self._redraw())
@@ -191,6 +284,7 @@ class BattleView(FloatingPanel):
         buttons: dict[int, LaneButton] | None = None,
         selected: frozenset[str] = frozenset(),
         stats: dict[str, dict[Stat, int]] | None = None,
+        viewer: PlayerId | None = None,
     ) -> None:
         """Redraw for ``attack``, or empty the view when there is none.
 
@@ -209,12 +303,16 @@ class BattleView(FloatingPanel):
         stats : dict mapping str to dict, optional
             :attr:`GameView.stats`, so a unit in a lane reports the same Force the lane's total was
             built from. Default None.
+        viewer : PlayerId, optional
+            The seat being played, whose side of every lane is drawn as the near one. Default None,
+            which draws the Attacker near.
         """
         self._attack = attack
         self._pending = pending or {}
         self._buttons = buttons or {}
         self._selected = selected
         self._stats = stats or {}
+        self._viewer = viewer
         if attack is not None:
             self._collapsed &= set(range(len(attack.battlefields)))
         self._redraw()
@@ -231,22 +329,37 @@ class BattleView(FloatingPanel):
                 return index
         return None
 
+    def _viewer_defends(self) -> bool:
+        """Whether the seat being played is the one under attack, which decides both which way its
+        lanes face and which army the units it has sent join."""
+        return (
+            self._attack is not None
+            and self._viewer is not None
+            and self._viewer is not self._attack.attacker
+        )
+
     def _on_click(self, event: tk.Event) -> None:
-        """Route a click to the lane it landed in: its header collapses it, its button resolves it."""
+        """Route a click to the lane it landed in: its heading collapses it, its button resolves it.
+
+        The button keeps the foot of the lane, but the heading changes ends with it, so a mirrored
+        lane is collapsed from the band just above the button rather than from the top.
+        """
         index = self.lane_at(event.x)
         if index is None:
             return
-        if event.y <= HEADER_H:
+        height = self._height()
+        button = self._buttons.get(index)
+        if button is not None and event.y >= height - FOOTER_H:
+            # A collapsed lane draws no button, and a strip that answered one anyway would fight a
+            # battle at a battlefield the player cannot see.
+            if button.enabled and index not in self._collapsed:
+                button.press()
+            return
+        heading_top = height - FOOTER_H - HEADER_H if self._viewer_defends() else 0
+        if heading_top <= event.y <= heading_top + HEADER_H:
             self.toggle_lane(index)
             return
         if index in self._collapsed:
-            # A collapsed lane draws no button, and a strip that answers one anyway would fight a
-            # battle at a battlefield the player cannot see.
-            return
-        button = self._buttons.get(index)
-        if button is not None and event.y >= self._height() - FOOTER_H:
-            if button.enabled:
-                button.press()
             return
         card_id = self._card_at(event)
         if card_id is not None and self.on_card_click:
@@ -313,7 +426,7 @@ class BattleView(FloatingPanel):
         current: bool,
         attacker: PlayerId,
     ) -> None:
-        """One lane: its panel, its header, the two armies facing each other across a divider, and
+        """One lane: its panel, its heading, the two armies facing each other across a divider, and
         the button that fights the battle here. ``current`` picks out the battlefield a battle is
         being fought at; ``attacker`` is which side an outcome's winner was."""
         left, right = span
@@ -327,63 +440,86 @@ class BattleView(FloatingPanel):
             outline=theme.GOLD if current else theme.PANEL,
             width=2,
         )
+        # The seat being played holds the lower half, the way the board puts its own units below
+        # the divider. Defending it therefore turns the whole lane over, bands included.
+        mirrored = self._viewer_defends()
         if index in self._collapsed:
-            self._draw_collapsed(index, span)
+            self._draw_collapsed(index, span, height, mirrored=mirrored)
             return
-        self._draw_header(index, view, span)
+        self._draw_header(index, view, span, height, mirrored=mirrored)
 
-        pending = self._pending.get(index)
-        attacking = view.attacking + (pending.units if pending else ())
-        attacking_force = view.attacking_force + (pending.force if pending else 0)
-        field_bottom = height - FOOTER_H
-        province_y, defending_y, divider, attacking_y = _rows(height)
+        defence, offence = _armies(view, self._pending.get(index), viewer_defends=mirrored)
+        top, bottom = _bands(height, mirrored=mirrored)
+        province_y, defending_y, divider, attacking_y = _rows(height, mirrored=mirrored)
         if view.occupant is not None:
-            # Above the Defender's own units, at the head of the side it belongs to: it is what they
-            # are standing in front of.
+            # Outermost on the side it belongs to, past the Defender's own units: it is what
+            # they are standing in front of.
             self._draw_card(
                 to_render_card(view.occupant), ((left + right) // 2, province_y), _PROVINCE_TAG
             )
-        self._draw_army(view.defending, span, defending_y, sink=False)
+        # Each army's tower fans away from the divider, so a unit never stacks over the other side.
+        self._draw_army(defence.units, span, defending_y, sink=mirrored)
         self.canvas.create_line(left + 6, divider, right - 6, divider, fill=theme.INK_DIM)
-        self._draw_army(attacking, span, attacking_y, sink=True)
+        self._draw_army(offence.units, span, attacking_y, sink=not mirrored)
         if view.outcome is not None:
             # Over the rows rather than beside them: the armies have gone home by now, so the space
             # they were drawn in is what the lane has to say what happened in it.
             self._draw_outcome(
                 _outcome_lines(view.outcome, view.destroyed_names, attacker), span, divider
             )
-        # After the cards, so a crowded army cannot bury the total that says how it is doing.
-        self._draw_force(view.defending_force, left + FORCE_INSET, HEADER_H + FORCE_INSET, "nw")
-        self._draw_force(attacking_force, left + FORCE_INSET, field_bottom - FORCE_INSET, "sw")
+        # After the cards, so a crowded army cannot bury the total that says how it is doing. Each
+        # total sits in the corner of the half its army holds.
+        top_force, bottom_force = (
+            (offence.force, defence.force) if mirrored else (defence.force, offence.force)
+        )
+        self._draw_force(top_force, left + FORCE_INSET, top + FORCE_INSET, "nw")
+        self._draw_force(bottom_force, left + FORCE_INSET, bottom - FORCE_INSET, "sw")
         self._draw_footer(index, span, height)
 
-    def _draw_collapsed(self, index: int, span: tuple[int, int]) -> None:
-        """A collapsed lane, which is its number and nothing else."""
+    def _draw_collapsed(
+        self, index: int, span: tuple[int, int], height: int, *, mirrored: bool
+    ) -> None:
+        """A collapsed lane, which is its number and nothing else. It sits where the heading would
+        have, so a strip lines up with the lanes still open beside it."""
         left, right = span
         self.canvas.create_text(
             (left + right) // 2,
-            HEADER_H,
+            height - FOOTER_H - HEADER_H if mirrored else HEADER_H,
             text=str(index + 1),
             fill=theme.INK,
             font=theme.serif(12, "bold"),
         )
 
-    def _draw_header(self, index: int, view: BattlefieldView, span: tuple[int, int]) -> None:
+    def _draw_header(
+        self,
+        index: int,
+        view: BattlefieldView,
+        span: tuple[int, int],
+        height: int,
+        *,
+        mirrored: bool,
+    ) -> None:
         """The lane's name and, in the largest type in the lane, the Province Strength the attackers
-        have to beat."""
+        have to beat. It names the Province, so it sits at the Province's own end of the lane."""
         left, right = span
         centre = (left + right) // 2
+
+        # Measured in from the band's outer edge, which turns the three lines over with the lane:
+        # the name stays outermost, the Strength nearest the Province it belongs to.
+        def inset(distance: int) -> int:
+            return height - FOOTER_H - distance if mirrored else distance
+
         heading = f"Battlefield {index + 1}"
         if view.fought:
             heading += "  (fought)"
         self.canvas.create_text(
-            centre, 14, text=heading, fill=theme.INK_DIM, font=theme.serif(10, "bold")
+            centre, inset(14), text=heading, fill=theme.INK_DIM, font=theme.serif(10, "bold")
         )
         self.canvas.create_text(
-            centre, 32, text="PROVINCE STRENGTH", fill=theme.INK_DIM, font=theme.serif(8)
+            centre, inset(32), text="PROVINCE STRENGTH", fill=theme.INK_DIM, font=theme.serif(8)
         )
         self.canvas.create_text(
-            centre, 56, text=str(view.strength), fill=theme.INK, font=theme.serif(26, "bold")
+            centre, inset(56), text=str(view.strength), fill=theme.INK, font=theme.serif(26, "bold")
         )
 
     def _draw_outcome(self, lines: list[_OutcomeLine], span: tuple[int, int], divider: int) -> None:
@@ -430,19 +566,19 @@ class BattleView(FloatingPanel):
         if button is None:
             return
         left, right = span
-        top = height - FOOTER_H + 6
+        top, bottom = height - FOOTER_H + 6, height - 8
         self.canvas.create_rectangle(
             left + 8,
             top,
             right - 8,
-            height - 8,
+            bottom,
             fill=theme.GOLD if button.enabled else theme.LINE,
             outline=theme.GOLD_HOVER if button.enabled else theme.LINE,
             width=1,
         )
         self.canvas.create_text(
             (left + right) // 2,
-            (top + height - 8) // 2,
+            (top + bottom) // 2,
             text=button.label,
             fill=theme.ON_DARK if button.enabled else theme.INK_DIM,
             font=theme.serif(11, "bold"),

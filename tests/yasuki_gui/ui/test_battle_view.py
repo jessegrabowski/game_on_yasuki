@@ -6,12 +6,13 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
 from yasuki_core.engine.rules.state import BattleOutcome, Segment
 from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W
 from yasuki_gui.ui.battle_view import (
     BattleView,
     _outcome_lines,
     FOOTER_H,
     HEADER_H,
+    LANE_MARGIN,
     LaneButton,
     MIN_ROW_STEP,
     PendingArmy,
@@ -189,6 +190,124 @@ def test_each_sides_force_sits_in_the_corner_of_its_own_half(view):
     assert defending[1] < attacking[1]  # the defenders hold the top half
 
 
+def test_the_seat_being_played_holds_the_lower_half(view):
+    """The board draws a seat's own units below the divider, and a lane that ignored the seat would
+    put the player's Province at the far end and the army attacking it in front of them."""
+    view.refresh(
+        _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
+        viewer=P2,  # the Defender
+    )
+
+    defending = _text_at(view, "6", "army-force")
+    attacking = _text_at(view, "3", "army-force")
+
+    assert attacking[1] < defending[1]
+
+
+def test_a_defended_province_sits_below_the_units_defending_it(view):
+    """Outermost on its own side, the way a seat's Provinces are the outermost row of its board."""
+    view.refresh(
+        _attack(_battlefield(0, occupant=personality("keep"), defending=(_unit("hida", 6),))),
+        viewer=P2,
+    )
+
+    province = view.canvas.coords("province:keep")[1]
+    defender = view.canvas.coords("battle:hida")[1]
+
+    assert province > defender
+
+
+def test_only_the_army_on_the_lower_half_is_dropped(view):
+    """Attachments always fan upward off their Personality, so whichever army holds the lower half
+    has to be dropped by the tower's height — otherwise its cards climb over the divider. Which
+    army that is turns over with the lane, so both sides are checked from both seats."""
+
+    def towered(name: str) -> UnitView:
+        banner = attachment(f"{name}-banner", attachment_type=AttachmentType.FOLLOWER)
+        return UnitView(leader=personality(name), attached=(banner,))
+
+    field = _battlefield(0, attacking=(towered("akodo"),), defending=(towered("hida"),))
+
+    view.refresh(_attack(field), viewer=P2)
+    _, defending_row, _, attacking_row = _rows(view._height(), mirrored=True)
+    assert view.canvas.coords("battle:hida")[1] - defending_row == ATTACH_STACK_OFFSET
+    assert view.canvas.coords("battle:akodo")[1] - attacking_row == 0
+
+    view.refresh(_attack(field), viewer=P1)
+    _, defending_row, _, attacking_row = _rows(view._height())
+    assert view.canvas.coords("battle:hida")[1] - defending_row == 0
+    assert view.canvas.coords("battle:akodo")[1] - attacking_row == ATTACH_STACK_OFFSET
+
+
+def test_the_attacking_seat_keeps_the_lower_half(view):
+    """Seat-relative, not role-relative: attacking puts the player's own army back at the bottom."""
+    view.refresh(
+        _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
+        viewer=P1,  # the Attacker
+    )
+
+    defending = _text_at(view, "6", "army-force")
+    attacking = _text_at(view, "3", "army-force")
+
+    assert defending[1] < attacking[1]
+
+
+def test_the_heading_stays_beside_the_province_it_names(view):
+    """It is the Province's number and Strength, so a lane turned over carries it to the foot rather
+    than leaving it labelling the far end of the board."""
+    view.refresh(_attack(_battlefield(0, occupant=personality("keep"), strength=4)), viewer=P2)
+
+    province = view.canvas.coords("province:keep")[1]
+    strength = _text_at(view, "4")[1]
+    name = _text_at(view, "Battlefield 1")[1]
+
+    assert strength > province  # past the Province, at the end of the lane
+    assert name > strength  # and the lane's name is outermost of the two, as it is upright
+    assert name < view._height() - FOOTER_H  # but clear of the button, which keeps the foot
+
+
+def test_an_upright_lane_keeps_its_heading_at_the_top(view):
+    view.refresh(_attack(_battlefield(0, occupant=personality("keep"), strength=4)), viewer=P1)
+
+    province = view.canvas.coords("province:keep")[1]
+    strength = _text_at(view, "4")[1]
+    name = _text_at(view, "Battlefield 1")[1]
+
+    assert strength < province
+    assert name < strength
+
+
+def test_a_collapsed_lane_labels_the_end_its_heading_would_have(view):
+    """Collapsing a lane must not break the row of headings the open lanes beside it make."""
+    view.refresh(_attack(_battlefield(0, strength=9), _battlefield(1, strength=9)), viewer=P2)
+    view.toggle_lane(1)
+
+    label = _text_at(view, "2")
+    left, right = view._lane_spans[1]
+
+    assert left <= label[0] <= right  # the collapsed lane's own number, not a neighbour's Strength
+    assert label[1] == view._height() - FOOTER_H - HEADER_H
+
+
+def test_a_mirrored_lanes_rows_fill_the_space_its_bands_leave():
+    """A mirrored lane carries the heading and the button both at its foot, so the rows have to be
+    laid out against that — against the upright bands the Province rides up over its own heading."""
+    height = 560
+    province, _defending, _divider, attacking = _rows(height, mirrored=True)
+
+    assert province + CARD_H // 2 == height - FOOTER_H - HEADER_H  # flush against its heading
+    assert attacking - CARD_H // 2 == LANE_MARGIN  # and the far row against the lane's own edge
+
+
+def test_an_upright_lanes_rows_fill_the_space_its_bands_leave():
+    """The counterpart of the mirrored case: the heading holds the top and the button the foot."""
+    height = 560
+    province, _defending, _divider, attacking = _rows(height)
+
+    assert province - CARD_H // 2 == HEADER_H  # flush under its heading
+    assert attacking + CARD_H // 2 == height - FOOTER_H  # and the far row against the button band
+
+
 def test_assigned_units_are_drawn_in_their_lane(view):
     """After assigning, a unit is drawn at its battlefield rather than at home — this is where, and
     it is the lane it was sent to rather than merely somewhere on the canvas."""
@@ -262,6 +381,38 @@ def test_a_pending_army_counts_towards_the_force_its_side_shows(view):
     )
 
     assert "8" in _texts(view)
+
+
+def test_a_defending_seats_pending_army_joins_the_defense(view):
+    """The player only ever sends their own units, so a seat under attack that has picked defenders
+    must see them counted with the defense — not added to the army coming at it."""
+    view.refresh(
+        _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
+        {0: PendingArmy(units=(_unit("kuni", 4),), force=4)},
+        viewer=P2,
+    )
+
+    defending = _text_at(view, "10", "army-force")  # 6 standing plus the 4 just sent
+    attacking = _text_at(view, "3", "army-force")  # and the attackers are untouched
+
+    assert defending[1] > attacking[1]  # totalled on the near side, where its army stands
+
+
+def test_a_defending_seats_pending_army_stands_on_its_own_side(view):
+    """Counted with the defense and drawn with it: a unit standing in the enemy's row reads as lost
+    to them however the totals add up."""
+    view.refresh(
+        _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
+        {0: PendingArmy(units=(_unit("kuni", 4),), force=4)},
+        viewer=P2,
+    )
+
+    sent = view.canvas.coords("battle:kuni")[1]
+    defender = view.canvas.coords("battle:hida")[1]
+    attacker = view.canvas.coords("battle:akodo")[1]
+
+    assert sent == defender  # shoulder to shoulder with the units already there
+    assert sent > attacker  # on the near side of the divider, not the far one
 
 
 def test_only_a_lane_with_something_to_offer_shows_a_button(view):
@@ -561,6 +712,23 @@ def test_clicking_a_personality_carrying_a_follower_picks_the_personality(view):
     assert picked == ["hida"]
 
 
+def test_a_card_spilling_into_the_button_strip_is_still_clickable(view):
+    """A lane too short to step its rows apart pushes the bottom row down over the strip. A lane
+    with no button draws nothing there to press, so the click belongs to the card under it."""
+    picked = []
+    view.on_card_click = picked.append
+    view.canvas.configure(height=200)  # short enough that the bottom row reaches the strip
+    view.refresh(_attack(_battlefield(0, attacking=(_unit("akodo"),))))
+    left, right = view._lane_spans[0]
+    strip_top = view._height() - FOOTER_H
+    _, _, _, card_bottom = view.canvas.bbox("battle:akodo")
+    assert card_bottom > strip_top, "the card has to reach the strip for this to test anything"
+
+    view._on_click(_click((left + right) // 2, (strip_top + card_bottom) // 2))
+
+    assert picked == ["akodo"]
+
+
 def test_clicking_bare_lane_picks_nothing(view):
     picked = []
     view.on_card_click = picked.append
@@ -673,6 +841,51 @@ def test_clicking_a_lane_header_collapses_that_lane(view):
     view._on_click(_click(x=(left + right) // 2, y=10))
 
     assert _lane_widths(view)[2] < _lane_widths(view)[0]
+
+
+def test_a_mirrored_lane_is_collapsed_from_the_foot_its_heading_moved_to(view):
+    """The heading is the control, and it changes ends with the lane, so the click that folds a lane
+    away has to change ends with it too."""
+    view.refresh(_attack(_battlefield(0), _battlefield(1), _battlefield(2)), viewer=P2)
+    left, right = view._lane_spans[2]
+
+    view._on_click(_click(x=(left + right) // 2, y=view._height() - FOOTER_H - 10))
+
+    assert _lane_widths(view)[2] < _lane_widths(view)[0]
+
+
+def test_a_mirrored_lane_keeps_its_button_at_its_foot(view):
+    """The heading changes ends with the lane but the button does not: a control that moved would be
+    somewhere new every time the seat changed roles. The heading stacks above it instead."""
+    pressed = []
+    view.refresh(
+        _attack(_battlefield(0), _battlefield(1)),
+        buttons={1: LaneButton("Fight here", lambda: pressed.append(1))},
+        viewer=P2,
+    )
+    left, right = view._lane_spans[1]
+    before = _lane_widths(view)
+
+    view._on_click(_click((left + right) // 2, view._height() - 4))
+
+    assert _text_at(view, "Fight here")[1] > view._height() - FOOTER_H  # still drawn at the foot
+    assert pressed == [1]
+    assert _lane_widths(view) == before  # and not read as the heading and folded away
+
+
+def test_a_collapsed_mirrored_lane_reopens_from_where_its_number_is_drawn(view):
+    """Drawn and hit-tested together: a mirrored lane collapses to a strip at its foot, so that is
+    where the click that reopens it has to land. Disagree and the lane cannot be opened again."""
+    view.refresh(_attack(_battlefield(0, strength=9), _battlefield(1, strength=9)), viewer=P2)
+    left, right = view._lane_spans[1]
+
+    view._on_click(_click((left + right) // 2, view._height() - FOOTER_H - 10))
+    collapsed = _lane_widths(view)
+    left, right = view._lane_spans[1]
+    view._on_click(_click((left + right) // 2, int(_text_at(view, "2")[1])))
+
+    assert collapsed[1] < collapsed[0]  # the first click folded it away
+    assert _lane_widths(view)[1] > collapsed[1]  # and a click on its number brought it back
 
 
 def test_clicking_below_the_header_leaves_the_lanes_alone(view):

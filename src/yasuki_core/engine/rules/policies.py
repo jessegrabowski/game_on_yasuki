@@ -7,15 +7,18 @@ from yasuki_core.engine.rules.actions import (
     Action,
     ActivateAbility,
     Cycle,
+    DeclareAttack,
     DynastyDiscard,
     Legacy,
     Pass,
     Recruit,
 )
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.agents import PayingAgent
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
+    ChooseBattlefield,
     assignment,
     assignment_token,
     ChooseAbilityTarget,
@@ -27,7 +30,7 @@ from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, GameView
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint, StrongholdPrint
 
 
 class Policy(Protocol):
@@ -293,6 +296,11 @@ class MilitaryPolicy:
     cycles, tutors, runs its abilities, buys and flushes. What it adds is the one question a
     Defender is ever asked — where its units go.
 
+    It attacks when it holds more Force than the seat it faces, and commits only to the Provinces
+    it can take whatever the Defender does — a Province it takes is a Province destroyed, and enough
+    of them ends the game. Assigning to one it might lose spends an army for nothing: the losers are
+    destroyed, and what survives comes home bowed and cannot defend on the opponent's next turn.
+
     It defends to save a Province rather than to win a battle. Resolution destroys a Province only
     when the attacking Force exceeds the defending Force *plus* the Province's Strength, so a
     defense that loses the battle outright can still hold the ground — and a seat that only
@@ -301,7 +309,8 @@ class MilitaryPolicy:
     is left alone: units spent on a Province that falls anyway are units it does not have next turn.
 
     Not a player. It weighs no Province above another, keeps no reserve against the counterattack it
-    invites, and cannot act inside a battle because nothing can yet.
+    invites, never attacks to destroy an army rather than to take ground, and cannot act inside a
+    battle because nothing can yet.
     """
 
     name = "military"
@@ -310,6 +319,9 @@ class MilitaryPolicy:
         self._playing = GoldRushPolicy()
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
+        attack = next((action for action in actions if isinstance(action, DeclareAttack)), None)
+        if attack is not None and _holds_the_initiative(view):
+            return attack
         return self._playing.choose(view, actions)
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
@@ -319,7 +331,107 @@ class MilitaryPolicy:
             defending = _attack_being_defended(view)
             if defending is not None:
                 return DecisionResponse(_defense(request, view, defending))
+            if view.attack is not None:
+                return DecisionResponse(_offense(request, view, view.attack))
+        if isinstance(request, ChooseBattlefield) and view.attack is not None:
+            return DecisionResponse((_best_battlefield(request, view.attack),))
         return self._playing.decide(request, view)
+
+
+def _holds_the_initiative(view: GameView) -> bool:
+    """Whether the viewer could take a Province from the seat it would attack.
+
+    No attack exists yet, so no Province's Strength can be read —
+    :attr:`~yasuki_core.engine.rules.projection.BattlefieldView.strength` only exists once one is
+    declared. What is readable is the other seat's Stronghold, and every
+    Province is at least that strong, so a seat that cannot beat the Stronghold's Strength plus the
+    Force the Defender could bring cannot take anything and has nothing to declare for.
+
+    The floor is a floor: Fortifications and counters raise a Province above it, so this can still
+    declare an attack whose assignment then finds every Province out of reach.
+    """
+    other = next(seat for seat in PlayerId if seat is not view.viewer)
+    cheapest_province = _province_strength_floor(view, other) + _force_at_home(view, other)
+    return _force_at_home(view, view.viewer) > cheapest_province
+
+
+def _province_strength_floor(view: GameView, seat: PlayerId) -> int:
+    """The least Strength any of ``seat``'s Provinces can have: what its Stronghold gives them.
+
+    Counters on a Province slot and the Fortifications attached to it add to this, and neither can
+    be evaluated from a view — :data:`~yasuki_core.engine.rules.economy.PROVINCE_STRENGTH_GRANTS`
+    takes the live game.
+    """
+    return max(
+        (
+            view.stat(entry.card, Stat.PROVINCE_STRENGTH)
+            for entry in view.table.battlefield
+            if isinstance(entry.card, L5RCard)
+            and entry.card.owner is seat
+            and isinstance(entry.card.printed, StrongholdPrint)
+        ),
+        default=0,
+    )
+
+
+def _force_at_home(view: GameView, seat: PlayerId) -> int:
+    """The Force ``seat`` could still send: its unbowed Personalities standing at home.
+
+    What a seat could assign rather than what it has — a bowed Personality may not be assigned at
+    all, and one already at a battlefield has been. A card the viewer cannot identify is redacted to
+    a :class:`HiddenCard` and so is never counted, which is why an opponent's face-down card cannot
+    be weighed.
+    """
+    return sum(
+        view.unit_force[entry.card.id]
+        for entry in view.table.battlefield
+        if isinstance(entry.card, L5RCard)
+        and entry.card.owner is seat
+        and isinstance(entry.card.printed, PersonalityPrint)
+        and not entry.card.bowed
+        and _is_home(view, entry.card.id)
+    )
+
+
+def _is_home(view: GameView, card_id: str) -> bool:
+    """Whether ``card_id`` stands at home. An absent location is home, which is where a card is
+    until an attack moves it."""
+    location = view.table.locations.get(card_id)
+    return location is None or location.is_home
+
+
+def _offense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[str, ...]:
+    """Where to send the Attacker's units: the fewest that take each Province it can take.
+
+    The Defender assigns *after* this answer, so what it will bring is unknown. A Province therefore
+    costs its Strength plus everything the Defender could still send, which makes taking it certain
+    rather than likely, and one the seat cannot pay for is left alone.
+    """
+    defending = _force_at_home(view, attack.defender)
+    # Strictly greater takes the Province; equalling the bound only ties the battle.
+    return _spend(
+        request,
+        view,
+        [
+            (field.strength + defending + 1, index)
+            for index, field in enumerate(attack.battlefields)
+        ],
+    )
+
+
+def _best_battlefield(request: ChooseBattlefield, attack: AttackView) -> str:
+    """Which battle to fight next: the one the Attacker leads by the most.
+
+    The battles of one Attack Phase do not affect each other — resolution reads an assignment both
+    seats already committed — so this is free today. It stops being free when a card can act between
+    battles, and taking the surest first is the order that keeps its winnings.
+    """
+
+    def margin(candidate: str) -> tuple[int, int]:
+        field = attack.battlefields[int(candidate)]
+        return field.attacking_force - field.defending_force, -int(candidate)
+
+    return max(request.candidates, key=margin)
 
 
 def _attack_being_defended(view: GameView) -> AttackView | None:
@@ -335,29 +447,51 @@ def _attack_being_defended(view: GameView) -> AttackView | None:
 def _defense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[str, ...]:
     """Where to send the Defender's units: the fewest that save each Province it can save.
 
-    Battlefields are taken in order of what they cost to hold, so a seat short of units saves as
-    many Provinces as it can rather than the ones it happened to look at first. A unit is spent
+    A Province survives when the attacking Force does not exceed the defending Force plus its
+    Strength, so what a Province costs to hold is the attack against it less what it withstands on
+    its own. One the seat cannot reach is left alone.
+    """
+    return _spend(
+        request,
+        view,
+        [
+            (field.attacking_force - field.strength, index)
+            for index, field in enumerate(attack.battlefields)
+        ],
+    )
+
+
+def _spend(request: AssignUnits, view: GameView, needs: list[tuple[int, int]]) -> tuple[str, ...]:
+    """Send the fewest units that meet each battlefield's need, cheapest need first.
+
+    Cheapest first is what lets a seat short of units meet two needs rather than one. A battlefield
+    needing nothing is skipped, one the units left cannot meet is left alone, and each unit is spent
     once — :meth:`AssignUnits.accepts` refuses the same Personality twice.
 
     Reads the candidates as a set of units rather than of places, which holds because
     :func:`~yasuki_core.engine.rules.battle.assignment_candidates` pairs every assignable unit with
-    every battlefield. A candidate list that restricted a unit to some battlefields would need this
-    to pick from the ones offered per battlefield instead.
+    every battlefield. A candidate list restricting a unit to some battlefields would need this to
+    pick per battlefield instead.
+
+    Parameters
+    ----------
+    request : AssignUnits
+        The question being answered; its candidates name the units available.
+    view : GameView
+        Read for each unit's Force.
+    needs : list of (int, int)
+        The Force each battlefield needs, paired with its index.
     """
     unspent = {assignment(token)[0] for token in request.candidates}
-    by_cost = sorted(
-        (field.attacking_force - field.strength, index)
-        for index, field in enumerate(attack.battlefields)
-    )
     chosen: list[str] = []
-    for needed, index in by_cost:
-        if needed <= 0:  # the Province survives whatever happens here
+    for needed, index in sorted(needs):
+        if needed <= 0:
             continue
-        holding = _fewest_reaching(unspent, needed, view)
-        if holding is None:  # nothing it could send saves this one
+        sending = _fewest_reaching(unspent, needed, view)
+        if sending is None:
             continue
-        unspent -= holding
-        chosen.extend(assignment_token(card_id, index) for card_id in sorted(holding))
+        unspent -= sending
+        chosen.extend(assignment_token(card_id, index) for card_id in sorted(sending))
     return tuple(chosen)
 
 
