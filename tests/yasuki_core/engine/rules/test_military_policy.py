@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.actions import DeclareAttack, Equip, Pass
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
     ChooseBattlefield,
+    ChooseEquipTarget,
     assignment,
     assignment_token,
     ChoosePayment,
@@ -20,7 +21,7 @@ from yasuki_core.engine.rules.policies import (
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import location_of, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import location_of, TableState, unit_members, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.builders import (
@@ -572,3 +573,87 @@ class TestEquipping:
 
         assert not any(isinstance(action, Equip) for action in actions)
         assert not isinstance(chosen, Equip)
+
+    def test_it_attaches_to_the_largest_unit_it_could_send(self):
+        """Taking a Province needs one army over its Strength at one battlefield, not two half
+        armies at two, so the Force goes where it makes the biggest unit bigger."""
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=7))
+        put_in_play(state, personality("small", owner=ATTACKER, force=2))
+        put_in_play(state, personality("large", owner=ATTACKER, force=6))
+        _in_hand(state, _follower("banner", force=3))
+        view = project(EngineSession.start(state, ATTACKER).game, ATTACKER)
+        request = ChooseEquipTarget(
+            seat=ATTACKER, candidates=("small", "large"), source_card_id="banner"
+        )
+
+        answer = MilitaryPolicy().decide(request, view)
+
+        assert request.accepts(answer)
+        assert answer.choices == ("large",)
+
+    def test_it_passes_over_a_bowed_personality_however_large_his_unit(self):
+        """A bowed Personality cannot be assigned at all, so Force hung on him is Force this turn's
+        attack cannot spend.
+
+        He carries an unbowed Follower, which is what makes the case visible: the CR totals an army
+        over unbowed Personalities *and* Followers, so his unit still reports the larger Force even
+        though nothing in it can be sent. Ranking on that number alone would equip him.
+        """
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=7))
+        put_in_play(state, personality("ready", owner=ATTACKER, force=5))
+        put_in_play(state, personality("bowed", owner=ATTACKER, force=2))
+        _in_hand(state, _follower("banner", force=3))
+        session = EngineSession.start(state, ATTACKER)
+        attached(
+            session.game,
+            attachment("carried", attachment_type=AttachmentType.FOLLOWER, force=9, owner=ATTACKER),
+            "bowed",
+        )
+        # After the turn begins: `_begin_turn` straightens the active seat's own cards, so a card
+        # bowed before the deal is standing again by the time the policy sees it.
+        session.game.table.cards_by_id["bowed"].bow()
+        view = project(session.game, ATTACKER)
+        assert view.unit_force["bowed"] > view.unit_force["ready"], "the Follower still counts"
+        request = ChooseEquipTarget(
+            seat=ATTACKER, candidates=("bowed", "ready"), source_card_id="banner"
+        )
+
+        answer = MilitaryPolicy().decide(request, view)
+
+        assert answer.choices == ("ready",)
+
+    def test_the_force_it_attaches_is_force_the_attack_then_spends(self):
+        """The point of equipping in the phase before the battle: the attachment has to land on a
+        unit the assignment rule will then send, or the Force sits at home and the Province holds.
+
+        The Province costs seven — the Defender's six at home, plus one to beat it — and the seat
+        holds five across two Personalities. Neither can take it, and neither can the pair, until
+        the Follower goes onto one of them. So the attachment and the assignment have to agree
+        about which unit matters, and the turn only works if they do.
+        """
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=0))
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "prov0", seat=DEFENDER, index=0)
+        put_in_play(state, personality("small", owner=ATTACKER, force=1))
+        put_in_play(state, personality("large", owner=ATTACKER, force=4))
+        put_in_play(state, personality("guard", owner=DEFENDER, force=6))
+        _in_hand(state, _follower("banner", force=3, gold_cost=0))
+        session = EngineSession.start(state, ATTACKER)
+        policy = MilitaryPolicy()
+
+        equip = policy.choose(project(session.game, ATTACKER), session.legal_actions(ATTACKER))
+        session.act(ATTACKER, equip)
+        while session.game.pending is not None:
+            asked = session.game.pending
+            session.submit(asked.seat, policy.decide(asked, project(session.game, asked.seat)))
+        end_phase(session)
+        sent = _sent_to(_attack_answer(session))
+
+        assert equip == Equip("banner")
+        large = session.game.table.cards_by_id["large"]
+        assert [card.id for card in unit_members(session.game.table, large)] == ["large", "banner"]
+        assert project(session.game, ATTACKER).unit_force["large"] == 7
+        assert sent == {0: {"large"}}  # the unit it built is the unit it spends

@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.decisions import (
     assignment_token,
     ChooseAbilityTarget,
     ChooseCards,
+    ChooseEquipTarget,
     DecisionRequest,
     DecisionResponse,
 )
@@ -344,6 +345,8 @@ class MilitaryPolicy:
                 return DecisionResponse(_offense(request, view, view.attack))
         if isinstance(request, ChooseBattlefield) and view.attack is not None:
             return DecisionResponse((_best_battlefield(request, view.attack),))
+        if isinstance(request, ChooseEquipTarget) and request.candidates:
+            return DecisionResponse((_best_equip_target(request, view),))
         return self._playing.decide(request, view)
 
 
@@ -491,6 +494,25 @@ def _offense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[
             (field.strength + defending + 1, index)
             for index, field in enumerate(attack.battlefields)
         ],
+    )
+
+
+def _best_equip_target(request: ChooseEquipTarget, view: GameView) -> str:
+    """Which Personality the attachment joins: the largest unit standing at home.
+
+    Force concentrates rather than spreads. Taking a Province needs one army over its Strength at
+    one battlefield, not two half-armies at two, so the card goes where it makes the biggest unit
+    bigger. A bowed Personality is passed over before size is weighed at all: he cannot be
+    assigned this turn, so Force hung on him is Force the attack cannot spend.
+    """
+    cards = _identifiable(view)
+    return min(
+        request.candidates,
+        key=lambda card_id: (
+            card_id not in cards or cards[card_id].bowed,
+            -view.unit_force.get(card_id, 0),
+            card_id,
+        ),
     )
 
 
