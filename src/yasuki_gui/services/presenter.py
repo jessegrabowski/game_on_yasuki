@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.runner import SearchView
 from yasuki_gui.services.game_host import GameHost
+from yasuki_gui.labels import turn_context
 from yasuki_gui.ui.battle_view import LaneButton, PendingArmy
 from yasuki_gui.ui.dialogs import Dialogs
 from yasuki_gui.ui.game_window import GameWindow
@@ -234,7 +235,7 @@ class Presenter:
             # decline something it was never told the name of.
             whose = f"Responses to {view.responding_to}"
         else:
-            whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
+            whose = turn_context(view)
         # Pass and Declare are buttons; a Recruit is invoked by clicking a holding on the board.
         return whose, [
             (_ACTION_LABELS[type(action)], lambda chosen=action: self.act(chosen), True)

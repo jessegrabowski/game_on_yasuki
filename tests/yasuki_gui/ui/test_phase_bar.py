@@ -28,8 +28,9 @@ def test_only_the_current_phase_is_highlighted(root):
     bar.refresh(_view(Phase.BATTLE))
 
     chips = bar._chips
-    assert chips[Phase.BATTLE].cget("text").endswith("Battle")
+    # The CR calls the engine's BATTLE phase the Attack Phase, and the bar says what the CR says.
+    assert chips[Phase.BATTLE].cget("text").endswith("Attack Phase")
     assert chips[Phase.BATTLE].cget("text").startswith("▶")  # the active marker
-    assert chips[Phase.ACTION].cget("text") == "Action"  # dimmed, unmarked
+    assert chips[Phase.ACTION].cget("text") == "Action Phase"  # dimmed, unmarked
     # The active chip is filled; the others are not.
     assert chips[Phase.BATTLE].cget("bg") != chips[Phase.ACTION].cget("bg")

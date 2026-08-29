@@ -70,7 +70,7 @@ def test_the_higher_honor_deck_takes_the_first_turn(client):
 
 
 def test_the_human_is_offered_a_pass_on_its_own_turn(client):
-    assert _status(client) == "Your turn"
+    assert _status(client) == "Your Action Phase"
     assert _buttons(client) == ["Pass"]
 
 

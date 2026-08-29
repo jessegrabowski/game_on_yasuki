@@ -15,6 +15,7 @@ yasuki_gui
     yasuki_gui.config <yasuki_gui.config>
     yasuki_gui.controller <yasuki_gui.controller>
     yasuki_gui.field_view <yasuki_gui.field_view>
+    yasuki_gui.labels <yasuki_gui.labels>
     yasuki_gui.layout <yasuki_gui.layout>
     yasuki_gui.services.actions <yasuki_gui.services.actions>
     yasuki_gui.services.allocation <yasuki_gui.services.allocation>
