@@ -6,13 +6,14 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.redaction import HiddenCard
+from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
+from yasuki_core.engine import ops
 from yasuki_core.engine.rules import battle, triggers
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.projection import project
+from yasuki_core.engine.rules.projection import _identifiable_ids, project
 
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -257,6 +258,137 @@ def test_an_attachments_bonus_reaches_the_view():
     )
 
     assert project(game, PlayerId.P1).stat(hero, Stat.FORCE) == 7
+
+
+def test_a_units_force_reaches_the_view():
+    """A policy sees only a view, and a unit's total is not a sum of its cards' Force — a Follower
+    brings its own, an Item brings a modifier already inside the Personality's. Working it out from
+    `stats` means a second copy of that rule."""
+    game = two_seat_game()
+    put_in_play(game, personality("hero", owner=PlayerId.P1, force=5))
+    attached(
+        game,
+        attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=4, owner=PlayerId.P1),
+        "hero",
+    )
+
+    assert project(game, PlayerId.P1).unit_force["hero"] == 9
+
+
+def test_an_items_modifier_is_inside_the_units_force():
+    game = two_seat_game()
+    put_in_play(game, personality("hero", owner=PlayerId.P1, force=5))
+    attached(
+        game,
+        attachment(
+            "blade", attachment_type=AttachmentType.ITEM, force_modifier=2, owner=PlayerId.P1
+        ),
+        "hero",
+    )
+
+    assert project(game, PlayerId.P1).unit_force["hero"] == 7
+
+
+def test_a_bowed_personality_contributes_nothing_but_his_followers_still_do():
+    """The CR's Army Force is a flat sum over unbowed Personalities and Followers, not a sum over
+    units, so an unbowed Follower on a bowed Personality still counts. Lotus had it the other way —
+    a bowed Personality zeroed his whole unit — which is why this is asserted rather than assumed."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", owner=PlayerId.P1, force=5))
+    attached(
+        game,
+        attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=4, owner=PlayerId.P1),
+        "hero",
+    )
+    hero.bow()
+
+    assert project(game, PlayerId.P1).unit_force["hero"] == 4
+
+
+def test_a_bowed_follower_drops_out_of_its_units_force():
+    game = two_seat_game()
+    put_in_play(game, personality("hero", owner=PlayerId.P1, force=5))
+    banner = attachment(
+        "banner", attachment_type=AttachmentType.FOLLOWER, force=4, owner=PlayerId.P1
+    )
+    attached(game, banner, "hero")
+    banner.bow()
+
+    assert project(game, PlayerId.P1).unit_force["hero"] == 5
+
+
+def test_both_seats_units_reach_the_view():
+    """Force in play is public — every card is face-up on the battlefield — and a policy weighing an
+    attack has to read the other seat's."""
+    game = two_seat_game()
+    put_in_play(game, personality("mine", owner=PlayerId.P1, force=3))
+    put_in_play(game, personality("theirs", owner=PlayerId.P2, force=4))
+
+    view = project(game, PlayerId.P1)
+
+    assert view.unit_force == {"mine": 3, "theirs": 4}
+
+
+def test_the_view_and_the_engine_agree_on_an_army():
+    """The whole point of projecting the number rather than deriving it: what a policy adds up has
+    to be what resolution will."""
+    game = two_seat_game()
+    for index in range(2):
+        province_card(game, f"p2-prov{index}", seat=PlayerId.P2, index=index)
+    sent = put_in_play(game, personality("sent", owner=PlayerId.P1, force=5))
+    attached(
+        game,
+        attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=4, owner=PlayerId.P1),
+        "sent",
+    )
+    put_in_play(game, personality("kept", owner=PlayerId.P1, force=3))
+    battle.declare_attack(game, PlayerId.P1)
+    ops.assign(game.table, sent, 0)
+
+    view = project(game, PlayerId.P1)
+
+    # The seat has a unit at home too, so a view that quietly counted the wrong set would differ.
+    assert view.unit_force["sent"] == battle.army_force(game, 0, PlayerId.P1) == 9
+    assert view.unit_force["kept"] == 3
+
+
+def test_only_personalities_carry_a_unit_force():
+    """A Holding has no unit and a Follower's Force belongs to the unit it joined, so an entry for
+    either would be a number nothing should add up."""
+    game = two_seat_game()
+    put_in_play(game, holding("farm", gold_production=2))
+    put_in_play(game, personality("hero", owner=PlayerId.P1, force=3))
+    attached(
+        game,
+        attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=4, owner=PlayerId.P1),
+        "hero",
+    )
+
+    assert set(project(game, PlayerId.P1).unit_force) == {"hero"}
+
+
+def test_a_card_that_is_not_in_play_has_no_unit_force():
+    """Only the battlefield is walked. The discarded Personality is identifiable — the viewer owns
+    it and it sits in a zone — so this fails for the right reason if the domain ever widens."""
+    game = two_seat_game()
+    put_in_play(game, personality("standing", owner=PlayerId.P1, force=3))
+    discarded = personality("fallen", owner=PlayerId.P1, force=9)
+    game.table.cards_by_id[discarded.id] = discarded
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].add(discarded)
+    assert discarded.id in _identifiable_ids(redact(game.table, PlayerId.P1))
+
+    assert set(project(game, PlayerId.P1).unit_force) == {"standing"}
+
+
+def test_a_unit_the_viewer_cannot_identify_has_no_force():
+    """Its Force would say what the card is, and the snapshot already decided the viewer may not
+    know."""
+    game = two_seat_game()
+    hidden = personality("theirs", owner=PlayerId.P2, force=7)
+    put_in_play(game, hidden)
+    hidden.turn_face_down()
+
+    assert "theirs" not in project(game, PlayerId.P1).unit_force
 
 
 def test_a_card_no_modifier_reaches_falls_back_to_its_printed_stat():
