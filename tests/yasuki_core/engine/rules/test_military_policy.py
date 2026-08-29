@@ -10,8 +10,15 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.policies import GoldRushPolicy, MilitaryPolicy, POLICIES
+from yasuki_core.engine.rules.agents import AutoAgent
+from yasuki_core.engine.rules.policies import (
+    GoldRushPolicy,
+    MilitaryPolicy,
+    PassPolicy,
+    POLICIES,
+)
 from yasuki_core.engine.rules.projection import project
+from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import location_of, TableState
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -374,3 +381,31 @@ def test_a_driven_defense_puts_units_on_the_battlefield():
 
     assert location_of(game.table, game.table.cards_by_id["guard"]).battlefield == 0
     assert battle.army_force(game, 0, DEFENDER) == 4
+
+
+def test_a_military_policy_wins_by_destroying_every_province():
+    """The first game in the suite that ends in a victory rather than at a turn limit. The military
+    path has been complete on the rules side since battle resolution landed, and nothing had ever
+    walked it — no shipped policy chooses `DeclareAttack`, so every driven game ended on the clock.
+    """
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    for index in range(2):
+        province_card(state, f"prov{index}", seat=DEFENDER, index=index)
+    for name in ("host-a", "host-b"):
+        put_in_play(state, personality(name, owner=ATTACKER, force=6))
+    session = EngineSession.start(state, ATTACKER)
+
+    military = MilitaryPolicy()
+    passive = PassPolicy()
+    play_game(
+        session,
+        {
+            ATTACKER: Controls(military, military),
+            DEFENDER: Controls(passive, AutoAgent()),
+        },
+        turn_limit=12,
+    )
+
+    assert session.game.loser is DEFENDER
+    assert session.game.loss_reason == "no Provinces remaining"
