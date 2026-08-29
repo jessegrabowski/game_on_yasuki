@@ -7,11 +7,13 @@ from yasuki_core.engine.rules.actions import (
     Action,
     ActivateAbility,
     Cycle,
+    DeclareAttack,
     DynastyDiscard,
     Legacy,
     Pass,
     Recruit,
 )
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.agents import PayingAgent
 from yasuki_core.engine.rules.decisions import (
@@ -27,7 +29,7 @@ from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, GameView
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
 
 
 class Policy(Protocol):
@@ -293,6 +295,9 @@ class MilitaryPolicy:
     cycles, tutors, runs its abilities, buys and flushes. What it adds is the one question a
     Defender is ever asked — where its units go.
 
+    It attacks when it holds more Force than the seat it faces. Where those units go is not its
+    question yet.
+
     It defends to save a Province rather than to win a battle. Resolution destroys a Province only
     when the attacking Force exceeds the defending Force *plus* the Province's Strength, so a
     defense that loses the battle outright can still hold the ground — and a seat that only
@@ -301,7 +306,8 @@ class MilitaryPolicy:
     is left alone: units spent on a Province that falls anyway are units it does not have next turn.
 
     Not a player. It weighs no Province above another, keeps no reserve against the counterattack it
-    invites, and cannot act inside a battle because nothing can yet.
+    invites, never attacks to destroy an army rather than to take ground, and cannot act inside a
+    battle because nothing can yet.
     """
 
     name = "military"
@@ -310,6 +316,9 @@ class MilitaryPolicy:
         self._playing = GoldRushPolicy()
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
+        attack = next((action for action in actions if isinstance(action, DeclareAttack)), None)
+        if attack is not None and _holds_the_initiative(view):
+            return attack
         return self._playing.choose(view, actions)
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
@@ -320,6 +329,44 @@ class MilitaryPolicy:
             if defending is not None:
                 return DecisionResponse(_defense(request, view, defending))
         return self._playing.decide(request, view)
+
+
+def _holds_the_initiative(view: GameView) -> bool:
+    """Whether the viewer has more Force to send than the seat it would attack.
+
+    Declaring costs nothing on its own — an attack nobody assigns to resolves every battlefield with
+    both sides empty and destroys nothing — so this only has to be right about who is ahead. Which
+    Provinces are worth taking is settled at the assignment, where the attack exists and the
+    Provinces' Strength can be read.
+    """
+    other = next(seat for seat in PlayerId if seat is not view.viewer)
+    return _force_at_home(view, view.viewer) > _force_at_home(view, other)
+
+
+def _force_at_home(view: GameView, seat: PlayerId) -> int:
+    """The Force ``seat`` could still send: its unbowed Personalities standing at home.
+
+    What a seat could assign rather than what it has — a bowed Personality may not be assigned at
+    all, and one already at a battlefield has been. A card the viewer cannot identify is redacted to
+    a :class:`HiddenCard` and so is never counted, which is why an opponent's face-down card cannot
+    be weighed.
+    """
+    return sum(
+        view.unit_force[entry.card.id]
+        for entry in view.table.battlefield
+        if isinstance(entry.card, L5RCard)
+        and entry.card.owner is seat
+        and isinstance(entry.card.printed, PersonalityPrint)
+        and not entry.card.bowed
+        and _is_home(view, entry.card.id)
+    )
+
+
+def _is_home(view: GameView, card_id: str) -> bool:
+    """Whether ``card_id`` stands at home. An absent location is home, which is where a card is
+    until an attack moves it."""
+    location = view.table.locations.get(card_id)
+    return location is None or location.is_home
 
 
 def _attack_being_defended(view: GameView) -> AttackView | None:
@@ -335,21 +382,22 @@ def _attack_being_defended(view: GameView) -> AttackView | None:
 def _defense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[str, ...]:
     """Where to send the Defender's units: the fewest that save each Province it can save.
 
-    Battlefields are taken in order of what they cost to hold, so a seat short of units saves as
-    many Provinces as it can rather than the ones it happened to look at first. A unit is spent
-    once — :meth:`AssignUnits.accepts` refuses the same Personality twice.
+    A Province survives when the attacking Force does not exceed the defending Force plus its
+    Strength, so what it costs to hold is the attack against it less what it withstands on its own.
+    Cheapest first, so a seat short of units saves as many Provinces as it can, and one it cannot
+    reach is left alone. A unit is spent once — :meth:`AssignUnits.accepts` refuses the same
+    Personality twice.
 
     Reads the candidates as a set of units rather than of places, which holds because
     :func:`~yasuki_core.engine.rules.battle.assignment_candidates` pairs every assignable unit with
-    every battlefield. A candidate list that restricted a unit to some battlefields would need this
-    to pick from the ones offered per battlefield instead.
+    every battlefield.
     """
     unspent = {assignment(token)[0] for token in request.candidates}
+    chosen: list[str] = []
     by_cost = sorted(
         (field.attacking_force - field.strength, index)
         for index, field in enumerate(attack.battlefields)
     )
-    chosen: list[str] = []
     for needed, index in by_cost:
         if needed <= 0:  # the Province survives whatever happens here
             continue

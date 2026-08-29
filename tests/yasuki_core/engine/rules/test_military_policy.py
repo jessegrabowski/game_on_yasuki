@@ -1,6 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import battle
+from yasuki_core.engine.rules.actions import DeclareAttack
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
     assignment,
@@ -171,6 +172,67 @@ class TestDefending:
         end_phase(session)
 
         assert _defend(session, {"raider": 0}) == ()
+
+
+class TestDeclaring:
+    def test_it_attacks_when_it_holds_more_force(self):
+        session = _attacked(defenders={"guard": 1}, attackers={"raider": 5})
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert isinstance(chosen, DeclareAttack)
+
+    def test_it_passes_when_it_is_outmatched(self):
+        session = _attacked(defenders={"guard": 9}, attackers={"raider": 1})
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert not isinstance(chosen, DeclareAttack)
+
+    def test_it_counts_only_what_it_could_send(self):
+        """A bowed Personality may not be assigned, so counting his unit would have the seat declare
+        an attack it cannot make.
+
+        He carries an unbowed Follower, which is what makes the case visible: a bowed Personality
+        contributes nothing on his own, but the CR totals an army over unbowed Personalities *and*
+        Followers, so his Follower's Force is still in his unit's total.
+        """
+        session = _attacked(defenders={"guard": 3}, attackers={"bowed": 1, "ready": 1})
+        attached(
+            session.game,
+            attachment("banner", attachment_type=AttachmentType.FOLLOWER, force=9, owner=ATTACKER),
+            "bowed",
+        )
+        session.game.table.cards_by_id["bowed"].bow()
+        view = project(session.game, ATTACKER)
+        assert view.unit_force["bowed"] == 9, "the Follower still counts toward the unit"
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert not isinstance(chosen, DeclareAttack)
+
+    def test_it_does_not_attack_on_even_force(self):
+        """Even armies take nothing: a Province falls only to a Force that exceeds the defense plus
+        its Strength, so an attack that merely matches spends an army for no ground."""
+        session = _attacked(defenders={"guard": 4}, attackers={"raider": 4})
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert not isinstance(chosen, DeclareAttack)
+
+    def test_it_does_not_declare_a_second_attack(self):
+        """`legality` withholds the action once an attack stands, so the policy must take what it is
+        offered rather than what it would prefer."""
+        session = _attacked(defenders={"guard": 1}, attackers={"raider": 5})
+        battle.declare_attack(session.game, ATTACKER)
+        view = project(session.game, ATTACKER)
+        actions = session.legal_actions(ATTACKER)
+        assert not any(isinstance(action, DeclareAttack) for action in actions)
+
+        assert not isinstance(MilitaryPolicy().choose(view, actions), DeclareAttack)
 
 
 class TestDelegation:
