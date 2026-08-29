@@ -18,6 +18,7 @@ from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.agents import PayingAgent
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
+    ChooseBattlefield,
     assignment,
     assignment_token,
     ChooseAbilityTarget,
@@ -332,6 +333,8 @@ class MilitaryPolicy:
                 return DecisionResponse(_defense(request, view, defending))
             if view.attack is not None:
                 return DecisionResponse(_offense(request, view, view.attack))
+        if isinstance(request, ChooseBattlefield) and view.attack is not None:
+            return DecisionResponse((_best_battlefield(request, view.attack),))
         return self._playing.decide(request, view)
 
 
@@ -390,6 +393,21 @@ def _offense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[
             for index, field in enumerate(attack.battlefields)
         ],
     )
+
+
+def _best_battlefield(request: ChooseBattlefield, attack: AttackView) -> str:
+    """Which battle to fight next: the one the Attacker leads by the most.
+
+    The battles of one Attack Phase do not affect each other — resolution reads an assignment both
+    seats already committed — so this is free today. It stops being free when a card can act between
+    battles, and taking the surest first is the order that keeps its winnings.
+    """
+
+    def margin(candidate: str) -> tuple[int, int]:
+        field = attack.battlefields[int(candidate)]
+        return field.attacking_force - field.defending_force, -int(candidate)
+
+    return max(request.candidates, key=margin)
 
 
 def _attack_being_defended(view: GameView) -> AttackView | None:

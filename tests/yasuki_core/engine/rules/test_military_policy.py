@@ -4,6 +4,7 @@ from yasuki_core.engine.rules import battle
 from yasuki_core.engine.rules.actions import DeclareAttack
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
+    ChooseBattlefield,
     assignment,
     assignment_token,
     ChoosePayment,
@@ -295,6 +296,23 @@ class TestAttacking:
         places = _sent_to(_attack_answer(session))
 
         assert sum(len(units) for units in places.values()) == 1
+
+
+class TestFightOrder:
+    def test_it_fights_the_battle_it_leads_by_the_most(self):
+        session = _attacked(
+            defenders={"guard": 3}, attackers={"host-a": 9, "host-b": 4}, provinces=2
+        )
+        game = session.game
+        battle.declare_attack(game, ATTACKER)
+        ops.assign(game.table, game.table.cards_by_id["host-a"], 1)
+        ops.assign(game.table, game.table.cards_by_id["host-b"], 0)
+        request = ChooseBattlefield(seat=ATTACKER, candidates=("0", "1"))
+
+        answer = MilitaryPolicy().decide(request, project(game, ATTACKER))
+
+        assert request.accepts(answer)
+        assert answer.choices == ("1",)  # the battlefield it leads 9-0 rather than 4-0
 
 
 class TestDelegation:
