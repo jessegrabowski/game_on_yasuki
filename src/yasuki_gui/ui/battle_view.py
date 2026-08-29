@@ -88,13 +88,21 @@ class PendingArmy:
     force: int
 
 
-def _rows(height: int) -> tuple[int, int, int, int]:
+def _rows(height: int, *, mirrored: bool = False) -> tuple[int, int, int, int]:
     """Where a lane's three rows of cards sit, and where the divider between the sides goes.
 
     The Province, the Defender's units and the Attacker's fill the space between the header and the
     footer. A lane with room for all three spreads them apart; a shorter one steps them closer until
     they overlap, each row keeping enough of itself showing to be read, rather than pushing the last
     row out of sight. Cards are a fixed size, so the rows moving is the only give there is.
+
+    Parameters
+    ----------
+    height : int
+        The lane's height in pixels.
+    mirrored : bool, optional
+        Whether to reflect the rows so the Defender's side is the lower one. Default False, which
+        puts the Province at the head of the lane.
 
     Returns
     -------
@@ -107,11 +115,15 @@ def _rows(height: int) -> tuple[int, int, int, int]:
     attacking : int
         The centre line of the Attacker's units.
     """
-    band = height - FOOTER_H - HEADER_H
-    step = max((band - CARD_H) // 2, MIN_ROW_STEP)
-    province = HEADER_H + CARD_H // 2
+    top, bottom = HEADER_H, height - FOOTER_H
+    step = max((bottom - top - CARD_H) // 2, MIN_ROW_STEP)
+    province = top + CARD_H // 2
     defending = province + step
-    return province, defending, defending + step // 2, defending + step
+    divider, attacking = defending + step // 2, defending + step
+    if not mirrored:
+        return province, defending, divider, attacking
+    band = top + bottom
+    return band - province, band - defending, band - divider, band - attacking
 
 
 class _OutcomeLine(NamedTuple):
@@ -176,6 +188,9 @@ class BattleView(FloatingPanel):
         self._pending: dict[int, PendingArmy] = {}
         self._selected: frozenset[str] = frozenset()
         self._stats: dict[str, dict[Stat, int]] = {}
+        # Whose side of the lane is the near one, following the board's habit of drawing the
+        # seat being played at the bottom. None outside a seated game, where the Attacker is near.
+        self._viewer: PlayerId | None = None
         self._buttons: dict[int, LaneButton] = {}
         self._lane_spans: dict[int, tuple[int, int]] = {}
         self.canvas.bind("<Configure>", lambda _event: self._redraw())
@@ -191,6 +206,7 @@ class BattleView(FloatingPanel):
         buttons: dict[int, LaneButton] | None = None,
         selected: frozenset[str] = frozenset(),
         stats: dict[str, dict[Stat, int]] | None = None,
+        viewer: PlayerId | None = None,
     ) -> None:
         """Redraw for ``attack``, or empty the view when there is none.
 
@@ -209,12 +225,16 @@ class BattleView(FloatingPanel):
         stats : dict mapping str to dict, optional
             :attr:`GameView.stats`, so a unit in a lane reports the same Force the lane's total was
             built from. Default None.
+        viewer : PlayerId, optional
+            The seat being played, whose side of every lane is drawn as the near one. Default None,
+            which draws the Attacker near.
         """
         self._attack = attack
         self._pending = pending or {}
         self._buttons = buttons or {}
         self._selected = selected
         self._stats = stats or {}
+        self._viewer = viewer
         if attack is not None:
             self._collapsed &= set(range(len(attack.battlefields)))
         self._redraw()
@@ -336,25 +356,35 @@ class BattleView(FloatingPanel):
         attacking = view.attacking + (pending.units if pending else ())
         attacking_force = view.attacking_force + (pending.force if pending else 0)
         field_bottom = height - FOOTER_H
-        province_y, defending_y, divider, attacking_y = _rows(height)
+        # The seat being played holds the lower half, the way the board puts its own units below the
+        # divider. Defending it therefore turns the lane over.
+        mirrored = self._viewer is not None and self._viewer is not attacker
+        province_y, defending_y, divider, attacking_y = _rows(height, mirrored=mirrored)
         if view.occupant is not None:
-            # Above the Defender's own units, at the head of the side it belongs to: it is what they
-            # are standing in front of.
+            # Outermost on the side it belongs to, past the Defender's own units: it is what
+            # they are standing in front of.
             self._draw_card(
                 to_render_card(view.occupant), ((left + right) // 2, province_y), _PROVINCE_TAG
             )
-        self._draw_army(view.defending, span, defending_y, sink=False)
+        # Each army's tower fans away from the divider, so a unit never stacks over the other side.
+        self._draw_army(view.defending, span, defending_y, sink=mirrored)
         self.canvas.create_line(left + 6, divider, right - 6, divider, fill=theme.INK_DIM)
-        self._draw_army(attacking, span, attacking_y, sink=True)
+        self._draw_army(attacking, span, attacking_y, sink=not mirrored)
         if view.outcome is not None:
             # Over the rows rather than beside them: the armies have gone home by now, so the space
             # they were drawn in is what the lane has to say what happened in it.
             self._draw_outcome(
                 _outcome_lines(view.outcome, view.destroyed_names, attacker), span, divider
             )
-        # After the cards, so a crowded army cannot bury the total that says how it is doing.
-        self._draw_force(view.defending_force, left + FORCE_INSET, HEADER_H + FORCE_INSET, "nw")
-        self._draw_force(attacking_force, left + FORCE_INSET, field_bottom - FORCE_INSET, "sw")
+        # After the cards, so a crowded army cannot bury the total that says how it is doing. Each
+        # total sits in the corner of the half its army holds.
+        top_force, bottom_force = (
+            (attacking_force, view.defending_force)
+            if mirrored
+            else (view.defending_force, attacking_force)
+        )
+        self._draw_force(top_force, left + FORCE_INSET, HEADER_H + FORCE_INSET, "nw")
+        self._draw_force(bottom_force, left + FORCE_INSET, field_bottom - FORCE_INSET, "sw")
         self._draw_footer(index, span, height)
 
     def _draw_collapsed(self, index: int, span: tuple[int, int]) -> None:

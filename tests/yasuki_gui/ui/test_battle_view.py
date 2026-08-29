@@ -6,7 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
 from yasuki_core.engine.rules.state import BattleOutcome, Segment
 from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W
 from yasuki_gui.ui.battle_view import (
     BattleView,
     _outcome_lines,
@@ -187,6 +187,68 @@ def test_each_sides_force_sits_in_the_corner_of_its_own_half(view):
     assert defending[0] < left + CARD_W  # both hug the lane's own edge
     assert attacking[0] < left + CARD_W
     assert defending[1] < attacking[1]  # the defenders hold the top half
+
+
+def test_the_seat_being_played_holds_the_lower_half(view):
+    """The board draws a seat's own units below the divider, and a lane that ignored the seat would
+    put the player's Province at the far end and the army attacking it in front of them."""
+    view.refresh(
+        _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
+        viewer=P2,  # the Defender
+    )
+
+    defending = _text_at(view, "6", "army-force")
+    attacking = _text_at(view, "3", "army-force")
+
+    assert attacking[1] < defending[1]
+
+
+def test_a_defended_province_sits_below_the_units_defending_it(view):
+    """Outermost on its own side, the way a seat's Provinces are the outermost row of its board."""
+    view.refresh(
+        _attack(_battlefield(0, occupant=personality("keep"), defending=(_unit("hida", 6),))),
+        viewer=P2,
+    )
+
+    province = view.canvas.coords("province:keep")[1]
+    defender = view.canvas.coords("battle:hida")[1]
+
+    assert province > defender
+
+
+def test_only_the_army_on_the_lower_half_is_dropped(view):
+    """Attachments always fan upward off their Personality, so whichever army holds the lower half
+    has to be dropped by the tower's height — otherwise its cards climb over the divider. Which
+    army that is turns over with the lane, so both sides are checked from both seats."""
+
+    def towered(name: str) -> UnitView:
+        banner = attachment(f"{name}-banner", attachment_type=AttachmentType.FOLLOWER)
+        return UnitView(leader=personality(name), attached=(banner,))
+
+    field = _battlefield(0, attacking=(towered("akodo"),), defending=(towered("hida"),))
+
+    view.refresh(_attack(field), viewer=P2)
+    _, defending_row, _, attacking_row = _rows(view._height(), mirrored=True)
+    assert view.canvas.coords("battle:hida")[1] - defending_row == ATTACH_STACK_OFFSET
+    assert view.canvas.coords("battle:akodo")[1] - attacking_row == 0
+
+    view.refresh(_attack(field), viewer=P1)
+    _, defending_row, _, attacking_row = _rows(view._height())
+    assert view.canvas.coords("battle:hida")[1] - defending_row == 0
+    assert view.canvas.coords("battle:akodo")[1] - attacking_row == ATTACH_STACK_OFFSET
+
+
+def test_the_attacking_seat_keeps_the_lower_half(view):
+    """Seat-relative, not role-relative: attacking puts the player's own army back at the bottom."""
+    view.refresh(
+        _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
+        viewer=P1,  # the Attacker
+    )
+
+    defending = _text_at(view, "6", "army-force")
+    attacking = _text_at(view, "3", "army-force")
+
+    assert defending[1] < attacking[1]
 
 
 def test_assigned_units_are_drawn_in_their_lane(view):
