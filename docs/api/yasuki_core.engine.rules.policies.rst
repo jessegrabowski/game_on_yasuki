@@ -11,6 +11,7 @@ yasuki_core.engine.rules.policies
     EconomicLegacyPolicy
     EconomicPolicy
     GoldRushPolicy
+    MilitaryPolicy
     PassPolicy
     Policy
     RandomPolicy

@@ -104,6 +104,7 @@ def test_the_registry_covers_the_policies_that_ship():
         "economic-legacy",
         "economic-cycle",
         "gold-rush",
+        "military",
     }
 
 
