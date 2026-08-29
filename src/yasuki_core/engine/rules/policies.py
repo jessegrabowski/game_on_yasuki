@@ -15,13 +15,16 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.rules.agents import PayingAgent
 from yasuki_core.engine.rules.decisions import (
+    AssignUnits,
+    assignment,
+    assignment_token,
     ChooseAbilityTarget,
     ChooseCards,
     DecisionRequest,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.modifiers import Stat
-from yasuki_core.engine.rules.projection import GameView
+from yasuki_core.engine.rules.projection import AttackView, GameView
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
@@ -283,6 +286,98 @@ class GoldRushPolicy:
         return self._answering.decide(request, view)
 
 
+class MilitaryPolicy:
+    """Plays the gold rush, and defends its Provinces when it is attacked.
+
+    Everything away from a battle is :class:`GoldRushPolicy`, which this wraps: the seat still
+    cycles, tutors, runs its abilities, buys and flushes. What it adds is the one question a
+    Defender is ever asked — where its units go.
+
+    It defends to save a Province rather than to win a battle. Resolution destroys a Province only
+    when the attacking Force exceeds the defending Force *plus* the Province's Strength, so a
+    defence that loses the battle outright can still hold the ground — and a seat that only
+    contested what it could beat would concede most of the board while its army sat at home. Each
+    Province it can save takes the fewest units that save it, cheapest first, and one it cannot save
+    is left alone: units spent on a Province that falls anyway are units it does not have next turn.
+
+    Not a player. It weighs no Province above another, keeps no reserve against the counterattack it
+    invites, and cannot act inside a battle because nothing can yet.
+    """
+
+    name = "military"
+
+    def __init__(self) -> None:
+        self._playing = GoldRushPolicy()
+
+    def choose(self, view: GameView, actions: list[Action]) -> Action:
+        return self._playing.choose(view, actions)
+
+    def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
+        if isinstance(request, AssignUnits):
+            # The request is checked first because everything it delegates may arrive without a
+            # view — the paying agent behind it answers a payment from the request alone.
+            defending = _attack_being_defended(view)
+            if defending is not None:
+                return DecisionResponse(_defense(request, view, defending))
+        return self._playing.decide(request, view)
+
+
+def _attack_being_defended(view: GameView) -> AttackView | None:
+    """The attack the viewer is defending, or None when it is the Attacker or there is no attack.
+
+    The Attacker answers the same request class, so a policy that read the request alone would send
+    its own units where the defence rule points them.
+    """
+    attack = view.attack
+    return attack if attack is not None and attack.defender is view.viewer else None
+
+
+def _defense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[str, ...]:
+    """Where to send the Defender's units: the fewest that save each Province it can save.
+
+    Battlefields are taken in order of what they cost to hold, so a seat short of units saves as
+    many Provinces as it can rather than the ones it happened to look at first. A unit is spent
+    once — :meth:`AssignUnits.accepts` refuses the same Personality twice.
+
+    Reads the candidates as a set of units rather than of places, which holds because
+    :func:`~yasuki_core.engine.rules.battle.assignment_candidates` pairs every assignable unit with
+    every battlefield. A candidate list that restricted a unit to some battlefields would need this
+    to pick from the ones offered per battlefield instead.
+    """
+    unspent = {assignment(token)[0] for token in request.candidates}
+    by_cost = sorted(
+        (field.attacking_force - field.strength, index)
+        for index, field in enumerate(attack.battlefields)
+    )
+    chosen: list[str] = []
+    for needed, index in by_cost:
+        if needed <= 0:  # the Province survives whatever happens here
+            continue
+        holding = _fewest_reaching(unspent, needed, view)
+        if holding is None:  # nothing it could send saves this one
+            continue
+        unspent -= holding
+        chosen.extend(assignment_token(card_id, index) for card_id in sorted(holding))
+    return tuple(chosen)
+
+
+def _fewest_reaching(unspent: set[str], needed: int, view: GameView) -> set[str] | None:
+    """The fewest of ``unspent`` whose Force reaches ``needed``, or None if together they cannot.
+
+    Largest first: a seat that spends three small units where one large one would do has two fewer
+    to save the next Province with.
+    """
+    strongest = sorted(unspent, key=lambda card_id: (-view.unit_force[card_id], card_id))
+    holding: set[str] = set()
+    brought = 0
+    for card_id in strongest:
+        if brought >= needed:
+            break
+        holding.add(card_id)
+        brought += view.unit_force[card_id]
+    return holding if brought >= needed else None
+
+
 # The activated abilities this policy has an economic model for, by printed id. An ability absent
 # here is never activated: a policy cannot read what a card does, and guessing at an unmodelled one
 # would spend a bow on an effect it has no way to value.
@@ -533,6 +628,7 @@ POLICIES: dict[str, type[Policy]] = {
         EconomicLegacyPolicy,
         EconomicCyclePolicy,
         GoldRushPolicy,
+        MilitaryPolicy,
     )
 }
 """Every policy a run can be configured with, by name."""
