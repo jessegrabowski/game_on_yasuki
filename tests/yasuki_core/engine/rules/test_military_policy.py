@@ -91,8 +91,8 @@ class TestDefending:
         assert _sent_to(_defend(session, {"raider": 1})) == {1: {"guard"}}
 
     def test_it_defends_what_it_cannot_win_but_can_hold(self):
-        """Resolution destroys a Province only when the attack exceeds the defence plus the
-        Province's Strength, so a defence that loses the battle can still hold the ground. A seat
+        """Resolution destroys a Province only when the attack exceeds the defense plus the
+        Province's Strength, so a defense that loses the battle can still hold the ground. A seat
         that only contested what it could beat would concede most of the board."""
         session = _attacked(defenders={"guard": 3}, attackers={"raider": 3})
 
@@ -131,7 +131,7 @@ class TestDefending:
 
     def test_it_never_sends_the_same_unit_twice(self):
         """Two battlefields both need it and a unit stands at one, so an answer naming it twice is
-        refused outright rather than being a greedier defence."""
+        refused outright rather than being a greedier defense."""
         session = _attacked(defenders={"guard": 4}, attackers={"a": 3, "b": 3})
 
         places = _sent_to(_defend(session, {"a": 0, "b": 1}))
@@ -139,7 +139,7 @@ class TestDefending:
         assert sum(len(units) for units in places.values()) == 1
 
     def test_it_counts_a_follower_toward_what_a_unit_can_hold(self):
-        """The unit's Force, not the Personality's — a defence weighed on the printed number sends
+        """The unit's Force, not the Personality's — a defense weighed on the printed number sends
         two units where one would have held, or none where one would."""
         session = _attacked(defenders={"guard": 2}, attackers={"raider": 5}, provinces=1)
         attached(
@@ -175,7 +175,7 @@ class TestDefending:
 
 class TestDelegation:
     def test_it_leaves_the_attacker_s_assignment_alone(self):
-        """The Attacker answers the same request class. Sending its units where the defence rule
+        """The Attacker answers the same request class. Sending its units where the defense rule
         points them would be nonsense, and the fallback declines instead."""
         session = _attacked(defenders={"guard": 4}, attackers={"raider": 3})
         game = session.game

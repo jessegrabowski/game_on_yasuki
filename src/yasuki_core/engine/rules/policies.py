@@ -295,7 +295,7 @@ class MilitaryPolicy:
 
     It defends to save a Province rather than to win a battle. Resolution destroys a Province only
     when the attacking Force exceeds the defending Force *plus* the Province's Strength, so a
-    defence that loses the battle outright can still hold the ground — and a seat that only
+    defense that loses the battle outright can still hold the ground — and a seat that only
     contested what it could beat would concede most of the board while its army sat at home. Each
     Province it can save takes the fewest units that save it, cheapest first, and one it cannot save
     is left alone: units spent on a Province that falls anyway are units it does not have next turn.
@@ -326,7 +326,7 @@ def _attack_being_defended(view: GameView) -> AttackView | None:
     """The attack the viewer is defending, or None when it is the Attacker or there is no attack.
 
     The Attacker answers the same request class, so a policy that read the request alone would send
-    its own units where the defence rule points them.
+    its own units where the defense rule points them.
     """
     attack = view.attack
     return attack if attack is not None and attack.defender is view.viewer else None
