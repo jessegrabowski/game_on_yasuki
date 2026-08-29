@@ -295,8 +295,10 @@ class MilitaryPolicy:
     cycles, tutors, runs its abilities, buys and flushes. What it adds is the one question a
     Defender is ever asked — where its units go.
 
-    It attacks when it holds more Force than the seat it faces. Where those units go is not its
-    question yet.
+    It attacks when it holds more Force than the seat it faces, and commits only to the Provinces
+    it can take whatever the Defender does — a Province it takes is a Province destroyed, and enough
+    of them ends the game. Assigning to one it might lose spends an army for nothing: the losers are
+    destroyed, and what survives comes home bowed and cannot defend on the opponent's next turn.
 
     It defends to save a Province rather than to win a battle. Resolution destroys a Province only
     when the attacking Force exceeds the defending Force *plus* the Province's Strength, so a
@@ -328,6 +330,8 @@ class MilitaryPolicy:
             defending = _attack_being_defended(view)
             if defending is not None:
                 return DecisionResponse(_defense(request, view, defending))
+            if view.attack is not None:
+                return DecisionResponse(_offense(request, view, view.attack))
         return self._playing.decide(request, view)
 
 
@@ -369,6 +373,25 @@ def _is_home(view: GameView, card_id: str) -> bool:
     return location is None or location.is_home
 
 
+def _offense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[str, ...]:
+    """Where to send the Attacker's units: the fewest that take each Province it can take.
+
+    The Defender assigns *after* this answer, so what it will bring is unknown. A Province therefore
+    costs its Strength plus everything the Defender could still send, which makes taking it certain
+    rather than likely, and one the seat cannot pay for is left alone.
+    """
+    defending = _force_at_home(view, attack.defender)
+    # Strictly greater takes the Province; equalling the bound only ties the battle.
+    return _spend(
+        request,
+        view,
+        [
+            (field.strength + defending + 1, index)
+            for index, field in enumerate(attack.battlefields)
+        ],
+    )
+
+
 def _attack_being_defended(view: GameView) -> AttackView | None:
     """The attack the viewer is defending, or None when it is the Attacker or there is no attack.
 
@@ -383,29 +406,50 @@ def _defense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[
     """Where to send the Defender's units: the fewest that save each Province it can save.
 
     A Province survives when the attacking Force does not exceed the defending Force plus its
-    Strength, so what it costs to hold is the attack against it less what it withstands on its own.
-    Cheapest first, so a seat short of units saves as many Provinces as it can, and one it cannot
-    reach is left alone. A unit is spent once — :meth:`AssignUnits.accepts` refuses the same
-    Personality twice.
+    Strength, so what a Province costs to hold is the attack against it less what it withstands on
+    its own. One the seat cannot reach is left alone.
+    """
+    return _spend(
+        request,
+        view,
+        [
+            (field.attacking_force - field.strength, index)
+            for index, field in enumerate(attack.battlefields)
+        ],
+    )
+
+
+def _spend(request: AssignUnits, view: GameView, needs: list[tuple[int, int]]) -> tuple[str, ...]:
+    """Send the fewest units that meet each battlefield's need, cheapest need first.
+
+    Cheapest first is what lets a seat short of units meet two needs rather than one. A battlefield
+    needing nothing is skipped, one the units left cannot meet is left alone, and each unit is spent
+    once — :meth:`AssignUnits.accepts` refuses the same Personality twice.
 
     Reads the candidates as a set of units rather than of places, which holds because
     :func:`~yasuki_core.engine.rules.battle.assignment_candidates` pairs every assignable unit with
-    every battlefield.
+    every battlefield. A candidate list restricting a unit to some battlefields would need this to
+    pick per battlefield instead.
+
+    Parameters
+    ----------
+    request : AssignUnits
+        The question being answered; its candidates name the units available.
+    view : GameView
+        Read for each unit's Force.
+    needs : list of (int, int)
+        The Force each battlefield needs, paired with its index.
     """
     unspent = {assignment(token)[0] for token in request.candidates}
     chosen: list[str] = []
-    by_cost = sorted(
-        (field.attacking_force - field.strength, index)
-        for index, field in enumerate(attack.battlefields)
-    )
-    for needed, index in by_cost:
-        if needed <= 0:  # the Province survives whatever happens here
+    for needed, index in sorted(needs):
+        if needed <= 0:
             continue
-        holding = _fewest_reaching(unspent, needed, view)
-        if holding is None:  # nothing it could send saves this one
+        sending = _fewest_reaching(unspent, needed, view)
+        if sending is None:
             continue
-        unspent -= holding
-        chosen.extend(assignment_token(card_id, index) for card_id in sorted(holding))
+        unspent -= sending
+        chosen.extend(assignment_token(card_id, index) for card_id in sorted(sending))
     return tuple(chosen)
 
 

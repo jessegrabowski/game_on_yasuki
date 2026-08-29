@@ -174,6 +174,20 @@ class TestDefending:
         assert _defend(session, {"raider": 0}) == ()
 
 
+def _attack_answer(session, seat=ATTACKER) -> tuple[str, ...]:
+    """Declare, then ask the policy where the Attacker's units go."""
+    game = session.game
+    battle.declare_attack(game, seat)
+    request = AssignUnits(
+        seat=seat,
+        candidates=battle.assignment_candidates(game, seat),
+        battlefields=len(game.attack.battlefields),
+    )
+    answer = MilitaryPolicy().decide(request, project(game, seat))
+    assert request.accepts(answer), "the policy answered with something the engine would refuse"
+    return answer.choices
+
+
 class TestDeclaring:
     def test_it_attacks_when_it_holds_more_force(self):
         session = _attacked(defenders={"guard": 1}, attackers={"raider": 5})
@@ -233,6 +247,54 @@ class TestDeclaring:
         assert not any(isinstance(action, DeclareAttack) for action in actions)
 
         assert not isinstance(MilitaryPolicy().choose(view, actions), DeclareAttack)
+
+
+class TestAttacking:
+    def test_it_takes_a_province_it_can_take_whatever_the_defense_does(self):
+        """The Defender assigns after this answer, so a Province is only worth committing to when
+        the attack beats its Strength plus everything the Defender could still bring."""
+        session = _attacked(defenders={"guard": 2}, attackers={"host": 5}, provinces=1)
+
+        assert _sent_to(_attack_answer(session)) == {0: {"host"}}
+
+    def test_it_leaves_a_province_the_defense_could_hold(self):
+        """Exactly enough to beat the defense is not enough — a tie leaves the Province standing and
+        destroys both armies."""
+        session = _attacked(defenders={"guard": 5}, attackers={"host": 5}, provinces=1)
+
+        assert _attack_answer(session) == ()
+
+    def test_it_counts_province_strength_against_it(self):
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=4))
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "prov0", seat=DEFENDER, index=0)
+        put_in_play(state, personality("guard", owner=DEFENDER, force=1))
+        put_in_play(state, personality("host", owner=ATTACKER, force=5))
+        session = EngineSession.start(state, ATTACKER)
+        end_phase(session)
+
+        assert _attack_answer(session) == ()
+
+    def test_it_spreads_across_the_provinces_it_can_take(self):
+        """Two Provinces it can each take, and force for both — a rule that stopped at the first
+        would leave the second standing for no reason."""
+        session = _attacked(
+            defenders={"guard": 1}, attackers={"host-a": 3, "host-b": 3}, provinces=2
+        )
+
+        places = _sent_to(_attack_answer(session))
+
+        # Which host goes where is a tie-break, not the behavior under test.
+        assert set(places) == {0, 1}
+        assert all(len(units) == 1 for units in places.values())
+
+    def test_it_never_sends_the_same_unit_to_two_provinces(self):
+        session = _attacked(defenders={"guard": 1}, attackers={"host": 9}, provinces=2)
+
+        places = _sent_to(_attack_answer(session))
+
+        assert sum(len(units) for units in places.values()) == 1
 
 
 class TestDelegation:
