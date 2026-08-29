@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.actions import (
     Cycle,
     DeclareAttack,
     DynastyDiscard,
+    Equip,
     Legacy,
     Pass,
     Recruit,
@@ -23,14 +24,20 @@ from yasuki_core.engine.rules.decisions import (
     assignment_token,
     ChooseAbilityTarget,
     ChooseCards,
+    ChooseEquipTarget,
     DecisionRequest,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, GameView
-from yasuki_core.engine.table import ZoneRole
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
+    HoldingPrint,
+    PersonalityPrint,
+    StrongholdPrint,
+)
 
 
 class Policy(Protocol):
@@ -322,6 +329,9 @@ class MilitaryPolicy:
         attack = next((action for action in actions if isinstance(action, DeclareAttack)), None)
         if attack is not None and _holds_the_initiative(view):
             return attack
+        equip = _worthwhile_equip(view, actions)
+        if equip is not None:
+            return equip
         return self._playing.choose(view, actions)
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
@@ -335,6 +345,8 @@ class MilitaryPolicy:
                 return DecisionResponse(_offense(request, view, view.attack))
         if isinstance(request, ChooseBattlefield) and view.attack is not None:
             return DecisionResponse((_best_battlefield(request, view.attack),))
+        if isinstance(request, ChooseEquipTarget) and request.candidates:
+            return DecisionResponse((_best_equip_target(request, view),))
         return self._playing.decide(request, view)
 
 
@@ -350,9 +362,14 @@ def _holds_the_initiative(view: GameView) -> bool:
     The floor is a floor: Fortifications and counters raise a Province above it, so this can still
     declare an attack whose assignment then finds every Province out of reach.
     """
+    return _force_at_home(view, view.viewer) > _force_needed_to_attack(view)
+
+
+def _force_needed_to_attack(view: GameView) -> int:
+    """The Force the viewer must beat at home to take any Province: the other seat's Stronghold
+    Strength, which every Province of theirs is at least worth, plus what they could still bring."""
     other = next(seat for seat in PlayerId if seat is not view.viewer)
-    cheapest_province = _province_strength_floor(view, other) + _force_at_home(view, other)
-    return _force_at_home(view, view.viewer) > cheapest_province
+    return _province_strength_floor(view, other) + _force_at_home(view, other)
 
 
 def _province_strength_floor(view: GameView, seat: PlayerId) -> int:
@@ -400,6 +417,67 @@ def _is_home(view: GameView, card_id: str) -> bool:
     return location is None or location.is_home
 
 
+def _worthwhile_equip(view: GameView, actions: list[Action]) -> Equip | None:
+    """The attachment worth buying now, or None to leave the Gold with the economy.
+
+    Attaching is the cheapest way an army grows — a Follower's Force joins the unit it stands in,
+    an Item's modifier raises the Personality — so the seat prefers the largest gain, and the
+    cheaper card where two add the same.
+
+    It buys one only when that gain leaves the seat able to take a Province, which is what decides
+    between Force and production without pricing one against the other. A seat far short of the
+    threshold cannot reach it with an attachment and buys production instead, so the Gold compounds
+    into the Personalities that close the gap; a seat near or past the threshold takes the Force,
+    because that is the turn it converts into ground.
+
+    Only the plain variant is weighed. Invest pays more now for something later, which a ranking of
+    Force added this turn cannot price, so the ``invest=True`` offer beside it is left alone.
+    """
+    if not any(isinstance(action, Equip) for action in actions):
+        return None
+    hand = _hand(view)
+    offers = [
+        (action, hand[action.card_id])
+        for action in actions
+        if isinstance(action, Equip) and not action.invest and action.card_id in hand
+    ]
+    if not offers:
+        return None
+    equip, card = min(offers, key=lambda offer: _equip_rank(view, offer[1]))
+    reach = _force_at_home(view, view.viewer) + _force_gain(card)
+    return equip if reach > _force_needed_to_attack(view) else None
+
+
+def _equip_rank(view: GameView, card: L5RCard) -> tuple[int, int, str]:
+    """How an attachment sorts for purchase, lowest first: most Force added, then cheapest. The
+    card id settles anything still level, so the choice does not follow hand order."""
+    return -_force_gain(card), view.stat(card, Stat.GOLD_COST), card.id
+
+
+def _force_gain(card: L5RCard) -> int:
+    """The Force a unit gains from ``card`` joining it.
+
+    A Follower stands in the unit and brings a Force of its own; an Item hands the Personality a
+    modifier instead. Both fields live on the same print and one card may carry each — Shadowlands
+    Ambassador brings Force to the unit and takes Chi off the Personality — so the gain is their
+    sum rather than a choice between them. Read printed, because a card in hand has no modifiers
+    on it yet.
+    """
+    printed = card.printed
+    if not isinstance(printed, AttachmentPrint):
+        return 0
+    return printed.force + printed.force_modifier
+
+
+def _hand(view: GameView) -> dict[str, L5RCard]:
+    """The viewer's own hand by id, which is what an :class:`Equip`'s ``card_id`` names. A seat
+    sees its own hand unredacted, so an attachment can be priced before it is played."""
+    zone = view.table.zones.get(ZoneKey(view.viewer, ZoneRole.HAND))
+    if zone is None:
+        return {}
+    return {card.id: card for card in zone.cards if isinstance(card, L5RCard)}
+
+
 def _offense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[str, ...]:
     """Where to send the Attacker's units: the fewest that take each Province it can take.
 
@@ -416,6 +494,25 @@ def _offense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[
             (field.strength + defending + 1, index)
             for index, field in enumerate(attack.battlefields)
         ],
+    )
+
+
+def _best_equip_target(request: ChooseEquipTarget, view: GameView) -> str:
+    """Which Personality the attachment joins: the largest unit standing at home.
+
+    Force concentrates rather than spreads. Taking a Province needs one army over its Strength at
+    one battlefield, not two half-armies at two, so the card goes where it makes the biggest unit
+    bigger. A bowed Personality is passed over before size is weighed at all: he cannot be
+    assigned this turn, so Force hung on him is Force the attack cannot spend.
+    """
+    cards = _identifiable(view)
+    return min(
+        request.candidates,
+        key=lambda card_id: (
+            card_id not in cards or cards[card_id].bowed,
+            -view.unit_force.get(card_id, 0),
+            card_id,
+        ),
     )
 
 
