@@ -1,7 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import battle
-from yasuki_core.engine.rules.actions import DeclareAttack
+from yasuki_core.engine.rules.actions import DeclareAttack, Equip, Pass
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
     ChooseBattlefield,
@@ -20,7 +20,7 @@ from yasuki_core.engine.rules.policies import (
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import location_of, TableState
+from yasuki_core.engine.table import location_of, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.builders import (
@@ -30,11 +30,47 @@ from tests.yasuki_core.engine.builders import (
     personality,
     province_card,
     put_in_play,
+    register,
     stronghold,
 )
 
+
 DEFENDER = PlayerId.P2
 ATTACKER = PlayerId.P1
+
+
+def _in_hand(state: TableState, card):
+    """Put a Fate card in its owner's hand, which is where an Equip's ``card_id`` points."""
+    register(state, card)
+    state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(card)
+    return card
+
+
+def _ready_to_equip(*hand, at_home: int = 5, province_strength: int = 7):
+    """A view for the Attacker holding ``at_home`` Force against a Stronghold of
+    ``province_strength``, with ``hand`` in its hand ready to be attached."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(DEFENDER, province_strength=province_strength))
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("host", owner=ATTACKER, force=at_home))
+    for card in hand:
+        _in_hand(state, card)
+    return project(EngineSession.start(state, ATTACKER).game, ATTACKER)
+
+
+def _follower(card_id: str, force: int, gold_cost: int = 2):
+    return attachment(
+        card_id,
+        owner=ATTACKER,
+        attachment_type=AttachmentType.FOLLOWER,
+        force=force,
+        gold_cost=gold_cost,
+    )
+
+
+def _item(card_id: str, force_modifier: int, gold_cost: int = 2):
+    return attachment(card_id, owner=ATTACKER, force_modifier=force_modifier, gold_cost=gold_cost)
 
 
 def _attacked(*, defenders: dict[str, int], attackers: dict[str, int], provinces: int = 2):
@@ -444,3 +480,95 @@ def test_a_military_policy_wins_by_destroying_every_province():
 
     assert session.game.loser is DEFENDER
     assert session.game.loss_reason == "no Provinces remaining"
+
+
+class TestEquipping:
+    def test_it_takes_the_attachment_that_adds_the_most_force(self):
+        view = _ready_to_equip(_follower("banner", force=3), _item("blade", force_modifier=1))
+
+        chosen = MilitaryPolicy().choose(view, [Equip("banner"), Equip("blade"), Pass()])
+
+        assert chosen == Equip("banner")
+
+    def test_it_ranks_by_the_force_added_rather_than_by_card_type(self):
+        """A Follower brings its own Force to the unit and an Item hands the Personality a modifier.
+        Different fields on the print, one number to the army, so the bigger one wins whichever
+        field it came from."""
+        view = _ready_to_equip(_follower("banner", force=2), _item("blade", force_modifier=4))
+
+        chosen = MilitaryPolicy().choose(view, [Equip("banner"), Equip("blade"), Pass()])
+
+        assert chosen == Equip("blade")
+
+    def test_the_cheaper_card_settles_two_that_add_the_same(self):
+        view = _ready_to_equip(
+            _follower("costly", force=3, gold_cost=5), _follower("thrifty", force=3, gold_cost=2)
+        )
+
+        chosen = MilitaryPolicy().choose(view, [Equip("costly"), Equip("thrifty"), Pass()])
+
+        assert chosen == Equip("thrifty")
+
+    def test_it_leaves_the_invest_variant_of_an_attachment_alone(self):
+        """Invest pays more now for something later, which a ranking of the Force added this turn
+        cannot price. Offered both variants of one card, it takes the plain one."""
+        view = _ready_to_equip(_follower("banner", force=3))
+
+        chosen = MilitaryPolicy().choose(
+            view, [Equip("banner", invest=True), Equip("banner"), Pass()]
+        )
+
+        assert chosen == Equip("banner")
+
+    def test_an_invest_only_offer_is_left_to_the_economy(self):
+        view = _ready_to_equip(_follower("banner", force=3))
+
+        chosen = MilitaryPolicy().choose(view, [Equip("banner", invest=True), Pass()])
+
+        assert chosen == Pass()  # left to the economy, which has nothing to buy here
+
+    def test_it_buys_production_while_the_force_it_would_add_cannot_take_a_province(self):
+        """Gold spent on an attachment that leaves the seat short of a Province is Gold not spent on
+        the Personalities that close the gap, so far from the threshold the economy keeps it."""
+        view = _ready_to_equip(_follower("banner", force=3), at_home=2, province_strength=7)
+
+        chosen = MilitaryPolicy().choose(view, [Equip("banner"), Pass()])
+
+        assert chosen == Pass()  # left to the economy, which has nothing to buy here
+
+    def test_matching_the_floor_is_not_reaching_it(self):
+        """Four at home and a Follower worth three against a Stronghold of seven: the attachment
+        levels the Province rather than beating it, and a level army takes no ground."""
+        view = _ready_to_equip(_follower("banner", force=3), at_home=4, province_strength=7)
+
+        chosen = MilitaryPolicy().choose(view, [Equip("banner"), Pass()])
+
+        assert chosen == Pass()
+
+    def test_it_takes_the_force_once_the_attachment_brings_a_province_in_reach(self):
+        """Two Force short of the Stronghold floor and holding a Follower worth three: this is the
+        turn the attachment converts into ground."""
+        view = _ready_to_equip(_follower("banner", force=3), at_home=5, province_strength=7)
+
+        chosen = MilitaryPolicy().choose(view, [Equip("banner"), Pass()])
+
+        assert chosen == Equip("banner")
+
+    def test_the_attack_phase_offers_no_attachment_to_take(self):
+        """`Equip` is an open-timing action and the Battle Phase permits only attack timing, so the
+        offer is gone by the time the seat is attacking. Asserted because the ranking must not be
+        the only thing keeping the policy inside the phase it is allowed to equip in."""
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=7))
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "prov0", seat=DEFENDER, index=0)
+        put_in_play(state, personality("host", owner=ATTACKER, force=9))
+        _in_hand(state, _follower("banner", force=3))
+        session = EngineSession.start(state, ATTACKER)
+        end_phase(session)
+        actions = session.legal_actions(ATTACKER)
+
+        chosen = MilitaryPolicy().choose(project(session.game, ATTACKER), actions)
+
+        assert not any(isinstance(action, Equip) for action in actions)
+        assert not isinstance(chosen, Equip)
