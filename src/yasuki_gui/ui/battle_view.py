@@ -94,6 +94,53 @@ class PendingArmy:
     force: int
 
 
+class _Army(NamedTuple):
+    """One side of a battlefield as the lane draws it.
+
+    Attributes
+    ----------
+    units : tuple of UnitView
+        The units standing there, whether the engine has been told about them or not.
+    force : int
+        Their Force, totalled the way resolution would.
+    """
+
+    units: tuple[UnitView, ...]
+    force: int
+
+
+def _armies(
+    view: BattlefieldView, sent: PendingArmy | None, *, viewer_defends: bool
+) -> tuple[_Army, _Army]:
+    """The two sides of ``view``, with anything sent but not yet assigned already standing in.
+
+    A player sends only their own units, so what is waiting joins the side they are on.
+
+    Parameters
+    ----------
+    view : BattlefieldView
+        The battlefield as the engine reports it.
+    sent : PendingArmy or None
+        Units picked for this battlefield and not yet answered for. None when there are none.
+    viewer_defends : bool
+        Whether the seat being played is the one under attack, which is whose units ``sent`` holds.
+
+    Returns
+    -------
+    defence : _Army
+        The Defender's side.
+    offence : _Army
+        The Attacker's side.
+    """
+    defence = _Army(view.defending, view.defending_force)
+    offence = _Army(view.attacking, view.attacking_force)
+    if sent is None:
+        return defence, offence
+    if viewer_defends:
+        return _Army(defence.units + sent.units, defence.force + sent.force), offence
+    return defence, _Army(offence.units + sent.units, offence.force + sent.force)
+
+
 def _bands(height: int, *, mirrored: bool = False) -> tuple[int, int]:
     """The space a lane lays its cards out in: what the heading band and the button band leave.
 
@@ -283,8 +330,8 @@ class BattleView(FloatingPanel):
         return None
 
     def _viewer_defends(self) -> bool:
-        """Whether the seat being played is the one under attack, which decides which way its lanes
-        face: its own Provinces belong at the foot, the way the board draws the row nearest it."""
+        """Whether the seat being played is the one under attack, which decides both which way its
+        lanes face and which army the units it has sent join."""
         return (
             self._attack is not None
             and self._viewer is not None
@@ -401,9 +448,7 @@ class BattleView(FloatingPanel):
             return
         self._draw_header(index, view, span, height, mirrored=mirrored)
 
-        pending = self._pending.get(index)
-        attacking = view.attacking + (pending.units if pending else ())
-        attacking_force = view.attacking_force + (pending.force if pending else 0)
+        defence, offence = _armies(view, self._pending.get(index), viewer_defends=mirrored)
         top, bottom = _bands(height, mirrored=mirrored)
         province_y, defending_y, divider, attacking_y = _rows(height, mirrored=mirrored)
         if view.occupant is not None:
@@ -413,9 +458,9 @@ class BattleView(FloatingPanel):
                 to_render_card(view.occupant), ((left + right) // 2, province_y), _PROVINCE_TAG
             )
         # Each army's tower fans away from the divider, so a unit never stacks over the other side.
-        self._draw_army(view.defending, span, defending_y, sink=mirrored)
+        self._draw_army(defence.units, span, defending_y, sink=mirrored)
         self.canvas.create_line(left + 6, divider, right - 6, divider, fill=theme.INK_DIM)
-        self._draw_army(attacking, span, attacking_y, sink=not mirrored)
+        self._draw_army(offence.units, span, attacking_y, sink=not mirrored)
         if view.outcome is not None:
             # Over the rows rather than beside them: the armies have gone home by now, so the space
             # they were drawn in is what the lane has to say what happened in it.
@@ -425,9 +470,7 @@ class BattleView(FloatingPanel):
         # After the cards, so a crowded army cannot bury the total that says how it is doing. Each
         # total sits in the corner of the half its army holds.
         top_force, bottom_force = (
-            (attacking_force, view.defending_force)
-            if mirrored
-            else (view.defending_force, attacking_force)
+            (offence.force, defence.force) if mirrored else (defence.force, offence.force)
         )
         self._draw_force(top_force, left + FORCE_INSET, top + FORCE_INSET, "nw")
         self._draw_force(bottom_force, left + FORCE_INSET, bottom - FORCE_INSET, "sw")

@@ -383,6 +383,38 @@ def test_a_pending_army_counts_towards_the_force_its_side_shows(view):
     assert "8" in _texts(view)
 
 
+def test_a_defending_seats_pending_army_joins_the_defense(view):
+    """The player only ever sends their own units, so a seat under attack that has picked defenders
+    must see them counted with the defense — not added to the army coming at it."""
+    view.refresh(
+        _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
+        {0: PendingArmy(units=(_unit("kuni", 4),), force=4)},
+        viewer=P2,
+    )
+
+    defending = _text_at(view, "10", "army-force")  # 6 standing plus the 4 just sent
+    attacking = _text_at(view, "3", "army-force")  # and the attackers are untouched
+
+    assert defending[1] > attacking[1]  # totalled on the near side, where its army stands
+
+
+def test_a_defending_seats_pending_army_stands_on_its_own_side(view):
+    """Counted with the defense and drawn with it: a unit standing in the enemy's row reads as lost
+    to them however the totals add up."""
+    view.refresh(
+        _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
+        {0: PendingArmy(units=(_unit("kuni", 4),), force=4)},
+        viewer=P2,
+    )
+
+    sent = view.canvas.coords("battle:kuni")[1]
+    defender = view.canvas.coords("battle:hida")[1]
+    attacker = view.canvas.coords("battle:akodo")[1]
+
+    assert sent == defender  # shoulder to shoulder with the units already there
+    assert sent > attacker  # on the near side of the divider, not the far one
+
+
 def test_only_a_lane_with_something_to_offer_shows_a_button(view):
     view.refresh(_attack(_battlefield(0), _battlefield(1)), buttons={1: _button("Fight here")})
 
