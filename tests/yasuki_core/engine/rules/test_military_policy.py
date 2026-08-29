@@ -245,6 +245,41 @@ class TestDeclaring:
 
         assert not isinstance(chosen, DeclareAttack)
 
+    def test_it_does_not_declare_against_provinces_it_cannot_reach(self):
+        """No Province's Strength is readable before an attack exists, but the Defender's Stronghold
+        is, and every Province is at least that strong. A seat that cannot beat the floor takes
+        nothing, so declaring only opens a phase it must then decline.
+
+        Its Force matches the floor exactly, which is the case that separates reading the
+        Stronghold's Strength from reading anything near it."""
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=7))
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "prov0", seat=DEFENDER, index=0)
+        put_in_play(state, personality("host", owner=ATTACKER, force=7))
+        session = EngineSession.start(state, ATTACKER)
+        end_phase(session)
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert not isinstance(chosen, DeclareAttack)
+
+    def test_it_declares_once_it_can_clear_the_strongholds_floor(self):
+        state = TableState.empty_two_seat()
+        put_in_play(state, stronghold(DEFENDER, province_strength=7))
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "prov0", seat=DEFENDER, index=0)
+        for name in ("host-a", "host-b"):
+            put_in_play(state, personality(name, owner=ATTACKER, force=5))
+        session = EngineSession.start(state, ATTACKER)
+        end_phase(session)
+        view = project(session.game, ATTACKER)
+
+        chosen = MilitaryPolicy().choose(view, session.legal_actions(ATTACKER))
+
+        assert isinstance(chosen, DeclareAttack)
+
     def test_it_does_not_declare_a_second_attack(self):
         """`legality` withholds the action once an attack stands, so the policy must take what it is
         offered rather than what it would prefer."""

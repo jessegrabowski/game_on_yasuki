@@ -30,7 +30,7 @@ from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, GameView
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint, StrongholdPrint
 
 
 class Policy(Protocol):
@@ -339,15 +339,39 @@ class MilitaryPolicy:
 
 
 def _holds_the_initiative(view: GameView) -> bool:
-    """Whether the viewer has more Force to send than the seat it would attack.
+    """Whether the viewer could take a Province from the seat it would attack.
 
-    Declaring costs nothing on its own — an attack nobody assigns to resolves every battlefield with
-    both sides empty and destroys nothing — so this only has to be right about who is ahead. Which
-    Provinces are worth taking is settled at the assignment, where the attack exists and the
-    Provinces' Strength can be read.
+    No attack exists yet, so no Province's Strength can be read —
+    :attr:`~yasuki_core.engine.rules.projection.BattlefieldView.strength` only exists once one is
+    declared. What is readable is the other seat's Stronghold, and every
+    Province is at least that strong, so a seat that cannot beat the Stronghold's Strength plus the
+    Force the Defender could bring cannot take anything and has nothing to declare for.
+
+    The floor is a floor: Fortifications and counters raise a Province above it, so this can still
+    declare an attack whose assignment then finds every Province out of reach.
     """
     other = next(seat for seat in PlayerId if seat is not view.viewer)
-    return _force_at_home(view, view.viewer) > _force_at_home(view, other)
+    cheapest_province = _province_strength_floor(view, other) + _force_at_home(view, other)
+    return _force_at_home(view, view.viewer) > cheapest_province
+
+
+def _province_strength_floor(view: GameView, seat: PlayerId) -> int:
+    """The least Strength any of ``seat``'s Provinces can have: what its Stronghold gives them.
+
+    Counters on a Province slot and the Fortifications attached to it add to this, and neither can
+    be evaluated from a view — :data:`~yasuki_core.engine.rules.economy.PROVINCE_STRENGTH_GRANTS`
+    takes the live game.
+    """
+    return max(
+        (
+            view.stat(entry.card, Stat.PROVINCE_STRENGTH)
+            for entry in view.table.battlefield
+            if isinstance(entry.card, L5RCard)
+            and entry.card.owner is seat
+            and isinstance(entry.card.printed, StrongholdPrint)
+        ),
+        default=0,
+    )
 
 
 def _force_at_home(view: GameView, seat: PlayerId) -> int:
