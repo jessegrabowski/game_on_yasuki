@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.effects import (
     LoseGame,
     MoveToHand,
     GrantKeyword,
+    GrantMinimum,
     GrantModifier,
     PayGold,
     IgnoreHonorRequirements,
@@ -71,6 +72,10 @@ EFFECTS = [
     (
         GrantModifier("millet", "farm_1", Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN),
         "millet grants farm_1 +2 GOLD_PRODUCTION (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantMinimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
+        "uncertainty gives shiba a minimum CHI of 1 (UNTIL_END_OF_TURN)",
     ),
     (
         GrantKeyword("fields", "shinjo_1", "Cavalry", Duration.UNTIL_END_OF_TURN),

@@ -37,6 +37,7 @@ yasuki_core.engine.rules.economy
     recruit_discount
     register_self_grant
     self_grant
+    stat_minimum
     unit_gold_cost
     untaken_self_grant
 

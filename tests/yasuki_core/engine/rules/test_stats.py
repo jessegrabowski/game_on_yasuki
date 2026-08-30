@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import effective_chi, effective_force, effective_stat
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -146,3 +146,77 @@ def test_a_stat_printed_as_a_dash_reads_zero_and_takes_no_modifiers():
     game = _game(free, [surcharge])
 
     assert effective_stat(game, free, Stat.GOLD_COST) == 0
+
+
+def test_a_granted_minimum_floors_the_stat_above_zero():
+    """CR, Minimums and Maximums: an effect may give a stat a minimum value, applied on top of the
+    penalties rather than among them."""
+    samurai = _personality(chi=2)
+    game = _game(
+        samurai,
+        [
+            Minimum("uncertainty", samurai.id, Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
+            Modifier("uncertainty", samurai.id, Stat.CHI, -5, Duration.UNTIL_END_OF_TURN),
+        ],
+    )
+
+    assert effective_chi(game, samurai) == 1
+
+
+def test_the_most_restrictive_minimum_is_the_one_that_applies():
+    """CR, Minimums and Maximums: "a minimum of 1 overrides a minimum of 0"."""
+    samurai = _personality(chi=2)
+    game = _game(
+        samurai,
+        [
+            Minimum("low", samurai.id, Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
+            Minimum("high", samurai.id, Stat.CHI, 3, Duration.UNTIL_END_OF_TURN),
+            Modifier("penalty", samurai.id, Stat.CHI, -5, Duration.UNTIL_END_OF_TURN),
+        ],
+    )
+
+    assert effective_chi(game, samurai) == 3
+
+
+def test_a_minimum_never_raises_a_stat_that_already_clears_it():
+    samurai = _personality(chi=4)
+    game = _game(samurai, [Minimum("src", samurai.id, Stat.CHI, 1, Duration.UNTIL_END_OF_TURN)])
+
+    assert effective_chi(game, samurai) == 4
+
+
+def test_a_minimum_floors_only_the_stat_it_names():
+    samurai = _personality(force=3, chi=2)
+    game = _game(
+        samurai,
+        [
+            Minimum("src", samurai.id, Stat.CHI, 2, Duration.UNTIL_END_OF_TURN),
+            Modifier("src", samurai.id, Stat.FORCE, -5, Duration.UNTIL_END_OF_TURN),
+        ],
+    )
+
+    assert effective_chi(game, samurai) == 2
+    assert effective_force(game, samurai) == 0
+
+
+def test_a_minimum_floors_only_the_card_it_names():
+    samurai = _personality("a", chi=2)
+    other = _personality("b", chi=2)
+    game = _game(samurai, [Minimum("src", samurai.id, Stat.CHI, 1, Duration.UNTIL_END_OF_TURN)])
+    put_in_play(game, other)
+    game.modifiers.append(Modifier("src", other.id, Stat.CHI, -5, Duration.UNTIL_END_OF_TURN))
+
+    assert effective_chi(game, other) == 0
+
+
+def test_a_while_source_in_play_minimum_drops_when_its_source_leaves():
+    samurai = _personality(chi=2)
+    game = _game(
+        samurai,
+        [
+            Minimum("gone", samurai.id, Stat.CHI, 2, Duration.WHILE_SOURCE_IN_PLAY),
+            Modifier("penalty", samurai.id, Stat.CHI, -5, Duration.UNTIL_END_OF_TURN),
+        ],
+    )  # "gone" was never put into play
+
+    assert effective_chi(game, samurai) == 0

@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.flow import run_stack
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.state import GameState
@@ -498,3 +498,19 @@ def test_proclaiming_a_personality_who_dies_on_arrival_still_gains_the_honor():
 
     assert "P1-doomed" not in _battlefield(session.game)
     assert session.game.table.seats[P1].honor == before + 3
+
+
+def test_a_minimum_chi_of_one_keeps_a_personality_out_of_the_chi_death_rule():
+    """The Chi Death Rule tests for zero, so a floor above zero settles it without an exemption —
+    which is what Uncertainty's "minimum Chi of 1" buys, and why the card is not a CHI_DEATH_EXEMPT
+    entry."""
+    samurai = _personality("shiba", chi=2)
+    game = _in_play(samurai)
+    game.modifiers.append(Minimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN))
+    game.modifiers.append(
+        Modifier("uncertainty", "shiba", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN)
+    )
+
+    triggers.enforce_state_rules(game)
+
+    assert _battlefield(game) == {"shiba"}

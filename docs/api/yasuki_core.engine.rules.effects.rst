@@ -29,6 +29,7 @@ yasuki_core.engine.rules.effects
     GainGold
     GainHonor
     GrantKeyword
+    GrantMinimum
     GrantModifier
     IgnoreHonorRequirements
     InterruptingEffect

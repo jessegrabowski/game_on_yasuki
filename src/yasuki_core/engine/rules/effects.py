@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.events import (
     Revealed,
     Straightened,
 )
-from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment, flow_resolves
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
@@ -380,6 +380,35 @@ class GrantModifier(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.modifiers.append(
             Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantMinimum(Effect):
+    """Record a continuous stat minimum: the ``source`` card floors ``target``'s ``stat`` at
+    ``value`` for ``duration`` (CR, Minimums and Maximums).
+
+    The minimum counterpart of :class:`GrantModifier`. A card reading "to a minimum of N" wants a
+    :class:`GrantModifier` with a capped amount instead, because that wording limits one change
+    rather than the stat.
+    """
+
+    source_id: str
+    target_id: str
+    stat: Stat
+    value: int
+    duration: Duration
+
+    def describe(self) -> str:
+        return (
+            f"{self.source_id} gives {self.target_id} a minimum {self.stat.name} of {self.value} "
+            f"({self.duration.name})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifiers.append(
+            Minimum(self.source_id, self.target_id, self.stat, self.value, self.duration)
         )
         return []
 

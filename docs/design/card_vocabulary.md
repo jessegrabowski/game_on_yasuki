@@ -53,6 +53,7 @@ deferred through `Then` instead.
    GainHonor
    LoseGame
    GrantKeyword
+   GrantMinimum
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
@@ -170,6 +171,7 @@ Production without a modifier being recorded.
    Stat
    Duration
    KeywordGrant
+   Minimum
    Modifier
 ```
 

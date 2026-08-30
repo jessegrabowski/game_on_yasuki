@@ -90,8 +90,40 @@ class KeywordGrant:
     duration: Duration
 
 
-# A recorded ongoing effect of either kind. The CR files a keyword change beside a stat change —
-# both are ongoing, both last to the end of the turn unless the card says otherwise, and both are
-# forgotten when their target leaves the table — so the two are recorded in one list and expire
-# together (CR, Duration of Effects).
-OngoingEffect = Modifier | KeywordGrant
+@dataclass(frozen=True, slots=True)
+class Minimum:
+    """A continuous effect that floors one card's stat while active — "a target Personality has a
+    minimum Chi of 1" (CR, Minimums and Maximums).
+
+    A minimum is applied on top of the bonuses and penalties rather than among them: the stat totals
+    first, and only then is raised to meet the floor (CR, Calculating Stats). Where several apply to
+    the same stat, the most restrictive wins. Every stat already floors at zero, so one of these
+    raises a floor that is always there rather than introducing one.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the minimum comes from — used to expire a ``WHILE_SOURCE_IN_PLAY`` minimum when it
+        leaves play and to attribute the effect.
+    target_id : str
+        The card whose stat is floored.
+    stat : Stat
+        Which stat the floor applies to.
+    value : int
+        The lowest the stat may read while this is active.
+    duration : Duration
+        When the minimum stops applying.
+    """
+
+    source_id: str
+    target_id: str
+    stat: Stat
+    value: int
+    duration: Duration
+
+
+# A recorded ongoing effect, whichever kind. The CR files a keyword change and a stat's floor
+# beside a stat change — each is ongoing, each lasts to the end of the turn unless the card says
+# otherwise, and each is forgotten when its target leaves the table — so they are recorded in one
+# list and expire together (CR, Duration of Effects).
+OngoingEffect = Modifier | KeywordGrant | Minimum
