@@ -1,10 +1,11 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.abilities import (
     CardLocation,
     Ability,
+    activatable,
     _ABILITIES,
     _ENTERS_UNBOWED,
     _INVEST,
@@ -22,11 +23,15 @@ from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.game_pieces.prints import FatePrint
 from tests.yasuki_core.engine.builders import (
     holding,
     province_card,
     put_in_play,
+    register,
 )
 
 
@@ -121,6 +126,75 @@ _ABILITIES["test_acts_from_province"] = Ability(
     effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
     located_at=(CardLocation.PROVINCE,),
 )
+
+
+# The same ability twice, differing only in where it acts from. A Strategy is played out of hand,
+# which is a location nothing acted from before.
+_ABILITIES["test_acts_from_hand"] = Ability(
+    timing=ActionTiming.OPEN,
+    label="test",
+    cost=lambda game, source: [],
+    targets=lambda game, card: [card.id],
+    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    located_at=(CardLocation.HAND,),
+)
+
+_ABILITIES["test_acts_from_play"] = Ability(
+    timing=ActionTiming.OPEN,
+    label="test",
+    cost=lambda game, source: [],
+    targets=lambda game, card: [card.id],
+    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+)
+
+
+def _in_hand(state: TableState, card_id: str, printed_id: str):
+    """Put a Fate card in P1's hand, which is where a Strategy waits to be played."""
+    card = register(
+        state,
+        L5RCard.of(
+            FatePrint,
+            id=card_id,
+            name=card_id,
+            printed_id=printed_id,
+            side=Side.FATE,
+            owner=PlayerId.P1,
+        ),
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+    return card
+
+
+def test_an_ability_that_acts_from_the_hand_is_found_there():
+    state = TableState.empty_two_seat()
+    card = _in_hand(state, "strategy", "test_acts_from_hand")
+    session = EngineSession.start(state, PlayerId.P1)
+    open_timing = frozenset({ActionTiming.OPEN})
+
+    found = activatable(session.game, PlayerId.P1, open_timing, at=(CardLocation.HAND,))
+
+    assert [held.id for held in found] == [card.id]
+
+
+def test_an_ability_that_acts_from_play_is_not_found_in_the_hand():
+    """`located_at` defaults to the battlefield, which is what keeps the hand from leaking into
+    every ability that already works."""
+    state = TableState.empty_two_seat()
+    _in_hand(state, "not_yet", "test_acts_from_play")
+    session = EngineSession.start(state, PlayerId.P1)
+    open_timing = frozenset({ActionTiming.OPEN})
+
+    assert activatable(session.game, PlayerId.P1, open_timing, at=(CardLocation.HAND,)) == []
+
+
+def test_a_card_in_hand_is_never_activated_in_play():
+    """A card in hand is played, not activated, so it must not reach `ActivateAbility` — it pays a
+    Gold Cost and goes to the discard, neither of which that action does."""
+    state = TableState.empty_two_seat()
+    card = _in_hand(state, "strategy", "test_acts_from_hand")
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert ActivateAbility(card.id) not in session.legal_actions(PlayerId.P1)
 
 
 def test_an_ability_that_acts_from_a_province_is_offered_there():
