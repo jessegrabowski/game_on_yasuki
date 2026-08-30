@@ -163,7 +163,9 @@ def advance(game: GameState) -> None:
 
     Pause instead of finishing the turn if the end-of-turn discard needs an answer: record the
     request on ``game.pending`` and return, leaving the caller to :func:`submit` a response before
-    advancing again. Raise ``RuntimeError`` if called while a decision is already pending.
+    advancing again. That discard is the only question the end of a turn may ask — raise
+    ``RuntimeError`` if a delayed effect asks one of its own, and if called while a decision is
+    already pending.
     """
     if game.awaiting_decision:
         raise RuntimeError("cannot advance while a decision is pending")
@@ -1088,6 +1090,11 @@ def _apply_card_choice(
 def _end_turn(game: GameState) -> None:
     seat = game.active
     _resolve_delayed(game, END_OF_TURN)
+    if game.pending is not None:
+        # What is left of the end of the turn — Sincerity, the fate draw, the hand-size discard —
+        # has nowhere to resume from, and setting the discard request would strand the paused
+        # effect's own cascade behind it. Nothing delayed today asks a question.
+        raise RuntimeError("a delayed effect paused the end of the turn, which cannot resume")
     _accrue_sincerity(game, seat)
     ops.draw_to_hand(game.table, seat)
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]

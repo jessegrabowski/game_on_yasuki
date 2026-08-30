@@ -1183,3 +1183,14 @@ def test_a_delayed_effect_refuses_a_moment_nothing_resolves(moment, worded):
         DelayedEffect(Banish("card"), moment).perform(game)
 
     assert game.delayed == []
+
+
+def test_a_delayed_effect_that_asks_a_question_at_the_end_of_the_turn_is_refused():
+    """Nothing after ``_resolve_delayed`` can resume — the fate draw and the hand-size discard would
+    run on a paused game and strand the effect's own cascade — so the end of the turn says so at the
+    point of failure rather than at the mismatched stack two submits later."""
+    game = _game(hand=0, fate_deck=1)
+    game.delayed = [(END_OF_TURN, Ask(PlayerId.P1, "a question", "unregistered"))]
+
+    with pytest.raises(RuntimeError, match="paused the end of the turn"):
+        _advance_to_end_of_turn(game)
