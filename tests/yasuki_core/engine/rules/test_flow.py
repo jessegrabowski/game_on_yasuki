@@ -15,7 +15,14 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.state import GameState, Phase, RESPONSE_TIMINGS
+from yasuki_core.engine.rules.state import (
+    Boundary,
+    END_OF_TURN,
+    GameState,
+    Moment,
+    Phase,
+    RESPONSE_TIMINGS,
+)
 from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     Confirm,
@@ -31,7 +38,9 @@ from yasuki_core.engine.rules.economy import (
 )
 from yasuki_core.engine.rules.effects import (
     Ask,
+    Banish,
     DelayStraighten,
+    DelayedEffect,
     Destroy,
     GrantModifier,
     Straighten,
@@ -1119,3 +1128,26 @@ def _advance_turns(session, count: int) -> None:
             return
         end_phase(session)
     raise AssertionError(f"stuck on turn {session.game.turn}, wanted {target}")
+
+
+def test_resolving_one_moment_drops_it_and_leaves_the_others_waiting():
+    """The drop is what makes the walk re-entrant and what bounds ``game.delayed``: an effect that
+    stayed on the list would resolve again at every later turn's end."""
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1)
+    later = Moment(Phase.ACTION, Boundary.BEGINNING)
+    game.delayed = [(END_OF_TURN, Banish("gone")), (later, Banish("staying"))]
+
+    flow._resolve_delayed(game, END_OF_TURN)
+
+    assert game.delayed == [(later, Banish("staying"))]
+
+
+def test_an_effect_delayed_while_the_moment_resolves_waits_for_the_next_one():
+    """The list is rebuilt before the held effects run, so a delay one of them schedules survives to
+    its own moment instead of being swept up by the walk that created it."""
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1)
+    game.delayed = [(END_OF_TURN, DelayedEffect(Banish("later"), END_OF_TURN))]
+
+    flow._resolve_delayed(game, END_OF_TURN)
+
+    assert game.delayed == [(END_OF_TURN, Banish("later"))]

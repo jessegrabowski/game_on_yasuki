@@ -1108,7 +1108,7 @@ def _resolve_delayed(game: GameState, moment: Moment) -> None:
     held = [effect for held_until, effect in game.delayed if held_until == moment]
     if not held:
         return
-    game.delayed = [pair for pair in game.delayed if pair[0] != moment]
+    game.delayed = [entry for entry in game.delayed if entry[0] != moment]
     triggers.resolve_effects(game, held)
 
 
