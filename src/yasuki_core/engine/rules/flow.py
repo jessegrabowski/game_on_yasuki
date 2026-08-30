@@ -329,6 +329,20 @@ def _resolve_strategy(game: GameState, card_id: str) -> None:
     _defer_ability(game, card, ability)
 
 
+def _discard_played(game: GameState, card_id: str) -> None:
+    """Discard a card whose play has finished, unless it has already left the hand.
+
+    Step F discards the played card "unless it is now in play" (CR, Action Sequence) — a Terrain, a
+    Kata or an Edict reaches the board as the thing its own text does. A card that banished itself has
+    left by another road, and discarding it would drag it back out of the pile it chose, so the
+    test is whether it is still in hand rather than whether it reached the board.
+    """
+    card = game.table.cards_by_id[card_id]
+    if card not in game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards:
+        return
+    triggers.resolve_effects(game, [Discard(card_id, card.owner)])
+
+
 def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()) -> None:
     """Open the producer's window, then bow it and add its yield to its owner's pool (KD6).
 
@@ -692,8 +706,7 @@ def _resolve(game: GameState, item: WorkItem) -> None:
         case ResolveStrategy(card_id=card_id):
             _resolve_strategy(game, card_id)
         case DiscardPlayed(card_id=card_id):
-            card = game.table.cards_by_id[card_id]
-            triggers.resolve_effects(game, [Discard(card_id, card.owner)])
+            _discard_played(game, card_id)
         case SelectAbilityTarget(card_id=card_id, candidates=candidates):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(

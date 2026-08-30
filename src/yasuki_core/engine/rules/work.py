@@ -233,8 +233,12 @@ class ResolveStrategy:
 
 @dataclass(frozen=True, slots=True)
 class DiscardPlayed:
-    """Discard a card that has finished resolving. A Strategy goes to its owner's Fate discard once
-    its ability is done, so this is stacked under the ability's own work and runs after it.
+    """Discard a card that has finished resolving, unless it is now in play.
+
+    A Strategy goes to its owner's Fate discard once its ability is done (CR, Action Sequence step
+    F), so this is stacked under the ability's own work and runs after it. The exception is the
+    card that put *itself* into play — a Terrain, a Kata, an Edict — which stays where its own text
+    left it.
 
     Attributes
     ----------

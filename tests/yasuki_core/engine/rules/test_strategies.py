@@ -1,8 +1,11 @@
+from dataclasses import dataclass
+
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, CardLocation
+from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, CardLocation, itself
 from yasuki_core.engine.rules.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.decisions import ChoosePayment, DecisionResponse
-from yasuki_core.engine.rules.effects import AdjustCounter
+from yasuki_core.engine.rules.effects import AdjustCounter, Effect
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -24,6 +27,31 @@ _ABILITIES["test_strategy"] = Ability(
         held.id for held in game.table.battlefield.cards if held.owner is card.owner
     ],
     effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    located_at=(CardLocation.HAND,),
+)
+
+
+@dataclass(frozen=True, slots=True)
+class _PutItIntoPlay(Effect):
+    """A Terrain's own text, in miniature: the played card ends up on the battlefield."""
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"{self.card_id} enters play"
+
+    def perform(self, game):
+        ops.move_card(game.table, game.table.cards_by_id[self.card_id], ops.BATTLEFIELD)
+        return []
+
+
+_ABILITIES["test_kata_strategy"] = Ability(
+    timing=ActionTiming.OPEN,
+    label="test",
+    cost=lambda game, source: [],
+    targets=itself,
+    effects=lambda game, source, target: [_PutItIntoPlay(source.id)],
+    all_targets=True,
     located_at=(CardLocation.HAND,),
 )
 
@@ -267,3 +295,32 @@ def test_a_strategy_resolves_before_it_is_discarded_rather_than_after():
 
     assert _RESOLVED_FROM == [ZoneRole.HAND]  # still in hand while its own text ran
     assert _discard(session) == [card.id]  # and in the discard once it was done
+
+
+def test_a_strategy_that_put_itself_into_play_is_not_discarded():
+    """CR, Action Sequence step F: the played card is discarded "unless it is now in play". A
+    Terrain reads "Put this card into play there", so discarding it afterward would undo the card."""
+    state = TableState.empty_two_seat()
+    card = register(
+        state,
+        L5RCard.of(
+            ActionPrint,
+            id="kata",
+            name="kata",
+            printed_id="test_kata_strategy",
+            side=Side.FATE,
+            owner=SEAT,
+            gold_cost=0,
+        ),
+    )
+    state.zones[ZoneKey(SEAT, ZoneRole.HAND)].add(card)
+    session = EngineSession.start(state, SEAT)
+
+    session.act(SEAT, PlayStrategy(card.id))
+    while session.game.pending is not None:
+        asked = session.game.pending
+        session.submit(asked.seat, DecisionResponse(asked.candidates[:1]))
+
+    assert card.id in {held.id for held in session.game.table.battlefield.cards}
+    assert _discard(session) == []
+    assert _hand(session) == []
