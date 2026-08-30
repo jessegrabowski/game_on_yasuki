@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.events import (
     Straightened,
 )
 from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Modifier, Stat
-from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment
+from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment, flow_resolves
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -281,7 +281,8 @@ class DelayedEffect(Effect):
     effect : Effect
         What resolves later.
     until : Moment
-        The boundary of play it waits for.
+        The boundary of play it waits for. Resolving a delay to a moment the flow never reaches
+        raises ``ValueError`` rather than holding the effect for the rest of the game.
     """
 
     effect: Effect
@@ -291,6 +292,8 @@ class DelayedEffect(Effect):
         return f"{self.effect.describe()} {self.until.describe()}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
+        if not flow_resolves(self.until):
+            raise ValueError(f"nothing resolves {self.until.describe()}")
         game.delayed.append((self.until, self.effect))
         return []
 

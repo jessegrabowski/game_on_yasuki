@@ -23,6 +23,7 @@ yasuki_core.engine.rules.state
 
 .. autosummary::
 
+    flow_resolves
     once_key
     once_per_turn
     rules_at_start

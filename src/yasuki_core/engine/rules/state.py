@@ -145,6 +145,16 @@ class Moment:
 
 END_OF_TURN = Moment(Turn.CURRENT, Boundary.END)
 
+# The moments the flow reaches. Any other Moment is constructible and correctly worded, so an effect
+# delayed to one would be held for the rest of the game with nothing to resolve it.
+FIRED_MOMENTS: frozenset[Moment] = frozenset({END_OF_TURN})
+
+
+def flow_resolves(moment: Moment) -> bool:
+    """Whether the flow reaches ``moment``. A Moment names a stage and a boundary and nothing else,
+    so it stands for every occurrence of that stage at once."""
+    return moment in FIRED_MOMENTS
+
 
 class BattleOutcome(NamedTuple):
     """What resolving a battle did, recorded as it happened.

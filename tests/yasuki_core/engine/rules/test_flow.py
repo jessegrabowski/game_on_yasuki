@@ -1,3 +1,6 @@
+import inspect
+import re
+
 import pytest
 
 from yasuki_core.engine import ops
@@ -18,10 +21,12 @@ from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import (
     Boundary,
     END_OF_TURN,
+    FIRED_MOMENTS,
     GameState,
     Moment,
     Phase,
     RESPONSE_TIMINGS,
+    Turn,
 )
 from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
@@ -45,7 +50,7 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     Straighten,
 )
-from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules import flow, legality, state
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
@@ -1151,3 +1156,30 @@ def test_an_effect_delayed_while_the_moment_resolves_waits_for_the_next_one():
     flow._resolve_delayed(game, END_OF_TURN)
 
     assert game.delayed == [(END_OF_TURN, Banish("later"))]
+
+
+def test_every_fired_moment_has_a_resolve_call_behind_it():
+    """``FIRED_MOMENTS`` is what ``DelayedEffect`` validates against, so a moment listed there with
+    no call site behind it would let through the delay it exists to refuse."""
+    called = set(re.findall(r"_resolve_delayed\(game, (\w+)\)", inspect.getsource(flow)))
+
+    assert {getattr(state, name) for name in called} == FIRED_MOMENTS
+
+
+@pytest.mark.parametrize(
+    "moment, worded",
+    [
+        (Moment(Phase.ACTION, Boundary.BEGINNING), "at the beginning of the Action Phase"),
+        # A moment is both halves, so neither alone may let a delay through: the stage the flow
+        # does reach at an edge it does not, and an edge it does reach on a stage it does not.
+        (Moment(Turn.CURRENT, Boundary.BEGINNING), "at the beginning of the turn"),
+        (Moment(Phase.ACTION, Boundary.END), "at the end of the Action Phase"),
+    ],
+)
+def test_a_delayed_effect_refuses_a_moment_nothing_resolves(moment, worded):
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1)
+
+    with pytest.raises(ValueError, match=f"nothing resolves {worded}"):
+        DelayedEffect(Banish("card"), moment).perform(game)
+
+    assert game.delayed == []
