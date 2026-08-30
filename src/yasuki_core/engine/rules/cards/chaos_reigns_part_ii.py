@@ -107,6 +107,7 @@ def _shosuro_aoki_yoritomo_kayoko_experienced_counter_gained(ctx: TriggerContext
 
 # --- Tarkasha ---
 
+
 NAGA_FOLLOWER = "naga"
 
 
@@ -155,7 +156,7 @@ register_ability(
     "tarkasha",
     Ability(
         timing=ActionTiming.OPEN,
-        label="Open: Reshuffle a fallen Naga to Equip a 1F Naga Follower to your Commander",
+        label="Open: Reshuffle a Naga Follower in your discard pile to create a 1F Naga Follower and attach it to your target Commander",
         cost=no_cost,
         targets=_tarkasha_targets,
         effects=_tarkasha_effects,
@@ -164,6 +165,7 @@ register_ability(
 
 
 # --- Tetsuo Hiyamako (Experienced) ---
+
 
 HIYAMAKOS_CLAW = "weapon_item_claw_plus1f"
 CLAW_COUNT = 2

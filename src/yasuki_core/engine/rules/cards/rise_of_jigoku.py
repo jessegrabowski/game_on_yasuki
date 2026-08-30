@@ -80,6 +80,7 @@ def _makeshift_fortifications_province_strength(
 
 # --- Mishime Sensei ---
 
+
 MISHIMES_ONI = "oni_personality_variable_chi"
 ONI_COST = 5
 
@@ -267,7 +268,7 @@ register_ability(
     "rural_market",
     Ability(
         timing=ActionTiming.OPEN,
-        label="Spend a wealth token: straighten a Farm",
+        label="Spend a Wealth token: straighten a Farm",
         cost=spend_wealth,
         targets=_rural_market_targets,
         effects=_rural_market_effects,
@@ -325,6 +326,7 @@ def _sapphire_mine_entered_play(ctx: TriggerContext) -> list[Effect]:
 
 
 # --- Shinjo Fields ---
+
 
 CAVALRY_FOLLOWER = "cavalry"
 

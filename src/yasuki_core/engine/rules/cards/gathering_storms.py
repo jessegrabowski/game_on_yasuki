@@ -73,7 +73,7 @@ register_ability(
     "otokoshi_district",
     Ability(
         timing=ActionTiming.OPEN,
-        label="Destroy: draw a card and give a Market a wealth token",
+        label="Tireless Open: Destroy this Holding to draw a card and give your target Market a +1GP Wealth token",
         cost=destroy_cost,
         targets=_otokoshi_district_targets,
         effects=_otokoshi_district_effects,

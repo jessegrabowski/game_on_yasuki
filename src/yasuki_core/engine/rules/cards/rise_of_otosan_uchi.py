@@ -114,6 +114,7 @@ register_ability(
 
 # --- Bound in Blood ---
 
+
 HORROR = "horror_shadowlands_personality"
 GOLD_PER_SACRIFICE = 2
 MOST_SACRIFICES = 4
@@ -140,7 +141,7 @@ def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
         AskAmount(
             source.owner,
             _bound_in_blood_amounts(game, source),
-            "How much Gold do you spend binding blood?",
+            "How much Gold do you spend on Bound in Blood?",
             "bound_in_blood",
             source.id,
         ),
@@ -161,7 +162,7 @@ def _resolve_bound_in_blood(
     ]
 
 
-@choice_resolver("bound_in_blood_sacrifice", prompt="Choose the Personalities to bind")
+@choice_resolver("bound_in_blood_sacrifice", prompt="Choose the Personalities to target")
 def _resolve_bound_in_blood_sacrifice(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
@@ -185,7 +186,7 @@ register_ability(
     "bound_in_blood",
     Ability(
         timing=ActionTiming.OPEN,
-        label="Open: Bow and spend Gold to bind your Personalities into a Horror",
+        label="Open: Bow and spend Gold to banish your target Personalities and Recruit a Horror",
         cost=_bound_in_blood_cost,
         targets=itself,
         effects=lambda game, source, target: [],
@@ -195,6 +196,7 @@ register_ability(
 
 
 # --- Courts of Otosan Uchi ---
+
 
 COURTIER = "courtier_personality_0_2_2"
 
@@ -291,6 +293,7 @@ register_invest(
 
 # --- Culling Grounds ---
 
+
 EXPENDABLE_SERVANT = "expendable_personality_0_2_1"
 
 
@@ -334,6 +337,7 @@ register_ability(
 
 # --- Kitsu Watanabe (Experienced) ---
 
+
 LION_ANCESTOR = "lion_ancestor"
 
 
@@ -355,7 +359,7 @@ register_ability(
     "kitsu_watanabe_experienced",
     Ability(
         timing=ActionTiming.OPEN,
-        label="Open: Destroy your Holding to call up a 2F/2C/3PH Lion Ancestor",
+        label="Open: Destroy your target Holding to create a 2F/2C/3PH Ancestor Personality",
         cost=no_cost,
         targets=_kitsu_watanabe_experienced_targets,
         effects=_kitsu_watanabe_experienced_effects,
@@ -375,6 +379,7 @@ register_invest("rebuilt_harbor", InvestAbility(amounts=(1, 2, 3), effect=_rebui
 
 
 # --- Shinjo Saeki, Clan Champion (Experienced 2) ---
+
 
 CAVALRY_FOLLOWER = "cavalry"
 

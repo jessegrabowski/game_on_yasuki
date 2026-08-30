@@ -159,7 +159,7 @@ register_ability(
     "repairing_the_ruins",
     Ability(
         timing=ActionTiming.OPEN,
-        label="Discard: rebuild this Province with a Holding you do not control",
+        label="Economic Open: Discard this Event to refill its Province with a non-Unique Holding you control no copies of",
         cost=no_cost,
         targets=_repairing_the_ruins_targets,
         effects=_repairing_the_ruins_effects,
@@ -169,6 +169,7 @@ register_ability(
 
 
 # --- The Forgotten ---
+
 
 FORGOTTEN_DEAD = "forgotten_dead"
 FORGOTTEN_HONOR_LOSS = 2
@@ -196,7 +197,7 @@ on(EnteredPlay, "the_forgotten")(_the_forgotten_entered_play_or_destroyed)
 on(Destroyed, "the_forgotten")(_the_forgotten_entered_play_or_destroyed)
 
 
-@choice_resolver("the_forgotten", prompt="Equip the dead to one of your Personalities")
+@choice_resolver("the_forgotten", prompt="Attach the Undead Follower to your target Personality")
 def _resolve_the_forgotten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
