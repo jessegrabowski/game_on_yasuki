@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.modifiers import (
     Stat,
 )
 from yasuki_core.engine.rules.state import GameState, used_this_turn
-from yasuki_core.engine.table import ZoneKey
+from yasuki_core.engine.table import ZoneKey, unit_members
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import counter_from_key
@@ -257,6 +257,16 @@ def effective_province_strength(game: GameState, province: ZoneKey) -> int:
         if grant is not None:
             total += grant(game, fortification, province)
     return max(0, total)
+
+
+def unit_gold_cost(game: GameState, personality: L5RCard) -> int:
+    """A unit's total Gold Cost: the Personality's own and every card attached to him (CR, Unit).
+
+    What a card means by "his unit's cost" — the pool a variable-cost action is priced against.
+    """
+    return sum(
+        effective_gold_cost(game, member) for member in unit_members(game.table, personality)
+    )
 
 
 def effective_gold_cost(game: GameState, card: L5RCard) -> int:

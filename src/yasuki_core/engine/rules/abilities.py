@@ -366,6 +366,14 @@ def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]
     )
 
 
+def personalities_in_play(game: GameState) -> tuple[L5RCard, ...]:
+    """Every Personality on the battlefield, either seat's — the pool a card means by "a target
+    Personality" with no side attached to it."""
+    return tuple(
+        card for card in game.table.battlefield.cards if isinstance(card.printed, PersonalityPrint)
+    )
+
+
 def owned_holdings(game: GameState, owner: PlayerId, keyword: str | None = None) -> list[L5RCard]:
     """The Holdings ``owner`` has in play, narrowed to those carrying ``keyword`` when one is given.
     Default None, which takes them all."""

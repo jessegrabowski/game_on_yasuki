@@ -36,6 +36,7 @@ yasuki_core.engine.rules.abilities
     one_wealth
     owned_holdings
     owned_personalities
+    personalities_in_play
     plus_one_gp_this_turn
     register_ability
     register_enters_unbowed

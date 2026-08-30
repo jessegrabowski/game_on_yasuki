@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     honors_veil,
     imperial_edition,
     ivory_edition,
+    lotus_edition,
     onyx_edition,
     pre_imperial,
     promotional_diamond,
