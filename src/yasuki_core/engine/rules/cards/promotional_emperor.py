@@ -38,7 +38,7 @@ def _colonial_farm_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "colonial_farm",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label=f"Open: Pay {ASHIGARU_COST} gold to Equip a 1F Ashigaru Follower to a Personality",
         cost=_colonial_farm_cost,
         targets=_colonial_farm_targets,

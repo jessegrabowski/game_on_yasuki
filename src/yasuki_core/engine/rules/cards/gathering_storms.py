@@ -49,7 +49,7 @@ def _ichiba_district_targets(game: GameState, card: L5RCard) -> list[str]:
 register_ability(
     "ichiba_district",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Banish a Fate card: give a Port +1 Gold Production",
         cost=banish_top_fate,
         targets=_ichiba_district_targets,
@@ -72,7 +72,7 @@ def _otokoshi_district_effects(game: GameState, source: L5RCard, target: L5RCard
 register_ability(
     "otokoshi_district",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Tireless Open: Destroy this Holding to draw a card and give your target Market a +1GP Wealth token",
         cost=destroy_cost,
         targets=_otokoshi_district_targets,

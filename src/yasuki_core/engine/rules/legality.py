@@ -53,28 +53,28 @@ RULESET = ruleset.ACTIVE
 OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
 
 
-def timing_of(game: GameState, action: Action) -> ActionTiming | None:
-    """The designator ``action`` is taken under, or None for a pass.
+def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
+    """The designators ``action`` may be taken under, empty for a pass.
 
     A pass is the CR's alternative to taking an action rather than an action itself, so it carries
-    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designator off
+    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designators off
     the card, which is why this is a query rather than a table: the same action is Open on one
-    Holding and Dynasty on another.
+    Holding and Dynasty on another, and a card printing "Battle/Open" carries both.
 
     Raise ValueError for an action with no designator rule, and for an ``ActivateAbility`` naming a
     card that has no activated ability.
     """
     if isinstance(action, Pass):
-        return None
+        return frozenset()
     if isinstance(action, ActivateAbility):
         ability = abilities.ability_for(game.table.cards_by_id[action.card_id])
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
-        return ability.timing
+        return frozenset(ability.timings)
     timing = ACTION_TIMINGS.get(type(action))
     if timing is None:
         raise ValueError(f"no designator for action {type(action).__name__}")
-    return timing
+    return frozenset({timing})
 
 
 def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming]:

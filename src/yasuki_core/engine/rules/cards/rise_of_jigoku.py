@@ -56,7 +56,7 @@ def _harvested_land_targets(game: GameState, card: L5RCard) -> list[str]:
 register_ability(
     "harvested_land",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Bow, destroy: give your other Farms +1 Gold Production",
         cost=bow_and_destroy,
         targets=_harvested_land_targets,
@@ -156,7 +156,7 @@ def _mishime_sensei_effects(game: GameState, source: L5RCard, target: L5RCard) -
 register_ability(
     "mishime_sensei",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label=f"Open: Bow and pay {ONI_COST} gold to bow your Personality for an Oni of his Chi",
         cost=_mishime_sensei_cost,
         targets=_mishime_sensei_targets,
@@ -219,7 +219,7 @@ def _modest_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> l
 register_ability(
     "modest_farm",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
         cost=bow_cost,
         targets=_modest_farm_targets,
@@ -267,7 +267,7 @@ def _rural_market_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
 register_ability(
     "rural_market",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Spend a Wealth token: straighten a Farm",
         cost=spend_wealth,
         targets=_rural_market_targets,
@@ -368,7 +368,7 @@ def _resolve_shinjo_fields(
 register_ability(
     "shinjo_fields",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Bow to give your Personality Cavalry, and may destroy this for a Follower",
         cost=bow_cost,
         targets=_shinjo_fields_targets,

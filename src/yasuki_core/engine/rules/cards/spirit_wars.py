@@ -31,7 +31,7 @@ def _poorly_placed_garden_effects(
 register_ability(
     "poorly_placed_garden",
     Ability(
-        timing=ActionTiming.LIMITED,
+        timings=(ActionTiming.LIMITED,),
         label="Limited: bow this Holding to gain 2 Honor",
         cost=bow_cost,
         targets=_poorly_placed_garden_targets,

@@ -93,7 +93,7 @@ def _resolve_hired_killer_target(
 register_ability(
     "hired_killer",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Spend Gold to destroy a target Personality",
         cost=_hired_killer_cost,
         targets=itself,

@@ -1040,7 +1040,7 @@ def activate(game: GameState, card_id: str) -> None:
     ``legal_actions`` validated are still there to hit."""
     card = game.table.cards_by_id[card_id]
     ability = abilities.ability_for(card)
-    if ability.timing is ActionTiming.RESPONSE:
+    if ActionTiming.RESPONSE in ability.timings:
         game.responded.add(card_id)
     _defer_ability(game, card, ability)
     run_stack(game)  # resolve the target, unless the cost's cascade paused for a decision first

@@ -102,7 +102,7 @@ def _shrine_of_sincerity_effects(game: GameState, source: L5RCard, target: L5RCa
 register_ability(
     "shrine_of_sincerity",
     Ability(
-        timing=ActionTiming.DYNASTY,
+        timings=(ActionTiming.DYNASTY,),
         label="Bow: seed a Sincerity token onto a Province Sincerity card",
         cost=bow_cost,
         targets=_shrine_of_sincerity_targets,
@@ -178,7 +178,7 @@ def _resolve_the_bad_death_of_hida_daizu_target(
 register_ability(
     "the_bad_death_of_hida_daizu",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Spend Gold to banish a target Personality at the end of the turn",
         cost=_the_bad_death_of_hida_daizu_cost,
         targets=itself,

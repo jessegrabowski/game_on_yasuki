@@ -4,7 +4,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules import abilities, legality
 from yasuki_core.engine.rules.actions import (
     ACTION_TIMINGS,
     Action,
@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
+from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, itself
 from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -24,6 +25,15 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     two_seat_game,
+)
+
+
+_ABILITIES["dual"] = Ability(
+    timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+    label="test",
+    cost=lambda game, source: [],
+    targets=itself,
+    effects=lambda game, source, target: [],
 )
 
 
@@ -48,10 +58,10 @@ def test_each_rulebook_action_reports_the_designator_the_cr_prints():
     # was already true before designators existed, so only this can catch a misclassification.
     game = two_seat_game()
 
-    assert legality.timing_of(game, Cycle()) is ActionTiming.LIMITED
-    assert legality.timing_of(game, Recruit("x")) is ActionTiming.DYNASTY
-    assert legality.timing_of(game, DynastyDiscard("x")) is ActionTiming.DYNASTY
-    assert legality.timing_of(game, Legacy()) is ActionTiming.DYNASTY
+    assert legality.timings_of(game, Cycle()) == {ActionTiming.LIMITED}
+    assert legality.timings_of(game, Recruit("x")) == {ActionTiming.DYNASTY}
+    assert legality.timings_of(game, DynastyDiscard("x")) == {ActionTiming.DYNASTY}
+    assert legality.timings_of(game, Legacy()) == {ActionTiming.DYNASTY}
 
 
 def test_every_action_has_a_designator_or_a_stated_reason_not_to():
@@ -66,13 +76,13 @@ def test_every_action_has_a_designator_or_a_stated_reason_not_to():
 
 def test_an_action_with_no_designator_is_an_error():
     with pytest.raises(ValueError, match="no designator"):
-        legality.timing_of(two_seat_game(), object())
+        legality.timings_of(two_seat_game(), object())
 
 
 def test_a_pass_carries_no_designator():
     # A pass is the alternative to taking an action, not an action, so every Action Round accepts it
     # and no designator would be right.
-    assert legality.timing_of(two_seat_game(), Pass()) is None
+    assert legality.timings_of(two_seat_game(), Pass()) == frozenset()
 
 
 def test_activating_an_ability_reports_the_cards_designator():
@@ -84,8 +94,8 @@ def test_activating_an_ability_reports_the_cards_designator():
     )
     put_in_play(game, holding("shrine", printed_id="shrine_of_sincerity", gold_production=1))
 
-    assert legality.timing_of(game, ActivateAbility("millet")) is ActionTiming.OPEN
-    assert legality.timing_of(game, ActivateAbility("shrine")) is ActionTiming.DYNASTY
+    assert legality.timings_of(game, ActivateAbility("millet")) == {ActionTiming.OPEN}
+    assert legality.timings_of(game, ActivateAbility("shrine")) == {ActionTiming.DYNASTY}
 
 
 def test_timing_a_card_with_no_activated_ability_is_an_error():
@@ -93,7 +103,7 @@ def test_timing_a_card_with_no_activated_ability_is_an_error():
     put_in_play(game, holding("plain", printed_id="plain_farm", gold_production=2))
 
     with pytest.raises(ValueError, match="no activated ability"):
-        legality.timing_of(game, ActivateAbility("plain"))
+        legality.timings_of(game, ActivateAbility("plain"))
 
 
 def test_each_phase_permits_only_the_designators_its_round_allows():
@@ -133,3 +143,18 @@ def test_a_phase_offers_only_the_abilities_its_round_permits():
     assert ActivateAbility("shrine") not in in_battle
     assert ActivateAbility("millet") not in in_dynasty
     assert ActivateAbility("shrine") in in_dynasty
+
+
+def test_a_card_printing_two_designators_is_offered_under_either():
+    """ "Battle/Open" is 86 of the arc's cards: the ability is one ability, offered in any round that
+    permits any designator it prints."""
+    game = two_seat_game()
+    card = put_in_play(game, holding("h", owner=PlayerId.P1, printed_id="dual"))
+
+    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.OPEN})) == [card]
+    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.BATTLE})) == [card]
+    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.DYNASTY})) == []
+    assert legality.timings_of(game, ActivateAbility("h")) == {
+        ActionTiming.BATTLE,
+        ActionTiming.OPEN,
+    }

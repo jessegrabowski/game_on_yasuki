@@ -51,7 +51,7 @@ def _register_probe() -> None:
     register_ability(
         PROBE,
         Ability(
-            timing=ActionTiming.OPEN,
+            timings=(ActionTiming.OPEN,),
             label="Open: discard a card from hand",
             cost=no_cost,
             targets=itself,

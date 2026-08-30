@@ -44,7 +44,7 @@ def _weapon_artist_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "weapon_artist",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Bow to Equip a +2F/+1C One-Handed Sword to a Personality",
         cost=bow_cost,
         targets=_weapon_artist_targets,

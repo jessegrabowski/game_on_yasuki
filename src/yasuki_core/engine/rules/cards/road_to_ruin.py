@@ -59,7 +59,7 @@ def _dull_tanto_effects(game: GameState, source: L5RCard, target: L5RCard) -> li
 register_ability(
     "dull_tanto",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: give a Personality two -1F tokens and destroy this Item",
         cost=no_cost,
         targets=_dull_tanto_targets,
@@ -158,7 +158,7 @@ def _repairing_the_ruins_effects(game: GameState, source: L5RCard, target: L5RCa
 register_ability(
     "repairing_the_ruins",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Economic Open: Discard this Event to refill its Province with a non-Unique Holding you control no copies of",
         cost=no_cost,
         targets=_repairing_the_ruins_targets,
@@ -228,7 +228,7 @@ def _verdant_wilds_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "verdant_wilds",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Bow: straighten your target card",
         cost=bow_cost,
         targets=_verdant_wilds_targets,

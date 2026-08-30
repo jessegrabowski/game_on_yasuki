@@ -141,8 +141,9 @@ class Ability:
 
     Attributes
     ----------
-    timing : ActionTiming
-        The designator printed on the card, saying when the ability may be used and by whom.
+    timings : tuple of ActionTiming
+        The designators printed on the card, saying when the ability may be used and by whom. A card
+        printing more than one — "Battle/Open" — may be used in any round that permits any of them.
     label : str
         A short human description for the activation menu.
     cost : callable
@@ -162,7 +163,7 @@ class Ability:
         sits face-up in, never from play. Default the battlefield alone.
     """
 
-    timing: ActionTiming
+    timings: tuple[ActionTiming, ...]
     label: str
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
@@ -343,9 +344,9 @@ def activatable(
         if location not in at:
             continue
         ability = _ABILITIES.get(card.printed_id)
-        if ability is None or ability.timing not in permitted:
+        if ability is None or permitted.isdisjoint(ability.timings):
             continue
-        if ability.timing is ActionTiming.RESPONSE and card.id in game.responded:
+        if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
             continue
         if location not in ability.located_at:
             continue

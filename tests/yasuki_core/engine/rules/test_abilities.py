@@ -44,7 +44,7 @@ def _test_cost_grant(game, source_id, chosen, seat):
 # cost's own decision must resolve before the ability's target is asked, neither clobbering the
 # other. No real card pays a cost that pauses yet.
 _ABILITIES["test_cost_pauses"] = Ability(
-    timing=ActionTiming.OPEN,
+    timings=(ActionTiming.OPEN,),
     label="test",
     cost=lambda game, source: [
         Choose(source.owner, (source.id,), 0, 1, "test_cost_pauses", source.id)
@@ -119,7 +119,7 @@ def test_a_second_enters_unbowed_for_one_card_is_refused():
 # An ability that acts from a Province rather than from play — the shape every Event needs. It
 # targets its own source, so the test needs nothing else there.
 _ABILITIES["test_acts_from_province"] = Ability(
-    timing=ActionTiming.OPEN,
+    timings=(ActionTiming.OPEN,),
     label="test",
     cost=lambda game, source: [],
     targets=lambda game, card: [card.id],
@@ -131,7 +131,7 @@ _ABILITIES["test_acts_from_province"] = Ability(
 # The same ability twice, differing only in where it acts from. A Strategy is played out of hand,
 # which is a location nothing acted from before.
 _ABILITIES["test_acts_from_hand"] = Ability(
-    timing=ActionTiming.OPEN,
+    timings=(ActionTiming.OPEN,),
     label="test",
     cost=lambda game, source: [],
     targets=lambda game, card: [card.id],
@@ -140,7 +140,7 @@ _ABILITIES["test_acts_from_hand"] = Ability(
 )
 
 _ABILITIES["test_acts_from_play"] = Ability(
-    timing=ActionTiming.OPEN,
+    timings=(ActionTiming.OPEN,),
     label="test",
     cost=lambda game, source: [],
     targets=lambda game, card: [card.id],
@@ -251,7 +251,7 @@ def test_an_ability_in_play_is_not_offered_from_a_province():
 # A card that acts from either place. The scope is a tuple so an ability can name more than one, and
 # nothing else pins that.
 _ABILITIES["test_acts_from_either"] = Ability(
-    timing=ActionTiming.OPEN,
+    timings=(ActionTiming.OPEN,),
     label="test",
     cost=lambda game, source: [],
     targets=lambda game, card: [card.id],

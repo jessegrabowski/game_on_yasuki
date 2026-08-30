@@ -35,7 +35,7 @@ def _harsh_choices_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "harsh_choices",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Destroy this Province to draw 3 cards",
         cost=no_cost,
         targets=_harsh_choices_targets,

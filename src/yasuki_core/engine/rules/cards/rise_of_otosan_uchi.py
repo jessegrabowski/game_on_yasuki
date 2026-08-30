@@ -101,7 +101,7 @@ def _blessings_of_the_red_panda_spirit_effects(
 register_ability(
     "blessings_of_the_red_panda_spirit",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Each player gains 1 Honor and draws a card",
         cost=no_cost,
         targets=_blessings_of_the_red_panda_spirit_targets,
@@ -185,7 +185,7 @@ def _resolve_bound_in_blood_sacrifice(
 register_ability(
     "bound_in_blood",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Bow and spend Gold to banish your target Personalities and Recruit a Horror",
         cost=_bound_in_blood_cost,
         targets=itself,
@@ -254,7 +254,7 @@ def _courts_of_otosan_uchi_effects(
 register_ability(
     "courts_of_otosan_uchi",
     Ability(
-        timing=ActionTiming.RESPONSE,
+        timings=(ActionTiming.RESPONSE,),
         label="Response: bow your Courtier to move a player's Honor",
         cost=no_cost,
         targets=_courts_of_otosan_uchi_targets,
@@ -325,7 +325,7 @@ def _culling_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) 
 register_ability(
     "culling_grounds",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Bow and lose 1 Honor to recruit a 0F/2C Expendable Personality",
         cost=bow_cost,
         targets=itself,
@@ -358,7 +358,7 @@ def _kitsu_watanabe_experienced_effects(
 register_ability(
     "kitsu_watanabe_experienced",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Destroy your target Holding to create a 2F/2C/3PH Ancestor Personality",
         cost=no_cost,
         targets=_kitsu_watanabe_experienced_targets,

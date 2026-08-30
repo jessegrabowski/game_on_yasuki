@@ -20,7 +20,7 @@ SEAT = PlayerId.P1
 # A Strategy that puts a Wealth token on a target Holding. Its whole text is one effect the engine
 # already has, so what these tests exercise is playing it rather than what it does.
 _ABILITIES["test_strategy"] = Ability(
-    timing=ActionTiming.OPEN,
+    timings=(ActionTiming.OPEN,),
     label="test",
     cost=lambda game, source: [],
     targets=lambda game, card: [
@@ -46,7 +46,7 @@ class _PutItIntoPlay(Effect):
 
 
 _ABILITIES["test_kata_strategy"] = Ability(
-    timing=ActionTiming.OPEN,
+    timings=(ActionTiming.OPEN,),
     label="test",
     cost=lambda game, source: [],
     targets=itself,
@@ -181,7 +181,7 @@ def test_an_untargeted_strategy_still_resolves_before_it_is_discarded():
     """An `all_targets` ability pauses for nothing, so the whole play drains in one pass and the
     ordering rests entirely on the discard being stacked under the ability's own work."""
     _ABILITIES["test_untargeted_strategy"] = Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="test",
         cost=lambda game, source: [],
         targets=lambda game, card: [
@@ -255,7 +255,7 @@ def _note_where_the_source_sits(game, source, target):
 
 
 _ABILITIES["test_probes_its_own_zone"] = Ability(
-    timing=ActionTiming.OPEN,
+    timings=(ActionTiming.OPEN,),
     label="test",
     cost=lambda game, source: [],
     targets=lambda game, card: [

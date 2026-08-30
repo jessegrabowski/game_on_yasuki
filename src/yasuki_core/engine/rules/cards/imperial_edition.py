@@ -54,7 +54,7 @@ register_ability(
     Ability(
         # Repeatable: bowing is the only thing rationing it, so a Gardens straightened again may
         # bow for another two Honor.
-        timing=ActionTiming.LIMITED,
+        timings=(ActionTiming.LIMITED,),
         label=f"Limited: Bow to gain {GARDENS_HONOR} Honor",
         cost=bow_cost,
         targets=itself,
@@ -111,7 +111,7 @@ def _imperial_gift_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "imperial_gift",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Gain 2 Honor and search your Fate deck for an Item",
         cost=no_cost,
         targets=_imperial_gift_targets,
@@ -151,7 +151,7 @@ def _touch_of_death_effects(game: GameState, source: L5RCard, target: L5RCard) -
 register_ability(
     "touch_of_death",
     Ability(
-        timing=ActionTiming.LIMITED,
+        timings=(ActionTiming.LIMITED,),
         label="Limited: destroy a bowed Personality with Chi no higher than this Shugenja's",
         cost=bow_parent_and_destroy,
         targets=_touch_of_death_targets,

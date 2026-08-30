@@ -36,7 +36,7 @@ def _caravansary_effects(game: GameState, source: L5RCard, target: L5RCard) -> l
 register_ability(
     "caravansary",
     Ability(
-        timing=ActionTiming.RESPONSE,
+        timings=(ActionTiming.RESPONSE,),
         label="Response: take a +1GP Wealth token for the Fate card your action discarded",
         cost=no_cost,
         targets=_caravansary_targets,
