@@ -37,6 +37,7 @@ deferred through `Then` instead.
    AskOption
    AttachCard
    Banish
+   DelayedEffect
    BanishTopFate
    Bow
    Choose

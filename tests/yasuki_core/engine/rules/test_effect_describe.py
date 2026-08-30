@@ -3,6 +3,7 @@ import inspect
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.state import END_OF_TURN
 from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,
@@ -11,6 +12,7 @@ from yasuki_core.engine.rules.effects import (
     AskOption,
     AttachCard,
     Banish,
+    DelayedEffect,
     BanishTopFate,
     Bow,
     Ask,
@@ -112,6 +114,10 @@ EFFECTS = [
         "P2 creates oni with Crab, FORCE 4",
     ),
     (Banish("oni"), "banish oni"),
+    (
+        DelayedEffect(Banish("oni"), END_OF_TURN),
+        "banish oni at the end of the turn",
+    ),
     (PayGold(PlayerId.P2, 3, "Colonial Farm"), "P2 pays 3 gold for Colonial Farm"),
     (CounterOnAttachedProvince("wall", WALL, 1), "+1 Wall on wall's province"),
     (

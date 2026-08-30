@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.events import (
     Straightened,
 )
 from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Modifier, Stat
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -270,6 +270,32 @@ class Banish(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class DelayedEffect(Effect):
+    """Hold ``effect`` until ``until``, then resolve it — the CR's delayed effect.
+
+    Nothing is decided at the moment it resolves: a held effect whose card has since left the table
+    is a no-op, so a delay never has to be withdrawn.
+
+    Attributes
+    ----------
+    effect : Effect
+        What resolves later.
+    until : Moment
+        The boundary of play it waits for.
+    """
+
+    effect: Effect
+    until: Moment
+
+    def describe(self) -> str:
+        return f"{self.effect.describe()} {self.until.describe()}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.delayed.append((self.until, self.effect))
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class DestroyProvince(Effect):
     """Destroy ``seat``'s Province ``zone``: its contents go to the discard face-up and the Province
     itself leaves the board. A Province already gone is a no-op.
@@ -489,7 +515,7 @@ class CreateToken(Effect):
         )
         game.created_by[card.id] = self.creator_id
         if self.banish_at_turn_end:
-            game.banish_at_turn_end.append(card.id)
+            game.delayed.append((END_OF_TURN, Banish(card.id)))
         if personality is not None:
             ops.attach_to_personality(game.table, card, personality)
         return [EnteredPlay(card.id, from_hand=False)]

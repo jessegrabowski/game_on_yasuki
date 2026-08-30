@@ -20,6 +20,7 @@ yasuki_core.engine.rules.effects
     CounterOnAttachedProvince
     CreateToken
     DelayStraighten
+    DelayedEffect
     Destroy
     DestroyProvince
     Discard

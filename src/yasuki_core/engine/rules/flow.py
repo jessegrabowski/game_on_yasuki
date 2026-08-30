@@ -24,7 +24,9 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.state import (
     ActionRound,
+    END_OF_TURN,
     GameState,
+    Moment,
     PHASE_TIMINGS,
     Phase,
     RESPONSE_TIMINGS,
@@ -94,7 +96,6 @@ from yasuki_core.engine.rules.legality import (
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    Banish,
     Choose,
     Discard,
     DrawCard,
@@ -1086,7 +1087,7 @@ def _apply_card_choice(
 
 def _end_turn(game: GameState) -> None:
     seat = game.active
-    _banish_lent_creations(game)
+    _resolve_delayed(game, END_OF_TURN)
     _accrue_sincerity(game, seat)
     ops.draw_to_hand(game.table, seat)
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
@@ -1098,17 +1099,17 @@ def _end_turn(game: GameState) -> None:
     _begin_next_turn(game)
 
 
-def _banish_lent_creations(game: GameState) -> None:
-    """Banish the cards created for this turn only, before it ends.
+def _resolve_delayed(game: GameState, moment: Moment) -> None:
+    """Resolve the effects held until ``moment``, and drop them whether they did anything or not.
 
-    The list is cleared whatever happens to the cards, so one destroyed or banished earlier in the
-    turn is not chased into the next: the loan was for this turn, and it is over either way.
+    A held effect whose card has since left the table is a no-op, so one destroyed or banished
+    earlier in the turn is not chased into the next.
     """
-    lent = game.banish_at_turn_end
-    if not lent:
+    held = [effect for held_until, effect in game.delayed if held_until == moment]
+    if not held:
         return
-    game.banish_at_turn_end = []
-    triggers.resolve_effects(game, [Banish(card_id) for card_id in lent])
+    game.delayed = [pair for pair in game.delayed if pair[0] != moment]
+    triggers.resolve_effects(game, held)
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
