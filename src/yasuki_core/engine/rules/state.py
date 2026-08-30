@@ -73,6 +73,7 @@ class RoundKind(Enum):
 
     PHASE = "phase"
     RESPONSE = "response"
+    BATTLE_SEGMENT = "battle_segment"
 
 
 @dataclass(frozen=True, slots=True)
@@ -99,6 +100,29 @@ class ActionRound:
     priority: PlayerId
     passes: int = 0
     kind: RoundKind = RoundKind.PHASE
+
+
+class BattleSegment(Enum):
+    """A battle's own segments, in the order the CR's Battle Sequence walks them.
+
+    Resolution follows the Combat Segment closing and is not an Action Round, so it is not one of
+    these — nothing may be taken during it.
+    """
+
+    ENGAGE = "engage"
+    COMBAT = "combat"
+
+
+# What each battle segment's Action Round permits. Both are open to every seat and permit only their
+# own designator, and both start with the Defender (CR, Battle Sequence).
+BATTLE_SEGMENT_TIMINGS: dict[BattleSegment, RoundTimings] = {
+    BattleSegment.ENGAGE: RoundTimings(
+        active=frozenset({ActionTiming.ENGAGE}), others=frozenset({ActionTiming.ENGAGE})
+    ),
+    BattleSegment.COMBAT: RoundTimings(
+        active=frozenset({ActionTiming.BATTLE}), others=frozenset({ActionTiming.BATTLE})
+    ),
+}
 
 
 class Segment(Enum):
@@ -230,6 +254,9 @@ class AttackPhase:
         so this is what the fight loop counts down. Default empty.
     current : int or None
         The battlefield a battle is being fought at, or None between battles. Default None.
+    battle_segment : BattleSegment or None
+        Which segment of the battle at ``current`` is open, or None when no battle is being fought.
+        Default None.
     assigned_in : dict mapping str to str
         Each assigned Personality to the maneuvers window it assigned in. The current rules run one
         window, so every entry names the same one; earlier editions ran Infantry Maneuvers and
@@ -243,6 +270,7 @@ class AttackPhase:
     segment: Segment = Segment.DECLARATION
     fought: frozenset[int] = frozenset()
     current: int | None = None
+    battle_segment: BattleSegment | None = None
     assigned_in: dict[str, str] = field(default_factory=dict)
 
 
