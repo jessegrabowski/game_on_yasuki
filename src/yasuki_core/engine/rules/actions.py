@@ -85,6 +85,23 @@ class Inheritance:
 
 
 @dataclass(frozen=True, slots=True)
+class PlayStrategy:
+    """Play a Strategy from hand for its Gold Cost, resolve its ability, and discard it.
+
+    Like :class:`ActivateAbility`, the designator is the card's own rather than the action's, so a
+    Strategy is offered in whichever Action Round its ability names and carries no entry in
+    :data:`ACTION_TIMINGS`. Its target is chosen through the decision the ability raises.
+
+    Attributes
+    ----------
+    card_id : str
+        The Strategy in hand.
+    """
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class Equip:
     """Attach a Follower, Item or Spell from hand to a Personality you control, paying its Gold Cost.
 
@@ -169,6 +186,7 @@ class DeclareAttack:
 Action = (
     Pass
     | Recruit
+    | PlayStrategy
     | Equip
     | DynastyDiscard
     | Legacy

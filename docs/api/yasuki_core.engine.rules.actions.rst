@@ -18,6 +18,7 @@ yasuki_core.engine.rules.actions
     KharmicRefill
     Legacy
     Pass
+    PlayStrategy
     Recruit
 
 .. automodule:: yasuki_core.engine.rules.actions

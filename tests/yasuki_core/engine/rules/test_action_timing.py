@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.actions import (
     DynastyDiscard,
     Legacy,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.session import EngineSession
@@ -56,8 +57,9 @@ def test_each_rulebook_action_reports_the_designator_the_cr_prints():
 def test_every_action_has_a_designator_or_a_stated_reason_not_to():
     # ACTION_TIMINGS is the single source, so an Action added to the union without an entry would
     # only surface when someone constructed one. Pass is exempt because it is the alternative to
-    # acting rather than an action; ActivateAbility because it reads its designator off the card.
-    timed_elsewhere = {Pass, ActivateAbility}
+    # acting rather than an action; ActivateAbility and PlayStrategy because they read their
+    # designator off the card, which is why a Strategy can be a Battle action and an Open one.
+    timed_elsewhere = {Pass, ActivateAbility, PlayStrategy}
 
     assert set(get_args(Action)) - timed_elsewhere == set(ACTION_TIMINGS)
 

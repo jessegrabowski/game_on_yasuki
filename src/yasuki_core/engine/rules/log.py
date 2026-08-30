@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.actions import (
     Inheritance,
     Legacy,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.rules.decisions import DecisionResponse
@@ -239,6 +240,8 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "kharmic_refill", "card_id": card_id}
         case ActivateAbility(card_id=card_id):
             return {"kind": "activate_ability", "card_id": card_id}
+        case PlayStrategy(card_id=card_id):
+            return {"kind": "play_strategy", "card_id": card_id}
         case DeclareAttack():
             return {"kind": "declare_attack"}
     raise ValueError(f"no encoding for action {action!r}")
@@ -270,6 +273,8 @@ def _decode_action(payload: dict) -> Action:
         return KharmicRefill(payload["card_id"])
     if kind == "activate_ability":
         return ActivateAbility(payload["card_id"])
+    if kind == "play_strategy":
+        return PlayStrategy(payload["card_id"])
     if kind == "declare_attack":
         return DeclareAttack()
     raise ValueError(f"unknown action kind {kind!r}")

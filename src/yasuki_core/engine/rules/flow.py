@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicRefill,
     Legacy,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.rules.state import (
@@ -31,7 +32,9 @@ from yasuki_core.engine.rules.state import (
 )
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
+    DiscardPlayed,
     FightNextBattle,
+    ResolveStrategy,
     CompleteProduction,
     ContinuePayment,
     ApplyAbilityEffects,
@@ -283,6 +286,8 @@ def perform(game: GameState, action: Action) -> None:
             kharmic_refill(game, card_id)
         case ActivateAbility(card_id=card_id):
             activate(game, card_id)
+        case PlayStrategy(card_id=card_id):
+            play_strategy(game, card_id)
         case DeclareAttack():
             battle.declare_attack(game)
             battle.open_maneuvers(game)
@@ -293,6 +298,35 @@ def perform(game: GameState, action: Action) -> None:
     run_stack(game)
     if not isinstance(action, Pass):
         _yield_after_action(game)
+
+
+def play_strategy(game: GameState, card_id: str) -> None:
+    """Announce a Strategy: defer its resolution, then pause for its Gold Cost.
+
+    The card stays in hand until the payment is answered, so backing out of the payment leaves it
+    there — the unwind truncates the tape to before the announcement and replays, and a card that
+    never moved needs nothing put back.
+    """
+    card = game.table.cards_by_id[card_id]
+    seat = card.owner
+    game.stack.append(ResolveStrategy(card_id))
+    game.pending = payment_request(
+        game, seat, effective_gold_cost(game, card), card.name, target=card
+    )
+
+
+def _resolve_strategy(game: GameState, card_id: str) -> None:
+    """Resolve a paid-for Strategy: its ability against its target, and then its discard.
+
+    The discard is stacked *under* the ability's own work so it runs after it, whether the ability
+    hits every target at once or pauses to be pointed at one.
+    """
+    card = game.table.cards_by_id[card_id]
+    ability = abilities.ability_for(card)
+    if ability is None:
+        raise ValueError(f"{card_id} has no ability to resolve")
+    game.stack.append(DiscardPlayed(card_id))
+    _defer_ability(game, card, ability)
 
 
 def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()) -> None:
@@ -655,6 +689,11 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             _resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
         case ResolveEquip(card_id=card_id, target_id=target_id, invest_amount=invest_amount):
             _resolve_equip(game, card_id, target_id, invest_amount)
+        case ResolveStrategy(card_id=card_id):
+            _resolve_strategy(game, card_id)
+        case DiscardPlayed(card_id=card_id):
+            card = game.table.cards_by_id[card_id]
+            triggers.resolve_effects(game, [Discard(card_id, card.owner)])
         case SelectAbilityTarget(card_id=card_id, candidates=candidates):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(
@@ -983,17 +1022,25 @@ def activate(game: GameState, card_id: str) -> None:
     are the ones ``legal_actions`` validated, so the ability is never left with nothing to hit."""
     card = game.table.cards_by_id[card_id]
     ability = abilities.ability_for(card)
-    targets = tuple(ability.targets(game, card))
-    deferred = (
-        ApplyAbilityEffects(card_id, targets)
-        if ability.all_targets
-        else SelectAbilityTarget(card_id, targets)
-    )
     if ability.timing is ActionTiming.RESPONSE:
         game.responded.add(card_id)
-    game.stack.append(deferred)
-    triggers.resolve_effects(game, ability.cost(game, card))
+    _defer_ability(game, card, ability)
     run_stack(game)  # resolve the target, unless the cost's cascade paused for a decision first
+
+
+def _defer_ability(game: GameState, card: L5RCard, ability: abilities.Ability) -> None:
+    """Stack ``ability``'s effects behind its cost, and pay the cost.
+
+    Targets are fixed before paying (Good Faith), and an ``all_targets`` ability hits every one it
+    found rather than pausing to be pointed at one.
+    """
+    targets = tuple(ability.targets(game, card))
+    game.stack.append(
+        ApplyAbilityEffects(card.id, targets)
+        if ability.all_targets
+        else SelectAbilityTarget(card.id, targets)
+    )
+    triggers.resolve_effects(game, ability.cost(game, card))
 
 
 def _apply_ability_target(

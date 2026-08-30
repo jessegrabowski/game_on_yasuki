@@ -11,10 +11,12 @@ yasuki_core.engine.rules.work
     ApplyEffects
     CompleteProduction
     ContinuePayment
+    DiscardPlayed
     FightNextBattle
     FinishRecruit
     ResolveEquip
     ResolveRecruit
+    ResolveStrategy
     ResumeCascade
     SelectAbilityTarget
 

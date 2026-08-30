@@ -215,6 +215,36 @@ class FightNextBattle:
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
+@dataclass(frozen=True, slots=True)
+class ResolveStrategy:
+    """Resolve a played Strategy once its Gold Cost is paid: its ability, then its discard.
+
+    Deferred behind the payment the way a Recruit is, so a payment that pauses for a decision — or is
+    backed out of — settles before the card does anything.
+
+    Attributes
+    ----------
+    card_id : str
+        The Strategy being played, still in hand until it resolves.
+    """
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class DiscardPlayed:
+    """Discard a card that has finished resolving. A Strategy goes to its owner's Fate discard once
+    its ability is done, so this is stacked under the ability's own work and runs after it.
+
+    Attributes
+    ----------
+    card_id : str
+        The card to discard. Its owner is the cause, since playing a card is its owner's doing.
+    """
+
+    card_id: str
+
+
 WorkItem = (
     CompleteProduction
     | ContinuePayment
@@ -226,4 +256,6 @@ WorkItem = (
     | ApplyEffects
     | FinishRecruit
     | FightNextBattle
+    | ResolveStrategy
+    | DiscardPlayed
 )
