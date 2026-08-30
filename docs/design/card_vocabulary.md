@@ -37,13 +37,13 @@ deferred through `Then` instead.
    AskOption
    AttachCard
    Banish
-   DelayedEffect
    BanishTopFate
    Bow
    Choose
    CounterOnAttachedProvince
    CreateToken
    DelayStraighten
+   DelayedEffect
    Destroy
    DestroyProvince
    Discard
