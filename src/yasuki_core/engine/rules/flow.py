@@ -1018,8 +1018,10 @@ def activate(game: GameState, card_id: str) -> None:
     have a legal target — ``legal_actions`` only offers it then.
 
     Resolving the target is deferred behind the cost on the stack, so a cost whose own cascade pauses
-    for a decision resolves fully first. Targets are fixed before paying (Good Faith): the candidates
-    are the ones ``legal_actions`` validated, so the ability is never left with nothing to hit."""
+    for a decision resolves fully first — which is the CR's order, since targets are chosen in step C
+    of the Action Sequence, after costs are paid in step B. Good Faith is what makes the deferral
+    safe: an action may only be announced when it could find a legal target, so the candidates
+    ``legal_actions`` validated are still there to hit."""
     card = game.table.cards_by_id[card_id]
     ability = abilities.ability_for(card)
     if ability.timing is ActionTiming.RESPONSE:
@@ -1031,8 +1033,8 @@ def activate(game: GameState, card_id: str) -> None:
 def _defer_ability(game: GameState, card: L5RCard, ability: abilities.Ability) -> None:
     """Stack ``ability``'s effects behind its cost, and pay the cost.
 
-    Targets are fixed before paying (Good Faith), and an ``all_targets`` ability hits every one it
-    found rather than pausing to be pointed at one.
+    The cost resolves first and targeting follows it (CR, Action Sequence steps B and C), and an
+    ``all_targets`` ability hits every one it found rather than pausing to be pointed at one.
     """
     targets = tuple(ability.targets(game, card))
     game.stack.append(
