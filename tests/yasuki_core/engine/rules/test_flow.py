@@ -19,6 +19,7 @@ from yasuki_core.game_pieces.prints import (
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import (
+    ActionRound,
     Boundary,
     END_OF_TURN,
     FIRED_MOMENTS,
@@ -26,6 +27,7 @@ from yasuki_core.engine.rules.state import (
     Moment,
     Phase,
     RESPONSE_TIMINGS,
+    RoundKind,
     Turn,
 )
 from yasuki_core.engine.rules.decisions import (
@@ -552,6 +554,29 @@ def test_a_response_step_opens_only_when_a_seat_holds_a_response():
     assert game.round_stack == []
 
 
+def test_a_response_opens_under_a_suspended_round_that_is_not_a_response_step():
+    """Whether a Response Step may open is a question about the round that is open, not about how
+    deep the round stack is. A battle segment suspends the phase round, so reading depth there would
+    take every Response in the battle for a Response already in progress and open none of them."""
+    game = _responder_game()
+    # Standing where the Engage and Combat Segments will: pushed over the phase round, and not
+    # itself a Response Step.
+    game.round_stack.append(game.round)
+    game.round = ActionRound(timings=game.round.timings, priority=game.active)
+
+    assert flow.open_response_window(game) is True
+    assert game.round.kind is RoundKind.RESPONSE
+    assert len(game.round_stack) == 2  # the phase round and the segment round, both suspended
+
+
+def test_a_response_step_opens_no_step_of_its_own():
+    """A Response is an action, and one taken inside the Step belongs to the window already open."""
+    game = _responder_game()
+    flow.open_response_window(game)
+
+    assert flow.open_response_window(game) is False
+
+
 def test_a_response_step_is_open_to_every_seat_and_to_nothing_else():
     """Any player may respond, and no one may take an Open action inside someone else's Step."""
     game = _responder_game()
@@ -602,6 +627,18 @@ def test_an_action_is_worded_for_the_seat_that_must_answer_it():
 
 def test_no_response_step_leaves_the_view_naming_nothing():
     game = _responder_game()
+
+    assert project(game, PlayerId.P1).responding_to is None
+
+
+def test_a_suspended_round_that_is_not_a_response_step_names_nothing_either():
+    """`responding_to` is what the prompt box reads to say "Responses to X". A battle segment
+    suspends the phase round without being a Response Step, and a view that went by stack depth
+    would have the prompt claim the seat was answering the last action taken."""
+    game = _responder_game()
+    game.action_taken = "the Recruit of Caravansary"
+    game.round_stack.append(game.round)
+    game.round = ActionRound(timings=game.round.timings, priority=game.active)
 
     assert project(game, PlayerId.P1).responding_to is None
 

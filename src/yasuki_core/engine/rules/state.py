@@ -63,6 +63,18 @@ RESPONSE_TIMINGS = RoundTimings(
 )
 
 
+class RoundKind(Enum):
+    """What sort of Action Round is open.
+
+    A round is suspended and resumed by kind rather than by how deep the round stack is. Depth only
+    answers "is something suspended beneath this", which stops meaning "this is a Response Step" the
+    moment anything else pushes — a battle's Engage and Combat Segments among them.
+    """
+
+    PHASE = "phase"
+    RESPONSE = "response"
+
+
 @dataclass(frozen=True, slots=True)
 class ActionRound:
     """The Action Round currently open — the CR's unit of "who may act now, and when this ends".
@@ -79,11 +91,14 @@ class ActionRound:
         The seat holding the opportunity to act.
     passes : int
         How many seats have passed in a row. Default 0.
+    kind : RoundKind
+        What sort of round this is, which decides how it closes. Default ``RoundKind.PHASE``.
     """
 
     timings: RoundTimings
     priority: PlayerId
     passes: int = 0
+    kind: RoundKind = RoundKind.PHASE
 
 
 class Segment(Enum):

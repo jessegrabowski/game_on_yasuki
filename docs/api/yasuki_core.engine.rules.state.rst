@@ -15,6 +15,7 @@ yasuki_core.engine.rules.state
     GameState
     Moment
     Phase
+    RoundKind
     RoundTimings
     Segment
     Turn

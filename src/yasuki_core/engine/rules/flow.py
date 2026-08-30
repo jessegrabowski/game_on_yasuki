@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.state import (
     PHASE_TIMINGS,
     Phase,
     RESPONSE_TIMINGS,
+    RoundKind,
     TURN_PHASES,
 )
 from yasuki_core.engine.rules.work import (
@@ -235,7 +236,7 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
             game.round = replace(game.round, priority=seat, passes=passes)
             return
         passes += 1
-    if game.round_stack:
+    if game.round.kind is RoundKind.RESPONSE:
         close_response_window(game)
         return
     advance(game)
@@ -266,7 +267,7 @@ def describe_action(game: GameState, action: Action) -> str:
 def perform(game: GameState, action: Action) -> None:
     """Apply a chosen action, dispatching to its handler. The single action-apply dispatch,
     mirroring :func:`submit` for decisions. Raise ``ValueError`` for an action with no handler."""
-    if not isinstance(action, Pass) and not game.round_stack:
+    if not isinstance(action, Pass) and game.round.kind is not RoundKind.RESPONSE:
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
         game.action = action
@@ -1233,7 +1234,7 @@ def open_response_window(game: GameState) -> bool:
     be asked for. A Response is itself an action, and one taken inside the step opens no step of its
     own — the window that is already open is the one it belongs to.
     """
-    if game.round_stack:
+    if game.round.kind is RoundKind.RESPONSE:
         return False
     # Cleared before the seats are polled, not after: a card still marked from the last Step would
     # not count as a responder, and so could never open another one.
@@ -1241,7 +1242,9 @@ def open_response_window(game: GameState) -> bool:
     if not _responders(game):
         return False
     game.round_stack.append(game.round)
-    game.round = ActionRound(timings=RESPONSE_TIMINGS, priority=game.active)
+    game.round = ActionRound(
+        timings=RESPONSE_TIMINGS, priority=game.active, kind=RoundKind.RESPONSE
+    )
     return True
 
 
