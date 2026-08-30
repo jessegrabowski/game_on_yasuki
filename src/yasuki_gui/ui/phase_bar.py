@@ -3,12 +3,7 @@ import tkinter as tk
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.state import Phase, TURN_PHASES
 from yasuki_gui import theme
-
-_PHASE_LABELS: dict[Phase, str] = {
-    Phase.ACTION: "Action",
-    Phase.BATTLE: "Battle",
-    Phase.DYNASTY: "Dynasty",
-}
+from yasuki_gui.labels import PHASE_LABELS
 
 
 class PhaseBar(tk.Frame):
@@ -34,7 +29,7 @@ class PhaseBar(tk.Frame):
         self._turn.configure(text=f"Turn {view.turn}")
         for phase, chip in self._chips.items():
             active = phase is view.phase
-            label = _PHASE_LABELS[phase]
+            label = PHASE_LABELS[phase]
             chip.configure(
                 text=f"▶ {label}" if active else label,
                 bg=theme.GOLD if active else theme.PANEL,

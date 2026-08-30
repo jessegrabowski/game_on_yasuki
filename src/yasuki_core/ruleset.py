@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 
+from yasuki_core.engine.rules.state import Segment
+
 
 def normalize_clan(name: str) -> str:
     """The comparison key for a clan name: lowercased, with a trailing ``" Clan"`` dropped and
@@ -24,11 +26,30 @@ class Ruleset:
     off_clan_surcharge : int
         Extra Gold a Recruit costs when the card has a Clan Alignment the recruiting seat does not
         share. Default 2.
+    attack_segments : tuple of Segment
+        The Attack Phase's segments in the order this arc walks them. The enum's own order is not
+        the authority, because an arc may walk a subset or interleave a segment another arc has no
+        equivalent of.
+    segment_names : dict mapping Segment to str
+        What this arc's rulebook calls each of ``attack_segments``, shown to the player.
     """
 
     clan_alignments: frozenset[str]
     clan_aliases: dict[str, str] = field(default_factory=dict)
     off_clan_surcharge: int = 2
+    attack_segments: tuple[Segment, ...] = ()
+    segment_names: dict[Segment, str] = field(default_factory=dict)
+
+    def segment_name(self, segment: Segment) -> str:
+        """What this arc calls ``segment``.
+
+        Raises
+        ------
+        KeyError
+            If this arc does not walk ``segment``, which is a segment the engine reached under a
+            ruleset that has no name for it — a wiring error rather than something to paper over.
+        """
+        return self.segment_names[segment]
 
     def alignment(self, clan_name: str) -> str | None:
         """The canonical Clan Alignment slug ``clan_name`` denotes, or None when it is not a legal
@@ -56,6 +77,16 @@ SCORPION = "scorpion"
 SPIDER = "spider"
 UNICORN = "unicorn"
 
+# The Attack Phase Sequence the Twenty Festivals CR lists, with its own headings. Fight Battles is
+# the CR's name for the third and the CR does not call that one a Segment, so neither does this.
+#
+# Earlier arcs walk a different sequence — the Cavalry Maneuvers segment between Maneuvers and the
+# battles is the one that will bring this to a head. Adding it is three edits: a member on
+# :class:`~yasuki_core.engine.rules.state.Segment`, a place in that arc's ``attack_segments``, and a
+# name in its ``segment_names``. Nothing reads the enum's declaration order, so no arc inherits
+# another's sequence.
+_SHATTERED_EMPIRE_SEGMENTS = (Segment.DECLARATION, Segment.MANEUVERS, Segment.FIGHT)
+
 # Onyx Edition / Shattered Empire: the ten legal Clan Alignments the rulebook enumerates. Naga is the
 # same alignment as Akasha and resolves to it. Every other clan name a card carries -- minor clans,
 # Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
@@ -64,6 +95,12 @@ SHATTERED_EMPIRE = Ruleset(
         {AKASHA, CRAB, CRANE, DRAGON, LION, MANTIS, PHOENIX, SCORPION, SPIDER, UNICORN}
     ),
     clan_aliases={NAGA: AKASHA},
+    attack_segments=_SHATTERED_EMPIRE_SEGMENTS,
+    segment_names={
+        Segment.DECLARATION: "Declaration Segment",
+        Segment.MANEUVERS: "Maneuvers Segment",
+        Segment.FIGHT: "Fight Battles",
+    },
 )
 
 # The ruleset the engine plays under. Named once so no module decides for itself which arc is live.
