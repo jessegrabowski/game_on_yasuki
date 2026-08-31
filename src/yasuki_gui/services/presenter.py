@@ -59,6 +59,12 @@ class Presenter:
         runner, field = self.host.runner, self.window.field
         self._spend_committed()
         pending = runner.pending
+        if isinstance(pending, ChoosePayment) and pending.amount == 0:
+            # A cost of nothing is not a question: there is no producer to bow and no gold to
+            # spend, so asking would put a prompt in front of the seat with one possible answer.
+            runner.submit(DecisionResponse())
+            self.present()
+            return
         search = runner.search_view()
         if search is not None:
             # The candidates are in a deck or a discard pile, so there is nothing on the board to

@@ -4,6 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, Confirm
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.payments import payment_request
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
@@ -220,6 +221,18 @@ def test_an_invest_decision_offers_a_button_per_affordable_amount(board):
     presenter.refresh()
 
     assert _buttons(window) == ["Invest 1", "Invest 2", "Invest 3", "Cancel"]
+
+
+def test_a_cost_of_nothing_is_paid_without_asking(board):
+    # A payment with nothing owed has one possible answer, so putting it to the seat is a prompt
+    # that can only be clicked through.
+    presenter, window, session = board
+    session.game.pending = payment_request(session.game, P1, 0, "Uncertainty")
+
+    presenter.present()
+
+    assert session.game.pending is None
+    assert _buttons(window) != ["Pay", "Cancel"]
 
 
 def test_a_finished_game_says_who_lost_and_offers_nothing(board):
