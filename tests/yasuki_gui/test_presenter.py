@@ -1,8 +1,8 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Recruit
-from yasuki_core.engine.rules.decisions import ChooseInvestAmount, Confirm
+from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
+from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseInvestAmount, Confirm
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.payments import payment_request
 from yasuki_core.engine.runner import GameRunner
@@ -11,7 +11,7 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, loc
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
 from yasuki_gui.layout import divider_y
 from yasuki_gui.services.presenter import Presenter
 from yasuki_gui.ui.floating_panel import MIN_H
@@ -129,6 +129,15 @@ def board():
         window.root.destroy()
 
 
+def _set_spinner(window, amount: str) -> None:
+    """Step the prompt's spinner to ``amount``, the way a click on its arrows would."""
+    spinner = window.prompt_box._spinner
+    spinner.configure(state="normal")
+    spinner.delete(0, "end")
+    spinner.insert(0, amount)
+    spinner.configure(state="readonly")
+
+
 def _status(window) -> str:
     return window.prompt_box._status.cget("text")
 
@@ -221,6 +230,60 @@ def test_an_invest_decision_offers_a_button_per_affordable_amount(board):
     presenter.refresh()
 
     assert _buttons(window) == ["Invest 1", "Invest 2", "Invest 3", "Cancel"]
+
+
+def test_a_variable_gold_cost_is_named_on_a_spinner_rather_than_a_button_each(board):
+    # The amounts run as high as the seat can raise, which is a list no panel this width can hold,
+    # so the seat steps a spinner and one button spends what it reads.
+    presenter, window, session = board
+    session.game.pending = ChooseAmount(
+        seat=P1,
+        candidates=tuple(str(amount) for amount in range(14)),
+        question="How much Gold do you spend on Hired Killer?",
+        resolver="hired_killer",
+        source_id="killer",
+    )
+
+    presenter.refresh()
+
+    assert _status(window) == "How much Gold do you spend on Hired Killer?"
+    assert _buttons(window) == ["Spend", "Cancel"]
+    assert window.prompt_box.amount() == "0"
+
+
+def test_spending_answers_with_the_amount_the_spinner_shows():
+    # The spinner is the only place the amount exists, so an answer that did not read it would spend
+    # Gold the seat never agreed to. Driven through a real Hired Killer because the amount is asked
+    # from inside its cost cascade, which is what the answer is spliced back into.
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("mine", owner=P1, gold_production=10))
+    put_in_play(state, personality("dear", owner=PlayerId.P2, gold_cost=6))
+    killer = register(
+        state,
+        L5RCard.of(
+            ActionPrint,
+            id="killer",
+            name="Hired Killer",
+            printed_id="hired_killer",
+            side=Side.FATE,
+            owner=P1,
+        ),
+    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(killer)
+    session = EngineSession.start(state, P1)
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    try:
+        presenter.act(PlayStrategy("killer"))
+        assert _status(window) == "How much Gold do you spend on Hired Killer?"
+        _set_spinner(window, "8")  # his unit costs 6, and the card reaches cost plus two
+
+        _press(presenter, "Spend")
+
+        assert session.game.pending.amount == 8  # the Gold the spinner named, now being charged
+    finally:
+        window.root.destroy()
 
 
 def test_a_cost_of_nothing_is_paid_without_asking(board):
