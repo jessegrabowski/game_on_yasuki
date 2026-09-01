@@ -23,7 +23,14 @@ from yasuki_core.engine.rules.events import (
     Revealed,
     Straightened,
 )
-from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Minimum, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import (
+    Duration,
+    KeywordGrant,
+    Minimum,
+    Modifier,
+    ProvinceModifier,
+    Stat,
+)
 from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment, flow_resolves
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
@@ -409,6 +416,33 @@ class GrantMinimum(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.modifiers.append(
             Minimum(self.source_id, self.target_id, self.stat, self.value, self.duration)
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantProvinceStrength(Effect):
+    """Record a continuous Province Strength modifier: the ``source`` card adjusts ``province`` by
+    ``amount`` for ``duration``.
+
+    The Province counterpart of :class:`GrantModifier`. A Province is a slot rather than a card, so
+    a card strengthening one for the turn cannot target it the way it targets a Personality.
+    """
+
+    source_id: str
+    province: ZoneKey
+    amount: int
+    duration: Duration
+
+    def describe(self) -> str:
+        return (
+            f"{self.source_id} gives {self.province.token} {self.amount:+d} province strength "
+            f"({self.duration.name})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifiers.append(
+            ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )
         return []
 

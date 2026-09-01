@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules import state_rules
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.economy import effective_keywords
+from yasuki_core.engine.rules.modifiers import ProvinceModifier
 from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces import keywords
@@ -230,7 +231,8 @@ def _forget_modifiers_on_cards_off_the_table(game: GameState) -> None:
     Gold Cost while it waits in one, and that has to survive being Recruited out of it.
 
     Forgotten rather than skipped when read: a card can return to a Province, and a modifier merely
-    filtered out would come back attached to the card that replaced it.
+    filtered out would come back attached to the card that replaced it. One laid on a Province slot
+    is kept whatever happens: a slot is part of the board rather than a card that can leave it.
     """
     if not game.modifiers:
         return
@@ -238,7 +240,11 @@ def _forget_modifiers_on_cards_off_the_table(game: GameState) -> None:
     for key, zone in game.table.zones.items():
         if key.role is ZoneRole.PROVINCE:
             on_table.update(card.id for card in zone.cards)
-    game.modifiers[:] = [modifier for modifier in game.modifiers if modifier.target_id in on_table]
+    game.modifiers[:] = [
+        modifier
+        for modifier in game.modifiers
+        if isinstance(modifier, ProvinceModifier) or modifier.target_id in on_table
+    ]
 
 
 def _settle_state_rules(game: GameState, queue: list[GameEvent]) -> None:

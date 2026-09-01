@@ -54,6 +54,7 @@ deferred through `Then` instead.
    LoseGame
    GrantKeyword
    GrantMinimum
+   GrantProvinceStrength
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
@@ -173,6 +174,7 @@ Production without a modifier being recorded.
    KeywordGrant
    Minimum
    Modifier
+   ProvinceModifier
 ```
 
 ```{eval-rst}

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
 
+from yasuki_core.engine.table import ZoneKey
+
 
 class Stat(Enum):
     """A card stat a modifier can adjust. Each member's value is the card attribute it reads, so a
@@ -122,8 +124,35 @@ class Minimum:
     duration: Duration
 
 
-# A recorded ongoing effect, whichever kind. The CR files a keyword change and a stat's floor
-# beside a stat change — each is ongoing, each lasts to the end of the turn unless the card says
-# otherwise, and each is forgotten when its target leaves the table — so they are recorded in one
-# list and expire together (CR, Duration of Effects).
-OngoingEffect = Modifier | KeywordGrant | Minimum
+@dataclass(frozen=True, slots=True)
+class ProvinceModifier:
+    """A continuous effect that adjusts one Province's strength while active.
+
+    A Province is a slot rather than a card, so it cannot be the target of a :class:`Modifier`; a
+    card that strengthens one for the turn records this instead.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the modifier comes from — used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it
+        leaves play and to attribute the effect.
+    province : ZoneKey
+        The Province slot whose strength is adjusted.
+    amount : int
+        The bonus (positive) or penalty (negative) added to the strength.
+    duration : Duration
+        When the modifier stops applying.
+    """
+
+    source_id: str
+    province: ZoneKey
+    amount: int
+    duration: Duration
+
+
+# A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
+# Province's strength beside a stat change — each is ongoing, and each lasts to the end of the turn
+# unless the card says otherwise — so they are recorded in one list and expire together (CR,
+# Duration of Effects). The three that name a card are forgotten when it leaves the table; the one
+# that names a Province slot is not, because a slot never does.
+OngoingEffect = Modifier | KeywordGrant | Minimum | ProvinceModifier

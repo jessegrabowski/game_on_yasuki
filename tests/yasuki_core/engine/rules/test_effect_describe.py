@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.effects import (
     MoveToHand,
     GrantKeyword,
     GrantMinimum,
+    GrantProvinceStrength,
     GrantModifier,
     PayGold,
     IgnoreHonorRequirements,
@@ -76,6 +77,12 @@ EFFECTS = [
     (
         GrantMinimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
         "uncertainty gives shiba a minimum CHI of 1 (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantProvinceStrength(
+            "walls", ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), 3, Duration.UNTIL_END_OF_TURN
+        ),
+        "walls gives P2:province:0 +3 province strength (UNTIL_END_OF_TURN)",
     ),
     (
         GrantKeyword("fields", "shinjo_1", "Cavalry", Duration.UNTIL_END_OF_TURN),

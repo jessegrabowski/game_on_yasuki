@@ -11,6 +11,7 @@ yasuki_core.engine.rules.modifiers
     KeywordGrant
     Minimum
     Modifier
+    ProvinceModifier
     Stat
 
 .. automodule:: yasuki_core.engine.rules.modifiers
