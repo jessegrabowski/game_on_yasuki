@@ -1,10 +1,11 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Pass, PlayStrategy, Recruit
+from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
 from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseInvestAmount, Confirm
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.payments import payment_request
+from yasuki_core.engine.rules.state import BattleSegment
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
@@ -689,19 +690,33 @@ def _press_lane(presenter, battlefield: int, label: str) -> None:
     buttons[battlefield].press()
 
 
-def _fight_at(presenter, window, battlefield: int) -> None:
-    """Fight the battle at ``battlefield`` from its lane, then pass out its segments.
+def _run_the_opponent(presenter) -> None:
+    """Let the AI take every opportunity it holds, so the human is the one being asked next.
 
-    A battle opens an Action Round per segment before it resolves. The battle window has no action
-    pane yet, so the segments are passed through the engine rather than from the board.
+    The client does this on a timer the tests do not pump, so a test that presses a button and
+    expects the answer back has to hand the opportunity on itself.
+    """
+    runner = presenter.host.runner
+    while runner.opponent_holds_priority or runner.opponent_owes_decision:
+        runner.run_opponent()
+        presenter.present()
+
+
+def _fight_at(presenter, battlefield: int) -> None:
+    """Fight the battle at ``battlefield`` from its lane, then pass out its segments from the board.
+
+    A battle opens an Action Round per segment before it resolves, and each is passed the way the
+    player passes anything: the opponent's opportunity is run, and the human's is the prompt box's
+    own Pass button.
     """
     _press_lane(presenter, battlefield, "Fight here")
-    session = presenter.host.runner.session
-    for _ in range(20):
-        attack = session.game.attack
-        if attack is None or attack.battle_segment is None:
-            break
-        session.act(session.game.round.priority, Pass())
+    runner = presenter.host.runner
+    for _ in BattleSegment:
+        _run_the_opponent(presenter)
+        # A seat with no presence at this battlefield is never offered the opportunity, so a
+        # segment can close on the opponent's passes alone and leave nothing to press.
+        if runner.session.game.attack.battle_segment is not None:
+            _press(presenter, "Pass")
     presenter.present()
 
 
@@ -942,8 +957,8 @@ def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
     runner.run_opponent()
     presenter.present()
 
-    _fight_at(presenter, window, 0)
-    _fight_at(presenter, window, 1)
+    _fight_at(presenter, 0)
+    _fight_at(presenter, 1)
 
     assert session.game.attack.fought == frozenset({0, 1})
     assert session.game.table.cards_by_id["hero"].bowed  # After Resolution bows the attackers
@@ -1112,8 +1127,8 @@ def test_the_battle_floats_over_the_board_with_an_attack_and_leaves_with_it(a_ba
     _press(presenter, "Done assigning")
     presenter.host.runner.run_opponent()
     presenter.present()
-    _fight_at(presenter, window, 0)
-    _fight_at(presenter, window, 1)
+    _fight_at(presenter, 0)
+    _fight_at(presenter, 1)
     _press(presenter, "Pass")  # the Attack Phase ends, and the battlefields cease to exist
 
     assert session.game.attack is None
