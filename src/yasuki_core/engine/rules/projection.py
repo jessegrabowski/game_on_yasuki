@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.economy import (
     effective_stat,
 )
 from yasuki_core.engine.rules.modifiers import Stat
-from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase, Segment
+from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase, RoundKind, Segment
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.rules.units import unit_force
@@ -242,7 +242,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
         gold=dict(game.gold),
         favor_holder=game.favor_holder,
         pending=pending,
-        responding_to=game.action_taken if game.round_stack else None,
+        responding_to=(game.action_taken if game.round.kind is RoundKind.RESPONSE else None),
         legacy_pool=tuple(sorted(legacy_candidates(game, viewer), key=lambda card: card.id)),
         dynasty_deck=tuple(
             sorted(game.table.decks[DeckKey(viewer, Side.DYNASTY)].cards, key=lambda card: card.id)

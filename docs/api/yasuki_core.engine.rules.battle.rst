@@ -13,6 +13,7 @@ yasuki_core.engine.rules.battle
     assignable_units
     assignment_candidates
     begin_fight
+    close_battle_segment
     declare_attack
     defender_of
     end_attack_phase

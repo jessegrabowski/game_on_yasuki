@@ -80,6 +80,7 @@ def _fight_every_battlefield(session: EngineSession) -> None:
         pending = session.game.pending
         assert isinstance(pending, ChooseBattlefield)
         session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+        _pass_out_the_segments(session)
 
 
 def _province(seat: PlayerId, idx: int) -> ZoneKey:
@@ -140,6 +141,21 @@ def _fight_one_battle(session: EngineSession) -> None:
     pending = session.game.pending
     assert isinstance(pending, ChooseBattlefield)
     session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    _pass_out_the_segments(session)
+
+
+def _pass_out_the_segments(session: EngineSession) -> None:
+    """Pass both seats through the battle's segments, which is what carries it to resolution.
+
+    A battle is an Action Round per segment before it resolves, so answering where to fight only
+    opens the first one. Nothing here takes a battle action; these tests are about resolution.
+    """
+    for _ in range(20):
+        attack = session.game.attack
+        if attack is None or attack.battle_segment is None:
+            return
+        session.act(session.game.round.priority, Pass())
+    raise AssertionError("the battle's segments never closed")
 
 
 def _attacker_with_keywords(
@@ -688,6 +704,7 @@ def test_every_battlefield_is_fought_exactly_once():
         assert isinstance(pending, ChooseBattlefield)
         fought_at.append(int(pending.candidates[0]))
         session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+        _pass_out_the_segments(session)
 
     assert sorted(fought_at) == [0, 1, 2]
     assert session.game.attack.fought == frozenset({0, 1, 2})
@@ -701,6 +718,7 @@ def test_a_battlefield_already_fought_at_is_not_offered_again():
     first = session.game.pending.candidates[0]
 
     session.submit(PlayerId.P1, DecisionResponse((first,)))
+    _pass_out_the_segments(session)
 
     assert first not in session.game.pending.candidates
 

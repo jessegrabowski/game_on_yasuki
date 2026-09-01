@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.state import (
     PHASE_TIMINGS,
     Phase,
     RESPONSE_TIMINGS,
+    RoundKind,
     TURN_PHASES,
 )
 from yasuki_core.engine.rules.work import (
@@ -235,8 +236,11 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
             game.round = replace(game.round, priority=seat, passes=passes)
             return
         passes += 1
-    if game.round_stack:
+    if game.round.kind is RoundKind.RESPONSE:
         close_response_window(game)
+        return
+    if game.round.kind is RoundKind.BATTLE_SEGMENT:
+        battle.close_battle_segment(game)
         return
     advance(game)
 
@@ -266,7 +270,10 @@ def describe_action(game: GameState, action: Action) -> str:
 def perform(game: GameState, action: Action) -> None:
     """Apply a chosen action, dispatching to its handler. The single action-apply dispatch,
     mirroring :func:`submit` for decisions. Raise ``ValueError`` for an action with no handler."""
-    if not isinstance(action, Pass) and not game.round_stack:
+    # Read before the handler runs: one that opens a round of its own leaves that round on
+    # `game.round`, and the round to hand on from is the one the action was taken in.
+    acted_in = game.round
+    if not isinstance(action, Pass) and game.round.kind is not RoundKind.RESPONSE:
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
         game.action = action
@@ -302,7 +309,7 @@ def perform(game: GameState, action: Action) -> None:
     # remainder for the submit that answers it.
     run_stack(game)
     if not isinstance(action, Pass):
-        _yield_after_action(game)
+        _yield_after_action(game, acted_in)
 
 
 def play_strategy(game: GameState, card_id: str) -> None:
@@ -585,6 +592,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         raise RuntimeError("no decision is pending")
     if not request.accepts(response):
         raise ValueError("malformed answer to the pending decision")
+    acted_in = game.round
     match request:
         case DiscardToHandSize():
             _apply_discard(game, request.seat, response.choices)
@@ -638,7 +646,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     # Turn structure is not an action: the round these resolve into is not one an action would
     # yield in, because the turn they belong to is either already over or has not opened yet.
     if not isinstance(request, _TURN_STRUCTURE):
-        _yield_after_action(game)
+        _yield_after_action(game, acted_in)
 
 
 def cancel(game: GameState) -> None:
@@ -1207,13 +1215,18 @@ def _other(seat: PlayerId) -> PlayerId:
     return PlayerId.P2 if seat is PlayerId.P1 else PlayerId.P1
 
 
-def _yield_after_action(game: GameState) -> None:
+def _yield_after_action(game: GameState, acted_in: ActionRound) -> None:
     """Hand on the opportunity once an action has fully resolved. An action that paused for a
     decision has not finished, and a game that has ended has no round left to run.
 
-    A Response Step comes first when the action left anyone something to respond with.
+    An action that opened a round of its own — a battle's Engage Segment, off the Attacker's choice
+    of where to fight — hands on nothing: the new round names its own first actor, and yielding here
+    would take the opportunity straight back off the Defender. A Response Step comes next when the
+    action left anyone something to respond with.
     """
     if game.awaiting_decision or game.game_over:
+        return
+    if game.round is not acted_in:
         return
     if open_response_window(game):
         return
@@ -1233,7 +1246,7 @@ def open_response_window(game: GameState) -> bool:
     be asked for. A Response is itself an action, and one taken inside the step opens no step of its
     own — the window that is already open is the one it belongs to.
     """
-    if game.round_stack:
+    if game.round.kind is RoundKind.RESPONSE:
         return False
     # Cleared before the seats are polled, not after: a card still marked from the last Step would
     # not count as a responder, and so could never open another one.
@@ -1241,7 +1254,9 @@ def open_response_window(game: GameState) -> bool:
     if not _responders(game):
         return False
     game.round_stack.append(game.round)
-    game.round = ActionRound(timings=RESPONSE_TIMINGS, priority=game.active)
+    game.round = ActionRound(
+        timings=RESPONSE_TIMINGS, priority=game.active, kind=RoundKind.RESPONSE
+    )
     return True
 
 

@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
+from yasuki_core.engine.rules.actions import Pass, PlayStrategy, Recruit
 from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseInvestAmount, Confirm
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.payments import payment_request
@@ -690,8 +690,19 @@ def _press_lane(presenter, battlefield: int, label: str) -> None:
 
 
 def _fight_at(presenter, window, battlefield: int) -> None:
-    """Fight the battle at ``battlefield`` from its lane."""
+    """Fight the battle at ``battlefield`` from its lane, then pass out its segments.
+
+    A battle opens an Action Round per segment before it resolves. The battle window has no action
+    pane yet, so the segments are passed through the engine rather than from the board.
+    """
     _press_lane(presenter, battlefield, "Fight here")
+    session = presenter.host.runner.session
+    for _ in range(20):
+        attack = session.game.attack
+        if attack is None or attack.battle_segment is None:
+            break
+        session.act(session.game.round.priority, Pass())
+    presenter.present()
 
 
 def _send(presenter, window, card_ids, battlefield: int) -> None:

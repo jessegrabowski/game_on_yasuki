@@ -63,6 +63,19 @@ RESPONSE_TIMINGS = RoundTimings(
 )
 
 
+class RoundKind(Enum):
+    """What sort of Action Round is open.
+
+    A round is suspended and resumed by kind rather than by how deep the round stack is. Depth only
+    answers "is something suspended beneath this", which stops meaning "this is a Response Step" the
+    moment anything else pushes — a battle's Engage and Combat Segments among them.
+    """
+
+    PHASE = "phase"
+    RESPONSE = "response"
+    BATTLE_SEGMENT = "battle_segment"
+
+
 @dataclass(frozen=True, slots=True)
 class ActionRound:
     """The Action Round currently open — the CR's unit of "who may act now, and when this ends".
@@ -79,15 +92,43 @@ class ActionRound:
         The seat holding the opportunity to act.
     passes : int
         How many seats have passed in a row. Default 0.
+    kind : RoundKind
+        What sort of round this is, which decides how it closes. Default ``RoundKind.PHASE``.
     """
 
     timings: RoundTimings
     priority: PlayerId
     passes: int = 0
+    kind: RoundKind = RoundKind.PHASE
+
+
+class BattleSegment(Enum):
+    """One battle's segments, in the order the CR's Battle Sequence walks them. Nested inside the
+    Attack Phase's :class:`Segment.FIGHT`, which is where battles are fought.
+
+    Resolution follows the Combat Segment closing and is not an Action Round, so it is not one of
+    these — nothing may be taken during it.
+    """
+
+    ENGAGE = "engage"
+    COMBAT = "combat"
+
+
+# What each battle segment's Action Round permits. Both are open to every seat and permit only their
+# own designator, and both start with the Defender (CR, Battle Sequence).
+BATTLE_SEGMENT_TIMINGS: dict[BattleSegment, RoundTimings] = {
+    BattleSegment.ENGAGE: RoundTimings(
+        active=frozenset({ActionTiming.ENGAGE}), others=frozenset({ActionTiming.ENGAGE})
+    ),
+    BattleSegment.COMBAT: RoundTimings(
+        active=frozenset({ActionTiming.BATTLE}), others=frozenset({ActionTiming.BATTLE})
+    ),
+}
 
 
 class Segment(Enum):
-    """The Attack Phase's segments, in the order the CR walks them."""
+    """The Attack Phase's segments, in the order the CR walks them. A battle fought inside the Fight
+    Segment has segments of its own — see :class:`BattleSegment`."""
 
     DECLARATION = "declaration"
     MANEUVERS = "maneuvers"
@@ -215,6 +256,9 @@ class AttackPhase:
         so this is what the fight loop counts down. Default empty.
     current : int or None
         The battlefield a battle is being fought at, or None between battles. Default None.
+    battle_segment : BattleSegment or None
+        Which segment of the battle at ``current`` is open, or None when no battle is being fought.
+        Default None.
     assigned_in : dict mapping str to str
         Each assigned Personality to the maneuvers window it assigned in. The current rules run one
         window, so every entry names the same one; earlier editions ran Infantry Maneuvers and
@@ -228,6 +272,7 @@ class AttackPhase:
     segment: Segment = Segment.DECLARATION
     fought: frozenset[int] = frozenset()
     current: int | None = None
+    battle_segment: BattleSegment | None = None
     assigned_in: dict[str, str] = field(default_factory=dict)
 
 
@@ -324,9 +369,10 @@ class GameState:
         dropped when its moment comes, whether or not it still has anything to do. Ephemeral and
         rebuilt by replay. Default empty.
     round_stack : list of ActionRound
-        The rounds a Response Step has suspended, innermost last. A Response Step opens a round of
-        its own over the round the action was taken in, and closing it puts that round back.
-        Ephemeral and rebuilt by replay. Default empty.
+        The rounds a Response Step or a battle segment has suspended, innermost last. Each opens a
+        round of its own over the round beneath, and closing it puts that round back. What is
+        suspended is read off :attr:`ActionRound.kind` rather than off this list's depth. Ephemeral
+        and rebuilt by replay. Default empty.
     responded : set of str
         The cards that have already taken a Response in the Response Step now open. A card answers a
         given Step once; nothing else rations a Response, which costs no bow. Cleared as each Step

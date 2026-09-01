@@ -10,11 +10,13 @@ yasuki_core.engine.rules.state
     ActionRound
     AttackPhase
     BattleOutcome
+    BattleSegment
     BattlefieldInfo
     Boundary
     GameState
     Moment
     Phase
+    RoundKind
     RoundTimings
     Segment
     Turn

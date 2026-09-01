@@ -17,10 +17,14 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.legality import province_zones
 from yasuki_core.engine.rules.events import Destroyed
 from yasuki_core.engine.rules.state import (
+    ActionRound,
     AttackPhase,
+    BATTLE_SEGMENT_TIMINGS,
     BattleOutcome,
+    BattleSegment,
     BattlefieldInfo,
     GameState,
+    RoundKind,
     Segment,
 )
 from yasuki_core.game_pieces import keywords
@@ -266,15 +270,71 @@ def fight_next_battle(game: GameState) -> None:
     )
 
 
-def fight_battle(game: GameState, battlefield: int) -> None:
-    """Fight the battle at ``battlefield``: resolve it, clear up after it, and queue the next.
+# What follows each battle segment: the next one, or None when resolution does (CR, Battle
+# Sequence). Spelled out rather than taken from the enum's order, so a segment added to
+# :class:`~yasuki_core.engine.rules.state.BattleSegment` has to say where it belongs.
+_AFTER_BATTLE_SEGMENT: dict[BattleSegment, BattleSegment | None] = {
+    BattleSegment.ENGAGE: BattleSegment.COMBAT,
+    BattleSegment.COMBAT: None,
+}
 
-    Nothing may be done inside a battle yet, so the whole thing runs from the Attacker's choice of
-    where — resolution is arithmetic over the armies that maneuvers left standing.
+
+def fight_battle(game: GameState, battlefield: int) -> None:
+    """Begin the battle at ``battlefield`` by opening its first segment.
+
+    A battle is an Action Round per segment and then resolution, so the Attacker's choice of where
+    only starts it: what happens next is whatever the seats do in the segments.
     """
     attack = _declared_attack(game)
     attack.current = battlefield
     attack.fought |= {battlefield}
+    _open_battle_segment(game, BattleSegment.ENGAGE)
+
+
+def _open_battle_segment(game: GameState, segment: BattleSegment) -> None:
+    """Open ``segment``'s Action Round over the round it suspends, starting with the Defender.
+
+    Both battle segments begin with the Defender rather than the active player (CR, Battle
+    Sequence), which is the one way they differ from a phase's round.
+    """
+    attack = _declared_attack(game)
+    attack.battle_segment = segment
+    game.round_stack.append(game.round)
+    game.round = ActionRound(
+        timings=BATTLE_SEGMENT_TIMINGS[segment],
+        priority=attack.defender,
+        kind=RoundKind.BATTLE_SEGMENT,
+    )
+
+
+def close_battle_segment(game: GameState) -> None:
+    """Close the open battle segment, resuming the round it suspended and moving the battle on.
+
+    The Combat Segment follows the Engage Segment, and resolution follows the Combat Segment (CR,
+    Battle Sequence), so closing the last one is what fights the battle.
+    """
+    attack = _declared_attack(game)
+    closed = attack.battle_segment
+    if closed is None:
+        raise ValueError("no battle segment is open")
+    game.round = game.round_stack.pop()
+    attack.battle_segment = None
+    following = _AFTER_BATTLE_SEGMENT[closed]
+    if following is not None:
+        _open_battle_segment(game, following)
+        return
+    _resolve_battle(game)
+
+
+def _resolve_battle(game: GameState) -> None:
+    """Resolve the battle at the current battlefield, clear up after it, and queue the next.
+
+    Raise ``ValueError`` when no battle is being fought, since resolution has nothing to resolve.
+    """
+    attack = _declared_attack(game)
+    battlefield = attack.current
+    if battlefield is None:
+        raise ValueError("no battle is being fought")
     last_battle = len(attack.fought) == len(attack.battlefields)
     # All three read before anything is applied: resolution destroys the armies the effects and the
     # winner are read off, and moves the honor the outcome reports the movement of.
