@@ -17,13 +17,15 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
     Effect,
+    DelayedEffect,
     GainHonor,
+    GrantPriority,
     MoveToHand,
     Show,
     ShuffleDeck,
     Then,
 )
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import BEGINNING_OF_COMBAT, GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
@@ -118,6 +120,34 @@ register_ability(
         effects=_imperial_gift_effects,
         all_targets=True,
         located_at=(CardLocation.PROVINCE,),
+    ),
+)
+
+
+# --- Sneak Attack ---
+
+
+def _sneak_attack_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Hand the Attacker the opportunity the Combat Segment would otherwise open on the Defender.
+
+    An Engage action reaches a segment that has not started, so the grant is held until it does. It
+    resolves at the next Combat Segment to open, which is this battle's — a held effect is spent
+    when it fires, so it cannot reach the battle after.
+    """
+    return [DelayedEffect(GrantPriority(game.attack.attacker), BEGINNING_OF_COMBAT)]
+
+
+register_ability(
+    "sneak_attack",
+    Ability(
+        timings=(ActionTiming.ENGAGE,),
+        label="Engage: The Attacker has the first opportunity to take a Battle action or pass in "
+        "this battle",
+        cost=no_cost,
+        targets=itself,
+        effects=_sneak_attack_effects,
+        all_targets=True,
+        located_at=(CardLocation.HAND,),
     ),
 )
 
