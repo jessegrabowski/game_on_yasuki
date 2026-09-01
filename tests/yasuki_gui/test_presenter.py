@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
 from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseInvestAmount, Confirm
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.payments import payment_request
+from yasuki_core import ruleset
 from yasuki_core.engine.rules.state import BattleSegment
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
@@ -711,7 +712,7 @@ def _fight_at(presenter, battlefield: int) -> None:
     """
     _press_lane(presenter, battlefield, "Fight here")
     runner = presenter.host.runner
-    for _ in BattleSegment:
+    for _ in ruleset.ACTIVE.battle_segments:
         _run_the_opponent(presenter)
         # A seat with no presence at this battlefield is never offered the opportunity, so a
         # segment can close on the opponent's passes alone and leave nothing to press.
@@ -944,6 +945,53 @@ def test_the_assign_buttons_go_away_once_the_assignment_is_answered(a_battle):
         "Fight here",
         "Fight here",
     ]
+
+
+def test_the_prompt_names_the_battle_segment_and_the_battlefield(a_battle):
+    """A battle's segments are the only place the seat is asked to act inside another segment, so
+    the heading has to name the one being fought — "Fight Battles" is true of every battle in the
+    phase and tells the player nothing about the one in front of them."""
+    presenter, window, session = a_battle
+    runner = presenter.host.runner
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+    _press(presenter, "Done assigning")
+    _run_the_opponent(presenter)
+    _press_lane(presenter, 1, "Fight here")
+
+    said = []
+    for _ in range(len(ruleset.ACTIVE.battle_segments)):
+        _run_the_opponent(presenter)
+        said.append(presenter._prompt(runner.view())[0])
+        _press(presenter, "Pass")
+
+    assert said == [
+        "Your Engage Segment at Battlefield 2",
+        "Your Combat Segment at Battlefield 2",
+    ]
+
+
+def test_both_battle_segments_are_passed_from_the_prompt_box(a_battle):
+    """The seat's opportunity inside a battle is offered where every other opportunity is. Passing
+    both segments is what carries the battle to its resolution, so a segment that offered nothing
+    would strand the phase."""
+    presenter, window, session = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 0)
+    _press(presenter, "Done assigning")
+    _run_the_opponent(presenter)
+    _press_lane(presenter, 0, "Fight here")
+    _run_the_opponent(presenter)
+
+    assert [label for label, _, _ in _specs(presenter)] == ["Pass"]
+    _press(presenter, "Pass")
+    _run_the_opponent(presenter)
+
+    assert session.game.attack.battle_segment is BattleSegment.COMBAT
+    _press(presenter, "Pass")
+    _run_the_opponent(presenter)
+
+    assert session.game.attack.fought == frozenset({0})
 
 
 def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):

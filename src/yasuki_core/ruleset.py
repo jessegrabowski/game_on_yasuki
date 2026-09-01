@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from yasuki_core.engine.rules.state import Segment
+from yasuki_core.engine.rules.state import BattleSegment, Segment
 
 
 def normalize_clan(name: str) -> str:
@@ -32,6 +32,11 @@ class Ruleset:
         equivalent of.
     segment_names : dict mapping Segment to str
         What this arc's rulebook calls each of ``attack_segments``, shown to the player.
+    battle_segments : tuple of BattleSegment
+        One battle's segments in the order this arc's Battle Sequence walks them, nested inside the
+        Fight Battles segment.
+    battle_segment_names : dict mapping BattleSegment to str
+        What this arc's rulebook calls each of ``battle_segments``, shown to the player.
     """
 
     clan_alignments: frozenset[str]
@@ -39,6 +44,8 @@ class Ruleset:
     off_clan_surcharge: int = 2
     attack_segments: tuple[Segment, ...] = ()
     segment_names: dict[Segment, str] = field(default_factory=dict)
+    battle_segments: tuple[BattleSegment, ...] = ()
+    battle_segment_names: dict[BattleSegment, str] = field(default_factory=dict)
 
     def segment_name(self, segment: Segment) -> str:
         """What this arc calls ``segment``.
@@ -50,6 +57,17 @@ class Ruleset:
             ruleset that has no name for it — a wiring error rather than something to paper over.
         """
         return self.segment_names[segment]
+
+    def battle_segment_name(self, segment: BattleSegment) -> str:
+        """What this arc calls ``segment`` of a battle.
+
+        Raises
+        ------
+        KeyError
+            If this arc does not walk ``segment``, which is a segment the engine reached under a
+            ruleset that has no name for it — a wiring error rather than something to paper over.
+        """
+        return self.battle_segment_names[segment]
 
     def alignment(self, clan_name: str) -> str | None:
         """The canonical Clan Alignment slug ``clan_name`` denotes, or None when it is not a legal
@@ -87,6 +105,10 @@ UNICORN = "unicorn"
 # another's sequence.
 _SHATTERED_EMPIRE_SEGMENTS = (Segment.DECLARATION, Segment.MANEUVERS, Segment.FIGHT)
 
+# The Battle Sequence this arc walks inside Fight Battles, named apart from the enum's order for
+# the same reason the Attack Phase's sequence is.
+_SHATTERED_EMPIRE_BATTLE_SEGMENTS = (BattleSegment.ENGAGE, BattleSegment.COMBAT)
+
 # Onyx Edition / Shattered Empire: the ten legal Clan Alignments the rulebook enumerates. Naga is the
 # same alignment as Akasha and resolves to it. Every other clan name a card carries -- minor clans,
 # Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
@@ -100,6 +122,11 @@ SHATTERED_EMPIRE = Ruleset(
         Segment.DECLARATION: "Declaration Segment",
         Segment.MANEUVERS: "Maneuvers Segment",
         Segment.FIGHT: "Fight Battles",
+    },
+    battle_segments=_SHATTERED_EMPIRE_BATTLE_SEGMENTS,
+    battle_segment_names={
+        BattleSegment.ENGAGE: "Engage Segment",
+        BattleSegment.COMBAT: "Combat Segment",
     },
 )
 

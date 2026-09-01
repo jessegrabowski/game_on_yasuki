@@ -14,11 +14,16 @@ PHASE_LABELS: dict[Phase, str] = {
 def turn_context(view: GameView) -> str:
     """Whose turn it is and where in it the seat stands, in the live ruleset's own words.
 
-    The most specific heading that applies: the segment of the Attack Phase once an attack has been
-    declared, and the phase otherwise. A turn belongs to its active player even where both seats may
-    act inside it, so the possessive follows the turn rather than the opportunity to act.
+    The most specific heading that applies: the segment of the battle being fought once one is
+    under way, the segment of the Attack Phase once an attack has been declared, and the phase
+    otherwise. A turn belongs to its active player even where both seats may act inside it, so the
+    possessive follows the turn rather than the opportunity to act.
     """
     whose = "Your" if view.active is view.viewer else "Opponent's"
-    if view.attack is not None:
-        return f"{whose} {ruleset.ACTIVE.segment_name(view.attack.segment)}"
-    return f"{whose} {PHASE_LABELS[view.phase]}"
+    attack = view.attack
+    if attack is None:
+        return f"{whose} {PHASE_LABELS[view.phase]}"
+    if attack.battle_segment is None or attack.current is None:
+        return f"{whose} {ruleset.ACTIVE.segment_name(attack.segment)}"
+    segment = ruleset.ACTIVE.battle_segment_name(attack.battle_segment)
+    return f"{whose} {segment} at Battlefield {attack.current + 1}"

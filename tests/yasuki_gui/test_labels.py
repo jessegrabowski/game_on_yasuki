@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import battle
-from yasuki_core.engine.rules.state import Phase, Segment
+from yasuki_core.engine.rules.state import BattleSegment, Phase, Segment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_gui.labels import PHASE_LABELS, turn_context
@@ -61,6 +61,54 @@ def test_a_declared_attack_names_its_segment_rather_than_the_phase(segment, expe
     session.game.attack.segment = segment
 
     assert turn_context(session.project(P1)) == expected
+
+
+@pytest.mark.parametrize(
+    ("battle_segment", "expected"),
+    [
+        (BattleSegment.ENGAGE, "Your Engage Segment at Battlefield 2"),
+        (BattleSegment.COMBAT, "Your Combat Segment at Battlefield 2"),
+    ],
+)
+def test_a_battle_names_its_own_segment_and_the_battlefield_it_is_fought_at(
+    battle_segment, expected
+):
+    """A battle's segments are nested inside Fight Battles, which is true of every battle in the
+    phase — so the heading names the segment being fought and the battlefield it is at, which is
+    what tells the seat which question it is answering."""
+    session = _session()
+    session.game.phase = Phase.BATTLE
+    battle.declare_attack(session.game, P1)
+    session.game.attack.segment = Segment.FIGHT
+    session.game.attack.current = 1
+    session.game.attack.battle_segment = battle_segment
+
+    assert turn_context(session.project(P1)) == expected
+
+
+def test_a_battle_segment_belongs_to_whoever_is_taking_the_turn():
+    """Both battle segments start with the Defender, so the seat holding the opportunity is
+    routinely not the one whose turn it is — and the heading follows the turn."""
+    session = _session()
+    session.game.phase = Phase.BATTLE
+    battle.declare_attack(session.game, P1)
+    session.game.attack.segment = Segment.FIGHT
+    session.game.attack.current = 0
+    session.game.attack.battle_segment = BattleSegment.COMBAT
+
+    assert turn_context(session.project(P2)) == "Opponent's Combat Segment at Battlefield 1"
+
+
+def test_between_battles_the_heading_falls_back_to_the_attack_phase_segment():
+    """The Fight Battles segment outlives each battle in it, so the heading has to stop naming a
+    battle once the one it named has resolved."""
+    session = _session()
+    session.game.phase = Phase.BATTLE
+    battle.declare_attack(session.game, P1)
+    session.game.attack.segment = Segment.FIGHT
+
+    assert session.game.attack.battle_segment is None
+    assert turn_context(session.project(P1)) == "Your Fight Battles"
 
 
 def test_every_phase_the_engine_has_carries_a_name():

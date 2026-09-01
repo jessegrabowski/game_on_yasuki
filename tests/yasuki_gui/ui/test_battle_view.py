@@ -72,7 +72,12 @@ def _battlefield(
 
 def _attack(*battlefields, current=None):
     return AttackView(
-        attacker=P1, defender=P2, segment=Segment.FIGHT, current=current, battlefields=battlefields
+        attacker=P1,
+        defender=P2,
+        segment=Segment.FIGHT,
+        battle_segment=None,
+        current=current,
+        battlefields=battlefields,
     )
 
 
