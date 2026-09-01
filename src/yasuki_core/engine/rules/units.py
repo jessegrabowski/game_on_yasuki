@@ -76,3 +76,35 @@ def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]
         and isinstance(card.printed, PersonalityPrint)
         and location_of(game.table, card).battlefield == battlefield
     ]
+
+
+def has_presence(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` controls a unit at the battle now being fought (CR, Rule of Presence).
+
+    True outside a battle, where presence is not a question anyone asks.
+    """
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return True
+    return bool(units_at(game, attack.current, seat))
+
+
+def in_a_unit(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` is part of a unit: a Personality, or a card attached to one (CR, Unit)."""
+    return isinstance(card.printed, PersonalityPrint) or card.id in game.table.units
+
+
+def location_permits(game: GameState, card: L5RCard) -> bool:
+    """Whether the Rules of Location leave ``card`` free to be acted from and targeted.
+
+    A card in a unit must stand at the battle now being fought. A card in no unit — a Holding, a
+    Region, a Stronghold — stands nowhere those rules speak of, so they never exclude it, and
+    neither rule applies outside a battle at all. A card in a unit stands where its Personality
+    stands, so its own recorded location answers for it.
+    """
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return True
+    if not in_a_unit(game, card):
+        return True
+    return location_of(game.table, card).battlefield == attack.current

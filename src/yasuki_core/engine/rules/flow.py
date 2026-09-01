@@ -1062,7 +1062,7 @@ def _defer_ability(game: GameState, card: L5RCard, ability: abilities.Ability) -
     The cost resolves first and targeting follows it (CR, Action Sequence steps B and C), and an
     ``all_targets`` ability hits every one it found rather than pausing to be pointed at one.
     """
-    targets = tuple(ability.targets(game, card))
+    targets = tuple(abilities.legal_targets(game, card, ability))
     game.stack.append(
         ApplyAbilityEffects(card.id, targets)
         if ability.all_targets

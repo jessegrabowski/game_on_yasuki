@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.attachments import attached_to, attachments_of
 from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
 from yasuki_core.engine.rules.state import once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.units import has_presence, location_permits
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -340,21 +341,51 @@ def activatable(
     different action with a cost of its own.
     """
     ready: list[L5RCard] = []
+    # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
+    present = has_presence(game, seat)
     for location, card in _seat_cards(game, seat):
         if location not in at:
             continue
         ability = _ABILITIES.get(card.printed_id)
         if ability is None or permitted.isdisjoint(ability.timings):
             continue
+        # The Rule of Presence is about the player, not the card, so it gates an action taken from
+        # anywhere — a Strategy out of hand as much as a Personality on the board.
+        if not present:
+            continue
         if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
             continue
         if location not in ability.located_at:
             continue
+        # A card in a unit may only be acted from at the battlefield the battle is at (CR, Rules
+        # of Location). A card in hand or in a Province is in no unit, and neither is a Holding.
+        if location is CardLocation.BATTLEFIELD and not location_permits(game, card):
+            continue
         if not can_pay(game, card, ability.cost):
             continue
-        if ability.targets(game, card):
+        if legal_targets(game, card, ability):
             ready.append(card)
     return ready
+
+
+def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]:
+    """The ids ``ability`` may target from ``card`` right now.
+
+    Filtered centrally rather than by each card's own ``targets``: during a battle, a card in a unit
+    may only be targeted at the battlefield the battle is at (CR, Rules of Location), and a handler
+    that forgot to say so would be a silent rules bug on every card that forgot. A card printing "at
+    any location" says so on its ``Ability`` instead, where the filter can see it.
+    """
+    offered = ability.targets(game, card)
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return offered
+    by_id = game.table.cards_by_id
+    return [
+        target_id
+        for target_id in offered
+        if target_id not in by_id or location_permits(game, by_id[target_id])
+    ]
 
 
 def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]:

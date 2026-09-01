@@ -28,7 +28,8 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, RoundKind
+from yasuki_core.engine.rules.units import has_presence
 from yasuki_core.engine.rules import abilities
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -78,7 +79,15 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
 
 
 def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming]:
-    """The designators the open Action Round permits ``seat``."""
+    """The designators the open Action Round permits ``seat``.
+
+    None at all during a battle for a seat with no unit at the battlefield being fought: a player
+    must control one or more units there to take an action at all (CR, Rule of Presence). A seat
+    permitted nothing is skipped rather than asked, which :func:`~yasuki_core.engine.rules.flow
+    .yield_priority` already does for a round that permits it nothing.
+    """
+    if game.round.kind is RoundKind.BATTLE_SEGMENT and not has_presence(game, seat):
+        return frozenset()
     timings = game.round.timings
     return timings.active if seat is game.active else timings.others
 
