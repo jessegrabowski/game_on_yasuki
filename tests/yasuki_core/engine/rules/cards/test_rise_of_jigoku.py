@@ -1,7 +1,9 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import ActivateAbility, Pass, Recruit
+from yasuki_core.engine.rules.actions import ActivateAbility, KharmicDraw, Pass, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     Confirm,
@@ -17,18 +19,19 @@ from yasuki_core.engine.rules.economy import (
     effective_gold_production,
     effective_province_strength,
 )
-from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.effects import Destroy, Discard
 from yasuki_core.engine.rules.log import replay
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, SenseiPrint, StrongholdPrint
 
 from tests.yasuki_core.engine.builders import (
     attachment,
     end_phase,
+    fate_card,
     end_turn,
     holding,
     pay,
@@ -725,3 +728,97 @@ def test_makeshift_fortifications_walls_the_province_it_was_recruited_from():
 
     assert session.game.table.province_attachments == {"wall": first}
     assert effective_province_strength(session.game, first) == 7
+
+
+def _blood_of_fu_leng_game(chi: int | None = 3) -> EngineSession:
+    """P1 holding Blood of Fu Leng and gold enough for the Kharmic cost, with one Personality to hit
+    unless ``chi`` is None, which leaves the board empty of them."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("sh", printed_id="plain_stronghold", gold_production=2, owner=P1))
+    if chi is not None:
+        put_in_play(state, personality("shiba", owner=PlayerId.P2, chi=chi))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                FatePrint,
+                id="blood",
+                name="Blood of Fu Leng",
+                printed_id="blood_of_fu_leng",
+                side=Side.FATE,
+                owner=P1,
+                keywords=("Kharmic",),
+            ),
+        )
+    )
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("P1-fd", P1))]
+    return EngineSession.start(state, P1)
+
+
+def _kharmic_it_away(session: EngineSession, target: str = "shiba") -> None:
+    """Spend Blood of Fu Leng on the Kharmic draw, then point its penalty at ``target``."""
+    session.act(P1, KharmicDraw("blood"))
+    pay(session, P1)
+    asked = session.game.pending
+    assert asked is not None and target in asked.candidates
+    session.submit(asked.seat, DecisionResponse((target,)))
+
+
+def test_blood_of_fu_leng_gives_a_chi_penalty_when_a_kharmic_action_discards_it():
+    session = _blood_of_fu_leng_game(chi=3)
+
+    _kharmic_it_away(session)
+
+    assert effective_chi(session.game, session.game.table.cards_by_id["shiba"]) == 2
+
+
+def test_the_chi_penalty_stops_at_a_minimum_another_card_has_given():
+    """A minimum applies on top of the penalties (CR, Calculating Stats), so Uncertainty's floor of
+    1 holds however many -1C penalties land on the target."""
+    session = _blood_of_fu_leng_game(chi=1)
+    session.game.modifiers.append(
+        Minimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN)
+    )
+
+    _kharmic_it_away(session)
+
+    target = session.game.table.cards_by_id["shiba"]
+    assert effective_chi(session.game, target) == 1
+    assert "shiba" in {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_the_chi_penalty_kills_a_one_chi_personality_with_no_minimum():
+    """The same board without the floor, so the test above is pinning the minimum rather than
+    something else about the penalty."""
+    session = _blood_of_fu_leng_game(chi=1)
+
+    _kharmic_it_away(session)
+
+    assert "shiba" not in {card.id for card in session.game.table.battlefield.cards}
+
+
+@pytest.mark.parametrize(
+    "action", [None, Recruit("shiba")], ids=["outside any action", "during another action"]
+)
+def test_discarding_it_any_other_way_gives_no_penalty(action):
+    """The card names a Kharmic action, so reaching the discard by another route — or during an
+    action that is not Kharmic — leaves the board alone."""
+    session = _blood_of_fu_leng_game(chi=3)
+    session.game.action = action
+
+    resolve_effects(session.game, [Discard("blood", P1)])
+
+    assert session.game.pending is None
+    assert effective_chi(session.game, session.game.table.cards_by_id["shiba"]) == 3
+
+
+def test_it_asks_for_no_target_with_no_personality_in_play():
+    """ "a target Personality" with none on the board reaches nobody, so the Kharmic draw resolves
+    without pausing to be pointed at one."""
+    session = _blood_of_fu_leng_game(chi=None)
+
+    session.act(P1, KharmicDraw("blood"))
+    pay(session, P1)
+
+    assert session.game.pending is None
+    assert session.game.modifiers == []
