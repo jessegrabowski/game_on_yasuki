@@ -31,6 +31,18 @@ def test_the_live_ruleset_names_every_segment_it_walks():
     assert all(live.battle_segment_name(segment) for segment in live.battle_segments)
 
 
+def test_the_live_ruleset_walks_the_crs_whole_battle_sequence():
+    """The CR's Battle Sequence has four entries and only the first two are Action Rounds, so the
+    sequence cannot be read off what opens a round — a player shown the battle's shape has to be
+    shown the two it passes through without being asked anything."""
+    assert SHATTERED_EMPIRE.battle_segments == (
+        BattleSegment.ENGAGE,
+        BattleSegment.COMBAT,
+        BattleSegment.RESOLUTION,
+        BattleSegment.AFTER_RESOLUTION,
+    )
+
+
 def test_an_arc_names_its_own_battle_segments():
     """A battle's own sequence is arc config like the Attack Phase's, so an arc that walks only one
     of them names only that one and raises on the other."""

@@ -107,7 +107,12 @@ _SHATTERED_EMPIRE_SEGMENTS = (Segment.DECLARATION, Segment.MANEUVERS, Segment.FI
 
 # The Battle Sequence this arc walks inside Fight Battles, named apart from the enum's order for
 # the same reason the Attack Phase's sequence is.
-_SHATTERED_EMPIRE_BATTLE_SEGMENTS = (BattleSegment.ENGAGE, BattleSegment.COMBAT)
+_SHATTERED_EMPIRE_BATTLE_SEGMENTS = (
+    BattleSegment.ENGAGE,
+    BattleSegment.COMBAT,
+    BattleSegment.RESOLUTION,
+    BattleSegment.AFTER_RESOLUTION,
+)
 
 # Onyx Edition / Shattered Empire: the ten legal Clan Alignments the rulebook enumerates. Naga is the
 # same alignment as Akasha and resolves to it. Every other clan name a card carries -- minor clans,
@@ -127,6 +132,8 @@ SHATTERED_EMPIRE = Ruleset(
     battle_segment_names={
         BattleSegment.ENGAGE: "Engage Segment",
         BattleSegment.COMBAT: "Combat Segment",
+        BattleSegment.RESOLUTION: "Resolution Segment",
+        BattleSegment.AFTER_RESOLUTION: "After Resolution",
     },
 )
 

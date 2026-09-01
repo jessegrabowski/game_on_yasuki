@@ -5,8 +5,7 @@ from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
 from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseInvestAmount, Confirm
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.payments import payment_request
-from yasuki_core import ruleset
-from yasuki_core.engine.rules.state import BattleSegment
+from yasuki_core.engine.rules.state import BATTLE_SEGMENT_TIMINGS, BattleSegment
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
@@ -712,7 +711,7 @@ def _fight_at(presenter, battlefield: int) -> None:
     """
     _press_lane(presenter, battlefield, "Fight here")
     runner = presenter.host.runner
-    for _ in ruleset.ACTIVE.battle_segments:
+    for _ in BATTLE_SEGMENT_TIMINGS:
         _run_the_opponent(presenter)
         # A seat with no presence at this battlefield is never offered the opportunity, so a
         # segment can close on the opponent's passes alone and leave nothing to press.
@@ -960,7 +959,7 @@ def test_the_prompt_names_the_battle_segment_and_the_battlefield(a_battle):
     _press_lane(presenter, 1, "Fight here")
 
     said = []
-    for _ in range(len(ruleset.ACTIVE.battle_segments)):
+    for _ in BATTLE_SEGMENT_TIMINGS:
         _run_the_opponent(presenter)
         said.append(presenter._prompt(runner.view())[0])
         _press(presenter, "Pass")

@@ -106,16 +106,19 @@ class BattleSegment(Enum):
     """One battle's segments, in the order the CR's Battle Sequence walks them. Nested inside the
     Attack Phase's :class:`Segment.FIGHT`, which is where battles are fought.
 
-    Resolution follows the Combat Segment closing and is not an Action Round, so it is not one of
-    these — nothing may be taken during it.
+    Only the first two are Action Rounds — the CR's own list of round types names them and stops
+    there. The last two are named because the battle passes through them and cards act around them,
+    not because a seat is asked anything in either.
     """
 
     ENGAGE = "engage"
     COMBAT = "combat"
+    RESOLUTION = "resolution"
+    AFTER_RESOLUTION = "after_resolution"
 
 
-# What each battle segment's Action Round permits. Both are open to every seat and permit only their
-# own designator, and both start with the Defender (CR, Battle Sequence).
+# What each battle segment that is an Action Round permits. Both are open to every seat and permit
+# only their own designator, and both start with the Defender (CR, Battle Sequence).
 BATTLE_SEGMENT_TIMINGS: dict[BattleSegment, RoundTimings] = {
     BattleSegment.ENGAGE: RoundTimings(
         active=frozenset({ActionTiming.ENGAGE}), others=frozenset({ActionTiming.ENGAGE})
