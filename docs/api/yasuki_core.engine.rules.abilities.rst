@@ -27,6 +27,7 @@ yasuki_core.engine.rules.abilities
     destroy_cost
     enters_play_bowed
     fixed_invest_amount
+    has_absent_ability
     invest_amounts
     invest_for
     itself

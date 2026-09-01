@@ -1,21 +1,28 @@
+from dataclasses import replace
+
 import pytest
 
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import (
     ActionTiming,
     ActivateAbility,
+    BattleDesignator,
     DeclareAttack,
     Pass,
+    PlayStrategy,
 )
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules import abilities, battle, flow, legality
-from yasuki_core.engine.rules.abilities import _ABILITIES, Ability
+from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, CardLocation, itself
 from yasuki_core.engine.rules.state import BattleSegment, RoundKind
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import TableState
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 
 from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import ActionPrint
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -23,6 +30,7 @@ from tests.yasuki_core.engine.builders import (
     personality,
     province_card,
     put_in_play,
+    register,
 )
 
 ATTACKER, DEFENDER = PlayerId.P1, PlayerId.P2
@@ -245,6 +253,12 @@ _ABILITIES["battle_probe"] = Ability(
     ],
     effects=lambda game, source, target: [],
 )
+_ABILITIES["battle_probe_home"] = replace(
+    _ABILITIES["battle_probe"], battle=frozenset({BattleDesignator.HOME})
+)
+_ABILITIES["battle_probe_absent"] = replace(
+    _ABILITIES["battle_probe"], battle=frozenset({BattleDesignator.ABSENT})
+)
 
 
 def _probe_in_a_battle(printed_id: str, *, at_home: bool) -> EngineSession:
@@ -292,6 +306,105 @@ def test_an_ability_is_withheld_from_a_card_left_at_home():
     assert "probe" not in _offered(session)
 
 
+def test_the_home_designator_lifts_the_location_rule():
+    """ShE, Home: usable even if the card is at home rather than the current battlefield."""
+    session = _probe_in_a_battle("battle_probe_home", at_home=True)
+
+    assert "probe" in _offered(session)
+
+
+def test_the_home_designator_does_not_lift_the_presence_rule():
+    """ShE, Home: "It cannot be used without presence unless it also has the Absent designator." The
+    two rules are independent, which is what stops this being one flag."""
+    session = _probe_in_a_battle("battle_probe_home", at_home=True)
+    ops.return_home(session.game.table, session.game.table.cards_by_id["hero"])
+
+    assert "probe" not in _offered(session)
+
+
+def test_the_absent_designator_does_not_lift_the_location_rule():
+    """The independence read the other way: Absent gets a seat with no presence into the battle, and
+    leaves a card in a unit stranded at home all the same."""
+    session = _probe_in_a_battle("battle_probe_absent", at_home=True)
+
+    assert "probe" not in _offered(session)
+
+
+_ABILITIES["absent_probe_in_hand"] = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="test",
+    cost=lambda game, source: [],
+    targets=itself,
+    effects=lambda game, source, target: [],
+    all_targets=True,
+    battle=frozenset({BattleDesignator.ABSENT}),
+    located_at=(CardLocation.HAND,),
+)
+_ABILITIES["plain_probe_in_hand"] = replace(_ABILITIES["absent_probe_in_hand"], battle=frozenset())
+
+
+def _in_hand(session: EngineSession, card_id: str, printed_id: str) -> None:
+    """Deal ``card_id`` to the Attacker's hand as a Strategy of ``printed_id``."""
+    table = session.game.table
+    card = register(
+        table,
+        L5RCard.of(
+            ActionPrint,
+            id=card_id,
+            name=card_id,
+            printed_id=printed_id,
+            side=Side.FATE,
+            owner=ATTACKER,
+        ),
+    )
+    table.zones[ZoneKey(ATTACKER, ZoneRole.HAND)].add(card)
+
+
+def _playable(session: EngineSession) -> set[str]:
+    return {
+        action.card_id
+        for action in session.legal_actions(ATTACKER)
+        if isinstance(action, PlayStrategy)
+    }
+
+
+def _in_the_combat_segment_with_no_presence(*hand: tuple[str, str]) -> EngineSession:
+    """The Combat Segment of a battle the Attacker has no unit standing in, holding the opportunity
+    with ``hand`` dealt to it.
+
+    The cards are dealt before the Defender hands the opportunity over, because whether the Attacker
+    is asked at all is itself the Absent question: a seat with no presence and nothing Absent to
+    play is skipped rather than offered a round it can do nothing in.
+    """
+    session = _probe_in_a_battle("battle_probe", at_home=True)
+    session.act(ATTACKER, Pass())  # out of the Engage Segment and into the Combat Segment
+    ops.return_home(session.game.table, session.game.table.cards_by_id["hero"])
+    for card_id, printed_id in hand:
+        _in_hand(session, card_id, printed_id)
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def test_an_absent_card_is_played_without_presence_at_the_battlefield():
+    """ShE, Absent: playable without presence at the current battlefield."""
+    session = _in_the_combat_segment_with_no_presence(("absent", "absent_probe_in_hand"))
+
+    assert "absent" in _playable(session)
+
+
+def test_an_absent_card_does_not_carry_the_seats_other_cards_into_the_battle():
+    """One Absent card gets the seat asked; it does not lift the rule off everything else in hand.
+    The pair is the same ability with and without the designator, so that is all that differs."""
+    session = _in_the_combat_segment_with_no_presence(
+        ("absent", "absent_probe_in_hand"), ("plain", "plain_probe_in_hand")
+    )
+
+    playable = _playable(session)
+
+    assert "absent" in playable
+    assert "plain" not in playable
+
+
 def test_a_target_left_at_home_is_filtered_out_centrally():
     """CR, Rules of Location: a card in a unit may only be targeted at the current battlefield. The
     probe offers both marks and the engine narrows them, so no card handler has to remember to."""
@@ -301,3 +414,58 @@ def test_a_target_left_at_home_is_filtered_out_centrally():
 
     assert set(ability.targets(session.game, probe)) == {"mark-front", "mark-home"}
     assert abilities.legal_targets(session.game, probe, ability) == ["mark-front"]
+
+
+_ABILITIES["battle_probe_remote"] = replace(
+    _ABILITIES["battle_probe"], battle=frozenset({BattleDesignator.REMOTE})
+)
+
+
+def _probe_at_another_battlefield(printed_id: str) -> EngineSession:
+    """Two battlefields, the battle fought at the first, and the Attacker's probe standing at the
+    second — at a battlefield, but not this one."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    for index in range(2):
+        province_card(state, f"def-prov{index}", seat=DEFENDER, index=index)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=3))
+    put_in_play(state, personality("probe", owner=ATTACKER, printed_id=printed_id, force=1))
+    put_in_play(state, personality("mark-front", owner=DEFENDER, force=1))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0", "probe@1")))
+    session.submit(DEFENDER, DecisionResponse(("mark-front@0",)))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseBattlefield)
+    session.submit(choice.seat, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def test_the_remote_designator_reaches_from_another_battlefield():
+    """ShE, Remote: usable even if the card is at home *or also at another battlefield* — the second
+    half is the whole of what makes it wider than Home."""
+    session = _probe_at_another_battlefield("battle_probe_remote")
+
+    assert "probe" in _offered(session)
+
+
+def test_the_home_designator_does_not_reach_from_another_battlefield():
+    """ShE, Home: usable "even if the card is at home rather than the current battlefield". A card
+    standing at a different battlefield is at neither, and Home does not name it."""
+    session = _probe_at_another_battlefield("battle_probe_home")
+
+    assert "probe" not in _offered(session)
+
+
+def test_the_target_filter_holds_when_the_action_is_actually_taken():
+    """The filter has two call sites — what is offered, and what the action is then pointed at. A
+    card handler that offered a stranded target would otherwise reach the second unchecked."""
+    session = _probe_in_a_battle("battle_probe", at_home=False)
+
+    session.act(ATTACKER, ActivateAbility("probe"))
+
+    asked = session.game.pending
+    assert asked is not None
+    assert asked.candidates == ("mark-front",)

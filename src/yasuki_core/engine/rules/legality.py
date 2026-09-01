@@ -86,7 +86,11 @@ def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming
     permitted nothing is skipped rather than asked, which :func:`~yasuki_core.engine.rules.flow
     .yield_priority` already does for a round that permits it nothing.
     """
-    if game.round.kind is RoundKind.BATTLE_SEGMENT and not has_presence(game, seat):
+    if (
+        game.round.kind is RoundKind.BATTLE_SEGMENT
+        and not has_presence(game, seat)
+        and not abilities.has_absent_ability(game, seat)
+    ):
         return frozenset()
     timings = game.round.timings
     return timings.active if seat is game.active else timings.others
