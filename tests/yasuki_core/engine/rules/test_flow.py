@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Lega
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import (
     ActionRound,
+    BATTLE_SEGMENT_TIMINGS,
     Boundary,
     END_OF_TURN,
     FIRED_MOMENTS,
@@ -1179,7 +1180,7 @@ def test_resolving_one_moment_drops_it_and_leaves_the_others_waiting():
     later = Moment(Phase.ACTION, Boundary.BEGINNING)
     game.delayed = [(END_OF_TURN, Banish("gone")), (later, Banish("staying"))]
 
-    flow._resolve_delayed(game, END_OF_TURN)
+    triggers.resolve_delayed(game, END_OF_TURN)
 
     assert game.delayed == [(later, Banish("staying"))]
 
@@ -1190,17 +1191,23 @@ def test_an_effect_delayed_while_the_moment_resolves_waits_for_the_next_one():
     game = GameState.start(TableState.empty_two_seat(), PlayerId.P1)
     game.delayed = [(END_OF_TURN, DelayedEffect(Banish("later"), END_OF_TURN))]
 
-    flow._resolve_delayed(game, END_OF_TURN)
+    triggers.resolve_delayed(game, END_OF_TURN)
 
     assert game.delayed == [(END_OF_TURN, Banish("later"))]
 
 
 def test_every_fired_moment_has_a_resolve_call_behind_it():
     """``FIRED_MOMENTS`` is what ``DelayedEffect`` validates against, so a moment listed there with
-    no call site behind it would let through the delay it exists to refuse."""
-    called = set(re.findall(r"_resolve_delayed\(game, (\w+)\)", inspect.getsource(flow)))
+    no call site behind it would let through the delay it exists to refuse.
 
-    assert {getattr(state, name) for name in called} == FIRED_MOMENTS
+    The turn's own moments are named as constants at their call sites. A battle segment's beginning
+    is fired generically as its round opens, so it is covered by
+    ``test_battle_rounds.test_a_delay_to_a_segments_beginning_resolves_as_it_opens`` instead.
+    """
+    called = set(re.findall(r"resolve_delayed\(game, (\w+)\)", inspect.getsource(flow)))
+    segment_beginnings = {Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS}
+
+    assert {getattr(state, name) for name in called} | segment_beginnings == FIRED_MOMENTS
 
 
 @pytest.mark.parametrize(

@@ -23,7 +23,9 @@ from yasuki_core.engine.rules.state import (
     BattleOutcome,
     BattleSegment,
     BattlefieldInfo,
+    Boundary,
     GameState,
+    Moment,
     RoundKind,
     Segment,
 )
@@ -293,6 +295,8 @@ def _open_battle_segment(game: GameState, segment: BattleSegment) -> None:
         priority=attack.defender,
         kind=RoundKind.BATTLE_SEGMENT,
     )
+    # After the round exists, so an effect held for this moment lands on the round it was held for.
+    triggers.resolve_delayed(game, Moment(segment, Boundary.BEGINNING))
 
 
 def close_battle_segment(game: GameState) -> None:

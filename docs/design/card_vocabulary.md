@@ -52,6 +52,7 @@ deferred through `Then` instead.
    GainGold
    GainHonor
    LoseGame
+   GrantPriority
    GrantKeyword
    GrantMinimum
    GrantProvinceStrength

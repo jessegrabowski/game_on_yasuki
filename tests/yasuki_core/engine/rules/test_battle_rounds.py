@@ -13,9 +13,17 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
-from yasuki_core.engine.rules import abilities, battle, flow, legality
+from yasuki_core.engine.rules import abilities, battle, flow, legality, triggers
 from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, CardLocation, itself
-from yasuki_core.engine.rules.state import BattleSegment, RoundKind
+from yasuki_core.engine.rules.effects import Bow, GrantPriority
+from yasuki_core.engine.rules.state import (
+    BATTLE_SEGMENT_TIMINGS,
+    BEGINNING_OF_COMBAT,
+    BattleSegment,
+    Boundary,
+    Moment,
+    RoundKind,
+)
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 
@@ -36,8 +44,9 @@ from tests.yasuki_core.engine.builders import (
 ATTACKER, DEFENDER = PlayerId.P1, PlayerId.P2
 
 
-def _in_a_battle(*, provinces: int = 1) -> EngineSession:
-    """A session paused in the first battle's opening segment, with a unit on each side of it."""
+def _at_the_battlefield_choice(*, provinces: int = 1) -> EngineSession:
+    """A session with the armies assigned, paused on the Attacker's choice of where to fight — the
+    step before any battle segment has opened."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
     for index in range(provinces):
@@ -49,8 +58,14 @@ def _in_a_battle(*, provinces: int = 1) -> EngineSession:
     session.act(ATTACKER, DeclareAttack())
     session.submit(ATTACKER, DecisionResponse(("hero@0",)))
     session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    assert isinstance(session.game.pending, ChooseBattlefield)
+    return session
+
+
+def _in_a_battle(*, provinces: int = 1) -> EngineSession:
+    """A session paused in the first battle's opening segment, with a unit on each side of it."""
+    session = _at_the_battlefield_choice(provinces=provinces)
     choice = session.game.pending
-    assert isinstance(choice, ChooseBattlefield)
     session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
     return session
 
@@ -469,3 +484,54 @@ def test_the_target_filter_holds_when_the_action_is_actually_taken():
     asked = session.game.pending
     assert asked is not None
     assert asked.candidates == ("mark-front",)
+
+
+def _walk_to(session: EngineSession, segment: BattleSegment) -> None:
+    """Pass until ``segment`` is the one open. The first battle segment is already open when a
+    battle starts, so reaching it is a walk of no steps."""
+    for _ in range(4):
+        if session.game.attack.battle_segment is segment:
+            return
+        session.act(session.game.round.priority, Pass())
+    raise AssertionError(f"{segment} never opened")
+
+
+@pytest.mark.parametrize("segment", list(BATTLE_SEGMENT_TIMINGS))
+def test_a_delay_to_a_segments_beginning_resolves_as_it_opens(segment):
+    """A battle segment's beginning is fired generically as its round opens rather than named at a
+    call site, so this is what stands behind its entry in ``FIRED_MOMENTS`` — a moment listed there
+    with nothing firing it would hold an effect for the rest of the game."""
+    session = _at_the_battlefield_choice()
+    session.game.delayed = [(Moment(segment, Boundary.BEGINNING), Bow("guard"))]
+
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    _walk_to(session, segment)
+
+    assert session.game.delayed == []
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def test_a_delayed_grant_lands_on_the_round_it_was_held_for():
+    """The grant is committed after the round exists, so it names the opportunity in the segment it
+    was held for rather than in the one it was scheduled from."""
+    session = _in_a_battle()
+    session.game.delayed = [(BEGINNING_OF_COMBAT, GrantPriority(ATTACKER))]
+
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+
+    assert session.game.attack.battle_segment is BattleSegment.COMBAT
+    assert session.game.round.priority is ATTACKER
+
+
+def test_granting_the_opportunity_restarts_the_count_of_consecutive_passes():
+    """A round closes on consecutive passes, and a seat handed the opportunity has not passed on it
+    — so a pass already made before the grant must not be one of the two that close the round."""
+    session = _in_a_battle()
+    session.act(DEFENDER, Pass())
+
+    triggers.resolve_effects(session.game, [GrantPriority(ATTACKER)])
+    session.act(ATTACKER, Pass())
+
+    assert session.game.attack.battle_segment is BattleSegment.ENGAGE

@@ -31,6 +31,7 @@ yasuki_core.engine.rules.effects
     GrantKeyword
     GrantMinimum
     GrantModifier
+    GrantPriority
     GrantProvinceStrength
     IgnoreHonorRequirements
     InterruptingEffect

@@ -26,7 +26,6 @@ from yasuki_core.engine.rules.state import (
     ActionRound,
     END_OF_TURN,
     GameState,
-    Moment,
     PHASE_TIMINGS,
     Phase,
     RESPONSE_TIMINGS,
@@ -1099,7 +1098,7 @@ def _apply_card_choice(
 
 def _end_turn(game: GameState) -> None:
     seat = game.active
-    _resolve_delayed(game, END_OF_TURN)
+    triggers.resolve_delayed(game, END_OF_TURN)
     if game.pending is not None:
         # What is left of the end of the turn — Sincerity, the fate draw, the hand-size discard —
         # has nowhere to resume from, and setting the discard request would strand the paused
@@ -1114,19 +1113,6 @@ def _end_turn(game: GameState) -> None:
         game.pending = DiscardToHandSize(seat, candidates, count=excess)
         return
     _begin_next_turn(game)
-
-
-def _resolve_delayed(game: GameState, moment: Moment) -> None:
-    """Resolve the effects held until ``moment``, and drop them whether they did anything or not.
-
-    A held effect whose card has since left the table is a no-op, so one destroyed or banished
-    earlier in the turn is not chased into the next.
-    """
-    held = [effect for held_until, effect in game.delayed if held_until == moment]
-    if not held:
-        return
-    game.delayed = [entry for entry in game.delayed if entry[0] != moment]
-    triggers.resolve_effects(game, held)
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:

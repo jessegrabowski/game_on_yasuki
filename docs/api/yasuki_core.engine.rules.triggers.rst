@@ -22,6 +22,7 @@ yasuki_core.engine.rules.triggers
     fire
     on
     province_holdings
+    resolve_delayed
     resolve_effects
     resume_cascade
     sincerity_seed_targets
