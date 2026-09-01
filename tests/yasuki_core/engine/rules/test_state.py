@@ -1,6 +1,16 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.rules.state import GameState, Phase, rules_at_start
+from yasuki_core.engine.rules.state import (
+    Boundary,
+    GameState,
+    Moment,
+    Phase,
+    Segment,
+    Turn,
+    rules_at_start,
+)
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules.victory import VictoryRule
 
@@ -92,3 +102,22 @@ def test_a_started_game_records_the_rules_each_seat_plays_under():
 
     assert set(game.active_rules) == set(PlayerId)
     assert game.active_rules[PlayerId.P1] == rules_at_start(state, PlayerId.P1)
+
+
+@pytest.mark.parametrize(
+    "moment, worded",
+    [
+        (Moment(Turn.CURRENT, Boundary.END), "at the end of the turn"),
+        (Moment(Phase.ACTION, Boundary.BEGINNING), "at the beginning of the Action Phase"),
+        (Moment(Segment.FIGHT, Boundary.END), "at the end of the Fight Segment"),
+    ],
+)
+def test_a_moment_is_worded_the_way_a_card_prints_it(moment, worded):
+    assert moment.describe() == worded
+
+
+def test_a_moment_naming_a_stage_it_cannot_word_raises():
+    """Every delayed effect renders through this, so a stage with no wording has to fail loudly
+    rather than putting "None" in front of a player."""
+    with pytest.raises(ValueError, match="no name for the stage"):
+        Moment("dusk", Boundary.END).describe()

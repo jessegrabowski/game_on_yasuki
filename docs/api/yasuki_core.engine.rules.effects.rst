@@ -20,6 +20,7 @@ yasuki_core.engine.rules.effects
     CounterOnAttachedProvince
     CreateToken
     DelayStraighten
+    DelayedEffect
     Destroy
     DestroyProvince
     Discard
@@ -28,6 +29,7 @@ yasuki_core.engine.rules.effects
     GainGold
     GainHonor
     GrantKeyword
+    GrantMinimum
     GrantModifier
     IgnoreHonorRequirements
     InterruptingEffect

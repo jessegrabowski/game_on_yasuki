@@ -1,21 +1,46 @@
-from yasuki_core.engine.rules.abilities import Ability, bow_cost, register_ability
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    CardLocation,
+    bow_cost,
+    itself,
+    personalities_in_play,
+    register_ability,
+)
 from yasuki_core.engine.rules.economy import (
     PlayerState,
     gold_handler,
     keyword_grant,
     recruit_discount,
+    unit_gold_cost,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter, CreateToken, Effect
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    AskAmount,
+    Banish,
+    Choose,
+    CreateToken,
+    DelayedEffect,
+    Effect,
+    PayGold,
+)
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import TriggerContext, on, sincerity_seed_targets
+from yasuki_core.engine.rules.state import END_OF_TURN, GameState
+from yasuki_core.engine.rules.legality import reachable_gold
+from yasuki_core.engine.rules.triggers import (
+    TriggerContext,
+    choice_resolver,
+    on,
+    sincerity_seed_targets,
+)
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 
 
 # --- Sasada, Pearl Champion (Experienced) ---
+
 
 SASADAS_OROCHI = "orochi_follower_2f"
 
@@ -77,10 +102,88 @@ def _shrine_of_sincerity_effects(game: GameState, source: L5RCard, target: L5RCa
 register_ability(
     "shrine_of_sincerity",
     Ability(
-        timing=ActionTiming.DYNASTY,
+        timings=(ActionTiming.DYNASTY,),
         label="Bow: seed a Sincerity token onto a Province Sincerity card",
         cost=bow_cost,
         targets=_shrine_of_sincerity_targets,
         effects=_shrine_of_sincerity_effects,
+    ),
+)
+
+
+# --- The Bad Death of Hida Daizu ---
+
+
+def _the_bad_death_of_hida_daizu_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]:
+    """Every amount the seat could spend, from nothing up to what it can raise.
+
+    The card reads "equal to or less than", so one amount reaches every unit at or under it and the
+    same target is reachable at many amounts. Spending more than the target costs is legal and
+    remains the seat's choice.
+
+    A board with no Personality on it offers no amount at all: nothing there can be targeted, and a
+    cost with no amount to choose is not payable (CR, Good Faith).
+    """
+    if not personalities_in_play(game):
+        return ()
+    return tuple(range(reachable_gold(game, source.owner) + 1))
+
+
+def _the_bad_death_of_hida_daizu_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Settle the amount before the target is chosen: the amount is the cost block, and the legal
+    targets are shaped by it (CR, Action Sequence steps B and C)."""
+    return [
+        AskAmount(
+            source.owner,
+            _the_bad_death_of_hida_daizu_amounts(game, source),
+            "How much Gold do you spend on The Bad Death of Hida Daizu?",
+            "the_bad_death_of_hida_daizu",
+            source.id,
+        )
+    ]
+
+
+@choice_resolver("the_bad_death_of_hida_daizu")
+def _resolve_the_bad_death_of_hida_daizu(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Pay the amount, then choose among the Personalities it reaches.
+
+    An amount below every unit's Gold Cost reaches no target: the Gold is spent in the cost step and
+    the effects after it do not happen, because an effect that requires a target and cannot find one
+    stops the effects that follow it (CR, Action Sequence step E).
+    """
+    paid = int(chosen[0])
+    targets = tuple(
+        card.id for card in personalities_in_play(game) if unit_gold_cost(game, card) <= paid
+    )
+    payment = PayGold(seat, paid, "The Bad Death of Hida Daizu")
+    if not targets:
+        return [payment]
+    return [payment, Choose(seat, targets, 1, 1, "the_bad_death_of_hida_daizu_target", source_id)]
+
+
+@choice_resolver(
+    "the_bad_death_of_hida_daizu_target",
+    prompt="Choose a Personality to banish at the end of the turn",
+)
+def _resolve_the_bad_death_of_hida_daizu_target(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The target stays in play until the turn ends, and the card banishes itself rather than
+    reaching the discard through step F."""
+    return [DelayedEffect(Banish(chosen[0]), END_OF_TURN), Banish(source_id)]
+
+
+register_ability(
+    "the_bad_death_of_hida_daizu",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: Spend Gold to banish a target Personality at the end of the turn",
+        cost=_the_bad_death_of_hida_daizu_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        all_targets=True,
+        located_at=(CardLocation.HAND,),
     ),
 )

@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicRefill,
     Legacy,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.rules.decisions import DecisionResponse
@@ -383,6 +384,7 @@ ROUND_TRIPPED_ACTIONS = [
     KharmicDraw("card"),
     KharmicRefill("card"),
     ActivateAbility("card"),
+    PlayStrategy("card"),
     DeclareAttack(),
 ]
 

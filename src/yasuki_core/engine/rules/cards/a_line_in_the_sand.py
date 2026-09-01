@@ -52,8 +52,8 @@ def _agasha_beiru_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
 register_ability(
     "agasha_beiru",
     Ability(
-        timing=ActionTiming.OPEN,
-        label="Open: recruit a Fortification from your discard pile and wall its Province",
+        timings=(ActionTiming.OPEN,),
+        label="Earth Open: Recruit a target Fortification in your discard pile and give its Province a +1 strength Wall token",
         cost=bow_cost,
         targets=_agasha_beiru_targets,
         effects=_agasha_beiru_effects,

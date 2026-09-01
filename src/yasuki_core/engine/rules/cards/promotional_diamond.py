@@ -74,7 +74,7 @@ def _resolve_suiteiru_no_oni(
 register_ability(
     "suiteiru_no_oni",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Destroy your unbowed Personality to create Oni Followers equal to his Chi",
         cost=no_cost,
         targets=_suiteiru_no_oni_targets,

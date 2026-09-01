@@ -1,6 +1,7 @@
 from yasuki_core.engine.rules.actions import Action, DeclareAttack, Pass
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
+    ChooseAmount,
     ChooseBattlefield,
     ChooseDistribution,
     ChooseInvestAmount,
@@ -60,6 +61,12 @@ class Presenter:
         runner, field = self.host.runner, self.window.field
         self._spend_committed()
         pending = runner.pending
+        if isinstance(pending, ChoosePayment) and pending.amount == 0:
+            # A cost of nothing is not a question: there is no producer to bow and no gold to
+            # spend, so asking would put a prompt in front of the seat with one possible answer.
+            runner.submit(DecisionResponse())
+            self.present()
+            return
         search = runner.search_view()
         if search is not None:
             # The candidates are in a deck or a discard pile, so there is nothing on the board to
@@ -76,11 +83,11 @@ class Presenter:
             # is how they are brought home or sent somewhere else.
             field.begin_selection({assignment(token)[0] for token in pending.candidates})
         elif pending is not None and not isinstance(
-            pending, ChooseInvestAmount | Confirm | ChooseBattlefield
+            pending, ChooseAmount | ChooseInvestAmount | Confirm | ChooseBattlefield
         ):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
-            # Invest amount and a yes/no question are answered by prompt buttons, so neither puts
-            # the board into selection mode.
+            # amount is named on the prompt's spinner and a yes/no question on its buttons, so
+            # neither puts the board into selection mode.
             field.begin_selection(
                 pending.candidates, render_bowed=isinstance(pending, ChoosePayment)
             )
@@ -165,7 +172,7 @@ class Presenter:
         window.field.render_snapshot(view.table, self.host.human_seat, view.stats)
         window.phase_bar.refresh(view)
         status, buttons = self._prompt(view)
-        window.prompt_box.show(status, buttons)
+        window.prompt_box.show(status, buttons, self._spinner_amounts())
         if view.attack is None:
             window.show_battle(None)
         else:
@@ -217,6 +224,13 @@ class Presenter:
                 for amount in pending.candidates
             ]
             return pending.prompt(), [*amounts, ("Cancel", self.cancel, True)]
+        if isinstance(pending, ChooseAmount):
+            # The seat names its own amount for a variable Gold cost, so the panel carries a spinner
+            # over the amounts and one button that spends what it reads.
+            return pending.prompt(), [
+                ("Spend", self.submit_amount, True),
+                ("Cancel", self.cancel, True),
+            ]
         if pending is not None:
             answer = self._board_answer()
             # A payment is picked whole and answered one producer at a time, so what makes it
@@ -327,6 +341,11 @@ class Presenter:
         attack = self.host.session.game.attack
         return len(attack.battlefields)
 
+    def _spinner_amounts(self) -> tuple[str, ...] | None:
+        """The amounts the prompt's spinner steps through, or None when nothing pending names one."""
+        pending = self.host.runner.pending
+        return pending.candidates if isinstance(pending, ChooseAmount) else None
+
     def _assignment_prompt(self) -> str:
         """The next thing to do, not a description of the state - this is the step the player has no
         other guide through."""
@@ -360,6 +379,11 @@ class Presenter:
     def submit_invest(self, amount: str) -> None:
         """Answer an Invest decision with the amount the seat picked."""
         self.host.runner.submit(DecisionResponse((amount,)))
+        self.present()
+
+    def submit_amount(self) -> None:
+        """Answer a variable Gold cost with the amount the spinner is showing."""
+        self.host.runner.submit(DecisionResponse((self.window.prompt_box.amount(),)))
         self.present()
 
     def _board_answer(self) -> DecisionResponse:

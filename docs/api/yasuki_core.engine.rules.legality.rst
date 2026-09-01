@@ -39,7 +39,7 @@ yasuki_core.engine.rules.legality
     seat_clan
     seat_holdings
     seat_stronghold
-    timing_of
+    timings_of
 
 .. automodule:: yasuki_core.engine.rules.legality
     :members:

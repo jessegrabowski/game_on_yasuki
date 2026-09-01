@@ -43,6 +43,7 @@ deferred through `Then` instead.
    CounterOnAttachedProvince
    CreateToken
    DelayStraighten
+   DelayedEffect
    Destroy
    DestroyProvince
    Discard
@@ -52,6 +53,7 @@ deferred through `Then` instead.
    GainHonor
    LoseGame
    GrantKeyword
+   GrantMinimum
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
@@ -145,10 +147,12 @@ the action rather than by deserializing it.
    ApplyEffects
    CompleteProduction
    ContinuePayment
+   DiscardPlayed
    FightNextBattle
    FinishRecruit
    ResolveEquip
    ResolveRecruit
+   ResolveStrategy
    ResumeCascade
    SelectAbilityTarget
 ```
@@ -167,6 +171,7 @@ Production without a modifier being recorded.
    Stat
    Duration
    KeywordGrant
+   Minimum
    Modifier
 ```
 

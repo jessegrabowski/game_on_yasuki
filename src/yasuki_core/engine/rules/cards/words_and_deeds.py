@@ -65,7 +65,7 @@ def _militia_training_ground_effects(
 register_ability(
     "militia_training_ground",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label=f"Open: Bow or pay {GOLD_INSTEAD_OF_BOWING} gold to Equip a 0F Follower",
         cost=_militia_training_ground_cost,
         targets=_militia_training_ground_targets,

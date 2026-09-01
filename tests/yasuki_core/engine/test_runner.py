@@ -5,6 +5,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
+    ActionPrint,
     AttachmentPrint,
     FatePrint,
     HoldingPrint,
@@ -21,6 +22,7 @@ from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse, DiscardToHandSize
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import (
+    PlayStrategy,
     ActivateAbility,
     Recruit,
     Cycle,
@@ -538,6 +540,32 @@ def test_a_hand_attachment_offers_equip_priced_at_its_gold_cost():
     # Equipping is reached by clicking the card in hand, so the offer has to hang off the hand menu
     # and has to say the price — the player commits to the target before seeing the payment prompt.
     assert _equip_runner().hand_menu("P1-katana") == [("Equip: Pay 3 gold", Equip("P1-katana"))]
+
+
+def test_a_hand_strategy_offers_a_play_priced_at_its_gold_cost():
+    # Playing a Strategy is reached by clicking the card in hand, the way Equipping is, so the offer
+    # has to hang off the hand menu — without an entry here the action is legal and unreachable.
+    runner = _equip_runner()
+    state = runner.session.game.table
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(
+        _register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="P1-killer",
+                name="Hired Killer",
+                printed_id="hired_killer",
+                side=Side.FATE,
+                owner=PlayerId.P1,
+                gold_cost=2,
+            ),
+        )
+    )
+
+    label, action = runner.hand_menu("P1-killer")[0]
+
+    assert action == PlayStrategy("P1-killer")
+    assert label == "Open: Spend Gold to destroy a target Personality — Pay 2 gold"
 
 
 def test_an_investable_attachment_prices_its_two_equips_apart():

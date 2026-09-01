@@ -59,7 +59,7 @@ def _dull_tanto_effects(game: GameState, source: L5RCard, target: L5RCard) -> li
 register_ability(
     "dull_tanto",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: give a Personality two -1F tokens and destroy this Item",
         cost=no_cost,
         targets=_dull_tanto_targets,
@@ -158,8 +158,8 @@ def _repairing_the_ruins_effects(game: GameState, source: L5RCard, target: L5RCa
 register_ability(
     "repairing_the_ruins",
     Ability(
-        timing=ActionTiming.OPEN,
-        label="Discard: rebuild this Province with a Holding you do not control",
+        timings=(ActionTiming.OPEN,),
+        label="Economic Open: Discard this Event to refill its Province with a non-Unique Holding you control no copies of",
         cost=no_cost,
         targets=_repairing_the_ruins_targets,
         effects=_repairing_the_ruins_effects,
@@ -169,6 +169,7 @@ register_ability(
 
 
 # --- The Forgotten ---
+
 
 FORGOTTEN_DEAD = "forgotten_dead"
 FORGOTTEN_HONOR_LOSS = 2
@@ -196,7 +197,7 @@ on(EnteredPlay, "the_forgotten")(_the_forgotten_entered_play_or_destroyed)
 on(Destroyed, "the_forgotten")(_the_forgotten_entered_play_or_destroyed)
 
 
-@choice_resolver("the_forgotten", prompt="Equip the dead to one of your Personalities")
+@choice_resolver("the_forgotten", prompt="Attach the Undead Follower to your target Personality")
 def _resolve_the_forgotten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
@@ -227,7 +228,7 @@ def _verdant_wilds_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "verdant_wilds",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Bow: straighten your target card",
         cost=bow_cost,
         targets=_verdant_wilds_targets,

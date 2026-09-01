@@ -2,6 +2,7 @@
 # cards. Its own tests fail when that happens.
 from yasuki_core.engine.rules.cards import (  # noqa: F401
     a_line_in_the_sand,
+    ambitions_debt,
     chaos_reigns_part_i,
     chaos_reigns_part_ii,
     chaos_reigns_part_iii,
@@ -13,6 +14,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     honors_veil,
     imperial_edition,
     ivory_edition,
+    lotus_edition,
     onyx_edition,
     pre_imperial,
     promotional_diamond,

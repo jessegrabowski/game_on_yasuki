@@ -19,11 +19,14 @@ from yasuki_core.engine.rules.actions import (
     KharmicRefill,
     Legacy,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.rules.state import (
     ActionRound,
+    END_OF_TURN,
     GameState,
+    Moment,
     PHASE_TIMINGS,
     Phase,
     RESPONSE_TIMINGS,
@@ -31,7 +34,9 @@ from yasuki_core.engine.rules.state import (
 )
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
+    DiscardPlayed,
     FightNextBattle,
+    ResolveStrategy,
     CompleteProduction,
     ContinuePayment,
     ApplyAbilityEffects,
@@ -91,7 +96,6 @@ from yasuki_core.engine.rules.legality import (
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    Banish,
     Choose,
     Discard,
     DrawCard,
@@ -159,7 +163,9 @@ def advance(game: GameState) -> None:
 
     Pause instead of finishing the turn if the end-of-turn discard needs an answer: record the
     request on ``game.pending`` and return, leaving the caller to :func:`submit` a response before
-    advancing again. Raise ``RuntimeError`` if called while a decision is already pending.
+    advancing again. That discard is the only question the end of a turn may ask — raise
+    ``RuntimeError`` if a delayed effect asks one of its own, and if called while a decision is
+    already pending.
     """
     if game.awaiting_decision:
         raise RuntimeError("cannot advance while a decision is pending")
@@ -200,6 +206,7 @@ def forget_action(game: GameState) -> None:
     """
     game.action_events.clear()
     game.action_taken = ""
+    game.action = None
 
 
 def open_round(game: GameState) -> None:
@@ -262,6 +269,7 @@ def perform(game: GameState, action: Action) -> None:
     if not isinstance(action, Pass) and not game.round_stack:
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
+        game.action = action
     match action:
         case Pass():
             yield_priority(game, passed=True)
@@ -283,6 +291,8 @@ def perform(game: GameState, action: Action) -> None:
             kharmic_refill(game, card_id)
         case ActivateAbility(card_id=card_id):
             activate(game, card_id)
+        case PlayStrategy(card_id=card_id):
+            play_strategy(game, card_id)
         case DeclareAttack():
             battle.declare_attack(game)
             battle.open_maneuvers(game)
@@ -293,6 +303,49 @@ def perform(game: GameState, action: Action) -> None:
     run_stack(game)
     if not isinstance(action, Pass):
         _yield_after_action(game)
+
+
+def play_strategy(game: GameState, card_id: str) -> None:
+    """Announce a Strategy: defer its resolution, then pause for its Gold Cost.
+
+    The card stays in hand until the payment is answered, so backing out of the payment leaves it
+    there — the unwind truncates the tape to before the announcement and replays, and a card that
+    never moved needs nothing put back.
+    """
+    card = game.table.cards_by_id[card_id]
+    seat = card.owner
+    game.stack.append(ResolveStrategy(card_id))
+    game.pending = payment_request(
+        game, seat, effective_gold_cost(game, card), card.name, target=card
+    )
+
+
+def _resolve_strategy(game: GameState, card_id: str) -> None:
+    """Resolve a paid-for Strategy: its ability against its target, and then its discard.
+
+    The discard is stacked *under* the ability's own work so it runs after it, whether the ability
+    hits every target at once or pauses to be pointed at one.
+    """
+    card = game.table.cards_by_id[card_id]
+    ability = abilities.ability_for(card)
+    if ability is None:
+        raise ValueError(f"{card_id} has no ability to resolve")
+    game.stack.append(DiscardPlayed(card_id))
+    _defer_ability(game, card, ability)
+
+
+def _discard_played(game: GameState, card_id: str) -> None:
+    """Discard a card whose play has finished, unless it has already left the hand.
+
+    Step F discards the played card "unless it is now in play" (CR, Action Sequence) — a Terrain, a
+    Kata or an Edict reaches the board as the thing its own text does. A card that banished itself has
+    left by another road, and discarding it would drag it back out of the pile it chose, so the
+    test is whether it is still in hand rather than whether it reached the board.
+    """
+    card = game.table.cards_by_id[card_id]
+    if card not in game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards:
+        return
+    triggers.resolve_effects(game, [Discard(card_id, card.owner)])
 
 
 def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()) -> None:
@@ -655,6 +708,10 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             _resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
         case ResolveEquip(card_id=card_id, target_id=target_id, invest_amount=invest_amount):
             _resolve_equip(game, card_id, target_id, invest_amount)
+        case ResolveStrategy(card_id=card_id):
+            _resolve_strategy(game, card_id)
+        case DiscardPlayed(card_id=card_id):
+            _discard_played(game, card_id)
         case SelectAbilityTarget(card_id=card_id, candidates=candidates):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(
@@ -979,21 +1036,31 @@ def activate(game: GameState, card_id: str) -> None:
     have a legal target — ``legal_actions`` only offers it then.
 
     Resolving the target is deferred behind the cost on the stack, so a cost whose own cascade pauses
-    for a decision resolves fully first. Targets are fixed before paying (Good Faith): the candidates
-    are the ones ``legal_actions`` validated, so the ability is never left with nothing to hit."""
+    for a decision resolves fully first — which is the CR's order, since targets are chosen in step C
+    of the Action Sequence, after costs are paid in step B. Good Faith is what makes the deferral
+    safe: an action may only be announced when it could find a legal target, so the candidates
+    ``legal_actions`` validated are still there to hit."""
     card = game.table.cards_by_id[card_id]
     ability = abilities.ability_for(card)
-    targets = tuple(ability.targets(game, card))
-    deferred = (
-        ApplyAbilityEffects(card_id, targets)
-        if ability.all_targets
-        else SelectAbilityTarget(card_id, targets)
-    )
-    if ability.timing is ActionTiming.RESPONSE:
+    if ActionTiming.RESPONSE in ability.timings:
         game.responded.add(card_id)
-    game.stack.append(deferred)
-    triggers.resolve_effects(game, ability.cost(game, card))
+    _defer_ability(game, card, ability)
     run_stack(game)  # resolve the target, unless the cost's cascade paused for a decision first
+
+
+def _defer_ability(game: GameState, card: L5RCard, ability: abilities.Ability) -> None:
+    """Stack ``ability``'s effects behind its cost, and pay the cost.
+
+    The cost resolves first and targeting follows it (CR, Action Sequence steps B and C), and an
+    ``all_targets`` ability hits every one it found rather than pausing to be pointed at one.
+    """
+    targets = tuple(ability.targets(game, card))
+    game.stack.append(
+        ApplyAbilityEffects(card.id, targets)
+        if ability.all_targets
+        else SelectAbilityTarget(card.id, targets)
+    )
+    triggers.resolve_effects(game, ability.cost(game, card))
 
 
 def _apply_ability_target(
@@ -1024,7 +1091,12 @@ def _apply_card_choice(
 
 def _end_turn(game: GameState) -> None:
     seat = game.active
-    _banish_lent_creations(game)
+    _resolve_delayed(game, END_OF_TURN)
+    if game.pending is not None:
+        # What is left of the end of the turn — Sincerity, the fate draw, the hand-size discard —
+        # has nowhere to resume from, and setting the discard request would strand the paused
+        # effect's own cascade behind it. Nothing delayed today asks a question.
+        raise RuntimeError("a delayed effect paused the end of the turn, which cannot resume")
     _accrue_sincerity(game, seat)
     ops.draw_to_hand(game.table, seat)
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
@@ -1036,17 +1108,17 @@ def _end_turn(game: GameState) -> None:
     _begin_next_turn(game)
 
 
-def _banish_lent_creations(game: GameState) -> None:
-    """Banish the cards created for this turn only, before it ends.
+def _resolve_delayed(game: GameState, moment: Moment) -> None:
+    """Resolve the effects held until ``moment``, and drop them whether they did anything or not.
 
-    The list is cleared whatever happens to the cards, so one destroyed or banished earlier in the
-    turn is not chased into the next: the loan was for this turn, and it is over either way.
+    A held effect whose card has since left the table is a no-op, so one destroyed or banished
+    earlier in the turn is not chased into the next.
     """
-    lent = game.banish_at_turn_end
-    if not lent:
+    held = [effect for held_until, effect in game.delayed if held_until == moment]
+    if not held:
         return
-    game.banish_at_turn_end = []
-    triggers.resolve_effects(game, [Banish(card_id) for card_id in lent])
+    game.delayed = [entry for entry in game.delayed if entry[0] != moment]
+    triggers.resolve_effects(game, held)
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:

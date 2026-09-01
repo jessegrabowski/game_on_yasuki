@@ -21,13 +21,32 @@ class PromptBox(tk.Frame):
         self._actions = tk.Frame(self, bg=theme.PANEL)
         self._actions.pack(side="top", fill="x", padx=8)
         self._buttons: list[tk.Button] = []
+        self._spinner: tk.Spinbox | None = None
 
-    def show(self, status: str, buttons: Iterable[ButtonSpec]) -> None:
-        """Render ``status`` and a button per spec."""
+    def show(
+        self, status: str, buttons: Iterable[ButtonSpec], amounts: tuple[str, ...] | None = None
+    ) -> None:
+        """Render ``status``, a spinner over ``amounts`` when there are any, and a button per spec.
+
+        A seat naming its own number gets one control it steps through rather than a button per
+        value: the amounts a variable Gold cost offers run as high as the seat can pay, and that is
+        a list no panel this width can hold.
+        """
         self._status.configure(text=status)
         for child in self._actions.winfo_children():
             child.destroy()
         self._buttons = []
+        self._spinner = None
+        if amounts:
+            self._spinner = tk.Spinbox(
+                self._actions,
+                values=amounts,
+                state="readonly",
+                justify="center",
+                width=6,
+                font=theme.serif(13, "bold"),
+            )
+            self._spinner.pack(side="top", pady=(0, 6))
         for label, command, enabled in buttons:
             button = tk.Button(
                 self._actions,
@@ -37,6 +56,10 @@ class PromptBox(tk.Frame):
             )
             button.pack(side="top", fill="x", pady=2)
             self._buttons.append(button)
+
+    def amount(self) -> str:
+        """The number the spinner is showing, or an empty string when none is up."""
+        return self._spinner.get() if self._spinner is not None else ""
 
     def invoke_primary(self) -> None:
         """Invoke the primary action — the first button — when enabled; the spacebar shortcut. The

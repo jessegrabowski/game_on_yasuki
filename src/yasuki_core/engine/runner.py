@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicRefill,
     Legacy,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
@@ -138,11 +139,12 @@ class GameRunner:
 
     def hand_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The labeled actions offered for one of the human's hand cards, for its left-click menu:
-        the Kharmic ability that spends it, and an Equip for an attachment. Empty when the card
-        offers nothing right now.
+        the Kharmic ability that spends it, an Equip for an attachment, and a Strategy played for
+        its Gold Cost. Empty when the card offers nothing right now.
 
-        Equipping names no target here — choosing it puts the board into selection over the
-        Personalities that would take the card, then into the payment."""
+        Neither Equipping nor playing a Strategy names a target here. Equipping picks its
+        Personality first and pays afterwards; a Strategy pays first and is pointed at its target on
+        the far side, which is the CR's order for any action (Action Sequence steps B and C)."""
         game = self.session.game
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
@@ -157,6 +159,12 @@ class GameRunner:
                     items.append((self._invest_label(game, card, cost, "Equip & Invest"), action))
                 else:
                     items.append((f"Equip: Pay {cost} gold", action))
+            elif isinstance(action, PlayStrategy):
+                card = game.table.cards_by_id[card_id]
+                ability = abilities.ability_for(card)
+                cost = effective_gold_cost(game, card)
+                label = ability.label if ability is not None else "Play this Strategy"
+                items.append((label if cost == 0 else f"{label} — Pay {cost} gold", action))
         return items
 
     @staticmethod

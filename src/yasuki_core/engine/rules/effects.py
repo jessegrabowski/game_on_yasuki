@@ -23,8 +23,8 @@ from yasuki_core.engine.rules.events import (
     Revealed,
     Straightened,
 )
-from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Modifier, Stat
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Minimum, Modifier, Stat
+from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment, flow_resolves
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -270,6 +270,35 @@ class Banish(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class DelayedEffect(Effect):
+    """Hold ``effect`` until ``until``, then resolve it — the CR's delayed effect.
+
+    Nothing is decided at the moment it resolves: a held effect whose card has since left the table
+    is a no-op, so a delay never has to be withdrawn.
+
+    Attributes
+    ----------
+    effect : Effect
+        What resolves later.
+    until : Moment
+        The boundary of play it waits for. Resolving a delay to a moment the flow never reaches
+        raises ``ValueError`` rather than holding the effect for the rest of the game.
+    """
+
+    effect: Effect
+    until: Moment
+
+    def describe(self) -> str:
+        return f"{self.effect.describe()} {self.until.describe()}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        if not flow_resolves(self.until):
+            raise ValueError(f"nothing resolves {self.until.describe()}")
+        game.delayed.append((self.until, self.effect))
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class DestroyProvince(Effect):
     """Destroy ``seat``'s Province ``zone``: its contents go to the discard face-up and the Province
     itself leaves the board. A Province already gone is a no-op.
@@ -351,6 +380,35 @@ class GrantModifier(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.modifiers.append(
             Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantMinimum(Effect):
+    """Record a continuous stat minimum: the ``source`` card floors ``target``'s ``stat`` at
+    ``value`` for ``duration`` (CR, Minimums and Maximums).
+
+    The minimum counterpart of :class:`GrantModifier`. A card reading "to a minimum of N" wants a
+    :class:`GrantModifier` with a capped amount instead, because that wording limits one change
+    rather than the stat.
+    """
+
+    source_id: str
+    target_id: str
+    stat: Stat
+    value: int
+    duration: Duration
+
+    def describe(self) -> str:
+        return (
+            f"{self.source_id} gives {self.target_id} a minimum {self.stat.name} of {self.value} "
+            f"({self.duration.name})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifiers.append(
+            Minimum(self.source_id, self.target_id, self.stat, self.value, self.duration)
         )
         return []
 
@@ -489,7 +547,7 @@ class CreateToken(Effect):
         )
         game.created_by[card.id] = self.creator_id
         if self.banish_at_turn_end:
-            game.banish_at_turn_end.append(card.id)
+            game.delayed.append((END_OF_TURN, Banish(card.id)))
         if personality is not None:
             ops.attach_to_personality(game.table, card, personality)
         return [EnteredPlay(card.id, from_hand=False)]

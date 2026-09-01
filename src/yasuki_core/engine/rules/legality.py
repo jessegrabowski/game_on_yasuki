@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.actions import (
     Inheritance,
     Legacy,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.rules.economy import (
@@ -52,28 +53,28 @@ RULESET = ruleset.ACTIVE
 OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
 
 
-def timing_of(game: GameState, action: Action) -> ActionTiming | None:
-    """The designator ``action`` is taken under, or None for a pass.
+def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
+    """The designators ``action`` may be taken under, empty for a pass.
 
     A pass is the CR's alternative to taking an action rather than an action itself, so it carries
-    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designator off
+    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designators off
     the card, which is why this is a query rather than a table: the same action is Open on one
-    Holding and Dynasty on another.
+    Holding and Dynasty on another, and a card printing "Battle/Open" carries both.
 
     Raise ValueError for an action with no designator rule, and for an ``ActivateAbility`` naming a
     card that has no activated ability.
     """
     if isinstance(action, Pass):
-        return None
+        return frozenset()
     if isinstance(action, ActivateAbility):
         ability = abilities.ability_for(game.table.cards_by_id[action.card_id])
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
-        return ability.timing
+        return frozenset(ability.timings)
     timing = ACTION_TIMINGS.get(type(action))
     if timing is None:
         raise ValueError(f"no designator for action {type(action).__name__}")
-    return timing
+    return frozenset({timing})
 
 
 def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming]:
@@ -103,6 +104,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_cycle(game, seat),
         *_recruits(game, seat),
         *_equips(game, seat),
+        *_strategies(game, seat),
         *_dynasty_discards(game, seat),
         *_legacy(game, seat),
         *_kharmic(game, seat),
@@ -134,6 +136,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _recruits(game, seat, only=card_id)
         case Equip(card_id=card_id):
             return action in _equips(game, seat, only=card_id)
+        case PlayStrategy(card_id=card_id):
+            return action in _strategies(game, seat, only=card_id)
         case DynastyDiscard(card_id=card_id):
             return action in _dynasty_discards(game, seat, only=card_id)
         case KharmicDraw(card_id=card_id) | KharmicRefill(card_id=card_id):
@@ -350,6 +354,25 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         if invest is not None and base + invest <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips
+
+
+def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
+    """The Strategies ``seat`` can play: each one in hand whose designator this round permits, whose
+    Gold Cost it can reach, and which has a legal target.
+
+    The card's own ability decides when it may be played, so this asks
+    :func:`~yasuki_core.engine.rules.abilities.activatable` for the hand rather than reading a fixed
+    timing off the action. ``only`` narrows to a single card.
+    """
+    playable = abilities.activatable(
+        game, seat, permitted_timings(game, seat), at=(abilities.CardLocation.HAND,)
+    )
+    return [
+        PlayStrategy(card.id)
+        for card in playable
+        if (only is None or card.id == only)
+        and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
+    ]
 
 
 def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Zone]]:

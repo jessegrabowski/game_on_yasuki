@@ -7,7 +7,7 @@ from numpy.random import Generator, default_rng
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.actions import Action, ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.events import GameEvent
 from yasuki_core.engine.rules.modifiers import OngoingEffect
@@ -92,6 +92,68 @@ class Segment(Enum):
     DECLARATION = "declaration"
     MANEUVERS = "maneuvers"
     FIGHT = "fight"
+
+
+class Turn(Enum):
+    """The turn itself as a stage of play, the one enclosing every :class:`Phase`."""
+
+    CURRENT = "turn"
+
+
+class Boundary(Enum):
+    """Which edge of a stage of play a :class:`Moment` names."""
+
+    BEGINNING = "beginning"
+    END = "end"
+
+
+# The stretches of play a Moment can name the edge of: the turn, one of its phases, or one of the
+# Attack Phase's segments.
+Stage = Turn | Phase | Segment
+
+
+@dataclass(frozen=True, slots=True)
+class Moment:
+    """A boundary of a stage of play, worded the way a card prints one — "at the end of the turn",
+    "at the beginning of the Action Phase".
+
+    Attributes
+    ----------
+    stage : Turn, Phase or Segment
+        The stretch of play whose edge this names.
+    boundary : Boundary
+        Which edge of that stretch.
+    """
+
+    stage: Stage
+    boundary: Boundary
+
+    def describe(self) -> str:
+        return f"at the {self.boundary.value} of the {self._stage_name()}"
+
+    def _stage_name(self) -> str:
+        match self.stage:
+            case Turn() as turn:
+                return turn.value
+            case Phase() as phase:
+                return f"{phase.value.title()} Phase"
+            case Segment() as segment:
+                return f"{segment.value.title()} Segment"
+            case _:
+                raise ValueError(f"no name for the stage {self.stage!r}")
+
+
+END_OF_TURN = Moment(Turn.CURRENT, Boundary.END)
+
+# The moments the flow reaches. Any other Moment is constructible and correctly worded, so an effect
+# delayed to one would be held for the rest of the game with nothing to resolve it.
+FIRED_MOMENTS: frozenset[Moment] = frozenset({END_OF_TURN})
+
+
+def flow_resolves(moment: Moment) -> bool:
+    """Whether the flow reaches ``moment``. A Moment names a stage and a boundary and nothing else,
+    so it stands for every occurrence of that stage at once."""
+    return moment in FIRED_MOMENTS
 
 
 class BattleOutcome(NamedTuple):
@@ -257,9 +319,9 @@ class GameState:
     created_by : dict mapping str to str
         Each created card to the card that created it, kept for the life of the game so a card can
         still name what it made after the fact. Ephemeral and rebuilt by replay. Default empty.
-    banish_at_turn_end : list of str
-        Created cards to banish before the current turn ends — the ones lent to a player for a turn.
-        Emptied as the turn ends, whether or not the cards are still there to banish. Ephemeral and
+    delayed : list of (Moment, Effect)
+        Effects held until a moment of play arrives — the CR's delayed effects. Each is resolved and
+        dropped when its moment comes, whether or not it still has anything to do. Ephemeral and
         rebuilt by replay. Default empty.
     round_stack : list of ActionRound
         The rounds a Response Step has suspended, innermost last. A Response Step opens a round of
@@ -269,6 +331,9 @@ class GameState:
         The cards that have already taken a Response in the Response Step now open. A card answers a
         given Step once; nothing else rations a Response, which costs no bow. Cleared as each Step
         opens. Ephemeral and rebuilt by replay. Default empty.
+    action : Action or None
+        The action now resolving, or None outside one — what a card reacting "from a Kharmic action"
+        reads to know which action it is reacting to. Ephemeral and rebuilt by replay. Default None.
     action_taken : str
         What the action now resolving is, worded for a player — what a Response Step names as the
         thing it is answering. Empty outside an action. Ephemeral and rebuilt by replay.
@@ -302,9 +367,10 @@ class GameState:
     modifiers: list[OngoingEffect] = field(default_factory=list)
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
-    banish_at_turn_end: list[str] = field(default_factory=list)
+    delayed: list[tuple[Moment, object]] = field(default_factory=list)
     round_stack: list[ActionRound] = field(default_factory=list)
     responded: set[str] = field(default_factory=set)
+    action: Action | None = None
     action_taken: str = ""
     action_events: list[GameEvent] = field(default_factory=list)
 

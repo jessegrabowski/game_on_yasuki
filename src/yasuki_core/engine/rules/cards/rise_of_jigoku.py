@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.abilities import (
     bow_and_destroy,
     owned_holdings,
     owned_personalities,
+    personalities_in_play,
     plus_one_gp_this_turn,
     spend_wealth,
     register_ability,
@@ -24,18 +25,20 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
     Bow,
+    Choose,
     CreateToken,
     Destroy,
     Effect,
     GrantKeyword,
+    GrantModifier,
     IgnoreHonorRequirements,
     PayGold,
     RecruitCard,
     Straighten,
     Then,
 )
-from yasuki_core.engine.rules.events import Destroyed, EnteredPlay
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay
+from yasuki_core.engine.rules.actions import ActionTiming, KharmicDraw, KharmicRefill
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on, province_holdings
@@ -44,6 +47,40 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.prints import AttachmentPrint
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
+
+
+# --- Blood of Fu Leng ---
+
+# "give a target Personality -1C", as the card prints it.
+BLOOD_OF_FU_LENG_PENALTY = -1
+
+
+@on(CardDiscarded, "blood_of_fu_leng")
+def _blood_of_fu_leng_card_discarded(ctx: TriggerContext) -> list[Effect]:
+    """Put the Chi penalty to a target Personality once a Kharmic action has discarded the card.
+
+    A Kharmic action is the only discard it reacts to, so reaching the pile any other way — pitched
+    to hand size, or discarded by another card — does nothing.
+    """
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    if not isinstance(ctx.game.action, KharmicDraw | KharmicRefill):
+        return []
+    targets = tuple(card.id for card in personalities_in_play(ctx.game))
+    if not targets:
+        return []
+    return [Choose(ctx.card.owner, targets, 1, 1, "blood_of_fu_leng", ctx.card.id)]
+
+
+@choice_resolver("blood_of_fu_leng", prompt="Choose a Personality to give -1C")
+def _resolve_blood_of_fu_leng(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [
+        GrantModifier(
+            source_id, chosen[0], Stat.CHI, BLOOD_OF_FU_LENG_PENALTY, Duration.UNTIL_END_OF_TURN
+        )
+    ]
 
 
 # --- Harvested Land ---
@@ -56,7 +93,7 @@ def _harvested_land_targets(game: GameState, card: L5RCard) -> list[str]:
 register_ability(
     "harvested_land",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Bow, destroy: give your other Farms +1 Gold Production",
         cost=bow_and_destroy,
         targets=_harvested_land_targets,
@@ -79,6 +116,7 @@ def _makeshift_fortifications_province_strength(
 
 
 # --- Mishime Sensei ---
+
 
 MISHIMES_ONI = "oni_personality_variable_chi"
 ONI_COST = 5
@@ -155,7 +193,7 @@ def _mishime_sensei_effects(game: GameState, source: L5RCard, target: L5RCard) -
 register_ability(
     "mishime_sensei",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label=f"Open: Bow and pay {ONI_COST} gold to bow your Personality for an Oni of his Chi",
         cost=_mishime_sensei_cost,
         targets=_mishime_sensei_targets,
@@ -218,7 +256,7 @@ def _modest_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> l
 register_ability(
     "modest_farm",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
         cost=bow_cost,
         targets=_modest_farm_targets,
@@ -266,8 +304,8 @@ def _rural_market_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
 register_ability(
     "rural_market",
     Ability(
-        timing=ActionTiming.OPEN,
-        label="Spend a wealth token: straighten a Farm",
+        timings=(ActionTiming.OPEN,),
+        label="Spend a Wealth token: straighten a Farm",
         cost=spend_wealth,
         targets=_rural_market_targets,
         effects=_rural_market_effects,
@@ -326,6 +364,7 @@ def _sapphire_mine_entered_play(ctx: TriggerContext) -> list[Effect]:
 
 # --- Shinjo Fields ---
 
+
 CAVALRY_FOLLOWER = "cavalry"
 
 
@@ -366,7 +405,7 @@ def _resolve_shinjo_fields(
 register_ability(
     "shinjo_fields",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Bow to give your Personality Cavalry, and may destroy this for a Follower",
         cost=bow_cost,
         targets=_shinjo_fields_targets,

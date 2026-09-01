@@ -118,7 +118,7 @@ def _wisdom_gained_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "wisdom_gained",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Each player may search for a Ring, starting with you",
         cost=no_cost,
         targets=_wisdom_gained_targets,

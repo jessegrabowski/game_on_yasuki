@@ -162,7 +162,7 @@ def test_the_action_and_its_answer_survive_a_replay():
 def test_inheritance_is_taken_under_the_dynasty_designator():
     session = _second_players_turn()
 
-    assert legality.timing_of(session.game, Inheritance()) is ActionTiming.DYNASTY
+    assert legality.timings_of(session.game, Inheritance()) == {ActionTiming.DYNASTY}
 
 
 def test_the_menu_offers_inheritance_on_the_seats_own_stronghold():

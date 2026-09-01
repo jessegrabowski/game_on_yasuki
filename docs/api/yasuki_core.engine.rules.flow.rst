@@ -28,6 +28,7 @@ yasuki_core.engine.rules.flow
     open_response_window
     open_round
     perform
+    play_strategy
     produce_gold
     recruit
     run_stack

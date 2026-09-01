@@ -132,6 +132,7 @@ class CardLocation(str, Enum):
 
     BATTLEFIELD = "battlefield"
     PROVINCE = "province"
+    HAND = "hand"
 
 
 @dataclass(frozen=True, slots=True)
@@ -140,8 +141,9 @@ class Ability:
 
     Attributes
     ----------
-    timing : ActionTiming
-        The designator printed on the card, saying when the ability may be used and by whom.
+    timings : tuple of ActionTiming
+        The designators printed on the card, saying when the ability may be used and by whom. A card
+        printing more than one — "Battle/Open" — may be used in any round that permits any of them.
     label : str
         A short human description for the activation menu.
     cost : callable
@@ -161,7 +163,7 @@ class Ability:
         sits face-up in, never from play. Default the battlefield alone.
     """
 
-    timing: ActionTiming
+    timings: tuple[ActionTiming, ...]
     label: str
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
@@ -296,29 +298,55 @@ def invest_for(card: L5RCard) -> InvestAbility | None:
 
 
 def _seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, L5RCard]]:
-    """Every card ``seat`` could activate something on, with where it is sitting."""
+    """Every card ``seat`` could activate something on, with where it is sitting.
+
+    A card in hand is yielded like any other. Only an ability whose ``located_at`` names the hand is
+    offered from there, and every ability defaults to the battlefield, so a card waiting to be played
+    stays silent until one says otherwise.
+    """
     for card in game.table.battlefield.cards:
         if card.owner is seat:
             yield CardLocation.BATTLEFIELD, card
     for key, zone in game.table.zones.items():
-        if key.owner is seat and key.role is ZoneRole.PROVINCE:
+        if key.owner is not seat:
+            continue
+        if key.role is ZoneRole.PROVINCE:
             for card in zone.cards:
                 if card.face_up:  # face-down, what the card is has not been revealed
                     yield CardLocation.PROVINCE, card
+        elif key.role is ZoneRole.HAND:
+            yield from ((CardLocation.HAND, card) for card in zone.cards)
+
+
+# Where a card is when activating it is what its ability means. A card in hand is *played* rather
+# than activated, and pays a Gold Cost to do it, so it answers to its own action and is left out of
+# the default.
+IN_PLAY: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD, CardLocation.PROVINCE)
 
 
 def activatable(
-    game: GameState, seat: PlayerId, permitted: frozenset[ActionTiming]
+    game: GameState,
+    seat: PlayerId,
+    permitted: frozenset[ActionTiming],
+    *,
+    at: tuple[CardLocation, ...] = IN_PLAY,
 ) -> list[L5RCard]:
-    """The cards ``seat`` may activate an ability on right now: controlled, sitting somewhere the
-    ability acts from, its designator among ``permitted``, its cost payable, and with at least one
-    legal target."""
+    """The cards ``seat`` may use an ability on right now: controlled, sitting somewhere the ability
+    acts from, its designator among ``permitted``, its cost payable, and with at least one legal
+    target.
+
+    ``at`` narrows which of those places count, and defaults to the ones a card is *in play* in.
+    Playing a card out of hand asks for :data:`CardLocation.HAND` explicitly, because it is a
+    different action with a cost of its own.
+    """
     ready: list[L5RCard] = []
     for location, card in _seat_cards(game, seat):
-        ability = _ABILITIES.get(card.printed_id)
-        if ability is None or ability.timing not in permitted:
+        if location not in at:
             continue
-        if ability.timing is ActionTiming.RESPONSE and card.id in game.responded:
+        ability = _ABILITIES.get(card.printed_id)
+        if ability is None or permitted.isdisjoint(ability.timings):
+            continue
+        if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
             continue
         if location not in ability.located_at:
             continue
@@ -336,6 +364,14 @@ def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]
         card
         for card in game.table.battlefield.cards
         if isinstance(card.printed, PersonalityPrint) and card.owner is owner
+    )
+
+
+def personalities_in_play(game: GameState) -> tuple[L5RCard, ...]:
+    """Every Personality on the battlefield, either seat's — the pool a card means by "a target
+    Personality" with no side attached to it."""
+    return tuple(
+        card for card in game.table.battlefield.cards if isinstance(card.printed, PersonalityPrint)
     )
 
 

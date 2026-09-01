@@ -69,7 +69,7 @@ def _millet_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> l
 register_ability(
     "millet_farm",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Bow: give a Farm +2 Gold Production",
         cost=bow_cost,
         targets=_millet_farm_targets,
@@ -106,6 +106,7 @@ def _shosuro_aoki_yoritomo_kayoko_experienced_counter_gained(ctx: TriggerContext
 
 
 # --- Tarkasha ---
+
 
 NAGA_FOLLOWER = "naga"
 
@@ -154,8 +155,8 @@ def _tarkasha_effects(game: GameState, source: L5RCard, target: L5RCard) -> list
 register_ability(
     "tarkasha",
     Ability(
-        timing=ActionTiming.OPEN,
-        label="Open: Reshuffle a fallen Naga to Equip a 1F Naga Follower to your Commander",
+        timings=(ActionTiming.OPEN,),
+        label="Open: Reshuffle a Naga Follower in your discard pile to create a 1F Naga Follower and attach it to your target Commander",
         cost=no_cost,
         targets=_tarkasha_targets,
         effects=_tarkasha_effects,
@@ -164,6 +165,7 @@ register_ability(
 
 
 # --- Tetsuo Hiyamako (Experienced) ---
+
 
 HIYAMAKOS_CLAW = "weapon_item_claw_plus1f"
 CLAW_COUNT = 2

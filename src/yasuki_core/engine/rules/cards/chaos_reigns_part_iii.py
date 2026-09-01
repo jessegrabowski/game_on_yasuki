@@ -24,6 +24,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 # --- Kengun Grounds ---
 
+
 ZOMBIE_FOLLOWER = "zombie_follower"
 KENGUN_HONOR_LOSS = 2
 UNTAINTED_HONOR_LOSS = 5
@@ -59,8 +60,8 @@ def _kengun_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) -
 register_ability(
     "kengun_grounds",
     Ability(
-        timing=ActionTiming.OPEN,
-        label="Open: Bow to Equip a 1F Undead Follower to your Personality",
+        timings=(ActionTiming.OPEN,),
+        label="Open: Bow to create a 1F Undead Follower and attach it to your target Personality",
         cost=bow_cost,
         targets=_kengun_grounds_targets,
         effects=_kengun_grounds_effects,
@@ -69,6 +70,7 @@ register_ability(
 
 
 # --- Moto Ikarichi, Bloodseeker ---
+
 
 IKARICHIS_UNDEAD = "undead_cavalry_follower_2f"
 KANPEKI_DYNASTY = "the_kanpeki_dynasty_hantei_xl"
@@ -125,7 +127,7 @@ def _moto_traders_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
 register_ability(
     "moto_traders",
     Ability(
-        timing=ActionTiming.OPEN,
+        timings=(ActionTiming.OPEN,),
         label="Open: Bow to draw a card",
         cost=bow_cost,
         targets=itself,
@@ -136,6 +138,7 @@ register_ability(
 
 
 # --- Walk with Tengoku ---
+
 
 FUSHICHO = "fushicho_personality_3_2_3"
 
@@ -148,8 +151,8 @@ def _walk_with_tengoku_effects(game: GameState, source: L5RCard, target: L5RCard
 register_ability(
     "walk_with_tengoku",
     Ability(
-        timing=ActionTiming.OPEN,
-        label="Open: Bow to call a 3F/2C/3PH Fushicho for the turn",
+        timings=(ActionTiming.OPEN,),
+        label="Open: Bow to create a 3F/2C/3PH Fushicho, banished at the end of the turn",
         cost=bow_cost,
         targets=itself,
         effects=_walk_with_tengoku_effects,

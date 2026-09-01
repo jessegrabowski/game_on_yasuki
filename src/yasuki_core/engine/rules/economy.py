@@ -7,12 +7,13 @@ from yasuki_core.engine.rules.attachments import attachments_of, granted_stat
 from yasuki_core.engine.rules.modifiers import (
     Duration,
     KeywordGrant,
+    Minimum,
     Modifier,
     OngoingEffect,
     Stat,
 )
 from yasuki_core.engine.rules.state import GameState, used_this_turn
-from yasuki_core.engine.table import ZoneKey
+from yasuki_core.engine.table import ZoneKey, unit_members
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import counter_from_key
@@ -163,9 +164,25 @@ def granted_keywords(game: GameState, card: L5RCard) -> Iterator[str]:
                 yield grant.keyword
 
 
+def stat_minimum(game: GameState, card: L5RCard, stat: Stat) -> int:
+    """The lowest ``card``'s ``stat`` may read: zero, or the most restrictive minimum a card has
+    given it (CR, Minimums and Maximums)."""
+    return max(
+        (
+            recorded.value
+            for recorded in game.modifiers
+            if isinstance(recorded, Minimum)
+            and recorded.target_id == card.id
+            and recorded.stat is stat
+            and _grant_applies(game, recorded)
+        ),
+        default=0,
+    )
+
+
 def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
     """``card``'s ``stat`` right now: its printed value plus every active modifier on it, floored at
-    zero.
+    zero or at whatever higher minimum a card has given it.
 
     The order is the CR's (Calculating Stats): modifiers sum first and the minimum applies to the
     total, so a 2F card penalised -3F and then given +2F reads 1 rather than 2. A stat absent from
@@ -189,7 +206,8 @@ def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
     base = getattr(card, stat.value, None)
     if base is None:
         return 0
-    return max(0, base + sum(modifier.amount for modifier in active_modifiers(game, card, stat)))
+    total = base + sum(modifier.amount for modifier in active_modifiers(game, card, stat))
+    return max(stat_minimum(game, card, stat), total)
 
 
 def effective_force(game: GameState, card: L5RCard) -> int:
@@ -257,6 +275,16 @@ def effective_province_strength(game: GameState, province: ZoneKey) -> int:
         if grant is not None:
             total += grant(game, fortification, province)
     return max(0, total)
+
+
+def unit_gold_cost(game: GameState, personality: L5RCard) -> int:
+    """A unit's total Gold Cost: the Personality's own and every card attached to him (CR, Unit).
+
+    What a card means by "his unit's cost" — the pool a variable-cost action is priced against.
+    """
+    return sum(
+        effective_gold_cost(game, member) for member in unit_members(game.table, personality)
+    )
 
 
 def effective_gold_cost(game: GameState, card: L5RCard) -> int:
