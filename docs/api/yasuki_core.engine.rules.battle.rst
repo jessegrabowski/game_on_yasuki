@@ -21,7 +21,6 @@ yasuki_core.engine.rules.battle
     fight_next_battle
     open_maneuvers
     resolution_effects
-    units_at
 
 .. automodule:: yasuki_core.engine.rules.battle
     :members:

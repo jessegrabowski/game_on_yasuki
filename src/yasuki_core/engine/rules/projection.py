@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase, RoundKind, Segment
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
-from yasuki_core.engine.rules.units import unit_force
+from yasuki_core.engine.rules.units import unit_force, units_at
 from yasuki_core.engine.table import DeckKey, ZoneKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -278,9 +278,7 @@ def unit_view(game: GameState, personality: L5RCard) -> UnitView:
 
 def _units(game: GameState, battlefield: int, seat: PlayerId) -> tuple[UnitView, ...]:
     """``seat``'s units at ``battlefield``, each with the cards attached to its Personality."""
-    return tuple(
-        unit_view(game, personality) for personality in battle.units_at(game, battlefield, seat)
-    )
+    return tuple(unit_view(game, personality) for personality in units_at(game, battlefield, seat))
 
 
 def _occupant(table: ViewSnapshot, province: ZoneKey) -> L5RCard | HiddenCard | None:

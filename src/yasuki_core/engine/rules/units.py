@@ -1,8 +1,11 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import effective_force, effective_keywords
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
+from yasuki_core.game_pieces.prints import PersonalityPrint
 
 
 def followers_of(game: GameState, personality: L5RCard) -> tuple[L5RCard, ...]:
@@ -61,3 +64,15 @@ def unit_keywords(game: GameState, personality: L5RCard) -> frozenset[str]:
     for follower in followers_of(game, personality):
         shared &= effective_keywords(game, follower)
     return shared
+
+
+def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]:
+    """The Personalities ``seat`` has standing at ``battlefield``, in play order. One side of the
+    army there, since a seat's units at a battlefield are all on the same side of it."""
+    return [
+        card
+        for card in game.table.battlefield.cards
+        if card.owner is seat
+        and isinstance(card.printed, PersonalityPrint)
+        and location_of(game.table, card).battlefield == battlefield
+    ]

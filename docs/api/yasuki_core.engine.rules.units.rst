@@ -10,6 +10,7 @@ yasuki_core.engine.rules.units
     followers_of
     unit_force
     unit_keywords
+    units_at
 
 .. automodule:: yasuki_core.engine.rules.units
     :members:

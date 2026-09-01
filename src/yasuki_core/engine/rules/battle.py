@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.economy import effective_keywords, effective_province_strength
 from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor
-from yasuki_core.engine.rules.units import unit_force
+from yasuki_core.engine.rules.units import unit_force, units_at
 from yasuki_core.engine.rules.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.legality import province_zones
@@ -152,18 +152,6 @@ def apply_assignment(game: GameState, request: AssignUnits, response: DecisionRe
         _ask_to_assign(game, attack.defender)
         return
     begin_fight(game)
-
-
-def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]:
-    """The Personalities ``seat`` has standing at ``battlefield``, in play order. One side of the
-    army there, since a seat's units at a battlefield are all on the same side of it."""
-    return [
-        card
-        for card in game.table.battlefield.cards
-        if card.owner is seat
-        and isinstance(card.printed, PersonalityPrint)
-        and location_of(game.table, card).battlefield == battlefield
-    ]
 
 
 def army_force(game: GameState, battlefield: int, seat: PlayerId) -> int:
