@@ -206,6 +206,7 @@ def forget_action(game: GameState) -> None:
     """
     game.action_events.clear()
     game.action_taken = ""
+    game.action = None
 
 
 def open_round(game: GameState) -> None:
@@ -268,6 +269,7 @@ def perform(game: GameState, action: Action) -> None:
     if not isinstance(action, Pass) and not game.round_stack:
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
+        game.action = action
     match action:
         case Pass():
             yield_priority(game, passed=True)

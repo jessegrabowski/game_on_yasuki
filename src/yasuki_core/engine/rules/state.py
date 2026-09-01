@@ -7,7 +7,7 @@ from numpy.random import Generator, default_rng
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.actions import Action, ActionTiming
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.events import GameEvent
 from yasuki_core.engine.rules.modifiers import OngoingEffect
@@ -331,6 +331,9 @@ class GameState:
         The cards that have already taken a Response in the Response Step now open. A card answers a
         given Step once; nothing else rations a Response, which costs no bow. Cleared as each Step
         opens. Ephemeral and rebuilt by replay. Default empty.
+    action : Action or None
+        The action now resolving, or None outside one — what a card reacting "from a Kharmic action"
+        reads to know which action it is reacting to. Ephemeral and rebuilt by replay. Default None.
     action_taken : str
         What the action now resolving is, worded for a player — what a Response Step names as the
         thing it is answering. Empty outside an action. Ephemeral and rebuilt by replay.
@@ -367,6 +370,7 @@ class GameState:
     delayed: list[tuple[Moment, object]] = field(default_factory=list)
     round_stack: list[ActionRound] = field(default_factory=list)
     responded: set[str] = field(default_factory=set)
+    action: Action | None = None
     action_taken: str = ""
     action_events: list[GameEvent] = field(default_factory=list)
 
