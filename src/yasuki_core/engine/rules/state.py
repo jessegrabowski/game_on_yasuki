@@ -103,7 +103,8 @@ class ActionRound:
 
 
 class BattleSegment(Enum):
-    """A battle's own segments, in the order the CR's Battle Sequence walks them.
+    """One battle's segments, in the order the CR's Battle Sequence walks them. Nested inside the
+    Attack Phase's :class:`Segment.FIGHT`, which is where battles are fought.
 
     Resolution follows the Combat Segment closing and is not an Action Round, so it is not one of
     these — nothing may be taken during it.
@@ -126,7 +127,8 @@ BATTLE_SEGMENT_TIMINGS: dict[BattleSegment, RoundTimings] = {
 
 
 class Segment(Enum):
-    """The Attack Phase's segments, in the order the CR walks them."""
+    """The Attack Phase's segments, in the order the CR walks them. A battle fought inside the Fight
+    Segment has segments of its own — see :class:`BattleSegment`."""
 
     DECLARATION = "declaration"
     MANEUVERS = "maneuvers"
@@ -367,9 +369,10 @@ class GameState:
         dropped when its moment comes, whether or not it still has anything to do. Ephemeral and
         rebuilt by replay. Default empty.
     round_stack : list of ActionRound
-        The rounds a Response Step has suspended, innermost last. A Response Step opens a round of
-        its own over the round the action was taken in, and closing it puts that round back.
-        Ephemeral and rebuilt by replay. Default empty.
+        The rounds a Response Step or a battle segment has suspended, innermost last. Each opens a
+        round of its own over the round beneath, and closing it puts that round back. What is
+        suspended is read off :attr:`ActionRound.kind` rather than off this list's depth. Ephemeral
+        and rebuilt by replay. Default empty.
     responded : set of str
         The cards that have already taken a Response in the Response Step now open. A card answers a
         given Step once; nothing else rations a Response, which costs no bow. Cleared as each Step
