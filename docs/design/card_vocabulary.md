@@ -58,6 +58,7 @@ deferred through `Then` instead.
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
+   Move
    MoveToDeck
    MoveToHand
    PayGold

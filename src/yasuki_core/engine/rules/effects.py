@@ -33,7 +33,14 @@ from yasuki_core.engine.rules.modifiers import (
 )
 from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment, flow_resolves
 from yasuki_core.engine.rules.work import ApplyEffects
-from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import (
+    BATTLEFIELD,
+    UNPLACED_BOARD_POS,
+    DeckKey,
+    Location,
+    ZoneKey,
+    ZoneRole,
+)
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
@@ -140,6 +147,36 @@ class DrawCard(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         ops.draw_to_hand(game.table, self.seat)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class Move(Effect):
+    """Put ``card_id``'s whole unit at ``to`` (CR, Unit). A unit already there stays where it is.
+
+    Attributes
+    ----------
+    card_id : str
+        Any card in the unit being moved.
+    to : Location
+        Where the unit ends up — a seat's home, or a battlefield.
+    """
+
+    card_id: str
+    to: Location
+
+    def describe(self) -> str:
+        where = (
+            f"{self.to.seat.name}'s home"
+            if self.to.is_home
+            else f"battlefield {self.to.battlefield}"
+        )
+        return f"move {self.card_id} to {where}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            ops.move_unit(game.table, card, self.to)
         return []
 
 
