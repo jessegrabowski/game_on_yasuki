@@ -5,7 +5,7 @@ from yasuki_core.engine.rules import battle
 from yasuki_core.engine.rules.state import BattleSegment, Phase, Segment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
-from yasuki_gui.labels import PHASE_LABELS, turn_context
+from yasuki_gui.labels import BATTLE_SEGMENT_CHIPS, PHASE_LABELS, turn_context
 
 from tests.yasuki_core.engine.builders import personality, province_card, put_in_play
 
@@ -114,3 +114,9 @@ def test_between_battles_the_heading_falls_back_to_the_attack_phase_segment():
 def test_every_phase_the_engine_has_carries_a_name():
     """A missing entry is a KeyError in the prompt box mid-game rather than a wrong label."""
     assert set(PHASE_LABELS) == set(Phase)
+
+
+def test_every_battle_segment_carries_a_chip():
+    """The lane draws one cell per segment the arc walks, so a missing entry is a KeyError in the
+    middle of a battle rather than a gap in the strip."""
+    assert set(BATTLE_SEGMENT_CHIPS) == set(BattleSegment)

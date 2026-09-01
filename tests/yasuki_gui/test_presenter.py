@@ -17,6 +17,7 @@ from yasuki_gui.layout import divider_y
 from yasuki_gui.services.presenter import Presenter
 from yasuki_gui.ui.floating_panel import MIN_H
 from yasuki_gui.ui.geometry import widget_size
+from yasuki_gui.ui.battle_view import _SEQUENCE_TAG
 from yasuki_gui.ui.game_window import GameWindow
 
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -991,6 +992,35 @@ def test_both_battle_segments_are_passed_from_the_prompt_box(a_battle):
     _run_the_opponent(presenter)
 
     assert session.game.attack.fought == frozenset({0})
+
+
+def _lane_sequence(window) -> list[str]:
+    """The lettering of the battle sequence strips drawn across the lanes' feet."""
+    canvas = window.battle_view.canvas
+    return [
+        canvas.itemcget(item, "text")
+        for item in canvas.find_withtag(_SEQUENCE_TAG)
+        if canvas.type(item) == "text"
+    ]
+
+
+def test_the_lanes_print_the_battle_sequence_once_a_battle_starts(a_battle):
+    """The foot of a lane is where the player is asked where to fight; once they have answered, it
+    is where the battle they started reports what it is doing. Which cell lights is the battle
+    view's own case — what this one checks is that the real flow reaches the strip at all."""
+    presenter, window, session = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 0)
+    _press(presenter, "Done assigning")
+    _run_the_opponent(presenter)
+
+    assert _lane_sequence(window) == []  # being asked where to fight, so the buttons hold the band
+
+    _press_lane(presenter, 0, "Fight here")
+    _run_the_opponent(presenter)
+
+    assert session.game.attack.battle_segment is BattleSegment.ENGAGE
+    assert _lane_sequence(window) == ["Engage", "Combat", "Resolution", "After-Resolution"] * 2
 
 
 def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):

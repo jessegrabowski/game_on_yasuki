@@ -4,8 +4,11 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
-from yasuki_core.engine.rules.state import BattleOutcome, Segment
+from yasuki_core.engine.rules.state import BattleOutcome, BattleSegment, Segment
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core import ruleset
+from yasuki_gui import theme
+from yasuki_gui.labels import BATTLE_SEGMENT_CHIPS
 from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W
 from yasuki_gui.ui.battle_view import (
     BattleView,
@@ -17,6 +20,8 @@ from yasuki_gui.ui.battle_view import (
     MIN_ROW_STEP,
     PendingArmy,
     _rows,
+    _SEQUENCE_TAG,
+    _sequence_tag,
 )
 
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -70,12 +75,12 @@ def _battlefield(
     )
 
 
-def _attack(*battlefields, current=None):
+def _attack(*battlefields, current=None, battle_segment=None):
     return AttackView(
         attacker=P1,
         defender=P2,
         segment=Segment.FIGHT,
-        battle_segment=None,
+        battle_segment=battle_segment,
         current=current,
         battlefields=battlefields,
     )
@@ -902,3 +907,75 @@ def test_clicking_below_the_header_leaves_the_lanes_alone(view):
     view._on_click(_click(x=(left + right) // 2, y=300))
 
     assert _lane_widths(view) == before
+
+
+def _sequence_chips(view) -> list[str]:
+    """The lettering of the lane sequence strips, in the order the canvas holds it."""
+    return [
+        view.canvas.itemcget(item, "text")
+        for item in view.canvas.find_withtag(_SEQUENCE_TAG)
+        if view.canvas.type(item) == "text"
+    ]
+
+
+def _lit_sequence_chips(view) -> list[str]:
+    """The lettering of every sequence cell drawn filled, one entry per cell across every lane."""
+    return [
+        BATTLE_SEGMENT_CHIPS[segment]
+        for segment in ruleset.ACTIVE.battle_segments
+        for item in view.canvas.find_withtag(_sequence_tag(segment))
+        if view.canvas.type(item) == "rectangle"
+        and view.canvas.itemcget(item, "fill") == theme.GOLD
+    ]
+
+
+def test_the_lane_prints_the_battle_sequence_without_the_word_segment(view):
+    """Four cells in a column the width of a card, and three of the CR's four names carry the same
+    word — so the strip drops it and keeps what tells the segments apart."""
+    view.refresh(_attack(_battlefield(0), current=0, battle_segment=BattleSegment.COMBAT))
+
+    assert _sequence_chips(view) == ["Engage", "Combat", "Resolution", "After-Resolution"]
+
+
+def test_only_the_lane_being_fought_at_lights_its_sequence(view):
+    """A battle happens at one battlefield at a time, so a second lit cell would say two battles
+    are being fought at once. Both lanes still carry the strip — the sequence is what a battle does,
+    and which battle is doing it is what the lit cell answers."""
+    view.refresh(
+        _attack(_battlefield(0), _battlefield(1), current=1, battle_segment=BattleSegment.ENGAGE)
+    )
+
+    assert _sequence_chips(view) == ["Engage", "Combat", "Resolution", "After-Resolution"] * 2
+    assert _lit_sequence_chips(view) == ["Engage"]
+
+
+def test_no_sequence_strip_until_a_battle_is_being_fought(view):
+    """Between battles the foot of the lane is where the player is asked where to fight next, and a
+    sequence nothing is walking would sit under that question saying nothing."""
+    view.refresh(_attack(_battlefield(0)))
+
+    assert _sequence_chips(view) == []
+
+
+def test_a_lane_button_keeps_the_foot_of_the_lane(view):
+    """The button and the strip share the band, and only one of them can be right: a battlefield
+    offers a button only while no battle has started there."""
+    view.refresh(
+        _attack(_battlefield(0)),
+        buttons={0: LaneButton("Fight here", lambda: None)},
+    )
+
+    assert _sequence_chips(view) == []
+    assert "Fight here" in _texts(view)
+
+
+def test_a_collapsed_lane_draws_no_sequence(view):
+    """A strip is four cells wide and a collapsed lane is narrower than one card, so a lane the
+    player has folded away carries its number and nothing else."""
+    view.refresh(
+        _attack(_battlefield(0), _battlefield(1), current=0, battle_segment=BattleSegment.ENGAGE)
+    )
+    view.toggle_lane(0)
+
+    assert _sequence_chips(view) == ["Engage", "Combat", "Resolution", "After-Resolution"]
+    assert _lit_sequence_chips(view) == []

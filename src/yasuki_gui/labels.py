@@ -1,6 +1,6 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.rules.state import BattleSegment, Phase
 
 # The CR's own names for the turn's phases, in its Turn Sequence. The engine's middle phase is
 # named BATTLE; the CR calls it the Attack Phase, and the player is shown the CR's name.
@@ -8,6 +8,17 @@ PHASE_LABELS: dict[Phase, str] = {
     Phase.ACTION: "Action Phase",
     Phase.BATTLE: "Attack Phase",
     Phase.DYNASTY: "Dynasty Phase",
+}
+
+
+# The Battle Sequence as a lane's foot can print it: four cells across a column the width of a
+# card, so the "Segment" three of the four names carry is cut. Here rather than in the ruleset,
+# which spells what the arc calls a segment, not how a widget abbreviates it.
+BATTLE_SEGMENT_CHIPS: dict[BattleSegment, str] = {
+    BattleSegment.ENGAGE: "Engage",
+    BattleSegment.COMBAT: "Combat",
+    BattleSegment.RESOLUTION: "Resolution",
+    BattleSegment.AFTER_RESOLUTION: "After-Resolution",
 }
 
 
