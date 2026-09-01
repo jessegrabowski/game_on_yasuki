@@ -2,6 +2,25 @@ from dataclasses import dataclass
 from enum import Enum
 
 
+class BattleDesignator(Enum):
+    """A designator qualifying how a battle action escapes the Rule of Presence or the Rules of
+    Location (ShE datasheet).
+
+    ABSENT
+        Playable without presence at the current battlefield.
+    HOME
+        Usable from a card at home rather than at the current battlefield. It does not lift the
+        Rule of Presence, which the datasheet says in as many words: the two are independent, and a
+        card needs ``ABSENT`` as well to be used by a seat with no presence.
+    REMOTE
+        Usable from a card at home or at another battlefield — a wider ``HOME``.
+    """
+
+    ABSENT = "absent"
+    HOME = "home"
+    REMOTE = "remote"
+
+
 class ActionTiming(Enum):
     """When an action may be taken, and by whom — the designator printed ahead of an ability's text.
 

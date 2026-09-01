@@ -275,6 +275,12 @@ class AttackPhase:
     battle_segment: BattleSegment | None = None
     assigned_in: dict[str, str] = field(default_factory=dict)
 
+    @property
+    def current_province(self) -> ZoneKey:
+        """The Province the battle now being fought sits at — what a card means by "the current
+        Province". Raise ``TypeError`` between battles, when there is no current battlefield."""
+        return self.battlefields[self.current].province
+
 
 def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:
     """The victory rules ``seat`` begins subject to: every one its board can support.

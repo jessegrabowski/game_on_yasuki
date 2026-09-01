@@ -31,9 +31,11 @@ yasuki_core.engine.rules.effects
     GrantKeyword
     GrantMinimum
     GrantModifier
+    GrantProvinceStrength
     IgnoreHonorRequirements
     InterruptingEffect
     LoseGame
+    Move
     MoveToDeck
     MoveToHand
     PayGold

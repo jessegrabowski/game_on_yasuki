@@ -3,6 +3,7 @@
 from yasuki_core.engine.rules.cards import (  # noqa: F401
     a_line_in_the_sand,
     ambitions_debt,
+    anvil_of_despair,
     chaos_reigns_part_i,
     chaos_reigns_part_ii,
     chaos_reigns_part_iii,

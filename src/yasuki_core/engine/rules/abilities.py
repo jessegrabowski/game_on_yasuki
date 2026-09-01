@@ -3,14 +3,15 @@ from dataclasses import dataclass
 from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import ZoneRole
+from yasuki_core.engine.table import ZoneRole, location_of
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
 from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
 from yasuki_core.engine.rules.state import once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.units import has_presence, location_permits
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -161,6 +162,13 @@ class Ability:
     located_at : tuple of CardLocation, optional
         Where the card has to be for the ability to be offered. An Event acts from the Province it
         sits face-up in, never from play. Default the battlefield alone.
+    battle : frozenset of BattleDesignator, optional
+        The designators qualifying how the ability escapes the Rule of Presence or the Rules of
+        Location during a battle. Default empty, which takes both rules as written.
+    targets_any_location : bool, optional
+        Whether the ability reaches a target wherever it stands — the "at any location" a card
+        prints, which lifts the Rules of Location off what it may be pointed at but not off the
+        card it is taken from. Default False.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -170,6 +178,8 @@ class Ability:
     effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]]
     all_targets: bool = False
     located_at: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,)
+    battle: frozenset[BattleDesignator] = frozenset()
+    targets_any_location: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -340,21 +350,81 @@ def activatable(
     different action with a cost of its own.
     """
     ready: list[L5RCard] = []
+    # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
+    present = has_presence(game, seat)
     for location, card in _seat_cards(game, seat):
         if location not in at:
             continue
         ability = _ABILITIES.get(card.printed_id)
         if ability is None or permitted.isdisjoint(ability.timings):
             continue
+        # The Rule of Presence is about the player, not the card, so it gates an action taken from
+        # anywhere — a Strategy out of hand as much as a Personality on the board.
+        if not present and BattleDesignator.ABSENT not in ability.battle:
+            continue
         if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
             continue
         if location not in ability.located_at:
             continue
+        # A card in a unit may only be acted from at the battlefield the battle is at (CR, Rules
+        # of Location). A card in hand or in a Province is in no unit, and neither is a Holding.
+        if (
+            location is CardLocation.BATTLEFIELD
+            and not _location_lifted(game, card, ability)
+            and not location_permits(game, card)
+        ):
+            continue
         if not can_pay(game, card, ability.cost):
             continue
-        if ability.targets(game, card):
+        if legal_targets(game, card, ability):
             ready.append(card)
     return ready
+
+
+def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:
+    """Whether one of ``ability``'s designators excuses ``card`` from the Rules of Location (ShE
+    datasheet).
+
+    Remote reaches from home or from another battlefield; Home reaches from home alone, so a card
+    standing at a battlefield that is not the current one is beyond it. Neither lifts the Rule of
+    Presence.
+    """
+    if BattleDesignator.REMOTE in ability.battle:
+        return True
+    if BattleDesignator.HOME in ability.battle:
+        return location_of(game.table, card).is_home
+    return False
+
+
+def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` holds any ability it could take with no presence at the current battlefield
+    (ShE, Absent). What decides whether a seat with no units there is offered the opportunity at
+    all, rather than skipped."""
+    return any(
+        (ability := _ABILITIES.get(card.printed_id)) is not None
+        and BattleDesignator.ABSENT in ability.battle
+        for _, card in _seat_cards(game, seat)
+    )
+
+
+def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]:
+    """The ids ``ability`` may target from ``card`` right now.
+
+    Filtered centrally rather than by each card's own ``targets``: during a battle, a card in a unit
+    may only be targeted at the battlefield the battle is at (CR, Rules of Location), and a handler
+    that forgot to say so would be a silent rules bug on every card that forgot. A card printing "at
+    any location" says so on its ``Ability`` instead, where the filter can see it.
+    """
+    offered = ability.targets(game, card)
+    attack = game.attack
+    if attack is None or attack.current is None or ability.targets_any_location:
+        return offered
+    by_id = game.table.cards_by_id
+    return [
+        target_id
+        for target_id in offered
+        if target_id not in by_id or location_permits(game, by_id[target_id])
+    ]
 
 
 def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]:

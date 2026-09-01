@@ -31,6 +31,13 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
+from yasuki_core.engine import ops
+from yasuki_core.engine.rules.economy import effective_province_strength
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.actions import DeclareAttack, PlayStrategy
+from yasuki_core.game_pieces.constants import AttachmentType
+from yasuki_core.game_pieces.prints import ActionPrint
+
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -786,3 +793,133 @@ def test_another_arrival_does_not_mount_the_clan():
     fire(game, EnteredPlay("rider"))
 
     assert attachments_of(game, game.table.cards_by_id["rider"]) == ()
+
+
+# The Province the battle is fought at, stated rather than read back off the attack.
+WALLED_PROVINCE = ZoneKey(P2, ZoneRole.PROVINCE, 0)
+
+
+def _man_the_walls_battle() -> EngineSession:
+    """The Combat Segment of P1's attack, with Man the Walls! in hand, one Personality sent to the
+    battlefield and one left at home carrying a Follower."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P2, province_strength=4))
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("front", owner=P1, force=3))
+    put_in_play(state, personality("rear", owner=P1, force=2))
+    attached(
+        state, attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, force=1), "rear"
+    )
+    put_in_play(state, personality("guard", owner=P2, force=1))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="walls",
+                name="Man the Walls!",
+                printed_id="man_the_walls",
+                side=Side.FATE,
+                owner=P1,
+            ),
+        )
+    )
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("front@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    session.act(P2, Pass())
+    session.act(P1, Pass())  # into the Combat Segment
+    session.act(P2, Pass())
+    return session
+
+
+def _play_walls(session: EngineSession, target: str) -> None:
+    """Play Man the Walls! at ``target``: its blank Gold Cost raises a payment of nothing, and the
+    target is chosen on the far side of it."""
+    session.act(P1, PlayStrategy("walls"))
+    session.submit(P1, DecisionResponse())
+    asked = session.game.pending
+    assert asked is not None and target in asked.candidates, f"{target} was not offered"
+    session.submit(asked.seat, DecisionResponse((target,)))
+
+
+def test_man_the_walls_reaches_a_target_left_at_home():
+    """ "At any location" is what puts a card standing at home on offer at all — the Rules of
+    Location would otherwise leave only what is at the battlefield being fought at."""
+    session = _man_the_walls_battle()
+
+    session.act(P1, PlayStrategy("walls"))
+    session.submit(P1, DecisionResponse())
+    asked = session.game.pending
+
+    assert set(asked.candidates) == {"front", "rear", "ashigaru"}
+
+
+def test_the_province_gains_the_targets_force():
+    """The Force he has, not the Force he prints: a bonus already on him counts toward the wall."""
+    session = _man_the_walls_battle()
+    session.game.modifiers.append(
+        Modifier("banner", "rear", Stat.FORCE, 1, Duration.UNTIL_END_OF_TURN)
+    )
+    before = effective_province_strength(session.game, WALLED_PROVINCE)
+
+    _play_walls(session, "rear")  # 2 printed, 3 with the banner
+
+    assert effective_province_strength(session.game, WALLED_PROVINCE) == before + 3
+
+
+def test_a_follower_is_a_legal_target_and_gives_its_own_force():
+    """The card names a Follower first, and a Follower's Force is its own rather than its unit's."""
+    session = _man_the_walls_battle()
+    before = effective_province_strength(session.game, WALLED_PROVINCE)
+
+    _play_walls(session, "ashigaru")  # 1 Force
+
+    assert effective_province_strength(session.game, WALLED_PROVINCE) == before + 1
+
+
+def test_the_target_is_bowed():
+    session = _man_the_walls_battle()
+
+    _play_walls(session, "rear")
+
+    assert session.game.table.cards_by_id["rear"].bowed
+
+
+def test_a_bowed_card_is_no_target():
+    """The action bows what it names, and a bowed card cannot be bowed again (CR, Costs)."""
+    session = _man_the_walls_battle()
+    session.game.table.cards_by_id["rear"].bow()
+
+    session.act(P1, PlayStrategy("walls"))
+    session.submit(P1, DecisionResponse())
+
+    assert "rear" not in session.game.pending.candidates
+
+
+def test_it_is_played_with_no_units_at_the_battlefield():
+    """ "Absent Battle" prints the designator outright."""
+    session = _man_the_walls_battle()
+    ops.return_home(session.game.table, session.game.table.cards_by_id["front"])
+
+    assert PlayStrategy("walls") in session.legal_actions(P1)
+
+
+def test_the_bonus_does_not_follow_the_targets_force_afterwards():
+    """ "Equal to the target's Force" is read as the bonus is laid down. A Province that tracked the
+    target would lose the strength the moment anything weakened him, which is a different card."""
+    session = _man_the_walls_battle()
+    before = effective_province_strength(session.game, WALLED_PROVINCE)
+    _play_walls(session, "rear")  # 2 Force
+
+    session.game.modifiers.append(
+        Modifier("later", "rear", Stat.FORCE, -2, Duration.UNTIL_END_OF_TURN)
+    )
+
+    assert effective_force(session.game, session.game.table.cards_by_id["rear"]) == 0
+    assert effective_province_strength(session.game, WALLED_PROVINCE) == before + 2

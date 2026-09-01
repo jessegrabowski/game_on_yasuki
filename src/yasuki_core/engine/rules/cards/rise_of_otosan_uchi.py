@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.abilities import (
     register_ability,
     register_invest,
 )
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -27,6 +27,7 @@ from yasuki_core.engine.rules.effects import (
     DrawCard,
     Effect,
     GainHonor,
+    GrantProvinceStrength,
     MoveToDeck,
     PayGold,
     ShuffleDeck,
@@ -34,13 +35,15 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.economy import (
     effective_chi,
+    effective_force,
     effective_gold_cost,
     effective_keywords,
 )
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.legality import reachable_gold, seat_alignment_name
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.units import followers_of
 from yasuki_core.engine.rules.events import EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
@@ -363,6 +366,56 @@ register_ability(
         cost=no_cost,
         targets=_kitsu_watanabe_experienced_targets,
         effects=_kitsu_watanabe_experienced_effects,
+    ),
+)
+
+
+# --- Man the Walls! ---
+
+
+def _man_the_walls_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The seat's own unbowed Followers and Personalities, wherever they stand.
+
+    "At any location" is what puts them all on offer: the Rules of Location would otherwise leave
+    only the ones at the battlefield the battle is being fought at. A bowed card is no target — the
+    action bows what it names, and one already bowed cannot be bowed again (CR, Costs).
+    """
+    offered: list[str] = []
+    for personality in owned_personalities(game, source.owner):
+        if not personality.bowed:
+            offered.append(personality.id)
+        offered.extend(
+            follower.id for follower in followers_of(game, personality) if not follower.bowed
+        )
+    return offered
+
+
+def _man_the_walls_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Bow the target, and give the Province the battle is at a bonus equal to its Force.
+
+    The Force is read as the bonus is laid down, so bowing the target, or anything that happens to
+    it later, leaves the Province as strong as it was made.
+    """
+    province = game.attack.current_province
+    bonus = effective_force(game, target)
+    return [
+        Bow(target.id),
+        GrantProvinceStrength(source.id, province, bonus, Duration.UNTIL_END_OF_TURN),
+    ]
+
+
+register_ability(
+    "man_the_walls",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Absent Battle: Bow your target Follower or Personality at any location to give the "
+        "current Province a strength bonus equal to the target's Force",
+        cost=no_cost,
+        targets=_man_the_walls_targets,
+        effects=_man_the_walls_effects,
+        located_at=(CardLocation.HAND,),
+        battle=frozenset({BattleDesignator.ABSENT}),
+        targets_any_location=True,
     ),
 )
 

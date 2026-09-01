@@ -23,10 +23,24 @@ from yasuki_core.engine.rules.events import (
     Revealed,
     Straightened,
 )
-from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Minimum, Modifier, Stat
+from yasuki_core.engine.rules.modifiers import (
+    Duration,
+    KeywordGrant,
+    Minimum,
+    Modifier,
+    ProvinceModifier,
+    Stat,
+)
 from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment, flow_resolves
 from yasuki_core.engine.rules.work import ApplyEffects
-from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import (
+    BATTLEFIELD,
+    UNPLACED_BOARD_POS,
+    DeckKey,
+    Location,
+    ZoneKey,
+    ZoneRole,
+)
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
@@ -133,6 +147,36 @@ class DrawCard(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         ops.draw_to_hand(game.table, self.seat)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class Move(Effect):
+    """Put ``card_id``'s whole unit at ``to`` (CR, Unit). A unit already there stays where it is.
+
+    Attributes
+    ----------
+    card_id : str
+        Any card in the unit being moved.
+    to : Location
+        Where the unit ends up — a seat's home, or a battlefield.
+    """
+
+    card_id: str
+    to: Location
+
+    def describe(self) -> str:
+        where = (
+            f"{self.to.seat.name}'s home"
+            if self.to.is_home
+            else f"battlefield {self.to.battlefield}"
+        )
+        return f"move {self.card_id} to {where}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            ops.move_unit(game.table, card, self.to)
         return []
 
 
@@ -409,6 +453,33 @@ class GrantMinimum(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.modifiers.append(
             Minimum(self.source_id, self.target_id, self.stat, self.value, self.duration)
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantProvinceStrength(Effect):
+    """Record a continuous Province Strength modifier: the ``source`` card adjusts ``province`` by
+    ``amount`` for ``duration``.
+
+    The Province counterpart of :class:`GrantModifier`. A Province is a slot rather than a card, so
+    a card strengthening one for the turn cannot target it the way it targets a Personality.
+    """
+
+    source_id: str
+    province: ZoneKey
+    amount: int
+    duration: Duration
+
+    def describe(self) -> str:
+        return (
+            f"{self.source_id} gives {self.province.token} {self.amount:+d} province strength "
+            f"({self.duration.name})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifiers.append(
+            ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )
         return []
 

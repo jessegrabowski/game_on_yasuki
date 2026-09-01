@@ -19,6 +19,7 @@ yasuki_core.engine.ops
     draw_to_hand
     fill_province
     move_card
+    move_unit
     remove_card
     remove_from_location
     reorder_in_hand

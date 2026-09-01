@@ -30,9 +30,11 @@ from yasuki_core.engine.rules.effects import (
     GainGold,
     GainHonor,
     LoseGame,
+    Move,
     MoveToHand,
     GrantKeyword,
     GrantMinimum,
+    GrantProvinceStrength,
     GrantModifier,
     PayGold,
     IgnoreHonorRequirements,
@@ -46,7 +48,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WALL, WEALTH
 
@@ -68,6 +70,7 @@ EFFECTS = [
     ),
     (Show("a"), "show a"),
     (MoveToHand("a", PlayerId.P1), "a to P1's hand"),
+    (Move("shiba", Location.home(PlayerId.P2)), "move shiba to P2's home"),
     (IgnoreHonorRequirements(PlayerId.P1), "P1 ignores honor requirements"),
     (
         GrantModifier("millet", "farm_1", Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN),
@@ -76,6 +79,12 @@ EFFECTS = [
     (
         GrantMinimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
         "uncertainty gives shiba a minimum CHI of 1 (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantProvinceStrength(
+            "walls", ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), 3, Duration.UNTIL_END_OF_TURN
+        ),
+        "walls gives P2:province:0 +3 province strength (UNTIL_END_OF_TURN)",
     ),
     (
         GrantKeyword("fields", "shinjo_1", "Cavalry", Duration.UNTIL_END_OF_TURN),

@@ -176,32 +176,32 @@ def set_location(state: TableState, card: L5RCard, location: Location) -> bool:
     return location != (default if recorded is None else recorded)
 
 
-def assign(state: TableState, card: L5RCard, battlefield: int) -> bool:
-    """Assign ``card``'s whole unit to the battlefield at index ``battlefield``; returns whether it
-    moved.
+def move_unit(state: TableState, card: L5RCard, location: Location) -> bool:
+    """Put ``card``'s whole unit at ``location``; returns whether it moved.
 
-    Assigning is *not* movement (CR, Assign), so nothing here goes through :func:`move_card` — the
-    cards stay where they are in play and only their location changes. Attached cards go with their
-    Personality (CR, Unit).
+    Attached cards go with their Personality (CR, Unit). Nothing here goes through
+    :func:`move_card` — the cards stay where they are in play and only their location changes.
     """
-    return _relocate_unit(state, card, Location.at_battlefield(battlefield))
-
-
-def return_home(state: TableState, card: L5RCard) -> bool:
-    """Send ``card``'s whole unit home; returns whether it moved.
-
-    Home is the unit's — its Personality's owner's — so an attached card owned by the other seat
-    goes where its Personality goes.
-    """
-    return _relocate_unit(state, card, Location.home(card.owner))
-
-
-def _relocate_unit(state: TableState, card: L5RCard, location: Location) -> bool:
     moved = False
     for member in unit_members(state, card):
         if set_location(state, member, location):
             moved = True
     return moved
+
+
+def assign(state: TableState, card: L5RCard, battlefield: int) -> bool:
+    """Assign ``card``'s whole unit to the battlefield at index ``battlefield``; returns whether it
+    moved. Assigning is *not* movement (CR, Assign), whatever it shares with it here.
+    """
+    return move_unit(state, card, Location.at_battlefield(battlefield))
+
+
+def return_home(state: TableState, card: L5RCard) -> bool:
+    """Send ``card``'s whole unit home; returns whether it moved. Home is the unit's — its
+    Personality's owner's — so an attached card owned by the other seat goes where its Personality
+    goes.
+    """
+    return move_unit(state, card, Location.home(card.owner))
 
 
 def stack(state: TableState, card: L5RCard, target: AttachTarget) -> bool:

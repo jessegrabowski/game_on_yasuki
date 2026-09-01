@@ -9,6 +9,7 @@ yasuki_core.engine.rules.actions
 
     ActionTiming
     ActivateAbility
+    BattleDesignator
     Cycle
     DeclareAttack
     DynastyDiscard

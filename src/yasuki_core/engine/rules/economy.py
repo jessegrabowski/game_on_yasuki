@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.modifiers import (
     KeywordGrant,
     Minimum,
     Modifier,
+    ProvinceModifier,
     OngoingEffect,
     Stat,
 )
@@ -256,10 +257,11 @@ def province_strength_grant(printed_id: str) -> Callable[[ProvinceGrant], Provin
 def effective_province_strength(game: GameState, province: ZoneKey) -> int:
     """How strong ``province`` is right now, floored at zero.
 
-    Three sources, summed: the owning seat's Stronghold prints the strength every one of its
+    Four sources, summed: the owning seat's Stronghold prints the strength every one of its
     Provinces starts at — a stat of a Stronghold *or* of a Province (CR, Province Strength) — then
-    the counters resting on this slot, then what the Fortifications attached to it grant. A seat
-    with no Stronghold in play contributes no printed base.
+    the counters resting on this slot, then what the Fortifications attached to it grant, then the
+    recorded modifiers a card has laid on it. A seat with no Stronghold in play contributes no
+    printed base.
     """
     stronghold = player_state(game, province.owner).stronghold
     total = (
@@ -274,6 +276,13 @@ def effective_province_strength(game: GameState, province: ZoneKey) -> int:
         grant = PROVINCE_STRENGTH_GRANTS.get(fortification.printed_id)
         if grant is not None:
             total += grant(game, fortification, province)
+    total += sum(
+        recorded.amount
+        for recorded in game.modifiers
+        if isinstance(recorded, ProvinceModifier)
+        and recorded.province == province
+        and _grant_applies(game, recorded)
+    )
     return max(0, total)
 
 
