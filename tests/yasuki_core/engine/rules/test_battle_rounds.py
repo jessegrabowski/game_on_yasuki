@@ -1,7 +1,9 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActionTiming, DeclareAttack, Pass
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
-from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules import battle, flow, legality
 from yasuki_core.engine.rules.state import BattleSegment, RoundKind
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
@@ -144,3 +146,24 @@ def test_every_battle_of_an_attack_opens_its_own_segments():
 
     assert session.game.attack.battle_segment is BattleSegment.ENGAGE
     assert session.game.round.priority is DEFENDER
+
+
+def test_closing_a_segment_when_none_is_open_is_refused():
+    """Closing pops the round the segment suspended, so doing it with no segment open would hand
+    the phase's round back to whatever is beneath it."""
+    session = _in_a_battle()
+    session.game.attack.battle_segment = None
+
+    with pytest.raises(ValueError, match="no battle segment is open"):
+        battle.close_battle_segment(session.game)
+
+
+def test_resolving_with_no_battlefield_named_is_refused():
+    """Resolution reads the outcome off the battlefield being fought at, so arriving with none
+    named is a lost battle rather than a resolved one."""
+    session = _in_a_battle()
+    session.game.attack.battle_segment = BattleSegment.COMBAT
+    session.game.attack.current = None
+
+    with pytest.raises(ValueError, match="no battle is being fought"):
+        battle.close_battle_segment(session.game)
