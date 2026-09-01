@@ -165,6 +165,10 @@ class Ability:
     battle : frozenset of BattleDesignator, optional
         The designators qualifying how the ability escapes the Rule of Presence or the Rules of
         Location during a battle. Default empty, which takes both rules as written.
+    targets_any_location : bool, optional
+        Whether the ability reaches a target wherever it stands — the "at any location" a card
+        prints, which lifts the Rules of Location off what it may be pointed at but not off the
+        card it is taken from. Default False.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -175,6 +179,7 @@ class Ability:
     all_targets: bool = False
     located_at: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,)
     battle: frozenset[BattleDesignator] = frozenset()
+    targets_any_location: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -407,11 +412,12 @@ def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]
 
     Filtered centrally rather than by each card's own ``targets``: during a battle, a card in a unit
     may only be targeted at the battlefield the battle is at (CR, Rules of Location), and a handler
-    that forgot to say so would be a silent rules bug on every card that forgot.
+    that forgot to say so would be a silent rules bug on every card that forgot. A card printing "at
+    any location" says so on its ``Ability`` instead, where the filter can see it.
     """
     offered = ability.targets(game, card)
     attack = game.attack
-    if attack is None or attack.current is None:
+    if attack is None or attack.current is None or ability.targets_any_location:
         return offered
     by_id = game.table.cards_by_id
     return [
