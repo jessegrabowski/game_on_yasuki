@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
 )
 from yasuki_core.engine.rules import state_rules
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, Moment
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.modifiers import ProvinceModifier
 from yasuki_core.engine.rules.work import ResumeCascade
@@ -362,3 +362,16 @@ def province_holdings(game: GameState, seat: PlayerId) -> list[str]:
         for card in zone.cards
         if card.face_up and isinstance(card.printed, HoldingPrint)
     ]
+
+
+def resolve_delayed(game: GameState, moment: Moment) -> None:
+    """Resolve the effects held until ``moment``, and drop them whether they did anything or not.
+
+    A held effect whose card has since left the table is a no-op, so one destroyed or banished
+    earlier in the turn is not chased into the next.
+    """
+    held = [effect for held_until, effect in game.delayed if held_until == moment]
+    if not held:
+        return
+    game.delayed = [entry for entry in game.delayed if entry[0] != moment]
+    resolve_effects(game, held)

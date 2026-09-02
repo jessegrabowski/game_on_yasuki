@@ -1,10 +1,11 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Pass, PlayStrategy, Recruit
+from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
 from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseInvestAmount, Confirm
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.payments import payment_request
+from yasuki_core.engine.rules.state import BATTLE_SEGMENT_TIMINGS, BattleSegment
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
@@ -16,6 +17,7 @@ from yasuki_gui.layout import divider_y
 from yasuki_gui.services.presenter import Presenter
 from yasuki_gui.ui.floating_panel import MIN_H
 from yasuki_gui.ui.geometry import widget_size
+from yasuki_gui.ui.battle_view import _SEQUENCE_TAG
 from yasuki_gui.ui.game_window import GameWindow
 
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -689,19 +691,33 @@ def _press_lane(presenter, battlefield: int, label: str) -> None:
     buttons[battlefield].press()
 
 
-def _fight_at(presenter, window, battlefield: int) -> None:
-    """Fight the battle at ``battlefield`` from its lane, then pass out its segments.
+def _run_the_opponent(presenter) -> None:
+    """Let the AI take every opportunity it holds, so the human is the one being asked next.
 
-    A battle opens an Action Round per segment before it resolves. The battle window has no action
-    pane yet, so the segments are passed through the engine rather than from the board.
+    The client does this on a timer the tests do not pump, so a test that presses a button and
+    expects the answer back has to hand the opportunity on itself.
+    """
+    runner = presenter.host.runner
+    while runner.opponent_holds_priority or runner.opponent_owes_decision:
+        runner.run_opponent()
+        presenter.present()
+
+
+def _fight_at(presenter, battlefield: int) -> None:
+    """Fight the battle at ``battlefield`` from its lane, then pass out its segments from the board.
+
+    A battle opens an Action Round per segment before it resolves, and each is passed the way the
+    player passes anything: the opponent's opportunity is run, and the human's is the prompt box's
+    own Pass button.
     """
     _press_lane(presenter, battlefield, "Fight here")
-    session = presenter.host.runner.session
-    for _ in range(20):
-        attack = session.game.attack
-        if attack is None or attack.battle_segment is None:
-            break
-        session.act(session.game.round.priority, Pass())
+    runner = presenter.host.runner
+    for _ in BATTLE_SEGMENT_TIMINGS:
+        _run_the_opponent(presenter)
+        # A seat with no presence at this battlefield is never offered the opportunity, so a
+        # segment can close on the opponent's passes alone and leave nothing to press.
+        if runner.session.game.attack.battle_segment is not None:
+            _press(presenter, "Pass")
     presenter.present()
 
 
@@ -931,6 +947,82 @@ def test_the_assign_buttons_go_away_once_the_assignment_is_answered(a_battle):
     ]
 
 
+def test_the_prompt_names_the_battle_segment_and_the_battlefield(a_battle):
+    """A battle's segments are the only place the seat is asked to act inside another segment, so
+    the heading has to name the one being fought — "Fight Battles" is true of every battle in the
+    phase and tells the player nothing about the one in front of them."""
+    presenter, window, session = a_battle
+    runner = presenter.host.runner
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 1)
+    _press(presenter, "Done assigning")
+    _run_the_opponent(presenter)
+    _press_lane(presenter, 1, "Fight here")
+
+    said = []
+    for _ in BATTLE_SEGMENT_TIMINGS:
+        _run_the_opponent(presenter)
+        said.append(presenter._prompt(runner.view())[0])
+        _press(presenter, "Pass")
+
+    assert said == [
+        "Your Engage Segment at Battlefield 2",
+        "Your Combat Segment at Battlefield 2",
+    ]
+
+
+def test_both_battle_segments_are_passed_from_the_prompt_box(a_battle):
+    """The seat's opportunity inside a battle is offered where every other opportunity is. Passing
+    both segments is what carries the battle to its resolution, so a segment that offered nothing
+    would strand the phase."""
+    presenter, window, session = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 0)
+    _press(presenter, "Done assigning")
+    _run_the_opponent(presenter)
+    _press_lane(presenter, 0, "Fight here")
+    _run_the_opponent(presenter)
+
+    assert [label for label, _, _ in _specs(presenter)] == ["Pass"]
+    _press(presenter, "Pass")
+    _run_the_opponent(presenter)
+
+    assert session.game.attack.battle_segment is BattleSegment.COMBAT
+    _press(presenter, "Pass")
+    _run_the_opponent(presenter)
+
+    assert session.game.attack.fought == frozenset({0})
+
+
+def _lane_sequence(window) -> list[str]:
+    """The lettering of the battle sequence strips drawn across the lanes' feet."""
+    canvas = window.battle_view.canvas
+    return [
+        canvas.itemcget(item, "text")
+        for item in canvas.find_withtag(_SEQUENCE_TAG)
+        if canvas.type(item) == "text"
+    ]
+
+
+def test_the_lanes_print_the_battle_sequence_once_a_battle_starts(a_battle):
+    """The foot of a lane is where the player is asked where to fight; once they have answered, it
+    is where the battle they started reports what it is doing. Which cell lights is the battle
+    view's own case — what this one checks is that the real flow reaches the strip at all."""
+    presenter, window, session = a_battle
+    _press(presenter, "Declare an attack")
+    _send(presenter, window, ["hero"], 0)
+    _press(presenter, "Done assigning")
+    _run_the_opponent(presenter)
+
+    assert _lane_sequence(window) == []  # being asked where to fight, so the buttons hold the band
+
+    _press_lane(presenter, 0, "Fight here")
+    _run_the_opponent(presenter)
+
+    assert session.game.attack.battle_segment is BattleSegment.ENGAGE
+    assert _lane_sequence(window) == ["Engage", "Combat", "Resolution", "After-Resolution"] * 2
+
+
 def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
     """The whole loop: declare, gather, send, assign, then choose where to fight until the phase
     runs out — which is what makes a battle playable rather than merely reachable."""
@@ -942,8 +1034,8 @@ def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
     runner.run_opponent()
     presenter.present()
 
-    _fight_at(presenter, window, 0)
-    _fight_at(presenter, window, 1)
+    _fight_at(presenter, 0)
+    _fight_at(presenter, 1)
 
     assert session.game.attack.fought == frozenset({0, 1})
     assert session.game.table.cards_by_id["hero"].bowed  # After Resolution bows the attackers
@@ -1112,8 +1204,8 @@ def test_the_battle_floats_over_the_board_with_an_attack_and_leaves_with_it(a_ba
     _press(presenter, "Done assigning")
     presenter.host.runner.run_opponent()
     presenter.present()
-    _fight_at(presenter, window, 0)
-    _fight_at(presenter, window, 1)
+    _fight_at(presenter, 0)
+    _fight_at(presenter, 1)
     _press(presenter, "Pass")  # the Attack Phase ends, and the battlefields cease to exist
 
     assert session.game.attack is None

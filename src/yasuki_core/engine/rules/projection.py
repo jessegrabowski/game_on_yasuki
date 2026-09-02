@@ -11,7 +11,14 @@ from yasuki_core.engine.rules.economy import (
     effective_stat,
 )
 from yasuki_core.engine.rules.modifiers import Stat
-from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase, RoundKind, Segment
+from yasuki_core.engine.rules.state import (
+    BattleOutcome,
+    BattleSegment,
+    GameState,
+    Phase,
+    RoundKind,
+    Segment,
+)
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.rules.units import unit_force, units_at
@@ -92,6 +99,9 @@ class AttackView:
         The seat being attacked.
     segment : Segment
         Which segment of the Attack Phase is open.
+    battle_segment : BattleSegment or None
+        Which segment of the battle at ``current`` is open, or None when no battle is being fought
+        — between battles, and during a battle's resolution, which is not an Action Round.
     current : int or None
         The battlefield a battle is being fought at, or None between battles.
     battlefields : tuple of BattlefieldView
@@ -101,6 +111,7 @@ class AttackView:
     attacker: PlayerId
     defender: PlayerId
     segment: Segment
+    battle_segment: BattleSegment | None
     current: int | None
     battlefields: tuple[BattlefieldView, ...]
 
@@ -312,6 +323,7 @@ def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
         attacker=attack.attacker,
         defender=attack.defender,
         segment=attack.segment,
+        battle_segment=attack.battle_segment,
         current=attack.current,
         battlefields=tuple(
             BattlefieldView(

@@ -3,7 +3,7 @@ import inspect
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.state import END_OF_TURN
+from yasuki_core.engine.rules.state import BEGINNING_OF_COMBAT, END_OF_TURN
 from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,
@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.effects import (
     LoseGame,
     Move,
     MoveToHand,
+    GrantPriority,
     GrantKeyword,
     GrantMinimum,
     GrantProvinceStrength,
@@ -85,6 +86,14 @@ EFFECTS = [
             "walls", ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), 3, Duration.UNTIL_END_OF_TURN
         ),
         "walls gives P2:province:0 +3 province strength (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantPriority(PlayerId.P1),
+        "P1 takes the opportunity to act",
+    ),
+    (
+        DelayedEffect(GrantPriority(PlayerId.P1), BEGINNING_OF_COMBAT),
+        "P1 takes the opportunity to act at the beginning of the Combat Segment",
     ),
     (
         GrantKeyword("fields", "shinjo_1", "Cavalry", Duration.UNTIL_END_OF_TURN),

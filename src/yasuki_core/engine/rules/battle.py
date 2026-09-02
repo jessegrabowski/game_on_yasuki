@@ -23,7 +23,9 @@ from yasuki_core.engine.rules.state import (
     BattleOutcome,
     BattleSegment,
     BattlefieldInfo,
+    Boundary,
     GameState,
+    Moment,
     RoundKind,
     Segment,
 )
@@ -258,8 +260,8 @@ def fight_next_battle(game: GameState) -> None:
     )
 
 
-# What follows each battle segment: the next one, or None when resolution does (CR, Battle
-# Sequence). Spelled out rather than taken from the enum's order, so a segment added to
+# What Action Round follows each of the two that are one, or None when resolution follows instead
+# (CR, Battle Sequence). Spelled out rather than taken from the enum's order, so a round added to
 # :class:`~yasuki_core.engine.rules.state.BattleSegment` has to say where it belongs.
 _AFTER_BATTLE_SEGMENT: dict[BattleSegment, BattleSegment | None] = {
     BattleSegment.ENGAGE: BattleSegment.COMBAT,
@@ -293,6 +295,8 @@ def _open_battle_segment(game: GameState, segment: BattleSegment) -> None:
         priority=attack.defender,
         kind=RoundKind.BATTLE_SEGMENT,
     )
+    # After the round exists, so an effect held for this moment lands on the round it was held for.
+    triggers.resolve_delayed(game, Moment(segment, Boundary.BEGINNING))
 
 
 def close_battle_segment(game: GameState) -> None:

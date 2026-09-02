@@ -6,9 +6,11 @@ from typing import NamedTuple
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
-from yasuki_core.engine.rules.state import BattleOutcome
+from yasuki_core import ruleset
+from yasuki_core.engine.rules.state import BattleOutcome, BattleSegment
 from yasuki_gui import theme
 from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.labels import BATTLE_SEGMENT_CHIPS
 from yasuki_gui.layout import COLUMN_STEP, centered_row, unit_tower_positions
 from yasuki_gui.ui.floating_panel import BORDER, FloatingPanel, TITLEBAR_H
 from yasuki_gui.ui.geometry import widget_size
@@ -23,6 +25,10 @@ _PROVINCE_TAG = "province:"
 # The lane's own army total, tagged apart from the per-card stamps so a reader — and a test —
 # can tell an army's Force from the Force of one card standing in it.
 _ARMY_FORCE_TAG = "army-force"
+# The lane's Battle Sequence strip. Every cell carries the strip's own tag and a second naming its
+# segment, the way a card's sprite carries its id — so which cell is lit is a question about the
+# canvas rather than about where things landed on it.
+_SEQUENCE_TAG = "sequence"
 # How wide a lane is once collapsed: enough for its number, and no more.
 COLLAPSED_W = 34
 LANE_GAP = 6
@@ -33,6 +39,8 @@ HEADER_H = 74
 # The strip along the bottom holding the lane's own button, whichever way the lane faces: a control
 # that moved with the orientation would be somewhere new every time the seat changed roles.
 FOOTER_H = 36
+# How far the footer's contents hold off the lane's own edges.
+FOOTER_INSET = 8
 # What a mirrored lane leaves above its topmost row, standing in for the heading band that is no
 # longer up there to space the cards off the panel's edge.
 LANE_MARGIN = 10
@@ -52,6 +60,11 @@ MIN_LANE_W = CARD_W + 10
 # actually opens over is the board's own, decided by whoever shows it.
 PANEL_W = 900
 PANEL_H = 600
+
+
+def _sequence_tag(segment: BattleSegment) -> str:
+    """The canvas tag every part of ``segment``'s cell in a lane's sequence strip carries."""
+    return f"{_SEQUENCE_TAG}:{segment.value}"
 
 
 @dataclass(frozen=True, slots=True)
@@ -559,18 +572,29 @@ class BattleView(FloatingPanel):
             tags=(_ARMY_FORCE_TAG,),
         )
 
+    def _footer_band(self, span: tuple[int, int], height: int) -> tuple[float, float, float, float]:
+        """The box the foot of a lane draws in, inset from the lane's own edges."""
+        left, right = span
+        return left + FOOTER_INSET, height - FOOTER_H + 6, right - FOOTER_INSET, height - 8
+
     def _draw_footer(self, index: int, span: tuple[int, int], height: int) -> None:
-        """The lane's own button, when this battlefield offers one. Under the battlefield it acts
-        on, rather than in the prompt box, so the choice is made where it can be seen."""
+        """The foot of the lane: its own button when this battlefield offers one, the battle's
+        sequence while one is being fought.
+
+        The button sits under the battlefield it acts on rather than in the prompt box, so the
+        choice is made where it can be seen. It cannot collide with the sequence, because a
+        battlefield offers a button only while the phase is asking where to send units or where to
+        fight, and neither question is open once a battle has started.
+        """
         button = self._buttons.get(index)
         if button is None:
+            self._draw_sequence(index, span, height)
             return
-        left, right = span
-        top, bottom = height - FOOTER_H + 6, height - 8
+        left, top, right, bottom = self._footer_band(span, height)
         self.canvas.create_rectangle(
-            left + 8,
+            left,
             top,
-            right - 8,
+            right,
             bottom,
             fill=theme.GOLD if button.enabled else theme.LINE,
             outline=theme.GOLD_HOVER if button.enabled else theme.LINE,
@@ -582,6 +606,54 @@ class BattleView(FloatingPanel):
             text=button.label,
             fill=theme.ON_DARK if button.enabled else theme.INK_DIM,
             font=theme.serif(11, "bold"),
+        )
+
+    def _draw_sequence(self, index: int, span: tuple[int, int], height: int) -> None:
+        """The CR's Battle Sequence across the foot of the lane, one cell per segment.
+
+        Every lane carries it while a battle is being fought and only the lane it is being fought at
+        lights a cell: the sequence says what a battle is doing, and the lit lane says which battle.
+        """
+        attack = self._attack
+        if attack is None or attack.battle_segment is None:
+            return
+        segments = ruleset.ACTIVE.battle_segments
+        left, top, right, bottom = self._footer_band(span, height)
+        cell = (right - left) / len(segments)
+        for step, segment in enumerate(segments):
+            self._draw_sequence_cell(
+                (left + step * cell, top, left + (step + 1) * cell, bottom),
+                segment,
+                current=segment is attack.battle_segment and index == attack.current,
+            )
+
+    def _draw_sequence_cell(
+        self,
+        box: tuple[float, float, float, float],
+        segment: BattleSegment,
+        *,
+        current: bool,
+    ) -> None:
+        """One cell of the sequence strip, filled when it names the segment being fought."""
+        left, top, right, bottom = box
+        tags = (_SEQUENCE_TAG, _sequence_tag(segment))
+        self.canvas.create_rectangle(
+            left,
+            top,
+            right,
+            bottom,
+            fill=theme.GOLD if current else theme.PANEL,
+            outline=theme.LINE,
+            width=1,
+            tags=tags,
+        )
+        self.canvas.create_text(
+            (left + right) / 2,
+            (top + bottom) / 2,
+            text=BATTLE_SEGMENT_CHIPS[segment],
+            fill=theme.ON_DARK if current else theme.INK_DIM,
+            font=theme.serif(7, "bold") if current else theme.serif(7),
+            tags=tags,
         )
 
     def _draw_army(

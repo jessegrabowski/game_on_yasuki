@@ -485,6 +485,24 @@ class GrantProvinceStrength(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class GrantPriority(Effect):
+    """Hand ``seat`` the opportunity to act in the round now open, overriding the seat that round
+    started on. A card naming the first actor in a round still to open delays this to that round's
+    beginning."""
+
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} takes the opportunity to act"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        # The pass count goes with it: the round is being handed to a seat rather than passed on by
+        # one, so the consecutive passes that would close it start again from this seat.
+        game.round = replace(game.round, priority=self.seat, passes=0)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class GrantKeyword(Effect):
     """Record a keyword grant: the ``source`` card gives ``target`` ``keyword`` for ``duration``.
 

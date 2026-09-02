@@ -1,17 +1,19 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility, Pass
+from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Pass, PlayStrategy
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint
+from yasuki_core.engine.rules.state import BattleSegment
+from yasuki_core.game_pieces.prints import ActionPrint, AttachmentPrint, FatePrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
+    end_phase,
     end_turn,
     attachment,
     holding,
@@ -221,6 +223,120 @@ def test_the_gift_replays_to_the_same_state():
     session.act(P1, ActivateAbility("gift"))
     session.submit(P1, DecisionResponse(("katana",)))
     assert replay(session.log) == session.game
+
+
+# --- Sneak Attack ---
+
+ATTACKER, DEFENDER = PlayerId.P1, PlayerId.P2
+
+
+def _sneak_attack_battle(*, holder: PlayerId = ATTACKER) -> EngineSession:
+    """The Engage Segment of P1's attack, with Sneak Attack in ``holder``'s hand."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    province_card(state, "def-prov1", seat=DEFENDER, index=1)
+    put_in_play(state, personality("raider", owner=ATTACKER, force=3))
+    put_in_play(state, personality("scout", owner=ATTACKER, force=1))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    put_in_play(state, personality("watch", owner=DEFENDER, force=1))
+    state.zones[ZoneKey(holder, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="sneak_attack",
+                name="Sneak Attack",
+                printed_id="sneak_attack",
+                side=Side.FATE,
+                owner=holder,
+            ),
+        )
+    )
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("raider@0", "scout@1")))
+    session.submit(DEFENDER, DecisionResponse(("guard@0", "watch@1")))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    return session
+
+
+def _close_the_engage_segment(session: EngineSession) -> None:
+    """Pass out of the Engage Segment, whoever is holding the opportunity as it goes round."""
+    for _ in range(4):
+        if session.game.attack.battle_segment is not BattleSegment.ENGAGE:
+            return
+        session.act(session.game.round.priority, Pass())
+    raise AssertionError("the Engage Segment would not close")
+
+
+def _play_sneak_attack(session: EngineSession, holder: PlayerId) -> None:
+    """Take the card from ``holder``'s hand. Both battle segments open on the Defender, so the
+    Attacker is handed the opportunity before it can play anything."""
+    if session.game.round.priority is not holder:
+        session.act(session.game.round.priority, Pass())
+    session.act(holder, PlayStrategy("sneak_attack"))
+    session.submit(holder, DecisionResponse())
+
+
+def test_the_combat_segment_opens_on_the_defender_without_it():
+    """The baseline the card overturns: both segments start with the Defender (CR, Battle
+    Sequence)."""
+    session = _sneak_attack_battle()
+
+    _close_the_engage_segment(session)
+
+    assert session.game.attack.battle_segment is BattleSegment.COMBAT
+    assert session.game.round.priority is DEFENDER
+
+
+def test_it_hands_the_attacker_the_first_battle_action():
+    session = _sneak_attack_battle()
+
+    _play_sneak_attack(session, ATTACKER)
+    _close_the_engage_segment(session)
+
+    assert session.game.attack.battle_segment is BattleSegment.COMBAT
+    assert session.game.round.priority is ATTACKER
+
+
+def test_it_leaves_the_engage_segment_it_is_played_in_alone():
+    """ "The first opportunity to take a Battle action" is the Combat Segment's, so the round the
+    card is played in goes on handing the opportunity round as it was."""
+    session = _sneak_attack_battle()
+
+    _play_sneak_attack(session, ATTACKER)
+
+    assert session.game.attack.battle_segment is BattleSegment.ENGAGE
+    assert session.game.round.priority is DEFENDER
+
+
+def test_the_defender_playing_it_still_names_the_attacker():
+    """The card names the Attacker rather than its player, so a Defender holding it hands the
+    opportunity to the other seat."""
+    session = _sneak_attack_battle(holder=DEFENDER)
+
+    _play_sneak_attack(session, DEFENDER)
+    _close_the_engage_segment(session)
+
+    assert session.game.round.priority is ATTACKER
+
+
+def test_it_lasts_the_one_battle_it_was_played_in():
+    """ "In this battle" — the next battle of the phase opens its Combat Segment on the Defender
+    again, because a held effect is spent when it fires."""
+    session = _sneak_attack_battle()
+    _play_sneak_attack(session, ATTACKER)
+    _close_the_engage_segment(session)
+    while session.game.attack.battle_segment is BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+
+    session.submit(ATTACKER, DecisionResponse(("1",)))
+    _close_the_engage_segment(session)
+
+    assert session.game.attack.battle_segment is BattleSegment.COMBAT
+    assert session.game.round.priority is DEFENDER
 
 
 # --- Touch of Death ---

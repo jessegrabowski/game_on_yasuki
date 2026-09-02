@@ -106,16 +106,19 @@ class BattleSegment(Enum):
     """One battle's segments, in the order the CR's Battle Sequence walks them. Nested inside the
     Attack Phase's :class:`Segment.FIGHT`, which is where battles are fought.
 
-    Resolution follows the Combat Segment closing and is not an Action Round, so it is not one of
-    these — nothing may be taken during it.
+    Only the first two are Action Rounds — the CR's own list of round types names them and stops
+    there. The last two are named because the battle passes through them and cards act around them,
+    not because a seat is asked anything in either.
     """
 
     ENGAGE = "engage"
     COMBAT = "combat"
+    RESOLUTION = "resolution"
+    AFTER_RESOLUTION = "after_resolution"
 
 
-# What each battle segment's Action Round permits. Both are open to every seat and permit only their
-# own designator, and both start with the Defender (CR, Battle Sequence).
+# What each battle segment that is an Action Round permits. Both are open to every seat and permit
+# only their own designator, and both start with the Defender (CR, Battle Sequence).
 BATTLE_SEGMENT_TIMINGS: dict[BattleSegment, RoundTimings] = {
     BattleSegment.ENGAGE: RoundTimings(
         active=frozenset({ActionTiming.ENGAGE}), others=frozenset({ActionTiming.ENGAGE})
@@ -150,7 +153,7 @@ class Boundary(Enum):
 
 # The stretches of play a Moment can name the edge of: the turn, one of its phases, or one of the
 # Attack Phase's segments.
-Stage = Turn | Phase | Segment
+Stage = Turn | Phase | Segment | BattleSegment
 
 
 @dataclass(frozen=True, slots=True)
@@ -160,7 +163,7 @@ class Moment:
 
     Attributes
     ----------
-    stage : Turn, Phase or Segment
+    stage : Turn, Phase, Segment or BattleSegment
         The stretch of play whose edge this names.
     boundary : Boundary
         Which edge of that stretch.
@@ -178,17 +181,22 @@ class Moment:
                 return turn.value
             case Phase() as phase:
                 return f"{phase.value.title()} Phase"
-            case Segment() as segment:
-                return f"{segment.value.title()} Segment"
+            case Segment() | BattleSegment() as segment:
+                return f"{segment.value.replace('_', ' ').title()} Segment"
             case _:
                 raise ValueError(f"no name for the stage {self.stage!r}")
 
 
 END_OF_TURN = Moment(Turn.CURRENT, Boundary.END)
+BEGINNING_OF_COMBAT = Moment(BattleSegment.COMBAT, Boundary.BEGINNING)
 
 # The moments the flow reaches. Any other Moment is constructible and correctly worded, so an effect
-# delayed to one would be held for the rest of the game with nothing to resolve it.
-FIRED_MOMENTS: frozenset[Moment] = frozenset({END_OF_TURN})
+# delayed to one would be held for the rest of the game with nothing to resolve it. The battle
+# segments' beginnings are taken from the map the flow opens their rounds from, so a segment that
+# becomes an Action Round is fired and listed in the one edit.
+FIRED_MOMENTS: frozenset[Moment] = frozenset(
+    {END_OF_TURN, *(Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS)}
+)
 
 
 def flow_resolves(moment: Moment) -> bool:
