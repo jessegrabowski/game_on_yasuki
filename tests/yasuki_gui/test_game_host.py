@@ -17,7 +17,7 @@ from tests.yasuki_core.db_guard import requires_db
 # The bundled Spider deck opens at -2 Family Honor and the Crane deck at 5, so a pairing of the two
 # decides turn order outright rather than drawing for it.
 LOW_HONOR = DEMO_DECK_PATH
-HIGH_HONOR = DEMO_DECK_PATH.parent / "crane_dishonor.yaml"
+HIGH_HONOR = DEMO_DECK_PATH.parent / "crane_starter.yaml"
 MISSING = DEMO_DECK_PATH.parent / "no_such_deck.yaml"
 
 

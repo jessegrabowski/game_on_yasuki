@@ -426,6 +426,7 @@ akodo_tetsuru
 akodo_tezuka
 akodo_tomio
 akodo_toshigure
+akodo_toshiki
 akodo_toturi_inexperienced
 akodo_tsudoken
 akodo_tsudoken_experienced
@@ -11529,6 +11530,7 @@ the_greater_threat
 the_greatest_cost
 the_grey_crane_experienced_2
 the_grey_crane_experienced_3
+the_gusai_estates
 the_hall_of_ancestors
 the_halls_of_the_damned
 the_hammer_of_kaiu

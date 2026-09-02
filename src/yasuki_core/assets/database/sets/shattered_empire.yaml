@@ -55,6 +55,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Agasha Gifu
+  subtitle: Arikura-no-baba
   types:
   - Personality
   decks:
@@ -63,7 +64,6 @@ cards:
   - Phoenix
   keywords:
   - Alchemist
-  - Arikura-no-baba
   - Earth
   - Fire
   - Nonhuman
@@ -722,6 +722,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Bayushi Akane
+  subtitle: Soul of Bayushi Kurumi
   types:
   - Personality
   decks:
@@ -731,7 +732,6 @@ cards:
   keywords:
   - Courtier
   - Scorpion Clan
-  - Soul of Bayushi Kurumi
   text: <b>Political Home Battle, :bow::</b> Target a Personality. His controller may dishonor him. If
     he did not become dishonorable <i>(or was already dishonorable)</i>, give him -3F.
   gold_cost: 2
@@ -1879,6 +1879,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Geiko
+  subtitle: Soul of Daigotsu Keigo
   types:
   - Personality
   decks:
@@ -1887,7 +1888,6 @@ cards:
   - Spider
   keywords:
   - Samurai
-  - Soul of Daigotsu Keigo
   - Spider Clan
   text: 'Will not join a player whose Wind is The Kanpeki Dynasty. After a Dark Virtue, :fear:, or :maho:
     action resolves, if Geiko is at the current battlefield, give him +1F.'
@@ -1994,6 +1994,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Roburo
+  subtitle: Soul of Daigotsu Bundoru
   types:
   - Personality
   decks:
@@ -2004,7 +2005,6 @@ cards:
   - Paragon
   - Samurai
   - Shadowlands
-  - Soul of Daigotsu Bundoru
   - Spider Clan
   text: 'Battle: :fear: 4.'
   gold_cost: 7
@@ -5403,6 +5403,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Matsu Tayuko
+  subtitle: Soul of Matsu Aoiko
   types:
   - Personality
   decks:
@@ -5412,7 +5413,6 @@ cards:
   keywords:
   - Lion Clan
   - Samurai
-  - Soul of Matsu Aoiko
   text: Tayuko has +2F while attacking.
   gold_cost: 3
   force: 1
@@ -5619,6 +5619,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Mirumoto Niwa
+  subtitle: Soul of Mirumoto Kei
   types:
   - Personality
   decks:
@@ -5629,7 +5630,6 @@ cards:
   - Kensai
   - Dragon Clan
   - Samurai
-  - Soul of Mirumoto Kei
   text: <i>(Kensai may attach two Weapons, as long as neither is Two-Handed.)</i> <br><b>Battle:</b> Niwa
     challenges a target enemy Personality. He may refuse; if he does, give Niwa +3F. Give the duel's loser
     -3F.
@@ -5651,6 +5651,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Mirumoto Nokkai
+  subtitle: Soul of Mirumoto Tsuge
   types:
   - Personality
   decks:
@@ -5660,7 +5661,6 @@ cards:
   keywords:
   - Dragon Clan
   - Samurai
-  - Soul of Mirumoto Tsuge
   - Tattooed
   text: Nokkai has +1F/+1C while dueling, or opposed by, a Phoenix Clan Personality.<br>After the first
     time each turn Nokkai challenges a Personality, draw a card.
@@ -8101,6 +8101,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tairao
+  subtitle: Soul of Chuda Rintaro
   types:
   - Personality
   decks:
@@ -8110,7 +8111,6 @@ cards:
   keywords:
   - Shadowlands
   - Shugenja
-  - Soul of Chuda Rintaro
   - Spider Clan
   text: 'Open: Target another player''s Personality. After each time they assign this turn, give them -2F/-1C
     and :shadowlands: (this turn).'
@@ -8837,6 +8837,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Korimi
+  subtitle: Soul of Togashi Oki
   types:
   - Personality
   decks:
@@ -8847,7 +8848,6 @@ cards:
   - Dragon Clan
   - Earth
   - Monk
-  - Soul of Togashi Oki
   - Tattooed
   text: Korimi has +2F while defending. <br><b>Interrupt, :bow::</b> After you Recruit Korimi, draw a
     card.

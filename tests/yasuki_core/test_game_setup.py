@@ -107,7 +107,7 @@ def _stronghold(state, seat):
 def test_the_lower_honor_seat_goes_second_with_its_stronghold_flipped():
     """Turn order belongs to the deal, not to whichever client happens to run it, so both the
     desktop and the web surface get it from here."""
-    lion = DECKS / "lion_deathseeker_farms.yaml"
+    lion = DECKS / "lion_starter.yaml"
     state, first = build_state_from_deck(
         DEMO_DECK_PATH, opponent_deck_path=lion, rng=default_rng(7)
     )
