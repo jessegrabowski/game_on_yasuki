@@ -353,6 +353,66 @@ class TestRulesModeRender:
         province = min(stacking.index(item) for item in field.find_withtag(zone_tag(province)))
         assert fortification < province
 
+    def _fortified_province(self, field, owner, card_ids):
+        """A board where every id in ``card_ids`` is a Fortification on ``owner``'s first Province,
+        attached in that order. Always rendered from ``field.seat``, so passing the far seat as
+        ``owner`` puts the fan on the far side rather than moving the camera."""
+        state = TableState.empty_two_seat()
+        province = ZoneKey(owner, ZoneRole.PROVINCE, 0)
+        for index in range(4):  # empty_two_seat builds no Provinces; the layout needs the row
+            state.zones[ZoneKey(owner, ZoneRole.PROVINCE, index)] = ProvinceZone(owner=owner)
+        for card_id in card_ids:
+            card = L5RCard.of(
+                HoldingPrint,
+                id=card_id,
+                name=card_id,
+                side=Side.DYNASTY,
+                owner=owner,
+                keywords=("Fortification",),
+            )
+            state.cards_by_id[card_id] = card
+            state.battlefield.add(card)
+            state.positions[card_id] = UNPLACED_BOARD_POS
+            state.province_attachments[card_id] = province
+        viewer = field.seat
+        field.render_snapshot(EngineSession.start(state, viewer).project(viewer).table, viewer)
+        return province
+
+    def test_a_second_fortification_draws_behind_the_first(self, loaded):
+        """The near seat's Provinces fan inboard, which is upward, so each Fortification must cover
+        the one above it. Drawn in attach order instead, the second lands on top of the first and
+        hides the title the fan exists to expose — the same rule a unit tower follows."""
+        field, _ = loaded
+        seat = field.seat
+        self._fortified_province(field, seat, ("wall", "gate"))
+
+        y_of = {card_id: field.sprites[card_tag(card_id)].y for card_id in ("wall", "gate")}
+        assert y_of["gate"] < y_of["wall"]  # the second fans a step further up
+
+        stacking = field.find_all()
+        top = {
+            card_id: max(stacking.index(item) for item in field.find_withtag(card_tag(card_id)))
+            for card_id in ("wall", "gate")
+        }
+        assert top["gate"] < top["wall"]
+
+    def test_the_far_seat_fans_its_fortifications_the_other_way(self, loaded):
+        """Inboard is downward for the far seat, so its stack fans down and the rule reverses: the
+        lowest card is in front. A fixed order would be right for one seat and wrong for the other."""
+        field, _ = loaded
+        far = PlayerId.P2 if field.seat is PlayerId.P1 else PlayerId.P1
+        self._fortified_province(field, far, ("wall", "gate"))
+
+        y_of = {card_id: field.sprites[card_tag(card_id)].y for card_id in ("wall", "gate")}
+        assert y_of["gate"] > y_of["wall"]  # fanned down instead
+
+        stacking = field.find_all()
+        top = {
+            card_id: max(stacking.index(item) for item in field.find_withtag(card_tag(card_id)))
+            for card_id in ("wall", "gate")
+        }
+        assert top["wall"] < top["gate"]
+
     def test_an_attachment_takes_no_column_from_the_holdings_row(self, loaded):
         """The attachment is unplaced and is not a Personality, so the home row would file it with
         the Holdings and shove the real ones sideways to make room for a column nothing draws in."""

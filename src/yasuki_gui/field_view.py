@@ -722,17 +722,27 @@ class FieldView(tk.Canvas):
         """Unit membership from whichever source is rendering: attached card id to Personality."""
         return self._snapshot.units if self._snapshot is not None else self.state.units
 
+    def _province_fans(self) -> dict[ZoneKey, list[str]]:
+        """Each Province slot with the Fortifications fanned off it, in attach order."""
+        fans: dict[ZoneKey, list[str]] = {}
+        for card_id, key in self._province_attachments().items():
+            fans.setdefault(key, []).append(card_id)
+        return fans
+
     def _sink_province_attachments(self) -> None:
         """Push each Fortification below the Province tableau, so the card standing in the slot
         covers it and only the fanned-out part shows.
 
         Zones are drawn before sprites, which would otherwise leave a Fortification sitting on top
-        of the Province it defends — the reverse of the table, where it is tucked underneath.
+        of the Province it defends — the reverse of the table, where it is tucked underneath. Each
+        lowering lands just under the tableau and so on top of the one before, which makes the call
+        order the draw order within a slot.
         """
-        for card_id in self._province_attachments():
-            tag = card_tag(card_id)
-            if self.find_withtag(tag):
-                self.tag_lower(tag, "zone")
+        for key, members in self._province_fans().items():
+            for card_id in tower_draw_order(members, fans_up=self._at_bottom(key.owner)):
+                tag = card_tag(card_id)
+                if self.find_withtag(tag):
+                    self.tag_lower(tag, "zone")
 
     def _province_attachments(self) -> dict[str, ZoneKey]:
         """Province membership from whichever source is rendering: card id to the Province slot."""
@@ -746,12 +756,9 @@ class FieldView(tk.Canvas):
         growing outward would leave the board. The slot itself holds a Dynasty card that refills
         behind the Fortification, so the fan starts one step off the slot rather than on it.
         """
-        attached = self._province_attachments()
-        if not attached:
+        by_slot = self._province_fans()
+        if not by_slot:
             return {}
-        by_slot: dict[ZoneKey, list[str]] = {}
-        for card_id, key in attached.items():
-            by_slot.setdefault(key, []).append(card_id)
         positions: dict[str, tuple[int, int]] = {}
         for owner, ordered in self._province_keys_by_owner().items():
             inboard = -1 if self._at_bottom(owner) else 1
