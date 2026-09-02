@@ -21,7 +21,7 @@ pytestmark = requires_db
 # outright. The bundled Spider deck opens at -2 and the Crane deck at 5; a mirror match ties and
 # draws for it, which is right for a game and useless for a test.
 LOW_HONOR = DEMO_DECK_PATH
-HIGH_HONOR = DEMO_DECK_PATH.parent / "crane_dishonor.yaml"
+HIGH_HONOR = DEMO_DECK_PATH.parent / "crane_starter.yaml"
 
 
 def _build(monkeypatch, *, human_leads: bool) -> Presenter:
