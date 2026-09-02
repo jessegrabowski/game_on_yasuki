@@ -1,9 +1,12 @@
 import ast
 import pathlib
+import re
 
 from yasuki_core.engine.rules import cards
 from yasuki_core.game_pieces import keywords
 from yasuki_core.install.card_index import DEFAULT_CARDS_PATH
+from yasuki_core.install.reminders import REMINDER_TEXT
+from yasuki_core.install.text_split import strip_markup
 
 from tests.yasuki_core.card_corpus import set_entries
 
@@ -107,3 +110,49 @@ def test_the_card_scan_reads_the_printed_keywords():
     # finds no offenders and reports success. A floor rather than a count, so printing a new keyword
     # does not fail it.
     assert len(printed_keywords()) > 500
+
+
+def reminder_only_cards(cards_dir: pathlib.Path = DEFAULT_CARDS_PATH) -> list[str]:
+    """Every printing whose whole text box is reminder text, with the keywords it reminds of and
+    the keywords it carries."""
+    found = []
+    for entry in set_entries(cards_dir):
+        if not entry.text:
+            continue
+        residue, reminded = strip_markup(entry.text), []
+        for keyword, wordings in REMINDER_TEXT.items():
+            for wording in wordings:
+                if wording in residue:
+                    residue = residue.replace(wording, "")
+                    reminded.append(keyword)
+        if reminded and not re.sub(r"[()\s.·•]", "", residue):
+            missing = sorted(set(reminded) - set(entry.keywords))
+            if missing:
+                found.append(f"{entry.card_id} [{entry.set_name}] reminds of {missing}")
+    return found
+
+
+def test_a_card_that_is_all_reminder_text_carries_the_keyword_it_reminds_of():
+    # Reminder text restates a keyword for a player who cannot look it up mid-game, so a card whose
+    # whole text box is one is telling you what its own keyword does. A record that prints the
+    # reminder and omits the keyword has dropped a rule silently: nothing fails, the card simply
+    # stops doing what it says. Onyx moved several keywords out of the text box and onto the keyword
+    # line, and a printing left on the older templating reads exactly like this.
+    assert reminder_only_cards() == []
+
+
+def test_the_reminder_scan_reads_cards_that_do_carry_their_keyword():
+    # Guards the check above against passing vacuously: a scan matching no reminder text at all
+    # reports nothing wrong without having read a card.
+    reminders = [
+        entry
+        for entry in set_entries()
+        if entry.text
+        and any(
+            wording in strip_markup(entry.text)
+            for wordings in REMINDER_TEXT.values()
+            for wording in wordings
+        )
+    ]
+
+    assert len(reminders) > 100

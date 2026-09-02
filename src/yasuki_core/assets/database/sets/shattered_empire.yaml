@@ -2828,6 +2828,7 @@ cards:
   - Dynasty
   keywords:
   - Market
+  - Renew
   text: (When a card with Renew enters play from a Province, refill its Province face-up.)
   gold_cost: 2
   gold_production: 2
