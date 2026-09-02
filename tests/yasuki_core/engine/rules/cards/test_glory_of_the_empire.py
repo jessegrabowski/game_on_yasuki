@@ -2,6 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.economy import effective_gold_production
+from yasuki_core.engine.rules.legality import reachable_gold
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -43,3 +44,35 @@ def test_the_peddler_bows_and_pays_three_gold_to_draw():
 
     assert _hand(session) == ["fd0"]
     assert session.game.table.cards_by_id["peddler"].bowed
+
+
+def test_the_peddler_cannot_fund_its_own_cost_by_bowing_itself():
+    """The cost bows the Peddler, so the 2 Gold it could otherwise produce is already spent. Its
+    production and the farm's reach 3 between them, but only the farm's is really available."""
+    session = _peddler_game(other_production=1)
+
+    assert reachable_gold(session.game, P1, session.game.table.cards_by_id["peddler"]) == 3
+
+    assert ActivateAbility("peddler") not in session.legal_actions(P1)
+
+
+def test_a_producer_the_cost_leaves_alone_still_pays_for_it():
+    """The exclusion is the bowed card alone — every other producer counts as it always did."""
+    session = _peddler_game(other_production=3)
+
+    assert ActivateAbility("peddler") in session.legal_actions(P1)
+
+
+def test_gold_already_in_the_pool_pays_for_the_peddler():
+    """The exclusion takes the Peddler out of the producers it could bow, not out of the gold the
+    seat is already holding — a pool that covers the cost needs no producer at all."""
+    session = _peddler_game()
+    session.game.add_gold(P1, 3)
+
+    assert ActivateAbility("peddler") in session.legal_actions(P1)
+
+    session.act(P1, ActivateAbility("peddler"))
+    session.submit(P1, DecisionResponse(()))  # no producer to bow; the pool covers it
+
+    assert _hand(session) == ["fd0"]
+    assert session.game.gold[P1] == 0

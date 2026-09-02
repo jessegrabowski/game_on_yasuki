@@ -125,8 +125,14 @@ def banish_top_fate(game: GameState, source: L5RCard) -> list[Effect]:
 
 def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:
     """Whether ``card`` can pay ``cost``: every effect it spends is payable against the current
-    state. Each effect owns its own precondition, so a new cost effect needs no change here."""
-    return all(effect.is_payable(game) for effect in cost(game, card))
+    state. Each effect owns its own precondition, so a new cost effect needs no change here.
+
+    Judged whole rather than effect by effect, because a cost's parts compete for the same cards:
+    one that bows a Gold producer leaves it unable to bow again to pay the cost's own Gold half.
+    """
+    effects = cost(game, card)
+    bowed = frozenset(effect.card_id for effect in effects if isinstance(effect, Bow))
+    return all(effect.is_payable(game, bowed_by_cost=bowed) for effect in effects)
 
 
 class CardLocation(str, Enum):

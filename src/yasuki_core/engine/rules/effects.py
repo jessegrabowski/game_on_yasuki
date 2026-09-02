@@ -76,9 +76,16 @@ class Effect(ABC):
     def perform(self, game: GameState) -> list[GameEvent]:
         """Commit this effect and return the events it raises, for the cascade to drain."""
 
-    def is_payable(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """Whether an ability can pay this effect as a cost. Most effects carry no precondition
-        and always can."""
+        and always can.
+
+        Parameters
+        ----------
+        bowed_by_cost : frozenset of str, optional
+            The cards this same cost bows, which are no longer free to pay the rest of it. Default
+            empty.
+        """
         return True
 
     @abstractmethod
@@ -120,7 +127,7 @@ class AdjustCounter(Effect):
     def describe(self) -> str:
         return f"{self.delta:+d} {self.counter.name} on {self.card_id}"
 
-    def is_payable(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """A removal needs the card to hold enough of the counter; a grant always applies."""
         if self.delta >= 0:
             return True
@@ -805,10 +812,10 @@ class PayGold(InterruptingEffect):
 
     # Imported where they are used: pricing a payment reads the production-boost registry, whose
     # module imports this one.
-    def is_payable(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         from yasuki_core.engine.rules.payments import can_afford
 
-        return can_afford(game, self.seat, self.amount)
+        return can_afford(game, self.seat, self.amount, bowed_by_cost=bowed_by_cost)
 
     def request(self, game: GameState) -> DecisionRequest:
         from yasuki_core.engine.rules.payments import payment_request
@@ -849,7 +856,7 @@ class AskAmount(InterruptingEffect):
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
 
-    def is_payable(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """Nothing to choose from is nothing to pay."""
         return bool(self.amounts)
 
@@ -894,7 +901,7 @@ class AskOption(InterruptingEffect):
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
 
-    def is_payable(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """Nothing to choose from is nothing to choose."""
         return bool(self.options)
 
@@ -917,7 +924,7 @@ class Bow(Effect):
     def describe(self) -> str:
         return f"bow {self.card_id}"
 
-    def is_payable(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """An already-bowed card cannot bow again."""
         card = game.table.cards_by_id.get(self.card_id)
         return card is not None and not card.bowed
@@ -956,7 +963,7 @@ class BanishTopFate(Effect):
     def describe(self) -> str:
         return f"banish the top of {self.seat.name}'s fate deck"
 
-    def is_payable(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """An empty Fate deck has nothing to banish."""
         return bool(game.table.decks[DeckKey(self.seat, Side.FATE)].cards)
 
@@ -1228,7 +1235,7 @@ class Unpayable(Effect):
     def describe(self) -> str:
         return f"unpayable: {self.reason}"
 
-    def is_payable(self, game: GameState) -> bool:
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         return False
 
     def perform(self, game: GameState) -> list[GameEvent]:
