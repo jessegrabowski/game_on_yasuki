@@ -439,3 +439,37 @@ def test_a_melee_card_emits_a_melee_attack_and_not_a_ranged_one(printed_id):
     effects = ability.effects(session.game, source, session.game.table.cards_by_id["guard"])
 
     assert [type(effect) for effect in effects] == [MeleeAttack]
+
+
+def test_the_exquisite_nagamaki_destroys_a_defender_and_bows_to_pay():
+    """An Item's Melee, taken from the Weapon rather than from the Personality carrying it. The
+    3F strength clears the 2F guard, and the bow is the cost rather than a consequence."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=4))
+    attached(
+        state,
+        attachment(
+            "nagamaki",
+            attachment_type=AttachmentType.ITEM,
+            printed_id="exquisite_nagamaki_of_the_fox_clan",
+        ),
+        "hero",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+
+    session.act(ATTACKER, ActivateAbility("nagamaki"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+    assert session.game.table.cards_by_id["nagamaki"].bowed
