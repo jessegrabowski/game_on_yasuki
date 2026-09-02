@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     the_coming_storm,
     the_hidden_city,
     the_hidden_emperor_episode_6,
+    the_hidden_emperor_the_dark_journey_home,
     thousand_years_of_darkness,
     the_imperial_gift_2,
     torn_asunder,

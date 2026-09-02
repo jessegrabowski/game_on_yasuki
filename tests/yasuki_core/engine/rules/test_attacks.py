@@ -2,6 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equip, Pass
+from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.effects import Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
@@ -352,3 +353,39 @@ def test_tosekiki_ranged_destroys_a_defender_and_bows_to_pay():
 
     assert not _in_play(session, "guard")
     assert session.game.table.cards_by_id["troops"].bowed
+
+
+def test_ashigaru_spearmen_offers_the_draw_only_when_it_arrives_from_hand():
+    """ "After this Follower enters play from your hand" — Equipping is that arrival, so the offer
+    is put to the seat rather than resolving silently."""
+    session = _equip_from_hand("ashigaru_spearmen")
+
+    session.act(ATTACKER, Equip("troops"))
+    session.submit(ATTACKER, DecisionResponse(("hero",)))
+    pay(session, ATTACKER)
+
+    assert session.game.pending is not None
+    assert "additional card" in session.game.pending.prompt()
+
+
+def test_ashigaru_spearmen_offers_nothing_when_it_arrives_any_other_way():
+    """ "...from your hand" is the whole condition. A Follower an effect attaches from a deck or a
+    discard arrives the same way as far as the board is concerned, and offers no draw."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=3))
+    attached(
+        state,
+        attachment(
+            "troops",
+            attachment_type=AttachmentType.FOLLOWER,
+            force=1,
+            printed_id="ashigaru_spearmen",
+        ),
+        "hero",
+    )
+    session = EngineSession.start(state, ATTACKER)
+
+    triggers.fire(session.game, EnteredPlay("troops", from_hand=False))
+
+    assert session.game.pending is None
