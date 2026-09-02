@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     chaos_reigns_part_iii,
     code_of_bushido,
     empire_at_war,
+    evil_portents,
     gates_of_chaos,
     gates_of_tengoku,
     gathering_storms,

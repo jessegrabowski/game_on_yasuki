@@ -327,7 +327,7 @@ def _equip_from_hand(printed_id, *, gold=6):
 
 @pytest.mark.parametrize(
     ("printed_id", "loss"),
-    [("tosekiki", 3), ("skeletal_troops", 2)],
+    [("tosekiki", 3), ("skeletal_troops", 2), ("questionable_vassal", 1)],
 )
 def test_a_follower_that_costs_honor_charges_it_as_it_enters_play(printed_id, loss):
     """Each of these prints "after this Follower enters play, lose N Honor", and the trigger only
