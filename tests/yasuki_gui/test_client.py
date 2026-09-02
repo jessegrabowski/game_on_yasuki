@@ -191,6 +191,16 @@ def test_the_honor_readout_ignores_a_board_left_on_a_stale_table(client):
     assert client.window.human_panel._honor_text.get() == "Honor 9"
 
 
+def test_the_honor_readout_is_not_offered_as_editable_during_a_rules_game(client):
+    """Clicking it dispatches a sandbox intent, and the sandbox path is disabled while the engine
+    owns the board — so a gold, hand-cursored label advertises an edit that cannot happen."""
+    panel = client.window.human_panel
+    assert panel.owner is client.window.field.seat  # the seat that would be allowed to edit
+
+    assert not panel._editable()
+    assert panel._honor_label.cget("cursor") == ""
+
+
 def test_confirming_a_decision_resolves_it(client):
     client.act(Cycle())
     pending = client.host.runner.pending
