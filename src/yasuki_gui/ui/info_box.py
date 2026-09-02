@@ -217,7 +217,7 @@ class PlayerInfoBox(tk.Frame):
 
     def refresh(self) -> None:
         """Resync the honor header and every pile count with the field's current source."""
-        honor = self.field.state.seats[self.owner].honor
+        honor = self.field.seat_honor(self.owner)
         self._honor_text.set(f"Honor {honor}")
         editable = self._editable()
         self._honor_label.configure(

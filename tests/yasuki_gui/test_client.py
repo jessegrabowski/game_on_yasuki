@@ -152,6 +152,45 @@ def test_backing_out_of_a_decision_leaves_the_board_alone(client):
     assert not client.window.field.selecting
 
 
+def test_backing_out_leaves_the_board_on_the_table_the_engine_kept(client):
+    """Cancelling rewinds the tape and replays it onto a fresh table. A board still pointed at the
+    old one renders a game nobody is playing — the honor readout freezes where it stood while the
+    engine goes on without it."""
+    client.act(Cycle())
+
+    client.cancel()
+
+    assert client.window.field.state is client.host.session.game.table
+
+
+def test_the_honor_readout_follows_the_engine_after_a_cancel(client):
+    """The readout reads whichever source is rendering, so it keeps up with the engine even when
+    the board is left holding a table the engine has replaced."""
+    seat = client.window.field.seat
+    client.act(Cycle())
+    client.cancel()
+
+    client.host.session.game.table.seats[seat].honor += 5
+    client.present()
+
+    shown = client.window.human_panel._honor_text.get()
+    assert shown == f"Honor {client.host.session.game.table.seats[seat].honor}"
+
+
+def test_the_honor_readout_ignores_a_board_left_on_a_stale_table(client):
+    """During play the engine owns honor, so the readout reads whatever is rendering rather than
+    the sandbox table the board carries. Reading the table instead makes the counter freeze the
+    moment anything hands the board a copy the engine has moved on from."""
+    seat = client.window.field.seat
+    client.host.session.game.table.seats[seat].honor = 9
+    client.present()
+    client.window.field.state.seats[seat].honor = 999  # a table the engine is no longer using
+
+    client.window.human_panel.refresh()
+
+    assert client.window.human_panel._honor_text.get() == "Honor 9"
+
+
 def test_confirming_a_decision_resolves_it(client):
     client.act(Cycle())
     pending = client.host.runner.pending

@@ -608,6 +608,11 @@ class FieldView(tk.Canvas):
                 return cards
         return []
 
+    def seat_honor(self, seat: PlayerId) -> int:
+        """``seat``'s Family Honor, from the active render source."""
+        source = self._snapshot if self._snapshot is not None else self.state
+        return source.seats[seat].honor
+
     def hand_count(self, seat: PlayerId) -> int:
         """How many cards ``seat`` holds, from the active render source."""
         return len(self.zone_render_cards(ZoneKey(seat, ZoneRole.HAND)))
