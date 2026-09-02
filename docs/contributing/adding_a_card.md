@@ -22,10 +22,14 @@ Read the card's text and find the shape:
 | Carries a keyword only sometimes | `@keyword_grant(id)` | Fortified Farmlands |
 | Gives the Personality it hangs on a stat | `@attachment_grant(id)` | Haramaki-do |
 | Limits what it will attach to | `@attach_restriction(id)` | Brothers in Arms |
+| Buys its Invest cheaper, conditionally | `@invest_discount(id)` | Moto Ikarichi |
+| Changes the strength of an attack | `@attack_strength_against(id)` | Aseth's Legion |
+| Changes a Province's strength | `@province_strength_grant(id)` | Defensive Memorial |
 
-Six events exist to react to: `EnteredPlay`, `Destroyed`, `CardDiscarded`, `CounterGained`,
-`Revealed`, and `TurnStarted`. If the moment your card cares about is not one of these, it needs a
-new event — see [what the vocabulary cannot express](#what-the-vocabulary-cannot-express-yet).
+Nine events exist to react to: `EnteredPlay`, `Destroyed`, `Straightened`, `CardDiscarded`,
+`CounterGained`, `Revealed`, `TurnStarted`, `ProducingGold` and `ProducedGold`. If the moment your
+card cares about is not one of these, it needs a new event — see [what the vocabulary cannot
+express](#what-the-vocabulary-cannot-express-yet).
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
 id no card has, and tells you the nearest real one.
@@ -303,6 +307,68 @@ card and hits it without asking:
         all_targets=True,
 ```
 
+## Cards that attack
+
+The three attacks are effects like any other: `RangedAttack`, `MeleeAttack` and `Fear`, each taking
+a strength, a target, and the seat that caused it. An attack reaches a card whose compared stat is
+no higher than its strength; Ranged and Melee destroy what they reach, Fear bows it. The stat is
+Force unless the card says otherwise, which `compared=Stat.CHI` says.
+
+`attack_targets` is the target predicate for "a target enemy Follower or Personality without
+Followers" — the phrase every attack card prints — so an attacking ability is usually three lines:
+
+```python
+def _legion_of_the_khan_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [RangedAttack(KHAN_RANGED, target.id, source.owner)]
+```
+
+A card that *changes* an attack's strength registers a handler instead. Every card in play is asked
+about every attack, so the handler states its own reach rather than relying on who gets asked:
+compare the two cards for "this Follower", `shares_unit` for "cards in this unit", and neither for a
+card that speaks about the whole board.
+
+```python
+@attack_strength_against("legion_of_the_khan")
+def _legion_of_the_khan_attack_strength(
+    game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
+) -> int:
+    """ "Targeting this Follower" — every kind of attack, but only the ones aimed at her."""
+    return KHAN_ATTACK_PENALTY if target is card else 0
+```
+
+The handlers sum, and the total is not floored: a card that takes more strength off an attack than
+it had leaves it reaching nothing, which is what "have -2 strength" buys. The zero floor the CR puts
+on a stat is about stats, and an attack's strength is not one.
+
+## Cards that print two abilities
+
+A card may register as many abilities as it prints. Each one after the first needs a `key`, because
+the action names the ability it takes by key and the designator often cannot tell them apart — both
+of Incendiary Archers' abilities are Battle:
+
+```python
+register_ability(
+    "incendiary_archers",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle, Bow: Ranged {INCENDIARY_ARCHERS_RANGED} Attack",
+        cost=bow_cost,
+        targets=attack_targets,
+        effects=_incendiary_archers_ranged_effects,
+        key="ranged",
+    ),
+)
+```
+
+`register_ability` refuses a second *unkeyed* ability and a repeated key, so an ambiguous
+registration cannot exist. A card printing one ability needs no key and none of the existing
+registrations carries one.
+
+Both halves are offered independently, and each pays its own cost — so a card whose first ability
+bows it can still take a second that does not, once the opportunity comes back around. Name the
+three handlers `_<card id>_<key>_<role>`, since two `effects` functions on one card would otherwise
+collide.
+
 ## Where the code goes
 
 Find the set that printed the card first, and open the module of the same name as its YAML file. Add
@@ -318,11 +384,14 @@ header names the card the block registers.
 
 Name every function in the block for the card and the job it does — `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
-`keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`), or the
-event a trigger answers (`entered_play`, `destroyed`, `straightened`, `turn_started`,
-`counter_gained`, `card_discarded`, `producing_gold`, `produced_gold`). A choice resolver is named for the choice
-instead, `_resolve_<the string it is registered under>`. Helpers the block calls but never registers
-only need the card's id in front. The point is grep: a card's whole implementation answers a search
+`keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
+`attack_strength`, `province_strength`), or the event a trigger answers (`entered_play`,
+`destroyed`, `straightened`, `turn_started`, `counter_gained`, `card_discarded`, `producing_gold`,
+`produced_gold`, `entered_play_or_destroyed`). A card printing several abilities qualifies the role
+with that ability's key — `_incendiary_archers_fear_effects` — since one name per role would collide
+between them, and the key has to be one the module really registers. A choice resolver is named for
+the choice instead, `_resolve_<the string it is registered under>`. Helpers the block calls but
+never registers only need the card's id in front. The point is grep: a card's whole implementation answers a search
 for its id, and every handler of a kind answers a search for its role. A test enforces it, and
 `ROLES` in `test_card_layout.py` is where a genuinely new role gets added.
 
@@ -347,17 +416,13 @@ these needs a core extension, not just a card module:
   Death destroys any bowed Personality with Chi no higher than its caster's — but each handler
   filters by owner itself. There is no permission model to ask, so a card whose restriction is a
   rulebook one rather than its own text has nowhere to read it from.
-- **More than one ability on a card.** The ability registries hold one entry per card id.
-- **Abilities usable from hand.** An ability is offered from the battlefield or from a Province
-  (`located_at`); a card in hand is out of reach.
-- **Combat.** No attack, assignment, or resolution machinery.
 - **Modal effects** — "choose one" where the modes are different *kinds* of effect. `Choose` picks
   cards, not modes.
 - **Suppression** — one card turning another's ability off.
-
 - **Interrupt abilities.** The designator exists and no Action Round grants it, so an ability
   carrying it is never offered. Response, the other half of the pair, is served by the Response
-  Step.
+  Step. Combining is an Interrupt ability too (CR, Combining), so it waits on the same layer.
+- **Duels.** No focus, no resolution.
 
 This list is measured, not guessed: a survey of a single arc found 27 cards targeting an opponent's
 cards and 20 modal. If your card needs one of these, the honest next step is a design discussion,
