@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import DeclareAttack
+from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Pass
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.effects import Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
@@ -195,3 +195,44 @@ def test_a_melee_attack_is_not_a_ranged_attack():
 
     assert not isinstance(melee, RangedAttack)
     assert type(melee) is not RangedAttack
+
+
+def _roburo_battle():
+    """A battle with Daigotsu Roburo attacking a 2F defender who carries no Follower."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("roburo", owner=ATTACKER, printed_id="daigotsu_roburo", force=4))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("roburo@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def test_roburo_bows_a_defender_his_fear_reaches():
+    """ "Battle: Fear 4" against a 2F guard — the whole card, and the first one to route an attack
+    effect through a real ability."""
+    session = _roburo_battle()
+
+    session.act(ATTACKER, ActivateAbility("roburo"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def test_roburo_is_offered_only_inside_a_battle():
+    """A Battle designator with no battle open is not a legal action, so the ability cannot be
+    taken from the Action Phase."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("roburo", owner=ATTACKER, printed_id="daigotsu_roburo", force=4))
+    session = EngineSession.start(state, ATTACKER)
+
+    assert ActivateAbility("roburo") not in session.legal_actions(ATTACKER)
