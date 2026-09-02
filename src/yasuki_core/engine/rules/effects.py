@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import ClassVar
 
@@ -532,7 +533,9 @@ class AttackEffect(Effect, ABC):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.target_id)
-        if card is None or effective_stat(game, card, self.compared) > self.strength:
+        if card is None or effective_stat(game, card, self.compared) > effective_strength(
+            game, self
+        ):
             return []
         return self._outcome().perform(game)
 
@@ -567,6 +570,53 @@ class Fear(AttackEffect):
 
     def _outcome(self) -> Effect:
         return Bow(self.target_id)
+
+
+# What a card's text does to an attack's strength. Every card in play is asked, because the scopes
+# the corpus prints do not nest: a Follower speaks about itself, another about its unit, a Ring
+# about every attack its controller makes. One walk and a handler that scopes itself is the only
+# shape that holds all three.
+AttackStrengthHandler = Callable[[GameState, L5RCard, L5RCard, "AttackEffect"], int]
+ATTACK_STRENGTH_AGAINST: dict[str, AttackStrengthHandler] = {}
+
+
+def attack_strength_against(
+    printed_id: str,
+) -> Callable[[AttackStrengthHandler], AttackStrengthHandler]:
+    """Register what ``printed_id`` does to the strength of an attack.
+
+    The handler takes ``(game, holder, target, attack)`` and returns the strength it adds, where
+    ``holder`` is the card the text is printed on and ``target`` the card being attacked. Every
+    card in play is asked about every attack, so a handler states its own reach: comparing the two
+    cards for "this Follower", :func:`~yasuki_core.engine.rules.attachments.shares_unit` for "cards
+    in this unit", and neither for a card that speaks about the whole board.
+    """
+
+    def register(handler: AttackStrengthHandler) -> AttackStrengthHandler:
+        if printed_id in ATTACK_STRENGTH_AGAINST:
+            raise ValueError(f"{printed_id} already adjusts the attacks against it")
+        ATTACK_STRENGTH_AGAINST[printed_id] = handler
+        return handler
+
+    return register
+
+
+def effective_strength(game: GameState, attack: AttackEffect) -> int:
+    """``attack``'s strength once every card in play has had its say.
+
+    Not floored: a card that takes more strength off an attack than it had leaves it reaching
+    nothing, which is what "have -2 strength" buys. The zero floor the CR puts on a stat
+    (Calculating Stats) is about stats, and an attack's strength is not one.
+    """
+    target = game.table.cards_by_id.get(attack.target_id)
+    if target is None:
+        return attack.strength
+    total = attack.strength
+    for holder in game.table.battlefield.cards:
+        handler = ATTACK_STRENGTH_AGAINST.get(holder.printed_id)
+        if handler is not None:
+            total += handler(game, holder, target, attack)
+    return total
 
 
 @dataclass(frozen=True, slots=True)

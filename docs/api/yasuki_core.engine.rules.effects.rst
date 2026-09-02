@@ -54,6 +54,13 @@ yasuki_core.engine.rules.effects
     Then
     Unpayable
 
+.. rubric:: Functions
+
+.. autosummary::
+
+    attack_strength_against
+    effective_strength
+
 .. automodule:: yasuki_core.engine.rules.effects
     :members:
     :undoc-members:

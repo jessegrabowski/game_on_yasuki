@@ -31,6 +31,7 @@ _DECORATORS = {
     "keyword_grant",
     "attachment_grant",
     "attach_restriction",
+    "attack_strength_against",
     "province_strength_grant",
 }
 _CALLS = {
