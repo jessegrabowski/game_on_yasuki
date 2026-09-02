@@ -30,6 +30,7 @@ from tests.yasuki_core.engine.builders import (
     holding,
     pay,
     personality,
+    province_card,
     put_in_play,
     register,
     stronghold,
@@ -299,3 +300,81 @@ def test_the_traders_replay_to_the_same_board():
     session.act(P1, ActivateAbility("traders"))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Doji Maya (Experienced) ---
+
+
+def _maya_game(*, courtier=True, filler=1):
+    """Maya face-up in a Province, her Invest affordable, with a Courtier in the Dynasty deck.
+
+    Three other Provinces are stocked so the only short one is the seat she vacates, which is how
+    her refill finds its target.
+    """
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, gold_production=12))
+    for index in range(1, 4):
+        province_card(state, f"filler{index}", seat=P1, index=index)
+    sought = personality("kakita", keywords=("Courtier",) if courtier else ("Bushi",))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+        register(state, sought),
+        *(register(state, holding(f"plain-refill{i}", owner=P1)) for i in range(filler)),
+    ]
+    maya = register(
+        state,
+        personality("maya", printed_id="doji_maya_experienced", force=3, chi=4, gold_cost=6),
+    )
+    maya.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(maya)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+    return session
+
+
+def _province(session, index):
+    return session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, index)].cards
+
+
+def test_mayas_invest_refills_the_province_she_left_with_what_it_found():
+    """ "Search your Dynasty deck for a Courtier or Tanuki Clan Personality and refill it with them,
+    face-up." The Province she vacated is the one still short when the Invest resolves."""
+    session = _maya_game()
+
+    session.act(P1, Recruit("maya", invest=True))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("kakita",)))
+
+    placed = _province(session, 0)
+    assert [card.id for card in placed] == ["kakita"]
+    assert placed[0].face_up
+    deck = session.game.table.decks[DeckKey(P1, Side.DYNASTY)].cards
+    assert "kakita" not in {card.id for card in deck}  # it left the deck to reach the Province
+
+
+def test_mayas_invest_offers_only_the_personalities_her_card_names():
+    """A Bushi in the deck is no candidate, so a deck holding nothing she names leaves the Province
+    to the ordinary refill rather than putting the wrong card in it."""
+    session = _maya_game(courtier=False)
+
+    session.act(P1, Recruit("maya", invest=True))
+    pay(session, P1)
+
+    assert session.game.pending is None
+    assert [card.id for card in _province(session, 0)] == ["plain-refill0"]
+
+
+def test_mayas_invest_shuffles_the_dynasty_deck_it_read():
+    """The search shows the seat their whole Dynasty deck, so its order is no longer secret."""
+    session = _maya_game(filler=8)
+    before = [card.id for card in session.game.table.decks[DeckKey(P1, Side.DYNASTY)].cards]
+
+    session.act(P1, Recruit("maya", invest=True))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("kakita",)))
+
+    after = [card.id for card in session.game.table.decks[DeckKey(P1, Side.DYNASTY)].cards]
+    assert set(after) == set(before) - {"kakita"}  # same cards, minus the one she took
+    assert after != [card for card in before if card != "kakita"]  # and not in the read order

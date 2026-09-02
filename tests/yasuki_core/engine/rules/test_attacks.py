@@ -4,6 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equip, Pass
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
+from yasuki_core.engine.rules.abilities import ability_for
 from yasuki_core.engine.rules.effects import Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.units import attackable
@@ -389,3 +390,48 @@ def test_ashigaru_spearmen_offers_nothing_when_it_arrives_any_other_way():
     triggers.fire(session.game, EnteredPlay("troops", from_hand=False))
 
     assert session.game.pending is None
+
+
+def _melee_battle(printed_id):
+    """A battle with an attacking Personality carrying ``printed_id``, against a 2F defender."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, printed_id=printed_id, force=4))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+@pytest.mark.parametrize("printed_id", ["doji_maya_experienced"], ids=["maya"])
+def test_a_melee_attack_destroys_the_defender_it_reaches(printed_id):
+    """The first cards to carry a Melee Attack. Both print a strength above the 2F guard, so each
+    destroys him — which is what tells a Melee that resolves from a Melee that merely exists."""
+    session = _melee_battle(printed_id)
+
+    session.act(ATTACKER, ActivateAbility("hero"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+
+
+@pytest.mark.parametrize("printed_id", ["doji_maya_experienced"], ids=["maya"])
+def test_a_melee_card_emits_a_melee_attack_and_not_a_ranged_one(printed_id):
+    """Both kinds destroy, so nothing about the board tells them apart until combining exists —
+    which is exactly why the card has to name the right one now. A Melee printed as a Ranged would
+    combine with the wrong attacks and no test of the outcome would notice."""
+    session = _melee_battle(printed_id)
+    source = session.game.table.cards_by_id["hero"]
+    ability = ability_for(source)
+
+    effects = ability.effects(session.game, source, session.game.table.cards_by_id["guard"])
+
+    assert [type(effect) for effect in effects] == [MeleeAttack]
