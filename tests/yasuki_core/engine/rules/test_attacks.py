@@ -411,7 +411,9 @@ def _melee_battle(printed_id):
     return session
 
 
-@pytest.mark.parametrize("printed_id", ["doji_maya_experienced"], ids=["maya"])
+@pytest.mark.parametrize(
+    "printed_id", ["doji_maya_experienced", "moto_ikarichi_bloodseeker"], ids=["maya", "ikarichi"]
+)
 def test_a_melee_attack_destroys_the_defender_it_reaches(printed_id):
     """The first cards to carry a Melee Attack. Both print a strength above the 2F guard, so each
     destroys him — which is what tells a Melee that resolves from a Melee that merely exists."""
@@ -423,7 +425,9 @@ def test_a_melee_attack_destroys_the_defender_it_reaches(printed_id):
     assert not _in_play(session, "guard")
 
 
-@pytest.mark.parametrize("printed_id", ["doji_maya_experienced"], ids=["maya"])
+@pytest.mark.parametrize(
+    "printed_id", ["doji_maya_experienced", "moto_ikarichi_bloodseeker"], ids=["maya", "ikarichi"]
+)
 def test_a_melee_card_emits_a_melee_attack_and_not_a_ranged_one(printed_id):
     """Both kinds destroy, so nothing about the board tells them apart until combining exists —
     which is exactly why the card has to name the right one now. A Melee printed as a Ranged would

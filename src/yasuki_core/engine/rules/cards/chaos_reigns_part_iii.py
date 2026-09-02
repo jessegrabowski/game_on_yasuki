@@ -192,6 +192,27 @@ def _moto_ikarichi_bloodseeker_entered_play(ctx: TriggerContext) -> list[Effect]
     return [GainHonor(ctx.card.owner, -IKARICHI_HONOR_LOSS)]
 
 
+IKARICHI_MELEE = 4
+
+
+def _moto_ikarichi_bloodseeker_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [MeleeAttack(IKARICHI_MELEE, target.id, source.owner)]
+
+
+register_ability(
+    "moto_ikarichi_bloodseeker",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Melee {IKARICHI_MELEE} Attack",
+        cost=no_cost,
+        targets=attack_targets,
+        effects=_moto_ikarichi_bloodseeker_effects,
+    ),
+)
+
+
 # --- Moto Traders ---
 
 
