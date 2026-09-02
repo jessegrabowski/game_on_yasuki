@@ -9,6 +9,7 @@ from yasuki_core.install.yaml_to_sql import card_slug
 from tests.yasuki_core.engine.rules.card_modules import (
     CardFunction,
     card_functions,
+    ability_keys,
     card_modules,
     headers,
     registered_ids,
@@ -85,7 +86,9 @@ def test_the_source_scan_sees_every_registration_the_engine_holds():
 
 # The jobs a card's handler can hold, spelled the way its name has to end. A handler's name is its
 # card's id and one of these, so a card's whole implementation answers a grep for its id and every
-# function of a kind answers a grep for its role.
+# function of a kind answers a grep for its role. A card printing several abilities qualifies the
+# role with that ability's key — ``_incendiary_archers_fear_effects`` — since one name per role
+# would collide between them.
 ROLES = frozenset(
     {
         # the three parts of an activated ability
@@ -121,10 +124,11 @@ def test_every_handler_is_named_for_its_card_and_its_job(module):
     # One shape, so a card's whole implementation answers a grep for its id and a reader can tell a
     # gold handler from a trigger without opening the registration. A name that reads as prose —
     # one describing what the card does — says neither which card nor which of the roles it fills.
+    keys = ability_keys(module)
     offenders = [
         f"{function.card_id}: {function.name}"
         for function in card_functions(module)
-        if not _named_conventionally(function)
+        if not _named_conventionally(function, keys)
     ]
 
     assert offenders == []
@@ -141,15 +145,20 @@ def test_the_function_scan_finds_handlers_to_check():
     assert any(function.resolves is not None for function in scanned)
 
 
-def _named_conventionally(function: CardFunction) -> bool:
+def _named_conventionally(function: CardFunction, keys: frozenset[str]) -> bool:
     """A resolver is named for the choice it resolves, a handler for its card and its role, and a
-    helper only has to carry its card's id."""
+    helper only has to carry its card's id. ``keys`` are the ability keys the module registers, each
+    of which may qualify a role."""
     if function.resolves is not None:
         return function.name == f"_resolve_{function.resolves}"
     prefix = f"_{function.card_id}_"
     if not function.name.startswith(prefix):
         return False
-    return not function.registered or function.name.removeprefix(prefix) in ROLES
+    if not function.registered:
+        return True
+    suffix = function.name.removeprefix(prefix)
+    qualified = {f"{key}_{role}" for key in keys for role in ROLES}
+    return suffix in ROLES or suffix in qualified
 
 
 def test_registered_ids_reads_a_module_in_line_order(tmp_path):
