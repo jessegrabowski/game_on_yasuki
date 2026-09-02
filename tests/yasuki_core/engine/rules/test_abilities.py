@@ -5,6 +5,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.abilities import (
     CardLocation,
     Ability,
+    ability_for,
     activatable,
     _ABILITIES,
     _ENTERS_UNBOWED,
@@ -173,7 +174,9 @@ def test_an_ability_that_acts_from_the_hand_is_found_there():
 
     found = activatable(session.game, PlayerId.P1, open_timing, at=(CardLocation.HAND,))
 
-    assert [held.id for held in found] == [card.id]
+    assert [(held.id, offered.label) for held, offered in found] == [
+        (card.id, ability_for(card).label)
+    ]
 
 
 def test_an_ability_that_acts_from_play_is_not_found_in_the_hand():

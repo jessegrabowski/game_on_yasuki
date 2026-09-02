@@ -340,16 +340,16 @@ def activatable(
     permitted: frozenset[ActionTiming],
     *,
     at: tuple[CardLocation, ...] = IN_PLAY,
-) -> list[L5RCard]:
-    """The cards ``seat`` may use an ability on right now: controlled, sitting somewhere the ability
-    acts from, its designator among ``permitted``, its cost payable, and with at least one legal
-    target.
+) -> list[tuple[L5RCard, Ability]]:
+    """Each card ``seat`` may use an ability on right now, paired with the ability it may use:
+    controlled, sitting somewhere the ability acts from, its designator among ``permitted``, its
+    cost payable, and with at least one legal target.
 
     ``at`` narrows which of those places count, and defaults to the ones a card is *in play* in.
     Playing a card out of hand asks for :data:`CardLocation.HAND` explicitly, because it is a
     different action with a cost of its own.
     """
-    ready: list[L5RCard] = []
+    ready: list[tuple[L5RCard, Ability]] = []
     # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
     present = has_presence(game, seat)
     for location, card in _seat_cards(game, seat):
@@ -377,7 +377,7 @@ def activatable(
         if not can_pay(game, card, ability.cost):
             continue
         if legal_targets(game, card, ability):
-            ready.append(card)
+            ready.append((card, ability))
     return ready
 
 

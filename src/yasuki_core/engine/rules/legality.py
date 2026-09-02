@@ -173,7 +173,7 @@ def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> l
     cost payable, and with at least one legal target. ``only`` narrows to a single card."""
     return [
         ActivateAbility(card.id)
-        for card in abilities.activatable(game, seat, permitted_timings(game, seat))
+        for card, _ability in abilities.activatable(game, seat, permitted_timings(game, seat))
         if only is None or card.id == only
     ]
 
@@ -382,7 +382,7 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     )
     return [
         PlayStrategy(card.id)
-        for card in playable
+        for card, _ability in playable
         if (only is None or card.id == only)
         and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
     ]
