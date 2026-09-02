@@ -5,7 +5,12 @@ from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equ
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.abilities import ability_for
-from yasuki_core.engine.rules.effects import Fear, MeleeAttack, RangedAttack
+from yasuki_core.engine.rules.effects import (
+    Fear,
+    MeleeAttack,
+    RangedAttack,
+    effective_strength,
+)
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.units import attackable
 from yasuki_core.engine.rules import triggers
@@ -562,3 +567,46 @@ def test_aseths_legion_attacks_with_its_own_melee():
     session.submit(DEFENDER, DecisionResponse(("raider",)))
 
     assert _in_play(session, "raider")  # 4F stands against a Melee 2
+
+
+@pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
+def test_every_attack_kind_loses_strength_against_the_legion_of_the_khan(attack):
+    """Her text names all three kinds, so unlike Aseth's Legion nothing gets through at printed
+    strength. A 4 against a 3F Follower resolves at 2 and leaves her standing."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+
+    _resolve(session, attack(4, "khan", ATTACKER))
+
+    assert _in_play(session, "khan")
+
+
+def test_fear_also_loses_strength_against_the_legion_of_the_khan():
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+
+    _resolve(session, Fear(4, "khan", ATTACKER))
+
+    assert not session.game.table.cards_by_id["khan"].bowed
+
+
+@pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
+def test_a_strong_enough_attack_still_reaches_the_legion_of_the_khan(attack):
+    """The penalty is a reduction, not immunity: a 5 resolves at 3 and destroys the 3F Follower."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+
+    _resolve(session, attack(5, "khan", ATTACKER))
+
+    assert not _in_play(session, "khan")
+
+
+def test_strength_reduced_past_zero_reaches_nothing():
+    """The zero floor the CR puts on a stat (Calculating Stats) is about stats, and an attack's
+    strength is not one — a Ranged Attack 1 against the Legion of the Khan resolves at -1, which
+    fails to reach even a Follower with no Force."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 0))
+    attack = RangedAttack(1, "khan", ATTACKER)
+
+    assert effective_strength(session.game, attack) == -1
+
+    _resolve(session, attack)
+
+    assert _in_play(session, "khan")
