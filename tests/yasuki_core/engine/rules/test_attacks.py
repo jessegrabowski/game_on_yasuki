@@ -236,3 +236,32 @@ def test_roburo_is_offered_only_inside_a_battle():
     session = EngineSession.start(state, ATTACKER)
 
     assert ActivateAbility("roburo") not in session.legal_actions(ATTACKER)
+
+
+def test_haramaki_do_attacks_from_the_personality_it_is_attached_to():
+    """An Item's ability is taken from the Item, not from its host — so the action names the Item
+    even though it is the Personality standing at the battlefield."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=4))
+    attached(
+        state,
+        attachment("armor", attachment_type=AttachmentType.ITEM, printed_id="haramaki_do"),
+        "hero",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+
+    session.act(ATTACKER, ActivateAbility("armor"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed

@@ -36,7 +36,26 @@ register_ability(
 # --- Haramaki-do ---
 
 
+HARAMAKI_DO_FEAR = 3
+
+
 @attachment_grant("haramaki_do")
 def _haramaki_do_attachment_grant(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
     """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
     return {Stat.PERSONAL_HONOR: 1}
+
+
+def _haramaki_do_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Fear(HARAMAKI_DO_FEAR, target.id, source.owner)]
+
+
+register_ability(
+    "haramaki_do",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Fear {HARAMAKI_DO_FEAR}",
+        cost=no_cost,
+        targets=attack_targets,
+        effects=_haramaki_do_effects,
+    ),
+)
