@@ -144,15 +144,15 @@ def test_a_card_that_is_all_reminder_text_carries_the_keyword_it_reminds_of():
 def test_the_reminder_scan_reads_cards_that_do_carry_their_keyword():
     # Guards the check above against passing vacuously: a scan matching no reminder text at all
     # reports nothing wrong without having read a card.
-    reminders = [
-        entry
-        for entry in set_entries()
-        if entry.text
-        and any(
-            wording in strip_markup(entry.text)
-            for wordings in REMINDER_TEXT.values()
-            for wording in wordings
-        )
-    ]
+    wordings = [wording for group in REMINDER_TEXT.values() for wording in group]
+    reminders = []
+    for entry in set_entries():
+        if not entry.text:
+            continue
+        # Stripped once per card rather than once per wording: there are a hundred wordings, and
+        # the corpus is twenty-odd thousand printings.
+        text = strip_markup(entry.text)
+        if any(wording in text for wording in wordings):
+            reminders.append(entry)
 
     assert len(reminders) > 100
