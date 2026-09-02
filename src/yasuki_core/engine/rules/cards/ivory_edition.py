@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.attachments import attachment_grant
-from yasuki_core.engine.rules.effects import Effect, Fear, MeleeAttack
+from yasuki_core.engine.rules.effects import Effect, Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -81,5 +81,48 @@ register_ability(
         cost=no_cost,
         targets=attack_targets,
         effects=_haramaki_do_effects,
+    ),
+)
+
+
+# --- Incendiary Archers ---
+
+INCENDIARY_ARCHERS_RANGED = 2
+INCENDIARY_ARCHERS_FEAR = 2
+
+
+def _incendiary_archers_ranged_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [RangedAttack(INCENDIARY_ARCHERS_RANGED, target.id, source.owner)]
+
+
+def _incendiary_archers_fear_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [Fear(INCENDIARY_ARCHERS_FEAR, target.id, source.owner)]
+
+
+register_ability(
+    "incendiary_archers",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle, Bow: Ranged {INCENDIARY_ARCHERS_RANGED} Attack",
+        cost=bow_cost,
+        targets=attack_targets,
+        effects=_incendiary_archers_ranged_effects,
+        key="ranged",
+    ),
+)
+
+register_ability(
+    "incendiary_archers",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Fear {INCENDIARY_ARCHERS_FEAR}",
+        cost=no_cost,
+        targets=attack_targets,
+        effects=_incendiary_archers_fear_effects,
+        key="fear",
     ),
 )
