@@ -19,6 +19,7 @@ from yasuki_gui.layout import (
     home_stack_positions,
     province_positions,
     to_canvas,
+    tower_draw_order,
     unit_tower_positions,
 )
 from yasuki_gui.services.allocation import Allocation
@@ -792,7 +793,7 @@ class FieldView(tk.Canvas):
         ordered: list[tuple] = []
         for entry in loose:
             card, _ = entry
-            ordered.extend(reversed(held.pop(card.id, ())))
+            ordered.extend(tower_draw_order(held.pop(card.id, ()), fans_up=True))
             ordered.append(entry)
         for stranded in held.values():  # its Personality is not on this board
             ordered.extend(stranded)
