@@ -525,6 +525,65 @@ def _attack_between(face_up: bool) -> GameState:
     return game
 
 
+def test_a_provinces_fortifications_reach_the_view_with_it():
+    """A Fortification stands at the battlefield with the Province it defends and is already
+    counted in its Strength, so a client drawing only the occupant shows a number it cannot account
+    for."""
+    game = _attack_between(face_up=True)
+    wall = put_in_play(
+        game,
+        holding("p2-wall", owner=PlayerId.P2, keywords=("Fortification",)),
+    )
+    game.table.province_attachments[wall.id] = ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)
+
+    view = project(game, PlayerId.P1)
+
+    assert [card.id for card in view.attack.battlefields[0].fortifications] == ["p2-wall"]
+
+
+def test_a_fortification_belongs_only_to_the_province_it_defends():
+    """Every Province reads the same attachment map, so one that ignored the slot would hand each
+    battlefield every Fortification on the board."""
+    game = two_seat_game()
+    for index, card_id in ((0, "p2-wall"), (1, "p2-gate")):
+        province_card(game, f"p2-holding{index}", seat=PlayerId.P2, index=index, face_up=True)
+        wall = put_in_play(game, holding(card_id, owner=PlayerId.P2, keywords=("Fortification",)))
+        game.table.province_attachments[wall.id] = ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, index)
+    battle.declare_attack(game, PlayerId.P1)
+
+    lanes = project(game, PlayerId.P1).attack.battlefields
+
+    assert [[card.id for card in lane.fortifications] for lane in lanes] == [
+        ["p2-wall"],
+        ["p2-gate"],
+    ]
+
+
+def test_a_fortification_the_viewer_cannot_identify_reaches_it_as_a_back():
+    """Read out of the redacted snapshot, where a card the viewer may not identify carries its id
+    under a different name. Reaching for the wrong one raises rather than degrading, and it takes
+    the whole projection down with it — every seat's view, not just this list."""
+    game = _attack_between(face_up=True)
+    wall = put_in_play(
+        game,
+        holding("p2-wall", owner=PlayerId.P2, keywords=("Fortification",)),
+    )
+    game.table.province_attachments[wall.id] = ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)
+    wall.turn_face_down()
+
+    view = project(game, PlayerId.P1)
+
+    assert [card.card_id for card in view.attack.battlefields[0].fortifications] == ["p2-wall"]
+
+
+def test_a_province_with_nothing_attached_carries_no_fortifications():
+    game = _attack_between(face_up=True)
+
+    view = project(game, PlayerId.P1)
+
+    assert view.attack.battlefields[0].fortifications == ()
+
+
 def test_a_face_up_province_card_reaches_the_attacker_by_name():
     game = _attack_between(face_up=True)
 

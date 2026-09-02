@@ -9,9 +9,14 @@ from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, Uni
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.state import BattleOutcome, BattleSegment
 from yasuki_gui import theme
-from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W
 from yasuki_gui.labels import BATTLE_SEGMENT_CHIPS
-from yasuki_gui.layout import COLUMN_STEP, centered_row, unit_tower_positions
+from yasuki_gui.layout import (
+    COLUMN_STEP,
+    centered_row,
+    tower_draw_order,
+    unit_tower_positions,
+)
 from yasuki_gui.ui.floating_panel import BORDER, FloatingPanel, TITLEBAR_H
 from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.visuals.cardface import RenderCard, to_render_card
@@ -464,12 +469,9 @@ class BattleView(FloatingPanel):
         defence, offence = _armies(view, self._pending.get(index), viewer_defends=mirrored)
         top, bottom = _bands(height, mirrored=mirrored)
         province_y, defending_y, divider, attacking_y = _rows(height, mirrored=mirrored)
-        if view.occupant is not None:
-            # Outermost on the side it belongs to, past the Defender's own units: it is what
-            # they are standing in front of.
-            self._draw_card(
-                to_render_card(view.occupant), ((left + right) // 2, province_y), _PROVINCE_TAG
-            )
+        # Outermost on the side it belongs to, past the Defender's own units: it is what they are
+        # standing in front of.
+        self._draw_province(view, (left + right) // 2, province_y, mirrored=mirrored)
         # Each army's tower fans away from the divider, so a unit never stacks over the other side.
         self._draw_army(defence.units, span, defending_y, sink=mirrored)
         self.canvas.create_line(left + 6, divider, right - 6, divider, fill=theme.INK_DIM)
@@ -656,6 +658,19 @@ class BattleView(FloatingPanel):
             tags=tags,
         )
 
+    def _draw_province(self, view: BattlefieldView, x: int, y: int, *, mirrored: bool) -> None:
+        """The Province card and the Fortifications attached to it, fanned inboard and tucked
+        behind it the way the board tucks them under the slot."""
+        inboard = -1 if mirrored else 1
+        fan = [
+            (to_render_card(card), (x, y + inboard * step * ATTACH_STACK_OFFSET))
+            for step, card in enumerate(view.fortifications, start=1)
+        ]
+        for card, spot in tower_draw_order(fan):
+            self._draw_card(card, spot, _PROVINCE_TAG)
+        if view.occupant is not None:
+            self._draw_card(to_render_card(view.occupant), (x, y), _PROVINCE_TAG)
+
     def _draw_army(
         self, army: tuple[UnitView, ...], span: tuple[int, int], y: int, *, sink: bool
     ) -> None:
@@ -671,9 +686,7 @@ class BattleView(FloatingPanel):
         step = min(COLUMN_STEP, max(usable // max(len(army) - 1, 1), MIN_STEP))
         for x, unit in zip(centered_row((left + right) // 2, len(army), step=step), army):
             leader, attached = unit_tower_positions(x, y, len(unit.attached), sink=sink)
-            # Outermost attachment first and the Personality last, so the tower stacks the way it
-            # is positioned: each card tucked behind the one in front, and the Personality whole.
-            for card, spot in reversed(list(zip(unit.attached, attached))):
+            for card, spot in tower_draw_order(list(zip(unit.attached, attached))):
                 self._draw_card(card, spot)
             self._draw_card(unit.leader, leader)
 

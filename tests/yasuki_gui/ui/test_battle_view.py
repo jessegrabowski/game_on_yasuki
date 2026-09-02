@@ -26,7 +26,7 @@ from yasuki_gui.ui.battle_view import (
 
 from yasuki_core.game_pieces.constants import AttachmentType
 
-from tests.yasuki_core.engine.builders import attachment, personality
+from tests.yasuki_core.engine.builders import attachment, holding, personality
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -58,12 +58,14 @@ def _battlefield(
     strength=2,
     fought=False,
     occupant=None,
+    fortifications=(),
     outcome=None,
     destroyed_names=(),
 ):
     return BattlefieldView(
         province=ZoneKey(P2, ZoneRole.PROVINCE, index),
         occupant=occupant,
+        fortifications=fortifications,
         strength=strength,
         attacking=attacking,
         defending=defending,
@@ -651,6 +653,70 @@ def test_a_lane_nobody_has_fought_at_reports_nothing(view):
     view.refresh(_attack(_battlefield(0)))
 
     assert not [text for text in _texts(view) if "wins" in text or "honor" in text]
+
+
+def test_a_provinces_fortifications_stand_in_the_lane_with_it(view):
+    """They are at the battlefield and already counted in the Strength the header shouts, so a lane
+    drawing only the occupant shows a number with nothing behind it."""
+    view.refresh(
+        _attack(
+            _battlefield(
+                0,
+                occupant=personality("shrine", owner=P2),
+                fortifications=(holding("wall", owner=P2), holding("gate", owner=P2)),
+                defending=(_unit("hida"),),
+            )
+        )
+    )
+
+    province_y = view.canvas.coords("province:shrine")[1]
+    wall_y = view.canvas.coords("province:wall")[1]
+    gate_y = view.canvas.coords("province:gate")[1]
+
+    # Fanned inboard from the Province, each a step further toward the units defending it.
+    assert province_y < wall_y < gate_y
+
+
+def test_a_fortification_is_tucked_behind_the_province_it_defends(view):
+    """The Province card is drawn over the nearest of them, so the stack has to ascend toward it —
+    drawn the other way round the nearest Fortification is covered twice and never shows."""
+    view.refresh(
+        _attack(
+            _battlefield(
+                0,
+                occupant=personality("shrine", owner=P2),
+                fortifications=(holding("wall", owner=P2), holding("gate", owner=P2)),
+            )
+        )
+    )
+
+    stacking = view.canvas.find_all()
+    drawn = {
+        name: max(stacking.index(item) for item in view.canvas.find_withtag(f"province:{name}"))
+        for name in ("shrine", "wall", "gate")
+    }
+    assert drawn["gate"] < drawn["wall"] < drawn["shrine"]
+
+
+def test_a_mirrored_lane_fans_its_fortifications_the_other_way(view):
+    """The Province changes ends with the lane, so inboard changes with it. Fanned the fixed way
+    the stack would climb out of the lane past the heading instead of toward the units."""
+    view.refresh(
+        _attack(
+            _battlefield(
+                0,
+                occupant=personality("shrine", owner=P2),
+                fortifications=(holding("wall", owner=P2), holding("gate", owner=P2)),
+            )
+        ),
+        viewer=P2,
+    )
+
+    province_y = view.canvas.coords("province:shrine")[1]
+    wall_y = view.canvas.coords("province:wall")[1]
+    gate_y = view.canvas.coords("province:gate")[1]
+
+    assert province_y > wall_y > gate_y
 
 
 def test_an_empty_province_draws_no_card(view):
