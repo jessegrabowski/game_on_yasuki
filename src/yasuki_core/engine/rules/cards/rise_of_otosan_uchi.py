@@ -300,6 +300,7 @@ register_ability(
         cost=no_cost,
         targets=_courts_of_otosan_uchi_targets,
         effects=_courts_of_otosan_uchi_effects,
+        tireless=True,
     ),
 )
 

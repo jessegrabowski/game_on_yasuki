@@ -58,13 +58,6 @@ def test_otokoshi_activation_replays_to_the_same_state():
     assert replay(session.log) == session.game
 
 
-def test_a_non_bow_ability_is_activatable_while_bowed():
-    # Tireless: a destroy/spend cost does not require an unbowed card (unlike a bow cost).
-    session = _otokoshi_game()
-    session.game.table.cards_by_id["oto"].bow()
-    assert ActivateAbility("oto") in session.legal_actions(P1)
-
-
 def _ichiba_game(fate_cards: int = 1, ports: int = 1) -> EngineSession:
     state = TableState.empty_two_seat()
     put_in_play(

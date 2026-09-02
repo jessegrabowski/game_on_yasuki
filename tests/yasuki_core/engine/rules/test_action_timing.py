@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, itself
+from yasuki_core.engine.rules.abilities import Ability, itself, register_ability
 from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -28,12 +28,15 @@ from tests.yasuki_core.engine.builders import (
 )
 
 
-_ABILITIES["dual"] = Ability(
-    timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
-    label="test",
-    cost=lambda game, source: [],
-    targets=itself,
-    effects=lambda game, source, target: [],
+register_ability(
+    "dual",
+    Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        label="test",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [],
+    ),
 )
 
 
@@ -151,8 +154,13 @@ def test_a_card_printing_two_designators_is_offered_under_either():
     game = two_seat_game()
     card = put_in_play(game, holding("h", owner=PlayerId.P1, printed_id="dual"))
 
-    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.OPEN})) == [card]
-    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.BATTLE})) == [card]
+    dual = abilities.ability_for(card)
+    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.OPEN})) == [
+        (card, dual)
+    ]
+    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.BATTLE})) == [
+        (card, dual)
+    ]
     assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.DYNASTY})) == []
     assert legality.timings_of(game, ActivateAbility("h")) == {
         ActionTiming.BATTLE,

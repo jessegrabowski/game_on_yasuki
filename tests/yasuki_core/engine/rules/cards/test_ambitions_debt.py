@@ -104,8 +104,11 @@ def test_it_is_offered_under_both_of_its_printed_designators():
     game = EngineSession.start(state, PLAYER).game
     in_hand = (CardLocation.HAND,)
 
+    uncertainty = abilities.ability_for(card)
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
-        assert abilities.activatable(game, PLAYER, frozenset({designator}), at=in_hand) == [card]
+        assert abilities.activatable(game, PLAYER, frozenset({designator}), at=in_hand) == [
+            (card, uncertainty)
+        ]
     assert abilities.activatable(game, PLAYER, frozenset({ActionTiming.DYNASTY}), at=in_hand) == []
 
 

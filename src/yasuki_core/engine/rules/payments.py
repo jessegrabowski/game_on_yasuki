@@ -68,13 +68,25 @@ def payment_request(
     )
 
 
-def can_afford(game: GameState, seat: PlayerId, amount: int) -> bool:
+def can_afford(
+    game: GameState, seat: PlayerId, amount: int, *, bowed_by_cost: frozenset[str] = frozenset()
+) -> bool:
     """Whether ``seat`` could cover ``amount``: its pool plus the most every unbowed producer it
     controls could make. Answered before a payment is offered, so an ability whose gold cost the seat
-    cannot meet is never announced."""
+    cannot meet is never announced.
+
+    Parameters
+    ----------
+    bowed_by_cost : frozenset of str, optional
+        Producers this same cost bows, which cannot also bow to produce for it. Default empty.
+    """
     return (
         game.gold[seat]
-        + sum(maximum_gold_production(game, producer) for producer in gold_producers(game, seat))
+        + sum(
+            maximum_gold_production(game, producer)
+            for producer in gold_producers(game, seat)
+            if producer.id not in bowed_by_cost
+        )
         >= amount
     )
 

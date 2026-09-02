@@ -77,5 +77,6 @@ register_ability(
         cost=destroy_cost,
         targets=_otokoshi_district_targets,
         effects=_otokoshi_district_effects,
+        tireless=True,
     ),
 )

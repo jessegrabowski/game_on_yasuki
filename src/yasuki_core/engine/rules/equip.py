@@ -1,7 +1,7 @@
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import owned_personalities
+from yasuki_core.engine.rules.abilities import is_spell, may_cast_spells, owned_personalities
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import effective_keywords, effective_weapon_limit
 from yasuki_core.engine.rules.state import GameState
@@ -64,13 +64,16 @@ def attach_restriction(printed_id: str) -> Callable[[AttachRestriction], AttachR
 
 
 def may_attach(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
-    """Whether ``card`` may attach to ``personality``, by its own text and by the Weapon rules.
+    """Whether ``card`` may attach to ``personality``, by its own text and by the rulebook's limits
+    on Spells and Weapons.
 
     Only Weapons answer to the Weapon rules — a Follower or a plain Item is limited by neither the
     count nor Two-Handed exclusivity.
     """
     restriction = ATTACH_RESTRICTIONS.get(card.printed_id)
     if restriction is not None and not restriction(game, personality, card):
+        return False
+    if is_spell(card) and not may_cast_spells(game, personality):
         return False
     if keywords.WEAPON not in effective_keywords(game, card):
         return True

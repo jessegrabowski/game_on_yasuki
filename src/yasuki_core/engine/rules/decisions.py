@@ -353,9 +353,13 @@ class ChooseAbilityTarget(DecisionRequest):
     ----------
     source_card_id : str
         The card whose ability is resolving, whose effects apply to the chosen target.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
     """
 
     source_card_id: str
+    ability_key: str | None = None
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose a target for the ability"

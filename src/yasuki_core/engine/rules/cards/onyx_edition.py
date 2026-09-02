@@ -112,6 +112,7 @@ register_ability(
         cost=no_cost,
         targets=_training_court_targets,
         effects=_training_court_effects,
+        tireless=True,
     ),
 )
 

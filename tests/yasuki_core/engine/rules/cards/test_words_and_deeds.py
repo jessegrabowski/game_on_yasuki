@@ -69,15 +69,14 @@ def test_paying_the_gold_leaves_the_grounds_standing():
     assert game.gold[P1] == 3  # the Stronghold made five and the Grounds took two
 
 
-def test_a_bowed_grounds_is_charged_the_gold_without_being_asked():
-    """With one way left to pay, the card takes it rather than putting a settled question."""
+def test_a_bowed_grounds_is_not_offered_even_with_the_gold_to_pay():
+    """Abilities on a bowed card cannot be used (CR, Using Abilities), so having another way to
+    pay the cost does not reach the ability — a Holding bowed for its gold has spent its turn."""
     session = _militia_game()
     session.game.table.cards_by_id["grounds"].bow()
+    session.game.add_gold(P1, 2)
 
-    session.act(P1, ActivateAbility("grounds"))
-
-    assert isinstance(session.game.pending, ChoosePayment)
-    assert session.game.pending.amount == 2
+    assert ActivateAbility("grounds") not in session.legal_actions(P1)
 
 
 def test_a_bowed_grounds_with_no_gold_in_reach_is_not_offered_at_all():

@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.effects import AttachCard
 from yasuki_core.engine.rules.equip import (
     creation_targets,
     equip_targets,
+    may_attach,
     may_attach_weapon,
     weapons_on,
 )
@@ -277,3 +278,51 @@ def test_attaching_ignores_the_weapon_limit_that_equip_enforces():
     AttachCard(second.id, hero.id).perform(game)
 
     assert game.table.units == {"first": hero.id, "second": hero.id}
+
+
+def _spell(card_id: str = "spell"):
+    return attachment(card_id, attachment_type=AttachmentType.SPELL)
+
+
+def test_a_spell_attaches_to_a_shugenja():
+    game = two_seat_game()
+    caster = put_in_play(game, personality("caster", keywords=("Shugenja",)))
+
+    assert may_attach(game, caster, _spell())
+
+
+def test_a_spell_refuses_a_personality_who_is_no_shugenja():
+    """ "They will only attach to a Shugenja Personality" (CR, Spell) — a rule about the Spell card
+    type, so no card has to print it and every Spell answers to it."""
+    game = two_seat_game()
+    bushi = put_in_play(game, personality("bushi", keywords=("Bushi",)))
+
+    assert not may_attach(game, bushi, _spell())
+
+
+def test_a_granted_shugenja_keyword_lets_the_spell_attach():
+    """The rule reads the keyword off the board rather than off the print, so a Personality another
+    card has made a Shugenja may be enchanted."""
+    game = two_seat_game()
+    bushi = put_in_play(
+        game, personality("bushi", printed_id="shugenja_probe", keywords=("Bushi",))
+    )
+
+    assert not may_attach(game, bushi, _spell())
+
+    @keyword_grant("shugenja_probe")
+    def _grants_shugenja(card, me, opponents):
+        return ("Shugenja",)
+
+    try:
+        assert may_attach(game, bushi, _spell())
+    finally:
+        KEYWORD_GRANTS.pop("shugenja_probe", None)
+
+
+def test_an_item_is_indifferent_to_shugenja():
+    """The Spell rule is about the card type, so an Item hangs on anyone."""
+    game = two_seat_game()
+    bushi = put_in_play(game, personality("bushi", keywords=("Bushi",)))
+
+    assert may_attach(game, bushi, attachment("boots"))

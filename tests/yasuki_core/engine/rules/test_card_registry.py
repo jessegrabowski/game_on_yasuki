@@ -12,6 +12,7 @@ from yasuki_core.engine.rules import (
     state_rules,
     triggers,
 )
+from yasuki_core.engine.rules import card_registry
 from yasuki_core.engine.rules.card_registry import (
     card_keyed_data,
     duplicate_registrations,
@@ -182,3 +183,45 @@ def test_every_card_module_is_imported_by_the_package():
     imported = {name for name in vars(cards) if not name.startswith("__")}
 
     assert on_disk - imported == set(), "add these to cards/__init__.py"
+
+
+def test_printed_ability_count_reads_the_designators_a_card_spells_out():
+    """Two abilities in one text run, split by the sentence between them — the shape Outer Walls
+    prints and the one a `<br>`-only split would miss."""
+    text = (
+        "<b>Battle:</b> Even if you control no units at the current battlefield: Give its province "
+        "+3 strength. <b>Reaction:</b> After a Ranged Attack is targeted: Give it -2 strength."
+    )
+
+    assert card_registry.printed_ability_count(text) == 2
+
+
+def test_a_colon_inside_an_abilitys_prose_does_not_head_a_second_one():
+    """Moto Ikarichi prints "if your Wind is The Kanpeki Dynasty:" mid-sentence. A designator only
+    counts where an ability could start."""
+    text = (
+        "Invest :g2:, or :g0: if your Wind is The Kanpeki Dynasty: Create and attach a 2F "
+        "Nonhuman Follower to Ikarichi."
+    )
+
+    assert card_registry.printed_ability_count(text) == 0
+
+
+def test_a_qualified_designator_still_heads_an_ability():
+    """ "Absent Battle", "Tireless Response", "Economic Open" — the qualifiers stack ahead of the
+    designator and the ability is still an ability."""
+    text = "<b>Tireless Response:</b> Straighten a unit.<br><b>Absent Battle:</b> Bow a Follower."
+
+    assert card_registry.printed_ability_count(text) == 2
+
+
+# The cards shipping with fewer abilities registered than they print. Each behaves correctly in the
+# half that is registered, which is why nothing else catches them. Shrinking this list is the fix;
+# growing it means a card was implemented incompletely.
+KNOWN_SHORT = {"man_the_walls", "outer_walls", "verdant_wilds"}
+
+
+def test_no_card_beyond_the_known_three_registers_less_than_it_prints():
+    reported = {line.split()[1] for line in card_registry.short_ability_registrations()}
+
+    assert reported == KNOWN_SHORT

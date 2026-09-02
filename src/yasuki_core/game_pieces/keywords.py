@@ -36,6 +36,10 @@ LEGACY = "Legacy"
 # so the next card is recruitable the same turn.
 RENEW = "Renew"
 
+# A Spell will only attach to a Shugenja Personality, and casts only while attached to one (CR,
+# Spell). A rule about the Spell card type rather than a keyword any card reads off a Shugenja.
+SHUGENJA = "Shugenja"
+
 # Cards carrying this accrue and receive seeded Sincerity tokens.
 SINCERITY = "Sincerity"
 

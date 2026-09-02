@@ -355,6 +355,7 @@ register_ability(
         cost=spend_wealth,
         targets=_rural_market_targets,
         effects=_rural_market_effects,
+        tireless=True,
     ),
 )
 

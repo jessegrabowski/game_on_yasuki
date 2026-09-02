@@ -86,13 +86,14 @@ def test_colonial_farm_is_withheld_when_the_seat_cannot_raise_three_gold():
     assert ActivateAbility("farm") not in session.legal_actions(P1)
 
 
-def test_colonial_farm_is_offered_when_the_pool_alone_covers_the_cost():
-    """Gold already in the pool pays, so a seat with nothing left to bow can still use the farm."""
+def test_a_bowed_farm_is_not_offered_even_when_the_pool_covers_the_cost():
+    """Abilities on a bowed card cannot be used (CR, Using Abilities). A farm that bowed for its
+    own gold has spent its turn, whatever the seat can still afford."""
     session = EngineSession.start(_farm_game(stronghold_production=2).table, P1)
     session.game.table.cards_by_id["farm"].bow()
     session.game.add_gold(P1, 3)
 
-    assert ActivateAbility("farm") in session.legal_actions(P1)
+    assert ActivateAbility("farm") not in session.legal_actions(P1)
 
 
 def test_colonial_farm_enters_play_for_one_less_for_a_lion():

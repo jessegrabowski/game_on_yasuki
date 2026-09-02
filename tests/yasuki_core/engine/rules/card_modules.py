@@ -188,6 +188,21 @@ def card_functions(module: pathlib.Path) -> tuple[CardFunction, ...]:
     return tuple(found)
 
 
+def ability_keys(module: pathlib.Path) -> frozenset[str]:
+    """Every ``key`` the module names on an :class:`Ability`, which is how a card printing several
+    tells them apart."""
+    found = set()
+    for node in ast.walk(ast.parse(module.read_text(encoding="utf-8"))):
+        if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)):
+            continue
+        if node.func.id != "Ability":
+            continue
+        for keyword in node.keywords:
+            if keyword.arg == "key" and isinstance(keyword.value, ast.Constant):
+                found.add(keyword.value.value)
+    return frozenset(found)
+
+
 def _registered_names(tree: ast.Module) -> set[str]:
     """The functions handed to a registration call, including the ``on(...)(handler)`` form."""
     names = set()
