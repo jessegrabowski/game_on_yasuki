@@ -9,6 +9,9 @@ from yasuki_core.engine.rules.abilities import (
     Ability,
     abilities_for,
     ability_for,
+    has_absent_ability,
+    itself,
+    no_cost,
     activatable,
     _ABILITIES,
     _ENTERS_UNBOWED,
@@ -17,7 +20,7 @@ from yasuki_core.engine.rules.abilities import (
     register_enters_unbowed,
     register_invest,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, BattleDesignator
 from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     ChooseCards,
@@ -438,3 +441,82 @@ def test_an_action_naming_a_key_the_card_does_not_print_is_not_legal():
     session = _two_ability_game()
 
     assert ActivateAbility("src", "enormous") not in session.legal_actions(PlayerId.P1)
+
+
+# A pair of probes differing only in Tireless, so the bowed rule and its one exception can be told
+# apart on otherwise identical cards.
+for _probe, _tireless in (("test_bows_to_act", False), ("test_acts_while_bowed", True)):
+    register_ability(
+        _probe,
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label="Open: probe",
+            cost=no_cost,
+            targets=itself,
+            effects=lambda game, source, target: [],
+            all_targets=True,
+            tireless=_tireless,
+        ),
+    )
+
+
+def test_a_bowed_card_offers_nothing():
+    """ "Abilities on bowed cards may not normally be used" (CR, Using Abilities). The cost is not
+    what stops it — this ability costs nothing at all."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("probe", printed_id="test_bows_to_act"))
+    session = EngineSession.start(state, PlayerId.P1)
+    assert ActivateAbility("probe") in session.legal_actions(PlayerId.P1)
+
+    session.game.table.cards_by_id["probe"].bow()
+
+    assert ActivateAbility("probe") not in session.legal_actions(PlayerId.P1)
+
+
+def test_a_tireless_ability_survives_its_card_being_bowed():
+    """The one exception: "an ability with the Tireless keyword may be used even if the card it is
+    on is bowed" (CR, Tireless)."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("probe", printed_id="test_acts_while_bowed"))
+    session = EngineSession.start(state, PlayerId.P1)
+    session.game.table.cards_by_id["probe"].bow()
+
+    assert ActivateAbility("probe") in session.legal_actions(PlayerId.P1)
+
+
+for _probe, _tireless in (("test_absent_probe", False), ("test_absent_tireless_probe", True)):
+    register_ability(
+        _probe,
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label="Open: absent probe",
+            cost=no_cost,
+            targets=itself,
+            effects=lambda game, source, target: [],
+            all_targets=True,
+            battle=frozenset({BattleDesignator.ABSENT}),
+            tireless=_tireless,
+        ),
+    )
+
+
+def test_a_bowed_card_earns_its_seat_no_absent_opportunity():
+    """Absent decides whether a seat with no presence is offered the opportunity at all. A bowed
+    card's ability cannot be used, so it is no reason to open one."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("probe", printed_id="test_absent_probe"))
+    session = EngineSession.start(state, PlayerId.P1)
+    assert has_absent_ability(session.game, PlayerId.P1)
+
+    session.game.table.cards_by_id["probe"].bow()
+
+    assert not has_absent_ability(session.game, PlayerId.P1)
+
+
+def test_a_bowed_tireless_card_still_earns_the_absent_opportunity():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("probe", printed_id="test_absent_tireless_probe"))
+    session = EngineSession.start(state, PlayerId.P1)
+    session.game.table.cards_by_id["probe"].bow()
+
+    assert has_absent_ability(session.game, PlayerId.P1)

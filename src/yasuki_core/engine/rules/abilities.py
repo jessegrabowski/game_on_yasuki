@@ -173,6 +173,9 @@ class Ability:
         Names this ability among the several its card prints, so an action can say which one it
         takes. A card printing one ability needs no key, because there is nothing to tell apart.
         Default None.
+    tireless : bool, optional
+        The Tireless keyword: the ability may be used even while its card is bowed (CR, Tireless).
+        Default False, which leaves it to the rule that a bowed card's abilities cannot be used.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -185,6 +188,7 @@ class Ability:
     battle: frozenset[BattleDesignator] = frozenset()
     targets_any_location: bool = False
     key: str | None = None
+    tireless: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -388,6 +392,8 @@ def activatable(
         for ability in abilities_for(card):
             if permitted.isdisjoint(ability.timings):
                 continue
+            if not _bow_permits(card, ability):
+                continue
             # The Rule of Presence is about the player, not the card, so it gates an action taken
             # from anywhere — a Strategy out of hand as much as a Personality on the board.
             if not present and BattleDesignator.ABSENT not in ability.battle:
@@ -412,6 +418,12 @@ def activatable(
     return ready
 
 
+def _bow_permits(card: L5RCard, ability: Ability) -> bool:
+    """Whether ``card``'s bowed state leaves ``ability`` usable: abilities on a bowed card cannot be
+    used, and Tireless is the keyword that escapes it (CR, Using Abilities; Tireless)."""
+    return ability.tireless or not card.bowed
+
+
 def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:
     """Whether one of ``ability``'s designators excuses ``card`` from the Rules of Location (ShE
     datasheet).
@@ -432,7 +444,7 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
     (ShE, Absent). What decides whether a seat with no units there is offered the opportunity at
     all, rather than skipped."""
     return any(
-        BattleDesignator.ABSENT in ability.battle
+        BattleDesignator.ABSENT in ability.battle and _bow_permits(card, ability)
         for _, card in _seat_cards(game, seat)
         for ability in abilities_for(card)
     )
