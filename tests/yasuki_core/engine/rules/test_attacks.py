@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.abilities import ability_for
 from yasuki_core.engine.rules.effects import (
+    Destroy,
     Fear,
     MeleeAttack,
     RangedAttack,
@@ -688,3 +689,103 @@ def test_two_reducers_over_the_same_target_both_apply():
     _resolve(session, RangedAttack(5, "khan", ATTACKER))
 
     assert _in_play(session, "khan")
+
+
+def _jade_legion_attacks(*, defender_keywords=()):
+    """The Jade Legion attacking a 2F defender who carries ``defender_keywords``."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=4))
+    attached(
+        state,
+        attachment(
+            "jade",
+            attachment_type=AttachmentType.FOLLOWER,
+            force=3,
+            printed_id="jade_legion",
+        ),
+        "hero",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2, keywords=defender_keywords))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def test_the_jade_legion_straightens_after_destroying_a_shadowlands_card():
+    """ "If this destroyed any Shadowlands cards, straighten this Follower." The bow was the cost,
+    so straightening gives the attack back — which is the whole point of the clause."""
+    session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
+
+    session.act(ATTACKER, ActivateAbility("jade"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+    assert not session.game.table.cards_by_id["jade"].bowed
+
+
+def test_the_jade_legion_stays_bowed_after_destroying_anything_else():
+    """A destruction is not enough — the card destroyed has to be Shadowlands."""
+    session = _jade_legion_attacks()
+
+    session.act(ATTACKER, ActivateAbility("jade"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+    assert session.game.table.cards_by_id["jade"].bowed
+
+
+def test_the_jade_legion_stays_bowed_when_its_attack_destroys_nothing():
+    """The clause reads the destruction, not the attempt: a Shadowlands defender the Melee cannot
+    reach leaves the Legion bowed."""
+    session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
+    session.game.modifiers.append(
+        Modifier("banner", "guard", Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)
+    )
+
+    session.act(ATTACKER, ActivateAbility("jade"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert _in_play(session, "guard")
+    assert session.game.table.cards_by_id["jade"].bowed
+
+
+def test_the_jade_legion_ignores_a_shadowlands_death_it_did_not_cause():
+    """ "If **this** destroyed any Shadowlands cards" — the destruction has to be the Legion's own.
+    ``Destroyed`` names only the seat that caused it, so a Shadowlands card dying to anything else
+    while the Legion sits bowed must leave it bowed."""
+    session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
+    session.game.table.cards_by_id["jade"].bow()
+
+    _resolve(session, Destroy("guard", ATTACKER))
+
+    assert not _in_play(session, "guard")
+    assert session.game.table.cards_by_id["jade"].bowed
+
+
+def test_only_the_jade_legion_that_attacked_straightens():
+    """Two copies share a printed id, so both subscribe to every destruction — the trigger fires
+    for each. The one that did not take the action has to stay bowed."""
+    session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
+    attached(
+        session.game.table,
+        attachment(
+            "jade-b", attachment_type=AttachmentType.FOLLOWER, force=3, printed_id="jade_legion"
+        ),
+        "hero",
+    )
+    session.game.table.cards_by_id["jade-b"].bow()
+
+    session.act(ATTACKER, ActivateAbility("jade"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not session.game.table.cards_by_id["jade"].bowed  # A attacked, so A straightens
+    assert session.game.table.cards_by_id["jade-b"].bowed  # B did not, so B stays down

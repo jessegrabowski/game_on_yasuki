@@ -1,6 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
+    attack_targets,
     bow_cost,
     bow_and_destroy,
     owned_holdings,
@@ -30,6 +31,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Effect,
     GrantKeyword,
+    MeleeAttack,
     GrantModifier,
     IgnoreHonorRequirements,
     PayGold,
@@ -38,7 +40,12 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay
-from yasuki_core.engine.rules.actions import ActionTiming, KharmicDraw, KharmicRefill
+from yasuki_core.engine.rules.actions import (
+    ActionTiming,
+    ActivateAbility,
+    KharmicDraw,
+    KharmicRefill,
+)
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on, province_holdings
@@ -99,6 +106,45 @@ register_ability(
         targets=_harvested_land_targets,
         effects=plus_one_gp_this_turn,
         all_targets=True,
+    ),
+)
+
+
+# --- Jade Legion ---
+
+JADE_LEGION_MELEE = 3
+
+
+def _jade_legion_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The attack alone. Whether it destroyed anything is not known until it resolves, so the
+    straighten rides on the destruction rather than being queued behind the attack."""
+    return [MeleeAttack(JADE_LEGION_MELEE, target.id, source.owner)]
+
+
+@on(Destroyed, "jade_legion")
+def _jade_legion_destroyed(ctx: TriggerContext) -> list[Effect]:
+    """Straighten the Legion when its own attack destroys a Shadowlands card.
+
+    ``Destroyed`` names the seat that caused it rather than the card, so the action being resolved
+    is what says the destruction was this Follower's doing.
+    """
+    action = ctx.game.action
+    if not isinstance(action, ActivateAbility) or action.card_id != ctx.card.id:
+        return []
+    destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
+    if destroyed is None or keywords.SHADOWLANDS not in effective_keywords(ctx.game, destroyed):
+        return []
+    return [Straighten(ctx.card.id)]
+
+
+register_ability(
+    "jade_legion",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle, Bow: Melee {JADE_LEGION_MELEE} Attack",
+        cost=bow_cost,
+        targets=attack_targets,
+        effects=_jade_legion_effects,
     ),
 )
 
