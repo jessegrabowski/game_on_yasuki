@@ -118,20 +118,20 @@ def unit_tower_positions(
     return (x, y), [(x, y - step * ATTACH_STACK_OFFSET) for step in range(1, count + 1)]
 
 
-def tower_draw_order(members: Sequence[Drawn], *, fans_up: bool) -> list[Drawn]:
+def tower_draw_order(members: Sequence[Drawn]) -> list[Drawn]:
     """``members`` in the order they must be drawn so each card's title bar clears the one it rides.
 
-    Fanning up, the highest card sits furthest back and draws first; fanning down, the lowest card
-    is in front and draws last.
+    The card furthest from the anchor draws first and the nearest last, whichever way the fan grows:
+    the anchor — a Personality, or the card standing in a Province — is drawn over the nearest of
+    them, so a stack ascending toward it leaves every card the same band showing. Drawn the other
+    way round the nearest card is covered twice and disappears entirely.
 
     Parameters
     ----------
     members : sequence
-        The attached cards, in attach order.
-    fans_up : bool
-        Whether the stack grows toward the top of the canvas.
+        The attached cards, in attach order, nearest the anchor first.
     """
-    return list(reversed(members)) if fans_up else list(members)
+    return list(reversed(members))
 
 
 def province_positions(

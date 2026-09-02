@@ -396,9 +396,10 @@ class TestRulesModeRender:
         }
         assert top["gate"] < top["wall"]
 
-    def test_the_far_seat_fans_its_fortifications_the_other_way(self, loaded):
-        """Inboard is downward for the far seat, so its stack fans down and the rule reverses: the
-        lowest card is in front. A fixed order would be right for one seat and wrong for the other."""
+    def test_the_far_seats_fan_stacks_the_same_way_it_grows_the_other_direction(self, loaded):
+        """Inboard is downward for the far seat, so its stack fans the other way — and the draw
+        order does not change with it. What the Province card covers is the nearest Fortification
+        either way, so the stack has to ascend toward it from the far end regardless of direction."""
         field, _ = loaded
         far = PlayerId.P2 if field.seat is PlayerId.P1 else PlayerId.P1
         self._fortified_province(field, far, ("wall", "gate"))
@@ -411,7 +412,7 @@ class TestRulesModeRender:
             card_id: max(stacking.index(item) for item in field.find_withtag(card_tag(card_id)))
             for card_id in ("wall", "gate")
         }
-        assert top["wall"] < top["gate"]
+        assert top["gate"] < top["wall"]
 
     def test_an_attachment_takes_no_column_from_the_holdings_row(self, loaded):
         """The attachment is unplaced and is not a Personality, so the home row would file it with

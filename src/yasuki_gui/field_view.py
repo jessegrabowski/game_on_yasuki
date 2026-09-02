@@ -739,7 +739,7 @@ class FieldView(tk.Canvas):
         order the draw order within a slot.
         """
         for key, members in self._province_fans().items():
-            for card_id in tower_draw_order(members, fans_up=self._at_bottom(key.owner)):
+            for card_id in tower_draw_order(members):
                 tag = card_tag(card_id)
                 if self.find_withtag(tag):
                     self.tag_lower(tag, "zone")
@@ -800,7 +800,7 @@ class FieldView(tk.Canvas):
         ordered: list[tuple] = []
         for entry in loose:
             card, _ = entry
-            ordered.extend(tower_draw_order(held.pop(card.id, ()), fans_up=True))
+            ordered.extend(tower_draw_order(held.pop(card.id, ())))
             ordered.append(entry)
         for stranded in held.values():  # its Personality is not on this board
             ordered.extend(stranded)
