@@ -32,8 +32,10 @@ yasuki_core.engine.rules.abilities
     has_absent_ability
     invest_amounts
     invest_for
+    is_spell
     itself
     legal_targets
+    may_cast_spells
     may_remain_bowed
     may_stay_bowed
     no_cost

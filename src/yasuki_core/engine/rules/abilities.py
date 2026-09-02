@@ -22,9 +22,11 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     Unpayable,
 )
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
 
 # A cost is the effects paid to activate an ability, applied before the ability's own effects. Bow /
 # destroy / spend-a-token are all just effects targeting a card, so costs and effects share one
@@ -389,6 +391,10 @@ def activatable(
     for location, card in _seat_cards(game, seat):
         if location not in at:
             continue
+        # The attach rule cannot settle casting alone: a Personality can stop being a Shugenja
+        # after the Spell landed on him.
+        if is_spell(card) and not _has_caster(game, card):
+            continue
         for ability in abilities_for(card):
             if permitted.isdisjoint(ability.timings):
                 continue
@@ -416,6 +422,24 @@ def activatable(
             if legal_targets(game, card, ability):
                 ready.append((card, ability))
     return ready
+
+
+def is_spell(card: L5RCard) -> bool:
+    """Whether ``card`` is a Spell. Only attachments carry a type, so the print answers first."""
+    return (
+        isinstance(card.printed, AttachmentPrint) and card.attachment_type is AttachmentType.SPELL
+    )
+
+
+def may_cast_spells(game: GameState, personality: L5RCard) -> bool:
+    """Whether ``personality`` may hold and cast a Spell, which only a Shugenja may (CR, Spell)."""
+    return keywords.SHUGENJA in effective_keywords(game, personality)
+
+
+def _has_caster(game: GameState, spell: L5RCard) -> bool:
+    """Whether ``spell`` hangs on a Personality who may cast it."""
+    caster = attached_to(game, spell)
+    return caster is not None and may_cast_spells(game, caster)
 
 
 def _bow_permits(card: L5RCard, ability: Ability) -> bool:

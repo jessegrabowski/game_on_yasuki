@@ -31,11 +31,14 @@ from yasuki_core.engine.rules.effects import AdjustCounter, Choose
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     holding,
+    personality,
     province_card,
     put_in_play,
     register,
@@ -441,6 +444,37 @@ def test_an_action_naming_a_key_the_card_does_not_print_is_not_legal():
     session = _two_ability_game()
 
     assert ActivateAbility("src", "enormous") not in session.legal_actions(PlayerId.P1)
+
+
+def test_a_spell_on_a_shugenja_may_be_cast():
+    state = TableState.empty_two_seat()
+    caster = put_in_play(state, personality("caster", keywords=("Shugenja",)))
+    attached(
+        state,
+        attachment("spell", attachment_type=AttachmentType.SPELL, printed_id="test_acts_from_play"),
+        caster.id,
+    )
+    session = EngineSession.start(state, PlayerId.P1)
+
+    offered = activatable(session.game, PlayerId.P1, frozenset({ActionTiming.OPEN}))
+
+    assert [card.id for card, _ in offered] == ["spell"]
+
+
+def test_a_spell_is_not_cast_from_a_personality_who_is_no_shugenja():
+    """ "Their abilities can only be used ('cast') if attached to a Shugenja" (CR, Spell). Attaching
+    is checked when the Spell lands; this is the same rule read again at the moment of casting,
+    which is what a Personality who stops being a Shugenja needs."""
+    state = TableState.empty_two_seat()
+    bushi = put_in_play(state, personality("bushi", keywords=("Bushi",)))
+    attached(
+        state,
+        attachment("spell", attachment_type=AttachmentType.SPELL, printed_id="test_acts_from_play"),
+        bushi.id,
+    )
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert activatable(session.game, PlayerId.P1, frozenset({ActionTiming.OPEN})) == []
 
 
 # A pair of probes differing only in Tireless, so the bowed rule and its one exception can be told
