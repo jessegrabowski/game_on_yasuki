@@ -106,6 +106,35 @@ cards:
   collector_number: '45'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Akodo Toshiki
+  subtitle: Bushido Master
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Paragon
+  - Samurai
+  - Tactician
+  text: Toshiki has +2F while attacking if no other player has higher Family Honor. Bushido Virtue
+    cards you discard from Toshiki's Tactical Advantage ability have +1FV.
+  gold_cost: 5
+  force: 1
+  chi: 3
+  honor_requirement: 6
+  personal_honor: 3
+  legality:
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  flavor_text: <i>"There may be some reason to Niito-sama's words... perhaps we have strayed too far
+    from Akodo's path."</i>
+  story: Spring Kotei 2015 - Tanweer Ahmad
+  collector_number: '46'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: An Empire in Ruins
   types:
   - Strategy
@@ -3472,6 +3501,29 @@ cards:
   flavor_text: <i>"We owe no fealty to would-be Emperors, be they Spiders or Lions. Their ambitions build
     nothing but ruins and graves. If the Empire is to survive, it must be through us."</i>
   collector_number: '155'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Gusai Estates
+  grants:
+  - wealth
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: 'This Holding has Port if you are Mantis Clan.<br><b>Economic Response, :g1: :</b> After your
+    action Recruits a Holding, give this Holding a +1GP Wealth Token.'
+  gold_cost: 2
+  gold_production: 3
+  is_unique: true
+  legality:
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: (PD) Stock Art
+  flavor_text: <i>"Others may call Ichido's actions treachery; I call them profitable." - Gusai Namazu</i>
+  collector_number: '18'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Heart's Arrow
