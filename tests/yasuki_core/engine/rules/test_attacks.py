@@ -327,7 +327,7 @@ def _equip_from_hand(printed_id, *, gold=6):
 
 @pytest.mark.parametrize(
     ("printed_id", "loss"),
-    [("skeletal_troops", 2)],
+    [("tosekiki", 3), ("skeletal_troops", 2)],
 )
 def test_a_follower_that_costs_honor_charges_it_as_it_enters_play(printed_id, loss):
     """Each of these prints "after this Follower enters play, lose N Honor", and the trigger only
@@ -340,3 +340,15 @@ def test_a_follower_that_costs_honor_charges_it_as_it_enters_play(printed_id, lo
     pay(session, ATTACKER)
 
     assert session.game.table.seats[ATTACKER].honor == before - loss
+
+
+def test_tosekiki_ranged_destroys_a_defender_and_bows_to_pay():
+    """ "Battle, Bow: Ranged 4" — the cost is paid as the attack resolves, so the Follower ends
+    bowed and the 2F guard is gone."""
+    session = _follower_battle("tosekiki")
+
+    session.act(ATTACKER, ActivateAbility("troops"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+    assert session.game.table.cards_by_id["troops"].bowed
