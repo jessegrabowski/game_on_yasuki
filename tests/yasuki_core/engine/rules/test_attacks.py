@@ -610,3 +610,81 @@ def test_strength_reduced_past_zero_reaches_nothing():
     _resolve(session, attack)
 
     assert _in_play(session, "khan")
+
+
+def test_ichigos_guard_covers_the_other_followers_in_its_unit():
+    """ "Targeting cards in this unit" — the card beside the Guard is shielded too, which is what
+    tells this apart from the Legions, who protect only themselves. A 3 lands at 2 on a 3F card."""
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
+
+    _resolve(session, RangedAttack(3, "ashigaru", ATTACKER))
+
+    assert _in_play(session, "ashigaru")
+
+
+def test_ichigos_guard_covers_itself_too():
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
+
+    _resolve(session, RangedAttack(3, "ichigo", ATTACKER))
+
+    assert _in_play(session, "ichigo")
+
+
+def test_ichigos_guard_does_not_reach_a_card_outside_its_unit():
+    """The unit is the boundary: another Personality's Follower at the same battlefield takes the
+    attack in full."""
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
+    put_in_play(session.game.table, personality("other", owner=DEFENDER, force=3))
+    attached(
+        session.game.table,
+        attachment("spearmen", owner=DEFENDER, attachment_type=AttachmentType.FOLLOWER, force=3),
+        "other",
+    )
+
+    _resolve(session, RangedAttack(3, "spearmen", ATTACKER))
+
+    assert not _in_play(session, "spearmen")
+
+
+def test_the_legion_of_the_khan_shields_nobody_but_herself():
+    """ "Targeting this Follower", against Ichigo's Guard's "cards in this unit" — a Follower beside
+    her in the same unit takes the attack at printed strength."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+    attached(
+        session.game.table,
+        attachment("ashigaru", owner=DEFENDER, attachment_type=AttachmentType.FOLLOWER, force=3),
+        "guard",
+    )
+
+    _resolve(session, RangedAttack(3, "ashigaru", ATTACKER))
+
+    assert not _in_play(session, "ashigaru")
+
+
+def test_a_cards_reach_is_its_own_business_not_the_walk_s():
+    """Every card in play is asked about every attack, so reach lives in the handler rather than in
+    who gets asked. Ichigo's Guard in one unit says nothing about a Follower in another — the same
+    board the walk covers, and the card declines it."""
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
+    put_in_play(session.game.table, personality("other", owner=DEFENDER, force=3))
+    attached(
+        session.game.table,
+        attachment("spearmen", owner=DEFENDER, attachment_type=AttachmentType.FOLLOWER, force=3),
+        "other",
+    )
+
+    guarded = effective_strength(session.game, RangedAttack(3, "ashigaru", ATTACKER))
+    exposed = effective_strength(session.game, RangedAttack(3, "spearmen", ATTACKER))
+
+    assert (guarded, exposed) == (2, 3)
+
+
+def test_two_reducers_over_the_same_target_both_apply():
+    """Nothing in the CR makes these penalties pick a winner, so a Follower who reduces attacks on
+    herself standing in a unit Ichigo's Guard covers gets both: a 5 resolves at 2 and leaves her
+    3F standing, where either penalty alone would have reached her."""
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("khan", "legion_of_the_khan", 3))
+
+    _resolve(session, RangedAttack(5, "khan", ATTACKER))
+
+    assert _in_play(session, "khan")

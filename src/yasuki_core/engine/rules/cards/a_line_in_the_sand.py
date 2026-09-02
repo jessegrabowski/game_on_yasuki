@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.abilities import (
     register_invest,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.attachments import shares_unit
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AttackEffect,
@@ -64,6 +65,21 @@ register_ability(
         effects=_agasha_beiru_effects,
     ),
 )
+
+
+# --- Ichigo's Guard ---
+
+# "Fear, Melee, and Ranged targeting cards in this unit have -1 strength." The unit, not the card:
+# the Guard covers the Personality it hangs on and every Follower beside it.
+ICHIGOS_GUARD_PENALTY = -1
+
+
+@attack_strength_against("ichigos_guard")
+def _ichigos_guard_attack_strength(
+    game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
+) -> int:
+    """The unit is the reach: the Personality the Guard hangs on and every Follower beside it."""
+    return ICHIGOS_GUARD_PENALTY if shares_unit(game, card, target) else 0
 
 
 # --- Legion of the Khan ---
