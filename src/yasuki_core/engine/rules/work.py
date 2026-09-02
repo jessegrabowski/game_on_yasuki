@@ -71,10 +71,14 @@ class SelectAbilityTarget:
         The card whose ability is resolving.
     candidates : tuple of str
         The ids the ability may target, fixed before paying so the choice is never left empty.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
     """
 
     card_id: str
     candidates: tuple[str, ...]
+    ability_key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -111,10 +115,14 @@ class ApplyAbilityEffects:
         The card whose ability is resolving.
     target_ids : tuple of str
         The cards the ability affects, fixed before paying.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
     """
 
     card_id: str
     target_ids: tuple[str, ...]
+    ability_key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -226,9 +234,13 @@ class ResolveStrategy:
     ----------
     card_id : str
         The Strategy being played, still in hand until it resolves.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
     """
 
     card_id: str
+    ability_key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

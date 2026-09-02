@@ -169,6 +169,10 @@ class Ability:
         Whether the ability reaches a target wherever it stands — the "at any location" a card
         prints, which lifts the Rules of Location off what it may be pointed at but not off the
         card it is taken from. Default False.
+    key : str, optional
+        Names this ability among the several its card prints, so an action can say which one it
+        takes. A card printing one ability needs no key, because there is nothing to tell apart.
+        Default None.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -180,6 +184,7 @@ class Ability:
     located_at: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,)
     battle: frozenset[BattleDesignator] = frozenset()
     targets_any_location: bool = False
+    key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -233,7 +238,7 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
     )
 
 
-_ABILITIES: dict[str, Ability] = {}
+_ABILITIES: dict[str, tuple[Ability, ...]] = {}
 _INVEST: dict[str, InvestAbility] = {}
 # The Holdings whose own text overrides the rule that a Holding enters play bowed. Registered from
 # the set module the card lives in, like everything else a card does, rather than listed centrally —
@@ -242,10 +247,19 @@ _ENTERS_UNBOWED: set[str] = set()
 
 
 def register_ability(printed_id: str, value: Ability) -> None:
-    """Register ``value`` as ``printed_id``'s activated ability."""
-    if printed_id in _ABILITIES:
-        raise ValueError(f"{printed_id} already has an ability")
-    _ABILITIES[printed_id] = value
+    """Register ``value`` as one of ``printed_id``'s activated abilities.
+
+    A card printing several needs a :attr:`Ability.key` on each, since an action names the ability
+    it takes by key and an unkeyed one could not be told from its sibling. Raise ValueError if a
+    second ability arrives unkeyed, or if it repeats a key already registered for the card.
+    """
+    registered = _ABILITIES.get(printed_id, ())
+    if registered:
+        if any(held.key is None for held in (*registered, value)):
+            raise ValueError(f"{printed_id} prints several abilities, so each one needs a key")
+        if any(held.key == value.key for held in registered):
+            raise ValueError(f"{printed_id} already has an ability keyed {value.key!r}")
+    _ABILITIES[printed_id] = (*registered, value)
 
 
 def register_enters_unbowed(printed_id: str) -> None:
@@ -297,9 +311,25 @@ def fixed_invest_amount(game: GameState, card: L5RCard) -> int | None:
     return amounts[0]
 
 
-def ability_for(card: L5RCard) -> Ability | None:
-    """The activated ability registered for ``card``'s printed id, or None."""
-    return _ABILITIES.get(card.printed_id)
+def abilities_for(card: L5RCard) -> tuple[Ability, ...]:
+    """Every activated ability registered for ``card``'s printed id, in registration order."""
+    return _ABILITIES.get(card.printed_id, ())
+
+
+def ability_for(card: L5RCard, key: str | None = None) -> Ability | None:
+    """The activated ability ``key`` names on ``card``, or None if no registered ability answers to
+    it.
+
+    ``key`` is None for a card printing one ability, which is the only one it could mean. Raise
+    ValueError when a card printing several is asked without a key, because the caller is holding
+    an action that failed to say which ability it takes.
+    """
+    registered = abilities_for(card)
+    if key is not None:
+        return next((held for held in registered if held.key == key), None)
+    if len(registered) > 1:
+        raise ValueError(f"{card.printed_id} prints several abilities; name one by key")
+    return next(iter(registered), None)
 
 
 def invest_for(card: L5RCard) -> InvestAbility | None:
@@ -355,29 +385,30 @@ def activatable(
     for location, card in _seat_cards(game, seat):
         if location not in at:
             continue
-        ability = _ABILITIES.get(card.printed_id)
-        if ability is None or permitted.isdisjoint(ability.timings):
-            continue
-        # The Rule of Presence is about the player, not the card, so it gates an action taken from
-        # anywhere — a Strategy out of hand as much as a Personality on the board.
-        if not present and BattleDesignator.ABSENT not in ability.battle:
-            continue
-        if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
-            continue
-        if location not in ability.located_at:
-            continue
-        # A card in a unit may only be acted from at the battlefield the battle is at (CR, Rules
-        # of Location). A card in hand or in a Province is in no unit, and neither is a Holding.
-        if (
-            location is CardLocation.BATTLEFIELD
-            and not _location_lifted(game, card, ability)
-            and not location_permits(game, card)
-        ):
-            continue
-        if not can_pay(game, card, ability.cost):
-            continue
-        if legal_targets(game, card, ability):
-            ready.append((card, ability))
+        for ability in abilities_for(card):
+            if permitted.isdisjoint(ability.timings):
+                continue
+            # The Rule of Presence is about the player, not the card, so it gates an action taken
+            # from anywhere — a Strategy out of hand as much as a Personality on the board.
+            if not present and BattleDesignator.ABSENT not in ability.battle:
+                continue
+            if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
+                continue
+            if location not in ability.located_at:
+                continue
+            # A card in a unit may only be acted from at the battlefield the battle is at (CR,
+            # Rules of Location). A card in hand or in a Province is in no unit, and neither is a
+            # Holding.
+            if (
+                location is CardLocation.BATTLEFIELD
+                and not _location_lifted(game, card, ability)
+                and not location_permits(game, card)
+            ):
+                continue
+            if not can_pay(game, card, ability.cost):
+                continue
+            if legal_targets(game, card, ability):
+                ready.append((card, ability))
     return ready
 
 
@@ -401,9 +432,9 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
     (ShE, Absent). What decides whether a seat with no units there is offered the opportunity at
     all, rather than skipped."""
     return any(
-        (ability := _ABILITIES.get(card.printed_id)) is not None
-        and BattleDesignator.ABSENT in ability.battle
+        BattleDesignator.ABSENT in ability.battle
         for _, card in _seat_cards(game, seat)
+        for ability in abilities_for(card)
     )
 
 

@@ -68,7 +68,8 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
     if isinstance(action, Pass):
         return frozenset()
     if isinstance(action, ActivateAbility):
-        ability = abilities.ability_for(game.table.cards_by_id[action.card_id])
+        card = game.table.cards_by_id[action.card_id]
+        ability = abilities.ability_for(card, action.ability_key)
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
         return frozenset(ability.timings)
@@ -172,8 +173,8 @@ def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> l
     somewhere that ability acts from, its designator permitted by the current round, controlled,
     cost payable, and with at least one legal target. ``only`` narrows to a single card."""
     return [
-        ActivateAbility(card.id)
-        for card, _ability in abilities.activatable(game, seat, permitted_timings(game, seat))
+        ActivateAbility(card.id, ability.key)
+        for card, ability in abilities.activatable(game, seat, permitted_timings(game, seat))
         if only is None or card.id == only
     ]
 
@@ -381,8 +382,8 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
         game, seat, permitted_timings(game, seat), at=(abilities.CardLocation.HAND,)
     )
     return [
-        PlayStrategy(card.id)
-        for card, _ability in playable
+        PlayStrategy(card.id, ability.key)
+        for card, ability in playable
         if (only is None or card.id == only)
         and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
     ]

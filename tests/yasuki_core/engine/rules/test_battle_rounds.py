@@ -14,7 +14,13 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules import abilities, battle, flow, legality, triggers
-from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities import (
+    _ABILITIES,
+    Ability,
+    CardLocation,
+    itself,
+    register_ability,
+)
 from yasuki_core.engine.rules.effects import Bow, GrantPriority
 from yasuki_core.engine.rules.state import (
     BATTLE_SEGMENT_TIMINGS,
@@ -259,20 +265,25 @@ def test_presence_is_not_asked_outside_a_battle():
     assert legality.permitted_timings(session.game, ATTACKER)
 
 
-_ABILITIES["battle_probe"] = Ability(
-    timings=(ActionTiming.ENGAGE,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=lambda game, source: [
-        card.id for card in game.table.battlefield.cards if card.id.startswith("mark")
-    ],
-    effects=lambda game, source, target: [],
+register_ability(
+    "battle_probe",
+    Ability(
+        timings=(ActionTiming.ENGAGE,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, source: [
+            card.id for card in game.table.battlefield.cards if card.id.startswith("mark")
+        ],
+        effects=lambda game, source, target: [],
+    ),
 )
-_ABILITIES["battle_probe_home"] = replace(
-    _ABILITIES["battle_probe"], battle=frozenset({BattleDesignator.HOME})
+register_ability(
+    "battle_probe_home",
+    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.HOME})),
 )
-_ABILITIES["battle_probe_absent"] = replace(
-    _ABILITIES["battle_probe"], battle=frozenset({BattleDesignator.ABSENT})
+register_ability(
+    "battle_probe_absent",
+    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.ABSENT})),
 )
 
 
@@ -345,17 +356,22 @@ def test_the_absent_designator_does_not_lift_the_location_rule():
     assert "probe" not in _offered(session)
 
 
-_ABILITIES["absent_probe_in_hand"] = Ability(
-    timings=(ActionTiming.BATTLE,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=itself,
-    effects=lambda game, source, target: [],
-    all_targets=True,
-    battle=frozenset({BattleDesignator.ABSENT}),
-    located_at=(CardLocation.HAND,),
+register_ability(
+    "absent_probe_in_hand",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [],
+        all_targets=True,
+        battle=frozenset({BattleDesignator.ABSENT}),
+        located_at=(CardLocation.HAND,),
+    ),
 )
-_ABILITIES["plain_probe_in_hand"] = replace(_ABILITIES["absent_probe_in_hand"], battle=frozenset())
+register_ability(
+    "plain_probe_in_hand", replace(_ABILITIES["absent_probe_in_hand"][0], battle=frozenset())
+)
 
 
 def _in_hand(session: EngineSession, card_id: str, printed_id: str) -> None:
@@ -425,14 +441,15 @@ def test_a_target_left_at_home_is_filtered_out_centrally():
     probe offers both marks and the engine narrows them, so no card handler has to remember to."""
     session = _probe_in_a_battle("battle_probe", at_home=False)
     probe = session.game.table.cards_by_id["probe"]
-    ability = _ABILITIES["battle_probe"]
+    ability = _ABILITIES["battle_probe"][0]
 
     assert set(ability.targets(session.game, probe)) == {"mark-front", "mark-home"}
     assert abilities.legal_targets(session.game, probe, ability) == ["mark-front"]
 
 
-_ABILITIES["battle_probe_remote"] = replace(
-    _ABILITIES["battle_probe"], battle=frozenset({BattleDesignator.REMOTE})
+register_ability(
+    "battle_probe_remote",
+    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.REMOTE})),
 )
 
 

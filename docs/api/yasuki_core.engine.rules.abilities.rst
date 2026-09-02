@@ -15,6 +15,7 @@ yasuki_core.engine.rules.abilities
 
 .. autosummary::
 
+    abilities_for
     ability_for
     activatable
     attack_targets

@@ -1,8 +1,15 @@
 from dataclasses import dataclass
 
+import pytest
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    CardLocation,
+    itself,
+    register_ability,
+)
 from yasuki_core.engine.rules.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.decisions import ChoosePayment, DecisionResponse
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect
@@ -19,15 +26,18 @@ SEAT = PlayerId.P1
 
 # A Strategy that puts a Wealth token on a target Holding. Its whole text is one effect the engine
 # already has, so what these tests exercise is playing it rather than what it does.
-_ABILITIES["test_strategy"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=lambda game, card: [
-        held.id for held in game.table.battlefield.cards if held.owner is card.owner
-    ],
-    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
-    located_at=(CardLocation.HAND,),
+register_ability(
+    "test_strategy",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, card: [
+            held.id for held in game.table.battlefield.cards if held.owner is card.owner
+        ],
+        effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+        located_at=(CardLocation.HAND,),
+    ),
 )
 
 
@@ -45,14 +55,17 @@ class _PutItIntoPlay(Effect):
         return []
 
 
-_ABILITIES["test_kata_strategy"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=itself,
-    effects=lambda game, source, target: [_PutItIntoPlay(source.id)],
-    all_targets=True,
-    located_at=(CardLocation.HAND,),
+register_ability(
+    "test_kata_strategy",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [_PutItIntoPlay(source.id)],
+        all_targets=True,
+        located_at=(CardLocation.HAND,),
+    ),
 )
 
 
@@ -180,16 +193,19 @@ def test_the_target_is_the_one_the_seat_chose():
 def test_an_untargeted_strategy_still_resolves_before_it_is_discarded():
     """An `all_targets` ability pauses for nothing, so the whole play drains in one pass and the
     ordering rests entirely on the discard being stacked under the ability's own work."""
-    _ABILITIES["test_untargeted_strategy"] = Ability(
-        timings=(ActionTiming.OPEN,),
-        label="test",
-        cost=lambda game, source: [],
-        targets=lambda game, card: [
-            held.id for held in game.table.battlefield.cards if held.owner is card.owner
-        ],
-        effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
-        all_targets=True,
-        located_at=(CardLocation.HAND,),
+    register_ability(
+        "test_untargeted_strategy",
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label="test",
+            cost=lambda game, source: [],
+            targets=lambda game, card: [
+                held.id for held in game.table.battlefield.cards if held.owner is card.owner
+            ],
+            effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+            all_targets=True,
+            located_at=(CardLocation.HAND,),
+        ),
     )
     state = TableState.empty_two_seat()
     put_in_play(state, holding("first", owner=SEAT, gold_production=3))
@@ -254,15 +270,18 @@ def _note_where_the_source_sits(game, source, target):
     return [AdjustCounter(target.id, WEALTH, 1)]
 
 
-_ABILITIES["test_probes_its_own_zone"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=lambda game, card: [
-        held.id for held in game.table.battlefield.cards if held.owner is card.owner
-    ],
-    effects=_note_where_the_source_sits,
-    located_at=(CardLocation.HAND,),
+register_ability(
+    "test_probes_its_own_zone",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, card: [
+            held.id for held in game.table.battlefield.cards if held.owner is card.owner
+        ],
+        effects=_note_where_the_source_sits,
+        located_at=(CardLocation.HAND,),
+    ),
 )
 
 
@@ -324,3 +343,69 @@ def test_a_strategy_that_put_itself_into_play_is_not_discarded():
     assert card.id in {held.id for held in session.game.table.battlefield.cards}
     assert _discard(session) == []
     assert _hand(session) == []
+
+
+# A Strategy printing two abilities under one designator, the shape 57 Shattered-legal Strategies
+# have. Playing one crosses the Gold Cost payment, so the key has to survive a suspension that the
+# activated-ability path never touches.
+for _key, _amount in (("small", 1), ("large", 3)):
+    register_ability(
+        "test_two_ability_strategy",
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label=f"Open: Add {_amount} wealth",
+            cost=lambda game, source: [],
+            targets=lambda game, card: [
+                held.id for held in game.table.battlefield.cards if held.owner is card.owner
+            ],
+            effects=(
+                lambda amount: lambda game, source, target: [
+                    AdjustCounter(target.id, WEALTH, amount)
+                ]
+            )(_amount),
+            located_at=(CardLocation.HAND,),
+            key=_key,
+        ),
+    )
+
+
+def _two_ability_strategy_session() -> tuple[EngineSession, L5RCard]:
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("farm", owner=SEAT, gold_production=2))
+    card = register(
+        state,
+        L5RCard.of(
+            ActionPrint,
+            id="plan",
+            name="plan",
+            printed_id="test_two_ability_strategy",
+            side=Side.FATE,
+            owner=SEAT,
+            gold_cost=1,
+        ),
+    )
+    state.zones[ZoneKey(SEAT, ZoneRole.HAND)].add(card)
+    return EngineSession.start(state, SEAT), card
+
+
+def test_both_of_a_strategys_abilities_are_offered():
+    session, card = _two_ability_strategy_session()
+
+    offered = [action for action in session.legal_actions(SEAT) if isinstance(action, PlayStrategy)]
+
+    assert offered == [PlayStrategy(card.id, "small"), PlayStrategy(card.id, "large")]
+
+
+@pytest.mark.parametrize(("key", "wealth"), [("small", 1), ("large", 3)])
+def test_the_strategy_ability_named_by_the_action_survives_the_payment(key, wealth):
+    """The Gold Cost suspends the play, so the key rides on the deferred work rather than on
+    anything the announcement still has in hand when it resolves."""
+    session, card = _two_ability_strategy_session()
+
+    session.act(SEAT, PlayStrategy(card.id, key))
+    while session.game.pending is not None:
+        asked = session.game.pending
+        session.submit(asked.seat, DecisionResponse(asked.candidates[:1]))
+
+    assert session.game.table.cards_by_id["farm"].counters.get(WEALTH.key) == wealth
+    assert _discard(session) == [card.id]

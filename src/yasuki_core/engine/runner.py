@@ -161,7 +161,7 @@ class GameRunner:
                     items.append((f"Equip: Pay {cost} gold", action))
             elif isinstance(action, PlayStrategy):
                 card = game.table.cards_by_id[card_id]
-                ability = abilities.ability_for(card)
+                ability = abilities.ability_for(card, action.ability_key)
                 cost = effective_gold_cost(game, card)
                 label = ability.label if ability is not None else "Play this Strategy"
                 items.append((label if cost == 0 else f"{label} — Pay {cost} gold", action))
@@ -182,14 +182,17 @@ class GameRunner:
         return f"{verb}: Pay {listed} or {prices[-1]} gold"
 
     def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
-        """The activated-ability action offered for an in-play card the human controls, labelled with
-        the ability's description, when it is legal to use now. Empty otherwise."""
+        """Every activated-ability action offered for an in-play card the human controls, each
+        labelled with its own ability's description, when it is legal to use now. Empty
+        otherwise."""
+        card = self.session.game.table.cards_by_id[card_id]
+        items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if isinstance(action, ActivateAbility) and action.card_id == card_id:
-                ability = abilities.ability_for(self.session.game.table.cards_by_id[card_id])
+                ability = abilities.ability_for(card, action.ability_key)
                 label = ability.label if ability is not None else "Activate ability"
-                return [(label, action)]
-        return []
+                items.append((label, action))
+        return items
 
     def inheritance_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The Inheritance action offered on the human's own Stronghold, when it is legal now. Empty

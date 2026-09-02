@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pytest
 
 from yasuki_core.engine.players import PlayerId
@@ -5,6 +7,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.abilities import (
     CardLocation,
     Ability,
+    abilities_for,
     ability_for,
     activatable,
     _ABILITIES,
@@ -27,7 +30,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import FatePrint
+from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from tests.yasuki_core.engine.builders import (
     holding,
     province_card,
@@ -44,18 +47,21 @@ def _test_cost_grant(game, source_id, chosen, seat):
 # A synthetic ability whose cost pauses for a choice. It exercises the deferred target selection: the
 # cost's own decision must resolve before the ability's target is asked, neither clobbering the
 # other. No real card pays a cost that pauses yet.
-_ABILITIES["test_cost_pauses"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=lambda game, source: [
-        Choose(source.owner, (source.id,), 0, 1, "test_cost_pauses", source.id)
-    ],
-    targets=lambda game, card: [
-        c.id
-        for c in game.table.battlefield.cards
-        if c.owner is card.owner and c is not card and "Farm" in c.keywords
-    ],
-    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+register_ability(
+    "test_cost_pauses",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [
+            Choose(source.owner, (source.id,), 0, 1, "test_cost_pauses", source.id)
+        ],
+        targets=lambda game, card: [
+            c.id
+            for c in game.table.battlefield.cards
+            if c.owner is card.owner and c is not card and "Farm" in c.keywords
+        ],
+        effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    ),
 )
 
 
@@ -83,14 +89,54 @@ def test_a_cost_that_pauses_resolves_before_the_ability_target():
     assert replay(session.log) == session.game  # the deferred-cost chain replays deterministically
 
 
-def test_a_second_ability_for_one_card_is_refused():
+def test_a_second_unkeyed_ability_for_one_card_is_refused():
+    """An unkeyed ability is "the card's only one", so a second cannot also be unkeyed — an action
+    naming neither would have no way to say which it takes."""
     # These three registries were dict literals until the card modules split them up, where a
     # repeated key was ruff's F601 to catch. Registration-time checks replace that guard.
-    register_ability("guard_probe", _ABILITIES["millet_farm"])
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("guard_probe", plain)
 
     try:
-        with pytest.raises(ValueError, match="guard_probe already has an ability"):
-            register_ability("guard_probe", _ABILITIES["millet_farm"])
+        with pytest.raises(ValueError, match="guard_probe prints several abilities"):
+            register_ability("guard_probe", plain)
+    finally:
+        _ABILITIES.pop("guard_probe", None)
+
+
+def test_a_second_ability_may_not_repeat_a_key():
+    """Keys are how an action names an ability, so two abilities answering to the same one would
+    make the choice unresolvable."""
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("guard_probe", replace(plain, key="first"))
+
+    try:
+        with pytest.raises(ValueError, match="already has an ability keyed 'first'"):
+            register_ability("guard_probe", replace(plain, key="first"))
+    finally:
+        _ABILITIES.pop("guard_probe", None)
+
+
+def test_a_card_may_register_several_keyed_abilities():
+    """The point of the key: two abilities under one printed id, each retrievable by name."""
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("guard_probe", replace(plain, key="fear", label="Battle: Fear 3"))
+    register_ability("guard_probe", replace(plain, key="ranged", label="Battle: Ranged 3"))
+
+    try:
+        card = L5RCard.of(
+            HoldingPrint,
+            id="probe",
+            name="Probe",
+            printed_id="guard_probe",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+        )
+        assert [held.key for held in abilities_for(card)] == ["fear", "ranged"]
+        assert ability_for(card, "ranged").label == "Battle: Ranged 3"
+        assert ability_for(card, "absent") is None
+        with pytest.raises(ValueError, match="prints several abilities; name one by key"):
+            ability_for(card)
     finally:
         _ABILITIES.pop("guard_probe", None)
 
@@ -119,33 +165,42 @@ def test_a_second_enters_unbowed_for_one_card_is_refused():
 
 # An ability that acts from a Province rather than from play — the shape every Event needs. It
 # targets its own source, so the test needs nothing else there.
-_ABILITIES["test_acts_from_province"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=lambda game, card: [card.id],
-    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
-    located_at=(CardLocation.PROVINCE,),
+register_ability(
+    "test_acts_from_province",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, card: [card.id],
+        effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+        located_at=(CardLocation.PROVINCE,),
+    ),
 )
 
 
 # The same ability twice, differing only in where it acts from. A Strategy is played out of hand,
 # which is a location nothing acted from before.
-_ABILITIES["test_acts_from_hand"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=lambda game, card: [card.id],
-    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
-    located_at=(CardLocation.HAND,),
+register_ability(
+    "test_acts_from_hand",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, card: [card.id],
+        effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+        located_at=(CardLocation.HAND,),
+    ),
 )
 
-_ABILITIES["test_acts_from_play"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=lambda game, card: [card.id],
-    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+register_ability(
+    "test_acts_from_play",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, card: [card.id],
+        effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+    ),
 )
 
 
@@ -253,13 +308,16 @@ def test_an_ability_in_play_is_not_offered_from_a_province():
 
 # A card that acts from either place. The scope is a tuple so an ability can name more than one, and
 # nothing else pins that.
-_ABILITIES["test_acts_from_either"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=lambda game, source: [],
-    targets=lambda game, card: [card.id],
-    effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
-    located_at=(CardLocation.BATTLEFIELD, CardLocation.PROVINCE),
+register_ability(
+    "test_acts_from_either",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, card: [card.id],
+        effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+        located_at=(CardLocation.BATTLEFIELD, CardLocation.PROVINCE),
+    ),
 )
 
 
@@ -273,3 +331,110 @@ def test_an_ability_may_act_from_more_than_one_place(in_play):
     session = EngineSession.start(state, PlayerId.P1)
 
     assert ActivateAbility("event") in session.legal_actions(PlayerId.P1)
+
+
+# A synthetic card printing two abilities under the same designator, which is what Yoritomo Tatsuki
+# and Incendiary Archers do: both of each card's abilities are Battle, so nothing but a key tells
+# them apart.
+for _key, _amount in (("small", 1), ("large", 3)):
+    register_ability(
+        "test_two_abilities",
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label=f"Open: Add {_amount} wealth",
+            cost=lambda game, source: [],
+            targets=lambda game, card: [
+                held.id for held in game.table.battlefield.cards if held is not card
+            ],
+            effects=(
+                lambda amount: lambda game, source, target: [
+                    AdjustCounter(target.id, WEALTH, amount)
+                ]
+            )(_amount),
+            key=_key,
+        ),
+    )
+
+
+def _two_ability_game():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("src", printed_id="test_two_abilities"))
+    put_in_play(state, holding("tgt", printed_id="plain_farm", gold_production=2))
+    return EngineSession.start(state, PlayerId.P1)
+
+
+def test_both_of_a_cards_abilities_are_offered():
+    """The designator cannot disambiguate — both abilities are Open — so the key is what makes them
+    two separate actions rather than one offered twice."""
+    session = _two_ability_game()
+
+    offered = [
+        action
+        for action in session.legal_actions(PlayerId.P1)
+        if isinstance(action, ActivateAbility) and action.card_id == "src"
+    ]
+
+    assert offered == [ActivateAbility("src", "small"), ActivateAbility("src", "large")]
+
+
+@pytest.mark.parametrize(("key", "wealth"), [("small", 1), ("large", 3)])
+def test_the_ability_named_by_the_action_is_the_one_that_resolves(key, wealth):
+    """The whole point of threading the key: the ability announced has to be the ability that
+    lands, across the target decision that suspends it."""
+    session = _two_ability_game()
+
+    session.act(PlayerId.P1, ActivateAbility("src", key))
+    session.submit(PlayerId.P1, DecisionResponse(("tgt",)))
+
+    assert session.game.table.cards_by_id["tgt"].counters == {"wealth": wealth}
+
+
+def test_a_keyed_activation_replays():
+    """``log.Act`` holds the action itself, so a tape carrying a key must replay to the same board
+    — the guarantee that keeps every pre-existing tape valid too."""
+    session = _two_ability_game()
+
+    session.act(PlayerId.P1, ActivateAbility("src", "large"))
+    session.submit(PlayerId.P1, DecisionResponse(("tgt",)))
+
+    assert replay(session.log) == session.game
+
+
+def test_a_round_offers_only_the_abilities_its_designator_permits():
+    """The designator filter is per ability, not per card. A card printing one Open and one Dynasty
+    ability is offered once in an Open round — a check hoisted back up to the card would offer both
+    or neither."""
+    register_ability(
+        "test_split_designators",
+        replace(
+            _ABILITIES["test_two_abilities"][0], timings=(ActionTiming.DYNASTY,), key="dynasty"
+        ),
+    )
+    register_ability(
+        "test_split_designators",
+        replace(_ABILITIES["test_two_abilities"][1], timings=(ActionTiming.OPEN,), key="open"),
+    )
+
+    try:
+        state = TableState.empty_two_seat()
+        put_in_play(state, holding("src", printed_id="test_split_designators"))
+        put_in_play(state, holding("tgt", printed_id="plain_farm", gold_production=2))
+        session = EngineSession.start(state, PlayerId.P1)
+
+        offered = [
+            action
+            for action in session.legal_actions(PlayerId.P1)
+            if isinstance(action, ActivateAbility) and action.card_id == "src"
+        ]
+
+        assert offered == [ActivateAbility("src", "open")]
+    finally:
+        _ABILITIES.pop("test_split_designators", None)
+
+
+def test_an_action_naming_a_key_the_card_does_not_print_is_not_legal():
+    """Good Faith is enforced by ``legal_actions``, so a hand-built action carrying an unknown key
+    must not be accepted as though it named the card's only ability."""
+    session = _two_ability_game()
+
+    assert ActivateAbility("src", "enormous") not in session.legal_actions(PlayerId.P1)

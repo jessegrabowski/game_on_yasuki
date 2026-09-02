@@ -32,6 +32,14 @@ from yasuki_core.engine.rules.actions import (
     Legacy,
     Pass,
 )
+from yasuki_core.engine.rules.abilities import (
+    _ABILITIES,
+    Ability,
+    itself,
+    no_cost,
+    register_ability,
+)
+from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
@@ -939,3 +947,51 @@ def test_a_policy_that_never_passes_is_stopped_rather_than_spinning(monkeypatch)
 
     with pytest.raises(RuntimeError, match="ran past"):
         runner.run_opponent()
+
+
+def test_ability_menu_offers_one_entry_per_ability_the_card_prints():
+    """A card printing two abilities gets two menu entries, each under its own label — the labels
+    are what tells them apart, since both actions name the same card."""
+    register_ability(
+        "test_menu_pair",
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label="Open: Take the small one",
+            cost=no_cost,
+            targets=itself,
+            effects=lambda game, source, target: [],
+            all_targets=True,
+            key="small",
+        ),
+    )
+    register_ability(
+        "test_menu_pair",
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label="Open: Take the large one",
+            cost=no_cost,
+            targets=itself,
+            effects=lambda game, source, target: [],
+            all_targets=True,
+            key="large",
+        ),
+    )
+
+    try:
+        card = L5RCard.of(
+            HoldingPrint,
+            id="pair",
+            name="Pair",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="test_menu_pair",
+            gold_production=1,
+        )
+        runner = _runner_with_in_play(card)
+
+        assert runner.ability_menu("pair") == [
+            ("Open: Take the small one", ActivateAbility("pair", "small")),
+            ("Open: Take the large one", ActivateAbility("pair", "large")),
+        ]
+    finally:
+        _ABILITIES.pop("test_menu_pair", None)

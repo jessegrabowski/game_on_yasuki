@@ -1,8 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
-    _ABILITIES,
     bow_parent_cost,
+    register_ability,
     can_pay,
 )
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility
@@ -26,16 +26,19 @@ P1 = PlayerId.P1
 # that Personality's Force. Between them they exercise both directions of the parent reference — the
 # cost reaching a card the ability never chose, and the effect reading a stat off it. No real card is
 # encoded yet; that is PR 2's job.
-_ABILITIES["test_bows_its_personality"] = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="test",
-    cost=bow_parent_cost,
-    targets=lambda game, card: [card.id],
-    effects=lambda game, source, target: [
-        AdjustCounter(source.id, WEALTH, effective_force(game, attached_to(game, source)))
-    ],
-    # It acts on itself, so there is nothing to choose and activation settles in one step.
-    all_targets=True,
+register_ability(
+    "test_bows_its_personality",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=bow_parent_cost,
+        targets=lambda game, card: [card.id],
+        effects=lambda game, source, target: [
+            AdjustCounter(source.id, WEALTH, effective_force(game, attached_to(game, source)))
+        ],
+        # It acts on itself, so there is nothing to choose and activation settles in one step.
+        all_targets=True,
+    ),
 )
 
 

@@ -115,9 +115,13 @@ class PlayStrategy:
     ----------
     card_id : str
         The Strategy in hand.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
     """
 
     card_id: str
+    ability_key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -150,9 +154,13 @@ class ActivateAbility:
     ----------
     card_id : str
         The card whose ability is used.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
     """
 
     card_id: str
+    ability_key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

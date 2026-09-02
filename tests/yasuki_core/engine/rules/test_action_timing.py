@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.abilities import _ABILITIES, Ability, itself
+from yasuki_core.engine.rules.abilities import Ability, itself, register_ability
 from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -28,12 +28,15 @@ from tests.yasuki_core.engine.builders import (
 )
 
 
-_ABILITIES["dual"] = Ability(
-    timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
-    label="test",
-    cost=lambda game, source: [],
-    targets=itself,
-    effects=lambda game, source, target: [],
+register_ability(
+    "dual",
+    Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        label="test",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [],
+    ),
 )
 
 

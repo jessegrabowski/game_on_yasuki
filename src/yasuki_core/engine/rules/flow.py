@@ -295,10 +295,10 @@ def perform(game: GameState, action: Action) -> None:
             kharmic_draw(game, card_id)
         case KharmicRefill(card_id=card_id):
             kharmic_refill(game, card_id)
-        case ActivateAbility(card_id=card_id):
-            activate(game, card_id)
-        case PlayStrategy(card_id=card_id):
-            play_strategy(game, card_id)
+        case ActivateAbility(card_id=card_id, ability_key=ability_key):
+            activate(game, card_id, ability_key)
+        case PlayStrategy(card_id=card_id, ability_key=ability_key):
+            play_strategy(game, card_id, ability_key)
         case DeclareAttack():
             battle.declare_attack(game)
             battle.open_maneuvers(game)
@@ -311,7 +311,7 @@ def perform(game: GameState, action: Action) -> None:
         _yield_after_action(game, acted_in)
 
 
-def play_strategy(game: GameState, card_id: str) -> None:
+def play_strategy(game: GameState, card_id: str, ability_key: str | None = None) -> None:
     """Announce a Strategy: defer its resolution, then pause for its Gold Cost.
 
     The card stays in hand until the payment is answered, so backing out of the payment leaves it
@@ -320,20 +320,20 @@ def play_strategy(game: GameState, card_id: str) -> None:
     """
     card = game.table.cards_by_id[card_id]
     seat = card.owner
-    game.stack.append(ResolveStrategy(card_id))
+    game.stack.append(ResolveStrategy(card_id, ability_key))
     game.pending = payment_request(
         game, seat, effective_gold_cost(game, card), card.name, target=card
     )
 
 
-def _resolve_strategy(game: GameState, card_id: str) -> None:
+def _resolve_strategy(game: GameState, card_id: str, ability_key: str | None = None) -> None:
     """Resolve a paid-for Strategy: its ability against its target, and then its discard.
 
     The discard is stacked *under* the ability's own work so it runs after it, whether the ability
     hits every target at once or pauses to be pointed at one.
     """
     card = game.table.cards_by_id[card_id]
-    ability = abilities.ability_for(card)
+    ability = abilities.ability_for(card, ability_key)
     if ability is None:
         raise ValueError(f"{card_id} has no ability to resolve")
     game.stack.append(DiscardPlayed(card_id))
@@ -715,18 +715,21 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             _resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
         case ResolveEquip(card_id=card_id, target_id=target_id, invest_amount=invest_amount):
             _resolve_equip(game, card_id, target_id, invest_amount)
-        case ResolveStrategy(card_id=card_id):
-            _resolve_strategy(game, card_id)
+        case ResolveStrategy(card_id=card_id, ability_key=ability_key):
+            _resolve_strategy(game, card_id, ability_key)
         case DiscardPlayed(card_id=card_id):
             _discard_played(game, card_id)
-        case SelectAbilityTarget(card_id=card_id, candidates=candidates):
+        case SelectAbilityTarget(card_id=card_id, candidates=candidates, ability_key=ability_key):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(
-                seat=owner, candidates=candidates, source_card_id=card_id
+                seat=owner,
+                candidates=candidates,
+                source_card_id=card_id,
+                ability_key=ability_key,
             )
-        case ApplyAbilityEffects(card_id=card_id, target_ids=target_ids):
+        case ApplyAbilityEffects(card_id=card_id, target_ids=target_ids, ability_key=ability_key):
             source = game.table.cards_by_id[card_id]
-            ability = abilities.ability_for(source)
+            ability = abilities.ability_for(source, ability_key)
             effects = [
                 effect
                 for target_id in target_ids
@@ -1037,7 +1040,7 @@ def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tu
     return tuple(displaceable)
 
 
-def activate(game: GameState, card_id: str) -> None:
+def activate(game: GameState, card_id: str, ability_key: str | None = None) -> None:
     """Announce an activated ability: pay its cost, then resolve its target — a single chosen card,
     or every card it hits for an ``all_targets`` ability. The ability is guaranteed registered and to
     have a legal target — ``legal_actions`` only offers it then.
@@ -1048,7 +1051,7 @@ def activate(game: GameState, card_id: str) -> None:
     safe: an action may only be announced when it could find a legal target, so the candidates
     ``legal_actions`` validated are still there to hit."""
     card = game.table.cards_by_id[card_id]
-    ability = abilities.ability_for(card)
+    ability = abilities.ability_for(card, ability_key)
     if ActionTiming.RESPONSE in ability.timings:
         game.responded.add(card_id)
     _defer_ability(game, card, ability)
@@ -1063,9 +1066,9 @@ def _defer_ability(game: GameState, card: L5RCard, ability: abilities.Ability) -
     """
     targets = tuple(abilities.legal_targets(game, card, ability))
     game.stack.append(
-        ApplyAbilityEffects(card.id, targets)
+        ApplyAbilityEffects(card.id, targets, ability.key)
         if ability.all_targets
-        else SelectAbilityTarget(card.id, targets)
+        else SelectAbilityTarget(card.id, targets, ability.key)
     )
     triggers.resolve_effects(game, ability.cost(game, card))
 
@@ -1075,7 +1078,7 @@ def _apply_ability_target(
 ) -> None:
     source = game.table.cards_by_id[request.source_card_id]
     target = game.table.cards_by_id[response.choices[0]]
-    ability = abilities.ability_for(source)
+    ability = abilities.ability_for(source, request.ability_key)
     game.pending = None
     triggers.resolve_effects(game, ability.effects(game, source, target))
 
