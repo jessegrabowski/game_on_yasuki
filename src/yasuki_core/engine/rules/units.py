@@ -78,6 +78,35 @@ def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]
     ]
 
 
+def attackable(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The cards ``seat``'s attack effects may target: the enemy army's Followers, and its
+    Personalities carrying none (CR, Ranged Attack).
+
+    The rule reaches the *army* rather than the seat, so it is empty outside a battle and holds only
+    what stands at the one being fought. A Personality is spared by a Follower alone — an Item or a
+    Spell attached to him is not one, and does not protect him.
+
+    Parameters
+    ----------
+    game : GameState
+        The board to read.
+    seat : PlayerId
+        The seat whose attack this is. The army returned is the other seat's.
+    """
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return []
+    enemy = attack.defender if seat is attack.attacker else attack.attacker
+    targets: list[L5RCard] = []
+    for personality in units_at(game, attack.current, enemy):
+        followers = followers_of(game, personality)
+        if followers:
+            targets.extend(followers)
+        else:
+            targets.append(personality)
+    return targets
+
+
 def has_presence(game: GameState, seat: PlayerId) -> bool:
     """Whether ``seat`` controls a unit at the battle now being fought (CR, Rule of Presence).
 

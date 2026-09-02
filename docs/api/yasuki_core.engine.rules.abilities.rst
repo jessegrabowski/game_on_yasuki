@@ -17,6 +17,7 @@ yasuki_core.engine.rules.abilities
 
     ability_for
     activatable
+    attack_targets
     banish_top_fate
     bow_and_destroy
     bow_cost

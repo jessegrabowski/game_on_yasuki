@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, replace
+from typing import ClassVar
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
+from yasuki_core.engine.rules.economy import effective_stat
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
     ChooseCards,
@@ -482,6 +484,89 @@ class GrantProvinceStrength(Effect):
             ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class AttackEffect(Effect, ABC):
+    """One of the CR's three attack effects: a strength weighed against a target's stat.
+
+    *"Target a Follower or a Personality without Followers in the current enemy army. If its Force
+    is equal to or less than X, destroy it."* Ranged and Melee destroy, Fear bows, and everything
+    else is shared. Who may be targeted is
+    :func:`~yasuki_core.engine.rules.units.attackable`; this is the comparison and its consequence.
+
+    The base exists because the CR names it: its Combining entry uses *"attack effect"* for the
+    thing being combined and *"kind of effect"* for which of the three it is, so an effect that
+    reaches every attack asks for this class and one that reaches a single kind asks for a subclass.
+
+    Attributes
+    ----------
+    strength : int
+        The X the target's stat is compared against.
+    target_id : str
+        The card being attacked.
+    cause : PlayerId or Rulebook
+        Who or what attacked, carried onto a destruction.
+    compared : Stat, optional
+        The stat weighed against ``strength``. *"If a Ranged Attack effect ends up being compared
+        against a different stat than Force, compare that stat against the Ranged Attack's strength
+        instead"* — read as an effective stat, so modifiers count. Default ``Stat.FORCE``.
+    """
+
+    # What the card prints this effect as, which is the only thing its description needs from the
+    # subclass. A ClassVar rather than a field: it belongs to the kind, not to one announcement.
+    name: ClassVar[str]
+
+    strength: int
+    target_id: str
+    cause: Cause
+    compared: Stat = Stat.FORCE
+
+    def describe(self) -> str:
+        stat = "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
+        return f"{self.name} {self.strength} on {self.target_id}{stat}"
+
+    @abstractmethod
+    def _outcome(self) -> Effect:
+        """What this attack does to a target its strength reaches."""
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.target_id)
+        if card is None or effective_stat(game, card, self.compared) > self.strength:
+            return []
+        return self._outcome().perform(game)
+
+
+@dataclass(frozen=True, slots=True)
+class RangedAttack(AttackEffect):
+    """*"A Ranged Attack represents a military effect that destroys at a distance."*"""
+
+    name: ClassVar[str] = "ranged"
+
+    def _outcome(self) -> Effect:
+        return Destroy(self.target_id, self.cause)
+
+
+@dataclass(frozen=True, slots=True)
+class MeleeAttack(AttackEffect):
+    """*"Melee Attacks follow the above rules but are not considered Ranged Attacks"* — the same
+    effect as a Ranged Attack, and deliberately not the same type."""
+
+    name: ClassVar[str] = "melee"
+
+    def _outcome(self) -> Effect:
+        return Destroy(self.target_id, self.cause)
+
+
+@dataclass(frozen=True, slots=True)
+class Fear(AttackEffect):
+    """*"Fear X" is shorthand for "Target an enemy Follower or Personality without Followers and bow
+    it if its Force is equal to or lower than X."*"""
+
+    name: ClassVar[str] = "fear"
+
+    def _outcome(self) -> Effect:
+        return Bow(self.target_id)
 
 
 @dataclass(frozen=True, slots=True)

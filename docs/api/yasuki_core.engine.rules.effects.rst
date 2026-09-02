@@ -13,6 +13,7 @@ yasuki_core.engine.rules.effects
     AskDistribution
     AskOption
     AttachCard
+    AttackEffect
     Banish
     BanishTopFate
     Bow
@@ -26,6 +27,7 @@ yasuki_core.engine.rules.effects
     Discard
     DrawCard
     Effect
+    Fear
     GainGold
     GainHonor
     GrantKeyword
@@ -36,11 +38,13 @@ yasuki_core.engine.rules.effects
     IgnoreHonorRequirements
     InterruptingEffect
     LoseGame
+    MeleeAttack
     Move
     MoveToDeck
     MoveToHand
     PayGold
     PlaceInProvince
+    RangedAttack
     RecruitCard
     RefillProvince
     RevealProvinces

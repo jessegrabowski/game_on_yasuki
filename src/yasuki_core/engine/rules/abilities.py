@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.attachments import attached_to, attachments_of
 from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
 from yasuki_core.engine.rules.state import once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.units import has_presence, location_permits
+from yasuki_core.engine.rules.units import attackable, has_presence, location_permits
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -425,6 +425,13 @@ def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]
         for target_id in offered
         if target_id not in by_id or location_permits(game, by_id[target_id])
     ]
+
+
+def attack_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The ids an attack effect from ``source`` may be pointed at: the enemy army's Followers and
+    its Personalities carrying none (CR, Ranged Attack). Empty outside a battle, which is what
+    keeps an attack ability from being offered where it has nothing to hit."""
+    return [card.id for card in attackable(game, source.owner)]
 
 
 def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]:
