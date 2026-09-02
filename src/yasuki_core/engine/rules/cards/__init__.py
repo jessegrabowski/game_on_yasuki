@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     gates_of_chaos,
     gates_of_tengoku,
     gathering_storms,
+    glory_of_the_empire,
     honors_veil,
     imperial_edition,
     ivory_edition,
