@@ -1,5 +1,7 @@
 import difflib
+import re
 import sys
+from pathlib import Path
 
 from yasuki_core.engine.rules import (
     abilities,
@@ -13,7 +15,7 @@ from yasuki_core.engine.rules import (
 
 # Without this the registries are empty and every check below passes vacuously.
 from yasuki_core.engine.rules import cards  # noqa: F401
-from yasuki_core.install.card_index import read_index
+from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, iter_set_entries, read_index
 
 
 def registered_card_ids() -> dict[str, frozenset[str]]:
@@ -116,6 +118,95 @@ def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -
             closest = difflib.get_close_matches(card_id, known, n=1)
             hint = f" — did you mean {closest[0]}?" if closest else ""
             problems.append(f"{registry}: no card has the id {card_id!r}{hint}")
+    return problems
+
+
+# The designator vocabulary the arc prints, as it reads on a card. Invest is deliberately absent: it
+# is a recruit-time purchase registered in its own registry, not an activated ability.
+_DESIGNATORS = (
+    "Open",
+    "Battle",
+    "Dynasty",
+    "Limited",
+    "Reaction",
+    "Interrupt",
+    "Response",
+    "Engage",
+)
+_QUALIFIERS = (
+    r"(?:Absent|Kiho|Maho|Iaijutsu|Ninja|Economic|Repeatable|Tireless|Political"
+    r"|Air|Earth|Fire|Water|Void)"
+)
+# An ability heads a segment — the start of the text, the far side of a line break, or the sentence
+# after the previous ability — and its designator phrase runs to the first colon.
+_ABILITY_HEAD = re.compile(
+    rf"(?:^|>|(?<=\.)\s|(?<=\.))\s*(?:{_QUALIFIERS}\s+)*"
+    rf"(?:{'|'.join(_DESIGNATORS)})\b[^.:<]{{0,20}}:"
+)
+_MARKUP = re.compile(r"<[^>]+>")
+
+
+def printed_ability_count(text: str) -> int:
+    """How many activated abilities ``text`` spells out.
+
+    Counts the designator phrases that head a segment, so "Battle: ... . Reaction: ..." is two and a
+    colon inside an ability's own prose is none. A designator printed as an icon rather than spelled
+    out is not counted, so the result is a floor.
+    """
+    return len(_ABILITY_HEAD.findall(_MARKUP.sub("", text)))
+
+
+def printed_ability_counts(cards_dir: Path = DEFAULT_CARDS_PATH) -> dict[str, int]:
+    """Every card id with the number of activated abilities its printed text spells out.
+
+    A card printed in several sets is counted at its most explicit printing, since a designator
+    spelled out on one printing and drawn as an icon on another is the same ability either way.
+
+    Parameters
+    ----------
+    cards_dir : path, optional
+        Directory of per-set YAML files. Default is the packaged ``sets`` directory.
+
+    Returns
+    -------
+    dict mapping str to int
+        Card id to the number of abilities its text spells out.
+    """
+    counts: dict[str, int] = {}
+    for entry in iter_set_entries(cards_dir):
+        count = printed_ability_count(entry.text)
+        if count > counts.get(entry.card_id, 0):
+            counts[entry.card_id] = count
+    return counts
+
+
+def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[str]:
+    """
+    One human-readable line per card registering fewer activated abilities than its text prints.
+
+    A card implemented in half behaves correctly in the half it has, so nothing else reports it.
+    Shortfalls alone: :func:`printed_ability_count` reads a floor, so a card registering more than
+    it appears to print is a limit of the count rather than a defect.
+
+    Parameters
+    ----------
+    cards_dir : path, optional
+        Directory of per-set YAML files. Default is the packaged ``sets`` directory.
+
+    Returns
+    -------
+    list of str
+        Sorted problem descriptions, empty when every card registers what it prints.
+    """
+    printed = printed_ability_counts(cards_dir)
+    problems = []
+    for card_id, registered in sorted(abilities._ABILITIES.items()):
+        shows = printed.get(card_id, 0)
+        if shows > len(registered):
+            problems.append(
+                f"abilities: {card_id} registers {len(registered)} of the {shows} "
+                f"activated abilities its text prints"
+            )
     return problems
 
 
