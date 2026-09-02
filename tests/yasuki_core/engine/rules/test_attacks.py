@@ -473,3 +473,92 @@ def test_the_exquisite_nagamaki_destroys_a_defender_and_bows_to_pay():
 
     assert not _in_play(session, "guard")
     assert session.game.table.cards_by_id["nagamaki"].bowed
+
+
+def _defending_unit(*followers):
+    """A battle where the Defender's Personality carries ``followers``, each ``(id, printed_id,
+    force)``.
+
+    The Attacker brings a 4F Personality and the Defender a 3F one, so what decides each case is
+    the attack's strength against the Follower it names rather than the Personality holding it.
+    """
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("raider", owner=ATTACKER, force=4))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=3))
+    for card_id, printed_id, force in followers:
+        attached(
+            state,
+            attachment(
+                card_id,
+                owner=DEFENDER,
+                attachment_type=AttachmentType.FOLLOWER,
+                force=force,
+                printed_id=printed_id,
+            ),
+            "guard",
+        )
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("raider@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    return session
+
+
+def test_fear_against_aseths_legion_loses_two_strength():
+    """ "Fear effects targeting this Follower have -2 strength." A Fear 3 reaches a 2F Follower
+    everywhere else on the board; here it comes up short."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+
+    _resolve(session, Fear(3, "legion", ATTACKER))
+
+    assert not session.game.table.cards_by_id["legion"].bowed
+
+
+def test_a_stronger_fear_still_reaches_aseths_legion():
+    """The penalty is a reduction, not immunity — Fear 4 against a 2F Follower still bows it."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+
+    _resolve(session, Fear(4, "legion", ATTACKER))
+
+    assert session.game.table.cards_by_id["legion"].bowed
+
+
+@pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
+def test_only_fear_is_blunted_by_aseths_legion(attack):
+    """Her text names Fear alone, so a Melee or Ranged Attack of the same strength destroys her."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+
+    _resolve(session, attack(3, "legion", ATTACKER))
+
+    assert not _in_play(session, "legion")
+
+
+def test_the_penalty_follows_the_card_it_is_printed_on():
+    """The reduction is keyed to the card being attacked, not to the seat or the battlefield — an
+    ordinary Follower beside the Legion takes a Fear 3 in full."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+    attached(
+        session.game.table,
+        attachment("ashigaru", owner=DEFENDER, attachment_type=AttachmentType.FOLLOWER, force=2),
+        "guard",
+    )
+
+    _resolve(session, Fear(3, "ashigaru", ATTACKER))
+
+    assert session.game.table.cards_by_id["ashigaru"].bowed
+
+
+def test_aseths_legion_attacks_with_its_own_melee():
+    """Her Battle ability is unaffected by the trait, which speaks only about attacks aimed at her."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+
+    session.act(DEFENDER, ActivateAbility("legion"))
+    session.submit(DEFENDER, DecisionResponse(("raider",)))
+
+    assert _in_play(session, "raider")  # 4F stands against a Melee 2

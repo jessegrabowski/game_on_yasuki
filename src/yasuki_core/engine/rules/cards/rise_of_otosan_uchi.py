@@ -1,6 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
+    attack_targets,
     owned_personalities,
     CardLocation,
     InvestAbility,
@@ -15,6 +16,7 @@ from yasuki_core.engine.rules.abilities import (
 from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    AttackEffect,
     Ask,
     AskAmount,
     AskOption,
@@ -26,10 +28,13 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     DrawCard,
     Effect,
+    Fear,
     GainHonor,
+    MeleeAttack,
     GrantProvinceStrength,
     MoveToDeck,
     PayGold,
+    attack_strength_against,
     ShuffleDeck,
     Then,
 )
@@ -51,6 +56,39 @@ from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
+
+
+# --- Aseth's Legion ---
+
+ASETHS_LEGION_MELEE = 2
+# "Fear effects targeting this Follower have -2 strength."
+ASETHS_LEGION_FEAR_PENALTY = -2
+
+
+@attack_strength_against("aseths_legion")
+def _aseths_legion_attack_strength(
+    game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
+) -> int:
+    """ "Targeting this Follower" — she shields herself alone, and only against Fear."""
+    if target is not card or not isinstance(attack, Fear):
+        return 0
+    return ASETHS_LEGION_FEAR_PENALTY
+
+
+def _aseths_legion_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [MeleeAttack(ASETHS_LEGION_MELEE, target.id, source.owner)]
+
+
+register_ability(
+    "aseths_legion",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Melee {ASETHS_LEGION_MELEE} Attack",
+        cost=no_cost,
+        targets=attack_targets,
+        effects=_aseths_legion_effects,
+    ),
+)
 
 
 # --- Blessings of the Red Panda Spirit ---
