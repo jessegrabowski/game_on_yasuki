@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Pass
+from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equip, Pass
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.effects import Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
@@ -15,6 +15,9 @@ from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
     end_phase,
+    holding,
+    pay,
+    register,
     personality,
     province_card,
     put_in_play,
@@ -265,3 +268,75 @@ def test_haramaki_do_attacks_from_the_personality_it_is_attached_to():
     session.submit(ATTACKER, DecisionResponse(("guard",)))
 
     assert session.game.table.cards_by_id["guard"].bowed
+
+
+def _follower_battle(printed_id, *, follower_force=1):
+    """A battle with a Follower carrying ``printed_id`` equipped to an attacking Personality."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=4))
+    attached(
+        state,
+        attachment(
+            "troops",
+            attachment_type=AttachmentType.FOLLOWER,
+            force=follower_force,
+            printed_id=printed_id,
+        ),
+        "hero",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def test_skeletal_troops_fear_bows_a_defender():
+    session = _follower_battle("skeletal_troops")
+
+    session.act(ATTACKER, ActivateAbility("troops"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def _equip_from_hand(printed_id, *, gold=6):
+    """A seat with gold and a Personality in play, holding ``printed_id`` as a Follower in hand.
+
+    Equipping is how a Follower enters play from hand, which is the arrival its enters-play trait
+    keys on — building it onto the table directly would skip the trigger entirely.
+    """
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, holding("mine", owner=ATTACKER, gold_production=gold))
+    put_in_play(state, personality("hero", owner=ATTACKER, force=3))
+    troops = attachment(
+        "troops", attachment_type=AttachmentType.FOLLOWER, force=1, printed_id=printed_id
+    )
+    state.zones[ZoneKey(ATTACKER, ZoneRole.HAND)].add(register(state, troops))
+    return EngineSession.start(state, ATTACKER)
+
+
+@pytest.mark.parametrize(
+    ("printed_id", "loss"),
+    [("skeletal_troops", 2)],
+)
+def test_a_follower_that_costs_honor_charges_it_as_it_enters_play(printed_id, loss):
+    """Each of these prints "after this Follower enters play, lose N Honor", and the trigger only
+    fires on a real arrival — so this is what tells the Equip path from a hand-built board."""
+    session = _equip_from_hand(printed_id)
+    before = session.game.table.seats[ATTACKER].honor
+
+    session.act(ATTACKER, Equip("troops"))
+    session.submit(ATTACKER, DecisionResponse(("hero",)))
+    pay(session, ATTACKER)
+
+    assert session.game.table.seats[ATTACKER].honor == before - loss

@@ -3,6 +3,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
+    attack_targets,
     bow_cost,
     bow_parent_and_destroy,
     itself,
@@ -18,6 +19,7 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     Effect,
     DelayedEffect,
+    Fear,
     GainHonor,
     GrantPriority,
     MoveToHand,
@@ -26,7 +28,8 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.state import BEGINNING_OF_COMBAT, GameState
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -120,6 +123,36 @@ register_ability(
         effects=_imperial_gift_effects,
         all_targets=True,
         located_at=(CardLocation.PROVINCE,),
+    ),
+)
+
+
+# --- Skeletal Troops ---
+
+SKELETAL_TROOPS_HONOR_LOSS = 2
+SKELETAL_TROOPS_FEAR = 3
+
+
+@on(EnteredPlay, "skeletal_troops")
+def _skeletal_troops_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After this Follower enters play, lose 2 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -SKELETAL_TROOPS_HONOR_LOSS)]
+
+
+def _skeletal_troops_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Fear(SKELETAL_TROOPS_FEAR, target.id, source.owner)]
+
+
+register_ability(
+    "skeletal_troops",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Fear {SKELETAL_TROOPS_FEAR}",
+        cost=no_cost,
+        targets=attack_targets,
+        effects=_skeletal_troops_effects,
     ),
 )
 
