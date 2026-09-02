@@ -7,6 +7,7 @@ yasuki_core.engine.rules.units
 
 .. autosummary::
 
+    attackable
     followers_of
     has_presence
     in_a_unit

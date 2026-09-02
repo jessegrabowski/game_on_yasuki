@@ -51,6 +51,12 @@ def unit_of(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
     return (card, *attachments_of(game, card))
 
 
+def shares_unit(game: GameState, card: L5RCard, other: L5RCard) -> bool:
+    """Whether ``card`` and ``other`` stand in the same unit (CR, Unit). A card shares a unit with
+    itself, so a text about "cards in this unit" covers the card it is printed on."""
+    return other in unit_of(game, attached_to(game, card) or card)
+
+
 # What an attachment grants the card it hangs on, beyond the modifier it prints. Haramaki-do prints
 # +2F and says "This Personality has +1PH" in its text; the printed half is a stat on the print, the
 # written half is this. Keyed by printed id like the other per-card registries.

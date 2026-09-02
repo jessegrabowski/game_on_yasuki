@@ -32,7 +32,9 @@ from yasuki_core.engine.rules.effects import (
     LoseGame,
     Move,
     MoveToHand,
+    Fear,
     GrantPriority,
+    RangedAttack,
     GrantKeyword,
     GrantMinimum,
     GrantProvinceStrength,
@@ -86,6 +88,14 @@ EFFECTS = [
             "walls", ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), 3, Duration.UNTIL_END_OF_TURN
         ),
         "walls gives P2:province:0 +3 province strength (UNTIL_END_OF_TURN)",
+    ),
+    (
+        RangedAttack(3, "ashigaru", PlayerId.P1),
+        "ranged 3 on ashigaru",
+    ),
+    (
+        Fear(4, "hida", PlayerId.P1, compared=Stat.CHI),
+        "fear 4 on hida vs CHI",
     ),
     (
         GrantPriority(PlayerId.P1),

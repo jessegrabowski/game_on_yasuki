@@ -1,8 +1,11 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     InvestAbility,
+    attack_targets,
     bow_cost,
     itself,
+    no_cost,
     register_ability,
     register_invest,
 )
@@ -13,13 +16,94 @@ from yasuki_core.engine.rules.economy import (
     invest_discount,
     recruit_discount,
 )
-from yasuki_core.engine.rules.effects import CreateToken, DrawCard, Effect, GainHonor
+from yasuki_core.engine.rules.effects import (
+    Choose,
+    CreateToken,
+    DrawCard,
+    Effect,
+    GainHonor,
+    MeleeAttack,
+    PlaceInProvince,
+    ShuffleDeck,
+)
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import TriggerContext, on
+from yasuki_core.engine.rules.legality import province_zones
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import PersonalityPrint
+
+
+# --- Doji Maya (Experienced) ---
+
+MAYA_MELEE = 3
+MAYA_INVEST = 2
+# "a Courtier or Tanuki Clan Personality" — both are keywords a card carries.
+MAYA_SOUGHT = (keywords.COURTIER, keywords.TANUKI_CLAN)
+
+
+def _doji_maya_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [MeleeAttack(MAYA_MELEE, target.id, source.owner)]
+
+
+register_ability(
+    "doji_maya_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Melee {MAYA_MELEE} Attack",
+        cost=no_cost,
+        targets=attack_targets,
+        effects=_doji_maya_experienced_effects,
+    ),
+)
+
+
+def _doji_maya_experienced_search_pool(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The Personalities in ``seat``'s Dynasty deck her Invest may fetch."""
+    return tuple(
+        card.id
+        for card in game.table.decks[DeckKey(seat, Side.DYNASTY)].cards
+        if isinstance(card.printed, PersonalityPrint)
+        and not effective_keywords(game, card).isdisjoint(MAYA_SOUGHT)
+    )
+
+
+def _doji_maya_experienced_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
+    """Search the Dynasty deck for a Personality to refill the Province Maya just left."""
+    # "If Maya entered play from a Province" needs no test: an Invest resolves only from a Recruit
+    # or an Equip, and a Personality reaches play by Recruit, which is always out of a Province.
+    pool = _doji_maya_experienced_search_pool(game, source.owner)
+    if not pool:
+        return []
+    return [Choose(source.owner, pool, 1, 1, "doji_maya_experienced", source.id)]
+
+
+@choice_resolver(
+    "doji_maya_experienced",
+    prompt="Search your Dynasty deck for a Courtier or Tanuki Clan Personality",
+)
+def _resolve_doji_maya_experienced(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Put the card Maya found into the Province she vacated, face-up, and shuffle the deck."""
+    # Her Province is the one still short: a vacated Province's refill is deferred behind the
+    # reactions to the card leaving, and an Invest resolves before that runs. Filling it here is
+    # what leaves the pending refill a no-op.
+    short = [key for key, zone in province_zones(game, seat) if zone.has_capacity()]
+    placement = [PlaceInProvince(chosen[0], short[0])] if short else []
+    return [*placement, ShuffleDeck(DeckKey(seat, Side.DYNASTY))]
+
+
+register_invest(
+    "doji_maya_experienced",
+    InvestAbility(amounts=(MAYA_INVEST,), effect=_doji_maya_experienced_invest),
+)
 
 
 # --- Kengun Grounds ---
@@ -106,6 +190,27 @@ def _moto_ikarichi_bloodseeker_entered_play(ctx: TriggerContext) -> list[Effect]
     if ctx.event.card_id != ctx.card.id:
         return []
     return [GainHonor(ctx.card.owner, -IKARICHI_HONOR_LOSS)]
+
+
+IKARICHI_MELEE = 4
+
+
+def _moto_ikarichi_bloodseeker_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [MeleeAttack(IKARICHI_MELEE, target.id, source.owner)]
+
+
+register_ability(
+    "moto_ikarichi_bloodseeker",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Melee {IKARICHI_MELEE} Attack",
+        cost=no_cost,
+        targets=attack_targets,
+        effects=_moto_ikarichi_bloodseeker_effects,
+    ),
+)
 
 
 # --- Moto Traders ---

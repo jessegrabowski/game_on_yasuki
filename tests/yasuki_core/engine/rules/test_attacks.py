@@ -1,0 +1,791 @@
+import pytest
+
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equip, Pass
+from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
+from yasuki_core.engine.rules.abilities import ability_for
+from yasuki_core.engine.rules.effects import (
+    Destroy,
+    Fear,
+    MeleeAttack,
+    RangedAttack,
+    effective_strength,
+)
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.units import attackable
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import AttachmentType
+
+from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
+    end_phase,
+    holding,
+    pay,
+    register,
+    personality,
+    province_card,
+    put_in_play,
+)
+
+ATTACKER, DEFENDER = PlayerId.P1, PlayerId.P2
+
+
+@pytest.fixture
+def battle():
+    """A battle at the Defender's first Province, both sides holding a plain Personality.
+
+    The Attacker also keeps one at home and the Defender has a second Province, so "the current
+    enemy army" can be told from "the enemy's cards".
+    """
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    for index in range(2):
+        province_card(state, f"def-prov{index}", seat=DEFENDER, index=index)
+    put_in_play(state, personality("raider", owner=ATTACKER, force=3))
+    put_in_play(state, personality("reserve", owner=ATTACKER, force=2))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    put_in_play(state, personality("watch", owner=DEFENDER, force=1))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("raider@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0", "watch@1")))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseBattlefield)
+    session.submit(choice.seat, DecisionResponse(("0",)))
+    return session
+
+
+def _ids(session, seat):
+    return {card.id for card in attackable(session.game, seat)}
+
+
+def test_it_reaches_the_enemy_army_and_not_the_enemys_other_cards(battle):
+    """ "In the current enemy army" is one side of one battlefield, so the Defender's unit at its
+    other Province is no target even though the Defender controls it."""
+    assert _ids(battle, ATTACKER) == {"guard"}
+
+
+def test_it_reaches_across_the_battle_rather_than_by_seat(battle):
+    """The Defender attacks the attacking army, so each seat's targets are the other's."""
+    assert _ids(battle, DEFENDER) == {"raider"}
+
+
+def test_a_personality_carrying_a_follower_is_spared_and_the_follower_is_not(battle):
+    """ "A Follower or a Personality without Followers" — the Follower stands in his place rather
+    than beside him, so exactly one of the two is a target."""
+    attached(
+        battle.game.table,
+        attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, force=1),
+        "guard",
+    )
+
+    assert _ids(battle, ATTACKER) == {"ashigaru"}
+
+
+def test_an_item_does_not_protect_the_personality_it_is_attached_to(battle):
+    """Only a Follower spares him. An Item hands him a modifier rather than standing in the unit,
+    so a Personality carrying one is still a target — and the Item itself is not."""
+    attached(
+        battle.game.table,
+        attachment("katana", attachment_type=AttachmentType.ITEM, force=2),
+        "guard",
+    )
+
+    assert _ids(battle, ATTACKER) == {"guard"}
+
+
+def test_every_follower_is_a_target_when_a_personality_carries_several(battle):
+    """The rule names Followers rather than one of them, so a unit of three offers two targets and
+    shields the Personality behind both."""
+    for name in ("ashigaru", "spearmen"):
+        attached(
+            battle.game.table,
+            attachment(name, attachment_type=AttachmentType.FOLLOWER, force=1),
+            "guard",
+        )
+
+    assert _ids(battle, ATTACKER) == {"ashigaru", "spearmen"}
+
+
+def test_nothing_is_attackable_outside_a_battle():
+    """An attack effect names the current enemy army, which does not exist between battles — so the
+    predicate is empty rather than falling back to the whole board."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+
+    assert attackable(session.game, ATTACKER) == []
+
+
+def _resolve(session, attack):
+    triggers.resolve_effects(session.game, [attack])
+
+
+def _in_play(session, card_id):
+    """Whether the card is still standing on the table. A destroyed card stays in the registry and
+    moves to a discard, so the battlefield is what answers."""
+    table = session.game.table
+    return table.cards_by_id[card_id] in table.battlefield.cards
+
+
+@pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
+def test_an_attack_destroys_a_target_at_or_under_its_strength(battle, attack):
+    """ "If its Force is equal to or less than X, destroy it." The guard is 2F, so a 2 kills and the
+    boundary is inclusive; Melee follows the same rules as Ranged."""
+    _resolve(battle, attack(2, "guard", ATTACKER))
+
+    assert not _in_play(battle, "guard")
+
+
+@pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
+def test_an_attack_leaves_a_target_above_its_strength(battle, attack):
+    _resolve(battle, attack(1, "guard", ATTACKER))
+
+    assert _in_play(battle, "guard")
+
+
+def test_fear_bows_rather_than_destroying(battle):
+    """Fear is the same targeting and comparison with the other consequence."""
+    _resolve(battle, Fear(2, "guard", ATTACKER))
+
+    assert _in_play(battle, "guard")
+    assert battle.game.table.cards_by_id["guard"].bowed
+
+
+def test_fear_leaves_a_target_above_its_strength_standing(battle):
+    _resolve(battle, Fear(1, "guard", ATTACKER))
+
+    assert not battle.game.table.cards_by_id["guard"].bowed
+
+
+def test_the_comparison_reads_the_effective_stat_not_the_printed_one(battle):
+    """A 2F guard given +2F survives a Ranged 2 that would have killed him as printed — modifiers
+    count, so the comparison goes through the same effective read the rest of the engine uses."""
+    battle.game.modifiers.append(
+        Modifier("banner", "guard", Stat.FORCE, 2, Duration.UNTIL_END_OF_TURN)
+    )
+
+    _resolve(battle, RangedAttack(2, "guard", ATTACKER))
+
+    assert _in_play(battle, "guard")
+
+
+def test_an_attack_may_be_compared_against_another_stat(battle):
+    """ "If a Ranged Attack effect ends up being compared against a different stat than Force,
+    compare that stat against the strength instead." The guard is 2F/3C, so the same strength 2
+    that destroys him on Force — the case above — leaves him standing on Chi."""
+    _resolve(battle, RangedAttack(2, "guard", ATTACKER, compared=Stat.CHI))
+
+    assert _in_play(battle, "guard")
+
+
+def test_an_attack_on_a_card_that_has_already_left_does_nothing(battle):
+    """Attacks are announced before they resolve, so the target can be gone by the time one lands.
+    Attacking a card already destroyed changes nothing rather than raising."""
+    _resolve(battle, RangedAttack(9, "guard", ATTACKER))
+    discard = list(battle.game.table.zones[ZoneKey(DEFENDER, ZoneRole.DYNASTY_DISCARD)].cards)
+
+    _resolve(battle, RangedAttack(9, "guard", ATTACKER))
+
+    assert (
+        list(battle.game.table.zones[ZoneKey(DEFENDER, ZoneRole.DYNASTY_DISCARD)].cards) == discard
+    )
+
+
+def test_a_melee_attack_is_not_a_ranged_attack():
+    """ "Melee Attacks follow the above rules but are not considered Ranged Attacks." Both destroy,
+    so the temptation is to make one a subclass of the other; the CR forbids it, and combining
+    turns on the two being different kinds."""
+    melee = MeleeAttack(3, "guard", ATTACKER)
+
+    assert not isinstance(melee, RangedAttack)
+    assert type(melee) is not RangedAttack
+
+
+def _roburo_battle():
+    """A battle with Daigotsu Roburo attacking a 2F defender who carries no Follower."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("roburo", owner=ATTACKER, printed_id="daigotsu_roburo", force=4))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("roburo@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def test_roburo_bows_a_defender_his_fear_reaches():
+    """ "Battle: Fear 4" against a 2F guard — the whole card, and the first one to route an attack
+    effect through a real ability."""
+    session = _roburo_battle()
+
+    session.act(ATTACKER, ActivateAbility("roburo"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def test_roburo_is_offered_only_inside_a_battle():
+    """A Battle designator with no battle open is not a legal action, so the ability cannot be
+    taken from the Action Phase."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("roburo", owner=ATTACKER, printed_id="daigotsu_roburo", force=4))
+    session = EngineSession.start(state, ATTACKER)
+
+    assert ActivateAbility("roburo") not in session.legal_actions(ATTACKER)
+
+
+def test_haramaki_do_attacks_from_the_personality_it_is_attached_to():
+    """An Item's ability is taken from the Item, not from its host — so the action names the Item
+    even though it is the Personality standing at the battlefield."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=4))
+    attached(
+        state,
+        attachment("armor", attachment_type=AttachmentType.ITEM, printed_id="haramaki_do"),
+        "hero",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+
+    session.act(ATTACKER, ActivateAbility("armor"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def _follower_battle(printed_id, *, follower_force=1):
+    """A battle with a Follower carrying ``printed_id`` equipped to an attacking Personality."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=4))
+    attached(
+        state,
+        attachment(
+            "troops",
+            attachment_type=AttachmentType.FOLLOWER,
+            force=follower_force,
+            printed_id=printed_id,
+        ),
+        "hero",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def test_skeletal_troops_fear_bows_a_defender():
+    session = _follower_battle("skeletal_troops")
+
+    session.act(ATTACKER, ActivateAbility("troops"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def _equip_from_hand(printed_id, *, gold=6):
+    """A seat with gold and a Personality in play, holding ``printed_id`` as a Follower in hand.
+
+    Equipping is how a Follower enters play from hand, which is the arrival its enters-play trait
+    keys on — building it onto the table directly would skip the trigger entirely.
+    """
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, holding("mine", owner=ATTACKER, gold_production=gold))
+    put_in_play(state, personality("hero", owner=ATTACKER, force=3))
+    troops = attachment(
+        "troops", attachment_type=AttachmentType.FOLLOWER, force=1, printed_id=printed_id
+    )
+    state.zones[ZoneKey(ATTACKER, ZoneRole.HAND)].add(register(state, troops))
+    return EngineSession.start(state, ATTACKER)
+
+
+@pytest.mark.parametrize(
+    ("printed_id", "loss"),
+    [("tosekiki", 3), ("skeletal_troops", 2), ("questionable_vassal", 1)],
+)
+def test_a_follower_that_costs_honor_charges_it_as_it_enters_play(printed_id, loss):
+    """Each of these prints "after this Follower enters play, lose N Honor", and the trigger only
+    fires on a real arrival — so this is what tells the Equip path from a hand-built board."""
+    session = _equip_from_hand(printed_id)
+    before = session.game.table.seats[ATTACKER].honor
+
+    session.act(ATTACKER, Equip("troops"))
+    session.submit(ATTACKER, DecisionResponse(("hero",)))
+    pay(session, ATTACKER)
+
+    assert session.game.table.seats[ATTACKER].honor == before - loss
+
+
+def test_tosekiki_ranged_destroys_a_defender_and_bows_to_pay():
+    """ "Battle, Bow: Ranged 4" — the cost is paid as the attack resolves, so the Follower ends
+    bowed and the 2F guard is gone."""
+    session = _follower_battle("tosekiki")
+
+    session.act(ATTACKER, ActivateAbility("troops"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+    assert session.game.table.cards_by_id["troops"].bowed
+
+
+def test_ashigaru_spearmen_offers_the_draw_only_when_it_arrives_from_hand():
+    """ "After this Follower enters play from your hand" — Equipping is that arrival, so the offer
+    is put to the seat rather than resolving silently."""
+    session = _equip_from_hand("ashigaru_spearmen")
+
+    session.act(ATTACKER, Equip("troops"))
+    session.submit(ATTACKER, DecisionResponse(("hero",)))
+    pay(session, ATTACKER)
+
+    assert session.game.pending is not None
+    assert "additional card" in session.game.pending.prompt()
+
+
+def test_ashigaru_spearmen_offers_nothing_when_it_arrives_any_other_way():
+    """ "...from your hand" is the whole condition. A Follower an effect attaches from a deck or a
+    discard arrives the same way as far as the board is concerned, and offers no draw."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=3))
+    attached(
+        state,
+        attachment(
+            "troops",
+            attachment_type=AttachmentType.FOLLOWER,
+            force=1,
+            printed_id="ashigaru_spearmen",
+        ),
+        "hero",
+    )
+    session = EngineSession.start(state, ATTACKER)
+
+    triggers.fire(session.game, EnteredPlay("troops", from_hand=False))
+
+    assert session.game.pending is None
+
+
+def _melee_battle(printed_id):
+    """A battle with an attacking Personality carrying ``printed_id``, against a 2F defender."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, printed_id=printed_id, force=4))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+@pytest.mark.parametrize(
+    "printed_id", ["doji_maya_experienced", "moto_ikarichi_bloodseeker"], ids=["maya", "ikarichi"]
+)
+def test_a_melee_attack_destroys_the_defender_it_reaches(printed_id):
+    """The first cards to carry a Melee Attack. Both print a strength above the 2F guard, so each
+    destroys him — which is what tells a Melee that resolves from a Melee that merely exists."""
+    session = _melee_battle(printed_id)
+
+    session.act(ATTACKER, ActivateAbility("hero"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+
+
+@pytest.mark.parametrize(
+    "printed_id", ["doji_maya_experienced", "moto_ikarichi_bloodseeker"], ids=["maya", "ikarichi"]
+)
+def test_a_melee_card_emits_a_melee_attack_and_not_a_ranged_one(printed_id):
+    """Both kinds destroy, so nothing about the board tells them apart until combining exists —
+    which is exactly why the card has to name the right one now. A Melee printed as a Ranged would
+    combine with the wrong attacks and no test of the outcome would notice."""
+    session = _melee_battle(printed_id)
+    source = session.game.table.cards_by_id["hero"]
+    ability = ability_for(source)
+
+    effects = ability.effects(session.game, source, session.game.table.cards_by_id["guard"])
+
+    assert [type(effect) for effect in effects] == [MeleeAttack]
+
+
+def test_the_exquisite_nagamaki_destroys_a_defender_and_bows_to_pay():
+    """An Item's Melee, taken from the Weapon rather than from the Personality carrying it. The
+    3F strength clears the 2F guard, and the bow is the cost rather than a consequence."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=4))
+    attached(
+        state,
+        attachment(
+            "nagamaki",
+            attachment_type=AttachmentType.ITEM,
+            printed_id="exquisite_nagamaki_of_the_fox_clan",
+        ),
+        "hero",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+
+    session.act(ATTACKER, ActivateAbility("nagamaki"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+    assert session.game.table.cards_by_id["nagamaki"].bowed
+
+
+def _defending_unit(*followers):
+    """A battle where the Defender's Personality carries ``followers``, each ``(id, printed_id,
+    force)``.
+
+    The Attacker brings a 4F Personality and the Defender a 3F one, so what decides each case is
+    the attack's strength against the Follower it names rather than the Personality holding it.
+    """
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("raider", owner=ATTACKER, force=4))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=3))
+    for card_id, printed_id, force in followers:
+        attached(
+            state,
+            attachment(
+                card_id,
+                owner=DEFENDER,
+                attachment_type=AttachmentType.FOLLOWER,
+                force=force,
+                printed_id=printed_id,
+            ),
+            "guard",
+        )
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("raider@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    return session
+
+
+def test_fear_against_aseths_legion_loses_two_strength():
+    """ "Fear effects targeting this Follower have -2 strength." A Fear 3 reaches a 2F Follower
+    everywhere else on the board; here it comes up short."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+
+    _resolve(session, Fear(3, "legion", ATTACKER))
+
+    assert not session.game.table.cards_by_id["legion"].bowed
+
+
+def test_a_stronger_fear_still_reaches_aseths_legion():
+    """The penalty is a reduction, not immunity — Fear 4 against a 2F Follower still bows it."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+
+    _resolve(session, Fear(4, "legion", ATTACKER))
+
+    assert session.game.table.cards_by_id["legion"].bowed
+
+
+@pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
+def test_only_fear_is_blunted_by_aseths_legion(attack):
+    """Her text names Fear alone, so a Melee or Ranged Attack of the same strength destroys her."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+
+    _resolve(session, attack(3, "legion", ATTACKER))
+
+    assert not _in_play(session, "legion")
+
+
+def test_the_penalty_follows_the_card_it_is_printed_on():
+    """The reduction is keyed to the card being attacked, not to the seat or the battlefield — an
+    ordinary Follower beside the Legion takes a Fear 3 in full."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+    attached(
+        session.game.table,
+        attachment("ashigaru", owner=DEFENDER, attachment_type=AttachmentType.FOLLOWER, force=2),
+        "guard",
+    )
+
+    _resolve(session, Fear(3, "ashigaru", ATTACKER))
+
+    assert session.game.table.cards_by_id["ashigaru"].bowed
+
+
+def test_aseths_legion_attacks_with_its_own_melee():
+    """Her Battle ability is unaffected by the trait, which speaks only about attacks aimed at her."""
+    session = _defending_unit(("legion", "aseths_legion", 2))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+
+    session.act(DEFENDER, ActivateAbility("legion"))
+    session.submit(DEFENDER, DecisionResponse(("raider",)))
+
+    assert _in_play(session, "raider")  # 4F stands against a Melee 2
+
+
+@pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
+def test_every_attack_kind_loses_strength_against_the_legion_of_the_khan(attack):
+    """Her text names all three kinds, so unlike Aseth's Legion nothing gets through at printed
+    strength. A 4 against a 3F Follower resolves at 2 and leaves her standing."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+
+    _resolve(session, attack(4, "khan", ATTACKER))
+
+    assert _in_play(session, "khan")
+
+
+def test_fear_also_loses_strength_against_the_legion_of_the_khan():
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+
+    _resolve(session, Fear(4, "khan", ATTACKER))
+
+    assert not session.game.table.cards_by_id["khan"].bowed
+
+
+@pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
+def test_a_strong_enough_attack_still_reaches_the_legion_of_the_khan(attack):
+    """The penalty is a reduction, not immunity: a 5 resolves at 3 and destroys the 3F Follower."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+
+    _resolve(session, attack(5, "khan", ATTACKER))
+
+    assert not _in_play(session, "khan")
+
+
+def test_strength_reduced_past_zero_reaches_nothing():
+    """The zero floor the CR puts on a stat (Calculating Stats) is about stats, and an attack's
+    strength is not one — a Ranged Attack 1 against the Legion of the Khan resolves at -1, which
+    fails to reach even a Follower with no Force."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 0))
+    attack = RangedAttack(1, "khan", ATTACKER)
+
+    assert effective_strength(session.game, attack) == -1
+
+    _resolve(session, attack)
+
+    assert _in_play(session, "khan")
+
+
+def test_ichigos_guard_covers_the_other_followers_in_its_unit():
+    """ "Targeting cards in this unit" — the card beside the Guard is shielded too, which is what
+    tells this apart from the Legions, who protect only themselves. A 3 lands at 2 on a 3F card."""
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
+
+    _resolve(session, RangedAttack(3, "ashigaru", ATTACKER))
+
+    assert _in_play(session, "ashigaru")
+
+
+def test_ichigos_guard_covers_itself_too():
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
+
+    _resolve(session, RangedAttack(3, "ichigo", ATTACKER))
+
+    assert _in_play(session, "ichigo")
+
+
+def test_ichigos_guard_does_not_reach_a_card_outside_its_unit():
+    """The unit is the boundary: another Personality's Follower at the same battlefield takes the
+    attack in full."""
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
+    put_in_play(session.game.table, personality("other", owner=DEFENDER, force=3))
+    attached(
+        session.game.table,
+        attachment("spearmen", owner=DEFENDER, attachment_type=AttachmentType.FOLLOWER, force=3),
+        "other",
+    )
+
+    _resolve(session, RangedAttack(3, "spearmen", ATTACKER))
+
+    assert not _in_play(session, "spearmen")
+
+
+def test_the_legion_of_the_khan_shields_nobody_but_herself():
+    """ "Targeting this Follower", against Ichigo's Guard's "cards in this unit" — a Follower beside
+    her in the same unit takes the attack at printed strength."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+    attached(
+        session.game.table,
+        attachment("ashigaru", owner=DEFENDER, attachment_type=AttachmentType.FOLLOWER, force=3),
+        "guard",
+    )
+
+    _resolve(session, RangedAttack(3, "ashigaru", ATTACKER))
+
+    assert not _in_play(session, "ashigaru")
+
+
+def test_a_cards_reach_is_its_own_business_not_the_walk_s():
+    """Every card in play is asked about every attack, so reach lives in the handler rather than in
+    who gets asked. Ichigo's Guard in one unit says nothing about a Follower in another — the same
+    board the walk covers, and the card declines it."""
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
+    put_in_play(session.game.table, personality("other", owner=DEFENDER, force=3))
+    attached(
+        session.game.table,
+        attachment("spearmen", owner=DEFENDER, attachment_type=AttachmentType.FOLLOWER, force=3),
+        "other",
+    )
+
+    guarded = effective_strength(session.game, RangedAttack(3, "ashigaru", ATTACKER))
+    exposed = effective_strength(session.game, RangedAttack(3, "spearmen", ATTACKER))
+
+    assert (guarded, exposed) == (2, 3)
+
+
+def test_two_reducers_over_the_same_target_both_apply():
+    """Nothing in the CR makes these penalties pick a winner, so a Follower who reduces attacks on
+    herself standing in a unit Ichigo's Guard covers gets both: a 5 resolves at 2 and leaves her
+    3F standing, where either penalty alone would have reached her."""
+    session = _defending_unit(("ichigo", "ichigos_guard", 3), ("khan", "legion_of_the_khan", 3))
+
+    _resolve(session, RangedAttack(5, "khan", ATTACKER))
+
+    assert _in_play(session, "khan")
+
+
+def _jade_legion_attacks(*, defender_keywords=()):
+    """The Jade Legion attacking a 2F defender who carries ``defender_keywords``."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("hero", owner=ATTACKER, force=4))
+    attached(
+        state,
+        attachment(
+            "jade",
+            attachment_type=AttachmentType.FOLLOWER,
+            force=3,
+            printed_id="jade_legion",
+        ),
+        "hero",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2, keywords=defender_keywords))
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def test_the_jade_legion_straightens_after_destroying_a_shadowlands_card():
+    """ "If this destroyed any Shadowlands cards, straighten this Follower." The bow was the cost,
+    so straightening gives the attack back — which is the whole point of the clause."""
+    session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
+
+    session.act(ATTACKER, ActivateAbility("jade"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+    assert not session.game.table.cards_by_id["jade"].bowed
+
+
+def test_the_jade_legion_stays_bowed_after_destroying_anything_else():
+    """A destruction is not enough — the card destroyed has to be Shadowlands."""
+    session = _jade_legion_attacks()
+
+    session.act(ATTACKER, ActivateAbility("jade"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not _in_play(session, "guard")
+    assert session.game.table.cards_by_id["jade"].bowed
+
+
+def test_the_jade_legion_stays_bowed_when_its_attack_destroys_nothing():
+    """The clause reads the destruction, not the attempt: a Shadowlands defender the Melee cannot
+    reach leaves the Legion bowed."""
+    session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
+    session.game.modifiers.append(
+        Modifier("banner", "guard", Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)
+    )
+
+    session.act(ATTACKER, ActivateAbility("jade"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert _in_play(session, "guard")
+    assert session.game.table.cards_by_id["jade"].bowed
+
+
+def test_the_jade_legion_ignores_a_shadowlands_death_it_did_not_cause():
+    """ "If **this** destroyed any Shadowlands cards" — the destruction has to be the Legion's own.
+    ``Destroyed`` names only the seat that caused it, so a Shadowlands card dying to anything else
+    while the Legion sits bowed must leave it bowed."""
+    session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
+    session.game.table.cards_by_id["jade"].bow()
+
+    _resolve(session, Destroy("guard", ATTACKER))
+
+    assert not _in_play(session, "guard")
+    assert session.game.table.cards_by_id["jade"].bowed
+
+
+def test_only_the_jade_legion_that_attacked_straightens():
+    """Two copies share a printed id, so both subscribe to every destruction — the trigger fires
+    for each. The one that did not take the action has to stay bowed."""
+    session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
+    attached(
+        session.game.table,
+        attachment(
+            "jade-b", attachment_type=AttachmentType.FOLLOWER, force=3, printed_id="jade_legion"
+        ),
+        "hero",
+    )
+    session.game.table.cards_by_id["jade-b"].bow()
+
+    session.act(ATTACKER, ActivateAbility("jade"))
+    session.submit(ATTACKER, DecisionResponse(("guard",)))
+
+    assert not session.game.table.cards_by_id["jade"].bowed  # A attacked, so A straightens
+    assert session.game.table.cards_by_id["jade-b"].bowed  # B did not, so B stays down

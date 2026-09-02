@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, replace
+from typing import ClassVar
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
+from yasuki_core.engine.rules.economy import effective_stat
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
     ChooseCards,
@@ -482,6 +485,138 @@ class GrantProvinceStrength(Effect):
             ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class AttackEffect(Effect, ABC):
+    """One of the CR's three attack effects: a strength weighed against a target's stat.
+
+    *"Target a Follower or a Personality without Followers in the current enemy army. If its Force
+    is equal to or less than X, destroy it."* Ranged and Melee destroy, Fear bows, and everything
+    else is shared. Who may be targeted is
+    :func:`~yasuki_core.engine.rules.units.attackable`; this is the comparison and its consequence.
+
+    The base exists because the CR names it: its Combining entry uses *"attack effect"* for the
+    thing being combined and *"kind of effect"* for which of the three it is, so an effect that
+    reaches every attack asks for this class and one that reaches a single kind asks for a subclass.
+
+    Attributes
+    ----------
+    strength : int
+        The X the target's stat is compared against.
+    target_id : str
+        The card being attacked.
+    cause : PlayerId or Rulebook
+        Who or what attacked, carried onto a destruction.
+    compared : Stat, optional
+        The stat weighed against ``strength``. *"If a Ranged Attack effect ends up being compared
+        against a different stat than Force, compare that stat against the Ranged Attack's strength
+        instead"* — read as an effective stat, so modifiers count. Default ``Stat.FORCE``.
+    """
+
+    # What the card prints this effect as, which is the only thing its description needs from the
+    # subclass. A ClassVar rather than a field: it belongs to the kind, not to one announcement.
+    name: ClassVar[str]
+
+    strength: int
+    target_id: str
+    cause: Cause
+    compared: Stat = Stat.FORCE
+
+    def describe(self) -> str:
+        stat = "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
+        return f"{self.name} {self.strength} on {self.target_id}{stat}"
+
+    @abstractmethod
+    def _outcome(self) -> Effect:
+        """What this attack does to a target its strength reaches."""
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.target_id)
+        if card is None or effective_stat(game, card, self.compared) > effective_strength(
+            game, self
+        ):
+            return []
+        return self._outcome().perform(game)
+
+
+@dataclass(frozen=True, slots=True)
+class RangedAttack(AttackEffect):
+    """*"A Ranged Attack represents a military effect that destroys at a distance."*"""
+
+    name: ClassVar[str] = "ranged"
+
+    def _outcome(self) -> Effect:
+        return Destroy(self.target_id, self.cause)
+
+
+@dataclass(frozen=True, slots=True)
+class MeleeAttack(AttackEffect):
+    """*"Melee Attacks follow the above rules but are not considered Ranged Attacks"* — the same
+    effect as a Ranged Attack, and deliberately not the same type."""
+
+    name: ClassVar[str] = "melee"
+
+    def _outcome(self) -> Effect:
+        return Destroy(self.target_id, self.cause)
+
+
+@dataclass(frozen=True, slots=True)
+class Fear(AttackEffect):
+    """*"Fear X" is shorthand for "Target an enemy Follower or Personality without Followers and bow
+    it if its Force is equal to or lower than X."*"""
+
+    name: ClassVar[str] = "fear"
+
+    def _outcome(self) -> Effect:
+        return Bow(self.target_id)
+
+
+# What a card's text does to an attack's strength. Every card in play is asked, because the scopes
+# the corpus prints do not nest: a Follower speaks about itself, another about its unit, a Ring
+# about every attack its controller makes. One walk and a handler that scopes itself is the only
+# shape that holds all three.
+AttackStrengthHandler = Callable[[GameState, L5RCard, L5RCard, "AttackEffect"], int]
+ATTACK_STRENGTH_AGAINST: dict[str, AttackStrengthHandler] = {}
+
+
+def attack_strength_against(
+    printed_id: str,
+) -> Callable[[AttackStrengthHandler], AttackStrengthHandler]:
+    """Register what ``printed_id`` does to the strength of an attack.
+
+    The handler takes ``(game, holder, target, attack)`` and returns the strength it adds, where
+    ``holder`` is the card the text is printed on and ``target`` the card being attacked. Every
+    card in play is asked about every attack, so a handler states its own reach: comparing the two
+    cards for "this Follower", :func:`~yasuki_core.engine.rules.attachments.shares_unit` for "cards
+    in this unit", and neither for a card that speaks about the whole board.
+    """
+
+    def register(handler: AttackStrengthHandler) -> AttackStrengthHandler:
+        if printed_id in ATTACK_STRENGTH_AGAINST:
+            raise ValueError(f"{printed_id} already adjusts the attacks against it")
+        ATTACK_STRENGTH_AGAINST[printed_id] = handler
+        return handler
+
+    return register
+
+
+def effective_strength(game: GameState, attack: AttackEffect) -> int:
+    """``attack``'s strength once every card in play has had its say.
+
+    Not floored: a card that takes more strength off an attack than it had leaves it reaching
+    nothing, which is what "have -2 strength" buys. The zero floor the CR puts on a stat
+    (Calculating Stats) is about stats, and an attack's strength is not one.
+    """
+    target = game.table.cards_by_id.get(attack.target_id)
+    if target is None:
+        return attack.strength
+    total = attack.strength
+    for holder in game.table.battlefield.cards:
+        handler = ATTACK_STRENGTH_AGAINST.get(holder.printed_id)
+        if handler is not None:
+            total += handler(game, holder, target, attack)
+    return total
 
 
 @dataclass(frozen=True, slots=True)

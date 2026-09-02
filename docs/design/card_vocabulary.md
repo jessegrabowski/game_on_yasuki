@@ -37,6 +37,7 @@ deferred through `Then` instead.
    AskOption
    AttachCard
    Banish
+   AttackEffect
    BanishTopFate
    Bow
    Choose
@@ -49,9 +50,11 @@ deferred through `Then` instead.
    Discard
    DrawCard
    Effect
+   Fear
    GainGold
    GainHonor
    LoseGame
+   MeleeAttack
    GrantPriority
    GrantKeyword
    GrantMinimum
@@ -64,6 +67,7 @@ deferred through `Then` instead.
    MoveToHand
    PayGold
    PlaceInProvince
+   RangedAttack
    RecruitCard
    RefillProvince
    RevealProvinces

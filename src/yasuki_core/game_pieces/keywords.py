@@ -59,3 +59,5 @@ NAGA = "Naga"
 PORT = "Port"
 SAMURAI = "Samurai"
 SHADOWLANDS = "Shadowlands"
+# The clan, not the creature — the "<X> Clan" column, per the note at the top of this module.
+TANUKI_CLAN = "Tanuki Clan"

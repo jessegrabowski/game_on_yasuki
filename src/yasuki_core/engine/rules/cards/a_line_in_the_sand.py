@@ -2,21 +2,27 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     InvestAbility,
+    attack_targets,
     bow_cost,
+    no_cost,
     register_ability,
     register_invest,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.attachments import shares_unit
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.effects import (
+    AttackEffect,
     Choose,
     CounterOnAttachedProvince,
     Effect,
     MoveToHand,
+    RangedAttack,
     RecruitCard,
     Show,
     ShuffleDeck,
     Then,
+    attack_strength_against,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
@@ -57,6 +63,53 @@ register_ability(
         cost=bow_cost,
         targets=_agasha_beiru_targets,
         effects=_agasha_beiru_effects,
+    ),
+)
+
+
+# --- Ichigo's Guard ---
+
+# "Fear, Melee, and Ranged targeting cards in this unit have -1 strength." The unit, not the card:
+# the Guard covers the Personality it hangs on and every Follower beside it.
+ICHIGOS_GUARD_PENALTY = -1
+
+
+@attack_strength_against("ichigos_guard")
+def _ichigos_guard_attack_strength(
+    game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
+) -> int:
+    """The unit is the reach: the Personality the Guard hangs on and every Follower beside it."""
+    return ICHIGOS_GUARD_PENALTY if shares_unit(game, card, target) else 0
+
+
+# --- Legion of the Khan ---
+
+KHAN_RANGED = 3
+# "Fear, Melee, and Ranged targeting this Follower have -2 strength" — every kind there is, so the
+# penalty asks nothing about which one arrived.
+KHAN_ATTACK_PENALTY = -2
+
+
+@attack_strength_against("legion_of_the_khan")
+def _legion_of_the_khan_attack_strength(
+    game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
+) -> int:
+    """ "Targeting this Follower" — every kind of attack, but only the ones aimed at her."""
+    return KHAN_ATTACK_PENALTY if target is card else 0
+
+
+def _legion_of_the_khan_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [RangedAttack(KHAN_RANGED, target.id, source.owner)]
+
+
+register_ability(
+    "legion_of_the_khan",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Ranged {KHAN_RANGED} Attack",
+        cost=no_cost,
+        targets=attack_targets,
+        effects=_legion_of_the_khan_effects,
     ),
 )
 
