@@ -1,5 +1,11 @@
+from collections.abc import Sequence
+from typing import TypeVar
+
 from yasuki_core.engine.table import BoardPos
 from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W
+
+# Whatever a caller stacks: a card id on the board, a rendered entry in the battle view.
+Drawn = TypeVar("Drawn")
 
 # How far each seat's province row sits from its edge. The human band (bottom) leaves room for the
 # hand strip below it; the opponent (top) draws no hand, so its provinces tuck right up against the
@@ -110,6 +116,22 @@ def unit_tower_positions(
     if sink:
         y += count * ATTACH_STACK_OFFSET
     return (x, y), [(x, y - step * ATTACH_STACK_OFFSET) for step in range(1, count + 1)]
+
+
+def tower_draw_order(members: Sequence[Drawn]) -> list[Drawn]:
+    """``members`` in the order they must be drawn so each card's title bar clears the one it rides.
+
+    The card furthest from the anchor draws first and the nearest last, whichever way the fan grows:
+    the anchor — a Personality, or the card standing in a Province — is drawn over the nearest of
+    them, so a stack ascending toward it leaves every card the same band showing. Drawn the other
+    way round the nearest card is covered twice and disappears entirely.
+
+    Parameters
+    ----------
+    members : sequence
+        The attached cards, in attach order, nearest the anchor first.
+    """
+    return list(reversed(members))
 
 
 def province_positions(

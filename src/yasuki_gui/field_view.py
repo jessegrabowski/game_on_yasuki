@@ -19,6 +19,7 @@ from yasuki_gui.layout import (
     home_stack_positions,
     province_positions,
     to_canvas,
+    tower_draw_order,
     unit_tower_positions,
 )
 from yasuki_gui.services.allocation import Allocation
@@ -607,6 +608,11 @@ class FieldView(tk.Canvas):
                 return cards
         return []
 
+    def seat_honor(self, seat: PlayerId) -> int:
+        """``seat``'s Family Honor, from the active render source."""
+        source = self._snapshot if self._snapshot is not None else self.state
+        return source.seats[seat].honor
+
     def hand_count(self, seat: PlayerId) -> int:
         """How many cards ``seat`` holds, from the active render source."""
         return len(self.zone_render_cards(ZoneKey(seat, ZoneRole.HAND)))
@@ -721,17 +727,27 @@ class FieldView(tk.Canvas):
         """Unit membership from whichever source is rendering: attached card id to Personality."""
         return self._snapshot.units if self._snapshot is not None else self.state.units
 
+    def _province_fans(self) -> dict[ZoneKey, list[str]]:
+        """Each Province slot with the Fortifications fanned off it, in attach order."""
+        fans: dict[ZoneKey, list[str]] = {}
+        for card_id, key in self._province_attachments().items():
+            fans.setdefault(key, []).append(card_id)
+        return fans
+
     def _sink_province_attachments(self) -> None:
         """Push each Fortification below the Province tableau, so the card standing in the slot
         covers it and only the fanned-out part shows.
 
         Zones are drawn before sprites, which would otherwise leave a Fortification sitting on top
-        of the Province it defends — the reverse of the table, where it is tucked underneath.
+        of the Province it defends — the reverse of the table, where it is tucked underneath. Each
+        lowering lands just under the tableau and so on top of the one before, which makes the call
+        order the draw order within a slot.
         """
-        for card_id in self._province_attachments():
-            tag = card_tag(card_id)
-            if self.find_withtag(tag):
-                self.tag_lower(tag, "zone")
+        for key, members in self._province_fans().items():
+            for card_id in tower_draw_order(members):
+                tag = card_tag(card_id)
+                if self.find_withtag(tag):
+                    self.tag_lower(tag, "zone")
 
     def _province_attachments(self) -> dict[str, ZoneKey]:
         """Province membership from whichever source is rendering: card id to the Province slot."""
@@ -745,12 +761,9 @@ class FieldView(tk.Canvas):
         growing outward would leave the board. The slot itself holds a Dynasty card that refills
         behind the Fortification, so the fan starts one step off the slot rather than on it.
         """
-        attached = self._province_attachments()
-        if not attached:
+        by_slot = self._province_fans()
+        if not by_slot:
             return {}
-        by_slot: dict[ZoneKey, list[str]] = {}
-        for card_id, key in attached.items():
-            by_slot.setdefault(key, []).append(card_id)
         positions: dict[str, tuple[int, int]] = {}
         for owner, ordered in self._province_keys_by_owner().items():
             inboard = -1 if self._at_bottom(owner) else 1
@@ -792,7 +805,7 @@ class FieldView(tk.Canvas):
         ordered: list[tuple] = []
         for entry in loose:
             card, _ = entry
-            ordered.extend(reversed(held.pop(card.id, ())))
+            ordered.extend(tower_draw_order(held.pop(card.id, ())))
             ordered.append(entry)
         for stranded in held.values():  # its Personality is not on this board
             ordered.extend(stranded)

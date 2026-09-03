@@ -168,6 +168,9 @@ class Presenter:
         """Redraw the board and rewrite the prompt from the current state, without advancing it."""
         window = self.window
         view = self.host.runner.view()
+        # Backing out or undoing rewinds the tape and replays it onto a fresh table, so the board is
+        # repointed here rather than at each of those call sites — one of which used to forget.
+        window.field.state = self.host.session.game.table
         window.field.gold = view.gold[view.viewer]
         window.field.render_snapshot(view.table, self.host.human_seat, view.stats)
         window.phase_bar.refresh(view)
@@ -447,7 +450,6 @@ class Presenter:
         elif isinstance(self.host.runner.pending, ChoosePayment):
             field.undo_last_selection()
         elif self.host.runner.undo_last():
-            field.state = self.host.session.game.table
             field.end_selection()
             self.refresh()
 
@@ -471,6 +473,7 @@ class Presenter:
     def present_new_game(self) -> None:
         """Render the game the host has just dealt. Every deck load ends here."""
         field = self.window.field
+        # Ahead of the relayout below, which rebuilds the panels and reads the seats off this table.
         field.state = self.host.session.game.table
         field.seat = self.host.human_seat
         field.end_selection()

@@ -1,3 +1,5 @@
+import os
+
 import psycopg
 import pytest
 from psycopg.rows import dict_row
@@ -10,6 +12,16 @@ from yasuki_core.database import get_connection_string
 # run against whatever Postgres is available, isolated in their own schema, instead of requiring a
 # separately provisioned accounts DB that a fresh clone / CI would lack.
 ACCOUNTS_TEST_SCHEMA = "accounts_test"
+
+
+def _schema_name() -> str:
+    """The throwaway schema this process owns.
+
+    The fixture drops the schema on the way in and on the way out, so workers running in parallel
+    would demolish each other's tables mid-test if they shared one name. ``PYTEST_XDIST_WORKER`` is
+    unset outside a parallel run, which leaves a single serial schema.
+    """
+    return f"{ACCOUNTS_TEST_SCHEMA}_{os.environ.get('PYTEST_XDIST_WORKER', 'main')}"
 
 
 def _db_available() -> bool:
@@ -28,15 +40,16 @@ def accounts_conn():
     """
     if not _db_available():
         pytest.skip("PostgreSQL not available")
+    schema = _schema_name()
     conn = psycopg.connect(get_connection_string(), autocommit=True, row_factory=dict_row)
     with conn.cursor() as cur:
-        cur.execute(f"DROP SCHEMA IF EXISTS {ACCOUNTS_TEST_SCHEMA} CASCADE")
-        cur.execute(f"CREATE SCHEMA {ACCOUNTS_TEST_SCHEMA}")
-        cur.execute(f"SET search_path TO {ACCOUNTS_TEST_SCHEMA}")
+        cur.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
+        cur.execute(f"CREATE SCHEMA {schema}")
+        cur.execute(f"SET search_path TO {schema}")
     apply_migrations(conn)
     try:
         yield conn
     finally:
         with conn.cursor() as cur:
-            cur.execute(f"DROP SCHEMA IF EXISTS {ACCOUNTS_TEST_SCHEMA} CASCADE")
+            cur.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
         conn.close()

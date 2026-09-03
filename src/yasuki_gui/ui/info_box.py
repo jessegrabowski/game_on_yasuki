@@ -132,7 +132,9 @@ class PlayerInfoBox(tk.Frame):
         return "".join(part[0].upper() for part in name.split()[:2]) or "?"
 
     def _editable(self) -> bool:
-        return self.owner is self.field.seat
+        """Whether this seat's honor can be typed on directly, which only the sandbox allows: in a
+        rules game the engine owns honor and the intent path that would change it is disabled."""
+        return self.owner is self.field.seat and not self.field.rules_mode
 
     def _adjust(self, delta: int) -> None:
         if not self._editable():
@@ -217,7 +219,7 @@ class PlayerInfoBox(tk.Frame):
 
     def refresh(self) -> None:
         """Resync the honor header and every pile count with the field's current source."""
-        honor = self.field.state.seats[self.owner].honor
+        honor = self.field.seat_honor(self.owner)
         self._honor_text.set(f"Honor {honor}")
         editable = self._editable()
         self._honor_label.configure(

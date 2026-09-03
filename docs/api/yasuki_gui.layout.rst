@@ -16,6 +16,7 @@ yasuki_gui.layout
     home_stack_positions
     province_positions
     to_canvas
+    tower_draw_order
     unit_tower_positions
 
 .. automodule:: yasuki_gui.layout

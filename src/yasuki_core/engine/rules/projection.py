@@ -55,6 +55,9 @@ class BattlefieldView:
     occupant : L5RCard or HiddenCard or None
         The card standing in that Province, redacted like any other — a face-down Dynasty card is a
         back to the seat attacking it. None when the Province is empty.
+    fortifications : tuple of L5RCard or HiddenCard
+        The cards attached to that Province, in attach order, redacted like the occupant. They stand
+        at the battlefield with it and are already counted in ``strength``.
     strength : int
         The Province's effective Strength, which the attacking Force must clear to destroy it.
     attacking : tuple of UnitView
@@ -77,6 +80,7 @@ class BattlefieldView:
 
     province: ZoneKey
     occupant: L5RCard | HiddenCard | None
+    fortifications: tuple[L5RCard | HiddenCard, ...]
     strength: int
     attacking: tuple[UnitView, ...]
     defending: tuple[UnitView, ...]
@@ -302,6 +306,22 @@ def _occupant(table: ViewSnapshot, province: ZoneKey) -> L5RCard | HiddenCard | 
     return zone.cards[0] if zone is not None and zone.cards else None
 
 
+def _fortifications(table: ViewSnapshot, province: ZoneKey) -> tuple[L5RCard | HiddenCard, ...]:
+    """The cards attached to ``province`` as the snapshot's viewer sees them, in attach order.
+
+    Read out of the redacted snapshot, so one the viewer may not identify arrives as a back rather
+    than not at all.
+    """
+    attached = [card_id for card_id, key in table.province_attachments.items() if key == province]
+    in_play: dict[str, L5RCard | HiddenCard] = {}
+    for placed in table.battlefield:
+        card = placed.card
+        # A card the viewer cannot identify keeps its id under a different name, and it still has to
+        # be found here: an unidentifiable Fortification reaches the client as a back, not as a gap.
+        in_play[card.card_id if isinstance(card, HiddenCard) else card.id] = card
+    return tuple(in_play[card_id] for card_id in attached if card_id in in_play)
+
+
 def _destroyed_names(game: GameState, outcome: BattleOutcome | None) -> tuple[str, ...]:
     """The names of the cards ``outcome`` destroyed, or nothing when no battle has been fought."""
     if outcome is None:
@@ -329,6 +349,7 @@ def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
             BattlefieldView(
                 province=info.province,
                 occupant=_occupant(table, info.province),
+                fortifications=_fortifications(table, info.province),
                 strength=effective_province_strength(game, info.province),
                 attacking=_units(game, index, attack.attacker),
                 defending=_units(game, index, attack.defender),
