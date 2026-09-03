@@ -11,12 +11,8 @@ from yasuki_core.game_pieces.cards import L5RCard
 def _famous_bazaar_keywords(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
 ) -> tuple[str, ...]:
-    """Renew, which the card carries under either templating.
-
-    Shattered Empire prints it on the keyword line; every earlier printing spells the same rule out
-    in the text box. Granting it here keeps the Province refilling face-up whichever printing's
-    record the board was built from.
-    """
+    """Renew, which the card carries under either templating: Shattered Empire prints it on the
+    keyword line, and every earlier printing spells the same rule out in the text box."""
     return (keywords.RENEW,)
 
 
