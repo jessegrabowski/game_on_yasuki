@@ -399,11 +399,48 @@ def test_bowing_the_courtier_costs_a_player_an_honor():
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
     assert isinstance(session.game.pending, ChooseOption)
-    session.submit(P1, DecisionResponse(("P2 loses 1 Honor",)))
+    session.submit(P1, DecisionResponse(("P2",)))
+    session.submit(P1, DecisionResponse(("Lose 1 Honor",)))
 
     game = session.game
     assert game.table.seats[PlayerId.P2].honor == -1
     assert game.table.cards_by_id["envoy"].bowed is True
+
+
+def test_the_swing_is_asked_as_two_questions_the_way_the_card_reads_it():
+    """ "Make a target player gain or lose 1 Honor" is asked as a player and then a direction, and
+    the direction is asked about the player the first question named."""
+    session = _courts_with_an_envoy()
+    session.act(P1, Recruit("courts"))
+    pay(session, P1)
+    session.act(P1, ActivateAbility("courts"))
+
+    session.submit(P1, DecisionResponse(("envoy",)))
+    assert session.game.pending.candidates == ("P1", "P2")
+
+    session.submit(P1, DecisionResponse(("P2",)))
+
+    assert session.game.pending.candidates == ("Gain 1 Honor", "Lose 1 Honor")
+
+
+def test_the_players_are_offered_by_the_names_they_chose():
+    """A seat is offered by its display name rather than its P1/P2 token, and both questions read
+    back the name the player chose."""
+    session = _courts_with_an_envoy()
+    session.game.table.seats[P1].name = "Ada"
+    session.game.table.seats[P2].name = "Crab"
+    session.act(P1, Recruit("courts"))
+    pay(session, P1)
+    session.act(P1, ActivateAbility("courts"))
+    session.submit(P1, DecisionResponse(("envoy",)))
+
+    assert session.game.pending.candidates == ("Ada", "Crab")
+
+    session.submit(P1, DecisionResponse(("Crab",)))
+    assert session.game.pending.question == "Does Crab gain or lose 1 Honor?"
+    session.submit(P1, DecisionResponse(("Lose 1 Honor",)))
+
+    assert session.game.table.seats[P2].honor == -1
 
 
 def test_the_swing_may_favour_you_instead():
@@ -414,7 +451,8 @@ def test_the_swing_may_favour_you_instead():
     pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
-    session.submit(P1, DecisionResponse(("P1 gains 1 Honor",)))
+    session.submit(P1, DecisionResponse(("P1",)))
+    session.submit(P1, DecisionResponse(("Gain 1 Honor",)))
 
     assert session.game.table.seats[P1].honor == 1
 
@@ -451,7 +489,8 @@ def test_the_courtier_the_invest_buys_can_be_bowed_by_the_response():
     courtier = _courtier_of(session)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse((courtier.id,)))
-    session.submit(P1, DecisionResponse(("P2 loses 1 Honor",)))
+    session.submit(P1, DecisionResponse(("P2",)))
+    session.submit(P1, DecisionResponse(("Lose 1 Honor",)))
 
     game = session.game
     assert game.table.cards_by_id[courtier.id].bowed is True
@@ -464,7 +503,8 @@ def test_the_courts_response_replays_to_the_same_board():
     pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
-    session.submit(P1, DecisionResponse(("P2 loses 1 Honor",)))
+    session.submit(P1, DecisionResponse(("P2",)))
+    session.submit(P1, DecisionResponse(("Lose 1 Honor",)))
 
     assert replay(session.log).table == session.game.table
 

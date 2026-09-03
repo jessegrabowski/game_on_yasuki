@@ -890,6 +890,9 @@ class AskOption(InterruptingEffect):
         The registered choice resolver the chosen option is handed to.
     source_id : str
         The card offering the choice.
+    resolver_context : tuple of str, optional
+        What an earlier step of the same choice settled, carried through to the resolver. Default
+        empty.
     """
 
     seat: PlayerId
@@ -897,6 +900,7 @@ class AskOption(InterruptingEffect):
     question: str
     resolver: str
     source_id: str
+    resolver_context: tuple[str, ...] = ()
 
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
@@ -912,6 +916,7 @@ class AskOption(InterruptingEffect):
             question=self.question,
             resolver=self.resolver,
             source_id=self.source_id,
+            resolver_context=self.resolver_context,
         )
 
 

@@ -2,7 +2,12 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
-from yasuki_core.engine.rules.decisions import ChooseAmount, ChooseInvestAmount, Confirm
+from yasuki_core.engine.rules.decisions import (
+    ChooseAmount,
+    ChooseInvestAmount,
+    ChooseOption,
+    Confirm,
+)
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.payments import payment_request
 from yasuki_core.engine.rules.state import BATTLE_SEGMENT_TIMINGS, BattleSegment
@@ -232,6 +237,26 @@ def test_an_invest_decision_offers_a_button_per_affordable_amount(board):
     presenter.refresh()
 
     assert _buttons(window) == ["Invest 1", "Invest 2", "Invest 3", "Cancel"]
+
+
+def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
+    """The wordings are outcomes rather than card ids, so the answer is a button each and the board
+    must not enter selection mode — handed these, it would find nothing to select and strand the
+    seat with no way to answer."""
+    presenter, window, session = board
+    session.game.pending = ChooseOption(
+        seat=P1,
+        candidates=("Gain 1 Honor", "Lose 1 Honor"),
+        question="Does P2 gain or lose 1 Honor?",
+        resolver="probe",
+        source_id="of",
+    )
+
+    presenter.present()
+
+    assert _status(window) == "Does P2 gain or lose 1 Honor?"
+    assert _buttons(window) == ["Gain 1 Honor", "Lose 1 Honor", "Cancel"]
+    assert not window.field.selecting
 
 
 def test_a_variable_gold_cost_is_named_on_a_spinner_rather_than_a_button_each(board):
