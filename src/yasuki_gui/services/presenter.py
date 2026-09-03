@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.decisions import (
     ChooseBattlefield,
     ChooseDistribution,
     ChooseInvestAmount,
+    ChooseOption,
     ChoosePayment,
     Confirm,
     DecisionResponse,
@@ -83,7 +84,7 @@ class Presenter:
             # is how they are brought home or sent somewhere else.
             field.begin_selection({assignment(token)[0] for token in pending.candidates})
         elif pending is not None and not isinstance(
-            pending, ChooseAmount | ChooseInvestAmount | Confirm | ChooseBattlefield
+            pending, ChooseAmount | ChooseInvestAmount | ChooseOption | Confirm | ChooseBattlefield
         ):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
             # amount is named on the prompt's spinner and a yes/no question on its buttons, so
@@ -220,6 +221,16 @@ class Presenter:
             # battlefield, and the whole map goes over as the one answer the CR's simultaneous
             # assignment calls for.
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
+        if isinstance(pending, ChooseOption):
+            # An outcome the card spells out rather than anything on the board — "gain or lose",
+            # "which player" — so it is read as a list of wordings and answered by picking one.
+            options: list[ButtonSpec] = [
+                (option, lambda chosen=option: self.submit_answer((chosen,)), True)
+                for option in pending.candidates
+            ]
+            if pending.cancellable:
+                options.append(("Cancel", self.cancel, True))
+            return pending.prompt(), options
         if isinstance(pending, ChooseInvestAmount):
             # An amount, not a board card — answered by one button per affordable amount.
             amounts: list[ButtonSpec] = [
