@@ -984,7 +984,7 @@ def _apply_legacy_banish(
     found = legacy_candidates(game, seat)
     if not found:
         # The whiff: failing to find a Legacy card loses the game.
-        game.lose(seat, "failed Legacy")
+        game.lose(seat, "failed Legacy", "opponent failed Legacy")
         return
     game.pending = ChooseLegacyCard(seat=seat, candidates=tuple(card.id for card in found))
 

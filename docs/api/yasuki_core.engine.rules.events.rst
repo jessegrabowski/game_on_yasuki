@@ -12,6 +12,7 @@ yasuki_core.engine.rules.events
     Destroyed
     EnteredPlay
     GameLost
+    GameWon
     ProducedGold
     ProducingGold
     Revealed

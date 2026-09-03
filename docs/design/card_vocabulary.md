@@ -54,6 +54,7 @@ deferred through `Then` instead.
    GainGold
    GainHonor
    LoseGame
+   WinGame
    MeleeAttack
    GrantPriority
    GrantKeyword
@@ -95,6 +96,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    CounterGained
    Destroyed
    GameLost
+   GameWon
    EnteredPlay
    ProducedGold
    ProducingGold

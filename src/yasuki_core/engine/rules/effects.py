@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.events import (
     EnteredPlay,
     GameEvent,
     GameLost,
+    GameWon,
     Revealed,
     Straightened,
 )
@@ -1051,7 +1052,7 @@ class GainGold(Effect):
 
 @dataclass(frozen=True, slots=True)
 class LoseGame(Effect):
-    """End the game, with ``seat`` the loser.
+    """End the game, with ``seat`` the loser and the last player left the winner.
 
     Attributes
     ----------
@@ -1059,17 +1060,43 @@ class LoseGame(Effect):
         The seat that has lost.
     reason : str
         Why, worded for a player.
+    victory : str
+        What the surviving seat has thereby won, worded for a player.
+    """
+
+    seat: PlayerId
+    reason: str
+    victory: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} loses: {self.reason}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.lose(self.seat, self.reason, self.victory)
+        return [GameLost(self.seat, self.reason)]
+
+
+@dataclass(frozen=True, slots=True)
+class WinGame(Effect):
+    """End the game, with ``seat`` the winner and no loser.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that has won.
+    reason : str
+        What it won, worded for a player.
     """
 
     seat: PlayerId
     reason: str
 
     def describe(self) -> str:
-        return f"{self.seat.name} loses: {self.reason}"
+        return f"{self.seat.name} wins: {self.reason}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.lose(self.seat, self.reason)
-        return [GameLost(self.seat, self.reason)]
+        game.win(self.seat, self.reason)
+        return [GameWon(self.seat, self.reason)]
 
 
 @dataclass(frozen=True, slots=True)

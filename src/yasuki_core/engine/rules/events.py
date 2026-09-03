@@ -152,3 +152,11 @@ class GameLost:
 
     seat: PlayerId
     reason: str
+
+
+@dataclass(frozen=True, slots=True)
+class GameWon:
+    """A seat won the game. ``reason`` names what it won, worded for a player."""
+
+    seat: PlayerId
+    reason: str

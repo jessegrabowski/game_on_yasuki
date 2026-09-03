@@ -91,7 +91,7 @@ def lost_last_province(game: GameState) -> list[Effect]:
         return []
     holders = {key.owner for key in game.table.zones if key.role is ZoneRole.PROVINCE}
     return [
-        LoseGame(seat, "no Provinces remaining")
+        LoseGame(seat, "no Provinces remaining", "Military Victory")
         for seat, rules in game.active_rules.items()
         if VictoryRule.MILITARY_LOSS in rules and seat not in holders
     ]

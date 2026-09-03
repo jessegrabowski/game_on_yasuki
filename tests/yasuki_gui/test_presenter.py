@@ -325,23 +325,23 @@ def test_a_cost_of_nothing_is_paid_without_asking(board):
     assert _buttons(window) != ["Pay", "Cancel"]
 
 
-def test_a_finished_game_says_who_lost_and_offers_nothing(board):
+def test_a_finished_game_says_who_won_and_offers_nothing(board):
     presenter, window, session = board
-    session.game.lose(P1, "failed Legacy")
+    session.game.lose(P1, "failed Legacy", "opponent failed Legacy")
 
     presenter.refresh()
 
-    assert _status(window) == "You lose (failed Legacy)"
+    assert _status(window) == "Opponent wins (opponent failed Legacy)"
     assert _buttons(window) == []
 
 
-def test_the_opponent_losing_reads_from_the_human_seat(board):
+def test_the_human_winning_reads_from_the_human_seat(board):
     presenter, window, session = board
-    session.game.lose(PlayerId.P2, "failed Legacy")
+    session.game.lose(PlayerId.P2, "failed Legacy", "opponent failed Legacy")
 
     presenter.refresh()
 
-    assert _status(window) == "Opponent loses (failed Legacy)"
+    assert _status(window) == "You win (opponent failed Legacy)"
 
 
 def test_the_window_wires_every_board_hook_to_the_presenter(board):
@@ -1112,15 +1112,15 @@ def test_every_battlefield_offers_its_button_for_as_long_as_the_question_is_open
     assert all(button.enabled for button in presenter._lane_buttons().values())
 
 
-def test_losing_the_last_Province_says_so_rather_than_naming_the_wrong_rule(a_battle):
-    """Every loss used to be announced as a failed Legacy, so a seat overrun said the one thing that
-    had not happened to it."""
+def test_the_last_Province_falling_is_announced_as_a_Military_Victory(a_battle):
+    """The CR names the victory from the survivor's side, and each ending names its own — a seat
+    overrun must not be told the one thing that did not happen to it."""
     presenter, _, session = a_battle
-    session.game.lose(PlayerId.P2, "no Provinces remaining")
+    session.game.lose(PlayerId.P2, "no Provinces remaining", "Military Victory")
 
     status, buttons = presenter._prompt(presenter.host.runner.view())
 
-    assert status == "Opponent loses (no Provinces remaining)"
+    assert status == "You win (Military Victory)"
     assert buttons == []
 
 
