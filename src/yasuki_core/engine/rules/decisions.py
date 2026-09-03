@@ -325,11 +325,15 @@ class ChooseOption(DecisionRequest):
         The registered choice resolver the chosen option is handed to.
     source_id : str
         The card offering the choice, handed to the resolver as its context.
+    resolver_context : tuple of str, optional
+        What an earlier step of the same choice settled, handed to the resolver alongside the
+        answer — a resolver is otherwise given only what was picked. Default empty.
     """
 
     question: str
     resolver: str
     source_id: str
+    resolver_context: tuple[str, ...] = ()
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question

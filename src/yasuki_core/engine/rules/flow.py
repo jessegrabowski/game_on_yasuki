@@ -1093,8 +1093,12 @@ def _apply_card_choice(
     if not isinstance(item, ResumeCascade):
         raise RuntimeError("a card choice resumed without its stashed cascade")
     resolver = triggers.CHOICE_RESOLVERS[request.resolver]
+    # Passed only when the choice carries one, so a resolver whose card asks a single question
+    # never declares a parameter it would not read.
+    carried = request.resolver_context if isinstance(request, ChooseOption) else ()
+    context = {"resolver_context": carried} if carried else {}
     triggers.resume_cascade(
-        game, item, resolver(game, request.source_id, response.choices, request.seat)
+        game, item, resolver(game, request.source_id, response.choices, request.seat, **context)
     )
     run_stack(game)  # finish any work deferred behind the choice, unless it paused again
 

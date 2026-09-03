@@ -66,7 +66,10 @@ def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
 # A choice resolver turns the ids a Choose collected into the effects the choice produces, given the
 # seat that answered. Keyed by a string so a paused ChooseCards names its resolver, keeping the
 # pending decision replay-stable (a stored closure would not rebuild to an equal object).
-Resolver = Callable[[GameState, str | None, tuple[str, ...], PlayerId], list[Effect]]
+# A resolver takes the board, the card that asked, what was picked, and the seat that picked it. A
+# choice raised with ``resolver_context`` — one step of a card that asks two questions in a row —
+# passes that too, by keyword; a resolver only declares the parameter if its card supplies one.
+Resolver = Callable[..., list[Effect]]
 CHOICE_RESOLVERS: dict[str, Resolver] = {}
 
 
