@@ -191,7 +191,9 @@ def test_running_the_opponent_stops_on_a_finished_game():
     runner.act(PASS)  # hands the Action-phase window to the opponent
     assert runner.opponent_holds_priority
     # The game ends while the opponent holds the window.
-    runner.session.game.lose(PlayerId.P2, "failed Legacy")
+    runner.session.game.lose(
+        PlayerId.P2, "failed Legacy", "victory by the opponent's failed Legacy"
+    )
 
     runner.run_opponent()  # returns rather than spinning on a game that offers nobody an action
 

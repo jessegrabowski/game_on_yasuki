@@ -315,6 +315,21 @@ class GameRunner:
         return self.session.game.loss_reason
 
     @property
+    def game_over(self) -> bool:
+        """Whether the game has ended, however it ended."""
+        return self.session.game.game_over
+
+    @property
+    def winner(self) -> PlayerId | None:
+        """The seat that has won the game, or None while it is ongoing."""
+        return self.session.game.winner
+
+    @property
+    def win_reason(self) -> str | None:
+        """What that seat won, worded for a player, or None while the game is ongoing."""
+        return self.session.game.win_reason
+
+    @property
     def is_opponent_turn(self) -> bool:
         """Whether the turn itself belongs to the AI-reserved opponent — as opposed to the human
         merely having handed the opportunity on inside a phase of its own turn."""

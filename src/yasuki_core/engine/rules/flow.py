@@ -110,7 +110,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.payments import payment_request
-from yasuki_core.engine.rules import abilities, battle, triggers
+from yasuki_core.engine.rules import abilities, battle, state_rules, triggers
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -984,7 +984,7 @@ def _apply_legacy_banish(
     found = legacy_candidates(game, seat)
     if not found:
         # The whiff: failing to find a Legacy card loses the game.
-        game.lose(seat, "failed Legacy")
+        game.lose(seat, "failed Legacy", "opponent failed Legacy")
         return
     game.pending = ChooseLegacyCard(seat=seat, candidates=tuple(card.id for card in found))
 
@@ -1143,6 +1143,9 @@ def _begin_next_turn(game: GameState) -> None:
     # Modifiers expiring can make the board illegal on their own, with no effect committing and so
     # no cascade to catch it. Settle that before the new turn starts and anything reads the board.
     triggers.enforce_state_rules(game)
+    triggers.resolve_effects(game, state_rules.dishonor_loss(game))
+    if game.game_over:
+        return
     game.turn += 1
     game.active = _other(game.active)
     game.phase = Phase.ACTION
@@ -1152,10 +1155,15 @@ def _begin_next_turn(game: GameState) -> None:
 def _begin_turn(game: GameState) -> None:
     """Open the turn: straighten, reveal the Provinces, and announce that the turn has begun.
 
-    A card that may remain bowed is asked about first, since that is a choice its controller makes
-    before each straightening (CR, May Remain Bowed). Pausing here leaves the rest of the turn's
-    opening for the submit that answers.
+    An Honor Victory is checked before any of it: the CR wins the game on the Honor the seat starts
+    the turn with, so nothing the opening does can be what pushes it over. A card that may remain
+    bowed is asked about next, since that is a choice its controller makes before each straightening
+    (CR, May Remain Bowed). Pausing there leaves the rest of the turn's opening for the submit that
+    answers.
     """
+    triggers.resolve_effects(game, state_rules.honor_victory(game))
+    if game.game_over:
+        return
     open_round(game)
     offering = abilities.may_stay_bowed(game, game.active)
     if offering:

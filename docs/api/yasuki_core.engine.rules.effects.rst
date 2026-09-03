@@ -53,6 +53,7 @@ yasuki_core.engine.rules.effects
     Straighten
     Then
     Unpayable
+    WinGame
 
 .. rubric:: Functions
 

@@ -1,8 +1,9 @@
 from collections.abc import Callable
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.rules.economy import effective_chi
-from yasuki_core.engine.rules.effects import Destroy, Discard, Effect, LoseGame
+from yasuki_core.engine.rules.effects import Destroy, Discard, Effect, LoseGame, WinGame
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.victory import VictoryRule
@@ -91,7 +92,7 @@ def lost_last_province(game: GameState) -> list[Effect]:
         return []
     holders = {key.owner for key in game.table.zones if key.role is ZoneRole.PROVINCE}
     return [
-        LoseGame(seat, "no Provinces remaining")
+        LoseGame(seat, "no Provinces remaining", "Military Victory")
         for seat, rules in game.active_rules.items()
         if VictoryRule.MILITARY_LOSS in rules and seat not in holders
     ]
@@ -104,3 +105,44 @@ STATE_RULES: tuple[StateRule, ...] = (chi_death, orphaned_attachments, lost_last
 def demanded(game: GameState) -> list[Effect]:
     """What the rules demand of the board as it stands, or an empty list when it is already legal."""
     return [effect for rule in STATE_RULES for effect in rule(game)]
+
+
+# The two victory conditions the CR states at a moment in the turn rather than as a condition that
+# holds at all times, so neither belongs in STATE_RULES: a seat may pass through the Honor Victory
+# threshold mid-turn and be back below it by the time its next turn starts, and that is not a win.
+# The flow calls each at the boundary it names.
+def honor_victory(game: GameState) -> list[Effect]:
+    """Win the game for the seat starting its turn on the Honor Victory threshold or higher (CR,
+    Honor Victory).
+
+    Only the seat whose turn is starting can win this way, and only if it is still held to
+    :attr:`~yasuki_core.engine.rules.victory.VictoryRule.HONOR_VICTORY` — a seat Kaede Sensei has
+    excused starts the same turn on the same Honor and does not win.
+    """
+    if game.game_over:
+        return []
+    seat = game.active
+    if VictoryRule.HONOR_VICTORY not in game.active_rules.get(seat, frozenset()):
+        return []
+    honor = game.table.seats[seat].honor
+    if honor < ruleset.ACTIVE.honor_victory_at:
+        return []
+    return [WinGame(seat, f"Honor Victory on {honor} Family Honor")]
+
+
+def dishonor_loss(game: GameState) -> list[Effect]:
+    """Lose the game for the seat ending its turn at or below the Dishonor threshold (CR, Dishonor
+    Loss/Victory), which wins the other seat a Dishonor Victory.
+
+    Only the seat whose turn is ending is checked, so a seat driven below the threshold on its
+    opponent's turn has its own turn to climb back out.
+    """
+    if game.game_over:
+        return []
+    seat = game.active
+    if VictoryRule.DISHONOR_LOSS not in game.active_rules.get(seat, frozenset()):
+        return []
+    honor = game.table.seats[seat].honor
+    if honor > ruleset.ACTIVE.dishonor_loss_at:
+        return []
+    return [LoseGame(seat, f"{honor} Family Honor", "Dishonor Victory")]

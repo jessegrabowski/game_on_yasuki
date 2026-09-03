@@ -338,6 +338,11 @@ class GameState:
     loss_reason : str or None
         Why that seat lost, worded for a player, or None while the game is ongoing. Set with
         ``loser`` by :meth:`lose`. Default None.
+    winner : PlayerId or None
+        The seat that has won the game, or None while the game is ongoing. Default None.
+    win_reason : str or None
+        What that seat won, worded for a player — the victory's designation where the CR gives it
+        one. Set with ``winner`` by :meth:`win`. Default None.
     active_rules : dict mapping PlayerId to frozenset of VictoryRule
         The ways each seat can win or lose. :meth:`start` fills it from :func:`rules_at_start`;
         dropping a rule from a seat's set afterwards excuses that seat alone, which is how a card
@@ -414,6 +419,8 @@ class GameState:
     favor_holder: PlayerId | None = None
     loser: PlayerId | None = None
     loss_reason: str | None = None
+    winner: PlayerId | None = None
+    win_reason: str | None = None
     active_rules: dict[PlayerId, frozenset[VictoryRule]] = field(default_factory=dict)
     attack: AttackPhase | None = None
     once_per: set[str] = field(default_factory=set)
@@ -441,8 +448,8 @@ class GameState:
 
     @property
     def game_over(self) -> bool:
-        """Whether the game has ended — a seat has lost."""
-        return self.loser is not None
+        """Whether the game has ended — a seat has won, or one has lost."""
+        return self.loser is not None or self.winner is not None
 
     @classmethod
     def start(cls, table: TableState, first_player: PlayerId, *, seed: int = 0) -> "GameState":
@@ -472,13 +479,37 @@ class GameState:
             rng=default_rng(seed),
         )
 
-    def lose(self, seat: PlayerId, reason: str) -> None:
-        """End the game with ``seat`` the loser, for ``reason`` worded for a player.
+    def lose(self, seat: PlayerId, reason: str, victory: str) -> None:
+        """End the game with ``seat`` the loser, for ``reason`` worded for a player, and award the
+        last player left the ``victory`` its designation names.
 
-        The only way to record a loss: a client announcing the end of the game reads both.
+        The CR states Military and Dishonor Victory this way round — a player loses, and the one
+        remaining player has thereby won — so the win is derived here rather than reported
+        separately by whatever noticed the loss.
+
+        Parameters
+        ----------
+        seat : PlayerId
+            The seat that has lost.
+        reason : str
+            Why it lost, worded for a player.
+        victory : str
+            What the surviving seat has won, worded for a player.
         """
         self.loser = seat
         self.loss_reason = reason
+        # The one remaining player, which two seats make the other one. A third seat would make
+        # this a count of who is left rather than a flip.
+        self.win(PlayerId.P2 if seat is PlayerId.P1 else PlayerId.P1, victory)
+
+    def win(self, seat: PlayerId, reason: str) -> None:
+        """End the game with ``seat`` the winner, ``reason`` naming what it won.
+
+        An Honor Victory is won outright rather than by anyone losing, so this is reachable without
+        a loser; :meth:`lose` calls it for the victories the CR derives from an elimination.
+        """
+        self.winner = seat
+        self.win_reason = reason
 
     def add_gold(self, seat: PlayerId, amount: int) -> None:
         """Add ``amount`` produced gold to ``seat``'s pool."""

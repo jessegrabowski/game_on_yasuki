@@ -98,7 +98,7 @@ class Presenter:
         # An owed decision counts as well as held priority: a card can put a question to the
         # opponent while the human keeps priority, and the engine is paused until it is answered.
         opponent_to_move = runner.opponent_holds_priority or runner.opponent_owes_decision
-        if pending is None and runner.loser is None and opponent_to_move:
+        if pending is None and not runner.game_over and opponent_to_move:
             # A finished game is excluded because the opponent can hold priority on one while
             # running it moves nothing, which would reschedule this forever.
             #
@@ -195,9 +195,12 @@ class Presenter:
         is waiting on."""
         runner = self.host.runner
         pending = runner.pending
-        if runner.loser is not None:
-            whose = "You lose" if runner.loser is self.host.human_seat else "Opponent loses"
-            return f"{whose} ({runner.loss_reason})", []
+        if runner.winner is not None:
+            # Announced as the victory rather than the loss: every ending has a winner, and the CR
+            # names Military and Dishonor Victory from the survivor's side even though a loss is
+            # what triggers them.
+            whose = "You win" if runner.winner is self.host.human_seat else "Opponent wins"
+            return f"{whose} ({runner.win_reason})", []
         if pending is not None and runner.search_view() is not None:
             # Answered by the search dialog (opened in present), not the board.
             return pending.prompt(), []

@@ -9,6 +9,8 @@ yasuki_core.engine.rules.state_rules
 
     chi_death
     demanded
+    dishonor_loss
+    honor_victory
     lost_last_province
     orphaned_attachments
 

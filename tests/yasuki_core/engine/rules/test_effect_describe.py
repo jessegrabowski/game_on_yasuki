@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.effects import (
     GainGold,
     GainHonor,
     LoseGame,
+    WinGame,
     Move,
     MoveToHand,
     Fear,
@@ -66,7 +67,14 @@ EFFECTS = [
     (GainGold(PlayerId.P2, 3), "P2 gains 3 gold"),
     (GainHonor(PlayerId.P1, 2), "P1 gains 2 honor"),
     (GainHonor(PlayerId.P2, -4), "P2 loses 4 honor"),
-    (LoseGame(PlayerId.P2, "no Provinces remaining"), "P2 loses: no Provinces remaining"),
+    (
+        LoseGame(PlayerId.P2, "no Provinces remaining", "Military Victory"),
+        "P2 loses: no Provinces remaining",
+    ),
+    (
+        WinGame(PlayerId.P1, "Honor Victory on 40 Family Honor"),
+        "P1 wins: Honor Victory on 40 Family Honor",
+    ),
     (
         DestroyProvince(PlayerId.P1, ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 2)),
         "destroy P1's province 2",
