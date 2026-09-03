@@ -26,6 +26,10 @@ class Ruleset:
     off_clan_surcharge : int
         Extra Gold a Recruit costs when the card has a Clan Alignment the recruiting seat does not
         share. Default 2.
+    honor_victory_at : int
+        The Family Honor a seat must start its turn on to win an Honor Victory. Default 40.
+    dishonor_loss_at : int
+        The Family Honor at or below which a seat loses at the end of its turn. Default -20.
     attack_segments : tuple of Segment
         The Attack Phase's segments in the order this arc walks them. The enum's own order is not
         the authority, because an arc may walk a subset or interleave a segment another arc has no
@@ -42,6 +46,8 @@ class Ruleset:
     clan_alignments: frozenset[str]
     clan_aliases: dict[str, str] = field(default_factory=dict)
     off_clan_surcharge: int = 2
+    honor_victory_at: int = 40
+    dishonor_loss_at: int = -20
     attack_segments: tuple[Segment, ...] = ()
     segment_names: dict[Segment, str] = field(default_factory=dict)
     battle_segments: tuple[BattleSegment, ...] = ()
