@@ -253,6 +253,8 @@ def _courts_of_otosan_uchi_invest(game: GameState, source: L5RCard, amount: int)
 
 
 COURTS_HONOR = 1
+COURTS_GAIN = f"Gain {COURTS_HONOR} Honor"
+COURTS_LOSE = f"Lose {COURTS_HONOR} Honor"
 
 
 def _courts_of_otosan_uchi_courtiers(game: GameState, seat: PlayerId) -> tuple[str, ...]:
@@ -279,14 +281,15 @@ def _courts_of_otosan_uchi_targets(game: GameState, source: L5RCard) -> list[str
 def _courts_of_otosan_uchi_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """Bow the named Courtier, then ask whose Honor moves and which way."""
+    """Bow the named Courtier, then ask whose Honor moves — a target player first, the direction
+    second, as the card is written."""
     return [
         Bow(target.id),
         AskOption(
             source.owner,
-            tuple(_courts_of_otosan_uchi_swings(game)),
-            "Whose Honor moves, and which way?",
-            "courts_of_otosan_uchi_honor",
+            tuple(info.name for info in game.table.seats.values()),
+            "Whose Honor moves?",
+            "courts_of_otosan_uchi_player",
             source.id,
         ),
     ]
@@ -305,25 +308,35 @@ register_ability(
 )
 
 
-def _courts_of_otosan_uchi_swings(game: GameState) -> dict[str, tuple[PlayerId, int]]:
-    """Each Honor swing on offer, by the wording the seat reads and picks it out by.
-
-    One mapping serves both halves of the choice, so the wording offered and the wording answered
-    can never drift apart. The seat's enum name keeps a label stable whatever a player calls
-    themselves.
-    """
-    return {
-        f"{player.name} {verb} {COURTS_HONOR} Honor": (player, delta)
-        for player in game.table.seats
-        for verb, delta in (("gains", COURTS_HONOR), ("loses", -COURTS_HONOR))
-    }
-
-
-@choice_resolver("courts_of_otosan_uchi_honor")
-def _resolve_courts_of_otosan_uchi_honor(
+@choice_resolver("courts_of_otosan_uchi_player")
+def _resolve_courts_of_otosan_uchi_player(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    moved, delta = _courts_of_otosan_uchi_swings(game)[chosen[0]]
+    """Having named the player, ask the direction, carrying the seat named as context."""
+    named = chosen[0]
+    picked = next(player for player, info in game.table.seats.items() if info.name == named)
+    return [
+        AskOption(
+            seat,
+            (COURTS_GAIN, COURTS_LOSE),
+            f"Does {named} gain or lose {COURTS_HONOR} Honor?",
+            "courts_of_otosan_uchi_swing",
+            source_id,
+            resolver_context=(picked.name,),
+        )
+    ]
+
+
+@choice_resolver("courts_of_otosan_uchi_swing")
+def _resolve_courts_of_otosan_uchi_swing(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    moved = PlayerId[resolver_context[0]]
+    delta = COURTS_HONOR if chosen[0] == COURTS_GAIN else -COURTS_HONOR
     return [GainHonor(moved, delta)]
 
 
