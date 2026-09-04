@@ -378,6 +378,10 @@ export function highlightCard(boardEl, cardId) {
 export const intentMessage = (intent) => ({ type: 'INTENT', intent });
 export const removeMessage = (id) => intentMessage({ op: 'REMOVE_CARD', card_id: id });
 
+// Not an intent: taking the Favor is a sweep of every seat's proxy plus a spawn, which the
+// server does as one step so two clients claiming it at once cannot both end up holding it.
+export const takeFavorMessage = () => ({ type: 'TAKE_FAVOR' });
+
 // A spawn drops down-right of its source card so it doesn't hide it; this is its canonical position.
 const DUPLICATE_OFFSET_PX = 18;
 const droppedPosition = (el, toCanon) => {
@@ -1529,6 +1533,7 @@ function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
     { label: '&Randomize…', onClick: (e, send) => openRandomizePrompt(send) },
   ];
   if (onCreateToken) items.push({ label: 'Create &token…', onClick: () => onCreateToken(spawnAt) });
+  items.push({ label: 'Take the Imperial &Favor', onClick: (e, send) => send(takeFavorMessage()) });
   return items;
 }
 

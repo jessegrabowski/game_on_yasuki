@@ -2608,12 +2608,21 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(sent.length, 1, 'one flip, from the menu accelerator, not also the hover hotkey');
   });
 
-  it('offers Unbow all and Randomize on the empty battlefield, on distinct accelerators', () => {
+  it('offers the empty-battlefield items on distinct accelerators', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
-    assert.deepEqual(menuLabels(root), ['Unbow all', 'Randomize…']);
-    const keys = ['Unbow all', 'Randomize…'].map(accelOf);
-    assert.deepEqual(keys, ['w', 'R']);
+    const labels = ['Unbow all', 'Randomize…', 'Take the Imperial Favor'];
+    assert.deepEqual(menuLabels(root), labels);
+    const keys = labels.map(accelOf);
+    assert.deepEqual(keys, ['w', 'R', 'F']);
     assert.equal(new Set(keys).size, keys.length, 'no two items share an accelerator');
+  });
+
+  it('takes the Favor with a room message rather than an intent', () => {
+    // The server sweeps every seat's proxy and spawns the new one together, so the client sends one
+    // message and computes nothing itself.
+    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
+    clickMenuItem(root, 'Take the Imperial Favor');
+    assert.deepEqual(sent.at(-1), { type: 'TAKE_FAVOR' });
   });
 
   // The Randomize chooser mounts in `.room`; its modal is overlay > .deck-scope >
