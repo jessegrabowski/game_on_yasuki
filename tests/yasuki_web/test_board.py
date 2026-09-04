@@ -10,6 +10,7 @@ from yasuki_core.engine.table import BoardPos, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import IntentOp
 from yasuki_core.engine.action_log import SessionEntry
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint
 
 from tests.yasuki_web._support import account
@@ -322,6 +323,69 @@ def test_retaking_your_own_favor_names_nobody():
     assert _log_lines(first) == ["Ada takes the Imperial Favor"] * 2
 
 
+@pytest.mark.parametrize(
+    "route",
+    [
+        pytest.param(lambda cid: IntentEnvelope(op=IntentOp.REMOVE_CARD, card_id=cid), id="remove"),
+        pytest.param(
+            lambda cid: IntentEnvelope(
+                op=IntentOp.MOVE_CARD, card_id=cid, to={"kind": "battlefield"}, position=[1, 2]
+            ),
+            id="played",
+        ),
+        pytest.param(
+            lambda cid: IntentEnvelope(
+                op=IntentOp.MOVE_CARD,
+                card_id=cid,
+                # idx is set for provinces only; a discard zone's key leaves it None.
+                to={"kind": "zone", "zone": {"owner": "P1", "role": "fate_discard", "idx": None}},
+            ),
+            id="discarded",
+        ),
+    ],
+)
+def test_every_route_out_of_hand_logs_one_discard(route):
+    """Playing it, discarding it and removing it are all the holder giving up the Favor, and each
+    reads the same way in the log."""
+    room, ws, _ = _two_seat_room()
+    asyncio.run(room.handle_take_favor(ws))
+    card_id = _favor_ids(room)[0]
+
+    asyncio.run(room.handle_intent(ws, route(card_id)))
+
+    assert _log_lines(ws)[-1] == "Ada discards the Imperial Favor"
+
+
+def test_playing_then_discarding_the_favor_logs_one_discard():
+    """A played Favor is already discarded, so sweeping it off the battlefield afterwards must not
+    report a second one."""
+    room, ws, _ = _two_seat_room()
+    asyncio.run(room.handle_take_favor(ws))
+    card_id = _favor_ids(room)[0]
+    asyncio.run(
+        room.handle_intent(
+            ws,
+            IntentEnvelope(
+                op=IntentOp.MOVE_CARD, card_id=card_id, to={"kind": "battlefield"}, position=[1, 2]
+            ),
+        )
+    )
+
+    asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.REMOVE_CARD, card_id=card_id)))
+
+    assert _log_lines(ws).count("Ada discards the Imperial Favor") == 1
+
+
+def test_taking_the_favor_from_another_seat_is_not_a_discard():
+    """The sweep is not the holder giving it up, so it reads as a take rather than a discard."""
+    room, first, second = _two_seat_room()
+    asyncio.run(room.handle_take_favor(first))
+
+    asyncio.run(room.handle_take_favor(second))
+
+    assert "Ada discards the Imperial Favor" not in _log_lines(first)
+
+
 def test_a_favor_that_cannot_be_spawned_is_not_swept_from_its_holder():
     """The sweep is destructive, so it must not run when the spawn that replaces it cannot. A table
     between a reset and its next deal has no template to spawn from."""
@@ -337,3 +401,28 @@ def test_a_favor_that_cannot_be_spawned_is_not_swept_from_its_holder():
     assert [m["message"] for m in second.sent if m["type"] == "ERROR"] == [
         "Could not take the Favor"
     ]
+
+
+def test_an_ordinary_card_leaving_a_hand_is_not_logged_as_a_favor_discard():
+    """The discard line is keyed on the card, not on the move, so a normal hand-to-discard reads the
+    way it always did."""
+    room, ws, _ = _two_seat_room()
+    card = L5RCard.of(FatePrint, id="f1", name="Ambush", side=Side.FATE, owner=PlayerId.P1)
+    room.state.cards_by_id["f1"] = card
+    room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+
+    asyncio.run(
+        room.handle_intent(
+            ws,
+            IntentEnvelope(
+                op=IntentOp.MOVE_CARD,
+                card_id="f1",
+                to={"kind": "zone", "zone": {"owner": "P1", "role": "fate_discard", "idx": None}},
+            ),
+        )
+    )
+
+    assert [c.id for c in room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards] == [
+        "f1"
+    ]
+    assert "Ada discards the Imperial Favor" not in _log_lines(ws)

@@ -260,6 +260,8 @@ class GameRoom:
                 )
                 return
 
+        # Read before applying: once the card has moved there is no way to tell it came from a hand.
+        discarding_favor = self._favor_leaving_hand(intent)
         events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
         if not events:
             await ws.send_json(
@@ -270,7 +272,10 @@ class GameRoom:
             await self._send_snapshot(ws, seat)
             return
         await self.broadcast_snapshots()
-        await self._log_intent(seat, intent, events[0])
+        if discarding_favor:
+            await self.log([{"text": f"{self.players[ws]} discards the Imperial Favor"}])
+        else:
+            await self._log_intent(seat, intent, events[0])
         if isinstance(intent, SearchDeck):
             await self._send_deck_contents(ws, intent)
 
@@ -515,6 +520,23 @@ class GameRoom:
         payload = ServerLog(room=self.room_id, parts=parts).model_dump()
         self._append_capped(self.log_history, payload)
         await self._broadcast(payload)
+
+    def _favor_leaving_hand(self, intent: Intent) -> bool:
+        """Whether this intent takes the Imperial Favor out of the hand holding it.
+
+        Every route out of a hand is the holder discarding it — played to the battlefield, moved to
+        a discard, or removed outright — and a copy can only leave a hand once, so a played Favor
+        later swept off the battlefield does not report a second discard.
+        """
+        if intent.op not in (IntentOp.MOVE_CARD, IntentOp.REMOVE_CARD):
+            return False
+        card = self.state.cards_by_id.get(getattr(intent, "card_id", None))
+        if card is None or card.printed_id != IMPERIAL_FAVOR_ID:
+            return False
+        return any(
+            key.role is ZoneRole.HAND and any(held is card for held in zone.cards)
+            for key, zone in self.state.zones.items()
+        )
 
     async def _log_intent(self, seat: PlayerId, intent: Intent, event: Event):
         """Append a human-readable game-log line for an accepted intent, unless it is one not shown
