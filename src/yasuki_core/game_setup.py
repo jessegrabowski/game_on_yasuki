@@ -3,7 +3,7 @@ from typing import Any
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.database import get_cards_by_names, get_creates_for_cards
+from yasuki_core.database import get_cards_by_names, get_creates_for_cards, get_rulebook_proxies
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.setup import flip_second_player_stronghold, setup_seat
@@ -55,6 +55,9 @@ def build_state_from_deck(
     *seat_streams, order_stream = deal.spawn(len(seats) + 1)
     seat_rngs = dict(zip((seat for seat, _ in seats), seat_streams, strict=True))
     resolved_by_path: dict[str, tuple[Decklist, list[dict], dict[str, list[str]]]] = {}
+    # Below the rng draw on purpose: the desktop client degrades to placeholder decks when the
+    # database is unreachable, so a database call above it would mask a defect in the deal itself.
+    state.creatable_tokens.update(build_token_templates(get_rulebook_proxies()))
     for seat, path in seats:
         key = str(path)
         if key not in resolved_by_path:

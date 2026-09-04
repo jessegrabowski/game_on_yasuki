@@ -23,6 +23,7 @@ yasuki_core.database
     get_creates_for_cards
     get_db_connection
     get_prints_by_card_id
+    get_rulebook_proxies
     init_pool
     mask_dsn
     query_all_cards

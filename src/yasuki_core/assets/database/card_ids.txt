@@ -5209,6 +5209,7 @@ imperial_drills
 imperial_edicts
 imperial_elite_guard
 imperial_explorers_dojo
+imperial_favor
 imperial_funeral
 imperial_gift
 imperial_gift_2_glory

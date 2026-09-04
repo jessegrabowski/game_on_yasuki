@@ -114,6 +114,12 @@ images:
   - role: front
     file: horror_shadowlands_personality.jpg
     sha256: a82c0a010febda4aa63e97f2c2f102536d25a9b175de06ff2adeb773c0353ed5
+- card_id: imperial_favor
+  printing_id: tokens
+  files:
+  - role: front
+    file: imperial_favor.jpg
+    sha256: af78bdd7f63b7b3f6a98403ce84945e0f3b3fab8063e375134cf0aa5a769d74b
 - card_id: mantis_samurai_naval_personality_2_1_2
   printing_id: tokens
   files:
