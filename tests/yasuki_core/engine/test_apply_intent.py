@@ -2120,3 +2120,57 @@ def test_spawn_card_onto_the_battlefield_without_a_position_uses_the_default_spo
 
     assert table.positions["ghul-1"] == DEFAULT_BOARD_POS
     table.validate()
+
+
+@pytest.mark.parametrize(
+    "dest",
+    [
+        ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD),
+        ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH),
+        ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0),
+        DeckKey(PlayerId.P1, Side.FATE),
+    ],
+    ids=["discard", "banish", "province", "deck"],
+)
+def test_a_token_sent_from_a_hand_to_a_pile_ceases_to_exist(dest):
+    """A proxy held in a hand never entered play, so it does not reach the battlefield on its way
+    out — but it is still a created card, and a pile of real cards is no place for one."""
+    table = TableState.empty_two_seat()
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=PlayerId.P1)
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="favor-1",
+            token_id="imperial_favor",
+            zone=ZoneKey(PlayerId.P1, ZoneRole.HAND),
+            shown=True,
+        ),
+    )
+
+    ops.move_card(table, table.cards_by_id["favor-1"], dest)
+
+    assert "favor-1" not in table.cards_by_id
+    table.validate()
+
+
+def test_a_token_moved_between_hands_survives():
+    """The Favor changes hands without being destroyed; only a pile annihilates it."""
+    table = TableState.empty_two_seat()
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="favor-1",
+            token_id="imperial_favor",
+            zone=ZoneKey(PlayerId.P1, ZoneRole.HAND),
+            shown=True,
+        ),
+    )
+
+    ops.move_card(table, table.cards_by_id["favor-1"], ZoneKey(PlayerId.P2, ZoneRole.HAND))
+
+    assert [c.id for c in table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards] == ["favor-1"]
+    table.validate()
