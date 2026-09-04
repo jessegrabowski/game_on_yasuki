@@ -51,6 +51,7 @@ yasuki_core.engine.intents
 
     apply_intent
     flip_coin
+    locked_ops
     roll_dice
 
 .. automodule:: yasuki_core.engine.intents

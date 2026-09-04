@@ -64,6 +64,12 @@ def bring_to_top(state: TableState, card: L5RCard) -> None:
             return
 
 
+def _holds_tokens(dest: MoveDest) -> bool:
+    """Whether a created card that is not in play may sit at ``dest``. Only a hand may, and only
+    because a rulebook proxy is represented by one there; every pile of real cards destroys it."""
+    return isinstance(dest, ZoneKey) and dest.role is ZoneRole.HAND
+
+
 def move_card(
     state: TableState,
     card: L5RCard,
@@ -81,19 +87,20 @@ def move_card(
     already occupies is a no-op.
 
     A card leaving the battlefield loses its counters: tokens cannot exist on a card out of play,
-    and they do not come back if it re-enters (CR, Tokens). A *created* card leaving the battlefield
-    goes nowhere at all — it ceases to exist (CR, Create) — so ``dest`` is ignored for one and the
-    card is taken off the table instead.
+    and they do not come back if it re-enters (CR, Tokens). A *created* card ceases to exist rather
+    than arriving (CR, Create), so ``dest`` is ignored and it is taken off the table: leaving the
+    battlefield destroys it wherever it was headed, and one held in a hand as a rulebook proxy
+    survives only a move to another hand.
 
     ``deck_index`` lands the card at that depth in a deck's bottom-first list, clamped into range,
     and takes precedence over ``to_bottom``."""
-    if dest != BATTLEFIELD and any(held is card for held in state.battlefield.cards):
-        # Enforced here rather than at each call site: every route off the battlefield funnels
-        # through this one, and a created card filed in a discard or shuffled into a deck would be
-        # drawn again as if it had always been real.
-        if card.is_token:
-            remove_card(state, card)
-            return True
+    # Enforced here rather than at each call site: every move funnels through this one.
+    on_battlefield = any(held is card for held in state.battlefield.cards)
+    if card.is_token and dest != BATTLEFIELD and (on_battlefield or not _holds_tokens(dest)):
+        remove_card(state, card)
+        return True
+    # Counters exist only in play, so a real card loses them on the way out (CR, Tokens).
+    if dest != BATTLEFIELD and on_battlefield:
         card.clear_counters()
 
     if dest == BATTLEFIELD:

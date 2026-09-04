@@ -27,8 +27,15 @@ from yasuki_web.game_log import describe_intent
 from yasuki_web.rooms import rooms
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, BoardPos
-from yasuki_core.engine.intents import Intent, IntentOp, Event, SearchDeck, SpawnCard
+from yasuki_core.engine.table import TableState, BoardPos, ZoneKey, ZoneRole
+from yasuki_core.engine.intents import (
+    Intent,
+    IntentOp,
+    Event,
+    RemoveCard,
+    SearchDeck,
+    SpawnCard,
+)
 from yasuki_core.engine.action_log import (
     ActionLog,
     ChatEntry,
@@ -44,6 +51,7 @@ from yasuki_core.game_pieces.factory import (
     build_token_print,
 )
 from yasuki_core.decklist import parse_deck_yaml
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
 from yasuki_core.database import (
     get_cards_by_names,
     get_creates_for_cards,
@@ -252,6 +260,8 @@ class GameRoom:
                 )
                 return
 
+        # Read before applying: once the card has moved there is no way to tell it came from a hand.
+        discarding_favor = self._favor_leaving_hand(intent)
         events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
         if not events:
             await ws.send_json(
@@ -262,7 +272,10 @@ class GameRoom:
             await self._send_snapshot(ws, seat)
             return
         await self.broadcast_snapshots()
-        await self._log_intent(seat, intent, events[0])
+        if discarding_favor:
+            await self.log([{"text": f"{self.players[ws]} discards the Imperial Favor"}])
+        else:
+            await self._log_intent(seat, intent, events[0])
         if isinstance(intent, SearchDeck):
             await self._send_deck_contents(ws, intent)
 
@@ -357,6 +370,55 @@ class GameRoom:
             await self.log([{"text": "A new game begins"}])
         else:
             await self.log([{"text": f"{self.players[ws]} wants a new game"}])
+
+    async def handle_take_favor(self, ws: WebSocket):
+        """Give the acting seat the Imperial Favor: clear every favor proxy on the table, then spawn
+        a fresh one face-up in their hand.
+
+        No legality check of any kind. The online table is a manual sandbox with no rules engine, so
+        lobbying is table etiquette rather than something the server adjudicates. The sweep runs
+        server-side rather than on the client so two seats claiming it at once cannot both keep a
+        copy.
+        """
+        seat = self.seats.get(ws)
+        if seat is None:
+            return
+        if IMPERIAL_FAVOR_ID not in self.state.creatable_tokens:
+            # Checked before the sweep, which is destructive: a table between a reset and its next
+            # deal has no template to spawn from, and clearing the Favor without replacing it would
+            # take it off the table entirely.
+            await ws.send_json(
+                ServerError(room=self.room_id, message="Could not take the Favor").model_dump()
+            )
+            return
+        held = [
+            card for card in self.state.cards_by_id.values() if card.printed_id == IMPERIAL_FAVOR_ID
+        ]
+        # Read before the sweep removes them. Whoever loses it is named in the log, so the other
+        # player is not left to notice a card vanish from their hand; re-taking your own names
+        # nobody.
+        taken_from = next((card.owner for card in held if card.owner is not seat), None)
+        for card in held:
+            apply_and_log(self.state, self.action_log, seat, RemoveCard(card.id), ts=time.time())
+
+        self._spawn_count += 1
+        spawn = SpawnCard(
+            card_id=f"spawn-{self._spawn_count}",
+            token_id=IMPERIAL_FAVOR_ID,
+            zone=ZoneKey(seat, ZoneRole.HAND),
+            shown=True,
+        )
+        events = apply_and_log(self.state, self.action_log, seat, spawn, ts=time.time())
+        if not events:
+            await ws.send_json(
+                ServerError(room=self.room_id, message="Could not take the Favor").model_dump()
+            )
+            return
+        await self.broadcast_snapshots()
+        line = f"{self.players[ws]} takes the Imperial Favor"
+        if taken_from is not None:
+            line += f" from {self.state.seats[taken_from].name}"
+        await self.log([{"text": line}])
 
     def _clear_table(self):
         names = {seat: info.name for seat, info in self.state.seats.items()}
@@ -458,6 +520,23 @@ class GameRoom:
         payload = ServerLog(room=self.room_id, parts=parts).model_dump()
         self._append_capped(self.log_history, payload)
         await self._broadcast(payload)
+
+    def _favor_leaving_hand(self, intent: Intent) -> bool:
+        """Whether this intent takes the Imperial Favor out of the hand holding it.
+
+        Every route out of a hand is the holder discarding it — played to the battlefield, moved to
+        a discard, or removed outright — and a copy can only leave a hand once, so a played Favor
+        later swept off the battlefield does not report a second discard.
+        """
+        if intent.op not in (IntentOp.MOVE_CARD, IntentOp.REMOVE_CARD):
+            return False
+        card = self.state.cards_by_id.get(getattr(intent, "card_id", None))
+        if card is None or card.printed_id != IMPERIAL_FAVOR_ID:
+            return False
+        return any(
+            key.role is ZoneRole.HAND and any(held is card for held in zone.cards)
+            for key, zone in self.state.zones.items()
+        )
 
     async def _log_intent(self, seat: PlayerId, intent: Intent, event: Event):
         """Append a human-readable game-log line for an accepted intent, unless it is one not shown
@@ -613,6 +692,9 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
 
             elif message.type == "RESET":
                 await game_room.handle_reset(websocket)
+
+            elif message.type == "TAKE_FAVOR":
+                await game_room.handle_take_favor(websocket)
 
             elif message.type == "PING":
                 await websocket.send_json({"type": "PONG"})

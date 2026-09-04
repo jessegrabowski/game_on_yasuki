@@ -1,3 +1,4 @@
+from yasuki_core.engine.intents import locked_ops
 from yasuki_core.engine.redaction import ViewSnapshot, HiddenCard
 from yasuki_core.engine.table import ZoneKey, DeckKey, AttachTarget
 from yasuki_core.game_pieces.cards import L5RCard
@@ -74,6 +75,9 @@ def _card(
         "peeked": view.id in peeked_ids,
         "hidden": False,
     }
+    if locked := locked_ops(view):
+        # Present only on a card that refuses something, so an ordinary card carries no extra bytes.
+        card["locked"] = sorted(op.value for op in locked)
     if view.back_card_id is not None:
         card["back_card_id"] = view.back_card_id
         card["showing_back"] = view.showing_back

@@ -2120,3 +2120,88 @@ def test_spawn_card_onto_the_battlefield_without_a_position_uses_the_default_spo
 
     assert table.positions["ghul-1"] == DEFAULT_BOARD_POS
     table.validate()
+
+
+def test_a_card_refuses_an_action_its_lock_table_entry_names():
+    """The Favor is public for as long as it is held, so its holder has no way to hide it. The gate
+    is central, so it holds for any card named in ``LOCKED_ACTIONS`` and any op it names."""
+    table = TableState.empty_two_seat()
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    hand = ZoneKey(PlayerId.P1, ZoneRole.HAND)
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(card_id="favor-1", token_id="imperial_favor", zone=hand, shown=True),
+    )
+
+    events = apply_intent(table, PlayerId.P1, Unshow("favor-1"))
+
+    assert events == []
+    assert table.cards_by_id["favor-1"].shown is True
+    assert not isinstance(redact(table, PlayerId.P2).zones[hand].cards[0], HiddenCard)
+
+
+def test_an_unlocked_card_still_takes_the_same_action():
+    """The central gate rejects only what the table names, so an ordinary shown card unshows."""
+    table = TableState.empty_two_seat()
+    hand = ZoneKey(PlayerId.P1, ZoneRole.HAND)
+    card = register(table, fate_card("f1", PlayerId.P1))
+    card.show()
+    table.zones[hand].add(card)
+
+    assert apply_intent(table, PlayerId.P1, Unshow("f1")) != []
+    assert table.cards_by_id["f1"].shown is False
+
+
+@pytest.mark.parametrize(
+    "dest",
+    [
+        ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD),
+        ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH),
+        ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0),
+        DeckKey(PlayerId.P1, Side.FATE),
+    ],
+    ids=["discard", "banish", "province", "deck"],
+)
+def test_a_token_sent_from_a_hand_to_a_pile_ceases_to_exist(dest):
+    """A proxy held in a hand never entered play, so it does not reach the battlefield on its way
+    out — but it is still a created card, and a pile of real cards is no place for one."""
+    table = TableState.empty_two_seat()
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=PlayerId.P1)
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="favor-1",
+            token_id="imperial_favor",
+            zone=ZoneKey(PlayerId.P1, ZoneRole.HAND),
+            shown=True,
+        ),
+    )
+
+    ops.move_card(table, table.cards_by_id["favor-1"], dest)
+
+    assert "favor-1" not in table.cards_by_id
+    table.validate()
+
+
+def test_a_token_moved_between_hands_survives():
+    """The Favor changes hands without being destroyed; only a pile annihilates it."""
+    table = TableState.empty_two_seat()
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="favor-1",
+            token_id="imperial_favor",
+            zone=ZoneKey(PlayerId.P1, ZoneRole.HAND),
+            shown=True,
+        ),
+    )
+
+    ops.move_card(table, table.cards_by_id["favor-1"], ZoneKey(PlayerId.P2, ZoneRole.HAND))
+
+    assert [c.id for c in table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards] == ["favor-1"]
+    table.validate()

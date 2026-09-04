@@ -62,6 +62,7 @@ function fakeCard(
     doubleFaced = false,
     token = false,
     shown = false,
+    locked = '',
     peeked = false,
     province = null,
     inHand = false,
@@ -89,6 +90,7 @@ function fakeCard(
     hidden: hidden ? '1' : '',
     token: token ? '1' : '',
     shown: shown ? '1' : '',
+    locked,
     peeked: peeked ? '1' : '',
     note,
     name,
@@ -2275,6 +2277,13 @@ describe('initBoardInteractions — context menu', () => {
     assert.deepEqual(sent[0].intent, { op: 'UNSHOW', card_id: 'c1' });
   });
 
+  it('leaves an item off the menu when the card refuses its intent', () => {
+    // The Imperial Favor stays public while it is held, so its holder is offered no way to hide it.
+    const favor = fakeCard('favor-1', { owner: 'P1', shown: true, inHand: true, locked: 'UNSHOW' });
+    root._emit('contextmenu', rightClick({ card: favor }));
+    assert.ok(!menuLabels(root).includes('Stop showing'));
+  });
+
   it('opens a hand card menu mounted on the stage, not the clipped battlefield', () => {
     const event = rightClick({
       zone: { zone: 'hand', owner: 'P1' },
@@ -2608,12 +2617,21 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(sent.length, 1, 'one flip, from the menu accelerator, not also the hover hotkey');
   });
 
-  it('offers Unbow all and Randomize on the empty battlefield, on distinct accelerators', () => {
+  it('offers the empty-battlefield items on distinct accelerators', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
-    assert.deepEqual(menuLabels(root), ['Unbow all', 'Randomize…']);
-    const keys = ['Unbow all', 'Randomize…'].map(accelOf);
-    assert.deepEqual(keys, ['w', 'R']);
+    const labels = ['Unbow all', 'Randomize…', 'Take the Imperial Favor'];
+    assert.deepEqual(menuLabels(root), labels);
+    const keys = labels.map(accelOf);
+    assert.deepEqual(keys, ['w', 'R', 'F']);
     assert.equal(new Set(keys).size, keys.length, 'no two items share an accelerator');
+  });
+
+  it('takes the Favor with a room message rather than an intent', () => {
+    // The server sweeps every seat's proxy and spawns the new one together, so the client sends one
+    // message and computes nothing itself.
+    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
+    clickMenuItem(root, 'Take the Imperial Favor');
+    assert.deepEqual(sent.at(-1), { type: 'TAKE_FAVOR' });
   });
 
   // The Randomize chooser mounts in `.room`; its modal is overlay > .deck-scope >

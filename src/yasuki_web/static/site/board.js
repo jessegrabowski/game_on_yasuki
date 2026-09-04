@@ -154,6 +154,9 @@ function tagCard(el, card) {
   // shown: the card is public-facing (the menu offers "Stop showing"); peeked: this viewer sees it
   // only through their own private peek (rendered at reduced opacity, the menu offers "Stop peeking").
   el.dataset.shown = card.shown ? '1' : '';
+  // Intent ops this card refuses, so the menu can leave them off. Comma-joined for the
+  // dataset, which holds strings only.
+  el.dataset.locked = (card.locked ?? []).join(',');
   el.dataset.peeked = card.peeked ? '1' : '';
   el.dataset.note = card.note ?? '';
   // name and img let the menu duplicate a card as a token; a hidden stub the viewer can't see carries
@@ -377,6 +380,10 @@ export function highlightCard(boardEl, cardId) {
 // card the search dialog picked (print_card_id) — and the server copies it as a fresh public token.
 export const intentMessage = (intent) => ({ type: 'INTENT', intent });
 export const removeMessage = (id) => intentMessage({ op: 'REMOVE_CARD', card_id: id });
+
+// Not an intent: taking the Favor is a sweep of every seat's proxy plus a spawn, which the
+// server does as one step so two clients claiming it at once cannot both end up holding it.
+export const takeFavorMessage = () => ({ type: 'TAKE_FAVOR' });
 
 // A spawn drops down-right of its source card so it doesn't hide it; this is its canonical position.
 const DUPLICATE_OFFSET_PX = 18;
@@ -672,9 +679,10 @@ function cardMenuItems(
   // Show and Peek fan one message per qualifying selected card. Show also always covers the clicked
   // card — it may be a hand card, which the battlefield-only face-down gate would otherwise skip.
   const viewerOwns = (d) => !d.owner || d.owner === viewer;
+  const refuses = (d, op) => (d.locked || '').split(',').includes(op);
   const viewerOwnsFaceDown = (d) => viewerOwns(d) && (d.hidden === '1' || d.faceUp !== '1');
   if (mine) {
-    if (shown) {
+    if (shown && !refuses(el.dataset, 'UNSHOW')) {
       items.push({
         label: 'Stop &showing',
         onClick: (e, send) =>
@@ -1529,6 +1537,7 @@ function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
     { label: '&Randomize…', onClick: (e, send) => openRandomizePrompt(send) },
   ];
   if (onCreateToken) items.push({ label: 'Create &token…', onClick: () => onCreateToken(spawnAt) });
+  items.push({ label: 'Take the Imperial &Favor', onClick: (e, send) => send(takeFavorMessage()) });
   return items;
 }
 
