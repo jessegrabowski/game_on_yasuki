@@ -260,6 +260,16 @@ cards:
   chi: '*'
   gold_cost: '*'
   is_proxy: true
+- id: imperial_favor
+  title: The Imperial Favor
+  types:
+  - Other
+  - Proxy
+  decks:
+  - Other
+  text: '<b>Political Open, :favor::</b> If it is your turn, discard a Fate card to draw a card.<br><b>Political
+    Battle, :favor::</b> Move a target attacking enemy Personality home.'
+  is_proxy: true
 - id: mantis_samurai_naval_personality_2_1_2
   title: Thunder Veteran
   types:
