@@ -3,6 +3,7 @@ import tkinter as tk
 import pytest
 
 from yasuki_gui.ui.floating_panel import (
+    CLOSE,
     FloatingPanel,
     KEEP_VISIBLE,
     MIN_H,
@@ -382,3 +383,80 @@ def test_the_panel_listens_for_the_board_resizing(board):
     FloatingPanel(board, "Attack", width=400, height=300)
 
     assert board.bind("<Configure>")
+
+
+def _bar_glyphs(panel: FloatingPanel) -> list[str]:
+    """The button glyphs on a panel's title bar."""
+    return [
+        child.cget("text")
+        for bar in panel.winfo_children()
+        for child in bar.winfo_children()
+        if isinstance(child, tk.Label) and child.cget("text") in (CLOSE, ROLL_UP, UNROLL)
+    ]
+
+
+def test_a_closable_panel_offers_a_way_to_dismiss_it(board):
+    """A panel the player opens is theirs to close, so it carries its own way out."""
+    assert CLOSE in _bar_glyphs(FloatingPanel(board, "Pile", width=400, height=300, closable=True))
+
+
+def test_a_panel_the_game_manages_carries_no_close_button(board):
+    """One the turn opens and closes, like the battle view, must not be dismissable: a stray click
+    would hide something the player still has to act on."""
+    managed = FloatingPanel(board, "Battle", width=400, height=300)
+
+    assert CLOSE not in _bar_glyphs(managed)
+    assert ROLL_UP in _bar_glyphs(managed), "it still rolls up"
+
+
+def test_clicking_the_board_away_from_a_closable_panel_dismisses_it(board):
+    """Tk delivers a click to the innermost widget under it, so one landing on the panel never
+    reaches the board and only a click genuinely past it closes."""
+    panel = FloatingPanel(board, "Pile", width=400, height=300, closable=True)
+    panel.open_at(10, 10)
+
+    panel._click_away(None)
+
+    assert not panel.showing
+
+
+def test_a_board_click_does_not_disturb_a_panel_that_is_closed(board):
+    panel = FloatingPanel(board, "Pile", width=400, height=300, closable=True)
+
+    panel._click_away(None)
+
+    assert not panel.showing
+
+
+def test_a_managed_panel_ignores_board_clicks(board):
+    """The flag governs both ways out, so a panel with no close button is not dismissed by a click
+    either."""
+    managed = FloatingPanel(board, "Battle", width=400, height=300)
+    managed.open_at(10, 10)
+
+    board.event_generate("<Button-1>", x=5, y=5)
+
+    assert managed.showing
+
+
+def test_the_dismissal_binding_joins_the_board_own_click_handler(board):
+    """The board binds ``<Button-1>`` for card interaction without ``add``, which replaces whatever
+    came before it, so a panel has to bind after the board is wired and additively. Reversing either
+    would drop card clicks or drop the dismissal, and neither shows up as a failure."""
+    board.bind("<Button-1>", lambda _event: None)  # stands in for FieldController
+    board_own = board.bind("<Button-1>")
+
+    FloatingPanel(board, "Pile", width=400, height=300, closable=True)
+
+    handlers = board.bind("<Button-1>")
+    assert board_own in handlers, "the board's own click handler survived"
+    assert handlers != board_own, "the panel added its dismissal"
+
+
+def test_a_panel_can_be_retitled_for_what_it_is_showing(board):
+    """One panel reused across several piles has to say which it is showing."""
+    panel = FloatingPanel(board, "Fate Discard", width=400, height=300)
+
+    panel.set_title("Dynasty Banish")
+
+    assert panel._title.cget("text") == "Dynasty Banish"

@@ -19,6 +19,7 @@ MIN_H = 140
 ROLL_UP = "\u2013"  # en dash, the bar the panel rolls down to
 UNROLL = "\u25a1"  # an empty box, the panel it rolls back out into
 GRIP = "\u25e2"  # a filled corner, the one the panel resizes from
+CLOSE = "\u2715"  # a cross, for a panel the player dismisses rather than the game
 
 
 class FloatingPanel(tk.Frame):
@@ -34,7 +35,9 @@ class FloatingPanel(tk.Frame):
         Everything below the title bar, which is where a subclass puts its content.
     """
 
-    def __init__(self, master: tk.Misc, title: str, *, width: int, height: int):
+    def __init__(
+        self, master: tk.Misc, title: str, *, width: int, height: int, closable: bool = False
+    ):
         """Build the panel, unplaced. It appears on the first :meth:`open_at`.
 
         Parameters
@@ -47,6 +50,10 @@ class FloatingPanel(tk.Frame):
             How wide the panel opens.
         height : int
             How tall the panel opens, title bar included.
+        closable : bool, optional
+            Whether the player may dismiss the panel: a button on the title bar, and a click on the
+            board away from it. Leave it off for one the game opens and closes on the player's
+            behalf, where a stray dismissal would hide something they still need. Default False.
         """
         super().__init__(
             master,
@@ -64,7 +71,7 @@ class FloatingPanel(tk.Frame):
         self._minimized = False
         self._ever_opened = False
 
-        self._build_titlebar(title)
+        self._build_titlebar(title, closable)
         self.body = tk.Frame(self, bg=theme.SURFACE)
         self.body.pack(side="top", fill="both", expand=True)
 
@@ -82,8 +89,12 @@ class FloatingPanel(tk.Frame):
         self._grip.bind("<B1-Motion>", self._resize)
         # Added to whatever the board already listens for, which on a canvas is its own redraw.
         master.bind("<Configure>", self._on_board_resized, add="+")
+        if closable:
+            # Tk sends a click to the innermost widget under it, so one landing on the panel never
+            # reaches the board and only a click genuinely away from it dismisses.
+            master.bind("<Button-1>", self._click_away, add="+")
 
-    def _build_titlebar(self, title: str) -> None:
+    def _build_titlebar(self, title: str, closable: bool) -> None:
         """Pack the bar the panel is dragged by, and the button that rolls it up."""
         # Gold like the border, so the bar and the frame read as the same piece of chrome, and the
         # only part of the panel that is not the pale table underneath.
@@ -99,23 +110,35 @@ class FloatingPanel(tk.Frame):
             cursor="fleur",
         )
         label.pack(side="left", padx=10)
+        self._title = label
         for widget in (bar, label):
             widget.bind("<Button-1>", self._grab)
             widget.bind("<B1-Motion>", self._drag)
 
-        self._roll = tk.Label(
+        if closable:
+            self._add_bar_button(bar, CLOSE, self.close)
+        self._roll = self._add_bar_button(bar, ROLL_UP, self.toggle_minimized)
+
+    def _add_bar_button(self, bar: tk.Frame, glyph: str, on_click) -> tk.Label:
+        """Pack a title-bar button. Packed right, so the first added sits furthest right."""
+        button = tk.Label(
             bar,
-            text=ROLL_UP,
+            text=glyph,
             bg=theme.GOLD_HOVER,
             fg=theme.ON_DARK,
             font=theme.serif(14, "bold"),
             width=3,
             cursor="hand2",
         )
-        self._roll.pack(side="right", fill="y", padx=(0, 4), pady=4)
-        self._roll.bind("<Button-1>", lambda _event: self.toggle_minimized())
-        self._roll.bind("<Enter>", lambda _event: self._roll.configure(bg=theme.INK))
-        self._roll.bind("<Leave>", lambda _event: self._roll.configure(bg=theme.GOLD_HOVER))
+        button.pack(side="right", fill="y", padx=(0, 4), pady=4)
+        button.bind("<Button-1>", lambda _event: on_click())
+        button.bind("<Enter>", lambda _event: button.configure(bg=theme.INK))
+        button.bind("<Leave>", lambda _event: button.configure(bg=theme.GOLD_HOVER))
+        return button
+
+    def set_title(self, title: str) -> None:
+        """Rename the panel, for one reused across the several things it can show."""
+        self._title.configure(text=title)
 
     @property
     def showing(self) -> bool:
@@ -157,6 +180,12 @@ class FloatingPanel(tk.Frame):
         if not self._ever_opened:
             self._panel_width, self._panel_height = width, height
         self.open_at(left, top)
+
+    def _click_away(self, _event: tk.Event) -> None:
+        """Dismiss the panel when the board is clicked past it, leaving the click to do whatever it
+        would have done on the board underneath."""
+        if self.showing:
+            self.close()
 
     def close(self) -> None:
         """Take the panel off the board. Its size and position survive for the next open."""
