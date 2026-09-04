@@ -6,8 +6,10 @@ from pydantic import ValidationError
 from yasuki_web.websocket import GameRoom, _entry_names
 from yasuki_web.schemas import ClientMessage, LoadDeckRequest
 from yasuki_web.rooms import rooms
+from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.engine.players import PlayerId
 
+from tests.yasuki_core.db_guard import requires_db
 from tests.yasuki_web._support import account
 
 DECK_YAML = """\
@@ -137,3 +139,16 @@ def test_entry_names_includes_the_art_swap_donor():
 def test_entry_names_is_just_the_card_without_an_art_swap():
     assert list(_entry_names({"name": "Ambush"})) == ["Ambush"]
     assert list(_entry_names({"name": "Ambush", "art": None})) == ["Ambush"]
+
+
+@requires_db
+def test_setup_leaves_rulebook_proxies_on_the_table(room):
+    """The per-deck token pull assigns ``creatable_tokens`` wholesale, so the rulebook proxies are
+    merged after it; swapping the two would drop the Favor from every room.
+    """
+    for seat in (PlayerId.P1, PlayerId.P2):
+        room.pending_decks[seat] = parse_deck_yaml(DECK_YAML)
+
+    asyncio.run(room._run_setup())
+
+    assert "imperial_favor" in room.state.creatable_tokens

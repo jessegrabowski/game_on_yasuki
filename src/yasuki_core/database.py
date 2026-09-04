@@ -561,6 +561,26 @@ def card_display_names(card_ids: set[str]) -> dict[str, str]:
         return {row["card_id"]: row["display"] for row in cur.fetchall()}
 
 
+# Proxies the rulebook itself puts on every table, as opposed to the tokens a card creates. The
+# Imperial Favor belongs to no creator card, so ``card_creates`` has no honest row for it.
+RULEBOOK_PROXY_IDS = ("imperial_favor",)
+
+
+def get_rulebook_proxies() -> dict[str, dict]:
+    """The full record of every rulebook proxy, keyed by card id.
+
+    Returns
+    -------
+    proxies : dict mapping str to dict
+        Each rulebook proxy card id to its full card record, in the shape ``get_card_by_id``
+        returns, omitting any id absent from the card database.
+    """
+    select_sql, _ = _card_select()
+    with get_db_connection() as conn, conn.cursor() as cur:
+        cur.execute(f"{select_sql} WHERE c.card_id = ANY(%s)", (list(RULEBOOK_PROXY_IDS),))
+        return {record["card_id"]: record for record in cur.fetchall()}
+
+
 def get_creates_for_cards(
     card_ids: list[str],
 ) -> tuple[dict[str, list[str]], dict[str, dict]]:

@@ -3,7 +3,7 @@ from typing import Any
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.database import get_cards_by_names, get_creates_for_cards
+from yasuki_core.database import get_cards_by_names, get_creates_for_cards, get_rulebook_proxies
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.setup import flip_second_player_stronghold, setup_seat
@@ -50,6 +50,7 @@ def build_state_from_deck(
     """
     seats = ((PlayerId.P1, deck_path), (PlayerId.P2, opponent_deck_path or deck_path))
     state = TableState.empty_two_seat(p1_name, p2_name)
+    state.creatable_tokens.update(build_token_templates(get_rulebook_proxies()))
     deal = default_rng() if rng is None else rng
     # One extra stream for the turn-order tie-break; the per-seat children are unchanged by it.
     *seat_streams, order_stream = deal.spawn(len(seats) + 1)

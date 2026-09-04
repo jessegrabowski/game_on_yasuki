@@ -19,7 +19,11 @@ from yasuki_core.database import (
     get_connection_string,
     get_db_connection,
     build_search_filters,
+    get_rulebook_proxies,
+    RULEBOOK_PROXY_IDS,
 )
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.factory import build_token_print
 from yasuki_core.paths import SETS_DIR, resolve_set_image_path
 from yasuki_core.search import parse_and_build_query
 
@@ -798,3 +802,31 @@ class TestApplySslmode:
         monkeypatch.setenv("YASUKI_DB_SSL_ROOT_CERT", "/etc/ssl/ca.pem")
         expected = self.PUBLIC + "?sslmode=verify-full&sslrootcert=/etc/ssl/ca.pem"
         assert apply_sslmode(self.PUBLIC) == expected
+
+
+def test_rulebook_proxy_loads_and_builds_without_stats():
+    """Twenty Festivals CR: the Favor is not a card, though it may be represented by one -- so the
+    proxy carries no stats and the print builder still has to stamp it."""
+    proxies = get_rulebook_proxies()
+    assert set(proxies) == set(RULEBOOK_PROXY_IDS)
+
+    printed = build_token_print(proxies["imperial_favor"])
+    assert printed.name == "The Imperial Favor"
+    # Side.FATE is what lets the Favor sit in a hand, which is where it is represented.
+    assert printed.side is Side.FATE
+    assert printed.focus is None
+    assert printed.gold_cost is None
+    # The record and the image manifest are separate files keyed by the same id; without art the
+    # proxy renders blank, and nothing else would notice.
+    assert printed.image_front is not None
+
+
+def test_no_card_creates_a_rulebook_proxy():
+    """A rulebook proxy belongs to no creator card, which is why it cannot ride the ``card_creates``
+    route the decks' own tokens use."""
+    with get_db_connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "SELECT creator_card_id FROM card_creates WHERE created_card_id = ANY(%s)",
+            (list(RULEBOOK_PROXY_IDS),),
+        )
+        assert cur.fetchall() == []

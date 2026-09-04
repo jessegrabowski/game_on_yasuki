@@ -44,7 +44,12 @@ from yasuki_core.game_pieces.factory import (
     build_token_print,
 )
 from yasuki_core.decklist import parse_deck_yaml
-from yasuki_core.database import get_cards_by_names, get_creates_for_cards, get_card_by_id
+from yasuki_core.database import (
+    get_cards_by_names,
+    get_creates_for_cards,
+    get_card_by_id,
+    get_rulebook_proxies,
+)
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -386,6 +391,9 @@ class GameRoom:
         card_ids = [record["card_id"] for record in records]
         creates_map, token_records = await asyncio.to_thread(get_creates_for_cards, card_ids)
         self.state.creatable_tokens = build_token_templates(token_records)
+        # Merged after the assignment above, which replaces the dict rather than updating it.
+        proxies = await asyncio.to_thread(get_rulebook_proxies)
+        self.state.creatable_tokens.update(build_token_templates(proxies))
         self._token_names = {tid: tpl.name for tid, tpl in self.state.creatable_tokens.items()}
         deals = self._deal_rng.spawn(len(self.pending_decks))
         for (seat, parsed), deal in zip(self.pending_decks.items(), deals, strict=True):

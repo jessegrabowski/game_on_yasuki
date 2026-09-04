@@ -129,3 +129,12 @@ def test_a_mirror_match_still_settles_turn_order():
     assert state.seats[first].honor == state.seats[second].honor
     assert _stronghold(state, second).showing_back
     assert not _stronghold(state, first).showing_back
+
+
+def test_rulebook_proxies_reach_a_table_whatever_the_decks_hold():
+    """ShE datasheet: the Favor is available to every player, so it reaches the table even though no
+    card in the dealt decks creates it."""
+    state, _ = build_state_from_deck(DEMO_DECK_PATH, rng=default_rng(7))
+    assert "imperial_favor" in state.creatable_tokens
+    # The deck's own tokens have to survive the merge that adds the proxy.
+    assert set(state.creatable_tokens) > {"imperial_favor"}
