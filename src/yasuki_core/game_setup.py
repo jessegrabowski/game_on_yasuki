@@ -50,12 +50,14 @@ def build_state_from_deck(
     """
     seats = ((PlayerId.P1, deck_path), (PlayerId.P2, opponent_deck_path or deck_path))
     state = TableState.empty_two_seat(p1_name, p2_name)
-    state.creatable_tokens.update(build_token_templates(get_rulebook_proxies()))
     deal = default_rng() if rng is None else rng
     # One extra stream for the turn-order tie-break; the per-seat children are unchanged by it.
     *seat_streams, order_stream = deal.spawn(len(seats) + 1)
     seat_rngs = dict(zip((seat for seat, _ in seats), seat_streams, strict=True))
     resolved_by_path: dict[str, tuple[Decklist, list[dict], dict[str, list[str]]]] = {}
+    # Below the rng draw on purpose: the desktop client degrades to placeholder decks when the
+    # database is unreachable, so a database call above it would mask a defect in the deal itself.
+    state.creatable_tokens.update(build_token_templates(get_rulebook_proxies()))
     for seat, path in seats:
         key = str(path)
         if key not in resolved_by_path:
