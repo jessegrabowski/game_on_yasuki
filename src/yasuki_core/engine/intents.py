@@ -6,7 +6,7 @@ from typing import ClassVar
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS, Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, RULEBOOK_PROXY_IDS, Side
 from yasuki_core.game_pieces.counters import Counter
 from yasuki_core.engine import ops
 from yasuki_core.engine.redaction import card_identity_public
@@ -1023,6 +1023,33 @@ _HANDLERS = {
 }
 
 
+# Actions a particular card refuses, whoever is acting. One entry per exception rather than a rule
+# about a category of card: the Imperial Favor is public for as long as it is held, so its holder
+# has no way to hide it.
+LOCKED_ACTIONS: dict[str, frozenset[IntentOp]] = {
+    IMPERIAL_FAVOR_ID: frozenset({IntentOp.UNSHOW}),
+}
+
+
+def locked_ops(card: L5RCard) -> frozenset[IntentOp]:
+    """The intents ``card`` refuses regardless of who is acting, for the client to leave off its
+    menu and for :func:`apply_intent` to reject."""
+    return LOCKED_ACTIONS.get(card.printed_id, frozenset())
+
+
+def _locked(state: TableState, intent: Intent) -> bool:
+    """Whether any card the intent targets refuses its op. A batch is all-or-nothing, matching the
+    ownership gate."""
+    card_ids = getattr(intent, "card_ids", None)
+    if card_ids is None:
+        target = getattr(intent, "card_id", None)
+        card_ids = () if target is None else (target,)
+    return any(
+        (card := state.cards_by_id.get(card_id)) is not None and intent.op in locked_ops(card)
+        for card_id in card_ids
+    )
+
+
 def apply_intent(state: TableState, seat: PlayerId, intent: Intent) -> list[Event]:
     """Validate and apply one intent, mutating ``state`` in place and returning the events produced.
 
@@ -1040,4 +1067,6 @@ def apply_intent(state: TableState, seat: PlayerId, intent: Intent) -> list[Even
     intent : Intent
         The operation to apply.
     """
+    if _locked(state, intent):
+        return []
     return _HANDLERS[intent.op](state, seat, intent)

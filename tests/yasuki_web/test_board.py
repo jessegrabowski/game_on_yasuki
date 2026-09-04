@@ -280,6 +280,23 @@ def test_take_favor_ignored_from_an_unseated_socket():
     assert _favor_ids(room) == []
 
 
+def test_the_favor_carries_its_locked_actions_on_the_wire():
+    """The client leaves a locked item off the menu, and nothing else in the payload says which
+    actions a card refuses."""
+    room, ws, other = _two_seat_room()
+
+    asyncio.run(room.handle_take_favor(ws))
+
+    snapshot = [m for m in ws.sent if m["type"] == "SNAPSHOT"][-1]["snapshot"]
+    cards = [card for zone in snapshot["zones"].values() for card in zone]
+    assert [card["locked"] for card in cards] == [["UNSHOW"]]
+
+    # The opponent sees it too, since it is shown, and needs the same list.
+    opponent = [m for m in other.sent if m["type"] == "SNAPSHOT"][-1]["snapshot"]
+    seen = [c for zone in opponent["zones"].values() for c in zone if not c["hidden"]]
+    assert [card["locked"] for card in seen] == [["UNSHOW"]]
+
+
 def _log_lines(ws):
     return [m["parts"][0]["text"] for m in ws.sent if m["type"] == "LOG"]
 

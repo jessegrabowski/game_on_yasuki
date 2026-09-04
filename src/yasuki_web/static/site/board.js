@@ -154,6 +154,9 @@ function tagCard(el, card) {
   // shown: the card is public-facing (the menu offers "Stop showing"); peeked: this viewer sees it
   // only through their own private peek (rendered at reduced opacity, the menu offers "Stop peeking").
   el.dataset.shown = card.shown ? '1' : '';
+  // Intent ops this card refuses, so the menu can leave them off. Comma-joined for the
+  // dataset, which holds strings only.
+  el.dataset.locked = (card.locked ?? []).join(',');
   el.dataset.peeked = card.peeked ? '1' : '';
   el.dataset.note = card.note ?? '';
   // name and img let the menu duplicate a card as a token; a hidden stub the viewer can't see carries
@@ -676,9 +679,10 @@ function cardMenuItems(
   // Show and Peek fan one message per qualifying selected card. Show also always covers the clicked
   // card — it may be a hand card, which the battlefield-only face-down gate would otherwise skip.
   const viewerOwns = (d) => !d.owner || d.owner === viewer;
+  const refuses = (d, op) => (d.locked || '').split(',').includes(op);
   const viewerOwnsFaceDown = (d) => viewerOwns(d) && (d.hidden === '1' || d.faceUp !== '1');
   if (mine) {
-    if (shown) {
+    if (shown && !refuses(el.dataset, 'UNSHOW')) {
       items.push({
         label: 'Stop &showing',
         onClick: (e, send) =>

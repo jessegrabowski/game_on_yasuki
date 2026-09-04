@@ -62,6 +62,7 @@ function fakeCard(
     doubleFaced = false,
     token = false,
     shown = false,
+    locked = '',
     peeked = false,
     province = null,
     inHand = false,
@@ -89,6 +90,7 @@ function fakeCard(
     hidden: hidden ? '1' : '',
     token: token ? '1' : '',
     shown: shown ? '1' : '',
+    locked,
     peeked: peeked ? '1' : '',
     note,
     name,
@@ -2273,6 +2275,13 @@ describe('initBoardInteractions — context menu', () => {
     assert.ok(labels.includes('Stop showing') && !labels.includes('Show opponent'));
     clickMenuItem(root, 'Stop showing');
     assert.deepEqual(sent[0].intent, { op: 'UNSHOW', card_id: 'c1' });
+  });
+
+  it('leaves an item off the menu when the card refuses its intent', () => {
+    // The Imperial Favor stays public while it is held, so its holder is offered no way to hide it.
+    const favor = fakeCard('favor-1', { owner: 'P1', shown: true, inHand: true, locked: 'UNSHOW' });
+    root._emit('contextmenu', rightClick({ card: favor }));
+    assert.ok(!menuLabels(root).includes('Stop showing'));
   });
 
   it('opens a hand card menu mounted on the stage, not the clipped battlefield', () => {
