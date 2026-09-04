@@ -34,21 +34,6 @@ class TestDialogs:
     def test_deck_inspect(self, dialogs, root):
         dialogs.deck_inspect([], "Test Deck")
 
-    def test_deck_search_empty(self, dialogs):
-        draw_cb = Mock()
-        dialogs.deck_search([], "Test Deck", draw_cb)
-
-    def test_deck_search_with_cards(self, dialogs):
-        card1 = Mock()
-        card1.name = "Card 1"
-        card1.bowed = False
-        card1.face_up = True
-        card1.inverted = False
-        card1.image_front = None
-
-        draw_cb = Mock()
-        dialogs.deck_search([card1], "Test Deck", draw_cb, n=1)
-
     def test_deck_reveal_top(self, dialogs):
         mock_deck_visual = Mock()
         mock_deck_visual.label = "Test Deck"

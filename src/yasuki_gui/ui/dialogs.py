@@ -55,58 +55,6 @@ class Dialogs:
         # prevent GC on PhotoImage objects
         win._images = keep  # type: ignore[attr-defined]
 
-    def deck_search(
-        self,
-        cards: list[L5RCard],
-        label: str,
-        draw_cb: Callable[[int], None],
-        n: int | None = None,
-    ) -> None:
-        win = tk.Toplevel(self.toplevel)
-        title = f"Search Top {n} - {label}" if n else f"Search - {label}"
-        win.title(title)
-        list_frame = tk.Frame(win, bg=theme.PANEL)
-        list_frame.pack(fill="both", expand=True)
-        keep: list[object] = []
-        # Determine slice of deck to show
-        shown = cards[-n:] if n else cards[:]
-        if not shown:
-            return
-
-        def draw_card_at_index(idx_in_deck: int) -> None:
-            try:
-                draw_cb(idx_in_deck)
-            finally:
-                try:
-                    win.destroy()
-                except Exception:
-                    pass
-
-        for col, card in enumerate(shown):
-            # Map displayed index to actual deck index
-            idx_in_deck = (len(cards) - len(shown)) + col if n else col
-            bowed = card.bowed
-            face_up = card.face_up
-            photo = (
-                self.images.front(card.image_front, bowed, card.inverted)
-                if face_up
-                else self.images.back(card.side, bowed, card.inverted, card.image_back)
-            )
-            cell = tk.Frame(list_frame, bg=theme.PANEL)
-            cell.grid(row=0, column=col, padx=6, pady=6)
-            if photo is not None:
-                lbl = tk.Label(cell, image=photo, bg=theme.PANEL)
-                lbl.pack()
-                keep.append(photo)
-            else:
-                w, h = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
-                c = tk.Canvas(cell, width=w, height=h, bg=theme.CARD_FACE, highlightthickness=0)
-                c.pack()
-                c.create_text(w // 2, h // 2, text=card.name, fill=theme.INK)
-            btn = tk.Button(cell, text="Draw", command=lambda i=idx_in_deck: draw_card_at_index(i))
-            btn.pack(pady=4)
-        win._images = keep  # type: ignore[attr-defined]
-
     def card_search(
         self,
         panes: dict[str, list[L5RCard]],
