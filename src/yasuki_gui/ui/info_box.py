@@ -3,13 +3,12 @@ from collections.abc import Callable
 from functools import partial
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.intents import SetHonor
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui import theme
 from yasuki_gui.field_view import FieldView
-from yasuki_gui.ui.dialogs import Dialogs
-from yasuki_gui.ui.images import ImageProvider
 
 try:
     from PIL import Image, ImageTk  # type: ignore
@@ -83,6 +82,9 @@ class PlayerInfoBox(tk.Frame):
         super().__init__(master, bg=theme.PANEL)
         self.field = field
         self.owner = owner
+        # Set by whoever owns the board, since the pile is shown in a panel over it rather than in
+        # a window this box could open for itself.
+        self.on_inspect: Callable[[list[L5RCard], str], None] | None = None
         self._honor_text = tk.StringVar()
 
         self._avatar_canvas = tk.Canvas(
@@ -200,10 +202,8 @@ class PlayerInfoBox(tk.Frame):
 
     def _inspect(self, role: ZoneRole, label: str) -> None:
         cards = self.field.zone_render_cards(ZoneKey(self.owner, role))
-        if not cards:
-            return
-        master = self.winfo_toplevel()
-        Dialogs(master, ImageProvider(master)).deck_inspect(cards, label)
+        if cards and self.on_inspect is not None:
+            self.on_inspect(cards, label)
 
     def cell_counts(self) -> dict[str, int]:
         """The count shown in each grid cell, keyed by a stable cell name, read from the field's

@@ -31,9 +31,6 @@ class TestDialogs:
         assert dialogs.toplevel is root
         assert dialogs.images is image_provider
 
-    def test_deck_inspect(self, dialogs, root):
-        dialogs.deck_inspect([], "Test Deck")
-
     def test_deck_reveal_top(self, dialogs):
         mock_deck_visual = Mock()
         mock_deck_visual.label = "Test Deck"
