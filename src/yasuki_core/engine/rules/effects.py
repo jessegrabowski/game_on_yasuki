@@ -775,7 +775,7 @@ class CreateToken(Effect):
             # behind would keep the template aligned to whatever it was printed as.
             printed = replace(printed, clan=self.clan, clans=(self.clan,))
         card = ops.spawn_token(
-            game.table, game.mint_token_id(), printed, UNPLACED_BOARD_POS, self.owner
+            game.table, game.mint_token_id(), printed, self.owner, position=UNPLACED_BOARD_POS
         )
         game.created_by[card.id] = self.creator_id
         if self.banish_at_turn_end:

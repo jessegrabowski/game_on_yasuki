@@ -447,7 +447,11 @@ def encode_intent(intent: Intent) -> dict:
                 "token_id": intent.token_id,
                 "source_card_id": intent.source_card_id,
                 "printed": encode_print(intent.printed) if intent.printed is not None else None,
-                "position": [intent.position.x, intent.position.y],
+                "position": (
+                    None if intent.position is None else [intent.position.x, intent.position.y]
+                ),
+                "zone": None if intent.zone is None else encode_zone_key(intent.zone),
+                "shown": intent.shown,
             }
         case IntentOp.REMOVE_CARD:
             payload["card_id"] = intent.card_id
@@ -534,12 +538,17 @@ def decode_intent(payload: dict) -> Intent:
             return SetHonor(delta=payload["delta"], value=payload["value"])
         case IntentOp.SPAWN_CARD:
             encoded_print = payload.get("printed")
+            encoded_zone = payload.get("zone")
             return SpawnCard(
                 card_id=payload["card_id"],
-                position=BoardPos(*payload["position"]),
+                position=(
+                    BoardPos(*payload["position"]) if payload.get("position") is not None else None
+                ),
                 token_id=payload.get("token_id"),
                 source_card_id=payload.get("source_card_id"),
                 printed=decode_print(encoded_print) if encoded_print else None,
+                zone=decode_zone_key(encoded_zone) if encoded_zone else None,
+                shown=bool(payload.get("shown")),
             )
         case IntentOp.REMOVE_CARD:
             return RemoveCard(payload["card_id"])

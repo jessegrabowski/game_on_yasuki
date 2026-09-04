@@ -1,4 +1,5 @@
 from collections.abc import Container
+from typing import Literal
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
@@ -434,18 +435,32 @@ def reveal_provinces(state: TableState, seat: PlayerId) -> list[str]:
 
 
 def spawn_token(
-    state: TableState, new_id: str, printed: CardPrint, position: BoardPos, owner: PlayerId
-) -> L5RCard:
-    """Place a fresh face-up token presenting ``printed`` onto the battlefield at ``position``.
+    state: TableState,
+    new_id: str,
+    printed: CardPrint,
+    owner: PlayerId,
+    *,
+    dest: ZoneKey | Literal["battlefield"] = BATTLEFIELD,
+    position: BoardPos | None = None,
+) -> L5RCard | None:
+    """Place a fresh face-up token presenting ``printed`` at ``dest``, defaulting to the battlefield
+    at ``position``. Returns None when a zone refuses the card for its side or capacity; a
+    battlefield spawn always succeeds.
 
     The token carries the print's type, stats, keywords, and text under a new id, with no per-copy
     state. It is face up, so both seats see it; ``owner`` gates who may move or remove it, not who
     may see it.
+
+    A created card cannot be moved into a zone afterwards — leaving the battlefield destroys it
+    (CR, Create) — so a token that belongs in a hand has to be spawned there directly.
     """
     card = L5RCard(id=new_id, printed=printed, owner=owner, is_token=True)
+    if dest == BATTLEFIELD:
+        state.battlefield.add(card)
+        state.positions[card.id] = DEFAULT_BOARD_POS if position is None else position
+    elif not state.zones[dest].add(card):
+        return None
     state.cards_by_id[card.id] = card
-    state.battlefield.add(card)
-    state.positions[card.id] = position
     return card
 
 

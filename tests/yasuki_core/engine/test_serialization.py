@@ -135,6 +135,12 @@ from yasuki_core.game_pieces.prints import (
         ),
         SpawnCard(card_id="tok2", token_id="some_token", position=BoardPos(0.0, 0.0)),
         SpawnCard(card_id="tok3", source_card_id="c1", position=BoardPos(7.0, 8.0)),
+        SpawnCard(
+            card_id="tok4",
+            token_id="imperial_favor",
+            zone=ZoneKey(PlayerId.P1, ZoneRole.HAND),
+            shown=True,
+        ),
         RemoveCard("tok1"),
         Attach("c1", "c2"),
         Attach("c1", ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)),
