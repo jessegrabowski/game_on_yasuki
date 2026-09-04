@@ -122,7 +122,7 @@ def intent_from_envelope(envelope: IntentEnvelope, rng: Generator) -> Intent:
 
 
 class ClientMessage(BaseModel):
-    type: Literal["JOIN", "INTENT", "CHAT", "LOAD_DECK", "READY", "RESET", "PING"]
+    type: Literal["JOIN", "INTENT", "CHAT", "LOAD_DECK", "READY", "RESET", "TAKE_FAVOR", "PING"]
     room: str = Field(max_length=64)
     join: JoinRequest | None = None
     intent: IntentEnvelope | None = None

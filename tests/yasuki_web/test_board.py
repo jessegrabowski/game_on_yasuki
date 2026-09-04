@@ -6,11 +6,11 @@ from yasuki_web.websocket import GameRoom, active_game_rooms
 from yasuki_web.rooms import rooms
 from yasuki_web.schemas import IntentEnvelope
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import BoardPos
+from yasuki_core.engine.table import BoardPos, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import IntentOp
 from yasuki_core.engine.action_log import SessionEntry
-from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint
 
 from tests.yasuki_web._support import account
 
@@ -210,3 +210,113 @@ def test_ready_advances_version_and_records_a_session_event(registered_room):
     asyncio.run(room.handle_ready(ada, True))
     assert room.state.seq > before
     assert any(isinstance(e, SessionEntry) and e.event == "ready" for e in room.action_log.entries)
+
+
+def _two_seat_room():
+    room = GameRoom("r1")
+    first, second = _FakeWS(), _FakeWS()
+    room.seats = {first: PlayerId.P1, second: PlayerId.P2}
+    room.players = {first: "Ada", second: "Kai"}
+    room.state.seats[PlayerId.P1].name = "Ada"
+    room.state.seats[PlayerId.P2].name = "Kai"
+    # The proxy reaches a real table from the rulebook pull; seed the template directly so the
+    # handler resolves it without a database.
+    room.state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    return room, first, second
+
+
+def _favor_ids(room):
+    return [
+        card_id
+        for card_id, card in room.state.cards_by_id.items()
+        if card.printed_id == IMPERIAL_FAVOR_ID
+    ]
+
+
+def test_taking_the_favor_puts_one_proxy_face_up_in_the_actors_hand():
+    room, ws, other = _two_seat_room()
+
+    asyncio.run(room.handle_take_favor(ws))
+
+    hand = room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
+    assert [card.printed_id for card in hand] == [IMPERIAL_FAVOR_ID]
+    # A hand is private to its owner, so the opponent identifying the card is what shown buys.
+    opponent = [m for m in other.sent if m["type"] == "SNAPSHOT"][-1]["snapshot"]
+    seen = [c for zone in opponent["zones"].values() for c in zone if not c["hidden"]]
+    assert [card["name"] for card in seen] == ["The Imperial Favor"]
+
+
+def test_taking_the_favor_sweeps_every_seats_proxy():
+    """Only one player holds the Favor at a time, so taking it clears the copy in the other seat's
+    hand rather than leaving two on the table."""
+    room, first, second = _two_seat_room()
+    asyncio.run(room.handle_take_favor(second))
+    assert len(_favor_ids(room)) == 1
+
+    asyncio.run(room.handle_take_favor(first))
+
+    assert len(_favor_ids(room)) == 1
+    assert room.state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards == []
+    assert len(room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards) == 1
+
+
+def test_taking_the_favor_twice_from_one_seat_leaves_one_proxy():
+    """Re-taking it is a no-op in effect: the sweep clears the actor's own copy before respawning."""
+    room, ws, _ = _two_seat_room()
+
+    asyncio.run(room.handle_take_favor(ws))
+    asyncio.run(room.handle_take_favor(ws))
+
+    assert len(_favor_ids(room)) == 1
+
+
+def test_take_favor_ignored_from_an_unseated_socket():
+    room, _, _ = _two_seat_room()
+
+    asyncio.run(room.handle_take_favor(_FakeWS()))
+
+    assert _favor_ids(room) == []
+
+
+def _log_lines(ws):
+    return [m["parts"][0]["text"] for m in ws.sent if m["type"] == "LOG"]
+
+
+def test_the_log_names_who_lost_the_favor():
+    room, first, second = _two_seat_room()
+    asyncio.run(room.handle_take_favor(first))
+
+    asyncio.run(room.handle_take_favor(second))
+
+    assert _log_lines(first) == [
+        "Ada takes the Imperial Favor",
+        "Kai takes the Imperial Favor from Ada",
+    ]
+
+
+def test_retaking_your_own_favor_names_nobody():
+    room, first, _ = _two_seat_room()
+    asyncio.run(room.handle_take_favor(first))
+
+    asyncio.run(room.handle_take_favor(first))
+
+    assert _log_lines(first) == ["Ada takes the Imperial Favor"] * 2
+
+
+def test_a_favor_that_cannot_be_spawned_is_not_swept_from_its_holder():
+    """The sweep is destructive, so it must not run when the spawn that replaces it cannot. A table
+    between a reset and its next deal has no template to spawn from."""
+    room, first, second = _two_seat_room()
+    asyncio.run(room.handle_take_favor(first))
+    held = _favor_ids(room)[0]
+    del room.state.creatable_tokens[IMPERIAL_FAVOR_ID]
+
+    asyncio.run(room.handle_take_favor(second))
+
+    assert _favor_ids(room)[0] == held
+    assert room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id == held
+    assert [m["message"] for m in second.sent if m["type"] == "ERROR"] == [
+        "Could not take the Favor"
+    ]

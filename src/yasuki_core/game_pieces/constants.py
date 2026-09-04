@@ -2,7 +2,8 @@ from enum import Enum
 
 # Proxies the rulebook itself puts on every table, as opposed to the tokens a card creates. The
 # Imperial Favor belongs to no creator card, so ``card_creates`` has no honest row for it.
-RULEBOOK_PROXY_IDS = ("imperial_favor",)
+IMPERIAL_FAVOR_ID = "imperial_favor"
+RULEBOOK_PROXY_IDS = (IMPERIAL_FAVOR_ID,)
 
 
 class Side(str, Enum):
