@@ -59,7 +59,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.prints import CardPrint, DynastyPrint, FatePrint, PersonalityPrint
 
-from tests.yasuki_core.engine.builders import token_template
+from tests.yasuki_core.engine.builders import fate_card, register, token_template
 
 
 def _fate(card_id: str, owner: PlayerId = PlayerId.P1) -> L5RCard:
@@ -2052,6 +2052,61 @@ def test_spawn_card_refused_by_a_zone_leaves_no_orphan():
 
     assert events == []
     assert "ghul-1" not in table.cards_by_id
+    table.validate()
+
+
+def test_any_seat_may_remove_a_rulebook_proxy_from_another_seats_hand():
+    """Taking the Favor clears every seat's proxy, and one of them sits in an opponent's hand."""
+    table = TableState.empty_two_seat()
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    apply_intent(
+        table,
+        PlayerId.P2,
+        SpawnCard(
+            card_id="favor-1",
+            token_id="imperial_favor",
+            zone=ZoneKey(PlayerId.P2, ZoneRole.HAND),
+            shown=True,
+        ),
+    )
+
+    events = apply_intent(table, PlayerId.P1, RemoveCard("favor-1"))
+
+    assert events[0].cards == ("favor-1",)
+    assert "favor-1" not in table.cards_by_id
+    assert table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards == []
+    table.validate()
+
+
+def test_a_seat_may_not_remove_another_seats_ordinary_token():
+    """The exception above is scoped to rulebook proxies. Widening it to tokens in general would
+    mean any seat could delete any token another seat made."""
+    table = TableState.empty_two_seat()
+    token_template(table, "ghul", name="Ghul", card_type="Personality", force=2, chi=2)
+    apply_intent(
+        table,
+        PlayerId.P2,
+        SpawnCard(card_id="ghul-1", token_id="ghul", position=BoardPos(1.0, 1.0)),
+    )
+
+    events = apply_intent(table, PlayerId.P1, RemoveCard("ghul-1"))
+
+    assert events == []
+    assert "ghul-1" in table.cards_by_id
+
+
+def test_a_real_card_in_another_seats_hand_still_cannot_be_removed():
+    """A real card is never destroyable wherever it sits — it moves to a discard or banish. The
+    proxy exception must not have opened a route around that."""
+    table = TableState.empty_two_seat()
+    hand = ZoneKey(PlayerId.P2, ZoneRole.HAND)
+    card = register(table, fate_card("real-1", PlayerId.P2))
+    table.zones[hand].add(card)
+
+    events = apply_intent(table, PlayerId.P1, RemoveCard("real-1"))
+
+    assert events == []
+    assert "real-1" in table.cards_by_id
     table.validate()
 
 

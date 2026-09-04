@@ -9,6 +9,7 @@ from psycopg_pool import ConnectionPool
 
 import logging
 
+from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS
 from yasuki_core.install.utils import normalize_name
 from yasuki_core.search.parse_search import ParsedQuery, SearchTerm, build_filter_options
 from yasuki_core.search.boolean_query import (
@@ -559,11 +560,6 @@ def card_display_names(card_ids: set[str]) -> dict[str, str]:
             (list(card_ids),),
         )
         return {row["card_id"]: row["display"] for row in cur.fetchall()}
-
-
-# Proxies the rulebook itself puts on every table, as opposed to the tokens a card creates. The
-# Imperial Favor belongs to no creator card, so ``card_creates`` has no honest row for it.
-RULEBOOK_PROXY_IDS = ("imperial_favor",)
 
 
 def get_rulebook_proxies() -> dict[str, dict]:

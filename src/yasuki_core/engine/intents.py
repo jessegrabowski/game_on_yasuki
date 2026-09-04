@@ -6,7 +6,7 @@ from typing import ClassVar
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS, Side
 from yasuki_core.game_pieces.counters import Counter
 from yasuki_core.engine import ops
 from yasuki_core.engine.redaction import card_identity_public
@@ -915,9 +915,14 @@ def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Ev
 
 
 def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[Event]:
-    if not owns_card(state, seat, intent.card_id):
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None:
         return []
-    card = state.cards_by_id[intent.card_id]
+    # Taking the Favor has to clear the proxy wherever it sits, including an opponent's hand, so the
+    # owner gate is lifted for rulebook proxies alone. Widening this to tokens generally would mean
+    # any seat could delete any token another seat made.
+    if card.printed_id not in RULEBOOK_PROXY_IDS and not owns_card(state, seat, intent.card_id):
+        return []
     # Only spawned tokens may leave the table outright; a real card from a deck or zone is never
     # destroyable — it must be moved to a discard or banish instead.
     if not card.is_token:
