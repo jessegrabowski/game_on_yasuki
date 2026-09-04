@@ -12,6 +12,7 @@ from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W, HOME_STACK_OFFSET
 from yasuki_gui.controller import FieldController
+from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.layout import (
     divider_y,
     from_canvas,
@@ -125,6 +126,8 @@ class FieldView(tk.Canvas):
         self.load_deck_from_file: Callable[[str], None] | None = None
         self.load_opponent_deck_from_file: Callable[[str], None] | None = None
 
+        # Set by whoever owns the window; the controller draws the view-key preview through it.
+        self.preview: CardPreview | None = None
         self._controller = FieldController(self)
         self._images = ImageProvider(self)
 

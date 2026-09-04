@@ -15,6 +15,7 @@ from yasuki_gui.layout import divider_y
 from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.battle_view import BattleView, LaneButton, PendingArmy
+from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.card_strip import CardStrip, STRIP_H, STRIP_W
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
@@ -136,6 +137,13 @@ class GameWindow:
         # One strip for every pile either player opens, retitled as it is reused, so a player who
         # has moved it finds it where they left it.
         self.card_strip = CardStrip(self.field, ImageProvider(self.field))
+        # The same keys the board reads, so a card previews the same way wherever it is looked at.
+        self.card_strip.hotkeys = load_hotkeys()
+        # Drawn on the window itself, so it floats over the board, the sidebar and every panel.
+        # One preview shared by the board and the strip, so neither can hide or clip the other's.
+        self.card_preview = CardPreview(self.root, ImageProvider(self.root))
+        self.field.preview = self.card_preview
+        self.card_strip.preview = self.card_preview
 
         # A panel reads the board through the FieldView it is handed, so the field is built first.
         self.opponent_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P2)

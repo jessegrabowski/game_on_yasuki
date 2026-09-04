@@ -14,7 +14,6 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import CARD_H, CARD_W
-from yasuki_gui.layout import card_view_placement
 from yasuki_gui.services.actions import REGISTRY as ACTIONS, ActionContext
 from yasuki_gui.services.drag import Drag, DragKind
 from yasuki_gui.services.hittest import (
@@ -27,10 +26,6 @@ from yasuki_gui.ui.images import load_back_image as _lbi, load_image as _li
 from yasuki_gui.visuals import MarqueeBoxVisual
 
 
-# How much larger than its on-board size the V-key card preview renders.
-_PREVIEW_SCALE = 3.6
-
-
 class FieldController:
     def __init__(self, view) -> None:
         self.view = view
@@ -38,8 +33,6 @@ class FieldController:
         self._hotkeys: Hotkeys = DEFAULT_HOTKEYS
         self._hover_card_tag: str | None = None
         self._hover_zone_tag: str | None = None
-        self._card_view_item: int | None = None
-        self._card_view_photo: object | None = None
         self._marquee_start: tuple[int, int] | None = None
         self._marquee_rect: int | None = None
         self._hand_ghost_id: int | None = None
@@ -516,17 +509,11 @@ class FieldController:
             act.run(self.view, ctx)
 
     def _preview_showing(self) -> bool:
-        # A board redraw deletes every canvas item, so verify our item still exists rather than
-        # trusting the stored id, which a redraw would leave stale and desync the toggle.
-        return self._card_view_item is not None and bool(
-            self.view.find_withtag(self._card_view_item)
-        )
+        return self.view.preview is not None and self.view.preview.showing
 
     def _hide_card_view(self) -> None:
-        if self._card_view_item is not None:
-            self.view.delete(self._card_view_item)
-            self._card_view_item = None
-            self._card_view_photo = None
+        if self.view.preview is not None:
+            self.view.preview.hide()
 
     def _card_under_pointer(self, e: tk.Event) -> tuple[L5RCard, int, int] | None:
         """The card under the pointer and its canvas centre, across any zone: a battlefield sprite,
@@ -553,26 +540,13 @@ class FieldController:
         return (zone.cards[-1], zone.x, zone.y)  # a province or pile shows its top card
 
     def _show_card_view(self, e: tk.Event) -> None:
-        """Float an enlarged, upright preview of the card under the pointer beside it — its front
-        when face up, else its back, so a hidden front never shows."""
+        """Float an enlarged preview of the card under the pointer, over the whole window so a
+        panel laid over the board cannot hide it."""
         found = self._card_under_pointer(e)
-        if found is None:
+        if found is None or self.view.preview is None:
             return
         card, cx, cy = found
-        canvas_h = self.view.winfo_height()
-        view_h = min(int(_PREVIEW_SCALE * CARD_H), max(CARD_H, canvas_h - 20))
-        view_w = view_h * CARD_W // CARD_H
-        if card.face_up:
-            photo = _li(card.active_face.image_front, False, False, self.view, (view_w, view_h))
-        else:
-            photo = _lbi(card.side, False, False, card.image_back, self.view, (view_w, view_h))
-        if photo is None:
-            return
-        left, top = card_view_placement(
-            cx, cy, CARD_W, CARD_H, view_w, view_h, self.view.winfo_width(), canvas_h
-        )
-        self._card_view_photo = photo
-        self._card_view_item = self.view.create_image(left, top, image=photo, anchor="nw")
+        self.view.preview.show(card, self.view.winfo_rootx() + cx, self.view.winfo_rooty() + cy)
 
     def on_toggle_player(self, e: tk.Event) -> None:
         """Switch the viewing/acting seat (debug only), flipping the board to that seat's view."""

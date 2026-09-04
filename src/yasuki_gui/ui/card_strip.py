@@ -4,6 +4,8 @@ from typing import Any
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
 from yasuki_gui.constants import CARD_W, CARD_H
+from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
+from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.floating_panel import FloatingPanel
 from yasuki_gui.ui.images import ImageProvider
 
@@ -46,6 +48,14 @@ class CardStrip(FloatingPanel):
         # Tk drops a PhotoImage the moment nothing references it, blanking the cell it was drawn
         # into, so the panel holds on to the ones it is currently showing.
         self._showing: list[Any] = []
+        self.hotkeys: Hotkeys = DEFAULT_HOTKEYS
+        # Set by whoever owns the window, so a card previews over everything rather than inside
+        # this panel, which would clip it and shrink it with the panel.
+        self.preview: CardPreview | None = None
+        self._hovered: tuple[L5RCard, tk.Misc] | None = None
+        # Bound once rather than per open: the key is live for the panel's whole life and the
+        # handler is what checks whether the panel is up, so reopening cannot stack handlers.
+        self.bind_all(f"<KeyPress-{self.hotkeys.view}>", self._toggle_preview, add="+")
 
     def show(self, cards: list[L5RCard], title: str) -> None:
         """Fill the strip with ``cards`` under ``title``, replacing whatever it held."""
@@ -62,11 +72,47 @@ class CardStrip(FloatingPanel):
             else:
                 tk.Label(holder, image=photo, bg=theme.PANEL).pack()
                 self._showing.append(photo)
+            self._track_hover(holder, card)
         # The title and the cards both change after the panel is placed, and Tk holds that layout
         # until its next redraw. Flushing idle work here paints the whole panel on the click that
         # opened it rather than the one after. Idle tasks only — pumping events here would run the
         # handler that is still on the stack.
         self.update_idletasks()
+
+    def _track_hover(self, cell: tk.Misc, card: L5RCard) -> None:
+        """Remember which card the pointer is over, so the preview key knows what to enlarge."""
+        for widget in (cell, *cell.winfo_children()):
+            widget.bind("<Enter>", lambda _event, c=card, w=cell: self._set_hovered((c, w)))
+        cell.bind("<Leave>", lambda _event: self._set_hovered(None))
+
+    def _set_hovered(self, hovered: tuple[L5RCard, tk.Misc] | None) -> None:
+        self._hovered = hovered
+
+    def close(self) -> None:
+        """Take the strip off the board, dropping any preview it put up."""
+        if self.preview is not None:
+            self.preview.hide()
+        self._hovered = None
+        super().close()
+
+    def _toggle_preview(self, _event: tk.Event | None = None) -> None:
+        """Enlarge the hovered card, or put an open preview away.
+
+        The key is bound app-wide and this handler runs after the board's, so it acts only while one
+        of the strip's own cards is under the pointer. Anywhere else the press belongs to the board,
+        and taking it would close the preview the board had just opened.
+        """
+        if self.preview is None or not self.showing or self._hovered is None:
+            return
+        if self.preview.showing:
+            self.preview.hide()
+            return
+        card, cell = self._hovered
+        self.preview.show(
+            card,
+            cell.winfo_rootx() + cell.winfo_width() // 2,
+            cell.winfo_rooty() + cell.winfo_height() // 2,
+        )
 
     def _fit_scrollregion(self, _event: tk.Event | None = None) -> None:
         """Scroll over exactly what the row holds, re-read whenever its layout settles."""

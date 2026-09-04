@@ -78,8 +78,15 @@ class ImageProvider:
     def __init__(self, master: tk.Misc):
         self.master = master
 
-    def front(self, image_front: Path | str | None, bowed: bool, inverted: bool) -> Any | None:
-        return load_image(image_front, bowed, inverted, master=self.master)
+    def front(
+        self,
+        image_front: Path | str | None,
+        bowed: bool,
+        inverted: bool,
+        target: tuple[int, int] | None = None,
+    ) -> Any | None:
+        """The card's front, at its board size unless ``target`` asks for another."""
+        return load_image(image_front, bowed, inverted, master=self.master, target=target)
 
     def back(
         self,
@@ -87,8 +94,10 @@ class ImageProvider:
         bowed: bool,
         inverted: bool,
         image_back: Path | None,
+        target: tuple[int, int] | None = None,
     ) -> Any | None:
-        return load_back_image(side, bowed, inverted, image_back, master=self.master)
+        """The card's back, at its board size unless ``target`` asks for another."""
+        return load_back_image(side, bowed, inverted, image_back, master=self.master, target=target)
 
     def clear(self) -> None:
         # Clears module-level caches (shared across providers).

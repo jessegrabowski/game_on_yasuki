@@ -127,7 +127,7 @@ class TestImageProvider:
 
         provider.front(test_path, False, False)
 
-        mock_load.assert_called_once_with(test_path, False, False, master=root)
+        mock_load.assert_called_once_with(test_path, False, False, master=root, target=None)
 
     @patch("yasuki_gui.ui.images.load_back_image")
     def test_back_image(self, mock_load_back, root):
@@ -135,7 +135,9 @@ class TestImageProvider:
 
         provider.back(Side.FATE, True, False, None)
 
-        mock_load_back.assert_called_once_with(Side.FATE, True, False, None, master=root)
+        mock_load_back.assert_called_once_with(
+            Side.FATE, True, False, None, master=root, target=None
+        )
 
     @patch("yasuki_gui.ui.images.clear_image_cache")
     def test_clear(self, mock_clear, root):
