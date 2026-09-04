@@ -1799,9 +1799,9 @@ cards:
   - Unique
   - Unaligned
   text: 'Miaka will not gain Clan Alignments or :shadowlands: and will not be challenged. Will only join
-    a player whose Wind is Kano''s Alliance.<br><b>Political Interrupt:</b> Pay the action''s :favor:
-    costs.<br><b>Home Response:</b> If the action straightened your Personality, give them +1F/+1C/+1PH,
-    give their Followers +1F, and if they are opposed, gain 1 Honor.'
+    a player whose Wind is Kano''s Alliance. Once per turn, you may pay your action''s :favor: costs.<br><b>Home
+    Response:</b> If the action straightened your Personality, give them +1F/+1C/+1PH and their Followers
+    +1F. If they are opposed, gain 1 Honor.'
   gold_cost: 6
   force: 0
   chi: 5
