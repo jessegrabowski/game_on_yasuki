@@ -6,7 +6,7 @@ from typing import ClassVar
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS, Side
 from yasuki_core.game_pieces.counters import Counter
 from yasuki_core.engine import ops
 from yasuki_core.engine.redaction import card_identity_public
@@ -349,13 +349,19 @@ class SpawnCard:
     (a visible in-play card, whose presented face is copied), or ``printed`` (a print the web layer
     pre-resolved, e.g. a database search result). The spawned card is owned by the acting seat: face up and visible to both,
     but only its creator may move or remove it (control can later be handed over with GiveControl).
+
+    ``zone`` lands the card in one of the acting seat's own zones instead of the battlefield, where
+    a card has no board position. A card in a hand is otherwise visible only to its owner, so
+    ``shown`` marks one that every seat may identify where it sits.
     """
 
     card_id: str
-    position: BoardPos
+    position: BoardPos | None = None
     token_id: str | None = None
     source_card_id: str | None = None
     printed: CardPrint | None = None
+    zone: ZoneKey | None = None
+    shown: bool = False
     op: ClassVar[IntentOp] = IntentOp.SPAWN_CARD
 
 
@@ -890,15 +896,33 @@ def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Ev
         source = intent.printed
     if source is None:
         return []
-    card = ops.spawn_token(state, intent.card_id, source, intent.position, owner=seat)
+    if intent.zone is not None and not owns_zone(state, seat, intent.zone):
+        return []
+    card = ops.spawn_token(
+        state,
+        intent.card_id,
+        source,
+        owner=seat,
+        dest=BATTLEFIELD if intent.zone is None else intent.zone,
+        position=intent.position,
+    )
+    if card is None:
+        return []
+    if intent.shown:
+        card.show()
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
 
 def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[Event]:
-    if not owns_card(state, seat, intent.card_id):
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None:
         return []
-    card = state.cards_by_id[intent.card_id]
+    # Taking the Favor has to clear the proxy wherever it sits, including an opponent's hand, so the
+    # owner gate is lifted for rulebook proxies alone. Widening this to tokens generally would mean
+    # any seat could delete any token another seat made.
+    if card.printed_id not in RULEBOOK_PROXY_IDS and not owns_card(state, seat, intent.card_id):
+        return []
     # Only spawned tokens may leave the table outright; a real card from a deck or zone is never
     # destroyable — it must be moved to a discard or banish instead.
     if not card.is_token:

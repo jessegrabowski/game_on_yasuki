@@ -4,7 +4,16 @@ from numpy.random import default_rng
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos, BATTLEFIELD
+from yasuki_core.engine.redaction import HiddenCard, redact
+from yasuki_core.engine.table import (
+    BATTLEFIELD,
+    DEFAULT_BOARD_POS,
+    BoardPos,
+    DeckKey,
+    TableState,
+    ZoneKey,
+    ZoneRole,
+)
 from yasuki_core.engine.intents import (
     MoveCard,
     SetCardPos,
@@ -49,6 +58,8 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.prints import CardPrint, DynastyPrint, FatePrint, PersonalityPrint
+
+from tests.yasuki_core.engine.builders import fate_card, register, token_template
 
 
 def _fate(card_id: str, owner: PlayerId = PlayerId.P1) -> L5RCard:
@@ -1964,3 +1975,148 @@ def test_a_card_returned_to_a_deck_loses_its_counters():
     apply_intent(table, PlayerId.P1, MoveCard("farm", DeckKey(PlayerId.P1, Side.DYNASTY)))
 
     assert farm.counters == {}
+
+
+def test_spawn_card_can_land_in_a_hand_shown_to_every_seat():
+    table = TableState.empty_two_seat()
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    hand = ZoneKey(PlayerId.P1, ZoneRole.HAND)
+
+    events = apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(card_id="favor-1", token_id="imperial_favor", zone=hand, shown=True),
+    )
+
+    card = table.cards_by_id["favor-1"]
+    assert events[0].cards == ("favor-1",)
+    assert [held.id for held in table.zones[hand].cards] == ["favor-1"]
+    assert not any(held is card for held in table.battlefield.cards)
+    # A zone card has no board position.
+    assert "favor-1" not in table.positions
+    # A hand card is otherwise its owner's alone, so the opponent identifying it is the whole point
+    # of spawning it shown.
+    opponent_view = redact(table, PlayerId.P2).zones[hand].cards[0]
+    assert not isinstance(opponent_view, HiddenCard)
+    assert opponent_view.name == "The Imperial Favor"
+    table.validate()
+
+
+def test_spawn_card_into_a_hand_stays_private_without_shown():
+    """The opponent sees a back, so ``shown`` is load-bearing rather than decoration."""
+    table = TableState.empty_two_seat()
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    hand = ZoneKey(PlayerId.P1, ZoneRole.HAND)
+
+    apply_intent(
+        table, PlayerId.P1, SpawnCard(card_id="favor-1", token_id="imperial_favor", zone=hand)
+    )
+
+    assert isinstance(redact(table, PlayerId.P2).zones[hand].cards[0], HiddenCard)
+    assert not isinstance(redact(table, PlayerId.P1).zones[hand].cards[0], HiddenCard)
+
+
+def test_spawn_card_into_another_seats_zone_is_rejected():
+    table = TableState.empty_two_seat()
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+
+    events = apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="favor-1",
+            token_id="imperial_favor",
+            zone=ZoneKey(PlayerId.P2, ZoneRole.HAND),
+        ),
+    )
+
+    assert events == []
+    assert "favor-1" not in table.cards_by_id
+
+
+def test_spawn_card_refused_by_a_zone_leaves_no_orphan():
+    """A hand takes Fate cards only, so a Dynasty token is turned away — and must not be left
+    behind in ``cards_by_id`` referencing a zone that never accepted it."""
+    table = TableState.empty_two_seat()
+    token_template(table, "ghul", name="Ghul", card_type="Personality", force=2, chi=2)
+
+    events = apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="ghul-1",
+            token_id="ghul",
+            zone=ZoneKey(PlayerId.P1, ZoneRole.HAND),
+        ),
+    )
+
+    assert events == []
+    assert "ghul-1" not in table.cards_by_id
+    table.validate()
+
+
+def test_any_seat_may_remove_a_rulebook_proxy_from_another_seats_hand():
+    """Taking the Favor clears every seat's proxy, and one of them sits in an opponent's hand."""
+    table = TableState.empty_two_seat()
+    token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
+    apply_intent(
+        table,
+        PlayerId.P2,
+        SpawnCard(
+            card_id="favor-1",
+            token_id="imperial_favor",
+            zone=ZoneKey(PlayerId.P2, ZoneRole.HAND),
+            shown=True,
+        ),
+    )
+
+    events = apply_intent(table, PlayerId.P1, RemoveCard("favor-1"))
+
+    assert events[0].cards == ("favor-1",)
+    assert "favor-1" not in table.cards_by_id
+    assert table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards == []
+    table.validate()
+
+
+def test_a_seat_may_not_remove_another_seats_ordinary_token():
+    """The exception above is scoped to rulebook proxies. Widening it to tokens in general would
+    mean any seat could delete any token another seat made."""
+    table = TableState.empty_two_seat()
+    token_template(table, "ghul", name="Ghul", card_type="Personality", force=2, chi=2)
+    apply_intent(
+        table,
+        PlayerId.P2,
+        SpawnCard(card_id="ghul-1", token_id="ghul", position=BoardPos(1.0, 1.0)),
+    )
+
+    events = apply_intent(table, PlayerId.P1, RemoveCard("ghul-1"))
+
+    assert events == []
+    assert "ghul-1" in table.cards_by_id
+
+
+def test_a_real_card_in_another_seats_hand_still_cannot_be_removed():
+    """A real card is never destroyable wherever it sits — it moves to a discard or banish. The
+    proxy exception must not have opened a route around that."""
+    table = TableState.empty_two_seat()
+    hand = ZoneKey(PlayerId.P2, ZoneRole.HAND)
+    card = register(table, fate_card("real-1", PlayerId.P2))
+    table.zones[hand].add(card)
+
+    events = apply_intent(table, PlayerId.P1, RemoveCard("real-1"))
+
+    assert events == []
+    assert "real-1" in table.cards_by_id
+    table.validate()
+
+
+def test_spawn_card_onto_the_battlefield_without_a_position_uses_the_default_spot():
+    """Only a zone spawn leaves a card with no board position; a battlefield one always has a spot,
+    so omitting the position falls back rather than leaving the card unplaced."""
+    table = TableState.empty_two_seat()
+    token_template(table, "ghul", name="Ghul", card_type="Personality", force=2, chi=2)
+
+    apply_intent(table, PlayerId.P1, SpawnCard(card_id="ghul-1", token_id="ghul"))
+
+    assert table.positions["ghul-1"] == DEFAULT_BOARD_POS
+    table.validate()
