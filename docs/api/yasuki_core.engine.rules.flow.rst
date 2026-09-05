@@ -34,6 +34,7 @@ yasuki_core.engine.rules.flow
     recruit
     run_stack
     submit
+    use_favor_ability
     yield_priority
 
 .. automodule:: yasuki_core.engine.rules.flow

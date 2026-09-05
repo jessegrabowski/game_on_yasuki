@@ -1408,6 +1408,10 @@ class Choose(InterruptingEffect):
     resolver: str
     source_id: str | None = None
 
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
+        """A cost that asks the seat to pick cannot be met with too few to pick from."""
+        return len(self.candidates) >= self.minimum
+
     def describe(self) -> str:
         return (
             f"{self.seat.name} chooses {self.minimum}-{self.maximum} of "

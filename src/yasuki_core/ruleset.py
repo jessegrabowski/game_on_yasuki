@@ -12,6 +12,34 @@ def normalize_clan(name: str) -> str:
 
 
 @dataclass(frozen=True, slots=True)
+class FavorAbility:
+    """A rulebook ability the Imperial Favor pays for, as one arc's rulebook grants it.
+
+    Which abilities exist and what they are designated is arc configuration, not a constant: the
+    pre-Gold rulebook granted four and the Onyx/ShE datasheet grants two, and the one they share
+    reads under a different designator in each.
+
+    Attributes
+    ----------
+    key : str
+        Names the ability's effects in ``FAVOR_ABILITY_EFFECTS``. Distinct per arc, because two arcs
+        granting "draw a card" for the Favor charge differently for it.
+    timing : ActionTiming
+        The designator it is taken under.
+    label : str
+        What the ability does, as the player reads it on a menu.
+    active_seat_only : bool, optional
+        Whether the rulebook restricts it to the player whose turn it is, which an Open designator
+        does not do on its own. Default False.
+    """
+
+    key: str
+    timing: ActionTiming
+    label: str
+    active_seat_only: bool = False
+
+
+@dataclass(frozen=True, slots=True)
 class Ruleset:
     """The arc-specific rules constants the engine reads. Bundling them behind one object lets a
     later arc's ruleset be swapped in wholesale rather than editing scattered literals.
@@ -42,6 +70,9 @@ class Ruleset:
         Fight Battles segment.
     battle_segment_names : dict mapping BattleSegment to str
         What this arc's rulebook calls each of ``battle_segments``, shown to the player.
+    favor_abilities : tuple of FavorAbility
+        The rulebook abilities this arc lets the Favor pay for. Empty for an arc whose rulebook
+        grants none, which is what Gold Edition changed to when it made every use come from a card.
     lobby_timing : ActionTiming
         The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
         Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
@@ -58,6 +89,7 @@ class Ruleset:
     battle_segments: tuple[BattleSegment, ...] = ()
     battle_segment_names: dict[BattleSegment, str] = field(default_factory=dict)
     lobby_timing: ActionTiming = ActionTiming.LIMITED
+    favor_abilities: tuple[FavorAbility, ...] = ()
 
     def segment_name(self, segment: Segment) -> str:
         """What this arc calls ``segment``.
@@ -141,6 +173,19 @@ SHATTERED_EMPIRE = Ruleset(
         Segment.FIGHT: "Fight Battles",
     },
     lobby_timing=ActionTiming.OPEN,
+    favor_abilities=(
+        FavorAbility(
+            "discard_to_draw",
+            ActionTiming.OPEN,
+            "discard a Fate card to draw a card",
+            active_seat_only=True,
+        ),
+        FavorAbility(
+            "send_attacker_home",
+            ActionTiming.BATTLE,
+            "move a target attacking enemy Personality home",
+        ),
+    ),
     battle_segments=_SHATTERED_EMPIRE_BATTLE_SEGMENTS,
     battle_segment_names={
         BattleSegment.ENGAGE: "Engage Segment",
@@ -152,3 +197,21 @@ SHATTERED_EMPIRE = Ruleset(
 
 # The ruleset the engine plays under. Named once so no module decides for itself which arc is live.
 ACTIVE = SHATTERED_EMPIRE
+
+
+# The pre-Gold rulebook, which granted four uses of the Favor rather than two and asked nothing
+# alongside it for the draw. Gold Edition then removed them all, leaving every use to come from a
+# card; the Onyx/ShE datasheet grants two again.
+IMPERIAL = Ruleset(
+    clan_alignments=SHATTERED_EMPIRE.clan_alignments,
+    favor_abilities=(
+        FavorAbility("draw", ActionTiming.LIMITED, "draw a Fate card"),
+        FavorAbility(
+            "restore_honor", ActionTiming.OPEN, "restore a Dishonored Personality to Honorable"
+        ),
+        FavorAbility(
+            "send_unit_home", ActionTiming.BATTLE, "send a unit home from a battle, bowed"
+        ),
+        FavorAbility("prevent_honor_loss", ActionTiming.RESPONSE, "prevent a Family Honor loss"),
+    ),
+)

@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.actions import (
     Legacy,
     Lobby,
     Pass,
+    UseFavorAbility,
     PlayStrategy,
     Recruit,
 )
@@ -119,6 +120,7 @@ from yasuki_core.engine.rules.payments import payment_request
 from yasuki_core.engine.rules import (
     abilities,
     favor,
+    favor_abilities,
     battle,
     state_rules,
     triggers,
@@ -305,6 +307,8 @@ def perform(game: GameState, action: Action) -> None:
             cycle(game)
         case Lobby():
             lobby(game)
+        case UseFavorAbility(key=key):
+            use_favor_ability(game, key)
         case KharmicDraw(card_id=card_id):
             kharmic_draw(game, card_id)
         case KharmicRefill(card_id=card_id):
@@ -972,6 +976,18 @@ def _apply_lobby_target(
     game.pending = None
     game.use_once(lobby_key(seat, game.turn))
     triggers.resolve_effects(game, [Bow(response.choices[0]), TakeFavor(seat)])
+
+
+def use_favor_ability(game: GameState, key: str) -> None:
+    """Take one of the arc's rulebook Favor abilities: pay the Favor cost, then do what it does.
+
+    The cost comes first because it is a cost — settled in the Pay Costs step, before the ability
+    resolves (CR, Action Sequence).
+    """
+    seat = game.round.priority
+    cost = favor_abilities.favor_ability_cost(game, seat, key)
+    effects = favor_abilities.FAVOR_ABILITY_EFFECTS[key](game, seat)
+    triggers.resolve_effects(game, [*cost, *effects])
 
 
 def kharmic_draw(game: GameState, card_id: str) -> None:

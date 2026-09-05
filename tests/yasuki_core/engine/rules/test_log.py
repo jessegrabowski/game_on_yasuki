@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.actions import (
     Legacy,
     Lobby,
     Pass,
+    UseFavorAbility,
     PlayStrategy,
     Recruit,
 )
@@ -383,6 +384,7 @@ ROUND_TRIPPED_ACTIONS = [
     Inheritance(),
     Cycle(),
     Lobby(),
+    UseFavorAbility("draw"),
     KharmicDraw("card"),
     KharmicRefill("card"),
     ActivateAbility("card"),
