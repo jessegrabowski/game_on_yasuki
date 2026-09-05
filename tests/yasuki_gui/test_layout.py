@@ -8,7 +8,6 @@ from yasuki_gui.layout import (
     home_stack_positions,
     in_play_column_positions,
     province_positions,
-    rows_center_x,
     to_canvas,
 )
 
@@ -37,10 +36,7 @@ class TestProvincePositions:
         assert sorted(xs) == xs  # left to right
         gaps = {b - a for a, b in zip(xs, xs[1:])}
         assert len(gaps) == 1 and gaps.pop() > CARD_W  # evenly spaced, with a gap between cards
-        # Centred on the space the rows actually have, which is the canvas less what the in-play
-        # column reserves — so the row sits left of the canvas center rather than under the column.
-        assert abs(sum(xs) / len(xs) - rows_center_x(W)) <= 1
-        assert rows_center_x(W) < W / 2
+        assert abs(sum(xs) / len(xs) - W / 2) <= 1  # centered on the canvas (within rounding)
 
     def test_top_seat_mirrors_column_order(self):
         bottom = province_positions(W, H, 4, seat_at_bottom=True)
@@ -126,8 +122,8 @@ def test_the_in_play_column_mirrors_between_the_seats():
 
 
 def test_a_full_province_row_clears_the_in_play_column():
-    """The rules cap a seat at five Provinces, so shifting the centered rows left by half the
-    column's width is enough to clear that row outright. The personalities row has no such cap."""
+    """The rules cap a seat at five Provinces, so a centered province row reaches nowhere near the
+    board's edge and the column costs it no width."""
     column_x = in_play_column_positions(["a"], W, H, seat_at_bottom=True)["a"][0]
     provinces = [x for x, _ in province_positions(W, H, 5, seat_at_bottom=True)]
 
@@ -161,7 +157,7 @@ def test_personalities_center_in_the_front_row():
     # All share the front row, which sits ahead of the holdings, nearest the divider.
     assert all(y == personality_y for _, y in pos.values())
     assert divider_y(h) < personality_y < holding_y < province_y
-    # Centre-justified on the space left beside the in-play column, evenly spaced with a gap — not
-    # left-justified like the holdings.
-    assert abs(sum(xs) / len(xs) - rows_center_x(w)) <= 1
+    # Center-justified across the canvas, evenly spaced with a gap — not left-justified like the
+    # holdings.
+    assert abs(sum(xs) / len(xs) - w / 2) <= 1
     assert len(gaps) == 1 and gaps.pop() > CARD_W

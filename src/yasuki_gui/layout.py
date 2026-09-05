@@ -145,7 +145,7 @@ def province_positions(
     if count <= 0:
         return []
     y = _row_y(canvas_h, seat_at_bottom)
-    xs = centered_row(rows_center_x(canvas_w), count)
+    xs = centered_row(canvas_w // 2, count)
     if not seat_at_bottom:
         xs.reverse()
     return [(x, y) for x in xs]
@@ -157,10 +157,10 @@ def province_positions(
 _HOME_X0 = CARD_W
 
 # The column of in-play cards belonging to no row — Events, Edicts, Rings and their kin — stands
-# against the board's right edge, inside each seat's band. The centered rows give up half its
-# width each side, which is why they center on :func:`rows_center_x` rather than on the canvas.
+# against the board's right edge, past where the rows reach. The rows take no width from it: a seat
+# holds four or five Provinces by rule, and a personalities row long enough to reach the column has
+# already run off the canvas.
 _COLUMN_INSET = CARD_W
-_COLUMN_RESERVED = CARD_W + _CARD_GAP
 # How far each card in the column sits below the one before it. Deeper than the home stacks', so a
 # column several Edicts long still shows a readable strip of each.
 _COLUMN_STACK_OFFSET = 34
@@ -171,12 +171,6 @@ def home_slot(canvas_w: int, canvas_h: int, index: int, *, seat_at_bottom: bool)
     right from inside the seat's edge. The stronghold, sensei, and freshly recruited holdings park
     here in battlefield order until a drag gives them a board spot."""
     return _HOME_X0 + index * COLUMN_STEP, _holding_row_y(canvas_h, seat_at_bottom)
-
-
-def rows_center_x(canvas_w: int) -> int:
-    """The x a seat's centered rows center on: left of the canvas center by half the in-play column's
-    width, so a row and the column share the board rather than the row sitting under it."""
-    return (canvas_w - _COLUMN_RESERVED) // 2
 
 
 def in_play_column_positions(
@@ -228,7 +222,7 @@ def home_stack_positions(
 
     if personality_row:  # center-justified across the canvas, like the provinces
         row_y = _personality_row_y(canvas_h, seat_at_bottom)
-        xs = centered_row(rows_center_x(canvas_w), len(columns))
+        xs = centered_row(canvas_w // 2, len(columns))
         base = {col: (xs[col], row_y) for col in columns.values()}
     else:  # left-justified in the holdings row, behind the stronghold
         base = {
