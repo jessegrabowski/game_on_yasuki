@@ -44,7 +44,7 @@ def test_every_token_a_card_names_is_a_real_card():
 
 def test_every_token_a_card_names_is_one_that_card_creates():
     # The database says which token each card makes, and several cards offer more than one candidate
-    # (Colonial Farm names three Ashigaru). Picking one is a judgement call; picking one from the
+    # (Colonial Farm names three Ashigaru). Picking one is a judgment call; picking one from the
     # wrong card is a bug, and only the data can tell them apart.
     creates = creations_by_card()
     mismatched = [

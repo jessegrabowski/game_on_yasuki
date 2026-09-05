@@ -230,12 +230,12 @@ class FloatingPanel(tk.Frame):
             self._apply()
 
     def _grab(self, event: tk.Event) -> None:
-        """Remember where the pointer took hold, so a drag can move by how far it travelled rather
+        """Remember where the pointer took hold, so a drag can move by how far it traveled rather
         than jump the panel's corner to the pointer."""
         self._grab_at = (event.x_root, event.y_root)
         self.lift()
 
-    def _travelled(self, event: tk.Event) -> tuple[int, int]:
+    def _traveled(self, event: tk.Event) -> tuple[int, int]:
         dx = event.x_root - self._grab_at[0]
         dy = event.y_root - self._grab_at[1]
         self._grab_at = (event.x_root, event.y_root)
@@ -243,7 +243,7 @@ class FloatingPanel(tk.Frame):
 
     def _drag(self, event: tk.Event) -> None:
         """Move the panel with the pointer. :meth:`_apply` is what keeps it on the board."""
-        dx, dy = self._travelled(event)
+        dx, dy = self._traveled(event)
         self._panel_left += dx
         self._panel_top += dy
         self._apply()
@@ -253,7 +253,7 @@ class FloatingPanel(tk.Frame):
         result a size that still holds a title bar and something under it."""
         if self._minimized:
             return
-        dx, dy = self._travelled(event)
+        dx, dy = self._traveled(event)
         self._panel_width += dx
         self._panel_height += dy
         self._apply()

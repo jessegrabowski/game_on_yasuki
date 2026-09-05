@@ -23,6 +23,7 @@ yasuki_core.engine.table
     owns_card
     owns_deck
     owns_zone
+    province_holding
     unit_members
     zone_accepts
     zone_owned_by_card

@@ -68,7 +68,7 @@ class TestBuildMenubar:
         assert mock_field_view.load_deck_from_file is not None
 
     @patch("yasuki_gui.ui.menus.filedialog")
-    def test_load_deck_command_cancelled(self, mock_filedialog, root, mock_field_view):
+    def test_load_deck_command_canceled(self, mock_filedialog, root, mock_field_view):
         mock_filedialog.askopenfilename.return_value = ""
 
         menubar = build_menubar(root, mock_field_view)

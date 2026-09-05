@@ -71,6 +71,7 @@ deferred through `Then` instead.
    PayFavorCost
    PayGold
    PlaceInProvince
+   PutIntoPlay
    RangedAttack
    RecruitCard
    RefillProvince

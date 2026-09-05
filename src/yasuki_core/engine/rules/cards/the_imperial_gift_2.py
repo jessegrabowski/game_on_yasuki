@@ -3,6 +3,7 @@ from yasuki_core.engine.rules.abilities import (
     CardLocation,
     no_cost,
     register_ability,
+    register_event_entry,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Effect, Move
@@ -40,3 +41,8 @@ register_ability(
         located_at=(CardLocation.HAND,),
     ),
 )
+
+
+# --- Military Alliance ---
+
+register_event_entry("military_alliance")

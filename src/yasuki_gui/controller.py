@@ -516,7 +516,7 @@ class FieldController:
             self.view.preview.hide()
 
     def _card_under_pointer(self, e: tk.Event) -> tuple[L5RCard, int, int] | None:
-        """The card under the pointer and its canvas centre, across any zone: a battlefield sprite,
+        """The card under the pointer and its canvas center, across any zone: a battlefield sprite,
         the hovered card in a hand, or the top card of a province or pile. None if none is there."""
         tag = self.view.resolve_tag_at(e)
         if not tag:

@@ -9,14 +9,14 @@ Drawn = TypeVar("Drawn")
 
 # How far each seat's province row sits from its edge. The human band (bottom) leaves room for the
 # hand strip below it; the opponent (top) draws no hand, so its provinces tuck right up against the
-# edge to free the centre. Decks, discards, and banishes live in the off-board info panels.
+# edge to free the center. Decks, discards, and banishes live in the off-board info panels.
 _PROVINCE_INSET_BOTTOM = 165
 _PROVINCE_INSET_TOP = 55
-# The hand's centre; its cards reach CARD_H/2 below it, so this is as low as the strip goes before
+# The hand's center; its cards reach CARD_H/2 below it, so this is as low as the strip goes before
 # the bottom row clips off-canvas.
 _HAND_INSET = 54
 
-# The seat halves are split higher than centre so the human's band gets the larger share; the
+# The seat halves are split higher than center so the human's band gets the larger share; the
 # opponent's compresses to the top edge.
 _DIVIDER_FRAC = 0.42
 # Each seat has three card rows stepping in from its edge, toward the divider: provinces (nearest the
@@ -63,7 +63,7 @@ def hand_box(canvas_w: int, canvas_h: int, *, seat_at_bottom: bool) -> tuple[int
 
 
 def centered_row(center_x: int, count: int, *, step: int = COLUMN_STEP) -> list[int]:
-    """The x centres for ``count`` cards laid in a row centred on ``center_x``.
+    """The x centers for ``count`` cards laid in a row centered on ``center_x``.
 
     Every row of cards the client draws is spaced this way — a seat's provinces, its personalities,
     and each army in the battle view — so they share one function and improving the spacing
@@ -72,11 +72,11 @@ def centered_row(center_x: int, count: int, *, step: int = COLUMN_STEP) -> list[
     Parameters
     ----------
     center_x : int
-        The x the row is centred on.
+        The x the row is centered on.
     count : int
         How many cards are in the row.
     step : int, optional
-        Distance between neighbouring centres. Default :data:`COLUMN_STEP`, one card plus its gap;
+        Distance between neighboring centers. Default :data:`COLUMN_STEP`, one card plus its gap;
         a caller with less room than that needs may pass a smaller step to overlap the row.
     """
     if count <= 0:
@@ -137,7 +137,7 @@ def tower_draw_order(members: Sequence[Drawn]) -> list[Drawn]:
 def province_positions(
     canvas_w: int, canvas_h: int, count: int, *, seat_at_bottom: bool
 ) -> list[tuple[int, int]]:
-    """Centre points for ``count`` provinces, centre-justified across the canvas on the seat's row.
+    """Center points for ``count`` provinces, center-justified across the canvas on the seat's row.
 
     The columns are evenly spaced by one column step and reversed for the top seat so its leftmost
     province faces the same edge as the bottom seat's.
@@ -156,12 +156,46 @@ def province_positions(
 # step to the right.
 _HOME_X0 = CARD_W
 
+# The column of in-play cards belonging to no row — Events, Edicts, Rings and their kin — stands
+# against the board's right edge, past where the rows reach. The rows take no width from it: a seat
+# holds four or five Provinces by rule, and a personalities row long enough to reach the column has
+# already run off the canvas.
+_COLUMN_INSET = CARD_W
+# How far each card in the column sits below the one before it. Deeper than the home stacks', so a
+# column several Edicts long still shows a readable strip of each.
+_COLUMN_STACK_OFFSET = 34
+
 
 def home_slot(canvas_w: int, canvas_h: int, index: int, *, seat_at_bottom: bool) -> tuple[int, int]:
     """Position for the ``index``-th unplaced card in a seat's home (holdings) row, laid left to
     right from inside the seat's edge. The stronghold, sensei, and freshly recruited holdings park
     here in battlefield order until a drag gives them a board spot."""
     return _HOME_X0 + index * COLUMN_STEP, _holding_row_y(canvas_h, seat_at_bottom)
+
+
+def in_play_column_positions(
+    card_ids: Sequence[str], canvas_w: int, canvas_h: int, *, seat_at_bottom: bool
+) -> dict[str, tuple[int, int]]:
+    """Where a seat's in-play cards that belong to no row stand: a column at the board's right edge,
+    stacked from the seat's front row outward toward the seat and overlapping as it fills.
+
+    Parameters
+    ----------
+    card_ids : sequence of str
+        The cards to place, in the order they entered play. The last is drawn whole; each one before
+        it shows the strip the next does not cover.
+    canvas_w : int
+        The canvas width.
+    canvas_h : int
+        The canvas height.
+    seat_at_bottom : bool
+        Whether this is the seat drawn along the bottom edge, which stacks downward. The other seat
+        mirrors it.
+    """
+    x = canvas_w - _COLUMN_INSET
+    front = _personality_row_y(canvas_h, seat_at_bottom)
+    step = _COLUMN_STACK_OFFSET if seat_at_bottom else -_COLUMN_STACK_OFFSET
+    return {card_id: (x, front + index * step) for index, card_id in enumerate(card_ids)}
 
 
 def home_stack_positions(
@@ -178,7 +212,7 @@ def home_stack_positions(
     sharing a key stack down a single column by ``offset`` each. Returns a map of card id to
     ``(x, y)``.
 
-    With ``personality_row`` set, the cards land in the personalities row, centre-justified across
+    With ``personality_row`` set, the cards land in the personalities row, center-justified across
     the canvas (like the provinces); otherwise they land in the holdings row, laid out left to right
     from the seat's edge behind the stronghold.
     """
@@ -186,7 +220,7 @@ def home_stack_positions(
     for _, key in unplaced:
         columns.setdefault(key, len(columns))
 
-    if personality_row:  # centre-justified across the canvas, like the provinces
+    if personality_row:  # center-justified across the canvas, like the provinces
         row_y = _personality_row_y(canvas_h, seat_at_bottom)
         xs = centered_row(canvas_w // 2, len(columns))
         base = {col: (xs[col], row_y) for col in columns.values()}
@@ -209,7 +243,7 @@ def home_stack_positions(
 def to_canvas(pos: BoardPos, *, flipped: bool, canvas_w: int, canvas_h: int) -> tuple[int, int]:
     """Project a seat-neutral battlefield position to canvas pixels.
 
-    Identity for the human-at-bottom view; a 180° rotation about the canvas centre for the debug
+    Identity for the human-at-bottom view; a 180° rotation about the canvas center for the debug
     other-seat view. ``to_canvas`` and :func:`from_canvas` are mutual inverses, so a drag
     round-trips.
     """
@@ -237,9 +271,9 @@ def card_view_placement(
     canvas_h: int,
     gap: int = 10,
 ) -> tuple[int, int]:
-    """The top-left canvas pixel for a card-view preview beside a card centred at
+    """The top-left canvas pixel for a card-view preview beside a card centered at
     ``(card_cx, card_cy)``: to the card's right, flipped to its left when that would overflow the
-    canvas, vertically centred on the card, and clamped to sit fully on-canvas."""
+    canvas, vertically centered on the card, and clamped to sit fully on-canvas."""
     left = card_cx + card_w // 2 + gap
     if left + view_w > canvas_w:
         left = card_cx - card_w // 2 - gap - view_w

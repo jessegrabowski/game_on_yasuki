@@ -331,7 +331,7 @@ BATTLEFIELD: Final = "battlefield"
 DEFAULT_BOARD_POS: Final = BoardPos(0.0, 0.0)
 
 # A dynasty card drawn while every province is full lands here: a negative sentinel the client
-# recognises and lays out next to the owner's dynasty deck, like an unplaced pre-game permanent.
+# recognizes and lays out next to the owner's dynasty deck, like an unplaced pre-game permanent.
 UNPLACED_BOARD_POS: Final = BoardPos(-1.0, -1.0)
 
 MoveDest = ZoneKey | DeckKey | Literal["battlefield"]
@@ -367,6 +367,15 @@ def unit_members(state: TableState, card: L5RCard) -> list[L5RCard]:
         if personality_id == card.id
     )
     return members
+
+
+def province_holding(state: TableState, seat: PlayerId, card_id: str) -> ZoneKey | None:
+    """The Province of ``seat`` holding ``card_id``, or None when none does."""
+    for key, zone in state.zones.items():
+        if key.owner is seat and key.role is ZoneRole.PROVINCE:
+            if any(card.id == card_id for card in zone.cards):
+                return key
+    return None
 
 
 def owns_card(state: TableState, seat: PlayerId, card_id: str) -> bool:

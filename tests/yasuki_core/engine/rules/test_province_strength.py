@@ -64,7 +64,7 @@ def test_a_fortification_grants_its_province_the_strength_its_text_names():
 
 
 def test_a_fortification_grants_nothing_to_the_provinces_it_is_not_on():
-    """The grant is looked up per Province, so a Fortification on one must not lift its neighbour."""
+    """The grant is looked up per Province, so a Fortification on one must not lift its neighbor."""
     game = _walled_game(printed_strength=3)
     attached(game, holding("wall", printed_id="makeshift_fortifications"), FIRST)
 

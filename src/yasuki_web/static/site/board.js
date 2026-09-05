@@ -299,7 +299,7 @@ function tableauFrame(container) {
 }
 
 // A seat's tableau laid out like the desktop table: dynasty deck + discard at the left, the four
-// provinces in the centre, fate discard + deck at the right. The stronghold/sensei/wind are not part
+// provinces in the center, fate discard + deck at the right. The stronghold/sensei/wind are not part
 // of the tableau — they are loose battlefield cards the client lays out by the dynasty discard (see
 // placeUnplacedCards). Decks and discards are piles — a count plus an at-most-one shown card, not a
 // card list — so they are rebuilt cheaply each render; the provinces are card-list zones, reconciled.
@@ -532,7 +532,7 @@ function insertAt(parent, el, index) {
 }
 
 // The slot a card dropped at `clientX` lands in among a hand strip's cards — one past every card
-// whose centre the pointer has crossed. The dragged card is skipped so the index is relative to the
+// whose center the pointer has crossed. The dragged card is skipped so the index is relative to the
 // others, matching the server's reorder (which removes the card before inserting at the slot).
 export function handDropIndex(handEl, clientX, draggedId) {
   let index = 0;
@@ -819,7 +819,7 @@ const DRAG_SEND_MS = 40;
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
-// The pointer's offset within a card's untransformed box at grab time. Derived from the box centre,
+// The pointer's offset within a card's untransformed box at grab time. Derived from the box center,
 // which is invariant under the bow/invert rotations, rather than the bounding rect's top-left: a
 // bowed card is rotated 90°, so getBoundingClientRect reports a swapped-axis box, and a rect-relative
 // offset would pop the card sideways the instant the drag repositions it via style.left/top (which
@@ -907,7 +907,7 @@ export function deckAnchor(tableau, battlefield, above, side) {
 }
 
 // Battlefield-local top-left for a seat's loose pre-game permanents (stronghold/sensei/wind): one card
-// width inboard of the dynasty discard so they start toward the centre of the play area, kept clear of
+// width inboard of the dynasty discard so they start toward the center of the play area, kept clear of
 // the discard row by the same gap as a deck-anchored card — above it for the bottom (viewer) seat,
 // below it for the top seat. Null if the tableau is not laid out yet.
 export function pregameAnchor(tableau, battlefield, above) {
@@ -927,7 +927,7 @@ export function pregameAnchor(tableau, battlefield, above) {
 // permanent (any side) starts by the dynasty discard with the others; otherwise a fate card anchors
 // to the fate deck and a dynasty card to the dynasty deck. Cards already placed (x >= 0) keep their
 // server position. `anchorFor(owner, isViewer, group)` returns that group's anchor or null. Each group
-// fans toward the centre of the board — rightward off the left-hung dynasty side, leftward off the
+// fans toward the center of the board — rightward off the left-hung dynasty side, leftward off the
 // right-hung fate deck — so a growing stack stays on the play space instead of running off the edge.
 // The groups fan independently so they don't overlap. Returns a new array.
 export function placeUnplacedCards(cards, viewerSeat, anchorFor, boardW, boardH) {
@@ -1591,14 +1591,14 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
   // Selection is keyed by card id so it survives the element churn of each SNAPSHOT re-render.
   const selected = new Set();
   const battleRect = () => boardEl.getBoundingClientRect();
-  // Convert a card's view-pixel top-left to the stored canonical position (a normalized card-centre
+  // Convert a card's view-pixel top-left to the stored canonical position (a normalized card-center
   // fraction in P1's frame), so a drop is recorded in the seat-symmetric frame every viewer reads.
   const toCanon = (left, top) => {
     const rect = battleRect();
     const viewerIsP1 = root.dataset.viewerSeat !== 'P2';
     return viewToCanonical(left, top, viewerIsP1, rect.width, rect.height);
   };
-  // The canonical battlefield spot a played card lands at: board-centre, fanned across slots so a
+  // The canonical battlefield spot a played card lands at: board-center, fanned across slots so a
   // flurry of plays spreads instead of stacking, into the viewer's half above the provinces. Shared by
   // hand double-click plays and province-card token creation, so the two never stack on one spot.
   const nextPlayPosition = () => {

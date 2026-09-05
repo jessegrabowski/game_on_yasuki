@@ -152,7 +152,7 @@ def test_an_ability_inside_leading_reminder_text_is_not_an_ability():
     assert traits(text) == []
 
 
-def test_an_unrecognised_leading_parenthetical_is_kept():
+def test_an_unrecognized_leading_parenthetical_is_kept():
     """Only a known rulebook wording is taken out. Anything else is the card's own text, and
     dropping it would lose rules that nothing else records."""
     text = "(Nothing happens to the loser.)<br><b>Battle:</b> Give -2F."
@@ -209,11 +209,11 @@ def test_reminder_text_is_separated_wherever_it_sits():
         "(When a card with Renew enters play from a province, refill that Province face up.)",
     ],
 )
-def test_a_reminder_is_recognised_through_the_wording_it_is_printed_with(printed):
+def test_a_reminder_is_recognized_through_the_wording_it_is_printed_with(printed):
     assert split_text_box(f"Akira has Renew. {printed}").reminders == (printed,)
 
 
-def test_a_reminder_is_recognised_with_its_period_outside_the_parentheses():
+def test_a_reminder_is_recognized_with_its_period_outside_the_parentheses():
     """Some cards close the sentence after the bracket rather than inside it, so the wording has to
     carry the recognition on its own."""
     text = "Give your target Spirit Expendable <i>(Draw a card after your Expendable card is destroyed)</i>."
@@ -278,7 +278,7 @@ def test_a_card_keeps_a_parenthetical_the_rulebook_does_not_own():
     ],
 )
 def test_a_reminder_naming_a_card_or_a_cost_is_matched_by_pattern(printed, separated):
-    """These vary per card, so they are recognised by shape rather than by a listed wording — which
+    """These vary per card, so they are recognized by shape rather than by a listed wording — which
     means the shape has to be tight enough to leave a card's own words alone."""
     box = split_text_box(f"Bow a target. {printed}")
 

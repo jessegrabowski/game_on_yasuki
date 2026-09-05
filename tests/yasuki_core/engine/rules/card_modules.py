@@ -39,6 +39,8 @@ _DECORATORS = {
 }
 _CALLS = {
     "register_ability",
+    "register_edict",
+    "register_event_entry",
     "register_enters_unbowed",
     "register_invest",
     "may_not_lobby",

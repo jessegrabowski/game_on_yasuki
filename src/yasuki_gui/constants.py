@@ -49,7 +49,7 @@ STAT_TAG = "stat"
 # top-right is where a card prints its Chi, and the live stat is stamped over that.
 COUNTER_BADGE_R = 9
 
-# Where a card prints its Force and Chi, as a fraction of the card — the median bounding-box centre
+# Where a card prints its Force and Chi, as a fraction of the card — the median bounding-box center
 # of the numerals over 40 Twenty Festivals Personalities. The live stat is stamped over the printed
 # one rather than inset from a corner, so it lands where the eye already goes for that number.
 FORCE_ANCHOR = (0.1107, 0.0714)

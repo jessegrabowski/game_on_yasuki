@@ -62,7 +62,7 @@ _CONTINUES = re.compile(
     rf"|You may\b(?=[^.]*\b(?:{_PRONOUN})\b))",
     re.I,
 )
-# Any parenthetical, markup and all. Reminder text is recognised by its wording, so the candidate
+# Any parenthetical, markup and all. Reminder text is recognized by its wording, so the candidate
 # has to be found before the tags come off.
 _PAREN = re.compile(r"\s*\([^()]*\)")
 

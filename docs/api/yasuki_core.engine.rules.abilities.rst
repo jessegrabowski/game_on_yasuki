@@ -53,7 +53,9 @@ yasuki_core.engine.rules.abilities
     personalities_in_play
     plus_one_gp_this_turn
     register_ability
+    register_edict
     register_enters_unbowed
+    register_event_entry
     register_invest
     spend_wealth
 

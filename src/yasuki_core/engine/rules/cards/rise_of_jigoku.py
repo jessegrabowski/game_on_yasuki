@@ -2,14 +2,15 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     attack_targets,
-    bow_cost,
     bow_and_destroy,
+    bow_cost,
     owned_holdings,
     owned_personalities,
     personalities_in_play,
     plus_one_gp_this_turn,
-    spend_wealth,
     register_ability,
+    register_event_entry,
+    spend_wealth,
 )
 from yasuki_core.engine.rules.economy import (
     PlayerState,
@@ -90,6 +91,11 @@ def _resolve_blood_of_fu_leng(
     ]
 
 
+# --- Confront Your Truth ---
+
+register_event_entry("confront_your_truth")
+
+
 # --- Harvested Land ---
 
 
@@ -108,6 +114,11 @@ register_ability(
         all_targets=True,
     ),
 )
+
+
+# --- Impressment ---
+
+register_event_entry("impressment", timing=ActionTiming.DYNASTY)
 
 
 # --- Jade Legion ---

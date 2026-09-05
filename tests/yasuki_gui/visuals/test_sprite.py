@@ -63,7 +63,7 @@ def test_wealth_counter_draws_a_badge(root):
     assert cv.find_withtag("card:w:counter")  # the wealth badge (disc + count) is drawn
 
 
-def test_styled_counters_draw_their_own_colours(root):
+def test_styled_counters_draw_their_own_colors(root):
     cv = tk.Canvas(root, width=200, height=200)
     cv.pack()
     root.update_idletasks()

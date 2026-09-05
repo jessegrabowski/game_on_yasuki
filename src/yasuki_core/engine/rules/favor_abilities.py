@@ -157,7 +157,7 @@ def _resolve_send_home(
 def _resolve_send_home_bowed(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """The pre-Gold ability bows what it sends back, which the unit does not do by travelling."""
+    """The pre-Gold ability bows what it sends back, which the unit does not do by traveling."""
     if not chosen:
         return []
     card = game.table.cards_by_id[chosen[0]]

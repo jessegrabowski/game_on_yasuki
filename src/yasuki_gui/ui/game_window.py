@@ -244,7 +244,7 @@ class GameWindow:
         """Pop up a menu of labelled commands where the pointer is. No-op when there is nothing to
         offer, so a caller can hand over whatever a click turned up without checking first.
 
-        An entry may carry a third element saying whether it is available. A greyed entry is shown
+        An entry may carry a third element saying whether it is available. A grayed entry is shown
         rather than hidden: it tells the player the step exists and is not reachable yet, which a
         menu that silently omits it cannot.
         """

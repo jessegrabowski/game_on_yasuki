@@ -7,7 +7,13 @@ from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Event, Intent, apply_intent
 from yasuki_core.engine.redaction import ViewSnapshot
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.prints import (
+    HoldingPrint,
+    PersonalityPrint,
+    SenseiPrint,
+    StrongholdPrint,
+    WindPrint,
+)
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W, HOME_STACK_OFFSET
@@ -18,6 +24,7 @@ from yasuki_gui.layout import (
     from_canvas,
     hand_box,
     home_stack_positions,
+    in_play_column_positions,
     province_positions,
     to_canvas,
     tower_draw_order,
@@ -49,6 +56,12 @@ def _zone_label(key: ZoneKey) -> str:
 ALLOCATION_TAG = "allocation"
 SPINNER_W = 46
 SPINNER_H = 30
+
+
+# What the holdings row holds: Holdings, and the pre-game permanents that stand beside them. A
+# Sensei and a Wind are neither Personality nor Holding but have parked here since before the
+# in-play column existed, and they are not what it is for.
+_HOLDING_ROW = (HoldingPrint, StrongholdPrint, SenseiPrint, WindPrint)
 
 
 class FieldView(tk.Canvas):
@@ -438,7 +451,7 @@ class FieldView(tk.Canvas):
 
     def reconcile(self, events: list[Event]) -> None:
         # The board is small, so a full reconcile after every accepted intent stays cheap and avoids
-        # any chance of a stale projection. Event-targeted redraw can specialise this later.
+        # any chance of a stale projection. Event-targeted redraw can specialize this later.
         self.reconcile_all()
 
     def reconcile_all(self) -> None:
@@ -847,11 +860,14 @@ class FieldView(tk.Canvas):
         copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``, while the
         stronghold, sensei, and distinct holdings each take their own column, and so does any copy
         that has stopped being interchangeable with the rest (see :meth:`_stack_key`). Personalities
-        lay out in the front (personalities) row; everything else in the holdings row. Attached
-        cards are left out — :meth:`_unit_positions` and :meth:`_province_attachment_positions`
-        place them on what they hang from."""
+        lay out in the front (personalities) row, Holdings in the holdings row, and everything else
+        — an Event, an Edict, a Ring — in the column at the board's edge, which is the leftover for
+        what the rules put in play but give no row. Attached cards are left out —
+        :meth:`_unit_positions` and :meth:`_province_attachment_positions` place them on what they
+        hang from."""
         holdings: dict[PlayerId | None, list[tuple[str, object]]] = {}
         personalities: dict[PlayerId | None, list[tuple[str, object]]] = {}
+        rowless: dict[PlayerId | None, list[str]] = {}
         # An attachment rides its Personality or its Province wherever that stands, so it takes no
         # column of its own — giving it one would shove the real Holdings sideways to make room.
         units = self._units()
@@ -861,13 +877,15 @@ class FieldView(tk.Canvas):
             if rc.id in attached:
                 continue
             if pos is None or pos.x < 0 or pos.y < 0:
-                key = self._stack_key(rc, leaders)
-                bucket = (
-                    personalities
-                    if isinstance(getattr(rc, "printed", None), PersonalityPrint)
-                    else holdings
-                )
-                bucket.setdefault(rc.owner, []).append((rc.id, key))
+                printed = getattr(rc, "printed", None)
+                if isinstance(printed, PersonalityPrint):
+                    bucket = personalities
+                elif isinstance(printed, _HOLDING_ROW):
+                    bucket = holdings
+                else:
+                    rowless.setdefault(rc.owner, []).append(rc.id)
+                    continue
+                bucket.setdefault(rc.owner, []).append((rc.id, self._stack_key(rc, leaders)))
         positions: dict[str, tuple[int, int]] = {}
         for personality_row, by_owner in ((False, holdings), (True, personalities)):
             for owner, unplaced in by_owner.items():
@@ -882,6 +900,10 @@ class FieldView(tk.Canvas):
                         personality_row=personality_row,
                     )
                 )
+        for owner, card_ids in rowless.items():
+            positions.update(
+                in_play_column_positions(card_ids, w, h, seat_at_bottom=self._at_bottom(owner))
+            )
         return positions
 
     def _stack_key(self, card: RenderCard, leaders: set[str]) -> str:

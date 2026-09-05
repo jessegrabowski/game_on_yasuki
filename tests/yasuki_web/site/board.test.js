@@ -541,7 +541,7 @@ describe('renderTableau', () => {
     assert.equal(dynasty.children[0].textContent, '38'); // face-down deck: count then label
   });
 
-  it('lays out four provinces in the centre and the fate deck on the right', () => {
+  it('lays out four provinces in the center and the fate deck on the right', () => {
     const area = document.createElement('div');
     renderTableau(area, 'P1', seatSnapshot(), '/images');
     assert.equal(area.children[1].children.length, 4);
@@ -777,7 +777,7 @@ describe('grabOffset', () => {
   });
 
   it('compensates for a bowed card whose bounding rect has swapped axes', () => {
-    // A bowed card's rect is 115x81, centred on the same point as its unrotated 81x115 box, whose
+    // A bowed card's rect is 115x81, centered on the same point as its unrotated 81x115 box, whose
     // top-left is therefore (117, 183). A pointer at (137, 213) is offset (20, 30) into that box, so
     // the drag (which sets style.left/top on the unrotated box) keeps it under the pointer — no pop.
     assert.deepEqual(grabOffset({ left: 100, top: 200, width: 115, height: 81 }, 137, 213), {
@@ -798,12 +798,12 @@ describe('dragVisualPosition', () => {
 });
 
 describe('handDropIndex', () => {
-  // Three 80px-wide hand cards at x = 0, 100, 200 (centres 40, 140, 240).
+  // Three 80px-wide hand cards at x = 0, 100, 200 (centers 40, 140, 240).
   const handCard = (id, left) => ({ dataset: { cardId: id }, getBoundingClientRect: () => ({ left, width: 80 }) });
   const hand = { children: [handCard('a', 0), handCard('b', 100), handCard('c', 200)] };
 
-  it('counts the cards whose centre the pointer has crossed', () => {
-    assert.equal(handDropIndex(hand, 30, 'x'), 0); // left of every centre
+  it('counts the cards whose center the pointer has crossed', () => {
+    assert.equal(handDropIndex(hand, 30, 'x'), 0); // left of every center
     assert.equal(handDropIndex(hand, 150, 'x'), 2); // past a and b
     assert.equal(handDropIndex(hand, 999, 'x'), 3); // past all → the end
   });
@@ -814,12 +814,12 @@ describe('handDropIndex', () => {
 });
 
 describe('listDropIndex', () => {
-  // Three 20px-tall rows at y = 0, 100, 200 (centres 10, 110, 210).
+  // Three 20px-tall rows at y = 0, 100, 200 (centers 10, 110, 210).
   const row = (id, top) => ({ dataset: { cardId: id }, getBoundingClientRect: () => ({ top, height: 20 }) });
   const list = { children: [row('a', 0), row('b', 100), row('c', 200)] };
 
-  it('counts the rows whose centre the pointer has crossed', () => {
-    assert.equal(listDropIndex(list, 5, 'x'), 0); // above every centre
+  it('counts the rows whose center the pointer has crossed', () => {
+    assert.equal(listDropIndex(list, 5, 'x'), 0); // above every center
     assert.equal(listDropIndex(list, 150, 'x'), 2); // past a and b
     assert.equal(listDropIndex(list, 999, 'x'), 3); // past all → the end
   });
@@ -924,7 +924,7 @@ describe('placeUnplacedCards', () => {
     const placed = placeUnplacedCards(cards, 'P1', anchorBySide);
     assert.deepEqual([placed[0].x, placed[0].y], [100, 200]); // fate, first
     assert.deepEqual([placed[1].x, placed[1].y], [20, 300]); // dynasty, first — fans right
-    assert.deepEqual([placed[2].x, placed[2].y], [80, 200]); // fate, second — fans left, toward centre
+    assert.deepEqual([placed[2].x, placed[2].y], [80, 200]); // fate, second — fans left, toward center
   });
 
   it('groups a pre-game card by its pre-game role, not its side (a fate sensei)', () => {
@@ -1832,7 +1832,7 @@ describe('initBoardInteractions — double-click shortcuts', () => {
     const move = sent.at(-1).intent;
     assert.equal(move.op, 'MOVE_CARD');
     assert.deepEqual(move.to, { kind: 'battlefield' });
-    // A normalized canonical position (centre fraction, P1 frame) in the viewer's lower half. Exact
+    // A normalized canonical position (center fraction, P1 frame) in the viewer's lower half. Exact
     // geometry is covered by the real-browser e2e; the fake DOM only checks the decision.
     const [x, y] = move.position;
     assert.ok(x > 0 && x < 1 && y > 0.5 && y < 1);
@@ -2150,7 +2150,7 @@ describe('initBoardInteractions — context menu', () => {
     const dup = sent.at(-1).intent;
     assert.equal(dup.op, 'SPAWN_CARD');
     assert.equal(dup.source_card_id, 'c1'); // the server copies the in-play card, not client fields
-    // Spawned at a canonical centre fraction down-right of the original; exact geometry is e2e's job.
+    // Spawned at a canonical center fraction down-right of the original; exact geometry is e2e's job.
     const [x, y] = dup.position;
     assert.ok(x > 0 && x < 1 && y > 0 && y < 1);
   });
@@ -2796,7 +2796,7 @@ describe('initBoardInteractions — create token', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
     assert.ok(menuLabels(root).includes('Create token…'));
     clickMenuItem(root, 'Create token…');
-    // The click point is recorded as a canonical centre fraction; exact geometry is covered by e2e.
+    // The click point is recorded as a canonical center fraction; exact geometry is covered by e2e.
     assert.equal(created.length, 1);
     const { x, y } = created[0];
     assert.ok(x > 0 && x < 1 && y > 0 && y < 1);
@@ -3114,7 +3114,7 @@ describe('initBoardInteractions — attach', () => {
   });
 
   it('plays a hand card to mid-board then attaches it to a province', () => {
-    // A province target carries no board position, so the play lands the card at the board centre
+    // A province target carries no board position, so the play lands the card at the board center
     // before attaching — the render then anchors it on the province slot.
     const child = fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true });
     armAttach(child, { zone: 'hand', owner: 'P1' });

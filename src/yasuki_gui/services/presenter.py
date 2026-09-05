@@ -154,7 +154,7 @@ class Presenter:
                 for token in pending.candidates
             }
         if isinstance(pending, AssignUnits):
-            # Every battlefield offers the button for as long as the question is open, greyed until
+            # Every battlefield offers the button for as long as the question is open, grayed until
             # units are picked, so where they could go is visible before any are.
             picked = bool(self.window.field.selection)
             return {
@@ -206,7 +206,7 @@ class Presenter:
             return pending.prompt(), []
         if isinstance(pending, Confirm):
             # A question, not a selection: the subjects are already settled, so the seat answers it
-            # rather than picking them off the board. No is greyed when the question refuses it,
+            # rather than picking them off the board. No is grayed when the question refuses it,
             # which leaves cancelling as the way out of an option the seat is committed to.
             buttons: list[ButtonSpec] = [
                 ("Yes", lambda asked=pending: self.submit_answer(asked.candidates), True),
@@ -426,7 +426,7 @@ class Presenter:
         if isinstance(runner.pending, AssignUnits):
             # Right-clicking a card the player has not picked picks it, the way a file manager does:
             # the menu acts on the selection, and a menu that needed an invisible click first would
-            # be greyed every time it was opened on the obvious card.
+            # be grayed every time it was opened on the obvious card.
             leader = self.window.field.unit_leader(card_id)
             if leader not in self.window.field.selection:
                 self.window.field.toggle_selection(leader)

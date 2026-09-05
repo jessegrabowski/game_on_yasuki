@@ -1,5 +1,10 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import favor_payer, lobby_bar
+from yasuki_core.engine.rules.abilities import (
+    favor_payer,
+    lobby_bar,
+    register_event_entry,
+)
+from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Discard, Effect
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -17,9 +22,11 @@ def _commanding_favor_favor_payer(game: GameState, card: L5RCard) -> list[Effect
     the Interrupt it prints: a cost is paid at step B of the Action Sequence and an Interrupt is
     played at D, so the printed window opens after the cost it names.
 
-    Its other line, "Dynasty: Put this Event into play", has no handler yet.
     """
     return [Discard(card.id, card.owner)]
+
+
+register_event_entry("commanding_favor", timing=ActionTiming.DYNASTY)
 
 
 # --- Miya Shoin ---

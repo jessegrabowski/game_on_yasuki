@@ -44,6 +44,7 @@ from yasuki_core.engine.rules.effects import (
     GrantProvinceStrength,
     GrantModifier,
     PayFavorCost,
+    PutIntoPlay,
     SpendOncePerTurn,
     PayGold,
     IgnoreHonorRequirements,
@@ -99,6 +100,10 @@ EFFECTS = [
     (
         PayFavorCost(),
         "the action pays a Favor cost",
+    ),
+    (
+        PutIntoPlay("edict"),
+        "put edict into play",
     ),
     (
         SpendOncePerTurn("miaka", "iweko_miaka_favor_payment"),

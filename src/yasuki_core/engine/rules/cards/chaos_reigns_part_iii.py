@@ -1,3 +1,4 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
@@ -7,6 +8,7 @@ from yasuki_core.engine.rules.abilities import (
     itself,
     no_cost,
     register_ability,
+    register_edict,
     register_invest,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
@@ -264,3 +266,10 @@ register_ability(
         all_targets=True,
     ),
 )
+
+
+# --- Zealotry ---
+
+# "Open: If you are an Akasha Clan player, put this Edict into play." Its Dynasty-phase trigger has
+# no handler yet.
+register_edict("zealotry", clan=ruleset.AKASHA)

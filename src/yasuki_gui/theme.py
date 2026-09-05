@@ -27,7 +27,7 @@ REVEAL = "#2563eb"  # a card shown to the opponent
 WARN = "#9c4a35"
 SELECT = "#2bb8c9"  # selection ring / marquee
 
-# The centre panel of the scroll each printed stat sits on, sampled off card scans and within three
+# The center panel of the scroll each printed stat sits on, sampled off card scans and within three
 # points across Celestial, Emperor, Ivory and Twenty Festivals. A card's live Force and Chi are
 # stamped over the printed numerals in these, so the stamp reads as the card's own furniture.
 FORCE_BANNER = "#988967"

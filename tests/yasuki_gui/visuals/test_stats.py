@@ -163,7 +163,7 @@ class TestDrawing:
         items = _text_items(canvas)
         assert canvas.itemcget(items["3"], "fill") == theme.STAT_PRINTED
 
-    def test_each_stat_takes_the_colour_of_its_own_banner(self, canvas):
+    def test_each_stat_takes_the_color_of_its_own_banner(self, canvas):
         """The card prints Force on a tan scroll and Chi on a slate one. One fill for both would
         read as an overlay stuck on the card rather than as the card's own furniture."""
         draw_stat_stamps(canvas, personality(force=3, chi=4), CARD, {}, ("stat",))

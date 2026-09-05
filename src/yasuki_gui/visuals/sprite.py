@@ -148,7 +148,7 @@ class CardSpriteVisual(Visual):
             return
         x, y = self.x, self.y
         w, h = self.size
-        strip_top = y  # the card centre, so the strip covers the bottom half
+        strip_top = y  # the card center, so the strip covers the bottom half
         bottom = y + h // 2
         canvas.create_rectangle(
             x - w // 2,

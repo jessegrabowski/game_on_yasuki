@@ -6,6 +6,7 @@ from yasuki_gui.layout import (
     from_canvas,
     home_slot,
     home_stack_positions,
+    in_play_column_positions,
     province_positions,
     to_canvas,
 )
@@ -35,7 +36,7 @@ class TestProvincePositions:
         assert sorted(xs) == xs  # left to right
         gaps = {b - a for a, b in zip(xs, xs[1:])}
         assert len(gaps) == 1 and gaps.pop() > CARD_W  # evenly spaced, with a gap between cards
-        assert abs(sum(xs) / len(xs) - W / 2) <= 1  # centred about the canvas (within rounding)
+        assert abs(sum(xs) / len(xs) - W / 2) <= 1  # centered on the canvas (within rounding)
 
     def test_top_seat_mirrors_column_order(self):
         bottom = province_positions(W, H, 4, seat_at_bottom=True)
@@ -58,7 +59,7 @@ class TestHomeRow:
 def test_card_view_sits_to_the_right_of_a_left_side_card():
     left, top = card_view_placement(100, 300, 81, 115, 243, 345, 1000, 700)
     assert left == 100 + 81 // 2 + 10  # right edge of the card + gap
-    assert top == 300 - 345 // 2  # vertically centred on the card
+    assert top == 300 - 345 // 2  # vertically centered on the card
 
 
 def test_card_view_flips_left_when_it_would_overflow_the_right_edge():
@@ -108,6 +109,27 @@ def test_home_stack_mixes_distinct_cards_and_interleaved_copies():
     assert pos["f2"][1] - pos["f1"][1] == 26  # and stacks one offset below the first
 
 
+def test_the_in_play_column_mirrors_between_the_seats():
+    """Each seat's column starts at its own front row and stacks toward that seat, so the two read
+    the same way from their own side of the divider."""
+    bottom = in_play_column_positions(["a", "b"], W, H, seat_at_bottom=True)
+    top = in_play_column_positions(["a", "b"], W, H, seat_at_bottom=False)
+
+    assert {x for x, _ in bottom.values()} == {x for x, _ in top.values()}, "one column, both seats"
+    assert bottom["b"][1] > bottom["a"][1], "the bottom seat stacks downward"
+    assert top["b"][1] < top["a"][1], "the top seat stacks upward"
+    assert top["a"][1] < divider_y(H) < bottom["a"][1], "each starts in its own half"
+
+
+def test_a_full_province_row_clears_the_in_play_column():
+    """The rules cap a seat at five Provinces, so a centered province row reaches nowhere near the
+    board's edge and the column costs it no width."""
+    column_x = in_play_column_positions(["a"], W, H, seat_at_bottom=True)["a"][0]
+    provinces = [x for x, _ in province_positions(W, H, 5, seat_at_bottom=True)]
+
+    assert max(provinces) + CARD_W / 2 <= column_x - CARD_W / 2
+
+
 def test_holdings_row_sits_between_the_divider_and_the_provinces():
     h = 800
     holding_y = home_slot(1000, h, 0, seat_at_bottom=True)[1]
@@ -135,6 +157,7 @@ def test_personalities_center_in_the_front_row():
     # All share the front row, which sits ahead of the holdings, nearest the divider.
     assert all(y == personality_y for _, y in pos.values())
     assert divider_y(h) < personality_y < holding_y < province_y
-    # Centre-justified across the canvas, evenly spaced with a gap — not left-justified like holdings.
+    # Center-justified across the canvas, evenly spaced with a gap — not left-justified like the
+    # holdings.
     assert abs(sum(xs) / len(xs) - w / 2) <= 1
     assert len(gaps) == 1 and gaps.pop() > CARD_W
