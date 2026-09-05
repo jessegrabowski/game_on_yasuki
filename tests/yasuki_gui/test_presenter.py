@@ -2,6 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
+from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
     ChooseInvestAmount,
@@ -16,8 +17,8 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, HoldingPrint
 from yasuki_gui.layout import divider_y
 from yasuki_gui.services.presenter import Presenter
 from yasuki_gui.ui.floating_panel import MIN_H
@@ -32,6 +33,7 @@ from tests.yasuki_core.engine.builders import (
     attachment,
     dealt_table,
     end_phase,
+    fate_card,
     personality,
     holding,
     province_card,
@@ -693,8 +695,9 @@ def _picked(window) -> str:
     return window.field.selection[0]
 
 
-def _menu_on(presenter, window, card_id: str) -> dict[str, bool]:
-    """Right-click ``card_id`` and read the menu it offers."""
+def _assignment_menu_on(presenter, window, card_id: str) -> dict[str, bool]:
+    """Right-click ``card_id`` while an assignment is open, and read the menu it offers, to whether
+    each entry is available. A card menu's entries carry no availability and are read directly."""
     offered = []
     window.popup_at_pointer = lambda entries: offered.append(list(entries))
     presenter.on_card_activated(card_id)
@@ -799,7 +802,7 @@ def test_right_clicking_a_unit_picks_it(a_battle):
     _send(presenter, window, ["hero"], 1)
     assert window.field.selection == ()
 
-    offered = _menu_on(presenter, window, "hero")
+    offered = _assignment_menu_on(presenter, window, "hero")
 
     assert window.field.selection == ("hero",)
     assert offered["Unassign units"] is True
@@ -812,7 +815,7 @@ def test_right_clicking_a_unit_at_home_picks_it_too(a_battle):
     _press(presenter, "Declare an attack")
     assert not any(button.enabled for button in presenter._lane_buttons().values())
 
-    _menu_on(presenter, window, "hero")
+    _assignment_menu_on(presenter, window, "hero")
 
     assert window.field.selection == ("hero",)
     assert all(button.enabled for button in presenter._lane_buttons().values())
@@ -827,7 +830,7 @@ def test_right_clicking_a_unit_already_picked_keeps_the_rest_of_the_picks(a_batt
     presenter.on_lane_card_clicked("hero")
     presenter.on_lane_card_clicked("second")
 
-    _menu_on(presenter, window, "hero")
+    _assignment_menu_on(presenter, window, "hero")
 
     assert set(window.field.selection) == {"hero", "second"}
 
@@ -1348,3 +1351,58 @@ def test_a_unit_sent_to_a_battlefield_can_still_be_unassigned(a_battle):
 
     assert window.field._at_home("hero")
     assert window.field.assigned_units() == {}
+
+
+@pytest.fixture
+def holding_the_favor():
+    """A presenter whose seat holds the Imperial Favor, with a Fate card its ability can discard."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, fate_card("spare", P1)))
+    session = EngineSession.start(state, P1)
+    TakeFavor(P1).perform(session.game)
+
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    window.bind_to(presenter)
+    try:
+        presenter.present()
+        yield presenter, window, session
+    finally:
+        window.root.destroy()
+
+
+def _proxy_id(session) -> str:
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)]
+    return next(card.id for card in hand.cards if card.printed_id == IMPERIAL_FAVOR_ID)
+
+
+def test_clicking_the_favor_proxy_offers_its_rulebook_abilities(holding_the_favor):
+    """The proxy sits in hand among the seat's own cards, so the card menu is where the Favor's
+    abilities have to appear — there is nowhere else the player would look for them."""
+    presenter, window, session = holding_the_favor
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated(_proxy_id(session))
+
+    assert [label for label, _ in offered] == ["Favor: discard a Fate card to draw a card"]
+
+
+def test_taking_a_favor_ability_from_the_card_menu_asks_for_its_discard(holding_the_favor):
+    """The menu entry has to run the ability, not just name it: pressing it settles the Favor cost
+    and leaves the seat picking the Fate card the ShE ability also charges."""
+    presenter, window, session = holding_the_favor
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+    presenter.on_card_activated(_proxy_id(session))
+
+    offered[0][1]()
+
+    assert session.game.pending is not None
+    assert session.game.pending.candidates == ("spare",), "the proxy is not a card it can spend"
+    assert session.game.favor_holder is None, "the Favor was discarded to pay for it"
+    assert session.game.pending.prompt() == "Discard a Fate card to draw a card"

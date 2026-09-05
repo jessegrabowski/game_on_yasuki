@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
@@ -19,7 +19,12 @@ from yasuki_core.engine import runner as runner_module
 from yasuki_core.engine.runner import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
-from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse, DiscardToHandSize
+from yasuki_core.engine.rules.decisions import (
+    ChooseCards,
+    Confirm,
+    DecisionResponse,
+    DiscardToHandSize,
+)
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import (
     PlayStrategy,
@@ -31,6 +36,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicRefill,
     Legacy,
     Pass,
+    UseFavorAbility,
 )
 from yasuki_core.engine.rules.abilities import (
     _ABILITIES,
@@ -47,6 +53,8 @@ from yasuki_core.engine import runner
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import DynastyDiscard
 from yasuki_core.engine.runner import GameRunner, play_game
+from yasuki_core.engine.rules.abilities import FAVOR_PAYERS
+from yasuki_core.engine.rules.effects import TakeFavor
 
 PASS = Pass()
 
@@ -997,3 +1005,95 @@ def test_ability_menu_offers_one_entry_per_ability_the_card_prints():
         ]
     finally:
         _ABILITIES.pop("test_menu_pair", None)
+
+
+def _favor_runner(p1_hand: int = 0) -> GameRunner:
+    """A runner whose seat holds the Imperial Favor, so its proxy is in hand to be clicked."""
+    state = _dealt_table(p1_hand)
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    game_runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    TakeFavor(PlayerId.P1).perform(game_runner.session.game)
+    return game_runner
+
+
+def _favor_proxy_id(game_runner: GameRunner) -> str:
+    hand = game_runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    return next(card.id for card in hand.cards if card.printed_id == IMPERIAL_FAVOR_ID)
+
+
+def test_the_favor_proxy_offers_the_arcs_favor_abilities():
+    # Label and action together: the proxy carries every arc's abilities through one menu, so a
+    # mismatched pairing would have the player read one ability and take another.
+    game_runner = _favor_runner(p1_hand=1)  # a Fate card to discard for the ShE ability
+
+    assert game_runner.favor_menu(_favor_proxy_id(game_runner)) == [
+        ("Favor: discard a Fate card to draw a card", UseFavorAbility("discard_to_draw"))
+    ]
+
+
+def test_an_ordinary_hand_card_offers_no_favor_ability():
+    """The abilities hang off the proxy, so clicking the card that would be discarded for one must
+    not offer it as well."""
+    game_runner = _favor_runner(p1_hand=1)
+
+    assert game_runner.favor_menu("P1-h0") == []
+
+
+def test_the_favor_proxy_offers_nothing_it_cannot_pay_for():
+    """The ShE ability discards a Fate card alongside the Favor, and the proxy is not one, so a hand
+    holding only the proxy cannot take it."""
+    game_runner = _favor_runner()
+
+    assert game_runner.favor_menu(_favor_proxy_id(game_runner)) == []
+
+
+def test_taking_a_favor_ability_from_the_menu_runs_it():
+    """The menu's action is the one the engine takes, so what the player clicks is playable as-is."""
+    game_runner = _favor_runner(p1_hand=1)
+    _label, action = game_runner.favor_menu(_favor_proxy_id(game_runner))[0]
+
+    game_runner.act(action)
+
+    assert isinstance(game_runner.pending, ChooseCards), (
+        "the discard the ability charges is asked for"
+    )
+    assert game_runner.pending.candidates == ("P1-h0",), "the proxy is not a card it can spend"
+
+
+def test_a_rivals_favor_proxy_offers_the_human_nothing():
+    """A seat that can pay a Favor cost some other way may use the abilities while the rival holds
+    the Favor. The rival's proxy is face up in its hand, so it is on screen and clickable, and
+    hanging the human's own abilities off it would read as taking the rival's card."""
+    FAVOR_PAYERS["test_favor_payer"] = lambda game, card: []
+    try:
+        state = _dealt_table(p1_hand=1)
+        state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+            name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+        )
+        payer = L5RCard.of(
+            HoldingPrint,
+            id="payer",
+            name="Payer",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="test_favor_payer",
+        )
+        state.battlefield.add(_register(state, payer))
+        game_runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+        TakeFavor(PlayerId.P2).perform(game_runner.session.game)
+        rivals_proxy = next(
+            card.id
+            for card in game_runner.session.game.table.zones[
+                ZoneKey(PlayerId.P2, ZoneRole.HAND)
+            ].cards
+            if card.printed_id == IMPERIAL_FAVOR_ID
+        )
+
+        assert UseFavorAbility("discard_to_draw") in game_runner.legal_actions(), (
+            "the payer makes the ability legal for the human, which is what the menu is guarding"
+        )
+        assert game_runner.favor_menu(rivals_proxy) == []
+    finally:
+        FAVOR_PAYERS.pop("test_favor_payer", None)

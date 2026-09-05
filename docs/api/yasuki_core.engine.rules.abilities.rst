@@ -28,6 +28,9 @@ yasuki_core.engine.rules.abilities
     can_pay
     destroy_cost
     enters_play_bowed
+    favor_cost
+    favor_cost_for_seat
+    favor_payers
     fixed_invest_amount
     has_absent_ability
     invest_amounts

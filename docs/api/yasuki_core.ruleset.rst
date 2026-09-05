@@ -7,6 +7,7 @@ yasuki_core.ruleset
 
 .. autosummary::
 
+    FavorAbility
     Ruleset
 
 .. rubric:: Functions

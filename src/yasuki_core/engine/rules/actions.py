@@ -178,6 +178,22 @@ class Lobby:
 
 
 @dataclass(frozen=True, slots=True)
+class UseFavorAbility:
+    """Take one of the rulebook abilities the Imperial Favor pays for.
+
+    Which abilities exist, and what each is designated, comes from the arc's ruleset rather than
+    from here: the pre-Gold rulebook granted four and the ShE datasheet grants two.
+
+    Attributes
+    ----------
+    key : str
+        Names the ability among the arc's, matching a ``FavorAbility.key``.
+    """
+
+    key: str
+
+
+@dataclass(frozen=True, slots=True)
 class KharmicDraw:
     """Take the Fate Kharmic rulebook ability (Repeatable Open, 2 Gold): discard a Kharmic card from
     hand to draw a card.
@@ -230,14 +246,16 @@ Action = (
     | KharmicRefill
     | Inheritance
     | Lobby
+    | UseFavorAbility
     | DeclareAttack
 )
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
 # to taking an action rather than one, and ActivateAbility because it reads its designator off the
-# card — the same action is Open on one Holding and Dynasty on another. Lobby is absent because it
-# reads its designator off the arc's ruleset: the Twenty Festivals CR makes it Limited and the ShE
-# datasheet makes it Open, which are different Action Rounds with different players entitled to act.
+# card — the same action is Open on one Holding and Dynasty on another. Lobby and UseFavorAbility
+# are absent because they read their designators off the arc's ruleset: the Twenty Festivals CR
+# makes Lobby Limited where the ShE datasheet makes it Open, and which Favor abilities exist at all
+# differs by arc.
 ACTION_TIMINGS: dict[type, ActionTiming] = {
     Cycle: ActionTiming.LIMITED,
     KharmicDraw: ActionTiming.OPEN,

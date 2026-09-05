@@ -160,8 +160,15 @@ def test_payment_prompt_counts_down_as_producers_are_picked():
 
 
 def test_choose_cards_wording_distinguishes_optional_from_required():
-    assert _choose(minimum=0, maximum=2).prompt() == "Choose up to 2 card(s)"
-    assert _choose(minimum=1, maximum=2).prompt() == "Choose 1 to 2 card(s)"
+    assert _choose(minimum=0, maximum=2).prompt() == "Choose up to 2 cards"
+    assert _choose(minimum=1, maximum=2).prompt() == "Choose 1 to 2 cards"
+
+
+def test_choose_cards_asks_for_an_exact_count_as_one():
+    """A range whose ends meet reads as a choice the effect is not offering — "Choose 1 to 1" asks
+    the player to weigh how many to take when the answer is fixed."""
+    assert _choose(minimum=1, maximum=1).prompt() == "Choose 1 card"
+    assert _choose(minimum=2, maximum=2).prompt() == "Choose 2 cards"
 
 
 @choice_resolver("test_prompted", prompt="Put a card on the bottom of your deck")
@@ -176,7 +183,7 @@ def test_a_registered_prompt_replaces_the_generic_wording():
     prompted = ChooseCards(PlayerId.P1, _HAND, 0, 2, resolver="test_prompted")
 
     assert prompted.prompt() == "Put a card on the bottom of your deck"
-    assert _choose(minimum=0, maximum=2).prompt() == "Choose up to 2 card(s)"
+    assert _choose(minimum=0, maximum=2).prompt() == "Choose up to 2 cards"
 
 
 @pytest.mark.parametrize(

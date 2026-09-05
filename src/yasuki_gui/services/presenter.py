@@ -414,8 +414,9 @@ class Presenter:
 
     def on_card_activated(self, card_id: str) -> None:
         """Offer what a left-clicked card can do: a face-up Province card's Recruit or Dynasty
-        Discard, a hand card's Kharmic, an in-play card's ability, or the Inheritance flip. The
-        target or payment that follows is picked through the board-selection path.
+        Discard, a hand card's Kharmic, an in-play card's ability, the Inheritance flip, or the
+        rulebook Favor abilities on the Favor proxy. The target or payment that follows is picked
+        through the board-selection path.
 
         While an assignment is open the card menu is the assignment menu instead — sending units to
         a battlefield and bringing them back is the only thing a Personality does in the Maneuvers
@@ -437,6 +438,7 @@ class Presenter:
             + runner.hand_menu(card_id)
             + runner.ability_menu(card_id)
             + runner.inheritance_menu(card_id)
+            + runner.favor_menu(card_id)
         )
 
     def on_lane_card_clicked(self, card_id: str) -> None:

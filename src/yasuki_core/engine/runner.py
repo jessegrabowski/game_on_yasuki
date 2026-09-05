@@ -2,7 +2,7 @@ from collections.abc import Iterable, Iterator
 from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import abilities, legality
+from yasuki_core.engine.rules import abilities, favor, favor_abilities, legality
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     PlayStrategy,
     Recruit,
+    UseFavorAbility,
 )
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import (
@@ -205,6 +206,27 @@ class GameRunner:
             (f"Inheritance: turn over for +{INHERITANCE_PRODUCTION}GP", action)
             for action in self.legal_actions()
             if isinstance(action, Inheritance)
+        ]
+
+    def favor_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The arc's rulebook Favor abilities, offered on the human's Favor proxy card. Empty for
+        any other card, and for abilities that are not legal now.
+
+        The Favor is not a card and its abilities sit on the player, but the proxy is where the
+        player looks for them, so it is what they are hung off.
+        """
+        card = self.session.game.table.cards_by_id.get(card_id)
+        if card is None or not favor.is_rulebook_proxy(card) or card.owner is not self.human:
+            return []
+        offered = {
+            action.key: action
+            for action in self.legal_actions()
+            if isinstance(action, UseFavorAbility)
+        }
+        return [
+            (f"Favor: {ability.label}", offered[ability.key])
+            for ability in favor_abilities.available_favor_abilities()
+            if ability.key in offered
         ]
 
     def board_menu(self) -> list[tuple[str, Action]]:

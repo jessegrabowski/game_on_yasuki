@@ -22,6 +22,7 @@ yasuki_core.engine.rules.actions
     Pass
     PlayStrategy
     Recruit
+    UseFavorAbility
 
 .. automodule:: yasuki_core.engine.rules.actions
     :members:

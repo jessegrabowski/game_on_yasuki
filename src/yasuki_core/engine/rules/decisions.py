@@ -603,9 +603,12 @@ class ChooseCards(DecisionRequest):
         registered = CHOICE_PROMPTS.get(self.resolver)
         if registered is not None:
             return registered
+        cards = "card" if self.maximum == 1 else "cards"
         if self.minimum == 0:
-            return f"Choose up to {self.maximum} card(s)"
-        return f"Choose {self.minimum} to {self.maximum} card(s)"
+            return f"Choose up to {self.maximum} {cards}"
+        if self.minimum == self.maximum:
+            return f"Choose {self.minimum} {cards}"
+        return f"Choose {self.minimum} to {self.maximum} {cards}"
 
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = response.choices
