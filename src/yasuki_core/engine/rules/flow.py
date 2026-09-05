@@ -221,6 +221,7 @@ def forget_action(game: GameState) -> None:
     """
     game.action_events.clear()
     game.action_taken = ""
+    game.action_is_favor = False
     game.action = None
 
 
@@ -290,6 +291,7 @@ def perform(game: GameState, action: Action) -> None:
     if not isinstance(action, Pass) and game.round.kind is not RoundKind.RESPONSE:
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
+        game.action_is_favor = False
         game.action = action
     match action:
         case Pass():

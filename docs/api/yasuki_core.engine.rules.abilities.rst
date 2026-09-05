@@ -35,6 +35,7 @@ yasuki_core.engine.rules.abilities
     has_absent_ability
     invest_amounts
     invest_for
+    is_favor_action
     is_spell
     itself
     legal_targets

@@ -5,7 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import abilities
 from yasuki_core.engine.rules.effects import Bow, Choose, Discard, DrawCard, Effect, Move
 from yasuki_core.engine.rules.favor import is_rulebook_proxy
-from yasuki_core.engine.rules.units import units_at
+from yasuki_core.engine.rules.units import opposing_units_in_battle
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.table import Location, ZoneKey, ZoneRole
@@ -108,15 +108,12 @@ def _draw(game: GameState, seat: PlayerId) -> list[Effect]:
 def _battle_candidates(game: GameState, seat: PlayerId, *, attackers_only: bool) -> tuple[str, ...]:
     """The Personalities at the battle now being fought that ``seat`` may send home.
 
-    Empty outside a battle, which is what withholds a Battle ability when no battle is open.
+    ``attackers_only`` narrows to the ability that names an *attacking* enemy, which only the
+    Defender ever faces.
     """
-    attack = game.attack
-    if attack is None or attack.current is None:
+    if attackers_only and (game.attack is None or seat is not game.attack.defender):
         return ()
-    if attackers_only and seat is not attack.defender:
-        return ()
-    enemy = attack.attacker if seat is attack.defender else attack.defender
-    return tuple(card.id for card in units_at(game, attack.current, enemy))
+    return opposing_units_in_battle(game, seat)
 
 
 def _choose_attacker(game: GameState, seat: PlayerId) -> list[Effect]:

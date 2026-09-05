@@ -1,24 +1,50 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine import ops
 from yasuki_core.engine.rules.abilities import (
+    DISCARD_THE_FAVOR,
     _ABILITIES,
     Ability,
+    ability_for,
+    is_favor_action,
     itself,
     no_cost,
     register_ability,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, DynastyDiscard, Pass
-from yasuki_core.engine.rules.effects import Discard
+from yasuki_core.engine.rules.actions import (
+    ActionTiming,
+    ActivateAbility,
+    DynastyDiscard,
+    Pass,
+    PlayStrategy,
+)
+from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.effects import Discard, DiscardFavor, TakeFavor
 from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.flow import submit
+from yasuki_core.engine.rules.state import (
+    BATTLE_SEGMENT_TIMINGS,
+    ActionRound,
+    AttackPhase,
+    BattleSegment,
+    BattlefieldInfo,
+    GameState,
+    RoundKind,
+)
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.game_pieces import keywords
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint
 
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
+    personality,
     province_card,
     put_in_play,
     register,
@@ -191,3 +217,151 @@ def test_a_caravansary_already_at_three_is_not_offered():
     session.act(P1, ActivateAbility("probe"))
 
     assert not _step_is_open(session)
+
+
+def _oaths_game(*, holds_favor: bool = True, yojimbo: bool = False) -> GameState:
+    """A battle each side has a unit in — the Rule of Presence is what lets P1 act at all — with an
+    enemy Personality to send home."""
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
+    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    game.attack = AttackPhase(
+        attacker=PlayerId.P1,
+        defender=PlayerId.P2,
+        battlefields=(BattlefieldInfo(province=ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)),),
+        current=0,
+    )
+    for card_id, owner in (("guard", PlayerId.P2), ("bushi", PlayerId.P1)):
+        unit = put_in_play(game, personality(card_id, owner=owner))
+        ops.set_location(game.table, unit, Location.at_battlefield(0))
+    if yojimbo:
+        put_in_play(game, personality("kakita", keywords=(keywords.YOJIMBO,)))
+    if holds_favor:
+        TakeFavor(PlayerId.P1).perform(game)
+    return game
+
+
+def _oaths(game: GameState):
+    """Honor Your Oaths in its controller's hand, where a Strategy is played from, and its ability."""
+    card = register(
+        game.table,
+        L5RCard.of(
+            ActionPrint,
+            id="oaths",
+            name="Honor Your Oaths",
+            printed_id="honor_your_oaths",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            gold_cost=0,
+        ),
+    )
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+    return card, ability_for(card, None)
+
+
+def test_honor_your_oaths_reads_the_favor_without_spending_it():
+    """CRI: "Political Battle: If you control :favor:, move home a target enemy Personality." The
+    condition is a check, not a cost — the Favor is still yours afterward."""
+    game = _oaths_game()
+    source, ability = _oaths(game)
+
+    resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
+
+    assert location_of(game.table, game.table.cards_by_id["guard"]).is_home
+    assert game.favor_holder is PlayerId.P1, "checking the Favor does not spend it"
+
+
+def test_honor_your_oaths_is_not_offered_without_the_favor():
+    """No Favor, no first clause, and the enemy Personality is the action's only target."""
+    game = _oaths_game(holds_favor=False)
+    source, ability = _oaths(game)
+
+    assert ability.targets(game, source) == []
+
+
+def test_paying_the_favor_for_the_second_clause_makes_it_a_favor_action():
+    """ShE datasheet, The Favor Icon: an action with alternate costs is a Favor action only when the
+    Favor is the half actually paid."""
+    game = _oaths_game(yojimbo=True)
+    source, ability = _oaths(game)
+    game.action = ActivateAbility(source.id)
+
+    resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
+    submit(game, DecisionResponse(choices=(DISCARD_THE_FAVOR,)))
+
+    assert game.table.seats[PlayerId.P1].honor == 1
+    assert game.favor_holder is None, "this half of the cost discards it"
+    assert is_favor_action(game)
+
+
+def test_bowing_the_yojimbo_instead_leaves_an_ordinary_action():
+    """The same clause paid the other way. The Favor is untouched and no card watching for a Favor
+    action sees one."""
+    game = _oaths_game(yojimbo=True)
+    source, ability = _oaths(game)
+    game.action = ActivateAbility(source.id)
+
+    resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
+    submit(game, DecisionResponse(choices=("Bow your target Yojimbo",)))
+    submit(game, DecisionResponse(choices=("kakita",)))
+
+    assert game.table.cards_by_id["kakita"].bowed
+    assert game.table.seats[PlayerId.P1].honor == 1
+    assert game.favor_holder is PlayerId.P1, "the Yojimbo paid, so the Favor stayed"
+    assert not is_favor_action(game)
+
+
+def test_the_second_clause_can_be_declined():
+    """ "You may" — so the seat that wants only the first clause is not made to pay for the rest."""
+    game = _oaths_game(yojimbo=True)
+    source, ability = _oaths(game)
+
+    resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
+    submit(game, DecisionResponse(choices=("Take neither",)))
+
+    assert game.table.seats[PlayerId.P1].honor == 0
+    assert game.favor_holder is PlayerId.P1
+    assert not game.table.cards_by_id["kakita"].bowed
+
+
+def test_honor_your_oaths_is_offered_from_hand_during_a_battle():
+    """A Strategy is played out of hand, so its ability has to say it acts from there — the default
+    is the battlefield, where a card in hand never is, and the action would simply never appear."""
+    game = _oaths_game()
+    _oaths(game)
+    game.round = ActionRound(
+        timings=BATTLE_SEGMENT_TIMINGS[BattleSegment.COMBAT],
+        priority=PlayerId.P1,
+        kind=RoundKind.BATTLE_SEGMENT,
+    )
+
+    assert PlayStrategy("oaths") in legality.legal_actions(game, PlayerId.P1)
+
+
+def test_a_bowed_yojimbo_cannot_pay_for_the_second_clause():
+    """Bowing him is the price, and a card already bowed cannot pay a bow cost (CR, Costs). With no
+    other Yojimbo the option is not offered at all."""
+    game = _oaths_game(yojimbo=True)
+    source, ability = _oaths(game)
+    game.table.cards_by_id["kakita"].bow()
+
+    resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
+
+    assert game.pending is not None
+    assert "Bow your target Yojimbo" not in game.pending.candidates
+
+
+def test_the_second_clause_is_not_offered_when_neither_half_can_be_paid():
+    """The targets are chosen at step C and the action resolves at step E, so an Interrupt between
+    them can take the Favor away — leaving a seat with no Yojimbo nothing to be asked about, and the
+    first clause to resolve alone."""
+    game = _oaths_game()
+    source, ability = _oaths(game)
+    target = game.table.cards_by_id["guard"]
+    DiscardFavor(PlayerId.P1).perform(game)
+
+    resolve_effects(game, ability.effects(game, source, target))
+
+    assert location_of(game.table, target).is_home
+    assert game.pending is None, "nothing to ask"

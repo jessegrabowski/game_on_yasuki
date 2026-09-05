@@ -537,6 +537,23 @@ class GrantProvinceStrength(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class PayFavorCost(Effect):
+    """Record that the action now resolving is paying a Favor cost.
+
+    Carried by the cost itself rather than set when the action is announced, so an action offering
+    the Favor as one of two ways to pay counts as a Favor action only on the branch that takes it
+    (ShE datasheet, The Favor Icon).
+    """
+
+    def describe(self) -> str:
+        return "the action pays a Favor cost"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.action_is_favor = True
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class GrantLobbyBonus(Effect):
     """Record a Lobby Bonus or Penalty on ``seat`` for ``duration``.
 

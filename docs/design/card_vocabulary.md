@@ -68,6 +68,7 @@ deferred through `Then` instead.
    Move
    MoveToDeck
    MoveToHand
+   PayFavorCost
    PayGold
    PlaceInProvince
    RangedAttack
