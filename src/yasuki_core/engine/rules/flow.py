@@ -116,7 +116,13 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.payments import payment_request
-from yasuki_core.engine.rules import abilities, battle, state_rules, triggers
+from yasuki_core.engine.rules import (
+    abilities,
+    favor,
+    battle,
+    state_rules,
+    triggers,
+)
 
 # Imported for the registrations it performs; see rules/cards/__init__.py.
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -1147,9 +1153,12 @@ def _end_turn(game: GameState) -> None:
     _accrue_sincerity(game, seat)
     ops.draw_to_hand(game.table, seat)
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    excess = len(hand.cards) - MAX_HAND_SIZE
+    # A rulebook proxy is not a card, so it neither counts toward the limit nor can be discarded to
+    # meet it.
+    held = [card for card in hand.cards if not favor.is_rulebook_proxy(card)]
+    excess = len(held) - MAX_HAND_SIZE
     if excess > 0:
-        candidates = tuple(card.id for card in hand.cards)
+        candidates = tuple(card.id for card in held)
         game.pending = DiscardToHandSize(seat, candidates, count=excess)
         return
     _begin_next_turn(game)

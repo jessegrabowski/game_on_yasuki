@@ -4,6 +4,7 @@ from dataclasses import dataclass, replace
 from typing import ClassVar
 
 from yasuki_core.engine import ops
+from yasuki_core.engine.rules import favor
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
 from yasuki_core.engine.rules.economy import effective_stat
@@ -429,6 +430,7 @@ class TakeFavor(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.favor_holder = self.seat
+        favor.sync_proxy(game)
         return []
 
 
@@ -448,6 +450,7 @@ class DiscardFavor(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         if game.favor_holder is self.seat:
             game.favor_holder = None
+            favor.sync_proxy(game)
         return []
 
 
