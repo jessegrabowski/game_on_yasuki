@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole, province_holding
 from yasuki_core.engine.rules.equip import equip_targets
 from yasuki_core.engine.rules.actions import (
     ACTION_TIMINGS,
@@ -716,10 +716,7 @@ def _clan_names(card: L5RCard) -> tuple[str, ...]:
 
 def province_key_holding(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey | None:
     """The Province of ``seat`` holding ``card_id``, or None when none does."""
-    for key, zone in province_zones(game, seat):
-        if any(card.id == card_id for card in zone.cards):
-            return key
-    return None
+    return province_holding(game.table, seat, card_id)
 
 
 def province_key_of(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey:

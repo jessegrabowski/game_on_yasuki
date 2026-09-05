@@ -369,6 +369,15 @@ def unit_members(state: TableState, card: L5RCard) -> list[L5RCard]:
     return members
 
 
+def province_holding(state: TableState, seat: PlayerId, card_id: str) -> ZoneKey | None:
+    """The Province of ``seat`` holding ``card_id``, or None when none does."""
+    for key, zone in state.zones.items():
+        if key.owner is seat and key.role is ZoneRole.PROVINCE:
+            if any(card.id == card_id for card in zone.cards):
+                return key
+    return None
+
+
 def owns_card(state: TableState, seat: PlayerId, card_id: str) -> bool:
     """Return whether ``seat`` may act on the card: True for its owner, False if the card is unknown
     or belongs to the other seat."""
