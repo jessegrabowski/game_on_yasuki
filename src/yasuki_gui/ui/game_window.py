@@ -8,15 +8,22 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView
 from yasuki_core.engine.table import TableState
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.layout import divider_y
 from yasuki_gui.ui.geometry import widget_size
+from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.battle_view import BattleView, LaneButton, PendingArmy
+from yasuki_gui.ui.card_preview import CardPreview
+from yasuki_gui.ui.card_strip import CardStrip, STRIP_H, STRIP_W
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
 from yasuki_gui.ui.prompt_box import PromptBox
+
+# Where the strip first opens, far enough in that the board still reads behind it.
+STRIP_INSET = 40
 
 
 class ClientBindings(Protocol):
@@ -127,10 +134,22 @@ class GameWindow:
         # Floats over the board rather than beside it, so it is built on the same parent and only
         # placed once there is an attack to show.
         self.battle_view = BattleView(self.field)
+        # One strip for every pile either player opens, retitled as it is reused, so a player who
+        # has moved it finds it where they left it.
+        self.card_strip = CardStrip(self.field, ImageProvider(self.field))
+        # The same keys the board reads, so a card previews the same way wherever it is looked at.
+        self.card_strip.hotkeys = load_hotkeys()
+        # Drawn on the window itself, so it floats over the board, the sidebar and every panel.
+        # One preview shared by the board and the strip, so neither can hide or clip the other's.
+        self.card_preview = CardPreview(self.root, ImageProvider(self.root))
+        self.field.preview = self.card_preview
+        self.card_strip.preview = self.card_preview
 
         # A panel reads the board through the FieldView it is handed, so the field is built first.
         self.opponent_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P2)
         self.human_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P1)
+        for panel in (self.opponent_panel, self.human_panel):
+            panel.on_inspect = self.show_cards
         self.prompt_box = PromptBox(self.sidebar)
         self.prompt_box.grid(row=1, column=0, sticky="nsew")
         # Spacebar takes the primary offered action (Pass/Pay/Discard), never a secondary like
@@ -143,6 +162,13 @@ class GameWindow:
         self.field.on_local_player_changed = self.relayout_panels
         self.field.apply_profile_to_panels = self.apply_profile_to_panels
         self.relayout_panels()
+
+    def show_cards(self, cards: list[L5RCard], title: str) -> None:
+        """Lay a pile out over the board in the strip panel, reusing the one panel for every pile."""
+        # Placed before it is filled, so the cards are laid out at the size they will be shown at
+        # rather than measured against an unplaced panel and corrected on a later redraw.
+        self.card_strip.open_over(STRIP_INSET, STRIP_INSET, STRIP_W, STRIP_H)
+        self.card_strip.show(cards, title)
 
     def show_battle(
         self,

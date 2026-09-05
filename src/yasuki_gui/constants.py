@@ -2,6 +2,10 @@
 # of the board fits on screen.
 CARD_W = 73
 CARD_H = 104
+
+# How much larger than its on-board size a card renders when previewed, wherever it is
+# previewed from.
+PREVIEW_SCALE = 3.6
 # Copies of one holding stack in a single home column, each offset down by this much so every copy
 # stays visible and clickable.
 HOME_STACK_OFFSET = 26
