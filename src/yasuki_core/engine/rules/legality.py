@@ -45,6 +45,7 @@ from yasuki_core.game_pieces.prints import (
     PersonalityPrint,
     SenseiPrint,
     StrongholdPrint,
+    WindPrint,
 )
 
 # What the Kharmic rulebook abilities cost to use.
@@ -250,13 +251,28 @@ def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
     return [Lobby()] if lobby_candidates(game, seat) else []
 
 
+def has_wind(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` has a Wind in play. A deck holds at most one, and it starts there."""
+    return any(
+        isinstance(card.printed, WindPrint)
+        for card in game.table.battlefield.cards
+        if card.owner is seat
+    )
+
+
 def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
-    """The arc's Favor abilities the seat can take: designator permitted, the rulebook's own
-    restriction met, and a Favor cost somebody can pay.
+    """The arc's Favor abilities the seat can take: designator permitted, no Wind in play, the
+    rulebook's own restriction met, and a Favor cost somebody can pay.
 
     Good Faith: the whole cost has to be payable, which is the Favor and whatever else that arc's
     ability charges. Holding the Favor is not the test, since a seat may pay with an alternate.
+
+    A Wind bars them outright — "While you have a Wind in play, you may not take rulebook Favor
+    actions, an effect which cannot be overcome by card effects" (ShE datasheet, Winds) — so no card
+    registry answers to it the way :func:`abilities.may_lobby` lets cards speak to Lobbying.
     """
+    if has_wind(game, seat):
+        return []
     actions: list[Action] = []
     for ability in favor_abilities.available_favor_abilities():
         if not permits(game, seat, ability.timing):

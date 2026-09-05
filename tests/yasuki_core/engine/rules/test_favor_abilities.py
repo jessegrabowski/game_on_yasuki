@@ -6,7 +6,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import favor_abilities, legality
-from yasuki_core.engine.rules.actions import ActionTiming, UseFavorAbility
+from yasuki_core.engine.rules.actions import ActionTiming, Lobby, UseFavorAbility
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.flow import submit, use_favor_ability
@@ -22,7 +22,13 @@ from yasuki_core.engine.table import (
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.prints import FatePrint
 
-from tests.yasuki_core.engine.builders import fate_card, personality, put_in_play, register
+from tests.yasuki_core.engine.builders import (
+    fate_card,
+    personality,
+    put_in_play,
+    register,
+    wind,
+)
 
 
 @pytest.fixture
@@ -239,3 +245,36 @@ def test_the_imperial_draw_is_offered_to_whoever_the_round_permits(imperial, gam
     imperial_draw = {a.key: a for a in ruleset.IMPERIAL.favor_abilities}["draw"]
 
     assert imperial_draw.active_seat_only is False
+
+
+def test_a_wind_bars_the_rulebook_favor_abilities(game):
+    """ShE datasheet, Winds: "While you have a Wind in play, you may not take rulebook Favor
+    actions." The seat otherwise qualifies outright, so the Wind is the only thing withholding it."""
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    hand.add(register(game.table, fate_card("spare", PlayerId.P1)))
+    TakeFavor(PlayerId.P1).perform(game)
+    assert _offered(game) == {"discard_to_draw"}, "it is on offer before the Wind arrives"
+
+    put_in_play(game, wind(PlayerId.P1))
+
+    assert _offered(game) == set()
+
+
+def test_a_rivals_wind_does_not_bar_your_own_favor_abilities(game):
+    """ "you have a Wind in play" — it is the acting seat's own Wind that stops them."""
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    hand.add(register(game.table, fate_card("spare", PlayerId.P1)))
+    TakeFavor(PlayerId.P1).perform(game)
+    put_in_play(game, wind(PlayerId.P2))
+
+    assert _offered(game) == {"discard_to_draw"}
+
+
+def test_a_wind_does_not_bar_lobbying(game):
+    """The bar names rulebook Favor actions. Lobby is the rulebook's own ability for taking the
+    Favor rather than one that pays it, and the datasheet lists it under its own heading."""
+    game.table.seats[PlayerId.P1].honor = 10
+    put_in_play(game, personality("courtier", personal_honor=2))
+    put_in_play(game, wind(PlayerId.P1))
+
+    assert Lobby() in legality.legal_actions(game, PlayerId.P1)

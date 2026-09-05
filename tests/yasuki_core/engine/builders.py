@@ -18,6 +18,7 @@ from yasuki_core.game_pieces.prints import (
     HoldingPrint,
     PersonalityPrint,
     StrongholdPrint,
+    WindPrint,
 )
 
 # Only shapes duplicated across two or more test modules belong here; one that would have to contort
@@ -194,6 +195,17 @@ def stronghold(
         clan=clan,
         clans=clans,
         starting_honor=starting_honor,
+    )
+
+
+def wind(owner: PlayerId = PlayerId.P1, *, name: str = "Wind") -> L5RCard:
+    """A Wind. A deck holds at most one and it starts in play, so tests put it there directly."""
+    return L5RCard.of(
+        WindPrint,
+        id=f"{owner.name}-wind",
+        name=name,
+        side=Side.FATE,
+        owner=owner,
     )
 
 

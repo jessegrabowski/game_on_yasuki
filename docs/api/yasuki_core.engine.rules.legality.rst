@@ -14,6 +14,7 @@ yasuki_core.engine.rules.legality
     gold_producers
     gold_reach
     has_keyword
+    has_wind
     inheritance_key
     is_first_turn
     is_kharmic_card
