@@ -693,8 +693,9 @@ def _picked(window) -> str:
     return window.field.selection[0]
 
 
-def _menu_on(presenter, window, card_id: str) -> dict[str, bool]:
-    """Right-click ``card_id`` and read the menu it offers."""
+def _assignment_menu_on(presenter, window, card_id: str) -> dict[str, bool]:
+    """Right-click ``card_id`` while an assignment is open, and read the menu it offers, to whether
+    each entry is available. A card menu's entries carry no availability and are read directly."""
     offered = []
     window.popup_at_pointer = lambda entries: offered.append(list(entries))
     presenter.on_card_activated(card_id)
@@ -799,7 +800,7 @@ def test_right_clicking_a_unit_picks_it(a_battle):
     _send(presenter, window, ["hero"], 1)
     assert window.field.selection == ()
 
-    offered = _menu_on(presenter, window, "hero")
+    offered = _assignment_menu_on(presenter, window, "hero")
 
     assert window.field.selection == ("hero",)
     assert offered["Unassign units"] is True
@@ -812,7 +813,7 @@ def test_right_clicking_a_unit_at_home_picks_it_too(a_battle):
     _press(presenter, "Declare an attack")
     assert not any(button.enabled for button in presenter._lane_buttons().values())
 
-    _menu_on(presenter, window, "hero")
+    _assignment_menu_on(presenter, window, "hero")
 
     assert window.field.selection == ("hero",)
     assert all(button.enabled for button in presenter._lane_buttons().values())
@@ -827,7 +828,7 @@ def test_right_clicking_a_unit_already_picked_keeps_the_rest_of_the_picks(a_batt
     presenter.on_lane_card_clicked("hero")
     presenter.on_lane_card_clicked("second")
 
-    _menu_on(presenter, window, "hero")
+    _assignment_menu_on(presenter, window, "hero")
 
     assert set(window.field.selection) == {"hero", "second"}
 
