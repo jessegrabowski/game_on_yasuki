@@ -4,17 +4,21 @@ import pytest
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import legality
+from yasuki_core.engine import ops
+from yasuki_core.engine.rules import legality, triggers
 from yasuki_core.engine.rules.legality import lobby_key
 from yasuki_core.engine.rules.actions import Lobby
 from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.economy import lobby_amount
+from yasuki_core.engine.rules.effects import GrantLobbyBonus
+from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules.flow import lobby, submit
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 
-from tests.yasuki_core.engine.builders import personality, put_in_play
+from tests.yasuki_core.engine.builders import holding, personality, put_in_play
 
 
 def _game(*, p1_honor: int = 10, p2_honor: int = 5) -> GameState:
@@ -160,3 +164,51 @@ def test_a_spent_lobby_is_not_offered_again_until_the_next_turn():
     game.turn += 2  # back round to this seat's next turn
 
     assert _lobbies(game) == [Lobby()]
+
+
+def test_shigekawas_court_wins_a_comparison_its_seat_would_otherwise_lose():
+    """Shigekawa's Court (ShE): "You have a +5 Lobby Bonus." Read against the datasheet's wide
+    wording rather than the CR's — the amount checked is considered higher, so 8 + 5 beats 10."""
+    game = _game(p1_honor=8, p2_honor=10)
+    put_in_play(game, personality("courtier", personal_honor=2))
+    put_in_play(game, holding("court", printed_id="shigekawas_court"))
+
+    assert _lobbies(game) == [Lobby()]
+
+
+def test_a_penalty_on_a_rival_wins_a_comparison_its_seat_would_otherwise_lose():
+    """The datasheet adjusts whichever player the amount is about, so a Penalty on the rival is what
+    settles this one — the acting seat's own honor is untouched."""
+    game = _game(p1_honor=8, p2_honor=10)
+    put_in_play(game, personality("courtier", personal_honor=2))
+    source = put_in_play(game, holding("agitator"))
+    GrantLobbyBonus(source.id, PlayerId.P2, -3, Duration.WHILE_SOURCE_IN_PLAY).perform(game)
+
+    assert _lobbies(game) == [Lobby()]
+
+
+def test_a_lobby_bonus_is_not_an_honor_gain():
+    """The datasheet says so explicitly. Writing the adjustment back to the seat would fire every
+    trigger and Victory check that watches Family Honor."""
+    game = _game(p1_honor=8, p2_honor=10)
+    put_in_play(game, personality("courtier", personal_honor=2))
+    put_in_play(game, holding("court", printed_id="shigekawas_court"))
+
+    assert _lobbies(game) == [Lobby()], "the bonus is being read"
+    assert game.table.seats[PlayerId.P1].honor == 8
+
+
+def test_a_lobby_penalty_stops_when_the_card_granting_it_leaves_play():
+    """A Lobby Bonus rests on a player, who never leaves the table, so the sweep that forgets a
+    departed card's modifiers has to keep it and let the duration decide instead."""
+    game = _game(p1_honor=8, p2_honor=10)
+    put_in_play(game, personality("courtier", personal_honor=2))
+    source = put_in_play(game, holding("agitator"))
+    GrantLobbyBonus(source.id, PlayerId.P2, -3, Duration.WHILE_SOURCE_IN_PLAY).perform(game)
+    assert _lobbies(game) == [Lobby()], "the Penalty is being read"
+
+    ops.remove_card(game.table, source)
+    triggers.resolve_effects(game, [])
+
+    assert lobby_amount(game, PlayerId.P2, 10) == 10, "the Penalty went with its source"
+    assert _lobbies(game) == []

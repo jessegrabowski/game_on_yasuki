@@ -31,6 +31,7 @@ from yasuki_core.engine.rules.events import (
 from yasuki_core.engine.rules.modifiers import (
     Duration,
     KeywordGrant,
+    LobbyModifier,
     Minimum,
     Modifier,
     ProvinceModifier,
@@ -532,6 +533,30 @@ class GrantProvinceStrength(Effect):
         game.modifiers.append(
             ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantLobbyBonus(Effect):
+    """Record a Lobby Bonus or Penalty on ``seat`` for ``duration``.
+
+    A Penalty is a negative ``amount``: the datasheet words them as two things and the engine reads
+    them as one signed adjustment, since every amount a Lobby action checks is read through the sum.
+    """
+
+    source_id: str
+    seat: PlayerId
+    amount: int
+    duration: Duration
+
+    def describe(self) -> str:
+        return (
+            f"{self.source_id} gives {self.seat.name} a {self.amount:+d} Lobby Bonus "
+            f"({self.duration.name})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifiers.append(LobbyModifier(self.source_id, self.seat, self.amount, self.duration))
         return []
 
 

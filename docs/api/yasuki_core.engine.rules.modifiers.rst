@@ -9,6 +9,7 @@ yasuki_core.engine.rules.modifiers
 
     Duration
     KeywordGrant
+    LobbyModifier
     Minimum
     Modifier
     ProvinceModifier

@@ -60,6 +60,7 @@ deferred through `Then` instead.
    GrantPriority
    GrantKeyword
    GrantMinimum
+   GrantLobbyBonus
    GrantProvinceStrength
    GrantModifier
    IgnoreHonorRequirements
@@ -183,6 +184,7 @@ Production without a modifier being recorded.
    Stat
    Duration
    KeywordGrant
+   LobbyModifier
    Minimum
    Modifier
    ProvinceModifier

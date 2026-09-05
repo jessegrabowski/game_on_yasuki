@@ -34,6 +34,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "bow waivers": frozenset(abilities.BOW_WAIVERS),
         "favor payers": frozenset(abilities.FAVOR_PAYERS),
         "gold handlers": frozenset(economy.GOLD_HANDLERS),
+        "lobby bonuses": frozenset(economy.LOBBY_BONUSES),
         "gold self grants": frozenset(economy.GOLD_SELF_GRANT),
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),
         "invest discounts": frozenset(economy.INVEST_DISCOUNTS),

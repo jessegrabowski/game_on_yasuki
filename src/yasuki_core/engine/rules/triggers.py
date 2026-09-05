@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules import state_rules
 from yasuki_core.engine.rules.state import GameState, Moment
 from yasuki_core.engine.rules.economy import effective_keywords
-from yasuki_core.engine.rules.modifiers import ProvinceModifier
+from yasuki_core.engine.rules.modifiers import LobbyModifier, ProvinceModifier
 from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces import keywords
@@ -235,7 +235,7 @@ def _forget_modifiers_on_cards_off_the_table(game: GameState) -> None:
 
     Forgotten rather than skipped when read: a card can return to a Province, and a modifier merely
     filtered out would come back attached to the card that replaced it. One laid on a Province slot
-    is kept whatever happens: a slot is part of the board rather than a card that can leave it.
+    or on a player is kept whatever happens: neither is a card that can leave the table.
     """
     if not game.modifiers:
         return
@@ -246,7 +246,7 @@ def _forget_modifiers_on_cards_off_the_table(game: GameState) -> None:
     game.modifiers[:] = [
         modifier
         for modifier in game.modifiers
-        if isinstance(modifier, ProvinceModifier) or modifier.target_id in on_table
+        if isinstance(modifier, ProvinceModifier | LobbyModifier) or modifier.target_id in on_table
     ]
 
 
