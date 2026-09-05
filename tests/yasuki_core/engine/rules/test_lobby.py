@@ -10,6 +10,8 @@ from yasuki_core.engine.rules.actions import Lobby
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.flow import lobby, submit
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.runner import GameRunner
+from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 
 from tests.yasuki_core.engine.builders import personality, put_in_play
@@ -118,6 +120,18 @@ def test_taking_lobby_takes_the_favor_from_the_seat_that_held_it():
     submit(game, DecisionResponse(choices=("courtier",)))
 
     assert game.favor_holder is PlayerId.P1
+
+
+def test_the_board_menu_offers_lobby_once():
+    """The Favor belongs to no card, so the empty board is the only place Lobby can be offered."""
+    session = EngineSession.start(TableState.empty_two_seat(), PlayerId.P1)
+    game = session.game
+    game.table.seats[PlayerId.P1].honor = 10
+    game.table.seats[PlayerId.P2].honor = 5
+    put_in_play(game, personality("courtier", name="Doji Kuwanan", personal_honor=2))
+    runner = GameRunner(session, PlayerId.P1)
+
+    assert ("Lobby: bow a Personality to take the Imperial Favor", Lobby()) in runner.board_menu()
 
 
 def test_taking_lobby_spends_its_once_per_turn_use():
