@@ -14,7 +14,9 @@ yasuki_gui.layout
     hand_box
     home_slot
     home_stack_positions
+    in_play_column_positions
     province_positions
+    rows_center_x
     to_canvas
     tower_draw_order
     unit_tower_positions

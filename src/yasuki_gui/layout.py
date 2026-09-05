@@ -145,7 +145,7 @@ def province_positions(
     if count <= 0:
         return []
     y = _row_y(canvas_h, seat_at_bottom)
-    xs = centered_row(canvas_w // 2, count)
+    xs = centered_row(rows_center_x(canvas_w), count)
     if not seat_at_bottom:
         xs.reverse()
     return [(x, y) for x in xs]
@@ -156,12 +156,52 @@ def province_positions(
 # step to the right.
 _HOME_X0 = CARD_W
 
+# The column of in-play cards belonging to no row — Events, Edicts, Rings and their kin — stands
+# against the board's right edge, inside each seat's band. The centered rows give up half its
+# width each side, which is why they center on :func:`rows_center_x` rather than on the canvas.
+_COLUMN_INSET = CARD_W
+_COLUMN_RESERVED = CARD_W + _CARD_GAP
+# How far each card in the column sits below the one before it. Deeper than the home stacks', so a
+# column several Edicts long still shows a readable strip of each.
+_COLUMN_STACK_OFFSET = 34
+
 
 def home_slot(canvas_w: int, canvas_h: int, index: int, *, seat_at_bottom: bool) -> tuple[int, int]:
     """Position for the ``index``-th unplaced card in a seat's home (holdings) row, laid left to
     right from inside the seat's edge. The stronghold, sensei, and freshly recruited holdings park
     here in battlefield order until a drag gives them a board spot."""
     return _HOME_X0 + index * COLUMN_STEP, _holding_row_y(canvas_h, seat_at_bottom)
+
+
+def rows_center_x(canvas_w: int) -> int:
+    """The x a seat's centered rows center on: left of the canvas center by half the in-play column's
+    width, so a row and the column share the board rather than the row sitting under it."""
+    return (canvas_w - _COLUMN_RESERVED) // 2
+
+
+def in_play_column_positions(
+    card_ids: Sequence[str], canvas_w: int, canvas_h: int, *, seat_at_bottom: bool
+) -> dict[str, tuple[int, int]]:
+    """Where a seat's in-play cards that belong to no row stand: a column at the board's right edge,
+    stacked from the seat's front row outward toward the seat and overlapping as it fills.
+
+    Parameters
+    ----------
+    card_ids : sequence of str
+        The cards to place, in the order they entered play. The last is drawn whole; each one before
+        it shows the strip the next does not cover.
+    canvas_w : int
+        The canvas width.
+    canvas_h : int
+        The canvas height.
+    seat_at_bottom : bool
+        Whether this is the seat drawn along the bottom edge, which stacks downward. The other seat
+        mirrors it.
+    """
+    x = canvas_w - _COLUMN_INSET
+    front = _personality_row_y(canvas_h, seat_at_bottom)
+    step = _COLUMN_STACK_OFFSET if seat_at_bottom else -_COLUMN_STACK_OFFSET
+    return {card_id: (x, front + index * step) for index, card_id in enumerate(card_ids)}
 
 
 def home_stack_positions(
@@ -188,7 +228,7 @@ def home_stack_positions(
 
     if personality_row:  # center-justified across the canvas, like the provinces
         row_y = _personality_row_y(canvas_h, seat_at_bottom)
-        xs = centered_row(canvas_w // 2, len(columns))
+        xs = centered_row(rows_center_x(canvas_w), len(columns))
         base = {col: (xs[col], row_y) for col in columns.values()}
     else:  # left-justified in the holdings row, behind the stronghold
         base = {

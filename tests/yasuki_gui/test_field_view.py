@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
     BoardPos,
@@ -16,7 +18,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.constants import ATTACH_STACK_OFFSET, HOME_STACK_OFFSET
+from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W, HOME_STACK_OFFSET
 from yasuki_gui.field_view import ALLOCATION_TAG
 from yasuki_gui.layout import province_positions
 from yasuki_gui.tags import allocation_tag, card_tag, deck_tag, zone_tag
@@ -31,8 +33,11 @@ from tests.yasuki_core.engine.builders import (
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     CardPrint,
+    DynastyPrint,
     HoldingPrint,
     PersonalityPrint,
+    SenseiPrint,
+    WindPrint,
 )
 
 
@@ -446,6 +451,82 @@ class TestRulesModeRender:
         home = field._home_positions(rendered, *field._canvas_size())
         assert "P1-katana" not in home
         assert {"P1-hero", "P1-mine"} <= set(home)
+
+    def _in_play(self, field, *cards):
+        """Put ``cards`` on the battlefield, unplaced, and return their home positions."""
+        state = TableState.empty_two_seat()
+        for card in cards:
+            state.cards_by_id[card.id] = card
+            state.battlefield.add(card)
+            state.positions[card.id] = UNPLACED_BOARD_POS
+        session = EngineSession.start(state, PlayerId.P1)
+        field.render_snapshot(session.project(PlayerId.P1).table, PlayerId.P1)
+        return field._home_positions(list(field._render_battlefield()), *field._canvas_size())
+
+    def test_a_card_with_no_row_stands_in_the_column_at_the_edge(self, loaded):
+        """An Event in play is neither a Personality nor a Holding, so it belongs to neither row.
+        The column is the leftover, and it stands clear of the rows to the right of both."""
+        field, _ = loaded
+        hero = L5RCard.of(
+            PersonalityPrint,
+            id="P1-hero",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            force=2,
+            chi=3,
+        )
+        mine = L5RCard.of(
+            HoldingPrint, id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1
+        )
+        event = L5RCard.of(
+            DynastyPrint,
+            id="P1-event",
+            name="Commanding Favor",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+        )
+        home = self._in_play(field, hero, mine, event)
+
+        rows = (home["P1-hero"][0], home["P1-mine"][0])
+        assert home["P1-event"][0] - max(rows) >= CARD_W, "a column of its own, not a nudge"
+
+    def test_the_column_stacks_downward_and_overlaps(self, loaded):
+        """Several at once — copies of one Edict are the realistic case — share the column, each
+        below the last by less than a card's height so the strip of every one stays readable."""
+        field, _ = loaded
+        events = [
+            L5RCard.of(
+                DynastyPrint,
+                id=f"P1-e{index}",
+                name="Edict",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+            )
+            for index in range(3)
+        ]
+        home = self._in_play(field, *events)
+
+        xs = {home[f"P1-e{index}"][0] for index in range(3)}
+        ys = [home[f"P1-e{index}"][1] for index in range(3)]
+        assert len(xs) == 1, "one column"
+        assert ys == sorted(ys), "stacked toward the seat"
+        assert 0 < ys[1] - ys[0] < CARD_H, "overlapping, not clear of each other"
+
+    @pytest.mark.parametrize("printed", [SenseiPrint, WindPrint], ids=["sensei", "wind"])
+    def test_a_pre_game_permanent_stays_in_the_holdings_row(self, loaded, printed):
+        """Neither a Sensei nor a Wind is a Personality or a Holding, so the column's leftover rule
+        would swallow both. They start in play beside the stronghold and stay there."""
+        field, _ = loaded
+        mine = L5RCard.of(
+            HoldingPrint, id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1
+        )
+        permanent = L5RCard.of(
+            printed, id="P1-permanent", name="Permanent", side=Side.FATE, owner=PlayerId.P1
+        )
+        home = self._in_play(field, mine, permanent)
+
+        assert home["P1-permanent"][1] == home["P1-mine"][1], "same row as the Holdings"
 
     def _two_copies(self, field, **modified):
         """Two copies of one printed Personality in play, the second given whatever ``modified``
