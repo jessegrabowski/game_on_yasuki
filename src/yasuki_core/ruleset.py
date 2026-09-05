@@ -44,8 +44,8 @@ class Ruleset:
         What this arc's rulebook calls each of ``battle_segments``, shown to the player.
     lobby_timing : ActionTiming
         The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
-        Limited and the Onyx/ShE datasheet makes it Open, which open to different sets of players.
-        Default Limited, the CR's.
+        Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
+        different players entitled to act. Default Limited, the CR's.
     """
 
     clan_alignments: frozenset[str]

@@ -553,7 +553,7 @@ def lobby_key(seat: PlayerId, turn: int) -> str:
     is.
 
     Named for the Lobby action rather than for the rulebook ability, because the ShE datasheet caps
-    a player at one Lobby action per turn across all of them, not one use of this ability.
+    a player at one Lobby action per turn whatever granted it, not at one use of this ability.
     """
     return f"lobby:{seat.name}:{turn}"
 

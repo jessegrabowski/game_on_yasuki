@@ -172,9 +172,9 @@ class Cycle:
 
 @dataclass(frozen=True, slots=True)
 class Lobby:
-    """Take the Lobby rulebook ability: with higher Family Honor than each other player, bow a
-    Personality to take the Imperial Favor. Which Personality bows is chosen through the decision
-    the action raises, so the action itself carries no target. [ShE]"""
+    """Take the Lobby rulebook ability: on your turn, with higher Family Honor than each other
+    player, bow a Personality to take the Imperial Favor. Which Personality bows is chosen through
+    the decision the action raises, so the action itself carries no target. [ShE]"""
 
 
 @dataclass(frozen=True, slots=True)
