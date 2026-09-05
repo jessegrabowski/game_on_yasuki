@@ -18,13 +18,16 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
     Discard,
+    DiscardFavor,
     PlaceInProvince,
     Effect,
+    TakeFavor,
     InterruptingEffect,
     Unpayable,
 )
 from yasuki_core.engine.rules.events import CardDiscarded
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint
 from yasuki_core.game_pieces.counters import WEALTH
@@ -376,3 +379,43 @@ def test_a_division_that_cannot_be_answered_is_refused_rather_than_asked(candida
 
     with pytest.raises(ValueError, match="cannot divide"):
         ask.request(two_seat_game())
+
+
+def test_taking_the_favor_gives_it_to_the_seat():
+    """Twenty Festivals CR, The Imperial Favor: one player controls it at a time."""
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
+
+    TakeFavor(PlayerId.P1).perform(game)
+
+    assert game.favor_holder is PlayerId.P1
+
+
+def test_taking_the_favor_takes_it_from_whoever_held_it():
+    """Changes of control are instantaneous, so the previous holder loses it in the same step
+    rather than the two seats briefly both holding it."""
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
+    TakeFavor(PlayerId.P1).perform(game)
+
+    TakeFavor(PlayerId.P2).perform(game)
+
+    assert game.favor_holder is PlayerId.P2
+
+
+def test_discarding_the_favor_leaves_it_held_by_nobody():
+    """Discarding it returns it to uncontrolled rather than passing it to the other seat."""
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
+    TakeFavor(PlayerId.P1).perform(game)
+
+    DiscardFavor(PlayerId.P1).perform(game)
+
+    assert game.favor_holder is None
+
+
+def test_discarding_the_favor_does_not_touch_another_seats_hold():
+    """Only the holder discards it, so a discard by anyone else leaves the holder alone."""
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
+    TakeFavor(PlayerId.P1).perform(game)
+
+    DiscardFavor(PlayerId.P2).perform(game)
+
+    assert game.favor_holder is PlayerId.P1

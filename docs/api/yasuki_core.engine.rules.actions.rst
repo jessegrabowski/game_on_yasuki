@@ -18,6 +18,7 @@ yasuki_core.engine.rules.actions
     KharmicDraw
     KharmicRefill
     Legacy
+    Lobby
     Pass
     PlayStrategy
     Recruit

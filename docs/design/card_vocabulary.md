@@ -48,6 +48,7 @@ deferred through `Then` instead.
    Destroy
    DestroyProvince
    Discard
+   DiscardFavor
    DrawCard
    Effect
    Fear
@@ -75,6 +76,7 @@ deferred through `Then` instead.
    Show
    ShuffleDeck
    Straighten
+   TakeFavor
    Then
    Unpayable
 ```
@@ -131,6 +133,7 @@ Legality with respect to game state is checked separately.
    ChooseOption
    LeaveBowed
    ChooseLegacyCard
+   ChooseLobbyTarget
    ChoosePayment
    Confirm
    DecisionRequest

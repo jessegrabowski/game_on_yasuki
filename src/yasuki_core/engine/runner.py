@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicDraw,
     KharmicRefill,
     Legacy,
+    Lobby,
     Pass,
     PlayStrategy,
     Recruit,
@@ -212,6 +213,7 @@ class GameRunner:
         labels = {
             Legacy(): "Legacy: banish a card to search for a Legacy card",
             Cycle(): "Cycle: put Province cards on the bottom of your deck",
+            Lobby(): "Lobby: bow a Personality to take the Imperial Favor",
         }
         return [(labels[action], action) for action in self.legal_actions() if action in labels]
 

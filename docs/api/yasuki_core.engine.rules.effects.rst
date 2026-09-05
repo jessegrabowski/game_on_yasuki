@@ -25,6 +25,7 @@ yasuki_core.engine.rules.effects
     Destroy
     DestroyProvince
     Discard
+    DiscardFavor
     DrawCard
     Effect
     Fear
@@ -51,6 +52,7 @@ yasuki_core.engine.rules.effects
     Show
     ShuffleDeck
     Straighten
+    TakeFavor
     Then
     Unpayable
     WinGame

@@ -171,6 +171,13 @@ class Cycle:
 
 
 @dataclass(frozen=True, slots=True)
+class Lobby:
+    """Take the Lobby rulebook ability: on your turn, with higher Family Honor than each other
+    player, bow a Personality to take the Imperial Favor. Which Personality bows is chosen through
+    the decision the action raises, so the action itself carries no target. [ShE]"""
+
+
+@dataclass(frozen=True, slots=True)
 class KharmicDraw:
     """Take the Fate Kharmic rulebook ability (Repeatable Open, 2 Gold): discard a Kharmic card from
     hand to draw a card.
@@ -222,12 +229,15 @@ Action = (
     | KharmicDraw
     | KharmicRefill
     | Inheritance
+    | Lobby
     | DeclareAttack
 )
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
 # to taking an action rather than one, and ActivateAbility because it reads its designator off the
-# card — the same action is Open on one Holding and Dynasty on another.
+# card — the same action is Open on one Holding and Dynasty on another. Lobby is absent because it
+# reads its designator off the arc's ruleset: the Twenty Festivals CR makes it Limited and the ShE
+# datasheet makes it Open, which are different Action Rounds with different players entitled to act.
 ACTION_TIMINGS: dict[type, ActionTiming] = {
     Cycle: ActionTiming.LIMITED,
     KharmicDraw: ActionTiming.OPEN,

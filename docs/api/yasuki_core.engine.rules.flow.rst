@@ -24,6 +24,7 @@ yasuki_core.engine.rules.flow
     kharmic_draw
     kharmic_refill
     legacy
+    lobby
     next_phase
     open_response_window
     open_round

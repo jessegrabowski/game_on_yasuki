@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicRefill,
     Inheritance,
     Legacy,
+    Lobby,
     Pass,
     PlayStrategy,
     Recruit,
@@ -23,6 +24,7 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
     effective_gold_cost,
+    effective_personal_honor,
     effective_gold_production,
     maximum_gold_production,
     effective_keywords,
@@ -73,6 +75,8 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
         return frozenset(ability.timings)
+    if isinstance(action, Lobby):
+        return frozenset({ruleset.ACTIVE.lobby_timing})
     timing = ACTION_TIMINGS.get(type(action))
     if timing is None:
         raise ValueError(f"no designator for action {type(action).__name__}")
@@ -123,6 +127,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_legacy(game, seat),
         *_kharmic(game, seat),
         *_inheritance(game, seat),
+        *_lobby(game, seat),
         *_declare_attack(game, seat),
     ]
 
@@ -156,6 +161,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _dynasty_discards(game, seat, only=card_id)
         case KharmicDraw(card_id=card_id) | KharmicRefill(card_id=card_id):
             return action in _kharmic(game, seat, only=card_id)
+        case Lobby():
+            return bool(_lobby(game, seat))
         case DeclareAttack():
             return bool(_declare_attack(game, seat))
         case _:
@@ -190,6 +197,35 @@ def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
     if game.has_used(cycle_key(seat, game.turn)):
         return []
     return [Cycle()] if cycle_candidates(game, seat) else []
+
+
+def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The Personalities ``seat`` could bow to Lobby: their own, unbowed, with 1 or more Personal
+    Honor. Zero Personal Honor is the boundary the datasheet draws, not merely a floor."""
+    return [
+        card
+        for card in abilities.owned_personalities(game, seat)
+        if not card.bowed and effective_personal_honor(game, card) >= 1
+    ]
+
+
+def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
+    """The Lobby ability when the seat can take it.
+
+    ShE datasheet: "If it is your turn and you have higher Family Honor than each other player, bow
+    your target unbowed Personality with 1 or more Personal Honor to take the Imperial Favor."
+    Which Personality bows is chosen when the action resolves, so this offers the ability once.
+    """
+    if not permits(game, seat, ruleset.ACTIVE.lobby_timing):
+        return []
+    if seat is not game.active:
+        return []
+    if game.has_used(lobby_key(seat, game.turn)):
+        return []
+    honor = game.table.seats[seat].honor
+    if any(info.honor >= honor for other, info in game.table.seats.items() if other is not seat):
+        return []
+    return [Lobby()] if lobby_candidates(game, seat) else []
 
 
 def _kharmic(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
@@ -510,6 +546,16 @@ def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     Provinces. A face-down card is not eligible, so a Province nobody has revealed stays where it
     is."""
     return [card for card in province_cards(game, seat) if card.face_up]
+
+
+def lobby_key(seat: PlayerId, turn: int) -> str:
+    """The once-per-turn usage key for a seat's Lobby, scoped to the turn the way :func:`legacy_key`
+    is.
+
+    Named for the Lobby action rather than for the rulebook ability, because the ShE datasheet caps
+    a player at one Lobby action per turn whatever granted it, not at one use of this ability.
+    """
+    return f"lobby:{seat.name}:{turn}"
 
 
 def legacy_key(seat: PlayerId, turn: int) -> str:

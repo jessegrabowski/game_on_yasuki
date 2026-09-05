@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import BattleSegment, Segment
 
 
@@ -41,6 +42,10 @@ class Ruleset:
         Fight Battles segment.
     battle_segment_names : dict mapping BattleSegment to str
         What this arc's rulebook calls each of ``battle_segments``, shown to the player.
+    lobby_timing : ActionTiming
+        The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
+        Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
+        different players entitled to act. Default Limited, the CR's.
     """
 
     clan_alignments: frozenset[str]
@@ -52,6 +57,7 @@ class Ruleset:
     segment_names: dict[Segment, str] = field(default_factory=dict)
     battle_segments: tuple[BattleSegment, ...] = ()
     battle_segment_names: dict[BattleSegment, str] = field(default_factory=dict)
+    lobby_timing: ActionTiming = ActionTiming.LIMITED
 
     def segment_name(self, segment: Segment) -> str:
         """What this arc calls ``segment``.
@@ -134,6 +140,7 @@ SHATTERED_EMPIRE = Ruleset(
         Segment.MANEUVERS: "Maneuvers Segment",
         Segment.FIGHT: "Fight Battles",
     },
+    lobby_timing=ActionTiming.OPEN,
     battle_segments=_SHATTERED_EMPIRE_BATTLE_SEGMENTS,
     battle_segment_names={
         BattleSegment.ENGAGE: "Engage Segment",

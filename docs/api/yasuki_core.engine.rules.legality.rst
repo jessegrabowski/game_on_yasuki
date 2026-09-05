@@ -25,6 +25,8 @@ yasuki_core.engine.rules.legality
     legacy_key
     legacy_search_pool
     legal_actions
+    lobby_candidates
+    lobby_key
     permits
     permitted_timings
     proclaim_key
