@@ -78,6 +78,18 @@ def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]
     ]
 
 
+def opposing_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The ids of the enemy Personalities ``seat`` faces at the battle now being fought.
+
+    Empty outside a battle, which is what withholds a Battle ability when no battle is open.
+    """
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return ()
+    enemy = attack.attacker if seat is attack.defender else attack.defender
+    return tuple(card.id for card in units_at(game, attack.current, enemy))
+
+
 def attackable(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The cards ``seat``'s attack effects may target: the enemy army's Followers, and its
     Personalities carrying none (CR, Ranged Attack).
