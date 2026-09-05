@@ -2,13 +2,14 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     InvestAbility,
+    bow_cost,
     invest_amounts,
     may_not_lobby,
-    bow_cost,
     no_cost,
     one_wealth,
     register_ability,
     register_invest,
+    register_event_entry,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import AdjustCounter, Banish, Choose, CreateToken, Effect
@@ -31,6 +32,11 @@ from yasuki_core.game_pieces.counters import SINCERITY
 
 # "Daytiba cannot Lobby." His other line, that Favor actions cannot target him, has no handler yet.
 may_not_lobby("daytiba")
+
+
+# --- Death of the Mantis Clan ---
+
+register_event_entry("death_of_the_mantis_clan")
 
 
 # --- Kitsu Hayako ---

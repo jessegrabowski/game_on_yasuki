@@ -55,6 +55,7 @@ yasuki_core.engine.rules.abilities
     register_ability
     register_edict
     register_enters_unbowed
+    register_event_entry
     register_invest
     spend_wealth
 

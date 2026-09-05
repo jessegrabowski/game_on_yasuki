@@ -1,18 +1,19 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
-    attack_targets,
-    owned_personalities,
     CardLocation,
     InvestAbility,
+    attack_targets,
     bow_cost,
     favor_payer,
     itself,
     may_remain_bowed,
     no_cost,
     owned_holdings,
+    owned_personalities,
     register_ability,
     register_invest,
+    register_event_entry,
 )
 from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
@@ -410,6 +411,11 @@ def _iweko_miaka_princess_of_rokugan_experienced_favor_payer(
     if used_this_turn(game, card, MIAKA_PAYMENT):
         return None
     return [SpendOncePerTurn(card.id, MIAKA_PAYMENT)]
+
+
+# --- Kisada's Funeral (Experienced) ---
+
+register_event_entry("kisadas_funeral_experienced", timing=ActionTiming.DYNASTY)
 
 
 # --- Kitsu Watanabe (Experienced) ---

@@ -1,7 +1,13 @@
+from yasuki_core.engine.rules.abilities import register_event_entry
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect, GainGold
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, on
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
+
+
+# --- Cessation of Hostilities ---
+
+register_event_entry("cessation_of_hostilities")
 
 
 # --- Pawnbroker ---
@@ -31,3 +37,8 @@ def _the_kurai_district_court_entered_play(ctx: TriggerContext) -> list[Effect]:
     if sincerity == 0:
         return []
     return [GainGold(ctx.card.owner, sincerity)]
+
+
+# --- Unmitigated Disaster ---
+
+register_event_entry("unmitigated_disaster")

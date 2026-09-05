@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.abilities import (
     itself,
     personalities_in_play,
     register_ability,
+    register_event_entry,
 )
 from yasuki_core.engine.rules.economy import (
     PlayerState,
@@ -37,6 +38,11 @@ from yasuki_core.engine.rules.triggers import (
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
+
+
+# --- Decree of the Hantei ---
+
+register_event_entry("decree_of_the_hantei")
 
 
 # --- Sasada, Pearl Champion (Experienced) ---

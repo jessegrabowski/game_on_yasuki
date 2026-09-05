@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.abilities import (
     bow_cost,
     no_cost,
     register_ability,
+    register_event_entry,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.economy import SELF_GRANT, register_self_grant
@@ -166,6 +167,11 @@ register_ability(
         located_at=(CardLocation.PROVINCE,),
     ),
 )
+
+
+# --- Siege of the Great Wall ---
+
+register_event_entry("siege_of_the_great_wall")
 
 
 # --- The Forgotten ---

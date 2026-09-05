@@ -234,8 +234,13 @@ def test_a_qualified_designator_still_heads_an_ability():
 # growing it means a card was implemented incompletely.
 KNOWN_SHORT = {"man_the_walls", "outer_walls", "verdant_wilds"}
 
+# Cards the count cannot see whole, rather than cards implemented in half. Commanding Favor's
+# Interrupt pays a Favor cost, which is registered as a Favor payer instead of as an activated
+# ability, so the scan finds one ability where the card prints two.
+COUNTED_SHORT = {"commanding_favor"}
 
-def test_no_card_beyond_the_known_three_registers_less_than_it_prints():
+
+def test_no_card_registers_less_than_it_prints_but_the_known_few():
     reported = {line.split()[1] for line in card_registry.short_ability_registrations()}
 
-    assert reported == KNOWN_SHORT
+    assert reported == KNOWN_SHORT | COUNTED_SHORT

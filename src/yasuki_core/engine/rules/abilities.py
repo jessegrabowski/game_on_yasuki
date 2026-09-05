@@ -299,6 +299,38 @@ def register_edict(printed_id: str, *, clan: str | None = None) -> None:
     )
 
 
+def register_event_entry(printed_id: str, *, timing: ActionTiming = ActionTiming.OPEN) -> None:
+    """Register ``printed_id``'s "put this Event into play" action, taken from the Province it
+    sits face-up in.
+
+    Step F does not discard the card afterward because it is no longer where it was played from
+    (CR, Action Sequence). The Province it vacates refills when the board settles, like any other.
+
+    Parameters
+    ----------
+    printed_id : str
+        The Event's printed id.
+    timing : ActionTiming, optional
+        The designator the entry is taken under. Default ``OPEN``, which most Events print.
+    """
+
+    def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+        return [PutIntoPlay(source.id)]
+
+    register_ability(
+        printed_id,
+        Ability(
+            timings=(timing,),
+            label=f"{timing.name.capitalize()}: Put this Event into play",
+            cost=no_cost,
+            targets=itself,
+            effects=effects,
+            all_targets=True,
+            located_at=(CardLocation.PROVINCE,),
+        ),
+    )
+
+
 def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
     """Bow the Personality ``source`` is attached to. Unpayable while it is attached to none."""
     parent = attached_to(game, source)
