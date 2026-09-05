@@ -156,6 +156,10 @@ def _resolve_favor_payment(
     return favor_payers(game, seat).get(chosen[0], [])
 
 
+# The per-turn mark a Lobby leaves on the Personality it bowed, for the cards that ask who Lobbied.
+LOBBIED_TAG = "lobbied"
+
+
 # What a card in play says about who may not Lobby, keyed by the card's printed id. A bar is a card
 # behavior rather than a branch inside the rule, the way a Favor payer is: the card decides which
 # seats it stops, since one stops its controller's rivals and another stops its own controller.

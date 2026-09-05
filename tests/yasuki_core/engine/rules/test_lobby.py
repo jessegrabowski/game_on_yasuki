@@ -5,10 +5,10 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules import legality, triggers
+from yasuki_core.engine.rules import abilities, flow, legality, triggers
 from yasuki_core.engine.rules.abilities import LOBBY_BARS
 from yasuki_core.engine.rules.legality import lobby_key
-from yasuki_core.engine.rules.actions import Lobby
+from yasuki_core.engine.rules.actions import ActivateAbility, Lobby
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.economy import lobby_amount
 from yasuki_core.engine.rules.effects import GrantLobbyBonus
@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
+from yasuki_core.game_pieces.cards import L5RCard
 
 from tests.yasuki_core.engine.builders import holding, personality, put_in_play
 
@@ -237,6 +238,56 @@ def test_a_lobby_bonus_adjusts_whatever_amount_is_checked():
 
     assert lobby_amount(game, PlayerId.P1, 3) == 8, "a hand of 3 cards is checked as 8"
     assert lobby_amount(game, PlayerId.P2, 3) == 3, "the Bonus is the checked player's, not P1's"
+
+
+def _court_targets(game: GameState, court: L5RCard) -> list[str]:
+    """Who Shigekawa's Court could straighten right now."""
+    return abilities.legal_targets(game, court, abilities.ability_for(court, None))
+
+
+def _lobby_with(game: GameState, card_id: str) -> None:
+    """Take the Lobby action and answer its target with ``card_id``."""
+    lobby(game)
+    submit(game, DecisionResponse((card_id,)))
+
+
+def test_shigekawas_court_straightens_the_personality_that_lobbied():
+    """ "Open, :bow: Straighten a target Personality who Lobbied this turn." The Lobby bowed him as
+    its cost, so this hands him back."""
+    game = _game()
+    courtier = put_in_play(game, personality("courtier", personal_honor=2))
+    court = put_in_play(game, holding("court", printed_id="shigekawas_court"))
+    _lobby_with(game, "courtier")
+    assert courtier.bowed, "the Lobby bowed him"
+
+    assert _court_targets(game, court) == ["courtier"]
+    flow.perform(game, ActivateAbility("court"))
+    submit(game, DecisionResponse(("courtier",)))
+
+    assert not courtier.bowed
+    assert court.bowed, "bowing the Court is the cost"
+
+
+def test_shigekawas_court_offers_nobody_who_has_not_lobbied():
+    """The mark is what the ability reads, so a Personality bowed some other way is not a target."""
+    game = _game()
+    courtier = put_in_play(game, personality("courtier", personal_honor=2))
+    court = put_in_play(game, holding("court", printed_id="shigekawas_court"))
+    courtier.bow()
+
+    assert _court_targets(game, court) == []
+
+
+def test_the_lobbied_mark_does_not_survive_the_turn():
+    """It is a per-turn mark, so the Court cannot straighten yesterday's Lobby."""
+    game = _game()
+    put_in_play(game, personality("courtier", personal_honor=2))
+    court = put_in_play(game, holding("court", printed_id="shigekawas_court"))
+    _lobby_with(game, "courtier")
+
+    game.turn += 1
+
+    assert _court_targets(game, court) == []
 
 
 def test_a_lobby_penalty_stops_when_the_card_granting_it_leaves_play():
