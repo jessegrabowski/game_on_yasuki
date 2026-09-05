@@ -37,7 +37,13 @@ from yasuki_core.engine.rules.modifiers import (
     ProvinceModifier,
     Stat,
 )
-from yasuki_core.engine.rules.state import END_OF_TURN, GameState, Moment, flow_resolves
+from yasuki_core.engine.rules.state import (
+    END_OF_TURN,
+    GameState,
+    Moment,
+    flow_resolves,
+    once_per_turn,
+)
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import (
     BATTLEFIELD,
@@ -533,6 +539,28 @@ class GrantProvinceStrength(Effect):
         game.modifiers.append(
             ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class SpendOncePerTurn(Effect):
+    """Claim ``card_id``'s once-per-turn use of ``tag``.
+
+    What a card charges when its limit is the whole price — an offer that costs nothing but may only
+    be taken once a turn. Spent when the price is paid rather than when it is offered, since a cost
+    is read to judge legality as well as to charge it.
+    """
+
+    card_id: str
+    tag: str
+
+    def describe(self) -> str:
+        return f"{self.card_id} spends its {self.tag} for the turn"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            once_per_turn(game, card, self.tag)
         return []
 
 

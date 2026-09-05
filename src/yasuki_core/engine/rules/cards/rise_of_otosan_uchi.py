@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.abilities import (
     CardLocation,
     InvestAbility,
     bow_cost,
+    favor_payer,
     itself,
     may_remain_bowed,
     no_cost,
@@ -36,6 +37,7 @@ from yasuki_core.engine.rules.effects import (
     PayGold,
     attack_strength_against,
     ShuffleDeck,
+    SpendOncePerTurn,
     Then,
 )
 from yasuki_core.engine.rules.economy import (
@@ -47,7 +49,7 @@ from yasuki_core.engine.rules.economy import (
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.legality import reachable_gold, seat_alignment_name
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.units import followers_of
 from yasuki_core.engine.rules.events import EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
@@ -388,6 +390,26 @@ register_ability(
         all_targets=True,
     ),
 )
+
+
+# --- Iweko Miaka, Princess of Rokugan (Experienced) ---
+
+MIAKA_PAYMENT = "iweko_miaka_favor_payment"
+
+
+@favor_payer("iweko_miaka_princess_of_rokugan_experienced")
+def _iweko_miaka_princess_of_rokugan_experienced_favor_payer(
+    game: GameState, card: L5RCard
+) -> list[Effect] | None:
+    """ "Once per turn, you may pay your action's :favor: costs."
+
+    A trait that fires while the cost is being paid, which is how the CR has a card contribute to
+    somebody's payment (CR, Paying Gold Costs; Special Triggered Traits). Her limit is the whole
+    price, so taking her offer costs nothing else and the Favor stays where it is.
+    """
+    if used_this_turn(game, card, MIAKA_PAYMENT):
+        return None
+    return [SpendOncePerTurn(card.id, MIAKA_PAYMENT)]
 
 
 # --- Kitsu Watanabe (Experienced) ---

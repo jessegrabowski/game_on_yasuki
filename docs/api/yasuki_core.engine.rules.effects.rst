@@ -53,6 +53,7 @@ yasuki_core.engine.rules.effects
     RevealProvinces
     Show
     ShuffleDeck
+    SpendOncePerTurn
     Straighten
     TakeFavor
     Then

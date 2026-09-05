@@ -44,6 +44,7 @@ from yasuki_core.engine.rules.effects import (
     GrantProvinceStrength,
     GrantModifier,
     PayFavorCost,
+    SpendOncePerTurn,
     PayGold,
     IgnoreHonorRequirements,
     MoveToDeck,
@@ -98,6 +99,10 @@ EFFECTS = [
     (
         PayFavorCost(),
         "the action pays a Favor cost",
+    ),
+    (
+        SpendOncePerTurn("miaka", "iweko_miaka_favor_payment"),
+        "miaka spends its iweko_miaka_favor_payment for the turn",
     ),
     (
         GrantLobbyBonus("court", PlayerId.P1, 5, Duration.WHILE_SOURCE_IN_PLAY),

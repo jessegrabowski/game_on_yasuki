@@ -5,6 +5,7 @@ from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.abilities import (
     DISCARD_THE_FAVOR,
+    favor_payers,
     _ABILITIES,
     Ability,
     ability_for,
@@ -48,6 +49,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    wind as wind_card,
     two_seat_game,
 )
 
@@ -365,3 +367,43 @@ def test_the_second_clause_is_not_offered_when_neither_half_can_be_paid():
 
     assert location_of(game.table, target).is_home
     assert game.pending is None, "nothing to ask"
+
+
+def _manjodh_game(*, has_wind: bool = False) -> GameState:
+    """Manjodh in play, his controller holding no Favor, so he is the only way to pay one."""
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
+    put_in_play(game, personality("manjodh", printed_id="manjodh"))
+    if has_wind:
+        put_in_play(game, wind_card(PlayerId.P1))
+    return game
+
+
+def test_manjodh_pays_a_favor_cost_by_bowing():
+    """CRI: "Political Interrupt, :bow:: If you have no Wind, pay the action's :favor: cost."
+
+    Implemented as a payer priced at bowing rather than as the Interrupt he prints, because a cost
+    is paid at step B of the Action Sequence and an Interrupt is played at D — the printed window
+    opens after the cost it names. The deviation is deliberate and recorded on the handler.
+    """
+    game = _manjodh_game()
+
+    resolve_effects(game, favor_payers(game, PlayerId.P1)["manjodh"])
+
+    assert game.table.cards_by_id["manjodh"].bowed
+    assert game.favor_holder is None, "he paid, and nobody held the Favor to begin with"
+
+
+def test_a_bowed_manjodh_cannot_pay():
+    """Bowing him is the price, and a bowed card cannot pay a bow cost (CR, Costs)."""
+    game = _manjodh_game()
+    game.table.cards_by_id["manjodh"].bow()
+
+    assert favor_payers(game, PlayerId.P1) == {}
+
+
+def test_manjodh_will_not_pay_for_a_player_with_a_wind():
+    """ "If you have no Wind" — the clause the datasheet's Winds rule explains, since a seat with a
+    Wind may not take rulebook Favor actions at all."""
+    game = _manjodh_game(has_wind=True)
+
+    assert favor_payers(game, PlayerId.P1) == {}

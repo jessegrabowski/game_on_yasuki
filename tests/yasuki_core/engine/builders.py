@@ -17,7 +17,9 @@ from yasuki_core.game_pieces.prints import (
     FatePrint,
     HoldingPrint,
     PersonalityPrint,
+    SenseiPrint,
     StrongholdPrint,
+    WindPrint,
 )
 
 # Only shapes duplicated across two or more test modules belong here; one that would have to contort
@@ -194,6 +196,29 @@ def stronghold(
         clan=clan,
         clans=clans,
         starting_honor=starting_honor,
+    )
+
+
+def sensei(owner: PlayerId = PlayerId.P1, *, printed_id: str | None = None) -> L5RCard:
+    """A Sensei. Like a Stronghold and a Wind it starts in play, so tests put it there directly."""
+    return L5RCard.of(
+        SenseiPrint,
+        id=f"{owner.name}-sensei",
+        name="Sensei",
+        side=Side.FATE,
+        owner=owner,
+        printed_id=printed_id,
+    )
+
+
+def wind(owner: PlayerId = PlayerId.P1, *, name: str = "Wind") -> L5RCard:
+    """A Wind. A deck holds at most one and it starts in play, so tests put it there directly."""
+    return L5RCard.of(
+        WindPrint,
+        id=f"{owner.name}-wind",
+        name=name,
+        side=Side.FATE,
+        owner=owner,
     )
 
 

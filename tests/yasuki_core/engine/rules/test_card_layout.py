@@ -106,6 +106,8 @@ ROLES = frozenset(
         "attack_strength",
         "province_strength",
         "lobby_bonus",
+        "favor_payer",
+        "lobby_bar",
         # triggers, named for the event they answer
         "producing_gold",
         "produced_gold",

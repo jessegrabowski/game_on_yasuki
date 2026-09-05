@@ -32,6 +32,8 @@ _DECORATORS = {
     "attachment_grant",
     "attach_restriction",
     "attack_strength_against",
+    "favor_payer",
+    "lobby_bar",
     "lobby_bonus_grant",
     "province_strength_grant",
 }
@@ -39,6 +41,7 @@ _CALLS = {
     "register_ability",
     "register_enters_unbowed",
     "register_invest",
+    "may_not_lobby",
     "may_remain_bowed",
     "bow_waiver",
 }

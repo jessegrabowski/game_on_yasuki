@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.abilities import (
     CardLocation,
     DISCARD_THE_FAVOR,
     favor_cost_for_seat,
+    favor_payer,
     favor_payers,
     no_cost,
     owned_personalities,
@@ -22,6 +23,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
 )
 from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.legality import has_wind
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import action_did, at_cap, choice_resolver
 from yasuki_core.engine.rules.units import opposing_units_in_battle
@@ -167,3 +169,20 @@ register_ability(
         located_at=(CardLocation.HAND,),
     ),
 )
+
+
+# --- Manjodh ---
+
+
+@favor_payer("manjodh")
+def _manjodh_favor_payer(game: GameState, card: L5RCard) -> list[Effect] | None:
+    """ "Political Interrupt, :bow:: If you have no Wind, pay the action's :favor: cost."
+
+    Implemented as a payer priced at bowing rather than as the Interrupt it prints. Costs are paid
+    at step B of the Action Sequence and Interrupts are played at D, so the printed window opens
+    two steps after the cost it names — a contradiction in the card that no correct Interrupt round
+    would resolve. Offering him where every other payer is offered delivers what the card is for.
+    """
+    if card.bowed or has_wind(game, card.owner):
+        return None
+    return [Bow(card.id)]

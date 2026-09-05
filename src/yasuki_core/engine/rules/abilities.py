@@ -107,6 +107,19 @@ def _resolve_bow_waiver(
 FavorPayer = Callable[[GameState, L5RCard], list[Effect] | None]
 FAVOR_PAYERS: dict[str, FavorPayer] = {}
 
+
+def favor_payer(printed_id: str) -> Callable[[FavorPayer], FavorPayer]:
+    """Register the decorated function as what ``printed_id`` charges to pay a Favor cost."""
+
+    def register(payer: FavorPayer) -> FavorPayer:
+        if printed_id in FAVOR_PAYERS:
+            raise ValueError(f"{printed_id} already pays Favor costs")
+        FAVOR_PAYERS[printed_id] = payer
+        return payer
+
+    return register
+
+
 FAVOR_PAYMENT = "favor_payment"
 DISCARD_THE_FAVOR = "Discard the Imperial Favor"
 
@@ -199,6 +212,17 @@ def may_lobby(game: GameState, seat: PlayerId) -> bool:
         for card in game.table.battlefield.cards
         if (bar := LOBBY_BARS.get(card.printed_id)) is not None
     )
+
+
+# Personalities their controller may not bow to Lobby (the printed "may not Lobby"), by printed id.
+# A flag rather than a handler: the card states the restriction flatly and admits no condition. This
+# is the card-level half of the rule; :data:`LOBBY_BARS` is the half that stops a whole player.
+MAY_NOT_LOBBY: set[str] = set()
+
+
+def may_not_lobby(printed_id: str) -> None:
+    """Register ``printed_id`` as a Personality who cannot be bowed to Lobby."""
+    MAY_NOT_LOBBY.add(printed_id)
 
 
 def is_favor_action(game: GameState) -> bool:

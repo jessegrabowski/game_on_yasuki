@@ -77,6 +77,7 @@ deferred through `Then` instead.
    RevealProvinces
    Show
    ShuffleDeck
+   SpendOncePerTurn
    Straighten
    TakeFavor
    Then

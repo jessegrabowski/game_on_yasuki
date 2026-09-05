@@ -18,7 +18,9 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import effective_chi, effective_force, effective_gold_cost
 from yasuki_core.engine.rules.events import EnteredPlay
-from yasuki_core.engine.rules.effects import Straighten
+from yasuki_core.engine.rules.abilities import favor_payers
+from yasuki_core.engine.rules.effects import Straighten, TakeFavor
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.legality import card_alignments, seat_alignments
 from yasuki_core.engine.rules.log import replay
@@ -963,3 +965,51 @@ def test_the_bonus_does_not_follow_the_targets_force_afterwards():
 
     assert effective_force(session.game, session.game.table.cards_by_id["rear"]) == 0
     assert effective_province_strength(session.game, WALLED_PROVINCE) == before + 2
+
+
+def _miaka_game() -> GameState:
+    """Iweko Miaka in play, her controller holding no Favor, so she is the only way to pay one."""
+    game = GameState.start(TableState.empty_two_seat(), P1, seed=0)
+    put_in_play(
+        game, personality("miaka", printed_id="iweko_miaka_princess_of_rokugan_experienced")
+    )
+    return game
+
+
+def test_iweko_miaka_pays_a_favor_cost_for_nothing():
+    """RoU: "Once per turn, you may pay your action's :favor: costs." Her limit is the whole price,
+    so taking her offer charges nothing and the Favor is not spent."""
+    game = _miaka_game()
+    TakeFavor(P1).perform(game)
+
+    resolve_effects(game, favor_payers(game, P1)["miaka"])
+
+    assert game.favor_holder is P1, "she paid instead of the Favor"
+
+
+def test_iweko_miaka_pays_only_once_a_turn():
+    game = _miaka_game()
+    resolve_effects(game, favor_payers(game, P1)["miaka"])
+
+    assert favor_payers(game, P1) == {}
+
+
+def test_iweko_miakas_use_comes_back_next_turn():
+    """The limit is per turn, so a new turn restores it."""
+    game = _miaka_game()
+    resolve_effects(game, favor_payers(game, P1)["miaka"])
+
+    game.turn += 1
+
+    assert set(favor_payers(game, P1)) == {"miaka"}
+
+
+def test_offering_iweko_miaka_does_not_spend_her_use():
+    """A cost is read to judge legality as well as to charge it, so merely asking what she charges
+    must not consume the turn's use."""
+    game = _miaka_game()
+
+    favor_payers(game, P1)
+    favor_payers(game, P1)
+
+    assert set(favor_payers(game, P1)) == {"miaka"}

@@ -3,6 +3,7 @@ from yasuki_core.engine.rules.abilities import (
     Ability,
     InvestAbility,
     invest_amounts,
+    may_not_lobby,
     bow_cost,
     no_cost,
     one_wealth,
@@ -24,6 +25,12 @@ from yasuki_core.engine.rules.triggers import (
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
+
+
+# --- Daytiba ---
+
+# "Daytiba cannot Lobby." His other line, that Favor actions cannot target him, has no handler yet.
+may_not_lobby("daytiba")
 
 
 # --- Kitsu Hayako ---
