@@ -33,6 +33,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "may remain bowed": frozenset(abilities.MAY_REMAIN_BOWED),
         "bow waivers": frozenset(abilities.BOW_WAIVERS),
         "lobby bars": frozenset(abilities.LOBBY_BARS),
+        "may not lobby": frozenset(abilities.MAY_NOT_LOBBY),
         "favor payers": frozenset(abilities.FAVOR_PAYERS),
         "gold handlers": frozenset(economy.GOLD_HANDLERS),
         "lobby bonuses": frozenset(economy.LOBBY_BONUSES),

@@ -212,11 +212,14 @@ def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
 
 def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Personalities ``seat`` could bow to Lobby: their own, unbowed, with 1 or more Personal
-    Honor. Zero Personal Honor is the boundary the datasheet draws, not merely a floor."""
+    Honor, and not one printed "may not Lobby". Zero Personal Honor is the boundary the datasheet
+    draws, not merely a floor."""
     return [
         card
         for card in abilities.owned_personalities(game, seat)
-        if not card.bowed and effective_personal_honor(game, card) >= 1
+        if not card.bowed
+        and effective_personal_honor(game, card) >= 1
+        and card.printed_id not in abilities.MAY_NOT_LOBBY
     ]
 
 

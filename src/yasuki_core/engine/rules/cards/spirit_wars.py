@@ -1,6 +1,8 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     bow_cost,
+    lobby_bar,
     register_ability,
     register_enters_unbowed,
 )
@@ -39,3 +41,13 @@ register_ability(
         all_targets=True,
     ),
 )
+
+
+# --- Wasp Sensei ---
+
+
+@lobby_bar("wasp_sensei")
+def _wasp_sensei_lobby_bar(game: GameState, card: L5RCard, seat: PlayerId) -> bool:
+    """ "You may not Lobby." Its own controller, and nobody else. Its other two lines need no
+    handler here."""
+    return seat is card.owner

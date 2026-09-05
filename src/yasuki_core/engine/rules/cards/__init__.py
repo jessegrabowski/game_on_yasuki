@@ -2,12 +2,14 @@
 # cards. Its own tests fail when that happens.
 from yasuki_core.engine.rules.cards import (  # noqa: F401
     a_line_in_the_sand,
+    a_perfect_cut,
     ambitions_debt,
     anvil_of_despair,
     chaos_reigns_part_i,
     chaos_reigns_part_ii,
     chaos_reigns_part_iii,
     code_of_bushido,
+    crimson_and_jade,
     empire_at_war,
     evil_portents,
     gates_of_chaos,

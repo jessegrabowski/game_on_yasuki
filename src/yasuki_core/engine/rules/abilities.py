@@ -214,6 +214,17 @@ def may_lobby(game: GameState, seat: PlayerId) -> bool:
     )
 
 
+# Personalities their controller may not bow to Lobby (the printed "may not Lobby"), by printed id.
+# A flag rather than a handler: the card states the restriction flatly and admits no condition. This
+# is the card-level half of the rule; :data:`LOBBY_BARS` is the half that stops a whole player.
+MAY_NOT_LOBBY: set[str] = set()
+
+
+def may_not_lobby(printed_id: str) -> None:
+    """Register ``printed_id`` as a Personality who cannot be bowed to Lobby."""
+    MAY_NOT_LOBBY.add(printed_id)
+
+
 def is_favor_action(game: GameState) -> bool:
     """Whether the action now resolving is a Favor action.
 

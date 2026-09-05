@@ -20,7 +20,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.cards import L5RCard
 
-from tests.yasuki_core.engine.builders import holding, personality, put_in_play
+from tests.yasuki_core.engine.builders import holding, personality, put_in_play, sensei
 
 
 def _game(*, p1_honor: int = 10, p2_honor: int = 5) -> GameState:
@@ -304,3 +304,55 @@ def test_a_lobby_penalty_stops_when_the_card_granting_it_leaves_play():
 
     assert lobby_amount(game, PlayerId.P2, 10) == 10, "the Penalty went with its source"
     assert _lobbies(game) == []
+
+
+def test_a_personality_printed_may_not_lobby_is_not_a_candidate():
+    """Daytiba (Onyx): "Daytiba cannot Lobby." The bar is on him rather than on his controller, so
+    the action stays open to anyone else the seat could bow."""
+    game = _game()
+    put_in_play(game, personality("daytiba", printed_id="daytiba", personal_honor=2))
+    put_in_play(game, personality("courtier", personal_honor=2))
+
+    assert [card.id for card in legality.lobby_candidates(game, PlayerId.P1)] == ["courtier"]
+    assert _lobbies(game) == [Lobby()]
+
+
+def test_a_seat_whose_only_personality_may_not_lobby_is_not_offered_it():
+    """With nobody left to bow there is no cost to pay, so the action is withheld entirely."""
+    game = _game()
+    put_in_play(game, personality("chen", printed_id="moto_chen", personal_honor=2))
+
+    assert _lobbies(game) == []
+
+
+def test_wasp_sensei_stops_its_own_controller_lobbying():
+    """Spirit Wars: "You may not Lobby.\" """
+    game = _game()
+    put_in_play(game, personality("courtier", personal_honor=2))
+    put_in_play(game, sensei(printed_id="wasp_sensei"))
+
+    assert _lobbies(game) == []
+
+
+def test_miya_shoin_leaves_his_own_controller_lobbying():
+    """Winds of Change: "Other players may not Lobby." Wasp Sensei bars the opposite side, which is
+    why the card decides which seats it stops rather than the rule doing it."""
+    game = _game()
+    put_in_play(game, personality("courtier", personal_honor=2))
+    put_in_play(game, personality("shoin", printed_id="miya_shoin", personal_honor=2))
+
+    assert _lobbies(game) == [Lobby()]
+
+
+def test_miya_shoin_stops_every_other_player():
+    """The rival qualifies outright — their turn, ahead on honor, a Personality to bow — so Shoin is
+    the only thing withholding it."""
+    game = _game(p1_honor=0, p2_honor=10)
+    game.active = PlayerId.P2
+    game.round = replace(game.round, priority=PlayerId.P2)
+    put_in_play(game, personality("rival", owner=PlayerId.P2, personal_honor=2))
+    assert _lobbies(game, PlayerId.P2) == [Lobby()], "the rival Lobbies before Shoin arrives"
+
+    put_in_play(game, personality("shoin", printed_id="miya_shoin", personal_honor=2))
+
+    assert _lobbies(game, PlayerId.P2) == []

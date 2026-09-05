@@ -43,6 +43,7 @@ yasuki_core.engine.rules.abilities
     lobby_bar
     may_cast_spells
     may_lobby
+    may_not_lobby
     may_remain_bowed
     may_stay_bowed
     no_cost
