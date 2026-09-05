@@ -30,7 +30,9 @@ from tests.yasuki_core.engine.builders import (
     token_template,
     two_seat_game,
 )
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.prints import (
+    ActionPrint,
     AttachmentPrint,
     CardPrint,
     DynastyPrint,
@@ -490,6 +492,26 @@ class TestRulesModeRender:
 
         rows = (home["P1-hero"][0], home["P1-mine"][0])
         assert home["P1-event"][0] - max(rows) >= CARD_W, "a column of its own, not a nudge"
+
+    def test_an_edict_put_into_play_lands_in_the_column(self, loaded):
+        """The first real consumer of the column: an Edict is a Strategy that puts itself into play,
+        so it reaches the battlefield as neither a Personality nor a Holding."""
+        field, _ = loaded
+        mine = L5RCard.of(
+            HoldingPrint, id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1
+        )
+        edict = L5RCard.of(
+            ActionPrint,
+            id="P1-edict",
+            name="Way of the Crane",
+            printed_id="way_of_the_crane_experienced",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            keywords=(keywords.EDICT,),
+        )
+        home = self._in_play(field, mine, edict)
+
+        assert home["P1-edict"][0] - home["P1-mine"][0] >= CARD_W
 
     def test_the_column_stacks_downward_and_overlaps(self, loaded):
         """Several at once — copies of one Edict are the realistic case — share the column, each

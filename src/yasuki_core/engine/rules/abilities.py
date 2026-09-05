@@ -13,7 +13,12 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
-from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
+from yasuki_core.engine.rules.economy import (
+    effective_invest_discount,
+    effective_keywords,
+    is_clan,
+    player_state,
+)
 from yasuki_core.engine.rules.state import once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.units import attackable, has_presence, location_permits
@@ -26,8 +31,10 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GrantModifier,
     AskOption,
+    Discard,
     DiscardFavor,
     PayFavorCost,
+    PutIntoPlay,
     Unpayable,
 )
 from yasuki_core.game_pieces import keywords
@@ -242,6 +249,54 @@ def is_favor_action(game: GameState) -> bool:
         return False
     card = game.table.cards_by_id.get(game.action.card_id)
     return card is not None and keywords.FAVOR in effective_keywords(game, card)
+
+
+def register_edict(printed_id: str, *, clan: str | None = None) -> None:
+    """Register ``printed_id``'s Open ability to put itself into play as an Edict.
+
+    Every Edict prints the same action — put this into play, discard your other Edicts — so it is
+    registered rather than written out per card. Discarding the others is the rulebook's own limit
+    of one Edict at a time restated on the card (ShE datasheet, Edicts).
+
+    Parameters
+    ----------
+    printed_id : str
+        The Edict's printed id.
+    clan : str, optional
+        A clan its controller must be playing, for the Edicts that name one. Default None, for an
+        Edict anyone may put into play.
+    """
+
+    def targets(game: GameState, source: L5RCard) -> list[str]:
+        if clan is not None and not is_clan(player_state(game, source.owner), clan):
+            return []
+        return [source.id]
+
+    def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+        others = [
+            card.id
+            for card in game.table.battlefield.cards
+            if card.owner is source.owner
+            and card.id != source.id
+            and keywords.EDICT in effective_keywords(game, card)
+        ]
+        return [
+            PutIntoPlay(source.id),
+            *(Discard(card_id, source.owner) for card_id in others),
+        ]
+
+    register_ability(
+        printed_id,
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label="Open: Put this Edict into play",
+            cost=no_cost,
+            targets=targets,
+            effects=effects,
+            all_targets=True,
+            located_at=(CardLocation.HAND,),
+        ),
+    )
 
 
 def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:

@@ -1,3 +1,11 @@
+from yasuki_core import ruleset
+from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules.actions import PlayStrategy
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.game_pieces import keywords
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import ActionPrint
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.attachments import attachments_of
@@ -8,7 +16,7 @@ from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 
@@ -181,3 +189,85 @@ def test_hida_sanjiro_recruited_plainly_wears_nothing():
     pay(session, P1)
 
     assert attachments_of(session.game, session.game.table.cards_by_id["sanjiro"]) == ()
+
+
+def _edict_game(*, clan: str | None = ruleset.CRANE, in_play: tuple[str, ...] = ()) -> GameState:
+    """Way of the Crane in P1's hand, with ``clan`` on their stronghold and ``in_play`` already out
+    as Edicts of theirs."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1, clan=clan)))
+    for card_id in in_play:
+        already = (
+            "way_of_the_crane_experienced" if card_id == "first" else "way_of_the_lion_experienced"
+        )
+        put_in_play(state, register(state, _edict(card_id, already)))
+    crane = register(state, _edict("crane", "way_of_the_crane_experienced"))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(crane)
+    return GameState.start(state, P1, seed=0)
+
+
+def _edict(card_id: str, printed_id: str) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        name=printed_id,
+        printed_id=printed_id,
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+        keywords=(keywords.EDICT,),
+    )
+
+
+def _play_the_edict(game: GameState) -> None:
+    flow.perform(game, PlayStrategy("crane"))
+    while game.pending is not None:
+        flow.submit(game, DecisionResponse(()))
+
+
+def test_an_edict_puts_itself_into_play_rather_than_being_discarded():
+    """ShE: "Open: If you are a Crane Clan player, put this Edict into play." Step F discards a
+    played Strategy "unless it is now in play", and this is the clause that exception exists for."""
+    game = _edict_game()
+
+    _play_the_edict(game)
+
+    assert "crane" in {card.id for card in game.table.battlefield.cards}
+    discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    assert "crane" not in {card.id for card in discard.cards}
+
+
+def test_an_edict_discards_the_one_already_out():
+    """A player holds one Edict at a time (ShE datasheet, Edicts), which every Edict restates as
+    "Discard your other Edicts in play"."""
+    game = _edict_game(in_play=("lion",))
+
+    _play_the_edict(game)
+
+    in_play = {card.id for card in game.table.battlefield.cards}
+    assert "crane" in in_play and "lion" not in in_play
+
+
+def test_an_edict_naming_a_clan_is_not_offered_to_another():
+    """ "If you are a Crane Clan player" — the condition gates the action, so a Lion player holding
+    it has nothing to take."""
+    game = _edict_game(clan=ruleset.LION)
+
+    assert PlayStrategy("crane") not in legality.legal_actions(game, P1)
+
+
+def test_a_second_copy_of_an_edict_discards_the_first():
+    """Way of the Crane says "Discard your other Edicts in play" with no carve-out, so a second copy
+    of itself is one of them. Only Be Prepared to Dig Two Graves exempts copies, and it says so.
+
+    Worth pinning because the two copies are indistinguishable on the board, which makes the swap
+    read as the played card vanishing."""
+    game = _edict_game(in_play=("first",))
+
+    _play_the_edict(game)
+
+    in_play = {card.id for card in game.table.battlefield.cards}
+    assert "crane" in in_play, "the copy just played is the one that stays"
+    assert "first" not in in_play
+    discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    assert "first" in {card.id for card in discard.cards}

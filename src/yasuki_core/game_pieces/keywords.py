@@ -30,6 +30,10 @@ FORTIFICATION = "Fortification"
 # A Kensai Personality may attach two Weapons rather than one (CR, Kensai).
 KENSAI = "Kensai"
 
+# A Strategy that puts itself into play and stays there. A player holds one at a time unless a
+# card says otherwise (ShE datasheet, Edicts).
+EDICT = "Edict"
+
 # The boldface keyword marking a card the Kharmic rulebook abilities can spend.
 KHARMIC = "Kharmic"
 

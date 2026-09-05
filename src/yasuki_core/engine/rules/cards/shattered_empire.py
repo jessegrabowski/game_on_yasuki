@@ -1,8 +1,10 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.rules.abilities import (
     Ability,
     InvestAbility,
     bow_cost,
     register_ability,
+    register_edict,
     register_invest,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
@@ -23,6 +25,60 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 
 
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
+
+
+# Each prints the same entry — "Open: If you are an X Clan player, put this Edict into play."
+# What they grant while in play has no handler yet.
+
+
+# --- Way of the Akasha ---
+
+register_edict("way_of_the_akasha", clan=ruleset.AKASHA)
+
+
+# --- Way of the Crab (Experienced) ---
+
+register_edict("way_of_the_crab_experienced", clan=ruleset.CRAB)
+
+
+# --- Way of the Crane (Experienced) ---
+
+register_edict("way_of_the_crane_experienced", clan=ruleset.CRANE)
+
+
+# --- Way of the Dragon (Experienced) ---
+
+register_edict("way_of_the_dragon_experienced", clan=ruleset.DRAGON)
+
+
+# --- Way of the Lion (Experienced) ---
+
+register_edict("way_of_the_lion_experienced", clan=ruleset.LION)
+
+
+# --- Way of the Mantis (Experienced) ---
+
+register_edict("way_of_the_mantis_experienced", clan=ruleset.MANTIS)
+
+
+# --- Way of the Phoenix (Experienced) ---
+
+register_edict("way_of_the_phoenix_experienced", clan=ruleset.PHOENIX)
+
+
+# --- Way of the Scorpion (Experienced) ---
+
+register_edict("way_of_the_scorpion_experienced", clan=ruleset.SCORPION)
+
+
+# --- Way of the Spider (Experienced) ---
+
+register_edict("way_of_the_spider_experienced", clan=ruleset.SPIDER)
+
+
+# --- Way of the Unicorn (Experienced) ---
+
+register_edict("way_of_the_unicorn_experienced", clan=ruleset.UNICORN)
 
 
 # --- Weapon Artist ---

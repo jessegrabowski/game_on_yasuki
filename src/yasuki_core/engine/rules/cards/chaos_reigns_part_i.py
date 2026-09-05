@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.abilities import (
     favor_payers,
     no_cost,
     owned_personalities,
+    register_edict,
     register_ability,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
@@ -32,6 +33,18 @@ from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
+
+
+# --- Act With Authority ---
+
+# "Open: Put this Edict into play." Its granted Favor ability has no handler yet.
+register_edict("act_with_authority")
+
+
+# --- Asceticism ---
+
+# "Open: Put this Edict into play." Its Equip surcharge has no handler yet.
+register_edict("asceticism")
 
 
 # --- Caravansary ---
@@ -186,3 +199,9 @@ def _manjodh_favor_payer(game: GameState, card: L5RCard) -> list[Effect] | None:
     if card.bowed or has_wind(game, card.owner):
         return None
     return [Bow(card.id)]
+
+
+# --- Rumormongering ---
+
+# "Political Open: Put this Edict into play." Its Favor-discard reaction has no handler yet.
+register_edict("rumormongering")
