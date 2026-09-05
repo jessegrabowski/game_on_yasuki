@@ -105,7 +105,7 @@ def run_games(
 
 def write_csv(path: Path | str, played: Sequence[Game], **run: object) -> None:
     """
-    Write one row per recorded turn, so a run can be loaded and analysed with real tools.
+    Write one row per recorded turn, so a run can be loaded and analyzed with real tools.
 
     Every ``run`` keyword becomes a column repeated on each row — the deck, the policy, the seed,
     whatever identifies the run. That is what lets two runs be concatenated and told apart later,

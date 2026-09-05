@@ -5,7 +5,7 @@
 
 // Longest-increasing-subsequence of `arr`, as the positions (into arr) that form it. A 0 entry is a
 // sentinel — a freshly created node with no current position — and never joins the kept run. Patience
-// sort + predecessor reconstruction, the algorithm Vue 3 / Inferno use to minimise moves on a reorder.
+// sort + predecessor reconstruction, the algorithm Vue 3 / Inferno use to minimize moves on a reorder.
 function lisPositions(source) {
   const predecessor = source.slice();
   const tails = [];
@@ -66,7 +66,7 @@ export function reconcile(container, next, registry, { create, patch, remove }) 
 
   // Minimal reorder. source[i] = (current index of desired[i] in container) + 1, or 0 if the node is
   // new / not yet attached. The LIS over source is the longest run already in correct relative order;
-  // it stays put, and everything else is moved — walking right-to-left so the already-placed neighbour
+  // it stays put, and everything else is moved — walking right-to-left so the already-placed neighbor
   // is a stable insertBefore anchor. (Spread first: a live HTMLCollection has no indexOf.)
   const current = [...container.children];
   const source = desired.map((el) => {

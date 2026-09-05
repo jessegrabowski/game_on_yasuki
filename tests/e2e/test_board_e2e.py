@@ -23,7 +23,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 MIRROR_TOL = (
-    0.12  # card size + grab offset shift the centre a little; a half-board flip clears this
+    0.12  # card size + grab offset shift the center a little; a half-board flip clears this
 )
 
 
@@ -269,7 +269,7 @@ def test_a_card_attached_to_a_province_anchors_on_its_slot(new_player):
         },
     )
 
-    # The card re-anchors: its horizontal centre lands on the province slot's column.
+    # The card re-anchors: its horizontal center lands on the province slot's column.
     p1.wait_for_function(
         """(cardId) => {
             const card = document.querySelector(`.board-card[data-card-id="${cardId}"]`);

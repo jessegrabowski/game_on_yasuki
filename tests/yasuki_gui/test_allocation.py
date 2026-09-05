@@ -80,9 +80,9 @@ def test_a_card_may_not_be_emptied_by_an_arrow():
     assert allocation.may_decrease("a") is False
 
 
-def test_an_increase_takes_from_the_fullest_neighbour():
+def test_an_increase_takes_from_the_fullest_neighbor():
     # Taking from the fullest keeps the division as even as the player left it. "b" is deliberately
-    # the fullest but not the first of "c"'s neighbours, so taking from whichever came first would
+    # the fullest but not the first of "c"'s neighbors, so taking from whichever came first would
     # fail this.
     allocation = _allocation(7, "a", "b", "c")  # 3, 2, 2
     allocation.decrease("a")  # 2, 3, 2
@@ -92,7 +92,7 @@ def test_an_increase_takes_from_the_fullest_neighbour():
     assert [allocation.amount(card) for card in "abc"] == [2, 2, 3]
 
 
-def test_a_decrease_gives_to_the_emptiest_neighbour():
+def test_a_decrease_gives_to_the_emptiest_neighbor():
     allocation = _allocation(5, "a", "b", "c")  # 2, 2, 1
 
     allocation.decrease("a")

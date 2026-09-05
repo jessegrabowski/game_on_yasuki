@@ -58,7 +58,7 @@ class TestHomeRow:
 def test_card_view_sits_to_the_right_of_a_left_side_card():
     left, top = card_view_placement(100, 300, 81, 115, 243, 345, 1000, 700)
     assert left == 100 + 81 // 2 + 10  # right edge of the card + gap
-    assert top == 300 - 345 // 2  # vertically centred on the card
+    assert top == 300 - 345 // 2  # vertically centered on the card
 
 
 def test_card_view_flips_left_when_it_would_overflow_the_right_edge():

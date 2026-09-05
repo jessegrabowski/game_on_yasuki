@@ -438,7 +438,7 @@ class FieldView(tk.Canvas):
 
     def reconcile(self, events: list[Event]) -> None:
         # The board is small, so a full reconcile after every accepted intent stays cheap and avoids
-        # any chance of a stale projection. Event-targeted redraw can specialise this later.
+        # any chance of a stale projection. Event-targeted redraw can specialize this later.
         self.reconcile_all()
 
     def reconcile_all(self) -> None:

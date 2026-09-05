@@ -452,7 +452,7 @@ class TestRulesModeRender:
         says. Returns their home positions.
 
         Each keyword trips exactly one of the reasons a copy leaves the stack, so a test using it
-        fails for its own reason rather than for a neighbour's: the Item grants no stat, and the
+        fails for its own reason rather than for a neighbor's: the Item grants no stat, and the
         counter is one that carries none.
 
         The modifications land after the session starts, because starting one straightens the board

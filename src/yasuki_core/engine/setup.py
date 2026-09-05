@@ -9,7 +9,7 @@ from yasuki_core.game_pieces.factory import ResolvedDeck
 from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 
 # Pre-game permanents start as loose, face-up battlefield cards at a negative sentinel position; the
-# client recognises an unplaced pre-game card and lays it out next to that seat's dynasty deck, after
+# client recognizes an unplaced pre-game card and lays it out next to that seat's dynasty deck, after
 # which a drag gives it a real on-board position.
 PREGAME_UNPLACED = BoardPos(-1.0, -1.0)
 

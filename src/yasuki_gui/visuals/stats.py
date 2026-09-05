@@ -19,11 +19,11 @@ from yasuki_gui.visuals.cardface import RenderCard
 # A bowed card is drawn turned a quarter clockwise, so its stamps turn with it: the text is set at
 # 270° counter-clockwise, which is the same quarter the other way.
 _BOWED_TEXT_ANGLE = 270
-# The tab's outline is drawn centred on its edge, so it reaches this far past it. Counted in the
+# The tab's outline is drawn centered on its edge, so it reaches this far past it. Counted in the
 # clamp, or a stamp pushed against the card's edge hangs a hairline over whatever is behind it.
 _OUTLINE = 1
 
-# Where each stat is stamped, and the colour of the printed banner it covers.
+# Where each stat is stamped, and the color of the printed banner it covers.
 _SLOTS = {
     Stat.FORCE: (FORCE_ANCHOR, theme.FORCE_BANNER),
     Stat.CHI: (CHI_ANCHOR, theme.CHI_BANNER),
@@ -38,7 +38,7 @@ class StatReading(NamedTuple):
     value : int
         The effective stat, modifiers included.
     printed : int
-        What the card prints, which is what ``value`` is coloured against.
+        What the card prints, which is what ``value`` is colored against.
     """
 
     value: int
@@ -73,7 +73,7 @@ def stamped_stats(card: RenderCard, stats: dict[str, dict[Stat, int]]) -> dict[S
     return {stat: StatReading(modified.get(stat, base), base) for stat, base in bases.items()}
 
 
-def _colour(reading: StatReading) -> str:
+def _color(reading: StatReading) -> str:
     if reading.value > reading.printed:
         return theme.STAT_UP
     if reading.value < reading.printed:
@@ -152,7 +152,7 @@ def draw_stat_stamps(
             cx,
             cy,
             text=text,
-            fill=_colour(reading),
+            fill=_color(reading),
             font=font,
             angle=_BOWED_TEXT_ANGLE if bowed else 0,
             tags=tags,

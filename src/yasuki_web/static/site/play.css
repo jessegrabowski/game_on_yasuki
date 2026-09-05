@@ -447,7 +447,7 @@
 
 /* Disclosure cues, shared by battlefield and zone cards. A shown card — one whose private state you've
    deliberately revealed to the opponent — wears a thick blue border, drawn inside its footprint so it
-   never bleeds over neighbouring cards, and distinct from the cyan selection ring. A peeked card is one
+   never bleeds over neighboring cards, and distinct from the cyan selection ring. A peeked card is one
    this viewer alone sees, through their own private peek: drawn face up but dimmed to read as provisional. */
 .board-card.shown,
 .zone-card.shown {
@@ -646,7 +646,7 @@
   min-height: 0;
 }
 
-/* A seat's decks (left), pre-game cards, provinces (centre), and discards/fate deck (right), laid
+/* A seat's decks (left), pre-game cards, provinces (center), and discards/fate deck (right), laid
    across one edge of the battlefield. Gaps pass pointer events through to the cards beneath. */
 .tableau {
   position: absolute;

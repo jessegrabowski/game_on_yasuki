@@ -180,7 +180,7 @@ def test_bowing_a_producer_puts_its_window_question_in_the_prompt_box(paying):
     assert not window.field.selecting  # a question, not a board selection
 
 
-def test_a_grant_the_payment_cannot_do_without_greys_out_its_no(paying):
+def test_a_grant_the_payment_cannot_do_without_grays_out_its_no(paying):
     """The Farm is the only way to cover the cost, so declining would strand a payment the seat has
     already committed to. Backing the whole action out is the way out, and it is on offer."""
     presenter, window = paying
@@ -715,7 +715,7 @@ def _press_lane(presenter, battlefield: int, label: str) -> None:
     buttons = presenter._lane_buttons()
     assert battlefield in buttons, f"battlefield {battlefield} offers no button; {buttons}"
     assert buttons[battlefield].label == label, f"reads {buttons[battlefield].label!r}"
-    assert buttons[battlefield].enabled, f"battlefield {battlefield}'s button is greyed"
+    assert buttons[battlefield].enabled, f"battlefield {battlefield}'s button is grayed"
     buttons[battlefield].press()
 
 
@@ -767,7 +767,7 @@ def test_the_attack_phase_offers_the_declaration_as_a_button(a_battle):
 
 
 def test_the_assignment_menu_shows_its_entry_before_it_is_reachable(a_battle):
-    """It is listed and greyed, so the way back is visible before there is anything to take."""
+    """It is listed and grayed, so the way back is visible before there is anything to take."""
     presenter, _, _ = a_battle
     _press(presenter, "Declare an attack")
 
@@ -795,7 +795,7 @@ def test_picking_units_at_a_battlefield_lights_up_bringing_them_back(a_battle):
 
 
 def test_right_clicking_a_unit_picks_it(a_battle):
-    """Sending a unit clears the picks, so the menu opened on the unit just sent would be greyed
+    """Sending a unit clears the picks, so the menu opened on the unit just sent would be grayed
     every time if right-clicking did not pick what it was opened on."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
@@ -837,7 +837,7 @@ def test_right_clicking_a_unit_already_picked_keeps_the_rest_of_the_picks(a_batt
 
 def test_clicking_a_follower_picks_the_unit_it_belongs_to(a_battle):
     """A unit answers as one card. A Follower is not an assignment candidate, so a click that named
-    it would select nothing at all and leave every menu entry greyed."""
+    it would select nothing at all and leave every menu entry grayed."""
     presenter, window, session = a_battle
     attached(
         session.game,
@@ -1106,9 +1106,9 @@ def test_every_battlefield_offers_its_button_for_as_long_as_the_question_is_open
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
 
-    greyed = presenter._lane_buttons()
-    assert [button.label for button in greyed.values()] == ["Assign here", "Assign here"]
-    assert not any(button.enabled for button in greyed.values())
+    grayed = presenter._lane_buttons()
+    assert [button.label for button in grayed.values()] == ["Assign here", "Assign here"]
+    assert not any(button.enabled for button in grayed.values())
 
     window.field.toggle_selection("hero")
 

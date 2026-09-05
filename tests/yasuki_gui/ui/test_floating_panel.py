@@ -76,7 +76,7 @@ def test_closing_takes_the_panel_off_the_board(board):
     assert not panel.showing
 
 
-def test_dragging_moves_the_panel_by_how_far_the_pointer_travelled(board):
+def test_dragging_moves_the_panel_by_how_far_the_pointer_traveled(board):
     """By the travel rather than to the pointer, so grabbing the bar's right end does not snap the
     panel's left corner under the cursor."""
     panel = FloatingPanel(board, "Attack", width=400, height=300)

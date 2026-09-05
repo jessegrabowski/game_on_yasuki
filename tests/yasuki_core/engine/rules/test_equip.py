@@ -216,7 +216,7 @@ def test_a_creation_only_reaches_its_own_seats_personalities():
 
 
 def test_an_effect_can_raise_the_limit_like_any_other_characteristic():
-    """What modelling the limit as a number buys: an Event granting an extra Weapon is a modifier,
+    """What modeling the limit as a number buys: an Event granting an extra Weapon is a modifier,
     not a second exception baked beside Kensai."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero"))

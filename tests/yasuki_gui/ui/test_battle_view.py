@@ -297,7 +297,7 @@ def test_a_collapsed_lane_labels_the_end_its_heading_would_have(view):
     label = _text_at(view, "2")
     left, right = view._lane_spans[1]
 
-    assert left <= label[0] <= right  # the collapsed lane's own number, not a neighbour's Strength
+    assert left <= label[0] <= right  # the collapsed lane's own number, not a neighbor's Strength
     assert label[1] == view._height() - FOOTER_H - HEADER_H
 
 
@@ -459,7 +459,7 @@ def test_pressing_a_lane_button_takes_that_lane_action(view):
     assert pressed == [1]
 
 
-def test_a_greyed_lane_button_is_drawn_but_does_nothing(view):
+def test_a_grayed_lane_button_is_drawn_but_does_nothing(view):
     """It says the battlefield is somewhere units could go, before any are picked to send."""
     pressed = []
     view.refresh(

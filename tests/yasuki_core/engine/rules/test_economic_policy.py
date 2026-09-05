@@ -127,7 +127,7 @@ def test_a_game_under_this_policy_differs_from_one_that_only_passes():
     assert sum(_cleared(EconomicPolicy())) > passive
 
 
-def test_a_face_down_province_neighbour_does_not_stop_it_choosing():
+def test_a_face_down_province_neighbor_does_not_stop_it_choosing():
     """A province refilled after a purchase is face-down, and reaches even its own owner redacted —
     with no name, no cost, and nothing to rank. Reading one as though it were a card crashes the
     policy on the turn after its first buy, which no all-face-up board reveals."""

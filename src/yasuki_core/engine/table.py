@@ -331,7 +331,7 @@ BATTLEFIELD: Final = "battlefield"
 DEFAULT_BOARD_POS: Final = BoardPos(0.0, 0.0)
 
 # A dynasty card drawn while every province is full lands here: a negative sentinel the client
-# recognises and lays out next to the owner's dynasty deck, like an unplaced pre-game permanent.
+# recognizes and lays out next to the owner's dynasty deck, like an unplaced pre-game permanent.
 UNPLACED_BOARD_POS: Final = BoardPos(-1.0, -1.0)
 
 MoveDest = ZoneKey | DeckKey | Literal["battlefield"]

@@ -807,7 +807,7 @@ def _continue_payment(
         game.spend_gold(seat, amount)
         return
     # The authoritative reachability check. `ChoosePayment.accepts` asks the same question of its
-    # own snapshot, which is what greys out an answer before it is sent; this one asks the live
+    # own snapshot, which is what grays out an answer before it is sent; this one asks the live
     # board, and the two can differ when an answer changes what another producer is worth.
     target = game.table.cards_by_id.get(target_id)
     if reachable_gold(game, seat, target) < amount:

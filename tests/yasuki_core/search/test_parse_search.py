@@ -357,7 +357,7 @@ class TestFilterBuilding:
         assert filters["format_filters"] == [(":", "lotus")]
 
     def test_unknown_field_is_unsatisfiable(self):
-        # An unrecognised field must NOT be silently text-searched (that returned nonsense, e.g.
+        # An unrecognized field must NOT be silently text-searched (that returned nonsense, e.g.
         # gc>5 matching cards containing "5"); the query becomes unsatisfiable instead.
         text, filters = parse_and_build_query("bogusfield:scorpion")
         assert text == ""

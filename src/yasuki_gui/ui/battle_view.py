@@ -145,18 +145,18 @@ def _armies(
 
     Returns
     -------
-    defence : _Army
+    defense : _Army
         The Defender's side.
-    offence : _Army
+    offense : _Army
         The Attacker's side.
     """
-    defence = _Army(view.defending, view.defending_force)
-    offence = _Army(view.attacking, view.attacking_force)
+    defense = _Army(view.defending, view.defending_force)
+    offense = _Army(view.attacking, view.attacking_force)
     if sent is None:
-        return defence, offence
+        return defense, offense
     if viewer_defends:
-        return _Army(defence.units + sent.units, defence.force + sent.force), offence
-    return defence, _Army(offence.units + sent.units, offence.force + sent.force)
+        return _Army(defense.units + sent.units, defense.force + sent.force), offense
+    return defense, _Army(offense.units + sent.units, offense.force + sent.force)
 
 
 def _bands(height: int, *, mirrored: bool = False) -> tuple[int, int]:
@@ -203,13 +203,13 @@ def _rows(height: int, *, mirrored: bool = False) -> tuple[int, int, int, int]:
     Returns
     -------
     province : int
-        The centre line of the Province's own card.
+        The center line of the Province's own card.
     defending : int
-        The centre line of the Defender's units.
+        The center line of the Defender's units.
     divider : int
         Where the line between the two sides is drawn.
     attacking : int
-        The centre line of the Attacker's units.
+        The center line of the Attacker's units.
     """
     top, bottom = _bands(height, mirrored=mirrored)
     step = max((bottom - top - CARD_H) // 2, MIN_ROW_STEP)
@@ -466,16 +466,16 @@ class BattleView(FloatingPanel):
             return
         self._draw_header(index, view, span, height, mirrored=mirrored)
 
-        defence, offence = _armies(view, self._pending.get(index), viewer_defends=mirrored)
+        defense, offense = _armies(view, self._pending.get(index), viewer_defends=mirrored)
         top, bottom = _bands(height, mirrored=mirrored)
         province_y, defending_y, divider, attacking_y = _rows(height, mirrored=mirrored)
         # Outermost on the side it belongs to, past the Defender's own units: it is what they are
         # standing in front of.
         self._draw_province(view, (left + right) // 2, province_y, mirrored=mirrored)
         # Each army's tower fans away from the divider, so a unit never stacks over the other side.
-        self._draw_army(defence.units, span, defending_y, sink=mirrored)
+        self._draw_army(defense.units, span, defending_y, sink=mirrored)
         self.canvas.create_line(left + 6, divider, right - 6, divider, fill=theme.INK_DIM)
-        self._draw_army(offence.units, span, attacking_y, sink=not mirrored)
+        self._draw_army(offense.units, span, attacking_y, sink=not mirrored)
         if view.outcome is not None:
             # Over the rows rather than beside them: the armies have gone home by now, so the space
             # they were drawn in is what the lane has to say what happened in it.
@@ -485,7 +485,7 @@ class BattleView(FloatingPanel):
         # After the cards, so a crowded army cannot bury the total that says how it is doing. Each
         # total sits in the corner of the half its army holds.
         top_force, bottom_force = (
-            (offence.force, defence.force) if mirrored else (defence.force, offence.force)
+            (offense.force, defense.force) if mirrored else (defense.force, offense.force)
         )
         self._draw_force(top_force, left + FORCE_INSET, top + FORCE_INSET, "nw")
         self._draw_force(bottom_force, left + FORCE_INSET, bottom - FORCE_INSET, "sw")
@@ -517,7 +517,7 @@ class BattleView(FloatingPanel):
         """The lane's name and, in the largest type in the lane, the Province Strength the attackers
         have to beat. It names the Province, so it sits at the Province's own end of the lane."""
         left, right = span
-        centre = (left + right) // 2
+        center = (left + right) // 2
 
         # Measured in from the band's outer edge, which turns the three lines over with the lane:
         # the name stays outermost, the Strength nearest the Province it belongs to.
@@ -528,20 +528,20 @@ class BattleView(FloatingPanel):
         if view.fought:
             heading += "  (fought)"
         self.canvas.create_text(
-            centre, inset(14), text=heading, fill=theme.INK_DIM, font=theme.serif(10, "bold")
+            center, inset(14), text=heading, fill=theme.INK_DIM, font=theme.serif(10, "bold")
         )
         self.canvas.create_text(
-            centre, inset(32), text="PROVINCE STRENGTH", fill=theme.INK_DIM, font=theme.serif(8)
+            center, inset(32), text="PROVINCE STRENGTH", fill=theme.INK_DIM, font=theme.serif(8)
         )
         self.canvas.create_text(
-            centre, inset(56), text=str(view.strength), fill=theme.INK, font=theme.serif(26, "bold")
+            center, inset(56), text=str(view.strength), fill=theme.INK, font=theme.serif(26, "bold")
         )
 
     def _draw_outcome(self, lines: list[_OutcomeLine], span: tuple[int, int], divider: int) -> None:
         """What the battle fought here did, once one has been. Stays on the lane for the rest of the
         Attack Phase, since a result the player has to catch as it goes past teaches them nothing."""
         left, right = span
-        centre = (left + right) // 2
+        center = (left + right) // 2
         top = divider - (len(lines) * OUTCOME_LINE_H) // 2
         self.canvas.create_rectangle(
             left + 6,
@@ -554,7 +554,7 @@ class BattleView(FloatingPanel):
         )
         for index, line in enumerate(lines):
             self.canvas.create_text(
-                centre,
+                center,
                 top + index * OUTCOME_LINE_H + OUTCOME_LINE_H // 2,
                 text=line.text,
                 fill=theme.INK if line.emphatic else theme.INK_DIM,
@@ -674,7 +674,7 @@ class BattleView(FloatingPanel):
     def _draw_army(
         self, army: tuple[UnitView, ...], span: tuple[int, int], y: int, *, sink: bool
     ) -> None:
-        """One side's units, in a centred row at the board's own spacing, each stacked as a tower.
+        """One side's units, in a centered row at the board's own spacing, each stacked as a tower.
 
         The step tightens when the row is wider than the lane, so a large army overlaps into a fan
         rather than spilling over the lane beside it.

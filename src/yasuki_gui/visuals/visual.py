@@ -18,7 +18,7 @@ _DEFAULT_COUNTER_STYLE = (theme.GOLD, theme.ON_DARK)
 def draw_counter_badges(
     canvas: tk.Canvas, card: RenderCard, bbox: tuple[int, int, int, int], tags: tuple[str, ...]
 ) -> None:
-    """Draw a badge per counter kind in the card's bottom-right corner, coloured by kind with the
+    """Draw a badge per counter kind in the card's bottom-right corner, colored by kind with the
     count inside, stacking upward in a fixed order.
 
     Bottom rather than top: a card prints its Chi in the top-right, and the live stat is stamped

@@ -3,7 +3,7 @@ class Allocation:
 
     The total never changes: every creation is placed, so the only question is where. Choosing a
     card splits the total evenly across everything chosen, and the per-card arrows move one creation
-    between neighbours rather than adding or removing any. A chosen card therefore always holds at
+    between neighbors rather than adding or removing any. A chosen card therefore always holds at
     least one — taking its last away is deselecting it, which the arrows will not do.
 
     Parameters
