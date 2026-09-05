@@ -133,6 +133,7 @@ Legality with respect to game state is checked separately.
    ChooseOption
    LeaveBowed
    ChooseLegacyCard
+   ChooseLobbyTarget
    ChoosePayment
    Confirm
    DecisionRequest

@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicDraw,
     KharmicRefill,
     Legacy,
+    Lobby,
     Pass,
     PlayStrategy,
     Recruit,
@@ -60,6 +61,7 @@ from yasuki_core.engine.rules.decisions import (
     ChooseEquipTarget,
     ChooseFortificationProvince,
     ChooseInheritanceTarget,
+    ChooseLobbyTarget,
     Confirm,
     ChooseInvestAmount,
     ChooseLegacyCard,
@@ -83,6 +85,8 @@ from yasuki_core.engine.rules.legality import (
     legacy_candidates,
     legacy_key,
     legacy_search_pool,
+    lobby_candidates,
+    lobby_key,
     permitted_timings,
     inheritance_key,
     proclaim_key,
@@ -96,6 +100,7 @@ from yasuki_core.engine.rules.legality import (
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Bow,
     Choose,
     Discard,
     DrawCard,
@@ -106,6 +111,7 @@ from yasuki_core.engine.rules.effects import (
     RefillProvince,
     RevealProvinces,
     ShuffleDeck,
+    TakeFavor,
     Then,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
@@ -291,6 +297,8 @@ def perform(game: GameState, action: Action) -> None:
             inheritance(game)
         case Cycle():
             cycle(game)
+        case Lobby():
+            lobby(game)
         case KharmicDraw(card_id=card_id):
             kharmic_draw(game, card_id)
         case KharmicRefill(card_id=card_id):
@@ -618,6 +626,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_equip_target(game, request, response)
         case ChooseInheritanceTarget():
             _apply_inheritance_target(game, request, response)
+        case ChooseLobbyTarget():
+            _apply_lobby_target(game, request, response)
         case ChooseFortificationProvince():
             _apply_fortification_province(game, request, response)
         case ChooseCards():
@@ -933,6 +943,29 @@ def _cycle_put_on_bottom(
     put_back = [MoveToDeck(card_id, deck, from_bottom=0) for card_id in chosen]
     refills = tuple(RefillProvince(key) for key in vacated if key is not None)
     return [*put_back, Then((*refills, RevealProvinces(seat)))]
+
+
+def lobby(game: GameState) -> None:
+    """Announce the Lobby ability by asking which Personality it bows. ``legal_actions`` has already
+    checked the turn, the honor comparison, and that a Personality is there to pay with."""
+    seat = game.active
+    game.pending = ChooseLobbyTarget(
+        seat=seat,
+        candidates=tuple(card.id for card in lobby_candidates(game, seat)),
+    )
+
+
+def _apply_lobby_target(
+    game: GameState, request: ChooseLobbyTarget, response: DecisionResponse
+) -> None:
+    """Bow the chosen Personality and take the Imperial Favor.
+
+    ShE datasheet: bowing the Personality is the cost and taking the Favor the effect.
+    """
+    seat = request.seat
+    game.pending = None
+    game.use_once(lobby_key(seat, game.turn))
+    triggers.resolve_effects(game, [Bow(response.choices[0]), TakeFavor(seat)])
 
 
 def kharmic_draw(game: GameState, card_id: str) -> None:

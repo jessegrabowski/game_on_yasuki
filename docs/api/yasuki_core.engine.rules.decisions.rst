@@ -19,6 +19,7 @@ yasuki_core.engine.rules.decisions
     ChooseInheritanceTarget
     ChooseInvestAmount
     ChooseLegacyCard
+    ChooseLobbyTarget
     ChooseOption
     ChoosePayment
     Confirm

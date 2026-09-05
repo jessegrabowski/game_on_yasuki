@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicRefill,
     Inheritance,
     Legacy,
+    Lobby,
     Pass,
     PlayStrategy,
     Recruit,
@@ -234,6 +235,8 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "inheritance"}
         case Cycle():
             return {"kind": "cycle"}
+        case Lobby():
+            return {"kind": "lobby"}
         case KharmicDraw(card_id=card_id):
             return {"kind": "kharmic_draw", "card_id": card_id}
         case KharmicRefill(card_id=card_id):
@@ -267,6 +270,8 @@ def _decode_action(payload: dict) -> Action:
         return Inheritance()
     if kind == "cycle":
         return Cycle()
+    if kind == "lobby":
+        return Lobby()
     if kind == "kharmic_draw":
         return KharmicDraw(payload["card_id"])
     if kind == "kharmic_refill":

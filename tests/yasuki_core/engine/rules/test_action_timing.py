@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules import abilities, legality
 from yasuki_core.engine.rules.actions import (
+    Lobby,
     ACTION_TIMINGS,
     Action,
     ActionTiming,
@@ -71,8 +72,9 @@ def test_every_action_has_a_designator_or_a_stated_reason_not_to():
     # ACTION_TIMINGS is the single source, so an Action added to the union without an entry would
     # only surface when someone constructed one. Pass is exempt because it is the alternative to
     # acting rather than an action; ActivateAbility and PlayStrategy because they read their
-    # designator off the card, which is why a Strategy can be a Battle action and an Open one.
-    timed_elsewhere = {Pass, ActivateAbility, PlayStrategy}
+    # designator off the card, which is why a Strategy can be a Battle action and an Open one; and
+    # Lobby because it reads its designator off the arc, which the CR and the datasheet disagree on.
+    timed_elsewhere = {Pass, ActivateAbility, PlayStrategy, Lobby}
 
     assert set(get_args(Action)) - timed_elsewhere == set(ACTION_TIMINGS)
 
