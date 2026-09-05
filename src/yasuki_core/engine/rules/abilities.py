@@ -107,6 +107,19 @@ def _resolve_bow_waiver(
 FavorPayer = Callable[[GameState, L5RCard], list[Effect] | None]
 FAVOR_PAYERS: dict[str, FavorPayer] = {}
 
+
+def favor_payer(printed_id: str) -> Callable[[FavorPayer], FavorPayer]:
+    """Register the decorated function as what ``printed_id`` charges to pay a Favor cost."""
+
+    def register(payer: FavorPayer) -> FavorPayer:
+        if printed_id in FAVOR_PAYERS:
+            raise ValueError(f"{printed_id} already pays Favor costs")
+        FAVOR_PAYERS[printed_id] = payer
+        return payer
+
+    return register
+
+
 FAVOR_PAYMENT = "favor_payment"
 DISCARD_THE_FAVOR = "Discard the Imperial Favor"
 

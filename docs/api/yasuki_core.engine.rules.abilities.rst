@@ -30,6 +30,7 @@ yasuki_core.engine.rules.abilities
     enters_play_bowed
     favor_cost
     favor_cost_for_seat
+    favor_payer
     favor_payers
     fixed_invest_amount
     has_absent_ability

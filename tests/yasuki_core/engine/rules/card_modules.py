@@ -32,6 +32,7 @@ _DECORATORS = {
     "attachment_grant",
     "attach_restriction",
     "attack_strength_against",
+    "favor_payer",
     "lobby_bonus_grant",
     "province_strength_grant",
 }
