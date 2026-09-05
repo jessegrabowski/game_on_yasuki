@@ -91,7 +91,7 @@ def _discard_to_draw(game: GameState, seat: PlayerId) -> list[Effect]:
     return [DrawCard(seat)]
 
 
-@choice_resolver(DISCARD_TO_DRAW)
+@choice_resolver(DISCARD_TO_DRAW, prompt="Discard a Fate card to draw a card")
 def _resolve_discard_to_draw(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
@@ -146,7 +146,7 @@ def _send_unit_home(game: GameState, seat: PlayerId) -> list[Effect]:
     return []
 
 
-@choice_resolver(SEND_HOME)
+@choice_resolver(SEND_HOME, prompt="Move a target attacking enemy Personality home")
 def _resolve_send_home(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
@@ -156,7 +156,7 @@ def _resolve_send_home(
     return [Move(chosen[0], Location.home(card.owner))]
 
 
-@choice_resolver(SEND_HOME_BOWED)
+@choice_resolver(SEND_HOME_BOWED, prompt="Send a unit home from the battle, bowed")
 def _resolve_send_home_bowed(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
