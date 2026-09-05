@@ -816,6 +816,30 @@ class AttachCard(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class PutIntoPlay(Effect):
+    """Move ``card_id`` onto the battlefield, unplaced.
+
+    What a card that puts *itself* into play does — an Edict, a Kata, a Terrain. The played card is
+    not discarded afterward because it is no longer in hand (CR, Action Sequence step F). Does
+    nothing for a card already there.
+    """
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"put {self.card_id} into play"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None or any(held is card for held in game.table.battlefield.cards):
+            return []
+        hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
+        from_hand = any(held is card for held in hand.cards)
+        ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
+        return [EnteredPlay(self.card_id, from_hand=from_hand)]
+
+
+@dataclass(frozen=True, slots=True)
 class CreateToken(Effect):
     """Create a card that was never in a deck — the "create a 1F Ashigaru Follower", the "create a
     Personality with Force equal to the target's Chi" — and put it into play.

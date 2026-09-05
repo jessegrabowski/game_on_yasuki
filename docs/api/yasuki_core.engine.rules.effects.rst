@@ -47,6 +47,7 @@ yasuki_core.engine.rules.effects
     PayFavorCost
     PayGold
     PlaceInProvince
+    PutIntoPlay
     RangedAttack
     RecruitCard
     RefillProvince
