@@ -415,6 +415,43 @@ class ShuffleDeck(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class TakeFavor(Effect):
+    """Give ``seat`` the Imperial Favor.
+
+    One player controls the Favor at a time and changes of control are instantaneous (Twenty
+    Festivals CR, The Imperial Favor), so whoever held it loses it in this same step.
+    """
+
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} takes the Imperial Favor"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.favor_holder = self.seat
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class DiscardFavor(Effect):
+    """Return the Imperial Favor to uncontrolled, if ``seat`` is the one holding it.
+
+    Discarding it leaves it held by nobody rather than passing it on (Twenty Festivals CR, The
+    Imperial Favor).
+    """
+
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} discards the Imperial Favor"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        if game.favor_holder is self.seat:
+            game.favor_holder = None
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class GrantModifier(Effect):
     """Record a continuous stat modifier: the ``source`` card grants ``target`` a change of
     ``amount`` to ``stat`` for ``duration``. The single created-effect entry point; a card's

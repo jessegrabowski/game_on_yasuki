@@ -24,10 +24,12 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     Destroy,
     DestroyProvince,
+    DiscardFavor,
     DrawCard,
     Effect,
     InterruptingEffect,
     GainGold,
+    TakeFavor,
     GainHonor,
     LoseGame,
     WinGame,
@@ -193,6 +195,8 @@ EFFECTS = [
         AskDistribution(PlayerId.P1, ("hero", "rival"), 3, "suiteiru_no_oni", "oni_1"),
         "P1 divides 3 among 2 for suiteiru_no_oni",
     ),
+    (TakeFavor(PlayerId.P1), "P1 takes the Imperial Favor"),
+    (DiscardFavor(PlayerId.P2), "P2 discards the Imperial Favor"),
 ]
 
 

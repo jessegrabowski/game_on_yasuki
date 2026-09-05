@@ -48,6 +48,7 @@ deferred through `Then` instead.
    Destroy
    DestroyProvince
    Discard
+   DiscardFavor
    DrawCard
    Effect
    Fear
@@ -75,6 +76,7 @@ deferred through `Then` instead.
    Show
    ShuffleDeck
    Straighten
+   TakeFavor
    Then
    Unpayable
 ```
