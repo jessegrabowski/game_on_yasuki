@@ -156,6 +156,38 @@ def _resolve_favor_payment(
     return favor_payers(game, seat).get(chosen[0], [])
 
 
+# What a card in play says about who may not Lobby, keyed by the card's printed id. A bar is a card
+# behavior rather than a branch inside the rule, the way a Favor payer is: the card decides which
+# seats it stops, since one stops its controller's rivals and another stops its own controller.
+LobbyBar = Callable[[GameState, L5RCard, PlayerId], bool]
+LOBBY_BARS: dict[str, LobbyBar] = {}
+
+
+def lobby_bar(printed_id: str) -> Callable[[LobbyBar], LobbyBar]:
+    """Register the decorated predicate as ``printed_id``'s bar on Lobbying."""
+
+    def register(bar: LobbyBar) -> LobbyBar:
+        if printed_id in LOBBY_BARS:
+            raise ValueError(f"{printed_id} already bars Lobbying")
+        LOBBY_BARS[printed_id] = bar
+        return bar
+
+    return register
+
+
+def may_lobby(game: GameState, seat: PlayerId) -> bool:
+    """Whether nothing in play stops ``seat`` taking a Lobby action.
+
+    Only what a card forbids. The datasheet's own conditions on Lobbying are checked where the
+    action's legality is decided.
+    """
+    return not any(
+        bar(game, card, seat)
+        for card in game.table.battlefield.cards
+        if (bar := LOBBY_BARS.get(card.printed_id)) is not None
+    )
+
+
 def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
     """Bow the Personality ``source`` is attached to. Unpayable while it is attached to none."""
     parent = attached_to(game, source)

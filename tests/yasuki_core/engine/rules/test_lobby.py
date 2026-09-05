@@ -6,6 +6,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import legality, triggers
+from yasuki_core.engine.rules.abilities import LOBBY_BARS
 from yasuki_core.engine.rules.legality import lobby_key
 from yasuki_core.engine.rules.actions import Lobby
 from yasuki_core.engine.rules.decisions import DecisionResponse
@@ -196,6 +197,46 @@ def test_a_lobby_bonus_is_not_an_honor_gain():
 
     assert _lobbies(game) == [Lobby()], "the bonus is being read"
     assert game.table.seats[PlayerId.P1].honor == 8
+
+
+def test_a_card_can_forbid_a_seat_to_lobby():
+    """The hook a card reaches for to say "this player may not Lobby". The seat otherwise qualifies
+    outright, so the bar is the only thing withholding the action."""
+    LOBBY_BARS["test_lobby_bar"] = lambda game, card, seat: seat is PlayerId.P1
+    try:
+        game = _game()
+        put_in_play(game, personality("courtier", personal_honor=2))
+        put_in_play(game, holding("edict", printed_id="test_lobby_bar"))
+
+        assert _lobbies(game) == []
+    finally:
+        LOBBY_BARS.pop("test_lobby_bar", None)
+
+
+def test_a_bar_stops_only_the_seats_it_names():
+    """A bar is the card's judgment, not a blanket switch: one card stops its controller's rivals
+    and another stops its controller, so the rule asks the card about the seat."""
+    LOBBY_BARS["test_lobby_bar"] = lambda game, card, seat: seat is PlayerId.P2
+    try:
+        game = _game()
+        put_in_play(game, personality("courtier", personal_honor=2))
+        put_in_play(game, holding("edict", printed_id="test_lobby_bar"))
+
+        assert _lobbies(game) == [Lobby()]
+    finally:
+        LOBBY_BARS.pop("test_lobby_bar", None)
+
+
+def test_a_lobby_bonus_adjusts_whatever_amount_is_checked():
+    """The rulebook Lobby checks Family Honor, but each Wind's own Lobby checks something else —
+    cards in hand for House of Suikihime, the total Gold Cost of attachments for Kano's Alliance,
+    the total Force of unbowed units for The Kanpeki Dynasty. The datasheet adjusts "any amount
+    checked during any Lobby action", so the Bonus is read against those too."""
+    game = _game()
+    put_in_play(game, holding("court", printed_id="shigekawas_court"))
+
+    assert lobby_amount(game, PlayerId.P1, 3) == 8, "a hand of 3 cards is checked as 8"
+    assert lobby_amount(game, PlayerId.P2, 3) == 3, "the Bonus is the checked player's, not P1's"
 
 
 def test_a_lobby_penalty_stops_when_the_card_granting_it_leaves_play():

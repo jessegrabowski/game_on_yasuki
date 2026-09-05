@@ -237,6 +237,8 @@ def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
         return []
     if game.has_used(lobby_key(seat, game.turn)):
         return []
+    if not abilities.may_lobby(game, seat):
+        return []
     seats = game.table.seats
     honor = lobby_amount(game, seat, seats[seat].honor)
     if any(
