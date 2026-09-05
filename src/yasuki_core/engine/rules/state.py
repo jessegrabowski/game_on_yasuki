@@ -402,6 +402,11 @@ class GameState:
     action_taken : str
         What the action now resolving is, worded for a player — what a Response Step names as the
         thing it is answering. Empty outside an action. Ephemeral and rebuilt by replay.
+    action_is_favor : bool
+        Whether the action now resolving has paid a Favor cost, which is what makes it a Favor
+        action. Settled during payment rather than at announcement, because an action with an
+        alternate cost is one only when the Favor is the half actually paid (ShE datasheet, The
+        Favor Icon). Ephemeral and rebuilt by replay. Default False.
     action_events : list of GameEvent
         What the action now resolving has done so far, in the order it happened, cleared as the next
         action begins. A Response reads it to ask what it is responding to — "discarded a Fate card"
@@ -439,6 +444,7 @@ class GameState:
     responded: set[str] = field(default_factory=set)
     action: Action | None = None
     action_taken: str = ""
+    action_is_favor: bool = False
     action_events: list[GameEvent] = field(default_factory=list)
 
     @property

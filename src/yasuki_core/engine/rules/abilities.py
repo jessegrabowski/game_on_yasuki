@@ -5,7 +5,12 @@ from enum import Enum
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneRole, location_of
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.actions import (
+    ActionTiming,
+    ActivateAbility,
+    BattleDesignator,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
 from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
@@ -22,6 +27,7 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     AskOption,
     DiscardFavor,
+    PayFavorCost,
     Unpayable,
 )
 from yasuki_core.game_pieces import keywords
@@ -139,8 +145,11 @@ def favor_cost_for_seat(game: GameState, seat: PlayerId, source_id: str) -> list
     if not payers:
         return [Unpayable(f"{seat.name} has no way to pay a Favor cost")]
     if len(payers) == 1:
-        return next(iter(payers.values()))
-    return [AskOption(seat, tuple(payers), "Pay the Favor cost how?", FAVOR_PAYMENT, source_id)]
+        return [PayFavorCost(), *next(iter(payers.values()))]
+    return [
+        PayFavorCost(),
+        AskOption(seat, tuple(payers), "Pay the Favor cost how?", FAVOR_PAYMENT, source_id),
+    ]
 
 
 def favor_cost(game: GameState, source: L5RCard) -> list[Effect]:
@@ -190,6 +199,25 @@ def may_lobby(game: GameState, seat: PlayerId) -> bool:
         for card in game.table.battlefield.cards
         if (bar := LOBBY_BARS.get(card.printed_id)) is not None
     )
+
+
+def is_favor_action(game: GameState) -> bool:
+    """Whether the action now resolving is a Favor action.
+
+    An action that pays a Favor cost is one. An action offering the Favor as one of two ways to pay
+    is one only on the branch that takes it, which is why this is read after payment rather than off
+    the announcement — unless the ability is designated Favor, which settles it either way (ShE
+    datasheet, The Favor Icon). The designator belongs to the ability, so it is read only off an
+    action taken from one.
+    """
+    if game.action_is_favor:
+        return True
+    # The keyword designates an ability, so it is read only off the actions taken from one. A card
+    # carrying it is not turned into a Favor action by being recruited, equipped, or spent.
+    if not isinstance(game.action, ActivateAbility | PlayStrategy):
+        return False
+    card = game.table.cards_by_id.get(game.action.card_id)
+    return card is not None and keywords.FAVOR in effective_keywords(game, card)
 
 
 def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:

@@ -43,6 +43,7 @@ from yasuki_core.engine.rules.effects import (
     GrantLobbyBonus,
     GrantProvinceStrength,
     GrantModifier,
+    PayFavorCost,
     PayGold,
     IgnoreHonorRequirements,
     MoveToDeck,
@@ -93,6 +94,10 @@ EFFECTS = [
     (
         GrantMinimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
         "uncertainty gives shiba a minimum CHI of 1 (UNTIL_END_OF_TURN)",
+    ),
+    (
+        PayFavorCost(),
+        "the action pays a Favor cost",
     ),
     (
         GrantLobbyBonus("court", PlayerId.P1, 5, Duration.WHILE_SOURCE_IN_PLAY),

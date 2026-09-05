@@ -19,6 +19,10 @@
 # exempts nobody, not even itself.
 CONQUEROR = "Conqueror"
 
+# The designator marking an ability a Favor action however its cost is settled, for a card whose
+# alternate cost would otherwise decide it (ShE datasheet, The Favor Icon).
+FAVOR = "Favor"
+
 # A Holding carrying this attaches to the Province it entered play from — or to one its controller
 # picks, if it came from elsewhere — and is destroyed with it (CR, Fortification).
 FORTIFICATION = "Fortification"

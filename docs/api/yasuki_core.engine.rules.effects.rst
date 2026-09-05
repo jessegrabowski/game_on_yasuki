@@ -44,6 +44,7 @@ yasuki_core.engine.rules.effects
     Move
     MoveToDeck
     MoveToHand
+    PayFavorCost
     PayGold
     PlaceInProvince
     RangedAttack
