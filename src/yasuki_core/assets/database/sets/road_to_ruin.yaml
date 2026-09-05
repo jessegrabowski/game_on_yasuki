@@ -640,10 +640,10 @@ cards:
   decks:
   - Dynasty
   keywords:
+  - Imperial
   - Unique
-  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
-    one of them, it enters play in your home.<br>Before you discard the Imperial Favor for a Favor action,
-    you may discard this Event from play instead.
+  text: '<b>Interrupt:</b> Discard this Event from play to pay the action''s :favor: cost.<br><b>Dynasty:</b>
+    Put this Event into play.'
   is_unique: true
   legality:
   - Age of Enlightenment (Lotus)
