@@ -31,6 +31,7 @@ VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "MAY_REMAIN_BOWED",
     "BOW_WAIVERS",
+    "FAVOR_PAYERS",
     "_INVEST",
     "_ENTERS_UNBOWED",
     "GOLD_HANDLERS",
@@ -95,12 +96,22 @@ def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():
     assert unregistered_card_ids(card_keyed_data()) == []
 
 
+# Registries that exist before the first card that registers into one. Listing them keeps the
+# emptiness guard below meaningful for every other registry; drop an entry when its first card
+# lands. "favor payers" waits on the cards that pay a Favor cost on your behalf.
+KNOWINGLY_EMPTY = {"favor payers"}
+
+
 def test_no_registry_reports_as_empty():
     # An empty frozenset here means card_registry read an attribute that is no longer the registry,
     # which looks exactly like a clean bill of health. The data lists answer to it too — one emptied
     # by a rename would report every card in it as validated.
-    assert all(registered_card_ids().values())
+    populated = {
+        name: ids for name, ids in registered_card_ids().items() if name not in KNOWINGLY_EMPTY
+    }
+    assert all(populated.values())
     assert all(card_keyed_data().values())
+    assert KNOWINGLY_EMPTY <= registered_card_ids().keys(), "a listed registry no longer exists"
 
 
 def test_a_misspelled_id_is_reported_with_its_registry_and_a_suggestion():
