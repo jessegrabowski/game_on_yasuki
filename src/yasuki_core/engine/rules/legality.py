@@ -29,6 +29,7 @@ from yasuki_core.engine.rules.economy import (
     effective_gold_production,
     maximum_gold_production,
     effective_keywords,
+    lobby_amount,
     effective_recruit_discount,
 )
 from yasuki_core.engine.rules.state import GameState, RoundKind
@@ -224,6 +225,11 @@ def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
     ShE datasheet: "If it is your turn and you have higher Family Honor than each other player, bow
     your target unbowed Personality with 1 or more Personal Honor to take the Imperial Favor."
     Which Personality bows is chosen when the action resolves, so this offers the ability once.
+
+    Both sides of the comparison are read through :func:`lobby_amount`, since the datasheet adjusts
+    an amount by the Bonuses and Penalties on the player it is about rather than on the player
+    acting. Family Honor is what this Lobby checks; a Wind's own Lobby checks something else and
+    reads it the same way.
     """
     if not permits(game, seat, ruleset.ACTIVE.lobby_timing):
         return []
@@ -231,8 +237,15 @@ def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
         return []
     if game.has_used(lobby_key(seat, game.turn)):
         return []
-    honor = game.table.seats[seat].honor
-    if any(info.honor >= honor for other, info in game.table.seats.items() if other is not seat):
+    if not abilities.may_lobby(game, seat):
+        return []
+    seats = game.table.seats
+    honor = lobby_amount(game, seat, seats[seat].honor)
+    if any(
+        lobby_amount(game, other, info.honor) >= honor
+        for other, info in seats.items()
+        if other is not seat
+    ):
         return []
     return [Lobby()] if lobby_candidates(game, seat) else []
 

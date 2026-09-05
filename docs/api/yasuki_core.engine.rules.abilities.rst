@@ -38,7 +38,9 @@ yasuki_core.engine.rules.abilities
     is_spell
     itself
     legal_targets
+    lobby_bar
     may_cast_spells
+    may_lobby
     may_remain_bowed
     may_stay_bowed
     no_cost

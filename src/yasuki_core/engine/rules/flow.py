@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.state import (
     RESPONSE_TIMINGS,
     RoundKind,
     TURN_PHASES,
+    once_per_turn,
 )
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
@@ -971,11 +972,15 @@ def _apply_lobby_target(
     """Bow the chosen Personality and take the Imperial Favor.
 
     ShE datasheet: bowing the Personality is the cost and taking the Favor the effect.
+
+    The Personality is marked as having Lobbied, for the cards that ask who did.
     """
     seat = request.seat
     game.pending = None
     game.use_once(lobby_key(seat, game.turn))
-    triggers.resolve_effects(game, [Bow(response.choices[0]), TakeFavor(seat)])
+    lobbied = game.table.cards_by_id[response.choices[0]]
+    once_per_turn(game, lobbied, abilities.LOBBIED_TAG)
+    triggers.resolve_effects(game, [Bow(lobbied.id), TakeFavor(seat)])
 
 
 def use_favor_ability(game: GameState, key: str) -> None:

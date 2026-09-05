@@ -31,10 +31,12 @@ VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "MAY_REMAIN_BOWED",
     "BOW_WAIVERS",
+    "LOBBY_BARS",
     "FAVOR_PAYERS",
     "_INVEST",
     "_ENTERS_UNBOWED",
     "GOLD_HANDLERS",
+    "LOBBY_BONUSES",
     "GOLD_SELF_GRANT",
     "RECRUIT_DISCOUNTS",
     "INVEST_DISCOUNTS",
@@ -98,8 +100,9 @@ def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():
 
 # Registries that exist before the first card that registers into one. Listing them keeps the
 # emptiness guard below meaningful for every other registry; drop an entry when its first card
-# lands. "favor payers" waits on the cards that pay a Favor cost on your behalf.
-KNOWINGLY_EMPTY = {"favor payers"}
+# lands. "favor payers" waits on the cards that pay a Favor cost on your behalf, and "lobby bars" on
+# the cards that forbid a player to Lobby.
+KNOWINGLY_EMPTY = {"favor payers", "lobby bars"}
 
 
 def test_no_registry_reports_as_empty():

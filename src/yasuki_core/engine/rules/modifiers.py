@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey
 
 
@@ -150,9 +151,37 @@ class ProvinceModifier:
     duration: Duration
 
 
+@dataclass(frozen=True, slots=True)
+class LobbyModifier:
+    """A continuous effect that adjusts one player's Lobby Bonus while active.
+
+    A Lobby Bonus or Penalty rests on a player rather than on a card, so it cannot be a
+    :class:`Modifier`. Every amount a Lobby action checks about that player reads higher or lower by
+    it, whoever is taking the action; where the amount is Family Honor the adjustment is neither an
+    Honor gain nor an Honor loss (ShE datasheet, Lobby Bonuses and Penalties).
+
+    Attributes
+    ----------
+    source_id : str
+        The card the bonus comes from — used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it leaves
+        play and to attribute the effect.
+    seat : PlayerId
+        The player whose Lobby amounts are adjusted.
+    amount : int
+        The Bonus (positive) or Penalty (negative).
+    duration : Duration
+        When the adjustment stops applying.
+    """
+
+    source_id: str
+    seat: PlayerId
+    amount: int
+    duration: Duration
+
+
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
 # Province's strength beside a stat change — each is ongoing, and each lasts to the end of the turn
 # unless the card says otherwise — so they are recorded in one list and expire together (CR,
-# Duration of Effects). The three that name a card are forgotten when it leaves the table; the one
-# that names a Province slot is not, because a slot never does.
-OngoingEffect = Modifier | KeywordGrant | Minimum | ProvinceModifier
+# Duration of Effects). The three that name a card are forgotten when it leaves the table; the two
+# that name a Province slot and a player are not, because neither ever leaves it.
+OngoingEffect = Modifier | KeywordGrant | Minimum | ProvinceModifier | LobbyModifier

@@ -30,6 +30,9 @@ yasuki_core.engine.rules.economy
     invest_discount
     is_clan
     keyword_grant
+    lobby_amount
+    lobby_bonus
+    lobby_bonus_grant
     maximum_gold_production
     opposing_states
     player_state
