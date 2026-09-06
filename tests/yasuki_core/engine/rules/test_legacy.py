@@ -9,7 +9,8 @@ from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint
 from yasuki_core.engine.rules.actions import Legacy
 from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, DecisionResponse
 from yasuki_core.engine.rules.events import CardDiscarded
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession

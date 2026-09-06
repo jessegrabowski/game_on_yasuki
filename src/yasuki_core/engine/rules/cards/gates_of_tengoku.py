@@ -27,7 +27,8 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.state import END_OF_TURN, GameState
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.legality import reachable_gold
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,

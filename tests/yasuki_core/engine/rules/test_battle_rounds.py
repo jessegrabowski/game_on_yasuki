@@ -22,7 +22,7 @@ from yasuki_core.engine.rules.abilities import (
     register_ability,
 )
 from yasuki_core.engine.rules.effects import Bow, GrantPriority
-from yasuki_core.engine.rules.state import (
+from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
     BEGINNING_OF_COMBAT,
     BattleSegment,

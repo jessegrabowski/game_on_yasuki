@@ -2,15 +2,8 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.rules.state import (
-    Boundary,
-    GameState,
-    Moment,
-    Phase,
-    Segment,
-    Turn,
-    rules_at_start,
-)
+from yasuki_core.engine.rules.state import GameState, rules_at_start
+from yasuki_core.engine.rules.turn.structure import Boundary, Moment, Phase, Segment, Turn
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules.victory import VictoryRule
 

@@ -63,12 +63,13 @@ COLLECTIONS = ("dict", "set", "frozenset")
 def module_level_collections() -> set[str]:
     """Every module-level dict, set and frozenset *defined* under ``engine/rules``.
 
-    Read from the source rather than from the imported modules. A re-exported name shows up in
-    ``vars`` without the module owning it, and — the failure this exists to prevent — a registry in
-    a module nobody thought to list shows up here regardless.
+    Read from the source rather than from the imported modules, and read recursively. A re-exported
+    name shows up in ``vars`` without the module owning it, and — the failure this exists to
+    prevent — a registry in a module nobody thought to list shows up here regardless, including one
+    inside a package.
     """
     found: set[str] = set()
-    for path in pathlib.Path(rules.__file__).parent.glob("*.py"):
+    for path in pathlib.Path(rules.__file__).parent.rglob("*.py"):
         for node in ast.parse(path.read_text(encoding="utf-8")).body:
             if isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
                 if any(kind in ast.unparse(node.annotation) for kind in COLLECTIONS):

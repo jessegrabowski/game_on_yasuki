@@ -24,16 +24,15 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.state import (
+from yasuki_core.engine.rules.state import GameState, once_per_turn
+from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     END_OF_TURN,
-    GameState,
     PHASE_TIMINGS,
     Phase,
     RESPONSE_TIMINGS,
     RoundKind,
     TURN_PHASES,
-    once_per_turn,
 )
 from yasuki_core.engine.rules.work import (
     ApplyEffects,

@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.payments import payment_request
-from yasuki_core.engine.rules.state import BATTLE_SEGMENT_TIMINGS, BattleSegment
+from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS, BattleSegment
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of

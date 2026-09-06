@@ -18,13 +18,13 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.state import (
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     BATTLE_SEGMENT_TIMINGS,
     Boundary,
     END_OF_TURN,
     FIRED_MOMENTS,
-    GameState,
     Moment,
     Phase,
     RESPONSE_TIMINGS,
@@ -53,7 +53,8 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     Straighten,
 )
-from yasuki_core.engine.rules import flow, legality, state
+from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules.turn import structure
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.events import (
     CardDiscarded,
@@ -1207,7 +1208,7 @@ def test_every_fired_moment_has_a_resolve_call_behind_it():
     called = set(re.findall(r"resolve_delayed\(game, (\w+)\)", inspect.getsource(flow)))
     segment_beginnings = {Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS}
 
-    assert {getattr(state, name) for name in called} | segment_beginnings == FIRED_MOMENTS
+    assert {getattr(structure, name) for name in called} | segment_beginnings == FIRED_MOMENTS
 
 
 @pytest.mark.parametrize(

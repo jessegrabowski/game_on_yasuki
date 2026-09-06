@@ -1,6 +1,6 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.state import BattleSegment, Phase
+from yasuki_core.engine.rules.turn.structure import BattleSegment, Phase
 
 # The CR's own names for the turn's phases, in its Turn Sequence. The engine's middle phase is
 # named BATTLE; the CR calls it the Attack Phase, and the player is shown the CR's name.

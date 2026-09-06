@@ -31,7 +31,8 @@ from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.policies import PassPolicy, Policy
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard

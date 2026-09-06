@@ -37,13 +37,8 @@ from yasuki_core.engine.rules.modifiers import (
     ProvinceModifier,
     Stat,
 )
-from yasuki_core.engine.rules.state import (
-    END_OF_TURN,
-    GameState,
-    Moment,
-    flow_resolves,
-    once_per_turn,
-)
+from yasuki_core.engine.rules.state import GameState, once_per_turn
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, flow_resolves
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import (
     BATTLEFIELD,

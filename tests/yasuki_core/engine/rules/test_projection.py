@@ -7,7 +7,8 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard, redact
-from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase
+from yasuki_core.engine.rules.state import BattleOutcome, GameState
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import battle, triggers

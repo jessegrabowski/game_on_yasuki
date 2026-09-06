@@ -16,15 +16,12 @@ from yasuki_core.engine.rules.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.legality import province_zones
 from yasuki_core.engine.rules.events import Destroyed
-from yasuki_core.engine.rules.state import (
+from yasuki_core.engine.rules.state import AttackPhase, BattleOutcome, BattlefieldInfo, GameState
+from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
-    AttackPhase,
     BATTLE_SEGMENT_TIMINGS,
-    BattleOutcome,
     BattleSegment,
-    BattlefieldInfo,
     Boundary,
-    GameState,
     Moment,
     RoundKind,
     Segment,

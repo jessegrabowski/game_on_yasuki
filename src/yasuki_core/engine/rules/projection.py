@@ -11,14 +11,8 @@ from yasuki_core.engine.rules.economy import (
     effective_stat,
 )
 from yasuki_core.engine.rules.modifiers import Stat
-from yasuki_core.engine.rules.state import (
-    BattleOutcome,
-    BattleSegment,
-    GameState,
-    Phase,
-    RoundKind,
-    Segment,
-)
+from yasuki_core.engine.rules.state import BattleOutcome, GameState
+from yasuki_core.engine.rules.turn.structure import BattleSegment, Phase, RoundKind, Segment
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.rules.units import unit_force, units_at

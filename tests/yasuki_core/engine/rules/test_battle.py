@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.decisions import (
     assignment_token,
 )
 from yasuki_core.engine.rules.policies import EconomicPolicy, GoldRushPolicy
-from yasuki_core.engine.rules.state import Phase, Segment
+from yasuki_core.engine.rules.turn.structure import Phase, Segment
 from yasuki_core.engine.rules.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of

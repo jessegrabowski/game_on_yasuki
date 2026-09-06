@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.decisions import ChooseInheritanceTarget, Decision
 from yasuki_core.engine.rules.economy import effective_gold_production
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.runner import GameRunner
-from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.cards import L5RCard

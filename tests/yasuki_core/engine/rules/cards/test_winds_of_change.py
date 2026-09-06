@@ -3,7 +3,8 @@ from yasuki_core.engine.rules.abilities import favor_cost_for_seat, favor_payers
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.actions import ActivateAbility
-from yasuki_core.engine.rules.state import PHASE_TIMINGS, ActionRound, GameState, Phase
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import PHASE_TIMINGS, ActionRound, Phase
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone

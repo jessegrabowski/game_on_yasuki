@@ -4,7 +4,8 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
-from yasuki_core.engine.rules.state import BattleOutcome, BattleSegment, Segment
+from yasuki_core.engine.rules.state import BattleOutcome
+from yasuki_core.engine.rules.turn.structure import BattleSegment, Segment
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core import ruleset
 from yasuki_gui import theme

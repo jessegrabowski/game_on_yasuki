@@ -8,7 +8,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.engine.rules.state import BattleSegment
+from yasuki_core.engine.rules.turn.structure import BattleSegment
 from yasuki_core.game_pieces.prints import ActionPrint, AttachmentPrint, FatePrint
 
 from tests.yasuki_core.engine.builders import (
