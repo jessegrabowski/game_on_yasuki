@@ -25,7 +25,8 @@ from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import Discard, DiscardFavor, TakeFavor
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.rules.flow import submit
-from yasuki_core.engine.rules.state import AttackPhase, BattlefieldInfo, GameState
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
     ActionRound,

@@ -7,9 +7,6 @@ yasuki_core.engine.rules.state
 
 .. autosummary::
 
-    AttackPhase
-    BattleOutcome
-    BattlefieldInfo
     GameState
 
 .. rubric:: Functions
