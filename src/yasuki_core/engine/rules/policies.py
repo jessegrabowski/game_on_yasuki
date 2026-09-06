@@ -566,7 +566,7 @@ def _spend(request: AssignUnits, view: GameView, needs: list[tuple[int, int]]) -
     once — :meth:`AssignUnits.accepts` refuses the same Personality twice.
 
     Reads the candidates as a set of units rather than of places, which holds because
-    :func:`~yasuki_core.engine.rules.battle.assignment_candidates` pairs every assignable unit with
+    :func:`~yasuki_core.engine.rules.resolution.assignment_candidates` pairs every assignable unit with
     every battlefield. A candidate list restricting a unit to some battlefields would need this to
     pick per battlefield instead.
 

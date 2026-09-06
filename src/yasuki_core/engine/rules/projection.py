@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
-from yasuki_core.engine.rules import battle
+from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.economy import (
     active_modifiers,
@@ -347,8 +347,8 @@ def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
                 strength=effective_province_strength(game, info.province),
                 attacking=_units(game, index, attack.attacker),
                 defending=_units(game, index, attack.defender),
-                attacking_force=battle.army_force(game, index, attack.attacker),
-                defending_force=battle.army_force(game, index, attack.defender),
+                attacking_force=resolution.army_force(game, index, attack.attacker),
+                defending_force=resolution.army_force(game, index, attack.defender),
                 fought=index in attack.fought,
                 outcome=info.outcome,
                 destroyed_names=_destroyed_names(game, info.outcome),
