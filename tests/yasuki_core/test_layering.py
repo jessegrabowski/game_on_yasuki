@@ -2,8 +2,10 @@ import ast
 import pathlib
 
 import yasuki_core
+from yasuki_core.engine import rules
 
 CORE = pathlib.Path(yasuki_core.__file__).parent
+RULES = pathlib.Path(rules.__file__).parent
 # yasuki_core is the substrate the other two packages sit on. It may not import either of them, or
 # the dependency runs both ways and neither can be used without the other.
 FORBIDDEN = ("yasuki_web", "yasuki_gui")
@@ -41,3 +43,20 @@ def test_the_scan_can_see_an_offending_import(tmp_path):
     found = {name.split(".")[0] for name in _imported_modules(probe)}
 
     assert found >= set(FORBIDDEN)
+
+
+def test_no_rules_package_reexports():
+    # An __init__ that re-exports makes its package a single import node: importing any submodule
+    # runs the whole package, which reintroduces cycles the splits exist to avoid. cards/ is the
+    # documented exception -- it aggregates its set modules on purpose, and a test guards that list.
+    offenders = {
+        str(path.relative_to(RULES))
+        for path in RULES.rglob("__init__.py")
+        if path.parent.name != "cards"
+        and any(
+            isinstance(node, ast.Import | ast.ImportFrom)
+            for node in ast.walk(ast.parse(path.read_text(encoding="utf-8")))
+        )
+    }
+
+    assert offenders == set()
