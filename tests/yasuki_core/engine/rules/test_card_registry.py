@@ -7,6 +7,7 @@ from yasuki_core.engine.rules import (
     attachments,
     cards,
     economy,
+    effects,
     equip,
     policies,
     state_rules,
@@ -26,7 +27,16 @@ from yasuki_core.engine.rules.events import EnteredPlay
 # and CHOICE_PROMPTS are deliberately left out: both key on the kind of a pending choice rather than
 # on a card. CHOICE_PROMPTS lives in decisions and is visible here only because triggers imports it
 # to register into. POLICIES is the policy registry, keyed by policy name rather than by card.
-REGISTRY_MODULES = (abilities, attachments, economy, equip, policies, state_rules, triggers)
+REGISTRY_MODULES = (
+    abilities,
+    attachments,
+    economy,
+    effects,
+    equip,
+    policies,
+    state_rules,
+    triggers,
+)
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "MAY_REMAIN_BOWED",
@@ -47,6 +57,7 @@ VALIDATED_REGISTRIES = {
     "CHI_DEATH_EXEMPT",
     "ATTACHMENT_GRANTS",
     "ATTACH_RESTRICTIONS",
+    "ATTACK_STRENGTH_AGAINST",
     "_TRIGGERS",
 }
 NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS", "CHOICE_PROMPTS", "POLICIES"}
@@ -128,6 +139,13 @@ def test_an_id_with_no_near_match_is_still_reported():
     assert unregistered_card_ids({"triggers": frozenset({"zzzzzzzzzz"})}) == [
         "triggers: no card has the id 'zzzzzzzzzz'"
     ]
+
+
+def test_the_attack_strength_registry_is_validated():
+    # The named instance of the guard above, kept because this is the registry that was actually
+    # missed: it lives in effects.py among the effect dataclasses rather than beside the read that
+    # consults it, so nothing walking the registry modules ever reached it.
+    assert registered_card_ids()["attack strength"]
 
 
 def a_trigger(ctx):

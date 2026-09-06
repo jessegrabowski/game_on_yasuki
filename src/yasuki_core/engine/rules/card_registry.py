@@ -7,6 +7,7 @@ from yasuki_core.engine.rules import (
     abilities,
     attachments,
     economy,
+    effects,
     equip,
     policies,
     state_rules,
@@ -45,6 +46,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "ability heuristics": frozenset(policies.ABILITY_HEURISTICS),
         "attachment grants": frozenset(attachments.ATTACHMENT_GRANTS),
         "attach restrictions": frozenset(equip.ATTACH_RESTRICTIONS),
+        "attack strength": frozenset(effects.ATTACK_STRENGTH_AGAINST),
         "triggers": frozenset(
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),
