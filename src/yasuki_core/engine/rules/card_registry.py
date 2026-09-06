@@ -70,8 +70,9 @@ def duplicate_registrations(
     One human-readable line per card id whose trigger is registered more than once.
 
     Only ``_TRIGGERS`` can hold a duplicate. It appends, so a handler copy-pasted into a second module
-    makes the trigger fire twice — a wrong game state rather than a shadowed one. The dict registries
-    overwrite instead, and the three written as literals are covered by ruff's F601.
+    makes the trigger fire twice — a wrong game state rather than a shadowed one. Every other
+    per-card registry raises on a repeated registration, so a duplicate there is loud at import
+    rather than something to be found here.
 
     Parameters
     ----------

@@ -5,12 +5,18 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.abilities import (
+    BOW_WAIVERS,
     CardLocation,
     Ability,
+    MAY_NOT_LOBBY,
+    MAY_REMAIN_BOWED,
     abilities_for,
     ability_for,
+    bow_waiver,
     has_absent_ability,
     itself,
+    may_not_lobby,
+    may_remain_bowed,
     no_cost,
     activatable,
     _ABILITIES,
@@ -167,6 +173,27 @@ def test_a_second_enters_unbowed_for_one_card_is_refused():
             register_enters_unbowed("guard_probe")
     finally:
         _ENTERS_UNBOWED.discard("guard_probe")
+
+
+@pytest.mark.parametrize(
+    "register_flag, registry, complaint",
+    [
+        (bow_waiver, BOW_WAIVERS, "already waives a bow cost"),
+        (may_not_lobby, MAY_NOT_LOBBY, "already may not be bowed to Lobby"),
+        (may_remain_bowed, MAY_REMAIN_BOWED, "may already remain bowed"),
+    ],
+    ids=["bow_waiver", "may_not_lobby", "may_remain_bowed"],
+)
+def test_a_second_flag_registration_for_one_card_is_refused(register_flag, registry, complaint):
+    # A flat set absorbs a repeated registration, so without this guard a card listed from two set
+    # modules is invisible rather than loud — the same failure register_enters_unbowed guards above.
+    register_flag("guard_probe")
+
+    try:
+        with pytest.raises(ValueError, match=f"guard_probe {complaint}"):
+            register_flag("guard_probe")
+    finally:
+        registry.discard("guard_probe")
 
 
 # An ability that acts from a Province rather than from play — the shape every Event needs. It
