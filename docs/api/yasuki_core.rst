@@ -42,7 +42,8 @@ yasuki_core
     yasuki_core.engine.rules.actions <yasuki_core.engine.rules.actions>
     yasuki_core.engine.rules.agents <yasuki_core.engine.rules.agents>
     yasuki_core.engine.rules.attachments <yasuki_core.engine.rules.attachments>
-    yasuki_core.engine.rules.battle <yasuki_core.engine.rules.battle>
+    yasuki_core.engine.rules.battle.records <yasuki_core.engine.rules.battle.records>
+    yasuki_core.engine.rules.battle.resolution <yasuki_core.engine.rules.battle.resolution>
     yasuki_core.engine.rules.card_registry <yasuki_core.engine.rules.card_registry>
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.economy <yasuki_core.engine.rules.economy>
@@ -61,6 +62,7 @@ yasuki_core
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_rules <yasuki_core.engine.rules.state_rules>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
+    yasuki_core.engine.rules.turn.structure <yasuki_core.engine.rules.turn.structure>
     yasuki_core.engine.rules.units <yasuki_core.engine.rules.units>
     yasuki_core.engine.rules.victory <yasuki_core.engine.rules.victory>
     yasuki_core.engine.rules.work <yasuki_core.engine.rules.work>

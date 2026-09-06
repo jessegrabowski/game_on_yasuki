@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.economy import maximum_gold_production, untaken_self_grant
 from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.log import replay
-from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.triggers import TriggerContext, _TRIGGERS
 from yasuki_core.engine.session import EngineSession
 

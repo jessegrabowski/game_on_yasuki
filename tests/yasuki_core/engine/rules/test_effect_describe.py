@@ -3,7 +3,7 @@ import inspect
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.state import BEGINNING_OF_COMBAT, END_OF_TURN
+from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT, END_OF_TURN
 from yasuki_core.engine.rules.effects import (
     RefillProvince,
     AdjustCounter,

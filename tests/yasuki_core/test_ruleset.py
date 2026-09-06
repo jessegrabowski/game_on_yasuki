@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.rules.state import BattleSegment, Segment
+from yasuki_core.engine.rules.turn.structure import BattleSegment, Segment
 from yasuki_core.ruleset import Ruleset, SHATTERED_EMPIRE, normalize_clan
 
 

@@ -6,7 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.decisions import (
     ChooseEquipTarget,
     ChoosePayment,

@@ -7,10 +7,13 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard, redact
-from yasuki_core.engine.rules.state import BattleOutcome, GameState, Phase
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.battle.records import BattleOutcome
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules import battle, triggers
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.projection import _identifiable_ids, project
@@ -342,13 +345,13 @@ def test_the_view_and_the_engine_agree_on_an_army():
         "sent",
     )
     put_in_play(game, personality("kept", owner=PlayerId.P1, force=3))
-    battle.declare_attack(game, PlayerId.P1)
+    resolution.declare_attack(game, PlayerId.P1)
     ops.assign(game.table, sent, 0)
 
     view = project(game, PlayerId.P1)
 
     # The seat has a unit at home too, so a view that quietly counted the wrong set would differ.
-    assert view.unit_force["sent"] == battle.army_force(game, 0, PlayerId.P1) == 9
+    assert view.unit_force["sent"] == resolution.army_force(game, 0, PlayerId.P1) == 9
     assert view.unit_force["kept"] == 3
 
 
@@ -521,7 +524,7 @@ def _attack_between(face_up: bool) -> GameState:
     """P1 attacking P2, whose one Province holds a card turned ``face_up`` or not."""
     game = two_seat_game()
     province_card(game, "p2-holding", seat=PlayerId.P2, index=0, face_up=face_up)
-    battle.declare_attack(game, PlayerId.P1)
+    resolution.declare_attack(game, PlayerId.P1)
     return game
 
 
@@ -549,7 +552,7 @@ def test_a_fortification_belongs_only_to_the_province_it_defends():
         province_card(game, f"p2-holding{index}", seat=PlayerId.P2, index=index, face_up=True)
         wall = put_in_play(game, holding(card_id, owner=PlayerId.P2, keywords=("Fortification",)))
         game.table.province_attachments[wall.id] = ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, index)
-    battle.declare_attack(game, PlayerId.P1)
+    resolution.declare_attack(game, PlayerId.P1)
 
     lanes = project(game, PlayerId.P1).attack.battlefields
 
@@ -618,7 +621,7 @@ def test_the_attack_view_names_the_cards_a_battle_destroyed():
     game = two_seat_game()
     # A name that is not the id, so the assertion cannot pass by echoing what it was given.
     province_card(game, "p2-holding", seat=PlayerId.P2, index=0, name="Kyuden Bayushi")
-    battle.declare_attack(game, PlayerId.P1)
+    resolution.declare_attack(game, PlayerId.P1)
     attack = game.attack
     attack.battlefields = (
         attack.battlefields[0]._replace(
@@ -639,7 +642,7 @@ def test_the_attack_view_names_the_cards_a_battle_destroyed():
 def test_a_battlefield_with_no_outcome_names_nothing_destroyed():
     game = two_seat_game()
     province_card(game, "p2-holding", seat=PlayerId.P2, index=0)
-    battle.declare_attack(game, PlayerId.P1)
+    resolution.declare_attack(game, PlayerId.P1)
 
     view = project(game, PlayerId.P1)
 

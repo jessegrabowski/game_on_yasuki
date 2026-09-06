@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import battle
+from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.actions import ActionTiming, DeclareAttack, Pass
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.decisions import (
     assignment_token,
 )
 from yasuki_core.engine.rules.policies import EconomicPolicy, GoldRushPolicy
-from yasuki_core.engine.rules.state import Phase, Segment
+from yasuki_core.engine.rules.turn.structure import Phase, Segment
 from yasuki_core.engine.rules.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
@@ -333,8 +333,8 @@ def test_the_economic_policies_decline_the_attack(policy):
 def test_the_defender_is_the_one_other_seat():
     game = two_seat_game()
 
-    assert battle.defender_of(game, PlayerId.P1) is PlayerId.P2
-    assert battle.defender_of(game, PlayerId.P2) is PlayerId.P1
+    assert resolution.defender_of(game, PlayerId.P1) is PlayerId.P2
+    assert resolution.defender_of(game, PlayerId.P2) is PlayerId.P1
 
 
 def test_a_seat_with_no_opponent_has_no_defender():
@@ -342,7 +342,7 @@ def test_a_seat_with_no_opponent_has_no_defender():
     del game.table.seats[PlayerId.P2]
 
     with pytest.raises(ValueError, match="0 opponents"):
-        battle.defender_of(game, PlayerId.P1)
+        resolution.defender_of(game, PlayerId.P1)
 
 
 def test_a_token_names_a_card_and_a_battlefield():
@@ -367,7 +367,7 @@ def test_every_unbowed_personality_at_home_pairs_with_every_battlefield():
     heroes = _hero_ids(PlayerId.P1, 2)
     session.act(PlayerId.P1, DeclareAttack())
 
-    candidates = battle.assignment_candidates(session.game, PlayerId.P1)
+    candidates = resolution.assignment_candidates(session.game, PlayerId.P1)
 
     assert set(candidates) == {
         assignment_token(hero, battlefield) for hero in heroes for battlefield in range(2)
@@ -380,7 +380,7 @@ def test_a_bowed_personality_is_not_assignable():
     session.game.table.cards_by_id[bowed].bow()
     session.act(PlayerId.P1, DeclareAttack())
 
-    assert battle.assignable_units(session.game, PlayerId.P1) == [
+    assert resolution.assignable_units(session.game, PlayerId.P1) == [
         session.game.table.cards_by_id[standing]
     ]
 
@@ -393,22 +393,22 @@ def test_a_personality_already_at_a_battlefield_is_not_assignable():
     session.act(PlayerId.P1, DeclareAttack())
     ops.assign(session.game.table, session.game.table.cards_by_id[away], 0)
 
-    assert [card.id for card in battle.assignable_units(session.game, PlayerId.P1)] == [home]
+    assert [card.id for card in resolution.assignable_units(session.game, PlayerId.P1)] == [home]
 
 
 def test_only_the_seats_own_personalities_are_assignable():
     session = _to_battle(_session(defender_provinces=1, units=1))
     session.act(PlayerId.P1, DeclareAttack())
 
-    assert [card.id for card in battle.assignable_units(session.game, PlayerId.P1)] == _hero_ids(
-        PlayerId.P1, 1
-    )
+    assert [
+        card.id for card in resolution.assignable_units(session.game, PlayerId.P1)
+    ] == _hero_ids(PlayerId.P1, 1)
 
 
 def test_there_are_no_candidates_without_a_declared_attack():
     session = _to_battle(_session(units=2))
 
-    assert battle.assignment_candidates(session.game, PlayerId.P1) == ()
+    assert resolution.assignment_candidates(session.game, PlayerId.P1) == ()
 
 
 def test_assigning_nothing_is_a_well_formed_answer():
@@ -495,7 +495,7 @@ def test_an_assignment_names_the_window_it_happened_in():
 
     session.submit(PlayerId.P1, DecisionResponse((assignment_token(heroes[0], 0),)))
 
-    assert session.game.attack.assigned_in == {heroes[0]: battle.MANEUVERS_WINDOW}
+    assert session.game.attack.assigned_in == {heroes[0]: resolution.MANEUVERS_WINDOW}
 
 
 def test_a_unit_that_stayed_home_names_no_window():
@@ -509,7 +509,7 @@ def test_a_unit_that_stayed_home_names_no_window():
 def test_both_seats_assign_to_the_same_battlefield():
     session, heroes = _declared(defender_provinces=1)
     session.submit(PlayerId.P1, DecisionResponse((assignment_token(heroes[0], 0),)))
-    defender = battle.assignable_units(session.game, PlayerId.P2)[0]
+    defender = resolution.assignable_units(session.game, PlayerId.P2)[0]
 
     session.submit(PlayerId.P2, DecisionResponse((assignment_token(defender.id, 0),)))
 
@@ -553,12 +553,12 @@ def test_a_bowed_follower_does_not_block_its_personality():
     follower.bow()
     session.act(PlayerId.P1, DeclareAttack())
 
-    assert [card.id for card in battle.assignable_units(session.game, PlayerId.P1)] == [leader]
+    assert [card.id for card in resolution.assignable_units(session.game, PlayerId.P1)] == [leader]
 
 
 def test_opening_the_maneuvers_segment_outside_an_attack_is_an_error():
     with pytest.raises(ValueError, match="no attack is declared"):
-        battle.open_maneuvers(two_seat_game())
+        resolution.open_maneuvers(two_seat_game())
 
 
 def test_a_seat_with_nothing_to_assign_is_still_asked():
@@ -582,21 +582,21 @@ def test_a_seat_with_nothing_to_assign_is_still_asked():
 def test_an_armys_force_is_the_sum_of_its_units():
     session = _one_battlefield({"a": 3, "b": 4}, {"d": 5})
 
-    assert battle.army_force(session.game, 0, PlayerId.P1) == 7
-    assert battle.army_force(session.game, 0, PlayerId.P2) == 5
+    assert resolution.army_force(session.game, 0, PlayerId.P1) == 7
+    assert resolution.army_force(session.game, 0, PlayerId.P2) == 5
 
 
 def test_a_side_with_no_units_has_zero_force():
     session = _one_battlefield({"a": 3}, {})
 
-    assert battle.army_force(session.game, 0, PlayerId.P2) == 0
+    assert resolution.army_force(session.game, 0, PlayerId.P2) == 0
 
 
 def test_a_bowed_personality_contributes_nothing_at_resolution():
     session = _one_battlefield({"a": 3, "b": 4}, {"d": 5})
     session.game.table.cards_by_id["b"].bow()
 
-    assert battle.army_force(session.game, 0, PlayerId.P1) == 3
+    assert resolution.army_force(session.game, 0, PlayerId.P1) == 3
 
 
 def test_the_attacker_winning_destroys_the_defending_army():
@@ -783,7 +783,7 @@ def test_an_attack_can_name_an_attacker_other_than_the_active_seat():
     # attack names its own Attacker — a Counterattack has the seat that just defended attacking.
     session = _to_battle(_session(defender_provinces=1))
 
-    battle.declare_attack(session.game, PlayerId.P2)
+    resolution.declare_attack(session.game, PlayerId.P2)
 
     attack = session.game.attack
     assert attack.attacker is PlayerId.P2

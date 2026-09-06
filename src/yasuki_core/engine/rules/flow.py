@@ -24,16 +24,15 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.state import (
+from yasuki_core.engine.rules.state import GameState, once_per_turn
+from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     END_OF_TURN,
-    GameState,
     PHASE_TIMINGS,
     Phase,
     RESPONSE_TIMINGS,
     RoundKind,
     TURN_PHASES,
-    once_per_turn,
 )
 from yasuki_core.engine.rules.work import (
     ApplyEffects,
@@ -118,11 +117,11 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.payments import payment_request
+from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules import (
     abilities,
     favor,
     favor_abilities,
-    battle,
     state_rules,
     triggers,
 )
@@ -188,7 +187,7 @@ def advance(game: GameState) -> None:
     if game.phase is Phase.ACTION:
         _lift_straighten_delays(game)
     elif game.phase is Phase.BATTLE:
-        battle.end_attack_phase(game)
+        resolution.end_attack_phase(game)
     following = next_phase(game.phase)
     if following is not None:
         game.phase = following
@@ -255,7 +254,7 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
         close_response_window(game)
         return
     if game.round.kind is RoundKind.BATTLE_SEGMENT:
-        battle.close_battle_segment(game)
+        resolution.close_battle_segment(game)
         return
     advance(game)
 
@@ -321,8 +320,8 @@ def perform(game: GameState, action: Action) -> None:
         case PlayStrategy(card_id=card_id, ability_key=ability_key):
             play_strategy(game, card_id, ability_key)
         case DeclareAttack():
-            battle.declare_attack(game)
-            battle.open_maneuvers(game)
+            resolution.declare_attack(game)
+            resolution.open_maneuvers(game)
         case _:
             raise ValueError(f"no handler for action {type(action).__name__}")
     # An action resolves fully before the next input; one that paused for a decision leaves its
@@ -657,10 +656,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         case ChooseInvestAmount():
             _apply_invest_amount(game, request, response)
         case AssignUnits():
-            battle.apply_assignment(game, request, response)
+            resolution.apply_assignment(game, request, response)
         case ChooseBattlefield():
             game.pending = None
-            battle.fight_battle(game, int(response.choices[0]))
+            resolution.fight_battle(game, int(response.choices[0]))
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
     # Symmetric with `perform`: an answered decision resolves fully before the next input.
@@ -773,7 +772,7 @@ def _resolve(game: GameState, item: WorkItem) -> None:
         case ApplyEffects(effects=effects):
             triggers.resolve_effects(game, list(effects))
         case FightNextBattle():
-            battle.fight_next_battle(game)
+            resolution.fight_next_battle(game)
         case _:
             raise ValueError(f"no resolver for work item {type(item).__name__}")
 

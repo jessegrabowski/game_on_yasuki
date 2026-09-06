@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.state import Phase, TURN_PHASES
+from yasuki_core.engine.rules.turn.structure import Phase, TURN_PHASES
 from yasuki_gui import theme
 from yasuki_gui.labels import PHASE_LABELS
 

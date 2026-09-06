@@ -27,7 +27,8 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
     Then,
 )
-from yasuki_core.engine.rules.state import BEGINNING_OF_COMBAT, GameState
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey

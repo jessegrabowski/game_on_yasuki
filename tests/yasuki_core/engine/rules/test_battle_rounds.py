@@ -13,7 +13,8 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
-from yasuki_core.engine.rules import abilities, battle, flow, legality, triggers
+from yasuki_core.engine.rules import abilities, flow, legality, triggers
+from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.abilities import (
     _ABILITIES,
     Ability,
@@ -22,7 +23,7 @@ from yasuki_core.engine.rules.abilities import (
     register_ability,
 )
 from yasuki_core.engine.rules.effects import Bow, GrantPriority
-from yasuki_core.engine.rules.state import (
+from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
     BEGINNING_OF_COMBAT,
     BattleSegment,
@@ -190,7 +191,7 @@ def test_closing_a_segment_when_none_is_open_is_refused():
     session.game.attack.battle_segment = None
 
     with pytest.raises(ValueError, match="no battle segment is open"):
-        battle.close_battle_segment(session.game)
+        resolution.close_battle_segment(session.game)
 
 
 def test_resolving_with_no_battlefield_named_is_refused():
@@ -201,7 +202,7 @@ def test_resolving_with_no_battlefield_named_is_refused():
     session.game.attack.current = None
 
     with pytest.raises(ValueError, match="no battle is being fought"):
-        battle.close_battle_segment(session.game)
+        resolution.close_battle_segment(session.game)
 
 
 def _in_a_battle_one_side(*, present: PlayerId) -> EngineSession:

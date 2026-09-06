@@ -1,6 +1,6 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import battle
+from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.actions import DeclareAttack, Equip, Pass
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
@@ -94,12 +94,12 @@ def _attacked(*, defenders: dict[str, int], attackers: dict[str, int], provinces
 def _defend(session, sent: dict[str, int]) -> tuple[str, ...]:
     """Send the Attacker's units where ``sent`` says, then ask the policy to defend."""
     game = session.game
-    battle.declare_attack(game, ATTACKER)
+    resolution.declare_attack(game, ATTACKER)
     for card_id, index in sent.items():
         ops.assign(game.table, game.table.cards_by_id[card_id], index)
     request = AssignUnits(
         seat=DEFENDER,
-        candidates=battle.assignment_candidates(game, DEFENDER),
+        candidates=resolution.assignment_candidates(game, DEFENDER),
         battlefields=len(game.attack.battlefields),
     )
     answer = MilitaryPolicy().decide(request, project(game, DEFENDER))
@@ -222,10 +222,10 @@ class TestDefending:
 def _attack_answer(session, seat=ATTACKER) -> tuple[str, ...]:
     """Declare, then ask the policy where the Attacker's units go."""
     game = session.game
-    battle.declare_attack(game, seat)
+    resolution.declare_attack(game, seat)
     request = AssignUnits(
         seat=seat,
-        candidates=battle.assignment_candidates(game, seat),
+        candidates=resolution.assignment_candidates(game, seat),
         battlefields=len(game.attack.battlefields),
     )
     answer = MilitaryPolicy().decide(request, project(game, seat))
@@ -321,7 +321,7 @@ class TestDeclaring:
         """`legality` withholds the action once an attack stands, so the policy must take what it is
         offered rather than what it would prefer."""
         session = _attacked(defenders={"guard": 1}, attackers={"raider": 5})
-        battle.declare_attack(session.game, ATTACKER)
+        resolution.declare_attack(session.game, ATTACKER)
         view = project(session.game, ATTACKER)
         actions = session.legal_actions(ATTACKER)
         assert not any(isinstance(action, DeclareAttack) for action in actions)
@@ -383,7 +383,7 @@ class TestFightOrder:
             defenders={"guard": 3}, attackers={"host-a": 9, "host-b": 4}, provinces=2
         )
         game = session.game
-        battle.declare_attack(game, ATTACKER)
+        resolution.declare_attack(game, ATTACKER)
         ops.assign(game.table, game.table.cards_by_id["host-a"], 1)
         ops.assign(game.table, game.table.cards_by_id["host-b"], 0)
         request = ChooseBattlefield(seat=ATTACKER, candidates=("0", "1"))
@@ -400,10 +400,10 @@ class TestDelegation:
         points them would be nonsense, and the fallback declines instead."""
         session = _attacked(defenders={"guard": 4}, attackers={"raider": 3})
         game = session.game
-        battle.declare_attack(game, ATTACKER)
+        resolution.declare_attack(game, ATTACKER)
         request = AssignUnits(
             seat=ATTACKER,
-            candidates=battle.assignment_candidates(game, ATTACKER),
+            candidates=resolution.assignment_candidates(game, ATTACKER),
             battlefields=len(game.attack.battlefields),
         )
 
@@ -443,8 +443,8 @@ def test_a_driven_defense_puts_units_on_the_battlefield():
     running the default agent answers the empty tuple here and the Province falls uncontested."""
     session = _attacked(defenders={"guard": 4}, attackers={"raider": 3}, provinces=1)
     game = session.game
-    battle.declare_attack(game, ATTACKER)
-    battle.open_maneuvers(game)
+    resolution.declare_attack(game, ATTACKER)
+    resolution.open_maneuvers(game)
     session.submit(ATTACKER, DecisionResponse((assignment_token("raider", 0),)))
 
     request = game.pending
@@ -452,7 +452,7 @@ def test_a_driven_defense_puts_units_on_the_battlefield():
     session.submit(DEFENDER, MilitaryPolicy().decide(request, project(game, DEFENDER)))
 
     assert location_of(game.table, game.table.cards_by_id["guard"]).battlefield == 0
-    assert battle.army_force(game, 0, DEFENDER) == 4
+    assert resolution.army_force(game, 0, DEFENDER) == 4
 
 
 def test_a_military_policy_wins_by_destroying_every_province():

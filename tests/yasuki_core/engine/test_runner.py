@@ -13,7 +13,7 @@ from yasuki_core.game_pieces.prints import (
     RingPrint,
     StrongholdPrint,
 )
-from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.agents import AutoAgent
 from yasuki_core.engine import runner as runner_module
 from yasuki_core.engine.runner import Controls

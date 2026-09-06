@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.decisions import DecisionResponse, DiscardToHandSi
 from yasuki_core.engine.rules.policies import PassPolicy, RandomPolicy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import Act, Answer
-from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.runner import Controls, play_game, run_game
 from yasuki_core.engine.session import EngineSession
 

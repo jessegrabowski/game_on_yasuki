@@ -32,7 +32,8 @@ from yasuki_core.engine.rules.economy import (
     lobby_amount,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.state import GameState, RoundKind
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.units import has_presence
 from yasuki_core.engine.rules import abilities, favor_abilities
 from yasuki_core.game_pieces import keywords

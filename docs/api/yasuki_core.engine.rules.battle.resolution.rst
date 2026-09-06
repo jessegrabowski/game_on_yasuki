@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.battle
-===============================
+yasuki_core.engine.rules.battle.resolution
+==========================================
 
-.. currentmodule:: yasuki_core.engine.rules.battle
+.. currentmodule:: yasuki_core.engine.rules.battle.resolution
 
 .. rubric:: Functions
 
@@ -22,6 +22,6 @@ yasuki_core.engine.rules.battle
     open_maneuvers
     resolution_effects
 
-.. automodule:: yasuki_core.engine.rules.battle
+.. automodule:: yasuki_core.engine.rules.battle.resolution
     :members:
     :undoc-members:

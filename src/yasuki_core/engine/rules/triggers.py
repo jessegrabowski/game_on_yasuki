@@ -14,7 +14,8 @@ from yasuki_core.engine.rules.effects import (
     Effect,
 )
 from yasuki_core.engine.rules import state_rules
-from yasuki_core.engine.rules.state import GameState, Moment
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import Moment
 from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.modifiers import LobbyModifier, ProvinceModifier
 from yasuki_core.engine.rules.work import ResumeCascade

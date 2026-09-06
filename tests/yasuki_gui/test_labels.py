@@ -1,8 +1,8 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import battle
-from yasuki_core.engine.rules.state import BattleSegment, Phase, Segment
+from yasuki_core.engine.rules.battle import resolution
+from yasuki_core.engine.rules.turn.structure import BattleSegment, Phase, Segment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_gui.labels import BATTLE_SEGMENT_CHIPS, PHASE_LABELS, turn_context
@@ -57,7 +57,7 @@ def test_a_declared_attack_names_its_segment_rather_than_the_phase(segment, expe
     own — Fight Battles is not called a Segment there, so it is not called one here."""
     session = _session()
     session.game.phase = Phase.BATTLE
-    battle.declare_attack(session.game, P1)
+    resolution.declare_attack(session.game, P1)
     session.game.attack.segment = segment
 
     assert turn_context(session.project(P1)) == expected
@@ -78,7 +78,7 @@ def test_a_battle_names_its_own_segment_and_the_battlefield_it_is_fought_at(
     what tells the seat which question it is answering."""
     session = _session()
     session.game.phase = Phase.BATTLE
-    battle.declare_attack(session.game, P1)
+    resolution.declare_attack(session.game, P1)
     session.game.attack.segment = Segment.FIGHT
     session.game.attack.current = 1
     session.game.attack.battle_segment = battle_segment
@@ -91,7 +91,7 @@ def test_a_battle_segment_belongs_to_whoever_is_taking_the_turn():
     routinely not the one whose turn it is — and the heading follows the turn."""
     session = _session()
     session.game.phase = Phase.BATTLE
-    battle.declare_attack(session.game, P1)
+    resolution.declare_attack(session.game, P1)
     session.game.attack.segment = Segment.FIGHT
     session.game.attack.current = 0
     session.game.attack.battle_segment = BattleSegment.COMBAT
@@ -104,7 +104,7 @@ def test_between_battles_the_heading_falls_back_to_the_attack_phase_segment():
     battle once the one it named has resolved."""
     session = _session()
     session.game.phase = Phase.BATTLE
-    battle.declare_attack(session.game, P1)
+    resolution.declare_attack(session.game, P1)
     session.game.attack.segment = Segment.FIGHT
 
     assert session.game.attack.battle_segment is None
