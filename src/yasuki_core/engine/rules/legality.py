@@ -63,8 +63,8 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
     """The designators ``action`` may be taken under, empty for a pass.
 
     A pass is the CR's alternative to taking an action rather than an action itself, so it carries
-    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designators off
-    the card, which is why this is a query rather than a table: the same action is Open on one
+    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designators
+    off the card, which is why this is a query rather than a table: the same action is Open on one
     Holding and Dynasty on another, and a card printing "Battle/Open" carries both.
 
     Raise ValueError for an action with no designator rule, and for an ``ActivateAbility`` naming a
@@ -399,11 +399,12 @@ def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = Non
 
 def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
     """The Recruit actions ``seat`` can afford: each face-up Holding or Personality in its provinces
-    whose cost its pool plus its unbowed producers' gold could cover. A Personality is withheld while
-    its Honor Requirement is above the seat's Family Honor (a dash ``None`` never withholds; the
-    check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim variant
-    when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest variant
-    when the seat could also cover the card's Invest cost. ``only`` narrows to a single card."""
+    whose cost its pool plus its unbowed producers' gold could cover. A Personality is withheld
+    while its Honor Requirement is above the seat's Family Honor (a dash ``None`` never withholds;
+    the check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim
+    variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an
+    Invest variant when the seat could also cover the card's Invest cost. ``only`` narrows to a
+    single card."""
     if not permits(game, seat, ACTION_TIMINGS[Recruit]):
         return []
     recruits: list[Action] = []
@@ -442,8 +443,8 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
     Personality it controls would accept.
 
     An attachment enters play only by attaching, so hand is a hard filter; the Personality is chosen
-    through the decision the action raises, and the action is withheld unless at least one would take
-    the card. ``only`` narrows to a single card."""
+    through the decision the action raises, and the action is withheld unless at least one would
+    take the card. ``only`` narrows to a single card."""
     if not permits(game, seat, ACTION_TIMINGS[Equip]):
         return []
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
@@ -520,8 +521,8 @@ def gold_reach(game: GameState, seat: PlayerId) -> tuple[int, tuple[L5RCard, ...
     """What ``seat`` can raise before knowing what it is paying for, split from the producers that
     still need to know.
 
-    Only a producer with a registered gold handler can read the cards being paid for; everything else
-    yields its printed Gold Production plus its modifiers whatever the target.
+    Only a producer with a registered gold handler can read the cards being paid for; everything
+    else yields its printed Gold Production plus its modifiers whatever the target.
 
     Returns
     -------
@@ -578,8 +579,8 @@ def proclaim_key(seat: PlayerId, turn: int) -> str:
 
 
 def can_proclaim(game: GameState, card: L5RCard) -> bool:
-    """Whether recruiting ``card`` could be Proclaimed by its seat: a Personality carrying the seat's
-    Clan Alignment that the seat has not yet Proclaimed against this turn."""
+    """Whether recruiting ``card`` could be Proclaimed by its seat: a Personality carrying the
+    seat's Clan Alignment that the seat has not yet Proclaimed against this turn."""
     if not isinstance(card.printed, PersonalityPrint):
         return False
     seat = card.owner
@@ -660,16 +661,6 @@ def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
         if card.owner is seat and isinstance(card.printed, StrongholdPrint):
             return card
     return None
-
-
-def seat_clan(game: GameState, seat: PlayerId | None) -> str | None:
-    """The clan printed on ``seat``'s Stronghold, or None when it has none in play. The first, for a
-    Stronghold printing several."""
-    stronghold = seat_stronghold(game, seat)
-    if stronghold is None:
-        return None
-    names = _clan_names(stronghold)
-    return names[0] if names else None
 
 
 def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:

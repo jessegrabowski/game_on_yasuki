@@ -66,6 +66,8 @@ WAIVER_TAG = "bow_waiver"
 def bow_waiver(printed_id: str) -> None:
     """Register ``printed_id`` as an attachment whose Personality may ignore a bow cost once a
     turn."""
+    if printed_id in BOW_WAIVERS:
+        raise ValueError(f"{printed_id} already waives a bow cost")
     BOW_WAIVERS.add(printed_id)
 
 
@@ -229,6 +231,8 @@ MAY_NOT_LOBBY: set[str] = set()
 
 def may_not_lobby(printed_id: str) -> None:
     """Register ``printed_id`` as a Personality who cannot be bowed to Lobby."""
+    if printed_id in MAY_NOT_LOBBY:
+        raise ValueError(f"{printed_id} already may not be bowed to Lobby")
     MAY_NOT_LOBBY.add(printed_id)
 
 
@@ -439,8 +443,8 @@ class Ability:
 
 @dataclass(frozen=True, slots=True)
 class InvestAbility:
-    """A card's Invest ability — an optional gold cost paid while recruiting for a one-time enter-play
-    effect (the kicker-style second purchase option).
+    """A card's Invest ability — an optional gold cost paid while recruiting for a one-time
+    enter-play effect (the kicker-style second purchase option).
 
     Attributes
     ----------
@@ -472,6 +476,8 @@ MAY_REMAIN_BOWED: set[str] = set()
 
 def may_remain_bowed(printed_id: str) -> None:
     """Register ``printed_id`` as a card the turn-start straighten passes over."""
+    if printed_id in MAY_REMAIN_BOWED:
+        raise ValueError(f"{printed_id} may already remain bowed")
     MAY_REMAIN_BOWED.add(printed_id)
 
 
@@ -591,8 +597,8 @@ def _seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation,
     """Every card ``seat`` could activate something on, with where it is sitting.
 
     A card in hand is yielded like any other. Only an ability whose ``located_at`` names the hand is
-    offered from there, and every ability defaults to the battlefield, so a card waiting to be played
-    stays silent until one says otherwise.
+    offered from there, and every ability defaults to the battlefield, so a card waiting to be
+    played stays silent until one says otherwise.
     """
     for card in game.table.battlefield.cards:
         if card.owner is seat:

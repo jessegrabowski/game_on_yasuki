@@ -39,7 +39,6 @@ yasuki_core.engine.rules.legality
     recruit_cost
     seat_alignment_name
     seat_alignments
-    seat_clan
     seat_holdings
     seat_stronghold
     timings_of

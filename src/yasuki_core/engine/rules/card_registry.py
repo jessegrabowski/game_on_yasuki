@@ -7,6 +7,7 @@ from yasuki_core.engine.rules import (
     abilities,
     attachments,
     economy,
+    effects,
     equip,
     policies,
     state_rules,
@@ -22,9 +23,9 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     """
     Every card id the engine keys a per-card handler on, grouped by the registry holding it.
 
-    ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than on
-    a card — ``modest_farm_straighten`` and ``sincerity_seed`` name steps in a sequence, not cards —
-    so validating it against the card index would report failures that are not defects.
+    ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than
+    on a card — ``modest_farm_straighten`` and ``sincerity_seed`` name steps in a sequence, not
+    cards — so validating it against the card index would report failures that are not defects.
     """
     return {
         "abilities": frozenset(abilities._ABILITIES),
@@ -45,6 +46,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "ability heuristics": frozenset(policies.ABILITY_HEURISTICS),
         "attachment grants": frozenset(attachments.ATTACHMENT_GRANTS),
         "attach restrictions": frozenset(equip.ATTACH_RESTRICTIONS),
+        "attack strength": frozenset(effects.ATTACK_STRENGTH_AGAINST),
         "triggers": frozenset(
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),
@@ -69,9 +71,10 @@ def duplicate_registrations(
     """
     One human-readable line per card id whose trigger is registered more than once.
 
-    Only ``_TRIGGERS`` can hold a duplicate. It appends, so a handler copy-pasted into a second module
-    makes the trigger fire twice — a wrong game state rather than a shadowed one. The dict registries
-    overwrite instead, and the three written as literals are covered by ruff's F601.
+    Only ``_TRIGGERS`` can hold a duplicate. It appends, so a handler copy-pasted into a second
+    module makes the trigger fire twice — a wrong game state rather than a shadowed one. Every other
+    per-card registry raises on a repeated registration, so a duplicate there is loud at import
+    rather than something to be found here.
 
     Parameters
     ----------
