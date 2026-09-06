@@ -1,18 +1,10 @@
+import ast
 import pathlib
 import subprocess
 import sys
 
-from yasuki_core.engine.rules import (
-    abilities,
-    attachments,
-    cards,
-    economy,
-    effects,
-    equip,
-    policies,
-    state_rules,
-    triggers,
-)
+from yasuki_core.engine import rules
+from yasuki_core.engine.rules import cards
 from yasuki_core.engine.rules import card_registry
 from yasuki_core.engine.rules.card_registry import (
     card_keyed_data,
@@ -23,20 +15,7 @@ from yasuki_core.engine.rules.card_registry import (
 )
 from yasuki_core.engine.rules.events import EnteredPlay
 
-# Registry modules, and the per-card registries in them that card_registry validates. CHOICE_RESOLVERS
-# and CHOICE_PROMPTS are deliberately left out: both key on the kind of a pending choice rather than
-# on a card. CHOICE_PROMPTS lives in decisions and is visible here only because triggers imports it
-# to register into. POLICIES is the policy registry, keyed by policy name rather than by card.
-REGISTRY_MODULES = (
-    abilities,
-    attachments,
-    economy,
-    effects,
-    equip,
-    policies,
-    state_rules,
-    triggers,
-)
+# The per-card registries card_registry validates.
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "MAY_REMAIN_BOWED",
@@ -60,19 +39,49 @@ VALIDATED_REGISTRIES = {
     "ATTACK_STRENGTH_AGAINST",
     "_TRIGGERS",
 }
-NOT_KEYED_BY_CARD = {"CHOICE_RESOLVERS", "CHOICE_PROMPTS", "POLICIES"}
+# Module-level collections under engine/rules that key on something other than a card. Each is
+# named so that a genuinely new registry cannot arrive unnoticed: the guard below insists every
+# collection it finds is either validated or listed here, so classifying a new one is a decision
+# someone has to make rather than one they can skip.
+NOT_KEYED_BY_CARD = {
+    "CHOICE_RESOLVERS",  # keyed by the kind of a pending choice
+    "CHOICE_PROMPTS",  # likewise, and it lives in decisions
+    "POLICIES",  # keyed by policy name
+    "AGENTS",  # keyed by agent name
+    "FAVOR_ABILITY_COSTS",  # keyed by the arc's FavorAbility
+    "FAVOR_ABILITY_EFFECTS",
+    "ACTION_TIMINGS",  # keyed by action type
+    "PHASE_TIMINGS",  # keyed by phase
+    "BATTLE_SEGMENT_TIMINGS",  # keyed by battle segment
+    "FIRED_MOMENTS",  # the moments the flow resolves
+    "_AFTER_BATTLE_SEGMENT",  # the segment order
+    "_ACTION_WORDING",  # keyed by action type, for describe_action
+}
+COLLECTIONS = ("dict", "set", "frozenset")
 
 
-def module_level_registries() -> set[str]:
-    """Every per-card registry the registry modules hold. Any collection counts, not only dicts: a
-    registry recording a card's permission rather than its handler is still a place a misspelled id
-    can hide, and a frozenset hides one as well as a set does."""
-    return {
-        name
-        for module in REGISTRY_MODULES
-        for name, value in vars(module).items()
-        if isinstance(value, dict | set | frozenset) and not name.startswith("__")
-    }
+def module_level_collections() -> set[str]:
+    """Every module-level dict, set and frozenset *defined* under ``engine/rules``.
+
+    Read from the source rather than from the imported modules. A re-exported name shows up in
+    ``vars`` without the module owning it, and — the failure this exists to prevent — a registry in
+    a module nobody thought to list shows up here regardless.
+    """
+    found: set[str] = set()
+    for path in pathlib.Path(rules.__file__).parent.glob("*.py"):
+        for node in ast.parse(path.read_text(encoding="utf-8")).body:
+            if isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+                if any(kind in ast.unparse(node.annotation) for kind in COLLECTIONS):
+                    found.add(node.target.id)
+            elif isinstance(node, ast.Assign):
+                literal = isinstance(node.value, ast.Dict | ast.Set)
+                call = (
+                    isinstance(node.value, ast.Call)
+                    and getattr(node.value.func, "id", "") in COLLECTIONS
+                )
+                if literal or call:
+                    found.update(t.id for t in node.targets if isinstance(t, ast.Name))
+    return found
 
 
 def test_every_registered_handler_names_a_real_card():
@@ -94,8 +103,9 @@ def test_every_registered_handler_names_a_real_card():
 def test_no_per_card_registry_escapes_validation():
     # The failure this guards is a registry added to the engine and never wired into the check: it
     # would be validated by nothing, and every other test here would still pass. Discovering the
-    # registries rather than listing them is what makes the new one visible.
-    discovered = module_level_registries()
+    # registries rather than listing them is what makes the new one visible — including one in a
+    # module this file never names, which is how the attack-strength registry stayed unchecked.
+    discovered = module_level_collections()
 
     assert discovered - VALIDATED_REGISTRIES == NOT_KEYED_BY_CARD
     assert VALIDATED_REGISTRIES - discovered == set()
@@ -182,7 +192,8 @@ def test_the_same_trigger_on_two_cards_is_legitimate():
 
 def test_no_registries_checks_nothing_rather_than_falling_back():
     # An empty mapping is a caller saying "check these", not "check the defaults". The two answers
-    # coincide while the engine's own registries are clean, which is what makes the confusion durable.
+    # coincide while the engine's own registries are clean, which is what makes the confusion
+    # durable.
     assert unregistered_card_ids({}) == []
     assert unregistered_card_ids({"abilities": frozenset({"milet_farm"})}) != []
 
