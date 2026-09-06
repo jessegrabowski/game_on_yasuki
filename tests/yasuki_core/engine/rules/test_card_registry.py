@@ -65,8 +65,8 @@ def module_level_registries() -> set[str]:
 
 
 def test_every_registered_handler_names_a_real_card():
-    # A handler keyed on a misspelled id registers, never fires, and raises nothing. This is the only
-    # thing standing between that and a silently dead card.
+    # A handler keyed on a misspelled id registers, never fires, and raises nothing. This is the
+    # only thing standing between that and a silently dead card.
     #
     # Run out of process, and via the same entry point the pre-commit hook uses: the registries are
     # module-global and several test modules register handlers on invented ids as they import, so an

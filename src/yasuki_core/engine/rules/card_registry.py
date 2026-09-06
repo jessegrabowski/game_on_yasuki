@@ -22,9 +22,9 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     """
     Every card id the engine keys a per-card handler on, grouped by the registry holding it.
 
-    ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than on
-    a card — ``modest_farm_straighten`` and ``sincerity_seed`` name steps in a sequence, not cards —
-    so validating it against the card index would report failures that are not defects.
+    ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than
+    on a card — ``modest_farm_straighten`` and ``sincerity_seed`` name steps in a sequence, not
+    cards — so validating it against the card index would report failures that are not defects.
     """
     return {
         "abilities": frozenset(abilities._ABILITIES),

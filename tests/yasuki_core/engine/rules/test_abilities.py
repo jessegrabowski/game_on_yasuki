@@ -50,8 +50,8 @@ def _test_cost_grant(game, source_id, chosen, seat):
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
 
 
-# A synthetic ability whose cost pauses for a choice. It exercises the deferred target selection: the
-# cost's own decision must resolve before the ability's target is asked, neither clobbering the
+# A synthetic ability whose cost pauses for a choice. It exercises the deferred target selection:
+# the cost's own decision must resolve before the ability's target is asked, neither clobbering the
 # other. No real card pays a cost that pauses yet.
 register_ability(
     "test_cost_pauses",
