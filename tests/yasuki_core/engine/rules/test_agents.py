@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.agents import AGENTS, AutoAgent, make_agent
+from yasuki_core.engine.bots.agents import AGENTS, AutoAgent, make_agent
 from yasuki_core.engine.rules.decisions import ChooseDistribution, DiscardToHandSize
 
 

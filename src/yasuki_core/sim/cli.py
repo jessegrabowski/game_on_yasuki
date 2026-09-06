@@ -6,8 +6,8 @@ from pathlib import Path
 import numpy as np
 import psycopg
 
-from yasuki_core.engine.rules.agents import Agent, PayingAgent
-from yasuki_core.engine.rules.policies import POLICIES, make_policy
+from yasuki_core.engine.bots.agents import Agent, PayingAgent
+from yasuki_core.engine.bots.policies import POLICIES, make_policy
 from yasuki_core.sim.harness import run_games, sample_rows, write_rows
 from yasuki_core.sim.metrics import (
     Metric,

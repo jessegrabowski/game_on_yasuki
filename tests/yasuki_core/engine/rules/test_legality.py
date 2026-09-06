@@ -12,8 +12,8 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.agents import make_agent
-from yasuki_core.engine.rules.policies import make_policy
+from yasuki_core.engine.bots.agents import make_agent
+from yasuki_core.engine.bots.policies import make_policy
 from yasuki_core.engine.runner import Controls, run_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_setup import build_state_from_deck

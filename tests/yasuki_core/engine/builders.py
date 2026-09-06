@@ -2,7 +2,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import Pass
-from yasuki_core.engine.rules.agents import PayingAgent, is_production_window
+from yasuki_core.engine.bots.agents import PayingAgent, is_production_window
 from yasuki_core.engine.rules.decisions import ChoosePayment, Confirm
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession

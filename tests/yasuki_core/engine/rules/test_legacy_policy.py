@@ -2,7 +2,7 @@ from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Legacy, Recruit
-from yasuki_core.engine.rules.agents import LegacyAgent, PayingAgent
+from yasuki_core.engine.bots.agents import LegacyAgent, PayingAgent
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseLegacyCard,
@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.policies import EconomicLegacyPolicy
+from yasuki_core.engine.bots.policies import EconomicLegacyPolicy
 from yasuki_core.engine.runner import Controls, run_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey

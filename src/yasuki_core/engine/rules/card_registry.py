@@ -9,10 +9,13 @@ from yasuki_core.engine.rules import (
     economy,
     effects,
     equip,
-    policies,
     state_rules,
     triggers,
 )
+
+# The one place the rules layer reaches into the bots: ABILITY_HEURISTICS is keyed by printed id
+# like every other per-card registry, so it is validated here even though a policy is not a rule.
+from yasuki_core.engine.bots import policies
 
 # Without this the registries are empty and every check below passes vacuously.
 from yasuki_core.engine.rules import cards  # noqa: F401

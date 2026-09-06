@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards
-from yasuki_core.engine.rules.policies import GoldRushPolicy
+from yasuki_core.engine.bots.policies import GoldRushPolicy
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
