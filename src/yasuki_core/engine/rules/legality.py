@@ -663,16 +663,6 @@ def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
     return None
 
 
-def seat_clan(game: GameState, seat: PlayerId | None) -> str | None:
-    """The clan printed on ``seat``'s Stronghold, or None when it has none in play. The first, for a
-    Stronghold printing several."""
-    stronghold = seat_stronghold(game, seat)
-    if stronghold is None:
-        return None
-    names = _clan_names(stronghold)
-    return names[0] if names else None
-
-
 def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:
     """Every Clan Alignment slug ``seat`` plays, taken from its Stronghold. Empty for an unaligned
     seat and for one with no Stronghold in play.
