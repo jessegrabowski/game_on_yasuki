@@ -4,8 +4,8 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import DynastyDiscard, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.log import Act, Cancel
-from yasuki_core.engine.rules.agents import AutoAgent
-from yasuki_core.engine.rules.policies import PassPolicy
+from yasuki_core.engine.bots.agents import AutoAgent
+from yasuki_core.engine.bots.policies import PassPolicy
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey

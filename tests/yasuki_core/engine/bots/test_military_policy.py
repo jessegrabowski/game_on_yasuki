@@ -11,8 +11,8 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.agents import AutoAgent
-from yasuki_core.engine.rules.policies import (
+from yasuki_core.engine.bots.agents import AutoAgent
+from yasuki_core.engine.bots.policies import (
     GoldRushPolicy,
     MilitaryPolicy,
     PassPolicy,

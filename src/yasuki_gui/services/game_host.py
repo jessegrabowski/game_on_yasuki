@@ -6,7 +6,7 @@ from numpy.random import Generator
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.runner import Controls, GameRunner
-from yasuki_core.engine.rules.policies import MilitaryPolicy
+from yasuki_core.engine.bots.policies import MilitaryPolicy
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_setup import build_state_from_deck

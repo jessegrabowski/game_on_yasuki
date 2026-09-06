@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard
-from yasuki_core.engine.rules.agents import PayingAgent
+from yasuki_core.engine.bots.agents import PayingAgent
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
     ChooseBattlefield,
@@ -43,7 +43,7 @@ from yasuki_core.game_pieces.prints import (
 class Policy(Protocol):
     """Chooses which action a seat takes from the ones open to it.
 
-    The counterpart to :class:`~yasuki_core.engine.rules.agents.Agent`: a policy picks an action, an
+    The counterpart to :class:`~yasuki_core.engine.bots.agents.Agent`: a policy picks an action, an
     agent answers a decision that action raises. A Recruit needs both — the policy chooses to
     recruit, the agent answers the payment.
 

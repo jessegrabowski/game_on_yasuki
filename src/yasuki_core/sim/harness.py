@@ -6,8 +6,8 @@ import numpy as np
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Action
-from yasuki_core.engine.rules.agents import Agent
-from yasuki_core.engine.rules.policies import Policy
+from yasuki_core.engine.bots.agents import Agent
+from yasuki_core.engine.bots.policies import Policy
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_setup import build_state_from_deck

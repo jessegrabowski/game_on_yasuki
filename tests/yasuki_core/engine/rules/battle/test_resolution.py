@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.decisions import (
     assignment,
     assignment_token,
 )
-from yasuki_core.engine.rules.policies import EconomicPolicy, GoldRushPolicy
+from yasuki_core.engine.bots.policies import EconomicPolicy, GoldRushPolicy
 from yasuki_core.engine.rules.turn.structure import Phase, Segment
 from yasuki_core.engine.rules.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession

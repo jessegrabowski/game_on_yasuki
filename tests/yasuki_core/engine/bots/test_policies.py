@@ -5,7 +5,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import DynastyDiscard, Legacy, Pass
-from yasuki_core.engine.rules.policies import (
+from yasuki_core.engine.bots.policies import (
     POLICIES,
     PassPolicy,
     RandomPolicy,

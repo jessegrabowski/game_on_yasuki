@@ -34,13 +34,14 @@ yasuki_core
     yasuki_core.deck_pdf <yasuki_core.deck_pdf>
     yasuki_core.decklist <yasuki_core.decklist>
     yasuki_core.engine.action_log <yasuki_core.engine.action_log>
+    yasuki_core.engine.bots.agents <yasuki_core.engine.bots.agents>
+    yasuki_core.engine.bots.policies <yasuki_core.engine.bots.policies>
     yasuki_core.engine.intents <yasuki_core.engine.intents>
     yasuki_core.engine.ops <yasuki_core.engine.ops>
     yasuki_core.engine.players <yasuki_core.engine.players>
     yasuki_core.engine.redaction <yasuki_core.engine.redaction>
     yasuki_core.engine.rules.abilities <yasuki_core.engine.rules.abilities>
     yasuki_core.engine.rules.actions <yasuki_core.engine.rules.actions>
-    yasuki_core.engine.rules.agents <yasuki_core.engine.rules.agents>
     yasuki_core.engine.rules.attachments <yasuki_core.engine.rules.attachments>
     yasuki_core.engine.rules.battle.records <yasuki_core.engine.rules.battle.records>
     yasuki_core.engine.rules.battle.resolution <yasuki_core.engine.rules.battle.resolution>
@@ -57,7 +58,6 @@ yasuki_core
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
     yasuki_core.engine.rules.payments <yasuki_core.engine.rules.payments>
-    yasuki_core.engine.rules.policies <yasuki_core.engine.rules.policies>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_rules <yasuki_core.engine.rules.state_rules>

@@ -3,7 +3,7 @@ import pathlib
 import subprocess
 import sys
 
-from yasuki_core.engine import rules
+from yasuki_core.engine import bots, rules
 from yasuki_core.engine.rules import cards
 from yasuki_core.engine.rules import card_registry
 from yasuki_core.engine.rules.card_registry import (
@@ -60,28 +60,42 @@ NOT_KEYED_BY_CARD = {
 COLLECTIONS = ("dict", "set", "frozenset")
 
 
+# Every package card_registry validates a registry in. `bots` is here because ABILITY_HEURISTICS is
+# keyed by printed id like any other per-card registry, so the scan has to follow it out of `rules`.
+SCANNED = (rules, bots)
+
+
 def module_level_collections() -> set[str]:
-    """Every module-level dict, set and frozenset *defined* under ``engine/rules``.
+    """Every module-level dict, set and frozenset *defined* in the scanned packages.
 
     Read from the source rather than from the imported modules, and read recursively. A re-exported
     name shows up in ``vars`` without the module owning it, and — the failure this exists to
     prevent — a registry in a module nobody thought to list shows up here regardless, including one
-    inside a package.
+    inside a package or in a package the rules layer does not own.
     """
+    return {
+        name
+        for package in SCANNED
+        for path in pathlib.Path(package.__file__).parent.rglob("*.py")
+        for name in _collections_defined_in(path)
+    }
+
+
+def _collections_defined_in(path: pathlib.Path) -> set[str]:
+    """The module-level collection names one source file binds, by annotation or by literal."""
     found: set[str] = set()
-    for path in pathlib.Path(rules.__file__).parent.rglob("*.py"):
-        for node in ast.parse(path.read_text(encoding="utf-8")).body:
-            if isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
-                if any(kind in ast.unparse(node.annotation) for kind in COLLECTIONS):
-                    found.add(node.target.id)
-            elif isinstance(node, ast.Assign):
-                literal = isinstance(node.value, ast.Dict | ast.Set)
-                call = (
-                    isinstance(node.value, ast.Call)
-                    and getattr(node.value.func, "id", "") in COLLECTIONS
-                )
-                if literal or call:
-                    found.update(t.id for t in node.targets if isinstance(t, ast.Name))
+    for node in ast.parse(path.read_text(encoding="utf-8")).body:
+        if isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            if any(kind in ast.unparse(node.annotation) for kind in COLLECTIONS):
+                found.add(node.target.id)
+        elif isinstance(node, ast.Assign):
+            literal = isinstance(node.value, ast.Dict | ast.Set)
+            call = (
+                isinstance(node.value, ast.Call)
+                and getattr(node.value.func, "id", "") in COLLECTIONS
+            )
+            if literal or call:
+                found.update(target.id for target in node.targets if isinstance(target, ast.Name))
     return found
 
 

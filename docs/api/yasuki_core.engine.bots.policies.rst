@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.policies
-=================================
+yasuki_core.engine.bots.policies
+================================
 
-.. currentmodule:: yasuki_core.engine.rules.policies
+.. currentmodule:: yasuki_core.engine.bots.policies
 
 .. rubric:: Classes
 
@@ -23,6 +23,6 @@ yasuki_core.engine.rules.policies
     cards_to_cycle
     make_policy
 
-.. automodule:: yasuki_core.engine.rules.policies
+.. automodule:: yasuki_core.engine.bots.policies
     :members:
     :undoc-members:

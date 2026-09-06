@@ -2,10 +2,12 @@ import ast
 import pathlib
 
 import yasuki_core
+from yasuki_core import engine
 from yasuki_core.engine import rules
 
 CORE = pathlib.Path(yasuki_core.__file__).parent
 RULES = pathlib.Path(rules.__file__).parent
+ENGINE = pathlib.Path(engine.__file__).parent
 # yasuki_core is the substrate the other two packages sit on. It may not import either of them, or
 # the dependency runs both ways and neither can be used without the other.
 FORBIDDEN = ("yasuki_web", "yasuki_gui")
@@ -45,13 +47,14 @@ def test_the_scan_can_see_an_offending_import(tmp_path):
     assert found >= set(FORBIDDEN)
 
 
-def test_no_rules_package_reexports():
+def test_no_package_reexports():
     # An __init__ that re-exports makes its package a single import node: importing any submodule
-    # runs the whole package, which reintroduces cycles the splits exist to avoid. cards/ is the
-    # documented exception -- it aggregates its set modules on purpose, and a test guards that list.
+    # runs the whole package, which reintroduces cycles the splits exist to avoid. Every package
+    # under engine/ is scanned, so one added later is covered without being listed here. cards/ is
+    # the documented exception -- it aggregates its set modules on purpose, guarded by its own test.
     offenders = {
-        str(path.relative_to(RULES))
-        for path in RULES.rglob("__init__.py")
+        str(path.relative_to(CORE))
+        for path in ENGINE.rglob("__init__.py")
         if path.parent.name != "cards"
         and any(
             isinstance(node, ast.Import | ast.ImportFrom)
@@ -60,3 +63,17 @@ def test_no_rules_package_reexports():
     }
 
     assert offenders == set()
+
+
+def test_the_rules_layer_does_not_reach_into_the_bots():
+    # A policy reads a redacted GameView and decides; a rule decides what is legal. The dependency
+    # runs one way, and card_registry is the single documented exception -- it validates
+    # ABILITY_HEURISTICS because that registry is keyed by printed id like any other.
+    reaching = {
+        str(source.relative_to(RULES))
+        for source in sorted(RULES.rglob("*.py"))
+        for name in _imported_modules(source)
+        if name.startswith("yasuki_core.engine.bots")
+    }
+
+    assert reaching == {"card_registry.py"}
