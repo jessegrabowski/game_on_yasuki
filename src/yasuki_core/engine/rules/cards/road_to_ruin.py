@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay, ProducedGold, ProducingGold
-from yasuki_core.engine.rules.legality import province_key_holding
+from yasuki_core.engine.rules.board.queries import province_key_holding
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.payments import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn

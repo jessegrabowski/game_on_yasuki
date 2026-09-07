@@ -83,21 +83,23 @@ from yasuki_core.engine.rules.legality import (
     KHARMIC_COST,
     cycle_candidates,
     cycle_key,
+    inheritance_key,
     legacy_candidates,
     legacy_key,
     legacy_search_pool,
     lobby_candidates,
     lobby_key,
     permitted_timings,
-    inheritance_key,
     proclaim_key,
-    province_key_holding,
-    province_zones,
-    province_key_of,
     reachable_gold,
     recruit_cost,
-    seat_holdings,
     seat_stronghold,
+)
+from yasuki_core.engine.rules.board.queries import (
+    owned_holdings,
+    province_key_holding,
+    province_key_of,
+    province_zones,
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -508,7 +510,7 @@ def inheritance(game: GameState) -> None:
     seat = game.active
     game.pending = ChooseInheritanceTarget(
         seat=seat,
-        candidates=tuple(card.id for card in seat_holdings(game, seat)),
+        candidates=tuple(card.id for card in owned_holdings(game, seat)),
     )
 
 

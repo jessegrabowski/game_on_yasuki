@@ -3,16 +3,17 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
-    attack_targets,
     bow_cost,
     bow_parent_and_destroy,
     itself,
     no_cost,
     register_ability,
 )
+from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.attachments import attached_to
-from yasuki_core.engine.rules.economy import effective_chi, is_clan, recruit_discount
+from yasuki_core.engine.rules.economy import effective_chi, recruit_discount
+from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,

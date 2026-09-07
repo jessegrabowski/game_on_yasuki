@@ -2,7 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.abilities import register_event_entry
 from yasuki_core import ruleset
-from yasuki_core.engine.rules.economy import gold_handler, is_clan, keyword_grant
+from yasuki_core.engine.rules.economy import gold_handler, keyword_grant
+from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 

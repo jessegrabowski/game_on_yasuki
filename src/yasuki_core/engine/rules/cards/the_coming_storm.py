@@ -6,17 +6,17 @@ from yasuki_core.engine.rules.abilities import (
     bow_cost,
     favor_cost,
     itself,
-    personalities_in_play,
     register_ability,
 )
+from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.economy import (
-    is_clan,
     lobby_bonus_grant,
-    opposing_seats,
     province_strength_grant,
     recruit_discount,
 )
+from yasuki_core.engine.rules.board.clans import is_clan
+from yasuki_core.engine.rules.board.seats import opposing_seats
 from yasuki_core.engine.rules.effects import Effect, GainHonor, Straighten
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import ZoneKey

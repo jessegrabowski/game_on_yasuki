@@ -18,7 +18,6 @@ yasuki_core.engine.rules.abilities
     abilities_for
     ability_for
     activatable
-    attack_targets
     banish_top_fate
     bow_and_destroy
     bow_cost
@@ -48,9 +47,6 @@ yasuki_core.engine.rules.abilities
     may_stay_bowed
     no_cost
     one_wealth
-    owned_holdings
-    owned_personalities
-    personalities_in_play
     plus_one_gp_this_turn
     register_ability
     register_edict

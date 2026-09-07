@@ -1,10 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import (
-    SELF_GRANT,
-    register_self_grant,
-    self_grant,
-    went_second,
-)
+from yasuki_core.engine.rules.economy import SELF_GRANT, register_self_grant, self_grant
+from yasuki_core.engine.rules.board.seats import went_second
 from yasuki_core.engine.rules.effects import DelayStraighten, Effect, GainHonor, GrantModifier
 from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.modifiers import Duration, Stat

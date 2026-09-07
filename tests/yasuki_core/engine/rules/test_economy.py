@@ -2,16 +2,19 @@ import pytest
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import owned_holdings
+from yasuki_core.engine.rules.board.queries import owned_holdings
 from yasuki_core.engine.rules.effects import Ask, GrantModifier
 from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.state import once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
-from yasuki_core.engine.rules.economy import (
+from yasuki_core.engine.rules.board.clans import is_clan
+from yasuki_core.engine.rules.board.seats import (
     cards_in_play,
     opposing_seats,
     seat_controls,
     went_second,
+)
+from yasuki_core.engine.rules.economy import (
     GOLD_HANDLERS,
     GOLD_SELF_GRANT,
     SELF_GRANT,
@@ -22,7 +25,6 @@ from yasuki_core.engine.rules.economy import (
     gold_handler,
     maximum_gold_production,
     keyword_grant,
-    is_clan,
     recruit_discount,
     register_self_grant,
 )

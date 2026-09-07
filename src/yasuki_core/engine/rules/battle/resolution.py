@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, G
 from yasuki_core.engine.rules.units import unit_force, units_at
 from yasuki_core.engine.rules.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.legality import province_zones
+from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.events import Destroyed
 from yasuki_core.engine.rules.battle.records import (
     AttackPhase,

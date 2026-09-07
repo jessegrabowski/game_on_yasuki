@@ -1,10 +1,5 @@
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    CardLocation,
-    no_cost,
-    personalities_in_play,
-    register_ability,
-)
+from yasuki_core.engine.rules.abilities import Ability, CardLocation, no_cost, register_ability
+from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Effect, GrantMinimum, GrantModifier
 from yasuki_core.engine.rules.modifiers import Duration, Stat
