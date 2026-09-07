@@ -3,12 +3,6 @@ yasuki_core.engine.rules.economy
 
 .. currentmodule:: yasuki_core.engine.rules.economy
 
-.. rubric:: Classes
-
-.. autosummary::
-
-    PlayerState
-
 .. rubric:: Functions
 
 .. autosummary::
@@ -37,8 +31,6 @@ yasuki_core.engine.rules.economy
     lobby_bonus_grant
     maximum_gold_production
     opposing_seats
-    opposing_states
-    player_state
     province_strength_grant
     recruit_discount
     register_self_grant

@@ -8,8 +8,6 @@ from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.state import once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
 from yasuki_core.engine.rules.economy import (
-    opposing_states,
-    player_state,
     cards_in_play,
     opposing_seats,
     seat_controls,
@@ -71,35 +69,6 @@ def test_a_seat_with_no_stronghold_plays_no_clan():
     game = two_seat_game()
 
     assert is_clan(game, PlayerId.P1, ruleset.LION) is False
-
-
-def test_player_state_exposes_stronghold_holdings_gold_and_honor():
-    game = two_seat_game()
-    sh = put_in_play(game, stronghold(PlayerId.P1, gold_production=8))
-    market = put_in_play(game, holding("P1-market", owner=PlayerId.P1, keywords=("Market",)))
-    put_in_play(
-        game, stronghold(PlayerId.P2, gold_production=5)
-    )  # an opponent's card must not leak into me.in_play
-    game.table.seats[PlayerId.P1].honor = 12
-    game.gold[PlayerId.P1] = 3
-
-    me = player_state(game, PlayerId.P1)
-
-    assert me.stronghold is sh
-    assert me.holdings == (market,)
-    assert me.gold == 3 and me.honor == 12
-    assert set(me.in_play) == {sh, market}
-
-
-def test_opposing_states_are_every_other_seat():
-    game = two_seat_game()
-    put_in_play(game, stronghold(PlayerId.P1, gold_production=8))
-    opp_sh = put_in_play(game, stronghold(PlayerId.P2, gold_production=5))
-
-    opponents = opposing_states(game, PlayerId.P1)
-
-    assert [o.seat for o in opponents] == [PlayerId.P2]
-    assert opponents[0].stronghold is opp_sh
 
 
 def test_went_second_is_true_only_for_the_non_first_player():
