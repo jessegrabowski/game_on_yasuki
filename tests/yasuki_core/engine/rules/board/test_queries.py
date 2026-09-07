@@ -28,7 +28,7 @@ def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
     assert owned_holdings(game, PlayerId.P1, "Port") == [printed]
 
     @keyword_grant("keyword_probe")
-    def _grants_port(card, me, opponents):
+    def _grants_port(card, game, seat):
         return ("Port",)
 
     try:
