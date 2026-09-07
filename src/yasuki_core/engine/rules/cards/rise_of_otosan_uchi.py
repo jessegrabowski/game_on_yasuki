@@ -48,7 +48,8 @@ from yasuki_core.engine.rules.economy import (
     effective_keywords,
 )
 from yasuki_core.engine.rules.equip import creation_targets
-from yasuki_core.engine.rules.legality import reachable_gold, seat_alignment_name
+from yasuki_core.engine.rules.legality import reachable_gold
+from yasuki_core.engine.rules.economy import seat_alignment_name
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.units import followers_of

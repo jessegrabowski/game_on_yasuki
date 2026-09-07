@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.cards.torn_asunder import KAXT
 from yasuki_core.engine.rules.economy import effective_chi, effective_force
 from yasuki_core.engine.rules.effects import Destroy
-from yasuki_core.engine.rules.legality import card_alignments
+from yasuki_core.engine.rules.economy import card_alignments
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core import ruleset
 

@@ -14,6 +14,7 @@ yasuki_core.engine.rules.economy
 .. autosummary::
 
     active_modifiers
+    card_alignments
     cards_in_play
     effective_chi
     effective_force
@@ -41,6 +42,8 @@ yasuki_core.engine.rules.economy
     province_strength_grant
     recruit_discount
     register_self_grant
+    seat_alignment_name
+    seat_alignments
     seat_controls
     seat_stronghold
     self_grant

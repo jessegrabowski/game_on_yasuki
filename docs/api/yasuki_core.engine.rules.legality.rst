@@ -8,7 +8,6 @@ yasuki_core.engine.rules.legality
 .. autosummary::
 
     can_proclaim
-    card_alignments
     cycle_candidates
     cycle_key
     gold_producers
@@ -37,8 +36,6 @@ yasuki_core.engine.rules.legality
     province_zones
     reachable_gold
     recruit_cost
-    seat_alignment_name
-    seat_alignments
     seat_holdings
     timings_of
 
