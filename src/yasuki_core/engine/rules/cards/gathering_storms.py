@@ -1,3 +1,4 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     banish_top_fate,
@@ -6,7 +7,7 @@ from yasuki_core.engine.rules.abilities import (
     plus_one_gp_this_turn,
     register_ability,
 )
-from yasuki_core.engine.rules.economy import PlayerState, gold_handler
+from yasuki_core.engine.rules.economy import gold_handler, opposing_seats, seat_stronghold
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     DrawCard,
@@ -24,17 +25,18 @@ from yasuki_core.game_pieces.counters import WEALTH
 
 @gold_handler("ancestral_estate")
 def _ancestral_estate_gold(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+    card: L5RCard, game: GameState, seat: PlayerId, targets: tuple[L5RCard, ...]
 ) -> int:
     """+1 GP while another player's Stronghold has higher Gold Production than yours.
 
     Your own missing Stronghold counts as producing nothing; an opponent's missing Stronghold has
     no production to compare and never grants the bonus.
     """
-    own_production = me.stronghold.gold_production if me.stronghold is not None else 0
+    own = seat_stronghold(game, seat)
+    own_production = own.gold_production if own is not None else 0
+    rivals = (seat_stronghold(game, other) for other in opposing_seats(game, seat))
     outproduced = any(
-        opponent.stronghold is not None and opponent.stronghold.gold_production > own_production
-        for opponent in opponents
+        rival is not None and rival.gold_production > own_production for rival in rivals
     )
     return card.gold_production + (1 if outproduced else 0)
 

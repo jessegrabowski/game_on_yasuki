@@ -8,6 +8,8 @@ from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.state import once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
 from yasuki_core.engine.rules.economy import (
+    opposing_states,
+    player_state,
     cards_in_play,
     opposing_seats,
     seat_controls,
@@ -22,9 +24,7 @@ from yasuki_core.engine.rules.economy import (
     gold_handler,
     maximum_gold_production,
     keyword_grant,
-    opposing_states,
     is_clan,
-    player_state,
     recruit_discount,
     register_self_grant,
 )
@@ -36,24 +36,6 @@ from yasuki_core.game_pieces.prints import PersonalityPrint, StrongholdPrint
 from tests.yasuki_core.engine.builders import two_seat_game
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, stronghold
-
-
-def test_player_state_exposes_stronghold_holdings_gold_and_honor():
-    game = two_seat_game()
-    sh = put_in_play(game, stronghold(PlayerId.P1, gold_production=8))
-    market = put_in_play(game, holding("P1-market", owner=PlayerId.P1, keywords=("Market",)))
-    put_in_play(
-        game, stronghold(PlayerId.P2, gold_production=5)
-    )  # an opponent's card must not leak into me.in_play
-    game.table.seats[PlayerId.P1].honor = 12
-    game.gold[PlayerId.P1] = 3
-
-    me = player_state(game, PlayerId.P1)
-
-    assert me.stronghold is sh
-    assert me.holdings == (market,)
-    assert me.gold == 3 and me.honor == 12
-    assert set(me.in_play) == {sh, market}
 
 
 @pytest.mark.parametrize(
@@ -82,13 +64,42 @@ def test_is_clan_compares_alignments_rather_than_strings(printed, asked, expecte
     game = two_seat_game()
     put_in_play(game, stronghold(PlayerId.P1, clan=printed))
 
-    assert is_clan(player_state(game, PlayerId.P1), asked) is expected
+    assert is_clan(game, PlayerId.P1, asked) is expected
 
 
 def test_a_seat_with_no_stronghold_plays_no_clan():
     game = two_seat_game()
 
-    assert is_clan(player_state(game, PlayerId.P1), ruleset.LION) is False
+    assert is_clan(game, PlayerId.P1, ruleset.LION) is False
+
+
+def test_player_state_exposes_stronghold_holdings_gold_and_honor():
+    game = two_seat_game()
+    sh = put_in_play(game, stronghold(PlayerId.P1, gold_production=8))
+    market = put_in_play(game, holding("P1-market", owner=PlayerId.P1, keywords=("Market",)))
+    put_in_play(
+        game, stronghold(PlayerId.P2, gold_production=5)
+    )  # an opponent's card must not leak into me.in_play
+    game.table.seats[PlayerId.P1].honor = 12
+    game.gold[PlayerId.P1] = 3
+
+    me = player_state(game, PlayerId.P1)
+
+    assert me.stronghold is sh
+    assert me.holdings == (market,)
+    assert me.gold == 3 and me.honor == 12
+    assert set(me.in_play) == {sh, market}
+
+
+def test_opposing_states_are_every_other_seat():
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, gold_production=8))
+    opp_sh = put_in_play(game, stronghold(PlayerId.P2, gold_production=5))
+
+    opponents = opposing_states(game, PlayerId.P1)
+
+    assert [o.seat for o in opponents] == [PlayerId.P2]
+    assert opponents[0].stronghold is opp_sh
 
 
 def test_went_second_is_true_only_for_the_non_first_player():
@@ -133,17 +144,6 @@ def test_cards_in_play_is_only_the_seats_own():
     assert cards_in_play(game, PlayerId.P1) == (mine,)
 
 
-def test_opposing_states_are_every_other_seat():
-    game = two_seat_game()
-    put_in_play(game, stronghold(PlayerId.P1, gold_production=8))
-    opp_sh = put_in_play(game, stronghold(PlayerId.P2, gold_production=5))
-
-    opponents = opposing_states(game, PlayerId.P1)
-
-    assert [o.seat for o in opponents] == [PlayerId.P2]
-    assert opponents[0].stronghold is opp_sh
-
-
 def test_effective_gold_production_falls_back_to_printed_without_a_handler():
     game = two_seat_game()
     mine = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, gold_production=3))
@@ -166,10 +166,10 @@ def test_a_non_producer_yields_zero_with_or_without_wealth_counters():
     assert effective_gold_production(game, hero) == 0
 
 
-def test_a_registered_handler_overrides_with_the_live_views_and_targets():
+def test_a_registered_handler_overrides_with_the_game_the_seat_and_targets():
     game = two_seat_game()
     me_sh = put_in_play(game, stronghold(PlayerId.P1, gold_production=8))
-    opp_sh = put_in_play(game, stronghold(PlayerId.P2, gold_production=5))
+    put_in_play(game, stronghold(PlayerId.P2, gold_production=5))
     probe = put_in_play(
         game, holding("P1-h", owner=PlayerId.P1, printed_id="probe_holding", gold_production=2)
     )
@@ -177,8 +177,8 @@ def test_a_registered_handler_overrides_with_the_live_views_and_targets():
     seen = {}
 
     @gold_handler("probe_holding")
-    def _probe(card, me, opponents, targets):
-        seen["call"] = (card, me, opponents, targets)
+    def _probe(card, game_, seat, targets):
+        seen["call"] = (card, game_, seat, targets)
         return 99
 
     try:
@@ -187,10 +187,10 @@ def test_a_registered_handler_overrides_with_the_live_views_and_targets():
         GOLD_HANDLERS.pop("probe_holding", None)
 
     assert result == 99
-    card, me, opponents, targets = seen["call"]
+    card, seen_game, seat, targets = seen["call"]
     assert card is probe
-    assert me.stronghold is me_sh
-    assert [o.stronghold for o in opponents] == [opp_sh]
+    assert seen_game is game
+    assert seat is PlayerId.P1
     assert targets == (me_sh,)
 
 
@@ -388,14 +388,14 @@ def test_a_second_gold_handler_for_one_card_is_refused():
     # The dict would overwrite, leaving no trace of the handler that lost — so the check has to be at
     # registration, not on the registry afterwards.
     @gold_handler("guard_probe")
-    def _first(card, me, opponents, targets):
+    def _first(card, game_, seat, targets):
         return 0
 
     try:
         with pytest.raises(ValueError, match="guard_probe already has a gold handler"):
 
             @gold_handler("guard_probe")
-            def _second(card, me, opponents, targets):
+            def _second(card, game_, seat, targets):
                 return 1
     finally:
         GOLD_HANDLERS.pop("guard_probe", None)
@@ -403,14 +403,14 @@ def test_a_second_gold_handler_for_one_card_is_refused():
 
 def test_a_second_recruit_discount_for_one_card_is_refused():
     @recruit_discount("guard_probe")
-    def _first(card, me, opponents):
+    def _first(card, game_, seat):
         return 0
 
     try:
         with pytest.raises(ValueError, match="guard_probe already has a recruit discount"):
 
             @recruit_discount("guard_probe")
-            def _second(card, me, opponents):
+            def _second(card, game_, seat):
                 return 1
     finally:
         RECRUIT_DISCOUNTS.pop("guard_probe", None)
@@ -441,11 +441,10 @@ def test_a_stronghold_printing_several_clans_plays_them_all():
     of them, the way a multi-clan Personality answers to each of its own."""
     game = two_seat_game()
     put_in_play(game, stronghold(PlayerId.P1, clans=("Lion", "Crane")))
-    me = player_state(game, PlayerId.P1)
 
-    assert is_clan(me, "Lion")
-    assert is_clan(me, "Crane")
-    assert not is_clan(me, "Scorpion")
+    assert is_clan(game, PlayerId.P1, "Lion")
+    assert is_clan(game, PlayerId.P1, "Crane")
+    assert not is_clan(game, PlayerId.P1, "Scorpion")
 
 
 def test_a_recorded_grant_gives_a_card_a_keyword_it_does_not_print():
@@ -490,14 +489,14 @@ def test_an_ownerless_card_falls_back_to_its_printed_keywords():
 
 def test_a_second_keyword_grant_for_one_card_is_refused():
     @keyword_grant("guard_probe")
-    def _first(card, me, opponents):
+    def _first(card, game_, seat):
         return ()
 
     try:
         with pytest.raises(ValueError, match="guard_probe already has a keyword grant"):
 
             @keyword_grant("guard_probe")
-            def _second(card, me, opponents):
+            def _second(card, game_, seat):
                 return ("Legacy",)
     finally:
         KEYWORD_GRANTS.pop("guard_probe", None)
@@ -668,9 +667,7 @@ def test_every_declared_self_grant_matches_what_its_trigger_grants(printed_id):
             and e.target_id == producer.id
         )
 
-    declared = GOLD_SELF_GRANT[printed_id](
-        producer, player_state(game, PlayerId.P1), opposing_states(game, PlayerId.P1)
-    )
+    declared = GOLD_SELF_GRANT[printed_id](producer, game, PlayerId.P1)
     assert declared > 0, "the board does not satisfy this card's condition, so it proves nothing"
     assert granted == declared
 

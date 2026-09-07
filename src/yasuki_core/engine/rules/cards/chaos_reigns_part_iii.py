@@ -13,10 +13,11 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.economy import (
-    PlayerState,
+    cards_in_play,
     effective_keywords,
     invest_discount,
     recruit_discount,
+    seat_controls,
 )
 from yasuki_core.engine.rules.effects import (
     Choose,
@@ -166,11 +167,15 @@ IKARICHI_INVEST = 2
 
 @invest_discount("moto_ikarichi_bloodseeker")
 def _moto_ikarichi_bloodseeker_invest_discount(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
+    card: L5RCard, game: GameState, seat: PlayerId
 ) -> int:
     """His Invest costs nothing under the Kanpeki Dynasty, and its printed two Gold under any other
     Wind."""
-    return IKARICHI_INVEST if any(held.printed_id == KANPEKI_DYNASTY for held in me.in_play) else 0
+    return (
+        IKARICHI_INVEST
+        if any(held.printed_id == KANPEKI_DYNASTY for held in cards_in_play(game, seat))
+        else 0
+    )
 
 
 def _moto_ikarichi_bloodseeker_invest(
@@ -219,11 +224,9 @@ register_ability(
 
 
 @recruit_discount("moto_traders")
-def _moto_traders_recruit_discount(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
-) -> int:
+def _moto_traders_recruit_discount(card: L5RCard, game: GameState, seat: PlayerId) -> int:
     """Enters play for 1 less Gold if you control another Merchant Caravan."""
-    return 1 if me.controls(keywords.MERCHANT_CARAVAN, other_than=card) else 0
+    return 1 if seat_controls(game, seat, keywords.MERCHANT_CARAVAN, other_than=card) else 0
 
 
 def _moto_traders_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

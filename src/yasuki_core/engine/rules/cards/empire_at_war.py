@@ -1,6 +1,7 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import Ability, bow_cost, itself, register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import PlayerState, gold_handler
+from yasuki_core.engine.rules.economy import gold_handler, seat_controls
 from yasuki_core.engine.rules.effects import DrawCard, Effect, PayGold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces import keywords
@@ -39,10 +40,10 @@ register_ability(
 
 @gold_handler("dockside_market")
 def _dockside_market_gold(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+    card: L5RCard, game: GameState, seat: PlayerId, targets: tuple[L5RCard, ...]
 ) -> int:
     """+1 GP for controlling any Port, and +1 GP for controlling another Market."""
-    bonus = (1 if me.controls(keywords.PORT) else 0) + (
-        1 if me.controls(keywords.MARKET, other_than=card) else 0
+    bonus = (1 if seat_controls(game, seat, keywords.PORT) else 0) + (
+        1 if seat_controls(game, seat, keywords.MARKET, other_than=card) else 0
     )
     return card.gold_production + bonus

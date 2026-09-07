@@ -110,9 +110,9 @@ def opposing_states(game: GameState, seat: PlayerId) -> tuple[PlayerState, ...]:
     return tuple(player_state(game, other) for other in game.table.seats if other is not seat)
 
 
-# A gold-production handler computes what a card produces in context, from the producing card, its
-# controller's view, the opponents' views, and the cards being paid for.
-GoldHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...], tuple[L5RCard, ...]], int]
+# A gold-production handler computes what a card produces in context, from the producing card, the
+# game, the seat it produces for, and the cards being paid for.
+GoldHandler = Callable[[L5RCard, GameState, PlayerId, tuple[L5RCard, ...]], int]
 GOLD_HANDLERS: dict[str, GoldHandler] = {}
 
 
@@ -437,9 +437,7 @@ def effective_gold_production(
             return 0  # an absent stat cannot receive modifiers (CR, Absent Stats)
         base = card.gold_production
     else:
-        base = handler(
-            card, player_state(game, card.owner), opposing_states(game, card.owner), targets
-        )
+        base = handler(card, game, card.owner, targets)
     total = base + sum(
         modifier.amount for modifier in active_modifiers(game, card, Stat.GOLD_PRODUCTION)
     )
@@ -452,7 +450,7 @@ def effective_gold_production(
 # the moment anything else raised the card. A handler rather than a number because a card may gate
 # its grant on a condition — Slave Pits offers nothing to the player who went first — and a grant
 # affordability counts but the card refuses would strand the payment it made reachable.
-SelfGrantHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], int]
+SelfGrantHandler = Callable[[L5RCard, GameState, PlayerId], int]
 GOLD_SELF_GRANT: dict[str, SelfGrantHandler] = {}
 
 # The once-per-turn tag a card claims as it grants itself. Read here to tell a grant still to come
@@ -519,13 +517,13 @@ def untaken_self_grant(game: GameState, card: L5RCard) -> int:
     handler = GOLD_SELF_GRANT.get(card.printed_id)
     if handler is None or used_this_turn(game, card, SELF_GRANT):
         return 0
-    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    return handler(card, game, card.owner)
 
 
 # A recruit-discount handler computes the gold reduction on recruiting a card, from the card being
 # recruited and its controller's and opponents' views. It reduces the card's own cost — the "enters
 # play for N less Gold" holdings, gated on a readable condition.
-DiscountHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], int]
+DiscountHandler = Callable[[L5RCard, GameState, PlayerId], int]
 RECRUIT_DISCOUNTS: dict[str, DiscountHandler] = {}
 
 
@@ -547,7 +545,7 @@ def effective_recruit_discount(game: GameState, card: L5RCard) -> int:
     handler = RECRUIT_DISCOUNTS.get(card.printed_id)
     if handler is None:
         return 0
-    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    return handler(card, game, card.owner)
 
 
 # The same shape one step along: a reduction on a card's Invest rather than on its Gold Cost, for
@@ -572,12 +570,12 @@ def effective_invest_discount(game: GameState, card: L5RCard) -> int:
     handler = INVEST_DISCOUNTS.get(card.printed_id)
     if handler is None:
         return 0
-    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    return handler(card, game, card.owner)
 
 
 # A keyword handler names the keywords a card carries beyond the printed ones, from the card and its
 # controller's and opponents' views — the "this card has X" clauses gated on a readable condition.
-KeywordHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], tuple[str, ...]]
+KeywordHandler = Callable[[L5RCard, GameState, PlayerId], tuple[str, ...]]
 KEYWORD_GRANTS: dict[str, KeywordHandler] = {}
 
 
@@ -600,7 +598,7 @@ def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
     handler = KEYWORD_GRANTS.get(card.printed_id)
     if handler is None:
         return carried
-    granted = handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    granted = handler(card, game, card.owner)
     return carried.union(granted)
 
 
@@ -648,18 +646,7 @@ def _clan_names(card: L5RCard) -> tuple[str, ...]:
     return (card.clan,) if card.clan else ()
 
 
-def is_clan(me: PlayerState, clan: str) -> bool:
-    """Whether ``me`` is playing ``clan``, read from the stronghold.
-
-    Compared as Clan Alignments rather than as strings: a stronghold printed "Lion Clan" answers to
-    Lion, and the arc's equal alignments answer to each other (a Naga stronghold is an Akasha
-    player). A clan that is no alignment in this arc matches nothing, including itself. A stronghold
-    printing several clans plays them all.
-    """
-    if me.stronghold is None:
-        return False
+def is_clan(game: GameState, seat: PlayerId | None, clan: str) -> bool:
+    """Whether ``seat`` plays ``clan``, read from its Stronghold's Clan Alignment."""
     alignment = ruleset.ACTIVE.alignment(clan)
-    if alignment is None:
-        return False
-    printed = me.stronghold.clans or ((me.stronghold.clan,) if me.stronghold.clan else ())
-    return any(ruleset.ACTIVE.alignment(name) == alignment for name in printed)
+    return alignment is not None and alignment in seat_alignments(game, seat)

@@ -13,7 +13,6 @@ from yasuki_core.engine.rules.abilities import (
     spend_wealth,
 )
 from yasuki_core.engine.rules.economy import (
-    PlayerState,
     effective_chi,
     effective_gold_production,
     effective_keywords,
@@ -379,7 +378,7 @@ EXPENSIVE_ITEM = 6
 
 @gold_handler("sapphire_mine")
 def _sapphire_mine_gold(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+    card: L5RCard, game: GameState, seat: PlayerId, targets: tuple[L5RCard, ...]
 ) -> int:
     """+1GP when paying for a single Item and nothing else, and +1GP more when it costs 6 or more.
 
@@ -398,9 +397,7 @@ def _sapphire_mine_gold(
 
 
 @keyword_grant("sapphire_mine")
-def _sapphire_mine_keywords(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
-) -> tuple[str, ...]:
+def _sapphire_mine_keywords(card: L5RCard, game: GameState, seat: PlayerId) -> tuple[str, ...]:
     """Renew while it holds any Sincerity token.
 
     Recruiting reads Renew as the card enters play and spends its Sincerity afterwards, so a Mine

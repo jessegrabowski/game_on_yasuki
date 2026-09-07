@@ -1,9 +1,9 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.economy import (
     SELF_GRANT,
-    PlayerState,
     register_self_grant,
     self_grant,
+    went_second,
 )
 from yasuki_core.engine.rules.effects import DelayStraighten, Effect, GainHonor, GrantModifier
 from yasuki_core.engine.rules.events import ProducingGold
@@ -56,10 +56,10 @@ SLAVE_PITS_HONOR_COST = 2
 
 
 @self_grant("slave_pits")
-def _slave_pits_gold(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+def _slave_pits_gold(card: L5RCard, game: GameState, seat: PlayerId) -> int:
     """Courtesy offers nothing to the player who went first, so affordability must not count it for
     them — a grant it counted and the window then withheld would strand the purchase."""
-    return SLAVE_PITS_GRANT if me.went_second else 0
+    return SLAVE_PITS_GRANT if went_second(game, seat) else 0
 
 
 @on(ProducingGold, "slave_pits")
