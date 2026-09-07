@@ -44,7 +44,8 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.economy import effective_chi, effective_force, effective_gold_cost
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
+from yasuki_core.engine.rules.economy import effective_gold_cost
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.legality import reachable_gold
 from yasuki_core.engine.rules.board.clans import seat_alignment_name

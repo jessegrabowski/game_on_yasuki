@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
     assignment_token,
 )
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.economy import effective_province_strength
+from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor
 from yasuki_core.engine.rules.units import unit_force, units_at
 from yasuki_core.engine.rules.work import FightNextBattle

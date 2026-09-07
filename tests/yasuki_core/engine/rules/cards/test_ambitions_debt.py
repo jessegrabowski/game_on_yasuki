@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.abilities import CardLocation
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules.economy import effective_chi, effective_force
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules import abilities
 from yasuki_core.engine.session import EngineSession

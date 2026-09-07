@@ -21,10 +21,10 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
+from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.economy import (
     effective_gold_cost,
     effective_gold_production,
-    effective_personal_honor,
     effective_recruit_discount,
     GOLD_HANDLERS,
     lobby_amount,

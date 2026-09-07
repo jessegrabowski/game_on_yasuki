@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import effective_chi, effective_force, effective_stat
+from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard

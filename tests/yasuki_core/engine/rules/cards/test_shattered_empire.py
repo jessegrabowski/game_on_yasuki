@@ -10,7 +10,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules.economy import effective_force
+from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.log import replay

@@ -13,6 +13,7 @@ from yasuki_core.engine.rules import (
     state_rules,
     triggers,
 )
+from yasuki_core.engine.rules.stats import province_strength
 
 # The one place the rules layer reaches into the bots: ABILITY_HEURISTICS is keyed by printed id
 # like every other per-card registry, so it is validated here even though a policy is not a rule.
@@ -46,7 +47,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),
         "invest discounts": frozenset(economy.INVEST_DISCOUNTS),
         "keyword grants": frozenset(keyword_grants.KEYWORD_GRANTS),
-        "province strength grants": frozenset(economy.PROVINCE_STRENGTH_GRANTS),
+        "province strength grants": frozenset(province_strength.PROVINCE_STRENGTH_GRANTS),
         "ability heuristics": frozenset(policies.ABILITY_HEURISTICS),
         "attachment grants": frozenset(attachments.ATTACHMENT_GRANTS),
         "attach restrictions": frozenset(equip.ATTACH_RESTRICTIONS),

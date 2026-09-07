@@ -5,11 +5,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.economy import (
-    active_modifiers,
-    effective_province_strength,
-    effective_stat,
-)
+from yasuki_core.engine.rules.stats.calculation import active_modifiers, effective_stat
+from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import BattleOutcome

@@ -2,7 +2,7 @@ import json
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import effective_province_strength
+from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.snapshot import InitialRecord, decode_initial, encode_initial
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat

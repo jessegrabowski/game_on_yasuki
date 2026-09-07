@@ -7,7 +7,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.rules import favor
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
-from yasuki_core.engine.rules.economy import effective_stat
+from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
     ChooseCards,

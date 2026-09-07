@@ -6,7 +6,8 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.economy import effective_gold_cost, effective_province_strength
+from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
+from yasuki_core.engine.rules.economy import effective_gold_cost
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession

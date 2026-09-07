@@ -5,11 +5,8 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import enforce_state_rules, resolve_effects
 from yasuki_core.engine.table import BATTLEFIELD
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.economy import (
-    active_modifiers,
-    effective_gold_cost,
-    effective_gold_production,
-)
+from yasuki_core.engine.rules.stats.calculation import active_modifiers
+from yasuki_core.engine.rules.economy import effective_gold_cost, effective_gold_production
 
 from tests.yasuki_core.engine.builders import (
     holding,

@@ -66,6 +66,9 @@ yasuki_core
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_rules <yasuki_core.engine.rules.state_rules>
+    yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>
+    yasuki_core.engine.rules.stats.card_values <yasuki_core.engine.rules.stats.card_values>
+    yasuki_core.engine.rules.stats.province_strength <yasuki_core.engine.rules.stats.province_strength>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
     yasuki_core.engine.rules.turn.structure <yasuki_core.engine.rules.turn.structure>
     yasuki_core.engine.rules.units <yasuki_core.engine.rules.units>

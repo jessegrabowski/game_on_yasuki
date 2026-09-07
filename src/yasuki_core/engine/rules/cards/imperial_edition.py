@@ -12,7 +12,8 @@ from yasuki_core.engine.rules.abilities import (
 from yasuki_core.engine.rules.board.queries import attack_targets, personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.attachments import attached_to
-from yasuki_core.engine.rules.economy import effective_chi, recruit_discount
+from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.economy import recruit_discount
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.effects import (
     Choose,

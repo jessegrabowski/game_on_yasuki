@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.actions import ActivateAbility, Pass
 from yasuki_core.engine.rules.cards.onyx_edition import CAVALRY_FOLLOWER
 from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.rules.economy import (
+from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
     effective_force,
     effective_personal_honor,
