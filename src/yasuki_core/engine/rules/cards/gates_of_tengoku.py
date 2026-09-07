@@ -9,11 +9,11 @@ from yasuki_core.engine.rules.abilities import (
     register_event_entry,
 )
 from yasuki_core.engine.rules.economy import (
-    PlayerState,
     gold_handler,
     keyword_grant,
     recruit_discount,
     unit_gold_cost,
+    went_second,
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -64,19 +64,15 @@ def _sasada_pearl_champion_experienced_entered_play(ctx: TriggerContext) -> list
 
 
 @recruit_discount("shrine_of_courtesy")
-def _shrine_of_courtesy_recruit_discount(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
-) -> int:
+def _shrine_of_courtesy_recruit_discount(card: L5RCard, game: GameState, seat: PlayerId) -> int:
     """Courtesy grants -3 Gold Cost while you are the second player (you did not go first)."""
-    return 3 if me.went_second else 0
+    return 3 if went_second(game, seat) else 0
 
 
 @keyword_grant("shrine_of_courtesy")
-def _shrine_of_courtesy_keywords(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
-) -> tuple[str, ...]:
+def _shrine_of_courtesy_keywords(card: L5RCard, game: GameState, seat: PlayerId) -> tuple[str, ...]:
     """The same Courtesy clause grants Legacy, so a second player can search this Holding out."""
-    return (keywords.LEGACY,) if me.went_second else ()
+    return (keywords.LEGACY,) if went_second(game, seat) else ()
 
 
 # --- Shrine of Sincerity ---
@@ -84,7 +80,7 @@ def _shrine_of_courtesy_keywords(
 
 @gold_handler("shrine_of_sincerity")
 def _shrine_of_sincerity_gold(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+    card: L5RCard, game: GameState, seat: PlayerId, targets: tuple[L5RCard, ...]
 ) -> int:
     """+1 GP when paying for a Sincerity card that still carries Sincerity tokens."""
     bonus = (

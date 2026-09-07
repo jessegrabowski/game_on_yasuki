@@ -1,3 +1,4 @@
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     bow_cost,
@@ -5,7 +6,7 @@ from yasuki_core.engine.rules.abilities import (
     register_ability,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import PlayerState, gold_handler
+from yasuki_core.engine.rules.economy import gold_handler
 from yasuki_core.engine.rules.effects import DrawCard, Effect, PayGold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -19,7 +20,7 @@ PEDDLER_DRAW_COST = 3
 
 @gold_handler("traveling_peddler")
 def _traveling_peddler_gold(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+    card: L5RCard, game: GameState, seat: PlayerId, targets: tuple[L5RCard, ...]
 ) -> int:
     """ "Produce 2 Gold", which the Peddler prints as text rather than as a Gold Production stat."""
     return PEDDLER_PRODUCTION

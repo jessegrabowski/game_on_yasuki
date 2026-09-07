@@ -46,15 +46,15 @@ only thing specific to the card, so the whole implementation is the condition:
 
 ```python
 @recruit_discount("colonial_farm")
-def _colonial_farm_recruit_discount(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
-) -> int:
+def _colonial_farm_recruit_discount(card: L5RCard, game: GameState, seat: PlayerId) -> int:
     """Enters play for 1 less Gold if you are a Lion Clan player."""
-    return 1 if is_clan(me, ruleset.LION) else 0
+    return 1 if is_clan(game, seat, ruleset.LION) else 0
 ```
 
-`is_clan` is shared, in `economy.py`. Look there before writing a predicate — most clan and keyword
-questions already have one.
+Every handler is handed the game and the seat it acts for, and asks the narrow question it needs.
+`is_clan` is shared, in `economy.py`, alongside `seat_controls`, `seat_stronghold`, `cards_in_play`
+and `went_second` — look there before writing a predicate, since most clan and keyword questions
+already have one.
 
 ### Return effects: reacting to an event
 

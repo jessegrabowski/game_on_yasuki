@@ -39,6 +39,7 @@ from yasuki_core.engine.rules.decisions import (
     LeaveBowed,
 )
 from yasuki_core.engine.rules.economy import (
+    seat_controls,
     GOLD_HANDLERS,
     GOLD_SELF_GRANT,
     gold_handler,
@@ -728,8 +729,9 @@ def test_a_payment_stranded_by_its_own_answer_raises():
             return [Destroy(ctx.card.id, ctx.card.owner)]
 
         @gold_handler("paired_probe")
-        def _paired(card, me, opponents, targets):
-            return card.gold_production + (1 if me.controls("Probe", other_than=card) else 0)
+        def _paired(card, game_, seat, targets):
+            paired = seat_controls(game_, seat, "Probe", other_than=card)
+            return card.gold_production + (1 if paired else 0)
 
         # Quoted 4 (sd with its own grant) + 3 (pp, paired with sd) = 7. Once sd has destroyed
         # itself, pp is worth 2 and the pool can only reach 6.

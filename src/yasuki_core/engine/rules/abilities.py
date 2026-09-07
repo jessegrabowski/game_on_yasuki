@@ -17,7 +17,6 @@ from yasuki_core.engine.rules.economy import (
     effective_invest_discount,
     effective_keywords,
     is_clan,
-    player_state,
 )
 from yasuki_core.engine.rules.state import once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
@@ -272,7 +271,7 @@ def register_edict(printed_id: str, *, clan: str | None = None) -> None:
     """
 
     def targets(game: GameState, source: L5RCard) -> list[str]:
-        if clan is not None and not is_clan(player_state(game, source.owner), clan):
+        if clan is not None and not is_clan(game, source.owner, clan):
             return []
         return [source.id]
 

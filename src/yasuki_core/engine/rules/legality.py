@@ -23,6 +23,9 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.economy import (
+    card_alignments,
+    seat_alignments,
+    seat_stronghold,
     GOLD_HANDLERS,
     effective_gold_cost,
     effective_personal_honor,
@@ -45,7 +48,6 @@ from yasuki_core.game_pieces.prints import (
     HoldingPrint,
     PersonalityPrint,
     SenseiPrint,
-    StrongholdPrint,
     WindPrint,
 )
 
@@ -654,56 +656,6 @@ def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
     Empty means a Legacy search would whiff and lose the game."""
     return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
-
-
-def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
-    """``seat``'s Stronghold, or None when it has none in play."""
-    for card in game.table.battlefield.cards:
-        if card.owner is seat and isinstance(card.printed, StrongholdPrint):
-            return card
-    return None
-
-
-def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:
-    """Every Clan Alignment slug ``seat`` plays, taken from its Stronghold. Empty for an unaligned
-    seat and for one with no Stronghold in play.
-
-    A set for the same reason :func:`card_alignments` is one: a card may print more than one clan,
-    and a Stronghold is a card.
-    """
-    stronghold = seat_stronghold(game, seat)
-    return card_alignments(stronghold) if stronghold is not None else set()
-
-
-def card_alignments(card: L5RCard) -> set[str]:
-    """The canonical Clan Alignment slugs ``card`` carries, dropping clan names that are not
-    alignments in the active ruleset (minor clans, Shadowlands, "Unaligned", ...). Empty for an
-    unaligned card."""
-    return {slug for name in _clan_names(card) if (slug := RULESET.alignment(name)) is not None}
-
-
-def seat_alignment_name(game: GameState, seat: PlayerId | None) -> str | None:
-    """The clan a card created "with your Clan Alignment" takes: the name printed on ``seat``'s
-    Stronghold, or None when that clan is no legal alignment — an unaligned seat has none to give.
-
-    The printed name rather than :func:`seat_alignments`' slug, because the created card carries it
-    the way any card carries its clan. The first legal one, for a Stronghold printing several.
-    """
-    stronghold = seat_stronghold(game, seat)
-    if stronghold is None:
-        return None
-    for name in _clan_names(stronghold):
-        if RULESET.alignment(name) is not None:
-            return name
-    return None
-
-
-def _clan_names(card: L5RCard) -> tuple[str, ...]:
-    """The card's printed clan names: its :attr:`clans` list, or the lone ``clan`` when that is
-    empty."""
-    if card.clans:
-        return card.clans
-    return (card.clan,) if card.clan else ()
 
 
 def province_key_holding(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey | None:

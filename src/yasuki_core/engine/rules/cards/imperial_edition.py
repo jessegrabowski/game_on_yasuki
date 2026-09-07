@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.attachments import attached_to
-from yasuki_core.engine.rules.economy import PlayerState, effective_chi, is_clan, recruit_discount
+from yasuki_core.engine.rules.economy import effective_chi, is_clan, recruit_discount
 from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
@@ -43,11 +43,9 @@ GARDENS_HONOR = 2
 
 
 @recruit_discount("fantastic_gardens")
-def _fantastic_gardens_recruit_discount(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
-) -> int:
+def _fantastic_gardens_recruit_discount(card: L5RCard, game: GameState, seat: PlayerId) -> int:
     """Enters play for 2 less Gold if you are a Crane Clan player."""
-    return 2 if is_clan(me, ruleset.CRANE) else 0
+    return 2 if is_clan(game, seat, ruleset.CRANE) else 0
 
 
 def _fantastic_gardens_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

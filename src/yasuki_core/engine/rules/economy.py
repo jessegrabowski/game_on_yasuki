@@ -1,5 +1,4 @@
 from collections.abc import Callable, Iterator
-from dataclasses import dataclass
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
@@ -19,62 +18,50 @@ from yasuki_core.engine.table import ZoneKey, unit_members
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import counter_from_key
-from yasuki_core.game_pieces.prints import HoldingPrint, SenseiPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 
 
-@dataclass(frozen=True, slots=True)
-class PlayerState:
-    """A read-only view of one seat — the vocabulary a card effect reasons over: the seat's
-    stronghold, the cards it controls in play, and its current gold and honor."""
-
-    seat: PlayerId
-    stronghold: L5RCard | None
-    in_play: tuple[L5RCard, ...]
-    gold: int
-    honor: int
-    went_second: bool
-
-    @property
-    def holdings(self) -> tuple[L5RCard, ...]:
-        """The Holdings the seat controls in play."""
-        return tuple(card for card in self.in_play if isinstance(card.printed, HoldingPrint))
-
-    def controls(self, keyword: str, *, other_than: L5RCard | None = None) -> bool:
-        """Whether the seat controls an in-play card carrying ``keyword``, optionally excluding one
-        card so an "another"/"other" clause can skip the card asking.
-
-        Parameters
-        ----------
-        keyword : str
-            The keyword to look for among controlled cards.
-        other_than : L5RCard, optional
-            A card to exclude from the search (matched by identity). Default None.
-        """
-        return any(keyword in card.keywords and card is not other_than for card in self.in_play)
+def cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
+    """The cards ``seat`` controls on the battlefield."""
+    return tuple(card for card in game.table.battlefield.cards if card.owner is seat)
 
 
-def player_state(game: GameState, seat: PlayerId) -> PlayerState:
-    """Build the read-only :class:`PlayerState` view for ``seat`` from the live game."""
-    in_play = tuple(card for card in game.table.battlefield.cards if card.owner is seat)
-    stronghold = next((card for card in in_play if isinstance(card.printed, StrongholdPrint)), None)
-    return PlayerState(
-        seat=seat,
-        stronghold=stronghold,
-        in_play=in_play,
-        gold=game.gold[seat],
-        honor=game.table.seats[seat].honor,
-        went_second=seat is not game.first_player,
+def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
+    """``seat``'s Stronghold, or None when it has none in play."""
+    for card in game.table.battlefield.cards:
+        if card.owner is seat and isinstance(card.printed, StrongholdPrint):
+            return card
+    return None
+
+
+def opposing_seats(game: GameState, seat: PlayerId) -> tuple[PlayerId, ...]:
+    """Every seat but ``seat``, in table order."""
+    return tuple(other for other in game.table.seats if other is not seat)
+
+
+def went_second(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` did not go first, which several cards condition on."""
+    return seat is not game.first_player
+
+
+def seat_controls(
+    game: GameState, seat: PlayerId, keyword: str, *, other_than: L5RCard | None = None
+) -> bool:
+    """Whether ``seat`` controls an in-play card carrying ``keyword``.
+
+    ``other_than`` skips one card, matched by identity, so an "another" clause can exclude the card
+    asking. Default None.
+    """
+    return any(
+        keyword in card.keywords and card is not other_than
+        for card in game.table.battlefield.cards
+        if card.owner is seat
     )
 
 
-def opposing_states(game: GameState, seat: PlayerId) -> tuple[PlayerState, ...]:
-    """The :class:`PlayerState` view for every seat other than ``seat``."""
-    return tuple(player_state(game, other) for other in game.table.seats if other is not seat)
-
-
-# A gold-production handler computes what a card produces in context, from the producing card, its
-# controller's view, the opponents' views, and the cards being paid for.
-GoldHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...], tuple[L5RCard, ...]], int]
+# A gold-production handler computes what a card produces in context, from the producing card, the
+# game, the seat it produces for, and the cards being paid for.
+GoldHandler = Callable[[L5RCard, GameState, PlayerId, tuple[L5RCard, ...]], int]
 GOLD_HANDLERS: dict[str, GoldHandler] = {}
 
 
@@ -322,7 +309,7 @@ def effective_province_strength(game: GameState, province: ZoneKey) -> int:
     recorded modifiers a card has laid on it. A seat with no Stronghold in play contributes no
     printed base.
     """
-    stronghold = player_state(game, province.owner).stronghold
+    stronghold = seat_stronghold(game, province.owner)
     total = (
         effective_stat(game, stronghold, Stat.PROVINCE_STRENGTH) if stronghold is not None else 0
     )
@@ -399,9 +386,7 @@ def effective_gold_production(
             return 0  # an absent stat cannot receive modifiers (CR, Absent Stats)
         base = card.gold_production
     else:
-        base = handler(
-            card, player_state(game, card.owner), opposing_states(game, card.owner), targets
-        )
+        base = handler(card, game, card.owner, targets)
     total = base + sum(
         modifier.amount for modifier in active_modifiers(game, card, Stat.GOLD_PRODUCTION)
     )
@@ -414,7 +399,7 @@ def effective_gold_production(
 # the moment anything else raised the card. A handler rather than a number because a card may gate
 # its grant on a condition — Slave Pits offers nothing to the player who went first — and a grant
 # affordability counts but the card refuses would strand the payment it made reachable.
-SelfGrantHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], int]
+SelfGrantHandler = Callable[[L5RCard, GameState, PlayerId], int]
 GOLD_SELF_GRANT: dict[str, SelfGrantHandler] = {}
 
 # The once-per-turn tag a card claims as it grants itself. Read here to tell a grant still to come
@@ -481,13 +466,13 @@ def untaken_self_grant(game: GameState, card: L5RCard) -> int:
     handler = GOLD_SELF_GRANT.get(card.printed_id)
     if handler is None or used_this_turn(game, card, SELF_GRANT):
         return 0
-    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    return handler(card, game, card.owner)
 
 
 # A recruit-discount handler computes the gold reduction on recruiting a card, from the card being
 # recruited and its controller's and opponents' views. It reduces the card's own cost — the "enters
 # play for N less Gold" holdings, gated on a readable condition.
-DiscountHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], int]
+DiscountHandler = Callable[[L5RCard, GameState, PlayerId], int]
 RECRUIT_DISCOUNTS: dict[str, DiscountHandler] = {}
 
 
@@ -509,7 +494,7 @@ def effective_recruit_discount(game: GameState, card: L5RCard) -> int:
     handler = RECRUIT_DISCOUNTS.get(card.printed_id)
     if handler is None:
         return 0
-    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    return handler(card, game, card.owner)
 
 
 # The same shape one step along: a reduction on a card's Invest rather than on its Gold Cost, for
@@ -534,12 +519,12 @@ def effective_invest_discount(game: GameState, card: L5RCard) -> int:
     handler = INVEST_DISCOUNTS.get(card.printed_id)
     if handler is None:
         return 0
-    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    return handler(card, game, card.owner)
 
 
 # A keyword handler names the keywords a card carries beyond the printed ones, from the card and its
 # controller's and opponents' views — the "this card has X" clauses gated on a readable condition.
-KeywordHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], tuple[str, ...]]
+KeywordHandler = Callable[[L5RCard, GameState, PlayerId], tuple[str, ...]]
 KEYWORD_GRANTS: dict[str, KeywordHandler] = {}
 
 
@@ -562,22 +547,55 @@ def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
     handler = KEYWORD_GRANTS.get(card.printed_id)
     if handler is None:
         return carried
-    granted = handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    granted = handler(card, game, card.owner)
     return carried.union(granted)
 
 
-def is_clan(me: PlayerState, clan: str) -> bool:
-    """Whether ``me`` is playing ``clan``, read from the stronghold.
+def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:
+    """Every Clan Alignment slug ``seat`` plays, taken from its Stronghold. Empty for an unaligned
+    seat and for one with no Stronghold in play.
 
-    Compared as Clan Alignments rather than as strings: a stronghold printed "Lion Clan" answers to
-    Lion, and the arc's equal alignments answer to each other (a Naga stronghold is an Akasha
-    player). A clan that is no alignment in this arc matches nothing, including itself. A stronghold
-    printing several clans plays them all.
+    A set for the same reason :func:`card_alignments` is one: a card may print more than one clan,
+    and a Stronghold is a card.
     """
-    if me.stronghold is None:
-        return False
+    stronghold = seat_stronghold(game, seat)
+    return card_alignments(stronghold) if stronghold is not None else set()
+
+
+def card_alignments(card: L5RCard) -> set[str]:
+    """The canonical Clan Alignment slugs ``card`` carries, dropping clan names that are not
+    alignments in the active ruleset (minor clans, Shadowlands, "Unaligned", ...). Empty for an
+    unaligned card."""
+    return {
+        slug for name in _clan_names(card) if (slug := ruleset.ACTIVE.alignment(name)) is not None
+    }
+
+
+def seat_alignment_name(game: GameState, seat: PlayerId | None) -> str | None:
+    """The clan a card created "with your Clan Alignment" takes: the name printed on ``seat``'s
+    Stronghold, or None when that clan is no legal alignment — an unaligned seat has none to give.
+
+    The printed name rather than :func:`seat_alignments`' slug, because the created card carries it
+    the way any card carries its clan. The first legal one, for a Stronghold printing several.
+    """
+    stronghold = seat_stronghold(game, seat)
+    if stronghold is None:
+        return None
+    for name in _clan_names(stronghold):
+        if ruleset.ACTIVE.alignment(name) is not None:
+            return name
+    return None
+
+
+def _clan_names(card: L5RCard) -> tuple[str, ...]:
+    """The card's printed clan names: its :attr:`clans` list, or the lone ``clan`` when that is
+    empty."""
+    if card.clans:
+        return card.clans
+    return (card.clan,) if card.clan else ()
+
+
+def is_clan(game: GameState, seat: PlayerId | None, clan: str) -> bool:
+    """Whether ``seat`` plays ``clan``, read from its Stronghold's Clan Alignment."""
     alignment = ruleset.ACTIVE.alignment(clan)
-    if alignment is None:
-        return False
-    printed = me.stronghold.clans or ((me.stronghold.clan,) if me.stronghold.clan else ())
-    return any(ruleset.ACTIVE.alignment(name) == alignment for name in printed)
+    return alignment is not None and alignment in seat_alignments(game, seat)

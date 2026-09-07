@@ -3,17 +3,13 @@ yasuki_core.engine.rules.economy
 
 .. currentmodule:: yasuki_core.engine.rules.economy
 
-.. rubric:: Classes
-
-.. autosummary::
-
-    PlayerState
-
 .. rubric:: Functions
 
 .. autosummary::
 
     active_modifiers
+    card_alignments
+    cards_in_play
     effective_chi
     effective_force
     effective_gold_cost
@@ -34,15 +30,19 @@ yasuki_core.engine.rules.economy
     lobby_bonus
     lobby_bonus_grant
     maximum_gold_production
-    opposing_states
-    player_state
+    opposing_seats
     province_strength_grant
     recruit_discount
     register_self_grant
+    seat_alignment_name
+    seat_alignments
+    seat_controls
+    seat_stronghold
     self_grant
     stat_minimum
     unit_gold_cost
     untaken_self_grant
+    went_second
 
 .. automodule:: yasuki_core.engine.rules.economy
     :members:

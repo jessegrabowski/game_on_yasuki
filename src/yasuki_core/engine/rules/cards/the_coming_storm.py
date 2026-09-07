@@ -1,4 +1,5 @@
 from yasuki_core import ruleset
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     LOBBIED_TAG,
@@ -10,9 +11,9 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.economy import (
-    PlayerState,
     is_clan,
     lobby_bonus_grant,
+    opposing_seats,
     province_strength_grant,
     recruit_discount,
 )
@@ -38,11 +39,10 @@ NATSUYO_HONOR = 1
 
 
 @recruit_discount("doji_natsuyo")
-def _doji_natsuyo_recruit_discount(
-    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]
-) -> int:
+def _doji_natsuyo_recruit_discount(card: L5RCard, game: GameState, seat: PlayerId) -> int:
     """Enters play for 1 less Gold if another player is Scorpion Clan."""
-    return 1 if any(is_clan(other, ruleset.SCORPION) for other in opponents) else 0
+    rivals = opposing_seats(game, seat)
+    return 1 if any(is_clan(game, other, ruleset.SCORPION) for other in rivals) else 0
 
 
 def _doji_natsuyo_cost(game: GameState, source: L5RCard) -> list[Effect]:

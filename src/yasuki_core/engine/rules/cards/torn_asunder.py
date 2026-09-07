@@ -1,6 +1,6 @@
 from yasuki_core.engine.rules.effects import CreateToken, Effect
 from yasuki_core.engine.rules.events import Destroyed
-from yasuki_core.engine.rules.legality import seat_alignment_name
+from yasuki_core.engine.rules.economy import seat_alignment_name
 from yasuki_core.engine.rules.triggers import TriggerContext, on
 
 
