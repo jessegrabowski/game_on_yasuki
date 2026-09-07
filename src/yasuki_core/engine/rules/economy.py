@@ -3,14 +3,14 @@ from collections.abc import Callable, Iterator
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.attachments import attachments_of, granted_stat
+from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.modifiers import (
     Duration,
-    KeywordGrant,
     LobbyModifier,
     Minimum,
     Modifier,
     ProvinceModifier,
-    OngoingEffect,
     Stat,
 )
 from yasuki_core.engine.rules.state import GameState, used_this_turn
@@ -39,10 +39,6 @@ def gold_handler(printed_id: str) -> Callable[[GoldHandler], GoldHandler]:
         return handler
 
     return register
-
-
-def _on_battlefield(game: GameState, card_id: str) -> bool:
-    return any(card.id == card_id for card in game.table.battlefield.cards)
 
 
 # What a Sensei grants the Stronghold rather than folding into its printed stats (CR, Sensei: the
@@ -94,25 +90,9 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
     for modifier in game.modifiers:
         if not isinstance(modifier, Modifier) or modifier.target_id != card.id:
             continue
-        if modifier.stat is not stat or not _grant_applies(game, modifier):
+        if modifier.stat is not stat or not grant_applies(game, modifier):
             continue
         yield modifier
-
-
-def _grant_applies(game: GameState, recorded: OngoingEffect) -> bool:
-    """Whether a recorded ongoing effect is in force — a ``WHILE_SOURCE_IN_PLAY`` one only while
-    the card it came from is still on the battlefield."""
-    return recorded.duration is not Duration.WHILE_SOURCE_IN_PLAY or _on_battlefield(
-        game, recorded.source_id
-    )
-
-
-def granted_keywords(game: GameState, card: L5RCard) -> Iterator[str]:
-    """Every keyword another card's recorded grant gives ``card`` right now."""
-    for grant in game.modifiers:
-        if isinstance(grant, KeywordGrant) and grant.target_id == card.id:
-            if _grant_applies(game, grant):
-                yield grant.keyword
 
 
 def stat_minimum(game: GameState, card: L5RCard, stat: Stat) -> int:
@@ -125,7 +105,7 @@ def stat_minimum(game: GameState, card: L5RCard, stat: Stat) -> int:
             if isinstance(recorded, Minimum)
             and recorded.target_id == card.id
             and recorded.stat is stat
-            and _grant_applies(game, recorded)
+            and grant_applies(game, recorded)
         ),
         default=0,
     )
@@ -243,7 +223,7 @@ def lobby_bonus(game: GameState, seat: PlayerId) -> int:
         for recorded in game.modifiers
         if isinstance(recorded, LobbyModifier)
         and recorded.seat is seat
-        and _grant_applies(game, recorded)
+        and grant_applies(game, recorded)
     )
     return total
 
@@ -289,7 +269,7 @@ def effective_province_strength(game: GameState, province: ZoneKey) -> int:
         for recorded in game.modifiers
         if isinstance(recorded, ProvinceModifier)
         and recorded.province == province
-        and _grant_applies(game, recorded)
+        and grant_applies(game, recorded)
     )
     return max(0, total)
 
@@ -482,32 +462,3 @@ def effective_invest_discount(game: GameState, card: L5RCard) -> int:
     if handler is None:
         return 0
     return handler(card, game, card.owner)
-
-
-# A keyword handler names the keywords a card carries beyond the printed ones, from the card and its
-# controller's and opponents' views — the "this card has X" clauses gated on a readable condition.
-KeywordHandler = Callable[[L5RCard, GameState, PlayerId], tuple[str, ...]]
-KEYWORD_GRANTS: dict[str, KeywordHandler] = {}
-
-
-def keyword_grant(printed_id: str) -> Callable[[KeywordHandler], KeywordHandler]:
-    """Register the decorated function as the keyword-grant handler for ``printed_id``."""
-
-    def register(handler: KeywordHandler) -> KeywordHandler:
-        if printed_id in KEYWORD_GRANTS:
-            raise ValueError(f"{printed_id} already has a keyword grant")
-        KEYWORD_GRANTS[printed_id] = handler
-        return handler
-
-    return register
-
-
-def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
-    """``card``'s printed keywords, plus any its own ability grants under current conditions, plus
-    any another card's ongoing effect has given it."""
-    carried = frozenset(card.keywords).union(granted_keywords(game, card))
-    handler = KEYWORD_GRANTS.get(card.printed_id)
-    if handler is None:
-        return carried
-    granted = handler(card, game, card.owner)
-    return carried.union(granted)

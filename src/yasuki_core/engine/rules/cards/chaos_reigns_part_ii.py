@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import keyword_grant
+from yasuki_core.engine.rules.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.board.seats import seat_controls
 from yasuki_core.engine.rules.abilities import Ability, bow_cost, no_cost, register_ability
 from yasuki_core.engine.rules.board.queries import owned_holdings

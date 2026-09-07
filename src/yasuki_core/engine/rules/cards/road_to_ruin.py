@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.abilities import (
     register_event_entry,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import SELF_GRANT, register_self_grant
+from yasuki_core.engine.rules.economy import register_self_grant, SELF_GRANT
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,

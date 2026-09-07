@@ -72,10 +72,10 @@ from yasuki_core.engine.rules.decisions import (
     PlaceLegacy,
 )
 from yasuki_core.engine.rules.equip import equip_targets
+from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.economy import (
     effective_gold_cost,
     effective_gold_production,
-    effective_keywords,
     effective_personal_honor,
 )
 from yasuki_core.engine.rules.legality import (

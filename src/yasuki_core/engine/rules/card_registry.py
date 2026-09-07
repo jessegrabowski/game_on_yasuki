@@ -9,6 +9,7 @@ from yasuki_core.engine.rules import (
     economy,
     effects,
     equip,
+    keyword_grants,
     state_rules,
     triggers,
 )
@@ -44,7 +45,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "gold self grants": frozenset(economy.GOLD_SELF_GRANT),
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),
         "invest discounts": frozenset(economy.INVEST_DISCOUNTS),
-        "keyword grants": frozenset(economy.KEYWORD_GRANTS),
+        "keyword grants": frozenset(keyword_grants.KEYWORD_GRANTS),
         "province strength grants": frozenset(economy.PROVINCE_STRENGTH_GRANTS),
         "ability heuristics": frozenset(policies.ABILITY_HEURISTICS),
         "attachment grants": frozenset(attachments.ATTACHMENT_GRANTS),

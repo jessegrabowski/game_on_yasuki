@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.cards.rise_of_jigoku import CAVALRY_FOLLOWER, MISHIMES_ONI
-from yasuki_core.engine.rules.economy import effective_keywords as keywords_of
+from yasuki_core.engine.rules.keyword_grants import effective_keywords as keywords_of
 from yasuki_core.engine.rules.economy import (
     effective_chi,
     effective_force,

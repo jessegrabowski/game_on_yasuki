@@ -15,12 +15,11 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
 )
+from yasuki_core.engine.rules.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.economy import (
     effective_chi,
     effective_gold_production,
-    effective_keywords,
     gold_handler,
-    keyword_grant,
     province_strength_grant,
 )
 from yasuki_core.engine.rules.legality import reachable_gold, recruit_cost

@@ -4,7 +4,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import is_spell, may_cast_spells
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.attachments import attachments_of
-from yasuki_core.engine.rules.economy import effective_keywords, effective_weapon_limit
+from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.economy import effective_weapon_limit
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard

@@ -13,16 +13,13 @@ yasuki_core.engine.rules.economy
     effective_gold_cost
     effective_gold_production
     effective_invest_discount
-    effective_keywords
     effective_personal_honor
     effective_province_strength
     effective_recruit_discount
     effective_stat
     effective_weapon_limit
     gold_handler
-    granted_keywords
     invest_discount
-    keyword_grant
     lobby_amount
     lobby_bonus
     lobby_bonus_grant

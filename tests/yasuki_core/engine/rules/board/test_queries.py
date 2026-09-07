@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.queries import has_keyword, owned_holdings, province_key_of
-from yasuki_core.engine.rules.economy import KEYWORD_GRANTS, keyword_grant
+from yasuki_core.engine.rules.keyword_grants import keyword_grant, KEYWORD_GRANTS
 
 from tests.yasuki_core.engine.builders import (
     holding,
