@@ -40,3 +40,9 @@ def seat_controls(
         for card in game.table.battlefield.cards
         if card.owner is seat
     )
+
+
+def cards_named(game: GameState, seat: PlayerId, printed_id: str) -> tuple[L5RCard, ...]:
+    """The cards ``seat`` controls whose print is ``printed_id`` -- what a card means when it speaks
+    about another copy of a named card rather than about a keyword or a type."""
+    return tuple(card for card in cards_in_play(game, seat) if card.printed_id == printed_id)

@@ -1,4 +1,5 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.board.seats import cards_named
 from yasuki_core.engine.rules.abilities import (
     Ability,
     bow_and_destroy,
@@ -193,11 +194,7 @@ def _mishime_sensei_entered_play(ctx: TriggerContext) -> list[Effect]:
 def _mishime_sensei_of(game: GameState, seat: PlayerId) -> L5RCard:
     """The Sensei whose ability is resolving. The question it asked carries the Personality rather
     than the Sensei, and a seat has the one Sensei, in play since it bowed to pay."""
-    return next(
-        card
-        for card in game.table.battlefield.cards
-        if card.printed_id == "mishime_sensei" and card.owner is seat
-    )
+    return cards_named(game, seat, "mishime_sensei")[0]
 
 
 @choice_resolver("mishime_sensei")

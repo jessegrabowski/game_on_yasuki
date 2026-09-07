@@ -8,6 +8,7 @@ yasuki_core.engine.rules.board.seats
 .. autosummary::
 
     cards_in_play
+    cards_named
     opposing_seats
     seat_controls
     seat_stronghold

@@ -179,3 +179,16 @@ def test_registered_ids_reads_a_module_in_line_order(tmp_path):
     )
 
     assert registered_ids(module) == ("alpha", "beta")
+
+
+def test_no_card_module_reads_the_battlefield_directly():
+    # Every board question a card asks has a named reader in board/. A raw scan reimplements one of
+    # them, silently disagrees the day the reader's filter changes -- owned_holdings matches
+    # effective keywords, not printed ones -- and hides from any search for the reader's callers.
+    offenders = sorted(
+        module.name
+        for module in card_modules()
+        if "battlefield.cards" in module.read_text(encoding="utf-8")
+    )
+
+    assert offenders == []
