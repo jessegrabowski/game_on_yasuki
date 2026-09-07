@@ -13,14 +13,11 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
-from yasuki_core.engine.rules.economy import (
-    effective_invest_discount,
-    effective_keywords,
-    is_clan,
-)
+from yasuki_core.engine.rules.economy import effective_invest_discount, effective_keywords
+from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.state import once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.units import attackable, has_presence, location_permits
+from yasuki_core.engine.rules.units import has_presence, location_permits
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -40,7 +37,7 @@ from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint
 
 # A cost is the effects paid to activate an ability, applied before the ability's own effects. Bow /
 # destroy / spend-a-token are all just effects targeting a card, so costs and effects share one
@@ -740,43 +737,6 @@ def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]
         target_id
         for target_id in offered
         if target_id not in by_id or location_permits(game, by_id[target_id])
-    ]
-
-
-def attack_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The ids an attack effect from ``source`` may be pointed at: the enemy army's Followers and
-    its Personalities carrying none (CR, Ranged Attack). Empty outside a battle, which is what
-    keeps an attack ability from being offered where it has nothing to hit."""
-    return [card.id for card in attackable(game, source.owner)]
-
-
-def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]:
-    """The Personalities ``owner`` has in play — the pool almost every "your target Personality"
-    starts from, before the card's own condition narrows it."""
-    return tuple(
-        card
-        for card in game.table.battlefield.cards
-        if isinstance(card.printed, PersonalityPrint) and card.owner is owner
-    )
-
-
-def personalities_in_play(game: GameState) -> tuple[L5RCard, ...]:
-    """Every Personality on the battlefield, either seat's — the pool a card means by "a target
-    Personality" with no side attached to it."""
-    return tuple(
-        card for card in game.table.battlefield.cards if isinstance(card.printed, PersonalityPrint)
-    )
-
-
-def owned_holdings(game: GameState, owner: PlayerId, keyword: str | None = None) -> list[L5RCard]:
-    """The Holdings ``owner`` has in play, narrowed to those carrying ``keyword`` when one is given.
-    Default None, which takes them all."""
-    return [
-        held
-        for held in game.table.battlefield.cards
-        if held.owner is owner
-        and isinstance(held.printed, HoldingPrint)
-        and (keyword is None or keyword in effective_keywords(game, held))
     ]
 
 

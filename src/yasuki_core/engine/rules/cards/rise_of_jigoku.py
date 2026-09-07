@@ -1,16 +1,19 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.board.seats import cards_named
 from yasuki_core.engine.rules.abilities import (
     Ability,
-    attack_targets,
     bow_and_destroy,
     bow_cost,
-    owned_holdings,
-    owned_personalities,
-    personalities_in_play,
     plus_one_gp_this_turn,
     register_ability,
     register_event_entry,
     spend_wealth,
+)
+from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
+    owned_holdings,
+    owned_personalities,
+    personalities_in_play,
 )
 from yasuki_core.engine.rules.economy import (
     effective_chi,
@@ -48,7 +51,8 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on, province_holdings
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.board.queries import province_holdings
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -190,11 +194,7 @@ def _mishime_sensei_entered_play(ctx: TriggerContext) -> list[Effect]:
 def _mishime_sensei_of(game: GameState, seat: PlayerId) -> L5RCard:
     """The Sensei whose ability is resolving. The question it asked carries the Personality rather
     than the Sensei, and a seat has the one Sensei, in play since it bowed to pay."""
-    return next(
-        card
-        for card in game.table.battlefield.cards
-        if card.printed_id == "mishime_sensei" and card.owner is seat
-    )
+    return cards_named(game, seat, "mishime_sensei")[0]
 
 
 @choice_resolver("mishime_sensei")

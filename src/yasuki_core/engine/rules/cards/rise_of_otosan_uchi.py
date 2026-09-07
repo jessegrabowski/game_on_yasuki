@@ -3,17 +3,19 @@ from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
     InvestAbility,
-    attack_targets,
     bow_cost,
     favor_payer,
     itself,
     may_remain_bowed,
     no_cost,
+    register_ability,
+    register_event_entry,
+    register_invest,
+)
+from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
     owned_holdings,
     owned_personalities,
-    register_ability,
-    register_invest,
-    register_event_entry,
 )
 from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
@@ -49,7 +51,7 @@ from yasuki_core.engine.rules.economy import (
 )
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.legality import reachable_gold
-from yasuki_core.engine.rules.economy import seat_alignment_name
+from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.units import followers_of

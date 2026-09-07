@@ -3,16 +3,17 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
-    attack_targets,
     bow_cost,
     bow_parent_and_destroy,
     itself,
     no_cost,
     register_ability,
 )
+from yasuki_core.engine.rules.board.queries import attack_targets, personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.attachments import attached_to
-from yasuki_core.engine.rules.economy import effective_chi, is_clan, recruit_discount
+from yasuki_core.engine.rules.economy import effective_chi, recruit_discount
+from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
@@ -34,7 +35,7 @@ from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, o
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint
 
 
 # --- Fantastic Gardens ---
@@ -199,10 +200,8 @@ def _touch_of_death_targets(game: GameState, source: L5RCard) -> list[str]:
     ceiling = effective_chi(game, caster)
     return [
         card.id
-        for card in game.table.battlefield.cards
-        if isinstance(card.printed, PersonalityPrint)
-        and card.bowed
-        and effective_chi(game, card) <= ceiling
+        for card in personalities_in_play(game)
+        if card.bowed and effective_chi(game, card) <= ceiling
     ]
 
 

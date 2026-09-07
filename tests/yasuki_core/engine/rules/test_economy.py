@@ -1,28 +1,21 @@
 import pytest
 
-from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import owned_holdings
 from yasuki_core.engine.rules.effects import Ask, GrantModifier
 from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.state import once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
 from yasuki_core.engine.rules.economy import (
-    cards_in_play,
-    opposing_seats,
-    seat_controls,
-    went_second,
     GOLD_HANDLERS,
     GOLD_SELF_GRANT,
-    SELF_GRANT,
     KEYWORD_GRANTS,
     RECRUIT_DISCOUNTS,
+    SELF_GRANT,
     effective_gold_production,
     effective_keywords,
     gold_handler,
-    maximum_gold_production,
     keyword_grant,
-    is_clan,
+    maximum_gold_production,
     recruit_discount,
     register_self_grant,
 )
@@ -34,83 +27,6 @@ from yasuki_core.game_pieces.prints import PersonalityPrint, StrongholdPrint
 from tests.yasuki_core.engine.builders import two_seat_game
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, stronghold
-
-
-@pytest.mark.parametrize(
-    "printed, asked, expected",
-    [
-        ("Lion", ruleset.LION, True),
-        ("Lion Clan", ruleset.LION, True),
-        ("Naga", ruleset.AKASHA, True),
-        ("Akasha", ruleset.NAGA, True),
-        ("Lion", ruleset.CRANE, False),
-        ("Fox", "fox", False),
-    ],
-    ids=[
-        "plain",
-        "spelled-in-full",
-        "naga-is-akasha",
-        "akasha-is-naga",
-        "other-clan",
-        "no-alignment",
-    ],
-)
-def test_is_clan_compares_alignments_rather_than_strings(printed, asked, expected):
-    # Two cards print their clan as "Lion Clan" where 555 print "Lion", and the arc holds Naga and
-    # Akasha to be one alignment. A string comparison would read all three as different clans, and
-    # a discount keyed on one would quietly never apply.
-    game = two_seat_game()
-    put_in_play(game, stronghold(PlayerId.P1, clan=printed))
-
-    assert is_clan(game, PlayerId.P1, asked) is expected
-
-
-def test_a_seat_with_no_stronghold_plays_no_clan():
-    game = two_seat_game()
-
-    assert is_clan(game, PlayerId.P1, ruleset.LION) is False
-
-
-def test_went_second_is_true_only_for_the_non_first_player():
-    game = two_seat_game()  # first_player is P1
-    assert went_second(game, PlayerId.P1) is False
-    assert went_second(game, PlayerId.P2) is True
-
-
-def test_seat_controls_matches_a_keyword_and_can_exclude_a_card():
-    game = two_seat_game()
-    dockside = put_in_play(game, holding("P1-dockside", owner=PlayerId.P1, keywords=("Market",)))
-    put_in_play(game, holding("P1-other-market", owner=PlayerId.P1, keywords=("Market",)))
-    put_in_play(game, holding("P2-market", owner=PlayerId.P2, keywords=("Market",)))
-
-    assert seat_controls(game, PlayerId.P1, "Market") is True
-    assert seat_controls(game, PlayerId.P1, "Port") is False
-    # "another Market" — excluding the asking card still finds the second one.
-    assert seat_controls(game, PlayerId.P1, "Market", other_than=dockside) is True
-
-
-def test_seat_controls_other_than_the_only_match_is_false():
-    game = two_seat_game()
-    lone = put_in_play(game, holding("P1-lone", owner=PlayerId.P1, keywords=("Market",)))
-    # An opponent's Market is not the seat's, so excluding the only one it holds finds nothing.
-    put_in_play(game, holding("P2-market", owner=PlayerId.P2, keywords=("Market",)))
-
-    assert seat_controls(game, PlayerId.P1, "Market", other_than=lone) is False
-
-
-def test_opposing_seats_is_every_other_seat_in_table_order():
-    game = two_seat_game()
-
-    assert opposing_seats(game, PlayerId.P1) == (PlayerId.P2,)
-    assert opposing_seats(game, PlayerId.P2) == (PlayerId.P1,)
-
-
-def test_cards_in_play_is_only_the_seats_own():
-    game = two_seat_game()
-    mine = put_in_play(game, holding("P1-h", owner=PlayerId.P1))
-    put_in_play(game, holding("P2-h", owner=PlayerId.P2))
-
-    assert cards_in_play(game, PlayerId.P1) == (mine,)
 
 
 def test_effective_gold_production_falls_back_to_printed_without_a_handler():
@@ -405,17 +321,6 @@ def test_a_card_without_a_grant_carries_only_its_printed_keywords():
     assert effective_keywords(game, plain) == frozenset({"Farm"})
 
 
-def test_a_stronghold_printing_several_clans_plays_them_all():
-    """A Stronghold is a card, and a card may print more than one clan — so the seat answers to each
-    of them, the way a multi-clan Personality answers to each of its own."""
-    game = two_seat_game()
-    put_in_play(game, stronghold(PlayerId.P1, clans=("Lion", "Crane")))
-
-    assert is_clan(game, PlayerId.P1, "Lion")
-    assert is_clan(game, PlayerId.P1, "Crane")
-    assert not is_clan(game, PlayerId.P1, "Scorpion")
-
-
 def test_a_recorded_grant_gives_a_card_a_keyword_it_does_not_print():
     game = two_seat_game()
     plain = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
@@ -469,38 +374,6 @@ def test_a_second_keyword_grant_for_one_card_is_refused():
                 return ("Legacy",)
     finally:
         KEYWORD_GRANTS.pop("guard_probe", None)
-
-
-def test_owned_holdings_without_a_keyword_takes_them_all():
-    """Kitsu Watanabe spends "your target Holding", any of them, so the lookup answers that too
-    rather than making the card scan the battlefield for itself."""
-    game = two_seat_game()
-    quay = put_in_play(game, holding("P1-quay", owner=PlayerId.P1, keywords=("Port",)))
-    plain = put_in_play(game, holding("P1-plain", owner=PlayerId.P1))
-    put_in_play(game, holding("P2-theirs", owner=PlayerId.P2))
-    put_in_play(game, stronghold(PlayerId.P1, gold_production=5))
-
-    assert owned_holdings(game, PlayerId.P1) == [quay, plain]
-
-
-def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
-    """Keyword lookups read effective keywords, so a card whose own condition grants one is found by
-    the same searches as a card that prints it. Registered here rather than leaning on a real card:
-    today only Shrine of Courtesy grants anything, and it grants Legacy, which no lookup asks for."""
-    game = two_seat_game()
-    granted = put_in_play(game, holding("P1-docks", owner=PlayerId.P1, printed_id="keyword_probe"))
-    printed = put_in_play(game, holding("P1-quay", owner=PlayerId.P1, keywords=("Port",)))
-
-    assert owned_holdings(game, PlayerId.P1, "Port") == [printed]
-
-    @keyword_grant("keyword_probe")
-    def _grants_port(card, me, opponents):
-        return ("Port",)
-
-    try:
-        assert owned_holdings(game, PlayerId.P1, "Port") == [granted, printed]
-    finally:
-        KEYWORD_GRANTS.pop("keyword_probe", None)
 
 
 def test_maximum_gold_production_adds_the_declared_grant():

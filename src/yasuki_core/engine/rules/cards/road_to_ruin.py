@@ -1,4 +1,5 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.board.seats import cards_in_play
 from yasuki_core.engine.rules.abilities import (
     Ability,
     CardLocation,
@@ -23,7 +24,11 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay, ProducedGold, ProducingGold
-from yasuki_core.engine.rules.legality import province_key_holding
+from yasuki_core.engine.rules.board.queries import (
+    owned_holdings,
+    personalities_in_play,
+    province_key_holding,
+)
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.payments import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn
@@ -32,7 +37,7 @@ from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import MINUS_1F
-from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import HoldingPrint
 
 
 # --- Dull Tanto ---
@@ -41,11 +46,7 @@ from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
 def _dull_tanto_targets(game: GameState, source: L5RCard) -> list[str]:
     """Every Personality on the board. The card says "a target Personality" and narrows it no
     further, so the controller's own are legal targets."""
-    return [
-        card.id
-        for card in game.table.battlefield.cards
-        if isinstance(card.printed, PersonalityPrint)
-    ]
+    return [card.id for card in personalities_in_play(game)]
 
 
 def _dull_tanto_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -122,11 +123,7 @@ def _outlying_farms_produced_gold(ctx: TriggerContext) -> list[Effect]:
 def _repairing_the_ruins_targets(game: GameState, source: L5RCard) -> list[str]:
     """Non-Unique Holdings in the seat's Dynasty deck or discard pile that they control no copy of."""
     seat = source.owner
-    held = {
-        card.printed_id
-        for card in game.table.battlefield.cards
-        if card.owner is seat and isinstance(card.printed, HoldingPrint)
-    }
+    held = {card.printed_id for card in owned_holdings(game, seat)}
     searched = [
         *game.table.decks[DeckKey(seat, Side.DYNASTY)].cards,
         *game.table.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)].cards,
@@ -220,11 +217,7 @@ def _verdant_wilds_targets(game: GameState, source: L5RCard) -> list[str]:
     forbids to straighten stays on the list — that prohibition is the other card's to enforce when
     the effect resolves, not this one's to read while choosing targets.
     """
-    return [
-        card.id
-        for card in game.table.battlefield.cards
-        if card.owner is source.owner and card.bowed
-    ]
+    return [card.id for card in cards_in_play(game, source.owner) if card.bowed]
 
 
 def _verdant_wilds_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

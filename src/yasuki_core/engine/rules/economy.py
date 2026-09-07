@@ -1,7 +1,7 @@
 from collections.abc import Callable, Iterator
 
-from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.attachments import attachments_of, granted_stat
 from yasuki_core.engine.rules.modifiers import (
     Duration,
@@ -19,44 +19,6 @@ from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import counter_from_key
 from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
-
-
-def cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
-    """The cards ``seat`` controls on the battlefield."""
-    return tuple(card for card in game.table.battlefield.cards if card.owner is seat)
-
-
-def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
-    """``seat``'s Stronghold, or None when it has none in play."""
-    for card in game.table.battlefield.cards:
-        if card.owner is seat and isinstance(card.printed, StrongholdPrint):
-            return card
-    return None
-
-
-def opposing_seats(game: GameState, seat: PlayerId) -> tuple[PlayerId, ...]:
-    """Every seat but ``seat``, in table order."""
-    return tuple(other for other in game.table.seats if other is not seat)
-
-
-def went_second(game: GameState, seat: PlayerId) -> bool:
-    """Whether ``seat`` did not go first, which several cards condition on."""
-    return seat is not game.first_player
-
-
-def seat_controls(
-    game: GameState, seat: PlayerId, keyword: str, *, other_than: L5RCard | None = None
-) -> bool:
-    """Whether ``seat`` controls an in-play card carrying ``keyword``.
-
-    ``other_than`` skips one card, matched by identity, so an "another" clause can exclude the card
-    asking. Default None.
-    """
-    return any(
-        keyword in card.keywords and card is not other_than
-        for card in game.table.battlefield.cards
-        if card.owner is seat
-    )
 
 
 # A gold-production handler computes what a card produces in context, from the producing card, the
@@ -549,53 +511,3 @@ def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
         return carried
     granted = handler(card, game, card.owner)
     return carried.union(granted)
-
-
-def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:
-    """Every Clan Alignment slug ``seat`` plays, taken from its Stronghold. Empty for an unaligned
-    seat and for one with no Stronghold in play.
-
-    A set for the same reason :func:`card_alignments` is one: a card may print more than one clan,
-    and a Stronghold is a card.
-    """
-    stronghold = seat_stronghold(game, seat)
-    return card_alignments(stronghold) if stronghold is not None else set()
-
-
-def card_alignments(card: L5RCard) -> set[str]:
-    """The canonical Clan Alignment slugs ``card`` carries, dropping clan names that are not
-    alignments in the active ruleset (minor clans, Shadowlands, "Unaligned", ...). Empty for an
-    unaligned card."""
-    return {
-        slug for name in _clan_names(card) if (slug := ruleset.ACTIVE.alignment(name)) is not None
-    }
-
-
-def seat_alignment_name(game: GameState, seat: PlayerId | None) -> str | None:
-    """The clan a card created "with your Clan Alignment" takes: the name printed on ``seat``'s
-    Stronghold, or None when that clan is no legal alignment — an unaligned seat has none to give.
-
-    The printed name rather than :func:`seat_alignments`' slug, because the created card carries it
-    the way any card carries its clan. The first legal one, for a Stronghold printing several.
-    """
-    stronghold = seat_stronghold(game, seat)
-    if stronghold is None:
-        return None
-    for name in _clan_names(stronghold):
-        if ruleset.ACTIVE.alignment(name) is not None:
-            return name
-    return None
-
-
-def _clan_names(card: L5RCard) -> tuple[str, ...]:
-    """The card's printed clan names: its :attr:`clans` list, or the lone ``clan`` when that is
-    empty."""
-    if card.clans:
-        return card.clans
-    return (card.clan,) if card.clan else ()
-
-
-def is_clan(game: GameState, seat: PlayerId | None, clan: str) -> bool:
-    """Whether ``seat`` plays ``clan``, read from its Stronghold's Clan Alignment."""
-    alignment = ruleset.ACTIVE.alignment(clan)
-    return alignment is not None and alignment in seat_alignments(game, seat)

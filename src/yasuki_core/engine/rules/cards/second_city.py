@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import DestroyProvince, DrawCard, Effect
-from yasuki_core.engine.rules.legality import province_key_holding
+from yasuki_core.engine.rules.board.queries import province_key_holding
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 

@@ -45,6 +45,9 @@ yasuki_core
     yasuki_core.engine.rules.attachments <yasuki_core.engine.rules.attachments>
     yasuki_core.engine.rules.battle.records <yasuki_core.engine.rules.battle.records>
     yasuki_core.engine.rules.battle.resolution <yasuki_core.engine.rules.battle.resolution>
+    yasuki_core.engine.rules.board.clans <yasuki_core.engine.rules.board.clans>
+    yasuki_core.engine.rules.board.queries <yasuki_core.engine.rules.board.queries>
+    yasuki_core.engine.rules.board.seats <yasuki_core.engine.rules.board.seats>
     yasuki_core.engine.rules.card_registry <yasuki_core.engine.rules.card_registry>
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.economy <yasuki_core.engine.rules.economy>

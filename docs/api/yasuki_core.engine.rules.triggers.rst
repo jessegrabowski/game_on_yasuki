@@ -21,11 +21,9 @@ yasuki_core.engine.rules.triggers
     enforce_state_rules
     fire
     on
-    province_holdings
     resolve_delayed
     resolve_effects
     resume_cascade
-    sincerity_seed_targets
 
 .. automodule:: yasuki_core.engine.rules.triggers
     :members:

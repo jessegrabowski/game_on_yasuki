@@ -1,7 +1,6 @@
-from collections.abc import Iterator
-
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole, province_holding
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.rules.board import queries
 from yasuki_core.engine.rules.equip import equip_targets
 from yasuki_core.engine.rules.actions import (
     ACTION_TIMINGS,
@@ -23,18 +22,21 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.economy import (
-    card_alignments,
-    seat_alignments,
-    seat_stronghold,
     GOLD_HANDLERS,
     effective_gold_cost,
-    effective_personal_honor,
     effective_gold_production,
-    maximum_gold_production,
-    effective_keywords,
-    lobby_amount,
+    effective_personal_honor,
     effective_recruit_discount,
+    lobby_amount,
+    maximum_gold_production,
 )
+from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
+from yasuki_core.engine.rules.board.queries import (
+    has_keyword,
+    owned_holdings,
+    province_cards,
+)
+from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.units import has_presence
@@ -219,7 +221,7 @@ def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     draws, not merely a floor."""
     return [
         card
-        for card in abilities.owned_personalities(game, seat)
+        for card in queries.owned_personalities(game, seat)
         if not card.bowed
         and effective_personal_honor(game, card) >= 1
         and card.printed_id not in abilities.MAY_NOT_LOBBY
@@ -351,15 +353,6 @@ def inheritance_key(seat: PlayerId) -> str:
     return f"inheritance:{seat.name}"
 
 
-def seat_holdings(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """``seat``'s Holdings in play, which is what Inheritance may raise."""
-    return [
-        card
-        for card in game.table.battlefield.cards
-        if card.owner is seat and isinstance(card.printed, HoldingPrint)
-    ]
-
-
 def _inheritance(game: GameState, seat: PlayerId) -> list[Action]:
     """The Inheritance ability when the seat can take it (ShE): only for the seat that did not go
     first, once per game, and only with a Stronghold to turn over and a Holding to raise."""
@@ -372,7 +365,7 @@ def _inheritance(game: GameState, seat: PlayerId) -> list[Action]:
     # back face.
     if stronghold is None or stronghold.back_card_id is None:
         return []
-    if not seat_holdings(game, seat):
+    if not owned_holdings(game, seat):
         return []
     return [Inheritance()]
 
@@ -488,19 +481,6 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
         if (only is None or card.id == only)
         and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
     ]
-
-
-def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Zone]]:
-    """Each of ``seat``'s Province zones with its key, in table order."""
-    for key, zone in game.table.zones.items():
-        if key.owner is seat and key.role is ZoneRole.PROVINCE:
-            yield key, zone
-
-
-def province_cards(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
-    """Every card in ``seat``'s Provinces, face-up or not, in Province order."""
-    for _, zone in province_zones(game, seat):
-        yield from zone.cards
 
 
 def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -629,13 +609,6 @@ def legacy_key(seat: PlayerId, turn: int) -> str:
     return f"legacy:{seat.name}:{turn}"
 
 
-def has_keyword(game: GameState, card: L5RCard, keyword: str) -> bool:
-    """Whether ``card`` carries ``keyword``, printed or granted by its own ability, matched without
-    regard to case."""
-    wanted = keyword.lower()
-    return any(carried.lower() == wanted for carried in effective_keywords(game, card))
-
-
 def is_legacy_card(game: GameState, card: L5RCard) -> bool:
     """Whether ``card`` carries the Legacy keyword, so the Legacy ability can search it out. Shrine
     of Courtesy grants itself Legacy for the second player, which is why this is not a printed
@@ -656,17 +629,3 @@ def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
     Empty means a Legacy search would whiff and lose the game."""
     return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
-
-
-def province_key_holding(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey | None:
-    """The Province of ``seat`` holding ``card_id``, or None when none does."""
-    return province_holding(game.table, seat, card_id)
-
-
-def province_key_of(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey:
-    """The Province of ``seat`` holding ``card_id``. Raise ValueError when none does — for callers
-    that already know the card is there and would otherwise carry an impossible None."""
-    key = province_key_holding(game, seat, card_id)
-    if key is None:
-        raise ValueError(f"no province of {seat.name} holds card {card_id}")
-    return key

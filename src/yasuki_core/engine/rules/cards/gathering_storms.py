@@ -3,11 +3,12 @@ from yasuki_core.engine.rules.abilities import (
     Ability,
     banish_top_fate,
     destroy_cost,
-    owned_holdings,
     plus_one_gp_this_turn,
     register_ability,
 )
-from yasuki_core.engine.rules.economy import gold_handler, opposing_seats, seat_stronghold
+from yasuki_core.engine.rules.board.queries import owned_holdings
+from yasuki_core.engine.rules.economy import gold_handler
+from yasuki_core.engine.rules.board.seats import opposing_seats, seat_stronghold
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     DrawCard,

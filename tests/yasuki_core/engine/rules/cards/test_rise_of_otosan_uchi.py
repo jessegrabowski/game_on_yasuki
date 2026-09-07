@@ -22,7 +22,7 @@ from yasuki_core.engine.rules.abilities import favor_payers
 from yasuki_core.engine.rules.effects import Straighten, TakeFavor
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
-from yasuki_core.engine.rules.economy import card_alignments, seat_alignments
+from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.projection import project
 from yasuki_core import ruleset

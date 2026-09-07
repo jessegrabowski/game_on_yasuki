@@ -16,14 +16,11 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules import state_rules
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Moment
-from yasuki_core.engine.rules.economy import effective_keywords
 from yasuki_core.engine.rules.modifiers import LobbyModifier, ProvinceModifier
 from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
-from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.counters import Counter, SINCERITY
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.counters import Counter
 
 # A sanity bound on both fixpoint walks: a converging cascade drains in a handful of events, and
 # the state rules settle in a handful of rounds, so far more than this means a trigger re-emits an
@@ -340,32 +337,6 @@ def action_did(game: GameState, kind: type[GameEvent]) -> tuple[GameEvent, ...]:
     Holding" are facts about the action rather than about the board it leaves behind.
     """
     return tuple(event for event in game.action_events if isinstance(event, kind))
-
-
-def sincerity_seed_targets(game: GameState, seat: PlayerId) -> list[str]:
-    """The seat's face-up Sincerity cards still in a Province with no Sincerity tokens — the legal
-    recipients of a seeded Sincerity token."""
-    return [
-        card.id
-        for key, zone in game.table.zones.items()
-        if key.owner is seat and key.role is ZoneRole.PROVINCE
-        for card in zone.cards
-        if card.face_up
-        and keywords.SINCERITY in effective_keywords(game, card)
-        and card.counters.get(SINCERITY.key, 0) == 0
-    ]
-
-
-def province_holdings(game: GameState, seat: PlayerId) -> list[str]:
-    """The seat's face-up Holdings still in a Province — the recruitable targets of a targeted
-    recruit ability."""
-    return [
-        card.id
-        for key, zone in game.table.zones.items()
-        if key.owner is seat and key.role is ZoneRole.PROVINCE
-        for card in zone.cards
-        if card.face_up and isinstance(card.printed, HoldingPrint)
-    ]
 
 
 def resolve_delayed(game: GameState, moment: Moment) -> None:

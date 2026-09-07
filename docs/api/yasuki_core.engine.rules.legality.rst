@@ -12,7 +12,6 @@ yasuki_core.engine.rules.legality
     cycle_key
     gold_producers
     gold_reach
-    has_keyword
     has_wind
     inheritance_key
     is_first_turn
@@ -30,13 +29,8 @@ yasuki_core.engine.rules.legality
     permits
     permitted_timings
     proclaim_key
-    province_cards
-    province_key_holding
-    province_key_of
-    province_zones
     reachable_gold
     recruit_cost
-    seat_holdings
     timings_of
 
 .. automodule:: yasuki_core.engine.rules.legality

@@ -1,11 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    CardLocation,
-    no_cost,
-    personalities_in_play,
-    register_ability,
-)
+from yasuki_core.engine.rules.abilities import Ability, CardLocation, no_cost, register_ability
+from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
     Ask,

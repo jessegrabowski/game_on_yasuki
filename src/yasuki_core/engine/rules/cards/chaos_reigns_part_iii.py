@@ -3,7 +3,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
     InvestAbility,
-    attack_targets,
     bow_cost,
     itself,
     no_cost,
@@ -11,14 +10,10 @@ from yasuki_core.engine.rules.abilities import (
     register_edict,
     register_invest,
 )
+from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import (
-    cards_in_play,
-    effective_keywords,
-    invest_discount,
-    recruit_discount,
-    seat_controls,
-)
+from yasuki_core.engine.rules.economy import effective_keywords, invest_discount, recruit_discount
+from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls
 from yasuki_core.engine.rules.effects import (
     Choose,
     CreateToken,
@@ -32,7 +27,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.equip import creation_targets
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.legality import province_zones
+from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.game_pieces import keywords
 from yasuki_core.engine.table import DeckKey
