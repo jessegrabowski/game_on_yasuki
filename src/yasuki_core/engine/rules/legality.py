@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.economy import (
+    seat_stronghold,
     GOLD_HANDLERS,
     effective_gold_cost,
     effective_personal_honor,
@@ -45,7 +46,6 @@ from yasuki_core.game_pieces.prints import (
     HoldingPrint,
     PersonalityPrint,
     SenseiPrint,
-    StrongholdPrint,
     WindPrint,
 )
 
@@ -654,14 +654,6 @@ def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
     Empty means a Legacy search would whiff and lose the game."""
     return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
-
-
-def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
-    """``seat``'s Stronghold, or None when it has none in play."""
-    for card in game.table.battlefield.cards:
-        if card.owner is seat and isinstance(card.printed, StrongholdPrint):
-            return card
-    return None
 
 
 def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:

@@ -40,7 +40,6 @@ yasuki_core.engine.rules.legality
     seat_alignment_name
     seat_alignments
     seat_holdings
-    seat_stronghold
     timings_of
 
 .. automodule:: yasuki_core.engine.rules.legality

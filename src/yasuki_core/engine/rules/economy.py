@@ -53,9 +53,47 @@ class PlayerState:
         return any(keyword in card.keywords and card is not other_than for card in self.in_play)
 
 
+def cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
+    """The cards ``seat`` controls on the battlefield."""
+    return tuple(card for card in game.table.battlefield.cards if card.owner is seat)
+
+
+def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
+    """``seat``'s Stronghold, or None when it has none in play."""
+    for card in game.table.battlefield.cards:
+        if card.owner is seat and isinstance(card.printed, StrongholdPrint):
+            return card
+    return None
+
+
+def opposing_seats(game: GameState, seat: PlayerId) -> tuple[PlayerId, ...]:
+    """Every seat but ``seat``, in table order."""
+    return tuple(other for other in game.table.seats if other is not seat)
+
+
+def went_second(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` did not go first, which several cards condition on."""
+    return seat is not game.first_player
+
+
+def seat_controls(
+    game: GameState, seat: PlayerId, keyword: str, *, other_than: L5RCard | None = None
+) -> bool:
+    """Whether ``seat`` controls an in-play card carrying ``keyword``.
+
+    ``other_than`` skips one card, matched by identity, so an "another" clause can exclude the card
+    asking. Default None.
+    """
+    return any(
+        keyword in card.keywords and card is not other_than
+        for card in game.table.battlefield.cards
+        if card.owner is seat
+    )
+
+
 def player_state(game: GameState, seat: PlayerId) -> PlayerState:
     """Build the read-only :class:`PlayerState` view for ``seat`` from the live game."""
-    in_play = tuple(card for card in game.table.battlefield.cards if card.owner is seat)
+    in_play = cards_in_play(game, seat)
     stronghold = next((card for card in in_play if isinstance(card.printed, StrongholdPrint)), None)
     return PlayerState(
         seat=seat,
@@ -63,7 +101,7 @@ def player_state(game: GameState, seat: PlayerId) -> PlayerState:
         in_play=in_play,
         gold=game.gold[seat],
         honor=game.table.seats[seat].honor,
-        went_second=seat is not game.first_player,
+        went_second=went_second(game, seat),
     )
 
 
@@ -322,7 +360,7 @@ def effective_province_strength(game: GameState, province: ZoneKey) -> int:
     recorded modifiers a card has laid on it. A seat with no Stronghold in play contributes no
     printed base.
     """
-    stronghold = player_state(game, province.owner).stronghold
+    stronghold = seat_stronghold(game, province.owner)
     total = (
         effective_stat(game, stronghold, Stat.PROVINCE_STRENGTH) if stronghold is not None else 0
     )

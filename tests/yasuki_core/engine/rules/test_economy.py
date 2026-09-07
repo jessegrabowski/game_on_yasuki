@@ -8,6 +8,10 @@ from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.state import once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
 from yasuki_core.engine.rules.economy import (
+    cards_in_play,
+    opposing_seats,
+    seat_controls,
+    went_second,
     GOLD_HANDLERS,
     GOLD_SELF_GRANT,
     SELF_GRANT,
@@ -89,28 +93,44 @@ def test_a_seat_with_no_stronghold_plays_no_clan():
 
 def test_went_second_is_true_only_for_the_non_first_player():
     game = two_seat_game()  # first_player is P1
-    assert player_state(game, PlayerId.P1).went_second is False
-    assert player_state(game, PlayerId.P2).went_second is True
+    assert went_second(game, PlayerId.P1) is False
+    assert went_second(game, PlayerId.P2) is True
 
 
-def test_controls_matches_a_keyword_and_can_exclude_a_card():
+def test_seat_controls_matches_a_keyword_and_can_exclude_a_card():
     game = two_seat_game()
     dockside = put_in_play(game, holding("P1-dockside", owner=PlayerId.P1, keywords=("Market",)))
     put_in_play(game, holding("P1-other-market", owner=PlayerId.P1, keywords=("Market",)))
+    put_in_play(game, holding("P2-market", owner=PlayerId.P2, keywords=("Market",)))
 
-    me = player_state(game, PlayerId.P1)
-
-    assert me.controls("Market") is True
-    assert me.controls("Port") is False
+    assert seat_controls(game, PlayerId.P1, "Market") is True
+    assert seat_controls(game, PlayerId.P1, "Port") is False
     # "another Market" — excluding the asking card still finds the second one.
-    assert me.controls("Market", other_than=dockside) is True
+    assert seat_controls(game, PlayerId.P1, "Market", other_than=dockside) is True
 
 
-def test_controls_other_than_the_only_match_is_false():
+def test_seat_controls_other_than_the_only_match_is_false():
     game = two_seat_game()
     lone = put_in_play(game, holding("P1-lone", owner=PlayerId.P1, keywords=("Market",)))
-    me = player_state(game, PlayerId.P1)
-    assert me.controls("Market", other_than=lone) is False
+    # An opponent's Market is not the seat's, so excluding the only one it holds finds nothing.
+    put_in_play(game, holding("P2-market", owner=PlayerId.P2, keywords=("Market",)))
+
+    assert seat_controls(game, PlayerId.P1, "Market", other_than=lone) is False
+
+
+def test_opposing_seats_is_every_other_seat_in_table_order():
+    game = two_seat_game()
+
+    assert opposing_seats(game, PlayerId.P1) == (PlayerId.P2,)
+    assert opposing_seats(game, PlayerId.P2) == (PlayerId.P1,)
+
+
+def test_cards_in_play_is_only_the_seats_own():
+    game = two_seat_game()
+    mine = put_in_play(game, holding("P1-h", owner=PlayerId.P1))
+    put_in_play(game, holding("P2-h", owner=PlayerId.P2))
+
+    assert cards_in_play(game, PlayerId.P1) == (mine,)
 
 
 def test_opposing_states_are_every_other_seat():
