@@ -1,8 +1,16 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.board.queries import owned_holdings
+from yasuki_core.engine.rules.board.queries import has_keyword, owned_holdings, province_key_of
 from yasuki_core.engine.rules.economy import KEYWORD_GRANTS, keyword_grant
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, stronghold, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    holding,
+    province_card,
+    put_in_play,
+    stronghold,
+    two_seat_game,
+)
 
 
 def test_owned_holdings_without_a_keyword_takes_them_all():
@@ -35,3 +43,27 @@ def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
         assert owned_holdings(game, PlayerId.P1, "Port") == [granted, printed]
     finally:
         KEYWORD_GRANTS.pop("keyword_probe", None)
+
+
+def test_has_keyword_ignores_case_on_both_sides():
+    """The case-insensitive match is the only thing separating this from ``keyword in
+    effective_keywords``, and card text spells a keyword however the printing did."""
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-quay", owner=PlayerId.P1, keywords=("Port",)))
+
+    assert has_keyword(game, card, "port") is True
+    assert has_keyword(game, card, "PORT") is True
+    assert has_keyword(game, card, "Harbor") is False
+
+
+def test_province_key_of_raises_when_no_province_holds_the_card():
+    """The raising variant exists so a caller that already knows the card is in a Province does not
+    carry an impossible None; a card in play is in no Province at all."""
+    game = two_seat_game()
+    provincial = province_card(game, "P1-farm", seat=PlayerId.P1)
+    in_play = put_in_play(game, holding("P1-built", owner=PlayerId.P1))
+
+    assert province_key_of(game, PlayerId.P1, provincial.id).owner is PlayerId.P1
+
+    with pytest.raises(ValueError, match=in_play.id):
+        province_key_of(game, PlayerId.P1, in_play.id)
