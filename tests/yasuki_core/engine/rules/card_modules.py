@@ -43,9 +43,9 @@ _CALLS = {
     "register_event_entry",
     "register_enters_unbowed",
     "register_invest",
-    "may_not_lobby",
-    "may_remain_bowed",
-    "bow_waiver",
+    "register_may_not_lobby",
+    "register_may_remain_bowed",
+    "register_bow_waiver",
 }
 
 

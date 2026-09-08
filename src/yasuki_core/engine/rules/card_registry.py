@@ -3,18 +3,12 @@ import re
 import sys
 from pathlib import Path
 
-from yasuki_core.engine.rules.abilities import costs, registry
+from yasuki_core.engine.rules.abilities import registry
 from yasuki_core.engine.rules import (
-    attachments,
-    effects,
-    equip,
-    keyword_grants,
     state_rules,
     triggers,
 )
-from yasuki_core.engine.rules.gold import discounts, production, self_grants
-from yasuki_core.engine.rules.rulebook import favor, lobby
-from yasuki_core.engine.rules.stats import province_strength
+from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
 
 # The one place the rules layer reaches into the bots: ABILITY_HEURISTICS is keyed by printed id
 # like every other per-card registry, so it is validated here even though a policy is not a rule.
@@ -29,30 +23,20 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     """
     Every card id the engine keys a per-card handler on, grouped by the registry holding it.
 
+    Every registry built through :mod:`~yasuki_core.engine.rules.registrar` reports itself, so a
+    new one is validated without being listed here. The four below are not built that way: two keep
+    bespoke registration rules, one lives in the bots, and the triggers are keyed by event first.
+
     ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than
     on a card — ``modest_farm_straighten`` and ``sincerity_seed`` name steps in a sequence, not
     cards — so validating it against the card index would report failures that are not defects.
     """
+    derived = {registry.label: frozenset(registry) for registry in CARD_REGISTRIES}
     return {
+        **derived,
         "abilities": frozenset(registry._ABILITIES),
         "invest abilities": frozenset(registry._INVEST),
-        "enters unbowed": frozenset(registry._ENTERS_UNBOWED),
-        "may remain bowed": frozenset(registry.MAY_REMAIN_BOWED),
-        "bow waivers": frozenset(costs.BOW_WAIVERS),
-        "lobby bars": frozenset(lobby.LOBBY_BARS),
-        "may not lobby": frozenset(lobby.MAY_NOT_LOBBY),
-        "favor payers": frozenset(favor.FAVOR_PAYERS),
-        "gold handlers": frozenset(production.GOLD_HANDLERS),
-        "lobby bonuses": frozenset(lobby.LOBBY_BONUSES),
-        "gold self grants": frozenset(self_grants.GOLD_SELF_GRANT),
-        "recruit discounts": frozenset(discounts.RECRUIT_DISCOUNTS),
-        "invest discounts": frozenset(discounts.INVEST_DISCOUNTS),
-        "keyword grants": frozenset(keyword_grants.KEYWORD_GRANTS),
-        "province strength grants": frozenset(province_strength.PROVINCE_STRENGTH_GRANTS),
         "ability heuristics": frozenset(policies.ABILITY_HEURISTICS),
-        "attachment grants": frozenset(attachments.ATTACHMENT_GRANTS),
-        "attach restrictions": frozenset(equip.ATTACH_RESTRICTIONS),
-        "attack strength": frozenset(effects.ATTACK_STRENGTH_AGAINST),
         "triggers": frozenset(
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),

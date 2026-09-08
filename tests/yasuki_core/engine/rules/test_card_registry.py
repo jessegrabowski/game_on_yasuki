@@ -14,29 +14,15 @@ from yasuki_core.engine.rules.card_registry import (
     unregistered_card_ids,
 )
 from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
 
-# The per-card registries card_registry validates.
+# The per-card registries card_registry validates by name. Everything built through the
+# registrar is absent on purpose -- those report themselves, which is the point of it.
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
-    "MAY_REMAIN_BOWED",
-    "BOW_WAIVERS",
-    "LOBBY_BARS",
-    "MAY_NOT_LOBBY",
-    "FAVOR_PAYERS",
     "_INVEST",
-    "_ENTERS_UNBOWED",
-    "GOLD_HANDLERS",
-    "LOBBY_BONUSES",
-    "GOLD_SELF_GRANT",
-    "RECRUIT_DISCOUNTS",
-    "INVEST_DISCOUNTS",
-    "KEYWORD_GRANTS",
-    "PROVINCE_STRENGTH_GRANTS",
     "ABILITY_HEURISTICS",
     "CHI_DEATH_EXEMPT",
-    "ATTACHMENT_GRANTS",
-    "ATTACH_RESTRICTIONS",
-    "ATTACK_STRENGTH_AGAINST",
     "_TRIGGERS",
 }
 # Module-level collections under engine/rules that key on something other than a card. Each is
@@ -58,6 +44,10 @@ NOT_KEYED_BY_CARD = {
     "_ACTION_WORDING",  # keyed by action type, for describe_action
 }
 COLLECTIONS = ("dict", "set", "frozenset")
+# What a registry built through the registrar looks like in source. These need no entry in
+# VALIDATED_REGISTRIES: they report themselves at import, so validation reads them whatever they
+# are named and wherever they live.
+REGISTRAR = ("FlagRegistry", "HandlerRegistry")
 
 
 # Every package card_registry validates a registry in. `bots` is here because ABILITY_HEURISTICS is
@@ -81,11 +71,18 @@ def module_level_collections() -> set[str]:
     }
 
 
+def _built_by_the_registrar(value: ast.expr | None) -> bool:
+    """Whether this binding is a registry the registrar catalogues, which validation finds itself."""
+    return isinstance(value, ast.Call) and getattr(value.func, "id", "") in REGISTRAR
+
+
 def _collections_defined_in(path: pathlib.Path) -> set[str]:
     """The module-level collection names one source file binds, by annotation or by literal."""
     found: set[str] = set()
     for node in ast.parse(path.read_text(encoding="utf-8")).body:
         if isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            if _built_by_the_registrar(node.value):
+                continue
             if any(kind in ast.unparse(node.annotation) for kind in COLLECTIONS):
                 found.add(node.target.id)
         elif isinstance(node, ast.Assign):
@@ -94,6 +91,8 @@ def _collections_defined_in(path: pathlib.Path) -> set[str]:
                 isinstance(node.value, ast.Call)
                 and getattr(node.value.func, "id", "") in COLLECTIONS
             )
+            if _built_by_the_registrar(node.value):
+                continue
             if literal or call:
                 found.update(target.id for target in node.targets if isinstance(target, ast.Name))
     return found
@@ -124,7 +123,10 @@ def test_no_per_card_registry_escapes_validation():
 
     assert discovered - VALIDATED_REGISTRIES == NOT_KEYED_BY_CARD
     assert VALIDATED_REGISTRIES - discovered == set()
-    assert len(registered_card_ids()) + len(card_keyed_data()) == len(VALIDATED_REGISTRIES)
+    assert {built.label for built in CARD_REGISTRIES} <= registered_card_ids().keys()
+    assert len(registered_card_ids()) + len(card_keyed_data()) == len(CARD_REGISTRIES) + len(
+        VALIDATED_REGISTRIES
+    )
 
 
 def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():

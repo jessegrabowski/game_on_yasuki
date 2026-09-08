@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import FlagRegistry, HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
@@ -11,19 +12,10 @@ from yasuki_core.game_pieces.cards import L5RCard
 # Court reads "You have a +5 Lobby Bonus"; there is no stat for it, so the grant is text. Keyed by
 # printed id like the other registries.
 LobbyGrant = Callable[[GameState, L5RCard], int]
-LOBBY_BONUSES: dict[str, LobbyGrant] = {}
-
-
-def lobby_bonus_grant(printed_id: str) -> Callable[[LobbyGrant], LobbyGrant]:
-    """Register the decorated function as ``printed_id``'s Lobby Bonus grant."""
-
-    def register(grant: LobbyGrant) -> LobbyGrant:
-        if printed_id in LOBBY_BONUSES:
-            raise ValueError(f"{printed_id} already grants a Lobby Bonus")
-        LOBBY_BONUSES[printed_id] = grant
-        return grant
-
-    return register
+LOBBY_BONUSES: HandlerRegistry[LobbyGrant] = HandlerRegistry(
+    "lobby bonuses", "already grants a Lobby Bonus"
+)
+lobby_bonus_grant = LOBBY_BONUSES.make_decorator()
 
 
 def lobby_bonus(game: GameState, seat: PlayerId) -> int:
@@ -73,19 +65,8 @@ LOBBIED_TAG = "lobbied"
 # behavior rather than a branch inside the rule, the way a Favor payer is: the card decides which
 # seats it stops, since one stops its controller's rivals and another stops its own controller.
 LobbyBar = Callable[[GameState, L5RCard, PlayerId], bool]
-LOBBY_BARS: dict[str, LobbyBar] = {}
-
-
-def lobby_bar(printed_id: str) -> Callable[[LobbyBar], LobbyBar]:
-    """Register the decorated predicate as ``printed_id``'s bar on Lobbying."""
-
-    def register(bar: LobbyBar) -> LobbyBar:
-        if printed_id in LOBBY_BARS:
-            raise ValueError(f"{printed_id} already bars Lobbying")
-        LOBBY_BARS[printed_id] = bar
-        return bar
-
-    return register
+LOBBY_BARS: HandlerRegistry[LobbyBar] = HandlerRegistry("lobby bars", "already bars Lobbying")
+lobby_bar = LOBBY_BARS.make_decorator()
 
 
 def may_lobby(game: GameState, seat: PlayerId) -> bool:
@@ -104,11 +85,5 @@ def may_lobby(game: GameState, seat: PlayerId) -> bool:
 # Personalities their controller may not bow to Lobby (the printed "may not Lobby"), by printed id.
 # A flag rather than a handler: the card states the restriction flatly and admits no condition. This
 # is the card-level half of the rule; :data:`LOBBY_BARS` is the half that stops a whole player.
-MAY_NOT_LOBBY: set[str] = set()
-
-
-def may_not_lobby(printed_id: str) -> None:
-    """Register ``printed_id`` as a Personality who cannot be bowed to Lobby."""
-    if printed_id in MAY_NOT_LOBBY:
-        raise ValueError(f"{printed_id} already may not be bowed to Lobby")
-    MAY_NOT_LOBBY.add(printed_id)
+MAY_NOT_LOBBY = FlagRegistry("may not lobby", "already may not be bowed to Lobby")
+register_may_not_lobby = MAY_NOT_LOBBY.make_register()

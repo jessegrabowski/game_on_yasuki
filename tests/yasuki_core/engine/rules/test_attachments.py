@@ -3,9 +3,7 @@ import pytest
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import (
-    ATTACHMENT_GRANTS,
     attached_to,
-    attachment_grant,
     attachments_of,
 )
 from yasuki_core.engine.rules.stats.card_values import (
@@ -217,23 +215,6 @@ def test_penalties_are_summed_before_the_floor_applies():
     attached(game, attachment("curse", chi_modifier=-1), "hero")
 
     assert effective_chi(game, hero) == 0
-
-
-def test_a_second_attachment_grant_for_one_card_is_refused():
-    # The dict would overwrite, leaving no trace of the handler that lost — so the check has to be at
-    # registration, not on the registry afterwards.
-    @attachment_grant("guard_probe")
-    def _first(game, card, host):
-        return {}
-
-    try:
-        with pytest.raises(ValueError, match="guard_probe already has an attachment grant"):
-
-            @attachment_grant("guard_probe")
-            def _second(game, card, host):
-                return {}
-    finally:
-        ATTACHMENT_GRANTS.pop("guard_probe", None)
 
 
 def test_a_personal_honor_counter_reaches_the_cards_honor():

@@ -13,10 +13,8 @@ yasuki_core.engine.rules.abilities.registry
     fixed_invest_amount
     invest_amounts
     invest_for
-    may_remain_bowed
     may_stay_bowed
     register_ability
-    register_enters_unbowed
     register_invest
 
 .. automodule:: yasuki_core.engine.rules.abilities.registry

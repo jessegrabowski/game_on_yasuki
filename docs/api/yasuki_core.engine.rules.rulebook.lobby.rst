@@ -8,11 +8,8 @@ yasuki_core.engine.rules.rulebook.lobby
 .. autosummary::
 
     lobby_amount
-    lobby_bar
     lobby_bonus
-    lobby_bonus_grant
     may_lobby
-    may_not_lobby
 
 .. automodule:: yasuki_core.engine.rules.rulebook.lobby
     :members:

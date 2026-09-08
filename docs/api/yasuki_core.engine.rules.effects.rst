@@ -65,7 +65,6 @@ yasuki_core.engine.rules.effects
 
 .. autosummary::
 
-    attack_strength_against
     effective_strength
 
 .. automodule:: yasuki_core.engine.rules.effects

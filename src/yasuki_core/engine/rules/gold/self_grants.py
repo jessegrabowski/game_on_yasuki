@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
@@ -13,24 +14,14 @@ from yasuki_core.game_pieces.cards import L5RCard
 # its grant on a condition — Slave Pits offers nothing to the player who went first — and a grant
 # affordability counts but the card refuses would strand the payment it made reachable.
 SelfGrantHandler = Callable[[L5RCard, GameState, PlayerId], int]
-GOLD_SELF_GRANT: dict[str, SelfGrantHandler] = {}
+GOLD_SELF_GRANT: HandlerRegistry[SelfGrantHandler] = HandlerRegistry(
+    "gold self grants", "already grants itself Gold Production"
+)
+self_grant = GOLD_SELF_GRANT.make_decorator()
 
 # The once-per-turn tag a card claims as it grants itself. Read here to tell a grant still to come
 # from one `effective_gold_production` is already carrying, and by the trait that prices it.
 SELF_GRANT = "gold_self_grant"
-
-
-def self_grant(printed_id: str) -> Callable[[SelfGrantHandler], SelfGrantHandler]:
-    """Register the decorated function as ``printed_id``'s self-grant, for a card whose own
-    conditions decide how much it offers, or whether it offers anything at all."""
-
-    def register(handler: SelfGrantHandler) -> SelfGrantHandler:
-        if printed_id in GOLD_SELF_GRANT:
-            raise ValueError(f"{printed_id} already grants itself Gold Production")
-        GOLD_SELF_GRANT[printed_id] = handler
-        return handler
-
-    return register
 
 
 def register_self_grant(printed_id: str, amount: int) -> None:

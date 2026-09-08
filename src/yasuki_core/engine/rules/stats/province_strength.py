@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.rules.board.seats import seat_stronghold
@@ -14,19 +15,10 @@ from yasuki_core.game_pieces.counters import counter_from_key
 # reads "This Province has +3PS"; a Fortification carries no Province Strength stat of its own, so
 # the grant is text rather than a number on the print. Keyed by printed id like the other registries.
 ProvinceGrant = Callable[[GameState, L5RCard, ZoneKey], int]
-PROVINCE_STRENGTH_GRANTS: dict[str, ProvinceGrant] = {}
-
-
-def province_strength_grant(printed_id: str) -> Callable[[ProvinceGrant], ProvinceGrant]:
-    """Register the decorated function as ``printed_id``'s Province Strength grant."""
-
-    def register(grant: ProvinceGrant) -> ProvinceGrant:
-        if printed_id in PROVINCE_STRENGTH_GRANTS:
-            raise ValueError(f"{printed_id} already grants Province Strength")
-        PROVINCE_STRENGTH_GRANTS[printed_id] = grant
-        return grant
-
-    return register
+PROVINCE_STRENGTH_GRANTS: HandlerRegistry[ProvinceGrant] = HandlerRegistry(
+    "province strength grants", "already grants Province Strength"
+)
+province_strength_grant = PROVINCE_STRENGTH_GRANTS.make_decorator()
 
 
 def effective_province_strength(game: GameState, province: ZoneKey) -> int:

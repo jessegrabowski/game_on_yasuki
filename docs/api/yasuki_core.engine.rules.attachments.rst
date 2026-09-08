@@ -8,7 +8,6 @@ yasuki_core.engine.rules.attachments
 .. autosummary::
 
     attached_to
-    attachment_grant
     attachments_of
     granted_stat
     shares_unit

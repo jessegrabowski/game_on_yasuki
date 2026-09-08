@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
@@ -20,19 +21,10 @@ from yasuki_core.game_pieces.cards import L5RCard
 # Registered by printed id the way ``BOW_WAIVERS`` registers waivers, so a payer is a card behavior
 # rather than a branch inside the cost.
 FavorPayer = Callable[[GameState, L5RCard], list[Effect] | None]
-FAVOR_PAYERS: dict[str, FavorPayer] = {}
-
-
-def favor_payer(printed_id: str) -> Callable[[FavorPayer], FavorPayer]:
-    """Register the decorated function as what ``printed_id`` charges to pay a Favor cost."""
-
-    def register(payer: FavorPayer) -> FavorPayer:
-        if printed_id in FAVOR_PAYERS:
-            raise ValueError(f"{printed_id} already pays Favor costs")
-        FAVOR_PAYERS[printed_id] = payer
-        return payer
-
-    return register
+FAVOR_PAYERS: HandlerRegistry[FavorPayer] = HandlerRegistry(
+    "favor payers", "already pays Favor costs"
+)
+favor_payer = FAVOR_PAYERS.make_decorator()
 
 
 FAVOR_PAYMENT = "favor_payment"
