@@ -1,11 +1,13 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.attachments import attached_to, attachments_of
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import location_of
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
+from yasuki_core.game_pieces.prints import AttachmentPrint
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
 
@@ -150,3 +152,21 @@ def location_permits(game: GameState, card: L5RCard) -> bool:
     if not in_a_unit(game, card):
         return True
     return location_of(game.table, card).battlefield == attack.current
+
+
+def is_spell(card: L5RCard) -> bool:
+    """Whether ``card`` is a Spell. Only attachments carry a type, so the print answers first."""
+    return (
+        isinstance(card.printed, AttachmentPrint) and card.attachment_type is AttachmentType.SPELL
+    )
+
+
+def may_cast_spells(game: GameState, personality: L5RCard) -> bool:
+    """Whether ``personality`` may hold and cast a Spell, which only a Shugenja may (CR, Spell)."""
+    return keywords.SHUGENJA in effective_keywords(game, personality)
+
+
+def has_caster(game: GameState, spell: L5RCard) -> bool:
+    """Whether ``spell`` hangs on a Personality who may cast it."""
+    caster = attached_to(game, spell)
+    return caster is not None and may_cast_spells(game, caster)

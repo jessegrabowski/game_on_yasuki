@@ -159,13 +159,11 @@ def test_a_card_printing_two_designators_is_offered_under_either():
     card = put_in_play(game, holding("h", owner=PlayerId.P1, printed_id="dual"))
 
     dual = abilities.ability_for(card)
-    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.OPEN})) == [
+    assert legality.activatable(game, PlayerId.P1, frozenset({ActionTiming.OPEN})) == [(card, dual)]
+    assert legality.activatable(game, PlayerId.P1, frozenset({ActionTiming.BATTLE})) == [
         (card, dual)
     ]
-    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.BATTLE})) == [
-        (card, dual)
-    ]
-    assert abilities.activatable(game, PlayerId.P1, frozenset({ActionTiming.DYNASTY})) == []
+    assert legality.activatable(game, PlayerId.P1, frozenset({ActionTiming.DYNASTY})) == []
     assert legality.timings_of(game, ActivateAbility("h")) == {
         ActionTiming.BATTLE,
         ActionTiming.OPEN,

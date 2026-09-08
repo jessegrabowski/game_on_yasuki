@@ -1,9 +1,8 @@
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import ZoneRole, location_of
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import (
     ActionTiming,
@@ -16,7 +15,6 @@ from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.state import once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.units import has_presence, location_permits
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -31,9 +29,8 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint
 
 # A cost is the effects paid to activate an ability, applied before the ability's own effects. Bow /
 # destroy / spend-a-token are all just effects targeting a card, so costs and effects share one
@@ -438,157 +435,6 @@ def ability_for(card: L5RCard, key: str | None = None) -> Ability | None:
 def invest_for(card: L5RCard) -> InvestAbility | None:
     """The Invest ability registered for ``card``'s printed id, or None."""
     return _INVEST.get(card.printed_id)
-
-
-def _seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, L5RCard]]:
-    """Every card ``seat`` could activate something on, with where it is sitting.
-
-    A card in hand is yielded like any other. Only an ability whose ``located_at`` names the hand is
-    offered from there, and every ability defaults to the battlefield, so a card waiting to be
-    played stays silent until one says otherwise.
-    """
-    for card in game.table.battlefield.cards:
-        if card.owner is seat:
-            yield CardLocation.BATTLEFIELD, card
-    for key, zone in game.table.zones.items():
-        if key.owner is not seat:
-            continue
-        if key.role is ZoneRole.PROVINCE:
-            for card in zone.cards:
-                if card.face_up:  # face-down, what the card is has not been revealed
-                    yield CardLocation.PROVINCE, card
-        elif key.role is ZoneRole.HAND:
-            yield from ((CardLocation.HAND, card) for card in zone.cards)
-
-
-# Where a card is when activating it is what its ability means. A card in hand is *played* rather
-# than activated, and pays a Gold Cost to do it, so it answers to its own action and is left out of
-# the default.
-IN_PLAY: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD, CardLocation.PROVINCE)
-
-
-def activatable(
-    game: GameState,
-    seat: PlayerId,
-    permitted: frozenset[ActionTiming],
-    *,
-    at: tuple[CardLocation, ...] = IN_PLAY,
-) -> list[tuple[L5RCard, Ability]]:
-    """Each card ``seat`` may use an ability on right now, paired with the ability it may use:
-    controlled, sitting somewhere the ability acts from, its designator among ``permitted``, its
-    cost payable, and with at least one legal target.
-
-    ``at`` narrows which of those places count, and defaults to the ones a card is *in play* in.
-    Playing a card out of hand asks for :data:`CardLocation.HAND` explicitly, because it is a
-    different action with a cost of its own.
-    """
-    ready: list[tuple[L5RCard, Ability]] = []
-    # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
-    present = has_presence(game, seat)
-    for location, card in _seat_cards(game, seat):
-        if location not in at:
-            continue
-        # The attach rule cannot settle casting alone: a Personality can stop being a Shugenja
-        # after the Spell landed on him.
-        if is_spell(card) and not _has_caster(game, card):
-            continue
-        for ability in abilities_for(card):
-            if permitted.isdisjoint(ability.timings):
-                continue
-            if not _bow_permits(card, ability):
-                continue
-            # The Rule of Presence is about the player, not the card, so it gates an action taken
-            # from anywhere — a Strategy out of hand as much as a Personality on the board.
-            if not present and BattleDesignator.ABSENT not in ability.battle:
-                continue
-            if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
-                continue
-            if location not in ability.located_at:
-                continue
-            # A card in a unit may only be acted from at the battlefield the battle is at (CR,
-            # Rules of Location). A card in hand or in a Province is in no unit, and neither is a
-            # Holding.
-            if (
-                location is CardLocation.BATTLEFIELD
-                and not _location_lifted(game, card, ability)
-                and not location_permits(game, card)
-            ):
-                continue
-            if not can_pay(game, card, ability.cost):
-                continue
-            if legal_targets(game, card, ability):
-                ready.append((card, ability))
-    return ready
-
-
-def is_spell(card: L5RCard) -> bool:
-    """Whether ``card`` is a Spell. Only attachments carry a type, so the print answers first."""
-    return (
-        isinstance(card.printed, AttachmentPrint) and card.attachment_type is AttachmentType.SPELL
-    )
-
-
-def may_cast_spells(game: GameState, personality: L5RCard) -> bool:
-    """Whether ``personality`` may hold and cast a Spell, which only a Shugenja may (CR, Spell)."""
-    return keywords.SHUGENJA in effective_keywords(game, personality)
-
-
-def _has_caster(game: GameState, spell: L5RCard) -> bool:
-    """Whether ``spell`` hangs on a Personality who may cast it."""
-    caster = attached_to(game, spell)
-    return caster is not None and may_cast_spells(game, caster)
-
-
-def _bow_permits(card: L5RCard, ability: Ability) -> bool:
-    """Whether ``card``'s bowed state leaves ``ability`` usable: abilities on a bowed card cannot be
-    used, and Tireless is the keyword that escapes it (CR, Using Abilities; Tireless)."""
-    return ability.tireless or not card.bowed
-
-
-def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:
-    """Whether one of ``ability``'s designators excuses ``card`` from the Rules of Location (ShE
-    datasheet).
-
-    Remote reaches from home or from another battlefield; Home reaches from home alone, so a card
-    standing at a battlefield that is not the current one is beyond it. Neither lifts the Rule of
-    Presence.
-    """
-    if BattleDesignator.REMOTE in ability.battle:
-        return True
-    if BattleDesignator.HOME in ability.battle:
-        return location_of(game.table, card).is_home
-    return False
-
-
-def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
-    """Whether ``seat`` holds any ability it could take with no presence at the current battlefield
-    (ShE, Absent). What decides whether a seat with no units there is offered the opportunity at
-    all, rather than skipped."""
-    return any(
-        BattleDesignator.ABSENT in ability.battle and _bow_permits(card, ability)
-        for _, card in _seat_cards(game, seat)
-        for ability in abilities_for(card)
-    )
-
-
-def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]:
-    """The ids ``ability`` may target from ``card`` right now.
-
-    Filtered centrally rather than by each card's own ``targets``: during a battle, a card in a unit
-    may only be targeted at the battlefield the battle is at (CR, Rules of Location), and a handler
-    that forgot to say so would be a silent rules bug on every card that forgot. A card printing "at
-    any location" says so on its ``Ability`` instead, where the filter can see it.
-    """
-    offered = ability.targets(game, card)
-    attack = game.attack
-    if attack is None or attack.current is None or ability.targets_any_location:
-        return offered
-    by_id = game.table.cards_by_id
-    return [
-        target_id
-        for target_id in offered
-        if target_id not in by_id or location_permits(game, by_id[target_id])
-    ]
 
 
 def plus_one_gp_this_turn(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

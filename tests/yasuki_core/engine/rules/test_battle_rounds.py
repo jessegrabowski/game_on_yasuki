@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
-from yasuki_core.engine.rules import abilities, flow, legality, triggers
+from yasuki_core.engine.rules import flow, legality, triggers
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.abilities import (
     _ABILITIES,
@@ -445,7 +445,7 @@ def test_a_target_left_at_home_is_filtered_out_centrally():
     ability = _ABILITIES["battle_probe"][0]
 
     assert set(ability.targets(session.game, probe)) == {"mark-front", "mark-home"}
-    assert abilities.legal_targets(session.game, probe, ability) == ["mark-front"]
+    assert legality.legal_targets(session.game, probe, ability) == ["mark-front"]
 
 
 register_ability(

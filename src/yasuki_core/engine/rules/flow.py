@@ -79,6 +79,7 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import (
+    activatable,
     cycle_candidates,
     cycle_key,
     inheritance_key,
@@ -87,6 +88,7 @@ from yasuki_core.engine.rules.legality import (
     legacy_candidates,
     legacy_key,
     legacy_search_pool,
+    legal_targets,
     lobby_candidates,
     lobby_key,
     permitted_timings,
@@ -1126,7 +1128,7 @@ def _defer_ability(game: GameState, card: L5RCard, ability: abilities.Ability) -
     The cost resolves first and targeting follows it (CR, Action Sequence steps B and C), and an
     ``all_targets`` ability hits every one it found rather than pausing to be pointed at one.
     """
-    targets = tuple(abilities.legal_targets(game, card, ability))
+    targets = tuple(legal_targets(game, card, ability))
     game.stack.append(
         ApplyAbilityEffects(card.id, targets, ability.key)
         if ability.all_targets
@@ -1302,7 +1304,7 @@ def _yield_after_action(game: GameState, acted_in: ActionRound) -> None:
 def _responders(game: GameState) -> list[PlayerId]:
     """Every seat holding a Response it could take against the action just resolved."""
     responding = frozenset({ActionTiming.RESPONSE})
-    return [seat for seat in game.table.seats if abilities.activatable(game, seat, responding)]
+    return [seat for seat in game.table.seats if activatable(game, seat, responding)]
 
 
 def open_response_window(game: GameState) -> bool:

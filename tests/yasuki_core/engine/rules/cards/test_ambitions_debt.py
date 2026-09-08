@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.abilities import CardLocation
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules import abilities
+from yasuki_core.engine.rules import abilities, legality
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -106,10 +106,10 @@ def test_it_is_offered_under_both_of_its_printed_designators():
 
     uncertainty = abilities.ability_for(card)
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
-        assert abilities.activatable(game, PLAYER, frozenset({designator}), at=in_hand) == [
+        assert legality.activatable(game, PLAYER, frozenset({designator}), at=in_hand) == [
             (card, uncertainty)
         ]
-    assert abilities.activatable(game, PLAYER, frozenset({ActionTiming.DYNASTY}), at=in_hand) == []
+    assert legality.activatable(game, PLAYER, frozenset({ActionTiming.DYNASTY}), at=in_hand) == []
 
 
 def test_the_penalty_and_the_minimum_both_wear_off_when_the_turn_ends():

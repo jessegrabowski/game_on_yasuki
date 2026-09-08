@@ -5,6 +5,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.rulebook.lobby import MAY_NOT_LOBBY, may_not_lobby
+from yasuki_core.engine.rules.legality import activatable, has_absent_ability
 from yasuki_core.engine.rules.abilities import (
     _ABILITIES,
     _ENTERS_UNBOWED,
@@ -12,11 +13,9 @@ from yasuki_core.engine.rules.abilities import (
     abilities_for,
     Ability,
     ability_for,
-    activatable,
     bow_waiver,
     BOW_WAIVERS,
     CardLocation,
-    has_absent_ability,
     itself,
     MAY_REMAIN_BOWED,
     may_remain_bowed,

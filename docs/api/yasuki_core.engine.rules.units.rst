@@ -9,9 +9,12 @@ yasuki_core.engine.rules.units
 
     attackable
     followers_of
+    has_caster
     has_presence
     in_a_unit
+    is_spell
     location_permits
+    may_cast_spells
     opposing_units_in_battle
     unit_force
     unit_keywords
