@@ -86,4 +86,4 @@ def may_lobby(game: GameState, seat: PlayerId) -> bool:
 # A flag rather than a handler: the card states the restriction flatly and admits no condition. This
 # is the card-level half of the rule; :data:`LOBBY_BARS` is the half that stops a whole player.
 MAY_NOT_LOBBY = FlagRegistry("may not lobby", "already may not be bowed to Lobby")
-may_not_lobby = MAY_NOT_LOBBY.make_register()
+register_may_not_lobby = MAY_NOT_LOBBY.make_register()

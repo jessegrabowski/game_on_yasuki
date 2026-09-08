@@ -28,7 +28,7 @@ class FlagRegistry:
     def make_register(self) -> Callable[[str], None]:
         """The function that records a card in this registry, to bind to a ``register_`` name.
 
-        ``may_not_lobby("moto_chen")`` and ``favor_payer("moto_chen")`` are the same
+        ``register_may_not_lobby("moto_chen")`` and ``favor_payer("moto_chen")`` are the same
         expression to the eye, but the second needs a function under it and does nothing without
         one. The prefix is what tells a reader which is which.
         """

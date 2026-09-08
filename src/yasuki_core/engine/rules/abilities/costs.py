@@ -35,8 +35,8 @@ def no_cost(game: GameState, source: L5RCard) -> list[Effect]:
 # Attachments offering the Personality they are on a once-per-turn waiver of the cost of bowing to
 # pay for one of his own abilities, keyed on the attachment's printed id.
 BOW_WAIVERS = FlagRegistry("bow waivers", "already waives a bow cost")
-bow_waiver = BOW_WAIVERS.make_register()
-WAIVER_TAG = "bow_waiver"
+register_bow_waiver = BOW_WAIVERS.make_register()
+WAIVER_TAG = "register_bow_waiver"
 
 
 def _waiver_on(game: GameState, card: L5RCard) -> L5RCard | None:

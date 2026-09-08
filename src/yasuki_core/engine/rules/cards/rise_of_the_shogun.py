@@ -1,4 +1,4 @@
-from yasuki_core.engine.rules.abilities.costs import bow_waiver
+from yasuki_core.engine.rules.abilities.costs import register_bow_waiver
 from yasuki_core.engine.rules.attachments import attachment_grant
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
@@ -17,4 +17,4 @@ def _shadowlands_ambassador_attachment_grant(
 
 
 # Once a turn, his Personality may ignore the cost of bowing to pay for one of their own abilities.
-bow_waiver("shadowlands_ambassador")
+register_bow_waiver("shadowlands_ambassador")

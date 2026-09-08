@@ -11,7 +11,7 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 # printed "May remain bowed"), by printed id. A flag rather than a handler: the card states the
 # permission and says nothing about when it is worth taking, which is the controller's business.
 MAY_REMAIN_BOWED = FlagRegistry("may remain bowed", "may already remain bowed")
-may_remain_bowed = MAY_REMAIN_BOWED.make_register()
+register_may_remain_bowed = MAY_REMAIN_BOWED.make_register()
 
 
 def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:

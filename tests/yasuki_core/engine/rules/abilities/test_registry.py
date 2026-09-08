@@ -3,7 +3,7 @@ from dataclasses import replace
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import BOW_WAIVERS, bow_waiver
+from yasuki_core.engine.rules.abilities.costs import BOW_WAIVERS, register_bow_waiver
 from yasuki_core.engine.rules.abilities.registry import (
     _ABILITIES,
     _ENTERS_UNBOWED,
@@ -11,12 +11,12 @@ from yasuki_core.engine.rules.abilities.registry import (
     MAY_REMAIN_BOWED,
     abilities_for,
     ability_for,
-    may_remain_bowed,
+    register_may_remain_bowed,
     register_ability,
     register_enters_unbowed,
     register_invest,
 )
-from yasuki_core.engine.rules.rulebook.lobby import MAY_NOT_LOBBY, may_not_lobby
+from yasuki_core.engine.rules.rulebook.lobby import MAY_NOT_LOBBY, register_may_not_lobby
 
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -102,11 +102,11 @@ def test_a_second_enters_unbowed_for_one_card_is_refused():
 @pytest.mark.parametrize(
     "register_flag, registry, complaint",
     [
-        (bow_waiver, BOW_WAIVERS, "already waives a bow cost"),
-        (may_not_lobby, MAY_NOT_LOBBY, "already may not be bowed to Lobby"),
-        (may_remain_bowed, MAY_REMAIN_BOWED, "may already remain bowed"),
+        (register_bow_waiver, BOW_WAIVERS, "already waives a bow cost"),
+        (register_may_not_lobby, MAY_NOT_LOBBY, "already may not be bowed to Lobby"),
+        (register_may_remain_bowed, MAY_REMAIN_BOWED, "may already remain bowed"),
     ],
-    ids=["bow_waiver", "may_not_lobby", "may_remain_bowed"],
+    ids=["register_bow_waiver", "register_may_not_lobby", "register_may_remain_bowed"],
 )
 def test_a_second_flag_registration_for_one_card_is_refused(register_flag, registry, complaint):
     # A flat set absorbs a repeated registration, so without this guard a card listed from two set

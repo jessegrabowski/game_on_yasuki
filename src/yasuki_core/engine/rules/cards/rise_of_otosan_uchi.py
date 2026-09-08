@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_event_entry
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import (
-    may_remain_bowed,
+    register_may_remain_bowed,
     register_ability,
     register_invest,
 )
@@ -351,7 +351,7 @@ register_invest(
 EXPENDABLE_SERVANT = "expendable_personality_0_2_1"
 
 
-may_remain_bowed("culling_grounds")
+register_may_remain_bowed("culling_grounds")
 
 
 @on(Straightened, "culling_grounds")
