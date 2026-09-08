@@ -49,14 +49,14 @@ def run_games(
     Play ``deck_path`` against itself ``games`` times, varying only the shuffle.
 
     Every stream is spawned from ``seed`` through :class:`numpy.random.SeedSequence`, one child per
-    game and one grandchild per entry in :data:`STREAMS`. Children are fixed by position, so a run
+    game and one grandchild per entry in :data:`~yasuki_core.sim.harness.STREAMS`. Children are fixed by position, so a run
     reproduces from its seed and game count, and lengthening a run leaves the games it already had
     identical. Everything else is held constant on purpose: a run that varied the deck or the
     policy alongside the seed would report a spread that answers nothing.
 
     Reproducibility relies on ``policy`` and ``agent`` being deterministic, which the shipped ones
     are. A stochastic policy holds its own stream and is not reseeded per game, so repeating a run
-    would not repeat it; giving it a spawned stream means adding a name to :data:`STREAMS`.
+    would not repeat it; giving it a spawned stream means adding a name to :data:`~yasuki_core.sim.harness.STREAMS`.
 
     Parameters
     ----------
