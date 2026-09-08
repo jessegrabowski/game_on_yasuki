@@ -1,7 +1,9 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.board.seats import seat_controls
-from yasuki_core.engine.rules.abilities import Ability, bow_cost, no_cost, register_ability
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import owned_holdings
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,

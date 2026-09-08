@@ -40,7 +40,10 @@ yasuki_core
     yasuki_core.engine.ops <yasuki_core.engine.ops>
     yasuki_core.engine.players <yasuki_core.engine.players>
     yasuki_core.engine.redaction <yasuki_core.engine.redaction>
-    yasuki_core.engine.rules.abilities <yasuki_core.engine.rules.abilities>
+    yasuki_core.engine.rules.abilities.costs <yasuki_core.engine.rules.abilities.costs>
+    yasuki_core.engine.rules.abilities.idioms <yasuki_core.engine.rules.abilities.idioms>
+    yasuki_core.engine.rules.abilities.model <yasuki_core.engine.rules.abilities.model>
+    yasuki_core.engine.rules.abilities.registry <yasuki_core.engine.rules.abilities.registry>
     yasuki_core.engine.rules.actions <yasuki_core.engine.rules.actions>
     yasuki_core.engine.rules.attachments <yasuki_core.engine.rules.attachments>
     yasuki_core.engine.rules.battle.records <yasuki_core.engine.rules.battle.records>
@@ -64,11 +67,12 @@ yasuki_core
     yasuki_core.engine.rules.gold.self_grants <yasuki_core.engine.rules.gold.self_grants>
     yasuki_core.engine.rules.keyword_grants <yasuki_core.engine.rules.keyword_grants>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
-    yasuki_core.engine.rules.lobby <yasuki_core.engine.rules.lobby>
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
     yasuki_core.engine.rules.ongoing_grants <yasuki_core.engine.rules.ongoing_grants>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
+    yasuki_core.engine.rules.rulebook.favor <yasuki_core.engine.rules.rulebook.favor>
+    yasuki_core.engine.rules.rulebook.lobby <yasuki_core.engine.rules.rulebook.lobby>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_rules <yasuki_core.engine.rules.state_rules>
     yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>

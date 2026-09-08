@@ -1,4 +1,4 @@
-from yasuki_core.engine.rules.abilities import register_event_entry
+from yasuki_core.engine.rules.abilities.idioms import register_event_entry
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect, GainGold
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, on

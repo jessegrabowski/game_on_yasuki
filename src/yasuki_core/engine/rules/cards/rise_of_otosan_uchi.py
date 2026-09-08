@@ -1,15 +1,11 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    CardLocation,
-    InvestAbility,
-    bow_cost,
-    favor_payer,
-    itself,
+from yasuki_core.engine.rules.rulebook.favor import favor_payer
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
+from yasuki_core.engine.rules.abilities.idioms import register_event_entry
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
+from yasuki_core.engine.rules.abilities.registry import (
     may_remain_bowed,
-    no_cost,
     register_ability,
-    register_event_entry,
     register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
@@ -494,7 +490,7 @@ register_ability(
         targets=_man_the_walls_targets,
         effects=_man_the_walls_effects,
         located_at=(CardLocation.HAND,),
-        battle=frozenset({BattleDesignator.ABSENT}),
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
         targets_any_location=True,
     ),
 )

@@ -1,14 +1,9 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_named
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    bow_and_destroy,
-    bow_cost,
-    plus_one_gp_this_turn,
-    register_ability,
-    register_event_entry,
-    spend_wealth,
-)
+from yasuki_core.engine.rules.abilities.costs import bow_and_destroy, bow_cost, spend_wealth
+from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, register_event_entry
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
     owned_holdings,

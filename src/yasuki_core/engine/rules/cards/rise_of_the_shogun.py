@@ -1,4 +1,4 @@
-from yasuki_core.engine.rules.abilities import bow_waiver
+from yasuki_core.engine.rules.abilities.costs import bow_waiver
 from yasuki_core.engine.rules.attachments import attachment_grant
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState

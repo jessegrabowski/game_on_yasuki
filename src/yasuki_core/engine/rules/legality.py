@@ -1,54 +1,62 @@
+from collections.abc import Iterator
+
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
-from yasuki_core.engine.rules.board import queries
-from yasuki_core.engine.rules.equip import equip_targets
+from yasuki_core.engine.rules import favor_abilities
+from yasuki_core.engine.rules.abilities.costs import can_pay
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.registry import (
+    abilities_for,
+    ability_for,
+    fixed_invest_amount,
+    invest_amounts,
+)
 from yasuki_core.engine.rules.actions import (
-    ACTION_TIMINGS,
     Action,
+    ACTION_TIMINGS,
     ActionTiming,
     ActivateAbility,
+    BattleDesignator,
     Cycle,
     DeclareAttack,
     DynastyDiscard,
     Equip,
+    Inheritance,
     KharmicDraw,
     KharmicRefill,
-    Inheritance,
     Legacy,
     Lobby,
     Pass,
-    UseFavorAbility,
     PlayStrategy,
     Recruit,
+    UseFavorAbility,
 )
-from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
-from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
-
+from yasuki_core.engine.rules.board import queries
+from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
+from yasuki_core.engine.rules.board.queries import has_keyword, owned_holdings, province_cards
+from yasuki_core.engine.rules.board.seats import seat_stronghold
+from yasuki_core.engine.rules.equip import equip_targets
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
+from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
-from yasuki_core.engine.rules.lobby import lobby_amount
-from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
-from yasuki_core.engine.rules.board.queries import (
-    has_keyword,
-    owned_holdings,
-    province_cards,
-)
-from yasuki_core.engine.rules.board.seats import seat_stronghold
+from yasuki_core.engine.rules.rulebook import lobby
+from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.units import has_presence
-from yasuki_core.engine.rules import abilities, favor_abilities
+from yasuki_core.engine.rules.units import has_caster, has_presence, is_spell, location_permits
+from yasuki_core.engine.table import DeckKey, location_of, ZoneKey, ZoneRole
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core import ruleset
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     HoldingPrint,
     PersonalityPrint,
     WindPrint,
 )
+
 
 # What the Kharmic rulebook abilities cost to use.
 KHARMIC_COST = 2
@@ -75,7 +83,7 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         return frozenset()
     if isinstance(action, ActivateAbility):
         card = game.table.cards_by_id[action.card_id]
-        ability = abilities.ability_for(card, action.ability_key)
+        ability = ability_for(card, action.ability_key)
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
         return frozenset(ability.timings)
@@ -103,7 +111,7 @@ def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming
     if (
         game.round.kind is RoundKind.BATTLE_SEGMENT
         and not has_presence(game, seat)
-        and not abilities.has_absent_ability(game, seat)
+        and not has_absent_ability(game, seat)
     ):
         return frozenset()
     timings = game.round.timings
@@ -193,7 +201,7 @@ def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> l
     cost payable, and with at least one legal target. ``only`` narrows to a single card."""
     return [
         ActivateAbility(card.id, ability.key)
-        for card, ability in abilities.activatable(game, seat, permitted_timings(game, seat))
+        for card, ability in activatable(game, seat, permitted_timings(game, seat))
         if only is None or card.id == only
     ]
 
@@ -220,7 +228,7 @@ def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
         for card in queries.owned_personalities(game, seat)
         if not card.bowed
         and effective_personal_honor(game, card) >= 1
-        and card.printed_id not in abilities.MAY_NOT_LOBBY
+        and card.printed_id not in lobby.MAY_NOT_LOBBY
     ]
 
 
@@ -242,7 +250,7 @@ def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
         return []
     if game.has_used(lobby_key(seat, game.turn)):
         return []
-    if not abilities.may_lobby(game, seat):
+    if not lobby.may_lobby(game, seat):
         return []
     seats = game.table.seats
     honor = lobby_amount(game, seat, seats[seat].honor)
@@ -273,7 +281,7 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
 
     A Wind bars them outright — "While you have a Wind in play, you may not take rulebook Favor
     actions, an effect which cannot be overcome by card effects" (ShE datasheet, Winds) — so no card
-    registry answers to it the way :func:`abilities.may_lobby` lets cards speak to Lobbying.
+    registry answers to it the way :func:`lobby.may_lobby` lets cards speak to Lobbying.
     """
     if has_wind(game, seat):
         return []
@@ -424,7 +432,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
             recruits.append(Recruit(card.id))
             if can_proclaim(game, card):
                 recruits.append(Recruit(card.id, proclaim=True))
-        invest = abilities.invest_amounts(game, card)
+        invest = invest_amounts(game, card)
         if invest is not None and base + min(invest) <= affordable:
             recruits.append(Recruit(card.id, invest=True))
     return recruits
@@ -454,7 +462,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         if base > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
-        invest = abilities.fixed_invest_amount(game, card)
+        invest = fixed_invest_amount(game, card)
         if invest is not None and base + invest <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips
@@ -465,12 +473,10 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     Gold Cost it can reach, and which has a legal target.
 
     The card's own ability decides when it may be played, so this asks
-    :func:`~yasuki_core.engine.rules.abilities.activatable` for the hand rather than reading a fixed
+    :func:`~yasuki_core.engine.rules.activatable` for the hand rather than reading a fixed
     timing off the action. ``only`` narrows to a single card.
     """
-    playable = abilities.activatable(
-        game, seat, permitted_timings(game, seat), at=(abilities.CardLocation.HAND,)
-    )
+    playable = activatable(game, seat, permitted_timings(game, seat), at=(CardLocation.HAND,))
     return [
         PlayStrategy(card.id, ability.key)
         for card, ability in playable
@@ -566,3 +572,136 @@ def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
     Empty means a Legacy search would whiff and lose the game."""
     return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
+
+
+def _seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, L5RCard]]:
+    """Every card ``seat`` could activate something on, with where it is sitting.
+
+    A card in hand is yielded like any other. Only an ability whose ``located_at`` names the hand is
+    offered from there, and every ability defaults to the battlefield, so a card waiting to be
+    played stays silent until one says otherwise.
+    """
+    for card in game.table.battlefield.cards:
+        if card.owner is seat:
+            yield CardLocation.BATTLEFIELD, card
+    for key, zone in game.table.zones.items():
+        if key.owner is not seat:
+            continue
+        if key.role is ZoneRole.PROVINCE:
+            for card in zone.cards:
+                if card.face_up:  # face-down, what the card is has not been revealed
+                    yield CardLocation.PROVINCE, card
+        elif key.role is ZoneRole.HAND:
+            yield from ((CardLocation.HAND, card) for card in zone.cards)
+
+
+# Where a card is when activating it is what its ability means. A card in hand is *played* rather
+# than activated, and pays a Gold Cost to do it, so it answers to its own action and is left out of
+# the default.
+IN_PLAY: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD, CardLocation.PROVINCE)
+
+
+def activatable(
+    game: GameState,
+    seat: PlayerId,
+    permitted: frozenset[ActionTiming],
+    *,
+    at: tuple[CardLocation, ...] = IN_PLAY,
+) -> list[tuple[L5RCard, Ability]]:
+    """Each card ``seat`` may use an ability on right now, paired with the ability it may use:
+    controlled, sitting somewhere the ability acts from, its designator among ``permitted``, its
+    cost payable, and with at least one legal target.
+
+    ``at`` narrows which of those places count, and defaults to the ones a card is *in play* in.
+    Playing a card out of hand asks for :data:`CardLocation.HAND` explicitly, because it is a
+    different action with a cost of its own.
+    """
+    ready: list[tuple[L5RCard, Ability]] = []
+    # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
+    present = has_presence(game, seat)
+    for location, card in _seat_cards(game, seat):
+        if location not in at:
+            continue
+        # The attach rule cannot settle casting alone: a Personality can stop being a Shugenja
+        # after the Spell landed on him.
+        if is_spell(card) and not has_caster(game, card):
+            continue
+        for ability in abilities_for(card):
+            if permitted.isdisjoint(ability.timings):
+                continue
+            if not _bow_permits(card, ability):
+                continue
+            # The Rule of Presence is about the player, not the card, so it gates an action taken
+            # from anywhere — a Strategy out of hand as much as a Personality on the board.
+            if not present and BattleDesignator.ABSENT not in ability.battle_designators:
+                continue
+            if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
+                continue
+            if location not in ability.located_at:
+                continue
+            # A card in a unit may only be acted from at the battlefield the battle is at (CR,
+            # Rules of Location). A card in hand or in a Province is in no unit, and neither is a
+            # Holding.
+            if (
+                location is CardLocation.BATTLEFIELD
+                and not _location_lifted(game, card, ability)
+                and not location_permits(game, card)
+            ):
+                continue
+            if not can_pay(game, card, ability.cost):
+                continue
+            if legal_targets(game, card, ability):
+                ready.append((card, ability))
+    return ready
+
+
+def _bow_permits(card: L5RCard, ability: Ability) -> bool:
+    """Whether ``card``'s bowed state leaves ``ability`` usable: abilities on a bowed card cannot be
+    used, and Tireless is the keyword that escapes it (CR, Using Abilities; Tireless)."""
+    return ability.tireless or not card.bowed
+
+
+def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:
+    """Whether one of ``ability``'s designators excuses ``card`` from the Rules of Location (ShE
+    datasheet).
+
+    Remote reaches from home or from another battlefield; Home reaches from home alone, so a card
+    standing at a battlefield that is not the current one is beyond it. Neither lifts the Rule of
+    Presence.
+    """
+    if BattleDesignator.REMOTE in ability.battle_designators:
+        return True
+    if BattleDesignator.HOME in ability.battle_designators:
+        return location_of(game.table, card).is_home
+    return False
+
+
+def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` holds any ability it could take with no presence at the current battlefield
+    (ShE, Absent). What decides whether a seat with no units there is offered the opportunity at
+    all, rather than skipped."""
+    return any(
+        BattleDesignator.ABSENT in ability.battle_designators and _bow_permits(card, ability)
+        for _, card in _seat_cards(game, seat)
+        for ability in abilities_for(card)
+    )
+
+
+def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]:
+    """The ids ``ability`` may target from ``card`` right now.
+
+    Filtered centrally rather than by each card's own ``targets``: during a battle, a card in a unit
+    may only be targeted at the battlefield the battle is at (CR, Rules of Location), and a handler
+    that forgot to say so would be a silent rules bug on every card that forgot. A card printing "at
+    any location" says so on its ``Ability`` instead, where the filter can see it.
+    """
+    offered = ability.targets(game, card)
+    attack = game.attack
+    if attack is None or attack.current is None or ability.targets_any_location:
+        return offered
+    by_id = game.table.cards_by_id
+    return [
+        target_id
+        for target_id in offered
+        if target_id not in by_id or location_permits(game, by_id[target_id])
+    ]

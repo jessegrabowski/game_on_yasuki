@@ -13,15 +13,10 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
-from yasuki_core.engine.rules import abilities, flow, legality, triggers
+from yasuki_core.engine.rules import flow, legality, triggers
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.abilities import (
-    _ABILITIES,
-    Ability,
-    CardLocation,
-    itself,
-    register_ability,
-)
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 from yasuki_core.engine.rules.effects import Bow, GrantPriority
 from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
@@ -280,11 +275,11 @@ register_ability(
 )
 register_ability(
     "battle_probe_home",
-    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.HOME})),
+    replace(_ABILITIES["battle_probe"][0], battle_designators=frozenset({BattleDesignator.HOME})),
 )
 register_ability(
     "battle_probe_absent",
-    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.ABSENT})),
+    replace(_ABILITIES["battle_probe"][0], battle_designators=frozenset({BattleDesignator.ABSENT})),
 )
 
 
@@ -366,12 +361,13 @@ register_ability(
         targets=itself,
         effects=lambda game, source, target: [],
         all_targets=True,
-        battle=frozenset({BattleDesignator.ABSENT}),
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
         located_at=(CardLocation.HAND,),
     ),
 )
 register_ability(
-    "plain_probe_in_hand", replace(_ABILITIES["absent_probe_in_hand"][0], battle=frozenset())
+    "plain_probe_in_hand",
+    replace(_ABILITIES["absent_probe_in_hand"][0], battle_designators=frozenset()),
 )
 
 
@@ -445,12 +441,12 @@ def test_a_target_left_at_home_is_filtered_out_centrally():
     ability = _ABILITIES["battle_probe"][0]
 
     assert set(ability.targets(session.game, probe)) == {"mark-front", "mark-home"}
-    assert abilities.legal_targets(session.game, probe, ability) == ["mark-front"]
+    assert legality.legal_targets(session.game, probe, ability) == ["mark-front"]
 
 
 register_ability(
     "battle_probe_remote",
-    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.REMOTE})),
+    replace(_ABILITIES["battle_probe"][0], battle_designators=frozenset({BattleDesignator.REMOTE})),
 )
 
 

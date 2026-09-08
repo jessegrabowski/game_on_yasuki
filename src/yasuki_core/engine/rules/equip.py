@@ -1,7 +1,7 @@
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import is_spell, may_cast_spells
+from yasuki_core.engine.rules.units import is_spell, may_cast_spells
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.keyword_grants import effective_keywords

@@ -2,7 +2,7 @@ from collections.abc import Callable
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import abilities
+from yasuki_core.engine.rules.rulebook import favor
 from yasuki_core.engine.rules.effects import Bow, Choose, Discard, DrawCard, Effect, Move
 from yasuki_core.engine.rules.favor import is_rulebook_proxy
 from yasuki_core.engine.rules.units import opposing_units_in_battle
@@ -60,7 +60,7 @@ def favor_ability_cost(game: GameState, seat: PlayerId, key: str) -> list[Effect
     else that arc's ability charges."""
     extra = FAVOR_ABILITY_COSTS.get(key)
     return [
-        *abilities.favor_cost_for_seat(game, seat, RULEBOOK_SOURCE),
+        *favor.favor_cost_for_seat(game, seat, RULEBOOK_SOURCE),
         *(extra(game, seat) if extra is not None else []),
     ]
 

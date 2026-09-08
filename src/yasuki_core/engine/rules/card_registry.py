@@ -3,8 +3,8 @@ import re
 import sys
 from pathlib import Path
 
+from yasuki_core.engine.rules.abilities import costs, registry
 from yasuki_core.engine.rules import (
-    abilities,
     attachments,
     effects,
     equip,
@@ -12,8 +12,8 @@ from yasuki_core.engine.rules import (
     state_rules,
     triggers,
 )
-from yasuki_core.engine.rules import lobby
 from yasuki_core.engine.rules.gold import discounts, production, self_grants
+from yasuki_core.engine.rules.rulebook import favor, lobby
 from yasuki_core.engine.rules.stats import province_strength
 
 # The one place the rules layer reaches into the bots: ABILITY_HEURISTICS is keyed by printed id
@@ -34,14 +34,14 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     cards — so validating it against the card index would report failures that are not defects.
     """
     return {
-        "abilities": frozenset(abilities._ABILITIES),
-        "invest abilities": frozenset(abilities._INVEST),
-        "enters unbowed": frozenset(abilities._ENTERS_UNBOWED),
-        "may remain bowed": frozenset(abilities.MAY_REMAIN_BOWED),
-        "bow waivers": frozenset(abilities.BOW_WAIVERS),
-        "lobby bars": frozenset(abilities.LOBBY_BARS),
-        "may not lobby": frozenset(abilities.MAY_NOT_LOBBY),
-        "favor payers": frozenset(abilities.FAVOR_PAYERS),
+        "abilities": frozenset(registry._ABILITIES),
+        "invest abilities": frozenset(registry._INVEST),
+        "enters unbowed": frozenset(registry._ENTERS_UNBOWED),
+        "may remain bowed": frozenset(registry.MAY_REMAIN_BOWED),
+        "bow waivers": frozenset(costs.BOW_WAIVERS),
+        "lobby bars": frozenset(lobby.LOBBY_BARS),
+        "may not lobby": frozenset(lobby.MAY_NOT_LOBBY),
+        "favor payers": frozenset(favor.FAVOR_PAYERS),
         "gold handlers": frozenset(production.GOLD_HANDLERS),
         "lobby bonuses": frozenset(lobby.LOBBY_BONUSES),
         "gold self grants": frozenset(self_grants.GOLD_SELF_GRANT),
@@ -126,11 +126,11 @@ def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -
 
     known = read_index()
     problems: list[str] = []
-    for registry, card_ids in sorted(registries.items()):
+    for label, card_ids in sorted(registries.items()):
         for card_id in sorted(card_ids - known):
             closest = difflib.get_close_matches(card_id, known, n=1)
             hint = f" — did you mean {closest[0]}?" if closest else ""
-            problems.append(f"{registry}: no card has the id {card_id!r}{hint}")
+            problems.append(f"{label}: no card has the id {card_id!r}{hint}")
     return problems
 
 
@@ -213,7 +213,7 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     """
     printed = printed_ability_counts(cards_dir)
     problems = []
-    for card_id, registered in sorted(abilities._ABILITIES.items()):
+    for card_id, registered in sorted(registry._ABILITIES.items()):
         shows = printed.get(card_id, 0)
         if shows > len(registered):
             problems.append(

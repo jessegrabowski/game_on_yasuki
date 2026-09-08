@@ -1,3 +1,12 @@
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.registry import (
+    ability_for,
+    enters_play_bowed,
+    fixed_invest_amount,
+    invest_amounts,
+    invest_for,
+    may_stay_bowed,
+)
 from dataclasses import replace
 
 from yasuki_core.engine import ops
@@ -24,6 +33,7 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
+from yasuki_core.engine.rules.rulebook.lobby import LOBBIED_TAG
 from yasuki_core.engine.rules.state import GameState, once_per_turn
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
@@ -78,6 +88,7 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import (
+    activatable,
     cycle_candidates,
     cycle_key,
     inheritance_key,
@@ -86,6 +97,7 @@ from yasuki_core.engine.rules.legality import (
     legacy_candidates,
     legacy_key,
     legacy_search_pool,
+    legal_targets,
     lobby_candidates,
     lobby_key,
     permitted_timings,
@@ -119,7 +131,6 @@ from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules import (
-    abilities,
     favor,
     favor_abilities,
     state_rules,
@@ -353,7 +364,7 @@ def _resolve_strategy(game: GameState, card_id: str, ability_key: str | None = N
     hits every target at once or pauses to be pointed at one.
     """
     card = game.table.cards_by_id[card_id]
-    ability = abilities.ability_for(card, ability_key)
+    ability = ability_for(card, ability_key)
     if ability is None:
         raise ValueError(f"{card_id} has no ability to resolve")
     game.stack.append(DiscardPlayed(card_id))
@@ -428,7 +439,7 @@ def recruit(
             game, card, seat, invest_amount=None, renew=renew, proclaim=proclaim
         )
         return
-    amounts = abilities.invest_amounts(game, card)
+    amounts = invest_amounts(game, card)
     affordable = reachable_gold(game, seat, card) - recruit_cost(game, card)
     payable = tuple(amount for amount in amounts if amount <= affordable)
     if len(payable) == 1:
@@ -488,14 +499,14 @@ def _finish_invest(game: GameState, card: L5RCard, invest_amount: int | None) ->
         game,
         [
             GrantModifier(card.id, card.id, Stat.GOLD_COST, invest_amount, Duration.PERMANENT),
-            *abilities.invest_for(card).effect(game, card, invest_amount),
+            *invest_for(card).effect(game, card, invest_amount),
         ],
     )
 
 
 def _equip_invest_amount(game: GameState, card: L5RCard) -> int:
     """The Invest cost ``card`` charges to Equip with."""
-    amount = abilities.fixed_invest_amount(game, card)
+    amount = fixed_invest_amount(game, card)
     if amount is None:
         raise ValueError(f"{card.id} prints no fixed Invest for Equip to charge")
     return amount
@@ -751,7 +762,7 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             )
         case ApplyAbilityEffects(card_id=card_id, target_ids=target_ids, ability_key=ability_key):
             source = game.table.cards_by_id[card_id]
-            ability = abilities.ability_for(source, ability_key)
+            ability = ability_for(source, ability_key)
             effects = [
                 effect
                 for target_id in target_ids
@@ -831,7 +842,7 @@ def _resolve_recruit(
     # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
     # rather than dropping it at the origin.
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
-    if abilities.enters_play_bowed(card):
+    if enters_play_bowed(card):
         card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
     fortification = keywords.FORTIFICATION in effective_keywords(game, card)
     if province_key is not None:
@@ -980,7 +991,7 @@ def _apply_lobby_target(
     game.pending = None
     game.use_once(lobby_key(seat, game.turn))
     lobbied = game.table.cards_by_id[response.choices[0]]
-    once_per_turn(game, lobbied, abilities.LOBBIED_TAG)
+    once_per_turn(game, lobbied, LOBBIED_TAG)
     triggers.resolve_effects(game, [Bow(lobbied.id), TakeFavor(seat)])
 
 
@@ -1112,20 +1123,20 @@ def activate(game: GameState, card_id: str, ability_key: str | None = None) -> N
     safe: an action may only be announced when it could find a legal target, so the candidates
     ``legal_actions`` validated are still there to hit."""
     card = game.table.cards_by_id[card_id]
-    ability = abilities.ability_for(card, ability_key)
+    ability = ability_for(card, ability_key)
     if ActionTiming.RESPONSE in ability.timings:
         game.responded.add(card_id)
     _defer_ability(game, card, ability)
     run_stack(game)  # resolve the target, unless the cost's cascade paused for a decision first
 
 
-def _defer_ability(game: GameState, card: L5RCard, ability: abilities.Ability) -> None:
+def _defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
     """Stack ``ability``'s effects behind its cost, and pay the cost.
 
     The cost resolves first and targeting follows it (CR, Action Sequence steps B and C), and an
     ``all_targets`` ability hits every one it found rather than pausing to be pointed at one.
     """
-    targets = tuple(abilities.legal_targets(game, card, ability))
+    targets = tuple(legal_targets(game, card, ability))
     game.stack.append(
         ApplyAbilityEffects(card.id, targets, ability.key)
         if ability.all_targets
@@ -1139,7 +1150,7 @@ def _apply_ability_target(
 ) -> None:
     source = game.table.cards_by_id[request.source_card_id]
     target = game.table.cards_by_id[response.choices[0]]
-    ability = abilities.ability_for(source, request.ability_key)
+    ability = ability_for(source, request.ability_key)
     game.pending = None
     triggers.resolve_effects(game, ability.effects(game, source, target))
 
@@ -1229,7 +1240,7 @@ def _begin_turn(game: GameState) -> None:
     if game.game_over:
         return
     open_round(game)
-    offering = abilities.may_stay_bowed(game, game.active)
+    offering = may_stay_bowed(game, game.active)
     if offering:
         game.pending = LeaveBowed(seat=game.active, candidates=offering)
         return
@@ -1301,7 +1312,7 @@ def _yield_after_action(game: GameState, acted_in: ActionRound) -> None:
 def _responders(game: GameState) -> list[PlayerId]:
     """Every seat holding a Response it could take against the action just resolved."""
     responding = frozenset({ActionTiming.RESPONSE})
-    return [seat for seat in game.table.seats if abilities.activatable(game, seat, responding)]
+    return [seat for seat in game.table.seats if activatable(game, seat, responding)]
 
 
 def open_response_window(game: GameState) -> bool:

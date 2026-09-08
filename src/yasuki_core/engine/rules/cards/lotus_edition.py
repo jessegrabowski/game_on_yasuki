@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import Ability, CardLocation, itself, register_ability
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost

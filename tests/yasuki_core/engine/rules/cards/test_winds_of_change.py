@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import favor_cost_for_seat, favor_payers
+from yasuki_core.engine.rules.rulebook.favor import favor_cost_for_seat, favor_payers
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine.rules.actions import ActivateAbility

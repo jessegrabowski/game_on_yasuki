@@ -1,4 +1,5 @@
-from yasuki_core.engine.rules.abilities import InvestAbility, register_invest
+from yasuki_core.engine.rules.abilities.model import InvestAbility
+from yasuki_core.engine.rules.abilities.registry import register_invest
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard

@@ -3,17 +3,11 @@ import pytest
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import flow, legality
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules.abilities import (
-    DISCARD_THE_FAVOR,
-    favor_payers,
-    _ABILITIES,
-    Ability,
-    ability_for,
-    is_favor_action,
-    itself,
-    no_cost,
-    register_ability,
-)
+from yasuki_core.engine.rules.rulebook.favor import DISCARD_THE_FAVOR, favor_payers
+from yasuki_core.engine.rules.rulebook.favor import is_favor_action
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
 from yasuki_core.engine.rules.actions import (
     ActionTiming,
     ActivateAbility,
