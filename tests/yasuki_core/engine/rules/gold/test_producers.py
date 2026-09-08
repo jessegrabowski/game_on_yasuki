@@ -1,11 +1,16 @@
+import dataclasses
+
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.gold.production import GOLD_HANDLERS, gold_handler
 from yasuki_core.engine.rules.gold.producers import gold_producers, gold_reach, reachable_gold
+from yasuki_core.engine.rules.legality import recruit_cost
 
 from tests.yasuki_core.engine.builders import (
     holding,
     put_in_play,
     sensei,
+    stronghold,
     two_seat_game,
 )
 
@@ -46,3 +51,17 @@ def test_gold_reach_splits_the_producers_that_still_need_a_target():
         assert reachable_gold(game, PlayerId.P1, varies) == 3 + 5
     finally:
         GOLD_HANDLERS.pop("reach_probe", None)
+
+
+def test_the_off_clan_surcharge_follows_the_active_ruleset(monkeypatch):
+    # Read at call time rather than frozen at import, so swapping the arc swaps the price with it.
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, clan="lion"))
+    off_clan = put_in_play(game, holding("P1-crane", owner=PlayerId.P1, gold_cost=4, clan="crane"))
+
+    base = recruit_cost(game, off_clan)
+    monkeypatch.setattr(
+        ruleset, "ACTIVE", dataclasses.replace(ruleset.ACTIVE, off_clan_surcharge=7)
+    )
+
+    assert recruit_cost(game, off_clan) == base - ruleset.SHATTERED_EMPIRE.off_clan_surcharge + 7

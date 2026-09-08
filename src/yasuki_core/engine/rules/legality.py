@@ -56,9 +56,6 @@ KHARMIC_COST = 2
 # The Gold Production the Inheritance ability grants the Holding it targets (ShE).
 INHERITANCE_PRODUCTION = 3
 
-# The active ruleset: legal Clan Alignments and the off-clan surcharge.
-RULESET = ruleset.ACTIVE
-OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
 
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
 
@@ -490,7 +487,7 @@ def recruit_cost(game: GameState, card: L5RCard) -> int:
     seat_aligns = seat_alignments(game, card.owner)
     card_aligns = card_alignments(card)
     if seat_aligns and card_aligns and seat_aligns.isdisjoint(card_aligns):
-        cost += OFF_CLAN_SURCHARGE
+        cost += ruleset.ACTIVE.off_clan_surcharge
     cost -= effective_recruit_discount(game, card)
     return max(0, cost)
 
