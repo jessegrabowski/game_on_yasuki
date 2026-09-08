@@ -4,8 +4,9 @@ import numpy as np
 from numpy.random import Generator
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import effective_gold_production
-from yasuki_core.engine.rules.legality import gold_producers, recruit_cost
+from yasuki_core.engine.rules.gold.production import effective_gold_production
+from yasuki_core.engine.rules.gold.producers import gold_producers
+from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, Zone, ZoneRole
 from yasuki_core.game_pieces.constants import Side

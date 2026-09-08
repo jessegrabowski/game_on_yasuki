@@ -3,7 +3,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import ability_for, can_pay
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.economy import effective_gold_production, effective_recruit_discount
+from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
+from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.state import GameState

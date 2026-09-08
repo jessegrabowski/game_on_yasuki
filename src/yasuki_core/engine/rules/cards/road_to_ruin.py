@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.abilities import (
     register_event_entry,
 )
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import register_self_grant, SELF_GRANT
+from yasuki_core.engine.rules.gold.self_grants import register_self_grant, SELF_GRANT
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
@@ -30,7 +30,7 @@ from yasuki_core.engine.rules.board.queries import (
     province_key_holding,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.payments import offer_self_grant
+from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole

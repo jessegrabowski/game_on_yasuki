@@ -10,8 +10,6 @@ yasuki_core.engine.rules.legality
     can_proclaim
     cycle_candidates
     cycle_key
-    gold_producers
-    gold_reach
     has_wind
     inheritance_key
     is_first_turn
@@ -29,7 +27,6 @@ yasuki_core.engine.rules.legality
     permits
     permitted_timings
     proclaim_key
-    reachable_gold
     recruit_cost
     timings_of
 

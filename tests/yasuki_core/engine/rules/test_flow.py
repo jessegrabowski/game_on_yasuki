@@ -38,12 +38,8 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     LeaveBowed,
 )
-from yasuki_core.engine.rules.economy import (
-    gold_handler,
-    GOLD_HANDLERS,
-    GOLD_SELF_GRANT,
-    register_self_grant,
-)
+from yasuki_core.engine.rules.gold.production import gold_handler, GOLD_HANDLERS
+from yasuki_core.engine.rules.gold.self_grants import GOLD_SELF_GRANT, register_self_grant
 from yasuki_core.engine.rules.board.seats import seat_controls
 from yasuki_core.engine.rules.effects import (
     Ask,

@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
     PayGold,
 )
-from yasuki_core.engine.rules.payments import can_afford
+from yasuki_core.engine.rules.gold.payment import can_afford
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.units import followers_of

@@ -1,4 +1,6 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.board.queries import has_keyword
+from yasuki_core.engine.rules.keyword_grants import KEYWORD_GRANTS, keyword_grant
 from yasuki_core.engine.rules.board.seats import (
     cards_in_play,
     cards_named,
@@ -73,3 +75,22 @@ def test_seat_stronghold_is_the_seats_own_and_none_without_one():
 
     assert seat_stronghold(game, PlayerId.P1) is mine
     assert seat_stronghold(game, None) is None
+
+
+def test_seat_controls_reads_printed_keywords_and_not_granted_ones():
+    # The divergence from has_keyword is deliberate: seat_controls is what a keyword-granting card
+    # calls to decide what it grants, so reading effective keywords here would make two granting
+    # cards recurse into each other. Pins the limitation so a later cycle guard is a deliberate
+    # change rather than an accident.
+    game = two_seat_game()
+    granted = put_in_play(game, holding("P1-docks", owner=PlayerId.P1, printed_id="seat_probe"))
+
+    @keyword_grant("seat_probe")
+    def _grants_port(card, game_, seat):
+        return ("Port",)
+
+    try:
+        assert has_keyword(game, granted, "Port") is True
+        assert seat_controls(game, PlayerId.P1, "Port") is False
+    finally:
+        KEYWORD_GRANTS.pop("seat_probe", None)

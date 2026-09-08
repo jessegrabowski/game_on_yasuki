@@ -8,10 +8,10 @@ from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.calculation import active_modifiers
-from yasuki_core.engine.rules.economy import effective_gold_production
+from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.flow import begin_game
 from yasuki_core.engine.rules.modifiers import Stat
-from yasuki_core.engine.rules.legality import gold_producers
+from yasuki_core.engine.rules.gold.producers import gold_producers
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import ResolvedDeck

@@ -18,8 +18,9 @@ from yasuki_core.engine.rules.board.queries import (
 from yasuki_core.engine.rules.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.province_strength import province_strength_grant
-from yasuki_core.engine.rules.economy import effective_gold_production, gold_handler
-from yasuki_core.engine.rules.legality import reachable_gold, recruit_cost
+from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler
+from yasuki_core.engine.rules.gold.producers import reachable_gold
+from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,

@@ -1,8 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules.economy import effective_gold_production
-from yasuki_core.engine.rules.legality import reachable_gold
+from yasuki_core.engine.rules.gold.production import effective_gold_production
+from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side

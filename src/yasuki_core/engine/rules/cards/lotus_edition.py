@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import Ability, CardLocation, itself, register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import unit_gold_cost
+from yasuki_core.engine.rules.gold.cost import unit_gold_cost
 from yasuki_core.engine.rules.effects import (
     AskAmount,
     Choose,
@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     PayGold,
 )
-from yasuki_core.engine.rules.legality import reachable_gold
+from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard

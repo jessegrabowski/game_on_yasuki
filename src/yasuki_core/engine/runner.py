@@ -27,7 +27,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
-from yasuki_core.engine.rules.economy import effective_gold_cost
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.bots.policies import PassPolicy, Policy

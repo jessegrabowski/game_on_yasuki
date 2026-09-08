@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.abilities import (
     register_ability,
 )
 from yasuki_core.engine.rules.board.queries import owned_holdings
-from yasuki_core.engine.rules.economy import gold_handler
+from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import opposing_seats, seat_stronghold
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,

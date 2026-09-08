@@ -30,7 +30,12 @@ def went_second(game: GameState, seat: PlayerId) -> bool:
 def seat_controls(
     game: GameState, seat: PlayerId, keyword: str, *, other_than: L5RCard | None = None
 ) -> bool:
-    """Whether ``seat`` controls an in-play card carrying ``keyword``.
+    """Whether ``seat`` controls an in-play card printing ``keyword``.
+
+    Printed keywords only, where :func:`~yasuki_core.engine.rules.board.queries.has_keyword` reads
+    effective ones. A card granting itself a keyword reads its controller's board to decide, so
+    answering this from effective keywords would make two such cards ask each other without end --
+    Fortified Farmlands is not Unique, and two copies each grant on the other's presence.
 
     ``other_than`` skips one card, matched by identity, so an "another" clause can exclude the card
     asking. Default None.

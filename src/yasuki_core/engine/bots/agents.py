@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.economy import GOLD_SELF_GRANT
+from yasuki_core.engine.rules.gold.self_grants import GOLD_SELF_GRANT
 from yasuki_core.engine.redaction import CardView, HiddenCard
 from yasuki_core.engine.rules.projection import GameView
 

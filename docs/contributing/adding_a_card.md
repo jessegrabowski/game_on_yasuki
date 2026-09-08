@@ -39,7 +39,7 @@ id no card has, and tells you the nearest real one.
 Four rungs, in order of what they cost you. Start at the top and only descend when the rung above
 cannot say what the card does.
 
-### Answer a number: the economy handlers
+### Answer a number: the gold handlers
 
 Colonial Farm is *"enters play for 1 less Gold if you are a Lion Clan player"*. The condition is the
 only thing specific to the card, so the whole implementation is the condition:
