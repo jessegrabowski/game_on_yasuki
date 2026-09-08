@@ -1,4 +1,5 @@
-from yasuki_core.engine.rules.abilities import may_not_lobby, register_event_entry
+from yasuki_core.engine.rules.rulebook.lobby import may_not_lobby
+from yasuki_core.engine.rules.abilities import register_event_entry
 
 
 # --- Matsu Goemon ---

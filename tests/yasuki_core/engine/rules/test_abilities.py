@@ -4,6 +4,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.rules.rulebook.lobby import MAY_NOT_LOBBY, may_not_lobby
 from yasuki_core.engine.rules.abilities import (
     _ABILITIES,
     _ENTERS_UNBOWED,
@@ -17,8 +18,6 @@ from yasuki_core.engine.rules.abilities import (
     CardLocation,
     has_absent_ability,
     itself,
-    MAY_NOT_LOBBY,
-    may_not_lobby,
     MAY_REMAIN_BOWED,
     may_remain_bowed,
     no_cost,

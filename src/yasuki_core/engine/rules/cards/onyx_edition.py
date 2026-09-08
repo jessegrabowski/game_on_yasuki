@@ -1,10 +1,10 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.lobby import may_not_lobby
 from yasuki_core.engine.rules.abilities import (
     Ability,
     bow_cost,
     invest_amounts,
     InvestAbility,
-    may_not_lobby,
     no_cost,
     one_wealth,
     register_ability,

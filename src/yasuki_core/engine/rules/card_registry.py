@@ -12,9 +12,8 @@ from yasuki_core.engine.rules import (
     state_rules,
     triggers,
 )
-from yasuki_core.engine.rules import lobby
 from yasuki_core.engine.rules.gold import discounts, production, self_grants
-from yasuki_core.engine.rules.rulebook import favor
+from yasuki_core.engine.rules.rulebook import favor, lobby
 from yasuki_core.engine.rules.stats import province_strength
 
 # The one place the rules layer reaches into the bots: ABILITY_HEURISTICS is keyed by printed id
@@ -40,8 +39,8 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "enters unbowed": frozenset(abilities._ENTERS_UNBOWED),
         "may remain bowed": frozenset(abilities.MAY_REMAIN_BOWED),
         "bow waivers": frozenset(abilities.BOW_WAIVERS),
-        "lobby bars": frozenset(abilities.LOBBY_BARS),
-        "may not lobby": frozenset(abilities.MAY_NOT_LOBBY),
+        "lobby bars": frozenset(lobby.LOBBY_BARS),
+        "may not lobby": frozenset(lobby.MAY_NOT_LOBBY),
         "favor payers": frozenset(favor.FAVOR_PAYERS),
         "gold handlers": frozenset(production.GOLD_HANDLERS),
         "lobby bonuses": frozenset(lobby.LOBBY_BONUSES),

@@ -64,12 +64,12 @@ yasuki_core
     yasuki_core.engine.rules.gold.self_grants <yasuki_core.engine.rules.gold.self_grants>
     yasuki_core.engine.rules.keyword_grants <yasuki_core.engine.rules.keyword_grants>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
-    yasuki_core.engine.rules.lobby <yasuki_core.engine.rules.lobby>
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
     yasuki_core.engine.rules.ongoing_grants <yasuki_core.engine.rules.ongoing_grants>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.rulebook.favor <yasuki_core.engine.rules.rulebook.favor>
+    yasuki_core.engine.rules.rulebook.lobby <yasuki_core.engine.rules.rulebook.lobby>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_rules <yasuki_core.engine.rules.state_rules>
     yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>

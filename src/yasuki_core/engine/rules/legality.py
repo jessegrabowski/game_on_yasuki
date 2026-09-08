@@ -27,7 +27,7 @@ from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
-from yasuki_core.engine.rules.lobby import lobby_amount
+from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
 from yasuki_core.engine.rules.board.queries import (
     has_keyword,
@@ -39,6 +39,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.units import has_presence
 from yasuki_core.engine.rules import abilities, favor_abilities
+from yasuki_core.engine.rules.rulebook import lobby
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -220,7 +221,7 @@ def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
         for card in queries.owned_personalities(game, seat)
         if not card.bowed
         and effective_personal_honor(game, card) >= 1
-        and card.printed_id not in abilities.MAY_NOT_LOBBY
+        and card.printed_id not in lobby.MAY_NOT_LOBBY
     ]
 
 
@@ -242,7 +243,7 @@ def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
         return []
     if game.has_used(lobby_key(seat, game.turn)):
         return []
-    if not abilities.may_lobby(game, seat):
+    if not lobby.may_lobby(game, seat):
         return []
     seats = game.table.seats
     honor = lobby_amount(game, seat, seats[seat].honor)
@@ -273,7 +274,7 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
 
     A Wind bars them outright — "While you have a Wind in play, you may not take rulebook Favor
     actions, an effect which cannot be overcome by card effects" (ShE datasheet, Winds) — so no card
-    registry answers to it the way :func:`abilities.may_lobby` lets cards speak to Lobbying.
+    registry answers to it the way :func:`lobby.may_lobby` lets cards speak to Lobbying.
     """
     if has_wind(game, seat):
         return []

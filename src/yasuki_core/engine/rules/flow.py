@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
+from yasuki_core.engine.rules.rulebook.lobby import LOBBIED_TAG
 from yasuki_core.engine.rules.state import GameState, once_per_turn
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
@@ -980,7 +981,7 @@ def _apply_lobby_target(
     game.pending = None
     game.use_once(lobby_key(seat, game.turn))
     lobbied = game.table.cards_by_id[response.choices[0]]
-    once_per_turn(game, lobbied, abilities.LOBBIED_TAG)
+    once_per_turn(game, lobbied, LOBBIED_TAG)
     triggers.resolve_effects(game, [Bow(lobbied.id), TakeFavor(seat)])
 
 

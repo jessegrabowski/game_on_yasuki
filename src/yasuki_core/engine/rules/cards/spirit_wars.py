@@ -1,8 +1,8 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
 from yasuki_core.engine.rules.abilities import (
     Ability,
     bow_cost,
-    lobby_bar,
     register_ability,
     register_enters_unbowed,
 )
