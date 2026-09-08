@@ -275,11 +275,11 @@ register_ability(
 )
 register_ability(
     "battle_probe_home",
-    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.HOME})),
+    replace(_ABILITIES["battle_probe"][0], battle_designators=frozenset({BattleDesignator.HOME})),
 )
 register_ability(
     "battle_probe_absent",
-    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.ABSENT})),
+    replace(_ABILITIES["battle_probe"][0], battle_designators=frozenset({BattleDesignator.ABSENT})),
 )
 
 
@@ -361,13 +361,13 @@ register_ability(
         targets=itself,
         effects=lambda game, source, target: [],
         all_targets=True,
-        battle=frozenset({BattleDesignator.ABSENT}),
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
         located_at=(CardLocation.HAND,),
     ),
 )
 register_ability(
     "plain_probe_in_hand",
-    replace(_ABILITIES["absent_probe_in_hand"][0], battle=frozenset()),
+    replace(_ABILITIES["absent_probe_in_hand"][0], battle_designators=frozenset()),
 )
 
 
@@ -446,7 +446,7 @@ def test_a_target_left_at_home_is_filtered_out_centrally():
 
 register_ability(
     "battle_probe_remote",
-    replace(_ABILITIES["battle_probe"][0], battle=frozenset({BattleDesignator.REMOTE})),
+    replace(_ABILITIES["battle_probe"][0], battle_designators=frozenset({BattleDesignator.REMOTE})),
 )
 
 

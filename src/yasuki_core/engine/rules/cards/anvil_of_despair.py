@@ -82,6 +82,6 @@ register_ability(
         targets=_refugees_targets,
         effects=_refugees_effects,
         located_at=(CardLocation.HAND,),
-        battle=frozenset({BattleDesignator.ABSENT}),
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
     ),
 )

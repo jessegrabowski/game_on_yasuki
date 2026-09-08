@@ -585,7 +585,7 @@ for _probe, _tireless in (("test_absent_probe", False), ("test_absent_tireless_p
             targets=itself,
             effects=lambda game, source, target: [],
             all_targets=True,
-            battle=frozenset({BattleDesignator.ABSENT}),
+            battle_designators=frozenset({BattleDesignator.ABSENT}),
             tireless=_tireless,
         ),
     )

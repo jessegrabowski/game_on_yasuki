@@ -44,7 +44,7 @@ class Ability:
     located_at : tuple of CardLocation, optional
         Where the card has to be for the ability to be offered. An Event acts from the Province it
         sits face-up in, never from play. Default the battlefield alone.
-    battle : frozenset of BattleDesignator, optional
+    battle_designators : frozenset of BattleDesignator, optional
         The designators qualifying how the ability escapes the Rule of Presence or the Rules of
         Location during a battle. Default empty, which takes both rules as written.
     targets_any_location : bool, optional
@@ -67,7 +67,7 @@ class Ability:
     effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]]
     all_targets: bool = False
     located_at: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,)
-    battle: frozenset[BattleDesignator] = frozenset()
+    battle_designators: frozenset[BattleDesignator] = frozenset()
     targets_any_location: bool = False
     key: str | None = None
     tireless: bool = False

@@ -105,6 +105,6 @@ register_ability(
         effects=_outer_walls_effects,
         all_targets=True,
         located_at=(CardLocation.HAND,),
-        battle=frozenset({BattleDesignator.ABSENT}),
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
     ),
 )

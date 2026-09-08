@@ -633,7 +633,7 @@ def activatable(
                 continue
             # The Rule of Presence is about the player, not the card, so it gates an action taken
             # from anywhere — a Strategy out of hand as much as a Personality on the board.
-            if not present and BattleDesignator.ABSENT not in ability.battle:
+            if not present and BattleDesignator.ABSENT not in ability.battle_designators:
                 continue
             if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
                 continue
@@ -669,9 +669,9 @@ def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:
     standing at a battlefield that is not the current one is beyond it. Neither lifts the Rule of
     Presence.
     """
-    if BattleDesignator.REMOTE in ability.battle:
+    if BattleDesignator.REMOTE in ability.battle_designators:
         return True
-    if BattleDesignator.HOME in ability.battle:
+    if BattleDesignator.HOME in ability.battle_designators:
         return location_of(game.table, card).is_home
     return False
 
@@ -681,7 +681,7 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
     (ShE, Absent). What decides whether a seat with no units there is offered the opportunity at
     all, rather than skipped."""
     return any(
-        BattleDesignator.ABSENT in ability.battle and _bow_permits(card, ability)
+        BattleDesignator.ABSENT in ability.battle_designators and _bow_permits(card, ability)
         for _, card in _seat_cards(game, seat)
         for ability in abilities_for(card)
     )

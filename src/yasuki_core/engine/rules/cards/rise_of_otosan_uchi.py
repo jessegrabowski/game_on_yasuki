@@ -490,7 +490,7 @@ register_ability(
         targets=_man_the_walls_targets,
         effects=_man_the_walls_effects,
         located_at=(CardLocation.HAND,),
-        battle=frozenset({BattleDesignator.ABSENT}),
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
         targets_any_location=True,
     ),
 )
