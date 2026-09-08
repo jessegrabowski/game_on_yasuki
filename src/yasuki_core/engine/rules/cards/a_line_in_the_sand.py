@@ -1,8 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
-    InvestAbility,
     bow_cost,
+    InvestAbility,
     no_cost,
     register_ability,
     register_invest,

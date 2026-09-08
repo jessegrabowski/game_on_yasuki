@@ -27,15 +27,10 @@ yasuki_core.engine.rules.abilities
     can_pay
     destroy_cost
     enters_play_bowed
-    favor_cost
-    favor_cost_for_seat
-    favor_payer
-    favor_payers
     fixed_invest_amount
     has_absent_ability
     invest_amounts
     invest_for
-    is_favor_action
     is_spell
     itself
     legal_targets

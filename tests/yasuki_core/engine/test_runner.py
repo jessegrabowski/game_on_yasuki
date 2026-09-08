@@ -53,7 +53,7 @@ from yasuki_core.engine import runner
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import DynastyDiscard
 from yasuki_core.engine.runner import GameRunner, play_game
-from yasuki_core.engine.rules.abilities import FAVOR_PAYERS
+from yasuki_core.engine.rules.rulebook.favor import FAVOR_PAYERS
 from yasuki_core.engine.rules.effects import TakeFavor
 
 PASS = Pass()

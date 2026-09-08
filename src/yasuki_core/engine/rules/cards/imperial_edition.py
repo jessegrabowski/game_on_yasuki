@@ -2,9 +2,9 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import (
     Ability,
-    CardLocation,
     bow_cost,
     bow_parent_and_destroy,
+    CardLocation,
     itself,
     no_cost,
     register_ability,

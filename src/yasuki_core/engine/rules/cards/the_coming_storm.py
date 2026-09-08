@@ -1,11 +1,11 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.favor import favor_cost
 from yasuki_core.engine.rules.abilities import (
     Ability,
-    LOBBIED_TAG,
     bow_cost,
-    favor_cost,
     itself,
+    LOBBIED_TAG,
     register_ability,
 )
 from yasuki_core.engine.rules.board.queries import personalities_in_play

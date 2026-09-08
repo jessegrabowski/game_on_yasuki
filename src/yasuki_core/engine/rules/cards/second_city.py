@@ -1,9 +1,4 @@
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    CardLocation,
-    no_cost,
-    register_ability,
-)
+from yasuki_core.engine.rules.abilities import Ability, CardLocation, no_cost, register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import DestroyProvince, DrawCard, Effect
 from yasuki_core.engine.rules.board.queries import province_key_holding

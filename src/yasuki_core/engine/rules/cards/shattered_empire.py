@@ -1,8 +1,8 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.abilities import (
     Ability,
-    InvestAbility,
     bow_cost,
+    InvestAbility,
     register_ability,
     register_edict,
     register_invest,

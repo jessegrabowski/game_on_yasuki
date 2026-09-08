@@ -1,11 +1,13 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    CardLocation,
+from yasuki_core.engine.rules.rulebook.favor import (
     DISCARD_THE_FAVOR,
     favor_cost_for_seat,
     favor_payer,
     favor_payers,
+)
+from yasuki_core.engine.rules.abilities import (
+    Ability,
+    CardLocation,
     no_cost,
     register_ability,
     register_edict,

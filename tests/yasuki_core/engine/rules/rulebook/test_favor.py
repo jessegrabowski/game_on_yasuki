@@ -1,14 +1,14 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import abilities
-from yasuki_core.engine.rules.abilities import (
-    FAVOR_PAYERS,
-    can_pay,
+from yasuki_core.engine.rules.rulebook import favor
+from yasuki_core.engine.rules.rulebook.favor import (
     favor_cost,
+    FAVOR_PAYERS,
     favor_payers,
     is_favor_action,
 )
+from yasuki_core.engine.rules.abilities import can_pay
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.flow import forget_action
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -87,7 +87,7 @@ def test_choosing_a_payer_leaves_the_favor_where_it_is(game):
     TakeFavor(PlayerId.P1).perform(game)
     put_in_play(game, personality("helper", name="Helper", printed_id=FREE_PAYER))
 
-    charged = abilities._resolve_favor_payment(game, "actor", ("Helper",), PlayerId.P1)
+    charged = favor._resolve_favor_payment(game, "actor", ("Helper",), PlayerId.P1)
 
     assert charged == []
     assert game.favor_holder is PlayerId.P1
@@ -97,7 +97,7 @@ def test_choosing_the_favor_discards_it(game):
     TakeFavor(PlayerId.P1).perform(game)
     put_in_play(game, personality("helper", name="Helper", printed_id=FREE_PAYER))
 
-    charged = abilities._resolve_favor_payment(
+    charged = favor._resolve_favor_payment(
         game, "actor", ("Discard the Imperial Favor",), PlayerId.P1
     )
 

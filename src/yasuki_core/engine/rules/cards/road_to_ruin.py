@@ -2,8 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_in_play
 from yasuki_core.engine.rules.abilities import (
     Ability,
-    CardLocation,
     bow_cost,
+    CardLocation,
     no_cost,
     register_ability,
     register_event_entry,

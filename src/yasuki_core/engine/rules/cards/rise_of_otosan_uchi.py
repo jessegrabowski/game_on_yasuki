@@ -1,10 +1,10 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.favor import favor_payer
 from yasuki_core.engine.rules.abilities import (
     Ability,
+    bow_cost,
     CardLocation,
     InvestAbility,
-    bow_cost,
-    favor_payer,
     itself,
     may_remain_bowed,
     no_cost,
