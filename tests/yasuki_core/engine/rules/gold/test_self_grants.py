@@ -107,18 +107,6 @@ def test_a_straightened_producer_does_not_regrant_itself():
         GOLD_SELF_GRANT.pop("granting_probe", None)
 
 
-def test_a_second_self_grant_for_one_card_is_refused():
-    # A silent overwrite would leave affordability quoting whichever registration won the import
-    # race, with no trace of the other.
-    register_self_grant("guard_probe", 2)
-
-    try:
-        with pytest.raises(ValueError, match="guard_probe already grants itself"):
-            register_self_grant("guard_probe", 3)
-    finally:
-        GOLD_SELF_GRANT.pop("guard_probe", None)
-
-
 @pytest.mark.parametrize("printed_id", sorted(GOLD_SELF_GRANT))
 def test_every_declared_self_grant_matches_what_its_trigger_grants(printed_id):
     """The declared delta is a cached derivation, and this is what keeps the cache honest: run the

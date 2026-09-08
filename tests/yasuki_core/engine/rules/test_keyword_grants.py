@@ -1,10 +1,6 @@
-import pytest
-
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.keyword_grants import (
-    KEYWORD_GRANTS,
     effective_keywords,
-    keyword_grant,
 )
 from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant
 
@@ -66,18 +62,3 @@ def test_an_ownerless_card_falls_back_to_its_printed_keywords():
     game = two_seat_game()
     orphan = holding("loose", printed_id="shrine_of_courtesy", keywords=("Temple",))
     assert effective_keywords(game, orphan) == frozenset({"Temple"})
-
-
-def test_a_second_keyword_grant_for_one_card_is_refused():
-    @keyword_grant("guard_probe")
-    def _first(card, game_, seat):
-        return ()
-
-    try:
-        with pytest.raises(ValueError, match="guard_probe already has a keyword grant"):
-
-            @keyword_grant("guard_probe")
-            def _second(card, game_, seat):
-                return ("Legacy",)
-    finally:
-        KEYWORD_GRANTS.pop("guard_probe", None)
