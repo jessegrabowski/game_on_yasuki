@@ -91,3 +91,19 @@ def test_the_stats_package_never_reads_the_gold_economy():
     }
 
     assert reaching == set()
+
+
+def test_the_favor_and_lobby_surfaces_stay_out_of_abilities():
+    # abilities.py held the favor payment surface, the Lobby bars and the Lobby bonuses in three
+    # places, none of them consumed by its own ability model. They are one subject each now, in
+    # rulebook/. A three-way split is exactly the shape that regrows, so this names the words
+    # rather than the symbols -- a new favor helper written into abilities/ fails here.
+    offenders = {
+        f"{source.relative_to(RULES)}:{number}"
+        for source in sorted((RULES / "abilities").rglob("*.py"))
+        for number, line in enumerate(source.read_text(encoding="utf-8").splitlines(), start=1)
+        if line.startswith(("def ", "class ", "FAVOR", "LOBBY", "MAY_NOT_LOBBY"))
+        and ("favor" in line.lower() or "lobby" in line.lower())
+    }
+
+    assert offenders == set()
