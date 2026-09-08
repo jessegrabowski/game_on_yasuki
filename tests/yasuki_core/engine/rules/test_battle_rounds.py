@@ -15,13 +15,8 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules import flow, legality, triggers
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.abilities import (
-    _ABILITIES,
-    Ability,
-    CardLocation,
-    itself,
-    register_ability,
-)
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 from yasuki_core.engine.rules.effects import Bow, GrantPriority
 from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
@@ -371,7 +366,8 @@ register_ability(
     ),
 )
 register_ability(
-    "plain_probe_in_hand", replace(_ABILITIES["absent_probe_in_hand"][0], battle=frozenset())
+    "plain_probe_in_hand",
+    replace(_ABILITIES["absent_probe_in_hand"][0], battle=frozenset()),
 )
 
 

@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.abilities.registry import ability_for
 from dataclasses import replace
 
 import pytest
@@ -5,7 +6,7 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules import abilities, flow, legality, triggers
+from yasuki_core.engine.rules import flow, legality, triggers
 from yasuki_core.engine.rules.rulebook.lobby import LOBBY_BARS
 from yasuki_core.engine.rules.legality import lobby_key
 from yasuki_core.engine.rules.actions import ActivateAbility, Lobby
@@ -242,7 +243,7 @@ def test_a_lobby_bonus_adjusts_whatever_amount_is_checked():
 
 def _court_targets(game: GameState, court: L5RCard) -> list[str]:
     """Who Shigekawa's Court could straighten right now."""
-    return legality.legal_targets(game, court, abilities.ability_for(court, None))
+    return legality.legal_targets(game, court, ability_for(court, None))
 
 
 def _lobby_with(game: GameState, card_id: str) -> None:

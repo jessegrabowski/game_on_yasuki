@@ -1,4 +1,5 @@
-from yasuki_core.engine.rules.abilities import Ability, register_ability
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Effect, GainHonor, PayGold, RangedAttack

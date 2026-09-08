@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import Ability, register_ability
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Ask, Bow, CreateToken, Effect, PayGold, Unpayable
 from yasuki_core.engine.rules.equip import creation_targets

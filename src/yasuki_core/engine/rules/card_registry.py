@@ -3,8 +3,8 @@ import re
 import sys
 from pathlib import Path
 
+from yasuki_core.engine.rules.abilities import costs, registry
 from yasuki_core.engine.rules import (
-    abilities,
     attachments,
     effects,
     equip,
@@ -34,11 +34,11 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     cards — so validating it against the card index would report failures that are not defects.
     """
     return {
-        "abilities": frozenset(abilities._ABILITIES),
-        "invest abilities": frozenset(abilities._INVEST),
-        "enters unbowed": frozenset(abilities._ENTERS_UNBOWED),
-        "may remain bowed": frozenset(abilities.MAY_REMAIN_BOWED),
-        "bow waivers": frozenset(abilities.BOW_WAIVERS),
+        "abilities": frozenset(registry._ABILITIES),
+        "invest abilities": frozenset(registry._INVEST),
+        "enters unbowed": frozenset(registry._ENTERS_UNBOWED),
+        "may remain bowed": frozenset(registry.MAY_REMAIN_BOWED),
+        "bow waivers": frozenset(costs.BOW_WAIVERS),
         "lobby bars": frozenset(lobby.LOBBY_BARS),
         "may not lobby": frozenset(lobby.MAY_NOT_LOBBY),
         "favor payers": frozenset(favor.FAVOR_PAYERS),
@@ -126,11 +126,11 @@ def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -
 
     known = read_index()
     problems: list[str] = []
-    for registry, card_ids in sorted(registries.items()):
+    for label, card_ids in sorted(registries.items()):
         for card_id in sorted(card_ids - known):
             closest = difflib.get_close_matches(card_id, known, n=1)
             hint = f" — did you mean {closest[0]}?" if closest else ""
-            problems.append(f"{registry}: no card has the id {card_id!r}{hint}")
+            problems.append(f"{label}: no card has the id {card_id!r}{hint}")
     return problems
 
 
@@ -213,7 +213,7 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     """
     printed = printed_ability_counts(cards_dir)
     problems = []
-    for card_id, registered in sorted(abilities._ABILITIES.items()):
+    for card_id, registered in sorted(registry._ABILITIES.items()):
         shows = printed.get(card_id, 0)
         if shows > len(registered):
             problems.append(

@@ -1,8 +1,9 @@
+from yasuki_core.engine.rules.abilities.registry import ability_for, invest_amounts
 from collections.abc import Iterable, Iterator
 from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import abilities, favor, favor_abilities, legality
+from yasuki_core.engine.rules import favor, favor_abilities, legality
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
@@ -165,7 +166,7 @@ class GameRunner:
                     items.append((f"Equip: Pay {cost} gold", action))
             elif isinstance(action, PlayStrategy):
                 card = game.table.cards_by_id[card_id]
-                ability = abilities.ability_for(card, action.ability_key)
+                ability = ability_for(card, action.ability_key)
                 cost = effective_gold_cost(game, card)
                 label = ability.label if ability is not None else "Play this Strategy"
                 items.append((label if cost == 0 else f"{label} — Pay {cost} gold", action))
@@ -176,7 +177,7 @@ class GameRunner:
         """The menu wording for taking ``card``'s Invest on top of ``base``: one price, or the
         prices the payer chooses among. Read off the board, so a card discounting its own Invest is
         offered at what it will actually charge."""
-        prices = [base + amount for amount in abilities.invest_amounts(game, card)]
+        prices = [base + amount for amount in invest_amounts(game, card)]
         if len(prices) == 1:
             return f"{verb}: Pay {prices[0]} gold"
         # A span reads as one, the way the card prints it; separate prices are listed as separate.
@@ -193,7 +194,7 @@ class GameRunner:
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if isinstance(action, ActivateAbility) and action.card_id == card_id:
-                ability = abilities.ability_for(card, action.ability_key)
+                ability = ability_for(card, action.ability_key)
                 label = ability.label if ability is not None else "Activate ability"
                 items.append((label, action))
         return items

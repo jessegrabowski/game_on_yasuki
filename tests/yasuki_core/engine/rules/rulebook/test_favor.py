@@ -2,13 +2,9 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook import favor
-from yasuki_core.engine.rules.rulebook.favor import (
-    favor_cost,
-    FAVOR_PAYERS,
-    favor_payers,
-    is_favor_action,
-)
-from yasuki_core.engine.rules.abilities import can_pay
+from yasuki_core.engine.rules.rulebook.favor import favor_cost, FAVOR_PAYERS, favor_payers
+from yasuki_core.engine.rules.rulebook.favor import is_favor_action
+from yasuki_core.engine.rules.abilities.costs import can_pay
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.flow import forget_action
 from yasuki_core.engine.rules.triggers import resolve_effects

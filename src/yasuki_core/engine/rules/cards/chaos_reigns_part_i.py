@@ -5,13 +5,10 @@ from yasuki_core.engine.rules.rulebook.favor import (
     favor_payer,
     favor_payers,
 )
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    CardLocation,
-    no_cost,
-    register_ability,
-    register_edict,
-)
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.idioms import register_edict
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.keyword_grants import effective_keywords

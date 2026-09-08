@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
     NAGA_FOLLOWER,
 )
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.abilities import invest_amounts
+from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, DecisionResponse
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
 from yasuki_core.engine.rules.events import CardDiscarded

@@ -1,12 +1,8 @@
 from yasuki_core import ruleset
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    bow_cost,
-    InvestAbility,
-    register_ability,
-    register_edict,
-    register_invest,
-)
+from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.idioms import register_edict
+from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
+from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import CreateToken, Effect
 from yasuki_core.engine.rules.equip import creation_targets

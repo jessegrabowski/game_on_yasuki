@@ -1,10 +1,11 @@
+from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActionTiming, PlayStrategy
-from yasuki_core.engine.rules.abilities import CardLocation
+from yasuki_core.engine.rules.abilities.model import CardLocation
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules import abilities, legality
+from yasuki_core.engine.rules import legality
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -104,7 +105,7 @@ def test_it_is_offered_under_both_of_its_printed_designators():
     game = EngineSession.start(state, PLAYER).game
     in_hand = (CardLocation.HAND,)
 
-    uncertainty = abilities.ability_for(card)
+    uncertainty = ability_for(card)
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
         assert legality.activatable(game, PLAYER, frozenset({designator}), at=in_hand) == [
             (card, uncertainty)

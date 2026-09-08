@@ -1,11 +1,8 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    banish_top_fate,
-    destroy_cost,
-    plus_one_gp_this_turn,
-    register_ability,
-)
+from yasuki_core.engine.rules.abilities.costs import banish_top_fate, destroy_cost
+from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import owned_holdings
 from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import opposing_seats, seat_stronghold

@@ -1,61 +1,62 @@
+from collections.abc import Iterator
+
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
-from yasuki_core.engine.rules.board import queries
-from yasuki_core.engine.rules.equip import equip_targets
+from yasuki_core.engine.rules import favor_abilities
+from yasuki_core.engine.rules.abilities.costs import can_pay
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.registry import (
+    abilities_for,
+    ability_for,
+    fixed_invest_amount,
+    invest_amounts,
+)
 from yasuki_core.engine.rules.actions import (
-    ACTION_TIMINGS,
     Action,
+    ACTION_TIMINGS,
     ActionTiming,
     ActivateAbility,
+    BattleDesignator,
     Cycle,
     DeclareAttack,
     DynastyDiscard,
     Equip,
+    Inheritance,
     KharmicDraw,
     KharmicRefill,
-    Inheritance,
     Legacy,
     Lobby,
     Pass,
-    UseFavorAbility,
     PlayStrategy,
     Recruit,
+    UseFavorAbility,
 )
-from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
-from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
-
+from yasuki_core.engine.rules.board import queries
+from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
+from yasuki_core.engine.rules.board.queries import has_keyword, owned_holdings, province_cards
+from yasuki_core.engine.rules.board.seats import seat_stronghold
+from yasuki_core.engine.rules.equip import equip_targets
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
+from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
-from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
-from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
-from yasuki_core.engine.rules.board.queries import (
-    has_keyword,
-    owned_holdings,
-    province_cards,
-)
-from yasuki_core.engine.rules.board.seats import seat_stronghold
-from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.units import has_presence
-from collections.abc import Iterator
-
-from yasuki_core.engine.rules import abilities, favor_abilities
-from yasuki_core.engine.rules.abilities import Ability, CardLocation, abilities_for, can_pay
-from yasuki_core.engine.rules.actions import BattleDesignator
-from yasuki_core.engine.rules.units import has_caster, is_spell, location_permits
-from yasuki_core.engine.table import location_of
 from yasuki_core.engine.rules.rulebook import lobby
+from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
+from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.units import has_caster, has_presence, is_spell, location_permits
+from yasuki_core.engine.table import DeckKey, location_of, ZoneKey, ZoneRole
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core import ruleset
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     HoldingPrint,
     PersonalityPrint,
     WindPrint,
 )
+
 
 # What the Kharmic rulebook abilities cost to use.
 KHARMIC_COST = 2
@@ -82,7 +83,7 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         return frozenset()
     if isinstance(action, ActivateAbility):
         card = game.table.cards_by_id[action.card_id]
-        ability = abilities.ability_for(card, action.ability_key)
+        ability = ability_for(card, action.ability_key)
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
         return frozenset(ability.timings)
@@ -431,7 +432,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
             recruits.append(Recruit(card.id))
             if can_proclaim(game, card):
                 recruits.append(Recruit(card.id, proclaim=True))
-        invest = abilities.invest_amounts(game, card)
+        invest = invest_amounts(game, card)
         if invest is not None and base + min(invest) <= affordable:
             recruits.append(Recruit(card.id, invest=True))
     return recruits
@@ -461,7 +462,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         if base > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
-        invest = abilities.fixed_invest_amount(game, card)
+        invest = fixed_invest_amount(game, card)
         if invest is not None and base + invest <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips
@@ -475,9 +476,7 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     :func:`~yasuki_core.engine.rules.activatable` for the hand rather than reading a fixed
     timing off the action. ``only`` narrows to a single card.
     """
-    playable = activatable(
-        game, seat, permitted_timings(game, seat), at=(abilities.CardLocation.HAND,)
-    )
+    playable = activatable(game, seat, permitted_timings(game, seat), at=(CardLocation.HAND,))
     return [
         PlayStrategy(card.id, ability.key)
         for card, ability in playable

@@ -1,12 +1,8 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import (
-    Ability,
-    bow_cost,
-    CardLocation,
-    itself,
-    register_ability,
-    register_event_entry,
-)
+from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.idioms import register_event_entry
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost

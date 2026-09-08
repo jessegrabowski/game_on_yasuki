@@ -1,6 +1,7 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities import ability_for, can_pay
+from yasuki_core.engine.rules.abilities.costs import can_pay
+from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount

@@ -1,10 +1,11 @@
+from yasuki_core.engine.rules.abilities.registry import ability_for
 from typing import get_args
 
 import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.rules import abilities, legality
+from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import (
     Lobby,
     UseFavorAbility,
@@ -19,7 +20,8 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.abilities import Ability, itself, register_ability
+from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -158,7 +160,7 @@ def test_a_card_printing_two_designators_is_offered_under_either():
     game = two_seat_game()
     card = put_in_play(game, holding("h", owner=PlayerId.P1, printed_id="dual"))
 
-    dual = abilities.ability_for(card)
+    dual = ability_for(card)
     assert legality.activatable(game, PlayerId.P1, frozenset({ActionTiming.OPEN})) == [(card, dual)]
     assert legality.activatable(game, PlayerId.P1, frozenset({ActionTiming.BATTLE})) == [
         (card, dual)

@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.abilities import register_event_entry
+from yasuki_core.engine.rules.abilities.idioms import register_event_entry
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.gold.production import gold_handler

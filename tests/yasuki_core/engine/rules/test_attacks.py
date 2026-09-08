@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equip, Pass
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
-from yasuki_core.engine.rules.abilities import ability_for
+from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.effects import (
     Destroy,
     Fear,
