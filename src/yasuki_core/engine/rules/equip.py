@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
@@ -50,19 +51,10 @@ def may_attach_weapon(game: GameState, personality: L5RCard, weapon: L5RCard) ->
 # printed id like the other per-card registries. The rulebook's restrictions live in this module as
 # code; a restriction only one card states lives with that card.
 AttachRestriction = Callable[[GameState, L5RCard, L5RCard], bool]
-ATTACH_RESTRICTIONS: dict[str, AttachRestriction] = {}
-
-
-def attach_restriction(printed_id: str) -> Callable[[AttachRestriction], AttachRestriction]:
-    """Register the decorated predicate as ``printed_id``'s limit on what it will attach to."""
-
-    def register(restriction: AttachRestriction) -> AttachRestriction:
-        if printed_id in ATTACH_RESTRICTIONS:
-            raise ValueError(f"{printed_id} already has an attach restriction")
-        ATTACH_RESTRICTIONS[printed_id] = restriction
-        return restriction
-
-    return register
+ATTACH_RESTRICTIONS: HandlerRegistry[AttachRestriction] = HandlerRegistry(
+    "attach restrictions", "already has an attach restriction"
+)
+attach_restriction = ATTACH_RESTRICTIONS.make_decorator()
 
 
 def may_attach(game: GameState, personality: L5RCard, card: L5RCard) -> bool:

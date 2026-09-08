@@ -7,7 +7,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import flow, legality, triggers
-from yasuki_core.engine.rules.rulebook.lobby import LOBBY_BARS
+from yasuki_core.engine.rules.rulebook.lobby import lobby_bar, LOBBY_BARS
 from yasuki_core.engine.rules.legality import lobby_key
 from yasuki_core.engine.rules.actions import ActivateAbility, Lobby
 from yasuki_core.engine.rules.decisions import DecisionResponse
@@ -204,7 +204,7 @@ def test_a_lobby_bonus_is_not_an_honor_gain():
 def test_a_card_can_forbid_a_seat_to_lobby():
     """The hook a card reaches for to say "this player may not Lobby". The seat otherwise qualifies
     outright, so the bar is the only thing withholding the action."""
-    LOBBY_BARS["test_lobby_bar"] = lambda game, card, seat: seat is PlayerId.P1
+    lobby_bar("test_lobby_bar")(lambda game, card, seat: seat is PlayerId.P1)
     try:
         game = _game()
         put_in_play(game, personality("courtier", personal_honor=2))
@@ -218,7 +218,7 @@ def test_a_card_can_forbid_a_seat_to_lobby():
 def test_a_bar_stops_only_the_seats_it_names():
     """A bar is the card's judgment, not a blanket switch: one card stops its controller's rivals
     and another stops its controller, so the rule asks the card about the seat."""
-    LOBBY_BARS["test_lobby_bar"] = lambda game, card, seat: seat is PlayerId.P2
+    lobby_bar("test_lobby_bar")(lambda game, card, seat: seat is PlayerId.P2)
     try:
         game = _game()
         put_in_play(game, personality("courtier", personal_honor=2))

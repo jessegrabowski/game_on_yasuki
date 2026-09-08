@@ -9,8 +9,6 @@ yasuki_core.engine.rules.gold.discounts
 
     effective_invest_discount
     effective_recruit_discount
-    invest_discount
-    recruit_discount
 
 .. automodule:: yasuki_core.engine.rules.gold.discounts
     :members:

@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, replace
@@ -690,28 +691,10 @@ class Fear(AttackEffect):
 # about every attack its controller makes. One walk and a handler that scopes itself is the only
 # shape that holds all three.
 AttackStrengthHandler = Callable[[GameState, L5RCard, L5RCard, "AttackEffect"], int]
-ATTACK_STRENGTH_AGAINST: dict[str, AttackStrengthHandler] = {}
-
-
-def attack_strength_against(
-    printed_id: str,
-) -> Callable[[AttackStrengthHandler], AttackStrengthHandler]:
-    """Register what ``printed_id`` does to the strength of an attack.
-
-    The handler takes ``(game, holder, target, attack)`` and returns the strength it adds, where
-    ``holder`` is the card the text is printed on and ``target`` the card being attacked. Every
-    card in play is asked about every attack, so a handler states its own reach: comparing the two
-    cards for "this Follower", :func:`~yasuki_core.engine.rules.attachments.shares_unit` for "cards
-    in this unit", and neither for a card that speaks about the whole board.
-    """
-
-    def register(handler: AttackStrengthHandler) -> AttackStrengthHandler:
-        if printed_id in ATTACK_STRENGTH_AGAINST:
-            raise ValueError(f"{printed_id} already adjusts the attacks against it")
-        ATTACK_STRENGTH_AGAINST[printed_id] = handler
-        return handler
-
-    return register
+ATTACK_STRENGTH_AGAINST: HandlerRegistry[AttackStrengthHandler] = HandlerRegistry(
+    "attack strength", "already adjusts the attacks against it"
+)
+attack_strength_against = ATTACK_STRENGTH_AGAINST.make_decorator()
 
 
 def effective_strength(game: GameState, attack: AttackEffect) -> int:

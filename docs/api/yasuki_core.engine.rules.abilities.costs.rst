@@ -12,7 +12,6 @@ yasuki_core.engine.rules.abilities.costs
     bow_cost
     bow_parent_and_destroy
     bow_parent_cost
-    bow_waiver
     can_pay
     destroy_cost
     no_cost

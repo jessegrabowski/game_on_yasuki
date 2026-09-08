@@ -49,7 +49,7 @@ from yasuki_core.engine import runner
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import DynastyDiscard
 from yasuki_core.engine.runner import GameRunner, play_game
-from yasuki_core.engine.rules.rulebook.favor import FAVOR_PAYERS
+from yasuki_core.engine.rules.rulebook.favor import favor_payer, FAVOR_PAYERS
 from yasuki_core.engine.rules.effects import TakeFavor
 
 PASS = Pass()
@@ -1062,7 +1062,7 @@ def test_a_rivals_favor_proxy_offers_the_human_nothing():
     """A seat that can pay a Favor cost some other way may use the abilities while the rival holds
     the Favor. The rival's proxy is face up in its hand, so it is on screen and clickable, and
     hanging the human's own abilities off it would read as taking the rival's card."""
-    FAVOR_PAYERS["test_favor_payer"] = lambda game, card: []
+    favor_payer("test_favor_payer")(lambda game, card: [])
     try:
         state = _dealt_table(p1_hand=1)
         state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(

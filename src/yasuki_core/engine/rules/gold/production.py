@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
@@ -10,21 +11,10 @@ from yasuki_core.game_pieces.cards import L5RCard
 # A gold-production handler computes what a card produces in context, from the producing card, the
 # game, the seat it produces for, and the cards being paid for.
 GoldHandler = Callable[[L5RCard, GameState, PlayerId, tuple[L5RCard, ...]], int]
-GOLD_HANDLERS: dict[str, GoldHandler] = {}
-
-
-def gold_handler(printed_id: str) -> Callable[[GoldHandler], GoldHandler]:
-    """Register the decorated function as the gold-production handler for ``printed_id``."""
-
-    def register(handler: GoldHandler) -> GoldHandler:
-        # Assignment would let the second registration shadow the first with no trace; by the time
-        # anything inspects the registry only the survivor is there.
-        if printed_id in GOLD_HANDLERS:
-            raise ValueError(f"{printed_id} already has a gold handler")
-        GOLD_HANDLERS[printed_id] = handler
-        return handler
-
-    return register
+GOLD_HANDLERS: HandlerRegistry[GoldHandler] = HandlerRegistry(
+    "gold handlers", "already has a gold handler"
+)
+gold_handler = GOLD_HANDLERS.make_decorator()
 
 
 def reads_its_targets(card: L5RCard) -> bool:

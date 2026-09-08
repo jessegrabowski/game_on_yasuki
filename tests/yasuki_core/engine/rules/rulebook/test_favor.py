@@ -2,7 +2,12 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook import favor
-from yasuki_core.engine.rules.rulebook.favor import favor_cost, FAVOR_PAYERS, favor_payers
+from yasuki_core.engine.rules.rulebook.favor import (
+    favor_payer,
+    favor_cost,
+    FAVOR_PAYERS,
+    favor_payers,
+)
 from yasuki_core.engine.rules.rulebook.favor import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import can_pay
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
@@ -40,12 +45,13 @@ def game() -> GameState:
 @pytest.fixture(autouse=True)
 def payers():
     """Stand-ins for the cards step 7 brings: one that pays for nothing, one that bows to pay."""
-    FAVOR_PAYERS[FREE_PAYER] = lambda game, card: []
-    FAVOR_PAYERS[BOWING_PAYER] = lambda game, card: None if card.bowed else [Bow(card.id)]
+    favor_payer(FREE_PAYER)(lambda game, card: [])
+    favor_payer(BOWING_PAYER)(lambda game, card: None if card.bowed else [Bow(card.id)])
     try:
         yield
     finally:
-        del FAVOR_PAYERS[FREE_PAYER], FAVOR_PAYERS[BOWING_PAYER]
+        FAVOR_PAYERS.pop(FREE_PAYER)
+        FAVOR_PAYERS.pop(BOWING_PAYER)
 
 
 def _source(game: GameState, owner: PlayerId = PlayerId.P1):

@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import FlagRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
@@ -9,14 +10,8 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 # Cards their controller may leave bowed rather than straightening at the start of their turn (the
 # printed "May remain bowed"), by printed id. A flag rather than a handler: the card states the
 # permission and says nothing about when it is worth taking, which is the controller's business.
-MAY_REMAIN_BOWED: set[str] = set()
-
-
-def may_remain_bowed(printed_id: str) -> None:
-    """Register ``printed_id`` as a card the turn-start straighten passes over."""
-    if printed_id in MAY_REMAIN_BOWED:
-        raise ValueError(f"{printed_id} may already remain bowed")
-    MAY_REMAIN_BOWED.add(printed_id)
+MAY_REMAIN_BOWED = FlagRegistry("may remain bowed", "may already remain bowed")
+may_remain_bowed = MAY_REMAIN_BOWED.make_register()
 
 
 def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
@@ -37,7 +32,8 @@ _INVEST: dict[str, InvestAbility] = {}
 # The Holdings whose own text overrides the rule that a Holding enters play bowed. Registered from
 # the set module the card lives in, like everything else a card does, rather than listed centrally —
 # so the layout guard scans it and the card index checks it.
-_ENTERS_UNBOWED: set[str] = set()
+_ENTERS_UNBOWED = FlagRegistry("enters unbowed", "already enters play unbowed")
+register_enters_unbowed = _ENTERS_UNBOWED.make_register()
 
 
 def register_ability(printed_id: str, value: Ability) -> None:
@@ -54,13 +50,6 @@ def register_ability(printed_id: str, value: Ability) -> None:
         if any(held.key == value.key for held in registered):
             raise ValueError(f"{printed_id} already has an ability keyed {value.key!r}")
     _ABILITIES[printed_id] = (*registered, value)
-
-
-def register_enters_unbowed(printed_id: str) -> None:
-    """Register ``printed_id`` as a card that enters play unbowed despite being a Holding."""
-    if printed_id in _ENTERS_UNBOWED:
-        raise ValueError(f"{printed_id} already enters play unbowed")
-    _ENTERS_UNBOWED.add(printed_id)
 
 
 def enters_play_bowed(card: L5RCard) -> bool:

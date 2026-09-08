@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.rules.modifiers import Stat
@@ -61,19 +62,10 @@ def shares_unit(game: GameState, card: L5RCard, other: L5RCard) -> bool:
 # +2F and says "This Personality has +1PH" in its text; the printed half is a stat on the print, the
 # written half is this. Keyed by printed id like the other per-card registries.
 GrantHandler = Callable[[GameState, L5RCard, L5RCard], dict[Stat, int]]
-ATTACHMENT_GRANTS: dict[str, GrantHandler] = {}
-
-
-def attachment_grant(printed_id: str) -> Callable[[GrantHandler], GrantHandler]:
-    """Register the decorated function as ``printed_id``'s grant to the card it attaches to."""
-
-    def register(handler: GrantHandler) -> GrantHandler:
-        if printed_id in ATTACHMENT_GRANTS:
-            raise ValueError(f"{printed_id} already has an attachment grant")
-        ATTACHMENT_GRANTS[printed_id] = handler
-        return handler
-
-    return register
+ATTACHMENT_GRANTS: HandlerRegistry[GrantHandler] = HandlerRegistry(
+    "attachment grants", "already has an attachment grant"
+)
+attachment_grant = ATTACHMENT_GRANTS.make_decorator()
 
 
 def granted_stat(game: GameState, attached: L5RCard, host: L5RCard, stat: Stat) -> int:

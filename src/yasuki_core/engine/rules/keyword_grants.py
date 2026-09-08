@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable, Iterator
 
 from yasuki_core.engine.players import PlayerId
@@ -18,19 +19,10 @@ def granted_keywords(game: GameState, card: L5RCard) -> Iterator[str]:
 # A keyword handler names the keywords a card carries beyond the printed ones, from the card and its
 # controller's and opponents' views — the "this card has X" clauses gated on a readable condition.
 KeywordHandler = Callable[[L5RCard, GameState, PlayerId], tuple[str, ...]]
-KEYWORD_GRANTS: dict[str, KeywordHandler] = {}
-
-
-def keyword_grant(printed_id: str) -> Callable[[KeywordHandler], KeywordHandler]:
-    """Register the decorated function as the keyword-grant handler for ``printed_id``."""
-
-    def register(handler: KeywordHandler) -> KeywordHandler:
-        if printed_id in KEYWORD_GRANTS:
-            raise ValueError(f"{printed_id} already has a keyword grant")
-        KEYWORD_GRANTS[printed_id] = handler
-        return handler
-
-    return register
+KEYWORD_GRANTS: HandlerRegistry[KeywordHandler] = HandlerRegistry(
+    "keyword grants", "already has a keyword grant"
+)
+keyword_grant = KEYWORD_GRANTS.make_decorator()
 
 
 def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:

@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.registrar import FlagRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
@@ -33,16 +34,9 @@ def no_cost(game: GameState, source: L5RCard) -> list[Effect]:
 
 # Attachments offering the Personality they are on a once-per-turn waiver of the cost of bowing to
 # pay for one of his own abilities, keyed on the attachment's printed id.
-BOW_WAIVERS: set[str] = set()
+BOW_WAIVERS = FlagRegistry("bow waivers", "already waives a bow cost")
+bow_waiver = BOW_WAIVERS.make_register()
 WAIVER_TAG = "bow_waiver"
-
-
-def bow_waiver(printed_id: str) -> None:
-    """Register ``printed_id`` as an attachment whose Personality may ignore a bow cost once a
-    turn."""
-    if printed_id in BOW_WAIVERS:
-        raise ValueError(f"{printed_id} already waives a bow cost")
-    BOW_WAIVERS.add(printed_id)
 
 
 def _waiver_on(game: GameState, card: L5RCard) -> L5RCard | None:
