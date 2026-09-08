@@ -7,7 +7,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.rules import favor
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
-from yasuki_core.engine.rules.economy import effective_stat
+from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
     ChooseCards,
@@ -943,12 +943,12 @@ class PayGold(InterruptingEffect):
     # Imported where they are used: pricing a payment reads the production-boost registry, whose
     # module imports this one.
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
-        from yasuki_core.engine.rules.payments import can_afford
+        from yasuki_core.engine.rules.gold.payment import can_afford
 
         return can_afford(game, self.seat, self.amount, bowed_by_cost=bowed_by_cost)
 
     def request(self, game: GameState) -> DecisionRequest:
-        from yasuki_core.engine.rules.payments import payment_request
+        from yasuki_core.engine.rules.gold.payment import payment_request
 
         return payment_request(game, self.seat, self.amount, self.label)
 

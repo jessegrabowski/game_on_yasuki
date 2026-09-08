@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.attachments import (
     attachment_grant,
     attachments_of,
 )
-from yasuki_core.engine.rules.economy import (
+from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
     effective_force,
     effective_personal_honor,

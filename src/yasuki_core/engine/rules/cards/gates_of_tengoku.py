@@ -8,12 +8,10 @@ from yasuki_core.engine.rules.abilities import (
     register_event_entry,
 )
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.economy import (
-    gold_handler,
-    keyword_grant,
-    recruit_discount,
-    unit_gold_cost,
-)
+from yasuki_core.engine.rules.keyword_grants import keyword_grant
+from yasuki_core.engine.rules.gold.cost import unit_gold_cost
+from yasuki_core.engine.rules.gold.discounts import recruit_discount
+from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import went_second
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -29,7 +27,7 @@ from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
-from yasuki_core.engine.rules.legality import reachable_gold
+from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import sincerity_seed_targets
 from yasuki_core.game_pieces import keywords

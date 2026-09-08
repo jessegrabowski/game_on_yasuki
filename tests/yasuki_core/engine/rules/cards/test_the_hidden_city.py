@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.actions import DeclareAttack, Pass, PlayStrategy
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
-from yasuki_core.engine.rules.economy import effective_province_strength
+from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import AttachCard
 from yasuki_core.engine.rules.equip import equip_targets, may_attach
 from yasuki_core.engine.rules.flow import submit

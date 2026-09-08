@@ -12,7 +12,8 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import effective_keywords, invest_discount, recruit_discount
+from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_discount
 from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls
 from yasuki_core.engine.rules.effects import (
     Choose,

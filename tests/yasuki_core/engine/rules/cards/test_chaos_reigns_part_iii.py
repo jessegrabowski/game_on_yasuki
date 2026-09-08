@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     ZOMBIE_FOLLOWER,
 )
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules.economy import effective_force
+from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.triggers import fire

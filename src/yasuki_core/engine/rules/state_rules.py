@@ -2,7 +2,7 @@ from collections.abc import Callable
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import Rulebook
-from yasuki_core.engine.rules.economy import effective_chi
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.effects import Destroy, Discard, Effect, LoseGame, WinGame
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.state import GameState

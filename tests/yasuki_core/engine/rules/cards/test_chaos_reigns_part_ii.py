@@ -7,11 +7,9 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import HIYAMAKOS_CLAW, NAGA_FOLLOWER
-from yasuki_core.engine.rules.economy import (
-    effective_force,
-    effective_gold_production,
-    effective_keywords,
-)
+from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects

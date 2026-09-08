@@ -4,8 +4,9 @@ import numpy as np
 from numpy.random import Generator
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import effective_gold_production
-from yasuki_core.engine.rules.legality import gold_producers, recruit_cost
+from yasuki_core.engine.rules.gold.production import effective_gold_production
+from yasuki_core.engine.rules.gold.producers import gold_producers
+from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, Zone, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -23,13 +24,13 @@ def potential_gold_production(game: GameState, seat: PlayerId) -> int:
     cleared at the end of the phase, so it reads zero at every turn boundary.
 
     Two things are deliberately outside this number, and both make it smaller than
-    :func:`~yasuki_core.engine.rules.legality.reachable_gold` for the same board.
+    :func:`~yasuki_core.engine.rules.gold.producers.reachable_gold` for the same board.
 
     A card's own bow-time grant is excluded, because taking one has a price the card sets — Outlying
     Farms destroys itself — so counting it would report gold a seat may rationally decline. This
     measures sustainable output, which is what a deck is being judged on. That is the same reason
     ``policies._spendable`` leaves it out, and the opposite of what
-    :func:`~yasuki_core.engine.rules.economy.maximum_gold_production` answers for affordability.
+    :func:`~yasuki_core.engine.rules.gold.self_grants.maximum_gold_production` answers for affordability.
 
     A producer's yield can depend on what it pays for (Jade Works yields more against a Jade card),
     and a metric has no payment in flight, so such a producer reports its unconditional base.

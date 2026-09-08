@@ -239,7 +239,7 @@ class GoldRushPolicy:
     four Gold, so the cheap producers a deck-average rule would bin are exactly the ones this policy
     can afford to buy with it. Then Legacy, when the pool holds a better producer than the board —
     it puts that card face-up in a Province where the same turn's Recruit can reach it. Then an
-    activated ability this policy has an economic model for, which :data:`ABILITY_HEURISTICS`
+    activated ability this policy has an economic model for, which :data:`~yasuki_core.engine.bots.policies.ABILITY_HEURISTICS`
     decides. Then the best purchase, ranked as :class:`EconomicPolicy` ranks it, which takes a
     Personality once no Holding is within reach: gold left in the pool is cleared at the phase
     change, and buying empties the Province either way. Then a Dynasty Discard of any face-up
@@ -376,7 +376,7 @@ def _province_strength_floor(view: GameView, seat: PlayerId) -> int:
     """The least Strength any of ``seat``'s Provinces can have: what its Stronghold gives them.
 
     Counters on a Province slot and the Fortifications attached to it add to this, and neither can
-    be evaluated from a view — :data:`~yasuki_core.engine.rules.economy.PROVINCE_STRENGTH_GRANTS`
+    be evaluated from a view — :data:`~yasuki_core.engine.rules.stats.province_strength.PROVINCE_STRENGTH_GRANTS`
     takes the live game.
     """
     return max(
@@ -826,7 +826,7 @@ def _spendable(view: GameView) -> int:
     count Gold it would rather not pay for. `legality.reachable_gold` must count it, because
     withholding a legal action is worse than offering one the seat declines.
 
-    A policy also cannot ask :func:`~yasuki_core.engine.rules.economy.maximum_gold_production`: it
+    A policy also cannot ask :func:`~yasuki_core.engine.rules.gold.self_grants.maximum_gold_production`: it
     sees a redacted :class:`GameView` rather than the live game, which is what keeps a policy from
     reading anything its seat is not entitled to.
     """

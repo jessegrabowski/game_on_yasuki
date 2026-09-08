@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import KEYWORD_GRANTS, effective_weapon_limit, keyword_grant
+from yasuki_core.engine.rules.keyword_grants import keyword_grant, KEYWORD_GRANTS
+from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
 from yasuki_core.engine.rules.effects import AttachCard
 from yasuki_core.engine.rules.equip import (
     creation_targets,

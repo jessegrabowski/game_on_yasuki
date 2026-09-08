@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.abilities import (
 )
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.attachments import attached_to
-from yasuki_core.engine.rules.economy import effective_force
+from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.effects import AdjustCounter, Unpayable
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.counters import WEALTH

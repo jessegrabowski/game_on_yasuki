@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.economy import effective_keywords
+from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units import attackable
 from yasuki_core.engine.table import Zone, ZoneKey, ZoneRole, province_holding

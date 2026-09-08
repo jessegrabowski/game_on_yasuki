@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.abilities import invest_amounts
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, DecisionResponse
-from yasuki_core.engine.rules.economy import INVEST_DISCOUNTS, invest_discount
+from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.log import replay

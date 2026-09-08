@@ -36,6 +36,7 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
+
 # -- Markdown (MyST) ---------------------------------------------------------
 source_suffix = {".md": "markdown", ".rst": "restructuredtext"}
 myst_enable_extensions = [
@@ -68,8 +69,27 @@ numpydoc_xref_ignore = {
     "instance",
     "sequence",
     "mapping",
+    "path",
+    "subclass",
+    "to",
     "M",
     "N",
+}
+
+# numpydoc_xref_param_type turns every word of a type field into a reference, so a class named by
+# its bare name resolves nowhere. These are the ones our docstrings name that way.
+numpydoc_xref_aliases = {
+    "Action": "yasuki_gui.services.actions.Action",
+    "Agent": "yasuki_core.engine.bots.agents.Agent",
+    "EngineSession": "yasuki_core.engine.session.EngineSession",
+    "GameRunner": "yasuki_core.engine.runner.GameRunner",
+    "GameState": "yasuki_core.engine.rules.state.GameState",
+    "GameView": "yasuki_core.engine.rules.projection.GameView",
+    "L5RCard": "yasuki_core.game_pieces.cards.L5RCard",
+    "Metric": "yasuki_core.sim.metrics.Metric",
+    "PayingAgent": "yasuki_core.engine.bots.agents.PayingAgent",
+    "PlayerId": "yasuki_core.engine.players.PlayerId",
+    "Policy": "yasuki_core.engine.bots.policies.Policy",
 }
 
 # -- HTML output (pydata-sphinx-theme) ---------------------------------------

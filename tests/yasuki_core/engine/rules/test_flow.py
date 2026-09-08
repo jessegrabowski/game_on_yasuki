@@ -3,6 +3,7 @@ import re
 
 import pytest
 
+from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
@@ -38,12 +39,8 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     LeaveBowed,
 )
-from yasuki_core.engine.rules.economy import (
-    GOLD_HANDLERS,
-    GOLD_SELF_GRANT,
-    gold_handler,
-    register_self_grant,
-)
+from yasuki_core.engine.rules.gold.production import gold_handler, GOLD_HANDLERS
+from yasuki_core.engine.rules.gold.self_grants import GOLD_SELF_GRANT, register_self_grant
 from yasuki_core.engine.rules.board.seats import seat_controls
 from yasuki_core.engine.rules.effects import (
     Ask,
@@ -298,7 +295,7 @@ def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
     )
 
     assert legality.recruit_cost(game, same) == 4
-    assert legality.recruit_cost(game, other) == 4 + legality.OFF_CLAN_SURCHARGE
+    assert legality.recruit_cost(game, other) == 4 + ruleset.ACTIVE.off_clan_surcharge
 
 
 def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
@@ -351,7 +348,10 @@ def test_recruit_cost_charges_no_surcharge_for_an_unaligned_personality():
 
 def test_recruit_cost_surcharges_a_personality_aligned_to_another_clan():
     game = _game_with_stronghold_clan("Scorpion")
-    assert legality.recruit_cost(game, _personality(("Crane",))) == 5 + legality.OFF_CLAN_SURCHARGE
+    assert (
+        legality.recruit_cost(game, _personality(("Crane",)))
+        == 5 + ruleset.ACTIVE.off_clan_surcharge
+    )
 
 
 def test_a_stronghold_printing_several_clans_surcharges_none_of_them():
@@ -374,7 +374,8 @@ def test_a_stronghold_printing_several_clans_surcharges_none_of_them():
     assert legality.recruit_cost(game, _personality(("Lion",))) == 5
     assert legality.recruit_cost(game, _personality(("Crane",))) == 5
     assert (
-        legality.recruit_cost(game, _personality(("Scorpion",))) == 5 + legality.OFF_CLAN_SURCHARGE
+        legality.recruit_cost(game, _personality(("Scorpion",)))
+        == 5 + ruleset.ACTIVE.off_clan_surcharge
     )
 
 
@@ -515,7 +516,7 @@ def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
         "moto_traders", gold_cost=5, clan="Unicorn"
     )  # off-clan from the Crab stronghold
     # Both apply and sum: +2 off-clan surcharge, -1 Merchant Caravan discount.
-    assert legality.recruit_cost(game, traders) == 5 + legality.OFF_CLAN_SURCHARGE - 1
+    assert legality.recruit_cost(game, traders) == 5 + ruleset.ACTIVE.off_clan_surcharge - 1
 
 
 def test_recruit_rejects_invest_and_proclaim_together():

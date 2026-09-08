@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import Ability, no_cost, register_ability
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import effective_chi
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.effects import (
     AskDistribution,
     CreateToken,

@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.abilities import Ability, register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Ask, Bow, CreateToken, Effect, PayGold, Unpayable
 from yasuki_core.engine.rules.equip import creation_targets
-from yasuki_core.engine.rules.payments import can_afford
+from yasuki_core.engine.rules.gold.payment import can_afford
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard

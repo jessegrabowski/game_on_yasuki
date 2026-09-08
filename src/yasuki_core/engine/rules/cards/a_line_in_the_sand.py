@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.abilities import (
 from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.attachments import shares_unit
-from yasuki_core.engine.rules.economy import effective_keywords
+from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AttackEffect,
     Choose,

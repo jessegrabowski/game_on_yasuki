@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.equip import attach_restriction
 from yasuki_core.engine.rules.events import EnteredPlay
-from yasuki_core.engine.rules.economy import effective_keywords
+from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver, on

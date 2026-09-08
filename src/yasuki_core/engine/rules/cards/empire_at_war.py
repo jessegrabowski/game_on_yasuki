@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities import Ability, bow_cost, itself, register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.economy import gold_handler
+from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import seat_controls
 from yasuki_core.engine.rules.effects import DrawCard, Effect, PayGold
 from yasuki_core.engine.rules.state import GameState

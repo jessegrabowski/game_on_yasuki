@@ -21,15 +21,13 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.economy import (
-    GOLD_HANDLERS,
-    effective_gold_cost,
-    effective_gold_production,
-    effective_personal_honor,
-    effective_recruit_discount,
-    lobby_amount,
-    maximum_gold_production,
-)
+from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
+from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
+
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
+from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
+from yasuki_core.engine.rules.lobby import lobby_amount
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
 from yasuki_core.engine.rules.board.queries import (
     has_keyword,
@@ -49,7 +47,6 @@ from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     HoldingPrint,
     PersonalityPrint,
-    SenseiPrint,
     WindPrint,
 )
 
@@ -59,9 +56,8 @@ KHARMIC_COST = 2
 # The Gold Production the Inheritance ability grants the Holding it targets (ShE).
 INHERITANCE_PRODUCTION = 3
 
+
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
-RULESET = ruleset.ACTIVE
-OFF_CLAN_SURCHARGE = RULESET.off_clan_surcharge
 
 
 def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
@@ -483,65 +479,6 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     ]
 
 
-def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The unbowed gold producers ``seat`` controls in play — its Stronghold and gold Holdings —
-    each a source it may bow for gold (KD6, stat-derived).
-
-    A Sensei is never one of them. Its printed Gold Production is a delta the Stronghold receives,
-    not gold the Sensei makes, so counting it would pay the seat twice for the same characteristic.
-    """
-    return [
-        card
-        for card in game.table.battlefield.cards
-        if card.owner is seat
-        and not card.bowed
-        and not isinstance(card.printed, SenseiPrint)
-        and effective_gold_production(game, card) > 0
-    ]
-
-
-def gold_reach(game: GameState, seat: PlayerId) -> tuple[int, tuple[L5RCard, ...]]:
-    """What ``seat`` can raise before knowing what it is paying for, split from the producers that
-    still need to know.
-
-    Only a producer with a registered gold handler can read the cards being paid for; everything
-    else yields its printed Gold Production plus its modifiers whatever the target.
-
-    Returns
-    -------
-    fixed : int
-        The seat's pool, every target-independent producer's yield, and every bow-time boost a
-        producer could add if the seat opts in.
-    variable : tuple of L5RCard
-        The unbowed producers whose yield may still depend on what they pay for.
-    """
-    fixed = game.gold[seat]
-    variable: list[L5RCard] = []
-    for producer in gold_producers(game, seat):
-        if producer.printed_id in GOLD_HANDLERS:
-            variable.append(producer)
-        else:
-            fixed += maximum_gold_production(game, producer)
-    return fixed, tuple(variable)
-
-
-def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard | None = None) -> int:
-    """The gold ``seat`` could muster: its pool plus the yield of every unbowed producer, plus any
-    bow-time boost a producer could add if the seat opts in.
-
-    Parameters
-    ----------
-    card : L5RCard, optional
-        The card being paid for, since a producer's yield can depend on what it pays for. Omit for a
-        rulebook cost, which prices no card. Default None.
-    """
-    targets = () if card is None else (card,)
-    fixed, variable = gold_reach(game, seat)
-    return fixed + sum(
-        maximum_gold_production(game, producer, targets=targets) for producer in variable
-    )
-
-
 def recruit_cost(game: GameState, card: L5RCard) -> int:
     """The gold a seat pays to recruit ``card``: its gold cost with modifiers, plus the off-clan
     surcharge when the card has a Clan Alignment the seat does not share, less the card's own
@@ -550,7 +487,7 @@ def recruit_cost(game: GameState, card: L5RCard) -> int:
     seat_aligns = seat_alignments(game, card.owner)
     card_aligns = card_alignments(card)
     if seat_aligns and card_aligns and seat_aligns.isdisjoint(card_aligns):
-        cost += OFF_CLAN_SURCHARGE
+        cost += ruleset.ACTIVE.off_clan_surcharge
     cost -= effective_recruit_discount(game, card)
     return max(0, cost)
 

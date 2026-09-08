@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.abilities import LOBBY_BARS
 from yasuki_core.engine.rules.legality import lobby_key
 from yasuki_core.engine.rules.actions import ActivateAbility, Lobby
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules.economy import lobby_amount
+from yasuki_core.engine.rules.lobby import lobby_amount
 from yasuki_core.engine.rules.effects import GrantLobbyBonus
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules.flow import lobby, submit

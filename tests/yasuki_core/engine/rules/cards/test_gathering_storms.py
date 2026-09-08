@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.decisions import (
     ChooseAbilityTarget,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.economy import effective_gold_production
+from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side

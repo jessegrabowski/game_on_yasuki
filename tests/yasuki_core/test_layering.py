@@ -77,3 +77,17 @@ def test_the_rules_layer_does_not_reach_into_the_bots():
     }
 
     assert reaching == {"card_registry.py"}
+
+
+def test_the_stats_package_never_reads_the_gold_economy():
+    # A stat is what a card is; gold is what a seat has and pays. Gold reads stats -- a Gold Cost is
+    # a stat and effective_gold_cost is one line over effective_stat -- so the dependency has to run
+    # one way or the two are a single tangle again under new names.
+    reaching = {
+        str(source.relative_to(RULES))
+        for source in sorted((RULES / "stats").rglob("*.py"))
+        for name in _imported_modules(source)
+        if name.startswith("yasuki_core.engine.rules.gold")
+    }
+
+    assert reaching == set()

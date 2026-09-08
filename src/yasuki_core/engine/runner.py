@@ -26,7 +26,8 @@ from yasuki_core.engine.rules.decisions import (
     DecisionRequest,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.economy import effective_gold_cost, effective_personal_honor
+from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.bots.policies import PassPolicy, Policy
@@ -49,7 +50,7 @@ class SearchView(NamedTuple):
     Attributes
     ----------
     panes : dict mapping str to list of L5RCard
-        The cards each of :data:`SEARCH_PANES` offers, in that order. A pane the search does not
+        The cards each of :data:`~yasuki_core.engine.runner.SEARCH_PANES` offers, in that order. A pane the search does not
         reach maps to an empty list, and the dialog shows it disabled rather than hiding it.
     choosable : set of str
         The ids across every pane the seat may actually take.
@@ -416,7 +417,7 @@ class GameRunner:
         Raises
         ------
         RuntimeError
-            If one Action Round runs past :data:`MAX_ACTIONS_PER_ROUND`. A round closes only once
+            If one Action Round runs past :data:`~yasuki_core.engine.runner.MAX_ACTIONS_PER_ROUND`. A round closes only once
             every seat passes consecutively, so a policy that always finds something to take would
             otherwise hang the caller.
         """
@@ -462,7 +463,7 @@ class Observer(Protocol):
     it, so an observer that wants them reads the tape between these two calls.
 
     The two ends answer different questions. As a turn begins,
-    :func:`~yasuki_core.engine.rules.flow._begin_turn` has straightened the active seat and revealed
+    ``flow._begin_turn`` has straightened the active seat and revealed
     its provinces, so the board shows what it has to spend. As one ends, the board shows what it
     did: producers bowed to pay are still bowed, and a province it cleared holds a face-down
     replacement.
@@ -519,7 +520,7 @@ def run_game(
     ------
     RuntimeError
         If a seat has no legal action, a policy returns one it was not offered, or one Action Round
-        runs past :data:`MAX_ACTIONS_PER_ROUND` without closing.
+        runs past :data:`~yasuki_core.engine.runner.MAX_ACTIONS_PER_ROUND` without closing.
     """
     game = session.game
     watched: int | None = None

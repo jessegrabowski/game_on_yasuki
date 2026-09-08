@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
     Confirm,
 )
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.payments import payment_request
+from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS, BattleSegment
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
