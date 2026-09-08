@@ -59,6 +59,7 @@ yasuki_core
     yasuki_core.engine.rules.flow <yasuki_core.engine.rules.flow>
     yasuki_core.engine.rules.keyword_grants <yasuki_core.engine.rules.keyword_grants>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
+    yasuki_core.engine.rules.lobby <yasuki_core.engine.rules.lobby>
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
     yasuki_core.engine.rules.ongoing_grants <yasuki_core.engine.rules.ongoing_grants>

@@ -10,6 +10,7 @@ from yasuki_core.engine.rules import (
     effects,
     equip,
     keyword_grants,
+    lobby,
     state_rules,
     triggers,
 )
@@ -42,7 +43,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "may not lobby": frozenset(abilities.MAY_NOT_LOBBY),
         "favor payers": frozenset(abilities.FAVOR_PAYERS),
         "gold handlers": frozenset(economy.GOLD_HANDLERS),
-        "lobby bonuses": frozenset(economy.LOBBY_BONUSES),
+        "lobby bonuses": frozenset(lobby.LOBBY_BONUSES),
         "gold self grants": frozenset(economy.GOLD_SELF_GRANT),
         "recruit discounts": frozenset(economy.RECRUIT_DISCOUNTS),
         "invest discounts": frozenset(economy.INVEST_DISCOUNTS),

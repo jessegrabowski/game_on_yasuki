@@ -22,12 +22,12 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
+from yasuki_core.engine.rules.lobby import lobby_amount
 from yasuki_core.engine.rules.economy import (
     effective_gold_cost,
     effective_gold_production,
     effective_recruit_discount,
     GOLD_HANDLERS,
-    lobby_amount,
     maximum_gold_production,
 )
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments

@@ -13,9 +13,6 @@ yasuki_core.engine.rules.economy
     effective_recruit_discount
     gold_handler
     invest_discount
-    lobby_amount
-    lobby_bonus
-    lobby_bonus_grant
     maximum_gold_production
     recruit_discount
     register_self_grant
