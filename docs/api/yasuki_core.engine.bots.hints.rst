@@ -14,6 +14,7 @@ yasuki_core.engine.bots.hints
 .. autosummary::
 
     optional_cost_answer
+    register_ability_hint
 
 .. automodule:: yasuki_core.engine.bots.hints
     :members:

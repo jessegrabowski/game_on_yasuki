@@ -49,16 +49,30 @@ class AbilityHint:
 ABILITY_HINTS: HandlerRegistry[AbilityHint] = HandlerRegistry(
     "ability hints", "already has an ability hint"
 )
-register_ability_hint = ABILITY_HINTS.make_register()
+_record_hint = ABILITY_HINTS.make_register()
+
+# The optional-cost answers of every registered hint, by resolver. Indexed here rather than
+# searched at decision time because a resolver names one card's cost: two hints claiming it is a
+# typo in one of them, and the scan that finds the first would answer the other's cost silently.
+_OPTIONAL_COST_ANSWERS: dict[str, Callable[[GameView, ChooseCards], bool]] = {}
+
+
+def register_ability_hint(printed_id: str, hint: AbilityHint) -> None:
+    """Record ``hint`` for ``printed_id``, and its optional-cost answers by resolver.
+
+    Raise ValueError if the card already has a hint, or if another card already answers one of the
+    resolvers this one claims. A refused registration records neither half.
+    """
+    for resolver in hint.optional_cost_answers:
+        if resolver in _OPTIONAL_COST_ANSWERS:
+            raise ValueError(f"{resolver} already has an optional cost answer")
+    _record_hint(printed_id, hint)
+    _OPTIONAL_COST_ANSWERS.update(hint.optional_cost_answers)
 
 
 def optional_cost_answer(resolver: str) -> Callable[[GameView, ChooseCards], bool] | None:
     """The hint answering the optional cost ``resolver`` offers, or None when no card claims it."""
-    for hint in ABILITY_HINTS.values():
-        answer = hint.optional_cost_answers.get(resolver)
-        if answer is not None:
-            return answer
-    return None
+    return _OPTIONAL_COST_ANSWERS.get(resolver)
 
 
 # How much more a non-Farm target must produce than the Modest Farm spent to reach it, before the
