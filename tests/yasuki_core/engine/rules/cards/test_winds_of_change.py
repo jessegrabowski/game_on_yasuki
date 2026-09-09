@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook.favor import favor_cost_for_seat, favor_payers
+from yasuki_core.engine.rules.rulebook.favor import favor_cost_for_seat, favor_payment_options
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn import action_sequence
@@ -49,7 +49,7 @@ def test_commanding_favor_pays_by_discarding_itself():
     play instead." Taking it leaves the Favor where it is, which is the point of the card."""
     game = _game()
 
-    resolve_effects(game, favor_payers(game, P1)["Commanding Favor"])
+    resolve_effects(game, favor_payment_options(game, P1)["Commanding Favor"])
 
     assert game.favor_holder is P1, "the Event went instead of the Favor"
     discard = game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
@@ -61,7 +61,10 @@ def test_commanding_favor_is_offered_beside_the_favor_itself():
     B)."""
     game = _game()
 
-    assert set(favor_payers(game, P1)) == {"Discard the Imperial Favor", "Commanding Favor"}
+    assert set(favor_payment_options(game, P1)) == {
+        "Discard the Imperial Favor",
+        "Commanding Favor",
+    }
 
 
 def test_commanding_favor_pays_for_a_seat_that_holds_no_favor():
@@ -69,7 +72,7 @@ def test_commanding_favor_pays_for_a_seat_that_holds_no_favor():
     a seat with no Favor at all — which is what Good Faith 0.4 calls a substitute."""
     game = _game(holds_favor=False)
 
-    assert set(favor_payers(game, P1)) == {"Commanding Favor"}
+    assert set(favor_payment_options(game, P1)) == {"Commanding Favor"}
     assert all(effect.is_payable(game) for effect in favor_cost_for_seat(game, P1, SOURCE))
 
 

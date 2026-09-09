@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.events import EnteredPlay
-from yasuki_core.engine.rules.rulebook.favor import favor_payers
+from yasuki_core.engine.rules.rulebook.favor import favor_payment_options
 from yasuki_core.engine.rules.effects import Straighten, TakeFavor
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
@@ -983,26 +983,26 @@ def test_iweko_miaka_pays_a_favor_cost_for_nothing():
     game = _miaka_game()
     TakeFavor(P1).perform(game)
 
-    resolve_effects(game, favor_payers(game, P1)["miaka"])
+    resolve_effects(game, favor_payment_options(game, P1)["miaka"])
 
     assert game.favor_holder is P1, "she paid instead of the Favor"
 
 
 def test_iweko_miaka_pays_only_once_a_turn():
     game = _miaka_game()
-    resolve_effects(game, favor_payers(game, P1)["miaka"])
+    resolve_effects(game, favor_payment_options(game, P1)["miaka"])
 
-    assert favor_payers(game, P1) == {}
+    assert favor_payment_options(game, P1) == {}
 
 
 def test_iweko_miakas_use_comes_back_next_turn():
     """The limit is per turn, so a new turn restores it."""
     game = _miaka_game()
-    resolve_effects(game, favor_payers(game, P1)["miaka"])
+    resolve_effects(game, favor_payment_options(game, P1)["miaka"])
 
     game.turn += 1
 
-    assert set(favor_payers(game, P1)) == {"miaka"}
+    assert set(favor_payment_options(game, P1)) == {"miaka"}
 
 
 def test_offering_iweko_miaka_does_not_spend_her_use():
@@ -1010,7 +1010,7 @@ def test_offering_iweko_miaka_does_not_spend_her_use():
     must not consume the turn's use."""
     game = _miaka_game()
 
-    favor_payers(game, P1)
-    favor_payers(game, P1)
+    favor_payment_options(game, P1)
+    favor_payment_options(game, P1)
 
-    assert set(favor_payers(game, P1)) == {"miaka"}
+    assert set(favor_payment_options(game, P1)) == {"miaka"}

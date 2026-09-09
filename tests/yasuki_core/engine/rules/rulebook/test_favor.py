@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.rulebook.favor import (
     favor_payer,
     favor_cost,
     FAVOR_PAYERS,
-    favor_payers,
+    favor_payment_options,
 )
 from yasuki_core.engine.rules.rulebook.favor import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import can_pay
@@ -111,13 +111,13 @@ def test_a_payer_that_cannot_pay_right_now_is_not_offered(game):
     bowed = put_in_play(game, personality("manjodh", name="Manjodh", printed_id=BOWING_PAYER))
     bowed.bow()
 
-    assert favor_payers(game, PlayerId.P1) == {}
+    assert favor_payment_options(game, PlayerId.P1) == {}
 
 
 def test_another_seats_payer_does_not_pay_for_you(game):
     put_in_play(game, personality("helper", owner=PlayerId.P2, printed_id=FREE_PAYER))
 
-    assert favor_payers(game, PlayerId.P1) == {}
+    assert favor_payment_options(game, PlayerId.P1) == {}
 
 
 def test_a_favor_cost_nobody_can_pay_is_unpayable(game):

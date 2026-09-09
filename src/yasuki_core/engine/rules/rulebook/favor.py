@@ -32,7 +32,7 @@ FAVOR_PAYMENT = "favor_payment"
 DISCARD_THE_FAVOR = "Discard the Imperial Favor"
 
 
-def favor_payers(game: GameState, seat: PlayerId) -> dict[str, list[Effect]]:
+def favor_payment_options(game: GameState, seat: PlayerId) -> dict[str, list[Effect]]:
     """Every way ``seat`` could pay a Favor cost right now, keyed by the option it reads as.
 
     Good Faith 0.4 lets a Favor action's player control the Favor "or have an alternate effect,
@@ -62,14 +62,14 @@ def favor_cost_for_seat(game: GameState, seat: PlayerId, source_id: str) -> list
     Takes the seat rather than a card because a rulebook Favor ability belongs to the player and has
     no card to charge it to.
     """
-    payers = favor_payers(game, seat)
-    if not payers:
+    options = favor_payment_options(game, seat)
+    if not options:
         return [Unpayable(f"{seat.name} has no way to pay a Favor cost")]
-    if len(payers) == 1:
-        return [PayFavorCost(), *next(iter(payers.values()))]
+    if len(options) == 1:
+        return [PayFavorCost(), *next(iter(options.values()))]
     return [
         PayFavorCost(),
-        AskOption(seat, tuple(payers), "Pay the Favor cost how?", FAVOR_PAYMENT, source_id),
+        AskOption(seat, tuple(options), "Pay the Favor cost how?", FAVOR_PAYMENT, source_id),
     ]
 
 
@@ -83,7 +83,7 @@ def _resolve_favor_payment(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Charge whichever payer the seat named."""
-    return favor_payers(game, seat).get(chosen[0], [])
+    return favor_payment_options(game, seat).get(chosen[0], [])
 
 
 def is_favor_action(game: GameState) -> bool:

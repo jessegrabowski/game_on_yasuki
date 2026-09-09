@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules.rulebook.favor import DISCARD_THE_FAVOR, favor_payers
+from yasuki_core.engine.rules.rulebook.favor import DISCARD_THE_FAVOR, favor_payment_options
 from yasuki_core.engine.rules.rulebook.favor import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
@@ -381,7 +381,7 @@ def test_manjodh_pays_a_favor_cost_by_bowing():
     """
     game = _manjodh_game()
 
-    resolve_effects(game, favor_payers(game, PlayerId.P1)["manjodh"])
+    resolve_effects(game, favor_payment_options(game, PlayerId.P1)["manjodh"])
 
     assert game.table.cards_by_id["manjodh"].bowed
     assert game.favor_holder is None, "he paid, and nobody held the Favor to begin with"
@@ -392,7 +392,7 @@ def test_a_bowed_manjodh_cannot_pay():
     game = _manjodh_game()
     game.table.cards_by_id["manjodh"].bow()
 
-    assert favor_payers(game, PlayerId.P1) == {}
+    assert favor_payment_options(game, PlayerId.P1) == {}
 
 
 def test_manjodh_will_not_pay_for_a_player_with_a_wind():
@@ -400,4 +400,4 @@ def test_manjodh_will_not_pay_for_a_player_with_a_wind():
     Wind may not take rulebook Favor actions at all."""
     game = _manjodh_game(has_wind=True)
 
-    assert favor_payers(game, PlayerId.P1) == {}
+    assert favor_payment_options(game, PlayerId.P1) == {}
