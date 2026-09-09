@@ -2,7 +2,8 @@ from dataclasses import replace
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import favor_proxy, state_based_actions, triggers
+from yasuki_core.engine.rules import state_based_actions, triggers
+from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
@@ -15,7 +16,7 @@ from yasuki_core.engine.rules.events import (
     Straightened,
     TurnStarted,
 )
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import activatable, permitted_timings
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState

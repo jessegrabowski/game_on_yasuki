@@ -9,6 +9,7 @@ yasuki_core.engine.rules.board.queries
 
     attack_targets
     has_keyword
+    opposing_units_in_battle
     owned_holdings
     owned_personalities
     personalities_in_play
@@ -18,6 +19,7 @@ yasuki_core.engine.rules.board.queries
     province_key_of
     province_zones
     sincerity_seed_targets
+    units_at
 
 .. automodule:: yasuki_core.engine.rules.board.queries
     :members:

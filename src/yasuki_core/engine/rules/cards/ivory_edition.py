@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.attachments import attachment_grant
+from yasuki_core.engine.rules.stats.attachment_grants import attachment_grant
 from yasuki_core.engine.rules.effects import Effect, Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState

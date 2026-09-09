@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_parent_cost, can_pay
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility
-from yasuki_core.engine.rules.attachments import attached_to
+from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.effects import AdjustCounter, Unpayable
 from yasuki_core.engine.session import EngineSession

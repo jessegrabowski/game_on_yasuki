@@ -1,7 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import location_of
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
     ChooseBattlefield,
@@ -9,10 +9,11 @@ from yasuki_core.engine.rules.decisions import (
     assignment,
     assignment_token,
 )
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor
-from yasuki_core.engine.rules.units import unit_force, units_at
+from yasuki_core.engine.rules.board.queries import units_at
+from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones

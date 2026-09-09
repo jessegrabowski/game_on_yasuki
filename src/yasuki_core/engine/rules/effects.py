@@ -3,9 +3,9 @@ from dataclasses import dataclass, replace
 from typing import ClassVar
 
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules import favor_proxy
+from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.players import Cause, PlayerId
-from yasuki_core.engine.rules.attachments import unit_of
+from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
@@ -606,7 +606,8 @@ class AttackEffect(Effect, ABC):
     *"Target a Follower or a Personality without Followers in the current enemy army. If its Force
     is equal to or less than X, destroy it."* Ranged and Melee destroy, Fear bows, and everything
     else is shared. Who may be targeted is
-    :func:`~yasuki_core.engine.rules.units.attackable`; this is the comparison and its consequence.
+    :func:`~yasuki_core.engine.rules.board.queries.attack_targets`; this is the comparison and its
+    consequence.
 
     The base exists because the CR names it: its Combining entry uses *"attack effect"* for the
     thing being combined and *"kind of effect"* for which of the three it is, so an effect that
@@ -646,7 +647,7 @@ class AttackEffect(Effect, ABC):
     def perform(self, game: GameState) -> list[GameEvent]:
         # Imported where it is used: reading an attack's strength walks the board for the cards
         # adjusting it, and that module imports this one for the attack types.
-        from yasuki_core.engine.rules.units import effective_strength
+        from yasuki_core.engine.rules.attack_effects import effective_strength
 
         card = game.table.cards_by_id.get(self.target_id)
         if card is None or effective_stat(game, card, self.compared) > effective_strength(

@@ -1,10 +1,10 @@
 from collections.abc import Iterator
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.units import attackable
-from yasuki_core.engine.table import Zone, ZoneKey, ZoneRole, province_holding
+from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.table import Zone, ZoneKey, ZoneRole, location_of, province_holding
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
@@ -48,8 +48,24 @@ def has_keyword(game: GameState, card: L5RCard, keyword: str) -> bool:
 def attack_targets(game: GameState, source: L5RCard) -> list[str]:
     """The ids an attack effect from ``source`` may be pointed at: the enemy army's Followers and
     its Personalities carrying none (CR, Ranged Attack). Empty outside a battle, which is what
-    keeps an attack ability from being offered where it has nothing to hit."""
-    return [card.id for card in attackable(game, source.owner)]
+    keeps an attack ability from being offered where it has nothing to hit.
+
+    The rule reaches the *army* rather than the seat, so it holds only what stands at the battle
+    being fought. A Personality is spared by a Follower alone — an Item or a Spell attached to him
+    is not one, and does not protect him.
+    """
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return []
+    enemy = attack.defender if source.owner is attack.attacker else attack.attacker
+    targets: list[str] = []
+    for personality in units_at(game, attack.current, enemy):
+        followers = followers_of(game, personality)
+        if followers:
+            targets.extend(follower.id for follower in followers)
+        else:
+            targets.append(personality.id)
+    return targets
 
 
 def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]:
@@ -102,3 +118,27 @@ def province_holdings(game: GameState, seat: PlayerId) -> list[str]:
         for card in province_cards(game, seat)
         if card.face_up and isinstance(card.printed, HoldingPrint)
     ]
+
+
+def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]:
+    """The Personalities ``seat`` has standing at ``battlefield``, in play order. One side of the
+    army there, since a seat's units at a battlefield are all on the same side of it."""
+    return [
+        card
+        for card in game.table.battlefield.cards
+        if card.owner is seat
+        and isinstance(card.printed, PersonalityPrint)
+        and location_of(game.table, card).battlefield == battlefield
+    ]
+
+
+def opposing_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The ids of the enemy Personalities ``seat`` faces at the battle now being fought.
+
+    Empty outside a battle, which is what withholds a Battle ability when no battle is open.
+    """
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return ()
+    enemy = attack.attacker if seat is attack.defender else attack.defender
+    return tuple(card.id for card in units_at(game, attack.current, enemy))

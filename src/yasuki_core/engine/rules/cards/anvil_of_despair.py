@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.effects import Ask, Bow, CreateToken, Effect, Move
 from yasuki_core.engine.rules.gold.payment import can_afford
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.units import followers_of
+from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.table import Location
 from yasuki_core.game_pieces.cards import L5RCard
 

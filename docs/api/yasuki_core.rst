@@ -50,7 +50,7 @@ yasuki_core
     yasuki_core.engine.rules.abilities.registry <yasuki_core.engine.rules.abilities.registry>
     yasuki_core.engine.rules.abilities.strategy <yasuki_core.engine.rules.abilities.strategy>
     yasuki_core.engine.rules.actions <yasuki_core.engine.rules.actions>
-    yasuki_core.engine.rules.attachments <yasuki_core.engine.rules.attachments>
+    yasuki_core.engine.rules.attack_effects <yasuki_core.engine.rules.attack_effects>
     yasuki_core.engine.rules.battle.records <yasuki_core.engine.rules.battle.records>
     yasuki_core.engine.rules.battle.resolution <yasuki_core.engine.rules.battle.resolution>
     yasuki_core.engine.rules.board.clans <yasuki_core.engine.rules.board.clans>
@@ -59,20 +59,16 @@ yasuki_core
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
     yasuki_core.engine.rules.events <yasuki_core.engine.rules.events>
-    yasuki_core.engine.rules.favor_proxy <yasuki_core.engine.rules.favor_proxy>
     yasuki_core.engine.rules.gold.cost <yasuki_core.engine.rules.gold.cost>
     yasuki_core.engine.rules.gold.discounts <yasuki_core.engine.rules.gold.discounts>
     yasuki_core.engine.rules.gold.payment <yasuki_core.engine.rules.gold.payment>
     yasuki_core.engine.rules.gold.producers <yasuki_core.engine.rules.gold.producers>
     yasuki_core.engine.rules.gold.production <yasuki_core.engine.rules.gold.production>
     yasuki_core.engine.rules.gold.self_grants <yasuki_core.engine.rules.gold.self_grants>
-    yasuki_core.engine.rules.keyword_grants <yasuki_core.engine.rules.keyword_grants>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
-    yasuki_core.engine.rules.ongoing_grants <yasuki_core.engine.rules.ongoing_grants>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
-    yasuki_core.engine.rules.provinces <yasuki_core.engine.rules.provinces>
     yasuki_core.engine.rules.registrar <yasuki_core.engine.rules.registrar>
     yasuki_core.engine.rules.registration_audit <yasuki_core.engine.rules.registration_audit>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
@@ -81,6 +77,7 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.equip <yasuki_core.engine.rules.rulebook.equip>
     yasuki_core.engine.rules.rulebook.favor_abilities <yasuki_core.engine.rules.rulebook.favor_abilities>
     yasuki_core.engine.rules.rulebook.favor_payment <yasuki_core.engine.rules.rulebook.favor_payment>
+    yasuki_core.engine.rules.rulebook.favor_proxy <yasuki_core.engine.rules.rulebook.favor_proxy>
     yasuki_core.engine.rules.rulebook.inheritance <yasuki_core.engine.rules.rulebook.inheritance>
     yasuki_core.engine.rules.rulebook.kharmic <yasuki_core.engine.rules.rulebook.kharmic>
     yasuki_core.engine.rules.rulebook.legacy <yasuki_core.engine.rules.rulebook.legacy>
@@ -88,14 +85,19 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.recruit <yasuki_core.engine.rules.rulebook.recruit>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_based_actions <yasuki_core.engine.rules.state_based_actions>
+    yasuki_core.engine.rules.stats.attachment_grants <yasuki_core.engine.rules.stats.attachment_grants>
     yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>
     yasuki_core.engine.rules.stats.card_values <yasuki_core.engine.rules.stats.card_values>
+    yasuki_core.engine.rules.stats.keyword_grants <yasuki_core.engine.rules.stats.keyword_grants>
+    yasuki_core.engine.rules.stats.ongoing_grants <yasuki_core.engine.rules.stats.ongoing_grants>
     yasuki_core.engine.rules.stats.province_strength <yasuki_core.engine.rules.stats.province_strength>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
     yasuki_core.engine.rules.turn.action_sequence <yasuki_core.engine.rules.turn.action_sequence>
+    yasuki_core.engine.rules.turn.provinces <yasuki_core.engine.rules.turn.provinces>
     yasuki_core.engine.rules.turn.sequence <yasuki_core.engine.rules.turn.sequence>
     yasuki_core.engine.rules.turn.structure <yasuki_core.engine.rules.turn.structure>
-    yasuki_core.engine.rules.units <yasuki_core.engine.rules.units>
+    yasuki_core.engine.rules.units.composition <yasuki_core.engine.rules.units.composition>
+    yasuki_core.engine.rules.units.membership <yasuki_core.engine.rules.units.membership>
     yasuki_core.engine.rules.victory <yasuki_core.engine.rules.victory>
     yasuki_core.engine.rules.work <yasuki_core.engine.rules.work>
     yasuki_core.engine.runner <yasuki_core.engine.runner>

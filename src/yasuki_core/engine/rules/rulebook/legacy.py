@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.effects import Discard, Effect, PlaceInProvince, ShuffleDeck, Then
 from yasuki_core.engine.rules.legality import legacy_candidates, legacy_key, legacy_search_pool
-from yasuki_core.engine.rules.provinces import defer_refill
+from yasuki_core.engine.rules.turn.provinces import defer_refill
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side

@@ -3,7 +3,8 @@ from collections.abc import Iterable, Iterator
 from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import favor_proxy, legality
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,

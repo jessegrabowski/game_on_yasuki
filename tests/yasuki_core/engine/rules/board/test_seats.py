@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.queries import has_keyword
-from yasuki_core.engine.rules.keyword_grants import KEYWORD_GRANTS, keyword_grant
+from yasuki_core.engine.rules.stats.keyword_grants import KEYWORD_GRANTS, keyword_grant
 from yasuki_core.engine.rules.board.seats import (
     cards_in_play,
     cards_named,

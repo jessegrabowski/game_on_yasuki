@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import PlayStrategy
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.gates_of_tengoku import SASADAS_OROCHI
 from yasuki_core.engine.rules.decisions import (
     ChooseAmount,
@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.triggers import fire
-from yasuki_core.engine.rules.units import unit_force
+from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard

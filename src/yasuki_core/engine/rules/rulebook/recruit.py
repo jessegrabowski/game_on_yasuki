@@ -13,9 +13,9 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import proclaim_key, recruit_cost
-from yasuki_core.engine.rules.provinces import defer_refill
+from yasuki_core.engine.rules.turn.provinces import defer_refill
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.work import FinishRecruit, ResolveRecruit

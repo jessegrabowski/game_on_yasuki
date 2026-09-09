@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itse
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import attack_targets, personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.attachments import attached_to
+from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.board.clans import is_clan

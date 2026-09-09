@@ -11,7 +11,7 @@ from yasuki_core.engine.table import (
 )
 from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, MoveCard
 from yasuki_core.engine.rules.actions import ActivateAbility
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.decisions import ChooseDistribution, DecisionResponse
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.session import EngineSession

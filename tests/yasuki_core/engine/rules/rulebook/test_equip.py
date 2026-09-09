@@ -1,9 +1,12 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.keyword_grants import keyword_grant, KEYWORD_GRANTS
+from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
 from yasuki_core.engine.rules.effects import AttachCard
 from yasuki_core.engine.rules.rulebook.equip import (
     creation_targets,
+    has_caster,
+    is_spell,
+    may_cast_spells,
     equip_targets,
     may_attach,
     may_attach_weapon,
@@ -11,6 +14,7 @@ from yasuki_core.engine.rules.rulebook.equip import (
 )
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint
 
@@ -327,3 +331,46 @@ def test_an_item_is_indifferent_to_shugenja():
     bushi = put_in_play(game, personality("bushi", keywords=("Bushi",)))
 
     assert may_attach(game, bushi, attachment("boots"))
+
+
+def test_only_an_attachment_typed_spell_is_a_spell():
+    """The type lives on the print and only attachments carry one, so a Personality has to answer
+    False rather than raise on the missing attribute."""
+    game = two_seat_game()
+    spell = put_in_play(game, attachment("scroll", owner=P1, attachment_type=AttachmentType.SPELL))
+    item = put_in_play(game, attachment("blade", owner=P1, attachment_type=AttachmentType.ITEM))
+    person = put_in_play(game, personality("shiba", owner=P1))
+
+    assert is_spell(spell)
+    assert not is_spell(item)
+    assert not is_spell(person)
+
+
+def test_only_a_shugenja_may_cast_spells():
+    game = two_seat_game()
+    shugenja = put_in_play(game, personality("isawa", owner=P1, keywords=(keywords.SHUGENJA,)))
+    bushi = put_in_play(game, personality("hida", owner=P1))
+
+    assert may_cast_spells(game, shugenja)
+    assert not may_cast_spells(game, bushi)
+
+
+def test_a_spell_has_a_caster_only_while_it_hangs_on_one():
+    """A Spell attached to a Personality who cannot cast it is the case that matters: it is in play
+    and on a unit, and still has no caster."""
+    game = two_seat_game()
+    put_in_play(game, personality("isawa", owner=P1, keywords=(keywords.SHUGENJA,)))
+    put_in_play(game, personality("hida", owner=P1))
+    cast = attached(
+        game, attachment("held", owner=P1, attachment_type=AttachmentType.SPELL), "isawa"
+    )
+    stray = attached(
+        game, attachment("loose", owner=P1, attachment_type=AttachmentType.SPELL), "hida"
+    )
+    unattached = put_in_play(
+        game, attachment("free", owner=P1, attachment_type=AttachmentType.SPELL)
+    )
+
+    assert has_caster(game, cast)
+    assert not has_caster(game, stray)
+    assert not has_caster(game, unattached)

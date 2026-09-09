@@ -12,6 +12,7 @@ yasuki_core.engine.rules.legality
     cycle_candidates
     cycle_key
     has_absent_ability
+    has_presence
     has_wind
     inheritance_key
     is_first_turn
@@ -25,6 +26,7 @@ yasuki_core.engine.rules.legality
     legacy_search_pool
     legal_actions
     legal_targets
+    location_permits
     permits
     permitted_timings
     proclaim_key
