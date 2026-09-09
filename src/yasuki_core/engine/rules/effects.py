@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from typing import ClassVar
 
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules import favor
+from yasuki_core.engine.rules import favor_proxy
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.attachments import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
@@ -36,7 +36,7 @@ from yasuki_core.engine.rules.modifiers import (
     ProvinceModifier,
     Stat,
 )
-from yasuki_core.engine.rules.state import GameState, once_per_turn
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, flow_resolves
 from yasuki_core.engine.rules.work import ApplyEffects
 from yasuki_core.engine.table import (
@@ -431,7 +431,7 @@ class TakeFavor(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.favor_holder = self.seat
-        favor.sync_proxy(game)
+        favor_proxy.sync_proxy(game)
         return []
 
 
@@ -451,7 +451,7 @@ class DiscardFavor(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         if game.favor_holder is self.seat:
             game.favor_holder = None
-            favor.sync_proxy(game)
+            favor_proxy.sync_proxy(game)
         return []
 
 
@@ -474,7 +474,7 @@ class GrantModifier(Effect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(
+        game.ongoing.append(
             Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
         )
         return []
@@ -503,7 +503,7 @@ class GrantMinimum(Effect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(
+        game.ongoing.append(
             Minimum(self.source_id, self.target_id, self.stat, self.value, self.duration)
         )
         return []
@@ -530,7 +530,7 @@ class GrantProvinceStrength(Effect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(
+        game.ongoing.append(
             ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )
         return []
@@ -554,7 +554,7 @@ class SpendOncePerTurn(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
         if card is not None:
-            once_per_turn(game, card, self.tag)
+            claim_once_per_turn(game, card, self.tag)
         return []
 
 
@@ -595,7 +595,7 @@ class GrantLobbyBonus(Effect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(LobbyModifier(self.source_id, self.seat, self.amount, self.duration))
+        game.ongoing.append(LobbyModifier(self.source_id, self.seat, self.amount, self.duration))
         return []
 
 
@@ -724,7 +724,7 @@ class GrantKeyword(Effect):
         return f"{self.source_id} gives {self.target_id} {self.keyword} ({self.duration.name})"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(
+        game.ongoing.append(
             KeywordGrant(self.source_id, self.target_id, self.keyword, self.duration)
         )
         return []
@@ -1253,7 +1253,7 @@ class RecruitCard(InterruptingEffect):
     def request(self, game: GameState) -> DecisionRequest:
         # Announcing a recruit builds a payment, and the payment loop is written in the effects
         # this module defines -- so the entry point is reached lazily whatever module holds it.
-        from yasuki_core.engine.rules.recruit import announce_recruit
+        from yasuki_core.engine.rules.rulebook.recruit import announce_recruit
 
         card = game.table.cards_by_id[self.card_id]
         return announce_recruit(game, card, card.owner, invest_amount=None, renew=self.renew)

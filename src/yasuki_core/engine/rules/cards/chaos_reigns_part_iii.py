@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_discount
-from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls
+from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls_printed
 from yasuki_core.engine.rules.effects import (
     Choose,
     CreateToken,
@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     ShuffleDeck,
 )
-from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.board.queries import province_zones
@@ -216,7 +216,7 @@ register_ability(
 @recruit_discount("moto_traders")
 def _moto_traders_recruit_discount(card: L5RCard, game: GameState, seat: PlayerId) -> int:
     """Enters play for 1 less Gold if you control another Merchant Caravan."""
-    return 1 if seat_controls(game, seat, keywords.MERCHANT_CARAVAN, other_than=card) else 0
+    return 1 if seat_controls_printed(game, seat, keywords.MERCHANT_CARAVAN, other_than=card) else 0
 
 
 def _moto_traders_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -232,7 +232,7 @@ register_ability(
         cost=bow_cost,
         targets=itself,
         effects=_moto_traders_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 
@@ -256,7 +256,7 @@ register_ability(
         cost=bow_cost,
         targets=itself,
         effects=_walk_with_tengoku_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 

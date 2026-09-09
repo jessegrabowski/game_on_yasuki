@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.effects import DestroyProvince, Discard, RefillPro
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.turn.action_sequence import run_stack, submit
 from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
-from yasuki_core.engine.rules.recruit import recruit
+from yasuki_core.engine.rules.rulebook.recruit import recruit
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard

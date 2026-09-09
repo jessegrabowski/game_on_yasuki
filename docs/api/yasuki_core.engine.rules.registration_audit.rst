@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.card_registry
-======================================
+yasuki_core.engine.rules.registration_audit
+===========================================
 
-.. currentmodule:: yasuki_core.engine.rules.card_registry
+.. currentmodule:: yasuki_core.engine.rules.registration_audit
 
 .. rubric:: Functions
 
@@ -16,6 +16,6 @@ yasuki_core.engine.rules.card_registry
     short_ability_registrations
     unregistered_card_ids
 
-.. automodule:: yasuki_core.engine.rules.card_registry
+.. automodule:: yasuki_core.engine.rules.registration_audit
     :members:
     :undoc-members:

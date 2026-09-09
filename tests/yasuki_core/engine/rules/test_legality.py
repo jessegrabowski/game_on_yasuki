@@ -63,7 +63,7 @@ from yasuki_core.engine.bots.policies import make_policy
 from yasuki_core.engine.runner import Controls, run_game
 from yasuki_core.game_setup import build_state_from_deck
 from tests.yasuki_core.db_guard import requires_db
-from yasuki_core.engine.rules import recruit
+from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import sequence
 
 DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
@@ -561,7 +561,7 @@ for _probe, _tireless in (("test_bows_to_act", False), ("test_acts_while_bowed",
             cost=no_cost,
             targets=itself,
             effects=lambda game, source, target: [],
-            all_targets=True,
+            hits_every_target=True,
             tireless=_tireless,
         ),
     )
@@ -600,7 +600,7 @@ for _probe, _tireless in (("test_absent_probe", False), ("test_absent_tireless_p
             cost=no_cost,
             targets=itself,
             effects=lambda game, source, target: [],
-            all_targets=True,
+            hits_every_target=True,
             battle_designators=frozenset({BattleDesignator.ABSENT}),
             tireless=_tireless,
         ),

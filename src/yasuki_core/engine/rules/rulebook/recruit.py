@@ -150,7 +150,7 @@ def _announce_entering_play(
     # A card reaching the battlefield can make the board illegal, and the board is made legal
     # before anything is told the card arrived — a trigger that reads a state the rules say cannot
     # exist is deciding on a board that never legally existed.
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
     game.stack.append(FinishRecruit(card_id, invest_amount, proclaim))
     triggers.fire(game, EnteredPlay(card_id))

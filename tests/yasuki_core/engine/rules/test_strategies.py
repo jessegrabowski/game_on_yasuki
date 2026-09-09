@@ -59,7 +59,7 @@ register_ability(
         cost=lambda game, source: [],
         targets=itself,
         effects=lambda game, source, target: [_PutItIntoPlay(source.id)],
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.HAND,),
     ),
 )
@@ -187,8 +187,8 @@ def test_the_target_is_the_one_the_seat_chose():
 
 
 def test_an_untargeted_strategy_still_resolves_before_it_is_discarded():
-    """An `all_targets` ability pauses for nothing, so the whole play drains in one pass and the
-    ordering rests entirely on the discard being stacked under the ability's own work."""
+    """A `hits_every_target` ability pauses for nothing, so the whole play drains in one pass and
+    the ordering rests entirely on the discard being stacked under the ability's own work."""
     register_ability(
         "test_untargeted_strategy",
         Ability(
@@ -199,7 +199,7 @@ def test_an_untargeted_strategy_still_resolves_before_it_is_discarded():
                 held.id for held in game.table.battlefield.cards if held.owner is card.owner
             ],
             effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
-            all_targets=True,
+            hits_every_target=True,
             located_at=(CardLocation.HAND,),
         ),
     )

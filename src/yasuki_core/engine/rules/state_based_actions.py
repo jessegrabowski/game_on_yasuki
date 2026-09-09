@@ -10,12 +10,12 @@ from yasuki_core.engine.rules.victory import VictoryRule
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
-# A state rule reads the board and returns the effects the rules demand of it. Unlike a trigger it
+# A state-based action reads the board and returns the effects the rules demand of it. Unlike a trigger it
 # answers to no event: the CR states these as conditions that hold at all times rather than as
 # consequences of something happening, so a rule fires however the board came to break it. The
 # Chi Death Rule is the one modeled here; a seat losing its last Province, a seat controlling five
 # Rings of different elements, and a destroyed Province ending its battlefield are the same shape.
-StateRule = Callable[[GameState], list[Effect]]
+StateBasedAction = Callable[[GameState], list[Effect]]
 
 # The cards whose own text exempts them from the Chi Death Rule, by printed id. Each says so
 # plainly — "Stone Breaker will not be destroyed for having 0 Chi" — which the CR permits as a
@@ -99,16 +99,20 @@ def lost_last_province(game: GameState) -> list[Effect]:
 
 
 # The rulebook's own list, in the order they are checked.
-STATE_RULES: tuple[StateRule, ...] = (chi_death, orphaned_attachments, lost_last_province)
+STATE_BASED_ACTIONS: tuple[StateBasedAction, ...] = (
+    chi_death,
+    orphaned_attachments,
+    lost_last_province,
+)
 
 
 def demanded(game: GameState) -> list[Effect]:
     """What the rules demand of the board as it stands, or an empty list when it is already legal."""
-    return [effect for rule in STATE_RULES for effect in rule(game)]
+    return [effect for rule in STATE_BASED_ACTIONS for effect in rule(game)]
 
 
 # The two victory conditions the CR states at a moment in the turn rather than as a condition that
-# holds at all times, so neither belongs in STATE_RULES: a seat may pass through the Honor Victory
+# holds at all times, so neither belongs in STATE_BASED_ACTIONS: a seat may pass through the Honor Victory
 # threshold mid-turn and be back below it by the time its next turn starts, and that is not a win.
 # The flow calls each at the boundary it names.
 def honor_victory(game: GameState) -> list[Effect]:

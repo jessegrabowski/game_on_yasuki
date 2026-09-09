@@ -47,12 +47,12 @@ from yasuki_core.engine.rules.decisions import (
     LeaveBowed,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.equip import apply_equip_target, resolve_equip, equip
+from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, resolve_equip, equip
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.gold.production import complete_production, produce_gold
 from yasuki_core.engine.rules.provinces import refill_short_provinces
-from yasuki_core.engine.rules.recruit import (
+from yasuki_core.engine.rules.rulebook.recruit import (
     apply_fortification_province,
     apply_invest_amount,
     finish_recruit,
@@ -61,7 +61,7 @@ from yasuki_core.engine.rules.recruit import (
 )
 from yasuki_core.engine.rules.rulebook.cycle import cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
-from yasuki_core.engine.rules.rulebook.favor import use_favor_ability
+from yasuki_core.engine.rules.rulebook.favor_payment import use_favor_ability
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
 from yasuki_core.engine.rules.rulebook.kharmic import kharmic_draw, kharmic_refill
 from yasuki_core.engine.rules.rulebook.legacy import (

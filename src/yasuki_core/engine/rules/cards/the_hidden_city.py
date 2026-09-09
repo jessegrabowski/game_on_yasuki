@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.effects import (
     Show,
     ShuffleDeck,
 )
-from yasuki_core.engine.rules.equip import attach_restriction
+from yasuki_core.engine.rules.rulebook.equip import attach_restriction
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.modifiers import Duration
@@ -103,7 +103,7 @@ register_ability(
         cost=no_cost,
         targets=itself,
         effects=_outer_walls_effects,
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.HAND,),
         battle_designators=frozenset({BattleDesignator.ABSENT}),
     ),

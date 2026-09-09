@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.events import EnteredPlay
-from yasuki_core.engine.rules.rulebook.favor import favor_payers
+from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_options
 from yasuki_core.engine.rules.effects import Straighten, TakeFavor
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
@@ -906,7 +906,7 @@ def test_man_the_walls_reaches_a_target_left_at_home():
 def test_the_province_gains_the_targets_force():
     """The Force he has, not the Force he prints: a bonus already on him counts toward the wall."""
     session = _man_the_walls_battle()
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Modifier("banner", "rear", Stat.FORCE, 1, Duration.UNTIL_END_OF_TURN)
     )
     before = effective_province_strength(session.game, WALLED_PROVINCE)
@@ -960,7 +960,7 @@ def test_the_bonus_does_not_follow_the_targets_force_afterwards():
     before = effective_province_strength(session.game, WALLED_PROVINCE)
     _play_walls(session, "rear")  # 2 Force
 
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Modifier("later", "rear", Stat.FORCE, -2, Duration.UNTIL_END_OF_TURN)
     )
 
@@ -983,26 +983,26 @@ def test_iweko_miaka_pays_a_favor_cost_for_nothing():
     game = _miaka_game()
     TakeFavor(P1).perform(game)
 
-    resolve_effects(game, favor_payers(game, P1)["miaka"])
+    resolve_effects(game, favor_payment_options(game, P1)["miaka"])
 
     assert game.favor_holder is P1, "she paid instead of the Favor"
 
 
 def test_iweko_miaka_pays_only_once_a_turn():
     game = _miaka_game()
-    resolve_effects(game, favor_payers(game, P1)["miaka"])
+    resolve_effects(game, favor_payment_options(game, P1)["miaka"])
 
-    assert favor_payers(game, P1) == {}
+    assert favor_payment_options(game, P1) == {}
 
 
 def test_iweko_miakas_use_comes_back_next_turn():
     """The limit is per turn, so a new turn restores it."""
     game = _miaka_game()
-    resolve_effects(game, favor_payers(game, P1)["miaka"])
+    resolve_effects(game, favor_payment_options(game, P1)["miaka"])
 
     game.turn += 1
 
-    assert set(favor_payers(game, P1)) == {"miaka"}
+    assert set(favor_payment_options(game, P1)) == {"miaka"}
 
 
 def test_offering_iweko_miaka_does_not_spend_her_use():
@@ -1010,7 +1010,7 @@ def test_offering_iweko_miaka_does_not_spend_her_use():
     must not consume the turn's use."""
     game = _miaka_game()
 
-    favor_payers(game, P1)
-    favor_payers(game, P1)
+    favor_payment_options(game, P1)
+    favor_payment_options(game, P1)
 
-    assert set(favor_payers(game, P1)) == {"miaka"}
+    assert set(favor_payment_options(game, P1)) == {"miaka"}

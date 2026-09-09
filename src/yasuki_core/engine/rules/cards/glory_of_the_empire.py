@@ -44,6 +44,6 @@ register_ability(
         cost=_traveling_peddler_cost,
         targets=itself,
         effects=_traveling_peddler_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )

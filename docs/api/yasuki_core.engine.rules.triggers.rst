@@ -18,7 +18,7 @@ yasuki_core.engine.rules.triggers
     at_cap
     caused_by
     choice_resolver
-    enforce_state_rules
+    enforce_state_based_actions
     fire
     on
     resolve_delayed

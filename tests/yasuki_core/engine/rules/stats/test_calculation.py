@@ -26,7 +26,7 @@ def _personality(card_id: str = "p", *, force: int = 2, chi: int = 3, counters=N
 def _game(card: L5RCard, modifiers=()) -> GameState:
     game = two_seat_game()
     put_in_play(game, card)
-    game.modifiers.extend(modifiers)
+    game.ongoing.extend(modifiers)
     return game
 
 
@@ -205,7 +205,7 @@ def test_a_minimum_floors_only_the_card_it_names():
     other = _personality("b", chi=2)
     game = _game(samurai, [Minimum("src", samurai.id, Stat.CHI, 1, Duration.UNTIL_END_OF_TURN)])
     put_in_play(game, other)
-    game.modifiers.append(Modifier("src", other.id, Stat.CHI, -5, Duration.UNTIL_END_OF_TURN))
+    game.ongoing.append(Modifier("src", other.id, Stat.CHI, -5, Duration.UNTIL_END_OF_TURN))
 
     assert effective_chi(game, other) == 0
 

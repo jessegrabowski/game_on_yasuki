@@ -36,11 +36,11 @@ repos:
 
 - repo: local
   hooks:
-    - id: card-registry
+    - id: registration-audit
       name: card handlers name real cards
       # Needs the project environment, which CI's pre-commit job does not have; the pytest test in
-      # tests/yasuki_core/engine/rules/test_card_registry.py is what guards this in CI.
-      entry: python -m yasuki_core.engine.rules.card_registry
+      # tests/yasuki_core/engine/rules/test_registration_audit.py is what guards this in CI.
+      entry: python -m yasuki_core.engine.rules.registration_audit
       language: system
       pass_filenames: false
       # The card data matters as much as the handlers: renaming a card orphans every handler

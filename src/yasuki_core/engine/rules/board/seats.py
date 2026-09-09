@@ -27,7 +27,7 @@ def went_second(game: GameState, seat: PlayerId) -> bool:
     return seat is not game.first_player
 
 
-def seat_controls(
+def seat_controls_printed(
     game: GameState, seat: PlayerId, keyword: str, *, other_than: L5RCard | None = None
 ) -> bool:
     """Whether ``seat`` controls an in-play card printing ``keyword``.

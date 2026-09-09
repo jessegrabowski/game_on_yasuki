@@ -35,7 +35,7 @@ register_ability(
         cost=bow_cost,
         targets=_poorly_placed_garden_targets,
         effects=_poorly_placed_garden_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 

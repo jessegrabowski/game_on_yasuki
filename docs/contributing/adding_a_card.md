@@ -53,7 +53,7 @@ def _colonial_farm_recruit_discount(card: L5RCard, game: GameState, seat: Player
 
 Every handler is handed the game and the seat it acts for, and asks the narrow question it needs.
 The shared predicates live in the `board/` package: `is_clan` in `board/clans.py`, and
-`seat_controls`, `seat_stronghold`, `cards_in_play`, `cards_named` and `went_second` in
+`seat_controls_printed`, `seat_stronghold`, `cards_in_play`, `cards_named` and `went_second` in
 `board/seats.py`. Look there before writing a predicate, since most clan and keyword questions
 already have one.
 
@@ -305,7 +305,7 @@ card and hits it without asking:
 
 ```python
         targets=itself,
-        all_targets=True,
+        hits_every_target=True,
 ```
 
 ## Cards that attack

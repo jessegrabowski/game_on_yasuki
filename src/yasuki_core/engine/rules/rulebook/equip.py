@@ -178,6 +178,6 @@ def resolve_equip(
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
     # Legal before anything is told it arrived, for the reason _put_into_play gives.
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
     triggers.fire(game, EnteredPlay(card_id, from_hand=True))
     finish_invest(game, card, invest_amount)

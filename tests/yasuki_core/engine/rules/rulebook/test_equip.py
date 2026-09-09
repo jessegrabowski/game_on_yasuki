@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
 from yasuki_core.engine.rules.effects import AttachCard
-from yasuki_core.engine.rules.equip import (
+from yasuki_core.engine.rules.rulebook.equip import (
     creation_targets,
     equip_targets,
     may_attach,
@@ -224,7 +224,7 @@ def test_an_effect_can_raise_the_limit_like_any_other_characteristic():
     attached(game, _weapon("katana"), "hero")
     assert may_attach_weapon(game, hero, _weapon("wakizashi")) is False
 
-    game.modifiers.append(
+    game.ongoing.append(
         Modifier("event", hero.id, Stat.WEAPON_LIMIT, 1, Duration.UNTIL_END_OF_TURN)
     )
 

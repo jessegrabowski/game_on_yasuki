@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook.favor import favor_payer
+from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_event_entry
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
@@ -42,7 +42,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.modifiers import Duration, Stat
@@ -107,8 +107,8 @@ def _resolve_red_panda_spirit_keep(
 
 def _blessings_of_the_red_panda_spirit_targets(game: GameState, card: L5RCard) -> list[str]:
     """The Event itself. The ability names no card at all, but an ability whose candidates are empty
-    is never offered, so it stands as its own — paired with ``all_targets`` so the seat is not asked
-    to pick the only thing there is."""
+    is never offered, so it stands as its own — paired with ``hits_every_target`` so the seat is
+    not asked to pick the only thing there is."""
     return [card.id]
 
 
@@ -146,7 +146,7 @@ register_ability(
         cost=no_cost,
         targets=_blessings_of_the_red_panda_spirit_targets,
         effects=_blessings_of_the_red_panda_spirit_effects,
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.PROVINCE,),
     ),
 )
@@ -230,7 +230,7 @@ register_ability(
         cost=_bound_in_blood_cost,
         targets=itself,
         effects=lambda game, source, target: [],
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 
@@ -384,7 +384,7 @@ register_ability(
         cost=bow_cost,
         targets=itself,
         effects=_culling_grounds_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 

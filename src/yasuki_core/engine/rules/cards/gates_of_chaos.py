@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.effects import DelayStraighten, Effect, GainHonor,
 from yasuki_core.engine.rules.events import ProducingGold
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
-from yasuki_core.engine.rules.state import GameState, once_per_turn
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -36,7 +36,7 @@ def _resolve_jade_mine_grant(
     if not chosen:
         return []
     card = game.table.cards_by_id[chosen[0]]
-    once_per_turn(game, card, SELF_GRANT)
+    claim_once_per_turn(game, card, SELF_GRANT)
     return [
         GrantModifier(
             card.id, card.id, Stat.GOLD_PRODUCTION, JADE_MINE_GRANT, Duration.UNTIL_END_OF_TURN
@@ -76,7 +76,7 @@ def _resolve_slave_pits_grant(
     if not chosen:
         return []
     card = game.table.cards_by_id[chosen[0]]
-    once_per_turn(game, card, SELF_GRANT)
+    claim_once_per_turn(game, card, SELF_GRANT)
     return [
         GrantModifier(
             card.id, card.id, Stat.GOLD_PRODUCTION, SLAVE_PITS_GRANT, Duration.UNTIL_END_OF_TURN

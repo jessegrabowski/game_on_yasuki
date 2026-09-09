@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import recruit
+from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.gold.production import effective_gold_production
@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
     apply_effect,
     choice_resolver,
-    enforce_state_rules,
+    enforce_state_based_actions,
     fire,
     on,
     resolve_effects,
@@ -560,7 +560,7 @@ def test_chi_death_names_the_rule_rather_than_a_seat():
     )
     put_in_play(game, doomed)
 
-    enforce_state_rules(game)
+    enforce_state_based_actions(game)
 
     assert probe.note == Rulebook.CHI_DEATH.name
 
@@ -622,7 +622,7 @@ def test_a_departed_card_reacts_to_nothing_but_its_own_leaving(reacting):
 
 def test_a_card_killed_as_it_arrives_still_takes_no_enter_play_trigger(reacting):
     """The narrowness is the point: only a departure reaches a card off the battlefield. An arrival
-    does not, so a Personality a state rule killed on sight cannot go on to take his enter-play
+    does not, so a Personality a state-based action killed on sight cannot go on to take his enter-play
     trait — which is what settling those rules before announcing the arrival is for."""
     game = two_seat_game()
     doomed = put_in_play(game, holding("P1-doomed", printed_id="departure_probe"))

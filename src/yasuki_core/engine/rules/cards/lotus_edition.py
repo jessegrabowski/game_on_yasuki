@@ -87,7 +87,7 @@ register_ability(
         cost=_hired_killer_cost,
         targets=itself,
         effects=lambda game, source, target: [],
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.HAND,),
     ),
 )

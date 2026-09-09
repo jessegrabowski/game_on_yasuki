@@ -5,7 +5,7 @@ from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.actions import Recruit
-from yasuki_core.engine.rules import equip
+from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.decisions import (
@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.gold.production import gold_handler, GOLD_HANDLERS
 from yasuki_core.engine.rules.gold.self_grants import GOLD_SELF_GRANT, register_self_grant
-from yasuki_core.engine.rules.board.seats import seat_controls
+from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.effects import (
     Ask,
     Destroy,
@@ -144,7 +144,7 @@ def test_a_payment_stranded_by_its_own_answer_raises():
 
         @gold_handler("paired_probe")
         def _paired(card, game_, seat, targets):
-            paired = seat_controls(game_, seat, "Probe", other_than=card)
+            paired = seat_controls_printed(game_, seat, "Probe", other_than=card)
             return card.gold_production + (1 if paired else 0)
 
         # Quoted 4 (sd with its own grant) + 3 (pp, paired with sd) = 7. Once sd has destroyed

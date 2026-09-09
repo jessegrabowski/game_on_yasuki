@@ -2,7 +2,7 @@ from dataclasses import replace
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import favor, state_rules, triggers
+from yasuki_core.engine.rules import favor_proxy, state_based_actions, triggers
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
@@ -166,7 +166,7 @@ def _end_turn(game: GameState) -> None:
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     # A rulebook proxy is not a card, so it neither counts toward the limit nor can be discarded to
     # meet it.
-    held = [card for card in hand.cards if not favor.is_rulebook_proxy(card)]
+    held = [card for card in hand.cards if not favor_proxy.is_rulebook_proxy(card)]
     excess = len(held) - MAX_HAND_SIZE
     if excess > 0:
         candidates = tuple(card.id for card in held)
@@ -192,11 +192,11 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
 def begin_next_turn(game: GameState) -> None:
     # Drop until-end-of-turn modifiers as the turn ends; the comprehension keeps creation order so
     # the list rebuilds identically under replay.
-    game.modifiers = [m for m in game.modifiers if m.duration is not Duration.UNTIL_END_OF_TURN]
+    game.ongoing = [m for m in game.ongoing if m.duration is not Duration.UNTIL_END_OF_TURN]
     # Modifiers expiring can make the board illegal on their own, with no effect committing and so
     # no cascade to catch it. Settle that before the new turn starts and anything reads the board.
-    triggers.enforce_state_rules(game)
-    triggers.resolve_effects(game, state_rules.dishonor_loss(game))
+    triggers.enforce_state_based_actions(game)
+    triggers.resolve_effects(game, state_based_actions.dishonor_loss(game))
     if game.game_over:
         return
     game.turn += 1
@@ -214,7 +214,7 @@ def _begin_turn(game: GameState) -> None:
     (CR, May Remain Bowed). Pausing there leaves the rest of the turn's opening for the submit that
     answers.
     """
-    triggers.resolve_effects(game, state_rules.honor_victory(game))
+    triggers.resolve_effects(game, state_based_actions.honor_victory(game))
     if game.game_over:
         return
     open_round(game)

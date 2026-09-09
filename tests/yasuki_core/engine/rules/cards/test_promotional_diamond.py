@@ -154,7 +154,7 @@ def test_the_count_follows_the_victims_chi_as_it_stands():
     """ "Equal to their Chi" reads the board, so a Personality carrying a Chi penalty when he is
     destroyed makes that many fewer Followers — and costs that much less Honor."""
     session = _suiteiru_game()
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Modifier("penalty", "victim", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN)
     )
 

@@ -3,7 +3,8 @@ from collections.abc import Iterable, Iterator
 from typing import NamedTuple, Protocol
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import favor, favor_abilities, legality
+from yasuki_core.engine.rules import favor_proxy, legality
+from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
     Action,
@@ -219,7 +220,7 @@ class GameRunner:
         player looks for them, so it is what they are hung off.
         """
         card = self.session.game.table.cards_by_id.get(card_id)
-        if card is None or not favor.is_rulebook_proxy(card) or card.owner is not self.human:
+        if card is None or not favor_proxy.is_rulebook_proxy(card) or card.owner is not self.human:
             return []
         offered = {
             action.key: action

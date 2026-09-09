@@ -10,7 +10,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 def granted_keywords(game: GameState, card: L5RCard) -> Iterator[str]:
     """Every keyword another card's recorded grant gives ``card`` right now."""
-    for grant in game.modifiers:
+    for grant in game.ongoing:
         if isinstance(grant, KeywordGrant) and grant.target_id == card.id:
             if grant_applies(game, grant):
                 yield grant.keyword

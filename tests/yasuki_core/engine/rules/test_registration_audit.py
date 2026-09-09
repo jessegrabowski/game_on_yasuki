@@ -5,8 +5,8 @@ import sys
 
 from yasuki_core.engine import bots, rules
 from yasuki_core.engine.rules import cards
-from yasuki_core.engine.rules import card_registry
-from yasuki_core.engine.rules.card_registry import (
+from yasuki_core.engine.rules import registration_audit
+from yasuki_core.engine.rules.registration_audit import (
     card_keyed_data,
     duplicate_registrations,
     main,
@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.card_registry import (
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
 
-# The per-card registries card_registry validates by name. Everything built through the
+# The per-card registries registration_audit validates by name. Everything built through the
 # registrar is absent on purpose -- those report themselves, which is the point of it.
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
@@ -50,8 +50,9 @@ COLLECTIONS = ("dict", "set", "frozenset")
 REGISTRAR = ("FlagRegistry", "HandlerRegistry")
 
 
-# Every package card_registry validates a registry in. `bots` is here because the ability hints are
-# keyed by printed id like any other per-card registry, so the scan has to follow it out of `rules`.
+# Every package registration_audit validates a registry in. `bots` is here because the ability
+# hints are keyed by printed id like any other per-card registry, so the scan has to follow it out
+# of `rules`.
 SCANNED = (rules, bots)
 
 
@@ -106,7 +107,7 @@ def test_every_registered_handler_names_a_real_card():
     # module-global and several test modules register handlers on invented ids as they import, so an
     # in-process check would see their leavings rather than the shipped registrations.
     finished = subprocess.run(
-        [sys.executable, "-m", "yasuki_core.engine.rules.card_registry"],
+        [sys.executable, "-m", "yasuki_core.engine.rules.registration_audit"],
         capture_output=True,
         text=True,
     )
@@ -144,8 +145,8 @@ KNOWINGLY_EMPTY: set[str] = set()
 
 
 def test_no_registry_reports_as_empty():
-    # An empty frozenset here means card_registry read an attribute that is no longer the registry,
-    # which looks exactly like a clean bill of health. The data lists answer to it too — one emptied
+    # An empty frozenset here means registration_audit read an attribute that is no longer the
+    # registry, which looks exactly like a clean bill of health. The data lists answer to it too — one emptied
     # by a rename would report every card in it as validated.
     populated = {
         name: ids for name, ids in registered_card_ids().items() if name not in KNOWINGLY_EMPTY
@@ -253,7 +254,7 @@ def test_printed_ability_count_reads_the_designators_a_card_spells_out():
         "+3 strength. <b>Reaction:</b> After a Ranged Attack is targeted: Give it -2 strength."
     )
 
-    assert card_registry.printed_ability_count(text) == 2
+    assert registration_audit.printed_ability_count(text) == 2
 
 
 def test_a_colon_inside_an_abilitys_prose_does_not_head_a_second_one():
@@ -264,7 +265,7 @@ def test_a_colon_inside_an_abilitys_prose_does_not_head_a_second_one():
         "Nonhuman Follower to Ikarichi."
     )
 
-    assert card_registry.printed_ability_count(text) == 0
+    assert registration_audit.printed_ability_count(text) == 0
 
 
 def test_a_qualified_designator_still_heads_an_ability():
@@ -272,7 +273,7 @@ def test_a_qualified_designator_still_heads_an_ability():
     designator and the ability is still an ability."""
     text = "<b>Tireless Response:</b> Straighten a unit.<br><b>Absent Battle:</b> Bow a Follower."
 
-    assert card_registry.printed_ability_count(text) == 2
+    assert registration_audit.printed_ability_count(text) == 2
 
 
 # The cards shipping with fewer abilities registered than they print. Each behaves correctly in the
@@ -287,6 +288,6 @@ COUNTED_SHORT = {"commanding_favor"}
 
 
 def test_no_card_registers_less_than_it_prints_but_the_known_few():
-    reported = {line.split()[1] for line in card_registry.short_ability_registrations()}
+    reported = {line.split()[1] for line in registration_audit.short_ability_registrations()}
 
     assert reported == KNOWN_SHORT | COUNTED_SHORT

@@ -5,7 +5,7 @@ from pathlib import Path
 
 from yasuki_core.engine.rules.abilities import registry
 from yasuki_core.engine.rules import (
-    state_rules,
+    state_based_actions,
     triggers,
 )
 from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
@@ -52,7 +52,7 @@ def card_keyed_data() -> dict[str, frozenset[str]]:
     and the layout scan would report every one of them as a registration it could not find. They are
     validated against the card index all the same.
     """
-    return {"chi death exemptions": state_rules.CHI_DEATH_EXEMPT}
+    return {"chi death exemptions": state_based_actions.CHI_DEATH_EXEMPT}
 
 
 def duplicate_registrations(

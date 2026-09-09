@@ -49,7 +49,7 @@ from yasuki_core.engine import runner
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import DynastyDiscard
 from yasuki_core.engine.runner import GameRunner, play_game
-from yasuki_core.engine.rules.rulebook.favor import favor_payer, FAVOR_PAYERS
+from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer, FAVOR_PAYERS
 from yasuki_core.engine.rules.effects import TakeFavor
 
 PASS = Pass()
@@ -966,7 +966,7 @@ def test_ability_menu_offers_one_entry_per_ability_the_card_prints():
             cost=no_cost,
             targets=itself,
             effects=lambda game, source, target: [],
-            all_targets=True,
+            hits_every_target=True,
             key="small",
         ),
     )
@@ -978,7 +978,7 @@ def test_ability_menu_offers_one_entry_per_ability_the_card_prints():
             cost=no_cost,
             targets=itself,
             effects=lambda game, source, target: [],
-            all_targets=True,
+            hits_every_target=True,
             key="large",
         ),
     )

@@ -106,7 +106,7 @@ register_ability(
         cost=bow_and_destroy,
         targets=_harvested_land_targets,
         effects=plus_one_gp_this_turn,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 

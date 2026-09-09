@@ -373,7 +373,7 @@ def test_a_sensei_with_no_stronghold_contributes_nothing():
     state = _setup_with_pregame(sensei)
 
     assert state.seats[PlayerId.P1].honor == 0
-    assert _begun(state).modifiers == []
+    assert _begun(state).ongoing == []
 
 
 def test_a_stronghold_without_a_sensei_keeps_its_printed_stats():
@@ -616,4 +616,4 @@ def test_a_sensei_with_nothing_to_give_grants_nothing():
 
     game = _begun(_setup_with_pregame(stronghold, sensei))
 
-    assert game.modifiers == []
+    assert game.ongoing == []

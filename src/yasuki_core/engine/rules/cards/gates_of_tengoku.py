@@ -176,7 +176,7 @@ register_ability(
         cost=_the_bad_death_of_hida_daizu_cost,
         targets=itself,
         effects=lambda game, source, target: [],
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.HAND,),
     ),
 )

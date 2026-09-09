@@ -27,9 +27,7 @@ def test_a_card_without_a_grant_carries_only_its_printed_keywords():
 def test_a_recorded_grant_gives_a_card_a_keyword_it_does_not_print():
     game = two_seat_game()
     plain = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
-    game.modifiers.append(
-        KeywordGrant("P1-source", plain.id, "Cavalry", Duration.UNTIL_END_OF_TURN)
-    )
+    game.ongoing.append(KeywordGrant("P1-source", plain.id, "Cavalry", Duration.UNTIL_END_OF_TURN))
 
     assert effective_keywords(game, plain) == frozenset({"Farm", "Cavalry"})
 
@@ -38,7 +36,7 @@ def test_a_while_source_in_play_keyword_grant_drops_when_its_source_leaves():
     """The same lifetime a stat modifier gets: the CR files both under ongoing effects."""
     game = two_seat_game()
     plain = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
-    game.modifiers.append(
+    game.ongoing.append(
         KeywordGrant("gone", plain.id, "Cavalry", Duration.WHILE_SOURCE_IN_PLAY)
     )  # "gone" was never put into play
 

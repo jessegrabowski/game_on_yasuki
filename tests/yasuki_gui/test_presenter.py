@@ -1275,9 +1275,7 @@ def test_a_card_on_the_board_is_stamped_with_the_force_the_engine_would_use(a_ba
     """Not the printed number. A granted modifier that the board does not report leaves the player
     adding up an army from figures the engine disagrees with."""
     presenter, window, session = a_battle
-    session.game.modifiers.append(
-        Modifier("test", "hero", Stat.FORCE, 4, Duration.UNTIL_END_OF_TURN)
-    )
+    session.game.ongoing.append(Modifier("test", "hero", Stat.FORCE, 4, Duration.UNTIL_END_OF_TURN))
 
     presenter.present()
 
@@ -1288,9 +1286,7 @@ def test_a_unit_in_a_lane_is_stamped_with_the_same_number(a_battle):
     """The lane draws the same sprites the board does, and a unit whose Force reads one way at home
     and another at the battlefield is worse than one that reports neither."""
     presenter, window, session = a_battle
-    session.game.modifiers.append(
-        Modifier("test", "hero", Stat.FORCE, 4, Duration.UNTIL_END_OF_TURN)
-    )
+    session.game.ongoing.append(Modifier("test", "hero", Stat.FORCE, 4, Duration.UNTIL_END_OF_TURN))
     _press(presenter, "Declare an attack")
 
     _send(presenter, window, ["hero"], 1)

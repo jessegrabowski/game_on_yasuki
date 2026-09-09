@@ -120,7 +120,7 @@ register_ability(
         cost=no_cost,
         targets=_wisdom_gained_targets,
         effects=_wisdom_gained_effects,
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.PROVINCE,),
     ),
 )

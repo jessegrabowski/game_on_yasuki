@@ -162,7 +162,7 @@ def test_fear_leaves_a_target_above_its_strength_standing(battle):
 def test_the_comparison_reads_the_effective_stat_not_the_printed_one(battle):
     """A 2F guard given +2F survives a Ranged 2 that would have killed him as printed — modifiers
     count, so the comparison goes through the same effective read the rest of the engine uses."""
-    battle.game.modifiers.append(
+    battle.game.ongoing.append(
         Modifier("banner", "guard", Stat.FORCE, 2, Duration.UNTIL_END_OF_TURN)
     )
 
@@ -751,7 +751,7 @@ def test_the_jade_legion_stays_bowed_when_its_attack_destroys_nothing():
     """The clause reads the destruction, not the attempt: a Shadowlands defender the Melee cannot
     reach leaves the Legion bowed."""
     session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Modifier("banner", "guard", Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)
     )
 

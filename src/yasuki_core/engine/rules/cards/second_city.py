@@ -37,7 +37,7 @@ register_ability(
         cost=no_cost,
         targets=_harsh_choices_targets,
         effects=_harsh_choices_effects,
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.PROVINCE,),
     ),
 )

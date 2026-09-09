@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.gold.self_grants import (
     register_self_grant,
 )
 from yasuki_core.engine.rules.modifiers import Stat
-from yasuki_core.engine.rules.state import once_per_turn
+from yasuki_core.engine.rules.state import claim_once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
@@ -82,7 +82,7 @@ def test_maximum_gold_production_stops_adding_a_grant_already_taken():
         producer = put_in_play(game, holding("gp", printed_id="granting_probe", gold_production=2))
         assert maximum_gold_production(game, producer) == 4
 
-        once_per_turn(game, producer, SELF_GRANT)
+        claim_once_per_turn(game, producer, SELF_GRANT)
 
         assert maximum_gold_production(game, producer) == 2
     finally:
@@ -97,7 +97,7 @@ def test_a_straightened_producer_does_not_regrant_itself():
     try:
         game = two_seat_game()
         producer = put_in_play(game, holding("gp", printed_id="granting_probe", gold_production=2))
-        once_per_turn(game, producer, SELF_GRANT)
+        claim_once_per_turn(game, producer, SELF_GRANT)
         producer.bow()
         producer.unbow()
 

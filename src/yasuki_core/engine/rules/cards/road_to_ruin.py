@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     Straighten,
 )
-from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay, ProducedGold, ProducingGold
 from yasuki_core.engine.rules.board.queries import (
     owned_holdings,
@@ -27,7 +27,7 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
-from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -92,7 +92,7 @@ def _resolve_outlying_farms_grant(
     if not chosen:
         return []
     card = game.table.cards_by_id[chosen[0]]
-    once_per_turn(game, card, SELF_GRANT)
+    claim_once_per_turn(game, card, SELF_GRANT)
     return [
         GrantModifier(
             card.id,

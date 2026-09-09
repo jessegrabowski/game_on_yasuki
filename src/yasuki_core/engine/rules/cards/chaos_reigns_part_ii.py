@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.keyword_grants import keyword_grant
-from yasuki_core.engine.rules.board.seats import seat_controls
+from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
@@ -15,12 +15,12 @@ from yasuki_core.engine.rules.effects import (
     MoveToDeck,
     ShuffleDeck,
 )
-from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.state import once_per_turn
+from yasuki_core.engine.rules.state import claim_once_per_turn
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
     at_cap,
@@ -48,7 +48,7 @@ def _fortified_farmlands_keywords(
     being granted once. The card's Response half is not modeled: no Action Round opens a Response
     step for it to be taken in.
     """
-    return ("Renew",) if seat_controls(game, seat, "Farm", other_than=card) else ()
+    return ("Renew",) if seat_controls_printed(game, seat, "Farm", other_than=card) else ()
 
 
 # --- Millet Farm ---
@@ -98,7 +98,7 @@ def _shosuro_aoki_yoritomo_kayoko_experienced_counter_gained(ctx: TriggerContext
     gainer = ctx.game.table.cards_by_id[ctx.event.card_id]
     if not isinstance(gainer.printed, HoldingPrint) or gainer.owner is not ctx.card.owner:
         return []
-    if not once_per_turn(ctx.game, ctx.card, "aoki_draw"):
+    if not claim_once_per_turn(ctx.game, ctx.card, "aoki_draw"):
         return []
     return [DrawCard(ctx.card.owner)]
 

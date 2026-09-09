@@ -1,7 +1,8 @@
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import favor_abilities, triggers
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.actions import ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.effects import (
     AskOption,
@@ -32,7 +33,7 @@ FAVOR_PAYMENT = "favor_payment"
 DISCARD_THE_FAVOR = "Discard the Imperial Favor"
 
 
-def favor_payers(game: GameState, seat: PlayerId) -> dict[str, list[Effect]]:
+def favor_payment_options(game: GameState, seat: PlayerId) -> dict[str, list[Effect]]:
     """Every way ``seat`` could pay a Favor cost right now, keyed by the option it reads as.
 
     Good Faith 0.4 lets a Favor action's player control the Favor "or have an alternate effect,
@@ -62,14 +63,14 @@ def favor_cost_for_seat(game: GameState, seat: PlayerId, source_id: str) -> list
     Takes the seat rather than a card because a rulebook Favor ability belongs to the player and has
     no card to charge it to.
     """
-    payers = favor_payers(game, seat)
-    if not payers:
+    options = favor_payment_options(game, seat)
+    if not options:
         return [Unpayable(f"{seat.name} has no way to pay a Favor cost")]
-    if len(payers) == 1:
-        return [PayFavorCost(), *next(iter(payers.values()))]
+    if len(options) == 1:
+        return [PayFavorCost(), *next(iter(options.values()))]
     return [
         PayFavorCost(),
-        AskOption(seat, tuple(payers), "Pay the Favor cost how?", FAVOR_PAYMENT, source_id),
+        AskOption(seat, tuple(options), "Pay the Favor cost how?", FAVOR_PAYMENT, source_id),
     ]
 
 
@@ -83,7 +84,7 @@ def _resolve_favor_payment(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Charge whichever payer the seat named."""
-    return favor_payers(game, seat).get(chosen[0], [])
+    return favor_payment_options(game, seat).get(chosen[0], [])
 
 
 def is_favor_action(game: GameState) -> bool:
@@ -105,6 +106,20 @@ def is_favor_action(game: GameState) -> bool:
     return card is not None and keywords.FAVOR in effective_keywords(game, card)
 
 
+# No card charges a rulebook ability, so its cost is named for the rulebook itself.
+RULEBOOK_SOURCE = "rulebook"
+
+
+def favor_ability_cost(game: GameState, seat: PlayerId, key: str) -> list[Effect]:
+    """Everything ``seat`` pays to take the Favor ability named ``key``: the Favor, plus whatever
+    else that arc's ability charges."""
+    extra = favor_abilities.FAVOR_ABILITY_COSTS.get(key)
+    return [
+        *favor_cost_for_seat(game, seat, RULEBOOK_SOURCE),
+        *(extra(game, seat) if extra is not None else []),
+    ]
+
+
 def use_favor_ability(game: GameState, key: str) -> None:
     """Take one of the arc's rulebook Favor abilities: pay the Favor cost, then do what it does.
 
@@ -112,6 +127,6 @@ def use_favor_ability(game: GameState, key: str) -> None:
     resolves (CR, Action Sequence).
     """
     seat = game.round.priority
-    cost = favor_abilities.favor_ability_cost(game, seat, key)
+    cost = favor_ability_cost(game, seat, key)
     effects = favor_abilities.FAVOR_ABILITY_EFFECTS[key](game, seat)
     triggers.resolve_effects(game, [*cost, *effects])

@@ -59,7 +59,7 @@ register_ability(
         cost=bow_cost,
         targets=itself,
         effects=_fantastic_gardens_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 
@@ -116,7 +116,7 @@ register_ability(
         cost=no_cost,
         targets=_imperial_gift_targets,
         effects=_imperial_gift_effects,
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.PROVINCE,),
     ),
 )
@@ -174,7 +174,7 @@ register_ability(
         cost=no_cost,
         targets=itself,
         effects=_sneak_attack_effects,
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.HAND,),
     ),
 )

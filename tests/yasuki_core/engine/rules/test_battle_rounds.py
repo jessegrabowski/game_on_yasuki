@@ -361,7 +361,7 @@ register_ability(
         cost=lambda game, source: [],
         targets=itself,
         effects=lambda game, source, target: [],
-        all_targets=True,
+        hits_every_target=True,
         battle_designators=frozenset({BattleDesignator.ABSENT}),
         located_at=(CardLocation.HAND,),
     ),

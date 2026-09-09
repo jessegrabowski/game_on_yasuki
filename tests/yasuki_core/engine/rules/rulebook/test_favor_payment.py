@@ -1,14 +1,14 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook import favor
-from yasuki_core.engine.rules.rulebook.favor import (
+from yasuki_core.engine.rules.rulebook.favor_payment import (
+    _resolve_favor_payment,
     favor_payer,
     favor_cost,
     FAVOR_PAYERS,
-    favor_payers,
+    favor_payment_options,
 )
-from yasuki_core.engine.rules.rulebook.favor import is_favor_action
+from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import can_pay
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.turn.sequence import forget_action
@@ -89,7 +89,7 @@ def test_choosing_a_payer_leaves_the_favor_where_it_is(game):
     TakeFavor(PlayerId.P1).perform(game)
     put_in_play(game, personality("helper", name="Helper", printed_id=FREE_PAYER))
 
-    charged = favor._resolve_favor_payment(game, "actor", ("Helper",), PlayerId.P1)
+    charged = _resolve_favor_payment(game, "actor", ("Helper",), PlayerId.P1)
 
     assert charged == []
     assert game.favor_holder is PlayerId.P1
@@ -99,9 +99,7 @@ def test_choosing_the_favor_discards_it(game):
     TakeFavor(PlayerId.P1).perform(game)
     put_in_play(game, personality("helper", name="Helper", printed_id=FREE_PAYER))
 
-    charged = favor._resolve_favor_payment(
-        game, "actor", ("Discard the Imperial Favor",), PlayerId.P1
-    )
+    charged = _resolve_favor_payment(game, "actor", ("Discard the Imperial Favor",), PlayerId.P1)
 
     assert charged == [DiscardFavor(PlayerId.P1)]
 
@@ -111,13 +109,13 @@ def test_a_payer_that_cannot_pay_right_now_is_not_offered(game):
     bowed = put_in_play(game, personality("manjodh", name="Manjodh", printed_id=BOWING_PAYER))
     bowed.bow()
 
-    assert favor_payers(game, PlayerId.P1) == {}
+    assert favor_payment_options(game, PlayerId.P1) == {}
 
 
 def test_another_seats_payer_does_not_pay_for_you(game):
     put_in_play(game, personality("helper", owner=PlayerId.P2, printed_id=FREE_PAYER))
 
-    assert favor_payers(game, PlayerId.P1) == {}
+    assert favor_payment_options(game, PlayerId.P1) == {}
 
 
 def test_a_favor_cost_nobody_can_pay_is_unpayable(game):

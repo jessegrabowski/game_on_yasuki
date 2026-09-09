@@ -451,9 +451,7 @@ def _hiding_game() -> GameState:
     in_hand.adjust_counter("wealth", 1)  # so it qualifies for the stats materialization
 
     province_card(game, "P2-facedown", seat=PlayerId.P2, gold_production=1, face_up=False)
-    game.modifiers.append(
-        Modifier("src", "P2-facedown", Stat.GOLD_PRODUCTION, 4, Duration.PERMANENT)
-    )
+    game.ongoing.append(Modifier("src", "P2-facedown", Stat.GOLD_PRODUCTION, 4, Duration.PERMANENT))
 
     in_deck = register(game.table, holding("P2-indeck", owner=PlayerId.P2, gold_production=9))
     in_deck.turn_face_down()
@@ -500,7 +498,7 @@ def test_the_viewers_own_hidden_card_still_carries_its_stats_to_them():
     )
     game.table.cards_by_id[mine.id] = mine
     assert game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(mine)
-    game.modifiers.append(Modifier("src", mine.id, Stat.GOLD_COST, 2, Duration.PERMANENT))
+    game.ongoing.append(Modifier("src", mine.id, Stat.GOLD_COST, 2, Duration.PERMANENT))
 
     assert project(game, PlayerId.P1).stat(mine, Stat.GOLD_COST) == 6
     assert "P1-inhand" not in project(game, PlayerId.P2).stats  # and stays the opponent's secret

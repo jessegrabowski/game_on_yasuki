@@ -11,8 +11,8 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 def activate(game: GameState, card_id: str, ability_key: str | None = None) -> None:
     """Announce an activated ability: pay its cost, then resolve its target — a single chosen card,
-    or every card it hits for an ``all_targets`` ability. The ability is guaranteed registered and to
-    have a legal target — ``legal_actions`` only offers it then.
+    or every card it hits for a ``hits_every_target`` ability. The ability is guaranteed registered
+    and to have a legal target — ``legal_actions`` only offers it then.
 
     Resolving the target is deferred behind the cost on the stack, so a cost whose own cascade pauses
     for a decision resolves fully first — which is the CR's order, since targets are chosen in step C
@@ -30,12 +30,12 @@ def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
     """Stack ``ability``'s effects behind its cost, and pay the cost.
 
     The cost resolves first and targeting follows it (CR, Action Sequence steps B and C), and an
-    ``all_targets`` ability hits every one it found rather than pausing to be pointed at one.
+    ``hits_every_target`` ability hits every one it found rather than pausing to be pointed at one.
     """
     targets = tuple(legal_targets(game, card, ability))
     game.stack.append(
         ApplyAbilityEffects(card.id, targets, ability.key)
-        if ability.all_targets
+        if ability.hits_every_target
         else SelectAbilityTarget(card.id, targets, ability.key)
     )
     triggers.resolve_effects(game, ability.cost(game, card))

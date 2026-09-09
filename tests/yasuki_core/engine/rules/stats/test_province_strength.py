@@ -85,7 +85,7 @@ def test_a_grant_on_the_stronghold_lifts_every_province_at_once():
     from — so one grant reaches them all rather than needing a per-Province effect."""
     game = _walled_game(printed_strength=3)
     put_in_play(game, holding("sensei"))
-    game.modifiers.append(
+    game.ongoing.append(
         Modifier("sensei", "SH", Stat.PROVINCE_STRENGTH, 1, Duration.WHILE_SOURCE_IN_PLAY)
     )
 

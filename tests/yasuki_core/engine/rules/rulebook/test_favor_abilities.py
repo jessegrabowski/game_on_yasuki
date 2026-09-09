@@ -5,12 +5,13 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import favor_abilities, legality
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.actions import ActionTiming, Lobby, UseFavorAbility
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit
-from yasuki_core.engine.rules.rulebook.favor import use_favor_ability
+from yasuki_core.engine.rules.rulebook.favor_payment import favor_ability_cost, use_favor_ability
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.table import (
@@ -54,7 +55,7 @@ def _hand(game: GameState, seat: PlayerId = PlayerId.P1):
 
 def _payable(game: GameState, seat: PlayerId, key: str) -> bool:
     """Whether ``seat`` could pay everything the Favor ability named ``key`` charges."""
-    cost = favor_abilities.favor_ability_cost(game, seat, key)
+    cost = favor_ability_cost(game, seat, key)
     return all(effect.is_payable(game) for effect in cost)
 
 

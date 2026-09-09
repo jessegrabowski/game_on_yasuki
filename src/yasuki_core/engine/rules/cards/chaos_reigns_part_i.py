@@ -1,9 +1,9 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook.favor import (
+from yasuki_core.engine.rules.rulebook.favor_payment import (
     DISCARD_THE_FAVOR,
     favor_cost_for_seat,
     favor_payer,
-    favor_payers,
+    favor_payment_options,
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
@@ -78,7 +78,7 @@ register_ability(
         cost=no_cost,
         targets=_caravansary_targets,
         effects=_caravansary_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 
@@ -119,7 +119,7 @@ def _honor_your_oaths_effects(game: GameState, source: L5RCard, target: L5RCard)
     options: list[str] = []
     if _honor_your_oaths_bowable_yojimbo(game, seat):
         options.append(BOW_A_YOJIMBO)
-    if favor_payers(game, seat):
+    if favor_payment_options(game, seat):
         options.append(DISCARD_THE_FAVOR)
     moved = [Move(target.id, Location.home(target.owner))]
     if not options:

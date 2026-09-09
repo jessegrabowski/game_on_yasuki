@@ -130,7 +130,7 @@ def test_the_penalty_and_the_minimum_both_wear_off_when_the_turn_ends():
     assert effective_force(session.game, target) == 3
     # A floor that outlived its turn is invisible while the stat is above it, so the assertion that
     # it is gone has to be a penalty that would otherwise be stopped by it.
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Modifier("later", "shiba", Stat.CHI, -5, Duration.UNTIL_END_OF_TURN)
     )
     assert effective_chi(session.game, target) == 0

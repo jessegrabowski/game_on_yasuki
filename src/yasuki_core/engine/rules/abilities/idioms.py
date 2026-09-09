@@ -60,7 +60,7 @@ def register_edict(printed_id: str, *, clan: str | None = None) -> None:
             cost=no_cost,
             targets=targets,
             effects=effects,
-            all_targets=True,
+            hits_every_target=True,
             located_at=(CardLocation.HAND,),
         ),
     )
@@ -92,7 +92,7 @@ def register_event_entry(printed_id: str, *, timing: ActionTiming = ActionTiming
             cost=no_cost,
             targets=itself,
             effects=effects,
-            all_targets=True,
+            hits_every_target=True,
             located_at=(CardLocation.PROVINCE,),
         ),
     )

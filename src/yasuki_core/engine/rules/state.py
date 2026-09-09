@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.actions import Action
 from yasuki_core.engine.rules.battle.records import AttackPhase
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.events import GameEvent
-from yasuki_core.engine.rules.modifiers import OngoingEffect
+from yasuki_core.engine.rules.modifiers import Ongoing
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     Moment,
@@ -102,8 +102,8 @@ class GameState:
         Deferred engine work — the later steps of an action sequence, run once the current decision
         clears. Ephemeral: replay rebuilds it by re-running the engine, so it is never serialized.
         Default empty.
-    modifiers : list of Modifier or KeywordGrant
-        The active recorded ongoing effects — created continuous stat and keyword grants, kept in
+    ongoing : list of Modifier, KeywordGrant, Minimum, ProvinceModifier or LobbyModifier
+        The ongoing records in force — every continuous grant a card has created, kept in
         creation order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike
         it may be non-empty at rest within a turn, so its order is load-bearing. Default empty.
     tokens_created : int
@@ -166,7 +166,7 @@ class GameState:
     rng: Generator = field(default_factory=lambda: default_rng(0), compare=False, repr=False)
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
-    modifiers: list[OngoingEffect] = field(default_factory=list)
+    ongoing: list[Ongoing] = field(default_factory=list)
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
     delayed: list[tuple[Moment, object]] = field(default_factory=list)
@@ -300,7 +300,7 @@ def once_key(card: L5RCard, tag: str, turn: int) -> str:
     return f"{card.id}:{tag}:t{turn}"
 
 
-def once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
+def claim_once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
     """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then False."""
     return game.use_once(once_key(card, tag, game.turn))
 
