@@ -5,13 +5,8 @@ from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equ
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.abilities.registry import ability_for
-from yasuki_core.engine.rules.effects import (
-    Destroy,
-    Fear,
-    MeleeAttack,
-    RangedAttack,
-    effective_strength,
-)
+from yasuki_core.engine.rules.units import effective_strength
+from yasuki_core.engine.rules.effects import Destroy, Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.units import attackable
 from yasuki_core.engine.rules import triggers

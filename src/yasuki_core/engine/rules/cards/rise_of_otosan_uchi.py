@@ -14,12 +14,13 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
 )
 from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.units import attack_strength_against
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    AttackEffect,
     Ask,
     AskAmount,
     AskOption,
+    AttackEffect,
     Banish,
     Bow,
     Choose,
@@ -30,11 +31,10 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
-    MeleeAttack,
     GrantProvinceStrength,
+    MeleeAttack,
     MoveToDeck,
     PayGold,
-    attack_strength_against,
     ShuffleDeck,
     SpendOncePerTurn,
     Then,

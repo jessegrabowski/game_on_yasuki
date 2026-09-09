@@ -11,10 +11,10 @@ from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.effects import (
     Choose,
+    DelayedEffect,
     Destroy,
     Discard,
     Effect,
-    DelayedEffect,
     Fear,
     GainHonor,
     GrantPriority,

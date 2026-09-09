@@ -4,14 +4,7 @@ from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
-from yasuki_core.engine.rules.effects import (
-    AskAmount,
-    Choose,
-    Destroy,
-    Effect,
-    GainHonor,
-    PayGold,
-)
+from yasuki_core.engine.rules.effects import AskAmount, Choose, Destroy, Effect, GainHonor, PayGold
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver

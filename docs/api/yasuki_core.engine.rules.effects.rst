@@ -61,12 +61,6 @@ yasuki_core.engine.rules.effects
     Unpayable
     WinGame
 
-.. rubric:: Functions
-
-.. autosummary::
-
-    effective_strength
-
 .. automodule:: yasuki_core.engine.rules.effects
     :members:
     :undoc-members:
