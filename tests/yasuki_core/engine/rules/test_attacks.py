@@ -5,13 +5,8 @@ from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equ
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.abilities.registry import ability_for
-from yasuki_core.engine.rules.effects import (
-    Destroy,
-    Fear,
-    MeleeAttack,
-    RangedAttack,
-    effective_strength,
-)
+from yasuki_core.engine.rules.units import effective_strength
+from yasuki_core.engine.rules.effects import Destroy, Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.units import attackable
 from yasuki_core.engine.rules import triggers
@@ -660,6 +655,15 @@ def test_the_legion_of_the_khan_shields_nobody_but_herself():
     _resolve(session, RangedAttack(3, "ashigaru", ATTACKER))
 
     assert not _in_play(session, "ashigaru")
+
+
+def test_an_attack_at_a_target_no_longer_on_the_table_keeps_its_printed_strength():
+    """A target can leave between an attack being built and its strength being read -- destroyed by
+    something earlier in the same batch. The walk needs a target to ask each card about, so with
+    none it reports what the attack printed and lets resolution find nothing to hit."""
+    session = _defending_unit(("khan", "legion_of_the_khan", 3))
+
+    assert effective_strength(session.game, RangedAttack(3, "gone", ATTACKER)) == 3
 
 
 def test_a_cards_reach_is_its_own_business_not_the_walk_s():

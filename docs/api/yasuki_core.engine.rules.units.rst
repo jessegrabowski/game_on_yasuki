@@ -8,6 +8,7 @@ yasuki_core.engine.rules.units
 .. autosummary::
 
     attackable
+    effective_strength
     followers_of
     has_caster
     has_presence
