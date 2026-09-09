@@ -84,8 +84,9 @@ def lost_last_province(game: GameState) -> list[Effect]:
     The CR loses it immediately rather than at any particular step, so a Province destroyed by a
     card ends the game exactly as one destroyed by an army does.
 
-    Only seats held to :attr:`~yasuki_core.engine.rules.vocabulary.victory.VictoryRule.MILITARY_LOSS` lose
-    this way, which is what excuses a seat a card has spared and a board that was never dealt
+    Only seats held to
+    :attr:`~yasuki_core.engine.rules.vocabulary.victory.VictoryRule.MILITARY_LOSS` lose this way,
+    which is what excuses a seat a card has spared and a board that was never dealt
     Provinces to lose.
     """
     if game.loser is not None:
@@ -120,8 +121,8 @@ def honor_victory(game: GameState) -> list[Effect]:
     Honor Victory).
 
     Only the seat whose turn is starting can win this way, and only if it is still held to
-    :attr:`~yasuki_core.engine.rules.vocabulary.victory.VictoryRule.HONOR_VICTORY` — a seat Kaede Sensei has
-    excused starts the same turn on the same Honor and does not win.
+    :attr:`~yasuki_core.engine.rules.vocabulary.victory.VictoryRule.HONOR_VICTORY` — a seat Kaede
+    Sensei has excused starts the same turn on the same Honor and does not win.
     """
     if game.game_over:
         return []
