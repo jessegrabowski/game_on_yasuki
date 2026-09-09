@@ -155,7 +155,7 @@ stack is last in, first out. Work items are ephemeral: replay reconstructs the s
 the action rather than by deserializing it.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.work
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.work
 
 .. autosummary::
 

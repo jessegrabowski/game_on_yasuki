@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.turn.structure import (
     Phase,
 )
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
-from yasuki_core.engine.rules.work import WorkItem
+from yasuki_core.engine.rules.vocabulary.work import WorkItem
 
 
 def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:

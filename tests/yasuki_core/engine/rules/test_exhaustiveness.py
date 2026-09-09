@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.actions import Action
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.log import GameInput
-from yasuki_core.engine.rules.work import WorkItem
+from yasuki_core.engine.rules.vocabulary.work import WorkItem
 
 from tests.yasuki_core.engine.builders import two_seat_game
 

@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.stats.province_strength import effective_province_
 from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor
 from yasuki_core.engine.rules.board.queries import units_at
 from yasuki_core.engine.rules.units.composition import unit_force
-from yasuki_core.engine.rules.work import FightNextBattle
+from yasuki_core.engine.rules.vocabulary.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.events import Destroyed

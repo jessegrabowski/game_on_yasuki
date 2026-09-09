@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.work
-=============================
+yasuki_core.engine.rules.vocabulary.work
+========================================
 
-.. currentmodule:: yasuki_core.engine.rules.work
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.work
 
 .. rubric:: Classes
 
@@ -20,6 +20,6 @@ yasuki_core.engine.rules.work
     ResumeCascade
     SelectAbilityTarget
 
-.. automodule:: yasuki_core.engine.rules.work
+.. automodule:: yasuki_core.engine.rules.vocabulary.work
     :members:
     :undoc-members:

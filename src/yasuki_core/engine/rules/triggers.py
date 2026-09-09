@@ -17,7 +17,7 @@ from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Moment
 from yasuki_core.engine.rules.modifiers import LobbyModifier, ProvinceModifier
-from yasuki_core.engine.rules.work import ResumeCascade
+from yasuki_core.engine.rules.vocabulary.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
