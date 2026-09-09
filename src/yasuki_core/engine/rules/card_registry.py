@@ -10,9 +10,10 @@ from yasuki_core.engine.rules import (
 )
 from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
 
-# The one place the rules layer reaches into the bots: ABILITY_HEURISTICS is keyed by printed id
-# like every other per-card registry, so it is validated here even though a policy is not a rule.
-from yasuki_core.engine.bots import policies
+# The one place the rules layer reaches into the bots: the ability hints are keyed by printed id
+# like every other per-card registry, so they are validated here even though a policy is not a rule.
+# Imported for the registration it performs -- the registry catalogues itself when this module runs.
+from yasuki_core.engine.bots import hints  # noqa: F401
 
 # Without this the registries are empty and every check below passes vacuously.
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -24,8 +25,8 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     Every card id the engine keys a per-card handler on, grouped by the registry holding it.
 
     Every registry built through :mod:`~yasuki_core.engine.rules.registrar` reports itself, so a
-    new one is validated without being listed here. The four below are not built that way: two keep
-    bespoke registration rules, one lives in the bots, and the triggers are keyed by event first.
+    new one is validated without being listed here. The three below are not built that way: two keep
+    bespoke registration rules, and the triggers are keyed by event first.
 
     ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than
     on a card — ``modest_farm_straighten`` and ``sincerity_seed`` name steps in a sequence, not
@@ -36,7 +37,6 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         **derived,
         "abilities": frozenset(registry._ABILITIES),
         "invest abilities": frozenset(registry._INVEST),
-        "ability heuristics": frozenset(policies.ABILITY_HEURISTICS),
         "triggers": frozenset(
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),

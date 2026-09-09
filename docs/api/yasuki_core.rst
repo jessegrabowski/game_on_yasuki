@@ -35,6 +35,7 @@ yasuki_core
     yasuki_core.decklist <yasuki_core.decklist>
     yasuki_core.engine.action_log <yasuki_core.engine.action_log>
     yasuki_core.engine.bots.agents <yasuki_core.engine.bots.agents>
+    yasuki_core.engine.bots.hints <yasuki_core.engine.bots.hints>
     yasuki_core.engine.bots.policies <yasuki_core.engine.bots.policies>
     yasuki_core.engine.bots.queries <yasuki_core.engine.bots.queries>
     yasuki_core.engine.intents <yasuki_core.engine.intents>

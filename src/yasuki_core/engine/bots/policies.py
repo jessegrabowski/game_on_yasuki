@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from typing import Protocol
 
 from numpy.random import Generator, default_rng
@@ -16,11 +15,10 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.bots.agents import PayingAgent
+from yasuki_core.engine.bots.hints import ABILITY_HINTS, optional_cost_answer
 from yasuki_core.engine.bots.queries import (
     best_production,
     identifiable,
-    in_play,
-    newly_affordable,
     production,
     rank,
     readable_province_cards,
@@ -247,7 +245,7 @@ class GoldRushPolicy:
     four Gold, so the cheap producers a deck-average rule would bin are exactly the ones this policy
     can afford to buy with it. Then Legacy, when the pool holds a better producer than the board —
     it puts that card face-up in a Province where the same turn's Recruit can reach it. Then an
-    activated ability this policy has an economic model for, which :data:`~yasuki_core.engine.bots.policies.ABILITY_HEURISTICS`
+    activated ability this policy has an economic model for, which :data:`~yasuki_core.engine.bots.hints.ABILITY_HINTS`
     decides. Then the best purchase, ranked as :class:`EconomicPolicy` ranks it, which takes a
     Personality once no Holding is within reach: gold left in the pool is cleared at the phase
     change, and buying empties the Province either way. Then a Dynasty Discard of any face-up
@@ -293,14 +291,13 @@ class GoldRushPolicy:
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
         if isinstance(request, ChooseAbilityTarget):
-            return DecisionResponse((_best_ability_target(request, view),))
+            return DecisionResponse((_best_ability_target(view, request),))
         if isinstance(request, ChooseCards):
             if request.resolver == "cycle":
                 return DecisionResponse(_barren_province_cards(view))
-            if request.resolver == MODEST_FARM_STRAIGHTEN:
-                return DecisionResponse(
-                    request.candidates if _worth_sacrificing(request, view) else ()
-                )
+            answer = optional_cost_answer(request.resolver)
+            if answer is not None:
+                return DecisionResponse(request.candidates if answer(view, request) else ())
         return self._answering.decide(request, view)
 
 
@@ -617,152 +614,31 @@ def _fewest_reaching(unspent: set[str], needed: int, view: GameView) -> set[str]
     return holding if brought >= needed else None
 
 
-# The activated abilities this policy has an economic model for, by printed id. An ability absent
-# here is never activated: a policy cannot read what a card does, and guessing at an unmodelled one
-# would spend a bow on an effect it has no way to value.
-ABILITY_HEURISTICS: dict[str, "Callable[[GameView, L5RCard], bool]"] = {}
-
-# Modest Farm's optional "you may destroy this Holding to straighten the target", by resolver name.
-MODEST_FARM_STRAIGHTEN = "modest_farm_straighten"
-
-# The Gold Production Millet Farm grants a Farm for the turn.
-MILLET_FARM_BOOST = 2
-
-# How much more a non-Farm target must produce than the Modest Farm spent to reach it, before the
-# chain is worth the face-down Province refill that recruiting a non-Farm costs.
-CHAIN_PAYOFF_RATIO = 3
-
-
 def _worthwhile_ability(view: GameView, actions: list[Action]) -> ActivateAbility | None:
-    """The lowest-id activation among ``actions`` whose heuristic says it is worth taking now, or
-    None when none of them is modelled or any modelled one declines."""
+    """The lowest-id activation among ``actions`` whose hint says it is worth taking now, or None
+    when none of them is modelled or any modelled one declines."""
     cards = identifiable(view)
     worthwhile = [
         action
         for action in actions
         if isinstance(action, ActivateAbility)
         and (card := cards.get(action.card_id)) is not None
-        and (heuristic := ABILITY_HEURISTICS.get(card.printed_id)) is not None
-        and heuristic(view, card)
+        and (hint := ABILITY_HINTS.get(card.printed_id)) is not None
+        and hint.worth_activating(view, card)
     ]
     return min(worthwhile, key=lambda action: action.card_id, default=None)
 
 
-def _modest_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
-    """Whether Modest Farm should recruit out of sequence now.
+def _best_ability_target(view: GameView, request: ChooseAbilityTarget) -> str:
+    """Which of ``request``'s candidates the ability should hit, by the source card's own hint.
 
-    Nothing caps how many cards a seat recruits in its Dynasty Phase, so an out-of-sequence recruit
-    is not an extra purchase on its own — the turn's production bounds the spending either way, and
-    Modest Farm bows itself out of that production to grant it. Two things do pay for it, and one
-    of them has to be true of some Holding the seat can still reach once that yield is gone.
-
-    A Farm target is granted Renew, which refills the vacated Province face-up. Any other target
-    refills it face-down, leaving the seat choosing from three live Provinces for the rest of the
-    turn — a real cost, and one only a payoff elsewhere covers.
-
-    That payoff is the chain. Destroying Modest Farm straightens the card it just recruited, so a
-    big producer is spendable the moment it lands; when that Gold reaches a second producer the seat
-    could not otherwise pay for, the recruit funds the recruit after it. Both halves are demanded of
-    the chain — a target worth :data:`CHAIN_PAYOFF_RATIO` times the Farm being spent, and a producer
-    on the other side of it. Firing on any purchase at all costs more in face-down refills than the
-    chain returns.
+    A card without one takes the first candidate, which is what a generic agent would have answered.
     """
-    reach = spendable(view) - production(view, source)
-    cards = readable_province_cards(view)
-    for card in cards.values():
-        cost = view.stat(card, Stat.GOLD_COST)
-        if not card.face_up or cost > reach:
-            continue
-        if "Farm" in card.keywords:
-            return True
-        if production(view, card) < CHAIN_PAYOFF_RATIO * max(production(view, source), 1):
-            continue
-        left = reach - cost
-        if any(
-            other.face_up
-            and other.id != card.id
-            and production(view, other) > 0
-            and left < view.stat(other, Stat.GOLD_COST) <= left + production(view, card)
-            for other in cards.values()
-        ):
-            return True
-    return False
-
-
-def _millet_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
-    """Whether Millet Farm should grant its Farm bonus now.
-
-    The grant lasts until end of turn and Millet Farm bows itself to give it, so the seat nets
-    :data:`MILLET_FARM_BOOST` less whatever Millet Farm would have yielded — and only on a Farm
-    still straight enough to be bowed for it. Taken when that net puts a Province card in reach
-    that is out of it, and declined otherwise: an unspent bonus expires at end of turn.
-    """
-    straight_farms = any(
-        card.id != source.id and not card.bowed and "Farm" in card.keywords
-        for card in in_play(view)
-    )
-    if not straight_farms:
-        return False
-    before = spendable(view)
-    return newly_affordable(view, before, before - production(view, source) + MILLET_FARM_BOOST)
-
-
-ABILITY_HEURISTICS.update(
-    {
-        "modest_farm": _modest_farm_worth_activating,
-        "millet_farm": _millet_farm_worth_activating,
-    }
-)
-
-
-def _best_ability_target(request: ChooseAbilityTarget, view: GameView) -> str:
-    """Which of ``request``'s candidates the ability should hit.
-
-    Modest Farm takes a Farm ahead of anything else, because only a Farm target is granted the Renew
-    that refills the vacated Province face-up; among equals it ranks them as purchases. Millet Farm's
-    bonus is only collected by bowing the Farm that receives it, so it wants a straight one, and the
-    largest — the bonus is flat, and the yield beside it is not. Anything else takes the first
-    candidate, which is what a generic agent would have answered.
-    """
-    cards = identifiable(view)
-    source = cards.get(request.source_card_id)
-    printed_id = None if source is None else source.printed_id
-    if printed_id == "modest_farm":
-        return min(
-            request.candidates,
-            key=lambda card_id: (
-                "Farm" not in cards[card_id].keywords,
-                rank(view, cards[card_id]),
-            ),
-        )
-    if printed_id == "millet_farm":
-        return min(
-            request.candidates,
-            key=lambda card_id: (
-                cards[card_id].bowed,
-                -production(view, cards[card_id]),
-                card_id,
-            ),
-        )
-    return request.candidates[0]
-
-
-def _worth_sacrificing(request: ChooseCards, view: GameView) -> bool:
-    """Whether to destroy Modest Farm to straighten the card it just recruited.
-
-    Modest Farm is an engine rather than a producer: it straightens every turn its owner's turn
-    begins, and each straightening is another out-of-sequence recruit. Trading that for one turn of
-    the target being straight is only worth it when that turn buys something — the recruit enters
-    play bowed, so straightening it is worth exactly the Gold it could still raise this turn.
-
-    Taken when that Gold puts a Province card in reach that is out of it, and declined otherwise,
-    which keeps the engine.
-    """
-    target = identifiable(view).get(request.source_id or "")
-    if target is None:
-        return False
-    before = spendable(view)
-    return newly_affordable(view, before, before + production(view, target))
+    source = identifiable(view).get(request.source_card_id)
+    hint = None if source is None else ABILITY_HINTS.get(source.printed_id)
+    if hint is None or hint.best_target is None:
+        return request.candidates[0]
+    return hint.best_target(view, request)
 
 
 def _barren_province_cards(view: GameView) -> tuple[str, ...]:
