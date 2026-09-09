@@ -1,4 +1,4 @@
-from collections.abc import Callable, Iterable
+from collections.abc import Callable
 from typing import Protocol
 
 from numpy.random import Generator, default_rng
@@ -15,8 +15,17 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.engine.bots.agents import PayingAgent
+from yasuki_core.engine.bots.queries import (
+    best_production,
+    identifiable,
+    in_play,
+    newly_affordable,
+    production,
+    rank,
+    readable_province_cards,
+    spendable,
+)
 from yasuki_core.engine.rules.decisions import (
     AssignUnits,
     ChooseBattlefield,
@@ -34,7 +43,6 @@ from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
-    HoldingPrint,
     PersonalityPrint,
     StrongholdPrint,
 )
@@ -121,8 +129,8 @@ class EconomicPolicy:
         ]
         if not purchases:
             return next((action for action in actions if isinstance(action, Pass)), actions[0])
-        cards = _readable_province_cards(view)
-        return min(purchases, key=lambda purchase: _rank(view, cards[purchase.card_id]))
+        cards = readable_province_cards(view)
+        return min(purchases, key=lambda purchase: rank(view, cards[purchase.card_id]))
 
 
 class EconomicLegacyPolicy:
@@ -164,13 +172,13 @@ def _legacy_worth_taking(view: GameView) -> bool:
         # board produces less. Kept because loosening that comparison would otherwise turn an empty
         # pool into a lost game.
         return False
-    reach = _spendable(view)
+    reach = spendable(view)
     within_reach = [
         card
-        for card in _readable_province_cards(view).values()
+        for card in readable_province_cards(view).values()
         if view.stat(card, Stat.GOLD_COST) <= reach
     ]
-    return _best_production(view, view.legacy_pool) > _best_production(view, within_reach)
+    return best_production(view, view.legacy_pool) > best_production(view, within_reach)
 
 
 def cards_to_cycle(view: GameView) -> tuple[str, ...]:
@@ -187,14 +195,14 @@ def cards_to_cycle(view: GameView) -> tuple[str, ...]:
     deck = view.dynasty_deck
     if not deck:
         return ()
-    average = sum(_production(view, card) for card in deck) / len(deck)
+    average = sum(production(view, card) for card in deck) / len(deck)
     return tuple(
         sorted(
             card_id
-            for card_id, card in _readable_province_cards(view).items()
+            for card_id, card in readable_province_cards(view).items()
             # Identifiable is not the same as face-up: a seat peeking its own face-down Province
             # cards can read one Cycle would refuse to be given.
-            if card.face_up and _production(view, card) < average
+            if card.face_up and production(view, card) < average
         )
     )
 
@@ -505,7 +513,7 @@ def _best_equip_target(request: ChooseEquipTarget, view: GameView) -> str:
     bigger. A bowed Personality is passed over before size is weighed at all: he cannot be
     assigned this turn, so Force hung on him is Force the attack cannot spend.
     """
-    cards = _identifiable(view)
+    cards = identifiable(view)
     return min(
         request.candidates,
         key=lambda card_id: (
@@ -628,7 +636,7 @@ CHAIN_PAYOFF_RATIO = 3
 def _worthwhile_ability(view: GameView, actions: list[Action]) -> ActivateAbility | None:
     """The lowest-id activation among ``actions`` whose heuristic says it is worth taking now, or
     None when none of them is modelled or any modelled one declines."""
-    cards = _identifiable(view)
+    cards = identifiable(view)
     worthwhile = [
         action
         for action in actions
@@ -659,22 +667,22 @@ def _modest_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
     on the other side of it. Firing on any purchase at all costs more in face-down refills than the
     chain returns.
     """
-    reach = _spendable(view) - _production(view, source)
-    cards = _readable_province_cards(view)
+    reach = spendable(view) - production(view, source)
+    cards = readable_province_cards(view)
     for card in cards.values():
         cost = view.stat(card, Stat.GOLD_COST)
         if not card.face_up or cost > reach:
             continue
         if "Farm" in card.keywords:
             return True
-        if _production(view, card) < CHAIN_PAYOFF_RATIO * max(_production(view, source), 1):
+        if production(view, card) < CHAIN_PAYOFF_RATIO * max(production(view, source), 1):
             continue
         left = reach - cost
         if any(
             other.face_up
             and other.id != card.id
-            and _production(view, other) > 0
-            and left < view.stat(other, Stat.GOLD_COST) <= left + _production(view, card)
+            and production(view, other) > 0
+            and left < view.stat(other, Stat.GOLD_COST) <= left + production(view, card)
             for other in cards.values()
         ):
             return True
@@ -691,12 +699,12 @@ def _millet_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
     """
     straight_farms = any(
         card.id != source.id and not card.bowed and "Farm" in card.keywords
-        for card in _in_play(view)
+        for card in in_play(view)
     )
     if not straight_farms:
         return False
-    before = _spendable(view)
-    return _newly_affordable(view, before, before - _production(view, source) + MILLET_FARM_BOOST)
+    before = spendable(view)
+    return newly_affordable(view, before, before - production(view, source) + MILLET_FARM_BOOST)
 
 
 ABILITY_HEURISTICS.update(
@@ -716,7 +724,7 @@ def _best_ability_target(request: ChooseAbilityTarget, view: GameView) -> str:
     largest — the bonus is flat, and the yield beside it is not. Anything else takes the first
     candidate, which is what a generic agent would have answered.
     """
-    cards = _identifiable(view)
+    cards = identifiable(view)
     source = cards.get(request.source_card_id)
     printed_id = None if source is None else source.printed_id
     if printed_id == "modest_farm":
@@ -724,7 +732,7 @@ def _best_ability_target(request: ChooseAbilityTarget, view: GameView) -> str:
             request.candidates,
             key=lambda card_id: (
                 "Farm" not in cards[card_id].keywords,
-                _rank(view, cards[card_id]),
+                rank(view, cards[card_id]),
             ),
         )
     if printed_id == "millet_farm":
@@ -732,7 +740,7 @@ def _best_ability_target(request: ChooseAbilityTarget, view: GameView) -> str:
             request.candidates,
             key=lambda card_id: (
                 cards[card_id].bowed,
-                -_production(view, cards[card_id]),
+                -production(view, cards[card_id]),
                 card_id,
             ),
         )
@@ -750,11 +758,11 @@ def _worth_sacrificing(request: ChooseCards, view: GameView) -> bool:
     Taken when that Gold puts a Province card in reach that is out of it, and declined otherwise,
     which keeps the engine.
     """
-    target = _identifiable(view).get(request.source_id or "")
+    target = identifiable(view).get(request.source_id or "")
     if target is None:
         return False
-    before = _spendable(view)
-    return _newly_affordable(view, before, before + _production(view, target))
+    before = spendable(view)
+    return newly_affordable(view, before, before + production(view, target))
 
 
 def _barren_province_cards(view: GameView) -> tuple[str, ...]:
@@ -769,8 +777,8 @@ def _barren_province_cards(view: GameView) -> tuple[str, ...]:
     return tuple(
         sorted(
             card_id
-            for card_id, card in _readable_province_cards(view).items()
-            if card.face_up and _production(view, card) == 0
+            for card_id, card in readable_province_cards(view).items()
+            if card.face_up and production(view, card) == 0
         )
     )
 
@@ -786,68 +794,19 @@ def _flushable(view: GameView, actions: list[Action]) -> DynastyDiscard | None:
     A card the viewer cannot identify is left alone: a discard is irreversible, and a seat that
     cannot read a card cannot know it is worthless.
     """
-    cards = _readable_province_cards(view)
-    reach = _spendable(view)
+    cards = readable_province_cards(view)
+    reach = spendable(view)
     junk = [
         action
         for action in actions
         if isinstance(action, DynastyDiscard)
         and action.card_id in cards
         and (
-            _production(view, cards[action.card_id]) == 0
+            production(view, cards[action.card_id]) == 0
             or view.stat(cards[action.card_id], Stat.GOLD_COST) > reach
         )
     ]
     return min(junk, key=lambda action: action.card_id, default=None)
-
-
-def _in_play(view: GameView) -> Iterable[L5RCard]:
-    """The viewer's own cards on the battlefield that it can identify."""
-    return (
-        entry.card
-        for entry in view.table.battlefield
-        if not isinstance(entry.card, HiddenCard) and entry.card.owner is view.viewer
-    )
-
-
-def _identifiable(view: GameView) -> dict[str, L5RCard]:
-    """Every card the viewer can name, by id — its own board and its own readable Province cards,
-    which between them cover what an ability offers as a target."""
-    cards: dict[str, L5RCard] = {card.id: card for card in _in_play(view)}
-    cards.update(_readable_province_cards(view))
-    return cards
-
-
-def _spendable(view: GameView) -> int:
-    """The Gold the viewer could raise right now by bowing what is straight, plus its pool.
-
-    Deliberately smaller than what affordability reaches: a card that can raise its own yield does
-    so at a price it sets, and a policy weighing whether a purchase is *worth* making should not
-    count Gold it would rather not pay for. `legality.reachable_gold` must count it, because
-    withholding a legal action is worse than offering one the seat declines.
-
-    A policy also cannot ask :func:`~yasuki_core.engine.rules.gold.self_grants.maximum_gold_production`: it
-    sees a redacted :class:`GameView` rather than the live game, which is what keeps a policy from
-    reading anything its seat is not entitled to.
-    """
-    return view.gold[view.viewer] + sum(
-        _production(view, card) for card in _in_play(view) if not card.bowed
-    )
-
-
-def _newly_affordable(view: GameView, before: int, after: int, exclude: str | None = None) -> bool:
-    """Whether any face-up Province card costs more than ``before`` and no more than ``after`` — the
-    test of whether extra Gold buys anything rather than merely existing.
-
-    Pass ``exclude`` when the Gold in question comes from recruiting one of those cards, so the card
-    being bought is not also counted as what the purchase pays for.
-    """
-    if after <= before:
-        return False
-    return any(
-        card.face_up and card.id != exclude and before < view.stat(card, Stat.GOLD_COST) <= after
-        for card in _readable_province_cards(view).values()
-    )
 
 
 POLICIES: dict[str, type[Policy]] = {
@@ -879,42 +838,3 @@ def make_policy(name: str) -> Policy:
     if name not in POLICIES:
         raise KeyError(f"unknown policy {name!r}; known: {', '.join(sorted(POLICIES))}")
     return POLICIES[name]()
-
-
-def _rank(view: GameView, card: L5RCard) -> tuple[int, int, str]:
-    """How a province card sorts for purchase, lowest first.
-
-    Gold Production leads and Gold Cost breaks the tie, both negated so the larger wins. The card id
-    settles anything still level, so the choice does not follow zone order. Both stats are read
-    through the view, so a modified card ranks on its current value.
-    """
-    production = _production(view, card)
-    return -production, -view.stat(card, Stat.GOLD_COST), card.id
-
-
-def _readable_province_cards(view: GameView) -> dict[str, L5RCard]:
-    """The viewer's province cards it can identify, by id — what a Recruit's ``card_id`` refers to.
-
-    Built by scanning rather than looked up, since a redacted view carries no id index. A card the
-    viewer cannot identify — a province refilled face-down, until something reveals it — is skipped
-    rather than ranked, since no Recruit can name it.
-    """
-    return {
-        card.id: card
-        for key, zone in view.table.zones.items()
-        if key.owner is view.viewer and key.role is ZoneRole.PROVINCE
-        for card in zone.cards
-        if not isinstance(card, HiddenCard)
-    }
-
-
-def _best_production(view: GameView, cards: Iterable[L5RCard]) -> int:
-    """The largest Gold Production among ``cards``, or 0 when none of them produces."""
-    return max((_production(view, card) for card in cards), default=0)
-
-
-def _production(view: GameView, card: L5RCard) -> int:
-    """What ``card`` produces right now, or 0 for a card that is not a Holding at all."""
-    if not isinstance(card.printed, HoldingPrint):
-        return 0
-    return view.stat(card, Stat.GOLD_PRODUCTION)

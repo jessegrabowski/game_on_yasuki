@@ -36,6 +36,7 @@ yasuki_core
     yasuki_core.engine.action_log <yasuki_core.engine.action_log>
     yasuki_core.engine.bots.agents <yasuki_core.engine.bots.agents>
     yasuki_core.engine.bots.policies <yasuki_core.engine.bots.policies>
+    yasuki_core.engine.bots.queries <yasuki_core.engine.bots.queries>
     yasuki_core.engine.intents <yasuki_core.engine.intents>
     yasuki_core.engine.ops <yasuki_core.engine.ops>
     yasuki_core.engine.players <yasuki_core.engine.players>
