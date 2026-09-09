@@ -149,6 +149,9 @@ def test_the_board_substrate_does_not_read_the_rules():
     # rules layer is built on it, so a substrate module reading a rule inverts the dependency and
     # drags the whole turn structure into the manual intent path that yasuki_gui and yasuki_web
     # drive. Only the two surfaces above the rules are excepted, and both are named here.
+    #
+    # Deliberately shallow: engine/bots/ and engine/rules/ are not substrate and bots reads the
+    # rules by design, so a recursive scan would report the layering working as intended.
     above_the_rules = {"session.py", "runner.py"}
     reaching = {
         source.name
