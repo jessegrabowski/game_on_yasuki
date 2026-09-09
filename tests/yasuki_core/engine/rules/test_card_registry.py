@@ -21,7 +21,6 @@ from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "_INVEST",
-    "ABILITY_HEURISTICS",
     "CHI_DEATH_EXEMPT",
     "_TRIGGERS",
 }
@@ -31,6 +30,7 @@ VALIDATED_REGISTRIES = {
 # someone has to make rather than one they can skip.
 NOT_KEYED_BY_CARD = {
     "CHOICE_RESOLVERS",  # keyed by the kind of a pending choice
+    "_OPTIONAL_COST_ANSWERS",  # likewise -- a bot hint's answers, by resolver
     "CHOICE_PROMPTS",  # likewise, and it lives in decisions
     "POLICIES",  # keyed by policy name
     "AGENTS",  # keyed by agent name
@@ -50,7 +50,7 @@ COLLECTIONS = ("dict", "set", "frozenset")
 REGISTRAR = ("FlagRegistry", "HandlerRegistry")
 
 
-# Every package card_registry validates a registry in. `bots` is here because ABILITY_HEURISTICS is
+# Every package card_registry validates a registry in. `bots` is here because the ability hints are
 # keyed by printed id like any other per-card registry, so the scan has to follow it out of `rules`.
 SCANNED = (rules, bots)
 

@@ -70,7 +70,7 @@ def test_no_package_reexports():
 def test_the_rules_layer_does_not_reach_into_the_bots():
     # A policy reads a redacted GameView and decides; a rule decides what is legal. The dependency
     # runs one way, and card_registry is the single documented exception -- it validates
-    # ABILITY_HEURISTICS because that registry is keyed by printed id like any other.
+    # the ability hints because that registry is keyed by printed id like any other.
     reaching = {
         str(source.relative_to(RULES))
         for source in sorted(RULES.rglob("*.py"))

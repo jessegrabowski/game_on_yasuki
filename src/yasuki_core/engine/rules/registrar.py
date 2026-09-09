@@ -91,6 +91,21 @@ class HandlerRegistry[T](Mapping[str, T]):
 
         return decorate
 
+    def make_register(self) -> Callable[[str, T], None]:
+        """The function that records a card's handler here, to bind to a ``register_`` name.
+
+        Use this where the handler is a value rather than a function to decorate -- a dataclass
+        holding several callables has nothing to sit under a decorator. Raise ValueError on a second
+        handler for one id, for the reason :meth:`make_decorator` gives.
+        """
+
+        def register(printed_id: str, handler: T) -> None:
+            if printed_id in self._handlers:
+                raise ValueError(f"{printed_id} {self.complaint}")
+            self._handlers[printed_id] = handler
+
+        return register
+
     def pop(self, printed_id: str, default: T | None = None) -> T | None:
         """Forget ``printed_id`` and return its handler, or ``default`` when it has none."""
         return self._handlers.pop(printed_id, default)
