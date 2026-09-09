@@ -39,7 +39,7 @@ from yasuki_core.engine.rules.effects import (
     SpendOncePerTurn,
     Then,
 )
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.rulebook.equip import creation_targets

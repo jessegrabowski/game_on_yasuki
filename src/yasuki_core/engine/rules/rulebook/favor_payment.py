@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.effects import (
     PayFavorCost,
     Unpayable,
 )
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver

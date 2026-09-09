@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.keyword_grants import (
+from yasuki_core.engine.rules.stats.keyword_grants import (
     effective_keywords,
 )
 from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant

@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
 )
-from yasuki_core.engine.rules.keyword_grants import effective_keywords, keyword_grant
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.province_strength import province_strength_grant
 from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler

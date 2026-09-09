@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import ChooseEquipTarget, ChoosePayment,
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit

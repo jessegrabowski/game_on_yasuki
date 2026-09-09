@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.events import (
     Straightened,
     TurnStarted,
 )
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import activatable, permitted_timings
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState

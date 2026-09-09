@@ -9,7 +9,6 @@ yasuki_core.engine.rules.attachments
 
     attached_to
     attachments_of
-    granted_stat
     shares_unit
     unit_of
 

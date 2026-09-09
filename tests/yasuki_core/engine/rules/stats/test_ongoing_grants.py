@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant, Modifier, Stat
-from yasuki_core.engine.rules.ongoing_grants import grant_applies
+from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 

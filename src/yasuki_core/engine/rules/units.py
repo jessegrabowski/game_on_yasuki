@@ -3,7 +3,7 @@ from collections.abc import Callable
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.attachments import attached_to, attachments_of
 from yasuki_core.engine.rules.effects import AttackEffect
-from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_force
