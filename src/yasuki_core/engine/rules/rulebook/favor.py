@@ -106,6 +106,20 @@ def is_favor_action(game: GameState) -> bool:
     return card is not None and keywords.FAVOR in effective_keywords(game, card)
 
 
+# No card charges a rulebook ability, so its cost is named for the rulebook itself.
+RULEBOOK_SOURCE = "rulebook"
+
+
+def favor_ability_cost(game: GameState, seat: PlayerId, key: str) -> list[Effect]:
+    """Everything ``seat`` pays to take the Favor ability named ``key``: the Favor, plus whatever
+    else that arc's ability charges."""
+    extra = favor_abilities.FAVOR_ABILITY_COSTS.get(key)
+    return [
+        *favor_cost_for_seat(game, seat, RULEBOOK_SOURCE),
+        *(extra(game, seat) if extra is not None else []),
+    ]
+
+
 def use_favor_ability(game: GameState, key: str) -> None:
     """Take one of the arc's rulebook Favor abilities: pay the Favor cost, then do what it does.
 
@@ -113,6 +127,6 @@ def use_favor_ability(game: GameState, key: str) -> None:
     resolves (CR, Action Sequence).
     """
     seat = game.round.priority
-    cost = favor_abilities.favor_ability_cost(game, seat, key)
+    cost = favor_ability_cost(game, seat, key)
     effects = favor_abilities.FAVOR_ABILITY_EFFECTS[key](game, seat)
     triggers.resolve_effects(game, [*cost, *effects])

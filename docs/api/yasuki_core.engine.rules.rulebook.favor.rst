@@ -7,6 +7,7 @@ yasuki_core.engine.rules.rulebook.favor
 
 .. autosummary::
 
+    favor_ability_cost
     favor_cost
     favor_cost_for_seat
     favor_payment_options
