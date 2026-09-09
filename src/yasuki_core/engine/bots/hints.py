@@ -2,6 +2,7 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
 from yasuki_core.engine.bots.queries import (
+    best_production,
     identifiable,
     in_play,
     newly_affordable,
@@ -159,6 +160,61 @@ def _millet_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
     return newly_affordable(view, before, before - production(view, source) + MILLET_FARM_BOOST)
 
 
+def _harvested_land_worth_activating(view: GameView, source: L5RCard) -> bool:
+    """Whether Harvested Land should spend itself to raise the other Farms.
+
+    It bows and destroys itself to give every other Farm +1 Gold Production for the turn, so the
+    seat trades this Holding's whole yield for one Gold per Farm it can still bow. A bowed Farm has
+    already been spent and collects nothing, which is what makes the count smaller than the board
+    suggests. Taken when the net puts a Province card in reach that is out of it.
+    """
+    raised = sum(
+        1
+        for card in in_play(view)
+        if card.id != source.id and not card.bowed and keywords.FARM in card.keywords
+    )
+    before = spendable(view)
+    return newly_affordable(view, before, before + raised - production(view, source))
+
+
+def _rural_market_worth_activating(view: GameView, source: L5RCard) -> bool:
+    """Whether Rural Market should spend a Wealth token to straighten a Farm.
+
+    A straightened Farm can be bowed for its yield again this turn, and the token that buys it is
+    one Gold off Rural Market's own production — but only while Rural Market is still straight
+    enough to be bowed for that Gold. It is Tireless, so paying costs it no bow of its own.
+    """
+    bowed_farms = [card for card in in_play(view) if card.bowed and keywords.FARM in card.keywords]
+    if not bowed_farms:
+        return False
+    before = spendable(view)
+    token = 0 if source.bowed else 1
+    return newly_affordable(view, before, before + best_production(view, bowed_farms) - token)
+
+
+def _largest_producer(view: GameView, request: ChooseAbilityTarget) -> str:
+    """The candidate whose straightening raises the most Gold: the largest producer, then the id."""
+    cards = identifiable(view)
+    return min(
+        request.candidates,
+        key=lambda card_id: (-production(view, cards[card_id]), card_id),
+    )
+
+
+def _ichiba_district_worth_activating(view: GameView, source: L5RCard) -> bool:
+    """Whether Ichiba District should banish a card to raise a Port.
+
+    The cost is the top card of the Fate deck rather than any Gold, and these policies price a card
+    at nothing, so the only question is whether the Gold arrives somewhere it can be spent from. A
+    bowed Port has already produced and cannot be bowed again, so the grant has to land on a
+    straight one to be worth anything this turn.
+    """
+    if not any(not card.bowed and keywords.PORT in card.keywords for card in in_play(view)):
+        return False
+    before = spendable(view)
+    return newly_affordable(view, before, before + 1)
+
+
 def _largest_straight_producer(view: GameView, request: ChooseAbilityTarget) -> str:
     """The candidate that can still be bowed for the Gold, largest first.
 
@@ -176,6 +232,21 @@ def _largest_straight_producer(view: GameView, request: ChooseAbilityTarget) -> 
     )
 
 
+def _verdant_wilds_worth_activating(view: GameView, source: L5RCard) -> bool:
+    """Whether Verdant Wilds should bow itself to straighten a card.
+
+    It produces five Gold and bows to pay, so the straightened card has to be worth more than that
+    before the seat is ahead. Almost nothing is, which is the answer: the trade is offered every
+    turn and is worth taking only when a bigger producer is sitting bowed.
+    """
+    bowed = [card for card in in_play(view) if card.bowed]
+    if not bowed:
+        return False
+    before = spendable(view)
+    after = before + best_production(view, bowed) - production(view, source)
+    return newly_affordable(view, before, after)
+
+
 register_ability_hint(
     "modest_farm",
     AbilityHint(
@@ -189,5 +260,30 @@ register_ability_hint(
     AbilityHint(
         worth_activating=_millet_farm_worth_activating,
         best_target=_largest_straight_producer,
+    ),
+)
+register_ability_hint(
+    "harvested_land",
+    AbilityHint(worth_activating=_harvested_land_worth_activating),
+)
+register_ability_hint(
+    "rural_market",
+    AbilityHint(
+        worth_activating=_rural_market_worth_activating,
+        best_target=_largest_producer,
+    ),
+)
+register_ability_hint(
+    "ichiba_district",
+    AbilityHint(
+        worth_activating=_ichiba_district_worth_activating,
+        best_target=_largest_straight_producer,
+    ),
+)
+register_ability_hint(
+    "verdant_wilds",
+    AbilityHint(
+        worth_activating=_verdant_wilds_worth_activating,
+        best_target=_largest_producer,
     ),
 )

@@ -15,6 +15,7 @@ from yasuki_core.engine.bots.policies import GoldRushPolicy
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.game_pieces.counters import WEALTH
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
@@ -184,18 +185,25 @@ def test_it_flushes_every_barren_card_it_could_not_buy():
 # --- activated abilities -------------------------------------------------------------------------
 
 
-def _action_phase(production: int = 8, farm_gp: int = 1) -> EngineSession:
-    """An Action-phase session where P1 holds Modest Farm and a producer to pay with. The Action
-    Phase is the only round permitting Open actions, which every economy ability here is."""
+def _economy_phase(production: int = 8) -> EngineSession:
+    """An Action-phase session holding only a producer to pay with, so the ability under test is the
+    only one the policy is weighing. The Action Phase is the only round permitting Open actions,
+    which every economy ability here is."""
     table = dealt_table()
     put_in_play(table, holding("purse", owner=P1, gold_production=production))
+    return EngineSession.start(table, P1, seed=1)
+
+
+def _action_phase(production: int = 8, farm_gp: int = 1) -> EngineSession:
+    """An Action-phase session where P1 also holds Modest Farm."""
+    session = _economy_phase(production)
     put_in_play(
-        table,
+        session.game,
         holding(
             "mf", owner=P1, printed_id="modest_farm", keywords=("Farm",), gold_production=farm_gp
         ),
     )
-    return EngineSession.start(table, P1, seed=1)
+    return session
 
 
 def test_it_activates_modest_farm_for_a_farm_it_can_reach():
@@ -227,12 +235,13 @@ def test_it_leaves_modest_farm_alone_when_its_own_yield_is_what_would_pay():
 
 def test_it_never_activates_an_ability_it_has_no_model_for():
     """A policy cannot read what a card does, so an unmodelled ability is left alone rather than
-    guessed at — otherwise every new card silently changes every deck's numbers. Harvested Land is
-    given the lower id, so passing it over is the model talking and not the tie-break."""
+    guessed at — otherwise every new card silently changes every deck's numbers. Moto Traders draws
+    a card, which these policies price at nothing, and is given the lower id so that passing it over
+    is the model talking and not the tie-break."""
     session = _action_phase()
     put_in_play(
         session.game,
-        holding("aa", owner=P1, printed_id="harvested_land", keywords=("Farm",), gold_production=1),
+        holding("aa", owner=P1, printed_id="moto_traders", gold_production=1),
     )
     province_card(session.game, "barn", seat=P1, gold_cost=3, gold_production=2, keywords=("Farm",))
     offered = session.legal_actions(P1)
@@ -293,6 +302,21 @@ def test_it_gives_millet_farms_bonus_to_a_farm_still_able_to_use_it():
     request = ChooseAbilityTarget(seat=P1, candidates=("mf", "mill"), source_card_id="mill")
 
     assert GoldRushPolicy().decide(request, session.project(P1)).choices == ("mill",)
+
+
+def test_it_takes_the_first_candidate_for_a_card_whose_hint_names_no_target_rule():
+    """Harvested Land is modelled well enough to be activated and not well enough to be aimed, and
+    the two halves of a hint are independent — an unaimed one must not fall back to answering
+    nothing."""
+    session = _economy_phase()
+    put_in_play(
+        session.game,
+        holding("hl", owner=P1, printed_id="harvested_land", keywords=("Farm",), gold_production=2),
+    )
+    province_card(session.game, "barn", seat=P1, gold_cost=3, gold_production=2)
+    request = ChooseAbilityTarget(seat=P1, candidates=("barn", "purse"), source_card_id="hl")
+
+    assert GoldRushPolicy().decide(request, session.project(P1)).choices == ("barn",)
 
 
 def _straighten_request(target_id: str) -> ChooseCards:
@@ -420,6 +444,152 @@ def test_it_declines_a_chain_that_only_unlocks_a_card_producing_nothing():
 
     assert ActivateAbility("mf") in session.legal_actions(P1)
     assert _choice(session) != ActivateAbility("mf")
+
+
+def _harvested_land_session(farms: int) -> EngineSession:
+    """P1 holding Harvested Land beside ``farms`` straight Farms for its grant to land on."""
+    session = _economy_phase()
+    put_in_play(
+        session.game,
+        holding("hl", owner=P1, printed_id="harvested_land", keywords=("Farm",), gold_production=2),
+    )
+    for index in range(farms):
+        put_in_play(
+            session.game, holding(f"f{index}", owner=P1, keywords=("Farm",), gold_production=1)
+        )
+    return session
+
+
+def test_it_spends_harvested_land_when_the_raise_beats_its_own_yield():
+    # Eight, two and three straight: thirteen. It destroys its own two to add one to each of the
+    # three Farms, which is fourteen — and fourteen is what the card costs.
+    session = _harvested_land_session(farms=3)
+    province_card(session.game, "keep", seat=P1, gold_cost=14, gold_production=2)
+
+    assert _choice(session) == ActivateAbility("hl")
+
+
+def test_it_keeps_harvested_land_when_too_few_farms_collect_the_grant():
+    """The Holding is destroyed to give the grant, so a board with fewer Farms than its own yield
+    hands back less Gold than it took away."""
+    session = _harvested_land_session(farms=1)
+    province_card(session.game, "keep", seat=P1, gold_cost=12, gold_production=2)
+
+    assert ActivateAbility("hl") in session.legal_actions(P1)  # the engine offers it
+    assert _choice(session) == Pass()  # the policy declines
+
+
+def _rural_market_session(farm_gp: int, cost: int) -> EngineSession:
+    """P1 holding Rural Market with a Wealth token to spend, and a bowed Farm to straighten."""
+    session = _economy_phase()
+    put_in_play(
+        session.game,
+        holding(
+            "rm",
+            owner=P1,
+            printed_id="rural_market",
+            keywords=("Farm", "Market"),
+            counters={WEALTH.key: 1},
+        ),
+    )
+    farm = put_in_play(
+        session.game, holding("barn", owner=P1, keywords=("Farm",), gold_production=farm_gp)
+    )
+    farm.bow()
+    province_card(session.game, "keep", seat=P1, gold_cost=cost, gold_production=2)
+    return session
+
+
+def test_it_spends_a_wealth_token_to_straighten_a_farm_that_buys_something():
+    # Eight straight and a Wealth token worth one: nine. Straightening the Farm adds four and the
+    # token spends one of Rural Market's own, which reaches the twelve the card costs.
+    session = _rural_market_session(farm_gp=4, cost=12)
+
+    assert _choice(session) == ActivateAbility("rm")
+
+
+def test_it_keeps_the_wealth_token_when_the_straightened_farm_buys_nothing():
+    session = _rural_market_session(farm_gp=4, cost=20)
+
+    assert ActivateAbility("rm") in session.legal_actions(P1)  # the engine offers it
+    assert _choice(session) == Pass()  # the policy declines
+
+
+def test_it_straightens_the_largest_bowed_farm():
+    """Every candidate is bowed, so the only thing separating them is what bowing them again
+    raises."""
+    session = _rural_market_session(farm_gp=1, cost=12)
+    big = put_in_play(
+        session.game, holding("silo", owner=P1, keywords=("Farm",), gold_production=5)
+    )
+    big.bow()
+    request = ChooseAbilityTarget(seat=P1, candidates=("barn", "silo"), source_card_id="rm")
+
+    assert GoldRushPolicy().decide(request, session.project(P1)).choices == ("silo",)
+
+
+def _ichiba_session(port_bowed: bool, cost: int) -> EngineSession:
+    """P1 holding Ichiba District and one Port for its grant."""
+    session = _economy_phase()
+    put_in_play(
+        session.game,
+        holding(
+            "ich", owner=P1, printed_id="ichiba_district", keywords=("Market",), gold_production=1
+        ),
+    )
+    port = put_in_play(
+        session.game, holding("dock", owner=P1, keywords=("Port",), gold_production=2)
+    )
+    if port_bowed:
+        port.bow()
+    province_card(session.game, "keep", seat=P1, gold_cost=cost, gold_production=2)
+    return session
+
+
+def test_it_banishes_a_card_to_raise_a_port_within_reach():
+    # Eleven straight, and the grant makes twelve, which is what the card costs. The banished card
+    # costs no Gold, so nothing is weighed against it.
+    session = _ichiba_session(port_bowed=False, cost=12)
+
+    assert _choice(session) == ActivateAbility("ich")
+
+
+def test_it_declines_ichiba_district_when_the_port_is_already_bowed():
+    """A bowed Port has produced already and cannot be bowed again, so the grant lands somewhere it
+    can never be collected from this turn."""
+    session = _ichiba_session(port_bowed=True, cost=10)
+
+    assert ActivateAbility("ich") in session.legal_actions(P1)  # the engine offers it
+    assert _choice(session) == Pass()  # the policy declines
+
+
+def _verdant_wilds_session(bowed_gp: int, cost: int) -> EngineSession:
+    """P1 holding Verdant Wilds and one bowed producer it could straighten."""
+    session = _economy_phase()
+    put_in_play(
+        session.game,
+        holding(
+            "vw", owner=P1, printed_id="verdant_wilds", keywords=("Forest",), gold_production=5
+        ),
+    )
+    bowed = put_in_play(session.game, holding("mine", owner=P1, gold_production=bowed_gp))
+    bowed.bow()
+    province_card(session.game, "keep", seat=P1, gold_cost=cost, gold_production=2)
+    return session
+
+
+def test_it_bows_verdant_wilds_only_for_a_bigger_producer():
+    # Thirteen straight. It bows its own five away to straighten a seven, which is fifteen.
+    session = _verdant_wilds_session(bowed_gp=7, cost=15)
+
+    assert _choice(session) == ActivateAbility("vw")
+
+
+def test_it_declines_verdant_wilds_for_a_producer_smaller_than_itself():
+    session = _verdant_wilds_session(bowed_gp=3, cost=14)
+
+    assert ActivateAbility("vw") in session.legal_actions(P1)  # the engine offers it
+    assert _choice(session) == Pass()  # the policy declines
 
 
 def _opening(*productions: int) -> EngineSession:
