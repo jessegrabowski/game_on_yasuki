@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy, Recruit
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,

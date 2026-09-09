@@ -1,7 +1,7 @@
 from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Legacy, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Legacy, Recruit
 from yasuki_core.engine.bots.agents import LegacyAgent, PayingAgent
 from yasuki_core.engine.rules.vocabulary.decisions import (
     BanishForLegacy,

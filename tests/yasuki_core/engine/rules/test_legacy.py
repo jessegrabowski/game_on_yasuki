@@ -6,7 +6,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint
-from yasuki_core.engine.rules.actions import Legacy
+from yasuki_core.engine.rules.vocabulary.actions import Legacy
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseLegacyCard,
     PlaceLegacy,

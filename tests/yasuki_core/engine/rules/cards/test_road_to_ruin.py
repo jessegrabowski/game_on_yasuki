@@ -3,7 +3,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
 from yasuki_core.engine.rules.effects import AttachCard, DelayStraighten, Destroy
 from yasuki_core.engine.rules.turn.action_sequence import submit

@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production, untaken_self_grant
 from yasuki_core.engine.rules.vocabulary.events import ProducingGold

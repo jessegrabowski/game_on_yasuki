@@ -2,7 +2,7 @@ from typing import Protocol
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Cycle,

@@ -3,7 +3,7 @@ from numpy.random import default_rng
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Action, Legacy
+from yasuki_core.engine.rules.vocabulary.actions import Action, Legacy
 from yasuki_core.engine.bots.agents import AutoAgent
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse, DiscardToHandSize
 from yasuki_core.engine.bots.policies import PassPolicy, RandomPolicy

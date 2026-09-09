@@ -1,4 +1,10 @@
-from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    Action,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.projection import GameView
 
 

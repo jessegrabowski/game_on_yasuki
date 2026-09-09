@@ -6,7 +6,7 @@ from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.snapshot import InitialRecord, encode_initial
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
-from yasuki_core.engine.rules.actions import Pass
+from yasuki_core.engine.rules.vocabulary.actions import Pass
 from yasuki_core.engine.rules.log import (
     GameLog,
     build_game,

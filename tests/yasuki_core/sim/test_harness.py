@@ -3,7 +3,7 @@ import csv
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.bots.agents import PayingAgent
 from yasuki_core.engine.bots.policies import EconomicPolicy, PassPolicy
 from yasuki_core.sim.harness import Game, run_games, sample_rows, write_csv, write_rows

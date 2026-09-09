@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, Recruit
 from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     CAVALRY_FOLLOWER,
     HORROR,
@@ -37,7 +37,7 @@ from yasuki_core.game_pieces.prints import FatePrint
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.actions import DeclareAttack, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, PlayStrategy
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.prints import ActionPrint
 

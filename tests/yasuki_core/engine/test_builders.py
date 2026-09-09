@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (

@@ -5,7 +5,7 @@ from numpy.random import Generator, default_rng
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.rules.actions import Action
+from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.battle.records import AttackPhase
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.vocabulary.events import GameEvent

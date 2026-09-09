@@ -49,7 +49,6 @@ yasuki_core
     yasuki_core.engine.rules.abilities.model <yasuki_core.engine.rules.abilities.model>
     yasuki_core.engine.rules.abilities.registry <yasuki_core.engine.rules.abilities.registry>
     yasuki_core.engine.rules.abilities.strategy <yasuki_core.engine.rules.abilities.strategy>
-    yasuki_core.engine.rules.actions <yasuki_core.engine.rules.actions>
     yasuki_core.engine.rules.attack_effects <yasuki_core.engine.rules.attack_effects>
     yasuki_core.engine.rules.battle.records <yasuki_core.engine.rules.battle.records>
     yasuki_core.engine.rules.battle.resolution <yasuki_core.engine.rules.battle.resolution>
@@ -95,6 +94,7 @@ yasuki_core
     yasuki_core.engine.rules.turn.structure <yasuki_core.engine.rules.turn.structure>
     yasuki_core.engine.rules.units.composition <yasuki_core.engine.rules.units.composition>
     yasuki_core.engine.rules.units.membership <yasuki_core.engine.rules.units.membership>
+    yasuki_core.engine.rules.vocabulary.actions <yasuki_core.engine.rules.vocabulary.actions>
     yasuki_core.engine.rules.vocabulary.decisions <yasuki_core.engine.rules.vocabulary.decisions>
     yasuki_core.engine.rules.vocabulary.events <yasuki_core.engine.rules.vocabulary.events>
     yasuki_core.engine.rules.vocabulary.modifiers <yasuki_core.engine.rules.vocabulary.modifiers>

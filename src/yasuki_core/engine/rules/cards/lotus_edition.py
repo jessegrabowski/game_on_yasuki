@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
 from yasuki_core.engine.rules.effects import AskAmount, Choose, Destroy, Effect, GainHonor, PayGold
 from yasuki_core.engine.rules.gold.producers import reachable_gold

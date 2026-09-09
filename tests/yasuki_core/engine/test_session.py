@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DynastyDiscard,
     Equip,

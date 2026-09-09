@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_holdings,
     owned_personalities,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,

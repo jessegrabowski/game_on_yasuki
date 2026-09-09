@@ -8,7 +8,7 @@ from yasuki_core.engine.snapshot import (
     decode_initial,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Cycle,

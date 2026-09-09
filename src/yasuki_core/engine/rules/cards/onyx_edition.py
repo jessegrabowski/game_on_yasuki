@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
     register_invest,
 )
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.effects import AdjustCounter, Banish, Choose, CreateToken, Effect
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.events import CardDiscarded, EnteredPlay

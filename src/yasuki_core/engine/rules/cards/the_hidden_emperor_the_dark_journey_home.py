@@ -2,7 +2,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import attack_targets
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Ask, DelayedEffect, DrawCard, Effect, RangedAttack
 from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
 from yasuki_core.engine.players import PlayerId

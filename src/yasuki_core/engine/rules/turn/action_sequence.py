@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.abilities.strategy import (
     resolve_strategy,
     play_strategy,
 )
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Cycle,

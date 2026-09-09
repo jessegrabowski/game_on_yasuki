@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.actions
-================================
+yasuki_core.engine.rules.vocabulary.actions
+===========================================
 
-.. currentmodule:: yasuki_core.engine.rules.actions
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.actions
 
 .. rubric:: Classes
 
@@ -24,6 +24,6 @@ yasuki_core.engine.rules.actions
     Recruit
     UseFavorAbility
 
-.. automodule:: yasuki_core.engine.rules.actions
+.. automodule:: yasuki_core.engine.rules.vocabulary.actions
     :members:
     :undoc-members:

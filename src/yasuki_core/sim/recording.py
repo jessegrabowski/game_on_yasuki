@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Action
+from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.log import Act, Cancel, GameLog
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.sim.metrics import Metric

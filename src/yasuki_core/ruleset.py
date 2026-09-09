@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.turn.structure import BattleSegment, Segment
 
 

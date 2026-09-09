@@ -10,7 +10,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.abilities.model import InvestAbility
 from yasuki_core.engine.rules.abilities.registry import _INVEST, register_invest
-from yasuki_core.engine.rules.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInvestAmount,
     ChoosePayment,

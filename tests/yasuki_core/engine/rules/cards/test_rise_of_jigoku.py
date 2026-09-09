@@ -3,7 +3,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import ActivateAbility, KharmicDraw, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, KharmicDraw, Pass, Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     Confirm,

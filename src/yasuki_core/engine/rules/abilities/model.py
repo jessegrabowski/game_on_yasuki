@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from yasuki_core.engine.rules.abilities.costs import Cost
-from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard

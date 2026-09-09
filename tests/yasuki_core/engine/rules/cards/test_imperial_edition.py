@@ -1,7 +1,12 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Pass, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
