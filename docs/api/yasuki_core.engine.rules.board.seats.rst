@@ -10,7 +10,7 @@ yasuki_core.engine.rules.board.seats
     cards_in_play
     cards_named
     opposing_seats
-    seat_controls
+    seat_controls_printed
     seat_stronghold
     went_second
 

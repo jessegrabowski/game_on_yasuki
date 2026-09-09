@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.keyword_grants import keyword_grant
-from yasuki_core.engine.rules.board.seats import seat_controls
+from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
@@ -48,7 +48,7 @@ def _fortified_farmlands_keywords(
     being granted once. The card's Response half is not modeled: no Action Round opens a Response
     step for it to be taken in.
     """
-    return ("Renew",) if seat_controls(game, seat, "Farm", other_than=card) else ()
+    return ("Renew",) if seat_controls_printed(game, seat, "Farm", other_than=card) else ()
 
 
 # --- Millet Farm ---
