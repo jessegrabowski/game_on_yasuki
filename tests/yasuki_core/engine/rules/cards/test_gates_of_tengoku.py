@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession

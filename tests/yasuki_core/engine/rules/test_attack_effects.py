@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equip, Pass
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.attack_effects import effective_strength

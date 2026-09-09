@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.events import GameEvent
+from yasuki_core.engine.rules.vocabulary.events import GameEvent
 
 
 @dataclass(frozen=True, slots=True)

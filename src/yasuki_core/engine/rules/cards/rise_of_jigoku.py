@@ -34,7 +34,7 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
     Then,
 )
-from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.events import CardDiscarded, Destroyed, EnteredPlay
 from yasuki_core.engine.rules.actions import (
     ActionTiming,
     ActivateAbility,

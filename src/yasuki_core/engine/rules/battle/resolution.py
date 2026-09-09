@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules.vocabulary.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
-from yasuki_core.engine.rules.events import Destroyed
+from yasuki_core.engine.rules.vocabulary.events import Destroyed
 from yasuki_core.engine.rules.battle.records import (
     AttackPhase,
     BattleOutcome,

@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     Unpayable,
 )
-from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType, Side

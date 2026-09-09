@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionRequest,
 )
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.rules.events import (
+from yasuki_core.engine.rules.vocabulary.events import (
     CardDiscarded,
     CounterGained,
     Destroyed,

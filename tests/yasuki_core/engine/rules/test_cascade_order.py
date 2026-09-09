@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.events import CounterGained, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.events import CounterGained, EnteredPlay
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.decisions import ChoosePayment, DecisionResponse

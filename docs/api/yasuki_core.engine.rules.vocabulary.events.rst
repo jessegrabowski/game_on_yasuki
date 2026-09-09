@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.events
-===============================
+yasuki_core.engine.rules.vocabulary.events
+==========================================
 
-.. currentmodule:: yasuki_core.engine.rules.events
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.events
 
 .. rubric:: Classes
 
@@ -19,6 +19,6 @@ yasuki_core.engine.rules.events
     Straightened
     TurnStarted
 
-.. automodule:: yasuki_core.engine.rules.events
+.. automodule:: yasuki_core.engine.rules.vocabulary.events
     :members:
     :undoc-members:

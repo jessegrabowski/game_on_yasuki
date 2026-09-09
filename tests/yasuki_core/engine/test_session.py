@@ -22,7 +22,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
 from yasuki_core.engine.rules.log import Answer, replay
 from yasuki_core.engine.rules.triggers import on
 from yasuki_core.engine.session import EngineSession

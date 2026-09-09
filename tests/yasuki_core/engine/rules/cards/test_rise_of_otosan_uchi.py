@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_options
 from yasuki_core.engine.rules.effects import Straighten, TakeFavor
 from yasuki_core.engine.rules.state import GameState

@@ -58,7 +58,6 @@ yasuki_core
     yasuki_core.engine.rules.board.seats <yasuki_core.engine.rules.board.seats>
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
-    yasuki_core.engine.rules.events <yasuki_core.engine.rules.events>
     yasuki_core.engine.rules.gold.cost <yasuki_core.engine.rules.gold.cost>
     yasuki_core.engine.rules.gold.discounts <yasuki_core.engine.rules.gold.discounts>
     yasuki_core.engine.rules.gold.payment <yasuki_core.engine.rules.gold.payment>
@@ -98,6 +97,7 @@ yasuki_core
     yasuki_core.engine.rules.turn.structure <yasuki_core.engine.rules.turn.structure>
     yasuki_core.engine.rules.units.composition <yasuki_core.engine.rules.units.composition>
     yasuki_core.engine.rules.units.membership <yasuki_core.engine.rules.units.membership>
+    yasuki_core.engine.rules.vocabulary.events <yasuki_core.engine.rules.vocabulary.events>
     yasuki_core.engine.rules.vocabulary.victory <yasuki_core.engine.rules.vocabulary.victory>
     yasuki_core.engine.rules.vocabulary.work <yasuki_core.engine.rules.vocabulary.work>
     yasuki_core.engine.runner <yasuki_core.engine.runner>

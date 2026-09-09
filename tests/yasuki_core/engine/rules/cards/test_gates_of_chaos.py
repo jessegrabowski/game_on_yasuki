@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production, untaken_self_grant
-from yasuki_core.engine.rules.events import ProducingGold
+from yasuki_core.engine.rules.vocabulary.events import ProducingGold
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.triggers import TriggerContext, _TRIGGERS

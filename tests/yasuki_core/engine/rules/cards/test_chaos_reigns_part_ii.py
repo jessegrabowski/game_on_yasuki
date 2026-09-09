@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.effects import Destroy
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
