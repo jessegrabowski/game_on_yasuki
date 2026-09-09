@@ -2,7 +2,8 @@ import inspect
 import pathlib
 import re
 
-from yasuki_core.engine.rules import decisions, effects
+from yasuki_core.engine.rules import effects
+from yasuki_core.engine.rules.vocabulary import decisions
 from yasuki_core.engine.rules.vocabulary import modifiers
 from yasuki_core.engine.rules.vocabulary import events
 from yasuki_core.engine.rules.vocabulary import work

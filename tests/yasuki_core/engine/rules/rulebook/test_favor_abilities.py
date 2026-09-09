@@ -8,7 +8,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.actions import ActionTiming, Lobby, UseFavorAbility
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_ability_cost, use_favor_ability

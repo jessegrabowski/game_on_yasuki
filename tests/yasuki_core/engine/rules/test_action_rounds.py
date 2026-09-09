@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.actions import (
     DynastyDiscard,
     Pass,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import end_phase, holding, province_card, put_in_play

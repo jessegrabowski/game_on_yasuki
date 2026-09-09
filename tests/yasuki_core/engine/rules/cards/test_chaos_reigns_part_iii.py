@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     KANPEKI_DYNASTY,
     ZOMBIE_FOLLOWER,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
 from yasuki_core.engine.rules.log import replay

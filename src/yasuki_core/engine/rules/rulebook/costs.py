@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.decisions import ChoosePayment
+from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.state import GameState

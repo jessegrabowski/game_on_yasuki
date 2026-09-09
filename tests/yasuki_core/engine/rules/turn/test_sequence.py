@@ -26,7 +26,7 @@ from yasuki_core.engine.rules.turn.structure import (
     RoundKind,
     Turn,
 )
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     DiscardToHandSize,
     DecisionResponse,
     LeaveBowed,

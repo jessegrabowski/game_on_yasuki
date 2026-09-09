@@ -1,6 +1,10 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import PlayStrategy
-from yasuki_core.engine.rules.decisions import ChooseAmount, ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseAmount,
+    ChoosePayment,
+    DecisionResponse,
+)
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard

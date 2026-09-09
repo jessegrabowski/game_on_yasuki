@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.decisions import DiscardToHandSize, LeaveBowed
+from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize, LeaveBowed
 from yasuki_core.engine.rules.effects import AdjustCounter
 from yasuki_core.engine.rules.vocabulary.events import (
     CardDiscarded,

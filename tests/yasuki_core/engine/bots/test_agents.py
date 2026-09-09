@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.bots.agents import AGENTS, AutoAgent, make_agent
-from yasuki_core.engine.rules.decisions import ChooseDistribution, DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseDistribution, DiscardToHandSize
 
 
 def test_auto_agent_answers_with_the_shortest_accepting_prefix():

@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, ChooseCards
 from yasuki_core.engine.bots.policies import GoldRushPolicy
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole

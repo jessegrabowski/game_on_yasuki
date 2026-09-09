@@ -19,7 +19,7 @@ from yasuki_core.engine import runner as runner_module
 from yasuki_core.engine.runner import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     Confirm,
     DecisionResponse,

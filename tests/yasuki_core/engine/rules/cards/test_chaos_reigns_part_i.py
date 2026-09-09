@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     PlayStrategy,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import Discard, DiscardFavor, TakeFavor
 from yasuki_core.engine.rules.vocabulary.events import CardDiscarded
 from yasuki_core.engine.rules.turn.action_sequence import submit

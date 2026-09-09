@@ -11,7 +11,11 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.abilities.model import InvestAbility
 from yasuki_core.engine.rules.abilities.registry import _INVEST, register_invest
 from yasuki_core.engine.rules.actions import Recruit
-from yasuki_core.engine.rules.decisions import ChooseInvestAmount, ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseInvestAmount,
+    ChoosePayment,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession

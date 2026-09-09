@@ -6,7 +6,11 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import equip_invest_amount, finish_invest
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.board.queries import owned_personalities
-from yasuki_core.engine.rules.decisions import ChooseEquipTarget, ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseEquipTarget,
+    ChoosePayment,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request

@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.bots.agents import Agent, AutoAgent
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseLegacyCard,
     Confirm,
     DecisionRequest,

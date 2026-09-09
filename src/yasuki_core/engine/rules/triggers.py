@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.vocabulary.events import (
     Destroyed,
     GameEvent,
 )
-from yasuki_core.engine.rules.decisions import CHOICE_PROMPTS
+from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     Effect,

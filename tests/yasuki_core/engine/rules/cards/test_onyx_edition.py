@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
 )
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
-from yasuki_core.engine.rules.decisions import ChooseInvestAmount, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseInvestAmount, DecisionResponse
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
 from yasuki_core.engine.rules.vocabulary.events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire

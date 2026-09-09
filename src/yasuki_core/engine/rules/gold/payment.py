@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.decisions import ChoosePayment
+from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment
 from yasuki_core.engine.rules.effects import Ask, Effect
 from yasuki_core.engine.rules.gold.producers import gold_producers, reachable_gold
 from yasuki_core.engine.rules.gold.production import effective_gold_production

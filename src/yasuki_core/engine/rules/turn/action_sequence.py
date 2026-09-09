@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     BanishForLegacy,
     ChooseAbilityTarget,

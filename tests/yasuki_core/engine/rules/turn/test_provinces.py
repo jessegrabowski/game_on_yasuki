@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.effects import DestroyProvince, Discard, RefillProvince
 from yasuki_core.engine.rules.vocabulary.events import CardDiscarded, EnteredPlay

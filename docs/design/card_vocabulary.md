@@ -119,7 +119,7 @@ execution resumes. The `accepts` method verifies that a response is structurally
 Legality with respect to game state is checked separately.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.decisions
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.decisions
 
 .. autosummary::
 

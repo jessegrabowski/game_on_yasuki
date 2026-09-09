@@ -2,7 +2,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.engine.rules.effects import DiscardFavor, TakeFavor
-from yasuki_core.engine.rules.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize
 from yasuki_core.engine.rules.turn.sequence import _end_turn, MAX_HAND_SIZE
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole

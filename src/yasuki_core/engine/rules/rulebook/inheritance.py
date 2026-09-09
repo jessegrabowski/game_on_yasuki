@@ -1,6 +1,6 @@
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import owned_holdings
-from yasuki_core.engine.rules.decisions import ChooseInheritanceTarget, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseInheritanceTarget, DecisionResponse
 from yasuki_core.engine.rules.effects import GrantModifier
 from yasuki_core.engine.rules.legality import (
     inheritance_key,

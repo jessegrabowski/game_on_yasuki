@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     EXPENDABLE_SERVANT,
     LION_ANCESTOR,
 )
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseOption,
     Confirm,

@@ -4,7 +4,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import finish_invest
 from yasuki_core.engine.rules.abilities.registry import enters_play_bowed, invest_amounts
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseFortificationProvince,
     ChooseInvestAmount,
     ChoosePayment,

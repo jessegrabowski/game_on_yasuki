@@ -7,7 +7,11 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint
 from yasuki_core.engine.rules.actions import Legacy
-from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseLegacyCard,
+    PlaceLegacy,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.vocabulary.events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase

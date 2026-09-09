@@ -7,7 +7,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     DecisionResponse,
 )

@@ -7,7 +7,7 @@ from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, Zo
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseEquipTarget,
     ChoosePayment,
     DiscardToHandSize,

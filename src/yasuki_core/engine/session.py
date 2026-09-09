@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.actions import (
     Action,
     DynastyDiscard,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules import legality, projection
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import (

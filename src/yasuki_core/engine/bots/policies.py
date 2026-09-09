@@ -24,7 +24,7 @@ from yasuki_core.engine.bots.queries import (
     readable_province_cards,
     spendable,
 )
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     ChooseBattlefield,
     assignment,

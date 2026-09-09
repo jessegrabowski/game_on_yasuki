@@ -8,7 +8,7 @@ import pytest
 from yasuki_core.engine.rules import legality, log
 from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.actions import Action
-from yasuki_core.engine.rules.decisions import DecisionRequest
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.log import GameInput
 from yasuki_core.engine.rules.vocabulary.work import WorkItem
 

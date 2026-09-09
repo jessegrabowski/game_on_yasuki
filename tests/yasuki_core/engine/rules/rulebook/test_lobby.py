@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar, LOBBY_BARS
 from yasuki_core.engine.rules.rulebook.lobby import lobby_key
 from yasuki_core.engine.rules.actions import ActivateAbility, Lobby
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.effects import GrantLobbyBonus
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration

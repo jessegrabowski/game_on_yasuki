@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     PlayStrategy,
 )
-from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules import legality, triggers
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.battle import resolution

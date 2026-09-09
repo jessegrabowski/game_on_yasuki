@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import BattleOutcome
 from yasuki_core.engine.rules.turn.structure import BattleSegment, Phase, RoundKind, Segment
-from yasuki_core.engine.rules.decisions import DecisionRequest
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.rules.board.queries import units_at
 from yasuki_core.engine.rules.units.composition import unit_force

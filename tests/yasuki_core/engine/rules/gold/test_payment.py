@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.actions import Recruit
 from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
     Confirm,
     DecisionResponse,
