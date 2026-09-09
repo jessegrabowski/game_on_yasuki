@@ -33,7 +33,13 @@ from yasuki_core.engine.rules.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
-from yasuki_core.engine.rules.board.queries import has_keyword, owned_holdings, province_cards
+from yasuki_core.engine.rules.units.composition import in_a_unit
+from yasuki_core.engine.rules.board.queries import (
+    has_keyword,
+    owned_holdings,
+    province_cards,
+    units_at,
+)
 from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.rulebook.equip import equip_targets
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -45,7 +51,7 @@ from yasuki_core.engine.rules.rulebook.lobby import lobby_candidates, lobby_key
 from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.units import has_caster, has_presence, is_spell, location_permits
+from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
 from yasuki_core.engine.table import DeckKey, location_of, ZoneKey, ZoneRole
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -681,3 +687,30 @@ def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]
         for target_id in offered
         if target_id not in by_id or location_permits(game, by_id[target_id])
     ]
+
+
+def has_presence(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` controls a unit at the battle now being fought (CR, Rule of Presence).
+
+    True outside a battle, where presence is not a question anyone asks.
+    """
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return True
+    return bool(units_at(game, attack.current, seat))
+
+
+def location_permits(game: GameState, card: L5RCard) -> bool:
+    """Whether the Rules of Location leave ``card`` free to be acted from and targeted.
+
+    A card in a unit must stand at the battle now being fought. A card in no unit — a Holding, a
+    Region, a Stronghold — stands nowhere those rules speak of, so they never exclude it, and
+    neither rule applies outside a battle at all. A card in a unit stands where its Personality
+    stands, so its own recorded location answers for it.
+    """
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return True
+    if not in_a_unit(game, card):
+        return True
+    return location_of(game.table, card).battlefield == attack.current

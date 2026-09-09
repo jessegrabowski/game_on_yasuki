@@ -4,9 +4,9 @@ from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.actions import ActionTiming
-from yasuki_core.engine.rules.attachments import shares_unit
+from yasuki_core.engine.rules.units.membership import shares_unit
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.units import attack_strength_against
+from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
     AttackEffect,
     Choose,

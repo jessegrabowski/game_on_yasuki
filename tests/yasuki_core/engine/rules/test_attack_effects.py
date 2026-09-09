@@ -5,10 +5,10 @@ from yasuki_core.engine.rules.actions import ActivateAbility, DeclareAttack, Equ
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.abilities.registry import ability_for
-from yasuki_core.engine.rules.units import effective_strength
+from yasuki_core.engine.rules.attack_effects import effective_strength
 from yasuki_core.engine.rules.effects import Destroy, Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.units import attackable
+from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -56,7 +56,8 @@ def battle():
 
 
 def _ids(session, seat):
-    return {card.id for card in attackable(session.game, seat)}
+    source = next(card for card in session.game.table.battlefield.cards if card.owner is seat)
+    return set(attack_targets(session.game, source))
 
 
 def test_it_reaches_the_enemy_army_and_not_the_enemys_other_cards(battle):
@@ -115,7 +116,10 @@ def test_nothing_is_attackable_outside_a_battle():
     put_in_play(state, personality("guard", owner=DEFENDER, force=2))
     session = EngineSession.start(state, ATTACKER)
 
-    assert attackable(session.game, ATTACKER) == []
+    source = personality("raider", owner=ATTACKER, force=3)
+    put_in_play(session.game, source)
+
+    assert attack_targets(session.game, source) == []
 
 
 def _resolve(session, attack):

@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Effect, Move
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.units import units_at
+from yasuki_core.engine.rules.board.queries import units_at
 from yasuki_core.engine.table import Location
 from yasuki_core.game_pieces.cards import L5RCard
 

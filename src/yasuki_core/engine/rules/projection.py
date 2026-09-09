@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.calculation import active_modifiers, effective_stat
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.modifiers import Stat
@@ -13,7 +13,8 @@ from yasuki_core.engine.rules.battle.records import BattleOutcome
 from yasuki_core.engine.rules.turn.structure import BattleSegment, Phase, RoundKind, Segment
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
-from yasuki_core.engine.rules.units import unit_force, units_at
+from yasuki_core.engine.rules.board.queries import units_at
+from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.table import DeckKey, ZoneKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -266,8 +267,8 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
 def _unit_forces(game: GameState, identifiable: set[str]) -> dict[str, int]:
     """Every identifiable in-play Personality's unit Force, as a battle would count it.
 
-    Taken from :func:`~yasuki_core.engine.rules.units.unit_force` rather than summed from
-    :attr:`GameView.stats`, because a unit's total is not a sum of its cards' Force: a Follower
+    Taken from :func:`~yasuki_core.engine.rules.units.composition.unit_force` rather than summed
+    from :attr:`GameView.stats`, because a unit's total is not a sum of its cards' Force: a Follower
     brings its own, an Item brings a modifier already inside the Personality's, and bowing removes
     some of them and not others.
     """

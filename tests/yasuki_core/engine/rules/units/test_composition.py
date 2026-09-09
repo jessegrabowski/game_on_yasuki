@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.units import followers_of, unit_force, unit_keywords
+from yasuki_core.engine.rules.units.composition import followers_of, unit_force, unit_keywords
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.builders import (

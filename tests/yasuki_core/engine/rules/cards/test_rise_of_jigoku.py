@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.rise_of_jigoku import CAVALRY_FOLLOWER, MISHIMES_ONI
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as keywords_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force

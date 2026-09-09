@@ -4,7 +4,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import equip_invest_amount, finish_invest
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.decisions import ChooseEquipTarget, ChoosePayment, DecisionResponse
 from yasuki_core.engine.rules.events import EnteredPlay
@@ -14,12 +14,14 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
-from yasuki_core.engine.rules.units import is_spell, may_cast_spells
 from yasuki_core.engine.rules.work import ResolveEquip
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint
+from yasuki_core.game_pieces.constants import AttachmentType
+from yasuki_core.engine.rules.units.membership import attached_to
 
 
 def weapons_on(game: GameState, personality: L5RCard) -> tuple[L5RCard, ...]:
@@ -181,3 +183,21 @@ def resolve_equip(
     triggers.enforce_state_based_actions(game)
     triggers.fire(game, EnteredPlay(card_id, from_hand=True))
     finish_invest(game, card, invest_amount)
+
+
+def is_spell(card: L5RCard) -> bool:
+    """Whether ``card`` is a Spell. Only attachments carry a type, so the print answers first."""
+    return (
+        isinstance(card.printed, AttachmentPrint) and card.attachment_type is AttachmentType.SPELL
+    )
+
+
+def may_cast_spells(game: GameState, personality: L5RCard) -> bool:
+    """Whether ``personality`` may hold and cast a Spell, which only a Shugenja may (CR, Spell)."""
+    return keywords.SHUGENJA in effective_keywords(game, personality)
+
+
+def has_caster(game: GameState, spell: L5RCard) -> bool:
+    """Whether ``spell`` hangs on a Personality who may cast it."""
+    caster = attached_to(game, spell)
+    return caster is not None and may_cast_spells(game, caster)

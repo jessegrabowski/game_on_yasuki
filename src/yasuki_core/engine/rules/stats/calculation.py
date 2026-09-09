@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.attachment_grants import granted_stat
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.modifiers import Duration, Minimum, Modifier, Stat

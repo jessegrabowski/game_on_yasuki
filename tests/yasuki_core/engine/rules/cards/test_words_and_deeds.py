@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.words_and_deeds import MILITIA_RECRUIT
 from yasuki_core.engine.rules.decisions import ChoosePayment, Confirm, DecisionResponse
 from yasuki_core.engine.rules.log import replay

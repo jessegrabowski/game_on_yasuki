@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     FUSHICHO,
     IKARICHIS_UNDEAD,

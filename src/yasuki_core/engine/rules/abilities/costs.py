@@ -2,7 +2,7 @@ from yasuki_core.engine.rules.registrar import FlagRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.attachments import attached_to, attachments_of
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,

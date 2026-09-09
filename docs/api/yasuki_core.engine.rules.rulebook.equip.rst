@@ -12,9 +12,12 @@ yasuki_core.engine.rules.rulebook.equip
     creation_targets
     equip
     equip_targets
+    has_caster
+    is_spell
     may_attach
     may_attach_created
     may_attach_weapon
+    may_cast_spells
     may_hold_weapon
     resolve_equip
     weapons_on

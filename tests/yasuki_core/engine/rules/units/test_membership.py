@@ -2,10 +2,7 @@ import pytest
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.attachments import (
-    attached_to,
-    attachments_of,
-)
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
     effective_force,

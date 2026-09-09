@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.decisions import (
     Confirm,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.events import EnteredPlay
