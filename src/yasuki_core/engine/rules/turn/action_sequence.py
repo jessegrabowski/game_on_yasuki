@@ -51,7 +51,7 @@ from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, resolve_
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.gold.production import complete_production, produce_gold
-from yasuki_core.engine.rules.provinces import refill_short_provinces
+from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.rulebook.recruit import (
     apply_fortification_province,
     apply_invest_amount,

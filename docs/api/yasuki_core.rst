@@ -70,7 +70,6 @@ yasuki_core
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
-    yasuki_core.engine.rules.provinces <yasuki_core.engine.rules.provinces>
     yasuki_core.engine.rules.registrar <yasuki_core.engine.rules.registrar>
     yasuki_core.engine.rules.registration_audit <yasuki_core.engine.rules.registration_audit>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
@@ -94,6 +93,7 @@ yasuki_core
     yasuki_core.engine.rules.stats.province_strength <yasuki_core.engine.rules.stats.province_strength>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
     yasuki_core.engine.rules.turn.action_sequence <yasuki_core.engine.rules.turn.action_sequence>
+    yasuki_core.engine.rules.turn.provinces <yasuki_core.engine.rules.turn.provinces>
     yasuki_core.engine.rules.turn.sequence <yasuki_core.engine.rules.turn.sequence>
     yasuki_core.engine.rules.turn.structure <yasuki_core.engine.rules.turn.structure>
     yasuki_core.engine.rules.units.composition <yasuki_core.engine.rules.units.composition>
