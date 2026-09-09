@@ -56,7 +56,6 @@ yasuki_core
     yasuki_core.engine.rules.board.clans <yasuki_core.engine.rules.board.clans>
     yasuki_core.engine.rules.board.queries <yasuki_core.engine.rules.board.queries>
     yasuki_core.engine.rules.board.seats <yasuki_core.engine.rules.board.seats>
-    yasuki_core.engine.rules.card_registry <yasuki_core.engine.rules.card_registry>
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
     yasuki_core.engine.rules.equip <yasuki_core.engine.rules.equip>
@@ -78,6 +77,7 @@ yasuki_core
     yasuki_core.engine.rules.provinces <yasuki_core.engine.rules.provinces>
     yasuki_core.engine.rules.recruit <yasuki_core.engine.rules.recruit>
     yasuki_core.engine.rules.registrar <yasuki_core.engine.rules.registrar>
+    yasuki_core.engine.rules.registration_audit <yasuki_core.engine.rules.registration_audit>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
     yasuki_core.engine.rules.rulebook.cycle <yasuki_core.engine.rules.rulebook.cycle>
     yasuki_core.engine.rules.rulebook.dynasty_discard <yasuki_core.engine.rules.rulebook.dynasty_discard>

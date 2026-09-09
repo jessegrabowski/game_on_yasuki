@@ -46,7 +46,7 @@ def main() -> None:
     args = parser.parse_args()
 
     # Imported here to keep the engine off the data pipeline's import path.
-    from yasuki_core.engine.rules.card_registry import registered_card_ids
+    from yasuki_core.engine.rules.registration_audit import registered_card_ids
 
     implemented = set().union(*registered_card_ids().values())
     rows = coverage(implemented, cards_by_set(args.cards))

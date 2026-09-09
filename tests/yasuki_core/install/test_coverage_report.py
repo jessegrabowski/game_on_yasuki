@@ -36,8 +36,8 @@ def test_sets_are_ranked_by_implemented_count_then_name():
 
 
 def test_an_implemented_id_absent_from_a_set_counts_nowhere():
-    # A handler keyed on a card that no set contains is what card_registry rejects; coverage must not
-    # quietly inflate a set's tally with it.
+    # A handler keyed on a card that no set contains is what registration_audit rejects; coverage
+    # must not quietly inflate a set's tally with it.
     assert coverage({"modest_farm", "ghost_card"}, {"imperial": {"modest_farm"}}) == [
         ("imperial", 1, 1)
     ]
