@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     Then,
 )
-from yasuki_core.engine.rules.flow import run_stack
+from yasuki_core.engine.rules.turn.action_sequence import run_stack
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay
 from yasuki_core.engine.rules.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.actions import Recruit

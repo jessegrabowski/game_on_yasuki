@@ -31,7 +31,6 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
     UseFavorAbility,
 )
-from yasuki_core.engine.rules.board import queries
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
 from yasuki_core.engine.rules.board.queries import has_keyword, owned_holdings, province_cards
 from yasuki_core.engine.rules.board.seats import seat_stronghold
@@ -41,9 +40,9 @@ from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
 from yasuki_core.engine.rules.rulebook import lobby
+from yasuki_core.engine.rules.rulebook.lobby import lobby_candidates, lobby_key
 from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.units import has_caster, has_presence, is_spell, location_permits
 from yasuki_core.engine.table import DeckKey, location_of, ZoneKey, ZoneRole
@@ -105,8 +104,7 @@ def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming
 
     None at all during a battle for a seat with no unit at the battlefield being fought: a player
     must control one or more units there to take an action at all (CR, Rule of Presence). A seat
-    permitted nothing is skipped rather than asked, which :func:`~yasuki_core.engine.rules.flow
-    .yield_priority` already does for a round that permits it nothing.
+    permitted nothing is skipped rather than asked, which :func:`~yasuki_core.engine.rules.turn.sequence.yield_priority` already does for a round that permits it nothing.
     """
     if (
         game.round.kind is RoundKind.BATTLE_SEGMENT
@@ -217,19 +215,6 @@ def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
     if game.has_used(cycle_key(seat, game.turn)):
         return []
     return [Cycle()] if cycle_candidates(game, seat) else []
-
-
-def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The Personalities ``seat`` could bow to Lobby: their own, unbowed, with 1 or more Personal
-    Honor, and not one printed "may not Lobby". Zero Personal Honor is the boundary the datasheet
-    draws, not merely a floor."""
-    return [
-        card
-        for card in queries.owned_personalities(game, seat)
-        if not card.bowed
-        and effective_personal_honor(game, card) >= 1
-        and card.printed_id not in lobby.MAY_NOT_LOBBY
-    ]
 
 
 def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
@@ -534,16 +519,6 @@ def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     Provinces. A face-down card is not eligible, so a Province nobody has revealed stays where it
     is."""
     return [card for card in province_cards(game, seat) if card.face_up]
-
-
-def lobby_key(seat: PlayerId, turn: int) -> str:
-    """The once-per-turn usage key for a seat's Lobby, scoped to the turn the way :func:`legacy_key`
-    is.
-
-    Named for the Lobby action rather than for the rulebook ability, because the ShE datasheet caps
-    a player at one Lobby action per turn whatever granted it, not at one use of this ability.
-    """
-    return f"lobby:{seat.name}:{turn}"
 
 
 def legacy_key(seat: PlayerId, turn: int) -> str:

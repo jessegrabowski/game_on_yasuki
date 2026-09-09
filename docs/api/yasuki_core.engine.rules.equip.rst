@@ -7,7 +7,9 @@ yasuki_core.engine.rules.equip
 
 .. autosummary::
 
+    announce_equip
     creation_targets
+    equip
     equip_targets
     may_attach
     may_attach_created

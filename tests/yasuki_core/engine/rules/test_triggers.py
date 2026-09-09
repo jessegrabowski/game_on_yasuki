@@ -1,7 +1,8 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules import recruit
+from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay, TurnStarted
@@ -168,7 +169,7 @@ def test_flow_emits_the_turn_start_event_from_begin_turn():
     game = two_seat_game()
     farm = _rice_farm(game)
 
-    flow.begin_game(game)
+    sequence.begin_game(game)
 
     assert farm.counters == {"wealth": 1}
 
@@ -194,7 +195,7 @@ def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
     game.table.cards_by_id[fate.id] = fate
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(fate)
 
-    flow._apply_discard(game, PlayerId.P1, ("P1-f",))
+    sequence._apply_discard(game, PlayerId.P1, ("P1-f",))
 
     assert probe.counters == {"wealth": 1}
 
@@ -381,7 +382,7 @@ def test_flow_emits_entered_play_from_recruit_resolution():
     )
     game.table.cards_by_id[rural.id] = rural  # being recruited, not yet on the battlefield
 
-    flow._resolve_recruit(game, PlayerId.P1, rural.id)
+    recruit._resolve_recruit(game, PlayerId.P1, rural.id)
 
     assert rural in game.table.battlefield.cards
     assert rural.counters == {"wealth": 1}
@@ -442,7 +443,7 @@ def test_wheat_farm_grants_a_token_to_each_chosen_farm():
     second = _keyworded_farm(game, card_id="P1-farm-b")
 
     fire(game, EnteredPlay(wheat.id))
-    flow.submit(game, DecisionResponse((first.id, second.id)))
+    action_sequence.submit(game, DecisionResponse((first.id, second.id)))
 
     assert first.counters == {"wealth": 1} and second.counters == {"wealth": 1}
     assert wheat.counters == {}
@@ -455,7 +456,7 @@ def test_wheat_farm_choice_is_optional():
     other = _keyworded_farm(game, card_id="P1-other-farm")
 
     fire(game, EnteredPlay(wheat.id))
-    flow.submit(game, DecisionResponse(()))  # decline — give none
+    action_sequence.submit(game, DecisionResponse(()))  # decline — give none
 
     assert other.counters == {}
     assert game.pending is None
@@ -469,7 +470,7 @@ def test_wheat_farm_token_cascades_into_aokis_draw():
     _seed_fate_deck(game, PlayerId.P1, 3)
 
     fire(game, EnteredPlay(wheat.id))
-    flow.submit(game, DecisionResponse((other.id,)))
+    action_sequence.submit(game, DecisionResponse((other.id,)))
 
     assert _hand_size(game, PlayerId.P1) == 1  # the granted token drew Aoki a card
 
@@ -511,7 +512,7 @@ def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
 
     fire(game, EnteredPlay(wheat.id))
     assert isinstance(game.pending, ChooseCards)  # paused with the probe's trigger stashed
-    flow.submit(game, DecisionResponse((other.id,)))
+    action_sequence.submit(game, DecisionResponse((other.id,)))
 
     assert other.counters == {"wealth": 1}  # the choice resolved
     assert probe.counters == {"wealth": 1}  # the stashed trigger resumed and applied its effect
@@ -527,7 +528,7 @@ def test_effects_after_a_choice_in_the_same_trigger_still_resolve():
 
     fire(game, EnteredPlay(sandwich.id))
     assert isinstance(game.pending, ChooseCards)
-    flow.submit(game, DecisionResponse(()))
+    action_sequence.submit(game, DecisionResponse(()))
 
     # One token before the choice, one from the resolver, one after: none dropped at the pause.
     assert sandwich.counters == {"wealth": 3}

@@ -13,7 +13,8 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
-from yasuki_core.engine.rules import flow, legality, triggers
+from yasuki_core.engine.rules import legality, triggers
+from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
@@ -91,11 +92,11 @@ def test_a_response_step_opens_over_a_battle_segment_and_unwinds_back_to_it():
     )
     game.action_events[:] = [CardDiscarded("some-fate", Side.FATE, ATTACKER)]
 
-    assert flow.open_response_window(game) is True
+    assert sequence.open_response_window(game) is True
     assert game.round.kind is RoundKind.RESPONSE
     assert len(game.round_stack) == 2  # the phase round, then the segment it suspended
 
-    flow.close_response_window(game)
+    sequence.close_response_window(game)
 
     assert game.round.kind is RoundKind.BATTLE_SEGMENT
     assert game.attack.battle_segment is BattleSegment.ENGAGE

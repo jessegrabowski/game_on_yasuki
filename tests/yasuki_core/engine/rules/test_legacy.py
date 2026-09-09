@@ -11,7 +11,9 @@ from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, De
 from yasuki_core.engine.rules.events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.rulebook import legacy
+from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 
@@ -200,12 +202,12 @@ def test_legacy_places_a_face_down_province_card_and_refills_its_old_province():
     # so drive flow directly on an unrevealed GameState rather than through a session.
     game = GameState.start(_table(legacy_in="province"), PlayerId.P1)
     game.phase = Phase.DYNASTY
-    flow.legacy(game)
-    flow.submit(game, DecisionResponse(("P1-h0",)))
-    flow.submit(game, DecisionResponse(("P1-leg",)))
+    legacy.legacy(game)
+    action_sequence.submit(game, DecisionResponse(("P1-h0",)))
+    action_sequence.submit(game, DecisionResponse(("P1-leg",)))
     assert "P1-leg" not in game.pending.candidates  # the found card can't be its own sacrifice
 
-    flow.submit(game, DecisionResponse(("P1-pv1",)))
+    action_sequence.submit(game, DecisionResponse(("P1-pv1",)))
     source = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)]
     assert len(source.cards) == 1 and source.cards[0].id != "P1-leg"  # refilled from the deck
 

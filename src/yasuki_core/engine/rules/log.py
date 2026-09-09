@@ -26,7 +26,7 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.turn import action_sequence, sequence
 
 
 @dataclass(frozen=True, slots=True)
@@ -110,7 +110,7 @@ def build_game(log: GameLog) -> GameState:
     """Rebuild the starting :class:`GameState` from ``log``: its snapshot table, first player, and
     seed, with the first turn's start-of-turn housekeeping already run."""
     game = GameState.start(build_initial_state(log.initial), log.first_player, seed=log.seed)
-    flow.begin_game(game)
+    sequence.begin_game(game)
     return game
 
 
@@ -118,26 +118,26 @@ def act_and_log(game: GameState, log: GameLog, action: Action) -> None:
     """Perform ``action`` for the seat holding the opportunity and record it. The acting seat is
     captured first, since the action hands the opportunity on and may end the turn."""
     seat = game.round.priority
-    flow.perform(game, action)
+    action_sequence.perform(game, action)
     log.entries.append(Act(seat, action))
 
 
 def submit_and_log(game: GameState, log: GameLog, response: DecisionResponse) -> None:
     """Answer the pending decision and, on success, record it. A rejected answer raises out of
-    ``flow.submit`` before anything is recorded, so the tape holds only accepted inputs.
+    ``action_sequence.submit`` before anything is recorded, so the tape holds only accepted inputs.
 
     Raise ``RuntimeError`` if no decision is pending.
     """
     if game.pending is None:
         raise RuntimeError("no decision is pending")
     seat = game.pending.seat
-    flow.submit(game, response)
+    action_sequence.submit(game, response)
     log.entries.append(Answer(seat, response))
 
 
 def cancel_and_log(game: GameState, log: GameLog) -> None:
     """Cancel the pending decision and, on success, record it. A decision that cannot be cancelled
-    raises out of ``flow.cancel`` before anything is recorded, so the tape holds only accepted
+    raises out of ``action_sequence.cancel`` before anything is recorded, so the tape holds only accepted
     inputs.
 
     Raise ``RuntimeError`` if no decision is pending.
@@ -145,7 +145,7 @@ def cancel_and_log(game: GameState, log: GameLog) -> None:
     if game.pending is None:
         raise RuntimeError("no decision is pending")
     seat = game.pending.seat
-    flow.cancel(game)
+    action_sequence.cancel(game)
     log.entries.append(Cancel(seat))
 
 
@@ -167,17 +167,17 @@ def _apply(game: GameState, entry: GameInput) -> None:
                     f"log out of step: {seat.name} acted but the opportunity is "
                     f"{game.round.priority.name}'s"
                 )
-            flow.perform(game, action)
+            action_sequence.perform(game, action)
         case Answer(seat=seat, response=response):
             pending = game.pending
             if pending is None or pending.seat is not seat:
                 raise ValueError(f"log out of step: {seat.name} answered with no matching request")
-            flow.submit(game, response)
+            action_sequence.submit(game, response)
         case Cancel(seat=seat):
             pending = game.pending
             if pending is None or pending.seat is not seat:
                 raise ValueError(f"log out of step: {seat.name} cancelled with no matching request")
-            flow.cancel(game)
+            action_sequence.cancel(game)
 
 
 def game_log_to_dict(log: GameLog) -> dict:

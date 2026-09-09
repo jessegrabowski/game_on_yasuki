@@ -68,19 +68,19 @@ class TurnRecorder:
             self._log_offset = len(self.log.entries)
 
     def turn_ended(self, game: GameState, seat: PlayerId) -> None:
-        open_turn = self._open
-        if open_turn is None:
+        _open_turn = self._open
+        if _open_turn is None:
             raise RuntimeError(f"{seat.name}'s turn ended, but no turn had begun")
-        if open_turn.seat is not seat:
+        if _open_turn.seat is not seat:
             raise RuntimeError(
-                f"{seat.name}'s turn ended, but the open turn is {open_turn.seat.name}'s"
+                f"{seat.name}'s turn ended, but the open turn is {_open_turn.seat.name}'s"
             )
-        open_turn.values.update(
+        _open_turn.values.update(
             {name: metric(game, seat) for name, metric in self.end_of_turn.items()}
         )
         for name in self._acted(seat):
-            open_turn.values[name] += 1
-        self.samples.append(open_turn)
+            _open_turn.values[name] += 1
+        self.samples.append(_open_turn)
         self._open = None
 
     def _acted(self, seat: PlayerId) -> list[str]:

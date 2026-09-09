@@ -1,13 +1,22 @@
-from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.units import is_spell, may_cast_spells
-from yasuki_core.engine.rules.board.queries import owned_personalities
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.abilities.invest import _equip_invest_amount, _finish_invest
 from yasuki_core.engine.rules.attachments import attachments_of
+from yasuki_core.engine.rules.board.queries import owned_personalities
+from yasuki_core.engine.rules.decisions import ChooseEquipTarget, ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
+from yasuki_core.engine.rules.units import is_spell, may_cast_spells
+from yasuki_core.engine.rules.work import ResolveEquip
+from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint
@@ -121,3 +130,54 @@ def equip_targets(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
         for personality in owned_personalities(game, card.owner)
         if may_attach(game, personality, card)
     )
+
+
+def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
+    """Announce an Equip by asking which Personality the card joins. Answering that raises the cost.
+
+    Equip is the rulebook action, with a cost and a target. An effect that merely *attaches* a card
+    reaches the same board without paying (CR, Equip), so the two do not share a path.
+
+    Raise ``ValueError`` if ``invest`` names an Invest whose amount the player chooses. Every
+    attachment printing one prints a fixed cost, so the amount is settled here rather than through a
+    decision, and a variable one would need a step this path does not have.
+    """
+    card = game.table.cards_by_id[card_id]
+    game.pending = ChooseEquipTarget(
+        seat=card.owner,
+        candidates=tuple(target.id for target in equip_targets(game, card)),
+        source_card_id=card_id,
+        invest_amount=_equip_invest_amount(game, card) if invest else None,
+    )
+
+
+def _apply_equip_target(
+    game: GameState, request: ChooseEquipTarget, response: DecisionResponse
+) -> None:
+    """Take the chosen Personality and put the Equip's cost to the seat."""
+    card = game.table.cards_by_id[request.source_card_id]
+    game.pending = announce_equip(
+        game, card, card.owner, response.choices[0], invest_amount=request.invest_amount
+    )
+
+
+def announce_equip(
+    game: GameState, card: L5RCard, seat: PlayerId, target_id: str, invest_amount: int | None = None
+) -> ChoosePayment:
+    """Queue the attach and build the payment it must be paid with."""
+    game.stack.append(ResolveEquip(card.id, target_id, invest_amount))
+    amount = effective_gold_cost(game, card) + (invest_amount or 0)
+    return payment_request(game, seat, amount, card.name, target=card)
+
+
+def _resolve_equip(
+    game: GameState, card_id: str, target_id: str, invest_amount: int | None = None
+) -> None:
+    """Bring the paid-for attachment out of hand and onto its Personality."""
+    card = game.table.cards_by_id[card_id]
+    ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
+    ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
+    # Legal before anything is told it arrived, for the reason _put_into_play gives.
+    triggers.enforce_state_rules(game)
+    triggers.fire(game, EnteredPlay(card_id, from_hand=True))
+    _finish_invest(game, card, invest_amount)

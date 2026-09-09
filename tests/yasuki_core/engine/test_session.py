@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.decisions import (
     DiscardToHandSize,
     DecisionResponse,
 )
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.actions import (
     ActivateAbility,
@@ -51,7 +51,7 @@ def _dealt_table() -> TableState:
         )
     ]
     hand = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
-    for i in range(flow.MAX_HAND_SIZE):
+    for i in range(sequence.MAX_HAND_SIZE):
         hand.add(
             _register(
                 state,

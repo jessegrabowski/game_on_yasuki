@@ -1,7 +1,7 @@
-from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules import favor_abilities, triggers
 from yasuki_core.engine.rules.actions import ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.effects import (
     AskOption,
@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.effects import (
     Unpayable,
 )
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces import keywords
@@ -102,3 +103,15 @@ def is_favor_action(game: GameState) -> bool:
         return False
     card = game.table.cards_by_id.get(game.action.card_id)
     return card is not None and keywords.FAVOR in effective_keywords(game, card)
+
+
+def use_favor_ability(game: GameState, key: str) -> None:
+    """Take one of the arc's rulebook Favor abilities: pay the Favor cost, then do what it does.
+
+    The cost comes first because it is a cost — settled in the Pay Costs step, before the ability
+    resolves (CR, Action Sequence).
+    """
+    seat = game.round.priority
+    cost = favor_abilities.favor_ability_cost(game, seat, key)
+    effects = favor_abilities.FAVOR_ABILITY_EFFECTS[key](game, seat)
+    triggers.resolve_effects(game, [*cost, *effects])

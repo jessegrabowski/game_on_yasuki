@@ -1,10 +1,15 @@
-from yasuki_core.engine.rules.registrar import FlagRegistry, HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.board import queries
+from yasuki_core.engine.rules.decisions import ChooseLobbyTarget, DecisionResponse
+from yasuki_core.engine.rules.effects import Bow, TakeFavor
 from yasuki_core.engine.rules.modifiers import LobbyModifier
 from yasuki_core.engine.rules.ongoing_grants import grant_applies
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.registrar import FlagRegistry, HandlerRegistry
+from yasuki_core.engine.rules.state import GameState, once_per_turn
+from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -87,3 +92,53 @@ def may_lobby(game: GameState, seat: PlayerId) -> bool:
 # is the card-level half of the rule; :data:`LOBBY_BARS` is the half that stops a whole player.
 MAY_NOT_LOBBY = FlagRegistry("may not lobby", "already may not be bowed to Lobby")
 register_may_not_lobby = MAY_NOT_LOBBY.make_register()
+
+
+def lobby(game: GameState) -> None:
+    """Announce the Lobby ability by asking which Personality it bows. ``legal_actions`` has already
+    checked the turn, the honor comparison, and that a Personality is there to pay with."""
+    seat = game.active
+    game.pending = ChooseLobbyTarget(
+        seat=seat,
+        candidates=tuple(card.id for card in lobby_candidates(game, seat)),
+    )
+
+
+def _apply_lobby_target(
+    game: GameState, request: ChooseLobbyTarget, response: DecisionResponse
+) -> None:
+    """Bow the chosen Personality and take the Imperial Favor.
+
+    ShE datasheet: bowing the Personality is the cost and taking the Favor the effect.
+
+    The Personality is marked as having Lobbied, for the cards that ask who did.
+    """
+    seat = request.seat
+    game.pending = None
+    game.use_once(lobby_key(seat, game.turn))
+    lobbied = game.table.cards_by_id[response.choices[0]]
+    once_per_turn(game, lobbied, LOBBIED_TAG)
+    triggers.resolve_effects(game, [Bow(lobbied.id), TakeFavor(seat)])
+
+
+def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The Personalities ``seat`` could bow to Lobby: their own, unbowed, with 1 or more Personal
+    Honor, and not one printed "may not Lobby". Zero Personal Honor is the boundary the datasheet
+    draws, not merely a floor."""
+    return [
+        card
+        for card in queries.owned_personalities(game, seat)
+        if not card.bowed
+        and effective_personal_honor(game, card) >= 1
+        and card.printed_id not in MAY_NOT_LOBBY
+    ]
+
+
+def lobby_key(seat: PlayerId, turn: int) -> str:
+    """The once-per-turn usage key for a seat's Lobby, scoped to the turn the way :func:`legacy_key`
+    is.
+
+    Named for the Lobby action rather than for the rulebook ability, because the ShE datasheet caps
+    a player at one Lobby action per turn whatever granted it, not at one use of this ability.
+    """
+    return f"lobby:{seat.name}:{turn}"

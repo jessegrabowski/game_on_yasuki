@@ -1251,9 +1251,9 @@ class RecruitCard(InterruptingEffect):
         return f"recruit {self.card_id} out of sequence{renewed}"
 
     def request(self, game: GameState) -> DecisionRequest:
-        # flow imports triggers, which imports this module, so the announce entry point is reached
-        # lazily rather than moving the module boundary.
-        from yasuki_core.engine.rules.flow import announce_recruit
+        # Announcing a recruit builds a payment, and the payment loop is written in the effects
+        # this module defines -- so the entry point is reached lazily whatever module holds it.
+        from yasuki_core.engine.rules.recruit import announce_recruit
 
         card = game.table.cards_by_id[self.card_id]
         return announce_recruit(game, card, card.owner, invest_amount=None, renew=self.renew)

@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
     LION_ANCESTOR,
     NAGA_FOLLOWER,
 )
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.decisions import ChooseInvestAmount, DecisionResponse
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
@@ -201,7 +201,7 @@ def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
     """The end-of-turn trim is the discard the card names, and it reaches a card in hand."""
     game = _spearmen_game()
 
-    flow._apply_discard(game, P1, ("spearmen",))
+    sequence._apply_discard(game, P1, ("spearmen",))
 
     assert game.pending.candidates == ("shahai",)
 
@@ -209,8 +209,8 @@ def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
 def test_banishing_the_spearmen_equips_the_naga_follower():
     game = _spearmen_game()
 
-    flow._apply_discard(game, P1, ("spearmen",))
-    flow.submit(game, DecisionResponse(("shahai",)))
+    sequence._apply_discard(game, P1, ("spearmen",))
+    action_sequence.submit(game, DecisionResponse(("shahai",)))
 
     follower = attachments_of(game, game.table.cards_by_id["shahai"])[0]
     assert follower.name == "Naga"
@@ -222,8 +222,8 @@ def test_declining_leaves_the_spearmen_lying_in_the_discard():
     """Banishing is the price of the Follower, so a seat that takes neither keeps the card."""
     game = _spearmen_game()
 
-    flow._apply_discard(game, P1, ("spearmen",))
-    flow.submit(game, DecisionResponse(()))
+    sequence._apply_discard(game, P1, ("spearmen",))
+    action_sequence.submit(game, DecisionResponse(()))
 
     assert attachments_of(game, game.table.cards_by_id["shahai"]) == ()
     discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
@@ -234,7 +234,7 @@ def test_only_a_naga_personality_is_offered():
     game = _spearmen_game()
     put_in_play(game, personality("bushi", force=3, chi=2, keywords=("Samurai",)))
 
-    flow._apply_discard(game, P1, ("spearmen",))
+    sequence._apply_discard(game, P1, ("spearmen",))
 
     assert game.pending.candidates == ("shahai",)
 
@@ -242,7 +242,7 @@ def test_only_a_naga_personality_is_offered():
 def test_nothing_is_offered_with_nobody_to_carry_the_follower():
     game = _spearmen_game(bearer_keywords=None)
 
-    flow._apply_discard(game, P1, ("spearmen",))
+    sequence._apply_discard(game, P1, ("spearmen",))
 
     assert game.pending is None
 

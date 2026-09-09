@@ -6,15 +6,17 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules import flow, legality, triggers
+from yasuki_core.engine.rules import legality, triggers
+from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar, LOBBY_BARS
-from yasuki_core.engine.rules.legality import lobby_key
+from yasuki_core.engine.rules.rulebook.lobby import lobby_key
 from yasuki_core.engine.rules.actions import ActivateAbility, Lobby
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.effects import GrantLobbyBonus
 from yasuki_core.engine.rules.modifiers import Duration
-from yasuki_core.engine.rules.flow import lobby, submit
+from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.rulebook.lobby import lobby
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.runner import GameRunner
 from yasuki_core.engine.session import EngineSession
@@ -262,7 +264,7 @@ def test_shigekawas_court_straightens_the_personality_that_lobbied():
     assert courtier.bowed, "the Lobby bowed him"
 
     assert _court_targets(game, court) == ["courtier"]
-    flow.perform(game, ActivateAbility("court"))
+    action_sequence.perform(game, ActivateAbility("court"))
     submit(game, DecisionResponse(("courtier",)))
 
     assert not courtier.bowed

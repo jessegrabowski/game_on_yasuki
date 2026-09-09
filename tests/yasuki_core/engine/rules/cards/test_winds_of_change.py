@@ -1,7 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.favor import favor_cost_for_seat, favor_payers
 from yasuki_core.engine.rules.effects import TakeFavor
-from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import PHASE_TIMINGS, ActionRound, Phase
@@ -102,7 +103,7 @@ def test_commanding_favor_leaves_its_province_for_the_battlefield():
     vacates refills behind it like any other."""
     game = _event_in_province()
 
-    flow.perform(game, ActivateAbility("event"))
+    action_sequence.perform(game, ActivateAbility("event"))
 
     assert "event" in {card.id for card in game.table.battlefield.cards}
     province = game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]

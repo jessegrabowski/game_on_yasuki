@@ -5,7 +5,8 @@ import typing
 
 import pytest
 
-from yasuki_core.engine.rules import flow, legality, log
+from yasuki_core.engine.rules import legality, log
+from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.actions import Action
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.log import GameInput
@@ -59,14 +60,14 @@ def _class_patterns(pattern: ast.pattern) -> list[ast.MatchClass]:
 # The dispatchers that are exhaustive *by contract* — every member of their union must have a case
 # — paired with the union they dispatch. Two match statements are deliberately absent:
 #
-#   flow.cancel     partial by design, and replay-only — it handles the two decisions that legacy
-#                   tapes recorded a Cancel for. Live backing-out truncates the tape instead.
+#   action_sequence.cancel  partial by design, and replay-only — it handles the two decisions that
+#                       legacy tapes recorded a Cancel for. Live backing-out truncates the tape.
 #   log._decode_action  dispatches on a string kind rather than a type, so there is no case pattern
-#                   to read. The round-trip test in test_log.py covers it end to end.
+#                       to read. The round-trip test in test_log.py covers it end to end.
 DISPATCH_SITES = [
-    pytest.param(WorkItem, flow._resolve, id="WorkItem/_resolve"),
-    pytest.param(DecisionRequest, flow.submit, id="DecisionRequest/submit"),
-    pytest.param(Action, flow.perform, id="Action/perform"),
+    pytest.param(WorkItem, action_sequence._resolve, id="WorkItem/_resolve"),
+    pytest.param(DecisionRequest, action_sequence.submit, id="DecisionRequest/submit"),
+    pytest.param(Action, action_sequence.perform, id="Action/perform"),
     pytest.param(Action, legality.is_legal, id="Action/is_legal"),
     pytest.param(Action, log._encode_action, id="Action/_encode_action"),
     pytest.param(GameInput, log._apply, id="GameInput/_apply"),
@@ -101,4 +102,4 @@ def test_an_unhandled_action_is_refused_rather_than_ignored():
         pass
 
     with pytest.raises(ValueError, match="no handler for action"):
-        flow.perform(two_seat_game(), Unregistered())
+        action_sequence.perform(two_seat_game(), Unregistered())

@@ -1,7 +1,8 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.rulebook.favor import DISCARD_THE_FAVOR, favor_payers
 from yasuki_core.engine.rules.rulebook.favor import is_favor_action
@@ -18,7 +19,7 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import Discard, DiscardFavor, TakeFavor
 from yasuki_core.engine.rules.events import CardDiscarded
-from yasuki_core.engine.rules.flow import submit
+from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.turn.structure import (
@@ -183,8 +184,8 @@ def test_a_dynasty_discard_offers_nothing():
     )
     province_card(game, "spare-dynasty", seat=P1, name="Spare")
     session = EngineSession.start(game.table, P1)
-    flow.advance(session.game)  # Action -> Battle
-    flow.advance(session.game)  # Battle -> Dynasty, where a Province card may be discarded
+    sequence.advance(session.game)  # Action -> Battle
+    sequence.advance(session.game)  # Battle -> Dynasty, where a Province card may be discarded
 
     session.act(P1, DynastyDiscard("spare-dynasty"))
 
@@ -198,7 +199,7 @@ def test_a_discard_no_player_made_offers_nothing():
     session = _caravansary_game()
     game = session.game
 
-    flow._apply_discard(game, P1, ("spare-fate-0",))
+    sequence._apply_discard(game, P1, ("spare-fate-0",))
 
     assert game.action_events[-1] == CardDiscarded(
         "spare-fate-0", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True

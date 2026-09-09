@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     DiscardToHandSize,
 )
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     ActivateAbility,
@@ -162,7 +162,7 @@ def test_passing_through_a_quiet_turn_hands_off_then_back():
 
 
 def test_human_discard_is_left_pending_then_resolved():
-    runner = _runner(p1_hand=flow.MAX_HAND_SIZE)  # 8 held + 1 drawn = 9 at end of turn
+    runner = _runner(p1_hand=sequence.MAX_HAND_SIZE)  # 8 held + 1 drawn = 9 at end of turn
     _to_dynasty(runner)
     runner.act(PASS)
 
@@ -214,7 +214,7 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
             )
         ]
     p2_hand = state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
-    for i in range(flow.MAX_HAND_SIZE):
+    for i in range(sequence.MAX_HAND_SIZE):
         p2_hand.add(
             _register(
                 state,
@@ -230,11 +230,11 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
     assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
     assert runner.pending is None  # the opponent's discard resolved without a prompt
     p2_after = runner.session.game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards
-    assert len(p2_after) == flow.MAX_HAND_SIZE  # 8 held + 1 drawn = 9, auto-trimmed to 8
+    assert len(p2_after) == sequence.MAX_HAND_SIZE  # 8 held + 1 drawn = 9, auto-trimmed to 8
 
 
 def test_runner_inputs_stay_replayable():
-    runner = _runner(p1_hand=flow.MAX_HAND_SIZE)
+    runner = _runner(p1_hand=sequence.MAX_HAND_SIZE)
     _to_dynasty(runner)
     runner.act(PASS)
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
