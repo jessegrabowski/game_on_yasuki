@@ -2,7 +2,7 @@ from collections.abc import Iterator
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import favor_abilities
+from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.abilities.costs import can_pay
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import (
@@ -34,7 +34,7 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
 from yasuki_core.engine.rules.board.queries import has_keyword, owned_holdings, province_cards
 from yasuki_core.engine.rules.board.seats import seat_stronghold
-from yasuki_core.engine.rules.equip import equip_targets
+from yasuki_core.engine.rules.rulebook.equip import equip_targets
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold

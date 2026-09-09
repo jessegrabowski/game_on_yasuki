@@ -10,7 +10,7 @@ from yasuki_core.game_pieces.prints import (
     FatePrint,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules import recruit
+from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.events import (
     CardDiscarded,

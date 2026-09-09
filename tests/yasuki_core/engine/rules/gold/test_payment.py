@@ -5,7 +5,7 @@ from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.actions import Recruit
-from yasuki_core.engine.rules import equip
+from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.decisions import (

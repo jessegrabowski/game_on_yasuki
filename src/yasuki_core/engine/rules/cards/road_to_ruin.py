@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     Straighten,
 )
-from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.events import Destroyed, EnteredPlay, ProducedGold, ProducingGold
 from yasuki_core.engine.rules.board.queries import (
     owned_holdings,

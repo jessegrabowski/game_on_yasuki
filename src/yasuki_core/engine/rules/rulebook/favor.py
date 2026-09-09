@@ -1,7 +1,8 @@
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import favor_abilities, triggers
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.actions import ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.effects import (
     AskOption,

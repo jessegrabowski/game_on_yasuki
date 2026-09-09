@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.effects import (
     MoveToDeck,
     ShuffleDeck,
 )
-from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming

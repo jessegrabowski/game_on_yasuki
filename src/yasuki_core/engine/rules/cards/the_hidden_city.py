@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.effects import (
     Show,
     ShuffleDeck,
 )
-from yasuki_core.engine.rules.equip import attach_restriction
+from yasuki_core.engine.rules.rulebook.equip import attach_restriction
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.modifiers import Duration

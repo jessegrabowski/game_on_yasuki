@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     ShuffleDeck,
 )
-from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.events import EnteredPlay
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.board.queries import province_zones

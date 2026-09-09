@@ -58,10 +58,8 @@ yasuki_core
     yasuki_core.engine.rules.board.seats <yasuki_core.engine.rules.board.seats>
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
-    yasuki_core.engine.rules.equip <yasuki_core.engine.rules.equip>
     yasuki_core.engine.rules.events <yasuki_core.engine.rules.events>
     yasuki_core.engine.rules.favor <yasuki_core.engine.rules.favor>
-    yasuki_core.engine.rules.favor_abilities <yasuki_core.engine.rules.favor_abilities>
     yasuki_core.engine.rules.gold.cost <yasuki_core.engine.rules.gold.cost>
     yasuki_core.engine.rules.gold.discounts <yasuki_core.engine.rules.gold.discounts>
     yasuki_core.engine.rules.gold.payment <yasuki_core.engine.rules.gold.payment>
@@ -75,17 +73,19 @@ yasuki_core
     yasuki_core.engine.rules.ongoing_grants <yasuki_core.engine.rules.ongoing_grants>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.provinces <yasuki_core.engine.rules.provinces>
-    yasuki_core.engine.rules.recruit <yasuki_core.engine.rules.recruit>
     yasuki_core.engine.rules.registrar <yasuki_core.engine.rules.registrar>
     yasuki_core.engine.rules.registration_audit <yasuki_core.engine.rules.registration_audit>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
     yasuki_core.engine.rules.rulebook.cycle <yasuki_core.engine.rules.rulebook.cycle>
     yasuki_core.engine.rules.rulebook.dynasty_discard <yasuki_core.engine.rules.rulebook.dynasty_discard>
+    yasuki_core.engine.rules.rulebook.equip <yasuki_core.engine.rules.rulebook.equip>
     yasuki_core.engine.rules.rulebook.favor <yasuki_core.engine.rules.rulebook.favor>
+    yasuki_core.engine.rules.rulebook.favor_abilities <yasuki_core.engine.rules.rulebook.favor_abilities>
     yasuki_core.engine.rules.rulebook.inheritance <yasuki_core.engine.rules.rulebook.inheritance>
     yasuki_core.engine.rules.rulebook.kharmic <yasuki_core.engine.rules.rulebook.kharmic>
     yasuki_core.engine.rules.rulebook.legacy <yasuki_core.engine.rules.rulebook.legacy>
     yasuki_core.engine.rules.rulebook.lobby <yasuki_core.engine.rules.rulebook.lobby>
+    yasuki_core.engine.rules.rulebook.recruit <yasuki_core.engine.rules.rulebook.recruit>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_based_actions <yasuki_core.engine.rules.state_based_actions>
     yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>

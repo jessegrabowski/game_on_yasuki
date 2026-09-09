@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.effects import CreateToken, Effect, PayGold
-from yasuki_core.engine.rules.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 

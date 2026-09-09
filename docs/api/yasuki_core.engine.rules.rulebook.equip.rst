@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.equip
-==============================
+yasuki_core.engine.rules.rulebook.equip
+=======================================
 
-.. currentmodule:: yasuki_core.engine.rules.equip
+.. currentmodule:: yasuki_core.engine.rules.rulebook.equip
 
 .. rubric:: Functions
 
@@ -19,6 +19,6 @@ yasuki_core.engine.rules.equip
     resolve_equip
     weapons_on
 
-.. automodule:: yasuki_core.engine.rules.equip
+.. automodule:: yasuki_core.engine.rules.rulebook.equip
     :members:
     :undoc-members:

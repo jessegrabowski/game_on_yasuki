@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import recruit
+from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.gold.production import effective_gold_production

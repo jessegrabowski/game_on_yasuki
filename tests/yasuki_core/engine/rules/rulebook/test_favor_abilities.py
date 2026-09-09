@@ -5,7 +5,8 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import favor_abilities, legality
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.actions import ActionTiming, Lobby, UseFavorAbility
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import TakeFavor

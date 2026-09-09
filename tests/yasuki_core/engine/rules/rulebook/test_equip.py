@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
 from yasuki_core.engine.rules.effects import AttachCard
-from yasuki_core.engine.rules.equip import (
+from yasuki_core.engine.rules.rulebook.equip import (
     creation_targets,
     equip_targets,
     may_attach,

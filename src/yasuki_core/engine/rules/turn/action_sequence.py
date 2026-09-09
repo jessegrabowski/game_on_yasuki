@@ -47,12 +47,12 @@ from yasuki_core.engine.rules.decisions import (
     LeaveBowed,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.equip import apply_equip_target, resolve_equip, equip
+from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, resolve_equip, equip
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.gold.production import complete_production, produce_gold
 from yasuki_core.engine.rules.provinces import refill_short_provinces
-from yasuki_core.engine.rules.recruit import (
+from yasuki_core.engine.rules.rulebook.recruit import (
     apply_fortification_province,
     apply_invest_amount,
     finish_recruit,

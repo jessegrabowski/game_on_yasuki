@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.recruit
-================================
+yasuki_core.engine.rules.rulebook.recruit
+=========================================
 
-.. currentmodule:: yasuki_core.engine.rules.recruit
+.. currentmodule:: yasuki_core.engine.rules.rulebook.recruit
 
 .. rubric:: Functions
 
@@ -14,6 +14,6 @@ yasuki_core.engine.rules.recruit
     recruit
     resolve_recruit
 
-.. automodule:: yasuki_core.engine.rules.recruit
+.. automodule:: yasuki_core.engine.rules.rulebook.recruit
     :members:
     :undoc-members:

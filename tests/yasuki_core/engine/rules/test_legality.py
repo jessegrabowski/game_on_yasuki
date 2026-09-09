@@ -63,7 +63,7 @@ from yasuki_core.engine.bots.policies import make_policy
 from yasuki_core.engine.runner import Controls, run_game
 from yasuki_core.game_setup import build_state_from_deck
 from tests.yasuki_core.db_guard import requires_db
-from yasuki_core.engine.rules import recruit
+from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import sequence
 
 DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
