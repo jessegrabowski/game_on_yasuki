@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook.favor import favor_payer
+from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_event_entry
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself

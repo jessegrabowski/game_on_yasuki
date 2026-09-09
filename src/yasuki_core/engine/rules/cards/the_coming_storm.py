@@ -1,6 +1,6 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook.favor import favor_cost
+from yasuki_core.engine.rules.rulebook.favor_payment import favor_cost
 from yasuki_core.engine.rules.rulebook.lobby import LOBBIED_TAG
 from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself

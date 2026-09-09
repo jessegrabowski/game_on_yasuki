@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook.favor import (
+from yasuki_core.engine.rules.rulebook.favor_payment import (
     DISCARD_THE_FAVOR,
     favor_cost_for_seat,
     favor_payer,

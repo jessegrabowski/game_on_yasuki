@@ -61,7 +61,7 @@ from yasuki_core.engine.rules.rulebook.recruit import (
 )
 from yasuki_core.engine.rules.rulebook.cycle import cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
-from yasuki_core.engine.rules.rulebook.favor import use_favor_ability
+from yasuki_core.engine.rules.rulebook.favor_payment import use_favor_ability
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
 from yasuki_core.engine.rules.rulebook.kharmic import kharmic_draw, kharmic_refill
 from yasuki_core.engine.rules.rulebook.legacy import (

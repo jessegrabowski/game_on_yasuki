@@ -2,7 +2,7 @@ from dataclasses import replace
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import favor, state_based_actions, triggers
+from yasuki_core.engine.rules import favor_proxy, state_based_actions, triggers
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
@@ -166,7 +166,7 @@ def _end_turn(game: GameState) -> None:
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     # A rulebook proxy is not a card, so it neither counts toward the limit nor can be discarded to
     # meet it.
-    held = [card for card in hand.cards if not favor.is_rulebook_proxy(card)]
+    held = [card for card in hand.cards if not favor_proxy.is_rulebook_proxy(card)]
     excess = len(held) - MAX_HAND_SIZE
     if excess > 0:
         candidates = tuple(card.id for card in held)

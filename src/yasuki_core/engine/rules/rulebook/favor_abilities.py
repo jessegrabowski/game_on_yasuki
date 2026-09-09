@@ -3,7 +3,7 @@ from collections.abc import Callable
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import Bow, Choose, Discard, DrawCard, Effect, Move
-from yasuki_core.engine.rules.favor import is_rulebook_proxy
+from yasuki_core.engine.rules.favor_proxy import is_rulebook_proxy
 from yasuki_core.engine.rules.units import opposing_units_in_battle
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver

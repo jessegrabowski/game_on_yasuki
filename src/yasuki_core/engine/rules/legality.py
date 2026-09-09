@@ -2,7 +2,7 @@ from collections.abc import Iterator
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook import favor as rulebook_favor
+from yasuki_core.engine.rules.rulebook import favor_payment
 from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.abilities.costs import can_pay
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
@@ -277,7 +277,7 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
             continue
         if ability.active_seat_only and seat is not game.active:
             continue
-        cost = rulebook_favor.favor_ability_cost(game, seat, ability.key)
+        cost = favor_payment.favor_ability_cost(game, seat, ability.key)
         if not all(effect.is_payable(game) for effect in cost):
             continue
         actions.append(UseFavorAbility(ability.key))

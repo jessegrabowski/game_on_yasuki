@@ -4,8 +4,8 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules.rulebook.favor import DISCARD_THE_FAVOR, favor_payment_options
-from yasuki_core.engine.rules.rulebook.favor import is_favor_action
+from yasuki_core.engine.rules.rulebook.favor_payment import DISCARD_THE_FAVOR, favor_payment_options
+from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
