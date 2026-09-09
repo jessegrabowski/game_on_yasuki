@@ -232,7 +232,7 @@ register_ability(
         cost=bow_cost,
         targets=itself,
         effects=_moto_traders_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 
@@ -256,7 +256,7 @@ register_ability(
         cost=bow_cost,
         targets=itself,
         effects=_walk_with_tengoku_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 

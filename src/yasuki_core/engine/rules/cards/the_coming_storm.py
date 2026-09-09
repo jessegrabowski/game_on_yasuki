@@ -59,7 +59,7 @@ register_ability(
         cost=_doji_natsuyo_cost,
         targets=itself,
         effects=_doji_natsuyo_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 

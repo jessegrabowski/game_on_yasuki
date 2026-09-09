@@ -78,7 +78,7 @@ register_ability(
         cost=no_cost,
         targets=_caravansary_targets,
         effects=_caravansary_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 

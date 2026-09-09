@@ -966,7 +966,7 @@ def test_ability_menu_offers_one_entry_per_ability_the_card_prints():
             cost=no_cost,
             targets=itself,
             effects=lambda game, source, target: [],
-            all_targets=True,
+            hits_every_target=True,
             key="small",
         ),
     )
@@ -978,7 +978,7 @@ def test_ability_menu_offers_one_entry_per_ability_the_card_prints():
             cost=no_cost,
             targets=itself,
             effects=lambda game, source, target: [],
-            all_targets=True,
+            hits_every_target=True,
             key="large",
         ),
     )

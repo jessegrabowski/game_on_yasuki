@@ -103,7 +103,7 @@ register_ability(
         cost=no_cost,
         targets=itself,
         effects=_outer_walls_effects,
-        all_targets=True,
+        hits_every_target=True,
         located_at=(CardLocation.HAND,),
         battle_designators=frozenset({BattleDesignator.ABSENT}),
     ),

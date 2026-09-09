@@ -33,7 +33,7 @@ register_ability(
         cost=_ancient_tome_cost,
         targets=itself,
         effects=_ancient_tome_effects,
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 

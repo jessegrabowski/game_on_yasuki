@@ -78,7 +78,7 @@ def _register_probe() -> None:
             cost=no_cost,
             targets=itself,
             effects=_discard_from_hand,
-            all_targets=True,
+            hits_every_target=True,
         ),
     )
 

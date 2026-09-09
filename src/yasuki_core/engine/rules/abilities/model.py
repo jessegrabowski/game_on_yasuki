@@ -38,7 +38,7 @@ class Ability:
     effects : callable
         Maps ``(game, source_card, target_card)`` to the effects the ability emits against a
         target.
-    all_targets : bool
+    hits_every_target : bool
         Whether the ability hits every card ``targets`` returns rather than one chosen among them —
         an untargeted "your other Farms" grant instead of a single pick. Default False.
     located_at : tuple of CardLocation, optional
@@ -65,7 +65,7 @@ class Ability:
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
     effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]]
-    all_targets: bool = False
+    hits_every_target: bool = False
     located_at: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,)
     battle_designators: frozenset[BattleDesignator] = frozenset()
     targets_any_location: bool = False
@@ -95,6 +95,6 @@ class InvestAbility:
 
 def itself(game: GameState, source: L5RCard) -> list[str]:
     """The target list of an ability that names no target: its own card. Paired with
-    ``all_targets``, so the ability resolves against itself without asking the seat to pick the only
-    card it could mean."""
+    ``hits_every_target``, so the ability resolves against itself without asking the seat to pick
+    the only card it could mean."""
     return [source.id]

@@ -305,7 +305,7 @@ card and hits it without asking:
 
 ```python
         targets=itself,
-        all_targets=True,
+        hits_every_target=True,
 ```
 
 ## Cards that attack

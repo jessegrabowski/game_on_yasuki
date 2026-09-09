@@ -34,7 +34,7 @@ register_ability(
             AdjustCounter(source.id, WEALTH, effective_force(game, attached_to(game, source)))
         ],
         # It acts on itself, so there is nothing to choose and activation settles in one step.
-        all_targets=True,
+        hits_every_target=True,
     ),
 )
 
