@@ -141,3 +141,21 @@ def test_the_rules_package_has_no_import_cycle():
     attempt = subprocess.run([sys.executable, "-c", program], capture_output=True, text=True)
 
     assert attempt.returncode == 0, attempt.stderr
+
+
+def test_the_board_substrate_does_not_read_the_rules():
+    # engine/ is one flat namespace holding two tiers, and only the import graph says which is
+    # which. Everything below names the board -- zones, cards, the ops that move them -- and the
+    # rules layer is built on it, so a substrate module reading a rule inverts the dependency and
+    # drags the whole turn structure into the manual intent path that yasuki_gui and yasuki_web
+    # drive. Only the two surfaces above the rules are excepted, and both are named here.
+    above_the_rules = {"session.py", "runner.py"}
+    reaching = {
+        source.name
+        for source in sorted(ENGINE.glob("*.py"))
+        if source.name not in above_the_rules
+        for name in _imported_modules(source)
+        if name.startswith("yasuki_core.engine.rules")
+    }
+
+    assert reaching == set()
