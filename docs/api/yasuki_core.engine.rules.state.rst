@@ -13,8 +13,8 @@ yasuki_core.engine.rules.state
 
 .. autosummary::
 
+    claim_once_per_turn
     once_key
-    once_per_turn
     rules_at_start
     used_this_turn
 

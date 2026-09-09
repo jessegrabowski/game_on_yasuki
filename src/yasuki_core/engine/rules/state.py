@@ -300,7 +300,7 @@ def once_key(card: L5RCard, tag: str, turn: int) -> str:
     return f"{card.id}:{tag}:t{turn}"
 
 
-def once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
+def claim_once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
     """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then False."""
     return game.use_once(once_key(card, tag, game.turn))
 

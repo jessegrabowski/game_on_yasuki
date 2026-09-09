@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.effects import Bow, TakeFavor
 from yasuki_core.engine.rules.modifiers import LobbyModifier
 from yasuki_core.engine.rules.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.registrar import FlagRegistry, HandlerRegistry
-from yasuki_core.engine.rules.state import GameState, once_per_turn
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -117,7 +117,7 @@ def apply_lobby_target(
     game.pending = None
     game.use_once(lobby_key(seat, game.turn))
     lobbied = game.table.cards_by_id[response.choices[0]]
-    once_per_turn(game, lobbied, LOBBIED_TAG)
+    claim_once_per_turn(game, lobbied, LOBBIED_TAG)
     triggers.resolve_effects(game, [Bow(lobbied.id), TakeFavor(seat)])
 
 

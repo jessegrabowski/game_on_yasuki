@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Unpayable,
 )
-from yasuki_core.engine.rules.state import GameState, once_per_turn, used_this_turn
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
@@ -74,7 +74,7 @@ def _resolve_bow_waiver(
     """Taking the waiver spends it and nothing bows; declining pays the cost as printed."""
     if not chosen:
         return [Bow(source_id)]
-    once_per_turn(game, game.table.cards_by_id[chosen[0]], WAIVER_TAG)
+    claim_once_per_turn(game, game.table.cards_by_id[chosen[0]], WAIVER_TAG)
     return []
 
 

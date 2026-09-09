@@ -20,7 +20,7 @@ from yasuki_core.engine.rules.events import CounterGained, EnteredPlay, TurnStar
 from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.state import once_per_turn
+from yasuki_core.engine.rules.state import claim_once_per_turn
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
     at_cap,
@@ -98,7 +98,7 @@ def _shosuro_aoki_yoritomo_kayoko_experienced_counter_gained(ctx: TriggerContext
     gainer = ctx.game.table.cards_by_id[ctx.event.card_id]
     if not isinstance(gainer.printed, HoldingPrint) or gainer.owner is not ctx.card.owner:
         return []
-    if not once_per_turn(ctx.game, ctx.card, "aoki_draw"):
+    if not claim_once_per_turn(ctx.game, ctx.card, "aoki_draw"):
         return []
     return [DrawCard(ctx.card.owner)]
 
