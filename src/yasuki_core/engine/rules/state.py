@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.turn.structure import (
     PHASE_TIMINGS,
     Phase,
 )
-from yasuki_core.engine.rules.victory import VictoryRule
+from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.rules.work import WorkItem
 
 
