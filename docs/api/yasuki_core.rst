@@ -87,7 +87,7 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.legacy <yasuki_core.engine.rules.rulebook.legacy>
     yasuki_core.engine.rules.rulebook.lobby <yasuki_core.engine.rules.rulebook.lobby>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
-    yasuki_core.engine.rules.state_rules <yasuki_core.engine.rules.state_rules>
+    yasuki_core.engine.rules.state_based_actions <yasuki_core.engine.rules.state_based_actions>
     yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>
     yasuki_core.engine.rules.stats.card_values <yasuki_core.engine.rules.stats.card_values>
     yasuki_core.engine.rules.stats.province_strength <yasuki_core.engine.rules.stats.province_strength>

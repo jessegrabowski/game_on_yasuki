@@ -223,7 +223,7 @@ def test_a_creation_takes_the_clan_on_both_the_name_and_the_list():
 
 def test_creating_onto_a_personality_who_has_left_play_creates_nothing():
     # The target is fixed when the ability is announced, and anything can happen to him before the
-    # creation resolves. A homeless attachment would be destroyed by the state rules on sight.
+    # creation resolves. A homeless attachment would be destroyed by the state-based actions on sight.
     game = _token_game()
 
     events = CreateToken("scout", PlayerId.P1, "maker", attach_to="gone").perform(game)

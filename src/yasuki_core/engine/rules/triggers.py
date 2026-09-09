@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     Effect,
 )
-from yasuki_core.engine.rules import state_rules
+from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Moment
 from yasuki_core.engine.rules.modifiers import LobbyModifier, ProvinceModifier
@@ -23,7 +23,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
 
 # A sanity bound on both fixpoint walks: a converging cascade drains in a handful of events, and
-# the state rules settle in a handful of rounds, so far more than this means a trigger re-emits an
+# the state-based actions settle in a handful of rounds, so far more than this means a trigger re-emits an
 # event that re-fires it or a rule demands what does not satisfy it — a bug, raised loudly.
 _MAX_CASCADE = 1000
 
@@ -121,7 +121,7 @@ def _departed_subject(game: GameState, event: GameEvent) -> L5RCard | None:
     way "after this card is destroyed" can ever fire.
 
     Departures only. A card off the battlefield takes no part in anything else that names it —
-    a Personality killed by a state rule as he arrived must not go on to take his enter-play trait,
+    a Personality killed by a state-based action as he arrived must not go on to take his enter-play trait,
     which is the whole point of settling those rules before the arrival is announced. A *created*
     card is never here either: it leaves the table outright, taking its printed id with it.
     """
@@ -184,7 +184,7 @@ def _advance(
                 return
             _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
-            _settle_state_rules(game, queue)
+            _settle_state_based_actions(game, queue)
         effects = ()
         if firing:
             card, trigger = firing.pop(0)
@@ -194,7 +194,7 @@ def _advance(
         if not queue:
             # The walk can be entered on a board something else already made illegal, and with
             # nothing to commit the per-effect check never runs. Judge it before returning.
-            _settle_state_rules(game, queue)
+            _settle_state_based_actions(game, queue)
             if not queue:
                 return
         resolved += 1
@@ -210,7 +210,7 @@ def _advance(
         firing.sort(key=_canonical_order)
 
 
-def enforce_state_rules(game: GameState) -> None:
+def enforce_state_based_actions(game: GameState) -> None:
     """Satisfy the state-based rules against the board as it stands, resolving what that raises.
 
     For the board changes the cascade does not make — a card placed on the battlefield by ``flow``,
@@ -218,7 +218,7 @@ def enforce_state_rules(game: GameState) -> None:
     commits; this is how a caller that mutated the board directly gets the same guarantee.
     """
     queue: list[GameEvent] = []
-    _settle_state_rules(game, queue)
+    _settle_state_based_actions(game, queue)
     if queue:
         _advance(game, (), [], None, queue)
 
@@ -248,7 +248,7 @@ def _forget_modifiers_on_cards_off_the_table(game: GameState) -> None:
     ]
 
 
-def _settle_state_rules(game: GameState, queue: list[GameEvent]) -> None:
+def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None:
     """Satisfy every state-based rule before anything else happens, queueing what the enforcement
     raises.
 
@@ -266,14 +266,14 @@ def _settle_state_rules(game: GameState, queue: list[GameEvent]) -> None:
     """
     for _ in range(_MAX_CASCADE):
         _forget_modifiers_on_cards_off_the_table(game)
-        demanded = state_rules.demanded(game)
+        demanded = state_based_actions.demanded(game)
         if not demanded:
             return
         for effect in demanded:
-            _trace.append(f"    {effect.describe()} (state rule)")
+            _trace.append(f"    {effect.describe()} (state-based action)")
             queue.extend(apply_effect(game, effect))
     raise RuntimeError(
-        f"state rules did not settle after {_MAX_CASCADE} rounds:\n{_render_trace()}"
+        f"state-based actions did not settle after {_MAX_CASCADE} rounds:\n{_render_trace()}"
     )
 
 

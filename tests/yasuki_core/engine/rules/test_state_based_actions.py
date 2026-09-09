@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.paths import DATABASE_DIR
-from yasuki_core.engine.rules import state_rules, triggers
+from yasuki_core.engine.rules import state_based_actions, triggers
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
@@ -74,11 +74,11 @@ def test_a_personality_penalised_to_zero_chi_is_destroyed():
     samurai = _personality("doomed", chi=2)
     game = _in_play(samurai)
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
     assert "doomed" in _battlefield(game)  # a live Personality is left alone
 
     game.modifiers.append(Modifier("src", "doomed", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert "doomed" not in _battlefield(game)
 
@@ -89,7 +89,7 @@ def test_a_personality_at_one_chi_is_left_alone():
     game = _in_play(samurai)
     game.modifiers.append(Modifier("src", "survivor", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert "survivor" in _battlefield(game)
 
@@ -99,7 +99,7 @@ def test_a_card_that_is_not_a_personality_is_never_chi_dead():
     farm = holding("farm", gold_production=2)
     game = _in_play(farm)
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert "farm" in _battlefield(game)
 
@@ -112,7 +112,7 @@ def test_a_card_whose_own_text_exempts_it_survives_zero_chi():
     mortal = _personality("mortal", chi=0)
     game = _in_play(golem, mortal)
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert "breaker" in _battlefield(game)
     assert "mortal" not in _battlefield(game)
@@ -149,7 +149,7 @@ def test_an_attachment_left_with_no_personality_is_discarded():
     game = two_seat_game()
     stray = put_in_play(game, attachment("stray"))
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert _battlefield(game) == set()
     discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
@@ -162,7 +162,7 @@ def test_the_orphan_rule_names_itself_rather_than_the_cards_owner():
     game = two_seat_game()
     put_in_play(game, attachment("stray"))
 
-    demanded = state_rules.orphaned_attachments(game)
+    demanded = state_based_actions.orphaned_attachments(game)
 
     assert [effect.cause for effect in demanded] == [Rulebook.ORPHANED_ATTACHMENT]
 
@@ -172,7 +172,7 @@ def test_an_attached_card_is_not_swept_by_the_orphan_rule():
     put_in_play(game, _personality("hero"))
     attached(game, attachment("yari"), "hero")
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert _battlefield(game) == {"hero", "yari"}
 
@@ -189,7 +189,7 @@ def test_a_card_on_a_province_is_not_swept_by_the_orphan_rule():
     )
     ops.attach_to_province(game.table, region, province)
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert _battlefield(game) == {"region"}
 
@@ -222,7 +222,7 @@ def test_a_discarded_personality_takes_his_unit_the_same_way():
 
 
 def test_chi_death_clears_the_whole_unit_off_the_board():
-    """The realistic route, where nothing calls `Destroy` directly and the state rule does. It pins
+    """The realistic route, where nothing calls `Destroy` directly and the state-based action does. It pins
     the rule reaching the cascade at all, not the manner: with the cascade gone the orphan rule
     reaches the same board by discarding what it strands."""
     samurai = _personality("doomed", chi=2)
@@ -230,7 +230,7 @@ def test_chi_death_clears_the_whole_unit_off_the_board():
     attached(game, attachment("yari", force_modifier=1), "doomed")
     game.modifiers.append(Modifier("src", "doomed", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert _battlefield(game) == set()
     assert game.table.units == {}
@@ -247,7 +247,7 @@ def test_one_death_causing_another_resolves_and_terminates():
     game.modifiers.append(Modifier("src", "second", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN))
     game.modifiers.append(Modifier("first", "second", Stat.CHI, 1, Duration.WHILE_SOURCE_IN_PLAY))
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert _battlefield(game) == set()
 
@@ -259,11 +259,11 @@ def test_a_state_rule_that_never_settles_names_itself_rather_than_hanging(monkey
     def never_satisfied(game: GameState) -> list:
         return [GainHonor(P1, 1)]
 
-    monkeypatch.setattr(state_rules, "STATE_RULES", (never_satisfied,))
+    monkeypatch.setattr(state_based_actions, "STATE_BASED_ACTIONS", (never_satisfied,))
     game = _in_play(_personality("bystander"))
 
-    with pytest.raises(RuntimeError, match="state rules did not settle"):
-        triggers.enforce_state_rules(game)
+    with pytest.raises(RuntimeError, match="state-based actions did not settle"):
+        triggers.enforce_state_based_actions(game)
 
 
 def test_nothing_gets_a_turn_between_reaching_zero_chi_and_dying():
@@ -324,18 +324,18 @@ def test_a_trigger_on_the_dying_card_does_not_get_to_save_it(reacting):
     four +1F/+1C tokens" — a window this rule does not grant. Making that card work needs a
     replacement keyed to it, not a hole in the rule for every card to climb through.
     """
-    doji = _personality("doji", chi=0, printed_id="state_rules_probe")
+    doji = _personality("doji", chi=0, printed_id="state_based_actions_probe")
     game = two_seat_game()
     reacting(
         EnteredPlay,
-        "state_rules_probe",
+        "state_based_actions_probe",
         lambda ctx: [AdjustCounter(ctx.card.id, counter_from_key("aura"), 4)],
     )
 
     # The order flow uses: the card lands, the rules are enforced, and only then is anything told
     # it arrived.
     put_in_play(game, doji)
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
     triggers.fire(game, EnteredPlay("doji"))
 
     assert "doji" not in _battlefield(game)
@@ -346,15 +346,15 @@ def test_every_exempt_card_names_a_real_card():
     never exempt, which nothing else would catch."""
     known = set(CARD_IDS.read_text().split())
 
-    assert state_rules.CHI_DEATH_EXEMPT <= known
+    assert state_based_actions.CHI_DEATH_EXEMPT <= known
 
 
 def test_a_conditional_exemption_is_not_registered_as_a_plain_one():
     """Moto Chagatai and Moto Soro read "not destroyed for having 0 Chi *unless* his Chi is 0 after
     all penalties that last until your turn ends wear off" — a deferred check this rule cannot
     express. They take the rule as written rather than a wrong exemption."""
-    assert "moto_chagatai" not in state_rules.CHI_DEATH_EXEMPT
-    assert "moto_soro" not in state_rules.CHI_DEATH_EXEMPT
+    assert "moto_chagatai" not in state_based_actions.CHI_DEATH_EXEMPT
+    assert "moto_soro" not in state_based_actions.CHI_DEATH_EXEMPT
 
 
 def test_a_game_in_which_a_personality_dies_of_zero_chi_replays_to_the_same_state():
@@ -390,14 +390,14 @@ def test_an_arriving_personality_dies_before_its_own_enter_play_trigger_runs(rea
     """
     table = dealt_table(hand=0)
     put_in_play(table, stronghold(P1, gold_production=8))
-    doji = _personality("P1-doji", chi=0, printed_id="state_rules_recruit_probe")
+    doji = _personality("P1-doji", chi=0, printed_id="state_based_actions_recruit_probe")
     doji.turn_face_up()
     province = ProvinceZone(owner=P1)
     province.add(register(table, doji))
     table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
     reacting(
         EnteredPlay,
-        "state_rules_recruit_probe",
+        "state_based_actions_recruit_probe",
         lambda ctx: [AdjustCounter(ctx.card.id, counter_from_key("aura"), 4)],
     )
     session = EngineSession.start(table, P1, seed=4)
@@ -422,7 +422,7 @@ def test_a_zero_chi_personality_waiting_in_a_province_is_left_alone():
     province.add(register(game.table, waiting))
     game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert [card.id for card in province.cards] == ["waiting"]
 
@@ -434,7 +434,7 @@ def test_the_rule_reaches_the_opponents_personalities_too():
     theirs = _personality("theirs", chi=0, owner=PlayerId.P2)
     game = _in_play(mine, theirs)
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert _battlefield(game) == set()
 
@@ -511,6 +511,6 @@ def test_a_minimum_chi_of_one_keeps_a_personality_out_of_the_chi_death_rule():
         Modifier("uncertainty", "shiba", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN)
     )
 
-    triggers.enforce_state_rules(game)
+    triggers.enforce_state_based_actions(game)
 
     assert _battlefield(game) == {"shiba"}

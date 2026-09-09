@@ -2,7 +2,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import enforce_state_rules, resolve_effects
+from yasuki_core.engine.rules.triggers import enforce_state_based_actions, resolve_effects
 from yasuki_core.engine.table import BATTLEFIELD
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.stats.calculation import active_modifiers
@@ -111,7 +111,7 @@ def test_a_card_waiting_in_a_province_keeps_its_modifiers():
     waiting = province_card(game.table, "m", printed_id="m", gold_cost=3, index=0)
     game.modifiers.append(Modifier("src", "m", Stat.GOLD_COST, 1, Duration.PERMANENT))
 
-    enforce_state_rules(game)
+    enforce_state_based_actions(game)
 
     assert effective_gold_cost(game, waiting) == 4
 
@@ -121,16 +121,16 @@ def test_a_province_cards_modifier_survives_the_move_into_play():
     game = two_seat_game()
     waiting = province_card(game.table, "m", printed_id="m", gold_cost=3, index=0)
     game.modifiers.append(Modifier("src", "m", Stat.GOLD_COST, 1, Duration.PERMANENT))
-    enforce_state_rules(game)
+    enforce_state_based_actions(game)
 
     ops.move_card(game.table, waiting, BATTLEFIELD)
-    enforce_state_rules(game)
+    enforce_state_based_actions(game)
 
     assert effective_gold_cost(game, waiting) == 4
 
 
 def test_a_card_a_state_rule_destroys_loses_its_modifiers_in_the_same_enforcement():
-    """The sweep and the state rules share a fixpoint, so a Personality killed by the Chi Death Rule
+    """The sweep and the state-based actions share a fixpoint, so a Personality killed by the Chi Death Rule
     has his modifiers gone before enforcement returns rather than at whatever happens next."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=2, chi=1))
@@ -141,7 +141,7 @@ def test_a_card_a_state_rule_destroys_loses_its_modifiers_in_the_same_enforcemen
         ]
     )
 
-    enforce_state_rules(game)
+    enforce_state_based_actions(game)
 
     assert hero not in game.table.battlefield.cards
     assert game.modifiers == []
