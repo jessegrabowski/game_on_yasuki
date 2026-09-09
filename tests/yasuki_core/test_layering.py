@@ -126,3 +126,18 @@ def test_importing_the_engine_registers_the_cards():
     )
 
     assert int(registered.stdout) > 0
+
+
+def test_the_rules_package_has_no_import_cycle():
+    # Every module in isolation, in a fresh interpreter: a cycle that the package's own import
+    # order happens to paper over still breaks the first consumer that reaches the modules in a
+    # different order, and nothing else in the suite imports them one at a time.
+    modules = sorted(
+        "yasuki_core.engine.rules." + str(path.relative_to(RULES))[:-3].replace("/", ".")
+        for path in RULES.rglob("*.py")
+        if path.name != "__init__.py" and "cards" not in path.parts
+    )
+    program = "".join(f"import {name}\n" for name in modules)
+    attempt = subprocess.run([sys.executable, "-c", program], capture_output=True, text=True)
+
+    assert attempt.returncode == 0, attempt.stderr
