@@ -474,7 +474,7 @@ class GrantModifier(Effect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(
+        game.ongoing.append(
             Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
         )
         return []
@@ -503,7 +503,7 @@ class GrantMinimum(Effect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(
+        game.ongoing.append(
             Minimum(self.source_id, self.target_id, self.stat, self.value, self.duration)
         )
         return []
@@ -530,7 +530,7 @@ class GrantProvinceStrength(Effect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(
+        game.ongoing.append(
             ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )
         return []
@@ -595,7 +595,7 @@ class GrantLobbyBonus(Effect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(LobbyModifier(self.source_id, self.seat, self.amount, self.duration))
+        game.ongoing.append(LobbyModifier(self.source_id, self.seat, self.amount, self.duration))
         return []
 
 
@@ -724,7 +724,7 @@ class GrantKeyword(Effect):
         return f"{self.source_id} gives {self.target_id} {self.keyword} ({self.duration.name})"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.modifiers.append(
+        game.ongoing.append(
             KeywordGrant(self.source_id, self.target_id, self.keyword, self.duration)
         )
         return []

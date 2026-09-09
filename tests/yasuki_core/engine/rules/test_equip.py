@@ -224,7 +224,7 @@ def test_an_effect_can_raise_the_limit_like_any_other_characteristic():
     attached(game, _weapon("katana"), "hero")
     assert may_attach_weapon(game, hero, _weapon("wakizashi")) is False
 
-    game.modifiers.append(
+    game.ongoing.append(
         Modifier("event", hero.id, Stat.WEAPON_LIMIT, 1, Duration.UNTIL_END_OF_TURN)
     )
 

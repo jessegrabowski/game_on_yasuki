@@ -153,7 +153,7 @@ def test_the_invested_cost_dies_with_the_card():
     resolve_effects(session.game, [Destroy("weapon", P1)])
 
     assert effective_gold_cost(session.game, weapon) == 3
-    assert session.game.modifiers == []
+    assert session.game.ongoing == []
 
 
 # --- Agasha Beiru ---

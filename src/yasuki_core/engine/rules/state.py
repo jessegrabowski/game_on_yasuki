@@ -102,8 +102,8 @@ class GameState:
         Deferred engine work — the later steps of an action sequence, run once the current decision
         clears. Ephemeral: replay rebuilds it by re-running the engine, so it is never serialized.
         Default empty.
-    modifiers : list of Modifier or KeywordGrant
-        The active recorded ongoing effects — created continuous stat and keyword grants, kept in
+    ongoing : list of Modifier, KeywordGrant, Minimum, ProvinceModifier or LobbyModifier
+        The ongoing records in force — every continuous grant a card has created, kept in
         creation order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike
         it may be non-empty at rest within a turn, so its order is load-bearing. Default empty.
     tokens_created : int
@@ -166,7 +166,7 @@ class GameState:
     rng: Generator = field(default_factory=lambda: default_rng(0), compare=False, repr=False)
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
-    modifiers: list[Ongoing] = field(default_factory=list)
+    ongoing: list[Ongoing] = field(default_factory=list)
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
     delayed: list[tuple[Moment, object]] = field(default_factory=list)

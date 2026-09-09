@@ -77,7 +77,7 @@ def test_a_personality_penalised_to_zero_chi_is_destroyed():
     triggers.enforce_state_based_actions(game)
     assert "doomed" in _battlefield(game)  # a live Personality is left alone
 
-    game.modifiers.append(Modifier("src", "doomed", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
+    game.ongoing.append(Modifier("src", "doomed", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
     triggers.enforce_state_based_actions(game)
 
     assert "doomed" not in _battlefield(game)
@@ -87,7 +87,7 @@ def test_a_personality_at_one_chi_is_left_alone():
     """The off-by-one that would depopulate the board."""
     samurai = _personality("survivor", chi=3)
     game = _in_play(samurai)
-    game.modifiers.append(Modifier("src", "survivor", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
+    game.ongoing.append(Modifier("src", "survivor", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
 
     triggers.enforce_state_based_actions(game)
 
@@ -228,7 +228,7 @@ def test_chi_death_clears_the_whole_unit_off_the_board():
     samurai = _personality("doomed", chi=2)
     game = _in_play(samurai)
     attached(game, attachment("yari", force_modifier=1), "doomed")
-    game.modifiers.append(Modifier("src", "doomed", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
+    game.ongoing.append(Modifier("src", "doomed", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
 
     triggers.enforce_state_based_actions(game)
 
@@ -242,10 +242,10 @@ def test_one_death_causing_another_resolves_and_terminates():
     first = _personality("first", chi=1)
     second = _personality("second", chi=1)
     game = _in_play(first, second)
-    game.modifiers.append(Modifier("src", "first", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN))
+    game.ongoing.append(Modifier("src", "first", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN))
     # The second is held up only by a grant from the first, which expires as it leaves play.
-    game.modifiers.append(Modifier("src", "second", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN))
-    game.modifiers.append(Modifier("first", "second", Stat.CHI, 1, Duration.WHILE_SOURCE_IN_PLAY))
+    game.ongoing.append(Modifier("src", "second", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN))
+    game.ongoing.append(Modifier("first", "second", Stat.CHI, 1, Duration.WHILE_SOURCE_IN_PLAY))
 
     triggers.enforce_state_based_actions(game)
 
@@ -506,10 +506,8 @@ def test_a_minimum_chi_of_one_keeps_a_personality_out_of_the_chi_death_rule():
     entry."""
     samurai = _personality("shiba", chi=2)
     game = _in_play(samurai)
-    game.modifiers.append(Minimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN))
-    game.modifiers.append(
-        Modifier("uncertainty", "shiba", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN)
-    )
+    game.ongoing.append(Minimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN))
+    game.ongoing.append(Modifier("uncertainty", "shiba", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN))
 
     triggers.enforce_state_based_actions(game)
 

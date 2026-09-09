@@ -40,7 +40,7 @@ def lobby_bonus(game: GameState, seat: PlayerId) -> int:
             total += grant(game, card)
     total += sum(
         recorded.amount
-        for recorded in game.modifiers
+        for recorded in game.ongoing
         if isinstance(recorded, LobbyModifier)
         and recorded.seat is seat
         and grant_applies(game, recorded)

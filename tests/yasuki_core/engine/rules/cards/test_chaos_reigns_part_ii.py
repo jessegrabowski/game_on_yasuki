@@ -103,7 +103,7 @@ def test_modifier_clear_replays_across_the_turn_boundary():
     for _ in range(3):  # end P1's turn, dropping the UEOT modifier
         end_phase(session)
 
-    assert session.game.modifiers == []  # the grant was cleared
+    assert session.game.ongoing == []  # the grant was cleared
     assert replay(session.log) == session.game  # and the clear rebuilds deterministically
 
 

@@ -45,7 +45,7 @@ def effective_province_strength(game: GameState, province: ZoneKey) -> int:
             total += grant(game, fortification, province)
     total += sum(
         recorded.amount
-        for recorded in game.modifiers
+        for recorded in game.ongoing
         if isinstance(recorded, ProvinceModifier)
         and recorded.province == province
         and grant_applies(game, recorded)

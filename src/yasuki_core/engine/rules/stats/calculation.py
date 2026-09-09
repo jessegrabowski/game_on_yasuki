@@ -58,7 +58,7 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
             delta = getattr(sensei, stat.value)
             if delta:
                 yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
-    for modifier in game.modifiers:
+    for modifier in game.ongoing:
         if not isinstance(modifier, Modifier) or modifier.target_id != card.id:
             continue
         if modifier.stat is not stat or not grant_applies(game, modifier):
@@ -72,7 +72,7 @@ def stat_minimum(game: GameState, card: L5RCard, stat: Stat) -> int:
     return max(
         (
             recorded.value
-            for recorded in game.modifiers
+            for recorded in game.ongoing
             if isinstance(recorded, Minimum)
             and recorded.target_id == card.id
             and recorded.stat is stat

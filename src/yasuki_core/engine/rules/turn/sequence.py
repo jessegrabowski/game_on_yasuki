@@ -192,7 +192,7 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
 def begin_next_turn(game: GameState) -> None:
     # Drop until-end-of-turn modifiers as the turn ends; the comprehension keeps creation order so
     # the list rebuilds identically under replay.
-    game.modifiers = [m for m in game.modifiers if m.duration is not Duration.UNTIL_END_OF_TURN]
+    game.ongoing = [m for m in game.ongoing if m.duration is not Duration.UNTIL_END_OF_TURN]
     # Modifiers expiring can make the board illegal on their own, with no effect committing and so
     # no cascade to catch it. Settle that before the new turn starts and anything reads the board.
     triggers.enforce_state_based_actions(game)

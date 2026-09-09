@@ -223,28 +223,28 @@ def enforce_state_based_actions(game: GameState) -> None:
         _advance(game, (), [], None, queue)
 
 
-def _forget_modifiers_on_cards_off_the_table(game: GameState) -> None:
-    """Drop recorded modifiers whose target has left the battlefield and the Provinces.
+def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
+    """Drop ongoing records whose target has left the battlefield and the Provinces.
 
     A card that leaves play ceases to exist (CR), so nothing granted to it outlives the departure —
     ``PERMANENT`` included, whose permanence is against its *source* going away rather than its
     target. A Province card counts as still on the table: Repairing the Ruins raises a Holding's
     Gold Cost while it waits in one, and that has to survive being Recruited out of it.
 
-    Forgotten rather than skipped when read: a card can return to a Province, and a modifier merely
+    Forgotten rather than skipped when read: a card can return to a Province, and a record merely
     filtered out would come back attached to the card that replaced it. One laid on a Province slot
     or on a player is kept whatever happens: neither is a card that can leave the table.
     """
-    if not game.modifiers:
+    if not game.ongoing:
         return
     on_table = {card.id for card in game.table.battlefield.cards}
     for key, zone in game.table.zones.items():
         if key.role is ZoneRole.PROVINCE:
             on_table.update(card.id for card in zone.cards)
-    game.modifiers[:] = [
-        modifier
-        for modifier in game.modifiers
-        if isinstance(modifier, ProvinceModifier | LobbyModifier) or modifier.target_id in on_table
+    game.ongoing[:] = [
+        record
+        for record in game.ongoing
+        if isinstance(record, ProvinceModifier | LobbyModifier) or record.target_id in on_table
     ]
 
 
@@ -261,11 +261,11 @@ def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None
 
     Enforcement runs to its own fixpoint: satisfying one condition can break another, and the CR's
     conditions chain that way by design — a destroyed card can orphan what was attached to it, and
-    a seat losing its last Province loses the game. Each round begins by forgetting the modifiers of
+    a seat losing its last Province loses the game. Each round begins by forgetting the ongoing records of
     whatever the last one drove off the table, so no rule reads a stat off a card that has gone.
     """
     for _ in range(_MAX_CASCADE):
-        _forget_modifiers_on_cards_off_the_table(game)
+        _forget_ongoing_on_cards_off_the_table(game)
         demanded = state_based_actions.demanded(game)
         if not demanded:
             return

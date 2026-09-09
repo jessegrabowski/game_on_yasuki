@@ -509,7 +509,7 @@ def test_the_oni_copies_the_chi_the_target_has_rather_than_the_chi_he_prints():
     """ "Force equal to the target's Chi" is his Chi as the board has it, so a Personality carrying a
     Chi bonus makes a bigger Oni than his printed line would."""
     session = _mishime_game(chi=3)
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Modifier("sensei", "victim", Stat.CHI, 2, Duration.WHILE_SOURCE_IN_PLAY)
     )
 
@@ -773,7 +773,7 @@ def test_the_chi_penalty_stops_at_a_minimum_another_card_has_given():
     """A minimum applies on top of the penalties (CR, Calculating Stats), so Uncertainty's floor of
     1 holds however many -1C penalties land on the target."""
     session = _blood_of_fu_leng_game(chi=1)
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Minimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN)
     )
 
@@ -818,4 +818,4 @@ def test_it_asks_for_no_target_with_no_personality_in_play():
     pay(session, P1)
 
     assert session.game.pending is None
-    assert session.game.modifiers == []
+    assert session.game.ongoing == []

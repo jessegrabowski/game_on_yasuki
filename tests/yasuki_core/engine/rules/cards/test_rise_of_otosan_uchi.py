@@ -906,7 +906,7 @@ def test_man_the_walls_reaches_a_target_left_at_home():
 def test_the_province_gains_the_targets_force():
     """The Force he has, not the Force he prints: a bonus already on him counts toward the wall."""
     session = _man_the_walls_battle()
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Modifier("banner", "rear", Stat.FORCE, 1, Duration.UNTIL_END_OF_TURN)
     )
     before = effective_province_strength(session.game, WALLED_PROVINCE)
@@ -960,7 +960,7 @@ def test_the_bonus_does_not_follow_the_targets_force_afterwards():
     before = effective_province_strength(session.game, WALLED_PROVINCE)
     _play_walls(session, "rear")  # 2 Force
 
-    session.game.modifiers.append(
+    session.game.ongoing.append(
         Modifier("later", "rear", Stat.FORCE, -2, Duration.UNTIL_END_OF_TURN)
     )
 

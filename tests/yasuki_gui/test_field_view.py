@@ -593,7 +593,7 @@ class TestRulesModeRender:
         if modified.get("note"):
             table.cards_by_id["P1-b"].set_note("dishonored")
         if modified.get("granted"):
-            session.game.modifiers.append(
+            session.game.ongoing.append(
                 Modifier("effect", "P1-b", Stat.FORCE, 2, Duration.UNTIL_END_OF_TURN)
             )
 

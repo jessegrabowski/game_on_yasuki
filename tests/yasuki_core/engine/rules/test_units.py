@@ -103,9 +103,7 @@ def test_every_follower_counts_and_each_at_its_own_effective_force():
     weakened = attached(
         game, attachment("b", attachment_type=AttachmentType.FOLLOWER, force=4), "hero"
     )
-    game.modifiers.append(
-        Modifier("curse", weakened.id, Stat.FORCE, -3, Duration.UNTIL_END_OF_TURN)
-    )
+    game.ongoing.append(Modifier("curse", weakened.id, Stat.FORCE, -3, Duration.UNTIL_END_OF_TURN))
 
     assert unit_force(game, hero) == 9  # 3 + 5 + (4 - 3)
 
