@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.gold.self_grants import (
     maximum_gold_production,
     register_self_grant,
 )
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import claim_once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
 

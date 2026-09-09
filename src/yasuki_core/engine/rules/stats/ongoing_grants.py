@@ -1,4 +1,4 @@
-from yasuki_core.engine.rules.modifiers import Duration, Ongoing
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Ongoing
 from yasuki_core.engine.rules.state import GameState
 
 

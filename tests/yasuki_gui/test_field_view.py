@@ -13,7 +13,7 @@ from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, 
 from yasuki_core.engine.rules.actions import ActivateAbility
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.decisions import ChooseDistribution, DecisionResponse
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard

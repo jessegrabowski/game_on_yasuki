@@ -27,7 +27,7 @@ from yasuki_core.engine.rules.vocabulary.events import (
     Revealed,
     Straightened,
 )
-from yasuki_core.engine.rules.modifiers import (
+from yasuki_core.engine.rules.vocabulary.modifiers import (
     Duration,
     KeywordGrant,
     LobbyModifier,

@@ -2,7 +2,7 @@ from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.rules.board.seats import seat_stronghold
-from yasuki_core.engine.rules.modifiers import ProvinceModifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import ProvinceModifier, Stat
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat

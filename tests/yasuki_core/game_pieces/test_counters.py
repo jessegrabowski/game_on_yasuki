@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.game_pieces.counters import (
     ALL_COUNTERS,
     SINCERITY,

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 
 from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_gui import theme

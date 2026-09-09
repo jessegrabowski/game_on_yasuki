@@ -5,7 +5,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board import queries
 from yasuki_core.engine.rules.decisions import ChooseLobbyTarget, DecisionResponse
 from yasuki_core.engine.rules.effects import Bow, TakeFavor
-from yasuki_core.engine.rules.modifiers import LobbyModifier
+from yasuki_core.engine.rules.vocabulary.modifiers import LobbyModifier
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn

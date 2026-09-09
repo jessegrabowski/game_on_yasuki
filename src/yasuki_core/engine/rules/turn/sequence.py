@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.vocabulary.events import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import activatable, permitted_timings
-from yasuki_core.engine.rules.modifiers import Duration
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,

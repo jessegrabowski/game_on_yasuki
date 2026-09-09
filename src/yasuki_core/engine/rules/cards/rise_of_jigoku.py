@@ -41,7 +41,7 @@ from yasuki_core.engine.rules.actions import (
     KharmicDraw,
     KharmicRefill,
 )
-from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import province_holdings

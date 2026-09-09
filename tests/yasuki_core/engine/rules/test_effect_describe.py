@@ -57,7 +57,7 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
     Then,
 )
-from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WALL, WEALTH

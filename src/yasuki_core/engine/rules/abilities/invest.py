@@ -1,7 +1,7 @@
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.registry import fixed_invest_amount, invest_for
 from yasuki_core.engine.rules.effects import GrantModifier
-from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 

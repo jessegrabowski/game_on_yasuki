@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.actions import ActivateAbility, Lobby
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.effects import GrantLobbyBonus
-from yasuki_core.engine.rules.modifiers import Duration
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.rulebook.lobby import lobby
 from yasuki_core.engine.rules.state import GameState

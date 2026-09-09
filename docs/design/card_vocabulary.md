@@ -180,7 +180,7 @@ each counter declares the per-count stat it grants, so a card's wealth tokens ra
 Production without a modifier being recorded.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.modifiers
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.modifiers
 
 .. autosummary::
 

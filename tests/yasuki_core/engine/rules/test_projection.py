@@ -15,7 +15,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.effects import Discard
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.projection import _identifiable_ids, project
 
 from tests.yasuki_core.engine.builders import (

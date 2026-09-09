@@ -2,7 +2,7 @@ from yasuki_core.engine.rules.registrar import HandlerRegistry
 from collections.abc import Callable, Iterator
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.modifiers import KeywordGrant
+from yasuki_core.engine.rules.vocabulary.modifiers import KeywordGrant
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard

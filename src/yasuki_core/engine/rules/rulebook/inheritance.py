@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.legality import (
     INHERITANCE_PRODUCTION,
     seat_stronghold,
 )
-from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 
 

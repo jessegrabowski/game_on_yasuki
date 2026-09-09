@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.rulebook.equip import (
     may_attach_weapon,
     weapons_on,
 )
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.constants import AttachmentType, Side

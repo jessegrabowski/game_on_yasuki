@@ -66,7 +66,6 @@ yasuki_core
     yasuki_core.engine.rules.gold.self_grants <yasuki_core.engine.rules.gold.self_grants>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
-    yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.registrar <yasuki_core.engine.rules.registrar>
     yasuki_core.engine.rules.registration_audit <yasuki_core.engine.rules.registration_audit>
@@ -98,6 +97,7 @@ yasuki_core
     yasuki_core.engine.rules.units.composition <yasuki_core.engine.rules.units.composition>
     yasuki_core.engine.rules.units.membership <yasuki_core.engine.rules.units.membership>
     yasuki_core.engine.rules.vocabulary.events <yasuki_core.engine.rules.vocabulary.events>
+    yasuki_core.engine.rules.vocabulary.modifiers <yasuki_core.engine.rules.vocabulary.modifiers>
     yasuki_core.engine.rules.vocabulary.victory <yasuki_core.engine.rules.vocabulary.victory>
     yasuki_core.engine.rules.vocabulary.work <yasuki_core.engine.rules.vocabulary.work>
     yasuki_core.engine.runner <yasuki_core.engine.runner>
