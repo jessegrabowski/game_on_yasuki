@@ -59,7 +59,6 @@ yasuki_core
     yasuki_core.engine.rules.decisions <yasuki_core.engine.rules.decisions>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
     yasuki_core.engine.rules.events <yasuki_core.engine.rules.events>
-    yasuki_core.engine.rules.favor_proxy <yasuki_core.engine.rules.favor_proxy>
     yasuki_core.engine.rules.gold.cost <yasuki_core.engine.rules.gold.cost>
     yasuki_core.engine.rules.gold.discounts <yasuki_core.engine.rules.gold.discounts>
     yasuki_core.engine.rules.gold.payment <yasuki_core.engine.rules.gold.payment>
@@ -78,6 +77,7 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.equip <yasuki_core.engine.rules.rulebook.equip>
     yasuki_core.engine.rules.rulebook.favor_abilities <yasuki_core.engine.rules.rulebook.favor_abilities>
     yasuki_core.engine.rules.rulebook.favor_payment <yasuki_core.engine.rules.rulebook.favor_payment>
+    yasuki_core.engine.rules.rulebook.favor_proxy <yasuki_core.engine.rules.rulebook.favor_proxy>
     yasuki_core.engine.rules.rulebook.inheritance <yasuki_core.engine.rules.rulebook.inheritance>
     yasuki_core.engine.rules.rulebook.kharmic <yasuki_core.engine.rules.rulebook.kharmic>
     yasuki_core.engine.rules.rulebook.legacy <yasuki_core.engine.rules.rulebook.legacy>

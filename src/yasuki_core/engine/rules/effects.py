@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from typing import ClassVar
 
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules import favor_proxy
+from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
