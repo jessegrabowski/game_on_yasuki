@@ -1,10 +1,10 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.activation import _apply_ability_target, activate
+from yasuki_core.engine.rules.abilities.activation import apply_ability_target, activate
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.abilities.strategy import (
-    _discard_played,
-    _resolve_strategy,
+    discard_played,
+    resolve_strategy,
     play_strategy,
 )
 from yasuki_core.engine.rules.actions import (
@@ -47,36 +47,36 @@ from yasuki_core.engine.rules.decisions import (
     LeaveBowed,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.equip import _apply_equip_target, _resolve_equip, equip
+from yasuki_core.engine.rules.equip import apply_equip_target, resolve_equip, equip
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.gold.production import _complete_production, produce_gold
-from yasuki_core.engine.rules.provinces import _refill_short_provinces
+from yasuki_core.engine.rules.gold.production import complete_production, produce_gold
+from yasuki_core.engine.rules.provinces import refill_short_provinces
 from yasuki_core.engine.rules.recruit import (
-    _apply_fortification_province,
-    _apply_invest_amount,
-    _finish_recruit,
-    _resolve_recruit,
+    apply_fortification_province,
+    apply_invest_amount,
+    finish_recruit,
+    resolve_recruit,
     recruit,
 )
 from yasuki_core.engine.rules.rulebook.cycle import cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor import use_favor_ability
-from yasuki_core.engine.rules.rulebook.inheritance import _apply_inheritance_target, inheritance
+from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
 from yasuki_core.engine.rules.rulebook.kharmic import kharmic_draw, kharmic_refill
 from yasuki_core.engine.rules.rulebook.legacy import (
-    _apply_legacy_banish,
-    _apply_legacy_choice,
-    _apply_legacy_placement,
+    apply_legacy_banish,
+    apply_legacy_choice,
+    apply_legacy_placement,
     legacy,
 )
-from yasuki_core.engine.rules.rulebook.lobby import _apply_lobby_target, lobby
+from yasuki_core.engine.rules.rulebook.lobby import apply_lobby_target, lobby
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.sequence import (
-    _apply_discard,
-    _begin_next_turn,
-    _open_turn,
-    _yield_after_action,
+    apply_discard,
+    begin_next_turn,
+    open_turn,
+    yield_after_action,
     yield_priority,
 )
 from yasuki_core.engine.rules.turn.structure import RoundKind
@@ -173,7 +173,7 @@ def perform(game: GameState, action: Action) -> None:
     # remainder for the submit that answers it.
     run_stack(game)
     if not isinstance(action, Pass):
-        _yield_after_action(game, acted_in)
+        yield_after_action(game, acted_in)
 
 
 # The decisions that are steps of the turn rather than actions taken in a round: the end-of-turn
@@ -199,12 +199,12 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     acted_in = game.round
     match request:
         case DiscardToHandSize():
-            _apply_discard(game, request.seat, response.choices)
+            apply_discard(game, request.seat, response.choices)
             game.pending = None
-            _begin_next_turn(game)
+            begin_next_turn(game)
         case LeaveBowed():
             game.pending = None
-            _open_turn(game, frozenset(response.choices))
+            open_turn(game, frozenset(response.choices))
         case ChoosePayment():
             # Cleared first: paying resolves the boost prices, and one that asks a question leaves
             # its decision on `pending` for the seat to answer next.
@@ -212,21 +212,21 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_payment(game, request, response)
             run_stack(game)
         case BanishForLegacy():
-            _apply_legacy_banish(game, request, response)
+            apply_legacy_banish(game, request, response)
         case ChooseLegacyCard():
-            _apply_legacy_choice(game, request, response)
+            apply_legacy_choice(game, request, response)
         case PlaceLegacy():
-            _apply_legacy_placement(game, request, response)
+            apply_legacy_placement(game, request, response)
         case ChooseAbilityTarget():
-            _apply_ability_target(game, request, response)
+            apply_ability_target(game, request, response)
         case ChooseEquipTarget():
-            _apply_equip_target(game, request, response)
+            apply_equip_target(game, request, response)
         case ChooseInheritanceTarget():
-            _apply_inheritance_target(game, request, response)
+            apply_inheritance_target(game, request, response)
         case ChooseLobbyTarget():
-            _apply_lobby_target(game, request, response)
+            apply_lobby_target(game, request, response)
         case ChooseFortificationProvince():
-            _apply_fortification_province(game, request, response)
+            apply_fortification_province(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
         case ChooseAmount():
@@ -239,7 +239,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         case Confirm():
             _apply_card_choice(game, request, response)
         case ChooseInvestAmount():
-            _apply_invest_amount(game, request, response)
+            apply_invest_amount(game, request, response)
         case AssignUnits():
             resolution.apply_assignment(game, request, response)
         case ChooseBattlefield():
@@ -252,7 +252,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     # Turn structure is not an action: the round these resolve into is not one an action would
     # yield in, because the turn they belong to is either already over or has not opened yet.
     if not isinstance(request, _TURN_STRUCTURE):
-        _yield_after_action(game, acted_in)
+        yield_after_action(game, acted_in)
 
 
 def cancel(game: GameState) -> None:
@@ -299,7 +299,7 @@ def run_stack(game: GameState) -> None:
     while game.stack and game.pending is None:
         _resolve(game, game.stack.pop())
     if game.pending is None:
-        _refill_short_provinces(game)
+        refill_short_provinces(game)
 
 
 def _resolve(game: GameState, item: WorkItem) -> None:
@@ -307,13 +307,13 @@ def _resolve(game: GameState, item: WorkItem) -> None:
         case ResolveRecruit(
             seat=seat, card_id=card_id, invest_amount=invest_amount, renew=renew, proclaim=proclaim
         ):
-            _resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
+            resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
         case ResolveEquip(card_id=card_id, target_id=target_id, invest_amount=invest_amount):
-            _resolve_equip(game, card_id, target_id, invest_amount)
+            resolve_equip(game, card_id, target_id, invest_amount)
         case ResolveStrategy(card_id=card_id, ability_key=ability_key):
-            _resolve_strategy(game, card_id, ability_key)
+            resolve_strategy(game, card_id, ability_key)
         case DiscardPlayed(card_id=card_id):
-            _discard_played(game, card_id)
+            discard_played(game, card_id)
         case SelectAbilityTarget(card_id=card_id, candidates=candidates, ability_key=ability_key):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(
@@ -332,9 +332,9 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             ]
             triggers.resolve_effects(game, effects)
         case FinishRecruit(card_id=card_id, invest_amount=invest_amount, proclaim=proclaim):
-            _finish_recruit(game, card_id, invest_amount, proclaim=proclaim)
+            finish_recruit(game, card_id, invest_amount, proclaim=proclaim)
         case CompleteProduction(card_id=card_id, target_ids=target_ids):
-            _complete_production(game, card_id, target_ids)
+            complete_production(game, card_id, target_ids)
         case ContinuePayment(seat=seat, amount=amount, label=label, target_id=target_id):
             _continue_payment(game, seat, amount, label, target_id)
         case ResumeCascade():

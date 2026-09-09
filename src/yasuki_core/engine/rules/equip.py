@@ -3,7 +3,7 @@ from collections.abc import Callable
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.invest import _equip_invest_amount, _finish_invest
+from yasuki_core.engine.rules.abilities.invest import equip_invest_amount, finish_invest
 from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.decisions import ChooseEquipTarget, ChoosePayment, DecisionResponse
@@ -147,11 +147,11 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
         seat=card.owner,
         candidates=tuple(target.id for target in equip_targets(game, card)),
         source_card_id=card_id,
-        invest_amount=_equip_invest_amount(game, card) if invest else None,
+        invest_amount=equip_invest_amount(game, card) if invest else None,
     )
 
 
-def _apply_equip_target(
+def apply_equip_target(
     game: GameState, request: ChooseEquipTarget, response: DecisionResponse
 ) -> None:
     """Take the chosen Personality and put the Equip's cost to the seat."""
@@ -170,7 +170,7 @@ def announce_equip(
     return payment_request(game, seat, amount, card.name, target=card)
 
 
-def _resolve_equip(
+def resolve_equip(
     game: GameState, card_id: str, target_id: str, invest_amount: int | None = None
 ) -> None:
     """Bring the paid-for attachment out of hand and onto its Personality."""
@@ -180,4 +180,4 @@ def _resolve_equip(
     # Legal before anything is told it arrived, for the reason _put_into_play gives.
     triggers.enforce_state_rules(game)
     triggers.fire(game, EnteredPlay(card_id, from_hand=True))
-    _finish_invest(game, card, invest_amount)
+    finish_invest(game, card, invest_amount)

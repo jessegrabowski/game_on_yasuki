@@ -78,7 +78,7 @@ def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()
     triggers.fire(game, ProducingGold(card_id, card.owner))
 
 
-def _complete_production(game: GameState, card_id: str, target_ids: tuple[str, ...]) -> None:
+def complete_production(game: GameState, card_id: str, target_ids: tuple[str, ...]) -> None:
     """Bow the producer for whatever it is worth now, and announce what it made."""
     card = game.table.cards_by_id[card_id]
     targets = tuple(game.table.cards_by_id[tid] for tid in target_ids)

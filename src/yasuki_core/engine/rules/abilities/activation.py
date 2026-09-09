@@ -23,10 +23,10 @@ def activate(game: GameState, card_id: str, ability_key: str | None = None) -> N
     ability = ability_for(card, ability_key)
     if ActionTiming.RESPONSE in ability.timings:
         game.responded.add(card_id)
-    _defer_ability(game, card, ability)
+    defer_ability(game, card, ability)
 
 
-def _defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
+def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
     """Stack ``ability``'s effects behind its cost, and pay the cost.
 
     The cost resolves first and targeting follows it (CR, Action Sequence steps B and C), and an
@@ -41,7 +41,7 @@ def _defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
     triggers.resolve_effects(game, ability.cost(game, card))
 
 
-def _apply_ability_target(
+def apply_ability_target(
     game: GameState, request: ChooseAbilityTarget, response: DecisionResponse
 ) -> None:
     source = game.table.cards_by_id[request.source_card_id]

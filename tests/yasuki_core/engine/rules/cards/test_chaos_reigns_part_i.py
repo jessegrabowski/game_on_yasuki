@@ -199,7 +199,7 @@ def test_a_discard_no_player_made_offers_nothing():
     session = _caravansary_game()
     game = session.game
 
-    sequence._apply_discard(game, P1, ("spare-fate-0",))
+    sequence.apply_discard(game, P1, ("spare-fate-0",))
 
     assert game.action_events[-1] == CardDiscarded(
         "spare-fate-0", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True

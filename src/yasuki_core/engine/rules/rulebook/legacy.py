@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.effects import Discard, Effect, PlaceInProvince, ShuffleDeck, Then
 from yasuki_core.engine.rules.legality import legacy_candidates, legacy_key, legacy_search_pool
-from yasuki_core.engine.rules.provinces import _defer_refill
+from yasuki_core.engine.rules.provinces import defer_refill
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -32,7 +32,7 @@ def _reveal_search_pool(game: GameState, seat: PlayerId) -> None:
         card.add_peeker(seat)
 
 
-def _apply_legacy_banish(
+def apply_legacy_banish(
     game: GameState, request: BanishForLegacy, response: DecisionResponse
 ) -> None:
     seat = request.seat
@@ -48,7 +48,7 @@ def _apply_legacy_banish(
     game.pending = ChooseLegacyCard(seat=seat, candidates=tuple(card.id for card in found))
 
 
-def _apply_legacy_choice(
+def apply_legacy_choice(
     game: GameState, request: ChooseLegacyCard, response: DecisionResponse
 ) -> None:
     seat = request.seat
@@ -63,7 +63,7 @@ def _apply_legacy_choice(
     game.pending = PlaceLegacy(seat=seat, candidates=provinces, legacy_card_id=legacy_card.id)
 
 
-def _apply_legacy_placement(
+def apply_legacy_placement(
     game: GameState, request: PlaceLegacy, response: DecisionResponse
 ) -> None:
     seat = request.seat
@@ -73,7 +73,7 @@ def _apply_legacy_placement(
     source_key = province_key_holding(game, seat, legacy_card.id)  # None when it came from the deck
     game.pending = None
     if source_key is not None:
-        _defer_refill(game, source_key)
+        defer_refill(game, source_key)
     # One effect per occurrence, so each announces itself where it happens. The placement is
     # deferred because the rules resolve what the displaced card leaving triggered before anything
     # fills the Province behind it.

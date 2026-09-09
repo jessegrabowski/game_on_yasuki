@@ -7,6 +7,9 @@ yasuki_core.engine.rules.rulebook.legacy
 
 .. autosummary::
 
+    apply_legacy_banish
+    apply_legacy_choice
+    apply_legacy_placement
     legacy
 
 .. automodule:: yasuki_core.engine.rules.rulebook.legacy

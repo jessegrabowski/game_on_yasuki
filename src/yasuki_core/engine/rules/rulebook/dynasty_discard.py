@@ -2,7 +2,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_key_holding
 from yasuki_core.engine.rules.events import CardDiscarded
-from yasuki_core.engine.rules.provinces import _defer_refill
+from yasuki_core.engine.rules.provinces import defer_refill
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 
@@ -15,5 +15,5 @@ def dynasty_discard(game: GameState, card_id: str) -> None:
     province_key = province_key_holding(game, seat, card_id)
     ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.DYNASTY_DISCARD))
     if province_key is not None:
-        _defer_refill(game, province_key)
+        defer_refill(game, province_key)
     triggers.fire(game, CardDiscarded(card_id, card.side, seat))

@@ -22,7 +22,7 @@ def inheritance(game: GameState) -> None:
     )
 
 
-def _apply_inheritance_target(
+def apply_inheritance_target(
     game: GameState, request: ChooseInheritanceTarget, response: DecisionResponse
 ) -> None:
     """Spend the once-per-game use, turn the Stronghold over, and raise the chosen Holding.

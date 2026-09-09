@@ -187,7 +187,7 @@ def _caravansary(game, seat=PlayerId.P1, card_id="P1-caravansary"):
 
 
 def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
-    # The wiring test: _apply_discard moves a hand card to the discard and must fire CardDiscarded.
+    # The wiring test: apply_discard moves a hand card to the discard and must fire CardDiscarded.
     game = two_seat_game()
     probe = holding("P1-probe", printed_id="test_discard_probe", owner=PlayerId.P1)
     put_in_play(game, probe)
@@ -195,7 +195,7 @@ def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
     game.table.cards_by_id[fate.id] = fate
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(fate)
 
-    sequence._apply_discard(game, PlayerId.P1, ("P1-f",))
+    sequence.apply_discard(game, PlayerId.P1, ("P1-f",))
 
     assert probe.counters == {"wealth": 1}
 
@@ -371,7 +371,7 @@ def test_rural_market_ignores_another_cards_entry():
 
 
 def test_flow_emits_entered_play_from_recruit_resolution():
-    # The wiring test: _resolve_recruit moves the card into play and must fire EnteredPlay.
+    # The wiring test: resolve_recruit moves the card into play and must fire EnteredPlay.
     game = two_seat_game()
     rural = holding(
         "P1-rural",
@@ -382,7 +382,7 @@ def test_flow_emits_entered_play_from_recruit_resolution():
     )
     game.table.cards_by_id[rural.id] = rural  # being recruited, not yet on the battlefield
 
-    recruit._resolve_recruit(game, PlayerId.P1, rural.id)
+    recruit.resolve_recruit(game, PlayerId.P1, rural.id)
 
     assert rural in game.table.battlefield.cards
     assert rural.counters == {"wealth": 1}

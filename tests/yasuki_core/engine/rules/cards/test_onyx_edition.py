@@ -201,7 +201,7 @@ def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
     """The end-of-turn trim is the discard the card names, and it reaches a card in hand."""
     game = _spearmen_game()
 
-    sequence._apply_discard(game, P1, ("spearmen",))
+    sequence.apply_discard(game, P1, ("spearmen",))
 
     assert game.pending.candidates == ("shahai",)
 
@@ -209,7 +209,7 @@ def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
 def test_banishing_the_spearmen_equips_the_naga_follower():
     game = _spearmen_game()
 
-    sequence._apply_discard(game, P1, ("spearmen",))
+    sequence.apply_discard(game, P1, ("spearmen",))
     action_sequence.submit(game, DecisionResponse(("shahai",)))
 
     follower = attachments_of(game, game.table.cards_by_id["shahai"])[0]
@@ -222,7 +222,7 @@ def test_declining_leaves_the_spearmen_lying_in_the_discard():
     """Banishing is the price of the Follower, so a seat that takes neither keeps the card."""
     game = _spearmen_game()
 
-    sequence._apply_discard(game, P1, ("spearmen",))
+    sequence.apply_discard(game, P1, ("spearmen",))
     action_sequence.submit(game, DecisionResponse(()))
 
     assert attachments_of(game, game.table.cards_by_id["shahai"]) == ()
@@ -234,7 +234,7 @@ def test_only_a_naga_personality_is_offered():
     game = _spearmen_game()
     put_in_play(game, personality("bushi", force=3, chi=2, keywords=("Samurai",)))
 
-    sequence._apply_discard(game, P1, ("spearmen",))
+    sequence.apply_discard(game, P1, ("spearmen",))
 
     assert game.pending.candidates == ("shahai",)
 
@@ -242,7 +242,7 @@ def test_only_a_naga_personality_is_offered():
 def test_nothing_is_offered_with_nobody_to_carry_the_follower():
     game = _spearmen_game(bearer_keywords=None)
 
-    sequence._apply_discard(game, P1, ("spearmen",))
+    sequence.apply_discard(game, P1, ("spearmen",))
 
     assert game.pending is None
 

@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 
 
-def _finish_invest(game: GameState, card: L5RCard, invest_amount: int | None) -> None:
+def finish_invest(game: GameState, card: L5RCard, invest_amount: int | None) -> None:
     """Charge ``card``'s Invest against itself and run what it bought. None is a card recruited
     without the option, which a free Invest is not — a card whose own text drops its Invest to zero
     still buys what the Invest buys.
@@ -25,7 +25,7 @@ def _finish_invest(game: GameState, card: L5RCard, invest_amount: int | None) ->
     )
 
 
-def _equip_invest_amount(game: GameState, card: L5RCard) -> int:
+def equip_invest_amount(game: GameState, card: L5RCard) -> int:
     """The Invest cost ``card`` charges to Equip with."""
     amount = fixed_invest_amount(game, card)
     if amount is None:

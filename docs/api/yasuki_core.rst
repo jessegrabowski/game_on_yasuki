@@ -43,6 +43,7 @@ yasuki_core
     yasuki_core.engine.rules.abilities.activation <yasuki_core.engine.rules.abilities.activation>
     yasuki_core.engine.rules.abilities.costs <yasuki_core.engine.rules.abilities.costs>
     yasuki_core.engine.rules.abilities.idioms <yasuki_core.engine.rules.abilities.idioms>
+    yasuki_core.engine.rules.abilities.invest <yasuki_core.engine.rules.abilities.invest>
     yasuki_core.engine.rules.abilities.model <yasuki_core.engine.rules.abilities.model>
     yasuki_core.engine.rules.abilities.registry <yasuki_core.engine.rules.abilities.registry>
     yasuki_core.engine.rules.abilities.strategy <yasuki_core.engine.rules.abilities.strategy>
@@ -72,6 +73,7 @@ yasuki_core
     yasuki_core.engine.rules.modifiers <yasuki_core.engine.rules.modifiers>
     yasuki_core.engine.rules.ongoing_grants <yasuki_core.engine.rules.ongoing_grants>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
+    yasuki_core.engine.rules.provinces <yasuki_core.engine.rules.provinces>
     yasuki_core.engine.rules.recruit <yasuki_core.engine.rules.recruit>
     yasuki_core.engine.rules.registrar <yasuki_core.engine.rules.registrar>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>

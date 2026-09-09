@@ -8,6 +8,8 @@ yasuki_core.engine.rules.abilities.activation
 .. autosummary::
 
     activate
+    apply_ability_target
+    defer_ability
 
 .. automodule:: yasuki_core.engine.rules.abilities.activation
     :members:

@@ -172,7 +172,7 @@ def _end_turn(game: GameState) -> None:
         candidates = tuple(card.id for card in held)
         game.pending = DiscardToHandSize(seat, candidates, count=excess)
         return
-    _begin_next_turn(game)
+    begin_next_turn(game)
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
@@ -189,7 +189,7 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
     triggers.resolve_effects(game, grants)
 
 
-def _begin_next_turn(game: GameState) -> None:
+def begin_next_turn(game: GameState) -> None:
     # Drop until-end-of-turn modifiers as the turn ends; the comprehension keeps creation order so
     # the list rebuilds identically under replay.
     game.modifiers = [m for m in game.modifiers if m.duration is not Duration.UNTIL_END_OF_TURN]
@@ -222,10 +222,10 @@ def _begin_turn(game: GameState) -> None:
     if offering:
         game.pending = LeaveBowed(seat=game.active, candidates=offering)
         return
-    _open_turn(game, frozenset())
+    open_turn(game, frozenset())
 
 
-def _open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
+def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
     """Straighten everything but ``staying_bowed`` and whatever may not straighten yet, reveal the
     Provinces, and open the turn.
 
@@ -244,7 +244,7 @@ def _open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
     forget_action(game)
 
 
-def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:
+def apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:
     """Discard down to the maximum hand size at the end of the turn.
 
     The rulebook trims the hand, so the discard names no seat as its cause: it is a step of the turn
@@ -269,7 +269,7 @@ def _other(seat: PlayerId) -> PlayerId:
     return PlayerId.P2 if seat is PlayerId.P1 else PlayerId.P1
 
 
-def _yield_after_action(game: GameState, acted_in: ActionRound) -> None:
+def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
     """Hand on the opportunity once an action has fully resolved. An action that paused for a
     decision has not finished, and a game that has ended has no round left to run.
 

@@ -104,7 +104,7 @@ def lobby(game: GameState) -> None:
     )
 
 
-def _apply_lobby_target(
+def apply_lobby_target(
     game: GameState, request: ChooseLobbyTarget, response: DecisionResponse
 ) -> None:
     """Bow the chosen Personality and take the Imperial Favor.

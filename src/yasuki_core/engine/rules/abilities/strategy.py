@@ -1,5 +1,5 @@
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.activation import _defer_ability
+from yasuki_core.engine.rules.abilities.activation import defer_ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -24,7 +24,7 @@ def play_strategy(game: GameState, card_id: str, ability_key: str | None = None)
     )
 
 
-def _resolve_strategy(game: GameState, card_id: str, ability_key: str | None = None) -> None:
+def resolve_strategy(game: GameState, card_id: str, ability_key: str | None = None) -> None:
     """Resolve a paid-for Strategy: its ability against its target, and then its discard.
 
     The discard is stacked *under* the ability's own work so it runs after it, whether the ability
@@ -35,10 +35,10 @@ def _resolve_strategy(game: GameState, card_id: str, ability_key: str | None = N
     if ability is None:
         raise ValueError(f"{card_id} has no ability to resolve")
     game.stack.append(DiscardPlayed(card_id))
-    _defer_ability(game, card, ability)
+    defer_ability(game, card, ability)
 
 
-def _discard_played(game: GameState, card_id: str) -> None:
+def discard_played(game: GameState, card_id: str) -> None:
     """Discard a card whose play has finished, unless it has already left the hand.
 
     Step F discards the played card "unless it is now in play" (CR, Action Sequence) — a Terrain, a

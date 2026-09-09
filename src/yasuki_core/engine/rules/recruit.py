@@ -1,7 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.invest import _finish_invest
+from yasuki_core.engine.rules.abilities.invest import finish_invest
 from yasuki_core.engine.rules.abilities.registry import enters_play_bowed, invest_amounts
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
 from yasuki_core.engine.rules.decisions import (
@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import proclaim_key, recruit_cost
-from yasuki_core.engine.rules.provinces import _defer_refill
+from yasuki_core.engine.rules.provinces import defer_refill
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.work import FinishRecruit, ResolveRecruit
@@ -80,7 +80,7 @@ def announce_recruit(
     return payment_request(game, seat, amount, card.name, target=card)
 
 
-def _apply_invest_amount(
+def apply_invest_amount(
     game: GameState, request: ChooseInvestAmount, response: DecisionResponse
 ) -> None:
     card = game.table.cards_by_id[request.source_card_id]
@@ -88,7 +88,7 @@ def _apply_invest_amount(
     game.pending = announce_recruit(game, card, card.owner, invest_amount=int(response.choices[0]))
 
 
-def _resolve_recruit(
+def resolve_recruit(
     game: GameState,
     seat: PlayerId,
     card_id: str,
@@ -110,7 +110,7 @@ def _resolve_recruit(
             ops.attach_to_province(game.table, card, province_key)
         # Renew is read once the card has entered play, which is when the keyword speaks.
         renews = renew or keywords.RENEW in effective_keywords(game, card)
-        _defer_refill(game, province_key, face_up=renews)
+        defer_refill(game, province_key, face_up=renews)
     elif fortification:
         # Brought in from somewhere other than a Province, so its controller picks one (CR,
         # Fortification). Nothing is told it arrived until it has a Province to have arrived at.
@@ -131,7 +131,7 @@ def _province_slots(game: GameState, seat: PlayerId) -> tuple[str, ...]:
     return tuple(key.token for key, _ in province_zones(game, seat))
 
 
-def _apply_fortification_province(
+def apply_fortification_province(
     game: GameState, request: ChooseFortificationProvince, response: DecisionResponse
 ) -> None:
     """Attach the waiting Fortification to the Province the seat named, then let it arrive."""
@@ -156,7 +156,7 @@ def _announce_entering_play(
     triggers.fire(game, EnteredPlay(card_id))
 
 
-def _finish_recruit(
+def finish_recruit(
     game: GameState, card_id: str, invest_amount: int | None, proclaim: bool = False
 ) -> None:
     card = game.table.cards_by_id[card_id]
@@ -164,7 +164,7 @@ def _finish_recruit(
     if proclaim:
         game.use_once(proclaim_key(card.owner, game.turn))
         ops.set_honor(game.table, card.owner, delta=effective_personal_honor(game, card))
-    _finish_invest(game, card, invest_amount)
+    finish_invest(game, card, invest_amount)
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:

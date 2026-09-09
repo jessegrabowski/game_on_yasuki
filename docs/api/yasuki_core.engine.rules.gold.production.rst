@@ -7,6 +7,7 @@ yasuki_core.engine.rules.gold.production
 
 .. autosummary::
 
+    complete_production
     effective_gold_production
     produce_gold
     reads_its_targets
