@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.actions import Action
 from yasuki_core.engine.rules.battle.records import AttackPhase
 from yasuki_core.engine.rules.decisions import DecisionRequest
 from yasuki_core.engine.rules.events import GameEvent
-from yasuki_core.engine.rules.modifiers import OngoingEffect
+from yasuki_core.engine.rules.modifiers import Ongoing
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     Moment,
@@ -166,7 +166,7 @@ class GameState:
     rng: Generator = field(default_factory=lambda: default_rng(0), compare=False, repr=False)
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
-    modifiers: list[OngoingEffect] = field(default_factory=list)
+    modifiers: list[Ongoing] = field(default_factory=list)
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
     delayed: list[tuple[Moment, object]] = field(default_factory=list)

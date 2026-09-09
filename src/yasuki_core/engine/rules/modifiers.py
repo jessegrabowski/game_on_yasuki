@@ -184,4 +184,4 @@ class LobbyModifier:
 # unless the card says otherwise — so they are recorded in one list and expire together (CR,
 # Duration of Effects). The three that name a card are forgotten when it leaves the table; the two
 # that name a Province slot and a player are not, because neither ever leaves it.
-OngoingEffect = Modifier | KeywordGrant | Minimum | ProvinceModifier | LobbyModifier
+Ongoing = Modifier | KeywordGrant | Minimum | ProvinceModifier | LobbyModifier
