@@ -50,8 +50,9 @@ COLLECTIONS = ("dict", "set", "frozenset")
 REGISTRAR = ("FlagRegistry", "HandlerRegistry")
 
 
-# Every package registration_audit validates a registry in. `bots` is here because the ability hints are
-# keyed by printed id like any other per-card registry, so the scan has to follow it out of `rules`.
+# Every package registration_audit validates a registry in. `bots` is here because the ability
+# hints are keyed by printed id like any other per-card registry, so the scan has to follow it out
+# of `rules`.
 SCANNED = (rules, bots)
 
 
