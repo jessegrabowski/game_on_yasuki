@@ -6,7 +6,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
 from yasuki_core.engine.rules.effects import AttachCard, DelayStraighten, Destroy
-from yasuki_core.engine.rules.flow import submit
+from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force

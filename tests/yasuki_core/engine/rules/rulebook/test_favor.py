@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.rulebook.favor import (
 from yasuki_core.engine.rules.rulebook.favor import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import can_pay
 from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
-from yasuki_core.engine.rules.flow import forget_action
+from yasuki_core.engine.rules.turn.sequence import forget_action
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.effects import (
     AskOption,

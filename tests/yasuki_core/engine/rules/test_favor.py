@@ -3,7 +3,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.engine.rules.effects import DiscardFavor, TakeFavor
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
-from yasuki_core.engine.rules.flow import MAX_HAND_SIZE, _end_turn
+from yasuki_core.engine.rules.turn.sequence import _end_turn, MAX_HAND_SIZE
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side

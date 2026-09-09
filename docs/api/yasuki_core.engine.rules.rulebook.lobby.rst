@@ -7,8 +7,12 @@ yasuki_core.engine.rules.rulebook.lobby
 
 .. autosummary::
 
+    apply_lobby_target
+    lobby
     lobby_amount
     lobby_bonus
+    lobby_candidates
+    lobby_key
     may_lobby
 
 .. automodule:: yasuki_core.engine.rules.rulebook.lobby

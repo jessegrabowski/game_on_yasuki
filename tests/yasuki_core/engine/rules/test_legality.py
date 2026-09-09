@@ -1,9 +1,39 @@
-import numpy as np
 import pytest
+
+from yasuki_core import ruleset
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import (
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    SenseiPrint,
+    StrongholdPrint,
+)
+from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.decisions import (
+    DecisionResponse,
+)
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.session import EngineSession
+
+from tests.yasuki_core.engine.builders import (
+    attachment,
+    end_phase,
+    holding,
+    personality,
+    put_in_play,
+    register,
+)
+
+
+import numpy as np
 
 from dataclasses import replace
 
-from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import (
@@ -12,43 +42,29 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
 )
 from yasuki_core.engine.rules.actions import (
-    ActionTiming,
-    ActivateAbility,
     BattleDesignator,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import AdjustCounter
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.legality import activatable, has_absent_ability
-from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
-from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
-    attachment,
-    personality,
     province_card,
-    put_in_play,
-    register,
 )
-from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.actions import (
     Cycle,
     DynastyDiscard,
-    Legacy,
-    Pass,
-    Recruit,
 )
 from yasuki_core.engine.bots.agents import make_agent
 from yasuki_core.engine.bots.policies import make_policy
 from yasuki_core.engine.runner import Controls, run_game
 from yasuki_core.game_setup import build_state_from_deck
 from tests.yasuki_core.db_guard import requires_db
-from tests.yasuki_core.engine.builders import end_phase, holding
+from yasuki_core.engine.rules import recruit
+from yasuki_core.engine.rules.turn import sequence
 
 DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
 
@@ -611,3 +627,269 @@ def test_a_bowed_tireless_card_still_earns_the_absent_opportunity():
     session.game.table.cards_by_id["probe"].bow()
 
     assert has_absent_ability(session.game, PlayerId.P1)
+
+
+def _game_with_stronghold_clan(clan: str | None) -> GameState:
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            clan=clan,
+        ),
+    )
+    return GameState.start(state, PlayerId.P1)
+
+
+def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
+    game = _game_with_stronghold_clan("crab")
+    same = L5RCard.of(
+        HoldingPrint,
+        id="h1",
+        name="H",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_cost=4,
+        clan="crab",
+    )
+    other = L5RCard.of(
+        HoldingPrint,
+        id="h2",
+        name="H",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_cost=4,
+        clan="crane",
+    )
+
+    assert legality.recruit_cost(game, same) == 4
+    assert legality.recruit_cost(game, other) == 4 + ruleset.ACTIVE.off_clan_surcharge
+
+
+def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
+    game = _game_with_stronghold_clan(None)
+    holding = L5RCard.of(
+        HoldingPrint,
+        id="h",
+        name="H",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_cost=4,
+        clan="crane",
+    )
+    assert legality.recruit_cost(game, holding) == 4  # no Stronghold clan to compare against
+
+
+def _personality(clans: tuple[str, ...], **kwargs) -> L5RCard:
+    return L5RCard.of(
+        PersonalityPrint,
+        id="p",
+        name="P",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        gold_cost=5,
+        clan=clans[0] if clans else None,
+        clans=clans,
+        **kwargs,
+    )
+
+
+def test_recruit_cost_reads_every_listed_clan_not_just_the_first():
+    # Bayushi Aramoro is printed Ninja and Scorpion; the alignment that matters is second in the list.
+    game = _game_with_stronghold_clan("Scorpion")
+    aramoro = _personality(("Ninja", "Scorpion"))
+    assert legality.recruit_cost(game, aramoro) == 5
+
+
+def test_recruit_cost_treats_naga_and_akasha_as_one_alignment():
+    game = _game_with_stronghold_clan("Naga")
+    akasha_personality = _personality(("Akasha",))
+    assert legality.recruit_cost(game, akasha_personality) == 5
+
+
+def test_recruit_cost_charges_no_surcharge_for_an_unaligned_personality():
+    game = _game_with_stronghold_clan("Scorpion")
+    # A clan name that is not a legal alignment (a minor clan) leaves the card unaligned.
+    assert legality.recruit_cost(game, _personality(("Fox",))) == 5
+    assert legality.recruit_cost(game, _personality(())) == 5
+
+
+def test_recruit_cost_surcharges_a_personality_aligned_to_another_clan():
+    game = _game_with_stronghold_clan("Scorpion")
+    assert (
+        legality.recruit_cost(game, _personality(("Crane",)))
+        == 5 + ruleset.ACTIVE.off_clan_surcharge
+    )
+
+
+def test_a_stronghold_printing_several_clans_surcharges_none_of_them():
+    """A Stronghold is a card, and a card may print more than one clan (the debug fixture prints all
+    ten). Every alignment it carries is one the seat plays, so none of them is off-clan."""
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            clans=("Lion", "Crane"),
+        ),
+    )
+    game = GameState.start(state, PlayerId.P1)
+
+    assert legality.recruit_cost(game, _personality(("Lion",))) == 5
+    assert legality.recruit_cost(game, _personality(("Crane",))) == 5
+    assert (
+        legality.recruit_cost(game, _personality(("Scorpion",)))
+        == 5 + ruleset.ACTIVE.off_clan_surcharge
+    )
+
+
+def test_a_stronghold_with_no_legal_alignment_neither_surcharges_nor_proclaims():
+    # A Shadowlands / minor-clan Stronghold has no legal Clan Alignment, so it has nothing to compare
+    # against: an aligned Personality costs face value and none can be Proclaimed.
+    game = _game_with_stronghold_clan("Shadowlands")
+    assert legality.recruit_cost(game, _personality(("Crab",))) == 5
+    assert not legality.can_proclaim(game, _personality(("Crab",)))
+
+
+def test_can_proclaim_accepts_any_shared_alignment_of_a_multi_clan_personality():
+    doji = _personality(("Crane", "Mantis"))  # a legal Crane/Mantis Personality
+    assert legality.can_proclaim(_game_with_stronghold_clan("Crane"), doji)
+    assert legality.can_proclaim(_game_with_stronghold_clan("Mantis"), doji)
+
+
+def test_can_proclaim_rejects_off_clan_and_unaligned_personalities():
+    game = _game_with_stronghold_clan("Scorpion")
+    assert not legality.can_proclaim(game, _personality(("Crane",)))  # off-clan
+    assert not legality.can_proclaim(game, _personality(("Fox",)))  # unaligned (minor clan only)
+    assert not legality.can_proclaim(game, _personality(()))  # unaligned (no clan)
+
+
+def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        L5RCard.of(StrongholdPrint, id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1),
+    )
+    put_in_play(
+        state,
+        L5RCard.of(
+            SenseiPrint,
+            id="P1-SE",
+            name="Sensei",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            printed_id=sensei_printed_id,
+        ),
+    )
+    game = GameState.start(state, PlayerId.P1)
+    sequence.begin_game(game)
+    return game
+
+
+def test_begin_game_grants_mishimes_ignore_honor_requirements_waiver():
+    game = _begun_game_with_sensei("mishime_sensei")
+    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is True
+
+
+def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            clan=clan,
+        ),
+    )
+    for card in in_play:
+        put_in_play(state, card)
+    return GameState.start(state, first_player)
+
+
+def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> L5RCard:
+    return L5RCard.of(
+        HoldingPrint,
+        id=f"{printed_id}-inst",
+        name="H",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        printed_id=printed_id,
+        gold_cost=gold_cost,
+        clan=clan,
+    )
+
+
+def test_colonial_farm_discounts_one_for_a_lion_player():
+    farm = _holding("colonial_farm", gold_cost=6)
+    assert legality.recruit_cost(_discount_game(clan="Lion"), farm) == 5
+    assert legality.recruit_cost(_discount_game(clan="Crab"), farm) == 6  # no discount off-clan
+
+
+def test_fantastic_gardens_discounts_two_for_a_crane_player():
+    gardens = _holding("fantastic_gardens", gold_cost=7)
+    assert legality.recruit_cost(_discount_game(clan="Crane"), gardens) == 5
+    assert legality.recruit_cost(_discount_game(clan="Lion"), gardens) == 7
+
+
+def test_moto_traders_discounts_with_another_merchant_caravan_in_play():
+    caravan = L5RCard.of(
+        HoldingPrint,
+        id="mc",
+        name="C",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        keywords=("Merchant Caravan",),
+    )
+    traders = _holding("moto_traders", gold_cost=5)
+    assert legality.recruit_cost(_discount_game(in_play=(caravan,)), traders) == 4
+    assert legality.recruit_cost(_discount_game(), traders) == 5
+
+
+def test_shrine_of_courtesy_discounts_three_when_you_went_second():
+    shrine = _holding("shrine_of_courtesy", gold_cost=4)
+    assert (
+        legality.recruit_cost(_discount_game(first_player=PlayerId.P2), shrine) == 1
+    )  # P1 went second
+    assert legality.recruit_cost(_discount_game(first_player=PlayerId.P1), shrine) == 4
+
+
+def test_recruit_discount_floors_the_cost_at_zero():
+    cheap = _holding("shrine_of_courtesy", gold_cost=2)  # a -3 discount would go negative
+    assert legality.recruit_cost(_discount_game(first_player=PlayerId.P2), cheap) == 0
+
+
+def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
+    caravan = L5RCard.of(
+        HoldingPrint,
+        id="mc",
+        name="C",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        keywords=("Merchant Caravan",),
+    )
+    game = _discount_game(clan="Crab", in_play=(caravan,))
+    traders = _holding(
+        "moto_traders", gold_cost=5, clan="Unicorn"
+    )  # off-clan from the Crab stronghold
+    # Both apply and sum: +2 off-clan surcharge, -1 Merchant Caravan discount.
+    assert legality.recruit_cost(game, traders) == 5 + ruleset.ACTIVE.off_clan_surcharge - 1
+
+
+def test_recruit_rejects_invest_and_proclaim_together():
+    # legal_actions never offers the pair, but a decoded tape could still carry it; recruit must
+    # fail loudly rather than silently drop the Proclaim.
+    game = _discount_game(clan="Crab")
+    holding = register(game.table, _holding("teahouse", gold_cost=2))
+    with pytest.raises(ValueError, match="Invest and Proclaim"):
+        recruit.recruit(game, holding.id, invest=True, proclaim=True)

@@ -7,7 +7,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import SINCERITY, counter_from_key
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
@@ -25,7 +25,7 @@ def test_end_of_turn_gives_a_face_up_sincerity_province_card_a_token():
     game = two_seat_game()
     card = province_card(game, "s", keywords=("Sincerity",))
 
-    flow._end_turn(game)
+    sequence._end_turn(game)
 
     assert card.counters == {"sincerity": 1}
 
@@ -34,7 +34,7 @@ def test_a_face_down_province_card_does_not_accrue():
     game = two_seat_game()
     card = province_card(game, "s", keywords=("Sincerity",), face_up=False)
 
-    flow._end_turn(game)
+    sequence._end_turn(game)
 
     assert card.counters == {}  # a face-down refill just arrived — it never lingered face-up
 
@@ -43,7 +43,7 @@ def test_a_non_sincerity_province_card_does_not_accrue():
     game = two_seat_game()
     card = province_card(game, "p", keywords=())
 
-    flow._end_turn(game)
+    sequence._end_turn(game)
 
     assert card.counters == {}
 
@@ -53,7 +53,7 @@ def test_every_lingering_sincerity_card_accrues_across_provinces():
     first = province_card(game, "s1", keywords=("Sincerity",), index=0)
     second = province_card(game, "s2", keywords=("Sincerity",), index=1)
 
-    flow._end_turn(game)
+    sequence._end_turn(game)
 
     assert first.counters == {"sincerity": 1} and second.counters == {"sincerity": 1}
 
@@ -72,7 +72,7 @@ def test_a_sincerity_card_in_play_does_not_accrue():
     game.table.cards_by_id["s"] = card
     game.table.battlefield.add(card)  # in play, not lingering in a Province
 
-    flow._end_turn(game)
+    sequence._end_turn(game)
 
     assert card.counters == {}
 
@@ -81,9 +81,9 @@ def test_sincerity_accrues_only_on_the_owners_own_turns():
     game = two_seat_game()  # P1 active
     card = province_card(game, "s", keywords=("Sincerity",))  # in P1's Province
 
-    flow._end_turn(game)  # P1's turn ends -> +1
-    flow._end_turn(game)  # P2's turn ends -> P1's card is not in P2's Provinces
-    flow._end_turn(game)  # P1's turn ends -> +1
+    sequence._end_turn(game)  # P1's turn ends -> +1
+    sequence._end_turn(game)  # P2's turn ends -> P1's card is not in P2's Provinces
+    sequence._end_turn(game)  # P1's turn ends -> +1
 
     assert card.counters == {"sincerity": 2}
 

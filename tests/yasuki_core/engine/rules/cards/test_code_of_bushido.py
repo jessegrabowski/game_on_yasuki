@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.attachments import attachments_of
 from yasuki_core.engine.rules.cards.code_of_bushido import MEDIUM_FOLLOWER
 from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.effects import AttachCard
-from yasuki_core.engine.rules.flow import submit
+from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 

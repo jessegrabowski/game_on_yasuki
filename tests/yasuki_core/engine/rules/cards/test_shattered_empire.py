@@ -1,5 +1,6 @@
 from yasuki_core import ruleset
-from yasuki_core.engine.rules import flow, legality
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.actions import PlayStrategy
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -220,9 +221,9 @@ def _edict(card_id: str, printed_id: str) -> L5RCard:
 
 
 def _play_the_edict(game: GameState) -> None:
-    flow.perform(game, PlayStrategy("crane"))
+    action_sequence.perform(game, PlayStrategy("crane"))
     while game.pending is not None:
-        flow.submit(game, DecisionResponse(()))
+        action_sequence.submit(game, DecisionResponse(()))
 
 
 def test_an_edict_puts_itself_into_play_rather_than_being_discarded():

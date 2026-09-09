@@ -1,6 +1,6 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.bots.agents import PayingAgent, is_production_window
 from yasuki_core.engine.rules.decisions import ChoosePayment, Confirm
@@ -234,7 +234,7 @@ def two_seat_game(first_player: PlayerId = PlayerId.P1) -> GameState:
 def dealt_table(*, fate_deck: int = 1, hand: int | None = None) -> TableState:
     """A two-seat table with ``fate_deck`` cards in each seat's fate deck and ``hand`` cards in P1's
     hand. The hand defaults to the maximum, so P1's turns end in a discard while P2's do not."""
-    hand = flow.MAX_HAND_SIZE if hand is None else hand
+    hand = sequence.MAX_HAND_SIZE if hand is None else hand
     state = TableState.empty_two_seat()
     for seat in PlayerId:
         state.decks[DeckKey(seat, Side.FATE)].cards = [

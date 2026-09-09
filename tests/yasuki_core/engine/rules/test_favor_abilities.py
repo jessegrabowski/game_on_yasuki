@@ -9,7 +9,8 @@ from yasuki_core.engine.rules import favor_abilities, legality
 from yasuki_core.engine.rules.actions import ActionTiming, Lobby, UseFavorAbility
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import TakeFavor
-from yasuki_core.engine.rules.flow import submit, use_favor_ability
+from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.rulebook.favor import use_favor_ability
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.table import (
