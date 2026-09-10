@@ -24,7 +24,7 @@ from yasuki_core.game_pieces.prints import CardPrint
 
 # The start-of-game table snapshot: a deep-copied capture of a dealt table, the rebuild that turns
 # it back into a live TableState, and its JSON codec. Product-neutral foundation — the manual sim's
-# action log and the rules engine's game log both seed a replay from it.
+# intent log and the rules layer's game log both seed a replay from it.
 
 
 @dataclass(slots=True)

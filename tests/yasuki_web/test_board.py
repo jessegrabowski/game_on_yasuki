@@ -8,7 +8,7 @@ from yasuki_web.schemas import IntentEnvelope
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import IntentOp
-from yasuki_core.engine.replay.action_log import SessionEntry
+from yasuki_core.engine.replay.intent_log import SessionEntry
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint
@@ -56,7 +56,7 @@ def test_spawn_injects_a_public_card_logs_and_broadcasts():
 
     card = room.state.battlefield.cards[0]
     assert card.owner is PlayerId.P1 and card.face_up is True
-    assert room.action_log.entries[-1].intent.op is IntentOp.SPAWN_CARD  # a real logged intent
+    assert room.intent_log.entries[-1].intent.op is IntentOp.SPAWN_CARD  # a real logged intent
     snapshot = [m for m in ws.sent if m["type"] == "SNAPSHOT"][-1]
     placed = snapshot["snapshot"]["battlefield"][0]
     assert placed["name"] == "Hida" and (placed["x"], placed["y"]) == (10, 20)
@@ -83,7 +83,7 @@ def test_remove_drops_the_card_and_logs():
     asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.REMOVE_CARD, card_id=card_id)))
     assert room.state.battlefield.cards == []
     assert card_id not in room.state.cards_by_id
-    assert room.action_log.entries[-1].intent.op is IntentOp.REMOVE_CARD
+    assert room.intent_log.entries[-1].intent.op is IntentOp.REMOVE_CARD
 
 
 def test_spawn_ignored_from_an_unseated_socket():
@@ -102,7 +102,7 @@ def test_move_intent_repositions_and_logs():
     asyncio.run(room.handle_intent(ws, env))
 
     assert room.state.positions[card_id] == BoardPos(40.0, 50.0)
-    assert room.action_log.entries[-1].intent.op is IntentOp.SET_CARD_POS
+    assert room.intent_log.entries[-1].intent.op is IntentOp.SET_CARD_POS
     assert ws.sent[-1]["type"] == "SNAPSHOT"
 
 
@@ -117,12 +117,12 @@ def test_flip_intent_toggles_face_up():
 
 def test_rejected_intent_sends_error_and_is_not_logged():
     room, ws = _room_with_seat()
-    before = len(room.action_log.entries)
+    before = len(room.intent_log.entries)
 
     asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.FLIP, card_ids=["ghost"])))
 
     assert any(m["type"] == "ERROR" for m in ws.sent)
-    assert len(room.action_log.entries) == before
+    assert len(room.intent_log.entries) == before
 
 
 def test_rejected_intent_reverts_the_sender_with_a_snapshot():
@@ -189,7 +189,7 @@ def test_join_and_leave_are_recorded_on_the_session_tape(registered_room):
     ada = _FakeWS()
     asyncio.run(room.add_player(ada, account("Ada")))
     asyncio.run(room.remove_player(ada))
-    sessions = [(e.name, e.event) for e in room.action_log.entries if isinstance(e, SessionEntry)]
+    sessions = [(e.name, e.event) for e in room.intent_log.entries if isinstance(e, SessionEntry)]
     assert sessions == [("Ada", "join"), ("Ada", "leave")]
 
 
@@ -210,7 +210,7 @@ def test_ready_advances_version_and_records_a_session_event(registered_room):
     before = room.state.seq
     asyncio.run(room.handle_ready(ada, True))
     assert room.state.seq > before
-    assert any(isinstance(e, SessionEntry) and e.event == "ready" for e in room.action_log.entries)
+    assert any(isinstance(e, SessionEntry) and e.event == "ready" for e in room.intent_log.entries)
 
 
 def _two_seat_room():

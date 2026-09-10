@@ -1,15 +1,15 @@
-yasuki_core.engine.replay.action_log
+yasuki_core.engine.replay.intent_log
 ====================================
 
-.. currentmodule:: yasuki_core.engine.replay.action_log
+.. currentmodule:: yasuki_core.engine.replay.intent_log
 
 .. rubric:: Classes
 
 .. autosummary::
 
-    ActionLog
     ChatEntry
     FlushSink
+    IntentLog
     LogEntry
     SessionEntry
 
@@ -17,12 +17,12 @@ yasuki_core.engine.replay.action_log
 
 .. autosummary::
 
-    action_log_from_dict
-    action_log_to_dict
     apply_and_log
     flush
+    intent_log_from_dict
+    intent_log_to_dict
     replay
 
-.. automodule:: yasuki_core.engine.replay.action_log
+.. automodule:: yasuki_core.engine.replay.intent_log
     :members:
     :undoc-members:

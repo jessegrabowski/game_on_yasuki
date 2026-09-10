@@ -10,7 +10,7 @@ from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey, BoardPos
 from yasuki_core.engine.intents import IntentOp
-from yasuki_core.engine.replay.action_log import ChatEntry, SessionEntry
+from yasuki_core.engine.replay.intent_log import ChatEntry, SessionEntry
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint
@@ -94,12 +94,12 @@ def test_each_seat_receives_its_own_redacted_snapshot(room):
 
 def test_accepted_intent_mutates_logs_and_broadcasts_to_both(room):
     ada, kenji = _seat_two(room)
-    before = len(room.action_log.entries)
+    before = len(room.intent_log.entries)
 
     asyncio.run(room.handle_intent(ada, IntentEnvelope(op=IntentOp.SET_HONOR, value=20)))
 
     assert room.state.seats[PlayerId.P1].honor == 20
-    assert len(room.action_log.entries) == before + 1
+    assert len(room.intent_log.entries) == before + 1
     assert kenji.sent[-1]["type"] == "LOG"
     assert kenji.sent[-1]["parts"] == [{"text": "Ada "}, {"text": "set their honor to 20"}]
     assert any(m["type"] == "SNAPSHOT" for m in kenji.sent)
@@ -108,13 +108,13 @@ def test_accepted_intent_mutates_logs_and_broadcasts_to_both(room):
 def test_opponent_targeting_intent_is_rejected_and_unlogged(room):
     ada, kenji = _seat_two(room)
     _hand_card(room, PlayerId.P2, name="Theirs")  # belongs to Kenji
-    before = len(room.action_log.entries)
+    before = len(room.intent_log.entries)
     kenji.sent.clear()
 
     asyncio.run(room.handle_intent(ada, IntentEnvelope(op=IntentOp.FLIP, card_ids=["f1"])))
 
     assert any(m["type"] == "ERROR" for m in ada.sent)
-    assert len(room.action_log.entries) == before  # nothing recorded
+    assert len(room.intent_log.entries) == before  # nothing recorded
     assert kenji.sent == []  # a rejected intent broadcasts nothing to the other seat
 
 
@@ -241,7 +241,7 @@ def test_chat_is_recorded_on_the_durable_tape(room):
     ada, _ = _seat_two(room)
     asyncio.run(room.handle_chat(ada, "hello"))
 
-    chats = [e for e in room.action_log.entries if isinstance(e, ChatEntry)]
+    chats = [e for e in room.intent_log.entries if isinstance(e, ChatEntry)]
     assert len(chats) == 1
     assert (chats[0].sender, chats[0].text) == ("Ada", "hello")
 
@@ -255,7 +255,7 @@ def test_chat_and_intents_share_one_ordered_tape(room):
     # Ignoring the session (join) entries, the chat lands between the two intents on one tape.
     kinds = [
         "chat" if isinstance(entry, ChatEntry) else "intent"
-        for entry in room.action_log.entries
+        for entry in room.intent_log.entries
         if not isinstance(entry, SessionEntry)
     ]
     assert kinds == ["intent", "chat", "intent"]

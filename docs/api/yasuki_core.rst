@@ -43,8 +43,8 @@ yasuki_core
     yasuki_core.engine.players <yasuki_core.engine.players>
     yasuki_core.engine.redaction <yasuki_core.engine.redaction>
     yasuki_core.engine.registrar <yasuki_core.engine.registrar>
-    yasuki_core.engine.replay.action_log <yasuki_core.engine.replay.action_log>
     yasuki_core.engine.replay.game_log <yasuki_core.engine.replay.game_log>
+    yasuki_core.engine.replay.intent_log <yasuki_core.engine.replay.intent_log>
     yasuki_core.engine.replay.serialization <yasuki_core.engine.replay.serialization>
     yasuki_core.engine.replay.snapshot <yasuki_core.engine.replay.snapshot>
     yasuki_core.engine.rules.abilities.activation <yasuki_core.engine.rules.abilities.activation>

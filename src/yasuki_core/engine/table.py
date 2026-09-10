@@ -174,7 +174,7 @@ class TableState:
     seq : int
         Monotonic view version, bumped on every state change: by ``apply_intent`` for game intents
         and by :meth:`bump_version` for non-intent seat metadata, so no two distinct broadcasts share
-        a ``seq``. The action log records only intents, so logged ``seq`` values may skip the bumps.
+        a ``seq``. The intent log records only intents, so logged ``seq`` values may skip the bumps.
     """
 
     seats: dict[PlayerId, SeatInfo]
