@@ -18,10 +18,10 @@ from yasuki_core.database import (
     get_card_backs,
     get_connection_string,
     get_db_connection,
-    build_search_filters,
     get_rulebook_proxies,
     RULEBOOK_PROXY_IDS,
 )
+from yasuki_core.search.compile_sql import build_search_filters
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import build_token_print
 from yasuki_core.paths import SETS_DIR, resolve_set_image_path

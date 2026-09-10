@@ -9,11 +9,8 @@ yasuki_core.database
 
     all_card_ids
     apply_sslmode
-    build_search_filters
     card_display_names
     close_pool
-    compile_query
-    compile_term
     count_cards_filtered
     get_card_backs
     get_card_by_id
