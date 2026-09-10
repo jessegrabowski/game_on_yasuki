@@ -1,0 +1,434 @@
+from collections.abc import Iterable
+from typing import NamedTuple
+
+from yasuki_core.bots.agents import AutoAgent
+from yasuki_core.bots.policies import PassPolicy
+from yasuki_core.engine.runner import Controls, MAX_ACTIONS_PER_ROUND
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.abilities.registry import ability_for, invest_amounts
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
+from yasuki_core.engine.rules.projection import GameView
+from yasuki_core.engine.rules.rulebook import favor_abilities, favor_proxy
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    Action,
+    Cycle,
+    DynastyDiscard,
+    Equip,
+    Inheritance,
+    KharmicDraw,
+    KharmicRefill,
+    Legacy,
+    Lobby,
+    Pass,
+    PlayStrategy,
+    Recruit,
+    UseFavorAbility,
+)
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseLegacyCard,
+    Confirm,
+    DecisionRequest,
+    DecisionResponse,
+)
+from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.game_pieces.cards import L5RCard
+
+
+# The places a search can look. Every search dialog offers all three, and disables the ones the
+# search in hand does not reach.
+PROVINCES_PANE, DECK_PANE, DISCARD_PANE = "Provinces", "Deck", "Discard"
+SEARCH_PANES = (PROVINCES_PANE, DECK_PANE, DISCARD_PANE)
+
+
+class SearchView(NamedTuple):
+    """A pending choice presented as a search through the piles rather than a board selection.
+
+    Attributes
+    ----------
+    panes : dict mapping str to list of L5RCard
+        The cards each of :data:`~yasuki_gui.services.game_runner.SEARCH_PANES` offers, in that
+        order. A pane the search does not reach maps to an empty list, and the dialog shows it
+        disabled rather than hiding it.
+    choosable : set of str
+        The ids across every pane the seat may actually take.
+    """
+
+    panes: dict[str, list[L5RCard]]
+    choosable: set[str]
+
+
+class GameRunner:
+    """Drives a single-player rules game through an :class:`EngineSession`.
+
+    The human advances their own turn a phase at a time; when the turn ends, the AI-reserved
+    opponent's turn auto-runs until control returns to the human. A decision the human owes is left
+    pending for the UI to present; the opponent's decisions are answered by its :class:`Agent`.
+
+    Attributes
+    ----------
+    session : EngineSession
+        The authoritative session this runner drives.
+    human : PlayerId
+        The seat the human plays.
+    """
+
+    def __init__(self, session: EngineSession, human: PlayerId, opponent: Controls | None = None):
+        self.session = session
+        self.human = human
+        self._opponent = opponent or Controls(PassPolicy(), AutoAgent())
+
+    def view(self) -> GameView:
+        """Return the human's projection — what the board, phase bar, and panels render."""
+        return self.session.project(self.human)
+
+    def legal_actions(self) -> list[Action]:
+        """Return the actions the human may take right now (empty when it is not their turn)."""
+        return self.session.legal_actions(self.human)
+
+    def province_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The labeled actions offered for a face-up province card, for its left-click menu: a plain
+        Recruit plus its second purchase option where one exists — Invest for an Invest holding,
+        Proclaim for an own-clan Personality (all labeled with their gold) — a Dynasty Discard, and
+        the Kharmic ability that spends the card. Empty when the card offers nothing right now."""
+        game = self.session.game
+        card = game.table.cards_by_id[card_id]
+        # Deferred until a Recruit action confirms this is a recruitable card: recruit_cost reads
+        # gold_cost, which only Dynasty/Fate cards carry. Clicking a card that only offers an
+        # activated ability (e.g. a stronghold) must not reach it.
+        base: int | None = None
+        items: list[tuple[str, Action]] = []
+        for action in self.legal_actions():
+            if getattr(action, "card_id", None) != card_id:
+                continue
+            if isinstance(action, Recruit):
+                if base is None:
+                    base = legality.recruit_cost(game, card)
+                if action.invest:
+                    items.append((self._invest_label(game, card, base), action))
+                elif action.proclaim:
+                    honor = effective_personal_honor(game, card)
+                    label = f"Recruit & Proclaim: Pay {base} gold, gain {honor} honor"
+                    items.append((label, action))
+                else:
+                    items.append((f"Recruit: Pay {base} gold", action))
+            elif isinstance(action, DynastyDiscard):
+                items.append(("Discard from province", action))
+            elif isinstance(action, KharmicRefill):
+                items.append(
+                    (
+                        f"Kharmic: Pay {legality.KHARMIC_COST} gold to refill this Province face-up",
+                        action,
+                    )
+                )
+        return items
+
+    def hand_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The labeled actions offered for one of the human's hand cards, for its left-click menu:
+        the Kharmic ability that spends it, an Equip for an attachment, and a Strategy played for
+        its Gold Cost. Empty when the card offers nothing right now.
+
+        Neither Equipping nor playing a Strategy names a target here. Equipping picks its
+        Personality first and pays afterwards; a Strategy pays first and is pointed at its target on
+        the far side, which is the CR's order for any action (Action Sequence steps B and C)."""
+        game = self.session.game
+        items: list[tuple[str, Action]] = []
+        for action in self.legal_actions():
+            if getattr(action, "card_id", None) != card_id:
+                continue
+            if isinstance(action, KharmicDraw):
+                items.append((f"Kharmic: Pay {legality.KHARMIC_COST} gold to draw a card", action))
+            elif isinstance(action, Equip):
+                card = game.table.cards_by_id[card_id]
+                cost = effective_gold_cost(game, card)
+                if action.invest:
+                    items.append((self._invest_label(game, card, cost, "Equip & Invest"), action))
+                else:
+                    items.append((f"Equip: Pay {cost} gold", action))
+            elif isinstance(action, PlayStrategy):
+                card = game.table.cards_by_id[card_id]
+                ability = ability_for(card, action.ability_key)
+                cost = effective_gold_cost(game, card)
+                label = ability.label if ability is not None else "Play this Strategy"
+                items.append((label if cost == 0 else f"{label} — Pay {cost} gold", action))
+        return items
+
+    @staticmethod
+    def _invest_label(game: GameState, card: L5RCard, base: int, verb: str = "Invest") -> str:
+        """The menu wording for taking ``card``'s Invest on top of ``base``: one price, or the
+        prices the payer chooses among. Read off the board, so a card discounting its own Invest is
+        offered at what it will actually charge."""
+        prices = [base + amount for amount in invest_amounts(game, card)]
+        if len(prices) == 1:
+            return f"{verb}: Pay {prices[0]} gold"
+        # A span reads as one, the way the card prints it; separate prices are listed as separate.
+        if len(prices) == prices[-1] - prices[0] + 1:
+            return f"{verb}: Pay {prices[0]}\u2013{prices[-1]} gold"
+        listed = ", ".join(str(price) for price in prices[:-1])
+        return f"{verb}: Pay {listed} or {prices[-1]} gold"
+
+    def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """Every activated-ability action offered for an in-play card the human controls, each
+        labelled with its own ability's description, when it is legal to use now. Empty
+        otherwise."""
+        card = self.session.game.table.cards_by_id[card_id]
+        items: list[tuple[str, Action]] = []
+        for action in self.legal_actions():
+            if isinstance(action, ActivateAbility) and action.card_id == card_id:
+                ability = ability_for(card, action.ability_key)
+                label = ability.label if ability is not None else "Activate ability"
+                items.append((label, action))
+        return items
+
+    def inheritance_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The Inheritance action offered on the human's own Stronghold, when it is legal now. Empty
+        for any other card, and for a seat that went first or has already spent it."""
+        stronghold = legality.seat_stronghold(self.session.game, self.human)
+        if stronghold is None or stronghold.id != card_id:
+            return []
+        return [
+            (f"Inheritance: turn over for +{INHERITANCE_PRODUCTION}GP", action)
+            for action in self.legal_actions()
+            if isinstance(action, Inheritance)
+        ]
+
+    def favor_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The arc's rulebook Favor abilities, offered on the human's Favor proxy card. Empty for
+        any other card, and for abilities that are not legal now.
+
+        The Favor is not a card and its abilities sit on the player, but the proxy is where the
+        player looks for them, so it is what they are hung off.
+        """
+        card = self.session.game.table.cards_by_id.get(card_id)
+        if card is None or not favor_proxy.is_rulebook_proxy(card) or card.owner is not self.human:
+            return []
+        offered = {
+            action.key: action
+            for action in self.legal_actions()
+            if isinstance(action, UseFavorAbility)
+        }
+        return [
+            (f"Favor: {ability.label}", offered[ability.key])
+            for ability in favor_abilities.available_favor_abilities()
+            if ability.key in offered
+        ]
+
+    def board_menu(self) -> list[tuple[str, Action]]:
+        """The labeled rulebook abilities, for a right-click on the empty board. These belong to no
+        card, so the board is the only place they can be offered. Empty when none is legal now."""
+        labels = {
+            Legacy(): "Legacy: banish a card to search for a Legacy card",
+            Cycle(): "Cycle: put Province cards on the bottom of your deck",
+            Lobby(): "Lobby: bow a Personality to take the Imperial Favor",
+        }
+        return [(labels[action], action) for action in self.legal_actions() if action in labels]
+
+    def legacy_search_pool(self) -> list:
+        """The cards the human's Legacy search looks through — its whole dynasty deck plus its
+        face-down province cards — for a search dialog to display."""
+        return legality.legacy_search_pool(self.session.game, self.human)
+
+    def search_view(self) -> SearchView | None:
+        """How to present the pending decision when its candidates are not on the board, or None
+        when they all are and the board can carry the selection.
+
+        A choice reaching into a deck or a discard pile has nothing for the player to click, so it
+        needs a dialog listing the piles instead. Picking a Province is excepted: the seat points at
+        a board position, which it can do whether or not the card sitting there is face-up.
+        """
+        pending = self.pending
+        if pending is None or not pending.candidates:
+            return None
+        if isinstance(pending, Confirm):
+            return None  # a question is answered yes or no, wherever its subjects happen to sit
+        table = self.session.game.table
+        if any(card_id not in table.cards_by_id for card_id in pending.candidates):
+            return None  # not cards at all — an Invest amount is answered by buttons
+        legacy = isinstance(pending, ChooseLegacyCard)
+        if not legacy:
+            reachable = self._on_the_board()
+            if all(card_id in reachable for card_id in pending.candidates):
+                return None
+        candidates = set(pending.candidates)
+        # Legacy names its own pool: it searches face-down Provinces too, which hold no candidate
+        # unless a Legacy card happens to be sitting there.
+        pool = self.legacy_search_pool() if legacy else self._piles_holding(candidates)
+        return SearchView(self._panes(pool), candidates)
+
+    def _piles_holding(self, candidates: set[str]) -> list[L5RCard]:
+        """Every card in each of the human's piles that holds a candidate. The whole pile is shown
+        so the seat sees what it passed over, and only the candidates in it can be taken."""
+        table = self.session.game.table
+        pool: list[L5RCard] = []
+        for deck_key, deck in table.decks.items():
+            if deck_key.owner is self.human and any(card.id in candidates for card in deck.cards):
+                pool.extend(deck.cards)
+        for zone_key, zone in table.zones.items():
+            if zone_key.owner is self.human and any(card.id in candidates for card in zone.cards):
+                pool.extend(zone.cards)
+        # A candidate somewhere no pile covers would otherwise drop out of the dialog entirely.
+        found = {card.id for card in pool}
+        pool.extend(table.cards_by_id[card_id] for card_id in candidates - found)
+        return pool
+
+    def _province_card_ids(self) -> set[str]:
+        """Every card sitting in one of the human's Provinces, face-up or not."""
+        table = self.session.game.table
+        return {
+            card.id
+            for key, zone in table.zones.items()
+            if key.owner is self.human and key.role is ZoneRole.PROVINCE
+            for card in zone.cards
+        }
+
+    def _on_the_board(self) -> set[str]:
+        """The human's cards a click can reach: what is in play, what is in hand, and whatever sits
+        in a Province. A Province card counts face-down as well as face-up — the seat picks the
+        Province by where it is, not by knowing what is in it."""
+        table = self.session.game.table
+        return (
+            {card.id for card in table.battlefield.cards}
+            | {card.id for card in table.zones[ZoneKey(self.human, ZoneRole.HAND)].cards}
+            | self._province_card_ids()
+        )
+
+    def _panes(self, pool: Iterable[L5RCard]) -> dict[str, list[L5RCard]]:
+        """``pool`` bucketed into the three panes a search dialog offers, by where each card sits.
+        A pane nothing was found in stays present and empty, so the dialog can disable it."""
+        table = self.session.game.table
+        provinces = self._province_card_ids()
+        discards = {
+            card.id
+            for role in (ZoneRole.DYNASTY_DISCARD, ZoneRole.FATE_DISCARD)
+            for card in table.zones[ZoneKey(self.human, role)].cards
+        }
+        panes: dict[str, list[L5RCard]] = {name: [] for name in SEARCH_PANES}
+        for card in pool:
+            if card.id in provinces:
+                panes[PROVINCES_PANE].append(card)
+            elif card.id in discards:
+                panes[DISCARD_PANE].append(card)
+            else:
+                panes[DECK_PANE].append(card)
+        return panes
+
+    @property
+    def loser(self) -> PlayerId | None:
+        """The seat that has lost the game, or None while it is ongoing."""
+        return self.session.game.loser
+
+    @property
+    def loss_reason(self) -> str | None:
+        """Why that seat lost, worded for a player, or None while the game is ongoing."""
+        return self.session.game.loss_reason
+
+    @property
+    def game_over(self) -> bool:
+        """Whether the game has ended, however it ended."""
+        return self.session.game.game_over
+
+    @property
+    def winner(self) -> PlayerId | None:
+        """The seat that has won the game, or None while it is ongoing."""
+        return self.session.game.winner
+
+    @property
+    def win_reason(self) -> str | None:
+        """What that seat won, worded for a player, or None while the game is ongoing."""
+        return self.session.game.win_reason
+
+    @property
+    def is_opponent_turn(self) -> bool:
+        """Whether the turn itself belongs to the AI-reserved opponent — as opposed to the human
+        merely having handed the opportunity on inside a phase of its own turn."""
+        return self.session.game.active is not self.human
+
+    @property
+    def opponent_holds_priority(self) -> bool:
+        """Whether the opportunity to act rests with the AI-reserved opponent, so the UI should run
+        it. True for the whole of the opponent's turn, and for its window inside each of the human's
+        Action phases."""
+        return self.session.game.round.priority is not self.human
+
+    @property
+    def pending(self) -> DecisionRequest | None:
+        """The decision the human must answer, or None when nothing is awaited from them."""
+        pending = self.session.game.pending
+        return pending if pending is not None and pending.seat is self.human else None
+
+    @property
+    def opponent_owes_decision(self) -> bool:
+        """Whether the engine is waiting on an answer from the AI-reserved opponent.
+
+        A card can put a question to the opponent while priority stays with the human, which is the
+        case :attr:`opponent_holds_priority` does not cover. The engine is paused until it is
+        answered, so a caller driving the opponent has to check both."""
+        pending = self.session.game.pending
+        return pending is not None and pending.seat is not self.human
+
+    def act(self, action: Action) -> None:
+        """Perform the human's chosen action. Does not run the opponent — the caller checks
+        :attr:`opponent_holds_priority` afterwards and runs it so the change stays visible."""
+        self.session.act(self.human, action)
+
+    def undo_last(self) -> bool:
+        """Undo the human's last action if it was a Dynasty Discard and nothing has happened since.
+        Return whether anything was undone, so the caller can re-render only when it did."""
+        return self.session.undo_last(self.human)
+
+    def submit(self, response: DecisionResponse) -> None:
+        """Answer the human's pending decision. A request whose answer carries more than the chosen
+        ids — a payment and its boosts — is answered with that request's own response type."""
+        self.session.submit(self.human, response)
+
+    def cancel(self) -> None:
+        """Back out of the human's pending decision, undoing the action that raised it."""
+        self.session.cancel(self.human)
+
+    def run_opponent(self) -> None:
+        """Act and answer for the opponent until the engine wants the human again.
+
+        Three cases, all of them the opponent's to clear: its own turn, the window it holds inside
+        the human's Action phase, and a decision a card put to it while the human kept priority. Its
+        :class:`Controls` supply both halves — the policy picks each action, the agent answers the
+        decisions those actions raise.
+
+        Returns as soon as the human owes an answer or holds priority with nothing pending, so the
+        caller renders between the opponent's work and the human's.
+
+        Raises
+        ------
+        RuntimeError
+            If one Action Round runs past
+            :data:`~yasuki_core.engine.runner.MAX_ACTIONS_PER_ROUND`. A round closes only once
+            every seat passes consecutively, so a policy that always finds something to take would
+            otherwise hang the caller.
+        """
+        game = self.session.game
+        round_actions = 0
+        while not game.game_over:
+            pending = game.pending
+            if pending is not None:
+                if pending.seat is self.human:
+                    return
+                response = self._opponent.agent.decide(pending, self.session.project(pending.seat))
+                self.session.submit(pending.seat, response)
+            elif game.round.priority is not self.human:
+                seat = game.round.priority
+                chosen = self._opponent.policy.choose(
+                    self.session.project(seat), self.session.legal_actions(seat)
+                )
+                round_actions = 0 if isinstance(chosen, Pass) else round_actions + 1
+                if round_actions > MAX_ACTIONS_PER_ROUND:
+                    raise RuntimeError(
+                        f"an Action Round in {game.phase} ran past {MAX_ACTIONS_PER_ROUND} "
+                        f"actions; {seat.name} last chose {chosen}"
+                    )
+                self.session.act(seat, chosen)
+            else:
+                return

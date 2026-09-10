@@ -8,9 +8,7 @@ yasuki_core.engine.runner
 .. autosummary::
 
     Controls
-    GameRunner
     Observer
-    SearchView
 
 .. rubric:: Functions
 

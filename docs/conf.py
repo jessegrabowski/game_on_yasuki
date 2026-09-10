@@ -82,7 +82,7 @@ numpydoc_xref_aliases = {
     "Action": "yasuki_gui.services.actions.Action",
     "Agent": "yasuki_core.engine.bots.agents.Agent",
     "EngineSession": "yasuki_core.engine.session.EngineSession",
-    "GameRunner": "yasuki_core.engine.runner.GameRunner",
+    "GameRunner": "yasuki_gui.services.game_runner.GameRunner",
     "GameState": "yasuki_core.engine.rules.state.GameState",
     "GameView": "yasuki_core.engine.rules.projection.GameView",
     "L5RCard": "yasuki_core.game_pieces.cards.L5RCard",

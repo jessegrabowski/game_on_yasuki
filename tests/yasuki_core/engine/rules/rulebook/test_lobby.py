@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.rulebook.lobby import lobby
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.runner import GameRunner
+from yasuki_gui.services.game_runner import GameRunner
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.cards import L5RCard
