@@ -3,7 +3,7 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, Inheritance
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseInheritanceTarget, DecisionResponse
 from yasuki_core.engine.rules.gold.production import effective_gold_production
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_gui.services.game_runner import GameRunner
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession

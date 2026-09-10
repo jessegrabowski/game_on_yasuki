@@ -8,7 +8,7 @@ from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse, DiscardToHandSize
 from yasuki_core.bots.policies import PassPolicy, RandomPolicy
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.log import Act, Answer
+from yasuki_core.engine.replay.game_log import Act, Answer
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine import driver
 from yasuki_core.engine.driver import Controls, play_game, run_game
@@ -74,7 +74,7 @@ def test_different_policy_seeds_produce_different_games():
 
 
 def test_a_driven_game_replays_to_the_same_state():
-    from yasuki_core.engine.rules.log import replay
+    from yasuki_core.engine.replay.game_log import replay
 
     session = _session()
     play_game(session, _random(4), turn_limit=8)

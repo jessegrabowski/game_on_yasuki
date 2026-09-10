@@ -2,7 +2,8 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.vocabulary.actions import Pass
-from yasuki_core.bots.agents import PayingAgent, is_production_window
+from yasuki_core.bots.agents import PayingAgent
+from yasuki_core.engine.rules.gold.self_grants import is_production_window
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Confirm
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
@@ -304,7 +305,7 @@ def pay(session: EngineSession, seat: PlayerId) -> None:
     while pending is not None and pending.seat is seat:
         view = session.project(seat)
         part_of_the_payment = isinstance(pending, ChoosePayment) or (
-            isinstance(pending, Confirm) and is_production_window(pending, view)
+            isinstance(pending, Confirm) and is_production_window(pending, view.table.battlefield)
         )
         if not part_of_the_payment:
             return

@@ -2,7 +2,7 @@
 
 The rules engine lives in `yasuki_core.engine`. It is a pure, in-memory state machine: it holds the
 table state, accepts intents (requested actions), validates and applies them through the rules layer,
-and emits an action log plus redacted per-player views. It has no knowledge of the database, the web
+and emits an intent log plus redacted per-player views. It has no knowledge of the database, the web
 server, or the desktop client — those consume it.
 
 ```{note}
@@ -14,12 +14,15 @@ The pieces, at a glance:
 
 - **Table state** (`engine/table.py`, `engine/players.py`, `engine/zones.py`) — the authoritative game
   state: players, their zones (hand, provinces, dynasty/fate decks, discards), and the cards in them.
-- **Sessions & intents** (`engine/session.py`, `engine/intents.py`, `engine/ops.py`) — how an action is
+- **Sessions & intents** (`engine/session.py`, `engine/intents.py`, `engine/intent_handlers.py`,
+  `engine/ops.py`) — the intent vocabulary, the interpreter that applies it, and how an action is
   requested, validated, and applied as a state transition.
 - **The rules layer** (`engine/rules/`) — state, flow (turn/phase progression), actions, decisions,
   abilities, effects, and triggers.
-- **Redaction & snapshots** (`engine/redaction.py`, `engine/snapshot.py`, `engine/serialization.py`) —
-  producing the per-player views that clients are allowed to see.
+- **Redaction** (`engine/redaction.py`) — producing the per-player views that clients are allowed
+  to see.
+- **Replay** (`engine/replay/`) — the wire codec, the initial position a tape replays from, and the
+  two tapes themselves: `intent_log.py` for the manual surface and `game_log.py` for the rules one.
 
 To be documented here:
 

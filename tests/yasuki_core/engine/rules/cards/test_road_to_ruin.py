@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard

@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
+from yasuki_core.engine.replay.game_log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import end_phase, pay, put_in_play, register

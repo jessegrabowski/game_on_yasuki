@@ -46,24 +46,24 @@ from yasuki_core.engine.intents import (
     GiveControl,
     SpawnCard,
     RemoveCard,
-    apply_intent,
 )
+from yasuki_core.engine.intent_handlers import apply_intent
 from yasuki_core.game_pieces.constants import Side, Element, Timing
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.action_log import (
+from yasuki_core.engine.replay.intent_log import (
     LogEntry,
     ChatEntry,
     SessionEntry,
-    ActionLog,
+    IntentLog,
     apply_and_log,
-    action_log_to_dict,
-    action_log_from_dict,
+    intent_log_to_dict,
+    intent_log_from_dict,
     encode_intent,
     decode_intent,
     flush,
 )
-from yasuki_core.engine.snapshot import (
+from yasuki_core.engine.replay.snapshot import (
     InitialRecord,
     build_initial_state,
     encode_initial,
@@ -165,7 +165,7 @@ def _start_state() -> TableState:
     return state
 
 
-def _script(state: TableState, log: ActionLog) -> None:
+def _script(state: TableState, log: IntentLog) -> None:
     """Drive a small but varied game through the recording hook."""
     ts = 1000.0
     moves = [
@@ -201,7 +201,7 @@ def _script(state: TableState, log: ActionLog) -> None:
 
 def test_append_preserves_order_and_holds_initial_at_head():
     initial = InitialRecord.from_state(_start_state())
-    log = ActionLog(initial=initial)
+    log = IntentLog(initial=initial)
     entries = [
         LogEntry(seq=1, ts=1.0, seat=PlayerId.P1, intent=CreateProvince()),
         LogEntry(seq=2, ts=2.0, seat=PlayerId.P2, intent=CreateProvince()),
@@ -218,7 +218,7 @@ def test_append_preserves_order_and_holds_initial_at_head():
 
 
 def test_append_rejects_seq_regression():
-    log = ActionLog(initial=InitialRecord.from_state(_start_state()))
+    log = IntentLog(initial=InitialRecord.from_state(_start_state()))
     log.append(LogEntry(seq=5, ts=1.0, seat=PlayerId.P1, intent=CreateProvince()))
     with pytest.raises(ValueError, match="seq regressed"):
         log.append(LogEntry(seq=4, ts=2.0, seat=PlayerId.P1, intent=CreateProvince()))
@@ -226,7 +226,7 @@ def test_append_rejects_seq_regression():
 
 def test_apply_and_log_records_only_accepted_intents():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
 
     accepted = apply_and_log(state, log, PlayerId.P1, CreateProvince(), ts=1.0)
     # P2 cannot shuffle P1's deck → rejected, nothing recorded, seq unchanged.
@@ -243,7 +243,7 @@ def test_apply_and_log_records_only_accepted_intents():
 
 def test_apply_and_log_entry_fields_match_application():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     intent = Shuffle(DeckKey(PlayerId.P1, Side.FATE), seed=123)
 
     apply_and_log(state, log, PlayerId.P1, intent, ts=1717.5)
@@ -260,7 +260,7 @@ def test_a_read_only_randomizer_is_taped_with_its_outcome(intent):
     """A coin or die changes no piece, so the tape is the only record that it happened — and it has
     to carry the face, since nothing downstream can recompute one."""
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
 
     apply_and_log(state, log, PlayerId.P1, intent, ts=1.0)
 
@@ -269,7 +269,7 @@ def test_a_read_only_randomizer_is_taped_with_its_outcome(intent):
 
 def test_apply_and_log_entries_match_the_full_run():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     _script(state, log)
 
     assert [e.seq for e in log.entries] == sorted(e.seq for e in log.entries)
@@ -310,8 +310,8 @@ def test_full_snapshot_round_trips_provinces_battlefield_and_positions():
 
 def test_full_snapshot_survives_serialization():
     state = _post_setup_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
-    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    log = IntentLog(initial=InitialRecord.from_state(state))
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
     assert restored.replay() == state
 
 
@@ -346,8 +346,8 @@ def test_full_snapshot_round_trips_attachments():
 
 def test_attachments_survive_serialization():
     state = _attached_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
-    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    log = IntentLog(initial=InitialRecord.from_state(state))
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
     assert restored.replay() == state
     assert restored.initial.attachments == state.attachments
     assert restored.initial.units == state.units
@@ -370,9 +370,9 @@ def test_full_snapshot_round_trips_locations():
 
 def test_locations_survive_serialization():
     state = _assigned_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
 
-    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
 
     assert restored.replay() == state
     assert restored.initial.locations == {
@@ -399,7 +399,7 @@ def test_a_log_written_before_locations_existed_decodes_to_none_assigned():
 def test_replay_reproduces_live_state_bit_for_bit():
     state = _start_state()
     initial = InitialRecord.from_state(state)
-    log = ActionLog(initial=initial)
+    log = IntentLog(initial=initial)
     _script(state, log)
 
     rebuilt = log.replay()
@@ -412,7 +412,7 @@ def test_replay_reproduces_live_state_bit_for_bit():
 
 def test_replay_reproduces_spawned_and_removed_cards():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     apply_and_log(
         state,
         log,
@@ -447,7 +447,7 @@ def test_replay_reproduces_spawned_and_removed_cards():
 def test_replay_is_independent_of_the_live_table():
     state = _start_state()
     initial = InitialRecord.from_state(state)
-    log = ActionLog(initial=initial)
+    log = IntentLog(initial=initial)
     _script(state, log)
     rebuilt = log.replay()
 
@@ -458,19 +458,19 @@ def test_replay_is_independent_of_the_live_table():
 
 def test_serialized_log_is_json_safe():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     _script(state, log)
 
-    text = json.dumps(action_log_to_dict(log))
-    assert json.loads(text) == action_log_to_dict(log)
+    text = json.dumps(intent_log_to_dict(log))
+    assert json.loads(text) == intent_log_to_dict(log)
 
 
 def test_round_trip_serialize_then_replay_matches():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     _script(state, log)
 
-    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
 
     assert restored.replay() == state
     assert restored.entries == log.entries
@@ -478,7 +478,7 @@ def test_round_trip_serialize_then_replay_matches():
 
 def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     log.append(SessionEntry(ts=1.0, seat=PlayerId.P1, name="Ada", event="join"))
     apply_and_log(state, log, PlayerId.P1, CreateProvince(), ts=2.0)
     log.append(SessionEntry(ts=3.0, seat=None, name="Kenji", event="leave"))
@@ -486,7 +486,7 @@ def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
     # Session events carry no game state, so the fold ignores them.
     assert log.replay() == state
     # They survive the JSON round-trip alongside the rest of the tape.
-    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
     assert restored.entries == log.entries
     assert restored.replay() == state
 
@@ -544,10 +544,10 @@ def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
     ],
 )
 def test_each_intent_survives_a_serialization_round_trip(intent):
-    log = ActionLog(initial=InitialRecord.from_state(_start_state()))
+    log = IntentLog(initial=InitialRecord.from_state(_start_state()))
     log.append(LogEntry(seq=1, ts=1.0, seat=PlayerId.P1, intent=intent))
 
-    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
 
     assert restored.entries[0].intent == intent
 
@@ -555,7 +555,7 @@ def test_each_intent_survives_a_serialization_round_trip(intent):
 def test_setup_seeds_survive_serialization():
     initial = InitialRecord.from_state(_start_state(), setup_seeds={"opening_shuffle": 99})
 
-    restored = action_log_from_dict(action_log_to_dict(ActionLog(initial=initial)))
+    restored = intent_log_from_dict(intent_log_to_dict(IntentLog(initial=initial)))
 
     assert restored.initial.setup_seeds == {"opening_shuffle": 99}
 
@@ -568,8 +568,8 @@ def test_creatable_tokens_survive_serialization():
         name="Ghul", side=Side.DYNASTY, force=2, chi=2, keywords=("Undead",)
     )
 
-    restored = action_log_from_dict(
-        action_log_to_dict(ActionLog(initial=InitialRecord.from_state(state)))
+    restored = intent_log_from_dict(
+        intent_log_to_dict(IntentLog(initial=InitialRecord.from_state(state)))
     )
 
     token = restored.initial.creatable_tokens["ghul"]
@@ -582,7 +582,7 @@ def test_replay_reproduces_a_creatable_token_spawn():
     state.creatable_tokens["ghul"] = PersonalityPrint(
         name="Ghul", side=Side.DYNASTY, force=2, chi=2
     )
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     apply_and_log(
         state,
         log,
@@ -600,9 +600,9 @@ def test_replay_reproduces_a_creatable_token_spawn():
 
 def test_card_subclass_fields_survive_serialization():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
 
-    restored = action_log_from_dict(action_log_to_dict(log))
+    restored = intent_log_from_dict(intent_log_to_dict(log))
 
     original = {c.id: c for cards in log.initial.decklists.values() for c in cards}
     rebuilt = {c.id: c for cards in restored.initial.decklists.values() for c in cards}
@@ -626,9 +626,9 @@ def test_a_back_face_survives_serialization():
         owner=PlayerId.P1,
     )
     key = DeckKey(PlayerId.P1, Side.DYNASTY)
-    log = ActionLog(initial=InitialRecord(seats={}, decklists={key: [front]}))
+    log = IntentLog(initial=InitialRecord(seats={}, decklists={key: [front]}))
 
-    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
 
     rebuilt = restored.initial.decklists[key][0]
     assert rebuilt == front  # dataclass eq compares the nested back face recursively
@@ -641,7 +641,7 @@ def test_public_intent_codec_round_trips():
 
 def test_chat_interleaves_with_intents_in_send_order():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
 
     apply_and_log(state, log, PlayerId.P1, CreateProvince(), ts=1.0)
     log.append(ChatEntry(ts=1.5, sender="Ada", text="nice"))
@@ -654,7 +654,7 @@ def test_chat_interleaves_with_intents_in_send_order():
 
 def test_replay_skips_chat_but_reproduces_state():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     _script(state, log)
     # Drop a chat line into the middle of the tape.
     log.entries.insert(len(log.entries) // 2, ChatEntry(ts=0.5, sender="Kenji", text="gg"))
@@ -663,7 +663,7 @@ def test_replay_skips_chat_but_reproduces_state():
 
 
 def test_chat_does_not_break_intent_seq_monotonicity():
-    log = ActionLog(initial=InitialRecord.from_state(_start_state()))
+    log = IntentLog(initial=InitialRecord.from_state(_start_state()))
     log.append(LogEntry(seq=5, ts=1.0, seat=PlayerId.P1, intent=CreateProvince()))
     log.append(ChatEntry(ts=1.5, sender="Ada", text="hi"))
     # A regression is still caught across an interposed chat entry.
@@ -673,11 +673,11 @@ def test_chat_does_not_break_intent_seq_monotonicity():
 
 def test_chat_survives_serialization_round_trip():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     apply_and_log(state, log, PlayerId.P1, CreateProvince(), ts=1.0)
     log.append(ChatEntry(ts=1.5, sender="Ada", text="hello <there>"))
 
-    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
 
     assert restored.entries == log.entries
     assert restored.entries[1] == ChatEntry(ts=1.5, sender="Ada", text="hello <there>")
@@ -686,7 +686,7 @@ def test_chat_survives_serialization_round_trip():
 
 def test_flush_hands_serialized_payload_to_sink():
     state = _start_state()
-    log = ActionLog(initial=InitialRecord.from_state(state))
+    log = IntentLog(initial=InitialRecord.from_state(state))
     _script(state, log)
 
     captured = []
@@ -697,5 +697,5 @@ def test_flush_hands_serialized_payload_to_sink():
 
     flush(log, CapturingSink())
 
-    assert captured == [action_log_to_dict(log)]
-    assert action_log_from_dict(captured[0]).replay() == state
+    assert captured == [intent_log_to_dict(log)]
+    assert intent_log_from_dict(captured[0]).replay() == state

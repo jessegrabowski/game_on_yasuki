@@ -49,10 +49,10 @@ from yasuki_core.engine.intents import (
     SetHonor,
     SpawnCard,
     RemoveCard,
-    apply_intent,
     flip_coin,
     roll_dice,
 )
+from yasuki_core.engine.intent_handlers import apply_intent
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side

@@ -1,9 +1,11 @@
 from yasuki_core.engine.registrar import HandlerRegistry
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.redaction import BattlefieldCardView, HiddenCard
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.state import GameState, used_this_turn
+from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -76,3 +78,27 @@ def untaken_self_grant(game: GameState, card: L5RCard) -> int:
     if handler is None or used_this_turn(game, card, SELF_GRANT):
         return 0
     return handler(card, game, card.owner)
+
+
+def is_production_window(request: Confirm, battlefield: Iterable[BattlefieldCardView]) -> bool:
+    """Whether a yes/no question is a producer's bow-time window rather than some other card's.
+
+    Recognized by the card asking, not by the resolver: every card that can raise its own Gold
+    Production declares the amount, so :data:`GOLD_SELF_GRANT` is the list of cards whose window
+    this could be.
+
+    Parameters
+    ----------
+    request : Confirm
+        The pending yes/no question.
+    battlefield : iterable of BattlefieldCardView
+        The battlefield as the asked seat sees it, which is where the asking card must be.
+    """
+    if request.source_id is None:
+        return False
+    return any(
+        not isinstance(entry.card, HiddenCard)
+        and entry.card.id == request.source_id
+        and entry.card.printed_id in GOLD_SELF_GRANT
+        for entry in battlefield
+    )

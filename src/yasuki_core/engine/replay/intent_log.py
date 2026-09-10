@@ -4,9 +4,10 @@ from collections.abc import Sequence
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.intents import Intent, Event, apply_intent
-from yasuki_core.engine.serialization import encode_intent, decode_intent
-from yasuki_core.engine.snapshot import (
+from yasuki_core.engine.intents import Intent, Event
+from yasuki_core.engine.intent_handlers import apply_intent
+from yasuki_core.engine.replay.serialization import encode_intent, decode_intent
+from yasuki_core.engine.replay.snapshot import (
     InitialRecord,
     build_initial_state,
     encode_initial,
@@ -86,7 +87,7 @@ class SessionEntry:
 
 
 @dataclass(slots=True)
-class ActionLog:
+class IntentLog:
     """An append-only record of a game: an initial snapshot at the head, then one ordered tape of
     game intents, chat messages, and session events.
 
@@ -119,7 +120,7 @@ class ActionLog:
 
 
 def apply_and_log(
-    state: TableState, log: ActionLog, seat: PlayerId, intent: Intent, ts: float
+    state: TableState, log: IntentLog, seat: PlayerId, intent: Intent, ts: float
 ) -> list[Event]:
     """Apply ``intent`` and, if accepted, append a ``LogEntry`` for it.
 
@@ -131,7 +132,7 @@ def apply_and_log(
     ----------
     state : TableState
         The authoritative table, mutated in place on acceptance.
-    log : ActionLog
+    log : IntentLog
         The log to append to.
     seat : PlayerId
         The acting seat.
@@ -213,17 +214,17 @@ def _decode_entry(payload: dict) -> LogEntry | ChatEntry | SessionEntry:
     )
 
 
-def action_log_to_dict(log: ActionLog) -> dict:
-    """Serialize a whole ``ActionLog`` — initial record and entries — to JSON-ready plain data."""
+def intent_log_to_dict(log: IntentLog) -> dict:
+    """Serialize a whole ``IntentLog`` — initial record and entries — to JSON-ready plain data."""
     return {
         "initial": encode_initial(log.initial),
         "entries": [_encode_entry(entry) for entry in log.entries],
     }
 
 
-def action_log_from_dict(payload: dict) -> ActionLog:
-    """Reconstruct an ``ActionLog`` from the plain data produced by ``action_log_to_dict``."""
-    return ActionLog(
+def intent_log_from_dict(payload: dict) -> IntentLog:
+    """Reconstruct an ``IntentLog`` from the plain data produced by ``intent_log_to_dict``."""
+    return IntentLog(
         initial=decode_initial(payload["initial"]),
         entries=[_decode_entry(entry) for entry in payload["entries"]],
     )
@@ -232,13 +233,13 @@ def action_log_from_dict(payload: dict) -> ActionLog:
 @runtime_checkable
 class FlushSink(Protocol):
     """Where a persisted log lands. A database or object-store backend implements ``write`` to take
-    the plain-dict payload from :func:`action_log_to_dict`. Nothing implements it yet, so a log is
+    the plain-dict payload from :func:`intent_log_to_dict`. Nothing implements it yet, so a log is
     never written anywhere."""
 
     def write(self, payload: dict) -> None: ...
 
 
-def flush(log: ActionLog, sink: FlushSink) -> None:
+def flush(log: IntentLog, sink: FlushSink) -> None:
     """Serialize ``log`` and hand it to ``sink`` — the one place persistence attaches. Nothing calls
     this yet, since nothing implements :class:`FlushSink`."""
-    sink.write(action_log_to_dict(log))
+    sink.write(intent_log_to_dict(log))

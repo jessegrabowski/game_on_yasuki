@@ -36,13 +36,13 @@ from yasuki_core.engine.intents import (
     SearchDeck,
     SpawnCard,
 )
-from yasuki_core.engine.action_log import (
-    ActionLog,
+from yasuki_core.engine.replay.intent_log import (
+    IntentLog,
     ChatEntry,
     SessionEntry,
     apply_and_log,
 )
-from yasuki_core.engine.snapshot import InitialRecord
+from yasuki_core.engine.replay.snapshot import InitialRecord
 from yasuki_core.engine.redaction import redact
 from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
 from yasuki_core.game_pieces.factory import (
@@ -93,7 +93,7 @@ def _entry_names(entry: dict):
 class GameRoom:
     """Authoritative game state and connections for one room.
 
-    Owns a `TableState` (the truth) and an `ActionLog` (the durable tape of intents and chat). Each
+    Owns a `TableState` (the truth) and an `IntentLog` (the durable tape of intents and chat). Each
     connection is bound to a seat (P1/P2); every accepted intent is applied through the core,
     recorded on the tape, and broadcast as a **per-viewer redacted** `SNAPSHOT` so a player never
     receives a card they are not entitled to see.
@@ -109,7 +109,7 @@ class GameRoom:
         self.user_by_ws: dict[WebSocket, int] = {}
         self.seat_by_user: dict[int, PlayerId] = {}
         self.state = TableState.empty_two_seat()
-        self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
+        self.intent_log = IntentLog(initial=InitialRecord.from_state(self.state))
         self._spawn_count = 0
         # Display name per creatable-token id, for the snapshot's "Create" menu; fixed after setup.
         self._token_names: dict[str, str] = {}
@@ -194,7 +194,7 @@ class GameRoom:
             await self._send_snapshot(ws, seat)
             return
 
-        self.action_log.append(SessionEntry(ts=time.time(), seat=seat, name=name, event="join"))
+        self.intent_log.append(SessionEntry(ts=time.time(), seat=seat, name=name, event="join"))
         await self.broadcast_snapshots()
         await self.log([{"text": f"{name} joined"}])
 
@@ -218,7 +218,7 @@ class GameRoom:
             if self.room_id in rooms and player_name in rooms[self.room_id]["players"]:
                 rooms[self.room_id]["players"].remove(player_name)
             logger.info(f"Player {player_name} left room {self.room_id}")
-            self.action_log.append(
+            self.intent_log.append(
                 SessionEntry(ts=time.time(), seat=seat, name=player_name, event="leave")
             )
             await self.broadcast_snapshots()
@@ -262,7 +262,7 @@ class GameRoom:
 
         # Read before applying: once the card has moved there is no way to tell it came from a hand.
         discarding_favor = self._favor_leaving_hand(intent)
-        events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
+        events = apply_and_log(self.state, self.intent_log, seat, intent, ts=time.time())
         if not events:
             await ws.send_json(
                 ServerError(room=self.room_id, message="Intent rejected", debug=True).model_dump()
@@ -335,7 +335,7 @@ class GameRoom:
             return
         self.state.seats[seat].ready = ready
         self.state.bump_version()
-        self.action_log.append(
+        self.intent_log.append(
             SessionEntry(
                 ts=time.time(),
                 seat=seat,
@@ -399,7 +399,7 @@ class GameRoom:
         # nobody.
         taken_from = next((card.owner for card in held if card.owner is not seat), None)
         for card in held:
-            apply_and_log(self.state, self.action_log, seat, RemoveCard(card.id), ts=time.time())
+            apply_and_log(self.state, self.intent_log, seat, RemoveCard(card.id), ts=time.time())
 
         self._spawn_count += 1
         spawn = SpawnCard(
@@ -408,7 +408,7 @@ class GameRoom:
             zone=ZoneKey(seat, ZoneRole.HAND),
             shown=True,
         )
-        events = apply_and_log(self.state, self.action_log, seat, spawn, ts=time.time())
+        events = apply_and_log(self.state, self.intent_log, seat, spawn, ts=time.time())
         if not events:
             await ws.send_json(
                 ServerError(room=self.room_id, message="Could not take the Favor").model_dump()
@@ -429,12 +429,12 @@ class GameRoom:
         self.state.seq = prev_seq + 1
         for seat in self.seats.values():
             self.state.seats[seat].connected = True
-        self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
+        self.intent_log = IntentLog(initial=InitialRecord.from_state(self.state))
         self._new_game_rng()
         self.setup_done = False
 
     async def _run_setup(self):
-        """Resolve both seats' decks and deal the opening table, then re-seed the action log so the
+        """Resolve both seats' decks and deal the opening table, then re-seed the intent log so the
         post-setup state is the replay head."""
         # Fetch the recipients and any art-swap donors (a borrowed printing's card may not otherwise
         # be in either deck), so the resolver can recomposite custom art.
@@ -467,7 +467,7 @@ class GameRoom:
         seats = tuple(self.pending_decks)
         if len(seats) == 2:
             flip_second_player_stronghold(self.state, seats, rng=self._deal_rng)
-        self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
+        self.intent_log = IntentLog(initial=InitialRecord.from_state(self.state))
 
     async def _send_snapshot(self, ws: WebSocket, seat: PlayerId):
         """Send one seated player its own redacted `SNAPSHOT`."""
@@ -510,7 +510,7 @@ class GameRoom:
         sender = self.players.get(ws)
         if not sender:
             return
-        self.action_log.append(ChatEntry(ts=time.time(), sender=sender, text=text))
+        self.intent_log.append(ChatEntry(ts=time.time(), sender=sender, text=text))
         payload = ServerChat(room=self.room_id, sender=sender, text=text).model_dump(by_alias=True)
         self._append_capped(self.chat_history, payload)
         await self._broadcast(payload)

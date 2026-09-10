@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.promotional_emperor import ASHIGARU
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DecisionResponse
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession
 

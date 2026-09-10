@@ -5,11 +5,12 @@ import typing
 
 import pytest
 
-from yasuki_core.engine.rules import legality, log
+from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
-from yasuki_core.engine.rules.log import GameInput
+from yasuki_core.engine.replay import game_log
+from yasuki_core.engine.replay.game_log import GameInput
 from yasuki_core.engine.rules.vocabulary.work import WorkItem
 
 from tests.yasuki_core.engine.builders import two_seat_game
@@ -62,15 +63,15 @@ def _class_patterns(pattern: ast.pattern) -> list[ast.MatchClass]:
 #
 #   action_sequence.cancel  partial by design, and replay-only — it handles the two decisions that
 #                       legacy tapes recorded a Cancel for. Live backing-out truncates the tape.
-#   log._decode_action  dispatches on a string kind rather than a type, so there is no case pattern
+#   game_log._decode_action  dispatches on a string kind rather than a type, so there is no case pattern
 #                       to read. The round-trip test in test_log.py covers it end to end.
 DISPATCH_SITES = [
     pytest.param(WorkItem, action_sequence._resolve, id="WorkItem/_resolve"),
     pytest.param(DecisionRequest, action_sequence.submit, id="DecisionRequest/submit"),
     pytest.param(Action, action_sequence.perform, id="Action/perform"),
     pytest.param(Action, legality.is_legal, id="Action/is_legal"),
-    pytest.param(Action, log._encode_action, id="Action/_encode_action"),
-    pytest.param(GameInput, log._apply, id="GameInput/_apply"),
+    pytest.param(Action, game_log._encode_action, id="Action/_encode_action"),
+    pytest.param(GameInput, game_log._apply, id="GameInput/_apply"),
 ]
 
 
@@ -89,7 +90,7 @@ def test_the_helper_notices_a_missing_case():
     # Guards the two tests above: a helper that silently found nothing would pass them vacuously.
     def _incomplete(entry: GameInput) -> None:
         match entry:
-            case log.Act():
+            case game_log.Act():
                 pass
 
     assert _union_members(GameInput) - _dispatched_names(_incomplete) == {"Answer", "Cancel"}

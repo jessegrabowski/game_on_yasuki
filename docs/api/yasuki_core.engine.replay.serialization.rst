@@ -1,7 +1,7 @@
-yasuki_core.engine.serialization
-================================
+yasuki_core.engine.replay.serialization
+=======================================
 
-.. currentmodule:: yasuki_core.engine.serialization
+.. currentmodule:: yasuki_core.engine.replay.serialization
 
 .. rubric:: Functions
 
@@ -26,6 +26,6 @@ yasuki_core.engine.serialization
     encode_seat
     encode_zone_key
 
-.. automodule:: yasuki_core.engine.serialization
+.. automodule:: yasuki_core.engine.replay.serialization
     :members:
     :undoc-members:

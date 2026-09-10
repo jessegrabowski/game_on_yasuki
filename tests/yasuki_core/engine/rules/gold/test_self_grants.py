@@ -7,9 +7,12 @@ from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.gold.self_grants import (
     GOLD_SELF_GRANT,
     SELF_GRANT,
+    is_production_window,
     maximum_gold_production,
     register_self_grant,
 )
+from yasuki_core.engine.rules.projection import project
+from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import claim_once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
@@ -151,3 +154,42 @@ def _window_effects(game, producer):
         for trigger in _TRIGGERS.get(ProducingGold, {}).get(producer.printed_id, [])
         for effect in trigger(TriggerContext(game, producer, event))
     ]
+
+
+def test_a_producer_asking_its_own_window_is_recognized():
+    """What the agent answering a payment has to tell apart: this Confirm is the bow-time offer to
+    raise a yield, not some other card's yes/no question."""
+    game = two_seat_game()
+    put_in_play(game, holding("of", owner=PlayerId.P1, printed_id="outlying_farms"))
+    asked = Confirm(
+        seat=PlayerId.P1, candidates=("of",), question="?", resolver="r", source_id="of"
+    )
+
+    assert is_production_window(asked, project(game, PlayerId.P2).table.battlefield)
+
+
+def test_a_card_that_declares_no_grant_raises_no_window():
+    """The registry is what makes a Confirm a production window, so a producer outside it asking a
+    question of its own must not be answered as one."""
+    game = two_seat_game()
+    put_in_play(game, holding("plain", owner=PlayerId.P1, printed_id="plain_holding"))
+    asked = Confirm(
+        seat=PlayerId.P1, candidates=("plain",), question="?", resolver="r", source_id="plain"
+    )
+
+    assert not is_production_window(asked, project(game, PlayerId.P2).table.battlefield)
+
+
+def test_a_face_down_card_in_play_is_not_mistaken_for_a_window():
+    """The window is recognized by the card that raised it, and a viewer who cannot identify a card
+    in play sees a back with no printed id to read. Reaching for one crashes the agent for every
+    decision, not just this one."""
+    game = two_seat_game()
+    put_in_play(
+        game, holding("of", owner=PlayerId.P1, printed_id="outlying_farms")
+    ).turn_face_down()
+    asked = Confirm(
+        seat=PlayerId.P1, candidates=("of",), question="?", resolver="r", source_id="of"
+    )
+
+    assert not is_production_window(asked, project(game, PlayerId.P2).table.battlefield)

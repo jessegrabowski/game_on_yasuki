@@ -5,7 +5,8 @@ from types import MappingProxyType
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
-from yasuki_core.engine.intents import Event, Intent, apply_intent
+from yasuki_core.engine.intents import Event, Intent
+from yasuki_core.engine.intent_handlers import apply_intent
 from yasuki_core.engine.redaction import ViewSnapshot
 from yasuki_core.game_pieces.prints import (
     HoldingPrint,

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.snapshot import (
+from yasuki_core.engine.replay.snapshot import (
     InitialRecord,
     build_initial_state,
     encode_initial,

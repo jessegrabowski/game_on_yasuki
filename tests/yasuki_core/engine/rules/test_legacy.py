@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook import legacy
 from yasuki_core.engine.rules.turn import action_sequence
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import end_phase, holding, put_in_play, register

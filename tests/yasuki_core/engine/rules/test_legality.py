@@ -51,7 +51,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     BattleDesignator,
 )
 from yasuki_core.engine.rules.effects import AdjustCounter
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.legality import activatable, has_absent_ability
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import WEALTH

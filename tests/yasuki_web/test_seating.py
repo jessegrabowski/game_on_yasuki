@@ -7,7 +7,7 @@ from yasuki_web import websocket as ws_module
 from yasuki_web.websocket import GameRoom
 from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.action_log import SessionEntry
+from yasuki_core.engine.replay.intent_log import SessionEntry
 
 from tests.yasuki_web._support import account, as_user
 
@@ -52,7 +52,7 @@ def test_a_second_tab_is_caught_up_privately_not_announced_as_a_join(room):
     second = _FakeWS()
     asyncio.run(room.add_player(second, ada))
     joins = [
-        e for e in room.action_log.entries if isinstance(e, SessionEntry) and e.event == "join"
+        e for e in room.intent_log.entries if isinstance(e, SessionEntry) and e.event == "join"
     ]
     assert len(joins) == 1  # only the first connection announced a join
     assert second.sent[-1]["type"] == "SNAPSHOT"  # the new tab still gets the current view
@@ -76,7 +76,7 @@ def test_seat_survives_until_the_players_last_tab_leaves(room):
     assert room.state.seats[PlayerId.P1].connected is False
     assert rooms["r1"]["players"] == []
     leaves = [
-        e for e in room.action_log.entries if isinstance(e, SessionEntry) and e.event == "leave"
+        e for e in room.intent_log.entries if isinstance(e, SessionEntry) and e.event == "leave"
     ]
     assert len(leaves) == 1
 

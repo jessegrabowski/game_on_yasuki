@@ -4,7 +4,7 @@ from typing import NamedTuple, Protocol
 from yasuki_core.bots.agents import Agent
 from yasuki_core.bots.policies import Policy
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.log import Act, Answer
+from yasuki_core.engine.replay.game_log import Act, Answer
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession

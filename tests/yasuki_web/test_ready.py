@@ -173,11 +173,11 @@ def test_re_ready_after_setup_does_not_rerun_it(room):
     ada, kenji = _both_loaded(room)
     asyncio.run(room.handle_ready(ada, True))
     asyncio.run(room.handle_ready(kenji, True))
-    log_after_setup = room.action_log
+    log_after_setup = room.intent_log
 
     asyncio.run(room.handle_ready(ada, True))
 
-    assert room.action_log is log_after_setup  # rerunning setup would re-seed a new log
+    assert room.intent_log is log_after_setup  # rerunning setup would re-seed a new log
 
 
 def test_setup_snapshot_holds_redaction_and_honor(room):

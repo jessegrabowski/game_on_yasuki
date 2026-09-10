@@ -1,6 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey
-from yasuki_core.engine.intents import Shuffle, apply_intent
+from yasuki_core.engine.intents import Shuffle
+from yasuki_core.engine.intent_handlers import apply_intent
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint

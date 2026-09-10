@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.log
-============================
+yasuki_core.engine.replay.game_log
+==================================
 
-.. currentmodule:: yasuki_core.engine.rules.log
+.. currentmodule:: yasuki_core.engine.replay.game_log
 
 .. rubric:: Classes
 
@@ -24,6 +24,6 @@ yasuki_core.engine.rules.log
     replay
     submit_and_log
 
-.. automodule:: yasuki_core.engine.rules.log
+.. automodule:: yasuki_core.engine.replay.game_log
     :members:
     :undoc-members:

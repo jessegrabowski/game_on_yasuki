@@ -1,7 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.bots.agents import AutoAgent, PayingAgent, is_production_window
-from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Confirm, DiscardToHandSize
-from yasuki_core.engine.rules.projection import project
+from yasuki_core.bots.agents import AutoAgent, PayingAgent
+from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DiscardToHandSize
 from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.bots.policies import EconomicPolicy
 from yasuki_core.engine.driver import Controls, play_game
@@ -9,7 +8,6 @@ from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
-    two_seat_game,
     end_phase,
     holding,
     pay,
@@ -59,17 +57,6 @@ def test_a_plain_recruit_is_paid_for_and_leaves_the_producer_alive():
     assert table.cards_by_id["target"] in table.battlefield.cards
     assert table.cards_by_id["mine"] in table.battlefield.cards
     assert table.cards_by_id["mine"].bowed
-
-
-def test_a_face_down_card_in_play_is_not_mistaken_for_a_window():
-    """The window is recognized by the card that raised it, and a viewer who cannot identify a card
-    in play sees a back with no printed id to read. Reaching for one crashes the agent for every
-    decision, not just this one."""
-    game = two_seat_game()
-    put_in_play(game, holding("of", owner=P1, printed_id="outlying_farms")).turn_face_down()
-    asked = Confirm(seat=P1, candidates=("of",), question="?", resolver="r", source_id="of")
-
-    assert not is_production_window(asked, project(game, PlayerId.P2))
 
 
 def _grant_only_game() -> EngineSession:

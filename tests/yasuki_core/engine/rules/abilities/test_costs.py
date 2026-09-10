@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.effects import AdjustCounter, Choose
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
