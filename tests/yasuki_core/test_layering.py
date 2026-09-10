@@ -4,6 +4,7 @@ import subprocess
 import sys
 
 import yasuki_core
+import yasuki_core.ruleset
 from yasuki_core import bots, engine, search
 from yasuki_core.engine import rules
 
@@ -12,6 +13,7 @@ RULES = pathlib.Path(rules.__file__).parent
 ENGINE = pathlib.Path(engine.__file__).parent
 BOTS = pathlib.Path(bots.__file__).parent
 SEARCH = pathlib.Path(search.__file__).parent
+RULESET = pathlib.Path(yasuki_core.ruleset.__file__)
 # yasuki_core is the substrate the other two packages sit on. It may not import either of them, or
 # the dependency runs both ways and neither can be used without the other.
 FORBIDDEN = ("yasuki_web", "yasuki_gui")
@@ -146,6 +148,18 @@ def test_the_query_language_does_not_read_the_database():
     }
 
     assert reaching == set()
+
+
+def test_the_ruleset_does_not_reach_past_the_rules_vocabulary():
+    # Ten rules modules import the ruleset, so anything it imports back has to be a module that
+    # cannot reach it. The vocabulary layer is that guarantee, because its modules import nothing
+    # else in rules/. Reaching past it, into the turn machine or the state, closes the loop.
+    reaching = {
+        name for name in _imported_modules(RULESET) if name.startswith("yasuki_core.engine.rules")
+    }
+
+    assert reaching  # a ruleset naming no vocabulary would satisfy the check below vacuously
+    assert {name for name in reaching if ".rules.vocabulary." not in name} == set()
 
 
 def test_the_rules_package_has_no_import_cycle():

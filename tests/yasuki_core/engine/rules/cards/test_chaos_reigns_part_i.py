@@ -22,12 +22,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
-from yasuki_core.engine.rules.turn.structure import (
-    BATTLE_SEGMENT_TIMINGS,
-    ActionRound,
-    BattleSegment,
-    RoundKind,
-)
+from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS, ActionRound, RoundKind
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of

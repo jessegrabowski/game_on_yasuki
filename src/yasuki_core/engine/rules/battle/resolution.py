@@ -27,12 +27,11 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     BATTLE_SEGMENT_TIMINGS,
-    BattleSegment,
     Boundary,
     Moment,
     RoundKind,
-    Segment,
 )
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
@@ -266,7 +265,7 @@ def fight_next_battle(game: GameState) -> None:
 
 # What Action Round follows each of the two that are one, or None when resolution follows instead
 # (CR, Battle Sequence). Spelled out rather than taken from the enum's order, so a round added to
-# :class:`~yasuki_core.engine.rules.state.BattleSegment` has to say where it belongs.
+# :class:`~yasuki_core.engine.rules.vocabulary.segments.BattleSegment` has to say where it belongs.
 _AFTER_BATTLE_SEGMENT: dict[BattleSegment, BattleSegment | None] = {
     BattleSegment.ENGAGE: BattleSegment.COMBAT,
     BattleSegment.COMBAT: None,

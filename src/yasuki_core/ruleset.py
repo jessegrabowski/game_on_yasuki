@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.turn.structure import BattleSegment, Segment
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 
 
 def normalize_clan(name: str) -> str:
@@ -144,9 +144,9 @@ UNICORN = "unicorn"
 #
 # Earlier arcs walk a different sequence — the Cavalry Maneuvers segment between Maneuvers and the
 # battles is the one that will bring this to a head. Adding it is three edits: a member on
-# :class:`~yasuki_core.engine.rules.state.Segment`, a place in that arc's ``attack_segments``, and a
-# name in its ``segment_names``. Nothing reads the enum's declaration order, so no arc inherits
-# another's sequence.
+# :class:`~yasuki_core.engine.rules.vocabulary.segments.Segment`, a place in that arc's
+# ``attack_segments``, and a name in its ``segment_names``. Nothing reads the enum's declaration
+# order, so no arc inherits another's sequence.
 _SHATTERED_EMPIRE_SEGMENTS = (Segment.DECLARATION, Segment.MANEUVERS, Segment.FIGHT)
 
 # The Battle Sequence this arc walks inside Fight Battles, named apart from the enum's order for

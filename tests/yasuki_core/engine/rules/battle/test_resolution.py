@@ -12,7 +12,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     assignment_token,
 )
 from yasuki_core.bots.policies import EconomicPolicy, GoldRushPolicy
-from yasuki_core.engine.rules.turn.structure import Phase, Segment
+from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.vocabulary.segments import Segment
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of

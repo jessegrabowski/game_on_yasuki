@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.battle.records import BattleOutcome
-from yasuki_core.engine.rules.turn.structure import BattleSegment
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_gui import theme
 from yasuki_gui.constants import ATTACH_STACK_OFFSET, CARD_H, CARD_W
 from yasuki_gui.labels import BATTLE_SEGMENT_CHIPS

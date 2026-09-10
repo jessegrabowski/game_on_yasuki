@@ -10,7 +10,8 @@ from yasuki_core.engine.rules.stats.province_strength import effective_province_
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import BattleOutcome
-from yasuki_core.engine.rules.turn.structure import BattleSegment, Phase, RoundKind, Segment
+from yasuki_core.engine.rules.turn.structure import Phase, RoundKind
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.rules.board.queries import units_at
