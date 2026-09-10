@@ -15,7 +15,6 @@ from yasuki_core.engine.table import (
     ZoneRole,
 )
 from yasuki_core.engine.intents import (
-    apply_intent,
     MoveCard,
     SetCardPos,
     SetCardPositions,
@@ -53,6 +52,7 @@ from yasuki_core.engine.intents import (
     flip_coin,
     roll_dice,
 )
+from yasuki_core.engine.intent_handlers import apply_intent
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side

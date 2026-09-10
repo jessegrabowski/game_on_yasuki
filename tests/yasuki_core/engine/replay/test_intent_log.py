@@ -15,7 +15,6 @@ from yasuki_core.engine.table import (
     Location,
 )
 from yasuki_core.engine.intents import (
-    apply_intent,
     MoveCard,
     SetCardPos,
     SetCardPositions,
@@ -48,6 +47,7 @@ from yasuki_core.engine.intents import (
     SpawnCard,
     RemoveCard,
 )
+from yasuki_core.engine.intent_handlers import apply_intent
 from yasuki_core.game_pieces.constants import Side, Element, Timing
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.zones import ProvinceZone

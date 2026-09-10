@@ -38,6 +38,7 @@ yasuki_core
     yasuki_core.deck_pdf <yasuki_core.deck_pdf>
     yasuki_core.decklist <yasuki_core.decklist>
     yasuki_core.engine.driver <yasuki_core.engine.driver>
+    yasuki_core.engine.intent_handlers <yasuki_core.engine.intent_handlers>
     yasuki_core.engine.intents <yasuki_core.engine.intents>
     yasuki_core.engine.ops <yasuki_core.engine.ops>
     yasuki_core.engine.players <yasuki_core.engine.players>

@@ -1,4 +1,4 @@
-from yasuki_core.engine.intents import locked_ops
+from yasuki_core.engine.intent_handlers import locked_ops
 from yasuki_core.engine.redaction import ViewSnapshot, HiddenCard
 from yasuki_core.engine.table import ZoneKey, DeckKey, AttachTarget
 from yasuki_core.game_pieces.cards import L5RCard
