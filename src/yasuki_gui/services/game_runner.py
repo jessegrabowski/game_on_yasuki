@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.rulebook import favor_abilities, favor_proxy
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
@@ -24,7 +25,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     KharmicRefill,
     Legacy,
     Lobby,
-    Pass,
     PlayStrategy,
     Recruit,
     UseFavorAbility,
@@ -407,10 +407,14 @@ class GameRunner:
             If one Action Round runs past
             :data:`~yasuki_core.engine.driver.MAX_ACTIONS_PER_ROUND`. A round closes only once
             every seat passes consecutively, so a policy that always finds something to take would
-            otherwise hang the caller.
+            otherwise hang the caller. Every action counts toward the ceiling, a Pass included, and
+            the count starts over when the round does.
         """
         game = self.session.game
         round_actions = 0
+        # A round is identified by the phase of the turn it belongs to: the record itself is frozen
+        # and replaced on every act, so it cannot be compared by identity.
+        open_round: tuple[int, Phase] | None = None
         while not game.game_over:
             pending = game.pending
             if pending is not None:
@@ -423,7 +427,9 @@ class GameRunner:
                 chosen = self._opponent.policy.choose(
                     self.session.project(seat), self.session.legal_actions(seat)
                 )
-                round_actions = 0 if isinstance(chosen, Pass) else round_actions + 1
+                here = (game.turn, game.phase)
+                round_actions = round_actions + 1 if here == open_round else 1
+                open_round = here
                 if round_actions > MAX_ACTIONS_PER_ROUND:
                     raise RuntimeError(
                         f"an Action Round in {game.phase} ran past {MAX_ACTIONS_PER_ROUND} "

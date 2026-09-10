@@ -15,6 +15,7 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.bots.agents import AutoAgent
+from yasuki_core.bots.policies import PassPolicy
 from yasuki_core.engine.driver import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
@@ -926,6 +927,23 @@ def test_a_policy_that_never_passes_is_stopped_rather_than_spinning(monkeypatch)
     runner.act(PASS)  # hands the opponent its window inside the human's Action phase
 
     with pytest.raises(RuntimeError, match="ran past"):
+        runner.run_opponent()
+
+
+def test_a_pass_counts_toward_the_round_ceiling(monkeypatch):
+    """The driver in :mod:`yasuki_core.engine.driver` counts every action a round takes and starts
+    over when the round does. This counts the same way, so the two report the same round as
+    runaway."""
+    monkeypatch.setattr(game_runner_module, "MAX_ACTIONS_PER_ROUND", 0)
+    state = _kharmic_table(seat=PlayerId.P2)
+    runner = GameRunner(
+        EngineSession.start(state, PlayerId.P1, seed=3),
+        PlayerId.P1,
+        Controls(PassPolicy(), AutoAgent()),
+    )
+    runner.act(PASS)  # hands the opponent its window inside the human's Action phase
+
+    with pytest.raises(RuntimeError, match="ran past 0 actions"):
         runner.run_opponent()
 
 
