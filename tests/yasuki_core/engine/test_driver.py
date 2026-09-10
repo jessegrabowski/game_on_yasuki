@@ -4,9 +4,9 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import Action, Legacy
-from yasuki_core.engine.bots.agents import AutoAgent
+from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse, DiscardToHandSize
-from yasuki_core.engine.bots.policies import PassPolicy, RandomPolicy
+from yasuki_core.bots.policies import PassPolicy, RandomPolicy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.turn.structure import Phase

@@ -1,7 +1,7 @@
-yasuki_core.engine.bots.agents
-==============================
+yasuki_core.bots.agents
+=======================
 
-.. currentmodule:: yasuki_core.engine.bots.agents
+.. currentmodule:: yasuki_core.bots.agents
 
 .. rubric:: Classes
 
@@ -19,6 +19,6 @@ yasuki_core.engine.bots.agents
     is_production_window
     make_agent
 
-.. automodule:: yasuki_core.engine.bots.agents
+.. automodule:: yasuki_core.bots.agents
     :members:
     :undoc-members:

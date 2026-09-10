@@ -4,12 +4,13 @@ import subprocess
 import sys
 
 import yasuki_core
-from yasuki_core import engine
+from yasuki_core import bots, engine
 from yasuki_core.engine import rules
 
 CORE = pathlib.Path(yasuki_core.__file__).parent
 RULES = pathlib.Path(rules.__file__).parent
 ENGINE = pathlib.Path(engine.__file__).parent
+BOTS = pathlib.Path(bots.__file__).parent
 # yasuki_core is the substrate the other two packages sit on. It may not import either of them, or
 # the dependency runs both ways and neither can be used without the other.
 FORBIDDEN = ("yasuki_web", "yasuki_gui")
@@ -52,11 +53,13 @@ def test_the_scan_can_see_an_offending_import(tmp_path):
 def test_no_package_reexports():
     # An __init__ that re-exports makes its package a single import node: importing any submodule
     # runs the whole package, which reintroduces cycles the splits exist to avoid. Every package
-    # under engine/ is scanned, so one added later is covered without being listed here. cards/ is
-    # the documented exception -- it aggregates its set modules on purpose, guarded by its own test.
+    # under engine/ and bots/ is scanned, so one added later is covered without being listed here.
+    # cards/ is the documented exception -- it aggregates its set modules on purpose, guarded by
+    # its own test.
     offenders = {
         str(path.relative_to(CORE))
-        for path in ENGINE.rglob("__init__.py")
+        for root in (ENGINE, BOTS)
+        for path in root.rglob("__init__.py")
         if path.parent.name != "cards"
         and any(
             isinstance(node, ast.Import | ast.ImportFrom)
@@ -74,7 +77,7 @@ def test_the_rules_layer_does_not_reach_into_the_bots():
         str(source.relative_to(RULES))
         for source in sorted(RULES.rglob("*.py"))
         for name in _imported_modules(source)
-        if name.startswith("yasuki_core.engine.bots")
+        if name.startswith("yasuki_core.bots")
     }
 
     assert reaching == set()
@@ -149,8 +152,8 @@ def test_the_board_substrate_does_not_read_the_rules():
     # drags the whole turn structure into the manual intent path that yasuki_gui and yasuki_web
     # drive. Only the two surfaces above the rules are excepted, and both are named here.
     #
-    # Deliberately shallow: engine/bots/ and engine/rules/ are not substrate and bots reads the
-    # rules by design, so a recursive scan would report the layering working as intended.
+    # Deliberately shallow: engine/rules/ is not substrate, so a recursive scan would report the
+    # layering working as intended.
     above_the_rules = {"session.py", "runner.py"}
     reaching = {
         source.name

@@ -1,7 +1,7 @@
-yasuki_core.engine.bots.queries
-===============================
+yasuki_core.bots.queries
+========================
 
-.. currentmodule:: yasuki_core.engine.bots.queries
+.. currentmodule:: yasuki_core.bots.queries
 
 .. rubric:: Functions
 
@@ -16,6 +16,6 @@ yasuki_core.engine.bots.queries
     readable_province_cards
     spendable
 
-.. automodule:: yasuki_core.engine.bots.queries
+.. automodule:: yasuki_core.bots.queries
     :members:
     :undoc-members:

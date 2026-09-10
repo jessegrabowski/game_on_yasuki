@@ -14,9 +14,9 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.bots.agents import PayingAgent
-from yasuki_core.engine.bots.hints import ABILITY_HINTS, optional_cost_answer
-from yasuki_core.engine.bots.queries import (
+from yasuki_core.bots.agents import PayingAgent
+from yasuki_core.bots.hints import ABILITY_HINTS, optional_cost_answer
+from yasuki_core.bots.queries import (
     best_production,
     identifiable,
     production,
@@ -49,7 +49,7 @@ from yasuki_core.game_pieces.prints import (
 class Policy(Protocol):
     """Chooses which action a seat takes from the ones open to it.
 
-    The counterpart to :class:`~yasuki_core.engine.bots.agents.Agent`: a policy picks an action, an
+    The counterpart to :class:`~yasuki_core.bots.agents.Agent`: a policy picks an action, an
     agent answers a decision that action raises. A Recruit needs both — the policy chooses to
     recruit, the agent answers the payment.
 
@@ -245,7 +245,7 @@ class GoldRushPolicy:
     four Gold, so the cheap producers a deck-average rule would bin are exactly the ones this policy
     can afford to buy with it. Then Legacy, when the pool holds a better producer than the board —
     it puts that card face-up in a Province where the same turn's Recruit can reach it. Then an
-    activated ability this policy has an economic model for, which :data:`~yasuki_core.engine.bots.hints.ABILITY_HINTS`
+    activated ability this policy has an economic model for, which :data:`~yasuki_core.bots.hints.ABILITY_HINTS`
     decides. Then the best purchase, ranked as :class:`EconomicPolicy` ranks it, which takes a
     Personality once no Holding is within reach: gold left in the pool is cleared at the phase
     change, and buying empties the Province either way. Then a Dynasty Discard of any face-up

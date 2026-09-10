@@ -6,7 +6,8 @@ import sys
 
 import yaml
 
-from yasuki_core.engine import bots, rules
+from yasuki_core import bots
+from yasuki_core.engine import rules
 from yasuki_core.engine.rules import cards
 from yasuki_core.install import registration_audit
 from yasuki_core.install.registration_audit import (
@@ -146,7 +147,7 @@ def test_the_pre_commit_hook_watches_every_module_that_registers():
     registering = sources_defining_registries()
 
     assert hook["entry"].split()[-1] == registration_audit.__name__
-    assert "src/yasuki_core/engine/bots/hints.py" in registering
+    assert "src/yasuki_core/bots/hints.py" in registering
     assert [source for source in registering if not watched.match(source)] == []
 
 

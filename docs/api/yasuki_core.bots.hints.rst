@@ -1,7 +1,7 @@
-yasuki_core.engine.bots.hints
-=============================
+yasuki_core.bots.hints
+======================
 
-.. currentmodule:: yasuki_core.engine.bots.hints
+.. currentmodule:: yasuki_core.bots.hints
 
 .. rubric:: Classes
 
@@ -16,6 +16,6 @@ yasuki_core.engine.bots.hints
     optional_cost_answer
     register_ability_hint
 
-.. automodule:: yasuki_core.engine.bots.hints
+.. automodule:: yasuki_core.bots.hints
     :members:
     :undoc-members:

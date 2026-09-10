@@ -2,7 +2,7 @@ import psycopg
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.bots.policies import EconomicCyclePolicy, EconomicPolicy
+from yasuki_core.bots.policies import EconomicCyclePolicy, EconomicPolicy
 from yasuki_core.sim import cli
 from yasuki_core.sim.harness import Game
 from yasuki_core.sim.recording import Sample

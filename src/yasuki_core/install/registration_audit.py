@@ -13,7 +13,7 @@ from yasuki_core.engine.registrar import CARD_REGISTRIES
 # The ability hints are keyed by printed id like every other per-card registry, so they are
 # validated here even though a policy is not a rule.
 # Imported for the registration it performs -- the registry catalogues itself when this module runs.
-from yasuki_core.engine.bots import hints  # noqa: F401
+from yasuki_core.bots import hints  # noqa: F401
 
 # Without this the registries are empty and every check below passes vacuously.
 from yasuki_core.engine.rules import cards  # noqa: F401

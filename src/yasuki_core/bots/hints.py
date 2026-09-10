@@ -1,7 +1,7 @@
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
-from yasuki_core.engine.bots.queries import (
+from yasuki_core.bots.queries import (
     best_production,
     identifiable,
     in_play,
