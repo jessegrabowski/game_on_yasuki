@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import TableState
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.prints import FatePrint
 

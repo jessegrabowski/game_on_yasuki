@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import ActionPrint
 from yasuki_core.engine.players import PlayerId

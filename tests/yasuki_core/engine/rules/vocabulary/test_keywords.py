@@ -2,18 +2,18 @@ import ast
 import pathlib
 import re
 
-from yasuki_core.engine.rules import cards
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.install.card_index import DEFAULT_CARDS_PATH
 from yasuki_core.install.reminders import REMINDER_TEXT
 from yasuki_core.install.text_split import strip_markup
 
 from tests.yasuki_core.card_corpus import set_entries
 
-# Derived from the imported package rather than written as a path from the repository root: a
+# Derived from the imported module rather than written as a path from the repository root: a
 # relative path resolves against the working directory, and pytest run from anywhere else would
 # scan nothing and pass every check below without reading a line.
-RULES_DIR = pathlib.Path(cards.__file__).parent.parent
+VOCABULARY = pathlib.Path(keywords.__file__)
+RULES_DIR = VOCABULARY.parent.parent
 
 
 def engine_keywords() -> dict[str, str]:
@@ -43,6 +43,10 @@ def rules_constants() -> list[tuple[str, int, str, str]]:
     value)."""
     found = []
     for path in sorted(RULES_DIR.rglob("*.py")):
+        # The vocabulary is inside the layer it serves, and it is the one module allowed to spell
+        # a keyword; scanning it would report every constant it names as a scattered copy.
+        if path == VOCABULARY:
+            continue
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in tree.body:
             if not isinstance(node, ast.Assign) or not isinstance(node.value, ast.Constant):
@@ -82,8 +86,14 @@ def test_the_constant_scan_reads_the_rules_layer():
     # Guards the test above: an empty scan finds no offenders and reports success, so the scan has
     # to be shown to have read something. Anchored on the layer rather than on any one card, so
     # implementing or removing a card cannot silence it.
+    scanned = {module for module, _, _, _ in rules_constants()}
+
     assert len(list(RULES_DIR.rglob("*.py"))) > 20
-    assert any(module.startswith("cards/") for module, _, _, _ in rules_constants())
+    assert any(module.startswith("cards/") for module in scanned)
+    # The vocabulary package is skipped one file deep, not wholesale: widening the exclusion to the
+    # directory would drop seven modules from the scan and pass both checks above.
+    assert "vocabulary/keywords.py" not in scanned
+    assert "vocabulary/decisions.py" in scanned
 
 
 def test_no_clan_word_is_named_without_saying_which_sense_it_means():

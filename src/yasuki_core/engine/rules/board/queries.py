@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.table import Zone, ZoneKey, ZoneRole, location_of, province_holding
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint

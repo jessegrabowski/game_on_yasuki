@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.effects import Discard, DrawCard, Effect, RefillPr
 from yasuki_core.engine.rules.legality import KHARMIC_COST
 from yasuki_core.engine.rules.rulebook.costs import announce_rulebook_cost
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 
 
 def kharmic_draw(game: GameState, card_id: str) -> None:

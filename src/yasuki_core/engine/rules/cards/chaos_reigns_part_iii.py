@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side

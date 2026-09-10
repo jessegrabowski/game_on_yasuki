@@ -5,7 +5,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.clans import is_clan
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 
 
