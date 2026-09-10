@@ -8,7 +8,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.battle.records import AttackPhase
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
-from yasuki_core.engine.rules.vocabulary.events import GameEvent
+from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.modifiers import Ongoing
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,

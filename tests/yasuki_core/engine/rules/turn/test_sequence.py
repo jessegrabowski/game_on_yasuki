@@ -48,7 +48,7 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.turn import structure
 from yasuki_core.engine.rules.projection import project
-from yasuki_core.engine.rules.vocabulary.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     Straightened,
 )

@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.rulebook.equip import attach_restriction
-from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState

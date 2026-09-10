@@ -94,7 +94,7 @@ window *before* a producer's yield is read, so a trait firing there still counts
 production it interrupts, and `ProducedGold` announces the result once the Gold has landed.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.vocabulary.events
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.game_events
 
 .. autosummary::
 

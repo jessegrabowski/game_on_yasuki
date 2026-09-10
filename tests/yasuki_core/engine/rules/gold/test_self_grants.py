@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import Ask, GrantModifier
-from yasuki_core.engine.rules.vocabulary.events import ProducingGold
+from yasuki_core.engine.rules.vocabulary.game_events import ProducingGold
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.gold.self_grants import (
     GOLD_SELF_GRANT,

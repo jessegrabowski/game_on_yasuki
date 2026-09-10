@@ -1,5 +1,5 @@
 from yasuki_core.engine.rules.effects import CreateToken, Effect
-from yasuki_core.engine.rules.vocabulary.events import Destroyed
+from yasuki_core.engine.rules.vocabulary.game_events import Destroyed
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.triggers import TriggerContext, on
 

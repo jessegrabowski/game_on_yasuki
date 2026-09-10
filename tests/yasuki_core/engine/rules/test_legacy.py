@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     PlaceLegacy,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.vocabulary.events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules import legality

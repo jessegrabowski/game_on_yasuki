@@ -3,7 +3,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     Destroyed,
     GameEvent,

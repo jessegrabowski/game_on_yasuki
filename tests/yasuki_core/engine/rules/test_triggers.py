@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.gold.production import effective_gold_production
-from yasuki_core.engine.rules.vocabulary.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     Destroyed,
     EnteredPlay,

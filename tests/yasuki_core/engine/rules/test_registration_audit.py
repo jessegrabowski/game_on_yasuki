@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.registration_audit import (
     registered_card_ids,
     unregistered_card_ids,
 )
-from yasuki_core.engine.rules.vocabulary.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
 
 # The per-card registries registration_audit validates by name. Everything built through the

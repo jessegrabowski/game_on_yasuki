@@ -21,7 +21,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     GrantModifier,
 )
-from yasuki_core.engine.rules.vocabulary.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     ProducedGold,
     ProducingGold,
 )

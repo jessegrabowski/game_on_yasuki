@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize, LeaveBowed
 from yasuki_core.engine.rules.effects import AdjustCounter
-from yasuki_core.engine.rules.vocabulary.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     EnteredPlay,
     Revealed,

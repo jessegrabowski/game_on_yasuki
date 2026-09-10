@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.vocabulary.events import CounterGained, EnteredPlay, TurnStarted
+from yasuki_core.engine.rules.vocabulary.game_events import CounterGained, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState

@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.vocabulary.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     EnteredPlay,
     ProducedGold,

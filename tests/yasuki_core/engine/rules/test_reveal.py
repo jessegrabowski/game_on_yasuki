@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.effects import RefillProvince
-from yasuki_core.engine.rules.vocabulary.events import Revealed, TurnStarted
+from yasuki_core.engine.rules.vocabulary.game_events import Revealed, TurnStarted
 from yasuki_core.engine.rules.turn.sequence import begin_game
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone

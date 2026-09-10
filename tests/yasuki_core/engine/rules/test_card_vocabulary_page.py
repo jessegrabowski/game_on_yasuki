@@ -3,14 +3,14 @@ import pathlib
 import re
 
 from yasuki_core.engine.rules import effects
-from yasuki_core.engine.rules.vocabulary import decisions, events, modifiers, work
+from yasuki_core.engine.rules.vocabulary import decisions, game_events, modifiers, work
 from yasuki_core.game_pieces import counters
 
 PAGE = pathlib.Path("docs/design/card_vocabulary.md")
 # Entries inside an autosummary block, rather than every indented word on the page: a code sample
 # indented the same way would otherwise read as a listing and hide a genuine omission.
 AUTOSUMMARY = re.compile(r"^\.\. autosummary::\n\n((?:^   \w+\n)+)", re.M)
-CATEGORIES = (effects, events, decisions, work, modifiers, counters)
+CATEGORIES = (effects, game_events, decisions, work, modifiers, counters)
 
 
 def listed_types() -> set[str]:

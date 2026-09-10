@@ -96,7 +96,7 @@ yasuki_core
     yasuki_core.engine.rules.units.membership <yasuki_core.engine.rules.units.membership>
     yasuki_core.engine.rules.vocabulary.actions <yasuki_core.engine.rules.vocabulary.actions>
     yasuki_core.engine.rules.vocabulary.decisions <yasuki_core.engine.rules.vocabulary.decisions>
-    yasuki_core.engine.rules.vocabulary.events <yasuki_core.engine.rules.vocabulary.events>
+    yasuki_core.engine.rules.vocabulary.game_events <yasuki_core.engine.rules.vocabulary.game_events>
     yasuki_core.engine.rules.vocabulary.modifiers <yasuki_core.engine.rules.vocabulary.modifiers>
     yasuki_core.engine.rules.vocabulary.victory <yasuki_core.engine.rules.vocabulary.victory>
     yasuki_core.engine.rules.vocabulary.work <yasuki_core.engine.rules.vocabulary.work>

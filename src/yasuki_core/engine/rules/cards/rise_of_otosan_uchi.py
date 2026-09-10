@@ -48,7 +48,7 @@ from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.rules.vocabulary.events import EnteredPlay, Straightened
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces import keywords
