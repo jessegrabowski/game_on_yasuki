@@ -164,3 +164,20 @@ def test_the_board_substrate_does_not_read_the_rules():
     }
 
     assert reaching == set()
+
+
+def test_the_board_substrate_does_not_read_the_bots():
+    # A policy is a consumer of the engine, at the same level as sim/, and bots/ sits beside engine/
+    # to say so. A substrate module importing one inverts that and drags the AI into the manual
+    # intent path yasuki_gui and yasuki_web drive. The headless driver is the exception and stays
+    # one, because running a game means handing it an Agent and a Policy.
+    drives_a_policy = {"runner.py"}
+    reaching = {
+        source.name
+        for source in sorted(ENGINE.glob("*.py"))
+        if source.name not in drives_a_policy
+        for name in _imported_modules(source)
+        if name.startswith("yasuki_core.bots")
+    }
+
+    assert reaching == set()
