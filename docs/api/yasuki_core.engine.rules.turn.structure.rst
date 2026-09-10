@@ -8,13 +8,11 @@ yasuki_core.engine.rules.turn.structure
 .. autosummary::
 
     ActionRound
-    BattleSegment
     Boundary
     Moment
     Phase
     RoundKind
     RoundTimings
-    Segment
     Turn
 
 .. rubric:: Functions

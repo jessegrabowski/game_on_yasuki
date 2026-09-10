@@ -22,11 +22,11 @@ from yasuki_core.engine.rules.effects import Bow, GrantPriority
 from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
     BEGINNING_OF_COMBAT,
-    BattleSegment,
     Boundary,
     Moment,
     RoundKind,
 )
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 

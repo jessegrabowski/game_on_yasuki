@@ -3,7 +3,7 @@ from typing import NamedTuple
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey
-from yasuki_core.engine.rules.turn.structure import BattleSegment, Segment
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 
 
 class BattleOutcome(NamedTuple):

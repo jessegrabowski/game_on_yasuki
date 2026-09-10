@@ -2,7 +2,8 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.turn.structure import BattleSegment, Phase, Segment
+from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_gui.labels import BATTLE_SEGMENT_CHIPS, PHASE_LABELS, turn_context

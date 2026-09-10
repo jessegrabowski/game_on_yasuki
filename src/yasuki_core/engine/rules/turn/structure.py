@@ -3,6 +3,7 @@ from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 
 
 class Phase(Enum):
@@ -92,21 +93,6 @@ class ActionRound:
     kind: RoundKind = RoundKind.PHASE
 
 
-class BattleSegment(Enum):
-    """One battle's segments, in the order the CR's Battle Sequence walks them. Nested inside the
-    Attack Phase's :class:`Segment.FIGHT`, which is where battles are fought.
-
-    Only the first two are Action Rounds — the CR's own list of round types names them and stops
-    there. The last two are named because the battle passes through them and cards act around them,
-    not because a seat is asked anything in either.
-    """
-
-    ENGAGE = "engage"
-    COMBAT = "combat"
-    RESOLUTION = "resolution"
-    AFTER_RESOLUTION = "after_resolution"
-
-
 # What each battle segment that is an Action Round permits. Both are open to every seat and permit
 # only their own designator, and both start with the Defender (CR, Battle Sequence).
 BATTLE_SEGMENT_TIMINGS: dict[BattleSegment, RoundTimings] = {
@@ -117,15 +103,6 @@ BATTLE_SEGMENT_TIMINGS: dict[BattleSegment, RoundTimings] = {
         active=frozenset({ActionTiming.BATTLE}), others=frozenset({ActionTiming.BATTLE})
     ),
 }
-
-
-class Segment(Enum):
-    """The Attack Phase's segments, in the order the CR walks them. A battle fought inside the Fight
-    Segment has segments of its own — see :class:`BattleSegment`."""
-
-    DECLARATION = "declaration"
-    MANEUVERS = "maneuvers"
-    FIGHT = "fight"
 
 
 class Turn(Enum):

@@ -10,12 +10,7 @@ from yasuki_core.engine.rules.battle.records import AttackPhase
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.modifiers import Ongoing
-from yasuki_core.engine.rules.turn.structure import (
-    ActionRound,
-    Moment,
-    PHASE_TIMINGS,
-    Phase,
-)
+from yasuki_core.engine.rules.turn.structure import ActionRound, Moment, PHASE_TIMINGS, Phase
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.rules.vocabulary.work import WorkItem
 
