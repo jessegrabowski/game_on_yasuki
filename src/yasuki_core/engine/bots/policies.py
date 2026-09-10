@@ -2,7 +2,7 @@ from typing import Protocol
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Cycle,
@@ -24,7 +24,7 @@ from yasuki_core.engine.bots.queries import (
     readable_province_cards,
     spendable,
 )
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     ChooseBattlefield,
     assignment,
@@ -35,7 +35,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionRequest,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, GameView
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard

@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseCards,
     ChooseDistribution,
@@ -16,18 +16,16 @@ from yasuki_core.engine.rules.decisions import (
     DecisionRequest,
 )
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.rules.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     CounterGained,
     Destroyed,
     EnteredPlay,
     GameEvent,
-    GameLost,
-    GameWon,
     Revealed,
     Straightened,
 )
-from yasuki_core.engine.rules.modifiers import (
+from yasuki_core.engine.rules.vocabulary.modifiers import (
     Duration,
     KeywordGrant,
     LobbyModifier,
@@ -38,7 +36,7 @@ from yasuki_core.engine.rules.modifiers import (
 )
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, flow_resolves
-from yasuki_core.engine.rules.work import ApplyEffects
+from yasuki_core.engine.rules.vocabulary.work import ApplyEffects
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     UNPLACED_BOARD_POS,
@@ -1159,7 +1157,7 @@ class LoseGame(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.lose(self.seat, self.reason, self.victory)
-        return [GameLost(self.seat, self.reason)]
+        return []
 
 
 @dataclass(frozen=True, slots=True)
@@ -1182,7 +1180,7 @@ class WinGame(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.win(self.seat, self.reason)
-        return [GameWon(self.seat, self.reason)]
+        return []
 
 
 @dataclass(frozen=True, slots=True)

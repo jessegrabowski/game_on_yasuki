@@ -8,7 +8,7 @@ from yasuki_core.engine.snapshot import (
     decode_initial,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Cycle,
@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 
 

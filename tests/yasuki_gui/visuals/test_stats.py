@@ -3,7 +3,7 @@ import tkinter as tk
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint

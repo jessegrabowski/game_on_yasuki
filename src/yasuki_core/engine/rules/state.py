@@ -5,19 +5,19 @@ from numpy.random import Generator, default_rng
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.rules.actions import Action
+from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.battle.records import AttackPhase
-from yasuki_core.engine.rules.decisions import DecisionRequest
-from yasuki_core.engine.rules.events import GameEvent
-from yasuki_core.engine.rules.modifiers import Ongoing
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
+from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
+from yasuki_core.engine.rules.vocabulary.modifiers import Ongoing
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     Moment,
     PHASE_TIMINGS,
     Phase,
 )
-from yasuki_core.engine.rules.victory import VictoryRule
-from yasuki_core.engine.rules.work import WorkItem
+from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
+from yasuki_core.engine.rules.vocabulary.work import WorkItem
 
 
 def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:

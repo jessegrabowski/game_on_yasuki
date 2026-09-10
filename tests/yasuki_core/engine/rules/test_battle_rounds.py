@@ -4,7 +4,7 @@ import pytest
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     BattleDesignator,
@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.actions import (
     Pass,
     PlayStrategy,
 )
-from yasuki_core.engine.rules.decisions import ChooseBattlefield, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules import legality, triggers
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.battle import resolution
@@ -30,7 +30,7 @@ from yasuki_core.engine.rules.turn.structure import (
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 
-from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint

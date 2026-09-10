@@ -1,6 +1,6 @@
 from typing import Protocol, runtime_checkable
 
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     BanishForLegacy,
     ChooseDistribution,
     ChooseLegacyCard,

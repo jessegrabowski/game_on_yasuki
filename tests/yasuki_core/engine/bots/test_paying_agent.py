@@ -1,8 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.bots.agents import AutoAgent, PayingAgent, is_production_window
-from yasuki_core.engine.rules.decisions import ChoosePayment, Confirm, DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Confirm, DiscardToHandSize
 from yasuki_core.engine.rules.projection import project
-from yasuki_core.engine.rules.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.bots.policies import EconomicPolicy
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession

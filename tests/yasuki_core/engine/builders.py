@@ -1,9 +1,9 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.turn import sequence
-from yasuki_core.engine.rules.actions import Pass
+from yasuki_core.engine.rules.vocabulary.actions import Pass
 from yasuki_core.engine.bots.agents import PayingAgent, is_production_window
-from yasuki_core.engine.rules.decisions import ChoosePayment, Confirm
+from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Confirm
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import AttachTarget, DeckKey, TableState, ZoneKey, ZoneRole

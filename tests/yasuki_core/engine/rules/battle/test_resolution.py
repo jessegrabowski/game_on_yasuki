@@ -3,8 +3,8 @@ import pytest
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.actions import ActionTiming, DeclareAttack, Pass
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, DeclareAttack, Pass
+from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     ChooseBattlefield,
     DecisionResponse,
@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.bots.policies import EconomicPolicy, GoldRushPolicy
 from yasuki_core.engine.rules.turn.structure import Phase, Segment
-from yasuki_core.engine.rules.victory import VictoryRule
+from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces import keywords

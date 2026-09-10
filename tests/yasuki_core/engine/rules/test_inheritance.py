@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.actions import ActionTiming, Inheritance
-from yasuki_core.engine.rules.decisions import ChooseInheritanceTarget, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, Inheritance
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseInheritanceTarget, DecisionResponse
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.runner import GameRunner

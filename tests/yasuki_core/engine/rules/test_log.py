@@ -10,7 +10,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint, StrongholdPrint
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Cycle,
@@ -27,7 +27,7 @@ from yasuki_core.engine.rules.actions import (
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.log import (
     GameLog,
     Act,

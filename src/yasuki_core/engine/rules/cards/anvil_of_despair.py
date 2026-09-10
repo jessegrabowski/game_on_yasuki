@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import Ask, Bow, CreateToken, Effect, Move, PayGold
 from yasuki_core.engine.rules.gold.payment import can_afford
 from yasuki_core.engine.rules.state import GameState

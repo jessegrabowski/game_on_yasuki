@@ -1,5 +1,5 @@
-from yasuki_core.engine.rules.actions import Action, DeclareAttack, Pass
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.actions import Action, DeclareAttack, Pass
+from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     ChooseAmount,
     ChooseBattlefield,

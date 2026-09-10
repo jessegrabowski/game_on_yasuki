@@ -1,15 +1,15 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import PlayStrategy, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy, Recruit
 from yasuki_core.engine.rules.effects import TakeFavor
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseInvestAmount,
     ChooseOption,
     Confirm,
 )
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS, BattleSegment
 from yasuki_core.engine.runner import GameRunner

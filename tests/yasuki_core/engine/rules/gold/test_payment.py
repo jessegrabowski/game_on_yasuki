@@ -4,11 +4,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.rules.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence
-from yasuki_core.engine.rules.modifiers import Duration, Stat
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
     Confirm,
     DecisionResponse,
@@ -21,13 +21,13 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     GrantModifier,
 )
-from yasuki_core.engine.rules.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     ProducedGold,
     ProducingGold,
 )
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.work import ContinuePayment
+from yasuki_core.engine.rules.vocabulary.work import ContinuePayment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 

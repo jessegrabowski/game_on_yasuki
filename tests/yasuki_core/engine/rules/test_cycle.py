@@ -1,8 +1,8 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Cycle
-from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
-from yasuki_core.engine.rules.events import Revealed
+from yasuki_core.engine.rules.vocabulary.actions import Cycle
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.game_events import Revealed
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneRole
 from yasuki_core.game_pieces.constants import Side

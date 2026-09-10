@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, Recruit
 from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     CAVALRY_FOLLOWER,
     HORROR,
@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     EXPENDABLE_SERVANT,
     LION_ANCESTOR,
 )
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseOption,
     Confirm,
@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.decisions import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_options
 from yasuki_core.engine.rules.effects import Straighten, TakeFavor
 from yasuki_core.engine.rules.state import GameState
@@ -36,8 +36,8 @@ from yasuki_core.game_pieces.prints import FatePrint
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.rules.actions import DeclareAttack, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, PlayStrategy
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.prints import ActionPrint
 

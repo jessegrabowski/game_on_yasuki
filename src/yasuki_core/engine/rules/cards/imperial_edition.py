@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, bow_parent_and_de
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import attack_targets, personalities_in_play
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard

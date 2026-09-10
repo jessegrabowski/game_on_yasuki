@@ -94,15 +94,13 @@ window *before* a producer's yield is read, so a trait firing there still counts
 production it interrupts, and `ProducedGold` announces the result once the Gold has landed.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.events
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.game_events
 
 .. autosummary::
 
    CardDiscarded
    CounterGained
    Destroyed
-   GameLost
-   GameWon
    EnteredPlay
    ProducedGold
    ProducingGold
@@ -119,7 +117,7 @@ execution resumes. The `accepts` method verifies that a response is structurally
 Legality with respect to game state is checked separately.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.decisions
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.decisions
 
 .. autosummary::
 
@@ -155,7 +153,7 @@ stack is last in, first out. Work items are ephemeral: replay reconstructs the s
 the action rather than by deserializing it.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.work
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.work
 
 .. autosummary::
 
@@ -180,7 +178,7 @@ each counter declares the per-count stat it grants, so a card's wealth tokens ra
 Production without a modifier being recorded.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.modifiers
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.modifiers
 
 .. autosummary::
 

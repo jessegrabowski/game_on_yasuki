@@ -2,8 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.gold.self_grants import register_self_grant, SELF_GRANT, self_grant
 from yasuki_core.engine.rules.board.seats import went_second
 from yasuki_core.engine.rules.effects import DelayStraighten, Effect, GainHonor, GrantModifier
-from yasuki_core.engine.rules.events import ProducingGold
-from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.game_events import ProducingGold
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on

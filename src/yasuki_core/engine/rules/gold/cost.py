@@ -1,4 +1,4 @@
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.table import unit_members

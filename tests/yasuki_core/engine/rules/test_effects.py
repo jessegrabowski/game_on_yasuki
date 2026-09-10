@@ -5,7 +5,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import effects
-from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
 from yasuki_core.engine.rules.effects import (
@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     Unpayable,
 )
-from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType, Side

@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 
 from yasuki_core.engine.redaction import HiddenCard
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard

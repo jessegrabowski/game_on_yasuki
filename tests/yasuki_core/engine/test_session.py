@@ -7,7 +7,7 @@ from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, Zo
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseEquipTarget,
     ChoosePayment,
     DiscardToHandSize,
@@ -15,14 +15,14 @@ from yasuki_core.engine.rules.decisions import (
 )
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DynastyDiscard,
     Equip,
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.log import Answer, replay
 from yasuki_core.engine.rules.triggers import on
 from yasuki_core.engine.session import EngineSession

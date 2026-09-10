@@ -11,8 +11,8 @@ from yasuki_core.engine.bots.queries import (
     readable_province_cards,
     spendable,
 )
-from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, ChooseCards
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.registrar import HandlerRegistry
 from yasuki_core.game_pieces import keywords

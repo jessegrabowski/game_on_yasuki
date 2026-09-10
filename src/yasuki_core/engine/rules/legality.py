@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     fixed_invest_amount,
     invest_amounts,
 )
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ACTION_TIMINGS,
     ActionTiming,

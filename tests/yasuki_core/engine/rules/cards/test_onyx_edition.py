@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
@@ -10,9 +10,9 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
 )
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
-from yasuki_core.engine.rules.decisions import ChooseInvestAmount, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseInvestAmount, DecisionResponse
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
-from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.units.composition import unit_force

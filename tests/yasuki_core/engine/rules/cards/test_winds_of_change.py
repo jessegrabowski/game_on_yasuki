@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.rulebook.favor_payment import (
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn import action_sequence
-from yasuki_core.engine.rules.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import PHASE_TIMINGS, ActionRound, Phase
 from yasuki_core.engine.rules.triggers import resolve_effects

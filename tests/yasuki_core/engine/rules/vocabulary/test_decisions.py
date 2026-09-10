@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     DecisionRequest,
     ChooseCards,

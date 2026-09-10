@@ -10,12 +10,12 @@ from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import BattleOutcome
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.effects import Discard
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.projection import _identifiable_ids, project
 
 from tests.yasuki_core.engine.builders import (

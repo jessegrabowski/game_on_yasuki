@@ -1,12 +1,12 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     DynastyDiscard,
     Pass,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import end_phase, holding, province_card, put_in_play

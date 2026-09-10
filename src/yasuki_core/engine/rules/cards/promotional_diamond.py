@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import owned_personalities
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.effects import (
     AskDistribution,

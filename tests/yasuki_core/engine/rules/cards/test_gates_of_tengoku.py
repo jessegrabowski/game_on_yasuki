@@ -1,14 +1,14 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.gates_of_tengoku import SASADAS_OROCHI
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseCards,
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession

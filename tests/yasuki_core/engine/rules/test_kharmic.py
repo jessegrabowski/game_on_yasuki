@@ -3,7 +3,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.actions import KharmicDraw, KharmicRefill, Pass
+from yasuki_core.engine.rules.vocabulary.actions import KharmicDraw, KharmicRefill, Pass
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard

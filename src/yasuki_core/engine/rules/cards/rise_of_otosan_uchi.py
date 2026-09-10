@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_holdings,
     owned_personalities,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -45,10 +45,10 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
-from yasuki_core.engine.rules.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.rules.events import EnteredPlay, Straightened
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces import keywords

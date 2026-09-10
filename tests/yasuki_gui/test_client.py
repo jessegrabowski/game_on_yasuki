@@ -2,7 +2,7 @@ import pytest
 from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Cycle, Pass
+from yasuki_core.engine.rules.vocabulary.actions import Cycle, Pass
 from yasuki_core.game_pieces.prints import StrongholdPrint
 
 import yasuki_gui.services.presenter as presenter_mod

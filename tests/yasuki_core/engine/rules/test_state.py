@@ -2,8 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.state import GameState, rules_at_start
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.decisions import DiscardToHandSize
-from yasuki_core.engine.rules.victory import VictoryRule
+from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 
 from tests.yasuki_core.engine.builders import province_card
 

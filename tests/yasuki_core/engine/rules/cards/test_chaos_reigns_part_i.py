@@ -9,16 +9,16 @@ from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     DynastyDiscard,
     Pass,
     PlayStrategy,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import Discard, DiscardFavor, TakeFavor
-from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo

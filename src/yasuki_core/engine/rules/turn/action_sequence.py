@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.abilities.strategy import (
     resolve_strategy,
     play_strategy,
 )
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Cycle,
@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     BanishForLegacy,
     ChooseAbilityTarget,
@@ -80,7 +80,7 @@ from yasuki_core.engine.rules.turn.sequence import (
     yield_priority,
 )
 from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.work import (
+from yasuki_core.engine.rules.vocabulary.work import (
     ApplyAbilityEffects,
     ApplyEffects,
     CompleteProduction,

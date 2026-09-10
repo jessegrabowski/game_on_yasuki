@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.work import DiscardPlayed, ResolveStrategy
+from yasuki_core.engine.rules.vocabulary.work import DiscardPlayed, ResolveStrategy
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 
 

@@ -5,7 +5,7 @@ from typing import Protocol
 import yasuki_gui.config as gui_config
 from yasuki_gui.config import load_hotkeys
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.cards import L5RCard

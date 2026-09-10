@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 
 
 class Phase(Enum):

@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.abilities.idioms import register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import owned_personalities
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -22,7 +22,7 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     Move,
 )
-from yasuki_core.engine.rules.events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.legality import has_wind
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import action_did, at_cap, choice_resolver

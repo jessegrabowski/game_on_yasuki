@@ -1,8 +1,8 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.promotional_emperor import ASHIGARU
-from yasuki_core.engine.rules.decisions import ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DecisionResponse
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.units.composition import unit_force

@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility
-from yasuki_core.engine.rules.decisions import Confirm, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.decisions import Confirm, DecisionResponse
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole

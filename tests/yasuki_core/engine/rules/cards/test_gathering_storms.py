@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
-from yasuki_core.engine.rules.actions import ActivateAbility
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     DecisionResponse,
 )

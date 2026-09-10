@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
     Choose,
     Effect,
@@ -12,9 +12,9 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.rulebook.equip import attach_restriction
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.modifiers import Duration
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole

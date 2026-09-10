@@ -3,8 +3,8 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import ActivateAbility, KharmicDraw, Pass, Recruit
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, KharmicDraw, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     Confirm,
     ChoosePayment,
@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.stats.province_strength import effective_province_
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.effects import Destroy, Discard
 from yasuki_core.engine.rules.log import replay
-from yasuki_core.engine.rules.modifiers import Duration, Minimum, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side

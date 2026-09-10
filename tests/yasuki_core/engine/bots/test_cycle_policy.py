@@ -1,7 +1,7 @@
 from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Cycle, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Cycle, Pass, Recruit
 from yasuki_core.engine.bots.policies import EconomicCyclePolicy, cards_to_cycle
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole

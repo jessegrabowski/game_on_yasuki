@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect
-from yasuki_core.engine.rules.events import CounterGained, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import CounterGained, EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, fire, on
 from yasuki_core.game_pieces.counters import WEALTH
 

@@ -1,7 +1,7 @@
 import tkinter as tk
 from typing import NamedTuple
 
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 

@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.keyword_grants import (
     effective_keywords,
 )
-from yasuki_core.engine.rules.modifiers import Duration, KeywordGrant
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 

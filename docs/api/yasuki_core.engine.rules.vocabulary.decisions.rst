@@ -1,7 +1,7 @@
-yasuki_core.engine.rules.decisions
-==================================
+yasuki_core.engine.rules.vocabulary.decisions
+=============================================
 
-.. currentmodule:: yasuki_core.engine.rules.decisions
+.. currentmodule:: yasuki_core.engine.rules.vocabulary.decisions
 
 .. rubric:: Classes
 
@@ -36,6 +36,6 @@ yasuki_core.engine.rules.decisions
     assignment
     assignment_token
 
-.. automodule:: yasuki_core.engine.rules.decisions
+.. automodule:: yasuki_core.engine.rules.vocabulary.decisions
     :members:
     :undoc-members:

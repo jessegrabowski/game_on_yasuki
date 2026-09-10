@@ -1,7 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.effects import RefillProvince
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.work import ApplyEffects
+from yasuki_core.engine.rules.vocabulary.work import ApplyEffects
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 
 

@@ -6,15 +6,19 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import equip_invest_amount, finish_invest
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.board.queries import owned_personalities
-from yasuki_core.engine.rules.decisions import ChooseEquipTarget, ChoosePayment, DecisionResponse
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseEquipTarget,
+    ChoosePayment,
+    DecisionResponse,
+)
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
-from yasuki_core.engine.rules.work import ResolveEquip
+from yasuki_core.engine.rules.vocabulary.work import ResolveEquip
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard

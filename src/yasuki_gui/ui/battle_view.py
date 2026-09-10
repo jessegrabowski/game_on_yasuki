@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import NamedTuple
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.battle.records import BattleOutcome

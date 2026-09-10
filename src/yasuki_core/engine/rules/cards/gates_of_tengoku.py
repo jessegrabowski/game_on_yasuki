@@ -19,8 +19,8 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     PayGold,
 )
-from yasuki_core.engine.rules.events import EnteredPlay
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.gold.producers import reachable_gold

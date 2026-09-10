@@ -4,13 +4,13 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import finish_invest
 from yasuki_core.engine.rules.abilities.registry import enters_play_bowed, invest_amounts
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseFortificationProvince,
     ChooseInvestAmount,
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.legality import proclaim_key, recruit_cost
 from yasuki_core.engine.rules.turn.provinces import defer_refill
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
-from yasuki_core.engine.rules.work import FinishRecruit, ResolveRecruit
+from yasuki_core.engine.rules.vocabulary.work import FinishRecruit, ResolveRecruit
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey
 from yasuki_core.game_pieces import keywords
 from yasuki_core.game_pieces.cards import L5RCard

@@ -12,9 +12,15 @@ from yasuki_core.game_pieces.prints import (
     SenseiPrint,
     StrongholdPrint,
 )
-from yasuki_core.engine.rules.actions import ActionTiming, ActivateAbility, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules import legality
@@ -41,7 +47,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     ability_for,
     register_ability,
 )
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     BattleDesignator,
 )
 from yasuki_core.engine.rules.effects import AdjustCounter
@@ -54,7 +60,7 @@ from tests.yasuki_core.engine.builders import (
     attached,
     province_card,
 )
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     Cycle,
     DynastyDiscard,
 )

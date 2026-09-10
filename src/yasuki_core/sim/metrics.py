@@ -124,9 +124,9 @@ def provinces_cleared(game: GameState, seat: PlayerId) -> int:
 
     This is the total, not a verdict on it. Recruiting a card and discarding one leave identical
     boards, and they are opposite signals — a deck delivering what was wanted versus one being dug
-    through. Count :class:`~yasuki_core.engine.rules.actions.Recruit` and
-    :class:`~yasuki_core.engine.rules.actions.DynastyDiscard` actions for that split; both draw only
-    from provinces, so together they attribute every province a seat turned over by choice.
+    through. Count :class:`~yasuki_core.engine.rules.vocabulary.actions.Recruit` and
+    :class:`~yasuki_core.engine.rules.vocabulary.actions.DynastyDiscard` actions for that split.
+    Both draw only from provinces, so together they attribute every province a seat turned over by choice.
 
     Those two do not have to add up to this number. A Legacy search and an ability-driven recruit
     both vacate a province without either action being taken, so the shortfall measures how much of

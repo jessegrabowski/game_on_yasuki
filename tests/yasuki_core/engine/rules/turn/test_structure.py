@@ -37,4 +37,4 @@ def test_the_turn_vocabulary_is_a_leaf():
         if isinstance(node, ast.ImportFrom) and node.module and ".rules." in f"{node.module}."
     }
 
-    assert imported == {"yasuki_core.engine.rules.actions"}
+    assert imported == {"yasuki_core.engine.rules.vocabulary.actions"}

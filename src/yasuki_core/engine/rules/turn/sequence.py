@@ -5,11 +5,11 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import state_based_actions, triggers
 from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.decisions import DiscardToHandSize, LeaveBowed
+from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize, LeaveBowed
 from yasuki_core.engine.rules.effects import AdjustCounter
-from yasuki_core.engine.rules.events import (
+from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     EnteredPlay,
     Revealed,
@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.events import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import activatable, permitted_timings
-from yasuki_core.engine.rules.modifiers import Duration
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,

@@ -19,14 +19,14 @@ from yasuki_core.engine import runner as runner_module
 from yasuki_core.engine.runner import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
-from yasuki_core.engine.rules.decisions import (
+from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     Confirm,
     DecisionResponse,
     DiscardToHandSize,
 )
 from yasuki_core.engine.rules.turn import sequence
-from yasuki_core.engine.rules.actions import (
+from yasuki_core.engine.rules.vocabulary.actions import (
     PlayStrategy,
     ActivateAbility,
     Recruit,
@@ -41,13 +41,13 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
-from yasuki_core.engine.rules.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine import runner
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.actions import DynastyDiscard
+from yasuki_core.engine.rules.vocabulary.actions import DynastyDiscard
 from yasuki_core.engine.runner import GameRunner, play_game
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer, FAVOR_PAYERS
 from yasuki_core.engine.rules.effects import TakeFavor

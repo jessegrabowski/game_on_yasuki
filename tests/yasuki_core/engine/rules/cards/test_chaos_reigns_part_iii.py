@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     FUSHICHO,
@@ -9,9 +9,9 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     KANPEKI_DYNASTY,
     ZOMBIE_FOLLOWER,
 )
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
-from yasuki_core.engine.rules.events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.session import EngineSession

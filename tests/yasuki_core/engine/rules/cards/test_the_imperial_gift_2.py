@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import DeclareAttack, Pass, PlayStrategy
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard

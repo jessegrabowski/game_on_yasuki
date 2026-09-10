@@ -1,10 +1,10 @@
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import ActionTiming, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.abilities.model import CardLocation
-from yasuki_core.engine.rules.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
-from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole

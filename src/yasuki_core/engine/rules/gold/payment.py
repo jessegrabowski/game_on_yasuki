@@ -1,12 +1,12 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.decisions import ChoosePayment
+from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment
 from yasuki_core.engine.rules.effects import Ask, Effect
 from yasuki_core.engine.rules.gold.producers import gold_producers, reachable_gold
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production, untaken_self_grant
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext
-from yasuki_core.engine.rules.work import ContinuePayment
+from yasuki_core.engine.rules.vocabulary.work import ContinuePayment
 from yasuki_core.game_pieces.cards import L5RCard
 
 
