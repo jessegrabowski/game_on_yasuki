@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     PlaceLegacy,
 )
 from yasuki_core.bots.policies import EconomicLegacyPolicy
-from yasuki_core.engine.runner import Controls, run_game
+from yasuki_core.engine.driver import Controls, run_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.constants import Side

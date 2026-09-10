@@ -15,7 +15,7 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.bots.agents import AutoAgent
-from yasuki_core.engine.runner import Controls
+from yasuki_core.engine.driver import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.vocabulary.decisions import (

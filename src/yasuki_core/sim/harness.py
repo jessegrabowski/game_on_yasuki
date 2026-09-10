@@ -8,7 +8,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.bots.agents import Agent
 from yasuki_core.bots.policies import Policy
-from yasuki_core.engine.runner import Controls, play_game
+from yasuki_core.engine.driver import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_setup import build_state_from_deck
 from yasuki_core.sim.metrics import Metric

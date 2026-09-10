@@ -10,8 +10,8 @@ from yasuki_core.bots.policies import PassPolicy, RandomPolicy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine import runner
-from yasuki_core.engine.runner import Controls, play_game, run_game
+from yasuki_core.engine import driver
+from yasuki_core.engine.driver import Controls, play_game, run_game
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
@@ -309,7 +309,7 @@ class _AlwaysDiscards:
 def test_a_round_that_never_closes_raises_instead_of_running_forever(monkeypatch):
     # A round ends only when every seat passes consecutively, so a policy that always acts keeps it
     # open. Without the ceiling a Monte Carlo run wedges silently instead of failing.
-    monkeypatch.setattr(runner, "MAX_ACTIONS_PER_ROUND", 2)
+    monkeypatch.setattr(driver, "MAX_ACTIONS_PER_ROUND", 2)
     state = dealt_table()
     for index in range(4):
         province_card(state, f"prov{index}", printed_id="plain_holding", index=index)

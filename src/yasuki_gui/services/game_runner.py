@@ -3,7 +3,7 @@ from typing import NamedTuple
 
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
-from yasuki_core.engine.runner import Controls, MAX_ACTIONS_PER_ROUND
+from yasuki_core.engine.driver import Controls, MAX_ACTIONS_PER_ROUND
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.registry import ability_for, invest_amounts
@@ -405,7 +405,7 @@ class GameRunner:
         ------
         RuntimeError
             If one Action Round runs past
-            :data:`~yasuki_core.engine.runner.MAX_ACTIONS_PER_ROUND`. A round closes only once
+            :data:`~yasuki_core.engine.driver.MAX_ACTIONS_PER_ROUND`. A round closes only once
             every seat passes consecutively, so a policy that always finds something to take would
             otherwise hang the caller.
         """

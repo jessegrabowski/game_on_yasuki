@@ -100,7 +100,7 @@ def run_game(
     ------
     RuntimeError
         If a seat has no legal action, a policy returns one it was not offered, or one Action Round
-        runs past :data:`~yasuki_core.engine.runner.MAX_ACTIONS_PER_ROUND` without closing.
+        runs past :data:`~yasuki_core.engine.driver.MAX_ACTIONS_PER_ROUND` without closing.
     """
     game = session.game
     watched: int | None = None
