@@ -1,7 +1,7 @@
-yasuki_core.engine.action_log
-=============================
+yasuki_core.engine.replay.action_log
+====================================
 
-.. currentmodule:: yasuki_core.engine.action_log
+.. currentmodule:: yasuki_core.engine.replay.action_log
 
 .. rubric:: Classes
 
@@ -23,6 +23,6 @@ yasuki_core.engine.action_log
     flush
     replay
 
-.. automodule:: yasuki_core.engine.action_log
+.. automodule:: yasuki_core.engine.replay.action_log
     :members:
     :undoc-members:

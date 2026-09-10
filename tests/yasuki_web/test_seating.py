@@ -7,7 +7,7 @@ from yasuki_web import websocket as ws_module
 from yasuki_web.websocket import GameRoom
 from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.action_log import SessionEntry
+from yasuki_core.engine.replay.action_log import SessionEntry
 
 from tests.yasuki_web._support import account, as_user
 

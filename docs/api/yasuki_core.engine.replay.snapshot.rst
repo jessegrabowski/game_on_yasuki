@@ -1,7 +1,7 @@
-yasuki_core.engine.snapshot
-===========================
+yasuki_core.engine.replay.snapshot
+==================================
 
-.. currentmodule:: yasuki_core.engine.snapshot
+.. currentmodule:: yasuki_core.engine.replay.snapshot
 
 .. rubric:: Classes
 
@@ -17,6 +17,6 @@ yasuki_core.engine.snapshot
     decode_initial
     encode_initial
 
-.. automodule:: yasuki_core.engine.snapshot
+.. automodule:: yasuki_core.engine.replay.snapshot
     :members:
     :undoc-members:

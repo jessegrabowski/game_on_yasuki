@@ -4,7 +4,7 @@ from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.snapshot import InitialRecord
+from yasuki_core.engine.replay.snapshot import InitialRecord
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,

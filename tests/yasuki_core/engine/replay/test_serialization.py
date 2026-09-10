@@ -53,7 +53,7 @@ from yasuki_core.engine.intents import (
     Attach,
     Detach,
 )
-from yasuki_core.engine.serialization import (
+from yasuki_core.engine.replay.serialization import (
     encode_intent,
     decode_intent,
     encode_card,

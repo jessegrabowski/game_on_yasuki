@@ -36,13 +36,13 @@ from yasuki_core.engine.intents import (
     SearchDeck,
     SpawnCard,
 )
-from yasuki_core.engine.action_log import (
+from yasuki_core.engine.replay.action_log import (
     ActionLog,
     ChatEntry,
     SessionEntry,
     apply_and_log,
 )
-from yasuki_core.engine.snapshot import InitialRecord
+from yasuki_core.engine.replay.snapshot import InitialRecord
 from yasuki_core.engine.redaction import redact
 from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
 from yasuki_core.game_pieces.factory import (

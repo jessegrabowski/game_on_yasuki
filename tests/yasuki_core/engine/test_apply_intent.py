@@ -15,6 +15,7 @@ from yasuki_core.engine.table import (
     ZoneRole,
 )
 from yasuki_core.engine.intents import (
+    apply_intent,
     MoveCard,
     SetCardPos,
     SetCardPositions,
@@ -49,7 +50,6 @@ from yasuki_core.engine.intents import (
     SetHonor,
     SpawnCard,
     RemoveCard,
-    apply_intent,
     flip_coin,
     roll_dice,
 )

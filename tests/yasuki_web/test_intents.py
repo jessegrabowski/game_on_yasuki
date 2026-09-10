@@ -10,7 +10,7 @@ from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey, BoardPos
 from yasuki_core.engine.intents import IntentOp
-from yasuki_core.engine.action_log import ChatEntry, SessionEntry
+from yasuki_core.engine.replay.action_log import ChatEntry, SessionEntry
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint

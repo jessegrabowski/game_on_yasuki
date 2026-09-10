@@ -8,7 +8,7 @@ from yasuki_web.schemas import IntentEnvelope
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import IntentOp
-from yasuki_core.engine.action_log import SessionEntry
+from yasuki_core.engine.replay.action_log import SessionEntry
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint

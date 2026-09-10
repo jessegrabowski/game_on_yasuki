@@ -4,7 +4,7 @@ from typing import Annotated, Literal
 from numpy.random import Generator
 
 from yasuki_core.engine.intents import Intent, IntentOp, flip_coin, roll_dice
-from yasuki_core.engine.serialization import decode_intent
+from yasuki_core.engine.replay.serialization import decode_intent
 
 # A shuffle records the seed its order came from rather than the order itself. 31 bits because the
 # seed rides on the action log as a plain int.

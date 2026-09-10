@@ -4,9 +4,9 @@ from collections.abc import Sequence
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.intents import Intent, Event, apply_intent
-from yasuki_core.engine.serialization import encode_intent, decode_intent
-from yasuki_core.engine.snapshot import (
+from yasuki_core.engine.intents import Event, Intent, apply_intent
+from yasuki_core.engine.replay.serialization import encode_intent, decode_intent
+from yasuki_core.engine.replay.snapshot import (
     InitialRecord,
     build_initial_state,
     encode_initial,

@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.table import TableState, SeatInfo, ZoneKey, DeckKey, BoardPos, Location
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.serialization import (
+from yasuki_core.engine.replay.serialization import (
     encode_print,
     decode_print,
     encode_card,

@@ -15,6 +15,7 @@ from yasuki_core.engine.table import (
     Location,
 )
 from yasuki_core.engine.intents import (
+    apply_intent,
     MoveCard,
     SetCardPos,
     SetCardPositions,
@@ -46,12 +47,11 @@ from yasuki_core.engine.intents import (
     GiveControl,
     SpawnCard,
     RemoveCard,
-    apply_intent,
 )
 from yasuki_core.game_pieces.constants import Side, Element, Timing
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.action_log import (
+from yasuki_core.engine.replay.action_log import (
     LogEntry,
     ChatEntry,
     SessionEntry,
@@ -63,7 +63,7 @@ from yasuki_core.engine.action_log import (
     decode_intent,
     flush,
 )
-from yasuki_core.engine.snapshot import (
+from yasuki_core.engine.replay.snapshot import (
     InitialRecord,
     build_initial_state,
     encode_initial,
