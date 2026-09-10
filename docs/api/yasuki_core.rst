@@ -44,6 +44,7 @@ yasuki_core
     yasuki_core.engine.redaction <yasuki_core.engine.redaction>
     yasuki_core.engine.registrar <yasuki_core.engine.registrar>
     yasuki_core.engine.replay.action_log <yasuki_core.engine.replay.action_log>
+    yasuki_core.engine.replay.game_log <yasuki_core.engine.replay.game_log>
     yasuki_core.engine.replay.serialization <yasuki_core.engine.replay.serialization>
     yasuki_core.engine.replay.snapshot <yasuki_core.engine.replay.snapshot>
     yasuki_core.engine.rules.abilities.activation <yasuki_core.engine.rules.abilities.activation>
@@ -67,7 +68,6 @@ yasuki_core
     yasuki_core.engine.rules.gold.production <yasuki_core.engine.rules.gold.production>
     yasuki_core.engine.rules.gold.self_grants <yasuki_core.engine.rules.gold.self_grants>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
-    yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
     yasuki_core.engine.rules.rulebook.cycle <yasuki_core.engine.rules.rulebook.cycle>

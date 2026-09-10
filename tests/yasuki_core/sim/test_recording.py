@@ -3,7 +3,7 @@ import pytest
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import DynastyDiscard, Legacy, Pass, Recruit
-from yasuki_core.engine.rules.log import Act, Cancel
+from yasuki_core.engine.replay.game_log import Act, Cancel
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
 from yasuki_core.engine.driver import Controls, play_game

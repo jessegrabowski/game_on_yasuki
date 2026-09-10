@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard

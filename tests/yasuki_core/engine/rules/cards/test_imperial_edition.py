@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard

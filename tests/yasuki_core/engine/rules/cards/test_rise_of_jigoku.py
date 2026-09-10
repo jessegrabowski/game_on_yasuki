@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.effects import Destroy, Discard
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession

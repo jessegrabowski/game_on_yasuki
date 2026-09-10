@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole

@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.triggers import resolve_effects
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey

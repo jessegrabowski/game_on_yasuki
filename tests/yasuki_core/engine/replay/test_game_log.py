@@ -28,7 +28,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
-from yasuki_core.engine.rules.log import (
+from yasuki_core.engine.replay.game_log import (
     GameLog,
     Act,
     Answer,

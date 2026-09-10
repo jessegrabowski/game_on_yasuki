@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import ChooseInvestAmount, De
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
-from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession
 

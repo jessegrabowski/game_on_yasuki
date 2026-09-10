@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.rules.log import Answer, replay
+from yasuki_core.engine.replay.game_log import Answer, replay
 from yasuki_core.engine.rules.triggers import on
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard

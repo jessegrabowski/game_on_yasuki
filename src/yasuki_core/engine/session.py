@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules import legality, projection
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.log import (
+from yasuki_core.engine.replay.game_log import (
     Act,
     Answer,
     GameLog,

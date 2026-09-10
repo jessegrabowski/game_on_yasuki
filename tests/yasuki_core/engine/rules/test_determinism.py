@@ -7,7 +7,7 @@ from yasuki_core.engine.replay.snapshot import InitialRecord, encode_initial
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.vocabulary.actions import Pass
-from yasuki_core.engine.rules.log import (
+from yasuki_core.engine.replay.game_log import (
     GameLog,
     build_game,
     act_and_log,

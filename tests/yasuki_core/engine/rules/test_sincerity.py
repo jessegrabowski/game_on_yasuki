@@ -8,7 +8,7 @@ from yasuki_core.game_pieces.counters import SINCERITY, counter_from_key
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.rules.turn import sequence
-from yasuki_core.engine.rules.log import game_log_from_dict, game_log_to_dict
+from yasuki_core.engine.replay.game_log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import end_phase, two_seat_game
