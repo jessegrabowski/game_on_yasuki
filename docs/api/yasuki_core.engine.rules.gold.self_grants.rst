@@ -7,6 +7,7 @@ yasuki_core.engine.rules.gold.self_grants
 
 .. autosummary::
 
+    is_production_window
     maximum_gold_production
     register_self_grant
     untaken_self_grant

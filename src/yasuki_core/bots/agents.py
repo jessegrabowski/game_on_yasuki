@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.gold.self_grants import GOLD_SELF_GRANT
+from yasuki_core.engine.rules.gold.self_grants import is_production_window
 from yasuki_core.engine.redaction import CardView, HiddenCard
 from yasuki_core.engine.rules.projection import GameView
 
@@ -85,7 +85,7 @@ class PayingAgent:
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
         if isinstance(request, ChoosePayment):
             return self._pay(request)
-        if isinstance(request, Confirm) and is_production_window(request, view):
+        if isinstance(request, Confirm) and is_production_window(request, view.table.battlefield):
             declined = DecisionResponse()
             if self._needs_a_grant or not request.accepts(declined):
                 return DecisionResponse(request.candidates)
@@ -99,22 +99,6 @@ class PayingAgent:
             return DecisionResponse(())
         producer, _ = min(request.produced, key=lambda pair: pair[1])
         return DecisionResponse((producer,))
-
-
-def is_production_window(request: Confirm, view: GameView) -> bool:
-    """Whether a yes/no question is a producer's bow-time window rather than some other card's.
-
-    Recognized by the card asking, not by the resolver: every card that can raise its own Gold
-    Production declares the amount, so the registry is the list of cards whose window this could be.
-    """
-    if request.source_id is None:
-        return False
-    return any(
-        not isinstance(entry.card, HiddenCard)
-        and entry.card.id == request.source_id
-        and entry.card.printed_id in GOLD_SELF_GRANT
-        for entry in view.table.battlefield
-    )
 
 
 class LegacyAgent:
