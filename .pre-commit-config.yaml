@@ -39,13 +39,13 @@ repos:
     - id: registration-audit
       name: card handlers name real cards
       # Needs the project environment, which CI's pre-commit job does not have; the pytest test in
-      # tests/yasuki_core/engine/rules/test_registration_audit.py is what guards this in CI.
-      entry: python -m yasuki_core.engine.rules.registration_audit
+      # tests/yasuki_core/install/test_registration_audit.py is what guards this in CI.
+      entry: python -m yasuki_core.install.registration_audit
       language: system
       pass_filenames: false
       # The card data matters as much as the handlers: renaming a card orphans every handler
       # keyed on its old id.
-      files: ^src/yasuki_core/(engine/rules/|assets/database/card_ids\.txt$)
+      files: ^src/yasuki_core/(engine/rules/|install/registration_audit\.py$|assets/database/card_ids\.txt$)
 
     - id: docs-api
       name: API pages match the source

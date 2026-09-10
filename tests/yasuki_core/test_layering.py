@@ -69,8 +69,7 @@ def test_no_package_reexports():
 
 def test_the_rules_layer_does_not_reach_into_the_bots():
     # A policy reads a redacted GameView and decides; a rule decides what is legal. The dependency
-    # runs one way, and registration_audit is the single documented exception -- it validates
-    # the ability hints because that registry is keyed by printed id like any other.
+    # runs one way, with no exception: the one that used to exist was a validator filed as a rule.
     reaching = {
         str(source.relative_to(RULES))
         for source in sorted(RULES.rglob("*.py"))
@@ -78,7 +77,7 @@ def test_the_rules_layer_does_not_reach_into_the_bots():
         if name.startswith("yasuki_core.engine.bots")
     }
 
-    assert reaching == {"registration_audit.py"}
+    assert reaching == set()
 
 
 def test_the_stats_package_never_reads_the_gold_economy():

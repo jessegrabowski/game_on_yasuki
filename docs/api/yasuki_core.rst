@@ -66,7 +66,6 @@ yasuki_core
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
-    yasuki_core.engine.rules.registration_audit <yasuki_core.engine.rules.registration_audit>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
     yasuki_core.engine.rules.rulebook.cycle <yasuki_core.engine.rules.rulebook.cycle>
     yasuki_core.engine.rules.rulebook.dynasty_discard <yasuki_core.engine.rules.rulebook.dynasty_discard>
@@ -119,6 +118,7 @@ yasuki_core
     yasuki_core.install.format_metadata <yasuki_core.install.format_metadata>
     yasuki_core.install.images_to_sql <yasuki_core.install.images_to_sql>
     yasuki_core.install.install_db <yasuki_core.install.install_db>
+    yasuki_core.install.registration_audit <yasuki_core.install.registration_audit>
     yasuki_core.install.reminders <yasuki_core.install.reminders>
     yasuki_core.install.sets_to_sql <yasuki_core.install.sets_to_sql>
     yasuki_core.install.text_split <yasuki_core.install.text_split>

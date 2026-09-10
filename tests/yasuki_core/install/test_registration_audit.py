@@ -5,8 +5,8 @@ import sys
 
 from yasuki_core.engine import bots, rules
 from yasuki_core.engine.rules import cards
-from yasuki_core.engine.rules import registration_audit
-from yasuki_core.engine.rules.registration_audit import (
+from yasuki_core.install import registration_audit
+from yasuki_core.install.registration_audit import (
     card_keyed_data,
     duplicate_registrations,
     main,
@@ -107,7 +107,7 @@ def test_every_registered_handler_names_a_real_card():
     # module-global and several test modules register handlers on invented ids as they import, so an
     # in-process check would see their leavings rather than the shipped registrations.
     finished = subprocess.run(
-        [sys.executable, "-m", "yasuki_core.engine.rules.registration_audit"],
+        [sys.executable, "-m", "yasuki_core.install.registration_audit"],
         capture_output=True,
         text=True,
     )
