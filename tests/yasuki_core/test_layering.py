@@ -51,8 +51,11 @@ def test_the_scan_can_see_an_offending_import(tmp_path):
 
 
 def test_no_package_reexports():
-    # An __init__ that re-exports makes its package a single import node: importing any submodule
-    # runs the whole package, which reintroduces cycles the splits exist to avoid. Every package
+    # Empty __init__ files buy one import path per symbol, which is what makes a module relocatable
+    # by rewriting its path everywhere. A facade doubles that: the symbol is importable from the
+    # package and from the module that defines it, so a rewrite silently misses half its call
+    # sites. It also makes the package one import node, which puts a cycle within reach --
+    # test_the_rules_package_has_no_import_cycle is what catches that if one closes. Every package
     # under engine/ and bots/ is scanned, so one added later is covered without being listed here.
     # cards/ is the documented exception -- it aggregates its set modules on purpose, guarded by
     # its own test.
@@ -131,9 +134,11 @@ def test_importing_the_engine_registers_the_cards():
 
 
 def test_the_rules_package_has_no_import_cycle():
-    # Every module in isolation, in a fresh interpreter: a cycle that the package's own import
-    # order happens to paper over still breaks the first consumer that reaches the modules in a
-    # different order, and nothing else in the suite imports them one at a time.
+    # Every module by name in a fresh interpreter, in sorted order: a cycle that the package's own
+    # import order happens to paper over still breaks the first consumer that reaches the modules
+    # in a different order, and nothing else in the suite imports them one at a time. One order
+    # rather than every order, so this catches a cycle sorted order reaches and not a cycle only
+    # some other order would.
     modules = sorted(
         "yasuki_core.engine.rules." + str(path.relative_to(RULES))[:-3].replace("/", ".")
         for path in RULES.rglob("*.py")
