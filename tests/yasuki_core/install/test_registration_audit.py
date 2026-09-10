@@ -1,7 +1,10 @@
 import ast
 import pathlib
+import re
 import subprocess
 import sys
+
+import yaml
 
 from yasuki_core.engine import bots, rules
 from yasuki_core.engine.rules import cards
@@ -72,6 +75,20 @@ def module_level_collections() -> set[str]:
     }
 
 
+def sources_defining_registries() -> list[str]:
+    """Every source file binding a registry the registrar catalogues, as a repo-relative path."""
+    return sorted(
+        path.relative_to(pathlib.Path.cwd()).as_posix()
+        for package in SCANNED
+        for path in pathlib.Path(package.__file__).parent.rglob("*.py")
+        if any(
+            _built_by_the_registrar(node.value)
+            for node in ast.parse(path.read_text(encoding="utf-8")).body
+            if isinstance(node, ast.Assign | ast.AnnAssign)
+        )
+    )
+
+
 def _built_by_the_registrar(value: ast.expr | None) -> bool:
     """Whether this binding is a registry the registrar catalogues, which validation finds itself."""
     return isinstance(value, ast.Call) and getattr(value.func, "id", "") in REGISTRAR
@@ -113,6 +130,24 @@ def test_every_registered_handler_names_a_real_card():
     )
 
     assert finished.returncode == 0, finished.stderr
+
+
+def test_the_pre_commit_hook_watches_every_module_that_registers():
+    # CI skips this hook, so a stale entry or a filter that misses a registry fails nowhere. The
+    # hints are the case that makes it real: they hold a per-card registry outside engine/rules/,
+    # so a filter written around the rules layer alone stops checking them the moment they change.
+    hook = next(
+        hook
+        for repo in yaml.safe_load(pathlib.Path(".pre-commit-config.yaml").read_text())["repos"]
+        for hook in repo["hooks"]
+        if hook["id"] == "registration-audit"
+    )
+    watched = re.compile(hook["files"])
+    registering = sources_defining_registries()
+
+    assert hook["entry"].split()[-1] == registration_audit.__name__
+    assert "src/yasuki_core/engine/bots/hints.py" in registering
+    assert [source for source in registering if not watched.match(source)] == []
 
 
 def test_no_per_card_registry_escapes_validation():
