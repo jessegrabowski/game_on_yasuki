@@ -26,7 +26,7 @@ from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import sincerity_seed_targets
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 

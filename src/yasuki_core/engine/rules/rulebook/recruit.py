@@ -20,7 +20,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.vocabulary.work import FinishRecruit, ResolveRecruit
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 

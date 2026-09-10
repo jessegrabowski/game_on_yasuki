@@ -30,7 +30,7 @@ from yasuki_core.engine.rules.turn.structure import (
     TURN_PHASES,
 )
 from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint, WindPrint
 

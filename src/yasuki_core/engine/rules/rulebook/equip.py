@@ -20,7 +20,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
 from yasuki_core.engine.rules.vocabulary.work import ResolveEquip
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint
 from yasuki_core.game_pieces.prints import AttachmentPrint

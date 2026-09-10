@@ -28,7 +28,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import action_did, at_cap, choice_resolver
 from yasuki_core.engine.rules.board.queries import opposing_units_in_battle
 from yasuki_core.engine.table import Location
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH

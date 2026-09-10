@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.board.seats import opposing_seats, seat_stronghold
 from yasuki_core.engine.rules.effects import AdjustCounter, DrawCard, Effect
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 

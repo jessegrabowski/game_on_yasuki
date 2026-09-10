@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.effects import DrawCard, Effect, PayGold
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 
 

@@ -30,7 +30,7 @@ from tests.yasuki_core.engine.builders import (
     token_template,
     two_seat_game,
 )
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AttachmentPrint,

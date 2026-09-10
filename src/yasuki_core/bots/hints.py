@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, C
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.registrar import HandlerRegistry
-from yasuki_core.game_pieces import keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 
 
