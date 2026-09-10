@@ -66,7 +66,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.bots.agents import make_agent
 from yasuki_core.bots.policies import make_policy
-from yasuki_core.engine.runner import Controls, run_game
+from yasuki_core.engine.driver import Controls, run_game
 from yasuki_core.game_setup import build_state_from_deck
 from tests.yasuki_core.db_guard import requires_db
 from yasuki_core.engine.rules.rulebook import recruit

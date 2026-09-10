@@ -80,16 +80,16 @@ numpydoc_xref_ignore = {
 # its bare name resolves nowhere. These are the ones our docstrings name that way.
 numpydoc_xref_aliases = {
     "Action": "yasuki_gui.services.actions.Action",
-    "Agent": "yasuki_core.engine.bots.agents.Agent",
+    "Agent": "yasuki_core.bots.agents.Agent",
     "EngineSession": "yasuki_core.engine.session.EngineSession",
-    "GameRunner": "yasuki_core.engine.runner.GameRunner",
+    "GameRunner": "yasuki_gui.services.game_runner.GameRunner",
     "GameState": "yasuki_core.engine.rules.state.GameState",
     "GameView": "yasuki_core.engine.rules.projection.GameView",
     "L5RCard": "yasuki_core.game_pieces.cards.L5RCard",
     "Metric": "yasuki_core.sim.metrics.Metric",
-    "PayingAgent": "yasuki_core.engine.bots.agents.PayingAgent",
+    "PayingAgent": "yasuki_core.bots.agents.PayingAgent",
     "PlayerId": "yasuki_core.engine.players.PlayerId",
-    "Policy": "yasuki_core.engine.bots.policies.Policy",
+    "Policy": "yasuki_core.bots.policies.Policy",
 }
 
 # -- HTML output (pydata-sphinx-theme) ---------------------------------------

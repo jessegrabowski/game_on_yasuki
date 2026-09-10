@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Confirm
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.bots.policies import EconomicPolicy
-from yasuki_core.engine.runner import Controls, play_game
+from yasuki_core.engine.driver import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (

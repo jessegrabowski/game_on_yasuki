@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.vocabulary.actions import DynastyDiscard, Legacy, 
 from yasuki_core.engine.rules.log import Act, Cancel
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
-from yasuki_core.engine.runner import Controls, play_game
+from yasuki_core.engine.driver import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.constants import Side

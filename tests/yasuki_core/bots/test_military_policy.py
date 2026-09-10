@@ -19,7 +19,7 @@ from yasuki_core.bots.policies import (
     POLICIES,
 )
 from yasuki_core.engine.rules.projection import project
-from yasuki_core.engine.runner import Controls, play_game
+from yasuki_core.engine.driver import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import location_of, TableState, unit_members, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType

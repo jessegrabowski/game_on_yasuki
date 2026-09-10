@@ -3,14 +3,15 @@ from numpy.random import default_rng
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Action, Legacy
+from yasuki_core.engine.rules.vocabulary.actions import Action, DynastyDiscard, Legacy
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse, DiscardToHandSize
 from yasuki_core.bots.policies import PassPolicy, RandomPolicy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import Act, Answer
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.runner import Controls, play_game, run_game
+from yasuki_core.engine import driver
+from yasuki_core.engine.driver import Controls, play_game, run_game
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
@@ -293,3 +294,27 @@ def test_playing_and_stepping_reach_the_same_game():
         pass
 
     assert played.log.entries == stepped.log.entries
+
+
+class _AlwaysDiscards:
+    """Takes a Dynasty Discard whenever one is offered. Stands in for any policy that keeps finding
+    something to do, which is what holds a round open."""
+
+    name = "always-discards"
+
+    def choose(self, view, actions):
+        return next((a for a in actions if isinstance(a, DynastyDiscard)), actions[0])
+
+
+def test_a_round_that_never_closes_raises_instead_of_running_forever(monkeypatch):
+    # A round ends only when every seat passes consecutively, so a policy that always acts keeps it
+    # open. Without the ceiling a Monte Carlo run wedges silently instead of failing.
+    monkeypatch.setattr(driver, "MAX_ACTIONS_PER_ROUND", 2)
+    state = dealt_table()
+    for index in range(4):
+        province_card(state, f"prov{index}", printed_id="plain_holding", index=index)
+    session = EngineSession.start(state, PlayerId.P1)
+    controls = {seat: Controls(_AlwaysDiscards(), AutoAgent()) for seat in PlayerId}
+
+    with pytest.raises(RuntimeError, match="ran past 2 actions"):
+        play_game(session, controls, turn_limit=4)

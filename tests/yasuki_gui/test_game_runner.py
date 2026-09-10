@@ -15,8 +15,8 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.bots.agents import AutoAgent
-from yasuki_core.engine import runner as runner_module
-from yasuki_core.engine.runner import Controls
+from yasuki_core.bots.policies import PassPolicy
+from yasuki_core.engine.driver import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -45,10 +45,9 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine import runner
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.vocabulary.actions import DynastyDiscard
-from yasuki_core.engine.runner import GameRunner, play_game
+from yasuki_gui.services import game_runner as game_runner_module
+from yasuki_gui.services.game_runner import GameRunner
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer, FAVOR_PAYERS
 from yasuki_core.engine.rules.effects import TakeFavor
 
@@ -440,30 +439,6 @@ def test_ability_menu_is_empty_for_a_card_with_no_ability():
     )
     runner = _runner_with_in_play(plain)
     assert runner.ability_menu("plain") == []
-
-
-class _AlwaysDiscards:
-    """Takes a Dynasty Discard whenever one is offered. Stands in for any policy that keeps finding
-    something to do, which is what holds a round open."""
-
-    name = "always-discards"
-
-    def choose(self, view, actions):
-        return next((a for a in actions if isinstance(a, DynastyDiscard)), actions[0])
-
-
-def test_a_round_that_never_closes_raises_instead_of_running_forever(monkeypatch):
-    # A round ends only when every seat passes consecutively, so a policy that always acts keeps it
-    # open. Without the ceiling a Monte Carlo run wedges silently instead of failing.
-    monkeypatch.setattr(runner, "MAX_ACTIONS_PER_ROUND", 2)
-    state = _dealt_table(0)
-    for index in range(4):
-        province_card(state, f"prov{index}", printed_id="plain_holding", index=index)
-    session = EngineSession.start(state, PlayerId.P1)
-    controls = {seat: Controls(_AlwaysDiscards(), AutoAgent()) for seat in PlayerId}
-
-    with pytest.raises(RuntimeError, match="ran past 2 actions"):
-        play_game(session, controls, turn_limit=4)
 
 
 def test_each_kharmic_form_hangs_off_the_card_it_spends():
@@ -942,7 +917,7 @@ def test_a_policy_that_never_passes_is_stopped_rather_than_spinning(monkeypatch)
     The ceiling is lowered rather than reached: driving 200 real actions needs a board that can pay
     for 200, which tests the board rather than the guard.
     """
-    monkeypatch.setattr(runner_module, "MAX_ACTIONS_PER_ROUND", 0)
+    monkeypatch.setattr(game_runner_module, "MAX_ACTIONS_PER_ROUND", 0)
     state = _kharmic_table(seat=PlayerId.P2)  # Kharmic is Repeatable Open, so P2 can act here
     runner = GameRunner(
         EngineSession.start(state, PlayerId.P1, seed=3),
@@ -952,6 +927,23 @@ def test_a_policy_that_never_passes_is_stopped_rather_than_spinning(monkeypatch)
     runner.act(PASS)  # hands the opponent its window inside the human's Action phase
 
     with pytest.raises(RuntimeError, match="ran past"):
+        runner.run_opponent()
+
+
+def test_a_pass_counts_toward_the_round_ceiling(monkeypatch):
+    """The driver in :mod:`yasuki_core.engine.driver` counts every action a round takes and starts
+    over when the round does. This counts the same way, so the two report the same round as
+    runaway."""
+    monkeypatch.setattr(game_runner_module, "MAX_ACTIONS_PER_ROUND", 0)
+    state = _kharmic_table(seat=PlayerId.P2)
+    runner = GameRunner(
+        EngineSession.start(state, PlayerId.P1, seed=3),
+        PlayerId.P1,
+        Controls(PassPolicy(), AutoAgent()),
+    )
+    runner.act(PASS)  # hands the opponent its window inside the human's Action phase
+
+    with pytest.raises(RuntimeError, match="ran past 0 actions"):
         runner.run_opponent()
 
 

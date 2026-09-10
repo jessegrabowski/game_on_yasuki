@@ -159,7 +159,7 @@ def test_the_board_substrate_does_not_read_the_rules():
     #
     # Deliberately shallow: engine/rules/ is not substrate, so a recursive scan would report the
     # layering working as intended.
-    above_the_rules = {"session.py", "runner.py"}
+    above_the_rules = {"session.py", "driver.py"}
     reaching = {
         source.name
         for source in sorted(ENGINE.glob("*.py"))
@@ -176,7 +176,7 @@ def test_the_board_substrate_does_not_read_the_bots():
     # to say so. A substrate module importing one inverts that and drags the AI into the manual
     # intent path yasuki_gui and yasuki_web drive. The headless driver is the exception and stays
     # one, because running a game means handing it an Agent and a Policy.
-    drives_a_policy = {"runner.py"}
+    drives_a_policy = {"driver.py"}
     reaching = {
         source.name
         for source in sorted(ENGINE.glob("*.py"))

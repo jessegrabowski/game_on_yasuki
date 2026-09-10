@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.runner import SearchView
+from yasuki_gui.services.game_runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.labels import turn_context
 from yasuki_gui.ui.battle_view import LaneButton, PendingArmy

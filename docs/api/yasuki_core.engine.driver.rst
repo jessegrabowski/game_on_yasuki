@@ -1,16 +1,14 @@
-yasuki_core.engine.runner
+yasuki_core.engine.driver
 =========================
 
-.. currentmodule:: yasuki_core.engine.runner
+.. currentmodule:: yasuki_core.engine.driver
 
 .. rubric:: Classes
 
 .. autosummary::
 
     Controls
-    GameRunner
     Observer
-    SearchView
 
 .. rubric:: Functions
 
@@ -19,6 +17,6 @@ yasuki_core.engine.runner
     play_game
     run_game
 
-.. automodule:: yasuki_core.engine.runner
+.. automodule:: yasuki_core.engine.driver
     :members:
     :undoc-members:
