@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.rules.registrar import CARD_REGISTRIES, FlagRegistry, HandlerRegistry
+from yasuki_core.engine.registrar import CARD_REGISTRIES, FlagRegistry, HandlerRegistry
 
 # Without this the catalogue holds only what this file's imports happen to reach.
 from yasuki_core.engine.rules import cards  # noqa: F401

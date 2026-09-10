@@ -45,8 +45,9 @@ def main() -> None:
     parser.add_argument("--all", action="store_true", help="include sets with nothing implemented")
     args = parser.parse_args()
 
-    # Imported here to keep the engine off the data pipeline's import path.
-    from yasuki_core.engine.rules.registration_audit import registered_card_ids
+    # Imported here rather than at the top: it pulls the whole engine in, and nothing else
+    # in the data pipeline loads it.
+    from yasuki_core.install.registration_audit import registered_card_ids
 
     implemented = set().union(*registered_card_ids().values())
     rows = coverage(implemented, cards_by_set(args.cards))

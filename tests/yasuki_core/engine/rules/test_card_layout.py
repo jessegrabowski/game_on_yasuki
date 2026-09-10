@@ -71,7 +71,7 @@ def test_the_source_scan_sees_every_registration_the_engine_holds():
             sys.executable,
             "-c",
             "import json;"
-            "from yasuki_core.engine.rules.registration_audit import registered_card_ids;"
+            "from yasuki_core.install.registration_audit import registered_card_ids;"
             "print(json.dumps(sorted(set().union(*registered_card_ids().values()))))",
         ],
         capture_output=True,
