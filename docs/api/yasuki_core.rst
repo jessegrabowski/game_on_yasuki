@@ -42,6 +42,7 @@ yasuki_core
     yasuki_core.engine.ops <yasuki_core.engine.ops>
     yasuki_core.engine.players <yasuki_core.engine.players>
     yasuki_core.engine.redaction <yasuki_core.engine.redaction>
+    yasuki_core.engine.registrar <yasuki_core.engine.registrar>
     yasuki_core.engine.rules.abilities.activation <yasuki_core.engine.rules.abilities.activation>
     yasuki_core.engine.rules.abilities.costs <yasuki_core.engine.rules.abilities.costs>
     yasuki_core.engine.rules.abilities.idioms <yasuki_core.engine.rules.abilities.idioms>
@@ -65,7 +66,6 @@ yasuki_core
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
     yasuki_core.engine.rules.log <yasuki_core.engine.rules.log>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
-    yasuki_core.engine.rules.registrar <yasuki_core.engine.rules.registrar>
     yasuki_core.engine.rules.registration_audit <yasuki_core.engine.rules.registration_audit>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
     yasuki_core.engine.rules.rulebook.cycle <yasuki_core.engine.rules.rulebook.cycle>

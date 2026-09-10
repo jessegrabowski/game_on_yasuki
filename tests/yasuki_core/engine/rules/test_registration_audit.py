@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.registration_audit import (
     unregistered_card_ids,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
+from yasuki_core.engine.registrar import CARD_REGISTRIES
 
 # The per-card registries registration_audit validates by name. Everything built through the
 # registrar is absent on purpose -- those report themselves, which is the point of it.

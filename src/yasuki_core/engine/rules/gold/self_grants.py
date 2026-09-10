@@ -1,4 +1,4 @@
-from yasuki_core.engine.rules.registrar import HandlerRegistry
+from yasuki_core.engine.registrar import HandlerRegistry
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId

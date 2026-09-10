@@ -8,7 +8,7 @@ from yasuki_core.engine.rules import (
     state_based_actions,
     triggers,
 )
-from yasuki_core.engine.rules.registrar import CARD_REGISTRIES
+from yasuki_core.engine.registrar import CARD_REGISTRIES
 
 # The one place the rules layer reaches into the bots: the ability hints are keyed by printed id
 # like every other per-card registry, so they are validated here even though a policy is not a rule.
@@ -24,8 +24,8 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     """
     Every card id the engine keys a per-card handler on, grouped by the registry holding it.
 
-    Every registry built through :mod:`~yasuki_core.engine.rules.registrar` reports itself, so a
-    new one is validated without being listed here. The three below are not built that way: two keep
+    Every registry built through :mod:`~yasuki_core.engine.registrar` reports itself, so a new one
+    is validated without being listed here. The three below are not built that way: two keep
     bespoke registration rules, and the triggers are keyed by event first.
 
     ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than

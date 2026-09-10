@@ -1,4 +1,4 @@
-from yasuki_core.engine.rules.registrar import FlagRegistry
+from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
