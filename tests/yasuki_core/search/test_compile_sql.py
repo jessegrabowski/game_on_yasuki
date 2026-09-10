@@ -1,5 +1,5 @@
-from yasuki_core.database import (
-    _build_card_filter,
+from yasuki_core.search.compile_sql import (
+    build_card_filter,
     build_search_filters,
     compile_query,
     compile_term,
@@ -7,14 +7,14 @@ from yasuki_core.database import (
 from yasuki_core.search.boolean_query import parse_query
 from yasuki_core.search.parse_search import parse_token
 
-# _build_card_filter is a pure (clause, params) builder — no database needed — so these run
+# build_card_filter is a pure (clause, params) builder — no database needed — so these run
 # everywhere, unlike the DB-backed tests in test_database.py.
 
 _PRINT_EXISTS = "EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
 
 
 def test_bare_text_query_reaches_per_print_rules_text():
-    clause, params = _build_card_filter(text_query="destroy")
+    clause, params = build_card_filter(text_query="destroy")
     assert _PRINT_EXISTS in clause
     assert clause.count("p.rules_text ILIKE") == 1
     # name, card_id, card rules_text, and the per-print rules_text all take the same pattern.
@@ -22,7 +22,7 @@ def test_bare_text_query_reaches_per_print_rules_text():
 
 
 def test_rules_text_contains_ors_in_per_print():
-    clause, params = _build_card_filter(filter_options={"rules_text_contains": ["bow"]})
+    clause, params = build_card_filter(filter_options={"rules_text_contains": ["bow"]})
     assert f" OR {_PRINT_EXISTS}" in clause
     assert params == ["%bow%", "%bow%"]
 
@@ -30,7 +30,7 @@ def test_rules_text_contains_ors_in_per_print():
 def test_rules_text_excludes_negates_card_and_per_print():
     # Excluding a phrase must hide a card whose *current* text or *any printing's* wording matches,
     # so the disjunction is negated as a whole (De Morgan).
-    clause, params = _build_card_filter(filter_options={"rules_text_excludes": ["bow"]})
+    clause, params = build_card_filter(filter_options={"rules_text_excludes": ["bow"]})
     assert "NOT ILIKE" in clause
     assert f"AND NOT {_PRINT_EXISTS}" in clause
     assert params == ["%bow%", "%bow%"]
@@ -38,70 +38,70 @@ def test_rules_text_excludes_negates_card_and_per_print():
 
 def test_name_search_folds_accents_on_a_single_column():
     # name: matches the accent-folded name_normalized so ASCII input finds accented titles.
-    clause, params = _build_card_filter(filter_options={"name_contains": ["Attaché"]})
+    clause, params = build_card_filter(filter_options={"name_contains": ["Attaché"]})
     assert "c.name_normalized ILIKE" in clause
     assert "prints" not in clause
     assert params == ["%attache%"]
-    excludes, _ = _build_card_filter(filter_options={"name_excludes": ["Attaché"]})
+    excludes, _ = build_card_filter(filter_options={"name_excludes": ["Attaché"]})
     assert "c.name_normalized NOT ILIKE" in excludes
 
 
 def test_year_filter_extracts_release_year():
-    exact, params = _build_card_filter(filter_options={"year_filters": [(":", 2005)]})
+    exact, params = build_card_filter(filter_options={"year_filters": [(":", 2005)]})
     assert "EXTRACT(YEAR FROM s.release_date) = %s" in exact
     assert params == [2005]
-    ge, _ = _build_card_filter(filter_options={"year_filters": [(">=", 2010)]})
+    ge, _ = build_card_filter(filter_options={"year_filters": [(">=", 2010)]})
     assert "EXTRACT(YEAR FROM s.release_date) >= %s" in ge
 
 
 def test_presence_flags_are_null_checks():
-    flip, _ = _build_card_filter(filter_options={"is_flip": True})
+    flip, _ = build_card_filter(filter_options={"is_flip": True})
     assert "c.back_card_id IS NOT NULL" in flip
-    not_flip, _ = _build_card_filter(filter_options={"is_flip": False})
+    not_flip, _ = build_card_filter(filter_options={"is_flip": False})
     assert "c.back_card_id IS NULL" in not_flip
-    errata, _ = _build_card_filter(filter_options={"has_errata": True})
+    errata, _ = build_card_filter(filter_options={"has_errata": True})
     assert "c.errata_text IS NOT NULL" in errata
 
 
 def test_name_exact_matches_whole_name_case_insensitively():
-    clause, params = _build_card_filter(filter_options={"name_exact": ["Doji Hoturi"]})
+    clause, params = build_card_filter(filter_options={"name_exact": ["Doji Hoturi"]})
     assert "lower(c.name) = lower(%s)" in clause
     assert params == ["Doji Hoturi"]
 
 
 def test_name_exact_excludes_negates_the_equality():
-    clause, params = _build_card_filter(filter_options={"name_exact_excludes": ["Doji Hoturi"]})
+    clause, params = build_card_filter(filter_options={"name_exact_excludes": ["Doji Hoturi"]})
     assert "lower(c.name) != lower(%s)" in clause
     assert params == ["Doji Hoturi"]
 
 
 def test_bare_excludes_negates_the_broad_union():
-    clause, params = _build_card_filter(filter_options={"bare_excludes": ["doji"]})
+    clause, params = build_card_filter(filter_options={"bare_excludes": ["doji"]})
     assert "NOT (c.name ILIKE" in clause
     assert _PRINT_EXISTS in clause
     assert params == ["%doji%"] * 4
 
 
 def test_like_wildcards_in_needle_are_escaped():
-    _, params = _build_card_filter(text_query="50%")
+    _, params = build_card_filter(text_query="50%")
     assert params == ["%50\\%%"] * 4
 
 
 def test_types_excludes_negates_membership():
-    clause, params = _build_card_filter(filter_options={"types_excludes": ["sensei"]})
+    clause, params = build_card_filter(filter_options={"types_excludes": ["sensei"]})
     assert "c.card_id NOT IN (SELECT card_id FROM card_card_types" in clause
     assert params == [["Sensei"]]
 
 
 def test_clans_excludes_negates_membership_including_all_clans_marker():
     # -clan:crane is the complement of clan:crane, so the "All Clans" sensei marker is excluded too.
-    clause, params = _build_card_filter(filter_options={"clans_excludes": ["crane"]})
+    clause, params = build_card_filter(filter_options={"clans_excludes": ["crane"]})
     assert "c.card_id NOT IN (SELECT card_id FROM card_clans" in clause
     assert set(params[0]) == {"crane", "all clans"}
 
 
 def test_include_and_exclude_type_both_emit_conditions():
-    clause, _ = _build_card_filter(
+    clause, _ = build_card_filter(
         filter_options={"types": ["personality"], "types_excludes": ["sensei"]}
     )
     assert "c.card_id IN (SELECT card_id FROM card_card_types" in clause
@@ -109,7 +109,7 @@ def test_include_and_exclude_type_both_emit_conditions():
 
 
 def test_story_excludes_keeps_null_credits():
-    clause, params = _build_card_filter(filter_options={"story_excludes": ["Ashman"]})
+    clause, params = build_card_filter(filter_options={"story_excludes": ["Ashman"]})
     assert "c.story IS NULL OR c.story NOT ILIKE" in clause
     assert params == ["%Ashman%"]
 
@@ -117,7 +117,7 @@ def test_story_excludes_keeps_null_credits():
 def test_format_excludes_negates_membership_not_the_operator():
     # -format>=diamond is the strict complement: NOT IN the set of cards legal at/after the ref,
     # with the >= kept verbatim inside the subquery (not flipped to <).
-    clause, _ = _build_card_filter(filter_options={"format_filters_excludes": [(">=", "diamond")]})
+    clause, _ = build_card_filter(filter_options={"format_filters_excludes": [(">=", "diamond")]})
     assert "c.card_id NOT IN (SELECT cl.card_id FROM card_legalities" in clause
     assert "f.legal_from >=" in clause
 
@@ -125,20 +125,20 @@ def test_format_excludes_negates_membership_not_the_operator():
 def test_format_excludes_fails_closed_on_unresolvable_reference():
     # A typo'd -format:xyz must match nothing, not everything, so the NOT IN is guarded by an
     # EXISTS that the unresolved reference fails.
-    clause, _ = _build_card_filter(filter_options={"format_filters_excludes": [(":", "xyz")]})
+    clause, _ = build_card_filter(filter_options={"format_filters_excludes": [(":", "xyz")]})
     assert "EXISTS (SELECT 1 FROM formats" in clause
     assert "AND c.card_id NOT IN" in clause
 
 
 def test_set_excludes_negates_membership_and_fails_closed():
-    clause, _ = _build_card_filter(filter_options={"set_filters_excludes": [(">=", "GE")]})
+    clause, _ = build_card_filter(filter_options={"set_filters_excludes": [(">=", "GE")]})
     assert "EXISTS (SELECT 1 FROM l5r_sets" in clause
     assert "AND c.card_id NOT IN (SELECT p.card_id FROM prints p" in clause
     assert "s.release_date >=" in clause
 
 
 # compile_term maps one search term to one predicate by reusing the same per-field SQL as
-# _build_card_filter, so the field-specific shape is covered above; these pin its composition rules.
+# build_card_filter, so the field-specific shape is covered above; these pin its composition rules.
 def test_compile_term_returns_a_single_condition_bare():
     sql, params = compile_term(parse_token("c:crane"))
     assert sql == "c.card_id IN (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"

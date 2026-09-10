@@ -4,13 +4,14 @@ import subprocess
 import sys
 
 import yasuki_core
-from yasuki_core import bots, engine
+from yasuki_core import bots, engine, search
 from yasuki_core.engine import rules
 
 CORE = pathlib.Path(yasuki_core.__file__).parent
 RULES = pathlib.Path(rules.__file__).parent
 ENGINE = pathlib.Path(engine.__file__).parent
 BOTS = pathlib.Path(bots.__file__).parent
+SEARCH = pathlib.Path(search.__file__).parent
 # yasuki_core is the substrate the other two packages sit on. It may not import either of them, or
 # the dependency runs both ways and neither can be used without the other.
 FORBIDDEN = ("yasuki_web", "yasuki_gui")
@@ -131,6 +132,20 @@ def test_importing_the_engine_registers_the_cards():
     )
 
     assert int(registered.stdout) > 0
+
+
+def test_the_query_language_does_not_read_the_database():
+    # search/ turns query text into SQL and hands it back; database.py is what runs it. A module
+    # here importing the pool would let a compiler function execute its own query, which is the
+    # one thing that makes the two halves separable. The dependency runs database to search.
+    reaching = {
+        str(source.relative_to(SEARCH))
+        for source in sorted(SEARCH.rglob("*.py"))
+        for name in _imported_modules(source)
+        if name == "yasuki_core.database" or name.startswith("yasuki_core.database.")
+    }
+
+    assert reaching == set()
 
 
 def test_the_rules_package_has_no_import_cycle():

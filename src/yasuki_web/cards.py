@@ -17,8 +17,8 @@ from yasuki_core.database import (
     query_all_types,
     query_types_by_deck,
     get_card_backs,
-    build_search_filters,
 )
+from yasuki_core.search.compile_sql import build_search_filters
 from yasuki_core.card_art import back_era_for_set, classify, load_art_layout
 from yasuki_core.card_diff import unified_diff
 from yasuki_web.rate_limit import limiter
