@@ -101,8 +101,6 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    CardDiscarded
    CounterGained
    Destroyed
-   GameLost
-   GameWon
    EnteredPlay
    ProducedGold
    ProducingGold

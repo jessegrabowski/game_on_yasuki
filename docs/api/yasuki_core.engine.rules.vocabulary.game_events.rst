@@ -11,8 +11,6 @@ yasuki_core.engine.rules.vocabulary.game_events
     CounterGained
     Destroyed
     EnteredPlay
-    GameLost
-    GameWon
     ProducedGold
     ProducingGold
     Revealed

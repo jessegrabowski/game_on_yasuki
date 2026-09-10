@@ -7,6 +7,8 @@ yasuki_core.engine.rules.vocabulary.victory
 
 .. autosummary::
 
+    GameLost
+    GameWon
     VictoryRule
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.victory

@@ -22,8 +22,6 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     EnteredPlay,
     GameEvent,
-    GameLost,
-    GameWon,
     Revealed,
     Straightened,
 )
@@ -1159,7 +1157,7 @@ class LoseGame(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.lose(self.seat, self.reason, self.victory)
-        return [GameLost(self.seat, self.reason)]
+        return []
 
 
 @dataclass(frozen=True, slots=True)
@@ -1182,7 +1180,7 @@ class WinGame(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.win(self.seat, self.reason)
-        return [GameWon(self.seat, self.reason)]
+        return []
 
 
 @dataclass(frozen=True, slots=True)

@@ -1,4 +1,7 @@
+from dataclasses import dataclass
 from enum import Enum
+
+from yasuki_core.engine.players import PlayerId
 
 
 class VictoryRule(Enum):
@@ -17,3 +20,19 @@ class VictoryRule(Enum):
     MILITARY_LOSS = "military_loss"
     DISHONOR_LOSS = "dishonor_loss"
     HONOR_VICTORY = "honor_victory"
+
+
+@dataclass(frozen=True, slots=True)
+class GameLost:
+    """A seat lost the game. ``reason`` is worded for a player."""
+
+    seat: PlayerId
+    reason: str
+
+
+@dataclass(frozen=True, slots=True)
+class GameWon:
+    """A seat won the game. ``reason`` names what it won, worded for a player."""
+
+    seat: PlayerId
+    reason: str
