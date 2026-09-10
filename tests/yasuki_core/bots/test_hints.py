@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.bots.hints import (
+from yasuki_core.bots.hints import (
     ABILITY_HINTS,
     AbilityHint,
     optional_cost_answer,

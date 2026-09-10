@@ -14,7 +14,7 @@ from yasuki_core.game_pieces.prints import (
     StrongholdPrint,
 )
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.bots.agents import AutoAgent
+from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine import runner as runner_module
 from yasuki_core.engine.runner import Controls
 from tests.yasuki_core.engine.builders import province_card

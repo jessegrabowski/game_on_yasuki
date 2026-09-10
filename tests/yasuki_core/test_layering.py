@@ -4,12 +4,13 @@ import subprocess
 import sys
 
 import yasuki_core
-from yasuki_core import engine
+from yasuki_core import bots, engine
 from yasuki_core.engine import rules
 
 CORE = pathlib.Path(yasuki_core.__file__).parent
 RULES = pathlib.Path(rules.__file__).parent
 ENGINE = pathlib.Path(engine.__file__).parent
+BOTS = pathlib.Path(bots.__file__).parent
 # yasuki_core is the substrate the other two packages sit on. It may not import either of them, or
 # the dependency runs both ways and neither can be used without the other.
 FORBIDDEN = ("yasuki_web", "yasuki_gui")
@@ -50,13 +51,18 @@ def test_the_scan_can_see_an_offending_import(tmp_path):
 
 
 def test_no_package_reexports():
-    # An __init__ that re-exports makes its package a single import node: importing any submodule
-    # runs the whole package, which reintroduces cycles the splits exist to avoid. Every package
-    # under engine/ is scanned, so one added later is covered without being listed here. cards/ is
-    # the documented exception -- it aggregates its set modules on purpose, guarded by its own test.
+    # Empty __init__ files buy one import path per symbol, which is what makes a module relocatable
+    # by rewriting its path everywhere. A facade doubles that: the symbol is importable from the
+    # package and from the module that defines it, so a rewrite silently misses half its call
+    # sites. It also makes the package one import node, which puts a cycle within reach --
+    # test_the_rules_package_has_no_import_cycle is what catches that if one closes. Every package
+    # under engine/ and bots/ is scanned, so one added later is covered without being listed here.
+    # cards/ is the documented exception -- it aggregates its set modules on purpose, guarded by
+    # its own test.
     offenders = {
         str(path.relative_to(CORE))
-        for path in ENGINE.rglob("__init__.py")
+        for root in (ENGINE, BOTS)
+        for path in root.rglob("__init__.py")
         if path.parent.name != "cards"
         and any(
             isinstance(node, ast.Import | ast.ImportFrom)
@@ -74,7 +80,7 @@ def test_the_rules_layer_does_not_reach_into_the_bots():
         str(source.relative_to(RULES))
         for source in sorted(RULES.rglob("*.py"))
         for name in _imported_modules(source)
-        if name.startswith("yasuki_core.engine.bots")
+        if name.startswith("yasuki_core.bots")
     }
 
     assert reaching == set()
@@ -128,9 +134,11 @@ def test_importing_the_engine_registers_the_cards():
 
 
 def test_the_rules_package_has_no_import_cycle():
-    # Every module in isolation, in a fresh interpreter: a cycle that the package's own import
-    # order happens to paper over still breaks the first consumer that reaches the modules in a
-    # different order, and nothing else in the suite imports them one at a time.
+    # Every module by name in a fresh interpreter, in sorted order: a cycle that the package's own
+    # import order happens to paper over still breaks the first consumer that reaches the modules
+    # in a different order, and nothing else in the suite imports them one at a time. One order
+    # rather than every order, so this catches a cycle sorted order reaches and not a cycle only
+    # some other order would.
     modules = sorted(
         "yasuki_core.engine.rules." + str(path.relative_to(RULES))[:-3].replace("/", ".")
         for path in RULES.rglob("*.py")
@@ -149,8 +157,8 @@ def test_the_board_substrate_does_not_read_the_rules():
     # drags the whole turn structure into the manual intent path that yasuki_gui and yasuki_web
     # drive. Only the two surfaces above the rules are excepted, and both are named here.
     #
-    # Deliberately shallow: engine/bots/ and engine/rules/ are not substrate and bots reads the
-    # rules by design, so a recursive scan would report the layering working as intended.
+    # Deliberately shallow: engine/rules/ is not substrate, so a recursive scan would report the
+    # layering working as intended.
     above_the_rules = {"session.py", "runner.py"}
     reaching = {
         source.name
@@ -158,6 +166,23 @@ def test_the_board_substrate_does_not_read_the_rules():
         if source.name not in above_the_rules
         for name in _imported_modules(source)
         if name.startswith("yasuki_core.engine.rules")
+    }
+
+    assert reaching == set()
+
+
+def test_the_board_substrate_does_not_read_the_bots():
+    # A policy is a consumer of the engine, at the same level as sim/, and bots/ sits beside engine/
+    # to say so. A substrate module importing one inverts that and drags the AI into the manual
+    # intent path yasuki_gui and yasuki_web drive. The headless driver is the exception and stays
+    # one, because running a game means handing it an Agent and a Policy.
+    drives_a_policy = {"runner.py"}
+    reaching = {
+        source.name
+        for source in sorted(ENGINE.glob("*.py"))
+        if source.name not in drives_a_policy
+        for name in _imported_modules(source)
+        if name.startswith("yasuki_core.bots")
     }
 
     assert reaching == set()

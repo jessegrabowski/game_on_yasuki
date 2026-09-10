@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import Action, Pass, Recruit
-from yasuki_core.engine.bots.agents import AutoAgent
-from yasuki_core.engine.bots.policies import EconomicPolicy, PassPolicy
+from yasuki_core.bots.agents import AutoAgent
+from yasuki_core.bots.policies import EconomicPolicy, PassPolicy
 from yasuki_core.engine.runner import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.sim.metrics import provinces_cleared

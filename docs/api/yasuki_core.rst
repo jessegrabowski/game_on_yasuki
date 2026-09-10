@@ -28,16 +28,16 @@ yasuki_core
     yasuki_core.accounts.roles <yasuki_core.accounts.roles>
     yasuki_core.accounts.sessions <yasuki_core.accounts.sessions>
     yasuki_core.accounts.users <yasuki_core.accounts.users>
+    yasuki_core.bots.agents <yasuki_core.bots.agents>
+    yasuki_core.bots.hints <yasuki_core.bots.hints>
+    yasuki_core.bots.policies <yasuki_core.bots.policies>
+    yasuki_core.bots.queries <yasuki_core.bots.queries>
     yasuki_core.card_art <yasuki_core.card_art>
     yasuki_core.card_diff <yasuki_core.card_diff>
     yasuki_core.database <yasuki_core.database>
     yasuki_core.deck_pdf <yasuki_core.deck_pdf>
     yasuki_core.decklist <yasuki_core.decklist>
     yasuki_core.engine.action_log <yasuki_core.engine.action_log>
-    yasuki_core.engine.bots.agents <yasuki_core.engine.bots.agents>
-    yasuki_core.engine.bots.hints <yasuki_core.engine.bots.hints>
-    yasuki_core.engine.bots.policies <yasuki_core.engine.bots.policies>
-    yasuki_core.engine.bots.queries <yasuki_core.engine.bots.queries>
     yasuki_core.engine.intents <yasuki_core.engine.intents>
     yasuki_core.engine.ops <yasuki_core.engine.ops>
     yasuki_core.engine.players <yasuki_core.engine.players>
