@@ -49,9 +49,9 @@ from yasuki_core.game_pieces.prints import (
 class Policy(Protocol):
     """Chooses which action a seat takes from the ones open to it.
 
-    The counterpart to :class:`~yasuki_core.bots.agents.Agent`: a policy picks an action, an
-    agent answers a decision that action raises. A Recruit needs both — the policy chooses to
-    recruit, the agent answers the payment.
+    The counterpart to :class:`~yasuki_core.bots.agents.Agent`: a policy picks an action, an agent
+    answers a decision that action raises. A Recruit needs both — the policy chooses to recruit, the
+    agent answers the payment.
 
     Policies read the seat's :class:`GameView` rather than the game itself, so one cannot see the
     opponent's hand and works unchanged over a network. The view carries live card objects, so a
@@ -245,12 +245,13 @@ class GoldRushPolicy:
     four Gold, so the cheap producers a deck-average rule would bin are exactly the ones this policy
     can afford to buy with it. Then Legacy, when the pool holds a better producer than the board —
     it puts that card face-up in a Province where the same turn's Recruit can reach it. Then an
-    activated ability this policy has an economic model for, which :data:`~yasuki_core.bots.hints.ABILITY_HINTS`
-    decides. Then the best purchase, ranked as :class:`EconomicPolicy` ranks it, which takes a
-    Personality once no Holding is within reach: gold left in the pool is cleared at the phase
-    change, and buying empties the Province either way. Then a Dynasty Discard of any face-up
-    Province card it has no use for — one producing nothing, or one priced beyond what it could
-    raise — which costs nothing and refills the Province for next turn.
+    activated ability this policy has an economic model for, which
+    :data:`~yasuki_core.bots.hints.ABILITY_HINTS` decides. Then the best purchase, ranked as
+    :class:`EconomicPolicy` ranks it, which takes a Personality once no Holding is within reach:
+    gold left in the pool is cleared at the phase change, and buying empties the Province either
+    way. Then a Dynasty Discard of any face-up Province card it has no use for — one producing
+    nothing, or one priced beyond what it could raise — which costs nothing and refills the Province
+    for next turn.
 
     The discard is what separates this from :class:`EconomicPolicy`. Nothing else in the registry
     ever takes it, so a Province holding a card the seat cannot afford would stay held for the rest
