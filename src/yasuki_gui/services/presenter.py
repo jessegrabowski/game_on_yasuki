@@ -282,7 +282,7 @@ class Presenter:
         """Answer the pending decision with the board's current selection.
 
         A payment is queued rather than sent: the seat picks every producer it means to bow in one
-        go, and :meth:`_spend_committed` feeds them to the engine one answer at a time. A payment the
+        go, and ``_spend_committed`` feeds them to the engine one answer at a time. A payment the
         pool already covers offers no producers, so there is nothing to queue and it is answered
         here, with the empty answer that bows nothing.
         """

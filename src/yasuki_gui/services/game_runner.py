@@ -52,9 +52,8 @@ class SearchView(NamedTuple):
     Attributes
     ----------
     panes : dict mapping str to list of L5RCard
-        The cards each of :data:`~yasuki_gui.services.game_runner.SEARCH_PANES` offers, in that
-        order. A pane the search does not reach maps to an empty list, and the dialog shows it
-        disabled rather than hiding it.
+        The cards each of ``SEARCH_PANES`` offers, in that order. A pane the search does not reach
+        maps to an empty list, and the dialog shows it disabled rather than hiding it.
     choosable : set of str
         The ids across every pane the seat may actually take.
     """
@@ -64,11 +63,11 @@ class SearchView(NamedTuple):
 
 
 class GameRunner:
-    """Drives a single-player rules game through an :class:`EngineSession`.
+    """Drives a single-player rules game through an :class:`~.EngineSession`.
 
     The human advances their own turn a phase at a time; when the turn ends, the AI-reserved
     opponent's turn auto-runs until control returns to the human. A decision the human owes is left
-    pending for the UI to present; the opponent's decisions are answered by its :class:`Agent`.
+    pending for the UI to present; the opponent's decisions are answered by its :class:`~.Agent`.
 
     Attributes
     ----------
@@ -395,7 +394,7 @@ class GameRunner:
 
         Three cases, all of them the opponent's to clear: its own turn, the window it holds inside
         the human's Action phase, and a decision a card put to it while the human kept priority. Its
-        :class:`Controls` supply both halves — the policy picks each action, the agent answers the
+        :class:`~.Controls` supply both halves — the policy picks each action, the agent answers the
         decisions those actions raise.
 
         Returns as soon as the human owes an answer or holds priority with nothing pending, so the
@@ -404,8 +403,7 @@ class GameRunner:
         Raises
         ------
         RuntimeError
-            If one Action Round runs past
-            :data:`~yasuki_core.engine.driver.MAX_ACTIONS_PER_ROUND`. A round closes only once
+            If one Action Round runs past ``MAX_ACTIONS_PER_ROUND``. A round closes only once
             every seat passes consecutively, so a policy that always finds something to take would
             otherwise hang the caller. Every action counts toward the ceiling, a Pass included, and
             the count starts over when the round does.

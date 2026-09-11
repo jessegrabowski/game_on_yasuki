@@ -135,8 +135,8 @@ def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
 
 
 def lobby_key(seat: PlayerId, turn: int) -> str:
-    """The once-per-turn usage key for a seat's Lobby, scoped to the turn the way :func:`legacy_key`
-    is.
+    """The once-per-turn usage key for a seat's Lobby, scoped to the turn the way
+    :func:`~.legacy_key` is.
 
     Named for the Lobby action rather than for the rulebook ability, because the ShE datasheet caps
     a player at one Lobby action per turn whatever granted it, not at one use of this ability.

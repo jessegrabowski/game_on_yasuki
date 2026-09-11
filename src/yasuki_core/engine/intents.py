@@ -391,7 +391,7 @@ COIN_FACES = ("Heads", "Tails")
 @dataclass(frozen=True, slots=True)
 class FlipCoin:
     """Announce an already-flipped fair coin, ``result`` being the face it landed on. A read-only
-    table event: it changes no piece. Build it with :func:`flip_coin` so the face is drawn rather
+    table event: it changes no piece. Build it with :func:`~.flip_coin` so the face is drawn rather
     than chosen."""
 
     result: str
@@ -404,9 +404,9 @@ class FlipCoin:
 
 @dataclass(frozen=True, slots=True)
 class RollDice:
-    """Announce an already-rolled ``sides``-sided die. Like :class:`FlipCoin` a read-only table
+    """Announce an already-rolled ``sides``-sided die. Like :class:`~.FlipCoin` a read-only table
     event: it changes no piece. ``sides`` must be at least 2 and ``face`` must land within them.
-    Build it with :func:`roll_dice` so the face is drawn rather than chosen."""
+    Build it with :func:`~.roll_dice` so the face is drawn rather than chosen."""
 
     face: int
     sides: int = 6

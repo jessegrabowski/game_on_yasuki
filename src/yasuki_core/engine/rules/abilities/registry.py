@@ -39,7 +39,7 @@ register_enters_unbowed = _ENTERS_UNBOWED.make_register()
 def register_ability(printed_id: str, value: Ability) -> None:
     """Register ``value`` as one of ``printed_id``'s activated abilities.
 
-    A card printing several needs a :attr:`Ability.key` on each, since an action names the ability
+    A card printing several needs a ``Ability.key`` on each, since an action names the ability
     it takes by key and an unkeyed one could not be told from its sibling. Raise ValueError if a
     second ability arrives unkeyed, or if it repeats a key already registered for the card.
     """

@@ -6,7 +6,7 @@ from yasuki_core.engine.players import PlayerId
 
 @dataclass(frozen=True, slots=True)
 class DecisionResponse:
-    """A seat's answer to the pending :class:`DecisionRequest`.
+    """A seat's answer to the pending :class:`~.DecisionRequest`.
 
     Carries the chosen identifiers — card ids, gold-source ids, or an ordering — interpreted by
     the request being answered. One uniform shape so the decision log, the save format, and the
@@ -28,7 +28,7 @@ class DecisionRequest(ABC):
     """A question the engine pauses to put to one seat.
 
     The engine runs until it needs input, records a concrete request on ``GameState.pending``, and
-    returns; the seat answers with a :class:`DecisionResponse` and the engine resumes. Concrete
+    returns; the seat answers with a :class:`~.DecisionResponse` and the engine resumes. Concrete
     requests form a closed union that grows with the rules vocabulary.
 
     Attributes
@@ -46,7 +46,7 @@ class DecisionRequest(ABC):
     @abstractmethod
     def accepts(self, response: DecisionResponse) -> bool:
         """Return whether ``response`` is a structurally well-formed answer to this request — the
-        right shape, drawn from :attr:`candidates`. A well-formed answer may still be illegal
+        right shape, drawn from ``candidates``. A well-formed answer may still be illegal
         against the game state; the rules layer makes that check separately."""
 
     @abstractmethod
@@ -418,12 +418,12 @@ ASSIGNMENT_SEPARATOR = "@"
 
 def assignment_token(card_id: str, battlefield: int) -> str:
     """The candidate string pairing the Personality ``card_id`` with the battlefield at index
-    ``battlefield`` — how :class:`AssignUnits` names one place a unit could go."""
+    ``battlefield`` — how :class:`~.AssignUnits` names one place a unit could go."""
     return f"{card_id}{ASSIGNMENT_SEPARATOR}{battlefield}"
 
 
 def assignment(token: str) -> tuple[str, int]:
-    """The Personality and battlefield index :func:`assignment_token` encoded.
+    """The Personality and battlefield index :func:`~.assignment_token` encoded.
 
     Returns
     -------
@@ -449,8 +449,9 @@ class AssignUnits(DecisionRequest):
 
     A candidate pairs a unit with a battlefield rather than naming either alone, because assigning is
     a choice of *where* and one Personality may go to any battlefield the attack made. Read a choice
-    through :func:`assignment` rather than splitting the string. The whole seat answers at once: the
-    CR has each seat assign simultaneously, so this is one request per seat rather than one per unit.
+    through :func:`~.assignment` rather than splitting the string. The whole seat answers at once:
+    the CR has each seat assign simultaneously, so this is one request per seat rather than one per
+    unit.
 
     Assigning nothing is a well-formed answer — the CR lets a seat keep some or all of its
     Personalities at home.
@@ -537,7 +538,7 @@ class Confirm(DecisionRequest):
 
     An optional effect whose subject is already settled — "destroy this Farm to straighten the card
     it recruited" — reads as a question rather than as a card selection. Answering yes returns the
-    candidates, answering no returns none, so this is an optional :class:`ChooseCards` in every
+    candidates, answering no returns none, so this is an optional :class:`~.ChooseCards` in every
     respect but how a client puts it: a question with two buttons instead of a board selection.
 
     Attributes
@@ -547,7 +548,8 @@ class Confirm(DecisionRequest):
     resolver : str
         The registered choice resolver that turns the answer into effects.
     source_id : str, optional
-        A card id handed to the resolver as its context, as for :class:`ChooseCards`. Default None.
+        A card id handed to the resolver as its context, as for :class:`~.ChooseCards`. Default
+        None.
     declinable : bool, optional
         Whether no is an answer. False when refusing would strand something the seat is already
         committed to, which leaves cancelling as its only way out rather than declining. Default

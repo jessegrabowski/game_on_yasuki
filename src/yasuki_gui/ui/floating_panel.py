@@ -27,7 +27,7 @@ class FloatingPanel(tk.Frame):
     resize it by, and a button that rolls it up to the bar.
 
     Placed rather than packed, so it covers the board instead of taking room from it. Subclasses
-    build their content into :attr:`body` and leave the chrome alone.
+    build their content into ``body`` and leave the chrome alone.
 
     Attributes
     ----------
@@ -173,7 +173,7 @@ class FloatingPanel(tk.Frame):
         top : int
             The box's top edge.
         width : int
-            How wide to open. Trimmed to the board by :meth:`_clamp` if it does not fit.
+            How wide to open. Trimmed to the board by ``_clamp`` if it does not fit.
         height : int
             How tall to open, title bar included.
         """
@@ -242,14 +242,14 @@ class FloatingPanel(tk.Frame):
         return dx, dy
 
     def _drag(self, event: tk.Event) -> None:
-        """Move the panel with the pointer. :meth:`_apply` is what keeps it on the board."""
+        """Move the panel with the pointer. :meth:`~._apply` is what keeps it on the board."""
         dx, dy = self._traveled(event)
         self._panel_left += dx
         self._panel_top += dy
         self._apply()
 
     def _resize(self, event: tk.Event) -> None:
-        """Grow or shrink the panel from its bottom-right corner. :meth:`_apply` is what keeps the
+        """Grow or shrink the panel from its bottom-right corner. :meth:`~._apply` is what keeps the
         result a size that still holds a title bar and something under it."""
         if self._minimized:
             return

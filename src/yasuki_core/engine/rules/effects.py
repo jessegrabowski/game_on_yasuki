@@ -68,7 +68,7 @@ class Effect(ABC):
     """One change to game state, described as data.
 
     Triggers and activated abilities return lists of effects rather than mutating the board, and the
-    cascade commits each through :meth:`perform`.
+    cascade commits each through :meth:`~.perform`.
     """
 
     __slots__ = ()
@@ -99,7 +99,7 @@ class InterruptingEffect(Effect, ABC):
     """An effect that pauses the cascade to put a question to a seat.
 
     The walker records :meth:`request` as the pending decision and stashes the rest of the cascade,
-    resuming once the seat answers. It never calls :meth:`perform` on one.
+    resuming once the seat answers. It never calls :meth:`~.perform` on one.
     """
 
     __slots__ = ()
@@ -483,8 +483,8 @@ class GrantMinimum(Effect):
     """Record a continuous stat minimum: the ``source`` card floors ``target``'s ``stat`` at
     ``value`` for ``duration`` (CR, Minimums and Maximums).
 
-    The minimum counterpart of :class:`GrantModifier`. A card reading "to a minimum of N" wants a
-    :class:`GrantModifier` with a capped amount instead, because that wording limits one change
+    The minimum counterpart of :class:`~.GrantModifier`. A card reading "to a minimum of N" wants a
+    :class:`~.GrantModifier` with a capped amount instead, because that wording limits one change
     rather than the stat.
     """
 
@@ -512,8 +512,8 @@ class GrantProvinceStrength(Effect):
     """Record a continuous Province Strength modifier: the ``source`` card adjusts ``province`` by
     ``amount`` for ``duration``.
 
-    The Province counterpart of :class:`GrantModifier`. A Province is a slot rather than a card, so
-    a card strengthening one for the turn cannot target it the way it targets a Personality.
+    The Province counterpart of :class:`~.GrantModifier`. A Province is a slot rather than a card,
+    so a card strengthening one for the turn cannot target it the way it targets a Personality.
     """
 
     source_id: str
@@ -709,7 +709,7 @@ class GrantPriority(Effect):
 class GrantKeyword(Effect):
     """Record a keyword grant: the ``source`` card gives ``target`` ``keyword`` for ``duration``.
 
-    The keyword counterpart of :class:`GrantModifier`, for the "give your target Personality
+    The keyword counterpart of :class:`~.GrantModifier`, for the "give your target Personality
     Cavalry" a card prints. A keyword a card carries by its own text needs no grant — that is a
     keyword handler, read off the board.
     """
@@ -1382,7 +1382,7 @@ class Ask(InterruptingEffect):
 
     The question names what is being asked so the seat reads it rather than inferring it from a
     board selection. Use this for an optional effect whose subject is already settled; a genuine
-    pick among several cards is a :class:`Choose`.
+    pick among several cards is a :class:`~.Choose`.
 
     Attributes
     ----------

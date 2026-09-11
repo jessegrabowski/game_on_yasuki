@@ -188,7 +188,7 @@ def _bands(height: int, *, mirrored: bool = False) -> tuple[int, int]:
 def _rows(height: int, *, mirrored: bool = False) -> tuple[int, int, int, int]:
     """Where a lane's three rows of cards sit, and where the divider between the sides goes.
 
-    The Province, the Defender's units and the Attacker's fill the space :func:`_bands` leaves. A
+    The Province, the Defender's units and the Attacker's fill the space :func:`~._bands` leaves. A
     lane with room for all three spreads them apart; a shorter one steps them closer until they
     overlap, each row keeping enough of itself showing to be read, rather than pushing the last row
     out of sight. Cards are a fixed size, so the rows moving is the only give there is.
@@ -320,7 +320,7 @@ class BattleView(FloatingPanel):
         selected : frozenset of str, optional
             The ids of the cards the player has picked, drawn with a selection ring. Default empty.
         stats : dict mapping str to dict, optional
-            :attr:`GameView.stats`, so a unit in a lane reports the same Force the lane's total was
+            ``GameView.stats``, so a unit in a lane reports the same Force the lane's total was
             built from. Default None.
         viewer : PlayerId, optional
             The seat being played, whose side of every lane is drawn as the near one. Default None,

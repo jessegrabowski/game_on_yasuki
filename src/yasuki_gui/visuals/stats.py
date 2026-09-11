@@ -57,7 +57,7 @@ def stamped_stats(card: RenderCard, stats: dict[str, dict[Stat, int]]) -> dict[S
     card : L5RCard or HiddenFace
         The card being drawn. A redacted back carries no print and so no stat.
     stats : dict mapping str to dict
-        :attr:`GameView.stats` — each modified card's effective stats by id. A card no modifier
+        ``GameView.stats`` — each modified card's effective stats by id. A card no modifier
         reaches is absent, and its printed value stands.
     """
     printed = getattr(card, "printed", None)
@@ -117,7 +117,7 @@ def draw_stat_stamps(
     bbox : tuple of int
         The card's rectangle as ``(x0, y0, x1, y1)``, already turned if the card is bowed.
     stats : dict mapping str to dict
-        :attr:`GameView.stats`, read through :func:`stamped_stats`.
+        ``GameView.stats``, read through :func:`~.stamped_stats`.
     tags : tuple of str
         The canvas tags every item is created under, so the caller can erase them as a group.
     bowed : bool, optional

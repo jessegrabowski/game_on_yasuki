@@ -53,7 +53,7 @@ class Policy(Protocol):
     answers a decision that action raises. A Recruit needs both — the policy chooses to recruit, the
     agent answers the payment.
 
-    Policies read the seat's :class:`GameView` rather than the game itself, so one cannot see the
+    Policies read the seat's :class:`~.GameView` rather than the game itself, so one cannot see the
     opponent's hand and works unchanged over a network. The view carries live card objects, so a
     policy weighing a card's Gold Production or Gold Cost has them to hand.
 
@@ -132,7 +132,7 @@ class EconomicPolicy:
 
 
 class EconomicLegacyPolicy:
-    """Buys like :class:`EconomicPolicy`, and takes the Legacy ability when it improves the board.
+    """Buys like :class:`~.EconomicPolicy`, and takes the Legacy ability when it improves the board.
 
     Legacy banishes a card from hand to search the seat's dynasty deck and face-down provinces for a
     Legacy card, then places it face-up over a province card, discarding what was there. It is worth
@@ -206,14 +206,14 @@ def cards_to_cycle(view: GameView) -> tuple[str, ...]:
 
 
 class EconomicCyclePolicy:
-    """Buys like :class:`EconomicPolicy`, and cycles an opening that its deck can beat.
+    """Buys like :class:`~.EconomicPolicy`, and cycles an opening that its deck can beat.
 
     Cycle is a first-turn-only rulebook ability: put one or more face-up Province cards on the
-    bottom of the dynasty deck, refill, and reveal. It is taken when :func:`cards_to_cycle` finds
+    bottom of the dynasty deck, refill, and reveal. It is taken when :func:`~.cards_to_cycle` finds
     anything worth replacing.
 
     Answers its own Cycle decision as well as choosing it, so the cards put back are the ones the
-    choice was made over. Every other decision falls through to :class:`PayingAgent`.
+    choice was made over. Every other decision falls through to :class:`~.PayingAgent`.
     """
 
     name = "economic-cycle"
@@ -245,15 +245,15 @@ class GoldRushPolicy:
     four Gold, so the cheap producers a deck-average rule would bin are exactly the ones this policy
     can afford to buy with it. Then Legacy, when the pool holds a better producer than the board —
     it puts that card face-up in a Province where the same turn's Recruit can reach it. Then an
-    activated ability this policy has an economic model for, which
-    :data:`~yasuki_core.bots.hints.ABILITY_HINTS` decides. Then the best purchase, ranked as
-    :class:`EconomicPolicy` ranks it, which takes a Personality once no Holding is within reach:
+    activated ability this policy has an economic model for, which ``ABILITY_HINTS`` decides. Then
+    the best purchase, ranked as :class:`~.EconomicPolicy` ranks it, which takes a Personality once
+    no Holding is within reach:
     gold left in the pool is cleared at the phase change, and buying empties the Province either
     way. Then a Dynasty Discard of any face-up Province card it has no use for — one producing
     nothing, or one priced beyond what it could raise — which costs nothing and refills the Province
     for next turn.
 
-    The discard is what separates this from :class:`EconomicPolicy`. Nothing else in the registry
+    The discard is what separates this from :class:`~.EconomicPolicy`. Nothing else in the registry
     ever takes it, so a Province holding a card the seat cannot afford would stay held for the rest
     of the game and the seat would play on with fewer slots than it has. One discard is one choice,
     so a turn ending with three unaffordable Personalities flushes them over three windows and
@@ -261,7 +261,7 @@ class GoldRushPolicy:
 
     Answers its own decisions as well as choosing, because an ability is only worth as much as the
     answers behind it: which card it targets, and whether to pay an optional cost the resolution
-    offers. Everything it has no model for falls through to :class:`PayingAgent`.
+    offers. Everything it has no model for falls through to :class:`~.PayingAgent`.
 
     A ceiling rather than a player: it prices every non-producing card at nothing, so it throws away
     Personalities a real deck wins with. Its numbers bound what a deck's economy can do, and say
@@ -305,7 +305,7 @@ class GoldRushPolicy:
 class MilitaryPolicy:
     """Plays the gold rush, and defends its Provinces when it is attacked.
 
-    Everything away from a battle is :class:`GoldRushPolicy`, which this wraps: the seat still
+    Everything away from a battle is :class:`~.GoldRushPolicy`, which this wraps: the seat still
     cycles, tutors, runs its abilities, buys and flushes. What it adds is the one question a
     Defender is ever asked — where its units go.
 
@@ -402,8 +402,8 @@ def _force_at_home(view: GameView, seat: PlayerId) -> int:
 
     What a seat could assign rather than what it has — a bowed Personality may not be assigned at
     all, and one already at a battlefield has been. A card the viewer cannot identify is redacted to
-    a :class:`HiddenCard` and so is never counted, which is why an opponent's face-down card cannot
-    be weighed.
+    a :class:`~.HiddenCard` and so is never counted, which is why an opponent's face-down card
+    cannot be weighed.
     """
     return sum(
         view.unit_force[entry.card.id]
@@ -476,7 +476,7 @@ def _force_gain(card: L5RCard) -> int:
 
 
 def _hand(view: GameView) -> dict[str, L5RCard]:
-    """The viewer's own hand by id, which is what an :class:`Equip`'s ``card_id`` names. A seat
+    """The viewer's own hand by id, which is what an :class:`~.Equip`'s ``card_id`` names. A seat
     sees its own hand unredacted, so an attachment can be priced before it is played."""
     zone = view.table.zones.get(ZoneKey(view.viewer, ZoneRole.HAND))
     if zone is None:

@@ -76,7 +76,7 @@ def centered_row(center_x: int, count: int, *, step: int = COLUMN_STEP) -> list[
     count : int
         How many cards are in the row.
     step : int, optional
-        Distance between neighboring centers. Default :data:`COLUMN_STEP`, one card plus its gap;
+        Distance between neighboring centers. Default ``COLUMN_STEP``, one card plus its gap;
         a caller with less room than that needs may pass a smaller step to overlap the row.
     """
     if count <= 0:
@@ -244,7 +244,7 @@ def to_canvas(pos: BoardPos, *, flipped: bool, canvas_w: int, canvas_h: int) -> 
     """Project a seat-neutral battlefield position to canvas pixels.
 
     Identity for the human-at-bottom view; a 180° rotation about the canvas center for the debug
-    other-seat view. ``to_canvas`` and :func:`from_canvas` are mutual inverses, so a drag
+    other-seat view. ``to_canvas`` and :func:`~.from_canvas` are mutual inverses, so a drag
     round-trips.
     """
     x, y = int(pos.x), int(pos.y)
@@ -254,7 +254,7 @@ def to_canvas(pos: BoardPos, *, flipped: bool, canvas_w: int, canvas_h: int) -> 
 
 
 def from_canvas(x: int, y: int, *, flipped: bool, canvas_w: int, canvas_h: int) -> BoardPos:
-    """Invert :func:`to_canvas`, turning a canvas pixel back into a seat-neutral position."""
+    """Invert :func:`~.to_canvas`, turning a canvas pixel back into a seat-neutral position."""
     if flipped:
         return BoardPos(float(canvas_w - x), float(canvas_h - y))
     return BoardPos(float(x), float(y))

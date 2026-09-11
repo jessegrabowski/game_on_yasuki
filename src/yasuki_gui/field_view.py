@@ -205,7 +205,7 @@ class FieldView(tk.Canvas):
         seat : PlayerId
             Whose view this is.
         stats : dict mapping str to dict, optional
-            :attr:`GameView.stats` — each modified card's effective stats, stamped on the cards
+            ``GameView.stats`` — each modified card's effective stats, stamped on the cards
             that carry them. Default None, which draws every card at its printed numbers.
         """
         self._snapshot = snapshot

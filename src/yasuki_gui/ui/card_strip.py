@@ -29,7 +29,7 @@ class CardStrip(FloatingPanel):
 
     A look rather than a chooser: nothing here commits, so it is dragged, rolled up and closed like
     any other panel, and reopening it keeps wherever the player left it. Which face each card shows
-    is :func:`card_face`'s call.
+    is :func:`~.card_face`'s call.
     """
 
     def __init__(self, master: tk.Misc, images: ImageProvider):

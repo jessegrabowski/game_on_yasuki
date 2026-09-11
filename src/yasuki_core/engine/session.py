@@ -57,7 +57,7 @@ def _position(game: GameState, seat: PlayerId) -> tuple:
 class EngineSession:
     """The single surface a client plays a rules-driven game through.
 
-    Owns the authoritative :class:`GameState` and the append-only :class:`GameLog`, and exposes
+    Owns the authoritative :class:`~.GameState` and the append-only :class:`~.GameLog`, and exposes
     the three engine-to-client channels: a per-seat projection, a legal-action query, and decision
     submission — plus turn advancement. Every accepted input is recorded, so ``log`` always replays
     to the current ``game``.

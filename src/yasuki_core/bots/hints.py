@@ -28,8 +28,8 @@ class AbilityHint:
     worth_activating : callable
         Answers, from the view and the card, whether taking the ability now is worth what it costs.
     best_target : callable, optional
-        Answers, from the view and the pending :class:`ChooseAbilityTarget`, which candidate to hit.
-        Default None, which takes the first candidate as a generic agent would.
+        Answers, from the view and the pending :class:`~.ChooseAbilityTarget`, which candidate to
+        hit. Default None, which takes the first candidate as a generic agent would.
     optional_cost_answers : mapping of str to callable, optional
         Answers, per choice resolver, whether to pay an optional cost the resolution offers. Keyed
         by resolver rather than by card because the request carries the card the cost is paid *for*,

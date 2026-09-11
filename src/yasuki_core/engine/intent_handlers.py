@@ -586,7 +586,7 @@ LOCKED_ACTIONS: dict[str, frozenset[IntentOp]] = {
 
 def locked_ops(card: L5RCard) -> frozenset[IntentOp]:
     """The intents ``card`` refuses regardless of who is acting, for the client to leave off its
-    menu and for :func:`apply_intent` to reject."""
+    menu and for :func:`~.apply_intent` to reject."""
     return LOCKED_ACTIONS.get(card.printed_id, frozenset())
 
 

@@ -75,7 +75,7 @@ def favor_cost_for_seat(game: GameState, seat: PlayerId, source_id: str) -> list
 
 
 def favor_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    """The Favor cost on ``source``'s ability, in the shape a :data:`Cost` takes."""
+    """The Favor cost on ``source``'s ability, in the shape a ``Cost`` takes."""
     return favor_cost_for_seat(game, source.owner, source.id)
 
 

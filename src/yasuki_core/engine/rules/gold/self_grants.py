@@ -31,7 +31,7 @@ def register_self_grant(printed_id: str, amount: int) -> None:
 
     What the card's window trigger grants, told to affordability separately so a purchase only the
     grant can reach is still offered. The trigger is what makes the grant happen; this is what makes
-    it countable before anyone is asked. Use :func:`self_grant` for a card that offers its grant only
+    it countable before anyone is asked. Use ``self_grant`` for a card that offers its grant only
     under a condition.
     """
     self_grant(printed_id)(lambda card, game_, seat: amount)
@@ -43,11 +43,11 @@ def maximum_gold_production(
     """The most ``card`` could yield if its controller took every option it offers.
 
     What affordability asks, so that a purchase reachable only by a card raising its own yield is
-    still offered. :func:`effective_gold_production` answers the same question for right now.
+    still offered. :func:`~.effective_gold_production` answers the same question for right now.
 
     A card that has already granted itself this turn adds nothing more: the grant is inside
-    :func:`effective_gold_production` by then, and counting it twice would report a ceiling the card
-    cannot reach.
+    :func:`~.effective_gold_production` by then, and counting it twice would report a ceiling the
+    card cannot reach.
 
     Two other places measure a seat's gold and deliberately report less: ``policies._spendable`` and
     :func:`~yasuki_core.sim.metrics.potential_gold_production` both leave a self-grant out, because
@@ -84,7 +84,7 @@ def is_production_window(request: Confirm, battlefield: Iterable[BattlefieldCard
     """Whether a yes/no question is a producer's bow-time window rather than some other card's.
 
     Recognized by the card asking, not by the resolver: every card that can raise its own Gold
-    Production declares the amount, so :data:`GOLD_SELF_GRANT` is the list of cards whose window
+    Production declares the amount, so ``GOLD_SELF_GRANT`` is the list of cards whose window
     this could be.
 
     Parameters

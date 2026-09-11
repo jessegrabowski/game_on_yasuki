@@ -233,7 +233,7 @@ def intent_log_from_dict(payload: dict) -> IntentLog:
 @runtime_checkable
 class FlushSink(Protocol):
     """Where a persisted log lands. A database or object-store backend implements ``write`` to take
-    the plain-dict payload from :func:`intent_log_to_dict`. Nothing implements it yet, so a log is
+    the plain-dict payload from :func:`~.intent_log_to_dict`. Nothing implements it yet, so a log is
     never written anywhere."""
 
     def write(self, payload: dict) -> None: ...
@@ -241,5 +241,5 @@ class FlushSink(Protocol):
 
 def flush(log: IntentLog, sink: FlushSink) -> None:
     """Serialize ``log`` and hand it to ``sink`` — the one place persistence attaches. Nothing calls
-    this yet, since nothing implements :class:`FlushSink`."""
+    this yet, since nothing implements :class:`~.FlushSink`."""
     sink.write(intent_log_to_dict(log))

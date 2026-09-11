@@ -9,7 +9,7 @@ def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:
     """Every Clan Alignment slug ``seat`` plays, taken from its Stronghold. Empty for an unaligned
     seat and for one with no Stronghold in play.
 
-    A set for the same reason :func:`card_alignments` is one: a card may print more than one clan,
+    A set for the same reason :func:`~.card_alignments` is one: a card may print more than one clan,
     and a Stronghold is a card.
     """
     stronghold = seat_stronghold(game, seat)
@@ -29,8 +29,8 @@ def seat_alignment_name(game: GameState, seat: PlayerId | None) -> str | None:
     """The clan a card created "with your Clan Alignment" takes: the name printed on ``seat``'s
     Stronghold, or None when that clan is no legal alignment -- an unaligned seat has none to give.
 
-    The printed name rather than :func:`seat_alignments`' slug, because the created card carries it
-    the way any card carries its clan. The first legal one, for a Stronghold printing several.
+    The printed name rather than :func:`~.seat_alignments`' slug, because the created card carries
+    it the way any card carries its clan. The first legal one, for a Stronghold printing several.
     """
     stronghold = seat_stronghold(game, seat)
     if stronghold is None:

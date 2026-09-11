@@ -238,7 +238,7 @@ def encode_card(card: L5RCard) -> dict:
     """Encode a card to JSON-ready plain data, tagged with the print it presents so ``decode_card``
     rebuilds the same one.
 
-    Writes the fields :data:`_PERSISTED_FIELDS` names for that print rather than whatever the
+    Writes the fields ``_PERSISTED_FIELDS`` names for that print rather than whatever the
     dataclasses declare, so the persisted format is a decision rather than a consequence.
 
     Raises
@@ -273,7 +273,7 @@ def encode_print(printed: CardPrint) -> dict:
 
 
 def decode_print(payload: dict) -> CardPrint:
-    """Rebuild the print encoded by :func:`encode_print`, dispatching on its ``__type__`` tag."""
+    """Rebuild the print encoded by :func:`~.encode_print`, dispatching on its ``__type__`` tag."""
     print_cls = _PRINT_REGISTRY[payload["__type__"]]
     return print_cls(
         **{key: _decode_value(value) for key, value in payload.items() if key != "__type__"}

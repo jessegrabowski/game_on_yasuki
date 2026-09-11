@@ -150,7 +150,7 @@ def _project(card: L5RCard, visible: bool) -> CardView:
 
 def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
     """Project the authoritative table into the per-viewer view, replacing every card the viewer is
-    not entitled to identify with a :class:`HiddenCard` stub.
+    not entitled to identify with a :class:`~.HiddenCard` stub.
 
     Visibility:
 

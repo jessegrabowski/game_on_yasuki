@@ -80,7 +80,7 @@ class GameWindow:
         The application menu, installed on the root.
     debug : bool
         Whether the debug affordances are live, from the config or from
-        :data:`LOCAL_DEBUG_OVERRIDE`.
+        ``LOCAL_DEBUG_OVERRIDE``.
     """
 
     def __init__(self, table: TableState, seat: PlayerId = PlayerId.P1) -> None:
@@ -90,7 +90,7 @@ class GameWindow:
         ----------
         table : TableState
             The board the client opens on. Required rather than optional because a
-            :class:`PlayerInfoBox` reads its seat's name as it is constructed.
+            :class:`~.PlayerInfoBox` reads its seat's name as it is constructed.
         seat : PlayerId, optional
             The seat being played, which decides which panel sits at the bottom of the sidebar.
             Default P1.
@@ -181,7 +181,7 @@ class GameWindow:
         """Float the battle over the board while ``attack`` is on, and take it away when it ends.
 
         It opens over the opponent's half and stays wherever the player has since dragged it. The
-        arguments are :meth:`BattleView.refresh`'s and are passed straight through.
+        arguments are ``BattleView.refresh``'s and are passed straight through.
         """
         if attack is None:
             self.battle_view.close()
