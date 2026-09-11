@@ -8,6 +8,7 @@ and desktop client surface that same engine. The dependency direction is one-way
 :maxdepth: 1
 
 engine
+package_boundaries
 card_vocabulary
 database
 web-app
