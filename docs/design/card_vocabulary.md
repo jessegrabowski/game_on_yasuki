@@ -177,18 +177,9 @@ A modifier adjusts one `Stat` for one `Duration`. A counter is named scalar stat
 each counter declares the per-count stat it grants, so a card's wealth tokens raise its Gold
 Production without a modifier being recorded.
 
-There are five ongoing types rather than one because they rest on different things. `Modifier` is
-the general case and adjusts a stat on a card. A Province is a slot rather than a card, so
-`ProvinceModifier` records a change to its strength. A Lobby Bonus rests on a player, so
-`LobbyModifier` records that, and the datasheet says an adjustment to Family Honor through one is
-neither an Honor gain nor an Honor loss. `KeywordGrant` gives a keyword instead of a number.
-`Minimum` floors a stat rather than adding to it, and is applied after the bonuses and penalties
-total rather than among them, so a minimum of 1 Chi cannot be summed away.
-
-`Duration` has three values. `UNTIL_END_OF_TURN` is the default for an action or ability effect.
-`WHILE_SOURCE_IN_PLAY` expires when the card the effect came from leaves the battlefield, which is
-how counters, attachments and continuous auras are held. `PERMANENT` outlives its source leaving play, and still ends when its *target* leaves the table,
-because a card that leaves play ceases to exist.
+The five ongoing types differ by what they rest on, and `Duration` decides how long one lasts.
+[Stats: printed against effective](systems/stats.md) explains both. This page lists the closed
+set a card can return.
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.vocabulary.modifiers
