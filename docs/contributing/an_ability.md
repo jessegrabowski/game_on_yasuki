@@ -1,5 +1,10 @@
 # Writing an ability
 
+```{card-image} Dull Tanto
+:printing: road_to_ruin
+:width: 220px
+```
+
 An ability is four things: when it may be taken, what it costs, what it may be pointed at, and what
 it does. {card}`Dull Tanto` is the whole of a simple one.
 

@@ -1,5 +1,10 @@
 # A card that prints two abilities
 
+```{card-image} Incendiary Archers
+:printing: ivory_edition
+:width: 220px
+```
+
 A card printing one ability registers it and stops. A card printing two has to say which is which.
 
 {card}`Incendiary Archers` prints both a Ranged attack and a Fear effect, and they are separate
