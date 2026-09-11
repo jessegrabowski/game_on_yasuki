@@ -11,6 +11,10 @@ engine
 systems/triggers-and-the-cascade
 systems/stats
 systems/gold
+systems/abilities-and-costs
+systems/turn-flow
+systems/actions-and-legality
+systems/action-lifecycles
 package_boundaries
 card_vocabulary
 database
