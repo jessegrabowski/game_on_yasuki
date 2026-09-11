@@ -24,17 +24,10 @@ Card data is **file-first**: the committed YAML under `src/yasuki_core/assets/da
 truth, loaded into Postgres by the `install/` pipeline (the DB is a derived cache). The accounts database
 is separate.
 
-## Subsystem depth: the area skills
-
-Per-subsystem depth (where it lives, what it does, how it fits) is in a skill that fires when you work in
-that area — invoke the matching one before a substantial change:
-
-`game-pieces` (card model) · `engine-state` (board state, intents, redaction) · `rules-engine` (turn
-play) · `card-data` (YAML + DB schema) · `search` (query language) · `web` (FastAPI server) · `gui`
-(Tkinter client) · `accounts` (users/auth).
+## Subsystem depth
 
 Full narrative documentation is the Sphinx site under `docs/` — `design/`, `getting_started/`,
-`contributing/`.
+`contributing/`. Implementing a card starts at `docs/contributing/adding_a_card.md`.
 
 ## Conventions
 
