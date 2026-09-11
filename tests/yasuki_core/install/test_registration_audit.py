@@ -1,14 +1,12 @@
-import ast
 import pathlib
 import subprocess
 import sys
 
 
-from yasuki_core import bots
-from yasuki_core.engine import rules
 from yasuki_core.engine.rules import cards
 from yasuki_core.install import registration_audit
 from yasuki_core.install.registration_audit import (
+    unvalidated_registries,
     card_keyed_data,
     duplicate_registrations,
     main,
@@ -16,89 +14,6 @@ from yasuki_core.install.registration_audit import (
     unregistered_card_ids,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.registrar import CARD_REGISTRIES
-
-# The per-card registries registration_audit validates by name. Everything built through the
-# registrar is absent on purpose -- those report themselves, which is the point of it.
-VALIDATED_REGISTRIES = {
-    "_ABILITIES",
-    "_INVEST",
-    "CHI_DEATH_EXEMPT",
-    "_TRIGGERS",
-}
-# Module-level collections under engine/rules that key on something other than a card. Each is
-# named so that a genuinely new registry cannot arrive unnoticed: the guard below insists every
-# collection it finds is either validated or listed here, so classifying a new one is a decision
-# someone has to make rather than one they can skip.
-NOT_KEYED_BY_CARD = {
-    "CHOICE_RESOLVERS",  # keyed by the kind of a pending choice
-    "_OPTIONAL_COST_ANSWERS",  # likewise -- a bot hint's answers, by resolver
-    "CHOICE_PROMPTS",  # likewise, and it lives in decisions
-    "POLICIES",  # keyed by policy name
-    "AGENTS",  # keyed by agent name
-    "FAVOR_ABILITY_COSTS",  # keyed by the arc's FavorAbility
-    "FAVOR_ABILITY_EFFECTS",
-    "ACTION_TIMINGS",  # keyed by action type
-    "PHASE_TIMINGS",  # keyed by phase
-    "BATTLE_SEGMENT_TIMINGS",  # keyed by battle segment
-    "FIRED_MOMENTS",  # the moments the flow resolves
-    "_AFTER_BATTLE_SEGMENT",  # the segment order
-    "_ACTION_WORDING",  # keyed by action type, for describe_action
-}
-COLLECTIONS = ("dict", "set", "frozenset")
-# What a registry built through the registrar looks like in source. These need no entry in
-# VALIDATED_REGISTRIES: they report themselves at import, so validation reads them whatever they
-# are named and wherever they live.
-REGISTRAR = ("FlagRegistry", "HandlerRegistry")
-
-
-# Every package registration_audit validates a registry in. `bots` is here because the ability
-# hints are keyed by printed id like any other per-card registry, so the scan has to follow it out
-# of `rules`.
-SCANNED = (rules, bots)
-
-
-def module_level_collections() -> set[str]:
-    """Every module-level dict, set and frozenset *defined* in the scanned packages.
-
-    Read from the source rather than from the imported modules, and read recursively. A re-exported
-    name shows up in ``vars`` without the module owning it, and — the failure this exists to
-    prevent — a registry in a module nobody thought to list shows up here regardless, including one
-    inside a package or in a package the rules layer does not own.
-    """
-    return {
-        name
-        for package in SCANNED
-        for path in pathlib.Path(package.__file__).parent.rglob("*.py")
-        for name in _collections_defined_in(path)
-    }
-
-
-def _built_by_the_registrar(value: ast.expr | None) -> bool:
-    """Whether this binding is a registry the registrar catalogues, which validation finds itself."""
-    return isinstance(value, ast.Call) and getattr(value.func, "id", "") in REGISTRAR
-
-
-def _collections_defined_in(path: pathlib.Path) -> set[str]:
-    """The module-level collection names one source file binds, by annotation or by literal."""
-    found: set[str] = set()
-    for node in ast.parse(path.read_text(encoding="utf-8")).body:
-        if isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
-            if _built_by_the_registrar(node.value):
-                continue
-            if any(kind in ast.unparse(node.annotation) for kind in COLLECTIONS):
-                found.add(node.target.id)
-        elif isinstance(node, ast.Assign):
-            literal = isinstance(node.value, ast.Dict | ast.Set)
-            call = (
-                isinstance(node.value, ast.Call)
-                and getattr(node.value.func, "id", "") in COLLECTIONS
-            )
-            if _built_by_the_registrar(node.value):
-                continue
-            if literal or call:
-                found.update(target.id for target in node.targets if isinstance(target, ast.Name))
-    return found
 
 
 def test_every_registered_handler_names_a_real_card():
@@ -115,21 +30,6 @@ def test_every_registered_handler_names_a_real_card():
     )
 
     assert finished.returncode == 0, finished.stderr
-
-
-def test_no_per_card_registry_escapes_validation():
-    # The failure this guards is a registry added to the engine and never wired into the check: it
-    # would be validated by nothing, and every other test here would still pass. Discovering the
-    # registries rather than listing them is what makes the new one visible — including one in a
-    # module this file never names, which is how the attack-strength registry stayed unchecked.
-    discovered = module_level_collections()
-
-    assert discovered - VALIDATED_REGISTRIES == NOT_KEYED_BY_CARD
-    assert VALIDATED_REGISTRIES - discovered == set()
-    assert {built.label for built in CARD_REGISTRIES} <= registered_card_ids().keys()
-    assert len(registered_card_ids()) + len(card_keyed_data()) == len(CARD_REGISTRIES) + len(
-        VALIDATED_REGISTRIES
-    )
 
 
 def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():
@@ -208,6 +108,22 @@ def test_the_same_trigger_on_two_cards_is_legitimate():
     registry = {EnteredPlay: {"millet_farm": [a_trigger], "modest_farm": [a_trigger]}}
 
     assert duplicate_registrations(registry) == []
+
+
+def test_a_registry_no_check_reads_is_reported():
+    # A plain dict keyed by card id is validated by nothing: unregistered_card_ids iterates the
+    # registries it is handed, so one it has never heard of contributes no ids and reports no
+    # problems. The card behind a misspelled key in it would be silently dead.
+    problems = unvalidated_registries({"_SNEAKY_REGISTRY"})
+
+    assert len(problems) == 1
+    assert "_SNEAKY_REGISTRY" in problems[0]
+
+
+def test_a_registry_already_classified_is_not_reported():
+    # Both classifications count: one the audit validates by name, and one that keys on something
+    # other than a card and is exempt on purpose.
+    assert unvalidated_registries({"_ABILITIES", "CHOICE_RESOLVERS"}) == []
 
 
 def test_no_registries_checks_nothing_rather_than_falling_back():
