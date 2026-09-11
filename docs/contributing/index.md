@@ -123,4 +123,5 @@ index.
 :hidden:
 
 adding_a_card
+reacting_to_events
 ```

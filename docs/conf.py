@@ -33,6 +33,7 @@ extensions = [
     "sphinx_design",
     "sphinx_copybutton",
     "cards",
+    "card_image",
 ]
 
 templates_path = ["_templates"]
@@ -54,6 +55,7 @@ myst_heading_anchors = 3
 # Where a card title links to. The role derives the id and checks it against the committed
 # card-id index, so a title naming no card fails the -W build rather than linking to a 404.
 card_base_url = "https://gameonyasuki.com/card"
+card_image_base_url = "https://pub-644375b8349147b0b1b99fbc4f7ef4d2.r2.dev"
 
 # -- autodoc / autosummary ---------------------------------------------------
 autosummary_generate = True
