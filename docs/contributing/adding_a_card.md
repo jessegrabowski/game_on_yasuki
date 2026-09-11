@@ -17,14 +17,24 @@ Read the card's text and find the shape:
 | Costs less to bring into play, conditionally | `@recruit_discount(id)` | Colonial Farm |
 | "After X happens…" | `@on(Event, id)` | Rice Farm |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | Millet Farm |
-| "Response: after X…" | `register_ability(id, Ability(timing=ActionTiming.RESPONSE, ...))` | Caravansary |
+| "Response: after X…" | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | Caravansary |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | Rebuilt Harbor |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | Fortified Farmlands |
 | Gives the Personality it hangs on a stat | `@attachment_grant(id)` | Haramaki-do |
 | Limits what it will attach to | `@attach_restriction(id)` | Brothers in Arms |
-| Buys its Invest cheaper, conditionally | `@invest_discount(id)` | Moto Ikarichi |
+| Buys its Invest cheaper, conditionally | `@invest_discount(id)` | Moto Ikarichi, Bloodseeker |
 | Changes the strength of an attack | `@attack_strength_against(id)` | Aseth's Legion |
 | Changes a Province's strength | `@province_strength_grant(id)` | Defensive Memorial |
+| Puts itself into play as an Edict | `register_edict(id)` | Act With Authority |
+| An Event played from the Province it sits in | `register_event_entry(id)` | Shadow of the Dark God |
+| Raises its own Gold Production as it bows | `register_self_grant(id, n)`, or `@self_grant(id)` when the grant has a condition | Jade Mine, Slave Pits |
+| Enters play unbowed where the rule says bowed | `register_enters_unbowed(id)` | Poorly Placed Garden |
+| "May remain bowed" | `register_may_remain_bowed(id)` | Culling Grounds |
+| Waives the bow cost of the Personality it hangs on | `register_bow_waiver(id)` | Shadowlands Ambassador |
+| Pays somebody's Imperial Favor cost | `@favor_payer(id)` | Manjodh |
+| "You have a +N Lobby Bonus" | `@lobby_bonus_grant(id)` | Shigekawa's Court |
+| Stops a player Lobbying at all | `@lobby_bar(id)` | Wasp Sensei |
+| "May not Lobby" | `register_may_not_lobby(id)` | Moto Chen |
 
 Nine events exist to react to: `EnteredPlay`, `Destroyed`, `Straightened`, `CardDiscarded`,
 `CounterGained`, `Revealed`, `TurnStarted`, `ProducingGold` and `ProducedGold`. If the moment your
