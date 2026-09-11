@@ -130,3 +130,23 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "pydantic": ("https://docs.pydantic.dev/latest", None),
 }
+
+# What nitpicky may not complain about. Every entry is a target no docstring can make resolve.
+nitpick_ignore_regex = [
+    # Third-party and stdlib types. Each would need another inventory fetched on every build to
+    # resolve ten-odd references, which is not worth the build time or the network dependency.
+    # `pathlib._local` is a 3.13 quirk: `pathlib.Path` resolves to the private module it now lives
+    # in, which the python inventory does not carry.
+    ("py:.*", r"pathlib\._local\..*"),
+    ("py:.*", r"psycopg\..*"),
+    ("py:.*", r"numpy\..*"),
+    ("py:.*", r"tk\..*"),
+    ("py:.*", r"PIL(\..*)?"),
+    ("py:.*", r"PhotoImage"),
+    # A TypeVar rendered into Deck's generic signature. It is a parameter, not a documented class.
+    ("py:class", r"CardT"),
+    # autodoc renders a dataclass annotation such as `clans: tuple[str, ...]` verbatim, and
+    # numpydoc_xref_param_type splits it on the comma, so the target is the unclosed fragment
+    # `tuple[str`.
+    ("py:class", r"[^\]]*\[[^\]]*"),
+]
