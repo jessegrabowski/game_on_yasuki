@@ -47,6 +47,14 @@ repos:
       # keyed on its old id.
       files: ^src/yasuki_core/(engine/rules/|bots/hints\.py$|install/registration_audit\.py$|assets/database/card_ids\.txt$)
 
+    - id: card-layout
+      name: card modules stay navigable
+      # Stdlib only and takes the changed files on argv, so it runs in CI's pre-commit job and
+      # scans the two modules you touched rather than all 41.
+      entry: python hooks/card_layout.py
+      language: system
+      files: ^src/yasuki_core/engine/rules/cards/.*\.py$
+
     - id: docs-api
       name: API pages match the source
       entry: pixi run -e docs docs-api

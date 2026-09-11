@@ -2,11 +2,8 @@ import datetime
 
 import yaml
 
-from tests.yasuki_core.engine.rules.card_modules import (
-    card_modules,
-    first_printing_module,
-    registered_ids,
-)
+from hooks.card_layout import registered_ids
+from tests.yasuki_core.engine.rules.card_modules import card_modules, first_printing_module
 
 
 def test_every_card_is_implemented_in_its_first_printing_module():
