@@ -1,10 +1,10 @@
 # Abilities and costs
 
-An activated ability is the most-used hook in the card module. It is also the  one that breaks the rule
-the others follow.
+An activated ability is the most-used hook in the card module. It is also the one that breaks the
+rule the others follow.
 
 Every other hook is a decorator on a function. This one is a plain call, and its second argument is
-a dataclass carrying five callables:
+a dataclass carrying five callables. {card}`Poorly Placed Garden` is the plainest complete one:
 
 ```python
 register_ability(
