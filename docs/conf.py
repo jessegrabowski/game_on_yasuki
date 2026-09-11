@@ -219,6 +219,11 @@ intersphinx_mapping = {
     "pydantic": ("https://docs.pydantic.dev/latest", None),
 }
 
+# Sphinx resolves a cross-reference role silently: one naming a symbol that has been deleted or
+# renamed renders as plain text and -W stays green. nitpicky makes every unresolved reference a
+# warning, and docs-build carries -W, so it fails the build instead of shipping a hole in a page.
+nitpicky = True
+
 # What nitpicky may not complain about. Every entry is a target no docstring can make resolve.
 nitpick_ignore_regex = [
     # Third-party and stdlib types. Each would need another inventory fetched on every build to
