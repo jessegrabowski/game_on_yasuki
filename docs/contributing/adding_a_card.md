@@ -125,6 +125,11 @@ Register the `prompt` alongside it. Without one the seat is asked "Choose up to 
 says how many cards to click and nothing about what for. Keep the wording free of counts — the same
 choice can offer one target or two.
 
+**A choice between modes** rather than between cards is `AskOption`, answered by a `ChooseOption`
+decision. Honor Your Oaths prints three modes with a different effect chain behind each, and the
+resolver branches on the option the seat picked. Reach for it when the card says "choose one" and
+the things being chosen are not cards.
+
 ### A division: how many go where
 
 Suiteiru no Oni creates a Follower per point of the Chi of the Personality he destroys, and attaches
@@ -439,14 +444,19 @@ these needs a core extension, not just a card module:
   Death destroys any bowed Personality with Chi no higher than its caster's — but each handler
   filters by owner itself. There is no permission model to ask, so a card whose restriction is a
   rulebook one rather than its own text has nowhere to read it from.
-- **Modal effects** — "choose one" where the modes are different *kinds* of effect. `Choose` picks
-  cards, not modes.
 - **Suppression** — one card turning another's ability off.
+- **Negating or cancelling** anything. No effect of either kind exists, so a card that stops an
+  action, an ability or an effect from resolving has nothing to return.
+- **A battle designator that depends on the board.** `battle_designators` is a static `frozenset` on
+  the `Ability`, so "Absent while you hold the Imperial Favor" cannot be one ability. Split it into
+  two abilities gated separately.
+- **Detaching.** `AttachCard` puts an attachment on and no effect takes one off. An attachment
+  leaves only by the state rule that discards one left with no Personality.
 - **Interrupt abilities.** The designator exists and no Action Round grants it, so an ability
   carrying it is never offered. Response, the other half of the pair, is served by the Response
   Step. Combining is an Interrupt ability too (CR, Combining), so it waits on the same layer.
 - **Duels.** No focus, no resolution.
 
 This list is measured, not guessed: a survey of a single arc found 27 cards targeting an opponent's
-cards and 20 modal. If your card needs one of these, the honest next step is a design discussion,
-not a workaround.
+cards. If your card needs one of these, the honest next step is a design discussion, not a
+workaround.
