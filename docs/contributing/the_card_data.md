@@ -52,15 +52,16 @@ A card is one logical thing printed many times. `Rice Farm` is one row in `cards
 derived id, with the canonical text and stats. Each physical printing is a row in `prints`, keyed
 by set, and a printing may override the text.
 
-Art attaches to printings, not to cards, which is why showing a card face on a page names the
-printing. The image manifests under `assets/database/images/` map a card id to a file per printing.
+Art attaches to printings, not to cards. That is why showing a card face on a page names the
+printing, and why the image manifests under `assets/database/images/` map a card id to a file per
+printing.
 
 ## Errata are a time axis, not an edit
 
 An erratum appends a revision rather than rewriting the entry. `card_revisions` holds them in
 order, revision 0 being the original, and the current one is mirrored onto the `cards` row so an
-ordinary read needs no join. A card's text as printed on a 1999 card and its text as played today
-are both available, and the engine reads the latter.
+ordinary read needs no join. A card's text as originally printed and its text as played today are
+both available, and the engine reads the latter.
 
 ## Adding a set
 

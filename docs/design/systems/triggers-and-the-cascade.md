@@ -160,12 +160,13 @@ Three repeating steps. Apply the effects in hand, each committing at once with t
 joining the queue. Fire the next trigger still waiting on the current event, whose effects become
 the next effects in hand. Pop the next event and collect what answers it.
 
-`_settle_state_based_actions` runs after every effect rather than at the end, which is the CR's
-order: a Personality who dies as he arrives is dead before his arrival is announced.
+`_settle_state_based_actions` runs after every effect, not once at the end. That is the order the
+Comprehensive Rules give, and it is why a Personality who dies as he arrives is dead before his
+arrival is announced.
 
 A trigger that re-emits the event that woke it would spin forever. The walk raises after 1,000
-events and prints the last sixty steps, alternating events and the cards that reacted to them,
-which is usually enough to see the cycle.
+events and prints the last sixty steps, alternating events and the cards that reacted to them.
+Sixty is usually enough to see the cycle.
 
 ## Pausing to ask
 
