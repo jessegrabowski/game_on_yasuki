@@ -364,8 +364,8 @@ def _legion_of_the_khan_attack_strength(
 ```
 
 The handlers sum, and the total is not floored: a card that takes more strength off an attack than
-it had leaves it reaching nothing, which is what "have -2 strength" buys. The zero floor the CR puts
-on a stat is about stats, and an attack's strength is not one.
+it had leaves it reaching nothing, which is what "have -2 strength" buys. The zero floor the
+Comprehensive Rules put on a stat is about stats, and an attack's strength is not one.
 
 ## Cards that print two abilities
 

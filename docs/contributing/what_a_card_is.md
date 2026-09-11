@@ -52,10 +52,10 @@ a deck.
 handler on any card: Ancestor, Celestial, Clock, Other, Proxy, Region, Ring, Stronghold, Territory
 and Wind.
 
-That list is the useful half. Picking a Ring and looking for the hook that would carry it is time
-spent on something the engine cannot express yet, and
-[what the vocabulary cannot express](adding_a_card.md#what-the-vocabulary-cannot-express-yet) says
-which of those are core extensions rather than missing handlers.
+The count dates quickly and the list does not. Picking a Ring and hunting for the hook that would
+carry it is time spent on something the engine cannot express, and
+[what the vocabulary cannot express](adding_a_card.md#what-the-vocabulary-cannot-express-yet)
+separates the core extensions from the merely unwritten.
 
 ## Where a card's behavior goes
 
