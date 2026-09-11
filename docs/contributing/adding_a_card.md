@@ -225,9 +225,20 @@ def _brothers_in_arms_attach_restriction(
 Two things an attachment gets for free, so do not write handlers for them: a card leaving play takes
 its attachments with it, and a state rule discards an attachment left with no Personality.
 
-**Battle is still out of reach**, and for attachments that is most of the corpus — 1,284 of the
-abilities printed on Follower, Item and Spell cards are Battle abilities. An attachment card whose
-text begins "Battle:" cannot be implemented today no matter which rung it would otherwise sit on.
+**An ability printed "Battle:"** carries `ActionTiming.BATTLE` and is offered in a battle's Combat
+Segment. Exquisite Nagamaki of the Fox Clan is an Item whose whole printed text is one, and it is
+an ordinary `register_ability` call with that timing.
+
+Three fields decide what such an ability may reach. `battle_designators` takes the Absent, Home and
+Remote designators off the ShE datasheet — Absent lifts the Rule of Presence, Home lets the ability
+be used from a card at home, and Remote widens Home to another battlefield. `targets_any_location`
+lifts the Rules of Location off what the ability may be pointed at, without lifting them off the
+card the ability is taken from. `located_at` says where the card itself must be, defaulting to the
+battlefield alone — a Strategy played out of hand passes `(CardLocation.HAND,)`.
+
+`legal_targets` in `legality.py` narrows whatever your `targets` function returns by the Rules of
+Location before the ability is offered, so your own predicate is not the last word. Write the
+predicate for what the card says and let the central rule do the rest.
 
 ## Cards that create
 
