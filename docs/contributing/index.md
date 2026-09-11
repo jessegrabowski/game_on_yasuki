@@ -88,9 +88,9 @@ Card data is committed YAML — the full workflow (set YAML, image manifests, er
 is generated, not hand-edited, and committed so that checks needing to know whether a card exists can
 read a file in a millisecond instead of reparsing 130 YAML files in eight seconds.
 
-Two things keep it honest:
+Three things read it:
 
-- A **pre-commit hook** (`card-registry`) asserts that every id the engine registers a handler on
+- A **pre-commit hook** (`registration-audit`) asserts that every id the engine registers a handler on
   names a real card. A handler keyed on a typo registers happily, never fires, and raises nothing —
   the card is simply dead. The hook reports the registry, the id, and the nearest real id:
 
@@ -101,9 +101,20 @@ Two things keep it honest:
   Fix the id. The hook needs the project environment, so it does not run in CI; the same check runs
   there as a test.
 
-- A **test** regenerates the index from the YAML and diffs it. If it fails, the index is stale: run
-  `pixi run card-index` and commit. It is marked `slow` and excluded from `pixi run test`; run it
-  with `pixi run pytest -m slow`.
+- The **`{card}` role** in the docs turns a printed card title into a link to that card on the live
+  site, deriving the id the same way the YAML loader does. A title deriving to an id the index does
+  not hold is reported with its file and line, and `docs-build` runs under `-W`, so the build fails
+  rather than shipping a link to a 404.
+
+  ```markdown
+  {card}`Exquisite Nagamaki of the Fox Clan`
+  ```
+
+- The **database loader**, which is what the index is derived from in the first place.
+
+Regenerate it with `pixi run card-index` after changing set YAML, and commit the result. Nothing
+checks that the committed file is current, so a set added without regenerating leaves every check
+above reading a stale list.
 
 ```{toctree}
 :hidden:
