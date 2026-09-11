@@ -401,13 +401,14 @@ the card in id order under a header:
 ```
 
 Everything the card does goes in that one block: its triggers, its target predicates, its effects
-helper, its registration. Tests assert the ordering, the one-header-per-card rule, and that the
-header names the card the block registers.
+helper, its registration. A pre-commit hook asserts the ordering, the one-header-per-card rule, and
+that the header names the card the block registers, on the modules your commit touches.
 
 Name every function in the block for the card and the job it does — `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
 `keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
-`attack_strength`, `province_strength`), or the event a trigger answers (`entered_play`,
+`attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`), or the event a
+trigger answers (`entered_play`,
 `destroyed`, `straightened`, `turn_started`, `counter_gained`, `card_discarded`, `producing_gold`,
 `produced_gold`, `entered_play_or_destroyed`). A card printing several abilities qualifies the role
 with that ability's key — `_incendiary_archers_fear_effects` — since one name per role would collide
@@ -415,7 +416,7 @@ between them, and the key has to be one the module really registers. A choice re
 the choice instead, `_resolve_<the string it is registered under>`. Helpers the block calls but
 never registers only need the card's id in front. The point is grep: a card's whole implementation answers a search
 for its id, and every handler of a kind answers a search for its role. A test enforces it, and
-`ROLES` in `test_card_layout.py` is where a genuinely new role gets added.
+`ROLES` in `hooks/card_layout.py` is where a genuinely new role gets added.
 
 A brand new set module needs a line in `cards/__init__.py`; a test will tell you if you forget.
 
