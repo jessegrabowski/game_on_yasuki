@@ -139,8 +139,8 @@ def test_a_local_set_file_stays_out_of_the_index(tmp_path):
 
 def test_the_committed_index_matches_the_card_yaml():
     # The index is a committed derivative of the YAML, so it can go stale silently: every check built
-    # on it would keep passing while naming cards that no longer exist. Reparsing costs ~8 s, which is
-    # why this is the only thing that pays it and why the fast readers never have to.
+    # on it would keep passing while naming cards that no longer exist. Reparsing costs about a
+    # second, which is why this is the only thing that pays it and the fast readers never have to.
     committed = read_index()
     current = set(card_ids(DEFAULT_CARDS_PATH))
 
