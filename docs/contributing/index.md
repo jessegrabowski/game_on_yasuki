@@ -127,5 +127,6 @@ what_a_card_is
 reading_card_text
 the_card_data
 holdings_and_gold
+stats_and_costs
 reacting_to_events
 ```
