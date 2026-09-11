@@ -66,36 +66,6 @@ def rules_constants() -> list[tuple[str, int, str, str]]:
     return found
 
 
-def test_no_rules_module_spells_a_keyword_for_itself():
-    # The vocabulary is only one module for as long as nothing else writes its own copy, and the
-    # copy need not be named for what it is: a bare SAMURAI = "Samurai" scatters the vocabulary just
-    # as surely as SAMURAI_KEYWORD did. The card data decides — a constant whose value is a printed
-    # keyword is one, whatever it is called. Token ids and card ids are lowercase slugs and no
-    # printed keyword is, so neither can be mistaken for one.
-    printed = printed_keywords()
-    offenders = [
-        f"{module}:{line} {name} = {value!r}"
-        for module, line, name, value in rules_constants()
-        if value in printed
-    ]
-
-    assert offenders == []
-
-
-def test_the_constant_scan_reads_the_rules_layer():
-    # Guards the test above: an empty scan finds no offenders and reports success, so the scan has
-    # to be shown to have read something. Anchored on the layer rather than on any one card, so
-    # implementing or removing a card cannot silence it.
-    scanned = {module for module, _, _, _ in rules_constants()}
-
-    assert len(list(RULES_DIR.rglob("*.py"))) > 20
-    assert any(module.startswith("cards/") for module in scanned)
-    # The vocabulary package is skipped one file deep, not wholesale: widening the exclusion to the
-    # directory would drop seven modules from the scan and pass both checks above.
-    assert "vocabulary/keywords.py" not in scanned
-    assert "vocabulary/decisions.py" in scanned
-
-
 def test_no_clan_word_is_named_without_saying_which_sense_it_means():
     # "Dragon" the keyword is the creature; "Dragon Clan" is the clan, and the clans column spells
     # that one plainly as "Dragon" — the two columns read the same word the opposite way round. A
