@@ -50,6 +50,11 @@ myst_enable_extensions = [
 ]
 myst_heading_anchors = 3
 
+# -- the {card} role ---------------------------------------------------------
+# Where a card title links to. The role derives the id and checks it against the committed
+# card-id index, so a title naming no card fails the -W build rather than linking to a 404.
+card_base_url = "https://gameonyasuki.com/card"
+
 # -- autodoc / autosummary ---------------------------------------------------
 autosummary_generate = True
 autodoc_typehints = "none"
