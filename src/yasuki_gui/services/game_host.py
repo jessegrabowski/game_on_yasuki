@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def _opponent_controls() -> Controls:
-    """What drives the AI opponent. One :class:`MilitaryPolicy` fills both halves, so the gold it
+    """What drives the AI opponent. One :class:`~.MilitaryPolicy` fills both halves, so the gold it
     chooses to raise, the payments it agrees to and where it sends its units come from the same
     strategy."""
     policy = MilitaryPolicy()

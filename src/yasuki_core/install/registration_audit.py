@@ -50,7 +50,7 @@ def card_keyed_data() -> dict[str, frozenset[str]]:
     """Every card id the engine names as *data* rather than as a handler, grouped by the list
     holding it.
 
-    Kept apart from :func:`registered_card_ids` because these ids do not live in a set module — a
+    Kept apart from :func:`~.registered_card_ids` because these ids do not live in a set module — a
     card excepted from a rulebook rule is a property of the card, listed beside the rule it excepts,
     and the layout scan would report every one of them as a registration it could not find. They are
     validated against the card index all the same.
@@ -185,7 +185,7 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     One human-readable line per card registering fewer activated abilities than its text prints.
 
     A card implemented in half behaves correctly in the half it has, so nothing else reports it.
-    Shortfalls alone: :func:`printed_ability_count` reads a floor, so a card registering more than
+    Shortfalls alone: :func:`~.printed_ability_count` reads a floor, so a card registering more than
     it appears to print is a limit of the count rather than a defect.
 
     Parameters
@@ -303,8 +303,8 @@ def unvalidated_registries(collections: set[str] | None = None) -> list[str]:
 
     Everything built through :mod:`~yasuki_core.engine.registrar` catalogues itself, so a registry
     made that way is validated wherever it lives. One written as a plain dict is not, and nothing
-    else notices: :func:`unregistered_card_ids` iterates the registries it is handed, so one it has
-    never heard of contributes no ids and reports no problems. Classifying a new collection is a
+    else notices: :func:`~.unregistered_card_ids` iterates the registries it is handed, so one it
+    has never heard of contributes no ids and reports no problems. Classifying a new collection is a
     decision someone makes rather than one they can skip.
 
     Parameters

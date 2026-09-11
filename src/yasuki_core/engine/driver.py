@@ -100,7 +100,7 @@ def run_game(
     ------
     RuntimeError
         If a seat has no legal action, a policy returns one it was not offered, or one Action Round
-        runs past :data:`~yasuki_core.engine.driver.MAX_ACTIONS_PER_ROUND` without closing.
+        runs past ``MAX_ACTIONS_PER_ROUND`` without closing.
     """
     game = session.game
     watched: int | None = None
@@ -157,8 +157,8 @@ def play_game(
     Play ``session`` to its end or to ``turn_limit``, whichever comes first, mutating it in place.
 
     Stops only on those two conditions. A driver that inferred its own stopping point would
-    silently truncate a run. Drives :func:`run_game` to exhaustion; take that instead when a caller
-    needs to act between steps.
+    silently truncate a run. Drives :func:`~.run_game` to exhaustion; take that instead when a
+    caller needs to act between steps.
 
     Parameters
     ----------

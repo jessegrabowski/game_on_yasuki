@@ -35,7 +35,7 @@ def spendable(view: GameView) -> int:
     withholding a legal action is worse than offering one the seat declines.
 
     A policy also cannot ask :func:`~yasuki_core.engine.rules.gold.self_grants.maximum_gold_production`: it
-    sees a redacted :class:`GameView` rather than the live game, which is what keeps a policy from
+    sees a redacted :class:`~.GameView` rather than the live game, which is what keeps a policy from
     reading anything its seat is not entitled to.
     """
     return view.gold[view.viewer] + sum(

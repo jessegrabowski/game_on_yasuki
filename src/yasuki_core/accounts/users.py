@@ -165,8 +165,8 @@ def set_approved(conn: psycopg.Connection, user_id: int, approved: bool) -> bool
 def unban_user(conn: psycopg.Connection, user_id: int) -> bool:
     """Lift a ban: clear the row's flag and reason and drop the identity's tombstone.
 
-    The inverse of :func:`ban_user`. Removing the tombstone lets the identity sign in again. Return
-    whether a user was there to unban.
+    The inverse of :func:`~.ban_user`. Removing the tombstone lets the identity sign in again.
+    Return whether a user was there to unban.
     """
     with conn.transaction(), conn.cursor() as cur:
         cur.execute(

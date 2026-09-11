@@ -7,7 +7,7 @@ from yasuki_core.game_pieces.prints import CardPrint
 class L5RCard:
     """One physical copy of a card in a game: its identity, its state, and the print it presents.
 
-    Characteristics — name, keywords, printed stats — belong to the :class:`CardPrint` in
+    Characteristics — name, keywords, printed stats — belong to the :class:`~.CardPrint` in
     ``printed``, which every copy of that card shares and none of them mutates. Reads forward, so
     ``card.gold_production`` answers from the print, but ``isinstance`` does not: ask
     ``isinstance(card.printed, HoldingPrint)`` for the card's type.

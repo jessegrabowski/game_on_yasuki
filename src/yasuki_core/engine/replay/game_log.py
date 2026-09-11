@@ -107,7 +107,7 @@ class GameLog:
 
 
 def build_game(log: GameLog) -> GameState:
-    """Rebuild the starting :class:`GameState` from ``log``: its snapshot table, first player, and
+    """Rebuild the starting :class:`~.GameState` from ``log``: its snapshot table, first player, and
     seed, with the first turn's start-of-turn housekeeping already run."""
     game = GameState.start(build_initial_state(log.initial), log.first_player, seed=log.seed)
     sequence.begin_game(game)
@@ -191,7 +191,7 @@ def game_log_to_dict(log: GameLog) -> dict:
 
 
 def game_log_from_dict(payload: dict) -> GameLog:
-    """Reconstruct a ``GameLog`` from the plain data produced by :func:`game_log_to_dict`."""
+    """Reconstruct a ``GameLog`` from the plain data produced by :func:`~.game_log_to_dict`."""
     return GameLog(
         initial=decode_initial(payload["initial"]),
         first_player=PlayerId[payload["first_player"]],

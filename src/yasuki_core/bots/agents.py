@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.projection import GameView
 
 @runtime_checkable
 class Agent(Protocol):
-    """Answers a :class:`DecisionRequest` with a :class:`DecisionResponse`.
+    """Answers a :class:`~.DecisionRequest` with a :class:`~.DecisionResponse`.
 
     The human UI, the AI, a network peer, and test doubles are all Agents, so the engine never cares
     who answers a decision (KD3). A bot answers synchronously here; the human UI instead presents
@@ -57,7 +57,8 @@ class AutoAgent:
 
 
 class PayingAgent:
-    """Covers a gold cost by bowing producers, and answers everything else like :class:`AutoAgent`.
+    """Covers a gold cost by bowing producers, and answers everything else like
+    :class:`~.AutoAgent`.
 
     Bows the smallest producer first, so the largest stay straight for a second purchase in the same
     turn, and answers again each time the payment comes back round. This is a greedy rule rather
@@ -103,7 +104,7 @@ class PayingAgent:
 
 class LegacyAgent:
     """Answers the Legacy decisions for economic value, and everything else like
-    :class:`PayingAgent`.
+    :class:`~.PayingAgent`.
 
     Takes the biggest producer the search found, and displaces the province card worth least, both
     ranked on printed Gold Production — the only figure a card outside play carries. Whether the

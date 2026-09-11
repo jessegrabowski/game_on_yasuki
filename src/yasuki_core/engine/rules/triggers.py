@@ -166,11 +166,11 @@ def _advance(
     One resumable worklist machine, in three repeating steps: apply the ``effects`` in hand (each
     committing at once, its derived events joining ``queue``); then fire the next trigger still
     ``firing`` for ``event``, whose effects become the next ``effects`` in hand; then pop the next
-    event off ``queue`` and collect its triggers. An :class:`InterruptingEffect` among the effects
+    event off ``queue`` and collect its triggers. An :class:`~.InterruptingEffect` among the effects
     pauses the machine: it records that effect's decision and stashes the exact remainder (the
     effects after it, the triggers not yet fired, the event, and the queue) as a
-    :class:`ResumeCascade`, so :func:`resume_cascade` continues from precisely here once the seat
-    answers."""
+    :class:`~.ResumeCascade`, so :func:`~.resume_cascade` continues from precisely here once the
+    seat answers."""
     resolved = 0
     firing = list(firing)
     while True:
@@ -326,7 +326,8 @@ def fire(game: GameState, event: GameEvent) -> None:
 
 def resolve_effects(game: GameState, effects: list[Effect]) -> None:
     """Apply ``effects`` — an ability's or a choice resolver's output — and run the derived-event
-    cascade the same way :func:`fire` does, so a triggered reaction to those effects still resolves."""
+    cascade the same way :func:`~.fire` does, so a triggered reaction to those effects still
+    resolves."""
     _advance(game, tuple(effects), [], None, [])
 
 

@@ -188,7 +188,7 @@ def move_unit(state: TableState, card: L5RCard, location: Location) -> bool:
     """Put ``card``'s whole unit at ``location``; returns whether it moved.
 
     Attached cards go with their Personality (CR, Unit). Nothing here goes through
-    :func:`move_card` — the cards stay where they are in play and only their location changes.
+    :func:`~.move_card` — the cards stay where they are in play and only their location changes.
     """
     moved = False
     for member in unit_members(state, card):
@@ -216,7 +216,7 @@ def stack(state: TableState, card: L5RCard, target: AttachTarget) -> bool:
     """Stack ``card`` behind ``target`` — a card id or province zone key — so it renders behind that
     parent. Returns whether the graph changed; re-stacking on the same target is a no-op.
 
-    Rendering only; :func:`attach_to_personality` is what puts a card in a unit.
+    Rendering only; :func:`~.attach_to_personality` is what puts a card in a unit.
     """
     if state.attachments.get(card.id) == target:
         return False

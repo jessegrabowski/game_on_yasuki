@@ -126,7 +126,7 @@ def describe_action(game: GameState, action: Action) -> str:
 
 def perform(game: GameState, action: Action) -> None:
     """Apply a chosen action, dispatching to its handler. The single action-apply dispatch,
-    mirroring :func:`submit` for decisions. Raise ``ValueError`` for an action with no handler."""
+    mirroring :func:`~.submit` for decisions. Raise ``ValueError`` for an action with no handler."""
     # Read before the handler runs: one that opens a round of its own leaves that round on
     # `game.round`, and the round to hand on from is the one the action was taken in.
     acted_in = game.round
@@ -258,7 +258,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
 def cancel(game: GameState) -> None:
     """Replay a recorded ``Cancel``, dropping the work the decision was queued in front of.
 
-    Live play does not reach this: :meth:`EngineSession.abort` unwinds by truncating the tape, so no
+    Live play does not reach this: ``EngineSession.abort`` unwinds by truncating the tape, so no
     new ``Cancel`` is ever written. It stays to replay tapes that already hold one.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
@@ -278,7 +278,7 @@ def cancel(game: GameState) -> None:
 
 def _cancel_payment(game: GameState) -> None:
     """Drop the work the cancelled payment stands in front of, whatever queued it — a Recruit's
-    :class:`ResolveRecruit` or a rulebook cost's :class:`ApplyEffects`.
+    :class:`~.ResolveRecruit` or a rulebook cost's :class:`~.ApplyEffects`.
 
     The item is always the top of the stack: announcing a cost pushes exactly one, and the engine is
     paused on the payment from that moment until it is answered or cancelled, so nothing can have
@@ -293,7 +293,7 @@ def _cancel_payment(game: GameState) -> None:
 def run_stack(game: GameState) -> None:
     """Drain deferred work, running each item until the stack empties or one pauses for a decision.
     A work item may itself emit a decision (setting ``pending``), so resolution stops there and
-    resumes on the next :func:`submit`. Once the board settles, every Province standing short
+    resumes on the next :func:`~.submit`. Once the board settles, every Province standing short
     refills.
     """
     while game.stack and game.pending is None:
@@ -357,8 +357,8 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     back round for whatever is still owed.
 
     Nothing here knows what a producer is worth. A card that can raise its own yield is asked in the
-    window :func:`produce_gold` opens, and what it owes for saying yes is settled on the far side of
-    the bow — both the card's own business, neither the payment's.
+    window :func:`~.produce_gold` opens, and what it owes for saying yes is settled on the far side
+    of the bow — both the card's own business, neither the payment's.
     """
     target_ids = (request.target_id,) if request.target_id in game.table.cards_by_id else ()
     for card_id in response.choices:

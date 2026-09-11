@@ -51,7 +51,7 @@ _PREGAME_PERMANENTS = (StrongholdPrint, SenseiPrint, WindPrint)
 
 
 def begin_game(game: GameState) -> None:
-    """Run the game-start pass once after :meth:`GameState.start`, before the active player acts:
+    """Run the game-start pass once after ``GameState.start``, before the active player acts:
     fire each pre-game permanent's enters-play effect, then the first turn's housekeeping. Re-runs on
     every replay, so those effects must be idempotent."""
     _begin_pregame(game)
@@ -71,7 +71,7 @@ def advance(game: GameState) -> None:
     the turn and begin the next. The gold pool empties on every phase change.
 
     Pause instead of finishing the turn if the end-of-turn discard needs an answer: record the
-    request on ``game.pending`` and return, leaving the caller to :func:`submit` a response before
+    request on ``game.pending`` and return, leaving the caller to :func:`~.submit` a response before
     advancing again. That discard is the only question the end of a turn may ask — raise
     ``RuntimeError`` if a delayed effect asks one of its own, and if called while a decision is
     already pending.

@@ -143,7 +143,7 @@ def empty_provinces(game: GameState, seat: PlayerId) -> int:
     How many of ``seat``'s provinces hold no card at all.
 
     Vacating a province refills it from the dynasty deck, so this is not the ordinary measure of
-    buying one out — see :func:`provinces_cleared` for that. A province is only truly empty once
+    buying one out — see :func:`~.provinces_cleared` for that. A province is only truly empty once
     the dynasty deck has run dry, which makes this a late-game exhaustion signal.
     """
     return sum(1 for zone in _provinces(game, seat) if not zone.cards)

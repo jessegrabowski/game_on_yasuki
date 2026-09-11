@@ -129,7 +129,7 @@ class Minimum:
 class ProvinceModifier:
     """A continuous effect that adjusts one Province's strength while active.
 
-    A Province is a slot rather than a card, so it cannot be the target of a :class:`Modifier`; a
+    A Province is a slot rather than a card, so it cannot be the target of a :class:`~.Modifier`; a
     card that strengthens one for the turn records this instead.
 
     Attributes
@@ -156,9 +156,9 @@ class LobbyModifier:
     """A continuous effect that adjusts one player's Lobby Bonus while active.
 
     A Lobby Bonus or Penalty rests on a player rather than on a card, so it cannot be a
-    :class:`Modifier`. Every amount a Lobby action checks about that player reads higher or lower by
-    it, whoever is taking the action; where the amount is Family Honor the adjustment is neither an
-    Honor gain nor an Honor loss (ShE datasheet, Lobby Bonuses and Penalties).
+    :class:`~.Modifier`. Every amount a Lobby action checks about that player reads higher or lower
+    by it, whoever is taking the action; where the amount is Family Honor the adjustment is neither
+    an Honor gain nor an Honor loss (ShE datasheet, Lobby Bonuses and Penalties).
 
     Attributes
     ----------

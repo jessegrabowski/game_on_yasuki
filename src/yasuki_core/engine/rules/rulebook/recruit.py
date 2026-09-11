@@ -33,12 +33,12 @@ def recruit(
     proclaim: bool = False,
 ) -> None:
     """Announce a Recruit: defer bringing the card into play, then pause for its cost payment. The
-    payment bows gold producers to cover :func:`recruit_cost` plus any Invest cost; once answered,
+    payment bows gold producers to cover :func:`~.recruit_cost` plus any Invest cost; once answered,
     the stack resolves the move into play and the province refill.
 
     With ``invest`` set, also pay the card's Invest cost for its one-time enter-play effect. A fixed
     Invest folds straight into the payment; a variable one pauses first for
-    :class:`ChooseInvestAmount` to pick how much to pay. With ``renew`` set, the vacated province
+    :class:`~.ChooseInvestAmount` to pick how much to pay. With ``renew`` set, the vacated province
     refills face-up (a Renew granted by the recruiting effect). With ``proclaim`` set, claim the
     seat's once-per-turn Proclaim and add the Personality's Personal Honor to its Family Honor after
     it enters play (rules-skeleton §6); nothing is claimed until the payment resolves, so a

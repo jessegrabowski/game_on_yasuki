@@ -157,7 +157,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
 
 def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
     """Whether ``seat`` may take exactly ``action`` right now — what membership in
-    :func:`legal_actions` answers, scoped to one action.
+    :func:`~.legal_actions` answers, scoped to one action.
 
     Raise ValueError for an action carrying no legality rule.
     """
@@ -231,10 +231,10 @@ def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
     your target unbowed Personality with 1 or more Personal Honor to take the Imperial Favor."
     Which Personality bows is chosen when the action resolves, so this offers the ability once.
 
-    Both sides of the comparison are read through :func:`lobby_amount`, since the datasheet adjusts
-    an amount by the Bonuses and Penalties on the player it is about rather than on the player
-    acting. Family Honor is what this Lobby checks; a Wind's own Lobby checks something else and
-    reads it the same way.
+    Both sides of the comparison are read through :func:`~.lobby_amount`, since the datasheet
+    adjusts an amount by the Bonuses and Penalties on the player it is about rather than on the
+    player acting. Family Honor is what this Lobby checks; a Wind's own Lobby checks something else
+    and reads it the same way.
     """
     if not permits(game, seat, ruleset.ACTIVE.lobby_timing):
         return []
@@ -345,7 +345,8 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
 
 def inheritance_key(seat: PlayerId) -> str:
     """The once-per-*game* usage key for a seat's Inheritance ability. Unscoped by turn, unlike
-    :func:`legacy_key` and :func:`cycle_key`, because the ability is spent for the whole game."""
+    :func:`~.legacy_key` and :func:`~.cycle_key`, because the ability is spent for the whole
+    game."""
     return f"inheritance:{seat.name}"
 
 
@@ -511,7 +512,7 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
 
 def cycle_key(seat: PlayerId, turn: int) -> str:
     """The once-per-turn usage key for a seat's Cycle ability, scoped to the turn the way
-    :func:`legacy_key` is."""
+    :func:`~.legacy_key` is."""
     return f"cycle:{seat.name}:{turn}"
 
 
@@ -595,7 +596,7 @@ def activatable(
     cost payable, and with at least one legal target.
 
     ``at`` narrows which of those places count, and defaults to the ones a card is *in play* in.
-    Playing a card out of hand asks for :data:`CardLocation.HAND` explicitly, because it is a
+    Playing a card out of hand asks for ``CardLocation.HAND`` explicitly, because it is a
     different action with a cost of its own.
     """
     ready: list[tuple[L5RCard, Ability]] = []

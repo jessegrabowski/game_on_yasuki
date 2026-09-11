@@ -66,7 +66,7 @@ class DeckKey(NamedTuple):
 class Location(NamedTuple):
     """Where a card in play stands: in a seat's home, or at a battlefield.
 
-    The rules' answer to "where is this card", as against :class:`BoardPos`, which is a table
+    The rules' answer to "where is this card", as against :class:`~.BoardPos`, which is a table
     coordinate a player may drag a card to and means nothing to the rules.
 
     Exactly one field is set. Build the two shapes with :meth:`home` and :meth:`at_battlefield`
@@ -144,7 +144,7 @@ class TableState:
     locations : dict mapping str to Location
         Where each card in play stands — a seat's home, or a battlefield — keyed by card id. Unlike
         ``positions`` this is rules truth, not presentation. Partial: a card with no entry is at its
-        owner's home, which :func:`location_of` supplies, so a board on which nothing has ever
+        owner's home, which :func:`~.location_of` supplies, so a board on which nothing has ever
         assigned carries an empty map.
     attachments : dict mapping str to (str or ZoneKey)
         Which card or province a card sits behind on the table, keyed by the card on top. This is

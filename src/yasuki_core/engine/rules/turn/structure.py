@@ -106,13 +106,13 @@ BATTLE_SEGMENT_TIMINGS: dict[BattleSegment, RoundTimings] = {
 
 
 class Turn(Enum):
-    """The turn itself as a stage of play, the one enclosing every :class:`Phase`."""
+    """The turn itself as a stage of play, the one enclosing every :class:`~.Phase`."""
 
     CURRENT = "turn"
 
 
 class Boundary(Enum):
-    """Which edge of a stage of play a :class:`Moment` names."""
+    """Which edge of a stage of play a :class:`~.Moment` names."""
 
     BEGINNING = "beginning"
     END = "end"

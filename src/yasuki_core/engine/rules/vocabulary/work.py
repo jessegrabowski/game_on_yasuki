@@ -107,7 +107,8 @@ class FinishRecruit:
 @dataclass(frozen=True, slots=True)
 class ApplyAbilityEffects:
     """Resolve an untargeted ability's effects against every card it hits, once its cost has been
-    paid. The all-target counterpart of :class:`SelectAbilityTarget`, deferred for the same reason.
+    paid. The all-target counterpart of :class:`~.SelectAbilityTarget`, deferred for the same
+    reason.
 
     Attributes
     ----------

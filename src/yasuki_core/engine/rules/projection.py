@@ -116,7 +116,7 @@ class AttackView:
 
 @dataclass(frozen=True, slots=True)
 class GameView:
-    """A per-seat projection of a :class:`GameState` — everything one seat is entitled to see.
+    """A per-seat projection of a :class:`~.GameState` — everything one seat is entitled to see.
 
     The table is redacted for the viewer (the opponent's hand, face-down cards, and deck contents
     appear as backs); the turn-level rules fields are public to both seats; and a pending decision
@@ -161,7 +161,7 @@ class GameView:
         whom, and which units stand where, is on the table for everyone to see. A Province's
         occupant is redacted like any other card.
     stats : dict mapping str to dict
-        Each modified card's effective stats by id, the inner dict keyed by :class:`Stat`. Read it
+        Each modified card's effective stats by id, the inner dict keyed by :class:`~.Stat`. Read it
         through :meth:`stat` rather than directly — a card no modifier reaches is absent, and the
         method supplies its printed value.
     unit_force : dict mapping str to int
@@ -200,9 +200,9 @@ class GameView:
 
 
 def _identifiable_ids(table: ViewSnapshot) -> set[str]:
-    """The ids ``table`` lets its viewer identify. A card redacted to a :class:`HiddenCard`, and one
-    the snapshot omits, are both absent — the snapshot has already decided entitlement, and reading
-    it back is what keeps that decision in one place."""
+    """The ids ``table`` lets its viewer identify. A card redacted to a :class:`~.HiddenCard`, and
+    one the snapshot omits, are both absent — the snapshot has already decided entitlement, and
+    reading it back is what keeps that decision in one place."""
     ids = {
         card.id for zone in table.zones.values() for card in zone.cards if isinstance(card, L5RCard)
     }
@@ -216,7 +216,7 @@ def _modified_cards(game: GameState, identifiable: set[str]) -> Iterator[L5RCard
 
     Only some modifier sources are recorded on the game: a counter and a granted effect are, while
     an attachment's printed modifier, a Sensei's grant to its Stronghold and a Kensai's raised
-    weapon limit are derived from the board as it stands. :func:`active_modifiers` is what knows
+    weapon limit are derived from the board as it stands. :func:`~.active_modifiers` is what knows
     about all of them, so it is what decides.
 
     A card no modifier reaches has only its printed stats, which :meth:`GameView.stat` reads
@@ -269,7 +269,7 @@ def _unit_forces(game: GameState, identifiable: set[str]) -> dict[str, int]:
     """Every identifiable in-play Personality's unit Force, as a battle would count it.
 
     Taken from :func:`~yasuki_core.engine.rules.units.composition.unit_force` rather than summed
-    from :attr:`GameView.stats`, because a unit's total is not a sum of its cards' Force: a Follower
+    from ``GameView.stats``, because a unit's total is not a sum of its cards' Force: a Follower
     brings its own, an Item brings a modifier already inside the Personality's, and bowing removes
     some of them and not others.
     """

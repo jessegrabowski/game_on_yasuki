@@ -107,9 +107,9 @@ class Inheritance:
 class PlayStrategy:
     """Play a Strategy from hand for its Gold Cost, resolve its ability, and discard it.
 
-    Like :class:`ActivateAbility`, the designator is the card's own rather than the action's, so a
+    Like :class:`~.ActivateAbility`, the designator is the card's own rather than the action's, so a
     Strategy is offered in whichever Action Round its ability names and carries no entry in
-    :data:`ACTION_TIMINGS`. Its target is chosen through the decision the ability raises.
+    ``ACTION_TIMINGS``. Its target is chosen through the decision the ability raises.
 
     Attributes
     ----------

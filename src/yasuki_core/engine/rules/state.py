@@ -32,7 +32,7 @@ def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:
 class GameState:
     """The mutable state of one rules-driven game.
 
-    Composes the shared :class:`TableState` (zones, decks, cards, positions) with the turn-level
+    Composes the shared :class:`~.TableState` (zones, decks, cards, positions) with the turn-level
     bookkeeping the rules engine owns: whose turn it is, the current phase, the per-seat gold pool,
     and once-per usage flags. The table stays a pure substrate so the manual sandbox keeps using it
     unchanged; the rules engine layers its own state on top.
@@ -69,7 +69,7 @@ class GameState:
         What that seat won, worded for a player — the victory's designation where the CR gives it
         one. Set with ``winner`` by :meth:`win`. Default None.
     active_rules : dict mapping PlayerId to frozenset of VictoryRule
-        The ways each seat can win or lose. :meth:`start` fills it from :func:`rules_at_start`;
+        The ways each seat can win or lose. :meth:`start` fills it from :func:`~.rules_at_start`;
         dropping a rule from a seat's set afterwards excuses that seat alone, which is how a card
         reading "you will not lose, or be eliminated, by Dishonor" is expressed. A seat absent from
         the dict is held to nothing. Default empty.
@@ -115,7 +115,7 @@ class GameState:
     round_stack : list of ActionRound
         The rounds a Response Step or a battle segment has suspended, innermost last. Each opens a
         round of its own over the round beneath, and closing it puts that round back. What is
-        suspended is read off :attr:`ActionRound.kind` rather than off this list's depth. Ephemeral
+        suspended is read off ``ActionRound.kind`` rather than off this list's depth. Ephemeral
         and rebuilt by replay. Default empty.
     responded : set of str
         The cards that have already taken a Response in the Response Step now open. A card answers a

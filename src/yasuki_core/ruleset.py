@@ -47,7 +47,7 @@ class Ruleset:
     Attributes
     ----------
     clan_alignments : frozenset of str
-        The legal Clan Alignments, as canonical :func:`normalize_clan` slugs. A card's clan counts
+        The legal Clan Alignments, as canonical :func:`~.normalize_clan` slugs. A card's clan counts
         toward alignment only if it resolves into this set; every other clan name is unaligned.
     clan_aliases : dict mapping str to str
         Alternate clan slugs that resolve to a canonical member of ``clan_alignments`` (e.g. Naga is
@@ -122,7 +122,7 @@ class Ruleset:
         return slug if slug in self.clan_alignments else None
 
 
-# The clans the engine names, as canonical :func:`normalize_clan` slugs. A clan is card text like a
+# The clans the engine names, as canonical :func:`~.normalize_clan` slugs. A clan is card text like a
 # keyword is, so it is spelled once here rather than at each call site — and here rather than beside
 # the keywords because which of these count as Clan Alignments is arc config, and a ruleset below
 # builds its set from these names so the two cannot drift.

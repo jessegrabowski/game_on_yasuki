@@ -3,7 +3,7 @@ from enum import Enum
 
 class Segment(Enum):
     """The Attack Phase's segments, in the order the CR walks them. A battle fought inside the Fight
-    Segment has segments of its own — see :class:`BattleSegment`."""
+    Segment has segments of its own — see :class:`~.BattleSegment`."""
 
     DECLARATION = "declaration"
     MANEUVERS = "maneuvers"
