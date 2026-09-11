@@ -9,7 +9,6 @@ from tests.yasuki_core.engine.rules.card_modules import card_modules, first_prin
 def test_every_card_is_implemented_in_its_first_printing_module():
     # A reprint is implemented once. Without this, a card printed in five sets could be implemented
     # in any of them — or, worse, in two — and the module layout would stop mirroring the card data.
-    # Deriving the answer costs the eight-second YAML parse, hence the marker.
     belongs = first_printing_module()
     misplaced = [
         f"{card_id} is in {module.stem}.py but first appeared in {belongs[card_id]}"

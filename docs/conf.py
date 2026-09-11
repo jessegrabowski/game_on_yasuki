@@ -3,6 +3,7 @@ from pathlib import Path
 
 _SRC = Path(__file__).resolve().parent.parent / "src"
 sys.path.insert(0, str(_SRC))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "_ext"))
 
 project = "Game on, Yasuki!"
 author = "Jesse Grabowski"
@@ -31,6 +32,7 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
+    "cards",
 ]
 
 templates_path = ["_templates"]
@@ -47,6 +49,11 @@ myst_enable_extensions = [
     "tasklist",
 ]
 myst_heading_anchors = 3
+
+# -- the {card} role ---------------------------------------------------------
+# Where a card title links to. The role derives the id and checks it against the committed
+# card-id index, so a title naming no card fails the -W build rather than linking to a 404.
+card_base_url = "https://gameonyasuki.com/card"
 
 # -- autodoc / autosummary ---------------------------------------------------
 autosummary_generate = True

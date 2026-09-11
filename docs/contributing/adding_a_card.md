@@ -13,18 +13,28 @@ Read the card's text and find the shape:
 
 | The card says | Hook | Example |
 |---|---|---|
-| Produces a variable amount of gold | `@gold_handler(id)` | Jade Works |
-| Costs less to bring into play, conditionally | `@recruit_discount(id)` | Colonial Farm |
-| "After X happens…" | `@on(Event, id)` | Rice Farm |
-| An activated ability with a cost | `register_ability(id, Ability(...))` | Millet Farm |
-| "Response: after X…" | `register_ability(id, Ability(timing=ActionTiming.RESPONSE, ...))` | Caravansary |
-| Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | Rebuilt Harbor |
-| Carries a keyword only sometimes | `@keyword_grant(id)` | Fortified Farmlands |
-| Gives the Personality it hangs on a stat | `@attachment_grant(id)` | Haramaki-do |
-| Limits what it will attach to | `@attach_restriction(id)` | Brothers in Arms |
-| Buys its Invest cheaper, conditionally | `@invest_discount(id)` | Moto Ikarichi |
-| Changes the strength of an attack | `@attack_strength_against(id)` | Aseth's Legion |
-| Changes a Province's strength | `@province_strength_grant(id)` | Defensive Memorial |
+| Produces a variable amount of gold | `@gold_handler(id)` | {card}`Jade Works` |
+| Costs less to bring into play, conditionally | `@recruit_discount(id)` | {card}`Colonial Farm` |
+| "After X happens…" | `@on(Event, id)` | {card}`Rice Farm` |
+| An activated ability with a cost | `register_ability(id, Ability(...))` | {card}`Millet Farm` |
+| "Response: after X…" | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
+| Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
+| Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
+| Gives the Personality it hangs on a stat | `@attachment_grant(id)` | {card}`Haramaki-do` |
+| Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |
+| Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
+| Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
+| Changes a Province's strength | `@province_strength_grant(id)` | {card}`Defensive Memorial` |
+| Puts itself into play as an Edict | `register_edict(id)` | {card}`Act With Authority` |
+| An Event played from the Province it sits in | `register_event_entry(id)` | {card}`Shadow of the Dark God` |
+| Raises its own Gold Production as it bows | `register_self_grant(id, n)`, or `@self_grant(id)` when the grant has a condition | {card}`Jade Mine`, {card}`Slave Pits` |
+| Enters play unbowed where the rule says bowed | `register_enters_unbowed(id)` | {card}`Poorly Placed Garden` |
+| "May remain bowed" | `register_may_remain_bowed(id)` | {card}`Culling Grounds` |
+| Waives the bow cost of the Personality it hangs on | `register_bow_waiver(id)` | {card}`Shadowlands Ambassador` |
+| Pays somebody's Imperial Favor cost | `@favor_payer(id)` | {card}`Manjodh` |
+| "You have a +N Lobby Bonus" | `@lobby_bonus_grant(id)` | {card}`Shigekawa's Court` |
+| Stops a player Lobbying at all | `@lobby_bar(id)` | {card}`Wasp Sensei` |
+| "May not Lobby" | `register_may_not_lobby(id)` | {card}`Moto Chen` |
 
 Nine events exist to react to: `EnteredPlay`, `Destroyed`, `Straightened`, `CardDiscarded`,
 `CounterGained`, `Revealed`, `TurnStarted`, `ProducingGold` and `ProducedGold`. If the moment your
@@ -41,7 +51,7 @@ cannot say what the card does.
 
 ### Answer a number: the gold handlers
 
-Colonial Farm is *"enters play for 1 less Gold if you are a Lion Clan player"*. The condition is the
+{card}`Colonial Farm` is *"enters play for 1 less Gold if you are a Lion Clan player"*. The condition is the
 only thing specific to the card, so the whole implementation is the condition:
 
 ```python
@@ -85,7 +95,7 @@ reaches every copy in play and not only the one that entered:
 
 ### A choice: pausing for the player
 
-Wheat Farm lets its controller give up to two other Farms a token. The trigger cannot know what they
+{card}`Wheat Farm` lets its controller give up to two other Farms a token. The trigger cannot know what they
 will pick, so it returns a `Choose` — an interrupting effect. The cascade pauses, the seat answers,
 and a resolver turns the answer into effects:
 
@@ -115,9 +125,14 @@ Register the `prompt` alongside it. Without one the seat is asked "Choose up to 
 says how many cards to click and nothing about what for. Keep the wording free of counts — the same
 choice can offer one target or two.
 
+**A choice between modes** rather than between cards is `AskOption`, answered by a `ChooseOption`
+decision. {card}`Honor Your Oaths` prints three modes with a different effect chain behind each, and the
+resolver branches on the option the seat picked. Reach for it when the card says "choose one" and
+the things being chosen are not cards.
+
 ### A division: how many go where
 
-Suiteiru no Oni creates a Follower per point of the Chi of the Personality he destroys, and attaches
+{card}`Suiteiru no Oni` creates a Follower per point of the Chi of the Personality he destroys, and attaches
 them "to one or more of your Personalities". The seat picks the bearers *and* how many each takes, so
 a `Choose` — which reads its answer as a set — cannot say it. `AskDistribution` can: the answer names
 a card once per creation it takes, and the resolver reads that tally.
@@ -175,7 +190,7 @@ sacrifice would be offered before the recruited card had finished entering play.
 
 ## Cards that attach
 
-A Follower, Item or Spell is not a fifth rung — Touch of Death is an activated ability like any
+A Follower, Item or Spell is not a fifth rung — {card}`Touch of Death` is an activated ability like any
 other, and Brothers in Arms is a trigger. What sets an attachment apart is that it acts *through*
 the Personality carrying it, and three registries cover the ways it does.
 
@@ -215,13 +230,24 @@ def _brothers_in_arms_attach_restriction(
 Two things an attachment gets for free, so do not write handlers for them: a card leaving play takes
 its attachments with it, and a state rule discards an attachment left with no Personality.
 
-**Battle is still out of reach**, and for attachments that is most of the corpus — 1,284 of the
-abilities printed on Follower, Item and Spell cards are Battle abilities. An attachment card whose
-text begins "Battle:" cannot be implemented today no matter which rung it would otherwise sit on.
+**An ability printed "Battle:"** carries `ActionTiming.BATTLE` and is offered in a battle's Combat
+Segment. {card}`Exquisite Nagamaki of the Fox Clan` is an Item whose whole printed text is one, and it is
+an ordinary `register_ability` call with that timing.
+
+Three fields decide what such an ability may reach. `battle_designators` takes the Absent, Home and
+Remote designators off the ShE datasheet — Absent lifts the Rule of Presence, Home lets the ability
+be used from a card at home, and Remote widens Home to another battlefield. `targets_any_location`
+lifts the Rules of Location off what the ability may be pointed at, without lifting them off the
+card the ability is taken from. `located_at` says where the card itself must be, defaulting to the
+battlefield alone — a Strategy played out of hand passes `(CardLocation.HAND,)`.
+
+`legal_targets` in `legality.py` narrows whatever your `targets` function returns by the Rules of
+Location before the ability is offered, so your own predicate is not the last word. Write the
+predicate for what the card says and let the central rule do the rest.
 
 ## Cards that create
 
-Weapon Artist makes a sword out of nothing; Colonial Farm makes an Ashigaru; Mishime Sensei makes an
+{card}`Weapon Artist` makes a sword out of nothing; Colonial Farm makes an Ashigaru; {card}`Mishime Sensei` makes an
 Oni. What they create is a card in its own right — the "Proxy" prints in the database, reached by
 token card id — so its stats, keywords and art come off that print rather than being spelled out at
 the creation site. The deck load resolves every token the deck's cards can create and parks the
@@ -380,13 +406,14 @@ the card in id order under a header:
 ```
 
 Everything the card does goes in that one block: its triggers, its target predicates, its effects
-helper, its registration. Tests assert the ordering, the one-header-per-card rule, and that the
-header names the card the block registers.
+helper, its registration. A pre-commit hook asserts the ordering, the one-header-per-card rule, and
+that the header names the card the block registers, on the modules your commit touches.
 
 Name every function in the block for the card and the job it does — `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
 `keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
-`attack_strength`, `province_strength`), or the event a trigger answers (`entered_play`,
+`attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`), or the event a
+trigger answers (`entered_play`,
 `destroyed`, `straightened`, `turn_started`, `counter_gained`, `card_discarded`, `producing_gold`,
 `produced_gold`, `entered_play_or_destroyed`). A card printing several abilities qualifies the role
 with that ability's key — `_incendiary_archers_fear_effects` — since one name per role would collide
@@ -394,7 +421,7 @@ between them, and the key has to be one the module really registers. A choice re
 the choice instead, `_resolve_<the string it is registered under>`. Helpers the block calls but
 never registers only need the card's id in front. The point is grep: a card's whole implementation answers a search
 for its id, and every handler of a kind answers a search for its role. A test enforces it, and
-`ROLES` in `test_card_layout.py` is where a genuinely new role gets added.
+`ROLES` in `hooks/card_layout.py` is where a genuinely new role gets added.
 
 A brand new set module needs a line in `cards/__init__.py`; a test will tell you if you forget.
 
@@ -417,14 +444,19 @@ these needs a core extension, not just a card module:
   Death destroys any bowed Personality with Chi no higher than its caster's — but each handler
   filters by owner itself. There is no permission model to ask, so a card whose restriction is a
   rulebook one rather than its own text has nowhere to read it from.
-- **Modal effects** — "choose one" where the modes are different *kinds* of effect. `Choose` picks
-  cards, not modes.
 - **Suppression** — one card turning another's ability off.
+- **Negating or cancelling** anything. No effect of either kind exists, so a card that stops an
+  action, an ability or an effect from resolving has nothing to return.
+- **A battle designator that depends on the board.** `battle_designators` is a static `frozenset` on
+  the `Ability`, so "Absent while you hold the Imperial Favor" cannot be one ability. Split it into
+  two abilities gated separately.
+- **Detaching.** `AttachCard` puts an attachment on and no effect takes one off. An attachment
+  leaves only by the state rule that discards one left with no Personality.
 - **Interrupt abilities.** The designator exists and no Action Round grants it, so an ability
   carrying it is never offered. Response, the other half of the pair, is served by the Response
   Step. Combining is an Interrupt ability too (CR, Combining), so it waits on the same layer.
 - **Duels.** No focus, no resolution.
 
 This list is measured, not guessed: a survey of a single arc found 27 cards targeting an opponent's
-cards and 20 modal. If your card needs one of these, the honest next step is a design discussion,
-not a workaround.
+cards. If your card needs one of these, the honest next step is a design discussion, not a
+workaround.
