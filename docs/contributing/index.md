@@ -86,7 +86,7 @@ Card data is committed YAML — the full workflow (set YAML, image manifests, er
 
 `src/yasuki_core/assets/database/card_ids.txt` lists every card id in the set YAML, one per line. It
 is generated, not hand-edited, and committed so that checks needing to know whether a card exists can
-read a file in a millisecond instead of reparsing 130 YAML files in eight seconds.
+read a file in a millisecond instead of reparsing 131 YAML files in about a second and a half.
 
 Three things read it:
 
@@ -110,11 +110,14 @@ Three things read it:
   {card}`Exquisite Nagamaki of the Fox Clan`
   ```
 
-- The **database loader**, which is what the index is derived from in the first place.
+- Two **tests**, which assert that every token a card creates and every card a rulebook exception
+  names is a real card.
 
-Regenerate it with `pixi run card-index` after changing set YAML, and commit the result. Nothing
-checks that the committed file is current, so a set added without regenerating leaves every check
-above reading a stale list.
+Regenerate it with `pixi run card-index` after changing set YAML, and commit the result.
+`test_the_committed_index_matches_the_card_yaml` reparses the YAML and diffs it against the
+committed file, in both directions, and names the command to run when it fails. It costs about a
+second, which is why it is the only thing that pays that price and every other reader gets the
+index.
 
 ```{toctree}
 :hidden:
