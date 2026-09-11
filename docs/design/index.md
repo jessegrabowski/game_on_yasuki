@@ -9,6 +9,7 @@ and desktop client surface that same engine. The dependency direction is one-way
 
 engine
 systems/triggers-and-the-cascade
+systems/gold
 package_boundaries
 card_vocabulary
 database
