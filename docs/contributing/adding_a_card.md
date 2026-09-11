@@ -13,28 +13,28 @@ Read the card's text and find the shape:
 
 | The card says | Hook | Example |
 |---|---|---|
-| Produces a variable amount of gold | `@gold_handler(id)` | Jade Works |
-| Costs less to bring into play, conditionally | `@recruit_discount(id)` | Colonial Farm |
-| "After X happens…" | `@on(Event, id)` | Rice Farm |
-| An activated ability with a cost | `register_ability(id, Ability(...))` | Millet Farm |
-| "Response: after X…" | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | Caravansary |
-| Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | Rebuilt Harbor |
-| Carries a keyword only sometimes | `@keyword_grant(id)` | Fortified Farmlands |
-| Gives the Personality it hangs on a stat | `@attachment_grant(id)` | Haramaki-do |
-| Limits what it will attach to | `@attach_restriction(id)` | Brothers in Arms |
-| Buys its Invest cheaper, conditionally | `@invest_discount(id)` | Moto Ikarichi, Bloodseeker |
-| Changes the strength of an attack | `@attack_strength_against(id)` | Aseth's Legion |
-| Changes a Province's strength | `@province_strength_grant(id)` | Defensive Memorial |
-| Puts itself into play as an Edict | `register_edict(id)` | Act With Authority |
-| An Event played from the Province it sits in | `register_event_entry(id)` | Shadow of the Dark God |
-| Raises its own Gold Production as it bows | `register_self_grant(id, n)`, or `@self_grant(id)` when the grant has a condition | Jade Mine, Slave Pits |
-| Enters play unbowed where the rule says bowed | `register_enters_unbowed(id)` | Poorly Placed Garden |
-| "May remain bowed" | `register_may_remain_bowed(id)` | Culling Grounds |
-| Waives the bow cost of the Personality it hangs on | `register_bow_waiver(id)` | Shadowlands Ambassador |
-| Pays somebody's Imperial Favor cost | `@favor_payer(id)` | Manjodh |
-| "You have a +N Lobby Bonus" | `@lobby_bonus_grant(id)` | Shigekawa's Court |
-| Stops a player Lobbying at all | `@lobby_bar(id)` | Wasp Sensei |
-| "May not Lobby" | `register_may_not_lobby(id)` | Moto Chen |
+| Produces a variable amount of gold | `@gold_handler(id)` | {card}`Jade Works` |
+| Costs less to bring into play, conditionally | `@recruit_discount(id)` | {card}`Colonial Farm` |
+| "After X happens…" | `@on(Event, id)` | {card}`Rice Farm` |
+| An activated ability with a cost | `register_ability(id, Ability(...))` | {card}`Millet Farm` |
+| "Response: after X…" | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
+| Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
+| Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
+| Gives the Personality it hangs on a stat | `@attachment_grant(id)` | {card}`Haramaki-do` |
+| Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |
+| Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
+| Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
+| Changes a Province's strength | `@province_strength_grant(id)` | {card}`Defensive Memorial` |
+| Puts itself into play as an Edict | `register_edict(id)` | {card}`Act With Authority` |
+| An Event played from the Province it sits in | `register_event_entry(id)` | {card}`Shadow of the Dark God` |
+| Raises its own Gold Production as it bows | `register_self_grant(id, n)`, or `@self_grant(id)` when the grant has a condition | {card}`Jade Mine`, {card}`Slave Pits` |
+| Enters play unbowed where the rule says bowed | `register_enters_unbowed(id)` | {card}`Poorly Placed Garden` |
+| "May remain bowed" | `register_may_remain_bowed(id)` | {card}`Culling Grounds` |
+| Waives the bow cost of the Personality it hangs on | `register_bow_waiver(id)` | {card}`Shadowlands Ambassador` |
+| Pays somebody's Imperial Favor cost | `@favor_payer(id)` | {card}`Manjodh` |
+| "You have a +N Lobby Bonus" | `@lobby_bonus_grant(id)` | {card}`Shigekawa's Court` |
+| Stops a player Lobbying at all | `@lobby_bar(id)` | {card}`Wasp Sensei` |
+| "May not Lobby" | `register_may_not_lobby(id)` | {card}`Moto Chen` |
 
 Nine events exist to react to: `EnteredPlay`, `Destroyed`, `Straightened`, `CardDiscarded`,
 `CounterGained`, `Revealed`, `TurnStarted`, `ProducingGold` and `ProducedGold`. If the moment your
@@ -51,7 +51,7 @@ cannot say what the card does.
 
 ### Answer a number: the gold handlers
 
-Colonial Farm is *"enters play for 1 less Gold if you are a Lion Clan player"*. The condition is the
+{card}`Colonial Farm` is *"enters play for 1 less Gold if you are a Lion Clan player"*. The condition is the
 only thing specific to the card, so the whole implementation is the condition:
 
 ```python
@@ -95,7 +95,7 @@ reaches every copy in play and not only the one that entered:
 
 ### A choice: pausing for the player
 
-Wheat Farm lets its controller give up to two other Farms a token. The trigger cannot know what they
+{card}`Wheat Farm` lets its controller give up to two other Farms a token. The trigger cannot know what they
 will pick, so it returns a `Choose` — an interrupting effect. The cascade pauses, the seat answers,
 and a resolver turns the answer into effects:
 
@@ -126,13 +126,13 @@ says how many cards to click and nothing about what for. Keep the wording free o
 choice can offer one target or two.
 
 **A choice between modes** rather than between cards is `AskOption`, answered by a `ChooseOption`
-decision. Honor Your Oaths prints three modes with a different effect chain behind each, and the
+decision. {card}`Honor Your Oaths` prints three modes with a different effect chain behind each, and the
 resolver branches on the option the seat picked. Reach for it when the card says "choose one" and
 the things being chosen are not cards.
 
 ### A division: how many go where
 
-Suiteiru no Oni creates a Follower per point of the Chi of the Personality he destroys, and attaches
+{card}`Suiteiru no Oni` creates a Follower per point of the Chi of the Personality he destroys, and attaches
 them "to one or more of your Personalities". The seat picks the bearers *and* how many each takes, so
 a `Choose` — which reads its answer as a set — cannot say it. `AskDistribution` can: the answer names
 a card once per creation it takes, and the resolver reads that tally.
@@ -190,7 +190,7 @@ sacrifice would be offered before the recruited card had finished entering play.
 
 ## Cards that attach
 
-A Follower, Item or Spell is not a fifth rung — Touch of Death is an activated ability like any
+A Follower, Item or Spell is not a fifth rung — {card}`Touch of Death` is an activated ability like any
 other, and Brothers in Arms is a trigger. What sets an attachment apart is that it acts *through*
 the Personality carrying it, and three registries cover the ways it does.
 
@@ -231,7 +231,7 @@ Two things an attachment gets for free, so do not write handlers for them: a car
 its attachments with it, and a state rule discards an attachment left with no Personality.
 
 **An ability printed "Battle:"** carries `ActionTiming.BATTLE` and is offered in a battle's Combat
-Segment. Exquisite Nagamaki of the Fox Clan is an Item whose whole printed text is one, and it is
+Segment. {card}`Exquisite Nagamaki of the Fox Clan` is an Item whose whole printed text is one, and it is
 an ordinary `register_ability` call with that timing.
 
 Three fields decide what such an ability may reach. `battle_designators` takes the Absent, Home and
@@ -247,7 +247,7 @@ predicate for what the card says and let the central rule do the rest.
 
 ## Cards that create
 
-Weapon Artist makes a sword out of nothing; Colonial Farm makes an Ashigaru; Mishime Sensei makes an
+{card}`Weapon Artist` makes a sword out of nothing; Colonial Farm makes an Ashigaru; {card}`Mishime Sensei` makes an
 Oni. What they create is a card in its own right — the "Proxy" prints in the database, reached by
 token card id — so its stats, keywords and art come off that print rather than being spelled out at
 the creation site. The deck load resolves every token the deck's cards can create and parks the

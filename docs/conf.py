@@ -3,6 +3,7 @@ from pathlib import Path
 
 _SRC = Path(__file__).resolve().parent.parent / "src"
 sys.path.insert(0, str(_SRC))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "_ext"))
 
 project = "Game on, Yasuki!"
 author = "Jesse Grabowski"
@@ -31,6 +32,7 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
+    "cards",
 ]
 
 templates_path = ["_templates"]
