@@ -190,60 +190,15 @@ sacrifice would be offered before the recruited card had finished entering play.
 
 ## Cards that attach
 
-A Follower, Item or Spell is not a fifth rung — {card}`Touch of Death` is an activated ability like any
-other, and Brothers in Arms is a trigger. What sets an attachment apart is that it acts *through*
-the Personality carrying it, and three registries cover the ways it does.
+A Follower, Item or Spell acts through the Personality carrying it, and the two bow costs are not
+the same: the `:bow:` icon bows the attachment, and only the written-out "Bow this Shugenja" reaches
+the Personality. [Cards that attach](attachments.md) works through that, `@attachment_grant` and
+`@attach_restriction`. [Units and attachments](../design/systems/units-and-attachments.md) is the
+system behind it.
 
-**Reaching the Personality.** `attached_to(game, card)` returns it, or None when the card hangs on
-nobody. Most often a cost needs it: an attachment's ability usually spends its Personality's bow
-rather than its own.
-
-```python
-        cost=bow_parent_and_destroy,
-```
-
-Watch the two bow costs — they are different. The `:bow:` icon in an ability's cost line means bow
-*the card the ability is on*, which is `bow_cost`. Only the written-out "Bow this Shugenja" reaches
-the Personality. Every Shattered Empire card paying with its parent is a Spell using that wording.
-
-**Giving the Personality a stat** it does not print. Haramaki-do prints +2F and reads "This
-Personality has +1PH"; the printed half is a number on the card, the written half is a grant:
-
-```python
-@attachment_grant("haramaki_do")
-def _haramaki_do_attachment_grant(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
-    """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
-    return {Stat.PERSONAL_HONOR: 1}
-```
-
-**Limiting what it will hang on.** The rulebook's own restrictions — one Weapon, Two-Handed
-exclusivity — live in `equip.py` as code. A restriction only one card states lives with that card:
-
-```python
-@attach_restriction("brothers_in_arms")
-def _brothers_in_arms_attach_restriction(
-    game: GameState, personality: L5RCard, card: L5RCard
-) -> bool:
-    return keywords.SAMURAI in effective_keywords(game, personality)
-```
-
-Two things an attachment gets for free, so do not write handlers for them: a card leaving play takes
-its attachments with it, and a state rule discards an attachment left with no Personality.
-
-**An ability printed "Battle:"** carries `ActionTiming.BATTLE` and is offered in a battle's Combat
-Segment. {card}`Exquisite Nagamaki of the Fox Clan` is an Item whose whole printed text is one, and it is
-an ordinary `register_ability` call with that timing.
-
-Three fields decide what such an ability may reach. `battle_designators` takes the Absent, Home and
-Remote designators off the ShE datasheet — Absent lifts the Rule of Presence, Home lets the ability
-be used from a card at home, and Remote widens Home to another battlefield. `targets_any_location`
-lifts the Rules of Location off what the ability may be pointed at, without lifting them off the
-card the ability is taken from. `located_at` says where the card itself must be, defaulting to the
-battlefield alone — a Strategy played out of hand passes `(CardLocation.HAND,)`.
-
-`legal_targets` in `legality.py` narrows whatever your `targets` function returns by the Rules of
-Location before the ability is offered, so your own predicate is not the last word. Write the
-predicate for what the card says and let the central rule do the rest.
+An ability printed `Battle:` carries `ActionTiming.BATTLE` and is an ordinary `register_ability`
+call. `battle_designators`, `targets_any_location` and `located_at` decide what it may reach, and
+[Cards that act in a battle](battle_cards.md) covers them.
 
 ## Cards that create
 
@@ -336,36 +291,11 @@ card and hits it without asking:
 
 ## Cards that attack
 
-The three attacks are effects like any other: `RangedAttack`, `MeleeAttack` and `Fear`, each taking
-a strength, a target, and the seat that caused it. An attack reaches a card whose compared stat is
-no higher than its strength; Ranged and Melee destroy what they reach, Fear bows it. The stat is
-Force unless the card says otherwise, which `compared=Stat.CHI` says.
-
-`attack_targets` is the target predicate for "a target enemy Follower or Personality without
-Followers" — the phrase every attack card prints — so an attacking ability is usually three lines:
-
-```python
-def _legion_of_the_khan_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [RangedAttack(KHAN_RANGED, target.id, source.owner)]
-```
-
-A card that *changes* an attack's strength registers a handler instead. Every card in play is asked
-about every attack, so the handler states its own reach rather than relying on who gets asked:
-compare the two cards for "this Follower", `shares_unit` for "cards in this unit", and neither for a
-card that speaks about the whole board.
-
-```python
-@attack_strength_against("legion_of_the_khan")
-def _legion_of_the_khan_attack_strength(
-    game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
-) -> int:
-    """ "Targeting this Follower" — every kind of attack, but only the ones aimed at her."""
-    return KHAN_ATTACK_PENALTY if target is card else 0
-```
-
-The handlers sum, and the total is not floored: a card that takes more strength off an attack than
-it had leaves it reaching nothing, which is what "have -2 strength" buys. The zero floor the
-Comprehensive Rules put on a stat is about stats, and an attack's strength is not one.
+`RangedAttack`, `MeleeAttack` and `Fear` are effects taking a strength, a target and a cause, and
+`attack_targets` is the target predicate every attack card wants. A card that changes an attack's
+strength registers `@attack_strength_against` instead of an ability.
+[Cards that act in a battle](battle_cards.md) works through both, and
+[Battle](../design/systems/battle.md) is the system behind them.
 
 ## Cards that print two abilities
 

@@ -18,6 +18,8 @@ systems/actions-and-legality
 systems/action-lifecycles
 systems/decisions-and-resumption
 systems/the-replay-log
+systems/units-and-attachments
+systems/battle
 package_boundaries
 card_vocabulary
 database
