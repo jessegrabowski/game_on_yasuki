@@ -15,7 +15,7 @@ New to the codebase? Start with [Setup](../getting_started/setup.md), then read
 
 Implementing a card is its own workflow: see [Adding a Card](adding_a_card.md).
 
-## Running Tests
+## Running tests
 
 ```bash
 # Python tests
@@ -37,7 +37,7 @@ pre-commit install       # once
 pre-commit run --all     # run on all files
 ```
 
-## Project Structure
+## Project structure
 
 ```
 src/
@@ -71,7 +71,7 @@ src/
 Tests mirror this structure under `tests/yasuki_core/`, `tests/yasuki_web/`,
 `tests/yasuki_gui/`.
 
-## Adding a Card Set
+## Adding a card set
 
 Card data is committed YAML — the full workflow (set YAML, image manifests, errata) lives in
 [Database & card data](../design/database.md). The short version:
@@ -82,7 +82,7 @@ Card data is committed YAML — the full workflow (set YAML, image manifests, er
 3. Reload the database: `pixi run install-db --force`.
 4. Regenerate the card-id index: `pixi run card-index`, and commit the result.
 
-## The Card-Id Index
+## The card-id index
 
 `src/yasuki_core/assets/database/card_ids.txt` lists every card id in the set YAML, one per line. It
 is generated, not hand-edited, and committed so that checks needing to know whether a card exists can

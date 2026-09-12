@@ -1,4 +1,4 @@
-# Style Guide
+# Style guide
 
 Conventions for contributing code to Game on, Yasuki! The authoritative, always-current source is
 `.github/copilot-instructions.md` and the project's `CLAUDE.md`; this page collects the essentials.
@@ -17,7 +17,7 @@ sections.
 - **One-way dependencies.** `yasuki_core ← yasuki_web`, `yasuki_core ← yasuki_gui`; web and gui never
   depend on each other.
 
-## Planned Sections
+## Planned sections
 
 - Docstring conventions (NumPy style, active voice, human-readable types).
 - Comment restraint and what earns a comment.

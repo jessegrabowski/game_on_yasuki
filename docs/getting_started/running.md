@@ -1,9 +1,9 @@
-# Running the Game
+# Running the game
 
 Complete [Setup](setup.md) first — these commands assume an installed Pixi environment
 and a created, seeded database.
 
-## Desktop Client (Tkinter)
+## Desktop client (Tkinter)
 
 ```bash
 pixi run play
@@ -21,7 +21,7 @@ Or as a Python module:
 pixi run python -m yasuki_gui
 ```
 
-## API Server
+## API server
 
 ```bash
 pixi run api
@@ -43,7 +43,7 @@ does not exist by default; copy the template to create one:
 cp config.yaml.example config.yaml
 ```
 
-### Database Connection
+### Database connection
 
 The application checks these sources in order:
 
@@ -52,12 +52,12 @@ The application checks these sources in order:
 3. `DATABASE_URL` environment variable (PaaS convention)
 4. Default: `postgresql://localhost/yasuki`
 
-### Card Images
+### Card images
 
 Set images are loaded from `YASUKI_SETS_DIR` (default: `./sets/`). The game
 falls back to generic card-type images when set images aren't available.
 
-### GUI Hotkeys
+### GUI hotkeys
 
 Hotkeys can be customized in `config.yaml`:
 
@@ -75,7 +75,7 @@ gui:
     view: v
 ```
 
-### Debug Logging
+### Debug logging
 
 Debug output includes database queries, GUI events, card loading, and full
 exception tracebacks:

@@ -1,4 +1,4 @@
-# Card Vocabulary
+# Card vocabulary
 
 A card's behavior is expressed entirely in a closed set of data types. Cards do not mutate the
 board. They return *effects*, and a single boundary applies them. The listings below name every

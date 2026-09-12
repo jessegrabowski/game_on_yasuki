@@ -1,11 +1,11 @@
-# Web App: HTTP & WebSocket API
+# Web app: HTTP and WebSocket API
 
 The web app is a FastAPI server fronting the same `yasuki_core` engine the desktop client uses. The
 server is authoritative: clients never mutate game state directly — they send intents over a WebSocket,
 the server applies them through the engine, and broadcasts the resulting state. Card browsing, room
 management, and configuration are plain REST; live gameplay runs over the WebSocket protocol below.
 
-## REST Endpoints
+## REST endpoints
 
 ### Cards
 
@@ -20,7 +20,7 @@ management, and configuration are plain REST; live gameplay runs over the WebSoc
 | `GET` | `/api/clans` | List all clans |
 | `GET` | `/api/card-types` | List all card types |
 
-### Game Rooms
+### Game rooms
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -38,7 +38,7 @@ management, and configuration are plain REST; live gameplay runs over the WebSoc
 | `GET` | `/health` | Health check |
 | `GET` | `/api/config` | Client configuration (image base URL) |
 
-## WebSocket Protocol
+## WebSocket protocol
 
 Connect to `WS /ws/{room_id}` for real-time game communication.
 
@@ -119,7 +119,7 @@ Connect to `WS /ws/{room_id}` for real-time game communication.
 }
 ```
 
-### Close Codes
+### Close codes
 
 | Code | Meaning |
 |------|---------|
@@ -128,7 +128,7 @@ Connect to `WS /ws/{room_id}` for real-time game communication.
 | `4004` | Room not found |
 | `4029` | Too many connections from this IP |
 
-### Action Kinds
+### Action kinds
 
 | Kind | Fields | Description |
 |------|--------|-------------|

@@ -1,4 +1,4 @@
-# Adding a Card
+# Adding a card
 
 A card's behavior lives in one module per set, mirroring the card data: `src/yasuki_core/assets/database/sets/rise_of_jigoku.yaml` pairs with
 `src/yasuki_core/engine/rules/cards/rise_of_jigoku.py`. A reprinted card is implemented **once**, in

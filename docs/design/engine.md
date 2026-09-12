@@ -1,4 +1,4 @@
-# Core Engine Design
+# Core engine design
 
 The rules engine lives in `yasuki_core.engine`. It is a pure, in-memory state machine: it holds the
 table state, accepts intents (requested actions), validates and applies them through the rules layer,

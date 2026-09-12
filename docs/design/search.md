@@ -1,9 +1,9 @@
-# Search Query Language
+# Search query language
 
 The deck builder search box accepts a Scryfall-inspired query syntax. Type a query
 to filter cards in real time; click the **?** button next to the box for inline help.
 
-## Quick Start
+## Quick start
 
 | Query | Finds |
 |-------|-------|
@@ -11,7 +11,7 @@ to filter cards in real time; click the **?** button next to the box for inline 
 | `clan:Crane type:personality` | Crane personalities |
 | `force>3 is:unique` | Unique cards with Force greater than 3 |
 
-## Field Search
+## Field search
 
 | Field | Aliases | Example |
 |-------|---------|---------|
@@ -29,7 +29,7 @@ Values with spaces need quotes: `set:"Imperial Edition"`. `year:` matches a card
 release year against any printing's set, and takes the numeric operators
 (`year:2005`, `year>=2010`, `year<2000`).
 
-## Numeric Fields
+## Numeric fields
 
 `force` (`f`), `chi`, `focus`, `gold` (cost), `ph` (personal honor),
 `province` (strength), `startinghonor`, `honor_requirement`, and `experience`
@@ -45,7 +45,7 @@ Experienced 2 and up.
 | `<=` | Less or equal | `gold<=3` |
 | `N-M` | Inclusive range | `force:2-4` |
 
-## Keyword Filters
+## Keyword filters
 
 `is:<keyword>` (alias `has:`) matches any card keyword: `is:unique`,
 `is:experienced`, `is:cavalry`, `is:kenshi`, `is:shugenja`, and so on. Multiple
@@ -58,7 +58,7 @@ is:shugenja is:shadowlands
 Besides keywords and `is:unique`/`is:banned`, two card flags are searchable:
 `is:flip` (a double-faced flip stronghold) and `is:errata` (has errata text).
 
-## Combining Terms
+## Combining terms
 
 Terms are ANDed by default. Use `OR` for alternatives, `(...)` to group, `-` to
 exclude, and `!"..."` for an exact card-name match:

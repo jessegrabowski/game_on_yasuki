@@ -1,4 +1,4 @@
-# Package Boundaries
+# Package boundaries
 
 The dependency direction is one-way at every level. `yasuki_core` imports neither front-end. The
 board substrate under `engine/` does not read `engine/rules/`, and the rules layer does not import

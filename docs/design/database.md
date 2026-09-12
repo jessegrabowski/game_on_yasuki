@@ -1,8 +1,8 @@
-# Card Data & Images
+# Card data and images
 
 How card data, printings, errata, and art are stored, edited, and loaded.
 
-## Source of Truth
+## Source of truth
 
 **The committed YAML files are the source of truth.** Card text, stats, printings, errata, and the
 image manifests all live in version-controlled YAML under `src/yasuki_core/assets/database/`. Edit
@@ -11,7 +11,7 @@ those and reload the database.
 Image **bytes** are the one thing never committed — they live in the R2 bucket (durable) and a local
 `sets/` cache. Everything else about a card is in the repo.
 
-## Where Everything Lives
+## Where everything lives
 
 | What | Path | Tracked? | Role |
 |------|------|----------|------|
@@ -36,7 +36,7 @@ pixi run install-db --force     # drop + rebuild the card DB from the YAML
 Postgres. Without `--force` it is do-nothing-on-conflict, so use `--force` to pick up edits. The
 accounts database is separate and untouched by this.
 
-## How Images Resolve at Read Time
+## How images resolve at read time
 
 A manifest stores a relative path `sets/<slug>/<file>`. `IMAGE_BASE_URL` is prefixed at read time:
 
@@ -138,7 +138,7 @@ other one. To add or replace any card's art:
 There is no separate tracked source directory: the JPEG in `sets/` + R2 is the canonical copy, exactly
 as for archive-materialized cards.
 
-### Sync Image Bytes to R2
+### Sync image bytes to R2
 
 ```bash
 pixi run sync-images              # dry run (shows what would upload)
@@ -148,7 +148,7 @@ pixi run sync-images -- --execute # upload for real (needs R2_REMOTE + R2_BUCKET
 This mirrors `sets/` (and bundled overlays/defaults) to R2. **It is a mirror** — it deletes remote
 objects not present locally, so only run it against a `sets/` tree you trust to be complete.
 
-## Recovery Playbook
+## Recovery playbook
 
 If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 
@@ -175,7 +175,7 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 
 ## Reference
 
-### Card Entry Fields (`sets/<slug>.yaml`)
+### Card entry fields (`sets/<slug>.yaml`)
 
 `title`, `types`, `decks`, `keywords`, `text`, stat fields (`gold_cost`, `focus`, `force`, `chi`,
 `personal_honor`, `honor_requirement`, `province_strength`, `starting_honor`, `gold_production`),
@@ -184,7 +184,7 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 (experience disambiguation), `is_back` (flip-card back face). Optional: `errata` (list),
 `errata_text` (a legacy free-text note, distinct from the structured `errata:` list).
 
-### `card_revisions` Columns
+### `card_revisions` columns
 
 `card_id`, `revision_index` (0 = original, highest = current), `effective_date`, `source`,
 `source_url` (where the erratum was announced), `rules_text`, `stats` (JSONB stat overrides),

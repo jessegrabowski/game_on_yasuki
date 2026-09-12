@@ -1,4 +1,4 @@
-# Tkinter Client Architecture
+# Tkinter client architecture
 
 The desktop client (`yasuki_gui`) is a Tkinter application that renders the game board and drives the
 same `yasuki_core` engine locally. Rendering is separated from interaction: `FieldView` draws the board

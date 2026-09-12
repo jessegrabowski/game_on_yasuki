@@ -1,4 +1,4 @@
-# Design & Architecture
+# Design and architecture
 
 How Game on, Yasuki! is built as software: the core engine and its data model, and how the web server
 and desktop client surface that same engine. The dependency direction is one-way —
