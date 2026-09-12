@@ -73,6 +73,7 @@ The three kinds differ in one method:
 ```python
 @dataclass(frozen=True, slots=True)
 class RangedAttack(AttackEffect):
+    ...
     name: ClassVar[str] = "ranged"
 
     def _outcome(self) -> Effect:
@@ -81,6 +82,7 @@ class RangedAttack(AttackEffect):
 
 @dataclass(frozen=True, slots=True)
 class MeleeAttack(AttackEffect):
+    ...
     name: ClassVar[str] = "melee"
 
     def _outcome(self) -> Effect:
@@ -89,6 +91,7 @@ class MeleeAttack(AttackEffect):
 
 @dataclass(frozen=True, slots=True)
 class Fear(AttackEffect):
+    ...
     name: ClassVar[str] = "fear"
 
     def _outcome(self) -> Effect:

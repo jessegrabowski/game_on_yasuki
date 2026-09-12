@@ -20,6 +20,7 @@ def sync_proxy(game: GameState) -> None:
     it may be represented by one, and its abilities sit on the player rather than on it (Twenty
     Festivals CR, The Imperial Favor). So this is the only place the proxy is created or destroyed,
     and nothing else under ``rules/`` reads it to answer a question about who holds the Favor.
+    ...
     """
 ```
 
