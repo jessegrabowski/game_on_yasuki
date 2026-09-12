@@ -4,8 +4,8 @@ A card's Force is two different numbers. There is the one printed on it, and the
 now with an attachment, a Strategy and a Province bonus counted in. Every rule that cares reads the
 second.
 
-One prefix marks that second reading everywhere. Twelve functions begin `effective_`, and all of
-them mean the same thing: ask the board what this is, do not read the print.
+One prefix marks that second reading everywhere. A function beginning `effective_` means the same
+thing wherever it appears: ask the board what this is, do not read the print.
 
 ## The read path
 
