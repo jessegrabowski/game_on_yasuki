@@ -17,8 +17,8 @@ dispatching.
 {func}`~.permitted_timings` gives the ones the current round allows, and {func}`~.permits` asks
 about one. An ability is offered when those two sets intersect.
 
-That intersection is why `INTERRUPT` never fires. No round permits it, so the set is always
-empty.
+That intersection is why `INTERRUPT` never fires. No round lists it, so the set is always empty for
+an ability carrying it.
 
 ## Targets
 
