@@ -52,7 +52,7 @@ AVATAR_FG = "#ffffff"
 # EB Garamond on the web; Georgia is the dependable desktop serif with the same editorial feel.
 SERIF_FAMILY = "Georgia"
 
-# Georgia's digits are old-style — 0 1 2 sit at x-height, 3 4 5 7 9 descend, 6 8 ascend — so a
+# Georgia's digits are old-style: 0 1 2 sit at x-height, 3 4 5 7 9 descend, 6 8 ascend. So a
 # column of them bobs, and a box sized to hold any of them has to span an ascender and a descender
 # to fit five pixels of digit. Stat readouts are data rather than prose and want lining figures of
 # one height. Tk falls back to its default sans where this family is absent.
@@ -66,7 +66,7 @@ def serif(size: int, weight: str = "normal") -> tuple[str, int, str]:
 def numerals(size_px: int, weight: str = "bold") -> tuple[str, int, str]:
     """A numeral font ``size_px`` pixels tall.
 
-    Pixels rather than points — Tk reads a negative size as pixels — because a stat stamp is drawn
+    Pixels rather than points. Tk reads a negative size as pixels because a stat stamp is drawn
     into a box of a fixed pixel size, and points would scale the digits out of it on any display
     whose DPI is not the one this was measured on.
     """

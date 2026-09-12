@@ -65,9 +65,9 @@ class SearchView(NamedTuple):
 class GameRunner:
     """Drives a single-player rules game through an :class:`~.EngineSession`.
 
-    The human advances their own turn a phase at a time; when the turn ends, the AI-reserved
+    The human advances their own turn a phase at a time. When the turn ends, the AI-reserved
     opponent's turn auto-runs until control returns to the human. A decision the human owes is left
-    pending for the UI to present; the opponent's decisions are answered by its :class:`~.Agent`.
+    pending for the UI to present. The opponent's decisions are answered by its :class:`~.Agent`.
 
     Attributes
     ----------
@@ -83,7 +83,7 @@ class GameRunner:
         self._opponent = opponent or Controls(PassPolicy(), AutoAgent())
 
     def view(self) -> GameView:
-        """Return the human's projection — what the board, phase bar, and panels render."""
+        """Return the human's projection: what the board, phase bar, and panels render."""
         return self.session.project(self.human)
 
     def legal_actions(self) -> list[Action]:
@@ -92,8 +92,8 @@ class GameRunner:
 
     def province_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The labeled actions offered for a face-up province card, for its left-click menu: a plain
-        Recruit plus its second purchase option where one exists — Invest for an Invest holding,
-        Proclaim for an own-clan Personality (all labeled with their gold) — a Dynasty Discard, and
+        Recruit plus its second purchase option where one exists (Invest for an Invest holding,
+        Proclaim for an own-clan Personality), all labeled with their gold, a Dynasty Discard, and
         the Kharmic ability that spends the card. Empty when the card offers nothing right now."""
         game = self.session.game
         card = game.table.cards_by_id[card_id]
@@ -133,7 +133,7 @@ class GameRunner:
         its Gold Cost. Empty when the card offers nothing right now.
 
         Neither Equipping nor playing a Strategy names a target here. Equipping picks its
-        Personality first and pays afterwards; a Strategy pays first and is pointed at its target on
+        Personality first and pays afterwards. A Strategy pays first and is pointed at its target on
         the far side, which is the CR's order for any action (Action Sequence steps B and C)."""
         game = self.session.game
         items: list[tuple[str, Action]] = []
@@ -228,8 +228,8 @@ class GameRunner:
         return [(labels[action], action) for action in self.legal_actions() if action in labels]
 
     def legacy_search_pool(self) -> list:
-        """The cards the human's Legacy search looks through — its whole dynasty deck plus its
-        face-down province cards — for a search dialog to display."""
+        """The cards the human's Legacy search looks through: its whole dynasty deck plus its
+        face-down province cards, for a search dialog to display."""
         return legality.legacy_search_pool(self.session.game, self.human)
 
     def search_view(self) -> SearchView | None:
@@ -247,7 +247,7 @@ class GameRunner:
             return None  # a question is answered yes or no, wherever its subjects happen to sit
         table = self.session.game.table
         if any(card_id not in table.cards_by_id for card_id in pending.candidates):
-            return None  # not cards at all — an Invest amount is answered by buttons
+            return None  # not cards at all. An Invest amount is answered by buttons
         legacy = isinstance(pending, ChooseLegacyCard)
         if not legacy:
             reachable = self._on_the_board()
@@ -287,7 +287,7 @@ class GameRunner:
 
     def _on_the_board(self) -> set[str]:
         """The human's cards a click can reach: what is in play, what is in hand, and whatever sits
-        in a Province. A Province card counts face-down as well as face-up — the seat picks the
+        in a Province. A Province card counts face-down as well as face-up. The seat picks the
         Province by where it is, not by knowing what is in it."""
         table = self.session.game.table
         return (
@@ -343,8 +343,8 @@ class GameRunner:
 
     @property
     def is_opponent_turn(self) -> bool:
-        """Whether the turn itself belongs to the AI-reserved opponent — as opposed to the human
-        merely having handed the opportunity on inside a phase of its own turn."""
+        """Whether the turn itself belongs to the AI-reserved opponent (as opposed to the human
+        merely having handed the opportunity on inside a phase of its own turn)."""
         return self.session.game.active is not self.human
 
     @property
@@ -371,7 +371,7 @@ class GameRunner:
         return pending is not None and pending.seat is not self.human
 
     def act(self, action: Action) -> None:
-        """Perform the human's chosen action. Does not run the opponent — the caller checks
+        """Perform the human's chosen action. Does not run the opponent. The caller checks
         :attr:`opponent_holds_priority` afterwards and runs it so the change stays visible."""
         self.session.act(self.human, action)
 
@@ -382,7 +382,7 @@ class GameRunner:
 
     def submit(self, response: DecisionResponse) -> None:
         """Answer the human's pending decision. A request whose answer carries more than the chosen
-        ids — a payment and its boosts — is answered with that request's own response type."""
+        ids (a payment and its boosts) is answered with that request's own response type."""
         self.session.submit(self.human, response)
 
     def cancel(self) -> None:
@@ -394,7 +394,7 @@ class GameRunner:
 
         Three cases, all of them the opponent's to clear: its own turn, the window it holds inside
         the human's Action phase, and a decision a card put to it while the human kept priority. Its
-        :class:`~.Controls` supply both halves — the policy picks each action, the agent answers the
+        :class:`~.Controls` supply both halves: the policy picks each action, the agent answers the
         decisions those actions raise.
 
         Returns as soon as the human owes an answer or holds priority with nothing pending, so the

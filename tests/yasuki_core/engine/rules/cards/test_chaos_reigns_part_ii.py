@@ -148,7 +148,7 @@ def test_modifier_grant_fires_no_counter_trigger():
     session.submit(P1, DecisionResponse(("farm",)))
 
     assert effective_gold_production(session.game, session.game.table.cards_by_id["farm"]) == 4
-    assert len(hand.cards) == before  # Aoki did not draw — the grant is a modifier, not a token
+    assert len(hand.cards) == before  # Aoki did not draw and the grant is a modifier, not a token
 
 
 # --- Tarkasha ---
@@ -221,7 +221,7 @@ def test_tarkasha_only_reshuffles_naga_followers():
 
 
 def test_tarkasha_only_mounts_a_commander():
-    """ "Your target Commander" — the plain Naga scout does not lead."""
+    """ "Your target Commander" and the plain Naga scout does not lead."""
     session = _tarkasha_game()
 
     session.act(P1, ActivateAbility("tarkasha"))
@@ -328,7 +328,7 @@ def test_fortified_farmlands_has_renew_beside_another_farm():
 
 def test_fortified_farmlands_has_no_renew_on_its_own():
     """ "Another Farm" excludes the card asking, so a lone Fortified Farmlands does not count itself
-    — it carries the Farm keyword and would otherwise always satisfy its own condition."""
+    and it carries the Farm keyword and would otherwise always satisfy its own condition."""
     game = _farmlands_game(other_farms=0)
 
     assert "Renew" not in effective_keywords(game, game.table.cards_by_id["farmlands"])

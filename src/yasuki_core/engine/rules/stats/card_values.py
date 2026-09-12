@@ -17,7 +17,7 @@ def effective_chi(game: GameState, card: L5RCard) -> int:
 
 
 def effective_personal_honor(game: GameState, card: L5RCard) -> int:
-    """``card``'s Personal Honor right now — what Proclaiming him gains, and what an effect reading
+    """``card``'s Personal Honor right now, what Proclaiming him gains, and what an effect reading
     his honor sees. The +1PH and +2PH counters carry their delta here."""
     return effective_stat(game, card, Stat.PERSONAL_HONOR)
 

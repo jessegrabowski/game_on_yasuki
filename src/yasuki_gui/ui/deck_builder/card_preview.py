@@ -413,7 +413,7 @@ class CardPreviewController:
     ) -> ImageTk.PhotoImage | None:
         """Load the generic card back as a fallback, matching the card's deck and print era.
 
-        Prints before Gold Edition show the old back; Gold onward the new back."""
+        Prints before Gold Edition show the old back. Gold onward the new back."""
         decks = card.get("decks") or []
         deck = "Fate" if "Fate" in decks else "Dynasty"
         set_name = print_info.get("set_name") if print_info else None

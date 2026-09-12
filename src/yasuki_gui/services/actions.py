@@ -97,7 +97,7 @@ def _card(view: HasView, tag: str | None) -> L5RCard | None:
 
 def _may(view: HasView, owner: PlayerId | None) -> bool:
     """UI affordance: a card/zone/deck is actionable when public or owned by the acting seat. This
-    only grays out menu items — ``apply_intent`` re-validates ownership on dispatch."""
+    only grays out menu items. ``apply_intent`` re-validates ownership on dispatch."""
     return owner is None or owner == view.seat
 
 

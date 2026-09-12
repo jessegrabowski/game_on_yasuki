@@ -43,7 +43,7 @@ from tests.yasuki_core.engine.builders import (
 
 def _effect_types():
     """Every concrete Effect the module defines. Discovered rather than listed, so a new effect is
-    covered by these tests the moment it is written; abstract bases are excluded."""
+    covered by these tests the moment it is written. Abstract bases are excluded."""
     return [
         value
         for value in vars(effects).values()
@@ -61,7 +61,8 @@ def test_every_effect_implements_perform():
 
 
 def test_effect_discovery_finds_concrete_effects_and_excludes_the_base():
-    # Guards the discovery above: if it silently found nothing, the other tests would pass vacuously.
+    # Guards the discovery above: if it silently found nothing, the other tests would pass
+    # vacuously.
     assert Bow in _effect_types()
     assert Effect not in _effect_types()
     assert InterruptingEffect not in _effect_types()
@@ -181,7 +182,7 @@ def test_banishing_a_card_that_is_already_gone_does_nothing():
 
 
 def _token_game():
-    """A game whose deck load resolved one token template — a 2F Follower to create."""
+    """A game whose deck load resolved one token template: a 2F Follower to create."""
     game = two_seat_game()
     game.table.creatable_tokens["scout"] = AttachmentPrint(
         name="Scout",
@@ -223,7 +224,8 @@ def test_a_creation_takes_the_clan_on_both_the_name_and_the_list():
 
 def test_creating_onto_a_personality_who_has_left_play_creates_nothing():
     # The target is fixed when the ability is announced, and anything can happen to him before the
-    # creation resolves. A homeless attachment would be destroyed by the state-based actions on sight.
+    # creation resolves. A homeless attachment would be destroyed by the state-based actions on
+    # sight.
     game = _token_game()
 
     events = CreateToken("scout", PlayerId.P1, "maker", attach_to="gone").perform(game)
@@ -341,7 +343,7 @@ def _record_the_seat(game, source_id, chosen, seat):
 
 def test_a_resolver_is_told_which_seat_answered():
     """A choice can be put to a seat other than the one whose action raised it, and a declining
-    answer names no card — so the seat cannot be recovered from the source or the chosen ids."""
+    answer names no card, so the seat cannot be recovered from the source or the chosen ids."""
     _SEATS_SEEN.clear()
     game = two_seat_game()
     card = put_in_play(game, holding("P2-h", owner=PlayerId.P2))

@@ -232,7 +232,7 @@ def test_a_defended_province_sits_below_the_units_defending_it(view):
 
 def test_only_the_army_on_the_lower_half_is_dropped(view):
     """Attachments always fan upward off their Personality, so whichever army holds the lower half
-    has to be dropped by the tower's height — otherwise its cards climb over the divider. Which
+    has to be dropped by the tower's height. Otherwise its cards climb over the divider. Which
     army that is turns over with the lane, so both sides are checked from both seats."""
 
     def towered(name: str) -> UnitView:
@@ -304,7 +304,8 @@ def test_a_collapsed_lane_labels_the_end_its_heading_would_have(view):
 
 def test_a_mirrored_lanes_rows_fill_the_space_its_bands_leave():
     """A mirrored lane carries the heading and the button both at its foot, so the rows have to be
-    laid out against that — against the upright bands the Province rides up over its own heading."""
+    laid out against that. Laid out against the upright bands instead, the Province rides up over
+    its own heading."""
     height = 560
     province, _defending, _divider, attacking = _rows(height, mirrored=True)
 
@@ -322,8 +323,8 @@ def test_an_upright_lanes_rows_fill_the_space_its_bands_leave():
 
 
 def test_assigned_units_are_drawn_in_their_lane(view):
-    """After assigning, a unit is drawn at its battlefield rather than at home — this is where, and
-    it is the lane it was sent to rather than merely somewhere on the canvas."""
+    """After assigning, a unit is drawn at its battlefield rather than at home: the lane it was
+    sent to, not merely somewhere on the canvas."""
     view.refresh(_attack(_battlefield(0), _battlefield(1, attacking=(_unit("akodo"),))))
 
     x = view.canvas.coords("battle:akodo")[0]
@@ -374,7 +375,7 @@ def test_a_fought_battlefield_says_so(view):
 
 
 def test_units_sent_but_not_yet_assigned_already_stand_at_their_battlefield(view):
-    """The player has decided where they go; the engine being told on Done assigning is bookkeeping
+    """The player has decided where they go. The engine being told on Done assigning is bookkeeping
     they should not have to watch for."""
     pending = PendingArmy(units=(_unit("akodo"), _unit("matsu")), force=4)
 
@@ -398,7 +399,7 @@ def test_a_pending_army_counts_towards_the_force_its_side_shows(view):
 
 def test_a_defending_seats_pending_army_joins_the_defense(view):
     """The player only ever sends their own units, so a seat under attack that has picked defenders
-    must see them counted with the defense — not added to the army coming at it."""
+    must see them counted with the defense, not added to the army coming at it."""
     view.refresh(
         _attack(_battlefield(0, attacking=(_unit("akodo", 3),), defending=(_unit("hida", 6),))),
         {0: PendingArmy(units=(_unit("kuni", 4),), force=4)},
@@ -435,7 +436,7 @@ def test_only_a_lane_with_something_to_offer_shows_a_button(view):
 
 
 def test_a_lane_button_reads_whatever_it_was_given(view):
-    """The label comes from the question the engine is asking — a place to send an army during
+    """The label comes from the question the engine is asking: a place to send an army during
     assignment, a battle to fight after."""
     view.refresh(_attack(_battlefield(0)), buttons={0: _button("Assign here")})
 
@@ -522,7 +523,7 @@ def test_a_lane_with_the_room_keeps_its_three_rows_clear_of_each_other(view):
 
 
 def test_a_personality_is_drawn_over_the_cards_attached_to_him(view):
-    """The tower fans up behind him, so he has to be the last thing drawn — otherwise a Follower
+    """The tower fans up behind him, so he has to be the last thing drawn. Otherwise a Follower
     covers the face of the Personality carrying it."""
     unit = UnitView(
         leader=personality("hida"),
@@ -577,8 +578,8 @@ def test_a_tied_battle_says_so_rather_than_naming_a_winner(view):
 
 
 def test_a_battle_where_nothing_happened_says_that_much(view):
-    """Distinct from a tie that destroyed both armies, and from a lane nobody has fought at — a
-    lane that reports nothing cannot be told apart from one still to come."""
+    """Distinct from a tie that destroyed both armies, and from a lane nobody has fought at,
+    because a lane that reports nothing cannot be told apart from one still to come."""
     view.refresh(_attack(_battlefield(0, fought=True, outcome=_outcome(winner=None))))
 
     assert "Nothing happened" in _texts(view)
@@ -679,8 +680,8 @@ def test_a_provinces_fortifications_stand_in_the_lane_with_it(view):
 
 
 def test_a_fortification_is_tucked_behind_the_province_it_defends(view):
-    """The Province card is drawn over the nearest of them, so the stack has to ascend toward it —
-    drawn the other way round the nearest Fortification is covered twice and never shows."""
+    """The Province card is drawn over the nearest of them, so the stack has to ascend toward it.
+    Drawn the other way round, the nearest Fortification is covered twice and never shows."""
     view.refresh(
         _attack(
             _battlefield(
@@ -728,7 +729,7 @@ def test_an_empty_province_draws_no_card(view):
 
 
 def test_the_province_card_is_not_a_card_the_player_can_act_on(view):
-    """It is the Defender's, and it is not a unit — offering the army menu on it lets a Holding be
+    """It is the Defender's, and it is not a unit. Offering the army menu on it lets a Holding be
     gathered into an army and shipped to the engine as part of the assignment."""
     asked = []
     view.on_card_menu = asked.append
@@ -761,7 +762,8 @@ def test_a_unit_in_a_lane_is_a_card_the_player_can_act_on(view):
 
 
 def test_clicking_a_unit_in_a_lane_picks_it(view):
-    """The lane is where a sent unit is, so it is where the player picks it to unassign or re-send."""
+    """The lane is where a sent unit is, so it is where the player picks it to unassign or
+    re-send."""
     picked = []
     view.on_card_click = picked.append
     view.refresh(_attack(_battlefield(0, defending=(_unit("hida"),))))
@@ -774,7 +776,7 @@ def test_clicking_a_unit_in_a_lane_picks_it(view):
 
 def test_clicking_a_personality_carrying_a_follower_picks_the_personality(view):
     """A unit is drawn as a tower, so answering with the bottommost card would hand back the
-    Follower fanned out behind him — and a Follower is not a card an assignment can name."""
+    Follower fanned out behind him. A Follower is not a card an assignment can name."""
     picked = []
     view.on_card_click = picked.append
     unit = UnitView(
@@ -831,7 +833,7 @@ def test_a_picked_unit_is_drawn_picked(view):
 
 
 def test_a_collapsed_lane_does_not_answer_the_button_it_is_not_showing(view):
-    """Collapsing hides the button; a strip that still took the click would fight a battle at a
+    """Collapsing hides the button. A strip that still took the click would fight a battle at a
     battlefield the player cannot see."""
     pressed = []
     view.refresh(
@@ -855,8 +857,8 @@ def test_an_ended_attack_empties_the_view(view):
 
 
 def test_an_army_is_laid_out_in_a_row_at_the_boards_own_spacing(view):
-    """Units at a battlefield stand side by side, spaced the way the board spaces a home row —
-    the same function lays out both, so improving one improves the other."""
+    """Units at a battlefield stand side by side, spaced the way the board spaces a home row.
+    The same function lays out both, so improving one improves the other."""
     army = tuple(_unit(name) for name in ("akodo", "matsu", "ikoma"))
     view.refresh(_attack(_battlefield(0, attacking=army)))
 
@@ -899,7 +901,7 @@ def test_an_attachment_fans_off_its_personality_in_the_same_column(view):
 
 
 def test_the_defenders_stand_above_the_attackers(view):
-    """Each lane faces the two armies across a divider, the Defender's on top — a lane that drew
+    """Each lane faces the two armies across a divider, the Defender's on top. A lane that drew
     them the other way round would read as the wrong side winning."""
     view.refresh(_attack(_battlefield(0, attacking=(_unit("akodo"),), defending=(_unit("hida"),))))
 
@@ -998,7 +1000,7 @@ def _lit_sequence_chips(view) -> list[str]:
 
 def test_the_lane_prints_the_battle_sequence_without_the_word_segment(view):
     """Four cells in a column the width of a card, and three of the CR's four names carry the same
-    word — so the strip drops it and keeps what tells the segments apart."""
+    word, so the strip drops it and keeps what tells the segments apart."""
     view.refresh(_attack(_battlefield(0), current=0, battle_segment=BattleSegment.COMBAT))
 
     assert _sequence_chips(view) == ["Engage", "Combat", "Resolution", "After-Resolution"]
@@ -1006,7 +1008,8 @@ def test_the_lane_prints_the_battle_sequence_without_the_word_segment(view):
 
 def test_only_the_lane_being_fought_at_lights_its_sequence(view):
     """A battle happens at one battlefield at a time, so a second lit cell would say two battles
-    are being fought at once. Both lanes still carry the strip — the sequence is what a battle does,
+    are being fought at once. Both lanes still carry the strip, because the sequence is what a
+    battle does,
     and which battle is doing it is what the lit cell answers."""
     view.refresh(
         _attack(_battlefield(0), _battlefield(1), current=1, battle_segment=BattleSegment.ENGAGE)

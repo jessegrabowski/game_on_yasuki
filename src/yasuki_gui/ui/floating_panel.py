@@ -9,9 +9,9 @@ TITLEBAR_H = 34
 BORDER = 3
 # What is left of the panel once it is rolled up.
 ROLLED_H = TITLEBAR_H + 2 * BORDER
-# How much of the panel's width has to stay over the board. Its whole height cannot be asked for —
-# a panel resized larger than the board would then have nowhere legal to sit — so what a drag
-# preserves is a strip of title bar wide enough to take hold of again.
+# How much of the panel's width has to stay over the board. Its whole height cannot be asked for,
+# since a panel resized larger than the board would then have nowhere legal to sit, so what a
+# drag preserves is a strip of title bar wide enough to take hold of again.
 KEEP_VISIBLE = 80
 MIN_W = 280
 MIN_H = 140
@@ -63,7 +63,7 @@ class FloatingPanel(tk.Frame):
             highlightcolor=theme.GOLD,
         )
         # Prefixed because these share a namespace with everything Tk and every subclass already
-        # keep on a widget — ``_w`` is Tk's own path to it, and a panel that shadows one of those
+        # keep on a widget. ``_w`` is Tk's own path to it, and a panel that shadows one of those
         # stops working in a way that points nowhere near here.
         self._panel_left, self._panel_top = 0, 0
         self._panel_width, self._panel_height = width, height
@@ -163,8 +163,8 @@ class FloatingPanel(tk.Frame):
     def open_over(self, left: int, top: int, width: int, height: int) -> None:
         """Lay the panel over the given box the first time, or where the player has since put it.
 
-        A starting place rather than a dock: the panel is free to be dragged and resized off the box
-        afterwards, and opening again keeps wherever it was left.
+        The box only sets the panel's starting place. It can be dragged and resized off the box
+        afterward, and opening again keeps wherever it was left.
 
         Parameters
         ----------

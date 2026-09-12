@@ -48,7 +48,7 @@ ATTACKER, DEFENDER = PlayerId.P1, PlayerId.P2
 
 
 def _at_the_battlefield_choice(*, provinces: int = 1) -> EngineSession:
-    """A session with the armies assigned, paused on the Attacker's choice of where to fight — the
+    """A session with the armies assigned, paused on the Attacker's choice of where to fight and the
     step before any battle segment has opened."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
@@ -82,7 +82,7 @@ def test_a_battle_opens_with_the_engage_segment():
 
 def test_a_response_step_opens_over_a_battle_segment_and_unwinds_back_to_it():
     """The case the old depth-as-proxy guard got wrong. A battle segment suspends the phase round,
-    so a Response taken during the battle is the second thing on the stack, not the first — and
+    so a Response taken during the battle is the second thing on the stack, not the first, and
     passing it out has to land back in the segment with its own priority, not in the phase."""
     session = _in_a_battle()
     game = session.game
@@ -231,9 +231,8 @@ def test_a_seat_with_no_unit_at_the_battlefield_is_permitted_nothing():
 
 
 def test_a_segment_still_opens_on_a_defender_with_nothing_to_take():
-    """The segment opens whatever the board looks like — a seat with no presence can still be moved
-    in, so there is no battlefield at which nothing can happen. It holds the opportunity and can
-    only pass, which is the CR's alternative to taking an action rather than an action itself."""
+    """The segment opens regardless of board presence. A defender with no presence still holds
+    priority and can only pass."""
     session = _in_a_battle_one_side(present=ATTACKER)
 
     assert session.game.round.priority is DEFENDER
@@ -422,7 +421,7 @@ def test_an_absent_card_is_played_without_presence_at_the_battlefield():
 
 
 def test_an_absent_card_does_not_carry_the_seats_other_cards_into_the_battle():
-    """One Absent card gets the seat asked; it does not lift the rule off everything else in hand.
+    """One Absent card gets the seat asked. It does not lift the rule off everything else in hand.
     The pair is the same ability with and without the designator, so that is all that differs."""
     session = _in_the_combat_segment_with_no_presence(
         ("absent", "absent_probe_in_hand"), ("plain", "plain_probe_in_hand")
@@ -453,7 +452,7 @@ register_ability(
 
 def _probe_at_another_battlefield(printed_id: str) -> EngineSession:
     """Two battlefields, the battle fought at the first, and the Attacker's probe standing at the
-    second — at a battlefield, but not this one."""
+    second and at a battlefield, but not this one."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
     for index in range(2):
@@ -474,8 +473,8 @@ def _probe_at_another_battlefield(printed_id: str) -> EngineSession:
 
 
 def test_the_remote_designator_reaches_from_another_battlefield():
-    """ShE, Remote: usable even if the card is at home *or also at another battlefield* — the second
-    half is the whole of what makes it wider than Home."""
+    """ShE, Remote: usable even if the card is at home *or also at another battlefield* and the
+    second half is the whole of what makes it wider than Home."""
     session = _probe_at_another_battlefield("battle_probe_remote")
 
     assert "probe" in _offered(session)
@@ -490,7 +489,7 @@ def test_the_home_designator_does_not_reach_from_another_battlefield():
 
 
 def test_the_target_filter_holds_when_the_action_is_actually_taken():
-    """The filter has two call sites — what is offered, and what the action is then pointed at. A
+    """The filter has two call sites and what is offered, and what the action is then pointed at. A
     card handler that offered a stranded target would otherwise reach the second unchecked."""
     session = _probe_in_a_battle("battle_probe", at_home=False)
 
@@ -514,8 +513,8 @@ def _walk_to(session: EngineSession, segment: BattleSegment) -> None:
 @pytest.mark.parametrize("segment", list(BATTLE_SEGMENT_TIMINGS))
 def test_a_delay_to_a_segments_beginning_resolves_as_it_opens(segment):
     """A battle segment's beginning is fired generically as its round opens rather than named at a
-    call site, so this is what stands behind its entry in ``FIRED_MOMENTS`` — a moment listed there
-    with nothing firing it would hold an effect for the rest of the game."""
+    call site, so this is what stands behind its entry in ``FIRED_MOMENTS`` and a moment listed
+    there with nothing firing it would hold an effect for the rest of the game."""
     session = _at_the_battlefield_choice()
     session.game.delayed = [(Moment(segment, Boundary.BEGINNING), Bow("guard"))]
 
@@ -542,7 +541,7 @@ def test_a_delayed_grant_lands_on_the_round_it_was_held_for():
 
 def test_granting_the_opportunity_restarts_the_count_of_consecutive_passes():
     """A round closes on consecutive passes, and a seat handed the opportunity has not passed on it
-    — so a pass already made before the grant must not be one of the two that close the round."""
+    and so a pass already made before the grant must not be one of the two that close the round."""
     session = _in_a_battle()
     session.act(DEFENDER, Pass())
 

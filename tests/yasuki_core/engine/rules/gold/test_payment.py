@@ -118,10 +118,11 @@ def _dynasty_phase(producers: list[L5RCard], *, cost: int) -> EngineSession:
 
 
 def test_a_payment_stranded_by_its_own_answer_raises():
-    """Affordability sums yields that cannot all be realised: destroying one producer as the price
-    of its own grant drops what another is worth. Answering one producer at a time re-quotes the
-    rest, so the shortfall surfaces here rather than silently underpaying — and it has to be loud,
-    because the alternative is a seat holding a question with no legal answer and no way to know why.
+    """Affordability sums yields that cannot all be realised: destroying one producer as the
+    price of its own grant drops what another is worth. Answering one producer at a time re-quotes
+    the rest, so the shortfall surfaces here rather than silently underpaying, and it has to be
+    loud, because the alternative is a seat holding a question with no legal answer and no way to
+    know why.
     """
     try:
         register_self_grant("self_destroying_probe", 2)
@@ -228,7 +229,7 @@ def test_a_price_that_asks_a_question_keeps_its_decision():
 
 def test_a_producer_that_grants_itself_nothing_is_not_made_to_pay():
     """The payment path exacts no price of its own. A card that raises its own yield and names no
-    consequence keeps its production and stays in play — Outlying Farms' text is Outlying Farms'."""
+    consequence keeps its production and stays in play. Outlying Farms' text is Outlying Farms'."""
     try:
         register_self_grant("free_grant_probe", 3)
 
@@ -353,7 +354,7 @@ def test_a_price_on_produced_gold_resolves_after_the_bow():
 
 def test_production_raises_its_events_once_per_producer():
     """A payment that bows two producers opens two windows and announces two yields, each naming its
-    own card — not one pair for the payment."""
+    own card, not one pair for the payment."""
     opened: list[str] = []
     landed: list[tuple[str, int]] = []
 
@@ -390,7 +391,7 @@ def test_production_raises_its_events_once_per_producer():
 
 
 def test_a_single_producer_that_covers_the_cost_pays_in_one_step():
-    """One answer is still enough when one producer covers the whole cost — the payment only comes
+    """One answer is still enough when one producer covers the whole cost. The payment only comes
     back round while something is still owed."""
     session = _dynasty_phase([holding("a", owner=PlayerId.P1, gold_production=5)], cost=5)
     session.act(PlayerId.P1, Recruit("tgt"))
@@ -494,7 +495,7 @@ def _window_grant(game, source_id, chosen, seat):
 
 def test_a_production_window_trigger_may_pause_for_a_decision():
     """The capability the narrowing exists for. A producer's trait asks its controller a question as
-    it bows, and the yield is read on the far side of the answer — so what the seat says still
+    it bows, and the yield is read on the far side of the answer. So what the seat says still
     counts toward the production it interrupted."""
     try:
 

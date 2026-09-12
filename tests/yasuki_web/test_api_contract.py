@@ -47,7 +47,8 @@ def test_list_cards_shape(client):
 
 
 def test_sort_orders_results(client):
-    # The card-search page drives sort/order through these params; force ordering must actually flip.
+    # The card-search page drives sort/order through these params; force ordering must actually
+    # flip.
     def forces(order):
         cards = client.get(f"/api/cards?search=type:personality&sort=force&order={order}").json()[
             "cards"
@@ -145,7 +146,7 @@ def test_keyword_or_matches_union_not_everything(client):
 
 
 def test_grouped_or_query_returns_the_union(client):
-    # Cross-field OR with grouping — the whole query is the union of its two AND groups.
+    # Cross-field OR with grouping: the whole query is the union of its two AND groups.
     crane_courtiers = _ids(client, "c:crane is:courtier")
     lion_commanders = _ids(client, "c:lion is:commander")
     combined = _ids(client, "(c:crane is:courtier) OR (c:lion is:commander)")
@@ -261,7 +262,8 @@ def test_default_print_rotated_in_card_uses_recent_printing(client):
 
 
 def test_prints_listed_chronologically(client):
-    # Prints come back oldest-first by set release date; Refugees' first printing is Anvil of Despair.
+    # Prints come back oldest-first by set release date; Refugees' first printing is Anvil of
+    # Despair.
     card_id = _named(client, "name:Refugees", "Refugees")["card_id"]
     prints = client.get(f"/api/cards/{card_id}").json()["prints"]
     assert prints[0]["set_name"] == "Anvil of Despair"
@@ -285,8 +287,8 @@ def test_card_detail_shape(client):
 
 
 def test_card_page_renders_og_tags(client):
-    # The shareable /card page server-renders OpenGraph tags so links unfurl in chat. The set_slug in
-    # the path pins which printing's art the tags point at; an unknown card is a 404.
+    # The shareable /card page server-renders OpenGraph tags so links unfurl in chat. The
+    # set_slug in the path pins which printing's art the tags point at; an unknown card is a 404.
     html = client.get("/card/refugees").text
     assert 'property="og:title" content="Refugees"' in html
     assert (

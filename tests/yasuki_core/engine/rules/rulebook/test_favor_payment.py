@@ -135,7 +135,7 @@ def _resolve(game: GameState, action, effects) -> None:
 
 def test_an_action_that_pays_a_favor_cost_is_a_favor_action(game):
     """ShE datasheet: paying the Favor is what makes it one, and it stays one however the cost was
-    settled — here by a payer rather than by discarding the Favor."""
+    settled, here by a payer rather than by discarding the Favor."""
     put_in_play(game, personality("helper", printed_id=FREE_PAYER))
     source = _source(game)
 
@@ -145,8 +145,8 @@ def test_an_action_that_pays_a_favor_cost_is_a_favor_action(game):
 
 
 def test_an_alternate_cost_paid_the_other_way_is_not_a_favor_action(game):
-    """ "Bow your Yojimbo or discard the Favor" is a Favor action only on the branch that discards
-    it, which is why the marker rides on the cost instead of the announcement."""
+    """ "Bow your Yojimbo or discard the Favor" is a Favor action only on the branch that
+    discards it."""
     TakeFavor(PlayerId.P1).perform(game)
     yojimbo = put_in_play(game, personality("yojimbo"))
 

@@ -171,8 +171,8 @@ def test_play_face_down_hides_the_card_from_the_opponent_but_not_its_owner(room)
     assert card.face_up is False
     assert PlayerId.P1 in card.peekers  # its owner still reads their own focused card
 
-    # The opponent's snapshot conceals the card entirely — a face-down play is the focus mechanic, so
-    # Kenji must see only a back — while Ada's still shows it, revealed by the auto-peek.
+    # The opponent's snapshot conceals the card entirely. A face-down play is the focus mechanic, so
+    # Kenji must see only a back, while Ada's still shows it, revealed by the auto-peek.
     def battlefield_card(ws):
         snapshot = next(m for m in reversed(ws.sent) if m["type"] == "SNAPSHOT")["snapshot"]
         return next(c for c in snapshot["battlefield"] if c["id"] == "f1")
@@ -182,7 +182,7 @@ def test_play_face_down_hides_the_card_from_the_opponent_but_not_its_owner(room)
     assert battlefield_card(ada)["name"] == "Secret"
     assert battlefield_card(ada)["peeked"] is True
 
-    # The shared log names no card — a face-down play must not leak the identity to the opponent.
+    # The shared log names no card. A face-down play must not leak the identity to the opponent.
     log = next(m for m in kenji.sent if m["type"] == "LOG")
     assert log["parts"] == [{"text": "Ada "}, {"text": "plays a face-down fate card"}]
 

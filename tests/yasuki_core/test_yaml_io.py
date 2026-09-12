@@ -17,13 +17,13 @@ SRC = pathlib.Path(yasuki_core.__file__).parent.parent
 )
 def test_the_compiled_scanner_is_used_where_pyyaml_provides_one():
     """Reading the committed card data is almost entirely YAML scanning, and the C scanner does it
-    about nine times faster — so which loader this module picks is the whole reason it exists."""
+    about nine times faster. Which loader this module picks is the whole reason it exists."""
     assert yaml_io.SafeLoader is yaml.CSafeLoader
 
 
 def test_no_module_reaches_for_safe_load():
     """``yaml.safe_load`` hardcodes the pure-Python scanner whatever PyYAML was built with, so a
-    call site drifting back to it costs the speed silently — no other test would fail.
+    call site drifting back to it costs the speed silently. No other test would fail.
 
     Read as syntax rather than as text: this file and :mod:`yasuki_core.yaml_io` both name the
     function in prose, and a substring search would report them.

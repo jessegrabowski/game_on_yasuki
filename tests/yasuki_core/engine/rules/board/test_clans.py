@@ -43,8 +43,8 @@ def test_a_seat_with_no_stronghold_plays_no_clan():
 
 
 def test_a_stronghold_printing_several_clans_plays_them_all():
-    """A Stronghold is a card, and a card may print more than one clan -- so the seat answers to each
-    of them, the way a multi-clan Personality answers to each of its own."""
+    """A Stronghold is a card, and a card may print more than one clan -- so the seat answers to
+    each of them, the way a multi-clan Personality answers to each of its own."""
     game = two_seat_game()
     put_in_play(game, stronghold(PlayerId.P1, clans=("Lion", "Crane")))
 

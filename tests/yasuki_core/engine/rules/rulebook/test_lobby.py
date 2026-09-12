@@ -39,7 +39,7 @@ def _lobbies(game: GameState, seat: PlayerId = PlayerId.P1) -> list[Lobby]:
 
 
 def test_lobby_is_offered_once_however_many_personalities_could_pay_for_it():
-    """The ability is one action; which Personality it bows is chosen when it resolves."""
+    """The ability is one action. Which Personality it bows is chosen when it resolves."""
     game = _game()
     put_in_play(game, personality("courtier", personal_honor=2))
     put_in_play(game, personality("champion", personal_honor=1))
@@ -173,7 +173,7 @@ def test_a_spent_lobby_is_not_offered_again_until_the_next_turn():
 
 def test_shigekawas_court_wins_a_comparison_its_seat_would_otherwise_lose():
     """Shigekawa's Court (ShE): "You have a +5 Lobby Bonus." Read against the datasheet's wide
-    wording rather than the CR's — the amount checked is considered higher, so 8 + 5 beats 10."""
+    wording rather than the CR's: the amount checked is considered higher, so 8 + 5 beats 10."""
     game = _game(p1_honor=8, p2_honor=10)
     put_in_play(game, personality("courtier", personal_honor=2))
     put_in_play(game, holding("court", printed_id="shigekawas_court"))
@@ -183,7 +183,7 @@ def test_shigekawas_court_wins_a_comparison_its_seat_would_otherwise_lose():
 
 def test_a_penalty_on_a_rival_wins_a_comparison_its_seat_would_otherwise_lose():
     """The datasheet adjusts whichever player the amount is about, so a Penalty on the rival is what
-    settles this one — the acting seat's own honor is untouched."""
+    settles this one, leaving the acting seat's own honor untouched."""
     game = _game(p1_honor=8, p2_honor=10)
     put_in_play(game, personality("courtier", personal_honor=2))
     source = put_in_play(game, holding("agitator"))
@@ -232,7 +232,7 @@ def test_a_bar_stops_only_the_seats_it_names():
 
 
 def test_a_lobby_bonus_adjusts_whatever_amount_is_checked():
-    """The rulebook Lobby checks Family Honor, but each Wind's own Lobby checks something else —
+    """The rulebook Lobby checks Family Honor, but each Wind's own Lobby checks something else:
     cards in hand for House of Suikihime, the total Gold Cost of attachments for Kano's Alliance,
     the total Force of unbowed units for The Kanpeki Dynasty. The datasheet adjusts "any amount
     checked during any Lobby action", so the Bonus is read against those too."""
@@ -348,7 +348,7 @@ def test_miya_shoin_leaves_his_own_controller_lobbying():
 
 
 def test_miya_shoin_stops_every_other_player():
-    """The rival qualifies outright — their turn, ahead on honor, a Personality to bow — so Shoin is
+    """The rival qualifies outright (their turn, ahead on honor, a Personality to bow), so Shoin is
     the only thing withholding it."""
     game = _game(p1_honor=0, p2_honor=10)
     game.active = PlayerId.P2

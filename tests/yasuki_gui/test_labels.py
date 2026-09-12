@@ -55,7 +55,7 @@ def test_the_phase_belongs_to_whoever_is_taking_the_turn():
 def test_a_declared_attack_names_its_segment_rather_than_the_phase(segment, expected):
     """The Attack Phase walks segments and each is a different question, so the more specific CR
     heading is the useful one once there is an attack to have segments. The spellings are the CR's
-    own — Fight Battles is not called a Segment there, so it is not called one here."""
+    own and Fight Battles is not called a Segment there, so it is not called one here."""
     session = _session()
     session.game.phase = Phase.BATTLE
     resolution.declare_attack(session.game, P1)
@@ -75,7 +75,7 @@ def test_a_battle_names_its_own_segment_and_the_battlefield_it_is_fought_at(
     battle_segment, expected
 ):
     """A battle's segments are nested inside Fight Battles, which is true of every battle in the
-    phase — so the heading names the segment being fought and the battlefield it is at, which is
+    phase and so the heading names the segment being fought and the battlefield it is at, which is
     what tells the seat which question it is answering."""
     session = _session()
     session.game.phase = Phase.BATTLE
@@ -89,7 +89,7 @@ def test_a_battle_names_its_own_segment_and_the_battlefield_it_is_fought_at(
 
 def test_a_battle_segment_belongs_to_whoever_is_taking_the_turn():
     """Both battle segments start with the Defender, so the seat holding the opportunity is
-    routinely not the one whose turn it is — and the heading follows the turn."""
+    routinely not the one whose turn it is, and the heading follows the turn."""
     session = _session()
     session.game.phase = Phase.BATTLE
     resolution.declare_attack(session.game, P1)

@@ -13,7 +13,7 @@ P1 = PlayerId.P1
 
 
 def test_a_card_with_no_grant_gives_nothing():
-    """The registry is sparse — almost no attachment grants anything beyond what it prints — so the
+    """The registry is sparse. Almost no attachment grants anything beyond what it prints, so the
     absent case is the one this read answers most often."""
     game = two_seat_game()
     host = put_in_play(game, personality("host", owner=P1))

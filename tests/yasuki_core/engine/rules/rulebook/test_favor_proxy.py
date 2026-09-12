@@ -113,9 +113,9 @@ def test_the_favor_is_never_offered_as_a_discard_to_hand_size():
 def test_the_favor_holder_is_authoritative_over_the_proxy_card():
     """Delete the card and the seat still holds the Favor.
 
-    The Favor is not a card, though it may be represented by one, and its abilities sit on the player
-    rather than on it (Twenty Festivals CR, The Imperial Favor). ``favor_holder`` is the truth and the
-    proxy renders it, so tampering with the card cannot make the two disagree.
+    The Favor is not a card, though it may be represented by one, and its abilities sit on the
+    player rather than on it (Twenty Festivals CR, The Imperial Favor). ``favor_holder`` is the
+    truth and the proxy renders it, so tampering with the card cannot make the two disagree.
     """
     game = _game()
     TakeFavor(PlayerId.P1).perform(game)

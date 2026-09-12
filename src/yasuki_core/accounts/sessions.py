@@ -20,7 +20,7 @@ def create_session(conn: psycopg.Connection, user_id: int, ttl: timedelta) -> st
     Returns
     -------
     token : str
-        The raw token to set in the cookie; never persisted.
+        The raw token to set in the cookie. Never persisted.
     """
     token = new_session_token()
     with conn.cursor() as cur:
@@ -34,7 +34,7 @@ def create_session(conn: psycopg.Connection, user_id: int, ttl: timedelta) -> st
 def resolve_session(conn: psycopg.Connection, token: str) -> dict | None:
     """Return the user behind a live session token, or None.
 
-    A session resolves only when it exists, has not expired, and its user is not banned; touch
+    A session resolves only when it exists, has not expired, and its user is not banned. Touch
     ``last_seen_at`` as a side effect. A banned, expired, or unknown token yields None, so the
     caller treats the request as anonymous.
 

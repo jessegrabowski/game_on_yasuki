@@ -131,7 +131,8 @@ def test_attachments_serialize_card_and_province_targets():
 
     attachments = _serialized(table, P1)["attachments"]
 
-    # A card target is tagged {"card": id}; a province target flattens to the shared zone-key string.
+    # A card target is tagged {"card": id}; a province target flattens to the shared zone-key
+    # string.
     assert attachments == {
         "child": {"card": "parent"},
         "fort": {"province": "P1:province:0"},
@@ -321,7 +322,8 @@ def test_shown_face_down_card_reveals_to_the_opponent_and_cues_the_owner():
     opp = _serialized(table, P2)["zones"]["P1:province:0"][0]
     assert opp["hidden"] is False and opp["shown"] is True and opp["peeked"] is False
 
-    # The owner still sees a back — but the stub carries the show marker so the reveal outline draws.
+    # The owner still sees a back, but the stub carries the show marker so the reveal outline
+    # draws.
     owner = _serialized(table, P1)["zones"]["P1:province:0"][0]
     assert owner["hidden"] is True and owner["shown"] is True
     assert "name" not in owner
@@ -377,8 +379,9 @@ def test_card_serializes_creates_for_the_menu():
 
 
 def test_realms_merge_in_province_serializes_creates_but_concealed_face_down():
-    # The Realms Merge is an Event that resolves from a province, creating a Zombie or an Oni Hatchling
-    # — a creator that never reaches the battlefield, so its Create menu lives in the province.
+    # The Realms Merge is an Event that resolves from a province, creating a Zombie or an Oni
+    # Hatchling: a creator that never reaches the battlefield, so its Create menu lives in the
+    # province.
     table = TableState.empty_two_seat()
     names = {"oni_hatchling": "Oni Hatchling", "zombie": "Zombie"}
     revealed = L5RCard.of(
@@ -415,8 +418,9 @@ def test_realms_merge_in_province_serializes_creates_but_concealed_face_down():
 
 
 def test_card_fields_covers_every_serialized_key():
-    # The client's CARD_FIELDS (board.js) must list every key _card emits, or a newly serialized field
-    # would silently never re-patch its card on the board. Anchor the JS list to the real serializer.
+    # The client's CARD_FIELDS (board.js) must list every key _card emits, or a newly serialized
+    # field would silently never re-patch its card on the board. Anchor the JS list to the real
+    # serializer.
     table = TableState.empty_two_seat()
     back = CardPrint(
         name="Back", side=Side.DYNASTY, printed_id="c1__back", image_front=Path("sets/x/b.jpg")

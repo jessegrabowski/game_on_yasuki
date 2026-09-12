@@ -72,7 +72,7 @@ from yasuki_core.game_pieces.prints import (
 from yasuki_core.game_pieces.constants import Side, Element, Timing, AttachmentType
 from yasuki_core.game_pieces.counters import counter_from_key
 
-# The shared JSON codec: plain-dict (JSON-ready) round-trips for the engine's value types — cards,
+# The shared JSON codec: plain-dict (JSON-ready) round-trips for the engine's value types: cards,
 # zone/deck keys, seats, and intents. One canonical wire shape, consumed by the persisted action
 # log, the live web protocol, and the rules-engine plumbing (decisions, game log, projection), so
 # no two of them can drift apart.
@@ -324,7 +324,7 @@ def decode_deck_key(payload: dict) -> DeckKey:
 
 
 def encode_move_dest(dest: MoveDest) -> dict:
-    """Encode a move destination — the shared battlefield, a deck, or an owned zone — to plain
+    """Encode a move destination (the shared battlefield, a deck, or an owned zone) to plain
     data."""
     if dest == BATTLEFIELD:
         return {"kind": "battlefield"}
@@ -344,7 +344,7 @@ def decode_move_dest(payload: dict) -> MoveDest:
 
 
 def encode_attach_target(target) -> dict:
-    """Encode an attachment target — a parent card id or a province — to plain data."""
+    """Encode an attachment target (a parent card id or a province) to plain data."""
     if isinstance(target, ZoneKey):
         return {"kind": "zone", "zone": encode_zone_key(target)}
     return {"kind": "card", "card_id": target}
@@ -470,7 +470,7 @@ def encode_intent(intent: Intent) -> dict:
 
 def decode_intent(payload: dict) -> Intent:
     """Rebuild an ``Intent`` from the plain data produced by ``encode_intent``. Raises
-    ``KeyError`` / ``ValueError`` on a malformed payload; callers handling untrusted input should
+    ``KeyError`` / ``ValueError`` on a malformed payload. Callers handling untrusted input should
     validate the envelope first and treat a raised error as a rejected message."""
     op = IntentOp(payload["op"])
     match op:

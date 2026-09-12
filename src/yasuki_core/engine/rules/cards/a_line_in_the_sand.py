@@ -40,9 +40,9 @@ def _agasha_beiru_targets(game: GameState, source: L5RCard) -> list[str]:
 def _agasha_beiru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Recruit the Fortification out of the discard pile, then wall the Province it landed on.
 
-    Entering play from anywhere but a Province, it asks its controller which Province to attach to
-    (CR, Fortification) — so the token names the card rather than a Province, and finds the answer
-    once the choice has been made.
+    Entering play from anywhere but a Province, it asks its controller which Province to attach
+    to (CR, Fortification), so the token names the card rather than a
+    Province and reads the answer once the choice has been made.
     """
     return [
         RecruitCard(target.id),
@@ -80,8 +80,8 @@ def _ichigos_guard_attack_strength(
 # --- Legion of the Khan ---
 
 KHAN_RANGED = 3
-# "Fear, Melee, and Ranged targeting this Follower have -2 strength" — every kind there is, so the
-# penalty asks nothing about which one arrived.
+# "Fear, Melee, and Ranged targeting this Follower have -2 strength" covers every kind there is, so
+# the penalty asks nothing about which one arrived.
 KHAN_ATTACK_PENALTY = -2
 
 
@@ -89,7 +89,7 @@ KHAN_ATTACK_PENALTY = -2
 def _legion_of_the_khan_attack_strength(
     game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
 ) -> int:
-    """ "Targeting this Follower" — every kind of attack, but only the ones aimed at her."""
+    """ "Targeting this Follower" means every kind of attack, but only the ones aimed at her."""
     return KHAN_ATTACK_PENALTY if target is card else 0
 
 
@@ -124,7 +124,7 @@ def _resolve_stockpiled_weapon(
 
 
 def _stockpiled_weapon_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
-    """Fetch another copy out of the Fate deck, or nothing when the deck holds none — the Invest is
+    """Fetch another copy out of the Fate deck, or nothing when the deck holds none. The Invest is
     then a pure surcharge, which the card does not forbid paying."""
     seat = source.owner
     deck = game.table.decks[DeckKey(seat, Side.FATE)].cards

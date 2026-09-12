@@ -80,7 +80,7 @@ def test_every_card_the_deck_beats_goes_back_in_a_settled_order():
 
 
 def test_a_personality_counts_as_producing_nothing():
-    # Gold Production is declared on Holdings, so a Personality has no such attribute at all — and
+    # Gold Production is declared on Holdings, so a Personality has no such attribute at all, and
     # a face-up Personality is an ordinary opening, not an edge case. Reading the stat off the card
     # rather than through the module's accessor raises instead of ranking it last.
     session = _opening(4)
@@ -140,7 +140,7 @@ def test_it_takes_cycle_when_something_is_worth_replacing():
 
 def test_it_declines_cycle_when_the_opening_already_beats_the_deck():
     # Recruits are offered only in the Dynasty phase, so passing is the whole of what declining
-    # looks like here — the buying delegation is exercised by the test below instead.
+    # looks like here. The buying delegation is exercised by the test below instead.
     session = _opening(5, 6)
 
     assert EconomicCyclePolicy().choose(_view(session, 1), session.legal_actions(P1)) == Pass()

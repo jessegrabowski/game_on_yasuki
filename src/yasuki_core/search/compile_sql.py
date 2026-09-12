@@ -92,8 +92,8 @@ def active_format_from_options(filter_options: dict | None) -> str | None:
     """
     Resolve the single active format whose arc should bias default-print selection.
 
-    An exact ``format:``/``arc:`` search token or the deck-builder format dropdown pins one format;
-    inequality ranges, multiple specs, or no format filter leave it unresolved.
+    An exact ``format:``/``arc:`` search token or the deck-builder format dropdown pins one format.
+    Inequality ranges, multiple specs, or no format filter leave it unresolved.
 
     Parameters
     ----------
@@ -124,7 +124,7 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
     Emit the SQL condition(s) and positional params for one filter entry.
 
     Map a single ``filter_options`` key/value to zero or more self-contained WHERE predicates.
-    ``build_card_filter`` calls this per dict entry to AND them into the query; ``compile_term``
+    ``build_card_filter`` calls this per dict entry to AND them into the query. ``compile_term``
     calls it per search term to compile one AST leaf.
 
     Parameters
@@ -132,7 +132,7 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
     property_name : str
         The filter key (a column, a ``*_excludes`` variant, or a synthetic key like ``clans``).
     value : object
-        The key's value; its shape depends on the key (a list of needles, a (min, max) tuple, a
+        The key's value. Its shape depends on the key (a list of needles, a (min, max) tuple, a
         list of (operator, value) specs, and so on).
 
     Returns
@@ -158,7 +158,7 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
         logger.warning("Unknown search field(s), returning no results: %s", value)
         conditions.append("FALSE")
     elif property_name in _PRESENCE_COLUMNS:
-        # Presence flag (is:flip → a front with a back face; is:errata → has errata text): the
+        # Presence flag (is:flip -> a front with a back face; is:errata -> has errata text): the
         # column is populated. The column name is a hardcoded table key, so interpolation is safe.
         column = _PRESENCE_COLUMNS[property_name]
         conditions.append(f"c.{column} IS NOT NULL" if value else f"c.{column} IS NULL")
@@ -170,8 +170,9 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
             conditions.append(f"c.name_normalized {op} %s ESCAPE '\\'")
             params.append(f"%{escape_like(normalize_name(needle))}%")
     elif property_name in ("name_exact", "name_exact_excludes"):
-        # `!"phrase"` — the whole name equals the phrase (case-insensitive). All of a card's
-        # experience versions share a name, so this isolates that card, not one printing.
+        # `!"phrase"` for exact match: the whole name equals the phrase (case-insensitive).
+        # All of a card's experience versions share a name, so this isolates that card, not one
+        # printing.
         op = "!=" if property_name.endswith("excludes") else "="
         for needle in value:
             conditions.append(f"lower(c.name) {op} lower(%s)")
@@ -212,10 +213,10 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
         # Each (operator, value) resolves the value against a format's name or short block alias.
         # Exact operators match that one format; inequalities compare every format's legal_from to
         # the reference format's, selecting one side of the arc timeline. The *_excludes twin is the
-        # strict set complement (NOT IN): -format>=diamond is "legal in no format at or after
+        # strict set complement (NOT IN). -format>=diamond means "legal in no format at or after
         # diamond", never a naive operator flip to format<diamond. An unresolvable reference fails
-        # closed via the EXISTS guard so a typo'd -format:xyz matches nothing, mirroring the positive
-        # filter whose empty IN-set matches nothing.
+        # closed via the EXISTS guard so a typo'd -format:xyz matches nothing, mirroring the
+        # positive filter whose empty IN-set matches nothing.
         excludes = property_name.endswith("excludes")
         for op, format_value in value:
             if op in (":", "="):
@@ -253,8 +254,8 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
         # Each (operator, value) resolves the value against a set's full name or short code. Exact
         # operators match that set; inequalities compare every set's release_date to the reference
         # set's, selecting cards printed on one side of that release. The *_excludes twin is the
-        # strict set complement (NOT IN) — -set>=GE means "printed in no set at or after GE", not
-        # "printed in some earlier set" — and an unresolvable reference fails closed via the EXISTS
+        # strict set complement (NOT IN). -set>=GE means "printed in no set at or after GE", not
+        # "printed in some earlier set", and an unresolvable reference fails closed via the EXISTS
         # guard, matching nothing like the positive filter does.
         excludes = property_name.endswith("excludes")
         for op, set_value in value:
@@ -322,8 +323,8 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
             )
             params.append([t.title() for t in value])
     elif property_name in ("clans", "clans_excludes"):
-        # An "All Clans" sensei is legal in any clan's deck, so every clan filter also matches it —
-        # and, symmetrically, -clan:X excludes it too (NOT of the positive).
+        # An "All Clans" sensei is legal in any clan's deck, so every clan filter also matches it.
+        # Symmetrically, -clan:X excludes it too (NOT of the positive).
         if value:
             wanted = set()
             for clan in value:
@@ -379,14 +380,14 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
                 )
                 params.append(keyword)
     elif property_name == "keywords_or":
-        # `is:a|b` — cards carrying any one of the keywords.
+        # `is:a|b` for cards carrying any one of the keywords.
         if value:
             conditions.append(
                 "c.card_id IN (SELECT card_id FROM card_keywords WHERE lower(keyword) = ANY(%s))"
             )
             params.append([k.lower() for k in value])
     elif property_name in _NUMERIC_STATS:
-        # A dash stat — one the card doesn't print — is stored as NULL. The whitelisted column name
+        # A dash stat (one the card doesn't print) is stored as NULL. The whitelisted column name
         # is interpolation-safe (it is a key of _NUMERIC_STATS).
         if value == "isnull":
             conditions.append(f"c.{property_name} IS NULL")
@@ -464,8 +465,8 @@ def build_card_filter(
             conditions.extend(new_conditions)
             params.extend(new_params)
 
-    # Non-deck cards — proxies and everything filed under the "Other" deck (tokens, bio cards,
-    # deckbackers, …) — are hidden by default. `include:tokens` brings the "Other" cards back
+    # Non-deck cards (proxies and everything filed under the "Other" deck: tokens, bio cards,
+    # deckbackers, ...) are hidden by default. `include:tokens` brings the "Other" cards back
     # (proxies that are also tokens come with them); `include:all` shows everything.
     token = "EXISTS (SELECT 1 FROM card_decks d WHERE d.card_id = c.card_id AND d.deck = 'Other')"
     includes = filter_options.get("include", ()) if filter_options else ()
@@ -578,7 +579,7 @@ def build_search_filters(query: str) -> dict:
     Returns
     -------
     filter_options : dict
-        Filter entries for ``query_cards_filtered``; empty when the query constrains nothing.
+        Filter entries for ``query_cards_filtered``. Empty when the query constrains nothing.
     """
     node = parse_query(query)
     options: dict = {}

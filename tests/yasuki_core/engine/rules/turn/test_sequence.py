@@ -136,7 +136,7 @@ def test_advance_empties_the_gold_pool_on_each_phase_change():
 
 def test_the_end_of_turn_discard_is_not_the_seats_own_action():
     """A card that pays its controller "if the action was yours and discarded a Fate card" must not
-    be paid for the rulebook trimming their hand — there was no action."""
+    be paid for the rulebook trimming their hand. There was no action."""
     game = _game(hand=sequence.MAX_HAND_SIZE, fate_deck=1)
     caravansary = holding(
         "P1-caravansary", printed_id="caravansary", name="Caravansary", owner=PlayerId.P1
@@ -227,7 +227,7 @@ def test_begin_game_straightens_and_reveals_only_the_active_board():
 
 def test_the_turn_start_straighten_announces_each_card_it_stands_up(reacting):
     """A card that watches for its own straightening has to hear about the one the rulebook does,
-    not only the one an effect does — Culling Grounds gives up its Personality either way."""
+    not only the one an effect does. Culling Grounds gives up its Personality either way."""
     state = TableState.empty_two_seat()
     bowed = put_in_play(state, holding("P1-bowed", printed_id="straighten_probe"))
     bowed.bow()
@@ -253,7 +253,7 @@ def test_begin_game_leaves_an_ordinary_seat_enforcing_honor_requirements():
 
 
 def _responder_game() -> GameState:
-    """A game whose active seat holds one Response — a Caravansary answering its own Fate discard."""
+    """A game whose active seat holds one Response. A Caravansary answering its own Fate discard."""
     state = TableState.empty_two_seat()
     put_in_play(
         state,
@@ -533,8 +533,8 @@ def test_a_delayed_effect_refuses_a_moment_nothing_resolves(moment, worded):
 
 
 def test_a_delayed_effect_that_asks_a_question_at_the_end_of_the_turn_is_refused():
-    """Nothing after ``_resolve_delayed`` can resume — the fate draw and the hand-size discard would
-    run on a paused game and strand the effect's own cascade — so the end of the turn says so at the
+    """Nothing after ``_resolve_delayed`` can resume. The fate draw and the hand-size discard would
+    run on a paused game and strand the effect's own cascade, so the end of the turn says so at the
     point of failure rather than at the mismatched stack two submits later."""
     game = _game(hand=0, fate_deck=1)
     game.delayed = [(END_OF_TURN, Ask(PlayerId.P1, "a question", "unregistered"))]

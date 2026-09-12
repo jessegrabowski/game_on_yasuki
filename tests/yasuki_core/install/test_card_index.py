@@ -15,8 +15,8 @@ def write_set(cards_dir, name, cards):
 
 
 def test_ids_come_from_explicit_id_then_extended_title_then_title(tmp_path):
-    # The first entry carries all three, so the assertion pins the precedence and not merely that each
-    # source works on its own.
+    # The first entry carries all three, so the assertion pins the precedence and not merely that
+    # each source works on its own.
     write_set(
         tmp_path,
         "imperial",
@@ -83,8 +83,8 @@ def test_a_collision_across_two_set_files_is_caught(tmp_path):
 
 
 def test_a_file_that_is_not_a_set_names_itself_in_the_error(tmp_path):
-    # An empty YAML parses to None, which would otherwise surface as an AttributeError naming no file
-    # — leaving whoever hits it to bisect 130 of them.
+    # An empty YAML parses to None, which would otherwise surface as an AttributeError naming no
+    # file and leaving whoever hits it to bisect 130 of them.
     (tmp_path / "truncated.yaml").write_text("")
 
     with pytest.raises(ValueError, match="truncated.yaml is not a set file"):
@@ -138,9 +138,9 @@ def test_a_local_set_file_stays_out_of_the_index(tmp_path):
 
 
 def test_the_committed_index_matches_the_card_yaml():
-    # The index is a committed derivative of the YAML, so it can go stale silently: every check built
-    # on it would keep passing while naming cards that no longer exist. Reparsing costs about a
-    # second, which is why this is the only thing that pays it and the fast readers never have to.
+    # The index is a committed derivative of the YAML, so it can go stale silently: every check
+    # built on it would keep passing while naming cards that no longer exist. Reparsing costs about
+    # a second, which is why this is the only thing that pays it and the fast readers never have to.
     committed = read_index()
     current = set(card_ids(DEFAULT_CARDS_PATH))
 

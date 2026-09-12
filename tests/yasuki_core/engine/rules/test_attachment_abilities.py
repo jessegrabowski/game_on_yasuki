@@ -20,8 +20,8 @@ from tests.yasuki_core.engine.builders import (
 P1 = PlayerId.P1
 
 # A synthetic attachment whose ability is paid by the Personality carrying it and whose effect reads
-# that Personality's Force. Between them they exercise both directions of the parent reference — the
-# cost reaching a card the ability never chose, and the effect reading a stat off it. No real card is
+# that Personality's Force. Between them they exercise both directions of the parent reference. The
+# cost reaches a card the ability never chose, and the effect reads a stat off it. No real card is
 # encoded yet; that is PR 2's job.
 register_ability(
     "test_bows_its_personality",
@@ -53,7 +53,7 @@ def _equipped(force: int = 3):
 
 def test_the_cost_bows_the_personality_not_the_attachment():
     """An attachment acts through the Personality carrying it, so what the cost spends is his
-    bow — the attachment itself stays ready."""
+    bow. The attachment itself stays ready."""
     game = _equipped()
     session = EngineSession.start(game.table, P1)
 
@@ -74,7 +74,7 @@ def test_the_effect_reads_the_personality_it_hangs_on():
 
 def test_the_ability_is_offered_while_the_personality_can_pay():
     """The control for the negative cases below. Without it they would all pass just as well if the
-    ability were never offered at all — a broken location or timing would read as a clean suite."""
+    ability were never offered at all. A broken location or timing would read as a clean suite."""
     game = _equipped()
     session = EngineSession.start(game.table, P1)
 
@@ -82,7 +82,7 @@ def test_the_ability_is_offered_while_the_personality_can_pay():
 
 
 def test_the_ability_is_not_offered_when_the_personality_is_already_bowed():
-    """The cost is the parent's bow, so his state gates the ability — not the attachment's."""
+    """The cost is the parent's bow, so his state gates the ability, not the attachment's."""
     game = _equipped()
     session = EngineSession.start(game.table, P1)
     # Bowed through the live game: starting a session runs the first turn's straighten, which would

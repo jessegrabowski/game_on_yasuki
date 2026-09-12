@@ -73,7 +73,8 @@ def test_a_face_down_card_is_never_named():
 
 
 def test_showing_a_fate_card_in_hand_names_it():
-    # A hand card the owner already reads, shown to the opponent, is public to all — so it is named.
+    # A hand card the owner already reads, shown to the opponent, is public to all and so it is
+    # named.
     table = TableState.empty_two_seat()
     card = L5RCard.of(
         CardPrint, id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=True, shown=True
@@ -142,7 +143,7 @@ def test_unpeek_is_generic():
 
 
 def test_a_face_up_card_off_the_battlefield_is_not_named():
-    # Public by its face flag, but in a private/off-board zone — must still read as "a card".
+    # Public by its face flag, but in a private/off-board zone and must still read as "a card".
     table = TableState.empty_two_seat()
     card = L5RCard.of(CardPrint, id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=True)
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)

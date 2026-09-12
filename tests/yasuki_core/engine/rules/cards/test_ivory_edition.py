@@ -20,7 +20,7 @@ from tests.yasuki_core.engine.builders import (
 
 
 def test_haramaki_do_gives_its_personality_both_halves_of_what_it_says():
-    """The +2F is printed on the card and needs no handler; the +1PH is text, and only the handler
+    """The +2F is printed on the card and needs no handler. The +1PH is text, and only the handler
     delivers it. A test asserting one half alone passes with the other half missing."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=2, personal_honor=2))
@@ -114,7 +114,7 @@ def test_the_ranged_attack_bows_the_archers_and_destroys_its_target():
 
 
 def test_the_fear_bows_its_target_and_costs_nothing():
-    """The second ability prints no cost, so the Archers stay standing — which is what makes taking
+    """The second ability prints no cost, so the Archers stay standing. Which is what makes taking
     the wrong one of the two a real mistake rather than a cosmetic one."""
     session = _archers_battle()
 

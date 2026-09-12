@@ -98,8 +98,8 @@ def _gold_source(state, card_id: str, amount: int, owner=PlayerId.P1) -> L5RCard
 
 
 def test_gold_is_not_a_free_action_outside_a_payment():
-    # Gold is produced only while paying a cost (rules-skeleton §7), so an unbowed producer offers
-    # nothing on its own — only Pass is free.
+    # Gold is produced only while paying a cost (rules-skeleton section 7), so an unbowed producer
+    # offers nothing on its own. Only Pass is free.
     state = _dealt_table()
     _gold_source(state, "P1-mine", 3)
     session = EngineSession.start(state, PlayerId.P1)
@@ -228,7 +228,7 @@ def test_recruit_pays_then_brings_the_personality_into_play_unbowed_and_refills(
     game = session.game
     bought = game.table.cards_by_id["P1-person"]
     assert bought in game.table.battlefield.cards
-    assert not bought.bowed  # Personalities enter unbowed (rules-skeleton §6)
+    assert not bought.bowed  # Personalities enter unbowed (rules-skeleton section 6)
     assert game.table.positions["P1-person"] == UNPLACED_BOARD_POS
     assert game.gold[PlayerId.P1] == 3  # 8 produced - 5 spent, excess pools
     refilled = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
@@ -286,7 +286,7 @@ def test_proclaim_is_offered_only_for_an_own_clan_personality():
     _gold_source(state, "P1-SH", 8)
     _personality_in_province(state, "P1-crab", clan="Crab")
     _personality_in_province(state, "P1-crane", clan="Crane", idx=1)
-    _personality_in_province(state, "P1-ronin", idx=2)  # clanless — Unaligned is never own-clan
+    _personality_in_province(state, "P1-ronin", idx=2)  # clanless: Unaligned is never own-clan
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
@@ -496,7 +496,7 @@ def test_jade_works_funds_and_pays_a_jade_recruit_at_its_premium_rate():
     session.submit(PlayerId.P1, DecisionResponse(("P1-jadeworks",)))
     game = session.game
     assert game.table.cards_by_id["P1-jade"] in game.table.battlefield.cards  # recruited
-    assert game.gold[PlayerId.P1] == 0  # produced 5, spent 5 — application matched the offer
+    assert game.gold[PlayerId.P1] == 0  # produced 5, spent 5, so the application matched the offer
 
 
 def test_cancel_backs_out_of_a_recruit_payment_committing_nothing():
@@ -513,7 +513,8 @@ def test_cancel_backs_out_of_a_recruit_payment_committing_nothing():
 
     game = session.game
     assert game.pending is None and not game.stack
-    # Nothing was committed: the holding sits face-up in its province, no gold spent, producer ready.
+    # Nothing was committed: the holding sits face-up in its province, no gold spent, producer
+    # ready.
     province = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
     assert holding in province and holding.face_up
     assert holding not in game.table.battlefield.cards
@@ -811,7 +812,7 @@ def test_only_an_attachment_is_offered_for_equip():
 
 
 def test_equip_is_an_open_action():
-    """ "Repeatable Open" (CR, Equip) — so it is taken in the Action phase, not held back to Dynasty
+    """ "Repeatable Open" (CR, Equip), so it is taken in the Action phase, not held back to Dynasty
     the way Recruit is."""
     state = _dealt_table()
     _gold_source(state, "P1-SH", 8)
@@ -885,7 +886,7 @@ def test_recruiting_a_fortification_attaches_it_to_the_province_it_came_from():
 
 
 def test_a_plain_holding_is_not_attached_to_its_province():
-    """The relation is the Fortification keyword's, not every Holding's — an ordinary Holding
+    """The relation is the Fortification keyword's, not every Holding's, so an ordinary Holding
     leaves its Province behind and stands on its own."""
     state = _dealt_table()
     _gold_source(state, "P1-SH", 8)

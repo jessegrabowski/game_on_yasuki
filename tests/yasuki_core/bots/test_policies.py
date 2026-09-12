@@ -49,7 +49,7 @@ def test_random_policy_only_ever_returns_an_offered_action():
 def test_random_policy_with_the_same_seed_makes_the_same_choices():
     # The determinism the whole simulation harness rests on: same seed, same game.
     view = _view()
-    # One policy drawing twenty times, not twenty policies drawing once — otherwise every draw is
+    # One policy drawing twenty times, not twenty policies drawing once. Otherwise every draw is
     # the rng's first and the comparison holds for the wrong reason.
     first = _draws(RandomPolicy(default_rng(3)), view, 20)
     second = _draws(RandomPolicy(default_rng(3)), view, 20)
@@ -114,7 +114,7 @@ def test_a_policy_built_by_name_chooses():
 
 def test_a_random_policy_seeds_itself_when_given_no_rng():
     """Built by name it has no run to draw from, so it must still choose rather than fail. Such a
-    run is not reproducible — that needs the rng passed to the constructor."""
+    run is not reproducible. That needs the rng passed to the constructor."""
     view = _view()
 
     assert all(action in ACTIONS for action in _draws(RandomPolicy(), view, 20))

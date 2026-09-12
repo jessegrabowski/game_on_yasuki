@@ -15,10 +15,11 @@ def _reclaim_tk_cycles_on_main_thread():
     """Collect each GUI test's tkinter/PIL reference cycles on the main thread.
 
     tkinter widgets and PIL ``PhotoImage``s form cycles that only generational GC reclaims. Left as
-    garbage, that GC can later fire on a worker thread — the web suite runs DB queries via
-    ``to_thread`` in the same process — and run their Tcl finalizers off the interpreter's thread,
+    garbage, that GC can later fire on a worker thread. The web suite runs DB queries via
+    ``to_thread`` in the same process and run their Tcl finalizers off the interpreter's thread,
     aborting the process with ``Tcl_AsyncDelete: async handler deleted by the wrong thread``.
-    Reclaiming them here, on the main thread after each test, leaves nothing for a worker to finalize.
+    Reclaiming them here, on the main thread after each test, leaves nothing for a worker to
+    finalize.
     """
     yield
     gc.collect()
@@ -26,15 +27,15 @@ def _reclaim_tk_cycles_on_main_thread():
 
 @pytest.fixture(autouse=True)
 def _keep_tk_windows_off_screen(monkeypatch):
-    """Withdraw every Tk window a GUI test builds — roots and Toplevels alike, wherever it builds
-    them.
+    """Withdraw every Tk window a GUI test builds (roots and Toplevels alike, wherever it builds
+    them).
 
     A mapped window takes the keyboard focus from whatever the developer is doing, and the suite
     makes dozens. Patching the constructors covers windows created inside a test body as well as in
     a fixture, so a new test cannot reintroduce the problem by forgetting to withdraw.
 
-    Toplevels are included because a dialog maps as soon as anything pumps the event loop — which
-    a dialog sizing its own scroll region does — and the test that opened it has no handle to close
+    Toplevels are included because a dialog maps as soon as anything pumps the event loop, which is
+    what a dialog sizing its own scroll region does. The test that opened it has no handle to close
     it again. Withdrawing costs nothing: geometry is still computed on idle, so the widgets under
     test measure exactly as they would on screen.
     """

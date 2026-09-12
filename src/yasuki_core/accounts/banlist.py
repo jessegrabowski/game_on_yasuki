@@ -8,7 +8,7 @@ def tombstone(
 ) -> None:
     """Record a banned identity's pepper'd sub and email hashes so it cannot re-register.
 
-    The tombstone outlives the user row (it survives GDPR erasure), holding only hashes — no raw
+    The tombstone outlives the user row (it survives GDPR erasure) and holds only hashes, no raw
     PII. Re-banning the same identity refreshes the email hash, reason, and timestamp.
 
     Parameters
@@ -16,7 +16,7 @@ def tombstone(
     conn : psycopg.Connection
         An open accounts-database connection.
     google_sub : str
-        The banned account's Google subject identifier; stored only as its blind index.
+        The banned account's Google subject identifier, stored only as its blind index.
     email_hmac : bytes
         The account's already-computed email blind index, as held on the user row.
     reason : str, optional
@@ -40,7 +40,7 @@ def remove(conn: psycopg.Connection, google_sub: str) -> None:
 def is_banned(conn: psycopg.Connection, google_sub: str, email: str) -> bool:
     """Whether an incoming Google identity matches a banlist tombstone, by sub or by email.
 
-    Checked at signup so a banned person cannot return under a fresh account row — neither by
+    Checked at signup so a banned person cannot return under a fresh account row, neither by
     re-using the same Google account (sub match) nor a new one on the same address (email match).
 
     Parameters

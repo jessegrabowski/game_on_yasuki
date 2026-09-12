@@ -50,7 +50,9 @@ _PREGAME_BY_TYPE: dict[str, tuple[type[CardPrint], Side]] = {
 
 @dataclass(slots=True)
 class ResolvedDeck:
-    """A decklist resolved to live card instances for one seat, plus the names that did not resolve."""
+    """
+    A decklist resolved to live card instances for one seat, plus the names that did not resolve.
+    """
 
     pre_game: list[L5RCard] = field(default_factory=list)
     dynasty: list[L5RCard] = field(default_factory=list)
@@ -67,13 +69,14 @@ def resolve_decklist(
     """Resolve a parsed decklist into typed card instances owned by ``owner``.
 
     Each entry's section (not the record's deck field) decides the card family, so a player's manual
-    placement is honored; the record's first type refines the print. One instance is built per
-    physical copy, with a card id unique across both seats; the copies of one entry share its print.
+    placement is honored, and the record's first type refines the print. One instance is built per
+    physical copy, with a card id unique across both seats. The copies of one entry share its
+    print.
 
     Parameters
     ----------
     parsed : dict
-        A decklist parsed by ``parse_deck_yaml`` — the section lists ``pre_game``, ``dynasty``, and
+        A decklist parsed by ``parse_deck_yaml``. The section lists ``pre_game``, ``dynasty``, and
         ``fate``, each of ``{name, count, set_name, art}`` entries.
     records : list of dict
         Card records as returned by ``database.get_cards_by_names``, each with a ``prints`` list.
@@ -122,8 +125,8 @@ def resolve_decklist(
 
 
 def _section_for_type(card_type: str | None) -> str:
-    """The deck family a token of ``card_type`` belongs to, which picks its print. A token carries no
-    deck section of its own, so it is inferred from its type."""
+    """The deck family a token of ``card_type`` belongs to, which picks its print. A token carries
+    no deck section of its own, so it is inferred from its type."""
     return "dynasty" if card_type in _DYNASTY_BY_TYPE else "fate"
 
 
@@ -164,7 +167,7 @@ def build_token_templates(token_records: dict[str, dict]) -> dict[str, CardPrint
 
 
 def _name_index(records: list[dict]) -> dict[str, dict]:
-    """Case-insensitive name → record index, keyed by extended title first, then plain name."""
+    """Case-insensitive name -> record index, keyed by extended title first, then plain name."""
     index: dict[str, dict] = {}
     for record in records:
         index.setdefault((record.get("extended_title") or record["name"]).lower(), record)
@@ -196,8 +199,8 @@ def _art_swap(
 ) -> dict | None:
     """The client-side art-swap payload for a card whose deck entry borrows another printing's art.
 
-    Carries the donor print's image and both frames' (era, layout) plus the recipient's keywords —
-    everything the browser canvas needs to recomposite the borrowed art onto the recipient frame.
+    Carries the donor print's image and both frames' (era, layout) plus the recipient's keywords.
+    Everything the browser canvas needs to recomposite the borrowed art onto the recipient frame.
     Returns None when the donor card or a usable donor print is absent, leaving the recipient's own
     art to stand."""
     donor_record = name_index.get(art["name"].lower())
@@ -344,7 +347,7 @@ def _printed_stat(record: dict, stat: str) -> int:
     the install pipeline keeps when the printed value would not fit one.
 
     A card type that prints the stat at all but leaves it empty reads zero (CR, Absent Stats). A
-    trailing ``*`` marks a value the card computes (``"2*"``, ``"+1*"``); the number before it is
+    trailing ``*`` marks a value the card computes (``"2*"``, ``"+1*"``). The number before it is
     taken and the variability is not modeled, so such a card reads its printed floor.
     """
     column = record.get(stat)
@@ -361,8 +364,8 @@ def _attachment_stats(attachment_type: AttachmentType, record: dict) -> dict[str
     """Split an attachment's printed Force and Chi between the stats it brings to the unit and the
     modifiers it hands the Personality it joins.
 
-    A Follower's Force is its own — it stands in the unit and totals into the army (CR, Unit and Army
-    Force) — while its Chi modifies the Personality, a Follower having no Chi of its own. An Item or
+    A Follower's Force is its own. It stands in the unit and totals into the army (CR, Unit and Army
+    Force). Its Chi modifies the Personality, a Follower having no Chi of its own. An Item or
     Spell has neither stat of its own, so both of its numbers are modifiers.
     """
     force = _printed_stat(record, "force")
@@ -373,7 +376,9 @@ def _attachment_stats(attachment_type: AttachmentType, record: dict) -> dict[str
 
 
 def _stat_fields(print_cls: type[CardPrint], card_type: str | None, record: dict) -> dict:
-    """The numeric and category stats a given print subclass holds, drawn from the database record."""
+    """
+    The numeric and category stats a given print subclass holds, drawn from the database record.
+    """
     if issubclass(print_cls, DynastyPrint):
         fields = {"gold_cost": record.get("gold_cost")}
         if print_cls is PersonalityPrint:

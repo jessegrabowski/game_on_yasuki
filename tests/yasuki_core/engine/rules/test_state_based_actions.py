@@ -95,7 +95,7 @@ def test_a_personality_at_one_chi_is_left_alone():
 
 
 def test_a_card_that_is_not_a_personality_is_never_chi_dead():
-    """A Holding has no Chi, so it reads zero — and zero Chi means dead only for a Personality."""
+    """A Holding has no Chi, so it reads zero. Zero Chi means dead only for a Personality."""
     farm = holding("farm", gold_production=2)
     game = _in_play(farm)
 
@@ -132,7 +132,7 @@ def test_a_destroyed_personality_takes_his_unit_with_him():
     events = Destroy("doomed", P1).perform(game)
 
     # Each leaves by destruction, which is what separates this from the orphan rule sweeping up
-    # afterwards — that reaches the same board by discarding what the cascade would have taken.
+    # afterwards. That rule reaches the same board by discarding what the cascade would have taken.
     assert [event.card_id for event in events] == ["doomed", yari.id, infantry.id]
     assert all(isinstance(event, Destroyed) for event in events)
     assert _battlefield(game) == set()
@@ -145,7 +145,7 @@ def test_a_destroyed_personality_takes_his_unit_with_him():
 
 def test_an_attachment_left_with_no_personality_is_discarded():
     """ "Attachments are discarded if in play and not attached to a Personality" (CR, Attachments).
-    The cascade covers a Personality leaving; this catches every other route."""
+    The cascade covers a Personality leaving. This catches every other route."""
     game = two_seat_game()
     stray = put_in_play(game, attachment("stray"))
 
@@ -178,7 +178,7 @@ def test_an_attached_card_is_not_swept_by_the_orphan_rule():
 
 
 def test_a_card_on_a_province_is_not_swept_by_the_orphan_rule():
-    """A Region sits on a Province, which is a relation of its own — reading "not in a unit" as
+    """A Region sits on a Province, which is a relation of its own. Reading "not in a unit" as
     "orphaned" would discard it on sight."""
     game = two_seat_game()
     province = ZoneKey(P1, ZoneRole.PROVINCE, 0)
@@ -195,8 +195,8 @@ def test_a_card_on_a_province_is_not_swept_by_the_orphan_rule():
 
 
 def test_every_card_leaving_with_the_unit_names_the_same_cause():
-    """A member leaves because the Personality did, so it names whoever destroyed him — not its own
-    controller, and not the rulebook."""
+    """A member leaves because the Personality did, so it names whoever destroyed him. It never
+    names its own controller, and never the rulebook."""
     samurai = _personality("doomed", chi=2)
     game = _in_play(samurai)
     attached(game, attachment("yari"), "doomed")
@@ -222,9 +222,9 @@ def test_a_discarded_personality_takes_his_unit_the_same_way():
 
 
 def test_chi_death_clears_the_whole_unit_off_the_board():
-    """The realistic route, where nothing calls `Destroy` directly and the state-based action does. It pins
-    the rule reaching the cascade at all, not the manner: with the cascade gone the orphan rule
-    reaches the same board by discarding what it strands."""
+    """The realistic route, where nothing calls `Destroy` directly and the state-based action does.
+    It pins the rule reaching the cascade at all, not the manner: with the cascade gone the orphan
+    rule reaches the same board by discarding what it strands."""
     samurai = _personality("doomed", chi=2)
     game = _in_play(samurai)
     attached(game, attachment("yari", force_modifier=1), "doomed")
@@ -302,7 +302,7 @@ def test_no_zero_chi_personality_is_alive_while_the_engine_waits_on_a_seat():
 
 
 def test_work_that_does_not_need_the_dead_personality_still_happens():
-    """Only what required him is skipped; an unrelated step of the same cascade is untouched."""
+    """Only what required him is skipped. An unrelated step of the same cascade is untouched."""
     samurai = _personality("doomed", chi=1)
     game = _in_play(samurai)
     before = game.table.seats[P1].honor
@@ -321,7 +321,7 @@ def test_work_that_does_not_need_the_dead_personality_still_happens():
 
 def test_a_trigger_on_the_dying_card_does_not_get_to_save_it(reacting):
     """Shuten Doji reads "after it enters play, but before destroying it for having 0 Chi, give it
-    four +1F/+1C tokens" — a window this rule does not grant. Making that card work needs a
+    four +1F/+1C tokens", but this rule grants no such window. Making that card work needs a
     replacement keyed to it, not a hole in the rule for every card to climb through.
     """
     doji = _personality("doji", chi=0, printed_id="state_based_actions_probe")
@@ -342,7 +342,7 @@ def test_a_trigger_on_the_dying_card_does_not_get_to_save_it(reacting):
 
 
 def test_every_exempt_card_names_a_real_card():
-    """The registry is a list of printed ids typed by hand; a typo would read as a card that is
+    """The registry is a list of printed ids typed by hand. A typo would read as a card that is
     never exempt, which nothing else would catch."""
     known = set(CARD_IDS.read_text().split())
 
@@ -351,8 +351,8 @@ def test_every_exempt_card_names_a_real_card():
 
 def test_a_conditional_exemption_is_not_registered_as_a_plain_one():
     """Moto Chagatai and Moto Soro read "not destroyed for having 0 Chi *unless* his Chi is 0 after
-    all penalties that last until your turn ends wear off" — a deferred check this rule cannot
-    express. They take the rule as written rather than a wrong exemption."""
+    all penalties that last until your turn ends wear off", a deferred check this rule cannot
+    express."""
     assert "moto_chagatai" not in state_based_actions.CHI_DEATH_EXEMPT
     assert "moto_soro" not in state_based_actions.CHI_DEATH_EXEMPT
 
@@ -384,7 +384,7 @@ def test_a_game_in_which_a_personality_dies_of_zero_chi_replays_to_the_same_stat
 
 def test_an_arriving_personality_dies_before_its_own_enter_play_trigger_runs(reacting):
     """The flow-level half of the no-window rule. A card arrives on the battlefield through ``ops``
-    rather than through an effect, so the walk never sees it land — ``flow`` has to enforce the
+    rather than through an effect, so the walk never sees it land. ``flow`` has to enforce the
     rules between the arrival and announcing it, or an enter-play trait gets to save a Personality
     the rule has already killed.
     """
@@ -413,7 +413,7 @@ def test_an_arriving_personality_dies_before_its_own_enter_play_trigger_runs(rea
 
 def test_a_zero_chi_personality_waiting_in_a_province_is_left_alone():
     """The rule reaches cards in play. A Personality revealed in a Province is not in play yet, so
-    it sits there at zero Chi until someone recruits it — widening the scan to every card would
+    it sits there at zero Chi until someone recruits it. Widening the scan to every card would
     destroy a card its owner has not brought out."""
     game = two_seat_game()
     waiting = _personality("waiting", chi=0)
@@ -462,7 +462,7 @@ def test_work_deferred_behind_the_death_still_runs():
 
 def test_proclaiming_a_personality_who_dies_on_arrival_still_gains_the_honor():
     """CR, Proclaim: "after the Personality enters play, add the Personality's Personal Honor to the
-    player's Family Honor." The honor keys off entering play, and he did — dying immediately
+    player's Family Honor." The honor keys off entering play, and he did. Dying immediately
     afterwards does not take it back."""
     table = dealt_table(hand=0)
     put_in_play(table, stronghold(P1, gold_production=8, clan="Crab"))
@@ -501,9 +501,8 @@ def test_proclaiming_a_personality_who_dies_on_arrival_still_gains_the_honor():
 
 
 def test_a_minimum_chi_of_one_keeps_a_personality_out_of_the_chi_death_rule():
-    """The Chi Death Rule tests for zero, so a floor above zero settles it without an exemption —
-    which is what Uncertainty's "minimum Chi of 1" buys, and why the card is not a CHI_DEATH_EXEMPT
-    entry."""
+    """The Chi Death Rule tests for zero, so a floor above zero settles it without an exemption:
+    Uncertainty's "minimum Chi of 1" buys that, and the card is not a CHI_DEATH_EXEMPT entry."""
     samurai = _personality("shiba", chi=2)
     game = _in_play(samurai)
     game.ongoing.append(Minimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN))

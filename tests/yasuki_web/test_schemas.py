@@ -230,9 +230,9 @@ def test_two_shuffles_from_one_stream_draw_different_seeds():
 
 
 def test_a_non_randomizer_leaves_the_seat_stream_where_it_was():
-    """Only randomizers draw, so a seat's shuffles do not depend on how many cards it moved first —
+    """Only randomizers draw, so a seat's shuffles do not depend on how many cards it moved first,
     the property that makes a room's randomness reproducible from its seed. Probed with a shuffle
-    seed rather than a coin, whose two faces would agree half the time by chance."""
+    seed, not a coin, whose two faces would agree half the time by chance."""
     shuffle = IntentEnvelope(op=IntentOp.SHUFFLE, deck={"owner": "P1", "side": "FATE"})
     rng = default_rng(5)
     intent_from_envelope(IntentEnvelope(op=IntentOp.CREATE_PROVINCE), rng)

@@ -38,8 +38,8 @@ def _walled_game(*, printed_strength: int = 3, provinces: int = 2):
 
 
 def test_a_province_starts_at_the_strength_its_stronghold_prints():
-    """ "A stat of a Stronghold, or of a Province" (CR) — the Stronghold sets where every one of its
-    Provinces begins."""
+    """ "A stat of a Stronghold, or of a Province" (CR) and the Stronghold sets where every one of
+    its Provinces begins."""
     game = _walled_game(printed_strength=4)
 
     assert effective_province_strength(game, FIRST) == 4
@@ -82,7 +82,7 @@ def test_a_fortification_stops_granting_once_it_detaches():
 
 def test_a_grant_on_the_stronghold_lifts_every_province_at_once():
     """A Sensei raises the Stronghold's Province Strength, and that is the stat each Province starts
-    from — so one grant reaches them all rather than needing a per-Province effect."""
+    from and so one grant reaches them all rather than needing a per-Province effect."""
     game = _walled_game(printed_strength=3)
     put_in_play(game, holding("sensei"))
     game.ongoing.append(
@@ -125,7 +125,7 @@ def test_a_provinces_counters_survive_the_log_and_the_view():
 
 
 def test_a_provinces_counters_survive_a_round_trip_through_real_json():
-    """A Province is keyed by a ZoneKey, which JSON cannot use as an object key — hence the pairs
+    """A Province is keyed by a ZoneKey, which JSON cannot use as an object key and hence the pairs
     the save format stores. Nothing else round-trips a zone-keyed map, so without this the encoding
     is only ever exercised in memory, where a dict keyed by the tuple works fine."""
     state = _walled_game().table
@@ -137,8 +137,8 @@ def test_a_provinces_counters_survive_a_round_trip_through_real_json():
 
 
 def test_a_counter_spent_to_zero_leaves_no_trace_on_the_province():
-    """Floored at zero and pruned, the way a card's counters are — an empty entry would replay as a
-    board that differs from the one it came from."""
+    """Floored at zero and pruned, the way a card's counters are and an empty entry would replay
+    as a board that differs from the one it came from."""
     game = _walled_game()
     ops.adjust_province_counter(game.table, FIRST, "wall", 1)
 

@@ -65,7 +65,7 @@ def test_honor_reached_and_lost_within_a_turn_wins_nothing():
 
 
 def test_a_seat_excused_the_honor_victory_starts_the_same_turn_and_does_not_win():
-    """Kaede Sensei reads "You permanently will not win an Honor Victory"; dropping the rule from
+    """Kaede Sensei reads "You permanently will not win an Honor Victory". Dropping the rule from
     that seat alone is how the engine holds it."""
     session = _game()
     session.game.table.seats[P2].honor = HONOR_VICTORY_AT
@@ -139,7 +139,7 @@ def test_the_dishonor_loss_is_taken_before_the_opponent_could_win_on_honor():
 
 @pytest.mark.parametrize("losing, surviving", [(P1, P2), (P2, P1)])
 def test_a_loss_awards_the_last_player_left_the_victory_it_names(losing, surviving):
-    """The CR states Military and Dishonor Victory from the survivor's side — one player loses, and
+    """The CR states Military and Dishonor Victory from the survivor's side. One player loses, and
     the one remaining player has thereby won. Either seat can be the one that goes."""
     session = _game()
 
@@ -151,7 +151,8 @@ def test_a_loss_awards_the_last_player_left_the_victory_it_names(losing, survivi
 
 def test_the_first_turn_of_the_game_can_be_won_on_honor():
     """The game's opening turn is a turn like any other, and it reaches the check by a different
-    route than every later one — through the game-start pass rather than the end of a turn."""
+    route than every later one. It goes through the game-start pass rather than the end of a
+    turn."""
     state = _table()
     state.seats[P1].honor = HONOR_VICTORY_AT
 
@@ -163,7 +164,7 @@ def test_the_first_turn_of_the_game_can_be_won_on_honor():
 
 def test_an_honor_victory_replays_to_the_same_ending():
     """The tape carries inputs rather than outcomes, so the win has to be re-derived from the same
-    board on the way back — a check that fires off the turn boundary must fire during replay too."""
+    board on the way back. A check that fires off the turn boundary must fire during replay too."""
     state = _table()
     state.seats[P2].honor = HONOR_VICTORY_AT  # in the snapshot, so the tape carries it
     session = EngineSession.start(state, P1)

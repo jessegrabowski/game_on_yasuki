@@ -107,8 +107,8 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
 
 
 def _move_deck_top(state: TableState, seat: PlayerId, intent: MoveDeckTop) -> list[Event]:
-    # Source the deck's top card, then route it exactly like a MoveCard — the deck owner alone may
-    # do this, and the card carries the owner's id so the delegated ownership gate passes.
+    # Source the deck's top card, then route it exactly like a MoveCard, since the deck owner alone
+    # may do this, and the card carries the owner's id so the delegated ownership gate passes.
     if not owns_deck(state, seat, intent.deck):
         return []
     cards = state.decks[intent.deck].cards
@@ -297,8 +297,9 @@ def _unshow(state: TableState, seat: PlayerId, intent: Unshow) -> list[Event]:
 
 
 def _peek(state: TableState, seat: PlayerId, intent: Peek) -> list[Event]:
-    # Owner-gated: you may privately peek only your own (or an owner-less public) hidden card. Seeing a
-    # card the opponent holds requires them to Show it; you cannot reach across and look yourself.
+    # Owner-gated: you may privately peek only your own (or an owner-less public) hidden card.
+    # Seeing a card the opponent holds requires them to Show it; you cannot reach across and look
+    # yourself.
     card = state.cards_by_id.get(intent.card_id)
     if card is None or not owns_card(state, seat, intent.card_id) or seat in card.peekers:
         return []
@@ -477,7 +478,7 @@ def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[
     if card.printed_id not in RULEBOOK_PROXY_IDS and not owns_card(state, seat, intent.card_id):
         return []
     # Only spawned tokens may leave the table outright; a real card from a deck or zone is never
-    # destroyable — it must be moved to a discard or banish instead.
+    # destroyable and must instead be moved to a discard or banish.
     if not card.is_token:
         return []
     ops.remove_card(state, card)
@@ -608,13 +609,13 @@ def apply_intent(state: TableState, seat: PlayerId, intent: Intent) -> list[Even
 
     Pure apart from the in-place mutation: no I/O, deterministic given the state, seat, and intent
     (shuffles derive their order from the intent's explicit seed). Ownership, side, and capacity
-    violations are rejected and leave the state untouched, returning an empty list; ``seq`` advances
+    violations are rejected and leave the state untouched, returning an empty list. ``seq`` advances
     only when the table actually changes.
 
     Parameters
     ----------
     state : TableState
-        The authoritative table; mutated in place on an accepted intent.
+        The authoritative table, mutated in place on an accepted intent.
     seat : PlayerId
         The seat attempting the action.
     intent : Intent

@@ -23,7 +23,7 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
 
 
-# Each prints the same entry — "Open: If you are an X Clan player, put this Edict into play."
+# Each prints the same entry. "Open: If you are an X Clan player, put this Edict into play."
 # What they grant while in play has no handler yet.
 
 

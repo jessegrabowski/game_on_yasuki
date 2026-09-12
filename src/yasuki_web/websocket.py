@@ -84,7 +84,8 @@ def _deck_display_name(parsed: dict, filename: str | None) -> str:
 
 
 def _entry_names(entry: dict):
-    """The card names a decklist entry references: its own, plus its art-swap donor's when present."""
+    """The card names a decklist entry references: its own, plus its art-swap donor's when
+    present."""
     yield entry["name"]
     if entry.get("art"):
         yield entry["art"]["name"]
@@ -94,7 +95,7 @@ class GameRoom:
     """Authoritative game state and connections for one room.
 
     Owns a `TableState` (the truth) and an `IntentLog` (the durable tape of intents and chat). Each
-    connection is bound to a seat (P1/P2); every accepted intent is applied through the core,
+    connection is bound to a seat (P1/P2). Every accepted intent is applied through the core,
     recorded on the tape, and broadcast as a **per-viewer redacted** `SNAPSHOT` so a player never
     receives a card they are not entitled to see.
     """
@@ -200,7 +201,7 @@ class GameRoom:
 
     async def remove_player(self, ws: WebSocket):
         """Drop one connection, freeing its seat and announcing the departure only when it was the
-        player's last tab — another open tab keeps the seat live for an uninterrupted game."""
+        player's last tab, since another open tab keeps the seat live for an uninterrupted game."""
         seat = self.seats.pop(ws, None)
         player_name = self.players.pop(ws, None)
         user_id = self.user_by_ws.pop(ws, None)
@@ -231,8 +232,8 @@ class GameRoom:
         if seat is None:
             return
         if envelope.op is IntentOp.SPAWN_CARD and not envelope.card_id:
-            # The server mints spawn ids so a replay reproduces the same card; the client never sends
-            # one.
+            # The server mints spawn ids so a replay reproduces the same card; the client never
+            # sends one.
             self._spawn_count += 1
             envelope = envelope.model_copy(update={"card_id": f"spawn-{self._spawn_count}"})
         if envelope.op is IntentOp.SPAWN_CARD and envelope.print_card_id:
@@ -284,7 +285,7 @@ class GameRoom:
 
         The intent is owner-gated upstream (``_search_deck`` rejects a non-owner before this runs),
         so the deck named by ``intent.deck`` belongs to the player on ``ws``. The cards go only to
-        ``ws`` — never broadcast — so deck order stays private to its owner.
+        ``ws``, never broadcast, so deck order stays private to its owner.
         """
         deck = self.state.decks.get(intent.deck)
         if deck is None:
@@ -320,11 +321,12 @@ class GameRoom:
         await self.log([{"text": f"{self.players[ws]} loaded "}, {"text": deck_name}])
 
     async def handle_ready(self, ws: WebSocket, ready: bool, solo: bool = False):
-        """Set the acting seat's ready flag and deal the opening table once everyone seated is ready.
+        """Set the acting seat's ready flag and deal the opening table once everyone seated is
+        ready.
 
-        Readying requires a loaded deck. A normal ready waits for both seats; `solo` deals a
-        one-seat goldfish table for the lone player. Setup runs at most once — start a fresh game
-        with `RESET`."""
+        Readying requires a loaded deck. A normal ready waits for both seats, while `solo` deals
+        a one-seat goldfish table for the lone player. Setup runs at most once, so use `RESET` to
+        start a fresh game."""
         seat = self.seats.get(ws)
         if seat is None:
             return
@@ -357,8 +359,8 @@ class GameRoom:
 
     async def handle_reset(self, ws: WebSocket):
         """Record the acting seat's vote for a new game. The table clears only once every seated
-        player has agreed — a lone goldfisher's vote is unanimous on its own — keeping seats and
-        loaded decks so players can ready up again immediately."""
+        player has agreed, though a lone goldfisher's vote is unanimous on its own. Seats and
+        loaded decks are kept so players can ready up again immediately."""
         seat = self.seats.get(ws)
         if seat is None:
             return
@@ -449,7 +451,7 @@ class GameRoom:
         )
         records = await asyncio.to_thread(get_cards_by_names, names)
         # One relational pull of every token the loaded cards can create, so spawning a token needs
-        # no live database call — the templates live on the table for the rest of the game.
+        # no live database call. The templates live on the table for the rest of the game.
         card_ids = [record["card_id"] for record in records]
         creates_map, token_records = await asyncio.to_thread(get_creates_for_cards, card_ids)
         self.state.creatable_tokens = build_token_templates(token_records)
@@ -475,8 +477,8 @@ class GameRoom:
         await ws.send_json(ServerSnapshot(room=self.room_id, snapshot=view).model_dump())
 
     async def broadcast_snapshots(self):
-        """Send each seated player its own redacted `SNAPSHOT`. This is the per-viewer leak fix:
-        the opponent's hand and face-down cards are stubs in the bytes that reach the wrong client."""
+        """Send each seated player its own redacted `SNAPSHOT`. This is the per-viewer leak fix: the
+        opponent's hand and face-down cards are stubs in the bytes that reach the wrong client."""
         disconnected = []
         for ws, seat in list(self.seats.items()):
             try:
@@ -488,7 +490,8 @@ class GameRoom:
             await self.remove_player(ws)
 
     async def _broadcast(self, payload: dict):
-        """Send one shared JSON payload (chat/log) to every connected player, evicting any that fail."""
+        """Send one shared JSON payload (chat/log) to every connected player, evicting any that
+        fail."""
         disconnected = []
         for ws in list(self.players):
             try:
@@ -524,9 +527,9 @@ class GameRoom:
     def _favor_leaving_hand(self, intent: Intent) -> bool:
         """Whether this intent takes the Imperial Favor out of the hand holding it.
 
-        Every route out of a hand is the holder discarding it — played to the battlefield, moved to
-        a discard, or removed outright — and a copy can only leave a hand once, so a played Favor
-        later swept off the battlefield does not report a second discard.
+        Every route out of a hand is the holder discarding it, whether played to the battlefield,
+        moved to a discard, or removed outright. A copy can only leave a hand once, so a played
+        Favor later swept off the battlefield does not report a second discard.
         """
         if intent.op not in (IntentOp.MOVE_CARD, IntentOp.REMOVE_CARD):
             return False
@@ -569,7 +572,7 @@ async def evict_stale_rooms():
 
 # Sized for the largest legitimate frame, a LOAD_DECK carrying a full decklist YAML (~3-4 KiB of
 # content, capped at 16 KiB by LoadDeckRequest). Realtime intents are tiny; the token-bucket
-# throttle below — not this per-frame cap — is what bounds a flood.
+# throttle below, not this per-frame cap, is what bounds a flood.
 MAX_WS_MESSAGE_SIZE = 32768
 
 # Per-connection message throttle (token bucket). The refill must exceed the drag send rate
@@ -585,7 +588,7 @@ def _origin_allowed(websocket: WebSocket) -> bool:
     """Reject cross-origin browser handshakes from sites not on the allowlist (CSWSH defense).
 
     A missing Origin header (native clients) and same-origin requests (the page that opened the
-    socket is served by this app) are allowed; browsers always send Origin on cross-site connects.
+    socket is served by this app) are allowed. Browsers always send Origin on cross-site connects.
     """
     origin = websocket.headers.get("origin")
     if not origin:

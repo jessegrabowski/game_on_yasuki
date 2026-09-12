@@ -86,7 +86,7 @@ def attachment(
     keywords: tuple[str, ...] = (),
 ) -> L5RCard:
     """An Item, Follower or Spell. ``force``/``chi`` are the card's own stats, which it brings to a
-    unit; the ``_modifier`` pair is what it hands to the Personality it attaches to."""
+    unit. The ``_modifier`` pair is what it hands to the Personality it attaches to."""
     return L5RCard.of(
         AttachmentPrint,
         id=card_id,
@@ -137,8 +137,8 @@ def token_template(
 
 
 def attached(target: GameState | TableState, card: L5RCard, parent: AttachTarget) -> L5RCard:
-    """Put ``card`` into play attached to ``parent`` — a Personality's card id, or a Province
-    ``ZoneKey`` for a Region or Fortification — through the same ops the rules layer uses, so a test
+    """Put ``card`` into play attached to ``parent`` (a Personality's card id, or a Province
+    ``ZoneKey`` for a Region or Fortification) through the same ops the rules layer uses, so a test
     never hand-builds the relation."""
     state = target.table if isinstance(target, GameState) else target
     put_in_play(state, card)
@@ -228,7 +228,7 @@ def fate_card(card_id: str, owner: PlayerId, *, name: str = "F") -> L5RCard:
 
 
 def two_seat_game(first_player: PlayerId = PlayerId.P1) -> GameState:
-    """An empty two-seat game — the starting point for tests that build their own board."""
+    """An empty two-seat game, the starting point for tests that build their own board."""
     return GameState.start(TableState.empty_two_seat(), first_player)
 
 
@@ -289,9 +289,10 @@ def province_card(
 def pay(session: EngineSession, seat: PlayerId) -> None:
     """Cover the gold cost ``seat`` owes, however many answers that takes.
 
-    Bows producers the way :class:`PayingAgent` does — smallest first — and answers the window each
+    Bows producers the way :class:`PayingAgent` does, smallest first, and answers the window each
     one opens as it bows, taking a producer's own grant only when nothing else reaches the cost. A
-    test that cares *which* producers bow, or how a window was answered, answers the decision itself.
+    test that cares *which* producers bow, or how a window was answered, answers the decision
+    itself.
 
     Raise ``AssertionError`` unless ``seat`` owes a payment right now, so a test that has drifted
     past the one it meant to answer fails here rather than somewhere downstream.
@@ -317,7 +318,7 @@ def end_phase(session: EngineSession) -> None:
     """Pass for whoever holds the opportunity until the round closes and the phase moves on.
 
     A round ends when every seat entitled to act in it has passed consecutively, so how many passes
-    that takes depends on the phase — two in the Action phase, where the inactive seat may take Open
+    that takes depends on the phase: two in the Action phase, where the inactive seat may take Open
     actions, one everywhere else. Tests that want the next phase should say so rather than counting.
     Stops early if the engine pauses for a decision, such as the end-of-turn discard.
     """

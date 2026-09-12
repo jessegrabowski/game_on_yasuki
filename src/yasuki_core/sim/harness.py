@@ -56,12 +56,12 @@ def run_games(
 
     Reproducibility relies on ``policy`` and ``agent`` being deterministic, which the shipped ones
     are. A stochastic policy holds its own stream and is not reseeded per game, so repeating a run
-    would not repeat it; giving it a spawned stream means adding a name to ``STREAMS``.
+    would not repeat it. Giving it a spawned stream means adding a name to ``STREAMS``.
 
     Parameters
     ----------
     deck_path : path or str
-        The decklist both seats play — a mirror match.
+        The decklist both seats play: a mirror match.
     policy : Policy
         Drives every seat.
     agent : Agent
@@ -107,10 +107,10 @@ def write_csv(path: Path | str, played: Sequence[Game], **run: object) -> None:
     """
     Write one row per recorded turn, so a run can be loaded and analyzed with real tools.
 
-    Every ``run`` keyword becomes a column repeated on each row — the deck, the policy, the seed,
-    whatever identifies the run. That is what lets two runs be concatenated and told apart later,
-    and it is why no aggregate is computed here: the numbers worth quoting depend on the question,
-    and the question is asked after the run.
+    Every ``run`` keyword becomes a column repeated on each row (the deck, the policy, the seed,
+    whatever identifies the run): what lets two runs be concatenated and told apart later, and
+    why no aggregate is computed here. The numbers worth quoting depend on the question, and the
+    question is asked after the run.
 
     Parameters
     ----------
@@ -201,6 +201,6 @@ def _engine_seed(stream: np.random.SeedSequence) -> int:
     """An integer seed for the rules engine, which records one in its log.
 
     The deal takes a generator directly, but a game log carries ``seed: int`` and replay rebuilds
-    the game's generator from it — so the engine's stream has to survive as a number.
+    the game's generator from it. So the engine's stream has to survive as a number.
     """
     return int(stream.generate_state(1, dtype=np.uint32)[0])

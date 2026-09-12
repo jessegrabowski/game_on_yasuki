@@ -115,7 +115,7 @@ def test_harvested_land_destroys_itself_to_boost_your_other_farms():
     session.act(P1, ActivateAbility("hl"))
 
     table = session.game.table
-    assert session.game.pending is None  # untargeted — it hits every other Farm, no choice
+    assert session.game.pending is None  # untargeted: it hits every other Farm, no choice
     assert "hl" in {c.id for c in table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].cards}
     assert effective_gold_production(session.game, table.cards_by_id["f0"]) == 3  # base 2 + 1
     assert effective_gold_production(session.game, table.cards_by_id["f1"]) == 3
@@ -131,7 +131,7 @@ def test_harvested_land_boost_expires_at_end_of_turn():
     session.act(P1, ActivateAbility("hl"))
     assert effective_gold_production(session.game, session.game.table.cards_by_id["f0"]) == 3
 
-    for _ in range(3):  # end P1's turn — the boost outlives its destroyed source but not the turn
+    for _ in range(3):  # end P1's turn. The boost outlives its destroyed source but not the turn
         end_phase(session)
     assert effective_gold_production(session.game, session.game.table.cards_by_id["f0"]) == 2
 
@@ -153,7 +153,7 @@ def _modest_farm_game(
 ):
     """An Action-phase session: P1's Modest Farm and a face-up Holding in a province to recruit
     through Modest Farm's ability. With ``with_producer`` a gold Holding of ``producer_gp`` yield is
-    also in play to pay the recruit; without it, only Modest Farm's own (forfeited) production
+    also in play to pay the recruit. Without it, only Modest Farm's own (forfeited) production
     remains."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
@@ -238,14 +238,14 @@ def test_modest_farm_is_not_activatable_while_bowed():
 
 def test_modest_farm_is_not_offered_when_no_target_is_affordable():
     # Modest Farm's cost is paying the target's recruit cost; with no producer to cover it (Modest
-    # Farm bows itself out of the pool), the ability must not be offered — else the recruit would
+    # Farm bows itself out of the pool), the ability must not be offered. Else the recruit would
     # wedge at an unpayable payment.
     session = _modest_farm_game(target_cost=3, with_producer=False)
     assert ActivateAbility("mf") not in session.legal_actions(P1)
 
 
 def test_modest_farm_does_not_count_its_own_forfeited_production_as_affordability():
-    # Producer gp2 + Modest Farm gp1 covers a cost-3 target only if Modest Farm's own yield counts —
+    # Producer gp2 + Modest Farm gp1 covers a cost-3 target only if Modest Farm's own yield counts,
     # but Modest Farm bows itself as the cost, so it cannot. The ability must not be offered.
     session = _modest_farm_game(target_cost=3, producer_gp=2)
     assert ActivateAbility("mf") not in session.legal_actions(P1)
@@ -471,7 +471,7 @@ def _summon_oni(session, *, destroy: bool):
 
 
 def test_the_oni_takes_its_force_from_the_personality_it_was_made_from():
-    """The token prints its Force as "*"; only the card creating it knows the number."""
+    """The token prints its Force as "*". Only the card creating it knows the number."""
     session = _mishime_game(chi=4)
 
     oni = _summon_oni(session, destroy=True)
@@ -493,7 +493,7 @@ def test_destroying_the_personality_keeps_the_oni_past_the_turn():
 
 
 def test_sparing_the_personality_lends_the_oni_for_one_turn():
-    """ "Banish it unless you destroyed the target" — the Personality lives, bowed, and the Oni goes
+    """ "Banish it unless you destroyed the target": the Personality lives, bowed, and the Oni goes
     before the turn it arrived in ends."""
     session = _mishime_game(chi=4)
 
@@ -506,8 +506,8 @@ def test_sparing_the_personality_lends_the_oni_for_one_turn():
 
 
 def test_the_oni_copies_the_chi_the_target_has_rather_than_the_chi_he_prints():
-    """ "Force equal to the target's Chi" is his Chi as the board has it, so a Personality carrying a
-    Chi bonus makes a bigger Oni than his printed line would."""
+    """ "Force equal to the target's Chi" is his Chi as the board has it, so a Personality
+    carrying a Chi bonus makes a bigger Oni than his printed line would."""
     session = _mishime_game(chi=3)
     session.game.ongoing.append(
         Modifier("sensei", "victim", Stat.CHI, 2, Duration.WHILE_SOURCE_IN_PLAY)
@@ -657,7 +657,7 @@ def test_the_mine_adds_two_for_an_item_costing_six_or_more():
 
 
 def test_the_mine_pays_its_printed_rate_for_a_follower():
-    """ "A single Item only" — a Follower is an attachment, but it is not an Item."""
+    """ "A single Item only": a Follower is an attachment, but it is not an Item."""
     game, mine, item = _mine_and_item(gold_cost=6, attachment_type=AttachmentType.FOLLOWER)
 
     assert effective_gold_production(game, mine, targets=(item,)) == 2
@@ -798,8 +798,8 @@ def test_the_chi_penalty_kills_a_one_chi_personality_with_no_minimum():
     "action", [None, Recruit("shiba")], ids=["outside any action", "during another action"]
 )
 def test_discarding_it_any_other_way_gives_no_penalty(action):
-    """The card names a Kharmic action, so reaching the discard by another route — or during an
-    action that is not Kharmic — leaves the board alone."""
+    """The card names a Kharmic action, so reaching the discard by another route, or during an
+    action that is not Kharmic, leaves the board alone."""
     session = _blood_of_fu_leng_game(chi=3)
     session.game.action = action
 

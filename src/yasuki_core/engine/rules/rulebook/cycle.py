@@ -34,8 +34,8 @@ def _cycle_put_on_bottom(
     """Put each chosen card on the bottom in pick order, then refill the Provinces they left and
     reveal them all.
 
-    Each card goes under the one before it, so the last pick ends up at the very bottom — the order
-    the rule gives the player. The refill and the reveal are deferred together because the rule
+    Each card goes under the one before it, in the order the rule gives the player, so the last pick
+    ends up at the very bottom. The refill and the reveal are deferred together because the rule
     reveals *after* refilling, and both wait on the reactions to the cards leaving.
     """
     seat = game.table.cards_by_id[chosen[0]].owner

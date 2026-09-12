@@ -56,13 +56,13 @@ class IntentOp(str, Enum):
 class MoveCard:
     """Move one card to a zone, deck, or the shared battlefield.
 
-    The universal mover behind hand↔battlefield↔zone↔deck transfers. ``position`` is set only when
-    ``to`` is the battlefield, giving the card its table coordinates. ``to_bottom`` applies only to
-    a deck destination: True slides the card under the deck instead of onto its top. ``index`` applies
-    only to a hand destination: the slot the card lands in, clamped into range; None appends it.
-    ``face_down`` applies only to a battlefield destination: True lays the card face down as it lands
-    and privately peeks it back to the acting seat, so its owner still reads their own card (focusing
-    in a duel) while the opponent sees only a back.
+    The universal mover behind hand<->battlefield<->zone<->deck transfers. ``position`` is set
+    only when ``to`` is the battlefield, giving the card its table coordinates. ``to_bottom``
+    applies only to a deck destination: True slides the card under the deck instead of onto its
+    top. ``index`` applies only to a hand destination: the slot the card lands in, clamped into
+    range. None appends it. ``face_down`` applies only to a battlefield destination: True lays
+    the card face down as it lands and privately peeks it back to the acting seat, so its owner
+    still reads their own card (focusing in a duel) while the opponent sees only a back.
     """
 
     card_id: str
@@ -78,7 +78,7 @@ class MoveCard:
 class MoveDeckTop:
     """Pop a deck's top card and move it to a zone, deck, or the shared battlefield.
 
-    The deck-sourced counterpart to ``MoveCard`` — for dragging a deck's top card onto the table.
+    The deck-sourced counterpart to ``MoveCard``, for dragging a deck's top card onto the table.
     ``position`` is honored only for a battlefield destination. Owner-gated on the deck.
     """
 
@@ -120,9 +120,10 @@ class ReorderHand:
 
 @dataclass(frozen=True, slots=True)
 class ReorderPile:
-    """Move a card within the acting seat's own deck or discard pile to a new slot. ``index`` is the
-    target position in the top-first order the owner sees (the deck's next-drawn card, or the discard's
-    top, is index 0). The index is clamped; a no-op move produces no event. Owner-gated."""
+    """Move a card within the acting seat's own deck or discard pile to a new slot. ``index`` is
+    the target position in the top-first order the owner sees (the deck's next-drawn card, or
+    the discard's top, is index 0). The index is clamped. A no-op move produces no event.
+    Owner-gated."""
 
     pile: "DeckKey | ZoneKey"
     card_id: str
@@ -132,7 +133,8 @@ class ReorderPile:
 
 @dataclass(frozen=True, slots=True)
 class Raise:
-    """Bring one battlefield card to the top of the stacking order without moving it. Owner-gated."""
+    """Bring one battlefield card to the top of the stacking order without moving it.
+    Owner-gated."""
 
     card_id: str
     op: ClassVar[IntentOp] = IntentOp.RAISE
@@ -140,8 +142,9 @@ class Raise:
 
 @dataclass(frozen=True, slots=True)
 class SetNote:
-    """Set or clear a free-text annotation on a face-up card; an empty note removes it. Either player
-    may note any card whose face is public — the note is a shared marker, not an owned action."""
+    """Set or clear a free-text annotation on a face-up card. An empty note removes it. Either
+    player may note any card whose face is public. The note is a shared marker, not an owned
+    action."""
 
     card_id: str
     note: str | None
@@ -151,7 +154,7 @@ class SetNote:
 @dataclass(frozen=True, slots=True)
 class AdjustCounter:
     """Add ``delta`` to a ``counter`` on a face-up card, flooring at zero. Either player may adjust
-    any public card's counters — effects legitimately token an opponent's cards, so like a note
+    any public card's counters, since effects legitimately token an opponent's cards. Like a note,
     this is a shared physical act, not an owned one."""
 
     card_id: str
@@ -162,9 +165,9 @@ class AdjustCounter:
 
 @dataclass(frozen=True, slots=True)
 class GiveControl:
-    """Hand control of a face-up battlefield card to the opponent: the card's owner becomes the other
-    seat. Owner-gated — only a card you control may be given away, and only from the shared battlefield,
-    where a card's owner is free to differ from its zone."""
+    """Hand control of a face-up battlefield card to the opponent: the card's owner becomes the
+    other seat. Owner-gated: only a card you control may be given away, and only from the shared
+    battlefield, where a card's owner is free to differ from its zone."""
 
     card_id: str
     op: ClassVar[IntentOp] = IntentOp.GIVE_CONTROL
@@ -199,7 +202,7 @@ class Flip(CardFlagIntent):
 
 @dataclass(frozen=True, slots=True)
 class FlipFace(CardFlagIntent):
-    """Turn a double-faced card to its other face; a no-op for single-faced cards."""
+    """Turn a double-faced card to its other face. A no-op for single-faced cards."""
 
     op: ClassVar[IntentOp] = IntentOp.FLIP_FACE
 
@@ -211,9 +214,9 @@ class Invert(CardFlagIntent):
 
 @dataclass(frozen=True, slots=True)
 class Show:
-    """Show one of your own cards to your opponent. Owner-gated. A face-down card stays a back to its
-    owner while the opponent gains sight of it; a hand card the owner already reads becomes public to
-    both seats."""
+    """Show one of your own cards to your opponent. Owner-gated. A face-down card stays a back to
+    its owner while the opponent gains sight of it. A hand card the owner already reads becomes
+    public to both seats."""
 
     card_id: str
     op: ClassVar[IntentOp] = IntentOp.SHOW
@@ -230,7 +233,7 @@ class Unshow:
 @dataclass(frozen=True, slots=True)
 class Peek:
     """Privately peek at one of your own face-down cards (or an owner-less public one). Owner-gated:
-    you cannot peek a card the opponent holds — they reveal those to you with Show."""
+    you cannot peek a card the opponent holds. They reveal those to you with Show."""
 
     card_id: str
     op: ClassVar[IntentOp] = IntentOp.PEEK
@@ -246,7 +249,7 @@ class Unpeek:
 
 @dataclass(frozen=True, slots=True)
 class Draw:
-    """Draw the top card of a deck; routing (hand/province/battlefield) is decided on apply."""
+    """Draw the top card of a deck. Routing (hand/province/battlefield) is decided on apply."""
 
     deck: DeckKey
     op: ClassVar[IntentOp] = IntentOp.DRAW
@@ -271,8 +274,9 @@ class FlipDeckTop:
 
 @dataclass(frozen=True, slots=True)
 class SearchDeck:
-    """Request a deck's ordered contents; the owner alone receives them. ``limit`` bounds the look to
-    the top N cards (None searches the whole deck). Pulling a card is a follow-up ``MoveCard``."""
+    """Request a deck's ordered contents. The owner alone receives them. ``limit`` bounds the look
+    to the top N cards (None searches the whole deck). Pulling a card is a follow-up
+    ``MoveCard``."""
 
     deck: DeckKey
     limit: int | None = None
@@ -331,10 +335,11 @@ class SpawnCard:
     """Put a new public, face-up token on the shared battlefield, copied from a source card.
 
     The card id is assigned by the caller and recorded, so a replay reproduces the same card. The
-    source is exactly one of: ``token_id`` (a creatable-token print on the table), ``source_card_id``
-    (a visible in-play card, whose presented face is copied), or ``printed`` (a print the web layer
-    pre-resolved, e.g. a database search result). The spawned card is owned by the acting seat: face up and visible to both,
-    but only its creator may move or remove it (control can later be handed over with GiveControl).
+    source is exactly one of: ``token_id`` (a creatable-token print on the table),
+    ``source_card_id`` (a visible in-play card, whose presented face is copied), or ``printed``
+    (a print the web layer pre-resolved, e.g. a database search result). The spawned card is
+    owned by the acting seat: face up and visible to both, but only its creator may move or
+    remove it (control can later be handed over with GiveControl).
 
     ``zone`` lands the card in one of the acting seat's own zones instead of the battlefield, where
     a card has no board position. A card in a hand is otherwise visible only to its owner, so
@@ -366,7 +371,7 @@ class Attach:
     Presentation only, and deliberately unconstrained: the manual surface has no rules
     interpretation, so any card you control may be stacked behind any target, and doing so puts
     nothing in a unit. ``to`` is a parent card id or a province ``ZoneKey``. The child keeps its own
-    board position; the vertical shift that stacks it behind the parent is a rendering concern, not
+    board position. The vertical shift that stacks it behind the parent is a rendering concern, not
     stored here. Re-stacking on the same target, a self-attach, or one that would form a cycle
     produces no event.
     """
@@ -474,7 +479,7 @@ class Event:
     Attributes
     ----------
     seq : int
-        The table's version after the mutation; equals the prior ``seq`` for accepted read-only
+        The table's version after the mutation. It equals the prior ``seq`` for accepted read-only
         intents (``SEARCH_DECK``) that produce an event without changing state.
     seat : PlayerId
         The seat that acted.
@@ -482,7 +487,7 @@ class Event:
         The fully resolved operation that occurred. For draws and province fills this is the
         ``MoveCard`` the server decided, not the originating ``Draw``/``FillProvince``.
     cards : tuple of str
-        Ids of the cards whose state materially changed; the changed subset for batched flag ops.
+        Ids of the cards whose state materially changed. The changed subset for batched flag ops.
     """
 
     seq: int

@@ -30,13 +30,15 @@ def _card(
     peeked_ids: frozenset[str] = frozenset(),
     token_names: dict[str, str] | None = None,
 ) -> dict:
-    """Encode a viewer's card as the client renders it. A ``HiddenCard`` becomes a back stub carrying
-    no identity; a full card carries the presented face's name and art plus its flags. A double-faced
-    card also carries its back link and which face is showing, so the client can render the flip.
+    """Encode a viewer's card as the client renders it. A ``HiddenCard`` becomes a back stub
+    carrying no identity. A full card carries the presented face's name and art plus its flags. A
+    double-faced card also carries its back link and which face is showing, so the client can
+    render the flip.
 
-    The ``shown`` flag marks a card the owner has made public-facing (render a public indicator); the
-    ``peeked`` flag, set from ``peeked_ids``, marks one this viewer sees only through their own peek
-    (render the private-peek cue). A hidden stub carries neither — the viewer cannot see it at all.
+    The ``shown`` flag marks a card the owner has made public-facing (render a public indicator).
+    The ``peeked`` flag, set from ``peeked_ids``, marks one this viewer sees only through their
+    own peek (render the private-peek cue). A hidden stub carries neither, since the viewer
+    cannot see it at all.
 
     Parameters
     ----------
@@ -55,7 +57,8 @@ def _card(
             "owner": view.owner.name if view.owner is not None else None,
             "token": False,
             "hidden": True,
-            # Rides the stub so the owner keeps the reveal outline on their own shown face-down card.
+            # Rides the stub so the owner keeps the reveal outline on their own shown
+            # face-down card.
             "shown": view.shown,
         }
     face = view.active_face
@@ -111,7 +114,7 @@ def serialize_snapshot(snapshot: ViewSnapshot, token_names: dict[str, str] | Non
     serializer cannot leak an identity it was not handed. Zone and deck keys are flattened to stable
     strings (``"P1:province:0"``, ``"P2:fate"``).
 
-    ``token_names`` maps a creatable-token card id to its display name; when given, a battlefield or
+    ``token_names`` maps a creatable-token card id to its display name. When given, a battlefield or
     province card that creates tokens carries a ``creates`` list for the per-card "Create" menu (a
     face-down province card is a ``HiddenCard`` stub, so its creations stay concealed).
     """

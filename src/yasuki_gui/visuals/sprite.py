@@ -29,8 +29,8 @@ class CardSpriteVisual(Visual):
     y: int
     tag: str
     images: ImageProvider | None = None
-    # Show the card as bowed before the engine commits it — used to preview a producer being tapped
-    # for gold during a payment, so the bow is undoable until the player confirms.
+    # Show the card as bowed before the engine commits it (used to preview a producer being tapped
+    # for gold during a payment). The bow is undoable until the player confirms.
     bowed_preview: bool = False
     # Each modified card's effective stats by id, as GameView carries them, or None where no rules
     # game is driving the board. The card's live Force and Chi are stamped from it over the numerals

@@ -81,7 +81,7 @@ def _login_and_callback(
     """Drive /auth/login, mint an id_token bound to that login's nonce, then hit /auth/callback.
 
     ``override_nonce`` mints a token whose nonce does not match the one bound at login, to exercise
-    the binding check; ``callback_headers`` lets a test present a header such as a forwarded proto.
+    the binding check. ``callback_headers`` lets a test present a header such as a forwarded proto.
     """
     login_resp = client.get("/auth/login", follow_redirects=False)
     query = parse_qs(urlparse(login_resp.headers["location"]).query)
@@ -118,8 +118,8 @@ def test_full_login_flow_sets_session_and_me_returns_user(client, monkeypatch, r
     assert "samesite=lax" in set_cookie
 
     body = client.get("/api/me").json()
-    # A new account is nameless until onboarding — the Google profile name "Ada" never lands on the
-    # row — and the opaque google_sub is never exposed.
+    # A new account is nameless until onboarding. The Google profile name "Ada" never lands on the
+    # row, and the opaque google_sub is never exposed.
     assert body["user"]["display_name"] is None
     assert "google_sub" not in body["user"]
 
@@ -495,7 +495,9 @@ def test_websocket_user_requires_a_name_and_approval(client, accounts_conn):
     pending = users.upsert_user(accounts_conn, "ws-pending", "p@example.com", True, "Kenji")
 
     assert asyncio.run(auth.user_for_websocket(ws_for(ready["id"])))["id"] == ready["id"]
-    assert asyncio.run(auth.user_for_websocket(ws_for(nameless["id"]))) is None  # unnamed → no play
+    assert (
+        asyncio.run(auth.user_for_websocket(ws_for(nameless["id"]))) is None
+    )  # unnamed -> no play
     assert (
         asyncio.run(auth.user_for_websocket(ws_for(pending["id"]))) is None
-    )  # unapproved → no play
+    )  # unapproved -> no play

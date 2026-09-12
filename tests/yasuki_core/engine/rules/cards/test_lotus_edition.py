@@ -56,7 +56,7 @@ def _reply(asked, amount: int | None) -> DecisionResponse:
     already covers a payment, and the first option otherwise.
 
     Answering a covered payment with a producer would bow it, which lowers what the seat can raise
-    and so which amounts are offered — the walk declines rather than overpaying.
+    and so which amounts are offered. The walk declines rather than overpaying.
     """
     if isinstance(asked, ChooseAmount) and amount is not None:
         return DecisionResponse((str(amount),))
@@ -167,7 +167,7 @@ def test_an_amount_that_reaches_no_target_spends_the_gold_and_stops():
 
 def test_it_is_not_offered_when_there_is_nobody_to_kill():
     """No Personality in play means no amount reaches a target, and a cost with no amount to choose
-    is not payable — so the card is never offered."""
+    is not payable, so the card is never offered."""
     state = _table()
     card = _hired_killer(state)
     session = EngineSession.start(state, PLAYER)
@@ -189,7 +189,7 @@ def test_it_goes_to_the_discard_once_it_has_resolved():
 
 
 def test_the_player_may_pay_to_destroy_his_own_personality():
-    """The card says "a target Personality" without a side, so the seat's own units are reachable —
+    """The card says "a target Personality" without a side, so the seat's own units are reachable,
     at the same price and the same Honor loss."""
     state = _table()
     put_in_play(state, personality("own", owner=PLAYER, gold_cost=1))

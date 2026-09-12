@@ -33,9 +33,10 @@ def test_every_registered_handler_names_a_real_card():
 
 
 def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():
-    # These ids name cards but no set module registers them — a card excepted from a rulebook rule
-    # is listed beside the rule. Folded into registered_card_ids() they would read as registrations
-    # the source scan cannot find, and that guard would fail for a card that is behaving correctly.
+    # These ids name cards, but no set module registers them, and a card excepted from a rulebook
+    # rule is listed beside the rule. Folded into registered_card_ids() they would read as
+    # registrations the source scan cannot find, and that guard would fail for a card that is
+    # behaving correctly.
     assert card_keyed_data().keys().isdisjoint(registered_card_ids())
     assert unregistered_card_ids(card_keyed_data()) == []
 
@@ -48,8 +49,8 @@ KNOWINGLY_EMPTY: set[str] = set()
 
 def test_no_registry_reports_as_empty():
     # An empty frozenset here means registration_audit read an attribute that is no longer the
-    # registry, which looks exactly like a clean bill of health. The data lists answer to it too — one emptied
-    # by a rename would report every card in it as validated.
+    # registry, which looks exactly like a clean bill of health. The data lists answer to it too
+    # and one emptied by a rename would report every card in it as validated.
     populated = {
         name: ids for name, ids in registered_card_ids().items() if name not in KNOWINGLY_EMPTY
     }
@@ -87,8 +88,8 @@ def another_trigger(ctx):
 
 
 def test_a_trigger_registered_twice_for_one_card_is_reported():
-    # _TRIGGERS appends rather than overwrites, so the duplicate does not shadow the original — both
-    # fire, and the card's effect happens twice.
+    # _TRIGGERS appends rather than overwrites, so the duplicate does not shadow the original and
+    # both fire, and the card's effect happens twice.
     problems = duplicate_registrations({EnteredPlay: {"millet_farm": [a_trigger, a_trigger]}})
 
     assert problems == [
@@ -165,7 +166,7 @@ def test_every_card_module_is_imported_by_the_package():
 
 
 def test_printed_ability_count_reads_the_designators_a_card_spells_out():
-    """Two abilities in one text run, split by the sentence between them — the shape Outer Walls
+    """Two abilities in one text run, split by the sentence between them and the shape Outer Walls
     prints and the one a `<br>`-only split would miss."""
     text = (
         "<b>Battle:</b> Even if you control no units at the current battlefield: Give its province "
@@ -187,7 +188,7 @@ def test_a_colon_inside_an_abilitys_prose_does_not_head_a_second_one():
 
 
 def test_a_qualified_designator_still_heads_an_ability():
-    """ "Absent Battle", "Tireless Response", "Economic Open" — the qualifiers stack ahead of the
+    """ "Absent Battle", "Tireless Response", "Economic Open" and the qualifiers stack ahead of the
     designator and the ability is still an ability."""
     text = "<b>Tireless Response:</b> Straighten a unit.<br><b>Absent Battle:</b> Bow a Follower."
 

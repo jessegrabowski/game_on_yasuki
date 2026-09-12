@@ -33,17 +33,17 @@ def recruit(
     proclaim: bool = False,
 ) -> None:
     """Announce a Recruit: defer bringing the card into play, then pause for its cost payment. The
-    payment bows gold producers to cover :func:`~.recruit_cost` plus any Invest cost; once answered,
+    payment bows gold producers to cover :func:`~.recruit_cost` plus any Invest cost. Once answered,
     the stack resolves the move into play and the province refill.
 
     With ``invest`` set, also pay the card's Invest cost for its one-time enter-play effect. A fixed
-    Invest folds straight into the payment; a variable one pauses first for
+    Invest folds straight into the payment. A variable one pauses first for
     :class:`~.ChooseInvestAmount` to pick how much to pay. With ``renew`` set, the vacated province
     refills face-up (a Renew granted by the recruiting effect). With ``proclaim`` set, claim the
     seat's once-per-turn Proclaim and add the Personality's Personal Honor to its Family Honor after
-    it enters play (rules-skeleton §6); nothing is claimed until the payment resolves, so a
+    it enters play (rules-skeleton section 6). Nothing is claimed until the payment resolves, so a
     cancelled Proclaim leaves it available. Raise ``ValueError`` if both ``invest`` and ``proclaim``
-    are set — Invest belongs to Holdings and Proclaim to Personalities, so no card offers both."""
+    are set. Invest belongs to Holdings and Proclaim to Personalities, so no card offers both."""
     if invest and proclaim:
         raise ValueError("a Recruit cannot both Invest and Proclaim")
     card = game.table.cards_by_id[card_id]
@@ -103,7 +103,8 @@ def resolve_recruit(
     # rather than dropping it at the origin.
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     if enters_play_bowed(card):
-        card.bow()  # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton §6)
+        # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton section 6).
+        card.bow()
     fortification = keywords.FORTIFICATION in effective_keywords(game, card)
     if province_key is not None:
         if fortification:
@@ -148,7 +149,7 @@ def _announce_entering_play(
     """The tail every recruited card shares: make the board legal, queue the post-entry steps, and
     announce the arrival."""
     # A card reaching the battlefield can make the board illegal, and the board is made legal
-    # before anything is told the card arrived — a trigger that reads a state the rules say cannot
+    # before anything is told the card arrived. A trigger that reads a state the rules say cannot
     # exist is deciding on a board that never legally existed.
     triggers.enforce_state_based_actions(game)
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
@@ -168,8 +169,8 @@ def finish_recruit(
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:
-    """Remove a card's Sincerity tokens once it has entered play — its trait has already read them
-    during the ``EnteredPlay`` cascade (Sincerity keyword)."""
+    """Remove a card's Sincerity tokens once it has entered play, because its trait has already
+    read them during the ``EnteredPlay`` cascade (Sincerity keyword)."""
     held = card.counters.get(SINCERITY.key, 0)
     if held:
         card.adjust_counter(SINCERITY.key, -held)

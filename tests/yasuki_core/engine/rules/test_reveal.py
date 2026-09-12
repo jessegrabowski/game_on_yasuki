@@ -36,8 +36,8 @@ def test_the_turn_start_sweep_raises_revealed_for_each_card_it_turns(reacting):
 
 
 def test_a_card_already_face_up_is_not_revealed_again(reacting):
-    # The event names the turn, not the state, so a card the sweep leaves alone raises nothing —
-    # otherwise every subscriber would fire again on each of the owner's turns.
+    # The event names the turn, not the state, so a card the sweep leaves alone raises nothing.
+    # Otherwise every subscriber would fire again on each of the owner's turns.
     seen = []
     reacting(Revealed, "reveal_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
     game = _watching_game()
@@ -82,7 +82,7 @@ def test_the_sweep_leaves_the_other_seat_alone(reacting):
 
 def test_every_reveal_resolves_before_the_turn_has_started(reacting):
     # A reaction to the reveal acts during the sweep, so it must not see a board where the turn is
-    # already under way — and the last card turned still precedes the turn starting.
+    # already under way. The last card turned still precedes the turn starting.
     order = []
     reacting(Revealed, "reveal_probe", lambda ctx: order.append("revealed") or [])
     reacting(TurnStarted, "reveal_probe", lambda ctx: order.append("turn-started") or [])

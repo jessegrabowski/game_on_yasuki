@@ -94,8 +94,8 @@ def test_origin_allowed_rejects_unlisted_origin(monkeypatch):
 
 
 def test_origin_allowed_permits_same_origin(monkeypatch):
-    # The page that opened the socket is served by this app, so its Origin matches the Host even when
-    # it isn't on the explicit allowlist.
+    # The page that opened the socket is served by this app, so its Origin matches the Host even
+    # when it isn't on the explicit allowlist.
     monkeypatch.setattr(ws_module, "ALLOWED_WS_ORIGINS", frozenset())
     assert _origin_allowed(_OriginWS(origin="https://play.example", host="play.example")) is True
 

@@ -12,13 +12,14 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 def _harsh_choices_targets(game: GameState, card: L5RCard) -> list[str]:
-    """The Event itself. It names no target — it acts on the Province it is sitting in."""
+    """The Event itself. It names no target, and it acts on the Province it is sitting in."""
     return [card.id]
 
 
 def _harsh_choices_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Destroy the Province the Event sits in, then draw three. Destroying it discards the Province's
-    contents face-up, so the Event spends itself in the same stroke and needs no discard of its own.
+    """Destroy the Province the Event sits in, then draw three. Destroying it discards the
+    Province's contents face-up, so the Event spends itself in the same stroke and needs no
+    discard of its own.
     """
     province = province_key_holding(game, source.owner, source.id)
     if province is None:

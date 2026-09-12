@@ -10,9 +10,10 @@ from yasuki_core.game_pieces.constants import Side
 @dataclass(frozen=True, slots=True)
 class HiddenCard:
     """A card the viewer may not identify, carrying only a stable id, its side (which back art to
-    draw), its owner (whose card it is — public; only the face is secret), a constant ``face`` marker,
-    and ``shown`` — the owner's own disclosure marker, kept so their shown face-down card keeps its
-    reveal cue. The real name, text, and front image never reach this viewer's snapshot."""
+    draw), its owner (whose card it is, and this is public, while only the face is secret), a
+    constant ``face`` marker, and ``shown`` (the owner's own disclosure marker, kept so their shown
+    face-down card keeps its reveal cue). The real name, text, and front image never reach this
+    viewer's snapshot."""
 
     card_id: str
     side: Side
@@ -58,12 +59,14 @@ class ViewSnapshot:
     zones: dict[ZoneKey, ZoneView]
     decks: dict[DeckKey, DeckView]
     battlefield: tuple[BattlefieldCardView, ...]
-    # Ids of cards this viewer sees solely because they are peeking them — visible to the viewer alone,
-    # so the client renders them with the reduced-opacity peek cue. Empty when nothing is being peeked.
+    # Ids of cards this viewer sees solely because they are peeking them. Visible to the viewer
+    # alone, so the client renders them with the reduced-opacity peek cue. Empty when nothing is
+    # being peeked.
     peeked_ids: frozenset[str] = frozenset()
     # The attachment graph, keyed by attached card id; each value is a parent card id or a province
-    # ``ZoneKey``. Passed through verbatim — card ids are public, so an attachment referencing a card
-    # the viewer cannot identify still resolves by id against the (hidden) card in the same snapshot.
+    # ``ZoneKey``. Passed through verbatim. Card ids are public, so an attachment referencing a
+    # card the viewer cannot identify still resolves by id against the (hidden) card in the same
+    # snapshot.
     attachments: dict[str, "str | ZoneKey"] = field(default_factory=dict)
     # Unit membership, keyed by attached card id and naming its Personality. Public for the same
     # reason and passed through the same way.
@@ -97,14 +100,14 @@ def _opponent(seat: PlayerId) -> PlayerId:
 
 
 def _shown_to(card: L5RCard, viewer: PlayerId) -> bool:
-    """Whether ``card`` is shown to ``viewer`` as the owner's opponent — the disclosure a face-down
-    card's owner makes to the other seat without turning the card face up."""
+    """Whether ``card`` is shown to ``viewer`` as the owner's opponent: the disclosure a
+    face-down card's owner makes to the other seat without turning the card face up."""
     return card.shown and viewer == _opponent(card.owner)
 
 
 def _default_visible(card: L5RCard, viewer: PlayerId, role: ZoneRole | None) -> bool:
-    """The baseline visibility before any show/peek disclosure: public discard/banish to all, the hand
-    to its owner, and a face-up card on the battlefield (``role`` None) or in a province."""
+    """The baseline visibility before any show/peek disclosure: public discard/banish to all, the
+    hand to its owner, and a face-up card on the battlefield (``role`` None) or in a province."""
     if role in _PUBLIC_ROLES:
         return True
     if role is ZoneRole.HAND:
@@ -113,13 +116,14 @@ def _default_visible(card: L5RCard, viewer: PlayerId, role: ZoneRole | None) -> 
 
 
 def _zone_card_visible(card: L5RCard, viewer: PlayerId, role: ZoneRole | None) -> bool:
-    """Whether ``viewer`` may identify ``card`` sitting in ``role`` (None for the battlefield): by the
-    baseline rule, because the owner shows it to this opponent, or because this viewer is peeking it."""
+    """Whether ``viewer`` may identify ``card`` sitting in ``role`` (None for the battlefield): by
+    the baseline rule, because the owner shows it to this opponent, or because this viewer is
+    peeking it."""
     return _default_visible(card, viewer, role) or _shown_to(card, viewer) or viewer in card.peekers
 
 
 def _peeked_only(card: L5RCard, viewer: PlayerId, role: ZoneRole | None) -> bool:
-    """Whether ``viewer`` sees ``card`` solely through their own peek — visible, but neither by the
+    """Whether ``viewer`` sees ``card`` solely through their own peek. Visible, but neither by the
     baseline rule nor through a show. These are the ids the snapshot flags for the peek cue."""
     return (
         viewer in card.peekers
@@ -129,10 +133,11 @@ def _peeked_only(card: L5RCard, viewer: PlayerId, role: ZoneRole | None) -> bool
 
 
 def card_identity_public(state: TableState, card_id: str) -> bool:
-    """Return whether every seat may currently identify this card, given where it sits, its face, and
-    any show. True for a battlefield or province card that is face up, for any card in a public discard
-    or banish, and for a hand card its owner has shown (now public to all); False for a card in a deck,
-    one lying face down to its owner, or one only an opponent or a peeker can see."""
+    """Return whether every seat may currently identify this card, given where it sits, its face,
+    and any show. True for a battlefield or province card that is face up, for any card in a
+    public discard or banish, and for a hand card its owner has shown (now public to all). False
+    for a card in a deck, one lying face down to its owner, or one only an opponent or a peeker can
+    see."""
     card = state.cards_by_id.get(card_id)
     if card is None:
         return False
@@ -141,7 +146,7 @@ def card_identity_public(state: TableState, card_id: str) -> bool:
     for key, zone in state.zones.items():
         if any(held is card for held in zone.cards):
             return all(_zone_card_visible(card, seat, key.role) for seat in state.seats)
-    return False  # in a deck or otherwise unlocated — hidden
+    return False  # in a deck or otherwise unlocated. Hidden.
 
 
 def _project(card: L5RCard, visible: bool) -> CardView:
@@ -154,14 +159,14 @@ def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
 
     Visibility:
 
-    - hand: the owner sees it; others see a back unless the owner has ``shown`` it (then public).
-    - battlefield and provinces: a card is shown only when ``face_up`` — a face-down card is a back to
-      everyone, its owner included, unless the owner has ``shown`` it to the other seat.
+    - hand: the owner sees it. Others see a back unless the owner has ``shown`` it (then public).
+    - battlefield and provinces: a card is shown only when ``face_up``. A face-down card is a back
+      to everyone, its owner included, unless the owner has ``shown`` it to the other seat.
     - discards and banishes: public to both seats.
     - decks: count only, plus the top card when it has been flipped ``face_up``.
 
-    A peeker sees any card it is peeking, whoever owns it; the returned snapshot records those ids in
-    ``peeked_ids`` so the client marks them as a private peek.
+    A peeker sees any card it is peeking, whoever owns it. The returned snapshot records those ids
+    in ``peeked_ids`` so the client marks them as a private peek.
 
     Card ids survive redaction so a client can animate a card it cannot yet identify (an opponent's
     draw is a back sliding from deck to hand).

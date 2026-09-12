@@ -4,7 +4,7 @@ from psycopg.types.json import Jsonb
 from yasuki_core.accounts import banlist, sessions
 from yasuki_core.accounts.crypto import email_blind_index
 
-# Returned on every user lookup — the non-sensitive identity the web layer needs to seat a player
+# Returned on every user lookup: the non-sensitive identity the web layer needs to seat a player
 # and enforce a ban. Deliberately excludes the email blind index.
 _USER_COLUMNS = "id, google_sub, display_name, role, is_approved, is_banned, avatar"
 
@@ -18,30 +18,31 @@ def upsert_user(
 ) -> dict:
     """Insert the user for a Google ``sub``, or refresh the existing one, and return it.
 
-    A returning user's ``display_name`` is left untouched — it is theirs to change and must not be
-    clobbered by Google's current name — while the email index, verified flag, and login timestamp
-    refresh each sign-in. ``email`` is stored only as its blind index, never in the clear. A new
-    account passes ``None`` and is nameless until it picks a display name during onboarding.
+    A returning user's ``display_name`` is left untouched, since it is theirs to change and must
+    not be clobbered by Google's current name, while the email index, verified flag, and login
+    timestamp refresh each sign-in. ``email`` is stored only as its blind index, never in the
+    clear. A new account passes ``None`` and is nameless until it picks a display name during
+    onboarding.
 
     Parameters
     ----------
     conn : psycopg.Connection
         An open accounts-database connection.
     google_sub : str
-        The Google subject identifier; the stable identity key.
+        The Google subject identifier, the stable identity key.
     email : str
         The address from the verified id_token, stored only as a blind index.
     email_verified : bool
         Google's ``email_verified`` claim.
     display_name : str or None
-        The name to seed a new account with, or None to leave it nameless until onboarding; ignored
+        The name to seed a new account with, or None to leave it nameless until onboarding. Ignored
         for an existing one.
 
     Returns
     -------
     user : dict
         The row, with keys ``id``, ``google_sub``, ``display_name``, ``role``, ``is_banned``,
-        ``avatar``, plus ``created`` — True only on first sign-in, so the caller can onboard.
+        ``avatar``, plus ``created``. True only on first sign-in, so the caller can onboard.
     """
     with conn.cursor() as cur:
         cur.execute(
@@ -72,7 +73,8 @@ def set_display_name(conn: psycopg.Connection, user_id: int, display_name: str) 
 
 
 def set_avatar(conn: psycopg.Connection, user_id: int, avatar: dict | None) -> dict | None:
-    """Set (or clear, with None) a user's avatar spec, returning the refreshed row, or None if absent.
+    """Set (or clear, with None) a user's avatar spec, returning the refreshed row, or None if
+    absent.
 
     Parameters
     ----------
@@ -130,7 +132,7 @@ def ban_user(conn: psycopg.Connection, user_id: int, reason: str | None = None) 
 def list_users(conn: psycopg.Connection) -> list[dict]:
     """Return every account for the admin dashboard, newest first.
 
-    Carries only the non-sensitive fields an admin needs to triage and ban — never the email blind
+    Carries only the non-sensitive fields an admin needs to triage and ban, never the email blind
     index. ``last_seen`` is the most recent of the last login and any live session's activity, so an
     active user reads as recent even between logins. Each row has keys ``id``, ``display_name``,
     ``role``, ``is_approved``, ``is_banned``, ``created_at``, and ``last_seen``.
@@ -185,7 +187,7 @@ def delete_account(conn: psycopg.Connection, user_id: int) -> bool:
     """Erase a user (GDPR right to erasure), cascading their sessions and decks.
 
     A banned user's pepper'd sub/email tombstone is retained first, so erasure cannot reopen the
-    door to a banned identity; a user in good standing leaves nothing behind. The row's deletion
+    door to a banned identity. A user in good standing leaves nothing behind. The row's deletion
     cascades to sessions, decks, and deck cards via their foreign keys. Return whether a user was
     there to delete.
 

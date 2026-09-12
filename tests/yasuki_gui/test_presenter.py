@@ -63,7 +63,7 @@ def _grant_board() -> EngineSession:
     """A Dynasty phase where the one Holding on offer is affordable only through a producer's grant.
 
     Outlying Farms produces 2 and can raise itself to 4, so recruiting the cost-4 target means
-    taking that grant — which is what puts the window question in front of the client.
+    taking that grant. This puts the window question in front of the client.
     """
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
@@ -110,8 +110,8 @@ def _grant_board() -> EngineSession:
 @pytest.fixture
 def paying():
     """A presenter over a game paused on a payment only a producer's own grant can cover, with the
-    board already in selection mode — the state the client is in when the player is about to pick a
-    producer."""
+    board already in selection mode: the state the client is in when the player is about to pick
+    a producer."""
     session = _grant_board()
     runner = GameRunner(session, P1)
     window = GameWindow(session.game.table, P1)
@@ -157,7 +157,7 @@ def _buttons(window) -> list[str]:
 
 
 def _primary_enabled(window) -> bool:
-    """Whether the affirmative button — the one the spacebar reaches — can be pressed."""
+    """Whether the affirmative button (the one the spacebar reaches) can be pressed."""
     return str(window.prompt_box._buttons[0].cget("state")) == "normal"
 
 
@@ -170,7 +170,7 @@ def test_the_payment_prompt_asks_which_producers_to_bow(paying):
 
 def test_bowing_a_producer_puts_its_window_question_in_the_prompt_box(paying):
     """The window arrives as an ordinary yes/no question, so the client renders it through the same
-    branch as any other — the wording is the card's and the client states none of its own."""
+    branch as any other. The wording is the card's and the client states none of its own."""
     presenter, window = paying
     window.field.toggle_selection("of")
 
@@ -195,8 +195,8 @@ def test_a_grant_the_payment_cannot_do_without_grays_out_its_no(paying):
 
 def test_pay_lights_on_a_grant_the_producer_has_not_been_asked_for_yet(paying):
     """The Farm makes 2 against a cost of 4 and can raise itself to 4 in its window. The figure the
-    seat reads is what the Farm makes now — promising the higher one would promise Gold it may still
-    decline — but Pay is live, because there is a way to finish from here."""
+    seat reads is what the Farm makes now. Promising the higher one would promise Gold it may still
+    decline, but Pay is live because there is a way to finish from here."""
     _, window = paying
 
     window.field.toggle_selection("of")
@@ -244,7 +244,7 @@ def test_an_invest_decision_offers_a_button_per_affordable_amount(board):
 
 def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
     """The wordings are outcomes rather than card ids, so the answer is a button each and the board
-    must not enter selection mode — handed these, it would find nothing to select and strand the
+    must not enter selection mode. Handed these, it would find nothing to select and strand the
     seat with no way to answer."""
     presenter, window, session = board
     session.game.pending = ChooseOption(
@@ -412,7 +412,7 @@ def test_a_payment_offers_only_what_is_left_to_bow_each_round(two_producers):
 
 def test_the_payment_prompt_is_exact_once_a_producer_has_bowed(two_producers):
     """Between rounds the figure is what the seat actually still owes, not a projection over cards
-    that have not bowed. Clicking previews; confirming makes it true."""
+    that have not bowed. Clicking previews. Confirming makes it true."""
     presenter, window, _ = two_producers
 
     assert _status(window) == "Pay 5 gold for tgt"
@@ -469,7 +469,7 @@ def test_the_pay_button_lights_only_once_the_picks_cover_the_cost(two_producers)
 
 def test_picking_both_producers_pays_in_one_click(two_producers):
     """The seat picks its whole payment and presses Pay once. The engine still takes one producer
-    per answer, so the board feeds them to it — that is not the player's problem."""
+    per answer, so the board feeds them to it: not the player's problem."""
     presenter, window, session = two_producers
 
     window.field.toggle_selection("a")
@@ -520,7 +520,7 @@ def farm_and_a_helper():
 
 def test_a_window_pauses_the_queue_and_answering_it_spends_the_rest(farm_and_a_helper):
     """The seat picks both producers and presses Pay once. The Farm's window stops the queue mid-way
-    so the seat can answer it; the producer still queued behind it is spent on the way back."""
+    so the seat can answer it. The producer still queued behind it is spent on the way back."""
     presenter, window, session = farm_and_a_helper
     window.field.toggle_selection("of")
     window.field.toggle_selection("small")
@@ -557,7 +557,7 @@ def test_cancelling_a_payment_forgets_what_was_queued(farm_and_a_helper):
 
 def test_a_producer_queued_behind_a_grant_that_covered_the_cost_never_bows():
     """The seat picked more than it turned out to need: the Farm's grant covered the whole cost, so
-    the engine stopped asking. What was still queued is spared, and dropped — a pick left waiting
+    the engine stopped asking. What was still queued is spared and dropped. A pick left waiting
     would bow into whatever the seat paid for next."""
     state = dealt_table()
     put_in_play(state, holding("of", owner=P1, printed_id="outlying_farms", gold_production=2))
@@ -654,7 +654,8 @@ def test_pay_with_nothing_picked_leaves_a_payment_that_still_owes_gold_open(two_
 
 @pytest.fixture
 def a_battle():
-    """A presenter in the Attack Phase, with a Personality to send and two Provinces to send it at."""
+    """A presenter in the Attack Phase, with a Personality to send and two Provinces to send it
+    at."""
     state = TableState.empty_two_seat()
     for index in range(2):
         province_card(state, f"p2-prov{index}", seat=PlayerId.P2, index=index)
@@ -667,7 +668,7 @@ def a_battle():
     window = GameWindow(session.game.table, P1)
     presenter = Presenter(FakeHost(runner), window)
     # The real wiring rather than a hand-picked hook, since the battle is played through several of
-    # them now — the board's, and the lane buttons' in the battle view.
+    # them now: the board's and the lane buttons' in the battle view.
     window.bind_to(presenter)
     try:
         presenter.present()
@@ -677,7 +678,7 @@ def a_battle():
 
 
 def _specs(presenter) -> list:
-    """The prompt box's button specs — label, callback and whether it is enabled."""
+    """The prompt box's button specs: label, callback, and whether it is enabled."""
     return presenter._prompt(presenter.host.runner.view())[1]
 
 
@@ -692,7 +693,7 @@ def _press(presenter, label: str) -> None:
 
 
 def _picked(window) -> str:
-    """A card in the board's current selection — whichever one the player would right-click."""
+    """A card in the board's current selection (whichever one the player would right-click)."""
     return window.field.selection[0]
 
 
@@ -751,7 +752,8 @@ def _fight_at(presenter, battlefield: int) -> None:
 
 
 def _send(presenter, window, card_ids, battlefield: int) -> None:
-    """Send units the way the player does: pick them, then press the button under the battlefield."""
+    """Send units the way the player does: pick them, then press the button under the
+    battlefield."""
     for card_id in card_ids:
         window.field.toggle_selection(card_id)
     _press_lane(presenter, battlefield, "Assign here")
@@ -776,7 +778,7 @@ def test_the_assignment_menu_shows_its_entry_before_it_is_reachable(a_battle):
 
 
 def test_picking_units_at_home_leaves_unassigning_out_of_reach(a_battle):
-    """Sending them is the lane's button; the menu is only for bringing them back."""
+    """Sending them is the lane's button. The menu is only for bringing them back."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
 
@@ -923,7 +925,7 @@ def test_unassigning_brings_back_every_unit_picked_at_that_battlefield(a_battle)
 
 
 def test_sending_a_unit_somewhere_else_moves_it(a_battle):
-    """There is no army to leave first — where a unit stands is the whole of the model."""
+    """There is no army to leave first. Where a unit stands is the whole of the model."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
     _send(presenter, window, ["hero"], 0)
@@ -961,7 +963,7 @@ def test_a_unit_left_at_home_is_not_assigned(a_battle):
 
 
 def test_the_assign_buttons_go_away_once_the_assignment_is_answered(a_battle):
-    """They are the gesture for a question that is over; what the lanes offer next is the battle."""
+    """They are the gesture for a question that is over. What the lanes offer next is the battle."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
     _send(presenter, window, ["hero"], 0)
@@ -978,7 +980,7 @@ def test_the_assign_buttons_go_away_once_the_assignment_is_answered(a_battle):
 
 def test_the_prompt_names_the_battle_segment_and_the_battlefield(a_battle):
     """A battle's segments are the only place the seat is asked to act inside another segment, so
-    the heading has to name the one being fought — "Fight Battles" is true of every battle in the
+    the heading has to name the one being fought. "Fight Battles" is true of every battle in the
     phase and tells the player nothing about the one in front of them."""
     presenter, window, session = a_battle
     runner = presenter.host.runner
@@ -1034,9 +1036,9 @@ def _lane_sequence(window) -> list[str]:
 
 
 def test_the_lanes_print_the_battle_sequence_once_a_battle_starts(a_battle):
-    """The foot of a lane is where the player is asked where to fight; once they have answered, it
+    """The foot of a lane is where the player is asked where to fight. Once they have answered, it
     is where the battle they started reports what it is doing. Which cell lights is the battle
-    view's own case — what this one checks is that the real flow reaches the strip at all."""
+    view's own case. What this one checks is that the real flow reaches the strip at all."""
     presenter, window, session = a_battle
     _press(presenter, "Declare an attack")
     _send(presenter, window, ["hero"], 0)
@@ -1054,7 +1056,7 @@ def test_the_lanes_print_the_battle_sequence_once_a_battle_starts(a_battle):
 
 def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
     """The whole loop: declare, gather, send, assign, then choose where to fight until the phase
-    runs out — which is what makes a battle playable rather than merely reachable."""
+    runs out. This is what makes a battle playable rather than merely reachable."""
     presenter, window, session = a_battle
     runner = presenter.host.runner
     _press(presenter, "Declare an attack")
@@ -1071,7 +1073,7 @@ def test_a_battle_can_be_fought_to_its_end_from_the_board(a_battle):
 
 
 def test_the_prompt_box_names_the_next_step_at_every_point(a_battle):
-    """The board carries the interaction, so the prompt box has to carry the instructions — a player
+    """The board carries the interaction, so the prompt box has to carry the instructions. A player
     who does not already know the flow has nothing else to read."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
@@ -1117,7 +1119,7 @@ def test_every_battlefield_offers_its_button_for_as_long_as_the_question_is_open
 
 
 def test_the_last_Province_falling_is_announced_as_a_Military_Victory(a_battle):
-    """The CR names the victory from the survivor's side, and each ending names its own — a seat
+    """The CR names the victory from the survivor's side, and each ending names its own. A seat
     overrun must not be told the one thing that did not happen to it."""
     presenter, _, session = a_battle
     session.game.lose(PlayerId.P2, "no Provinces remaining", "Military Victory")
@@ -1129,8 +1131,8 @@ def test_the_last_Province_falling_is_announced_as_a_Military_Victory(a_battle):
 
 
 def test_undo_takes_back_the_last_step_of_an_assignment(a_battle):
-    """Setting up an attack is scratch work — nothing reaches the engine until the whole map is
-    answered — so each step comes back one at a time."""
+    """Setting up an attack is scratch work. Nothing reaches the engine until the whole map is
+    answered, so each step comes back one at a time."""
     presenter, window, session = a_battle
     put_in_play(session.game, personality("second", owner=P1, force=3))
     _press(presenter, "Declare an attack")
@@ -1155,7 +1157,7 @@ def test_undo_brings_a_sent_unit_back_home(a_battle):
 
 
 def test_undo_puts_an_unassigned_unit_back_at_its_battlefield(a_battle):
-    """Unassigning is a step like any other; the symmetric case to undoing a send."""
+    """Unassigning is a step like any other, and it is the symmetric case to undoing a send."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
     _send(presenter, window, ["hero"], 1)
@@ -1217,8 +1219,9 @@ def test_the_battle_opens_clear_of_the_half_the_player_is_seated_at(a_battle):
     placed = window.battle_view.place_info()
     _, board_h = widget_size(window.field)
     assert int(placed["y"]) == 0
-    # The opponent's half, unless that half is shorter than a panel can usefully be — a board too
-    # small to dock in is one where the panel has to overrun to stay worth showing at all.
+    # The panel height is the opponent's half, unless that half is shorter than a panel can
+    # usefully be. A board too small to dock in is one where the panel has to overrun to stay
+    # worth showing at all.
     assert int(placed["height"]) == max(divider_y(board_h), MIN_H)
 
 
@@ -1242,7 +1245,7 @@ def test_the_battle_floats_over_the_board_with_an_attack_and_leaves_with_it(a_ba
 
 
 def test_a_unit_sent_to_a_battlefield_stands_there_before_the_engine_is_told(a_battle):
-    """The player has decided; the engine hearing about it on Done assigning is bookkeeping they
+    """The player has decided. The engine hearing about it on Done assigning is bookkeeping they
     should not have to watch for."""
     presenter, window, _ = a_battle
     _press(presenter, "Declare an attack")
@@ -1296,8 +1299,8 @@ def test_a_unit_in_a_lane_is_stamped_with_the_same_number(a_battle):
 
 
 def test_the_force_a_lane_shows_does_not_move_when_the_assignment_is_answered(a_battle):
-    """The player sees the total the moment they send the army; the engine being told is bookkeeping,
-    and a figure that jumps at that point reads as something having changed.
+    """The player sees the total the moment they send the army. The engine being told is
+    bookkeeping, and a figure that jumps at that point reads as something having changed.
 
     The Personality carries a Follower, so a total taken off his printed Force rather than his
     unit's is a different number and this notices.
@@ -1320,8 +1323,9 @@ def test_the_force_a_lane_shows_does_not_move_when_the_assignment_is_answered(a_
 
 
 def test_a_unit_sent_to_a_battlefield_takes_its_followers_off_the_board(a_battle):
-    """Only the Personality is named in an assignment, so a board that asks each card whether it was
-    sent leaves his Followers behind — drawn at home while the same cards are drawn in the lane."""
+    """Only the Personality is named in an assignment, so a board that asks each card whether it
+    was sent leaves his Followers behind. They are drawn at home while the same cards are drawn
+    in the lane."""
     presenter, window, session = a_battle
     attached(
         session.game,
@@ -1379,7 +1383,7 @@ def _proxy_id(session) -> str:
 
 def test_clicking_the_favor_proxy_offers_its_rulebook_abilities(holding_the_favor):
     """The proxy sits in hand among the seat's own cards, so the card menu is where the Favor's
-    abilities have to appear — there is nowhere else the player would look for them."""
+    abilities have to appear. There is nowhere else the player would look for them."""
     presenter, window, session = holding_the_favor
     offered = []
     window.popup_at_pointer = lambda entries: offered.extend(entries)

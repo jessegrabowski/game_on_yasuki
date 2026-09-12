@@ -72,8 +72,8 @@ def test_it_reaches_across_the_battle_rather_than_by_seat(battle):
 
 
 def test_a_personality_carrying_a_follower_is_spared_and_the_follower_is_not(battle):
-    """ "A Follower or a Personality without Followers" — the Follower stands in his place rather
-    than beside him, so exactly one of the two is a target."""
+    """ "A Follower or a Personality without Followers." The Follower stands in his place rather
+    than beside him. Exactly one of the two is a target."""
     attached(
         battle.game.table,
         attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, force=1),
@@ -85,7 +85,7 @@ def test_a_personality_carrying_a_follower_is_spared_and_the_follower_is_not(bat
 
 def test_an_item_does_not_protect_the_personality_it_is_attached_to(battle):
     """Only a Follower spares him. An Item hands him a modifier rather than standing in the unit,
-    so a Personality carrying one is still a target — and the Item itself is not."""
+    so a Personality carrying one is still a target. The Item itself is not."""
     attached(
         battle.game.table,
         attachment("katana", attachment_type=AttachmentType.ITEM, force=2),
@@ -109,7 +109,7 @@ def test_every_follower_is_a_target_when_a_personality_carries_several(battle):
 
 
 def test_nothing_is_attackable_outside_a_battle():
-    """An attack effect names the current enemy army, which does not exist between battles — so the
+    """An attack effect names the current enemy army, which does not exist between battles, so the
     predicate is empty rather than falling back to the whole board."""
     state = TableState.empty_two_seat()
     province_card(state, "def-prov0", seat=DEFENDER, index=0)
@@ -136,7 +136,7 @@ def _in_play(session, card_id):
 @pytest.mark.parametrize("attack", [RangedAttack, MeleeAttack])
 def test_an_attack_destroys_a_target_at_or_under_its_strength(battle, attack):
     """ "If its Force is equal to or less than X, destroy it." The guard is 2F, so a 2 kills and the
-    boundary is inclusive; Melee follows the same rules as Ranged."""
+    boundary is inclusive. Melee follows the same rules as Ranged."""
     _resolve(battle, attack(2, "guard", ATTACKER))
 
     assert not _in_play(battle, "guard")
@@ -164,7 +164,7 @@ def test_fear_leaves_a_target_above_its_strength_standing(battle):
 
 
 def test_the_comparison_reads_the_effective_stat_not_the_printed_one(battle):
-    """A 2F guard given +2F survives a Ranged 2 that would have killed him as printed — modifiers
+    """A 2F guard given +2F survives a Ranged 2 that would have killed him as printed. Modifiers
     count, so the comparison goes through the same effective read the rest of the engine uses."""
     battle.game.ongoing.append(
         Modifier("banner", "guard", Stat.FORCE, 2, Duration.UNTIL_END_OF_TURN)
@@ -178,7 +178,7 @@ def test_the_comparison_reads_the_effective_stat_not_the_printed_one(battle):
 def test_an_attack_may_be_compared_against_another_stat(battle):
     """ "If a Ranged Attack effect ends up being compared against a different stat than Force,
     compare that stat against the strength instead." The guard is 2F/3C, so the same strength 2
-    that destroys him on Force — the case above — leaves him standing on Chi."""
+    that destroys him on Force (the case above) leaves him standing on Chi."""
     _resolve(battle, RangedAttack(2, "guard", ATTACKER, compared=Stat.CHI))
 
     assert _in_play(battle, "guard")
@@ -199,7 +199,7 @@ def test_an_attack_on_a_card_that_has_already_left_does_nothing(battle):
 
 def test_a_melee_attack_is_not_a_ranged_attack():
     """ "Melee Attacks follow the above rules but are not considered Ranged Attacks." Both destroy,
-    so the temptation is to make one a subclass of the other; the CR forbids it, and combining
+    so the temptation is to make one a subclass of the other. The CR forbids it, and combining
     turns on the two being different kinds."""
     melee = MeleeAttack(3, "guard", ATTACKER)
 
@@ -227,8 +227,8 @@ def _roburo_battle():
 
 
 def test_roburo_bows_a_defender_his_fear_reaches():
-    """ "Battle: Fear 4" against a 2F guard — the whole card, and the first one to route an attack
-    effect through a real ability."""
+    """ "Battle: Fear 4" against a 2F guard: the whole card, and the first one to route an
+    attack effect through a real ability."""
     session = _roburo_battle()
 
     session.act(ATTACKER, ActivateAbility("roburo"))
@@ -249,7 +249,7 @@ def test_roburo_is_offered_only_inside_a_battle():
 
 
 def test_haramaki_do_attacks_from_the_personality_it_is_attached_to():
-    """An Item's ability is taken from the Item, not from its host — so the action names the Item
+    """An Item's ability is taken from the Item, not from its host, so the action names the Item
     even though it is the Personality standing at the battlefield."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
@@ -319,7 +319,7 @@ def _equip_from_hand(printed_id, *, gold=6):
     """A seat with gold and a Personality in play, holding ``printed_id`` as a Follower in hand.
 
     Equipping is how a Follower enters play from hand, which is the arrival its enters-play trait
-    keys on — building it onto the table directly would skip the trigger entirely.
+    keys on. Building it onto the table directly would skip the trigger entirely.
     """
     state = TableState.empty_two_seat()
     province_card(state, "def-prov0", seat=DEFENDER, index=0)
@@ -338,7 +338,7 @@ def _equip_from_hand(printed_id, *, gold=6):
 )
 def test_a_follower_that_costs_honor_charges_it_as_it_enters_play(printed_id, loss):
     """Each of these prints "after this Follower enters play, lose N Honor", and the trigger only
-    fires on a real arrival — so this is what tells the Equip path from a hand-built board."""
+    fires on a real arrival: what tells the Equip path from a hand-built board."""
     session = _equip_from_hand(printed_id)
     before = session.game.table.seats[ATTACKER].honor
 
@@ -350,7 +350,7 @@ def test_a_follower_that_costs_honor_charges_it_as_it_enters_play(printed_id, lo
 
 
 def test_tosekiki_ranged_destroys_a_defender_and_bows_to_pay():
-    """ "Battle, Bow: Ranged 4" — the cost is paid as the attack resolves, so the Follower ends
+    """ "Battle, Bow: Ranged 4." The cost is paid as the attack resolves, so the Follower ends
     bowed and the 2F guard is gone."""
     session = _follower_battle("tosekiki")
 
@@ -362,7 +362,7 @@ def test_tosekiki_ranged_destroys_a_defender_and_bows_to_pay():
 
 
 def test_ashigaru_spearmen_offers_the_draw_only_when_it_arrives_from_hand():
-    """ "After this Follower enters play from your hand" — Equipping is that arrival, so the offer
+    """ "After this Follower enters play from your hand." Equipping is that arrival, so the offer
     is put to the seat rather than resolving silently."""
     session = _equip_from_hand("ashigaru_spearmen")
 
@@ -421,7 +421,7 @@ def _melee_battle(printed_id):
 )
 def test_a_melee_attack_destroys_the_defender_it_reaches(printed_id):
     """The first cards to carry a Melee Attack. Both print a strength above the 2F guard, so each
-    destroys him — which is what tells a Melee that resolves from a Melee that merely exists."""
+    destroys him: what tells a Melee that resolves from a Melee that merely exists."""
     session = _melee_battle(printed_id)
 
     session.act(ATTACKER, ActivateAbility("hero"))
@@ -434,9 +434,9 @@ def test_a_melee_attack_destroys_the_defender_it_reaches(printed_id):
     "printed_id", ["doji_maya_experienced", "moto_ikarichi_bloodseeker"], ids=["maya", "ikarichi"]
 )
 def test_a_melee_card_emits_a_melee_attack_and_not_a_ranged_one(printed_id):
-    """Both kinds destroy, so nothing about the board tells them apart until combining exists —
-    which is exactly why the card has to name the right one now. A Melee printed as a Ranged would
-    combine with the wrong attacks and no test of the outcome would notice."""
+    """Both kinds destroy, so nothing about the board tells them apart until combining exists:
+    the card has to name the right one now. A Melee printed as a Ranged would combine with the
+    wrong attacks and no test of the outcome would notice."""
     session = _melee_battle(printed_id)
     source = session.game.table.cards_by_id["hero"]
     ability = ability_for(source)
@@ -515,7 +515,7 @@ def _defending_unit(*followers):
 
 def test_fear_against_aseths_legion_loses_two_strength():
     """ "Fear effects targeting this Follower have -2 strength." A Fear 3 reaches a 2F Follower
-    everywhere else on the board; here it comes up short."""
+    everywhere else on the board, but here it comes up short."""
     session = _defending_unit(("legion", "aseths_legion", 2))
 
     _resolve(session, Fear(3, "legion", ATTACKER))
@@ -524,7 +524,7 @@ def test_fear_against_aseths_legion_loses_two_strength():
 
 
 def test_a_stronger_fear_still_reaches_aseths_legion():
-    """The penalty is a reduction, not immunity — Fear 4 against a 2F Follower still bows it."""
+    """The penalty is a reduction, not immunity. Fear 4 against a 2F Follower still bows it."""
     session = _defending_unit(("legion", "aseths_legion", 2))
 
     _resolve(session, Fear(4, "legion", ATTACKER))
@@ -543,7 +543,7 @@ def test_only_fear_is_blunted_by_aseths_legion(attack):
 
 
 def test_the_penalty_follows_the_card_it_is_printed_on():
-    """The reduction is keyed to the card being attacked, not to the seat or the battlefield — an
+    """The reduction is keyed to the card being attacked, not to the seat or the battlefield. An
     ordinary Follower beside the Legion takes a Fear 3 in full."""
     session = _defending_unit(("legion", "aseths_legion", 2))
     attached(
@@ -558,7 +558,8 @@ def test_the_penalty_follows_the_card_it_is_printed_on():
 
 
 def test_aseths_legion_attacks_with_its_own_melee():
-    """Her Battle ability is unaffected by the trait, which speaks only about attacks aimed at her."""
+    """Her Battle ability is unaffected by the trait, which speaks only about attacks aimed at
+    her."""
     session = _defending_unit(("legion", "aseths_legion", 2))
     session.act(DEFENDER, Pass())
     session.act(ATTACKER, Pass())
@@ -600,7 +601,7 @@ def test_a_strong_enough_attack_still_reaches_the_legion_of_the_khan(attack):
 
 def test_strength_reduced_past_zero_reaches_nothing():
     """The zero floor the CR puts on a stat (Calculating Stats) is about stats, and an attack's
-    strength is not one — a Ranged Attack 1 against the Legion of the Khan resolves at -1, which
+    strength is not one. A Ranged Attack 1 against the Legion of the Khan resolves at -1, which
     fails to reach even a Follower with no Force."""
     session = _defending_unit(("khan", "legion_of_the_khan", 0))
     attack = RangedAttack(1, "khan", ATTACKER)
@@ -613,7 +614,7 @@ def test_strength_reduced_past_zero_reaches_nothing():
 
 
 def test_ichigos_guard_covers_the_other_followers_in_its_unit():
-    """ "Targeting cards in this unit" — the card beside the Guard is shielded too, which is what
+    """ "Targeting cards in this unit." The card beside the Guard is shielded too, which is what
     tells this apart from the Legions, who protect only themselves. A 3 lands at 2 on a 3F card."""
     session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
 
@@ -647,7 +648,7 @@ def test_ichigos_guard_does_not_reach_a_card_outside_its_unit():
 
 
 def test_the_legion_of_the_khan_shields_nobody_but_herself():
-    """ "Targeting this Follower", against Ichigo's Guard's "cards in this unit" — a Follower beside
+    """ "Targeting this Follower", against Ichigo's Guard's "cards in this unit." A Follower beside
     her in the same unit takes the attack at printed strength."""
     session = _defending_unit(("khan", "legion_of_the_khan", 3))
     attached(
@@ -672,8 +673,8 @@ def test_an_attack_at_a_target_no_longer_on_the_table_keeps_its_printed_strength
 
 def test_a_cards_reach_is_its_own_business_not_the_walk_s():
     """Every card in play is asked about every attack, so reach lives in the handler rather than in
-    who gets asked. Ichigo's Guard in one unit says nothing about a Follower in another — the same
-    board the walk covers, and the card declines it."""
+    who gets asked. Ichigo's Guard in one unit says nothing about a Follower in another. It is the
+    same board the walk covers, and the card declines it."""
     session = _defending_unit(("ichigo", "ichigos_guard", 3), ("ashigaru", None, 3))
     put_in_play(session.game.table, personality("other", owner=DEFENDER, force=3))
     attached(
@@ -730,7 +731,7 @@ def _jade_legion_attacks(*, defender_keywords=()):
 
 def test_the_jade_legion_straightens_after_destroying_a_shadowlands_card():
     """ "If this destroyed any Shadowlands cards, straighten this Follower." The bow was the cost,
-    so straightening gives the attack back — which is the whole point of the clause."""
+    so straightening gives the attack back: the whole point of the clause."""
     session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
 
     session.act(ATTACKER, ActivateAbility("jade"))
@@ -741,7 +742,7 @@ def test_the_jade_legion_straightens_after_destroying_a_shadowlands_card():
 
 
 def test_the_jade_legion_stays_bowed_after_destroying_anything_else():
-    """A destruction is not enough — the card destroyed has to be Shadowlands."""
+    """A destruction is not enough. The card destroyed has to be Shadowlands."""
     session = _jade_legion_attacks()
 
     session.act(ATTACKER, ActivateAbility("jade"))
@@ -767,7 +768,7 @@ def test_the_jade_legion_stays_bowed_when_its_attack_destroys_nothing():
 
 
 def test_the_jade_legion_ignores_a_shadowlands_death_it_did_not_cause():
-    """ "If **this** destroyed any Shadowlands cards" — the destruction has to be the Legion's own.
+    """ "If **this** destroyed any Shadowlands cards": the destruction has to be the Legion's own.
     ``Destroyed`` names only the seat that caused it, so a Shadowlands card dying to anything else
     while the Legion sits bowed must leave it bowed."""
     session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
@@ -780,7 +781,7 @@ def test_the_jade_legion_ignores_a_shadowlands_death_it_did_not_cause():
 
 
 def test_only_the_jade_legion_that_attacked_straightens():
-    """Two copies share a printed id, so both subscribe to every destruction — the trigger fires
+    """Two copies share a printed id, so both subscribe to every destruction. The trigger fires
     for each. The one that did not take the action has to stay bowed."""
     session = _jade_legion_attacks(defender_keywords=("Shadowlands",))
     attached(

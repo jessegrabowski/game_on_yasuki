@@ -17,7 +17,7 @@ from yasuki_gui.constants import (
 from yasuki_gui.visuals.cardface import RenderCard
 
 # A bowed card is drawn turned a quarter clockwise, so its stamps turn with it: the text is set at
-# 270° counter-clockwise, which is the same quarter the other way.
+# 270 degrees counter-clockwise, which is the same quarter the other way.
 _BOWED_TEXT_ANGLE = 270
 # The tab's outline is drawn centered on its edge, so it reaches this far past it. Counted in the
 # clamp, or a stamp pushed against the card's edge hangs a hairline over whatever is behind it.
@@ -49,7 +49,7 @@ def stamped_stats(card: RenderCard, stats: dict[str, dict[Stat, int]]) -> dict[S
     """The stats to stamp on ``card``, keyed by stat and empty for a card that carries none.
 
     A Personality answers with Force and Chi. A Follower stands in the unit and so carries a Force
-    of its own but no Chi, and every other card carries neither — an Item's contribution is a
+    of its own but no Chi, and every other card carries neither. An Item's contribution is a
     modifier, already folded into the Personality's Force by the time it is read here.
 
     Parameters
@@ -57,7 +57,7 @@ def stamped_stats(card: RenderCard, stats: dict[str, dict[Stat, int]]) -> dict[S
     card : L5RCard or HiddenFace
         The card being drawn. A redacted back carries no print and so no stat.
     stats : dict mapping str to dict
-        ``GameView.stats`` — each modified card's effective stats by id. A card no modifier
+        ``GameView.stats``: each modified card's effective stats by id. A card no modifier
         reaches is absent, and its printed value stands.
     """
     printed = getattr(card, "printed", None)
@@ -87,7 +87,7 @@ def _anchor(
     """Where a printed stat sits on a card drawn at ``bbox``.
 
     The fractions measure an upright card. Bowing turns the card a quarter clockwise, which carries
-    a point at ``(fx, fy)`` to ``(1 - fy, fx)`` — both stats end up down the card's right edge,
+    a point at ``(fx, fy)`` to ``(1 - fy, fx)``, so both stats end up down the card's right edge,
     over the printing they cover.
     """
     x0, y0, x1, y1 = bbox

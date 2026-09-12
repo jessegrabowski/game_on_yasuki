@@ -68,7 +68,7 @@ def _deck_order(session: EngineSession, seat: PlayerId = P1) -> list[str]:
 
 
 def _province_cards(session: EngineSession, seat: PlayerId = P1) -> list[list[str]]:
-    """One entry per Province, holding its face-up card ids — so an empty Province reads as []."""
+    """One entry per Province, holding its face-up card ids, so an empty Province reads as []."""
     provinces = [
         (key.idx, zone)
         for key, zone in session.game.table.zones.items()
@@ -178,7 +178,7 @@ def test_a_face_down_province_is_not_a_candidate_but_is_revealed_by_the_cycle():
 def test_the_reveal_announces_each_card_it_turns(reacting):
     # The reason Cycle is built as a cascade rather than a straight line: every occurrence it
     # performs is announced where it happens, so a card can react to the reveal itself. The
-    # refilled card is the one turned here — the others were already face-up and stay silent.
+    # refilled card is the one turned here. The others were already face-up and stay silent.
     seen = []
     reacting(Revealed, "cycle_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
     session = _session()

@@ -51,7 +51,7 @@ def _declared_attack(game: GameState) -> AttackPhase:
 
 
 def defender_of(game: GameState, attacker: PlayerId) -> PlayerId:
-    """The seat ``attacker`` attacks — the one other seat at the table.
+    """The seat ``attacker`` attacks: the one other seat at the table.
 
     Raise ``ValueError`` at a table not holding exactly two seats: the Defender is a single seat in
     every rule written about a battle.
@@ -71,8 +71,8 @@ def declare_attack(game: GameState, attacker: PlayerId | None = None) -> None:
         The game to declare in.
     attacker : PlayerId, optional
         The seat attacking. Defaults to the active player, which is who the Attack Phase's
-        Declaration Segment offers the choice to; an attack a card creates names its own attacker,
-        and need not be the seat whose turn it is.
+        Declaration Segment offers the choice to. An attack a card creates names its own
+        attacker, and need not be the seat whose turn it is.
     """
     attacker = game.active if attacker is None else attacker
     defender = defender_of(game, attacker)
@@ -93,10 +93,10 @@ def declare_attack(game: GameState, attacker: PlayerId | None = None) -> None:
 def assignable_units(game: GameState, seat: PlayerId) -> list[L5RCard]:
     """The Personalities ``seat`` may assign from home to a battlefield, in play order.
 
-    Both clauses sit on the Personality rather than on the unit he leads: he must be unbowed — *"A
-    unit led by a bowed Personality may not be assigned"* — and at home, since assigning moves a unit
-    out of home rather than between battlefields. A bowed Follower blocks nothing; it only stops
-    contributing Force once a battle resolves.
+    Both clauses sit on the Personality rather than on the unit he leads: he must be unbowed
+    (*"A unit led by a bowed Personality may not be assigned"*) and at home, since assigning moves
+    a unit out of home rather than between battlefields. A bowed Follower blocks nothing, since it
+    only stops contributing Force once a battle resolves.
     """
     return [
         card
@@ -124,7 +124,7 @@ def assignment_candidates(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 def open_maneuvers(game: GameState) -> None:
     """Begin the Maneuvers Segment by asking the Attacker where its units go.
 
-    The Attacker assigns first and the Defender answers next, which is the CR's order; each seat
+    The Attacker assigns first and the Defender answers next, which is the CR's order. Each seat
     assigns simultaneously within its own answer.
     """
     attack = _declared_attack(game)
@@ -162,7 +162,7 @@ def apply_assignment(game: GameState, request: AssignUnits, response: DecisionRe
 def army_force(game: GameState, battlefield: int, seat: PlayerId) -> int:
     """``seat``'s army Force at ``battlefield`` (CR, Army Force).
 
-    The total of every unbowed Personality and Follower in it; an Item modifies its Personality's
+    The total of every unbowed Personality and Follower in it. An Item modifies its Personality's
     Force whether the Item is bowed or not. A side with no units has zero Force, which is what makes
     an empty side comparable rather than absent.
     """
@@ -173,7 +173,7 @@ def army_force(game: GameState, battlefield: int, seat: PlayerId) -> int:
 
 
 def _cards_in(game: GameState, army: list[L5RCard]) -> int:
-    """How many cards ``army`` is made of — each Personality plus everything attached to him. What
+    """How many cards ``army`` is made of: each Personality plus everything attached to him. What
     the honor gain counts, which is cards rather than units."""
     return sum(1 + len(attachments_of(game, personality)) for personality in army)
 
@@ -186,7 +186,7 @@ def _destroy_army(army: list[L5RCard]) -> list[Effect]:
 def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     """What resolving the battle at ``battlefield`` does (CR, Battle Resolution).
 
-    The higher Force wins and destroys the enemy army; an Attacker whose Force also cleared the
+    The higher Force wins and destroys the enemy army. An Attacker whose Force also cleared the
     Province Strength destroys the Province too. A tie with units on both sides destroys both. A tie
     on zero Force where either side is empty has no outcome, which is not the same as a tie that
     destroys nothing. The winner gains twice the cards it destroyed, and on a tie both do.
@@ -223,10 +223,10 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     """Send the survivors home (CR, After Resolution).
 
     Attacking units at this battlefield bow and then return home, both as effects of the
-    resolution and neither as movement; every card in the unit bows, and a Conqueror Personality
+    resolution and neither as movement. Every card in the unit bows, and a Conqueror Personality
     exempts his whole unit from the bow but not from the trip home. Once the Attack Phase's last
-    battle is over, defending units return home without bowing — every one of them, at every
-    battlefield, since until then they hold the ground they defended.
+    battle is over, defending units return home without bowing. Every one of them, at every
+    battlefield, holds the ground they defended until then.
     """
     attack = _declared_attack(game)
     for personality in units_at(game, battlefield, attack.attacker):
@@ -385,7 +385,7 @@ def _outcome(
     Destruction and the Province's fate are read off the board rather than off the effects
     resolution set out to apply, so a card that prevents one leaves an outcome that still matches
     the board. Honor is the difference across resolution, which is exact while nothing can act
-    inside a resolution and will over-report once something can — there is no honor event to
+    inside a resolution and will over-report once something can. There is no honor event to
     attribute a movement to a cause with.
     """
     province = _declared_attack(game).battlefields[battlefield].province

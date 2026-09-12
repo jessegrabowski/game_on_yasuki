@@ -4,7 +4,7 @@ class Allocation:
     The total never changes: every creation is placed, so the only question is where. Choosing a
     card splits the total evenly across everything chosen, and the per-card arrows move one creation
     between neighbors rather than adding or removing any. A chosen card therefore always holds at
-    least one — taking its last away is deselecting it, which the arrows will not do.
+    least one, and taking its last away is deselecting it, which the arrows will not do.
 
     Parameters
     ----------
@@ -46,7 +46,8 @@ class Allocation:
         self._split_evenly()
 
     def may_increase(self, card_id: str) -> bool:
-        """Whether ``card_id`` can take one more — some other chosen card has one to spare."""
+        """Whether ``card_id`` can take one more, true only when some other chosen card has one to
+        spare."""
         return self._donor(card_id) is not None
 
     def may_decrease(self, card_id: str) -> bool:

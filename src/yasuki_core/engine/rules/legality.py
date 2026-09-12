@@ -77,10 +77,10 @@ INHERITANCE_PRODUCTION = 3
 def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
     """The designators ``action`` may be taken under, empty for a pass.
 
-    A pass is the CR's alternative to taking an action rather than an action itself, so it carries
-    no designator and every Action Round accepts it. An ``ActivateAbility`` reads its designators
-    off the card, which is why this is a query rather than a table: the same action is Open on one
-    Holding and Dynasty on another, and a card printing "Battle/Open" carries both.
+    A pass is the CR's alternative to taking an action, not an action itself, so it carries no
+    designator and every Action Round accepts it. An ``ActivateAbility`` reads its designators off
+    the card: the same action is Open on one Holding and Dynasty
+    on another, and a card printing "Battle/Open" carries both.
 
     Raise ValueError for an action with no designator rule, and for an ``ActivateAbility`` naming a
     card that has no activated ability.
@@ -111,7 +111,9 @@ def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming
 
     None at all during a battle for a seat with no unit at the battlefield being fought: a player
     must control one or more units there to take an action at all (CR, Rule of Presence). A seat
-    permitted nothing is skipped rather than asked, which :func:`~yasuki_core.engine.rules.turn.sequence.yield_priority` already does for a round that permits it nothing.
+    permitted nothing is skipped rather than asked, which
+    :func:`~yasuki_core.engine.rules.turn.sequence.yield_priority` already does for a round that
+    permits it nothing.
     """
     if (
         game.round.kind is RoundKind.BATTLE_SEGMENT
@@ -133,8 +135,8 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
     card ability whose own conditions it meets in the current phase. Empty while a decision is
     pending and for any seat but the active one.
 
-    Gold is not a free action: it is produced only while paying a cost (rules-skeleton §7), so it
-    surfaces through the Recruit's ``ChoosePayment``, never here.
+    Gold is not a free action: it is produced only while paying a cost (rules-skeleton section 7),
+    so it surfaces through the Recruit's ``ChoosePayment``, never here.
     """
     if not _may_act(game, seat):
         return []
@@ -156,7 +158,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
 
 
 def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
-    """Whether ``seat`` may take exactly ``action`` right now — what membership in
+    """Whether ``seat`` may take exactly ``action`` right now: what membership in
     :func:`~.legal_actions` answers, scoped to one action.
 
     Raise ValueError for an action carrying no legality rule.
@@ -233,7 +235,7 @@ def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
 
     Both sides of the comparison are read through :func:`~.lobby_amount`, since the datasheet
     adjusts an amount by the Bonuses and Penalties on the player it is about rather than on the
-    player acting. Family Honor is what this Lobby checks; a Wind's own Lobby checks something else
+    player acting. Family Honor is what this Lobby checks. A Wind's own Lobby checks something else
     and reads it the same way.
     """
     if not permits(game, seat, ruleset.ACTIVE.lobby_timing):
@@ -271,9 +273,9 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
     Good Faith: the whole cost has to be payable, which is the Favor and whatever else that arc's
     ability charges. Holding the Favor is not the test, since a seat may pay with an alternate.
 
-    A Wind bars them outright — "While you have a Wind in play, you may not take rulebook Favor
-    actions, an effect which cannot be overcome by card effects" (ShE datasheet, Winds) — so no card
-    registry answers to it the way :func:`lobby.may_lobby` lets cards speak to Lobbying.
+    A Wind bars them outright: "While you have a Wind in play, you may not take rulebook Favor
+    actions, an effect which cannot be overcome by card effects" (ShE datasheet, Winds), so no
+    card registry answers to it the way :func:`lobby.may_lobby` lets cards speak to Lobbying.
     """
     if has_wind(game, seat):
         return []
@@ -291,8 +293,8 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
 
 
 def _kharmic(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """A Kharmic action for each card the seat could spend — from hand to draw, or from a Province
-    to refill it face-up — when the round permits Open actions and the seat can reach the cost. Both
+    """A Kharmic action for each card the seat could spend (from hand to draw, or from a Province
+    to refill it face-up) when the round permits Open actions and the seat can reach the cost. Both
     are Repeatable, so neither claims a once-per-turn key. ``only`` narrows to a single card."""
     if reachable_gold(game, seat) < KHARMIC_COST:
         return []
@@ -333,8 +335,8 @@ def kharmic_in_provinces(game: GameState, seat: PlayerId) -> list[L5RCard]:
 
 def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
     """The Legacy ability when the seat can take it: once per turn, and only with a card in hand to
-    pay the banish cost. Offered even when no Legacy card can be found — the rules make the whiff a
-    loss rather than hiding the option (which would leak face-down province contents)."""
+    pay the banish cost. Offered even when no Legacy card can be found. The rules make the whiff a
+    loss instead of hiding the option, which would leak face-down province contents."""
     if not permits(game, seat, ACTION_TIMINGS[Legacy]):
         return []
     if game.has_used(legacy_key(seat, game.turn)):
@@ -379,7 +381,7 @@ def _declare_attack(game: GameState, seat: PlayerId) -> list[Action]:
 
 
 def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """A DynastyDiscard for each face-up card in the seat's provinces — the rule allows discarding
+    """A DynastyDiscard for each face-up card in the seat's provinces. The rule allows discarding
     any face-up province card, not only Holdings. ``only`` narrows to a single card."""
     if not permits(game, seat, ACTION_TIMINGS[DynastyDiscard]):
         return []
@@ -393,10 +395,10 @@ def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = Non
 def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
     """The Recruit actions ``seat`` can afford: each face-up Holding or Personality in its provinces
     whose cost its pool plus its unbowed producers' gold could cover. A Personality is withheld
-    while its Honor Requirement is above the seat's Family Honor (a dash ``None`` never withholds;
-    the check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim
-    variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an
-    Invest variant when the seat could also cover the card's Invest cost. ``only`` narrows to a
+    while its Honor Requirement is above the seat's Family Honor (a dash ``None`` never withholds,
+    and the check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim
+    variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest
+    variant when the seat could also cover the card's Invest cost. ``only`` narrows to a
     single card."""
     if not permits(game, seat, ACTION_TIMINGS[Recruit]):
         return []
@@ -435,7 +437,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
     """The Equip actions ``seat`` can take: each attachment in hand it can afford that some
     Personality it controls would accept.
 
-    An attachment enters play only by attaching, so hand is a hard filter; the Personality is chosen
+    An attachment enters play only by attaching, so hand is a hard filter. The Personality is chosen
     through the decision the action raises, and the action is withheld unless at least one would
     take the card. ``only`` narrows to a single card."""
     if not permits(game, seat, ACTION_TIMINGS[Equip]):
@@ -465,9 +467,8 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     """The Strategies ``seat`` can play: each one in hand whose designator this round permits, whose
     Gold Cost it can reach, and which has a legal target.
 
-    The card's own ability decides when it may be played, so this asks
-    :func:`~yasuki_core.engine.rules.activatable` for the hand rather than reading a fixed
-    timing off the action. ``only`` narrows to a single card.
+    Asks :func:`~yasuki_core.engine.rules.activatable` for the hand, since the card's own
+    ability decides when it may be played. ``only`` narrows to a single card.
     """
     playable = activatable(game, seat, permitted_timings(game, seat), at=(CardLocation.HAND,))
     return [
@@ -523,7 +524,7 @@ def is_first_turn(game: GameState, seat: PlayerId) -> bool:
 
 
 def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The cards ``seat`` may put on the bottom of its deck with Cycle — the face-up ones in its
+    """The cards ``seat`` may put on the bottom of its deck with Cycle: the face-up ones in its
     Provinces. A face-down card is not eligible, so a Province nobody has revealed stays where it
     is."""
     return [card for card in province_cards(game, seat) if card.face_up]
@@ -543,16 +544,16 @@ def is_legacy_card(game: GameState, card: L5RCard) -> bool:
 
 
 def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """Every card ``seat``'s Legacy search looks through: its whole dynasty deck plus the face-down
-    (unrevealed) cards in its provinces. Face-up province cards are already recruitable and are not
-    searched. This is the pool a search dialog shows."""
+    """Every card ``seat``'s Legacy search looks through: its whole dynasty deck plus the
+    face-down (unrevealed) cards in its provinces, the pool a search dialog shows. Face-up
+    province cards are already recruitable and are not searched."""
     pool = list(game.table.decks[DeckKey(seat, Side.DYNASTY)].cards)
     pool.extend(card for card in province_cards(game, seat) if not card.face_up)
     return pool
 
 
 def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
+    """The Legacy cards ``seat`` could find right now: the Legacy cards within its search pool.
     Empty means a Legacy search would whiff and lose the game."""
     return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
 
@@ -615,7 +616,7 @@ def activatable(
             if not _bow_permits(card, ability):
                 continue
             # The Rule of Presence is about the player, not the card, so it gates an action taken
-            # from anywhere — a Strategy out of hand as much as a Personality on the board.
+            # from anywhere, a Strategy out of hand as much as a Personality on the board.
             if not present and BattleDesignator.ABSENT not in ability.battle_designators:
                 continue
             if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
@@ -640,7 +641,7 @@ def activatable(
 
 def _bow_permits(card: L5RCard, ability: Ability) -> bool:
     """Whether ``card``'s bowed state leaves ``ability`` usable: abilities on a bowed card cannot be
-    used, and Tireless is the keyword that escapes it (CR, Using Abilities; Tireless)."""
+    used, and Tireless is the keyword that escapes it (CR, Using Abilities, Tireless)."""
     return ability.tireless or not card.bowed
 
 
@@ -648,7 +649,7 @@ def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:
     """Whether one of ``ability``'s designators excuses ``card`` from the Rules of Location (ShE
     datasheet).
 
-    Remote reaches from home or from another battlefield; Home reaches from home alone, so a card
+    Remote reaches from home or from another battlefield. Home reaches from home alone, so a card
     standing at a battlefield that is not the current one is beyond it. Neither lifts the Rule of
     Presence.
     """
@@ -673,10 +674,9 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
 def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]:
     """The ids ``ability`` may target from ``card`` right now.
 
-    Filtered centrally rather than by each card's own ``targets``: during a battle, a card in a unit
-    may only be targeted at the battlefield the battle is at (CR, Rules of Location), and a handler
-    that forgot to say so would be a silent rules bug on every card that forgot. A card printing "at
-    any location" says so on its ``Ability`` instead, where the filter can see it.
+    Filtered centrally: during a battle, a card in a unit may only be targeted at the
+    battlefield the battle is at (CR, Rules of Location), unless the ``Ability`` sets
+    ``targets_any_location``.
     """
     offered = ability.targets(game, card)
     attack = game.attack
@@ -704,8 +704,8 @@ def has_presence(game: GameState, seat: PlayerId) -> bool:
 def location_permits(game: GameState, card: L5RCard) -> bool:
     """Whether the Rules of Location leave ``card`` free to be acted from and targeted.
 
-    A card in a unit must stand at the battle now being fought. A card in no unit — a Holding, a
-    Region, a Stronghold — stands nowhere those rules speak of, so they never exclude it, and
+    A card in a unit must stand at the battle now being fought. A card in no unit (a Holding, a
+    Region, a Stronghold) stands nowhere those rules speak of, so they never exclude it, and
     neither rule applies outside a battle at all. A card in a unit stands where its Personality
     stands, so its own recorded location answers for it.
     """

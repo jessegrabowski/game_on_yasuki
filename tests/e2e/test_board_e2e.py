@@ -3,7 +3,7 @@
 # rewrite must preserve: the local player always at the bottom with the opponent mirrored, and
 # hidden information never reaching the wrong client. The tests seed a public, owner-less token to
 # carry those invariants, but a token id only resolves once the table's creatable tokens are loaded,
-# which happens via deck-load — so they deal a real two-seat deck and need the cards database.
+# which happens via deck-load, so they deal a real two-seat deck and need the cards database.
 
 import pytest
 
@@ -145,9 +145,10 @@ def _board_card_ids(page):
 
 def _spawn_card(page, room_id, position=(0.5, 0.5)):
     # Spawn a real card by database id onto an otherwise empty board (no deck): SPAWN_CARD's
-    # `print_card_id` source is the only DB-backed path the socket exposes — the server resolves the
-    # card and mints its spawn id. Return that id, so a test can spawn the same card several times and
-    # address each without a name lookup. CREATOR_CARD_ID is the gate card, so it is always present.
+    # `print_card_id` source is the only DB-backed path the socket exposes, and the server resolves
+    # the card and mints its spawn id. Return that id, so a test can spawn the same card several
+    # times and address each without a name lookup. CREATOR_CARD_ID is the gate card, so it is
+    # always present.
     before = set(_board_card_ids(page))
     send_intent(
         page,
@@ -161,16 +162,17 @@ def _spawn_card(page, room_id, position=(0.5, 0.5)):
 
 
 def test_each_player_sees_own_cards_low_and_the_opponent_mirrored(new_player):
-    # Deliberately different window sizes, so the assertions can only pass if positions are stored in
-    # a size-independent canonical frame and flipped per viewer.
+    # Deliberately different window sizes, so the assertions can only pass if positions are stored
+    # in a size-independent canonical frame and flipped per viewer.
     p1, p2, room_id = _deal_two_players(
         new_player, {"width": 1400, "height": 900}, {"width": 1000, "height": 1280}
     )
     card_id = _spawn_token(p1, room_id)
     _wait_for_token(p2, card_id)
 
-    # P1 drags the card into its own lower half, kept clear of the province row that lines the bottom
-    # edge of the dealt table (a drop onto a province is a zone move the server rejects, not a slide).
+    # P1 drags the card into its own lower half, kept clear of the province row that lines the
+    # bottom edge of the dealt table (a drop onto a province is a zone move the server rejects, not
+    # a slide).
     p2_seed = _fraction(p2, card_id)
     _drag_to_fraction(p1, card_id, 0.4, 0.72)
     _wait_until_moved(p2, card_id, p2_seed["fy"])
@@ -186,7 +188,7 @@ def test_each_player_sees_own_cards_low_and_the_opponent_mirrored(new_player):
     send_intent(p1, room_id, {"op": "GIVE_CONTROL", "card_id": card_id})
     _wait_for_card(p2, card_id, "el.dataset.owner === 'P2'")
 
-    # P2 drags it to ITS own lower half — exercises P2's view→canonical send transform.
+    # P2 drags it to ITS own lower half, exercising P2's view->canonical send transform.
     p1_seed = _fraction(p1, card_id)
     _drag_to_fraction(p2, card_id, 0.3, 0.72)
     _wait_until_moved(p1, card_id, p1_seed["fy"])
@@ -235,8 +237,8 @@ def test_a_flag_change_propagates_to_the_opponents_view(new_player):
     assert _card(p2, card_id)["bowed"] == "1"
 
 
-# One stack-offset (ATTACH_STACK_OFFSET in board.js): the pixels a province-attached card fans inboard
-# of its slot.
+# One stack-offset (ATTACH_STACK_OFFSET in board.js): the pixels a province-attached card fans
+# inboard of its slot.
 _ATTACH_OFFSET = 24
 
 _PROVINCE_ANCHOR_JS = """(cardId) => {
@@ -251,12 +253,13 @@ _PROVINCE_ANCHOR_JS = """(cardId) => {
 
 
 def test_a_card_attached_to_a_province_anchors_on_its_slot(new_player):
-    # Province attachment must actually reposition the card onto its province slot — behind it, fanned
-    # inboard so its title reads — not merely record the relationship.
+    # Province attachment must actually reposition the card onto its province slot, behind it and
+    # fanned inboard so its title reads, not merely record the relationship.
     p1, _p2, room_id = _open_two_players(new_player)
     send_intent(p1, room_id, {"op": "CREATE_PROVINCE"})
     p1.wait_for_selector('#selfTableau .province[data-idx="0"]')
-    # Spawn well away from the province so a successful anchor can only be the attach repositioning it.
+    # Spawn well away from the province so a successful anchor can only be the attach repositioning
+    # it.
     card_id = _spawn_card(p1, room_id, position=(0.3, 0.3))
 
     send_intent(
@@ -284,8 +287,8 @@ def test_a_card_attached_to_a_province_anchors_on_its_slot(new_player):
     )
 
     r = p1.evaluate(_PROVINCE_ANCHOR_JS, card_id)
-    # Same column as the slot, one stack-offset above it (a bottom-lining own province fans up), so the
-    # card draws behind the province with its title clear.
+    # Same column as the slot, one stack-offset above it (a bottom-lining own province fans up), so
+    # the card draws behind the province with its title clear.
     assert abs(r["cardLeft"] - r["slotLeft"]) < 3
     assert abs(r["cardTop"] - (r["slotTop"] - _ATTACH_OFFSET)) < 3
     assert p1.get_attribute(f'.board-card[data-card-id="{card_id}"]', "data-attached") == "1"

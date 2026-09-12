@@ -76,13 +76,13 @@ FIELD_ALIASES = {
 # `is:` values that toggle a boolean card column rather than match a keyword/trait.
 IS_BOOLEAN_FIELDS = {"unique": "is_unique", "banned": "is_banned"}
 
-# `is:` values that test whether a nullable column is populated — `is:flip` (has a back face),
+# `is:` values that test whether a nullable column is populated: `is:flip` (has a back face),
 # `is:errata` (has errata text). Maps the value to the filter key the database resolves.
 IS_PRESENCE_FIELDS = {"flip": "is_flip", "errata": "has_errata"}
 
 
-# Non-deck cards (proxies, tokens, bio cards, …) are hidden by default. `include:tokens` brings the
-# token/non-deck cards back; `include:all` shows everything.
+# Non-deck cards (proxies, tokens, bio cards, ...) are hidden by default. `include:tokens` brings
+# the token/non-deck cards back; `include:all` shows everything.
 INCLUDE_CATEGORIES = {"tokens", "all"}
 
 
@@ -254,9 +254,10 @@ def parse_search_query(query: str) -> ParsedQuery:
     """
     Parse a search query string into a flat, deduplicated list of terms.
 
-    Bare boolean keywords (AND/OR/NOT) are stripped; combining logic lives downstream, where
-    ``build_filter_options`` ORs same-field values and ANDs everything else. (The deck-builder search
-    box parses through ``boolean_query`` instead, which honors real cross-field OR and grouping.)
+    Bare boolean keywords (AND/OR/NOT) are stripped. Combining logic lives downstream, where
+    ``build_filter_options`` ORs same-field values and ANDs everything else. (The deck-builder
+    search box parses through ``boolean_query`` instead, which honors real cross-field OR and
+    grouping.)
 
     Parameters
     ----------
@@ -339,13 +340,13 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                 else:
                     text_query_parts.append(term.value)
         elif field == "name":
-            # name:/title: — match the card name only.
+            # name:/title: match the card name only.
             _scope_text_field(terms_list, "name", filter_options)
         elif field == "text":
-            # text:/o:/oracle: — match the rules text only.
+            # text:/o:/oracle: match the rules text only.
             _scope_text_field(terms_list, "rules_text", filter_options)
         elif field == "all":
-            # The canonical "match every card" predicate — adds no constraints.
+            # The canonical "match every card" predicate. It adds no constraints.
             filter_options["all"] = True
         elif field == "is":
             # Special "is:" filters
@@ -375,7 +376,7 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                     # Boolean card flags (is:unique, is:banned) rather than keyword traits.
                     filter_options[IS_BOOLEAN_FIELDS[keyword_value]] = not term.negated
                 elif keyword_value in IS_PRESENCE_FIELDS:
-                    # Presence flags (is:flip, is:errata) — a nullable column being populated.
+                    # Presence flags (is:flip, is:errata) test a nullable column being populated.
                     filter_options[IS_PRESENCE_FIELDS[keyword_value]] = not term.negated
                 else:
                     # Single keyword (implicit AND when multiple is: terms)
@@ -411,9 +412,10 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                 filter_options[f"{field}_excludes"] = excluded
         elif field == "set":
             # Set by full name or short code, resolved in the database. Like format, emit each
-            # (operator, value); the operator may be exact or an inequality against set release dates.
-            # A negated term forbids membership via the *_excludes twin (strict set complement, so
-            # -set>=GE means "printed in no set at or after GE", not "printed in some set before GE").
+            # (operator, value); the operator may be exact or an inequality against set release
+            # dates. A negated term forbids membership via the *_excludes twin (strict set
+            # complement, so -set>=GE means "printed in no set at or after GE", not "printed in
+            # some set before GE").
             specs = [
                 (term.operator, term.value.strip('"').strip())
                 for term in terms_list
@@ -461,7 +463,7 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                 filter_options["year_filters"] = specs
         elif field in NUMERIC_FIELDS:
             # Numeric comparison filters tracked as a (min, max) pair. A bare "-" matches the dash
-            # stat — one the card simply doesn't print, stored as NULL — and negation flips it to
+            # stat, one the card simply doesn't print, stored as NULL. Negation flips it to
             # "has any value".
             field_min = None
             field_max = None

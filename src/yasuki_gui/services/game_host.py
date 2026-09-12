@@ -57,8 +57,8 @@ class GameHost:
         opponent_deck : pathlib.Path
             The decklist dealt to the AI opponent.
         rng : numpy.random.Generator, optional
-            Deals every game this host starts. Default None, which deals from system entropy —
-            what a game wants, where a repeated opening is a defect.
+            Deals every game this host starts. Default None, which deals from system entropy,
+            since a repeated opening is a defect.
         human_seat : PlayerId, optional
             The seat the human plays. Default P1.
         """
@@ -106,8 +106,8 @@ class GameHost:
         """Deal the chosen decks, or the DB-free placeholder ones when the database is unreachable
         or a decklist cannot be read, so the client still opens.
 
-        Narrow on purpose: anything else is a defect rather than a degraded environment, and a
-        client that silently opened on placeholder cards would hide it.
+        Falls back only on ``OSError`` or ``psycopg.OperationalError``. Any other exception
+        propagates.
         """
         try:
             return self._deal(self._decks)

@@ -157,7 +157,7 @@ def test_each_intent_survives_a_json_round_trip(intent):
 
 def test_decoding_an_unknown_counter_is_rejected():
     # The counter vocabulary is closed, so a malformed envelope naming an unregistered counter
-    # raises rather than minting a novel counter — the caller treats the raise as a rejected intent.
+    # raises rather than minting a novel counter. The caller treats the raise as a rejected intent.
     with pytest.raises(KeyError):
         decode_intent({"op": "ADJUST_COUNTER", "card_id": "c1", "name": "bogus", "delta": 1})
 
@@ -250,7 +250,8 @@ def test_location_round_trips(location):
 
 
 def test_an_encoded_location_is_json_ready():
-    """The enum member has to travel as its name; a raw PlayerId would not survive ``json.dumps``."""
+    """The enum member has to travel as its name. A raw PlayerId would not survive
+    ``json.dumps``."""
     payload = encode_location(Location.home(PlayerId.P2))
 
     assert json.loads(json.dumps(payload)) == payload
@@ -262,16 +263,15 @@ def test_seat_round_trips():
     assert decode_seat(encode_seat(info)) == info
 
 
-# --- the persisted card format ---------------------------------------------------------------------
+# --- the persisted card format ---------------------------------------------------------------
 
 
 def test_persisted_fields_match_the_classes():
-    """The pinned lists are the format; the dataclasses happen to agree today. Adding a field to a
-    print or to the card fails here until someone decides whether it belongs on disk, which is the
-    whole reason the lists exist rather than being derived.
+    """The pinned lists are the format. The dataclasses happen to agree today. Adding a field to a
+    print or to the card fails here until someone decides whether it belongs on disk.
 
     A payload is flat, so each list covers both halves at once. ``printed`` is the reference that
-    joins them and is the one card field with nothing to persist — the tag records which print it
+    joins them and is the one card field with nothing to persist. The tag records which print it
     pointed at."""
     instance = {f.name for f in fields(L5RCard)} - {"printed"}
     mismatched = {
@@ -325,8 +325,8 @@ def _golden_cards() -> dict[str, L5RCard]:
     Path, None, and a nested print. Two rather than fifteen because the classes differ only in extra
     scalars, and the value encoding they share is what a golden payload is for.
 
-    Every image path is set explicitly, including the ones a print's type defaults, so the checked-in
-    bytes do not depend on what those defaults happen to be.
+    Every image path is set explicitly, including the ones a print's type defaults, so the
+    checked-in bytes do not depend on what those defaults happen to be.
     """
     holding = L5RCard.of(
         HoldingPrint,
@@ -397,7 +397,7 @@ def test_the_checked_in_payloads_decode_to_the_cards_they_came_from():
 
 def test_a_cards_art_swap_survives_the_round_trip():
     """A card borrowing another printing's art carries the payload ``factory._art_swap`` builds,
-    whose keywords are a list — the one place a card field holds one."""
+    whose keywords are a list, the one place a card field holds one."""
     swapped = L5RCard.of(
         HoldingPrint,
         id="h",
@@ -442,8 +442,8 @@ def test_a_list_stays_a_list_and_a_tuple_stays_a_tuple():
 def test_the_pinned_list_is_the_format_not_the_dataclass():
     """The two agree today and `test_persisted_fields_match_the_classes` keeps them that way, so
     nothing else can tell which one `encode_card` reads. This forces the list out of step for one
-    call to prove the format follows it — that is the property the whole pin exists for, and the
-    one that matters on the day a field moves off the card."""
+    call to prove the format follows it: the property the whole pin exists for, and the one that
+    matters on the day a field moves off the card."""
     original = _PERSISTED_FIELDS["HoldingPrint"]
     holding = L5RCard.of(
         HoldingPrint, id="h", name="Farm", side=Side.DYNASTY, gold_production=2, owner=PlayerId.P1
@@ -474,7 +474,7 @@ def test_re_encoding_a_decoded_payload_reproduces_it():
 
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
 def test_a_card_the_factory_built_encodes():
-    """The hand-built art-swap case above pins a shape this test proves is the real one — the codec
+    """The hand-built art-swap case above pins a shape this test proves is the real one. The codec
     could not encode a factory-built card at all until the list branch landed, and no test held the
     two together because none of them ever encoded a card the factory made."""
     yaml = "name: T\nDynasty:\n  - Kuni Yori [Pearl Edition] {art: Ambush [Lotus Edition]}"

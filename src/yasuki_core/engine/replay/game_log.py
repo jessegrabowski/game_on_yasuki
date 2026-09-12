@@ -31,7 +31,7 @@ from yasuki_core.engine.rules.turn import action_sequence, sequence
 
 @dataclass(frozen=True, slots=True)
 class Act:
-    """Tape entry: the active player took an action — a pass or a card action.
+    """Tape entry: the active player took an action (a pass or a card action).
 
     Attributes
     ----------
@@ -82,7 +82,7 @@ GameInput = Act | Answer | Cancel
 class GameLog:
     """An append-only record of a rules-driven game: a start snapshot at the head, then the ordered
     tape of engine inputs. Replay re-runs the engine from the snapshot, feeding each logged input in
-    turn — the save format, the replay format, and the netcode are one tape.
+    turn. The save format, the replay format, and the netcode are one tape.
 
     Attributes
     ----------
@@ -137,8 +137,8 @@ def submit_and_log(game: GameState, log: GameLog, response: DecisionResponse) ->
 
 def cancel_and_log(game: GameState, log: GameLog) -> None:
     """Cancel the pending decision and, on success, record it. A decision that cannot be cancelled
-    raises out of ``action_sequence.cancel`` before anything is recorded, so the tape holds only accepted
-    inputs.
+    raises out of ``action_sequence.cancel`` before anything is recorded, so the tape holds only
+    accepted inputs.
 
     Raise ``RuntimeError`` if no decision is pending.
     """
@@ -152,7 +152,7 @@ def cancel_and_log(game: GameState, log: GameLog) -> None:
 def replay(log: GameLog) -> GameState:
     """Deterministically rebuild the final game state by re-running the engine from the start
     snapshot and feeding each logged input in order. Raise ``ValueError`` if an entry does not match
-    the engine's expectation at that point — a desynced or corrupted tape."""
+    the engine's expectation at that point (a desynced or corrupted tape)."""
     game = build_game(log)
     for entry in log.entries:
         _apply(game, entry)
@@ -181,7 +181,7 @@ def _apply(game: GameState, entry: GameInput) -> None:
 
 
 def game_log_to_dict(log: GameLog) -> dict:
-    """Serialize a whole ``GameLog`` — snapshot and tape — to JSON-ready plain data."""
+    """Serialize a whole ``GameLog`` (snapshot and tape) to JSON-ready plain data."""
     return {
         "initial": encode_initial(log.initial),
         "first_player": log.first_player.name,

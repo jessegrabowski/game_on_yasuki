@@ -62,7 +62,7 @@ def apply_sslmode(dsn: str) -> str:
     """Append an ``sslmode`` to a DSN aimed at a public host, leaving private/loopback hosts alone.
 
     Verify the server certificate and hostname (``sslmode=verify-full``) with the CA bundle when
-    ``YASUKI_DB_SSL_ROOT_CERT`` points at one; otherwise require encryption without authentication
+    ``YASUKI_DB_SSL_ROOT_CERT`` points at one. Otherwise require encryption without authentication
     (``sslmode=require``). A DSN that already sets ``sslmode``, or that targets a private/loopback
     host, is returned unchanged.
 
@@ -108,7 +108,7 @@ def init_pool(min_size: int = 2, max_size: int = 20) -> None:
     """
     Initialize the module-level connection pool.
 
-    Safe to call multiple times; subsequent calls are no-ops if the pool
+    Safe to call multiple times, since subsequent calls are no-ops if the pool
     is already open.
 
     Parameters
@@ -198,9 +198,9 @@ def _card_select(active_format: str | None = None) -> tuple[str, list]:
     """
     Build the shared card SELECT and its leading parameters.
 
-    The default print — the one supplying ``image_path`` / ``default_print_id`` — is the card's
+    The default print (the one supplying ``image_path`` / ``default_print_id``) is the card's
     representative printing. With an active arc/format filter, it is the earliest printing from that
-    format's arc; for a card carried into the format by rotation with no printing in that arc, it is
+    format's arc. For a card carried into the format by rotation with no printing in that arc, it is
     the most recent printing whose own arc was already legal as of the format. Without a filter, or
     for a format with no era (Legacy/Modern), it is the earliest printing by release date.
     ``print_id`` is the final stable tiebreaker.
@@ -418,9 +418,10 @@ def get_card_revisions(card_id: str) -> list[dict]:
     """
     Fetch a card's rules-text revision history, oldest first.
 
-    Only errata'd cards have rows; an unerrata'd card returns an empty list. Revision 0 is the
-    original printing text and the highest index is the current version (also mirrored onto the cards
-    row). This backs the card page's errata badge and "what did it used to say" history.
+    Only errata'd cards have rows. An unerrata'd card returns an empty list. Revision 0 is
+    the original printing text and the highest index is the current version (also mirrored
+    onto the cards row). This backs the card page's errata badge and "what did it used to say"
+    history.
 
     Parameters
     ----------
@@ -430,8 +431,8 @@ def get_card_revisions(card_id: str) -> list[dict]:
     Returns
     -------
     revisions : list of dict
-        Revisions ordered by revision_index, each with its effective_date, source, rules_text, stats,
-        image_path, and notes.
+        Revisions ordered by revision_index, each with its effective_date, source, rules_text,
+        stats, image_path, and notes.
     """
     with get_db_connection() as conn:
         with conn.cursor() as cur:
@@ -515,7 +516,7 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
 
 
 def all_card_ids() -> set[str]:
-    """Every card id in the card database — the valid-id universe for deck-storage integrity checks.
+    """Every card id in the card database: the valid-id universe for deck-storage integrity checks.
 
     Returns
     -------
@@ -574,11 +575,11 @@ def get_creates_for_cards(
 ) -> tuple[dict[str, list[str]], dict[str, dict]]:
     """Resolve the tokens the given creator cards can create, plus each token's full record.
 
-    Reads the ``card_creates`` relation for every id in ``card_ids`` and fetches each distinct token
-    card with the same shape ``get_card_by_id`` returns, so the card factory can build a live token
-    from it. Used once at deck load to populate ``TableState.creatable_tokens``. ``card_creates`` holds
-    only spawnable cards — counter/marker provenance lives in ``card_grants_counter`` — so no marker
-    filtering is needed here.
+    Reads the ``card_creates`` relation for every id in ``card_ids`` and fetches each distinct
+    token card with the same shape ``get_card_by_id`` returns, so the card factory can build a
+    live token from it. Used once at deck load to populate ``TableState.creatable_tokens``.
+    ``card_creates`` holds only spawnable cards. Counter/marker provenance lives in
+    ``card_grants_counter``, so no marker filtering is needed here.
 
     Parameters
     ----------
@@ -598,7 +599,7 @@ def get_creates_for_cards(
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             # Only the given (deck) card ids are queried, so a token that itself creates a token is
-            # resolved one level deep — no such data exists today.
+            # resolved one level deep. No such data exists today.
             cur.execute(
                 "SELECT creator_card_id, created_card_id FROM card_creates "
                 "WHERE creator_card_id = ANY(%s)",
@@ -635,7 +636,8 @@ def query_all_formats() -> list[str]:
 
 
 def query_formats_ordered() -> list[dict]:
-    """Fetch formats with their chronological ``legal_from``, arcs oldest-first then non-arc formats.
+    """Fetch formats with their chronological ``legal_from``, arcs oldest-first then non-arc
+    formats.
 
     Returns
     -------
@@ -1016,8 +1018,8 @@ def query_sets_by_format(format_name: str) -> list[str]:
     """
     Fetch the set names that belong to a format's arc/era.
 
-    Arc-specific formats (e.g. "Clan Wars (Imperial)") return only sets from that arc; cross-era
-    formats (Modern, Legacy) return every set holding a card legal in the format.
+    Arc-specific formats (e.g. "Clan Wars (Imperial)") return only sets from that arc, while
+    cross-era formats (Modern, Legacy) return every set holding a card legal in the format.
 
     Parameters
     ----------
@@ -1119,9 +1121,9 @@ _NAME_TIEBREAK = f"{_NAME_SORT} ASC, c.experience ASC, c.extended_title ASC"
 def _order_by_clause(sort: str, order: str) -> str:
     """Build a safe ``ORDER BY`` clause from a whitelisted sort key and direction.
 
-    Numeric stats sort NULLs last (cards without the stat fall to the end in both directions); every
-    sort then tiebreaks by base name, experience level, and extended_title for a stable, intuitive
-    order. An unknown key falls back to name.
+    Numeric stats sort NULLs last (cards without the stat fall to the end in both directions).
+    Every sort then tiebreaks by base name, experience level, and extended_title for a stable,
+    intuitive order. An unknown key falls back to name.
     """
     column = _SORT_COLUMNS.get(sort, "c.name")
     direction = "DESC" if str(order).lower() == "desc" else "ASC"
@@ -1156,7 +1158,7 @@ def query_cards_page(
     offset : int
         Number of rows to skip (default 0)
     sort : str
-        Column to order by; one of name, force, chi, gold_cost, focus, personal_honor,
+        Column to order by, one of name, force, chi, gold_cost, focus, personal_honor,
         honor_requirement, or province_strength. An unknown value falls back to name.
         Default 'name'.
     order : str
@@ -1257,8 +1259,8 @@ def query_random_cards(
 
     # Draw the random ids from the bare cards table, then build the full record (lateral image join
     # and per-card aggregate subqueries) for only those rows. Sorting the whole select by RANDOM()
-    # computes every card's aggregates before discarding all but ``count`` of them — a full-table
-    # scan that times out at scale.
+    # computes every card's aggregates before discarding all but ``count`` of them. A full-table
+    # scan times out at scale.
     select_sql, select_params = _card_select()
     picked = f"SELECT c.card_id FROM cards c {where_clause} ORDER BY RANDOM() LIMIT %s"
     sql = f"{select_sql} WHERE c.card_id IN ({picked}) ORDER BY RANDOM()"

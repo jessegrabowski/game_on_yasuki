@@ -25,9 +25,9 @@ class ReadyRequest(BaseModel):
 
 
 class LoadDeckRequest(BaseModel):
-    # The deck-builder export YAML, parsed server-side into dynasty/fate/pre-game name lists. The cap
-    # is well above a full decklist (~3-4 KiB) but still bounded; the WS read loop allows a larger
-    # frame for this message than for realtime intents (see MAX_WS_MESSAGE_SIZE).
+    # The deck-builder export YAML, parsed server-side into dynasty/fate/pre-game name lists. The
+    # cap is well above a full decklist (~3-4 KiB) but still bounded; the WS read loop allows a
+    # larger frame for this message than for realtime intents (see MAX_WS_MESSAGE_SIZE).
     yaml: str = Field(min_length=1, max_length=16384)
     # Source filename the client loaded from, a fallback deck label when the YAML carries no name.
     filename: str | None = Field(None, max_length=200)
@@ -42,9 +42,9 @@ class CardMove(BaseModel):
 
 class IntentEnvelope(BaseModel):
     """A game intent on the wire: an op plus whichever targets that op needs. The same shape the
-    intent log persists (see ``encode_intent``); the server maps it to a core ``Intent`` and applies
-    it authoritatively. Nested key targets (``to``/``deck``/``zone``) are validated structurally when
-    decoded; a malformed one is rejected as a bad intent, not a protocol error.
+    intent log persists (see ``encode_intent``). The server maps it to a core ``Intent`` and
+    applies it authoritatively. Nested key targets (``to``/``deck``/``zone``) are validated
+    structurally when decoded. A malformed one is rejected as a bad intent, not a protocol error.
     """
 
     op: IntentOp
@@ -76,7 +76,7 @@ class IntentEnvelope(BaseModel):
 
 def intent_from_envelope(envelope: IntentEnvelope, rng: Generator) -> Intent:
     """Build a core ``Intent`` from a validated envelope. Raises on a structurally malformed target
-    (``KeyError``/``TypeError``) or an invalid combination (``ValueError``); the caller treats a
+    (``KeyError``/``TypeError``) or an invalid combination (``ValueError``). The caller treats a
     raised error as a rejected intent.
 
     Parameters
@@ -175,10 +175,10 @@ class ServerLog(BaseModel):
 class ServerDeckContents(BaseModel):
     """A deck's full ordered contents, delivered to its owner alone in response to a SEARCH_DECK.
 
-    The normal SNAPSHOT redacts deck order, so this is the one message that reveals a deck's cards —
-    and only ever to the player who owns it. ``cards`` is top-of-deck first: index 0 is the card that
-    would be drawn next. ``deck`` carries the owning seat and side (e.g. ``{"owner": "P1", "side":
-    "FATE"}``) so the client can label the dialog and route a pulled card.
+    The normal SNAPSHOT redacts deck order, so this is the one message that reveals a deck's cards,
+    and only ever to the player who owns it. ``cards`` is top-of-deck first: index 0 is the card
+    that would be drawn next. ``deck`` carries the owning seat and side (e.g. ``{"owner": "P1",
+    "side": "FATE"}``) so the client can label the dialog and route a pulled card.
     """
 
     type: Literal["DECK_CONTENTS"] = "DECK_CONTENTS"

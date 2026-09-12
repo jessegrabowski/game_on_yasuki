@@ -14,7 +14,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 def _incapacitated_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The Defender's Personalities standing at the battle being fought — the defending army, which
+    """The Defender's Personalities standing at the battle being fought: the defending army, which
     a Personality kept at home is no part of."""
     attack = game.attack
     if attack is None or attack.current is None:

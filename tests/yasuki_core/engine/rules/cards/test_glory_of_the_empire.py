@@ -30,7 +30,7 @@ def _hand(session: EngineSession) -> list[str]:
 
 def test_the_peddler_produces_two_gold_from_its_text():
     """ "Produce 2 Gold" is printed as text, not as a Gold Production stat, so only the handler
-    delivers it — the stat on the card is blank."""
+    delivers it. The stat on the card is blank."""
     session = _peddler_game()
 
     assert effective_gold_production(session.game, session.game.table.cards_by_id["peddler"]) == 2
@@ -57,7 +57,7 @@ def test_the_peddler_cannot_fund_its_own_cost_by_bowing_itself():
 
 
 def test_a_producer_the_cost_leaves_alone_still_pays_for_it():
-    """The exclusion is the bowed card alone — every other producer counts as it always did."""
+    """The exclusion is the bowed card alone. Every other producer counts as it always did."""
     session = _peddler_game(other_production=3)
 
     assert ActivateAbility("peddler") in session.legal_actions(P1)
@@ -65,7 +65,7 @@ def test_a_producer_the_cost_leaves_alone_still_pays_for_it():
 
 def test_gold_already_in_the_pool_pays_for_the_peddler():
     """The exclusion takes the Peddler out of the producers it could bow, not out of the gold the
-    seat is already holding — a pool that covers the cost needs no producer at all."""
+    seat is already holding. A pool that covers the cost needs no producer at all."""
     session = _peddler_game()
     session.game.add_gold(P1, 3)
 

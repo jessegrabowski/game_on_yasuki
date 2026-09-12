@@ -37,7 +37,7 @@ def _brothers_in_arms_copies(game: GameState, seat: PlayerId) -> tuple[str, ...]
     """Other copies to fetch, discard pile before Fate deck.
 
     The card searches "your Fate discard pile, then deck", so the deck is read only when the discard
-    holds none — a player never chooses to leave a discarded copy and shuffle for one instead.
+    holds none. A player never chooses to leave a discarded copy and shuffle for one instead.
     """
     discard = game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards
     found = [card.id for card in discard if card.printed_id == "brothers_in_arms"]
@@ -51,7 +51,7 @@ def _brothers_in_arms_copies(game: GameState, seat: PlayerId) -> tuple[str, ...]
 def _resolve_brothers_in_arms(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Show the copy and take it. A copy pulled out of the deck costs a shuffle; one lifted off the
+    """Show the copy and take it. A copy pulled out of the deck costs a shuffle. One lifted off the
     discard pile does not, since the discard pile is public and its order carries no information."""
     taken = chosen[0]
     from_deck = any(card.id == taken for card in game.table.decks[DeckKey(seat, Side.FATE)].cards)
@@ -86,7 +86,7 @@ OUTER_WALLS_STRENGTH = 3
 
 
 def _outer_walls_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Strengthen the Province the battle is being fought at — "its province" is the current
+    """Strengthen the Province the battle is being fought at. "Its province" is the current
     battlefield's, which the card names rather than the seat choosing."""
     province = game.attack.current_province
     return [

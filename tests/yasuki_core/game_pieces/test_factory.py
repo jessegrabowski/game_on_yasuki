@@ -231,8 +231,8 @@ def test_base_identity_and_unique_flag_are_carried():
 
 
 def test_an_attachment_carries_the_force_and_chi_it_prints():
-    """A Follower's Force is the stat it exists to lend its Personality; dropping it at build time
-    leaves the card in play with nothing to contribute."""
+    """A Follower's Force is the stat it exists to lend its Personality, so dropping it at build
+    time leaves the card in play with nothing to contribute."""
     r = resolve_decklist(
         parse_deck_yaml("name: T\nFate:\n  - Ashigaru Spearmen"), RECORDS, PlayerId.P1
     )
@@ -277,7 +277,7 @@ ATTACHMENT_RECORDS = [
 
 
 def test_the_card_type_decides_which_printed_stats_are_modifiers():
-    """An Item has no Force or Chi of its own, so both of its numbers modify the Personality; a
+    """An Item has no Force or Chi of its own, so both of its numbers modify the Personality. A
     Follower's Force is its own and only its Chi modifies. Card type decides, not the sign of the
     printed value: a negative Chi is a plain integer in the YAML, so a sign-based rule reads it as a
     stat the Follower has and never moves the Personality's Chi at all."""
@@ -295,7 +295,7 @@ def test_the_card_type_decides_which_printed_stats_are_modifiers():
 
 def test_a_variable_printed_stat_reads_its_floor():
     """A Force of "2*" is a value the card computes. The pipeline cannot store that as an integer so
-    it survives as text; the number in front of the star is taken and the variability is not
+    it survives as text. The number in front of the star is taken and the variability is not
     modeled."""
     r = resolve_decklist(
         parse_deck_yaml("name: T\nFate:\n  - Variable Follower"),
@@ -354,7 +354,7 @@ def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
 def test_get_creates_for_cards_offers_only_spawnable_cards():
     # Courts of Otosan Uchi creates a real courtier (a spawnable card) and grants a Wealth counter.
-    # Only the card is offered — counter grants live in card_grants_counter, not card_creates.
+    # Only the card is offered: counter grants live in card_grants_counter, not card_creates.
     creates, tokens = get_creates_for_cards(["courts_of_otosan_uchi"])
     made = creates.get("courts_of_otosan_uchi", [])
     assert "courtier_personality_0_2_2" in made
@@ -370,7 +370,8 @@ def test_get_creates_for_cards_offers_only_spawnable_cards():
 
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
 def test_art_swap_carries_the_donor_print_and_both_frames():
-    # Building the swap classifies both prints' eras, which reads set release dates from the database.
+    # Building the swap classifies both prints' eras, which reads set release dates from the
+    # database.
     yaml = "name: T\nDynasty:\n  - Kuni Yori [Pearl Edition] {art: Ambush [Lotus Edition]}"
     card = resolve_decklist(parse_deck_yaml(yaml), RECORDS, PlayerId.P1).dynasty[0]
     # The recipient still renders its own printing; the swap rides alongside for the browser canvas.
@@ -442,8 +443,8 @@ def test_double_faced_card_carries_its_back_print_when_the_record_is_present():
     sh = resolve_decklist(deck, [FLIP_FRONT, FLIP_BACK], PlayerId.P1).pre_game[0]
     assert sh.back_card_id == "kyuden_kuni__back"
     assert isinstance(sh.back_printed, StrongholdPrint)
-    # Each face is its own print, so it carries its own printed_id — the back dispatches to its own
-    # effect handler, not the front's.
+    # Each face is its own print, so it carries its own printed_id, and the back dispatches to its
+    # own effect handler, not the front's.
     assert sh.printed_id == "kyuden_kuni"
     assert sh.back_printed.printed_id == "kyuden_kuni__back"
     assert sh.back_printed.starting_honor == 8
@@ -574,7 +575,7 @@ def test_resolve_decklist_stamps_creates_on_creator_cards():
     assert _resolve().dynasty[0].creates == ()
 
 
-# --- the print behind each card --------------------------------------------------------------------
+# --- the print behind each card ------------------------------------------------------------
 
 
 def test_a_resolved_card_keeps_its_deck_back():
@@ -588,7 +589,7 @@ def test_a_resolved_card_keeps_its_deck_back():
 
 def test_a_resolved_card_presents_the_print_its_record_describes():
     """Resolving a decklist and building a print from the same record are two paths to the same
-    print; a card reads all its characteristics through whichever one it got."""
+    print. A card reads all its characteristics through whichever one it got."""
     record = next(r for r in RECORDS if r["card_id"] == "kuni_yori")
     card = _resolve().dynasty[0]
 
@@ -597,7 +598,7 @@ def test_a_resolved_card_presents_the_print_its_record_describes():
 
 def test_two_copies_of_a_card_share_one_print():
     """A print is built per deck entry, so the copies it produces share it. Sharing is safe because
-    a print is frozen; each copy still carries its own state."""
+    a print is frozen, and each copy still carries its own state."""
     first, second = _resolve().dynasty
 
     assert first is not second

@@ -45,7 +45,6 @@ def _clear_proxy(game: GameState) -> None:
 def is_rulebook_proxy(card: L5RCard) -> bool:
     """Whether ``card`` is a rulebook proxy rather than a card a player drew.
 
-    Counting one toward a limit on cards would be counting something that is not a card, so the
-    maximum hand size skips them.
+    Not counted toward the maximum hand size.
     """
     return card.printed_id in RULEBOOK_PROXY_IDS

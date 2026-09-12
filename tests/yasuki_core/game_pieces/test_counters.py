@@ -36,6 +36,7 @@ def test_unknown_key_raises():
 
 
 def test_counter_has_a_field_for_every_bridged_stat():
-    # active_modifiers reads deltas via getattr(counter, stat.value); every Stat must map to a field.
+    # active_modifiers reads deltas via getattr(counter,
+    # stat.value); every Stat must map to a field.
     for stat in Stat:
         assert hasattr(Counter("k"), stat.value)

@@ -62,8 +62,8 @@ BLOOD_OF_FU_LENG_PENALTY = -1
 def _blood_of_fu_leng_card_discarded(ctx: TriggerContext) -> list[Effect]:
     """Put the Chi penalty to a target Personality once a Kharmic action has discarded the card.
 
-    A Kharmic action is the only discard it reacts to, so reaching the pile any other way — pitched
-    to hand size, or discarded by another card — does nothing.
+    A Kharmic action is the only discard it reacts to, so reaching the pile any other way (pitched
+    to hand size or discarded by another card) does nothing.
     """
     if ctx.event.card_id != ctx.card.id:
         return []
@@ -263,8 +263,8 @@ register_ability(
 def _resolve_modest_farm_straighten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    # source_id is the recruited target; chosen holds Modest Farm's id when its controller sacrifices
-    # it to straighten the target.
+    # source_id is the recruited target; chosen holds Modest Farm's id when its controller
+    # sacrifices it to straighten the target.
     if not chosen:
         return []
     return [Destroy(chosen[0], seat), Straighten(source_id)]
@@ -382,8 +382,8 @@ def _sapphire_mine_gold(
 ) -> int:
     """+1GP when paying for a single Item and nothing else, and +1GP more when it costs 6 or more.
 
-    "A single Item only" is the whole payment rather than the Mine's share of it: paying for two
-    cards at once, or for anything that is not an Item, leaves the Mine at its printed rate.
+    "A single Item only" means the whole payment: paying for two cards at once, or for anything
+    that is not an Item, leaves the Mine at its printed rate.
     """
     if len(targets) != 1:
         return card.gold_production
@@ -408,8 +408,8 @@ def _sapphire_mine_keywords(card: L5RCard, game: GameState, seat: PlayerId) -> t
 
 @on(EnteredPlay, "sapphire_mine")
 def _sapphire_mine_entered_play(ctx: TriggerContext) -> list[Effect]:
-    """Sincerity: after this Holding enters play, if it accrued two or more Sincerity tokens, give it
-    a +1GP Wealth token."""
+    """Sincerity: after this Holding enters play, if it accrued two or more Sincerity tokens, give
+    it a +1GP Wealth token."""
     if ctx.event.card_id != ctx.card.id:
         return []
     if ctx.card.counters.get(SINCERITY.key, 0) < 2:

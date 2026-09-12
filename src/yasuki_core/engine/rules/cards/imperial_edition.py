@@ -68,7 +68,7 @@ register_ability(
 
 
 def _imperial_gift_fate_deck_items(game: GameState, seat: PlayerId) -> tuple[str, ...]:
-    """The Items in ``seat``'s Fate deck — what the search may turn up."""
+    """The Items in ``seat``'s Fate deck. What the search may turn up."""
     return tuple(
         card.id
         for card in game.table.decks[DeckKey(seat, Side.FATE)].cards
@@ -93,7 +93,7 @@ def _resolve_imperial_gift_item(
 
 def _imperial_gift_targets(game: GameState, card: L5RCard) -> list[str]:
     """The Event itself. The honor is unconditional, so the ability is offered whether or not the
-    Fate deck holds an Item; the search is a choice raised after it, not the ability's target."""
+    Fate deck holds an Item. The search is a choice raised after it, not the ability's target."""
     return [card.id]
 
 
@@ -159,7 +159,7 @@ def _sneak_attack_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
     """Hand the Attacker the opportunity the Combat Segment would otherwise open on the Defender.
 
     An Engage action reaches a segment that has not started, so the grant is held until it does. It
-    resolves at the next Combat Segment to open, which is this battle's — a held effect is spent
+    resolves at the next Combat Segment to open, which is this battle's. A held effect is spent
     when it fires, so it cannot reach the battle after.
     """
     return [DelayedEffect(GrantPriority(game.attack.attacker), BEGINNING_OF_COMBAT)]
@@ -192,7 +192,7 @@ def _touch_of_death_cost(game: GameState, source: L5RCard) -> list[Effect]:
 def _touch_of_death_targets(game: GameState, source: L5RCard) -> list[str]:
     """Bowed Personalities whose Chi does not exceed the Shugenja carrying this Spell.
 
-    "Equal or lower" names no referent; the comparison is against the caster. The caster is never
+    "Equal or lower" names no referent. The comparison is against the caster. The caster is never
     among these, since he has to be unbowed to pay the cost that bows him.
     """
     caster = attached_to(game, source)

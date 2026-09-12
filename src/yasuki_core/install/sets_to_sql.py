@@ -56,7 +56,7 @@ def load_l5r_sets(set_info_path: Path, dsn: str) -> None:
     """
     Load set metadata from the arc-grouped set_info YAML into l5r_sets.
 
-    One row per set name; a name that recurs across arcs (e.g. promotional cards) is kept once.
+    One row per set name. A name that recurs across arcs (e.g. promotional cards) is kept once.
 
     Parameters
     ----------

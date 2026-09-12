@@ -47,7 +47,7 @@ class ZoneKey(NamedTuple):
 
     @property
     def token(self) -> str:
-        """A string naming this zone, for the places that carry one beside card ids — a decision's
+        """A string naming this zone, for the places that carry one beside card ids. A decision's
         candidates are strings, and a Province is chosen as a slot rather than as the card in it."""
         return f"{self.owner.name}:{self.role.value}:{'' if self.idx is None else self.idx}"
 
@@ -138,11 +138,11 @@ class TableState:
     decks : dict mapping DeckKey to Deck
         Each seat's fate and dynasty decks.
     battlefield : BattlefieldZone
-        Shared, public play area; member cards have a position in ``positions``.
+        Shared, public play area. Member cards have a position in ``positions``.
     positions : dict mapping str to BoardPos
         Table coordinates for battlefield cards, keyed by card id.
     locations : dict mapping str to Location
-        Where each card in play stands — a seat's home, or a battlefield — keyed by card id. Unlike
+        Where each card in play stands (a seat's home or a battlefield), keyed by card id. Unlike
         ``positions`` this is rules truth, not presentation. Partial: a card with no entry is at its
         owner's home, which :func:`~.location_of` supplies, so a board on which nothing has ever
         assigned carries an empty map.
@@ -150,12 +150,12 @@ class TableState:
         Which card or province a card sits behind on the table, keyed by the card on top. This is
         presentation, not rules: the manual sandbox lets a player stack anything on anything, so a
         Follower parked behind a Stronghold is a legal entry here and means nothing to the rules
-        layer, which never reads it. Only battlefield cards appear as children; a card leaving the
+        layer, which never reads it. Only battlefield cards appear as children. A card leaving the
         battlefield drops its entry and unstacks whatever sits on it.
     units : dict mapping str to str
         Unit membership, keyed by the attached card id and naming the Personality it is attached to.
-        A Personality together with the cards attached to him makes up a unit (CR, Unit), and
-        attachments are the only card type that may attach to a Personality — so unlike
+        A Personality together with the cards attached to him makes up a unit (CR, Unit).
+        Attachments are the only card type that may attach to a Personality, so unlike
         ``attachments`` this relation is flat, and a parent is always a Personality.
     province_attachments : dict mapping str to ZoneKey
         The Regions and Fortifications attached to a province, keyed by card id. The value names the
@@ -166,15 +166,16 @@ class TableState:
     province_counters : dict mapping ZoneKey to a dict of str to int
         Counters resting on a Province rather than on a card, keyed by the Province's zone key. A
         Province is a slot rather than a card, so a "+1 strength Wall token" has nowhere else to
-        live — the card sitting in the slot is refilled and destroyed independently of it.
+        live. The card sitting in the slot is refilled and destroyed independently of it.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
     creatable_tokens : dict mapping str to CardPrint
         Token templates the loaded decks can create, keyed by token card id, resolved at deck load.
     seq : int
         Monotonic view version, bumped on every state change: by ``apply_intent`` for game intents
-        and by :meth:`bump_version` for non-intent seat metadata, so no two distinct broadcasts share
-        a ``seq``. The intent log records only intents, so logged ``seq`` values may skip the bumps.
+        and by :meth:`bump_version` for non-intent seat metadata, so no two distinct broadcasts
+        share a ``seq``. The intent log records only intents, so logged ``seq`` values may skip
+        the bumps.
     """
 
     seats: dict[PlayerId, SeatInfo]
@@ -188,7 +189,7 @@ class TableState:
     locations: dict[str, Location] = field(default_factory=dict)
     # Presentation stacking, external to the frozen card. See the class docstring.
     attachments: dict[str, "AttachTarget"] = field(default_factory=dict)
-    # The two rules relations. Kept apart because they are apart in the rules — one map with a
+    # The two rules relations. Kept apart because they are apart in the rules. One map with a
     # `str | ZoneKey` value cannot express that a Follower may never be a parent.
     units: dict[str, str] = field(default_factory=dict)
     province_attachments: dict[str, ZoneKey] = field(default_factory=dict)
@@ -340,7 +341,7 @@ MoveDest = ZoneKey | DeckKey | Literal["battlefield"]
 AttachTarget = str | ZoneKey
 
 
-# Ownership, zone and location predicates — pure read-only queries on the table, shared by the
+# Ownership, zone and location predicates. Pure read-only queries on the table, shared by the
 # manual sim (intents.py) and the rules engine. A None owner means public (any seat may act).
 
 
@@ -357,7 +358,7 @@ def location_of(state: TableState, card: L5RCard) -> Location:
 def unit_members(state: TableState, card: L5RCard) -> list[L5RCard]:
     """``card`` and every card attached to it, the Personality first.
 
-    A Personality together with the cards attached to him makes up a unit (CR, Unit); a card with
+    A Personality together with the cards attached to him makes up a unit (CR, Unit). A card with
     nothing attached is a unit of one, so this answers for any card, not only a Personality.
     """
     members = [card]
@@ -388,7 +389,7 @@ def owns_card(state: TableState, seat: PlayerId, card_id: str) -> bool:
 
 
 def owns_zone(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> bool:
-    """Return whether ``seat`` may act on the zone. True for the zone's owner and for public zones;
+    """Return whether ``seat`` may act on the zone. True for the zone's owner and for public zones.
     False if the zone does not exist or belongs to the other seat."""
     zone = state.zones.get(zone_key)
     if zone is None:
@@ -397,7 +398,7 @@ def owns_zone(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> bool:
 
 
 def owns_deck(state: TableState, seat: PlayerId, deck_key: DeckKey) -> bool:
-    """Return whether ``seat`` owns the deck. Decks are always owned, so this is the key's owner;
+    """Return whether ``seat`` owns the deck. Decks are always owned, so this is the key's owner.
     False if the deck does not exist."""
     if deck_key not in state.decks:
         return False

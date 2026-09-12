@@ -6,10 +6,11 @@ from yasuki_core.yaml_io import read_yaml
 
 @dataclass(frozen=True, slots=True)
 class Counter:
-    """A kind of counter a card can carry — a scalar tally whose stat modifiers apply per count.
-    Data, not behavior: the effect layer reads the delta fields; the counter never acts. Each stat
-    field is a per-count modifier defaulting to 0, so a counter lists only what it changes. The field
-    names match ``Stat.value`` strings so the effect layer can bridge them generically."""
+    """A kind of counter a card can carry: a scalar tally whose stat modifiers apply per count.
+    Data, not behavior: the effect layer reads the delta fields. The counter never acts. Each
+    stat field is a per-count modifier defaulting to 0, so a counter lists only what it changes.
+    The field names match ``Stat.value`` strings so the effect layer can bridge them
+    generically."""
 
     key: str
     name: str = ""

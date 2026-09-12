@@ -18,9 +18,9 @@ _pool: ConnectionPool | None = None
 
 
 def accounts_connection_string() -> str:
-    """DSN for the accounts database — a separate Postgres from the card DB.
+    """DSN for the accounts database, a separate Postgres from the card DB.
 
-    Read ``YASUKI_ACCOUNTS_DATABASE_URL``; fall back to a local ``yasuki_accounts`` database so
+    Read ``YASUKI_ACCOUNTS_DATABASE_URL``. Fall back to a local ``yasuki_accounts`` database so
     development needs only a second database on the same server, not a second server. Apply the same
     TLS treatment as the card pool (verify-full / require on public hosts).
 

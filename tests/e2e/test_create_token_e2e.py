@@ -1,8 +1,8 @@
-# The right-click "Create <token>" path, driven through a real browser. Like test_board_e2e.py, this
-# test deals a real deck, so it needs the cards database: the Create-token menu only exists once a
-# card carries a `creates` list and the table's `creatable_tokens` are populated, and both come solely
-# from the deck-load path, which queries PostgreSQL. So this test loads a real deck into a solo
-# (goldfish) table and is skipped when the cards database isn't reachable.
+# The right-click "Create <token>" path, driven through a real browser. Like test_board_e2e.py,
+# this test deals a real deck, so it needs the cards database: the Create-token menu only exists
+# once a card carries a `creates` list and the table's `creatable_tokens` are populated, and both
+# come solely from the deck-load path, which queries PostgreSQL. So this test loads a real deck
+# into a solo (goldfish) table and is skipped when the cards database isn't reachable.
 
 import psycopg
 import pytest
@@ -40,14 +40,15 @@ def test_create_token_from_a_revealed_province_card(new_player):
     send(page, {"type": "READY", "room": room_id, "ready": {"ready": True, "solo": True}})
 
     # Setup deals every dynasty card face-down into a province (rendered as flow-positioned
-    # `.zone-card`, not absolute `.board-card`). Grab one — they're all Weapon Artist.
+    # `.zone-card`, not absolute `.board-card`). Grab one and they're all Weapon Artist.
     page.wait_for_selector('[data-zone="province"] .zone-card[data-card-id]')
     card_id = page.evaluate(
         """() => document
             .querySelector('[data-zone="province"] .zone-card[data-card-id]').dataset.cardId"""
     )
 
-    # Reveal it: a face-up province card carries its `creates` list and offers the "Create" menu item.
+    # Reveal it: a face-up province card carries its `creates` list and offers the "Create" menu
+    # item.
     send_intent(page, room_id, {"op": "FLIP", "card_ids": [card_id]})
     page.wait_for_function(
         """(id) => {
@@ -63,7 +64,8 @@ def test_create_token_from_a_revealed_province_card(new_player):
     page.wait_for_selector("ul.board-menu")
     page.click(f"ul.board-menu li:has-text('Create {token_name}')")
 
-    # A fresh public token lands on the battlefield: a spawned token (data-token) named for the token.
+    # A fresh public token lands on the battlefield: a spawned token (data-token) named for the
+    # token.
     page.wait_for_selector(f'.board-card[data-token="1"][data-name="{token_name}"]')
     token_count = page.evaluate(
         """(name) => document.querySelectorAll(

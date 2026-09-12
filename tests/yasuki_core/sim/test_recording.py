@@ -131,7 +131,7 @@ def _buyable(gold_cost: int = 2, provinces: int = 2) -> EngineSession:
 
 def test_a_cleared_province_reads_zero_at_turn_start_and_one_at_turn_end():
     """Why the metric needs the end-of-turn hook at all. A seat's turn begins by revealing every
-    province, so face-down — the mark of one cleared and refilled — cannot exist yet."""
+    province, so face-down (the mark of one cleared and refilled) cannot exist yet."""
     recorder = TurnRecorder(
         {"cleared_at_start": provinces_cleared},
         end_of_turn={"cleared": provinces_cleared},
@@ -186,7 +186,7 @@ def _counting(session: EngineSession) -> TurnRecorder:
 
 def test_a_recruit_and_a_discard_leave_the_same_board_and_are_told_apart_anyway():
     """The whole point of counting actions. Both seats clear one province and end the turn looking
-    identical; only what they did says one bought a card and the other threw one away."""
+    identical. Only what they did says one bought a card and the other threw one away."""
     # One province each, so both policies clear exactly it: a Dynasty Discard is free and
     # repeatable, and given more it would empty every face-up province while the buyer paid for one.
     buying, flushing = _buyable(provinces=1), _buyable(provinces=1)
@@ -234,7 +234,7 @@ def test_flushing_every_province_is_not_reported_as_buying_them_out():
 def test_the_actions_a_seat_took_account_for_every_province_it_cleared():
     """Recruit and DynastyDiscard both draw only from provinces, so across a plain game the split
     adds back up to the board's own count. A shortfall would mean a card cleared a province by
-    itself — a Legacy search or an ability-driven recruit — rather than a miscount."""
+    itself, through a Legacy search or an ability-driven recruit."""
     session = _buyable()
     recorder = _counting(session)
 
@@ -425,8 +425,8 @@ def test_ending_a_turn_for_the_wrong_seat_is_refused():
 
 def test_a_metric_may_report_a_fraction_rather_than_a_count():
     """Shares and rates are the natural way to compare decks of different sizes, so a metric is not
-    limited to whole numbers. Recorded and returned unrounded — halving it here would be invisible
-    against an int-valued metric."""
+    limited to whole numbers. Recorded and returned unrounded, since halving it here would be
+    invisible against an int-valued metric."""
     session = _buyable()
 
     def share_of_provinces_cleared(game, seat) -> float:

@@ -65,13 +65,13 @@ def effective_gold_production(
 def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()) -> None:
     """Open the producer's window, then bow it and add its yield to its owner's pool (KD6).
 
-    Gold is only produced while paying a cost (rules-skeleton §7), so a payment drives this. The
-    yield is read after the window rather than quoted up front, because a trait firing there can
-    raise it, and announced through ``ProducedGold`` afterwards, because a price payable once the
-    card has bowed cannot resolve while the yield is still unread.
+    Gold is only produced while paying a cost (rules-skeleton section 7), so a payment drives
+    this. The yield is read after the window rather than quoted up front, because a trait
+    firing there can raise it, and announced through ``ProducedGold`` afterwards, because a
+    price payable once the card has bowed cannot resolve while the yield is still unread.
 
-    The read is deferred onto the stack rather than run inline so that a window trait may pause for
-    a decision: the yield is then taken on the far side of whatever the seat answers.
+    The read is deferred onto the stack rather than run inline so that a window trait may
+    pause for a decision: the yield is then taken on the far side of whatever the seat answers.
     """
     card = game.table.cards_by_id[card_id]
     game.stack.append(CompleteProduction(card_id, target_ids))

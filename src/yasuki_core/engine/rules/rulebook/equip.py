@@ -41,10 +41,10 @@ def may_hold_weapon(game: GameState, personality: L5RCard, weapon_keywords: froz
     """Whether ``personality`` has room for a Weapon carrying ``weapon_keywords`` under the Weapon
     rules.
 
-    Two rules, independent of each other. How many Weapons fit is a characteristic — one by default,
-    two for a Kensai — so raising it is a modifier rather than an exemption from a rule. Two-Handed
-    is exclusive on top of that: a Personality, "even a Kensai", cannot hold a Two-Handed Weapon
-    beside any other Weapon, in either order (CR, Weapon; Kensai; Two-Handed).
+    Two independent rules apply. How many Weapons fit is a characteristic: one by default, two for
+    a Kensai, so raising it is a modifier rather than an exemption from a rule. Two-Handed is
+    exclusive on top of that: a Personality, "even a Kensai", cannot hold a Two-Handed Weapon
+    beside any other Weapon, in either order (CR, Weapon, Kensai, Two-Handed).
 
     Takes the keywords rather than the Weapon so a card about to be created can be judged before it
     exists.
@@ -62,9 +62,9 @@ def may_attach_weapon(game: GameState, personality: L5RCard, weapon: L5RCard) ->
     return may_hold_weapon(game, personality, effective_keywords(game, weapon))
 
 
-# What a card's own text says it will hang on — "Can only attach to a Samurai" and its kin. Keyed by
+# What a card's own text says it will hang on. "Can only attach to a Samurai" and its kin. Keyed by
 # printed id like the other per-card registries. The rulebook's restrictions live in this module as
-# code; a restriction only one card states lives with that card.
+# code. A restriction only one card states lives with that card.
 AttachRestriction = Callable[[GameState, L5RCard, L5RCard], bool]
 ATTACH_RESTRICTIONS: HandlerRegistry[AttachRestriction] = HandlerRegistry(
     "attach restrictions", "already has an attach restriction"
@@ -76,7 +76,7 @@ def may_attach(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
     """Whether ``card`` may attach to ``personality``, by its own text and by the rulebook's limits
     on Spells and Weapons.
 
-    Only Weapons answer to the Weapon rules — a Follower or a plain Item is limited by neither the
+    Only Weapons answer to the Weapon rules. A Follower or a plain Item is limited by neither the
     count nor Two-Handed exclusivity.
     """
     restriction = ATTACH_RESTRICTIONS.get(card.printed_id)
@@ -105,7 +105,7 @@ def may_attach_created(game: GameState, personality: L5RCard, printed: CardPrint
 def creation_targets(
     game: GameState, seat: PlayerId, printed: CardPrint, *, keyword: str | None = None
 ) -> tuple[L5RCard, ...]:
-    """The Personalities ``seat`` may create a card from ``printed`` onto — its own, that the
+    """The Personalities ``seat`` may create a card from ``printed`` onto: its own, that the
     attachment rules still admit. A player creates onto their own, as they attach (CR, Attachments).
 
     Parameters
@@ -117,7 +117,7 @@ def creation_targets(
     printed : CardPrint
         The template the created card is stamped from, judged by the attachment rules.
     keyword : str, optional
-        Narrows the Personalities to those carrying it — the "your target Samurai Personality" a
+        Narrows the Personalities to those carrying it, the "your target Samurai Personality" a
         card names. Default None, which offers them all.
     """
     return tuple(

@@ -50,12 +50,12 @@ from yasuki_core.game_pieces.counters import Counter
 
 
 def _pile(card: L5RCard, *, banished: bool = False) -> ZoneKey:
-    """The pile ``card`` belongs in when it leaves play: its owner's, on the card's own side, and its
-    banish rather than its discard when ``banished``.
+    """The pile ``card`` belongs in when it leaves play: its owner's, on the card's own side,
+    and its banish rather than its discard when ``banished``.
 
-    Anything not on the Dynasty side is filed with the Fate cards, which is where a Stronghold or a
-    Sensei goes for want of a pile of its own. Shared so a Dynasty card cannot reach a Fate pile
-    through one path and not another.
+    Anything not on the Dynasty side is filed with the Fate cards, which is where a Stronghold
+    or a Sensei goes for want of a pile of its own. Shared so a Dynasty card cannot reach a Fate
+    pile through one path and not another.
     """
     if card.side is Side.DYNASTY:
         role = ZoneRole.DYNASTY_BANISH if banished else ZoneRole.DYNASTY_DISCARD
@@ -129,7 +129,7 @@ class AdjustCounter(Effect):
         return f"{self.delta:+d} {self.counter.name} on {self.card_id}"
 
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
-        """A removal needs the card to hold enough of the counter; a grant always applies."""
+        """A removal needs the card to hold enough of the counter. A grant always applies."""
         if self.delta >= 0:
             return True
         card = game.table.cards_by_id.get(self.card_id)
@@ -170,7 +170,7 @@ class Move(Effect):
     card_id : str
         Any card in the unit being moved.
     to : Location
-        Where the unit ends up — a seat's home, or a battlefield.
+        Where the unit ends up: a seat's home, or a battlefield.
     """
 
     card_id: str
@@ -227,8 +227,8 @@ class MoveToHand(Effect):
 
 
 def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> tuple[L5RCard, ...]:
-    """Send ``card`` and everything attached to him out of play — to their discards, or to their
-    banishes when ``banished`` — returning the unit that left so the caller can announce each
+    """Send ``card`` and everything attached to him out of play, to their discards or to their
+    banishes when ``banished``. Return the unit that left so the caller can announce each
     departure in its own words (CR, Unit).
 
     A created card among them has no pile of either kind and is taken off the table instead, which
@@ -252,7 +252,7 @@ class Destroy(Effect):
     card_id : str
         The card to destroy.
     cause : PlayerId or Rulebook
-        Who or what destroyed it — the seat whose card did, or the rule that demanded it.
+        Who or what destroyed it: the seat whose card did, or the rule that demanded it.
     """
 
     card_id: str
@@ -277,8 +277,8 @@ class Discard(Effect):
     card_id : str
         The card to discard.
     cause : PlayerId or Rulebook
-        Who or what discarded it — the seat whose action did, which a discard reaction reads to tell
-        its own doing from its opponent's, or the rule that demanded it.
+        Who or what discarded it: the seat whose action did (which a discard reaction reads to
+        tell its own doing from its opponent's), or the rule that demanded it.
     """
 
     card_id: str
@@ -301,8 +301,8 @@ class Banish(Effect):
 
     Banishing is not a destruction and not a discard: nothing reacts to it and the card is out of
     reach of anything that recurs from a discard pile. A Personality takes his unit with him, as he
-    does however he leaves (CR, Unit), and a created card leaves the table entirely — banishing one
-    and destroying one come to the same thing, since neither pile can hold it.
+    does however he leaves (CR, Unit). A created card leaves the table entirely. Banishing one and
+    destroying one come to the same thing, since neither pile can hold it.
 
     Attributes
     ----------
@@ -326,7 +326,7 @@ class Banish(Effect):
 
 @dataclass(frozen=True, slots=True)
 class DelayedEffect(Effect):
-    """Hold ``effect`` until ``until``, then resolve it — the CR's delayed effect.
+    """Hold ``effect`` until ``until``, then resolve it: the CR's delayed effect.
 
     Nothing is decided at the moment it resolves: a held effect whose card has since left the table
     is a no-op, so a delay never has to be withdrawn.
@@ -456,7 +456,7 @@ class DiscardFavor(Effect):
 @dataclass(frozen=True, slots=True)
 class GrantModifier(Effect):
     """Record a continuous stat modifier: the ``source`` card grants ``target`` a change of
-    ``amount`` to ``stat`` for ``duration``. The single created-effect entry point; a card's
+    ``amount`` to ``stat`` for ``duration``. The single created-effect entry point. A card's
     counters and attachments grant their bonuses without one (they are derived on read)."""
 
     source_id: str
@@ -483,9 +483,8 @@ class GrantMinimum(Effect):
     """Record a continuous stat minimum: the ``source`` card floors ``target``'s ``stat`` at
     ``value`` for ``duration`` (CR, Minimums and Maximums).
 
-    The minimum counterpart of :class:`~.GrantModifier`. A card reading "to a minimum of N" wants a
-    :class:`~.GrantModifier` with a capped amount instead, because that wording limits one change
-    rather than the stat.
+    The minimum counterpart of :class:`~.GrantModifier`. For "to a minimum of N" wording, use
+    :class:`~.GrantModifier` with a capped amount instead.
     """
 
     source_id: str
@@ -512,8 +511,8 @@ class GrantProvinceStrength(Effect):
     """Record a continuous Province Strength modifier: the ``source`` card adjusts ``province`` by
     ``amount`` for ``duration``.
 
-    The Province counterpart of :class:`~.GrantModifier`. A Province is a slot rather than a card,
-    so a card strengthening one for the turn cannot target it the way it targets a Personality.
+    The Province counterpart of :class:`~.GrantModifier`, targeting a province slot instead of a
+    Personality.
     """
 
     source_id: str
@@ -538,9 +537,9 @@ class GrantProvinceStrength(Effect):
 class SpendOncePerTurn(Effect):
     """Claim ``card_id``'s once-per-turn use of ``tag``.
 
-    What a card charges when its limit is the whole price — an offer that costs nothing but may only
-    be taken once a turn. Spent when the price is paid rather than when it is offered, since a cost
-    is read to judge legality as well as to charge it.
+    What a card charges when its limit is the whole price: an offer that costs nothing but may
+    only be taken once a turn. Spent when the price is paid rather than when it is offered, since
+    a cost is read to judge legality as well as to charge it.
     """
 
     card_id: str
@@ -604,7 +603,7 @@ class AttackEffect(Effect, ABC):
     *"Target a Follower or a Personality without Followers in the current enemy army. If its Force
     is equal to or less than X, destroy it."* Ranged and Melee destroy, Fear bows, and everything
     else is shared. Who may be targeted is
-    :func:`~yasuki_core.engine.rules.board.queries.attack_targets`; this is the comparison and its
+    :func:`~yasuki_core.engine.rules.board.queries.attack_targets`. This is the comparison and its
     consequence.
 
     The base exists because the CR names it: its Combining entry uses *"attack effect"* for the
@@ -622,7 +621,7 @@ class AttackEffect(Effect, ABC):
     compared : Stat, optional
         The stat weighed against ``strength``. *"If a Ranged Attack effect ends up being compared
         against a different stat than Force, compare that stat against the Ranged Attack's strength
-        instead"* — read as an effective stat, so modifiers count. Default ``Stat.FORCE``.
+        instead"*. Read as an effective stat, so modifiers count. Default ``Stat.FORCE``.
     """
 
     # What the card prints this effect as, which is the only thing its description needs from the
@@ -667,8 +666,8 @@ class RangedAttack(AttackEffect):
 
 @dataclass(frozen=True, slots=True)
 class MeleeAttack(AttackEffect):
-    """*"Melee Attacks follow the above rules but are not considered Ranged Attacks"* — the same
-    effect as a Ranged Attack, and deliberately not the same type."""
+    """*"Melee Attacks follow the above rules but are not considered Ranged Attacks"*. The same
+    effect as a Ranged Attack, deliberately not the same type."""
 
     name: ClassVar[str] = "melee"
 
@@ -710,7 +709,7 @@ class GrantKeyword(Effect):
     """Record a keyword grant: the ``source`` card gives ``target`` ``keyword`` for ``duration``.
 
     The keyword counterpart of :class:`~.GrantModifier`, for the "give your target Personality
-    Cavalry" a card prints. A keyword a card carries by its own text needs no grant — that is a
+    Cavalry" a card prints. A keyword a card carries by its own text needs no grant: that is a
     keyword handler, read off the board.
     """
 
@@ -735,7 +734,7 @@ class AttachCard(Effect):
 
     The other half of the Equip distinction: a card that says "attach" reaches the same board as the
     Equip action without its cost, its timing or its legality (CR, Equip). A card already in play
-    moves units; one elsewhere arrives on the battlefield first.
+    moves units. One elsewhere arrives on the battlefield first.
 
     Attributes
     ----------
@@ -769,9 +768,9 @@ class AttachCard(Effect):
 class PutIntoPlay(Effect):
     """Move ``card_id`` onto the battlefield, unplaced.
 
-    What a card that puts *itself* into play does — an Edict, a Kata, a Terrain. The played card is
-    not discarded afterward because it is no longer in hand (CR, Action Sequence step F). Does
-    nothing for a card already there.
+    What a card that puts itself into play does: an Edict, a Kata, a Terrain. The played card is
+    not discarded afterward because it is no longer in hand (CR, Action Sequence step F).
+    Does nothing for a card already there.
     """
 
     card_id: str
@@ -791,13 +790,11 @@ class PutIntoPlay(Effect):
 
 @dataclass(frozen=True, slots=True)
 class CreateToken(Effect):
-    """Create a card that was never in a deck — the "create a 1F Ashigaru Follower", the "create a
-    Personality with Force equal to the target's Chi" — and put it into play.
+    """Create a card that was never in a deck, such as "create a 1F Ashigaru Follower" or "create a
+    Personality with Force equal to the target's Chi". Put it into play.
 
-    What it is comes from the token template the deck load resolved, so the created card carries the
-    stats, keywords and art the printed text describes rather than a stat line spelled out at the
-    creation site. A created card is not a copy of anything: it enters play fresh, and leaving play
-    removes it from the game rather than filling a discard pile.
+    Stamped from the token template the deck load resolved, not a copy of anything already in the
+    game. Leaving play removes it from the game rather than filling a discard pile.
 
     Attributes
     ----------
@@ -807,13 +804,13 @@ class CreateToken(Effect):
         The seat that will control it.
     creator_id : str
         The card creating it, which the created card is remembered by. A card that speaks about what
-        it made later — "if this Holding is ever unbowed, banish the Personality" — reads the
+        it made later (e.g., "if this Holding is ever unbowed, banish the Personality") reads the
         relation rather than hunting the board for something that looks right.
     attach_to : str or None
         The Personality it arrives attached to, or None to arrive on its own. A card that names a
         target Personality creates nothing when that Personality has left play in the meantime.
     stats : tuple of (Stat, int)
-        Stats the creating card fixes, which the template prints as variable — Mishime Sensei's Oni
+        Stats the creating card fixes. The template prints these as variable. Mishime Sensei's Oni
         has "Force equal to the target's Chi", and the token print carries a ``*`` there. Each pair
         replaces that stat on the print the created card presents, so the card genuinely has the
         number rather than carrying a modifier over a printed zero. Default none, for a template
@@ -850,7 +847,7 @@ class CreateToken(Effect):
             if personality is None:
                 return []
         # A KeyError here is a deck that reached the table without its token templates, not a card
-        # doing something unusual — the load resolves every token the deck's cards can create.
+        # doing something unusual. The load resolves every token the deck's cards can create.
         printed = game.table.creatable_tokens[self.token_id]
         if self.stats:
             printed = replace(printed, **{stat.value: value for stat, value in self.stats})
@@ -914,7 +911,7 @@ class AskAmount(InterruptingEffect):
     a resolver.
 
     The ``:X:`` in a cost block: the amount is settled during the Pay Costs step and everything the
-    action does is shaped by it, so the resolver both charges it and reads it (CR, Action Sequence;
+    action does is shaped by it, so the resolver both charges it and reads it (CR, Action Sequence,
     Good Faith).
 
     Attributes
@@ -1029,7 +1026,7 @@ class Bow(Effect):
 @dataclass(frozen=True, slots=True)
 class Straighten(Effect):
     """Straighten (unbow) a card. Announces the change, which a card that watches for its own
-    straightening reads; one already standing, or forbidden to straighten, announces nothing."""
+    straightening reads. One already standing, or forbidden to straighten, announces nothing."""
 
     card_id: str
 
@@ -1046,7 +1043,7 @@ class Straighten(Effect):
 
 @dataclass(frozen=True, slots=True)
 class BanishTopFate(Effect):
-    """Banish the top card of ``seat``'s Fate deck; a no-op if the deck is empty."""
+    """Banish the top card of ``seat``'s Fate deck. A no-op if the deck is empty."""
 
     seat: PlayerId
 
@@ -1185,7 +1182,7 @@ class WinGame(Effect):
 
 @dataclass(frozen=True, slots=True)
 class GainHonor(Effect):
-    """Move ``seat``'s Family Honor by ``amount``. Negative loses honor; the two directions are one
+    """Move ``seat``'s Family Honor by ``amount``. Negative loses honor. The two directions are one
     effect because the rules treat them as one dial."""
 
     seat: PlayerId
@@ -1204,9 +1201,8 @@ class GainHonor(Effect):
 class DelayStraighten(Effect):
     """Forbid ``card_id`` from straightening until its controller's next Action Phase has ended.
 
-    A prohibition rather than a skipped step: nothing straightens the card while it holds, an effect
-    that tries no more than the turn-start straighten. Imposed rather than offered, unlike the
-    printed "May remain bowed" its controller chooses each turn."""
+    Blocks any attempt to straighten the card while it holds, not just the turn-start straighten.
+    Imposed, unlike the printed "May remain bowed" its controller chooses each turn."""
 
     card_id: str
 
@@ -1338,7 +1334,8 @@ class CounterOnAttachedProvince(Effect):
 @dataclass(frozen=True, slots=True)
 class Unpayable(Effect):
     """A cost that can never be paid, so the ability holding it is never offered. Resolving one
-    raises — reaching it means the legality check that should have withheld the ability did not run.
+    raises an exception. Reaching it means the legality check that should have withheld the ability
+    did not run.
 
     Attributes
     ----------
@@ -1381,7 +1378,7 @@ class Ask(InterruptingEffect):
     """Put a yes/no question to a seat, and hand ``subjects`` to the resolver if it answers yes.
 
     The question names what is being asked so the seat reads it rather than inferring it from a
-    board selection. Use this for an optional effect whose subject is already settled; a genuine
+    board selection. Use this for an optional effect whose subject is already settled. A genuine
     pick among several cards is a :class:`~.Choose`.
 
     Attributes
@@ -1393,7 +1390,7 @@ class Ask(InterruptingEffect):
     resolver : str
         The registered choice resolver naming what a yes does.
     subjects : tuple of str
-        The card ids passed to the resolver on yes; it receives none on no.
+        The card ids passed to the resolver on yes. It receives none on no.
     source_id : str, optional
         A card id handed to the resolver as its context. Default None.
     declinable : bool, optional
@@ -1424,8 +1421,8 @@ class Ask(InterruptingEffect):
 
 @dataclass(frozen=True, slots=True)
 class Choose(InterruptingEffect):
-    """Pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of ``candidates``;
-    the chosen ids feed the registered ``resolver``, whose effects apply on resume.
+    """Pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of ``candidates``.
+    The chosen ids feed the registered ``resolver``, whose effects apply on resume.
 
     Attributes
     ----------
@@ -1434,15 +1431,15 @@ class Choose(InterruptingEffect):
     candidates : tuple of str
         The card ids the seat may pick among.
     minimum : int
-        The fewest cards the seat may pick; zero when the choice is optional.
+        The fewest cards the seat may pick. Zero when the choice is optional.
     maximum : int
         The most cards the seat may pick.
     resolver : str
         The registered choice resolver naming what the chosen ids do.
     source_id : str, optional
-        A card id handed to the resolver as its context. Which card that is belongs to the resolver
-        — often the one whose trigger raised the choice, sometimes the card being acted on. None
-        when the rulebook raises the choice and there is no card to name. Default None.
+        A card id handed to the resolver as its context. Which card that is belongs to the resolver.
+        Often the one whose trigger raised the choice, sometimes the card being acted on. None when
+        the rulebook raises the choice and there is no card to name. Default None.
     """
 
     seat: PlayerId
@@ -1480,7 +1477,7 @@ class AskDistribution(InterruptingEffect):
 
     For the "attach them to one or more of your Personalities" a card leaves to its controller: how
     many go where is the whole of the choice, so the resolver reads the answer as a tally rather
-    than as a set — a candidate named twice takes two.
+    than as a set. A candidate named twice takes two.
 
     Attributes
     ----------

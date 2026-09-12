@@ -32,8 +32,8 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     bespoke registration rules, and the triggers are keyed by event first.
 
     ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than
-    on a card — ``modest_farm_straighten`` and ``sincerity_seed`` name steps in a sequence, not
-    cards — so validating it against the card index would report failures that are not defects.
+    on a card. ``modest_farm_straighten`` and ``sincerity_seed`` name steps in a sequence, not
+    cards, so validating it against the card index would report failures that are not defects.
     """
     derived = {registry.label: frozenset(registry) for registry in CARD_REGISTRIES}
     return {
@@ -50,7 +50,7 @@ def card_keyed_data() -> dict[str, frozenset[str]]:
     """Every card id the engine names as *data* rather than as a handler, grouped by the list
     holding it.
 
-    Kept apart from :func:`~.registered_card_ids` because these ids do not live in a set module — a
+    Kept apart from :func:`~.registered_card_ids` because these ids do not live in a set module. A
     card excepted from a rulebook rule is a property of the card, listed beside the rule it excepts,
     and the layout scan would report every one of them as a registration it could not find. They are
     validated against the card index all the same.
@@ -65,9 +65,8 @@ def duplicate_registrations(
     One human-readable line per card id whose trigger is registered more than once.
 
     Only ``_TRIGGERS`` can hold a duplicate. It appends, so a handler copy-pasted into a second
-    module makes the trigger fire twice — a wrong game state rather than a shadowed one. Every other
-    per-card registry raises on a repeated registration, so a duplicate there is loud at import
-    rather than something to be found here.
+    module fires the trigger twice, producing a wrong game state rather than a loud failure. Every
+    other per-card registry raises on a repeated registration.
 
     Parameters
     ----------
@@ -137,8 +136,8 @@ _QUALIFIERS = (
     r"(?:Absent|Kiho|Maho|Iaijutsu|Ninja|Economic|Repeatable|Tireless|Political"
     r"|Air|Earth|Fire|Water|Void)"
 )
-# An ability heads a segment — the start of the text, the far side of a line break, or the sentence
-# after the previous ability — and its designator phrase runs to the first colon.
+# An ability heads a segment: the start of the text, the far side of a line break, or the sentence
+# after the previous ability, and its designator phrase runs to the first colon.
 _ABILITY_HEAD = re.compile(
     rf"(?:^|>|(?<=\.)\s|(?<=\.))\s*(?:{_QUALIFIERS}\s+)*"
     rf"(?:{'|'.join(_DESIGNATORS)})\b[^.:<]{{0,20}}:"
@@ -185,8 +184,8 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     One human-readable line per card registering fewer activated abilities than its text prints.
 
     A card implemented in half behaves correctly in the half it has, so nothing else reports it.
-    Shortfalls alone: :func:`~.printed_ability_count` reads a floor, so a card registering more than
-    it appears to print is a limit of the count rather than a defect.
+    Shortfalls only: :func:`~.printed_ability_count` reads a floor, so a card registering more
+    than it appears to print is not reported as a defect.
 
     Parameters
     ----------
@@ -258,9 +257,9 @@ def module_level_collections() -> set[str]:
     """Every module-level dict, set and frozenset *defined* in the scanned packages.
 
     Read from the source rather than from the imported modules, and read recursively. A re-exported
-    name shows up in ``vars`` without the module owning it, and — the failure this exists to
-    prevent — a registry in a module nobody thought to list shows up here regardless, including one
-    inside a package or in a package the rules layer does not own.
+    name shows up in ``vars`` without the module owning it, which is the failure this exists to
+    prevent, so a registry in a module nobody thought to list shows up here regardless, including
+    one inside a package or in a package the rules layer does not own.
     """
     return {
         name
@@ -271,7 +270,8 @@ def module_level_collections() -> set[str]:
 
 
 def _built_by_the_registrar(value: ast.expr | None) -> bool:
-    """Whether this binding is a registry the registrar catalogues, which validation finds itself."""
+    """Whether this binding is a registry the registrar catalogues, which validation finds
+    itself."""
     return isinstance(value, ast.Call) and getattr(value.func, "id", "") in REGISTRAR
 
 
@@ -301,11 +301,10 @@ def unvalidated_registries(collections: set[str] | None = None) -> list[str]:
     """
     One human-readable line per module-level collection that no check here reads.
 
-    Everything built through :mod:`~yasuki_core.engine.registrar` catalogues itself, so a registry
-    made that way is validated wherever it lives. One written as a plain dict is not, and nothing
-    else notices: :func:`~.unregistered_card_ids` iterates the registries it is handed, so one it
-    has never heard of contributes no ids and reports no problems. Classifying a new collection is a
-    decision someone makes rather than one they can skip.
+    A registry built through :mod:`~yasuki_core.engine.registrar` catalogues itself and needs no
+    entry here. One written as a plain dict, set, or frozenset does not, and nothing else notices,
+    since :func:`~.unregistered_card_ids` only iterates the registries it is handed. Classifying it
+    is a decision someone must make explicitly.
 
     Parameters
     ----------

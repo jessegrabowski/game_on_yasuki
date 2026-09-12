@@ -68,7 +68,8 @@ ASETHS_LEGION_FEAR_PENALTY = -2
 def _aseths_legion_attack_strength(
     game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
 ) -> int:
-    """ "Targeting this Follower" — she shields herself alone, and only against Fear."""
+    """The phrase "targeting this Follower" means she shields herself alone, and only against
+    Fear."""
     if target is not card or not isinstance(attack, Fear):
         return 0
     return ASETHS_LEGION_FEAR_PENALTY
@@ -98,7 +99,7 @@ def _resolve_red_panda_spirit_keep(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Reshuffle the Event into its owner's Dynasty deck, or discard it. Declining is not doing
-    nothing — the Event leaves its Province either way, and only where it goes is the seat's."""
+    nothing. The Event leaves its Province either way, and only where it goes is the seat's."""
     if not chosen:
         return [Discard(source_id, seat)]
     deck = DeckKey(seat, Side.DYNASTY)
@@ -107,15 +108,15 @@ def _resolve_red_panda_spirit_keep(
 
 def _blessings_of_the_red_panda_spirit_targets(game: GameState, card: L5RCard) -> list[str]:
     """The Event itself. The ability names no card at all, but an ability whose candidates are empty
-    is never offered, so it stands as its own — paired with ``hits_every_target`` so the seat is
-    not asked to pick the only thing there is."""
+    is never offered, so it stands as its own target, paired with ``hits_every_target`` so the seat
+    is not asked to pick the only thing there is."""
     return [card.id]
 
 
 def _blessings_of_the_red_panda_spirit_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """A gift to the table, then a question. Every seat gains and draws in seat order; the reshuffle
+    """A gift to the table, then a question. Every seat gains and draws in seat order. The reshuffle
     is deferred so it follows the draws, which is the order the card states."""
     gifts: list[Effect] = []
     for seat in game.table.seats:
@@ -174,7 +175,7 @@ def _bound_in_blood_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]
 
 
 def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    """Bow the Spell, then settle the :X: — both are printed in the cost block, so both are paid
+    """Bow the Spell, then settle the :X:. Both are printed in the cost block, so both are paid
     before the Personalities are chosen (CR, Action Sequence)."""
     return [
         Bow(source.id),
@@ -257,7 +258,7 @@ COURTS_LOSE = f"Lose {COURTS_HONOR} Honor"
 
 
 def _courts_of_otosan_uchi_courtiers(game: GameState, seat: PlayerId) -> tuple[str, ...]:
-    """The seat's unbowed Courtiers — the ones there is still a bow to spend."""
+    """The seat's unbowed Courtiers (the ones that still have a bow to spend)."""
     return tuple(
         personality.id
         for personality in owned_personalities(game, seat)
@@ -280,8 +281,8 @@ def _courts_of_otosan_uchi_targets(game: GameState, source: L5RCard) -> list[str
 def _courts_of_otosan_uchi_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """Bow the named Courtier, then ask whose Honor moves — a target player first, the direction
-    second, as the card is written."""
+    """Bow the named Courtier, then ask whose Honor moves. A target player is named first, then the
+    direction, as the card is written."""
     return [
         Bow(target.id),
         AskOption(
@@ -358,9 +359,7 @@ register_may_remain_bowed("culling_grounds")
 def _culling_grounds_straightened(ctx: TriggerContext) -> list[Effect]:
     """Until the game ends, if this Holding is ever unbowed, banish the Personality.
 
-    Which is why the Holding may remain bowed: standing it up again to produce Gold is what costs
-    the servant. Nothing it created earlier and lost is chased, so a second servant is only ever at
-    risk of the same bargain.
+    Banishes only the servant currently created by this Holding. One already lost is not chased.
     """
     if ctx.event.card_id != ctx.card.id:
         return []
@@ -368,8 +367,8 @@ def _culling_grounds_straightened(ctx: TriggerContext) -> list[Effect]:
 
 
 def _culling_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Create and Recruit the servant, ignoring Gold Cost — nothing is paid for it, so there is no
-    payment to raise; the Honor is the price."""
+    """Create and Recruit the servant, ignoring Gold Cost. Nothing is paid for it, so there is no
+    payment to raise. The Honor is the price."""
     return [
         CreateToken(EXPENDABLE_SERVANT, source.owner, source.id),
         GainHonor(source.owner, -1),
@@ -401,7 +400,7 @@ def _iweko_miaka_princess_of_rokugan_experienced_favor_payer(
     """ "Once per turn, you may pay your action's :favor: costs."
 
     A trait that fires while the cost is being paid, which is how the CR has a card contribute to
-    somebody's payment (CR, Paying Gold Costs; Special Triggered Traits). Her limit is the whole
+    somebody's payment (CR, Paying Gold Costs and Special Triggered Traits). Her limit is the whole
     price, so taking her offer costs nothing else and the Favor stays where it is.
     """
     if used_this_turn(game, card, MIAKA_PAYMENT):
@@ -452,9 +451,8 @@ register_ability(
 def _man_the_walls_targets(game: GameState, source: L5RCard) -> list[str]:
     """The seat's own unbowed Followers and Personalities, wherever they stand.
 
-    "At any location" is what puts them all on offer: the Rules of Location would otherwise leave
-    only the ones at the battlefield the battle is being fought at. A bowed card is no target — the
-    action bows what it names, and one already bowed cannot be bowed again (CR, Costs).
+    The card says "at any location," so targets are not limited to the current battle's
+    battlefield.
     """
     offered: list[str] = []
     for personality in owned_personalities(game, source.owner):
@@ -500,7 +498,7 @@ register_ability(
 
 
 def _rebuilt_harbor_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
-    """One +1GP Wealth token per gold invested — Rebuilt Harbor's variable payoff."""
+    """One +1GP Wealth token per gold invested (Rebuilt Harbor's variable payoff)."""
     return [AdjustCounter(source.id, WEALTH, amount)]
 
 
@@ -516,7 +514,7 @@ CAVALRY_FOLLOWER = "cavalry"
 @on(EnteredPlay, "shinjo_saeki_clan_champion_experienced_2")
 def _shinjo_saeki_clan_champion_experienced_2_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After Saeki enters play, create and Equip a 1F Cavalry Follower to each of your Cavalry
-    Personalities — himself among them, since he carries the keyword."""
+    Personalities, himself included, since he carries the keyword."""
     if ctx.event.card_id != ctx.card.id:
         return []
     cavalry = ctx.game.table.creatable_tokens[CAVALRY_FOLLOWER]

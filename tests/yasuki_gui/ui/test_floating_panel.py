@@ -38,8 +38,8 @@ class _drag:
 def _shrink(panel: FloatingPanel, board: tk.Frame, width: int, height: int) -> None:
     """Resize the window the board fills, then hand the panel the notice Tk would.
 
-    The suite withdraws every root so tests do not flash windows on screen, and a withdrawn window
-    is never sent ``<Configure>`` — so the handler is called rather than awaited. That the handler
+    The suite withdraws every root so tests do not flash windows on screen. A withdrawn window
+    is never sent ``<Configure>``, so the handler is called rather than awaited. That the handler
     is wired to the event at all is :func:`test_the_panel_listens_for_the_board_resizing`.
     """
     board.master.geometry(f"{width}x{height}")
@@ -91,8 +91,7 @@ def test_dragging_moves_the_panel_by_how_far_the_pointer_traveled(board):
 def test_a_panel_cannot_be_dragged_off_the_board(board):
     """It is only grabbable by its title bar, so one pushed past the edge could never be recovered.
 
-    Down to a strip of bar rather than the whole panel: what has to stay reachable is somewhere to
-    take hold of, and demanding the whole panel fit would strand one resized larger than the board.
+    What must stay on-board is a strip of the title bar, not the whole panel.
     """
     panel = FloatingPanel(board, "Attack", width=400, height=300)
     panel.open_at(100, 100)
@@ -117,7 +116,7 @@ def test_a_panel_cannot_be_resized_larger_than_the_board(board):
 
 
 def test_a_panel_at_its_full_width_still_drags(board):
-    """A panel as wide as the board has a range of legal positions, not one — it slides until a
+    """A panel as wide as the board has a range of legal positions, not one. It slides until a
     strip of bar is all that is left on."""
     panel = FloatingPanel(board, "Attack", width=400, height=300)
     panel.open_at(200, 100)
@@ -334,7 +333,9 @@ def test_opening_over_a_box_takes_that_box(board):
 
 
 def test_a_box_larger_than_the_board_is_trimmed_to_it(board):
-    """Otherwise the panel opens with its resize corner past the edge and cannot be shrunk to fit."""
+    """
+    Otherwise the panel opens with its resize corner past the edge and cannot be shrunk to fit.
+    """
     panel = FloatingPanel(board, "Attack", width=400, height=300)
 
     panel.open_over(0, 0, 2000, 1500)
@@ -354,7 +355,7 @@ def test_opening_over_a_box_does_not_resize_a_panel_already_on_the_board(board):
 
 
 def test_opening_over_a_box_leaves_a_panel_the_player_has_already_placed_alone(board):
-    """The box is where it starts, not where it belongs — a size the player chose is theirs, and an
+    """The box is where it starts, not where it belongs. A size the player chose is theirs, and an
     attack ending is no reason to take it back."""
     panel = FloatingPanel(board, "Attack", width=400, height=300)
     panel.open_over(0, 0, 400, 250)  # narrower than the board, so there is room to grow

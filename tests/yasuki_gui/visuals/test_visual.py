@@ -37,7 +37,7 @@ class TestCounterBadges:
         )
 
     def test_badges_hang_off_the_cards_bottom_right_corner(self, root):
-        """The bbox is (x0, y0, x1, y1); reading its corners in the wrong order would park the
+        """The bbox is (x0, y0, x1, y1). Reading its corners in the wrong order would park the
         badges on the opposite side of the card with every count still correct. Bottom rather than
         top: the top-right is where a card prints its Chi, and the live stat is stamped over it."""
         canvas = tk.Canvas(root, width=400, height=400)
@@ -62,7 +62,7 @@ class TestCounterBadges:
         assert len({canvas.itemcget(disc, "fill") for disc in discs}) == 2  # styled apart
 
     def test_a_counter_at_zero_draws_nothing(self, root):
-        """A counter spent down to zero leaves its key behind; a badge reading 0 would be noise."""
+        """A counter spent down to zero leaves its key behind. A badge reading 0 would be noise."""
         canvas = tk.Canvas(root, width=400, height=400)
         draw_counter_badges(canvas, self._card(wealth=0), (0, 0, 120, 200), ("badge",))
 

@@ -112,7 +112,7 @@ def test_a_declined_jade_mine_straightens_as_usual():
 
 def test_a_producer_asked_once_a_turn_is_not_asked_again():
     """The window's own once-per-turn guard, which needs a card that survives its own price to be
-    reachable at all — Outlying Farms is destroyed for taking its grant and never gets here."""
+    reachable at all. Outlying Farms is destroyed for taking its grant and never gets here."""
     session = _mine_game(target_cost=2)
     session.act(P1, Recruit("target"))
     session.submit(P1, DecisionResponse(("jm",)))

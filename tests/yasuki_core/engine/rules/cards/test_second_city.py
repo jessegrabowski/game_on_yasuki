@@ -86,8 +86,8 @@ def test_destroying_a_province_replays_to_the_same_state():
 
 
 def test_destroying_a_province_that_is_already_gone_is_a_no_op():
-    """Two Events in one Province both resolving, or a Province destroyed by anything else first —
-    the effect finds nothing to destroy rather than raising on a missing zone."""
+    """Two Events in one Province both resolving, or a Province destroyed by anything else first.
+    The effect finds nothing to destroy rather than raising on a missing zone."""
     session = _harsh_game()
     gone = ZoneKey(P1, ZoneRole.PROVINCE, 0)
     session.act(P1, ActivateAbility("harsh"))

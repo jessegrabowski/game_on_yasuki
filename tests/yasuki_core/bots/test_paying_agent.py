@@ -29,7 +29,7 @@ def test_a_cost_already_in_the_pool_bows_nothing():
 
 def test_it_bows_the_smallest_producer_first():
     """Smallest first, so the larger producers stay straight for a second purchase this turn. The
-    answer names one; the payment comes back round for the rest."""
+    answer names one. The payment comes back round for the rest."""
     assert _answer(amount=3, available=0, produced=(("big", 5), ("small", 1), ("mid", 2))) == (
         "small",
     )
@@ -73,9 +73,10 @@ def _grant_only_game() -> EngineSession:
 
 
 def test_a_grant_the_payment_needs_cannot_be_declined():
-    """The engine offers the recruit because the grant reaches it, so announcing it commits the seat
-    to taking it. The window refuses no, which is what stops even the placeholder agent — whose rule
-    is the shortest answer that fits — from stranding a payment it already committed to."""
+    """The engine offers the recruit because the grant reaches it, so announcing it commits the
+    seat to taking it. The window refuses no, which is what stops even the placeholder agent,
+    whose rule is the shortest answer that fits, from stranding a payment it already committed
+    to."""
     session = _grant_only_game()
     controls = {seat: Controls(EconomicPolicy(), AutoAgent()) for seat in PlayerId}
 
@@ -100,7 +101,7 @@ def test_a_recruit_only_a_grant_reaches_is_paid_for_and_completes():
 
 def test_a_grant_is_declined_when_plain_production_covers_the_cost():
     """The grant costs the producer whatever its card names, so it is never taken for convenience.
-    The window still opens; the agent answers no and the Farm lives."""
+    The window still opens. The agent answers no and the Farm lives."""
     table = dealt_table()
     put_in_play(table, holding("of", owner=P1, printed_id="outlying_farms", gold_production=2))
     session = EngineSession.start(table, P1)
@@ -119,7 +120,7 @@ def test_a_grant_is_declined_when_plain_production_covers_the_cost():
 def test_it_keeps_answering_until_the_cost_is_met():
     """Three one-gold producers against a cost of three, driven end to end. Any off-by-one in the
     loop's stopping condition under-pays here while covering every cost met in a single larger
-    jump. The agent picks one each round; knowing when to stop is the payment's job, not its."""
+    jump. The agent picks one each round, and knowing when to stop is the payment's job, not its."""
     state = dealt_table()
     for name in ("a", "b", "c"):
         put_in_play(state, holding(name, owner=P1, gold_production=1))

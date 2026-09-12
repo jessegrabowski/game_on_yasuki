@@ -20,7 +20,7 @@ def test_bundled_art_resolves_against_the_bundled_images():
 
 
 def test_an_already_resolved_path_is_left_alone():
-    """A caller may hold a path it resolved itself — the GUI caches them — so resolving twice has
+    """A caller may hold a path it resolved itself. The GUI caches them, so resolving twice has
     to be harmless rather than prefixing the image root a second time."""
     resolved = resolve_card_image_path(DYNASTY_BACK)
 

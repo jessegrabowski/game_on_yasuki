@@ -46,7 +46,8 @@ def load_art_layout() -> dict:
 
 
 def era_for_date(release_date: datetime.date | None) -> str:
-    """Map a set's release date to its art-layout era band; the modern band for an unknown date."""
+    """Map a set's release date to its art-layout era band, or the modern band for an unknown
+    date."""
     if release_date is None:
         return DEFAULT_ERA
     for max_date, era in ERA_BANDS:
@@ -77,12 +78,14 @@ def _load_set_dates() -> dict[str, datetime.date | None]:
 
 def era_for_set(set_name: str) -> str:
     """Art-layout era for a set. A set with no release date falls back to its arc's earliest dated
-    set, so metadata gaps (e.g. Samurai Edition Banzai, Chaos Reigns Part III) still bucket right."""
+    set, so metadata gaps (e.g. Samurai Edition Banzai, Chaos Reigns Part III) still bucket
+    right."""
     return era_for_date(_load_set_dates().get(set_name))
 
 
 def back_era_for_set(set_name: str) -> str:
-    """Which generic card back a set's printings use: ``"old"`` before Gold Edition, else ``"new"``."""
+    """Which generic card back a set's printings use: ``"old"`` before Gold Edition, else
+    ``"new"``."""
     date = _load_set_dates().get(set_name)
     if date is None:
         return "new"
@@ -97,7 +100,8 @@ def classify(card: dict, set_name: str) -> tuple[str, str]:
 
 
 def art_rect(key: tuple[str, str]) -> tuple[float, float, float, float]:
-    """The art rect for an (era, layout type) key, falling back to the era's then the modern Strategy window."""
+    """The art rect for an (era, layout type) key, falling back to the era's then the modern
+    Strategy window."""
     era, _ = key
     return (
         ART_RECTS.get(key)
@@ -107,7 +111,7 @@ def art_rect(key: tuple[str, str]) -> tuple[float, float, float, float]:
 
 
 def overlays_for(key: tuple[str, str]) -> list[dict]:
-    """Frame-element overlays to stamp over the donor art for an (era, layout) key; empty if none.
+    """Frame-element overlays to stamp over the donor art for an (era, layout) key. Empty if none.
 
     Each overlay is a dict with ``asset`` (filename under the bundled overlays dir) and ``rect``
     (its placement on the full card as left, top, right, bottom fractions)."""
@@ -115,7 +119,8 @@ def overlays_for(key: tuple[str, str]) -> list[dict]:
 
 
 def mon_overlays(keywords: list[str], era: str) -> list[dict]:
-    """Mon overlays for a card's keywords on the modern frame; empty off-era or with no mon keywords.
+    """Mon overlays for a card's keywords on the modern frame. Empty off-era or with no mon
+    keywords.
 
     The card's mon keywords are stamped in alphabetical order down stacked slots, each the same size
     and left, at centers :math:`cy0 + i \\cdot pitch`. Returns a list of dicts with ``asset`` and
@@ -144,20 +149,21 @@ def mon_overlays(keywords: list[str], era: str) -> list[dict]:
 
 
 def patches_for(key: tuple[str, str]) -> list[dict]:
-    """Recipient patches to re-stamp over the donor art for an (era, layout) key; empty if none.
+    """Recipient patches to re-stamp over the donor art for an (era, layout) key. Empty if none.
 
-    Each dict has ``rect`` (left, top, right, bottom fractions) and an optional ``mask`` (a silhouette
-    asset under the overlays dir). With a mask the renderer keeps only that shape (stat icons),
-    without one it restores the whole rect (banner corners, frame edges)."""
+    Each dict has ``rect`` (left, top, right, bottom fractions) and an optional ``mask`` (a
+    silhouette asset under the overlays dir). With a mask the renderer keeps only that shape (stat
+    icons), without one it restores the whole rect (banner corners, frame edges)."""
     return PATCHES.get("|".join(key), [])
 
 
 def cover_crop(
     box: tuple[int, int, int, int], target_w: int, target_h: int
 ) -> tuple[int, int, int, int]:
-    """Shrink box to the target aspect ratio, centered, so a resize to target fills without distortion.
+    """Shrink box to the target aspect ratio, centered, so a resize to target fills without
+    distortion.
 
-    Canonical geometry mirrored by the browser canvas; keep the two implementations in step."""
+    Canonical geometry mirrored by the browser canvas. Keep the two implementations in step."""
     left, top, right, bottom = box
     w, h = right - left, bottom - top
     if w * target_h > h * target_w:

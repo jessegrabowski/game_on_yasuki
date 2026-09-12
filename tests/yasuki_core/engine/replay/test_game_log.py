@@ -238,7 +238,7 @@ def test_a_grant_taken_in_a_production_window_round_trips_through_the_codec():
 
 def test_triggered_choice_replays_and_round_trips():
     # Recruiting a Wheat Farm fires its EnteredPlay trigger, which pauses to choose other Farms to
-    # give a Wealth token — the recruit -> pay -> choose -> resume chain must survive replay.
+    # give a Wealth token, and the recruit -> pay -> choose -> resume chain must survive replay.
     state = dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
@@ -395,7 +395,7 @@ ROUND_TRIPPED_ACTIONS = [
 
 def test_every_action_kind_is_round_tripped():
     # The list above is hand-written, so an action added to the union without a case here would
-    # ship a codec nothing exercises — and only fail when someone saved a game.
+    # ship a codec nothing exercises, and only fail when someone saved a game.
     covered = {type(action) for action in ROUND_TRIPPED_ACTIONS}
     assert set(typing.get_args(Action)) - covered == set()
 

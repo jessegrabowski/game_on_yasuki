@@ -20,8 +20,9 @@ _COUNTER_KEYS = frozenset(counter.key for counter in ALL_COUNTERS)
 
 logger = logging.getLogger(__name__)
 
-# YAML stat field == card column name. A value that is a clean integer fills the column; a meaningful
-# non-integer (a follower modifier like "+2", a variable "*") is kept under "<col>_raw" in extra.
+# YAML stat field == card column name. A value that is a clean integer fills the column; a
+# meaningful non-integer (a follower modifier like "+2", a variable "*") is kept under
+# "<col>_raw" in extra.
 STAT_FIELDS = (
     "gold_cost",
     "focus",
@@ -54,8 +55,8 @@ def parse_collector_numbers(raw: str | None) -> list[tuple[str | None, int]]:
 
 
 # Cards-table column order. The row _card_columns builds matches it positionally, and the INSERT is
-# generated from it, so the back_card_id position the link pass writes to is derived here rather than
-# hand-counted.
+# generated from it, so the back_card_id position the link pass writes to is derived here rather
+# than hand-counted.
 _CARD_COLUMN_NAMES = (
     "card_id",
     "slug",
@@ -104,7 +105,7 @@ def build_revisions(original_text: str, errata: list[dict]) -> list[CardRevision
 
     Each errata entry is a dict with ``date`` and ``text``, optionally ``source``, ``source_url``,
     ``art`` and ``set_slug`` (which resolve the revision's image path), ``notes``, and any integer
-    stat overrides keyed by stat column. Revision 0 is the original text; errata follow sorted by
+    stat overrides keyed by stat column. Revision 0 is the original text. Errata follow sorted by
     effective date, so the last element is the current version.
 
     Parameters
@@ -157,18 +158,18 @@ def build_revisions(original_text: str, errata: list[dict]) -> list[CardRevision
 
 
 def _revision_baseline(errata: list[dict], fallback: str) -> str:
-    """The pre-errata text for revision 0: the ``home_text`` of the oldest erratum — the text on the
-    printing that erratum was issued for — so the compare diffs against the right prior wording even
-    when that printing is not the card's first-seen entry. Falls back to ``fallback`` when the oldest
-    erratum carries no home text."""
+    """The pre-errata text for revision 0: the ``home_text`` of the oldest erratum, the text on the
+    printing that erratum was issued for, so the compare diffs against the right prior wording even
+    when that printing is not the card's first-seen entry. Falls back to ``fallback`` when the
+    oldest erratum carries no home text."""
     oldest = min(errata, key=lambda e: coerce_date(e.get("date")) or datetime.date.min)
     return oldest.get("home_text") or fallback
 
 
 def _apply_current_revision(row: list, revisions: list[CardRevision]) -> None:
     """Mutate a cards row so its rules text and stats reflect the newest revision. Stat overrides
-    accumulate in date order, so a stat an earlier errata changed sticks until a later one changes it
-    again."""
+    accumulate in date order, so a stat an earlier errata changed sticks until a later one changes
+    it again."""
     row[_RULES_TEXT_COL] = revisions[-1].rules_text
     for revision in revisions[1:]:
         for col, value in revision.stats.items():
@@ -217,7 +218,7 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[list,
         stats["province_strength"],
         stats["starting_honor"],
         stats["gold_production"],
-        None,  # back_card_id — filled in by _link_and_validate_back_faces
+        None,  # back_card_id, filled in by _link_and_validate_back_faces
         bool(entry.get("is_back")),
         bool(entry.get("is_unique")),
         bool(entry.get("is_proxy")),
@@ -235,7 +236,7 @@ def _print_columns(entry: dict, card_id: str, printing_id: str, set_id: int) -> 
     """Build the prints-table row for one YAML entry (one printing of a card).
 
     ``print_text`` is this printing's own rules wording, authored only where it differs from the
-    card's canonical text; when absent the column is None and readers fall back to
+    card's canonical text. When absent the column is None and readers fall back to
     ``cards.rules_text`` (the most-recent-printing + errata standard).
 
     Parameters
@@ -275,7 +276,7 @@ def _print_columns(entry: dict, card_id: str, printing_id: str, set_id: int) -> 
 
 def _validate_creates(cards: dict, creates_links: set[tuple[str, str]]) -> None:
     """Check every `creates:` edge before inserting it. Both endpoints must be loaded cards and a
-    card may not create itself; a dangling id is a curation error in the source YAML, so fail loudly
+    card may not create itself. A dangling id is a curation error in the source YAML, so fail loudly
     rather than silently dropping the edge."""
     dangling = {
         cid for creator, created in creates_links for cid in (creator, created) if cid not in cards
@@ -300,7 +301,7 @@ def _validate_grants(cards: dict, grants_links: set[tuple[str, str]]) -> None:
 
 def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) -> None:
     """Point each front row at its back face. Every is_back card must have a front (is_back=False)
-    card of the same name — the link is derived from that shared name, so its absence is a fatal
+    card of the same name. The link is derived from that shared name, so its absence is a fatal
     data error, not something to paper over."""
     front_names = {card_names[c] for c in cards if c not in back_ids}
     for back_id in back_ids:
@@ -318,7 +319,7 @@ def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) 
 
 def mrp_text(dated_texts: list[tuple[datetime.date | None, str]]) -> str | None:
     """The rules text from the most-recently-released printing (the MRP standard). Each element is a
-    ``(release_date, text)`` pair for one printing that carries text; a null date sorts oldest so a
+    ``(release_date, text)`` pair for one printing that carries text. A null date sorts oldest so a
     dated printing always wins over an undated one. Return None for an empty list.
 
     Parameters
@@ -339,9 +340,8 @@ def mrp_text(dated_texts: list[tuple[datetime.date | None, str]]) -> str | None:
 def _register_local_set(cur, set_name: str) -> tuple:
     """Give a local-only set its own ``l5r_sets`` row and return the columns ``load_cards`` reads.
 
-    A local set is absent from the committed set metadata by definition, so it registers itself here
-    rather than being listed there. Filed under a ``Local`` arc and marked digital, which keeps it
-    out of the arc-ordered format lists a real set appears in.
+    Filed under a ``Local`` arc and marked digital, which keeps it out of the arc-ordered format
+    lists a real set appears in.
     """
     cur.execute(
         """
@@ -360,8 +360,9 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     Load every per-set YAML file into the card tables.
 
     Cards are identified by their explicit `id` or, failing that, a slug of the extended title, and
-    deduplicated across the sets they appear in. Each YAML entry contributes one printing; a card with
-    several printings in one set gets suffixed printing ids. Set names resolve to set ids via l5r_sets.
+    deduplicated across the sets they appear in. Each YAML entry contributes one printing. A card
+    with several printings in one set gets suffixed printing ids. Set names resolve to set ids via
+    l5r_sets.
 
     Parameters
     ----------
@@ -390,7 +391,8 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     print_rows: list[tuple] = []
     number_map: dict[tuple[str, str], list[tuple[str | None, int]]] = {}
     # Errata are collected across every entry of a card, keyed by card_id, so which per-set file a
-    # card's canonical row happens to come from (filename sort order) never decides which errata win.
+    # card's canonical row happens to come from (filename sort order) never decides which errata
+    # win.
     errata_map: dict[str, list[dict]] = {}
 
     # The Most-Recent-Printing standard: a card's standing rules text is the text on its newest
@@ -452,7 +454,8 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                     )
 
                 # `creates:` (spawns a real card) and `grants:` (applies a counter) are card-level
-                # but unioned across printings so they load regardless of which printing carries them.
+                # but unioned across printings so they load regardless of which printing carries
+                # them.
                 creates_links.update((card_id, tok) for tok in entry.get("creates", []))
                 grants_links.update((card_id, key) for key in entry.get("grants", []))
 
@@ -469,7 +472,8 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
         _validate_grants(cards, grants_links)
 
         # Set each card's standing rules text to its most-recent printing (MRP standard). This runs
-        # before errata folding so an erratum, being the newest revision, still wins over the printing.
+        # before errata folding so an erratum, being the newest revision, still wins over the
+        # printing.
         for card_id, dated_texts in latest_text.items():
             text = mrp_text(dated_texts)
             if text is not None and card_id in cards:
@@ -652,7 +656,8 @@ def _insert_all(
             number_rows,
         )
 
-    # Sets are already loaded, so each format's arc and chronological legal_from can be resolved now.
+    # Sets are already loaded, so each format's arc and chronological legal_from can be resolved
+    # now.
     populate_format_metadata(cur)
 
 

@@ -147,8 +147,8 @@ def test_doji_natsuyo_costs_a_gold_less_against_a_scorpion():
 
 
 def test_doji_natsuyo_is_not_discounted_by_her_own_players_clan():
-    """ "another player" — a Crane player who is themselves Scorpion (or the only Scorpion at the
-    table) pays her in full."""
+    """ "another player" excludes a Crane player who is themselves Scorpion (or the only Scorpion at
+    the table), so that player pays her in full."""
     game = _natsuyo_game()
     natsuyo = game.table.cards_by_id["natsuyo"]
     put_in_play(game.table, register(game.table, stronghold(P1, clan=ruleset.SCORPION)))

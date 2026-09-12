@@ -138,7 +138,7 @@ def test_it_is_offered_from_its_province():
 
 
 def test_the_search_offers_only_items():
-    """887 cards are Items and a Fate deck is mostly not; picking them out is the whole search."""
+    """887 cards are Items and a Fate deck is mostly not. Picking them out is the whole search."""
     session = _gift_game(items=("katana", "bow"), plain=("strategy", "spell"))
     session.act(P1, ActivateAbility("gift"))
 
@@ -169,8 +169,8 @@ def test_the_honor_is_gained_and_the_event_spent():
 
 
 def test_the_search_cannot_be_declined_once_an_item_is_there():
-    """ "…search your Fate deck for an Item, show it, and put it in your hand" offers no choice about
-    taking what it finds — unlike Wisdom Gained, which says "may"."""
+    """ "...search your Fate deck for an Item, show it, and put it in your hand" offers no choice
+    about taking what it finds, unlike Wisdom Gained, which says "may"."""
     session = _gift_game()
     session.act(P1, ActivateAbility("gift"))
 
@@ -205,7 +205,7 @@ def test_a_fate_deck_with_no_item_still_gains_the_honor():
 
 def test_the_province_refills_behind_the_spent_event():
     """An Event that spends itself out of a Province leaves it short, and a Province that is short
-    refills — otherwise the seat is down a Province for the rest of the game."""
+    refills, or else the seat is down a Province for the rest of the game."""
     session = _gift_game()
     session.act(P1, ActivateAbility("gift"))
     session.submit(P1, DecisionResponse(("katana",)))
@@ -329,8 +329,8 @@ def test_the_defender_playing_it_still_names_the_attacker():
 
 
 def test_it_lasts_the_one_battle_it_was_played_in():
-    """ "In this battle" — the next battle of the phase opens its Combat Segment on the Defender
-    again, because a held effect is spent when it fires."""
+    """ "In this battle" holds for one battle only, so the next battle of the phase opens its Combat
+    Segment on the Defender again, because a held effect is spent when it fires."""
     session = _sneak_attack_battle()
     _play_sneak_attack(session, ATTACKER)
     _close_the_engage_segment(session)
@@ -379,7 +379,9 @@ def test_touch_of_death_destroys_a_bowed_personality_with_lower_chi():
 
 
 def test_touch_of_death_does_not_target_a_personality_with_higher_chi():
-    """ "Equal or lower" is measured against the caster, so a hardier Personality is out of reach."""
+    """
+    "Equal or lower" is measured against the caster, so a hardier Personality is out of reach.
+    """
     game = _touch_game(caster_chi=2)  # the victim's Chi 4 is above it
     session = EngineSession.start(game.table, P1)
 
@@ -395,7 +397,7 @@ def test_touch_of_death_targets_a_personality_with_equal_chi():
 
 
 def test_touch_of_death_does_not_target_an_unbowed_personality():
-    # Chi 4 against a caster of 5 — only the standing is what puts him out of reach.
+    # Chi 4 against a caster of 5, so only the standing puts him out of reach.
     game = _touch_game(caster_chi=5, victims=((4, False),))
     session = EngineSession.start(game.table, P1)
 

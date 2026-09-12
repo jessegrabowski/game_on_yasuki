@@ -112,7 +112,7 @@ class Presenter:
         """The units the player has sent to each battlefield but not yet assigned, by battlefield.
 
         Board state rather than engine state: units are sent from the card menu and the engine is
-        told once, so until then this is the only place the intention exists — and the player has
+        told once, so until then this is the only place the intention exists. The player has
         already decided, so the battle view draws them standing where they were sent.
 
         Parameters
@@ -141,9 +141,9 @@ class Presenter:
     def _lane_buttons(self) -> dict[int, LaneButton]:
         """What each battlefield offers the player right now.
 
-        Both questions the Attack Phase asks are about a place, so both are answered under the lane
-        that place is drawn in. Empty the rest of the time, which is what keeps a button off a lane
-        whenever pressing it would not be a legal move.
+        Both questions the Attack Phase asks are about a place, so both are answered under the
+        lane that place is drawn in. Empty when pressing a lane's button would not be a legal
+        move.
         """
         pending = self.host.runner.pending
         if isinstance(pending, ChooseBattlefield):
@@ -170,7 +170,7 @@ class Presenter:
         window = self.window
         view = self.host.runner.view()
         # Backing out or undoing rewinds the tape and replays it onto a fresh table, so the board is
-        # repointed here rather than at each of those call sites — one of which used to forget.
+        # repointed here rather than at each of those call sites. One of them used to forget.
         window.field.state = self.host.session.game.table
         window.field.gold = view.gold[view.viewer]
         window.field.render_snapshot(view.table, self.host.human_seat, view.stats)
@@ -216,7 +216,7 @@ class Presenter:
                 buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(), buttons
         if isinstance(pending, ChooseBattlefield):
-            # Answered by the button under the lane it picks, not from here — the choice is about
+            # Answered by the button under the lane it picks, not from here. The choice is about
             # the battlefields, and they are what the player is looking at when it is asked.
             return pending.prompt(), []
         if isinstance(pending, AssignUnits):
@@ -225,8 +225,8 @@ class Presenter:
             # assignment calls for.
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
         if isinstance(pending, ChooseOption):
-            # An outcome the card spells out rather than anything on the board — "gain or lose",
-            # "which player" — so it is read as a list of wordings and answered by picking one.
+            # An outcome the card spells out rather than anything on the board: "gain or lose" or
+            # "which player". It is read as a list of wordings and answered by picking one.
             options: list[ButtonSpec] = [
                 (option, lambda chosen=option: self.submit_answer((chosen,)), True)
                 for option in pending.candidates
@@ -235,7 +235,7 @@ class Presenter:
                 options.append(("Cancel", self.cancel, True))
             return pending.prompt(), options
         if isinstance(pending, ChooseInvestAmount):
-            # An amount, not a board card — answered by one button per affordable amount.
+            # An amount, not a board card. Answered by one button per affordable amount.
             amounts: list[ButtonSpec] = [
                 (f"Invest {amount}", lambda a=amount: self.submit_invest(a), True)
                 for amount in pending.candidates
@@ -250,8 +250,8 @@ class Presenter:
             ]
         if pending is not None:
             answer = self._board_answer()
-            # A payment is picked whole and answered one producer at a time, so what makes it
-            # finishable is whether the picks cover the cost — not whether this is one legal answer.
+            # A payment is picked whole and answered one producer at a time. What makes it
+            # finishable is whether the picks cover the cost, not whether this is one legal answer.
             ready = (
                 pending.covers_cost(answer)
                 if isinstance(pending, ChoosePayment)
@@ -304,7 +304,7 @@ class Presenter:
 
         It stops early whenever a producer's own window interrupts, so the seat answers that and the
         rest of the queue is spent on the way back through. Anything still queued once the payment
-        is over is dropped — only a question can pause a payment, so anything else pending means the
+        is over is dropped. Only a question can pause a payment, so anything else pending means the
         payment this queue belonged to has finished.
         """
         runner, field = self.host.runner, self.window.field
@@ -318,7 +318,8 @@ class Presenter:
             field.drop_committed()
 
     def cancel(self) -> None:
-        """Back out of a pending payment: drop the announced Recruit and clear the gold selection."""
+        """Back out of a pending payment: drop the announced Recruit and clear the gold
+        selection."""
         self.host.runner.cancel()
         self.window.field.drop_committed()
         self.window.field.end_selection()
@@ -359,7 +360,8 @@ class Presenter:
         return len(attack.battlefields)
 
     def _spinner_amounts(self) -> tuple[str, ...] | None:
-        """The amounts the prompt's spinner steps through, or None when nothing pending names one."""
+        """The amounts the prompt's spinner steps through, or None when nothing pending names
+        one."""
         pending = self.host.runner.pending
         return pending.candidates if isinstance(pending, ChooseAmount) else None
 
@@ -418,7 +420,7 @@ class Presenter:
         rulebook Favor abilities on the Favor proxy. The target or payment that follows is picked
         through the board-selection path.
 
-        While an assignment is open the card menu is the assignment menu instead — sending units to
+        While an assignment is open the card menu is the assignment menu instead: sending units to
         a battlefield and bringing them back is the only thing a Personality does in the Maneuvers
         Segment.
         """
@@ -470,8 +472,8 @@ class Presenter:
             self.refresh()
 
     def cancel_via_escape(self, _event=None) -> None:
-        """Escape backs out of a cancellable pending decision, and does nothing otherwise — which
-        leaves the board's own Escape, clearing the selection, alone."""
+        """Escape backs out of a cancellable pending decision. It does nothing otherwise, which
+        leaves the board's own Escape (clearing the selection) alone."""
         pending = self.host.runner.pending
         if pending is not None and pending.cancellable:
             self.cancel()

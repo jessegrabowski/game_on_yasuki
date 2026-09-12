@@ -20,7 +20,7 @@ class Agent(Protocol):
     """Answers a :class:`~.DecisionRequest` with a :class:`~.DecisionResponse`.
 
     The human UI, the AI, a network peer, and test doubles are all Agents, so the engine never cares
-    who answers a decision (KD3). A bot answers synchronously here; the human UI instead presents
+    who answers a decision (KD3). A bot answers synchronously here. The human UI instead presents
     the request and submits the answer through the session when the player acts.
 
     Attributes
@@ -37,7 +37,7 @@ class Agent(Protocol):
 
 class AutoAgent:
     """A placeholder bot standing in for the AI: answers any request with the shortest prefix of its
-    candidates that the request accepts (the whole list for an ordering). Generic by construction —
+    candidates that the request accepts (the whole list for an ordering). Generic by construction,
     it leans on the request's own ``accepts`` rather than knowing the decision type.
 
     One answer a prefix of distinct candidates cannot express is handled rather than left to fail: a
@@ -60,21 +60,19 @@ class PayingAgent:
     """Covers a gold cost by bowing producers, and answers everything else like
     :class:`~.AutoAgent`.
 
-    Bows the smallest producer first, so the largest stay straight for a second purchase in the same
-    turn, and answers again each time the payment comes back round. This is a greedy rule rather
-    than a search for the cheapest covering set — a cost of 4 met from yields of 1, 2 and 5 bows all
-    three.
+    Bows the smallest producer first, leaving the largest straight for a later purchase the same
+    turn, and answers again each time the payment comes back round. Greedy, not a search for the
+    cheapest covering set: a cost of 4 met from yields of 1, 2 and 5 bows all three.
 
-    A producer's own grant is a last resort. Raising a yield costs whatever the card names — Outlying
-    Farms destroys itself — so the offer is taken only when what every producer plainly makes still
-    falls short. That matters because
-    :meth:`~yasuki_core.engine.session.EngineSession.legal_actions` offers a recruit whose cost only
-    a grant can reach, which an agent that always declined would be unable to pay for at all.
-
-    Whether to take one is settled while answering the payment, since that is where the shortfall is
-    visible; the window that asks for it opens later, one producer at a time, and carries no figures
-    of its own. A window that refuses no overrides that judgment — the seat committed to the grant by
+    Takes a producer's own grant only when every producer's plain yield still falls short, since
+    raising a yield can cost the producer itself (Outlying Farms destroys itself). That decision is
+    made while answering the payment, before the later window that offers the grant one producer at
+    a time opens. That window carries no figures of its own, so the shortfall is only visible while
+    answering the payment. A window that refuses no overrides it: the seat committed to the grant by
     announcing the purchase, so there is nothing left to weigh.
+
+    Taking a grant matters because ``EngineSession.legal_actions`` can offer a recruit whose cost
+    only a grant can reach, which an agent that always declined would be unable to pay for.
     """
 
     name = "paying"
@@ -107,7 +105,7 @@ class LegacyAgent:
     :class:`~.PayingAgent`.
 
     Takes the biggest producer the search found, and displaces the province card worth least, both
-    ranked on printed Gold Production — the only figure a card outside play carries. Whether the
+    ranked on printed Gold Production, the only figure a card outside play carries. Whether the
     trade is worth making at all is the policy's call, not this agent's.
 
     The banished hand card is chosen by id. A policy that never plays from hand loses nothing by it,

@@ -13,8 +13,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 # the seat it produces for. A delta over whatever the card is worth at the time rather than
 # a total: counters and granted modifiers feed the same stat, so a flat ceiling would under-report
 # the moment anything else raised the card. A handler rather than a number because a card may gate
-# its grant on a condition — Slave Pits offers nothing to the player who went first — and a grant
-# affordability counts but the card refuses would strand the payment it made reachable.
+# its grant on a condition: Slave Pits offers nothing to the player who went first, and a grant
+# whose affordability counts but that the card then refuses would strand the payment it made
+# reachable.
 SelfGrantHandler = Callable[[L5RCard, GameState, PlayerId], int]
 GOLD_SELF_GRANT: HandlerRegistry[SelfGrantHandler] = HandlerRegistry(
     "gold self grants", "already grants itself Gold Production"
@@ -30,9 +31,9 @@ def register_self_grant(printed_id: str, amount: int) -> None:
     """Declare that ``printed_id`` may raise its own Gold Production by ``amount`` as it bows.
 
     What the card's window trigger grants, told to affordability separately so a purchase only the
-    grant can reach is still offered. The trigger is what makes the grant happen; this is what makes
-    it countable before anyone is asked. Use ``self_grant`` for a card that offers its grant only
-    under a condition.
+    grant can reach is still offered. The trigger is what makes the grant happen. This
+    declaration is what makes it countable before anyone is asked. Use ``self_grant`` for a
+    card that offers its grant only under a condition.
     """
     self_grant(printed_id)(lambda card, game_, seat: amount)
 

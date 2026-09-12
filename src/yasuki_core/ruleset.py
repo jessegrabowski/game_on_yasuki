@@ -48,10 +48,11 @@ class Ruleset:
     ----------
     clan_alignments : frozenset of str
         The legal Clan Alignments, as canonical :func:`~.normalize_clan` slugs. A card's clan counts
-        toward alignment only if it resolves into this set; every other clan name is unaligned.
+        toward alignment only if it resolves into this set. Every other clan name is unaligned.
     clan_aliases : dict mapping str to str
-        Alternate clan slugs that resolve to a canonical member of ``clan_alignments`` (e.g. Naga is
-        the same alignment as Akasha in this arc). Applied before the membership test. Default empty.
+        Alternate clan slugs that resolve to a canonical member of ``clan_alignments`` (e.g. Naga
+        is the same alignment as Akasha in this arc). Applied before the membership test. Default
+        empty.
     off_clan_surcharge : int
         Extra Gold a Recruit costs when the card has a Clan Alignment the recruiting seat does not
         share. Default 2.
@@ -98,7 +99,7 @@ class Ruleset:
         ------
         KeyError
             If this arc does not walk ``segment``, which is a segment the engine reached under a
-            ruleset that has no name for it — a wiring error rather than something to paper over.
+            ruleset that has no name for it: a wiring error rather than something to paper over.
         """
         return self.segment_names[segment]
 
@@ -109,7 +110,7 @@ class Ruleset:
         ------
         KeyError
             If this arc does not walk ``segment``, which is a segment the engine reached under a
-            ruleset that has no name for it — a wiring error rather than something to paper over.
+            ruleset that has no name for it: a wiring error rather than something to paper over.
         """
         return self.battle_segment_names[segment]
 
@@ -122,10 +123,10 @@ class Ruleset:
         return slug if slug in self.clan_alignments else None
 
 
-# The clans the engine names, as canonical :func:`~.normalize_clan` slugs. A clan is card text like a
-# keyword is, so it is spelled once here rather than at each call site — and here rather than beside
-# the keywords because which of these count as Clan Alignments is arc config, and a ruleset below
-# builds its set from these names so the two cannot drift.
+# The clans the engine names, as canonical :func:`~.normalize_clan` slugs. A clan is card text
+# like a keyword is, so it is spelled once here rather than at each call site. It is here rather
+# than beside the keywords because which of these count as Clan Alignments is arc config, and a
+# ruleset below builds its set from these names so the two cannot drift.
 AKASHA = "akasha"
 CRAB = "crab"
 CRANE = "crane"
@@ -142,7 +143,7 @@ UNICORN = "unicorn"
 # The Attack Phase Sequence the Twenty Festivals CR lists, with its own headings. Fight Battles is
 # the CR's name for the third and the CR does not call that one a Segment, so neither does this.
 #
-# Earlier arcs walk a different sequence — the Cavalry Maneuvers segment between Maneuvers and the
+# Earlier arcs walk a different sequence. The Cavalry Maneuvers segment between Maneuvers and the
 # battles is the one that will bring this to a head. Adding it is three edits: a member on
 # :class:`~yasuki_core.engine.rules.vocabulary.segments.Segment`, a place in that arc's
 # ``attack_segments``, and a name in its ``segment_names``. Nothing reads the enum's declaration
@@ -158,9 +159,9 @@ _SHATTERED_EMPIRE_BATTLE_SEGMENTS = (
     BattleSegment.AFTER_RESOLUTION,
 )
 
-# Onyx Edition / Shattered Empire: the ten legal Clan Alignments the rulebook enumerates. Naga is the
-# same alignment as Akasha and resolves to it. Every other clan name a card carries -- minor clans,
-# Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
+# Onyx Edition / Shattered Empire: the ten legal Clan Alignments the rulebook enumerates. Naga is
+# the same alignment as Akasha and resolves to it. Every other clan name a card carries -- minor
+# clans, Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
 SHATTERED_EMPIRE = Ruleset(
     clan_alignments=frozenset(
         {AKASHA, CRAB, CRANE, DRAGON, LION, MANTIS, PHOENIX, SCORPION, SPIDER, UNICORN}

@@ -9,8 +9,8 @@ from yasuki_core.game_pieces.factory import ResolvedDeck
 from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 
 # Pre-game permanents start as loose, face-up battlefield cards at a negative sentinel position; the
-# client recognizes an unplaced pre-game card and lays it out next to that seat's dynasty deck, after
-# which a drag gives it a real on-board position.
+# client recognizes an unplaced pre-game card and lays it out next to that seat's dynasty deck,
+# after which a drag gives it a real on-board position.
 PREGAME_UNPLACED = BoardPos(-1.0, -1.0)
 
 
@@ -23,13 +23,13 @@ def setup_seat(
 ) -> None:
     """Build ``seat``'s table slice from its resolved deck and deal its opening table.
 
-    Load the dynasty and fate cards into their decks face-down, shuffling each from the given generator,
-    open the stronghold's provinces and fill each one face-down from the dynasty deck, draw the
-    stronghold's ``starting_hand_size`` fate cards face-up into the hand, deal the pre-game
+    Load the dynasty and fate cards into their decks face-down, shuffling each from the given
+    generator, open the stronghold's provinces and fill each one face-down from the dynasty deck,
+    draw the stronghold's ``starting_hand_size`` fate cards face-up into the hand, deal the pre-game
     permanents (stronghold, sensei, wind) face-up onto the battlefield as loose cards, set the
     seat's starting honor from its stronghold and senseis, and register every card in the table's
-    identity map. The
-    discards and banishes stay empty, and no deck legality is enforced (a manual sandbox).
+    identity map. The discards and banishes stay empty, and no deck legality is enforced (a manual
+    sandbox).
 
     Parameters
     ----------
@@ -73,7 +73,7 @@ def _starting_honor(resolved: ResolvedDeck) -> int:
 
     Honor is a seat scalar read once here, not a card stat anything reads again, so it is summed
     rather than granted the way the sensei's other characteristics are. A deck with no stronghold
-    opens at zero, which is the same rule those grants follow — a sensei with nothing to modify
+    opens at zero, which is the same rule those grants follow. A sensei with nothing to modify
     contributes nothing.
     """
     stronghold = _stronghold(resolved)
@@ -121,7 +121,7 @@ def flip_second_player_stronghold(
 ) -> PlayerId:
     """Resolve turn order by honor and flip the second player's stronghold to its back face.
 
-    The lower-honor seat goes second; flip its stronghold to the back side, but only when that
+    The lower-honor seat goes second. Flip its stronghold to the back side, but only when that
     stronghold actually has a back face (single-faced strongholds are left front-up). Two seats on
     equal honor are separated by a draw. Return the seat that goes second.
 

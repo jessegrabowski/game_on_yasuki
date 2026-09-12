@@ -12,7 +12,7 @@ from yasuki_core.engine.table import DeckKey, Zone, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 
 # A metric answers one question about one seat at one moment. Float rather than int so a
-# ratio — a share of provinces, a rate per turn — is expressible alongside a plain count.
+# ratio (a share of provinces, a rate per turn) is expressible alongside a plain count.
 Metric = Callable[[GameState, PlayerId], float]
 
 
@@ -26,11 +26,12 @@ def potential_gold_production(game: GameState, seat: PlayerId) -> int:
     Two things are deliberately outside this number, and both make it smaller than
     :func:`~yasuki_core.engine.rules.gold.producers.reachable_gold` for the same board.
 
-    A card's own bow-time grant is excluded, because taking one has a price the card sets — Outlying
-    Farms destroys itself — so counting it would report gold a seat may rationally decline. This
+    A card's own bow-time grant is excluded, because taking one has a price the card sets. Outlying
+    Farms destroys itself, so counting it would report gold a seat may rationally decline. This
     measures sustainable output, which is what a deck is being judged on. That is the same reason
     ``policies._spendable`` leaves it out, and the opposite of what
-    :func:`~yasuki_core.engine.rules.gold.self_grants.maximum_gold_production` answers for affordability.
+    :func:`~yasuki_core.engine.rules.gold.self_grants.maximum_gold_production` answers for
+    affordability.
 
     A producer's yield can depend on what it pays for (Jade Works yields more against a Jade card),
     and a metric has no payment in flight, so such a producer reports its unconditional base.
@@ -43,21 +44,17 @@ def province_clearance(rng: Generator, *, samples: int = 500, slots: int = 4) ->
     Build a metric giving the chance ``seat`` could buy out a fresh flop of ``slots`` province
     cards with what it can produce right now.
 
-    A deck is judged on reaching the speed at which what it flips stops constraining it, and that
-    is a property of the pair (economy, curve) rather than of either alone: the same production is
-    plenty against a deck of Farms and nothing against a deck of five-cost Personalities. What the
-    board happens to be showing this turn is a single draw from that distribution, so it is
-    resampled instead — ``samples`` hands of ``slots`` cards are dealt without replacement from the
-    seat's dynasty deck, each priced with :func:`~yasuki_core.engine.rules.legality.recruit_cost`,
-    and the metric is the share whose total the seat's production covers.
+    ``samples`` hands of ``slots`` cards are dealt without replacement from the seat's dynasty
+    deck, each priced with :func:`~yasuki_core.engine.rules.legality.recruit_cost`, and the metric
+    is the share whose total the seat's production covers.
 
-    The deck is the right urn even though the seat's live provinces are not in it: those cards are
-    where the flop came from, not where the next one comes from. It shrinks over a game, so the
-    estimate tracks a seat digging toward the bottom of its own list.
+    Draws from the seat's dynasty deck rather than its live provinces, since that is where the next
+    flop comes from. The deck shrinks over a game, so the estimate tracks a seat digging toward the
+    bottom of its own list.
 
-    Affording every card is not the same as buying every card — one Recruit per province per turn,
-    and a gold-producing purchase pays for the ones after it — so this reads as a ceiling on
-    clearance rather than the rate itself.
+    This is a ceiling on clearance, not the rate itself: only one Recruit is taken per province per
+    turn, and a gold-producing purchase also pays for the ones recruited after it, so affording
+    every card at once is not the same as buying every card.
 
     Parameters
     ----------
@@ -66,7 +63,7 @@ def province_clearance(rng: Generator, *, samples: int = 500, slots: int = 4) ->
         its seed and a longer run leaves the turns it already had alone.
     samples : int, optional
         Hands dealt per call. The estimate is a mean of Bernoullis, so its standard error is at
-        worst :math:`1 / (2\sqrt{n})` — under one point at 500. Default 500.
+        worst :math:`1 / (2\sqrt{n})`. Under one point at 500. Default 500.
     slots : int, optional
         Cards per hand, which is how many provinces a seat starts with. Default 4.
 
@@ -86,7 +83,7 @@ def province_clearance(rng: Generator, *, samples: int = 500, slots: int = 4) ->
             (recruit_cost(game, card) for card in deck), dtype=np.int64, count=len(deck)
         )
         # argpartition over one random matrix deals every hand at once, and without replacement
-        # within a hand — which sampling `slots` indices independently would not give.
+        # within a hand. Sampling `slots` indices independently would not give this.
         hands = np.argpartition(rng.random((samples, costs.size)), slots - 1, axis=1)[:, :slots]
         return float((costs[hands].sum(axis=1) <= potential_gold_production(game, seat)).mean())
 
@@ -97,9 +94,9 @@ def family_honor(game: GameState, seat: PlayerId) -> int:
     """
     ``seat``'s Family Honor.
 
-    Read directly rather than computed: honor is a standing total set from the stronghold and sensei
-    at setup and moved by effects since, so unlike the gold pool it means the same thing at any
-    moment. It can go negative, which is a real position rather than an error.
+    Honor is a standing total set from the stronghold and sensei at setup and moved by effects
+    since, unlike the gold pool, so it is read directly rather than computed. Can go negative,
+    which is a real position, not an error.
     """
     return game.table.seats[seat].honor
 
@@ -123,10 +120,11 @@ def provinces_cleared(game: GameState, seat: PlayerId) -> int:
     turned over, and a face-up one a card that sat there untouched.
 
     This is the total, not a verdict on it. Recruiting a card and discarding one leave identical
-    boards, and they are opposite signals — a deck delivering what was wanted versus one being dug
+    boards. They are opposite signals: a deck delivering what was wanted versus one being dug
     through. Count :class:`~yasuki_core.engine.rules.vocabulary.actions.Recruit` and
     :class:`~yasuki_core.engine.rules.vocabulary.actions.DynastyDiscard` actions for that split.
-    Both draw only from provinces, so together they attribute every province a seat turned over by choice.
+    Both draw only from provinces, so together they attribute every province a seat turned over by
+    choice.
 
     Those two do not have to add up to this number. A Legacy search and an ability-driven recruit
     both vacate a province without either action being taken, so the shortfall measures how much of
@@ -143,7 +141,7 @@ def empty_provinces(game: GameState, seat: PlayerId) -> int:
     How many of ``seat``'s provinces hold no card at all.
 
     Vacating a province refills it from the dynasty deck, so this is not the ordinary measure of
-    buying one out — see :func:`~.provinces_cleared` for that. A province is only truly empty once
+    buying one out. See :func:`~.provinces_cleared` for that. A province is only truly empty once
     the dynasty deck has run dry, which makes this a late-game exhaustion signal.
     """
     return sum(1 for zone in _provinces(game, seat) if not zone.cards)

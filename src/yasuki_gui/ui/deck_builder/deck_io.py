@@ -14,7 +14,8 @@ SECTION_LABEL = {"pre_game": "Pre-Game", "dynasty": "Dynasty", "fate": "Fate"}
 
 
 def _pluralize(word: str) -> str:
-    """Title-case-preserving plural for type subheaders (Holding -> Holdings, Strategy -> Strategies)."""
+    """Title-case-preserving plural for type subheaders (Holding -> Holdings, Strategy ->
+    Strategies)."""
     return word[:-1] + "ies" if word.endswith("y") else word + "s"
 
 
@@ -32,7 +33,7 @@ def serialize_deck(
     Serialize a DeckState to the portable YAML decklist format.
 
     Each deck section is grouped by card type with ``# Type (n)`` subheaders and counts (comments,
-    skipped on import); name/author/date metadata heads the file.
+    skipped on import). Name/author/date metadata heads the file.
 
     Parameters
     ----------
@@ -43,7 +44,7 @@ def serialize_deck(
     deck_name : str
         Deck name to embed in the file. Default ''.
     deck_author : str
-        Deck author; omitted from the file when empty. Default ''.
+        Deck author. Omitted from the file when empty. Default ''.
     today : str, optional
         ISO date for the ``date:`` line. Defaults to today.
 
@@ -206,7 +207,8 @@ def import_deck_yaml(
 
 
 def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_ext, repository):
-    """Register the art-swap recipe for an ``{art: ...}`` entry; return its id or None if unresolved."""
+    """Register the art-swap recipe for an ``{art: ...}`` entry. Return its id or None if
+    unresolved."""
     donor = cards_by_ext.get(art["name"].lower())
     if not donor:
         return None
@@ -229,7 +231,7 @@ def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_e
 
 def _build_name_index(repository) -> dict[str, tuple[dict, str]]:
     """
-    Build a case-insensitive name → (card, card_id) index.
+    Build a case-insensitive name -> (card, card_id) index.
 
     Keys by extended_title first, then name as fallback (no overwrite).
     """

@@ -138,7 +138,7 @@ def test_the_pool_is_empty_when_no_legacy_card_remains():
 
 
 def test_the_pool_never_reaches_the_other_seat():
-    """A seat knows what it built; its opponent's buried cards stay buried."""
+    """A seat knows what it built, but its opponent's buried cards stay buried."""
     game = _game()
     _seed_deck(game, PlayerId.P1, _legacy_holding("P1-9"))
 
@@ -146,8 +146,8 @@ def test_the_pool_never_reaches_the_other_seat():
 
 
 def test_the_pool_is_sorted_rather_than_left_in_deck_order():
-    """Which Legacy cards remain is the seat's knowledge; where they sit in the shuffle is not, so
-    the deck's order must not survive into the view."""
+    """Which Legacy cards remain is the seat's knowledge, but where they sit in the shuffle is not,
+    so the deck's order must not survive into the view."""
     game = _game()
     first, second = _legacy_holding("P1-2"), _legacy_holding("P1-1")
     _seed_deck(game, PlayerId.P1, first, second)  # deck order puts P1-2 ahead of P1-1
@@ -156,8 +156,8 @@ def test_the_pool_is_sorted_rather_than_left_in_deck_order():
 
 
 def test_the_dynasty_deck_shows_the_seat_what_it_still_holds():
-    # A seat built its deck, so what remains in it is its own knowledge — the basis for judging
-    # whether a redraw beats the row it is looking at.
+    # A seat built its deck, so what remains in it is its own knowledge.
+    # That knowledge is the basis for judging whether a redraw beats the row it is looking at.
     game = _game()
     _seed_deck(game, PlayerId.P1, _dynasty_holding("P1-a"), _dynasty_holding("P1-b"))
 
@@ -194,8 +194,8 @@ def test_a_face_down_province_card_is_still_findable():
 
 
 def test_a_revealed_province_card_has_left_the_pool():
-    """A face-up province card is already recruitable, so the search does not reach it — and the
-    policy would see it among its Recruits instead."""
+    """A face-up province card is already recruitable, so the search does not reach it.
+    The policy would see it among its Recruits instead."""
     game = _game()
     revealed = _legacy_holding("P1-9")
     revealed.turn_face_up()
@@ -264,9 +264,9 @@ def test_an_attachments_bonus_reaches_the_view():
 
 
 def test_a_units_force_reaches_the_view():
-    """A policy sees only a view, and a unit's total is not a sum of its cards' Force — a Follower
-    brings its own, an Item brings a modifier already inside the Personality's. Working it out from
-    `stats` means a second copy of that rule."""
+    """A policy sees only a view, and a unit's total is not a sum of its cards' Force.
+    A Follower brings its own, and an Item brings a modifier already inside the Personality's.
+    Working it out from `stats` means a second copy of that rule."""
     game = two_seat_game()
     put_in_play(game, personality("hero", owner=PlayerId.P1, force=5))
     attached(
@@ -294,8 +294,9 @@ def test_an_items_modifier_is_inside_the_units_force():
 
 def test_a_bowed_personality_contributes_nothing_but_his_followers_still_do():
     """The CR's Army Force is a flat sum over unbowed Personalities and Followers, not a sum over
-    units, so an unbowed Follower on a bowed Personality still counts. Lotus had it the other way —
-    a bowed Personality zeroed his whole unit — which is why this is asserted rather than assumed."""
+    units, so an unbowed Follower on a bowed Personality still counts. Lotus had it the other way
+    (a bowed Personality zeroed his whole unit), which is why this is asserted rather than
+    assumed."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", owner=PlayerId.P1, force=5))
     attached(
@@ -321,8 +322,8 @@ def test_a_bowed_follower_drops_out_of_its_units_force():
 
 
 def test_both_seats_units_reach_the_view():
-    """Force in play is public — every card is face-up on the battlefield — and a policy weighing an
-    attack has to read the other seat's."""
+    """Force in play is public: every card is face-up on the battlefield.
+    A policy weighing an attack has to read the other seat's."""
     game = two_seat_game()
     put_in_play(game, personality("mine", owner=PlayerId.P1, force=3))
     put_in_play(game, personality("theirs", owner=PlayerId.P2, force=4))
@@ -371,8 +372,8 @@ def test_only_personalities_carry_a_unit_force():
 
 
 def test_a_card_that_is_not_in_play_has_no_unit_force():
-    """Only the battlefield is walked. The discarded Personality is identifiable — the viewer owns
-    it and it sits in a zone — so this fails for the right reason if the domain ever widens."""
+    """Only the battlefield is walked. The discarded Personality is identifiable: the viewer owns
+    it and it sits in a zone, so this fails for the right reason if the domain ever widens."""
     game = two_seat_game()
     put_in_play(game, personality("standing", owner=PlayerId.P1, force=3))
     discarded = personality("fallen", owner=PlayerId.P1, force=9)
@@ -462,7 +463,7 @@ def _hiding_game() -> GameState:
 
 
 def test_no_card_the_viewer_cannot_identify_reaches_the_view():
-    """The board channels are safe by construction — a snapshot holds a ``CardView``, so redaction
+    """The board channels are safe by construction: a snapshot holds a ``CardView``, so redaction
     is a decision the type forces. A field of plain values is not, and this sweeps the whole view so
     the next one added is covered whether or not it carries cards."""
     game = _hiding_game()
@@ -563,7 +564,7 @@ def test_a_fortification_belongs_only_to_the_province_it_defends():
 def test_a_fortification_the_viewer_cannot_identify_reaches_it_as_a_back():
     """Read out of the redacted snapshot, where a card the viewer may not identify carries its id
     under a different name. Reaching for the wrong one raises rather than degrading, and it takes
-    the whole projection down with it — every seat's view, not just this list."""
+    the whole projection down with it: every seat's view, not just this list."""
     game = _attack_between(face_up=True)
     wall = put_in_play(
         game,
@@ -594,8 +595,9 @@ def test_a_face_up_province_card_reaches_the_attacker_by_name():
 
 
 def test_a_face_down_province_card_reaches_the_attacker_as_a_back():
-    """The attack is public, but what is sitting in the Province is not — projecting it out of the
-    table rather than the snapshot would hand the attacker the Defender's face-down card."""
+    """The attack is public, but what is sitting in the Province is not.
+    Projecting it out of the table rather than the snapshot would hand the attacker the
+    Defender's face-down card."""
     game = _attack_between(face_up=False)
 
     view = project(game, PlayerId.P1)
@@ -605,7 +607,7 @@ def test_a_face_down_province_card_reaches_the_attacker_as_a_back():
 
 def test_the_defender_sees_its_own_face_down_province_card_as_a_back_too():
     """Redaction hides a face-down card from its owner as well, and the attack view is the same
-    projection — so it says the same thing rather than a second opinion."""
+    projection, so it says the same thing rather than a second opinion."""
     game = _attack_between(face_up=False)
 
     view = project(game, PlayerId.P2)
@@ -614,8 +616,8 @@ def test_the_defender_sees_its_own_face_down_province_card_as_a_back_too():
 
 
 def test_the_attack_view_names_the_cards_a_battle_destroyed():
-    """The outcome carries ids; a client has to show names, and a destroyed card is in a discard
-    both seats may read."""
+    """The outcome carries ids, but a client has to show names, and a destroyed card is in a
+    discard both seats may read."""
     game = two_seat_game()
     # A name that is not the id, so the assertion cannot pass by echoing what it was given.
     province_card(game, "p2-holding", seat=PlayerId.P2, index=0, name="Kyuden Bayushi")

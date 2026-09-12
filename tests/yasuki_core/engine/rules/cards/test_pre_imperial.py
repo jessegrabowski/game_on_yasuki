@@ -63,7 +63,7 @@ def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
     end_phase(session)
     end_phase(session)
     session.act(P1, Recruit("jade"))
-    # The offer quotes 4 — base 2 plus the Jade bonus — and bowing it alone must cover the cost.
+    # The offer quotes 4, base 2 plus the Jade bonus, and bowing it alone must cover the cost.
     pay(session, P1)
 
     # 4 produced (2 base + 2 Jade bonus) less the 4 spent. Recomputing without the target would

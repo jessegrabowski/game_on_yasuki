@@ -47,7 +47,7 @@ def _hand_of(session, seat):
 
 
 def test_each_seat_is_offered_the_search_before_it_looks():
-    """ "each player **may** search" — and searching is what costs the shuffle, so the offer comes
+    """ "each player **may** search," and searching is what costs the shuffle, so the offer comes
     before the deck is read rather than as a way out of the dialog afterwards."""
     session = _wisdom_game()
     session.act(P1, ActivateAbility("wisdom"))
@@ -66,7 +66,8 @@ def test_accepting_the_offer_searches_both_the_deck_and_the_discard():
 
 
 def test_declining_passes_the_offer_on_without_touching_the_deck():
-    """A seat that declines keeps the order of its deck — nothing is searched, so nothing shuffles."""
+    """A seat that declines keeps the order of its deck, because nothing is searched, so nothing
+    shuffles."""
     session = _wisdom_game()
     before = [c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards]
     session.act(P1, ActivateAbility("wisdom"))
@@ -112,7 +113,7 @@ def test_taking_a_ring_shows_it_and_shuffles_the_deck_it_was_read_from():
 
 
 def test_the_opponents_offer_cannot_be_unwound_by_the_controller():
-    """Once the offer has passed to the opponent the window is theirs; P1 has nothing in flight."""
+    """Once the offer has passed to the opponent the window is theirs. P1 has nothing in flight."""
     session = _wisdom_game()
     session.act(P1, ActivateAbility("wisdom"))
     session.submit(P1, DecisionResponse(()))
@@ -122,8 +123,8 @@ def test_the_opponents_offer_cannot_be_unwound_by_the_controller():
 
 def test_the_province_the_event_spent_itself_from_refills():
     """The Event takes its own Province with it when it resolves, and nothing in the card says to
-    put a card back — the Province refills because the board settles short, once the last seat has
-    answered the offer that kept it in flight."""
+    put a card back, but the Province refills because the board settles short, once the last seat
+    has answered the offer that kept it in flight."""
     session = _wisdom_game()
     session.act(P1, ActivateAbility("wisdom"))
     session.submit(P1, DecisionResponse(()))  # P1 declines

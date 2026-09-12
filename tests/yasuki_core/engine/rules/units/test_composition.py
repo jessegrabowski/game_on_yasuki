@@ -18,8 +18,8 @@ P1 = PlayerId.P1
 
 def _unit(*, hero_bowed: bool, follower_bowed: bool, item_bowed: bool):
     """A Personality of Force 3, one Follower of Force 5, and one Item granting +2, each bowed or
-    not. The Item's 2 reaches the total through the Personality; the Follower's 5 stands on its
-    own."""
+    not. The Item's 2 reaches the total through the Personality, and the Follower's 5 stands on
+    its own."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=3))
     follower = attached(
@@ -84,8 +84,8 @@ def test_a_personality_alone_is_a_unit_of_one():
 
 
 def test_only_followers_stand_in_the_unit():
-    """An Item is in the unit but is not a Follower — it lends Force rather than carrying it, so
-    counting it among the Followers would double its contribution."""
+    """An Item is in the unit but is not a Follower, because it lends Force rather than carrying it,
+    so counting it among the Followers would double its contribution."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero"))
     follower = attached(game, attachment("foll", attachment_type=AttachmentType.FOLLOWER), "hero")
@@ -95,7 +95,7 @@ def test_only_followers_stand_in_the_unit():
 
 
 def test_every_follower_counts_and_each_at_its_own_effective_force():
-    """Two Followers rather than one, and one of them under a penalty — a total that reads a
+    """With two Followers rather than one, and one of them under a penalty, a total that reads a
     Follower's printed Force, or stops at the first, gets both of these wrong."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=3))
@@ -138,7 +138,7 @@ def test_one_follower_without_the_keyword_takes_it_from_the_unit():
 
 
 def test_a_personality_with_no_followers_gives_the_unit_his_own_keywords():
-    """The CR's "if any" clause — a lone Personality is a Cavalry unit if he is Cavalry."""
+    """Under the CR's "if any" clause, a lone Personality is a Cavalry unit if he is Cavalry."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", keywords=("Cavalry",)))
 
@@ -146,7 +146,7 @@ def test_a_personality_with_no_followers_gives_the_unit_his_own_keywords():
 
 
 def test_items_take_no_part_in_a_units_keywords():
-    """The rule quantifies over the Personality and Followers; an Item without the keyword would
+    """The rule quantifies over the Personality and Followers. An Item without the keyword would
     otherwise silently dismount the unit."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", keywords=("Cavalry",)))

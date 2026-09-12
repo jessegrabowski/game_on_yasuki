@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS
 
 def test_every_resolver_a_hint_answers_is_one_a_card_registers():
     """A hint keyed on a misspelled resolver is never consulted and never errors, so the policy
-    silently stops answering the cost — the same silent death registration_audit guards printed
+    silently stops answering the cost: the same silent death registration_audit guards printed
     ids against."""
     claimed = {
         resolver for hint in ABILITY_HINTS.values() for resolver in hint.optional_cost_answers

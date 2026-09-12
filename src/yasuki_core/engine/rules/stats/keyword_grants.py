@@ -16,8 +16,9 @@ def granted_keywords(game: GameState, card: L5RCard) -> Iterator[str]:
                 yield grant.keyword
 
 
-# A keyword handler names the keywords a card carries beyond the printed ones, from the card and its
-# controller's and opponents' views — the "this card has X" clauses gated on a readable condition.
+# A keyword handler names the keywords a card carries beyond the printed ones, from the card and
+# its controller's and opponents' views. The "this card has X" clauses are gated on a readable
+# condition.
 KeywordHandler = Callable[[L5RCard, GameState, PlayerId], tuple[str, ...]]
 KEYWORD_GRANTS: HandlerRegistry[KeywordHandler] = HandlerRegistry(
     "keyword grants", "already has a keyword grant"

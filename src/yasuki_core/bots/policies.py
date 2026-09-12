@@ -50,18 +50,16 @@ class Policy(Protocol):
     """Chooses which action a seat takes from the ones open to it.
 
     The counterpart to :class:`~yasuki_core.bots.agents.Agent`: a policy picks an action, an agent
-    answers a decision that action raises. A Recruit needs both — the policy chooses to recruit, the
-    agent answers the payment.
+    answers a decision that action raises.
 
-    Policies read the seat's :class:`~.GameView` rather than the game itself, so one cannot see the
-    opponent's hand and works unchanged over a network. The view carries live card objects, so a
+    Policies read the seat's :class:`~.GameView`, not the live game, so a policy cannot see the
+    opponent's hand and behaves the same over a network. The view carries live card objects, so a
     policy weighing a card's Gold Production or Gold Cost has them to hand.
 
     Attributes
     ----------
     name : str
-        How this policy is reported. A simulation's numbers describe a deck *under a policy*, so a
-        result quoted without one cannot be compared against anything.
+        How this policy is reported.
     """
 
     name: str
@@ -100,21 +98,12 @@ class EconomicPolicy:
     """Buys the best economy on offer, and passes when there is nothing to buy.
 
     Ranks the plain Recruits by the province card's Gold Production first and its Gold Cost second,
-    so the bigger producer wins and cost only breaks a tie between equals. Ties beyond that go to
-    the lowest card id, which keeps a run reproducible rather than dependent on zone ordering.
+    breaking any remaining tie by the lowest card id. Skips Invest and Proclaim variants, and ranks
+    on the card's printed cost, not a discounted one.
 
-    Affordability is never rechecked: :meth:`~yasuki_core.engine.session.EngineSession.legal_actions`
-    withholds a recruit the seat cannot reach, so a policy deciding for itself would drift from the
-    engine and offer choices the driver then refuses.
-
-    Two things it deliberately does not weigh. Invest and Proclaim variants are skipped, because each
-    changes what the payment has to answer without serving the economic aim. And the ranking reads
-    the card's printed cost, which is what a view carries — a card whose cost a discount lowers is
-    ranked as though it cost full price.
-
-    This models a fixed player rather than a good one. The harness compares decks under one
-    policy, which makes the policy a control variable: tuning it leaves runs from either side of
-    the change incomparable.
+    Affordability is never rechecked:
+    :meth:`~yasuki_core.engine.session.EngineSession.legal_actions` already withholds a recruit the
+    seat cannot reach.
     """
 
     name = "economic"
@@ -135,16 +124,14 @@ class EconomicLegacyPolicy:
     """Buys like :class:`~.EconomicPolicy`, and takes the Legacy ability when it improves the board.
 
     Legacy banishes a card from hand to search the seat's dynasty deck and face-down provinces for a
-    Legacy card, then places it face-up over a province card, discarding what was there. It is worth
-    taking only when the best producer it could find beats the best one already face-up in its own
-    provinces — otherwise it spends two cards to reach production the seat could simply buy.
+    Legacy card, then places it face-up over a province card, discarding what was there. Takes it
+    only when the best producer found beats the best one already face-up in its own provinces.
 
-    Finding nothing loses the game outright, so an empty ``legacy_pool`` is a hard veto rather than a
-    weighing.
+    A Legacy that finds nothing loses the game outright, so an empty ``legacy_pool`` is a hard
+    veto, not a weighing.
 
-    Two simplifications it makes, both of which flatter the ability. It ranks on printed Gold
-    Production, since a card not yet in play has no effective value to read. And it treats the
-    banished hand card as free, which it is under this policy — nothing here ever plays from hand.
+    Two simplifications: it ranks candidates on printed Gold Production, since a card not yet in
+    play has no effective value to read, and it treats the banished hand card as free.
     """
 
     name = "economic-legacy"
@@ -184,11 +171,11 @@ def cards_to_cycle(view: GameView) -> tuple[str, ...]:
 
     A card is worth replacing when it produces less Gold than a card drawn off the deck would on
     average, the deck being exactly the distribution a redraw samples from. A card with no Gold
-    Production stat — a Personality — counts as producing nothing, so an economic seat replaces it
-    whenever its deck produces at all.
+    Production stat, such as a Personality, counts as producing nothing, so an economic seat
+    replaces it whenever its deck produces at all.
 
-    Returns empty when the deck is empty — a redraw would hand the same cards straight back — or
-    when every face-up card already beats what the deck offers.
+    Returns empty when the deck is empty, since a redraw would hand the same cards straight back,
+    or when every face-up card already beats what the deck offers.
     """
     deck = view.dynasty_deck
     if not deck:
@@ -238,30 +225,15 @@ class GoldRushPolicy:
     """Drives for gold as hard as the rulebook allows: take Legacy, run the economy abilities on the
     board, buy, else clear the way.
 
-    Five things in a fixed order of preference, each taken whenever it is offered. Cycle first: it
-    is the seat's first turn only, costs nothing, and reshapes the opening the rest of the turn is
-    decided against, so weighing anything before it would weigh a board about to be replaced. It
-    puts back what the Dynasty Discard would flush and nothing else — a first turn raises three or
-    four Gold, so the cheap producers a deck-average rule would bin are exactly the ones this policy
-    can afford to buy with it. Then Legacy, when the pool holds a better producer than the board —
-    it puts that card face-up in a Province where the same turn's Recruit can reach it. Then an
-    activated ability this policy has an economic model for, which ``ABILITY_HINTS`` decides. Then
-    the best purchase, ranked as :class:`~.EconomicPolicy` ranks it, which takes a Personality once
-    no Holding is within reach:
-    gold left in the pool is cleared at the phase change, and buying empties the Province either
-    way. Then a Dynasty Discard of any face-up Province card it has no use for — one producing
-    nothing, or one priced beyond what it could raise — which costs nothing and refills the Province
-    for next turn.
+    Takes, in fixed order of preference: Cycle, Legacy, an economy ability ``ABILITY_HINTS`` models,
+    the best purchase, then a Dynasty Discard. Cycle is first because it is offered on the seat's
+    first turn only and costs nothing, and it replaces the board the rest of the turn is decided
+    against. The purchase takes a Personality once no Holding is in reach, since gold left in the
+    pool is cleared at the phase change. One discard is one choice, so several unaffordable cards
+    are flushed over successive windows before the policy passes.
 
-    The discard is what separates this from :class:`~.EconomicPolicy`. Nothing else in the registry
-    ever takes it, so a Province holding a card the seat cannot afford would stay held for the rest
-    of the game and the seat would play on with fewer slots than it has. One discard is one choice,
-    so a turn ending with three unaffordable Personalities flushes them over three windows and
-    passes only once the Provinces are clear.
-
-    Answers its own decisions as well as choosing, because an ability is only worth as much as the
-    answers behind it: which card it targets, and whether to pay an optional cost the resolution
-    offers. Everything it has no model for falls through to :class:`~.PayingAgent`.
+    Answers its own decisions as well as choosing: which card an ability targets, and whether to pay
+    an optional cost. Everything it has no model for falls through to :class:`~.PayingAgent`.
 
     A ceiling rather than a player: it prices every non-producing card at nothing, so it throws away
     Personalities a real deck wins with. Its numbers bound what a deck's economy can do, and say
@@ -307,16 +279,17 @@ class MilitaryPolicy:
 
     Everything away from a battle is :class:`~.GoldRushPolicy`, which this wraps: the seat still
     cycles, tutors, runs its abilities, buys and flushes. What it adds is the one question a
-    Defender is ever asked — where its units go.
+    Defender is ever asked: where its units go.
 
     It attacks when it holds more Force than the seat it faces, and commits only to the Provinces
-    it can take whatever the Defender does — a Province it takes is a Province destroyed, and enough
-    of them ends the game. Assigning to one it might lose spends an army for nothing: the losers are
-    destroyed, and what survives comes home bowed and cannot defend on the opponent's next turn.
+    it can take whatever the Defender does, because a Province it takes is a Province destroyed,
+    and enough of them ends the game. Assigning to one it might lose spends an army for nothing:
+    the losers are destroyed, and what survives comes home bowed and cannot defend on the
+    opponent's next turn.
 
     It defends to save a Province rather than to win a battle. Resolution destroys a Province only
     when the attacking Force exceeds the defending Force *plus* the Province's Strength, so a
-    defense that loses the battle outright can still hold the ground — and a seat that only
+    defense that loses the battle outright can still hold the ground, and a seat that only
     contested what it could beat would concede most of the board while its army sat at home. Each
     Province it can save takes the fewest units that save it, cheapest first, and one it cannot save
     is left alone: units spent on a Province that falls anyway are units it does not have next turn.
@@ -343,7 +316,7 @@ class MilitaryPolicy:
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
         if isinstance(request, AssignUnits):
             # The request is checked first because everything it delegates may arrive without a
-            # view — the paying agent behind it answers a payment from the request alone.
+            # view, and the paying agent behind it answers a payment from the request alone.
             defending = _attack_being_defended(view)
             if defending is not None:
                 return DecisionResponse(_defense(request, view, defending))
@@ -359,7 +332,7 @@ class MilitaryPolicy:
 def _holds_the_initiative(view: GameView) -> bool:
     """Whether the viewer could take a Province from the seat it would attack.
 
-    No attack exists yet, so no Province's Strength can be read —
+    No attack exists yet, so no Province's Strength can be read.
     :attr:`~yasuki_core.engine.rules.projection.BattlefieldView.strength` only exists once one is
     declared. What is readable is the other seat's Stronghold, and every
     Province is at least that strong, so a seat that cannot beat the Stronghold's Strength plus the
@@ -382,8 +355,9 @@ def _province_strength_floor(view: GameView, seat: PlayerId) -> int:
     """The least Strength any of ``seat``'s Provinces can have: what its Stronghold gives them.
 
     Counters on a Province slot and the Fortifications attached to it add to this, and neither can
-    be evaluated from a view — :data:`~yasuki_core.engine.rules.stats.province_strength.PROVINCE_STRENGTH_GRANTS`
-    takes the live game.
+    be evaluated from a view.
+    :data:`~yasuki_core.engine.rules.stats.province_strength.PROVINCE_STRENGTH_GRANTS` takes the
+    live game.
     """
     return max(
         (
@@ -400,10 +374,9 @@ def _province_strength_floor(view: GameView, seat: PlayerId) -> int:
 def _force_at_home(view: GameView, seat: PlayerId) -> int:
     """The Force ``seat`` could still send: its unbowed Personalities standing at home.
 
-    What a seat could assign rather than what it has — a bowed Personality may not be assigned at
-    all, and one already at a battlefield has been. A card the viewer cannot identify is redacted to
-    a :class:`~.HiddenCard` and so is never counted, which is why an opponent's face-down card
-    cannot be weighed.
+    Counts what the seat could assign, not what it has: a bowed Personality is not assignable, and
+    one already at a battlefield has already been assigned. A card the viewer cannot identify is
+    redacted to a :class:`~.HiddenCard`, so an opponent's face-down card is never counted.
     """
     return sum(
         view.unit_force[entry.card.id]
@@ -426,14 +399,14 @@ def _is_home(view: GameView, card_id: str) -> bool:
 def _worthwhile_equip(view: GameView, actions: list[Action]) -> Equip | None:
     """The attachment worth buying now, or None to leave the Gold with the economy.
 
-    Attaching is the cheapest way an army grows — a Follower's Force joins the unit it stands in,
-    an Item's modifier raises the Personality — so the seat prefers the largest gain, and the
+    Attaching is the cheapest way an army grows. A Follower's Force joins the unit it stands in,
+    and an Item's modifier raises the Personality, so the seat prefers the largest gain, and the
     cheaper card where two add the same.
 
     It buys one only when that gain leaves the seat able to take a Province, which is what decides
     between Force and production without pricing one against the other. A seat far short of the
     threshold cannot reach it with an attachment and buys production instead, so the Gold compounds
-    into the Personalities that close the gap; a seat near or past the threshold takes the Force,
+    into the Personalities that close the gap. A seat near or past the threshold takes the Force,
     because that is the turn it converts into ground.
 
     Only the plain variant is weighed. Invest pays more now for something later, which a ranking of
@@ -463,11 +436,9 @@ def _equip_rank(view: GameView, card: L5RCard) -> tuple[int, int, str]:
 def _force_gain(card: L5RCard) -> int:
     """The Force a unit gains from ``card`` joining it.
 
-    A Follower stands in the unit and brings a Force of its own; an Item hands the Personality a
-    modifier instead. Both fields live on the same print and one card may carry each — Shadowlands
-    Ambassador brings Force to the unit and takes Chi off the Personality — so the gain is their
-    sum rather than a choice between them. Read printed, because a card in hand has no modifiers
-    on it yet.
+    A Follower stands in the unit and brings a Force of its own. An Item hands the Personality a
+    modifier instead. A card may carry both fields, in which case the gain is their sum. Reads the
+    printed values, since a card in hand carries no modifiers yet.
     """
     printed = card.printed
     if not isinstance(printed, AttachmentPrint):
@@ -525,9 +496,9 @@ def _best_equip_target(request: ChooseEquipTarget, view: GameView) -> str:
 def _best_battlefield(request: ChooseBattlefield, attack: AttackView) -> str:
     """Which battle to fight next: the one the Attacker leads by the most.
 
-    The battles of one Attack Phase do not affect each other — resolution reads an assignment both
-    seats already committed — so this is free today. It stops being free when a card can act between
-    battles, and taking the surest first is the order that keeps its winnings.
+    The battles of one Attack Phase do not affect each other, since resolution reads an assignment
+    both seats already committed, so this is free today. It stops being free when a card can act
+    between battles, and taking the surest first is the order that keeps its winnings.
     """
 
     def margin(candidate: str) -> tuple[int, int]:
@@ -567,19 +538,17 @@ def _defense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[
 def _spend(request: AssignUnits, view: GameView, needs: list[tuple[int, int]]) -> tuple[str, ...]:
     """Send the fewest units that meet each battlefield's need, cheapest need first.
 
-    Cheapest first is what lets a seat short of units meet two needs rather than one. A battlefield
-    needing nothing is skipped, one the units left cannot meet is left alone, and each unit is spent
-    once — :meth:`AssignUnits.accepts` refuses the same Personality twice.
+    A battlefield needing nothing is skipped, one the units left cannot meet is left alone, and each
+    unit is spent once. :meth:`AssignUnits.accepts` refuses the same Personality twice.
 
-    Reads the candidates as a set of units rather than of places, which holds because
-    :func:`~yasuki_core.engine.rules.battle.resolution.assignment_candidates` pairs every assignable unit with
-    every battlefield. A candidate list restricting a unit to some battlefields would need this to
-    pick per battlefield instead.
+    Reads the candidates as a set of units, not of places: every assignable unit is paired with
+    every battlefield by
+    :func:`~yasuki_core.engine.rules.battle.resolution.assignment_candidates`.
 
     Parameters
     ----------
     request : AssignUnits
-        The question being answered; its candidates name the units available.
+        The question being answered. Its candidates name the units available.
     view : GameView
         Read for each unit's Force.
     needs : list of (int, int)
@@ -646,8 +615,8 @@ def _barren_province_cards(view: GameView) -> tuple[str, ...]:
     """The viewer's face-up Province cards producing no Gold, by id, sorted so a run reproduces.
 
     What both this policy's Cycle and its Dynasty Discard act on: it prices a card at its Gold
-    Production, so a card with none is one it would rather redraw. Empty when the dynasty deck is —
-    a redraw would hand the same cards straight back.
+    Production, so a card with none is one it would rather redraw. Empty when the dynasty deck is
+    empty, since a redraw would hand the same cards straight back.
     """
     if not view.dynasty_deck:
         return ()
@@ -662,8 +631,8 @@ def _barren_province_cards(view: GameView) -> tuple[str, ...]:
 
 def _flushable(view: GameView, actions: list[Action]) -> DynastyDiscard | None:
     """The lowest-id Dynasty Discard among ``actions`` that clears a Province card the seat has no
-    use for — one producing no Gold, or one costing more than it could raise — or None when every
-    discard on offer would throw away a producer it can buy.
+    use for, whether one producing no Gold or one costing more than it could raise, or None when
+    every discard on offer would throw away a producer it can buy.
 
     An unaffordable card counts as junk because the slot is what matters: held, it produces nothing
     and blocks the refill.
@@ -704,7 +673,7 @@ POLICIES: dict[str, type[Policy]] = {
 def make_policy(name: str) -> Policy:
     """Build the policy registered under ``name``.
 
-    A stochastic policy seeds itself here; construct it directly with the run's
+    A stochastic policy seeds itself here. Construct it directly with the run's
     :class:`numpy.random.Generator` when the run has to be reproducible.
 
     Raises

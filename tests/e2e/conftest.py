@@ -16,8 +16,9 @@ from yasuki_core.database import get_connection_string
 E2E_PEPPER = "e2e-test-pepper"
 
 # Wrap the browser's WebSocket so a test can reach the room socket the page opens (window.__ws).
-# Tests drive deck-load/ready and card intents straight onto this socket — there is no UI path for
-# them — so the drag and flag interactions they actually exercise run against the real client.
+# Tests drive deck-load/ready and card intents straight onto this socket, because there is no UI
+# path for them, so the drag and flag interactions they actually exercise run against the real
+# client.
 WS_CAPTURE_SCRIPT = """
 const Native = window.WebSocket;
 class Captured extends Native {
@@ -60,7 +61,7 @@ def live_server() -> str:
     """A real uvicorn server on its own port with the dev-login bypass enabled.
 
     Play is login-required, so each browser signs in via /auth/dev-login, which needs the accounts
-    DB; the suite skips when it is unreachable. Board state stays in-memory, but the tests deal a
+    DB. The suite skips when it is unreachable. Board state stays in-memory, but the tests deal a
     real deck, so the server also reaches the cards database to resolve decks and creatable tokens.
     """
     if not _accounts_db_available():
@@ -148,7 +149,7 @@ def _token_db_ready() -> bool:
 
 
 def create_room(page):
-    """Create a room through the lobby UI and return its id; the room socket the page opens is
+    """Create a room through the lobby UI and return its id. The room socket the page opens is
     captured on window.__ws by `new_player`."""
     page.click("#createForm button[type=submit]")
     page.wait_for_selector("#roomView:not([hidden])")

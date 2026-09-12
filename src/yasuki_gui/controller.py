@@ -165,14 +165,14 @@ class FieldController:
 
     def _toggle_selection_at(self, tag: str | None, e: tk.Event) -> None:
         """While the engine awaits a choice, a click on a candidate toggles its selection (the field
-        ignores non-candidates); clicks elsewhere do nothing.
+        ignores non-candidates). Clicks elsewhere do nothing.
 
         An arrow of a division's spinner sits over the card it belongs to, so it is read first: a
         click there moves one creation rather than dropping the card out of the division.
 
-        A decision may name Provinces rather than cards — a Fortification attaches to the slot, and
-        an empty slot is as valid a choice as an occupied one — so a click on one of your own
-        Provinces offers the slot as well as whatever card is standing in it.
+        A decision may name Provinces rather than cards, because a Fortification attaches to the
+        slot, and an empty slot is as valid a choice as an occupied one, so a click on one of your
+        own Provinces offers the slot as well as whatever card is standing in it.
         """
         arrow = allocation_step_for_tag(tag) if tag else None
         if arrow is not None:
@@ -216,8 +216,8 @@ class FieldController:
         return None
 
     def _card_at(self, tag: str | None, e: tk.Event) -> str | None:
-        """The id of the card clicked — a battlefield sprite, one of your own hand cards, or the
-        card in one of your own provinces."""
+        """The id of the card clicked, whether a battlefield sprite, one of your own hand cards, or
+        the card in one of your own provinces."""
         if not tag:
             return None
         if tag.startswith("card:"):
@@ -244,8 +244,8 @@ class FieldController:
         return zv.cards[-1].id if zv is not None and zv.cards else None
 
     def _activate_card_at(self, tag: str | None, e: tk.Event) -> None:
-        """In rules mode, a click on a card invokes the action it offers (e.g. recruit a holding);
-        the host resolves which action that card offers."""
+        """In rules mode, a click on a card invokes the action it offers (e.g. recruit a holding).
+        The host resolves which action that card offers."""
         card_id = self._card_at(tag, e)
         if card_id is not None and self.view.on_card_activated is not None:
             self.view.on_card_activated(card_id)
@@ -424,9 +424,6 @@ class FieldController:
     def on_context_click(self, e: tk.Event) -> None:
         """Open a menu on a right-click, in rules mode only: the card's if the click hit one, the
         board's if it hit nothing.
-
-        A right-click is what a player reaches for to ask a card what it can do, so it opens the
-        same menu a double-click does rather than being reserved for empty board.
         """
         self._hide_card_view()
         if not self.view.rules_mode:
@@ -468,7 +465,7 @@ class FieldController:
 
         if key == hk.view:
             # Toggle: a second V closes the preview; otherwise open it for the card under the
-            # pointer (works over any zone — battlefield, hand, or province).
+            # pointer (works over any zone, battlefield, hand, or province).
             if self._preview_showing():
                 self._hide_card_view()
             else:

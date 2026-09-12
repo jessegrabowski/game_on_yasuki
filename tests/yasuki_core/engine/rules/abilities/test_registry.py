@@ -22,8 +22,8 @@ from yasuki_core.game_pieces.prints import HoldingPrint
 
 
 def test_a_second_unkeyed_ability_for_one_card_is_refused():
-    """An unkeyed ability is "the card's only one", so a second cannot also be unkeyed — an action
-    naming neither would have no way to say which it takes."""
+    """An unkeyed ability is "the card's only one", so a second cannot also be unkeyed, since an
+    action naming neither would have no way to say which it takes."""
     # These three registries were dict literals until the card modules split them up, where a
     # repeated key was ruff's F601 to catch. Registration-time checks replace that guard.
     plain = _ABILITIES["millet_farm"][0]

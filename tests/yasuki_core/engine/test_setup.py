@@ -25,7 +25,7 @@ from yasuki_core.game_pieces.prints import (
 )
 
 
-# Honor decides these outright, so the tie-break never draws — the generator only satisfies the
+# Honor decides these outright, so the tie-break never draws and the generator only satisfies the
 # signature.
 UNDRAWN = default_rng(0)
 
@@ -160,13 +160,13 @@ def test_pre_game_cards_are_dealt_face_up_as_loose_battlefield_cards():
 
 def _granted(game: GameState, card, stat: Stat) -> int:
     """The total a card's modifiers add to ``stat``. Province Strength has no effective-read
-    function yet — nothing asks for it until battle exists — so a grant over it is only assertable
-    here, which is weaker coverage than the Gold Production cases get."""
+    function yet and nothing asks for it until battle exists, so a grant over it is only
+    assertable here, which is weaker coverage than the Gold Production cases get."""
     return sum(m.amount for m in active_modifiers(game, card, stat))
 
 
 def _begun(state) -> GameState:
-    """The game the rules layer sees, with the game-start pass run — which is where a sensei's
+    """The game the rules layer sees, with the game-start pass run and which is where a sensei's
     characteristics are granted to the stronghold."""
     game = GameState.start(state, PlayerId.P1)
     begin_game(game)
@@ -340,7 +340,7 @@ def test_several_senseis_all_contribute():
 
 def test_a_sensei_is_not_a_second_gold_producer():
     """A sensei's printed Gold Production is a delta the stronghold receives, not gold the sensei
-    makes — offering it as a source to bow would pay the seat twice for one characteristic."""
+    makes and offering it as a source to bow would pay the seat twice for one characteristic."""
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
@@ -358,7 +358,7 @@ def test_a_sensei_is_not_a_second_gold_producer():
 
 
 def test_a_sensei_with_no_stronghold_contributes_nothing():
-    """A sensei modifies a stronghold; with none to modify it contributes nothing, and that holds
+    """A sensei modifies a stronghold. With none to modify it contributes nothing, and that holds
     for honor as much as for the two characteristics that arrive as grants."""
     sensei = L5RCard.of(
         SenseiPrint,
@@ -427,7 +427,7 @@ def test_lower_honor_player_goes_second_and_their_stronghold_flips():
 
     second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2), rng=UNDRAWN)
 
-    assert second is PlayerId.P2  # lower honor → second
+    assert second is PlayerId.P2  # lower honor -> second
     assert p2_sh.showing_back is True
     assert p1_sh.showing_back is False  # the first player's stronghold stays front-up
 
@@ -445,7 +445,7 @@ def test_an_honor_tie_is_settled_by_a_draw():
 
 
 def test_the_tie_break_reproduces_from_its_seed():
-    """One generator, one answer — what lets a seeded deal replay to the same opening."""
+    """One generator, one answer and what lets a seeded deal replay to the same opening."""
     drawn = {
         flip_second_player_stronghold(
             _two_seat_table(7, 7)[0], (PlayerId.P1, PlayerId.P2), rng=default_rng(3)
@@ -513,7 +513,7 @@ def test_a_sensei_leaving_play_takes_its_gold_with_it():
 
 def test_a_sensei_reaching_the_table_after_setup_still_grants():
     """The grant is read off the board rather than recorded as the game begins, so a sensei that was
-    not there at setup is not skipped. Nothing puts one into play mid-game yet; Temples of the Crow
+    not there at setup is not skipped. Nothing puts one into play mid-game yet. Temples of the Crow
     is the card that would."""
     stronghold = L5RCard.of(
         StrongholdPrint,

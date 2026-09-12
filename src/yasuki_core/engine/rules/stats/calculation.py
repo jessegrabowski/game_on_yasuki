@@ -31,11 +31,11 @@ def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
 
 
 def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
-    """Every modifier adjusting ``card``'s ``stat`` right now: one from each counter it holds, which
-    grants its per-count stat while in play; one from each card attached to it, for the modifier that
-    card prints plus whatever its own text grants; one from each Sensei its seat controls, when
-    ``card`` is a Stronghold; and the recorded modifiers targeting it, a ``WHILE_SOURCE_IN_PLAY`` one
-    only while its source is on the battlefield.
+    """Every modifier adjusting ``card``'s ``stat`` right now: one from each counter it holds,
+    granting its per-count stat while in play, one from each card attached to it, for the modifier
+    that card prints plus whatever its own text grants, one from each Sensei its seat controls when
+    ``card`` is a Stronghold, and the recorded modifiers targeting it, a ``WHILE_SOURCE_IN_PLAY``
+    one only while its source is on the battlefield.
 
     Everything but the recorded modifiers is read off the board, so a derived grant lasts exactly as
     long as the card granting it stays in play, whenever that card arrived."""

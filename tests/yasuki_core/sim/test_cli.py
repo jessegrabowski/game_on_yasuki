@@ -40,8 +40,8 @@ def test_the_flags_reach_the_run(monkeypatch, tmp_path):
 
 
 def test_a_repeated_policy_flag_sweeps_into_one_table(monkeypatch, tmp_path):
-    # The point of the sweep: one file, told apart by a column, over the same deals — so the
-    # policies are comparable rather than each run being its own incomparable file.
+    # The point of the sweep: one file, told apart by a column, over the same deals. This makes the
+    # policies comparable rather than each run being its own incomparable file.
     calls = []
     monkeypatch.setattr(cli, "run_games", _fake_run(calls, games=2))
     out = tmp_path / "run.csv"

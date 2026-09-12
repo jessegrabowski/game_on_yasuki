@@ -68,7 +68,7 @@ def _offered(game: GameState, seat: PlayerId = PlayerId.P1) -> set[str]:
 
 
 def test_the_arc_decides_which_favor_abilities_exist():
-    """The pre-Gold rulebook granted four uses; the Onyx/ShE datasheet grants two."""
+    """The pre-Gold rulebook granted four uses. The Onyx/ShE datasheet grants two."""
     assert [a.key for a in ruleset.SHATTERED_EMPIRE.favor_abilities] == [
         "discard_to_draw",
         "send_attacker_home",
@@ -145,7 +145,9 @@ def test_the_imperial_draw_costs_only_the_favor(game, imperial):
 
 
 def test_the_datasheet_draw_discards_a_fate_card_as_well(game):
-    """ShE datasheet: "discard a Fate card to draw a card", on top of the Favor in the cost block."""
+    """
+    ShE datasheet: "discard a Fate card to draw a card", on top of the Favor in the cost block.
+    """
     hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     # Two, so the discard is a genuine choice the seat is asked rather than a foregone one.
     for card_id in ("spare", "keeper"):
@@ -179,7 +181,9 @@ def _at_battle(game: GameState, *, attacker_ids=(), defender_ids=()) -> None:
 
 
 def test_the_datasheet_battle_ability_sends_an_attacker_home(game):
-    """ShE datasheet: "Political Battle, (Favor): Move a target attacking enemy Personality home"."""
+    """
+    ShE datasheet: "Political Battle, (Favor): Move a target attacking enemy Personality home".
+    """
     _at_battle(game, attacker_ids=("raider",))
     TakeFavor(PlayerId.P2).perform(game)
     # The Defender is the seat with a reason to use it, so it is the one holding priority here.
@@ -252,7 +256,8 @@ def test_the_imperial_draw_is_offered_to_whoever_the_round_permits(imperial, gam
 
 def test_a_wind_bars_the_rulebook_favor_abilities(game):
     """ShE datasheet, Winds: "While you have a Wind in play, you may not take rulebook Favor
-    actions." The seat otherwise qualifies outright, so the Wind is the only thing withholding it."""
+    actions." The seat otherwise qualifies outright, so the Wind is the only thing withholding
+    it."""
     hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     hand.add(register(game.table, fate_card("spare", PlayerId.P1)))
     TakeFavor(PlayerId.P1).perform(game)
@@ -264,7 +269,7 @@ def test_a_wind_bars_the_rulebook_favor_abilities(game):
 
 
 def test_a_rivals_wind_does_not_bar_your_own_favor_abilities(game):
-    """ "you have a Wind in play" — it is the acting seat's own Wind that stops them."""
+    """'you have a Wind in play': it is the acting seat's own Wind that stops them."""
     hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     hand.add(register(game.table, fate_card("spare", PlayerId.P1)))
     TakeFavor(PlayerId.P1).perform(game)

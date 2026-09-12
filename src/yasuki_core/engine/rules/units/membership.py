@@ -1,7 +1,7 @@
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 
-# The readers below are views over ``TableState.units`` — unit membership, not the presentation
+# The readers below are views over ``TableState.units``: unit membership, not the presentation
 # stacking in ``TableState.attachments``, which carries no rules meaning and which the rules layer
 # must never read. The substrate owns the relation and keeps its invariants, so nothing here
 # validates or mirrors it. A rules-layer copy would be a desync waiting to happen.
@@ -24,12 +24,12 @@ def attached_to(game: GameState, card: L5RCard) -> L5RCard | None:
 
 
 def attachments_of(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
-    """The cards attached to ``card``, in the order they were attached — with ``card`` himself, his
+    """The cards attached to ``card``, in the order they were attached. With ``card`` himself, his
     unit (CR, Unit).
 
-    The relation is flat: everything in a unit attaches to the Personality, however the table renders
-    it, so there is no chain to walk. The order is the relation's insertion order, which replay
-    reproduces.
+    The relation is flat: everything in a unit attaches to the Personality, however the table
+    renders it, so there is no chain to walk. The order is the relation's insertion order, which
+    replay reproduces.
     """
     return tuple(
         game.table.cards_by_id[member]
@@ -39,7 +39,7 @@ def attachments_of(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
 
 
 def unit_of(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
-    """``card`` and the cards attached to him, in attach order — his unit (CR, Unit). A card with
+    """``card`` and the cards attached to him, in attach order: his unit (CR, Unit). A card with
     nothing attached is a unit of one, so a caller need not ask whether it is a Personality.
 
     Read the unit before moving the card: leaving the battlefield clears the relation, so a caller

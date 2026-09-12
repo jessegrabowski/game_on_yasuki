@@ -12,10 +12,10 @@ _SECTION_LABEL = {"pre_game": "Pre-Game", "dynasty": "Dynasty", "fate": "Fate"}
 
 @dataclass(frozen=True)
 class DeckCard:
-    """One normalized deck entry — a single (card, side, printing, art-variant) with its quantity.
+    """One normalized deck entry: a single (card, side, printing, art-variant) with its quantity.
 
     Mirrors a ``deck_cards`` row minus its surrogate and ``deck_id``. ``card_name`` is the
-    denormalized recovery handle stored alongside the id so an entry survives a card_id drift; the
+    denormalized recovery handle stored alongside the id so an entry survives a card_id drift. The
     art-swap fields capture a borrowed printing semantically (donor card slug + set), never the
     builder's volatile synthetic print_id.
     """
@@ -85,8 +85,8 @@ def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCa
 
     This is both the save-time serializer and its validation: every named card (and every art-swap
     donor) is looked up in ``name_index``, and any that miss are collected and raised together so a
-    user sees every problem at once. Identical entries — same card, side, printing, and art
-    variant — are summed into one row, matching the null-safe uniqueness the schema enforces.
+    user sees every problem at once. Identical entries (same card, side, printing, and art
+    variant) are summed into one row, matching the null-safe uniqueness the schema enforces.
 
     Parameters
     ----------
@@ -177,8 +177,8 @@ def assert_card_ids_known(cards: list[DeckCard], known_ids: set[str]) -> None:
 def summarize(cards: list[DeckCard], records_by_id: dict[str, dict]) -> DeckSummary:
     """Derive the denormalized deck summary from its cards.
 
-    The stronghold is the pre-game card typed ``Stronghold``; the deck's clan is that stronghold's
-    clan. Dynasty and fate counts sum the quantities on their sides.
+    The stronghold is the pre-game card typed ``Stronghold``, and the deck's clan is that
+    stronghold's clan. Dynasty and fate counts sum the quantities on their sides.
 
     Parameters
     ----------
@@ -190,7 +190,7 @@ def summarize(cards: list[DeckCard], records_by_id: dict[str, dict]) -> DeckSumm
     Returns
     -------
     summary : DeckSummary
-        Stronghold id, clan, and dynasty/fate counts; the stronghold and clan are None if the deck
+        Stronghold id, clan, and dynasty/fate counts. The stronghold and clan are None if the deck
         has no stronghold.
     """
     stronghold_id: str | None = None
@@ -254,8 +254,8 @@ def to_yaml(
     """Serialize deck cards to the interchange YAML ``parse_deck_yaml`` reads back.
 
     Within each section cards sort by name then set for a stable export. An art-swap renders as the
-    ``{art: Donor [Set]}`` trailer; the donor's display name comes from ``donor_names`` (its slug is
-    a graceful fallback), since the row stores only the donor's id.
+    ``{art: Donor [Set]}`` trailer, and the donor's display name comes from ``donor_names`` (its
+    slug is a graceful fallback), since the row stores only the donor's id.
 
     Parameters
     ----------
@@ -305,12 +305,12 @@ def to_yaml(
 
 
 def deck_from_yaml(text: str, name_index: dict[str, dict]) -> list[DeckCard]:
-    """Parse and resolve a YAML decklist in one step — the import-and-validate entry point."""
+    """Parse and resolve a YAML decklist in one step. The import-and-validate entry point."""
     return resolve_deck_cards(parse_deck_yaml(text), name_index)
 
 
 def stored_card_ids(conn: psycopg.Connection) -> set[str]:
-    """Every card id referenced by any stored deck — cards and art-swap donors alike."""
+    """Every card id referenced by any stored deck, cards and art-swap donors alike."""
     with conn.cursor() as cur:
         cur.execute(
             "SELECT card_id FROM deck_cards "
@@ -321,10 +321,10 @@ def stored_card_ids(conn: psycopg.Connection) -> set[str]:
 
 
 def orphan_card_ids(stored_ids: set[str], known_ids: set[str]) -> set[str]:
-    """The stored card ids absent from the card database — the post-rebuild integrity sweep.
+    """The stored card ids absent from the card database. The post-rebuild integrity sweep.
 
-    A non-empty result means a card-DB rebuild dropped or renamed an id some deck still references;
-    those decks need re-linking (by the denormalized ``card_name``) before the id vanishes for good.
+    A non-empty result means a card-DB rebuild dropped or renamed an id some deck still references.
+    Those decks need re-linking (by the denormalized ``card_name``) before the id vanishes for good.
 
     Parameters
     ----------

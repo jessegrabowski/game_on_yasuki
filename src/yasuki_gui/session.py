@@ -107,14 +107,15 @@ def _resolved_demo_deck(seat: PlayerId) -> ResolvedDeck:
 def build_demo_state(rng: Generator | None = None) -> tuple[TableState, PlayerId]:
     """Build a fully set-up two-seat table from placeholder decks, returning it and the human seat.
 
-    The human plays P1; P2 is the AI-reserved opponent, dealt the same way so the board is
+    The human plays P1. P2 is the AI-reserved opponent, dealt the same way so the board is
     populated on both sides.
 
     Parameters
     ----------
     rng : numpy.random.Generator, optional
-        Split into one stream per seat, so a seeded generator lays out the same board — what a test
-        pins. Default None, which deals from system entropy, so each launch opens differently.
+        Split into one stream per seat, so a seeded generator lays out the same board: what a
+        test pins. Default None, which deals from system entropy, so each launch opens
+        differently.
     """
     state = TableState.empty_two_seat("You", "Opponent")
     deal = default_rng() if rng is None else rng

@@ -32,7 +32,7 @@ class ZoneVisual(Visual):
         self.tag = tag
         self.images = images
         self.selected_ids = selected_ids
-        # A decision may name this zone rather than a card in it — a Fortification attaches to the
+        # A decision may name this zone rather than a card in it. A Fortification attaches to the
         # slot, so an empty one is as pickable as an occupied one and has to show it.
         self.slot_selected = slot_selected
 

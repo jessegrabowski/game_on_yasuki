@@ -93,7 +93,7 @@ def test_giving_the_zombie_to_an_untainted_personality_costs_five_honor():
 
 
 def test_kengun_grounds_is_withheld_on_another_seats_turn():
-    """ "If it is your turn" — read before the ability is offered rather than resolving to nothing."""
+    """'If it is your turn'. Read before the ability is offered rather than resolving to nothing."""
     session = _kengun_game()
     end_turn(session)  # hand the turn to P2; the Grounds is still P1's to bow
 
@@ -155,7 +155,7 @@ def test_ikarichi_invests_two_gold_for_an_undead_outrider():
 
 
 def test_the_kanpeki_dynasty_rides_him_in_for_nothing():
-    """ "Invest :g2:, or :g0: if your Wind is The Kanpeki Dynasty" — the Wind is a card in play, so
+    """'Invest :g2:, or :g0: if your Wind is The Kanpeki Dynasty'. The Wind is a card in play, so
     the Invest reads the board rather than a printed number alone."""
     session = _ikarichi_game(wind=KANPEKI_DYNASTY)
 

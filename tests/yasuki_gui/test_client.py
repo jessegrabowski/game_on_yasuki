@@ -12,9 +12,10 @@ from yasuki_gui.session import DEMO_DECK_PATH
 
 from tests.yasuki_core.db_guard import requires_db
 
-# Every test here builds a client, and building one deals the chosen decks out of Postgres. Without
-# it the deal degrades to the placeholder deck, where both seats tie on Family Honor and turn order
-# is never resolved — so these would not fail honestly, they would assert against a different game.
+# Every test here builds a client, and building one deals the chosen decks out of Postgres.
+# Without it the deal degrades to the placeholder deck, where both seats tie on Family Honor and
+# turn order is never resolved and so these would not fail honestly, they would assert against a
+# different game.
 pytestmark = requires_db
 
 # Turn order goes to the higher Family Honor, so a pairing that differs on it decides who leads
@@ -28,7 +29,7 @@ def _build(monkeypatch, *, human_leads: bool) -> Presenter:
     """A client dealt so the human leads or does not, never entered into its event loop.
 
     The opponent hand-off is scheduled with ``root.after``, so a test pumps the event queue to let
-    it run; the delay is zeroed so pumping is instant rather than a real 700ms wait.
+    it run. The delay is zeroed so pumping is instant.
     """
     monkeypatch.setattr(presenter_mod, "OPPONENT_TURN_DELAY_MS", 0)
     return build_client(
@@ -108,7 +109,7 @@ def _stronghold_name(client: Presenter, seat) -> str:
 
 
 def test_loading_a_deck_restarts_the_game_on_it(client):
-    """A new session is not enough — it has to be dealt from the deck that was picked, which the
+    """A new session is not enough, and it has to be dealt from the deck that was picked, which the
     opponent's Stronghold is the cheapest way to see."""
     opponent = PlayerId.P2 if client.host.runner.human is PlayerId.P1 else PlayerId.P1
     before = _stronghold_name(client, opponent)
@@ -154,7 +155,7 @@ def test_backing_out_of_a_decision_leaves_the_board_alone(client):
 
 def test_backing_out_leaves_the_board_on_the_table_the_engine_kept(client):
     """Cancelling rewinds the tape and replays it onto a fresh table. A board still pointed at the
-    old one renders a game nobody is playing — the honor readout freezes where it stood while the
+    old one renders a game nobody is playing. The honor readout freezes where it stood while the
     engine goes on without it."""
     client.act(Cycle())
 
@@ -193,7 +194,7 @@ def test_the_honor_readout_ignores_a_board_left_on_a_stale_table(client):
 
 def test_the_honor_readout_is_not_offered_as_editable_during_a_rules_game(client):
     """Clicking it dispatches a sandbox intent, and the sandbox path is disabled while the engine
-    owns the board — so a gold, hand-cursored label advertises an edit that cannot happen."""
+    owns the board, so a gold, hand-cursored label advertises an edit that cannot happen."""
     panel = client.window.human_panel
     assert panel.owner is client.window.field.seat  # the seat the sandbox would let edit
 

@@ -8,7 +8,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 def finish_invest(game: GameState, card: L5RCard, invest_amount: int | None) -> None:
     """Charge ``card``'s Invest against itself and run what it bought. None is a card recruited
-    without the option, which a free Invest is not — a card whose own text drops its Invest to zero
+    without the option, which a free Invest is not. A card whose own text drops its Invest to zero
     still buys what the Invest buys.
 
     Invest belongs to a card entering play rather than to the action that brought it (CR, Invest),

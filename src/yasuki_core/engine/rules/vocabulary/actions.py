@@ -13,7 +13,7 @@ class BattleDesignator(Enum):
         Rule of Presence, which the datasheet says in as many words: the two are independent, and a
         card needs ``ABSENT`` as well to be used by a seat with no presence.
     REMOTE
-        Usable from a card at home or at another battlefield — a wider ``HOME``.
+        Usable from a card at home or at another battlefield, a wider ``HOME``.
     """
 
     ABSENT = "absent"
@@ -22,18 +22,18 @@ class BattleDesignator(Enum):
 
 
 class ActionTiming(Enum):
-    """When an action may be taken, and by whom — the designator printed ahead of an ability's text.
+    """When an action may be taken, and by whom: the designator printed ahead of an ability's text.
 
     Each names an Action Round and a first actor:
 
-    - ``OPEN`` — the Action Phase, by any player
-    - ``LIMITED`` — the Action Phase, only by the active player
-    - ``DYNASTY`` — the Dynasty phase, only by the active player
-    - ``ATTACK`` — the Attack Phase's Declaration Segment, only by the active player
-    - ``ENGAGE`` — a battle's Engage Segment, by any player, the Defender acting first
-    - ``BATTLE`` — a battle's Combat Segment, by any player, the Defender acting first
-    - ``INTERRUPT`` — the Interrupt step of another action, by any player
-    - ``RESPONSE`` — the Response step of another action, by any player [ShE]
+    - ``OPEN``: the Action Phase, by any player
+    - ``LIMITED``: the Action Phase, only by the active player
+    - ``DYNASTY``: the Dynasty phase, only by the active player
+    - ``ATTACK``: the Attack Phase's Declaration Segment, only by the active player
+    - ``ENGAGE``: a battle's Engage Segment, by any player, the Defender acting first
+    - ``BATTLE``: a battle's Combat Segment, by any player, the Defender acting first
+    - ``INTERRUPT``: the Interrupt step of another action, by any player
+    - ``RESPONSE``: the Response step of another action, by any player [ShE]
 
     Repeatability is a separate axis: a designator says *when*, and whether an ability may be used
     more than once in that window is the once-per-turn key its own handler claims.
@@ -63,7 +63,7 @@ class Recruit:
     card_id : str
         The province card to recruit.
     invest : bool
-        Whether to also pay the card's Invest cost for its one-time enter-play effect — the
+        Whether to also pay the card's Invest cost for its one-time enter-play effect, the
         kicker-style second purchase option. Default False.
     proclaim : bool
         Whether to Proclaim the recruit (once per turn, own-clan Personalities only), adding the
@@ -91,7 +91,7 @@ class DynastyDiscard:
 @dataclass(frozen=True, slots=True)
 class Legacy:
     """Take the Legacy rulebook ability (Dynasty, once per turn): banish a card from hand to search
-    your dynasty deck and provinces for a Legacy card and place it face-up in a province; failing
+    your dynasty deck and provinces for a Legacy card and place it face-up in a province. Failing
     to find one loses the game. The banished card and the placement province are chosen through the
     decisions the action raises, so the action itself carries no target."""
 
@@ -107,9 +107,8 @@ class Inheritance:
 class PlayStrategy:
     """Play a Strategy from hand for its Gold Cost, resolve its ability, and discard it.
 
-    Like :class:`~.ActivateAbility`, the designator is the card's own rather than the action's, so a
-    Strategy is offered in whichever Action Round its ability names and carries no entry in
-    ``ACTION_TIMINGS``. Its target is chosen through the decision the ability raises.
+    Offered in whichever Action Round the card's own ability names, not a fixed one. Carries no
+    entry in ``ACTION_TIMINGS``. Its target is chosen through the decision the ability raises.
 
     Attributes
     ----------
@@ -126,7 +125,8 @@ class PlayStrategy:
 
 @dataclass(frozen=True, slots=True)
 class Equip:
-    """Attach a Follower, Item or Spell from hand to a Personality you control, paying its Gold Cost.
+    """Attach a Follower, Item or Spell from hand to a Personality you control, paying its Gold
+    Cost.
 
     The Personality is chosen through the decision the action raises rather than named here, the way
     an activated ability picks its target.
@@ -147,8 +147,8 @@ class Equip:
 
 @dataclass(frozen=True, slots=True)
 class ActivateAbility:
-    """Activate the activated ability on an in-play card, bowing it as the cost. The ability's target
-    is chosen through the decision the action raises.
+    """Activate the activated ability on an in-play card, bowing it as the cost. The ability's
+    target is chosen through the decision the action raises.
 
     Attributes
     ----------
@@ -226,9 +226,8 @@ class DeclareAttack:
     """Declare an attack in the Attack Phase, creating a battlefield at each of the Defender's
     Provinces (CR, Declare an Attack).
 
-    The CR makes this a choice rather than a prompt — the active player *"may now optionally
-    create"* an attack — so it is an action the seat takes rather than a decision the engine raises.
-    Passing the Attack Phase instead is how a seat declines.
+    An action the seat takes, not a decision the engine raises: the active player *"may now
+    optionally create"* an attack. Passing the Attack Phase is how a seat declines.
     """
 
 
@@ -252,7 +251,7 @@ Action = (
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
 # to taking an action rather than one, and ActivateAbility because it reads its designator off the
-# card — the same action is Open on one Holding and Dynasty on another. Lobby and UseFavorAbility
+# card. The same action is Open on one Holding and Dynasty on another. Lobby and UseFavorAbility
 # are absent because they read their designators off the arc's ruleset: the Twenty Festivals CR
 # makes Lobby Limited where the ShE datasheet makes it Open, and which Favor abilities exist at all
 # differs by arc.
@@ -261,7 +260,7 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     KharmicDraw: ActionTiming.OPEN,
     KharmicRefill: ActionTiming.OPEN,
     Recruit: ActionTiming.DYNASTY,
-    # Repeatable Open, not Dynasty (CR, Equip) — it is taken in the Action phase like Kharmic.
+    # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.
     Equip: ActionTiming.OPEN,
     DynastyDiscard: ActionTiming.DYNASTY,
     Legacy: ActionTiming.DYNASTY,

@@ -25,7 +25,7 @@ from yasuki_core.game_pieces.prints import RingPrint
 
 
 def _wisdom_gained_findable_rings(game: GameState, seat: PlayerId) -> tuple[str, ...]:
-    """The Rings in ``seat``'s Fate deck and Fate discard pile — both piles the search reaches."""
+    """The Rings in ``seat``'s Fate deck and Fate discard pile, both piles the search reaches."""
     piles = (
         game.table.decks[DeckKey(seat, Side.FATE)].cards,
         game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards,
@@ -41,9 +41,9 @@ def _wisdom_gained_search_order(game: GameState, controller: PlayerId) -> tuple[
 def _wisdom_gained_ask_to_search(
     game: GameState, event_id: str, seats: tuple[PlayerId, ...]
 ) -> list[Effect]:
-    """Put the offer to the first of ``seats`` holding a Ring. A seat with none is passed over rather
-    than asked a question it cannot answer, and each answer asks the seat behind it — so the offer
-    moves along one player at a time in the order the card names."""
+    """Put the offer to the first of ``seats`` holding a Ring. A seat with none is passed over
+    rather than asked a question it cannot answer, and each answer asks the seat behind it. So
+    the offer moves along one player at a time in the order the card names."""
     for seat in seats:
         if _wisdom_gained_findable_rings(game, seat):
             question = "Search your discard pile and Fate deck for a Ring?"
@@ -72,7 +72,7 @@ def _resolve_wisdom_gained_search(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Open the search for a seat that accepted, or pass the offer on. The offer comes before the
-    search rather than after it because searching is what costs the shuffle — a seat that would
+    search rather than after it because searching is what costs the shuffle. A seat that would
     rather keep the order of its deck has to be able to decline without looking."""
     if not chosen:
         return _wisdom_gained_ask_to_search(

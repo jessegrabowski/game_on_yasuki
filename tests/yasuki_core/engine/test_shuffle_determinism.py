@@ -51,7 +51,7 @@ def test_shuffle_records_seed_in_event():
 
 
 def test_replaying_recorded_seed_reproduces_order():
-    # The event's seed is enough to reproduce the order on a fresh deck — the basis for replay.
+    # The event's seed is enough to reproduce the order on a fresh deck: the basis for replay.
     live = _table_with_fate_deck()
     events = apply_intent(live, PlayerId.P1, Shuffle(DeckKey(PlayerId.P1, Side.FATE), seed=4242))
 

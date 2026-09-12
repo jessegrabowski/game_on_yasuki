@@ -174,8 +174,8 @@ def _tetsuo_hiyamako_experienced_entered_play(ctx: TriggerContext) -> list[Effec
     """After Hiyamako enters play, create two +1F Claws and attach them to her.
 
     Two Weapons on one Personality, where the rules allow one (CR, Weapon). Her text says so, and
-    card text beats the rules (CR, Cardinal Rule 1) — which is also why they are attached rather
-    than Equipped: the Weapon limit belongs to Equip's legality, and nothing here is Equipping.
+    card text beats the rules (CR, Cardinal Rule 1), which is also why they are attached rather
+    than Equipped. The Weapon limit belongs to Equip's legality, and nothing here is Equipping.
     """
     if ctx.event.card_id != ctx.card.id:
         return []
@@ -190,8 +190,8 @@ def _tetsuo_hiyamako_experienced_entered_play(ctx: TriggerContext) -> list[Effec
 
 @on(EnteredPlay, "wheat_farm")
 def _wheat_farm_entered_play(ctx: TriggerContext) -> list[Effect]:
-    """After this Holding enters play, let its controller give zero to two other Farms they control a
-    +1GP Wealth token."""
+    """After this Holding enters play, let its controller give zero to two other Farms they
+    control a +1GP Wealth token."""
     if ctx.event.card_id != ctx.card.id:
         return []
     others = tuple(

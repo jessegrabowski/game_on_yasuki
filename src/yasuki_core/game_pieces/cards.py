@@ -7,13 +7,13 @@ from yasuki_core.game_pieces.prints import CardPrint
 class L5RCard:
     """One physical copy of a card in a game: its identity, its state, and the print it presents.
 
-    Characteristics — name, keywords, printed stats — belong to the :class:`~.CardPrint` in
+    Characteristics (name, keywords, printed stats) belong to the :class:`~.CardPrint` in
     ``printed``, which every copy of that card shares and none of them mutates. Reads forward, so
     ``card.gold_production`` answers from the print, but ``isinstance`` does not: ask
     ``isinstance(card.printed, HoldingPrint)`` for the card's type.
 
-    A double-faced card carries both prints and flips by choosing between them, so its two faces
-    are one card with one identity rather than a card nested inside another.
+    A double-faced card carries both prints and flips by choosing between them: its two faces
+    share one identity, one ``L5RCard``.
     """
 
     # Every copy on the table belongs to a seat: dealt from that seat's deck, or spawned by it.
@@ -23,14 +23,14 @@ class L5RCard:
     bowed: bool = False
     face_up: bool = True
     inverted: bool = False
-    # Named counters on the card (e.g. "wealth" → +1GP each): scalar host state, never cards
-    # (docs/engine/counters-vs-cards.md). In equality — replay checks must see counter drift — but
+    # Named counters on the card (e.g. "wealth" -> +1GP each): scalar host state, never cards
+    # (docs/engine/counters-vs-cards.md). In equality, replay checks must see counter drift, but
     # out of the generated hash, which a dict cannot join.
     counters: dict[str, int] = field(default_factory=dict, hash=False)
-    # Two distinct disclosures, both narrower than turning the card face up. ``shown`` marks a card the
-    # owner has revealed to their opponent: a face-down card the opponent may then identify while its
-    # owner still sees a back, or a hand card made public to all. ``peekers`` holds the seats privately
-    # peeking at the card — each may identify it, nobody else learns what they saw.
+    # Two distinct disclosures, both narrower than turning the card face up. ``shown`` marks a card
+    # the owner has revealed to their opponent: a face-down card the opponent may then identify
+    # while its owner still sees a back, or a hand card made public to all. ``peekers`` holds the
+    # seats privately peeking at the card. Each may identify it, nobody else learns what they saw.
     shown: bool = False
     peekers: frozenset[PlayerId] = frozenset()
     # The other face of a double-faced card, when its print could be resolved; ``showing_back``
@@ -41,8 +41,9 @@ class L5RCard:
     # A sandbox piece spawned onto the table (SpawnCard), not a card drawn from a deck. Only tokens
     # may be removed from the table; a real card is never destroyed outright.
     is_token: bool = False
-    # A free-text annotation a player wrote on the face-up card (e.g. "dead"), shown over its art. It
-    # rides along while the card stays public — including into a discard — and clears on entering a deck.
+    # A free-text annotation a player wrote on the face-up card (e.g. "dead"), shown over its art.
+    # It rides along while the card stays public (including into a discard) and clears on entering a
+    # deck.
     note: str | None = field(default=None, compare=False)
 
     @classmethod

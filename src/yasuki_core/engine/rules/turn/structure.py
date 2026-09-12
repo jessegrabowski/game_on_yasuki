@@ -19,7 +19,7 @@ TURN_PHASES: tuple[Phase, ...] = (Phase.ACTION, Phase.BATTLE, Phase.DYNASTY)
 
 @dataclass(frozen=True, slots=True)
 class RoundTimings:
-    """What an Action Round permits, split the way the CR splits it — the active player and everyone
+    """What an Action Round permits, split the way the CR splits it. The active player and everyone
     else are allowed different designators in the same round.
 
     Attributes
@@ -59,7 +59,7 @@ class RoundKind(Enum):
 
     A round is suspended and resumed by kind rather than by how deep the round stack is. Depth only
     answers "is something suspended beneath this", which stops meaning "this is a Response Step" the
-    moment anything else pushes — a battle's Engage and Combat Segments among them.
+    moment anything else pushes. A battle's Engage and Combat Segments are among them.
     """
 
     PHASE = "phase"
@@ -69,9 +69,9 @@ class RoundKind(Enum):
 
 @dataclass(frozen=True, slots=True)
 class ActionRound:
-    """The Action Round currently open — the CR's unit of "who may act now, and when this ends".
+    """The Action Round currently open: the CR's unit of "who may act now, and when this ends".
 
-    A round runs until every seat has passed consecutively; taking an action resets that count and
+    A round runs until every seat has passed consecutively. Taking an action resets that count and
     hands the opportunity on. Every phase opens one, and a battle's Engage and Combat Segments will
     open their own.
 
@@ -125,8 +125,8 @@ Stage = Turn | Phase | Segment | BattleSegment
 
 @dataclass(frozen=True, slots=True)
 class Moment:
-    """A boundary of a stage of play, worded the way a card prints one — "at the end of the turn",
-    "at the beginning of the Action Phase".
+    """A boundary of a stage of play, worded the way a card prints one, such as "at the end of the
+    turn" or "at the beginning of the Action Phase".
 
     Attributes
     ----------

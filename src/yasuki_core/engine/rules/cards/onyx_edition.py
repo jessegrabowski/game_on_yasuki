@@ -44,8 +44,7 @@ def _kitsu_hayako_invest(game: GameState, source: L5RCard, amount: int) -> list[
     Which price was paid, not how much: a discount moves both prices down together, so the second
     Ancestor goes with whichever price is higher at the time.
 
-    Both come from the one proxy: each creation mints its own card, so the pair are two Ancestors
-    rather than one counted twice.
+    Creates two separate Ancestor cards, not one counted twice.
     """
     ancestors = 2 if amount == max(invest_amounts(game, source)) else 1
     return [CreateToken(LION_ANCESTOR, source.owner, source.id) for _ in range(ancestors)]
@@ -86,7 +85,8 @@ def _spearmen_of_the_akasha_card_discarded(ctx: TriggerContext) -> list[Effect]:
 def _resolve_spearmen_of_the_akasha(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Banishing is what buys the Follower, so declining leaves the Spearmen lying in the discard."""
+    """Banishing is what buys the Follower, so declining
+    leaves the Spearmen lying in the discard."""
     if not chosen:
         return []
     return [Banish(source_id), CreateToken(NAGA_FOLLOWER, seat, source_id, attach_to=chosen[0])]

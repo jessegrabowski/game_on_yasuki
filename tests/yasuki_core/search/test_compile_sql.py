@@ -7,7 +7,7 @@ from yasuki_core.search.compile_sql import (
 from yasuki_core.search.boolean_query import parse_query
 from yasuki_core.search.parse_search import parse_token
 
-# build_card_filter is a pure (clause, params) builder — no database needed — so these run
+# build_card_filter is a pure (clause, params) builder. No database needed, so these run
 # everywhere, unlike the DB-backed tests in test_database.py.
 
 _PRINT_EXISTS = "EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
@@ -193,7 +193,8 @@ def test_compile_query_not_prefixes_the_group():
 
 
 def test_compile_query_drops_no_constraint_children():
-    # include: is a directive, not a predicate, so it leaves no trace (and no stray TRUE) in the SQL.
+    # include: is a directive, not a predicate, so it leaves no trace (and no stray TRUE) in the
+    # SQL.
     sql, _ = compile_query(parse_query("c:crane include:tokens"))
     assert "card_clans" in sql
     assert "TRUE" not in sql and "include" not in sql

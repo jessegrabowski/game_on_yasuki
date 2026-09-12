@@ -19,13 +19,13 @@ def payment_request(
 ) -> ChoosePayment:
     """Queue the payment's completion and build the first request for ``amount`` gold from ``seat``.
 
-    Every unbowed producer the seat controls is offered, quoted at what it makes for ``target`` right
-    now. A producer whose own trait can raise that quotes the lower figure and asks in its window as
-    it bows, so the answer the seat gives here is only which card to bow. The pool the seat already
-    holds counts toward the cost before anything bows.
+    Every unbowed producer the seat controls is offered, quoted at what it makes for ``target``
+    right now. A producer whose own trait can raise that quotes the lower figure and asks in its
+    window as it bows, so the answer the seat gives here is only which card to bow. The pool the
+    seat already holds counts toward the cost before anything bows.
 
     The completion is pushed onto the stack before the request is raised, so it sits above whatever
-    the announcing action queued and resolves first — bowing what the answer names, then re-raising
+    the announcing action queued and resolves first. It bows what the answer names, then re-raises
     for the remainder or spending once the pool covers the cost.
 
     Parameters
@@ -69,8 +69,8 @@ def can_afford(
     game: GameState, seat: PlayerId, amount: int, *, bowed_by_cost: frozenset[str] = frozenset()
 ) -> bool:
     """Whether ``seat`` could cover ``amount``: its pool plus the most every unbowed producer it
-    controls could make. Answered before a payment is offered, so an ability whose gold cost the seat
-    cannot meet is never announced.
+    controls could make. Answered before a payment is offered, so an ability whose gold cost the
+    seat cannot meet is never announced.
 
     Parameters
     ----------
@@ -127,11 +127,11 @@ def payment_in_flight(game: GameState, seat: PlayerId) -> ContinuePayment | None
 
 
 def offer_self_grant(ctx: TriggerContext, question: str, resolver: str) -> list[Effect]:
-    """The offer a card makes in the window it opens as it bows: ``question``, answered by
+    """The offer a card makes in the window it opens as it bows. The ``question`` is answered by
     ``resolver``, for the card whose window is firing.
 
     How much is on offer comes from the same projection affordability counts, so the two cannot
-    disagree — a window offering less than affordability promised would strand the purchase it made
+    disagree. A window offering less than affordability promised would strand the purchase it made
     reachable. Offers nothing when the event names another card, or when this one has nothing left
     to give this turn.
 

@@ -42,7 +42,8 @@ def _register_free_invest(printed_id: str):
 
 
 def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: int = 8):
-    """A session in the Dynasty phase with a big producer and one face-up Invest holding to recruit."""
+    """A session in the Dynasty phase with a big producer and one face-up Invest holding to
+    recruit."""
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
@@ -181,8 +182,8 @@ def test_variable_invest_recruit_replays_and_round_trips():
 
 
 def test_investing_permanently_raises_the_holdings_gold_cost():
-    """ "Entering play, permanently increase the Gold Cost by the Invest cost to get the effect." The
-    rise is what pays for the effect, so a card that got the effect must show it."""
+    """ "Entering play, permanently increase the Gold Cost by the Invest cost to get the effect."
+    The rise is what pays for the effect, so a card that got the effect must show it."""
     session = _invest_game("qm", "questionable_market", gold_cost=1)
     session.act(PlayerId.P1, Recruit("qm", invest=True))
     pay(session, PlayerId.P1)

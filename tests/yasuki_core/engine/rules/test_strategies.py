@@ -145,7 +145,7 @@ def test_it_resolves_its_ability_and_then_goes_to_the_discard():
 
 def test_backing_out_of_the_payment_leaves_the_card_in_hand():
     """The cancel path. Nothing has moved when the payment is asked, and the unwind truncates the
-    tape to before the announcement — so the card is where it was and nothing was discarded."""
+    tape to before the announcement, so the card is where it was and nothing was discarded."""
     session, card = _session()
     session.act(SEAT, PlayStrategy(card.id))
     assert isinstance(session.game.pending, ChoosePayment)
@@ -283,7 +283,7 @@ register_ability(
 
 def test_a_strategy_resolves_before_it_is_discarded_rather_than_after():
     """The CR order, and the reason the discard is stacked under the ability's own work. Reversed,
-    the card would already be in the discard pile while its text was still resolving — which a
+    the card would already be in the discard pile while its text was still resolving. Which a
     Response reading "after this was discarded" would see happen too early."""
     _RESOLVED_FROM.clear()
     state = TableState.empty_two_seat()
@@ -313,8 +313,9 @@ def test_a_strategy_resolves_before_it_is_discarded_rather_than_after():
 
 
 def test_a_strategy_that_put_itself_into_play_is_not_discarded():
-    """CR, Action Sequence step F: the played card is discarded "unless it is now in play". A
-    Terrain reads "Put this card into play there", so discarding it afterward would undo the card."""
+    """CR, Action Sequence step F: the played card is discarded "unless it is now in play".
+    A Terrain reads "Put this card into play there", so discarding it afterward would undo the
+    card."""
     state = TableState.empty_two_seat()
     card = register(
         state,

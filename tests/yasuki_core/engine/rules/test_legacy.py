@@ -57,7 +57,7 @@ def _legacy_holding(seat: PlayerId, card_id: str) -> L5RCard:
 def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck") -> TableState:
     """A two-seat table with P1 holding ``hand`` fate cards, ``provinces`` face-down provinces, and
     a filled dynasty deck. ``legacy_in`` seeds a Legacy holding in P1's ``"deck"`` or first
-    ``"province"``; None leaves P1 with no findable Legacy card."""
+    ``"province"``. None leaves P1 with no findable Legacy card."""
     state = TableState.empty_two_seat()
     for i in range(provinces):
         _facedown_province(
@@ -267,7 +267,8 @@ def test_a_completed_legacy_sequence_replays_to_the_same_state():
 
 def test_the_reshuffle_draws_on_the_games_own_generator():
     """Seed 7 at turn 2 and seed 8 at turn 1 once collided, because the reshuffle seed was the sum
-    of the two. Drawing from the game's generator makes the turn irrelevant to which stream it is."""
+    of the two. Drawing from the game's generator makes the turn irrelevant to which stream it
+    is."""
     orders = []
     for seed, turn in ((7, 2), (8, 1)):
         session = _dynasty_session(legacy_in="deck")
@@ -284,7 +285,7 @@ def test_the_reshuffle_draws_on_the_games_own_generator():
 
 
 def _shrine_of_courtesy(seat: PlayerId) -> L5RCard:
-    """Shrine of Courtesy carries no printed Legacy keyword; its Courtesy clause grants one."""
+    """Shrine of Courtesy carries no printed Legacy keyword. Its Courtesy clause grants one."""
     return L5RCard.of(
         HoldingPrint,
         id=f"{seat.name}-courtesy",
@@ -319,7 +320,7 @@ def test_a_conditional_grant_that_does_not_apply_leaves_the_card_unfindable():
 
 def _buried_province_card(session: EngineSession) -> L5RCard:
     """Put a face-down card in a Province of the seat about to act, the state a Province is left in
-    when it refills after a recruit — the only way one is face-down during its owner's own turn."""
+    when it refills after a recruit, the only way one is face-down during its owner's own turn."""
     buried = L5RCard.of(
         HoldingPrint,
         id="P1-buried",
@@ -362,7 +363,7 @@ def test_a_reaction_to_the_displaced_card_sees_the_province_it_left(reacting):
     """The rules resolve what the displaced card leaving triggered before the Legacy card lands, so
     a seat reacting to its own discard acts on the Province that discard emptied.
 
-    Doji Meiji is the card this is for — "after you discard Meiji from a Province, if you are Crane
+    Doji Meiji is the card this is for. "after you discard Meiji from a Province, if you are Crane
     Clan, take the Imperial Favor" should resolve while the Province is still the one Meiji left.
     """
     seen = []

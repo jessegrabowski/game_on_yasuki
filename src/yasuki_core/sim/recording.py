@@ -9,7 +9,8 @@ from yasuki_core.sim.metrics import Metric
 
 @dataclass(frozen=True, slots=True)
 class Sample:
-    """One seat's completed turn: metrics read at either end of it, and actions counted across it."""
+    """One seat's completed turn: metrics read at either end of it, and actions counted across
+    it."""
 
     turn: int
     seat: PlayerId
@@ -27,11 +28,11 @@ class TurnRecorder:
     Attributes
     ----------
     metrics : dict mapping str to callable
-        Sampled as the turn begins, when the seat has straightened and revealed — what it has to
+        Sampled as the turn begins, when the seat has straightened and revealed what it has to
         spend. Reported under the name each is keyed by.
     end_of_turn : dict mapping str to callable, optional
-        Sampled as the turn ends, when the board shows what the seat did with it — bowed producers,
-        provinces cleared and refilled face-down. Default empty.
+        Sampled as the turn ends, when the board shows what the seat did with it (bowed producers
+        and provinces cleared and refilled face-down). Default empty.
     actions : dict mapping str to Action subclass, optional
         Counted over the turn from the game log: how many actions of that class the seat took. What
         the board cannot say, since a recruited card and a discarded one leave a province looking
@@ -41,7 +42,7 @@ class TurnRecorder:
         Default None, which is only valid when nothing is being counted.
     samples : list of Sample
         The turns recorded so far, in order. A turn appears once its end has been observed, so
-        every row carries every name — a run that raises part-way through a turn drops it rather
+        every row carries every name. A run that raises part-way through a turn drops it rather
         than reporting one with its end-of-turn columns missing.
 
     All three sources land in one sample per turn, so a name used in two of them would collide.
@@ -87,8 +88,8 @@ class TurnRecorder:
         """The counted name of each action ``seat`` took this turn, in order.
 
         A cancelled action is dropped rather than counted: cancelling backs out the action that
-        raised the pending decision, so it never happened. An undone action needs no such handling —
-        undo pops it off the tape.
+        raised the pending decision, so it never happened. An undone action needs no such handling.
+        Undo pops it off the tape.
         """
         if not self.actions or self.log is None:
             return []

@@ -65,8 +65,8 @@ def test_colonial_farm_charges_three_gold_before_it_creates_anything():
 
 
 def test_colonial_farm_leaves_the_change_from_its_payment_in_the_pool():
-    """The Stronghold makes five for a cost of three: gold produced over a cost stays in the pool for
-    the rest of the phase rather than evaporating."""
+    """The Stronghold makes five for a cost of three: gold produced over a cost stays in the pool
+    for the rest of the phase rather than evaporating."""
     session = EngineSession.start(_farm_game().table, P1)
 
     session.act(P1, ActivateAbility("farm"))

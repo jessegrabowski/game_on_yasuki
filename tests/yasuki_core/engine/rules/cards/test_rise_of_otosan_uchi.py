@@ -62,7 +62,7 @@ P1, P2 = PlayerId.P1, PlayerId.P2
 
 def _panda_game(fate_cards: int = 2, *, dynasty: tuple[str, ...] = ()) -> EngineSession:
     """A session with Blessings of the Red Panda Spirit face-up in P1's Province and a stocked Fate
-    deck for each seat, so both have something to draw. ``dynasty`` stocks P1's Dynasty deck; it is
+    deck for each seat, so both have something to draw. ``dynasty`` stocks P1's Dynasty deck. It is
     empty by default so a test that does not care about the refill sees no card arrive."""
     state = TableState.empty_two_seat()
     province_card(
@@ -100,8 +100,8 @@ def test_it_is_offered_from_its_province():
 
 
 def test_every_seat_gains_honor_and_draws_not_just_the_controller():
-    """ "Each player gains 1 Honor and draws a card" — the opponent benefits too, which is the
-    card's whole character and the easiest half to leave out."""
+    """ "Each player gains 1 Honor and draws a card": the opponent benefits too, the card's
+    whole character and the easiest half to leave out."""
     session = _panda_game()
     before = {seat: (_honor(session, seat), len(_hand(session, seat))) for seat in (P1, P2)}
 
@@ -126,9 +126,7 @@ def test_it_asks_whether_to_keep_the_event_rather_than_offering_it_as_a_target()
 
 def test_answering_yes_shuffles_the_event_back_into_the_dynasty_deck():
     """With the Dynasty deck otherwise empty the Event is the only card in it, so the refill of the
-    Province it just left draws it straight back — face-down, as a refill arrives. That round trip
-    is the sharpest evidence it went to the deck rather than the discard; a stocked deck makes the
-    return a chance rather than a certainty."""
+    Province it just left draws it straight back, face-down."""
     session = _panda_game()
     session.act(P1, ActivateAbility("panda"))
     session.submit(P1, DecisionResponse(("panda",)))
@@ -141,7 +139,7 @@ def test_answering_yes_shuffles_the_event_back_into_the_dynasty_deck():
 
 
 def test_answering_no_discards_the_event():
-    """Declining is not doing nothing: the Event is spent either way, only its destination differs."""
+    """The Event is spent either way. Only its destination differs."""
     session = _panda_game()
     session.act(P1, ActivateAbility("panda"))
     session.submit(P1, DecisionResponse(()))
@@ -163,9 +161,9 @@ def test_the_province_refills_when_the_event_is_discarded():
 
 
 def test_the_province_refills_when_the_event_is_shuffled_back_instead():
-    """The refill follows the Event leaving rather than the Event being discarded, so the branch
-    that puts it back in the deck refills too. Which card arrives is not asserted: the Event is in
-    the shuffled deck it refills from and may be the one drawn."""
+    """The refill follows the Event leaving the Province, so the shuffle-back branch refills too.
+    Which card arrives is not asserted: the Event is in the shuffled deck it refills from and may
+    be the one drawn."""
     session = _panda_game(dynasty=("next-card",))
     session.act(P1, ActivateAbility("panda"))
     session.submit(P1, DecisionResponse(("panda",)))
@@ -184,7 +182,7 @@ def test_using_the_blessing_replays_to_the_same_state():
 
 def test_it_cannot_be_backed_out_of_once_the_opponent_has_been_given_something():
     """Every other modeled card emits at its own owner, so this is the only one whose abort can
-    reach across the table — and it must not. P2 has seen the card it drew, and taking the card back
+    reach across the table, and it must not. P2 has seen the card it drew, and taking the card back
     does not take back the seeing."""
     session = _panda_game()
     session.act(P1, ActivateAbility("panda"))
@@ -383,7 +381,7 @@ def test_recruiting_the_courts_opens_a_response_step_rather_than_acting():
 
 
 def test_the_response_step_names_the_recruit_that_opened_it():
-    """End to end: the Recruit records its own wording, and both seats read it off the view — the
+    """End to end: the Recruit records its own wording, and both seats read it off the view. The
     Step is declined with a button, so it has to say what is being declined."""
     session = _courts_with_an_envoy()
 
@@ -483,7 +481,7 @@ def test_a_bowed_courtier_is_no_courtier_to_spend():
 
 
 def test_the_courtier_the_invest_buys_can_be_bowed_by_the_response():
-    """The Step opens after the action has finished resolving, and the Invest resolves inside it —
+    """The Step opens after the action has finished resolving, and the Invest resolves inside it,
     so the Holding pays for its own Response with the Courtier it just bought."""
     session = _courts_game()  # no Courtier in play beforehand
 
@@ -525,8 +523,8 @@ def test_the_courts_invest_buys_a_wealth_token_and_a_courtier():
 
 
 def test_the_courtier_joins_the_clan_his_patron_plays():
-    """ "With your Clan Alignment" — he is a Lion because his patron is, not because the token says
-    so; the template carries no clan at all."""
+    """ "With your Clan Alignment": he is a Lion because his patron is, not because the token says
+    so. The template carries no clan at all."""
     session = _courts_game(clan="Lion")
 
     session.act(P1, Recruit("courts", invest=True))
@@ -627,7 +625,7 @@ def test_culling_grounds_asks_nobody_to_pick_a_target():
 
 def test_the_servant_survives_when_you_choose_to_leave_the_holding_bowed():
     """ "May remain bowed" is a choice made before each straightening (CR), so the turn start asks.
-    Keeping it bowed keeps the servant. The plain Farm beside it is the control — the choice has to
+    Keeping it bowed keeps the servant. The plain Farm beside it is the control. The choice has to
     be for this card, not for the seat."""
     session = _culling_game()
     farm = put_in_play(session.game.table, holding("farm", printed_id="plain_farm"))
@@ -892,7 +890,7 @@ def _play_walls(session: EngineSession, target: str) -> None:
 
 
 def test_man_the_walls_reaches_a_target_left_at_home():
-    """ "At any location" is what puts a card standing at home on offer at all — the Rules of
+    """ "At any location" is what puts a card standing at home on offer at all. The Rules of
     Location would otherwise leave only what is at the battlefield being fought at."""
     session = _man_the_walls_battle()
 

@@ -112,7 +112,7 @@ def test_a_card_type_that_prints_no_such_stat_reads_zero():
 
 
 def test_an_absent_stat_takes_no_modifiers_at_all():
-    """ "Absent values cannot receive bonuses, penalties or modifiers" — a Holding handed a Force
+    """ "Absent values cannot receive bonuses, penalties or modifiers": a Holding handed a Force
     grant stays at zero rather than becoming a 3-Force Holding."""
     farm = holding("f", gold_production=2)
     granted = Modifier("src", farm.id, Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)
@@ -122,7 +122,7 @@ def test_an_absent_stat_takes_no_modifiers_at_all():
 
 
 def test_an_attachments_printed_force_is_readable():
-    """Followers and Items carry Force and Chi of their own — the stats a unit will total. Without
+    """Followers and Items carry Force and Chi of their own: the stats a unit will total. Without
     them on the print there is nothing for an attachment to contribute."""
     bow = L5RCard.of(
         AttachmentPrint,

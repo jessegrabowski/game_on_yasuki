@@ -39,7 +39,7 @@ class CardDiscarded:
 
 @dataclass(frozen=True, slots=True)
 class CounterGained:
-    """A card gained ``amount`` of a counter — the actual number added, after any floor."""
+    """A card gained ``amount`` of a counter: the actual number added, after any floor."""
 
     card_id: str
     counter: Counter
@@ -48,7 +48,7 @@ class CounterGained:
 
 @dataclass(frozen=True, slots=True)
 class Destroyed:
-    """A card was destroyed — sent to a discard by destruction, distinct from being discarded from
+    """A card was destroyed, sent to a discard by destruction, distinct from being discarded from
     hand. ``cause`` names who or what destroyed it, which cards ask about: several react only to a
     Personality destroyed for having zero Chi, and others only to a destruction that was not their
     own doing."""
@@ -87,7 +87,7 @@ class Straightened:
 @dataclass(frozen=True, slots=True)
 class Revealed:
     """A face-down card in a Province was turned face-up. A card that arrives already face-up raises
-    nothing — the event names the turn, not the resulting state."""
+    nothing. The event names the turn, not the resulting state."""
 
     card_id: str
 

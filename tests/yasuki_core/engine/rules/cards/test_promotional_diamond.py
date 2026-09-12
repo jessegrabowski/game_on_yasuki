@@ -24,7 +24,7 @@ P1 = PlayerId.P1
 def _suiteiru_game(*, victim_chi: int = 3, victim_id: str | None = None, bearers: int = 2):
     """Suiteiru in play beside ``bearers`` other Personalities and the victim his ability destroys.
 
-    ``victim_id`` is the victim's printed id, which only a test putting him at zero Chi needs — he
+    ``victim_id`` is the victim's printed id, which only a test putting him at zero Chi needs. He
     has to be one of the prints the Chi Death Rule spares, or the board destroys him before the
     ability can.
     """
@@ -49,8 +49,8 @@ def _followers_on(game, personality_id: str) -> int:
 
 
 def test_suiteiru_divides_the_followers_as_the_answer_names_them():
-    """Chi 3 makes three Podlings, and naming a Personality twice puts two on him — the whole of the
-    "attach them to one or more of your Personalities" choice."""
+    """Chi 3 makes three Podlings, and naming a Personality twice puts two on him: the whole of
+    the "attach them to one or more of your Personalities" choice."""
     session = _suiteiru_game()
 
     session.act(P1, ActivateAbility("suiteiru"))
@@ -107,7 +107,7 @@ def test_suiteiru_may_take_the_followers_himself():
 
 
 def test_a_victim_with_no_chi_creates_nothing_to_divide():
-    """Nothing is created, so nothing is asked and no Honor is paid — the destroy is all of it."""
+    """Nothing is created, so nothing is asked and no Honor is paid. The destroy is all of it."""
     session = _suiteiru_game(victim_chi=0, victim_id="earthen_golem")
 
     session.act(P1, ActivateAbility("suiteiru"))
@@ -152,7 +152,7 @@ def test_suiteiru_replays_to_the_same_board():
 
 def test_the_count_follows_the_victims_chi_as_it_stands():
     """ "Equal to their Chi" reads the board, so a Personality carrying a Chi penalty when he is
-    destroyed makes that many fewer Followers — and costs that much less Honor."""
+    destroyed makes that many fewer Followers, and costs that much less Honor."""
     session = _suiteiru_game()
     session.game.ongoing.append(
         Modifier("penalty", "victim", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN)

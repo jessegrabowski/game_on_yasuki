@@ -11,9 +11,8 @@ from yasuki_gui.ui.card_strip import CardStrip, card_face
 class _Images:
     """Records which face was asked for, so a test reads the decision rather than the pixels.
 
-    A sized request is the preview's and an unsized one a cell's, so the two are answered
-    separately: cells with no art fall through to named placeholders, while the preview needs a real
-    Tk image, which is the only thing Tk will build a label from.
+    A sized request is the preview's, and an unsized one is a cell's, because cells with no art
+    fall through to named placeholders while the preview needs a real Tk image.
     """
 
     def __init__(self, front=None, back=None, preview=None):
@@ -131,7 +130,8 @@ def _strip_with_preview(board, art):
 
 
 def test_the_preview_key_enlarges_the_hovered_card(board, art):
-    """The board previews a card under the pointer with V; a card in the strip reads the same way."""
+    """The board previews a card under the pointer with V. A card in the strip reads the
+    same way."""
     strip = _strip_with_preview(board, art)
     strip.show([_card(face_up=True)], "Fate Discard")
     strip.open_at(10, 10)

@@ -91,7 +91,8 @@ def test_move_card_battlefield_to_hand_lands_upright_and_face_up():
     assert card in table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     assert card not in table.battlefield.cards
     assert "f1" not in table.positions
-    # The owner reads their own hand: a card enters it face up, unbowed, and uninverted, like a draw.
+    # The owner reads their own hand: a card enters it face up, unbowed, and uninverted, like a
+    # draw.
     assert card.face_up is True
     assert card.bowed is False
     assert card.inverted is False
@@ -270,10 +271,10 @@ def test_a_note_rides_a_card_into_the_discard_but_clears_in_a_deck():
     _on_battlefield(table, card)
 
     apply_intent(table, PlayerId.P1, MoveCard("f1", ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)))
-    assert card.note == "dead"  # the discard is public — the marker stays
+    assert card.note == "dead"  # the discard is public, the marker stays
 
     apply_intent(table, PlayerId.P1, MoveCard("f1", DeckKey(PlayerId.P1, Side.FATE)))
-    assert card.note is None  # shuffled back into the deck — the marker is gone
+    assert card.note is None  # shuffled back into the deck, the marker is gone
 
 
 def test_adjust_counter_grants_and_removes_on_a_face_up_card():
@@ -351,7 +352,8 @@ def test_give_control_is_rejected_on_a_face_down_card():
 
 
 def test_give_control_is_rejected_off_the_battlefield():
-    # Reassigning a card held in an owned zone would break the zone/owner invariant, so it's refused.
+    # Reassigning a card held in an owned zone would break the zone/owner invariant, so it's
+    # refused.
     table = TableState.empty_two_seat()
     hand = _stock_hand(table, "a")
     card = table.zones[hand].cards[0]
@@ -956,7 +958,7 @@ def test_peek_is_owner_gated_to_your_own_hidden_card():
     card = _fate("f1", owner=PlayerId.P1)
     _on_battlefield(table, card)
 
-    # The opponent cannot peek your hidden card — they must wait for you to Show it.
+    # The opponent cannot peek your hidden card; they must wait for you to Show it.
     assert apply_intent(table, PlayerId.P2, Peek("f1")) == []
     assert card.peekers == frozenset()
 
@@ -970,7 +972,7 @@ def test_peek_is_owner_gated_to_your_own_hidden_card():
 
 def test_unpeek_drops_a_peek_even_after_control_passes_to_the_opponent():
     # Unpeek is not owner-gated: whoever holds a peek may always drop it, even once the card has
-    # changed hands — so a stale peek never lingers after a Give control.
+    # changed hands, so a stale peek never lingers after a Give control.
     table = TableState.empty_two_seat()
     card = _fate("f1", owner=PlayerId.P1)
     _on_battlefield(table, card)
@@ -991,7 +993,7 @@ def test_batch_flag_is_atomic_and_rejected_if_any_unowned():
     events = apply_intent(table, PlayerId.P1, Bow(("f1", "f2")))
 
     assert events == []
-    assert mine.bowed is False  # rolled into nothing — neither card touched
+    assert mine.bowed is False  # rolled into nothing: neither card touched
     assert theirs.bowed is False
     assert table.seq == 0
 
@@ -1545,7 +1547,7 @@ def test_moving_a_card_onto_the_battlefield_puts_it_on_top():
 
 def test_table_invariants_hold_after_a_sequence_of_intents():
     # The handlers' core obligation is to keep cards_by_id and positions consistent as cards move.
-    # validate() asserts that whole-table invariant; running it after a representative sequence
+    # validate() asserts that whole-table invariant. running it after a representative sequence
     # guards every handler at once (e.g. a position not cleared when a card leaves the battlefield).
     table = TableState.empty_two_seat()
     dynasty_deck = table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
@@ -1563,7 +1565,7 @@ def test_table_invariants_hold_after_a_sequence_of_intents():
     apply_intent(table, PlayerId.P1, Draw(DeckKey(PlayerId.P1, Side.FATE)))  # to hand
     apply_intent(
         table, PlayerId.P1, Draw(DeckKey(PlayerId.P1, Side.DYNASTY))
-    )  # no province → board
+    )  # no province, so it lands on the board
     apply_intent(table, PlayerId.P1, MoveCard("d1", BATTLEFIELD, BoardPos(5.0, 5.0)))
     apply_intent(table, PlayerId.P1, MoveCard("d1", DeckKey(PlayerId.P1, Side.DYNASTY)))
     apply_intent(table, PlayerId.P1, DestroyProvince(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)))
@@ -1582,7 +1584,7 @@ def test_attach_records_a_card_to_card_relationship():
     assert table.attachments == {"c": "p"}
     assert table.seq == 1
     assert len(events) == 1 and events[0].cards == ("c",)
-    # The child keeps its own board position — the attachment is a relationship, not a move.
+    # The child keeps its own board position. The attachment is a relationship, not a move.
     assert table.positions["c"] == BoardPos(0.0, 0.0)
     table.validate()
 
@@ -1651,7 +1653,8 @@ def test_attach_rejects_a_cycle():
     apply_intent(table, PlayerId.P1, Attach("a", "b"))
     apply_intent(table, PlayerId.P1, Attach("b", "c"))
 
-    # a→b→c already; hanging c off a would close the loop. The guard must walk the whole chain.
+    # an a -> b -> c chain already, and hanging c off a would close the loop. The guard must walk
+    # the whole chain.
     events = apply_intent(table, PlayerId.P1, Attach("c", "a"))
 
     assert events == [] and table.attachments == {"a": "b", "b": "c"}
@@ -1782,8 +1785,9 @@ def test_destroying_a_province_routes_a_fate_attachment_to_the_fate_discard():
 
 
 def test_destroying_a_province_detaches_a_side_without_a_discard_in_place():
-    # A stronghold-side card has no discard; destroying its province must detach it, not remove it from
-    # the board into a pile that rejects its side and leave it floating (a corrupt cards_by_id).
+    # A stronghold-side card has no discard; destroying its province must detach it, not remove it
+    # from the board into a pile that rejects its side and leave it floating (a corrupt
+    # cards_by_id).
     table = TableState.empty_two_seat()
     province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
     table.zones[province] = ProvinceZone(owner=PlayerId.P1)
@@ -1810,7 +1814,7 @@ def test_destroying_a_province_discards_every_attachment_to_its_own_pile():
 
     apply_intent(table, PlayerId.P1, DestroyProvince(province))
 
-    # Every attached card is discarded, each routed by its own side — not just the first.
+    # Every attached card is discarded, each routed by its own side: not just the first.
     assert fort in table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
     assert spell in table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
     assert table.attachments == {}
@@ -1841,8 +1845,8 @@ def test_moving_a_middle_node_off_the_battlefield_clears_both_its_links():
     apply_intent(table, PlayerId.P1, Attach("p", "g"))
     apply_intent(table, PlayerId.P1, Attach("c", "p"))
 
-    # p has both a parent (g) and a child (c). Moving it off the board clears both — unlike Detach(p),
-    # which would break only p→g and leave c→p.
+    # p has both a parent (g) and a child (c). Moving it off the board clears both,
+    # unlike Detach(p), which would break only p -> g and leave c -> p.
     apply_intent(table, PlayerId.P1, MoveCard("p", ZoneKey(PlayerId.P1, ZoneRole.HAND)))
 
     assert table.attachments == {}
@@ -1947,7 +1951,7 @@ def test_a_card_moving_around_the_battlefield_keeps_its_counters():
 def test_a_card_leaving_a_province_keeps_its_counters():
     """A Province is not play, so a card moving out of one never left play. Shattered Empire relies
     on that: "give each Sincerity card in your Provinces a Sincerity token. After a card with
-    Sincerity tokens on it enters play, remove those tokens" (ShE datasheet, Sincerity) — clearing
+    Sincerity tokens on it enters play, remove those tokens" (ShE datasheet, Sincerity). Clearing
     on any zone change would empty the token before the card that reads it ever arrives."""
     table = TableState.empty_two_seat()
     province = ProvinceZone(owner=PlayerId.P1)
@@ -1966,7 +1970,8 @@ def test_a_card_leaving_a_province_keeps_its_counters():
 
 def test_a_card_returned_to_a_deck_loses_its_counters():
     """The deck branch scrubs a card back to a library card, and its counters go with the rest.
-    Blessings of the Red Panda Spirit shuffles itself back in, so this is a path cards really take."""
+    Blessings of the Red Panda Spirit shuffles itself back in, so this is a path cards really
+    take."""
     table = TableState.empty_two_seat()
     farm = _dynasty("farm")
     _on_battlefield(table, farm)
@@ -2035,7 +2040,7 @@ def test_spawn_card_into_another_seats_zone_is_rejected():
 
 
 def test_spawn_card_refused_by_a_zone_leaves_no_orphan():
-    """A hand takes Fate cards only, so a Dynasty token is turned away — and must not be left
+    """A hand takes Fate cards only, so a Dynasty token is turned away and must not be left
     behind in ``cards_by_id`` referencing a zone that never accepted it."""
     table = TableState.empty_two_seat()
     token_template(table, "ghul", name="Ghul", card_type="Personality", force=2, chi=2)
@@ -2096,7 +2101,7 @@ def test_a_seat_may_not_remove_another_seats_ordinary_token():
 
 
 def test_a_real_card_in_another_seats_hand_still_cannot_be_removed():
-    """A real card is never destroyable wherever it sits — it moves to a discard or banish. The
+    """A real card is never destroyable wherever it sits. It moves to a discard or banish. The
     proxy exception must not have opened a route around that."""
     table = TableState.empty_two_seat()
     hand = ZoneKey(PlayerId.P2, ZoneRole.HAND)
@@ -2111,7 +2116,7 @@ def test_a_real_card_in_another_seats_hand_still_cannot_be_removed():
 
 
 def test_spawn_card_onto_the_battlefield_without_a_position_uses_the_default_spot():
-    """Only a zone spawn leaves a card with no board position; a battlefield one always has a spot,
+    """Only a zone spawn leaves a card with no board position. A battlefield one always has a spot,
     so omitting the position falls back rather than leaving the card unplaced."""
     table = TableState.empty_two_seat()
     token_template(table, "ghul", name="Ghul", card_type="Personality", force=2, chi=2)
@@ -2165,7 +2170,7 @@ def test_an_unlocked_card_still_takes_the_same_action():
 )
 def test_a_token_sent_from_a_hand_to_a_pile_ceases_to_exist(dest):
     """A proxy held in a hand never entered play, so it does not reach the battlefield on its way
-    out — but it is still a created card, and a pile of real cards is no place for one."""
+    out, but it is still a created card, and a pile of real cards is no place for one."""
     table = TableState.empty_two_seat()
     table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=PlayerId.P1)
     token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
@@ -2187,7 +2192,7 @@ def test_a_token_sent_from_a_hand_to_a_pile_ceases_to_exist(dest):
 
 
 def test_a_token_moved_between_hands_survives():
-    """The Favor changes hands without being destroyed; only a pile annihilates it."""
+    """The Favor changes hands without being destroyed. Only a pile annihilates it."""
     table = TableState.empty_two_seat()
     token_template(table, "imperial_favor", name="The Imperial Favor", card_type="Other")
     apply_intent(

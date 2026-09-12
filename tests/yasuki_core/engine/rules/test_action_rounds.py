@@ -13,7 +13,7 @@ from tests.yasuki_core.engine.builders import end_phase, holding, province_card,
 
 
 def _session():
-    """A game whose active seat holds Millet Farm — an Open ability with a Farm to target — and a
+    """A game whose active seat holds Millet Farm (an Open ability with a Farm to target) and a
     face-up Province card it can discard in the Dynasty phase. Two real actions, one that pauses for
     a decision and one that resolves inline."""
     state = TableState.empty_two_seat()
@@ -106,7 +106,7 @@ def test_a_seat_the_round_could_let_act_is_asked_even_holding_nothing():
 
 def test_an_action_then_a_pass_still_closes_the_round():
     # Taking an action resets the count, so the seat that acted must decline again before the round
-    # can end — and the round must still end rather than staying open behind the reset.
+    # can end. The round must still end rather than staying open behind the reset.
     session = _to_dynasty(_session())
 
     session.act(PlayerId.P1, DynastyDiscard("prov"))

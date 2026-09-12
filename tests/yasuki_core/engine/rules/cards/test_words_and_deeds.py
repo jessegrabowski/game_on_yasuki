@@ -71,7 +71,7 @@ def test_paying_the_gold_leaves_the_grounds_standing():
 
 def test_a_bowed_grounds_is_not_offered_even_with_the_gold_to_pay():
     """Abilities on a bowed card cannot be used (CR, Using Abilities), so having another way to
-    pay the cost does not reach the ability — a Holding bowed for its gold has spent its turn."""
+    pay the cost does not reach the ability. A Holding bowed for its gold has spent its turn."""
     session = _militia_game()
     session.game.table.cards_by_id["grounds"].bow()
     session.game.add_gold(P1, 2)

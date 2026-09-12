@@ -23,11 +23,11 @@ class Dialogs:
         """Search the piles the way the web deck dialog does: one pile listed at a time, filterable,
         with a live preview of the selection.
 
-        ``panes`` maps each pile name to the cards it offers, and a nav bar switches between them —
-        a pile this search does not reach is shown disabled rather than hidden, so the bar reads the
+        ``panes`` maps each pile name to the cards it offers, and a nav bar switches between them.
+        A pile this search does not reach is shown disabled rather than hidden, so the bar reads the
         same every time. Only cards in ``choosable`` can be taken (the rest show but stay disabled),
-        and taking one calls ``on_pick`` with its id. The window requires a pick — the search is a
-        committed cost.
+        and taking one calls ``on_pick`` with its id. The window requires a pick, and the search
+        is a committed cost.
         """
         win = tk.Toplevel(self.toplevel)
         win.title("Search")

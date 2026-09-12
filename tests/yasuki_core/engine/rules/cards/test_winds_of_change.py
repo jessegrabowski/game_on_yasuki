@@ -23,7 +23,8 @@ SOURCE = "rulebook"
 
 
 def _game(*, holds_favor: bool = True) -> GameState:
-    """Commanding Favor in play, its controller holding the Imperial Favor unless a test says not."""
+    """Commanding Favor in play, its controller holding the Imperial Favor unless a test says
+    not."""
     game = GameState.start(TableState.empty_two_seat(), P1, seed=0)
     game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
@@ -71,8 +72,8 @@ def test_commanding_favor_is_offered_beside_the_favor_itself():
 
 
 def test_commanding_favor_pays_for_a_seat_that_holds_no_favor():
-    """It pays the cost rather than substituting for a discard, so it makes a Favor action legal for
-    a seat with no Favor at all — which is what Good Faith 0.4 calls a substitute."""
+    """It pays the cost rather than substituting for a discard, so it makes a Favor action legal
+    for a seat with no Favor at all: what Good Faith 0.4 calls a substitute."""
     game = _game(holds_favor=False)
 
     assert set(favor_payment_options(game, P1)) == {"Commanding Favor"}
@@ -117,8 +118,8 @@ def test_commanding_favor_leaves_its_province_for_the_battlefield():
 
 
 def test_commanding_favor_is_offered_from_the_province_it_sits_in():
-    """An Event is activated where it sits, face-up in a Province, so its ability has to say so —
-    the default is the battlefield, where an Event on offer never is, and the action would simply
+    """An Event is activated where it sits, face-up in a Province, so its ability has to say so.
+    The default is the battlefield, where an Event on offer never is, and the action would simply
     never appear."""
     game = _event_in_province()
     game.phase = Phase.DYNASTY

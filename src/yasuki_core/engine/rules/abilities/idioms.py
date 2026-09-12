@@ -21,7 +21,7 @@ from yasuki_core.game_pieces.counters import WEALTH
 def register_edict(printed_id: str, *, clan: str | None = None) -> None:
     """Register ``printed_id``'s Open ability to put itself into play as an Edict.
 
-    Every Edict prints the same action — put this into play, discard your other Edicts — so it is
+    Every Edict prints the same action (put this into play, discard your other Edicts), so it is
     registered rather than written out per card. Discarding the others is the rulebook's own limit
     of one Edict at a time restated on the card (ShE datasheet, Edicts).
 

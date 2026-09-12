@@ -63,15 +63,15 @@ async def list_cards(
 
     The search parameter supports Scryfall-style query syntax:
     - Plain text searches name and rules text
-    - clan:Crane, c:Crane — filter by clan
-    - type:personality, t:personality — filter by type
-    - force>3, chi>=2, gold<=3 — numeric comparisons
-    - is:unique, is:cavalry, is:shadowlands — keyword/trait filters
-    - !"exact name" — exact whole-name match
-    - -type:event — negation
-    - a OR b, (a b) OR (c d) — OR logic and parenthesised grouping
+    - clan:Crane, c:Crane: filter by clan
+    - type:personality, t:personality: filter by type
+    - force>3, chi>=2, gold<=3: numeric comparisons
+    - is:unique, is:cavalry, is:shadowlands: keyword/trait filters
+    - !"exact name": exact whole-name match
+    - -type:event: negation
+    - a OR b, (a b) OR (c d): OR logic and parenthesised grouping
 
-    The deck, clan, and card_type query params still work for backwards compatibility; each is an
+    The deck, clan, and card_type query params still work for backwards compatibility. Each is an
     independent constraint ANDed with the parsed search query.
     """
     try:
@@ -175,9 +175,10 @@ async def get_card(
         if card.get("back_card_id"):
             back = await to_thread(get_card_by_id, card["back_card_id"])
 
-        # Errata history, oldest first; empty for cards that were never errata'd. The card's `text` is
-        # already the current revision, so the page shows the latest by default and can walk back.
-        # Each prior revision carries a word-level diff against the current text for the compare view.
+        # Errata history, oldest first; empty for cards that were never errata'd. The card's `text`
+        # is already the current revision, so the page shows the latest by default and can walk
+        # back. Each prior revision carries a word-level diff against the current text for the
+        # compare view.
         revisions = await to_thread(get_card_revisions, card_id)
         if revisions:
             current_text = revisions[-1]["rules_text"]
@@ -219,7 +220,7 @@ async def list_sets(request: Request):
 
 
 # The cross-arc formats that sit outside the storyline timeline (no legal_from), in display order.
-# Unlike the arcs — which are ordered by the database — this short set is fixed and never grows.
+# Unlike the arcs, which are ordered by the database, this short set is fixed and never grows.
 OTHER_ORDER = ["Modern", "Legacy", "Not Legal (Proxy)", "Unreleased"]
 
 

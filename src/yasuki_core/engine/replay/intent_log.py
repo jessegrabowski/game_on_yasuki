@@ -22,14 +22,14 @@ class LogEntry:
     Attributes
     ----------
     seq : int
-        The table's version after the intent applied; monotonic across a log.
+        The table's version after the intent applied, and it is monotonic across a log.
     ts : float
         Server wall-clock time of acceptance, as a POSIX timestamp. The core never reads the clock
-        itself; the caller stamps this.
+        itself, and the caller stamps this.
     seat : PlayerId
         The seat that acted.
     intent : Intent
-        The original intent as submitted, not the resolved event; a randomizer's outcome rides on
+        The original intent as submitted, not the resolved event. A randomizer's outcome rides on
         it, so the entry replays without further state.
     """
 
@@ -41,7 +41,7 @@ class LogEntry:
 
 @dataclass(frozen=True, slots=True)
 class ChatEntry:
-    """One chat message on the tape — a record that does not change game state.
+    """One chat message on the tape. A record that does not change game state.
 
     Carried on the same tape as ``LogEntry`` so a replay surfaces each message at the moment it was
     sent, interleaved with the moves. ``replay()`` skips these when folding state.
@@ -63,10 +63,10 @@ class ChatEntry:
 
 @dataclass(frozen=True, slots=True)
 class SessionEntry:
-    """One session/lifecycle event on the tape — a player joining, leaving, or (un)readying.
+    """One session/lifecycle event on the tape: a player joining, leaving, or (un)readying.
 
-    Like ``ChatEntry``, it records who and when without changing game state, so ``replay()`` skips it
-    when folding.
+    Like ``ChatEntry``, it records who and when without changing game state, so ``replay()`` skips
+    it when folding.
 
     Attributes
     ----------
@@ -97,8 +97,8 @@ class IntentLog:
         The start configuration the intents fold onto.
     entries : list of LogEntry or ChatEntry or SessionEntry
         The tape, in send order: accepted intents (``LogEntry``, with non-decreasing ``seq``), chat
-        messages (``ChatEntry``), and session events (``SessionEntry``) interleaved. Replay folds the
-        intents and skips the rest.
+        messages (``ChatEntry``), and session events (``SessionEntry``) interleaved. Replay folds
+        the intents and skips the rest.
     """
 
     initial: InitialRecord
@@ -106,8 +106,8 @@ class IntentLog:
 
     def append(self, entry: LogEntry | ChatEntry | SessionEntry) -> None:
         """Append ``entry`` to the tape. For an intent entry, enforce non-decreasing ``seq`` against
-        the prior intent (raising ``ValueError`` on a regression — an out-of-order or duplicated
-        record); chat and session entries carry no seq and append freely."""
+        the prior intent (raising ``ValueError`` on a regression: an out-of-order or duplicated
+        record). Chat and session entries carry no seq and append freely."""
         if isinstance(entry, LogEntry):
             last = next((e for e in reversed(self.entries) if isinstance(e, LogEntry)), None)
             if last is not None and entry.seq < last.seq:
@@ -115,7 +115,8 @@ class IntentLog:
         self.entries.append(entry)
 
     def replay(self) -> TableState:
-        """Rebuild the table by folding the tape's intents onto a fresh copy of the initial state."""
+        """Rebuild the table by folding the tape's intents onto a fresh copy of the initial
+        state."""
         return replay(self.initial, self.entries)
 
 
@@ -125,7 +126,7 @@ def apply_and_log(
     """Apply ``intent`` and, if accepted, append a ``LogEntry`` for it.
 
     The recording hook lives in core so every transport records identically. An intent is recorded
-    exactly when ``apply_intent`` accepts it (returns at least one event); rejected intents change
+    exactly when ``apply_intent`` accepts it (returns at least one event). Rejected intents change
     neither the state nor the log.
 
     Parameters
@@ -139,7 +140,7 @@ def apply_and_log(
     intent : Intent
         The operation to apply.
     ts : float
-        Server wall-clock timestamp for the entry, as a POSIX time; the caller reads the clock.
+        Server wall-clock timestamp for the entry, as a POSIX time. The caller reads the clock.
     """
     events = apply_intent(state, seat, intent)
     if events:
@@ -153,15 +154,15 @@ def replay(
     """Deterministically rebuild a table from its start and tape.
 
     Fold each intent entry through ``apply_intent`` onto a fresh state built from ``initial``,
-    reproducing the live state bit-for-bit, deck order included. Chat and session entries on the tape
-    are skipped — they carry no game state — but their position records when each occurred.
+    reproducing the live state bit-for-bit, deck order included. Chat and session entries on the
+    tape are skipped (they carry no game state), but their position records when each occurred.
 
     Parameters
     ----------
     initial : InitialRecord
         The start configuration to fold onto.
     entries : sequence of LogEntry or ChatEntry or SessionEntry
-        The ordered tape to fold; only the intent entries apply.
+        The ordered tape to fold. Only the intent entries apply.
     """
     state = build_initial_state(initial)
     for entry in entries:
@@ -215,7 +216,7 @@ def _decode_entry(payload: dict) -> LogEntry | ChatEntry | SessionEntry:
 
 
 def intent_log_to_dict(log: IntentLog) -> dict:
-    """Serialize a whole ``IntentLog`` — initial record and entries — to JSON-ready plain data."""
+    """Serialize a whole ``IntentLog`` (initial record and entries) to JSON-ready plain data."""
     return {
         "initial": encode_initial(log.initial),
         "entries": [_encode_entry(entry) for entry in log.entries],
@@ -240,6 +241,6 @@ class FlushSink(Protocol):
 
 
 def flush(log: IntentLog, sink: FlushSink) -> None:
-    """Serialize ``log`` and hand it to ``sink`` — the one place persistence attaches. Nothing calls
+    """Serialize ``log`` and hand it to ``sink``: the one place persistence attaches. Nothing calls
     this yet, since nothing implements :class:`~.FlushSink`."""
     sink.write(intent_log_to_dict(log))

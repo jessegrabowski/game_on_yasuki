@@ -6,8 +6,8 @@ def widget_size(widget: tk.Misc) -> tuple[int, int]:
     for while Tk has not laid it out at all.
 
     A widget Tk has not reached yet reports one pixel, and a layout computed against that collapses
-    to its floors. The requested size stands in until then — but only until then, since a widget
-    that has since been made smaller than it asked for is genuinely that size.
+    to its floors. The requested size stands in only until then, because a widget that has
+    since been made smaller than it asked for is genuinely that size.
 
     Returns
     -------
