@@ -107,5 +107,5 @@ the card does not exist yet to be asked.
 
 ## Where the rest lives
 
-[Asking the player a question](asking_a_question.md) covers the `Choose` that picks who carries a
-creation, which is how Ichiro Yojimbo and Suiteiru no Oni hand theirs out.
+[Asking the player a question](asking_a_question.md) covers the {class}`~.Choose` that picks who
+carries a creation, which is how Ichiro Yojimbo and Suiteiru no Oni hand theirs out.

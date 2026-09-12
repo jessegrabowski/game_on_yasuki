@@ -5,7 +5,8 @@ abilities it grants sit on the player. Four modules carry it, and each holds a d
 
 ## Who holds it
 
-`GameState.favor_holder` is a seat or None. Everything else reads that.
+{attr}`GameState.favor_holder <yasuki_core.engine.rules.state.GameState.favor_holder>` is a seat
+or None. Everything else reads that.
 
 A card on the table represents it, and `rulebook/favor_proxy.py` is the only place that card is
 made or unmade:
@@ -65,8 +66,8 @@ A card that can pay for somebody registers `@favor_payer`, keyed by printed id. 
 could pay is offered together, the way the Pay Costs step offers every Gold producer. With one payer
 there is nothing to ask, and with none the cost is unpayable and the ability is never offered.
 
-`GameState.action_is_favor` marks the action in progress as a Favor action, which is what
-{class}`~.PayFavorCost` sets.
+{attr}`GameState.action_is_favor <yasuki_core.engine.rules.state.GameState.action_is_favor>` marks
+the action in progress as a Favor action, which is what {class}`~.PayFavorCost` sets.
 
 ## Lobby is beside the Favor, not inside it
 
