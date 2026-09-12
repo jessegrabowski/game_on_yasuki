@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_named
-from yasuki_core.engine.rules.abilities.costs import bow_and_destroy, bow_cost, spend_wealth
+from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, register_event_entry
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
@@ -94,6 +94,10 @@ register_event_entry("confront_your_truth")
 # --- Harvested Land ---
 
 
+def _harvested_land_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [Bow(source.id), Destroy(source.id, source.owner)]
+
+
 def _harvested_land_targets(game: GameState, card: L5RCard) -> list[str]:
     return [farm.id for farm in owned_holdings(game, card.owner, keywords.FARM) if farm is not card]
 
@@ -103,7 +107,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         label="Bow, destroy: give your other Farms +1 Gold Production",
-        cost=bow_and_destroy,
+        cost=_harvested_land_cost,
         targets=_harvested_land_targets,
         effects=plus_one_gp_this_turn,
         hits_every_target=True,
@@ -339,6 +343,10 @@ def _rural_market_destroyed(ctx: TriggerContext) -> list[Effect]:
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
 
 
+def _rural_market_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [AdjustCounter(source.id, WEALTH, -1)]
+
+
 def _rural_market_targets(game: GameState, card: L5RCard) -> list[str]:
     # "Not produced Gold this turn" is satisfied for any bowed Farm: production only happens in the
     # Dynasty phase, after this Open ability's Action-phase window.
@@ -354,7 +362,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         label="Spend a Wealth token: straighten a Farm",
-        cost=spend_wealth,
+        cost=_rural_market_cost,
         targets=_rural_market_targets,
         effects=_rural_market_effects,
         tireless=True,

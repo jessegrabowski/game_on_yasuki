@@ -42,11 +42,15 @@ stays off the menu.
 returns instead of asking the seat to pick one, which is how an untargeted "your other Farms" grant
 is written. Poorly Placed Garden above uses it to act on itself.
 
-## Costs are a small vocabulary
+## Where a cost builder lives
 
-Eight builders cover almost everything: `no_cost`, `bow_cost`, `bow_parent_cost`,
-`bow_parent_and_destroy`, `destroy_cost`, `bow_and_destroy`, `spend_wealth` and `banish_top_fate`.
-{func}`~.can_pay` sits beside them and answers whether a given cost is payable now.
+`abilities/costs.py` holds the builders more than one card uses: {func}`~.no_cost`,
+{func}`~.bow_cost` and {func}`~.bow_parent_cost`. {func}`~.can_pay` sits beside them and answers
+whether a given cost is payable now.
+
+A cost only one card charges lives with that card, as `_<card id>_cost`, the way a target predicate
+or an effects function does. That is the same rule `@attach_restriction` and the other per-card
+registries follow, and it means a new combination of effects needs no new shared name.
 
 `bow_cost` and `bow_parent_cost` are the pair to be careful with. `bow_cost` bows the card the
 ability is on. `bow_parent_cost` bows the Personality an attachment is attached to, and is

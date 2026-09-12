@@ -19,8 +19,12 @@ and are not the same cost.
 :language: python
 ```
 
-{card}`Touch of Death` pays with {func}`~.bow_parent_and_destroy`, which bows the Personality and
-destroys the Spell.
+{card}`Touch of Death` charges both:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/imperial_edition.py
+:pyobject: _touch_of_death_cost
+:language: python
+```
 
 ## Giving the Personality a stat
 

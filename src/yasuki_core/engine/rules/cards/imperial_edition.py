@@ -1,6 +1,6 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import bow_cost, bow_parent_and_destroy, no_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, bow_parent_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import attack_targets, personalities_in_play
@@ -183,6 +183,12 @@ register_ability(
 # --- Touch of Death ---
 
 
+def _touch_of_death_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Bow the Personality this Spell is attached to and destroy the Spell. Unpayable while it
+    is attached to none."""
+    return [*bow_parent_cost(game, source), Destroy(source.id, source.owner)]
+
+
 def _touch_of_death_targets(game: GameState, source: L5RCard) -> list[str]:
     """Bowed Personalities whose Chi does not exceed the Shugenja carrying this Spell.
 
@@ -209,7 +215,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.LIMITED,),
         label="Limited: destroy a bowed Personality with Chi no higher than this Shugenja's",
-        cost=bow_parent_and_destroy,
+        cost=_touch_of_death_cost,
         targets=_touch_of_death_targets,
         effects=_touch_of_death_effects,
     ),
