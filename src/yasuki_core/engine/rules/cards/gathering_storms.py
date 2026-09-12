@@ -1,12 +1,11 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import banish_top_fate, destroy_cost
 from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import owned_holdings
 from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import opposing_seats, seat_stronghold
-from yasuki_core.engine.rules.effects import AdjustCounter, DrawCard, Effect
+from yasuki_core.engine.rules.effects import AdjustCounter, BanishTopFate, Destroy, DrawCard, Effect
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -38,6 +37,10 @@ def _ancestral_estate_gold(
 # --- Ichiba District ---
 
 
+def _ichiba_district_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [BanishTopFate(source.owner)]
+
+
 def _ichiba_district_targets(game: GameState, card: L5RCard) -> list[str]:
     return [port.id for port in owned_holdings(game, card.owner, keywords.PORT)]
 
@@ -47,7 +50,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         label="Banish a Fate card: give a Port +1 Gold Production",
-        cost=banish_top_fate,
+        cost=_ichiba_district_cost,
         targets=_ichiba_district_targets,
         effects=plus_one_gp_this_turn,
     ),
@@ -55,6 +58,10 @@ register_ability(
 
 
 # --- Otokoshi District ---
+
+
+def _otokoshi_district_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [Destroy(source.id, source.owner)]
 
 
 def _otokoshi_district_targets(game: GameState, card: L5RCard) -> list[str]:
@@ -70,7 +77,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         label="Tireless Open: Destroy this Holding to draw a card and give your target Market a +1GP Wealth token",
-        cost=destroy_cost,
+        cost=_otokoshi_district_cost,
         targets=_otokoshi_district_targets,
         effects=_otokoshi_district_effects,
         tireless=True,

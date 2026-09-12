@@ -4,18 +4,14 @@ from collections.abc import Callable
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.effects import (
-    AdjustCounter,
     Ask,
-    BanishTopFate,
     Bow,
-    Destroy,
     Effect,
     Unpayable,
 )
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.counters import WEALTH
 
 
 # A cost is the effects paid to activate an ability, applied before the ability's own effects. Bow /
@@ -24,6 +20,8 @@ from yasuki_core.game_pieces.counters import WEALTH
 # must be paid before resolution; anything the card's own text sequences is an effect. A cost takes
 # the board as well as the source because it may be paid by a card the source did not choose: an
 # attachment's cost is usually paid by the Personality it hangs on, which only the graph can name.
+# A builder lives here only when more than one card uses it; a cost one card charges lives with that
+# card as ``_<card id>_cost``, beside its targets and effects.
 Cost = Callable[[GameState, L5RCard], list[Effect]]
 
 
@@ -84,28 +82,6 @@ def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
     if parent is None:
         return [Unpayable(f"{source.id} is attached to no Personality")]
     return [Bow(parent.id)]
-
-
-def bow_parent_and_destroy(game: GameState, source: L5RCard) -> list[Effect]:
-    """Bow the Personality ``source`` is attached to and destroy ``source``. Unpayable while it is
-    attached to none."""
-    return [*bow_parent_cost(game, source), Destroy(source.id, source.owner)]
-
-
-def destroy_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    return [Destroy(source.id, source.owner)]
-
-
-def spend_wealth(game: GameState, source: L5RCard) -> list[Effect]:
-    return [AdjustCounter(source.id, WEALTH, -1)]
-
-
-def bow_and_destroy(game: GameState, source: L5RCard) -> list[Effect]:
-    return [Bow(source.id), Destroy(source.id, source.owner)]
-
-
-def banish_top_fate(game: GameState, source: L5RCard) -> list[Effect]:
-    return [BanishTopFate(source.owner)]
 
 
 def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:
