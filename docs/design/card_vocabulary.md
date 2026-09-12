@@ -1,12 +1,13 @@
 # Card Vocabulary
 
-A card's behavior is expressed entirely in a closed set of data types. Cards do not mutate the board;
-they return *effects*, which a single boundary applies. The listings below name every member of each
-category, and a test fails when the engine gains one this page does not list — so a type missing
-here is a bug in the page rather than a type you may not use.
+A card's behavior is expressed entirely in a closed set of data types. Cards do not mutate the
+board. They return *effects*, and a single boundary applies them. The listings below name every
+member of each category, so a type missing from one of them is a gap in this page and not a type
+you may not use.
 
-The runtime relationships between these types (the trigger cascade, decision handling, and the turn
-machine) are described in [the engine design](engine.md).
+This page is the index. The pages that explain how these types behave at runtime are
+[Effects](systems/effects.md), [Triggers and the cascade](systems/triggers-and-the-cascade.md),
+[Abilities and costs](systems/abilities-and-costs.md) and [The turn machine](systems/turn-flow.md).
 
 ## Effects
 
