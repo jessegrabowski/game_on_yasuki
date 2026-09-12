@@ -29,12 +29,12 @@ to yes. {meth}`~.Effect.describe` names the effect in one line for a cascade tra
 so that a new effect cannot ship unreadable.
 
 Every effect is a frozen dataclass. A card returns instances, never subclasses: the vocabulary is
-closed, and [Card Vocabulary](../card_vocabulary.md) names every one, 50 concrete effects under the
-two abstract categories {class}`~.InterruptingEffect` and {class}`~.AttackEffect`.
+closed, and [Card Vocabulary](../card_vocabulary.md) names every one, with
+{class}`~.InterruptingEffect` and {class}`~.AttackEffect` as the two abstract categories.
 
 ## Not every effect changes a card
 
-Ten of them write engine bookkeeping and touch no card at all. The five `Grant` effects append to
+Some write engine bookkeeping and touch no card at all. The `Grant` effects append to
 `game.ongoing`, which is the list the `effective_*` read path consults.
 {class}`~.DelayedEffect` appends to `game.delayed`. {class}`~.Then` pushes onto `game.stack`.
 {class}`~.GrantPriority` replaces `game.round`, {class}`~.DelayStraighten` writes
@@ -55,12 +55,13 @@ Nothing on the board moved. The modifier is recorded, and every later read of th
 
 ## Which effects another card can react to
 
-A trigger fires on an event, so an effect that raises none is invisible to every other card. Ten
-do: {class}`AdjustCounter <yasuki_core.engine.rules.effects.AdjustCounter>`, {class}`~.Destroy`,
-{class}`~.Discard`, {class}`DestroyProvince <yasuki_core.engine.rules.effects.DestroyProvince>`,
+A trigger fires on an event, so an effect that raises none is invisible to every other card.
+These raise one: {class}`AdjustCounter <yasuki_core.engine.rules.effects.AdjustCounter>`,
+{class}`~.Destroy`, {class}`~.Discard`,
+{class}`DestroyProvince <yasuki_core.engine.rules.effects.DestroyProvince>`,
 {class}`~.AttachCard`, {class}`~.PutIntoPlay`, {class}`~.CreateToken`, {class}`~.Straighten`,
-{class}`~.RevealProvinces`, and the three attacks through {class}`~.AttackEffect`. The other
-thirty-two return an empty list.
+{class}`~.RevealProvinces`, and the three attacks through {class}`~.AttackEffect`. Every other
+effect returns an empty list.
 
 This is worth knowing in both directions. A card that should provoke a reaction has to reach for
 the effect that raises the event, and a card that quietly does something no opponent may answer is
@@ -110,9 +111,9 @@ def enforce_state_based_actions(game: GameState) -> None:
     """
 ```
 
-This is a convention, and nothing enforces it. Three modules call it today: `turn/sequence.py`,
-`rulebook/recruit.py` and `rulebook/equip.py`. A card author never needs it, and a card that
-reaches for the mutation layer instead of returning an effect is doing something wrong.
+This is a convention, and nothing enforces it. `turn/sequence.py`, `rulebook/recruit.py` and
+`rulebook/equip.py` call it. A card author never needs it, and a card that reaches for the
+mutation layer instead of returning an effect is doing something wrong.
 
 ## Creating a card
 
