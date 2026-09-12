@@ -16,6 +16,8 @@ systems/abilities-and-costs
 systems/turn-flow
 systems/actions-and-legality
 systems/action-lifecycles
+systems/decisions-and-resumption
+systems/the-replay-log
 package_boundaries
 card_vocabulary
 database
