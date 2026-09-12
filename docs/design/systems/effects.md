@@ -114,6 +114,29 @@ This is a convention, and nothing enforces it. Three modules call it today: `tur
 `rulebook/recruit.py` and `rulebook/equip.py`. A card author never needs it, and a card that
 reaches for the mutation layer instead of returning an effect is doing something wrong.
 
+## Creating a card
+
+{class}`~.CreateToken` is the one effect that makes a card, and its fields carry the whole of what
+creation means:
+
+```python
+token_id: str
+owner: PlayerId
+creator_id: str
+attach_to: str | None = None
+stats: tuple[tuple[Stat, int], ...] = ()
+clan: str | None = None
+banish_at_turn_end: bool = False
+```
+
+`token_id` names a template the deck load resolved, so a created card is a real card with a print
+behind it. `creator_id` records who made it, which is how a card speaks about its creation later.
+`attach_to` makes creating-and-attaching one effect, since a created card has no id to attach in a
+second step. `stats` fills in a template's variable stat line, and `banish_at_turn_end` is settled
+at creation because by the time the turn ends there is nothing left to decide.
+
+[Cards that create cards](../../contributing/creating_cards.md) works through each of them.
+
 ## Where a card plugs in
 
 By returning effects and nothing else. [Writing an ability](../../contributing/an_ability.md) is

@@ -1,4 +1,4 @@
-# Tkinter Client Architecture
+# Tkinter client architecture
 
 The desktop client (`yasuki_gui`) is a Tkinter application that renders the game board and drives the
 same `yasuki_core` engine locally. Rendering is separated from interaction: `FieldView` draws the board
@@ -11,12 +11,12 @@ sections.
 
 The pieces, at a glance:
 
-- **Rendering** (`field_view.py`, `visuals/`) — the board, zones, card sprites, and hand.
-- **Interaction** (`controller.py`, `services/`) — hotkeys, drag-and-drop, hit-testing, and the action
-  permissions that gate what a player may do.
-- **Session** (`session.py`, `rules_runner.py`) — building table state from a deck and running the
-  engine behind the UI.
-- **Deck builder** (`ui/deck_builder/`) — the in-client deck editor.
+- **Rendering** (`field_view.py`, `visuals/`) draws the board, zones, card sprites, and hand.
+- **Interaction** (`controller.py`, `services/`) covers hotkeys, drag-and-drop, hit-testing, and
+  the action permissions that gate what a player may do.
+- **Session** (`session.py`, `rules_runner.py`) builds table state from a deck and runs the engine
+  behind the UI.
+- **Deck builder** (`ui/deck_builder/`) is the in-client deck editor.
 
 To be documented here:
 

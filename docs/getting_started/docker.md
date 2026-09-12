@@ -1,4 +1,4 @@
-# Docker Guide
+# Docker guide
 
 Docker runs PostgreSQL (and optionally the API server) without a native install.
 The GUI still runs on the host machine.
@@ -9,7 +9,7 @@ running, and [Pixi](https://pixi.sh) (see [Setup](setup.md)). PostgreSQL binds h
 
 ## Configure
 
-`POSTGRES_PASSWORD` is required and has no default — the containers will not start until
+`POSTGRES_PASSWORD` is required and has no default. The containers will not start until
 it is set. Copy the template and set it:
 
 ```bash
@@ -17,9 +17,9 @@ cp .env.example .env
 # edit .env: set POSTGRES_PASSWORD (and any other values you want to change)
 ```
 
-Docker Compose loads `.env` automatically from the project root; `.env` is gitignored.
+Docker Compose loads `.env` automatically from the project root. `.env` is gitignored.
 
-## Database Only
+## Database only
 
 Start PostgreSQL and seed the card database:
 
@@ -35,7 +35,7 @@ YASUKI_DATABASE_URL=postgresql://yasuki:yasuki@localhost:5432/yasuki pixi run pl
 
 Replace `yasuki:yasuki` with the `POSTGRES_USER:POSTGRES_PASSWORD` you set in `.env`.
 
-## Database + API Server
+## Database and API server
 
 ```bash
 pixi run docker-api
@@ -45,14 +45,14 @@ pixi run docker-api
 - Docs: `http://localhost:8000/docs`
 - Deck builder: `http://localhost:8000/deck_builder`
 
-## Environment Variables
+## Environment variables
 
 All Docker services read their configuration from `.env` (loaded automatically from the
-project root). `POSTGRES_PASSWORD` is required and has no default; the remaining variables
+project root). `POSTGRES_PASSWORD` is required and has no default. The remaining variables
 fall back to the defaults defined in `docker-compose.yml`. `.env.example` documents every
 variable.
 
-## Smoke Test
+## Smoke test
 
 ```bash
 pixi run docker-test
@@ -60,7 +60,7 @@ pixi run docker-test
 
 Builds the image, starts the services, requests the API health and card endpoints, and reports the result.
 
-## Command Reference
+## Command reference
 
 | Command | Effect |
 |---------|--------|

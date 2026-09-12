@@ -1,11 +1,11 @@
-# Adding a Card
+# Adding a card
 
 A card's behavior lives in one module per set, mirroring the card data: `src/yasuki_core/assets/database/sets/rise_of_jigoku.yaml` pairs with
 `src/yasuki_core/engine/rules/cards/rise_of_jigoku.py`. A reprinted card is implemented **once**, in
 the set that printed it first, and a test enforces that.
 
 Cards never mutate the board. A card returns *effects*, and one boundary applies them. The full type
-list is in [Card Vocabulary](../design/card_vocabulary.md); this page is about choosing among them.
+list is in [Card Vocabulary](../design/card_vocabulary.md). This page is about choosing among them.
 
 ## Which hook?
 
@@ -15,9 +15,9 @@ Read the card's text and find the shape:
 |---|---|---|
 | Produces a variable amount of gold | `@gold_handler(id)` | {card}`Jade Works` |
 | Costs less to bring into play, conditionally | `@recruit_discount(id)` | {card}`Colonial Farm` |
-| "After X happens…" | `@on(Event, id)` | {card}`Rice Farm` |
+| "After X happens..." | `@on(Event, id)` | {card}`Rice Farm` |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | {card}`Millet Farm` |
-| "Response: after X…" | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
+| "Response: after X..." | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
 | Gives the Personality it hangs on a stat | `@attachment_grant(id)` | {card}`Haramaki-do` |
@@ -38,7 +38,7 @@ Read the card's text and find the shape:
 
 Nine events exist to react to: `EnteredPlay`, `Destroyed`, `Straightened`, `CardDiscarded`,
 `CounterGained`, `Revealed`, `TurnStarted`, `ProducingGold` and `ProducedGold`. If the moment your
-card cares about is not one of these, it needs a new event — see [what the vocabulary cannot
+card cares about is not one of these, it needs a new event. See [what the vocabulary cannot
 express](#what-the-vocabulary-cannot-express-yet).
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
@@ -82,7 +82,7 @@ def _rice_farm_turn_started(ctx: TriggerContext) -> list[Effect]:
 ```
 
 Two things to copy. **Guard first**: a trigger fires for every copy of the card in play, so check the
-event is about *your* card before doing anything. Which check depends on the event — Rice Farm
+event is about *your* card before doing anything. Which check depends on the event. Rice Farm
 asks whose turn started, while a card reacting to its own arrival compares ids, since `EnteredPlay`
 reaches every copy in play and not only the one that entered:
 
@@ -96,7 +96,7 @@ reaches every copy in play and not only the one that entered:
 ### A choice: pausing for the player
 
 {card}`Wheat Farm` lets its controller give up to two other Farms a token. The trigger cannot know what they
-will pick, so it returns a `Choose` — an interrupting effect. The cascade pauses, the seat answers,
+will pick, so it returns a `Choose`, which is an interrupting effect. The cascade pauses, the seat answers,
 and a resolver turns the answer into effects:
 
 ```python
@@ -118,11 +118,11 @@ def _resolve_wheat_farm(
 ```
 
 The resolver is registered under a string rather than passed as a function, so a paused game stays
-replayable — a stored closure would not rebuild to an equal object. Return an empty candidate list
+replayable. A stored closure would not rebuild to an equal object. Return an empty candidate list
 when there is nothing to target: an ability with no legal target is not offered.
 
 Register the `prompt` alongside it. Without one the seat is asked "Choose up to 2 card(s)", which
-says how many cards to click and nothing about what for. Keep the wording free of counts — the same
+says how many cards to click and nothing about what for. Keep the wording free of counts, since the same
 choice can offer one target or two.
 
 **A choice between modes** rather than between cards is `AskOption`, answered by a `ChooseOption`
@@ -134,7 +134,7 @@ the things being chosen are not cards.
 
 {card}`Suiteiru no Oni` creates a Follower per point of the Chi of the Personality he destroys, and attaches
 them "to one or more of your Personalities". The seat picks the bearers *and* how many each takes, so
-a `Choose` — which reads its answer as a set — cannot say it. `AskDistribution` can: the answer names
+a `Choose` cannot say it, because it reads its answer as a set. `AskDistribution` can: the answer names
 a card once per creation it takes, and the resolver reads that tally.
 
 ```python
@@ -156,10 +156,10 @@ def _resolve_suiteiru_no_oni(
     ]
 ```
 
-Everything offered is placed — the seat divides the creations rather than declining any — so raise
+Everything offered is placed, since the seat divides the creations instead of declining any. Raise
 the question only when there is both something to divide and somewhere to put it. The client draws a
 count and a pair of arrows on each card the seat picks, and the prompt counts down as they are
-placed; the registered wording carries no number for that reason.
+placed, which is why the registered wording carries no number.
 
 ### Sequencing: making a step wait
 
@@ -184,8 +184,8 @@ return [
 ]
 ```
 
-That is Modest Farm: recruit a Holding out of sequence, and *then* — once the recruited card's own
-enter-play trait has resolved — offer to sacrifice the Farm to straighten it. Without `Then`, the
+That is Modest Farm: recruit a Holding out of sequence, and *then*, once the recruited card's own
+enter-play trait has resolved, offer to sacrifice the Farm to straighten it. Without `Then`, the
 sacrifice would be offered before the recruited card had finished entering play.
 
 ## Cards that attach
@@ -202,92 +202,17 @@ call. `battle_designators`, `targets_any_location` and `located_at` decide what 
 
 ## Cards that create
 
-{card}`Weapon Artist` makes a sword out of nothing; Colonial Farm makes an Ashigaru; {card}`Mishime Sensei` makes an
-Oni. What they create is a card in its own right — the "Proxy" prints in the database, reached by
-token card id — so its stats, keywords and art come off that print rather than being spelled out at
-the creation site. The deck load resolves every token the deck's cards can create and parks the
-templates on the table, which is why a card names one by id and nothing else:
-
-```python
-FINE_SWORD = "weapon_item_sword_plus2f_plus1c"
-```
-
-Creating is one effect, and creating-and-attaching is still one, because the created card has no id
-until it exists:
-
-```python
-    return [CreateToken(FINE_SWORD, source.owner, source.id, attach_to=target.id)]
-```
-
-The third argument is the card doing the creating. It is remembered, so a card that speaks about
-what it made — "if this Holding is ever unbowed, banish the Personality" — can ask for it later
-rather than hunting the board for something that looks right.
-
-**Attachment targets** are the catch. The rules that decide where an attachment may hang — one
-Weapon per Personality, Two-Handed exclusivity — have to be answered before there is a card to ask
-about, so `creation_targets` judges the template instead:
-
-```python
-    sword = game.table.creatable_tokens[FINE_SWORD]
-    return [target.id for target in creation_targets(game, source.owner, sword)]
-```
-
-**A variable stat line** — "a Personality with Force equal to the target's Chi" — is printed on the
-token as `*` and supplied by the card creating it. Pass the numbers it fixes and the created card
-genuinely has them, rather than carrying a modifier over a printed zero:
-
-```python
-        CreateToken(
-            MISHIMES_ONI,
-            seat,
-            sensei.id,
-            stats=((Stat.FORCE, effective_chi(game, target)),),
-            banish_at_turn_end=not destroyed,
-        )
-```
-
-`banish_at_turn_end` is the other half of that card: a creation lent to its owner for one turn is
-recorded as it is made, because by the time the turn ends there is nothing left to decide.
-
-A created card is not a copy of a real one: it exists only in play, and destroying it, banishing it,
-or destroying the Personality carrying it takes it off the table rather than into a pile. That is
-handled for you.
-
-A cost paid in Gold rather than a bow is an effect like any other, and raises the same payment a
-Recruit does:
-
-```python
-    return [PayGold(source.owner, ASHIGARU_COST, source.name)]
-```
+A created card is stamped from a token template, so its stats, keywords and art come off a print
+rather than the creation site. `CreateToken` carries all of it, including attaching the new card
+and fixing a template's variable stat.
+[Cards that create cards](creating_cards.md) works through it, and
+[Effects](../design/systems/effects.md) is where the effect sits in the vocabulary.
 
 ## Cards that watch their own bow
 
-Culling Grounds trades an Honor and a bow for a Personality, and keeps it only while the Holding
-stays bowed. Two registrations carry that. The first is the printed "May remain bowed", which takes
-the card out of the turn-start straighten — a flag, since the card grants the permission and says
-nothing about when taking it is worth it:
-
-```python
-may_remain_bowed("culling_grounds")
-```
-
-The second is what happens when it does straighten. Straightening announces itself, whether the turn
-start or an effect did it, so the drawback is an ordinary trigger:
-
-```python
-@on(Straightened, "culling_grounds")
-def _culling_grounds_straightened(ctx: TriggerContext) -> list[Effect]:
-    ...
-    return [Banish(created) for created in ctx.game.creations_of(ctx.card.id)]
-```
-
-Its ability names no target at all. An ability still needs one to be offered, so it takes its own
-card and hits it without asking:
-
-```python
-        targets=itself,
-        hits_every_target=True,
-```
+`register_may_remain_bowed` takes a card out of the turn-start straighten, and a `Straightened`
+trigger is how it pays for that when it does stand up. Culling Grounds is both, and
+[Cards that create cards](creating_cards.md) works through it alongside the creation it protects.
 
 ## Cards that attack
 
@@ -300,7 +225,7 @@ strength registers `@attack_strength_against` instead of an ability.
 ## Cards that print two abilities
 
 A card may register as many abilities as it prints. Each one after the first needs a `key`, because
-the action names the ability it takes by key and the designator often cannot tell them apart — both
+the action names the ability it takes by key and the designator often cannot tell them apart. Both
 of Incendiary Archers' abilities are Battle:
 
 ```python
@@ -321,7 +246,7 @@ register_ability(
 registration cannot exist. A card printing one ability needs no key and none of the existing
 registrations carries one.
 
-Both halves are offered independently, and each pays its own cost — so a card whose first ability
+Both halves are offered independently, and each pays its own cost, so a card whose first ability
 bows it can still take a second that does not, once the opportunity comes back around. Name the
 three handlers `_<card id>_<key>_<role>`, since two `effects` functions on one card would otherwise
 collide.
@@ -339,21 +264,21 @@ Everything the card does goes in that one block: its triggers, its target predic
 helper, its registration. A pre-commit hook asserts the ordering, the one-header-per-card rule, and
 that the header names the card the block registers, on the modules your commit touches.
 
-Name every function in the block for the card and the job it does — `_<card id>_<role>`, where the
+Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
 `keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
 `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`), or the event a
 trigger answers (`entered_play`,
 `destroyed`, `straightened`, `turn_started`, `counter_gained`, `card_discarded`, `producing_gold`,
 `produced_gold`, `entered_play_or_destroyed`). A card printing several abilities qualifies the role
-with that ability's key — `_incendiary_archers_fear_effects` — since one name per role would collide
-between them, and the key has to be one the module really registers. A choice resolver is named for
+with that ability's key, as in `_incendiary_archers_fear_effects`, since one name per role would
+collide between them, and the key has to be one the module really registers. A choice resolver is named for
 the choice instead, `_resolve_<the string it is registered under>`. Helpers the block calls but
 never registers only need the card's id in front. The point is grep: a card's whole implementation answers a search
 for its id, and every handler of a kind answers a search for its role. A test enforces it, and
 `ROLES` in `hooks/card_layout.py` is where a genuinely new role gets added.
 
-A brand new set module needs a line in `cards/__init__.py`; a test will tell you if you forget.
+A brand new set module needs a line in `cards/__init__.py`. A test will tell you if you forget.
 
 ## Checking your work
 
@@ -363,18 +288,18 @@ pre-commit run --all   # includes the card-id check
 ```
 
 Write the test with the card. The suite is how a mass refactor knows it did not drop your
-registration — every implemented card is covered, and that is not an accident.
+registration. Every implemented card is covered, and that is not an accident.
 
 ## What the vocabulary cannot express yet
 
 Knowing a card is out of reach before you start is worth more than any amount of reference. Each of
 these needs a core extension, not just a card module:
 
-- **A general rule about whose cards you may touch.** A card *can* target an opponent's — Touch of
-  Death destroys any bowed Personality with Chi no higher than its caster's — but each handler
+- **A general rule about whose cards you may touch.** A card *can* target an opponent's, and Touch of
+  Death destroys any bowed Personality with Chi no higher than its caster's, but each handler
   filters by owner itself. There is no permission model to ask, so a card whose restriction is a
   rulebook one rather than its own text has nowhere to read it from.
-- **Suppression** — one card turning another's ability off.
+- **Suppression**, one card turning another's ability off.
 - **Negating or cancelling** anything. No effect of either kind exists, so a card that stops an
   action, an ability or an effect from resolving has nothing to return.
 - **A battle designator that depends on the board.** `battle_designators` is a static `frozenset` on

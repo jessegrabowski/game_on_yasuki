@@ -1,4 +1,4 @@
-# Getting Started
+# Getting started
 
 Install the toolchain, seed the card database, and launch the desktop client or the API server.
 

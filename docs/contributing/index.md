@@ -15,7 +15,7 @@ New to the codebase? Start with [Setup](../getting_started/setup.md), then read
 
 Implementing a card is its own workflow: see [Adding a Card](adding_a_card.md).
 
-## Running Tests
+## Running tests
 
 ```bash
 # Python tests
@@ -37,7 +37,7 @@ pre-commit install       # once
 pre-commit run --all     # run on all files
 ```
 
-## Project Structure
+## Project structure
 
 ```
 src/
@@ -71,9 +71,9 @@ src/
 Tests mirror this structure under `tests/yasuki_core/`, `tests/yasuki_web/`,
 `tests/yasuki_gui/`.
 
-## Adding a Card Set
+## Adding a card set
 
-Card data is committed YAML — the full workflow (set YAML, image manifests, errata) lives in
+Card data is committed YAML. The full workflow (set YAML, image manifests, errata) lives in
 [Database & card data](../design/database.md). The short version:
 
 1. Add the set's card data to `src/yasuki_core/assets/database/sets/<slug>.yaml` and its metadata to
@@ -82,7 +82,7 @@ Card data is committed YAML — the full workflow (set YAML, image manifests, er
 3. Reload the database: `pixi run install-db --force`.
 4. Regenerate the card-id index: `pixi run card-index`, and commit the result.
 
-## The Card-Id Index
+## The card-id index
 
 `src/yasuki_core/assets/database/card_ids.txt` lists every card id in the set YAML, one per line. It
 is generated, not hand-edited, and committed so that checks needing to know whether a card exists can
@@ -91,14 +91,14 @@ read a file in a millisecond instead of reparsing 131 YAML files in about a seco
 Three things read it:
 
 - A **pre-commit hook** (`registration-audit`) asserts that every id the engine registers a handler on
-  names a real card. A handler keyed on a typo registers happily, never fires, and raises nothing —
-  the card is simply dead. The hook reports the registry, the id, and the nearest real id:
+  names a real card. A handler keyed on a typo registers happily, never fires, and raises
+  nothing, leaving the card dead. The hook reports the registry, the id, and the nearest real id:
 
   ```
   abilities: no card has the id 'milet_farm' — did you mean millet_farm?
   ```
 
-  Fix the id. The hook needs the project environment, so it does not run in CI; the same check runs
+  Fix the id. The hook needs the project environment, so it does not run in CI. The same check runs
   there as a test.
 
 - The **`{card}` role** in the docs turns a printed card title into a link to that card on the live
@@ -135,4 +135,6 @@ asking_a_question
 attachments
 battle_cards
 cards_outside_play
+the_favor_and_the_court
+creating_cards
 ```

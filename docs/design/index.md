@@ -1,8 +1,8 @@
-# Design & Architecture
+# Design and architecture
 
 How Game on, Yasuki! is built as software: the core engine and its data model, and how the web server
-and desktop client surface that same engine. The dependency direction is one-way —
-`yasuki_core ← yasuki_web` and `yasuki_core ← yasuki_gui`, with no coupling between web and gui.
+and desktop client surface that same engine. The dependency direction is one-way:
+`yasuki_core <- yasuki_web` and `yasuki_core <- yasuki_gui`, with no coupling between web and gui.
 
 ```{toctree}
 :maxdepth: 1
@@ -20,6 +20,7 @@ systems/decisions-and-resumption
 systems/the-replay-log
 systems/units-and-attachments
 systems/battle
+systems/the-imperial-favor
 package_boundaries
 card_vocabulary
 database

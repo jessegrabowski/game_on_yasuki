@@ -1,4 +1,4 @@
-# Setup Guide
+# Setup guide
 
 ## Requirements
 
@@ -18,7 +18,7 @@ curl -fsSL https://pixi.sh/install.sh | bash
 iwr -useb https://pixi.sh/install.ps1 | iex
 ```
 
-## Install Dependencies
+## Install dependencies
 
 ```bash
 pixi install
@@ -74,7 +74,7 @@ pixi run install-db
 ```
 
 This assumes PostgreSQL is already running on localhost and your user can access it
-without a password (check with `pg_isready`). `createdb` creates the database;
+without a password (check with `pg_isready`). `createdb` creates the database.
 `install-db` only populates an existing one. If `createdb` reports that `yasuki`
 already exists, skip it. `install-db` is do-nothing-on-conflict, so to reload card
 data into an already-seeded database, add `--force` (see the flag table below).
@@ -102,7 +102,7 @@ pixi run install-db
 | `--images PATH` | Override the per-set image-manifest directory (default: `src/yasuki_core/assets/database/images/`) |
 | `--schema PATH` | Override the schema SQL file (default: `src/yasuki_core/assets/database/schema.sql`) |
 
-## Card Set Images
+## Card set images
 
 Card images (~8 GB) are not checked into version control. Place or symlink them at
 `sets/` in the repository root, or set the `YASUKI_SETS_DIR` environment variable:
@@ -111,9 +111,9 @@ Card images (~8 GB) are not checked into version control. Place or symlink them 
 export YASUKI_SETS_DIR=/path/to/your/sets
 ```
 
-The game works without them — generic card-type images are bundled in the package.
+The game works without them, since generic card-type images are bundled in the package.
 
-## Next Steps
+## Next steps
 
 - [Run the desktop client](running.md)
 - [Run with Docker](docker.md)

@@ -1,22 +1,22 @@
-# Card Data & Images
+# Card data and images
 
 How card data, printings, errata, and art are stored, edited, and loaded.
 
-## Source of Truth
+## Source of truth
 
 **The committed YAML files are the source of truth.** Card text, stats, printings, errata, and the
 image manifests all live in version-controlled YAML under `src/yasuki_core/assets/database/`. Edit
 those and reload the database.
 
-Image **bytes** are the one thing never committed — they live in the R2 bucket (durable) and a local
+Image **bytes** are the one thing never committed. They live in the R2 bucket (durable) and a local
 `sets/` cache. Everything else about a card is in the repo.
 
-## Where Everything Lives
+## Where everything lives
 
 | What | Path | Tracked? | Role |
 |------|------|----------|------|
 | Card data (per set) | `src/yasuki_core/assets/database/sets/<slug>.yaml` | Yes (git) | Titles, text, stats, keywords, per-printing fields, **errata** |
-| Image manifests (per set) | `src/yasuki_core/assets/database/images/<slug>.yaml` | Yes (git) | Maps `(card_id, printing_id)` → image files + sha256 |
+| Image manifests (per set) | `src/yasuki_core/assets/database/images/<slug>.yaml` | Yes (git) | Maps `(card_id, printing_id)` -> image files + sha256 |
 | Set metadata | `src/yasuki_core/assets/database/set_info.yaml`, `set_alias.yaml` | Yes (git) | Set names, codes, release dates, arcs |
 | Schema | `src/yasuki_core/assets/database/schema.sql` | Yes (git) | The Postgres schema |
 | Local image cache | `sets/<slug>/<file>.jpg` | No (gitignored) | Image **bytes**, served locally |
@@ -24,7 +24,7 @@ Image **bytes** are the one thing never committed — they live in the R2 bucket
 
 **Two planes, kept separate.** *Metadata* (which cards/printings/images exist, their paths + sha256)
 is the committed YAML. *Image bytes* live only in R2 and the local `sets/` cache. The manifests
-reference bytes by path + sha; the bytes are synced, not versioned.
+reference bytes by path + sha. The bytes are synced, not versioned.
 
 ## Loading Data into the Database
 
@@ -36,15 +36,15 @@ pixi run install-db --force     # drop + rebuild the card DB from the YAML
 Postgres. Without `--force` it is do-nothing-on-conflict, so use `--force` to pick up edits. The
 accounts database is separate and untouched by this.
 
-## How Images Resolve at Read Time
+## How images resolve at read time
 
 A manifest stores a relative path `sets/<slug>/<file>`. `IMAGE_BASE_URL` is prefixed at read time:
 
-- **Locally** — `IMAGE_BASE_URL=/images`, served from the `sets/` directory mount.
-- **Production** — `IMAGE_BASE_URL=https://pub-<id>.r2.dev`, served from R2.
+- Locally, `IMAGE_BASE_URL=/images`, served from the `sets/` directory mount.
+- In production, `IMAGE_BASE_URL=https://pub-<id>.r2.dev`, served from R2.
 
 So a card shows art only if (a) its manifest entry exists *and* (b) the bytes exist at that path in
-`sets/` (local) or R2 (prod). A missing manifest entry OR missing bytes → no image.
+`sets/` (local) or R2 (prod). A missing manifest entry OR missing bytes -> no image.
 
 To populate a fresh `sets/`, pull the bytes down from R2. With the rclone remote configured (R2 is
 S3-compatible, so `aws s3` works too):
@@ -53,7 +53,7 @@ S3-compatible, so `aws s3` works too):
 rclone copy "$R2_REMOTE:$R2_BUCKET/sets" ./sets   # remote/bucket from .env; copy is additive
 ```
 
-Without credentials, the public CDN cannot list objects, but specific files remain fetchable by path — see the
+Without credentials, the public CDN cannot list objects, but specific files remain fetchable by path. See the
 [Recovery playbook](#recovery-playbook).
 
 ## Recipes
@@ -65,9 +65,9 @@ logical `card_id`, so every deck and search result updates automatically.
 
 ### Add a New Printing of an Existing Card
 
-A card is one row keyed by `card_id` (a slug of its extended title); each YAML **entry** is one
+A card is one row keyed by `card_id` (a slug of its extended title). Each YAML **entry** is one
 printing. To add a printing, add another entry with the same title in the new set's YAML, plus its
-image manifest entry. Same-set reprints get suffixed printing ids (`<slug>`, `<slug>_2`, …). Distinct
+image manifest entry. Same-set reprints get suffixed printing ids (`<slug>`, `<slug>_2`, ...). Distinct
 gameplay versions (e.g. Experienced) need a distinct `extended_title` so they slug to a distinct
 `card_id` instead of merging.
 
@@ -88,17 +88,17 @@ that phrasing preserved and searchable, add an optional `print_text:` to that pr
   print_text: 'Kenshinzen Battle: ...'   # this printing's own wording (overrides the canonical text)
 ```
 
-`print_text` is stored on the `prints` row (`prints.rules_text`); when absent the column is NULL and
+`print_text` is stored on the `prints` row (`prints.rules_text`). When absent the column is NULL and
 every reader falls back to the card's canonical text. Text search matches a card when the phrase is in
 its current text **or** in any printing's `print_text`, so an old reprint's phrasing stays findable
-even after the card's current wording drops it. `text:` is unchanged by this — leave it as the card's
-current wording; `print_text` is a pure additive override.
+even after the card's current wording drops it. `text:` is unchanged by this. Leave it as the card's
+current wording. `print_text` is a pure additive override.
 
 ### Issue an Errata (a Revision)
 
-Errata are a **revision time-axis, orthogonal to printings** — a card can have many printings *and*
-many errata independently. **Append**, never overwrite: keep the original `text:` and add an `errata:`
-list to the card's entry (put it on the printing the erratum applies to; the loader collects errata
+Errata are a **revision time-axis, orthogonal to printings**, so a card can have many printings
+*and* many errata independently. **Append**, never overwrite: keep the original `text:` and add an `errata:`
+list to the card's entry (put it on the printing the erratum applies to, and the loader collects errata
 across all of a card's entries, so file order doesn't matter):
 
 ```yaml
@@ -115,22 +115,21 @@ across all of a card's entries, so file order doesn't matter):
 ```
 
 On reload, the loader mirrors the **newest** revision's text (and any stat overrides) onto the `cards`
-row — so every read path and deck shows the current wording — and records the full ordered history in
+row, so every read path and deck shows the current wording. It records the full ordered history in
 `card_revisions` (revision 0 = original, highest index = current). The card page shows the current
-text with an **errata badge** and an expandable history; the errata render leads the art carousel with
+text with an **errata badge** and an expandable history. The errata render leads the art carousel with
 the pre-errata art one click away.
 
 A missing or unparseable `date` is a hard error (loud, not a silent null). This pass covers **text +
-art + stats**; keyword/type/uniqueness errata are *not* yet modelled (they'd need the junction tables
+art + stats**. Keyword/type/uniqueness errata are *not* yet modelled (they'd need the junction tables
 extended).
 
 ### Add or Replace Card Art (Including Errata Renders)
 
-An errata render is not special — it is just a card image, so it lives in `sets/` and R2 like every
-other one. To add or replace any card's art:
+An errata render is just a card image, so it lives in `sets/` and R2 like every other one. To add or replace any card's art:
 
 1. Produce an optimized progressive JPEG (quality ~95, native dimensions) at `sets/<slug>/<file>.jpg`
-   — a ~10-line PIL script from whatever source you have (e.g. the errata announcement image).
+   using a ~10-line PIL script from whatever source you have (e.g. the errata announcement image).
 2. For an errata, name it to match the errata block's `art:` field (which becomes
    `card_revisions.image_path`, e.g. `sets/chaos_reigns_part_iii/what_have_you_done__errata_2026_07.jpg`).
 3. Push to R2 so it serves in production and survives a `sets/` wipe (below).
@@ -138,17 +137,17 @@ other one. To add or replace any card's art:
 There is no separate tracked source directory: the JPEG in `sets/` + R2 is the canonical copy, exactly
 as for archive-materialized cards.
 
-### Sync Image Bytes to R2
+### Sync image bytes to R2
 
 ```bash
 pixi run sync-images              # dry run (shows what would upload)
 pixi run sync-images -- --execute # upload for real (needs R2_REMOTE + R2_BUCKET / rclone configured)
 ```
 
-This mirrors `sets/` (and bundled overlays/defaults) to R2. **It is a mirror** — it deletes remote
-objects not present locally, so only run it against a `sets/` tree you trust to be complete.
+This mirrors `sets/` (and bundled overlays/defaults) to R2. **It is a mirror.** It deletes remote objects not present locally, so only run it against a `sets/`
+tree you trust to be complete.
 
-## Recovery Playbook
+## Recovery playbook
 
 If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 
@@ -157,7 +156,7 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
    git checkout -- src/yasuki_core/assets/database/images/
    ```
 2. **Restore the bytes** from R2. If you have the rclone remote configured (R2 is S3-compatible, so
-   `aws s3` works with `--endpoint-url` too), pull the affected prefix — `copy` is additive and won't
+   `aws s3` works with `--endpoint-url` too), pull the affected prefix. `copy` is additive and won't
    touch anything else:
    ```bash
    rclone copy "$R2_REMOTE:$R2_BUCKET/sets/<slug>" ./sets/<slug>
@@ -175,7 +174,7 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 
 ## Reference
 
-### Card Entry Fields (`sets/<slug>.yaml`)
+### Card entry fields (`sets/<slug>.yaml`)
 
 `title`, `types`, `decks`, `keywords`, `text`, stat fields (`gold_cost`, `focus`, `force`, `chi`,
 `personal_honor`, `honor_requirement`, `province_strength`, `starting_honor`, `gold_production`),
@@ -184,8 +183,8 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 (experience disambiguation), `is_back` (flip-card back face). Optional: `errata` (list),
 `errata_text` (a legacy free-text note, distinct from the structured `errata:` list).
 
-### `card_revisions` Columns
+### `card_revisions` columns
 
 `card_id`, `revision_index` (0 = original, highest = current), `effective_date`, `source`,
 `source_url` (where the erratum was announced), `rules_text`, `stats` (JSONB stat overrides),
-`image_path` (null → fall back to print art), `notes`. Sparse: only errata'd cards have rows.
+`image_path` (null -> fall back to print art), `notes`. Sparse: only errata'd cards have rows.
