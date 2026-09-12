@@ -202,92 +202,17 @@ call. `battle_designators`, `targets_any_location` and `located_at` decide what 
 
 ## Cards that create
 
-{card}`Weapon Artist` makes a sword out of nothing; Colonial Farm makes an Ashigaru; {card}`Mishime Sensei` makes an
-Oni. What they create is a card in its own right — the "Proxy" prints in the database, reached by
-token card id — so its stats, keywords and art come off that print rather than being spelled out at
-the creation site. The deck load resolves every token the deck's cards can create and parks the
-templates on the table, which is why a card names one by id and nothing else:
-
-```python
-FINE_SWORD = "weapon_item_sword_plus2f_plus1c"
-```
-
-Creating is one effect, and creating-and-attaching is still one, because the created card has no id
-until it exists:
-
-```python
-    return [CreateToken(FINE_SWORD, source.owner, source.id, attach_to=target.id)]
-```
-
-The third argument is the card doing the creating. It is remembered, so a card that speaks about
-what it made — "if this Holding is ever unbowed, banish the Personality" — can ask for it later
-rather than hunting the board for something that looks right.
-
-**Attachment targets** are the catch. The rules that decide where an attachment may hang — one
-Weapon per Personality, Two-Handed exclusivity — have to be answered before there is a card to ask
-about, so `creation_targets` judges the template instead:
-
-```python
-    sword = game.table.creatable_tokens[FINE_SWORD]
-    return [target.id for target in creation_targets(game, source.owner, sword)]
-```
-
-**A variable stat line** — "a Personality with Force equal to the target's Chi" — is printed on the
-token as `*` and supplied by the card creating it. Pass the numbers it fixes and the created card
-genuinely has them, rather than carrying a modifier over a printed zero:
-
-```python
-        CreateToken(
-            MISHIMES_ONI,
-            seat,
-            sensei.id,
-            stats=((Stat.FORCE, effective_chi(game, target)),),
-            banish_at_turn_end=not destroyed,
-        )
-```
-
-`banish_at_turn_end` is the other half of that card: a creation lent to its owner for one turn is
-recorded as it is made, because by the time the turn ends there is nothing left to decide.
-
-A created card is not a copy of a real one: it exists only in play, and destroying it, banishing it,
-or destroying the Personality carrying it takes it off the table rather than into a pile. That is
-handled for you.
-
-A cost paid in Gold rather than a bow is an effect like any other, and raises the same payment a
-Recruit does:
-
-```python
-    return [PayGold(source.owner, ASHIGARU_COST, source.name)]
-```
+A created card is stamped from a token template, so its stats, keywords and art come off a print
+rather than the creation site. `CreateToken` carries all of it, including attaching the new card
+and fixing a template's variable stat.
+[Cards that create cards](creating_cards.md) works through it, and
+[Effects](../design/systems/effects.md) is where the effect sits in the vocabulary.
 
 ## Cards that watch their own bow
 
-Culling Grounds trades an Honor and a bow for a Personality, and keeps it only while the Holding
-stays bowed. Two registrations carry that. The first is the printed "May remain bowed", which takes
-the card out of the turn-start straighten — a flag, since the card grants the permission and says
-nothing about when taking it is worth it:
-
-```python
-may_remain_bowed("culling_grounds")
-```
-
-The second is what happens when it does straighten. Straightening announces itself, whether the turn
-start or an effect did it, so the drawback is an ordinary trigger:
-
-```python
-@on(Straightened, "culling_grounds")
-def _culling_grounds_straightened(ctx: TriggerContext) -> list[Effect]:
-    ...
-    return [Banish(created) for created in ctx.game.creations_of(ctx.card.id)]
-```
-
-Its ability names no target at all. An ability still needs one to be offered, so it takes its own
-card and hits it without asking:
-
-```python
-        targets=itself,
-        hits_every_target=True,
-```
+`register_may_remain_bowed` takes a card out of the turn-start straighten, and a `Straightened`
+trigger is how it pays for that when it does stand up. Culling Grounds is both, and
+[Cards that create cards](creating_cards.md) works through it alongside the creation it protects.
 
 ## Cards that attack
 

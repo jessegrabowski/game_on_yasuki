@@ -20,6 +20,7 @@ systems/decisions-and-resumption
 systems/the-replay-log
 systems/units-and-attachments
 systems/battle
+systems/the-imperial-favor
 package_boundaries
 card_vocabulary
 database
