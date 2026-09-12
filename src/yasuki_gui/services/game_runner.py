@@ -154,7 +154,7 @@ class GameRunner:
                 ability = ability_for(card, action.ability_key)
                 cost = effective_gold_cost(game, card)
                 label = ability.label if ability is not None else "Play this Strategy"
-                items.append((label if cost == 0 else f"{label} — Pay {cost} gold", action))
+                items.append((label if cost == 0 else f"{label} -- Pay {cost} gold", action))
         return items
 
     @staticmethod

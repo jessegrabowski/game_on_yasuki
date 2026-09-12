@@ -554,7 +554,7 @@ def test_a_hand_strategy_offers_a_play_priced_at_its_gold_cost():
     label, action = runner.hand_menu("P1-killer")[0]
 
     assert action == PlayStrategy("P1-killer")
-    assert label == "Open: Spend Gold to destroy a target Personality — Pay 2 gold"
+    assert label == "Open: Spend Gold to destroy a target Personality -- Pay 2 gold"
 
 
 def test_an_investable_attachment_prices_its_two_equips_apart():

@@ -26,7 +26,7 @@ def cycle(game: GameState) -> None:
 
 @triggers.choice_resolver(
     "cycle",
-    prompt="Put face-up Province cards on the bottom of your deck — your last pick ends up lowest",
+    prompt="Put face-up Province cards on the bottom of your deck (your last pick ends up lowest)",
 )
 def _cycle_put_on_bottom(
     game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId

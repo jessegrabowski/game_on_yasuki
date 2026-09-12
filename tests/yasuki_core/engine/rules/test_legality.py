@@ -178,7 +178,7 @@ def test_is_legal_and_the_enumeration_agree_across_a_driven_game():
                     assert not legality.is_legal(session.game, seat, action), (seat, action)
             checked += len(offered)
 
-    assert checked > 100, f"only {checked} actions checked — the walk is not exercising much"
+    assert checked > 100, f"only {checked} actions checked. The walk is not exercising much"
 
 
 def test_gold_reach_holds_a_target_independent_producer_in_its_fixed_part():

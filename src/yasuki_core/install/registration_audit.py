@@ -115,7 +115,7 @@ def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -
     for label, card_ids in sorted(registries.items()):
         for card_id in sorted(card_ids - known):
             closest = difflib.get_close_matches(card_id, known, n=1)
-            hint = f" — did you mean {closest[0]}?" if closest else ""
+            hint = f". Did you mean {closest[0]}?" if closest else ""
             problems.append(f"{label}: no card has the id {card_id!r}{hint}")
     return problems
 

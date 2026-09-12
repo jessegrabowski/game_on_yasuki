@@ -62,7 +62,7 @@ def test_no_registry_reports_as_empty():
 def test_a_misspelled_id_is_reported_with_its_registry_and_a_suggestion():
     problems = unregistered_card_ids({"abilities": frozenset({"milet_farm"})})
 
-    assert problems == ["abilities: no card has the id 'milet_farm' — did you mean millet_farm?"]
+    assert problems == ["abilities: no card has the id 'milet_farm'. Did you mean millet_farm?"]
 
 
 def test_an_id_with_no_near_match_is_still_reported():

@@ -135,7 +135,7 @@ def test_cycle_asks_for_at_least_one_card_and_offers_every_face_up_province():
     assert pending.minimum == 1  # declining means not taking the action at all
     assert set(pending.candidates) == {"P1-pv0", "P1-pv1", "P1-pv2"}
     assert pending.prompt() == (
-        "Put face-up Province cards on the bottom of your deck — your last pick ends up lowest"
+        "Put face-up Province cards on the bottom of your deck (your last pick ends up lowest)"
     )
 
 
