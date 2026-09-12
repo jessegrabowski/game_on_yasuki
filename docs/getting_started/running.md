@@ -1,6 +1,6 @@
 # Running the game
 
-Complete [Setup](setup.md) first — these commands assume an installed Pixi environment
+Complete [Setup](setup.md) first. These commands assume an installed Pixi environment
 and a created, seeded database.
 
 ## Desktop client (Tkinter)
@@ -37,7 +37,7 @@ This starts the FastAPI server on `http://localhost:8000` (override the port wit
 ## Configuration
 
 The desktop client reads optional settings from a `config.yaml` at the repository root. It
-does not exist by default; copy the template to create one:
+does not exist by default. Copy the template to create one:
 
 ```bash
 cp config.yaml.example config.yaml

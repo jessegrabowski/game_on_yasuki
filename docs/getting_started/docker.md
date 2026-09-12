@@ -9,7 +9,7 @@ running, and [Pixi](https://pixi.sh) (see [Setup](setup.md)). PostgreSQL binds h
 
 ## Configure
 
-`POSTGRES_PASSWORD` is required and has no default — the containers will not start until
+`POSTGRES_PASSWORD` is required and has no default. The containers will not start until
 it is set. Copy the template and set it:
 
 ```bash
@@ -17,7 +17,7 @@ cp .env.example .env
 # edit .env: set POSTGRES_PASSWORD (and any other values you want to change)
 ```
 
-Docker Compose loads `.env` automatically from the project root; `.env` is gitignored.
+Docker Compose loads `.env` automatically from the project root. `.env` is gitignored.
 
 ## Database only
 
@@ -48,7 +48,7 @@ pixi run docker-api
 ## Environment variables
 
 All Docker services read their configuration from `.env` (loaded automatically from the
-project root). `POSTGRES_PASSWORD` is required and has no default; the remaining variables
+project root). `POSTGRES_PASSWORD` is required and has no default. The remaining variables
 fall back to the defaults defined in `docker-compose.yml`. `.env.example` documents every
 variable.
 

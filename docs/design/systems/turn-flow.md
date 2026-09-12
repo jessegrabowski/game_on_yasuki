@@ -1,6 +1,6 @@
 # The turn machine
 
-A designator on a card names a window. The turn machine is what opens them.
+A designator on a card names a window. The turn machine opens them.
 
 ## Phases, rounds and segments
 

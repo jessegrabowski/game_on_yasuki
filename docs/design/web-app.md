@@ -1,9 +1,9 @@
 # Web app: HTTP and WebSocket API
 
 The web app is a FastAPI server fronting the same `yasuki_core` engine the desktop client uses. The
-server is authoritative: clients never mutate game state directly — they send intents over a WebSocket,
+server is authoritative: clients never mutate game state directly. They send intents over a WebSocket,
 the server applies them through the engine, and broadcasts the resulting state. Card browsing, room
-management, and configuration are plain REST; live gameplay runs over the WebSocket protocol below.
+management, and configuration are plain REST. Live gameplay runs over the WebSocket protocol below.
 
 ## REST endpoints
 
@@ -51,7 +51,7 @@ Connect to `WS /ws/{room_id}` for real-time game communication.
 5. Clients exchange `ACTION` messages
 6. Server broadcasts `STATE` updates to all players
 
-### Client → Server Messages
+### Client to server messages
 
 **Join Room:**
 ```json
@@ -83,7 +83,7 @@ Connect to `WS /ws/{room_id}` for real-time game communication.
 }
 ```
 
-### Server → Client Messages
+### Server to client messages
 
 **Hello (on join):**
 ```json
@@ -133,8 +133,8 @@ Connect to `WS /ws/{room_id}` for real-time game communication.
 | Kind | Fields | Description |
 |------|--------|-------------|
 | `PLAY_CARD` | `card` | Play a card by ID |
-| `DRAW` | — | Draw a card |
-| `PASS` | — | Pass (advances turn) |
+| `DRAW` | -- | Draw a card |
+| `PASS` | -- | Pass (advances turn) |
 | `SHUFFLE` | `deck_type` | Shuffle a deck (`dynasty` or `fate`) |
 
 Message schemas are defined in `src/yasuki_web/schemas.py`.

@@ -6,7 +6,7 @@ board substrate under `engine/` does not read `engine/rules/`, and the rules lay
 further than that vocabulary. `search/` turns query text into SQL without touching `database.py`.
 `stats/` never reads `gold/`. Neither `accounts/` nor `sim/` is imported by anything shipped.
 A package `__init__` re-exports nothing, so a symbol has one import path and a module can be
-moved by rewriting it; `yasuki_core`, `search/` and `cards/` are the three that do, the last
+moved by rewriting it. `yasuki_core`, `search/` and `cards/` are the three that do, the last
 aggregating its set modules on purpose.
 
 Nothing under `engine/` or `game_pieces/` imports `psycopg`. The engine is a pure in-memory state

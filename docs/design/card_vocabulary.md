@@ -12,8 +12,8 @@ This page is the index. The pages that explain how these types behave at runtime
 ## Effects
 
 An effect is a frozen dataclass describing one change to game state, and it carries its own
-behavior. `perform` commits the change and returns the events it raises; `is_payable` reports
-whether an ability can pay the effect as a cost; `describe` names the effect in one line, for
+behavior. `perform` commits the change and returns the events it raises. `is_payable` reports
+whether an ability can pay the effect as a cost. `describe` names the effect in one line, for
 reading a cascade back. Triggers and activated abilities return lists of effects, and the cascade
 commits each in turn, draining the events they raise until no further events are produced.
 
@@ -113,7 +113,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
 ## Decisions
 
 A decision request is a question the engine puts to a single seat. The engine runs until it requires
-input, records the request, and returns control; the seat replies with a `DecisionResponse`, and
+input, records the request, and returns control. The seat replies with a `DecisionResponse`, and
 execution resumes. The `accepts` method verifies that a response is structurally well formed.
 Legality with respect to game state is checked separately.
 
