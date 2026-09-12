@@ -11,8 +11,11 @@ effects with a comparison instead of a fixed outcome.
 `ActionTiming.ENGAGE` and `ActionTiming.BATTLE` open in a battle's Engage and Combat Segments, and
 both seats get them:
 
-```python
-Phase.BATTLE: RoundTimings(active=frozenset({ActionTiming.ATTACK}), others=frozenset()),
+```{literalinclude} ../../../src/yasuki_core/engine/rules/turn/structure.py
+:start-at: Phase.BATTLE: RoundTimings(active=frozenset({ActionTiming.ATTACK}), others=frozenset()),
+:end-at: Phase.BATTLE: RoundTimings(active=frozenset({ActionTiming.ATTACK}), others=frozenset()),
+:dedent: 4
+:language: python
 ```
 
 An ability printed `Battle:` is an ordinary `register_ability` call carrying
@@ -73,6 +76,7 @@ The three kinds differ in one method:
 ```python
 @dataclass(frozen=True, slots=True)
 class RangedAttack(AttackEffect):
+    ...
     name: ClassVar[str] = "ranged"
 
     def _outcome(self) -> Effect:
@@ -81,6 +85,7 @@ class RangedAttack(AttackEffect):
 
 @dataclass(frozen=True, slots=True)
 class MeleeAttack(AttackEffect):
+    ...
     name: ClassVar[str] = "melee"
 
     def _outcome(self) -> Effect:
@@ -89,6 +94,7 @@ class MeleeAttack(AttackEffect):
 
 @dataclass(frozen=True, slots=True)
 class Fear(AttackEffect):
+    ...
     name: ClassVar[str] = "fear"
 
     def _outcome(self) -> Effect:
@@ -119,14 +125,10 @@ menu when there is nothing to hit.
 
 Every card in play is asked about every attack, and the handlers sum:
 
-```python
-def effective_strength(game: GameState, attack: AttackEffect) -> int:
-    """``attack``'s strength once every card in play has had its say.
-
-    Not floored: a card that takes more strength off an attack than it had leaves it reaching
-    nothing, which is what "have -2 strength" buys. The zero floor the CR puts on a stat
-    (Calculating Stats) is about stats, and an attack's strength is not one.
-    """
+```{literalinclude} ../../../src/yasuki_core/engine/rules/attack_effects.py
+:start-at: def effective_strength(game: GameState, attack: AttackEffect) -> int:
+:end-before: target = game.table.cards_by_id.get(attack.target_id)
+:language: python
 ```
 
 Because every card is asked, a handler has to state its own reach. Being asked is not a signal that

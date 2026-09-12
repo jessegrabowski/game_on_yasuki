@@ -60,9 +60,6 @@ not what it costs, so it sits in `effects`.
 offered at all. That is how a card with nothing to target stays off the menu instead of appearing
 and failing.
 
-Dull Tanto targets every Personality on the board. The card says "a target Personality" and
-narrows it no further, so the controller's own are legal. Write what the card says.
-
 **What you return is not final.** `legal_targets` narrows it by the Rules of Location before the
 ability is offered, so write the predicate for the card's text and stop there. Reimplementing
 those rules in a handler, or working around them, both produce a card that is wrong in a way no

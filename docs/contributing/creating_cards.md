@@ -13,14 +13,9 @@ all of it. [Effects](../design/systems/effects.md) covers where that effect sits
 
 {card}`Culling Grounds` recruits a servant out of nothing:
 
-```python
-def _culling_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Create and Recruit the servant, ignoring Gold Cost — nothing is paid for it, so there is no
-    payment to raise; the Honor is the price."""
-    return [
-        CreateToken(EXPENDABLE_SERVANT, source.owner, source.id),
-        GainHonor(source.owner, -1),
-    ]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/rise_of_otosan_uchi.py
+:pyobject: _culling_grounds_effects
+:language: python
 ```
 
 `EXPENDABLE_SERVANT` is a token id naming the template. The 0F/2C on the printed card is on that
@@ -46,18 +41,9 @@ asking the seat to pick the only card it could mean.
 `creator_id` is why the third argument exists. A card that speaks about its creation later reads
 the relation instead of hunting the board:
 
-```python
-@on(Straightened, "culling_grounds")
-def _culling_grounds_straightened(ctx: TriggerContext) -> list[Effect]:
-    """Until the game ends, if this Holding is ever unbowed, banish the Personality.
-
-    Which is why the Holding may remain bowed: standing it up again to produce Gold is what costs
-    the servant. Nothing it created earlier and lost is chased, so a second servant is only ever at
-    risk of the same bargain.
-    """
-    if ctx.event.card_id != ctx.card.id:
-        return []
-    return [Banish(created) for created in ctx.game.creations_of(ctx.card.id)]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/rise_of_otosan_uchi.py
+:pyobject: _culling_grounds_straightened
+:language: python
 ```
 
 {meth}`~.GameState.creations_of` gives the cards this one created that are still on the table,
@@ -66,8 +52,10 @@ oldest first. Cards it made and lost are already gone from the list.
 The other half of that bargain is one line, because the card grants a permission and says nothing
 about when taking it is worth it:
 
-```python
-register_may_remain_bowed("culling_grounds")
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/rise_of_otosan_uchi.py
+:start-at: register_may_remain_bowed("culling_grounds")
+:end-at: register_may_remain_bowed("culling_grounds")
+:language: python
 ```
 
 That takes the Holding out of the turn-start straighten. Straightening announces itself either way,

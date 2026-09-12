@@ -30,8 +30,11 @@ worked trigger in [Reacting to events](reacting_to_events.md):
 
 Nothing in that entry is the card's id, and the id is what every handler keys on. It is computed:
 
-```python
-card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
+```{literalinclude} ../../src/yasuki_core/install/card_index.py
+:start-at: card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
+:end-at: card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
+:dedent: 12
+:language: python
 ```
 
 `card_slug` lowercases, turns `&` into `and`, drops apostrophes, and replaces every other run of

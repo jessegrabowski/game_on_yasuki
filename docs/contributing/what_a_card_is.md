@@ -14,10 +14,10 @@ it, so every copy of Rice Farm on the table shares one `HoldingPrint`.
 
 ## Identity is split, and handlers key on the shared half
 
-```python
-    id: str
-    printed: CardPrint
-    owner: PlayerId
+```{literalinclude} ../../src/yasuki_core/game_pieces/cards.py
+:start-at: id: str
+:end-at: owner: PlayerId
+:language: python
 ```
 
 `id` is this copy. `printed_id` is the database id every copy and every printing shares, and that

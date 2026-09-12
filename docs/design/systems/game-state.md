@@ -23,12 +23,11 @@ production across phases.
 
 `active_rules` is the interesting one:
 
-```text
-active_rules : dict mapping PlayerId to frozenset of VictoryRule
-    The ways each seat can win or lose. :meth:`start` fills it from :func:`~.rules_at_start`;
-    dropping a rule from a seat's set afterwards excuses that seat alone, which is how a card
-    reading "you will not lose, or be eliminated, by Dishonor" is expressed. A seat absent from
-    the dict is held to nothing. Default empty.
+```{literalinclude} ../../../src/yasuki_core/engine/rules/state.py
+:start-at: active_rules : dict mapping PlayerId to frozenset of VictoryRule
+:end-at: the dict is held to nothing. Default empty.
+:dedent: 4
+:language: text
 ```
 
 A card that exempts its controller from a loss condition drops a rule from that seat's set. It does

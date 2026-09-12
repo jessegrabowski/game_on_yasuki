@@ -33,16 +33,9 @@ The engine puts the request on `GameState.pending` and returns. Nothing polls, a
 `GameState.stack` holds what is waiting, last in and first out. A cascade that pauses mid-list
 stashes its remainder there as a {class}`~.ResumeCascade`:
 
-```python
-def _stash(
-    game: GameState,
-    effects: tuple[Effect, ...],
-    firing: list[tuple[L5RCard, Trigger]],
-    event: GameEvent | None,
-    queue: list[GameEvent],
-) -> None:
-    remaining = tuple((card.id, trigger) for card, trigger in firing)
-    game.stack.append(ResumeCascade(effects, remaining, event, tuple(queue)))
+```{literalinclude} ../../../src/yasuki_core/engine/rules/triggers.py
+:pyobject: _stash
+:language: python
 ```
 
 Everything the walk had in hand goes with it: the effects not yet committed, the triggers not yet

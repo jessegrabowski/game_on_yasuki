@@ -15,13 +15,9 @@ used hook in the card modules and the easiest place to start.
 turn begins, give this Holding a +1GP Wealth token."* Two sentences, and the whole card is four
 lines, in `src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py`:
 
-```python
-@on(TurnStarted, "rice_farm")
-def _rice_farm_turn_started(ctx: TriggerContext) -> list[Effect]:
-    """After your turn begins, give this Holding a +1GP Wealth token (max four)."""
-    if ctx.card.owner is not ctx.event.seat or at_cap(ctx.card, WEALTH, 4):
-        return []
-    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py
+:pyobject: _rice_farm_turn_started
+:language: python
 ```
 
 Read it against the card. `@on(TurnStarted, "rice_farm")` is "after your turn begins", keyed to the
@@ -44,13 +40,9 @@ Rice Farm gets this for free, because it acts on itself and reads only its own o
 reacts to something happening *to itself* does not. {card}`Rural Market` is one, and the rest of
 this page is from `src/yasuki_core/engine/rules/cards/rise_of_jigoku.py`:
 
-```python
-@on(EnteredPlay, "rural_market")
-def _rural_market_entered_play(ctx: TriggerContext) -> list[Effect]:
-    """After this Holding enters play, give it a +1GP Wealth token."""
-    if ctx.event.card_id != ctx.card.id:
-        return []
-    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/rise_of_jigoku.py
+:pyobject: _rural_market_entered_play
+:language: python
 ```
 
 `ctx.event.card_id != ctx.card.id` is the whole difference between "this Holding" and "a Holding".
@@ -70,20 +62,9 @@ Holding a +1GP Wealth token."* That is one sentence in English and two triggers 
 they answer different events. The second carries three guards the card's wording does not spell
 out:
 
-```python
-@on(Destroyed, "rural_market")
-def _rural_market_destroyed(ctx: TriggerContext) -> list[Effect]:
-    """After your Farm is destroyed, give this Holding a +1GP Wealth token."""
-    if ctx.event.card_id == ctx.card.id:
-        # Rural Market carries Farm itself, and a Holding in a discard pile can hold no token
-        # (CR, Tokens), so its own destruction pays it nothing.
-        return []
-    destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
-    if destroyed is None or destroyed.owner is not ctx.card.owner:
-        return []
-    if keywords.FARM not in effective_keywords(ctx.game, destroyed):
-        return []
-    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/rise_of_jigoku.py
+:pyobject: _rural_market_destroyed
+:language: python
 ```
 
 Three guards, each one a word on the card. The first is not on the card at all: Rural Market is
