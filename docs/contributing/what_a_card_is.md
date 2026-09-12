@@ -53,9 +53,7 @@ handler on any card: Ancestor, Celestial, Clock, Other, Proxy, Region, Ring, Str
 and Wind.
 
 The count dates quickly and the list does not. Picking a Ring and hunting for the hook that would
-carry it is time spent on something the engine cannot express, and
-[what the vocabulary cannot express](adding_a_card.md#what-the-vocabulary-cannot-express-yet)
-separates the core extensions from the merely unwritten.
+carry it is time spent on a type the engine has no handler for.
 
 ## Where a card's behavior goes
 
