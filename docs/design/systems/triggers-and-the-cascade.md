@@ -92,7 +92,7 @@ def _goju_kaxt_destroyed(ctx: TriggerContext) -> list[Effect]:
 ```
 
 The Follower announces his own death from the discard pile, and nothing else could announce it for
-him. Thirty-four printed cards carry a clause of that shape, so this is a category rather than one
+him. Many printed cards carry a clause of that shape, so this is a category rather than one
 card's quirk.
 
 Compare that guard with {card}`Rural Market`'s, which is written identically and means the

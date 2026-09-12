@@ -36,6 +36,8 @@ The cascade trace is kept out of `GameState` entirely for a related reason:
 # and bounded rather than carried on GameState: the history is derived (replay regenerates it), and
 # GameState compares by field, so storing it there would drag traces into every replay-equality
 # assertion. A deque of this size holds several cycles of any loop a human would need to read.
+_TRACE_LIMIT = 60
+_trace: collections.deque[str] = collections.deque(maxlen=_TRACE_LIMIT)
 ```
 
 `replay(log) == game` is the assertion that proves the tape is faithful, and a field holding a

@@ -92,7 +92,7 @@ keyword parameter, and only a resolver whose card supplies one needs to.
 ## How many go where
 
 {class}`~.AskDistribution` hands out several things among several recipients.
-{card}`Suiteiru no Oni` is the only card that does this:
+{card}`Suiteiru no Oni` deals Oni Followers among a seat's Personalities:
 
 ```python
 return [

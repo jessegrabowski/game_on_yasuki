@@ -132,4 +132,7 @@ an_ability
 several_abilities
 reacting_to_events
 asking_a_question
+attachments
+battle_cards
+cards_outside_play
 ```
