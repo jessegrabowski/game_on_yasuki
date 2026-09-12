@@ -8,6 +8,7 @@ and desktop client surface that same engine. The dependency direction is one-way
 :maxdepth: 1
 
 engine
+systems/effects
 systems/triggers-and-the-cascade
 systems/stats
 systems/gold
