@@ -31,9 +31,9 @@ ability is not offered where there is nothing to hit.
 The three attacks take a strength, a target and a cause. That makes most attacking abilities one
 line:
 
-```python
-def _legion_of_the_khan_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [RangedAttack(KHAN_RANGED, target.id, source.owner)]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/a_line_in_the_sand.py
+:pyobject: _legion_of_the_khan_effects
+:language: python
 ```
 
 Ranged and Melee destroy what they reach. Fear bows it. The compared stat is Force unless the card
@@ -44,13 +44,9 @@ says otherwise.
 A card that alters attacks registers a handler instead of an ability. Every card in play is asked
 about every attack, so the handler has to state its own reach:
 
-```python
-@attack_strength_against("legion_of_the_khan")
-def _legion_of_the_khan_attack_strength(
-    game: GameState, card: L5RCard, target: L5RCard, attack: AttackEffect
-) -> int:
-    """ "Targeting this Follower" — every kind of attack, but only the ones aimed at her."""
-    return KHAN_ATTACK_PENALTY if target is card else 0
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/a_line_in_the_sand.py
+:pyobject: _legion_of_the_khan_attack_strength
+:language: python
 ```
 
 Compare the two cards for "this Follower". Use {func}`~.shares_unit` for "cards in this unit".

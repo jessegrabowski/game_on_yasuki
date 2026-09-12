@@ -24,9 +24,11 @@ game.pending = payment_request(
 The card stays in hand until the payment is answered, so backing out of the payment leaves it
 there. Resolution stacks the discard before deferring the ability:
 
-```python
-game.stack.append(DiscardPlayed(card_id))
-defer_ability(game, card, ability)
+```{literalinclude} ../../src/yasuki_core/engine/rules/abilities/strategy.py
+:start-at: game.stack.append(DiscardPlayed(card_id))
+:end-at: defer_ability(game, card, ability)
+:dedent: 4
+:language: python
 ```
 
 The stack is last in, first out, so the discard runs *after* the ability, whether the ability hits
@@ -68,19 +70,9 @@ Terrain does too, and is its own case, below.
 There is no per-kind machinery for staying, and none is needed, because the rule asks where the
 card ended up, not what kind it is:
 
-```python
-def discard_played(game: GameState, card_id: str) -> None:
-    """Discard a card whose play has finished, unless it has already left the hand.
-
-    Step F discards the played card "unless it is now in play" (CR, Action Sequence) — a Terrain, a
-    Kata or an Edict reaches the board as the thing its own text does. A card that banished itself has
-    left by another road, and discarding it would drag it back out of the pile it chose, so the
-    test is whether it is still in hand rather than whether it reached the board.
-    """
-    card = game.table.cards_by_id[card_id]
-    if card not in game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards:
-        return
-    triggers.resolve_effects(game, [Discard(card_id, card.owner)])
+```{literalinclude} ../../src/yasuki_core/engine/rules/abilities/strategy.py
+:pyobject: discard_played
+:language: python
 ```
 
 So the handler says one thing and the discard takes care of itself:

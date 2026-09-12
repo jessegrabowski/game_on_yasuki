@@ -14,13 +14,9 @@ and are not the same cost.
 
 {func}`~.bow_cost` is the icon. {func}`~.bow_parent_cost` is the written-out form:
 
-```python
-def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    """Bow the Personality ``source`` is attached to. Unpayable while it is attached to none."""
-    parent = attached_to(game, source)
-    if parent is None:
-        return [Unpayable(f"{source.id} is attached to no Personality")]
-    return [Bow(parent.id)]
+```{literalinclude} ../../src/yasuki_core/engine/rules/abilities/costs.py
+:pyobject: bow_parent_cost
+:language: python
 ```
 
 {card}`Touch of Death` pays with {func}`~.bow_parent_and_destroy`, which bows the Personality and
@@ -36,11 +32,9 @@ destroys the Spell.
 `@attachment_grant` is for a stat the attachment's text hands over. {card}`Haramaki-do` prints +2F
 and reads "This Personality has +1PH", and only the second half is a handler:
 
-```python
-@attachment_grant("haramaki_do")
-def _haramaki_do_attachment_grant(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
-    """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
-    return {Stat.PERSONAL_HONOR: 1}
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/ivory_edition.py
+:pyobject: _haramaki_do_attachment_grant
+:language: python
 ```
 
 A printed number on an attachment already reaches the unit through {func}`~.unit_force`.
@@ -51,12 +45,9 @@ A printed number on an attachment already reaches the unit through {func}`~.unit
 The rulebook's own limits, one Weapon and Two-Handed exclusivity, are already code. A restriction
 that only one card states is registered with that card:
 
-```python
-@attach_restriction("brothers_in_arms")
-def _brothers_in_arms_attach_restriction(
-    game: GameState, personality: L5RCard, card: L5RCard
-) -> bool:
-    return keywords.SAMURAI in effective_keywords(game, personality)
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/the_hidden_city.py
+:pyobject: _brothers_in_arms_attach_restriction
+:language: python
 ```
 
 ## Ancestors

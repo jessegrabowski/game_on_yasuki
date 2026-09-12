@@ -8,18 +8,10 @@ a card says about Followers, Items, Spells or "cards in this unit" is a question
 `TableState.units` maps an attached card's id to its Personality's. The relation is flat, so there
 is no chain to walk, and the rules layer reads it without keeping a copy:
 
-```python
-# The readers below are views over ``TableState.units`` — unit membership, not the presentation
-# stacking in ``TableState.attachments``, which carries no rules meaning and which the rules layer
-# must never read. The substrate owns the relation and keeps its invariants, so nothing here
-# validates or mirrors it. A rules-layer copy would be a desync waiting to happen.
-
-
-def attached_to(game: GameState, card: L5RCard) -> L5RCard | None:
-    personality_id = game.table.units.get(card.id)
-    if personality_id is None:
-        return None
-    return game.table.cards_by_id[personality_id]
+```{literalinclude} ../../../src/yasuki_core/engine/rules/units/membership.py
+:start-at: The readers below are views over
+:end-at: return game.table.cards_by_id[personality_id]
+:language: python
 ```
 
 Every reader is that short, because the relation is the answer. {func}`~.attachments_of` scans it
@@ -36,11 +28,9 @@ attached is a unit of one, so a caller never has to check first.
 
 {func}`~.shares_unit` is what most card text about units needs:
 
-```python
-def shares_unit(game: GameState, card: L5RCard, other: L5RCard) -> bool:
-    """Whether ``card`` and ``other`` stand in the same unit (CR, Unit). A card shares a unit with
-    itself, so a text about "cards in this unit" covers the card it is printed on."""
-    return other in unit_of(game, attached_to(game, card) or card)
+```{literalinclude} ../../../src/yasuki_core/engine/rules/units/membership.py
+:pyobject: shares_unit
+:language: python
 ```
 
 A card shares a unit with itself. "Cards in this unit have -1F" includes the card printing it.
@@ -101,14 +91,10 @@ text of its own.
 A card leaving play takes its attachments with it. An attachment that comes loose by any other route
 is caught by a state-based action:
 
-```python
-def orphaned_attachments(game: GameState) -> list[Effect]:
-    """Discard every attachment in play that is attached to no Personality (CR, Attachments).
-
-    A Follower, Item or Spell exists in play only as part of a unit, so one left on the battlefield
-    without a Personality is not a board state the rules allow. The destruction cascade already takes
-    a unit with its Personality; this catches every other route by which a card comes loose.
-    """
+```{literalinclude} ../../../src/yasuki_core/engine/rules/state_based_actions.py
+:start-at: def orphaned_attachments(game: GameState) -> list[Effect]:
+:end-before: No card is spared this yet. Street to Street will be the first: it detaches every Follower at a
+:language: python
 ```
 
 Writing either of these onto a card duplicates a rule that already fires.

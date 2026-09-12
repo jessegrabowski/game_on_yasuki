@@ -15,11 +15,9 @@ totals the Personality's Force.
 
 The +1PH is written in the text, so it is a grant:
 
-```python
-@attachment_grant("haramaki_do")
-def _haramaki_do_attachment_grant(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
-    """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
-    return {Stat.PERSONAL_HONOR: 1}
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/ivory_edition.py
+:pyobject: _haramaki_do_attachment_grant
+:language: python
 ```
 
 Two bonuses on one card, and only one is code. The docstring says which is which. Copy that habit.

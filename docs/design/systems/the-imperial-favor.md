@@ -31,9 +31,10 @@ A rules function that asks the board who holds the Favor has the direction backw
 
 `rulebook/favor_abilities.py` holds the rulebook's own Favor abilities, registered by key:
 
-```python
-@favor_ability("send_attacker_home", cost=_choose_attacker)
-def _send_attacker_home(game: GameState, seat: PlayerId) -> list[Effect]:
+```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/favor_abilities.py
+:start-at: @favor_ability("send_attacker_home", cost=_choose_attacker)
+:end-at: def _send_attacker_home(game: GameState, seat: PlayerId) -> list[Effect]:
+:language: python
 ```
 
 Which abilities exist at all is arc configuration. {func}`~.available_favor_abilities` intersects
@@ -55,13 +56,10 @@ FAVOR_ABILITY_EFFECTS: dict[str, "FavorAbilityEffects"] = {}
 
 Holding the Favor is one way to pay a Favor cost. It is not the only way:
 
-```python
-def favor_payment_options(game: GameState, seat: PlayerId) -> dict[str, list[Effect]]:
-    """Every way ``seat`` could pay a Favor cost right now, keyed by the option it reads as.
-
-    Good Faith 0.4 lets a Favor action's player control the Favor "or have an alternate effect,
-    substitute, or waiver", so holding it is one payer among several rather than the only one.
-    """
+```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/favor_payment.py
+:start-at: def favor_payment_options(game: GameState, seat: PlayerId) -> dict[str, list[Effect]]:
+:end-before: payers: dict[str, list[Effect]] = {}
+:language: python
 ```
 
 A card that can pay for somebody registers `@favor_payer`, keyed by printed id. Every source that

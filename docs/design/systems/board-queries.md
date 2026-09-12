@@ -11,14 +11,9 @@ by hand is nearly always rewriting one of them.
 
 Two functions find the Province holding a card, and the difference is what they do when none does:
 
-```python
-def province_key_of(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey:
-    """The Province of ``seat`` holding ``card_id``. Raise ValueError when none does -- for callers
-    that already know the card is there and would otherwise carry an impossible None."""
-    key = province_key_holding(game, seat, card_id)
-    if key is None:
-        raise ValueError(f"no province of {seat.name} holds card {card_id}")
-    return key
+```{literalinclude} ../../../src/yasuki_core/engine/rules/board/queries.py
+:pyobject: province_key_of
+:language: python
 ```
 
 {func}`~.province_key_holding` returns None. {func}`~.province_key_of` raises. Reach for the second

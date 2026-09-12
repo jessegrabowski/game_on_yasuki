@@ -30,16 +30,10 @@ not among the options offered.
 
 {card}`Manjodh` prints an Interrupt. He is implemented as a payer, and the handler says why:
 
-```python
-@favor_payer("manjodh")
-def _manjodh_favor_payer(game: GameState, card: L5RCard) -> list[Effect] | None:
-    """ "Political Interrupt, :bow:: If you have no Wind, pay the action's :favor: cost."
-
-    Implemented as a payer priced at bowing rather than as the Interrupt it prints. Costs are paid
-    at step B of the Action Sequence and Interrupts are played at D, so the printed window opens
-    two steps after the cost it names — a contradiction in the card that no correct Interrupt round
-    would resolve. Offering him where every other payer is offered delivers what the card is for.
-    """
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_i.py
+:start-at: @favor_payer("manjodh")
+:end-before: if card.bowed or has_wind(game, card.owner):
+:language: python
 ```
 
 Copy the habit, not the shortcut. The designator was not implementable as printed, the reason is a
@@ -57,9 +51,10 @@ action. `register_may_not_lobby` stops one Personality from being bowed to pay f
 A bar is a function, because the card decides which seats it stops. {card}`Wasp Sensei` is asked
 about each seat in turn:
 
-```python
-@lobby_bar("wasp_sensei")
-def _wasp_sensei_lobby_bar(game: GameState, card: L5RCard, seat: PlayerId) -> bool:
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/spirit_wars.py
+:start-at: @lobby_bar("wasp_sensei")
+:end-at: def _wasp_sensei_lobby_bar(game: GameState, card: L5RCard, seat: PlayerId) -> bool:
+:language: python
 ```
 
 A flag is one line, because the card states the restriction flatly and admits no condition:

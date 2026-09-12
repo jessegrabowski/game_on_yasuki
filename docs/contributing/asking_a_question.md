@@ -31,15 +31,10 @@ something.
 {class}`~.AskAmount` takes the amounts the seat may name. {card}`Hired Killer` asks how much Gold
 to spend, and the answer decides what the card can reach:
 
-```python
-def _hired_killer_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]:
-    if not personalities_in_play(game):
-        return ()
-    return tuple(range(reachable_gold(game, source.owner) + 1))
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/lotus_edition.py
+:pyobject: _hired_killer_amounts
+:language: python
 ```
-
-An empty tuple means the question cannot be asked, and an ability whose cost cannot be paid is
-never offered.
 
 ## A card
 
@@ -51,21 +46,21 @@ never offered.
 {class}`~.Choose` collects ids. {card}`Ichiro Yojimbo` creates a second Follower and lets its
 controller pick who carries it:
 
-```python
-return [Choose(ctx.card.owner, targets, 1, 1, "ichiro_yojimbo", ctx.card.id)]
-
-
-@choice_resolver(
-    "ichiro_yojimbo", prompt="Attach the created Follower to one of your Personalities"
-)
-def _resolve_ichiro_yojimbo(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [CreateToken(MEDIUM_FOLLOWER, seat, source_id, attach_to=chosen[0])]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/code_of_bushido.py
+:pyobject: _ichiro_yojimbo_entered_play
+:language: python
 ```
 
-The two numbers are the minimum and the maximum. The string is the resolver's name, and
-`@choice_resolver` on the function is what makes the two meet.
+The candidates are worked out first, and an empty list ends it there. The two numbers after them
+are the minimum and the maximum. The string names the resolver, which turns the answer into
+effects:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/code_of_bushido.py
+:pyobject: _resolve_ichiro_yojimbo
+:language: python
+```
+
+`@choice_resolver` on that function binds the two.
 
 ## A mode
 
@@ -73,17 +68,9 @@ The two numbers are the minimum and the maximum. The string is the resolver's na
 {card}`Courts of Otosan Uchi` asks two questions in a row, naming a player and then a direction,
 and carries the first answer into the second:
 
-```python
-return [
-    AskOption(
-        seat,
-        (COURTS_GAIN, COURTS_LOSE),
-        f"Does {named} gain or lose {COURTS_HONOR} Honor?",
-        "courts_of_otosan_uchi_swing",
-        source_id,
-        resolver_context=(picked.name,),
-    )
-]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/rise_of_otosan_uchi.py
+:pyobject: _resolve_courts_of_otosan_uchi_player
+:language: python
 ```
 
 `resolver_context` is how a chained question remembers. The second resolver declares it as a
@@ -94,11 +81,9 @@ keyword parameter, and only a resolver whose card supplies one needs to.
 {class}`~.AskDistribution` hands out several things among several recipients.
 {card}`Suiteiru no Oni` deals Oni Followers among a seat's Personalities:
 
-```python
-return [
-    destroy,
-    AskDistribution(source.owner, bearers, podlings, "suiteiru_no_oni", source.id),
-]
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/promotional_diamond.py
+:pyobject: _suiteiru_no_oni_effects
+:language: python
 ```
 
 A recipient named twice gets two.

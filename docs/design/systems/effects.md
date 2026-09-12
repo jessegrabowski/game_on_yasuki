@@ -101,14 +101,10 @@ No card module in the package calls the mutation layer. The flow does, in a hand
 a board change has no effect behind it, and a caller that mutates directly owes the board the same
 settling the cascade would have done:
 
-```python
-def enforce_state_based_actions(game: GameState) -> None:
-    """Satisfy the state-based rules against the board as it stands, resolving what that raises.
-
-    For the board changes the cascade does not make — a card placed on the battlefield by ``flow``,
-    a modifier expiring at a turn boundary. The walk enforces the rules after each effect it
-    commits; this is how a caller that mutated the board directly gets the same guarantee.
-    """
+```{literalinclude} ../../../src/yasuki_core/engine/rules/triggers.py
+:start-at: def enforce_state_based_actions(game: GameState) -> None:
+:end-before: queue: list[GameEvent] = []
+:language: python
 ```
 
 This is a convention, and nothing enforces it. `turn/sequence.py`, `rulebook/recruit.py` and
