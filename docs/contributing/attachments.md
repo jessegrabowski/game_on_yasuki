@@ -1,10 +1,5 @@
 # Cards that attach
 
-```{card-image} Haramaki-do
-:printing: ivory_edition
-:width: 220px
-```
-
 A Follower, Item or Spell is written the same way as anything else. What sets one apart is that it
 acts through the Personality carrying it, and that the rules already handle most of what that
 implies. [Units and attachments](../design/systems/units-and-attachments.md) is the system behind
@@ -32,6 +27,11 @@ def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
 destroys the Spell.
 
 ## Giving the Personality a stat
+
+```{card-image} Haramaki-do
+:printing: ivory_edition
+:width: 220px
+```
 
 `@attachment_grant` is for a stat the attachment's text hands over. {card}`Haramaki-do` prints +2F
 and reads "This Personality has +1PH", and only the second half is a handler:

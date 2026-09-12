@@ -1,10 +1,5 @@
 # Asking the player a question
 
-```{card-image} Ichiro Yojimbo
-:printing: code_of_bushido
-:width: 220px
-```
-
 A card that says "choose" or "may" needs an answer before it can finish. The card returns an effect
 that asks, the engine pauses and puts the question to the seat, and a resolver you register turns
 the answer into more effects.
@@ -47,6 +42,11 @@ An empty tuple means the question cannot be asked, and an ability whose cost can
 never offered.
 
 ## A card
+
+```{card-image} Ichiro Yojimbo
+:printing: code_of_bushido
+:width: 220px
+```
 
 {class}`~.Choose` collects ids. {card}`Ichiro Yojimbo` creates a second Follower and lets its
 controller pick who carries it:
