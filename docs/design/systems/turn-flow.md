@@ -35,9 +35,7 @@ reports whether it opened at all.
 - `RESPONSE` belongs to the Response Step over another action
 - `INTERRUPT` belongs to nothing
 
-`INTERRUPT` is declared and no round grants it, so an ability carrying it is never offered. The
-limits list in [Adding a Card](../../contributing/adding_a_card.md) is where that claim lives, and
-it is the one to update if a round ever grants it.
+`INTERRUPT` is declared and no round grants it, so an ability carrying it is never offered.
 
 ## Where a card plugs in
 

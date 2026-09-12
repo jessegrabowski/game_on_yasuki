@@ -5,8 +5,8 @@
 :width: 220px
 ```
 
-Most cards that touch the Imperial Favor are one registration. This page is the three registries
-and the card that explains why a printed timing is sometimes not the one to implement.
+Most cards that touch the Imperial Favor are one registration. This page is those registries and
+the card that explains why a printed timing is sometimes not the one to implement.
 [The Imperial Favor](../design/systems/the-imperial-favor.md) is the system.
 
 ## Paying somebody's Favor cost
@@ -48,7 +48,7 @@ from the printed text without saying why is indistinguishable from one that got 
 
 ## Lobby
 
-Lobby shares the Favor's payment machinery and is a separate rule. Three registries cover almost
+Lobby shares the Favor's payment machinery and is a separate rule. A few registries cover almost
 every card that touches it.
 
 The two that look alike stop different things. `@lobby_bar` stops a whole player from taking the

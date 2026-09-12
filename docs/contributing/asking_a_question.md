@@ -109,8 +109,10 @@ A recipient named twice gets two.
 answered with, and a question with none of them is not a question. Both Hired Killer and Ichiro
 Yojimbo check first and return the rest of their effects, or no effects at all.
 
-**Register a prompt.** Without one the seat is asked "Choose 1 card", which says nothing about
-what the card is doing. Pass `prompt=` to `@choice_resolver`, as Ichiro Yojimbo does.
+**Register a prompt, and keep counts out of it.** Without one the seat is asked "Choose 1 card",
+which says nothing about what the card is doing. Pass `prompt=` to `@choice_resolver`, as Ichiro
+Yojimbo does. Leave the numbers to the client, which draws its own count and ticks it down as
+the seat picks, because the same choice can offer one target or two.
 
 ## Where the rest lives
 

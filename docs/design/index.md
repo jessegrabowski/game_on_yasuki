@@ -21,6 +21,10 @@ systems/the-replay-log
 systems/units-and-attachments
 systems/battle
 systems/the-imperial-favor
+systems/board-queries
+systems/game-state
+systems/registration-and-the-audit
+systems/bots-and-policies
 package_boundaries
 card_vocabulary
 database

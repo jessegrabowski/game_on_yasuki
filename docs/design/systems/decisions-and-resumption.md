@@ -20,10 +20,11 @@ def accepts(self, response: DecisionResponse) -> bool:
     against the game state; the rules layer makes that check separately."""
 ```
 
-Nineteen requests exist, and {meth}`~.DecisionRequest.accepts` is the line worth reading twice. It
-checks shape, not legality. A response naming a card outside `candidates` is malformed and refused
-here. A response naming a card that is in `candidates` but has since become an illegal target is
-well formed, and the rules layer is what turns it down.
+The concrete requests form a closed union that grows with the rules vocabulary.
+{meth}`~.DecisionRequest.accepts` is the line to read twice, because it checks shape and not
+legality. A response naming a card outside `candidates` is malformed and refused here. A response
+naming a card that is in `candidates` but has since become an illegal target is well formed, and
+the rules layer is what turns it down.
 
 The engine puts the request on `GameState.pending` and returns. Nothing polls, and nothing blocks.
 
@@ -49,8 +50,8 @@ fired, the event being answered, and the events still queued. {func}`~.resume_ca
 answer's effects in where the paused one stood, ahead of all of that, and drops any trigger whose
 card has left play in the meantime.
 
-The twelve work items in {mod}`~yasuki_core.engine.rules.vocabulary.work` are the other things
-that wait the same way, mostly the middle of an action whose cost raised a question.
+The work items in {mod}`~yasuki_core.engine.rules.vocabulary.work` are the other things that wait
+the same way, mostly the middle of an action whose cost raised a question.
 [Action lifecycles](action-lifecycles.md) covers those.
 
 ## Why a resolver is a string

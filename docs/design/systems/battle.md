@@ -34,8 +34,8 @@ REMOTE
 ```
 
 `ABSENT` is the only one any implemented card carries. {card}`Refugees`, {card}`Man the Walls!`
-and {card}`Outer Walls` are the cards that do. `HOME` and `REMOTE` are declared and nothing
-exercises them, so their implemented behavior rests on no card.
+and {card}`Outer Walls` are the cards that do. `HOME` and `REMOTE` are declared and no card carries
+either, so their behavior rests on nothing a test exercises.
 
 `targets_any_location` sits beside them and does a different job: it lifts the Rules of Location
 off what an ability may be pointed at, without lifting them off the card the ability is taken from.

@@ -1,7 +1,8 @@
 # The Imperial Favor
 
 The Favor is a thing one seat holds. It is not a card, though a card may stand in for it, and the
-abilities it grants sit on the player. Four modules carry it, and each holds a different rule.
+abilities it grants sit on the player. It is split across several modules, and the split follows
+the rules rather than the history.
 
 ## Who holds it
 
@@ -74,7 +75,7 @@ the action in progress as a Favor action, which is what {class}`~.PayFavorCost` 
 `rulebook/lobby.py` is a separate module because Lobby is a separate rule. It shares the payment
 machinery and nothing else.
 
-Three registries hang off it, and they answer different questions. `@lobby_bonus_grant` adds to
+The registries hanging off it answer different questions. `@lobby_bonus_grant` adds to
 what a seat's Lobby is worth. `@lobby_bar` is a predicate saying a seat may not Lobby at all.
 `register_may_not_lobby` is a flag taking a card out of the Lobby pool. A card that changes Lobby
 is almost always one line in one of the three.

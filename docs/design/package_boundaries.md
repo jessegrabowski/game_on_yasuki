@@ -42,7 +42,7 @@ Three packages could be spun out without untangling anything first.
 `sim/` is the Monte Carlo harness, 601 lines. It imports the engine and the bots, and no shipped
 module imports it. It is the clearest candidate.
 
-`accounts/` is 1,233 lines across 11 modules with its own connection pool and its own database. No
+`accounts/` is a package of its own size with its own connection pool and its own database. No
 module in it imports `engine/` or `game_pieces/`, and no GUI module imports it.
 
 `bots/` is 1,313 lines and has six importers, all of which take `Agent`, `Policy` or `Controls`.
