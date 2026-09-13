@@ -3,7 +3,7 @@ import sys
 
 from collections.abc import Callable
 from pathlib import Path
-from typing import TextIO
+from typing import NamedTuple, TextIO
 
 from yasuki_skills import bundle
 from yasuki_skills.agents_file import agents_block, update_instructions
@@ -65,11 +65,19 @@ def chosen(names: list[str]) -> list[Harness]:
     return [harness for harness in HARNESSES if harness.name in wanted]
 
 
-def parse_selection(answer: str) -> list[str]:
+class Selection(NamedTuple):
+    """What a reply to the prompt asked for, and what of it went unrecognized."""
+
+    names: list[str]
+    unknown: list[str]
+
+
+def parse_selection(answer: str) -> Selection:
     """Read a reply to the prompt as harness names.
 
     Accepts names, the numbers shown beside them, "all", or any mix, separated by spaces or
-    commas. An unrecognized token yields no names at all rather than a partial install.
+    commas. A reply holding anything unrecognized selects nothing at all, so a typo asks again
+    instead of installing half of what was meant.
 
     Parameters
     ----------
@@ -80,25 +88,27 @@ def parse_selection(answer: str) -> list[str]:
     -------
     names : list of str
         The harnesses chosen, empty when the reply was empty or held anything unrecognized.
+    unknown : list of str
+        The tokens that named no harness, in the order they were typed.
     """
     tokens = [token for token in answer.replace(",", " ").split() if token]
 
     if not tokens:
-        return []
+        return Selection([], [])
 
     if any(token.lower() == "all" for token in tokens):
-        return [harness.name for harness in HARNESSES]
+        return Selection([harness.name for harness in HARNESSES], [])
 
-    names = []
+    names, unknown = [], []
     for token in tokens:
         if token.isdigit() and 1 <= int(token) <= len(HARNESSES):
             names.append(HARNESSES[int(token) - 1].name)
         elif token.lower() in BY_NAME:
             names.append(token.lower())
         else:
-            return []
+            unknown.append(token)
 
-    return names
+    return Selection([] if unknown else names, unknown)
 
 
 def ask(out: TextIO | None = None, read: Callable[[str], str] = input) -> list[str]:
@@ -123,9 +133,15 @@ def ask(out: TextIO | None = None, read: Callable[[str], str] = input) -> list[s
     print('\nNumbers or names, separated by spaces, or "all".', file=out)
 
     try:
-        return parse_selection(read("Install for: "))
-    except EOFError:
+        selection = parse_selection(read("Install for: "))
+    except (EOFError, KeyboardInterrupt):
+        print(file=out)
         return []
+
+    if selection.unknown:
+        print(f"Not an agent: {', '.join(selection.unknown)}", file=out)
+
+    return selection.names
 
 
 def install(root: Path, skills: list[Path], harnesses: list[Harness], *, force: bool) -> list[str]:

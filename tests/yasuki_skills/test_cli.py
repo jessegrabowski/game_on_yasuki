@@ -11,22 +11,51 @@ def test_listing_the_skills_exits_zero(capsys):
 
 
 def test_the_prompt_accepts_names():
-    assert parse_selection("claude pi") == ["claude", "pi"]
+    assert parse_selection("claude pi").names == ["claude", "pi"]
 
 
 def test_the_prompt_accepts_the_numbers_it_shows():
-    assert parse_selection("1, 2") == [HARNESSES[0].name, HARNESSES[1].name]
+    assert parse_selection("1, 2").names == [HARNESSES[0].name, HARNESSES[1].name]
 
 
 def test_the_prompt_accepts_all():
-    assert parse_selection("all") == [h.name for h in HARNESSES]
+    assert parse_selection("all").names == [h.name for h in HARNESSES]
 
 
 def test_an_unrecognized_answer_selects_nothing():
     """A partial install from a typo is worse than asking again."""
-    assert parse_selection("claude, emacs") == []
-    assert parse_selection("") == []
-    assert parse_selection("99") == []
+    selection = parse_selection("claude, emacs")
+
+    assert selection.names == []
+    assert selection.unknown == ["emacs"]
+
+
+def test_an_empty_answer_selects_nothing_and_complains_about_nothing():
+    assert parse_selection("") == ([], [])
+
+
+def test_a_number_outside_the_listing_is_unrecognized():
+    assert parse_selection("99").unknown == ["99"]
+
+
+def test_the_prompt_names_what_it_did_not_recognize(capsys):
+    names = ask(read=lambda _: "claude, emacs")
+
+    assert names == []
+    assert "emacs" in capsys.readouterr().out
+
+
+def test_interrupting_the_prompt_installs_nothing(capsys):
+    """Ctrl-C and Ctrl-D at the prompt leave without a traceback."""
+
+    def interrupt(_):
+        raise KeyboardInterrupt
+
+    def end_of_file(_):
+        raise EOFError
+
+    assert ask(read=interrupt) == []
+    assert ask(read=end_of_file) == []
 
 
 def test_the_prompt_lists_every_harness_with_its_directory(capsys):
