@@ -15,6 +15,9 @@ New to the codebase? Start with [Setup](../getting_started/setup.md), then read
 
 Implementing a card is its own workflow: see [Adding a Card](adding_a_card.md).
 
+Working with a coding agent? This project ships skills that orient one: see
+[Agent skills](agent_skills.md).
+
 ## Running tests
 
 ```bash
@@ -137,4 +140,5 @@ battle_cards
 cards_outside_play
 the_favor_and_the_court
 creating_cards
+agent_skills
 ```
