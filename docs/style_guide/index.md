@@ -1,7 +1,8 @@
 # Style guide
 
 Conventions for contributing code to Game on, Yasuki! The authoritative, always-current source is
-`.github/copilot-instructions.md` and the project's `CLAUDE.md`. This page collects the essentials.
+`AGENTS.md` at the repository root, which is what a coding agent reads. This page collects the
+essentials for a human reader.
 
 ```{note}
 This page is an outline. The full write-up is still being written; the bullets below are the intended
