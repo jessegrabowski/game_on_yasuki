@@ -150,7 +150,11 @@ play = "python play.py"
 # -n auto spreads the suite over the machine's cores; loadfile keeps one file's tests in one
 # worker, which matters because several register probes into module-global registries and clean up
 # after themselves.
-test = "pytest tests/ --ignore=tests/e2e -p no:playwright -n auto --dist loadfile"
+# The skills package and its hooks are excluded: they do not move while the engine or the apps
+# do, and as a separate xdist worker they crowd the database tests. Run them with test-skills.
+test = "pytest tests/ --ignore=tests/e2e --ignore=tests/yasuki_skills --ignore=tests/hooks -p no:playwright -n auto --dist loadfile"
+# Fast enough serially that a worker pool costs more than it saves.
+test-skills = "pytest tests/yasuki_skills tests/hooks -p no:playwright"
 test-js = "node --test tests/yasuki_web/deck_builder/*.test.js tests/yasuki_web/site/*.test.js"
 test-e2e = "pytest tests/e2e"
 e2e-setup = "playwright install chromium"

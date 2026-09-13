@@ -123,5 +123,8 @@ the page first; that is what keeps the skills short.
 Name real files. Every path and module name in a `SKILL.md` and in `AGENTS.md`, the frontmatter
 included, is checked by a pre-commit hook, so a renamed module fails the commit that renamed it.
 
+Run `pixi run test-skills` after changing anything here. The skills package is excluded from
+`pixi run test`, because it does not move while the engine does.
+
 Say what the skill is not. Each description names its neighbors and the boundary with them, so an
 agent choosing between two of them chooses correctly.

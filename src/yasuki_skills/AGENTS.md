@@ -41,7 +41,8 @@ check catches a name that no longer resolves, but not prose that has quietly sto
 ```bash
 pixi run play          # Tkinter desktop client
 pixi run api           # FastAPI server (port 8000, override with $PORT; api-dev also loads .env)
-pixi run test          # Python unit tests (excludes tests/e2e)
+pixi run test          # Python unit tests (excludes tests/e2e and the skills package)
+pixi run test-skills   # the agent-skills package and its hooks
 pixi run test-js       # JS deck-builder tests
 pixi run install-db    # seed the card DB (add --force to reload after YAML edits)
 pixi run docs-build    # build the Sphinx docs (docs-api regenerates API pages, docs-serve serves)
