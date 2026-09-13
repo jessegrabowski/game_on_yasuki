@@ -28,6 +28,9 @@ all = ["game-on-yasuki[web]"]
 [project.urls]
 Homepage = "https://github.com/jessegrabowski/game-on-yasuki"
 
+[project.scripts]
+yasuki-install-skills = "yasuki_skills.cli:main"
+
 [tool.hatch.version]
 source = "vcs"
 fallback-version = "0.0.0+unknown"
@@ -147,6 +150,7 @@ install-db = "python -m yasuki_core.install.install_db"
 ensure-ro-role = "python -m yasuki_core.install.install_db --ensure-readonly-role"
 format-metadata = "python -m yasuki_core.install.install_db --format-metadata"
 card-index = "python -m yasuki_core.install.card_index"
+install-skills = "python -m yasuki_skills.cli"
 card-coverage = "python -m yasuki_core.install.coverage_report"
 sim = "python -m yasuki_core.sim.cli"
 sync-images = "python scripts/sync_images.py"
