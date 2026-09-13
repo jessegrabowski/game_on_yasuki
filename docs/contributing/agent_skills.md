@@ -5,9 +5,9 @@ orientation notes, one per kind of task, that tell an agent where the code for t
 which pages of this site explain it.
 
 They exist because an agent that has not been told where to look will reverse engineer the codebase
-from whatever file it landed in, and get the same three things wrong every time -- that a card's id
-is derived rather than written, that the committed YAML rather than the database is the source of
-truth, and that the engine's game pieces change only through their transition methods.
+from whatever file it landed in, and get the same three things wrong every time. It assumes a card's
+id is written down somewhere, that the database is the source of truth, and that game pieces can be
+assigned to.
 
 A skill is orientation, not teaching. It says which area you are in and where its code is. The pages
 on this site explain the thing itself, and travel with the skill so that an agent working offline,
@@ -21,10 +21,10 @@ yasuki-install-skills            # in a project that installed the package
 ```
 
 It installs into the current directory. Skills follow the [Agent Skills](https://agentskills.io)
-standard -- a directory holding a `SKILL.md` with `name` and `description` frontmatter -- so one
-copy serves every agent that implements it, and the only difference between agents is which
-directory they read. All of them are written, because a contributor should not have to know which
-of these their tool wants:
+standard: a directory holding a `SKILL.md` with `name` and `description` frontmatter. One copy
+serves every agent that implements it, and the only difference between agents is which directory
+they read. All of them are written, so that a contributor does not have to know which of these their
+tool wants:
 
 | Directory | Read by |
 |---|---|
@@ -50,7 +50,7 @@ Eight skills, named for the work rather than for the source directory it happens
 | Skill | Use it when you are |
 |---|---|
 | `implementing-a-card` | Modeling a printed card: picking a hook, writing the handler, registering it |
-| `card-vocabulary` | Working with what a card can express -- effects, triggers, abilities, costs, stats, gold -- or adding to it |
+| `card-vocabulary` | Working with what a card can express (effects, triggers, abilities, costs, stats, gold), or adding to it |
 | `turns-and-actions` | Changing how a turn proceeds: phases, actions, legality, decisions, the replay log |
 | `card-data` | Adding a set, correcting a card, issuing an erratum, adding card art |
 | `card-search` | Changing the query language or what it compiles to |
@@ -86,7 +86,7 @@ implementing-a-card/
 
 That is the [Agent Skills](https://agentskills.io) layout: a directory named for the skill, a
 `SKILL.md` carrying `name` and `description`, and `references/` for material the agent loads only
-when it needs it. `references.txt` is ours -- the manifest the installer reads.
+when it needs it. `references.txt` is ours: the manifest the installer reads.
 
 `SKILL.md` carries YAML frontmatter with a `name` and a `description`, then a body of four short
 sections: where the code lives, what it does, what checks it, and how it fits the rest of the
@@ -109,14 +109,16 @@ whose target has moved fails the install rather than shipping a page with a hole
 
 ## Writing or changing one
 
-Skills live in `src/yasuki_skills/skills/`. Edit them there, never in an installed copy -- an
+Skills live in `src/yasuki_skills/skills/`. Edit them there, never in an installed copy. An
 installed skill is generated output, and a check will tell you when one has been edited by hand.
 
 Three rules carry most of the weight:
 
-- **Point at a page rather than summarizing it.** If the explanation does not exist on this site
-  yet, write the page first. That is the whole reason the skills stay short.
-- **Name real files.** Every path and module name in a `SKILL.md`, the frontmatter included, is
-  checked by a pre-commit hook. A renamed module fails the commit that renamed it.
-- **Say what the skill is not.** Each description names its neighbors and the boundary with them, so
-  an agent picking between two of them picks correctly.
+Point at a page instead of summarizing it. If the explanation does not exist on this site yet, write
+the page first; that is what keeps the skills short.
+
+Name real files. Every path and module name in a `SKILL.md`, the frontmatter included, is checked by
+a pre-commit hook, so a renamed module fails the commit that renamed it.
+
+Say what the skill is not. Each description names its neighbors and the boundary with them, so an
+agent choosing between two of them chooses correctly.

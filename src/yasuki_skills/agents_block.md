@@ -6,8 +6,8 @@ Card data is file-first. The committed YAML under `yasuki_core/assets/database/`
 truth and PostgreSQL is a derived cache, so a card is corrected in the YAML and reloaded with
 `install-db --force`. Never edit the database to fix a card.
 
-A card's id is derived from its printed title rather than written down anywhere you can edit. A
-handler keyed on a misspelled id registers happily, never fires, and raises nothing.
+A card's id is derived from its printed title, and is written down nowhere you can edit. A handler
+keyed on a misspelled id registers happily, never fires, and raises nothing.
 
 Game pieces are frozen dataclasses. They change through their transition methods, never by
 assignment.
