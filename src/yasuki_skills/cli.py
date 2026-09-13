@@ -1,7 +1,9 @@
 import argparse
 import sys
 
+from collections.abc import Callable
 from pathlib import Path
+from typing import TextIO
 
 from yasuki_skills import bundle
 from yasuki_skills.agents_file import agents_block, update_instructions
@@ -9,18 +11,23 @@ from yasuki_skills.harnesses import BY_NAME, HARNESSES, Harness
 from yasuki_skills.install import install_all, link_instructions
 
 
+def _row(harness: Harness, number: int | None = None) -> str:
+    """Format one harness as a line of the help text or of the prompt."""
+    lead = f"  {number}  " if number is not None else "  "
+
+    return f"{lead}{harness.name:9} {harness.directory:18} {harness.reads}"
+
+
 def _build_parser() -> argparse.ArgumentParser:
-    reads = "\n".join(
-        f"  {harness.name:9} {harness.directory:18} {harness.reads}" for harness in HARNESSES
-    )
+    reads = "\n".join(_row(harness) for harness in HARNESSES)
 
     parser = argparse.ArgumentParser(
         prog="yasuki-install-skills",
         description=(
             "Install the game-on-yasuki agent skills into the current project. Skills follow the "
             "Agent Skills standard, so one copy serves every agent that implements it; the only "
-            "difference between agents is which directory they read, and every one of them is "
-            "written unless you narrow it with --harness.\n\n" + reads
+            "difference between agents is which directory they read. Pass --harness to choose, or "
+            "run with no arguments to be asked.\n\n" + reads
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -30,7 +37,7 @@ def _build_parser() -> argparse.ArgumentParser:
         action="append",
         choices=sorted(BY_NAME),
         metavar="NAME",
-        help="Write only this agent's directory. Repeatable. Default: all of them.",
+        help="Write this agent's directory. Repeatable. Omit to be asked.",
     )
     parser.add_argument(
         "--force", action="store_true", help="Replace a skill that is already installed."
@@ -40,25 +47,85 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def chosen(names: list[str] | None) -> list[Harness]:
-    """Return the harnesses to install for, in declaration order.
+def chosen(names: list[str]) -> list[Harness]:
+    """Return the named harnesses, in declaration order and without repeats.
 
     Parameters
     ----------
-    names : list of str or None
-        Names passed with ``--harness``, or None for every harness.
+    names : list of str
+        Harness names, as ``--harness`` or the prompt accepts them.
 
     Returns
     -------
     harnesses : list of Harness
-        Those asked for, without repeats.
+        Those asked for.
     """
-    if not names:
-        return list(HARNESSES)
-
     wanted = set(names)
 
     return [harness for harness in HARNESSES if harness.name in wanted]
+
+
+def parse_selection(answer: str) -> list[str]:
+    """Read a reply to the prompt as harness names.
+
+    Accepts names, the numbers shown beside them, "all", or any mix, separated by spaces or
+    commas. An unrecognized token yields no names at all rather than a partial install.
+
+    Parameters
+    ----------
+    answer : str
+        What the user typed.
+
+    Returns
+    -------
+    names : list of str
+        The harnesses chosen, empty when the reply was empty or held anything unrecognized.
+    """
+    tokens = [token for token in answer.replace(",", " ").split() if token]
+
+    if not tokens:
+        return []
+
+    if any(token.lower() == "all" for token in tokens):
+        return [harness.name for harness in HARNESSES]
+
+    names = []
+    for token in tokens:
+        if token.isdigit() and 1 <= int(token) <= len(HARNESSES):
+            names.append(HARNESSES[int(token) - 1].name)
+        elif token.lower() in BY_NAME:
+            names.append(token.lower())
+        else:
+            return []
+
+    return names
+
+
+def ask(out: TextIO | None = None, read: Callable[[str], str] = input) -> list[str]:
+    """Ask which agents should read the skills, and return the names chosen.
+
+    Parameters
+    ----------
+    out : file object or None, optional
+        Where the listing is printed. Default None, meaning ``sys.stdout``.
+    read : callable, optional
+        How the reply is read. Default :func:`input`.
+
+    Returns
+    -------
+    names : list of str
+        The harnesses chosen, empty when the reply was empty or unrecognized.
+    """
+    out = sys.stdout if out is None else out
+    print("\nWhich agents should read these skills?\n", file=out)
+    for number, harness in enumerate(HARNESSES, 1):
+        print(_row(harness, number), file=out)
+    print('\nNumbers or names, separated by spaces, or "all".', file=out)
+
+    try:
+        return parse_selection(read("Install for: "))
+    except EOFError:
+        return []
 
 
 def install(root: Path, skills: list[Path], harnesses: list[Harness], *, force: bool) -> list[str]:
@@ -123,7 +190,20 @@ def main(argv: list[str] | None = None) -> int:
             print(skill.name)
         return 0
 
-    for line in install(Path.cwd(), skills, chosen(args.harness), force=args.force):
+    interactive = sys.stdin.isatty()
+    names = args.harness or (ask() if interactive else [])
+
+    if not names:
+        print(
+            "Nothing installed."
+            if interactive
+            else "Nothing installed: pass --harness NAME (repeatable) to say which agent's "
+            "directory to write. Run with a terminal attached to be asked instead.",
+            file=sys.stderr,
+        )
+        return 1
+
+    for line in install(Path.cwd(), skills, chosen(names), force=args.force):
         print(line)
 
     return 0

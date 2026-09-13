@@ -16,32 +16,35 @@ or in a project that merely installed this package, can read them.
 ## Installing them
 
 ```bash
-pixi run install-skills          # in a checkout of this repository
-yasuki-install-skills            # in a project that installed the package
+pixi run install-skills                        # asks which agents to install for
+yasuki-install-skills --harness claude         # or name them outright, repeatable
 ```
 
-It installs into the current directory. Skills follow the [Agent Skills](https://agentskills.io)
-standard: a directory holding a `SKILL.md` with `name` and `description` frontmatter. One copy
-serves every agent that implements it, and the only difference between agents is which directory
-they read. All of them are written, so that a contributor does not have to know which of these their
-tool wants:
+It installs into the current directory, and only for the agents you choose. Run it with a terminal
+attached and it lists the options and waits; run it in a script or CI without `--harness` and it
+installs nothing and says so, rather than guessing.
 
-| Directory | Read by |
-|---|---|
-| `.agents/skills/` | GitHub Copilot, Cursor, opencode, pi |
-| `.claude/skills/` | Claude Code, and also read by Copilot and opencode |
-| `.github/skills/` | GitHub Copilot |
-| `.cursor/skills/` | Cursor |
-| `.opencode/skills/` | opencode |
-| `.pi/skills/` | pi |
+Skills follow the [Agent Skills](https://agentskills.io) standard: a directory holding a `SKILL.md`
+with `name` and `description` frontmatter. One copy serves every agent that implements it, and the
+only difference between agents is which directory they read:
 
-`--harness NAME` narrows it to one, repeatably, if you would rather keep your tree to the directory
-your own agent reads.
+| `--harness` | Directory | Read by |
+|---|---|---|
+| `agents` | `.agents/skills/` | GitHub Copilot, Cursor, opencode, pi |
+| `claude` | `.claude/skills/` | Claude Code, and also read by Copilot and opencode |
+| `copilot` | `.github/skills/` | GitHub Copilot |
+| `cursor` | `.cursor/skills/` | Cursor |
+| `opencode` | `.opencode/skills/` | opencode |
+| `pi` | `.pi/skills/` | pi |
 
-A project also gets a short delimited block appended to its `AGENTS.md`. The installer owns what
-lies between the markers and nothing else in the file, and a file carrying one marker without the
-other is left alone. Nothing the installer did not create is ever replaced: an already-installed
-skill is skipped unless you pass `--force`, which is how a local edit survives.
+Installing for every agent is possible (answer `all`) and usually a mistake: each directory is a
+copy that can go stale on its own, and an agent that reads two of them loads the same skill twice.
+Pick the one your tool reads.
+
+A project install also appends a short delimited block to `AGENTS.md`. The installer owns what lies
+between the markers and nothing else in the file, and a file carrying one marker without the other
+is left alone. Nothing the installer did not create is ever replaced: an already-installed skill is
+skipped unless you pass `--force`, which is how a local edit survives.
 
 ## The roster
 

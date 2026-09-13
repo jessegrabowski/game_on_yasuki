@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from yasuki_skills.agents_file import BLOCK_START
-from yasuki_skills.cli import chosen, install, main
+from yasuki_skills.cli import ask, chosen, install, main, parse_selection
 from yasuki_skills.harnesses import HARNESSES
 
 
@@ -10,8 +10,33 @@ def test_listing_the_skills_exits_zero(capsys):
     assert "implementing-a-card" in capsys.readouterr().out
 
 
-def test_no_flag_means_every_harness():
-    assert chosen(None) == list(HARNESSES)
+def test_the_prompt_accepts_names():
+    assert parse_selection("claude pi") == ["claude", "pi"]
+
+
+def test_the_prompt_accepts_the_numbers_it_shows():
+    assert parse_selection("1, 2") == [HARNESSES[0].name, HARNESSES[1].name]
+
+
+def test_the_prompt_accepts_all():
+    assert parse_selection("all") == [h.name for h in HARNESSES]
+
+
+def test_an_unrecognized_answer_selects_nothing():
+    """A partial install from a typo is worse than asking again."""
+    assert parse_selection("claude, emacs") == []
+    assert parse_selection("") == []
+    assert parse_selection("99") == []
+
+
+def test_the_prompt_lists_every_harness_with_its_directory(capsys):
+    names = ask(read=lambda _: "claude")
+
+    listing = capsys.readouterr().out
+    assert names == ["claude"]
+    for harness in HARNESSES:
+        assert harness.name in listing
+        assert harness.directory in listing
 
 
 def test_naming_harnesses_narrows_it_in_declaration_order():
@@ -19,7 +44,7 @@ def test_naming_harnesses_narrows_it_in_declaration_order():
 
 
 def test_a_project_gets_every_directory_and_an_owned_block(tmp_path: Path, skill: Path):
-    install(tmp_path, [skill], chosen(None), force=False)
+    install(tmp_path, [skill], chosen([h.name for h in HARNESSES]), force=False)
 
     for harness in HARNESSES:
         assert (tmp_path / harness.directory / skill.name / "SKILL.md").is_file()
