@@ -36,7 +36,7 @@ fallback-version = "0.0.0+unknown"
 version-file = "src/yasuki_core/_version.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/yasuki_core", "src/yasuki_web", "src/yasuki_gui"]
+packages = ["src/yasuki_core", "src/yasuki_web", "src/yasuki_gui", "src/yasuki_skills"]
 
 [tool.hatch.build.targets.sdist]
 include = ["src", "README.md", "tests", "pyproject.toml"]
