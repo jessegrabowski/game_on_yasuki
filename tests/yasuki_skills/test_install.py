@@ -1,6 +1,14 @@
 from pathlib import Path
 
-from yasuki_skills.install import install_all, install_skill, link_instructions
+import pytest
+
+from yasuki_skills.install import (
+    install_all,
+    install_skill,
+    link_instructions,
+    manifested_pages,
+)
+from yasuki_skills.materialize import MaterializeError
 
 
 def test_a_skill_is_copied_into_place(tmp_path: Path, skill: Path):
@@ -131,3 +139,42 @@ def test_a_broken_symlink_is_left_alone_without_force(tmp_path: Path, skill: Pat
 
     assert target.is_symlink()
     assert report.startswith("skip")
+
+
+def test_a_skill_carries_the_pages_its_manifest_names(tmp_path: Path, skill: Path):
+    docs = tmp_path / "docs" / "contributing"
+    docs.mkdir(parents=True)
+    (docs / "adding_a_card.md").write_text("How to add a card.\n", encoding="utf-8")
+    (skill / "references.txt").write_text("docs/contributing/adding_a_card.md\n", encoding="utf-8")
+
+    reports = install_all([skill], tmp_path / "skills", docs_root=tmp_path / "docs")
+    page = tmp_path / "skills" / skill.name / "references" / "contributing" / "adding_a_card.md"
+
+    assert page.read_text(encoding="utf-8") == "How to add a card.\n"
+    assert reports[0].endswith("(+1 page)")
+
+
+def test_a_skill_without_a_manifest_carries_nothing(tmp_path: Path, skill: Path):
+    (tmp_path / "docs").mkdir()
+
+    install_all([skill], tmp_path / "skills", docs_root=tmp_path / "docs")
+
+    assert not (tmp_path / "skills" / skill.name / "references").exists()
+
+
+def test_a_manifest_naming_a_page_that_is_gone_fails_the_install(tmp_path: Path, skill: Path):
+    """Shipping the skill without the page it routes to is the failure worth crashing over."""
+    (tmp_path / "docs").mkdir()
+    (skill / "references.txt").write_text("docs/contributing/deleted.md\n", encoding="utf-8")
+
+    with pytest.raises(MaterializeError, match="deleted.md"):
+        install_all([skill], tmp_path / "skills", docs_root=tmp_path / "docs")
+
+
+def test_comments_and_blank_lines_are_not_pages(tmp_path: Path, skill: Path):
+    (skill / "references.txt").write_text(
+        "# the reading order for a first card\n\ndocs/contributing/adding_a_card.md\n",
+        encoding="utf-8",
+    )
+
+    assert manifested_pages(skill) == ["docs/contributing/adding_a_card.md"]

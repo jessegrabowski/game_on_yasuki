@@ -83,9 +83,10 @@ def install(root: Path, skills: list[Path], harnesses: list[Harness], *, force: 
     reports = []
     for harness in harnesses:
         reports.append(f"{harness.name}:")
-        reports += [
-            f"  {line}" for line in install_all(skills, root / harness.directory, force=force)
-        ]
+        installed = install_all(
+            skills, root / harness.directory, force=force, docs_root=bundle.docs_source()
+        )
+        reports += [f"  {line}" for line in installed]
 
     # The checkout the package's source lives in states its own conventions, so it gets the root
     # names linked to them. A block there would describe this project to itself in words written

@@ -5,7 +5,9 @@ from yasuki_skills.bundle import (
     available_skills,
     docs_source,
     is_source_checkout,
+    source_root,
 )
+from yasuki_skills.install import manifested_pages, write_references
 
 
 def test_the_bundled_skills_are_discovered():
@@ -61,3 +63,22 @@ def test_the_documentation_tree_is_found():
 
     assert docs is not None
     assert (docs / "contributing" / "adding_a_card.md").is_file()
+
+
+def test_every_page_every_skill_names_still_renders(tmp_path: Path):
+    """The check that a moved function or a renamed page has not left a hole in a shipped skill.
+
+    It asserts nothing about the prose, so editing a page cannot break it.
+    """
+    docs = docs_source()
+    assert docs is not None
+
+    for skill in available_skills():
+        target = tmp_path / skill.name
+        write_references(skill, target, docs, source_root())
+
+        for page in manifested_pages(skill):
+            rendered = target / "references" / page.removeprefix("docs/")
+
+            assert rendered.is_file()
+            assert "literalinclude" not in rendered.read_text(encoding="utf-8")
