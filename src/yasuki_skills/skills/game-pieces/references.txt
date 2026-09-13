@@ -1,3 +1,0 @@
-docs/contributing/what_a_card_is.md
-docs/design/database.md
-docs/design/engine.md

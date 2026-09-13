@@ -1,5 +1,0 @@
-docs/design/engine.md
-docs/design/package_boundaries.md
-docs/design/systems/gold.md
-docs/design/systems/stats.md
-docs/design/systems/triggers-and-the-cascade.md
