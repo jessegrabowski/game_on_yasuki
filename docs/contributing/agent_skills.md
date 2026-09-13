@@ -13,6 +13,36 @@ A skill is orientation, not teaching. It says which area you are in and where it
 on this site explain the thing itself, and travel with the skill so that an agent working offline,
 or in a project that merely installed this package, can read them.
 
+## Installing them
+
+```bash
+pixi run install-skills          # in a checkout of this repository
+yasuki-install-skills            # in a project that installed the package
+```
+
+It installs into the current directory. Skills follow the [Agent Skills](https://agentskills.io)
+standard -- a directory holding a `SKILL.md` with `name` and `description` frontmatter -- so one
+copy serves every agent that implements it, and the only difference between agents is which
+directory they read. All of them are written, because a contributor should not have to know which
+of these their tool wants:
+
+| Directory | Read by |
+|---|---|
+| `.agents/skills/` | GitHub Copilot, Cursor, opencode, pi |
+| `.claude/skills/` | Claude Code, and also read by Copilot and opencode |
+| `.github/skills/` | GitHub Copilot |
+| `.cursor/skills/` | Cursor |
+| `.opencode/skills/` | opencode |
+| `.pi/skills/` | pi |
+
+`--harness NAME` narrows it to one, repeatably, if you would rather keep your tree to the directory
+your own agent reads.
+
+A project also gets a short delimited block appended to its `AGENTS.md`. The installer owns what
+lies between the markers and nothing else in the file, and a file carrying one marker without the
+other is left alone. Nothing the installer did not create is ever replaced: an already-installed
+skill is skipped unless you pass `--force`, which is how a local edit survives.
+
 ## The roster
 
 Eight skills, named for the work rather than for the source directory it happens in.
@@ -49,10 +79,14 @@ link with a regular file, which git then reports as a typechange.
 
 ```
 implementing-a-card/
-  SKILL.md        # frontmatter, then the router
-  concepts.txt    # the pages this skill carries
-  concepts/       # those pages, written here at install time
+  SKILL.md          # frontmatter, then the router
+  references.txt    # the pages this skill carries
+  references/       # those pages, written here at install time
 ```
+
+That is the [Agent Skills](https://agentskills.io) layout: a directory named for the skill, a
+`SKILL.md` carrying `name` and `description`, and `references/` for material the agent loads only
+when it needs it. `references.txt` is ours -- the manifest the installer reads.
 
 `SKILL.md` carries YAML frontmatter with a `name` and a `description`, then a body of four short
 sections: where the code lives, what it does, what checks it, and how it fits the rest of the
@@ -67,9 +101,9 @@ fine.
 The body stays a router. A skill that restates its pages is a second copy to keep true, and the
 copy is the one that goes stale.
 
-`concepts.txt` lists the pages the skill carries, one repository-relative path per line. The
+`references.txt` lists the pages the skill carries, one repository-relative path per line. The
 installer reads it, resolves each page's `literalinclude` directives against the current source, and
-writes the result into `concepts/`. That is why a skill's code samples are the source's own text
+writes the result into `references/`. That is why a skill's code samples are the source's own text
 rather than a copy of it: they are re-resolved every time the skill is installed, and an include
 whose target has moved fails the install rather than shipping a page with a hole in it.
 
