@@ -26,6 +26,16 @@ shipped GUI). Both front-ends mutate through the same `ops`, and neither ever sh
 `docs/design/package_boundaries.md` states the boundaries. Nothing enforces them, so they are yours
 to hold.
 
+## The skills
+
+This project ships agent skills, one per kind of task, which `yasuki-install-skills` places where
+your agent reads them (see `docs/contributing/agent_skills.md`). Each one names the source paths it
+covers in its own description, so the skill that fits what you are doing should already be in
+context.
+
+After moving or renaming a module, grep `src/yasuki_skills/skills/` for the old path: the pre-commit
+check catches a name that no longer resolves, but not prose that has quietly stopped being true.
+
 ## Commands
 
 ```bash

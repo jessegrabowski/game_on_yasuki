@@ -120,8 +120,8 @@ Three rules carry most of the weight:
 Point at a page instead of summarizing it. If the explanation does not exist on this site yet, write
 the page first; that is what keeps the skills short.
 
-Name real files. Every path and module name in a `SKILL.md`, the frontmatter included, is checked by
-a pre-commit hook, so a renamed module fails the commit that renamed it.
+Name real files. Every path and module name in a `SKILL.md` and in `AGENTS.md`, the frontmatter
+included, is checked by a pre-commit hook, so a renamed module fails the commit that renamed it.
 
 Say what the skill is not. Each description names its neighbors and the boundary with them, so an
 agent choosing between two of them chooses correctly.

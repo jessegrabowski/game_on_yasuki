@@ -62,7 +62,7 @@ repos:
       # naming a module that moved is what stops a skill from firing at all.
       entry: python hooks/skill_paths.py
       language: system
-      files: ^src/yasuki_skills/skills/.*/SKILL\.md$
+      files: ^src/yasuki_skills/(skills/.*/SKILL|AGENTS)\.md$
 
     - id: docs-api
       name: API pages match the source
