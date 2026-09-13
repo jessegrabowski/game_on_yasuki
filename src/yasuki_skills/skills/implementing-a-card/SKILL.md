@@ -40,11 +40,18 @@ Start there; grepping for a registry that looks close is how cards end up on the
 
 A handler never mutates the board. It returns effects, and the trigger machinery commits them.
 
-Two failure modes are worth knowing before you write anything. A handler keyed on a misspelled id
+A number printed on the card belongs in its YAML, and a handler reads it rather than repeating it:
+a gold handler owns the whole amount the card produces, so it adds to `card.gold_production` instead
+of restating it. Where the stat is missing from the data, the fix is the set file, which the
+`card-data` skill covers. A printed number typed into code is a second copy of one the database
+already holds.
+
+Three failure modes are worth knowing before you write anything. A handler keyed on a misspelled id
 registers, never fires, and raises nothing. The `registration-audit` pre-commit hook catches that one
 and names the nearest real id. The second is quieter: every copy of a card in play runs the same
 trigger, so a trigger about "this card" has to compare the event's card id against its own, or all
-three copies act.
+three copies act. The third passes every check in this repository: a printed stat hard-coded into a
+handler produces the right number today and the wrong one after an erratum, and nothing fails.
 
 ## What checks it
 

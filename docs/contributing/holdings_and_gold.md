@@ -9,6 +9,17 @@ something.
 A Holding with a `gold_production` of 2 produces 2. There is no hook to register and no function to
 write. Reach for one only when the printed number is wrong for some situation the card describes.
 
+## When the printed number is missing from the data
+
+Some sets are missing the stat: the card has a number in its Gold Production box and its YAML has no
+`gold_production` key. That is a defect in the card data, and the fix belongs there. Add the stat to
+the set file and reload with `pixi run install-db --force`.
+
+Do not type the number into the handler instead. A handler owns the whole amount the card produces,
+so a printed value written into code is a second copy of a number the database already holds, and
+the two diverge silently the first time the card is errata'd. [The card data](the_card_data.md)
+covers editing a set file.
+
 ## When it depends on what is being bought
 
 {card}`Jade Works` reads *"Bow: Produce 3 Gold. Bow: Produce 5 Gold, which can only pay for a
