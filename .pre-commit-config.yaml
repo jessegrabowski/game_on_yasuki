@@ -55,6 +55,15 @@ repos:
       language: system
       files: ^src/yasuki_core/engine/rules/cards/.*\.py$
 
+    - id: skill-paths
+      name: skills name files that exist
+      # Stdlib only and takes the changed files on argv, in the shape of card_layout.py, so it
+      # runs in CI's pre-commit job. The frontmatter is checked with the body: a description
+      # naming a module that moved is what stops a skill from firing at all.
+      entry: python hooks/skill_paths.py
+      language: system
+      files: ^src/yasuki_skills/skills/.*/SKILL\.md$
+
     - id: docs-api
       name: API pages match the source
       entry: pixi run -e docs docs-api
