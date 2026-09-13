@@ -18,7 +18,7 @@ description: >
 ## Where it lives
 
 - `src/yasuki_core/assets/database/sets/`: one YAML file per set, the source of truth
-- `src/yasuki_core/assets/database/set_info.yaml`, `set_alias.yaml`, `counters.yaml`: set metadata
+- `src/yasuki_core/assets/database/set_info.yaml`, `counters.yaml`: set metadata
 - `src/yasuki_core/assets/database/images/`: one image manifest per printing
 - `src/yasuki_core/assets/database/card_ids.txt`: the generated index of every card id
 - `src/yasuki_core/assets/database/schema.sql`: the PostgreSQL schema
