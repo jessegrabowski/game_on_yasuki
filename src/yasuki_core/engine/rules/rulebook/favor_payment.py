@@ -36,8 +36,8 @@ DISCARD_THE_FAVOR = "Discard the Imperial Favor"
 def favor_payment_options(game: GameState, seat: PlayerId) -> dict[str, list[Effect]]:
     """Every way ``seat`` could pay a Favor cost right now, keyed by the option it reads as.
 
-    Good Faith 0.4 lets a Favor action's player control the Favor "or have an alternate effect,
-    substitute, or waiver", so holding it is one payer among several rather than the only one.
+    Holding the Favor is one payer among several: Good Faith 0.4 lets a Favor action's player
+    control the Favor "or have an alternate effect, substitute, or waiver".
     """
     payers: dict[str, list[Effect]] = {}
     if game.favor_holder is seat:
@@ -55,13 +55,12 @@ def favor_payment_options(game: GameState, seat: PlayerId) -> dict[str, list[Eff
 def favor_cost_for_seat(game: GameState, seat: PlayerId, source_id: str) -> list[Effect]:
     """The Favor cost ``seat`` pays: discard the Favor, or take one of the offers to pay it instead.
 
-    Every source that could pay is offered together, the way the Pay Costs step offers every Gold
-    producer, because that is where the CR settles who pays (CR, Action Sequence step B). With one
-    payer there is nothing to ask, and with none the cost is unpayable and the ability is never
-    offered.
+    Every source that could pay is offered together, settled in the Pay Costs step (CR, Action
+    Sequence step B). With one payer there is nothing to ask, and with none the cost is
+    unpayable and the ability is never offered.
 
-    Takes the seat rather than a card because a rulebook Favor ability belongs to the player and has
-    no card to charge it to.
+    Takes the seat, not a card: a rulebook Favor ability belongs to the player and has no card
+    to charge it to.
     """
     options = favor_payment_options(game, seat)
     if not options:
@@ -90,11 +89,10 @@ def _resolve_favor_payment(
 def is_favor_action(game: GameState) -> bool:
     """Whether the action now resolving is a Favor action.
 
-    An action that pays a Favor cost is one. An action offering the Favor as one of two ways to pay
-    is one only on the branch that takes it, which is why this is read after payment rather than off
-    the announcement — unless the ability is designated Favor, which settles it either way (ShE
-    datasheet, The Favor Icon). The designator belongs to the ability, so it is read only off an
-    action taken from one.
+    True when the action pays a Favor cost. When it offers the Favor as one of two ways to pay, the
+    answer is read after payment resolves, not off the announcement, since only the branch that
+    takes it counts. An ability designated Favor settles it either way (ShE datasheet, The Favor
+    Icon). The designator belongs to the ability, so it is read only off an action taken from one.
     """
     if game.action_is_favor:
         return True
@@ -123,7 +121,7 @@ def favor_ability_cost(game: GameState, seat: PlayerId, key: str) -> list[Effect
 def use_favor_ability(game: GameState, key: str) -> None:
     """Take one of the arc's rulebook Favor abilities: pay the Favor cost, then do what it does.
 
-    The cost comes first because it is a cost — settled in the Pay Costs step, before the ability
+    The cost comes first because it is a cost: settled in the Pay Costs step, before the ability
     resolves (CR, Action Sequence).
     """
     seat = game.round.priority

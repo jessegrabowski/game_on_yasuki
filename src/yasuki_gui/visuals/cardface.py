@@ -11,8 +11,8 @@ from yasuki_core.game_pieces.constants import Side
 class HiddenFace:
     """A back-only render facade for a redacted :class:`~.HiddenCard`.
 
-    Exposes the card-render interface the visuals read — ``face_up`` False, no front art, a known
-    ``side`` and ``image_back`` for the back — so a hidden card draws as a face-down back without
+    Exposes the card-render interface the visuals read. ``face_up`` is False, no front art, a known
+    ``side`` and ``image_back`` for the back, so a hidden card draws as a face-down back without
     the visuals special-casing it. ``active_face`` returns ``self`` so the visuals'
     ``card.active_face.image_front`` and ``.name`` reads resolve harmlessly while the back draws.
 
@@ -23,7 +23,7 @@ class HiddenFace:
     side : Side
         Which back art to draw.
     owner : PlayerId or None
-        Whose card it is — public even while the face is secret.
+        Whose card it is: public even while the face is secret.
     """
 
     id: str
@@ -47,7 +47,7 @@ RenderCard = L5RCard | HiddenFace
 
 
 def to_render_card(card: L5RCard | HiddenCard) -> RenderCard:
-    """Pass a real card through unchanged; wrap a redacted ``HiddenCard`` as a back-only
+    """Pass a real card through unchanged. Wrap a redacted ``HiddenCard`` as a back-only
     :class:`~.HiddenFace`."""
     if isinstance(card, HiddenCard):
         return HiddenFace(id=card.card_id, side=card.side, owner=card.owner)

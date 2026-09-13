@@ -32,7 +32,7 @@ def zone_tag(key: ZoneKey) -> str:
 
 def allocation_tag(card_id: str, step: int) -> str:
     """The tag of the arrow that moves one creation on or off ``card_id`` while it is dividing a
-    number of them; ``step`` is +1 for the up arrow and -1 for the down."""
+    number of them. ``step`` is +1 for the up arrow and -1 for the down."""
     return f"alloc:{'up' if step > 0 else 'down'}:{card_id}"
 
 

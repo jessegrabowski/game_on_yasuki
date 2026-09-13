@@ -11,7 +11,8 @@ from yasuki_core.game_pieces.constants import Side
 
 from tests.yasuki_web._support import account
 
-# Card records shaped like database.get_cards_by_names output; the fetch is faked in the room fixture.
+# Card records shaped like database.get_cards_by_names
+# output; the fetch is faked in the room fixture.
 RECORDS = [
     {
         "card_id": "kyuden_hida",
@@ -107,11 +108,11 @@ def test_reset_needs_every_seated_player_to_agree(room):
     asyncio.run(room.handle_ready(kenji, True))
     assert room.setup_done
 
-    asyncio.run(room.handle_reset(ada))  # one vote — table stands
+    asyncio.run(room.handle_reset(ada))  # one vote, table stands
     assert room.setup_done
     assert room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards != []
 
-    asyncio.run(room.handle_reset(kenji))  # both agree — table clears
+    asyncio.run(room.handle_reset(kenji))  # both agree, table clears
     assert not room.setup_done
     assert room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards == []
     assert not room.state.seats[PlayerId.P1].ready
@@ -129,7 +130,7 @@ def test_a_solo_goldfisher_resets_on_their_own(room):
     asyncio.run(room.handle_ready(ada, True, solo=True))
     assert room.setup_done
 
-    asyncio.run(room.handle_reset(ada))  # lone seat — unanimous
+    asyncio.run(room.handle_reset(ada))  # lone seat, so unanimous
     assert not room.setup_done
     assert room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards == []
 
@@ -188,7 +189,7 @@ def test_setup_snapshot_holds_redaction_and_honor(room):
     snapshot = ada.sent[-1]["snapshot"]
     assert snapshot["your_seat"] == "P1"
     assert snapshot["seats"]["P1"]["honor"] == 10  # from the stronghold
-    # The face-down deck never leaks identities — count only, no top card.
+    # The face-down deck never leaks identities: count only, no top card.
     assert snapshot["decks"]["P1:dynasty"] == {"count": 6, "top": None}
     # The stronghold is a public, face-up loose pre-game card on the battlefield.
     stronghold = next(c for c in snapshot["battlefield"] if c.get("name") == "Kyuden Hida")

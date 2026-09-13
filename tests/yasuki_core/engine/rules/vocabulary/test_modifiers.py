@@ -105,7 +105,7 @@ def test_a_permanent_modifier_is_forgotten_when_its_target_leaves_play():
 
 
 def test_a_card_waiting_in_a_province_keeps_its_modifiers():
-    """A Province card has not left play — it has not entered yet. Repairing the Ruins raises a
+    """A Province card has not left play: it has not entered yet. Repairing the Ruins raises a
     Holding's Gold Cost while it waits in one, so sweeping it off the table would erase the card."""
     game = two_seat_game()
     waiting = province_card(game.table, "m", printed_id="m", gold_cost=3, index=0)
@@ -130,8 +130,9 @@ def test_a_province_cards_modifier_survives_the_move_into_play():
 
 
 def test_a_card_a_state_rule_destroys_loses_its_modifiers_in_the_same_enforcement():
-    """The sweep and the state-based actions share a fixpoint, so a Personality killed by the Chi Death Rule
-    has his modifiers gone before enforcement returns rather than at whatever happens next."""
+    """The sweep and the state-based actions share a fixpoint, so a Personality killed by the
+    Chi Death Rule has his modifiers gone before enforcement returns rather than at whatever happens
+    next."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=2, chi=1))
     game.ongoing.extend(

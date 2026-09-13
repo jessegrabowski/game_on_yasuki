@@ -21,15 +21,9 @@ logger = logging.getLogger(__name__)
 
 
 class DeckBuilderWindow:
-    """
-    Deck builder UI with three-column layout.
-
-    Columns
-    -------
-    Left: Search box and filtered card list
-    Middle: Deck composition (Fate and Dynasty decks)
-    Right: Card preview with image, stats, and rules text
-    """
+    """Deck builder UI laid out in three columns: the search box and filtered card list on the
+    left, the Fate and Dynasty decks in the middle, and the card preview with image, stats and
+    rules text on the right."""
 
     def __init__(self, master: tk.Misc, on_close: Callable | None = None):
         self.master = master

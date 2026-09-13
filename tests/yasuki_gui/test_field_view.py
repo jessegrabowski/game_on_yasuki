@@ -141,7 +141,8 @@ class TestHomeRow:
             state.positions[card.id] = UNPLACED_BOARD_POS
         field.reconcile_all()
 
-        # P1 sits at the bottom, so its personalities row is further in (smaller y) than its holdings.
+        # P1 sits at the bottom, so its personalities row is further in (smaller y) than its
+        # holdings.
         assert field.sprites[card_tag("P1-pers")].y < field.sprites[card_tag("P1-hold")].y
 
 
@@ -184,7 +185,7 @@ class TestOffBoardReads:
         # P1 reads the opponent's public counts through the projection...
         assert field.deck_summary(DeckKey(PlayerId.P2, Side.FATE))[0] == 3
         assert field.hand_count(PlayerId.P2) == 1
-        # ...but the held card's identity stays hidden — it comes back as a back, not its face.
+        # ...but the held card's identity stays hidden, and it comes back as a back, not its face.
         hand = field.zone_render_cards(ZoneKey(PlayerId.P2, ZoneRole.HAND))
         assert [type(card) for card in hand] == [HiddenFace]
 
@@ -388,7 +389,7 @@ class TestRulesModeRender:
     def test_a_second_fortification_draws_behind_the_first(self, loaded):
         """The near seat's Provinces fan inboard, which is upward, so each Fortification must cover
         the one above it. Drawn in attach order instead, the second lands on top of the first and
-        hides the title the fan exists to expose — the same rule a unit tower follows."""
+        hides the title the fan exists to expose, which is the same rule a unit tower follows."""
         field, _ = loaded
         seat = field.seat
         self._fortified_province(field, seat, ("wall", "gate"))
@@ -404,9 +405,9 @@ class TestRulesModeRender:
         assert top["gate"] < top["wall"]
 
     def test_the_far_seats_fan_stacks_the_same_way_it_grows_the_other_direction(self, loaded):
-        """Inboard is downward for the far seat, so its stack fans the other way — and the draw
-        order does not change with it. What the Province card covers is the nearest Fortification
-        either way, so the stack has to ascend toward it from the far end regardless of direction."""
+        """Inboard is downward for the far seat, so its stack fans the other way, and the draw order
+        does not change with it. What the Province card covers is the nearest Fortification either
+        way, so the stack has to ascend toward it from the far end regardless of direction."""
         field, _ = loaded
         far = PlayerId.P2 if field.seat is PlayerId.P1 else PlayerId.P1
         self._fortified_province(field, far, ("wall", "gate"))
@@ -514,7 +515,7 @@ class TestRulesModeRender:
         assert home["P1-edict"][0] - home["P1-mine"][0] >= CARD_W
 
     def test_the_column_stacks_downward_and_overlaps(self, loaded):
-        """Several at once — copies of one Edict are the realistic case — share the column, each
+        """Several copies of one Edict at once are the realistic case. They share the column, each
         below the last by less than a card's height so the strip of every one stays readable."""
         field, _ = loaded
         events = [
@@ -638,7 +639,7 @@ class TestRulesModeRender:
 
     def test_a_copy_with_a_modified_stat_keeps_its_place_in_the_stack(self, loaded):
         """Its Force and Chi are stamped in the top corners, which is the strip a stack leaves
-        showing — so the number is already legible and moving the copy says nothing new."""
+        showing, so the number is already legible and moving the copy says nothing new."""
         field, _ = loaded
 
         first, second = self._positions(self._two_copies(field, granted=True))
@@ -696,7 +697,7 @@ class TestRulesModeRender:
 
     def test_bowing_a_holding_leaves_the_rest_of_the_row_where_it_was(self, loaded):
         """A producer bows for gold every turn. If that reflows the row, every other Holding jumps
-        sideways and back once a turn — which is the whole board moving, to say something the
+        sideways and back once a turn, which is the whole board moving, to say something the
         card's own rotation already says."""
         field, _ = loaded
         state = TableState.empty_two_seat()
@@ -850,7 +851,8 @@ class TestDecisionSelection:
 
 class TestAllocationSelection:
     def _two_personalities(self, field, state):
-        """A second P1 card on the board, so a division has two cards to trade a creation between."""
+        """A second P1 card on the board, so a division has two cards to
+        trade a creation between."""
         extra = L5RCard.of(
             CardPrint, id="P1-extra", name="Bearer", side=Side.DYNASTY, owner=PlayerId.P1
         )
@@ -893,7 +895,7 @@ class TestAllocationSelection:
         assert len(changes) == 3  # two picks and the arrow
 
     def test_an_arrow_never_empties_a_card_that_is_down_to_one(self, loaded):
-        """Carrying nothing is what unchosen means, so the down arrow stops at one; the player
+        """Carrying nothing is what unchosen means, so the down arrow stops at one. The player
         clicks the card itself to take it out of the division."""
         field, _ = loaded
         field.begin_allocation(["a", "b"], 2)

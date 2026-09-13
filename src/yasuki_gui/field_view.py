@@ -69,7 +69,7 @@ class FieldView(tk.Canvas):
     """Tkinter canvas that renders a single authoritative ``TableState`` and drives it through
     ``apply_intent``.
 
-    The state is the sole source of truth; every visual is a keyed projection of it, rebuilt by
+    The state is the sole source of truth. Every visual is a keyed projection of it, rebuilt by
     :meth:`reconcile_all` after each :meth:`dispatch`. Card identity is stable (cards mutate in
     place), so a sprite keeps its card reference across mutations and reconciliation only tracks
     membership and battlefield position.
@@ -85,7 +85,7 @@ class FieldView(tk.Canvas):
         # table; the manual sandbox leaves it None and renders the full TableState directly.
         self._snapshot: ViewSnapshot | None = None
         # Each modified card's effective stats by id, as the projection carries them, or None in
-        # the sandbox — which has no rules engine and so cannot say what any card's stats come to.
+        # the sandbox (which has no rules engine and so cannot say what any card's stats come to).
         self._stats: dict[str, dict[Stat, int]] | None = None
         self.seat: PlayerId = PlayerId.P1
         # The viewer's gold pool, drawn as a coin in the battlefield corner; set by the host before
@@ -162,8 +162,8 @@ class FieldView(tk.Canvas):
 
     @property
     def _flipped(self) -> bool:
-        """Whether the battlefield is rendered 180° from the canonical P1 frame (debug other-seat
-        view). Positions are stored in P1's frame, so viewing as P2 flips them."""
+        """Whether the battlefield is rendered 180 degrees from the canonical P1 frame (debug
+        other-seat view). Positions are stored in P1's frame, so viewing as P2 flips them."""
         return self.seat is PlayerId.P2
 
     def load_state(self, state: TableState, seat: PlayerId) -> None:
@@ -205,7 +205,7 @@ class FieldView(tk.Canvas):
         seat : PlayerId
             Whose view this is.
         stats : dict mapping str to dict, optional
-            ``GameView.stats`` — each modified card's effective stats, stamped on the cards
+            ``GameView.stats``: each modified card's effective stats, stamped on the cards
             that carry them. Default None, which draws every card at its printed numbers.
         """
         self._snapshot = snapshot
@@ -260,8 +260,9 @@ class FieldView(tk.Canvas):
         self._committed = []
 
     def unit_leader(self, card_id: str) -> str:
-        """The Personality whose unit ``card_id`` belongs to, or ``card_id`` itself when it leads a
-        unit or is in none. A unit answers as one card, so a click on a Follower is a click on him."""
+        """The Personality whose unit ``card_id`` belongs to, or ``card_id`` itself when it leads
+        a unit or is in none. A unit answers as one card, so a click on a Follower is a click on
+        him."""
         return self._units().get(card_id, card_id)
 
     def assigned_units(self) -> dict[str, int]:
@@ -341,14 +342,14 @@ class FieldView(tk.Canvas):
         self.delete(ALLOCATION_TAG)
 
     def is_selectable(self, candidate: str) -> bool:
-        """Whether ``candidate`` — a card id or a zone token — is one the pending decision offers."""
+        """Whether ``candidate`` (a card id or a zone token) is one the pending decision offers."""
         return self._selectable is not None and candidate in self._selectable
 
     def toggle_selection(self, card_id: str) -> None:
         """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener.
 
-        A selection belongs to one place. Picking a card somewhere else — a unit at home while units
-        at a battlefield are picked, or the reverse — drops the old picks rather than mixing two
+        A selection belongs to one place. Picking a card somewhere else (a unit at home while units
+        at a battlefield are picked, or the reverse) drops the old picks rather than mixing two
         places in one answer.
         """
         if self._selectable is None or card_id not in self._selectable:
@@ -513,9 +514,9 @@ class FieldView(tk.Canvas):
     def _render_battlefield(self):
         """The cards the board draws in play: everything standing at home.
 
-        A unit assigned to a battlefield is drawn there instead — by the battle view, which is the
-        only surface that can show four battlefields legibly — so the board leaves it out rather than
-        drawing it in two places at once.
+        A unit assigned to a battlefield is drawn there instead (by the battle view, which is the
+        only surface that can show four battlefields legibly), so the board leaves it out rather
+        than drawing it in two places at once.
         """
         if self._snapshot is not None:
             for bf_view in self._snapshot.battlefield:
@@ -531,11 +532,9 @@ class FieldView(tk.Canvas):
     def _at_home(self, card_id: str) -> bool:
         """Whether ``card_id`` stands in a seat's home rather than at a battlefield.
 
-        A card with no recorded location is at home, which is what every card is until an attack
-        moves it — unless the unit it belongs to has been sent to a battlefield and the engine has
-        not been told yet, which is a decision already made and so already a card the board has
-        given up. Asked of the unit rather than the card, because only a Personality is ever sent
-        and his Followers go with him.
+        A card with no recorded location is at home. A unit whose leader has been sent to a
+        battlefield but not yet told to the engine counts as away too. Asked of the unit rather
+        than the card, since only a Personality is ever sent and his Followers go with him.
         """
         if self.unit_leader(card_id) in self._assigned:
             return False
@@ -558,7 +557,7 @@ class FieldView(tk.Canvas):
     def _reconcile_zones(self) -> None:
         """Draw the on-board zones only: every seat's provinces and the viewer's own hand. Decks,
         discards, and banishes live in the off-board info panels, and the opponent's hand is never
-        shown — those are read through the accessors below, not drawn here."""
+        shown. Those are read through the accessors below, not drawn here."""
         w, h = self._canvas_size()
         province_keys = self._province_keys_by_owner()
         wanted_zones: set[str] = set()
@@ -692,7 +691,8 @@ class FieldView(tk.Canvas):
         top, bottom = y - SPINNER_H // 2, y + SPINNER_H // 2
         arrow_left = x + SPINNER_W // 6  # the box splits into a count and a column of two arrows
         # The box covers the middle of the card it sits on, so it carries the card's own tag: a
-        # click on the count still reads as a click on the card, which is how it leaves the division.
+        # click on the count still reads as a click on the card, which is how it leaves the
+        # division.
         on_card = (ALLOCATION_TAG, card_tag(card_id))
         self.create_rectangle(
             left, top, right, bottom, fill=theme.COUNT_BG, outline=theme.SELECT, tags=on_card
@@ -755,10 +755,9 @@ class FieldView(tk.Canvas):
         """Push each Fortification below the Province tableau, so the card standing in the slot
         covers it and only the fanned-out part shows.
 
-        Zones are drawn before sprites, which would otherwise leave a Fortification sitting on top
-        of the Province it defends — the reverse of the table, where it is tucked underneath. Each
-        lowering lands just under the tableau and so on top of the one before, which makes the call
-        order the draw order within a slot.
+        Zones draw before sprites, so without this a Fortification would sit on top of the
+        Province it defends. Each lowering lands just under the tableau and so on top of the one
+        before, which makes the call order the draw order within a slot.
         """
         for key, members in self._province_fans().items():
             for card_id in tower_draw_order(members):
@@ -805,8 +804,8 @@ class FieldView(tk.Canvas):
         """``rendered`` with each Personality's attachments moved directly ahead of him, highest
         first, so every card in the stack covers the one it rides and only title bars show.
 
-        The stack fans up, so the last attachment sits highest and furthest back and has to be drawn
-        before the rest of the tower — matching the web board's ``drawTower``.
+        The stack fans up, so the last attachment sits highest and furthest back. It has to be drawn
+        before the rest of the tower, matching the web board's ``drawTower``.
         """
         units = self._units()
         if not units:
@@ -857,20 +856,20 @@ class FieldView(tk.Canvas):
         return positions
 
     def _home_positions(self, rendered, w: int, h: int) -> dict[str, tuple[int, int]]:
-        """Stacked home-row positions for the unplaced cards among ``rendered``, grouped per owner:
-        copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``, while the
-        stronghold, sensei, and distinct holdings each take their own column, and so does any copy
+        """Stacked home-row positions for the unplaced cards among ``rendered``, grouped per owner.
+        Copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``. The
+        stronghold, sensei, and distinct holdings each take their own column, as does any copy
         that has stopped being interchangeable with the rest (see :meth:`_stack_key`). Personalities
         lay out in the front (personalities) row, Holdings in the holdings row, and everything else
-        — an Event, an Edict, a Ring — in the column at the board's edge, which is the leftover for
-        what the rules put in play but give no row. Attached cards are left out —
-        :meth:`_unit_positions` and :meth:`_province_attachment_positions` place them on what they
-        hang from."""
+        (an Event, an Edict, a Ring) in the column at the board's edge, which is the leftover for
+        what the rules put in play but give no row. Attached cards are left out:
+        :meth:`_unit_positions` and :meth:`_province_attachment_positions` place them on what
+        they hang from."""
         holdings: dict[PlayerId | None, list[tuple[str, object]]] = {}
         personalities: dict[PlayerId | None, list[tuple[str, object]]] = {}
         rowless: dict[PlayerId | None, list[str]] = {}
         # An attachment rides its Personality or its Province wherever that stands, so it takes no
-        # column of its own — giving it one would shove the real Holdings sideways to make room.
+        # column of its own. Giving it one would shove the real Holdings sideways to make room.
         units = self._units()
         attached = units.keys() | self._province_attachments().keys()
         leaders = set(units.values())
@@ -910,9 +909,9 @@ class FieldView(tk.Canvas):
     def _stack_key(self, card: RenderCard, leaders: set[str]) -> str:
         """What ``card`` shares a home column with: its printed card, or itself.
 
-        Copies stack so four Rice Fields cost one column rather than four, and a stack shows only
-        the top strip of every copy but the last. So a copy carrying something that strip hides —
-        an attachment, counters, a note — steps out and takes a column of its own.
+        Copies stack so four Rice Fields cost one column rather than four. A stack shows only
+        the top strip of every copy but the last. A copy carrying something that strip hides
+        (an attachment, counters, or a note) steps out and takes a column of its own.
 
         What the strip does show stays in the stack, however different it makes the card look. A
         bowed card is drawn on its side, and a modified Force or Chi is stamped in the top corners,

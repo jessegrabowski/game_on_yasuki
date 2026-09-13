@@ -15,7 +15,7 @@ def _normalize(text: str) -> str:
 def _word_segments(old_line: str, new_line: str) -> tuple[list[dict], list[dict]]:
     """Split a changed line pair into inline segments that mark just the words that differ.
 
-    Returns ``(removed, added)`` lists of ``{"kind", "text"}`` — ``kind`` is ``"eq"`` for shared
+    Returns ``(removed, added)`` lists of ``{"kind", "text"}``. ``kind`` is ``"eq"`` for shared
     words and ``"chg"`` for the words unique to that side.
     """
     a = _TOKEN_RE.findall(old_line)
@@ -46,11 +46,11 @@ def unified_diff(old: str, new: str) -> list[dict]:
     Returns
     -------
     rows : list of dict
-        Rows for a single-column diff view, top to bottom. Each row is ``{"type", "segments"}`` where
-        ``type`` is ``"context"`` (unchanged line), ``"del"`` (only in ``old``), or ``"ins"`` (only in
-        ``new``); ``segments`` carry the line text as ``{"kind", "text"}`` pieces so a replaced line
-        highlights just the words that changed. A replace is emitted as its ``del`` rows followed by
-        its ``ins`` rows, lines paired for word-level refinement.
+        Rows for a single-column diff view, top to bottom. Each row is ``{"type", "segments"}``
+        where ``type`` is ``"context"`` (unchanged line), ``"del"`` (only in ``old``), or ``"ins"``
+        (only in ``new``). ``segments`` carry the line text as ``{"kind", "text"}`` pieces so a
+        replaced line highlights just the words that changed. A replace is emitted as its ``del``
+        rows followed by its ``ins`` rows, lines paired for word-level refinement.
     """
     old_lines = _normalize(old).split("\n")
     new_lines = _normalize(new).split("\n")

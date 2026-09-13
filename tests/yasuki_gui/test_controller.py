@@ -49,7 +49,7 @@ class TestBoardMenu:
 
     def test_both_right_click_buttons_are_bound(self, loaded):
         # Aqua calls a right-click Button-2 and X11 calls it Button-3, so binding only one leaves
-        # the menu unreachable on half the platforms — and on the wrong one it fires on the wheel.
+        # the menu unreachable on half the platforms, and on the wrong one it fires on the wheel.
         field, _ = loaded
 
         assert {"<Button-2>", "<Button-3>"} <= set(field.bind())
@@ -144,7 +144,7 @@ class TestDecisionSelection:
 
     def test_clicking_your_own_province_toggles_the_slot_when_it_is_a_candidate(self, loaded):
         """A Fortification attaches to the Province slot, so a decision names the slot rather than
-        the card standing in it — and an empty Province has to be as clickable as a full one."""
+        the card standing in it, and an empty Province has to be as clickable as a full one."""
         field, _ = loaded
         key = next(k for k in field._tag_to_key.values() if _is_own_province(k, field.seat))
         tag = zone_tag(key)
@@ -191,7 +191,7 @@ class TestDecisionSelection:
         assert field.selection == (key.token,)
 
     def test_a_province_click_still_picks_the_card_when_the_card_is_the_candidate(self, loaded):
-        """Only a slot-token candidate claims the click; a decision over province cards is
+        """Only a slot-token candidate claims the click. A decision over province cards is
         unaffected."""
         field, _ = loaded
         key = next(k for k in field._tag_to_key.values() if _is_own_province(k, field.seat))

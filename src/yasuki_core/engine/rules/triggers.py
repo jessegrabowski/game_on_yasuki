@@ -23,8 +23,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
 
 # A sanity bound on both fixpoint walks: a converging cascade drains in a handful of events, and
-# the state-based actions settle in a handful of rounds, so far more than this means a trigger re-emits an
-# event that re-fires it or a rule demands what does not satisfy it — a bug, raised loudly.
+# the state-based actions settle in a handful of rounds, so far more than this means a trigger
+# re-emits an event that re-fires it or a rule demands what does not satisfy it: a bug, raised
+# loudly.
 _MAX_CASCADE = 1000
 
 # The tail of the current walk, kept only to describe a cascade that fails to converge. Module-level
@@ -65,7 +66,7 @@ def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
 # seat that answered. Keyed by a string so a paused ChooseCards names its resolver, keeping the
 # pending decision replay-stable (a stored closure would not rebuild to an equal object).
 # A resolver takes the board, the card that asked, what was picked, and the seat that picked it. A
-# choice raised with ``resolver_context`` — one step of a card that asks two questions in a row —
+# choice raised with ``resolver_context``, one step of a card that asks two questions in a row,
 # passes that too, by keyword; a resolver only declares the parameter if its card supplies one.
 Resolver = Callable[..., list[Effect]]
 CHOICE_RESOLVERS: dict[str, Resolver] = {}
@@ -97,20 +98,20 @@ def choice_resolver(key: str, *, prompt: str | None = None) -> Callable[[Resolve
 
 
 def at_cap(card: L5RCard, counter: Counter, cap: int) -> bool:
-    """Whether ``card`` already holds ``cap`` or more of ``counter`` — a shared trigger guard."""
+    """Whether ``card`` already holds ``cap`` or more of ``counter``, a shared trigger guard."""
     return card.counters.get(counter.key, 0) >= cap
 
 
 def caused_by(ctx: TriggerContext, seat: PlayerId) -> bool:
-    """Whether ``seat``'s own action caused the event — the "if the action was yours" guard. Reads
-    the event's ``cause``; only meaningful for events that carry one. False when the rulebook caused
+    """Whether ``seat``'s own action caused the event. The "if the action was yours" guard. Reads
+    the event's ``cause``. Only meaningful for events that carry one. False when the rulebook caused
     it, since no seat did."""
     return ctx.event.cause is seat
 
 
 def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
     """Commit one effect and return the events it raises, for the fixpoint walk to drain. This is
-    the single mutation boundary; triggers themselves never mutate."""
+    the single mutation boundary. Triggers themselves never mutate."""
     return effect.perform(game)
 
 
@@ -120,10 +121,11 @@ def _departed_subject(game: GameState, event: GameEvent) -> L5RCard | None:
     A card is already in its discard by the time its destruction is announced, so this is the only
     way "after this card is destroyed" can ever fire.
 
-    Departures only. A card off the battlefield takes no part in anything else that names it —
-    a Personality killed by a state-based action as he arrived must not go on to take his enter-play trait,
-    which is the whole point of settling those rules before the arrival is announced. A *created*
-    card is never here either: it leaves the table outright, taking its printed id with it.
+    Departures only. A card off the battlefield takes no part in anything else that names it.
+    A Personality killed by a state-based action as he arrived must not go on to take his
+    enter-play trait, which is the whole point of settling those rules before the arrival is
+    announced. A *created* card is never here either. It leaves the table outright, taking its
+    printed id with it.
     """
     if not isinstance(event, Destroyed | CardDiscarded):
         return None
@@ -164,8 +166,8 @@ def _advance(
     """Run the effect-and-trigger cascade to a fixpoint from an arbitrary resume point.
 
     One resumable worklist machine, in three repeating steps: apply the ``effects`` in hand (each
-    committing at once, its derived events joining ``queue``); then fire the next trigger still
-    ``firing`` for ``event``, whose effects become the next ``effects`` in hand; then pop the next
+    committing at once, its derived events joining ``queue``), then fire the next trigger still
+    ``firing`` for ``event``, whose effects become the next ``effects`` in hand, then pop the next
     event off ``queue`` and collect its triggers. An :class:`~.InterruptingEffect` among the effects
     pauses the machine: it records that effect's decision and stashes the exact remainder (the
     effects after it, the triggers not yet fired, the event, and the queue) as a
@@ -213,9 +215,9 @@ def _advance(
 def enforce_state_based_actions(game: GameState) -> None:
     """Satisfy the state-based rules against the board as it stands, resolving what that raises.
 
-    For the board changes the cascade does not make — a card placed on the battlefield by ``flow``,
-    a modifier expiring at a turn boundary. The walk enforces the rules after each effect it
-    commits; this is how a caller that mutated the board directly gets the same guarantee.
+    For the board changes the cascade does not make (a card placed on the battlefield by
+    ``flow``, a modifier expiring at a turn boundary), the walk enforces the rules after each
+    effect it commits: how a caller that mutated the board directly gets the same guarantee.
     """
     queue: list[GameEvent] = []
     _settle_state_based_actions(game, queue)
@@ -226,9 +228,9 @@ def enforce_state_based_actions(game: GameState) -> None:
 def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     """Drop ongoing records whose target has left the battlefield and the Provinces.
 
-    A card that leaves play ceases to exist (CR), so nothing granted to it outlives the departure —
+    A card that leaves play ceases to exist (CR), so nothing granted to it outlives the departure,
     ``PERMANENT`` included, whose permanence is against its *source* going away rather than its
-    target. A Province card counts as still on the table: Repairing the Ruins raises a Holding's
+    target. A Province card counts as still on the table. Repairing the Ruins raises a Holding's
     Gold Cost while it waits in one, and that has to survive being Recruited out of it.
 
     Forgotten rather than skipped when read: a card can return to a Province, and a record merely
@@ -260,9 +262,10 @@ def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None
     applies and every applied effect has already been judged.
 
     Enforcement runs to its own fixpoint: satisfying one condition can break another, and the CR's
-    conditions chain that way by design — a destroyed card can orphan what was attached to it, and
-    a seat losing its last Province loses the game. Each round begins by forgetting the ongoing records of
-    whatever the last one drove off the table, so no rule reads a stat off a card that has gone.
+    conditions chain that way by design. A destroyed card can orphan what was attached to it, and
+    a seat losing its last Province loses the game. Each round begins by forgetting the ongoing
+    records of whatever the last one drove off the table, so no rule reads a stat off a card
+    that has gone.
     """
     for _ in range(_MAX_CASCADE):
         _forget_ongoing_on_cards_off_the_table(game)
@@ -325,7 +328,7 @@ def fire(game: GameState, event: GameEvent) -> None:
 
 
 def resolve_effects(game: GameState, effects: list[Effect]) -> None:
-    """Apply ``effects`` — an ability's or a choice resolver's output — and run the derived-event
+    """Apply ``effects``, an ability's or a choice resolver's output, and run the derived-event
     cascade the same way :func:`~.fire` does, so a triggered reaction to those effects still
     resolves."""
     _advance(game, tuple(effects), [], None, [])

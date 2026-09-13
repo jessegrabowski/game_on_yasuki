@@ -75,8 +75,8 @@ class CardStrip(FloatingPanel):
             self._track_hover(holder, card)
         # The title and the cards both change after the panel is placed, and Tk holds that layout
         # until its next redraw. Flushing idle work here paints the whole panel on the click that
-        # opened it rather than the one after. Idle tasks only — pumping events here would run the
-        # handler that is still on the stack.
+        # opened it rather than the one after. Idle tasks only, because pumping events here would
+        # run the handler that is still on the stack.
         self.update_idletasks()
 
     def _track_hover(self, cell: tk.Misc, card: L5RCard) -> None:

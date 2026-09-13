@@ -7,8 +7,8 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 # A recruit-discount handler computes the gold reduction on recruiting a card, from the card being
-# recruited, the game, and the seat recruiting it. It reduces the card's own cost — the "enters play
-# for N less Gold" holdings, gated on a readable condition.
+# recruited, the game, and the seat recruiting it. It reduces the card's own cost, which is
+# what the "enters play for N less Gold" holdings are, gated on a readable condition.
 DiscountHandler = Callable[[L5RCard, GameState, PlayerId], int]
 RECRUIT_DISCOUNTS: HandlerRegistry[DiscountHandler] = HandlerRegistry(
     "recruit discounts", "already has a recruit discount"

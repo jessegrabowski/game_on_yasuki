@@ -34,7 +34,8 @@ def email_blind_index(email: str) -> bytes:
 
 
 def sub_blind_index(google_sub: str) -> bytes:
-    """Return the banlist tombstone key for a Google identity: ``HMAC-SHA256("sub:" + sub, pepper)``.
+    """Return the banlist tombstone key for a Google identity:
+    ``HMAC-SHA256("sub:" + sub, pepper)``.
 
     The subject identifier is opaque and stable, so it is hashed as-is apart from a ``sub:`` domain
     tag. The tag keeps this index's value space disjoint from the email index (which the email
@@ -60,5 +61,5 @@ def new_session_token() -> str:
 
 
 def hash_session_token(token: str) -> bytes:
-    """Return ``SHA-256(token)`` — the form stored server-side, so a DB leak can't mint sessions."""
+    """Return ``SHA-256(token)``, the form stored server-side, so a DB leak can't mint sessions."""
     return hashlib.sha256(token.encode()).digest()

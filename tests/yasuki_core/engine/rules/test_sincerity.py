@@ -36,7 +36,7 @@ def test_a_face_down_province_card_does_not_accrue():
 
     sequence._end_turn(game)
 
-    assert card.counters == {}  # a face-down refill just arrived — it never lingered face-up
+    assert card.counters == {}  # a face-down refill just arrived. It never lingered face-up
 
 
 def test_a_non_sincerity_province_card_does_not_accrue():

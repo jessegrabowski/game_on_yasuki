@@ -636,7 +636,7 @@ class TestEndToEnd:
         assert filters == {"all": True}
 
     def test_all_predicate_is_recognized(self):
-        # all: is a real predicate, not an unknown field — no _unknown_fields, no nonsense.
+        # all: is a real predicate, not an unknown field. No _unknown_fields, no nonsense.
         _, filters = parse_and_build_query("all:cards")
         assert filters == {"all": True}
 

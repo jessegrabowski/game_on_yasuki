@@ -76,7 +76,7 @@ DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
 
 
 def _board():
-    """P1 with three gold producers and two face-up Province Holdings — enough that the Dynasty
+    """P1 with three gold producers and two face-up Province Holdings: enough that the Dynasty
     phase offers several Recruits and a Discard for each, so narrowing to one card is observable."""
     state = TableState.empty_two_seat()
     put_in_play(state, holding("sh", printed_id="plain_stronghold", gold_production=5))
@@ -97,7 +97,7 @@ def _dynasty(session):
     return session
 
 
-# Well-formed actions naming a card no board holds — never legal anywhere.
+# Well-formed actions naming a card no board holds. Never legal anywhere.
 UNKNOWN_CARD = (
     Recruit("nonexistent"),
     DynastyDiscard("nonexistent"),
@@ -127,7 +127,7 @@ def test_is_legal_accepts_exactly_what_the_enumeration_offers(open_phase):
 
 def test_an_action_with_no_legality_rule_raises():
     # Action is a closed union and every member is handled, so this is only reachable by adding one
-    # without a rule here — which would otherwise read as a rules bug rather than a missing case.
+    # without a rule here (which would otherwise read as a rules bug rather than a missing case).
     game = _board().game
 
     with pytest.raises(ValueError, match="no legality rule"):
@@ -161,8 +161,8 @@ def test_is_legal_rejects_every_action_while_a_decision_is_pending():
 
 @requires_db
 def test_is_legal_and_the_enumeration_agree_across_a_driven_game():
-    # The fixtures above are hand-built and shallow. This walks real boards — refills, bowed
-    # producers, spent gold, a used Legacy — and checks the two never diverge on any of them.
+    # The fixtures above are hand-built and shallow. This walks real boards (refills, bowed
+    # producers, spent gold, a used Legacy) and checks the two never diverge on any of them.
     table, first = build_state_from_deck(DECK, rng=np.random.default_rng(11))
     session = EngineSession.start(table, first, seed=11)
     controls = {seat: Controls(make_policy("economic"), make_agent("paying")) for seat in PlayerId}
@@ -178,7 +178,7 @@ def test_is_legal_and_the_enumeration_agree_across_a_driven_game():
                     assert not legality.is_legal(session.game, seat, action), (seat, action)
             checked += len(offered)
 
-    assert checked > 100, f"only {checked} actions checked — the walk is not exercising much"
+    assert checked > 100, f"only {checked} actions checked. The walk is not exercising much"
 
 
 def test_gold_reach_holds_a_target_independent_producer_in_its_fixed_part():
@@ -193,8 +193,8 @@ def test_gold_reach_holds_a_target_independent_producer_in_its_fixed_part():
 
 def test_gold_reach_counts_a_bow_time_boost_the_seat_could_opt_into():
     # Outlying Farms yields 2 more if the seat destroys it as it bows. That is optional, so it does
-    # not change what the producer makes — but it does change what the seat can reach, which is what
-    # decides whether a Recruit is offered at all. `maximum_gold_production` is where that lives.
+    # not change what the producer makes, but it does change what the seat can reach: what decides
+    # whether a Recruit is offered at all. `maximum_gold_production` is where that lives.
     state = TableState.empty_two_seat()
     put_in_play(state, holding("outlying", printed_id="outlying_farms", gold_production=3))
     game = EngineSession.start(state, PlayerId.P1).game
@@ -207,7 +207,7 @@ def test_gold_reach_counts_a_bow_time_boost_the_seat_could_opt_into():
 
 def test_gold_reach_leaves_a_producer_that_reads_its_target_variable():
     # Jade Works yields +2 when paying for a Jade card, so its yield cannot be settled until the
-    # purchase is known — the whole reason for the split.
+    # purchase is known: the whole reason for the split.
     state = TableState.empty_two_seat()
     put_in_play(state, holding("jade", printed_id="jade_works", gold_production=2))
     put_in_play(state, holding("farm", printed_id="plain_farm", gold_production=3))
@@ -248,7 +248,7 @@ def test_a_recruit_reachable_only_by_a_self_grant_is_still_offered():
     assert Recruit("target") in session.legal_actions(PlayerId.P1)
 
 
-# An ability that acts from a Province rather than from play — the shape every Event needs. It
+# An ability that acts from a Province rather than from play: the shape every Event needs. It
 # targets its own source, so the test needs nothing else there.
 register_ability(
     "test_acts_from_province",
@@ -320,7 +320,7 @@ def test_an_ability_that_acts_from_the_hand_is_found_there():
 
 
 def test_an_ability_that_acts_from_play_is_not_found_in_the_hand():
-    """`located_at` defaults to the battlefield, which is what keeps the hand from leaking into
+    """`located_at` defaults to the battlefield. This keeps the hand from leaking into
     every ability that already works."""
     state = TableState.empty_two_seat()
     _in_hand(state, "not_yet", "test_acts_from_play")
@@ -331,7 +331,7 @@ def test_an_ability_that_acts_from_play_is_not_found_in_the_hand():
 
 
 def test_a_card_in_hand_is_never_activated_in_play():
-    """A card in hand is played, not activated, so it must not reach `ActivateAbility` — it pays a
+    """A card in hand is played, not activated, so it must not reach `ActivateAbility`. It pays a
     Gold Cost and goes to the discard, neither of which that action does."""
     state = TableState.empty_two_seat()
     card = _in_hand(state, "strategy", "test_acts_from_hand")
@@ -369,8 +369,8 @@ def test_an_ability_that_acts_from_a_province_is_not_offered_in_play():
 
 
 def test_a_province_ability_is_not_offered_for_another_seats_card():
-    """Asked from the seat holding priority, so it fails if the scan stops filtering by owner —
-    asking P2 instead would pass on P2 having no actions at all."""
+    """Asked from the seat holding priority, so it fails if the scan stops filtering by owner.
+    Asking P2 instead would pass on P2 having no actions at all."""
     state = TableState.empty_two_seat()
     province_card(state, "event", printed_id="test_acts_from_province", seat=PlayerId.P2)
     session = EngineSession.start(state, PlayerId.P1)
@@ -380,7 +380,7 @@ def test_a_province_ability_is_not_offered_for_another_seats_card():
 
 def test_an_ability_in_play_is_not_offered_from_a_province():
     """The default scope is the battlefield, so a Holding sitting face-up in a Province offers
-    nothing — which is what keeps every existing registration behaving as it did."""
+    nothing. This keeps every existing registration behaving as it did."""
     state = TableState.empty_two_seat()
     card = province_card(
         state, "millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1
@@ -449,7 +449,7 @@ def _two_ability_game():
 
 
 def test_both_of_a_cards_abilities_are_offered():
-    """The designator cannot disambiguate — both abilities are Open — so the key is what makes them
+    """The designator cannot disambiguate (both abilities are Open), so the key is what makes them
     two separate actions rather than one offered twice."""
     session = _two_ability_game()
 
@@ -475,8 +475,8 @@ def test_the_ability_named_by_the_action_is_the_one_that_resolves(key, wealth):
 
 
 def test_a_keyed_activation_replays():
-    """``log.Act`` holds the action itself, so a tape carrying a key must replay to the same board
-    — the guarantee that keeps every pre-existing tape valid too."""
+    """``log.Act`` holds the action itself, so a tape carrying a key must replay to the same
+    board: the guarantee that keeps every pre-existing tape valid too."""
     session = _two_ability_game()
 
     session.act(PlayerId.P1, ActivateAbility("src", "large"))
@@ -487,7 +487,7 @@ def test_a_keyed_activation_replays():
 
 def test_a_round_offers_only_the_abilities_its_designator_permits():
     """The designator filter is per ability, not per card. A card printing one Open and one Dynasty
-    ability is offered once in an Open round — a check hoisted back up to the card would offer both
+    ability is offered once in an Open round. A check hoisted back up to the card would offer both
     or neither."""
     register_ability(
         "test_split_designators",
@@ -542,7 +542,7 @@ def test_a_spell_on_a_shugenja_may_be_cast():
 
 def test_a_spell_is_not_cast_from_a_personality_who_is_no_shugenja():
     """ "Their abilities can only be used ('cast') if attached to a Shugenja" (CR, Spell). Attaching
-    is checked when the Spell lands; this is the same rule read again at the moment of casting,
+    is checked when the Spell lands. This is the same rule read again at the moment of casting,
     which is what a Personality who stops being a Shugenja needs."""
     state = TableState.empty_two_seat()
     bushi = put_in_play(state, personality("bushi", keywords=("Bushi",)))
@@ -575,7 +575,7 @@ for _probe, _tireless in (("test_bows_to_act", False), ("test_acts_while_bowed",
 
 def test_a_bowed_card_offers_nothing():
     """ "Abilities on bowed cards may not normally be used" (CR, Using Abilities). The cost is not
-    what stops it — this ability costs nothing at all."""
+    what stops it. This ability costs nothing at all."""
     state = TableState.empty_two_seat()
     put_in_play(state, holding("probe", printed_id="test_bows_to_act"))
     session = EngineSession.start(state, PlayerId.P1)
@@ -705,7 +705,8 @@ def _personality(clans: tuple[str, ...], **kwargs) -> L5RCard:
 
 
 def test_recruit_cost_reads_every_listed_clan_not_just_the_first():
-    # Bayushi Aramoro is printed Ninja and Scorpion; the alignment that matters is second in the list.
+    # Bayushi Aramoro is printed Ninja and Scorpion; the alignment that matters is second in
+    # the list.
     game = _game_with_stronghold_clan("Scorpion")
     aramoro = _personality(("Ninja", "Scorpion"))
     assert legality.recruit_cost(game, aramoro) == 5
@@ -758,8 +759,8 @@ def test_a_stronghold_printing_several_clans_surcharges_none_of_them():
 
 
 def test_a_stronghold_with_no_legal_alignment_neither_surcharges_nor_proclaims():
-    # A Shadowlands / minor-clan Stronghold has no legal Clan Alignment, so it has nothing to compare
-    # against: an aligned Personality costs face value and none can be Proclaimed.
+    # A Shadowlands / minor-clan Stronghold has no legal Clan Alignment, so it has nothing to
+    # compare against: an aligned Personality costs face value and none can be Proclaimed.
     game = _game_with_stronghold_clan("Shadowlands")
     assert legality.recruit_cost(game, _personality(("Crab",))) == 5
     assert not legality.can_proclaim(game, _personality(("Crab",)))

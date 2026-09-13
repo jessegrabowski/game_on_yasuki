@@ -35,7 +35,8 @@ GOOGLE_ISSUERS = frozenset({"accounts.google.com", "https://accounts.google.com"
 
 SESSION_COOKIE = "yasuki_session"
 SESSION_TTL = timedelta(days=30)
-# Local-only sign-in shortcut, gated by this env var and refused in production (see dev_login_enabled).
+# Local-only sign-in shortcut, gated by this env var and refused in production (see
+# dev_login_enabled).
 DEV_LOGIN_ENV = "YASUKI_DEV_LOGIN"
 # A login must reach the callback within this window; stale OAuth state is rejected and swept.
 LOGIN_STATE_TTL = timedelta(minutes=10)
@@ -157,9 +158,9 @@ def _pop_login(state: str) -> dict | None:
 def _complete_login(claims: dict) -> tuple[str, dict] | None:
     """Upsert the authenticated user and return ``(session token, user)``, or None if banned.
 
-    A new account is created nameless — it picks a display name during onboarding, so the Google
+    A new account is created nameless. It picks a display name during onboarding, so the Google
     profile name never even touches the row. A banlist tombstone is checked before any row is
-    created, so a banned identity cannot slip back in by having deleted its account; the live
+    created, so a banned identity cannot slip back in by having deleted its account. The live
     ``is_banned`` flag is the second guard. The returned user carries ``created`` and
     ``is_approved`` so the caller can onboard a new or still-pending account.
     """
@@ -189,7 +190,7 @@ def _delete_account(user_id: int) -> None:
 
 
 async def current_user_optional(request: Request) -> dict | None:
-    """The user behind the session cookie, or None — the additive dependency for public routes."""
+    """The user behind the session cookie, or None. The additive dependency for public routes."""
     token = request.cookies.get(SESSION_COOKIE)
     if not token:
         return None
@@ -197,7 +198,7 @@ async def current_user_optional(request: Request) -> dict | None:
 
 
 async def current_user(request: Request) -> dict:
-    """The authenticated user, or 401 — the gate for login-required routes."""
+    """The authenticated user, or 401. The gate for login-required routes."""
     user = await current_user_optional(request)
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication required")
@@ -205,7 +206,7 @@ async def current_user(request: Request) -> dict:
 
 
 async def require_admin(user: dict = Depends(current_user)) -> dict:
-    """The authenticated user if an admin, else 403 — the gate for the admin dashboard."""
+    """The authenticated user if an admin, else 403. The gate for the admin dashboard."""
     if user.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     return user
@@ -215,7 +216,7 @@ async def require_approved(user: dict = Depends(current_user)) -> dict:
     """The user if their account is ready for the product (named and approved), else 403.
 
     Gates play and saving decks. A new account must finish onboarding (pick a display name) and then
-    be approved by an admin; profile self-service stays open so a pending user can do both.
+    be approved by an admin. Profile self-service stays open so a pending user can do both.
     """
     if not user.get("display_name"):
         raise HTTPException(status_code=403, detail="Finish setting up your account first")
@@ -229,8 +230,8 @@ async def user_for_websocket(websocket: WebSocket) -> dict | None:
 
     Browsers send the session cookie on the upgrade request, so the same cookie that authenticates
     HTTP routes also identifies the socket. The play surface needs a ready account, so a session
-    that is unauthenticated, unnamed, or not-yet-approved yields None — the signal to close the
-    handshake.
+    that is unauthenticated, unnamed, or not-yet-approved yields None, which signals the caller to
+    close the handshake.
     """
     token = websocket.cookies.get(SESSION_COOKIE)
     if not token:
@@ -302,7 +303,8 @@ async def callback(request: Request):
 
     # A new or still-pending account lands on settings (the name picker / pending-approval notice);
     # a returning, approved account goes where it asked, or to the default landing. The admin is
-    # notified once the new account picks a name (see update_me), not here — there is no name yet.
+    # notified once the new account picks a name (see update_me), not here, since there is no
+    # name yet.
     landing = (
         "/settings"
         if user["created"] or user["display_name"] is None or not user["is_approved"]
@@ -346,7 +348,7 @@ async def dev_login(request: Request):
     Refused with 404 (as if the route did not exist) unless ``YASUKI_DEV_LOGIN`` is set and the app
     is not in production, so it can never become a backdoor in a deployed environment. An optional
     ``?as=<name>`` query selects a distinct dev identity, so several can be signed in at once (two
-    browsers for a local game); omitting it yields the default "Dev Player".
+    browsers for a local game). Omitting it yields the default "Dev Player".
     """
     if not dev_login_enabled():
         raise HTTPException(status_code=404, detail="Not found")
@@ -419,7 +421,7 @@ async def update_me(request: Request, body: DisplayNameUpdate, user: dict = Depe
     """Change the signed-in user's display name.
 
     The first time a nameless new account sets a name it finishes onboarding, so the admin is
-    notified that it is awaiting approval — with the name they chose. A later rename does not
+    notified that it is awaiting approval, along with the name they chose. A later rename does not
     re-notify.
     """
     name = body.display_name.strip()
@@ -445,9 +447,9 @@ def _set_display_name(user_id: int, display_name: str) -> dict:
 async def set_my_avatar(request: Request, body: AvatarRequest, user: dict = Depends(current_user)):
     """Set the signed-in user's avatar to a crop of a chosen card.
 
-    The card's image path is resolved server-side from ``card_id`` (rejecting an unknown card), so a
-    client never supplies an arbitrary image path; the path is stored alongside the crop so rendering
-    needs no further card-DB lookup.
+    The card's image path is resolved server-side from ``card_id`` (rejecting an unknown card),
+    so a client never supplies an arbitrary image path. The path is stored alongside the crop
+    so rendering needs no further card-DB lookup.
     """
     image_path = await asyncio.to_thread(_card_image_path, body.card_id)
     if image_path is None:
@@ -487,7 +489,7 @@ async def delete_me(request: Request, user: dict = Depends(current_user)):
 
 @router.get("/api/admin/users")
 async def admin_list_users(admin: dict = Depends(require_admin)):
-    """Every account, for the admin dashboard. Admin-only; carries no email."""
+    """Every account, for the admin dashboard. Admin-only. Carries no email."""
     return {"users": await asyncio.to_thread(_list_users)}
 
 

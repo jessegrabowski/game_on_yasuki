@@ -18,7 +18,7 @@ P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 def _stronghold(seat: PlayerId, *, two_faced: bool = True) -> L5RCard:
-    """A Stronghold with a Sun front and a Moon back — the shape the second player is dealt."""
+    """A Stronghold with a Sun front and a Moon back, the shape the second player is dealt."""
     back = (
         StrongholdPrint(name="Moon", side=Side.STRONGHOLD, printed_id=f"{seat.name}-SH__back")
         if two_faced

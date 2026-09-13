@@ -137,7 +137,7 @@ def test_rejected_intent_reverts_the_sender_with_a_snapshot():
 
 def test_malformed_intent_sends_error():
     room, ws = _room_with_seat()
-    # MOVE_CARD with no destination → decode fails → clean rejection, not a crash.
+    # MOVE_CARD with no destination -> decode fails -> clean rejection, not a crash.
     asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.MOVE_CARD, card_id="c1")))
     assert ws.sent[-1]["type"] == "ERROR"
 
@@ -264,7 +264,8 @@ def test_taking_the_favor_sweeps_every_seats_proxy():
 
 
 def test_taking_the_favor_twice_from_one_seat_leaves_one_proxy():
-    """Re-taking it is a no-op in effect: the sweep clears the actor's own copy before respawning."""
+    """Re-taking it is a no-op in effect: the sweep clears the actor's own copy before
+    respawning."""
     room, ws, _ = _two_seat_room()
 
     asyncio.run(room.handle_take_favor(ws))

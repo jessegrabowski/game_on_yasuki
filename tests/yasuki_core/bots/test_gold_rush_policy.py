@@ -64,7 +64,7 @@ def test_it_flushes_a_card_that_produces_nothing_when_it_cannot_buy():
 
 def test_it_flushes_a_producer_priced_beyond_what_it_can_raise():
     # The production is only worth chasing if the seat can pay for it. Raising 1 against a cost of 9
-    # never gets there — Gold does not carry between turns, and the board grows only by buying — so
+    # never gets there. Gold does not carry between turns, and the board grows only by buying, so
     # holding the card keeps a Province dead for the rest of the game.
     session = _dynasty_phase(production=1)
     province_card(session.game, "dear-farm", seat=P1, gold_cost=9, gold_production=4)
@@ -133,7 +133,7 @@ def test_it_passes_when_its_provinces_hold_nothing_it_can_read():
 
 
 def _personality(session: EngineSession, card_id: str, *, gold_cost: int, index: int = 0):
-    """Put a Personality — a province card with no Gold Production at all — into a province."""
+    """Put a Personality (a province card with no Gold Production at all) into a province."""
     card = register(
         session.game.table,
         personality(card_id, owner=P1, gold_cost=gold_cost),
@@ -163,7 +163,7 @@ def test_a_holding_still_outranks_an_affordable_personality():
 
 
 def test_it_flushes_every_barren_card_it_could_not_buy():
-    """One choice per window, so clearing three provinces takes three of them — and the seat must
+    """One choice per window, so clearing three provinces takes three of them. The seat must
     still be offered the discard after the first, or the rest sit there for the whole game."""
     session = _dynasty_phase(production=1)
     for index, card_id in enumerate(("one", "two", "three")):
@@ -235,9 +235,8 @@ def test_it_leaves_modest_farm_alone_when_its_own_yield_is_what_would_pay():
 
 def test_it_never_activates_an_ability_it_has_no_model_for():
     """A policy cannot read what a card does, so an unmodelled ability is left alone rather than
-    guessed at — otherwise every new card silently changes every deck's numbers. Moto Traders draws
-    a card, which these policies price at nothing, and is given the lower id so that passing it over
-    is the model talking and not the tie-break."""
+    guessed at. Moto Traders draws a card, which these policies price at nothing, and is given
+    the lower id so that passing it over is the model talking and not the tie-break."""
     session = _action_phase()
     put_in_play(
         session.game,
@@ -272,7 +271,7 @@ def test_it_gives_millet_farms_bonus_when_it_puts_a_card_in_reach():
 
 def test_it_declines_millet_farms_bonus_when_the_seat_could_already_pay():
     """The grant expires at end of turn, so spending a bow on Gold the seat already had is a bow
-    thrown away — and Millet Farm bows itself out of the pool to give it."""
+    thrown away. Millet Farm bows itself out of the pool to give it."""
     session = _millet_session(purse=8, cost=4)
 
     assert ActivateAbility("mill") in session.legal_actions(P1)
@@ -280,7 +279,7 @@ def test_it_declines_millet_farms_bonus_when_the_seat_could_already_pay():
 
 
 def test_it_targets_the_farm_over_a_larger_producer():
-    """Renew is what makes the ability pay, and only a Farm target receives it — so the Farm wins
+    """Renew is what makes the ability pay, and only a Farm target receives it, so the Farm wins
     even against a Holding that produces more."""
     session = _action_phase()
     province_card(session.game, "barn", seat=P1, gold_cost=3, gold_production=1, keywords=("Farm",))
@@ -306,7 +305,7 @@ def test_it_gives_millet_farms_bonus_to_a_farm_still_able_to_use_it():
 
 def test_it_takes_the_first_candidate_for_a_card_whose_hint_names_no_target_rule():
     """Harvested Land is modelled well enough to be activated and not well enough to be aimed, and
-    the two halves of a hint are independent — an unaimed one must not fall back to answering
+    the two halves of a hint are independent. An unaimed one must not fall back to answering
     nothing."""
     session = _economy_phase()
     put_in_play(
@@ -364,7 +363,7 @@ def test_it_sacrifices_modest_farm_when_the_straightened_target_unlocks_a_purcha
 
 
 def test_it_declines_when_the_only_affordable_target_is_not_the_farm():
-    """The engine offers the ability once *any* Holding is within reach; the policy wants the Farm
+    """The engine offers the ability once *any* Holding is within reach. The policy wants the Farm
     within reach, and Modest Farm's own forfeited yield is exactly the gap between the two. Reading
     the board's reach without that subtraction activates into a non-Farm target."""
     session = _action_phase(production=3, farm_gp=1)
@@ -376,8 +375,8 @@ def test_it_declines_when_the_only_affordable_target_is_not_the_farm():
 
 
 def test_it_declines_millet_farms_bonus_when_every_other_farm_is_already_bowed():
-    """A bowed Farm cannot be bowed again to collect the bonus, so the grant would expire unspent —
-    even though the Gold it would add is exactly what the Market is out of reach by. The purse
+    """A bowed Farm cannot be bowed again to collect the bonus, so the grant would expire unspent.
+    Even though the Gold it would add is exactly what the Market is out of reach by, the purse
     carries the Gold the bowed Farm no longer does, so the only thing separating this from the case
     above is which Farm can still be bowed."""
     session = _millet_session(purse=9, cost=11)
@@ -402,7 +401,7 @@ def _fortification(session: EngineSession, card_id: str, index: int):
 
 def test_it_takes_a_non_farm_that_chains_into_a_second_producer():
     """Destroying Modest Farm straightens what it recruited, so the first Fortification's six Gold
-    pays for the second — which eight Gold on the board could not have done alone."""
+    pays for the second. Eight Gold on the board could not have done this alone."""
     session = _action_phase(production=6, farm_gp=1)
     put_in_play(
         session.game,
@@ -426,7 +425,7 @@ def test_it_declines_a_non_farm_with_nothing_on_the_other_side_of_it():
 
 def test_it_declines_a_chain_whose_target_barely_beats_the_farm_it_spends():
     """A two-Gold target chains as readily as a six-Gold one, and is not worth the Province turning
-    face-down for the rest of the turn — so the target has to be worth several Modest Farms."""
+    face-down for the rest of the turn, so the target has to be worth several Modest Farms."""
     session = _action_phase(production=6, farm_gp=1)
     province_card(session.game, "shop", seat=P1, gold_cost=2, gold_production=2, index=0)
     province_card(session.game, "next", seat=P1, gold_cost=5, gold_production=2, index=1)
@@ -462,7 +461,7 @@ def _harvested_land_session(farms: int) -> EngineSession:
 
 def test_it_spends_harvested_land_when_the_raise_beats_its_own_yield():
     # Eight, two and three straight: thirteen. It destroys its own two to add one to each of the
-    # three Farms, which is fourteen — and fourteen is what the card costs.
+    # three Farms, which is fourteen: what the card costs.
     session = _harvested_land_session(farms=3)
     province_card(session.game, "keep", seat=P1, gold_cost=14, gold_production=2)
 

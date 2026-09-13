@@ -31,8 +31,9 @@ def composite_art(
     """Crop the donor's art (its layout's cut rect) into the recipient's art window.
 
     The donor crop is reduced to the window's aspect ratio before scaling, so the art fills the
-    window edge-to-edge without distortion (a thin strip of the donor's outer edge is trimmed). The
-    recipient's frame overlays (holding flair) and keyword mons are stamped back over the new art."""
+    window edge-to-edge without distortion (a thin strip of the donor's outer edge is trimmed).
+    The recipient's frame overlays (holding flair) and keyword mons are stamped back over the new
+    art."""
     recipient = Image.open(recipient_path).convert("RGB")
     donor = Image.open(donor_path).convert("RGB")
     window = _box(recipient, art_rect(recipient_key))
@@ -63,7 +64,7 @@ def _stamp_patches(card: Image.Image, recipient: Image.Image, key: tuple[str, st
     """Re-stamp recipient patches (stat icons, banner corners, frame edges) over the donor art.
 
     Each region is harvested from the pristine ``recipient`` at its rect. A masked patch keeps only
-    the silhouette shape (the stat icons, so the donor art shows around them); an unmasked patch
+    the silhouette shape (the stat icons, so the donor art shows around them). An unmasked patch
     restores the whole rect (banner corners, frame edges)."""
     for patch in patches_for(key):
         left, top, right, bottom = _box(card, patch["rect"])
@@ -96,7 +97,8 @@ def custom_print_record(recipe: CustomPrint, repository) -> dict:
 
 
 def render_custom_image(recipe: CustomPrint, repository) -> Image.Image | None:
-    """Recompose a recipe's art from its recipient and donor printings, or None if either is missing."""
+    """Recompose a recipe's art from its recipient and donor printings, or None if either is
+    missing."""
     recipient_card = repository.get_card(recipe.recipient_card_id)
     donor_card = repository.get_card(recipe.donor_card_id)
     if not recipient_card or not donor_card:

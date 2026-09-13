@@ -29,7 +29,7 @@ def _migrations() -> list[tuple[str, str]]:
 
     A migration's version is its filename without the ``.sql`` suffix (e.g. ``0001_initial``).
     Applying in sorted-filename order is what makes the sequence deterministic, so zero-pad new
-    numbers (``0002_…``, ``0010_…``).
+    numbers (``0002_...``, ``0010_...``).
     """
     entries = resources.files(_MIGRATIONS_PACKAGE).iterdir()
     files = sorted((p for p in entries if p.name.endswith(".sql")), key=lambda p: p.name)
@@ -42,12 +42,12 @@ def apply_migrations(conn: psycopg.Connection) -> list[str]:
     Each migration runs in its own transaction and is recorded only on success, so a failure leaves
     the database at the last good version and a re-run resumes from there. Already-applied
     migrations are skipped, so this is safe to run on every deploy. ``migrate`` wraps this with a
-    real connection; a caller may pass its own.
+    real connection. A caller may pass its own.
 
     Parameters
     ----------
     conn : psycopg.Connection
-        An open connection, expected in autocommit mode; each migration is wrapped in its own
+        An open connection, expected in autocommit mode. Each migration is wrapped in its own
         explicit transaction.
 
     Returns

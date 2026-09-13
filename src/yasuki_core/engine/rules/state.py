@@ -19,7 +19,7 @@ def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:
     """The victory rules ``seat`` begins subject to: every one its board can support.
 
     A seat dealt no Provinces cannot lose the ones it does not have, and dealing is the one moment
-    that is distinguishable from having lost them all — afterwards the board looks the same either
+    that is distinguishable from having lost them all. Afterwards the board looks the same either
     way. A hand-built board therefore excuses itself rather than losing on the first check.
     """
     rules = set(VictoryRule)
@@ -35,7 +35,7 @@ class GameState:
     Composes the shared :class:`~.TableState` (zones, decks, cards, positions) with the turn-level
     bookkeeping the rules engine owns: whose turn it is, the current phase, the per-seat gold pool,
     and once-per usage flags. The table stays a pure substrate so the manual sandbox keeps using it
-    unchanged; the rules engine layers its own state on top.
+    unchanged. The rules engine layers its own state on top.
 
     Attributes
     ----------
@@ -66,23 +66,23 @@ class GameState:
     winner : PlayerId or None
         The seat that has won the game, or None while the game is ongoing. Default None.
     win_reason : str or None
-        What that seat won, worded for a player — the victory's designation where the CR gives it
+        What that seat won, worded for a player: the victory's designation where the CR gives it
         one. Set with ``winner`` by :meth:`win`. Default None.
     active_rules : dict mapping PlayerId to frozenset of VictoryRule
-        The ways each seat can win or lose. :meth:`start` fills it from :func:`~.rules_at_start`;
-        dropping a rule from a seat's set afterwards excuses that seat alone, which is how a card
+        The ways each seat can win or lose. :meth:`start` fills it from :func:`~.rules_at_start`.
+        Dropping a rule from a seat's set afterwards excuses that seat alone, which is how a card
         reading "you will not lose, or be eliminated, by Dishonor" is expressed. A seat absent from
         the dict is held to nothing. Default empty.
     attack : AttackPhase or None
-        The attack declared in the Attack Phase now open, or None — outside that phase, and inside
-        it until the active player declares. Ephemeral and rebuilt by replay. Default None.
+        The attack declared in the Attack Phase now open: None outside that phase and inside it
+        until the active player declares. Ephemeral and rebuilt by replay. Default None.
     once_per : set of str
         Usage flags for once-per-turn and once-per-game abilities (the Inheritance Rule, Proclaim,
         ...), keyed by a caller-chosen string. Default empty.
     straighten_delayed : dict mapping str to int
         Cards that may not straighten, each with the turn its delay was imposed on. A prohibition
         the card imposes for a stretch of time, where "may remain bowed" is a choice offered each
-        turn; it blocks an effect that would straighten the card as surely as it blocks the
+        turn. It blocks an effect that would straighten the card as surely as it blocks the
         straighten step. Lifted once its controller's next Action Phase has ended, which is why the
         turn it began on is recorded. Default empty.
     seed : int
@@ -94,22 +94,22 @@ class GameState:
         The decision the engine is paused on, awaiting an answer from one seat, or None when the
         engine is free to advance. Default None.
     stack : list of WorkItem
-        Deferred engine work — the later steps of an action sequence, run once the current decision
+        Deferred engine work: the later steps of an action sequence, run once the current decision
         clears. Ephemeral: replay rebuilds it by re-running the engine, so it is never serialized.
         Default empty.
     ongoing : list of Modifier, KeywordGrant, Minimum, ProvinceModifier or LobbyModifier
-        The ongoing records in force — every continuous grant a card has created, kept in
-        creation order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike
-        it may be non-empty at rest within a turn, so its order is load-bearing. Default empty.
+        The ongoing records in force: every continuous grant a card has created, kept in creation
+        order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike it may
+        be non-empty at rest within a turn, so its order is load-bearing. Default empty.
     tokens_created : int
         How many tokens the game has created, which names the next one. Ephemeral and rebuilt by
-        replay like ``stack``; it counts creations rather than tokens on the board, so an id is
+        replay like ``stack``. It counts creations rather than tokens on the board, so an id is
         never reused by a token created after an earlier one has gone. Default 0.
     created_by : dict mapping str to str
         Each created card to the card that created it, kept for the life of the game so a card can
         still name what it made after the fact. Ephemeral and rebuilt by replay. Default empty.
     delayed : list of (Moment, Effect)
-        Effects held until a moment of play arrives — the CR's delayed effects. Each is resolved and
+        Effects held until a moment of play arrives: the CR's delayed effects. Each is resolved and
         dropped when its moment comes, whether or not it still has anything to do. Ephemeral and
         rebuilt by replay. Default empty.
     round_stack : list of ActionRound
@@ -119,13 +119,13 @@ class GameState:
         and rebuilt by replay. Default empty.
     responded : set of str
         The cards that have already taken a Response in the Response Step now open. A card answers a
-        given Step once; nothing else rations a Response, which costs no bow. Cleared as each Step
+        given Step once. Nothing else rations a Response, which costs no bow. Cleared as each Step
         opens. Ephemeral and rebuilt by replay. Default empty.
     action : Action or None
-        The action now resolving, or None outside one — what a card reacting "from a Kharmic action"
+        The action now resolving, or None outside one: what a card reacting "from a Kharmic action"
         reads to know which action it is reacting to. Ephemeral and rebuilt by replay. Default None.
     action_taken : str
-        What the action now resolving is, worded for a player — what a Response Step names as the
+        What the action now resolving is, worded for a player: what a Response Step names as the
         thing it is answering. Empty outside an action. Ephemeral and rebuilt by replay.
     action_is_favor : bool
         Whether the action now resolving has paid a Favor cost, which is what makes it a Favor
@@ -134,7 +134,7 @@ class GameState:
         Favor Icon). Ephemeral and rebuilt by replay. Default False.
     action_events : list of GameEvent
         What the action now resolving has done so far, in the order it happened, cleared as the next
-        action begins. A Response reads it to ask what it is responding to — "discarded a Fate card"
+        action begins. A Response reads it to ask what it is responding to  "discarded a Fate card"
         is a fact about the action rather than about the board it left behind. Ephemeral and rebuilt
         by replay. Default empty.
     """
@@ -179,7 +179,7 @@ class GameState:
 
     @property
     def game_over(self) -> bool:
-        """Whether the game has ended — a seat has won, or one has lost."""
+        """Whether the game has ended: a seat has won or one has lost."""
         return self.loser is not None or self.winner is not None
 
     @classmethod
@@ -214,8 +214,8 @@ class GameState:
         """End the game with ``seat`` the loser, for ``reason`` worded for a player, and award the
         last player left the ``victory`` its designation names.
 
-        The CR states Military and Dishonor Victory this way round — a player loses, and the one
-        remaining player has thereby won — so the win is derived here rather than reported
+        The CR states Military and Dishonor Victory this way round: a player loses and the one
+        remaining player has thereby won, so the win is derived here rather than reported
         separately by whatever noticed the loss.
 
         Parameters
@@ -237,7 +237,7 @@ class GameState:
         """End the game with ``seat`` the winner, ``reason`` naming what it won.
 
         An Honor Victory is won outright rather than by anyone losing, so this is reachable without
-        a loser; :meth:`lose` calls it for the victories the CR derives from an elimination.
+        a loser. :meth:`lose` calls it for the victories the CR derives from an elimination.
         """
         self.winner = seat
         self.win_reason = reason
@@ -247,7 +247,7 @@ class GameState:
         self.gold[seat] += amount
 
     def spend_gold(self, seat: PlayerId, amount: int) -> bool:
-        """Spend ``amount`` from ``seat``'s pool. Return whether the pool covered it; on an
+        """Spend ``amount`` from ``seat``'s pool. Return whether the pool covered it. On an
         insufficient pool, leave it untouched and return False."""
         if self.gold[seat] < amount:
             return False
@@ -277,7 +277,7 @@ class GameState:
         )
 
     def use_once(self, key: str) -> bool:
-        """Claim the one-time use named ``key``. Return True the first time and record it; return
+        """Claim the one-time use named ``key``. Return True the first time and record it, or
         False if it was already used."""
         if key in self.once_per:
             return False
@@ -290,13 +290,14 @@ class GameState:
 
 
 def once_key(card: L5RCard, tag: str, turn: int) -> str:
-    """The usage key for ``card``'s ``tag`` this turn — turn-scoped, so it resets each turn without
+    """The usage key for ``card``'s ``tag`` this turn: turn-scoped, so it resets each turn without
     clearing ``GameState.once_per``."""
     return f"{card.id}:{tag}:t{turn}"
 
 
 def claim_once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
-    """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then False."""
+    """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then
+    False."""
     return game.use_once(once_key(card, tag, game.turn))
 
 

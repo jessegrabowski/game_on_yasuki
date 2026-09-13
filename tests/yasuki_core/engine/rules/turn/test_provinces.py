@@ -70,7 +70,7 @@ def test_the_province_refills_once_the_reactions_are_done():
 
 
 def test_a_reaction_that_refills_first_leaves_nothing_to_refill(reacting):
-    """ "Unless something else has refilled it" — the refill is conditional, so a reaction that
+    """ "Unless something else has refilled it": the refill is conditional, so a reaction that
     filled the gap itself is not doubled up on."""
     reacting(CardDiscarded, "refill_probe", lambda ctx: [RefillProvince(PROVINCE)])
     game = _game(spares=2)
@@ -84,7 +84,7 @@ def test_a_reaction_that_refills_first_leaves_nothing_to_refill(reacting):
 
 def test_a_province_emptied_by_an_effect_refills_without_being_asked():
     """The refill is a property of the settled board, not a step each effect remembers: an effect
-    that simply takes the card out of a Province — no flow path, nothing queuing a refill — leaves
+    that simply takes the card out of a Province  no flow path, nothing queuing a refill  leaves
     the Province short, and short Provinces refill."""
     game = _game()
 
@@ -96,7 +96,7 @@ def test_a_province_emptied_by_an_effect_refills_without_being_asked():
 
 
 def test_a_province_stays_short_when_the_dynasty_deck_cannot_fill_it():
-    """ "When possible" is the whole rule — an exhausted Dynasty deck leaves the Province empty
+    """ "When possible" is the whole rule: an exhausted Dynasty deck leaves the Province empty
     rather than raising."""
     game = _game(spares=0)
 

@@ -28,8 +28,8 @@ def turn_context(view: GameView) -> str:
 
     The most specific heading that applies: the segment of the battle being fought once one is
     under way, the segment of the Attack Phase once an attack has been declared, and the phase
-    otherwise. A turn belongs to its active player even where both seats may act inside it, so the
-    possessive follows the turn rather than the opportunity to act.
+    otherwise. The possessive names the active player, even where both seats may act inside the
+    turn.
     """
     whose = "Your" if view.active is view.viewer else "Opponent's"
     attack = view.attack

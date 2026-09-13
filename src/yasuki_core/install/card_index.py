@@ -7,7 +7,7 @@ from yasuki_core import DATABASE_DIR
 from yasuki_core.yaml_io import read_yaml
 
 DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
-# Set files a developer keeps on their own machine and does not commit — a fixture Stronghold, a
+# Set files a developer keeps on their own machine and does not commit: a fixture Stronghold, a
 # set being transcribed. They are absent from a fresh clone, so nothing committed may depend on
 # them: the card index skips them, and they register their own set metadata as they load.
 LOCAL_SET_SUFFIX = ".local.yaml"
@@ -29,8 +29,8 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
     Every card entry in every set file, in filename order.
 
     Ids are derived exactly as :func:`yasuki_core.install.yaml_to_sql.load_cards` derives them: an
-    explicit ``id``, or a slug of the extended title, with ``__back`` appended for the reverse face of
-    a double-faced card. Every consumer reads the data through here, so the derivation has one
+    explicit ``id``, or a slug of the extended title, with ``__back`` appended for the reverse face
+    of a double-faced card. Every consumer reads the data through here, so the derivation has one
     definition and cannot drift between them.
 
     Local set files are skipped. The committed index has to match a fresh clone, which holds none of
@@ -93,8 +93,8 @@ def card_ids(cards_dir: Path) -> list[str]:
     titles_by_id: dict[str, str] = {}
     for entry in iter_set_entries(cards_dir):
         # Reprints repeat an id legitimately; two *different* cards sharing one never do. Token ids
-        # are stat-descriptive (`courtier_0_3_2`), so that is where a genuine clash is likeliest —
-        # and both this index and load_cards keep whichever came first, silently.
+        # are stat-descriptive (`courtier_0_3_2`), so that is where a genuine clash is likeliest.
+        # Both this index and load_cards keep whichever came first, silently.
         claimed = titles_by_id.setdefault(entry.card_id, entry.title)
         if claimed != entry.title:
             raise ValueError(

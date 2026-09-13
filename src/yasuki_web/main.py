@@ -45,7 +45,7 @@ async def lifespan(app: FastAPI):
     logger.info("API Documentation available at: /docs")
     # Ensure the accounts schema exists (idempotent; never drops). Best-effort: an unreachable
     # accounts DB must not take down the fully public card-search / deck-builder surface, so log and
-    # continue — account features degrade until it recovers, and the migration re-runs next boot. A
+    # continue. Account features degrade until it recovers, and the migration re-runs next boot. A
     # non-connection failure (e.g. a real DDL bug) still propagates and fails the deploy loudly.
     try:
         await asyncio.to_thread(migrate_accounts_schema)
@@ -96,7 +96,7 @@ class BodySizeLimitMiddleware(BaseHTTPMiddleware):
 app.add_middleware(BodySizeLimitMiddleware)
 
 # allow_credentials is True so the browser sends the session cookie on same-origin and allowed
-# cross-origin requests. This is safe only against a concrete origin allowlist — never "*" — which
+# cross-origin requests: safe only against a concrete origin allowlist, never "*", which
 # allowed_origins() enforces by rejecting a wildcard.
 app.add_middleware(
     CORSMiddleware,
@@ -107,8 +107,9 @@ app.add_middleware(
 )
 
 
-# Card images come from the R2 CDN (https://*.r2.dev) or the local /images mount. CSS, JS, and the
-# self-hosted EB Garamond font (/fonts) are all same-origin, so styles, scripts, and fonts stay 'self'.
+# Card images come from the R2 CDN (https://*.r2.dev) or the local /images mount. CSS, JS, and
+# the self-hosted EB Garamond font (/fonts) are all same-origin, so styles, scripts, and fonts
+# stay 'self'.
 _CONTENT_SECURITY_POLICY = (
     "default-src 'self'; "
     "img-src 'self' https://*.r2.dev data:; "
@@ -177,9 +178,9 @@ else:
     logger.warning(f"Bundled images directory not found at {BUNDLED_IMAGES_DIR}")
 
 app.include_router(cards.router, prefix="/api", tags=["cards"])
-# Saved decks are part of the public deck-builder surface, not the WIP play backend, so they carry no
-# WIP gate; owner routes (/api/me/decks) require a session, public reads (/api/decks/{slug}) are
-# visibility-checked.
+# Saved decks are part of the public deck-builder surface, not the WIP play backend, so they
+# carry no WIP gate; owner routes (/api/me/decks) require a session, public reads
+# (/api/decks/{slug}) are visibility-checked.
 app.include_router(saved_decks.router, prefix="/api", tags=["decks"])
 # Play is login-required: the whole rooms API needs a session, matching the WS handshake's own
 # login gate (websocket.py). Anonymous visitors can browse cards and build decks, not create or
@@ -188,7 +189,7 @@ app.include_router(
     rooms.router, prefix="/api", tags=["rooms"], dependencies=[Depends(require_approved)]
 )
 app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
-# Auth routes carry their own full paths (/auth/*, /api/me) and gate nothing themselves — the
+# Auth routes carry their own full paths (/auth/*, /api/me) and gate nothing themselves. The
 # session cookie is additive, ignored on public routes and required only where a route depends on
 # current_user.
 app.include_router(auth.router, tags=["auth"])
@@ -203,7 +204,7 @@ def _site_page(filename: str) -> FileResponse:
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon() -> FileResponse:
-    # Content type, not the .ico extension, drives rendering — the SVG serves fine at this path.
+    # Content type, not the .ico extension, drives rendering, so the SVG serves fine at this path.
     icon = SITE_DIR / "favicon.svg"
     if not icon.exists():
         raise HTTPException(status_code=404, detail="favicon not found")
@@ -261,7 +262,7 @@ _SetSlug = Annotated[str, PathParam(max_length=120, pattern=_SLUG)]
 def _absolute_image_url(image_path: str, request: Request) -> str:
     """Build an absolute URL for a card image, for crawler-readable og:image tags.
 
-    ``IMAGE_BASE_URL`` is already absolute in production (the R2 CDN); locally it is the relative
+    ``IMAGE_BASE_URL`` is already absolute in production (the R2 CDN). Locally it is the relative
     ``/images`` mount, so join it onto the request's own origin.
     """
     if IMAGE_BASE_URL.startswith("http"):
@@ -328,7 +329,8 @@ async def config():
     return {
         "image_base_url": IMAGE_BASE_URL,
         "debug": _debug,
-        # Lets the client offer a one-click local sign-in that skips Google (dev only; false in prod).
+        # Lets the client offer a one-click local sign-in that skips Google (dev only; false in
+        # prod).
         "dev_login": auth.dev_login_enabled(),
     }
 

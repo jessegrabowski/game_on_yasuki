@@ -21,7 +21,7 @@ def test_auto_agent_handles_a_zero_count():
 
 def test_auto_agent_heaps_a_division_onto_one_candidate():
     """A prefix of distinct candidates cannot name one twice, so a division of three among two would
-    have no prefix that answers it — the agent would raise on a decision a player answers easily."""
+    have no prefix that answers it. The agent would raise on a decision a player answers easily."""
     request = ChooseDistribution(
         PlayerId.P1, ("a", "b"), count=3, resolver="split", source_id="source"
     )

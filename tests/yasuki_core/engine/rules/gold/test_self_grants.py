@@ -21,7 +21,8 @@ from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_gam
 
 
 def test_maximum_gold_production_adds_the_declared_grant():
-    """What affordability asks: the most a card could yield if its controller took what it offers."""
+    """What affordability asks: the most a card could yield if its controller took what it
+    offers."""
     register_self_grant("granting_probe", 2)
 
     try:
@@ -94,7 +95,8 @@ def test_maximum_gold_production_stops_adding_a_grant_already_taken():
 
 def test_a_straightened_producer_does_not_regrant_itself():
     """The reason the tag is asked rather than `card.bowed`: a producer that bowed, granted itself
-    and was straightened again is unbowed with the grant still live, and has nothing left to give."""
+    and was straightened again is unbowed with the grant still live, and has nothing left to
+    give."""
     register_self_grant("granting_probe", 2)
 
     try:
@@ -112,15 +114,14 @@ def test_a_straightened_producer_does_not_regrant_itself():
 
 @pytest.mark.parametrize("printed_id", sorted(GOLD_SELF_GRANT))
 def test_every_declared_self_grant_matches_what_its_trigger_grants(printed_id):
-    """The declared delta is a cached derivation, and this is what keeps the cache honest: run the
-    card's own window trigger, answer its question yes, and sum what it actually grants.
+    """Verify the declared self-grant delta matches what the card's window trigger actually
+    grants: run the trigger on a board built for the test, answer its question yes, and sum the
+    granted amount.
 
-    Derived on a board built for the test and thrown away, never on the live game. A trigger may
-    claim a once-per-turn use as it fires, which is why affordability reads the declaration at
-    runtime instead of deriving it — asking would spend the use.
-
-    The owner went second so that a Courtesy card offers its grant at all; a board that failed a
-    card's condition would compare nothing against nothing and pass whatever the card did.
+    Runs on a throwaway board, never the live game. Affordability reads the declared value rather
+    than the trigger itself, because answering it would spend the once-per-turn use its resolver
+    claims. The owner goes second so a Courtesy card's grant condition is met, since a board that
+    failed it would compare nothing against nothing and pass regardless.
     """
     game = two_seat_game(first_player=PlayerId.P2)
     producer = put_in_play(game, holding("probe", owner=PlayerId.P1, printed_id=printed_id))

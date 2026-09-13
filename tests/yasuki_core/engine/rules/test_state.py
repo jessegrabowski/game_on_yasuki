@@ -78,7 +78,7 @@ def test_a_seat_dealt_provinces_can_lose_them_all():
 
 def test_a_seat_dealt_no_provinces_is_not_held_to_the_military_loss():
     # Otherwise a board built card by card loses on the first check, before it has been dealt a
-    # game to lose — and after dealing, "never had any" and "lost them all" look identical.
+    # game to lose. And after dealing, "never had any" and "lost them all" look identical.
     state = TableState.empty_two_seat()
     province_card(state, "prov", seat=PlayerId.P1, index=0)
 

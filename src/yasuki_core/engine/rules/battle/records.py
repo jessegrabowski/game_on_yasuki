@@ -70,7 +70,7 @@ class AttackPhase:
         Default None.
     assigned_in : dict mapping str to str
         Each assigned Personality to the maneuvers window it assigned in. The current rules run one
-        window, so every entry names the same one; earlier editions ran Infantry Maneuvers and
+        window, so every entry names the same one. Earlier editions ran Infantry Maneuvers and
         Cavalry Maneuvers as two, and cards ask which of them a unit came in on. Recording where a
         unit ended up would not answer that. Default empty.
     """
@@ -86,6 +86,6 @@ class AttackPhase:
 
     @property
     def current_province(self) -> ZoneKey:
-        """The Province the battle now being fought sits at — what a card means by "the current
+        """The Province the battle now being fought sits at: what a card means by "the current
         Province". Raise ``TypeError`` between battles, when there is no current battlefield."""
         return self.battlefields[self.current].province

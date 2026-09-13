@@ -33,7 +33,7 @@ def test_the_live_ruleset_names_every_segment_it_walks():
 
 def test_the_live_ruleset_walks_the_crs_whole_battle_sequence():
     """The CR's Battle Sequence has four entries and only the first two are Action Rounds, so the
-    sequence cannot be read off what opens a round — a player shown the battle's shape has to be
+    sequence cannot be read off what opens a round. A player shown the battle's shape has to be
     shown the two it passes through without being asked anything."""
     assert SHATTERED_EMPIRE.battle_segments == (
         BattleSegment.ENGAGE,

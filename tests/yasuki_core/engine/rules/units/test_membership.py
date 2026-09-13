@@ -101,7 +101,7 @@ def test_a_card_on_a_province_is_in_no_unit():
 
 
 def test_attaching_to_one_parent_releases_the_other():
-    """A card is in a unit or on a province, never both — `validate` refuses the overlap, so the
+    """A card is in a unit or on a province, never both. `validate` refuses the overlap, so the
     mutators have to clear the relation they are leaving rather than let it accumulate."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero"))
@@ -131,7 +131,7 @@ def test_a_personality_leaving_play_empties_his_unit():
 
 
 def test_a_parent_that_left_the_table_is_loud_rather_than_silent():
-    """`ops` drops the entry when a card leaves the battlefield, so this state is unreachable — and
+    """`ops` drops the entry when a card leaves the battlefield, so this state is unreachable, and
     answering None for it would read exactly like an unattached card, hiding a broken invariant
     behind a legitimate answer."""
     game = two_seat_game()
@@ -204,7 +204,7 @@ def test_modifiers_from_several_attachments_stack():
 
 
 def test_penalties_are_summed_before_the_floor_applies():
-    """Two penalties against a Chi of 1 total -1, which reads as 0 — the sum floors once, rather than
+    """Two penalties against a Chi of 1 total -1, which reads as 0. The sum floors once, rather than
     each penalty flooring on its own (CR, Calculating Stats)."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", chi=1))
@@ -215,7 +215,7 @@ def test_penalties_are_summed_before_the_floor_applies():
 
 
 def test_a_personal_honor_counter_reaches_the_cards_honor():
-    """The +1PH and +2PH counters have declared their delta all along; Personal Honor becoming a
+    """The +1PH and +2PH counters have declared their delta all along. Personal Honor becoming a
     readable stat is what lets anything ask."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero"))

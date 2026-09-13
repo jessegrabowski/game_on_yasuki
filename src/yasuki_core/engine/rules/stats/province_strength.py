@@ -13,7 +13,8 @@ from yasuki_core.game_pieces.counters import counter_from_key
 
 # What a card attached to a Province gives it, beyond anything it prints. Makeshift Fortifications
 # reads "This Province has +3PS"; a Fortification carries no Province Strength stat of its own, so
-# the grant is text rather than a number on the print. Keyed by printed id like the other registries.
+# the grant is text rather than a number on the print. Keyed by printed id like the other
+# registries.
 ProvinceGrant = Callable[[GameState, L5RCard, ZoneKey], int]
 PROVINCE_STRENGTH_GRANTS: HandlerRegistry[ProvinceGrant] = HandlerRegistry(
     "province strength grants", "already grants Province Strength"
@@ -25,7 +26,7 @@ def effective_province_strength(game: GameState, province: ZoneKey) -> int:
     """How strong ``province`` is right now, floored at zero.
 
     Four sources, summed: the owning seat's Stronghold prints the strength every one of its
-    Provinces starts at — a stat of a Stronghold *or* of a Province (CR, Province Strength) — then
+    Provinces starts at, a stat of a Stronghold *or* of a Province (CR, Province Strength), then
     the counters resting on this slot, then what the Fortifications attached to it grant, then the
     recorded modifiers a card has laid on it. A seat with no Stronghold in play contributes no
     printed base.

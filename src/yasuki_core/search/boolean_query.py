@@ -11,8 +11,8 @@ def tokenize_boolean(query: str) -> list[str]:
     """
     Split a query into tokens for the boolean grammar.
 
-    Behaves like ``tokenize_query`` — whitespace separates tokens and a quoted phrase is one token —
-    but additionally emits each parenthesis as its own token, even when flush against a term, so
+    Behaves like ``tokenize_query``: whitespace separates tokens, and a quoted phrase is one token.
+    It additionally emits each parenthesis as its own token, even when flush against a term, so
     ``(c:dragon`` yields ``['(', 'c:dragon']``. Parentheses inside a quoted phrase stay literal, and
     ``OR``/``AND`` are left as ordinary tokens for the parser to classify.
 
@@ -110,9 +110,9 @@ def active_format_from_ast(node: Node | None) -> str | None:
     """
     Find the single format a query pins for default-print selection, or None.
 
-    Return the value of an exact ``format:``/``arc:`` term reachable through AND groups only — not
-    under an ``OR`` (which makes the choice ambiguous) or a ``NOT`` (which negates it) — and only
-    when exactly one such term exists.
+    Return the value of an exact ``format:``/``arc:`` term reachable through AND groups only.
+    A term under an ``OR`` is excluded, because that makes the choice ambiguous, as is one under a
+    ``NOT``, because that negates it. The value is returned only when exactly one such term exists.
 
     Parameters
     ----------
@@ -158,7 +158,7 @@ def includes_from_ast(node: Node | None) -> set[str]:
 
 
 def _top_level_and_terms(node: Node | None) -> Iterator[SearchTerm]:
-    """Yield the terms reachable through AND groups — not those under an OR or a NOT."""
+    """Yield the terms reachable through AND groups, not those under an OR or a NOT."""
     if isinstance(node, Term):
         yield node.term
     elif isinstance(node, BoolGroup) and node.op == "AND":

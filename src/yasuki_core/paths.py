@@ -14,7 +14,7 @@ FONTS_DIR = _PACKAGE_DIR / "assets" / "fonts"
 FATE_BACK = Path("fate_back_new.jpg")
 DYNASTY_BACK = Path("dynasty_back_new.jpg")
 # The red back a proxy wears. A proxy stands in for a card that was never printed, so it shows this
-# rather than its type's frame — it should read as a proxy before it reads as an Item.
+# rather than its type's frame. It should read as a proxy before it reads as an Item.
 TOKEN_BACK = Path("dynasty_back_token.jpg")
 
 _DEFAULT_SETS_DIR = Path.cwd() / "sets"
@@ -93,7 +93,7 @@ def default_personality_image(clans: list[str] | None) -> Path:
 def resolve_card_image_path(path: Path | str | None) -> Path | None:
     """Resolve an image path off a card to a filesystem path.
 
-    A card's own art is set-relative (``"sets/.../card.jpg"``); its type's default art and deck back
+    A card's own art is set-relative (``"sets/.../card.jpg"``). Its type's default art and deck back
     are relative to the bundled images. An absolute path is returned unchanged, so a caller holding
     one already resolved is safe.
 

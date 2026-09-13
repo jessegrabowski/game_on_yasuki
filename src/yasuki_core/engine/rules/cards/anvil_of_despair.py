@@ -21,7 +21,7 @@ ASHIGARU_GOLD = 1
 
 
 def _refugees_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Every Personality with no Follower attached, either side's — the card names no side."""
+    """Every Personality with no Follower attached, either side's. The card names no side."""
     return [card.id for card in personalities_in_play(game) if not followers_of(game, card)]
 
 
@@ -32,7 +32,7 @@ def _refugees_effects(game: GameState, source: L5RCard, target: L5RCard) -> list
     a seat with no Gold to reach.
     """
     controller = target.owner
-    # The bow rides the movement, so a card negating the move — The Height of Courage — should take
+    # The bow rides the movement, so a card negating the move (The Height of Courage) should take
     # the bow with it. Nothing can negate one until the Interrupt layer exists, so the two never
     # differ yet and the bow is written plainly.
     sent_home: list[Effect] = [Move(target.id, Location.home(controller)), Bow(target.id)]
@@ -55,7 +55,7 @@ def _refugees_effects(game: GameState, source: L5RCard, target: L5RCard) -> list
 def _resolve_refugees(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Declining costs nothing and buys nothing; the Follower is the controller's own."""
+    """Declining costs nothing and buys nothing. The Follower is the controller's own."""
     if not chosen:
         return []
     return [

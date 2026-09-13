@@ -8,8 +8,8 @@ def cards_by_set(cards_dir: Path = DEFAULT_CARDS_PATH) -> dict[str, set[str]]:
     """
     Every card id in each set, keyed by set name.
 
-    A reprint counts toward every set it appears in, not only its first, so a set is credited for the
-    cards a player can actually field from it.
+    A reprint counts toward every set it appears in, not only its first, so a set is credited for
+    the cards a player can actually field from it.
 
     Parameters
     ----------

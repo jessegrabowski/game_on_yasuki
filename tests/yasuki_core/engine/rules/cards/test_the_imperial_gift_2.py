@@ -66,7 +66,7 @@ def _offered_targets(session: EngineSession, holder: PlayerId) -> tuple[str, ...
 
 def test_it_targets_the_defending_army_and_not_the_defenders_whole_side():
     """ "A target defending Personality" is the Defender's units at the battle, so the one kept at
-    home is no target — and neither is the Attacker's own."""
+    home is no target, and neither is the Attacker's own."""
     session = _incapacitated_battle()
     session.act(DEFENDER, Pass())
 
@@ -96,8 +96,8 @@ def test_the_targets_follower_goes_home_with_him():
 
 
 def test_the_target_stops_counting_toward_the_defending_force():
-    """The point of the card. The armies are level at 3 — the raider against the guard and his
-    Follower — so the battle ties if the move does not take the guard out of the army it resolves,
+    """The point of the card. The armies are level at 3, the raider against the guard and his
+    Follower, so the battle ties if the move does not take the guard out of the army it resolves,
     and the Attacker takes the Province if it does."""
     session = _incapacitated_battle()
     session.act(DEFENDER, Pass())

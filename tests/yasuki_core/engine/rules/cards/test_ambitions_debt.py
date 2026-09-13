@@ -48,7 +48,7 @@ def _play_at(session: EngineSession, target_id: str) -> None:
 
 
 def test_the_target_keeps_one_chi_however_far_the_penalty_takes_him():
-    """A 2 Chi Personality given -2C reads 1, not 0 — the minimum applies on top of the penalty."""
+    """A 2 Chi Personality given -2C reads 1, not 0. The minimum applies on top of the penalty."""
     state = TableState.empty_two_seat()
     put_in_play(state, personality("shiba", owner=OPPONENT, force=3, chi=2))
     _uncertainty(state)
@@ -97,7 +97,7 @@ def test_it_is_not_offered_with_no_personality_in_play():
 
 
 def test_it_is_offered_under_both_of_its_printed_designators():
-    """ "Battle/Open" — the Open half is reachable through a round today, the Battle half once battle
+    """'Battle/Open'. The Open half is reachable through a round today, the Battle half once battle
     rounds open one, and the card is the same card in either."""
     state = TableState.empty_two_seat()
     put_in_play(state, personality("shiba", owner=OPPONENT, force=3, chi=2))
@@ -115,7 +115,7 @@ def test_it_is_offered_under_both_of_its_printed_designators():
 
 def test_the_penalty_and_the_minimum_both_wear_off_when_the_turn_ends():
     """Neither prints a duration, so both last until the end of the current turn (CR, Duration of
-    Effects) — a minimum that outlived its turn would keep a Personality out of the Chi Death Rule
+    Effects). A minimum that outlived its turn would keep a Personality out of the Chi Death Rule
     for the rest of the game."""
     state = TableState.empty_two_seat()
     put_in_play(state, personality("shiba", owner=OPPONENT, force=3, chi=2))

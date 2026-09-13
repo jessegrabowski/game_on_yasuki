@@ -27,8 +27,9 @@ def test_owned_holdings_without_a_keyword_takes_them_all():
 
 def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
     """Keyword lookups read effective keywords, so a card whose own condition grants one is found by
-    the same searches as a card that prints it. Registered here rather than leaning on a real card:
-    today only Shrine of Courtesy grants anything, and it grants Legacy, which no lookup asks for."""
+    the same searches as a card that prints it. Registered here rather than leaning on a real
+    card: today only Shrine of Courtesy grants anything, and it grants Legacy, which no lookup
+    asks for."""
     game = two_seat_game()
     granted = put_in_play(game, holding("P1-docks", owner=PlayerId.P1, printed_id="keyword_probe"))
     printed = put_in_play(game, holding("P1-quay", owner=PlayerId.P1, keywords=("Port",)))
@@ -58,7 +59,7 @@ def test_has_keyword_ignores_case_on_both_sides():
 
 def test_province_key_of_raises_when_no_province_holds_the_card():
     """The raising variant exists so a caller that already knows the card is in a Province does not
-    carry an impossible None; a card in play is in no Province at all."""
+    carry an impossible None. A card in play is in no Province at all."""
     game = two_seat_game()
     provincial = province_card(game, "P1-farm", seat=PlayerId.P1)
     in_play = put_in_play(game, holding("P1-built", owner=PlayerId.P1))

@@ -8,7 +8,7 @@ def reacting():
     """Register triggers for one test and clear them afterwards.
 
     `_TRIGGERS` is module-global and appends, so a leaked registration fires in every later test in
-    the process. The fixture owns that hygiene; each test still writes its own reaction inline.
+    the process. The fixture owns that hygiene. Each test still writes its own reaction inline.
     """
     registered: list[tuple[type, str]] = []
 

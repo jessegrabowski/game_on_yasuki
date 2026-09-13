@@ -16,7 +16,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 # A cost is the effects paid to activate an ability, applied before the ability's own effects. Bow /
 # destroy / spend-a-token are all just effects targeting a card, so costs and effects share one
-# vocabulary — there is no separate cost taxonomy. What a card calls a cost is one here only when it
+# vocabulary: there is no separate cost taxonomy. What a card calls a cost is one here only when it
 # must be paid before resolution; anything the card's own text sequences is an effect. A cost takes
 # the board as well as the source because it may be paid by a card the source did not choose: an
 # attachment's cost is usually paid by the Personality it hangs on, which only the graph can name.
@@ -69,7 +69,7 @@ def bow_cost(game: GameState, source: L5RCard) -> list[Effect]:
 def _resolve_bow_waiver(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Taking the waiver spends it and nothing bows; declining pays the cost as printed."""
+    """Taking the waiver spends it and nothing bows. Declining pays the cost as printed."""
     if not chosen:
         return [Bow(source_id)]
     claim_once_per_turn(game, game.table.cards_by_id[chosen[0]], WAIVER_TAG)

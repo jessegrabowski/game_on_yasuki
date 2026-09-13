@@ -174,7 +174,7 @@ def test_validate_accepts_a_unit_and_a_province_attachment():
 
 def test_validate_rejects_a_unit_parent_that_is_not_a_personality():
     """Attachments are the only card type that may attach to a Personality, and a Personality is the
-    only thing they may attach to (CR, Attachments) — so a Follower parent is not a board state to
+    only thing they may attach to (CR, Attachments), so a Follower parent is not a board state to
     tolerate, it is a broken relation."""
     table = TableState.empty_two_seat()
     _put_on_battlefield(table, "follower")
@@ -292,8 +292,8 @@ def test_validate_rejects_a_location_naming_neither_or_both(location):
 
 
 def test_validate_rejects_a_home_belonging_to_no_seat():
-    """A location may name a home the table has no seat for — a stale seat left behind by a table
-    rebuilt with different players — and that is a broken relation rather than a card at home."""
+    """A location may name a home the table has no seat for (a stale seat left behind by a table
+    rebuilt with different players), and that is a broken relation rather than a card at home."""
     table = TableState.empty_two_seat()
     _put_personality_on_battlefield(table, "hero")
     del table.seats[PlayerId.P2]

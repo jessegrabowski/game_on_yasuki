@@ -299,7 +299,7 @@ def test_no_identity_leaks_across_random_tables():
 
 
 def test_both_seats_see_the_same_locations():
-    """Assignment happens in the open, so a location is public — and a location naming a card the
+    """Assignment happens in the open, so a location is public. A location naming a card the
     viewer cannot identify still resolves, because ids survive redaction either way."""
     table = TableState.empty_two_seat()
     mine = _card("mine", side=Side.DYNASTY, owner=P1, face_up=True)

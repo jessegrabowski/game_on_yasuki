@@ -118,7 +118,7 @@ _ACTION_WORDING: dict[type, str] = {
 
 
 def describe_action(game: GameState, action: Action) -> str:
-    """``action`` worded for a player — "the Recruit of Courts of Otosan Uchi"."""
+    """``action`` worded for a player: "the Recruit of Courts of Otosan Uchi"."""
     wording = _ACTION_WORDING.get(type(action), type(action).__name__)
     card = game.table.cards_by_id.get(getattr(action, "card_id", ""))
     return f"{wording} {card.name}" if card is not None else wording
@@ -277,7 +277,7 @@ def cancel(game: GameState) -> None:
 
 
 def _cancel_payment(game: GameState) -> None:
-    """Drop the work the cancelled payment stands in front of, whatever queued it — a Recruit's
+    """Drop the work the cancelled payment stands in front of, whatever queued it: a Recruit's
     :class:`~.ResolveRecruit` or a rulebook cost's :class:`~.ApplyEffects`.
 
     The item is always the top of the stack: announcing a cost pushes exactly one, and the engine is
@@ -338,7 +338,7 @@ def _resolve(game: GameState, item: WorkItem) -> None:
         case ContinuePayment(seat=seat, amount=amount, label=label, target_id=target_id):
             _continue_payment(game, seat, amount, label, target_id)
         case ResumeCascade():
-            # An interrupting effect whose answer produces no effects of its own — a payment, say —
+            # An interrupting effect whose answer produces no effects of its own, a payment, say,
             # leaves its stash here for the generic drain. A Choose is popped by its own handler,
             # which splices the resolver's effects in.
             triggers.resume_cascade(game, item, [])
@@ -353,12 +353,12 @@ def _resolve(game: GameState, item: WorkItem) -> None:
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
     """Bow the producer the answer names, adding what it makes to the seat's pool.
 
-    An answer names at most one — none when the pool already covers the cost — and the payment comes
-    back round for whatever is still owed.
+    An answer names at most one, none when the pool already covers the cost, and the payment
+    comes back round for whatever is still owed.
 
     Nothing here knows what a producer is worth. A card that can raise its own yield is asked in the
     window :func:`~.produce_gold` opens, and what it owes for saying yes is settled on the far side
-    of the bow — both the card's own business, neither the payment's.
+    of the bow, both the card's own business, neither the payment's.
     """
     target_ids = (request.target_id,) if request.target_id in game.table.cards_by_id else ()
     for card_id in response.choices:
@@ -371,9 +371,9 @@ def _continue_payment(
     """Spend once ``seat``'s pool covers ``amount``, or ask it to bow more producers.
 
     Raise ``RuntimeError`` if what is left unbowed can no longer reach the cost. Affordability
-    decided the action was payable before it was announced, so arriving here means that projection
-    was wrong — the alternative is a seat stranded on a question with no legal answer, or handed
-    what it was paying for at no charge.
+    decided the action was payable before it was announced, so reaching this error means that
+    earlier projection was wrong. Without the raise, the seat would be stranded on a question
+    with no legal answer, or handed what it was paying for at no charge.
     """
     if game.gold[seat] >= amount:
         game.spend_gold(seat, amount)

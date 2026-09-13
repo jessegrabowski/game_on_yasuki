@@ -144,7 +144,7 @@ def test_entry_names_is_just_the_card_without_an_art_swap():
 @requires_db
 def test_setup_leaves_rulebook_proxies_on_the_table(room):
     """The per-deck token pull assigns ``creatable_tokens`` wholesale, so the rulebook proxies are
-    merged after it; swapping the two would drop the Favor from every room.
+    merged after it. Swapping the two would drop the Favor from every room.
     """
     for seat in (PlayerId.P1, PlayerId.P2):
         room.pending_decks[seat] = parse_deck_yaml(DECK_YAML)

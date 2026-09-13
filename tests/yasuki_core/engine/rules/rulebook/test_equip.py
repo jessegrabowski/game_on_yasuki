@@ -44,7 +44,7 @@ def test_a_personality_carries_one_weapon_by_default():
 
 
 def test_a_kensai_carries_two():
-    """Kensai raises the limit; it does not exempt him from it (CR, Kensai)."""
+    """Kensai raises the limit, but it does not exempt him from it (CR, Kensai)."""
     game = two_seat_game()
     kensai = put_in_play(game, personality("kensai", keywords=("Kensai",)))
 
@@ -71,8 +71,8 @@ def test_a_kensai_takes_a_second_weapon_but_not_a_third():
 
 
 def test_a_two_handed_weapon_needs_an_empty_hand_even_for_a_kensai():
-    """ "A Personality, even a Kensai, cannot attach a Two-Handed Weapon if they have a Weapon
-    attached" — so the count is not the only rule, and raising it does not lift this one."""
+    """'A Personality, even a Kensai, cannot attach a Two-Handed Weapon if they have a Weapon
+    attached'. So the count is not the only rule, and raising it does not lift this one."""
     game = two_seat_game()
     kensai = put_in_play(game, personality("kensai", keywords=("Kensai",)))
     attached(game, _weapon("katana"), "kensai")
@@ -98,7 +98,7 @@ def test_an_empty_handed_personality_takes_a_two_handed_weapon():
 
 
 def test_a_non_weapon_item_does_not_fill_a_weapon_slot():
-    """The limit counts Weapons, not attachments — armor and Followers leave the hand free."""
+    """The limit counts Weapons, not attachments. Armor and Followers leave the hand free."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero"))
     attached(game, attachment("armor", keywords=("Armor",)), "hero")
@@ -122,8 +122,8 @@ def test_a_follower_is_not_held_back_by_a_weapon_the_personality_already_carries
 
 
 def _weapon_print(*, two_handed: bool = False) -> AttachmentPrint:
-    """The template a card creates a Weapon from — what the Weapon rules have to judge before there
-    is a card to ask."""
+    """The template a card creates a Weapon from: what the Weapon rules have to judge before
+    there is a card to ask."""
     keywords = ("Weapon", "Two-Handed") if two_handed else ("Weapon",)
     return AttachmentPrint(
         name="Created Sword",
@@ -148,7 +148,7 @@ def test_a_created_weapon_answers_to_the_same_limit_as_a_drawn_one():
 
 def test_a_created_weapon_cannot_join_a_two_handed_one_even_for_a_kensai():
     """The Kensai's second slot is open, and Two-Handed exclusivity closes it anyway (CR,
-    Two-Handed) — the branch a one-Weapon limit alone would never reach."""
+    Two-Handed): the branch a one-Weapon limit alone would never reach."""
     game = two_seat_game()
     kensai = put_in_play(game, personality("kensai", keywords=("Kensai",)))
     attached(game, _weapon("no_dachi", two_handed=True), "kensai")
@@ -185,7 +185,7 @@ def test_a_creation_can_be_narrowed_to_the_keyword_the_card_names():
 
 
 def test_a_narrowed_creation_still_answers_to_the_weapon_rules():
-    """The keyword narrows the Personalities; it does not excuse one from the rules that decide
+    """The keyword narrows the Personalities, but it does not excuse one from the rules that decide
     whether the Weapon fits."""
     game = two_seat_game()
     laden = put_in_play(game, personality("laden", keywords=("Samurai",)))
@@ -297,8 +297,8 @@ def test_a_spell_attaches_to_a_shugenja():
 
 
 def test_a_spell_refuses_a_personality_who_is_no_shugenja():
-    """ "They will only attach to a Shugenja Personality" (CR, Spell) — a rule about the Spell card
-    type, so no card has to print it and every Spell answers to it."""
+    """'They will only attach to a Shugenja Personality' (CR, Spell): a rule about the Spell
+    card type, so no card has to print it and every Spell answers to it."""
     game = two_seat_game()
     bushi = put_in_play(game, personality("bushi", keywords=("Bushi",)))
 

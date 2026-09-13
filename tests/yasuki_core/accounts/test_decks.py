@@ -3,7 +3,7 @@ import pytest
 from yasuki_core.accounts import decks
 from yasuki_core.accounts.decks import DeckCard
 
-# Card records shaped like get_cards_by_names output — the contract the serializer resolves against.
+# Card records shaped like get_cards_by_names output, the contract the serializer resolves against.
 RECORDS = [
     {"card_id": "kyuden_hida", "name": "Kyuden Hida", "types": ["Stronghold"], "clans": ["Crab"]},
     {

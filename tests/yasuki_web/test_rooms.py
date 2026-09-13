@@ -37,8 +37,8 @@ def test_room_name_length_is_bounded(client):
 
 
 def test_room_payload_exposes_expected_keys(client):
-    # The lobby JS (and its fixtures.js) consume these exact keys; pin the shape here so a regression
-    # fails a test instead of only surfacing in the browser after a deploy.
+    # The lobby JS (and its fixtures.js) consume these exact keys; pin the shape here so a
+    # regression fails a test instead of only surfacing in the browser after a deploy.
     created = client.post("/api/rooms", json={"room_name": "Table", "max_players": 2}).json()
     assert created.keys() >= {"room_id", "room", "delete_token", "websocket_url"}
     room = created["room"]

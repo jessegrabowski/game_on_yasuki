@@ -58,8 +58,8 @@ class EngineSession:
     """The single surface a client plays a rules-driven game through.
 
     Owns the authoritative :class:`~.GameState` and the append-only :class:`~.GameLog`, and exposes
-    the three engine-to-client channels: a per-seat projection, a legal-action query, and decision
-    submission — plus turn advancement. Every accepted input is recorded, so ``log`` always replays
+    the three engine-to-client channels: a per-seat projection, a legal-action query, decision
+    submission, and turn advancement. Every accepted input is recorded, so ``log`` always replays
     to the current ``game``.
 
     Attributes
@@ -120,7 +120,7 @@ class EngineSession:
         """Back out of ``seat``'s pending decision, unwinding the whole action that raised it.
 
         Backing out of one step of a multi-step action undoes every step of it, including the cost
-        it has already paid — see :meth:`abort`. Raise ``RuntimeError`` if no decision is pending, or
+        it has already paid. See :meth:`abort`. Raise ``RuntimeError`` if no decision is pending, or
         ``ValueError`` if ``seat`` is not the seat being asked or the action cannot be unwound.
         """
         pending = self.game.pending
@@ -137,15 +137,15 @@ class EngineSession:
         """Abandon the action ``seat`` has in flight, unwinding everything it has done so far.
 
         An ability announced and half-resolved has already paid its cost and may have taken several
-        answers; backing out of any one step has to undo all of them, not just the last. The tape is
+        answers. Backing out of any one step has to undo all of them, not just the last. The tape is
         truncated to before the action was announced and the game rebuilt by replay, so the unwind
         reverses whatever the action did without any effect needing its own inverse.
 
         Refuse once the action has moved anything another seat holds. Taking back a card an opponent
         has already drawn does not take back their having seen it, so an action that reached across
-        the table is committed the moment it did. Refuse likewise for a decision the rules force, for
-        an action already complete, once another seat has resolved a step of its own, and while
-        another seat is the one being asked — an action that has handed the question on is past the
+        the table is committed the moment it did. Refuse likewise for a decision the rules force,
+        for an action already complete, once another seat has resolved a step of its own, and while
+        another seat is the one being asked. An action that has handed the question on is past the
         point where its announcer may take it back.
 
         Return whether anything was unwound.
@@ -171,8 +171,9 @@ class EngineSession:
 
     def undo_last(self, seat: PlayerId) -> bool:
         """Undo ``seat``'s most recent action when it was a Dynasty Discard and no decision is
-        pending — the one free action safe to reverse, as it has no cost and does not advance the
-        turn. Drop it from the tape and rebuild by replay. Return whether anything was undone."""
+        pending. That is the one free action safe to reverse, since it has no cost and does not
+        advance the turn. Drop it from the tape and rebuild by replay. Return whether anything
+        was undone."""
         if self.game.pending is not None:
             return False
         entries = self.log.entries

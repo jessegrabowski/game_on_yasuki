@@ -27,7 +27,8 @@ FIRING_ORDER: list[str] = []
 
 @on(EnteredPlay, "order_two_effects")
 def _two_effects(ctx):
-    """Emit two counter adjustments; the first raises a CounterGained that has its own subscriber."""
+    """Emit two counter adjustments. The first raises a CounterGained that has its own
+    subscriber."""
     return [
         AdjustCounter(ctx.card.id, WEALTH, 1),
         AdjustCounter(ctx.card.id, SINCERITY, 1),
@@ -50,7 +51,8 @@ def _record_firing(ctx):
 @pytest.fixture(autouse=True)
 def order_log():
     """Clear the shared firing log around every test, so one test's cascade cannot leak into the
-    next. Autouse because forgetting it would produce a passing test that asserts the wrong thing."""
+    next. Autouse because forgetting it would produce a passing test that asserts the wrong
+    thing."""
     FIRING_ORDER.clear()
     yield FIRING_ORDER
     FIRING_ORDER.clear()
@@ -58,7 +60,7 @@ def order_log():
 
 def test_every_effect_from_one_trigger_applies_before_its_derived_events_fire():
     # The worklist drains the effects in hand before popping the event queue, so the subscriber sees
-    # both adjustments already committed — and each gain raises its own event, so it fires twice.
+    # both adjustments already committed, and each gain raises its own event, so it fires twice.
     game = two_seat_game()
     source = put_in_play(game, holding("P1-source", printed_id="order_two_effects"))
     put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))

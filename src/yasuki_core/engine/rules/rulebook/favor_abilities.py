@@ -74,7 +74,7 @@ def _discard_a_fate_card(game: GameState, seat: PlayerId) -> list[Effect]:
 @favor_ability("discard_to_draw", cost=_discard_a_fate_card)
 def _discard_to_draw(game: GameState, seat: PlayerId) -> list[Effect]:
     """ShE datasheet: "Political Open, (Favor): If it is your turn, discard a Fate card to draw a
-    card." The Favor and the discarded card are both cost; drawing is what it buys."""
+    card." The Favor and the discarded card are both cost. Drawing is what it buys."""
     return [DrawCard(seat)]
 
 
@@ -87,7 +87,7 @@ def _resolve_discard_to_draw(
 
 @favor_ability("draw")
 def _draw(game: GameState, seat: PlayerId) -> list[Effect]:
-    """Pre-Gold rulebook: "Limited: Draw a Fate card." The Favor is the whole cost; unlike the ShE
+    """Pre-Gold rulebook: "Limited: Draw a Fate card." The Favor is the whole cost. Unlike the ShE
     ability it asks for no card alongside it."""
     return [DrawCard(seat)]
 

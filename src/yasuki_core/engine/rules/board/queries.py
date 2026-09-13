@@ -47,12 +47,10 @@ def has_keyword(game: GameState, card: L5RCard, keyword: str) -> bool:
 
 def attack_targets(game: GameState, source: L5RCard) -> list[str]:
     """The ids an attack effect from ``source`` may be pointed at: the enemy army's Followers and
-    its Personalities carrying none (CR, Ranged Attack). Empty outside a battle, which is what
-    keeps an attack ability from being offered where it has nothing to hit.
+    its Personalities carrying none (CR, Ranged Attack). Empty outside a battle.
 
-    The rule reaches the *army* rather than the seat, so it holds only what stands at the battle
-    being fought. A Personality is spared by a Follower alone — an Item or a Spell attached to him
-    is not one, and does not protect him.
+    Reaches only what stands at the battle being fought. A Personality is spared by a Follower
+    alone. An Item or a Spell attached to him does not protect him.
     """
     attack = game.attack
     if attack is None or attack.current is None:

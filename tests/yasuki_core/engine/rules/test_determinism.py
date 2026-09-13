@@ -42,7 +42,7 @@ def _play_three_turns(game: GameState, log: GameLog) -> None:
 
 
 def _fingerprint(game: GameState) -> str:
-    """A canonical sha256 over the full final state — the table plus every rules field — so any
+    """A canonical sha256 over the full final state (the table plus every rules field) so any
     divergence in a replay changes the digest."""
     canonical = {
         "table": encode_initial(InitialRecord.from_state(game.table)),

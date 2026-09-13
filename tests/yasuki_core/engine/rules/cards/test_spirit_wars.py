@@ -49,7 +49,7 @@ def _garden_game(printed_id: str = "poorly_placed_garden") -> EngineSession:
 
 
 def test_poorly_placed_garden_enters_play_unbowed():
-    """ "Enters play unbowed" overrides the rule that a Holding enters play bowed — and it has to,
+    """ "Enters play unbowed" overrides the rule that a Holding enters play bowed, and it has to,
     or the Limited ability that bows it as a cost could never be paid the turn it arrives."""
     session = _garden_game()
 

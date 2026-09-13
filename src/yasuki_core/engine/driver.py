@@ -39,8 +39,8 @@ class Observer(Protocol):
     Read after an arbitrary action instead, a producer bowed to pay stops counting and the reading
     depends on where in the turn it was taken.
 
-    Actions are not reported here — the game log already records every one with the seat that took
-    it, so an observer that wants them reads the tape between these two calls.
+    Actions are not reported here, because the game log already records every one with the seat
+    that took it, so an observer that wants them reads the tape between these two calls.
 
     The two ends answer different questions. As a turn begins,
     ``flow._begin_turn`` has straightened the active seat and revealed
@@ -57,7 +57,7 @@ class Observer(Protocol):
         """Called once ``seat``'s turn is over, with the board it left behind.
 
         By then the next turn has already begun, but ``seat`` is no longer active and nothing has
-        touched what it owns — only the new active seat straightens and reveals.
+        touched what it owns, and only the new active seat straightens and reveals.
         """
         ...
 
@@ -73,7 +73,7 @@ def run_game(
     Play ``session`` a step at a time, yielding each input as the engine accepts it.
 
     Nothing happens until the iterator is advanced, and stopping early leaves the game exactly where
-    it stopped — which is what lets a caller pause, inspect between steps, or cancel a run. A turn
+    it stopped, which is what lets a caller pause, inspect between steps, or cancel a run. A turn
     abandoned that way is never closed, so an observer never sees it end and a recorder does not
     report it.
 
@@ -93,8 +93,8 @@ def run_game(
     Yields
     ------
     Act or Answer
-        The input just applied, in the vocabulary the game log records — an action a policy chose,
-        or a decision an agent answered.
+        The input just applied, in the vocabulary the game log records, either an action a policy
+        chose or a decision an agent answered.
 
     Raises
     ------
@@ -157,7 +157,7 @@ def play_game(
     Play ``session`` to its end or to ``turn_limit``, whichever comes first, mutating it in place.
 
     Stops only on those two conditions. A driver that inferred its own stopping point would
-    silently truncate a run. Drives :func:`~.run_game` to exhaustion; take that instead when a
+    silently truncate a run. Drives :func:`~.run_game` to exhaustion. Take that instead when a
     caller needs to act between steps.
 
     Parameters

@@ -248,7 +248,8 @@ def test_nothing_is_offered_with_nobody_to_carry_the_follower():
 
 
 def test_a_discard_from_play_raises_nothing():
-    """ "From your hand or deck" — a Follower that reached the discard off the board is not it."""
+    """ "From your hand or deck," and a Follower that reached the discard off the board is not
+    it."""
     game = _spearmen_game()
 
     fire(game, CardDiscarded("spearmen", Side.FATE, P1))
@@ -289,12 +290,12 @@ def test_utaku_gorou_bows_to_mount_a_samurai():
     assert set(horse.keywords) == {"Cavalry"}
     assert game.table.cards_by_id["gorou"].bowed is True  # the cost
     assert unit_force(game, bushi) == 4  # his 3, plus the Follower's own 1
-    # One Follower, to the Samurai chosen — Gorou is a legal target himself and gets nothing.
+    # One Follower, to the Samurai chosen. Gorou is a legal target himself and gets nothing.
     assert attachments_of(game, game.table.cards_by_id["gorou"]) == ()
 
 
 def test_utaku_gorou_offers_only_samurai():
-    """ "Your target Samurai Personality" — the Courtier is no horseman, and Gorou himself is."""
+    """ "Your target Samurai Personality," but the Courtier is no horseman, and Gorou himself is."""
     session = _gorou_game()
 
     session.act(P1, ActivateAbility("gorou"))

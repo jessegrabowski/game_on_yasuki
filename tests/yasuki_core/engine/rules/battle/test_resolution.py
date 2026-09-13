@@ -149,7 +149,7 @@ def _pass_out_the_segments(session: EngineSession) -> None:
     """Pass both seats through the battle's segments, which is what carries it to resolution.
 
     A battle is an Action Round per segment before it resolves, so answering where to fight only
-    opens the first one. Nothing here takes a battle action; these tests are about resolution.
+    opens the first one. Nothing here takes a battle action. These tests are about resolution.
     """
     for _ in range(20):
         attack = session.game.attack
@@ -245,7 +245,7 @@ def test_declaration_creates_one_battlefield_per_defender_province():
 
 
 def test_the_attackers_own_provinces_are_not_battlefields():
-    # Both seats hold one Province, so a declaration that read the wrong seat — or both — is
+    # Both seats hold one Province, so a declaration that read the wrong seat and or both and is
     # visible in the battlefields it created.
     session = _to_battle(_session(defender_provinces=1))
 
@@ -639,8 +639,8 @@ def test_a_tie_on_zero_force_with_an_empty_side_has_no_outcome():
 
 
 def test_the_province_survives_when_force_only_matches_its_strength():
-    # Strictly greater, not equal: attacking 5 against 2 defending and Province Strength 3 is exactly
-    # the threshold and leaves the Province standing.
+    # Strictly greater, not equal: attacking 5 against 2 defending and Province Strength 3 is
+    # exactly the threshold and leaves the Province standing.
     session = _one_battlefield({"a": 5}, {"d": 2}, province_strength=3)
 
     _fight_one_battle(session)
@@ -725,7 +725,8 @@ def test_a_battlefield_already_fought_at_is_not_offered_again():
 
 
 def test_the_defender_holds_its_battlefield_until_the_last_battle():
-    # After Resolution 0.2: defending units go home only once the Attack Phase's last battle is over.
+    # After Resolution 0.2: defending units go home only once the Attack Phase's last battle is
+    # over.
     state = TableState.empty_two_seat()
     for idx in range(2):
         province_card(state, f"def-prov{idx}", seat=PlayerId.P2, index=idx)
@@ -754,7 +755,7 @@ def test_a_conqueror_unit_goes_home_without_bowing():
 
     assert location_of(session.game.table, cards["hero"]).is_home
     assert not cards["hero"].bowed
-    # "Cards in a Conqueror Personality's unit" — the Follower is exempt too.
+    # "Cards in a Conqueror Personality's unit" and the Follower is exempt too.
     assert not cards["retainer"].bowed
 
 
@@ -781,7 +782,7 @@ def test_a_unit_without_conqueror_bows_every_card_in_it():
 
 def test_an_attack_can_name_an_attacker_other_than_the_active_seat():
     # The Declaration Segment always offers it to the active player, but a card that creates an
-    # attack names its own Attacker — a Counterattack has the seat that just defended attacking.
+    # attack names its own Attacker and a Counterattack has the seat that just defended attacking.
     session = _to_battle(_session(defender_provinces=1))
 
     resolution.declare_attack(session.game, PlayerId.P2)
@@ -838,7 +839,7 @@ def test_losing_a_province_that_is_not_the_last_does_not_end_the_game():
 
 
 def test_a_seat_not_held_to_the_military_loss_keeps_playing_without_provinces():
-    # The per-seat hatch a card like Hidden Catacombs of the Scorpion needs — "You will not lose,
+    # The per-seat hatch a card like Hidden Catacombs of the Scorpion needs and "You will not lose,
     # or be eliminated, by Dishonor" is the same shape, one seat excused from one rule.
     session = _one_battlefield({"a": 6}, {"d": 2}, province_strength=3)
     # Dropping the one rule rather than all of them: with a second member these stop being the same
@@ -900,7 +901,7 @@ def test_an_outcome_says_the_province_stood_when_the_force_fell_short():
 
 
 def test_a_battle_that_did_nothing_records_an_outcome_saying_so():
-    """A tie on zero Force with a side empty is an outcome, and an empty one — distinct from a
+    """A tie on zero Force with a side empty is an outcome, and an empty one and distinct from a
     battlefield nobody has fought at yet."""
     session = _one_battlefield({}, {"d": 0})
 

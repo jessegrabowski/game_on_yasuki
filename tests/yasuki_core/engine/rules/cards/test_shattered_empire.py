@@ -93,7 +93,7 @@ def test_the_created_sword_is_a_one_handed_weapon():
 
 
 def test_weapon_artist_offers_only_the_personalities_with_a_hand_free():
-    """One Weapon per Personality, so the sword has nowhere to go on the one already carrying — the
+    """One Weapon per Personality, so the sword has nowhere to go on the one already carrying. The
     Weapon rules judge it before it exists. The filter has to narrow the targets rather than
     withdraw the ability, which is what the empty-handed rival is here to show."""
     session = EngineSession.start(
@@ -250,8 +250,8 @@ def test_an_edict_discards_the_one_already_out():
 
 
 def test_an_edict_naming_a_clan_is_not_offered_to_another():
-    """ "If you are a Crane Clan player" — the condition gates the action, so a Lion player holding
-    it has nothing to take."""
+    """ "If you are a Crane Clan player" is the condition that gates the action, so a Lion player
+    holding it has nothing to take."""
     game = _edict_game(clan=ruleset.LION)
 
     assert PlayStrategy("crane") not in legality.legal_actions(game, P1)

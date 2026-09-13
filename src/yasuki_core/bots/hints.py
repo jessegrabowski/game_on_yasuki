@@ -84,18 +84,18 @@ def _modest_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
     """Whether Modest Farm should recruit out of sequence now.
 
     Nothing caps how many cards a seat recruits in its Dynasty Phase, so an out-of-sequence recruit
-    is not an extra purchase on its own — the turn's production bounds the spending either way, and
+    is not an extra purchase on its own. The turn's production bounds the spending either way, and
     Modest Farm bows itself out of that production to grant it. Two things do pay for it, and one
     of them has to be true of some Holding the seat can still reach once that yield is gone.
 
     A Farm target is granted Renew, which refills the vacated Province face-up. Any other target
     refills it face-down, leaving the seat choosing from three live Provinces for the rest of the
-    turn — a real cost, and one only a payoff elsewhere covers.
+    turn: a real cost, and one only a payoff elsewhere covers.
 
     That payoff is the chain. Destroying Modest Farm straightens the card it just recruited, so a
-    big producer is spendable the moment it lands; when that Gold reaches a second producer the seat
+    big producer is spendable the moment it lands. When that Gold reaches a second producer the seat
     could not otherwise pay for, the recruit funds the recruit after it. Both halves are demanded of
-    the chain — a target worth :data:`CHAIN_PAYOFF_RATIO` times the Farm being spent, and a producer
+    the chain: a target worth :data:`CHAIN_PAYOFF_RATIO` times the Farm being spent, and a producer
     on the other side of it. Firing on any purchase at all costs more in face-down refills than the
     chain returns.
     """
@@ -137,13 +137,10 @@ def _modest_farm_best_target(view: GameView, request: ChooseAbilityTarget) -> st
 def _modest_farm_worth_sacrificing(view: GameView, request: ChooseCards) -> bool:
     """Whether to destroy Modest Farm to straighten the card it just recruited.
 
-    Modest Farm is an engine rather than a producer: it straightens every turn its owner's turn
-    begins, and each straightening is another out-of-sequence recruit. Trading that for one turn of
-    the target being straight is only worth it when that turn buys something — the recruit enters
-    play bowed, so straightening it is worth exactly the Gold it could still raise this turn.
-
-    Taken when that Gold puts a Province card in reach that is out of it, and declined otherwise,
-    which keeps the engine.
+    Modest Farm straightens at the start of each of its owner's turns, so destroying it forfeits
+    every later out-of-sequence recruit. The recruit enters play bowed, so straightening it is
+    worth exactly the Gold it could still raise this turn. Taken when that Gold puts a Province
+    card in reach that is out of it now, declined otherwise.
     """
     target = identifiable(view).get(request.source_id or "")
     if target is None:
@@ -160,7 +157,7 @@ def _millet_farm_worth_activating(view: GameView, source: L5RCard) -> bool:
     """Whether Millet Farm should grant its Farm bonus now.
 
     The grant lasts until end of turn and Millet Farm bows itself to give it, so the seat nets
-    :data:`MILLET_FARM_BOOST` less whatever Millet Farm would have yielded — and only on a Farm
+    :data:`MILLET_FARM_BOOST` less whatever Millet Farm would have yielded, and only on a Farm
     still straight enough to be bowed for it. Taken when that net puts a Province card in reach
     that is out of it, and declined otherwise: an unspent bonus expires at end of turn.
     """
@@ -195,7 +192,7 @@ def _rural_market_worth_activating(view: GameView, source: L5RCard) -> bool:
     """Whether Rural Market should spend a Wealth token to straighten a Farm.
 
     A straightened Farm can be bowed for its yield again this turn, and the token that buys it is
-    one Gold off Rural Market's own production — but only while Rural Market is still straight
+    one Gold off Rural Market's own production, but only while Rural Market is still straight
     enough to be bowed for that Gold. It is Tireless, so paying costs it no bow of its own.
     """
     bowed_farms = [card for card in in_play(view) if card.bowed and keywords.FARM in card.keywords]

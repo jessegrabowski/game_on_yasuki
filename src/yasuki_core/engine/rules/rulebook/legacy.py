@@ -56,8 +56,8 @@ def apply_legacy_choice(
     game.pending = None
     provinces = _displaceable_provinces(game, seat, keep=legacy_card.id)
     if not provinces:
-        # No province to sacrifice — only reachable at zero provinces (a military loss the engine
-        # does not model yet). Reveal the found card where it sits rather than placing it.
+        # No province to sacrifice, a state only reachable at zero provinces (a military loss the
+        # engine does not model yet). Reveal the found card where it sits rather than placing it.
         legacy_card.turn_face_up()
         return
     game.pending = PlaceLegacy(seat=seat, candidates=provinces, legacy_card_id=legacy_card.id)
@@ -86,9 +86,9 @@ def apply_legacy_placement(
 
 
 def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tuple[str, ...]:
-    """The province cards ``seat`` may discard to make room for a placed Legacy card — its face card
-    in each province, skipping the province that already holds the found card (id ``keep``), which
-    cannot be its own sacrifice."""
+    """The face card in each province ``seat`` may discard to make room for a placed Legacy card,
+    skipping the province that already holds the found card (id ``keep``), which cannot be its own
+    sacrifice."""
     displaceable: list[str] = []
     for key, zone in game.table.zones.items():
         if key.owner is not seat or key.role is not ZoneRole.PROVINCE or not zone.cards:

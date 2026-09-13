@@ -45,9 +45,10 @@ register_ability(
 
 
 def _phases_fixture():
-    """P1 holding one Open ability and one Dynasty ability, each with a legal target — Millet Farm
-    wants another Farm in play, the Shrine an untokened Sincerity card in a Province. Without those
-    an ability is withheld for a reason that has nothing to do with timing."""
+    """P1 holding one Open ability and one Dynasty ability, each with a legal target.
+    Millet Farm wants another Farm in play, and the Shrine wants an untokened Sincerity card in a
+    Province. Without those an ability is withheld for a reason that has nothing to do with
+    timing."""
     state = TableState.empty_two_seat()
     put_in_play(
         state, holding("millet", printed_id="millet_farm", keywords=("Farm",), gold_production=1)
@@ -95,7 +96,7 @@ def test_a_pass_carries_no_designator():
 
 
 def test_activating_an_ability_reports_the_cards_designator():
-    # Millet Farm prints "Open, bow:" and Shrine of Sincerity prints "Dynasty, bow:" — the same
+    # Millet Farm prints "Open, bow:" and Shrine of Sincerity prints "Dynasty, bow:", the same
     # action class, timed by the card rather than by its own type.
     game = two_seat_game()
     put_in_play(
@@ -155,8 +156,8 @@ def test_a_phase_offers_only_the_abilities_its_round_permits():
 
 
 def test_a_card_printing_two_designators_is_offered_under_either():
-    """ "Battle/Open" is 86 of the arc's cards: the ability is one ability, offered in any round that
-    permits any designator it prints."""
+    """ "Battle/Open" is 86 of the arc's cards: the ability is one ability, offered in any round
+    that permits any designator it prints."""
     game = two_seat_game()
     card = put_in_play(game, holding("h", owner=PlayerId.P1, printed_id="dual"))
 

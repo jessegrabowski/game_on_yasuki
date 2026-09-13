@@ -25,8 +25,9 @@ _ZONE_DEST = {
 
 
 def _card_segment(state: TableState, card_id: str) -> dict:
-    """Reference a card by a clickable, named link when its identity is public to both seats, else by
-    the unlinked words "a card" — so a shared log line never names a card the opponent cannot see."""
+    """Reference a card by a clickable, named link when its identity is public to both seats, else
+    by the unlinked words "a card", so a shared log line never names a card the opponent cannot
+    see."""
     if card_identity_public(state, card_id):
         return {"card_id": card_id, "name": state.cards_by_id[card_id].name}
     return {"text": "a card"}
@@ -42,7 +43,8 @@ def _card_segments(state: TableState, card_ids: tuple[str, ...]) -> list[dict]:
 
 
 def _side_word(state: TableState, card_id: str) -> str:
-    """The card's side as a lowercase word ("fate"/"dynasty") for a generic, non-leaking reference."""
+    """The card's side as a lowercase word ("fate"/"dynasty") for a generic, non-leaking
+    reference."""
     card = state.cards_by_id.get(card_id)
     return card.side.value.lower() if card is not None else "card"
 
@@ -52,8 +54,9 @@ def _deck_desc(deck: DeckKey) -> str:
 
 
 def _pile_desc(pile: DeckKey | ZoneKey) -> str:
-    """An own-pile description for the reorder log, hiding the card and the new order. The reorder is
-    owner-gated, so a deck reads "their fate deck" and a discard "their fate discard"."""
+    """An own-pile description for the reorder log, hiding the card and the new order. The
+    reorder is owner-gated, so a deck reads "their fate deck" and a discard "their fate
+    discard"."""
     if isinstance(pile, DeckKey):
         return _deck_desc(pile)
     return f"their {pile.role.value.split('_')[0]} discard"
@@ -70,9 +73,9 @@ def _dest_desc(to: MoveDest) -> str:
 def describe_intent(state: TableState, actor: str, intent: Intent, event: Event) -> list[dict]:
     """Build the shared game-log segments for one accepted intent, safe to show both seats.
 
-    A card is named (and linked) only when it is publicly visible on the battlefield; everywhere else
-    it reads as "a card". Pure card repositioning (``SET_CARD_POS``) is not shown — the result is an
-    empty list, and the caller logs nothing.
+    A card is named (and linked) only when it is publicly visible on the battlefield. Everywhere
+    else it reads as "a card". Pure card repositioning (``SET_CARD_POS``) is not shown. The result
+    is an empty list, and the caller logs nothing.
 
     Parameters
     ----------
@@ -122,8 +125,9 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
                 {"text": f" to {_dest_desc(intent.to)}"},
             ]
         case IntentOp.SHOW:
-            # Named only when the card is public to ALL seats after the show (a fate card from hand);
-            # a shown face-down card stays hidden from its owner, so it must read generically.
+            # Named only when the card is public to ALL seats after the show (a fate card from
+            # hand); a shown face-down card stays hidden from its owner, so it must read
+            # generically.
             if card_identity_public(state, intent.card_id):
                 return [lead, {"text": "shows "}, _card_segment(state, intent.card_id)]
             return [lead, {"text": f"shows a {_side_word(state, intent.card_id)} card"}]

@@ -204,8 +204,8 @@ def headers(module: pathlib.Path) -> tuple[str, ...]:
 # The jobs a card's handler can hold, spelled the way its name has to end. A handler's name is its
 # card's id and one of these, so a card's whole implementation answers a grep for its id and every
 # function of a kind answers a grep for its role. A card printing several abilities qualifies the
-# role with that ability's key — ``_incendiary_archers_fear_effects`` — since one name per role
-# would collide between them.
+# role with that ability's key, as in ``_incendiary_archers_fear_effects``, since one name per
+# role would collide between them.
 ROLES = frozenset(
     {
         # the three parts of an activated ability

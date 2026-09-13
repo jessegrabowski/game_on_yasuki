@@ -19,9 +19,10 @@ _HAND_INSET = 54
 # The seat halves are split higher than center so the human's band gets the larger share; the
 # opponent's compresses to the top edge.
 _DIVIDER_FRAC = 0.42
-# Each seat has three card rows stepping in from its edge, toward the divider: provinces (nearest the
-# edge/hand), then stronghold + holdings, then personalities out front. Rows step by a card height
-# plus a gap, and cards within a row step by a card width plus a gap, so neither touches edge-to-edge.
+# Each seat has three card rows stepping in from its edge, toward the divider: provinces (nearest
+# the edge/hand), then stronghold + holdings, then personalities out front. Rows step by a card
+# height plus a gap, and cards within a row step by a card width plus a gap, so neither touches
+# edge-to-edge.
 _ROW_GAP = 16
 _CARD_GAP = 8
 _ROW_STEP = CARD_H + _ROW_GAP
@@ -31,7 +32,7 @@ COLUMN_STEP = CARD_W + _CARD_GAP
 
 
 def _row_y(canvas_h: int, seat_at_bottom: bool) -> int:
-    """The outermost card row, against the seat's edge; the human's sits just above the hand."""
+    """The outermost card row, against the seat's edge. The human's sits just above the hand."""
     return canvas_h - _PROVINCE_INSET_BOTTOM if seat_at_bottom else _PROVINCE_INSET_TOP
 
 
@@ -65,8 +66,8 @@ def hand_box(canvas_w: int, canvas_h: int, *, seat_at_bottom: bool) -> tuple[int
 def centered_row(center_x: int, count: int, *, step: int = COLUMN_STEP) -> list[int]:
     """The x centers for ``count`` cards laid in a row centered on ``center_x``.
 
-    Every row of cards the client draws is spaced this way — a seat's provinces, its personalities,
-    and each army in the battle view — so they share one function and improving the spacing
+    Every row of cards the client draws is spaced this way. A seat's provinces, its personalities,
+    and each army in the battle view all share one function, so improving the spacing
     improves all of them at once.
 
     Parameters
@@ -76,8 +77,8 @@ def centered_row(center_x: int, count: int, *, step: int = COLUMN_STEP) -> list[
     count : int
         How many cards are in the row.
     step : int, optional
-        Distance between neighboring centers. Default ``COLUMN_STEP``, one card plus its gap;
-        a caller with less room than that needs may pass a smaller step to overlap the row.
+        Distance between neighboring centers. Default ``COLUMN_STEP``, one card plus its gap.
+        A caller with less room than that needs may pass a smaller step to overlap the row.
     """
     if count <= 0:
         return []
@@ -103,8 +104,8 @@ def unit_tower_positions(
         How many cards are attached to him.
     sink : bool
         Whether to drop the Personality by the tower's own height. Set it for a unit whose row has
-        something directly above it — the near seat's row on the board, the attacking side of a
-        lane — so the stack grows downward instead of climbing into what is there.
+        something directly above it (the near seat's row on the board, the attacking side of a
+        lane), so the stack grows downward instead of climbing into what is there.
 
     Returns
     -------
@@ -121,10 +122,10 @@ def unit_tower_positions(
 def tower_draw_order(members: Sequence[Drawn]) -> list[Drawn]:
     """``members`` in the order they must be drawn so each card's title bar clears the one it rides.
 
-    The card furthest from the anchor draws first and the nearest last, whichever way the fan grows:
-    the anchor — a Personality, or the card standing in a Province — is drawn over the nearest of
+    The card furthest from the anchor draws first and the nearest last, whichever way the fan grows.
+    The anchor (a Personality or the card standing in a Province) is drawn over the nearest of
     them, so a stack ascending toward it leaves every card the same band showing. Drawn the other
-    way round the nearest card is covered twice and disappears entirely.
+    way round, the nearest card is covered twice and disappears entirely.
 
     Parameters
     ----------
@@ -156,8 +157,8 @@ def province_positions(
 # step to the right.
 _HOME_X0 = CARD_W
 
-# The column of in-play cards belonging to no row — Events, Edicts, Rings and their kin — stands
-# against the board's right edge, past where the rows reach. The rows take no width from it: a seat
+# The column of in-play cards belonging to no row (Events, Edicts, Rings and their kin) stands
+# against the board's right edge, past where the rows reach. The rows take no width from it. A seat
 # holds four or five Provinces by rule, and a personalities row long enough to reach the column has
 # already run off the canvas.
 _COLUMN_INSET = CARD_W
@@ -182,7 +183,7 @@ def in_play_column_positions(
     Parameters
     ----------
     card_ids : sequence of str
-        The cards to place, in the order they entered play. The last is drawn whole; each one before
+        The cards to place, in the order they entered play. The last is drawn whole. Each one before
         it shows the strip the next does not cover.
     canvas_w : int
         The canvas width.
@@ -213,7 +214,7 @@ def home_stack_positions(
     ``(x, y)``.
 
     With ``personality_row`` set, the cards land in the personalities row, center-justified across
-    the canvas (like the provinces); otherwise they land in the holdings row, laid out left to right
+    the canvas (like the provinces). Otherwise they land in the holdings row, laid out left to right
     from the seat's edge behind the stronghold.
     """
     columns: dict[object, int] = {}
@@ -243,9 +244,9 @@ def home_stack_positions(
 def to_canvas(pos: BoardPos, *, flipped: bool, canvas_w: int, canvas_h: int) -> tuple[int, int]:
     """Project a seat-neutral battlefield position to canvas pixels.
 
-    Identity for the human-at-bottom view; a 180° rotation about the canvas center for the debug
-    other-seat view. ``to_canvas`` and :func:`~.from_canvas` are mutual inverses, so a drag
-    round-trips.
+    Identity for the human-at-bottom view. A 180-degree rotation about the canvas center is used
+    for the debug other-seat view. ``to_canvas`` and :func:`~.from_canvas` are mutual inverses, so
+    a drag round-trips.
     """
     x, y = int(pos.x), int(pos.y)
     if flipped:

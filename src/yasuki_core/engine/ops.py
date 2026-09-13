@@ -66,7 +66,7 @@ def bring_to_top(state: TableState, card: L5RCard) -> None:
 
 def _holds_tokens(dest: MoveDest) -> bool:
     """Whether a created card that is not in play may sit at ``dest``. Only a hand may, and only
-    because a rulebook proxy is represented by one there; every pile of real cards destroys it."""
+    because a rulebook proxy is represented by one there. Every pile of real cards destroys it."""
     return isinstance(dest, ZoneKey) and dest.role is ZoneRole.HAND
 
 
@@ -81,10 +81,10 @@ def move_card(
     deck_index: int | None = None,
 ) -> bool:
     """Move ``card`` to a zone, deck, or the shared battlefield, applying the destination's entry
-    effects (a card faces up entering a hand or discard, unbows entering a province, and is scrubbed
-    to a pristine library card entering a deck — face down, unbowed, uninverted, its note and every
-    show/peek disclosure cleared). Returns whether the table changed — a move onto the zone the card
-    already occupies is a no-op.
+    effects. A card faces up entering a hand or discard, unbows entering a province, and is scrubbed
+    to a pristine library card entering a deck (face down, unbowed, uninverted, with its note and
+    every show/peek disclosure cleared). Returns whether the table changed. A move onto the zone the
+    card already occupies is a no-op.
 
     A card leaving the battlefield loses its counters: tokens cannot exist on a card out of play,
     and they do not come back if it re-enters (CR, Tokens). A *created* card ceases to exist rather
@@ -118,7 +118,7 @@ def move_card(
     if isinstance(dest, DeckKey):
         remove_from_location(state, card)
         _clear_relations(state, card.id)
-        # Anonymize the card for the shuffle back into the library — no seat may read a deck card.
+        # Anonymize the card for the shuffle back into the library. No seat may read a deck card.
         card.turn_face_down()
         card.unbow()
         card.uninvert()
@@ -185,10 +185,10 @@ def set_location(state: TableState, card: L5RCard, location: Location) -> bool:
 
 
 def move_unit(state: TableState, card: L5RCard, location: Location) -> bool:
-    """Put ``card``'s whole unit at ``location``; returns whether it moved.
+    """Put ``card``'s whole unit at ``location``. Returns whether it moved.
 
     Attached cards go with their Personality (CR, Unit). Nothing here goes through
-    :func:`~.move_card` — the cards stay where they are in play and only their location changes.
+    :func:`~.move_card`. The cards stay where they are in play and only their location changes.
     """
     moved = False
     for member in unit_members(state, card):
@@ -198,25 +198,25 @@ def move_unit(state: TableState, card: L5RCard, location: Location) -> bool:
 
 
 def assign(state: TableState, card: L5RCard, battlefield: int) -> bool:
-    """Assign ``card``'s whole unit to the battlefield at index ``battlefield``; returns whether it
+    """Assign ``card``'s whole unit to the battlefield at index ``battlefield``. Returns whether it
     moved. Assigning is *not* movement (CR, Assign), whatever it shares with it here.
     """
     return move_unit(state, card, Location.at_battlefield(battlefield))
 
 
 def return_home(state: TableState, card: L5RCard) -> bool:
-    """Send ``card``'s whole unit home; returns whether it moved. Home is the unit's — its
-    Personality's owner's — so an attached card owned by the other seat goes where its Personality
+    """Send ``card``'s whole unit home. Returns whether it moved. Home belongs to the unit's
+    Personality's owner, so an attached card owned by the other seat goes where its Personality
     goes.
     """
     return move_unit(state, card, Location.home(card.owner))
 
 
 def stack(state: TableState, card: L5RCard, target: AttachTarget) -> bool:
-    """Stack ``card`` behind ``target`` — a card id or province zone key — so it renders behind that
-    parent. Returns whether the graph changed; re-stacking on the same target is a no-op.
+    """Stack ``card`` behind ``target`` (a card id or province zone key) so it renders behind that
+    parent. Returns whether the graph changed. Re-stacking on the same target is a no-op.
 
-    Rendering only; :func:`~.attach_to_personality` is what puts a card in a unit.
+    Rendering only. :func:`~.attach_to_personality` is what puts a card in a unit.
     """
     if state.attachments.get(card.id) == target:
         return False
@@ -232,14 +232,14 @@ def unstack(state: TableState, card: L5RCard) -> bool:
 
 def attach_to_personality(state: TableState, card: L5RCard, personality: L5RCard) -> bool:
     """Attach ``card`` to ``personality``, putting it in his unit. Returns whether the relation
-    changed; re-attaching to the same Personality is a no-op.
+    changed. Re-attaching to the same Personality is a no-op.
 
     Raises
     ------
     ValueError
-        If ``personality`` is not a Personality. Attachments are the only card type that may attach
-        to a Personality and a Personality is the only thing they may attach to (CR, Attachments), so
-        a wrong parent is a caller bug rather than a board state to represent.
+        If ``personality`` is not a Personality. Attachments are the only card type that may
+        attach to a Personality and a Personality is the only thing they may attach to (CR,
+        Attachments), so a wrong parent is a caller bug rather than a board state to represent.
     """
     if not isinstance(personality.printed, PersonalityPrint):
         raise ValueError(f"cannot attach {card.id!r} to non-Personality {personality.id!r}")
@@ -315,7 +315,7 @@ def reorder_in_pile(state: TableState, pile: DeckKey | ZoneKey, card_id: str, in
 def fill_province(
     state: TableState, seat: PlayerId, zone: ProvinceZone, *, face_up: bool = False
 ) -> L5RCard | None:
-    """Draw the seat's top dynasty card into ``zone``; None if the dynasty deck is empty.
+    """Draw the seat's top dynasty card into ``zone``. None if the dynasty deck is empty.
 
     Parameters
     ----------
@@ -336,7 +336,7 @@ def fill_province(
 
 
 def draw_to_hand(state: TableState, seat: PlayerId) -> L5RCard | None:
-    """Draw the seat's top fate card into their hand face-up; None if the fate deck is empty."""
+    """Draw the seat's top fate card into their hand face-up. None if the fate deck is empty."""
     card = state.decks[DeckKey(seat, Side.FATE)].draw_one()
     if card is None:
         return None
@@ -346,9 +346,10 @@ def draw_to_hand(state: TableState, seat: PlayerId) -> L5RCard | None:
 
 
 def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> list[str]:
-    """Discard a province's contents face-up and remove the province, then send each card attached to
-    it (fortifications, regions) to its own side's discard — the owner's pile if it has one, else the
-    destroying seat's. A card with no discard for its side (a pregame permanent) is detached in place.
+    """Discard a province's contents face-up and remove the province, then send each card
+    attached to it (fortifications, regions) to its own side's discard, using the owner's pile if
+    it has one and the destroying seat's pile otherwise. A card with no discard for its side (a
+    pregame permanent) is detached in place.
     Returns the moved card ids."""
     zone = state.zones[zone_key]
     discard = state.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)]
@@ -360,9 +361,10 @@ def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> li
         moved.append(card.id)
     del state.zones[zone_key]
     state.province_counters.pop(zone_key, None)  # the slot is gone; nothing rests on it
-    # A card attached to the province follows it off the board into its own side's discard; move_card
-    # turns it face up and clears the attachment. Only fate/dynasty cards have a discard — a pregame
-    # side (stronghold/sensei/wind) has none, so it just detaches rather than vanishing off the board.
+    # A card attached to the province follows it off the board into its own side's discard;
+    # move_card turns it face up and clears the attachment. Only fate/dynasty cards have a
+    # discard. A pregame side (stronghold/sensei/wind) has none, so it just detaches rather than
+    # vanishing off the board.
     stacked = [child for child, parent in state.attachments.items() if parent == zone_key]
     attached = [child for child, parent in state.province_attachments.items() if parent == zone_key]
     # A card can be both stacked behind the province and attached to it; it follows the province off
@@ -398,7 +400,7 @@ def adjust_province_counter(state: TableState, zone_key: ZoneKey, name: str, del
 
 
 def discard_province(state: TableState, seat: PlayerId, zone: ProvinceZone) -> L5RCard | None:
-    """Move the province's top card to the dynasty discard face-up; None if empty."""
+    """Move the province's top card to the dynasty discard face-up. None if empty."""
     if not zone.cards:
         return None
     card = zone.cards.pop()
@@ -408,7 +410,7 @@ def discard_province(state: TableState, seat: PlayerId, zone: ProvinceZone) -> L
 
 
 def create_province(state: TableState, seat: PlayerId) -> ZoneKey:
-    """Add a fresh province zone for ``seat`` at the next free index; returns its key."""
+    """Add a fresh province zone for ``seat`` at the next free index. Returns its key."""
     idx = 0
     while ZoneKey(seat, ZoneRole.PROVINCE, idx) in state.zones:
         idx += 1
@@ -418,8 +420,8 @@ def create_province(state: TableState, seat: PlayerId) -> ZoneKey:
 
 
 def straighten(state: TableState, seat: PlayerId, skip: Container[str] = ()) -> list[str]:
-    """Unbow every card ``seat`` controls on the battlefield, other than the ids in ``skip``;
-    returns the straightened card ids. What may be left bowed is the rules layer's to decide, so the
+    """Unbow every card ``seat`` controls on the battlefield, other than the ids in ``skip``.
+    Returns the straightened card ids. What may be left bowed is the rules layer's to decide, so the
     caller names the cards rather than this reading a card's text."""
     straightened = []
     for card in state.battlefield.cards:
@@ -430,7 +432,7 @@ def straighten(state: TableState, seat: PlayerId, skip: Container[str] = ()) -> 
 
 
 def reveal_provinces(state: TableState, seat: PlayerId) -> list[str]:
-    """Turn every face-down card in ``seat``'s provinces face-up; returns the revealed card ids."""
+    """Turn every face-down card in ``seat``'s provinces face-up. Returns the revealed card ids."""
     revealed = []
     for key, zone in state.zones.items():
         if key.owner == seat and key.role is ZoneRole.PROVINCE:
@@ -451,15 +453,15 @@ def spawn_token(
     position: BoardPos | None = None,
 ) -> L5RCard | None:
     """Place a fresh face-up token presenting ``printed`` at ``dest``, defaulting to the battlefield
-    at ``position``. Returns None when a zone refuses the card for its side or capacity; a
+    at ``position``. Returns None when a zone refuses the card for its side or capacity. A
     battlefield spawn always succeeds.
 
     The token carries the print's type, stats, keywords, and text under a new id, with no per-copy
-    state. It is face up, so both seats see it; ``owner`` gates who may move or remove it, not who
+    state. It is face up, so both seats see it. ``owner`` gates who may move or remove it, not who
     may see it.
 
-    A created card cannot be moved into a zone afterwards — leaving the battlefield destroys it
-    (CR, Create) — so a token that belongs in a hand has to be spawned there directly.
+    A created card cannot be moved into a zone afterwards, because leaving the battlefield destroys
+    it (CR, Create), so a token that belongs in a hand has to be spawned there directly.
     """
     card = L5RCard(id=new_id, printed=printed, owner=owner, is_token=True)
     if dest == BATTLEFIELD:
@@ -481,7 +483,7 @@ def remove_card(state: TableState, card: L5RCard) -> None:
 def set_honor(
     state: TableState, seat: PlayerId, *, delta: int | None = None, value: int | None = None
 ) -> bool:
-    """Adjust ``seat``'s honor by ``delta`` or to ``value``; returns whether it changed."""
+    """Adjust ``seat``'s honor by ``delta`` or to ``value``. Returns whether it changed."""
     info = state.seats[seat]
     new_honor = info.honor + delta if delta is not None else value
     if new_honor == info.honor:
@@ -491,7 +493,7 @@ def set_honor(
 
 
 def set_ignore_honor_requirements(state: TableState, seat: PlayerId, value: bool) -> bool:
-    """Set whether ``seat`` waives every Personality's Honor Requirement when recruiting; returns
+    """Set whether ``seat`` waives every Personality's Honor Requirement when recruiting. Returns
     whether it changed."""
     info = state.seats[seat]
     if info.ignores_honor_requirements == value:

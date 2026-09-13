@@ -136,7 +136,7 @@ def test_passing_the_response_leaves_the_token_unclaimed():
 
 
 def test_the_response_answers_one_discard_once():
-    """Nothing else rations it — it costs no bow — so the Step itself does."""
+    """Nothing else rations it. It costs no bow, so the Step itself does."""
     session = _caravansary_game()
     session.act(P1, ActivateAbility("probe"))
 
@@ -162,8 +162,8 @@ def test_a_later_step_offers_the_response_again():
 
 
 def test_an_opponents_discard_offers_you_nothing():
-    """ "If the action was yours" — the Caravansary reads whose action it was, not merely that a Fate
-    card reached a pile."""
+    """ "If the action was yours": the Caravansary reads whose action it was, not merely that a
+    Fate card reached a pile."""
     session = _caravansary_game(discarder=P2)
 
     session.act(P1, Pass())
@@ -190,7 +190,7 @@ def test_a_dynasty_discard_offers_nothing():
 
 def test_a_discard_no_player_made_offers_nothing():
     """Trimming to the maximum hand size is a step of the turn rather than an action (CR, Drawing
-    and Discarding Fate Cards), so "if the action was yours" has no action to claim — and turn
+    and Discarding Fate Cards), so "if the action was yours" has no action to claim, and turn
     structure opens no Response Step at all."""
     session = _caravansary_game()
     game = session.game
@@ -212,8 +212,8 @@ def test_a_caravansary_already_at_three_is_not_offered():
 
 
 def _oaths_game(*, holds_favor: bool = True, yojimbo: bool = False) -> GameState:
-    """A battle each side has a unit in — the Rule of Presence is what lets P1 act at all — with an
-    enemy Personality to send home."""
+    """A battle each side has a unit in, so the Rule of Presence is what lets P1 act at all, with
+    an enemy Personality to send home."""
     game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
     game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
@@ -235,7 +235,8 @@ def _oaths_game(*, holds_favor: bool = True, yojimbo: bool = False) -> GameState
 
 
 def _oaths(game: GameState):
-    """Honor Your Oaths in its controller's hand, where a Strategy is played from, and its ability."""
+    """Honor Your Oaths in its controller's hand, where a Strategy is played from, and its
+    ability."""
     card = register(
         game.table,
         L5RCard.of(
@@ -254,7 +255,7 @@ def _oaths(game: GameState):
 
 def test_honor_your_oaths_reads_the_favor_without_spending_it():
     """CRI: "Political Battle: If you control :favor:, move home a target enemy Personality." The
-    condition is a check, not a cost — the Favor is still yours afterward."""
+    condition is a check, not a cost, so the Favor is still yours afterward."""
     game = _oaths_game()
     source, ability = _oaths(game)
 
@@ -305,7 +306,7 @@ def test_bowing_the_yojimbo_instead_leaves_an_ordinary_action():
 
 
 def test_the_second_clause_can_be_declined():
-    """ "You may" — so the seat that wants only the first clause is not made to pay for the rest."""
+    """ "You may", so the seat that wants only the first clause is not made to pay for the rest."""
     game = _oaths_game(yojimbo=True)
     source, ability = _oaths(game)
 
@@ -318,7 +319,7 @@ def test_the_second_clause_can_be_declined():
 
 
 def test_honor_your_oaths_is_offered_from_hand_during_a_battle():
-    """A Strategy is played out of hand, so its ability has to say it acts from there — the default
+    """A Strategy is played out of hand, so its ability has to say it acts from there. The default
     is the battlefield, where a card in hand never is, and the action would simply never appear."""
     game = _oaths_game()
     _oaths(game)
@@ -346,7 +347,7 @@ def test_a_bowed_yojimbo_cannot_pay_for_the_second_clause():
 
 def test_the_second_clause_is_not_offered_when_neither_half_can_be_paid():
     """The targets are chosen at step C and the action resolves at step E, so an Interrupt between
-    them can take the Favor away — leaving a seat with no Yojimbo nothing to be asked about, and the
+    them can take the Favor away, leaving a seat with no Yojimbo nothing to be asked about, and the
     first clause to resolve alone."""
     game = _oaths_game()
     source, ability = _oaths(game)
@@ -372,7 +373,7 @@ def test_manjodh_pays_a_favor_cost_by_bowing():
     """CRI: "Political Interrupt, :bow:: If you have no Wind, pay the action's :favor: cost."
 
     Implemented as a payer priced at bowing rather than as the Interrupt he prints, because a cost
-    is paid at step B of the Action Sequence and an Interrupt is played at D — the printed window
+    is paid at step B of the Action Sequence and an Interrupt is played at D. The printed window
     opens after the cost it names. The deviation is deliberate and recorded on the handler.
     """
     game = _manjodh_game()
@@ -392,7 +393,7 @@ def test_a_bowed_manjodh_cannot_pay():
 
 
 def test_manjodh_will_not_pay_for_a_player_with_a_wind():
-    """ "If you have no Wind" — the clause the datasheet's Winds rule explains, since a seat with a
+    """ "If you have no Wind": the clause the datasheet's Winds rule explains, since a seat with a
     Wind may not take rulebook Favor actions at all."""
     game = _manjodh_game(has_wind=True)
 

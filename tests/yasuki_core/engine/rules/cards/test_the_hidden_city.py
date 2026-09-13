@@ -115,7 +115,7 @@ def test_brothers_in_arms_stays_quiet_when_a_different_card_enters_play():
     """The event reaches every copy of a printed id in play, not only the card that arrived. Without
     a self-check an in-play Brothers in Arms fires again each time anything else is Equipped, and
     the player is asked to search for a card they did not play."""
-    # Two spares, so one is still fetchable after the first search — otherwise a re-fire finds
+    # Two spares, so one is still fetchable after the first search. Otherwise a re-fire finds
     # nothing and the bug hides behind an empty discard pile.
     game = _city_game(in_discard=("spare", "another"))
     hand = game.table.zones[ZoneKey(P1, ZoneRole.HAND)]
@@ -197,7 +197,7 @@ def test_outer_walls_strengthens_the_province_the_battle_is_at():
 
 
 def test_outer_walls_is_played_with_no_units_at_the_battlefield():
-    """The card's own clause — "Even if you control no units at the current battlefield" — is the
+    """The card's own clause, "Even if you control no units at the current battlefield," is the
     Absent designator in longhand, and it is the whole of what gets the action taken."""
     session = _outer_walls_battle(present=False)
 
@@ -206,7 +206,7 @@ def test_outer_walls_is_played_with_no_units_at_the_battlefield():
 
 def test_the_bonus_wears_off_when_the_turn_ends():
     """The card gives no duration, so the bonus lasts to the end of the turn (CR, Duration of
-    Effects) — a Province left permanently stronger would be a different card."""
+    Effects). A Province left permanently stronger would be a different card."""
     session = _outer_walls_battle(present=True)
     before = effective_province_strength(session.game, BATTLED_PROVINCE)
     _play_walls(session)

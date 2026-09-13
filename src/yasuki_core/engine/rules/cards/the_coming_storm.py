@@ -75,7 +75,7 @@ def _shigekawas_court_lobby_bonus(game: GameState, card: L5RCard) -> int:
 
 
 def _shigekawas_court_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The Personalities who Lobbied this turn — anyone's, since the card says "a target
+    """The Personalities who Lobbied this turn. Anyone's is legal, since the card says "a target
     Personality" rather than "your target Personality"."""
     return [
         card.id for card in personalities_in_play(game) if used_this_turn(game, card, LOBBIED_TAG)

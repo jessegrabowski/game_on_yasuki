@@ -19,7 +19,7 @@ except Exception:  # pragma: no cover
 _CELL_W = 58
 _CELL_H = 78
 
-# The 3×3 grid of off-board piles, top-to-bottom and left-to-right. Decks and the hand count are
+# The 3x3 grid of off-board piles, top-to-bottom and left-to-right. Decks and the hand count are
 # display-only; discard and banish piles open an inspect dialog. The third column holds only the
 # hand count (the playable hand itself stays on the board); its lower cells are intentionally blank.
 _DECK_CELLS: tuple[tuple[int, int, Side, str], ...] = (
@@ -36,7 +36,7 @@ _PILE_CELLS: tuple[tuple[int, int, ZoneRole, str], ...] = (
 
 class _Cell(tk.Canvas):
     """A compact pile slot: a card silhouette with a count, captioned. Decks draw as a back, piles
-    as a face when occupied; an empty pile draws as an outline."""
+    as a face when occupied, and an empty pile draws as an outline."""
 
     def __init__(self, master: tk.Misc, caption: str, on_click: Callable[[], None] | None = None):
         super().__init__(
@@ -69,13 +69,13 @@ class _Cell(tk.Canvas):
 
 
 class PlayerInfoBox(tk.Frame):
-    """The off-board panel for one seat: avatar, name, editable honor, and a 3×3 grid of the seat's
+    """The off-board panel for one seat: avatar, name, editable honor, and a 3x3 grid of the seat's
     decks, discard and banish piles, and hand count.
 
     Reads every count and top card from the field's active render source (the redacted projection in
-    rules mode), so the opponent's box shows only what the viewer is entitled to — counts, never
+    rules mode), so the opponent's box shows only what the viewer is entitled to: counts, never
     hidden identities. Honor edits dispatch a ``SetHonor`` intent and so apply only in the manual
-    sandbox; the rules engine owns honor during play.
+    sandbox. The rules engine owns honor during play.
     """
 
     def __init__(self, master: tk.Misc, field: FieldView, owner: PlayerId):
@@ -186,7 +186,7 @@ class PlayerInfoBox(tk.Frame):
                 pass
         self._draw_avatar_circle()
 
-    # ----- the 3×3 pile grid -------------------------------------------------
+    # ----- the 3x3 pile grid -------------------------------------------------
 
     def _build_cells(self) -> None:
         for row, col, side, caption in _DECK_CELLS:

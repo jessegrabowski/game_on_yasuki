@@ -48,7 +48,7 @@ That distinction is the whole of the battle-resolution rule in {func}`~.unit_for
 
 ```python
 # An Item's modifier is already inside the Personality's effective Force, so dropping him drops
-# what his Items lend him — which is what the rule says happens.
+# what his Items lend him, which is what the rule says happens.
 total = 0 if personality.bowed else effective_force(game, personality)
 return total + sum(
     effective_force(game, follower) for follower in followers if not follower.bowed
@@ -93,7 +93,7 @@ is caught by a state-based action:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/state_based_actions.py
 :start-at: def orphaned_attachments(game: GameState) -> list[Effect]:
-:end-before: No card is spared this yet. Street to Street will be the first: it detaches every Follower at a
+:end-before: No card is spared this yet.
 :language: python
 ```
 

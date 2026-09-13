@@ -30,7 +30,7 @@ def printed_keywords(cards_dir: pathlib.Path = DEFAULT_CARDS_PATH) -> set[str]:
 
 
 def test_every_keyword_the_engine_names_is_printed_on_a_card():
-    # A keyword is card text, so a misspelling here is a rule that never fires and never errors —
+    # A keyword is card text, so a misspelling here is a rule that never fires and never errors,
     # the same silent death a misspelled card id dies, and caught the same way.
     printed = printed_keywords()
     unprinted = {name: value for name, value in engine_keywords().items() if value not in printed}
@@ -68,7 +68,7 @@ def rules_constants() -> list[tuple[str, int, str, str]]:
 
 def test_no_clan_word_is_named_without_saying_which_sense_it_means():
     # "Dragon" the keyword is the creature; "Dragon Clan" is the clan, and the clans column spells
-    # that one plainly as "Dragon" — the two columns read the same word the opposite way round. A
+    # that one plainly as "Dragon". The two columns read the same word the opposite way round. A
     # rule keyed on the bare word would quietly match 70 Nonhuman dragons instead of 409 clan cards.
     printed = printed_keywords()
     conflatable = {

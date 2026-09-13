@@ -19,7 +19,7 @@ register_self_grant("jade_mine", JADE_MINE_GRANT)
 
 @on(ProducingGold, "jade_mine")
 def _jade_mine_producing_gold(ctx: TriggerContext) -> list[Effect]:
-    """ "When this Holding produces Gold, you may give it +1GP; if you do, it will not straighten
+    """ "When this Holding produces Gold, you may give it +1GP. If you do, it will not straighten
     until after your next Action Phase." """
     return offer_self_grant(
         ctx,
@@ -54,7 +54,7 @@ SLAVE_PITS_HONOR_COST = 2
 @self_grant("slave_pits")
 def _slave_pits_gold(card: L5RCard, game: GameState, seat: PlayerId) -> int:
     """Courtesy offers nothing to the player who went first, so affordability must not count it for
-    them — a grant it counted and the window then withheld would strand the purchase."""
+    them, since a grant it counted and the window then withheld would strand the purchase."""
     return SLAVE_PITS_GRANT if went_second(game, seat) else 0
 
 

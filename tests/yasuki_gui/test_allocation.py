@@ -70,7 +70,7 @@ def test_an_arrow_moves_one_across_without_changing_the_total():
 
 
 def test_a_card_may_not_be_emptied_by_an_arrow():
-    """Carrying nothing is what being unchosen means, so the last one cannot be taken away — the
+    """Carrying nothing is what being unchosen means, so the last one cannot be taken away. The
     player deselects the card instead."""
     allocation = _allocation(2, "a", "b")
 

@@ -50,7 +50,7 @@ def canvas(root):
 
 
 def _boxes(canvas):
-    """Every stamp's tab, in the order they were drawn — Force first, then Chi."""
+    """Every stamp's tab, in the order they were drawn. Force first, then Chi."""
     return [canvas.coords(i) for i in canvas.find_all() if canvas.type(i) == "rectangle"]
 
 
@@ -78,7 +78,7 @@ class TestWhichCardsCarryAStat:
         }
 
     def test_a_follower_reports_force_but_no_chi(self):
-        """It stands in the unit and so has a Force of its own; Chi belongs to the Personality, and
+        """It stands in the unit and so has a Force of its own. Chi belongs to the Personality, and
         a Follower's print carries a zero that would otherwise stamp as a real number."""
         assert stamped_stats(follower(force=2), {}) == {Stat.FORCE: StatReading(2, 2)}
 
@@ -109,7 +109,7 @@ class TestDrawing:
         assert set(_text_items(canvas)) == {"3", "4"}
 
     def test_a_board_with_no_rules_game_stamps_nothing(self, canvas):
-        """The manual sandbox has no engine to ask, so it cannot say what a card's stats come to —
+        """The manual sandbox has no engine to ask, so it cannot say what a card's stats come to,
         and a card whose counters modify it would be stamped with the numbers it prints, which the
         badge beside them contradicts."""
         card = personality(force=3, chi=4)
@@ -174,7 +174,7 @@ class TestDrawing:
         assert fills == {theme.FORCE_BANNER, theme.CHI_BANNER}
 
     def test_every_stamp_is_the_same_shape_whatever_the_digit(self, canvas):
-        """Sized to each glyph's own ink, a 0 and a 6 make different boxes — and a bowed card then
+        """Sized to each glyph's own ink, a 0 and a 6 make different boxes, and a bowed card then
         rotates a shape that was never the same twice."""
         sizes = set()
         for force in range(10):
@@ -223,7 +223,7 @@ class TestDrawing:
         runs wider than the constant spills a little further over the edge with every digit added.
 
         Width only: Tk reports a text item's layout box, ascender to descender, where what has to
-        fit is the ink — the digits sit well inside a box the linespace overhangs.
+        fit is the ink, and the digits sit well inside a box the linespace overhangs.
         """
         for force in (8, 12, 100):
             canvas.delete("all")
@@ -244,7 +244,7 @@ class TestDrawing:
             assert 0 <= y0 and y1 <= CARD_W, f"{canvas.type(item)} runs off the short edge"
 
     def test_bowing_turns_both_stamps_onto_the_cards_side(self, canvas):
-        """The card is drawn a quarter turn over, and its printed numerals go with it — a stamp
+        """The card is drawn a quarter turn over, and its printed numerals go with it, so a stamp
         left at the upright fractions lands in two corners the printing never used."""
         draw_stat_stamps(canvas, personality(force=3, chi=4), BOWED, {}, ("stat",), bowed=True)
 

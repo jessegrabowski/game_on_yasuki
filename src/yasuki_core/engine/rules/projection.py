@@ -24,7 +24,7 @@ from yasuki_core.game_pieces.prints import PersonalityPrint
 
 @dataclass(frozen=True, slots=True)
 class UnitView:
-    """A Personality and the cards attached to him — the CR's unit, as a seat sees it.
+    """A Personality and the cards attached to him: the CR's unit, as a seat sees it.
 
     Attributes
     ----------
@@ -47,7 +47,7 @@ class BattlefieldView:
     province : ZoneKey
         The Defender Province the battlefield sits at.
     occupant : L5RCard or HiddenCard or None
-        The card standing in that Province, redacted like any other — a face-down Dynasty card is a
+        The card standing in that Province, redacted like any other. A face-down Dynasty card is a
         back to the seat attacking it. None when the Province is empty.
     fortifications : tuple of L5RCard or HiddenCard
         The cards attached to that Province, in attach order, redacted like the occupant. They stand
@@ -68,8 +68,8 @@ class BattlefieldView:
         What the battle fought here did, or None until one has been.
     destroyed_names : tuple of str
         The names of the cards that battle destroyed, in the order they went. Named apart from
-        ``outcome.destroyed``, which carries the same cards as ids; public because a destroyed card
-        is sitting in a discard both seats may read.
+        ``outcome.destroyed``, which carries the same cards as ids, and public because a destroyed
+        card is sitting in a discard both seats may read.
     """
 
     province: ZoneKey
@@ -98,8 +98,8 @@ class AttackView:
     segment : Segment
         Which segment of the Attack Phase is open.
     battle_segment : BattleSegment or None
-        Which segment of the battle at ``current`` is open, or None when no battle is being fought
-        — between battles, and during a battle's resolution, which is not an Action Round.
+        Which segment of the battle at ``current`` is open, or None when no battle is being fought.
+        This occurs between battles and during a battle's resolution, which is not an Action Round.
     current : int or None
         The battlefield a battle is being fought at, or None between battles.
     battlefields : tuple of BattlefieldView
@@ -116,10 +116,11 @@ class AttackView:
 
 @dataclass(frozen=True, slots=True)
 class GameView:
-    """A per-seat projection of a :class:`~.GameState` — everything one seat is entitled to see.
+    """A per-seat projection of a :class:`~.GameState`. This includes everything one seat is
+    entitled to see.
 
     The table is redacted for the viewer (the opponent's hand, face-down cards, and deck contents
-    appear as backs); the turn-level rules fields are public to both seats; and a pending decision
+    appear as backs). The turn-level rules fields are public to both seats, and a pending decision
     reaches only the seat that must answer it.
 
     Attributes
@@ -137,21 +138,21 @@ class GameView:
     first_player : PlayerId
         The seat that took the first turn.
     gold : dict mapping PlayerId to int
-        Every seat's gold pool — public to both seats.
+        Every seat's gold pool, public to both seats.
     favor_holder : PlayerId or None
         The seat holding the Imperial Favor, or None.
     pending : DecisionRequest or None
-        The decision the viewer must answer, or None when nothing is awaited from this viewer —
-        including when the engine is instead waiting on the other seat.
+        The decision the viewer must answer, or None when nothing is awaited from this viewer.
+        This includes when the engine is instead waiting on the other seat.
     legacy_pool : tuple of L5RCard
         The viewer's own Legacy cards a search would still find, sorted by card id rather than left
         in deck order. Empty means a Legacy search would whiff and lose the game. Never populated
         for the other seat.
     dynasty_deck : tuple of L5RCard
         The cards left in the viewer's own dynasty deck, sorted by card id rather than left in deck
-        order. A seat built its deck and so knows what remains in it; where those cards sit in the
-        shuffle is the part it must not learn, which is what the sort strips. Never populated for
-        the other seat.
+        order. A seat built its deck and so knows what remains in it, but where those cards sit
+        in the shuffle is the part it must not learn, which is what the sort strips. Never
+        populated for the other seat.
     responding_to : str or None
         The action an open Response Step answers, worded for a player, or None when no Step is open.
         A seat holding no Response still sees it: the Step is the whole table's, and a seat is
@@ -162,13 +163,13 @@ class GameView:
         occupant is redacted like any other card.
     stats : dict mapping str to dict
         Each modified card's effective stats by id, the inner dict keyed by :class:`~.Stat`. Read it
-        through :meth:`stat` rather than directly — a card no modifier reaches is absent, and the
+        through :meth:`stat` rather than directly. A card no modifier reaches is absent, and the
         method supplies its printed value.
     unit_force : dict mapping str to int
         Each identifiable in-play Personality's unit Force by his card id, totalled the way a battle
         resolves it: a bowed Personality contributes nothing, a bowed Follower drops out, and an
         Item's modifier rides on the Personality either way. It says what a unit would contribute,
-        not whether it may be sent — a bowed Personality cannot be assigned at all, and his entry
+        not whether it may be sent. A bowed Personality cannot be assigned at all, and his entry
         still counts his unbowed Followers. A seat's army is the sum over the units it may assign.
     """
 
@@ -189,8 +190,9 @@ class GameView:
     unit_force: dict[str, int]
 
     def stat(self, card: L5RCard, stat: Stat) -> int:
-        """``card``'s effective ``stat`` — counters, granted modifiers and all. Reading the card's
-        own attribute instead yields the printed number, since modifiers live on the game.
+        """``card``'s effective ``stat``. This includes counters, granted modifiers and all. Reading
+        the card's own attribute instead yields the printed number, since modifiers live on the
+        game.
         """
         modified = self.stats.get(card.id)
         if modified is not None:
@@ -201,7 +203,7 @@ class GameView:
 
 def _identifiable_ids(table: ViewSnapshot) -> set[str]:
     """The ids ``table`` lets its viewer identify. A card redacted to a :class:`~.HiddenCard`, and
-    one the snapshot omits, are both absent — the snapshot has already decided entitlement, and
+    one the snapshot omits, are both absent. The snapshot has already decided entitlement, and
     reading it back is what keeps that decision in one place."""
     ids = {
         card.id for zone in table.zones.values() for card in zone.cards if isinstance(card, L5RCard)

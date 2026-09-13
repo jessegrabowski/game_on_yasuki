@@ -25,11 +25,10 @@ def client():
 def _fake_ws_auth(monkeypatch):
     """Authenticate WS handshakes from a per-connection header instead of the accounts database.
 
-    Production resolves the session cookie against the accounts pool; here a connection names its
-    player via the ``x-test-user`` header and gets a stable account for it, so seating logic is
-    exercised without provisioning Postgres. Two connections naming the same player share an id —
-    the second-tab case — while distinct names are distinct players. A connection with no header
-    defaults to ``Ada``, the lone player the single-seat tests expect.
+    A connection names its player via the ``x-test-user`` header and gets a stable account for it.
+    Two connections naming the same player share an id, the second-tab case, while distinct names
+    are distinct players. A connection with no header defaults to ``Ada``, the lone player the
+    single-seat tests expect.
     """
     from yasuki_web import websocket as ws_module
 

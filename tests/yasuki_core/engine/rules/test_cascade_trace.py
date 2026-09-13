@@ -11,7 +11,7 @@ from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_gam
 
 @on(CounterGained, "loop_forever")
 def _loop_forever(ctx: TriggerContext) -> list[Effect]:
-    """Reacts to its own wealth by granting itself more — the card-logic bug the guard exists for."""
+    """Reacts to its own wealth by granting itself more, the card-logic bug the guard exists for."""
     if ctx.event.card_id != ctx.card.id:
         return []
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]

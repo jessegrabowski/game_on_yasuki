@@ -60,7 +60,7 @@ def test_a_tome_its_seat_cannot_pay_for_is_not_offered():
 
 
 def test_an_empty_fate_deck_still_costs_the_gold_and_the_bow():
-    """Drawing from an exhausted deck draws nothing; the cost is paid all the same (CR, Costs)."""
+    """Drawing from an exhausted deck draws nothing. The cost is paid all the same (CR, Costs)."""
     session = _tome_game(fate_deck=0)
 
     session.act(P1, ActivateAbility("tome"))

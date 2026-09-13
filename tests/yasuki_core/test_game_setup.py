@@ -119,7 +119,7 @@ def test_the_lower_honor_seat_goes_second_with_its_stronghold_flipped():
 
 
 def test_a_mirror_match_still_settles_turn_order():
-    """Equal honor is the common case for a mirror, and it is drawn rather than defaulted — so one
+    """Equal honor is the common case for a mirror, and it is drawn rather than defaulted. So one
     seat still goes second with its stronghold flipped."""
     state, first = build_state_from_deck(
         DEMO_DECK_PATH, opponent_deck_path=DEMO_DECK_PATH, rng=default_rng(7)

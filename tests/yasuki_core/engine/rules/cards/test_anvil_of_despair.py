@@ -31,7 +31,7 @@ def _refugees_battle(
     *, holder: PlayerId = DEFENDER, defender_gold: int = 2, attacker_gold: int = 0
 ) -> EngineSession:
     """The Combat Segment of P1's attack, with Refugees in ``holder``'s hand. The Attacker sends a
-    plain Personality; the Defender sends one carrying a Follower and keeps one at home."""
+    plain Personality, and the Defender sends one carrying a Follower and keeps one at home."""
     state = TableState.empty_two_seat()
     token_template(
         state, "ashigaru_2", name="Ashigaru", card_type="Follower", keywords=("Ashigaru",), force=1
@@ -82,7 +82,7 @@ def _offered_targets(session: EngineSession, holder: PlayerId) -> tuple[str, ...
 
 
 def test_refugees_targets_only_personalities_carrying_no_follower():
-    """ "A Personality without Followers" — either side's, since the card names no side. The escort
+    """ "A Personality without Followers": either side's, since the card names no side. The escort
     has a Follower, so he is spared."""
     session = _refugees_battle()
     _reach_the_combat_segment(session, DEFENDER)
@@ -116,7 +116,7 @@ def test_paying_the_gold_buys_the_ashigaru():
 
 
 def test_the_offer_goes_to_the_targets_controller_not_the_seat_playing_it():
-    """ "The target's controller may pay" — the Defender plays Refugees at an attacking Personality,
+    """ "The target's controller may pay": the Defender plays Refugees at an attacking Personality,
     and it is the Attacker who is asked."""
     session = _refugees_battle(attacker_gold=2)
     _reach_the_combat_segment(session, DEFENDER)
@@ -158,8 +158,8 @@ def test_the_offer_is_withheld_from_a_controller_who_could_not_pay():
     ids=["defender", "attacker"],
 )
 def test_it_is_played_with_no_units_at_the_battlefield(holder, standing_there):
-    """ "Absent Battle" is the plain designator, so the exception is not conditioned on which side of
-    the battle the seat is on."""
+    """ "Absent Battle" is the plain designator, so the exception is not conditioned on which side
+    of the battle the seat is on."""
     session = _refugees_battle(holder=holder)
     _reach_the_combat_segment(session, holder)
     table = session.game.table

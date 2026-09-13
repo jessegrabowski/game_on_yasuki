@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 MAX_DECKS_PER_USER = 200
-# Distinct (card, side, printing, art) entries; a legal deck is far smaller, but alt-art variants and
-# casual formats leave generous headroom below anything abusive.
+# Distinct (card, side, printing, art) entries; a legal deck is far smaller, but alt-art variants
+# and casual formats leave generous headroom below anything abusive.
 MAX_DECK_ENTRIES = 250
 MAX_COPIES_PER_ENTRY = 100
 MAX_NAME_LEN = 80
@@ -39,7 +39,7 @@ class SaveDeckRequest(BaseModel):
 
 
 class DeckLimitError(ValueError):
-    """A deck or a user is over a storage cap — distinct from an unknown-card rejection."""
+    """A deck or a user is over a storage cap. Distinct from an unknown-card rejection."""
 
 
 def _deck_names(parsed: dict) -> set[str]:
@@ -54,7 +54,7 @@ def _deck_names(parsed: dict) -> set[str]:
 
 
 def _resolve_deck(yaml_text: str) -> tuple[list[DeckCard], DeckSummary]:
-    """Parse, resolve, validate, and summarize a decklist — the save path's card-DB work.
+    """Parse, resolve, validate, and summarize a decklist: the save path's card-DB work.
 
     Raises ``UnknownCardError`` for any unresolved card and ``DeckLimitError`` for an empty or
     oversized deck.
@@ -89,7 +89,7 @@ def _persist_deck(owner_id: int, body: SaveDeckRequest, cards, summary) -> dict:
 
 
 def _public_deck(deck: dict) -> dict:
-    """The deck fields safe to return — owner id and surrogate key stay internal."""
+    """The deck fields safe to return. Owner id and surrogate key stay internal."""
     return {
         "slug": deck["slug"],
         "name": deck["name"],
@@ -166,7 +166,7 @@ async def read_deck(
 ):
     """A shared deck by slug, with a YAML rendering ready to feed LOAD_DECK.
 
-    Public and unlisted decks are readable by anyone with the link; a private deck is visible only
+    Public and unlisted decks are readable by anyone with the link. A private deck is visible only
     to its owner and otherwise 404s, so its existence stays hidden.
     """
     deck = await asyncio.to_thread(_get_deck, slug)

@@ -22,9 +22,10 @@ def load_print_images(images_dir: Path, dsn: str) -> None:
     """
     Populate ``print_images`` from the per-set image manifests.
 
-    Each manifest (``<set_slug>.yaml``) maps a printing — identified by ``(card_id, printing_id)`` —
-    to its image files, in front-then-back order. The stored ``path`` is ``sets/<set_slug>/<file>``,
-    resolved at read time against the local set tree or the configured image base URL.
+    Each manifest (``<set_slug>.yaml``) maps a printing, identified by ``(card_id, printing_id)``,
+    to its image files, in front-then-back order. The stored ``path`` is
+    ``sets/<set_slug>/<file>``, resolved at read time against the local set tree or the
+    configured image base URL.
 
     Parameters
     ----------
@@ -86,9 +87,9 @@ def load_print_images(images_dir: Path, dsn: str) -> None:
 
 
 def apply_errata_art(dsn: str) -> None:
-    """Point each errata'd printing's front image at its current errata render (matched by set slug),
-    so every art surface resolves the latest version. Preserve the pre-errata front on the card's
-    revision 0 for the compare view.
+    """Point each errata'd printing's front image at its current errata render (matched by set
+    slug), so every art surface resolves the latest version. Preserve the pre-errata front on the
+    card's revision 0 for the compare view.
     """
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute(
@@ -123,7 +124,7 @@ def apply_errata_art(dsn: str) -> None:
 
 
 def seed_card_backs(dsn: str) -> None:
-    """Seed the five generic card backs (Fate/Dynasty × old/new, plus the Dynasty token back)."""
+    """Seed the five generic card backs (Fate/Dynasty x old/new, plus the Dynasty token back)."""
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.executemany(
             """

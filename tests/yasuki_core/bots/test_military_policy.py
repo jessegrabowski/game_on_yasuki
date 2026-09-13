@@ -159,11 +159,10 @@ class TestDefending:
         assert _sent_to(_defend(session, {"raider": 0})) == {0: {"big"}}
 
     def test_it_saves_as_many_provinces_as_it_can_afford(self):
-        """Cheapest first, so a seat short of units saves two Provinces rather than one. Taking the
-        battlefields in board order spends everything on the expensive one and saves one.
+        """Cheapest first: a seat short of units saves two Provinces, not one. Taking the
+        battlefields in board order spends everything on the expensive one and saves only one.
 
-        Three battlefields, because with two the two orders happen to save the same number and the
-        difference does not show.
+        Uses three battlefields. With two, both orders save the same number.
         """
         session = _attacked(
             defenders={"guard-a": 2, "guard-b": 2},
@@ -185,7 +184,7 @@ class TestDefending:
         assert sum(len(units) for units in places.values()) == 1
 
     def test_it_counts_a_follower_toward_what_a_unit_can_hold(self):
-        """The unit's Force, not the Personality's — a defense weighed on the printed number sends
+        """The unit's Force, not the Personality's. A defense weighed on the printed number sends
         two units where one would have held, or none where one would."""
         session = _attacked(defenders={"guard": 2}, attackers={"raider": 5}, provinces=1)
         attached(
@@ -338,7 +337,7 @@ class TestAttacking:
         assert _sent_to(_attack_answer(session)) == {0: {"host"}}
 
     def test_it_leaves_a_province_the_defense_could_hold(self):
-        """Exactly enough to beat the defense is not enough — a tie leaves the Province standing and
+        """Exactly enough to beat the defense is not enough. A tie leaves the Province standing and
         destroys both armies."""
         session = _attacked(defenders={"guard": 5}, attackers={"host": 5}, provinces=1)
 
@@ -357,7 +356,7 @@ class TestAttacking:
         assert _attack_answer(session) == ()
 
     def test_it_spreads_across_the_provinces_it_can_take(self):
-        """Two Provinces it can each take, and force for both — a rule that stopped at the first
+        """Two Provinces it can each take, and force for both. A rule that stopped at the first
         would leave the second standing for no reason."""
         session = _attacked(
             defenders={"guard": 1}, attackers={"host-a": 3, "host-b": 3}, provinces=2
@@ -412,8 +411,8 @@ class TestDelegation:
         assert answer.choices == ()
 
     def test_it_answers_everything_else_the_way_the_gold_rush_does(self):
-        """Only the defending assignment is its own. Answering a payment differently — or not at
-        all — would strand a driven game on the first thing it buys."""
+        """Only the defending assignment is its own, so answering a payment differently, or not at
+        all, would strand a driven game on the first thing it buys."""
         request = ChoosePayment(
             seat=DEFENDER,
             candidates=("purse",),
@@ -438,9 +437,10 @@ class TestDelegation:
 
 
 def test_a_driven_defense_puts_units_on_the_battlefield():
-    """The whole path through the engine rather than the policy alone: the request the engine builds,
-    answered through the session, leaves the Defender's unit standing where it was sent. A seat
-    running the default agent answers the empty tuple here and the Province falls uncontested."""
+    """The whole path through the engine rather than the policy alone: the request the engine
+    builds, answered through the session, leaves the Defender's unit standing where it was sent.
+    A seat running the default agent answers the empty tuple here and the Province falls
+    uncontested."""
     session = _attacked(defenders={"guard": 4}, attackers={"raider": 3}, provinces=1)
     game = session.game
     resolution.declare_attack(game, ATTACKER)
@@ -458,7 +458,7 @@ def test_a_driven_defense_puts_units_on_the_battlefield():
 def test_a_military_policy_wins_by_destroying_every_province():
     """The first game in the suite that ends in a victory rather than at a turn limit. The military
     path has been complete on the rules side since battle resolution landed, and nothing had ever
-    walked it — no shipped policy chooses `DeclareAttack`, so every driven game ended on the clock.
+    walked it  no shipped policy chooses `DeclareAttack`, so every driven game ended on the clock.
     """
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
@@ -628,7 +628,7 @@ class TestEquipping:
         """The point of equipping in the phase before the battle: the attachment has to land on a
         unit the assignment rule will then send, or the Force sits at home and the Province holds.
 
-        The Province costs seven — the Defender's six at home, plus one to beat it — and the seat
+        The Province costs seven  the Defender's six at home, plus one to beat it  and the seat
         holds five across two Personalities. Neither can take it, and neither can the pair, until
         the Follower goes onto one of them. So the attachment and the assignment have to agree
         about which unit matters, and the turn only works if they do.

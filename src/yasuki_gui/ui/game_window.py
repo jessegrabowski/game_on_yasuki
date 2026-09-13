@@ -53,7 +53,7 @@ class GameWindow:
     collaborator takes what it needs as an argument and cannot read a widget that does not exist
     yet.
 
-    Renders a game rather than owning one — whoever deals keeps the session, and a deck load
+    Renders a game rather than owning one. Whoever deals keeps the session, and a deck load
     reassigns ``field.state`` and calls :meth:`relayout_panels` rather than building a new window.
 
     Attributes
@@ -164,7 +164,8 @@ class GameWindow:
         self.relayout_panels()
 
     def show_cards(self, cards: list[L5RCard], title: str) -> None:
-        """Lay a pile out over the board in the strip panel, reusing the one panel for every pile."""
+        """Lay a pile out over the board in the strip panel, reusing the one panel for every
+        pile."""
         # Placed before it is filled, so the cards are laid out at the size they will be shown at
         # rather than measured against an unplaced panel and corrected on a later redraw.
         self.card_strip.open_over(STRIP_INSET, STRIP_INSET, STRIP_W, STRIP_H)
@@ -223,7 +224,7 @@ class GameWindow:
         """Point every widget hook and key binding at ``presenter``.
 
         Bindings live here rather than at the assembly point because they name widgets, and the
-        widgets are all built by the time this can be called — so a hook cannot be attached to one
+        widgets are all built by the time this can be called. A hook cannot be attached to one
         that does not exist yet.
         """
         # Re-render (board borders + confirm-button state) as the player toggles candidates.

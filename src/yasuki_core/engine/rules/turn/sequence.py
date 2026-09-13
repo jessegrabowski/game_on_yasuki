@@ -35,7 +35,7 @@ from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint, WindPrint
 
 
-# The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
+# The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton section 1).
 MAX_HAND_SIZE = 8
 
 
@@ -51,28 +51,28 @@ _PREGAME_PERMANENTS = (StrongholdPrint, SenseiPrint, WindPrint)
 
 
 def begin_game(game: GameState) -> None:
-    """Run the game-start pass once after ``GameState.start``, before the active player acts:
-    fire each pre-game permanent's enters-play effect, then the first turn's housekeeping. Re-runs on
+    """Run the game-start pass once after ``GameState.start``, before the active player acts: fire
+    each pre-game permanent's enters-play effect, then the first turn's housekeeping. Re-runs on
     every replay, so those effects must be idempotent."""
     _begin_pregame(game)
     _begin_turn(game)
 
 
 def _begin_pregame(game: GameState) -> None:
-    """Fire EnteredPlay for each pre-game permanent on the battlefield, so a Stronghold or Sensei with
-    an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
+    """Fire EnteredPlay for each pre-game permanent on the battlefield, so a Stronghold or Sensei
+    with an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
     for card in list(game.table.battlefield.cards):
         if isinstance(card.printed, _PREGAME_PERMANENTS):
             triggers.fire(game, EnteredPlay(card.id))
 
 
 def advance(game: GameState) -> None:
-    """Advance the active player's turn to the next phase; past the Dynasty phase, run the end of
+    """Advance the active player's turn to the next phase. Past the Dynasty phase, run the end of
     the turn and begin the next. The gold pool empties on every phase change.
 
     Pause instead of finishing the turn if the end-of-turn discard needs an answer: record the
     request on ``game.pending`` and return, leaving the caller to :func:`~.submit` a response before
-    advancing again. That discard is the only question the end of a turn may ask — raise
+    advancing again. That discard is the only question the end of a turn may ask. Raise
     ``RuntimeError`` if a delayed effect asks one of its own, and if called while a decision is
     already pending.
     """
@@ -95,8 +95,8 @@ def _lift_straighten_delays(game: GameState) -> None:
     """Free the active seat's cards that were forbidden to straighten, now its Action Phase is over.
 
     Only a *later* Action Phase than the one the delay began on counts: a card bowed to pay for an
-    Action is forbidden until the seat's next Action Phase, not the rest of this one. A card that has
-    left the table takes its delay with it — nothing it could be forbidden from is left.
+    Action is forbidden until the seat's next Action Phase, not the rest of this one. A card that
+    has left the table takes its delay with it. Nothing it could be forbidden from is left.
     """
     by_id = game.table.cards_by_id
     game.straighten_delayed = {
@@ -130,8 +130,8 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
     """Hand the opportunity to act to the next seat in turn order, closing the round once every seat
     has passed consecutively.
 
-    A pass counts toward closing; taking an action resets the count. A seat the round permits nothing
-    never receives the opportunity, and counts as having passed.
+    A pass counts toward closing. Taking an action resets the count. A seat the round permits
+    nothing never receives the opportunity, and counts as having passed.
     """
     seats = list(game.table.seats)
     passes = game.round.passes + 1 if passed else 0
@@ -158,7 +158,7 @@ def _end_turn(game: GameState) -> None:
     seat = game.active
     triggers.resolve_delayed(game, END_OF_TURN)
     if game.pending is not None:
-        # What is left of the end of the turn — Sincerity, the fate draw, the hand-size discard —
+        # What is left of the end of the turn (Sincerity, the fate draw, the hand-size discard)
         # has nowhere to resume from, and setting the discard request would strand the paused
         # effect's own cascade behind it. Nothing delayed today asks a question.
         raise RuntimeError("a delayed effect paused the end of the turn, which cannot resume")
@@ -230,8 +230,8 @@ def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
     """Straighten everything but ``staying_bowed`` and whatever may not straighten yet, reveal the
     Provinces, and open the turn.
 
-    The prohibition outlives this step — it lifts when the Action Phase this straighten precedes has
-    ended — so nothing is spent here.
+    The prohibition outlives this step. It lifts when the Action Phase this straighten precedes has
+    ended, so nothing is spent here.
     """
     straightened = ops.straighten(
         game.table, game.active, staying_bowed | game.straighten_delayed.keys()
@@ -248,9 +248,9 @@ def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
 def apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:
     """Discard down to the maximum hand size at the end of the turn.
 
-    The rulebook trims the hand, so the discard names no seat as its cause: it is a step of the turn
-    rather than an action (CR, Drawing and Discarding Fate Cards), and a card reacting to "if the
-    action was yours" has no action to claim.
+    A step of the turn rather than an action (CR, Drawing and Discarding Fate Cards): the discard
+    names no seat as its cause, so a card reacting to "if the action was yours" has no action to
+    claim.
     """
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     by_id = {card.id: card for card in hand.cards}
@@ -274,8 +274,8 @@ def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
     """Hand on the opportunity once an action has fully resolved. An action that paused for a
     decision has not finished, and a game that has ended has no round left to run.
 
-    An action that opened a round of its own — a battle's Engage Segment, off the Attacker's choice
-    of where to fight — hands on nothing: the new round names its own first actor, and yielding here
+    An action that opened a round of its own (a battle's Engage Segment, off the Attacker's choice
+    of where to fight) hands on nothing. The new round names its own first actor, and yielding here
     would take the opportunity straight back off the Defender. A Response Step comes next when the
     action left anyone something to respond with.
     """
@@ -299,7 +299,7 @@ def open_response_window(game: GameState) -> bool:
 
     Only when a seat actually holds a Response: a step nobody could act in is a pass nobody needs to
     be asked for. A Response is itself an action, and one taken inside the step opens no step of its
-    own — the window that is already open is the one it belongs to.
+    own. The window that is already open is the one it belongs to.
     """
     if game.round.kind is RoundKind.RESPONSE:
         return False

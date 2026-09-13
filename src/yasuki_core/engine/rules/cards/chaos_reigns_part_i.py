@@ -54,8 +54,8 @@ WEALTH_CAP = 3
 def _caravansary_targets(game: GameState, source: L5RCard) -> list[str]:
     """Itself, once the action just resolved was its controller's and discarded a Fate card.
 
-    A Response reads the action rather than the board: the discarded card is already in a pile by
-    the time the Step opens, and nothing on the board says whose action put it there.
+    Reads the action rather than the board: nothing on the board says whose action discarded
+    the card.
     """
     if at_cap(source, WEALTH, WEALTH_CAP):
         return []
@@ -93,7 +93,7 @@ DECLINE_SECOND_CLAUSE = "Take neither"
 def _honor_your_oaths_targets(game: GameState, source: L5RCard) -> list[str]:
     """The enemy Personalities at the battle, offered only while you control the Favor.
 
-    Controlling it is a condition rather than a cost — nothing here spends it, and the clause below
+    Controlling it is a condition rather than a cost: nothing here spends it, and the clause below
     is the only part of the card that can.
     """
     if game.favor_holder is not source.owner:
@@ -144,7 +144,7 @@ def _resolve_honor_your_oaths_second_clause(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Charge whichever half the seat named. Paying the Favor here is what makes this a Favor
-    action; bowing the Yojimbo leaves it an ordinary one (ShE datasheet, The Favor Icon)."""
+    action. Bowing the Yojimbo leaves it an ordinary one (ShE datasheet, The Favor Icon)."""
     if not chosen or chosen[0] == DECLINE_SECOND_CLAUSE:
         return []
     if chosen[0] == DISCARD_THE_FAVOR:
@@ -190,10 +190,10 @@ register_ability(
 def _manjodh_favor_payer(game: GameState, card: L5RCard) -> list[Effect] | None:
     """ "Political Interrupt, :bow:: If you have no Wind, pay the action's :favor: cost."
 
-    Implemented as a payer priced at bowing rather than as the Interrupt it prints. Costs are paid
-    at step B of the Action Sequence and Interrupts are played at D, so the printed window opens
-    two steps after the cost it names — a contradiction in the card that no correct Interrupt round
-    would resolve. Offering him where every other payer is offered delivers what the card is for.
+    Implemented as a payer priced at bowing rather than as the printed Interrupt, offered wherever
+    every other payer is offered. The printed timing cannot be honored: costs are paid at step B of
+    the Action Sequence and Interrupts are played at D, so the window opens two steps after the cost
+    it names.
     """
     if card.bowed or has_wind(game, card.owner):
         return None

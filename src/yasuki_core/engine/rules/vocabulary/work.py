@@ -38,9 +38,9 @@ class ResolveRecruit:
 class ResumeCascade:
     """The exact remainder of an effect-and-trigger cascade a choice paused: the effects still to
     apply, then the ``(card_id, trigger)`` pairs still to fire for ``event``, then the events still
-    queued behind them. The answered choice's own effects splice in ahead of these. Ephemeral like
-    the rest of the stack — its effects and triggers are value-equal and stable module-level
-    functions, so it rebuilds and compares equal under replay.
+    queued behind them. The answered choice's own effects splice in ahead of these. It is ephemeral
+    like the rest of the stack, since its effects and triggers are value-equal and stable
+    module-level functions, so it rebuilds and compares equal under replay.
 
     Attributes
     ----------
@@ -83,7 +83,7 @@ class SelectAbilityTarget:
 
 @dataclass(frozen=True, slots=True)
 class FinishRecruit:
-    """The recruit steps that follow a card entering play — clearing its Sincerity tokens, resolving
+    """The recruit steps that follow a card entering play: clearing its Sincerity tokens, resolving
     a Proclaim's honor gain, and applying any Invest effect. Deferred behind the ``EnteredPlay``
     cascade so a trait that pauses on entry (a Sincerity seed choice) resolves before them.
 
@@ -150,7 +150,7 @@ class ResolveEquip:
 @dataclass(frozen=True, slots=True)
 class ApplyEffects:
     """Resolve ``effects`` once the current step finishes. The generic deferral: an effect that must
-    wait for what precedes it to resolve fully — including any cascade it raises — is queued here
+    wait for what precedes it to resolve fully, including any cascade it raises, is queued here
     rather than placed inline, where it would run ahead of the events already in flight.
 
     Attributes
@@ -216,20 +216,20 @@ class FightNextBattle:
     """Fight the next battlefield the Attacker has not fought at yet, or end the Attack Phase's
     Fight Segment once every one has been.
 
-    A work item rather than a loop because choosing where to fight is a decision: the procedure has
-    to pause for the answer and pick up where it left off.
+    A work item, since choosing where to fight is a decision the procedure must pause for and
+    pick up again once answered.
     """
 
 
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
-# grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
+# grows as those steps do. Work items are ephemeral, replay rebuilds the stack by re-running.
 @dataclass(frozen=True, slots=True)
 class ResolveStrategy:
     """Resolve a played Strategy once its Gold Cost is paid: its ability, then its discard.
 
-    Deferred behind the payment the way a Recruit is, so a payment that pauses for a decision — or is
-    backed out of — settles before the card does anything.
+    Deferred behind the payment the way a Recruit is, so a payment that pauses for a decision or is
+    backed out of settles before the card does anything.
 
     Attributes
     ----------
@@ -250,7 +250,7 @@ class DiscardPlayed:
 
     A Strategy goes to its owner's Fate discard once its ability is done (CR, Action Sequence step
     F), so this is stacked under the ability's own work and runs after it. The exception is the
-    card that put *itself* into play — a Terrain, a Kata, an Edict — which stays where its own text
+    card that put *itself* into play (a Terrain, a Kata, an Edict), which stays where its own text
     left it.
 
     Attributes

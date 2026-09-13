@@ -10,15 +10,15 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 def activate(game: GameState, card_id: str, ability_key: str | None = None) -> None:
-    """Announce an activated ability: pay its cost, then resolve its target — a single chosen card,
-    or every card it hits for a ``hits_every_target`` ability. The ability is guaranteed registered
-    and to have a legal target — ``legal_actions`` only offers it then.
+    """Announce an activated ability: pay its cost, then resolve its target, a single chosen card
+    or every card it hits for a ``hits_every_target`` ability. The ability is guaranteed
+    registered and to have a legal target. ``legal_actions`` only offers it then.
 
-    Resolving the target is deferred behind the cost on the stack, so a cost whose own cascade pauses
-    for a decision resolves fully first — which is the CR's order, since targets are chosen in step C
-    of the Action Sequence, after costs are paid in step B. Good Faith is what makes the deferral
-    safe: an action may only be announced when it could find a legal target, so the candidates
-    ``legal_actions`` validated are still there to hit."""
+    Resolving the target is deferred behind the cost on the stack, so a cost whose own cascade
+    pauses for a decision resolves fully first: the CR's order, since targets are chosen in step
+    C of the Action Sequence, after costs are paid in step B. Good Faith is what makes the
+    deferral safe: an action may only be announced when it could find a legal target, so the
+    candidates ``legal_actions`` validated are still there to hit."""
     card = game.table.cards_by_id[card_id]
     ability = ability_for(card, ability_key)
     if ActionTiming.RESPONSE in ability.timings:

@@ -22,7 +22,7 @@ def test_front_image_source_falls_back_to_type_default_when_image_missing():
 
 def test_a_proxy_shows_the_token_back_rather_than_its_type_frame():
     """A proxy stands in for a card that was never printed, so it should read as a proxy before it
-    reads as an Item — the type frame would make it look like a real card."""
+    reads as an Item. The type frame would otherwise make it look like a real card."""
     proxy = {"types": ["Item", "Proxy"], "decks": ["Other"], "is_proxy": True}
 
     art = front_image_source(proxy, {"image_path": "sets/nope/missing.jpg"}, repository=None)

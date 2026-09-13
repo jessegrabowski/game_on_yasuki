@@ -157,7 +157,7 @@ def test_personalities_center_in_the_front_row():
     # All share the front row, which sits ahead of the holdings, nearest the divider.
     assert all(y == personality_y for _, y in pos.values())
     assert divider_y(h) < personality_y < holding_y < province_y
-    # Center-justified across the canvas, evenly spaced with a gap — not left-justified like the
-    # holdings.
+    # Center-justified across the canvas, evenly spaced with a gap, unlike the holdings, which are
+    # left-justified.
     assert abs(sum(xs) / len(xs) - w / 2) <= 1
     assert len(gaps) == 1 and gaps.pop() > CARD_W

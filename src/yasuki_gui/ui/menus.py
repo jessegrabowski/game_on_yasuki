@@ -12,7 +12,8 @@ def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
     app_menu = tk.Menu(menubar, tearoff=0)
 
     def open_prefs() -> None:
-        # Determine which player panel is local from the field_view and update a stored profile on field_view
+        # Determine which player panel is local from the field_view and update a stored profile on
+        # field_view
         name = getattr(field_view, "profile_name", "Player")
         avatar = getattr(field_view, "profile_avatar", None)
         dialogs = Dialogs(root, ImageProvider(root))

@@ -41,8 +41,8 @@ def _ashigaru_spearmen_entered_play(ctx: TriggerContext) -> list[Effect]:
 def _resolve_ashigaru_spearmen(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """The draw waits for the end of the turn rather than happening now, so a Spearmen that leaves
-    play in between still draws — the card ties the draw to the turn ending, not to itself."""
+    """The draw waits for the end of the turn rather than happening now. A Spearmen that leaves
+    play in between still draws because the card ties the draw to the turn ending, not to itself."""
     if not chosen:
         return []
     return [DelayedEffect(DrawCard(seat), END_OF_TURN)]

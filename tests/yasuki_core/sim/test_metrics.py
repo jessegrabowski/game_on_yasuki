@@ -55,7 +55,7 @@ def test_potential_production_ignores_the_opponents_producers():
 
 
 def test_potential_production_is_not_the_gold_pool():
-    """The pool reads zero at every turn boundary — gold is produced during a payment and cleared
+    """The pool reads zero at every turn boundary. Gold is produced during a payment and cleared
     at the end of the phase. A metric that sampled it would report zero forever and look correct."""
     session = _game(4, 2)
 
@@ -79,9 +79,9 @@ def test_a_producer_bowed_to_pay_stops_counting():
 
 
 def test_a_bow_time_boost_is_not_counted():
-    """Outlying Farms could raise 4 by boosting, and legality.reachable_gold says so. This metric says
-    2, because the boost costs the card its life. Sustainable output is what a deck is judged on,
-    and the two functions disagreeing is the intent rather than a bug in either."""
+    """Outlying Farms could raise 4 by boosting, and legality.reachable_gold says so. This metric
+    says 2: the boost costs the card its life, and this metric reports sustainable output. The
+    two functions disagreeing is intended."""
     session = _game()
     put_in_play(
         session.game,
@@ -93,7 +93,7 @@ def test_a_bow_time_boost_is_not_counted():
 
 def test_a_target_dependent_producer_reports_its_unconditional_base():
     """Jade Works yields +2 when paying for a Jade card. A metric has no payment in flight, so it
-    reports the base — the reason this number can sit below what a given recruit could muster."""
+    reports the base. The reason this number can sit below what a given recruit could muster."""
     session = _game()
     put_in_play(
         session.game,
@@ -138,7 +138,8 @@ def test_provinces_held_counts_the_seats_provinces():
 
 def test_a_province_emptied_by_an_exhausted_deck_is_still_held():
     """Held counts the province, not the card in it. Otherwise the denominator would shrink exactly
-    as the numerator it normalizes grows, and a seat running out of dynasty deck would look intact."""
+    as the numerator it normalizes grows, and a seat running out of dynasty deck would look
+    intact."""
     session = _game()
     for index in range(3):
         province_card(session.game, f"card{index}", seat=P1, index=index)
@@ -149,7 +150,7 @@ def test_a_province_emptied_by_an_exhausted_deck_is_still_held():
 
 
 def test_a_seat_holding_no_provinces_is_told_apart_from_one_holding_full_ones():
-    """The reason this metric exists. Both boards report zero cleared and zero empty; only the
+    """The reason this metric exists. Both boards report zero cleared and zero empty. Only the
     denominator says one seat is intact and the other has nothing left."""
     intact = _game()
     for index in range(4):

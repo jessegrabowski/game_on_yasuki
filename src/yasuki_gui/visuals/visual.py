@@ -6,8 +6,8 @@ from yasuki_gui.constants import COUNTER_BADGE_R
 from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
-# Per-counter badge colors — (fill, count-text) — so a card carrying more than one kind reads at
-# a glance. Light text on the dark gold, dark text on the light powder blue.
+# Per-counter badge colors, given as (fill, count-text), so a card carrying more than one kind
+# reads at a glance. Light text on the dark gold, dark text on the light powder blue.
 _COUNTER_STYLE = {
     WEALTH.key: (theme.GOLD, theme.ON_DARK),
     SINCERITY.key: (theme.POWDER_BLUE, theme.INK),
@@ -31,7 +31,7 @@ def draw_counter_badges(
     card : L5RCard or HiddenFace
         The card whose counters are shown. A redacted back carries none and draws nothing.
     bbox : tuple of int
-        The card's rectangle as ``(x0, y0, x1, y1)``; the badges hang off its bottom-right.
+        The card's rectangle as ``(x0, y0, x1, y1)``. The badges hang off its bottom-right.
     tags : tuple of str
         The canvas tags every badge item is created under, so the caller can erase them as a group.
     """
@@ -41,8 +41,8 @@ def draw_counter_badges(
     _, _, right, bottom = bbox
     cx = right - COUNTER_BADGE_R - 2
     cy = bottom - COUNTER_BADGE_R - 2
-    # Iterate the counters actually on the card (sorted for a stable stack), not the whole registry
-    # — so the badge system doesn't scale with the catalogue's size.
+    # Iterate the counters actually on the card (sorted for a stable stack), not the whole registry,
+    # so the badge system doesn't scale with the catalogue's size.
     for key, count in sorted(counters.items()):
         if count <= 0:
             continue

@@ -55,7 +55,7 @@ def test_goju_kaxt_comes_back_as_a_personality_when_he_is_destroyed():
 
 
 def test_the_ninja_who_returns_belongs_to_the_clan_his_controller_plays():
-    """ "With your Clan Alignment" — the token prints Ninja, which is no alignment at all."""
+    """ "With your Clan Alignment." The token prints Ninja, which is no alignment at all."""
     game = _kaxt_game(clan="Scorpion")
 
     resolve_effects(game, [Destroy("kaxt", P1)])

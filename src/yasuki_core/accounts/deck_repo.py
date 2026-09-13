@@ -4,8 +4,8 @@ import psycopg
 
 from yasuki_core.accounts.decks import DeckCard, DeckSummary, from_rows, to_rows
 
-# The deck fields the web layer needs to render a tile or a shared-deck page; excludes the soft-delete
-# tombstone and the heavy card list (fetched separately by get_deck).
+# The deck fields the web layer needs to render a tile or a shared-deck page; excludes the
+# soft-delete tombstone and the heavy card list (fetched separately by get_deck).
 _DECK_COLUMNS = (
     "id, slug, owner_id, name, format, description, visibility, "
     "stronghold_card_id, clan, dynasty_count, fate_count, created_at, updated_at"
@@ -16,7 +16,7 @@ _SLUG_ATTEMPTS = 5
 
 
 def count_active_decks(conn: psycopg.Connection, owner_id: int) -> int:
-    """The number of a user's decks that are not soft-deleted — the per-user cap is checked here."""
+    """The number of a user's decks that are not soft-deleted. The per-user cap is checked here."""
     with conn.cursor() as cur:
         cur.execute(
             "SELECT count(*) AS n FROM decks WHERE owner_id = %s AND deleted_at IS NULL",
@@ -38,9 +38,9 @@ def save_deck(
 ) -> dict:
     """Insert a deck and its cards in one transaction, returning the new deck row.
 
-    A fresh random slug is allocated; on the vanishingly rare collision the insert retries with a new
-    one. The cards are expected pre-validated and pre-summarized (see ``decks.resolve_deck_cards`` and
-    ``decks.summarize``).
+    A fresh random slug is allocated. On the vanishingly rare collision the insert retries with a
+    new one. The cards are expected pre-validated and pre-summarized (see
+    ``decks.resolve_deck_cards`` and ``decks.summarize``).
 
     Parameters
     ----------

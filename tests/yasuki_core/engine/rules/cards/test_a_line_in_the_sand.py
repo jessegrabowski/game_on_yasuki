@@ -109,7 +109,7 @@ def test_investing_fetches_another_copy_out_of_the_fate_deck():
 
 
 def test_investing_raises_the_cards_gold_cost_permanently():
-    """ "Permanently increase the Gold Cost by the Invest cost" (CR, Invest) — the surcharge is a
+    """ "Permanently increase the Gold Cost by the Invest cost" (CR, Invest). The surcharge is a
     lasting property of the card in play, not a one-off payment."""
     session = _sand_game()
     session.act(P1, Equip("weapon", invest=True))
@@ -140,8 +140,9 @@ def test_the_invest_is_withheld_when_only_the_bare_cost_is_affordable():
 
 
 def test_the_invested_cost_dies_with_the_card():
-    """The Invest raises the Gold Cost stat, which Hired Killer and its kin read off a unit. The
-    card ceasing to exist takes the raise with it, so a copy that comes back is priced as printed."""
+    """The Invest raises the Gold Cost stat, which Hired Killer and its kin read off a unit.
+    The card ceasing to exist takes the raise with it, so a copy that comes back is priced as
+    printed."""
     session = _sand_game()
     session.act(P1, Equip("weapon", invest=True))
     session.submit(P1, DecisionResponse(("bearer",)))
@@ -208,7 +209,7 @@ def _beiru_game(*, provinces=("keep",), discarded=("wall",)):
 def test_beiru_walls_the_province_he_attaches_the_fortification_to():
     """ "Recruit a target Fortification in your discard pile (attach it to any of your Provinces).
     Give its Province a +1 strength Wall token." The Fortification never sat in a Province, so the
-    CR hands its controller the choice — and the token follows wherever that lands."""
+    CR hands its controller the choice, and the token follows wherever that lands."""
     session = _beiru_game()
 
     session.act(P1, ActivateAbility("beiru"))
@@ -259,7 +260,7 @@ def test_beiru_can_wall_an_empty_province():
 
 
 def test_beiru_is_not_offered_without_a_fortification_to_raise():
-    """A plain Holding in the discard pile is not a target; the ability needs the keyword."""
+    """A plain Holding in the discard pile is not a target. The ability needs the keyword."""
     session = _beiru_game(discarded=())
     state = session.game.table
     state.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].add(

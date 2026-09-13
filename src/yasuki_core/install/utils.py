@@ -100,10 +100,10 @@ def strip_title(title: str) -> str:
 
     Examples
     --------
-    "Bayushi Kachiko" → "bayushi_kachiko"
-    "Bayushi Kachiko • Experienced" → "bayushi_kachiko_exp"
-    "Bayushi Kachiko • Inexperienced" → "bayushi_kachiko_inexp"
-    "Bayushi Kachiko • Experienced 2" → "bayushi_kachiko_exp2"
+    "Bayushi Kachiko" -> "bayushi_kachiko"
+    "Bayushi Kachiko • Experienced" -> "bayushi_kachiko_exp"
+    "Bayushi Kachiko • Inexperienced" -> "bayushi_kachiko_inexp"
+    "Bayushi Kachiko • Experienced 2" -> "bayushi_kachiko_exp2"
 
     Parameters
     ----------

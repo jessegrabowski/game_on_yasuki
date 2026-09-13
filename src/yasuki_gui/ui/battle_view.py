@@ -28,19 +28,19 @@ _CARD_TAG = "battle:"
 # The Defender's Province card, tagged apart because it is not a unit: it belongs to the seat
 # being attacked, and nothing the player can do to a unit applies to it.
 _PROVINCE_TAG = "province:"
-# The lane's own army total, tagged apart from the per-card stamps so a reader — and a test —
-# can tell an army's Force from the Force of one card standing in it.
+# The lane's own army total, tagged apart from the per-card stamps.
+# This lets a reader, and a test, tell an army's Force from the Force of one card standing in it.
 _ARMY_FORCE_TAG = "army-force"
 # The lane's Battle Sequence strip. Every cell carries the strip's own tag and a second naming its
-# segment, the way a card's sprite carries its id — so which cell is lit is a question about the
-# canvas rather than about where things landed on it.
+# segment, the way a card's sprite carries its id. Which cell is lit is therefore a question about
+# the canvas rather than about where things landed on it.
 _SEQUENCE_TAG = "sequence"
 # How wide a lane is once collapsed: enough for its number, and no more.
 COLLAPSED_W = 34
 LANE_GAP = 6
 # The band holding the lane's name and the Province Strength under it, which is the number the
-# battle is about. It sits on the Province's own side of the lane, so mirroring moves it to the foot,
-# where it stacks above the button rather than displacing it.
+# battle is about. It sits on the Province's own side of the lane, so mirroring moves it to the
+# foot, where it stacks above the button rather than displacing it.
 HEADER_H = 74
 # The strip along the bottom holding the lane's own button, whichever way the lane faces: a control
 # that moved with the orientation would be somewhere new every time the seat changed roles.
@@ -53,8 +53,9 @@ LANE_MARGIN = 10
 # How far each side's Force total sits in from the corner it marks.
 FORCE_INSET = 12
 # The least a lane steps between its rows of cards. The step normally comes out of the height, so
-# this only binds on a lane crushed shorter than three cards can be stacked in at all — small enough
-# that it does not push the bottom row over the lane's button on any lane worth reading.
+# this only binds on a lane crushed shorter than three cards can be stacked in at all.
+# It stays small enough that it does not push the bottom row over the lane's button on any lane
+# worth reading.
 MIN_ROW_STEP = 16
 # How tall a line of the outcome block is.
 OUTCOME_LINE_H = 16
@@ -78,7 +79,7 @@ class LaneButton:
     """A lane's own button: what it says, and what pressing it does.
 
     Carried per lane rather than named by the view, because what a battlefield offers depends on
-    what the engine is asking — a place to send units during assignment, a battle to fight after.
+    what the engine is asking: a place to send units during assignment, a battle to fight after.
 
     Attributes
     ----------
@@ -163,7 +164,7 @@ def _armies(
 def _bands(height: int, *, mirrored: bool = False) -> tuple[int, int]:
     """The space a lane lays its cards out in: what the heading band and the button band leave.
 
-    The heading belongs beside the Province it names and so changes ends with the lane; the button
+    The heading belongs beside the Province it names and so changes ends with the lane. The button
     keeps the foot, so a mirrored lane carries both there.
 
     Parameters
@@ -189,7 +190,7 @@ def _rows(height: int, *, mirrored: bool = False) -> tuple[int, int, int, int]:
     """Where a lane's three rows of cards sit, and where the divider between the sides goes.
 
     The Province, the Defender's units and the Attacker's fill the space :func:`~._bands` leaves. A
-    lane with room for all three spreads them apart; a shorter one steps them closer until they
+    lane with room for all three spreads them apart. A shorter one steps them closer until they
     overlap, each row keeping enough of itself showing to be read, rather than pushing the last row
     out of sight. Cards are a fixed size, so the rows moving is the only give there is.
 
@@ -235,8 +236,8 @@ def _outcome_lines(
 ) -> list[_OutcomeLine]:
     """What the outcome block says, one line at a time, each flagged as emphatic or not.
 
-    A battle where nothing happened still says so — a lane that reports nothing is one the player
-    cannot tell from a lane that has not been fought at.
+    A battle where nothing happened still says so. Otherwise a lane that reports nothing is one the
+    player cannot tell from a lane that has not been fought at.
     """
     if outcome.winner is None:
         headline = "Tied" if outcome.destroyed else "Nothing happened"
@@ -255,13 +256,12 @@ def _outcome_lines(
 class BattleView(FloatingPanel):
     """The attack in progress, drawn as one vertical lane per battlefield.
 
-    The board draws two whole tableaux and cannot show four battlefields legibly, so this is where
-    an attack is read: each lane leads with the Province Strength the attackers have to clear, marks
-    each side's Force in its own corner, and draws the units standing there with the same sprites the
-    board uses. A lane collapses to a strip when the player wants to concentrate on one battlefield.
+    Each lane leads with the Province Strength the attackers have to clear, marks each side's Force
+    in its own corner, and draws the units standing there with the same sprites the board uses. A
+    lane collapses to a strip when the player wants to concentrate on one battlefield.
 
-    A window inside the game rather than one the desktop puts beside it: it floats over the board,
-    and the player drags it clear of whatever they want to look at underneath.
+    Floats over the board rather than sitting beside it, so the player drags it clear of whatever
+    they want to look at underneath.
     """
 
     def __init__(self, master: tk.Misc):
@@ -277,7 +277,7 @@ class BattleView(FloatingPanel):
         )
         self.canvas.pack(fill="both", expand=True)
         # A unit in a lane is still the player's to recall, and the lane is now the only place it
-        # is drawn — so the picking and the menu the board gives its cards are reachable here too.
+        # is drawn, so the picking and the menu the board gives its cards are reachable here too.
         self.on_card_menu: Callable[[str], None] | None = None
         self.on_card_click: Callable[[str], None] | None = None
         self._collapsed: set[int] = set()
@@ -385,7 +385,8 @@ class BattleView(FloatingPanel):
             self.on_card_click(card_id)
 
     def _on_context_click(self, event: tk.Event) -> None:
-        """Offer the card menu for a unit standing in a lane, so one sent here can be brought back."""
+        """Offer the card menu for a unit standing in a lane, so one sent here can be brought
+        back."""
         card_id = self._card_at(event)
         if card_id is not None and self.on_card_menu:
             self.on_card_menu(card_id)
@@ -447,7 +448,7 @@ class BattleView(FloatingPanel):
     ) -> None:
         """One lane: its panel, its heading, the two armies facing each other across a divider, and
         the button that fights the battle here. ``current`` picks out the battlefield a battle is
-        being fought at; ``attacker`` is which side an outcome's winner was."""
+        being fought at. ``attacker`` is which side an outcome's winner was."""
         left, right = span
         height = self._height()
         self.canvas.create_rectangle(
@@ -539,8 +540,9 @@ class BattleView(FloatingPanel):
         )
 
     def _draw_outcome(self, lines: list[_OutcomeLine], span: tuple[int, int], divider: int) -> None:
-        """What the battle fought here did, once one has been. Stays on the lane for the rest of the
-        Attack Phase, since a result the player has to catch as it goes past teaches them nothing."""
+        """What the battle fought here did, once one has been. Stays on the lane for the rest of
+        the Attack Phase, since a result the player has to catch as it goes past teaches them
+        nothing."""
         left, right = span
         center = (left + right) // 2
         top = divider - (len(lines) * OUTCOME_LINE_H) // 2

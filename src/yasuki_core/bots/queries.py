@@ -18,7 +18,7 @@ def in_play(view: GameView) -> Iterable[L5RCard]:
 
 
 def identifiable(view: GameView) -> dict[str, L5RCard]:
-    """Every card the viewer can name, by id — its own board and its own readable Province cards,
+    """Every card the viewer can name, by id: its own board and its own readable Province cards,
     which between them cover what an ability offers as a target."""
     cards: dict[str, L5RCard] = {card.id: card for card in in_play(view)}
     cards.update(readable_province_cards(view))
@@ -28,15 +28,10 @@ def identifiable(view: GameView) -> dict[str, L5RCard]:
 def spendable(view: GameView) -> int:
     """The Gold the viewer could raise right now by bowing what is straight, plus its pool.
 
-    Deliberately smaller than what affordability reaches: a card that can raise its own yield does
-    so at a price it sets, and a policy weighing whether a purchase is *worth* making should not
-    count Gold it would rather not pay for.
-    :func:`~yasuki_core.engine.rules.gold.producers.reachable_gold` must count it, because
-    withholding a legal action is worse than offering one the seat declines.
-
-    A policy also cannot ask :func:`~yasuki_core.engine.rules.gold.self_grants.maximum_gold_production`: it
-    sees a redacted :class:`~.GameView` rather than the live game, which is what keeps a policy from
-    reading anything its seat is not entitled to.
+    Smaller than what :func:`~yasuki_core.engine.rules.gold.producers.reachable_gold` counts: this
+    excludes Gold a producer would only grant at a price it sets. A policy cannot ask
+    :func:`~yasuki_core.engine.rules.gold.self_grants.maximum_gold_production` either, since it
+    holds a redacted :class:`~.GameView` and not the live game.
     """
     return view.gold[view.viewer] + sum(
         production(view, card) for card in in_play(view) if not card.bowed
@@ -44,8 +39,8 @@ def spendable(view: GameView) -> int:
 
 
 def newly_affordable(view: GameView, before: int, after: int, exclude: str | None = None) -> bool:
-    """Whether any face-up Province card costs more than ``before`` and no more than ``after`` — the
-    test of whether extra Gold buys anything rather than merely existing.
+    """Whether any face-up Province card costs more than ``before`` and no more than ``after``,
+    the test of whether extra Gold buys anything rather than merely existing.
 
     Pass ``exclude`` when the Gold in question comes from recruiting one of those cards, so the card
     being bought is not also counted as what the purchase pays for.
@@ -70,10 +65,11 @@ def rank(view: GameView, card: L5RCard) -> tuple[int, int, str]:
 
 
 def readable_province_cards(view: GameView) -> dict[str, L5RCard]:
-    """The viewer's province cards it can identify, by id — what a Recruit's ``card_id`` refers to.
+    """The viewer's province cards it can identify, by id: what a Recruit's ``card_id`` refers
+    to.
 
     Built by scanning rather than looked up, since a redacted view carries no id index. A card the
-    viewer cannot identify — a province refilled face-down, until something reveals it — is skipped
+    viewer cannot identify (a province refilled face-down, until something reveals it) is skipped
     rather than ranked, since no Recruit can name it.
     """
     return {

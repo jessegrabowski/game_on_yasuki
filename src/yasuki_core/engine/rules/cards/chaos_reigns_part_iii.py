@@ -35,7 +35,7 @@ from yasuki_core.game_pieces.prints import PersonalityPrint
 
 MAYA_MELEE = 3
 MAYA_INVEST = 2
-# "a Courtier or Tanuki Clan Personality" — both are keywords a card carries.
+# "a Courtier or Tanuki Clan Personality": both are keywords a card carries.
 MAYA_SOUGHT = (keywords.COURTIER, keywords.TANUKI_CLAN)
 
 
@@ -116,8 +116,8 @@ def _kengun_grounds_entered_play(ctx: TriggerContext) -> list[Effect]:
 
 
 def _kengun_grounds_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Nobody while it is not the controller's turn — the ability's own condition, read before it is
-    offered rather than resolving into nothing."""
+    """Nobody while it is not the controller's turn. The ability's own condition is read before it
+    is offered rather than resolving into nothing."""
     if game.active is not source.owner:
         return []
     zombie = game.table.creatable_tokens[ZOMBIE_FOLLOWER]
@@ -125,7 +125,7 @@ def _kengun_grounds_targets(game: GameState, source: L5RCard) -> list[str]:
 
 
 def _kengun_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """The dead serve anyone; a Personality untouched by the Shadowlands pays for the company."""
+    """The dead serve anyone. A Personality untouched by the Shadowlands pays for the company."""
     effects: list[Effect] = [
         CreateToken(ZOMBIE_FOLLOWER, source.owner, source.id, attach_to=target.id)
     ]

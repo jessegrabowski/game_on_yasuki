@@ -40,9 +40,8 @@ def test_every_exposed_widget_is_built_by_the_constructor(window, name):
 
 
 def test_the_board_opens_on_the_table_it_was_handed(window):
-    """The window renders a game rather than dealing one. The table is a constructor argument
-    rather than a later assignment because a panel reads its seat's name as it is built, which is
-    what this asserts — a window handed the table afterwards would show an empty panel."""
+    """The window renders a game rather than dealing one: the table is a constructor argument, not
+    a later assignment, since a panel reads its seat's name as it is built."""
     state, _ = build_demo_state(default_rng(7))
 
     assert window.human_panel._name_label.cget("text") == state.seats[PlayerId.P1].name
@@ -76,7 +75,7 @@ def test_relayout_swaps_the_panels_when_the_viewed_seat_changes(window):
 
 
 def test_relayout_resyncs_the_panels_against_the_board(window):
-    """Layout alone is not enough — the numbers a panel shows have to follow the table under it,
+    """Layout alone is not enough. The numbers a panel shows have to follow the table under it,
     or a deck load leaves the previous game's honor on screen."""
     window.field.state.seats[PlayerId.P1].honor = 99
 

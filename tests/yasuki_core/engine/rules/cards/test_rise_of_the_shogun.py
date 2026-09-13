@@ -24,7 +24,7 @@ from tests.yasuki_core.engine.builders import (
 
 def test_shadowlands_ambassador_dishonors_the_personality_he_serves():
     """He prints Force 2 and Chi -1 and reads "This Personality has -1PH". The Force is his own and
-    stays with the unit; the Chi and the Honor are both the Personality's."""
+    stays with the unit. The Chi and the Honor are both the Personality's."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=3, chi=2, personal_honor=2))
     attached(

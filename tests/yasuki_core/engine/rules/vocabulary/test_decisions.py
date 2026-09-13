@@ -165,7 +165,7 @@ def test_choose_cards_wording_distinguishes_optional_from_required():
 
 
 def test_choose_cards_asks_for_an_exact_count_as_one():
-    """A range whose ends meet reads as a choice the effect is not offering — "Choose 1 to 1" asks
+    """A range whose ends meet reads as a choice the effect is not offering. "Choose 1 to 1" asks
     the player to weigh how many to take when the answer is fixed."""
     assert _choose(minimum=1, maximum=1).prompt() == "Choose 1 card"
     assert _choose(minimum=2, maximum=2).prompt() == "Choose 2 cards"
@@ -259,7 +259,7 @@ def test_finishable_and_answerable_are_different_questions():
 
 
 def test_the_payment_prompt_quotes_what_a_producer_makes_now_not_what_it_could():
-    """Clicking previews the bow, and the grant is not part of it — the seat has not been asked yet,
+    """Clicking previews the bow, and the grant is not part of it. The seat has not been asked yet,
     and quoting the higher figure would promise gold it may decline."""
     request = _payment(amount=4, available=0, produced=[("of", 2)], grantable=[("of", 2)])
 
@@ -274,7 +274,7 @@ def test_discard_prompt_names_the_count():
 
 def test_a_confirm_takes_yes_as_its_subjects_and_no_as_none():
     """The answer is the subjects or nothing, which is what an optional card choice already hands a
-    resolver — so asking a question instead of offering a selection changes no resolver."""
+    resolver, so asking a question instead of offering a selection changes no resolver."""
     ask = Confirm(
         seat=PlayerId.P1,
         candidates=("farm",),
@@ -315,7 +315,7 @@ def test_a_distribution_may_heap_everything_on_one_candidate():
 
 
 def test_a_distribution_rejects_an_answer_that_places_the_wrong_number():
-    # All of them are placed — the seat divides the creations, it does not decline any.
+    # All of them are placed. The seat divides the creations and does not decline any.
     request = _distribution(3)
     assert request.accepts(DecisionResponse(("a", "b"))) is False
     assert request.accepts(DecisionResponse(("a", "a", "b", "b"))) is False

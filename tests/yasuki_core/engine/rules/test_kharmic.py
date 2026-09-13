@@ -84,8 +84,8 @@ def test_kharmic_is_not_offered_outside_the_action_phase():
 
 
 def test_kharmic_is_withheld_when_the_seat_cannot_reach_the_cost():
-    # One Gold of production against a cost of two. Cycle is still offered — it is the first turn
-    # and costs nothing — so the assertion names Kharmic rather than the whole list.
+    # One Gold of production against a cost of two. Cycle is still offered because it is the first
+    # turn and costs nothing, so the assertion names Kharmic rather than the whole list.
     session = EngineSession.start(_table(production=1), PlayerId.P1)
 
     offered = session.legal_actions(PlayerId.P1)
@@ -109,7 +109,7 @@ def test_each_form_is_withheld_without_a_card_to_spend(action, kwargs):
 
 def test_a_face_down_province_card_cannot_be_spent():
     # Provinces are revealed as their owner's turn begins, so before P2 has had one its cards are
-    # face-down — unknown even to P2. Its Open window still offers the Fate form, which spends from
+    # face-down, unknown even to P2. Its Open window still offers the Fate form, which spends from
     # a hand it can see, and withholds the Dynasty form, which would name a card nobody has seen.
     state = _table(seat=PlayerId.P2, province_kharmic=0)
     put_in_play(state, holding("P1-sh", printed_id="plain_stronghold", gold_production=2))
@@ -175,7 +175,8 @@ def test_kharmic_is_repeatable_within_one_turn():
 
 
 def test_the_inactive_seat_may_take_kharmic_in_the_opponents_action_phase():
-    # Kharmic is Open, so it is the first action either player can take on a turn that is not theirs.
+    # Kharmic is Open, so it is the first action either player can take on a turn that is not
+    # theirs.
     state = _table(seat=PlayerId.P2)
     put_in_play(state, holding("P1-sh", printed_id="plain_stronghold", gold_production=2))
     session = EngineSession.start(state, PlayerId.P1)
@@ -205,7 +206,7 @@ def test_paying_on_the_opponents_turn_leaves_the_producer_bowed_into_your_own():
 
 
 def test_cancelling_the_cost_backs_the_ability_out():
-    # A payment advertises itself as cancellable, and the undo used to demand a Recruit behind it —
+    # A payment advertises itself as cancellable, and the undo used to demand a Recruit behind it
     # so cancelling a rulebook cost raised instead of backing out. Nothing is committed until the
     # payment is answered, so the board must be exactly as it was.
     session = EngineSession.start(_table(), PlayerId.P1)

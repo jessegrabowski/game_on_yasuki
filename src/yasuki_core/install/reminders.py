@@ -9,7 +9,7 @@ from difflib import SequenceMatcher
 #
 # A wording earns its place by naming its own keyword; a shared keyword among the cards printing it
 # is coincidence, which a cycle of similar cards produces just as readily. Nothing here may be
-# relaxed into a shape test either, since a card's own clarification is shaped identically —
+# relaxed into a shape test either, since a card's own clarification is shaped identically.
 # "(Nothing happens to the loser.)" reads exactly like a reminder and is not one. Both rules guard
 # the same asymmetry: a missing wording leaves text visible in the traits, a wrong one deletes rules
 # silently. Reminder text belonging to no keyword goes in UNKEYED_REMINDER_TEXT.
@@ -154,7 +154,7 @@ REMINDER_PATTERNS = {
     "Unique": (r"[A-Z][\w'’ ]* is not Unique\.?",),
 }
 # Could be reminder text: it opens like a sentence rather than a qualifier, since "(if able)" and
-# "(this turn)" are lowercase fragments. Only ever used to rule a parenthetical out — what rules one
+# "(this turn)" are lowercase fragments, only ever used to rule a parenthetical out. What rules one
 # in is its wording, because a card's own clarification opens the same way.
 _MAYBE_REMINDER = re.compile(r"\(\s*[A-Z][^()]*\)")
 
@@ -170,8 +170,8 @@ _REMINDERS = frozenset(
 _REMINDER_MATCHERS = tuple(
     re.compile(pattern) for patterns in REMINDER_PATTERNS.values() for pattern in patterns
 )
-# The same rule is printed more than one way — an Expendable card "dies" on one card and "is
-# destroyed" on another, and a period sometimes falls outside the bracket — so a sentence is matched
+# The same rule is printed more than one way. An Expendable card "dies" on one card and "is
+# destroyed" on another, and a period sometimes falls outside the bracket, so a sentence is matched
 # by resemblance rather than equality. Across the corpus a card's own clarification scores at most
 # 0.39 against the nearest reminder while the known variants score 0.90 and up.
 _RESEMBLANCE = 0.80

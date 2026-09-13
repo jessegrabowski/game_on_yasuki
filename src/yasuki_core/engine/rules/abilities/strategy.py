@@ -13,7 +13,7 @@ def play_strategy(game: GameState, card_id: str, ability_key: str | None = None)
     """Announce a Strategy: defer its resolution, then pause for its Gold Cost.
 
     The card stays in hand until the payment is answered, so backing out of the payment leaves it
-    there — the unwind truncates the tape to before the announcement and replays, and a card that
+    there. The unwind truncates the tape to before the announcement and replays, and a card that
     never moved needs nothing put back.
     """
     card = game.table.cards_by_id[card_id]
@@ -41,9 +41,9 @@ def resolve_strategy(game: GameState, card_id: str, ability_key: str | None = No
 def discard_played(game: GameState, card_id: str) -> None:
     """Discard a card whose play has finished, unless it has already left the hand.
 
-    Step F discards the played card "unless it is now in play" (CR, Action Sequence) — a Terrain, a
-    Kata or an Edict reaches the board as the thing its own text does. A card that banished itself has
-    left by another road, and discarding it would drag it back out of the pile it chose, so the
+    Step F discards the played card "unless it is now in play" (CR, Action Sequence). A Terrain, a
+    Kata or an Edict reaches the board as the thing its own text does. A card that banished itself
+    has left by another road, and discarding it would drag it back out of the pile it chose, so the
     test is whether it is still in hand rather than whether it reached the board.
     """
     card = game.table.cards_by_id[card_id]

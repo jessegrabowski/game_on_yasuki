@@ -8,8 +8,8 @@ from yasuki_core.engine.table import ZoneKey, ZoneRole
 
 
 def dynasty_discard(game: GameState, card_id: str) -> None:
-    """Discard a face-up province card to its owner's dynasty discard and refill the province — the
-    Dynasty Discard action. It has no cost, so it resolves at once with no payment."""
+    """Discard a face-up province card to its owner's dynasty discard and refill the province. The
+    Dynasty Discard action has no cost, so it resolves at once with no payment."""
     card = game.table.cards_by_id[card_id]
     seat = card.owner
     province_key = province_key_holding(game, seat, card_id)

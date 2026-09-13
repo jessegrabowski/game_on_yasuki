@@ -44,7 +44,7 @@ def test_a_named_trait_opens_a_new_trait():
 
 
 def test_a_named_trait_word_mid_sentence_is_prose():
-    """ "…have Discipline :g2:." names a trait rather than opening one, so it must not split."""
+    """ "...have Discipline :g2:." names a trait rather than opening one, so it must not split."""
     text = "Dark Virtues in your discard pile have Discipline :g2:. Your fear may target Followers."
 
     assert traits(text) == [
@@ -82,7 +82,7 @@ def test_a_sentence_that_cannot_stand_alone_continues_the_one_before_it(tail):
 
 
 def test_a_designator_word_inside_a_sentence_does_not_open_an_ability():
-    """ "…if your Wind is The Kanpeki Dynasty:" names a card and the colon is the sentence's own.
+    """ "...if your Wind is The Kanpeki Dynasty:" names a card and the colon is the sentence's own.
     Reading it as a prefix invents an ability and truncates the trait that contains it."""
     text = "Invest :g2:, or :g0: if your Wind is The Kanpeki Dynasty: Attach a Follower.<br><b>Battle:</b> :melee: 4."
 
@@ -133,16 +133,16 @@ def test_a_card_with_no_abilities_inherits_nothing():
 
 
 def test_a_classifier_may_govern_an_ability():
-    """ "Honesty: Interrupt, :X:: …" is an ability that applies while you have Honesty, not a trait
-    that happens to contain one."""
+    """ "Honesty: Interrupt, :X:: ..." is an ability that applies while you have Honesty, not a
+    trait that happens to contain one."""
     text = "Honesty: <b>Interrupt, :X::</b> Equip it to your target Personality."
 
     assert abilities(text) == [((), ("Interrupt",), ":X:", "Equip it to your target Personality.")]
 
 
 def test_an_ability_inside_leading_reminder_text_is_not_an_ability():
-    """The parenthetical restates the Honor keyword, so the card does not own the ability in it —
-    the same reason the reminder is not one of the card's traits."""
+    """The parenthetical restates the Honor keyword, so the card does not own the ability in it,
+    for the same reason the reminder is not one of the card's traits."""
     text = (
         "<i>(<b>Repeatable Interrupt:</b> Once per action, discard an Honor card to increase or "
         "reduce an Honor gain or loss by 1.)</i><br><b>Battle:</b> Give -2F."
@@ -169,7 +169,7 @@ def test_a_focus_effect_under_a_classifier_stays_one_trait():
 
 
 def test_a_granted_ability_stays_inside_the_text_that_grants_it():
-    """Quoted text is an ability handed to another card; splitting it out would credit this card
+    """Quoted text is an ability handed to another card. Splitting it out would credit this card
     with an ability it does not have."""
     text = 'Other players\' Personalities have "Yu: The enemy leader may create a Strategy."'
 
@@ -184,7 +184,7 @@ def test_leading_reminder_text_is_dropped():
 
 
 def test_reminder_text_is_separated_wherever_it_sits():
-    """It restates a rule the card does not own, so it is not one of the card's traits — but it is
+    """It restates a rule the card does not own, so it is not one of the card's traits, but it is
     printed, so it is kept rather than thrown away."""
     text = (
         "(Draw a card after your Expendable card dies.)<br>Invest :g2:: Dishonor a target. "
@@ -225,7 +225,7 @@ def test_a_reminder_is_recognized_with_its_period_outside_the_parentheses():
 
 def test_a_bracket_holds_one_reminder_per_keyword_the_card_carries():
     """A Loyal Naval Shugenja prints all three rules in one bracket, so the reminders are matched a
-    sentence at a time — keying on the whole bracket would need an entry per combination."""
+    sentence at a time, since keying on the whole bracket would need an entry per combination."""
     text = (
         "Kageharu has +1F. <i>(Loyal Personalities will not join other Clans. Once a turn, the "
         "Attacker gets the first Battle action, if it's from a Naval Personality's unit. Shugenja "
@@ -278,7 +278,7 @@ def test_a_card_keeps_a_parenthetical_the_rulebook_does_not_own():
     ],
 )
 def test_a_reminder_naming_a_card_or_a_cost_is_matched_by_pattern(printed, separated):
-    """These vary per card, so they are recognized by shape rather than by a listed wording — which
+    """These vary per card, so they are recognized by shape rather than by a listed wording, which
     means the shape has to be tight enough to leave a card's own words alone."""
     box = split_text_box(f"Bow a target. {printed}")
 
@@ -286,7 +286,7 @@ def test_a_reminder_naming_a_card_or_a_cost_is_matched_by_pattern(printed, separ
 
 
 def test_a_qualifier_in_parentheses_is_not_reminder_text():
-    """Reminder text is a whole sentence; a qualifier is a fragment, and the card owns it."""
+    """Reminder text is a whole sentence. A qualifier is a fragment, and the card owns it."""
     box = split_text_box("Destroy a Terrain (if able). Put this Terrain into play.")
 
     assert box.reminders == ()
@@ -302,7 +302,7 @@ def test_a_parenthetical_holding_two_sentences_stays_one_chunk():
 
 
 def test_a_break_inside_a_parenthetical_does_not_start_a_line():
-    """The aside runs across two printed lines; the break is typesetting, not a boundary."""
+    """The aside runs across two printed lines. The break is typesetting, not a boundary."""
     text = "Bow a target.<br>(The Districts may now be destroyed.<br>The Naga player draws a card.)"
 
     assert traits(text) == [

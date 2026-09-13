@@ -101,7 +101,7 @@ def _refill(session):
 
 
 def test_sapphire_mine_renews_its_province_while_it_holds_any_sincerity():
-    """ "This Holding has Renew while it has any Sincerity tokens" — one is any, and Renew refills
+    """ "This Holding has Renew while it has any Sincerity tokens" One is any, and Renew refills
     the vacated Province face-up, so the next card is recruitable the same turn."""
     session = _recruit_game("sm", "sapphire_mine", sincerity=1, keywords=("Mine", "Sincerity"))
 

@@ -10,9 +10,9 @@ class Stat(Enum):
     derived source can look it up with ``getattr(card, stat.value)``. More stats join as the rules
     engine grows.
 
-    Province Strength has no effective-read function yet, because nothing asks for it until battle
-    exists. Modifiers over it are recorded all the same, by a sensei's grant and by the counters that
-    carry a per-count delta.
+    Province Strength has no effective-read function yet, because nothing asks for it until
+    battle exists. Modifiers over it are recorded all the same, by a sensei's grant and by the
+    counters that carry a per-count delta.
     """
 
     CHI = "chi"
@@ -28,10 +28,10 @@ class Duration(Enum):
     """How long a modifier stays active.
 
     UNTIL_END_OF_TURN
-        The default for action and ability effects; dropped when the turn ends.
+        The default for action and ability effects, dropped when the turn ends.
     WHILE_SOURCE_IN_PLAY
-        Active only while the modifier's source is on the battlefield — counters, attachments, and
-        continuous auras.
+        Active only while the modifier's source (a counter, an attachment, or a continuous aura) is
+        on the battlefield.
     PERMANENT
         Outlives its source leaving play. Like every modifier it ends when its *target* leaves the
         table, because a card that leaves play ceases to exist.
@@ -45,13 +45,13 @@ class Duration(Enum):
 @dataclass(frozen=True, slots=True)
 class Modifier:
     """A continuous effect that adjusts one card's stat by a fixed amount while active. Every stat
-    change — a counter's grant, an attachment's bonus, an ability's effect — is one of these, summed
+    change (counter grant, attachment bonus, ability effect) is one of these, summed
     on demand to compute a card's effective stat.
 
     Attributes
     ----------
     source_id : str
-        The card the modifier comes from — used to expire ``WHILE_SOURCE_IN_PLAY`` modifiers when it
+        The card the modifier comes from, used to expire ``WHILE_SOURCE_IN_PLAY`` modifiers when it
         leaves play and to attribute the effect.
     target_id : str
         The card whose stat is adjusted.
@@ -77,7 +77,7 @@ class KeywordGrant:
     Attributes
     ----------
     source_id : str
-        The card the grant comes from — used to expire a ``WHILE_SOURCE_IN_PLAY`` grant when it
+        The card the grant comes from, used to expire a ``WHILE_SOURCE_IN_PLAY`` grant when it
         leaves play and to attribute the effect.
     target_id : str
         The card that carries the keyword while the grant lasts.
@@ -95,7 +95,7 @@ class KeywordGrant:
 
 @dataclass(frozen=True, slots=True)
 class Minimum:
-    """A continuous effect that floors one card's stat while active — "a target Personality has a
+    """A continuous effect that floors one card's stat while active: "a target Personality has a
     minimum Chi of 1" (CR, Minimums and Maximums).
 
     A minimum is applied on top of the bonuses and penalties rather than among them: the stat totals
@@ -106,7 +106,7 @@ class Minimum:
     Attributes
     ----------
     source_id : str
-        The card the minimum comes from — used to expire a ``WHILE_SOURCE_IN_PLAY`` minimum when it
+        The card the minimum comes from, used to expire a ``WHILE_SOURCE_IN_PLAY`` minimum when it
         leaves play and to attribute the effect.
     target_id : str
         The card whose stat is floored.
@@ -129,13 +129,13 @@ class Minimum:
 class ProvinceModifier:
     """A continuous effect that adjusts one Province's strength while active.
 
-    A Province is a slot rather than a card, so it cannot be the target of a :class:`~.Modifier`; a
+    A Province is a slot rather than a card, so it cannot be the target of a :class:`~.Modifier`. A
     card that strengthens one for the turn records this instead.
 
     Attributes
     ----------
     source_id : str
-        The card the modifier comes from — used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it
+        The card the modifier comes from, used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it
         leaves play and to attribute the effect.
     province : ZoneKey
         The Province slot whose strength is adjusted.
@@ -157,13 +157,13 @@ class LobbyModifier:
 
     A Lobby Bonus or Penalty rests on a player rather than on a card, so it cannot be a
     :class:`~.Modifier`. Every amount a Lobby action checks about that player reads higher or lower
-    by it, whoever is taking the action; where the amount is Family Honor the adjustment is neither
+    by it, whoever is taking the action. Where the amount is Family Honor the adjustment is neither
     an Honor gain nor an Honor loss (ShE datasheet, Lobby Bonuses and Penalties).
 
     Attributes
     ----------
     source_id : str
-        The card the bonus comes from — used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it leaves
+        The card the bonus comes from, used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it leaves
         play and to attribute the effect.
     seat : PlayerId
         The player whose Lobby amounts are adjusted.
@@ -180,8 +180,8 @@ class LobbyModifier:
 
 
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
-# Province's strength beside a stat change — each is ongoing, and each lasts to the end of the turn
-# unless the card says otherwise — so they are recorded in one list and expire together (CR,
+# Province's strength beside a stat change. Each is ongoing and lasts to the end of the turn
+# unless the card says otherwise. So they are recorded in one list and expire together (CR,
 # Duration of Effects). The three that name a card are forgotten when it leaves the table; the two
 # that name a Province slot and a player are not, because neither ever leaves it.
 Ongoing = Modifier | KeywordGrant | Minimum | ProvinceModifier | LobbyModifier

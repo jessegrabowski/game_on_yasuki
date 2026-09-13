@@ -10,22 +10,24 @@ from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
-# A state-based action reads the board and returns the effects the rules demand of it. Unlike a trigger it
-# answers to no event: the CR states these as conditions that hold at all times rather than as
-# consequences of something happening, so a rule fires however the board came to break it. The
-# Chi Death Rule is the one modeled here; a seat losing its last Province, a seat controlling five
-# Rings of different elements, and a destroyed Province ending its battlefield are the same shape.
+# A state-based action reads the board and returns the effects the rules demand of it. Unlike a
+# trigger it answers to no event: the CR states these as conditions that hold at all times rather
+# than as consequences of something happening, so a rule fires however the board came to break it.
+# The Chi Death Rule is the one modeled here; a seat losing its last Province, a seat controlling
+# five Rings of different elements, and a destroyed Province ending its battlefield are the same
+# shape.
 StateBasedAction = Callable[[GameState], list[Effect]]
 
 # The cards whose own text exempts them from the Chi Death Rule, by printed id. Each says so
-# plainly — "Stone Breaker will not be destroyed for having 0 Chi" — which the CR permits as a
-# continuous effect. Listed here rather than registered from the set modules because it is data
-# about a card rather than behavior; it belongs on the print, alongside the Chi it qualifies.
+# plainly ("Stone Breaker will not be destroyed for having 0 Chi"), which the CR permits as a
+# continuous effect. Listed here rather than registered from the set modules because
+# it is data about a card rather than behavior; it belongs on the print, alongside the Chi it
+# qualifies.
 #
 # Two cards that mention 0 Chi are deliberately absent. Moto Chagatai and Moto Soro read "unless
-# his Chi is 0 after all penalties that last until your turn ends wear off" — a deferred check
-# this rule cannot express, so they take the rule as written rather than a wrong exemption. Shuten
-# Doji asks for a window before the destruction, which is a replacement rather than an exemption.
+# his Chi is 0 after all penalties that last until your turn ends wear off": a deferred check this
+# rule cannot express, so they take the rule as written rather than a wrong exemption. Shuten Doji
+# asks for a window before the destruction, which is a replacement rather than an exemption.
 CHI_DEATH_EXEMPT: frozenset[str] = frozenset(
     {
         "bayushi_baku",
@@ -64,13 +66,14 @@ def orphaned_attachments(game: GameState) -> list[Effect]:
     """Discard every attachment in play that is attached to no Personality (CR, Attachments).
 
     A Follower, Item or Spell exists in play only as part of a unit, so one left on the battlefield
-    without a Personality is not a board state the rules allow. The destruction cascade already takes
-    a unit with its Personality; this catches every other route by which a card comes loose.
+    without a Personality is not a board state the rules allow. The destruction cascade already
+    takes a unit with its Personality. This catches every other route by which a card comes loose.
     """
-    # No card is spared this yet. Street to Street will be the first: it detaches every Follower at a
-    # battlefield and leaves them in play "though not in units" until the Terrain goes or the Combat
-    # Segment ends. That is a granted, time-bounded suspension of the rule rather than a property of
-    # a card, so it needs a duration vocabulary this layer does not have, and it needs battle.
+    # No card is spared this yet. Street to Street will be the first: it detaches every Follower at
+    # a battlefield and leaves them in play "though not in units" until the Terrain goes or the
+    # Combat Segment ends. That is a granted, time-bounded suspension of the rule rather than a
+    # property of a card, so it needs a duration vocabulary this layer does not have, and it needs
+    # battle.
     return [
         Discard(card.id, Rulebook.ORPHANED_ATTACHMENT)
         for card in game.table.battlefield.cards
@@ -108,20 +111,21 @@ STATE_BASED_ACTIONS: tuple[StateBasedAction, ...] = (
 
 
 def demanded(game: GameState) -> list[Effect]:
-    """What the rules demand of the board as it stands, or an empty list when it is already legal."""
+    """What the rules demand of the board as it stands, or an empty list when it is already
+    legal."""
     return [effect for rule in STATE_BASED_ACTIONS for effect in rule(game)]
 
 
 # The two victory conditions the CR states at a moment in the turn rather than as a condition that
-# holds at all times, so neither belongs in STATE_BASED_ACTIONS: a seat may pass through the Honor Victory
-# threshold mid-turn and be back below it by the time its next turn starts, and that is not a win.
-# The flow calls each at the boundary it names.
+# holds at all times, so neither belongs in STATE_BASED_ACTIONS: a seat may pass through the Honor
+# Victory threshold mid-turn and be back below it by the time its next turn starts, and that is not
+# a win. The flow calls each at the boundary it names.
 def honor_victory(game: GameState) -> list[Effect]:
     """Win the game for the seat starting its turn on the Honor Victory threshold or higher (CR,
     Honor Victory).
 
     Only the seat whose turn is starting can win this way, and only if it is still held to
-    :attr:`~yasuki_core.engine.rules.vocabulary.victory.VictoryRule.HONOR_VICTORY` — a seat Kaede
+    :attr:`~yasuki_core.engine.rules.vocabulary.victory.VictoryRule.HONOR_VICTORY`. A seat Kaede
     Sensei has excused starts the same turn on the same Honor and does not win.
     """
     if game.game_over:

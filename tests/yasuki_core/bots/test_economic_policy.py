@@ -128,7 +128,7 @@ def test_a_game_under_this_policy_differs_from_one_that_only_passes():
 
 
 def test_a_face_down_province_neighbor_does_not_stop_it_choosing():
-    """A province refilled after a purchase is face-down, and reaches even its own owner redacted —
+    """A province refilled after a purchase is face-down, and reaches even its own owner redacted,
     with no name, no cost, and nothing to rank. Reading one as though it were a card crashes the
     policy on the turn after its first buy, which no all-face-up board reveals."""
     session = _dynasty_phase()
@@ -140,7 +140,7 @@ def test_a_face_down_province_neighbor_does_not_stop_it_choosing():
 
 def test_a_personality_is_ranked_without_gold_production():
     """Gold Production lives only on Holdings, and a Personality is offered as a recruit like any
-    other province card. Ranking one must not assume the field is there — a Holding that produces
+    other province card. Ranking one must not assume the field is there. A Holding that produces
     still wins, even at a lower cost."""
     session = _dynasty_phase()
     hero = register(
@@ -170,7 +170,7 @@ def test_a_card_printed_with_a_dash_cost_ranks_as_free():
 
 
 def test_a_province_card_is_ranked_on_what_it_produces_now_not_what_it_printed():
-    """The policy sees only a view, and a view used to carry no modifiers at all — so a card
+    """The policy sees only a view, and a view used to carry no modifiers at all. So a card
     carrying Wealth was weighed at its printed number and passed over for a card that is worth
     less."""
     session = _dynasty_phase()

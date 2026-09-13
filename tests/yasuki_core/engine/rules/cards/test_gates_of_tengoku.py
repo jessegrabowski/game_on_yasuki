@@ -143,7 +143,7 @@ def test_an_amount_reaches_every_unit_costing_that_much_or_less():
 
 
 def test_the_target_stays_in_play_until_the_turn_ends():
-    """ "Banish them at the end of the turn" — he is still there to fight with until it does."""
+    """ "Banish them at the end of the turn" means he is still there to fight with until it does."""
     state = TableState.empty_two_seat()
     put_in_play(state, holding("mine", owner=PLAYER, gold_production=10))
     put_in_play(state, personality("target", owner=OPPONENT, gold_cost=2))

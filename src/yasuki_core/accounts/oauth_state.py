@@ -36,7 +36,7 @@ def stash_login(
 def pop_login(conn: psycopg.Connection, state: str, max_age: timedelta) -> dict | None:
     """Consume the login state for ``state``, or None if absent or older than ``max_age``.
 
-    The row is deleted as it is read, so a state is single-use — a replayed or forged callback finds
+    The row is deleted as it is read, so a state is single-use. A replayed or forged callback finds
     nothing.
 
     Parameters
@@ -63,7 +63,7 @@ def pop_login(conn: psycopg.Connection, state: str, max_age: timedelta) -> dict 
 
 
 def purge_stale_logins(conn: psycopg.Connection, max_age: timedelta) -> int:
-    """Delete abandoned login rows older than ``max_age``; return how many were removed."""
+    """Delete abandoned login rows older than ``max_age``, and return how many were removed."""
     with conn.cursor() as cur:
         cur.execute("DELETE FROM oauth_logins WHERE created_at <= now() - %s", (max_age,))
         return cur.rowcount

@@ -9,7 +9,7 @@ from yasuki_web.main import app
 
 from yasuki_core.accounts import decks, sessions, users
 
-# A small card universe shaped like get_cards_by_names output — the contract the save path resolves
+# A small card universe shaped like get_cards_by_names output, the contract the save path resolves
 # against. The card DB is faked so these tests don't depend on real card data.
 RECORDS = [
     {"card_id": "kyuden_hida", "name": "Kyuden Hida", "types": ["Stronghold"], "clans": ["Crab"]},
@@ -90,7 +90,7 @@ def test_save_list_and_read_round_trip_the_cards(client, accounts_conn):
 
     read = client.get(f"/api/decks/{slug}").json()
     assert _variant_keys(read["cards"]) == _expected_keys()
-    # The returned YAML, re-resolved, is the same deck the lobby would load — the pick path matches
+    # The returned YAML, re-resolved, is the same deck the lobby would load. The pick path matches
     # the direct YAML path.
     relisted = decks.deck_from_yaml(read["yaml"], decks.build_name_index(RECORDS))
     assert {(c.card_id, c.quantity, c.art_donor_card_id) for c in relisted} == {

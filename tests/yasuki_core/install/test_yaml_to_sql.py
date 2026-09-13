@@ -192,7 +192,8 @@ def test_build_revisions_captures_only_integer_stat_overrides():
 
 
 def test_revision_baseline_uses_oldest_erratum_home_text():
-    # The oldest erratum's home printing supplies rev 0, even when a later erratum came from elsewhere.
+    # The oldest erratum's home printing supplies rev 0, even when a later erratum came from
+    # elsewhere.
     errata = [
         {"date": "2026-07-01", "home_text": "shattered empire text"},
         {"date": "2024-01-01", "home_text": "pre-errata printed text"},
@@ -249,7 +250,7 @@ def test_print_columns_maps_print_text_to_rules_text_slot():
 
 
 def test_print_columns_absent_print_text_is_null():
-    # No print_text ⇒ NULL, so readers fall back to the card's canonical (MRP + errata) text. The
+    # No print_text => NULL, so readers fall back to the card's canonical (MRP + errata) text. The
     # card's own `text` field must not leak onto the printing.
     row = dict(zip(_PRINT_COLS, _print_columns({"text": "card canonical"}, "cid", "some_set", 7)))
     assert row["rules_text"] is None

@@ -187,8 +187,8 @@ class Installer:
     def _provision_readonly_role(self) -> None:
         """Create or update a least-privilege read-only login role, if configured.
 
-        Driven by ``POSTGRES_RO_USER`` / ``POSTGRES_RO_PASSWORD``; a no-op when either is unset, so
-        existing single-role setups are unaffected. The role gets only CONNECT + schema USAGE +
+        Driven by ``POSTGRES_RO_USER`` / ``POSTGRES_RO_PASSWORD``, and a no-op when either is unset,
+        so existing single-role setups are unaffected. The role gets only CONNECT + schema USAGE +
         SELECT (current and future tables). Idempotent: re-running refreshes the password and
         re-applies the grants.
         """

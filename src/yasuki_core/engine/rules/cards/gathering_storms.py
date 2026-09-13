@@ -22,7 +22,7 @@ def _ancestral_estate_gold(
 ) -> int:
     """+1 GP while another player's Stronghold has higher Gold Production than yours.
 
-    Your own missing Stronghold counts as producing nothing; an opponent's missing Stronghold has
+    Your own missing Stronghold counts as producing nothing. An opponent's missing Stronghold has
     no production to compare and never grants the bonus.
     """
     own = seat_stronghold(game, seat)

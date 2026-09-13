@@ -30,7 +30,7 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 _ABILITIES: dict[str, tuple[Ability, ...]] = {}
 _INVEST: dict[str, InvestAbility] = {}
 # The Holdings whose own text overrides the rule that a Holding enters play bowed. Registered from
-# the set module the card lives in, like everything else a card does, rather than listed centrally —
+# the set module the card lives in, like everything else a card does, rather than listed centrally,
 # so the layout guard scans it and the card index checks it.
 _ENTERS_UNBOWED = FlagRegistry("enters unbowed", "already enters play unbowed")
 register_enters_unbowed = _ENTERS_UNBOWED.make_register()
@@ -53,7 +53,7 @@ def register_ability(printed_id: str, value: Ability) -> None:
 
 
 def enters_play_bowed(card: L5RCard) -> bool:
-    """Whether ``card`` bows as it enters play — every Holding but the few that say otherwise."""
+    """Whether ``card`` bows as it enters play: every Holding but the few that say otherwise."""
     return isinstance(card.printed, HoldingPrint) and card.printed_id not in _ENTERS_UNBOWED
 
 
@@ -65,8 +65,8 @@ def register_invest(printed_id: str, value: InvestAbility) -> None:
 
 
 def invest_amounts(game: GameState, card: L5RCard) -> tuple[int, ...] | None:
-    """The sums ``card``'s Invest may be paid for now — its printed amounts less whatever its own
-    text discounts, floored at zero — or None when it prints no Invest.
+    """The sums ``card``'s Invest may be paid for now: its printed amounts less whatever its own
+    text discounts, floored at zero, or None when it prints no Invest.
 
     Two printed amounts a discount drives to the same price collapse to one, since paying it once
     can only buy one of the two things.

@@ -13,8 +13,8 @@ def _functions() -> dict[str, ast.FunctionDef]:
 
 
 def test_the_entry_point_defines_nothing_but_building_and_running():
-    """What the refactor was for. Every other responsibility has an owner — the host, the window,
-    the presenter — so a new function here is a fourth one accreting where the last tangle grew."""
+    """What the refactor was for. Every other responsibility has an owner (the host, the window,
+    the presenter), so a new function here is a fourth one accreting where the last tangle grew."""
     assert set(_functions()) == {"build_client", "main"}
 
 

@@ -22,17 +22,17 @@ from yasuki_core.engine.replay.serialization import (
 )
 from yasuki_core.game_pieces.prints import CardPrint
 
-# The start-of-game table snapshot: a deep-copied capture of a dealt table, the rebuild that turns
-# it back into a live TableState, and its JSON codec. Product-neutral foundation — the manual sim's
-# intent log and the rules layer's game log both seed a replay from it.
+# The start-of-game table snapshot: a deep-copied capture of a dealt table, the rebuild that
+# turns it back into a live TableState, and its JSON codec: a product-neutral foundation the
+# manual sim's intent log and the rules layer's game log both seed a replay from.
 
 
 @dataclass(slots=True)
 class InitialRecord:
     """A complete table snapshot that seeds a replay.
 
-    Captures the full state at the log head — seats, every owned zone and deck with its ordered
-    contents, and the battlefield with positions — so a replay rebuilds the table exactly and then
+    Captures the full state at the log head: seats, every owned zone and deck with its ordered
+    contents, and the battlefield with positions, so a replay rebuilds the table exactly and then
     folds the recorded tape onto it.
 
     Attributes
@@ -198,8 +198,8 @@ def decode_initial(payload: dict) -> InitialRecord:
         card_id: decode_attach_target(target)
         for card_id, target in payload.get("attachments", {}).items()
     }
-    # Absent from a log written before the relations were split, which replays as an empty unit map
-    # — correct, because nothing could attach in the rules layer then.
+    # Absent from a log written before the relations were split, which replays as an empty
+    # unit map: correct, because nothing could attach in the rules layer then.
     units = dict(payload.get("units", {}))
     province_attachments = {
         card_id: decode_zone_key(zone)

@@ -29,9 +29,9 @@ def named_tokens() -> list[tuple[str, str, str]]:
 
 
 def test_every_token_a_card_names_is_a_real_card():
-    # A token id is a card id, and a misspelled one is not a rule that fails loudly at import the way
-    # a misspelled handler id does — it survives until someone activates the ability in a game whose
-    # deck loaded that template, and dies there with a KeyError.
+    # A token id is a card id, and a misspelled one is not a rule that fails loudly at import the
+    # way a misspelled handler id does. It survives until someone activates the ability in a game
+    # whose deck loaded that template, and dies there with a KeyError.
     known = read_index()
     invented = [
         f"{module}: {card_id} creates {token!r}"
@@ -73,5 +73,5 @@ def test_the_scan_finds_the_tokens_the_engine_creates():
 )
 def test_the_scan_attributes_a_token_to_the_card_whose_block_names_it(module, card_id, token):
     # The attribution is by source position, so a module holding several creating cards is where it
-    # would go wrong — and every module above holds at least two.
+    # would go wrong. And every module above holds at least two.
     assert (module, card_id, token) in named_tokens()

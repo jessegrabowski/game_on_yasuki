@@ -38,7 +38,7 @@ def build_state_from_deck(
         P2's display name. Default 'P2'.
     rng : numpy.random.Generator, optional
         Split into one stream per seat, so a caller holding a seeded generator lays out the same
-        board. Default None, which deals from system entropy — what a game wants, where a repeated
+        board. Default None, which deals from system entropy: what a game wants, since a repeated
         opening is a defect.
 
     Returns
@@ -64,7 +64,7 @@ def build_state_from_deck(
             parsed = parse_deck_yaml(Path(path).read_text())
             records = get_cards_by_names(_deck_card_names(parsed))
             # One relational pull of every token the deck can create, so a card that creates one
-            # mid-game needs no live database call — the templates sit on the table for the rest of
+            # mid-game needs no live database call. The templates sit on the table for the rest of
             # the game.
             creates, tokens = get_creates_for_cards([record["card_id"] for record in records])
             state.creatable_tokens.update(build_token_templates(tokens))

@@ -89,7 +89,7 @@ def test_badges_scale_with_the_cards_counters_not_the_catalogue(root):
     cv.pack()
     root.update_idletasks()
 
-    # A card with three counters draws three badges — rendering tracks the card's own tallies, not
+    # A card with three counters draws three badges. Rendering tracks the card's own tallies, not
     # the 100+-entry counter catalogue.
     card = L5RCard.of(
         CardPrint,
@@ -126,7 +126,7 @@ def test_a_sprite_stamps_the_stats_it_was_given(root):
 
 def test_refreshing_a_face_replaces_the_stamps_rather_than_adding_to_them(root):
     """`refresh_face_state` erases its layers by name, so a layer left off that list survives the
-    redraw — and a Personality whose Force just changed would carry both numbers at once."""
+    redraw. A Personality whose Force just changed would then carry both numbers at once."""
     cv = tk.Canvas(root, width=200, height=200)
     hero = L5RCard.of(
         PersonalityPrint, id="h", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, force=3, chi=4

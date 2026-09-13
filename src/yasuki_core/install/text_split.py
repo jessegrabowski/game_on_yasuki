@@ -13,14 +13,14 @@ DESIGNATORS = frozenset(
 # keyword nothing in the game refers to one as a thing: no card destroys "a Tireless" the way cards
 # destroy "a Terrain". They therefore never rise to the card.
 MODIFIERS = frozenset({"Absent", "Home", "Remote", "Repeatable", "Tireless", "Unstoppable"})
-# Two words that name one keyword. "Virtue" never opens a prefix on its own — it is always a Dark
-# Virtue or a Bushido Virtue — so splitting on spaces would invent three keywords out of one.
+# Two words that name one keyword. "Virtue" never opens a prefix on its own. It is always a Dark
+# Virtue or a Bushido Virtue, so splitting on spaces would invent three keywords out of one.
 COMPOUND_KEYWORDS = ("Bushido Virtue", "Dark Virtue")
 # The traits the rules name, each written "Name: effect" and each its own unit of behavior.
 NAMED_TRAITS = ("Compassion", "Courtesy", "Discipline", "Honesty", "Invest", "Sincerity", "Yu")
 # A duel's focus step names its trait the same way, but punctuates it with a comma instead of a
-# colon. It can also follow another classifier — "Honesty: As a Focus Effect, …" — so like the
-# named traits it only opens a trait where it opens a segment.
+# colon. It can also follow another classifier (for example, "Honesty: As a Focus Effect, ..."),
+# so, like the named traits, it only opens a trait where it opens a segment.
 FOCUS_EFFECT = "As a Focus Effect,"
 
 _ICON_BODY = r"[A-Za-z0-9_*]+:"
@@ -36,15 +36,17 @@ _ANCHOR = re.compile(
     rf"(?P<cost>(?:\s*,?\s*(?:{_ICON})(?:\s+or\s+{_ICON})?)*)"
     rf"\s*:"
 )
-# A cost with no designator is still an ability — the ":bow:: Produce 2 Gold" production template.
+# A cost with no designator is still an ability, as in the ":bow:: Produce 2 Gold" production
+# template.
 _COST_ONLY = re.compile(rf"(?:(?<=^)|(?<=\.))\s*(?P<cost>{_ICON}(?:\s+or\s+{_ICON})?)\s*:")
 _NAMED = re.compile(
     rf"(?=\b(?:{'|'.join(NAMED_TRAITS)})\b\s*(?:{_ICON})?\s*:|{re.escape(FOCUS_EFFECT)})"
 )
-# A prefix only opens an ability where it opens a segment. Mid-sentence the same words are prose —
-# "if your Wind is The Kanpeki Dynasty:" names a card, and the colon is the sentence's own. A trait
-# classifier is the exception: it qualifies what follows rather than being prose, so "Honesty:
-# Interrupt, :X:: …" is a classified ability, not a trait that happens to contain one.
+# A prefix only opens an ability where it opens a segment. Mid-sentence the same words are prose.
+# For example, "if your Wind is The Kanpeki Dynasty:" names a card, and the colon is the sentence's
+# own. A trait classifier is the exception: it qualifies what follows rather than being prose.
+# So "Honesty: Interrupt, :X:: ..." is a classified ability, not a trait that happens to contain
+# one.
 _SEGMENT_OPEN = re.compile(
     rf"(?:[.”]|\.\))\s*$|^\s*(?:(?:{'|'.join(NAMED_TRAITS)})\s*(?:{_ICON})?\s*:|{re.escape(FOCUS_EFFECT)})\s*$"
 )
@@ -71,7 +73,7 @@ _PAREN = re.compile(r"\s*\([^()]*\)")
 class Ability:
     """One ability of a card: when it may be used, what it is classified as, and what it costs.
 
-    ``keywords`` classify the ability and rise to the card that holds it — the CR reads a Strategy
+    ``keywords`` classify the ability and rise to the card that holds it. The CR reads a Strategy
     with a Political ability as a Political Strategy. ``modifiers`` change how the ability behaves
     and stay where they are printed.
     """
@@ -100,9 +102,9 @@ def strip_markup(text: str) -> str:
     """The text box as plain prose.
 
     Tags become a space so words never fuse, then the space a tag leaves in front of punctuation is
-    taken back out — ``<b>Tireless</b>.`` must read "Tireless." and ``<b>Battle</b>:`` must read
-    "Battle:". A colon that opens an icon keeps the space in front of it, so ``:pearl:`` stays
-    apart from the word before it. An opening quote hugs what it quotes.
+    taken back out. For example, ``<b>Tireless</b>.`` must read "Tireless." and ``<b>Battle</b>:``
+    must read "Battle:". A colon that opens an icon keeps the space in front of it, so ``:pearl:``
+    stays apart from the word before it. An opening quote hugs what it quotes.
 
     Parameters
     ----------
@@ -125,7 +127,7 @@ def strip_markup(text: str) -> str:
 
 
 def _outside_parens(text: str, pos: int) -> bool:
-    """Whether ``pos`` falls outside parentheses — a bracket holding two sentences is one aside, so
+    """Whether ``pos`` falls outside parentheses. A bracket holding two sentences is one aside, so
     cutting between them would leave both halves unclosed."""
     before = text[:pos]
     return before.count("(") == before.count(")")
@@ -144,13 +146,13 @@ def _segments(text: str) -> list[str]:
 
 
 def _outside_quotes(text: str, pos: int) -> bool:
-    """Whether ``pos`` falls outside quotation marks — inside them the text is granted, not the
+    """Whether ``pos`` falls outside quotation marks. Inside them the text is granted, not the
     card's own, so no split may happen there."""
     return text[:pos].count('"') % 2 == 0
 
 
 def _opens_segment(plain: str, pos: int) -> bool:
-    """Whether ``pos`` begins a segment — nothing before it, or a finished sentence."""
+    """Whether ``pos`` begins a segment, with nothing before it or a finished sentence."""
     before = plain[:pos]
     return not before.strip() or bool(_SEGMENT_OPEN.search(before))
 
@@ -263,8 +265,9 @@ def _traits(text: str) -> list[str]:
 
 
 def _split_named(chunk: str) -> list[str]:
-    """Split where a named trait opens a new one — at the start of a block or after a sentence end.
-    Mid-sentence the word names a trait rather than opening one, as in "…have Discipline :g2:."."""
+    """Split where a named trait opens a new one. This happens at the start of a block or after a
+    sentence end. Mid-sentence the word names a trait rather than opening one, as in "...have
+    Discipline :g2:."."""
     starts = [
         m.start()
         for m in _NAMED.finditer(chunk)

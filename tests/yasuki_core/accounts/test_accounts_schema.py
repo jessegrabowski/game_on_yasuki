@@ -9,7 +9,7 @@ from yasuki_core.database import get_connection_string
 
 
 def _digest(value: str) -> bytes:
-    """A stand-in for the production pepper'd HMAC — the schema only needs unique bytes."""
+    """A stand-in for the production pepper'd HMAC. The schema only needs unique bytes."""
     return hashlib.sha256(value.encode()).digest()
 
 
@@ -112,14 +112,14 @@ def test_deck_cards_collapse_duplicates_but_keep_art_variants(accounts_conn):
             "VALUES (%s, 'kuni', 'Kuni', 'dynasty', 2)",
             (deck_id,),
         )
-        # Same card, side, and (null) art variant is the same row — must collide.
+        # Same card, side, and (null) art variant is the same row. Must collide.
         with pytest.raises(psycopg.errors.UniqueViolation):
             cur.execute(
                 "INSERT INTO deck_cards (deck_id, card_id, card_name, side, quantity) "
                 "VALUES (%s, 'kuni', 'Kuni', 'dynasty', 1)",
                 (deck_id,),
             )
-        # An art-swapped copy of the same card is a distinct visual variant — must be allowed.
+        # An art-swapped copy of the same card is a distinct visual variant. Must be allowed.
         cur.execute(
             "INSERT INTO deck_cards "
             "(deck_id, card_id, card_name, side, quantity, art_donor_card_id, art_donor_set) "
@@ -176,8 +176,8 @@ def test_runner_applies_only_pending_in_order_including_alters(accounts_conn, mo
     assert apply_migrations(accounts_conn) == ["9001_create"]
     assert not column_exists()
 
-    # Exposing the ALTER must apply only it — not re-run the recorded create — and evolve the live
-    # table, the capability numbered migrations exist to provide.
+    # Exposing the ALTER must apply only it (not re-run the recorded create) and evolve the live
+    # table. The capability numbered migrations exist to provide this.
     monkeypatch.setattr("yasuki_core.accounts.migrate._migrations", lambda: [create, alter])
     assert apply_migrations(accounts_conn) == ["9002_alter"]
     assert column_exists()

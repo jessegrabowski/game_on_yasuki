@@ -75,8 +75,8 @@ def _face_up_holding_in_province(state, card_id, gold_cost, printed_id=""):
 
 
 def _to_dynasty(runner):
-    """Walk the human to the Dynasty phase the way the client does — passing, and running the
-    opponent whenever it takes the opportunity back."""
+    """Walk the human to the Dynasty phase the way the client does. Pass, and run the opponent
+    whenever it takes the opportunity back."""
     while runner.view().phase is not Phase.DYNASTY:
         if runner.opponent_holds_priority:
             runner.run_opponent()
@@ -390,7 +390,7 @@ def test_board_menu_offers_legacy_in_the_dynasty_phase():
 
 def test_board_menu_offers_cycle_on_the_opening_turn():
     # Both rulebook abilities live here now, so the menu has to sort them by what is legal rather
-    # than by which zone was clicked — Cycle is the Action phase's, Legacy the Dynasty phase's.
+    # than by which zone was clicked. Cycle is the Action phase's, Legacy the Dynasty phase's.
     runner = _runner_with_a_province()
 
     assert runner.board_menu() == [
@@ -443,7 +443,7 @@ def test_ability_menu_is_empty_for_a_card_with_no_ability():
 
 def test_each_kharmic_form_hangs_off_the_card_it_spends():
     # The click that opens the menu is the choice of card, so the Fate form belongs to a hand card
-    # and the Dynasty form to a Province card — neither to the board.
+    # and the Dynasty form to a Province card. Neither goes to the board.
     game_runner = GameRunner(EngineSession.start(_kharmic_table(), PlayerId.P1), PlayerId.P1)
 
     hand = game_runner.hand_menu("P1-k0")
@@ -452,7 +452,7 @@ def test_each_kharmic_form_hangs_off_the_card_it_spends():
     assert [action for _, action in hand] == [KharmicDraw("P1-k0")]
     assert KharmicRefill("P1-pk0") in [action for _, action in province]
     # Kharmic stays a rulebook action in the engine, matching the CR. Where it surfaces is a client
-    # decision, and it spends a card the player names — so it belongs on that card, not on the board
+    # decision, and it spends a card the player names. So it belongs on that card, not on the board
     # with Cycle and Legacy, which act on whole zones.
     board = [action for _, action in game_runner.board_menu()]
     assert not any(isinstance(action, (KharmicDraw, KharmicRefill)) for action in board)
@@ -527,13 +527,13 @@ def _equip_runner(*, printed_id: str | None = None) -> GameRunner:
 
 def test_a_hand_attachment_offers_equip_priced_at_its_gold_cost():
     # Equipping is reached by clicking the card in hand, so the offer has to hang off the hand menu
-    # and has to say the price — the player commits to the target before seeing the payment prompt.
+    # and has to say the price. The player commits to the target before seeing the payment prompt.
     assert _equip_runner().hand_menu("P1-katana") == [("Equip: Pay 3 gold", Equip("P1-katana"))]
 
 
 def test_a_hand_strategy_offers_a_play_priced_at_its_gold_cost():
     # Playing a Strategy is reached by clicking the card in hand, the way Equipping is, so the offer
-    # has to hang off the hand menu — without an entry here the action is legal and unreachable.
+    # has to hang off the hand menu. Without an entry here the action is legal and unreachable.
     runner = _equip_runner()
     state = runner.session.game.table
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(
@@ -554,7 +554,7 @@ def test_a_hand_strategy_offers_a_play_priced_at_its_gold_cost():
     label, action = runner.hand_menu("P1-killer")[0]
 
     assert action == PlayStrategy("P1-killer")
-    assert label == "Open: Spend Gold to destroy a target Personality — Pay 2 gold"
+    assert label == "Open: Spend Gold to destroy a target Personality -- Pay 2 gold"
 
 
 def test_an_investable_attachment_prices_its_two_equips_apart():
@@ -615,7 +615,7 @@ def _ruins_runner() -> GameRunner:
 
 def test_a_search_through_hidden_piles_is_presented_as_a_dialog_not_a_board_selection():
     """Repairing the Ruins' candidates sit in a deck and a discard pile, so there is nothing on the
-    board to click — without a search view the ability is unanswerable."""
+    board to click. Without a search view the ability is unanswerable."""
     runner_ = _ruins_runner()
     runner_.act(ActivateAbility("ruins"))
 
@@ -657,7 +657,7 @@ def test_a_board_targeting_ability_takes_no_search_dialog():
 
 def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
     """Legacy shows the whole searched pile with only the Legacy cards takeable, so its pool is
-    broader than its candidates — the derived routing must not narrow it to the candidates."""
+    broader than its candidates. The derived routing must not narrow it to the candidates."""
     state = _dealt_table(p1_hand=1)  # a hand card pays the banish cost
     deck = state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
     for index, (card_id, keywords) in enumerate([("legacy-card", ("Legacy",)), ("plain-card", ())]):
@@ -693,7 +693,7 @@ def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
     _to_dynasty(runner_)
     runner_.act(Legacy())
 
-    # The banish cost is paid from hand, which the board shows — that stays a board selection.
+    # The banish cost is paid from hand, which the board shows. That stays a board selection.
     assert runner_.search_view() is None
     runner_.submit(DecisionResponse(("P1-h0",)))
 
@@ -702,7 +702,7 @@ def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
     assert "plain-card" in {card.id for card in search.panes["Deck"]}  # shown, but not takeable
     assert search.choosable == {"legacy-card"}
 
-    # Choosing it asks which Province to sacrifice — a board pick, not a second search dialog.
+    # Choosing it asks which Province to sacrifice: a board pick, not a second search dialog.
     runner_.submit(DecisionResponse(("legacy-card",)))
     assert runner_.pending is not None
     assert runner_.search_view() is None
@@ -829,8 +829,8 @@ def test_the_opponent_is_run_for_a_decision_it_owes_inside_the_humans_turn():
 
 def test_running_the_opponent_never_answers_a_decision_owed_by_the_human():
     """The opponent runs while it holds priority, and a decision owed by the human can be live at
-    that moment. Answering it would play the human's card for them — silently, with the agent's
-    choice — so the run stops instead and leaves the question standing."""
+    that moment. Answering it would play the human's card for them (silently, with the agent's
+    choice), so the run stops instead and leaves the question standing."""
     runner_ = _runner()
     runner_.act(PASS)  # hand the Action-phase window to the opponent
     assert runner_.opponent_holds_priority
@@ -888,7 +888,7 @@ class _NeverPasses:
 
 
 def test_the_opponent_takes_the_actions_its_policy_chooses():
-    """Its Controls supply both halves; without a policy the opponent passed every window and never
+    """Its Controls supply both halves. Without a policy the opponent passed every window and never
     built a board, so nothing it was offered ever reached the table."""
     session = EngineSession.start(_dealt_table(0), PlayerId.P1, seed=3)
     province_card(session.game, "farm", seat=PlayerId.P2, gold_cost=0, gold_production=2)
@@ -914,8 +914,7 @@ def test_a_policy_that_never_passes_is_stopped_rather_than_spinning(monkeypatch)
     """A round closes only once every seat passes consecutively, so a policy that always finds
     something to take keeps it open forever and hangs the caller with no way out.
 
-    The ceiling is lowered rather than reached: driving 200 real actions needs a board that can pay
-    for 200, which tests the board rather than the guard.
+    The ceiling is lowered to 0 for this test rather than driven to its real value.
     """
     monkeypatch.setattr(game_runner_module, "MAX_ACTIONS_PER_ROUND", 0)
     state = _kharmic_table(seat=PlayerId.P2)  # Kharmic is Repeatable Open, so P2 can act here
@@ -948,7 +947,7 @@ def test_a_pass_counts_toward_the_round_ceiling(monkeypatch):
 
 
 def test_ability_menu_offers_one_entry_per_ability_the_card_prints():
-    """A card printing two abilities gets two menu entries, each under its own label — the labels
+    """A card printing two abilities gets two menu entries, each under its own label. The labels
     are what tells them apart, since both actions name the same card."""
     register_ability(
         "test_menu_pair",
@@ -1038,7 +1037,8 @@ def test_the_favor_proxy_offers_nothing_it_cannot_pay_for():
 
 
 def test_taking_a_favor_ability_from_the_menu_runs_it():
-    """The menu's action is the one the engine takes, so what the player clicks is playable as-is."""
+    """The menu's action is the one the engine takes, so what the player clicks is playable
+    as-is."""
     game_runner = _favor_runner(p1_hand=1)
     _label, action = game_runner.favor_menu(_favor_proxy_id(game_runner))[0]
 

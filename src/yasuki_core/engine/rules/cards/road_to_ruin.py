@@ -111,8 +111,8 @@ def _resolve_outlying_farms_grant(
 
 @on(ProducedGold, "outlying_farms")
 def _outlying_farms_produced_gold(ctx: TriggerContext) -> list[Effect]:
-    """ "...if you did, destroy it after it bows." The price waits for the bow, so the Gold the grant
-    bought reaches the pool before the card leaves play."""
+    """ "...if you did, destroy it after it bows." The price waits for the bow, so the Gold the
+    grant bought reaches the pool before the card leaves play."""
     if ctx.event.card_id != ctx.card.id or not used_this_turn(ctx.game, ctx.card, SELF_GRANT):
         return []
     return [Destroy(ctx.card.id, ctx.card.owner)]
@@ -122,7 +122,8 @@ def _outlying_farms_produced_gold(ctx: TriggerContext) -> list[Effect]:
 
 
 def _repairing_the_ruins_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Non-Unique Holdings in the seat's Dynasty deck or discard pile that they control no copy of."""
+    """Non-Unique Holdings in the seat's Dynasty deck or discard pile that they control no copy
+    of."""
     seat = source.owner
     held = {card.printed_id for card in owned_holdings(game, seat)}
     searched = [
@@ -196,7 +197,7 @@ def _the_forgotten_entered_play_or_destroyed(ctx: TriggerContext) -> list[Effect
     return effects
 
 
-# "After this Follower enters play or is destroyed" — one clause, so one handler on both events.
+# "After this Follower enters play or is destroyed" is one clause, so one handler on both events.
 on(EnteredPlay, "the_forgotten")(_the_forgotten_entered_play_or_destroyed)
 on(Destroyed, "the_forgotten")(_the_forgotten_entered_play_or_destroyed)
 
@@ -215,8 +216,8 @@ def _verdant_wilds_targets(game: GameState, source: L5RCard) -> list[str]:
     """The controller's own bowed cards in play: "your target card" is one this seat owns.
 
     Narrowed to the bowed because straightening presupposes one, and no further. A card another card
-    forbids to straighten stays on the list — that prohibition is the other card's to enforce when
-    the effect resolves, not this one's to read while choosing targets.
+    forbids to straighten stays on the list, since that prohibition is the other card's to enforce
+    when the effect resolves, not this one's to read while choosing targets.
     """
     return [card.id for card in cards_in_play(game, source.owner) if card.bowed]
 

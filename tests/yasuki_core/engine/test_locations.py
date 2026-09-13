@@ -175,8 +175,8 @@ def test_a_unit_returns_to_its_personalitys_home_not_each_owners():
 
 def test_attaching_to_an_assigned_personality_joins_him_at_the_battlefield():
     """A card in a unit stands where its Personality stands (CR, Unit). Equipping into a battle is a
-    real move — the Reserve rulebook ability equips "at the current battlefield" — so an attachment
-    that stayed home would leave its unit split across two locations."""
+    real move (the Reserve rulebook ability equips "at the current battlefield"), so an
+    attachment that stayed home would leave its unit split across two locations."""
     state = TableState.empty_two_seat()
     hero = put_in_play(state, personality("hero"))
     ops.assign(state, hero, 0)

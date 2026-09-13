@@ -240,7 +240,7 @@ def test_every_effect_has_a_description_here():
 
 
 def test_nesting_deferrals_does_not_grow_the_line():
-    # Then is the deferral primitive, so it is the effect most likely to nest — and a cascade that
+    # Then is the deferral primitive, so it is the effect most likely to nest, and a cascade that
     # fails to converge is where nesting runs deepest. Inlining children would put the longest line
     # exactly where the trace matters most; the renderer nests them by depth instead.
     inner = Then((Bow("a"), Destroy("b", PlayerId.P1), AdjustCounter("c", WEALTH, 1)))

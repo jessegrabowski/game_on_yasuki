@@ -9,7 +9,7 @@ ButtonSpec = tuple[str, Callable[[], None], bool]
 
 class PromptBox(tk.Frame):
     """The prompt panel between the two seats: what is being asked, and a button for each offered
-    choice. The host (presenter) builds the status text and the buttons; this widget only renders
+    choice. The host (presenter) builds the status text and the buttons. This widget only renders
     them."""
 
     def __init__(self, master: tk.Misc):
@@ -28,9 +28,7 @@ class PromptBox(tk.Frame):
     ) -> None:
         """Render ``status``, a spinner over ``amounts`` when there are any, and a button per spec.
 
-        A seat naming its own number gets one control it steps through rather than a button per
-        value: the amounts a variable Gold cost offers run as high as the seat can pay, and that is
-        a list no panel this width can hold.
+        A seat naming its own number gets one control it steps through, not a button per value.
         """
         self._status.configure(text=status)
         for child in self._actions.winfo_children():
@@ -62,8 +60,8 @@ class PromptBox(tk.Frame):
         return self._spinner.get() if self._spinner is not None else ""
 
     def invoke_primary(self) -> None:
-        """Invoke the primary action — the first button — when enabled; the spacebar shortcut. The
-        presenter lists the affirmative action (Pass/Pay/Discard) first, so a secondary button such
-        as Cancel is never triggered this way."""
+        """Invoke the primary action, the first button, when enabled: the spacebar shortcut. The
+        presenter lists the affirmative action (Pass/Pay/Discard) first, so a secondary button
+        such as Cancel is never triggered this way."""
         if self._buttons and str(self._buttons[0].cget("state")) == "normal":
             self._buttons[0].invoke()

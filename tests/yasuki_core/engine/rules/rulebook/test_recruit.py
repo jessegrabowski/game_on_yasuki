@@ -88,7 +88,7 @@ def test_recruit_rejects_invest_and_proclaim_together():
 
 
 def _responder_game() -> GameState:
-    """A game whose active seat holds one Response — a Caravansary answering its own Fate discard."""
+    """A game whose active seat holds one Response: a Caravansary answering its own Fate discard."""
     state = TableState.empty_two_seat()
     put_in_play(
         state,

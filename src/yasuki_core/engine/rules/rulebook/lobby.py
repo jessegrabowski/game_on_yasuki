@@ -49,11 +49,11 @@ def lobby_bonus(game: GameState, seat: PlayerId) -> int:
 
 
 def lobby_amount(game: GameState, seat: PlayerId, amount: int) -> int:
-    """``amount``, about ``seat``, as a Lobby action reads it — its Lobby Bonus included.
+    """``amount``, about ``seat``, as a Lobby action reads it. Its Lobby Bonus is included.
 
     Any amount is adjusted, not only Family Honor: the rulebook Lobby checks Family Honor, but each
-    Wind's own Lobby checks something else — cards in hand, the total Gold Cost of attachments
-    controlled, the total Force of unbowed Followers and Personalities — and the Bonus applies to
+    Wind's own Lobby checks something else (cards in hand, the total Gold Cost of attachments
+    controlled, the total Force of unbowed Followers and Personalities), and the Bonus applies to
     whichever it is (ShE datasheet, Lobby Bonuses and Penalties).
 
     Where the amount is Family Honor the adjustment is neither an Honor gain nor an Honor loss, so

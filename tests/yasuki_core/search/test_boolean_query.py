@@ -107,7 +107,7 @@ class TestParseQuery:
         assert parse_query("a or b") == parse_query("a OR b")
 
     def test_quotes_escape_the_or_keyword(self):
-        # A quoted "or" is a search term, not the operator — the only way to search the literal word.
+        # A quoted "or" is a search term, not the operator: the only way to search the literal word.
         assert parse_query('a "or" b') == BoolGroup("AND", [leaf("a"), leaf('"or"'), leaf("b")])
 
 

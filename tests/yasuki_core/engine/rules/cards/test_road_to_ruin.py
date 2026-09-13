@@ -36,8 +36,9 @@ P1 = PlayerId.P1
 
 
 def _ruins_game(*, in_deck=("mine",), in_discard=(), in_play=(), unique=()):
-    """A session with P1's Repairing the Ruins face-up in a Province, and Holdings salted through
-    the zones it searches. Ids double as printed ids, so a card in play blocks the copy of itself."""
+    """A session with P1's Repairing the Ruins face-up in a Province, and Holdings salted
+    through the zones it searches. Ids double as printed ids, so a card in play blocks the
+    copy of itself."""
     state = TableState.empty_two_seat()
     province_card(state, "ruins", printed_id="repairing_the_ruins")
 
@@ -92,8 +93,8 @@ def test_it_rebuilds_its_own_province_with_the_holding_it_finds():
 
 
 def test_a_different_holding_in_play_blocks_nothing():
-    """ "…of which you do not control any copies." Control is judged per printed id, so an unrelated
-    Holding in play leaves the deck's copy findable."""
+    """'...of which you do not control any copies.' Control is judged per printed id, so an
+    unrelated Holding in play leaves the deck's copy findable."""
     session = _ruins_game(in_deck=("mine",), in_play=("mine_copy",))
     session.act(P1, ActivateAbility("ruins"))
     assert set(session.game.pending.candidates) == {"mine"}
@@ -123,7 +124,7 @@ def test_rebuilding_a_province_replays_to_the_same_state():
 
 
 def test_a_holding_pulled_from_the_deck_is_permanently_dearer():
-    """ "…and permanently give it +1 Gold Cost if it was not from your discard pile." """
+    """'...and permanently give it +1 Gold Cost if it was not from your discard pile.'"""
     session = _ruins_game(in_deck=("mine",))
     session.act(P1, ActivateAbility("ruins"))
     session.submit(P1, DecisionResponse(("mine",)))
@@ -145,7 +146,8 @@ def test_the_rider_follows_the_chosen_cards_own_zone(chosen, cost):
 
 
 def test_the_rebuilt_holding_still_has_to_be_recruited_at_the_dearer_price():
-    """The Holding lands face-up in the Province, not in play, so the rider is what the seat pays."""
+    """The Holding lands face-up in the Province, not in play, so the rider is what the seat
+    pays."""
     session = _ruins_game(in_deck=("mine",))
     session.act(P1, ActivateAbility("ruins"))
     session.submit(P1, DecisionResponse(("mine",)))
@@ -216,7 +218,7 @@ def _in_dynasty_discard(session, card_id):
 
 def test_the_payment_quotes_outlying_farms_at_its_plain_yield_and_its_ceiling():
     """The payment carries the extra separately from what the Farm makes now, because the seat has
-    not been asked yet — the question comes in the window, as it bows."""
+    not been asked yet. The question comes in the window, as it bows."""
     session = _outlying_game()
     session.act(P1, Recruit("target"))
 
@@ -461,7 +463,8 @@ def test_another_follower_falling_raises_nothing():
 
 
 def _wilds_game():
-    """P1's Verdant Wilds unbowed, with a bowed Holding of its own seat's and one of P2's to aim at."""
+    """P1's Verdant Wilds unbowed, with a bowed Holding of its own seat's and one of P2's to
+    aim at."""
     game = two_seat_game()
     put_in_play(game, holding("wilds", owner=P1, printed_id="verdant_wilds", gold_production=5))
     session = EngineSession.start(game.table, P1)
@@ -494,7 +497,7 @@ def test_verdant_wilds_straightens_the_card_it_targets():
 def test_verdant_wilds_cannot_straighten_a_card_forbidden_to_straighten():
     """A granted Jade Mine may not straighten until after its next Action Phase, and an ability that
     would straighten it finds it immovable. Failing to move it does not lift the prohibition, and it
-    stays a legal target — the ban belongs to the Mine, not to whatever aims at it."""
+    stays a legal target. The ban belongs to the Mine, not to whatever aims at it."""
     session = _wilds_game()
     resolve_effects(session.game, [DelayStraighten("mine")])
 

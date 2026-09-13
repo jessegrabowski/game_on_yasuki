@@ -59,8 +59,8 @@ def _probe_sees_any_discard(ctx):
 
 
 # A test-only trigger writing what caused each destruction onto its own card, the way the probes
-# above do observable work on theirs. No shipped card reads the cause yet — the one Destroyed
-# subscriber, Rural Market, filters on the destroyed card's owner — and a Personality cannot watch
+# above do observable work on theirs. No shipped card reads the cause yet: the one Destroyed
+# subscriber, Rural Market, filters on the destroyed card's owner. A Personality cannot watch
 # its own death while triggers are collected from the battlefield.
 @on(Destroyed, "test_death_probe")
 def _probe_records_the_cause(ctx):
@@ -116,7 +116,7 @@ def test_turn_start_gives_the_rice_farm_a_wealth_token():
 
 def test_the_same_card_awaiting_recruitment_in_a_province_does_not_react():
     # Triggers key on printed_id, so the unbought copy in a Province is indistinguishable from the
-    # one in play except by where collection looks — and Rice Farm's guard reads the seat and the
+    # one in play except by where collection looks. Rice Farm's guard reads the seat and the
     # cap, never whether it is in play. Scanning past the battlefield would accrue Gold Production
     # on a card nobody paid for; a trigger would first have to declare where it functions.
     game = two_seat_game()
@@ -153,7 +153,7 @@ def test_the_token_only_lands_on_the_turn_players_own_farm():
     game = two_seat_game()
     farm = _rice_farm(game)  # owned by P1
 
-    fire(game, TurnStarted(PlayerId.P2))  # "after your turn begins" — not P1's turn
+    fire(game, TurnStarted(PlayerId.P2))  # "after your turn begins": not P1's turn
 
     assert farm.counters == {}
 
@@ -275,7 +275,7 @@ def test_aoki_ignores_wealth_gained_on_an_opponents_holding():
     _rice_farm(game, seat=PlayerId.P2, card_id="P2-farm")
     _seed_fate_deck(game, PlayerId.P1, 3)
 
-    fire(game, TurnStarted(PlayerId.P2))  # P2's farm gains wealth — not Aoki's Holding
+    fire(game, TurnStarted(PlayerId.P2))  # P2's farm gains wealth: not Aoki's Holding
 
     assert _hand_size(game, PlayerId.P1) == 0
 
@@ -372,7 +372,7 @@ def test_rural_market_ignores_another_cards_entry():
 
     fire(game, EnteredPlay(other.id))
 
-    assert rural.counters == {}  # "after THIS Holding enters play" — only its own entry
+    assert rural.counters == {}  # "after THIS Holding enters play": only its own entry
 
 
 def test_flow_emits_entered_play_from_recruit_resolution():
@@ -438,7 +438,7 @@ def test_wheat_farm_excludes_non_farms_and_opponents_farms():
 
     fire(game, EnteredPlay(wheat.id))
 
-    assert game.pending is None  # no eligible target — no choice raised
+    assert game.pending is None  # no eligible target, no choice raised
 
 
 def test_wheat_farm_grants_a_token_to_each_chosen_farm():
@@ -461,7 +461,7 @@ def test_wheat_farm_choice_is_optional():
     other = _keyworded_farm(game, card_id="P1-other-farm")
 
     fire(game, EnteredPlay(wheat.id))
-    action_sequence.submit(game, DecisionResponse(()))  # decline — give none
+    action_sequence.submit(game, DecisionResponse(()))  # decline: give none
 
     assert other.counters == {}
     assert game.pending is None
@@ -491,7 +491,7 @@ def test_wheat_farm_caps_the_choice_at_two_farms():
     pending = game.pending
     assert isinstance(pending, ChooseCards)
     assert len(pending.candidates) == 3
-    assert pending.maximum == 2  # "zero to two" — capped however many Farms you control
+    assert pending.maximum == 2  # "zero to two": capped however many Farms you control
 
 
 def _probe(game, seat=PlayerId.P1, card_id="P1-z-probe"):
@@ -508,8 +508,9 @@ def _probe(game, seat=PlayerId.P1, card_id="P1-z-probe"):
 
 
 def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
-    # The probe also fires on the Wheat Farm's entry but sorts after it, so the pausing choice stashes
-    # the probe's trigger; resuming must run it and land its Wealth token, not merely drain the stack.
+    # The probe also fires on the Wheat Farm's entry but sorts after it, so the pausing choice
+    # stashes the probe's trigger; resuming must run it and land its Wealth token, not merely drain
+    # the stack.
     game = two_seat_game()
     wheat = _wheat_farm(game, card_id="P1-a-wheat")
     other = _keyworded_farm(game, card_id="P1-other-farm")
@@ -627,8 +628,8 @@ def test_a_departed_card_reacts_to_nothing_but_its_own_leaving(reacting):
 
 def test_a_card_killed_as_it_arrives_still_takes_no_enter_play_trigger(reacting):
     """The narrowness is the point: only a departure reaches a card off the battlefield. An arrival
-    does not, so a Personality a state-based action killed on sight cannot go on to take his enter-play
-    trait — which is what settling those rules before announcing the arrival is for."""
+    does not, so a Personality a state-based action killed on sight cannot go on to take his
+    enter-play trait, which is what settling those rules before announcing the arrival is for."""
     game = two_seat_game()
     doomed = put_in_play(game, holding("P1-doomed", printed_id="departure_probe"))
     seen: list[str] = []

@@ -10,8 +10,8 @@ from yasuki_core.game_pieces.prints import SenseiPrint
 
 
 def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The unbowed gold producers ``seat`` controls in play — its Stronghold and gold Holdings —
-    each a source it may bow for gold (KD6, stat-derived).
+    """The unbowed gold producers ``seat`` controls in play, its Stronghold and gold Holdings, each
+    a source it may bow for gold (KD6, stat-derived).
 
     A Sensei is never one of them. Its printed Gold Production is a delta the Stronghold receives,
     not gold the Sensei makes, so counting it would pay the seat twice for the same characteristic.
@@ -30,7 +30,7 @@ def gold_reach(game: GameState, seat: PlayerId) -> tuple[int, tuple[L5RCard, ...
     """What ``seat`` can raise before knowing what it is paying for, split from the producers that
     still need to know.
 
-    Only a producer with a registered gold handler can read the cards being paid for; everything
+    Only a producer with a registered gold handler can read the cards being paid for. Everything
     else yields its printed Gold Production plus its modifiers whatever the target.
 
     Returns

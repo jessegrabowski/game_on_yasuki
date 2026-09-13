@@ -125,7 +125,7 @@ def test_a_decision_goes_to_the_seat_that_owes_it():
 
     play_game(session, controls, turn_limit=1)
 
-    # Asked P2 while P1 was still the active seat — the two are not the same question.
+    # Asked P2 while P1 was still the active seat. The two are not the same question.
     assert asked[0] == (PlayerId.P2, PlayerId.P1)
 
 
@@ -175,7 +175,7 @@ def test_the_observer_sees_every_turn_once():
 def test_a_seats_producers_are_straight_at_the_start_of_its_own_turn():
     """Only the active seat straightens, so a producer bowed to pay stays bowed through the
     opponent's whole turn. A metric sampling a seat's production on every turn would read it as
-    halved every other turn; it is canonical only at the start of that seat's own turn."""
+    halved every other turn. It is canonical only at the start of that seat's own turn."""
     bowed_by_turn: dict[int, bool] = {}
 
     class Watcher:
@@ -239,7 +239,8 @@ def test_a_turn_ends_with_the_seat_that_played_it_still_untouched():
 
 
 def test_stepping_yields_each_input_the_engine_accepted():
-    """The vocabulary is the log's, so a caller stepping a game sees exactly what the tape records."""
+    """The vocabulary is the log's, so a caller stepping a game sees exactly what the tape
+    records."""
     session = _session()
 
     steps = list(run_game(session, _passing(), turn_limit=2))

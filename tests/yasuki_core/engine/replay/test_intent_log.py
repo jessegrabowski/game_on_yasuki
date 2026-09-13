@@ -181,7 +181,7 @@ def _script(state: TableState, log: IntentLog) -> None:
         (PlayerId.P1, FlipCoin("Heads")),  # read-only randomizer, still recorded
         (PlayerId.P2, RollDice(12, sides=20)),
         (PlayerId.P2, Shuffle(DeckKey(PlayerId.P2, Side.DYNASTY), seed=99)),
-        (PlayerId.P2, Draw(DeckKey(PlayerId.P2, Side.DYNASTY))),  # no province → battlefield
+        (PlayerId.P2, Draw(DeckKey(PlayerId.P2, Side.DYNASTY))),  # no province -> battlefield
         (PlayerId.P1, SetHonor(delta=-2)),
         (PlayerId.P2, SetHonor(value=5)),
         (PlayerId.P1, DiscardProvince(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0))),
@@ -229,7 +229,7 @@ def test_apply_and_log_records_only_accepted_intents():
     log = IntentLog(initial=InitialRecord.from_state(state))
 
     accepted = apply_and_log(state, log, PlayerId.P1, CreateProvince(), ts=1.0)
-    # P2 cannot shuffle P1's deck → rejected, nothing recorded, seq unchanged.
+    # P2 cannot shuffle P1's deck -> rejected, nothing recorded, seq unchanged.
     seq_before = state.seq
     rejected = apply_and_log(
         state, log, PlayerId.P2, Shuffle(DeckKey(PlayerId.P1, Side.FATE), seed=1), ts=2.0
@@ -257,8 +257,8 @@ def test_apply_and_log_entry_fields_match_application():
 
 @pytest.mark.parametrize("intent", [FlipCoin("Heads"), RollDice(19, sides=20)])
 def test_a_read_only_randomizer_is_taped_with_its_outcome(intent):
-    """A coin or die changes no piece, so the tape is the only record that it happened — and it has
-    to carry the face, since nothing downstream can recompute one."""
+    """A coin or die changes no piece, so the tape is the only record that it happened. It has to
+    carry the face, since nothing downstream can recompute one."""
     state = _start_state()
     log = IntentLog(initial=InitialRecord.from_state(state))
 
@@ -317,7 +317,7 @@ def test_full_snapshot_survives_serialization():
 
 def _attached_state() -> TableState:
     """Every relation at once: a card stacked behind another for rendering, a unit, and a
-    fortification on a province — so a snapshot that drops one of the three fails here."""
+    fortification on a province, so a snapshot that drops one of the three fails here."""
     state = _post_setup_state()
     hero = L5RCard.of(
         PersonalityPrint, id="hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1
@@ -355,8 +355,8 @@ def test_attachments_survive_serialization():
 
 
 def _assigned_state() -> TableState:
-    """The unit of `_attached_state` assigned to a battlefield, so the location map is non-empty —
-    an empty one round-trips whether or not the snapshot carries it."""
+    """The unit of `_attached_state` assigned to a battlefield, so the location map is non-empty. An
+    empty one round-trips whether or not the snapshot carries it."""
     state = _attached_state()
     ops.assign(state, state.cards_by_id["hero"], 1)
     state.validate()
@@ -382,7 +382,7 @@ def test_locations_survive_serialization():
 
 
 def test_encode_initial_covers_every_field():
-    """A record field the encoder forgets is silent corruption — the replay rebuilds a table missing
+    """A record field the encoder forgets is silent corruption. The replay rebuilds a table missing
     it and nothing raises. Pin the payload's keys to the dataclass so a new field fails here."""
     payload = encode_initial(InitialRecord.from_state(_assigned_state()))
 
@@ -562,7 +562,7 @@ def test_setup_seeds_survive_serialization():
 
 def test_creatable_tokens_survive_serialization():
     # The initial record carries the deck's creatable-token templates, so a replayed token spawn
-    # needs no database — the templates round-trip through the tape intact.
+    # needs no database. The templates round-trip through the tape intact.
     state = _start_state()
     state.creatable_tokens["ghul"] = PersonalityPrint(
         name="Ghul", side=Side.DYNASTY, force=2, chi=2, keywords=("Undead",)

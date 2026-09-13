@@ -9,9 +9,9 @@ class PlayerId(Enum):
 # Not a PlayerId member: seats are iterated to build hands, decks, zones and policies, so a rulebook
 # seat would be dealt a hand and given an AI.
 class Rulebook(Enum):
-    """A cause that is the rules rather than a player — the effects no one chose to take. One member
-    per rulebook procedure that acts, so a card can react to the specific one as well as to "not a
-    player at all". Duel resolution joins when duels exist."""
+    """A cause that is the rules, not a player: stands in for the effects no one chose to take. One
+    member per rulebook procedure that acts, so a card can react to the specific one and not just to
+    "not a player at all". Duel resolution joins when duels exist."""
 
     BATTLE_RESOLUTION = "battle_resolution"
     CHI_DEATH = "chi_death"

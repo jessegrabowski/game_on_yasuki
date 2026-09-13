@@ -24,8 +24,9 @@ def build_client(
     opponent_deck : pathlib.Path, optional
         The decklist dealt to the AI opponent. Default the bundled deck, a mirror match.
     rng : numpy.random.Generator, optional
-        Deals every game this client starts, including the ones a deck load restarts. Default None,
-        which deals from system entropy — what a game wants, where a repeated opening is a defect.
+        Deals every game this client starts, including the ones a deck load restarts. Default
+        None, which deals from system entropy: what a game wants, where a repeated opening is a
+        defect.
 
     Returns
     -------

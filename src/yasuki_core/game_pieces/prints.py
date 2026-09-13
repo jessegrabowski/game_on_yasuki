@@ -23,7 +23,7 @@ from yasuki_core.paths import (
 class CardPrint:
     """A printed card: everything identical on every copy of it.
 
-    A print is frozen and never mutated, so copies may share one — a change to one card in play
+    A print is frozen and never mutated, so copies may share one. A change to one card in play
     must not reach another. The subclasses carry the printed stats, and which subclass a print is
     is what gives a card in play its type.
 
@@ -34,7 +34,7 @@ class CardPrint:
 
     name: str
     side: Side
-    # The stable printed identity — the database card slug, shared by every copy and printing.
+    # The stable printed identity: the database card slug, shared by every copy and printing.
     # Per-card effect handlers key off it; None for fabricated demo cards and spawned tokens.
     printed_id: str | None = None
     clan: str | None = None
@@ -76,7 +76,7 @@ class PersonalityPrint(DynastyPrint):
     # None is the printed dash: below any number, so the card recruits at any Family Honor.
     honor_requirement: int | None = None
     # How many Weapon Items may hang on him (CR, Weapon). One is the rulebook's default rather than
-    # anything a card prints, and it sits here so the limit reads like any other characteristic —
+    # anything a card prints, and it sits here so the limit reads like any other characteristic.
     # Kensai raises it with a modifier instead of exempting him from a rule.
     weapon_limit: int = 1
 
@@ -126,9 +126,9 @@ class AttachmentPrint(FatePrint):
     attachment_type: AttachmentType = AttachmentType.ITEM
     attach_restrictions: tuple[str, ...] = ()
     # What the card brings to the unit it joins, against what it hands the Personality. A Follower
-    # stands in the unit and so has a Force of its own, but no Chi; an Item or Spell has neither, and
-    # both of its numbers are modifiers. Shadowlands Ambassador does both — Force 2 to the unit, -1
-    # Chi to the Personality — so these are separate fields rather than one number.
+    # stands in the unit and so has a Force of its own, but no Chi; an Item or Spell has neither,
+    # and both of its numbers are modifiers. Shadowlands Ambassador does both, giving Force 2 to
+    # the unit and -1 Chi to the Personality, so these are separate fields rather than one number.
     force: int = 0
     chi: int = 0
     force_modifier: int = 0

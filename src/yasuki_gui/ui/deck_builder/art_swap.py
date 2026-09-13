@@ -12,7 +12,7 @@ DIALOG_PREVIEW_W = 240
 
 
 class BorrowArtDialog:
-    """Pick a donor card + printing; auto-classifies both sides and previews the composite."""
+    """Pick a donor card + printing. Auto-classifies both sides and previews the composite."""
 
     def __init__(self, parent: tk.Misc, repository, recipient_path: Path, recipient_key):
         self.repository = repository

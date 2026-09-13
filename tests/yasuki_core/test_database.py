@@ -121,7 +121,7 @@ def test_get_card_by_invalid_id():
 
 
 def test_a_cards_grant_lands_in_card_grants_counter():
-    # Courts of Otosan Uchi grants a Wealth counter — the migration moved it from `creates:` to
+    # Courts of Otosan Uchi grants a Wealth counter. The migration moved it from `creates:` to
     # `grants:`, so it must load into card_grants_counter, not card_creates.
     with get_db_connection() as conn, conn.cursor() as cur:
         cur.execute(
@@ -248,7 +248,8 @@ class TestSQLFiltering:
         assert ascii_hits == accent_hits
 
     def test_year_release_filter(self):
-        """year: matches cards by release era; a wider inequality is a superset of a narrower one."""
+        """year: matches cards by release era. A wider inequality is a superset of a narrower
+        one."""
         from_2010 = count_cards_filtered(
             filter_options=build_search_filters("year>=2010 include:all")
         )
@@ -261,7 +262,7 @@ class TestSQLFiltering:
         assert exact
 
     def test_presence_flags_filter(self):
-        """is:flip finds double-faced cards; is:flip and -is:flip partition the catalog."""
+        """is:flip finds double-faced cards. is:flip and -is:flip partition the catalog."""
         flip = query_cards_filtered(filter_options=build_search_filters("is:flip"))
         assert flip and all(c["back_card_id"] for c in flip)
         errata = query_cards_filtered(filter_options=build_search_filters("is:errata include:all"))
@@ -324,7 +325,7 @@ class TestSQLFiltering:
         assert dialog_ids and dialog_ids == search_ids
 
     def test_exact_name_match_isolates_one_card(self):
-        """!\"Doji Hoturi\" returns only cards named exactly that — every experience version, and
+        """!\"Doji Hoturi\" returns only cards named exactly that: every experience version, and
         nothing whose name merely contains the phrase."""
         exact = query_cards_filtered(filter_options={"name_exact": ["Doji Hoturi"]})
         substring = query_cards_filtered(text_query="Doji Hoturi")
@@ -382,7 +383,8 @@ class TestSQLFiltering:
         assert kept == all_ids - sensei_ids
 
     def test_clan_with_excluded_type_is_the_reported_regression(self):
-        """c:crane -t:sensei returned all Crane cards before the fix; the -t: was silently dropped."""
+        """c:crane -t:sensei returned all Crane cards before the fix. The -t: was silently
+        dropped."""
         cards = query_cards_filtered(
             filter_options={"clans": ["Crane"], "types_excludes": ["Sensei"]}
         )
@@ -666,7 +668,7 @@ def test_cross_face_filter_works_through_pagination_and_count():
 
 def test_double_faced_flip_image_from_back_card():
     # The flip image resolves from the back card's matching printing (role='front' on the back's
-    # print), not a role='back' image on the front print — and stays within the same printing's set.
+    # print), not a role='back' image on the front print. And stays within the same printing's set.
     prints = get_prints_by_card_id("the_dark_capital_of_the_spider")
     assert prints
     for p in prints:
@@ -703,7 +705,7 @@ def test_scroll_prose_searchable_via_flavor():
 
 def test_name_sort_groups_experience_versions_by_base_name():
     # A character's experience versions sort together by base name (an epithet like "Seven Thunder"
-    # must not split the line), then by experience: Inexperienced < base < Exp < Exp2 < Exp3 — so the
+    # must not split the line), then by experience: Inexperienced < base < Exp < Exp2 < Exp3. So the
     # "Experienced 2CW" epithet version lands between Exp2 and Exp3, not after Exp3.
     cards, _ = query_cards_page(
         text_query="Bayushi Kachiko", filter_options={"types": ["Personality"]}

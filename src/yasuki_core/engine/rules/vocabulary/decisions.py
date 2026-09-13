@@ -8,8 +8,8 @@ from yasuki_core.engine.players import PlayerId
 class DecisionResponse:
     """A seat's answer to the pending :class:`~.DecisionRequest`.
 
-    Carries the chosen identifiers — card ids, gold-source ids, or an ordering — interpreted by
-    the request being answered. One uniform shape so the decision log, the save format, and the
+    Carries the chosen identifiers: card ids, gold-source ids, or an ordering. The request being
+    answered interprets them. One uniform shape so the decision log, the save format, and the
     netcode all serialize answers the same way. A request whose answer needs a second dimension
     subclasses this rather than widening it, so a mechanic only one decision reads stays off the
     type every decision shares.
@@ -28,7 +28,7 @@ class DecisionRequest(ABC):
     """A question the engine pauses to put to one seat.
 
     The engine runs until it needs input, records a concrete request on ``GameState.pending``, and
-    returns; the seat answers with a :class:`~.DecisionResponse` and the engine resumes. Concrete
+    returns. The seat answers with a :class:`~.DecisionResponse` and the engine resumes. Concrete
     requests form a closed union that grows with the rules vocabulary.
 
     Attributes
@@ -36,7 +36,7 @@ class DecisionRequest(ABC):
     seat : PlayerId
         The seat that must answer.
     candidates : tuple of str
-        The ids the seat may choose among — the request's legal options. A client renders these as
+        The ids the seat may choose among, the request's legal options. A client renders these as
         the selectable cards, and a well-formed answer draws only from them.
     """
 
@@ -45,14 +45,14 @@ class DecisionRequest(ABC):
 
     @abstractmethod
     def accepts(self, response: DecisionResponse) -> bool:
-        """Return whether ``response`` is a structurally well-formed answer to this request — the
+        """Return whether ``response`` is a structurally well-formed answer to this request: the
         right shape, drawn from ``candidates``. A well-formed answer may still be illegal
-        against the game state; the rules layer makes that check separately."""
+        against the game state. The rules layer makes that check separately."""
 
     @abstractmethod
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         """The question to put to the seat. ``partial`` is the answer as it stands, for a request
-        whose wording tracks the selection being made; the rest ignore it."""
+        whose wording tracks the selection being made, and the rest ignore it."""
 
     @property
     def confirm_label(self) -> str:
@@ -69,7 +69,7 @@ class DecisionRequest(ABC):
 @dataclass(frozen=True, slots=True)
 class ChoosePayment(DecisionRequest):
     """The seat must cover a gold cost, bowing gold producers to make up what its pool lacks. The
-    candidates are the seat's unbowed producers; choosing some bows them, and their production plus
+    candidates are the seat's unbowed producers. Choosing some bows them, and their production plus
     the pool must reach the cost. Excess stays in the pool.
 
     An answer names one producer, and the payment comes back round for whatever is still owed. That
@@ -78,7 +78,7 @@ class ChoosePayment(DecisionRequest):
 
     The request snapshots what it quotes for: the cost, the pool on hand when the cost arose, and
     each producer's yield. :meth:`accepts` asks whether the cost is still *reachable* after the
-    answer rather than whether the answer already covers it — an answer that leaves the cost out of
+    answer rather than whether the answer already covers it. An answer that leaves the cost out of
     reach is refused, because it would strand the payment with the board already changed.
 
     Attributes
@@ -97,7 +97,7 @@ class ChoosePayment(DecisionRequest):
     grantable : tuple of (str, int)
         Each producer that can still raise its own yield this turn, paired with the extra Gold it
         would add. What it costs and how it asks are the card's business, settled in the window it
-        opens as it bows; only the figure is here, because reachability cannot be judged without it.
+        opens as it bows. Only the figure is here, because reachability cannot be judged without it.
     """
 
     amount: int
@@ -146,10 +146,10 @@ class ChoosePayment(DecisionRequest):
             return False
         # Reachability against this request's own snapshot, so a client can refuse the answer before
         # sending it. `flow._continue_payment` asks the live board, and is the authority when they
-        # disagree — an answer can change what another producer is worth.
+        # disagree, because an answer can change what another producer is worth.
         #
-        # Every producer counts at its ceiling, the one being bowed included: it is asked for its own
-        # grant in the window it opens, so naming it does not decide against that grant.
+        # Every producer counts at its ceiling, the one being bowed included: it is asked for its
+        # own grant in the window it opens, so naming it does not decide against that grant.
         ceiling = sum(made for _, made in self.produced) + sum(extra for _, extra in self.grantable)
         return self.available + ceiling >= self.amount
 
@@ -190,11 +190,12 @@ class DiscardToHandSize(DecisionRequest):
 
 @dataclass(frozen=True, slots=True)
 class LeaveBowed(DecisionRequest):
-    """The seat must say which of its bowed cards to keep bowed as its turn begins.
+    """The seat must say which of its bowed cards to keep bowed as its turn begins (CR, May
+    Remain Bowed).
 
-    "May remain bowed" is a choice its controller makes before each straightening rather than a
-    standing exemption (CR, May Remain Bowed), so the turn start asks. The candidates are the cards
-    offering it; those chosen stay bowed and the rest straighten with everything else.
+    The choice is made fresh at each straightening rather than a standing exemption. The
+    candidates are the cards offering the choice. Those chosen stay bowed and the rest
+    straighten with everything else.
     """
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
@@ -221,7 +222,7 @@ def _chooses_exactly_one(request: "DecisionRequest", response: DecisionResponse)
 @dataclass(frozen=True, slots=True)
 class BanishForLegacy(DecisionRequest):
     """The seat must banish one card from hand to pay for the Legacy ability. The candidates are the
-    seat's hand; the chosen card is removed from the game. Not cancellable — announcing Legacy
+    seat's hand. The chosen card is removed from the game. Not cancellable: announcing Legacy
     commits to the cost."""
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
@@ -237,7 +238,7 @@ class BanishForLegacy(DecisionRequest):
 
 @dataclass(frozen=True, slots=True)
 class ChooseLegacyCard(DecisionRequest):
-    """The seat must choose which Legacy card its search found — the candidates are the Legacy cards
+    """The seat must choose which Legacy card its search found. The candidates are the Legacy cards
     in its dynasty deck and provinces. The chosen card is placed into a province next."""
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
@@ -250,8 +251,8 @@ class ChooseLegacyCard(DecisionRequest):
 @dataclass(frozen=True, slots=True)
 class ChooseInvestAmount(DecisionRequest):
     """The seat must choose how much to Invest while recruiting a variable-Invest holding. The
-    candidates are the affordable amounts rendered as strings; the chosen amount is added to the
-    recruit payment and drives the Invest effect. Cancellable — nothing is committed until the
+    candidates are the affordable amounts rendered as strings. The chosen amount is added to the
+    recruit payment and drives the Invest effect. Cancellable, since nothing is committed until the
     payment that follows.
 
     Attributes
@@ -276,9 +277,9 @@ class ChooseInvestAmount(DecisionRequest):
 @dataclass(frozen=True, slots=True)
 class ChooseAmount(DecisionRequest):
     """The seat must say how much Gold to spend on an action whose cost block prints a variable
-    amount — the ``:X:`` whose effects scale with what is paid (CR, Costs).
+    amount: the ``:X:`` whose effects scale with what is paid (CR, Costs).
 
-    The candidates are the amounts the seat could pay, rendered as strings; the answer feeds the
+    The candidates are the amounts the seat could pay, rendered as strings. The answer feeds the
     named resolver, which prices the payment and shapes what the amount bought. A client shows a
     number, not a board selection.
 
@@ -304,16 +305,16 @@ class ChooseAmount(DecisionRequest):
 
     @property
     def cancellable(self) -> bool:
-        """Backing out unwinds the action; nothing is paid until the amount is settled."""
+        """Backing out unwinds the action. Nothing is paid until the amount is settled."""
         return True
 
 
 @dataclass(frozen=True, slots=True)
 class ChooseOption(DecisionRequest):
-    """The seat must pick one of the outcomes an ability spells out — the "gain or lose", "this
-    player or that" a card leaves to the player rather than reading off the board.
+    """The seat must pick one of the outcomes an ability spells out, such as "gain or lose" or
+    "this player or that".
 
-    The candidates are the outcomes as the seat reads them; the answer feeds the named resolver,
+    The candidates are the outcomes as the seat reads them. The answer feeds the named resolver,
     which turns the chosen label back into effects. A client shows a list of wordings, not a board
     selection and not a number.
 
@@ -327,7 +328,7 @@ class ChooseOption(DecisionRequest):
         The card offering the choice, handed to the resolver as its context.
     resolver_context : tuple of str, optional
         What an earlier step of the same choice settled, handed to the resolver alongside the
-        answer — a resolver is otherwise given only what was picked. Default empty.
+        answer. A resolver is otherwise given only what was picked. Default empty.
     """
 
     question: str
@@ -350,7 +351,7 @@ class ChooseOption(DecisionRequest):
 @dataclass(frozen=True, slots=True)
 class ChooseAbilityTarget(DecisionRequest):
     """The seat must choose the target of an activated ability it has announced. The candidates are
-    the cards the ability may legally target — all in play, so a client renders them as board
+    the cards the ability may legally target, all in play, so a client renders them as board
     selections.
 
     Attributes
@@ -418,7 +419,7 @@ ASSIGNMENT_SEPARATOR = "@"
 
 def assignment_token(card_id: str, battlefield: int) -> str:
     """The candidate string pairing the Personality ``card_id`` with the battlefield at index
-    ``battlefield`` — how :class:`~.AssignUnits` names one place a unit could go."""
+    ``battlefield``: how :class:`~.AssignUnits` names one place a unit could go."""
     return f"{card_id}{ASSIGNMENT_SEPARATOR}{battlefield}"
 
 
@@ -447,13 +448,13 @@ def assignment(token: str) -> tuple[str, int]:
 class AssignUnits(DecisionRequest):
     """The seat must assign any number of its unbowed Personalities from home to battlefields.
 
-    A candidate pairs a unit with a battlefield rather than naming either alone, because assigning is
-    a choice of *where* and one Personality may go to any battlefield the attack made. Read a choice
-    through :func:`~.assignment` rather than splitting the string. The whole seat answers at once:
-    the CR has each seat assign simultaneously, so this is one request per seat rather than one per
-    unit.
+    A candidate pairs a unit with a battlefield rather than naming either alone, because assigning
+    is a choice of *where* and one Personality may go to any battlefield the attack made. Read a
+    choice through :func:`~.assignment` rather than splitting the string. The whole seat answers at
+    once: the CR has each seat assign simultaneously, so this is one request per seat rather than
+    one per unit.
 
-    Assigning nothing is a well-formed answer — the CR lets a seat keep some or all of its
+    Assigning nothing is a well-formed answer, since the CR lets a seat keep some or all of its
     Personalities at home.
 
     Attributes
@@ -536,10 +537,8 @@ class ChooseFortificationProvince(DecisionRequest):
 class Confirm(DecisionRequest):
     """The seat must answer a yes/no question naming what it is being asked to do.
 
-    An optional effect whose subject is already settled — "destroy this Farm to straighten the card
-    it recruited" — reads as a question rather than as a card selection. Answering yes returns the
-    candidates, answering no returns none, so this is an optional :class:`~.ChooseCards` in every
-    respect but how a client puts it: a question with two buttons instead of a board selection.
+    Answering yes returns the candidates. Answering no returns none. A client renders this as a
+    yes/no question rather than a board selection.
 
     Attributes
     ----------
@@ -577,7 +576,7 @@ class Confirm(DecisionRequest):
 
 @dataclass(frozen=True, slots=True)
 class ChooseCards(DecisionRequest):
-    """The seat must choose between ``minimum`` and ``maximum`` of the candidate cards — a
+    """The seat must choose between ``minimum`` and ``maximum`` of the candidate cards, a
     variable-count target, as when a triggered effect targets "zero to two" cards. The chosen ids
     feed the named resolver, whose effects apply once the choice is made. The candidates are the
     cards the effect may legally target, all in play, so a client renders them as board selections.
@@ -585,14 +584,14 @@ class ChooseCards(DecisionRequest):
     Attributes
     ----------
     minimum : int
-        The fewest cards the seat may choose — zero when the effect is optional.
+        The fewest cards the seat may choose, zero when the effect is optional.
     maximum : int
         The most cards the seat may choose.
     resolver : str
         The registered choice resolver that turns the chosen ids into effects.
     source_id : str, optional
-        A card id handed to the resolver as its context. Which card that is belongs to the resolver
-        — often the one whose trigger raised the choice, sometimes the card being acted on. None
+        A card id handed to the resolver as its context. Which card that is belongs to the resolver,
+        often the one whose trigger raised the choice, sometimes the card being acted on. None
         when the rulebook raises the choice and there is no card to name. Default None.
     """
 
@@ -629,18 +628,16 @@ class ChooseCards(DecisionRequest):
 
 @dataclass(frozen=True, slots=True)
 class ChooseDistribution(DecisionRequest):
-    """The seat must divide ``count`` identical creations among one or more of the candidates — the
-    "create N Followers and attach them to one or more of your Personalities" a card hands to its
-    controller rather than reading off the board.
+    """The seat must divide ``count`` identical creations among one or more of the candidates, as
+    when a card creates several Followers and its controller chooses how to attach them.
 
-    The answer names a candidate once per creation it takes, so an id appearing twice takes two and
-    one left out takes none. That keeps the answer the tuple of ids every other decision carries,
-    and it says "one or more" without a second count: a card getting nothing is simply not named.
+    The answer names a candidate once per creation it takes, so an id appearing twice takes two
+    and one left out takes none.
 
     Attributes
     ----------
     count : int
-        How many creations there are to divide. All of them are placed — the seat chooses where
+        How many creations there are to divide. All of them are placed, and the seat chooses where
         they go, not whether they arrive.
     resolver : str
         The registered choice resolver that turns the division into effects.
