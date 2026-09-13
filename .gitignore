@@ -10,6 +10,15 @@
 /AGENTS.md
 /CLAUDE.md
 
+# Installed skills. The source is src/yasuki_skills/skills/; these are the copies
+# `pixi run install-skills` writes, one directory per agent that reads them.
+/.agents/
+/.claude/
+/.cursor/
+/.opencode/
+/.pi/
+/.github/skills/
+
 # Auto-generated version file (hatch-vcs)
 src/yasuki_core/_version.py
 
