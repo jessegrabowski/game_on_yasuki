@@ -129,7 +129,9 @@ def init_pool(min_size: int = 2, max_size: int = 20) -> None:
         kwargs={
             "autocommit": True,
             "row_factory": dict_row,
-            "options": "-c statement_timeout=15000",
+            # 30s rather than the accounts pool's 15s: the card reads include whole-corpus
+            # queries over 20k prints, which pass that ceiling on a loaded machine.
+            "options": "-c statement_timeout=30000",
             "connect_timeout": 5,
         },
     )
