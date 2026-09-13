@@ -1,6 +1,11 @@
 from pathlib import Path
 
-from yasuki_skills.bundle import SKILLS_SOURCE, available_skills, is_source_checkout
+from yasuki_skills.bundle import (
+    SKILLS_SOURCE,
+    available_skills,
+    docs_source,
+    is_source_checkout,
+)
 
 
 def test_the_bundled_skills_are_discovered():
@@ -49,3 +54,10 @@ def test_a_project_with_its_own_unrelated_instruction_file_is_not_the_checkout(
     (project / "src" / "yasuki_skills" / "AGENTS.md").write_text("theirs\n", encoding="utf-8")
 
     assert not is_source_checkout(project, instructions)
+
+
+def test_the_documentation_tree_is_found():
+    docs = docs_source()
+
+    assert docs is not None
+    assert (docs / "contributing" / "adding_a_card.md").is_file()

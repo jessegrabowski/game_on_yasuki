@@ -10,6 +10,8 @@ AGENTS_FILE = "AGENTS.md"
 
 INSTRUCTIONS = PACKAGE_ROOT / AGENTS_FILE
 
+REPOSITORY = PACKAGE_ROOT.parents[1]
+
 
 def available_skills(source: Path | None = None) -> list[Path]:
     """Return the bundled skill directories, sorted by name.
@@ -53,3 +55,34 @@ def is_source_checkout(root: Path, instructions: Path | None = None) -> bool:
     candidate = root / "src" / PACKAGE_NAME / AGENTS_FILE
 
     return candidate.is_file() and candidate.resolve() == instructions.resolve()
+
+
+def docs_source() -> Path | None:
+    """Locate the documentation pages: packaged in the wheel, else the checkout's own tree.
+
+    Returns
+    -------
+    docs : Path or None
+        Root of the documentation tree, or None when neither is present.
+    """
+    packaged = PACKAGE_ROOT / "docs"
+    if packaged.is_dir():
+        return packaged
+
+    repository = REPOSITORY / "docs"
+
+    return repository if repository.is_dir() else None
+
+
+def source_root() -> Path:
+    """Return the directory an installed package's source is resolved against.
+
+    A page includes its samples by repository path (``../../src/yasuki_core/...``). A wheel has no
+    ``src/``, so the remainder is resolved against the directory holding the installed packages.
+
+    Returns
+    -------
+    root : Path
+        Where ``yasuki_core`` and its siblings live.
+    """
+    return PACKAGE_ROOT.parent

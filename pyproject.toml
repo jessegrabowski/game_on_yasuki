@@ -41,6 +41,14 @@ version-file = "src/yasuki_core/_version.py"
 [tool.hatch.build.targets.wheel]
 packages = ["src/yasuki_core", "src/yasuki_web", "src/yasuki_gui", "src/yasuki_skills"]
 
+# The narrative pages ship inside the package so an installed skill can carry them without a
+# checkout. Named subdirectories rather than docs/, which also holds the Sphinx project and its
+# build output.
+[tool.hatch.build.targets.wheel.force-include]
+"docs/contributing" = "yasuki_skills/docs/contributing"
+"docs/design" = "yasuki_skills/docs/design"
+"docs/getting_started" = "yasuki_skills/docs/getting_started"
+
 [tool.hatch.build.targets.sdist]
 include = ["src", "README.md", "tests", "pyproject.toml"]
 
