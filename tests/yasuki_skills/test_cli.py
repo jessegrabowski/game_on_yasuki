@@ -124,3 +124,28 @@ def test_a_package_carrying_no_skills_is_an_error(tmp_path: Path, monkeypatch, c
 
     assert main([]) == 1
     assert "No skills found" in capsys.readouterr().err
+
+
+def test_checking_a_current_install_exits_zero(tmp_path: Path, skill: Path, monkeypatch, capsys):
+    monkeypatch.setattr("yasuki_skills.bundle.SKILLS_SOURCE", skill.parent)
+    monkeypatch.setattr("yasuki_skills.bundle.docs_source", lambda: None)
+    (tmp_path / ".claude" / "skills").mkdir(parents=True)
+    install(tmp_path, [skill], chosen(["claude"]), force=False)
+    monkeypatch.chdir(tmp_path)
+
+    assert main(["--check"]) == 0
+    assert "current" in capsys.readouterr().out
+
+
+def test_checking_a_stale_install_exits_non_zero(tmp_path: Path, skill: Path, monkeypatch, capsys):
+    """CI gates on this: a retired skill still installed fails the build."""
+    monkeypatch.setattr("yasuki_skills.bundle.SKILLS_SOURCE", skill.parent)
+    monkeypatch.setattr("yasuki_skills.bundle.docs_source", lambda: None)
+    stale = tmp_path / ".claude" / "skills" / "rules-engine"
+    stale.mkdir(parents=True)
+    (stale / "SKILL.md").write_text("---\nname: rules-engine\n---\n", encoding="utf-8")
+    install(tmp_path, [skill], chosen(["claude"]), force=False)
+    monkeypatch.chdir(tmp_path)
+
+    assert main(["--check"]) == 1
+    assert "rules-engine" in capsys.readouterr().out

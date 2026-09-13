@@ -7,6 +7,7 @@ from typing import NamedTuple, TextIO
 
 from yasuki_skills import bundle
 from yasuki_skills.agents_file import agents_block, update_instructions
+from yasuki_skills.check import drift
 from yasuki_skills.harnesses import BY_NAME, HARNESSES, Harness
 from yasuki_skills.install import install_all, link_instructions
 
@@ -41,6 +42,13 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--force", action="store_true", help="Replace a skill that is already installed."
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Install nothing; report whether the skills already installed here are current, "
+        "and exit non-zero if they are not. Checks every agent's directory, so --harness and "
+        "--force do not apply.",
     )
     parser.add_argument("--list", action="store_true", help="List the bundled skills and exit.")
 
@@ -205,6 +213,13 @@ def main(argv: list[str] | None = None) -> int:
         for skill in skills:
             print(skill.name)
         return 0
+
+    if args.check:
+        reports = drift(Path.cwd())
+        for line in reports:
+            print(line)
+        print("Installed skills are current." if not reports else f"{len(reports)} to fix.")
+        return 1 if reports else 0
 
     interactive = sys.stdin.isatty()
     names = args.harness or (ask() if interactive else [])
