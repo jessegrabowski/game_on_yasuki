@@ -1,51 +1,61 @@
 ---
 name: card-data
 description: >
-  Use this whenever you work on card data or the card database — editing a card's text/stats/printings,
-  adding a set, issuing an erratum, adding card art/images, changing the Postgres schema, or the install
-  pipeline that loads the committed YAML into the DB — and read it first, since the YAML is the source of
-  truth (not the DB) and the reload and errata rules are easy to get wrong. Covers the file-first data
-  model (assets/database/ YAML as source of truth), the cards/prints/errata/images schema, and the read
-  path in database.py. The account/user database is separate — see the accounts skill.
+  Use this when you are changing what a card *is* rather than what it does: correcting a title,
+  text, stat or keyword, adding a set, issuing an erratum, adding card art or an image manifest,
+  touching the PostgreSQL schema, or working on the pipeline that loads the committed YAML into the
+  database. Fires on "add a set", "fix this card's text", "the database has the wrong", "issue an
+  erratum", "add card images", "reload the card database", and on any question about where card data
+  lives. Read it first, because the YAML is the source of truth and the database is a cache that
+  will not pick up an edit without --force, and because a card's id is derived from its title, so
+  editing a title silently orphans every handler keyed on the old one. Covers
+  src/yasuki_core/assets/database/, src/yasuki_core/install/ and database.py. Implementing a card's
+  behavior is the implementing-a-card skill; the user and deck database is accounts.
 ---
 
-# Card data & the card database
+# Card data and the card database
 
 ## Where it lives
 
-- `src/yasuki_core/assets/database/` — the **source of truth** (committed YAML + schema):
-  `sets/<slug>.yaml` (card text/stats/printings/errata), `images/<slug>.yaml` (image manifests),
-  `set_info.yaml`, `counters.yaml`, `schema.sql`
-- `src/yasuki_core/install/` — the loader: `install_db`, `yaml_to_sql`, `images_to_sql`, `sets_to_sql`
-- `src/yasuki_core/database.py` — the card read/query path; `paths.py` — asset locations
+- `src/yasuki_core/assets/database/sets/`: one YAML file per set, the source of truth
+- `src/yasuki_core/assets/database/set_info.yaml`, `set_alias.yaml`, `counters.yaml`: set metadata
+- `src/yasuki_core/assets/database/images/`: one image manifest per printing
+- `src/yasuki_core/assets/database/card_ids.txt`: the generated index of every card id
+- `src/yasuki_core/assets/database/schema.sql`: the PostgreSQL schema
+- `src/yasuki_core/install/`: the load pipeline: `install_db.py`, `yaml_to_sql.py`,
+  `sets_to_sql.py`, `images_to_sql.py`, `card_index.py`, `registration_audit.py`
+- `src/yasuki_core/database.py`: the read path everything else goes through
 
 ## What it does
 
-The committed YAML is authoritative; `install/` loads it into PostgreSQL (a derived cache). Reload after
-edits with `pixi run install-db --force` (plain `install-db` is do-nothing-on-conflict). The schema:
+The committed YAML is the source of truth and PostgreSQL is a derived cache. `pixi run install-db`
+loads one into the other and does nothing where a row already exists, so an edit to a set file is
+invisible until `pixi run install-db --force`. Fixing a card by editing the database is always
+wrong: the next reload overwrites it.
 
-- `cards` — one row per *logical* card, PK `card_id` (a title slug); canonical stats + `rules_text`.
-- `prints` — one row per *physical printing* (`card_id` FK, `set_id` FK, `printing_id` within-card).
-- `print_images` — images attach to **printings** (`role` front/back/alt, `sha256`, `path`).
-- `card_revisions` — errata as a **revision time-axis** on the logical card (0 = original, highest =
-  current), orthogonal to printings.
-- Junctions off `card_id` (cascade): `card_clans`, `card_card_types`, `card_decks`, `card_keywords`.
-- `counters` + `card_grants_counter`; `card_creates` (spawnable tokens); `l5r_sets`, `formats`,
-  `card_legalities`/`print_legalities`.
+A card's id is derived from its printed title by `card_slug` rather than written down. Renaming a
+card therefore renames its id, which orphans every handler, token and rulebook exception keyed on
+the old one. `card_ids.txt` is the committed index of all of them; regenerate it with
+`pixi run card-index` after changing set YAML and commit the result.
 
-Must-knows: canonical `cards.rules_text` follows the **most-recent-printing** rule with errata folded on
-top; `prints.rules_text` is a per-printing override (NULL → fall back to the card's text); the current
-erratum is mirrored onto the `cards` row so ordinary reads need no join to `card_revisions`. Counters are
-scalar host state, **not** cards. Flip cards self-reference via `cards.back_card_id` (`is_back` flag).
-Image *bytes* are never committed — they live in an R2 bucket + a gitignored local `sets/` cache.
+An erratum appends to the card's revision history and mirrors the newest text onto the card itself,
+so the old text stays readable rather than being overwritten. Errata art is an ordinary card image:
+a file in the set's image directory and an entry in that printing's manifest.
 
-## How it fits the big picture
+## What checks it
 
-This data feeds everything: `factory` builds the frozen card models from these rows at setup (see the
-`game-pieces` skill), and `search` queries this schema (see the `search` skill). The engine itself never
-touches the DB — cards are resolved up front, then the engine works purely in memory. The **accounts**
-database is entirely separate (see the `accounts` skill).
+- `card-index` (pre-commit, and a test): `card_ids.txt` matches the set YAML, in both directions
+- `registration-audit` (pre-commit, and a test in CI): every registered handler names a real card
+- The `{card}` role in the docs: a card title deriving to an id the index does not hold fails the
+  documentation build
 
-Full narrative: `docs/design/database.md` is the most complete design doc, and it is worth reading
-before editing card data. `docs/contributing/the_card_data.md` is the shorter card-author view of
-the same thing, and it covers the derived `card_id`, which appears nowhere in the YAML.
+## How it fits
+
+`docs/design/database.md` is the reference: the schema, the two planes of metadata and image bytes,
+the reload rules and how errata are recorded. `docs/contributing/the_card_data.md` covers authoring
+a card's YAML and how its id is derived. `docs/getting_started/setup.md` is how to get a database at
+all.
+
+The behavior a card's text implies is the `implementing-a-card` skill, and the query language that
+reads these rows is `card-search`. The `accounts` skill covers the separate user database, which is
+kept apart so that reseeding cards can never reach user data.
