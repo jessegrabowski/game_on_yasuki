@@ -1,0 +1,20 @@
+# The reading order for a first card.
+docs/contributing/what_a_card_is.md
+docs/contributing/the_card_data.md
+docs/contributing/reading_card_text.md
+docs/contributing/adding_a_card.md
+docs/contributing/reacting_to_events.md
+docs/contributing/an_ability.md
+docs/contributing/several_abilities.md
+docs/contributing/asking_a_question.md
+docs/contributing/holdings_and_gold.md
+docs/contributing/stats_and_costs.md
+# One page per kind of card that needs something other than the common shape.
+docs/contributing/attachments.md
+docs/contributing/battle_cards.md
+docs/contributing/cards_outside_play.md
+docs/contributing/creating_cards.md
+docs/contributing/the_favor_and_the_court.md
+# What happens to a handler once it is written.
+docs/design/systems/registration-and-the-audit.md
+docs/design/systems/bots-and-policies.md

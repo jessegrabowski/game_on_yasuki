@@ -4,6 +4,21 @@
 
 .pixi/
 
+# Agent instruction files. The source is src/yasuki_skills/AGENTS.md; these root names are
+# symlinks the skills installer places, so every harness reads the packaged file rather than a
+# copy of it that drifts.
+/AGENTS.md
+/CLAUDE.md
+
+# Installed skills. The source is src/yasuki_skills/skills/; these are the copies
+# `pixi run install-skills` writes, one directory per agent that reads them.
+/.agents/
+/.claude/
+/.cursor/
+/.opencode/
+/.pi/
+/.github/skills/
+
 # Auto-generated version file (hatch-vcs)
 src/yasuki_core/_version.py
 

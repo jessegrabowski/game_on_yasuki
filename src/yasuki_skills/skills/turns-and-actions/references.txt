@@ -1,0 +1,8 @@
+docs/design/engine.md
+docs/design/systems/turn-flow.md
+docs/design/systems/actions-and-legality.md
+docs/design/systems/action-lifecycles.md
+docs/design/systems/game-state.md
+docs/design/systems/board-queries.md
+docs/design/systems/the-replay-log.md
+docs/design/package_boundaries.md

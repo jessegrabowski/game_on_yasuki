@@ -15,7 +15,11 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY pyproject.toml pixi.lock ./
-RUN mkdir -p src/yasuki_core && touch src/yasuki_core/__init__.py
+# Enough of the tree for the editable install to resolve: a package to point at, and the
+# documentation directories the wheel force-includes. The pages themselves stay out, since
+# .dockerignore drops markdown and the server never installs skills.
+RUN mkdir -p src/yasuki_core docs/contributing docs/design docs/getting_started \
+    && touch src/yasuki_core/__init__.py
 RUN pixi install --locked --environment prod
 
 COPY src/ ./src/

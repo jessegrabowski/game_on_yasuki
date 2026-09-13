@@ -17,7 +17,7 @@ Image **bytes** are the one thing never committed. They live in the R2 bucket (d
 |------|------|----------|------|
 | Card data (per set) | `src/yasuki_core/assets/database/sets/<slug>.yaml` | Yes (git) | Titles, text, stats, keywords, per-printing fields, **errata** |
 | Image manifests (per set) | `src/yasuki_core/assets/database/images/<slug>.yaml` | Yes (git) | Maps `(card_id, printing_id)` -> image files + sha256 |
-| Set metadata | `src/yasuki_core/assets/database/set_info.yaml`, `set_alias.yaml` | Yes (git) | Set names, codes, release dates, arcs |
+| Set metadata | `src/yasuki_core/assets/database/set_info.yaml` | Yes (git) | Set names, codes, release dates, arcs |
 | Schema | `src/yasuki_core/assets/database/schema.sql` | Yes (git) | The Postgres schema |
 | Local image cache | `sets/<slug>/<file>.jpg` | No (gitignored) | Image **bytes**, served locally |
 | Durable image store | R2 bucket `l5r-card-images` | No (cloud) | Image **bytes**, served in production |
