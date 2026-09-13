@@ -1,4 +1,5 @@
 import pathlib
+import subprocess
 
 from hooks.skill_paths import claims, main, repository_files, unresolved
 
@@ -18,11 +19,20 @@ The table in `docs/contributing/adding_a_card.md` maps wording to hook. The regi
 
 def repo(tmp_path: pathlib.Path) -> pathlib.Path:
     (tmp_path / "src/yasuki_core/engine/rules/cards").mkdir(parents=True)
+    (tmp_path / "src/yasuki_core/engine/rules/cards/imperial_edition.py").touch()
     (tmp_path / "src/yasuki_core/engine/registrar.py").touch()
     (tmp_path / "docs/contributing").mkdir(parents=True)
     (tmp_path / "docs/contributing/adding_a_card.md").touch()
 
-    return tmp_path
+    return track(tmp_path)
+
+
+def track(root: pathlib.Path) -> pathlib.Path:
+    """Make ``root`` a repository with everything in it committed, which is what the hook reads."""
+    subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+    subprocess.run(["git", "add", "-A"], cwd=root, check=True)
+
+    return root
 
 
 def written(tmp_path: pathlib.Path, source: str) -> str:
@@ -58,8 +68,9 @@ def test_a_module_that_moved_is_found_wherever_it_landed(tmp_path):
     moved = root / "src/yasuki_core/engine/rules/board/queries.py"
     moved.parent.mkdir(parents=True)
     moved.touch()
+    track(root)
 
-    assert unresolved("`queries.py`", root, repository_files(root)) == []
+    assert unresolved("`queries.py`", repository_files(root)) == []
 
 
 def test_a_deleted_module_fails_and_is_named(tmp_path, monkeypatch, capsys):
@@ -79,3 +90,14 @@ def test_a_stale_path_in_the_description_fails(tmp_path, monkeypatch, capsys):
 
     assert main([written(tmp_path, stale)]) == 1
     assert "economy.py" in capsys.readouterr().out
+
+
+def test_a_file_kept_out_of_the_repository_is_not_a_resolution(tmp_path, monkeypatch, capsys):
+    """An excluded file resolves on the author's machine and nowhere else, so CI would fail alone."""
+    root = repo(tmp_path)
+    (root / "src/yasuki_core/assets").mkdir(parents=True)
+    (root / "src/yasuki_core/assets/set_alias.yaml").touch()
+    monkeypatch.chdir(root)
+
+    assert main([written(tmp_path, SKILL.replace("`registrar.py`", "`set_alias.yaml`"))]) == 1
+    assert "set_alias.yaml" in capsys.readouterr().out

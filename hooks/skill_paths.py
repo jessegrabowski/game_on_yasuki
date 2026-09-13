@@ -1,5 +1,6 @@
 import pathlib
 import re
+import subprocess
 import sys
 
 BACKTICKED = re.compile(r"`([^`\s]+)`")
@@ -7,8 +8,6 @@ BACKTICKED = re.compile(r"`([^`\s]+)`")
 ROOTS = ("src/", "docs/", "tests/", "hooks/", "scripts/")
 
 SEARCHED = ("src", "docs", "tests", "hooks", "scripts")
-
-PRUNED = {".git", ".pixi", ".venv", "__pycache__", "node_modules", "_build", ".ruff_cache"}
 
 # A skill writes a placeholder where the name varies by card or set, as in ``cards/<set>.py``.
 PLACEHOLDER = re.compile(r"[<>*]")
@@ -47,22 +46,30 @@ def claims(text: str) -> list[str]:
 
 
 def repository_files(repo: pathlib.Path) -> set[str]:
-    """Return every file under the searched trees, as a path relative to ``repo``."""
-    found = set()
-    for root in SEARCHED:
-        for path in (repo / root).rglob("*"):
-            if path.is_file() and not PRUNED & set(path.parts):
-                found.add(path.relative_to(repo).as_posix())
+    """Return every tracked file under the searched trees, as a path relative to ``repo``.
 
-    return found
+    Tracked rather than present on disk: a file kept out of the repository by ``.gitignore`` or
+    ``.git/info/exclude`` resolves on the author's machine and nowhere else, which is a check that
+    only ever fails in CI.
+    """
+    listed = subprocess.run(
+        ["git", "ls-files", "-z", *SEARCHED], cwd=repo, capture_output=True, text=True, check=True
+    )
+
+    return {path for path in listed.stdout.split("\0") if path}
 
 
-def unresolved(text: str, repo: pathlib.Path, files: set[str]) -> list[str]:
-    """Return the claims in ``text`` that name nothing under ``repo``."""
+def unresolved(text: str, files: set[str]) -> list[str]:
+    """Return the claims in ``text`` that name nothing in ``files``."""
     missing = []
     for claim in claims(text):
+        if claim.endswith("/"):
+            if not any(path.startswith(claim) for path in files):
+                missing.append(claim)
+            continue
+
         if claim.startswith(ROOTS):
-            if not (repo / claim).exists():
+            if claim not in files:
                 missing.append(claim)
             continue
 
@@ -93,7 +100,7 @@ def main(argv: list[str] | None = None) -> int:
     for name in argv:
         skill = pathlib.Path(name)
 
-        for claim in unresolved(skill.read_text(encoding="utf-8"), repo, files):
+        for claim in unresolved(skill.read_text(encoding="utf-8"), files):
             print(f"{skill}: names nothing in the repository: {claim}")
             failed = 1
 
