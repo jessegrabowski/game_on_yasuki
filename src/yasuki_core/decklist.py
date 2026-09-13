@@ -1,6 +1,6 @@
 import re
 
-_COUNT_PREFIX = re.compile(r"^(\d+)[x×]\s+", re.IGNORECASE)
+_COUNT_PREFIX = re.compile(r"^(\d+)x\s+", re.IGNORECASE)
 _SET_SUFFIX = re.compile(r"^(.*?)\s+\[([^\]]+)\]\s*$")
 _ART_TRAILER = re.compile(r"\s*\{art:\s*(.+?)\}\s*$")
 

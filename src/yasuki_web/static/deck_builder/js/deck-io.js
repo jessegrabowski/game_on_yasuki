@@ -129,7 +129,7 @@ function _parseCardLine(text) {
   let count = 1;
   let rest = text;
 
-  const countMatch = rest.match(/^(\d+)[x×]\s+/i);
+  const countMatch = rest.match(/^(\d+)x\s+/i);
   if (countMatch) {
     count = parseInt(countMatch[1], 10);
     rest = rest.slice(countMatch[0].length);

@@ -30,11 +30,6 @@ describe('parseDeckYaml', () => {
     assert.equal(r.dynasty[0].count, 3);
     assert.equal(r.dynasty[0].name, 'Doji Hoturi');
   });
-  it('parses unicode multiplication sign as count prefix', () => {
-    const r = parseDeckYaml('name: T\nfate:\n  - 2× Ambush');
-    assert.equal(r.fate[0].count, 2);
-    assert.equal(r.fate[0].name, 'Ambush');
-  });
   it('parses set suffix', () => {
     const r = parseDeckYaml('name: T\nfate:\n  - 2x Ambush [Imperial Edition]');
     assert.equal(r.fate[0].count, 2);

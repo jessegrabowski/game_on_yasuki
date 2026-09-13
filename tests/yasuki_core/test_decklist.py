@@ -1,7 +1,7 @@
 from yasuki_core.decklist import parse_deck_yaml
 
-# A small but representative export: metadata header, all three sections, counts (both "x" and the
-# "×" the deck-builder emits), set suffixes, and an {art: ...} trailer.
+# A small but representative export: metadata header, all three sections, counts, set suffixes,
+# and an {art: ...} trailer.
 SAMPLE = """\
 name: Crab Beats
 author: Ada
@@ -20,7 +20,7 @@ Dynasty: # (3)
 
 Fate: # (2)
   # Strategies (2)
-  - 2× Ambush [Lotus Edition]
+  - 2x Ambush [Lotus Edition]
 """
 
 
