@@ -1,0 +1,2 @@
+docs/contributing/the_card_data.md
+docs/design/database.md

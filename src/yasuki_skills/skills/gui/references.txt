@@ -1,0 +1,2 @@
+docs/design/tk-client.md
+docs/getting_started/running.md

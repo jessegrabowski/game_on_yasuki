@@ -1,0 +1,11 @@
+docs/contributing/adding_a_card.md
+docs/contributing/holdings_and_gold.md
+docs/contributing/reacting_to_events.md
+docs/contributing/reading_card_text.md
+docs/contributing/the_card_data.md
+docs/contributing/what_a_card_is.md
+docs/design/systems/bots-and-policies.md
+docs/design/systems/gold.md
+docs/design/systems/registration-and-the-audit.md
+docs/design/systems/stats.md
+docs/design/systems/triggers-and-the-cascade.md
