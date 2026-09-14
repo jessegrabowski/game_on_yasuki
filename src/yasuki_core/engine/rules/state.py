@@ -138,10 +138,11 @@ class GameState:
         is a fact about the action rather than about the board it left behind. Ephemeral and rebuilt
         by replay. Default empty.
     honor_adjustments : dict mapping PlayerId to int
-        The net change the Honor Interrupts taken against the action now resolving make to the
-        size of each seat's next Honor gain or loss. The gain or loss has not been performed yet,
-        so the change waits here until it is, and performing it spends the entry. Cleared as the
-        next action begins. Ephemeral and rebuilt by replay. Default empty.
+        The net change the Honor Interrupts taken against a pending Honor gain or loss make to its
+        size, by the seat whose Honor moves. The change performs once every seat has answered and
+        spends the entry. Keyed by seat, so where one action moves a seat's Honor twice the
+        Interrupt reaches the first change only, a narrowing of the datasheet's "one of the
+        action's Honor gains or losses". Ephemeral and rebuilt by replay. Default empty.
     honor_interrupted : set of PlayerId
         The seats that have taken the Honor Interrupt against the action now resolving. The
         datasheet allows a Repeatable Interrupt once per action. Cleared as the next action begins.

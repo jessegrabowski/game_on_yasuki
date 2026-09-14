@@ -228,12 +228,15 @@ def finish_recruit(
 ) -> None:
     card = game.table.cards_by_id[card_id]
     _clear_sincerity(game, card)
+    # The Invest before the Proclaim: the Proclaim's gain can pause for an Honor Interrupt, and
+    # nothing may run behind a paused cascade. The two never combine, since ``recruit`` refuses
+    # Invest with Proclaim, so the order changes nothing a card can observe.
+    finish_invest(game, card, invest_amount)
     if proclaim:
         game.use_once(proclaim_key(card.owner, game.turn))
         triggers.resolve_effects(
             game, [GainHonor(card.owner, effective_personal_honor(game, card))]
         )
-    finish_invest(game, card, invest_amount)
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:

@@ -5,6 +5,9 @@ from yasuki_core.engine.players import PlayerId
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseHonorInterrupt,
+    honor_interrupt,
+    honor_interrupt_token,
     Confirm,
     DecisionRequest,
     ChooseCards,
@@ -348,3 +351,33 @@ def test_a_distribution_with_no_registered_wording_still_says_what_it_wants():
     )
 
     assert request.prompt() == "Divide them among one or more cards (2 of 2 left)"
+
+
+def _honor_interrupt() -> ChooseHonorInterrupt:
+    return ChooseHonorInterrupt(
+        seat=PlayerId.P2,
+        candidates=(honor_interrupt_token("a", 1), honor_interrupt_token("a", -1)),
+        honor_seat=PlayerId.P1,
+        amount=3,
+        asked=frozenset(),
+    )
+
+
+def test_an_honor_interrupt_takes_one_way_to_answer_or_a_pass():
+    request = _honor_interrupt()
+
+    assert request.accepts(DecisionResponse())
+    assert request.accepts(DecisionResponse((honor_interrupt_token("a", -1),)))
+    assert not request.accepts(DecisionResponse(request.candidates))
+    assert not request.accepts(DecisionResponse(("b@+1",)))
+
+
+def test_an_honor_interrupt_token_round_trips():
+    assert honor_interrupt(honor_interrupt_token("card@x", -1)) == ("card@x", -1)
+
+
+def test_an_honor_interrupt_names_the_change_it_guards():
+    assert (
+        _honor_interrupt().prompt() == "P1 gains 3 Honor. Discard an Honor card to change it by 1?"
+    )
+    assert _honor_interrupt().confirm_label == "Pass"

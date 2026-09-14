@@ -5,12 +5,14 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseBattlefield,
     ChooseDistribution,
     ChooseInvestAmount,
+    ChooseHonorInterrupt,
     ChooseOption,
     ChoosePayment,
     Confirm,
     DecisionResponse,
     assignment,
     assignment_token,
+    honor_interrupt,
 )
 from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
@@ -84,7 +86,13 @@ class Presenter:
             # is how they are brought home or sent somewhere else.
             field.begin_selection({assignment(token)[0] for token in pending.candidates})
         elif pending is not None and not isinstance(
-            pending, ChooseAmount | ChooseInvestAmount | ChooseOption | Confirm | ChooseBattlefield
+            pending,
+            ChooseAmount
+            | ChooseInvestAmount
+            | ChooseOption
+            | ChooseHonorInterrupt
+            | Confirm
+            | ChooseBattlefield,
         ):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
             # amount is named on the prompt's spinner and a yes/no question on its buttons, so
@@ -224,6 +232,17 @@ class Presenter:
             # battlefield, and the whole map goes over as the one answer the CR's simultaneous
             # assignment calls for.
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
+        if isinstance(pending, ChooseHonorInterrupt):
+            # The cards are in hand, so each way to interrupt is a button naming the card and the
+            # direction, and passing is the confirm.
+            cards = self.host.runner.session.game.table.cards_by_id
+            interrupts: list[ButtonSpec] = []
+            for token in pending.candidates:
+                card_id, delta = honor_interrupt(token)
+                label = f"Discard {cards[card_id].name} ({delta:+d})"
+                interrupts.append((label, lambda chosen=token: self.submit_answer((chosen,)), True))
+            interrupts.append((pending.confirm_label, lambda: self.submit_answer(()), True))
+            return pending.prompt(), interrupts
         if isinstance(pending, ChooseOption):
             # An outcome the card spells out rather than anything on the board: "gain or lose" or
             # "which player". It is read as a list of wordings and answered by picking one.

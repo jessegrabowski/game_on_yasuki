@@ -481,6 +481,73 @@ class AssignUnits(DecisionRequest):
         return len(set(assigned)) == len(assigned)
 
 
+def honor_interrupt_token(card_id: str, delta: int) -> str:
+    """The candidate string pairing the Honor card ``card_id`` with the ``delta`` discarding it
+    gives a gain or loss: how :class:`~.ChooseHonorInterrupt` names one way to answer. The same
+    separator the assignment tokens use, so a client splits both alike."""
+    return f"{card_id}{ASSIGNMENT_SEPARATOR}{delta:+d}"
+
+
+def honor_interrupt(token: str) -> tuple[str, int]:
+    """The card and delta :func:`~.honor_interrupt_token` encoded.
+
+    Returns
+    -------
+    card_id : str
+        The Honor card to discard.
+    delta : int
+        The change to the gain or loss's size, 1 or -1.
+
+    Raises
+    ------
+    ValueError
+        If ``token`` names neither.
+    """
+    card_id, separator, delta = token.rpartition(ASSIGNMENT_SEPARATOR)
+    if not separator or not card_id or delta not in ("+1", "-1"):
+        raise ValueError(f"not an honor interrupt token: {token!r}")
+    return card_id, int(delta)
+
+
+@dataclass(frozen=True, slots=True)
+class ChooseHonorInterrupt(DecisionRequest):
+    """The seat may take the Honor rulebook Interrupt against an Honor gain or loss about to
+    happen: discard one Honor card from hand to make it one larger or one smaller (ShE datasheet,
+    Honor Rulebook ability).
+
+    A candidate pairs a card with a direction, read through :func:`~.honor_interrupt`. Declining
+    is the empty answer, and is what most seats do most of the time, so the request is neither
+    forced nor cancellable.
+
+    Attributes
+    ----------
+    honor_seat : PlayerId
+        The seat whose Honor is about to move.
+    amount : int
+        The signed change, before any Interrupt.
+    asked : frozenset of PlayerId
+        The seats already offered the Interrupt against this change, this one excluded.
+    """
+
+    honor_seat: PlayerId
+    amount: int
+    asked: frozenset[PlayerId]
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        verb = "gains" if self.amount > 0 else "loses"
+        return (
+            f"{self.honor_seat.name} {verb} {abs(self.amount)} Honor. "
+            "Discard an Honor card to change it by 1?"
+        )
+
+    @property
+    def confirm_label(self) -> str:
+        return "Pass"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return len(response.choices) <= 1 and set(response.choices) <= set(self.candidates)
+
+
 @dataclass(frozen=True, slots=True)
 class ChooseBattlefield(DecisionRequest):
     """The Attacker must choose where the next battle is fought.

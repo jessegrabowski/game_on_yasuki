@@ -1187,16 +1187,48 @@ class WinGame(Effect):
 
 
 @dataclass(frozen=True, slots=True)
-class GainHonor(Effect):
+class GainHonor(InterruptingEffect):
     """Move ``seat``'s Family Honor by ``amount``. Negative loses honor. The two directions are one
-    effect because the rules treat them as one dial."""
+    effect because the rules treat them as one dial.
+
+    Inside an action the change is open to the Honor rulebook Interrupt: before it performs, each
+    seat holding an Honor card is asked in turn whether to discard one to move it by 1, and it
+    performs once every seat has answered.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat whose Honor moves.
+    amount : int
+        The signed change.
+    asked : frozenset of PlayerId, optional
+        The seats already offered the Interrupt against this change. Default empty.
+    interruptible : bool, optional
+        Whether the Interrupt may be taken against this change at all. False for a change a
+        rulebook procedure makes outside any action, such as battle resolution, which has no
+        Interrupt step. Default True.
+    """
 
     seat: PlayerId
     amount: int
+    asked: frozenset[PlayerId] = frozenset()
+    interruptible: bool = True
 
     def describe(self) -> str:
         verb = "gains" if self.amount >= 0 else "loses"
         return f"{self.seat.name} {verb} {abs(self.amount)} honor"
+
+    # Imported where they are used: the Interrupt reads the hands and the round, and the module
+    # that does so imports this one.
+    def pauses(self, game: GameState) -> bool:
+        from yasuki_core.engine.rules.rulebook.honor import interrupters
+
+        return bool(interrupters(game, self))
+
+    def request(self, game: GameState) -> DecisionRequest:
+        from yasuki_core.engine.rules.rulebook.honor import honor_interrupt_request
+
+        return honor_interrupt_request(game, self)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         amount = self.amount
@@ -1220,17 +1252,20 @@ def adjusted_honor_change(amount: int, adjustment: int) -> int:
 @dataclass(frozen=True, slots=True)
 class AdjustHonorChange(Effect):
     """Record that ``seat``'s next Honor gain or loss in the action now resolving changes in size
-    by ``delta``. The Honor Interrupt's effect. The gain or loss it modifies has not been performed
-    yet, so the change waits on ``GameState.honor_adjustments`` until it is."""
+    by ``delta``, and that ``by`` has taken its one Interrupt against this action. The Honor
+    Interrupt's effect. The gain or loss it modifies has not been performed yet, so the change
+    waits on ``GameState.honor_adjustments`` until it is."""
 
     seat: PlayerId
     delta: int
+    by: PlayerId
 
     def describe(self) -> str:
-        return f"{self.seat.name}'s next honor change is adjusted by {self.delta:+d}"
+        return f"{self.by.name} adjusts {self.seat.name}'s next honor change by {self.delta:+d}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.honor_adjustments[self.seat] = game.honor_adjustments.get(self.seat, 0) + self.delta
+        game.honor_interrupted.add(self.by)
         return []
 
 

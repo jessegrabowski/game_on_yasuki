@@ -356,6 +356,16 @@ def test_a_resolver_is_told_which_seat_answered():
     assert _SEATS_SEEN == [PlayerId.P2]
 
 
+def test_an_interrupting_effect_that_finds_nobody_to_ask_is_performed():
+    game = two_seat_game()
+    before = game.table.seats[PlayerId.P1].honor
+
+    resolve_effects(game, [GainHonor(PlayerId.P1, 2)])
+
+    assert game.pending is None
+    assert game.table.seats[PlayerId.P1].honor == before + 2
+
+
 def test_an_interrupting_effect_refuses_to_be_committed_directly():
     effect = _AskToDiscard(PlayerId.P1, ("a",))
     with pytest.raises(RuntimeError, match="never applied directly"):
@@ -455,7 +465,7 @@ def test_an_adjustment_changes_the_size_of_a_gain_or_loss_but_never_its_directio
 def test_a_recorded_adjustment_is_spent_by_the_next_change_for_that_seat():
     game = two_seat_game()
     before = game.table.seats[PlayerId.P1].honor
-    AdjustHonorChange(PlayerId.P1, -1).perform(game)
+    AdjustHonorChange(PlayerId.P1, -1, by=PlayerId.P2).perform(game)
 
     GainHonor(PlayerId.P2, 2).perform(game)
     GainHonor(PlayerId.P1, 2).perform(game)
@@ -467,15 +477,23 @@ def test_a_recorded_adjustment_is_spent_by_the_next_change_for_that_seat():
 
 def test_a_change_reduced_to_nothing_is_not_announced():
     game = two_seat_game()
-    AdjustHonorChange(PlayerId.P1, -1).perform(game)
+    AdjustHonorChange(PlayerId.P1, -1, by=PlayerId.P2).perform(game)
 
     assert GainHonor(PlayerId.P1, 1).perform(game) == []
 
 
 def test_a_change_of_zero_leaves_the_adjustment_waiting():
     game = two_seat_game()
-    AdjustHonorChange(PlayerId.P1, 1).perform(game)
+    AdjustHonorChange(PlayerId.P1, 1, by=PlayerId.P2).perform(game)
 
     GainHonor(PlayerId.P1, 0).perform(game)
 
     assert game.honor_adjustments == {PlayerId.P1: 1}
+
+
+def test_an_adjustment_marks_the_seat_that_took_the_interrupt():
+    game = two_seat_game()
+
+    AdjustHonorChange(PlayerId.P1, 1, by=PlayerId.P2).perform(game)
+
+    assert game.honor_interrupted == {PlayerId.P2}
