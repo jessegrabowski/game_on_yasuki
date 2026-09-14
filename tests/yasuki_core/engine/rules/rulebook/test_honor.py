@@ -7,7 +7,12 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.turn.structure import ActionRound, RoundTimings
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, HonorInterrupt, Pass
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    HonorInterrupt,
+    KharmicDraw,
+    Pass,
+)
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -112,3 +117,37 @@ def test_the_next_action_forgets_the_adjustments():
 
     assert game.honor_adjustments == {}
     assert game.honor_interrupted == set()
+
+
+def test_an_interrupt_leaves_the_interrupted_action_on_record():
+    game = _interrupt_step()
+    game.action = KharmicDraw("interrupted")
+
+    action_sequence.perform(game, HonorInterrupt("P1-h0", PlayerId.P2, 1))
+
+    assert game.action == KharmicDraw("interrupted")
+
+
+def test_interrupts_from_both_seats_accumulate_against_one_action():
+    game = _interrupt_step()
+    hand = game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
+    hand.add(
+        register(
+            game.table,
+            L5RCard.of(
+                FatePrint,
+                id="P2-h0",
+                name="Honor Fate",
+                side=Side.FATE,
+                owner=PlayerId.P2,
+                keywords=("Honor",),
+            ),
+        )
+    )
+
+    action_sequence.perform(game, HonorInterrupt("P1-h0", PlayerId.P2, 1))
+    game.round = ActionRound(timings=INTERRUPT_TIMINGS, priority=PlayerId.P2)
+    action_sequence.perform(game, HonorInterrupt("P2-h0", PlayerId.P2, 1))
+
+    assert game.honor_adjustments == {PlayerId.P2: 2}
+    assert game.honor_interrupted == {PlayerId.P1, PlayerId.P2}

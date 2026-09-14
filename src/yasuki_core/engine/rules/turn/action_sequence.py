@@ -133,7 +133,9 @@ def perform(game: GameState, action: Action) -> None:
     # Read before the handler runs: one that opens a round of its own leaves that round on
     # `game.round`, and the round to hand on from is the one the action was taken in.
     acted_in = game.round
-    if not isinstance(action, Pass) and game.round.kind is not RoundKind.RESPONSE:
+    # An Interrupt is taken inside another action, so it neither replaces that action's record nor
+    # resets the ledger it is about to write.
+    if not isinstance(action, Pass | HonorInterrupt) and game.round.kind is not RoundKind.RESPONSE:
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
         game.action_is_favor = False
