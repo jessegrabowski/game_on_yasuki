@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.activation import defer_ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
@@ -5,8 +7,30 @@ from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.vocabulary.work import DiscardPlayed, ResolveStrategy
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+
+
+@dataclass(frozen=True, slots=True)
+class ResolveStrategy:
+    """Resolve a played Strategy once its Gold Cost is paid: its ability, then its discard.
+
+    Deferred behind the payment the way a Recruit is, so a payment that pauses for a decision or is
+    backed out of settles before the card does anything.
+
+    Attributes
+    ----------
+    card_id : str
+        The Strategy being played, still in hand until it resolves.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
+    """
+
+    card_id: str
+    ability_key: str | None = None
+
+    def resume(self, game: GameState) -> None:
+        resolve_strategy(game, self.card_id, self.ability_key)
 
 
 def play_strategy(game: GameState, card_id: str, ability_key: str | None = None) -> None:
@@ -22,6 +46,27 @@ def play_strategy(game: GameState, card_id: str, ability_key: str | None = None)
     game.pending = payment_request(
         game, seat, effective_gold_cost(game, card), card.name, target=card
     )
+
+
+@dataclass(frozen=True, slots=True)
+class DiscardPlayed:
+    """Discard a card that has finished resolving, unless it is now in play.
+
+    A Strategy goes to its owner's Fate discard once its ability is done (CR, Action Sequence step
+    F), so this is stacked under the ability's own work and runs after it. The exception is the
+    card that put *itself* into play (a Terrain, a Kata, an Edict), which stays where its own text
+    left it.
+
+    Attributes
+    ----------
+    card_id : str
+        The card to discard. Its owner is the cause, since playing a card is its owner's doing.
+    """
+
+    card_id: str
+
+    def resume(self, game: GameState) -> None:
+        discard_played(game, self.card_id)
 
 
 def resolve_strategy(game: GameState, card_id: str, ability_key: str | None = None) -> None:

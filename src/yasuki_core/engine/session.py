@@ -1,6 +1,5 @@
-from dataclasses import dataclass
-
-from dataclasses import replace
+from collections.abc import Callable
+from dataclasses import dataclass, replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
@@ -99,11 +98,14 @@ class EngineSession:
         return legality.legal_actions(self.game, seat)
 
     def act(self, seat: PlayerId, action: Action) -> None:
-        """Perform ``action`` for ``seat`` and record it. Raise ``ValueError`` if it is not
-        currently legal for that seat."""
+        """Perform ``action`` for ``seat`` and record it.
+
+        Raise ``ValueError`` if it is not currently legal for that seat. An action that raises
+        part-way through is unwound the way a rejected answer is: see :meth:`submit`.
+        """
         if not legality.is_legal(self.game, seat, action):
             raise ValueError(f"{action} is not legal for {seat.name} right now")
-        act_and_log(self.game, self.log, action)
+        self._drive(lambda: act_and_log(self.game, self.log, action))
 
     def submit(self, seat: PlayerId, response: DecisionResponse) -> None:
         """Answer the pending decision and record it.
@@ -120,8 +122,18 @@ class EngineSession:
             raise RuntimeError("no decision is pending")
         if pending.seat is not seat:
             raise ValueError(f"{seat.name} cannot answer {pending.seat.name}'s decision")
+        if not pending.accepts(response):
+            raise ValueError("malformed answer to the pending decision")
+        self._drive(lambda: submit_and_log(self.game, self.log, response))
+
+    def _drive(self, step: Callable[[], None]) -> None:
+        """Run ``step`` against the live game, rebuilding the game from the tape if it raises.
+
+        The tape holds only accepted inputs, so the rebuilt game is the one the failed input was
+        offered to, and ``log`` still replays to ``game``.
+        """
         try:
-            submit_and_log(self.game, self.log, response)
+            step()
         except Exception:
             self.game = replay(self.log)
             raise

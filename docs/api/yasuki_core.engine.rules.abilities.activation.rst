@@ -3,6 +3,13 @@ yasuki_core.engine.rules.abilities.activation
 
 .. currentmodule:: yasuki_core.engine.rules.abilities.activation
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    ApplyAbilityEffects
+    SelectAbilityTarget
+
 .. rubric:: Functions
 
 .. autosummary::

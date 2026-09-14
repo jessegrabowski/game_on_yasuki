@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment
 from yasuki_core.engine.rules.effects import Ask, Effect
@@ -6,8 +8,55 @@ from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production, untaken_self_grant
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext
-from yasuki_core.engine.rules.vocabulary.work import ContinuePayment
 from yasuki_core.game_pieces.cards import L5RCard
+
+
+@dataclass(frozen=True, slots=True)
+class ContinuePayment:
+    """Carry on covering a gold cost until the seat's pool reaches it.
+
+    Owns the solvency question the request cannot answer alone: an answer names producers to bow,
+    and only once they have produced is it known whether the cost is met. Re-raises the payment for
+    whatever is still owed, spends when the pool covers it, and is what lets a producer's own trait
+    fire between one bow and the next.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat being charged.
+    amount : int
+        The cost to cover, unchanged as the pool fills toward it.
+    label : str
+        What the payment is for, shown in the prompt.
+    target_id : str
+        The card being paid for, since a producer's yield can depend on what it pays for. Empty for
+        a rulebook cost that prices no card.
+    """
+
+    seat: PlayerId
+    amount: int
+    label: str
+    target_id: str = ""
+
+    def resume(self, game: GameState) -> None:
+        """Spend once the seat's pool covers the amount, or ask it to bow more producers.
+
+        Raise ``RuntimeError`` if what is left unbowed can no longer reach the cost, which means
+        the affordability check that announced the action was wrong.
+        """
+        if game.gold[self.seat] >= self.amount:
+            game.spend_gold(self.seat, self.amount)
+            return
+        # The authoritative reachability check. `ChoosePayment.accepts` asks the same question of
+        # its own snapshot, which is what grays out an answer before it is sent; this one asks the
+        # live board, and the two can differ when an answer changes what another producer is worth.
+        target = game.table.cards_by_id.get(self.target_id)
+        if reachable_gold(game, self.seat, target) < self.amount:
+            raise RuntimeError(
+                f"{self.seat.name} cannot cover {self.amount} for {self.label}: the pool holds "
+                f"{game.gold[self.seat]} and everything still unbowed cannot make up the difference"
+            )
+        game.pending = payment_request(game, self.seat, self.amount, self.label, target=target)
 
 
 def payment_request(

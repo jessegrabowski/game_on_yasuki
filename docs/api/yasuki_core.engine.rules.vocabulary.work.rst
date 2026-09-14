@@ -7,19 +7,7 @@ yasuki_core.engine.rules.vocabulary.work
 
 .. autosummary::
 
-    ApplyAbilityEffects
-    ApplyEffects
-    BeginNextTurn
-    CompleteProduction
-    ContinuePayment
-    DiscardPlayed
-    FightNextBattle
-    FinishRecruit
-    ResolveEquip
-    ResolveRecruit
-    ResolveStrategy
-    ResumeCascade
-    SelectAbilityTarget
+    WorkItem
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.work
     :members:

@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import location_of
@@ -14,7 +16,6 @@ from yasuki_core.engine.rules.stats.province_strength import effective_province_
 from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor
 from yasuki_core.engine.rules.board.queries import units_at
 from yasuki_core.engine.rules.units.composition import unit_force
-from yasuki_core.engine.rules.vocabulary.work import FightNextBattle
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.vocabulary.game_events import Destroyed
@@ -241,6 +242,19 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
         for index in range(len(attack.battlefields)):
             for personality in units_at(game, index, attack.defender):
                 ops.return_home(game.table, personality)
+
+
+@dataclass(frozen=True, slots=True)
+class FightNextBattle:
+    """Fight the next battlefield the Attacker has not fought at yet, or end the Attack Phase's
+    Fight Segment once every one has been.
+
+    A work item, since choosing where to fight is a decision the procedure must pause for and
+    pick up again once answered.
+    """
+
+    def resume(self, game: GameState) -> None:
+        fight_next_battle(game)
 
 
 def begin_fight(game: GameState) -> None:

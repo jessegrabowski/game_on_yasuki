@@ -1,10 +1,6 @@
-from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.activation import apply_ability_target, activate
-from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.abilities.strategy import (
-    discard_played,
-    resolve_strategy,
     play_strategy,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -48,16 +44,12 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     LeaveBowed,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, resolve_equip, equip
-from yasuki_core.engine.rules.gold.payment import payment_request
-from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.gold.production import complete_production, produce_gold
+from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, equip
+from yasuki_core.engine.rules.gold.production import produce_gold
 from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.rulebook.recruit import (
     apply_fortification_province,
     apply_invest_amount,
-    finish_recruit,
-    resolve_recruit,
     recruit,
 )
 from yasuki_core.engine.rules.rulebook.cycle import cycle
@@ -75,29 +67,13 @@ from yasuki_core.engine.rules.rulebook.legacy import (
 from yasuki_core.engine.rules.rulebook.lobby import apply_lobby_target, lobby
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.sequence import (
+    BeginNextTurn,
     apply_discard,
-    begin_next_turn,
     open_turn,
     yield_after_action,
     yield_priority,
 )
 from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.vocabulary.work import (
-    ApplyAbilityEffects,
-    ApplyEffects,
-    BeginNextTurn,
-    CompleteProduction,
-    ContinuePayment,
-    DiscardPlayed,
-    FightNextBattle,
-    FinishRecruit,
-    ResolveEquip,
-    ResolveRecruit,
-    ResolveStrategy,
-    ResumeCascade,
-    SelectAbilityTarget,
-    WorkItem,
-)
 
 # Imported for the registrations it performs: every entry point reaches the engine through
 # this dispatcher, and a registry read before the card modules load is silently empty.
@@ -208,11 +184,11 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     if not request.accepts(response):
         raise ValueError("malformed answer to the pending decision")
     acted_in = game.round
+    if isinstance(request, DiscardToHandSize) and game.stack:
+        raise RuntimeError("the turn is ending with work still queued")
     game.pending = None
     match request:
         case DiscardToHandSize():
-            if game.stack:
-                raise RuntimeError("the turn is ending with work still queued")
             game.stack.append(BeginNextTurn())
             apply_discard(game, request.seat, response.choices)
         case LeaveBowed():
@@ -307,59 +283,9 @@ def run_stack(game: GameState) -> None:
     refills.
     """
     while game.stack and game.pending is None:
-        _resolve(game, game.stack.pop())
+        game.stack.pop().resume(game)
     if game.pending is None:
         refill_short_provinces(game)
-
-
-def _resolve(game: GameState, item: WorkItem) -> None:
-    match item:
-        case ResolveRecruit(
-            seat=seat, card_id=card_id, invest_amount=invest_amount, renew=renew, proclaim=proclaim
-        ):
-            resolve_recruit(game, seat, card_id, invest_amount, renew=renew, proclaim=proclaim)
-        case ResolveEquip(card_id=card_id, target_id=target_id, invest_amount=invest_amount):
-            resolve_equip(game, card_id, target_id, invest_amount)
-        case ResolveStrategy(card_id=card_id, ability_key=ability_key):
-            resolve_strategy(game, card_id, ability_key)
-        case DiscardPlayed(card_id=card_id):
-            discard_played(game, card_id)
-        case SelectAbilityTarget(card_id=card_id, candidates=candidates, ability_key=ability_key):
-            owner = game.table.cards_by_id[card_id].owner
-            game.pending = ChooseAbilityTarget(
-                seat=owner,
-                candidates=candidates,
-                source_card_id=card_id,
-                ability_key=ability_key,
-            )
-        case ApplyAbilityEffects(card_id=card_id, target_ids=target_ids, ability_key=ability_key):
-            source = game.table.cards_by_id[card_id]
-            ability = ability_for(source, ability_key)
-            effects = [
-                effect
-                for target_id in target_ids
-                for effect in ability.effects(game, source, game.table.cards_by_id[target_id])
-            ]
-            triggers.resolve_effects(game, effects)
-        case FinishRecruit(card_id=card_id, invest_amount=invest_amount, proclaim=proclaim):
-            finish_recruit(game, card_id, invest_amount, proclaim=proclaim)
-        case CompleteProduction(card_id=card_id, target_ids=target_ids):
-            complete_production(game, card_id, target_ids)
-        case ContinuePayment(seat=seat, amount=amount, label=label, target_id=target_id):
-            _continue_payment(game, seat, amount, label, target_id)
-        case ResumeCascade():
-            # An interrupting effect whose answer produces no effects of its own, a payment, say,
-            # leaves its stash here for the generic drain. A Choose is popped by its own handler,
-            # which splices the resolver's effects in.
-            triggers.resume_cascade(game, item, [])
-        case ApplyEffects(effects=effects):
-            triggers.resolve_effects(game, list(effects))
-        case FightNextBattle():
-            resolution.fight_next_battle(game)
-        case BeginNextTurn():
-            begin_next_turn(game)
-        case _:
-            raise ValueError(f"no resolver for work item {type(item).__name__}")
 
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
@@ -377,45 +303,16 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
         produce_gold(game, card_id, target_ids)
 
 
-def _continue_payment(
-    game: GameState, seat: PlayerId, amount: int, label: str, target_id: str
-) -> None:
-    """Spend once ``seat``'s pool covers ``amount``, or ask it to bow more producers.
-
-    Raise ``RuntimeError`` if what is left unbowed can no longer reach the cost. Affordability
-    decided the action was payable before it was announced, so reaching this error means that
-    earlier projection was wrong. Without the raise, the seat would be stranded on a question
-    with no legal answer, or handed what it was paying for at no charge.
-    """
-    if game.gold[seat] >= amount:
-        game.spend_gold(seat, amount)
-        return
-    # The authoritative reachability check. `ChoosePayment.accepts` asks the same question of its
-    # own snapshot, which is what grays out an answer before it is sent; this one asks the live
-    # board, and the two can differ when an answer changes what another producer is worth.
-    target = game.table.cards_by_id.get(target_id)
-    if reachable_gold(game, seat, target) < amount:
-        raise RuntimeError(
-            f"{seat.name} cannot cover {amount} for {label}: the pool holds {game.gold[seat]} "
-            f"and everything still unbowed cannot make up the difference"
-        )
-    game.pending = payment_request(game, seat, amount, label, target=target)
-
-
 def _apply_card_choice(
     game: GameState,
     request: ChooseCards | ChooseAmount | ChooseOption | ChooseDistribution | Confirm,
     response: DecisionResponse,
 ) -> None:
-    item = game.stack.pop()  # the ResumeCascade this choice paused, always stacked atop it
-    if not isinstance(item, ResumeCascade):
-        raise RuntimeError("a card choice resumed without its stashed cascade")
     resolver = triggers.CHOICE_RESOLVERS[request.resolver]
     # Passed only when the choice carries one, so a resolver whose card asks a single question
     # never declares a parameter it would not read.
     carried = request.resolver_context if isinstance(request, ChooseOption) else ()
     context = {"resolver_context": carried} if carried else {}
-    triggers.resume_cascade(
-        game, item, resolver(game, request.source_id, response.choices, request.seat, **context)
-    )
+    produced = resolver(game, request.source_id, response.choices, request.seat, **context)
+    triggers.resume_paused_cascade(game, produced)
     run_stack(game)  # finish any work deferred behind the choice, unless it paused again

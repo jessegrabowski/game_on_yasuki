@@ -156,23 +156,24 @@ stack is last in, first out. Work items are ephemeral: replay reconstructs the s
 the action rather than by deserializing it.
 
 ```{eval-rst}
-.. currentmodule:: yasuki_core.engine.rules.vocabulary.work
+.. currentmodule:: yasuki_core.engine.rules
 
 .. autosummary::
 
-   ApplyAbilityEffects
-   ApplyEffects
-   BeginNextTurn
-   CompleteProduction
-   ContinuePayment
-   DiscardPlayed
-   FightNextBattle
-   FinishRecruit
-   ResolveEquip
-   ResolveRecruit
-   ResolveStrategy
-   ResumeCascade
-   SelectAbilityTarget
+   vocabulary.work.WorkItem
+   abilities.activation.ApplyAbilityEffects
+   abilities.activation.SelectAbilityTarget
+   abilities.strategy.DiscardPlayed
+   abilities.strategy.ResolveStrategy
+   battle.resolution.FightNextBattle
+   effects.ApplyEffects
+   gold.payment.ContinuePayment
+   gold.production.CompleteProduction
+   rulebook.equip.ResolveEquip
+   rulebook.recruit.FinishRecruit
+   rulebook.recruit.ResolveRecruit
+   triggers.ResumeCascade
+   turn.sequence.BeginNextTurn
 ```
 
 ## Stats, durations, and counters

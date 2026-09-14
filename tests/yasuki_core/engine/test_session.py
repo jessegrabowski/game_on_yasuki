@@ -22,7 +22,8 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     Recruit,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
+from yasuki_core.engine.rules.battle.resolution import FightNextBattle
 from yasuki_core.engine.replay.game_log import Answer, replay
 from yasuki_core.engine.rules.triggers import on
 from yasuki_core.engine.session import EngineSession
@@ -602,6 +603,55 @@ def test_a_rejected_answer_leaves_the_question_pending():
     assert stale in session.game.pending.candidates
     assert not session.game.stack
     assert not isinstance(session.log.entries[-1], Answer)
+
+
+@on(CardDiscarded, "raises_on_discard")
+def _raise_on_discard(ctx):
+    raise RuntimeError("a handler failed part-way through the action")
+
+
+def test_an_action_that_raises_is_unwound_from_the_tape():
+    state = _dealt_table()
+    junk = _register(
+        state,
+        L5RCard.of(
+            HoldingPrint,
+            id="P1-junk",
+            name="Holding",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=9,
+            printed_id="raises_on_discard",
+        ),
+    )
+    junk.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(junk)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+    taped = len(session.log.entries)
+
+    with pytest.raises(RuntimeError, match="part-way through"):
+        session.act(PlayerId.P1, DynastyDiscard("P1-junk"))
+
+    province = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
+    assert [card.id for card in province] == ["P1-junk"]
+    assert len(session.log.entries) == taped
+    assert DynastyDiscard("P1-junk") in session.legal_actions(PlayerId.P1)
+
+
+def test_an_end_of_turn_discard_over_queued_work_is_refused_and_unwound():
+    session = EngineSession.start(_dealt_table(), PlayerId.P1)
+    _to_pending_discard(session)
+    session.game.stack.append(FightNextBattle())
+    victim = session.game.pending.candidates[0]
+
+    with pytest.raises(RuntimeError, match="work still queued"):
+        session.submit(PlayerId.P1, DecisionResponse((victim,)))
+
+    assert isinstance(session.game.pending, DiscardToHandSize)
+    assert not session.game.stack
 
 
 def test_submit_without_a_pending_decision_raises():

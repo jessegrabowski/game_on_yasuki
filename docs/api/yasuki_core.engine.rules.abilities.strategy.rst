@@ -3,6 +3,13 @@ yasuki_core.engine.rules.abilities.strategy
 
 .. currentmodule:: yasuki_core.engine.rules.abilities.strategy
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    DiscardPlayed
+    ResolveStrategy
+
 .. rubric:: Functions
 
 .. autosummary::

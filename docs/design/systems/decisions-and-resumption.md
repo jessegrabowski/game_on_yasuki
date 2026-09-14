@@ -43,8 +43,9 @@ fired, the event being answered, and the events still queued. {func}`~.resume_ca
 answer's effects in where the paused one stood, ahead of all of that, and drops any trigger whose
 card has left play in the meantime.
 
-The work items in {mod}`~yasuki_core.engine.rules.vocabulary.work` are the other things that wait
-the same way, mostly the middle of an action whose cost raised a question.
+The other {class}`~yasuki_core.engine.rules.vocabulary.work.WorkItem` implementations, each
+declared beside the procedure that pushes it, wait the same way, mostly the middle of an action
+whose cost raised a question.
 [Action lifecycles](action-lifecycles.md) covers those.
 
 ## Why a resolver is a string

@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
@@ -7,7 +9,6 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import active_modifiers
-from yasuki_core.engine.rules.vocabulary.work import CompleteProduction
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -60,6 +61,30 @@ def effective_gold_production(
         modifier.amount for modifier in active_modifiers(game, card, Stat.GOLD_PRODUCTION)
     )
     return max(0, total)
+
+
+@dataclass(frozen=True, slots=True)
+class CompleteProduction:
+    """Read a producer's yield and bow it, once the window it opened has closed.
+
+    Deferred rather than run inline because a trait firing in that window may pause for a decision,
+    and the yield has to be read after whatever the seat answers. Only safe because a payment answer
+    names one producer: two would open two windows before either was answered.
+
+    Attributes
+    ----------
+    card_id : str
+        The producer to bow.
+    target_ids : tuple of str
+        The cards being paid for, since a producer's yield can depend on what it pays for. Empty for
+        a cost that prices no card.
+    """
+
+    card_id: str
+    target_ids: tuple[str, ...] = ()
+
+    def resume(self, game: GameState) -> None:
+        complete_production(game, self.card_id, self.target_ids)
 
 
 def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()) -> None:

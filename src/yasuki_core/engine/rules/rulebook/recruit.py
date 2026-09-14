@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
@@ -19,7 +21,6 @@ from yasuki_core.engine.rules.legality import proclaim_key, recruit_cost
 from yasuki_core.engine.rules.turn.provinces import defer_refill
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
-from yasuki_core.engine.rules.vocabulary.work import FinishRecruit, ResolveRecruit
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -65,6 +66,46 @@ def recruit(
         candidates=tuple(str(amount) for amount in payable),
         source_card_id=card_id,
     )
+
+
+@dataclass(frozen=True, slots=True)
+class ResolveRecruit:
+    """Finish a Recruit once its cost is paid: bring the card from its province into play (bowed for
+    a Holding) and refill the vacated province.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The recruiting seat.
+    card_id : str
+        The card leaving its province for play.
+    invest_amount : int or None
+        The gold Invested while recruiting, driving the card's one-time Invest effect on entry, or
+        None when the recruit took no Invest. A free Invest is an amount of zero, not None. Default
+        None.
+    renew : bool
+        Whether to refill the vacated province face-up (a granted Renew), on top of the card's own
+        Renew keyword. Default False.
+    proclaim : bool
+        Whether the recruit is Proclaimed, claiming the seat's once-per-turn Proclaim and adding the
+        Personality's Personal Honor to its Family Honor after entry. Default False.
+    """
+
+    seat: PlayerId
+    card_id: str
+    invest_amount: int | None = None
+    renew: bool = False
+    proclaim: bool = False
+
+    def resume(self, game: GameState) -> None:
+        resolve_recruit(
+            game,
+            seat=self.seat,
+            card_id=self.card_id,
+            invest_amount=self.invest_amount,
+            renew=self.renew,
+            proclaim=self.proclaim,
+        )
 
 
 def announce_recruit(
@@ -140,6 +181,32 @@ def apply_fortification_province(
     province = ZoneKey.from_token(response.choices[0])
     ops.attach_to_province(game.table, card, province)
     _announce_entering_play(game, card.id, request.invest_amount, request.proclaim)
+
+
+@dataclass(frozen=True, slots=True)
+class FinishRecruit:
+    """The recruit steps that follow a card entering play: clearing its Sincerity tokens, resolving
+    a Proclaim's honor gain, and applying any Invest effect. Deferred behind the ``EnteredPlay``
+    cascade so a trait that pauses on entry (a Sincerity seed choice) resolves before them.
+
+    Attributes
+    ----------
+    card_id : str
+        The card that entered play.
+    invest_amount : int or None
+        The gold Invested while recruiting, driving the Invest effect, or None when the recruit took
+        no Invest. A free Invest is an amount of zero, not None.
+    proclaim : bool
+        Whether the recruit was Proclaimed, so entry claims the once-per-turn Proclaim and adds the
+        Personality's Personal Honor to its seat's Family Honor. Default False.
+    """
+
+    card_id: str
+    invest_amount: int | None
+    proclaim: bool = False
+
+    def resume(self, game: GameState) -> None:
+        finish_recruit(game, self.card_id, self.invest_amount, proclaim=self.proclaim)
 
 
 def _announce_entering_play(

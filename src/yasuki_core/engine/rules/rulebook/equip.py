@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from collections.abc import Callable
 
 from yasuki_core.engine import ops
@@ -18,7 +20,6 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
-from yasuki_core.engine.rules.vocabulary.work import ResolveEquip
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -165,6 +166,30 @@ def apply_equip_target(
     game.pending = announce_equip(
         game, card, card.owner, response.choices[0], invest_amount=request.invest_amount
     )
+
+
+@dataclass(frozen=True, slots=True)
+class ResolveEquip:
+    """Finish an Equip once its cost is paid: move the attachment from its owner's hand onto the
+    battlefield and attach it to the target Personality.
+
+    Attributes
+    ----------
+    card_id : str
+        The attachment leaving hand for play.
+    target_id : str
+        The Personality it attaches to.
+    invest_amount : int or None
+        The Invest cost paid, applied once the card is in play, or None when the Equip took no
+        Invest. Default None.
+    """
+
+    card_id: str
+    target_id: str
+    invest_amount: int | None = None
+
+    def resume(self, game: GameState) -> None:
+        resolve_equip(game, self.card_id, self.target_id, self.invest_amount)
 
 
 def announce_equip(
