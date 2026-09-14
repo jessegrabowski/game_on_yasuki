@@ -1,4 +1,5 @@
 import inspect
+from abc import ABC
 
 import pytest
 
@@ -238,7 +239,9 @@ def test_every_effect_has_a_description_here():
         subclass.__name__
         for base in (Effect, InterruptingEffect)
         for subclass in base.__subclasses__()
-        if subclass.__module__ == Effect.__module__ and not inspect.isabstract(subclass)
+        if subclass.__module__ == Effect.__module__
+        and not inspect.isabstract(subclass)
+        and ABC not in subclass.__bases__
     }
 
     assert concrete - described == set()

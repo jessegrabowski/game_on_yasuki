@@ -16,7 +16,9 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Bow,
     Choose,
+    Consequence,
     Destroy,
+    Fear,
     Discard,
     AdjustHonorChange,
     DiscardFavor,
@@ -497,3 +499,13 @@ def test_an_adjustment_marks_the_seat_that_took_the_interrupt():
     AdjustHonorChange(PlayerId.P1, 1, by=PlayerId.P2).perform(game)
 
     assert game.honor_interrupted == {PlayerId.P2}
+
+
+def test_an_attack_performs_every_consequence_it_carries():
+    game = two_seat_game()
+    target = put_in_play(game, holding("P1-h"))
+    fear = Fear(9, target.id, PlayerId.P2, consequences=(Consequence.BOW, Consequence.DESTROY))
+
+    resolve_effects(game, [fear])
+
+    assert target not in game.table.battlefield.cards

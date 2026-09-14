@@ -20,6 +20,7 @@ yasuki_core.engine.rules.effects
     BanishTopFate
     Bow
     Choose
+    Consequence
     CounterOnAttachedProvince
     CreateToken
     DelayStraighten
