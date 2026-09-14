@@ -1,10 +1,18 @@
 from yasuki_core.engine.replay.game_log import replay
-from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
+from yasuki_core.engine.rules.effects import Fear, GainHonor
+from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.vocabulary.actions import KharmicDraw
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt, DecisionResponse
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 
-from tests.yasuki_core.engine.builders import pay
-from tests.yasuki_core.engine.rules.test_interrupts import ATTACKER, DEFENDER, _fear_announced
+from tests.yasuki_core.engine.builders import pay, personality, put_in_play, two_seat_game
+from tests.yasuki_core.engine.rules.test_interrupts import (
+    ATTACKER,
+    DEFENDER,
+    _fear_announced,
+    _honor_card,
+    _strategy,
+)
 
 OKURA = ("okura", "okura_is_released", DEFENDER)
 
@@ -40,18 +48,29 @@ def test_okura_leaves_a_target_the_fear_does_not_reach_alone():
     assert not session.game.table.cards_by_id["guard"].bowed
 
 
-def test_okura_is_not_offered_outside_a_fear_window():
-    session = _fear_announced({}, strategies=(OKURA,))
-    session.submit(DEFENDER, DecisionResponse())
+def test_okura_is_not_offered_against_an_effect_it_does_not_answer():
+    game = two_seat_game()
+    _honor_card(game.table, "P2-honor0", DEFENDER)
+    _strategy(game.table, "okura", "okura_is_released", DEFENDER)
+    game.action = KharmicDraw("the-interrupted-action")
 
-    assert session.game.pending is None
-    offered = [
-        action
-        for seat in (ATTACKER, DEFENDER)
-        for action in session.legal_actions(seat)
-        if isinstance(action, PlayStrategy)
-    ]
-    assert offered == []
+    resolve_effects(game, [GainHonor(ATTACKER, 2)])
+
+    pending = game.pending
+    assert isinstance(pending, ChooseInterrupt)
+    assert pending.candidates == ("P2-honor0@+1", "P2-honor0@-1")
+
+
+def test_okura_is_not_offered_when_its_gold_cost_is_out_of_reach():
+    game = two_seat_game()
+    target = put_in_play(game, personality("guard", owner=DEFENDER, force=2))
+    _strategy(game.table, "okura", "okura_is_released", DEFENDER, gold_cost=1)
+    game.action = KharmicDraw("the-interrupted-action")
+
+    resolve_effects(game, [Fear(2, target.id, ATTACKER)])
+
+    assert game.pending is None
+    assert target.bowed
 
 
 def test_the_okura_game_replays_to_the_same_board():

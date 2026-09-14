@@ -2,8 +2,8 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import replay
-from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, Interruption
+from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.effects import Fear, GainHonor
 from yasuki_core.engine.rules.state import GameState
@@ -82,6 +82,18 @@ register_ability(
 )
 
 
+register_interrupt(
+    "interrupt_probe",
+    Interrupt(
+        label="Interrupt: gain 1 Honor, leave the effect alone",
+        answers=Fear,
+        interrupt=lambda game, source, effect: Interruption(
+            effect, effects=(GainHonor(source.owner, 1, interruptible=False),)
+        ),
+    ),
+)
+
+
 def _keyword_card(table: TableState, card_id: str, owner: PlayerId, keyword: str) -> L5RCard:
     card = L5RCard.of(
         FatePrint,
@@ -103,7 +115,9 @@ def _courage_card(table: TableState, card_id: str, owner: PlayerId) -> L5RCard:
     return _keyword_card(table, card_id, owner, "Courage")
 
 
-def _strategy(table: TableState, card_id: str, printed_id: str, owner: PlayerId) -> L5RCard:
+def _strategy(
+    table: TableState, card_id: str, printed_id: str, owner: PlayerId, gold_cost: int = 0
+) -> L5RCard:
     card = L5RCard.of(
         ActionPrint,
         id=card_id,
@@ -111,7 +125,7 @@ def _strategy(table: TableState, card_id: str, printed_id: str, owner: PlayerId)
         printed_id=printed_id,
         side=Side.FATE,
         owner=owner,
-        gold_cost=0,
+        gold_cost=gold_cost,
     )
     table.zones[ZoneKey(owner, ZoneRole.HAND)].add(register(table, card))
     return card
@@ -400,6 +414,24 @@ def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
     # a reaction to what the replacement did fires, the same as after a rulebook discard.
     assert _event_names(session) == ["CardDiscarded", "Destroyed", "HonorChanged"]
     assert honor_seen == [1]
+
+
+def test_a_played_interrupts_own_effects_resolve_before_its_discard():
+    session = _fear_announced(
+        {}, strategies=(("probe", "interrupt_probe", DEFENDER),), probe="fear_then_honor_probe"
+    )
+
+    session.submit(DEFENDER, DecisionResponse(("probe",)))
+    pay(session, DEFENDER)
+
+    # The Strategy's own effect, then its discard, then the interrupted ability's next effect.
+    assert [
+        (type(event).__name__, getattr(event, "seat", None)) for event in session.game.action_events
+    ] == [
+        ("HonorChanged", DEFENDER),
+        ("CardDiscarded", None),
+        ("HonorChanged", ATTACKER),
+    ]
 
 
 # --- when the step does not open ---
