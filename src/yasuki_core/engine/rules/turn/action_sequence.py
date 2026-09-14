@@ -136,6 +136,8 @@ def perform(game: GameState, action: Action) -> None:
         game.action_taken = describe_action(game, action)
         game.action_is_favor = False
         game.action = action
+        game.honor_adjustments.clear()
+        game.honor_interrupted.clear()
     match action:
         case Pass():
             yield_priority(game, passed=True)

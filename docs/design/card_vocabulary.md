@@ -32,6 +32,7 @@ deferred through `Then` instead.
 .. autosummary::
 
    AdjustCounter
+   AdjustHonorChange
    Ask
    AskAmount
    AskDistribution
