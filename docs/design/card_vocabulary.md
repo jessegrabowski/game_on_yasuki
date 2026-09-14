@@ -103,6 +103,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    CounterGained
    Destroyed
    EnteredPlay
+   HonorChanged
    ProducedGold
    ProducingGold
    Revealed

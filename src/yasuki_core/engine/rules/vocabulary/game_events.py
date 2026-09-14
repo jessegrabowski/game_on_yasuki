@@ -133,12 +133,35 @@ class ProducedGold:
     amount: int
 
 
+@dataclass(frozen=True, slots=True)
+class HonorChanged:
+    """A seat's Family Honor moved.
+
+    Raised after the change has landed, so a trigger reading the seat's Honor sees the new value.
+    Never raised for a change of zero: an Honor gain of 0 points "is not considered an Honor gain
+    for things that check whether a gain happened" (CR, Honor Gains and Losses), and a loss of 0
+    likewise.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat whose Honor moved.
+    amount : int
+        The signed change: positive for a gain, negative for a loss. A trigger that reads "after
+        you gain Honor" guards on the sign.
+    """
+
+    seat: PlayerId
+    amount: int
+
+
 GameEvent = (
     TurnStarted
     | CardDiscarded
     | CounterGained
     | Destroyed
     | EnteredPlay
+    | HonorChanged
     | ProducedGold
     | ProducingGold
     | Revealed

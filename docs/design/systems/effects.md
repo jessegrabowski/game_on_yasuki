@@ -60,8 +60,8 @@ These raise one: {class}`AdjustCounter <yasuki_core.engine.rules.effects.AdjustC
 {class}`~.Destroy`, {class}`~.Discard`,
 {class}`DestroyProvince <yasuki_core.engine.rules.effects.DestroyProvince>`,
 {class}`~.AttachCard`, {class}`~.PutIntoPlay`, {class}`~.CreateToken`, {class}`~.Straighten`,
-{class}`~.RevealProvinces`, and the three attacks through {class}`~.AttackEffect`. Every other
-effect returns an empty list.
+{class}`~.RevealProvinces`, {class}`~.GainHonor`, and the three attacks through
+{class}`~.AttackEffect`. Every other effect returns an empty list.
 
 This is worth knowing in both directions. A card that should provoke a reaction has to reach for
 the effect that raises the event, and a card that quietly does something no opponent may answer is

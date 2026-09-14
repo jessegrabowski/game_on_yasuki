@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     Destroyed,
     EnteredPlay,
+    HonorChanged,
     TurnStarted,
 )
 from yasuki_core.engine.rules.effects import (
@@ -16,6 +17,7 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
     Discard,
+    GainHonor,
     IgnoreHonorRequirements,
 )
 from yasuki_core.engine.rules.triggers import (
@@ -639,3 +641,14 @@ def test_a_card_killed_as_it_arrives_still_takes_no_enter_play_trigger(reacting)
     fire(game, EnteredPlay(doomed.id))
 
     assert seen == []
+
+
+def test_a_card_reacts_to_an_honor_gain(reacting):
+    game = two_seat_game()
+    put_in_play(game, holding("P1-watcher", printed_id="honor_probe"))
+    seen: list[HonorChanged] = []
+    reacting(HonorChanged, "honor_probe", lambda ctx: seen.append(ctx.event) or [])
+
+    resolve_effects(game, [GainHonor(PlayerId.P2, 3), GainHonor(PlayerId.P1, -1)])
+
+    assert seen == [HonorChanged(PlayerId.P2, 3), HonorChanged(PlayerId.P1, -1)]

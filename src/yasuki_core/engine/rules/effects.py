@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     EnteredPlay,
     GameEvent,
+    HonorChanged,
     Revealed,
     Straightened,
 )
@@ -1193,8 +1194,9 @@ class GainHonor(Effect):
         return f"{self.seat.name} {verb} {abs(self.amount)} honor"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        ops.set_honor(game.table, self.seat, delta=self.amount)
-        return []
+        if not ops.set_honor(game.table, self.seat, delta=self.amount):
+            return []
+        return [HonorChanged(self.seat, self.amount)]
 
 
 @dataclass(frozen=True, slots=True)
