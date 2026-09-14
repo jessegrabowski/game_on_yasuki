@@ -29,7 +29,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     interrupt_token,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -63,6 +63,21 @@ register_ability(
         cost=lambda game, source: [],
         targets=lambda game, source: attack_targets(game, source),
         effects=lambda game, source, target: [Fear(FEAR, target.id, source.owner)],
+    ),
+)
+
+
+register_ability(
+    "fear_then_honor_probe",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle: Fear, then gain Honor",
+        cost=lambda game, source: [],
+        targets=lambda game, source: attack_targets(game, source),
+        effects=lambda game, source, target: [
+            Fear(FEAR, target.id, source.owner),
+            GainHonor(source.owner, 1, interruptible=False),
+        ],
     ),
 )
 
@@ -264,15 +279,23 @@ ATTACKER, DEFENDER = P1, P2
 
 
 def _fear_announced(
-    courage_cards: dict[PlayerId, int], *, strategies: tuple[tuple[str, str, PlayerId], ...] = ()
+    courage_cards: dict[PlayerId, int],
+    *,
+    strategies: tuple[tuple[str, str, PlayerId], ...] = (),
+    probe: str = "fear_probe",
+    watcher: str | None = None,
 ) -> EngineSession:
     """A session in which the Attacker has just aimed Fear ``FEAR`` at the Defender's 2F guard in
-    the Combat Segment, with each seat holding the Courage cards ``courage_cards`` gives it and
-    the ``(card_id, printed_id, owner)`` Strategies ``strategies`` names."""
+    the Combat Segment through the ability printed ``probe``, with each seat holding the Courage
+    cards ``courage_cards`` gives it, the ``(card_id, printed_id, owner)`` Strategies
+    ``strategies`` names, and a Holding printed ``watcher`` in play for the Attacker when one is
+    named."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
     province_card(state, "def-prov0", seat=DEFENDER, index=0)
-    put_in_play(state, personality("raider", owner=ATTACKER, printed_id="fear_probe", force=3))
+    if watcher is not None:
+        put_in_play(state, holding("atk-watcher", printed_id=watcher))
+    put_in_play(state, personality("raider", owner=ATTACKER, printed_id=probe, force=3))
     put_in_play(state, personality("guard", owner=DEFENDER, force=2))
     for seat, count in courage_cards.items():
         for index in range(count):
@@ -349,6 +372,39 @@ def test_the_courage_game_replays_to_the_same_board():
 
     assert rebuilt.table.cards_by_id["guard"].bowed == _guard_bowed(session)
     assert rebuilt.pending is None and not rebuilt.stack
+
+
+OKURA = ("okura", "okura_is_released", DEFENDER)
+
+
+def _event_names(session: EngineSession) -> list[str]:
+    return [type(event).__name__ for event in session.game.action_events]
+
+
+def test_a_rulebook_discard_rejoins_the_cascade_where_the_fear_stood():
+    session = _fear_announced({DEFENDER: 1}, probe="fear_then_honor_probe")
+
+    session.submit(DEFENDER, DecisionResponse((interrupt_token("P2-courage0", 2),)))
+
+    assert _event_names(session) == ["CardDiscarded", "HonorChanged"]
+
+
+def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
+    session = _fear_announced(
+        {}, strategies=(OKURA,), probe="fear_then_honor_probe", watcher="destroyed_probe"
+    )
+    honor_seen: list[int] = []
+    reacting(
+        Destroyed, "destroyed_probe", lambda ctx: honor_seen.append(_honor(session, ATTACKER)) or []
+    )
+
+    session.submit(DEFENDER, DecisionResponse(("okura",)))
+    pay(session, DEFENDER)
+
+    # The replacement splices in where the Fear stood, so the ability's next effect applies before
+    # a reaction to what the replacement did fires, the same as after a rulebook discard.
+    assert _event_names(session) == ["CardDiscarded", "Destroyed", "HonorChanged"]
+    assert honor_seen == [1]
 
 
 # --- when the step does not open ---

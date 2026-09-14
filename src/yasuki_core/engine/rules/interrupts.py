@@ -8,7 +8,6 @@ from yasuki_core.engine.rules.abilities.registry import interrupt_for
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.effects import (
-    ApplyEffects,
     Discard,
     Effect,
     Fear,
@@ -172,14 +171,32 @@ def interrupt_request(game: GameState, effect: InterruptibleEffect) -> ChooseInt
     return ChooseInterrupt(seat=seat, candidates=discards + plays, description=effect.describe())
 
 
+@dataclass(frozen=True, slots=True)
+class ResumeInterrupted:
+    """Splice ``effects`` into the cascade an Interrupt paused, once the Strategy that answered it
+    has resolved. Stacked above the stash and beneath the Strategy's own work, so the answer
+    rejoins the cascade through the same door a rulebook discard does.
+
+    Attributes
+    ----------
+    effects : tuple of Effect
+        What stands in for the interrupted effect.
+    """
+
+    effects: tuple[Effect, ...]
+
+    def resume(self, game: GameState) -> None:
+        triggers.resume_paused_cascade(game, list(self.effects))
+
+
 def apply_interrupt(game: GameState, request: ChooseInterrupt, response: DecisionResponse) -> None:
     """Act on the seat's answer and bring the paused effect back for the next answer.
 
     A pass marks the seat on the effect, which asks the next seat or resolves. A rulebook discard
     and the adjusted effect are spliced into the paused cascade, and the same seat is asked again
     if it may. A Strategy is played the way any Strategy is, its Interrupt deciding what replaces
-    the effect and what else happens, with the replacement queued to return once the Strategy has
-    resolved.
+    the effect and what else happens, with the replacement queued to rejoin the cascade once the
+    Strategy has resolved.
 
     A discard runs inside the interrupted action's cascade, so a reaction to it fires and it joins
     the action's event record.
@@ -211,9 +228,7 @@ def _play_interrupt(
         raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can play")
     card, interrupt = played
     interruption = interrupt.interrupt(game, card, effect)
-    # The replacement waits beneath the Strategy's own work and returns once that has resolved,
-    # while the paused cascade waits beneath both.
-    game.stack.append(ApplyEffects((interruption.replacement,)))
+    game.stack.append(ResumeInterrupted((interruption.replacement,)))
     play_strategy_with(game, card, interruption.effects)
 
 
