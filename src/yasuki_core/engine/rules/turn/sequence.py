@@ -221,6 +221,10 @@ def _begin_turn(game: GameState) -> None:
     triggers.resolve_effects(game, state_based_actions.honor_victory(game))
     if game.game_over:
         return
+    if game.pending is not None:
+        # The same shape as the end of the turn: the request set below would overwrite the paused
+        # effect's question. Nothing on this path asks one today, since a win announces no event.
+        raise RuntimeError("a reaction to the Honor Victory check paused the start of the turn")
     open_round(game)
     offering = may_stay_bowed(game, game.active)
     if offering:

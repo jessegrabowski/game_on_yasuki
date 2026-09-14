@@ -244,7 +244,6 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_card_choice(game, request, response)
         case ChooseDistribution():
             _apply_card_choice(game, request, response)
-        # One case per union member, so the exhaustiveness guard can read them off the AST.
         case Confirm():
             _apply_card_choice(game, request, response)
         case ChooseInvestAmount():
