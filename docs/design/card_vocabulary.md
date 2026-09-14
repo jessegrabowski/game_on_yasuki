@@ -160,6 +160,7 @@ the action rather than by deserializing it.
 
    ApplyAbilityEffects
    ApplyEffects
+   BeginNextTurn
    CompleteProduction
    ContinuePayment
    DiscardPlayed

@@ -8,9 +8,14 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
     LION_ANCESTOR,
     NAGA_FOLLOWER,
 )
-from yasuki_core.engine.rules.turn import action_sequence, sequence
+from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseInvestAmount, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseCards,
+    ChooseInvestAmount,
+    DecisionResponse,
+    DiscardToHandSize,
+)
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
@@ -24,7 +29,9 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 
 from tests.yasuki_core.engine.builders import (
     attachment,
+    dealt_table,
     end_phase,
+    end_turn,
     holding,
     pay,
     personality,
@@ -173,70 +180,82 @@ def test_kitsu_hayako_replays_to_the_same_board():
 
 
 def _spearmen_game(*, bearer_keywords=("Naga",)):
-    """The Spearmen sitting in hand, beside a Personality carrying ``bearer_keywords``."""
-    game = two_seat_game()
+    state = dealt_table(hand=sequence.MAX_HAND_SIZE - 1)
+    _naga_follower(state)
+    if bearer_keywords is not None:
+        put_in_play(state, personality("shahai", force=2, chi=2, keywords=bearer_keywords))
+    _hand_the_spearmen(state, "spearmen")
+    return EngineSession.start(state, P1)
+
+
+def _naga_follower(state):
     token_template(
-        game,
+        state,
         NAGA_FOLLOWER,
         name="Naga",
         card_type="Follower",
         keywords=("Naga", "Nonhuman"),
         force=1,
     )
-    if bearer_keywords is not None:
-        put_in_play(game, personality("shahai", force=2, chi=2, keywords=bearer_keywords))
+
+
+def _hand_the_spearmen(state, card_id):
     spearmen = attachment(
-        "spearmen",
+        card_id,
         printed_id="spearmen_of_the_akasha",
         attachment_type=AttachmentType.FOLLOWER,
         force=2,
         keywords=("Naga", "Nonhuman", "Kharmic"),
     )
-    game.table.cards_by_id[spearmen.id] = spearmen
-    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(spearmen)
-    return game
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, spearmen))
+
+
+def _trim_the_spearmen(session, card_ids=("spearmen",)):
+    end_turn(session)
+    assert isinstance(session.game.pending, DiscardToHandSize)
+    session.submit(P1, DecisionResponse(card_ids))
 
 
 def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
-    """The end-of-turn trim is the discard the card names, and it reaches a card in hand."""
-    game = _spearmen_game()
+    """The end-of-turn trim is a discard from hand, which the card names."""
+    session = _spearmen_game()
 
-    sequence.apply_discard(game, P1, ("spearmen",))
+    _trim_the_spearmen(session)
 
-    assert game.pending.candidates == ("shahai",)
+    assert isinstance(session.game.pending, ChooseCards)
+    assert session.game.pending.candidates == ("shahai",)
+    assert session.game.active is P1, "the turn waits for the answer"
 
 
 def test_banishing_the_spearmen_equips_the_naga_follower():
-    game = _spearmen_game()
+    session = _spearmen_game()
+    _trim_the_spearmen(session)
 
-    sequence.apply_discard(game, P1, ("spearmen",))
-    action_sequence.submit(game, DecisionResponse(("shahai",)))
+    session.submit(P1, DecisionResponse(("shahai",)))
 
+    game = session.game
     follower = attachments_of(game, game.table.cards_by_id["shahai"])[0]
     assert follower.name == "Naga"
     banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)]
     assert [card.id for card in banished.cards] == ["spearmen"]
+    assert game.active is PlayerId.P2, "the turn passes once the offer is answered"
 
 
 def test_two_spearmen_discarded_together_are_each_offered_a_naga():
-    """Both copies are discarded at one instant, so both offers are made rather than the second
-    overwriting the first."""
-    game = _spearmen_game()
-    put_in_play(game, personality("shahai2", force=2, chi=2, keywords=("Naga",)))
-    second = attachment(
-        "spearmen2",
-        printed_id="spearmen_of_the_akasha",
-        attachment_type=AttachmentType.FOLLOWER,
-        force=2,
-        keywords=("Naga", "Nonhuman", "Kharmic"),
-    )
-    game.table.cards_by_id[second.id] = second
-    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(second)
+    """Discarded at one instant, so both offers survive."""
+    state = dealt_table(hand=sequence.MAX_HAND_SIZE - 1)
+    _naga_follower(state)
+    for bearer in ("shahai", "shahai2"):
+        put_in_play(state, personality(bearer, force=2, chi=2, keywords=("Naga",)))
+    _hand_the_spearmen(state, "spearmen")
+    _hand_the_spearmen(state, "spearmen2")
+    session = EngineSession.start(state, P1)
 
-    sequence.apply_discard(game, P1, ("spearmen", "spearmen2"))
-    action_sequence.submit(game, DecisionResponse(("shahai",)))
-    action_sequence.submit(game, DecisionResponse(("shahai2",)))
+    _trim_the_spearmen(session, ("spearmen", "spearmen2"))
+    session.submit(P1, DecisionResponse(("shahai",)))
+    session.submit(P1, DecisionResponse(("shahai2",)))
 
+    game = session.game
     for bearer in ("shahai", "shahai2"):
         carried = attachments_of(game, game.table.cards_by_id[bearer])
         assert [follower.name for follower in carried] == ["Naga"]
@@ -245,38 +264,38 @@ def test_two_spearmen_discarded_together_are_each_offered_a_naga():
 
 
 def test_declining_leaves_the_spearmen_lying_in_the_discard():
-    """Banishing is the price of the Follower, so a seat that takes neither keeps the card."""
-    game = _spearmen_game()
+    session = _spearmen_game()
+    _trim_the_spearmen(session)
 
-    sequence.apply_discard(game, P1, ("spearmen",))
-    action_sequence.submit(game, DecisionResponse(()))
+    session.submit(P1, DecisionResponse(()))
 
+    game = session.game
     assert attachments_of(game, game.table.cards_by_id["shahai"]) == ()
     discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
     assert [card.id for card in discard.cards] == ["spearmen"]
 
 
 def test_only_a_naga_personality_is_offered():
-    game = _spearmen_game()
-    put_in_play(game, personality("bushi", force=3, chi=2, keywords=("Samurai",)))
+    session = _spearmen_game()
+    put_in_play(session.game, personality("bushi", force=3, chi=2, keywords=("Samurai",)))
 
-    sequence.apply_discard(game, P1, ("spearmen",))
+    _trim_the_spearmen(session)
 
-    assert game.pending.candidates == ("shahai",)
+    assert session.game.pending.candidates == ("shahai",)
 
 
 def test_nothing_is_offered_with_nobody_to_carry_the_follower():
-    game = _spearmen_game(bearer_keywords=None)
+    session = _spearmen_game(bearer_keywords=None)
 
-    sequence.apply_discard(game, P1, ("spearmen",))
+    _trim_the_spearmen(session)
 
-    assert game.pending is None
+    assert session.game.pending is None
+    assert session.game.active is PlayerId.P2  # the turn passed with nothing to ask
 
 
 def test_a_discard_from_play_raises_nothing():
-    """ "From your hand or deck," and a Follower that reached the discard off the board is not
-    it."""
-    game = _spearmen_game()
+    """ "From your hand or deck": a discard off the board is not one."""
+    game = _spearmen_game().game
 
     fire(game, CardDiscarded("spearmen", Side.FATE, P1))
 

@@ -83,6 +83,7 @@ from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.work import (
     ApplyAbilityEffects,
     ApplyEffects,
+    BeginNextTurn,
     CompleteProduction,
     ContinuePayment,
     DiscardPlayed,
@@ -199,9 +200,13 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     acted_in = game.round
     match request:
         case DiscardToHandSize():
-            apply_discard(game, request.seat, response.choices)
+            # Cleared first: a trait reacting to the discard may ask a question, and its request
+            # has to be what is pending when this returns.
             game.pending = None
-            begin_next_turn(game)
+            if game.stack:
+                raise RuntimeError("the turn is ending with work still queued")
+            game.stack.append(BeginNextTurn())
+            apply_discard(game, request.seat, response.choices)
         case LeaveBowed():
             game.pending = None
             open_turn(game, frozenset(response.choices))
@@ -346,6 +351,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             triggers.resolve_effects(game, list(effects))
         case FightNextBattle():
             resolution.fight_next_battle(game)
+        case BeginNextTurn():
+            begin_next_turn(game)
         case _:
             raise ValueError(f"no resolver for work item {type(item).__name__}")
 

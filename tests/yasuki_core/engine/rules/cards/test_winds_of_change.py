@@ -4,19 +4,18 @@ from yasuki_core.engine.rules.rulebook.favor_payment import (
     favor_payment_options,
 )
 from yasuki_core.engine.rules.effects import TakeFavor
-from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import PHASE_TIMINGS, ActionRound, Phase
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint
 from yasuki_core.game_pieces.cards import L5RCard
 
-from tests.yasuki_core.engine.builders import province_card, put_in_play, register
+from tests.yasuki_core.engine.builders import end_phase, province_card, put_in_play, register
 
 P1 = PlayerId.P1
 SOURCE = "rulebook"
@@ -80,8 +79,7 @@ def test_commanding_favor_pays_for_a_seat_that_holds_no_favor():
     assert all(effect.is_payable(game) for effect in favor_cost_for_seat(game, P1, SOURCE))
 
 
-def _event_in_province() -> GameState:
-    """Commanding Favor face-up in P1's first Province, with a card behind it to refill from."""
+def _event_in_province() -> EngineSession:
     state = TableState.empty_two_seat()
     event = register(
         state,
@@ -101,28 +99,29 @@ def _event_in_province() -> GameState:
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
         register(state, province_card(state, "next", seat=P1, index=1))
     ]
-    return GameState.start(state, P1, seed=0)
+    session = EngineSession.start(state, P1)
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+    assert session.game.phase is Phase.DYNASTY
+    return session
 
 
 def test_commanding_favor_leaves_its_province_for_the_battlefield():
-    """RtR: "Dynasty: Put this Event into play." An Event is played from the Province it sits in, so
-    entering play is a move out of that Province rather than out of hand, and the Province it
-    vacates refills behind it like any other."""
-    game = _event_in_province()
+    """RtR: "Dynasty: Put this Event into play." It leaves the Province it sits in, which refills
+    behind it."""
+    session = _event_in_province()
 
-    action_sequence.perform(game, ActivateAbility("event"))
+    session.act(P1, ActivateAbility("event"))
 
+    game = session.game
     assert "event" in {card.id for card in game.table.battlefield.cards}
     province = game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
     assert [card.id for card in province.cards] == ["next"], "the Province refilled behind it"
 
 
 def test_commanding_favor_is_offered_from_the_province_it_sits_in():
-    """An Event is activated where it sits, face-up in a Province, so its ability has to say so.
-    The default is the battlefield, where an Event on offer never is, and the action would simply
-    never appear."""
-    game = _event_in_province()
-    game.phase = Phase.DYNASTY
-    game.round = ActionRound(timings=PHASE_TIMINGS[Phase.DYNASTY], priority=P1)
+    """The ability has to declare the Province as where it is activated from, since the default is
+    the battlefield."""
+    session = _event_in_province()
 
-    assert ActivateAbility("event") in legality.legal_actions(game, P1)
+    assert ActivateAbility("event") in session.legal_actions(P1)

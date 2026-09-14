@@ -9,6 +9,7 @@ yasuki_core.engine.rules.vocabulary.work
 
     ApplyAbilityEffects
     ApplyEffects
+    BeginNextTurn
     CompleteProduction
     ContinuePayment
     DiscardPlayed

@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.turn.structure import (
     RoundKind,
     Turn,
 )
+from yasuki_core.engine.rules.vocabulary.work import FightNextBattle
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DiscardToHandSize,
     DecisionResponse,
@@ -171,6 +172,18 @@ def test_overfull_hand_pauses_for_discard_then_resumes():
     assert len(hand.cards) == sequence.MAX_HAND_SIZE
     discard = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)]
     assert any(card.id == victim for card in discard.cards)
+
+
+def test_the_end_of_turn_discard_refuses_to_run_over_queued_work():
+    """Beginning the next turn is queued under the discard's own cascade, which only holds if the
+    stack is empty when the turn ends."""
+    game = _game(hand=sequence.MAX_HAND_SIZE, fate_deck=1)
+    _advance_to_end_of_turn(game)
+    game.stack.append(FightNextBattle())
+    victim = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
+
+    with pytest.raises(RuntimeError, match="work still queued"):
+        action_sequence.submit(game, DecisionResponse((victim,)))
 
 
 def test_cannot_advance_while_a_decision_is_pending():

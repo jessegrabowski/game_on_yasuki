@@ -33,6 +33,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint
 
 from tests.yasuki_core.engine.builders import (
+    end_phase,
     fate_card,
     holding,
     personality,
@@ -180,8 +181,8 @@ def test_a_dynasty_discard_offers_nothing():
     )
     province_card(game, "spare-dynasty", seat=P1, name="Spare")
     session = EngineSession.start(game.table, P1)
-    sequence.advance(session.game)  # Action -> Battle
-    sequence.advance(session.game)  # Battle -> Dynasty, where a Province card may be discarded
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty, where a Province card may be discarded
 
     session.act(P1, DynastyDiscard("spare-dynasty"))
 
