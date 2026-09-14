@@ -410,3 +410,23 @@ def test_a_seat_may_take_the_honor_interrupt_once_per_action():
 
     assert game.pending is None
     assert game.table.seats[P1].honor == 1 + 2
+
+
+def test_a_change_of_zero_asks_nobody():
+    game = _inside_an_action()
+
+    resolve_effects(game, [GainHonor(P1, 0)])
+
+    assert game.pending is None
+
+
+def test_interrupts_from_both_seats_net_against_the_change_and_never_reverse_it():
+    game = _inside_an_action()
+    _honor_card(game.table, "P1-honor0", P1)
+
+    resolve_effects(game, [GainHonor(P1, 1)])
+    action_sequence.submit(game, DecisionResponse((interrupt_token("P1-honor0", -1),)))
+    action_sequence.submit(game, DecisionResponse((interrupt_token("P2-honor0", 1),)))
+
+    assert game.pending is None
+    assert game.table.seats[P1].honor == 1  # -1 then +1 net to nothing, not a gain turned loss

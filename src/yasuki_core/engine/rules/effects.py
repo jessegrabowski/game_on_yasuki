@@ -1252,7 +1252,11 @@ class GainHonor(InterruptingEffect):
     seat : PlayerId
         The seat whose Honor moves.
     amount : int
-        The signed change.
+        The signed change, before any Interrupt.
+    adjustment : int, optional
+        The net change the Interrupts taken against this change make to its size, applied once
+        when it performs so that no run of Interrupts can carry it through zero and reverse it.
+        Default 0.
     declined : frozenset of PlayerId, optional
         The seats that have declined an Interrupt against this change. Default empty.
     interruptible : bool, optional
@@ -1263,15 +1267,23 @@ class GainHonor(InterruptingEffect):
 
     seat: PlayerId
     amount: int
+    adjustment: int = 0
     declined: frozenset[PlayerId] = frozenset()
     interruptible: bool = True
 
+    @property
+    def adjusted(self) -> int:
+        return adjusted_honor_change(self.amount, self.adjustment)
+
     def describe(self) -> str:
-        verb = "gains" if self.amount >= 0 else "loses"
-        return f"{self.seat.name} {verb} {abs(self.amount)} honor"
+        amount = self.adjusted
+        verb = "gains" if amount >= 0 else "loses"
+        return f"{self.seat.name} {verb} {abs(amount)} honor"
 
     def is_interruptible(self) -> bool:
-        return self.interruptible
+        # A change of zero is not a gain or loss (CR, Honor Gains and Losses), so there is nothing
+        # to interrupt.
+        return self.interruptible and self.amount != 0
 
     # Imported where they are used: the Interrupt step reads the hands and the round, and the
     # module that does so imports this one.
@@ -1292,9 +1304,10 @@ class GainHonor(InterruptingEffect):
         return interrupt_request(game, self)
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        if not ops.set_honor(game.table, self.seat, delta=self.amount):
+        amount = self.adjusted
+        if not ops.set_honor(game.table, self.seat, delta=amount):
             return []
-        return [HonorChanged(self.seat, self.amount)]
+        return [HonorChanged(self.seat, amount)]
 
 
 def adjusted_honor_change(amount: int, adjustment: int) -> int:

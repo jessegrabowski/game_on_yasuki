@@ -13,7 +13,6 @@ from yasuki_core.engine.rules.effects import (
     Fear,
     GainHonor,
     InterruptingEffect,
-    adjusted_honor_change,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
@@ -67,7 +66,7 @@ def _adjust_fear(effect: Fear, delta: int) -> Fear:
 
 
 def _adjust_honor(effect: GainHonor, delta: int) -> GainHonor:
-    return replace(effect, amount=adjusted_honor_change(effect.amount, delta))
+    return replace(effect, adjustment=effect.adjustment + delta)
 
 
 # The two rulebook Interrupts the ShE datasheet grants. Courage may be taken any number of times per
