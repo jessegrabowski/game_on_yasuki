@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
     followers_in_play,
     owned_holdings,
     personalities_in_play,
@@ -19,8 +20,11 @@ from yasuki_core.engine.rules.effects import (
     DrawCard,
     Effect,
     GrantModifier,
+    RangedAttack,
+    Unpayable,
 )
 from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
@@ -157,5 +161,55 @@ register_ability(
         targets=_otokoshi_district_targets,
         effects=_otokoshi_district_effects,
         tireless=True,
+    ),
+)
+
+
+# --- Yoritomo Bunrakuken ---
+
+BUNRAKUKEN_RANGED = 2
+
+
+def _yoritomo_bunrakuken_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Destroy Bunrakuken's target Follower. Unpayable with none attached, since the destruction
+    is the whole cost rather than something else the ability could pay instead. With more than one
+    attached, the seat picks which; with exactly one there is nothing to ask.
+    """
+    followers = followers_of(game, source)
+    if not followers:
+        return [Unpayable(f"{source.id} carries no Follower to destroy")]
+    if len(followers) == 1:
+        return [Destroy(followers[0].id, source.owner)]
+    return [
+        Choose(
+            source.owner,
+            tuple(follower.id for follower in followers),
+            1,
+            1,
+            "yoritomo_bunrakuken_follower",
+            source.id,
+        )
+    ]
+
+
+@choice_resolver("yoritomo_bunrakuken_follower", prompt="Destroy Bunrakuken's target Follower")
+def _resolve_yoritomo_bunrakuken_follower(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Destroy(chosen[0], seat)]
+
+
+def _yoritomo_bunrakuken_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [RangedAttack(BUNRAKUKEN_RANGED, target.id, source.owner)]
+
+
+register_ability(
+    "yoritomo_bunrakuken",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Destroy Bunrakuken's target Follower to make Ranged {BUNRAKUKEN_RANGED}",
+        cost=_yoritomo_bunrakuken_cost,
+        targets=attack_targets,
+        effects=_yoritomo_bunrakuken_effects,
     ),
 )

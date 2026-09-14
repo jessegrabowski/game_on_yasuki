@@ -113,6 +113,99 @@ def test_ichiba_activation_replays_to_the_same_state():
     assert replay(session.log) == session.game
 
 
+def _bunrakuken_battle(
+    followers: tuple[str, ...] = ("sword",), *, defending_follower_force: int = 2
+) -> EngineSession:
+    """The Combat Segment of an attack led by Bunrakuken, carrying ``followers`` -- Bunrakuken's
+    own attached Followers, the pool "Bunrakuken's target Follower" destroys the cost from. The
+    Defender brings a 2F Personality with a Follower at ``defending_follower_force``, default 2,
+    which a Ranged 2 destroys."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(
+        state, personality("bun", owner=ATTACKER, printed_id="yoritomo_bunrakuken", force=4)
+    )
+    for follower_id in followers:
+        attached(
+            state,
+            attachment(follower_id, attachment_type=AttachmentType.FOLLOWER, force=1),
+            "bun",
+        )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    attached(
+        state,
+        attachment(
+            "ashigaru",
+            owner=DEFENDER,
+            attachment_type=AttachmentType.FOLLOWER,
+            force=defending_follower_force,
+        ),
+        "guard",
+    )
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("bun@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    session.submit(ATTACKER, DecisionResponse(("0",)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    session.act(DEFENDER, Pass())
+    return session
+
+
+def _in_play(session: EngineSession, card_id: str) -> bool:
+    table = session.game.table
+    return table.cards_by_id[card_id] in table.battlefield.cards
+
+
+def test_bunrakuken_destroys_its_own_follower_to_make_the_ranged_attack():
+    session = _bunrakuken_battle()
+
+    session.act(ATTACKER, ActivateAbility("bun"))
+    session.submit(ATTACKER, DecisionResponse(("ashigaru",)))
+
+    assert not _in_play(session, "sword")  # destroyed to pay the cost
+    assert not _in_play(session, "ashigaru")  # the Ranged 2 destroyed the target
+
+
+def test_bunrakuken_spares_a_follower_the_ranged_2_cannot_reach():
+    """Ranged X destroys only a target at X Force or less (CR, Ranged Attack), so a 3F Follower
+    survives -- and the Follower Bunrakuken paid is gone either way."""
+    session = _bunrakuken_battle(defending_follower_force=3)
+
+    session.act(ATTACKER, ActivateAbility("bun"))
+    session.submit(ATTACKER, DecisionResponse(("ashigaru",)))
+
+    assert _in_play(session, "ashigaru")
+    assert not _in_play(session, "sword")
+
+
+def test_bunrakuken_is_not_activatable_with_no_follower_to_destroy():
+    session = _bunrakuken_battle(followers=())
+    assert ActivateAbility("bun") not in session.legal_actions(ATTACKER)
+
+
+def test_bunrakuken_lets_the_seat_choose_which_of_his_followers_to_destroy():
+    session = _bunrakuken_battle(followers=("sword", "bow"))
+
+    session.act(ATTACKER, ActivateAbility("bun"))
+    session.submit(ATTACKER, DecisionResponse(("bow",)))  # which of Bunrakuken's Followers
+    session.submit(ATTACKER, DecisionResponse(("ashigaru",)))  # the Ranged Attack's target
+
+    assert not _in_play(session, "bow")
+    assert _in_play(session, "sword")  # only the chosen Follower was destroyed
+    assert not _in_play(session, "ashigaru")
+
+
+def test_bunrakuken_activation_replays_to_the_same_state():
+    session = _bunrakuken_battle()
+    session.act(ATTACKER, ActivateAbility("bun"))
+    session.submit(ATTACKER, DecisionResponse(("ashigaru",)))
+    assert replay(session.log) == session.game
+
+
 def _mantis_kama_battle(
     *,
     defender_followers: tuple[str, ...] = ("f1", "f2"),
