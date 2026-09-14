@@ -82,8 +82,8 @@ from yasuki_core.engine.rules.turn.sequence import (
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.work import (
     ApplyAbilityEffects,
-    BeginNextTurn,
     ApplyEffects,
+    BeginNextTurn,
     CompleteProduction,
     ContinuePayment,
     DiscardPlayed,

@@ -213,11 +213,10 @@ class CompleteProduction:
 
 @dataclass(frozen=True, slots=True)
 class BeginNextTurn:
-    """Begin the next turn once the end-of-turn discard has fully resolved.
+    """Begin the next turn once the end-of-turn discard, and any question it raised, has resolved.
 
-    A work item because a trait reacting to the discard may pause for a decision, and the turn
-    must not pass over an unanswered question. Pushed before the discard is announced, so the
-    remainder of a paused cascade stacks above it and resumes first.
+    Pushed before the discard is announced, so a paused cascade's remainder stacks above it and
+    resumes first.
     """
 
 
