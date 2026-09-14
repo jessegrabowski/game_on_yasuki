@@ -32,7 +32,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 @dataclass(frozen=True, slots=True)
-class RulebookInterrupt:
+class RulebookInterrupt[T: InterruptibleEffect]:
     """A rulebook Interrupt every player holds: discard a card carrying ``keyword`` to adjust a
     pending effect of type ``answers`` by one of ``deltas``.
 
@@ -55,9 +55,9 @@ class RulebookInterrupt:
 
     key: str
     keyword: str
-    answers: type[Effect]
+    answers: type[T]
     deltas: tuple[int, ...]
-    adjust: Callable[..., Effect]
+    adjust: Callable[[T, int], T]
     once_per_action: bool
 
 
@@ -101,10 +101,6 @@ def discardable_for(game: GameState, seat: PlayerId, interrupt: RulebookInterrup
     return [card for card in _hand(game, seat) if has_keyword(game, card, interrupt.keyword)]
 
 
-def _taken_key(interrupt: RulebookInterrupt, seat: PlayerId) -> str:
-    return f"{interrupt.key}:{seat.name}"
-
-
 def rulebook_interrupts_for(
     game: GameState, seat: PlayerId, effect: Effect
 ) -> list[RulebookInterrupt]:
@@ -114,7 +110,7 @@ def rulebook_interrupts_for(
         interrupt
         for interrupt in RULEBOOK_INTERRUPTS
         if isinstance(effect, interrupt.answers)
-        and not (interrupt.once_per_action and _taken_key(interrupt, seat) in game.interrupts_taken)
+        and not (interrupt.once_per_action and (interrupt.key, seat) in game.interrupts_taken)
         and discardable_for(game, seat, interrupt)
     ]
 
@@ -234,5 +230,5 @@ def _discard_to_interrupt(
     if taken is None:
         raise RuntimeError(f"{card_id} is no longer a card {seat.name} can discard to interrupt")
     if taken.once_per_action:
-        game.interrupts_taken.add(_taken_key(taken, seat))
+        game.interrupts_taken.add((taken.key, seat))
     triggers.resume_paused_cascade(game, [Discard(card_id, seat), taken.adjust(effect, delta)])

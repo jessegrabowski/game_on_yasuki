@@ -137,10 +137,10 @@ class GameState:
         action begins. A Response reads it to ask what it is responding to  "discarded a Fate card"
         is a fact about the action rather than about the board it left behind. Ephemeral and rebuilt
         by replay. Default empty.
-    interrupts_taken : set of str
-        The once-per-action rulebook Interrupts taken against the action now resolving, keyed by
-        ability and seat. Cleared as the next action begins. Ephemeral and rebuilt by replay.
-        Default empty.
+    interrupts_taken : set of (str, PlayerId)
+        The once-per-action rulebook Interrupts taken against the action now resolving, as the
+        Interrupt's key and the seat that took it. Cleared as the next action begins. Ephemeral
+        and rebuilt by replay. Default empty.
     """
 
     table: TableState
@@ -175,7 +175,7 @@ class GameState:
     action_taken: str = ""
     action_is_favor: bool = False
     action_events: list[GameEvent] = field(default_factory=list)
-    interrupts_taken: set[str] = field(default_factory=set)
+    interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)
 
     @property
     def awaiting_decision(self) -> bool:
