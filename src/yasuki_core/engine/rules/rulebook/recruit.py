@@ -4,6 +4,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import finish_invest
 from yasuki_core.engine.rules.abilities.registry import enters_play_bowed, invest_amounts
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
+from yasuki_core.engine.rules.effects import GainHonor
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseFortificationProvince,
     ChooseInvestAmount,
@@ -164,7 +165,9 @@ def finish_recruit(
     _clear_sincerity(game, card)
     if proclaim:
         game.use_once(proclaim_key(card.owner, game.turn))
-        ops.set_honor(game.table, card.owner, delta=effective_personal_honor(game, card))
+        triggers.resolve_effects(
+            game, [GainHonor(card.owner, effective_personal_honor(game, card))]
+        )
     finish_invest(game, card, invest_amount)
 
 

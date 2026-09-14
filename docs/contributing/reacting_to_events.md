@@ -78,7 +78,7 @@ when an `effective_*` function exists for it.
 
 ## What you can react to
 
-Nine events:
+Ten events:
 
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.EnteredPlay`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Destroyed`
@@ -87,6 +87,7 @@ Nine events:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.CounterGained`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Revealed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.TurnStarted`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.HonorChanged`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducingGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducedGold`
 

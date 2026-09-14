@@ -19,13 +19,14 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
     DiscardFavor,
+    GainHonor,
     PlaceInProvince,
     Effect,
     TakeFavor,
     InterruptingEffect,
     Unpayable,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, HonorChanged
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -421,3 +422,20 @@ def test_discarding_the_favor_does_not_touch_another_seats_hold():
     DiscardFavor(PlayerId.P2).perform(game)
 
     assert game.favor_holder is PlayerId.P1
+
+
+@pytest.mark.parametrize("amount", [2, -4])
+def test_an_honor_change_announces_its_signed_amount(amount):
+    game = two_seat_game()
+    before = game.table.seats[PlayerId.P1].honor
+
+    events = GainHonor(PlayerId.P1, amount).perform(game)
+
+    assert game.table.seats[PlayerId.P1].honor == before + amount
+    assert events == [HonorChanged(PlayerId.P1, amount)]
+
+
+def test_an_honor_change_of_zero_is_not_announced():
+    game = two_seat_game()
+
+    assert GainHonor(PlayerId.P1, 0).perform(game) == []
