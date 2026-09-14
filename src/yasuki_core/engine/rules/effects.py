@@ -99,7 +99,8 @@ class InterruptingEffect(Effect, ABC):
     """An effect that pauses the cascade to put a question to a seat.
 
     The walker records :meth:`request` as the pending decision and stashes the rest of the cascade,
-    resuming once the seat answers. It never calls :meth:`~.perform` on one.
+    resuming once the seat answers. It calls :meth:`~.perform` only on one whose :meth:`pauses`
+    says there is no one to ask.
     """
 
     __slots__ = ()
@@ -107,6 +108,11 @@ class InterruptingEffect(Effect, ABC):
     @abstractmethod
     def request(self, game: GameState) -> DecisionRequest:
         """The decision to put to the seat."""
+
+    def pauses(self, game: GameState) -> bool:
+        """Whether the cascade stops here. True unless a subclass finds nobody to answer, in which
+        case the walker performs the effect instead of asking."""
+        return True
 
     def perform(self, game: GameState) -> list[GameEvent]:
         """Never reached: the walker records :meth:`request` and pauses instead of committing."""

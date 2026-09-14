@@ -176,7 +176,7 @@ def _advance(
     firing = list(firing)
     while True:
         for index, effect in enumerate(effects):
-            if isinstance(effect, InterruptingEffect):
+            if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
