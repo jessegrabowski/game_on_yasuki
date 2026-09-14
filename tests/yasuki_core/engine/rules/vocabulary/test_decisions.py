@@ -377,6 +377,12 @@ def test_an_interrupt_token_round_trips():
     assert interrupt_choice("plain-card") == ("plain-card", None)
 
 
+@pytest.mark.parametrize("token", ["@honor", "card@"])
+def test_an_interrupt_token_missing_its_card_or_key_is_refused(token):
+    with pytest.raises(ValueError, match="not an interrupt token"):
+        interrupt_choice(token)
+
+
 def test_an_interrupt_names_the_effect_it_guards():
     assert _interrupt().prompt() == "P1 gains 3 honor. Take an Interrupt?"
     assert _interrupt().confirm_label == "Pass"
