@@ -8,7 +8,6 @@ yasuki_core.engine.rules.effects
 .. autosummary::
 
     AdjustCounter
-    AdjustHonorChange
     ApplyEffects
     Ask
     AskAmount

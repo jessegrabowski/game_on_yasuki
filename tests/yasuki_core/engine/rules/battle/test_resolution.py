@@ -20,7 +20,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import AttachmentType
 
-from tests.yasuki_core.engine.rules.rulebook.test_honor import _honor_card
+from tests.yasuki_core.engine.rules.test_interrupts import _honor_card
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,

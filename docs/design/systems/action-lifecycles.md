@@ -39,8 +39,7 @@ a card because a created attachment has no card to ask about yet.
 
 One module per action covers the rest: `cycle.py`, `kharmic.py`, `legacy.py`, `inheritance.py`,
 `lobby.py`, `dynasty_discard.py`, and the three Favor modules. `costs.py` is the exception, a
-shared helper, not an action. `honor.py` is the other: the Honor Interrupt is a decision a
-pending Honor change raises, not an action of its own.
+shared helper, not an action.
 
 ## Where a card plugs in
 

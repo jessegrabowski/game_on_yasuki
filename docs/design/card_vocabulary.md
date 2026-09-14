@@ -18,8 +18,8 @@ reading a cascade back. Triggers and activated abilities return lists of effects
 commits each in turn, draining the events they raise until no further events are produced.
 
 An `InterruptingEffect` pauses the cascade rather than committing. One may decline to pause when
-nobody could answer, which is how `GainHonor` opens the Honor Interrupt only while a seat holds an
-Honor card. The walker records the decision
+nobody could answer, which is how `GainHonor` and `Fear` open the Interrupt step only while a
+seat holds something to interrupt with. The walker records the decision
 its `request` returns, stashes the remainder of the cascade, and resumes once the seat answers. An
 effect cannot declare itself interrupting without supplying that decision, because `request` is
 abstract on the category.
@@ -34,7 +34,6 @@ deferred through `Then` instead.
 .. autosummary::
 
    AdjustCounter
-   AdjustHonorChange
    Ask
    AskAmount
    AskDistribution
@@ -135,8 +134,8 @@ Legality with respect to game state is checked separately.
    ChooseDistribution
    ChooseEquipTarget
    ChooseFortificationProvince
-   ChooseHonorInterrupt
    ChooseInheritanceTarget
+   ChooseInterrupt
    ChooseInvestAmount
    ChooseOption
    LeaveBowed

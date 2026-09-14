@@ -4,15 +4,15 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseBattlefield,
     ChooseDistribution,
+    ChooseInterrupt,
     ChooseInvestAmount,
-    ChooseHonorInterrupt,
     ChooseOption,
     ChoosePayment,
     Confirm,
     DecisionResponse,
     assignment,
     assignment_token,
-    honor_interrupt,
+    interrupt_choice,
 )
 from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
@@ -90,7 +90,7 @@ class Presenter:
             ChooseAmount
             | ChooseInvestAmount
             | ChooseOption
-            | ChooseHonorInterrupt
+            | ChooseInterrupt
             | Confirm
             | ChooseBattlefield,
         ):
@@ -232,13 +232,13 @@ class Presenter:
             # battlefield, and the whole map goes over as the one answer the CR's simultaneous
             # assignment calls for.
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
-        if isinstance(pending, ChooseHonorInterrupt):
+        if isinstance(pending, ChooseInterrupt):
             # The cards are in hand, so each way to interrupt is a button naming the card and the
             # direction, and passing is the confirm.
             cards = self.host.runner.session.game.table.cards_by_id
             interrupts: list[ButtonSpec] = []
             for token in pending.candidates:
-                card_id, delta = honor_interrupt(token)
+                card_id, delta = interrupt_choice(token)
                 label = f"Discard {cards[card_id].name} ({delta:+d})"
                 interrupts.append((label, lambda chosen=token: self.submit_answer((chosen,)), True))
             interrupts.append((pending.confirm_label, lambda: self.submit_answer(()), True))
