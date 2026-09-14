@@ -184,11 +184,11 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     if not request.accepts(response):
         raise ValueError("malformed answer to the pending decision")
     acted_in = game.round
+    if isinstance(request, DiscardToHandSize) and game.stack:
+        raise RuntimeError("the turn is ending with work still queued")
     game.pending = None
     match request:
         case DiscardToHandSize():
-            if game.stack:
-                raise RuntimeError("the turn is ending with work still queued")
             game.stack.append(BeginNextTurn())
             apply_discard(game, request.seat, response.choices)
         case LeaveBowed():
