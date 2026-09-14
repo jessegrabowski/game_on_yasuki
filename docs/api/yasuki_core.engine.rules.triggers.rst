@@ -20,6 +20,7 @@ yasuki_core.engine.rules.triggers
     choice_resolver
     enforce_state_based_actions
     fire
+    fire_all
     on
     resolve_delayed
     resolve_effects

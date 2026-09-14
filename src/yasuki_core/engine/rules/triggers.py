@@ -1,5 +1,5 @@
 import collections
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
@@ -325,6 +325,16 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
 def fire(game: GameState, event: GameEvent) -> None:
     """Resolve ``event`` and the cascade it triggers, running the worklist to a fixpoint."""
     _advance(game, (), [], None, [event])
+
+
+def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
+    """Resolve ``events`` as one cascade, for occurrences that happen at the same instant.
+
+    Firing them one at a time is not the same thing: a trigger that pauses for a decision leaves
+    the machine stopped, and the next call would start a second cascade on top of the pending
+    request and overwrite it.
+    """
+    _advance(game, (), [], None, list(events))
 
 
 def resolve_effects(game: GameState, effects: list[Effect]) -> None:
