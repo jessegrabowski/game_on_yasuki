@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.board.queries import attack_targets, personalities_in_play
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_discount
@@ -15,12 +15,14 @@ from yasuki_core.engine.rules.effects import (
     DrawCard,
     Effect,
     GainHonor,
+    GrantKeyword,
     MeleeAttack,
     PlaceInProvince,
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
@@ -29,6 +31,49 @@ from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
+
+
+# --- Chuda Jomei ---
+
+
+JOMEI_HONOR_LOSS = 3
+
+
+@on(EnteredPlay, "chuda_jomei")
+def _chuda_jomei_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After Jomei enters play, lose 3 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -JOMEI_HONOR_LOSS)]
+
+
+def _chuda_jomei_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Every Personality on the board without the Nonhuman keyword. Human is the absence of that
+    keyword rather than one a card carries (CR, Human), and it is read off the board because
+    Nonhuman can be granted."""
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if keywords.NONHUMAN not in effective_keywords(game, card)
+    ]
+
+
+def _chuda_jomei_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Give the target Shadowlands. The card prints no duration, so the grant lasts until the end
+    of the turn (CR, Duration of Effects)."""
+    return [GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "chuda_jomei",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: Give a target Human Personality Shadowlands",
+        cost=no_cost,
+        targets=_chuda_jomei_targets,
+        effects=_chuda_jomei_effects,
+    ),
+)
 
 
 # --- Doji Maya (Experienced) ---

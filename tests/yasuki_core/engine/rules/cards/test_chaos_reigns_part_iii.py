@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.triggers import fire
@@ -39,6 +40,49 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1, P2 = PlayerId.P1, PlayerId.P2
+
+
+# --- Chuda Jomei ---
+
+
+def _jomei_game():
+    """Jomei in play beside a Human Personality and a Nonhuman one."""
+    game = two_seat_game()
+    put_in_play(game, personality("jomei", printed_id="chuda_jomei", name="Chuda Jomei"))
+    put_in_play(game, personality("monk", keywords=("Monk",)))
+    put_in_play(game, personality("oni", keywords=("Nonhuman", "Oni")))
+    return EngineSession.start(game.table, P1)
+
+
+def test_chuda_jomei_costs_three_honor_to_enter_play():
+    session = _jomei_game()
+
+    fire(session.game, EnteredPlay("jomei"))
+
+    assert session.game.table.seats[P1].honor == -3
+
+
+def test_chuda_jomei_offers_only_human_personalities():
+    """ "A target Human Personality": Human is the absence of Nonhuman (CR, Human), and Jomei is
+    one himself."""
+    session = _jomei_game()
+
+    session.act(P1, ActivateAbility("jomei"))
+
+    assert set(session.game.pending.candidates) == {"jomei", "monk"}
+
+
+def test_chuda_jomei_gives_shadowlands_until_the_end_of_the_turn():
+    session = _jomei_game()
+
+    session.act(P1, ActivateAbility("jomei"))
+    session.submit(P1, DecisionResponse(("monk",)))
+
+    monk = session.game.table.cards_by_id["monk"]
+    assert "Shadowlands" in effective_keywords(session.game, monk)
+
+    end_turn(session)
+    assert "Shadowlands" not in effective_keywords(session.game, monk)
 
 
 # --- Kengun Grounds ---
