@@ -1,16 +1,33 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import owned_holdings
+from yasuki_core.engine.rules.board.queries import (
+    followers_in_play,
+    owned_holdings,
+    personalities_in_play,
+)
 from yasuki_core.engine.rules.gold.production import gold_handler
+from yasuki_core.engine.rules.legality import location_permits
 from yasuki_core.engine.rules.board.seats import opposing_seats, seat_stronghold
-from yasuki_core.engine.rules.effects import AdjustCounter, BanishTopFate, Destroy, DrawCard, Effect
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    BanishTopFate,
+    Choose,
+    Destroy,
+    DrawCard,
+    Effect,
+    GrantModifier,
+)
+from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.game_pieces.prints import PersonalityPrint
 
 
 # --- Ancestral Estate ---
@@ -53,6 +70,65 @@ register_ability(
         cost=_ichiba_district_cost,
         targets=_ichiba_district_targets,
         effects=plus_one_gp_this_turn,
+    ),
+)
+
+
+# --- Mantis Kama ---
+
+MANTIS_KAMA_PENALTY = -2
+
+
+def _mantis_kama_penalty(source_id: str, target_id: str) -> GrantModifier:
+    """The -2F the card gives, whichever of its two targets takes it."""
+    return GrantModifier(
+        source_id, target_id, Stat.FORCE, MANTIS_KAMA_PENALTY, Duration.UNTIL_END_OF_TURN
+    )
+
+
+def _mantis_kama_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Every Personality and Follower in play: the card reaches either a single Personality or a
+    Follower, and a Follower target may bring in a second one through the effect."""
+    return [card.id for card in personalities_in_play(game)] + [
+        follower.id for follower in followers_in_play(game)
+    ]
+
+
+def _mantis_kama_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """-2F to the chosen target. Only a Follower target may bring in a second, since the card reads
+    "a target Personality or ... one or two target Followers".
+
+    The second Follower is filtered here rather than centrally: ``legal_targets`` narrows what an
+    ability's own predicate offers, and a choice an effect raises never passes through it.
+    """
+    penalty = _mantis_kama_penalty(source.id, target.id)
+    if isinstance(target.printed, PersonalityPrint):
+        return [penalty]
+    others = tuple(
+        follower.id
+        for follower in followers_in_play(game)
+        if follower.id != target.id and location_permits(game, follower)
+    )
+    if not others:
+        return [penalty]
+    return [penalty, Choose(source.owner, others, 0, 1, "mantis_kama", source.id)]
+
+
+@choice_resolver("mantis_kama", prompt="Give a second target Follower -2F")
+def _resolve_mantis_kama(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [_mantis_kama_penalty(source_id, follower_id) for follower_id in chosen]
+
+
+register_ability(
+    "mantis_kama",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle, Bow: Give -2F to a target Personality or to one or two target Followers",
+        cost=bow_cost,
+        targets=_mantis_kama_targets,
+        effects=_mantis_kama_effects,
     ),
 )
 

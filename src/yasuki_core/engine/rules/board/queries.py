@@ -7,8 +7,9 @@ from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.table import Zone, ZoneKey, ZoneRole, location_of, province_holding
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import SINCERITY
-from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
 
 
 def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Zone]]:
@@ -81,6 +82,18 @@ def personalities_in_play(game: GameState) -> tuple[L5RCard, ...]:
     Personality" with no side attached to it."""
     return tuple(
         card for card in game.table.battlefield.cards if isinstance(card.printed, PersonalityPrint)
+    )
+
+
+def followers_in_play(game: GameState) -> tuple[L5RCard, ...]:
+    """Every Follower on the battlefield, either seat's -- the pool a card means by "a target
+    Follower" with no side attached to it. The Follower counterpart of
+    :func:`~.personalities_in_play`."""
+    return tuple(
+        card
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type is AttachmentType.FOLLOWER
     )
 
 
