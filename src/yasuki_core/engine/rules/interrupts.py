@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
-    InterruptingEffect,
+    InterruptibleEffect,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
@@ -131,7 +131,7 @@ def card_interrupts_for(
     ]
 
 
-def interrupters(game: GameState, effect: InterruptingEffect) -> list[PlayerId]:
+def interrupters(game: GameState, effect: InterruptibleEffect) -> list[PlayerId]:
     """The seats still to be offered an Interrupt against ``effect``, the active player first
     (ShE datasheet, Interrupt).
 
@@ -155,7 +155,7 @@ def interrupters(game: GameState, effect: InterruptingEffect) -> list[PlayerId]:
     ]
 
 
-def interrupt_request(game: GameState, effect: InterruptingEffect) -> ChooseInterrupt:
+def interrupt_request(game: GameState, effect: InterruptibleEffect) -> ChooseInterrupt:
     """The Interrupt offered to the first seat :func:`~.interrupters` names against ``effect``."""
     seat = interrupters(game, effect)[0]
     discards = tuple(
@@ -196,7 +196,7 @@ def apply_interrupt(game: GameState, request: ChooseInterrupt, response: Decisio
 
 
 def _play_interrupt(
-    game: GameState, seat: PlayerId, effect: InterruptingEffect, card_id: str
+    game: GameState, seat: PlayerId, effect: InterruptibleEffect, card_id: str
 ) -> None:
     played = next(
         (pair for pair in card_interrupts_for(game, seat, effect) if pair[0].id == card_id), None
@@ -213,7 +213,7 @@ def _play_interrupt(
 
 
 def _discard_to_interrupt(
-    game: GameState, seat: PlayerId, effect: InterruptingEffect, card_id: str, delta: int
+    game: GameState, seat: PlayerId, effect: InterruptibleEffect, card_id: str, delta: int
 ) -> None:
     taken = next(
         (

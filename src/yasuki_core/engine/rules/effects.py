@@ -115,26 +115,58 @@ class InterruptingEffect(Effect, ABC):
         case the walker performs the effect instead of asking."""
         return True
 
-    def is_interruptible(self) -> bool:
-        """Whether the Interrupt step is open against this effect. True unless a subclass says the
-        effect belongs to a rulebook procedure, which has no Interrupt step."""
-        return True
-
-    def has_declined(self, seat: PlayerId) -> bool:
-        """Whether ``seat`` has declined an Interrupt against this effect. False unless a subclass
-        opens the Interrupt step and records who declined."""
-        return False
-
-    def declined_by(self, seat: PlayerId) -> "InterruptingEffect":
-        """This effect with ``seat`` recorded as having declined an Interrupt against it. Only an
-        effect that opens the Interrupt step records one."""
-        raise NotImplementedError(f"{type(self).__name__} opens no Interrupt step")
-
     def perform(self, game: GameState) -> list[GameEvent]:
-        """Never reached: the walker records :meth:`request` and pauses instead of committing."""
+        """Never reached: the walker records :meth:`~.InterruptingEffect.request` and pauses instead
+        of committing."""
         raise RuntimeError(
             f"{type(self).__name__} pauses the cascade; it is never applied directly"
         )
+
+
+class InterruptibleEffect(InterruptingEffect, ABC):
+    """An effect the Interrupt step is open against: while it waits to resolve inside an action,
+    each seat in turn may take an Interrupt that replaces it (ShE datasheet, Interrupt).
+
+    Pauses only while :func:`~yasuki_core.engine.rules.interrupts.interrupters` names a seat with
+    something to take, and performs once every seat has declined. A subclass declares the
+    ``declined`` field this category reads, since a dataclass field cannot sit on the category
+    ahead of the subclass's own required ones.
+
+    Attributes
+    ----------
+    declined : frozenset of PlayerId
+        The seats that have declined an Interrupt against this effect.
+    """
+
+    __slots__ = ()
+
+    declined: frozenset[PlayerId]
+
+    def is_interruptible(self) -> bool:
+        """Whether the Interrupt step is open against this effect at all. True unless a subclass
+        says the effect belongs to a rulebook procedure, which has no Interrupt step."""
+        return True
+
+    def has_declined(self, seat: PlayerId) -> bool:
+        return seat in self.declined
+
+    def declined_by(self, seat: PlayerId) -> "InterruptibleEffect":
+        """This effect with ``seat`` recorded as having declined an Interrupt against it."""
+        # The category carries no fields of its own, so it is not a dataclass, but every concrete
+        # effect under it is one.
+        return replace(self, declined=self.declined | {seat})  # pyright: ignore[reportArgumentType]
+
+    # Imported where they are used: the Interrupt step reads the hands and the round, and the
+    # module that does so imports this one.
+    def pauses(self, game: GameState) -> bool:
+        from yasuki_core.engine.rules.interrupts import interrupters
+
+        return bool(interrupters(game, self))
+
+    def request(self, game: GameState) -> DecisionRequest:
+        from yasuki_core.engine.rules.interrupts import interrupt_request
+
+        return interrupt_request(game, self)
 
 
 @dataclass(frozen=True, slots=True)
@@ -711,12 +743,9 @@ class MeleeAttack(AttackEffect):
 
 
 @dataclass(frozen=True, slots=True)
-class Fear(AttackEffect, InterruptingEffect):
+class Fear(AttackEffect, InterruptibleEffect):
     """*"Fear X" is shorthand for "Target an enemy Follower or Personality without Followers and bow
     it if its Force is equal to or lower than X."*
-
-    Inside an action the effect is open to the Interrupt step before it resolves: see
-    :mod:`~yasuki_core.engine.rules.interrupts`.
 
     Attributes
     ----------
@@ -728,24 +757,6 @@ class Fear(AttackEffect, InterruptingEffect):
 
     consequences: tuple[Consequence, ...] = (Consequence.BOW,)
     declined: frozenset[PlayerId] = frozenset()
-
-    # Imported where they are used: the Interrupt step reads the hands and the round, and the
-    # module that does so imports this one.
-    def pauses(self, game: GameState) -> bool:
-        from yasuki_core.engine.rules.interrupts import interrupters
-
-        return bool(interrupters(game, self))
-
-    def has_declined(self, seat: PlayerId) -> bool:
-        return seat in self.declined
-
-    def declined_by(self, seat: PlayerId) -> "InterruptingEffect":
-        return replace(self, declined=self.declined | {seat})
-
-    def request(self, game: GameState) -> DecisionRequest:
-        from yasuki_core.engine.rules.interrupts import interrupt_request
-
-        return interrupt_request(game, self)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1243,12 +1254,9 @@ class WinGame(Effect):
 
 
 @dataclass(frozen=True, slots=True)
-class GainHonor(InterruptingEffect):
+class GainHonor(InterruptibleEffect):
     """Move ``seat``'s Family Honor by ``amount``. Negative loses honor. The two directions are one
     effect because the rules treat them as one dial.
-
-    Inside an action the change is open to the Interrupt step before it performs: see
-    :mod:`~yasuki_core.engine.rules.interrupts`.
 
     Attributes
     ----------
@@ -1287,24 +1295,6 @@ class GainHonor(InterruptingEffect):
         # A change of zero is not a gain or loss (CR, Honor Gains and Losses), so there is nothing
         # to interrupt.
         return self.interruptible and self.amount != 0
-
-    # Imported where they are used: the Interrupt step reads the hands and the round, and the
-    # module that does so imports this one.
-    def pauses(self, game: GameState) -> bool:
-        from yasuki_core.engine.rules.interrupts import interrupters
-
-        return bool(interrupters(game, self))
-
-    def has_declined(self, seat: PlayerId) -> bool:
-        return seat in self.declined
-
-    def declined_by(self, seat: PlayerId) -> "InterruptingEffect":
-        return replace(self, declined=self.declined | {seat})
-
-    def request(self, game: GameState) -> DecisionRequest:
-        from yasuki_core.engine.rules.interrupts import interrupt_request
-
-        return interrupt_request(game, self)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         amount = self.adjusted

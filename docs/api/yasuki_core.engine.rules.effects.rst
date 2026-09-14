@@ -40,6 +40,7 @@ yasuki_core.engine.rules.effects
     GrantPriority
     GrantProvinceStrength
     IgnoreHonorRequirements
+    InterruptibleEffect
     InterruptingEffect
     LoseGame
     MeleeAttack
