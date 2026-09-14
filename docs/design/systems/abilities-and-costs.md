@@ -64,6 +64,11 @@ Personality's bow is consulted at the moment of payment.
 ## The optional fields
 
 `key` names an ability among several its card prints, so an action can say which one it takes.
+`interrupts` names the effect types an Interrupt answers, which is when the Interrupt step offers
+it: a Strategy naming `Fear` is offered from hand while a Fear effect waits to resolve. `interrupt`
+is what it then does, mapping the pending effect to an {class}`~.Interruption`: the effect that
+resolves in its place and whatever else happens. The Strategy is paid for and discarded the way any
+Strategy is.
 `tireless` lets an ability be used while its card is bowed. `located_at` says where the card must
 be, defaulting to the battlefield. `battle_designators` and `targets_any_location` govern what a
 battle ability can reach, and [Adding a Card](../../contributing/adding_a_card.md) explains both

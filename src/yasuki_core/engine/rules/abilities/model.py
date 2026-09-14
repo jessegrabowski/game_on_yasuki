@@ -19,6 +19,24 @@ class CardLocation(str, Enum):
 
 
 @dataclass(frozen=True, slots=True)
+class Interruption:
+    """What an Interrupt makes of the effect it interrupts.
+
+    Attributes
+    ----------
+    replacement : Effect
+        The effect that resolves in place of the interrupted one, the same one when the Interrupt
+        leaves it alone.
+    effects : list of Effect
+        What else the Interrupt does, resolved as the Strategy's own effects before the
+        replacement returns.
+    """
+
+    replacement: Effect
+    effects: list[Effect]
+
+
+@dataclass(frozen=True, slots=True)
 class Ability:
     """An activated ability, on a card in play or on one waiting face-up in a Province.
 
@@ -59,6 +77,13 @@ class Ability:
     tireless : bool, optional
         The Tireless keyword: the ability may be used even while its card is bowed (CR, Tireless).
         Default False, which leaves it to the rule that a bowed card's abilities cannot be used.
+    interrupts : tuple of type, optional
+        For an Interrupt, the effect types it answers, which is when it is offered: an Interrupt
+        naming ``Fear`` is offered while a Fear effect waits to resolve. Default empty, which is
+        an Interrupt no window offers.
+    interrupt : callable, optional
+        For an Interrupt, maps ``(game, source_card, effect)`` to the :class:`~.Interruption` it
+        makes of the pending effect: what replaces it and what else happens. Default None.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -72,6 +97,8 @@ class Ability:
     targets_any_location: bool = False
     key: str | None = None
     tireless: bool = False
+    interrupts: tuple[type[Effect], ...] = ()
+    interrupt: Callable[[GameState, L5RCard, Effect], Interruption] | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -93,6 +120,12 @@ class InvestAbility:
 
     amounts: tuple[int, ...]
     effect: Callable[[GameState, L5RCard, int], list[Effect]]
+
+
+def no_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The effects of an ability whose whole action is its Interrupt, which decides what it does
+    against the effect it interrupts rather than against a target."""
+    return []
 
 
 def itself(game: GameState, source: L5RCard) -> list[str]:

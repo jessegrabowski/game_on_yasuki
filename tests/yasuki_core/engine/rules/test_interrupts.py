@@ -36,7 +36,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, PersonalityPrint
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
@@ -86,6 +86,20 @@ def _honor_card(table: TableState, card_id: str, owner: PlayerId) -> L5RCard:
 
 def _courage_card(table: TableState, card_id: str, owner: PlayerId) -> L5RCard:
     return _keyword_card(table, card_id, owner, "Courage")
+
+
+def _strategy(table: TableState, card_id: str, printed_id: str, owner: PlayerId) -> L5RCard:
+    card = L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        name=card_id,
+        printed_id=printed_id,
+        side=Side.FATE,
+        owner=owner,
+        gold_cost=0,
+    )
+    table.zones[ZoneKey(owner, ZoneRole.HAND)].add(register(table, card))
+    return card
 
 
 def _asked(session: EngineSession) -> PlayerId:
@@ -249,9 +263,12 @@ def test_an_answer_naming_a_card_no_longer_in_hand_is_refused():
 ATTACKER, DEFENDER = P1, P2
 
 
-def _fear_announced(courage_cards: dict[PlayerId, int]) -> EngineSession:
+def _fear_announced(
+    courage_cards: dict[PlayerId, int], *, strategies: tuple[tuple[str, str, PlayerId], ...] = ()
+) -> EngineSession:
     """A session in which the Attacker has just aimed Fear ``FEAR`` at the Defender's 2F guard in
-    the Combat Segment, with each seat holding the Courage cards ``courage_cards`` gives it."""
+    the Combat Segment, with each seat holding the Courage cards ``courage_cards`` gives it and
+    the ``(card_id, printed_id, owner)`` Strategies ``strategies`` names."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
     province_card(state, "def-prov0", seat=DEFENDER, index=0)
@@ -260,6 +277,8 @@ def _fear_announced(courage_cards: dict[PlayerId, int]) -> EngineSession:
     for seat, count in courage_cards.items():
         for index in range(count):
             _courage_card(state, f"{seat.name}-courage{index}", seat)
+    for card_id, printed_id, owner in strategies:
+        _strategy(state, card_id, printed_id, owner)
     session = EngineSession.start(state, ATTACKER)
     end_phase(session)
     session.act(ATTACKER, DeclareAttack())

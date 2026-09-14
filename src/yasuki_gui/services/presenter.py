@@ -239,7 +239,8 @@ class Presenter:
             interrupts: list[ButtonSpec] = []
             for token in pending.candidates:
                 card_id, delta = interrupt_choice(token)
-                label = f"Discard {cards[card_id].name} ({delta:+d})"
+                name = cards[card_id].name
+                label = f"Play {name}" if delta is None else f"Discard {name} ({delta:+d})"
                 interrupts.append((label, lambda chosen=token: self.submit_answer((chosen,)), True))
             interrupts.append((pending.confirm_label, lambda: self.submit_answer(()), True))
             return pending.prompt(), interrupts

@@ -266,16 +266,22 @@ def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
 
 def test_an_interrupt_is_a_button_per_way_to_take_it_and_a_pass(board):
     presenter, window, session = board
-    card = L5RCard.of(FatePrint, id="hc", name="Honor Fate", side=Side.FATE, owner=P2)
-    session.game.table.cards_by_id[card.id] = card
+    for card_id, name in (("hc", "Honor Fate"), ("okura", "Okura is Released")):
+        card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P2)
+        session.game.table.cards_by_id[card.id] = card
     session.game.pending = ChooseInterrupt(
-        seat=P1, candidates=("hc@+1", "hc@-1"), effect=GainHonor(P2, 2)
+        seat=P1, candidates=("hc@+1", "hc@-1", "okura"), effect=GainHonor(P2, 2)
     )
 
     presenter.present()
 
     assert _status(window) == "P2 gains 2 honor. Take an Interrupt?"
-    assert _buttons(window) == ["Discard Honor Fate (+1)", "Discard Honor Fate (-1)", "Pass"]
+    assert _buttons(window) == [
+        "Discard Honor Fate (+1)",
+        "Discard Honor Fate (-1)",
+        "Play Okura is Released",
+        "Pass",
+    ]
     assert not window.field.selecting
 
 

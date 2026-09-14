@@ -14,6 +14,7 @@ yasuki_core.engine.rules.interrupts
 .. autosummary::
 
     apply_interrupt
+    card_interrupts_for
     discardable_for
     interrupt_request
     interrupters

@@ -497,35 +497,39 @@ def interrupt_token(card_id: str, delta: int) -> str:
     return f"{card_id}{ASSIGNMENT_SEPARATOR}{delta:+d}"
 
 
-def interrupt_choice(token: str) -> tuple[str, int]:
-    """The card and delta :func:`~.interrupt_token` encoded.
+def interrupt_choice(token: str) -> tuple[str, int | None]:
+    """The card and delta :func:`~.interrupt_token` encoded, or a bare card id and no delta,
+    which names a card to play rather than discard.
 
     Returns
     -------
     card_id : str
-        The card to discard.
-    delta : int
-        The signed change to the interrupted effect.
+        The card to discard or play.
+    delta : int or None
+        The signed change to the interrupted effect, or None for a card to play.
 
     Raises
     ------
     ValueError
-        If ``token`` names neither.
+        If ``token`` carries a separator but no readable delta.
     """
     card_id, separator, delta = token.rpartition(ASSIGNMENT_SEPARATOR)
-    if not separator or not card_id or not _SIGNED_INT.fullmatch(delta):
+    if not separator:
+        return token, None
+    if not card_id or not _SIGNED_INT.fullmatch(delta):
         raise ValueError(f"not an interrupt token: {token!r}")
     return card_id, int(delta)
 
 
 @dataclass(frozen=True, slots=True)
 class ChooseInterrupt(DecisionRequest):
-    """The seat may interrupt ``effect``, which waits to resolve, by discarding a card carrying the
-    keyword a rulebook Interrupt asks for to adjust it.
+    """The seat may interrupt ``effect``, which waits to resolve: discard a card carrying the
+    keyword a rulebook Interrupt asks for to adjust it, or play an Interrupt from hand that
+    answers it.
 
-    A candidate is a card paired with a delta, read through :func:`~.interrupt_choice`. Declining
-    is the empty answer, and is what most seats do most of the time, so the request is neither
-    forced nor cancellable.
+    A candidate is a card paired with a delta, or the id of a Strategy to play, both read through
+    :func:`~.interrupt_choice`. Declining is the empty answer, and is what most seats do most of
+    the time, so the request is neither forced nor cancellable.
 
     Attributes
     ----------

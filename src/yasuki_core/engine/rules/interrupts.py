@@ -3,8 +3,11 @@ from dataclasses import dataclass, replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.effects import (
+    ApplyEffects,
     Discard,
     Effect,
     Fear,
@@ -12,9 +15,13 @@ from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     adjusted_honor_change,
 )
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.producers import reachable_gold
+from yasuki_core.engine.rules.legality import activatable
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInterrupt,
     DecisionResponse,
@@ -110,6 +117,21 @@ def rulebook_interrupts_for(
     ]
 
 
+def card_interrupts_for(
+    game: GameState, seat: PlayerId, effect: Effect
+) -> list[tuple[L5RCard, Ability]]:
+    """The Interrupts ``seat`` could play from hand against ``effect``: each Strategy whose
+    Interrupt answers its type and whose Gold Cost the seat can reach."""
+    playable = activatable(game, seat, frozenset({ActionTiming.INTERRUPT}), at=(CardLocation.HAND,))
+    return [
+        (card, ability)
+        for card, ability in playable
+        if ability.interrupt is not None
+        and isinstance(effect, ability.interrupts)
+        and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
+    ]
+
+
 def interrupters(game: GameState, effect: InterruptingEffect) -> list[PlayerId]:
     """The seats still to be offered an Interrupt against ``effect``, the active player first
     (ShE datasheet, Interrupt).
@@ -129,7 +151,8 @@ def interrupters(game: GameState, effect: InterruptingEffect) -> list[PlayerId]:
     return [
         seat
         for seat in order
-        if not effect.has_declined(seat) and rulebook_interrupts_for(game, seat, effect)
+        if not effect.has_declined(seat)
+        and (rulebook_interrupts_for(game, seat, effect) or card_interrupts_for(game, seat, effect))
     ]
 
 
@@ -142,7 +165,8 @@ def interrupt_request(game: GameState, effect: InterruptingEffect) -> ChooseInte
         for card in discardable_for(game, seat, interrupt)
         for delta in interrupt.deltas
     )
-    return ChooseInterrupt(seat=seat, candidates=discards, effect=effect)
+    plays = tuple(card.id for card, _ in card_interrupts_for(game, seat, effect))
+    return ChooseInterrupt(seat=seat, candidates=discards + plays, effect=effect)
 
 
 def apply_interrupt(game: GameState, request: ChooseInterrupt, response: DecisionResponse) -> None:
@@ -150,7 +174,9 @@ def apply_interrupt(game: GameState, request: ChooseInterrupt, response: Decisio
 
     A pass marks the seat on the effect, which asks the next seat or resolves. A rulebook discard
     and the adjusted effect are spliced into the paused cascade, and the same seat is asked again
-    if it may.
+    if it may. A Strategy is played the way any Strategy is, its Interrupt deciding what replaces
+    the effect and what else happens, with the replacement queued to return once the Strategy has
+    resolved.
 
     A discard runs inside the interrupted action's cascade, so a reaction to it fires and it joins
     the action's event record.
@@ -164,7 +190,27 @@ def apply_interrupt(game: GameState, request: ChooseInterrupt, response: Decisio
         triggers.resume_paused_cascade(game, [effect.declined_by(seat)])
         return
     card_id, delta = interrupt_choice(response.choices[0])
-    _discard_to_interrupt(game, seat, effect, card_id, delta)
+    if delta is None:
+        _play_interrupt(game, seat, effect, card_id)
+    else:
+        _discard_to_interrupt(game, seat, effect, card_id, delta)
+
+
+def _play_interrupt(
+    game: GameState, seat: PlayerId, effect: InterruptingEffect, card_id: str
+) -> None:
+    played = next(
+        (pair for pair in card_interrupts_for(game, seat, effect) if pair[0].id == card_id), None
+    )
+    if played is None:
+        raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can play")
+    card, ability = played
+    assert ability.interrupt is not None
+    interruption = ability.interrupt(game, card, effect)
+    # The replacement waits beneath the Strategy's own work and returns once that has resolved,
+    # while the paused cascade waits beneath both.
+    game.stack.append(ApplyEffects((interruption.replacement,)))
+    play_strategy_with(game, card, interruption.effects)
 
 
 def _discard_to_interrupt(

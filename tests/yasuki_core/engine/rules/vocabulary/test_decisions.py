@@ -357,7 +357,7 @@ def test_a_distribution_with_no_registered_wording_still_says_what_it_wants():
 def _interrupt() -> ChooseInterrupt:
     return ChooseInterrupt(
         seat=PlayerId.P2,
-        candidates=(interrupt_token("a", 1), interrupt_token("a", -1)),
+        candidates=(interrupt_token("a", 1), interrupt_token("a", -1), "okura"),
         effect=GainHonor(PlayerId.P1, 3),
     )
 
@@ -367,6 +367,7 @@ def test_an_interrupt_takes_one_way_to_answer_or_a_pass():
 
     assert request.accepts(DecisionResponse())
     assert request.accepts(DecisionResponse((interrupt_token("a", -1),)))
+    assert request.accepts(DecisionResponse(("okura",)))
     assert not request.accepts(DecisionResponse(request.candidates[:2]))
     assert not request.accepts(DecisionResponse(("b@+1",)))
 
@@ -374,6 +375,7 @@ def test_an_interrupt_takes_one_way_to_answer_or_a_pass():
 def test_an_interrupt_token_round_trips():
     assert interrupt_choice(interrupt_token("card@x", -1)) == ("card@x", -1)
     assert interrupt_choice(interrupt_token("c", 2)) == ("c", 2)
+    assert interrupt_choice("plain-card") == ("plain-card", None)
 
 
 def test_an_interrupt_names_the_effect_it_guards():

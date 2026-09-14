@@ -154,7 +154,7 @@ helper, its registration. A pre-commit hook asserts the ordering, the one-header
 that the header names the card the block registers, on the modules your commit touches.
 
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
-role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
+role is one of `cost`, `targets`, `effects`, `interrupt`, an entry point of a registry (`gold`, `invest`,
 `keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
 `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`), or the event a
 trigger answers (`entered_play`, `destroyed`, `straightened`, `turn_started`, `counter_gained`,
