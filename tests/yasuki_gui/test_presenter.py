@@ -264,25 +264,56 @@ def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
     assert not window.field.selecting
 
 
-def test_an_interrupt_is_a_button_per_way_to_take_it_and_a_pass(board):
+@pytest.fixture
+def an_interrupt_offered(board):
     presenter, window, session = board
     for card_id, name in (("hc", "Honor Fate"), ("okura", "Okura is Released")):
-        card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P2)
+        card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P1)
         session.game.table.cards_by_id[card.id] = card
     session.game.pending = ChooseInterrupt(
         seat=P1, candidates=("hc@+1", "hc@-1", "okura"), description="P2 gains 2 honor"
     )
+    return presenter, window, session
+
+
+def test_an_interrupt_leaves_the_panel_with_only_a_pass(an_interrupt_offered):
+    # The ways to take it live on the cards. The panel says what waits and offers to decline, and
+    # the board stays out of selection mode so a click on a card reaches its menu.
+    presenter, window, _ = an_interrupt_offered
 
     presenter.present()
 
     assert _status(window) == "P2 gains 2 honor. Take an Interrupt?"
-    assert _buttons(window) == [
+    assert _buttons(window) == ["Pass"]
+    assert not window.field.selecting
+
+
+def test_clicking_a_card_while_an_interrupt_waits_offers_its_ways_to_take_it(an_interrupt_offered):
+    presenter, window, _ = an_interrupt_offered
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("hc")
+    presenter.on_card_activated("okura")
+
+    assert [label for label, _ in offered] == [
         "Discard Honor Fate (+1)",
         "Discard Honor Fate (-1)",
         "Play Okura is Released",
-        "Pass",
     ]
-    assert not window.field.selecting
+
+
+def test_a_card_the_interrupt_does_not_name_offers_nothing(an_interrupt_offered):
+    presenter, window, session = an_interrupt_offered
+    session.game.table.cards_by_id["idle"] = L5RCard.of(
+        FatePrint, id="idle", name="Idle", side=Side.FATE, owner=P1
+    )
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("idle")
+
+    assert offered == []
 
 
 def test_a_variable_gold_cost_is_named_on_a_spinner_rather_than_a_button_each(board):

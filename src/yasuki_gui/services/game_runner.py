@@ -30,10 +30,12 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseInterrupt,
     ChooseLegacyCard,
     Confirm,
     DecisionRequest,
     DecisionResponse,
+    interrupt_choice,
 )
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -216,6 +218,24 @@ class GameRunner:
             for ability in favor_abilities.available_favor_abilities()
             if ability.key in offered
         ]
+
+    def interrupt_menu(self, card_id: str) -> list[tuple[str, DecisionResponse]]:
+        """The ways the pending Interrupt offers to take through ``card_id``, for its left-click
+        menu while the interrupted effect waits: each rulebook discard labeled with its delta, or
+        the Strategy played from hand. Empty for a card the offer does not name, and whenever no
+        Interrupt is pending."""
+        pending = self.pending
+        if not isinstance(pending, ChooseInterrupt):
+            return []
+        name = self.session.game.table.cards_by_id[card_id].name
+        items: list[tuple[str, DecisionResponse]] = []
+        for token in pending.candidates:
+            candidate, delta = interrupt_choice(token)
+            if candidate != card_id:
+                continue
+            label = f"Play {name}" if delta is None else f"Discard {name} ({delta:+d})"
+            items.append((label, DecisionResponse((token,))))
+        return items
 
     def board_menu(self) -> list[tuple[str, Action]]:
         """The labeled rulebook abilities, for a right-click on the empty board. These belong to no

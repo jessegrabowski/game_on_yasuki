@@ -12,7 +12,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     assignment,
     assignment_token,
-    interrupt_choice,
 )
 from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
@@ -233,17 +232,9 @@ class Presenter:
             # assignment calls for.
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
         if isinstance(pending, ChooseInterrupt):
-            # The cards are in hand, so each way to interrupt is a button naming the card and the
-            # direction, and passing is the confirm.
-            cards = self.host.runner.session.game.table.cards_by_id
-            interrupts: list[ButtonSpec] = []
-            for token in pending.candidates:
-                card_id, delta = interrupt_choice(token)
-                name = cards[card_id].name
-                label = f"Play {name}" if delta is None else f"Discard {name} ({delta:+d})"
-                interrupts.append((label, lambda chosen=token: self.submit_answer((chosen,)), True))
-            interrupts.append((pending.confirm_label, lambda: self.submit_answer(()), True))
-            return pending.prompt(), interrupts
+            # Taken from the card's own menu, the way an action is at any other timing, so the
+            # panel only offers to decline.
+            return pending.prompt(), [(pending.confirm_label, lambda: self.submit_answer(()), True)]
         if isinstance(pending, ChooseOption):
             # An outcome the card spells out rather than anything on the board: "gain or lose" or
             # "which player". It is read as a list of wordings and answered by picking one.
@@ -442,7 +433,7 @@ class Presenter:
 
         While an assignment is open the card menu is the assignment menu instead: sending units to
         a battlefield and bringing them back is the only thing a Personality does in the Maneuvers
-        Segment.
+        Segment. While an Interrupt is offered it is the ways the card can take it.
         """
         runner = self.host.runner
         if isinstance(runner.pending, AssignUnits):
@@ -454,6 +445,12 @@ class Presenter:
                 self.window.field.toggle_selection(leader)
                 self.refresh()
             self.window.popup_at_pointer(self._assignment_menu())
+            return
+        if isinstance(runner.pending, ChooseInterrupt):
+            self.window.popup_at_pointer(
+                (label, lambda chosen=answer: self.submit_answer(chosen.choices))
+                for label, answer in runner.interrupt_menu(card_id)
+            )
             return
         self._offer(
             runner.province_menu(card_id)
