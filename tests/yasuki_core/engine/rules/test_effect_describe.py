@@ -74,7 +74,10 @@ EFFECTS = [
     (GainGold(PlayerId.P2, 3), "P2 gains 3 gold"),
     (GainHonor(PlayerId.P1, 2), "P1 gains 2 honor"),
     (GainHonor(PlayerId.P2, -4), "P2 loses 4 honor"),
-    (AdjustHonorChange(PlayerId.P1, -1), "P1's next honor change is adjusted by -1"),
+    (
+        AdjustHonorChange(PlayerId.P1, -1, by=PlayerId.P2),
+        "P2 adjusts P1's next honor change by -1",
+    ),
     (
         LoseGame(PlayerId.P2, "no Provinces remaining", "Military Victory"),
         "P2 loses: no Provinces remaining",

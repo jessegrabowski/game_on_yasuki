@@ -7,7 +7,10 @@ yasuki_core.engine.rules.rulebook.honor
 
 .. autosummary::
 
-    honor_interrupt
+    apply_honor_interrupt
+    honor_cards_in_hand
+    honor_interrupt_request
+    interrupters
 
 .. automodule:: yasuki_core.engine.rules.rulebook.honor
     :members:

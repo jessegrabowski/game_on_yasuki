@@ -20,6 +20,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import AttachmentType
 
+from tests.yasuki_core.engine.rules.rulebook.test_honor import _honor_card
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -671,6 +672,19 @@ def test_honor_is_twice_the_cards_destroyed_not_the_units():
     _fight_one_battle(session)
 
     assert session.game.table.seats[PlayerId.P1].honor - before == 6
+
+
+def test_resolution_honor_is_not_open_to_the_honor_interrupt():
+    # Battle resolution is a rulebook procedure with no Interrupt step (CR, Interrupt Actions), so
+    # a defender holding an Honor card is not asked before the attacker's gain lands.
+    session = _one_battlefield({"a": 5}, {"d": 2})
+    _honor_card(session.game.table, "P2-honor0", PlayerId.P2)
+    before = session.game.table.seats[PlayerId.P1].honor
+
+    _fight_one_battle(session)
+
+    assert session.game.pending is None
+    assert session.game.table.seats[PlayerId.P1].honor - before == 2
 
 
 def test_a_tie_pays_each_seat_for_the_army_it_destroyed():
