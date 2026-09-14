@@ -186,8 +186,10 @@ _TURN_STRUCTURE = (DiscardToHandSize, LeaveBowed)
 def submit(game: GameState, response: DecisionResponse) -> None:
     """Answer the pending decision and resume the engine.
 
-    Dispatch on the request type to its apply-handler, then continue: an end-of-turn discard begins
-    the next turn, while a cost payment drains the stack to finish the action that paused for it.
+    Clear the request, dispatch on its type to its apply-handler, then continue: an end-of-turn
+    discard begins the next turn, while a cost payment drains the stack to finish the action that
+    paused for it. The clear comes first, and here only, because a handler may raise a question of
+    its own, and the request it sets has to be the one pending when this returns.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the answer is malformed
     or illegal against the game state.
@@ -198,6 +200,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     if not request.accepts(response):
         raise ValueError("malformed answer to the pending decision")
     acted_in = game.round
+    game.pending = None
     match request:
         case DiscardToHandSize():
             # Cleared first: a trait reacting to the discard may ask a question, and its request
@@ -266,6 +269,9 @@ def cancel(game: GameState) -> None:
     Live play does not reach this: ``EngineSession.abort`` unwinds by truncating the tape, so no
     new ``Cancel`` is ever written. It stays to replay tapes that already hold one.
 
+    The request is cleared once, here, after the undo: nothing a cancel does can ask a question,
+    and a cancel that is refused leaves the question where it was.
+
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
     cannot be canceled.
     """
@@ -276,23 +282,23 @@ def cancel(game: GameState) -> None:
         case ChoosePayment():
             _cancel_payment(game)
         case ChooseInvestAmount():
-            game.pending = None  # the recruit is not yet announced; nothing to undo
+            pass  # the recruit is not yet announced; nothing to undo
         case _:
-            raise ValueError(f"{type(request).__name__} cannot be cancelled")
+            raise ValueError(f"{type(request).__name__} cannot be canceled")
+    game.pending = None
 
 
 def _cancel_payment(game: GameState) -> None:
-    """Drop the work the cancelled payment stands in front of, whatever queued it: a Recruit's
+    """Drop the work the canceled payment stands in front of, whatever queued it: a Recruit's
     :class:`~.ResolveRecruit` or a rulebook cost's :class:`~.ApplyEffects`.
 
     The item is always the top of the stack: announcing a cost pushes exactly one, and the engine is
-    paused on the payment from that moment until it is answered or cancelled, so nothing can have
+    paused on the payment from that moment until it is answered or canceled, so nothing can have
     pushed since.
     """
     if not game.stack:
         raise ValueError("the pending payment has no queued work to undo")
     game.stack.pop()
-    game.pending = None
 
 
 def run_stack(game: GameState) -> None:
