@@ -16,7 +16,55 @@ The pause is a pending decision on `GameState`. Nothing further happens until a 
 which is what lets a human, a bot and a replayed tape all drive the same machine.
 
 Resuming runs the queued work. {func}`~.run_stack` drains the deferred items one at a time and
-stops again the moment one of them pauses for another decision.
+stops again the moment one of them pauses for another decision:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/turn/sequence.py
+:pyobject: run_stack
+:language: python
+```
+
+## The work stack
+
+An item on `GameState.stack` is a frozen dataclass that implements one Protocol:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/vocabulary/work.py
+:pyobject: WorkItem
+:language: python
+```
+
+There is no central switch. Each item lives in the module of the procedure it continues and
+answers `resume` by calling that procedure, so adding a step to a procedure means declaring the
+item beside it, giving it a `resume`, and pushing it. No other file changes. A continuation may
+end in a question of its own: `SelectAbilityTarget` resumes by setting `pending`, and
+`ContinuePayment` asks for more producers when the pool is still short.
+
+What is on the stack, and what each continues:
+
+- `ResolveRecruit` and `FinishRecruit` in `rulebook/recruit.py`: the two halves of a Recruit
+  after its payment and after the card's entry, with `ResolveEquip` in `rulebook/equip.py` the
+  same for an Equip.
+- `ResolveStrategy` and `DiscardPlayed` in `abilities/strategy.py`: a played Strategy's ability,
+  then its discard. `SelectAbilityTarget` and `ApplyAbilityEffects` in `abilities/activation.py`:
+  an ability's targeting or its untargeted effects, deferred behind its cost.
+- `ContinuePayment` in `gold/payment.py` and `CompleteProduction` in `gold/production.py`: the
+  payment loop and the bow that follows a producer's window.
+- `FightNextBattle` in `battle/resolution.py`: the next battlefield, or the end of the Fight
+  Segment.
+- `ResumeCascade` in `triggers.py`: the remainder of a walk an interrupting effect paused.
+- `ApplyEffects` in `effects.py`: the generic deferral, which {class}`~.Then` and the rulebook
+  costs push.
+- `BeginNextTurn`, `OpenFirstTurn`, `AnnounceTurnStart` and `OpenRound` in `turn/sequence.py`:
+  the turn boundary. The next turn waits behind the end-of-turn discard, and a turn's opening is
+  three instants queued in order, straighten, reveal and announcement, with the round opening
+  last so that a question asked while opening resolves into the previous round.
+
+The stack is last in, first out. A procedure that needs two steps in order pushes the later one
+first. A cascade that pauses pushes its stash on top of whatever was already queued, which is why
+`BeginNextTurn` goes on before the discard is announced: the answer to a discard trigger's
+question has to resume that cascade before the next turn begins.
+
+Work items never reach the tape. Replay rebuilds the stack by re-running the procedures that push
+them, and [The replay log](the-replay-log.md) is why that is enough.
 
 ## Why a card returns `RecruitCard`
 

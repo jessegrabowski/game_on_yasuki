@@ -28,6 +28,61 @@ the rules layer is what turns it down.
 
 The engine puts the request on `GameState.pending` and returns. Nothing polls, and nothing blocks.
 
+## The life of a decision
+
+A decision is raised, answered, cleared and resumed, in that order, and four rules say who may do
+each. They exist because a question can be lost without anything failing: a handler that clears
+`pending` at the wrong moment, or a cascade driven over an open question, wipes the request one
+line after it was set, and the game goes on as if nobody had asked. That is how
+{card}`Spearmen of the Akasha` shipped doing nothing for months. Its offer was raised by the
+end-of-turn discard, cleared by the handler that ran the discard, and the turn passed.
+
+1. **One owner.** `pending` is set wherever the engine genuinely stops to ask, and cleared only by
+   {func}`~.submit` and {func}`~.cancel`, once, before a handler runs. No handler clears it. The
+   `pending-owner` pre-commit hook refuses a `game.pending = None` anywhere else.
+2. **One way to continue.** Anything that must happen after a cascade settles is a
+   {class}`~yasuki_core.engine.rules.vocabulary.work.WorkItem` on `GameState.stack`. Nothing calls
+   the next step directly after driving one.
+3. **One instant, one cascade.** Occurrences that happen at the same moment are announced together
+   with {func}`~.fire_all`. A loop over {func}`~.fire` says they happened one after another, and
+   the second call would start a fresh walk over the first one's question.
+4. **Violations are loud.** Driving a cascade while a decision is pending raises, naming the driver
+   and the request.
+
+{func}`~.submit` is where the first rule lives. It validates the answer's shape, clears the
+request, and only then dispatches:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/turn/action_sequence.py
+:start-at: request = game.pending
+:end-at: game.pending = None
+:dedent: 4
+:language: python
+```
+
+Clearing first is the whole point. A handler may raise a question of its own, and the request it
+sets has to be the one pending when `submit` returns. Every arm after the clear runs on an empty
+slot, and the tail is the same for all of them:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/turn/action_sequence.py
+:start-at: Symmetric with `perform`: an answered decision
+:end-at: yield_after_action(game, acted_in)
+:dedent: 4
+:language: python
+```
+
+The drain is the second rule. Whatever the answer queued runs now, unless one of those items
+pauses again, and then the next answer picks it up. The yield is why a question asked by turn
+structure needs no special case: the end-of-turn discard and the turn's opening resolve into a
+round that did not exist when they were asked, and `yield_after_action` hands nothing on when the
+round has changed under it.
+
+An answer a handler rejects part-way through would leave the request cleared and the board
+wherever the handler stopped. {meth}`EngineSession.submit <yasuki_core.engine.session.EngineSession.submit>`
+rebuilds the game from the tape before the error propagates, which holds only accepted inputs, so
+the question is asked again on the board it was first asked on. {func}`~.cancel` is the second,
+narrower owner of the clear. It exists for replaying tapes that hold a `Cancel`, and it clears
+after its undo, so a refused cancel leaves the question in place.
+
 ## The unfinished work
 
 `GameState.stack` holds what is waiting, last in and first out. A cascade that pauses mid-list
@@ -39,9 +94,11 @@ stashes its remainder there as a {class}`~.ResumeCascade`:
 ```
 
 Everything the walk had in hand goes with it: the effects not yet committed, the triggers not yet
-fired, the event being answered, and the events still queued. {func}`~.resume_cascade` splices the
-answer's effects in where the paused one stood, ahead of all of that, and drops any trigger whose
-card has left play in the meantime.
+fired, the event being answered, and the events still queued. {func}`~.resume_paused_cascade` pops
+that stash when a card choice is answered and splices the answer's effects in where the paused
+one stood, ahead of all of that, dropping any trigger whose card has left play in the meantime.
+The stash is always the top of the stack, because a choice pauses the walk the moment it is
+raised and nothing pushes between the pause and the answer.
 
 The other {class}`~yasuki_core.engine.rules.vocabulary.work.WorkItem` implementations, each
 declared beside the procedure that pushes it, wait the same way, mostly the middle of an action
