@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.gold.payment import payment_request
+from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_gui.services.game_runner import GameRunner
@@ -30,6 +31,7 @@ from yasuki_gui.ui.game_window import GameWindow
 
 from yasuki_core.game_pieces.constants import AttachmentType
 
+from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -264,25 +266,56 @@ def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
     assert not window.field.selecting
 
 
-def test_an_interrupt_is_a_button_per_way_to_take_it_and_a_pass(board):
+@pytest.fixture
+def an_interrupt_offered(board):
     presenter, window, session = board
     for card_id, name in (("hc", "Honor Fate"), ("okura", "Okura is Released")):
-        card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P2)
+        card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P1)
         session.game.table.cards_by_id[card.id] = card
     session.game.pending = ChooseInterrupt(
-        seat=P1, candidates=("hc@+1", "hc@-1", "okura"), description="P2 gains 2 honor"
+        seat=P1, candidates=("hc@honor", "okura"), description="P2 gains 2 honor"
     )
+    return presenter, window, session
+
+
+def test_an_interrupt_leaves_the_panel_with_only_a_pass(an_interrupt_offered):
+    # The ways to take it live on the cards. The panel says what waits and offers to decline, and
+    # the board stays out of selection mode so a click on a card reaches its menu.
+    presenter, window, _ = an_interrupt_offered
 
     presenter.present()
 
     assert _status(window) == "P2 gains 2 honor. Take an Interrupt?"
-    assert _buttons(window) == [
-        "Discard Honor Fate (+1)",
-        "Discard Honor Fate (-1)",
-        "Play Okura is Released",
-        "Pass",
-    ]
+    assert _buttons(window) == ["Pass"]
     assert not window.field.selecting
+
+
+def test_clicking_a_card_while_an_interrupt_waits_offers_its_ways_to_take_it(an_interrupt_offered):
+    presenter, window, _ = an_interrupt_offered
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("hc")
+    presenter.on_card_activated("okura")
+
+    assert [label for label, _ in offered] == [
+        "Honor Repeatable Interrupt: If the action has any Honor gains or losses, discard an "
+        "Honor card to increase or reduce one such gain or loss by 1.",
+        "Play Okura is Released",
+    ]
+
+
+def test_a_card_the_interrupt_does_not_name_offers_nothing(an_interrupt_offered):
+    presenter, window, session = an_interrupt_offered
+    session.game.table.cards_by_id["idle"] = L5RCard.of(
+        FatePrint, id="idle", name="Idle", side=Side.FATE, owner=P1
+    )
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("idle")
+
+    assert offered == []
 
 
 def test_a_variable_gold_cost_is_named_on_a_spinner_rather_than_a_button_each(board):
@@ -1430,3 +1463,70 @@ def test_taking_a_favor_ability_from_the_card_menu_asks_for_its_discard(holding_
     assert session.game.pending.candidates == ("spare",), "the proxy is not a card it can spend"
     assert session.game.favor_holder is None, "the Favor was discarded to pay for it"
     assert session.game.pending.prompt() == "Discard a Fate card to draw a card"
+
+
+@pytest.fixture
+def a_fear_to_interrupt():
+    """A presenter for the Defender, whose 2F guard the Attacker has just aimed Fear at while the
+    Defender holds a Courage card."""
+    session = _fear_announced({DEFENDER: 1})
+    runner = GameRunner(session, DEFENDER)
+    window = GameWindow(session.game.table, DEFENDER)
+    presenter = Presenter(FakeHost(runner), window)
+    window.bind_to(presenter)
+    try:
+        presenter.present()
+        yield presenter, window, session
+    finally:
+        window.root.destroy()
+
+
+def _take_from_card(presenter, window, card_id: str) -> None:
+    """Open ``card_id``'s menu and pick its one entry."""
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+    presenter.on_card_activated(card_id)
+    ((_, take),) = offered
+    take()
+
+
+def test_the_courage_interrupt_is_offered_on_the_card_and_adjusted_on_the_panel(
+    a_fear_to_interrupt,
+):
+    presenter, window, _ = a_fear_to_interrupt
+    assert _status(window) == "Fear 2 on guard. Take an Interrupt?"
+    assert _buttons(window) == ["Pass"]
+    assert not window.field.selecting
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("P2-courage0")
+    assert [label for label, _ in offered] == [rulebook_interrupt("courage").label]
+    offered[0][1]()
+
+    assert _status(window) == "Fear 2 on guard. Give it +2 or -2 strength?"
+    assert _buttons(window) == ["+2 strength", "-2 strength", "Cancel"]
+    assert not window.field.selecting
+
+
+def test_cancelling_the_adjustment_returns_to_the_interrupt_offer(a_fear_to_interrupt):
+    presenter, window, session = a_fear_to_interrupt
+    _take_from_card(presenter, window, "P2-courage0")
+
+    _press(presenter, "Cancel")
+
+    assert _status(window) == "Fear 2 on guard. Take an Interrupt?"
+    assert _buttons(window) == ["Pass"]
+    assert "P2-courage0" in session.game.table.cards_by_id
+
+
+def test_the_adjustment_discards_the_card_and_resolves_the_fear(a_fear_to_interrupt):
+    presenter, window, session = a_fear_to_interrupt
+    _take_from_card(presenter, window, "P2-courage0")
+
+    _press(presenter, "-2 strength")
+
+    assert session.game.pending is None
+    assert not session.game.table.cards_by_id["guard"].bowed
+    hand = session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)].cards
+    assert "P2-courage0" not in [card.id for card in hand]

@@ -42,7 +42,8 @@ def test_okura_leaves_a_target_the_fear_does_not_reach_alone():
 
     session.submit(DEFENDER, DecisionResponse(("okura",)))
     pay(session, DEFENDER)
-    session.submit(DEFENDER, DecisionResponse(("P2-courage0@-2",)))
+    session.submit(DEFENDER, DecisionResponse(("P2-courage0@courage",)))
+    session.submit(DEFENDER, DecisionResponse(("-2 strength",)))
 
     assert _in_play(session, "guard")
     assert not session.game.table.cards_by_id["guard"].bowed
@@ -58,7 +59,7 @@ def test_okura_is_not_offered_against_an_effect_it_does_not_answer():
 
     pending = game.pending
     assert isinstance(pending, ChooseInterrupt)
-    assert pending.candidates == ("P2-honor0@+1", "P2-honor0@-1")
+    assert pending.candidates == ("P2-honor0@honor",)
 
 
 def test_okura_is_not_offered_when_its_gold_cost_is_out_of_reach():

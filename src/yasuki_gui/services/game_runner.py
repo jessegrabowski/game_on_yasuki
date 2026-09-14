@@ -6,8 +6,9 @@ from yasuki_core.bots.policies import PassPolicy
 from yasuki_core.engine.driver import Controls, MAX_ACTIONS_PER_ROUND
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.abilities.registry import ability_for, invest_amounts
+from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for, invest_amounts
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.rulebook import favor_abilities, favor_proxy
@@ -30,10 +31,12 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseInterrupt,
     ChooseLegacyCard,
     Confirm,
     DecisionRequest,
     DecisionResponse,
+    interrupt_choice,
 )
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -216,6 +219,28 @@ class GameRunner:
             for ability in favor_abilities.available_favor_abilities()
             if ability.key in offered
         ]
+
+    def interrupt_menu(self, card_id: str) -> list[tuple[str, DecisionResponse]]:
+        """The ways the pending Interrupt offers to take through ``card_id``, for its left-click
+        menu while the interrupted effect waits: a rulebook Interrupt worded as the datasheet
+        prints it, or the Strategy's own Interrupt. Empty for a card the offer does not name, and
+        whenever no Interrupt is pending."""
+        pending = self.pending
+        if not isinstance(pending, ChooseInterrupt):
+            return []
+        card = self.session.game.table.cards_by_id[card_id]
+        items: list[tuple[str, DecisionResponse]] = []
+        for token in pending.candidates:
+            candidate, key = interrupt_choice(token)
+            if candidate != card_id:
+                continue
+            if key is None:
+                interrupt = interrupt_for(card)
+                label = interrupt.label if interrupt is not None else f"Play {card.name}"
+            else:
+                label = rulebook_interrupt(key).label
+            items.append((label, DecisionResponse((token,))))
+        return items
 
     def board_menu(self) -> list[tuple[str, Action]]:
         """The labeled rulebook abilities, for a right-click on the empty board. These belong to no

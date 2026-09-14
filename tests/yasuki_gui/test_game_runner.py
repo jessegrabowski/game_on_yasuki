@@ -21,10 +21,12 @@ from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
+    ChooseInterrupt,
     Confirm,
     DecisionResponse,
     DiscardToHandSize,
 )
+from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.vocabulary.actions import (
     PlayStrategy,
@@ -403,6 +405,33 @@ def test_board_menu_is_empty_when_no_rulebook_ability_is_legal():
     runner.act(PASS)  # Action -> Battle, which is neither ability's phase
 
     assert runner.board_menu() == []
+
+
+def test_interrupt_menu_pairs_each_way_to_take_it_with_its_answer():
+    # The interrupted effect waits on the seat, so its ways to answer hang off the cards they spend,
+    # each already the response the card menu submits. A rulebook Interrupt reads as the datasheet
+    # prints it: the adjustment is the question that follows, not part of the entry.
+    game_runner = _runner(p1_hand=2)
+    hc, okura = game_runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
+    game_runner.session.game.pending = ChooseInterrupt(
+        seat=PlayerId.P1,
+        candidates=(f"{hc.id}@honor", okura.id),
+        description="P2 gains 2 honor",
+    )
+
+    assert game_runner.interrupt_menu(hc.id) == [
+        (rulebook_interrupt("honor").label, DecisionResponse((f"{hc.id}@honor",)))
+    ]
+    assert game_runner.interrupt_menu(okura.id) == [
+        (f"Play {okura.name}", DecisionResponse((okura.id,)))
+    ]
+
+
+def test_interrupt_menu_is_empty_when_no_interrupt_is_pending():
+    game_runner = _runner(p1_hand=1)
+    card = game_runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0]
+
+    assert game_runner.interrupt_menu(card.id) == []
 
 
 def _runner_with_in_play(card) -> GameRunner:

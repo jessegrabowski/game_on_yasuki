@@ -18,6 +18,7 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseFortificationProvince
     ChooseInheritanceTarget
     ChooseInterrupt
+    ChooseInterruptAdjustment
     ChooseInvestAmount
     ChooseLegacyCard
     ChooseLobbyTarget

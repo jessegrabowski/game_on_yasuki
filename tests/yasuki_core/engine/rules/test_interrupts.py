@@ -2,6 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules import interrupts
 from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, Interruption
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import attack_targets
@@ -26,6 +27,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseBattlefield,
     ChooseInterrupt,
+    ChooseInterruptAdjustment,
     DecisionResponse,
     interrupt_token,
 )
@@ -131,6 +133,28 @@ def _strategy(
     return card
 
 
+HONOR_UP, HONOR_DOWN = ("honor", "Increase by 1"), ("honor", "Reduce by 1")
+COURAGE_UP, COURAGE_DOWN = ("courage", "+2 strength"), ("courage", "-2 strength")
+
+
+def _interrupt_answers(card_id: str, adjustment: tuple[str, str]) -> tuple[DecisionResponse, ...]:
+    """The two answers a rulebook Interrupt takes: the card, then the adjustment."""
+    key, wording = adjustment
+    return DecisionResponse((interrupt_token(card_id, key),)), DecisionResponse((wording,))
+
+
+def _discard_to_interrupt(
+    session: EngineSession, seat: PlayerId, card_id: str, adjustment: tuple[str, str]
+) -> None:
+    for answer in _interrupt_answers(card_id, adjustment):
+        session.submit(seat, answer)
+
+
+def _discard_to_interrupt_in(game: GameState, card_id: str, adjustment: tuple[str, str]) -> None:
+    for answer in _interrupt_answers(card_id, adjustment):
+        action_sequence.submit(game, answer)
+
+
 def _asked(session: EngineSession) -> PlayerId:
     pending = session.game.pending
     assert isinstance(pending, ChooseInterrupt)
@@ -191,12 +215,40 @@ def test_the_opponent_is_offered_the_honor_interrupt_and_the_gain_shrinks():
     assert isinstance(pending, ChooseInterrupt)
     assert (pending.seat, pending.description) == (P2, f"P1 gains {PERSONAL_HONOR} honor")
 
-    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", -1),)))
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
 
     assert _honor(session, P1) == PERSONAL_HONOR - 1
     assert session.game.pending is None
     discard = session.game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)]
     assert [card.id for card in discard.cards] == ["P2-honor0"]
+
+
+def test_naming_the_card_asks_for_the_adjustment_before_anything_moves():
+    session = _proclaim_session({P2: 1})
+
+    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", "honor"),)))
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseInterruptAdjustment)
+    assert (pending.seat, pending.candidates) == (P2, ("Increase by 1", "Reduce by 1"))
+    assert pending.prompt() == f"P1 gains {PERSONAL_HONOR} honor. Increase or reduce it by 1?"
+    assert session.game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards == []
+
+
+def test_backing_out_of_the_adjustment_reopens_the_offer():
+    # Naming the card moved nothing, so the seat may change its mind up to the adjustment, and
+    # only that step comes back: the interrupted action stays where it was.
+    session = _proclaim_session({P2: 1})
+    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", "honor"),)))
+
+    session.cancel(P2)
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseInterrupt)
+    assert pending.candidates == ("P2-honor0@honor",)
+    assert _honor(session, P1) == 0
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
+    assert _honor(session, P1) == PERSONAL_HONOR - 1
 
 
 def test_passing_leaves_the_gain_whole():
@@ -219,9 +271,9 @@ def test_both_seats_may_interrupt_the_same_change_and_the_deltas_accumulate():
     session = _proclaim_session({P1: 1, P2: 1})
     assert _asked(session) is P1  # the active player is asked first
 
-    session.submit(P1, DecisionResponse((interrupt_token("P1-honor0", -1),)))
+    _discard_to_interrupt(session, P1, "P1-honor0", HONOR_DOWN)
     assert _asked(session) is P2
-    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", -1),)))
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
 
     assert _honor(session, P1) == PERSONAL_HONOR - 2
 
@@ -229,7 +281,7 @@ def test_both_seats_may_interrupt_the_same_change_and_the_deltas_accumulate():
 def test_the_honor_interrupt_is_once_per_action_for_a_seat():
     session = _proclaim_session({P2: 2})
 
-    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", 1),)))
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_UP)
 
     assert session.game.pending is None
     assert _honor(session, P1) == PERSONAL_HONOR + 1
@@ -240,7 +292,7 @@ def test_the_interrupting_discard_is_announced_to_the_board(reacting):
     seen: list[str] = []
     reacting(CardDiscarded, "discard_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
 
-    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", -1),)))
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
 
     assert seen == ["P2-honor0"]
 
@@ -254,7 +306,7 @@ def test_an_abilitys_gain_is_interruptible():
     session.act(P1, ActivateAbility("P1-garden"))
 
     assert _asked(session) is P2
-    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", 1),)))
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_UP)
     assert _honor(session, P1) == 3
 
 
@@ -268,7 +320,7 @@ def test_neither_seat_can_back_out_while_the_interrupt_is_open():
 
 def test_the_honor_game_replays_to_the_same_board():
     session = _proclaim_session({P2: 1})
-    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", -1),)))
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
 
     rebuilt = replay(session.log)
 
@@ -282,7 +334,7 @@ def test_an_answer_naming_a_card_no_longer_in_hand_is_refused():
     hand.remove(hand.cards[0])
 
     with pytest.raises(RuntimeError, match="no longer"):
-        session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", -1),)))
+        _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
 
 
 # --- the Courage Interrupt, against a Fear in the Combat Segment ---
@@ -337,7 +389,7 @@ def test_the_defender_is_offered_the_courage_interrupt_and_a_reduction_saves_the
     session = _fear_announced({DEFENDER: 1})
     assert _asked(session) is DEFENDER
 
-    session.submit(DEFENDER, DecisionResponse((interrupt_token("P2-courage0", -2),)))
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
 
     assert not _guard_bowed(session)
     assert session.game.pending is None
@@ -354,9 +406,9 @@ def test_passing_lets_the_fear_resolve_at_full_strength():
 def test_a_seat_that_interrupted_with_courage_is_asked_again_until_it_passes():
     session = _fear_announced({DEFENDER: 2})
 
-    session.submit(DEFENDER, DecisionResponse((interrupt_token("P2-courage0", -2),)))
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
     assert _asked(session) is DEFENDER
-    session.submit(DEFENDER, DecisionResponse((interrupt_token("P2-courage1", 2),)))
+    _discard_to_interrupt(session, DEFENDER, "P2-courage1", COURAGE_UP)
 
     assert session.game.pending is None  # no Courage card left to offer
     assert _guard_bowed(session)  # -2 then +2 leaves Fear 2 against a 2F guard
@@ -366,16 +418,16 @@ def test_the_attacker_is_asked_first_and_may_raise_its_own_fear():
     session = _fear_announced({ATTACKER: 1, DEFENDER: 1})
     assert _asked(session) is ATTACKER
 
-    session.submit(ATTACKER, DecisionResponse((interrupt_token("P1-courage0", 2),)))
+    _discard_to_interrupt(session, ATTACKER, "P1-courage0", COURAGE_UP)
     assert _asked(session) is DEFENDER
-    session.submit(DEFENDER, DecisionResponse((interrupt_token("P2-courage0", -2),)))
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
 
     assert _guard_bowed(session)  # 2 + 2 - 2 = 2 reaches the 2F guard
 
 
 def test_the_courage_game_replays_to_the_same_board():
     session = _fear_announced({DEFENDER: 1})
-    session.submit(DEFENDER, DecisionResponse((interrupt_token("P2-courage0", -2),)))
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
 
     rebuilt = replay(session.log)
 
@@ -393,7 +445,7 @@ def _event_names(session: EngineSession) -> list[str]:
 def test_a_rulebook_discard_rejoins_the_cascade_where_the_fear_stood():
     session = _fear_announced({DEFENDER: 1}, probe="fear_then_honor_probe")
 
-    session.submit(DEFENDER, DecisionResponse((interrupt_token("P2-courage0", 2),)))
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_UP)
 
     assert _event_names(session) == ["CardDiscarded", "HonorChanged"]
 
@@ -489,10 +541,27 @@ def test_a_seat_may_take_the_honor_interrupt_once_per_action():
     _honor_card(game.table, "P2-honor1", P2)
 
     resolve_effects(game, [GainHonor(P1, 2), GainHonor(P1, 2)])
-    action_sequence.submit(game, DecisionResponse((interrupt_token("P2-honor0", -1),)))
+    _discard_to_interrupt_in(game, "P2-honor0", HONOR_DOWN)
 
     assert game.pending is None
     assert game.table.seats[P1].honor == 1 + 2
+
+
+def test_an_unknown_rulebook_interrupt_is_a_key_error():
+    with pytest.raises(KeyError):
+        interrupts.rulebook_interrupt("valor")
+
+
+def test_the_offer_names_the_card_and_the_player_as_the_seat_reads_them():
+    # The log describes an effect by id, which is what a replay needs and not what a player is
+    # asked about: the offer and the adjustment question both name the board as the seat sees it.
+    game = two_seat_game()
+    game.table.seats[P1].name = "Ada"
+    target = put_in_play(game, personality("P2-d3", owner=P2, name="Shiba Guard", force=2))
+
+    assert GainHonor(P1, 2).narrate(game) == "Ada gains 2 honor"
+    assert Fear(2, target.id, P1).narrate(game) == "Fear 2 on Shiba Guard"
+    assert Fear(2, target.id, P1).describe() == "fear 2 on P2-d3"
 
 
 def test_a_change_of_zero_asks_nobody():
@@ -508,8 +577,8 @@ def test_interrupts_from_both_seats_net_against_the_change_and_never_reverse_it(
     _honor_card(game.table, "P1-honor0", P1)
 
     resolve_effects(game, [GainHonor(P1, 1)])
-    action_sequence.submit(game, DecisionResponse((interrupt_token("P1-honor0", -1),)))
-    action_sequence.submit(game, DecisionResponse((interrupt_token("P2-honor0", 1),)))
+    _discard_to_interrupt_in(game, "P1-honor0", HONOR_DOWN)
+    _discard_to_interrupt_in(game, "P2-honor0", HONOR_UP)
 
     assert game.pending is None
     assert game.table.seats[P1].honor == 1  # -1 then +1 net to nothing, not a gain turned loss
