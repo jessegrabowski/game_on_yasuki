@@ -150,7 +150,7 @@ class InterruptibleEffect(InterruptingEffect, ABC):
 
     def narrate(self, game: GameState) -> str:
         """The effect as the seat offered an Interrupt against it reads it: cards and players by
-        name, unlike :meth:`describe`, which names them by id for the log."""
+        name, unlike :meth:`~.Effect.describe`, which names them by id for the log."""
         return self.describe()
 
     def declined_by(self, seat: PlayerId) -> "InterruptibleEffect":
