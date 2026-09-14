@@ -203,20 +203,13 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     game.pending = None
     match request:
         case DiscardToHandSize():
-            # Cleared first: a trait reacting to the discard may ask a question, and its request
-            # has to be what is pending when this returns.
-            game.pending = None
             if game.stack:
                 raise RuntimeError("the turn is ending with work still queued")
             game.stack.append(BeginNextTurn())
             apply_discard(game, request.seat, response.choices)
         case LeaveBowed():
-            game.pending = None
             open_turn(game, frozenset(response.choices))
         case ChoosePayment():
-            # Cleared first: paying resolves the boost prices, and one that asks a question leaves
-            # its decision on `pending` for the seat to answer next.
-            game.pending = None
             _apply_payment(game, request, response)
             run_stack(game)
         case BanishForLegacy():
@@ -251,7 +244,6 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         case AssignUnits():
             resolution.apply_assignment(game, request, response)
         case ChooseBattlefield():
-            game.pending = None
             resolution.fight_battle(game, int(response.choices[0]))
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
@@ -408,7 +400,6 @@ def _apply_card_choice(
     request: ChooseCards | ChooseAmount | ChooseOption | ChooseDistribution | Confirm,
     response: DecisionResponse,
 ) -> None:
-    game.pending = None
     item = game.stack.pop()  # the ResumeCascade this choice paused, always stacked atop it
     if not isinstance(item, ResumeCascade):
         raise RuntimeError("a card choice resumed without its stashed cascade")
