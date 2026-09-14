@@ -586,6 +586,24 @@ def test_submit_resolves_the_decision_and_passes_the_turn():
     assert session.project(PlayerId.P2).active is PlayerId.P2  # turn passed
 
 
+def test_a_rejected_answer_leaves_the_question_pending():
+    """Well-formed but illegal: the card is a candidate, and by the time the handler runs it has
+    left the hand."""
+    session = EngineSession.start(_dealt_table(), PlayerId.P1)
+    _to_pending_discard(session)
+    table = session.game.table
+    stale = session.game.pending.candidates[0]
+    ops.move_card(table, table.cards_by_id[stale], ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD))
+
+    with pytest.raises(ValueError):
+        session.submit(PlayerId.P1, DecisionResponse((stale,)))
+
+    assert isinstance(session.game.pending, DiscardToHandSize)
+    assert stale in session.game.pending.candidates
+    assert not session.game.stack
+    assert not isinstance(session.log.entries[-1], Answer)
+
+
 def test_submit_without_a_pending_decision_raises():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
     with pytest.raises(RuntimeError):
