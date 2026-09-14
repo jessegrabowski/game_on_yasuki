@@ -200,11 +200,13 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     acted_in = game.round
     match request:
         case DiscardToHandSize():
+            # Cleared first: a trait reacting to the discard may ask a question, and its request
+            # has to be what is pending when this returns.
+            game.pending = None
             if game.stack:
                 raise RuntimeError("the turn is ending with work still queued")
             game.stack.append(BeginNextTurn())
             apply_discard(game, request.seat, response.choices)
-            game.pending = None
         case LeaveBowed():
             game.pending = None
             open_turn(game, frozenset(response.choices))

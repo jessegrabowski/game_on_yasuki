@@ -216,13 +216,6 @@ def _trim_the_spearmen(session, card_ids=("spearmen",)):
     session.submit(P1, DecisionResponse(card_ids))
 
 
-_TRIM_WIPES_THE_OFFER = pytest.mark.xfail(
-    strict=True,
-    reason="submit clears the Spearmen's offer after the discard raises it and passes the turn",
-)
-
-
-@_TRIM_WIPES_THE_OFFER
 def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
     """The end-of-turn trim is a discard from hand, which the card names."""
     session = _spearmen_game()
@@ -234,7 +227,6 @@ def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
     assert session.game.active is P1, "the turn waits for the answer"
 
 
-@_TRIM_WIPES_THE_OFFER
 def test_banishing_the_spearmen_equips_the_naga_follower():
     session = _spearmen_game()
     _trim_the_spearmen(session)
@@ -249,10 +241,9 @@ def test_banishing_the_spearmen_equips_the_naga_follower():
     assert game.active is PlayerId.P2, "the turn passes once the offer is answered"
 
 
-@_TRIM_WIPES_THE_OFFER
 def test_two_spearmen_discarded_together_are_each_offered_a_naga():
     """Discarded at one instant, so both offers survive."""
-    state = dealt_table(hand=sequence.MAX_HAND_SIZE - 2)
+    state = dealt_table(hand=sequence.MAX_HAND_SIZE - 1)
     _naga_follower(state)
     for bearer in ("shahai", "shahai2"):
         put_in_play(state, personality(bearer, force=2, chi=2, keywords=("Naga",)))
@@ -272,7 +263,6 @@ def test_two_spearmen_discarded_together_are_each_offered_a_naga():
     assert sorted(card.id for card in banished.cards) == ["spearmen", "spearmen2"]
 
 
-@_TRIM_WIPES_THE_OFFER
 def test_declining_leaves_the_spearmen_lying_in_the_discard():
     session = _spearmen_game()
     _trim_the_spearmen(session)
@@ -285,7 +275,6 @@ def test_declining_leaves_the_spearmen_lying_in_the_discard():
     assert [card.id for card in discard.cards] == ["spearmen"]
 
 
-@_TRIM_WIPES_THE_OFFER
 def test_only_a_naga_personality_is_offered():
     session = _spearmen_game()
     put_in_play(session.game, personality("bushi", force=3, chi=2, keywords=("Samurai",)))
