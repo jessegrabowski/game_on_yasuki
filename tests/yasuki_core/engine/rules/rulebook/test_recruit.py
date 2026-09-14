@@ -14,11 +14,13 @@ from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
+    HonorChanged,
 )
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
     holding,
+    personality,
     put_in_play,
     register,
 )
@@ -82,6 +84,18 @@ def test_recruit_rejects_invest_and_proclaim_together():
     holding = register(game.table, _holding("teahouse", gold_cost=2))
     with pytest.raises(ValueError, match="Invest and Proclaim"):
         recruit.recruit(game, holding.id, invest=True, proclaim=True)
+
+
+def test_a_proclaimed_recruit_announces_its_honor_gain(reacting):
+    game = _game()
+    put_in_play(game.table, holding("P1-watcher", printed_id="honor_probe"))
+    samurai = put_in_play(game.table, personality("P1-samurai", personal_honor=3))
+    seen: list[HonorChanged] = []
+    reacting(HonorChanged, "honor_probe", lambda ctx: seen.append(ctx.event) or [])
+
+    recruit.finish_recruit(game, samurai.id, None, proclaim=True)
+
+    assert seen == [HonorChanged(PlayerId.P1, 3)]
 
 
 # --- the Response Step ---
