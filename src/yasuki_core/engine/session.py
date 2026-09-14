@@ -106,15 +106,25 @@ class EngineSession:
         act_and_log(self.game, self.log, action)
 
     def submit(self, seat: PlayerId, response: DecisionResponse) -> None:
-        """Answer the pending decision and record it. Raise ``RuntimeError`` if no decision is
-        pending, or ``ValueError`` if ``seat`` is not the seat being asked or the answer is
-        malformed."""
+        """Answer the pending decision and record it.
+
+        An answer a handler rejects part-way through leaves the question cleared and the board
+        wherever the handler stopped, so the game is rebuilt from the tape before the error
+        propagates, and the question is asked again.
+
+        Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if ``seat`` is not the
+        seat being asked or the answer is malformed or illegal.
+        """
         pending = self.game.pending
         if pending is None:
             raise RuntimeError("no decision is pending")
         if pending.seat is not seat:
             raise ValueError(f"{seat.name} cannot answer {pending.seat.name}'s decision")
-        submit_and_log(self.game, self.log, response)
+        try:
+            submit_and_log(self.game, self.log, response)
+        except Exception:
+            self.game = replay(self.log)
+            raise
 
     def cancel(self, seat: PlayerId) -> None:
         """Back out of ``seat``'s pending decision, unwinding the whole action that raised it.
@@ -129,7 +139,7 @@ class EngineSession:
         if pending.seat is not seat:
             raise ValueError(f"{seat.name} cannot cancel {pending.seat.name}'s decision")
         if not pending.cancellable:
-            raise ValueError(f"{type(pending).__name__} cannot be cancelled")
+            raise ValueError(f"{type(pending).__name__} cannot be canceled")
         if not self.abort(seat):
             raise ValueError("the opportunity has passed; there is nothing left to unwind")
 

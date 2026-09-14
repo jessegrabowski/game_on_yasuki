@@ -174,6 +174,16 @@ def test_overfull_hand_pauses_for_discard_then_resumes():
     assert any(card.id == victim for card in discard.cards)
 
 
+def test_a_refused_cancel_leaves_the_question_pending():
+    game = _game(hand=sequence.MAX_HAND_SIZE, fate_deck=1)
+    _advance_to_end_of_turn(game)
+
+    with pytest.raises(ValueError, match="cannot be canceled"):
+        action_sequence.cancel(game)
+
+    assert isinstance(game.pending, DiscardToHandSize)
+
+
 def test_the_end_of_turn_discard_refuses_to_run_over_queued_work():
     """Beginning the next turn is queued under the discard's own cascade, which only holds if the
     stack is empty when the turn ends."""

@@ -114,7 +114,6 @@ def apply_lobby_target(
     The Personality is marked as having Lobbied, for the cards that ask who did.
     """
     seat = request.seat
-    game.pending = None
     game.use_once(lobby_key(seat, game.turn))
     lobbied = game.table.cards_by_id[response.choices[0]]
     claim_once_per_turn(game, lobbied, LOBBIED_TAG)

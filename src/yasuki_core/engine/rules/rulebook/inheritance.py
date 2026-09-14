@@ -31,7 +31,6 @@ def apply_inheritance_target(
     already flipped turns it back (ShE, The Inheritance Rule).
     """
     seat = request.seat
-    game.pending = None
     game.use_once(inheritance_key(seat))
     stronghold = seat_stronghold(game, seat)
     stronghold.flip_face()

@@ -47,5 +47,4 @@ def apply_ability_target(
     source = game.table.cards_by_id[request.source_card_id]
     target = game.table.cards_by_id[response.choices[0]]
     ability = ability_for(source, request.ability_key)
-    game.pending = None
     triggers.resolve_effects(game, ability.effects(game, source, target))
