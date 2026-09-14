@@ -657,8 +657,11 @@ class AttackEffect(Effect, ABC):
     """
 
     # What the card prints this effect as, which is the only thing its description needs from the
-    # subclass. A ClassVar rather than a field: it belongs to the kind, not to one announcement.
-    name: ClassVar[str]
+    # subclass. Abstract, so the category cannot be announced on its own, and a class attribute on
+    # each kind rather than a field: it belongs to the kind, not to one announcement.
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
 
     strength: int
     target_id: str
