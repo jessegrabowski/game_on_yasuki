@@ -7,10 +7,16 @@ from yasuki_skills.materialize import DOCS_URL, MaterializeError, materialize
 MODULE = '''from yasuki_core.engine import on
 
 
+# --- Rural Market ---
+
+
 @on(EnteredPlay, "rural_market")
 def _rural_market_entered_play(ctx):
     """Give it a token."""
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+# --- Order ---
 
 
 def _canonical_order(cards):
@@ -99,6 +105,21 @@ def test_end_before_stops_short_of_its_marker(docs: Path):
 
     assert "ordered = sorted(cards)" in body
     assert "return ordered" not in body
+
+
+def test_a_quoted_marker_matches_the_text_inside_the_quotes(docs: Path):
+    # A marker naming a card header holds a "#", which MyST would read as a comment unquoted.
+    page = written(
+        docs,
+        "```{literalinclude} ../../src/yasuki_core/cards.py\n"
+        ':start-at: "# --- Rural Market ---"\n:end-before: "# --- Order"\n```\n',
+    )
+
+    body = render(page, docs)
+
+    assert "# --- Rural Market ---" in body
+    assert "_rural_market_entered_play" in body
+    assert "_canonical_order" not in body
 
 
 def test_dedent_removes_exactly_the_width_asked_for(docs: Path):

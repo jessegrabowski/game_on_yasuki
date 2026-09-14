@@ -8,6 +8,7 @@ yasuki_core.engine.rules.board.queries
 .. autosummary::
 
     attack_targets
+    followers_in_play
     has_keyword
     opposing_units_in_battle
     owned_holdings

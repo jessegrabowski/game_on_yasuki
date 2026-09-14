@@ -76,6 +76,20 @@ than one worth -2F, so that an effect removing a single token removes only 1 For
 card does not say which, and the finer grain is the one that behaves correctly under everything
 else in the vocabulary.
 
+### How long it lasts
+
+An effect that changes a card, such as `GrantModifier` or `GrantKeyword`, carries a
+{class}`~yasuki_core.engine.rules.vocabulary.modifiers.Duration`, and the card usually prints none.
+The Comprehensive Rules fill the gap: an ongoing effect lasts until the end of the current turn
+unless the card gives a different duration (CR, Duration of Effects). So a bare "give" is
+`Duration.UNTIL_END_OF_TURN`, and only a card that says so reaches for `PERMANENT` or
+`WHILE_SOURCE_IN_PLAY`. {card}`Chuda Jomei` on [Adding a Card](adding_a_card.md) is a keyword
+grant written that way.
+
+Bowing, tokens and Family Honor have no duration at all. They are instantaneous changes that stay
+until something else changes them (CR, Instantaneous), which is why `AdjustCounter` and
+`GainHonor` take none.
+
 ## Where the rest lives
 
 [Abilities and costs](../design/systems/abilities-and-costs.md) covers the model and the cost

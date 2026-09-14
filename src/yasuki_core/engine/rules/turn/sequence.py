@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.effects import AdjustCounter
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     EnteredPlay,
+    GameEvent,
     Revealed,
     Straightened,
     TurnStarted,
@@ -251,19 +252,24 @@ def apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) ->
     A step of the turn rather than an action (CR, Drawing and Discarding Fate Cards): the discard
     names no seat as its cause, so a card reacting to "if the action was yours" has no action to
     claim.
+
+    Every card named reaches the discard before any of them is announced, and the announcements are
+    one cascade: the cards go at once, so a trait reading the board sees the whole discard rather
+    than the part of it that happened to precede its own card.
     """
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     by_id = {card.id: card for card in hand.cards}
     missing = [card_id for card_id in card_ids if card_id not in by_id]
     if missing:
         raise ValueError(f"discard names cards not in {seat.name}'s hand: {missing}")
+    discarded: list[GameEvent] = []
     for card_id in card_ids:
         card = by_id[card_id]
         ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.FATE_DISCARD))
-        triggers.fire(
-            game,
-            CardDiscarded(card_id, card.side, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True),
+        discarded.append(
+            CardDiscarded(card_id, card.side, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True)
         )
+    triggers.fire_all(game, discarded)
 
 
 def _other(seat: PlayerId) -> PlayerId:

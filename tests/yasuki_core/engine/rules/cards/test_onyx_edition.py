@@ -218,6 +218,32 @@ def test_banishing_the_spearmen_equips_the_naga_follower():
     assert [card.id for card in banished.cards] == ["spearmen"]
 
 
+def test_two_spearmen_discarded_together_are_each_offered_a_naga():
+    """Both copies are discarded at one instant, so both offers are made rather than the second
+    overwriting the first."""
+    game = _spearmen_game()
+    put_in_play(game, personality("shahai2", force=2, chi=2, keywords=("Naga",)))
+    second = attachment(
+        "spearmen2",
+        printed_id="spearmen_of_the_akasha",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=2,
+        keywords=("Naga", "Nonhuman", "Kharmic"),
+    )
+    game.table.cards_by_id[second.id] = second
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(second)
+
+    sequence.apply_discard(game, P1, ("spearmen", "spearmen2"))
+    action_sequence.submit(game, DecisionResponse(("shahai",)))
+    action_sequence.submit(game, DecisionResponse(("shahai2",)))
+
+    for bearer in ("shahai", "shahai2"):
+        carried = attachments_of(game, game.table.cards_by_id[bearer])
+        assert [follower.name for follower in carried] == ["Naga"]
+    banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)]
+    assert sorted(card.id for card in banished.cards) == ["spearmen", "spearmen2"]
+
+
 def test_declining_leaves_the_spearmen_lying_in_the_discard():
     """Banishing is the price of the Follower, so a seat that takes neither keeps the card."""
     game = _spearmen_game()

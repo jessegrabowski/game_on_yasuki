@@ -198,6 +198,11 @@ def _marker(options: dict[str, str], key: str, page: Path) -> str:
     """Return the text an option matches on, which has to be text."""
     marker = options[key]
 
+    # A marker holding a "#" has to be quoted on the page, or MyST reads the rest as a comment.
+    # Sphinx sees the text inside the quotes, and so must this.
+    if len(marker) >= 2 and marker[0] == marker[-1] and marker[0] in "\"'":
+        marker = marker[1:-1]
+
     if not marker:
         raise MaterializeError(f"{page}: its {key} names no text to match")
 

@@ -42,6 +42,78 @@ These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straight
 `CardDiscarded`, `CounterGained`, `Revealed`, `TurnStarted`, `ProducingGold` and `ProducedGold`. A
 card whose moment is not one of them needs a new event, which is a core change.
 
+## Three cards, complete
+
+The table names the hook. It does not show the hook's signature, the helpers a predicate calls, or
+where any of them is imported from, and a handler written from the table alone gets those wrong.
+Each card below is its whole implementation as it stands in its set module, preceded by that
+module's import block, so every name in the block resolves to a line above it. Copy the shape that
+matches your card, then read the page for it.
+
+### A trigger
+
+{card}`Rice Farm` reads *"After your turn begins, give this Holding a +1GP Wealth token."* One
+event, one guard, one effect, in `src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py`.
+[Reacting to events](reacting_to_events.md) walks through it.
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py
+:start-at: from yasuki_core
+:end-before: "# ---"
+:language: python
+```
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py
+:start-at: "# --- Rice Farm ---"
+:end-before: "# --- Shosuro Aoki"
+:language: python
+```
+
+### An ability
+
+{card}`Dull Tanto` reads *"Open: Give a target Personality two -1F tokens. Destroy this Item."*
+A target predicate, an effects helper, and a registration, in
+`src/yasuki_core/engine/rules/cards/road_to_ruin.py`. [Writing an ability](an_ability.md) walks
+through it. Note what the predicate calls: `personalities_in_play`, from
+`src/yasuki_core/engine/rules/board/queries.py`, which is where the other questions a predicate
+asks of the board live.
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/road_to_ruin.py
+:start-at: from yasuki_core
+:end-before: "# ---"
+:language: python
+```
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/road_to_ruin.py
+:start-at: "# --- Dull Tanto ---"
+:end-before: "# --- Outlying Farms"
+:language: python
+```
+
+### A trigger and a keyword grant on one card
+
+{card}`Chuda Jomei` reads *"After Jomei enters play, lose 3 Honor. Open: Give a target Human
+Personality :shadowlands:."* Two sentences, two hooks, one block, in
+`src/yasuki_core/engine/rules/cards/chaos_reigns_part_iii.py`. The trigger guards on
+`ctx.event.card_id`, because every copy in play hears the event. The predicate reads *Human* as the
+absence of the Nonhuman keyword, which is how the rules define the word (CR, Human), and the
+effect is `GrantKeyword` with the duration the rules give an unqualified "give"
+([Writing an ability](an_ability.md) says which). Every effect a handler may return is a
+dataclass in `src/yasuki_core/engine/rules/effects.py`, and every keyword the engine reads is a
+constant in `src/yasuki_core/engine/rules/vocabulary/keywords.py`. Open those two files before
+writing a name that is not in a block on this page.
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_iii.py
+:start-at: from yasuki_core
+:end-before: "# ---"
+:language: python
+```
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_iii.py
+:start-at: "# --- Chuda Jomei ---"
+:end-before: "# --- Doji Maya"
+:language: python
+```
+
 ## Which page?
 
 Work down this list. Each rung costs more than the one above, so stop at the first that can say
