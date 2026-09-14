@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     BATTLE_SEGMENT_TIMINGS,
@@ -40,6 +41,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.effects import (
     Ask,
+    Choose,
     Banish,
     DelayStraighten,
     DelayedEffect,
@@ -51,7 +53,10 @@ from yasuki_core.engine.rules.turn import structure
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
+    EnteredPlay,
+    Revealed,
     Straightened,
+    TurnStarted,
 )
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.session import EngineSession
@@ -59,6 +64,7 @@ from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import (
     dealt_table,
     end_phase,
+    end_turn,
     holding,
     put_in_play,
     register,
@@ -195,6 +201,8 @@ def test_the_end_of_turn_discard_refuses_to_run_over_queued_work():
     with pytest.raises(RuntimeError, match="work still queued"):
         action_sequence.submit(game, DecisionResponse((victim,)))
 
+    assert isinstance(game.pending, DiscardToHandSize)
+
 
 def test_cannot_advance_while_a_decision_is_pending():
     game = _game(hand=sequence.MAX_HAND_SIZE, fate_deck=1)
@@ -231,6 +239,159 @@ def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
     return card
+
+
+@choice_resolver("pause_probe")
+def _pause_probe_resolves_to_nothing(game, source_id, chosen, seat):
+    return []
+
+
+def _pause_on_own_event(ctx):
+    """A trigger that stops the cascade with an empty choice when the event names its own card."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)]
+
+
+def _answer(game: GameState) -> None:
+    action_sequence.submit(game, DecisionResponse(()))
+
+
+def test_a_new_game_starts_with_an_empty_stack():
+    game = _game()
+
+    sequence.begin_game(game)
+
+    assert not game.stack and game.pending is None
+
+
+def test_two_pregame_permanents_that_pause_are_each_answered_before_the_turn_opens(reacting):
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            printed_id="pause_probe",
+        ),
+    )
+    put_in_play(
+        state,
+        L5RCard.of(
+            SenseiPrint,
+            id="P1-SE",
+            name="Sensei",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            printed_id="pause_probe",
+        ),
+    )
+    bowed = _bowed_on_battlefield(state, PlayerId.P1, "P1-bowed")
+    reacting(EnteredPlay, "pause_probe", _pause_on_own_event)
+    game = GameState.start(state, PlayerId.P1)
+
+    sequence.begin_game(game)
+    assert game.pending is not None and bowed.bowed is True
+    _answer(game)
+    assert game.pending is not None and bowed.bowed is True
+    _answer(game)
+
+    assert game.pending is None and bowed.bowed is False
+    assert not game.stack and game.round.priority is game.active
+
+
+def test_two_cards_that_pause_on_straightening_are_answered_before_any_reveal(reacting):
+    state = TableState.empty_two_seat()
+    for card_id in ("P1-a", "P1-b"):
+        card = put_in_play(state, holding(card_id, printed_id="pause_probe"))
+        card.bow()
+    facedown = _facedown_in_province(state, PlayerId.P1, "P1-pv")
+    reacting(Straightened, "pause_probe", _pause_on_own_event)
+    game = GameState.start(state, PlayerId.P1)
+
+    sequence.begin_game(game)
+    assert game.pending is not None and facedown.face_up is False
+    _answer(game)
+    assert game.pending is not None and facedown.face_up is False
+    _answer(game)
+
+    assert game.pending is None and facedown.face_up is True
+    assert not game.stack and game.round.priority is game.active
+
+
+def test_a_reveal_that_pauses_is_answered_before_the_turn_starts(reacting):
+    state = TableState.empty_two_seat()
+    started: list[PlayerId] = []
+    put_in_play(state, holding("P1-eyes", printed_id="pause_probe"))
+    _facedown_in_province(state, PlayerId.P1, "P1-pv")
+    reacting(
+        Revealed,
+        "pause_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)],
+    )
+    reacting(TurnStarted, "pause_probe", lambda ctx: started.append(ctx.event.seat) or [])
+    game = GameState.start(state, PlayerId.P1)
+
+    sequence.begin_game(game)
+    assert game.pending is not None and started == []
+    _answer(game)
+
+    assert started == [PlayerId.P1]
+    assert not game.stack and game.round.priority is game.active
+
+
+def test_a_pause_on_the_next_seats_straighten_holds_the_turn_boundary(reacting):
+    state = dealt_table(hand=0)
+    put_in_play(state, holding("P2-a", owner=PlayerId.P2, printed_id="pause_probe")).bow()
+    reacting(Straightened, "pause_probe", _pause_on_own_event)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    end_turn(session)
+
+    theirs = session.game.table.cards_by_id["P2-a"]
+    assert session.game.active is PlayerId.P2 and session.game.pending is not None
+    assert theirs.bowed is False and session.game.stack
+    session.submit(PlayerId.P2, DecisionResponse(()))
+    assert session.game.pending is None and not session.game.stack
+    assert session.game.round.priority is PlayerId.P2
+
+
+def test_a_pause_on_the_turn_starting_leaves_a_clean_record_for_the_first_action(reacting):
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("P1-eyes", printed_id="pause_probe"))
+    reacting(
+        TurnStarted,
+        "pause_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)],
+    )
+    game = GameState.start(state, PlayerId.P1)
+    game.action_taken = "the Recruit of something"
+
+    sequence.begin_game(game)
+    assert game.pending is not None
+    _answer(game)
+
+    assert game.action_events == [] and game.action_taken == ""
+    assert not game.stack and game.round.priority is game.active
+
+
+def test_a_new_game_refills_a_short_province_before_the_first_action():
+    state = TableState.empty_two_seat()
+    empty = ops.create_province(state, PlayerId.P1)
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        register(
+            state,
+            L5RCard.of(DynastyPrint, id="P1-next", name="N", side=Side.DYNASTY, owner=PlayerId.P1),
+        )
+    ]
+    game = GameState.start(state, PlayerId.P1)
+
+    sequence.begin_game(game)
+
+    assert [card.id for card in game.table.zones[empty].cards] == ["P1-next"]
 
 
 def test_begin_game_straightens_and_reveals_only_the_active_board():
@@ -417,7 +578,7 @@ def test_a_turn_boundary_forgets_the_action_a_response_would_answer():
     game = _responder_game()
     game.action_taken = "the Recruit of something"
 
-    sequence._begin_turn(game)
+    sequence.begin_game(game)
 
     assert game.action_events == []
     assert game.action_taken == ""
@@ -428,7 +589,7 @@ def test_opening_a_turn_records_none_of_its_own_events_as_an_action():
     """Straightening and revealing are steps of the turn, not something a seat may respond to."""
     game = _responder_game()
 
-    sequence._begin_turn(game)
+    sequence.begin_game(game)
 
     assert game.action_events == []
 

@@ -176,7 +176,10 @@ the action rather than by deserializing it.
    rulebook.recruit.FinishRecruit
    rulebook.recruit.ResolveRecruit
    triggers.ResumeCascade
+   turn.sequence.AnnounceTurnStart
    turn.sequence.BeginNextTurn
+   turn.sequence.OpenFirstTurn
+   turn.sequence.OpenRound
 ```
 
 ## Stats, durations, and counters

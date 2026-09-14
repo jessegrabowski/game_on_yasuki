@@ -10,12 +10,11 @@ from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize, LeaveBowed
-from yasuki_core.engine.rules.effects import AdjustCounter
+from yasuki_core.engine.rules.effects import AdjustCounter, ApplyEffects, RevealProvinces
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     EnteredPlay,
     GameEvent,
-    Revealed,
     Straightened,
     TurnStarted,
 )
@@ -23,6 +22,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import activatable, permitted_timings
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     END_OF_TURN,
@@ -54,19 +54,49 @@ _PREGAME_PERMANENTS = (StrongholdPrint, SenseiPrint, WindPrint)
 
 
 def begin_game(game: GameState) -> None:
-    """Run the game-start pass once after ``GameState.start``, before the active player acts: fire
-    each pre-game permanent's enters-play effect, then the first turn's housekeeping. Re-runs on
-    every replay, so those effects must be idempotent."""
+    """Run the game-start pass once after ``GameState.start``, before the active player acts:
+    announce each pre-game permanent entering play, then open the first turn. Re-runs on every
+    replay, so those effects must be idempotent.
+
+    The first turn is queued behind the announcement and the stack drained, so a permanent whose
+    trait pauses is answered before anything straightens, and the stack is empty on return unless
+    a question is open.
+    """
+    game.stack.append(OpenFirstTurn())
     _begin_pregame(game)
-    _begin_turn(game)
+    run_stack(game)
+
+
+def run_stack(game: GameState) -> None:
+    """Drain deferred work, running each item until the stack empties or one pauses for a decision.
+    A work item may itself emit a decision (setting ``pending``), so resolution stops there and
+    resumes on the next :func:`~.submit`. Once the board settles, every Province standing short
+    refills.
+    """
+    while game.stack and game.pending is None:
+        game.stack.pop().resume(game)
+    if game.pending is None:
+        refill_short_provinces(game)
+
+
+@dataclass(frozen=True, slots=True)
+class OpenFirstTurn:
+    """Open the first turn once the pre-game permanents have entered play and anything their entry
+    asked has been answered."""
+
+    def resume(self, game: GameState) -> None:
+        _begin_turn(game)
 
 
 def _begin_pregame(game: GameState) -> None:
-    """Fire EnteredPlay for each pre-game permanent on the battlefield, so a Stronghold or Sensei
-    with an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
-    for card in list(game.table.battlefield.cards):
-        if isinstance(card.printed, _PREGAME_PERMANENTS):
-            triggers.fire(game, EnteredPlay(card.id))
+    """Announce every pre-game permanent on the battlefield entering play as one instant, so a
+    Stronghold or Sensei with an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
+    entered = [
+        EnteredPlay(card.id)
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, _PREGAME_PERMANENTS)
+    ]
+    triggers.fire_all(game, entered)
 
 
 def advance(game: GameState) -> None:
@@ -180,7 +210,10 @@ def _end_turn(game: GameState) -> None:
         candidates = tuple(card.id for card in held)
         game.pending = DiscardToHandSize(seat, candidates, count=excess)
         return
-    begin_next_turn(game)
+    # Reached inside an action's own drain, after that drain has emptied the stack, so this nested
+    # one runs only what the turn boundary queues.
+    game.stack.append(BeginNextTurn())
+    run_stack(game)
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
@@ -241,7 +274,6 @@ def _begin_turn(game: GameState) -> None:
         # The same shape as the end of the turn: the request set below would overwrite the paused
         # effect's question. Nothing on this path asks one today, since a win announces no event.
         raise RuntimeError("a reaction to the Honor Victory check paused the start of the turn")
-    open_round(game)
     offering = may_stay_bowed(game, game.active)
     if offering:
         game.pending = LeaveBowed(seat=game.active, candidates=offering)
@@ -250,22 +282,40 @@ def _begin_turn(game: GameState) -> None:
 
 
 def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
-    """Straighten everything but ``staying_bowed`` and whatever may not straighten yet, reveal the
-    Provinces, and open the turn.
+    """Straighten everything but ``staying_bowed`` and whatever may not straighten yet, then queue
+    the Province reveal, the turn's start, and the opening of its first round behind it for the
+    caller to drain.
 
-    The prohibition outlives this step. It lifts when the Action Phase this straighten precedes has
-    ended, so nothing is spent here.
+    The three announcements are separate instants (CR), so each is its own cascade. The round
+    opens last, so a question asked while opening is answered in the previous round and hands no
+    opportunity on. The straighten prohibition outlives this step: it lifts when the Action Phase
+    this straighten precedes has ended.
     """
+    game.stack.append(OpenRound())
+    game.stack.append(AnnounceTurnStart())
+    game.stack.append(ApplyEffects((RevealProvinces(game.active),)))
     straightened = ops.straighten(
         game.table, game.active, staying_bowed | game.straighten_delayed.keys()
     )
-    for card_id in straightened:
-        triggers.fire(game, Straightened(card_id))
-    for card_id in ops.reveal_provinces(game.table, game.active):
-        triggers.fire(game, Revealed(card_id))
-    triggers.fire(game, TurnStarted(game.active))
-    # Opening the turn is not an action, so what it just raised is nobody's to respond to.
-    forget_action(game)
+    triggers.fire_all(game, [Straightened(card_id) for card_id in straightened])
+
+
+@dataclass(frozen=True, slots=True)
+class AnnounceTurnStart:
+    """Announce that the active seat's turn has begun, once its cards have straightened and its
+    Provinces are revealed."""
+
+    def resume(self, game: GameState) -> None:
+        triggers.fire(game, TurnStarted(game.active))
+
+
+@dataclass(frozen=True, slots=True)
+class OpenRound:
+    """Open the turn's first Action Round once the opening has fully resolved, forgetting what the
+    opening raised: it is not an action, so it is nobody's to respond to."""
+
+    def resume(self, game: GameState) -> None:
+        open_round(game)
 
 
 def apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:

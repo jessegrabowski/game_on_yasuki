@@ -46,7 +46,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, equip
 from yasuki_core.engine.rules.gold.production import produce_gold
-from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.rulebook.recruit import (
     apply_fortification_province,
     apply_invest_amount,
@@ -70,6 +69,7 @@ from yasuki_core.engine.rules.turn.sequence import (
     BeginNextTurn,
     apply_discard,
     open_turn,
+    run_stack,
     yield_after_action,
     yield_priority,
 )
@@ -156,12 +156,6 @@ def perform(game: GameState, action: Action) -> None:
         yield_after_action(game, acted_in)
 
 
-# The decisions that are steps of the turn rather than actions taken in a round: the end-of-turn
-# discard, and the turn-start choice of what to leave bowed. Every new DecisionRequest owes an
-# answer to which of the two it is.
-_TURN_STRUCTURE = (DiscardToHandSize, LeaveBowed)
-
-
 def submit(game: GameState, response: DecisionResponse) -> None:
     """Answer the pending decision and resume the engine.
 
@@ -227,12 +221,11 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             resolution.fight_battle(game, int(response.choices[0]))
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
-    # Symmetric with `perform`: an answered decision resolves fully before the next input.
+    # Symmetric with `perform`: an answered decision resolves fully before the next input. A
+    # question asked by turn structure resolves into a round it was not asked in, which is how
+    # `yield_after_action` knows there is no opportunity to hand on.
     run_stack(game)
-    # Turn structure is not an action: the round these resolve into is not one an action would
-    # yield in, because the turn they belong to is either already over or has not opened yet.
-    if not isinstance(request, _TURN_STRUCTURE):
-        yield_after_action(game, acted_in)
+    yield_after_action(game, acted_in)
 
 
 def cancel(game: GameState) -> None:
@@ -271,18 +264,6 @@ def _cancel_payment(game: GameState) -> None:
     if not game.stack:
         raise ValueError("the pending payment has no queued work to undo")
     game.stack.pop()
-
-
-def run_stack(game: GameState) -> None:
-    """Drain deferred work, running each item until the stack empties or one pauses for a decision.
-    A work item may itself emit a decision (setting ``pending``), so resolution stops there and
-    resumes on the next :func:`~.submit`. Once the board settles, every Province standing short
-    refills.
-    """
-    while game.stack and game.pending is None:
-        game.stack.pop().resume(game)
-    if game.pending is None:
-        refill_short_provinces(game)
 
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:

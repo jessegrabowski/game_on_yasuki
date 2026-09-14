@@ -383,6 +383,9 @@ def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
 def fire(game: GameState, event: GameEvent) -> None:
     """Resolve ``event`` and the cascade it triggers, running the worklist to a fixpoint.
 
+    The single-event case of :func:`~.fire_all`. Occurrences that happen at the same instant go
+    through that one together; firing them one after another imposes an order the rules do not.
+
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "fire")
