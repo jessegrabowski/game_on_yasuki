@@ -199,7 +199,7 @@ def interrupt_request(game: GameState, effect: InterruptibleEffect) -> ChooseInt
         for card in discardable_for(game, seat, interrupt)
     )
     plays = tuple(card.id for card, _ in card_interrupts_for(game, seat, effect))
-    return ChooseInterrupt(seat=seat, candidates=discards + plays, description=effect.describe())
+    return ChooseInterrupt(seat=seat, candidates=discards + plays, description=effect.narrate(game))
 
 
 @dataclass(frozen=True, slots=True)
@@ -279,7 +279,7 @@ def _ask_adjustment(
     game.pending = ChooseInterruptAdjustment(
         seat=seat,
         candidates=tuple(wording for wording, _ in taken.adjustments),
-        question=f"{effect.describe()}. {taken.question}",
+        question=f"{effect.narrate(game)}. {taken.question}",
         resolver=RULEBOOK_INTERRUPT_RESOLVER,
         source_id=card_id,
         resolver_context=(key,),

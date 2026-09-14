@@ -537,6 +537,18 @@ def test_an_unknown_rulebook_interrupt_is_a_key_error():
         interrupts.rulebook_interrupt("valor")
 
 
+def test_the_offer_names_the_card_and_the_player_as_the_seat_reads_them():
+    # The log describes an effect by id, which is what a replay needs and not what a player is
+    # asked about: the offer and the adjustment question both name the board as the seat sees it.
+    game = two_seat_game()
+    game.table.seats[P1].name = "Ada"
+    target = put_in_play(game, personality("P2-d3", owner=P2, name="Shiba Guard", force=2))
+
+    assert GainHonor(P1, 2).narrate(game) == "Ada gains 2 honor"
+    assert Fear(2, target.id, P1).narrate(game) == "Fear 2 on Shiba Guard"
+    assert Fear(2, target.id, P1).describe() == "fear 2 on P2-d3"
+
+
 def test_a_change_of_zero_asks_nobody():
     game = _inside_an_action()
 

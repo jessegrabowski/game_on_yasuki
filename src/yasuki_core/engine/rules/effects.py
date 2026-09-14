@@ -148,6 +148,11 @@ class InterruptibleEffect(InterruptingEffect, ABC):
     def has_declined(self, seat: PlayerId) -> bool:
         return seat in self.declined
 
+    def narrate(self, game: GameState) -> str:
+        """The effect as the seat offered an Interrupt against it reads it: cards and players by
+        name, unlike :meth:`describe`, which names them by id for the log."""
+        return self.describe()
+
     def declined_by(self, seat: PlayerId) -> "InterruptibleEffect":
         """This effect with ``seat`` recorded as having declined an Interrupt against it."""
         # The category carries no fields of its own, so it is not a dataclass, but every concrete
@@ -703,8 +708,10 @@ class AttackEffect(Effect, ABC):
         """What this kind does to a target its strength reaches, as the CR prints it."""
 
     def describe(self) -> str:
-        stat = "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
-        return f"{self.name} {self.strength} on {self.target_id}{stat}"
+        return f"{self.name} {self.strength} on {self.target_id}{self._compared_stat()}"
+
+    def _compared_stat(self) -> str:
+        return "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         # Imported where it is used: reading an attack's strength walks the board for the cards
@@ -757,6 +764,10 @@ class Fear(AttackEffect, InterruptibleEffect):
     name: ClassVar[str] = "fear"
 
     declined: frozenset[PlayerId] = frozenset()
+
+    def narrate(self, game: GameState) -> str:
+        target = game.table.cards_by_id[self.target_id].name
+        return f"{self.name.capitalize()} {self.strength} on {target}{self._compared_stat()}"
 
     def _printed_outcome(self) -> tuple[Effect, ...]:
         return (Bow(self.target_id),)
@@ -1290,9 +1301,15 @@ class GainHonor(InterruptibleEffect):
         return adjusted_honor_change(self.amount, self.adjustment)
 
     def describe(self) -> str:
+        return self._describe(self.seat.name)
+
+    def narrate(self, game: GameState) -> str:
+        return self._describe(game.table.seats[self.seat].name)
+
+    def _describe(self, whose: str) -> str:
         amount = self.adjusted
         verb = "gains" if amount >= 0 else "loses"
-        return f"{self.seat.name} {verb} {abs(amount)} honor"
+        return f"{whose} {verb} {abs(amount)} honor"
 
     def is_interruptible(self) -> bool:
         # A change of zero is not a gain or loss (CR, Honor Gains and Losses), so there is nothing
