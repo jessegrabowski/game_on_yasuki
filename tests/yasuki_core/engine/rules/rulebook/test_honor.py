@@ -3,6 +3,8 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.effects import GainHonor
+from yasuki_core.engine.rules.turn import sequence
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.state import GameState
@@ -224,6 +226,19 @@ def test_neither_seat_can_back_out_while_the_interrupt_is_open():
     assert not session.abort(P1)
     with pytest.raises(ValueError, match="cannot be canceled"):
         session.cancel(P2)
+
+
+def test_a_delayed_change_at_the_end_of_the_turn_asks_nobody():
+    game = GameState.start(dealt_table(hand=0), P1)
+    _honor_card(game.table, "P2-honor0", P2)
+    game.action = KharmicDraw("the-turns-last-action")
+    game.delayed.append((END_OF_TURN, GainHonor(P1, -2)))
+
+    for _ in range(3):
+        sequence.advance(game)
+
+    assert game.pending is None
+    assert game.table.seats[P1].honor == -2
 
 
 def test_an_answer_naming_a_card_no_longer_in_hand_is_refused():

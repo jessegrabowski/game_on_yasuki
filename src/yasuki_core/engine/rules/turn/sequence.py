@@ -160,6 +160,9 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
 
 def _end_turn(game: GameState) -> None:
     seat = game.active
+    # Ending the turn is not an action, so a delayed effect resolving here has nothing to
+    # interrupt and nobody to respond to.
+    forget_action(game)
     triggers.resolve_delayed(game, END_OF_TURN)
     if game.pending is not None:
         # What is left of the end of the turn (Sincerity, the fate draw, the hand-size discard)
