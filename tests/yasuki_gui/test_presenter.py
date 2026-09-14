@@ -271,7 +271,7 @@ def an_interrupt_offered(board):
         card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P1)
         session.game.table.cards_by_id[card.id] = card
     session.game.pending = ChooseInterrupt(
-        seat=P1, candidates=("hc@+1", "hc@-1", "okura"), description="P2 gains 2 honor"
+        seat=P1, candidates=("hc@honor", "okura"), description="P2 gains 2 honor"
     )
     return presenter, window, session
 
@@ -297,8 +297,8 @@ def test_clicking_a_card_while_an_interrupt_waits_offers_its_ways_to_take_it(an_
     presenter.on_card_activated("okura")
 
     assert [label for label, _ in offered] == [
-        "Discard Honor Fate (+1)",
-        "Discard Honor Fate (-1)",
+        "Honor Repeatable Interrupt: If the action has any Honor gains or losses, discard an "
+        "Honor card to increase or reduce one such gain or loss by 1.",
         "Play Okura is Released",
     ]
 

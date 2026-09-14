@@ -19,6 +19,7 @@ yasuki_core.engine.rules.interrupts
     discardable_for
     interrupt_request
     interrupters
+    rulebook_interrupt
     rulebook_interrupts_for
 
 .. automodule:: yasuki_core.engine.rules.interrupts

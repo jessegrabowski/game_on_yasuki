@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInterrupt,
+    ChooseInterruptAdjustment,
     DecisionResponse,
     interrupt_choice,
     interrupt_token,
@@ -33,18 +34,23 @@ from yasuki_core.game_pieces.cards import L5RCard
 @dataclass(frozen=True, slots=True)
 class RulebookInterrupt[T: InterruptibleEffect]:
     """A rulebook Interrupt every player holds: discard a card carrying ``keyword`` to adjust a
-    pending effect of type ``answers`` by one of ``deltas``.
+    pending effect of type ``answers`` by one of ``adjustments``.
 
     Attributes
     ----------
     key : str
         Names the ability, for the once-per-action record.
+    label : str
+        The ability as the datasheet prints it, which a client offers on the card it discards.
     keyword : str
         The keyword a card must carry to be discarded for it.
     answers : type
         The effect type the Interrupt may be taken against.
-    deltas : tuple of int
-        The adjustments the seat may choose between.
+    question : str
+        What the seat is asked once it has named the card, ahead of ``adjustments``.
+    adjustments : tuple of (str, int)
+        The adjustments the seat may choose between, each as the seat reads it and as the delta it
+        gives the effect.
     adjust : callable
         Maps the pending effect and the chosen delta to the effect that replaces it.
     once_per_action : bool
@@ -53,11 +59,17 @@ class RulebookInterrupt[T: InterruptibleEffect]:
     """
 
     key: str
+    label: str
     keyword: str
     answers: type[T]
-    deltas: tuple[int, ...]
+    question: str
+    adjustments: tuple[tuple[str, int], ...]
     adjust: Callable[[T, int], T]
     once_per_action: bool
+
+    def delta_for(self, wording: str) -> int:
+        """The delta behind ``wording``, one of the adjustments as the seat reads them."""
+        return dict(self.adjustments)[wording]
 
 
 def _adjust_fear(effect: Fear, delta: int) -> Fear:
@@ -68,27 +80,47 @@ def _adjust_honor(effect: GainHonor, delta: int) -> GainHonor:
     return replace(effect, adjustment=effect.adjustment + delta)
 
 
-# The two rulebook Interrupts the ShE datasheet grants. Courage may be taken any number of times per
-# action, which the datasheet says in as many words, and Honor once, which is its default for a
-# Repeatable Interrupt.
+# The two rulebook Interrupts the ShE datasheet grants, worded as it prints them. Courage may be
+# taken any number of times per action, which the datasheet says in as many words, and Honor once,
+# which is its default for a Repeatable Interrupt.
 RULEBOOK_INTERRUPTS: tuple[RulebookInterrupt, ...] = (
     RulebookInterrupt(
         key="courage",
+        label=(
+            "Courage Repeatable Interrupt: If the action has any Fear effects, any number of times "
+            "per action, discard a Courage card to give one such effect +2 or -2 strength."
+        ),
         keyword=keywords.COURAGE,
         answers=Fear,
-        deltas=(2, -2),
+        question="Give it +2 or -2 strength?",
+        adjustments=(("+2 strength", 2), ("-2 strength", -2)),
         adjust=_adjust_fear,
         once_per_action=False,
     ),
     RulebookInterrupt(
         key="honor",
+        label=(
+            "Honor Repeatable Interrupt: If the action has any Honor gains or losses, discard an "
+            "Honor card to increase or reduce one such gain or loss by 1."
+        ),
         keyword=keywords.HONOR,
         answers=GainHonor,
-        deltas=(1, -1),
+        question="Increase or reduce it by 1?",
+        adjustments=(("Increase by 1", 1), ("Reduce by 1", -1)),
         adjust=_adjust_honor,
         once_per_action=True,
     ),
 )
+
+_RULEBOOK_INTERRUPTS_BY_KEY = {interrupt.key: interrupt for interrupt in RULEBOOK_INTERRUPTS}
+
+RULEBOOK_INTERRUPT_RESOLVER = "rulebook_interrupt"
+
+
+def rulebook_interrupt(key: str) -> RulebookInterrupt[InterruptibleEffect]:
+    """The rulebook Interrupt named ``key``. Raise ``KeyError`` for a key the datasheet has none
+    for."""
+    return _RULEBOOK_INTERRUPTS_BY_KEY[key]
 
 
 def _hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -162,10 +194,9 @@ def interrupt_request(game: GameState, effect: InterruptibleEffect) -> ChooseInt
     """The Interrupt offered to the first seat :func:`~.interrupters` names against ``effect``."""
     seat = interrupters(game, effect)[0]
     discards = tuple(
-        interrupt_token(card.id, delta)
+        interrupt_token(card.id, interrupt.key)
         for interrupt in rulebook_interrupts_for(game, seat, effect)
         for card in discardable_for(game, seat, interrupt)
-        for delta in interrupt.deltas
     )
     plays = tuple(card.id for card, _ in card_interrupts_for(game, seat, effect))
     return ChooseInterrupt(seat=seat, candidates=discards + plays, description=effect.describe())
@@ -192,24 +223,29 @@ class ResumeInterrupted:
 def apply_interrupt(game: GameState, request: ChooseInterrupt, response: DecisionResponse) -> None:
     """Act on the seat's answer and bring the paused effect back for the next answer.
 
-    A pass records the seat as declined. A rulebook discard splices the discard and the adjusted
-    effect into the paused cascade. A Strategy is played the way any Strategy is, with the
-    replacement its Interrupt returns queued to rejoin the cascade once the Strategy has resolved.
-    Raise ``RuntimeError`` if the answer names a card the seat can no longer take the Interrupt
-    with.
+    A pass records the seat as declined. A rulebook discard names its card here and asks for the
+    adjustment next, leaving the effect paused until that is answered. A Strategy is played the
+    way any Strategy is, with the replacement its Interrupt returns queued to rejoin the cascade
+    once the Strategy has resolved. Raise ``RuntimeError`` if the answer names a card the seat can
+    no longer take the Interrupt with.
     """
-    effect = triggers.paused_effect(game)
-    if not isinstance(effect, InterruptibleEffect):
-        raise RuntimeError(f"{type(effect).__name__} opens no Interrupt step")
+    effect = _interrupted(game)
     seat = request.seat
     if not response.choices:
         triggers.resume_paused_cascade(game, [effect.declined_by(seat)])
         return
-    card_id, delta = interrupt_choice(response.choices[0])
-    if delta is None:
+    card_id, key = interrupt_choice(response.choices[0])
+    if key is None:
         _play_interrupt(game, seat, effect, card_id)
     else:
-        _discard_to_interrupt(game, seat, effect, card_id, delta)
+        _ask_adjustment(game, seat, effect, card_id, key)
+
+
+def _interrupted(game: GameState) -> InterruptibleEffect:
+    effect = triggers.paused_effect(game)
+    if not isinstance(effect, InterruptibleEffect):
+        raise RuntimeError(f"{type(effect).__name__} opens no Interrupt step")
+    return effect
 
 
 def _play_interrupt(
@@ -226,20 +262,42 @@ def _play_interrupt(
     play_strategy_with(game, card, interruption.effects)
 
 
-def _discard_to_interrupt(
-    game: GameState, seat: PlayerId, effect: InterruptibleEffect, card_id: str, delta: int
+def _ask_adjustment(
+    game: GameState, seat: PlayerId, effect: InterruptibleEffect, card_id: str, key: str
 ) -> None:
     taken = next(
         (
             interrupt
             for interrupt in rulebook_interrupts_for(game, seat, effect)
-            if delta in interrupt.deltas
+            if interrupt.key == key
             and card_id in {card.id for card in discardable_for(game, seat, interrupt)}
         ),
         None,
     )
     if taken is None:
         raise RuntimeError(f"{card_id} is no longer a card {seat.name} can discard to interrupt")
+    game.pending = ChooseInterruptAdjustment(
+        seat=seat,
+        candidates=tuple(wording for wording, _ in taken.adjustments),
+        question=f"{effect.describe()}. {taken.question}",
+        resolver=RULEBOOK_INTERRUPT_RESOLVER,
+        source_id=card_id,
+        resolver_context=(key,),
+    )
+
+
+@triggers.choice_resolver(RULEBOOK_INTERRUPT_RESOLVER)
+def _resolve_rulebook_interrupt(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...],
+) -> list[Effect]:
+    """Discard the named card and splice the adjusted effect in where the interrupted one stood.
+    The cascade is still paused on that effect: naming the card asked a second question without
+    resuming it."""
+    taken = rulebook_interrupt(resolver_context[0])
     if taken.once_per_action:
         game.interrupts_taken.add((taken.key, seat))
-    triggers.resume_paused_cascade(game, [Discard(card_id, seat), taken.adjust(effect, delta)])
+    return [Discard(source_id, seat), taken.adjust(_interrupted(game), taken.delta_for(chosen[0]))]

@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     DiscardToHandSize,
 )
+from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.vocabulary.actions import (
     PlayStrategy,
@@ -408,18 +409,18 @@ def test_board_menu_is_empty_when_no_rulebook_ability_is_legal():
 
 def test_interrupt_menu_pairs_each_way_to_take_it_with_its_answer():
     # The interrupted effect waits on the seat, so its ways to answer hang off the cards they spend,
-    # each already the response the card menu submits.
+    # each already the response the card menu submits. A rulebook Interrupt reads as the datasheet
+    # prints it: the adjustment is the question that follows, not part of the entry.
     game_runner = _runner(p1_hand=2)
     hc, okura = game_runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     game_runner.session.game.pending = ChooseInterrupt(
         seat=PlayerId.P1,
-        candidates=(f"{hc.id}@+1", f"{hc.id}@-1", okura.id),
+        candidates=(f"{hc.id}@honor", okura.id),
         description="P2 gains 2 honor",
     )
 
     assert game_runner.interrupt_menu(hc.id) == [
-        (f"Discard {hc.name} (+1)", DecisionResponse((f"{hc.id}@+1",))),
-        (f"Discard {hc.name} (-1)", DecisionResponse((f"{hc.id}@-1",))),
+        (rulebook_interrupt("honor").label, DecisionResponse((f"{hc.id}@honor",)))
     ]
     assert game_runner.interrupt_menu(okura.id) == [
         (f"Play {okura.name}", DecisionResponse((okura.id,)))
