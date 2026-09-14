@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.gold.payment import payment_request
+from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_gui.services.game_runner import GameRunner
@@ -30,6 +31,7 @@ from yasuki_gui.ui.game_window import GameWindow
 
 from yasuki_core.game_pieces.constants import AttachmentType
 
+from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -1461,3 +1463,52 @@ def test_taking_a_favor_ability_from_the_card_menu_asks_for_its_discard(holding_
     assert session.game.pending.candidates == ("spare",), "the proxy is not a card it can spend"
     assert session.game.favor_holder is None, "the Favor was discarded to pay for it"
     assert session.game.pending.prompt() == "Discard a Fate card to draw a card"
+
+
+@pytest.fixture
+def a_fear_to_interrupt():
+    """A presenter for the Defender, whose 2F guard the Attacker has just aimed Fear at while the
+    Defender holds a Courage card."""
+    session = _fear_announced({DEFENDER: 1})
+    runner = GameRunner(session, DEFENDER)
+    window = GameWindow(session.game.table, DEFENDER)
+    presenter = Presenter(FakeHost(runner), window)
+    window.bind_to(presenter)
+    try:
+        presenter.present()
+        yield presenter, window, session
+    finally:
+        window.root.destroy()
+
+
+def test_the_courage_interrupt_is_taken_from_the_card_and_answered_on_the_panel(
+    a_fear_to_interrupt,
+):
+    presenter, window, session = a_fear_to_interrupt
+    assert _status(window) == "Fear 2 on guard. Take an Interrupt?"
+    assert _buttons(window) == ["Pass"]
+    assert not window.field.selecting
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("P2-courage0")
+    assert [label for label, _ in offered] == [rulebook_interrupt("courage").label]
+    offered[0][1]()
+
+    assert _status(window) == "Fear 2 on guard. Give it +2 or -2 strength?"
+    assert _buttons(window) == ["+2 strength", "-2 strength", "Cancel"]
+    assert not window.field.selecting
+    _press(presenter, "Cancel")
+    assert _status(window) == "Fear 2 on guard. Take an Interrupt?"
+    assert _buttons(window) == ["Pass"]
+
+    offered.clear()
+    presenter.on_card_activated("P2-courage0")
+    offered[0][1]()
+    _press(presenter, "-2 strength")
+
+    assert session.game.pending is None
+    assert not session.game.table.cards_by_id["guard"].bowed
+    assert "P2-courage0" not in [
+        card.id for card in session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)].cards
+    ]

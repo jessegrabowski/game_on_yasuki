@@ -65,6 +65,13 @@ class DecisionRequest(ABC):
         for a forced decision the seat must answer."""
         return False
 
+    @property
+    def reopens_on_cancel(self) -> bool:
+        """Whether backing out returns to the decision the seat answered just before this one,
+        instead of unwinding the action that raised it. True for a later step of an answer whose
+        earlier steps changed nothing on the board."""
+        return False
+
 
 @dataclass(frozen=True, slots=True)
 class ChoosePayment(DecisionRequest):
@@ -549,13 +556,13 @@ class ChooseInterruptAdjustment(ChooseOption):
     named the card to discard for it: increase or reduce, in the datasheet's words.
 
     A :class:`~.ChooseOption` in every other respect, so a client offers it as the wordings it
-    lists. Not cancellable: the step before it was the seat's answer to an offer, and backing out
-    of it would unwind the interrupted action instead.
+    lists. Backing out reopens the offer the card was named against, since naming it moved
+    nothing: the card is discarded only once the adjustment is answered.
     """
 
     @property
-    def cancellable(self) -> bool:
-        return False
+    def reopens_on_cancel(self) -> bool:
+        return True
 
 
 @dataclass(frozen=True, slots=True)

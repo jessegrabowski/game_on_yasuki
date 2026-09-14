@@ -232,8 +232,23 @@ def test_naming_the_card_asks_for_the_adjustment_before_anything_moves():
     assert isinstance(pending, ChooseInterruptAdjustment)
     assert (pending.seat, pending.candidates) == (P2, ("Increase by 1", "Reduce by 1"))
     assert pending.prompt() == f"P1 gains {PERSONAL_HONOR} honor. Increase or reduce it by 1?"
-    assert not pending.cancellable
     assert session.game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards == []
+
+
+def test_backing_out_of_the_adjustment_reopens_the_offer():
+    # Naming the card moved nothing, so the seat may change its mind up to the adjustment, and
+    # only that step comes back: the interrupted action stays where it was.
+    session = _proclaim_session({P2: 1})
+    session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", "honor"),)))
+
+    session.cancel(P2)
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseInterrupt)
+    assert pending.candidates == ("P2-honor0@honor",)
+    assert _honor(session, P1) == 0
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
+    assert _honor(session, P1) == PERSONAL_HONOR - 1
 
 
 def test_passing_leaves_the_gain_whole():

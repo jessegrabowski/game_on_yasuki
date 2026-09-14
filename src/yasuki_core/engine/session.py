@@ -163,6 +163,10 @@ class EngineSession:
         truncated to before the action was announced and the game rebuilt by replay, so the unwind
         reverses whatever the action did without any effect needing its own inverse.
 
+        A decision that reopens on cancel is a later step of one answer, and only that step is
+        taken back: the tape loses the answer that raised it, and the decision it answered comes
+        back when the tape is replayed.
+
         Refuse once the action has moved anything another seat holds. Taking back a card an opponent
         has already drawn does not take back their having seen it, so an action that reached across
         the table is committed the moment it did. Refuse likewise for a decision the rules force,
@@ -179,10 +183,17 @@ class EngineSession:
             return False  # another seat is mid-decision; the question is not this seat's to erase
         entries = self.log.entries
         cut = len(entries)
-        while cut and isinstance(entries[cut - 1], Answer) and entries[cut - 1].seat is seat:
-            cut -= 1
-        if not cut or not isinstance(entries[cut - 1], Act) or entries[cut - 1].seat is not seat:
-            return False  # the pending decision is not one this seat's own action raised
+        if pending.reopens_on_cancel:
+            # Only the answer that raised this step comes off: the decision it answered comes back
+            # when the shorter tape is replayed.
+            opened_by = Answer
+        else:
+            opened_by = Act
+            while cut and isinstance(entries[cut - 1], Answer) and entries[cut - 1].seat is seat:
+                cut -= 1
+        opener = entries[cut - 1] if cut else None
+        if not isinstance(opener, opened_by) or opener.seat is not seat:
+            return False  # the pending decision is not one this seat's own step raised
         rewound = replace(self.log, entries=entries[: cut - 1]).replay()
         others = [other for other in self.game.table.seats if other is not seat]
         if any(_position(rewound, other) != _position(self.game, other) for other in others):
