@@ -1481,10 +1481,19 @@ def a_fear_to_interrupt():
         window.root.destroy()
 
 
-def test_the_courage_interrupt_is_taken_from_the_card_and_answered_on_the_panel(
+def _take_from_card(presenter, window, card_id: str) -> None:
+    """Open ``card_id``'s menu and pick its one entry."""
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+    presenter.on_card_activated(card_id)
+    ((_, take),) = offered
+    take()
+
+
+def test_the_courage_interrupt_is_offered_on_the_card_and_adjusted_on_the_panel(
     a_fear_to_interrupt,
 ):
-    presenter, window, session = a_fear_to_interrupt
+    presenter, window, _ = a_fear_to_interrupt
     assert _status(window) == "Fear 2 on guard. Take an Interrupt?"
     assert _buttons(window) == ["Pass"]
     assert not window.field.selecting
@@ -1498,17 +1507,26 @@ def test_the_courage_interrupt_is_taken_from_the_card_and_answered_on_the_panel(
     assert _status(window) == "Fear 2 on guard. Give it +2 or -2 strength?"
     assert _buttons(window) == ["+2 strength", "-2 strength", "Cancel"]
     assert not window.field.selecting
+
+
+def test_cancelling_the_adjustment_returns_to_the_interrupt_offer(a_fear_to_interrupt):
+    presenter, window, session = a_fear_to_interrupt
+    _take_from_card(presenter, window, "P2-courage0")
+
     _press(presenter, "Cancel")
+
     assert _status(window) == "Fear 2 on guard. Take an Interrupt?"
     assert _buttons(window) == ["Pass"]
+    assert "P2-courage0" in session.game.table.cards_by_id
 
-    offered.clear()
-    presenter.on_card_activated("P2-courage0")
-    offered[0][1]()
+
+def test_the_adjustment_discards_the_card_and_resolves_the_fear(a_fear_to_interrupt):
+    presenter, window, session = a_fear_to_interrupt
+    _take_from_card(presenter, window, "P2-courage0")
+
     _press(presenter, "-2 strength")
 
     assert session.game.pending is None
     assert not session.game.table.cards_by_id["guard"].bowed
-    assert "P2-courage0" not in [
-        card.id for card in session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)].cards
-    ]
+    hand = session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)].cards
+    assert "P2-courage0" not in [card.id for card in hand]
