@@ -16,6 +16,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | An activated ability with a cost | `register_ability(id, Ability(...))` | {card}`Millet Farm` |
 | "Response: after X..." | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
+| "Interrupt: ..." against a pending effect | `register_interrupt(id, Interrupt(...))` | {card}`Okura is Released` |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
 | Gives the Personality it hangs on a stat | `@attachment_grant(id)` | {card}`Haramaki-do` |
 | Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |
@@ -154,7 +155,7 @@ helper, its registration. A pre-commit hook asserts the ordering, the one-header
 that the header names the card the block registers, on the modules your commit touches.
 
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
-role is one of `cost`, `targets`, `effects`, an entry point of a registry (`gold`, `invest`,
+role is one of `cost`, `targets`, `effects`, `interrupt`, an entry point of a registry (`gold`, `invest`,
 `keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
 `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`), or the event a
 trigger answers (`entered_play`, `destroyed`, `straightened`, `turn_started`, `counter_gained`,

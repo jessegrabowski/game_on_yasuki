@@ -1,6 +1,6 @@
 from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
+from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, InvestAbility
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -29,6 +29,7 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 
 _ABILITIES: dict[str, tuple[Ability, ...]] = {}
 _INVEST: dict[str, InvestAbility] = {}
+_INTERRUPTS: dict[str, Interrupt] = {}
 # The Holdings whose own text overrides the rule that a Holding enters play bowed. Registered from
 # the set module the card lives in, like everything else a card does, rather than listed centrally,
 # so the layout guard scans it and the card index checks it.
@@ -62,6 +63,18 @@ def register_invest(printed_id: str, value: InvestAbility) -> None:
     if printed_id in _INVEST:
         raise ValueError(f"{printed_id} already has an invest ability")
     _INVEST[printed_id] = value
+
+
+def register_interrupt(printed_id: str, value: Interrupt) -> None:
+    """Register ``value`` as ``printed_id``'s Interrupt."""
+    if printed_id in _INTERRUPTS:
+        raise ValueError(f"{printed_id} already has an interrupt")
+    _INTERRUPTS[printed_id] = value
+
+
+def interrupt_for(card: L5RCard) -> Interrupt | None:
+    """The Interrupt registered for ``card``'s printed id, or None."""
+    return _INTERRUPTS.get(card.printed_id)
 
 
 def invest_amounts(game: GameState, card: L5RCard) -> tuple[int, ...] | None:

@@ -33,9 +33,11 @@ reports whether it opened at all.
 - `ATTACK` belongs to the Attack Phase's Declaration Segment
 - `ENGAGE` and `BATTLE` belong to a battle's Engage and Combat Segments, Defender acting first
 - `RESPONSE` belongs to the Response Step over another action
-- `INTERRUPT` belongs to nothing
+- `INTERRUPT` belongs to no round
 
-`INTERRUPT` is declared and no round grants it, so an ability carrying it is never offered.
+No round grants `INTERRUPT`. The Interrupt step offers it instead, from hand, while an effect it
+answers waits to resolve inside an action: see `rules/interrupts.py` and
+[Abilities and costs](abilities-and-costs.md).
 
 ## Where a card plugs in
 

@@ -1,3 +1,4 @@
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
@@ -481,64 +482,60 @@ class AssignUnits(DecisionRequest):
         return len(set(assigned)) == len(assigned)
 
 
-def honor_interrupt_token(card_id: str, delta: int) -> str:
-    """The candidate string pairing the Honor card ``card_id`` with the ``delta`` discarding it
-    gives a gain or loss: how :class:`~.ChooseHonorInterrupt` names one way to answer. The same
+_SIGNED_INT = re.compile(r"[+-]\d+")
+
+
+def interrupt_token(card_id: str, delta: int) -> str:
+    """The candidate string pairing the card ``card_id`` with the ``delta`` discarding it gives the
+    interrupted effect: how the rulebook discard Interrupts name one way to answer. The same
     separator the assignment tokens use, so a client splits both alike."""
     return f"{card_id}{ASSIGNMENT_SEPARATOR}{delta:+d}"
 
 
-def honor_interrupt(token: str) -> tuple[str, int]:
-    """The card and delta :func:`~.honor_interrupt_token` encoded.
+def interrupt_choice(token: str) -> tuple[str, int | None]:
+    """The card and delta :func:`~.interrupt_token` encoded, or a bare card id and no delta,
+    which names a card to play rather than discard.
 
     Returns
     -------
     card_id : str
-        The Honor card to discard.
-    delta : int
-        The change to the gain or loss's size, 1 or -1.
+        The card to discard or play.
+    delta : int or None
+        The signed change to the interrupted effect, or None for a card to play.
 
     Raises
     ------
     ValueError
-        If ``token`` names neither.
+        If ``token`` carries a separator but no readable delta.
     """
     card_id, separator, delta = token.rpartition(ASSIGNMENT_SEPARATOR)
-    if not separator or not card_id or delta not in ("+1", "-1"):
-        raise ValueError(f"not an honor interrupt token: {token!r}")
+    if not separator:
+        return token, None
+    if not card_id or not _SIGNED_INT.fullmatch(delta):
+        raise ValueError(f"not an interrupt token: {token!r}")
     return card_id, int(delta)
 
 
 @dataclass(frozen=True, slots=True)
-class ChooseHonorInterrupt(DecisionRequest):
-    """The seat may take the Honor rulebook Interrupt against an Honor gain or loss about to
-    happen: discard one Honor card from hand to make it one larger or one smaller (ShE datasheet,
-    Honor Rulebook ability).
+class ChooseInterrupt(DecisionRequest):
+    """The seat may interrupt ``effect``, which waits to resolve: discard a card carrying the
+    keyword a rulebook Interrupt asks for to adjust it, or play an Interrupt from hand that
+    answers it.
 
-    A candidate pairs a card with a direction, read through :func:`~.honor_interrupt`. Declining
-    is the empty answer, and is what most seats do most of the time, so the request is neither
-    forced nor cancellable.
+    A candidate is a card paired with a delta, or the id of a Strategy to play, both read through
+    :func:`~.interrupt_choice`. Declining is the empty answer, and is what most seats do most of
+    the time, so the request is neither forced nor cancellable.
 
     Attributes
     ----------
-    honor_seat : PlayerId
-        The seat whose Honor is about to move.
-    amount : int
-        The signed change, before any Interrupt.
-    asked : frozenset of PlayerId
-        The seats already offered the Interrupt against this change, this one excluded.
+    description : str
+        The effect as it stands, in the words its own description uses.
     """
 
-    honor_seat: PlayerId
-    amount: int
-    asked: frozenset[PlayerId]
+    description: str
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        verb = "gains" if self.amount > 0 else "loses"
-        return (
-            f"{self.honor_seat.name} {verb} {abs(self.amount)} Honor. "
-            "Discard an Honor card to change it by 1?"
-        )
+        return f"{self.description}. Take an Interrupt?"
 
     @property
     def confirm_label(self) -> str:

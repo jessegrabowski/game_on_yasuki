@@ -8,7 +8,6 @@ yasuki_core.engine.rules.effects
 .. autosummary::
 
     AdjustCounter
-    AdjustHonorChange
     ApplyEffects
     Ask
     AskAmount
@@ -40,6 +39,7 @@ yasuki_core.engine.rules.effects
     GrantPriority
     GrantProvinceStrength
     IgnoreHonorRequirements
+    InterruptibleEffect
     InterruptingEffect
     LoseGame
     MeleeAttack

@@ -16,8 +16,8 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseDistribution
     ChooseEquipTarget
     ChooseFortificationProvince
-    ChooseHonorInterrupt
     ChooseInheritanceTarget
+    ChooseInterrupt
     ChooseInvestAmount
     ChooseLegacyCard
     ChooseLobbyTarget
@@ -36,8 +36,8 @@ yasuki_core.engine.rules.vocabulary.decisions
 
     assignment
     assignment_token
-    honor_interrupt
-    honor_interrupt_token
+    interrupt_choice
+    interrupt_token
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.decisions
     :members:

@@ -77,3 +77,13 @@ the central rule answers where the card may reach.
 
 Write the predicate for the card's text and let the rule do the rest. A handler that tries to
 reimplement the Rules of Location will drift from them.
+
+## An Interrupt
+
+A Strategy printing an Interrupt is not an `Ability`. It has no target and no effects of its own,
+since what it does is decided against the effect it interrupts, and no round offers it. It is
+registered with `register_interrupt` as an {class}`~.Interrupt`, whose `answers` names the effect
+type it may be played against and whose `interrupt` maps the pending effect to an
+{class}`~.Interruption`: the effect that resolves in its place and whatever else happens. The
+Interrupt step in `rules/interrupts.py` offers it from hand while such an effect waits to resolve,
+and the Strategy is then paid for and discarded the way any Strategy is.

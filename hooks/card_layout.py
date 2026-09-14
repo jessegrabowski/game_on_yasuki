@@ -208,10 +208,11 @@ def headers(module: pathlib.Path) -> tuple[str, ...]:
 # role would collide between them.
 ROLES = frozenset(
     {
-        # the three parts of an activated ability
+        # the parts of an activated ability
         "cost",
         "targets",
         "effects",
+        "interrupt",
         # the per-registry hooks
         "invest",
         "gold",

@@ -3,11 +3,12 @@ from dataclasses import dataclass
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.activation import defer_ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
-from yasuki_core.engine.rules.effects import Discard
+from yasuki_core.engine.rules.effects import ApplyEffects, Discard, Effect
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.game_pieces.cards import L5RCard
 
 
 @dataclass(frozen=True, slots=True)
@@ -45,6 +46,18 @@ def play_strategy(game: GameState, card_id: str, ability_key: str | None = None)
     game.stack.append(ResolveStrategy(card_id, ability_key))
     game.pending = payment_request(
         game, seat, effective_gold_cost(game, card), card.name, target=card
+    )
+
+
+def play_strategy_with(game: GameState, card: L5RCard, effects: tuple[Effect, ...]) -> None:
+    """Announce ``card`` for ``effects`` in place of its printed ability's: pause for its Gold
+    Cost with its discard and those effects queued behind. How an Interrupt plays a Strategy,
+    since what it does is decided against the effect it interrupts rather than against a target.
+    """
+    game.stack.append(DiscardPlayed(card.id))
+    game.stack.append(ApplyEffects(effects))
+    game.pending = payment_request(
+        game, card.owner, effective_gold_cost(game, card), card.name, target=card
     )
 
 

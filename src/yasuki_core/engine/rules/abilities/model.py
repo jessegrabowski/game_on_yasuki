@@ -4,7 +4,7 @@ from enum import Enum
 
 from yasuki_core.engine.rules.abilities.costs import Cost
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
-from yasuki_core.engine.rules.effects import Effect
+from yasuki_core.engine.rules.effects import Effect, InterruptibleEffect
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -16,6 +16,49 @@ class CardLocation(str, Enum):
     BATTLEFIELD = "battlefield"
     PROVINCE = "province"
     HAND = "hand"
+
+
+@dataclass(frozen=True, slots=True)
+class Interruption:
+    """What an Interrupt makes of the effect it interrupts.
+
+    Attributes
+    ----------
+    replacement : Effect
+        The effect that resolves in place of the interrupted one, the same one when the Interrupt
+        leaves it alone.
+    effects : tuple of Effect, optional
+        What else the Interrupt does, resolved as the Strategy's own effects before the
+        replacement returns. Default none.
+    """
+
+    replacement: Effect
+    effects: tuple[Effect, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
+class Interrupt[T: InterruptibleEffect]:
+    """A Strategy's Interrupt, played from hand while an effect it answers waits to resolve.
+
+    Not an :class:`~.Ability`: it has no target and no effects of its own, since what it does is
+    decided against the effect it interrupts, and no round offers it. The Interrupt step offers it
+    instead, and the Strategy is then paid for and discarded the way any Strategy is.
+
+    Attributes
+    ----------
+    label : str
+        What a client shows for the Strategy.
+    answers : type
+        The effect type the Interrupt may be played against: one naming ``Fear`` is offered while
+        a Fear effect waits to resolve.
+    interrupt : callable
+        Maps ``(game, source_card, effect)`` to the :class:`~.Interruption` it makes of the pending
+        effect: what replaces it and what else happens.
+    """
+
+    label: str
+    answers: type[T]
+    interrupt: Callable[[GameState, L5RCard, T], Interruption]
 
 
 @dataclass(frozen=True, slots=True)

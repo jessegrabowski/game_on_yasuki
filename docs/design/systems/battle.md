@@ -64,42 +64,32 @@ def perform(self, game: GameState) -> list[GameEvent]:
         game, self
     ):
         return []
-    return self._outcome().perform(game)
+    events: list[GameEvent] = []
+    for effect in self.outcome:
+        events.extend(effect.perform(game))
+    return events
 ```
 
 Both sides are effective values. The target's stat is read with its modifiers, and the strength is
 read with whatever the board has done to it. An attack that reaches nothing returns no events, so
 nothing downstream can react to a miss.
 
-The three kinds differ in one method:
+The three kinds differ in what reaching the target does. `outcome` carries it as a tuple of
+ordinary effects, filled in from the kind's printed outcome when a handler gives none, so an
+Interrupt replaces an attack with one whose outcome does more without the vocabulary growing:
 
 ```python
 @dataclass(frozen=True, slots=True)
-class RangedAttack(AttackEffect):
-    ...
-    name: ClassVar[str] = "ranged"
-
-    def _outcome(self) -> Effect:
-        return Destroy(self.target_id, self.cause)
-
-
-@dataclass(frozen=True, slots=True)
-class MeleeAttack(AttackEffect):
-    ...
-    name: ClassVar[str] = "melee"
-
-    def _outcome(self) -> Effect:
-        return Destroy(self.target_id, self.cause)
-
-
-@dataclass(frozen=True, slots=True)
-class Fear(AttackEffect):
+class Fear(AttackEffect, InterruptibleEffect):
     ...
     name: ClassVar[str] = "fear"
 
-    def _outcome(self) -> Effect:
-        return Bow(self.target_id)
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        return (Bow(self.target_id),)
 ```
+
+Ranged and Melee print `Destroy` and Fear prints `Bow`. A Fear that {card}`Okura is Released` has
+extended carries `Bow` then `Destroy`.
 
 Ranged and Melee produce the same effect and are deliberately not the same type, because a card can
 name one and not the other. `compared` defaults to `Stat.FORCE` and is what a card changes when it

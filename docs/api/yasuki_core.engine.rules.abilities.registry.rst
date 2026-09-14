@@ -11,10 +11,12 @@ yasuki_core.engine.rules.abilities.registry
     ability_for
     enters_play_bowed
     fixed_invest_amount
+    interrupt_for
     invest_amounts
     invest_for
     may_stay_bowed
     register_ability
+    register_interrupt
     register_invest
 
 .. automodule:: yasuki_core.engine.rules.abilities.registry

@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy, Recruit
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
-    ChooseHonorInterrupt,
+    ChooseInterrupt,
     ChooseInvestAmount,
     ChooseOption,
     Confirm,
@@ -264,22 +264,24 @@ def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
     assert not window.field.selecting
 
 
-def test_an_honor_interrupt_is_a_button_per_way_to_take_it_and_a_pass(board):
+def test_an_interrupt_is_a_button_per_way_to_take_it_and_a_pass(board):
     presenter, window, session = board
-    card = L5RCard.of(FatePrint, id="hc", name="Honor Fate", side=Side.FATE, owner=P2)
-    session.game.table.cards_by_id[card.id] = card
-    session.game.pending = ChooseHonorInterrupt(
-        seat=P1,
-        candidates=("hc@+1", "hc@-1"),
-        honor_seat=P2,
-        amount=2,
-        asked=frozenset(),
+    for card_id, name in (("hc", "Honor Fate"), ("okura", "Okura is Released")):
+        card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P2)
+        session.game.table.cards_by_id[card.id] = card
+    session.game.pending = ChooseInterrupt(
+        seat=P1, candidates=("hc@+1", "hc@-1", "okura"), description="P2 gains 2 honor"
     )
 
     presenter.present()
 
-    assert _status(window) == "P2 gains 2 Honor. Discard an Honor card to change it by 1?"
-    assert _buttons(window) == ["Discard Honor Fate (+1)", "Discard Honor Fate (-1)", "Pass"]
+    assert _status(window) == "P2 gains 2 honor. Take an Interrupt?"
+    assert _buttons(window) == [
+        "Discard Honor Fate (+1)",
+        "Discard Honor Fate (-1)",
+        "Play Okura is Released",
+        "Pass",
+    ]
     assert not window.field.selecting
 
 

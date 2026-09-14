@@ -9,6 +9,8 @@ yasuki_core.engine.rules.abilities.model
 
     Ability
     CardLocation
+    Interrupt
+    Interruption
     InvestAbility
 
 .. rubric:: Functions

@@ -115,10 +115,56 @@ class InterruptingEffect(Effect, ABC):
         return True
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        """Never reached: the walker records :meth:`request` and pauses instead of committing."""
+        """Never reached: the walker records :meth:`~.InterruptingEffect.request` and pauses instead
+        of committing."""
         raise RuntimeError(
             f"{type(self).__name__} pauses the cascade; it is never applied directly"
         )
+
+
+class InterruptibleEffect(InterruptingEffect, ABC):
+    """An effect the Interrupt step is open against: while it waits to resolve inside an action,
+    each seat in turn may take an Interrupt that replaces it (ShE datasheet, Interrupt).
+
+    Pauses only while :func:`~yasuki_core.engine.rules.interrupts.interrupters` names a seat with
+    something to take, and performs once every seat has declined. Each subclass declares the
+    ``declined`` field itself.
+
+    Attributes
+    ----------
+    declined : frozenset of PlayerId
+        The seats that have declined an Interrupt against this effect.
+    """
+
+    __slots__ = ()
+
+    declined: frozenset[PlayerId]
+
+    def is_interruptible(self) -> bool:
+        """Whether the Interrupt step is open against this effect at all. True unless a subclass
+        says the effect belongs to a rulebook procedure, which has no Interrupt step."""
+        return True
+
+    def has_declined(self, seat: PlayerId) -> bool:
+        return seat in self.declined
+
+    def declined_by(self, seat: PlayerId) -> "InterruptibleEffect":
+        """This effect with ``seat`` recorded as having declined an Interrupt against it."""
+        # The category carries no fields of its own, so it is not a dataclass, but every concrete
+        # effect under it is one.
+        return replace(self, declined=self.declined | {seat})  # pyright: ignore[reportArgumentType]
+
+    # Imported where they are used: the Interrupt step reads the hands and the round, and the
+    # module that does so imports this one.
+    def pauses(self, game: GameState) -> bool:
+        from yasuki_core.engine.rules.interrupts import interrupters
+
+        return bool(interrupters(game, self))
+
+    def request(self, game: GameState) -> DecisionRequest:
+        from yasuki_core.engine.rules.interrupts import interrupt_request
+
+        return interrupt_request(game, self)
 
 
 @dataclass(frozen=True, slots=True)
@@ -628,24 +674,37 @@ class AttackEffect(Effect, ABC):
         The stat weighed against ``strength``. *"If a Ranged Attack effect ends up being compared
         against a different stat than Force, compare that stat against the Ranged Attack's strength
         instead"*. Read as an effective stat, so modifiers count. Default ``Stat.FORCE``.
+    outcome : tuple of Effect, optional
+        What happens to a target the strength reaches, in order, built from the ordinary effects.
+        Default the kind's printed outcome, ``Bow`` for Fear and ``Destroy`` for the other two,
+        filled in when none is given. An Interrupt replaces the effect with one whose outcome does
+        more.
     """
 
     # What the card prints this effect as, which is the only thing its description needs from the
-    # subclass. A ClassVar rather than a field: it belongs to the kind, not to one announcement.
-    name: ClassVar[str]
+    # subclass. Abstract, so the category cannot be announced on its own, and a class attribute on
+    # each kind rather than a field: it belongs to the kind, not to one announcement.
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
 
     strength: int
     target_id: str
     cause: Cause
     compared: Stat = Stat.FORCE
+    outcome: tuple[Effect, ...] = ()
+
+    def __post_init__(self) -> None:
+        if not self.outcome:
+            object.__setattr__(self, "outcome", self._printed_outcome())
+
+    @abstractmethod
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        """What this kind does to a target its strength reaches, as the CR prints it."""
 
     def describe(self) -> str:
         stat = "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
         return f"{self.name} {self.strength} on {self.target_id}{stat}"
-
-    @abstractmethod
-    def _outcome(self) -> Effect:
-        """What this attack does to a target its strength reaches."""
 
     def perform(self, game: GameState) -> list[GameEvent]:
         # Imported where it is used: reading an attack's strength walks the board for the cards
@@ -657,7 +716,10 @@ class AttackEffect(Effect, ABC):
             game, self
         ):
             return []
-        return self._outcome().perform(game)
+        events: list[GameEvent] = []
+        for effect in self.outcome:
+            events.extend(effect.perform(game))
+        return events
 
 
 @dataclass(frozen=True, slots=True)
@@ -666,8 +728,8 @@ class RangedAttack(AttackEffect):
 
     name: ClassVar[str] = "ranged"
 
-    def _outcome(self) -> Effect:
-        return Destroy(self.target_id, self.cause)
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        return (Destroy(self.target_id, self.cause),)
 
 
 @dataclass(frozen=True, slots=True)
@@ -677,19 +739,27 @@ class MeleeAttack(AttackEffect):
 
     name: ClassVar[str] = "melee"
 
-    def _outcome(self) -> Effect:
-        return Destroy(self.target_id, self.cause)
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        return (Destroy(self.target_id, self.cause),)
 
 
 @dataclass(frozen=True, slots=True)
-class Fear(AttackEffect):
+class Fear(AttackEffect, InterruptibleEffect):
     """*"Fear X" is shorthand for "Target an enemy Follower or Personality without Followers and bow
-    it if its Force is equal to or lower than X."*"""
+    it if its Force is equal to or lower than X."*
+
+    Attributes
+    ----------
+    declined : frozenset of PlayerId, optional
+        The seats that have declined an Interrupt against this effect. Default empty.
+    """
 
     name: ClassVar[str] = "fear"
 
-    def _outcome(self) -> Effect:
-        return Bow(self.target_id)
+    declined: frozenset[PlayerId] = frozenset()
+
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        return (Bow(self.target_id),)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1187,53 +1257,50 @@ class WinGame(Effect):
 
 
 @dataclass(frozen=True, slots=True)
-class GainHonor(InterruptingEffect):
+class GainHonor(InterruptibleEffect):
     """Move ``seat``'s Family Honor by ``amount``. Negative loses honor. The two directions are one
     effect because the rules treat them as one dial.
-
-    Inside an action the change is open to the Honor rulebook Interrupt: before it performs, each
-    seat holding an Honor card is asked in turn whether to discard one to move it by 1, and it
-    performs once every seat has answered.
 
     Attributes
     ----------
     seat : PlayerId
         The seat whose Honor moves.
     amount : int
-        The signed change.
-    asked : frozenset of PlayerId, optional
-        The seats already offered the Interrupt against this change. Default empty.
+        The signed change, before any Interrupt.
+    adjustment : int, optional
+        The net change the Interrupts taken against this change make to its size, applied once
+        when it performs so that no run of Interrupts can carry it through zero and reverse it.
+        Default 0.
+    declined : frozenset of PlayerId, optional
+        The seats that have declined an Interrupt against this change. Default empty.
     interruptible : bool, optional
-        Whether the Interrupt may be taken against this change at all. False for a change a
+        Whether the Interrupt step is open against this change at all. False for a change a
         rulebook procedure makes outside any action, such as battle resolution, which has no
         Interrupt step. Default True.
     """
 
     seat: PlayerId
     amount: int
-    asked: frozenset[PlayerId] = frozenset()
+    adjustment: int = 0
+    declined: frozenset[PlayerId] = frozenset()
     interruptible: bool = True
 
+    @property
+    def adjusted(self) -> int:
+        return adjusted_honor_change(self.amount, self.adjustment)
+
     def describe(self) -> str:
-        verb = "gains" if self.amount >= 0 else "loses"
-        return f"{self.seat.name} {verb} {abs(self.amount)} honor"
+        amount = self.adjusted
+        verb = "gains" if amount >= 0 else "loses"
+        return f"{self.seat.name} {verb} {abs(amount)} honor"
 
-    # Imported where they are used: the Interrupt reads the hands and the round, and the module
-    # that does so imports this one.
-    def pauses(self, game: GameState) -> bool:
-        from yasuki_core.engine.rules.rulebook.honor import interrupters
-
-        return bool(interrupters(game, self))
-
-    def request(self, game: GameState) -> DecisionRequest:
-        from yasuki_core.engine.rules.rulebook.honor import honor_interrupt_request
-
-        return honor_interrupt_request(game, self)
+    def is_interruptible(self) -> bool:
+        # A change of zero is not a gain or loss (CR, Honor Gains and Losses), so there is nothing
+        # to interrupt.
+        return self.interruptible and self.amount != 0
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        amount = self.amount
-        if amount:
-            amount = adjusted_honor_change(amount, game.honor_adjustments.pop(self.seat, 0))
+        amount = self.adjusted
         if not ops.set_honor(game.table, self.seat, delta=amount):
             return []
         return [HonorChanged(self.seat, amount)]
@@ -1247,26 +1314,6 @@ def adjusted_honor_change(amount: int, adjustment: int) -> int:
     """
     size = max(0, abs(amount) + adjustment)
     return size if amount > 0 else -size
-
-
-@dataclass(frozen=True, slots=True)
-class AdjustHonorChange(Effect):
-    """Record that ``seat``'s next Honor gain or loss in the action now resolving changes in size
-    by ``delta``, and that ``by`` has taken its one Interrupt against this action. The Honor
-    Interrupt's effect. The gain or loss it modifies has not been performed yet, so the change
-    waits on ``GameState.honor_adjustments`` until it is."""
-
-    seat: PlayerId
-    delta: int
-    by: PlayerId
-
-    def describe(self) -> str:
-        return f"{self.by.name} adjusts {self.seat.name}'s next honor change by {self.delta:+d}"
-
-    def perform(self, game: GameState) -> list[GameEvent]:
-        game.honor_adjustments[self.seat] = game.honor_adjustments.get(self.seat, 0) + self.delta
-        game.honor_interrupted.add(self.by)
-        return []
 
 
 @dataclass(frozen=True, slots=True)

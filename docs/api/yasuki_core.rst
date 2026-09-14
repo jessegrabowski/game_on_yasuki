@@ -68,6 +68,7 @@ yasuki_core
     yasuki_core.engine.rules.gold.producers <yasuki_core.engine.rules.gold.producers>
     yasuki_core.engine.rules.gold.production <yasuki_core.engine.rules.gold.production>
     yasuki_core.engine.rules.gold.self_grants <yasuki_core.engine.rules.gold.self_grants>
+    yasuki_core.engine.rules.interrupts <yasuki_core.engine.rules.interrupts>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
@@ -77,7 +78,6 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.favor_abilities <yasuki_core.engine.rules.rulebook.favor_abilities>
     yasuki_core.engine.rules.rulebook.favor_payment <yasuki_core.engine.rules.rulebook.favor_payment>
     yasuki_core.engine.rules.rulebook.favor_proxy <yasuki_core.engine.rules.rulebook.favor_proxy>
-    yasuki_core.engine.rules.rulebook.honor <yasuki_core.engine.rules.rulebook.honor>
     yasuki_core.engine.rules.rulebook.inheritance <yasuki_core.engine.rules.rulebook.inheritance>
     yasuki_core.engine.rules.rulebook.kharmic <yasuki_core.engine.rules.rulebook.kharmic>
     yasuki_core.engine.rules.rulebook.legacy <yasuki_core.engine.rules.rulebook.legacy>

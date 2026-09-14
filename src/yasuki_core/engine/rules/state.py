@@ -137,16 +137,10 @@ class GameState:
         action begins. A Response reads it to ask what it is responding to  "discarded a Fate card"
         is a fact about the action rather than about the board it left behind. Ephemeral and rebuilt
         by replay. Default empty.
-    honor_adjustments : dict mapping PlayerId to int
-        The net change the Honor Interrupts taken against a pending Honor gain or loss make to its
-        size, by the seat whose Honor moves. The change performs once every seat has answered and
-        spends the entry. Keyed by seat, so where one action moves a seat's Honor twice the
-        Interrupt reaches the first change only, a narrowing of the datasheet's "one of the
-        action's Honor gains or losses". Ephemeral and rebuilt by replay. Default empty.
-    honor_interrupted : set of PlayerId
-        The seats that have taken the Honor Interrupt against the action now resolving. The
-        datasheet allows a Repeatable Interrupt once per action. Cleared as the next action begins.
-        Ephemeral and rebuilt by replay. Default empty.
+    interrupts_taken : set of (str, PlayerId)
+        The once-per-action rulebook Interrupts taken against the action now resolving, as the
+        Interrupt's key and the seat that took it. Cleared as the next action begins. Ephemeral
+        and rebuilt by replay. Default empty.
     """
 
     table: TableState
@@ -181,8 +175,7 @@ class GameState:
     action_taken: str = ""
     action_is_favor: bool = False
     action_events: list[GameEvent] = field(default_factory=list)
-    honor_adjustments: dict[PlayerId, int] = field(default_factory=dict)
-    honor_interrupted: set[PlayerId] = field(default_factory=set)
+    interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)
 
     @property
     def awaiting_decision(self) -> bool:

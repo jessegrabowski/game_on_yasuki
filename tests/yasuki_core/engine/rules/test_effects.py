@@ -17,8 +17,8 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     Destroy,
+    Fear,
     Discard,
-    AdjustHonorChange,
     DiscardFavor,
     GainHonor,
     PlaceInProvince,
@@ -462,38 +462,13 @@ def test_an_adjustment_changes_the_size_of_a_gain_or_loss_but_never_its_directio
     assert effects.adjusted_honor_change(amount, adjustment) == expected
 
 
-def test_a_recorded_adjustment_is_spent_by_the_next_change_for_that_seat():
+def test_an_attack_performs_every_effect_in_its_outcome():
     game = two_seat_game()
-    before = game.table.seats[PlayerId.P1].honor
-    AdjustHonorChange(PlayerId.P1, -1, by=PlayerId.P2).perform(game)
+    target = put_in_play(game, holding("P1-h"))
+    fear = Fear(
+        9, target.id, PlayerId.P2, outcome=(Bow(target.id), Destroy(target.id, PlayerId.P2))
+    )
 
-    GainHonor(PlayerId.P2, 2).perform(game)
-    GainHonor(PlayerId.P1, 2).perform(game)
-    GainHonor(PlayerId.P1, 2).perform(game)
+    resolve_effects(game, [fear])
 
-    assert game.table.seats[PlayerId.P1].honor == before + 3
-    assert game.honor_adjustments == {}
-
-
-def test_a_change_reduced_to_nothing_is_not_announced():
-    game = two_seat_game()
-    AdjustHonorChange(PlayerId.P1, -1, by=PlayerId.P2).perform(game)
-
-    assert GainHonor(PlayerId.P1, 1).perform(game) == []
-
-
-def test_a_change_of_zero_leaves_the_adjustment_waiting():
-    game = two_seat_game()
-    AdjustHonorChange(PlayerId.P1, 1, by=PlayerId.P2).perform(game)
-
-    GainHonor(PlayerId.P1, 0).perform(game)
-
-    assert game.honor_adjustments == {PlayerId.P1: 1}
-
-
-def test_an_adjustment_marks_the_seat_that_took_the_interrupt():
-    game = two_seat_game()
-
-    AdjustHonorChange(PlayerId.P1, 1, by=PlayerId.P2).perform(game)
-
-    assert game.honor_interrupted == {PlayerId.P2}
+    assert target not in game.table.battlefield.cards

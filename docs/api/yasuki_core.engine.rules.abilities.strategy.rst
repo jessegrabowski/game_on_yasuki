@@ -16,6 +16,7 @@ yasuki_core.engine.rules.abilities.strategy
 
     discard_played
     play_strategy
+    play_strategy_with
     resolve_strategy
 
 .. automodule:: yasuki_core.engine.rules.abilities.strategy

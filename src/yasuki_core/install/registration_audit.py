@@ -40,6 +40,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         **derived,
         "abilities": frozenset(registry._ABILITIES),
         "invest abilities": frozenset(registry._INVEST),
+        "interrupts": frozenset(registry._INTERRUPTS),
         "triggers": frozenset(
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),
@@ -199,11 +200,13 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     """
     printed = printed_ability_counts(cards_dir)
     problems = []
-    for card_id, registered in sorted(registry._ABILITIES.items()):
+    registering = set(registry._ABILITIES) | set(registry._INTERRUPTS)
+    for card_id in sorted(registering):
         shows = printed.get(card_id, 0)
-        if shows > len(registered):
+        registered = len(registry._ABILITIES.get(card_id, ())) + (card_id in registry._INTERRUPTS)
+        if shows > registered:
             problems.append(
-                f"abilities: {card_id} registers {len(registered)} of the {shows} "
+                f"abilities: {card_id} registers {registered} of the {shows} "
                 f"activated abilities its text prints"
             )
     return problems
@@ -214,6 +217,7 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
 VALIDATED_REGISTRIES = {
     "_ABILITIES",
     "_INVEST",
+    "_INTERRUPTS",
     "CHI_DEATH_EXEMPT",
     "_TRIGGERS",
 }
