@@ -152,7 +152,6 @@ def apply_assignment(game: GameState, request: AssignUnits, response: DecisionRe
         card_id, battlefield = assignment(token)
         ops.assign(game.table, game.table.cards_by_id[card_id], battlefield)
         attack.assigned_in[card_id] = MANEUVERS_WINDOW
-    game.pending = None
     if request.seat is attack.attacker:
         _ask_to_assign(game, attack.defender)
         return
