@@ -46,7 +46,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, equip
 from yasuki_core.engine.rules.gold.production import produce_gold
-from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.rulebook.recruit import (
     apply_fortification_province,
     apply_invest_amount,
@@ -70,6 +69,7 @@ from yasuki_core.engine.rules.turn.sequence import (
     BeginNextTurn,
     apply_discard,
     open_turn,
+    run_stack,
     yield_after_action,
     yield_priority,
 )
@@ -274,18 +274,6 @@ def _cancel_payment(game: GameState) -> None:
     if not game.stack:
         raise ValueError("the pending payment has no queued work to undo")
     game.stack.pop()
-
-
-def run_stack(game: GameState) -> None:
-    """Drain deferred work, running each item until the stack empties or one pauses for a decision.
-    A work item may itself emit a decision (setting ``pending``), so resolution stops there and
-    resumes on the next :func:`~.submit`. Once the board settles, every Province standing short
-    refills.
-    """
-    while game.stack and game.pending is None:
-        game.stack.pop().resume(game)
-    if game.pending is None:
-        refill_short_provinces(game)
 
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:

@@ -10,7 +10,6 @@ yasuki_core.engine.rules.turn.action_sequence
     cancel
     describe_action
     perform
-    run_stack
     submit
 
 .. automodule:: yasuki_core.engine.rules.turn.action_sequence

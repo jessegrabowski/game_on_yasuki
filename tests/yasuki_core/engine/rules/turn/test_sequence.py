@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     BATTLE_SEGMENT_TIMINGS,
@@ -40,6 +41,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.effects import (
     Ask,
+    Choose,
     Banish,
     DelayStraighten,
     DelayedEffect,
@@ -51,6 +53,7 @@ from yasuki_core.engine.rules.turn import structure
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
+    EnteredPlay,
     Straightened,
 )
 from yasuki_core.engine.rules import triggers
@@ -195,6 +198,8 @@ def test_the_end_of_turn_discard_refuses_to_run_over_queued_work():
     with pytest.raises(RuntimeError, match="work still queued"):
         action_sequence.submit(game, DecisionResponse((victim,)))
 
+    assert isinstance(game.pending, DiscardToHandSize)
+
 
 def test_cannot_advance_while_a_decision_is_pending():
     game = _game(hand=sequence.MAX_HAND_SIZE, fate_deck=1)
@@ -231,6 +236,84 @@ def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
     return card
+
+
+@choice_resolver("pause_probe")
+def _pause_probe_resolves_to_nothing(game, source_id, chosen, seat):
+    return []
+
+
+def _pause_on_own_event(ctx):
+    """A trigger that stops the cascade with an empty choice when the event names its own card."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)]
+
+
+def _answer(game: GameState) -> None:
+    action_sequence.submit(game, DecisionResponse(()))
+
+
+def test_a_new_game_starts_with_an_empty_stack():
+    game = _game()
+
+    sequence.begin_game(game)
+
+    assert not game.stack and game.pending is None
+
+
+def test_two_pregame_permanents_that_pause_are_each_answered_before_the_turn_opens(reacting):
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+            printed_id="pause_probe",
+        ),
+    )
+    put_in_play(
+        state,
+        L5RCard.of(
+            SenseiPrint,
+            id="P1-SE",
+            name="Sensei",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            printed_id="pause_probe",
+        ),
+    )
+    bowed = _bowed_on_battlefield(state, PlayerId.P1, "P1-bowed")
+    reacting(EnteredPlay, "pause_probe", _pause_on_own_event)
+    game = GameState.start(state, PlayerId.P1)
+
+    sequence.begin_game(game)
+    assert game.pending is not None and bowed.bowed is True
+    _answer(game)
+    assert game.pending is not None and bowed.bowed is True
+    _answer(game)
+
+    assert game.pending is None and bowed.bowed is False
+    assert not game.stack and game.round.priority is game.active
+
+
+def test_a_new_game_refills_a_short_province_before_the_first_action():
+    state = TableState.empty_two_seat()
+    empty = ops.create_province(state, PlayerId.P1)
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        register(
+            state,
+            L5RCard.of(DynastyPrint, id="P1-next", name="N", side=Side.DYNASTY, owner=PlayerId.P1),
+        )
+    ]
+    game = GameState.start(state, PlayerId.P1)
+
+    sequence.begin_game(game)
+
+    assert [card.id for card in game.table.zones[empty].cards] == ["P1-next"]
 
 
 def test_begin_game_straightens_and_reveals_only_the_active_board():

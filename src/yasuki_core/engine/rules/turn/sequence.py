@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import activatable, permitted_timings
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     END_OF_TURN,
@@ -54,19 +55,49 @@ _PREGAME_PERMANENTS = (StrongholdPrint, SenseiPrint, WindPrint)
 
 
 def begin_game(game: GameState) -> None:
-    """Run the game-start pass once after ``GameState.start``, before the active player acts: fire
-    each pre-game permanent's enters-play effect, then the first turn's housekeeping. Re-runs on
-    every replay, so those effects must be idempotent."""
+    """Run the game-start pass once after ``GameState.start``, before the active player acts:
+    announce each pre-game permanent entering play, then open the first turn. Re-runs on every
+    replay, so those effects must be idempotent.
+
+    The first turn is queued behind the announcement and the stack drained, so a permanent whose
+    trait pauses is answered before anything straightens, and the stack is empty on return unless
+    a question is open.
+    """
+    game.stack.append(OpenFirstTurn())
     _begin_pregame(game)
-    _begin_turn(game)
+    run_stack(game)
+
+
+def run_stack(game: GameState) -> None:
+    """Drain deferred work, running each item until the stack empties or one pauses for a decision.
+    A work item may itself emit a decision (setting ``pending``), so resolution stops there and
+    resumes on the next :func:`~.submit`. Once the board settles, every Province standing short
+    refills.
+    """
+    while game.stack and game.pending is None:
+        game.stack.pop().resume(game)
+    if game.pending is None:
+        refill_short_provinces(game)
+
+
+@dataclass(frozen=True, slots=True)
+class OpenFirstTurn:
+    """Open the first turn once the pre-game permanents have entered play and anything their entry
+    asked has been answered."""
+
+    def resume(self, game: GameState) -> None:
+        _begin_turn(game)
 
 
 def _begin_pregame(game: GameState) -> None:
-    """Fire EnteredPlay for each pre-game permanent on the battlefield, so a Stronghold or Sensei
-    with an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
-    for card in list(game.table.battlefield.cards):
-        if isinstance(card.printed, _PREGAME_PERMANENTS):
-            triggers.fire(game, EnteredPlay(card.id))
+    """Announce every pre-game permanent on the battlefield entering play as one instant, so a
+    Stronghold or Sensei with an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
+    entered = [
+        EnteredPlay(card.id)
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, _PREGAME_PERMANENTS)
+    ]
+    triggers.fire_all(game, entered)
 
 
 def advance(game: GameState) -> None:
@@ -178,7 +209,10 @@ def _end_turn(game: GameState) -> None:
         candidates = tuple(card.id for card in held)
         game.pending = DiscardToHandSize(seat, candidates, count=excess)
         return
-    begin_next_turn(game)
+    # Reached inside an action's own drain, after that drain has emptied the stack, so this nested
+    # one runs only what the turn boundary queues.
+    game.stack.append(BeginNextTurn())
+    run_stack(game)
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:

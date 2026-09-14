@@ -6,7 +6,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.rules.rulebook import equip
-from yasuki_core.engine.rules.turn import action_sequence
+from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
@@ -429,7 +429,7 @@ def test_a_payment_that_runs_out_of_producers_raises():
     game.stack.append(ContinuePayment(PlayerId.P1, amount=3, label="probe"))
 
     with pytest.raises(RuntimeError, match="cannot make up the difference"):
-        action_sequence.run_stack(game)
+        sequence.run_stack(game)
 
 
 def test_a_rulebook_cost_resolves_its_effects_after_a_partial_payment():
