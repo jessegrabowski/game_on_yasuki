@@ -34,6 +34,10 @@ KENSAI = "Kensai"
 # card says otherwise (ShE datasheet, Edicts).
 EDICT = "Edict"
 
+# The boldface keyword marking a card the Honor rulebook Interrupt can discard to move an Honor
+# gain or loss by 1 (ShE datasheet, Honor Rulebook ability).
+HONOR = "Honor"
+
 # The boldface keyword marking a card the Kharmic rulebook abilities can spend.
 KHARMIC = "Kharmic"
 

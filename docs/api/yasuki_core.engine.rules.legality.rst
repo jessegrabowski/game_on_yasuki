@@ -14,6 +14,7 @@ yasuki_core.engine.rules.legality
     has_absent_ability
     has_presence
     has_wind
+    honor_in_hand
     inheritance_key
     is_first_turn
     is_kharmic_card

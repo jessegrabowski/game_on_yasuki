@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     DynastyDiscard,
     Equip,
+    HonorInterrupt,
     Inheritance,
     KharmicDraw,
     KharmicRefill,
@@ -69,6 +70,9 @@ KHARMIC_COST = 2
 
 # The Gold Production the Inheritance ability grants the Holding it targets (ShE).
 INHERITANCE_PRODUCTION = 3
+
+# An Honor Interrupt makes a gain or loss one larger or one smaller.
+HONOR_INTERRUPT_DELTAS = (1, -1)
 
 
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
@@ -154,6 +158,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_lobby(game, seat),
         *_favor_abilities(game, seat),
         *_declare_attack(game, seat),
+        *_honor_interrupts(game, seat),
     ]
 
 
@@ -192,6 +197,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _favor_abilities(game, seat)
         case DeclareAttack():
             return bool(_declare_attack(game, seat))
+        case HonorInterrupt(card_id=card_id):
+            return action in _honor_interrupts(game, seat, only=card_id)
         case _:
             raise ValueError(f"no legality rule for action {type(action).__name__}")
 
@@ -312,6 +319,29 @@ def _kharmic(game: GameState, seat: PlayerId, *, only: str | None = None) -> lis
             if only is None or card.id == only
         )
     return actions
+
+
+def _honor_interrupts(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
+    """An Honor Interrupt for each Honor card the seat holds, against each seat's next gain or loss
+    and in either direction, when the round permits Interrupts and the seat has not yet taken one
+    against this action. ``only`` narrows to a single card."""
+    if not permits(game, seat, ACTION_TIMINGS[HonorInterrupt]):
+        return []
+    if seat in game.honor_interrupted:
+        return []
+    return [
+        HonorInterrupt(card.id, target, delta)
+        for card in honor_in_hand(game, seat)
+        if only is None or card.id == only
+        for target in game.table.seats
+        for delta in HONOR_INTERRUPT_DELTAS
+    ]
+
+
+def honor_in_hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The Honor cards ``seat`` holds, which the Honor Interrupt discards."""
+    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
+    return [card for card in hand.cards if has_keyword(game, card, keywords.HONOR)]
 
 
 def is_kharmic_card(game: GameState, card: L5RCard) -> bool:

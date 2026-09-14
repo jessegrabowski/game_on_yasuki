@@ -14,6 +14,7 @@ yasuki_core.engine.rules.vocabulary.actions
     DeclareAttack
     DynastyDiscard
     Equip
+    HonorInterrupt
     Inheritance
     KharmicDraw
     KharmicRefill

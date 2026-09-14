@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     DynastyDiscard,
     Equip,
+    HonorInterrupt,
     KharmicDraw,
     KharmicRefill,
     Inheritance,
@@ -250,6 +251,13 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "play_strategy", "card_id": card_id}
         case DeclareAttack():
             return {"kind": "declare_attack"}
+        case HonorInterrupt(card_id=card_id, seat=seat, delta=delta):
+            return {
+                "kind": "honor_interrupt",
+                "card_id": card_id,
+                "seat": seat.name,
+                "delta": delta,
+            }
     raise ValueError(f"no encoding for action {action!r}")
 
 
@@ -287,4 +295,6 @@ def _decode_action(payload: dict) -> Action:
         return PlayStrategy(payload["card_id"])
     if kind == "declare_attack":
         return DeclareAttack()
+    if kind == "honor_interrupt":
+        return HonorInterrupt(payload["card_id"], PlayerId[payload["seat"]], payload["delta"])
     raise ValueError(f"unknown action kind {kind!r}")
