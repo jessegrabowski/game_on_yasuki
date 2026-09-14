@@ -3,6 +3,12 @@ yasuki_core.engine.rules.gold.payment
 
 .. currentmodule:: yasuki_core.engine.rules.gold.payment
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    ContinuePayment
+
 .. rubric:: Functions
 
 .. autosummary::

@@ -3,6 +3,12 @@ yasuki_core.engine.rules.turn.sequence
 
 .. currentmodule:: yasuki_core.engine.rules.turn.sequence
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    BeginNextTurn
+
 .. rubric:: Functions
 
 .. autosummary::

@@ -3,6 +3,12 @@ yasuki_core.engine.rules.gold.production
 
 .. currentmodule:: yasuki_core.engine.rules.gold.production
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    CompleteProduction
+
 .. rubric:: Functions
 
 .. autosummary::

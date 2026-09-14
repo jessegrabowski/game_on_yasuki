@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from dataclasses import replace
 
 from yasuki_core.engine import ops
@@ -191,6 +193,18 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
         if card.face_up and keywords.SINCERITY in effective_keywords(game, card)
     ]
     triggers.resolve_effects(game, grants)
+
+
+@dataclass(frozen=True, slots=True)
+class BeginNextTurn:
+    """Begin the next turn once the end-of-turn discard, and any question it raised, has resolved.
+
+    Pushed before the discard is announced, so a paused cascade's remainder stacks above it and
+    resumes first.
+    """
+
+    def resume(self, game: GameState) -> None:
+        begin_next_turn(game)
 
 
 def begin_next_turn(game: GameState) -> None:

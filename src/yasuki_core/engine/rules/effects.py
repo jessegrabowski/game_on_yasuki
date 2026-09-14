@@ -37,7 +37,6 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, flow_resolves
-from yasuki_core.engine.rules.vocabulary.work import ApplyEffects
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     UNPLACED_BOARD_POS,
@@ -1385,6 +1384,28 @@ class Unpayable(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         raise RuntimeError(f"resolved an unpayable cost: {self.reason}")
+
+
+@dataclass(frozen=True, slots=True)
+class ApplyEffects:
+    """Resolve ``effects`` once the current step finishes. The generic deferral: an effect that must
+    wait for what precedes it to resolve fully, including any cascade it raises, is queued here
+    rather than placed inline, where it would run ahead of the events already in flight.
+
+    Attributes
+    ----------
+    effects : tuple of Effect
+        The effects to resolve, in order.
+    """
+
+    effects: tuple[Effect, ...]
+
+    def resume(self, game: GameState) -> None:
+        # The cascade imports this module, so the one module this item drives cannot be imported at
+        # the top without closing that cycle.
+        from yasuki_core.engine.rules import triggers
+
+        triggers.resolve_effects(game, list(self.effects))
 
 
 @dataclass(frozen=True, slots=True)

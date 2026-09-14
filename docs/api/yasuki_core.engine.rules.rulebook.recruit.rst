@@ -3,6 +3,13 @@ yasuki_core.engine.rules.rulebook.recruit
 
 .. currentmodule:: yasuki_core.engine.rules.rulebook.recruit
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    FinishRecruit
+    ResolveRecruit
+
 .. rubric:: Functions
 
 .. autosummary::

@@ -17,7 +17,6 @@ from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Moment
 from yasuki_core.engine.rules.vocabulary.modifiers import LobbyModifier, ProvinceModifier
-from yasuki_core.engine.rules.vocabulary.work import ResumeCascade
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
@@ -312,6 +311,38 @@ def _render_trace() -> str:
                 [*cycle, f"  ... repeating, {repeats} times in the last {len(lines)} steps"]
             )
     return "\n".join(lines)
+
+
+@dataclass(frozen=True, slots=True)
+class ResumeCascade:
+    """The exact remainder of an effect-and-trigger cascade a choice paused: the effects still to
+    apply, then the ``(card_id, trigger)`` pairs still to fire for ``event``, then the events still
+    queued behind them. The answered choice's own effects splice in ahead of these. It is ephemeral
+    like the rest of the stack, since its effects and triggers are value-equal and stable
+    module-level functions, so it rebuilds and compares equal under replay.
+
+    Attributes
+    ----------
+    effects : tuple of Effect
+        The effects still to apply for the paused trigger, after the one that raised the choice.
+    firing : tuple of (str, callable)
+        The card id and trigger of each subscriber still to fire for ``event``.
+    event : GameEvent or None
+        The event those triggers are firing for, or None when the pause held only loose effects.
+    queue : tuple of GameEvent
+        The events still waiting behind ``event`` in the paused worklist.
+    """
+
+    effects: tuple[Effect, ...]
+    firing: tuple[tuple[str, Trigger], ...]
+    event: GameEvent | None
+    queue: tuple[GameEvent, ...]
+
+    def resume(self, game: GameState) -> None:
+        # An interrupting effect whose answer produces no effects of its own, a payment, say, leaves
+        # its stash here for the generic drain. A Choose is popped by its own handler, which splices
+        # the resolver's effects in.
+        resume_cascade(game, self, [])
 
 
 def _stash(

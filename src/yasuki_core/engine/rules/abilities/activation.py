@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
@@ -5,7 +7,6 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
 from yasuki_core.engine.rules.legality import legal_targets
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.vocabulary.work import ApplyAbilityEffects, SelectAbilityTarget
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -24,6 +25,68 @@ def activate(game: GameState, card_id: str, ability_key: str | None = None) -> N
     if ActionTiming.RESPONSE in ability.timings:
         game.responded.add(card_id)
     defer_ability(game, card, ability)
+
+
+@dataclass(frozen=True, slots=True)
+class SelectAbilityTarget:
+    """Raise an activated ability's target choice once its cost has been paid. Deferred so a cost
+    whose own cascade pauses for a decision resolves fully before the target is chosen.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose ability is resolving.
+    candidates : tuple of str
+        The ids the ability may target, fixed before paying so the choice is never left empty.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
+    """
+
+    card_id: str
+    candidates: tuple[str, ...]
+    ability_key: str | None = None
+
+    def resume(self, game: GameState) -> None:
+        owner = game.table.cards_by_id[self.card_id].owner
+        game.pending = ChooseAbilityTarget(
+            seat=owner,
+            candidates=self.candidates,
+            source_card_id=self.card_id,
+            ability_key=self.ability_key,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ApplyAbilityEffects:
+    """Resolve an untargeted ability's effects against every card it hits, once its cost has been
+    paid. The all-target counterpart of :class:`~.SelectAbilityTarget`, deferred for the same
+    reason.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose ability is resolving.
+    target_ids : tuple of str
+        The cards the ability affects, fixed before paying.
+    ability_key : str, optional
+        Names the ability among the several the card prints, so the one announced is the one
+        that resolves. Default None, the card's only ability.
+    """
+
+    card_id: str
+    target_ids: tuple[str, ...]
+    ability_key: str | None = None
+
+    def resume(self, game: GameState) -> None:
+        source = game.table.cards_by_id[self.card_id]
+        ability = ability_for(source, self.ability_key)
+        effects = [
+            effect
+            for target_id in self.target_ids
+            for effect in ability.effects(game, source, game.table.cards_by_id[target_id])
+        ]
+        triggers.resolve_effects(game, effects)
 
 
 def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:

@@ -27,7 +27,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.vocabulary.work import ContinuePayment
+from yasuki_core.engine.rules.gold.payment import ContinuePayment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 

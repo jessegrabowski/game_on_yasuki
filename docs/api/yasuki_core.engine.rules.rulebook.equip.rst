@@ -3,6 +3,12 @@ yasuki_core.engine.rules.rulebook.equip
 
 .. currentmodule:: yasuki_core.engine.rules.rulebook.equip
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    ResolveEquip
+
 .. rubric:: Functions
 
 .. autosummary::

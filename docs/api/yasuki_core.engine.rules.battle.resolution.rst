@@ -3,6 +3,12 @@ yasuki_core.engine.rules.battle.resolution
 
 .. currentmodule:: yasuki_core.engine.rules.battle.resolution
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    FightNextBattle
+
 .. rubric:: Functions
 
 .. autosummary::
