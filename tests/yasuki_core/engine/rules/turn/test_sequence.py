@@ -54,7 +54,9 @@ from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     EnteredPlay,
+    Revealed,
     Straightened,
+    TurnStarted,
 )
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.session import EngineSession
@@ -62,6 +64,7 @@ from yasuki_core.engine.session import EngineSession
 from tests.yasuki_core.engine.builders import (
     dealt_table,
     end_phase,
+    end_turn,
     holding,
     put_in_play,
     register,
@@ -300,6 +303,81 @@ def test_two_pregame_permanents_that_pause_are_each_answered_before_the_turn_ope
     assert not game.stack and game.round.priority is game.active
 
 
+def test_two_cards_that_pause_on_straightening_are_answered_before_any_reveal(reacting):
+    state = TableState.empty_two_seat()
+    for card_id in ("P1-a", "P1-b"):
+        card = put_in_play(state, holding(card_id, printed_id="pause_probe"))
+        card.bow()
+    facedown = _facedown_in_province(state, PlayerId.P1, "P1-pv")
+    reacting(Straightened, "pause_probe", _pause_on_own_event)
+    game = GameState.start(state, PlayerId.P1)
+
+    sequence.begin_game(game)
+    assert game.pending is not None and facedown.face_up is False
+    _answer(game)
+    assert game.pending is not None and facedown.face_up is False
+    _answer(game)
+
+    assert game.pending is None and facedown.face_up is True
+    assert not game.stack and game.round.priority is game.active
+
+
+def test_a_reveal_that_pauses_is_answered_before_the_turn_starts(reacting):
+    state = TableState.empty_two_seat()
+    started: list[PlayerId] = []
+    put_in_play(state, holding("P1-eyes", printed_id="pause_probe"))
+    _facedown_in_province(state, PlayerId.P1, "P1-pv")
+    reacting(
+        Revealed,
+        "pause_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)],
+    )
+    reacting(TurnStarted, "pause_probe", lambda ctx: started.append(ctx.event.seat) or [])
+    game = GameState.start(state, PlayerId.P1)
+
+    sequence.begin_game(game)
+    assert game.pending is not None and started == []
+    _answer(game)
+
+    assert started == [PlayerId.P1]
+    assert not game.stack and game.round.priority is game.active
+
+
+def test_a_pause_on_the_next_seats_straighten_holds_the_turn_boundary(reacting):
+    state = dealt_table(hand=0)
+    put_in_play(state, holding("P2-a", owner=PlayerId.P2, printed_id="pause_probe")).bow()
+    reacting(Straightened, "pause_probe", _pause_on_own_event)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    end_turn(session)
+
+    theirs = session.game.table.cards_by_id["P2-a"]
+    assert session.game.active is PlayerId.P2 and session.game.pending is not None
+    assert theirs.bowed is False and session.game.stack
+    session.submit(PlayerId.P2, DecisionResponse(()))
+    assert session.game.pending is None and not session.game.stack
+    assert session.game.round.priority is PlayerId.P2
+
+
+def test_a_pause_on_the_turn_starting_leaves_a_clean_record_for_the_first_action(reacting):
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("P1-eyes", printed_id="pause_probe"))
+    reacting(
+        TurnStarted,
+        "pause_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)],
+    )
+    game = GameState.start(state, PlayerId.P1)
+    game.action_taken = "the Recruit of something"
+
+    sequence.begin_game(game)
+    assert game.pending is not None
+    _answer(game)
+
+    assert game.action_events == [] and game.action_taken == ""
+    assert not game.stack and game.round.priority is game.active
+
+
 def test_a_new_game_refills_a_short_province_before_the_first_action():
     state = TableState.empty_two_seat()
     empty = ops.create_province(state, PlayerId.P1)
@@ -500,7 +578,7 @@ def test_a_turn_boundary_forgets_the_action_a_response_would_answer():
     game = _responder_game()
     game.action_taken = "the Recruit of something"
 
-    sequence._begin_turn(game)
+    sequence.begin_game(game)
 
     assert game.action_events == []
     assert game.action_taken == ""
@@ -511,7 +589,7 @@ def test_opening_a_turn_records_none_of_its_own_events_as_an_action():
     """Straightening and revealing are steps of the turn, not something a seat may respond to."""
     game = _responder_game()
 
-    sequence._begin_turn(game)
+    sequence.begin_game(game)
 
     assert game.action_events == []
 

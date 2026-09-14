@@ -10,12 +10,11 @@ from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize, LeaveBowed
-from yasuki_core.engine.rules.effects import AdjustCounter
+from yasuki_core.engine.rules.effects import AdjustCounter, ApplyEffects, RevealProvinces
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     EnteredPlay,
     GameEvent,
-    Revealed,
     Straightened,
     TurnStarted,
 )
@@ -273,7 +272,6 @@ def _begin_turn(game: GameState) -> None:
         # The same shape as the end of the turn: the request set below would overwrite the paused
         # effect's question. Nothing on this path asks one today, since a win announces no event.
         raise RuntimeError("a reaction to the Honor Victory check paused the start of the turn")
-    open_round(game)
     offering = may_stay_bowed(game, game.active)
     if offering:
         game.pending = LeaveBowed(seat=game.active, candidates=offering)
@@ -282,22 +280,40 @@ def _begin_turn(game: GameState) -> None:
 
 
 def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
-    """Straighten everything but ``staying_bowed`` and whatever may not straighten yet, reveal the
-    Provinces, and open the turn.
+    """Straighten everything but ``staying_bowed`` and whatever may not straighten yet, then queue
+    the Province reveal, the turn's start, and the opening of its first round behind it for the
+    caller to drain.
 
-    The prohibition outlives this step. It lifts when the Action Phase this straighten precedes has
-    ended, so nothing is spent here.
+    The three announcements are separate instants (CR), so each is its own cascade. The round
+    opens last, so a question asked while opening is answered in the previous round and hands no
+    opportunity on. The straighten prohibition outlives this step: it lifts when the Action Phase
+    this straighten precedes has ended.
     """
+    game.stack.append(OpenRound())
+    game.stack.append(AnnounceTurnStart())
+    game.stack.append(ApplyEffects((RevealProvinces(game.active),)))
     straightened = ops.straighten(
         game.table, game.active, staying_bowed | game.straighten_delayed.keys()
     )
-    for card_id in straightened:
-        triggers.fire(game, Straightened(card_id))
-    for card_id in ops.reveal_provinces(game.table, game.active):
-        triggers.fire(game, Revealed(card_id))
-    triggers.fire(game, TurnStarted(game.active))
-    # Opening the turn is not an action, so what it just raised is nobody's to respond to.
-    forget_action(game)
+    triggers.fire_all(game, [Straightened(card_id) for card_id in straightened])
+
+
+@dataclass(frozen=True, slots=True)
+class AnnounceTurnStart:
+    """Announce that the active seat's turn has begun, once its cards have straightened and its
+    Provinces are revealed."""
+
+    def resume(self, game: GameState) -> None:
+        triggers.fire(game, TurnStarted(game.active))
+
+
+@dataclass(frozen=True, slots=True)
+class OpenRound:
+    """Open the turn's first Action Round once the opening has fully resolved, forgetting what the
+    opening raised: it is not an action, so it is nobody's to respond to."""
+
+    def resume(self, game: GameState) -> None:
+        open_round(game)
 
 
 def apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:

@@ -42,11 +42,10 @@ class Observer(Protocol):
     Actions are not reported here, because the game log already records every one with the seat
     that took it, so an observer that wants them reads the tape between these two calls.
 
-    The two ends answer different questions. As a turn begins,
-    ``flow._begin_turn`` has straightened the active seat and revealed
-    its provinces, so the board shows what it has to spend. As one ends, the board shows what it
-    did: producers bowed to pay are still bowed, and a province it cleared holds a face-down
-    replacement.
+    The two ends answer different questions. As a turn begins, its opening has straightened the
+    active seat and revealed its provinces, so the board shows what it has to spend. As one ends,
+    the board shows what it did: producers bowed to pay are still bowed, and a province it cleared
+    holds a face-down replacement.
     """
 
     def turn_began(self, game: GameState) -> None:
@@ -110,7 +109,9 @@ def run_game(
     # replaced on every yield, so it cannot be compared by identity.
     open_round: tuple[int, Phase] | None = None
     while not game.game_over and game.turn <= turn_limit:
-        if observer is not None and game.turn != watched:
+        # An opening that paused for a decision is not over, and the board is not yet the one the
+        # observer is promised.
+        if observer is not None and game.turn != watched and game.pending is None:
             if playing is not None:
                 observer.turn_ended(game, playing)
             watched, playing = game.turn, game.active

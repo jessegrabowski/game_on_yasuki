@@ -602,6 +602,10 @@ def _servant_of(session):
     return next(card for card in session.game.table.battlefield.cards if card.is_token)
 
 
+def _servants_of(session):
+    return [card for card in session.game.table.battlefield.cards if card.is_token]
+
+
 def test_culling_grounds_bows_for_a_personality_and_an_honor():
     session = _culling_game()
 
@@ -657,6 +661,29 @@ def test_declining_to_stay_bowed_straightens_it_and_costs_the_servant():
     game = session.game
     assert game.table.cards_by_id["grounds"].bowed is False
     assert servant.id not in game.table.cards_by_id  # banished by its own trait
+
+
+def test_two_culling_grounds_straightening_together_banish_both_servants():
+    """Both straighten at one instant, and each banishes only what it made."""
+    session = _culling_game()
+    put_in_play(
+        session.game.table,
+        holding(
+            "grounds2", printed_id="culling_grounds", name="Culling Grounds", gold_production=2
+        ),
+    )
+    session.act(P1, ActivateAbility("grounds"))
+    session.act(P2, Pass())
+    session.act(P1, ActivateAbility("grounds2"))
+    assert len(_servants_of(session)) == 2
+
+    end_turn(session)
+    end_turn(session)
+    assert set(session.game.pending.candidates) == {"grounds", "grounds2"}
+    session.submit(P1, DecisionResponse(()))
+
+    assert _servants_of(session) == []
+    assert not session.game.stack and session.game.pending is None
 
 
 def test_straightening_the_holding_banishes_the_servant():

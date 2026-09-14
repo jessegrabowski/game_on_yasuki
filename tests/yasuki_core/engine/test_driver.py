@@ -11,6 +11,10 @@ from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.replay.game_log import Act, Answer
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine import driver
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.effects import Choose
+from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.vocabulary.game_events import Straightened
 from yasuki_core.engine.driver import Controls, play_game, run_game
 from yasuki_core.engine.session import EngineSession
 
@@ -195,6 +199,37 @@ def test_a_seats_producers_are_straight_at_the_start_of_its_own_turn():
     assert bowed_by_turn[1] is False  # P1's turn: straight, nothing spent yet
     assert bowed_by_turn[2] is True  # P2's turn: still bowed from P1 paying
     assert bowed_by_turn[3] is False  # P1's turn again: straightened
+
+
+@choice_resolver("driver_pause")
+def _driver_pause_resolves_to_nothing(game, source_id, chosen, seat):
+    return []
+
+
+def test_the_observer_sees_a_turn_only_once_its_opening_has_resolved():
+    """A trait that pauses while the turn opens is answered before the observer looks, so the board
+    it is shown is the opened one."""
+    revealed_by_turn: dict[int, bool] = {}
+
+    class Watcher:
+        def turn_began(self, game) -> None:
+            revealed_by_turn[game.turn] = game.table.cards_by_id["theirs"].face_up
+
+        def turn_ended(self, game, seat) -> None:
+            pass
+
+    session = _session()
+    put_in_play(session.game, holding("pauser", owner=PlayerId.P2, printed_id="driver_pause")).bow()
+    province_card(session.game, "theirs", seat=PlayerId.P2, face_up=False)
+    triggers.on(Straightened, "driver_pause")(
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "driver_pause", ctx.card.id)]
+    )
+    try:
+        play_game(session, _passing(), turn_limit=2, observer=Watcher())
+    finally:
+        triggers._TRIGGERS[Straightened].pop("driver_pause", None)
+
+    assert revealed_by_turn[2] is True
 
 
 def test_a_run_without_an_observer_plays_the_same_game():

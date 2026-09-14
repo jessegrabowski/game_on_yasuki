@@ -161,12 +161,6 @@ def perform(game: GameState, action: Action) -> None:
         yield_after_action(game, acted_in)
 
 
-# The decisions that are steps of the turn rather than actions taken in a round: the end-of-turn
-# discard, and the turn-start choice of what to leave bowed. Every new DecisionRequest owes an
-# answer to which of the two it is.
-_TURN_STRUCTURE = (DiscardToHandSize, LeaveBowed)
-
-
 def submit(game: GameState, response: DecisionResponse) -> None:
     """Answer the pending decision and resume the engine.
 
@@ -230,12 +224,11 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             resolution.fight_battle(game, int(response.choices[0]))
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
-    # Symmetric with `perform`: an answered decision resolves fully before the next input.
+    # Symmetric with `perform`: an answered decision resolves fully before the next input. A
+    # question asked by turn structure resolves into a round it was not asked in, which is how
+    # `yield_after_action` knows there is no opportunity to hand on.
     run_stack(game)
-    # Turn structure is not an action: the round these resolve into is not one an action would
-    # yield in, because the turn they belong to is either already over or has not opened yet.
-    if not isinstance(request, _TURN_STRUCTURE):
-        yield_after_action(game, acted_in)
+    yield_after_action(game, acted_in)
 
 
 def cancel(game: GameState) -> None:
