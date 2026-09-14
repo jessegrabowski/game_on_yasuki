@@ -3,7 +3,8 @@ from dataclasses import dataclass, replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.model import Interrupt
+from yasuki_core.engine.rules.abilities.registry import interrupt_for
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.effects import (
@@ -16,11 +17,10 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.legality import activatable
+from yasuki_core.engine.rules.legality import has_presence
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInterrupt,
     DecisionResponse,
@@ -92,10 +92,13 @@ RULEBOOK_INTERRUPTS: tuple[RulebookInterrupt, ...] = (
 )
 
 
+def _hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    return game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
+
+
 def discardable_for(game: GameState, seat: PlayerId, interrupt: RulebookInterrupt) -> list[L5RCard]:
     """The cards ``seat`` holds that ``interrupt`` may discard."""
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    return [card for card in hand.cards if has_keyword(game, card, interrupt.keyword)]
+    return [card for card in _hand(game, seat) if has_keyword(game, card, interrupt.keyword)]
 
 
 def _taken_key(interrupt: RulebookInterrupt, seat: PlayerId) -> str:
@@ -118,17 +121,22 @@ def rulebook_interrupts_for(
 
 def card_interrupts_for(
     game: GameState, seat: PlayerId, effect: Effect
-) -> list[tuple[L5RCard, Ability]]:
+) -> list[tuple[L5RCard, Interrupt]]:
     """The Interrupts ``seat`` could play from hand against ``effect``: each Strategy whose
-    Interrupt answers its type and whose Gold Cost the seat can reach."""
-    playable = activatable(game, seat, frozenset({ActionTiming.INTERRUPT}), at=(CardLocation.HAND,))
-    return [
-        (card, ability)
-        for card, ability in playable
-        if ability.interrupt is not None
-        and isinstance(effect, ability.interrupts)
-        and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
-    ]
+    Interrupt answers its type and whose Gold Cost the seat can reach, while the seat has a unit
+    at any battle being fought (CR, Rule of Presence)."""
+    if not has_presence(game, seat):
+        return []
+    playable: list[tuple[L5RCard, Interrupt]] = []
+    for card in _hand(game, seat):
+        interrupt = interrupt_for(card)
+        if (
+            interrupt is not None
+            and isinstance(effect, interrupt.answers)
+            and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
+        ):
+            playable.append((card, interrupt))
+    return playable
 
 
 def interrupters(game: GameState, effect: InterruptibleEffect) -> list[PlayerId]:
@@ -203,9 +211,8 @@ def _play_interrupt(
     )
     if played is None:
         raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can play")
-    card, ability = played
-    assert ability.interrupt is not None
-    interruption = ability.interrupt(game, card, effect)
+    card, interrupt = played
+    interruption = interrupt.interrupt(game, card, effect)
     # The replacement waits beneath the Strategy's own work and returns once that has resolved,
     # while the paused cascade waits beneath both.
     game.stack.append(ApplyEffects((interruption.replacement,)))

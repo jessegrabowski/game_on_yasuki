@@ -9,6 +9,7 @@ yasuki_core.engine.rules.abilities.model
 
     Ability
     CardLocation
+    Interrupt
     Interruption
     InvestAbility
 
@@ -17,7 +18,6 @@ yasuki_core.engine.rules.abilities.model
 .. autosummary::
 
     itself
-    no_effects
 
 .. automodule:: yasuki_core.engine.rules.abilities.model
     :members:

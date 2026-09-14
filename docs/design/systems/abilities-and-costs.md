@@ -64,11 +64,6 @@ Personality's bow is consulted at the moment of payment.
 ## The optional fields
 
 `key` names an ability among several its card prints, so an action can say which one it takes.
-`interrupts` names the effect types an Interrupt answers, which is when the Interrupt step offers
-it: a Strategy naming `Fear` is offered from hand while a Fear effect waits to resolve. `interrupt`
-is what it then does, mapping the pending effect to an {class}`~.Interruption`: the effect that
-resolves in its place and whatever else happens. The Strategy is paid for and discarded the way any
-Strategy is.
 `tireless` lets an ability be used while its card is bowed. `located_at` says where the card must
 be, defaulting to the battlefield. `battle_designators` and `targets_any_location` govern what a
 battle ability can reach, and [Adding a Card](../../contributing/adding_a_card.md) explains both
@@ -82,3 +77,13 @@ the central rule answers where the card may reach.
 
 Write the predicate for the card's text and let the rule do the rest. A handler that tries to
 reimplement the Rules of Location will drift from them.
+
+## An Interrupt
+
+A Strategy printing an Interrupt is not an `Ability`. It has no target and no effects of its own,
+since what it does is decided against the effect it interrupts, and no round offers it. It is
+registered with `register_interrupt` as an {class}`~.Interrupt`, whose `answers` names the effect
+type it may be played against and whose `interrupt` maps the pending effect to an
+{class}`~.Interruption`: the effect that resolves in its place and whatever else happens. The
+Interrupt step in `rules/interrupts.py` offers it from hand while such an effect waits to resolve,
+and the Strategy is then paid for and discarded the way any Strategy is.

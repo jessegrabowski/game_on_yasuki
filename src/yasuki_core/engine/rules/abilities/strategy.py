@@ -49,13 +49,13 @@ def play_strategy(game: GameState, card_id: str, ability_key: str | None = None)
     )
 
 
-def play_strategy_with(game: GameState, card: L5RCard, effects: list[Effect]) -> None:
+def play_strategy_with(game: GameState, card: L5RCard, effects: tuple[Effect, ...]) -> None:
     """Announce ``card`` for ``effects`` in place of its printed ability's: pause for its Gold
     Cost with its discard and those effects queued behind. How an Interrupt plays a Strategy,
     since what it does is decided against the effect it interrupts rather than against a target.
     """
     game.stack.append(DiscardPlayed(card.id))
-    game.stack.append(ApplyEffects(tuple(effects)))
+    game.stack.append(ApplyEffects(effects))
     game.pending = payment_request(
         game, card.owner, effective_gold_cost(game, card), card.name, target=card
     )
