@@ -169,11 +169,11 @@ def interrupt_request(game: GameState, effect: InterruptibleEffect) -> ChooseInt
         for delta in interrupt.deltas
     )
     plays = tuple(card.id for card, _ in card_interrupts_for(game, seat, effect))
-    return ChooseInterrupt(seat=seat, candidates=discards + plays, effect=effect)
+    return ChooseInterrupt(seat=seat, candidates=discards + plays, description=effect.describe())
 
 
 def apply_interrupt(game: GameState, request: ChooseInterrupt, response: DecisionResponse) -> None:
-    """Act on the seat's answer and bring the effect ``request`` guarded back for the next answer.
+    """Act on the seat's answer and bring the paused effect back for the next answer.
 
     A pass marks the seat on the effect, which asks the next seat or resolves. A rulebook discard
     and the adjusted effect are spliced into the paused cascade, and the same seat is asked again
@@ -187,7 +187,9 @@ def apply_interrupt(game: GameState, request: ChooseInterrupt, response: Decisio
     Raise ``RuntimeError`` if the answer names a card the seat can no longer take the Interrupt
     with.
     """
-    effect = request.effect
+    effect = triggers.paused_effect(game)
+    if not isinstance(effect, InterruptibleEffect):
+        raise RuntimeError(f"{type(effect).__name__} opens no Interrupt step")
     seat = request.seat
     if not response.choices:
         triggers.resume_paused_cascade(game, [effect.declined_by(seat)])

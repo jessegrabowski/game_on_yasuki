@@ -16,7 +16,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     DiscardToHandSize,
 )
-from yasuki_core.engine.rules.effects import GainHonor
 from yasuki_core.engine.rules.triggers import choice_resolver
 
 _HAND = ("a", "b", "c")
@@ -358,7 +357,7 @@ def _interrupt() -> ChooseInterrupt:
     return ChooseInterrupt(
         seat=PlayerId.P2,
         candidates=(interrupt_token("a", 1), interrupt_token("a", -1), "okura"),
-        effect=GainHonor(PlayerId.P1, 3),
+        description="P1 gains 3 honor",
     )
 
 

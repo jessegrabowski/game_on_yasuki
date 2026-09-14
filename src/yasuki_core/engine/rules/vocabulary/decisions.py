@@ -2,12 +2,7 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from typing import TYPE_CHECKING
-
 from yasuki_core.engine.players import PlayerId
-
-if TYPE_CHECKING:
-    from yasuki_core.engine.rules.effects import InterruptingEffect
 
 
 @dataclass(frozen=True, slots=True)
@@ -533,14 +528,14 @@ class ChooseInterrupt(DecisionRequest):
 
     Attributes
     ----------
-    effect : :class:`~yasuki_core.engine.rules.effects.InterruptingEffect`
-        The effect as it stands, which the answer replaces.
+    description : str
+        The effect as it stands, in the words its own description uses.
     """
 
-    effect: "InterruptingEffect"
+    description: str
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return f"{self.effect.describe()}. Take an Interrupt?"
+        return f"{self.description}. Take an Interrupt?"
 
     @property
     def confirm_label(self) -> str:

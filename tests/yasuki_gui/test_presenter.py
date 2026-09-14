@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy, Recruit
-from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
+from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseInterrupt,
@@ -270,7 +270,7 @@ def test_an_interrupt_is_a_button_per_way_to_take_it_and_a_pass(board):
         card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P2)
         session.game.table.cards_by_id[card.id] = card
     session.game.pending = ChooseInterrupt(
-        seat=P1, candidates=("hc@+1", "hc@-1", "okura"), effect=GainHonor(P2, 2)
+        seat=P1, candidates=("hc@+1", "hc@-1", "okura"), description="P2 gains 2 honor"
     )
 
     presenter.present()

@@ -162,7 +162,7 @@ def test_the_opponent_is_offered_the_honor_interrupt_and_the_gain_shrinks():
     session = _proclaim_session({P2: 1})
     pending = session.game.pending
     assert isinstance(pending, ChooseInterrupt)
-    assert (pending.seat, pending.effect) == (P2, GainHonor(P1, PERSONAL_HONOR))
+    assert (pending.seat, pending.description) == (P2, f"P1 gains {PERSONAL_HONOR} honor")
 
     session.submit(P2, DecisionResponse((interrupt_token("P2-honor0", -1),)))
 
