@@ -212,13 +212,28 @@ def _advance(
         firing.sort(key=_canonical_order)
 
 
+def _refuse_mid_decision(game: GameState, driver: str) -> None:
+    """Raise ``RuntimeError`` if a decision is pending, naming ``driver`` and the request.
+
+    A cascade driven over an open question would overwrite the request the moment it paused, and
+    the question would be lost without anything failing.
+    """
+    if game.pending is not None:
+        raise RuntimeError(
+            f"{driver} drove a cascade while {type(game.pending).__name__} is pending"
+        )
+
+
 def enforce_state_based_actions(game: GameState) -> None:
     """Satisfy the state-based rules against the board as it stands, resolving what that raises.
 
     For the board changes the cascade does not make (a card placed on the battlefield by
     ``flow``, a modifier expiring at a turn boundary), the walk enforces the rules after each
     effect it commits: how a caller that mutated the board directly gets the same guarantee.
+
+    Raise ``RuntimeError`` if a decision is pending.
     """
+    _refuse_mid_decision(game, "enforce_state_based_actions")
     queue: list[GameEvent] = []
     _settle_state_based_actions(game, queue)
     if queue:
@@ -323,7 +338,11 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
 
 
 def fire(game: GameState, event: GameEvent) -> None:
-    """Resolve ``event`` and the cascade it triggers, running the worklist to a fixpoint."""
+    """Resolve ``event`` and the cascade it triggers, running the worklist to a fixpoint.
+
+    Raise ``RuntimeError`` if a decision is pending.
+    """
+    _refuse_mid_decision(game, "fire")
     _advance(game, (), [], None, [event])
 
 
@@ -333,14 +352,21 @@ def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
     Firing them one at a time is not the same thing: a trigger that pauses for a decision leaves
     the machine stopped, and the next call would start a second cascade on top of the pending
     request and overwrite it.
+
+    Raise ``RuntimeError`` if a decision is pending.
     """
+    _refuse_mid_decision(game, "fire_all")
     _advance(game, (), [], None, list(events))
 
 
 def resolve_effects(game: GameState, effects: list[Effect]) -> None:
     """Apply ``effects``, an ability's or a choice resolver's output, and run the derived-event
     cascade the same way :func:`~.fire` does, so a triggered reaction to those effects still
-    resolves."""
+    resolves.
+
+    Raise ``RuntimeError`` if a decision is pending.
+    """
+    _refuse_mid_decision(game, "resolve_effects")
     _advance(game, tuple(effects), [], None, [])
 
 

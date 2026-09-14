@@ -3,7 +3,12 @@ import pytest
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseCards,
+    DecisionResponse,
+    DiscardToHandSize,
+)
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
@@ -26,7 +31,9 @@ from yasuki_core.engine.rules.triggers import (
     choice_resolver,
     enforce_state_based_actions,
     fire,
+    fire_all,
     on,
+    resolve_delayed,
     resolve_effects,
 )
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
@@ -84,6 +91,30 @@ def _sandwich_around_a_choice(ctx):
 @choice_resolver("test_sandwich")
 def _sandwich_grant(game, source_id, chosen, seat):
     return [AdjustCounter(source_id, WEALTH, 1)]
+
+
+def _resolve_a_held_effect(game):
+    game.delayed = [(END_OF_TURN, GainHonor(PlayerId.P1, 1))]
+    resolve_delayed(game, END_OF_TURN)
+
+
+@pytest.mark.parametrize(
+    ("driver", "drive"),
+    [
+        ("fire", lambda game: fire(game, TurnStarted(PlayerId.P1))),
+        ("fire_all", lambda game: fire_all(game, [TurnStarted(PlayerId.P1)])),
+        ("resolve_effects", lambda game: resolve_effects(game, [GainHonor(PlayerId.P1, 1)])),
+        ("resolve_effects", _resolve_a_held_effect),
+        ("enforce_state_based_actions", enforce_state_based_actions),
+    ],
+    ids=["fire", "fire_all", "resolve_effects", "resolve_delayed", "enforce_state_based_actions"],
+)
+def test_driving_a_cascade_mid_decision_raises_naming_driver_and_request(driver, drive):
+    game = two_seat_game()
+    game.pending = DiscardToHandSize(PlayerId.P1, ("c1",), count=1)
+
+    with pytest.raises(RuntimeError, match=f"{driver} drove a cascade while DiscardToHandSize"):
+        drive(game)
 
 
 def test_ignore_honor_requirements_effect_sets_the_seat_flag():
