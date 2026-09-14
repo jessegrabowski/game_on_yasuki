@@ -39,6 +39,14 @@ Most of the rest is ephemeral. `stack`, `ongoing`, `delayed`, `round_stack`, `re
 `created_by`, `tokens_created`, `attack`, `action` and its companions are all rebuilt by re-running
 the tape rather than serialized. [The replay log](the-replay-log.md) covers why.
 
+`pending` is the question the engine has stopped on, or None, and `stack` is the work waiting
+behind it. Together they are the engine's whole notion of "part-way through". A client reads
+`pending` to know who is asked and what they may answer, and `awaiting_decision` is the same
+question as a boolean. Only {func}`~.submit` and {func}`~.cancel` clear it, and every cascade entry
+point raises while it is set. [Decisions and resumption](decisions-and-resumption.md) is the
+lifecycle. A card never reads it: a handler runs on a cleared slot, and the request it raises is
+the one that will be pending when control returns.
+
 Ephemeral does not mean empty at rest. `ongoing` holds every continuous grant in force and its
 order is load-bearing, since grants apply in creation order.
 
