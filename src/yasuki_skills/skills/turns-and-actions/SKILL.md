@@ -50,8 +50,12 @@ that card code does not have to know the board's shape.
 
 `docs/design/engine.md` is the overview of the two surfaces. Then, under `docs/design/systems/`:
 `turn-flow.md`, `actions-and-legality.md`, `action-lifecycles.md`, `game-state.md`,
-`board-queries.md` and `the-replay-log.md`. `docs/design/package_boundaries.md` states the one-way
-dependency rule that engine work is most likely to break.
+`board-queries.md` and `the-replay-log.md`. `decisions-and-resumption.md` is the life of a
+pending decision and the four rules that keep one from being lost, and
+`triggers-and-the-cascade.md` follows one cascade end to end through a pause and its answers. Read
+those two before touching anything that drives the cascade or clears `pending`.
+`docs/design/package_boundaries.md` states the one-way dependency rule that engine work is most
+likely to break.
 
 What a card may say into this machinery is the `card-vocabulary` skill. The web server and the
 desktop client are two front-ends over it, covered by `play-server` and `desktop-client`.
