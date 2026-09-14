@@ -133,9 +133,7 @@ def _honor(session: EngineSession, seat: PlayerId) -> int:
 def _proclaim_session(
     honor_cards: dict[PlayerId, int], *, watcher: str | None = None
 ) -> EngineSession:
-    """A session that has just paid for a Proclaimed recruit worth ``PERSONAL_HONOR``, with each
-    seat holding the number of Honor cards ``honor_cards`` gives it, and a Holding printed
-    ``watcher`` in play for P1 when one is named."""
+    """A session that has just paid for a Proclaimed recruit worth ``PERSONAL_HONOR``."""
     table = dealt_table(hand=0)
     put_in_play(table, stronghold(P1, gold_production=8, clan="Crab"))
     if watcher is not None:
@@ -286,10 +284,7 @@ def _fear_announced(
     watcher: str | None = None,
 ) -> EngineSession:
     """A session in which the Attacker has just aimed Fear ``FEAR`` at the Defender's 2F guard in
-    the Combat Segment through the ability printed ``probe``, with each seat holding the Courage
-    cards ``courage_cards`` gives it, the ``(card_id, printed_id, owner)`` Strategies
-    ``strategies`` names, and a Holding printed ``watcher`` in play for the Attacker when one is
-    named."""
+    the Combat Segment. ``strategies`` are ``(card_id, printed_id, owner)`` triples."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
     province_card(state, "def-prov0", seat=DEFENDER, index=0)

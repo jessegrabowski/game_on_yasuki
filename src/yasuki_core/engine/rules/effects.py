@@ -127,9 +127,8 @@ class InterruptibleEffect(InterruptingEffect, ABC):
     each seat in turn may take an Interrupt that replaces it (ShE datasheet, Interrupt).
 
     Pauses only while :func:`~yasuki_core.engine.rules.interrupts.interrupters` names a seat with
-    something to take, and performs once every seat has declined. A subclass declares the
-    ``declined`` field this category reads, since a dataclass field cannot sit on the category
-    ahead of the subclass's own required ones.
+    something to take, and performs once every seat has declined. Each subclass declares the
+    ``declined`` field itself.
 
     Attributes
     ----------

@@ -192,15 +192,9 @@ class ResumeInterrupted:
 def apply_interrupt(game: GameState, request: ChooseInterrupt, response: DecisionResponse) -> None:
     """Act on the seat's answer and bring the paused effect back for the next answer.
 
-    A pass marks the seat on the effect, which asks the next seat or resolves. A rulebook discard
-    and the adjusted effect are spliced into the paused cascade, and the same seat is asked again
-    if it may. A Strategy is played the way any Strategy is, its Interrupt deciding what replaces
-    the effect and what else happens, with the replacement queued to rejoin the cascade once the
-    Strategy has resolved.
-
-    A discard runs inside the interrupted action's cascade, so a reaction to it fires and it joins
-    the action's event record.
-
+    A pass records the seat as declined. A rulebook discard splices the discard and the adjusted
+    effect into the paused cascade. A Strategy is played the way any Strategy is, with the
+    replacement its Interrupt returns queued to rejoin the cascade once the Strategy has resolved.
     Raise ``RuntimeError`` if the answer names a card the seat can no longer take the Interrupt
     with.
     """
