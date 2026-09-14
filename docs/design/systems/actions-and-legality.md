@@ -17,8 +17,9 @@ dispatching.
 {func}`~.permitted_timings` gives the ones the current round allows, and {func}`~.permits` asks
 about one. An ability is offered when those two sets intersect.
 
-That intersection is why `INTERRUPT` never fires. No round lists it, so the set is always empty for
-an ability carrying it.
+No round lists `INTERRUPT`, so that intersection never offers an Interrupt as an action. The
+Interrupt step in `rules/interrupts.py` asks {func}`~.activatable` for it directly, while an effect
+the Interrupt answers waits to resolve.
 
 ## Targets
 
