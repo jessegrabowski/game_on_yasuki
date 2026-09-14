@@ -212,6 +212,16 @@ class CompleteProduction:
 
 
 @dataclass(frozen=True, slots=True)
+class BeginNextTurn:
+    """Begin the next turn once the end-of-turn discard has fully resolved.
+
+    A work item because a trait reacting to the discard may pause for a decision, and the turn
+    must not pass over an unanswered question. Pushed before the discard is announced, so the
+    remainder of a paused cascade stacks above it and resumes first.
+    """
+
+
+@dataclass(frozen=True, slots=True)
 class FightNextBattle:
     """Fight the next battlefield the Attacker has not fought at yet, or end the Attack Phase's
     Fight Segment once every one has been.
@@ -263,7 +273,8 @@ class DiscardPlayed:
 
 
 WorkItem = (
-    CompleteProduction
+    BeginNextTurn
+    | CompleteProduction
     | ContinuePayment
     | ResolveRecruit
     | ResolveEquip
