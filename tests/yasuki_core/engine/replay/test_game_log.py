@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DynastyDiscard,
     Equip,
     Inheritance,
+    HonorInterrupt,
     KharmicDraw,
     KharmicRefill,
     Legacy,
@@ -390,6 +391,7 @@ ROUND_TRIPPED_ACTIONS = [
     ActivateAbility("card"),
     PlayStrategy("card"),
     DeclareAttack(),
+    HonorInterrupt("card", PlayerId.P2, -1),
 ]
 
 

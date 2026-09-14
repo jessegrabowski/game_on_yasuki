@@ -77,6 +77,7 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.favor_abilities <yasuki_core.engine.rules.rulebook.favor_abilities>
     yasuki_core.engine.rules.rulebook.favor_payment <yasuki_core.engine.rules.rulebook.favor_payment>
     yasuki_core.engine.rules.rulebook.favor_proxy <yasuki_core.engine.rules.rulebook.favor_proxy>
+    yasuki_core.engine.rules.rulebook.honor <yasuki_core.engine.rules.rulebook.honor>
     yasuki_core.engine.rules.rulebook.inheritance <yasuki_core.engine.rules.rulebook.inheritance>
     yasuki_core.engine.rules.rulebook.kharmic <yasuki_core.engine.rules.rulebook.kharmic>
     yasuki_core.engine.rules.rulebook.legacy <yasuki_core.engine.rules.rulebook.legacy>

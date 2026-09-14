@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     DynastyDiscard,
     Equip,
+    HonorInterrupt,
     Inheritance,
     KharmicDraw,
     KharmicRefill,
@@ -62,6 +63,7 @@ from yasuki_core.engine.rules.rulebook.recruit import (
 from yasuki_core.engine.rules.rulebook.cycle import cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor_payment import use_favor_ability
+from yasuki_core.engine.rules.rulebook.honor import honor_interrupt
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
 from yasuki_core.engine.rules.rulebook.kharmic import kharmic_draw, kharmic_refill
 from yasuki_core.engine.rules.rulebook.legacy import (
@@ -131,11 +133,15 @@ def perform(game: GameState, action: Action) -> None:
     # Read before the handler runs: one that opens a round of its own leaves that round on
     # `game.round`, and the round to hand on from is the one the action was taken in.
     acted_in = game.round
-    if not isinstance(action, Pass) and game.round.kind is not RoundKind.RESPONSE:
+    # An Interrupt is taken inside another action, so it neither replaces that action's record nor
+    # resets the ledger it is about to write.
+    if not isinstance(action, Pass | HonorInterrupt) and game.round.kind is not RoundKind.RESPONSE:
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
         game.action_is_favor = False
         game.action = action
+        game.honor_adjustments.clear()
+        game.honor_interrupted.clear()
     match action:
         case Pass():
             yield_priority(game, passed=True)
@@ -168,6 +174,8 @@ def perform(game: GameState, action: Action) -> None:
         case DeclareAttack():
             resolution.declare_attack(game)
             resolution.open_maneuvers(game)
+        case HonorInterrupt(card_id=card_id, seat=seat, delta=delta):
+            honor_interrupt(game, card_id, seat, delta)
         case _:
             raise ValueError(f"no handler for action {type(action).__name__}")
     # An action resolves fully before the next input; one that paused for a decision leaves its

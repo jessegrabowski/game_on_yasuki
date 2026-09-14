@@ -8,6 +8,7 @@ yasuki_core.engine.rules.effects
 .. autosummary::
 
     AdjustCounter
+    AdjustHonorChange
     Ask
     AskAmount
     AskDistribution
@@ -60,6 +61,12 @@ yasuki_core.engine.rules.effects
     Then
     Unpayable
     WinGame
+
+.. rubric:: Functions
+
+.. autosummary::
+
+    adjusted_honor_change
 
 .. automodule:: yasuki_core.engine.rules.effects
     :members:

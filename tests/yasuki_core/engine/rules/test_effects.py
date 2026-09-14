@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
     Discard,
+    AdjustHonorChange,
     DiscardFavor,
     GainHonor,
     PlaceInProvince,
@@ -439,3 +440,42 @@ def test_an_honor_change_of_zero_is_not_announced():
     game = two_seat_game()
 
     assert GainHonor(PlayerId.P1, 0).perform(game) == []
+
+
+@pytest.mark.parametrize(
+    ("amount", "adjustment", "expected"),
+    [(3, 1, 4), (3, -1, 2), (-3, 1, -4), (-3, -1, -2), (1, -2, 0), (-1, -2, 0)],
+)
+def test_an_adjustment_changes_the_size_of_a_gain_or_loss_but_never_its_direction(
+    amount, adjustment, expected
+):
+    assert effects.adjusted_honor_change(amount, adjustment) == expected
+
+
+def test_a_recorded_adjustment_is_spent_by_the_next_change_for_that_seat():
+    game = two_seat_game()
+    before = game.table.seats[PlayerId.P1].honor
+    AdjustHonorChange(PlayerId.P1, -1).perform(game)
+
+    GainHonor(PlayerId.P2, 2).perform(game)
+    GainHonor(PlayerId.P1, 2).perform(game)
+    GainHonor(PlayerId.P1, 2).perform(game)
+
+    assert game.table.seats[PlayerId.P1].honor == before + 3
+    assert game.honor_adjustments == {}
+
+
+def test_a_change_reduced_to_nothing_is_not_announced():
+    game = two_seat_game()
+    AdjustHonorChange(PlayerId.P1, -1).perform(game)
+
+    assert GainHonor(PlayerId.P1, 1).perform(game) == []
+
+
+def test_a_change_of_zero_leaves_the_adjustment_waiting():
+    game = two_seat_game()
+    AdjustHonorChange(PlayerId.P1, 1).perform(game)
+
+    GainHonor(PlayerId.P1, 0).perform(game)
+
+    assert game.honor_adjustments == {PlayerId.P1: 1}

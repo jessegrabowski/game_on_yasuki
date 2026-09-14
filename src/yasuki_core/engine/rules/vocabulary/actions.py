@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
 
+from yasuki_core.engine.players import PlayerId
+
 
 class BattleDesignator(Enum):
     """A designator qualifying how a battle action escapes the Rule of Presence or the Rules of
@@ -222,6 +224,27 @@ class KharmicRefill:
 
 
 @dataclass(frozen=True, slots=True)
+class HonorInterrupt:
+    """Take the Honor rulebook ability (Repeatable Interrupt): discard an Honor card from hand to
+    increase or reduce one of the interrupted action's Honor gains or losses by 1 (ShE datasheet).
+    The datasheet limits a Repeatable Interrupt to once per action, per seat.
+
+    Attributes
+    ----------
+    card_id : str
+        The Honor card in hand to discard.
+    seat : PlayerId
+        The seat whose gain or loss the adjustment applies to.
+    delta : int
+        The change to the gain or loss's size: 1 increases it and -1 reduces it.
+    """
+
+    card_id: str
+    seat: PlayerId
+    delta: int
+
+
+@dataclass(frozen=True, slots=True)
 class DeclareAttack:
     """Declare an attack in the Attack Phase, creating a battlefield at each of the Defender's
     Provinces (CR, Declare an Attack).
@@ -247,6 +270,7 @@ Action = (
     | Lobby
     | UseFavorAbility
     | DeclareAttack
+    | HonorInterrupt
 )
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
@@ -266,4 +290,5 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     Legacy: ActionTiming.DYNASTY,
     Inheritance: ActionTiming.DYNASTY,
     DeclareAttack: ActionTiming.ATTACK,
+    HonorInterrupt: ActionTiming.INTERRUPT,
 }

@@ -37,9 +37,9 @@ effect is how a card borrows the whole sequence.
 {func}`~.equip_targets` and {func}`~.creation_targets`, which judges a token template rather than
 a card because a created attachment has no card to ask about yet.
 
-One module per action covers the rest: `cycle.py`, `kharmic.py`, `legacy.py`, `inheritance.py`,
-`lobby.py`, `dynasty_discard.py`, and the three Favor modules. `costs.py` is the exception, a
-shared helper, not an action.
+One module per action covers the rest: `cycle.py`, `honor.py`, `kharmic.py`, `legacy.py`,
+`inheritance.py`, `lobby.py`, `dynasty_discard.py`, and the three Favor modules. `costs.py` is the
+exception, a shared helper, not an action.
 
 ## Where a card plugs in
 

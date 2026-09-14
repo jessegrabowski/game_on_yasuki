@@ -118,6 +118,8 @@ def forget_action(game: GameState) -> None:
     game.action_taken = ""
     game.action_is_favor = False
     game.action = None
+    game.honor_adjustments.clear()
+    game.honor_interrupted.clear()
 
 
 def open_round(game: GameState) -> None:

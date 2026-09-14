@@ -1194,9 +1194,39 @@ class GainHonor(Effect):
         return f"{self.seat.name} {verb} {abs(self.amount)} honor"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        if not ops.set_honor(game.table, self.seat, delta=self.amount):
+        amount = self.amount
+        if amount:
+            amount = adjusted_honor_change(amount, game.honor_adjustments.pop(self.seat, 0))
+        if not ops.set_honor(game.table, self.seat, delta=amount):
             return []
-        return [HonorChanged(self.seat, self.amount)]
+        return [HonorChanged(self.seat, amount)]
+
+
+def adjusted_honor_change(amount: int, adjustment: int) -> int:
+    """``amount`` with ``adjustment`` applied to its size, keeping its direction.
+
+    A gain stays a gain and a loss a loss however far it is reduced, and neither goes below zero
+    (CR, Honor Gains and Losses). A positive ``adjustment`` makes the gain or loss larger.
+    """
+    size = max(0, abs(amount) + adjustment)
+    return size if amount > 0 else -size
+
+
+@dataclass(frozen=True, slots=True)
+class AdjustHonorChange(Effect):
+    """Record that ``seat``'s next Honor gain or loss in the action now resolving changes in size
+    by ``delta``. The Honor Interrupt's effect. The gain or loss it modifies has not been performed
+    yet, so the change waits on ``GameState.honor_adjustments`` until it is."""
+
+    seat: PlayerId
+    delta: int
+
+    def describe(self) -> str:
+        return f"{self.seat.name}'s next honor change is adjusted by {self.delta:+d}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.honor_adjustments[self.seat] = game.honor_adjustments.get(self.seat, 0) + self.delta
+        return []
 
 
 @dataclass(frozen=True, slots=True)
