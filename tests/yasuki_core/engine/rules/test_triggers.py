@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    ApplyEffects,
     Choose,
     Destroy,
     Discard,
@@ -35,6 +36,7 @@ from yasuki_core.engine.rules.triggers import (
     on,
     resolve_delayed,
     resolve_effects,
+    resume_paused_cascade,
 )
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -115,6 +117,14 @@ def test_driving_a_cascade_mid_decision_raises_naming_driver_and_request(driver,
 
     with pytest.raises(RuntimeError, match=f"{driver} drove a cascade while DiscardToHandSize"):
         drive(game)
+
+
+def test_resuming_a_choice_without_its_stash_on_top_raises():
+    game = two_seat_game()
+    game.stack.append(ApplyEffects(()))
+
+    with pytest.raises(RuntimeError, match="without its stashed cascade"):
+        resume_paused_cascade(game, [])
 
 
 def test_ignore_honor_requirements_effect_sets_the_seat_flag():

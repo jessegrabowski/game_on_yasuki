@@ -340,8 +340,8 @@ class ResumeCascade:
 
     def resume(self, game: GameState) -> None:
         # An interrupting effect whose answer produces no effects of its own, a payment, say, leaves
-        # its stash here for the generic drain. A Choose is popped by its own handler, which splices
-        # the resolver's effects in.
+        # its stash here for the generic drain. A Choose goes through `resume_paused_cascade`, which
+        # splices the resolver's effects in.
         resume_cascade(game, self, [])
 
 
@@ -366,6 +366,18 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
         if card_id in game.table.cards_by_id
     ]
     _advance(game, tuple(produced) + item.effects, firing, item.event, list(item.queue))
+
+
+def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
+    """Pop the cascade the answered choice paused and continue it with ``produced`` spliced in.
+
+    The stash is always the top of the stack: a choice pauses the walk the moment it is raised, and
+    nothing pushes between the pause and the answer. Raise ``RuntimeError`` if it is not there.
+    """
+    item = game.stack.pop()
+    if not isinstance(item, ResumeCascade):
+        raise RuntimeError("a card choice resumed without its stashed cascade")
+    resume_cascade(game, item, produced)
 
 
 def fire(game: GameState, event: GameEvent) -> None:
