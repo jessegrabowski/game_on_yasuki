@@ -84,7 +84,6 @@ def apply_invest_amount(
     game: GameState, request: ChooseInvestAmount, response: DecisionResponse
 ) -> None:
     card = game.table.cards_by_id[request.source_card_id]
-    game.pending = None
     game.pending = announce_recruit(game, card, card.owner, invest_amount=int(response.choices[0]))
 
 
@@ -138,7 +137,6 @@ def apply_fortification_province(
     """Attach the waiting Fortification to the Province the seat named, then let it arrive."""
     card = game.table.cards_by_id[request.source_card_id]
     province = ZoneKey.from_token(response.choices[0])
-    game.pending = None
     ops.attach_to_province(game.table, card, province)
     _announce_entering_play(game, card.id, request.invest_amount, request.proclaim)
 

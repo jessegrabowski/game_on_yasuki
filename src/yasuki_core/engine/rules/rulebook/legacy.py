@@ -38,7 +38,6 @@ def apply_legacy_banish(
     seat = request.seat
     banished = game.table.cards_by_id[response.choices[0]]
     ops.move_card(game.table, banished, ZoneKey(seat, ZoneRole.FATE_BANISH))
-    game.pending = None
     _reveal_search_pool(game, seat)
     found = legacy_candidates(game, seat)
     if not found:
@@ -53,7 +52,6 @@ def apply_legacy_choice(
 ) -> None:
     seat = request.seat
     legacy_card = game.table.cards_by_id[response.choices[0]]
-    game.pending = None
     provinces = _displaceable_provinces(game, seat, keep=legacy_card.id)
     if not provinces:
         # No province to sacrifice, a state only reachable at zero provinces (a military loss the
@@ -71,7 +69,6 @@ def apply_legacy_placement(
     legacy_card = game.table.cards_by_id[request.legacy_card_id]
     target_key = province_key_of(game, seat, displaced.id)
     source_key = province_key_holding(game, seat, legacy_card.id)  # None when it came from the deck
-    game.pending = None
     if source_key is not None:
         defer_refill(game, source_key)
     # One effect per occurrence, so each announces itself where it happens. The placement is
