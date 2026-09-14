@@ -1,20 +1,24 @@
 # Read the Docs build configuration.
 # https://docs.readthedocs.io/en/stable/config-file/v2.html
 #
-# We drive the build with pixi (build.commands mode) so RTD uses the same
-# toolchain and lockfile as local `pixi run docs-build`. In this mode RTD does
-# not run Sphinx for us: we build the HTML ourselves and copy it into
-# $READTHEDOCS_OUTPUT/html. The `sphinx:` and `python:` keys are intentionally
-# absent — they are not allowed alongside build.commands.
+# The build runs through pixi, so Read the Docs resolves from the committed pixi.lock rather than
+# from a second dependency list that would drift. This follows the readthedocs-override example in
+# the pixi repository: the miniforge toolchain puts mamba on $PATH, mamba installs pixi, and pixi
+# does the rest. Overriding build.commands means Read the Docs builds no environment and runs no
+# Sphinx of its own, so the sphinx, python and conda keys must stay absent.
 version: 2
 
 build:
   os: ubuntu-24.04
   tools:
-    python: "3.12"
+    python: "miniforge3-latest"
   commands:
-    - curl -fsSL https://pixi.sh/install.sh | bash
-    - ~/.pixi/bin/pixi run -e docs docs-build
+    # hatch-vcs derives the version from git tags, and the checkout is shallow and tagless, so
+    # without this the docs would report the 0.0.0+unknown fallback.
+    - git fetch --tags --unshallow || true
+    - mamba install -y -c conda-forge -c nodefaults pixi
+    - pixi install -e docs
+    - pixi run -e docs docs-build
     - mkdir -p "$READTHEDOCS_OUTPUT/html"
     - cp -r docs/_build/html/. "$READTHEDOCS_OUTPUT/html/"
 
