@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, replace
-from enum import Enum
 from typing import ClassVar
 
 from yasuki_core.engine import ops
@@ -650,13 +649,6 @@ class GrantLobbyBonus(Effect):
         return []
 
 
-class Consequence(Enum):
-    """What an attack effect does to a target its strength reaches."""
-
-    BOW = "bow"
-    DESTROY = "destroy"
-
-
 @dataclass(frozen=True, slots=True)
 class AttackEffect(Effect, ABC):
     """One of the CR's three attack effects: a strength weighed against a target's stat.
@@ -683,9 +675,11 @@ class AttackEffect(Effect, ABC):
         The stat weighed against ``strength``. *"If a Ranged Attack effect ends up being compared
         against a different stat than Force, compare that stat against the Ranged Attack's strength
         instead"*. Read as an effective stat, so modifiers count. Default ``Stat.FORCE``.
-    consequences : tuple of Consequence, optional
-        What happens to a target the strength reaches, in order. Each kind has its printed
-        default, and an Interrupt may replace the effect with one that does more. Default destroy.
+    outcome : tuple of Effect, optional
+        What happens to a target the strength reaches, in order, built from the ordinary effects.
+        Default the kind's printed outcome, ``Bow`` for Fear and ``Destroy`` for the other two,
+        filled in when none is given. An Interrupt replaces the effect with one whose outcome does
+        more.
     """
 
     # What the card prints this effect as, which is the only thing its description needs from the
@@ -699,17 +693,19 @@ class AttackEffect(Effect, ABC):
     target_id: str
     cause: Cause
     compared: Stat = Stat.FORCE
-    consequences: tuple[Consequence, ...] = (Consequence.DESTROY,)
+    outcome: tuple[Effect, ...] = ()
+
+    def __post_init__(self) -> None:
+        if not self.outcome:
+            object.__setattr__(self, "outcome", self._printed_outcome())
+
+    @abstractmethod
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        """What this kind does to a target its strength reaches, as the CR prints it."""
 
     def describe(self) -> str:
         stat = "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
         return f"{self.name} {self.strength} on {self.target_id}{stat}"
-
-    def _outcome(self) -> list[Effect]:
-        return [
-            Bow(self.target_id) if step is Consequence.BOW else Destroy(self.target_id, self.cause)
-            for step in self.consequences
-        ]
 
     def perform(self, game: GameState) -> list[GameEvent]:
         # Imported where it is used: reading an attack's strength walks the board for the cards
@@ -722,7 +718,7 @@ class AttackEffect(Effect, ABC):
         ):
             return []
         events: list[GameEvent] = []
-        for effect in self._outcome():
+        for effect in self.outcome:
             events.extend(effect.perform(game))
         return events
 
@@ -733,6 +729,9 @@ class RangedAttack(AttackEffect):
 
     name: ClassVar[str] = "ranged"
 
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        return (Destroy(self.target_id, self.cause),)
+
 
 @dataclass(frozen=True, slots=True)
 class MeleeAttack(AttackEffect):
@@ -740,6 +739,9 @@ class MeleeAttack(AttackEffect):
     effect as a Ranged Attack, deliberately not the same type."""
 
     name: ClassVar[str] = "melee"
+
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        return (Destroy(self.target_id, self.cause),)
 
 
 @dataclass(frozen=True, slots=True)
@@ -755,8 +757,10 @@ class Fear(AttackEffect, InterruptibleEffect):
 
     name: ClassVar[str] = "fear"
 
-    consequences: tuple[Consequence, ...] = (Consequence.BOW,)
     declined: frozenset[PlayerId] = frozenset()
+
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        return (Bow(self.target_id),)
 
 
 @dataclass(frozen=True, slots=True)

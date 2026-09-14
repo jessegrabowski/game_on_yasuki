@@ -2,7 +2,7 @@ from dataclasses import replace
 
 from yasuki_core.engine.rules.abilities.model import Interrupt, Interruption
 from yasuki_core.engine.rules.abilities.registry import register_interrupt
-from yasuki_core.engine.rules.effects import Consequence, Fear
+from yasuki_core.engine.rules.effects import Destroy, Fear
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -17,7 +17,9 @@ def _okura_is_released_interrupt(game: GameState, source: L5RCard, effect: Fear)
     destruction follows it. Played against one Fear effect: an action producing several needs it
     played against each.
     """
-    return Interruption(replace(effect, consequences=effect.consequences + (Consequence.DESTROY,)))
+    return Interruption(
+        replace(effect, outcome=(*effect.outcome, Destroy(effect.target_id, effect.cause)))
+    )
 
 
 register_interrupt(

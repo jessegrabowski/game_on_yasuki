@@ -16,7 +16,6 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Bow,
     Choose,
-    Consequence,
     Destroy,
     Fear,
     Discard,
@@ -463,10 +462,12 @@ def test_an_adjustment_changes_the_size_of_a_gain_or_loss_but_never_its_directio
     assert effects.adjusted_honor_change(amount, adjustment) == expected
 
 
-def test_an_attack_performs_every_consequence_it_carries():
+def test_an_attack_performs_every_effect_in_its_outcome():
     game = two_seat_game()
     target = put_in_play(game, holding("P1-h"))
-    fear = Fear(9, target.id, PlayerId.P2, consequences=(Consequence.BOW, Consequence.DESTROY))
+    fear = Fear(
+        9, target.id, PlayerId.P2, outcome=(Bow(target.id), Destroy(target.id, PlayerId.P2))
+    )
 
     resolve_effects(game, [fear])
 

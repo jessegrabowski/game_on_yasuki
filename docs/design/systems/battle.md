@@ -65,7 +65,7 @@ def perform(self, game: GameState) -> list[GameEvent]:
     ):
         return []
     events: list[GameEvent] = []
-    for effect in self._outcome():
+    for effect in self.outcome:
         events.extend(effect.perform(game))
     return events
 ```
@@ -74,19 +74,22 @@ Both sides are effective values. The target's stat is read with its modifiers, a
 read with whatever the board has done to it. An attack that reaches nothing returns no events, so
 nothing downstream can react to a miss.
 
-The three kinds differ in what reaching the target does, carried as data so an Interrupt can
-replace an effect with one that does more:
+The three kinds differ in what reaching the target does. `outcome` carries it as a tuple of
+ordinary effects, filled in from the kind's printed outcome when a handler gives none, so an
+Interrupt replaces an attack with one whose outcome does more without the vocabulary growing:
 
 ```python
-class Consequence(Enum):
-    """What an attack effect does to a target its strength reaches."""
+@dataclass(frozen=True, slots=True)
+class Fear(AttackEffect, InterruptibleEffect):
+    ...
+    name: ClassVar[str] = "fear"
 
-    BOW = "bow"
-    DESTROY = "destroy"
+    def _printed_outcome(self) -> tuple[Effect, ...]:
+        return (Bow(self.target_id),)
 ```
 
-Ranged and Melee default to destroy and Fear to bow, and a Fear an Interrupt has extended reads
-bow then destroy.
+Ranged and Melee print `Destroy` and Fear prints `Bow`. A Fear that {card}`Okura is Released` has
+extended carries `Bow` then `Destroy`.
 
 Ranged and Melee produce the same effect and are deliberately not the same type, because a card can
 name one and not the other. `compared` defaults to `Stat.FORCE` and is what a card changes when it
