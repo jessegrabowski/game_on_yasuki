@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 
@@ -31,12 +32,16 @@ class FavorAbility:
     active_seat_only : bool, optional
         Whether the rulebook restricts it to the player whose turn it is, which an Open designator
         does not do on its own. Default False.
+    keywords : frozenset of str, optional
+        The ability keywords the rulebook prints ahead of its designator, such as Political.
+        Default empty.
     """
 
     key: str
     timing: ActionTiming
     label: str
     active_seat_only: bool = False
+    keywords: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,6 +95,7 @@ class Ruleset:
     battle_segments: tuple[BattleSegment, ...] = ()
     battle_segment_names: dict[BattleSegment, str] = field(default_factory=dict)
     lobby_timing: ActionTiming = ActionTiming.LIMITED
+    lobby_keywords: frozenset[str] = frozenset()
     favor_abilities: tuple[FavorAbility, ...] = ()
 
     def segment_name(self, segment: Segment) -> str:
@@ -174,17 +180,20 @@ SHATTERED_EMPIRE = Ruleset(
         Segment.FIGHT: "Fight Battles",
     },
     lobby_timing=ActionTiming.OPEN,
+    lobby_keywords=frozenset({keywords.POLITICAL}),
     favor_abilities=(
         FavorAbility(
             "discard_to_draw",
             ActionTiming.OPEN,
             "discard a Fate card to draw a card",
             active_seat_only=True,
+            keywords=frozenset({keywords.POLITICAL}),
         ),
         FavorAbility(
             "send_attacker_home",
             ActionTiming.BATTLE,
             "move a target attacking enemy Personality home",
+            keywords=frozenset({keywords.POLITICAL}),
         ),
     ),
     battle_segments=_SHATTERED_EMPIRE_BATTLE_SEGMENTS,
@@ -205,6 +214,7 @@ ACTIVE = SHATTERED_EMPIRE
 # card; the Onyx/ShE datasheet grants two again.
 IMPERIAL = Ruleset(
     clan_alignments=SHATTERED_EMPIRE.clan_alignments,
+    lobby_keywords=frozenset({keywords.POLITICAL}),
     favor_abilities=(
         FavorAbility("draw", ActionTiming.LIMITED, "draw a Fate card"),
         FavorAbility(
