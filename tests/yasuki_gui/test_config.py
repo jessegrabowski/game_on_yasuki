@@ -17,8 +17,20 @@ def test_load_hotkeys_overrides(tmp_path: Path):
           hotkeys:
             bow: x
             flip: y
-            invert: z
+            dishonor: z
         """
     )
     hk = load_hotkeys(cfg)
-    assert hk == Hotkeys(bow="x", flip="y", invert="z")
+    assert hk == Hotkeys(bow="x", flip="y", dishonor="z")
+
+
+def test_load_hotkeys_reads_the_former_invert_key(tmp_path: Path):
+    cfg = tmp_path / "config.yaml"
+    cfg.write_text(
+        """
+        gui:
+          hotkeys:
+            invert: z
+        """
+    )
+    assert load_hotkeys(cfg).dishonor == "z"

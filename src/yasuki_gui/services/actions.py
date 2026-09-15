@@ -157,7 +157,9 @@ def card_dishonor() -> Action:
             return
         view.dispatch(Rehonor(ids) if card and card.dishonorable else Dishonor(ids))
 
-    return Action("card.toggle_dishonor", "Dishonor / Rehonor", HK.invert, _card_when, run, "card")
+    return Action(
+        "card.toggle_dishonor", "Dishonor / Rehonor", HK.dishonor, _card_when, run, "card"
+    )
 
 
 def _send_to(role: ZoneRole, side: Side | None, to_bottom: bool = False):
@@ -287,7 +289,7 @@ def province_discard() -> Action:
         if key is not None:
             view.dispatch(DiscardProvince(key))
 
-    return Action("zone.discard", "Discard", HK.invert, when, run, "zone")
+    return Action("zone.discard", "Discard", HK.dishonor, when, run, "zone")
 
 
 # ----- tokens and annotations -----------------------------------------------

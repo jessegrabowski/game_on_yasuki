@@ -66,7 +66,7 @@ gui:
   hotkeys:
     bow: b
     flip: f
-    invert: d
+    dishonor: d
     fill: l
     destroy: c
     draw: r

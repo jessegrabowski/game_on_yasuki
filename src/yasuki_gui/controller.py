@@ -57,7 +57,7 @@ class FieldController:
         old = {
             self._hotkeys.bow,
             self._hotkeys.flip,
-            self._hotkeys.invert,
+            self._hotkeys.dishonor,
             self._hotkeys.fill,
             self._hotkeys.destroy,
             self._hotkeys.draw,
@@ -74,7 +74,7 @@ class FieldController:
         keys = {
             hotkeys.bow,
             hotkeys.flip,
-            hotkeys.invert,
+            hotkeys.dishonor,
             hotkeys.fill,
             hotkeys.destroy,
             hotkeys.draw,
@@ -474,7 +474,7 @@ class FieldController:
 
         self._hide_card_view()  # any other key dismisses a floating preview
 
-        if self._hover_zone_tag and key in {hk.flip, hk.fill, hk.destroy, hk.invert}:
+        if self._hover_zone_tag and key in {hk.flip, hk.fill, hk.destroy, hk.dishonor}:
             ctx = ActionContext(
                 zone_tag=self._hover_zone_tag, event=e, owner=self._owner_of(self._hover_zone_tag)
             )
@@ -482,7 +482,7 @@ class FieldController:
                 hk.flip: "zone.toggle_flip",
                 hk.fill: "zone.fill",
                 hk.destroy: "zone.destroy",
-                hk.invert: "zone.discard",
+                hk.dishonor: "zone.discard",
             }[key]
             self._run_if_enabled(action_id, ctx)
             return
@@ -495,7 +495,7 @@ class FieldController:
         action_id = {
             hk.bow: "card.toggle_bow",
             hk.flip: "card.toggle_flip",
-            hk.invert: "card.toggle_dishonor",
+            hk.dishonor: "card.toggle_dishonor",
         }.get(key)
         if action_id:
             self._run_if_enabled(action_id, ctx)
