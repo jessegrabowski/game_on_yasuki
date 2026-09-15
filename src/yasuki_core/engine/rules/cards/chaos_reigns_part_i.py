@@ -9,8 +9,9 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability, tireless_grant
+from yasuki_core.engine.rules.action_record import action_keywords
 from yasuki_core.engine.rules.board.queries import owned_personalities
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -24,6 +25,8 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.legality import has_wind
+from yasuki_core.engine.rules.rulebook.equip import attach_restriction
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import action_did, at_cap, choice_resolver
 from yasuki_core.engine.rules.board.queries import opposing_units_in_battle
@@ -181,6 +184,51 @@ register_ability(
         targets=_honor_your_oaths_targets,
         effects=_honor_your_oaths_effects,
         located_at=(CardLocation.HAND,),
+    ),
+)
+
+
+# --- Latest Fashions ---
+
+FASHIONS_HONOR = 1
+
+
+@attach_restriction("latest_fashions")
+def _latest_fashions_attach_restriction(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> bool:
+    """A Personality may only attach one Kimono."""
+    return not any(
+        keywords.KIMONO in effective_keywords(game, attached)
+        for attached in attachments_of(game, personality)
+    )
+
+
+def _latest_fashions_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Itself, once the action just resolved was Political and targeted or was from the Personality
+    wearing it."""
+    if keywords.POLITICAL not in action_keywords(game):
+        return []
+    wearer = attached_to(game, source)
+    if wearer is None:
+        return []
+    from_wearer = isinstance(game.action, ActivateAbility) and game.action.card_id == wearer.id
+    return [source.id] if from_wearer or wearer.id in game.action_targets else []
+
+
+def _latest_fashions_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [GainHonor(source.owner, FASHIONS_HONOR)]
+
+
+register_ability(
+    "latest_fashions",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        label="Response: after a Political action targeting or from this Personality, gain 1 Honor",
+        cost=no_cost,
+        targets=_latest_fashions_targets,
+        effects=_latest_fashions_effects,
+        hits_every_target=True,
     ),
 )
 

@@ -8,7 +8,9 @@ from yasuki_core.engine.rules.rulebook.favor_payment import DISCARD_THE_FAVOR, f
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.rulebook.equip import may_attach
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
+from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
@@ -18,7 +20,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
-from yasuki_core.engine.rules.effects import Discard, DiscardFavor, TakeFavor
+from yasuki_core.engine.rules.effects import Bow, Discard, DiscardFavor, TakeFavor
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.state import GameState
@@ -33,7 +35,10 @@ from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, StrongholdPrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     end_phase,
     fate_card,
     holding,
@@ -400,6 +405,80 @@ def test_manjodh_will_not_pay_for_a_player_with_a_wind():
     game = _manjodh_game(has_wind=True)
 
     assert favor_payment_options(game, PlayerId.P1) == {}
+
+
+# --- Latest Fashions ---
+
+POLITICAL_PROBE = "probe_political_open_bow_a_personality"
+PLAIN_PROBE = "probe_open_bow_a_personality"
+
+
+def _bow_a_personality(keywords_printed: frozenset[str]) -> Ability:
+    return Ability(
+        timings=(ActionTiming.OPEN,),
+        keywords=keywords_printed,
+        label="Open: bow a target Personality",
+        cost=no_cost,
+        targets=lambda game, source: [card.id for card in owned_personalities(game, source.owner)],
+        effects=lambda game, source, target: [Bow(target.id)],
+    )
+
+
+def _fashions_on_doji(*, envoy_probe: str = POLITICAL_PROBE) -> EngineSession:
+    """P1's doji wears Latest Fashions and prints a Political Open action. P1's envoy prints
+    ``envoy_probe``, which targets a Personality."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("doji", printed_id=POLITICAL_PROBE))
+    put_in_play(state, personality("envoy", printed_id=envoy_probe))
+    attached(
+        state,
+        attachment("kimono", printed_id="latest_fashions", keywords=(keywords.KIMONO,)),
+        "doji",
+    )
+    return EngineSession.start(state, P1)
+
+
+def test_latest_fashions_gains_honor_after_a_political_action_from_its_wearer():
+    with probe_ability(POLITICAL_PROBE, _bow_a_personality(frozenset({keywords.POLITICAL}))):
+        session = _fashions_on_doji()
+        session.act(P1, ActivateAbility("doji"))
+        session.submit(P1, DecisionResponse(("envoy",)))
+
+        session.act(P1, ActivateAbility("kimono"))
+
+        assert session.game.table.seats[P1].honor == 1
+
+
+def test_latest_fashions_gains_honor_after_a_political_action_targeting_its_wearer():
+    with probe_ability(POLITICAL_PROBE, _bow_a_personality(frozenset({keywords.POLITICAL}))):
+        session = _fashions_on_doji()
+        session.act(P1, ActivateAbility("envoy"))
+        session.submit(P1, DecisionResponse(("doji",)))
+
+        assert ActivateAbility("kimono") in session.legal_actions(P1)
+
+
+def test_latest_fashions_is_not_offered_after_a_plain_action():
+    with (
+        probe_ability(POLITICAL_PROBE, _bow_a_personality(frozenset({keywords.POLITICAL}))),
+        probe_ability(PLAIN_PROBE, _bow_a_personality(frozenset())),
+    ):
+        session = _fashions_on_doji(envoy_probe=PLAIN_PROBE)
+        session.act(P1, ActivateAbility("envoy"))
+        session.submit(P1, DecisionResponse(("doji",)))
+
+        assert ActivateAbility("kimono") not in session.legal_actions(P1)
+
+
+def test_a_personality_wearing_a_kimono_may_not_attach_another():
+    game = GameState.start(TableState.empty_two_seat(), P1)
+    doji = put_in_play(game, personality("doji"))
+    bare = put_in_play(game, personality("bare"))
+    attached(game, attachment("silk", keywords=(keywords.KIMONO,)), "doji")
+    fashions = attachment("kimono", printed_id="latest_fashions", keywords=(keywords.KIMONO,))
+
+    assert may_attach(game, bare, fashions) is True
+    assert may_attach(game, doji, fashions) is False
 
 
 # --- Shrine to Inari ---
