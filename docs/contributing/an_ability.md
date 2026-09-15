@@ -90,6 +90,12 @@ Bowing, tokens and Family Honor have no duration at all. They are instantaneous 
 until something else changes them (CR, Instantaneous), which is why `AdjustCounter` and
 `GainHonor` take none.
 
+A Honor gain that an action or trait earns by targeting a Personality, or from one, names him in
+`GainHonor.personalities`. While he is dishonorable and the gaining seat's, the effect rehonors him
+in place of the gain (CR, Rehonoring 0.1 and 0.2). {card}`Blessed Sword` names its bearer this
+way. Leave the field empty when the ability rehonors him as one of its own effects, since the CR
+substitutes only where rehonoring "is not one of that action or trait's effects".
+
 ## Where the rest lives
 
 [Abilities and costs](../design/systems/abilities-and-costs.md) covers the model and the cost

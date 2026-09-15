@@ -1413,11 +1413,18 @@ class GainHonor(Effect):
         The net change the Interrupts taken against this change make to its size, applied once
         when it performs so that no run of Interrupts can carry it through zero and reverse it.
         Default 0.
+    personalities : tuple of str, optional
+        The Personalities the gain's action or trait targeted or came from. A gain owed while one
+        of them is ``seat``'s and dishonorable rehonors him instead, one rehonoring standing in for
+        the whole gain (CR, Rehonoring 0.1 and 0.2). A handler whose action rehonors him as one of
+        its own effects leaves this empty, since the CR substitutes only where rehonoring "is not
+        one of that action or trait's effects". Default empty.
     """
 
     seat: PlayerId
     amount: int
     adjustment: int = 0
+    personalities: tuple[str, ...] = ()
 
     @property
     def adjusted(self) -> int:
@@ -1441,9 +1448,25 @@ class GainHonor(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         amount = self.adjusted
+        rehonored = self._substituted_for(game) if amount > 0 else []
+        if rehonored:
+            for card in rehonored:
+                card.rehonor()
+            return [Rehonored(card.id) for card in rehonored]
         if not ops.set_honor(game.table, self.seat, delta=amount):
             return []
         return [HonorChanged(self.seat, amount)]
+
+    def _substituted_for(self, game: GameState) -> list[L5RCard]:
+        """The seat's own dishonorable Personalities among ``personalities``, whose rehonoring
+        stands in for the gain."""
+        return [
+            card
+            for card_id in self.personalities
+            if (card := game.table.cards_by_id.get(card_id)) is not None
+            and card.owner is self.seat
+            and card.dishonorable
+        ]
 
 
 def adjusted_honor_change(amount: int, adjustment: int) -> int:
