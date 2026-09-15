@@ -241,8 +241,7 @@ RANGED_ABILITY = Ability(
 
 
 def _aitso_defending(*, probe: str = DESTROY_PROBE, target: str = "guard") -> EngineSession:
-    """P1 attacks with a Personality carrying ``probe`` and aims it at ``target``. P2 defends with
-    a guard and with Aitso, whose Dynasty deck starts empty so the reshuffle is easy to read."""
+    """Aitso's Dynasty deck starts empty so the reshuffle is easy to read."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=P1, index=0)
     province_card(state, "def-prov0", seat=PlayerId.P2, index=0)

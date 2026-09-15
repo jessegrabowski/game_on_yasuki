@@ -409,7 +409,6 @@ def _wind_named(owner: PlayerId, printed_id: str) -> L5RCard:
 def _p2_ready_to_lobby(
     *, meiji_bowed: bool = False, p1_wind: str | None = "kanos_alliance", p2_wind: str | None = None
 ) -> GameState:
-    """P2's turn, P2 ahead on Family Honor with a Courtier to bow, facing P1's Meiji and Wind."""
     game = two_seat_game(first_player=PlayerId.P2)
     meiji = put_in_play(game, _meiji())
     if meiji_bowed:

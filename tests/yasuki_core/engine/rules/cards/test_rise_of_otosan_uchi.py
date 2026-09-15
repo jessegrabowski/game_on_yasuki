@@ -1093,8 +1093,6 @@ FEAR_ABILITY = Ability(
 
 
 def _yuten_defending(*, probe: str = BOW_PROBE, yuten_defends: bool = True) -> EngineSession:
-    """P1 attacks with a Personality carrying ``probe``. P2 defends with a guard, and with Doji
-    Yuten at the battle unless he is kept at home."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=P1, index=0)
     province_card(state, "def-prov0", seat=P2, index=0)
