@@ -54,6 +54,7 @@ register_ability(
     "agasha_beiru",
     Ability(
         timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.EARTH}),
         label="Earth Open: Recruit a target Fortification in your discard pile and give its Province a +1 strength Wall token",
         cost=bow_cost,
         targets=_agasha_beiru_targets,

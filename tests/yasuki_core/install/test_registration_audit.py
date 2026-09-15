@@ -6,6 +6,7 @@ import sys
 from yasuki_core.engine.rules import cards
 from yasuki_core.install import registration_audit
 from yasuki_core.install.registration_audit import (
+    mislabeled_ability_keywords,
     unvalidated_registries,
     card_keyed_data,
     duplicate_registrations,
@@ -13,6 +14,10 @@ from yasuki_core.install.registration_audit import (
     registered_card_ids,
     unregistered_card_ids,
 )
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 
 
@@ -210,3 +215,56 @@ def test_no_card_registers_less_than_it_prints_but_the_known_few():
     reported = {line.split()[1] for line in registration_audit.short_ability_registrations()}
 
     assert reported == KNOWN_SHORT | COUNTED_SHORT
+
+
+def _battle_ability(
+    *,
+    timings: tuple[ActionTiming, ...] = (ActionTiming.BATTLE,),
+    keywords: frozenset[str] = frozenset(),
+) -> Ability:
+    return Ability(
+        timings=timings,
+        label="",
+        cost=no_cost,
+        targets=lambda game, source: [],
+        effects=lambda game, source, target: [],
+        keywords=keywords,
+    )
+
+
+def test_an_ability_registered_without_its_printed_keyword_is_reported():
+    # Inexplicable Challenge prints "Political Battle:". A registration that leaves Political off
+    # would make "if the action was Political" silently false for it.
+    problems = mislabeled_ability_keywords(
+        abilities={"inexplicable_challenge": [_battle_ability()]}
+    )
+
+    assert problems == [
+        "abilities: inexplicable_challenge registers keywords none on its Battle ability, "
+        "whose text prints Political"
+    ]
+
+
+def test_an_ability_registered_as_its_card_prints_passes():
+    labeled = _battle_ability(keywords=frozenset({keywords.POLITICAL}))
+
+    assert mislabeled_ability_keywords(abilities={"inexplicable_challenge": [labeled]}) == []
+
+
+def test_an_ability_the_text_does_not_print_is_not_judged():
+    # Rout prints one Battle ability and nothing under Open, so an Open registration has no printed
+    # ability to disagree with.
+    unprinted = _battle_ability(timings=(ActionTiming.OPEN,))
+
+    assert mislabeled_ability_keywords(abilities={"rout": [unprinted]}) == []
+
+
+def test_half_of_a_printed_battle_open_is_judged_against_the_whole():
+    # Heart of Honor prints "Bushido Virtue Battle/Open". A registration of its Open half alone
+    # still has to carry the keyword.
+    half = _battle_ability(timings=(ActionTiming.OPEN,))
+
+    assert mislabeled_ability_keywords(abilities={"heart_of_honor": [half]}) == [
+        "abilities: heart_of_honor registers keywords none on its Open ability, "
+        "whose text prints Bushido Virtue"
+    ]

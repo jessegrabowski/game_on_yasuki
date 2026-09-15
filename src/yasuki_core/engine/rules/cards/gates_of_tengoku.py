@@ -33,7 +33,7 @@ from yasuki_core.game_pieces.counters import SINCERITY
 
 # --- Decree of the Hantei ---
 
-register_event_entry("decree_of_the_hantei")
+register_event_entry("decree_of_the_hantei", ability_keywords=frozenset({keywords.POLITICAL}))
 
 
 # --- Sasada, Pearl Champion (Experienced) ---

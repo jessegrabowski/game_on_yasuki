@@ -34,6 +34,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -159,6 +160,7 @@ register_ability(
     "repairing_the_ruins",
     Ability(
         timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.ECONOMIC}),
         label="Economic Open: Discard this Event to refill its Province with a non-Unique Holding you control no copies of",
         cost=no_cost,
         targets=_repairing_the_ruins_targets,

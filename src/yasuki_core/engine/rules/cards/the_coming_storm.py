@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.board.seats import opposing_seats
 from yasuki_core.engine.rules.effects import Effect, GainHonor, Straighten
 from yasuki_core.engine.rules.state import GameState, used_this_turn
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -55,6 +56,7 @@ register_ability(
     "doji_natsuyo",
     Ability(
         timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.POLITICAL}),
         label="Open: Bow and pay the Imperial Favor to gain 1 Honor",
         cost=_doji_natsuyo_cost,
         targets=itself,

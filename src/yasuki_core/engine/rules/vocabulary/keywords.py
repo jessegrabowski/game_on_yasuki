@@ -85,3 +85,11 @@ SHADOWLANDS = "Shadowlands"
 YOJIMBO = "Yojimbo"
 # The clan, not the creature: the "<X> Clan" column, per the note at the top of this module.
 TANUKI_CLAN = "Tanuki Clan"
+# Ability keywords: printed ahead of a designator ("Political Battle:"), authored on the Ability
+# that carries them, and checked against the card text by the registration audit.
+BUSHIDO_VIRTUE = "Bushido Virtue"
+EARTH = "Earth"
+ECONOMIC = "Economic"
+IAIJUTSU = "Iaijutsu"
+MAHO = "Maho"
+POLITICAL = "Political"

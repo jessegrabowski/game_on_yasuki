@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from yasuki_core.engine.rules.abilities import registry
+from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules import (
     state_based_actions,
     triggers,
@@ -21,6 +22,7 @@ from yasuki_core.bots import hints  # noqa: F401
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine import rules
 from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, iter_set_entries, read_index
+from yasuki_core.install.text_split import split_text_box
 
 
 def registered_card_ids() -> dict[str, frozenset[str]]:
@@ -212,6 +214,85 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     return problems
 
 
+def printed_ability_keywords(
+    cards_dir: Path = DEFAULT_CARDS_PATH,
+) -> dict[str, set[tuple[frozenset[str], frozenset[str]]]]:
+    """Every card id with the ``(designators, keywords)`` pairs its printed abilities carry.
+
+    Read across every printing, since a keyword one printing spells out another may draw as an
+    icon, and the pairs are a set so a printing that repeats the wording adds nothing.
+
+    Parameters
+    ----------
+    cards_dir : path, optional
+        Directory of per-set YAML files. Default is the packaged ``sets`` directory.
+
+    Returns
+    -------
+    dict mapping str to set of tuple
+        Card id to its ``(designators, keywords)`` pairs, each a frozenset of str.
+    """
+    printed: dict[str, set[tuple[frozenset[str], frozenset[str]]]] = {}
+    for entry in iter_set_entries(cards_dir):
+        for ability in split_text_box(entry.text).abilities:
+            printed.setdefault(entry.card_id, set()).add(
+                (frozenset(ability.designators), frozenset(ability.keywords))
+            )
+    return printed
+
+
+def _printed_designators(ability: Ability) -> frozenset[str]:
+    return frozenset(timing.name.capitalize() for timing in ability.timings)
+
+
+def _spelled(keywords: frozenset[str]) -> str:
+    return " ".join(sorted(keywords)) or "none"
+
+
+def mislabeled_ability_keywords(
+    cards_dir: Path = DEFAULT_CARDS_PATH,
+    abilities: dict[str, list[Ability]] | None = None,
+) -> list[str]:
+    """
+    One human-readable line per registered ability whose ``keywords`` disagree with the card's text.
+
+    A registration is matched to the printed abilities whose designators cover its timings, so one
+    registering the Open half of a printed Battle/Open is still judged, and its keywords must equal
+    one of theirs. An ability the text does not print under those designators, such as a granted or
+    rulebook one, is left alone: only what is printed can contradict a registration.
+
+    Parameters
+    ----------
+    cards_dir : path, optional
+        Directory of per-set YAML files. Default is the packaged ``sets`` directory.
+    abilities : dict mapping str to list of :class:`~yasuki_core.engine.rules.abilities.model.Ability`, optional
+        Card id to its registered abilities. Defaults to the engine's own ability registry.
+
+    Returns
+    -------
+    list of str
+        Sorted problem descriptions, empty when every registration reads as its card prints.
+    """
+    if abilities is None:
+        abilities = registry._ABILITIES
+    printed = printed_ability_keywords(cards_dir)
+    problems = []
+    for card_id in sorted(abilities):
+        for ability in abilities[card_id]:
+            designators = _printed_designators(ability)
+            matching = {kws for desig, kws in printed.get(card_id, ()) if designators <= desig}
+            if not matching or ability.keywords in matching:
+                continue
+            authored = _spelled(ability.keywords)
+            printed_words = " or ".join(sorted(_spelled(kws) for kws in matching))
+            under = "/".join(sorted(designators))
+            problems.append(
+                f"abilities: {card_id} registers keywords {authored} on its {under} ability, "
+                f"whose text prints {printed_words}"
+            )
+    return problems
+
+
 # The per-card registries registration_audit validates by name. Everything built through the
 # registrar is absent on purpose -- those report themselves, which is the point of it.
 VALIDATED_REGISTRIES = {
@@ -332,6 +413,7 @@ def main(
         unregistered_card_ids(registries)
         + duplicate_registrations(trigger_registry)
         + unvalidated_registries()
+        + mislabeled_ability_keywords()
     )
     for problem in problems:
         print(problem, file=sys.stderr)

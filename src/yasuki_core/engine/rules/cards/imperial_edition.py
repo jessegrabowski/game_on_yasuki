@@ -27,6 +27,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -214,6 +215,7 @@ register_ability(
     "touch_of_death",
     Ability(
         timings=(ActionTiming.LIMITED,),
+        keywords=frozenset({keywords.MAHO}),
         label="Limited: destroy a bowed Personality with Chi no higher than this Shugenja's",
         cost=_touch_of_death_cost,
         targets=_touch_of_death_targets,

@@ -2,12 +2,13 @@ from yasuki_core.engine.rules.abilities.idioms import register_event_entry
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect, GainGold
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, on
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
 
 # --- Cessation of Hostilities ---
 
-register_event_entry("cessation_of_hostilities")
+register_event_entry("cessation_of_hostilities", ability_keywords=frozenset({keywords.POLITICAL}))
 
 
 # --- Pawnbroker ---
@@ -41,4 +42,4 @@ def _the_kurai_district_court_entered_play(ctx: TriggerContext) -> list[Effect]:
 
 # --- Unmitigated Disaster ---
 
-register_event_entry("unmitigated_disaster")
+register_event_entry("unmitigated_disaster", ability_keywords=frozenset({keywords.IAIJUTSU}))

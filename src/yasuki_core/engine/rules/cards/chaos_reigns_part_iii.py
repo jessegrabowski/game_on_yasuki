@@ -94,6 +94,7 @@ register_ability(
     "doji_maya_experienced",
     Ability(
         timings=(ActionTiming.BATTLE,),
+        keywords=frozenset({keywords.IAIJUTSU}),
         label=f"Battle: Melee {MAYA_MELEE} Attack",
         cost=no_cost,
         targets=attack_targets,

@@ -22,7 +22,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 
 
-def register_edict(printed_id: str, *, clan: str | None = None) -> None:
+def register_edict(
+    printed_id: str, *, clan: str | None = None, ability_keywords: frozenset[str] = frozenset()
+) -> None:
     """Register ``printed_id``'s Open ability to put itself into play as an Edict.
 
     Every Edict prints the same action (put this into play, discard your other Edicts), so it is
@@ -36,6 +38,8 @@ def register_edict(printed_id: str, *, clan: str | None = None) -> None:
     clan : str, optional
         A clan its controller must be playing, for the Edicts that name one. Default None, for an
         Edict anyone may put into play.
+    ability_keywords : frozenset of str, optional
+        The ability keywords the entry prints, as in "Political Open". Default empty.
     """
 
     def targets(game: GameState, source: L5RCard) -> list[str]:
@@ -66,11 +70,17 @@ def register_edict(printed_id: str, *, clan: str | None = None) -> None:
             effects=effects,
             hits_every_target=True,
             located_at=(CardLocation.HAND,),
+            keywords=ability_keywords,
         ),
     )
 
 
-def register_event_entry(printed_id: str, *, timing: ActionTiming = ActionTiming.OPEN) -> None:
+def register_event_entry(
+    printed_id: str,
+    *,
+    timing: ActionTiming = ActionTiming.OPEN,
+    ability_keywords: frozenset[str] = frozenset(),
+) -> None:
     """Register ``printed_id``'s "put this Event into play" action, taken from the Province it
     sits face-up in.
 
@@ -83,6 +93,8 @@ def register_event_entry(printed_id: str, *, timing: ActionTiming = ActionTiming
         The Event's printed id.
     timing : ActionTiming, optional
         The designator the entry is taken under. Default ``OPEN``, which most Events print.
+    ability_keywords : frozenset of str, optional
+        The ability keywords the entry prints, as in "Political Open". Default empty.
     """
 
     def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -98,6 +110,7 @@ def register_event_entry(printed_id: str, *, timing: ActionTiming = ActionTiming
             effects=effects,
             hits_every_target=True,
             located_at=(CardLocation.PROVINCE,),
+            keywords=ability_keywords,
         ),
     )
 

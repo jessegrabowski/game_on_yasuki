@@ -5,7 +5,7 @@ import re
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.install.card_index import DEFAULT_CARDS_PATH
 from yasuki_core.install.reminders import REMINDER_TEXT
-from yasuki_core.install.text_split import strip_markup
+from yasuki_core.install.text_split import ability_keywords, strip_markup
 
 from tests.yasuki_core.card_corpus import set_entries
 
@@ -26,7 +26,13 @@ def engine_keywords() -> dict[str, str]:
 
 
 def printed_keywords(cards_dir: pathlib.Path = DEFAULT_CARDS_PATH) -> set[str]:
-    return {keyword for entry in set_entries(cards_dir) for keyword in entry.keywords}
+    # A card's keyword line plus what its abilities print ahead of their designators, which the
+    # CR inherits up to the card and the install folds into card_keywords the same way.
+    return {
+        keyword
+        for entry in set_entries(cards_dir)
+        for keyword in (*entry.keywords, *ability_keywords(entry.text))
+    }
 
 
 def test_every_keyword_the_engine_names_is_printed_on_a_card():
