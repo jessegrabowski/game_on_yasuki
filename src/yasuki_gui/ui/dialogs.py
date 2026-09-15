@@ -86,7 +86,7 @@ class Dialogs:
 
         def refresh_preview(_event=None) -> None:
             card = selected()
-            photo = self.images.front(card.image_front, False, card.inverted) if card else None
+            photo = self.images.front(card.image_front, False, card.dishonorable) if card else None
             keep.clear()
             if photo is not None:
                 preview.configure(image=photo, text="")

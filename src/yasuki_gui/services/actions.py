@@ -154,7 +154,7 @@ def card_invert() -> Action:
         if ids:
             view.dispatch(Invert(ids))
 
-    return Action("card.toggle_invert", "Invert", HK.invert, _card_when, run, "card")
+    return Action("card.toggle_invert", "Dishonor / Rehonor", HK.invert, _card_when, run, "card")
 
 
 def _send_to(role: ZoneRole, side: Side | None, to_bottom: bool = False):

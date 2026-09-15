@@ -19,11 +19,11 @@ class _Images:
         self._front, self._back, self._preview = front, back, preview
         self.asked: list[str] = []
 
-    def front(self, image_front, bowed, inverted, target=None):
+    def front(self, image_front, bowed, dishonorable, target=None):
         self.asked.append("front")
         return self._preview if target else self._front
 
-    def back(self, side, bowed, inverted, image_back, target=None):
+    def back(self, side, bowed, dishonorable, image_back, target=None):
         self.asked.append("back")
         return self._preview if target else self._back
 
@@ -33,7 +33,7 @@ def _card(*, face_up: bool, name: str = "A Card"):
     card.name = name
     card.face_up = face_up
     card.bowed = False
-    card.inverted = False
+    card.dishonorable = False
     card.side = Side.FATE
     card.image_front = None
     card.image_back = None

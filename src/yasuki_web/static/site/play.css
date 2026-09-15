@@ -381,11 +381,11 @@
   transform: rotate(90deg);
 }
 
-.board-card.inverted {
+.board-card.dishonorable {
   transform: rotate(180deg);
 }
 
-.board-card.bowed.inverted {
+.board-card.bowed.dishonorable {
   transform: rotate(270deg);
 }
 
@@ -783,11 +783,11 @@
   transform: rotate(90deg);
 }
 
-.zone-card.inverted {
+.zone-card.dishonorable {
   transform: rotate(180deg);
 }
 
-.zone-card.bowed.inverted {
+.zone-card.bowed.dishonorable {
   transform: rotate(270deg);
 }
 

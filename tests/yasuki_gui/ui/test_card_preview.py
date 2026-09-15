@@ -14,11 +14,11 @@ class _Images:
         self.art = art
         self.asked: list[str] = []
 
-    def front(self, image_front, bowed, inverted, target=None):
+    def front(self, image_front, bowed, dishonorable, target=None):
         self.asked.append("front")
         return self.art
 
-    def back(self, side, bowed, inverted, image_back, target=None):
+    def back(self, side, bowed, dishonorable, image_back, target=None):
         self.asked.append("back")
         return self.art
 

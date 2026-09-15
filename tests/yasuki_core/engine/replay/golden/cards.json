@@ -56,7 +56,7 @@
     },
     "bowed": true,
     "face_up": false,
-    "inverted": true,
+    "dishonorable": true,
     "counters": {
       "__dict__": {
         "wealth": 2
@@ -120,7 +120,7 @@
     },
     "bowed": false,
     "face_up": true,
-    "inverted": false,
+    "dishonorable": false,
     "counters": {
       "__dict__": {}
     },

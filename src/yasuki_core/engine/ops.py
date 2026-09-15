@@ -82,7 +82,7 @@ def move_card(
 ) -> bool:
     """Move ``card`` to a zone, deck, or the shared battlefield, applying the destination's entry
     effects. A card faces up entering a hand or discard, unbows entering a province, and is scrubbed
-    to a pristine library card entering a deck (face down, unbowed, uninverted, with its note and
+    to a pristine library card entering a deck (face down, unbowed, rehonored, with its note and
     every show/peek disclosure cleared). Returns whether the table changed. A move onto the zone the
     card already occupies is a no-op.
 
@@ -121,7 +121,7 @@ def move_card(
         # Anonymize the card for the shuffle back into the library. No seat may read a deck card.
         card.turn_face_down()
         card.unbow()
-        card.uninvert()
+        card.rehonor()
         card.set_note(None)
         card.unshow()
         card.clear_peekers()
@@ -142,7 +142,7 @@ def move_card(
     if dest.role is ZoneRole.HAND:
         card.turn_face_up()
         card.unbow()
-        card.uninvert()
+        card.rehonor()
     elif dest.role is ZoneRole.PROVINCE:
         card.unbow()
     elif dest.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):

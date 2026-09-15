@@ -141,9 +141,9 @@ class FieldController:
         owner = card.owner
         show_front = not (owner is not None and owner != viewer and not card.shown)
         photo = (
-            _li(card.image_front, card.bowed, card.inverted, master=self.view)
+            _li(card.image_front, card.bowed, card.dishonorable, master=self.view)
             if show_front
-            else _lbi(card.side, card.bowed, card.inverted, card.image_back, master=self.view)
+            else _lbi(card.side, card.bowed, card.dishonorable, card.image_back, master=self.view)
         )
         if photo is None:
             w, h = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)

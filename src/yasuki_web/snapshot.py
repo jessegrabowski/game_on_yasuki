@@ -73,7 +73,7 @@ def _card(
         "token": view.is_token,
         "bowed": view.bowed,
         "face_up": view.face_up,
-        "inverted": view.inverted,
+        "dishonorable": view.dishonorable,
         "shown": view.shown,
         "peeked": view.id in peeked_ids,
         "hidden": False,

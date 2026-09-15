@@ -20,8 +20,8 @@ def card_face(images: ImageProvider, card: L5RCard) -> Any | None:
     Returns None where the art is missing, which the caller renders as a named placeholder.
     """
     if card.face_up:
-        return images.front(card.image_front, card.bowed, card.inverted)
-    return images.back(card.side, card.bowed, card.inverted, card.image_back)
+        return images.front(card.image_front, card.bowed, card.dishonorable)
+    return images.back(card.side, card.bowed, card.dishonorable, card.image_back)
 
 
 class CardStrip(FloatingPanel):

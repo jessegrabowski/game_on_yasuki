@@ -14,7 +14,7 @@ from functools import lru_cache
 def load_image(
     path: Path | str | None,
     bowed: bool,
-    inverted: bool,
+    dishonorable: bool,
     master: tk.Misc | None = None,
     target: tuple[int, int] | None = None,
 ) -> Any | None:
@@ -34,7 +34,7 @@ def load_image(
         if bowed:
             target = (target[1], target[0])
             img = img.rotate(-90, expand=True)
-        if inverted:
+        if dishonorable:
             img = img.rotate(180, expand=True)
         resample = getattr(Image, "LANCZOS", None)
         img = img.resize(target) if resample is None else img.resize(target, resample)
@@ -52,7 +52,7 @@ essential_backs = {Side.FATE: FATE_BACK, Side.DYNASTY: DYNASTY_BACK}
 def load_back_image(
     side: Side,
     bowed: bool,
-    inverted: bool,
+    dishonorable: bool,
     image_path: Path | None,
     master: tk.Misc | None = None,
     target: tuple[int, int] | None = None,
@@ -61,7 +61,7 @@ def load_back_image(
     Returns a PhotoImage for the back of a card (custom image if present, else essential back).
     """
     path = image_path if image_path else essential_backs[side]
-    return load_image(path, bowed, inverted, master=master, target=target)
+    return load_image(path, bowed, dishonorable, master=master, target=target)
 
 
 def clear_image_cache() -> None:
@@ -82,22 +82,24 @@ class ImageProvider:
         self,
         image_front: Path | str | None,
         bowed: bool,
-        inverted: bool,
+        dishonorable: bool,
         target: tuple[int, int] | None = None,
     ) -> Any | None:
         """The card's front, at its board size unless ``target`` asks for another."""
-        return load_image(image_front, bowed, inverted, master=self.master, target=target)
+        return load_image(image_front, bowed, dishonorable, master=self.master, target=target)
 
     def back(
         self,
         side: Side,
         bowed: bool,
-        inverted: bool,
+        dishonorable: bool,
         image_back: Path | None,
         target: tuple[int, int] | None = None,
     ) -> Any | None:
         """The card's back, at its board size unless ``target`` asks for another."""
-        return load_back_image(side, bowed, inverted, image_back, master=self.master, target=target)
+        return load_back_image(
+            side, bowed, dishonorable, image_back, master=self.master, target=target
+        )
 
     def clear(self) -> None:
         # Clears module-level caches (shared across providers).

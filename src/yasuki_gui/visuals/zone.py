@@ -54,19 +54,19 @@ class ZoneVisual(Visual):
         if top is not None:
             # Province cards always sit upright; a pile's top shows however it was placed.
             bowed = False if is_province else top.bowed
-            inverted = False if is_province else top.inverted
+            dishonorable = False if is_province else top.dishonorable
             face_up = top.face_up
             if self.images is not None:
                 photo = (
-                    self.images.front(top.active_face.image_front, bowed, inverted)
+                    self.images.front(top.active_face.image_front, bowed, dishonorable)
                     if face_up
-                    else self.images.back(top.side, bowed, inverted, top.image_back)
+                    else self.images.back(top.side, bowed, dishonorable, top.image_back)
                 )
             else:
                 photo = (
-                    _li(top.active_face.image_front, bowed, inverted, master=canvas)
+                    _li(top.active_face.image_front, bowed, dishonorable, master=canvas)
                     if face_up
-                    else _lbi(top.side, bowed, inverted, top.image_back, master=canvas)
+                    else _lbi(top.side, bowed, dishonorable, top.image_back, master=canvas)
                 )
             if photo is not None:
                 canvas.create_image(x, y, image=photo, tags=(self.tag, "zone"))

@@ -343,7 +343,7 @@ def _golden_cards() -> dict[str, L5RCard]:
         is_unique=True,
         bowed=True,
         face_up=False,
-        inverted=True,
+        dishonorable=True,
         counters={"wealth": 2},
         image_front=Path("sets/roj/farm.png"),
         image_back=Path("backs/dynasty.jpg"),

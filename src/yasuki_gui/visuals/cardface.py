@@ -30,7 +30,7 @@ class HiddenFace:
     side: Side
     owner: PlayerId | None
     bowed: bool = False
-    inverted: bool = False
+    dishonorable: bool = False
     face_up: bool = False
     shown: bool = False
     note: str | None = None

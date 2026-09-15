@@ -247,10 +247,10 @@ def _flip_face_card(card: L5RCard) -> bool:
 
 
 def _invert_card(card: L5RCard) -> bool:
-    if card.inverted:
-        card.uninvert()
+    if card.dishonorable:
+        card.rehonor()
     else:
-        card.invert()
+        card.dishonor()
     return True
 
 

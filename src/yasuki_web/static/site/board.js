@@ -178,7 +178,7 @@ function tagCard(el, card) {
 // `_card` plus the battlefield x/y. `id` is excluded — it keys the element, it never changes.
 // Exported so the reconcile diff and the shape-drift guard key off the same list.
 export const CARD_FIELDS = [
-  'name', 'img', 'card_type', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
+  'name', 'img', 'card_type', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'dishonorable',
   'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'creates', 'x', 'y',
   'attached', 'attachParent',
 ];
@@ -204,7 +204,7 @@ export function patchCard(el, view, prev, imgBase) {
   // a drop back into its own zone re-patches that same reused node, which would otherwise stay hidden.
   el.style.visibility = '';
   el.classList.toggle('bowed', !!view.bowed);
-  el.classList.toggle('inverted', !!view.inverted);
+  el.classList.toggle('dishonorable', !!view.dishonorable);
   el.classList.toggle('shown', !!view.shown);
   el.classList.toggle('peeked', !!view.peeked);
   tagCard(el, view);
@@ -1548,7 +1548,7 @@ function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
 function dragGhost(sourceEl) {
   const ghost = node('div', 'board-card dragging');
   ghost.style.pointerEvents = 'none';
-  for (const cls of ['face-down', 'bowed', 'inverted']) {
+  for (const cls of ['face-down', 'bowed', 'dishonorable']) {
     if (sourceEl.classList.contains(cls)) ghost.classList.add(cls);
   }
   const face = sourceEl.querySelector('img');

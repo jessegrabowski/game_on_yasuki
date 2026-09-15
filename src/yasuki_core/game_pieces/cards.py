@@ -22,7 +22,9 @@ class L5RCard:
     owner: PlayerId
     bowed: bool = False
     face_up: bool = True
-    inverted: bool = False
+    # The 180-degree turn of disgrace (CR, Honorable and Dishonorable). It survives leaving play,
+    # so a discard keeps it; only ``move_card`` into a hand or a deck scrubs it, with the rest.
+    dishonorable: bool = False
     # Named counters on the card (e.g. "wealth" -> +1GP each): scalar host state, never cards
     # (docs/engine/counters-vs-cards.md). In equality, replay checks must see counter drift, but
     # out of the generated hash, which a dict cannot join.
@@ -124,13 +126,13 @@ class L5RCard:
     def flip(self) -> None:
         object.__setattr__(self, "face_up", not self.face_up)
 
-    def invert(self) -> None:
-        if not self.inverted:
-            object.__setattr__(self, "inverted", True)
+    def dishonor(self) -> None:
+        if not self.dishonorable:
+            object.__setattr__(self, "dishonorable", True)
 
-    def uninvert(self) -> None:
-        if self.inverted:
-            object.__setattr__(self, "inverted", False)
+    def rehonor(self) -> None:
+        if self.dishonorable:
+            object.__setattr__(self, "dishonorable", False)
 
     def show(self) -> None:
         if not self.shown:
