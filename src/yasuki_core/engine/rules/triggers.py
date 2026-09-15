@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
+    InterruptStep,
     Effect,
 )
 from yasuki_core.engine.rules import state_based_actions
@@ -171,11 +172,17 @@ def _advance(
     pauses the machine: it records that effect's decision and stashes the exact remainder (the
     effects after it, the triggers not yet fired, the event, and the queue) as a
     :class:`~.ResumeCascade`, so :func:`~.resume_cascade` continues from precisely here once the
-    seat answers."""
+    seat answers.
+
+    Inside an action every other effect is held at the Interrupt step on its way through, wrapped
+    as an :class:`~.InterruptStep`, which pauses the same way while a seat has an Interrupt to
+    take against it (ShE datasheet, Interrupt)."""
     resolved = 0
     firing = list(firing)
     while True:
         for index, effect in enumerate(effects):
+            if game.action is not None and not isinstance(effect, InterruptingEffect):
+                effect = InterruptStep(effect)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work

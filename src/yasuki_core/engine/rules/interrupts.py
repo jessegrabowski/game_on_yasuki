@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
-    InterruptibleEffect,
+    InterruptStep,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
@@ -32,7 +32,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 @dataclass(frozen=True, slots=True)
-class RulebookInterrupt[T: InterruptibleEffect]:
+class RulebookInterrupt[T: Effect]:
     """A rulebook Interrupt every player holds: discard a card carrying ``keyword`` to adjust a
     pending effect of type ``answers`` by one of ``adjustments``.
 
@@ -117,7 +117,7 @@ _RULEBOOK_INTERRUPTS_BY_KEY = {interrupt.key: interrupt for interrupt in RULEBOO
 RULEBOOK_INTERRUPT_RESOLVER = "rulebook_interrupt"
 
 
-def rulebook_interrupt(key: str) -> RulebookInterrupt[InterruptibleEffect]:
+def rulebook_interrupt(key: str) -> RulebookInterrupt[Effect]:
     """The rulebook Interrupt named ``key``. Raise ``KeyError`` for a key the datasheet has none
     for."""
     return _RULEBOOK_INTERRUPTS_BY_KEY[key]
@@ -166,9 +166,9 @@ def card_interrupts_for(
     return playable
 
 
-def interrupters(game: GameState, effect: InterruptibleEffect) -> list[PlayerId]:
-    """The seats still to be offered an Interrupt against ``effect``, the active player first
-    (ShE datasheet, Interrupt).
+def interrupters(game: GameState, step: InterruptStep) -> list[PlayerId]:
+    """The seats still to be offered an Interrupt against the effect ``step`` holds, the active
+    player first (ShE datasheet, Interrupt).
 
     Nobody against an effect that is not interruptible, nobody outside an action, since there is
     nothing to interrupt, and nobody during a Response Step, since a Response is not
@@ -177,22 +177,25 @@ def interrupters(game: GameState, effect: InterruptibleEffect) -> list[PlayerId]
     which also reaches an effect a triggered trait raised during the action, a wider window than
     the datasheet's "the action's" effects.
     """
-    if not effect.is_interruptible() or game.action is None:
+    if game.action is None or not step.is_interruptible():
         return []
     if game.round.kind is RoundKind.RESPONSE:
         return []
+    effect = step.effect
     order = [game.active, *(seat for seat in game.table.seats if seat is not game.active)]
     return [
         seat
         for seat in order
-        if not effect.has_declined(seat)
+        if not step.has_declined(seat)
         and (rulebook_interrupts_for(game, seat, effect) or card_interrupts_for(game, seat, effect))
     ]
 
 
-def interrupt_request(game: GameState, effect: InterruptibleEffect) -> ChooseInterrupt:
-    """The Interrupt offered to the first seat :func:`~.interrupters` names against ``effect``."""
-    seat = interrupters(game, effect)[0]
+def interrupt_request(game: GameState, step: InterruptStep) -> ChooseInterrupt:
+    """The Interrupt offered to the first seat :func:`~.interrupters` names against the effect
+    ``step`` holds."""
+    seat = interrupters(game, step)[0]
+    effect = step.effect
     discards = tuple(
         interrupt_token(card.id, interrupt.key)
         for interrupt in rulebook_interrupts_for(game, seat, effect)
@@ -229,46 +232,45 @@ def apply_interrupt(game: GameState, request: ChooseInterrupt, response: Decisio
     once the Strategy has resolved. Raise ``RuntimeError`` if the answer names a card the seat can
     no longer take the Interrupt with.
     """
-    effect = _interrupted(game)
+    step = _interrupted(game)
     seat = request.seat
     if not response.choices:
-        triggers.resume_paused_cascade(game, [effect.declined_by(seat)])
+        triggers.resume_paused_cascade(game, [step.declined_by(seat)])
         return
     card_id, key = interrupt_choice(response.choices[0])
     if key is None:
-        _play_interrupt(game, seat, effect, card_id)
+        _play_interrupt(game, seat, step, card_id)
     else:
-        _ask_adjustment(game, seat, effect, card_id, key)
+        _ask_adjustment(game, seat, step, card_id, key)
 
 
-def _interrupted(game: GameState) -> InterruptibleEffect:
-    effect = triggers.paused_effect(game)
-    if not isinstance(effect, InterruptibleEffect):
-        raise RuntimeError(f"{type(effect).__name__} opens no Interrupt step")
-    return effect
+def _interrupted(game: GameState) -> InterruptStep:
+    step = triggers.paused_effect(game)
+    if not isinstance(step, InterruptStep):
+        raise RuntimeError(f"{type(step).__name__} opens no Interrupt step")
+    return step
 
 
-def _play_interrupt(
-    game: GameState, seat: PlayerId, effect: InterruptibleEffect, card_id: str
-) -> None:
+def _play_interrupt(game: GameState, seat: PlayerId, step: InterruptStep, card_id: str) -> None:
     played = next(
-        (pair for pair in card_interrupts_for(game, seat, effect) if pair[0].id == card_id), None
+        (pair for pair in card_interrupts_for(game, seat, step.effect) if pair[0].id == card_id),
+        None,
     )
     if played is None:
         raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can play")
     card, interrupt = played
-    interruption = interrupt.interrupt(game, card, effect)
-    game.stack.append(ResumeInterrupted((interruption.replacement,)))
+    interruption = interrupt.interrupt(game, card, step.effect)
+    game.stack.append(ResumeInterrupted((step.replaced_by(interruption.replacement),)))
     play_strategy_with(game, card, interruption.effects)
 
 
 def _ask_adjustment(
-    game: GameState, seat: PlayerId, effect: InterruptibleEffect, card_id: str, key: str
+    game: GameState, seat: PlayerId, step: InterruptStep, card_id: str, key: str
 ) -> None:
     taken = next(
         (
             interrupt
-            for interrupt in rulebook_interrupts_for(game, seat, effect)
+            for interrupt in rulebook_interrupts_for(game, seat, step.effect)
             if interrupt.key == key
             and card_id in {card.id for card in discardable_for(game, seat, interrupt)}
         ),
@@ -279,7 +281,7 @@ def _ask_adjustment(
     game.pending = ChooseInterruptAdjustment(
         seat=seat,
         candidates=tuple(wording for wording, _ in taken.adjustments),
-        question=f"{effect.narrate(game)}. {taken.question}",
+        question=f"{step.narrate(game)}. {taken.question}",
         resolver=RULEBOOK_INTERRUPT_RESOLVER,
         source_id=card_id,
         resolver_context=(key,),
@@ -300,4 +302,8 @@ def _resolve_rulebook_interrupt(
     taken = rulebook_interrupt(resolver_context[0])
     if taken.once_per_action:
         game.interrupts_taken.add((taken.key, seat))
-    return [Discard(source_id, seat), taken.adjust(_interrupted(game), taken.delta_for(chosen[0]))]
+    step = _interrupted(game)
+    return [
+        Discard(source_id, seat),
+        step.replaced_by(taken.adjust(step.effect, taken.delta_for(chosen[0]))),
+    ]

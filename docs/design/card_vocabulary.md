@@ -17,12 +17,16 @@ whether an ability can pay the effect as a cost. `describe` names the effect in 
 reading a cascade back. Triggers and activated abilities return lists of effects, and the cascade
 commits each in turn, draining the events they raise until no further events are produced.
 
-An `InterruptingEffect` pauses the cascade rather than committing. One may decline to pause when
-nobody could answer, which is how `GainHonor` and `Fear` open the Interrupt step only while a
-seat holds something to interrupt with. The walker records the decision
+An `InterruptingEffect` pauses the cascade rather than committing. The walker records the decision
 its `request` returns, stashes the remainder of the cascade, and resumes once the seat answers. An
 effect cannot declare itself interrupting without supplying that decision, because `request` is
 abstract on the category.
+
+Every other effect is held at the Interrupt step on its way through an action. The walker wraps it
+as an `InterruptStep`, which pauses only while a seat holds an Interrupt answering that effect's
+type and performs it once every seat has declined, so an effect nothing answers costs a lookup and
+nothing more. An effect opts out through `is_interruptible`, which is how a rulebook procedure's
+Honor gain refuses the step.
 
 `Then` is the counterpart for sequencing. An effect placed inline runs before the events already
 queued behind it, so a step that must follow another card's reaction to what just happened is
@@ -68,6 +72,7 @@ deferred through `Then` instead.
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
+   InterruptStep
    Move
    MoveToDeck
    MoveToHand

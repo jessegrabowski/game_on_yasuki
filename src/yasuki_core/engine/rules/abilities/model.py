@@ -4,7 +4,7 @@ from enum import Enum
 
 from yasuki_core.engine.rules.abilities.costs import Cost
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
-from yasuki_core.engine.rules.effects import Effect, InterruptibleEffect
+from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -37,7 +37,7 @@ class Interruption:
 
 
 @dataclass(frozen=True, slots=True)
-class Interrupt[T: InterruptibleEffect]:
+class Interrupt[T: Effect]:
     """A Strategy's Interrupt, played from hand while an effect it answers waits to resolve.
 
     Not an :class:`~.Ability`: it has no target and no effects of its own, since what it does is
