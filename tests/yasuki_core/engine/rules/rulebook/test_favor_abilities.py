@@ -119,14 +119,39 @@ def test_the_shattered_empire_arc_offers_its_own_draw(game):
 
 
 def test_an_ability_the_engine_cannot_perform_yet_is_not_offered(game, imperial):
-    """``restore_honor`` and ``prevent_honor_loss`` need a Dishonored status and honor-loss
-    prevention, neither of which the engine models, so the arc names them and they stay off."""
+    # prevent_honor_loss needs honor-loss prevention, which the engine does not model, so the arc
+    # names it and it stays off.
     TakeFavor(PlayerId.P1).perform(game)
 
     assert {a.key for a in favor_abilities.available_favor_abilities()} == {
         "draw",
+        "restore_honor",
         "send_unit_home",
     }
+
+
+def test_restore_honor_is_offered_only_with_a_dishonorable_personality_to_restore(game, imperial):
+    TakeFavor(PlayerId.P1).perform(game)
+    hero = put_in_play(game, personality("P1-p"))
+    put_in_play(game, personality("P2-p", owner=PlayerId.P2)).dishonor()
+
+    assert "restore_honor" not in _offered(game)
+
+    hero.dishonor()
+    assert "restore_honor" in _offered(game)
+
+
+def test_restore_honor_rehonors_the_chosen_personality(game, imperial):
+    TakeFavor(PlayerId.P1).perform(game)
+    hero = put_in_play(game, personality("P1-p"))
+    hero.dishonor()
+
+    use_favor_ability(game, "restore_honor")
+    submit(game, DecisionResponse((hero.id,)))
+    run_stack(game)
+
+    assert not hero.dishonorable
+    assert game.favor_holder is None
 
 
 def test_a_favor_ability_is_not_offered_without_a_way_to_pay(game):

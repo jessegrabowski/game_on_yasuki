@@ -2,9 +2,9 @@ from collections.abc import Callable
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.effects import Bow, Choose, Discard, DrawCard, Effect, Move
+from yasuki_core.engine.rules.effects import Bow, Choose, Discard, DrawCard, Effect, Move, Rehonor
 from yasuki_core.engine.rules.rulebook.favor_proxy import is_rulebook_proxy
-from yasuki_core.engine.rules.board.queries import opposing_units_in_battle
+from yasuki_core.engine.rules.board.queries import opposing_units_in_battle, personalities_in_play
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.table import Location, ZoneKey, ZoneRole
@@ -13,6 +13,7 @@ from yasuki_core.ruleset import FavorAbility
 DISCARD_TO_DRAW = "favor_discard_to_draw"
 SEND_HOME = "favor_send_home"
 SEND_HOME_BOWED = "favor_send_home_bowed"
+RESTORE_HONOR = "favor_restore_honor"
 
 
 # What each arc's Favor abilities cost and do, keyed by ``FavorAbility.key``. An ability the ruleset
@@ -128,6 +129,27 @@ def _send_unit_home(game: GameState, seat: PlayerId) -> list[Effect]:
     """Pre-Gold rulebook: "Battle: Send a unit home from a battle, bowed." Either army's, and it
     arrives bowed, neither of which the ShE ability does."""
     return []
+
+
+def _choose_dishonorable(game: GameState, seat: PlayerId) -> list[Effect]:
+    candidates = tuple(
+        card.id for card in personalities_in_play(game) if card.owner is seat and card.dishonorable
+    )
+    return [Choose(seat, candidates, 1, 1, RESTORE_HONOR)]
+
+
+@favor_ability("restore_honor", cost=_choose_dishonorable)
+def _restore_honor(game: GameState, seat: PlayerId) -> list[Effect]:
+    """Pre-Gold rulebook: "Open: Restore a Dishonored Personality to Honorable." Naming the
+    Personality is the cost, so the ability is withheld while the seat has nobody to restore."""
+    return []
+
+
+@choice_resolver(RESTORE_HONOR, prompt="Restore a Dishonored Personality to Honorable")
+def _resolve_restore_honor(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Rehonor(chosen[0])] if chosen else []
 
 
 @choice_resolver(SEND_HOME, prompt="Move a target attacking enemy Personality home")
