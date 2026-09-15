@@ -56,6 +56,7 @@ deferred through `Then` instead.
    DestroyProvince
    Discard
    DiscardFavor
+   Dishonor
    DrawCard
    Effect
    Fear
@@ -83,6 +84,7 @@ deferred through `Then` instead.
    RangedAttack
    RecruitCard
    RefillProvince
+   Rehonor
    RevealProvinces
    Show
    ShuffleDeck
@@ -109,10 +111,12 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    CardDiscarded
    CounterGained
    Destroyed
+   Dishonored
    EnteredPlay
    HonorChanged
    ProducedGold
    ProducingGold
+   Rehonored
    Revealed
    Straightened
    TurnStarted

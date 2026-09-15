@@ -20,14 +20,21 @@ from yasuki_core.engine.rules.effects import (
     Fear,
     Discard,
     DiscardFavor,
+    Dishonor,
     GainHonor,
     PlaceInProvince,
     Effect,
+    Rehonor,
     TakeFavor,
     InterruptingEffect,
     Unpayable,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, HonorChanged
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    CardDiscarded,
+    Dishonored,
+    HonorChanged,
+    Rehonored,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -37,6 +44,7 @@ from yasuki_core.game_pieces.counters import WEALTH
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
+    personality,
     province_card,
     put_in_play,
     two_seat_game,
@@ -95,6 +103,59 @@ def test_bow_is_not_payable_for_an_already_bowed_card():
 
 def test_bow_is_not_payable_for_a_card_that_is_not_there():
     assert Bow("nonexistent").is_payable(two_seat_game()) is False
+
+
+def test_dishonor_turns_a_personality_once_and_announces_it():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("P1-p"))
+
+    assert Dishonor(hero.id, PlayerId.P2).perform(game) == [Dishonored(hero.id, PlayerId.P2)]
+    assert hero.dishonorable is True
+    assert Dishonor(hero.id, PlayerId.P2).perform(game) == []
+
+
+def test_rehonor_restores_a_dishonorable_personality_once():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("P1-p"))
+    hero.dishonor()
+
+    assert Rehonor(hero.id).perform(game) == [Rehonored(hero.id)]
+    assert hero.dishonorable is False
+    assert Rehonor(hero.id).perform(game) == []
+
+
+def test_only_a_personality_can_be_dishonored():
+    game = two_seat_game()
+    farm = put_in_play(game, holding("P1-h"))
+
+    assert Dishonor(farm.id, PlayerId.P1).perform(game) == []
+    assert farm.dishonorable is False
+    assert Dishonor(farm.id, PlayerId.P1).is_payable(game) is False
+
+
+def test_a_card_can_react_to_a_dishonoring_and_a_rehonoring(reacting):
+    game = two_seat_game()
+    hero = put_in_play(game, personality("P1-p", printed_id="watcher"))
+    seen: list[str] = []
+    reacting(
+        Dishonored, "watcher", lambda ctx: seen.append(f"dishonored by {ctx.event.cause}") or []
+    )
+    reacting(Rehonored, "watcher", lambda ctx: seen.append("rehonored") or [])
+
+    resolve_effects(game, [Dishonor(hero.id, PlayerId.P2), Rehonor(hero.id)])
+
+    assert seen == ["dishonored by PlayerId.P2", "rehonored"]
+
+
+def test_dishonor_and_rehonor_are_payable_only_when_they_change_the_card():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("P1-p"))
+
+    assert Dishonor(hero.id, PlayerId.P1).is_payable(game) is True
+    assert Rehonor(hero.id).is_payable(game) is False
+    hero.dishonor()
+    assert Dishonor(hero.id, PlayerId.P1).is_payable(game) is False
+    assert Rehonor(hero.id).is_payable(game) is True
 
 
 def test_removing_a_counter_needs_enough_of_it():

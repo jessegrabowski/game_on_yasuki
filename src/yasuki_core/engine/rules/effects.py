@@ -20,9 +20,11 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     CounterGained,
     Destroyed,
+    Dishonored,
     EnteredPlay,
     GameEvent,
     HonorChanged,
+    Rehonored,
     Revealed,
     Straightened,
 )
@@ -46,6 +48,7 @@ from yasuki_core.engine.table import (
     ZoneRole,
 )
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import PersonalityPrint
 from yasuki_core.game_pieces.counters import Counter
 
 
@@ -1136,6 +1139,68 @@ class Straighten(Effect):
             return []
         card.unbow()
         return [Straightened(self.card_id)]
+
+
+@dataclass(frozen=True, slots=True)
+class Dishonor(Effect):
+    """Dishonor a Personality (CR, Honorable and Dishonorable). Announces the change, naming
+    ``cause`` as who or what dishonored him. Only a Personality can be dishonorable, so any other
+    card, and one already dishonorable, announces nothing.
+
+    Attributes
+    ----------
+    card_id : str
+        The Personality to dishonor.
+    cause : PlayerId or Rulebook
+        Who or what dishonored him: the seat whose card did, or the rule that demanded it.
+    """
+
+    card_id: str
+    cause: Cause
+
+    def describe(self) -> str:
+        return f"dishonor {self.card_id}"
+
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
+        """A dishonorable Personality cannot be dishonored again."""
+        return self._target(game) is not None
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = self._target(game)
+        if card is None:
+            return []
+        card.dishonor()
+        return [Dishonored(self.card_id, self.cause)]
+
+    def _target(self, game: GameState) -> L5RCard | None:
+        """The honorable Personality this would dishonor, or None when there is nothing to do."""
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None or not isinstance(card.printed, PersonalityPrint) or card.dishonorable:
+            return None
+        return card
+
+
+@dataclass(frozen=True, slots=True)
+class Rehonor(Effect):
+    """Rehonor a dishonorable Personality (CR, Rehonoring). Announces the change, which a card that
+    reacts to a rehonoring reads. One already honorable announces nothing."""
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"rehonor {self.card_id}"
+
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
+        """An honorable Personality cannot be rehonored."""
+        card = game.table.cards_by_id.get(self.card_id)
+        return card is not None and card.dishonorable
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None or not card.dishonorable:
+            return []
+        card.rehonor()
+        return [Rehonored(self.card_id)]
 
 
 @dataclass(frozen=True, slots=True)
