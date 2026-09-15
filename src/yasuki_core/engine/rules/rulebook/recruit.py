@@ -1,6 +1,8 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from yasuki_core.engine import ops
+from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import finish_invest
@@ -223,6 +225,29 @@ def _announce_entering_play(
     triggers.fire(game, EnteredPlay(card_id))
 
 
+ProclaimGain = Callable[[GameState, L5RCard], int]
+
+# Cards that Proclaim for an amount other than their Personal Honor ("you may gain 3 Honor
+# instead"). The handler returns the amount.
+PROCLAIM_GAINS: HandlerRegistry[ProclaimGain] = HandlerRegistry(
+    "proclaim gains", "already names a Proclaim gain"
+)
+proclaim_gain = PROCLAIM_GAINS.make_decorator()
+
+
+def proclaimed_honor(game: GameState, card: L5RCard) -> int:
+    """The Honor Proclaiming ``card`` gains its seat: its Personal Honor, or the alternative the
+    card offers when that is larger (ShE datasheet, Proclaim).
+
+    "May gain N instead" is a choice, and this takes it for the seat, since the larger gain is
+    never worse. A card whose alternative differs in kind rather than amount would need the seat
+    asked.
+    """
+    printed = effective_personal_honor(game, card)
+    handler = PROCLAIM_GAINS.get(card.printed_id)
+    return printed if handler is None else max(printed, handler(game, card))
+
+
 def finish_recruit(
     game: GameState, card_id: str, invest_amount: int | None, proclaim: bool = False
 ) -> None:
@@ -234,9 +259,7 @@ def finish_recruit(
     finish_invest(game, card, invest_amount)
     if proclaim:
         game.use_once(proclaim_key(card.owner, game.turn))
-        triggers.resolve_action_effects(
-            game, [GainHonor(card.owner, effective_personal_honor(game, card))]
-        )
+        triggers.resolve_action_effects(game, [GainHonor(card.owner, proclaimed_honor(game, card))])
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:

@@ -18,6 +18,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
 | "Interrupt: ..." against a pending effect | `register_interrupt(id, Interrupt(...))` | {card}`Okura is Released` |
 | "Interrupt: ..." on a card in play | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.BATTLEFIELD,)))` | {card}`Doji Yuten` |
+| Proclaims for an amount other than Personal Honor | `@proclaim_gain(id)` | {card}`Ninube Aitso, "Doji Yeiko" (Experienced)` |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
 | Gives the Personality it hangs on a stat | `@attachment_grant(id)` | {card}`Haramaki-do` |
 | Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |

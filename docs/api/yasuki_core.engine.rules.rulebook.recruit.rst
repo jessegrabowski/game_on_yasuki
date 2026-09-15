@@ -18,6 +18,7 @@ yasuki_core.engine.rules.rulebook.recruit
     apply_fortification_province
     apply_invest_amount
     finish_recruit
+    proclaimed_honor
     recruit
     resolve_recruit
 
