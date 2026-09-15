@@ -85,6 +85,23 @@ CREATE TABLE card_keywords (
   PRIMARY KEY (card_id, keyword)
 );
 
+-- One row per ability the card's current rules text prints, in printed order, split by
+-- install/text_split.py from the same text the cards row carries after the MRP and errata folds.
+-- A derived view of that text, never authored: an ability is fixed by editing the card's text or
+-- the splitter, and this table follows on the next reload. `designators` is empty for the
+-- cost-only production template (":bow:: Produce 2 Gold"), which the CR still counts as an
+-- ability. `cost` is the icon cost as printed, null when the ability is free.
+CREATE TABLE card_abilities (
+  card_id     TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  position    INTEGER NOT NULL,
+  designators TEXT[] NOT NULL,
+  keywords    TEXT[] NOT NULL,
+  modifiers   TEXT[] NOT NULL,
+  cost        TEXT,
+  rules_text  TEXT NOT NULL,
+  PRIMARY KEY (card_id, position)
+);
+
 -- Real cards a card creates in play: `created_card_id` is a spawnable card proxy (a made
 -- Personality, an Ashigaru, …). Counter/marker "tokens" are NOT here — they are scalar host state,
 -- catalogued in `counters` and linked to their creators via `card_grants_counter`.
@@ -280,6 +297,10 @@ CREATE INDEX idx_card_clans_clan        ON card_clans (clan) INCLUDE (card_id);
 CREATE INDEX idx_card_card_types_type   ON card_card_types (type) INCLUDE (card_id);
 CREATE INDEX idx_card_decks_deck        ON card_decks (deck) INCLUDE (card_id);
 CREATE INDEX idx_card_keywords_lower_kw ON card_keywords (lower(keyword)) INCLUDE (card_id);
+-- Array containment on the parsed classifiers, so "cards with a Political Battle ability" is one
+-- index scan rather than a text-box search.
+CREATE INDEX idx_card_abilities_keywords    ON card_abilities USING gin (keywords);
+CREATE INDEX idx_card_abilities_designators ON card_abilities USING gin (designators);
 CREATE INDEX idx_card_creates_created   ON card_creates (created_card_id) INCLUDE (creator_card_id);
 CREATE INDEX idx_card_grants_counter    ON card_grants_counter (counter_key) INCLUDE (creator_card_id);
 CREATE INDEX idx_card_legalities_format ON card_legalities (format_name);

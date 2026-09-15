@@ -4,6 +4,7 @@ import pytest
 
 from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.yaml_to_sql import (
+    ability_rows,
     build_revisions,
     card_slug,
     mrp_text,
@@ -283,3 +284,29 @@ def test_grants_from_unknown_card_raises():
 def test_grants_of_unknown_counter_raises():
     with pytest.raises(ValueError, match="unknown counter keys"):
         _validate_grants({"akodo_kage": None}, {("akodo_kage", "not_a_counter")})
+
+
+def test_ability_rows_keep_printed_order_and_classifiers():
+    text = (
+        "<b>:bow::</b> Produce 2 Gold.<br><b>Economic Battle/Open, :bow: or :g2::</b> "
+        "Target another player's Follower."
+    )
+
+    rows = ability_rows("yasuki_umi_ushi", text)
+
+    assert rows == [
+        ("yasuki_umi_ushi", 0, [], [], [], ":bow:", "Produce 2 Gold."),
+        (
+            "yasuki_umi_ushi",
+            1,
+            ["Battle", "Open"],
+            ["Economic"],
+            [],
+            ":bow: or :g2:",
+            "Target another player's Follower.",
+        ),
+    ]
+
+
+def test_ability_rows_are_empty_for_a_card_with_only_traits():
+    assert ability_rows("hida_izo", "Sincerity: Give Izo a +1F token for each token removed.") == []

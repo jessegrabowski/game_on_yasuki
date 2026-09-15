@@ -13,6 +13,7 @@ yasuki_core.install.yaml_to_sql
 
 .. autosummary::
 
+    ability_rows
     build_revisions
     card_slug
     load_cards

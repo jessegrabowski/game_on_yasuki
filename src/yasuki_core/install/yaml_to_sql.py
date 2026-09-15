@@ -12,7 +12,7 @@ from yasuki_core.game_pieces.counters import ALL_COUNTERS
 from yasuki_core.install.format_metadata import populate_format_metadata
 from yasuki_core.install.card_index import LOCAL_SET_SUFFIX
 from yasuki_core.install.sets_to_sql import coerce_date, set_slug
-from yasuki_core.install.text_split import ability_keywords
+from yasuki_core.install.text_split import ability_keywords, split_text_box
 from yasuki_core.yaml_io import read_yaml
 from yasuki_core.install.utils import normalize_name
 
@@ -337,6 +337,36 @@ def mrp_text(dated_texts: list[tuple[datetime.date | None, str]]) -> str | None:
     return max(dated_texts, key=lambda dt: dt[0] or datetime.date.min)[1]
 
 
+def ability_rows(card_id: str, text: str) -> list[tuple]:
+    """The ``card_abilities`` rows for one card's rules text, one per printed ability.
+
+    Parameters
+    ----------
+    card_id : str
+        The card the abilities belong to.
+    text : str
+        The card's current rules text.
+
+    Returns
+    -------
+    rows : list of tuple
+        ``(card_id, position, designators, keywords, modifiers, cost, rules_text)`` per ability, in
+        printed order. Empty when the text prints no ability.
+    """
+    return [
+        (
+            card_id,
+            position,
+            list(ability.designators),
+            list(ability.keywords),
+            list(ability.modifiers),
+            ability.cost,
+            ability.text,
+        )
+        for position, ability in enumerate(split_text_box(text).abilities)
+    ]
+
+
 def _register_local_set(cur, set_name: str) -> tuple:
     """Give a local-only set its own ``l5r_sets`` row and return the columns ``load_cards`` reads.
 
@@ -501,6 +531,13 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                     )
                 )
 
+        # Split after both folds so the table describes the text the cards row now carries.
+        ability_table = [
+            row
+            for card_id, columns in cards.items()
+            for row in ability_rows(card_id, columns[_RULES_TEXT_COL] or "")
+        ]
+
         _insert_all(
             cur,
             cards,
@@ -517,14 +554,16 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             print_rows,
             number_map,
             revision_rows,
+            ability_table,
         )
         conn.commit()
 
     logger.info(
-        "Loaded %d cards, %d printings, %d revisions from %d sets",
+        "Loaded %d cards, %d printings, %d revisions, %d abilities from %d sets",
         len(cards),
         len(print_rows),
         len(revision_rows),
+        len(ability_table),
         len(yaml_files),
     )
 
@@ -545,6 +584,7 @@ def _insert_all(
     print_rows,
     number_map,
     revision_rows,
+    ability_table,
 ) -> None:
     """Batch-insert the accumulated rows in dependency order, then resolve print numbers."""
     cur.executemany(
@@ -608,6 +648,12 @@ def _insert_all(
         "ON CONFLICT DO NOTHING",
         [(card_id, kw, True) for card_id, kw in keyword_links]
         + [(card_id, kw, False) for card_id, kw in inherited_links - keyword_links],
+    )
+    cur.executemany(
+        "INSERT INTO card_abilities "
+        "(card_id, position, designators, keywords, modifiers, cost, rules_text) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING",
+        ability_table,
     )
     cur.executemany(
         "INSERT INTO card_legalities (card_id, format_name) VALUES (%s, %s) ON CONFLICT DO NOTHING",
