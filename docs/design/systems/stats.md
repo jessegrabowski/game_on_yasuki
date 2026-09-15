@@ -11,17 +11,20 @@ thing wherever it appears: ask the board what this is, do not read the print.
 
 {func}`~.effective_stat` is the whole calculation:
 
-```python
-    base = getattr(card, stat.value, None)
-    if base is None:
-        return 0
-    total = base + sum(modifier.amount for modifier in active_modifiers(game, card, stat))
-    return max(stat_minimum(game, card, stat), total)
+```{literalinclude} ../../../src/yasuki_core/engine/rules/stats/calculation.py
+:start-at: base = getattr(card, stat.value, None)
+:end-at: return max(floor, min(cap, total))
+:dedent: 4
+:language: python
 ```
 
 Three steps, and the order is the rulebook's. The printed value, plus every active modifier summed,
-then floored. A card printed 2F, penalized -3F and then given +2F reads 1 rather than 2, because
-the minimum applies to the total rather than to each step.
+then floored and capped. A card printed 2F, penalized -3F and then given +2F reads 1 rather than 2,
+because the minimum applies to the total rather than to each step.
+
+The one maximum the rulebook imposes is a dishonorable Personality's Personal Honor of 0, and
+{func}`~.stat_maximum` is where it lives. A minimum granted above that cap cancels both, so only
+the basic floor of zero remains (CR, Minimums and Maximums).
 
 A stat the card type does not have, and a stat printed as a dash, both read zero and take no
 modifiers at all.

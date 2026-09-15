@@ -1,6 +1,10 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.calculation import effective_stat
-from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
+from yasuki_core.engine.rules.stats.card_values import (
+    effective_chi,
+    effective_force,
+    effective_personal_honor,
+)
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -10,7 +14,9 @@ from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 
 
-def _personality(card_id: str = "p", *, force: int = 2, chi: int = 3, counters=None) -> L5RCard:
+def _personality(
+    card_id: str = "p", *, force: int = 2, chi: int = 3, personal_honor: int = 2, counters=None
+) -> L5RCard:
     return L5RCard.of(
         PersonalityPrint,
         id=card_id,
@@ -19,6 +25,7 @@ def _personality(card_id: str = "p", *, force: int = 2, chi: int = 3, counters=N
         owner=PlayerId.P1,
         force=force,
         chi=chi,
+        personal_honor=personal_honor,
         counters=counters or {},
     )
 
@@ -221,3 +228,47 @@ def test_a_while_source_in_play_minimum_drops_when_its_source_leaves():
     )  # "gone" was never put into play
 
     assert effective_chi(game, samurai) == 0
+
+
+def test_a_dishonorable_personality_has_a_maximum_personal_honor_of_zero():
+    """CR, Honorable and Dishonorable. The cap applies to the total, so a bonus cannot lift it, and
+    rehonoring restores the printed value."""
+    samurai = _personality(personal_honor=3)
+    game = _game(
+        samurai,
+        [Modifier("blessing", samurai.id, Stat.PERSONAL_HONOR, 2, Duration.UNTIL_END_OF_TURN)],
+    )
+    samurai.dishonor()
+
+    assert effective_personal_honor(game, samurai) == 0
+
+    samurai.rehonor()
+    assert effective_personal_honor(game, samurai) == 5
+
+
+def test_the_cap_binds_only_personal_honor():
+    samurai = _personality(force=2, chi=3)
+    game = _game(samurai)
+    samurai.dishonor()
+
+    assert effective_force(game, samurai) == 2
+    assert effective_chi(game, samurai) == 3
+
+
+def test_a_minimum_above_the_maximum_cancels_both():
+    """CR, Minimums and Maximums: "the minimum and maximum cancel each other out; neither one is
+    applied until the other one ends." Only the basic floor of zero remains."""
+    samurai = _personality(personal_honor=3)
+    game = _game(
+        samurai,
+        [
+            Minimum("vow", samurai.id, Stat.PERSONAL_HONOR, 1, Duration.UNTIL_END_OF_TURN),
+            Modifier("slander", samurai.id, Stat.PERSONAL_HONOR, -5, Duration.UNTIL_END_OF_TURN),
+        ],
+    )
+    samurai.dishonor()
+
+    assert effective_personal_honor(game, samurai) == 0
+
+    game.ongoing.pop()
+    assert effective_personal_honor(game, samurai) == 3
