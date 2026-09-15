@@ -22,13 +22,14 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itse
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 from yasuki_core.engine.rules.effects import GainHonor
 from yasuki_core.engine.rules.legality import recruit_cost
-from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.triggers import fire, resolve_effects
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
@@ -450,6 +451,80 @@ def test_meiji_stops_nobody_while_his_controller_has_no_wind():
     game = _p2_ready_to_lobby(p1_wind=None)
 
     assert Lobby() in legality.legal_actions(game, PlayerId.P2)
+
+
+# --- Matsu Gonshiro, Soul of Matsu Shimei ---
+
+GONSHIRO = "matsu_gonshiro_soul_of_matsu_shimei"
+
+
+def test_gonshiro_enters_play_dishonored():
+    game = two_seat_game()
+    gonshiro = put_in_play(game, personality("gonshiro", printed_id=GONSHIRO))
+
+    fire(game, EnteredPlay(gonshiro.id))
+
+    assert gonshiro.dishonorable
+
+
+def _gonshiro_attacking(*, dishonored: bool = True) -> EngineSession:
+    """Gonshiro attacks into a 9-Gold unit and a 10-Gold one, with the Combat Segment open and the
+    Defender passed."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("gonshiro", printed_id=GONSHIRO, force=4, personal_honor=2))
+    put_in_play(state, personality("cheap", owner=P2, force=2, gold_cost=5))
+    attached(state, attachment("blade", attachment_type=AttachmentType.ITEM, gold_cost=4), "cheap")
+    put_in_play(state, personality("costly", owner=P2, force=2, gold_cost=10))
+    session = EngineSession.start(state, P1)
+    if dishonored:
+        session.game.table.cards_by_id["gonshiro"].dishonor()
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("gonshiro@0",)))
+    session.submit(P2, DecisionResponse(("cheap@0", "costly@0")))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(P2, Pass())
+    return session
+
+
+def test_gonshiro_reaches_only_a_unit_costing_nine_or_less():
+    session = _gonshiro_attacking()
+
+    session.act(P1, ActivateAbility("gonshiro"))
+
+    assert session.game.pending.candidates == ("cheap",)
+
+
+def test_gonshiro_rehonors_to_destroy_the_unit_and_commits_seppuku_after_the_battle():
+    session = _gonshiro_attacking()
+
+    session.act(P1, ActivateAbility("gonshiro"))
+    session.submit(P1, DecisionResponse(("cheap",)))
+    on_board = {card.id for card in session.game.table.battlefield.cards}
+    assert not session.game.table.cards_by_id["gonshiro"].dishonorable
+    assert "cheap" not in on_board and "blade" not in on_board
+    assert "gonshiro" in on_board
+
+    session.act(P2, Pass())
+    session.act(P1, Pass())
+
+    gonshiro = session.game.table.cards_by_id["gonshiro"]
+    assert gonshiro in session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].cards
+    assert not gonshiro.dishonorable
+    # The 2 is for destroying the 10-Gold unit in resolution. Seppuku rehonors him first, so his
+    # own death costs nothing.
+    assert session.game.table.seats[P1].honor == 2
+
+
+def test_gonshiro_is_withheld_while_honorable():
+    session = _gonshiro_attacking(dishonored=False)
+
+    assert ActivateAbility("gonshiro") not in session.legal_actions(P1)
 
 
 # --- Shinjo Mayuko, Soul of Shinjo Wei ---

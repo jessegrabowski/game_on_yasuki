@@ -6,23 +6,33 @@ from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.board.clans import card_alignments
-from yasuki_core.engine.rules.board.queries import attack_targets, owned_personalities
+from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
+    opposing_units_in_battle,
+    owned_personalities,
+)
 from yasuki_core.engine.rules.effects import (
     Choose,
     CreateToken,
+    DelayedEffect,
+    Destroy,
     Dishonor,
     DrawCard,
     Effect,
     MeleeAttack,
+    Rehonor,
+    seppuku,
 )
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.triggers import action_did, choice_resolver
+from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.game_events import HonorChanged
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, HonorChanged
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -127,6 +137,68 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 
 
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
+
+
+# --- Matsu Gonshiro, Soul of Matsu Shimei ---
+
+GONSHIRO_UNIT_COST = 9
+
+
+@on(EnteredPlay, "matsu_gonshiro_soul_of_matsu_shimei")
+def _matsu_gonshiro_soul_of_matsu_shimei_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """Before Gonshiro enters play, dishonor him. Modeled after he enters, since nothing opens a
+    window before a card arrives, and the difference is not observable until a card reacts to his
+    entering play while he is still honorable. "You must assign Gonshiro to a battlefield
+    whenever legal" is a restriction on the seat and is not modeled."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [Dishonor(ctx.card.id, ctx.card.owner)]
+
+
+def _matsu_gonshiro_soul_of_matsu_shimei_unit_gold_cost(
+    game: GameState, personality: L5RCard
+) -> int:
+    return sum(card.gold_cost or 0 for card in (personality, *attachments_of(game, personality)))
+
+
+def _matsu_gonshiro_soul_of_matsu_shimei_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The enemy Personalities at this battle whose unit's total Gold Cost is 9 or less."""
+    return [
+        card_id
+        for card_id in opposing_units_in_battle(game, source.owner)
+        if _matsu_gonshiro_soul_of_matsu_shimei_unit_gold_cost(
+            game, game.table.cards_by_id[card_id]
+        )
+        <= GONSHIRO_UNIT_COST
+    ]
+
+
+def _matsu_gonshiro_soul_of_matsu_shimei_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Rehonor Gonshiro: unpayable, so the ability is withheld, while he is honorable."""
+    return [Rehonor(source.id)]
+
+
+def _matsu_gonshiro_soul_of_matsu_shimei_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Destroy the target's unit, and after this battle ends Gonshiro commits seppuku."""
+    return [
+        Destroy(target.id, source.owner),
+        *(DelayedEffect(effect, END_OF_BATTLE) for effect in seppuku(source.id, source.owner)),
+    ]
+
+
+register_ability(
+    "matsu_gonshiro_soul_of_matsu_shimei",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Rehonor Gonshiro to destroy a target enemy unit costing "
+        f"{GONSHIRO_UNIT_COST} or less, and commit seppuku after the battle",
+        cost=_matsu_gonshiro_soul_of_matsu_shimei_cost,
+        targets=_matsu_gonshiro_soul_of_matsu_shimei_targets,
+        effects=_matsu_gonshiro_soul_of_matsu_shimei_effects,
+    ),
+)
 
 
 # --- Shinjo Mayuko, Soul of Shinjo Wei ---
