@@ -92,6 +92,7 @@ registered with `register_interrupt` as an {class}`~.Interrupt`, whose `answers`
 type it may be played against and whose `interrupt` maps the pending effect to an
 {class}`~.Interruption`: the effect that resolves in its place and whatever else happens. The
 Interrupt step in `rules/interrupts.py` offers it from hand while such an effect waits to resolve,
-and the Strategy is then paid for and discarded the way any Strategy is. Any effect of the action
-can be answered: the step is open against every effect the cascade applies inside one, and an
+and the Strategy is then paid for and discarded the way any Strategy is. Any of the action's own
+effects can be answered, and only those: the step is open against what step E hands to
+`resolve_action_effects`, never against a cost, a trait's effects or a rulebook procedure's, and an
 Interrupt names the type it answers.

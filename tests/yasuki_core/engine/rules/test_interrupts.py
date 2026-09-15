@@ -3,12 +3,17 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules import interrupts
-from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, Interruption
-from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
+from yasuki_core.engine.rules.abilities.activation import defer_ability
+from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, Interruption, itself
+from yasuki_core.engine.rules.abilities.registry import (
+    ability_for,
+    register_ability,
+    register_interrupt,
+)
 from yasuki_core.engine.rules.board.queries import attack_targets
-from yasuki_core.engine.rules.effects import Bow, Fear, GainHonor
+from yasuki_core.engine.rules.effects import Bow, Fear, GainHonor, Straighten, Then
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.triggers import resolve_action_effects, resolve_effects
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.turn.structure import (
     END_OF_TURN,
@@ -31,7 +36,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     interrupt_token,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed, Straightened
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -78,8 +83,21 @@ register_ability(
         targets=lambda game, source: attack_targets(game, source),
         effects=lambda game, source, target: [
             Fear(FEAR, target.id, source.owner),
-            GainHonor(source.owner, 1, interruptible=False),
+            GainHonor(source.owner, 1),
         ],
+    ),
+)
+
+
+register_ability(
+    "honor_cost_probe",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: lose 1 Honor to gain 2 Honor",
+        cost=lambda game, source: [GainHonor(source.owner, -1)],
+        targets=itself,
+        effects=lambda game, source, target: [GainHonor(source.owner, 2)],
+        hits_every_target=True,
     ),
 )
 
@@ -90,7 +108,7 @@ register_interrupt(
         label="Interrupt: gain 1 Honor, leave the effect alone",
         answers=Fear,
         interrupt=lambda game, source, effect: Interruption(
-            effect, effects=(GainHonor(source.owner, 1, interruptible=False),)
+            effect, effects=(GainHonor(source.owner, 1),)
         ),
     ),
 )
@@ -102,7 +120,7 @@ register_interrupt(
         label="Interrupt: gain 1 Honor as the action bows a card",
         answers=Bow,
         interrupt=lambda game, source, effect: Interruption(
-            effect, effects=(GainHonor(source.owner, 1, interruptible=False),)
+            effect, effects=(GainHonor(source.owner, 1),)
         ),
     ),
 )
@@ -515,7 +533,7 @@ def test_every_effect_inside_an_action_opens_the_step_when_a_card_answers_it():
     farm = put_in_play(game, holding("P1-farm"))
     _strategy(game.table, "P2-probe", "bow_interrupt_probe", P2)
 
-    resolve_effects(game, [Bow(farm.id)])
+    resolve_action_effects(game, [Bow(farm.id)])
 
     request = game.pending
     assert isinstance(request, ChooseInterrupt)
@@ -543,7 +561,7 @@ def test_a_seat_that_declined_is_not_asked_again_once_the_other_seat_interrupts(
     game = _inside_an_action()
     _honor_card(game.table, "P1-honor0", P1)
 
-    resolve_effects(game, [GainHonor(P1, 2)])
+    resolve_action_effects(game, [GainHonor(P1, 2)])
     assert _asked_seat(game) is P1
     action_sequence.submit(game, DecisionResponse(()))
     assert _asked_seat(game) is P2
@@ -560,9 +578,8 @@ def _asked_seat(game: GameState) -> PlayerId:
     return pending.seat
 
 
-def test_a_change_outside_an_action_asks_nobody():
+def test_a_change_that_is_not_the_actions_own_asks_nobody():
     game = _inside_an_action()
-    game.action = None
 
     resolve_effects(game, [GainHonor(P1, 2)])
 
@@ -574,17 +591,48 @@ def test_a_change_during_a_response_step_asks_nobody():
     game = _inside_an_action()
     game.round = ActionRound(timings=RESPONSE_TIMINGS, priority=P1, kind=RoundKind.RESPONSE)
 
-    resolve_effects(game, [GainHonor(P1, 2)])
+    resolve_action_effects(game, [GainHonor(P1, 2)])
 
     assert game.pending is None
 
 
-def test_a_change_that_is_not_interruptible_asks_nobody():
+def test_a_traits_effect_during_an_action_asks_nobody(reacting):
+    # The action straightens the card; "after this card straightens, gain 2 Honor" is the trait's
+    # gain, not the action's, so the Honor Interrupt is not offered against it.
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-h", printed_id="trait_gain_probe"))
+    farm.bow()
+    reacting(Straightened, "trait_gain_probe", lambda ctx: [GainHonor(P1, 2)])
+
+    resolve_action_effects(game, [Straighten(farm.id)])
+
+    assert game.pending is None
+    assert game.table.seats[P1].honor == 2
+
+
+def test_a_cost_is_not_open_to_the_interrupt_step_but_the_effect_is():
+    # A cost is paid in step B and the action's effects resolve in step E (CR, Action Sequence),
+    # and the Honor Interrupt answers "the action's" gains and losses (ShE datasheet).
+    game = _inside_an_action()
+    source = put_in_play(game, holding("P1-h", printed_id="honor_cost_probe"))
+    ability = ability_for(source)
+    assert ability is not None
+
+    defer_ability(game, source, ability)
+    assert game.pending is None
+    assert game.table.seats[P1].honor == -1
+
+    sequence.run_stack(game)
+    assert _asked_seat(game) is P2
+
+
+def test_a_then_among_the_actions_effects_is_still_the_actions():
     game = _inside_an_action()
 
-    resolve_effects(game, [GainHonor(P1, 2, interruptible=False)])
+    resolve_action_effects(game, [Then((GainHonor(P1, 2),))])
+    sequence.run_stack(game)
 
-    assert game.pending is None
+    assert _asked_seat(game) is P2
 
 
 def test_a_delayed_change_at_the_end_of_the_turn_asks_nobody():
@@ -604,7 +652,7 @@ def test_a_seat_may_take_the_honor_interrupt_once_per_action():
     game = _inside_an_action()
     _honor_card(game.table, "P2-honor1", P2)
 
-    resolve_effects(game, [GainHonor(P1, 2), GainHonor(P1, 2)])
+    resolve_action_effects(game, [GainHonor(P1, 2), GainHonor(P1, 2)])
     _discard_to_interrupt_in(game, "P2-honor0", HONOR_DOWN)
 
     assert game.pending is None
@@ -631,7 +679,7 @@ def test_the_offer_names_the_card_and_the_player_as_the_seat_reads_them():
 def test_a_change_of_zero_asks_nobody():
     game = _inside_an_action()
 
-    resolve_effects(game, [GainHonor(P1, 0)])
+    resolve_action_effects(game, [GainHonor(P1, 0)])
 
     assert game.pending is None
 
@@ -640,7 +688,7 @@ def test_interrupts_from_both_seats_net_against_the_change_and_never_reverse_it(
     game = _inside_an_action()
     _honor_card(game.table, "P1-honor0", P1)
 
-    resolve_effects(game, [GainHonor(P1, 1)])
+    resolve_action_effects(game, [GainHonor(P1, 1)])
     _discard_to_interrupt_in(game, "P1-honor0", HONOR_DOWN)
     _discard_to_interrupt_in(game, "P2-honor0", HONOR_UP)
 

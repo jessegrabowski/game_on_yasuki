@@ -1,6 +1,6 @@
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.effects import Fear, GainHonor
-from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.triggers import resolve_action_effects
 from yasuki_core.engine.rules.vocabulary.actions import KharmicDraw
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt, DecisionResponse
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -55,7 +55,7 @@ def test_okura_is_not_offered_against_an_effect_it_does_not_answer():
     _strategy(game.table, "okura", "okura_is_released", DEFENDER)
     game.action = KharmicDraw("the-interrupted-action")
 
-    resolve_effects(game, [GainHonor(ATTACKER, 2)])
+    resolve_action_effects(game, [GainHonor(ATTACKER, 2)])
 
     pending = game.pending
     assert isinstance(pending, ChooseInterrupt)
@@ -68,7 +68,7 @@ def test_okura_is_not_offered_when_its_gold_cost_is_out_of_reach():
     _strategy(game.table, "okura", "okura_is_released", DEFENDER, gold_cost=1)
     game.action = KharmicDraw("the-interrupted-action")
 
-    resolve_effects(game, [Fear(2, target.id, ATTACKER)])
+    resolve_action_effects(game, [Fear(2, target.id, ATTACKER)])
 
     assert game.pending is None
     assert target.bowed

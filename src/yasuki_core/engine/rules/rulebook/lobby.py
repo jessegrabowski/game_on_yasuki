@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board import queries
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseLobbyTarget, DecisionResponse
-from yasuki_core.engine.rules.effects import Bow, TakeFavor
+from yasuki_core.engine.rules.effects import ApplyEffects, Bow, TakeFavor
 from yasuki_core.engine.rules.vocabulary.modifiers import LobbyModifier
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
@@ -117,7 +117,9 @@ def apply_lobby_target(
     game.use_once(lobby_key(seat, game.turn))
     lobbied = game.table.cards_by_id[response.choices[0]]
     claim_once_per_turn(game, lobbied, LOBBIED_TAG)
-    triggers.resolve_effects(game, [Bow(lobbied.id), TakeFavor(seat)])
+    # The bow is the cost and taking the Favor the effect, so only the latter is the action's own.
+    game.stack.append(ApplyEffects((TakeFavor(seat),), interruptible=True))
+    triggers.resolve_effects(game, [Bow(lobbied.id)])
 
 
 def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:

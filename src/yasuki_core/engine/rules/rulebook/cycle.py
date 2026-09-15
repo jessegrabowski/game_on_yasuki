@@ -21,7 +21,7 @@ def cycle(game: GameState) -> None:
     seat = game.active
     game.use_once(cycle_key(seat, game.turn))
     candidates = tuple(card.id for card in cycle_candidates(game, seat))
-    triggers.resolve_effects(game, [Choose(seat, candidates, 1, len(candidates), "cycle")])
+    triggers.resolve_action_effects(game, [Choose(seat, candidates, 1, len(candidates), "cycle")])
 
 
 @triggers.choice_resolver(

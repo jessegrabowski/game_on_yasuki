@@ -5,6 +5,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.effects import (
+    ApplyEffects,
     AskOption,
     DiscardFavor,
     Effect,
@@ -135,4 +136,5 @@ def use_favor_ability(game: GameState, key: str) -> None:
     game.use_once(favor_ability_key(seat, key, game.turn))
     cost = favor_ability_cost(game, seat, key)
     effects = favor_abilities.FAVOR_ABILITY_EFFECTS[key](game, seat)
-    triggers.resolve_effects(game, [*cost, *effects])
+    game.stack.append(ApplyEffects(tuple(effects), interruptible=True))
+    triggers.resolve_effects(game, cost)

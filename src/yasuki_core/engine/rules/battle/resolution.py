@@ -199,7 +199,7 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
 
     if attacking_force > defending_force:
         effects = _destroy_army(defending) + [
-            GainHonor(attack.attacker, 2 * _cards_in(game, defending), interruptible=False)
+            GainHonor(attack.attacker, 2 * _cards_in(game, defending))
         ]
         province = attack.battlefields[battlefield].province
         if attacking_force > defending_force + effective_province_strength(game, province):
@@ -207,15 +207,15 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
         return effects
     if defending_force > attacking_force:
         return _destroy_army(attacking) + [
-            GainHonor(attack.defender, 2 * _cards_in(game, attacking), interruptible=False)
+            GainHonor(attack.defender, 2 * _cards_in(game, attacking))
         ]
     if not (attacking and defending):
         return []  # tied on zero Force with a side empty: no outcome
     return [
         *_destroy_army(defending),
         *_destroy_army(attacking),
-        GainHonor(attack.attacker, 2 * _cards_in(game, defending), interruptible=False),
-        GainHonor(attack.defender, 2 * _cards_in(game, attacking), interruptible=False),
+        GainHonor(attack.attacker, 2 * _cards_in(game, defending)),
+        GainHonor(attack.defender, 2 * _cards_in(game, attacking)),
     ]
 
 

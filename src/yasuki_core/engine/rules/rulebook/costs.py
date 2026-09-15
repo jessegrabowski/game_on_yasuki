@@ -13,5 +13,5 @@ def announce_rulebook_cost(
     A rulebook ability charges the player rather than pricing a card, so the payment carries no
     target and every producer is quoted at what it makes for nobody in particular.
     """
-    game.stack.append(ApplyEffects(effects))
+    game.stack.append(ApplyEffects(effects, interruptible=True))
     return payment_request(game, seat, amount, label)
