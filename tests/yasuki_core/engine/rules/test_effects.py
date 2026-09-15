@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     Effect,
     Rehonor,
+    seppuku,
     TakeFavor,
     InterruptingEffect,
     Unpayable,
@@ -131,6 +132,18 @@ def test_only_a_personality_can_be_dishonored():
     assert Dishonor(farm.id, PlayerId.P1).perform(game) == []
     assert farm.dishonorable is False
     assert Dishonor(farm.id, PlayerId.P1).is_payable(game) is False
+
+
+def test_seppuku_rehonors_and_then_destroys():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("P1-p"))
+    hero.dishonor()
+
+    assert seppuku(hero.id, PlayerId.P1) == [Rehonor(hero.id), Destroy(hero.id, PlayerId.P1)]
+
+    resolve_effects(game, seppuku(hero.id, PlayerId.P1))
+    assert hero.dishonorable is False
+    assert hero in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
 
 
 def test_a_card_can_react_to_a_dishonoring_and_a_rehonoring(reacting):

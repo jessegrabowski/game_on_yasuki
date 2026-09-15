@@ -28,6 +28,9 @@ type and performs it once every seat has declined, so an effect nothing answers 
 nothing more. An effect opts out through `is_interruptible`, which is how a rulebook procedure's
 Honor gain refuses the step.
 
+`seppuku` is the one builder in the module: the CR defines seppuku as two effects, a rehonoring and
+then a destruction, and a handler returns that pair so each passes the Interrupt step on its own.
+
 `Then` is the counterpart for sequencing. An effect placed inline runs before the events already
 queued behind it, so a step that must follow another card's reaction to what just happened is
 deferred through `Then` instead.
@@ -85,6 +88,7 @@ deferred through `Then` instead.
    RecruitCard
    RefillProvince
    Rehonor
+   seppuku
    RevealProvinces
    Show
    ShuffleDeck
