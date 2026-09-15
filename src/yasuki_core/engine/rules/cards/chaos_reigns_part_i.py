@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.rulebook.favor_payment import (
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.registry import register_ability, tireless_grant
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -27,6 +27,7 @@ from yasuki_core.engine.rules.legality import has_wind
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import action_did, at_cap, choice_resolver
 from yasuki_core.engine.rules.board.queries import opposing_units_in_battle
+from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.table import Location
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -205,3 +206,12 @@ def _manjodh_favor_payer(game: GameState, card: L5RCard) -> list[Effect] | None:
 
 # "Political Open: Put this Edict into play." Its Favor-discard reaction has no handler yet.
 register_edict("rumormongering", ability_keywords=frozenset({keywords.POLITICAL}))
+
+
+# --- Shrine to Inari ---
+
+
+@tireless_grant("shrine_to_inari")
+def _shrine_to_inari_tireless_grant(game: GameState, source: L5RCard, card: L5RCard) -> bool:
+    """Your Stronghold's printed abilities have Tireless while this Holding is unbowed."""
+    return not source.bowed and card is seat_stronghold(game, source.owner)

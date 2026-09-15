@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DynastyDiscard,
     Pass,
     PlayStrategy,
+    UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import Discard, DiscardFavor, TakeFavor
@@ -30,7 +31,7 @@ from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, lo
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import ActionPrint, FatePrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, StrongholdPrint
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -399,3 +400,49 @@ def test_manjodh_will_not_pay_for_a_player_with_a_wind():
     game = _manjodh_game(has_wind=True)
 
     assert favor_payment_options(game, PlayerId.P1) == {}
+
+
+# --- Shrine to Inari ---
+
+
+def _bowed_estate_with_shrine(*, shrine_bowed: bool = False) -> EngineSession:
+    """P1's Stronghold is the Palatial Estate, bowed, beside a Shrine to Inari. P1 has just paid
+    the Favor for a rulebook Favor action, which is what the Estate's Response answers."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="estate",
+            name="The Palatial Estate of the Crane",
+            printed_id="the_palatial_estate_of_the_crane",
+            side=Side.DYNASTY,
+            owner=P1,
+        ),
+    )
+    put_in_play(state, holding("shrine", printed_id="shrine_to_inari"))
+    _hand_a_fate_card(state, P1, "spare")
+    session = EngineSession.start(state, P1)
+    # Bowed after the game opens, since opening straightens the active seat's board.
+    session.game.table.cards_by_id["estate"].bow()
+    if shrine_bowed:
+        session.game.table.cards_by_id["shrine"].bow()
+    TakeFavor(P1).perform(session.game)
+    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.submit(P1, DecisionResponse(("spare",)))
+    return session
+
+
+def test_the_shrine_lets_a_bowed_stronghold_use_its_ability():
+    session = _bowed_estate_with_shrine()
+
+    assert ActivateAbility("estate") in session.legal_actions(P1)
+
+
+def test_a_bowed_shrine_grants_nothing():
+    session = _bowed_estate_with_shrine(shrine_bowed=True)
+
+    assert ActivateAbility("estate") not in session.legal_actions(P1)
