@@ -34,7 +34,7 @@ def apply_inheritance_target(
     game.use_once(inheritance_key(seat))
     stronghold = seat_stronghold(game, seat)
     stronghold.flip_face()
-    triggers.resolve_effects(
+    triggers.resolve_action_effects(
         game,
         [
             GrantModifier(

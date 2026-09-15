@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.vocabulary.actions import Pass, ActionTiming, Lobb
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_ability_cost, use_favor_ability
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
@@ -145,6 +146,7 @@ def test_the_imperial_draw_costs_only_the_favor(game, imperial):
     TakeFavor(PlayerId.P1).perform(game)
 
     use_favor_ability(game, "draw")
+    run_stack(game)
 
     assert game.favor_holder is None, "the Favor was given up"
     assert [card.id for card in _hand(game)] == ["drawn"], "and nothing was discarded for it"

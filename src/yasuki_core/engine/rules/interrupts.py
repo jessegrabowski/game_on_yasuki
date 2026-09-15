@@ -170,14 +170,12 @@ def interrupters(game: GameState, step: InterruptStep) -> list[PlayerId]:
     """The seats still to be offered an Interrupt against the effect ``step`` holds, the active
     player first (ShE datasheet, Interrupt).
 
-    Nobody against an effect that is not interruptible, nobody outside an action, since there is
-    nothing to interrupt, and nobody during a Response Step, since a Response is not
-    interruptible. A seat that declined is not asked again, and a seat that interrupted is, until
-    it declines or has nothing left to take. "Inside an action" means ``game.action`` is set,
-    which also reaches an effect a triggered trait raised during the action, a wider window than
-    the datasheet's "the action's" effects.
+    Nobody against an effect that is not interruptible, and nobody during a Response Step, since
+    a Response is not interruptible. A seat that declined is not asked again, and a seat that
+    interrupted is, until it declines or has nothing left to take. Only an action's own effects
+    reach the step at all: the cascade holds nothing else there.
     """
-    if game.action is None or not step.is_interruptible():
+    if not step.is_interruptible():
         return []
     if game.round.kind is RoundKind.RESPONSE:
         return []

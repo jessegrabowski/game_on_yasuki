@@ -103,8 +103,8 @@ class Effect(ABC):
         return self.describe()
 
     def is_interruptible(self) -> bool:
-        """Whether the Interrupt step is open against this effect at all. True unless the effect
-        says it belongs to a rulebook procedure, which has no Interrupt step."""
+        """Whether the Interrupt step is open against this effect at all, when it is an action's
+        own. True unless the effect is nothing to interrupt, such as an Honor change of zero."""
         return True
 
 
@@ -1373,16 +1373,11 @@ class GainHonor(Effect):
         The net change the Interrupts taken against this change make to its size, applied once
         when it performs so that no run of Interrupts can carry it through zero and reverse it.
         Default 0.
-    interruptible : bool, optional
-        Whether the Interrupt step is open against this change at all. False for a change a
-        rulebook procedure makes outside any action, such as battle resolution, which has no
-        Interrupt step. Default True.
     """
 
     seat: PlayerId
     amount: int
     adjustment: int = 0
-    interruptible: bool = True
 
     @property
     def adjusted(self) -> int:
@@ -1402,7 +1397,7 @@ class GainHonor(Effect):
     def is_interruptible(self) -> bool:
         # A change of zero is not a gain or loss (CR, Honor Gains and Losses), so there is nothing
         # to interrupt.
-        return self.interruptible and self.amount != 0
+        return self.amount != 0
 
     def perform(self, game: GameState) -> list[GameEvent]:
         amount = self.adjusted
@@ -1589,16 +1584,22 @@ class ApplyEffects:
     ----------
     effects : tuple of Effect
         The effects to resolve, in order.
+    interruptible : bool, optional
+        Whether the effects are an action's own, open to the Interrupt step. Default False.
     """
 
     effects: tuple[Effect, ...]
+    interruptible: bool = False
 
     def resume(self, game: GameState) -> None:
         # The cascade imports this module, so the one module this item drives cannot be imported at
         # the top without closing that cycle.
         from yasuki_core.engine.rules import triggers
 
-        triggers.resolve_effects(game, list(self.effects))
+        if self.interruptible:
+            triggers.resolve_action_effects(game, list(self.effects))
+        else:
+            triggers.resolve_effects(game, list(self.effects))
 
 
 @dataclass(frozen=True, slots=True)
@@ -1615,6 +1616,9 @@ class Then(Effect):
         return f"then: {len(self.effects)} deferred"
 
     def perform(self, game: GameState) -> list[GameEvent]:
+        """Defer the effects with no Interrupt step open on them. The cascade handles a ``Then``
+        itself, carrying the provenance of the effects around it, so this runs only when a ``Then``
+        is applied outside the cascade."""
         game.stack.append(ApplyEffects(self.effects))
         return []
 

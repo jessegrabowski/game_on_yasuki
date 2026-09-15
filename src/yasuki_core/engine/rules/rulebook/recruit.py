@@ -234,7 +234,7 @@ def finish_recruit(
     finish_invest(game, card, invest_amount)
     if proclaim:
         game.use_once(proclaim_key(card.owner, game.turn))
-        triggers.resolve_effects(
+        triggers.resolve_action_effects(
             game, [GainHonor(card.owner, effective_personal_honor(game, card))]
         )
 

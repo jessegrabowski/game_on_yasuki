@@ -22,11 +22,14 @@ its `request` returns, stashes the remainder of the cascade, and resumes once th
 effect cannot declare itself interrupting without supplying that decision, because `request` is
 abstract on the category.
 
-Every other effect is held at the Interrupt step on its way through an action. The walker wraps it
+An action's own effects are held at the Interrupt step on their way through. The walker wraps each
 as an `InterruptStep`, which pauses only while a seat holds an Interrupt answering that effect's
 type and performs it once every seat has declined, so an effect nothing answers costs a lookup and
-nothing more. An effect opts out through `is_interruptible`, which is how a rulebook procedure's
-Honor gain refuses the step.
+nothing more. Which effects are the action's own is decided at the entry point: step E of the
+Action Sequence hands them to `resolve_action_effects`, and everything else, a cost, a trait's
+return, a rulebook procedure's effects, goes through `resolve_effects` and is never held there. An
+effect opts out through `is_interruptible` only when there is nothing to interrupt, such as an
+Honor change of zero.
 
 `seppuku` is the one builder in the module: the CR defines seppuku as two effects, a rehonoring and
 then a destruction, and a handler returns that pair so each passes the Interrupt step on its own.

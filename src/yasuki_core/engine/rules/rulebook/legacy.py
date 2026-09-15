@@ -79,7 +79,9 @@ def apply_legacy_placement(
         # The found card came out of the deck, so the deck the search read is no longer secret. It
         # shuffles behind the placement, which is what takes the card out of it.
         after_the_discard.append(ShuffleDeck(DeckKey(seat, Side.DYNASTY)))
-    triggers.resolve_effects(game, [Discard(displaced.id, seat), Then(tuple(after_the_discard))])
+    triggers.resolve_action_effects(
+        game, [Discard(displaced.id, seat), Then(tuple(after_the_discard))]
+    )
 
 
 def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tuple[str, ...]:

@@ -10,9 +10,11 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
+    ApplyEffects,
     InterruptingEffect,
     InterruptStep,
     Effect,
+    Then,
 )
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.state import GameState
@@ -162,6 +164,8 @@ def _advance(
     firing: list[tuple[L5RCard, Trigger]],
     event: GameEvent | None,
     queue: list[GameEvent],
+    *,
+    interruptible: bool,
 ) -> None:
     """Run the effect-and-trigger cascade to a fixpoint from an arbitrary resume point.
 
@@ -174,26 +178,35 @@ def _advance(
     :class:`~.ResumeCascade`, so :func:`~.resume_cascade` continues from precisely here once the
     seat answers.
 
-    Inside an action every other effect is held at the Interrupt step on its way through, wrapped
-    as an :class:`~.InterruptStep`, which pauses the same way while a seat has an Interrupt to
-    take against it (ShE datasheet, Interrupt)."""
+    ``interruptible`` says the effects in hand are an action's own, the only ones the Interrupt
+    step is open against (ShE datasheet, Interrupt). Each is held there on its way through, wrapped
+    as an :class:`~.InterruptStep`, which pauses the same way while a seat has an Interrupt to take
+    against it. What a trigger returns is a trait's or the rulebook's, never the action's, so it is
+    applied unwrapped, and a ``Then`` among the action's effects carries the flag to the deferred
+    step."""
     resolved = 0
     firing = list(firing)
     while True:
         for index, effect in enumerate(effects):
-            if game.action is not None and not isinstance(effect, InterruptingEffect):
+            if isinstance(effect, Then):
+                _trace.append(f"    {effect.describe()}")
+                game.stack.append(ApplyEffects(effect.effects, interruptible=interruptible))
+                continue
+            if interruptible and not isinstance(effect, InterruptingEffect):
                 effect = InterruptStep(effect)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
-                _stash(game, effect, tuple(effects[index + 1 :]), firing, event, queue)
+                remainder = tuple(effects[index + 1 :])
+                _stash(game, effect, remainder, firing, event, queue, interruptible)
                 game.pending = effect.request(game)
                 return
             _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
             _settle_state_based_actions(game, queue)
         effects = ()
+        interruptible = False
         if firing:
             card, trigger = firing.pop(0)
             _trace.append(f"  {card.printed_id} ({card.id}) reacts")
@@ -243,7 +256,7 @@ def enforce_state_based_actions(game: GameState) -> None:
     queue: list[GameEvent] = []
     _settle_state_based_actions(game, queue)
     if queue:
-        _advance(game, (), [], None, queue)
+        _advance(game, (), [], None, queue, interruptible=False)
 
 
 def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
@@ -340,6 +353,9 @@ class ResumeCascade:
         The event those triggers are firing for, or None when the pause held only loose effects.
     queue : tuple of GameEvent
         The events still waiting behind ``event`` in the paused worklist.
+    interruptible : bool, optional
+        Whether the effects still to apply are an action's own, open to the Interrupt step.
+        Default False.
     """
 
     paused: Effect
@@ -347,6 +363,7 @@ class ResumeCascade:
     firing: tuple[tuple[str, Trigger], ...]
     event: GameEvent | None
     queue: tuple[GameEvent, ...]
+    interruptible: bool = False
 
     def resume(self, game: GameState) -> None:
         # An interrupting effect whose answer produces no effects of its own, a payment, say, leaves
@@ -362,9 +379,10 @@ def _stash(
     firing: list[tuple[L5RCard, Trigger]],
     event: GameEvent | None,
     queue: list[GameEvent],
+    interruptible: bool,
 ) -> None:
     remaining = tuple((card.id, trigger) for card, trigger in firing)
-    game.stack.append(ResumeCascade(paused, effects, remaining, event, tuple(queue)))
+    game.stack.append(ResumeCascade(paused, effects, remaining, event, tuple(queue), interruptible))
 
 
 def paused_effect(game: GameState) -> Effect:
@@ -385,7 +403,14 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
         for card_id, trigger in item.firing
         if card_id in game.table.cards_by_id
     ]
-    _advance(game, tuple(produced) + item.effects, firing, item.event, list(item.queue))
+    _advance(
+        game,
+        tuple(produced) + item.effects,
+        firing,
+        item.event,
+        list(item.queue),
+        interruptible=item.interruptible,
+    )
 
 
 def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
@@ -409,7 +434,7 @@ def fire(game: GameState, event: GameEvent) -> None:
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "fire")
-    _advance(game, (), [], None, [event])
+    _advance(game, (), [], None, [event], interruptible=False)
 
 
 def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
@@ -422,18 +447,30 @@ def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "fire_all")
-    _advance(game, (), [], None, list(events))
+    _advance(game, (), [], None, list(events), interruptible=False)
 
 
 def resolve_effects(game: GameState, effects: list[Effect]) -> None:
-    """Apply ``effects``, an ability's or a choice resolver's output, and run the derived-event
-    cascade the same way :func:`~.fire` does, so a triggered reaction to those effects still
-    resolves.
+    """Apply ``effects`` and run the derived-event cascade the same way :func:`~.fire` does, so a
+    triggered reaction to those effects still resolves. The effects are not an action's own, so
+    none is held at the Interrupt step: a cost, a rulebook procedure's effects, a trait's, and an
+    Interrupt's own effects all come through here.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "resolve_effects")
-    _advance(game, tuple(effects), [], None, [])
+    _advance(game, tuple(effects), [], None, [], interruptible=False)
+
+
+def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:
+    """Apply ``effects`` as an action's own, which is what step E of the Action Sequence hands
+    over: each is held at the Interrupt step on its way through (ShE datasheet, Interrupt), and
+    the derived-event cascade runs as in :func:`~.resolve_effects`.
+
+    Raise ``RuntimeError`` if a decision is pending.
+    """
+    _refuse_mid_decision(game, "resolve_action_effects")
+    _advance(game, tuple(effects), [], None, [], interruptible=True)
 
 
 def action_did(game: GameState, kind: type[GameEvent]) -> tuple[GameEvent, ...]:

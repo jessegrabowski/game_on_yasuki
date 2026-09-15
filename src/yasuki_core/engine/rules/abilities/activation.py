@@ -90,7 +90,7 @@ class ApplyAbilityEffects:
             for target_id in self.target_ids
             for effect in ability.effects(game, source, game.table.cards_by_id[target_id])
         ]
-        triggers.resolve_effects(game, effects)
+        triggers.resolve_action_effects(game, effects)
 
 
 def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
@@ -115,7 +115,7 @@ def apply_ability_target(
     target = game.table.cards_by_id[response.choices[0]]
     ability = ability_for(source, request.ability_key)
     _record_targets(game, (target.id,))
-    triggers.resolve_effects(game, ability.effects(game, source, target))
+    triggers.resolve_action_effects(game, ability.effects(game, source, target))
 
 
 def _record_targets(game: GameState, target_ids: tuple[str, ...]) -> None:
