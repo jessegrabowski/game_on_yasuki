@@ -285,6 +285,8 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
             continue
         if ability.active_seat_only and seat is not game.active:
             continue
+        if game.has_used(favor_payment.favor_ability_key(seat, ability.key, game.turn)):
+            continue
         cost = favor_payment.favor_ability_cost(game, seat, ability.key)
         if not all(effect.is_payable(game) for effect in cost):
             continue

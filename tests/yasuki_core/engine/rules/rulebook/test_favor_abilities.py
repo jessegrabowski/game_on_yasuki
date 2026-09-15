@@ -5,6 +5,7 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, Lobby, UseFavorAbility
@@ -286,3 +287,16 @@ def test_a_wind_does_not_bar_lobbying(game):
     put_in_play(game, wind(PlayerId.P1))
 
     assert Lobby() in legality.legal_actions(game, PlayerId.P1)
+
+
+def test_a_favor_ability_is_once_per_turn_per_player(game):
+    # CR, Using Abilities 0.3: player abilities may only be taken once per turn per player.
+    TakeFavor(PlayerId.P1).perform(game)
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    hand.add(register(game.table, fate_card("first", PlayerId.P1)))
+    hand.add(register(game.table, fate_card("second", PlayerId.P1)))
+    action_sequence.perform(game, UseFavorAbility("discard_to_draw"))
+    submit(game, DecisionResponse(choices=("first",)))
+    TakeFavor(PlayerId.P1).perform(game)
+
+    assert _offered(game) == set()
