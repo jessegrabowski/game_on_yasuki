@@ -17,7 +17,25 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint
 
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.effects import Destroy, RangedAttack
+from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+)
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
+from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.replay.game_log import replay
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
+    end_phase,
+    province_card,
     end_turn,
     holding,
     personality,
@@ -191,3 +209,130 @@ def test_an_amount_below_every_unit_reaches_no_target():
     end_turn(session)
 
     assert "target" in _on_board(session)
+
+
+# --- Ninube Aitso, "Doji Yeiko" (Experienced) ---
+
+DESTROY_PROBE = "probe_battle_destroy_an_enemy"
+RANGED_PROBE = "probe_battle_ranged_attack"
+AITSO = "ninube_aitso_doji_yeiko_experienced"
+
+
+def _enemy_personalities(game, source):
+    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
+
+
+DESTROY_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: destroy a target enemy Personality",
+    cost=no_cost,
+    targets=_enemy_personalities,
+    effects=lambda game, source, target: [Destroy(target.id, source.owner)],
+)
+RANGED_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: Ranged 9 Attack",
+    cost=no_cost,
+    targets=_enemy_personalities,
+    effects=lambda game, source, target: [RangedAttack(9, target.id, source.owner)],
+)
+
+
+def _aitso_defending(*, probe: str = DESTROY_PROBE, target: str = "guard") -> EngineSession:
+    """P1 attacks with a Personality carrying ``probe`` and aims it at ``target``. P2 defends with
+    a guard and with Aitso, whose Dynasty deck starts empty so the reshuffle is easy to read."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    put_in_play(state, personality("raider", owner=P1, printed_id=probe, force=3))
+    put_in_play(state, personality("guard", owner=PlayerId.P2, force=2))
+    put_in_play(state, personality("aitso", owner=PlayerId.P2, printed_id=AITSO, force=2))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(PlayerId.P2, DecisionResponse(("guard@0", "aitso@0")))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(PlayerId.P2, Pass())
+    session.act(P1, ActivateAbility("raider"))
+    session.submit(P1, DecisionResponse((target,)))
+    return session
+
+
+def _dynasty_deck(session: EngineSession) -> list[str]:
+    return [card.id for card in session.game.table.decks[DeckKey(PlayerId.P2, Side.DYNASTY)].cards]
+
+
+def test_aitso_reshuffles_herself_into_the_dynasty_deck_to_negate_the_destruction():
+    with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
+        session = _aitso_defending()
+        assert isinstance(session.game.pending, ChooseInterrupt)
+
+        session.submit(PlayerId.P2, DecisionResponse(("aitso",)))
+
+        game = session.game
+        assert "guard" in {card.id for card in game.table.battlefield.cards}
+        assert _dynasty_deck(session) == ["aitso"]
+        assert game.pending is None
+
+
+def test_aitso_answers_the_destruction_a_ranged_attack_would_make():
+    with probe_ability(RANGED_PROBE, RANGED_ABILITY):
+        session = _aitso_defending(probe=RANGED_PROBE)
+        assert isinstance(session.game.pending, ChooseInterrupt)
+
+        session.submit(PlayerId.P2, DecisionResponse(("aitso",)))
+
+        assert "guard" in {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_aitso_may_negate_her_own_destruction():
+    with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
+        session = _aitso_defending(target="aitso")
+
+        session.submit(PlayerId.P2, DecisionResponse(("aitso",)))
+
+        assert _dynasty_deck(session) == ["aitso"]
+        assert session.game.pending is None
+
+
+def test_declining_aitso_lets_the_destruction_resolve():
+    with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
+        session = _aitso_defending()
+
+        session.submit(PlayerId.P2, DecisionResponse())
+
+        in_play = {card.id for card in session.game.table.battlefield.cards}
+        assert "guard" not in in_play and "aitso" in in_play
+
+
+def test_aitsos_interrupt_replays_to_the_same_board():
+    with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
+        session = _aitso_defending()
+        session.submit(PlayerId.P2, DecisionResponse(("aitso",)))
+
+        rebuilt = replay(session.log)
+
+        assert rebuilt.table == session.game.table
+        assert rebuilt.pending is None and not rebuilt.stack
+
+
+def test_proclaiming_aitso_gains_three_honor_in_place_of_her_personal_honor():
+    game = two_seat_game()
+    aitso = put_in_play(game, personality("aitso", printed_id=AITSO, personal_honor=0))
+
+    finish_recruit(game, aitso.id, None, proclaim=True)
+
+    assert game.table.seats[P1].honor == 3
+
+
+def test_proclaiming_aitso_keeps_a_higher_personal_honor():
+    game = two_seat_game()
+    aitso = put_in_play(game, personality("aitso", printed_id=AITSO, personal_honor=4))
+
+    finish_recruit(game, aitso.id, None, proclaim=True)
+
+    assert game.table.seats[P1].honor == 4
