@@ -1,4 +1,5 @@
 from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -6,13 +7,16 @@ from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    AskOption,
     Discard,
     Effect,
+    GainHonor,
     GrantModifier,
     PutIntoPlay,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
@@ -106,3 +110,67 @@ def plus_one_gp_this_turn(game: GameState, source: L5RCard, target: L5RCard) -> 
 
 def one_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, 1)]
+
+
+def ask_whose_honor_moves(
+    game: GameState, seat: PlayerId, amount: int, source_id: str
+) -> AskOption:
+    """The question "a target player gains or loses N Honor" prints: name the player, then the
+    direction, both the acting seat's call.
+
+    Parameters
+    ----------
+    game : GameState
+        The game, for the seats it may name.
+    seat : PlayerId
+        The seat answering both questions.
+    amount : int
+        The N the card prints.
+    source_id : str
+        The card asking, carried to the resolvers.
+    """
+    return AskOption(
+        seat,
+        tuple(info.name for info in game.table.seats.values()),
+        "Whose Honor moves?",
+        "honor_swing_player",
+        source_id,
+        resolver_context=(str(amount),),
+    )
+
+
+@choice_resolver("honor_swing_player")
+def _resolve_honor_swing_player(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    named = chosen[0]
+    picked = next(player for player, info in game.table.seats.items() if info.name == named)
+    amount = int(resolver_context[0])
+    return [
+        AskOption(
+            seat,
+            (f"Gain {amount} Honor", f"Lose {amount} Honor"),
+            f"Does {named} gain or lose {amount} Honor?",
+            "honor_swing",
+            source_id,
+            resolver_context=(picked.name, str(amount)),
+        )
+    ]
+
+
+@choice_resolver("honor_swing")
+def _resolve_honor_swing(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    moved = PlayerId[resolver_context[0]]
+    amount = int(resolver_context[1])
+    delta = amount if chosen[0].startswith("Gain") else -amount
+    return [GainHonor(moved, delta)]

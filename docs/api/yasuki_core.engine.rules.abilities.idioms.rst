@@ -7,6 +7,7 @@ yasuki_core.engine.rules.abilities.idioms
 
 .. autosummary::
 
+    ask_whose_honor_moves
     one_wealth
     plus_one_gp_this_turn
     register_edict
