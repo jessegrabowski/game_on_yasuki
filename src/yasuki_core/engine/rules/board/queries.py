@@ -153,3 +153,11 @@ def opposing_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]
         return ()
     enemy = attack.attacker if seat is attack.defender else attack.defender
     return tuple(card.id for card in units_at(game, attack.current, enemy))
+
+
+def opposed_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The ids of ``seat``'s Personalities opposed at the battle now being fought: those at its
+    battlefield while an enemy unit is also there (CR, Opposed). Empty otherwise."""
+    if not opposing_units_in_battle(game, seat):
+        return ()
+    return tuple(card.id for card in units_at(game, game.attack.current, seat))

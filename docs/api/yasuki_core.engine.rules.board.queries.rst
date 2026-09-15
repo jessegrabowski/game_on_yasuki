@@ -10,6 +10,7 @@ yasuki_core.engine.rules.board.queries
     attack_targets
     followers_in_play
     has_keyword
+    opposed_units_in_battle
     opposing_units_in_battle
     owned_holdings
     owned_personalities
