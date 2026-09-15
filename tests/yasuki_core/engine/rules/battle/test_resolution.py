@@ -687,6 +687,36 @@ def test_resolution_honor_is_not_open_to_the_honor_interrupt():
     assert session.game.table.seats[PlayerId.P1].honor - before == 2
 
 
+def test_a_winner_with_a_dishonorable_personality_is_rehonored_instead_of_paid():
+    # CR, Rehonoring 0.3: "all such dishonorable Personalities are rehonored, substituting for the
+    # Honor gain."
+    session = _one_battlefield({"a": 5, "b": 1}, {"d": 2})
+    session.game.table.cards_by_id["b"].dishonor()
+    before = session.game.table.seats[PlayerId.P1].honor
+
+    _fight_one_battle(session)
+
+    assert not session.game.table.cards_by_id["b"].dishonorable
+    assert session.game.table.seats[PlayerId.P1].honor == before
+
+
+def test_a_tied_armys_dishonorable_personality_is_rehonored_before_he_dies():
+    # CR, Rehonoring 0.3: rehonored "before being destroyed, in substitution for their army's
+    # leader's Honor gain". He dies honorable, so the death costs nothing, and the other seat is
+    # paid as usual.
+    session = _one_battlefield({"a": 4}, {"d": 4})
+    session.game.table.cards_by_id["a"].dishonor()
+    seats = session.game.table.seats
+    before = {seat: seats[seat].honor for seat in PlayerId}
+
+    _fight_one_battle(session)
+
+    assert not _in_play(session, "a")
+    assert not session.game.table.cards_by_id["a"].dishonorable
+    assert seats[PlayerId.P1].honor == before[PlayerId.P1]
+    assert seats[PlayerId.P2].honor - before[PlayerId.P2] == 2
+
+
 def test_a_tie_pays_each_seat_for_the_army_it_destroyed():
     session = _one_battlefield({"a": 4}, {"d": 4})
     seats = session.game.table.seats
