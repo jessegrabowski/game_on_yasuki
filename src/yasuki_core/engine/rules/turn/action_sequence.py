@@ -1,3 +1,4 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.activation import apply_ability_target, activate
 from yasuki_core.engine.rules.abilities.strategy import (
@@ -90,17 +91,26 @@ _ACTION_WORDING: dict[type, str] = {
     DynastyDiscard: "the discard of",
     KharmicDraw: "the Kharmic draw on",
     KharmicRefill: "the Kharmic refill on",
+    PlayStrategy: "the Strategy",
     Legacy: "Legacy",
     Cycle: "Cycle",
+    Inheritance: "Inheritance",
+    Lobby: "Lobby",
     DeclareAttack: "the attack",
 }
 
 
 def describe_action(game: GameState, action: Action) -> str:
     """``action`` worded for a player: "the Recruit of Courts of Otosan Uchi"."""
+    if isinstance(action, UseFavorAbility):
+        return f"the Imperial Favor's ability to {_favor_ability_label(action.key)}"
     wording = _ACTION_WORDING.get(type(action), type(action).__name__)
     card = game.table.cards_by_id.get(getattr(action, "card_id", ""))
     return f"{wording} {card.name}" if card is not None else wording
+
+
+def _favor_ability_label(key: str) -> str:
+    return next(ability.label for ability in ruleset.ACTIVE.favor_abilities if ability.key == key)
 
 
 def perform(game: GameState, action: Action) -> None:

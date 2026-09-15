@@ -13,6 +13,8 @@ from yasuki_core.game_pieces.prints import (
     FatePrint,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
+    Lobby,
+    UseFavorAbility,
     ActionTiming,
     ActivateAbility,
     Legacy,
@@ -536,6 +538,11 @@ def test_an_action_is_worded_for_the_seat_that_must_answer_it():
         == "the ability on Caravansary"
     )
     assert action_sequence.describe_action(game, Legacy()) == "Legacy"
+    assert action_sequence.describe_action(game, Lobby()) == "Lobby"
+    assert (
+        action_sequence.describe_action(game, UseFavorAbility("discard_to_draw"))
+        == "the Imperial Favor's ability to discard a Fate card to draw a card"
+    )
 
 
 def test_no_response_step_leaves_the_view_naming_nothing():
