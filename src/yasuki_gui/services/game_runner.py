@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.rulebook import favor_abilities, favor_proxy
+from yasuki_core.engine.rules.rulebook.recruit import PROCLAIM_GAINS
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
@@ -114,9 +115,7 @@ class GameRunner:
                 if action.invest:
                     items.append((self._invest_label(game, card, base), action))
                 elif action.proclaim:
-                    honor = effective_personal_honor(game, card)
-                    label = f"Recruit & Proclaim: Pay {base} gold, gain {honor} honor"
-                    items.append((label, action))
+                    items.append((self._proclaim_label(game, card, base), action))
                 else:
                     items.append((f"Recruit: Pay {base} gold", action))
             elif isinstance(action, DynastyDiscard):
@@ -129,6 +128,14 @@ class GameRunner:
                     )
                 )
         return items
+
+    def _proclaim_label(self, game: GameState, card: L5RCard, base: int) -> str:
+        """The Proclaim entry names the Honor it gains, unless the card offers an alternative
+        the seat is asked about after entry, when the amount is not yet decided."""
+        label = f"Recruit & Proclaim: Pay {base} gold"
+        if card.printed_id in PROCLAIM_GAINS:
+            return label
+        return f"{label}, gain {effective_personal_honor(game, card)} honor"
 
     def hand_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The labeled actions offered for one of the human's hand cards, for its left-click menu:

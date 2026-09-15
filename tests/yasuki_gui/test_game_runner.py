@@ -312,6 +312,49 @@ def test_province_menu_offers_proclaim_for_an_own_clan_personality():
     ]
 
 
+def test_province_menu_names_no_amount_for_a_proclaim_the_seat_is_asked_about():
+    # Ninube Aitso may Proclaim for 3 Honor instead of her Personal Honor, chosen after she enters
+    # play, so the menu cannot yet say what the Proclaim gains.
+    state = _dealt_table(0)
+    state.battlefield.add(
+        _register(
+            state,
+            L5RCard.of(
+                StrongholdPrint,
+                id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=PlayerId.P1,
+                clan="Crane",
+                gold_production=8,
+            ),
+        )
+    )
+    aitso = _register(
+        state,
+        L5RCard.of(
+            PersonalityPrint,
+            id="P1-aitso",
+            name="Ninube Aitso",
+            printed_id="ninube_aitso_doji_yeiko_experienced",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=5,
+            clan="Crane",
+            personal_honor=0,
+        ),
+    )
+    aitso.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(aitso)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    _to_dynasty(runner)
+
+    labels = [label for label, _ in runner.province_menu("P1-aitso")]
+    assert "Recruit & Proclaim: Pay 5 gold" in labels
+
+
 def test_province_menu_drops_recruit_when_it_is_unaffordable():
     state = _dealt_table(0)
     _face_up_holding_in_province(state, "P1-buy", gold_cost=9)  # no producer to pay with
