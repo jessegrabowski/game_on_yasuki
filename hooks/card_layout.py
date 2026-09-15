@@ -30,6 +30,7 @@ _DECORATORS = {
     "favor_payer",
     "lobby_bar",
     "lobby_bonus_grant",
+    "proclaim_gain",
     "province_strength_grant",
 }
 
@@ -39,6 +40,7 @@ _CALLS = {
     "register_edict",
     "register_event_entry",
     "register_enters_unbowed",
+    "register_interrupt",
     "register_invest",
     "register_may_not_lobby",
     "register_may_remain_bowed",
@@ -105,9 +107,11 @@ def _owning_card(sections: list[tuple[int, str]], line: int) -> str | None:
 _REGISTRARS = {
     "on",
     "register_ability",
+    "register_interrupt",
     "register_invest",
     "register_self_grant",
     "Ability",
+    "Interrupt",
     "InvestAbility",
 }
 
@@ -213,6 +217,8 @@ ROLES = frozenset(
         "targets",
         "effects",
         "interrupt",
+        "applies",
+        "proclaim_gain",
         # the per-registry hooks
         "invest",
         "gold",
