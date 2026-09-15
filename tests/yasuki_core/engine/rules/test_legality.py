@@ -27,6 +27,7 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
+    end_turn,
     attachment,
     end_phase,
     holding,
@@ -287,6 +288,33 @@ register_ability(
         effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
     ),
 )
+
+
+register_ability(
+    "test_repeats_in_play",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, card: [card.id],
+        effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+        repeatable=True,
+    ),
+)
+
+
+for _key in ("first", "second"):
+    register_ability(
+        "test_two_keyed_abilities",
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label=_key,
+            cost=lambda game, source: [],
+            targets=lambda game, card: [card.id],
+            effects=lambda game, source, target: [AdjustCounter(target.id, WEALTH, 1)],
+            key=_key,
+        ),
+    )
 
 
 def _in_hand(state: TableState, card_id: str, printed_id: str):
@@ -900,3 +928,53 @@ def test_recruit_rejects_invest_and_proclaim_together():
     holding = register(game.table, _holding("teahouse", gold_cost=2))
     with pytest.raises(ValueError, match="Invest and Proclaim"):
         recruit.recruit(game, holding.id, invest=True, proclaim=True)
+
+
+def _use(session: EngineSession, card_id: str) -> None:
+    """Activate a probe ability on its own card and hand priority back to P1 afterwards."""
+    session.act(PlayerId.P1, ActivateAbility(card_id))
+    session.submit(PlayerId.P1, DecisionResponse((card_id,)))
+    while session.game.round.priority is not PlayerId.P1:
+        session.act(session.game.round.priority, Pass())
+
+
+def test_an_ability_in_play_is_once_per_turn_unless_repeatable():
+    # CR, Using Abilities 0.3: each card ability may normally be used once per turn.
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("once", printed_id="test_acts_from_play"))
+    put_in_play(state, holding("again", printed_id="test_repeats_in_play"))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    _use(session, "once")
+    _use(session, "again")
+
+    offered = session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("once") not in offered
+    assert ActivateAbility("again") in offered
+
+
+def test_a_used_ability_is_offered_again_next_turn():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("once", printed_id="test_acts_from_play"))
+    session = EngineSession.start(state, PlayerId.P1)
+    _use(session, "once")
+    end_turn(session)
+    end_turn(session)
+
+    assert session.game.active is PlayerId.P1
+    assert ActivateAbility("once") in session.legal_actions(PlayerId.P1)
+
+
+def test_using_one_keyed_ability_leaves_the_cards_other_one_offered():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("twice", printed_id="test_two_keyed_abilities"))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    session.act(PlayerId.P1, ActivateAbility("twice", "first"))
+    session.submit(PlayerId.P1, DecisionResponse(("twice",)))
+    while session.game.round.priority is not PlayerId.P1:
+        session.act(session.game.round.priority, Pass())
+
+    offered = session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("twice", "first") not in offered
+    assert ActivateAbility("twice", "second") in offered

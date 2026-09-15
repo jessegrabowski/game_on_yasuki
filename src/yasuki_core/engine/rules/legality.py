@@ -5,7 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook import favor_payment
 from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.abilities.costs import can_pay
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, once_tag
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
     ability_for,
@@ -49,7 +49,7 @@ from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
 from yasuki_core.engine.rules.rulebook import lobby
 from yasuki_core.engine.rules.rulebook.lobby import lobby_candidates, lobby_key
 from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
 from yasuki_core.engine.table import DeckKey, location_of, ZoneKey, ZoneRole
@@ -622,6 +622,14 @@ def activatable(
             if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
                 continue
             if location not in ability.located_at:
+                continue
+            # An ability on a card in play is once per turn unless it prints Repeatable (CR,
+            # Using Abilities 0.3). A card played from hand is spent, so nothing rations it.
+            if (
+                location is not CardLocation.HAND
+                and not ability.repeatable
+                and used_this_turn(game, card, once_tag(ability))
+            ):
                 continue
             # A card in a unit may only be acted from at the battlefield the battle is at (CR,
             # Rules of Location). A card in hand or in a Province is in no unit, and neither is a

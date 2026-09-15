@@ -71,6 +71,7 @@ def _register_probe() -> None:
         PROBE,
         Ability(
             timings=(ActionTiming.OPEN,),
+            repeatable=True,
             label="Open: discard a card from hand",
             cost=no_cost,
             targets=itself,
@@ -146,9 +147,9 @@ def test_the_response_answers_one_discard_once():
     assert ActivateAbility("caravansary") not in session.legal_actions(P1)
 
 
-def test_a_later_step_offers_the_response_again():
-    """The once-a-Step limit is scoped to the Step, so a second discarding action offers the card
-    again rather than spending it for the rest of the turn."""
+def test_a_later_step_in_the_same_turn_does_not_offer_the_response_again():
+    """The Response prints no Repeatable, so it is once per turn (CR, Using Abilities 0.3): the
+    second discarding action opens a Step the Caravansary has nothing left to say in."""
     session = _caravansary_game(in_hand=2)
     session.act(P1, ActivateAbility("probe"))
     session.act(P1, ActivateAbility("caravansary"))
@@ -158,8 +159,7 @@ def test_a_later_step_offers_the_response_again():
 
     session.act(P1, ActivateAbility("probe"))
 
-    assert _step_is_open(session)
-    assert ActivateAbility("caravansary") in session.legal_actions(P1)
+    assert ActivateAbility("caravansary") not in session.legal_actions(P1)
 
 
 def test_an_opponents_discard_offers_you_nothing():

@@ -18,6 +18,7 @@ yasuki_core.engine.rules.abilities.model
 .. autosummary::
 
     itself
+    once_tag
 
 .. automodule:: yasuki_core.engine.rules.abilities.model
     :members:

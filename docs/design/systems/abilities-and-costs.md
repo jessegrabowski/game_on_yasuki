@@ -69,8 +69,10 @@ be, defaulting to the battlefield. `battle_designators` and `targets_any_locatio
 battle ability can reach, and [Adding a Card](../../contributing/adding_a_card.md) explains both
 under attachments. `keywords` holds the ability keywords printed ahead of the designator, as in
 "Political Battle:", so a card asking whether the resolving action was Political has something to
-read. The registration audit compares them with the card's text and rejects a registration that
-leaves one off or invents one.
+read. `repeatable` is the Repeatable modifier: an ability on a card in play is once per turn
+without it, which `legality.activatable` enforces through the same once-per-turn keys a handler
+claims by hand. The registration audit compares both with the card's text and rejects a
+registration that leaves one off or invents one.
 
 ## What narrows a target list
 

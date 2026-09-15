@@ -1,11 +1,12 @@
 import ast
 import difflib
+from collections.abc import Mapping, Sequence
 import re
 import sys
 from pathlib import Path
 
 from yasuki_core.engine.rules.abilities import registry
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules import (
     state_based_actions,
     triggers,
@@ -146,6 +147,7 @@ _ABILITY_HEAD = re.compile(
     rf"(?:{'|'.join(_DESIGNATORS)})\b[^.:<]{{0,20}}:"
 )
 _MARKUP = re.compile(r"<[^>]+>")
+REPEATABLE = "Repeatable"
 
 
 def printed_ability_count(text: str) -> int:
@@ -214,13 +216,14 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     return problems
 
 
-def printed_ability_keywords(
+def printed_abilities(
     cards_dir: Path = DEFAULT_CARDS_PATH,
-) -> dict[str, set[tuple[frozenset[str], frozenset[str]]]]:
-    """Every card id with the ``(designators, keywords)`` pairs its printed abilities carry.
+) -> dict[str, set[tuple[frozenset[str], frozenset[str], frozenset[str]]]]:
+    """Every card id with the ``(designators, keywords, modifiers)`` triples its printed abilities
+    carry.
 
     Read across every printing, since a keyword one printing spells out another may draw as an
-    icon, and the pairs are a set so a printing that repeats the wording adds nothing.
+    icon, and the triples are a set so a printing that repeats the wording adds nothing.
 
     Parameters
     ----------
@@ -230,13 +233,17 @@ def printed_ability_keywords(
     Returns
     -------
     dict mapping str to set of tuple
-        Card id to its ``(designators, keywords)`` pairs, each a frozenset of str.
+        Card id to its ``(designators, keywords, modifiers)`` triples, each a frozenset of str.
     """
-    printed: dict[str, set[tuple[frozenset[str], frozenset[str]]]] = {}
+    printed: dict[str, set[tuple[frozenset[str], frozenset[str], frozenset[str]]]] = {}
     for entry in iter_set_entries(cards_dir):
         for ability in split_text_box(entry.text).abilities:
             printed.setdefault(entry.card_id, set()).add(
-                (frozenset(ability.designators), frozenset(ability.keywords))
+                (
+                    frozenset(ability.designators),
+                    frozenset(ability.keywords),
+                    frozenset(ability.modifiers),
+                )
             )
     return printed
 
@@ -249,12 +256,13 @@ def _spelled(keywords: frozenset[str]) -> str:
     return " ".join(sorted(keywords)) or "none"
 
 
-def mislabeled_ability_keywords(
+def mislabeled_abilities(
     cards_dir: Path = DEFAULT_CARDS_PATH,
-    abilities: dict[str, list[Ability]] | None = None,
+    abilities: Mapping[str, Sequence[Ability]] | None = None,
 ) -> list[str]:
     """
-    One human-readable line per registered ability whose ``keywords`` disagree with the card's text.
+    One human-readable line per registered ability whose ``keywords`` or ``repeatable`` disagree
+    with the card's text.
 
     A registration is matched to the printed abilities whose designators cover its timings, so one
     registering the Open half of a printed Battle/Open is still judged, and its keywords must equal
@@ -265,7 +273,7 @@ def mislabeled_ability_keywords(
     ----------
     cards_dir : path, optional
         Directory of per-set YAML files. Default is the packaged ``sets`` directory.
-    abilities : dict mapping str to list of :class:`~yasuki_core.engine.rules.abilities.model.Ability`, optional
+    abilities : mapping of str to sequence of :class:`~yasuki_core.engine.rules.abilities.model.Ability`, optional
         Card id to its registered abilities. Defaults to the engine's own ability registry.
 
     Returns
@@ -275,21 +283,32 @@ def mislabeled_ability_keywords(
     """
     if abilities is None:
         abilities = registry._ABILITIES
-    printed = printed_ability_keywords(cards_dir)
+    printed = printed_abilities(cards_dir)
     problems = []
     for card_id in sorted(abilities):
         for ability in abilities[card_id]:
             designators = _printed_designators(ability)
-            matching = {kws for desig, kws in printed.get(card_id, ()) if designators <= desig}
-            if not matching or ability.keywords in matching:
+            matching = {
+                (kws, mods) for desig, kws, mods in printed.get(card_id, ()) if designators <= desig
+            }
+            if not matching:
                 continue
-            authored = _spelled(ability.keywords)
-            printed_words = " or ".join(sorted(_spelled(kws) for kws in matching))
             under = "/".join(sorted(designators))
-            problems.append(
-                f"abilities: {card_id} registers keywords {authored} on its {under} ability, "
-                f"whose text prints {printed_words}"
-            )
+            if ability.keywords not in {kws for kws, _ in matching}:
+                authored = _spelled(ability.keywords)
+                printed_words = " or ".join(sorted({_spelled(kws) for kws, _ in matching}))
+                problems.append(
+                    f"abilities: {card_id} registers keywords {authored} on its {under} ability, "
+                    f"whose text prints {printed_words}"
+                )
+            in_play = CardLocation.HAND not in ability.located_at
+            prints_repeatable = any(REPEATABLE in mods for _, mods in matching)
+            if in_play and ability.repeatable != prints_repeatable:
+                verb = "registers" if ability.repeatable else "does not register"
+                problems.append(
+                    f"abilities: {card_id} {verb} its {under} ability as Repeatable, "
+                    f"and its text {'prints' if prints_repeatable else 'does not print'} it"
+                )
     return problems
 
 
@@ -413,7 +432,7 @@ def main(
         unregistered_card_ids(registries)
         + duplicate_registrations(trigger_registry)
         + unvalidated_registries()
-        + mislabeled_ability_keywords()
+        + mislabeled_abilities()
     )
     for problem in problems:
         print(problem, file=sys.stderr)

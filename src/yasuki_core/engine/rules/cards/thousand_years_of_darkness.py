@@ -32,6 +32,7 @@ register_ability(
     "tosekiki",
     Ability(
         timings=(ActionTiming.BATTLE,),
+        repeatable=True,
         label=f"Battle, Bow: Ranged {TOSEKIKI_RANGED} Attack",
         cost=bow_cost,
         targets=attack_targets,

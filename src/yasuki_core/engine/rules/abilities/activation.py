@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, once_tag
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
 from yasuki_core.engine.rules.legality import legal_targets
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -25,6 +25,8 @@ def activate(game: GameState, card_id: str, ability_key: str | None = None) -> N
     ability = ability_for(card, ability_key)
     if ActionTiming.RESPONSE in ability.timings:
         game.responded.add(card_id)
+    if not ability.repeatable:
+        claim_once_per_turn(game, card, once_tag(ability))
     defer_ability(game, card, ability)
 
 

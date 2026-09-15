@@ -35,8 +35,8 @@ class ActionTiming(Enum):
     - ``INTERRUPT``: the Interrupt step of another action, by any player
     - ``RESPONSE``: the Response step of another action, by any player [ShE]
 
-    Repeatability is a separate axis: a designator says *when*, and whether an ability may be used
-    more than once in that window is the once-per-turn key its own handler claims.
+    Repeatability is a separate axis: a designator says *when*, and an ability on a card in play
+    is once per turn unless its registration says ``repeatable`` (CR, Using Abilities 0.3).
     """
 
     OPEN = "open"

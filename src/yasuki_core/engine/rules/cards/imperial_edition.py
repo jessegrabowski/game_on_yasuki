@@ -53,10 +53,9 @@ def _fantastic_gardens_effects(game: GameState, source: L5RCard, target: L5RCard
 register_ability(
     "fantastic_gardens",
     Ability(
-        # Repeatable: bowing is the only thing rationing it, so a Gardens straightened again may
-        # bow for another two Honor.
         timings=(ActionTiming.LIMITED,),
-        label=f"Limited: Bow to gain {GARDENS_HONOR} Honor",
+        label=f"Repeatable Limited: Bow to gain {GARDENS_HONOR} Honor",
+        repeatable=True,
         cost=bow_cost,
         targets=itself,
         effects=_fantastic_gardens_effects,
