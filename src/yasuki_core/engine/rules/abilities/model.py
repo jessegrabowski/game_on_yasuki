@@ -1,8 +1,9 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
+from types import UnionType
 
-from yasuki_core.engine.rules.abilities.costs import Cost
+from yasuki_core.engine.rules.abilities.costs import Cost, no_cost
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.state import GameState
@@ -38,27 +39,46 @@ class Interruption:
 
 @dataclass(frozen=True, slots=True)
 class Interrupt[T: Effect]:
-    """A Strategy's Interrupt, played from hand while an effect it answers waits to resolve.
+    """An Interrupt a card prints, offered while an effect it answers waits to resolve: from hand
+    for a Strategy, which is then played, or from play for a Personality or attachment, whose card
+    pays ``cost`` and is otherwise left where its own text leaves it.
 
     Not an :class:`~.Ability`: it has no target and no effects of its own, since what it does is
     decided against the effect it interrupts, and no round offers it. The Interrupt step offers it
-    instead, and the Strategy is then paid for and discarded the way any Strategy is.
+    instead.
 
     Attributes
     ----------
     label : str
-        What a client shows for the Strategy.
+        What a client shows for the card.
     answers : type
-        The effect type the Interrupt may be played against: one naming ``Fear`` is offered while
-        a Fear effect waits to resolve.
+        The effect type the Interrupt may be taken against, or a union of them: one naming
+        ``Fear`` is offered while a Fear effect waits to resolve, one naming ``Bow | Move`` while
+        either does.
     interrupt : callable
         Maps ``(game, source_card, effect)`` to the :class:`~.Interruption` it makes of the pending
         effect: what replaces it and what else happens.
+    applies : callable, optional
+        Maps ``(game, source_card, effect)`` to whether this Interrupt may answer that particular
+        effect, for a card whose text narrows it beyond the type, as "your other Personality's
+        bowing" does. Default answers every effect of the type.
+    located_at : tuple of CardLocation, optional
+        Where the card has to be for the Interrupt to be offered. A Strategy's is taken from hand
+        and the card is played; a Personality's or attachment's is taken from play, under the
+        gates an activated ability in play answers to, and the card is not discarded for it.
+        Default the hand alone.
+    cost : callable, optional
+        Maps ``(game, source_card)`` to the effects paid to take an Interrupt from play, resolved
+        before the Interrupt's own. A Strategy from hand pays its Gold Cost instead. Default
+        ``no_cost``.
     """
 
     label: str
-    answers: type[T]
+    answers: type[T] | UnionType
     interrupt: Callable[[GameState, L5RCard, T], Interruption]
+    applies: Callable[[GameState, L5RCard, T], bool] = lambda game, source, effect: True
+    located_at: tuple[CardLocation, ...] = (CardLocation.HAND,)
+    cost: Cost = no_cost
 
 
 @dataclass(frozen=True, slots=True)

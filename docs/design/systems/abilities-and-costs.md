@@ -98,6 +98,13 @@ effects can be answered, and only those: the step is open against what step E ha
 Interrupt names the type it answers. A card that reads "negate" returns {class}`~.Negated` around
 the effect it answers, which resolves as nothing where the effect would have.
 
+A Personality or attachment prints an Interrupt too, taken from play rather than from hand. Its
+`located_at` names the battlefield, and it is offered under the gates an activated ability in play
+answers to: unbowed, within the Rules of Location, and unused this turn. `cost` is what the card
+gives up to take it, so "destroy this Item to negate" and "reshuffle Aitso to negate" are both
+costs, and a card that cannot pay is not offered. `applies` narrows the offer beyond the effect's
+type, so Doji Yuten answers a bowing of his controller's other Personality and not his own.
+
 An attack's outcome, the `Bow` behind a Fear or the `Destroy` behind a Ranged Attack, follows the
 comparison through the cascade as an effect of its own, so an Interrupt answering `Bow` or
 `Destroy` is offered against what an attack does.
