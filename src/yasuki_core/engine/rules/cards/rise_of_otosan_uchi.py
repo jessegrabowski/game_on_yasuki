@@ -382,7 +382,8 @@ def _kitsu_watanabe_experienced_targets(game: GameState, source: L5RCard) -> lis
 def _kitsu_watanabe_experienced_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """The Holding is spent on the summons, so it goes before the Ancestor answers."""
+    """The Holding is spent on the summons, so it goes before the Ancestor answers. The additional
+    action a Battle-taken summons earns for destroying a Fortification has no effect to name it."""
     return [
         Destroy(target.id, source.owner),
         CreateToken(LION_ANCESTOR, source.owner, source.id),
@@ -392,8 +393,8 @@ def _kitsu_watanabe_experienced_effects(
 register_ability(
     "kitsu_watanabe_experienced",
     Ability(
-        timings=(ActionTiming.OPEN,),
-        label="Open: Destroy your target Holding to create a 2F/2C/3PH Ancestor Personality",
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        label="Battle/Open: Destroy your target Holding to create a 2F/2C/3PH Ancestor Personality",
         cost=no_cost,
         targets=_kitsu_watanabe_experienced_targets,
         effects=_kitsu_watanabe_experienced_effects,
