@@ -35,6 +35,7 @@ from yasuki_core.engine.rules.turn.structure import (
     RoundKind,
     Turn,
 )
+from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.battle.resolution import FightNextBattle
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DiscardToHandSize,
@@ -693,12 +694,16 @@ def test_every_fired_moment_has_a_resolve_call_behind_it():
     """``FIRED_MOMENTS`` is what ``DelayedEffect`` validates against, so a moment listed there with
     no call site behind it would let through the delay it exists to refuse.
 
-    The turn's own moments are named as constants at their call sites in the turn sequence. A
-    battle segment's beginning
-    is fired generically as its round opens, so it is covered by
+    The turn's own moments are named as constants at their call sites in the turn sequence, and a
+    battle's end at its call site in battle resolution. A battle segment's beginning is fired
+    generically as its round opens, so it is covered by
     ``test_battle_rounds.test_a_delay_to_a_segments_beginning_resolves_as_it_opens`` instead.
     """
-    called = set(re.findall(r"resolve_delayed\(game, (\w+)\)", inspect.getsource(sequence)))
+    called = {
+        name
+        for module in (sequence, resolution)
+        for name in re.findall(r"resolve_delayed\(game, (\w+)\)", inspect.getsource(module))
+    }
     segment_beginnings = {Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS}
 
     assert {getattr(structure, name) for name in called} | segment_beginnings == FIRED_MOMENTS

@@ -31,6 +31,7 @@ from yasuki_core.engine.rules.turn.structure import (
     Boundary,
     Moment,
     RoundKind,
+    END_OF_BATTLE,
 )
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -385,6 +386,7 @@ def _resolve_battle(game: GameState) -> None:
     )
     attack.battlefields = _with_outcome(attack.battlefields, battlefield, outcome)
     after_resolution(game, battlefield, last_battle=last_battle)
+    triggers.resolve_delayed(game, END_OF_BATTLE)
     attack.current = None
     game.stack.append(FightNextBattle())
 
