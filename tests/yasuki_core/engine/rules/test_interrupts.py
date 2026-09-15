@@ -537,6 +537,29 @@ def test_an_effect_nothing_answers_passes_through_the_step_untouched():
     assert farm.bowed
 
 
+def test_a_seat_that_declined_is_not_asked_again_once_the_other_seat_interrupts():
+    """The replacement an Interrupt makes keeps the declines: P1 passed on the gain, P2 reduced
+    it, and P1 is not offered the reduced gain a second time."""
+    game = _inside_an_action()
+    _honor_card(game.table, "P1-honor0", P1)
+
+    resolve_effects(game, [GainHonor(P1, 2)])
+    assert _asked_seat(game) is P1
+    action_sequence.submit(game, DecisionResponse(()))
+    assert _asked_seat(game) is P2
+
+    _discard_to_interrupt_in(game, "P2-honor0", HONOR_DOWN)
+
+    assert game.pending is None
+    assert game.table.seats[P1].honor == 1
+
+
+def _asked_seat(game: GameState) -> PlayerId:
+    pending = game.pending
+    assert isinstance(pending, ChooseInterrupt)
+    return pending.seat
+
+
 def test_a_change_outside_an_action_asks_nobody():
     game = _inside_an_action()
     game.action = None
