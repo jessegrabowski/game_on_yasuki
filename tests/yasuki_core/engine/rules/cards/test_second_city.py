@@ -1,6 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import DestroyProvince
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -11,7 +12,10 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import (
+    holding,
+    personality,
     province_card,
+    put_in_play,
     register,
 )
 
@@ -97,3 +101,32 @@ def test_destroying_a_province_that_is_already_gone_is_a_no_op():
     resolve_effects(session.game, [DestroyProvince(P1, gone)])
 
     assert len(session.game.table.zones) == before
+
+
+# --- Slanderer ---
+
+
+def _slanderer_game(*, retinue: tuple[str, ...] = ("Courtier",)) -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("slanderer", printed_id="slanderer"))
+    put_in_play(state, personality("courtier", keywords=retinue))
+    put_in_play(state, personality("enemy", owner=PlayerId.P2))
+    return EngineSession.start(state, P1)
+
+
+def test_slanderer_is_offered_only_while_a_courtier_or_magistrate_is_controlled():
+    assert ActivateAbility("slanderer") in _slanderer_game().legal_actions(P1)
+    assert ActivateAbility("slanderer") in _slanderer_game(retinue=("Magistrate",)).legal_actions(
+        P1
+    )
+    assert ActivateAbility("slanderer") not in _slanderer_game(retinue=()).legal_actions(P1)
+
+
+def test_slanderer_bows_to_dishonor_the_target():
+    session = _slanderer_game()
+
+    session.act(P1, ActivateAbility("slanderer"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+
+    assert session.game.table.cards_by_id["enemy"].dishonorable
+    assert session.game.table.cards_by_id["slanderer"].bowed

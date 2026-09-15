@@ -1,9 +1,15 @@
-from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.effects import DestroyProvince, DrawCard, Effect
-from yasuki_core.engine.rules.board.queries import province_key_holding
+from yasuki_core.engine.rules.effects import DestroyProvince, Dishonor, DrawCard, Effect
+from yasuki_core.engine.rules.board.queries import (
+    has_keyword,
+    owned_personalities,
+    personalities_in_play,
+    province_key_holding,
+)
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -40,5 +46,37 @@ register_ability(
         effects=_harsh_choices_effects,
         hits_every_target=True,
         located_at=(CardLocation.PROVINCE,),
+    ),
+)
+
+
+# --- Slanderer ---
+
+
+def _slanderer_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Every Personality, while the controller has a Courtier or Magistrate: "If you control a
+    Courtier or Magistrate" is the whole condition, and an ability with nobody it may dishonor
+    is not offered."""
+    if not any(
+        has_keyword(game, card, keywords.COURTIER) or has_keyword(game, card, keywords.MAGISTRATE)
+        for card in owned_personalities(game, source.owner)
+    ):
+        return []
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _slanderer_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Dishonor(target.id, source.owner)]
+
+
+register_ability(
+    "slanderer",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.POLITICAL}),
+        label="Political Open, bow: dishonor a target Personality",
+        cost=bow_cost,
+        targets=_slanderer_targets,
+        effects=_slanderer_effects,
     ),
 )

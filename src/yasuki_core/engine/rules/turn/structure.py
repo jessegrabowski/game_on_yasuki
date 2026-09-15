@@ -156,13 +156,20 @@ class Moment:
 
 END_OF_TURN = Moment(Turn.CURRENT, Boundary.END)
 BEGINNING_OF_COMBAT = Moment(BattleSegment.COMBAT, Boundary.BEGINNING)
+# "After this battle ends": the battle ends once After Resolution has sent its survivors home
+# (CR, After Resolution).
+END_OF_BATTLE = Moment(BattleSegment.AFTER_RESOLUTION, Boundary.END)
 
 # The moments the flow reaches. Any other Moment is constructible and correctly worded, so an effect
 # delayed to one would be held for the rest of the game with nothing to resolve it. The battle
 # segments' beginnings are taken from the map the flow opens their rounds from, so a segment that
 # becomes an Action Round is fired and listed in the one edit.
 FIRED_MOMENTS: frozenset[Moment] = frozenset(
-    {END_OF_TURN, *(Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS)}
+    {
+        END_OF_TURN,
+        END_OF_BATTLE,
+        *(Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS),
+    }
 )
 
 

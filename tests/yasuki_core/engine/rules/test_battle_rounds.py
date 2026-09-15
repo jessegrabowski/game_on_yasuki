@@ -22,13 +22,14 @@ from yasuki_core.engine.rules.effects import Bow, GrantPriority
 from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
     BEGINNING_OF_COMBAT,
+    END_OF_BATTLE,
     Boundary,
     Moment,
     RoundKind,
 )
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.game_pieces.cards import L5RCard
@@ -524,6 +525,24 @@ def test_a_delay_to_a_segments_beginning_resolves_as_it_opens(segment):
 
     assert session.game.delayed == []
     assert session.game.table.cards_by_id["guard"].bowed
+
+
+def test_a_delay_to_the_end_of_the_battle_resolves_once_the_survivors_are_home():
+    # "After this battle ends" is after After Resolution (CR, After Resolution), so the held effect
+    # sees the attacker already home from the battlefield it won.
+    session = _at_the_battlefield_choice()
+    session.game.delayed = [(END_OF_BATTLE, Bow("hero"))]
+
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    _walk_to(session, BattleSegment.COMBAT)
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+
+    hero = session.game.table.cards_by_id["hero"]
+    assert session.game.delayed == []
+    assert hero.bowed
+    assert location_of(session.game.table, hero).is_home
 
 
 def test_a_delayed_grant_lands_on_the_round_it_was_held_for():
