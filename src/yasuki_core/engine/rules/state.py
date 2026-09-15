@@ -127,6 +127,13 @@ class GameState:
     action_taken : str
         What the action now resolving is, worded for a player: what a Response Step names as the
         thing it is answering. Empty outside an action. Ephemeral and rebuilt by replay.
+    action_seat : PlayerId or None
+        The seat that announced the action now resolving, or None outside one. Ephemeral and
+        rebuilt by replay. Default None.
+    action_targets : tuple of str
+        The cards the action now resolving has been pointed at, in the order its abilities hit
+        them: the target a seat chose, or every card an untargeted ability reached. A card picked
+        inside a later question is not among them. Ephemeral and rebuilt by replay. Default empty.
     action_is_favor : bool
         Whether the action now resolving has paid a Favor cost, which is what makes it a Favor
         action. Settled during payment rather than at announcement, because an action with an
@@ -173,6 +180,8 @@ class GameState:
     responded: set[str] = field(default_factory=set)
     action: Action | None = None
     action_taken: str = ""
+    action_seat: PlayerId | None = None
+    action_targets: tuple[str, ...] = ()
     action_is_favor: bool = False
     action_events: list[GameEvent] = field(default_factory=list)
     interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)

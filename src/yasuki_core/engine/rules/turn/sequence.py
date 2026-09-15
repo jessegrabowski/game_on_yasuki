@@ -148,6 +148,8 @@ def forget_action(game: GameState) -> None:
     """
     game.action_events.clear()
     game.action_taken = ""
+    game.action_seat = None
+    game.action_targets = ()
     game.action_is_favor = False
     game.action = None
     game.interrupts_taken.clear()

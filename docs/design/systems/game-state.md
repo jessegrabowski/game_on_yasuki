@@ -68,6 +68,12 @@ the prohibition lifts once its controller's next Action Phase has ended.
 rather than at announcement, since an action with an alternate cost is a Favor action only when the
 Favor is the half actually paid.
 
+`action_seat` is the seat that announced the action now resolving, and `action_targets` the cards
+its abilities were pointed at, in order. Both are what a Response reads when its card says "if the
+action was yours" or "if it targeted this Personality". The action's keywords, such as Political,
+are not stored: {func}`~.action_keywords` reads them off the ability's registration or off the
+ruleset for a rulebook action.
+
 ## Where a card plugs in
 
 By reading, never by writing. A handler returns effects and the cascade commits them, and

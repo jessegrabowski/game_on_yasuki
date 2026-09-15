@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
 from yasuki_core.engine.rules.legality import legal_targets
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -81,6 +82,7 @@ class ApplyAbilityEffects:
     def resume(self, game: GameState) -> None:
         source = game.table.cards_by_id[self.card_id]
         ability = ability_for(source, self.ability_key)
+        _record_targets(game, self.target_ids)
         effects = [
             effect
             for target_id in self.target_ids
@@ -110,4 +112,12 @@ def apply_ability_target(
     source = game.table.cards_by_id[request.source_card_id]
     target = game.table.cards_by_id[response.choices[0]]
     ability = ability_for(source, request.ability_key)
+    _record_targets(game, (target.id,))
     triggers.resolve_effects(game, ability.effects(game, source, target))
+
+
+def _record_targets(game: GameState, target_ids: tuple[str, ...]) -> None:
+    """Add ``target_ids`` to the resolving action's record, unless the ability is a Response: the
+    record then belongs to the action being responded to, which every responder reads."""
+    if game.round.kind is not RoundKind.RESPONSE:
+        game.action_targets += target_ids

@@ -122,6 +122,8 @@ def perform(game: GameState, action: Action) -> None:
     if not isinstance(action, Pass) and game.round.kind is not RoundKind.RESPONSE:
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
+        game.action_seat = game.round.priority
+        game.action_targets = ()
         game.action_is_favor = False
         game.action = action
         game.interrupts_taken.clear()
