@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy, Recruit
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     FUSHICHO,
@@ -23,7 +23,7 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import WindPrint
+from yasuki_core.game_pieces.prints import ActionPrint, WindPrint
 
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -434,3 +434,66 @@ def test_walk_with_tengoku_is_offered_under_both_of_its_designators():
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
         offered = legality.activatable(session.game, P1, frozenset({designator}))
         assert (spell, ability_for(spell, None)) in offered
+
+
+# --- Hungry Moon ---
+
+
+def _hungry_moon_game() -> EngineSession:
+    state = TableState.empty_two_seat()
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="moon",
+                name="Hungry Moon",
+                printed_id="hungry_moon",
+                side=Side.FATE,
+                owner=P1,
+                gold_cost=0,
+            ),
+        )
+    )
+    put_in_play(state, personality("standing", owner=P2))
+    put_in_play(state, personality("kneeling", owner=P2))
+    put_in_play(state, holding("market", owner=P2, counters={"wealth": 2}))
+    put_in_play(state, holding("farm", owner=P2))
+    session = EngineSession.start(state, P1)
+    session.game.table.cards_by_id["kneeling"].bow()
+    return session
+
+
+def test_hungry_moon_dishonors_only_a_bowed_personality():
+    session = _hungry_moon_game()
+
+    session.act(P1, PlayStrategy("moon", "dishonor"))
+    pay(session, P1)
+    asked = session.game.pending
+    assert asked is not None and asked.candidates == ("kneeling",)
+    session.submit(P1, DecisionResponse(("kneeling",)))
+
+    assert session.game.table.cards_by_id["kneeling"].dishonorable
+
+
+def test_hungry_moon_strips_a_holdings_wealth_and_names_who_pays():
+    session = _hungry_moon_game()
+
+    session.act(P1, PlayStrategy("moon", "wealth"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("market",)))
+    session.submit(P1, DecisionResponse(("P2",)))
+
+    assert session.game.table.cards_by_id["market"].counters == {}
+    assert session.game.table.seats[P2].honor == -3
+
+
+def test_hungry_moon_on_a_holding_with_no_wealth_asks_nobody_to_pay():
+    session = _hungry_moon_game()
+
+    session.act(P1, PlayStrategy("moon", "wealth"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("farm",)))
+
+    assert session.game.pending is None
+    assert session.game.table.seats[P2].honor == 0

@@ -2,16 +2,24 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
-from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility, itself
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
-from yasuki_core.engine.rules.board.queries import attack_targets, personalities_in_play
+from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
+    owned_holdings,
+    personalities_in_play,
+)
+from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_discount
 from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls_printed
 from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    AskOption,
     Choose,
     CreateToken,
+    Dishonor,
     DrawCard,
     Effect,
     GainHonor,
@@ -142,6 +150,76 @@ def _resolve_doji_maya_experienced(
 register_invest(
     "doji_maya_experienced",
     InvestAbility(amounts=(MAYA_INVEST,), effect=_doji_maya_experienced_invest),
+)
+
+
+# --- Hungry Moon ---
+
+
+def _hungry_moon_dishonor_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in personalities_in_play(game) if card.bowed]
+
+
+def _hungry_moon_dishonor_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [Dishonor(target.id, source.owner)]
+
+
+def _hungry_moon_wealth_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for seat in game.table.seats for card in owned_holdings(game, seat)]
+
+
+def _hungry_moon_wealth_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Destroy all Wealth tokens on a target Holding. If this destroyed any Wealth tokens, choose a
+    player, who loses 3 Honor. A Holding with none is a legal target the ability does nothing to."""
+    held = target.counters.get(WEALTH.key, 0)
+    if not held:
+        return []
+    return [
+        AdjustCounter(target.id, WEALTH, -held),
+        AskOption(
+            source.owner,
+            tuple(info.name for info in game.table.seats.values()),
+            "Who loses 3 Honor?",
+            "hungry_moon_player",
+            source.id,
+        ),
+    ]
+
+
+@choice_resolver("hungry_moon_player")
+def _resolve_hungry_moon_player(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
+    return [GainHonor(named, -3)]
+
+
+register_ability(
+    "hungry_moon",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: dishonor a target bowed Personality",
+        cost=no_cost,
+        targets=_hungry_moon_dishonor_targets,
+        effects=_hungry_moon_dishonor_effects,
+        located_at=(CardLocation.HAND,),
+        key="dishonor",
+    ),
+)
+
+register_ability(
+    "hungry_moon",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: destroy a target Holding's Wealth tokens, and a player loses 3 Honor",
+        cost=no_cost,
+        targets=_hungry_moon_wealth_targets,
+        effects=_hungry_moon_wealth_effects,
+        located_at=(CardLocation.HAND,),
+        key="wealth",
+    ),
 )
 
 
