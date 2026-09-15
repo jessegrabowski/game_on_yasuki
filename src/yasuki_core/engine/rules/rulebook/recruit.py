@@ -243,8 +243,9 @@ def proclaim_gain_effects(game: GameState, card: L5RCard) -> list[Effect]:
     printed = effective_personal_honor(game, card)
     handler = PROCLAIM_GAINS.get(card.printed_id)
     if handler is None or handler(game, card) == printed:
-        # The Recruit action targets the card, so Proclaiming a dishonorable Personality rehonors
-        # him instead of gaining his capped Personal Honor (CR, Rehonoring 0.1).
+        # The Recruit action targets the card, so a gain from Proclaiming a dishonorable Personality
+        # rehonors him instead (CR, Rehonoring 0.1). His capped Personal Honor is 0, which is not a
+        # gain, so only an alternative amount ever substitutes.
         return [GainHonor(card.owner, printed, personalities=(card.id,))]
     instead = handler(game, card)
     return [
