@@ -17,6 +17,7 @@ yasuki_core.engine.rules.abilities.registry
     ability_for
     enters_play_bowed
     fixed_invest_amount
+    granted_tireless
     interrupt_for
     invest_amounts
     invest_for

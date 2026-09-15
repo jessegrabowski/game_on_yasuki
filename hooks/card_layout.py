@@ -32,6 +32,7 @@ _DECORATORS = {
     "lobby_bonus_grant",
     "proclaim_gain",
     "province_strength_grant",
+    "tireless_grant",
 }
 
 
@@ -222,6 +223,7 @@ ROLES = frozenset(
         "interrupt",
         "applies",
         "proclaim_gain",
+        "tireless_grant",
         # the per-registry hooks
         "invest",
         "gold",

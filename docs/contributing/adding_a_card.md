@@ -20,6 +20,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "Interrupt: ..." on a card in play | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.BATTLEFIELD,)))` | {card}`Doji Yuten` |
 | May Proclaim for an amount other than Personal Honor | `@proclaim_gain(id)` | {card}`Ninube Aitso, "Doji Yeiko" (Experienced)` |
 | "You may Recruit this Holding as a Political Open action" | `register_recruit_timing(id, RecruitTiming(...))` | {card}`The Ivory Courtroom` |
+| Gives another card's abilities Tireless | `@tireless_grant(id)` | {card}`Shrine to Inari` |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
 | Gives the Personality it hangs on a stat | `@attachment_grant(id)` | {card}`Haramaki-do` |
 | Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |

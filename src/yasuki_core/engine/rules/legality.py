@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
     ability_for,
     fixed_invest_amount,
+    granted_tireless,
     invest_amounts,
     recruit_timing_of,
 )
@@ -629,7 +630,7 @@ def activatable(
         for ability in abilities_for(card):
             if permitted.isdisjoint(ability.timings):
                 continue
-            if not _bow_permits(card, ability):
+            if not _bow_permits(game, card, ability):
                 continue
             # The Rule of Presence is about the player, not the card, so it gates an action taken
             # from anywhere, a Strategy out of hand as much as a Personality on the board.
@@ -665,10 +666,11 @@ def activatable(
     return ready
 
 
-def _bow_permits(card: L5RCard, ability: Ability) -> bool:
+def _bow_permits(game: GameState, card: L5RCard, ability: Ability) -> bool:
     """Whether ``card``'s bowed state leaves ``ability`` usable: abilities on a bowed card cannot be
-    used, and Tireless is the keyword that escapes it (CR, Using Abilities, Tireless)."""
-    return ability.tireless or not card.bowed
+    used, and Tireless is the keyword that escapes it, printed on the ability or granted to the
+    card by another in play (CR, Using Abilities, Tireless)."""
+    return not card.bowed or ability.tireless or granted_tireless(game, card)
 
 
 def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:
@@ -691,7 +693,7 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
     (ShE, Absent). What decides whether a seat with no units there is offered the opportunity at
     all, rather than skipped."""
     return any(
-        BattleDesignator.ABSENT in ability.battle_designators and _bow_permits(card, ability)
+        BattleDesignator.ABSENT in ability.battle_designators and _bow_permits(game, card, ability)
         for _, card in _seat_cards(game, seat)
         for ability in abilities_for(card)
     )

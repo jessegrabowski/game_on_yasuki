@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
@@ -69,6 +70,25 @@ def recruit_timing_of(game: GameState, card_id: str) -> RecruitTiming | None:
     allows or is no longer on the table."""
     card = game.table.cards_by_id.get(card_id)
     return None if card is None else RECRUIT_TIMINGS.get(card.printed_id)
+
+
+# Cards in play that give another card's abilities Tireless ("Your Stronghold's printed abilities
+# have Tireless while this Holding is unbowed"). The handler says whether ``card``'s abilities are
+# Tireless under the granting card, given the game.
+TirelessGrant = Callable[[GameState, L5RCard, L5RCard], bool]
+TIRELESS_GRANTS: HandlerRegistry[TirelessGrant] = HandlerRegistry(
+    "tireless grants", "already grants Tireless"
+)
+tireless_grant = TIRELESS_GRANTS.make_decorator()
+
+
+def granted_tireless(game: GameState, card: L5RCard) -> bool:
+    """Whether a card in play gives ``card``'s abilities Tireless right now."""
+    return any(
+        grant(game, granting, card)
+        for granting in game.table.battlefield.cards
+        if (grant := TIRELESS_GRANTS.get(granting.printed_id)) is not None
+    )
 
 
 def register_ability(printed_id: str, value: Ability) -> None:
