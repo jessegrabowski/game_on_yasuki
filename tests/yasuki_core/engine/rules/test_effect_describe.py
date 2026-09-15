@@ -5,6 +5,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT, END_OF_TURN
 from yasuki_core.engine.rules.effects import (
+    Negated,
     RefillProvince,
     AdjustCounter,
     AskAmount,
@@ -74,6 +75,7 @@ EFFECTS = [
     (Straighten("farm_1"), "straighten farm_1"),
     (InterruptStep(Bow("farm_1")), "bow farm_1"),
     (Dishonor("hero_1", PlayerId.P2), "dishonor hero_1"),
+    (Negated(Bow("hero_1")), "negated: bow hero_1"),
     (Rehonor("hero_1"), "rehonor hero_1"),
     (BanishTopFate(PlayerId.P2), "banish the top of P2's fate deck"),
     (GainGold(PlayerId.P2, 3), "P2 gains 3 gold"),

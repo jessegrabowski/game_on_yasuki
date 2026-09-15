@@ -71,6 +71,7 @@ deferred through `Then` instead.
    LoseGame
    WinGame
    MeleeAttack
+   Negated
    GrantPriority
    GrantKeyword
    GrantMinimum

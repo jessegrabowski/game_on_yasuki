@@ -95,7 +95,8 @@ Interrupt step in `rules/interrupts.py` offers it from hand while such an effect
 and the Strategy is then paid for and discarded the way any Strategy is. Any of the action's own
 effects can be answered, and only those: the step is open against what step E hands to
 `resolve_action_effects`, never against a cost, a trait's effects or a rulebook procedure's, and an
-Interrupt names the type it answers.
+Interrupt names the type it answers. A card that reads "negate" returns {class}`~.Negated` around
+the effect it answers, which resolves as nothing where the effect would have.
 
 An attack's outcome, the `Bow` behind a Fear or the `Destroy` behind a Ranged Attack, follows the
 comparison through the cascade as an effect of its own, so an Interrupt answering `Bow` or

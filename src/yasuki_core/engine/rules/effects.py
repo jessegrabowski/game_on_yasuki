@@ -203,6 +203,32 @@ class InterruptStep(InterruptingEffect):
 
 
 @dataclass(frozen=True, slots=True)
+class Negated(Effect):
+    """An effect an Interrupt negated: it resolves as nothing where ``effect`` would have.
+
+    What an Interrupt returns as its :class:`~yasuki_core.engine.rules.abilities.model.Interruption`
+    replacement when the card reads "negate". Keeping the negated effect lets the trace and the
+    Interrupt step name what was negated.
+
+    Attributes
+    ----------
+    effect : Effect
+        The effect that would have resolved.
+    """
+
+    effect: Effect
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        return []
+
+    def describe(self) -> str:
+        return f"negated: {self.effect.describe()}"
+
+    def narrate(self, game: GameState) -> str:
+        return f"negated: {self.effect.narrate(game)}"
+
+
+@dataclass(frozen=True, slots=True)
 class AdjustCounter(Effect):
     """Add ``delta`` to a counter on a card (floored at zero by the card). A grant is a positive
     delta, a removal negative. The rules-side twin of the sandbox ``AdjustCounter`` intent, applied

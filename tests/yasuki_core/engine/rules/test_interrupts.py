@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_interrupt,
 )
 from yasuki_core.engine.rules.board.queries import attack_targets
-from yasuki_core.engine.rules.effects import Bow, Fear, GainHonor, Straighten, Then
+from yasuki_core.engine.rules.effects import Bow, Fear, GainHonor, Negated, Straighten, Then
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import resolve_action_effects, resolve_effects
 from yasuki_core.engine.rules.turn import action_sequence, sequence
@@ -110,6 +110,16 @@ register_interrupt(
         interrupt=lambda game, source, effect: Interruption(
             effect, effects=(GainHonor(source.owner, 1),)
         ),
+    ),
+)
+
+
+register_interrupt(
+    "negate_fear_probe",
+    Interrupt(
+        label="Interrupt: negate the action's Fear",
+        answers=Fear,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
     ),
 )
 
@@ -466,6 +476,32 @@ def test_the_courage_game_replays_to_the_same_board():
 
 
 OKURA = ("okura", "okura_is_released", DEFENDER)
+NEGATOR = ("negator", "negate_fear_probe", DEFENDER)
+
+
+def test_a_negated_effect_resolves_as_nothing_and_the_action_goes_on():
+    session = _fear_announced({}, strategies=(NEGATOR,), probe="fear_then_honor_probe")
+
+    session.submit(DEFENDER, DecisionResponse(("negator",)))
+    pay(session, DEFENDER)
+
+    assert not _guard_bowed(session)
+    assert session.game.pending is None
+    assert _event_names(session) == ["CardDiscarded", "HonorChanged"]
+
+
+def test_a_negated_attack_leaves_its_outcome_unreached():
+    # The Fear's Bow arrives as the attack's follow-on effect, so negating the Fear negates the
+    # comparison and no Bow is ever raised for anyone to answer.
+    session = _fear_announced({ATTACKER: 1, DEFENDER: 1}, strategies=(NEGATOR,))
+    session.submit(ATTACKER, DecisionResponse())
+
+    session.submit(DEFENDER, DecisionResponse(("negator",)))
+    pay(session, DEFENDER)
+
+    assert not _guard_bowed(session)
+    assert session.game.pending is None
+    assert "HonorChanged" not in _event_names(session)
 
 
 def _event_names(session: EngineSession) -> list[str]:
