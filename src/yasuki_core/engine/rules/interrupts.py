@@ -1,9 +1,11 @@
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.model import Interrupt
+from yasuki_core.engine.rules.abilities.costs import can_pay
+from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt
 from yasuki_core.engine.rules.abilities.registry import interrupt_for
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
 from yasuki_core.engine.rules.board.queries import has_keyword
@@ -13,11 +15,12 @@ from yasuki_core.engine.rules.effects import (
     Fear,
     GainHonor,
     InterruptStep,
+    SpendOncePerTurn,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.legality import has_presence
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.legality import has_presence, location_permits
+from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -146,24 +149,52 @@ def rulebook_interrupts_for(
     ]
 
 
+# The once-per-turn tag an Interrupt taken from play is claimed under (CR, Using Abilities 0.3).
+INTERRUPT_TAG = "interrupt"
+
+
 def card_interrupts_for(
     game: GameState, seat: PlayerId, effect: Effect
-) -> list[tuple[L5RCard, Interrupt]]:
-    """The Interrupts ``seat`` could play from hand against ``effect``: each Strategy whose
-    Interrupt answers its type and whose Gold Cost the seat can reach, while the seat has a unit
-    at any battle being fought (CR, Rule of Presence)."""
+) -> list[tuple[L5RCard, Interrupt, CardLocation]]:
+    """The Interrupts ``seat`` could take against ``effect``, each with where it is taken from,
+    while the seat has a unit at any battle being fought (CR, Rule of Presence).
+
+    A Strategy in hand is offered when its Interrupt answers the effect and the seat can reach its
+    Gold Cost. A card in play is offered under the gates an activated ability answers to: unbowed,
+    within the Rules of Location, unused this turn where the arc makes abilities once per turn,
+    and able to pay the Interrupt's cost.
+    """
     if not has_presence(game, seat):
         return []
-    playable: list[tuple[L5RCard, Interrupt]] = []
+    offered: list[tuple[L5RCard, Interrupt, CardLocation]] = []
     for card in _hand(game, seat):
-        interrupt = interrupt_for(card)
-        if (
-            interrupt is not None
-            and isinstance(effect, interrupt.answers)
-            and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
+        interrupt = _answering(game, card, effect, CardLocation.HAND)
+        if interrupt is not None and effective_gold_cost(game, card) <= reachable_gold(
+            game, seat, card
         ):
-            playable.append((card, interrupt))
-    return playable
+            offered.append((card, interrupt, CardLocation.HAND))
+    once = ruleset.ACTIVE.abilities_once_per_turn
+    for card in game.table.battlefield.cards:
+        if card.owner is not seat or card.bowed or not location_permits(game, card):
+            continue
+        if once and used_this_turn(game, card, INTERRUPT_TAG):
+            continue
+        interrupt = _answering(game, card, effect, CardLocation.BATTLEFIELD)
+        if interrupt is not None and can_pay(game, card, interrupt.cost):
+            offered.append((card, interrupt, CardLocation.BATTLEFIELD))
+    return offered
+
+
+def _answering(
+    game: GameState, card: L5RCard, effect: Effect, location: CardLocation
+) -> Interrupt | None:
+    """``card``'s Interrupt if it is taken from ``location`` and answers ``effect``, else None."""
+    interrupt = interrupt_for(card)
+    if interrupt is None or location not in interrupt.located_at:
+        return None
+    if not isinstance(effect, interrupt.answers) or not interrupt.applies(game, card, effect):
+        return None
+    return interrupt
 
 
 def interrupters(game: GameState, step: InterruptStep) -> list[PlayerId]:
@@ -199,7 +230,7 @@ def interrupt_request(game: GameState, step: InterruptStep) -> ChooseInterrupt:
         for interrupt in rulebook_interrupts_for(game, seat, effect)
         for card in discardable_for(game, seat, interrupt)
     )
-    plays = tuple(card.id for card, _ in card_interrupts_for(game, seat, effect))
+    plays = tuple(card.id for card, _, _ in card_interrupts_for(game, seat, effect))
     return ChooseInterrupt(seat=seat, candidates=discards + plays, description=effect.narrate(game))
 
 
@@ -251,15 +282,19 @@ def _interrupted(game: GameState) -> InterruptStep:
 
 def _play_interrupt(game: GameState, seat: PlayerId, step: InterruptStep, card_id: str) -> None:
     played = next(
-        (pair for pair in card_interrupts_for(game, seat, step.effect) if pair[0].id == card_id),
+        (offer for offer in card_interrupts_for(game, seat, step.effect) if offer[0].id == card_id),
         None,
     )
     if played is None:
         raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can play")
-    card, interrupt = played
+    card, interrupt, location = played
     interruption = interrupt.interrupt(game, card, step.effect)
     game.stack.append(ResumeInterrupted((step.replaced_by(interruption.replacement),)))
-    play_strategy_with(game, card, interruption.effects)
+    if location is CardLocation.HAND:
+        play_strategy_with(game, card, interruption.effects)
+        return
+    spent = SpendOncePerTurn(card.id, INTERRUPT_TAG)
+    triggers.resolve_effects(game, [spent, *interrupt.cost(game, card), *interruption.effects])
 
 
 def _ask_adjustment(

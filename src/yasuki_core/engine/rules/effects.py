@@ -107,6 +107,12 @@ class Effect(ABC):
         own. True unless the effect is nothing to interrupt, such as an Honor change of zero."""
         return True
 
+    def follow_on(self, game: GameState) -> tuple["Effect", ...]:
+        """The effects this one produces once performed, which the cascade applies next, each
+        through its own Interrupt step. Read after :meth:`~.Effect.perform`, on the board it left.
+        Empty for an effect that is complete in itself."""
+        return ()
+
 
 class InterruptingEffect(Effect, ABC):
     """An effect that pauses the cascade to put a question to a seat.
@@ -191,6 +197,35 @@ class InterruptStep(InterruptingEffect):
     def perform(self, game: GameState) -> list[GameEvent]:
         """Commit the held effect, reached once nobody is left to ask."""
         return self.effect.perform(game)
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        return self.effect.follow_on(game)
+
+
+@dataclass(frozen=True, slots=True)
+class Negated(Effect):
+    """An effect an Interrupt negated: it resolves as nothing where ``effect`` would have.
+
+    What an Interrupt returns as its :class:`~yasuki_core.engine.rules.abilities.model.Interruption`
+    replacement when the card reads "negate". Keeping the negated effect lets the trace and the
+    Interrupt step name what was negated.
+
+    Attributes
+    ----------
+    effect : Effect
+        The effect that would have resolved.
+    """
+
+    effect: Effect
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        return []
+
+    def describe(self) -> str:
+        return f"negated: {self.effect.describe()}"
+
+    def narrate(self, game: GameState) -> str:
+        return f"negated: {self.effect.narrate(game)}"
 
 
 @dataclass(frozen=True, slots=True)
@@ -704,7 +739,8 @@ class AttackEffect(Effect, ABC):
         What happens to a target the strength reaches, in order, built from the ordinary effects.
         Default the kind's printed outcome, ``Bow`` for Fear and ``Destroy`` for the other two,
         filled in when none is given. An Interrupt replaces the effect with one whose outcome does
-        more.
+        more. The outcome follows the comparison through the cascade as effects of its own, so an
+        Interrupt against a Bow or a Destroy is offered against what an attack does as well.
     """
 
     # What the card prints this effect as, which is the only thing its description needs from the
@@ -735,19 +771,22 @@ class AttackEffect(Effect, ABC):
         return "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
+        """The comparison itself changes nothing. What it decides arrives as :meth:`follow_on`."""
+        return []
+
+    def reaches(self, game: GameState) -> bool:
+        """Whether the strength reaches the target's compared stat, read as the attack resolves."""
         # Imported where it is used: reading an attack's strength walks the board for the cards
         # adjusting it, and that module imports this one for the attack types.
         from yasuki_core.engine.rules.attack_effects import effective_strength
 
         card = game.table.cards_by_id.get(self.target_id)
-        if card is None or effective_stat(game, card, self.compared) > effective_strength(
-            game, self
-        ):
-            return []
-        events: list[GameEvent] = []
-        for effect in self.outcome:
-            events.extend(effect.perform(game))
-        return events
+        return card is not None and effective_stat(game, card, self.compared) <= (
+            effective_strength(game, self)
+        )
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        return self.outcome if self.reaches(game) else ()
 
 
 @dataclass(frozen=True, slots=True)

@@ -3,9 +3,14 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint, WindPrint
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    Lobby,
+    Recruit,
+)
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
@@ -23,6 +28,11 @@ from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
+from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.vocabulary.decisions import Confirm
+from yasuki_core.engine.rules.state import GameState
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -360,3 +370,79 @@ def test_doji_yasuko_draws_after_a_strategy_gains_a_player_honor():
         assert [card.id for card in hand] == ["top"]
     finally:
         _ABILITIES.pop(HONORABLE_STRATEGY)
+
+
+# --- Doji Meiji, Regent (Experienced) ---
+
+MEIJI = "doji_meiji_regent_experienced"
+
+
+def _meiji(**overrides) -> L5RCard:
+    fields = dict(chi=5, personal_honor=2)
+    fields.update(overrides)
+    return personality("meiji", printed_id=MEIJI, **fields)
+
+
+def test_proclaiming_meiji_asks_whether_to_gain_his_chi_instead():
+    game = two_seat_game()
+    meiji = put_in_play(game, _meiji())
+
+    finish_recruit(game, meiji.id, None, proclaim=True)
+
+    assert isinstance(game.pending, Confirm)
+    assert game.pending.prompt() == "Gain 5 Honor from Proclaiming instead of 2?"
+    submit(game, DecisionResponse(game.pending.candidates))
+    assert game.table.seats[P1].honor == 5
+
+
+def _wind_named(owner: PlayerId, printed_id: str) -> L5RCard:
+    return L5RCard.of(
+        WindPrint,
+        id=f"{owner.name}-wind",
+        name=printed_id,
+        printed_id=printed_id,
+        side=Side.FATE,
+        owner=owner,
+    )
+
+
+def _p2_ready_to_lobby(
+    *, meiji_bowed: bool = False, p1_wind: str | None = "kanos_alliance", p2_wind: str | None = None
+) -> GameState:
+    game = two_seat_game(first_player=PlayerId.P2)
+    meiji = put_in_play(game, _meiji())
+    if meiji_bowed:
+        meiji.bow()
+    if p1_wind is not None:
+        put_in_play(game, _wind_named(P1, p1_wind))
+    if p2_wind is not None:
+        put_in_play(game, _wind_named(PlayerId.P2, p2_wind))
+    game.table.seats[PlayerId.P2].honor = 10
+    put_in_play(game, personality("P2-courtier", owner=PlayerId.P2, personal_honor=2))
+    return game
+
+
+def test_an_unbowed_meiji_stops_a_seat_without_his_controllers_wind_lobbying():
+    game = _p2_ready_to_lobby()
+
+    assert Lobby() not in legality.legal_actions(game, PlayerId.P2)
+
+
+def test_a_seat_sharing_meijis_controllers_wind_may_lobby():
+    game = _p2_ready_to_lobby(p2_wind="kanos_alliance")
+
+    assert Lobby() in legality.legal_actions(game, PlayerId.P2)
+
+
+def test_a_bowed_meiji_stops_nobody():
+    game = _p2_ready_to_lobby(meiji_bowed=True)
+
+    assert Lobby() in legality.legal_actions(game, PlayerId.P2)
+
+
+def test_meiji_stops_nobody_while_his_controller_has_no_wind():
+    # "Your Wind" names a Wind his controller has. Without one the clause has no referent, and
+    # the ruling here is that it does nothing.
+    game = _p2_ready_to_lobby(p1_wind=None)
+
+    assert Lobby() in legality.legal_actions(game, PlayerId.P2)

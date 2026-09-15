@@ -1,12 +1,14 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from yasuki_core.engine import ops
+from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import finish_invest
 from yasuki_core.engine.rules.abilities.registry import enters_play_bowed, invest_amounts
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
-from yasuki_core.engine.rules.effects import GainHonor
+from yasuki_core.engine.rules.effects import Ask, Effect, GainHonor
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseFortificationProvince,
     ChooseInvestAmount,
@@ -223,6 +225,51 @@ def _announce_entering_play(
     triggers.fire(game, EnteredPlay(card_id))
 
 
+ProclaimGain = Callable[[GameState, L5RCard], int]
+
+# Cards that may Proclaim for an amount other than their Personal Honor ("you may gain 3 Honor
+# instead"). The handler returns the alternative, and the seat is asked which to take.
+PROCLAIM_GAINS: HandlerRegistry[ProclaimGain] = HandlerRegistry(
+    "proclaim gains", "already names a Proclaim gain"
+)
+proclaim_gain = PROCLAIM_GAINS.make_decorator()
+PROCLAIM_GAIN_CHOICE = "proclaim_gain"
+
+
+def proclaim_gain_effects(game: GameState, card: L5RCard) -> list[Effect]:
+    """The Honor gain Proclaiming ``card`` earns its seat once it has entered play (CR, Proclaim):
+    its Personal Honor, or a yes/no question when the card offers a different amount instead,
+    since "may gain N instead" is the seat's call. No keeps the Personal Honor."""
+    printed = effective_personal_honor(game, card)
+    handler = PROCLAIM_GAINS.get(card.printed_id)
+    if handler is None or handler(game, card) == printed:
+        return [GainHonor(card.owner, printed)]
+    instead = handler(game, card)
+    return [
+        Ask(
+            card.owner,
+            f"Gain {instead} Honor from Proclaiming instead of {printed}?",
+            PROCLAIM_GAIN_CHOICE,
+            subjects=(card.id,),
+            source_id=card.id,
+        )
+    ]
+
+
+@triggers.choice_resolver(PROCLAIM_GAIN_CHOICE)
+def _resolve_proclaim_gain(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Yes takes the alternative, no the Personal Honor. Both are read now, in play."""
+    card = game.table.cards_by_id[source_id]
+    amount = (
+        PROCLAIM_GAINS[card.printed_id](game, card)
+        if chosen
+        else effective_personal_honor(game, card)
+    )
+    return [GainHonor(seat, amount)]
+
+
 def finish_recruit(
     game: GameState, card_id: str, invest_amount: int | None, proclaim: bool = False
 ) -> None:
@@ -234,9 +281,7 @@ def finish_recruit(
     finish_invest(game, card, invest_amount)
     if proclaim:
         game.use_once(proclaim_key(card.owner, game.turn))
-        triggers.resolve_action_effects(
-            game, [GainHonor(card.owner, effective_personal_honor(game, card))]
-        )
+        triggers.resolve_action_effects(game, proclaim_gain_effects(game, card))
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:

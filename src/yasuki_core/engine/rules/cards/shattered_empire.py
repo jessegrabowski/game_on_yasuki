@@ -9,6 +9,9 @@ from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.effects import CreateToken, DrawCard, Effect
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
+from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
+from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.triggers import action_did
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -16,6 +19,47 @@ from yasuki_core.engine.rules.vocabulary.game_events import HonorChanged
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import WindPrint
+
+
+# --- Doji Meiji, Regent (Experienced) ---
+
+
+@proclaim_gain("doji_meiji_regent_experienced")
+def _doji_meiji_regent_experienced_proclaim_gain(game: GameState, card: L5RCard) -> int:
+    """When Proclaiming Meiji, you may choose to gain Honor equal to his Chi instead of equal to
+    his Personal Honor."""
+    return effective_chi(game, card)
+
+
+def _doji_meiji_regent_experienced_wind_of(game: GameState, seat: PlayerId) -> str | None:
+    """The printed id of the Wind ``seat`` has in play, or None without one."""
+    return next(
+        (
+            card.printed_id
+            for card in game.table.battlefield.cards
+            if card.owner is seat and isinstance(card.printed, WindPrint)
+        ),
+        None,
+    )
+
+
+@lobby_bar("doji_meiji_regent_experienced")
+def _doji_meiji_regent_experienced_lobby_bar(
+    game: GameState, card: L5RCard, seat: PlayerId
+) -> bool:
+    """While Meiji is unbowed, players without your Wind may not Lobby.
+
+    "Your Wind" names a Wind his controller has, so a controller with none bars nobody; this is
+    a ruling, the CR being silent. A rival with no Wind, or a different one, is without yours.
+    His Political Open has no handler yet: it waits on duels and on a per-turn record of Favor
+    discards.
+    """
+    if card.bowed or seat is card.owner:
+        return False
+    wind_of = _doji_meiji_regent_experienced_wind_of
+    yours = wind_of(game, card.owner)
+    return yours is not None and wind_of(game, seat) != yours
 
 
 # --- Doji Yasuko, Soul of Doji Takeji ---

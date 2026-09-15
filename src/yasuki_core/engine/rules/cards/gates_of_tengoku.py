@@ -1,9 +1,15 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.idioms import register_event_entry
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
-from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+    itself,
+)
+from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
+from yasuki_core.engine.rules.board.queries import owned_personalities, personalities_in_play
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
@@ -16,24 +22,75 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     CreateToken,
     DelayedEffect,
+    Destroy,
     Effect,
+    MoveToDeck,
+    Negated,
     PayGold,
+    ShuffleDeck,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import sincerity_seed_targets
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import SINCERITY
 
 
 # --- Decree of the Hantei ---
 
 register_event_entry("decree_of_the_hantei", ability_keywords=frozenset({keywords.POLITICAL}))
+
+
+# --- Ninube Aitso, "Doji Yeiko" (Experienced) ---
+
+AITSO_PROCLAIM = 3
+
+
+@proclaim_gain("ninube_aitso_doji_yeiko_experienced")
+def _ninube_aitso_doji_yeiko_experienced_proclaim_gain(game: GameState, card: L5RCard) -> int:
+    """When Proclaiming Aitso, you may gain 3 Honor instead of her Personal Honor."""
+    return AITSO_PROCLAIM
+
+
+def _ninube_aitso_doji_yeiko_experienced_applies(
+    game: GameState, source: L5RCard, effect: Destroy
+) -> bool:
+    target = game.table.cards_by_id.get(effect.card_id)
+    return target is not None and target in owned_personalities(game, source.owner)
+
+
+def _ninube_aitso_doji_yeiko_experienced_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Reshuffle Aitso into her owner's Dynasty deck."""
+    deck = DeckKey(source.owner, Side.DYNASTY)
+    return [MoveToDeck(source.id, deck, from_top=0), ShuffleDeck(deck)]
+
+
+def _ninube_aitso_doji_yeiko_experienced_interrupt(
+    game: GameState, source: L5RCard, effect: Destroy
+) -> Interruption:
+    return Interruption(Negated(effect))
+
+
+register_interrupt(
+    "ninube_aitso_doji_yeiko_experienced",
+    Interrupt(
+        label="Interrupt: reshuffle Aitso into your Dynasty deck to negate your Personality's "
+        "destruction",
+        answers=Destroy,
+        interrupt=_ninube_aitso_doji_yeiko_experienced_interrupt,
+        applies=_ninube_aitso_doji_yeiko_experienced_applies,
+        located_at=(CardLocation.BATTLEFIELD,),
+        cost=_ninube_aitso_doji_yeiko_experienced_cost,
+    ),
+)
 
 
 # --- Sasada, Pearl Champion (Experienced) ---

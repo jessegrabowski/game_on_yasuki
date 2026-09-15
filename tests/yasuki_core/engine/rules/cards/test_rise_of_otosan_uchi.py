@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_options
-from yasuki_core.engine.rules.effects import Straighten, TakeFavor
+from yasuki_core.engine.rules.effects import Bow, Fear, Move, Straighten, TakeFavor
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
@@ -31,7 +31,7 @@ from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.projection import project
 from yasuki_core import ruleset
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -44,6 +44,13 @@ from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, PlayStrat
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.prints import ActionPrint
 
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
+from tests.yasuki_core.engine.rules.conftest import probe_ability
+from yasuki_core.engine.rules.units.composition import followers_of
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -1056,3 +1063,151 @@ def test_kitsu_watanabe_is_offered_under_both_of_his_designators():
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
         offered = legality.activatable(session.game, P1, frozenset({designator}))
         assert (watanabe, ability_for(watanabe, None)) in offered
+
+
+# --- Doji Yuten ---
+
+BOW_PROBE = "probe_battle_bow_an_enemy"
+FEAR_PROBE = "probe_battle_fear_an_enemy"
+
+
+def _enemy_personalities(game, source):
+    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
+
+
+BOW_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Repeatable Battle: bow a target enemy Personality",
+    cost=no_cost,
+    targets=_enemy_personalities,
+    effects=lambda game, source, target: [Bow(target.id)],
+    repeatable=True,
+)
+FEAR_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: Fear 9",
+    cost=no_cost,
+    targets=_enemy_personalities,
+    effects=lambda game, source, target: [Fear(9, target.id, source.owner)],
+)
+
+
+def _yuten_defending(*, probe: str = BOW_PROBE, yuten_defends: bool = True) -> EngineSession:
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("raider", owner=P1, printed_id=probe, force=3))
+    put_in_play(state, personality("guard", owner=P2, force=2))
+    put_in_play(state, personality("yuten", owner=P2, printed_id="doji_yuten", force=4))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    defenders = ("guard@0", "yuten@0") if yuten_defends else ("guard@0",)
+    session.submit(P2, DecisionResponse(defenders))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(P2, Pass())
+    return session
+
+
+def _raider_targets_the_guard(session: EngineSession) -> None:
+    session.act(P1, ActivateAbility("raider"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+
+def test_doji_yuten_negates_the_bowing_of_his_controllers_other_personality():
+    with probe_ability(BOW_PROBE, BOW_ABILITY):
+        session = _yuten_defending()
+        _raider_targets_the_guard(session)
+        assert isinstance(session.game.pending, ChooseInterrupt)
+        assert session.game.pending.seat is P2
+
+        session.submit(P2, DecisionResponse(("yuten",)))
+
+        game = session.game
+        assert game.table.cards_by_id["guard"].bowed is False
+        assert game.table.seats[P2].honor == 1  # the Defender's gain
+        assert game.pending is None
+
+
+def test_doji_yuten_answers_the_bow_a_fear_would_make():
+    with probe_ability(FEAR_PROBE, FEAR_ABILITY):
+        session = _yuten_defending(probe=FEAR_PROBE)
+        _raider_targets_the_guard(session)
+        assert isinstance(session.game.pending, ChooseInterrupt)
+
+        session.submit(P2, DecisionResponse(("yuten",)))
+
+        assert session.game.table.cards_by_id["guard"].bowed is False
+
+
+MOVE_PROBE = "probe_battle_move_an_enemy_follower_home"
+MOVE_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: move a target enemy Follower's unit home",
+    cost=no_cost,
+    targets=lambda game, source: [
+        follower.id
+        for card in personalities_in_play(game)
+        if card.owner is not source.owner
+        for follower in followers_of(game, card)
+    ],
+    effects=lambda game, source, target: [Move(target.id, Location.home(target.owner))],
+)
+
+
+def test_doji_yuten_answers_a_move_that_names_a_follower_in_his_personalitys_unit():
+    with probe_ability(MOVE_PROBE, MOVE_ABILITY):
+        session = _yuten_defending(probe=MOVE_PROBE)
+        attached(
+            session.game,
+            attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER),
+            "guard",
+        )
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("ashigaru",)))
+        assert isinstance(session.game.pending, ChooseInterrupt)
+
+        session.submit(P2, DecisionResponse(("yuten",)))
+
+        guard = session.game.table.cards_by_id["guard"]
+        assert not location_of(session.game.table, guard).is_home
+
+
+def test_doji_yuten_is_not_offered_against_his_own_bowing():
+    with probe_ability(BOW_PROBE, BOW_ABILITY):
+        session = _yuten_defending()
+        session.act(P1, ActivateAbility("raider"))
+
+        session.submit(P1, DecisionResponse(("yuten",)))
+
+        assert session.game.pending is None
+        assert session.game.table.cards_by_id["yuten"].bowed is True
+
+
+def test_doji_yuten_is_not_offered_while_bowed_or_away_from_the_battle():
+    with probe_ability(BOW_PROBE, BOW_ABILITY):
+        at_home = _yuten_defending(yuten_defends=False)
+        _raider_targets_the_guard(at_home)
+        assert at_home.game.pending is None
+
+        bowed = _yuten_defending()
+        bowed.game.table.cards_by_id["yuten"].bow()
+        _raider_targets_the_guard(bowed)
+        assert bowed.game.pending is None
+
+
+def test_doji_yuten_interrupts_once_a_turn():
+    with probe_ability(BOW_PROBE, BOW_ABILITY):
+        session = _yuten_defending()
+        _raider_targets_the_guard(session)
+        session.submit(P2, DecisionResponse(("yuten",)))
+        session.act(P2, Pass())
+
+        _raider_targets_the_guard(session)
+
+        assert session.game.pending is None
+        assert session.game.table.cards_by_id["guard"].bowed is True

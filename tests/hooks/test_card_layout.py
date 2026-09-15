@@ -51,6 +51,28 @@ def test_a_header_naming_another_card_is_reported(tmp_path, capsys):
     )
 
 
+INTERRUPT = """# --- Okura is Released ---
+
+
+def _okura_is_released_applies(game, source, effect):
+    return True
+
+
+def _okura_is_released_interrupt(game, source, effect):
+    return effect
+
+
+register_interrupt("okura_is_released", Interrupt(answers=Fear, interrupt=_okura_is_released_interrupt))
+"""
+
+
+def test_an_interrupt_registration_belongs_to_the_header_above_it(tmp_path, capsys):
+    # An Interrupt block ahead of another card used to be read as part of the next section, so
+    # every header below it named the wrong card.
+    assert main([written(tmp_path, FARM + "\n\n" + INTERRUPT + "\n\n" + PORT)]) == 0
+    assert capsys.readouterr().err == ""
+
+
 def test_registrations_split_into_two_runs_are_reported(tmp_path, capsys):
     interleaved = FARM + "\n\n" + PORT + '\n\nregister_event_entry("modest_farm")\n'
 

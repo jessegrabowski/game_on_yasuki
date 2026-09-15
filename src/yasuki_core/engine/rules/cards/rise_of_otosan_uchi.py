@@ -2,8 +2,16 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import ask_whose_honor_moves, register_event_entry
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+    InvestAbility,
+    itself,
+)
 from yasuki_core.engine.rules.abilities.registry import (
+    register_interrupt,
     register_may_remain_bowed,
     register_ability,
     register_invest,
@@ -32,7 +40,9 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantProvinceStrength,
     MeleeAttack,
+    Move,
     MoveToDeck,
+    Negated,
     PayGold,
     ShuffleDeck,
     SpendOncePerTurn,
@@ -45,6 +55,8 @@ from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.legality import permits
+from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, Straightened
@@ -52,6 +64,7 @@ from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import PersonalityPrint
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 
@@ -340,6 +353,46 @@ register_ability(
         targets=itself,
         effects=_culling_grounds_effects,
         hits_every_target=True,
+    ),
+)
+
+
+# --- Doji Yuten ---
+
+
+def _doji_yuten_applies(game: GameState, source: L5RCard, effect: Bow | Move) -> bool:
+    """A Battle action's bowing or moving of one of Yuten's controller's other Personalities.
+    A Move names any card in the unit, so the Personality is read off the unit. "Yuten cannot
+    attack" is not modeled."""
+    if not permits(game, source.owner, ActionTiming.BATTLE):
+        return False
+    card = game.table.cards_by_id.get(effect.card_id)
+    if card is None:
+        return False
+    personality = card if isinstance(card.printed, PersonalityPrint) else attached_to(game, card)
+    return (
+        personality is not None
+        and personality.id != source.id
+        and personality.owner is source.owner
+    )
+
+
+def _doji_yuten_interrupt(game: GameState, source: L5RCard, effect: Bow | Move) -> Interruption:
+    attack = game.attack
+    defending = attack is not None and attack.defender is source.owner
+    gained = (GainHonor(source.owner, 1),) if defending else ()
+    return Interruption(Negated(effect), effects=gained)
+
+
+register_interrupt(
+    "doji_yuten",
+    Interrupt(
+        label="Interrupt: negate your other Personality's bowing or movement from the Battle "
+        "action",
+        answers=Bow | Move,
+        interrupt=_doji_yuten_interrupt,
+        applies=_doji_yuten_applies,
+        located_at=(CardLocation.BATTLEFIELD,),
     ),
 )
 
