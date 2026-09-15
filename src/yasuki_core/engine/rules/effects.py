@@ -1244,9 +1244,10 @@ class Rehonor(Effect):
 
 def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     """The effects of a Personality committing seppuku: rehonor him, then destroy him (CR,
-    Seppuku). Two effects rather than one, so each passes through the Interrupt step on its own.
-    The CR adds that neither can be negated, which nothing here models because negation is not
-    modeled.
+    Seppuku). Two effects rather than one, so each passes through the Interrupt step on its own,
+    and the destruction is deferred through ``Then`` so the Personality's own reaction to his
+    rehonoring fires while he is still in play. The CR adds that neither can be negated, which
+    nothing here models because negation is not modeled.
 
     Parameters
     ----------
@@ -1255,7 +1256,7 @@ def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     cause : PlayerId or Rulebook
         Who or what directed it: the seat whose card did, or the rule that demanded it.
     """
-    return [Rehonor(card_id), Destroy(card_id, cause)]
+    return [Rehonor(card_id), Then((Destroy(card_id, cause),))]
 
 
 @dataclass(frozen=True, slots=True)

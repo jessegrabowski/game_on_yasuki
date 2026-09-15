@@ -74,6 +74,7 @@ yasuki_core
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
     yasuki_core.engine.rules.rulebook.cycle <yasuki_core.engine.rules.rulebook.cycle>
+    yasuki_core.engine.rules.rulebook.dishonor <yasuki_core.engine.rules.rulebook.dishonor>
     yasuki_core.engine.rules.rulebook.dynasty_discard <yasuki_core.engine.rules.rulebook.dynasty_discard>
     yasuki_core.engine.rules.rulebook.equip <yasuki_core.engine.rules.rulebook.equip>
     yasuki_core.engine.rules.rulebook.favor_abilities <yasuki_core.engine.rules.rulebook.favor_abilities>

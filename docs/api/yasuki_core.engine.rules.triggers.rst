@@ -29,6 +29,7 @@ yasuki_core.engine.rules.triggers
     resolve_effects
     resume_cascade
     resume_paused_cascade
+    rulebook_trigger
 
 .. automodule:: yasuki_core.engine.rules.triggers
     :members:

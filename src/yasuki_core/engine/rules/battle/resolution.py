@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor
+from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor, Rehonor
 from yasuki_core.engine.rules.board.queries import units_at
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules import triggers
@@ -189,7 +189,9 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     The higher Force wins and destroys the enemy army. An Attacker whose Force also cleared the
     Province Strength destroys the Province too. A tie with units on both sides destroys both. A tie
     on zero Force where either side is empty has no outcome, which is not the same as a tie that
-    destroys nothing. The winner gains twice the cards it destroyed, and on a tie both do.
+    destroys nothing. The winner gains twice the cards it destroyed, and on a tie both do, except
+    that an army holding a dishonorable Personality rehonors him in place of its gain (CR,
+    Rehonoring 0.3), in a tie before it is destroyed.
     """
     attack = _declared_attack(game)
     attacking = units_at(game, battlefield, attack.attacker)
@@ -198,25 +200,45 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     defending_force = army_force(game, battlefield, attack.defender)
 
     if attacking_force > defending_force:
-        effects = _destroy_army(defending) + [
-            GainHonor(attack.attacker, 2 * _cards_in(game, defending))
+        effects = [
+            *_destroy_army(defending),
+            *_rehonored(attacking),
+            *_spoils(game, attack.attacker, attacking, defending),
         ]
         province = attack.battlefields[battlefield].province
         if attacking_force > defending_force + effective_province_strength(game, province):
             effects.append(DestroyProvince(attack.attacker, province))
         return effects
     if defending_force > attacking_force:
-        return _destroy_army(attacking) + [
-            GainHonor(attack.defender, 2 * _cards_in(game, attacking))
+        return [
+            *_destroy_army(attacking),
+            *_rehonored(defending),
+            *_spoils(game, attack.defender, defending, attacking),
         ]
     if not (attacking and defending):
         return []  # tied on zero Force with a side empty: no outcome
     return [
+        *_rehonored(attacking),
+        *_rehonored(defending),
         *_destroy_army(defending),
         *_destroy_army(attacking),
-        GainHonor(attack.attacker, 2 * _cards_in(game, defending)),
-        GainHonor(attack.defender, 2 * _cards_in(game, attacking)),
+        *_spoils(game, attack.attacker, attacking, defending),
+        *_spoils(game, attack.defender, defending, attacking),
     ]
+
+
+def _rehonored(army: list[L5RCard]) -> list[Effect]:
+    return [Rehonor(personality.id) for personality in army if personality.dishonorable]
+
+
+def _spoils(
+    game: GameState, winner: PlayerId, army: list[L5RCard], destroyed: list[L5RCard]
+) -> list[Effect]:
+    """The Honor ``winner`` gains for destroying ``destroyed``, twice the cards, unless a
+    dishonorable Personality in its ``army`` was rehonored in its place (CR, Rehonoring 0.3)."""
+    if any(personality.dishonorable for personality in army):
+        return []
+    return [GainHonor(winner, 2 * _cards_in(game, destroyed))]
 
 
 def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) -> None:

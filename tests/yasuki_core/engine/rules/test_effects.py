@@ -7,6 +7,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import effects
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -134,14 +135,23 @@ def test_only_a_personality_can_be_dishonored():
     assert Dishonor(farm.id, PlayerId.P1).is_payable(game) is False
 
 
-def test_seppuku_rehonors_and_then_destroys():
+def test_seppuku_rehonors_and_then_destroys(reacting):
+    # The Personality's own "after this Personality is rehonored" fires before he dies: the
+    # destruction is deferred until the rehonoring's cascade has drained.
     game = two_seat_game()
-    hero = put_in_play(game, personality("P1-p"))
+    hero = put_in_play(game, personality("P1-p", printed_id="seppuku_probe"))
     hero.dishonor()
-
-    assert seppuku(hero.id, PlayerId.P1) == [Rehonor(hero.id), Destroy(hero.id, PlayerId.P1)]
+    seen: list[bool] = []
+    reacting(
+        Rehonored,
+        "seppuku_probe",
+        lambda ctx: seen.append(ctx.card in game.table.battlefield.cards) or [],
+    )
 
     resolve_effects(game, seppuku(hero.id, PlayerId.P1))
+    run_stack(game)
+
+    assert seen == [True]
     assert hero.dishonorable is False
     assert hero in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
 

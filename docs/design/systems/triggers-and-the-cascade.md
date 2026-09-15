@@ -43,10 +43,11 @@ engine order them, settle the rules between them, and replay the game from its i
 
 A seat may control three copies of {card}`Rural Market`, all sharing a `printed_id`. Collection
 walks the battlefield and gathers every trigger registered for the event, so all three fire and
-each decides for itself whether the event was about it. `_collect`:
+each decides for itself whether the event was about it. `_card_triggers`, the half of `_collect`
+that gathers the cards' triggers:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/triggers.py
-:pyobject: _collect
+:pyobject: _card_triggers
 :language: python
 ```
 
@@ -82,6 +83,24 @@ Order is fixed before anything fires, by `_canonical_order`:
 
 Owner then card id. Two cards reacting to the same event resolve the same way every time, which
 replay depends on.
+
+## The rulebook reacts too
+
+Some consequences follow an occurrence with no card behind them. After a dishonorable Personality
+is destroyed, his controller loses Honor equal to his printed Personal Honor, and the CR calls that
+a rulebook effect. It is a trigger with nobody to register it, so `rulebook_trigger` registers it
+against the event type alone:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/dishonor.py
+:pyobject: lose_honor_for_a_dishonorable_death
+:language: python
+```
+
+A rulebook trigger fires after every card's trigger for the same event, and its context card is the
+card the event names, which is how the Honor loss above knows whose death it is reacting to. An
+event about no card fires no rulebook trigger. The loss is an ordinary `GainHonor` in the cascade,
+so any card reading `HonorChanged` sees it, and like every trigger's effect it is never held at the
+Interrupt step.
 
 ## The walk
 

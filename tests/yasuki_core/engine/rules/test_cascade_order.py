@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Decisio
 from yasuki_core.engine.rules.effects import AdjustCounter, RecruitCard, Then
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.turn.sequence import run_stack
+from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.triggers import fire, on, resolve_effects
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
@@ -82,6 +83,26 @@ def test_triggers_for_one_event_fire_in_canonical_owner_then_id_order():
     fire(game, EnteredPlay("P1-a"))
 
     assert FIRING_ORDER == [("recorder", "P1-a"), ("recorder", "P1-b"), ("recorder", "P2-z")]
+
+
+def test_a_rulebook_trigger_fires_after_every_card_trigger_on_the_card_the_event_names():
+    # A rulebook trigger is registered for the test only: the registry is module-global, and one
+    # left behind would fire on every EnteredPlay in the process.
+    def _rulebook_records(ctx):
+        FIRING_ORDER.append(("rulebook", ctx.card.id))
+        return []
+
+    triggers.rulebook_trigger(EnteredPlay)(_rulebook_records)
+    try:
+        game = two_seat_game()
+        put_in_play(game, holding("P2-z", printed_id="order_recorder", owner=PlayerId.P2))
+        put_in_play(game, holding("P1-a", printed_id="order_recorder"))
+
+        fire(game, EnteredPlay("P1-a"))
+    finally:
+        triggers._RULEBOOK_TRIGGERS[EnteredPlay].remove(_rulebook_records)
+
+    assert FIRING_ORDER == [("recorder", "P1-a"), ("recorder", "P2-z"), ("rulebook", "P1-a")]
 
 
 def test_a_second_subscriber_still_fires_after_the_first_ones_effects_resolve():
