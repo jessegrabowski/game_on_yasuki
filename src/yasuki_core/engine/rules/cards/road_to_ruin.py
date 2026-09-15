@@ -2,12 +2,19 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_in_play
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_event_entry
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+)
+from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.gold.self_grants import register_self_grant, SELF_GRANT
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    AskOption,
+    AttackEffect,
     Bow,
     Choose,
     CreateToken,
@@ -16,7 +23,10 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GainHonor,
     GrantModifier,
+    MeleeAttack,
+    Negated,
     PlaceInProvince,
+    RangedAttack,
     Straighten,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
@@ -27,12 +37,16 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ProducingGold,
 )
 from yasuki_core.engine.rules.board.queries import (
+    has_keyword,
+    opposed_units_in_battle,
     opposing_units_in_battle,
     owned_holdings,
+    owned_personalities,
     personalities_in_play,
     province_key_holding,
 )
 from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
@@ -245,6 +259,93 @@ def _resolve_the_forgotten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [CreateToken(FORGOTTEN_DEAD, seat, source_id, attach_to=chosen[0])]
+
+
+# --- Unity of Spirit ---
+
+UNITY_BONUS = 2
+UNITY_FORCE = f"+{UNITY_BONUS}F"
+UNITY_CHI = f"+{UNITY_BONUS}C"
+
+
+def _unity_of_spirit_targets(game: GameState, source: L5RCard) -> list[str]:
+    return list(opposed_units_in_battle(game, source.owner))
+
+
+def _unity_of_spirit_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Straighten the target, and offer a Yojimbo +2F or +2C."""
+    straightened: list[Effect] = [Straighten(target.id)]
+    if keywords.YOJIMBO not in effective_keywords(game, target):
+        return straightened
+    offer = AskOption(
+        source.owner,
+        (UNITY_FORCE, UNITY_CHI),
+        f"Give {target.name} which?",
+        "unity_of_spirit_bonus",
+        source.id,
+        resolver_context=(target.id,),
+    )
+    return [*straightened, offer]
+
+
+@choice_resolver("unity_of_spirit_bonus")
+def _resolve_unity_of_spirit_bonus(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    if not chosen:
+        return []
+    stat = Stat.FORCE if chosen[0] == UNITY_FORCE else Stat.CHI
+    yojimbo_id = resolver_context[0]
+    return [GrantModifier(source_id, yojimbo_id, stat, UNITY_BONUS, Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "unity_of_spirit",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle: straighten your target opposed Personality, a Yojimbo also gaining +2F or "
+        "+2C",
+        cost=no_cost,
+        targets=_unity_of_spirit_targets,
+        effects=_unity_of_spirit_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
+
+
+def _unity_of_spirit_applies(game: GameState, source: L5RCard, effect: AttackEffect) -> bool:
+    """The attack targets your Yojimbo and you control a Courtier or Shugenja."""
+    target = game.table.cards_by_id.get(effect.target_id)
+    return (
+        target is not None
+        and target in owned_personalities(game, source.owner)
+        and keywords.YOJIMBO in effective_keywords(game, target)
+        and any(
+            has_keyword(game, card, keywords.COURTIER) or has_keyword(game, card, keywords.SHUGENJA)
+            for card in owned_personalities(game, source.owner)
+        )
+    )
+
+
+def _unity_of_spirit_interrupt(
+    game: GameState, source: L5RCard, effect: AttackEffect
+) -> Interruption:
+    return Interruption(Negated(effect))
+
+
+register_interrupt(
+    "unity_of_spirit",
+    Interrupt(
+        label="Interrupt: negate the action's Melee or Ranged Attack targeting your Yojimbo",
+        answers=MeleeAttack | RangedAttack,
+        interrupt=_unity_of_spirit_interrupt,
+        applies=_unity_of_spirit_applies,
+    ),
+)
 
 
 # --- Verdant Wilds ---
