@@ -3,7 +3,14 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, KharmicDraw, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    DeclareAttack,
+    KharmicDraw,
+    Pass,
+    PlayStrategy,
+    Recruit,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     Confirm,
@@ -35,6 +42,7 @@ from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS, Acti
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import Location
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.prints import ActionPrint
 
 from tests.yasuki_core.engine.builders import (
@@ -45,6 +53,7 @@ from tests.yasuki_core.engine.builders import (
     holding,
     pay,
     personality,
+    province_card,
     put_in_play,
     register,
     stronghold,
@@ -917,3 +926,83 @@ def test_heart_of_honor_is_offered_from_hand_under_both_of_its_designators():
         assert legality.activatable(game, P1, frozenset({designator}), at=in_hand) == [
             (card, ability)
         ]
+
+
+# --- Draw Strength from Your Oaths ---
+
+
+def _oaths_attack(*, guard_force: int) -> EngineSession:
+    """The Combat Segment of P1's attack with the opportunity. P1 sends a bushi (Chi 3) and kakita,
+    a Yojimbo (Chi 2), keeps a Courtier and a Shugenja home, and holds Draw Strength from Your
+    Oaths. P2 defends with a guard of ``guard_force``."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    put_in_play(state, personality("bushi", chi=3))
+    put_in_play(state, personality("kakita", chi=2, keywords=(keywords.YOJIMBO,)))
+    put_in_play(state, personality("courtier", keywords=(keywords.COURTIER,)))
+    put_in_play(state, personality("shugenja", keywords=(keywords.SHUGENJA,)))
+    put_in_play(state, personality("guard", owner=PlayerId.P2, force=guard_force))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="oaths",
+                name="Draw Strength from Your Oaths",
+                printed_id="draw_strength_from_your_oaths",
+                side=Side.FATE,
+                owner=P1,
+                gold_cost=0,
+            ),
+        )
+    )
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("bushi@0", "kakita@0")))
+    session.submit(PlayerId.P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(PlayerId.P2, Pass())
+    return session
+
+
+def _play_oaths(session: EngineSession, bowing: str) -> None:
+    session.act(P1, PlayStrategy("oaths"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse((bowing,)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+
+def _in_play(session: EngineSession, card_id: str) -> bool:
+    return card_id in [card.id for card in session.game.table.battlefield.cards]
+
+
+def test_draw_strength_bows_the_personality_for_a_melee_equal_to_their_chi():
+    session = _oaths_attack(guard_force=3)
+
+    _play_oaths(session, "bushi")
+
+    assert session.game.table.cards_by_id["bushi"].bowed is True
+    assert _in_play(session, "guard") is False
+
+
+def test_draw_strength_adds_a_yojimbos_courtiers_and_shugenja_to_the_melee():
+    session = _oaths_attack(guard_force=4)  # Chi 2 alone falls short, the two at home make it 4
+
+    _play_oaths(session, "kakita")
+
+    assert _in_play(session, "guard") is False
+
+
+def test_draw_strength_offers_only_unbowed_personalities_at_the_battle():
+    session = _oaths_attack(guard_force=3)
+    session.game.table.cards_by_id["kakita"].bow()
+
+    session.act(P1, PlayStrategy("oaths"))
+    pay(session, P1)
+
+    assert session.game.pending.candidates == ("bushi",)
