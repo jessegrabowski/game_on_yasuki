@@ -15,6 +15,7 @@ yasuki_core.engine.intents
     DestroyProvince
     Detach
     DiscardProvince
+    Dishonor
     Draw
     Event
     FillProvince
@@ -24,11 +25,11 @@ yasuki_core.engine.intents
     FlipFace
     GiveControl
     IntentOp
-    Invert
     MoveCard
     MoveDeckTop
     Peek
     Raise
+    Rehonor
     RemoveCard
     ReorderHand
     ReorderPile

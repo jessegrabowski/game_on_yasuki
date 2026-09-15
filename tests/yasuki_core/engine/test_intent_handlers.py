@@ -29,7 +29,8 @@ from yasuki_core.engine.intents import (
     Unbow,
     Flip,
     FlipFace,
-    Invert,
+    Dishonor,
+    Rehonor,
     Show,
     Unshow,
     Peek,
@@ -936,15 +937,17 @@ def test_flip_face_toggles_with_only_the_back_link():
     assert table.seq == 1
 
 
-def test_invert_toggles_both_directions():
+def test_dishonor_and_rehonor_each_change_the_card_once():
     table = TableState.empty_two_seat()
     card = _fate("f1")
     _on_battlefield(table, card)
 
-    apply_intent(table, PlayerId.P1, Invert(("f1",)))
+    assert apply_intent(table, PlayerId.P1, Dishonor(("f1",)))
     assert card.dishonorable is True
-    apply_intent(table, PlayerId.P1, Invert(("f1",)))
+    assert apply_intent(table, PlayerId.P1, Dishonor(("f1",))) == []
+    assert apply_intent(table, PlayerId.P1, Rehonor(("f1",)))
     assert card.dishonorable is False
+    assert apply_intent(table, PlayerId.P1, Rehonor(("f1",))) == []
 
 
 def test_show_and_unshow_are_owner_gated():

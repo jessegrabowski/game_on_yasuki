@@ -14,7 +14,7 @@ DEBUG_MODE: bool = False
 class Hotkeys:
     bow: str = "b"
     flip: str = "f"
-    invert: str = "d"
+    dishonor: str = "d"
     fill: str = "l"
     destroy: str = "c"
 
@@ -57,7 +57,8 @@ def load_hotkeys(config_path: str | Path | None = None) -> Hotkeys:
     return Hotkeys(
         bow=_get("bow", DEFAULT_HOTKEYS.bow),
         flip=_get("flip", DEFAULT_HOTKEYS.flip),
-        invert=_get("invert", DEFAULT_HOTKEYS.invert),
+        # "invert" is the key's former name, still honored so an older config.yaml keeps working.
+        dishonor=_get("dishonor", _get("invert", DEFAULT_HOTKEYS.dishonor)),
         fill=_get("fill", DEFAULT_HOTKEYS.fill),
         destroy=_get("destroy", DEFAULT_HOTKEYS.destroy),
         draw=_get("draw", DEFAULT_HOTKEYS.draw),

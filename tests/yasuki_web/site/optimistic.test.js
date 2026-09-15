@@ -28,10 +28,10 @@ describe('predictSnapshot', () => {
     assert.equal(card(next, 'b1').bowed, false);
   });
 
-  it('toggles invert from its current value', () => {
-    const up = predictSnapshot(base(), { op: 'INVERT', card_ids: ['b1'] });
+  it('sets dishonorable for DISHONOR and clears it for REHONOR', () => {
+    const up = predictSnapshot(base(), { op: 'DISHONOR', card_ids: ['b1'] });
     assert.equal(card(up, 'b1').dishonorable, true);
-    const down = predictSnapshot(up, { op: 'INVERT', card_ids: ['b1'] });
+    const down = predictSnapshot(up, { op: 'REHONOR', card_ids: ['b1'] });
     assert.equal(card(down, 'b1').dishonorable, false);
   });
 

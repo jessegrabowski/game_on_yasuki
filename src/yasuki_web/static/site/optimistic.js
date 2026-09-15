@@ -1,12 +1,13 @@
 // Locally predict the outcome of the toggles whose result is fully determined by the current
 // snapshot, so the board can update before the server's confirming snapshot arrives. Each toggle
-// mirrors its server-side flag mutator (yasuki_core table.py): BOW/UNBOW set bowed, INVERT toggles
-// it, SHOW/UNSHOW set shown, FLIP turns the card over. A toggle returns null for a card it cannot
-// predict, leaving that card for the authoritative snapshot.
+// mirrors its server-side flag mutator (yasuki_core table.py): BOW/UNBOW set bowed,
+// DISHONOR/REHONOR set dishonorable, SHOW/UNSHOW set shown, FLIP turns the card over. A toggle
+// returns null for a card it cannot predict, leaving that card for the authoritative snapshot.
 const TOGGLES = {
   BOW: (card) => ({ ...card, bowed: true }),
   UNBOW: (card) => ({ ...card, bowed: false }),
-  INVERT: (card) => ({ ...card, dishonorable: !card.dishonorable }),
+  DISHONOR: (card) => ({ ...card, dishonorable: true }),
+  REHONOR: (card) => ({ ...card, dishonorable: false }),
   SHOW: (card) => ({ ...card, shown: true }),
   UNSHOW: (card) => ({ ...card, shown: false }),
   // A face-down card the viewer cannot identify is a redacted stub with no front, so turning it up
