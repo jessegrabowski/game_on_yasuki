@@ -8,7 +8,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
+    DeclareAttack,
     Lobby,
+    Pass,
     Recruit,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
@@ -33,6 +35,7 @@ from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -40,6 +43,7 @@ from tests.yasuki_core.engine.builders import (
     holding,
     pay,
     personality,
+    province_card,
     put_in_play,
     register,
     stronghold,
@@ -47,7 +51,7 @@ from tests.yasuki_core.engine.builders import (
     two_seat_game,
 )
 
-P1 = PlayerId.P1
+P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 def _artist_game(*, carrying: tuple[str, ...] = (), free_handed: bool = False):
@@ -446,3 +450,55 @@ def test_meiji_stops_nobody_while_his_controller_has_no_wind():
     game = _p2_ready_to_lobby(p1_wind=None)
 
     assert Lobby() in legality.legal_actions(game, PlayerId.P2)
+
+
+# --- Shinjo Mayuko, Soul of Shinjo Wei ---
+
+MAYUKO = "shinjo_mayuko_soul_of_shinjo_wei"
+
+
+def _mayuko_attacking(*, dishonored: bool = False) -> EngineSession:
+    """Mayuko attacks alone into three defenders, one too strong for either of her attacks, and
+    the Combat Segment is open with the Defender having passed."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("mayuko", printed_id=MAYUKO, force=2))
+    put_in_play(state, personality("weak", owner=P2, force=3))
+    put_in_play(state, personality("weaker", owner=P2, force=2))
+    put_in_play(state, personality("strong", owner=P2, force=5))
+    session = EngineSession.start(state, P1)
+    if dishonored:
+        session.game.table.cards_by_id["mayuko"].dishonor()
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("mayuko@0",)))
+    session.submit(P2, DecisionResponse(("weak@0", "weaker@0", "strong@0")))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(P2, Pass())
+    return session
+
+
+def test_mayuko_dishonors_herself_for_two_consecutive_melee_attacks():
+    session = _mayuko_attacking()
+
+    session.act(P1, ActivateAbility("mayuko"))
+    session.submit(P1, DecisionResponse(("weak",)))
+    asked = session.game.pending
+    assert asked is not None and set(asked.candidates) == {"weaker", "strong"}
+    session.submit(P1, DecisionResponse(("weaker",)))
+
+    table = session.game.table
+    assert table.cards_by_id["mayuko"].dishonorable
+    assert "weak" not in {card.id for card in table.battlefield.cards}
+    assert "weaker" not in {card.id for card in table.battlefield.cards}
+    assert "strong" in {card.id for card in table.battlefield.cards}
+
+
+def test_mayuko_cannot_pay_her_dishonoring_twice():
+    session = _mayuko_attacking(dishonored=True)
+
+    assert ActivateAbility("mayuko") not in session.legal_actions(P1)

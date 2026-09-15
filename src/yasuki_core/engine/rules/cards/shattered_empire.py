@@ -6,14 +6,21 @@ from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.board.clans import card_alignments
-from yasuki_core.engine.rules.board.queries import owned_personalities
-from yasuki_core.engine.rules.effects import CreateToken, DrawCard, Effect
+from yasuki_core.engine.rules.board.queries import attack_targets, owned_personalities
+from yasuki_core.engine.rules.effects import (
+    Choose,
+    CreateToken,
+    Dishonor,
+    DrawCard,
+    Effect,
+    MeleeAttack,
+)
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.triggers import action_did
+from yasuki_core.engine.rules.triggers import action_did, choice_resolver
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.game_events import HonorChanged
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
@@ -120,6 +127,51 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 
 
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
+
+
+# --- Shinjo Mayuko, Soul of Shinjo Wei ---
+
+MAYUKO_FIRST_MELEE = 4
+MAYUKO_SECOND_MELEE = 3
+
+
+def _shinjo_mayuko_soul_of_shinjo_wei_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Dishonor Mayuko: unpayable, so the ability is withheld, once she is dishonorable."""
+    return [Dishonor(source.id, source.owner)]
+
+
+def _shinjo_mayuko_soul_of_shinjo_wei_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """A Melee 4, then a Melee 3 with its own target. The second is chosen once the first has
+    resolved, and the first target is left out of it: a survivor of Melee 4 is beyond Melee 3."""
+    others = tuple(card_id for card_id in attack_targets(game, source) if card_id != target.id)
+    second = (
+        [Choose(source.owner, others, 1, 1, "shinjo_mayuko_second_melee", source.id)]
+        if others
+        else []
+    )
+    return [MeleeAttack(MAYUKO_FIRST_MELEE, target.id, source.owner), *second]
+
+
+@choice_resolver("shinjo_mayuko_second_melee", prompt=f"Melee {MAYUKO_SECOND_MELEE} Attack")
+def _resolve_shinjo_mayuko_second_melee(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [MeleeAttack(MAYUKO_SECOND_MELEE, chosen[0], seat)] if chosen else []
+
+
+register_ability(
+    "shinjo_mayuko_soul_of_shinjo_wei",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Battle: Dishonor Mayuko to make a Melee {MAYUKO_FIRST_MELEE}, then a Melee "
+        f"{MAYUKO_SECOND_MELEE}",
+        cost=_shinjo_mayuko_soul_of_shinjo_wei_cost,
+        targets=attack_targets,
+        effects=_shinjo_mayuko_soul_of_shinjo_wei_effects,
+    ),
+)
 
 
 # Each prints the same entry. "Open: If you are an X Clan player, put this Edict into play."
