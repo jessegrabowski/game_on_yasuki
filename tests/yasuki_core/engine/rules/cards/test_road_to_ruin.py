@@ -3,12 +3,18 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
 from yasuki_core.engine.rules.effects import AttachCard, DelayStraighten, Destroy
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
@@ -507,3 +513,45 @@ def test_verdant_wilds_cannot_straighten_a_card_forbidden_to_straighten():
 
     assert session.game.table.cards_by_id["mine"].bowed
     assert "mine" in session.game.straighten_delayed
+
+
+# --- Kakita Harudei, Drunkard ---
+
+
+def _harudei_in_battle(*, guard_chi: int = 2) -> EngineSession:
+    """P1 attacks with Harudei (Chi 3). P2 defends with a guard of ``guard_chi`` and a sage of
+    Chi 4."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    put_in_play(state, personality("harudei", printed_id="kakita_harudei_drunkard", chi=3))
+    put_in_play(state, personality("guard", owner=PlayerId.P2, chi=guard_chi))
+    put_in_play(state, personality("sage", owner=PlayerId.P2, chi=4))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("harudei@0",)))
+    session.submit(PlayerId.P2, DecisionResponse(("guard@0", "sage@0")))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(PlayerId.P2, Pass())
+    return session
+
+
+def test_harudei_bows_an_opposed_personality_with_lower_chi():
+    session = _harudei_in_battle()
+
+    session.act(P1, ActivateAbility("harudei"))
+    assert session.game.pending.candidates == ("guard",)
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed is True
+    assert session.game.table.cards_by_id["harudei"].bowed is False
+
+
+def test_harudei_is_withheld_when_no_opposed_personality_has_lower_chi():
+    session = _harudei_in_battle(guard_chi=3)  # equal Chi is not lower
+
+    assert ActivateAbility("harudei") not in session.legal_actions(P1)

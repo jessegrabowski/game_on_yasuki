@@ -10,7 +10,9 @@ from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
     ability_for,
     fixed_invest_amount,
+    granted_tireless,
     invest_amounts,
+    recruit_timing_of,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
@@ -100,10 +102,21 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         if action.key not in granted:
             raise ValueError(f"this arc grants no Favor ability {action.key!r}")
         return frozenset({granted[action.key].timing})
+    if isinstance(action, Recruit):
+        return recruit_timings(game, action.card_id)
     timing = ACTION_TIMINGS.get(type(action))
     if timing is None:
         raise ValueError(f"no designator for action {type(action).__name__}")
     return frozenset({timing})
+
+
+def recruit_timings(game: GameState, card_id: str) -> frozenset[ActionTiming]:
+    """The designators ``card_id`` may be Recruited under: the rulebook's Dynasty, plus any its own
+    text adds ("You may Recruit this Holding as a Political Open action")."""
+    added = recruit_timing_of(game, card_id)
+    if added is None:
+        return frozenset({ACTION_TIMINGS[Recruit]})
+    return frozenset({ACTION_TIMINGS[Recruit], added.timing})
 
 
 def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming]:
@@ -403,8 +416,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
     variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest
     variant when the seat could also cover the card's Invest cost. ``only`` narrows to a
     single card."""
-    if not permits(game, seat, ACTION_TIMINGS[Recruit]):
-        return []
+    permitted = permitted_timings(game, seat)
     recruits: list[Action] = []
     seat_info = game.table.seats[seat]
     honor = seat_info.honor
@@ -414,6 +426,8 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
         if only is not None and card.id != only:
             continue
         if not (isinstance(card.printed, (HoldingPrint, PersonalityPrint)) and card.face_up):
+            continue
+        if permitted.isdisjoint(recruit_timings(game, card.id)):
             continue
         if (
             enforce_honor
@@ -616,7 +630,7 @@ def activatable(
         for ability in abilities_for(card):
             if permitted.isdisjoint(ability.timings):
                 continue
-            if not _bow_permits(card, ability):
+            if not _bow_permits(game, card, ability):
                 continue
             # The Rule of Presence is about the player, not the card, so it gates an action taken
             # from anywhere, a Strategy out of hand as much as a Personality on the board.
@@ -652,10 +666,11 @@ def activatable(
     return ready
 
 
-def _bow_permits(card: L5RCard, ability: Ability) -> bool:
+def _bow_permits(game: GameState, card: L5RCard, ability: Ability) -> bool:
     """Whether ``card``'s bowed state leaves ``ability`` usable: abilities on a bowed card cannot be
-    used, and Tireless is the keyword that escapes it (CR, Using Abilities, Tireless)."""
-    return ability.tireless or not card.bowed
+    used, and Tireless is the keyword that escapes it, printed on the ability or granted to the
+    card by another in play (CR, Using Abilities, Tireless)."""
+    return not card.bowed or ability.tireless or granted_tireless(game, card)
 
 
 def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:
@@ -678,7 +693,7 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
     (ShE, Absent). What decides whether a seat with no units there is offered the opportunity at
     all, rather than skipped."""
     return any(
-        BattleDesignator.ABSENT in ability.battle_designators and _bow_permits(card, ability)
+        BattleDesignator.ABSENT in ability.battle_designators and _bow_permits(game, card, ability)
         for _, card in _seat_cards(game, seat)
         for ability in abilities_for(card)
     )

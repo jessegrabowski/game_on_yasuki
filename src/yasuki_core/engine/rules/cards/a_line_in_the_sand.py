@@ -1,8 +1,13 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
-from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.abilities.registry import (
+    RecruitTiming,
+    register_ability,
+    register_invest,
+    register_recruit_timing,
+)
+from yasuki_core.engine.rules.board.queries import attack_targets, owned_personalities
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.units.membership import shares_unit
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -15,12 +20,15 @@ from yasuki_core.engine.rules.effects import (
     MoveToHand,
     RangedAttack,
     RecruitCard,
+    Rehonor,
     Show,
     ShuffleDeck,
+    TakeFavor,
     Then,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -136,3 +144,38 @@ def _stockpiled_weapon_invest(game: GameState, source: L5RCard, amount: int) -> 
 
 
 register_invest("stockpiled_weapon", InvestAbility((1,), _stockpiled_weapon_invest))
+
+
+# --- The Ivory Courtroom ---
+
+
+@on(EnteredPlay, "the_ivory_courtroom")
+def _the_ivory_courtroom_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After this Holding enters play, take the Imperial Favor and rehonor one of your
+    Personalities (if able)."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    dishonorable = tuple(
+        card.id for card in owned_personalities(ctx.game, ctx.card.owner) if card.dishonorable
+    )
+    effects: list[Effect] = [TakeFavor(ctx.card.owner)]
+    if dishonorable:
+        effects.append(
+            Choose(ctx.card.owner, dishonorable, 1, 1, "the_ivory_courtroom", ctx.card.id)
+        )
+    return effects
+
+
+@choice_resolver("the_ivory_courtroom", prompt="Rehonor one of your Personalities")
+def _resolve_the_ivory_courtroom(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Rehonor(chosen[0])]
+
+
+# "You may Recruit this Holding as a Political Open action." Its bow for 2 Gold is printed gold
+# production and needs no handler.
+register_recruit_timing(
+    "the_ivory_courtroom",
+    RecruitTiming(ActionTiming.OPEN, keywords=frozenset({keywords.POLITICAL})),
+)

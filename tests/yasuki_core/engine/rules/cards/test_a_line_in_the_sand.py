@@ -1,5 +1,7 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Equip
+from yasuki_core.engine.rules.action_record import action_keywords
+from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Equip, Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     ChooseFortificationProvince,
@@ -14,10 +16,23 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, StrongholdPrint
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
+    FatePrint,
+    PersonalityPrint,
+    StrongholdPrint,
+)
 
-from tests.yasuki_core.engine.builders import holding, pay, province_card, register
+from tests.yasuki_core.engine.builders import (
+    end_phase,
+    holding,
+    pay,
+    personality,
+    province_card,
+    put_in_play,
+    register,
+)
 
 P1 = PlayerId.P1
 
@@ -268,3 +283,80 @@ def test_beiru_is_not_offered_without_a_fortification_to_raise():
     )
 
     assert ActivateAbility("beiru") not in session.legal_actions(P1)
+
+
+# --- The Ivory Courtroom ---
+
+
+def _courtroom_in_province(*, dishonorable: tuple[str, ...] = ()) -> EngineSession:
+    """P1 with the Courtroom face-up in a Province, the Favor uncontrolled, and ``dishonorable``
+    Personalities in play."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    put_in_play(state, holding("mine", gold_production=4))
+    for card_id in dishonorable:
+        put_in_play(state, personality(card_id)).dishonor()
+    put_in_play(state, personality("upright"))
+    province_card(state, "courtroom", printed_id="the_ivory_courtroom", gold_cost=2)
+    return EngineSession.start(state, P1)
+
+
+def test_the_courtroom_takes_the_favor_and_rehonors_a_chosen_personality():
+    session = _courtroom_in_province(dishonorable=("shamed", "disgraced"))
+    end_phase(session)
+    end_phase(session)  # through the Battle phase into the Dynasty phase
+
+    session.act(P1, Recruit("courtroom"))
+    pay(session, P1)
+    assert session.game.favor_holder is P1
+    assert set(session.game.pending.candidates) == {"shamed", "disgraced"}
+    session.submit(P1, DecisionResponse(("shamed",)))
+
+    game = session.game
+    assert game.table.cards_by_id["shamed"].dishonorable is False
+    assert game.table.cards_by_id["disgraced"].dishonorable is True
+
+
+def test_the_courtroom_asks_nothing_with_nobody_to_rehonor():
+    session = _courtroom_in_province()
+    end_phase(session)
+    end_phase(session)
+
+    session.act(P1, Recruit("courtroom"))
+    pay(session, P1)
+
+    assert session.game.favor_holder is P1
+    assert session.game.pending is None
+
+
+def test_the_courtroom_may_be_recruited_in_the_action_phase_as_a_political_action():
+    # "You may Recruit this Holding as a Political Open action."
+    session = _courtroom_in_province()
+
+    assert Recruit("courtroom") in session.legal_actions(P1)
+    session.act(P1, Recruit("courtroom"))
+    assert action_keywords(session.game) == {keywords.POLITICAL}
+    pay(session, P1)
+
+    assert session.game.favor_holder is P1
+
+
+def test_the_courtroom_recruited_in_the_dynasty_phase_is_not_a_political_action():
+    session = _courtroom_in_province()
+    end_phase(session)
+    end_phase(session)
+
+    session.act(P1, Recruit("courtroom"))
+
+    assert action_keywords(session.game) == frozenset()
+
+
+def test_a_plain_holding_is_not_recruited_in_the_action_phase():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("mine", gold_production=4))
+    province_card(state, "farm", printed_id="rice_farm", gold_cost=2)
+    session = EngineSession.start(state, P1)
+
+    assert Recruit("farm") not in session.legal_actions(P1)

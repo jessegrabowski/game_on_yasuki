@@ -31,6 +31,7 @@ yasuki_core.engine.rules.legality
     permitted_timings
     proclaim_key
     recruit_cost
+    recruit_timings
     timings_of
 
 .. automodule:: yasuki_core.engine.rules.legality

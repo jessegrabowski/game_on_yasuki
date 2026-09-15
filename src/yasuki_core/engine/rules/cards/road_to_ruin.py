@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.gold.self_grants import register_self_grant, SELF_GRANT
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Bow,
     Choose,
     CreateToken,
     Destroy,
@@ -26,10 +27,12 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ProducingGold,
 )
 from yasuki_core.engine.rules.board.queries import (
+    opposing_units_in_battle,
     owned_holdings,
     personalities_in_play,
     province_key_holding,
 )
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
@@ -68,6 +71,39 @@ register_ability(
         cost=no_cost,
         targets=_dull_tanto_targets,
         effects=_dull_tanto_effects,
+    ),
+)
+
+
+# --- Kakita Harudei, Drunkard ---
+
+
+def _kakita_harudei_drunkard_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Enemy Personalities opposing Harudei with lower Chi than his. The Compassion rider, one
+    more use per turn, has no model for Bushido Virtues to read and is not written."""
+    own_chi = effective_chi(game, source)
+    return [
+        card_id
+        for card_id in opposing_units_in_battle(game, source.owner)
+        if effective_chi(game, game.table.cards_by_id[card_id]) < own_chi
+    ]
+
+
+def _kakita_harudei_drunkard_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [Bow(target.id)]
+
+
+register_ability(
+    "kakita_harudei_drunkard",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        keywords=frozenset({keywords.IAIJUTSU}),
+        label="Iaijutsu Battle: bow a target enemy Personality with lower Chi",
+        cost=no_cost,
+        targets=_kakita_harudei_drunkard_targets,
+        effects=_kakita_harudei_drunkard_effects,
     ),
 )
 
