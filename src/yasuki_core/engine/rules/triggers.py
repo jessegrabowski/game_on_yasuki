@@ -40,7 +40,8 @@ _trace: collections.deque[str] = collections.deque(maxlen=_TRACE_LIMIT)
 
 @dataclass(frozen=True, slots=True)
 class TriggerContext:
-    """What a trigger reads: the live game, the card whose trigger is firing, and the event."""
+    """What a trigger reads: the live game, the card whose trigger is firing, and the event. A
+    rulebook trigger has no card of its own and reads the card the event names instead."""
 
     game: GameState
     card: L5RCard
@@ -59,6 +60,23 @@ def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
 
     def register(trigger: Trigger) -> Trigger:
         _TRIGGERS.setdefault(event_type, {}).setdefault(printed_id, []).append(trigger)
+        return trigger
+
+    return register
+
+
+# event type -> triggers the rulebook itself takes, after every card's. A rulebook effect that
+# follows an occurrence, such as the Honor loss after a dishonorable Personality dies, is a trigger
+# with no card behind it, and it fires on the card the event names.
+_RULEBOOK_TRIGGERS: dict[type, list[Trigger]] = {}
+
+
+def rulebook_trigger(event_type: type) -> Callable[[Trigger], Trigger]:
+    """Register the decorated function as a rulebook trigger for ``event_type``, fired after the
+    card triggers for the same event with the card the event names as its context card."""
+
+    def register(trigger: Trigger) -> Trigger:
+        _RULEBOOK_TRIGGERS.setdefault(event_type, []).append(trigger)
         return trigger
 
     return register
@@ -138,6 +156,19 @@ def _departed_subject(game: GameState, event: GameEvent) -> L5RCard | None:
 
 
 def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
+    """The ``(card, trigger)`` pairs ``event`` fires: the cards' in canonical order, then the
+    rulebook's, each on the card the event names."""
+    firing = _card_triggers(game, event)
+    firing.sort(key=_canonical_order)
+    rulebook = _RULEBOOK_TRIGGERS.get(type(event))
+    if rulebook:
+        subject = _named_subject(game, event)
+        if subject is not None:
+            firing.extend((subject, trigger) for trigger in rulebook)
+    return firing
+
+
+def _card_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
     by_id = _TRIGGERS.get(type(event))
     if not by_id:
         return []
@@ -151,6 +182,12 @@ def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]
     if departed is not None:
         firing.extend((departed, trigger) for trigger in by_id.get(departed.printed_id, ()))
     return firing
+
+
+def _named_subject(game: GameState, event: GameEvent) -> L5RCard | None:
+    """The card ``event`` names, wherever it now is, or None for an event about no card."""
+    card_id = getattr(event, "card_id", None)
+    return None if card_id is None else game.table.cards_by_id.get(card_id)
 
 
 def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
@@ -228,7 +265,6 @@ def _advance(
         game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
-        firing.sort(key=_canonical_order)
 
 
 def _refuse_mid_decision(game: GameState, driver: str) -> None:
