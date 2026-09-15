@@ -5,10 +5,12 @@ from yasuki_core.engine.intents import (
     MoveCard,
     SetCardPos,
     Bow,
+    Dishonor,
     Flip,
     Show,
     Unshow,
     Peek,
+    Rehonor,
     Unpeek,
     Draw,
     Shuffle,
@@ -62,6 +64,13 @@ def test_bow_links_a_public_battlefield_card():
         {"text": "bowed "},
         {"card_id": "c1", "name": "Hida Kisada"},
     ]
+
+
+def test_dishonor_and_rehonor_each_log_their_own_direction():
+    table = TableState.empty_two_seat()
+    _board_card(table)
+    assert {"text": "dishonored "} in _describe(table, Dishonor(("c1",)), ("c1",))
+    assert {"text": "rehonored "} in _describe(table, Rehonor(("c1",)), ("c1",))
 
 
 def test_a_face_down_card_is_never_named():

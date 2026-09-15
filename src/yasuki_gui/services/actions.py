@@ -9,12 +9,13 @@ from yasuki_core.engine.table import BoardPos, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import (
     Bow,
     DestroyProvince,
+    Dishonor,
     DiscardProvince,
     FillProvince,
     Flip,
     FlipFace,
-    Invert,
     MoveCard,
+    Rehonor,
     RemoveCard,
     SetNote,
     SpawnCard,
@@ -148,13 +149,15 @@ def card_flip() -> Action:
 
 
 @_register
-def card_invert() -> Action:
+def card_dishonor() -> Action:
     def run(view, ctx):
+        card = _card(view, ctx.card_tag)
         ids = _selection_ids(view, ctx)
-        if ids:
-            view.dispatch(Invert(ids))
+        if not ids:
+            return
+        view.dispatch(Rehonor(ids) if card and card.dishonorable else Dishonor(ids))
 
-    return Action("card.toggle_invert", "Dishonor / Rehonor", HK.invert, _card_when, run, "card")
+    return Action("card.toggle_dishonor", "Dishonor / Rehonor", HK.invert, _card_when, run, "card")
 
 
 def _send_to(role: ZoneRole, side: Side | None, to_bottom: bool = False):

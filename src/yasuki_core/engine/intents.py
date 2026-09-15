@@ -27,7 +27,8 @@ class IntentOp(str, Enum):
     UNBOW = "UNBOW"
     FLIP = "FLIP"
     FLIP_FACE = "FLIP_FACE"
-    INVERT = "INVERT"
+    DISHONOR = "DISHONOR"
+    REHONOR = "REHONOR"
     SHOW = "SHOW"
     UNSHOW = "UNSHOW"
     PEEK = "PEEK"
@@ -208,8 +209,13 @@ class FlipFace(CardFlagIntent):
 
 
 @dataclass(frozen=True, slots=True)
-class Invert(CardFlagIntent):
-    op: ClassVar[IntentOp] = IntentOp.INVERT
+class Dishonor(CardFlagIntent):
+    op: ClassVar[IntentOp] = IntentOp.DISHONOR
+
+
+@dataclass(frozen=True, slots=True)
+class Rehonor(CardFlagIntent):
+    op: ClassVar[IntentOp] = IntentOp.REHONOR
 
 
 @dataclass(frozen=True, slots=True)
@@ -449,7 +455,8 @@ Intent = (
     | Unbow
     | Flip
     | FlipFace
-    | Invert
+    | Dishonor
+    | Rehonor
     | Show
     | Unshow
     | Peek

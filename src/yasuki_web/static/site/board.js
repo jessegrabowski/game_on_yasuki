@@ -146,6 +146,7 @@ async function swapArt(img, card, imgBase) {
 function tagCard(el, card) {
   el.dataset.cardId = card.id;
   el.dataset.bowed = card.bowed ? '1' : '';
+  el.dataset.dishonorable = card.dishonorable ? '1' : '';
   el.dataset.side = card.side ?? '';
   el.dataset.owner = card.owner ?? '';
   el.dataset.hidden = card.hidden ? '1' : '';
@@ -418,7 +419,8 @@ export const flipIntent = (ids) => intentMessage({ op: 'FLIP', card_ids: [].conc
 export const bowIntent = (ids, bowed) =>
   intentMessage({ op: bowed ? 'UNBOW' : 'BOW', card_ids: [].concat(ids) });
 export const unbowIntent = (ids) => intentMessage({ op: 'UNBOW', card_ids: [].concat(ids) });
-export const invertIntent = (ids) => intentMessage({ op: 'INVERT', card_ids: [].concat(ids) });
+export const dishonorIntent = (ids, dishonorable) =>
+  intentMessage({ op: dishonorable ? 'REHONOR' : 'DISHONOR', card_ids: [].concat(ids) });
 // Show/peek act on a single card: show is owner-gated (reveal your own card to your opponent), peek
 // is not (any player may privately peek any card). Each carries one card id, not a batch.
 // Cap a note's length; mirror schemas.py IntentEnvelope.text, which the server rejects beyond.
@@ -592,6 +594,7 @@ function cardMenuItems(
   const shown = el.dataset.shown === '1';
   const peeked = el.dataset.peeked === '1';
   const bowed = el.dataset.bowed === '1';
+  const dishonorable = el.dataset.dishonorable === '1';
   const pregame = el.dataset.pregame === '1';
   const doubleFaced = el.dataset.doubleFaced === '1';
   const inProvince = !!el.closest?.('[data-zone="province"]');
@@ -632,17 +635,21 @@ function cardMenuItems(
     });
   }
 
-  // Flip, Bow, and Invert manipulate a card in play; a card in hand is played, not turned in place.
-  // A discard pile is always public and squared up, so it offers neither flip nor bow there — only
-  // invert, to mark a dishonourable death. The server rejects these on a card you don't control, so
-  // they're offered only on your own (or an owner-less public) card.
+  // Flip, Bow, and Dishonor manipulate a card in play; a card in hand is played, not turned in
+  // place. A discard pile is always public and squared up, so it offers neither flip nor bow there,
+  // only dishonor and rehonor, since a dead Personality keeps the status he died with. The server
+  // rejects these on a card you don't control, so they're offered only on your own (or an
+  // owner-less public) card.
   if (!inHand && mine) {
     if (!inDiscard) items.push({ label: '&Flip', message: flipIntentFor(doubleFaced, targetIds) });
     // Bowing a card is meaningless in a province too, matching the desktop client's gate.
     if (!inProvince && !inDiscard) {
       items.push({ label: bowed ? 'Un&bow' : '&Bow', message: bowIntent(targetIds, bowed) });
     }
-    items.push({ label: '&Invert', message: invertIntent(targetIds) });
+    items.push({
+      label: dishonorable ? '&Rehonor' : 'D&ishonor',
+      message: dishonorIntent(targetIds, dishonorable),
+    });
   }
   // A note annotates a face-up battlefield card (e.g. marking a unit dead), offered only on your own
   // (or an owner-less public) card. Editing opens a small text box; "Add note" becomes "Edit note"
@@ -820,7 +827,7 @@ const DRAG_SEND_MS = 40;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
 // The pointer's offset within a card's untransformed box at grab time. Derived from the box center,
-// which is invariant under the bow/invert rotations, rather than the bounding rect's top-left: a
+// which is invariant under the bow/dishonor rotations, rather than the bounding rect's top-left: a
 // bowed card is rotated 90°, so getBoundingClientRect reports a swapped-axis box, and a rect-relative
 // offset would pop the card sideways the instant the drag repositions it via style.left/top (which
 // address the unrotated box). Upright cards are unaffected, since their rect equals their box.
@@ -2072,8 +2079,9 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
   });
 
   // Hover-driven hotkeys on the card/deck under the pointer, gated to the viewer's own pieces and
-  // suppressed while typing: F flip, B bow/unbow, I invert (cards); D draw, S search (decks). A card
-  // flag op applies to the whole selection when the hovered card is part of one, like its menu item.
+  // suppressed while typing: F flip, B bow/unbow, I dishonor/rehonor (cards); D draw, S search
+  // (decks). A card flag op applies to the whole selection when the hovered card is part of one,
+  // like its menu item.
   const DECK_HOTKEYS = new Set(['d', 's']);
   document.addEventListener('keydown', (e) => {
     // An armed attach owns the keyboard until it resolves: Escape cancels it, and every hover hotkey
@@ -2113,12 +2121,13 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     e.preventDefault();
     const id = cardEl.dataset.cardId;
     const ids = selected.size > 1 && selected.has(id) ? [...selected] : [id];
-    // A discard pile is public and squared up: no flip (face-down) or bow there, only invert. Bowing
-    // is likewise meaningless in a province. Both gates mirror the menu's, so F and B no-op there.
+    // A discard pile is public and squared up: no flip (face-down) or bow there, only dishonor.
+    // Bowing is likewise meaningless in a province. Both gates mirror the menu's, so F and B no-op
+    // there.
     const inDiscard = !!cardEl.closest?.('[data-zone="discard"]');
     if (key === 'f') {
       if (!inDiscard) send(flipIntentFor(cardEl.dataset.doubleFaced === '1', ids));
-    } else if (key === 'i') send(invertIntent(ids));
+    } else if (key === 'i') send(dishonorIntent(ids, cardEl.dataset.dishonorable === '1'));
     else if (!inDiscard && !cardEl.closest?.('[data-zone="province"]'))
       send(bowIntent(ids, cardEl.dataset.bowed === '1'));
   });

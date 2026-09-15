@@ -246,11 +246,17 @@ def _flip_face_card(card: L5RCard) -> bool:
     return True
 
 
-def _invert_card(card: L5RCard) -> bool:
+def _dishonor_card(card: L5RCard) -> bool:
     if card.dishonorable:
-        card.rehonor()
-    else:
-        card.dishonor()
+        return False
+    card.dishonor()
+    return True
+
+
+def _rehonor_card(card: L5RCard) -> bool:
+    if not card.dishonorable:
+        return False
+    card.rehonor()
     return True
 
 
@@ -259,7 +265,8 @@ _FLAG_MUTATORS = {
     IntentOp.UNBOW: _unbow_card,
     IntentOp.FLIP: _flip_card,
     IntentOp.FLIP_FACE: _flip_face_card,
-    IntentOp.INVERT: _invert_card,
+    IntentOp.DISHONOR: _dishonor_card,
+    IntentOp.REHONOR: _rehonor_card,
 }
 
 
@@ -554,7 +561,8 @@ _HANDLERS = {
     IntentOp.UNBOW: _apply_flag,
     IntentOp.FLIP: _apply_flag,
     IntentOp.FLIP_FACE: _apply_flag,
-    IntentOp.INVERT: _apply_flag,
+    IntentOp.DISHONOR: _apply_flag,
+    IntentOp.REHONOR: _apply_flag,
     IntentOp.SHOW: _show,
     IntentOp.UNSHOW: _unshow,
     IntentOp.PEEK: _peek,

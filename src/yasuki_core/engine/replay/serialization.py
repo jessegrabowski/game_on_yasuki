@@ -27,7 +27,8 @@ from yasuki_core.engine.intents import (
     Unbow,
     Flip,
     FlipFace,
-    Invert,
+    Dishonor,
+    Rehonor,
     Show,
     Unshow,
     Peek,
@@ -176,7 +177,8 @@ _FLAG_CLASSES: dict[IntentOp, type[CardFlagIntent]] = {
     IntentOp.UNBOW: Unbow,
     IntentOp.FLIP: Flip,
     IntentOp.FLIP_FACE: FlipFace,
-    IntentOp.INVERT: Invert,
+    IntentOp.DISHONOR: Dishonor,
+    IntentOp.REHONOR: Rehonor,
 }
 
 # Single-card intents whose only payload is the target card id.
@@ -415,7 +417,14 @@ def encode_intent(intent: Intent) -> dict:
                 "name": intent.counter.key,
                 "delta": intent.delta,
             }
-        case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
+        case (
+            IntentOp.BOW
+            | IntentOp.UNBOW
+            | IntentOp.FLIP
+            | IntentOp.FLIP_FACE
+            | IntentOp.DISHONOR
+            | IntentOp.REHONOR
+        ):
             payload["card_ids"] = list(intent.card_ids)
         case (
             IntentOp.SHOW
@@ -508,7 +517,14 @@ def decode_intent(payload: dict) -> Intent:
         case IntentOp.ADJUST_COUNTER:
             counter = counter_from_key(payload["name"])
             return AdjustCounter(payload["card_id"], counter, payload["delta"])
-        case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
+        case (
+            IntentOp.BOW
+            | IntentOp.UNBOW
+            | IntentOp.FLIP
+            | IntentOp.FLIP_FACE
+            | IntentOp.DISHONOR
+            | IntentOp.REHONOR
+        ):
             return _FLAG_CLASSES[op](tuple(payload["card_ids"]))
         case (
             IntentOp.SHOW

@@ -54,6 +54,7 @@ function fakeCard(
   id,
   {
     bowed = false,
+    dishonorable = false,
     onBattlefield = true,
     side = '',
     owner = '',
@@ -84,6 +85,7 @@ function fakeCard(
   const dataset = {
     cardId: id,
     bowed: bowed ? '1' : '',
+    dishonorable: dishonorable ? '1' : '',
     side,
     owner,
     faceUp: faceUp ? '1' : '',
@@ -1900,13 +1902,18 @@ describe('initBoardInteractions — keyboard shortcuts', () => {
     closest: (sel) => (sel === '[data-zone="deck"]' ? { dataset: { owner, side } } : null),
   });
 
-  it('F flips, B bows, I inverts the hovered card you own', () => {
+  it('F flips, B bows, I dishonors the hovered card you own', () => {
     press('f', overCard({ owner: 'P1', faceUp: false }));
     assert.deepEqual(sent.at(-1).intent, { op: 'FLIP', card_ids: ['c1'] });
     press('b', overCard({ owner: 'P1', faceUp: true }));
     assert.deepEqual(sent.at(-1).intent, { op: 'BOW', card_ids: ['c1'] });
     press('i', overCard({ owner: 'P1', faceUp: true }));
-    assert.deepEqual(sent.at(-1).intent, { op: 'INVERT', card_ids: ['c1'] });
+    assert.deepEqual(sent.at(-1).intent, { op: 'DISHONOR', card_ids: ['c1'] });
+  });
+
+  it('I rehonors a dishonorable card', () => {
+    press('i', overCard({ owner: 'P1', faceUp: true, dishonorable: true }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'REHONOR', card_ids: ['c1'] });
   });
 
   it('B unbows a bowed card and is case-insensitive', () => {
@@ -1990,13 +1997,13 @@ describe('initBoardInteractions — keyboard shortcuts', () => {
     assert.equal(sent.length, 0);
   });
 
-  it('skips flipping a card in a discard pile but still inverts it', () => {
+  it('skips flipping a card in a discard pile but still dishonors it', () => {
     const card = fakeCard('c1', { owner: 'P1', faceUp: true, inDiscard: true });
     const hover = { closest: (sel) => (sel === '[data-card-id]' ? card : null) };
     press('f', hover);
     assert.equal(sent.length, 0);
     press('i', hover);
-    assert.deepEqual(sent.at(-1).intent, { op: 'INVERT', card_ids: ['c1'] });
+    assert.deepEqual(sent.at(-1).intent, { op: 'DISHONOR', card_ids: ['c1'] });
   });
 
   it('applies a card hotkey to the whole selection when the hovered card is selected', () => {
@@ -2123,7 +2130,7 @@ describe('initBoardInteractions — context menu', () => {
       'View',
       'Flip',
       'Bow',
-      'Invert',
+      'Dishonor',
       'Add note…',
       'Duplicate',
       'Give control',
@@ -2408,16 +2415,23 @@ describe('initBoardInteractions — context menu', () => {
     assert.ok(labels.includes('Send to Deck (top)'), 'but it can still go back to the deck');
   });
 
-  it('offers only invert (no flip or bow) on a card in a discard pile', () => {
-    // A discard is always public and squared up, so flip and bow are gone; invert stays to mark a
-    // dishonourable death.
+  it('offers only dishonor (no flip or bow) on a card in a discard pile', () => {
+    // A discard is always public and squared up, so flip and bow are gone; dishonor stays because a
+    // dead Personality keeps the status he died with.
     const discard = { dataset: { zone: 'discard', owner: 'P1', role: 'fate_discard' } };
     const card = fakeCard('c1', { side: 'FATE', owner: 'P1', inDiscard: true, bowed: true });
     root._emit('contextmenu', rightClick({ zone: discard.dataset, card }));
     const labels = menuLabels(root);
     assert.ok(!labels.includes('Flip'), 'no flip in a public discard');
     assert.ok(!labels.includes('Bow') && !labels.includes('Unbow'), 'no bow toggle in a discard');
-    assert.ok(labels.includes('Invert'), 'invert still marks a dishonourable death');
+    assert.ok(labels.includes('Dishonor'), 'dishonor still marks a dishonorable death');
+  });
+
+  it('offers Rehonor instead of Dishonor on a dishonorable card', () => {
+    const card = fakeCard('c1', { side: 'FATE', owner: 'P1', dishonorable: true });
+    root._emit('contextmenu', rightClick({ card }));
+    const labels = menuLabels(root);
+    assert.ok(labels.includes('Rehonor') && !labels.includes('Dishonor'));
   });
 
   it('trims a visible opponent card to just View and Duplicate', () => {
@@ -2428,10 +2442,10 @@ describe('initBoardInteractions — context menu', () => {
   });
 
   it('keeps the in-play actions on an owner-less public card (anyone may manipulate it)', () => {
-    // A public token is shared, so the server lets either seat flip/bow/invert and note it.
+    // A public token is shared, so the server lets either seat flip/bow/dishonor and note it.
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: '' }) }));
     const labels = menuLabels(root);
-    for (const action of ['Flip', 'Bow', 'Invert', 'Add note…']) {
+    for (const action of ['Flip', 'Bow', 'Dishonor', 'Add note…']) {
       assert.ok(labels.includes(action), `public card keeps ${action}`);
     }
     assert.ok(!labels.includes('Give control'), 'but a public card has no controller to give away');

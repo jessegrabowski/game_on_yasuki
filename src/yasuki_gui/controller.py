@@ -495,7 +495,7 @@ class FieldController:
         action_id = {
             hk.bow: "card.toggle_bow",
             hk.flip: "card.toggle_flip",
-            hk.invert: "card.toggle_invert",
+            hk.invert: "card.toggle_dishonor",
         }.get(key)
         if action_id:
             self._run_if_enabled(action_id, ctx)
