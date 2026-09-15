@@ -6,7 +6,7 @@ import sys
 from yasuki_core.engine.rules import cards
 from yasuki_core.install import registration_audit
 from yasuki_core.install.registration_audit import (
-    mislabeled_ability_keywords,
+    mislabeled_abilities,
     unvalidated_registries,
     card_keyed_data,
     duplicate_registrations,
@@ -235,9 +235,7 @@ def _battle_ability(
 def test_an_ability_registered_without_its_printed_keyword_is_reported():
     # Inexplicable Challenge prints "Political Battle:". A registration that leaves Political off
     # would make "if the action was Political" silently false for it.
-    problems = mislabeled_ability_keywords(
-        abilities={"inexplicable_challenge": [_battle_ability()]}
-    )
+    problems = mislabeled_abilities(abilities={"inexplicable_challenge": [_battle_ability()]})
 
     assert problems == [
         "abilities: inexplicable_challenge registers keywords none on its Battle ability, "
@@ -248,7 +246,7 @@ def test_an_ability_registered_without_its_printed_keyword_is_reported():
 def test_an_ability_registered_as_its_card_prints_passes():
     labeled = _battle_ability(keywords=frozenset({keywords.POLITICAL}))
 
-    assert mislabeled_ability_keywords(abilities={"inexplicable_challenge": [labeled]}) == []
+    assert mislabeled_abilities(abilities={"inexplicable_challenge": [labeled]}) == []
 
 
 def test_an_ability_the_text_does_not_print_is_not_judged():
@@ -256,7 +254,7 @@ def test_an_ability_the_text_does_not_print_is_not_judged():
     # ability to disagree with.
     unprinted = _battle_ability(timings=(ActionTiming.OPEN,))
 
-    assert mislabeled_ability_keywords(abilities={"rout": [unprinted]}) == []
+    assert mislabeled_abilities(abilities={"rout": [unprinted]}) == []
 
 
 def test_half_of_a_printed_battle_open_is_judged_against_the_whole():
@@ -264,7 +262,27 @@ def test_half_of_a_printed_battle_open_is_judged_against_the_whole():
     # still has to carry the keyword.
     half = _battle_ability(timings=(ActionTiming.OPEN,))
 
-    assert mislabeled_ability_keywords(abilities={"heart_of_honor": [half]}) == [
+    assert mislabeled_abilities(abilities={"heart_of_honor": [half]}) == [
         "abilities: heart_of_honor registers keywords none on its Open ability, "
         "whose text prints Bushido Virtue"
+    ]
+
+
+def test_an_in_play_ability_registered_repeatable_against_its_text_is_reported():
+    # Inexplicable Challenge prints no Repeatable, and a Strategy from hand is never rationed, so
+    # the check reads only an ability registered as acting from play.
+    in_play = _battle_ability(keywords=frozenset({keywords.POLITICAL}))
+    repeating = Ability(
+        timings=in_play.timings,
+        label="",
+        cost=no_cost,
+        targets=in_play.targets,
+        effects=in_play.effects,
+        keywords=in_play.keywords,
+        repeatable=True,
+    )
+
+    assert mislabeled_abilities(abilities={"inexplicable_challenge": [repeating]}) == [
+        "abilities: inexplicable_challenge registers its Battle ability as Repeatable, "
+        "and its text does not print it"
     ]

@@ -1,7 +1,17 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.effects import TakeFavor
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    Lobby,
+    Recruit,
+    UseFavorAbility,
+)
+from yasuki_core.engine.table import location_of
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
+from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
@@ -361,3 +371,105 @@ def test_utaku_gorou_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("bushi",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Doji Aoi, Soul of Doji Chitose ---
+
+
+def _aoi_after_a_lobby() -> EngineSession:
+    """P1 has just Lobbied, bowing a Courtier, with Doji Aoi at home. Lobby is Political under the
+    datasheet, so the Response Step that follows is one Aoi may answer."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    state.seats[P1].honor = 10
+    put_in_play(state, personality("aoi", printed_id="doji_aoi_soul_of_doji_chitose"))
+    put_in_play(state, personality("courtier", personal_honor=2))
+    session = EngineSession.start(state, P1)
+    session.act(P1, Lobby())
+    session.submit(P1, DecisionResponse(("courtier",)))
+    return session
+
+
+def test_doji_aoi_answers_a_political_action_by_straightening_the_personality_she_calls():
+    session = _aoi_after_a_lobby()
+    assert session.game.table.cards_by_id["courtier"].bowed is True
+
+    session.act(P1, ActivateAbility("aoi"))
+    session.submit(P1, DecisionResponse(("courtier",)))
+
+    game = session.game
+    courtier = game.table.cards_by_id["courtier"]
+    assert courtier.bowed is False
+    assert location_of(game.table, courtier) == location_of(
+        game.table, game.table.cards_by_id["aoi"]
+    )
+
+
+def test_doji_aoi_offers_her_other_personalities_and_not_herself():
+    session = _aoi_after_a_lobby()
+
+    session.act(P1, ActivateAbility("aoi"))
+
+    assert session.game.pending.candidates == ("courtier",)
+
+
+def test_doji_aoi_is_not_offered_after_an_action_that_is_not_political():
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("aoi", printed_id="doji_aoi_soul_of_doji_chitose"))
+    put_in_play(state, personality("courtier"))
+    put_in_play(state, holding("traders", printed_id="moto_traders"))
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, ActivateAbility("traders"))
+
+    assert ActivateAbility("aoi") not in session.legal_actions(P1)
+
+
+# --- The Palatial Estate of the Crane ---
+
+
+def _estate_holding_the_favor() -> EngineSession:
+    """P1's Stronghold is the Palatial Estate, P1 holds the Favor and a Fate card to spend."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="estate",
+            name="The Palatial Estate of the Crane",
+            printed_id="the_palatial_estate_of_the_crane",
+            side=Side.DYNASTY,
+            owner=P1,
+        ),
+    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(state, L5RCard.of(FatePrint, id="fate", name="Fate", side=Side.FATE, owner=P1))
+    )
+    session = EngineSession.start(state, P1)
+    TakeFavor(P1).perform(session.game)
+    return session
+
+
+def test_the_estate_takes_the_favor_back_after_its_controller_pays_it():
+    session = _estate_holding_the_favor()
+
+    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.submit(P1, DecisionResponse(("fate",)))
+    assert session.game.favor_holder is None
+    session.act(P1, ActivateAbility("estate"))
+
+    assert session.game.favor_holder is P1
+
+
+def test_the_estate_is_not_offered_after_an_action_that_paid_no_favor():
+    session = _estate_holding_the_favor()
+    put_in_play(session.game, holding("traders", printed_id="moto_traders"))
+
+    session.act(P1, ActivateAbility("traders"))
+
+    assert ActivateAbility("estate") not in session.legal_actions(P1)

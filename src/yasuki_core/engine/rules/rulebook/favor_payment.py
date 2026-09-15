@@ -118,13 +118,21 @@ def favor_ability_cost(game: GameState, seat: PlayerId, key: str) -> list[Effect
     ]
 
 
+def favor_ability_key(seat: PlayerId, key: str, turn: int) -> str:
+    """The once-per-turn usage key for ``seat``'s use of the Favor ability ``key``, scoped to the
+    turn so it resets each turn without clearing ``GameState.once_per``."""
+    return f"favor:{key}:{seat.name}:{turn}"
+
+
 def use_favor_ability(game: GameState, key: str) -> None:
     """Take one of the arc's rulebook Favor abilities: pay the Favor cost, then do what it does.
 
     The cost comes first because it is a cost: settled in the Pay Costs step, before the ability
-    resolves (CR, Action Sequence).
+    resolves (CR, Action Sequence). A player ability is once per turn per player (CR, Using
+    Abilities 0.3), so the use is claimed as it is taken.
     """
     seat = game.round.priority
+    game.use_once(favor_ability_key(seat, key, game.turn))
     cost = favor_ability_cost(game, seat, key)
     effects = favor_abilities.FAVOR_ABILITY_EFFECTS[key](game, seat)
     triggers.resolve_effects(game, [*cost, *effects])

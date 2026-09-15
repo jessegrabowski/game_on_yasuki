@@ -88,6 +88,7 @@ TANUKI_CLAN = "Tanuki Clan"
 # Ability keywords: printed ahead of a designator ("Political Battle:"), authored on the Ability
 # that carries them, and checked against the card text by the registration audit.
 BUSHIDO_VIRTUE = "Bushido Virtue"
+DUELIST = "Duelist"
 EARTH = "Earth"
 ECONOMIC = "Economic"
 IAIJUTSU = "Iaijutsu"

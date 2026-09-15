@@ -5,9 +5,10 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook import favor_abilities
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, Lobby, UseFavorAbility
+from yasuki_core.engine.rules.vocabulary.actions import Pass, ActionTiming, Lobby, UseFavorAbility
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit
@@ -57,6 +58,11 @@ def _payable(game: GameState, seat: PlayerId, key: str) -> bool:
     """Whether ``seat`` could pay everything the Favor ability named ``key`` charges."""
     cost = favor_ability_cost(game, seat, key)
     return all(effect.is_payable(game) for effect in cost)
+
+
+def _priority_back_to(game: GameState, seat: PlayerId) -> None:
+    while game.round.priority is not seat:
+        action_sequence.perform(game, Pass())
 
 
 def _offered(game: GameState, seat: PlayerId = PlayerId.P1) -> set[str]:
@@ -286,3 +292,26 @@ def test_a_wind_does_not_bar_lobbying(game):
     put_in_play(game, wind(PlayerId.P1))
 
     assert Lobby() in legality.legal_actions(game, PlayerId.P1)
+
+
+def test_a_favor_ability_is_once_per_turn_per_player(game):
+    # CR, Using Abilities 0.3: player abilities may only be taken once per turn per player.
+    TakeFavor(PlayerId.P1).perform(game)
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    hand.add(register(game.table, fate_card("first", PlayerId.P1)))
+    hand.add(register(game.table, fate_card("second", PlayerId.P1)))
+    action_sequence.perform(game, UseFavorAbility("discard_to_draw"))
+    submit(game, DecisionResponse(choices=("first",)))
+    _priority_back_to(game, PlayerId.P1)
+    TakeFavor(PlayerId.P1).perform(game)
+
+    assert "discard_to_draw" not in _offered(game)
+
+
+def test_the_pre_gold_arc_lets_a_favor_ability_repeat(game, imperial):
+    TakeFavor(PlayerId.P1).perform(game)
+    action_sequence.perform(game, UseFavorAbility("draw"))
+    _priority_back_to(game, PlayerId.P1)
+    TakeFavor(PlayerId.P1).perform(game)
+
+    assert "draw" in _offered(game)

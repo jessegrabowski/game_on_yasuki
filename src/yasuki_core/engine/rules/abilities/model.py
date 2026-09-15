@@ -106,6 +106,10 @@ class Ability:
         The ability keywords printed ahead of the designator, as in "Political Battle:". They
         classify the action the ability produces and rise to the card that holds it, and the
         registration audit checks them against the printed text. Default empty.
+    repeatable : bool, optional
+        The Repeatable modifier: the ability may be used more than once per turn in an arc whose
+        ruleset makes abilities once per turn (CR, Using Abilities 0.3). Default False. The
+        registration audit checks it against the printed text.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -120,6 +124,12 @@ class Ability:
     key: str | None = None
     tireless: bool = False
     keywords: frozenset[str] = frozenset()
+    repeatable: bool = False
+
+
+def once_tag(ability: Ability) -> str:
+    """The once-per-turn tag an ability's use is claimed under, distinct per keyed ability."""
+    return f"ability:{ability.key or ''}"
 
 
 @dataclass(frozen=True, slots=True)

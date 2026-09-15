@@ -1,4 +1,6 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.effects import Bow
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
@@ -124,18 +126,16 @@ def test_declining_the_waiver_pays_the_cost_as_printed():
 
 
 def test_the_waiver_is_offered_once_a_turn():
-    """Spent on the first ability, the second is charged as printed with nothing to ask about."""
+    """Spent on the first ability, a second bow cost the same turn is charged as printed with
+    nothing to ask about. Gorou's own ability is once per turn too, so the cost is built directly."""
     session = _gorou_game()
     session.act(P1, ActivateAbility("gorou"))
     session.submit(P1, DecisionResponse(("ambassador",)))
     session.submit(P1, DecisionResponse(("bushi",)))
+    gorou = session.game.table.cards_by_id["gorou"]
+    gorou.unbow()
 
-    session.game.table.cards_by_id["gorou"].unbow()
-    session.act(PlayerId.P2, Pass())
-    session.act(P1, ActivateAbility("gorou"))
-
-    assert not isinstance(session.game.pending, Confirm)  # nothing left to waive
-    assert session.game.table.cards_by_id["gorou"].bowed is True
+    assert bow_cost(session.game, gorou) == [Bow("gorou")]
 
 
 def test_merely_listing_the_action_does_not_spend_the_waiver():

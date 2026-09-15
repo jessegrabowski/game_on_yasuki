@@ -701,13 +701,18 @@ def test_straightening_the_holding_banishes_the_servant():
 
 
 def test_a_second_servant_is_only_at_risk_of_its_own_bargain():
-    """The banish reaches what the Holding still has out, not every servant it ever made."""
+    """The banish reaches what the Holding still has out, not every servant it ever made. The
+    ability is once per turn, so the second servant is raised by resolving its effects directly."""
     session = _culling_game()
     session.act(P1, ActivateAbility("grounds"))
     first = _servant_of(session)
     resolve_effects(session.game, [Straighten("grounds")])
-    session.act(P2, Pass())  # hand the opportunity back after the first activation
-    session.act(P1, ActivateAbility("grounds"))
+    grounds = session.game.table.cards_by_id["grounds"]
+    ability = ability_for(grounds, None)
+    resolve_effects(
+        session.game,
+        [*ability.cost(session.game, grounds), *ability.effects(session.game, grounds, grounds)],
+    )
     second = _servant_of(session)
 
     assert first.id not in session.game.table.cards_by_id
