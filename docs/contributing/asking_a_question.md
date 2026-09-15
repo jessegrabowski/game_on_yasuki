@@ -64,12 +64,14 @@ effects:
 
 ## A mode
 
-{class}`~.AskOption` offers a fixed set of answers that are not cards.
-{card}`Courts of Otosan Uchi` asks two questions in a row, naming a player and then a direction,
-and carries the first answer into the second:
+{class}`~.AskOption` offers a fixed set of answers that are not cards. "A target player gains or
+loses N Honor" is two questions in a row, naming a player and then a direction, and enough cards
+print it that {func}`~.ask_whose_honor_moves` asks them for all of them. {card}`Courts of Otosan
+Uchi` and {card}`Inexplicable Challenge` each call it. Its first resolver carries the first answer
+into the second:
 
-```{literalinclude} ../../src/yasuki_core/engine/rules/cards/rise_of_otosan_uchi.py
-:pyobject: _resolve_courts_of_otosan_uchi_player
+```{literalinclude} ../../src/yasuki_core/engine/rules/abilities/idioms.py
+:pyobject: _resolve_honor_swing_player
 :language: python
 ```
 

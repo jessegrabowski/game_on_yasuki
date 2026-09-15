@@ -67,7 +67,10 @@ Personality's bow is consulted at the moment of payment.
 `tireless` lets an ability be used while its card is bowed. `located_at` says where the card must
 be, defaulting to the battlefield. `battle_designators` and `targets_any_location` govern what a
 battle ability can reach, and [Adding a Card](../../contributing/adding_a_card.md) explains both
-under attachments.
+under attachments. `keywords` holds the ability keywords printed ahead of the designator, as in
+"Political Battle:", so a card asking whether the resolving action was Political has something to
+read. The registration audit compares them with the card's text and rejects a registration that
+leaves one off or invents one.
 
 ## What narrows a target list
 

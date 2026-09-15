@@ -1,6 +1,9 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.abilities.registry import ability_for
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, Recruit
 from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     CAVALRY_FOLLOWER,
@@ -1039,3 +1042,12 @@ def test_offering_iweko_miaka_does_not_spend_her_use():
     favor_payment_options(game, P1)
 
     assert set(favor_payment_options(game, P1)) == {"miaka"}
+
+
+def test_kitsu_watanabe_is_offered_under_both_of_his_designators():
+    session = _watanabe_game()
+    watanabe = session.game.table.cards_by_id["watanabe"]
+
+    for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
+        offered = legality.activatable(session.game, P1, frozenset({designator}))
+        assert (watanabe, ability_for(watanabe, None)) in offered

@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import register_event_entry
+from yasuki_core.engine.rules.abilities.idioms import ask_whose_honor_moves, register_event_entry
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import (
     register_may_remain_bowed,
@@ -19,7 +19,6 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
     AskAmount,
-    AskOption,
     AttackEffect,
     Banish,
     Bow,
@@ -253,8 +252,6 @@ def _courts_of_otosan_uchi_invest(game: GameState, source: L5RCard, amount: int)
 
 
 COURTS_HONOR = 1
-COURTS_GAIN = f"Gain {COURTS_HONOR} Honor"
-COURTS_LOSE = f"Lose {COURTS_HONOR} Honor"
 
 
 def _courts_of_otosan_uchi_courtiers(game: GameState, seat: PlayerId) -> tuple[str, ...]:
@@ -283,16 +280,7 @@ def _courts_of_otosan_uchi_effects(
 ) -> list[Effect]:
     """Bow the named Courtier, then ask whose Honor moves. A target player is named first, then the
     direction, as the card is written."""
-    return [
-        Bow(target.id),
-        AskOption(
-            source.owner,
-            tuple(info.name for info in game.table.seats.values()),
-            "Whose Honor moves?",
-            "courts_of_otosan_uchi_player",
-            source.id,
-        ),
-    ]
+    return [Bow(target.id), ask_whose_honor_moves(game, source.owner, COURTS_HONOR, source.id)]
 
 
 register_ability(
@@ -306,38 +294,6 @@ register_ability(
         tireless=True,
     ),
 )
-
-
-@choice_resolver("courts_of_otosan_uchi_player")
-def _resolve_courts_of_otosan_uchi_player(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """Having named the player, ask the direction, carrying the seat named as context."""
-    named = chosen[0]
-    picked = next(player for player, info in game.table.seats.items() if info.name == named)
-    return [
-        AskOption(
-            seat,
-            (COURTS_GAIN, COURTS_LOSE),
-            f"Does {named} gain or lose {COURTS_HONOR} Honor?",
-            "courts_of_otosan_uchi_swing",
-            source_id,
-            resolver_context=(picked.name,),
-        )
-    ]
-
-
-@choice_resolver("courts_of_otosan_uchi_swing")
-def _resolve_courts_of_otosan_uchi_swing(
-    game: GameState,
-    source_id: str,
-    chosen: tuple[str, ...],
-    seat: PlayerId,
-    resolver_context: tuple[str, ...] = (),
-) -> list[Effect]:
-    moved = PlayerId[resolver_context[0]]
-    delta = COURTS_HONOR if chosen[0] == COURTS_GAIN else -COURTS_HONOR
-    return [GainHonor(moved, delta)]
 
 
 register_invest(
@@ -426,7 +382,8 @@ def _kitsu_watanabe_experienced_targets(game: GameState, source: L5RCard) -> lis
 def _kitsu_watanabe_experienced_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """The Holding is spent on the summons, so it goes before the Ancestor answers."""
+    """The Holding is spent on the summons, so it goes before the Ancestor answers. The additional
+    action a Battle-taken summons earns for destroying a Fortification has no effect to name it."""
     return [
         Destroy(target.id, source.owner),
         CreateToken(LION_ANCESTOR, source.owner, source.id),
@@ -436,8 +393,8 @@ def _kitsu_watanabe_experienced_effects(
 register_ability(
     "kitsu_watanabe_experienced",
     Ability(
-        timings=(ActionTiming.OPEN,),
-        label="Open: Destroy your target Holding to create a 2F/2C/3PH Ancestor Personality",
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        label="Battle/Open: Destroy your target Holding to create a 2F/2C/3PH Ancestor Personality",
         cost=no_cost,
         targets=_kitsu_watanabe_experienced_targets,
         effects=_kitsu_watanabe_experienced_effects,

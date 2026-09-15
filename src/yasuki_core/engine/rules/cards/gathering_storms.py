@@ -70,6 +70,7 @@ register_ability(
     "ichiba_district",
     Ability(
         timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.ECONOMIC}),
         label="Banish a Fate card: give a Port +1 Gold Production",
         cost=_ichiba_district_cost,
         targets=_ichiba_district_targets,

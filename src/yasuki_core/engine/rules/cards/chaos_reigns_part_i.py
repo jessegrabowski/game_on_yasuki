@@ -174,6 +174,7 @@ register_ability(
     "honor_your_oaths",
     Ability(
         timings=(ActionTiming.BATTLE,),
+        keywords=frozenset({keywords.POLITICAL}),
         label="Battle: Move a target enemy Personality home",
         cost=no_cost,
         targets=_honor_your_oaths_targets,
@@ -203,4 +204,4 @@ def _manjodh_favor_payer(game: GameState, card: L5RCard) -> list[Effect] | None:
 # --- Rumormongering ---
 
 # "Political Open: Put this Edict into play." Its Favor-discard reaction has no handler yet.
-register_edict("rumormongering")
+register_edict("rumormongering", ability_keywords=frozenset({keywords.POLITICAL}))

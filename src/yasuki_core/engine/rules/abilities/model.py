@@ -102,6 +102,10 @@ class Ability:
     tireless : bool, optional
         The Tireless keyword: the ability may be used even while its card is bowed (CR, Tireless).
         Default False, which leaves it to the rule that a bowed card's abilities cannot be used.
+    keywords : frozenset of str, optional
+        The ability keywords printed ahead of the designator, as in "Political Battle:". They
+        classify the action the ability produces and rise to the card that holds it, and the
+        registration audit checks them against the printed text. Default empty.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -115,6 +119,7 @@ class Ability:
     targets_any_location: bool = False
     key: str | None = None
     tireless: bool = False
+    keywords: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True, slots=True)

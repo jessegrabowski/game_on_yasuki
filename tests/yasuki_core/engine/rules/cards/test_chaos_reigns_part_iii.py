@@ -1,6 +1,9 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.abilities.registry import ability_for
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
@@ -422,3 +425,12 @@ def test_mayas_invest_shuffles_the_dynasty_deck_it_read():
     after = [card.id for card in session.game.table.decks[DeckKey(P1, Side.DYNASTY)].cards]
     assert set(after) == set(before) - {"kakita"}  # same cards, minus the one she took
     assert after != [card for card in before if card != "kakita"]  # and not in the read order
+
+
+def test_walk_with_tengoku_is_offered_under_both_of_its_designators():
+    session = _tengoku_game()
+    spell = session.game.table.cards_by_id["spell"]
+
+    for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
+        offered = legality.activatable(session.game, P1, frozenset({designator}))
+        assert (spell, ability_for(spell, None)) in offered

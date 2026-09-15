@@ -183,6 +183,15 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 (experience disambiguation), `is_back` (flip-card back face). Optional: `errata` (list),
 `errata_text` (a legacy free-text note, distinct from the structured `errata:` list).
 
+### `card_abilities` columns
+
+`card_id`, `position` (0 = first printed), `designators` (`Open`, `Battle`, ... as a text array,
+empty for a cost-only production ability), `keywords` (the classifiers that rise to the card, such
+as `Political`), `modifiers` (`Repeatable`, `Tireless`, `Absent`, ...), `cost` (the icon cost as
+printed, null when free), `rules_text`. Derived from the card's current text by
+`install/text_split.py` after the MRP and errata folds, so it is never edited directly: fix the
+text or the splitter and reload.
+
 ### `card_revisions` columns
 
 `card_id`, `revision_index` (0 = original, highest = current), `effective_date`, `source`,

@@ -113,6 +113,7 @@ register_ability(
         # Tireless, so it asks nothing of the Holding it is on: a Response costs no bow, and this
         # one is taken in the Step that follows the Recruit which brought the Holding into play.
         timings=(ActionTiming.RESPONSE,),
+        keywords=frozenset({keywords.POLITICAL}),
         label="Response: seed a Sincerity token onto one of your Sincerity cards",
         cost=no_cost,
         targets=_training_court_targets,

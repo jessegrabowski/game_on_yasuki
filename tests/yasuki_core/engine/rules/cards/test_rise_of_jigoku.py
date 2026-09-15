@@ -25,6 +25,18 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, SenseiPrint, StrongholdPrint
 
+from yasuki_core.engine import ops
+from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.abilities.model import CardLocation
+from yasuki_core.engine.rules.abilities.registry import ability_for
+from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS, ActionRound, RoundKind
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
+from yasuki_core.engine.table import Location
+from yasuki_core.game_pieces.prints import ActionPrint
+
 from tests.yasuki_core.engine.builders import (
     attachment,
     end_phase,
@@ -819,3 +831,89 @@ def test_it_asks_for_no_target_with_no_personality_in_play():
 
     assert session.game.pending is None
     assert session.game.ongoing == []
+
+
+def _heart_of_honor(game: GameState):
+    card = register(
+        game.table,
+        L5RCard.of(
+            ActionPrint,
+            id="hoh",
+            name="Heart of Honor",
+            printed_id="heart_of_honor",
+            side=Side.FATE,
+            owner=P1,
+            gold_cost=0,
+        ),
+    )
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(card)
+    return card, ability_for(card, None)
+
+
+def _heart_of_honor_battle(personal_honor: int) -> GameState:
+    """The Combat Segment's round is where the Battle half of Battle/Open is taken."""
+    game = two_seat_game()
+    game.attack = AttackPhase(
+        attacker=P1,
+        defender=PlayerId.P2,
+        battlefields=(BattlefieldInfo(province=ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)),),
+        current=0,
+    )
+    bushi = put_in_play(game, personality("bushi", force=3, personal_honor=personal_honor))
+    ops.set_location(game.table, bushi, Location.at_battlefield(0))
+    bushi.bow()
+    game.round = ActionRound(
+        timings=BATTLE_SEGMENT_TIMINGS[BattleSegment.COMBAT],
+        priority=P1,
+        kind=RoundKind.BATTLE_SEGMENT,
+    )
+    return game
+
+
+def test_heart_of_honor_pays_the_battle_half_to_an_honorable_target():
+    game = _heart_of_honor_battle(personal_honor=3)
+    source, ability = _heart_of_honor(game)
+    bushi = game.table.cards_by_id["bushi"]
+
+    resolve_effects(game, ability.effects(game, source, bushi))
+
+    assert not bushi.bowed
+    assert effective_force(game, bushi) == 5  # 3 printed, +2F
+    assert game.table.seats[P1].honor == 1
+
+
+def test_heart_of_honor_pays_nothing_extra_to_a_target_below_three_personal_honor():
+    game = _heart_of_honor_battle(personal_honor=2)
+    source, ability = _heart_of_honor(game)
+    bushi = game.table.cards_by_id["bushi"]
+
+    resolve_effects(game, ability.effects(game, source, bushi))
+
+    assert not bushi.bowed
+    assert effective_force(game, bushi) == 3
+    assert game.table.seats[P1].honor == 0
+
+
+def test_heart_of_honor_only_straightens_as_an_open_action():
+    game = two_seat_game()
+    bushi = put_in_play(game, personality("bushi", force=3, personal_honor=5))
+    bushi.bow()
+    source, ability = _heart_of_honor(game)
+
+    resolve_effects(game, ability.effects(game, source, bushi))
+
+    assert not bushi.bowed
+    assert effective_force(game, bushi) == 3
+    assert game.table.seats[P1].honor == 0
+
+
+def test_heart_of_honor_is_offered_from_hand_under_both_of_its_designators():
+    game = two_seat_game()
+    put_in_play(game, personality("bushi"))
+    card, ability = _heart_of_honor(game)
+    in_hand = (CardLocation.HAND,)
+
+    for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
+        assert legality.activatable(game, P1, frozenset({designator}), at=in_hand) == [
+            (card, ability)
+        ]

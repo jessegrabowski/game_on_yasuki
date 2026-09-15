@@ -94,6 +94,7 @@ register_ability(
     "doji_maya_experienced",
     Ability(
         timings=(ActionTiming.BATTLE,),
+        keywords=frozenset({keywords.IAIJUTSU}),
         label=f"Battle: Melee {MAYA_MELEE} Attack",
         cost=no_cost,
         targets=attack_targets,
@@ -289,15 +290,16 @@ FUSHICHO = "fushicho_personality_3_2_3"
 
 
 def _walk_with_tengoku_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """A Fushicho for the turn: it burns out before the turn ends however the turn goes."""
+    """A Fushicho for the turn: it burns out before the turn ends however the turn goes. The
+    Ranged 3 Attack a battle lets the Shugenja bow for is not modeled."""
     return [CreateToken(FUSHICHO, source.owner, source.id, banish_at_turn_end=True)]
 
 
 register_ability(
     "walk_with_tengoku",
     Ability(
-        timings=(ActionTiming.OPEN,),
-        label="Open: Bow to create a 3F/2C/3PH Fushicho, banished at the end of the turn",
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        label="Battle/Open: Bow to create a 3F/2C/3PH Fushicho, banished at the end of the turn",
         cost=bow_cost,
         targets=itself,
         effects=_walk_with_tengoku_effects,
