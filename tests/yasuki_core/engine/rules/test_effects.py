@@ -156,6 +156,51 @@ def test_seppuku_rehonors_and_then_destroys(reacting):
     assert hero in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
 
 
+def test_a_gain_from_a_dishonorable_personality_rehonors_him_instead():
+    # CR, Rehonoring 0.1: the rehonoring "is substituted for the Honor gain".
+    game = two_seat_game()
+    hero = put_in_play(game, personality("P1-p"))
+    hero.dishonor()
+
+    assert GainHonor(PlayerId.P1, 2, personalities=(hero.id,)).perform(game) == [Rehonored(hero.id)]
+    assert not hero.dishonorable
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+
+def test_a_gain_from_an_honorable_or_another_seats_personality_is_gained():
+    game = two_seat_game()
+    own = put_in_play(game, personality("P1-p"))
+    theirs = put_in_play(game, personality("P2-p", owner=PlayerId.P2))
+    theirs.dishonor()
+
+    resolve_effects(game, [GainHonor(PlayerId.P1, 2, personalities=(own.id, theirs.id))])
+
+    assert game.table.seats[PlayerId.P1].honor == 2
+    assert theirs.dishonorable
+
+
+def test_a_loss_from_a_dishonorable_personality_is_still_lost():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("P1-p"))
+    hero.dishonor()
+
+    resolve_effects(game, [GainHonor(PlayerId.P1, -2, personalities=(hero.id,))])
+
+    assert game.table.seats[PlayerId.P1].honor == -2
+    assert hero.dishonorable
+
+
+def test_a_gain_reduced_to_nothing_rehonors_nobody():
+    # CR, Rehonoring: "preventing the Honor gain also prevents its substituted rehonoring."
+    game = two_seat_game()
+    hero = put_in_play(game, personality("P1-p"))
+    hero.dishonor()
+
+    resolve_effects(game, [GainHonor(PlayerId.P1, 1, adjustment=-1, personalities=(hero.id,))])
+
+    assert hero.dishonorable
+
+
 def test_a_card_can_react_to_a_dishonoring_and_a_rehonoring(reacting):
     game = two_seat_game()
     hero = put_in_play(game, personality("P1-p", printed_id="watcher"))

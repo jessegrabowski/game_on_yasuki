@@ -12,6 +12,8 @@ from yasuki_core.game_pieces.prints import (
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import sequence
+from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     HonorChanged,
@@ -96,6 +98,39 @@ def test_a_proclaimed_recruit_announces_its_honor_gain(reacting):
     recruit.finish_recruit(game, samurai.id, None, proclaim=True)
 
     assert seen == [HonorChanged(PlayerId.P1, 3)]
+
+
+def test_proclaiming_a_dishonorable_personality_for_his_capped_honor_rehonors_nobody():
+    # A dishonorable Personality's Personal Honor is capped at 0, so his Proclaim gains 0, and a
+    # gain of 0 is not "one or more points of Honor" for the rehonoring to substitute (CR,
+    # Rehonoring 0.1; Honor Gains and Losses). He stays dishonorable.
+    game = _game()
+    samurai = put_in_play(game.table, personality("P1-samurai", personal_honor=3))
+    samurai.dishonor()
+
+    recruit.finish_recruit(game, samurai.id, None, proclaim=True)
+
+    assert samurai.dishonorable
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+
+def test_proclaiming_a_dishonorable_personality_for_another_amount_rehonors_him_instead():
+    # A card that Proclaims for an amount other than its Personal Honor gains that amount, which
+    # the Recruit action's targeting of him substitutes (CR, Rehonoring 0.1).
+    game = _game()
+    samurai = put_in_play(
+        game.table, personality("P1-samurai", printed_id="proclaim_probe", personal_honor=1)
+    )
+    samurai.dishonor()
+    recruit.proclaim_gain("proclaim_probe")(lambda game, card: 3)
+    try:
+        recruit.finish_recruit(game, samurai.id, None, proclaim=True)
+        submit(game, DecisionResponse((samurai.id,)))
+    finally:
+        recruit.PROCLAIM_GAINS.pop("proclaim_probe", None)
+
+    assert not samurai.dishonorable
+    assert game.table.seats[PlayerId.P1].honor == 0
 
 
 # --- the Response Step ---

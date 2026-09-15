@@ -13,10 +13,13 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 @on(EnteredPlay, "blessed_sword")
 def _blessed_sword_entered_play(ctx: TriggerContext) -> list[Effect]:
-    """After you Equip this Item, gain 1 Honor. The +1F/+1C is printed on the card."""
+    """After you Equip this Item, gain 1 Honor. The +1F/+1C is printed on the card. Attaching to a
+    dishonorable Personality rehonors him in place of the gain (CR, Rehonoring 0.2)."""
     if ctx.event.card_id != ctx.card.id or not ctx.event.from_hand:
         return []
-    return [GainHonor(ctx.card.owner, 1)]
+    bearer = attached_to(ctx.game, ctx.card)
+    bearers = () if bearer is None else (bearer.id,)
+    return [GainHonor(ctx.card.owner, 1, personalities=bearers)]
 
 
 def _blessed_sword_applies(game: GameState, source: L5RCard, effect: Dishonor) -> bool:
