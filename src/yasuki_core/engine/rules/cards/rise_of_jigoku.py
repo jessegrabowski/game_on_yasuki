@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
+    has_keyword,
     owned_holdings,
     owned_personalities,
     personalities_in_play,
@@ -90,6 +91,56 @@ def _resolve_blood_of_fu_leng(
 # --- Confront Your Truth ---
 
 register_event_entry("confront_your_truth")
+
+
+# --- Draw Strength from Your Oaths ---
+
+
+def _draw_strength_from_your_oaths_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your unbowed Personalities. The Honesty rider, Melee equal to their Force instead, has no
+    model for Bushido Virtues to read and is not written."""
+    return [card.id for card in owned_personalities(game, source.owner) if not card.bowed]
+
+
+def _draw_strength_from_your_oaths_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Bow the target, then aim the Melee Attack at a card in the enemy army, if there is one. The
+    Choose carries the bowed Personality, whose Chi the resolver reads."""
+    bowed: list[Effect] = [Bow(target.id)]
+    aimable = tuple(attack_targets(game, source))
+    if not aimable:
+        return bowed
+    return [*bowed, Choose(source.owner, aimable, 1, 1, "draw_strength_from_your_oaths", target.id)]
+
+
+@choice_resolver("draw_strength_from_your_oaths", prompt="Target the Melee Attack")
+def _resolve_draw_strength_from_your_oaths(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Strength is the bowed Personality's Chi, plus one per Courtier and Shugenja you control when
+    they are a Yojimbo."""
+    bowed = game.table.cards_by_id[source_id]
+    strength = effective_chi(game, bowed)
+    if keywords.YOJIMBO in effective_keywords(game, bowed):
+        strength += sum(
+            has_keyword(game, card, keywords.COURTIER) or has_keyword(game, card, keywords.SHUGENJA)
+            for card in owned_personalities(game, seat)
+        )
+    return [MeleeAttack(strength, chosen[0], seat)]
+
+
+register_ability(
+    "draw_strength_from_your_oaths",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle: bow your target unbowed Personality for a Melee Attack equal to their Chi",
+        cost=no_cost,
+        targets=_draw_strength_from_your_oaths_targets,
+        effects=_draw_strength_from_your_oaths_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
 
 
 # --- Harvested Land ---

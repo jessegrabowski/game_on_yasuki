@@ -4,13 +4,22 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
     ActivateAbility,
     DeclareAttack,
     Pass,
+    PlayStrategy,
     Recruit,
 )
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.cards.road_to_ruin import UNITY_CHI, UNITY_FORCE
+from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
 from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
-from yasuki_core.engine.rules.effects import AttachCard, DelayStraighten, Destroy
+from yasuki_core.engine.rules.effects import AttachCard, DelayStraighten, Destroy, MeleeAttack
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
@@ -23,13 +32,15 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MINUS_1F
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
     end_phase,
     holding,
+    pay,
     personality,
     province_card,
     put_in_play,
@@ -555,3 +566,123 @@ def test_harudei_is_withheld_when_no_opposed_personality_has_lower_chi():
     session = _harudei_in_battle(guard_chi=3)  # equal Chi is not lower
 
     assert ActivateAbility("harudei") not in session.legal_actions(P1)
+
+
+# --- Unity of Spirit ---
+
+MELEE_PROBE = "probe_battle_melee_5"
+MELEE_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: Melee 5 Attack",
+    cost=no_cost,
+    targets=attack_targets,
+    effects=lambda game, source, target: [MeleeAttack(5, target.id, source.owner)],
+)
+
+
+def _unity_battle(*, yojimbo: bool = True, courtier: bool = True) -> EngineSession:
+    """The Combat Segment of P1's attack, the Defender holding the opportunity. P1's raider has a
+    Melee probe. P2 defends with kakita, a Yojimbo unless told otherwise, keeps a Courtier home
+    unless told otherwise, and holds Unity of Spirit."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    put_in_play(state, personality("raider", printed_id=MELEE_PROBE, force=3))
+    kakita_keywords = (keywords.YOJIMBO,) if yojimbo else ()
+    put_in_play(state, personality("kakita", owner=PlayerId.P2, force=2, keywords=kakita_keywords))
+    if courtier:
+        put_in_play(
+            state, personality("courtier", owner=PlayerId.P2, keywords=(keywords.COURTIER,))
+        )
+    state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="unity",
+                name="Unity of Spirit",
+                printed_id="unity_of_spirit",
+                side=Side.FATE,
+                owner=PlayerId.P2,
+                gold_cost=0,
+            ),
+        )
+    )
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(PlayerId.P2, DecisionResponse(("kakita@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    return session
+
+
+def test_unity_of_spirit_straightens_an_opposed_yojimbo_and_grants_the_chosen_bonus():
+    with probe_ability(MELEE_PROBE, MELEE_ABILITY):
+        session = _unity_battle()
+        session.game.table.cards_by_id["kakita"].bow()
+
+        session.act(PlayerId.P2, PlayStrategy("unity"))
+        pay(session, PlayerId.P2)
+        assert session.game.pending.candidates == ("kakita",)
+        session.submit(PlayerId.P2, DecisionResponse(("kakita",)))
+        assert session.game.pending.candidates == (UNITY_FORCE, UNITY_CHI)
+        session.submit(PlayerId.P2, DecisionResponse((UNITY_CHI,)))
+
+        kakita = session.game.table.cards_by_id["kakita"]
+        assert kakita.bowed is False
+        assert effective_chi(session.game, kakita) == 5
+
+
+def test_unity_of_spirit_offers_no_bonus_to_a_personality_who_is_not_a_yojimbo():
+    with probe_ability(MELEE_PROBE, MELEE_ABILITY):
+        session = _unity_battle(yojimbo=False)
+        session.game.table.cards_by_id["kakita"].bow()
+
+        session.act(PlayerId.P2, PlayStrategy("unity"))
+        pay(session, PlayerId.P2)
+        session.submit(PlayerId.P2, DecisionResponse(("kakita",)))
+
+        assert session.game.table.cards_by_id["kakita"].bowed is False
+        assert session.game.pending is None
+        discard = session.game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.FATE_DISCARD)]
+        assert [card.id for card in discard.cards] == ["unity"]
+
+
+def test_unity_of_spirit_negates_a_melee_attack_on_the_yojimbo():
+    with probe_ability(MELEE_PROBE, MELEE_ABILITY):
+        session = _unity_battle()
+        session.act(PlayerId.P2, Pass())
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("kakita",)))
+        assert isinstance(session.game.pending, ChooseInterrupt)
+        assert "unity" in session.game.pending.candidates
+
+        session.submit(PlayerId.P2, DecisionResponse(("unity",)))
+
+        assert "kakita" in [card.id for card in session.game.table.battlefield.cards]
+
+
+def test_unity_of_spirit_is_not_offered_without_a_courtier_or_shugenja():
+    with probe_ability(MELEE_PROBE, MELEE_ABILITY):
+        session = _unity_battle(courtier=False)
+        session.act(PlayerId.P2, Pass())
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("kakita",)))
+
+        assert not isinstance(session.game.pending, ChooseInterrupt)
+        assert "kakita" not in [card.id for card in session.game.table.battlefield.cards]
+
+
+def test_unity_of_spirit_is_not_offered_against_a_personality_who_is_not_a_yojimbo():
+    with probe_ability(MELEE_PROBE, MELEE_ABILITY):
+        session = _unity_battle(yojimbo=False)
+        session.act(PlayerId.P2, Pass())
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("kakita",)))
+
+        assert not isinstance(session.game.pending, ChooseInterrupt)
+        assert "kakita" not in [card.id for card in session.game.table.battlefield.cards]
