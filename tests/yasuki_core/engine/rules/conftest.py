@@ -1,6 +1,10 @@
+from contextlib import contextmanager
+
 import pytest
 
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 
 
 @pytest.fixture
@@ -19,3 +23,17 @@ def reacting():
     yield _register
     for event, printed_id in registered:
         triggers._TRIGGERS[event].pop(printed_id, None)
+
+
+@contextmanager
+def probe_ability(printed_id: str, ability: Ability):
+    """Register ``ability`` under ``printed_id`` for the body of a ``with`` and remove it after.
+
+    The ability registry is module-global, so a probe left behind is offered in every later test
+    in the process.
+    """
+    register_ability(printed_id, ability)
+    try:
+        yield
+    finally:
+        _ABILITIES.pop(printed_id)
