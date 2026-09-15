@@ -655,6 +655,20 @@ def test_move_card_into_a_discard_unbows():
     assert card.bowed is False
 
 
+def test_move_card_into_a_discard_keeps_it_dishonorable():
+    # Leaving play does not change the status (CR, Honorable and Dishonorable): a dishonorably dead
+    # Personality stays turned in the pile, and only a hand or a deck scrubs the flag.
+    table = TableState.empty_two_seat()
+    card = _dynasty("d1")
+    card.dishonor()
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("d1", ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)))
+
+    assert card in table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
+    assert card.dishonorable is True
+
+
 def test_move_deck_top_to_battlefield_pops_the_top_card():
     table = TableState.empty_two_seat()
     deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
