@@ -27,6 +27,7 @@ yasuki_core.engine.rules.effects
     DestroyProvince
     Discard
     DiscardFavor
+    Dishonor
     DrawCard
     Effect
     Fear
@@ -53,6 +54,7 @@ yasuki_core.engine.rules.effects
     RangedAttack
     RecruitCard
     RefillProvince
+    Rehonor
     RevealProvinces
     Show
     ShuffleDeck
@@ -68,6 +70,7 @@ yasuki_core.engine.rules.effects
 .. autosummary::
 
     adjusted_honor_change
+    seppuku
 
 .. automodule:: yasuki_core.engine.rules.effects
     :members:

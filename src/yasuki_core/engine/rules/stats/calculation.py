@@ -83,14 +83,23 @@ def stat_minimum(game: GameState, card: L5RCard, stat: Stat) -> int:
     )
 
 
+def stat_maximum(game: GameState, card: L5RCard, stat: Stat) -> int | None:
+    """The highest ``card``'s ``stat`` may read, or None where nothing caps it. The rulebook's one
+    maximum is a dishonorable Personality's Personal Honor of 0 (CR, Honorable and Dishonorable)."""
+    if stat is Stat.PERSONAL_HONOR and card.dishonorable:
+        return 0
+    return None
+
+
 def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
     """``card``'s ``stat`` right now: its printed value plus every active modifier on it, floored at
-    zero or at whatever higher minimum a card has given it.
+    zero or at whatever higher minimum a card has given it, and capped at whatever maximum applies.
 
-    The order is the CR's (Calculating Stats): modifiers sum first and the minimum applies to the
-    total, so a 2F card penalised -3F and then given +2F reads 1 rather than 2. A stat absent from
-    the card type, and one printed as a dash, both read zero and take no modifiers at all (CR,
-    Absent Stats).
+    The order is the CR's (Calculating Stats): modifiers sum first and the minimum and maximum apply
+    to the total, so a 2F card penalised -3F and then given +2F reads 1 rather than 2. A minimum
+    above the maximum cancels both, leaving only the basic floor of zero (CR, Minimums and
+    Maximums). A stat absent from the card type, and one printed as a dash, both read zero and take
+    no modifiers at all (CR, Absent Stats).
 
     Parameters
     ----------
@@ -110,4 +119,10 @@ def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
     if base is None:
         return 0
     total = base + sum(modifier.amount for modifier in active_modifiers(game, card, stat))
-    return max(stat_minimum(game, card, stat), total)
+    floor = stat_minimum(game, card, stat)
+    cap = stat_maximum(game, card, stat)
+    if cap is None:
+        return max(floor, total)
+    if floor > cap:
+        return max(0, total)
+    return max(floor, min(cap, total))

@@ -85,6 +85,24 @@ class Straightened:
 
 
 @dataclass(frozen=True, slots=True)
+class Dishonored:
+    """A Personality went from honorable to dishonorable (CR, Honorable and Dishonorable). The event
+    names the change, so one already dishonorable raises nothing. ``cause`` names who or what
+    dishonored him, which a card reacting only to its own controller's doing reads."""
+
+    card_id: str
+    cause: Cause
+
+
+@dataclass(frozen=True, slots=True)
+class Rehonored:
+    """A Personality went from dishonorable to honorable. The event names the change, so one already
+    honorable raises nothing."""
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class Revealed:
     """A face-down card in a Province was turned face-up. A card that arrives already face-up raises
     nothing. The event names the turn, not the resulting state."""
@@ -160,10 +178,12 @@ GameEvent = (
     | CardDiscarded
     | CounterGained
     | Destroyed
+    | Dishonored
     | EnteredPlay
     | HonorChanged
     | ProducedGold
     | ProducingGold
+    | Rehonored
     | Revealed
     | Straightened
 )

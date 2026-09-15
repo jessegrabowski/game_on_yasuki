@@ -9,6 +9,7 @@ yasuki_core.engine.rules.stats.calculation
 
     active_modifiers
     effective_stat
+    stat_maximum
     stat_minimum
 
 .. automodule:: yasuki_core.engine.rules.stats.calculation
