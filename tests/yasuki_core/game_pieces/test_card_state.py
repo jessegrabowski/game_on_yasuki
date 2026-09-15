@@ -85,10 +85,10 @@ def test_counters_participate_in_card_equality():
     assert plain != tokened
 
 
-def test_card_invert_and_uninvert():
+def test_card_dishonor_and_rehonor():
     c = L5RCard.of(CardPrint, id="c3", name="Rot", side=Side.FATE, owner=PlayerId.P1)
-    assert c.inverted is False
-    c.invert()
-    assert c.inverted is True
-    c.uninvert()
-    assert c.inverted is False
+    assert c.dishonorable is False
+    c.dishonor()
+    assert c.dishonorable is True
+    c.rehonor()
+    assert c.dishonorable is False

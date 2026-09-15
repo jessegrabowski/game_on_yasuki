@@ -70,7 +70,7 @@ class CardSpriteVisual(Visual):
         x, y = self.x, self.y
         w, h = self.size
         bowed = self._bowed
-        inverted = self.card.inverted
+        dishonorable = self.card.dishonorable
         face_up = self.card.face_up
 
         # The presented art is the active face: a double-faced card flipped to its back shows that
@@ -79,16 +79,16 @@ class CardSpriteVisual(Visual):
         img = None
         if self.images is not None:
             if face_up:
-                img = self.images.front(front_art, bowed, inverted)
+                img = self.images.front(front_art, bowed, dishonorable)
             else:
-                img = self.images.back(self.card.side, bowed, inverted, self.card.image_back)
+                img = self.images.back(self.card.side, bowed, dishonorable, self.card.image_back)
         else:
             # fallback no-cache path
             img = (
-                load_image(front_art, bowed, inverted, master=canvas)
+                load_image(front_art, bowed, dishonorable, master=canvas)
                 if face_up
                 else load_back_image(
-                    self.card.side, bowed, inverted, self.card.image_back, master=canvas
+                    self.card.side, bowed, dishonorable, self.card.image_back, master=canvas
                 )
             )
 
@@ -229,7 +229,6 @@ class CardSpriteVisual(Visual):
         canvas.move(self.tag, 0, 0)  # no-op but keeps tag grouping predictable
 
     def refresh_face_state(self, canvas: tk.Canvas) -> None:
-        # Called after flip/bow/invert changes; redraw art+border and keep selection overlay in sync
         # Detect if selection overlay currently exists so we can re-draw it with new geometry
         had_selection = bool(canvas.find_withtag(self._subtag(SELECT_TAG)))
         # Clear layers

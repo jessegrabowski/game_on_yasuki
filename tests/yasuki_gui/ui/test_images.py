@@ -55,7 +55,7 @@ class TestLoadImage:
 
     @patch("yasuki_gui.ui.images.Image")
     @patch("yasuki_gui.ui.images.ImageTk")
-    def test_load_image_inverted(self, mock_imagetk, mock_image, root):
+    def test_load_image_dishonorable(self, mock_imagetk, mock_image, root):
         mock_img = Mock()
         mock_image.open.return_value = mock_img
         mock_img.rotate.return_value = mock_img

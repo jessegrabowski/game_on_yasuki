@@ -109,15 +109,17 @@ class HandVisual(Visual):
             front_art = card.active_face.image_front
             if self.images is not None:
                 photo = (
-                    self.images.front(front_art, card.bowed, card.inverted)
+                    self.images.front(front_art, card.bowed, card.dishonorable)
                     if show_front
-                    else self.images.back(card.side, card.bowed, card.inverted, card.image_back)
+                    else self.images.back(card.side, card.bowed, card.dishonorable, card.image_back)
                 )
             else:
                 photo = (
-                    _li(front_art, card.bowed, card.inverted, master=canvas)
+                    _li(front_art, card.bowed, card.dishonorable, master=canvas)
                     if show_front
-                    else _lbi(card.side, card.bowed, card.inverted, card.image_back, master=canvas)
+                    else _lbi(
+                        card.side, card.bowed, card.dishonorable, card.image_back, master=canvas
+                    )
                 )
             cw, ch = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
             if photo is not None:

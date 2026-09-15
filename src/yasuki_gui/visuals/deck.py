@@ -46,7 +46,7 @@ class DeckVisual(Visual):
         photo = None
         if self.top is not None and self.images is not None:
             photo = self.images.back(
-                self.top.side, bowed=False, inverted=False, image_back=self.top.image_back
+                self.top.side, bowed=False, dishonorable=False, image_back=self.top.image_back
             )
         if photo is not None:
             canvas.create_image(x, y, image=photo, tags=(self.tag, "deck"))

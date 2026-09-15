@@ -6,7 +6,7 @@
 const TOGGLES = {
   BOW: (card) => ({ ...card, bowed: true }),
   UNBOW: (card) => ({ ...card, bowed: false }),
-  INVERT: (card) => ({ ...card, inverted: !card.inverted }),
+  INVERT: (card) => ({ ...card, dishonorable: !card.dishonorable }),
   SHOW: (card) => ({ ...card, shown: true }),
   UNSHOW: (card) => ({ ...card, shown: false }),
   // A face-down card the viewer cannot identify is a redacted stub with no front, so turning it up

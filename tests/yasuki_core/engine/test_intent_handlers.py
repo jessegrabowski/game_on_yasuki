@@ -82,7 +82,7 @@ def test_move_card_battlefield_to_hand_lands_upright_and_face_up():
     _on_battlefield(table, card)
     card.turn_face_up()
     card.bow()
-    card.invert()
+    card.dishonor()
 
     events = apply_intent(table, PlayerId.P1, MoveCard("f1", ZoneKey(PlayerId.P1, ZoneRole.HAND)))
 
@@ -91,11 +91,11 @@ def test_move_card_battlefield_to_hand_lands_upright_and_face_up():
     assert card in table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     assert card not in table.battlefield.cards
     assert "f1" not in table.positions
-    # The owner reads their own hand: a card enters it face up, unbowed, and uninverted, like a
+    # The owner reads their own hand: a card enters it face up, unbowed, and rehonored, like a
     # draw.
     assert card.face_up is True
     assert card.bowed is False
-    assert card.inverted is False
+    assert card.dishonorable is False
 
 
 def test_move_card_within_the_same_hand_is_a_no_op():
@@ -466,7 +466,7 @@ def test_move_card_to_own_deck_resets_flags():
     table = TableState.empty_two_seat()
     card = _fate("f1")
     card.bow()
-    card.invert()
+    card.dishonor()
     card.set_note("dead")
     card.show()
     card.add_peeker(PlayerId.P1)
@@ -479,7 +479,7 @@ def test_move_card_to_own_deck_resets_flags():
     # A card shuffled back into the library is scrubbed to a plain face-down card no one can read.
     assert card.face_up is False
     assert card.bowed is False
-    assert card.inverted is False
+    assert card.dishonorable is False
     assert card.note is None
     assert card.shown is False
     assert card.peekers == frozenset()
@@ -928,9 +928,9 @@ def test_invert_toggles_both_directions():
     _on_battlefield(table, card)
 
     apply_intent(table, PlayerId.P1, Invert(("f1",)))
-    assert card.inverted is True
+    assert card.dishonorable is True
     apply_intent(table, PlayerId.P1, Invert(("f1",)))
-    assert card.inverted is False
+    assert card.dishonorable is False
 
 
 def test_show_and_unshow_are_owner_gated():

@@ -226,7 +226,7 @@ const card = (overrides = {}) => ({
   bowed: false,
   face_up: true,
   hidden: false,
-  inverted: false,
+  dishonorable: false,
   ...overrides,
 });
 
@@ -404,18 +404,18 @@ describe('renderBoard', () => {
     assert.ok(el.classList.contains('face-down'), 'but the card stays a back to its owner');
   });
 
-  it('marks inverted cards', () => {
+  it('marks dishonorable cards', () => {
     const board = document.getElementById('battlefield');
-    renderBoard(board, [card({ inverted: true })], '/images');
-    assert.ok(board.children[0].classList.contains('inverted'));
+    renderBoard(board, [card({ dishonorable: true })], '/images');
+    assert.ok(board.children[0].classList.contains('dishonorable'));
     assert.ok(!board.children[0].classList.contains('bowed'));
   });
 
-  it('marks a card that is both bowed and inverted', () => {
+  it('marks a card that is both bowed and dishonorable', () => {
     const board = document.getElementById('battlefield');
-    renderBoard(board, [card({ bowed: true, inverted: true })], '/images');
+    renderBoard(board, [card({ bowed: true, dishonorable: true })], '/images');
     assert.ok(board.children[0].classList.contains('bowed'));
-    assert.ok(board.children[0].classList.contains('inverted'));
+    assert.ok(board.children[0].classList.contains('dishonorable'));
   });
 
   it('draws the side-specific back for a face-down card, strongholds using the dynasty back', () => {
@@ -832,7 +832,7 @@ describe('listDropIndex', () => {
 describe('patchCard', () => {
   const view = (over = {}) => ({
     id: 'c1', name: 'Hida', img: 'a.jpg', side: 'DYNASTY', owner: 'P1',
-    bowed: false, inverted: false, face_up: true, shown: false, peeked: false,
+    bowed: false, dishonorable: false, face_up: true, shown: false, peeked: false,
     hidden: false, token: false, pregame: false, ...over,
   });
 

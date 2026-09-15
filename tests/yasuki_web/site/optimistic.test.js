@@ -7,8 +7,8 @@ import { predictSnapshot } from '../../../src/yasuki_web/static/site/optimistic.
 const base = () => ({
   seq: 5,
   your_seat: 'P1',
-  battlefield: [{ id: 'b1', bowed: false, inverted: false, shown: false, face_up: true }],
-  zones: { 'P1:province:0': [{ id: 'pv0', bowed: false, inverted: false, face_up: true }] },
+  battlefield: [{ id: 'b1', bowed: false, dishonorable: false, shown: false, face_up: true }],
+  zones: { 'P1:province:0': [{ id: 'pv0', bowed: false, dishonorable: false, face_up: true }] },
 });
 
 const card = (snapshot, id) =>
@@ -30,9 +30,9 @@ describe('predictSnapshot', () => {
 
   it('toggles invert from its current value', () => {
     const up = predictSnapshot(base(), { op: 'INVERT', card_ids: ['b1'] });
-    assert.equal(card(up, 'b1').inverted, true);
+    assert.equal(card(up, 'b1').dishonorable, true);
     const down = predictSnapshot(up, { op: 'INVERT', card_ids: ['b1'] });
-    assert.equal(card(down, 'b1').inverted, false);
+    assert.equal(card(down, 'b1').dishonorable, false);
   });
 
   it('shows a single card addressed by card_id', () => {

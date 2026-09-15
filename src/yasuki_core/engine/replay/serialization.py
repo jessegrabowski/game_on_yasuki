@@ -157,7 +157,7 @@ _INSTANCE_FIELDS = (
     "owner",
     "bowed",
     "face_up",
-    "inverted",
+    "dishonorable",
     "counters",
     "shown",
     "peekers",
