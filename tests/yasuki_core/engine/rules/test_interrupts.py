@@ -6,7 +6,7 @@ from yasuki_core.engine.rules import interrupts
 from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, Interruption
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import attack_targets
-from yasuki_core.engine.rules.effects import Fear, GainHonor
+from yasuki_core.engine.rules.effects import Bow, Fear, GainHonor
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.turn import action_sequence, sequence
@@ -89,6 +89,18 @@ register_interrupt(
     Interrupt(
         label="Interrupt: gain 1 Honor, leave the effect alone",
         answers=Fear,
+        interrupt=lambda game, source, effect: Interruption(
+            effect, effects=(GainHonor(source.owner, 1, interruptible=False),)
+        ),
+    ),
+)
+
+
+register_interrupt(
+    "bow_interrupt_probe",
+    Interrupt(
+        label="Interrupt: gain 1 Honor as the action bows a card",
+        answers=Bow,
         interrupt=lambda game, source, effect: Interruption(
             effect, effects=(GainHonor(source.owner, 1, interruptible=False),)
         ),
@@ -494,6 +506,58 @@ def _inside_an_action() -> GameState:
     _honor_card(game.table, "P2-honor0", P2)
     game.action = KharmicDraw("the-interrupted-action")
     return game
+
+
+def test_every_effect_inside_an_action_opens_the_step_when_a_card_answers_it():
+    """The datasheet's Interrupt answers any of the action's effects, so a Strategy answering Bow
+    is offered while a Bow waits, and the Bow resolves once the seat declines."""
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+    _strategy(game.table, "P2-probe", "bow_interrupt_probe", P2)
+
+    resolve_effects(game, [Bow(farm.id)])
+
+    request = game.pending
+    assert isinstance(request, ChooseInterrupt)
+    assert request.seat is P2 and request.candidates == ("P2-probe",)
+    assert not farm.bowed
+
+    action_sequence.submit(game, DecisionResponse(()))
+    assert game.pending is None
+    assert farm.bowed
+
+
+def test_an_effect_nothing_answers_passes_through_the_step_untouched():
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+
+    resolve_effects(game, [Bow(farm.id)])
+
+    assert game.pending is None
+    assert farm.bowed
+
+
+def test_a_seat_that_declined_is_not_asked_again_once_the_other_seat_interrupts():
+    """The replacement an Interrupt makes keeps the declines: P1 passed on the gain, P2 reduced
+    it, and P1 is not offered the reduced gain a second time."""
+    game = _inside_an_action()
+    _honor_card(game.table, "P1-honor0", P1)
+
+    resolve_effects(game, [GainHonor(P1, 2)])
+    assert _asked_seat(game) is P1
+    action_sequence.submit(game, DecisionResponse(()))
+    assert _asked_seat(game) is P2
+
+    _discard_to_interrupt_in(game, "P2-honor0", HONOR_DOWN)
+
+    assert game.pending is None
+    assert game.table.seats[P1].honor == 1
+
+
+def _asked_seat(game: GameState) -> PlayerId:
+    pending = game.pending
+    assert isinstance(pending, ChooseInterrupt)
+    return pending.seat
 
 
 def test_a_change_outside_an_action_asks_nobody():

@@ -80,7 +80,7 @@ Interrupt replaces an attack with one whose outcome does more without the vocabu
 
 ```python
 @dataclass(frozen=True, slots=True)
-class Fear(AttackEffect, InterruptibleEffect):
+class Fear(AttackEffect):
     ...
     name: ClassVar[str] = "fear"
 
