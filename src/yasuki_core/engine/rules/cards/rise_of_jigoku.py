@@ -1,8 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_named
-from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, register_event_entry
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
@@ -11,11 +11,11 @@ from yasuki_core.engine.rules.board.queries import (
     personalities_in_play,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
-from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
 from yasuki_core.engine.rules.stats.province_strength import province_strength_grant
 from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.legality import recruit_cost
+from yasuki_core.engine.rules.legality import permits, recruit_cost
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Destroy,
     Effect,
+    GainHonor,
     GrantKeyword,
     GrantModifier,
     IgnoreHonorRequirements,
@@ -111,6 +112,59 @@ register_ability(
         targets=_harvested_land_targets,
         effects=plus_one_gp_this_turn,
         hits_every_target=True,
+    ),
+)
+
+
+# --- Heart of Honor ---
+
+HEART_OF_HONOR_HONORABLE = 3
+HEART_OF_HONOR_FORCE_BONUS = 2
+HEART_OF_HONOR_HONOR_GAIN = 1
+
+
+def _heart_of_honor_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in owned_personalities(game, source.owner)]
+
+
+def _heart_of_honor_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Straighten the target, and pay the honorable half only under the Battle designator.
+
+    "If this was taken as a Battle action" is read off the Action Round the card was played in
+    rather than off the action: the card prints Battle/Open, and a battle's Combat Segment is the
+    only round that permits the Battle half (CR, Battle Sequence).
+    """
+    effects: list[Effect] = [Straighten(target.id)]
+    if not permits(game, source.owner, ActionTiming.BATTLE):
+        return effects
+    if effective_personal_honor(game, target) < HEART_OF_HONOR_HONORABLE:
+        return effects
+    effects.append(
+        GrantModifier(
+            source.id,
+            target.id,
+            Stat.FORCE,
+            HEART_OF_HONOR_FORCE_BONUS,
+            Duration.UNTIL_END_OF_TURN,
+        )
+    )
+    effects.append(GainHonor(source.owner, HEART_OF_HONOR_HONOR_GAIN))
+    return effects
+
+
+register_ability(
+    "heart_of_honor",
+    Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        keywords=frozenset({keywords.BUSHIDO_VIRTUE}),
+        label=(
+            "Battle/Open: Straighten your target Personality, and as a Battle action give one "
+            "with 3 or more Personal Honor +2F and gain 1 Honor"
+        ),
+        cost=no_cost,
+        targets=_heart_of_honor_targets,
+        effects=_heart_of_honor_effects,
+        located_at=(CardLocation.HAND,),
     ),
 )
 
