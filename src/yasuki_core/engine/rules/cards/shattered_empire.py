@@ -1,13 +1,68 @@
 from yasuki_core import ruleset
-from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.effects import CreateToken, Effect
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
+from yasuki_core.engine.rules.board.clans import card_alignments
+from yasuki_core.engine.rules.board.queries import owned_personalities
+from yasuki_core.engine.rules.effects import CreateToken, DrawCard, Effect
+from yasuki_core.engine.rules.gold.discounts import recruit_discount
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.triggers import action_did
+from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.game_events import HonorChanged
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
+
+
+# --- Doji Yasuko, Soul of Doji Takeji ---
+
+YASUKO_DISCOUNT = 2
+YASUKO_COMPANIONS = (keywords.DUELIST, keywords.COURTIER)
+
+
+@recruit_discount("doji_yasuko_soul_of_doji_takeji")
+def _doji_yasuko_soul_of_doji_takeji_recruit_discount(
+    card: L5RCard, game: GameState, seat: PlayerId
+) -> int:
+    """Enters play for 2 less while the seat controls a Crane Clan Duelist or Courtier."""
+    for personality in owned_personalities(game, seat):
+        if ruleset.CRANE not in card_alignments(personality):
+            continue
+        if any(word in effective_keywords(game, personality) for word in YASUKO_COMPANIONS):
+            return YASUKO_DISCOUNT
+    return 0
+
+
+def _doji_yasuko_soul_of_doji_takeji_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Itself, once the action just resolved was a Strategy from which a player gained Honor."""
+    if not isinstance(game.action, PlayStrategy):
+        return []
+    gained = any(event.amount > 0 for event in action_did(game, HonorChanged))
+    return [source.id] if gained else []
+
+
+def _doji_yasuko_soul_of_doji_takeji_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [DrawCard(source.owner)]
+
+
+register_ability(
+    "doji_yasuko_soul_of_doji_takeji",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        keywords=frozenset({keywords.POLITICAL}),
+        label="Political Response: after a Strategy gained a player Honor, draw a card",
+        cost=no_cost,
+        targets=_doji_yasuko_soul_of_doji_takeji_targets,
+        effects=_doji_yasuko_soul_of_doji_takeji_effects,
+        hits_every_target=True,
+    ),
+)
 
 
 # --- Hida Sanjiro ---

@@ -3,13 +3,18 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import ActionPrint
+from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, Recruit
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
+from yasuki_core.engine.rules.effects import GainHonor
+from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
@@ -264,3 +269,94 @@ def test_a_second_copy_of_an_edict_discards_the_first():
     assert "first" not in in_play
     discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
     assert "first" in {card.id for card in discard.cards}
+
+
+# --- Doji Yasuko, Soul of Doji Takeji ---
+
+
+def _yasuko_waiting(state: TableState) -> L5RCard:
+    return register(
+        state, personality("yasuko", printed_id="doji_yasuko_soul_of_doji_takeji", gold_cost=6)
+    )
+
+
+def _courtier_of(clan: str) -> L5RCard:
+    return L5RCard.of(
+        PersonalityPrint,
+        id="courtier",
+        name="Courtier",
+        side=Side.DYNASTY,
+        owner=P1,
+        chi=3,
+        keywords=("Courtier",),
+        clans=(clan,),
+    )
+
+
+def test_doji_yasuko_costs_two_less_beside_a_crane_courtier():
+    game = two_seat_game()
+    put_in_play(game, _courtier_of("Crane Clan"))
+    yasuko = _yasuko_waiting(game.table)
+
+    assert recruit_cost(game, yasuko) == 4
+
+
+def test_doji_yasuko_is_not_discounted_by_a_courtier_of_another_clan():
+    game = two_seat_game()
+    put_in_play(game, _courtier_of("Lion Clan"))
+    yasuko = _yasuko_waiting(game.table)
+
+    assert recruit_cost(game, yasuko) == 6
+
+
+HONORABLE_STRATEGY = "probe_honorable_strategy"
+
+
+def _honorable_strategy_registered():
+    register_ability(
+        HONORABLE_STRATEGY,
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label="Open: gain 1 Honor",
+            cost=no_cost,
+            targets=itself,
+            effects=lambda game, source, target: [GainHonor(source.owner, 1)],
+            hits_every_target=True,
+            located_at=(CardLocation.HAND,),
+        ),
+    )
+
+
+def test_doji_yasuko_draws_after_a_strategy_gains_a_player_honor():
+    _honorable_strategy_registered()
+    try:
+        state = TableState.empty_two_seat()
+        put_in_play(state, personality("yasuko", printed_id="doji_yasuko_soul_of_doji_takeji"))
+        state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+            register(
+                state,
+                L5RCard.of(
+                    ActionPrint,
+                    id="probe",
+                    name="Probe",
+                    printed_id=HONORABLE_STRATEGY,
+                    side=Side.FATE,
+                    owner=P1,
+                    gold_cost=0,
+                ),
+            )
+        )
+        state.decks[DeckKey(P1, Side.FATE)].cards = [
+            register(state, L5RCard.of(ActionPrint, id="top", name="Top", side=Side.FATE, owner=P1))
+        ]
+        session = EngineSession.start(state, P1)
+
+        session.act(P1, PlayStrategy("probe"))
+        session.submit(P1, DecisionResponse())
+        assert ActivateAbility("yasuko") in session.legal_actions(P1)
+        session.act(P1, ActivateAbility("yasuko"))
+
+        hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+        assert [card.id for card in hand] == ["top"]
+    finally:
+        _ABILITIES.pop(HONORABLE_STRATEGY)
