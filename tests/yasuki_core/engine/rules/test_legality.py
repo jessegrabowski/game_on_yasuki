@@ -1,3 +1,4 @@
+import dataclasses
 import pytest
 
 from yasuki_core import ruleset
@@ -978,3 +979,16 @@ def test_using_one_keyed_ability_leaves_the_cards_other_one_offered():
     offered = session.legal_actions(PlayerId.P1)
     assert ActivateAbility("twice", "first") not in offered
     assert ActivateAbility("twice", "second") in offered
+
+
+def test_an_arc_without_the_rule_lets_every_ability_repeat(monkeypatch):
+    monkeypatch.setattr(
+        ruleset, "ACTIVE", dataclasses.replace(ruleset.ACTIVE, abilities_once_per_turn=False)
+    )
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("once", printed_id="test_acts_from_play"))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    _use(session, "once")
+
+    assert ActivateAbility("once") in session.legal_actions(PlayerId.P1)

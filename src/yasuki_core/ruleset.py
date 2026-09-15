@@ -79,6 +79,10 @@ class Ruleset:
     favor_abilities : tuple of FavorAbility
         The rulebook abilities this arc lets the Favor pay for. Empty for an arc whose rulebook
         grants none, which is what Gold Edition changed to when it made every use come from a card.
+    abilities_once_per_turn : bool
+        Whether an ability on a card in play, and a player ability, may be used only once per turn
+        unless it prints Repeatable (CR, Using Abilities 0.3). Earlier arcs let every ability
+        repeat. Default True, the CR's.
     lobby_timing : ActionTiming
         The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
         Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
@@ -94,6 +98,7 @@ class Ruleset:
     segment_names: dict[Segment, str] = field(default_factory=dict)
     battle_segments: tuple[BattleSegment, ...] = ()
     battle_segment_names: dict[BattleSegment, str] = field(default_factory=dict)
+    abilities_once_per_turn: bool = True
     lobby_timing: ActionTiming = ActionTiming.LIMITED
     lobby_keywords: frozenset[str] = frozenset()
     favor_abilities: tuple[FavorAbility, ...] = ()
@@ -214,6 +219,7 @@ ACTIVE = SHATTERED_EMPIRE
 # card; the Onyx/ShE datasheet grants two again.
 IMPERIAL = Ruleset(
     clan_alignments=SHATTERED_EMPIRE.clan_alignments,
+    abilities_once_per_turn=False,
     lobby_keywords=frozenset({keywords.POLITICAL}),
     favor_abilities=(
         FavorAbility("draw", ActionTiming.LIMITED, "draw a Fate card"),

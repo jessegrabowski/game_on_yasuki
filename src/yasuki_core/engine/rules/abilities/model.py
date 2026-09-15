@@ -107,8 +107,8 @@ class Ability:
         classify the action the ability produces and rise to the card that holds it, and the
         registration audit checks them against the printed text. Default empty.
     repeatable : bool, optional
-        The Repeatable modifier: the ability may be used more than once per turn. Default False,
-        which is the rule for an ability on a card in play (CR, Using Abilities 0.3). The
+        The Repeatable modifier: the ability may be used more than once per turn in an arc whose
+        ruleset makes abilities once per turn (CR, Using Abilities 0.3). Default False. The
         registration audit checks it against the printed text.
     """
 

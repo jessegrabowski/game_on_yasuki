@@ -285,7 +285,8 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
             continue
         if ability.active_seat_only and seat is not game.active:
             continue
-        if game.has_used(favor_payment.favor_ability_key(seat, ability.key, game.turn)):
+        spent = game.has_used(favor_payment.favor_ability_key(seat, ability.key, game.turn))
+        if ruleset.ACTIVE.abilities_once_per_turn and spent:
             continue
         cost = favor_payment.favor_ability_cost(game, seat, ability.key)
         if not all(effect.is_payable(game) for effect in cost):
@@ -626,9 +627,11 @@ def activatable(
             if location not in ability.located_at:
                 continue
             # An ability on a card in play is once per turn unless it prints Repeatable (CR,
-            # Using Abilities 0.3). A card played from hand is spent, so nothing rations it.
+            # Using Abilities 0.3), where the arc says so. A card played from hand is spent, so
+            # nothing rations it.
             if (
-                location is not CardLocation.HAND
+                ruleset.ACTIVE.abilities_once_per_turn
+                and location is not CardLocation.HAND
                 and not ability.repeatable
                 and used_this_turn(game, card, once_tag(ability))
             ):
