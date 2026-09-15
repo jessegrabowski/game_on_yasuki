@@ -16,7 +16,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint
+from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
@@ -28,21 +28,26 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
     Pass,
+    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
+    dealt_table,
     end_phase,
     province_card,
     end_turn,
     holding,
     personality,
     put_in_play,
+    pay,
     register,
+    stronghold,
     token_template,
     two_seat_game,
 )
@@ -333,6 +338,51 @@ def test_proclaiming_aitso_asks_whether_to_gain_three_instead():
     assert game.pending.prompt() == "Gain 3 Honor from Proclaiming instead of 0?"
     submit(game, DecisionResponse(game.pending.candidates))
     assert game.table.seats[P1].honor == 3
+
+
+def test_proclaiming_a_dishonored_aitso_for_three_rehonors_her_instead():
+    # Dishonored face up in a Province, she is recruited dishonorable (CR, Honorable and
+    # Dishonorable). The Recruit action targets her, so the 3 Honor her trait offers is a gain 0.1
+    # substitutes her rehonoring for. The seat gains nothing.
+    table = dealt_table(hand=0)
+    put_in_play(table, stronghold(P1, gold_production=8, clan="Crane"))
+    aitso = L5RCard.of(
+        PersonalityPrint,
+        id="aitso",
+        name="aitso",
+        printed_id=AITSO,
+        side=Side.DYNASTY,
+        owner=P1,
+        force=2,
+        chi=2,
+        clan="Crane",
+        personal_honor=0,
+        gold_cost=0,
+        honor_requirement=0,
+    )
+    aitso.turn_face_up()
+    aitso.dishonor()
+    province = ProvinceZone(owner=P1)
+    province.add(register(table, aitso))
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(table, P1, seed=4)
+    end_phase(session)
+    end_phase(session)
+
+    proclaim = next(
+        action
+        for action in session.legal_actions(P1)
+        if isinstance(action, Recruit) and action.proclaim
+    )
+    session.act(P1, proclaim)
+    pay(session, P1)
+    assert isinstance(session.game.pending, Confirm)
+    session.submit(P1, DecisionResponse(session.game.pending.candidates))
+
+    recruited = session.game.table.cards_by_id["aitso"]
+    assert recruited in session.game.table.battlefield.cards
+    assert not recruited.dishonorable
+    assert session.game.table.seats[P1].honor == 0
 
 
 def test_declining_the_alternative_proclaims_aitso_for_her_personal_honor():

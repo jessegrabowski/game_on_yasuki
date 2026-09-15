@@ -63,6 +63,23 @@ def test_equipping_the_sword_gains_an_honor():
     assert session.game.table.seats[P1].honor == 1
 
 
+def test_equipping_the_sword_to_a_dishonorable_bearer_rehonors_him_instead():
+    # CR, Rehonoring 0.2: attaching to a dishonorable Personality substitutes his rehonoring for
+    # the Honor gain.
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("bearer")).dishonor()
+    put_in_play(state, holding("mine", gold_production=2))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, _blessed_sword()))
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, Equip("sword"))
+    session.submit(P1, DecisionResponse(("bearer",)))
+    pay(session, P1)
+
+    assert not session.game.table.cards_by_id["bearer"].dishonorable
+    assert session.game.table.seats[P1].honor == 0
+
+
 def test_the_sword_is_destroyed_to_negate_its_bearers_dishonoring():
     with probe_ability(DISHONOR_PROBE, DISHONOR_ABILITY):
         state = TableState.empty_two_seat()
