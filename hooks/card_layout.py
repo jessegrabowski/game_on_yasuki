@@ -43,6 +43,7 @@ _CALLS = {
     "register_interrupt",
     "register_invest",
     "register_may_not_lobby",
+    "register_recruit_timing",
     "register_may_remain_bowed",
     "register_bow_waiver",
 }
@@ -109,10 +110,12 @@ _REGISTRARS = {
     "register_ability",
     "register_interrupt",
     "register_invest",
+    "register_recruit_timing",
     "register_self_grant",
     "Ability",
     "Interrupt",
     "InvestAbility",
+    "RecruitTiming",
 }
 
 

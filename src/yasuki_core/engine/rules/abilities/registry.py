@@ -1,8 +1,11 @@
-from yasuki_core.engine.registrar import FlagRegistry
+from dataclasses import dataclass
+
+from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, InvestAbility
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
 
@@ -35,6 +38,37 @@ _INTERRUPTS: dict[str, Interrupt] = {}
 # so the layout guard scans it and the card index checks it.
 _ENTERS_UNBOWED = FlagRegistry("enters unbowed", "already enters play unbowed")
 register_enters_unbowed = _ENTERS_UNBOWED.make_register()
+
+
+@dataclass(frozen=True, slots=True)
+class RecruitTiming:
+    """A designator a card lets itself be Recruited under besides the rulebook's Dynasty, with the
+    ability keywords that Recruit then carries ("You may Recruit this Holding as a Political Open
+    action").
+
+    Attributes
+    ----------
+    timing : ActionTiming
+        The designator the Recruit may be taken under.
+    keywords : frozenset of str, optional
+        The ability keywords that Recruit carries. Default empty.
+    """
+
+    timing: ActionTiming
+    keywords: frozenset[str] = frozenset()
+
+
+RECRUIT_TIMINGS: HandlerRegistry[RecruitTiming] = HandlerRegistry(
+    "recruit timings", "already names a Recruit timing"
+)
+register_recruit_timing = RECRUIT_TIMINGS.make_register()
+
+
+def recruit_timing_of(game: GameState, card_id: str) -> RecruitTiming | None:
+    """The Recruit timing ``card_id``'s text adds, or None when it Recruits only as the rulebook
+    allows or is no longer on the table."""
+    card = game.table.cards_by_id.get(card_id)
+    return None if card is None else RECRUIT_TIMINGS.get(card.printed_id)
 
 
 def register_ability(printed_id: str, value: Ability) -> None:

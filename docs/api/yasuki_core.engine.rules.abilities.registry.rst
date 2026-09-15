@@ -3,6 +3,12 @@ yasuki_core.engine.rules.abilities.registry
 
 .. currentmodule:: yasuki_core.engine.rules.abilities.registry
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    RecruitTiming
+
 .. rubric:: Functions
 
 .. autosummary::
@@ -15,6 +21,7 @@ yasuki_core.engine.rules.abilities.registry
     invest_amounts
     invest_for
     may_stay_bowed
+    recruit_timing_of
     register_ability
     register_interrupt
     register_invest

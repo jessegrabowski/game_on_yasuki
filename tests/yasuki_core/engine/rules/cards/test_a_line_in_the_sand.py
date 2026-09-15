@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Equip
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Equip, Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     ChooseFortificationProvince,
@@ -15,9 +15,19 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
+    PersonalityPrint,
+    StrongholdPrint,
+)
 
-from tests.yasuki_core.engine.builders import holding, pay, province_card, register
+from tests.yasuki_core.engine.builders import (
+    holding,
+    pay,
+    province_card,
+    put_in_play,
+    register,
+)
 
 P1 = PlayerId.P1
 
@@ -268,3 +278,12 @@ def test_beiru_is_not_offered_without_a_fortification_to_raise():
     )
 
     assert ActivateAbility("beiru") not in session.legal_actions(P1)
+
+
+def test_a_plain_holding_is_not_recruited_in_the_action_phase():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("mine", gold_production=4))
+    province_card(state, "farm", printed_id="rice_farm", gold_cost=2)
+    session = EngineSession.start(state, P1)
+
+    assert Recruit("farm") not in session.legal_actions(P1)

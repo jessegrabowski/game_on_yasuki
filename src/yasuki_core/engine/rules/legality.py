@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     ability_for,
     fixed_invest_amount,
     invest_amounts,
+    recruit_timing_of,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
@@ -100,10 +101,21 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         if action.key not in granted:
             raise ValueError(f"this arc grants no Favor ability {action.key!r}")
         return frozenset({granted[action.key].timing})
+    if isinstance(action, Recruit):
+        return recruit_timings(game, action.card_id)
     timing = ACTION_TIMINGS.get(type(action))
     if timing is None:
         raise ValueError(f"no designator for action {type(action).__name__}")
     return frozenset({timing})
+
+
+def recruit_timings(game: GameState, card_id: str) -> frozenset[ActionTiming]:
+    """The designators ``card_id`` may be Recruited under: the rulebook's Dynasty, plus any its own
+    text adds ("You may Recruit this Holding as a Political Open action")."""
+    added = recruit_timing_of(game, card_id)
+    if added is None:
+        return frozenset({ACTION_TIMINGS[Recruit]})
+    return frozenset({ACTION_TIMINGS[Recruit], added.timing})
 
 
 def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming]:
@@ -403,8 +415,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
     variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest
     variant when the seat could also cover the card's Invest cost. ``only`` narrows to a
     single card."""
-    if not permits(game, seat, ACTION_TIMINGS[Recruit]):
-        return []
+    permitted = permitted_timings(game, seat)
     recruits: list[Action] = []
     seat_info = game.table.seats[seat]
     honor = seat_info.honor
@@ -414,6 +425,8 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
         if only is not None and card.id != only:
             continue
         if not (isinstance(card.printed, (HoldingPrint, PersonalityPrint)) and card.face_up):
+            continue
+        if permitted.isdisjoint(recruit_timings(game, card.id)):
             continue
         if (
             enforce_honor
