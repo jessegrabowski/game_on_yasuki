@@ -187,7 +187,9 @@ def _advance(
     resolved = 0
     firing = list(firing)
     while True:
-        for index, effect in enumerate(effects):
+        pending = list(effects)
+        while pending:
+            effect = pending.pop(0)
             if isinstance(effect, Then):
                 _trace.append(f"    {effect.describe()}")
                 game.stack.append(ApplyEffects(effect.effects, interruptible=interruptible))
@@ -198,12 +200,14 @@ def _advance(
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
-                remainder = tuple(effects[index + 1 :])
-                _stash(game, effect, remainder, firing, event, queue, interruptible)
+                _stash(game, effect, tuple(pending), firing, event, queue, interruptible)
                 game.pending = effect.request(game)
                 return
             _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
+            # What the effect produced goes next, ahead of the rest, so an attack's outcome resolves
+            # where the attack stood and passes through the Interrupt step on its own.
+            pending[:0] = effect.follow_on(game)
             _settle_state_based_actions(game, queue)
         effects = ()
         interruptible = False
