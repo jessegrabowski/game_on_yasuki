@@ -8,21 +8,25 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
     register_invest,
 )
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Banish,
     Choose,
     CreateToken,
     Effect,
+    Move,
+    Straighten,
     TakeFavor,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.action_record import action_keywords
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
-from yasuki_core.engine.rules.board.queries import sincerity_seed_targets
+from yasuki_core.engine.rules.board.queries import owned_personalities, sincerity_seed_targets
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.table import location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 
@@ -36,6 +40,38 @@ register_may_not_lobby("daytiba")
 # --- Death of the Mantis Clan ---
 
 register_event_entry("death_of_the_mantis_clan")
+
+
+# --- Doji Aoi, Soul of Doji Chitose ---
+
+
+def _doji_aoi_soul_of_doji_chitose_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The controller's other Personalities, once the action just resolved was Political."""
+    if keywords.POLITICAL not in action_keywords(game):
+        return []
+    return [card.id for card in owned_personalities(game, source.owner) if card.id != source.id]
+
+
+def _doji_aoi_soul_of_doji_chitose_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [Move(target.id, location_of(game.table, source)), Straighten(target.id)]
+
+
+register_ability(
+    "doji_aoi_soul_of_doji_chitose",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        label="Home Tireless Response: after a Political action, move your target Personality to "
+        "Aoi and straighten them",
+        cost=no_cost,
+        targets=_doji_aoi_soul_of_doji_chitose_targets,
+        effects=_doji_aoi_soul_of_doji_chitose_effects,
+        battle_designators=frozenset({BattleDesignator.HOME}),
+        targets_any_location=True,
+        tireless=True,
+    ),
+)
 
 
 # --- Kitsu Hayako ---
