@@ -1,7 +1,15 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.effects import TakeFavor
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    Recruit,
+    UseFavorAbility,
+)
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
+from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
@@ -361,3 +369,51 @@ def test_utaku_gorou_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("bushi",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- The Palatial Estate of the Crane ---
+
+
+def _estate_holding_the_favor() -> EngineSession:
+    """P1's Stronghold is the Palatial Estate, P1 holds the Favor and a Fate card to spend."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="estate",
+            name="The Palatial Estate of the Crane",
+            printed_id="the_palatial_estate_of_the_crane",
+            side=Side.DYNASTY,
+            owner=P1,
+        ),
+    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(state, L5RCard.of(FatePrint, id="fate", name="Fate", side=Side.FATE, owner=P1))
+    )
+    session = EngineSession.start(state, P1)
+    TakeFavor(P1).perform(session.game)
+    return session
+
+
+def test_the_estate_takes_the_favor_back_after_its_controller_pays_it():
+    session = _estate_holding_the_favor()
+
+    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.submit(P1, DecisionResponse(("fate",)))
+    assert session.game.favor_holder is None
+    session.act(P1, ActivateAbility("estate"))
+
+    assert session.game.favor_holder is P1
+
+
+def test_the_estate_is_not_offered_after_an_action_that_paid_no_favor():
+    session = _estate_holding_the_favor()
+    put_in_play(session.game, holding("traders", printed_id="moto_traders"))
+
+    session.act(P1, ActivateAbility("traders"))
+
+    assert ActivateAbility("estate") not in session.legal_actions(P1)

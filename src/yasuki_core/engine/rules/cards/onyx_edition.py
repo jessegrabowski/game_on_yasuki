@@ -9,7 +9,14 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.effects import AdjustCounter, Banish, Choose, CreateToken, Effect
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Banish,
+    Choose,
+    CreateToken,
+    Effect,
+    TakeFavor,
+)
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.state import GameState
@@ -90,6 +97,35 @@ def _resolve_spearmen_of_the_akasha(
     if not chosen:
         return []
     return [Banish(source_id), CreateToken(NAGA_FOLLOWER, seat, source_id, attach_to=chosen[0])]
+
+
+# --- The Palatial Estate of the Crane ---
+
+
+def _the_palatial_estate_of_the_crane_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Itself, once the action just resolved was its controller's and paid the Favor."""
+    paid = game.action_is_favor and game.action_seat is source.owner
+    return [source.id] if paid else []
+
+
+def _the_palatial_estate_of_the_crane_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [TakeFavor(source.owner)]
+
+
+register_ability(
+    "the_palatial_estate_of_the_crane",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        keywords=frozenset({keywords.POLITICAL}),
+        label="Political Response: after paying the Imperial Favor, take it",
+        cost=no_cost,
+        targets=_the_palatial_estate_of_the_crane_targets,
+        effects=_the_palatial_estate_of_the_crane_effects,
+        hits_every_target=True,
+    ),
+)
 
 
 # --- Training Court ---
