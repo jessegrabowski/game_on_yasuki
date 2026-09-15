@@ -3,6 +3,7 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.gates_of_tengoku import SASADAS_OROCHI
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    Confirm,
     ChooseAmount,
     ChooseCards,
     ChoosePayment,
@@ -32,6 +33,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules.turn.action_sequence import submit
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -320,19 +322,25 @@ def test_aitsos_interrupt_replays_to_the_same_board():
         assert rebuilt.pending is None and not rebuilt.stack
 
 
-def test_proclaiming_aitso_gains_three_honor_in_place_of_her_personal_honor():
+def test_proclaiming_aitso_asks_whether_to_gain_three_instead():
+    # "You may gain 3 Honor instead of her Personal Honor" is the seat's call, asked once she has
+    # entered play, which is when a Proclaim's gain is added (CR, Proclaim).
     game = two_seat_game()
     aitso = put_in_play(game, personality("aitso", printed_id=AITSO, personal_honor=0))
 
     finish_recruit(game, aitso.id, None, proclaim=True)
 
+    assert isinstance(game.pending, Confirm)
+    assert game.pending.prompt() == "Gain 3 Honor from Proclaiming instead of 0?"
+    submit(game, DecisionResponse(game.pending.candidates))
     assert game.table.seats[P1].honor == 3
 
 
-def test_proclaiming_aitso_keeps_a_higher_personal_honor():
+def test_declining_the_alternative_proclaims_aitso_for_her_personal_honor():
     game = two_seat_game()
     aitso = put_in_play(game, personality("aitso", printed_id=AITSO, personal_honor=4))
 
     finish_recruit(game, aitso.id, None, proclaim=True)
+    submit(game, DecisionResponse())
 
     assert game.table.seats[P1].honor == 4
