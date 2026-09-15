@@ -1,9 +1,18 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.units.membership import attachments_of
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.cards.onyx_edition import CAVALRY_FOLLOWER
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm, DecisionResponse
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import ActionPrint
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
     effective_force,
@@ -16,8 +25,13 @@ from tests.yasuki_core.engine.builders import (
     attached,
     token_template,
     attachment,
+    end_phase,
+    holding,
+    pay,
     personality,
+    province_card,
     put_in_play,
+    register,
     two_seat_game,
 )
 
@@ -142,3 +156,97 @@ def test_a_personality_without_the_ambassador_is_asked_nothing():
 
     assert not isinstance(session.game.pending, Confirm)
     assert session.game.table.cards_by_id["gorou"].bowed is True
+
+
+# --- Rout ---
+
+ATTACKER, DEFENDER = PlayerId.P1, PlayerId.P2
+
+
+def _rout_battle() -> EngineSession:
+    """The Combat Segment of P1's attack, with Rout in the Defender's hand. The Attacker sends a
+    Personality carrying an Item and a Follower, and the Defender sends a plain one."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, holding("mine", owner=DEFENDER, gold_production=2))
+    put_in_play(state, personality("raider", owner=ATTACKER, force=3))
+    attached(state, attachment("naginata", force_modifier=1), "raider")
+    attached(
+        state,
+        attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, force=1),
+        "raider",
+    )
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    state.zones[ZoneKey(DEFENDER, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="rout",
+                name="Rout",
+                printed_id="rout",
+                side=Side.FATE,
+                owner=DEFENDER,
+                gold_cost=1,
+            ),
+        )
+    )
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("raider@0",)))
+    session.submit(DEFENDER, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    session.act(DEFENDER, Pass())
+    session.act(ATTACKER, Pass())
+    return session
+
+
+def _play_rout(session: EngineSession) -> tuple[str, ...]:
+    session.act(DEFENDER, PlayStrategy("rout"))
+    pay(session, DEFENDER)
+    return session.game.pending.candidates
+
+
+def test_rout_targets_a_unit_on_either_side():
+    """A unit is a Personality and what is attached to him (CR, Unit), and the card names no side."""
+    session = _rout_battle()
+
+    assert set(_play_rout(session)) == {"raider", "guard"}
+
+
+def test_the_targeted_unit_goes_home_and_loses_the_chosen_attachment():
+    session = _rout_battle()
+    _play_rout(session)
+
+    session.submit(DEFENDER, DecisionResponse(("raider",)))
+    session.submit(DEFENDER, DecisionResponse(("naginata",)))
+
+    game = session.game
+    raider = game.table.cards_by_id["raider"]
+    assert location_of(game.table, raider).is_home
+    assert [card.id for card in attachments_of(game, raider)] == ["ashigaru"]
+
+
+def test_the_seat_playing_it_chooses_among_the_units_attachments():
+    session = _rout_battle()
+    _play_rout(session)
+
+    session.submit(DEFENDER, DecisionResponse(("raider",)))
+
+    pending = session.game.pending
+    assert pending.seat is DEFENDER
+    assert set(pending.candidates) == {"naginata", "ashigaru"}
+
+
+def test_a_unit_carrying_nothing_only_goes_home():
+    session = _rout_battle()
+    _play_rout(session)
+
+    session.submit(DEFENDER, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert location_of(game.table, game.table.cards_by_id["guard"]).is_home
+    assert game.pending is None
