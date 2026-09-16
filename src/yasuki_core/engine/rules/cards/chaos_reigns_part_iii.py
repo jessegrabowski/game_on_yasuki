@@ -1,7 +1,7 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import register_edict
+from yasuki_core.engine.rules.abilities.idioms import ask_who_loses_honor, register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.board.queries import (
@@ -16,7 +16,6 @@ from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_dis
 from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls_printed
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    AskOption,
     Choose,
     CreateToken,
     Dishonor,
@@ -155,6 +154,8 @@ register_invest(
 
 # --- Hungry Moon ---
 
+HUNGRY_MOON_HONOR = 3
+
 
 def _hungry_moon_dishonor_targets(game: GameState, source: L5RCard) -> list[str]:
     return [card.id for card in personalities_in_play(game) if card.bowed]
@@ -178,22 +179,8 @@ def _hungry_moon_wealth_effects(game: GameState, source: L5RCard, target: L5RCar
         return []
     return [
         AdjustCounter(target.id, WEALTH, -held),
-        AskOption(
-            source.owner,
-            tuple(info.name for info in game.table.seats.values()),
-            "Who loses 3 Honor?",
-            "hungry_moon_player",
-            source.id,
-        ),
+        ask_who_loses_honor(game, source.owner, HUNGRY_MOON_HONOR, source.id),
     ]
-
-
-@choice_resolver("hungry_moon_player")
-def _resolve_hungry_moon_player(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
-    return [GainHonor(named, -3)]
 
 
 register_ability(

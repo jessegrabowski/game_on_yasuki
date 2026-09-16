@@ -125,6 +125,43 @@ def one_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, 1)]
 
 
+def ask_who_loses_honor(game: GameState, seat: PlayerId, amount: int, source_id: str) -> AskOption:
+    """The question "a target player loses N Honor" prints: name the player, the acting seat's
+    call.
+
+    Parameters
+    ----------
+    game : GameState
+        The game, for the seats it may name.
+    seat : PlayerId
+        The seat naming the player.
+    amount : int
+        The N the card prints.
+    source_id : str
+        The card asking, carried to the resolver.
+    """
+    return AskOption(
+        seat,
+        tuple(info.name for info in game.table.seats.values()),
+        f"Who loses {amount} Honor?",
+        "honor_loss_player",
+        source_id,
+        resolver_context=(str(amount),),
+    )
+
+
+@choice_resolver("honor_loss_player")
+def _resolve_honor_loss_player(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
+    return [GainHonor(named, -int(resolver_context[0]))]
+
+
 def ask_whose_honor_moves(
     game: GameState, seat: PlayerId, amount: int, source_id: str
 ) -> AskOption:
