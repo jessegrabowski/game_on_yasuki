@@ -111,8 +111,8 @@ battlefield. Everything else only fires for cards in play.
 {card}`Bayushi Gihei` reads *"After your action destroys or dishonors a card at this location, give
 Gihei +2F and a target player loses 1 Honor."* The text has two guards. *Your action* is
 {func}`~yasuki_core.engine.rules.triggers.caused_by`, which compares the event's `cause` to a seat
-and is false when the rulebook caused it. *At this location* compares Gihei's location to the other
-card's, which the event supplies:
+and is false when the rulebook or a card's own trait caused it, since neither is an action. *At
+this location* compares Gihei's location to the other card's, which the event supplies:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_iii.py
 :pyobject: _bayushi_gihei_reacts

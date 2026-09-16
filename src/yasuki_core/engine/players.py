@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 
 
@@ -19,5 +20,25 @@ class Rulebook(Enum):
     ORPHANED_ATTACHMENT = "orphaned_attachment"
 
 
-# Who or what caused an effect: a player taking an action, or the rulebook enforcing itself.
-Cause = PlayerId | Rulebook
+@dataclass(frozen=True, slots=True)
+class Trait:
+    """A cause that is a card's own trait: "before Gonshiro enters play, dishonor him" is Gonshiro's
+    doing, not his controller's action and not the rulebook's. A trait is not an action (CR,
+    Traits), so a reaction guarded on "your action" correctly ignores it.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose trait acted.
+    """
+
+    card_id: str
+
+    @property
+    def name(self) -> str:
+        return f"{self.card_id}'s trait"
+
+
+# Who or what caused an effect: a player taking an action, the rulebook enforcing itself, or a
+# card's own trait.
+Cause = PlayerId | Rulebook | Trait

@@ -368,7 +368,7 @@ class Destroy(Effect):
     ----------
     card_id : str
         The card to destroy.
-    cause : PlayerId or Rulebook
+    cause : PlayerId, Rulebook or Trait
         Who or what destroyed it: the seat whose card did, or the rule that demanded it.
     """
 
@@ -394,7 +394,7 @@ class Discard(Effect):
     ----------
     card_id : str
         The card to discard.
-    cause : PlayerId or Rulebook
+    cause : PlayerId, Rulebook or Trait
         Who or what discarded it: the seat whose action did (which a discard reaction reads to
         tell its own doing from its opponent's), or the rule that demanded it.
     """
@@ -798,7 +798,7 @@ class AttackEffect(Effect, ABC):
         The X the target's stat is compared against.
     target_id : str
         The card being attacked.
-    cause : PlayerId or Rulebook
+    cause : PlayerId, Rulebook or Trait
         Who or what attacked, carried onto a destruction.
     compared : Stat, optional
         The stat weighed against ``strength``. *"If a Ranged Attack effect ends up being compared
@@ -1259,7 +1259,7 @@ class Dishonor(Effect):
     ----------
     card_id : str
         The Personality to dishonor.
-    cause : PlayerId or Rulebook
+    cause : PlayerId, Rulebook or Trait
         Who or what dishonored him: the seat whose card did, or the rule that demanded it.
     """
 
@@ -1322,7 +1322,7 @@ def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     ----------
     card_id : str
         The Personality committing seppuku.
-    cause : PlayerId or Rulebook
+    cause : PlayerId, Rulebook or Trait
         Who or what directed it: the seat whose card did, or the rule that demanded it.
     """
     return [Rehonor(card_id), Then((Destroy(card_id, cause),))]

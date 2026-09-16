@@ -18,12 +18,13 @@ from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, Decision
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.idioms import ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 from yasuki_core.engine.rules.effects import GainHonor
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.triggers import resolve_effects
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
 from yasuki_core.engine.session import EngineSession
@@ -491,9 +492,14 @@ def test_gonshiro_is_dishonored_before_he_enters_play(reacting):
     assert session.game.table.cards_by_id["gonshiro"] in session.game.table.battlefield.cards
 
 
-def test_the_dishonoring_is_reacted_to_while_gonshiro_still_stands_in_his_province():
+def test_the_dishonoring_is_reacted_to_while_gonshiro_still_stands_in_his_province(reacting):
+    reacting(
+        Dishonored,
+        "dishonor_probe",
+        lambda ctx: [ask_who_loses_honor(ctx.game, P1, 1, ctx.card.id)],
+    )
     session = _gonshiro_in_a_province()
-    put_in_play(session.game, personality("gihei", printed_id="bayushi_gihei", force=3))
+    put_in_play(session.game, personality("probe", printed_id="dishonor_probe"))
 
     session.act(P1, Recruit("gonshiro"))
     pay(session, P1)
@@ -507,6 +513,21 @@ def test_the_dishonoring_is_reacted_to_while_gonshiro_still_stands_in_his_provin
     assert [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)].cards] == [
         "refill"
     ]
+
+
+def test_gonshiros_own_trait_is_not_his_controllers_action():
+    # Gihei reacts to "your action" dishonoring a card at his location, and a trait is not an
+    # action (CR, Traits).
+    session = _gonshiro_in_a_province()
+    put_in_play(session.game, personality("gihei", printed_id="bayushi_gihei", force=3))
+
+    session.act(P1, Recruit("gonshiro"))
+    pay(session, P1)
+
+    game = session.game
+    assert game.pending is None
+    assert game.table.cards_by_id["gonshiro"].dishonorable
+    assert effective_force(game, game.table.cards_by_id["gihei"]) == 3
 
 
 def _gonshiro_attacking(*, dishonored: bool = True) -> EngineSession:

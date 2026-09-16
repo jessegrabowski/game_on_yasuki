@@ -1,4 +1,4 @@
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_event_entry
@@ -138,7 +138,7 @@ def _kitsune_rumiko_dishonored(ctx: TriggerContext) -> list[Effect]:
     dishonoring (CR, "If" Triggers), and the seppuku is her own trait's doing."""
     if ctx.event.card_id != ctx.card.id:
         return []
-    return seppuku(ctx.card.id, ctx.card.owner)
+    return seppuku(ctx.card.id, Trait(ctx.card.id))
 
 
 def _kitsune_rumiko_targets(game: GameState, source: L5RCard) -> list[str]:
@@ -211,7 +211,7 @@ def _outlying_farms_produced_gold(ctx: TriggerContext) -> list[Effect]:
     grant bought reaches the pool before the card leaves play."""
     if ctx.event.card_id != ctx.card.id or not used_this_turn(ctx.game, ctx.card, SELF_GRANT):
         return []
-    return [Destroy(ctx.card.id, ctx.card.owner)]
+    return [Destroy(ctx.card.id, Trait(ctx.card.id))]
 
 
 # --- Repairing the Ruins ---

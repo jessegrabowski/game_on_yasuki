@@ -2,7 +2,7 @@ import inspect
 
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT, END_OF_TURN
 from yasuki_core.engine.rules.effects import (
     Negated,
@@ -183,6 +183,7 @@ EFFECTS = [
         "refill P2 province 0 face-up",
     ),
     (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
+    (Discard("farm_1", Trait("harvest")), "harvest's trait discards farm_1"),
     (AttachCard("katana", "hero"), "attach katana to hero"),
     (CreateToken("ashigaru_2", PlayerId.P1, "farm_1"), "P1 creates ashigaru_2"),
     (
