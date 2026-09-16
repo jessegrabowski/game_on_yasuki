@@ -15,6 +15,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "After X happens..." | `@on(Event, id)` | {card}`Rice Farm` |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | {card}`Millet Farm` |
 | "Response: after X..." | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
+| "X have +NF while Y" for the rest of the turn | effects returning `GrantConditionalModifier(...)` | {card}`Flashy Technique` |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
 | "Interrupt: ..." against a pending effect | `register_interrupt(id, Interrupt(...))` | {card}`Okura is Released` |
 | "Interrupt: ..." on a card in play | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.BATTLEFIELD,)))` | {card}`Doji Yuten` |
