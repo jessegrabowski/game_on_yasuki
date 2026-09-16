@@ -2,18 +2,22 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
-from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
+from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import (
     before_entering_play,
     register_ability,
+    register_cannot_attack,
     register_invest,
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
+    has_keyword,
+    opposed_units_in_battle,
     opposing_units_in_battle,
     owned_personalities,
+    units_at,
 )
 from yasuki_core.engine.rules.effects import (
     Choose,
@@ -23,6 +27,8 @@ from yasuki_core.engine.rules.effects import (
     Dishonor,
     DrawCard,
     Effect,
+    Evaluate,
+    GainHonor,
     MeleeAttack,
     Rehonor,
     seppuku,
@@ -30,17 +36,69 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
-from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.triggers import action_did, choice_resolver
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.vocabulary.game_events import HonorChanged
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import WindPrint
+
+
+# --- Daidoji Tashiko ---
+
+TASHIKO_HONOR = 2
+
+register_cannot_attack("daidoji_tashiko")
+
+
+@stat_grant("daidoji_tashiko")
+def _daidoji_tashiko_stat_grant(game: GameState, source: L5RCard, card: L5RCard, stat: Stat) -> int:
+    """While opposed, a Force bonus equal to the highest Personal Honor among Courtiers in her
+    army."""
+    if card is not source or stat is not Stat.FORCE:
+        return 0
+    if source.id not in opposed_units_in_battle(game, source.owner):
+        return 0
+    honors = [
+        effective_personal_honor(game, personality)
+        for personality in units_at(game, game.attack.current, source.owner)
+        if has_keyword(game, personality, keywords.COURTIER)
+    ]
+    return max(honors, default=0)
+
+
+def _daidoji_tashiko_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [DelayedEffect(Evaluate("daidoji_tashiko", source.id, source.owner), END_OF_BATTLE)]
+
+
+@choice_resolver("daidoji_tashiko")
+def _resolve_daidoji_tashiko(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """After the battle resolves, gain 2 Honor if its Province was not destroyed. Every battle is
+    fought at a Province, so "if it was at a Province" always holds."""
+    outcome = game.attack.battlefields[game.attack.current].outcome
+    return [] if outcome.province_destroyed else [GainHonor(seat, TASHIKO_HONOR)]
+
+
+register_ability(
+    "daidoji_tashiko",
+    Ability(
+        timings=(ActionTiming.ENGAGE,),
+        label=f"Engage: gain {TASHIKO_HONOR} Honor after this battle if its Province survives",
+        cost=no_cost,
+        targets=itself,
+        effects=_daidoji_tashiko_effects,
+        hits_every_target=True,
+    ),
+)
 
 
 # --- Doji Meiji, Regent (Experienced) ---

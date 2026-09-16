@@ -139,8 +139,8 @@ ends when its *target* leaves the table, because a card that leaves play ceases 
 ## Where a card plugs in
 
 A card in play whose text gives a stat to a card, itself or another, uses `@stat_grant`, and its
-handler names the scope, as {card}`Haramaki-do` reaching the Personality it hangs on. A card that
-grants a keyword sometimes uses
+handler names the scope: {card}`Haramaki-do` reaches the Personality it hangs on, and
+{card}`Daidoji Tashiko` reaches herself while opposed. A card that grants a keyword sometimes uses
 `@keyword_grant`. A card that changes a Province's strength uses
 `@province_strength_grant`.
 

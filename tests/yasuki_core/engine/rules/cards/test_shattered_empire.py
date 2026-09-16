@@ -619,3 +619,74 @@ def test_mayuko_cannot_pay_her_dishonoring_twice():
     session = _mayuko_attacking(dishonored=True)
 
     assert ActivateAbility("mayuko") not in session.legal_actions(P1)
+
+
+# --- Daidoji Tashiko ---
+
+
+def _tashiko_defending(*, raider_force: int, courtier: bool = False) -> EngineSession:
+    """P1 attacks P2's Province with a raider of ``raider_force``. P2 defends with Tashiko (Force
+    3), beside a Courtier of Personal Honor 3 when asked, and the session is left in the Engage
+    Segment with the Defender holding the opportunity."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("raider", force=raider_force))
+    put_in_play(state, personality("tashiko", owner=P2, printed_id="daidoji_tashiko", force=3))
+    defenders = ["tashiko@0"]
+    if courtier:
+        put_in_play(
+            state,
+            personality(
+                "courtier", owner=P2, personal_honor=3, keywords=(keywords.COURTIER,), force=1
+            ),
+        )
+        defenders.append("courtier@0")
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(P2, DecisionResponse(tuple(defenders)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    return session
+
+
+def _resolve_the_battle(session: EngineSession) -> None:
+    while session.game.attack.current is not None:
+        session.act(session.game.round.priority, Pass())
+
+
+def test_tashiko_gains_the_highest_courtier_honor_as_force_while_opposed():
+    session = _tashiko_defending(raider_force=1, courtier=True)
+
+    assert effective_force(session.game, session.game.table.cards_by_id["tashiko"]) == 3 + 3
+
+
+def test_tashiko_gains_nothing_from_an_army_without_courtiers():
+    session = _tashiko_defending(raider_force=1)
+
+    assert effective_force(session.game, session.game.table.cards_by_id["tashiko"]) == 3
+
+
+def test_tashiko_gains_honor_after_a_battle_that_leaves_her_province_standing():
+    session = _tashiko_defending(raider_force=1)
+    session.act(P2, ActivateAbility("tashiko"))
+    honor_before_resolution = session.game.table.seats[P2].honor
+
+    _resolve_the_battle(session)
+
+    outcome = session.game.attack.battlefields[0].outcome
+    assert outcome.province_destroyed is False
+    assert session.game.table.seats[P2].honor == honor_before_resolution + outcome.honor[P2] + 2
+
+
+def test_tashiko_gains_nothing_when_her_province_falls():
+    session = _tashiko_defending(raider_force=9)
+    session.act(P2, ActivateAbility("tashiko"))
+
+    _resolve_the_battle(session)
+
+    outcome = session.game.attack.battlefields[0].outcome
+    assert outcome.province_destroyed is True
+    assert session.game.table.seats[P2].honor == outcome.honor.get(P2, 0)
