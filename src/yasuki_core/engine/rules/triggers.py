@@ -19,7 +19,11 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Moment
-from yasuki_core.engine.rules.vocabulary.modifiers import LobbyModifier, ProvinceModifier
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    ConditionalModifier,
+    LobbyModifier,
+    ProvinceModifier,
+)
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
@@ -308,8 +312,9 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     Gold Cost while it waits in one, and that has to survive being Recruited out of it.
 
     Forgotten rather than skipped when read: a card can return to a Province, and a record merely
-    filtered out would come back attached to the card that replaced it. One laid on a Province slot
-    or on a player is kept whatever happens: neither is a card that can leave the table.
+    filtered out would come back attached to the card that replaced it. One laid on a condition, a
+    Province slot or a player is kept whatever happens: none of those is a card that can leave the
+    table.
     """
     if not game.ongoing:
         return
@@ -320,7 +325,8 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     game.ongoing[:] = [
         record
         for record in game.ongoing
-        if isinstance(record, ProvinceModifier | LobbyModifier) or record.target_id in on_table
+        if isinstance(record, ConditionalModifier | ProvinceModifier | LobbyModifier)
+        or record.target_id in on_table
     ]
 
 

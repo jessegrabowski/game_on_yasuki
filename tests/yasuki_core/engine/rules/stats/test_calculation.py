@@ -1,12 +1,22 @@
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
     effective_force,
     effective_personal_honor,
 )
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    Condition,
+    ConditionalModifier,
+    Duration,
+    Minimum,
+    Modifier,
+    Stat,
+)
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
@@ -77,6 +87,67 @@ def test_a_while_source_in_play_grant_drops_when_its_source_leaves():
     game = _game(samurai, [granted])  # "gone" was never put into play
 
     assert effective_force(game, samurai) == 2
+
+
+def _attacked_by(game: GameState, card: L5RCard) -> None:
+    """Open a battle at P2's first Province with ``card`` in P1's attacking army."""
+    game.attack = AttackPhase(
+        attacker=PlayerId.P1,
+        defender=PlayerId.P2,
+        battlefields=(BattlefieldInfo(province=ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)),),
+        current=0,
+    )
+    ops.set_location(game.table, card, Location.at_battlefield(0))
+
+
+def test_a_conditional_grant_reaches_a_card_only_while_its_condition_holds():
+    samurai = _personality(force=2)
+    penalty = ConditionalModifier(
+        "src", Condition.ATTACKING, Stat.FORCE, -1, Duration.UNTIL_END_OF_TURN
+    )
+    game = _game(samurai, [penalty])
+    assert effective_force(game, samurai) == 2
+
+    _attacked_by(game, samurai)
+    assert effective_force(game, samurai) == 1
+
+    ops.set_location(game.table, samurai, Location.home(PlayerId.P1))
+    assert effective_force(game, samurai) == 2
+
+
+def test_a_conditional_grant_reaches_a_card_that_entered_play_after_it_was_recorded():
+    samurai = _personality(force=2)
+    penalty = ConditionalModifier(
+        "src", Condition.ATTACKING, Stat.FORCE, -1, Duration.UNTIL_END_OF_TURN
+    )
+    game = _game(samurai, [penalty])
+    latecomer = put_in_play(game, _personality("late", force=3))
+
+    _attacked_by(game, latecomer)
+
+    assert effective_force(game, latecomer) == 2
+
+
+def test_a_while_source_in_play_conditional_grant_drops_when_its_source_leaves():
+    samurai = _personality(force=2)
+    penalty = ConditionalModifier(
+        "gone", Condition.ATTACKING, Stat.FORCE, -1, Duration.WHILE_SOURCE_IN_PLAY
+    )
+    game = _game(samurai, [penalty])  # "gone" was never put into play
+    _attacked_by(game, samurai)
+
+    assert effective_force(game, samurai) == 2
+
+
+def test_a_conditional_grant_adjusts_only_the_stat_it_names():
+    samurai = _personality(force=2, chi=3)
+    penalty = ConditionalModifier(
+        "src", Condition.ATTACKING, Stat.FORCE, -1, Duration.UNTIL_END_OF_TURN
+    )
+    game = _game(samurai, [penalty])
+    _attacked_by(game, samurai)
+
+    assert effective_chi(game, samurai) == 3
 
 
 def test_the_minimum_applies_to_the_total_rather_than_to_each_step():

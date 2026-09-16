@@ -7,6 +7,8 @@ yasuki_core.engine.rules.vocabulary.modifiers
 
 .. autosummary::
 
+    Condition
+    ConditionalModifier
     Duration
     KeywordGrant
     LobbyModifier

@@ -34,12 +34,17 @@ The named readers wrap it. {func}`~.effective_force`, {func}`~.effective_chi`,
 {func}`~.effective_keywords` answers the same question for keywords, and
 {func}`~.effective_province_strength` for a Province.
 
-## The five kinds of ongoing effect
+## The six kinds of ongoing effect
 
-A modifier is one of five things, and which one a card needs is decided by what it rests on.
+A modifier is one of six things, and which one a card needs is decided by what it rests on.
 
 {class}`~.Modifier` adjusts one stat on one card. It is the common case and everything else is a
 departure from it.
+
+{class}`~.ConditionalModifier` adjusts one stat on every card that meets a {class}`~.Condition` at
+the moment the stat is read. It names no target, so "Personalities have -1F while attacking"
+reaches a Personality Recruited after it was played and stops reaching one the moment he goes
+home, with nothing to withdraw. The condition is evaluated on every read and never stored.
 
 {class}`~.KeywordGrant` grants a keyword instead of a number. Asking whether a card is a Farm
 therefore goes through {func}`~.effective_keywords`, never through its printed keywords.

@@ -22,6 +22,12 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    Condition,
+    ConditionalModifier,
+    Duration,
+    Stat,
+)
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
@@ -135,6 +141,19 @@ def test_empty_fate_deck_draws_nothing_and_still_passes_the_turn():
 
     assert game.turn == 2 and game.active is PlayerId.P2
     assert game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards == []
+
+
+def test_the_turns_end_drops_a_conditional_modifier_with_the_rest():
+    game = _game(hand=0, fate_deck=1)
+    game.ongoing.append(
+        ConditionalModifier(
+            "flashy", Condition.ATTACKING, Stat.FORCE, -1, Duration.UNTIL_END_OF_TURN
+        )
+    )
+
+    _advance_to_end_of_turn(game)
+
+    assert game.ongoing == []
 
 
 def test_advance_empties_the_gold_pool_on_each_phase_change():
