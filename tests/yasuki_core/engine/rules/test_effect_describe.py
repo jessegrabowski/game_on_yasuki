@@ -42,12 +42,14 @@ from yasuki_core.engine.rules.effects import (
     RangedAttack,
     GrantKeyword,
     GrantMinimum,
+    GrantConditionalModifier,
     GrantLobbyBonus,
     GrantProvinceStrength,
     GrantModifier,
     PayFavorCost,
     PutIntoPlay,
     SpendOncePerTurn,
+    SpendSeatOncePerTurn,
     PayGold,
     IgnoreHonorRequirements,
     InterruptStep,
@@ -61,7 +63,7 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
     Then,
 )
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Condition, Duration, Stat
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WALL, WEALTH
@@ -116,6 +118,16 @@ EFFECTS = [
     (
         SpendOncePerTurn("miaka", "iweko_miaka_favor_payment"),
         "miaka spends its iweko_miaka_favor_payment for the turn",
+    ),
+    (
+        SpendSeatOncePerTurn(PlayerId.P1, "flashy_technique"),
+        "P1 spends flashy_technique for the turn",
+    ),
+    (
+        GrantConditionalModifier(
+            "flashy", Condition.ATTACKING, Stat.FORCE, -1, Duration.UNTIL_END_OF_TURN
+        ),
+        "flashy grants -1 FORCE while attacking (UNTIL_END_OF_TURN)",
     ),
     (
         GrantLobbyBonus("court", PlayerId.P1, 5, Duration.WHILE_SOURCE_IN_PLAY),

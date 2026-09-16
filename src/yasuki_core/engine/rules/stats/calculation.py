@@ -4,7 +4,14 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.attachment_grants import granted_stat
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    ConditionalModifier,
+    Duration,
+    Minimum,
+    Modifier,
+    Stat,
+)
+from yasuki_core.engine.rules.stats.conditions import condition_holds
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -34,8 +41,9 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
     """Every modifier adjusting ``card``'s ``stat`` right now: one from each counter it holds,
     granting its per-count stat while in play, one from each card attached to it, for the modifier
     that card prints plus whatever its own text grants, one from each Sensei its seat controls when
-    ``card`` is a Stronghold, and the recorded modifiers targeting it, a ``WHILE_SOURCE_IN_PLAY``
-    one only while its source is on the battlefield.
+    ``card`` is a Stronghold, the recorded modifiers targeting it, and the recorded conditional
+    modifiers whose condition ``card`` meets at this read, a ``WHILE_SOURCE_IN_PLAY`` one of either
+    only while its source is on the battlefield.
 
     Everything but the recorded modifiers is read off the board, so a derived grant lasts exactly as
     long as the card granting it stays in play, whenever that card arrived."""
@@ -59,12 +67,16 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
             delta = getattr(sensei, stat.value)
             if delta:
                 yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
-    for modifier in game.ongoing:
-        if not isinstance(modifier, Modifier) or modifier.target_id != card.id:
+    for recorded in game.ongoing:
+        if not isinstance(recorded, Modifier | ConditionalModifier) or recorded.stat is not stat:
             continue
-        if modifier.stat is not stat or not grant_applies(game, modifier):
+        if not grant_applies(game, recorded):
             continue
-        yield modifier
+        if isinstance(recorded, Modifier):
+            if recorded.target_id == card.id:
+                yield recorded
+        elif condition_holds(game, card, recorded.condition):
+            yield Modifier(recorded.source_id, card.id, stat, recorded.amount, recorded.duration)
 
 
 def stat_minimum(game: GameState, card: L5RCard, stat: Stat) -> int:

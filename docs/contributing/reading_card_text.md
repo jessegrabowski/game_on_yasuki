@@ -95,6 +95,19 @@ The two read alike on the card. "Paying 2 more Gold" leaves the Gold Cost stat a
 `Invest :g2:` raises it permanently. Cards that read a Gold Cost see the raised value, so the
 difference is visible to other cards rather than only to the purchase.
 
+## "X have Y while Z" names a condition
+
+{card}`Flashy Technique` reads *"Personalities have -1F while attacking."* Read at the moment the
+card resolves, that looks like a grant to each attacking Personality on the board.
+
+The CR settles it. A continuous effect is "applied immediately and continuously" for its duration
+and reaches cards that enter play after it was created. So the -1F belongs to whichever
+Personalities are attacking whenever Force is read, and a Personality who goes home stops carrying
+it without anything withdrawing it. The tell is a stat clause with a "while" and no target. The
+card describes a state of the board, and the engine reads that state on every read.
+`GrantConditionalModifier` is the effect, and [Writing an ability](an_ability.md) shows the
+handler.
+
 ## Adding to this page
 
 An entry earns its place by naming the card that nearly went wrong and what settles the reading. If

@@ -152,6 +152,8 @@ numpydoc_xref_aliases = {
     "HiddenCard": "yasuki_core.engine.redaction.HiddenCard",
     "HiddenFace": "yasuki_gui.visuals.cardface.HiddenFace",
     "InitialRecord": "yasuki_core.engine.replay.snapshot.InitialRecord",
+    "Condition": "yasuki_core.engine.rules.vocabulary.modifiers.Condition",
+    "ConditionalModifier": "yasuki_core.engine.rules.vocabulary.modifiers.ConditionalModifier",
     "KeywordGrant": "yasuki_core.engine.rules.vocabulary.modifiers.KeywordGrant",
     "L5RCard": "yasuki_core.game_pieces.cards.L5RCard",
     "LOCAL_DEBUG_OVERRIDE": "yasuki_gui.ui.game_window.LOCAL_DEBUG_OVERRIDE",

@@ -70,6 +70,47 @@ class Modifier:
     duration: Duration
 
 
+class Condition(Enum):
+    """What a :class:`~.ConditionalModifier` asks of a card each time the stat is read.
+
+    ATTACKING
+        A Personality standing in the attacking army at the battle now being fought.
+    """
+
+    ATTACKING = "attacking"
+
+
+@dataclass(frozen=True, slots=True)
+class ConditionalModifier:
+    """A continuous effect that adjusts a stat on every card meeting ``condition`` while active:
+    "Personalities have -1F while attacking".
+
+    It names no target. Which cards it reaches is decided on each read, so a card that enters play
+    after it was created is reached too, and one that stops meeting the condition stops being
+    reached, with nothing to withdraw (CR, Continuous Effects).
+
+    Attributes
+    ----------
+    source_id : str
+        The card the modifier comes from, used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it
+        leaves play and to attribute the effect.
+    condition : Condition
+        What a card has to satisfy, at the moment its stat is read, to be adjusted.
+    stat : Stat
+        Which stat is adjusted.
+    amount : int
+        The bonus (positive) or penalty (negative) added to the stat.
+    duration : Duration
+        When the modifier stops applying.
+    """
+
+    source_id: str
+    condition: Condition
+    stat: Stat
+    amount: int
+    duration: Duration
+
+
 @dataclass(frozen=True, slots=True)
 class KeywordGrant:
     """A continuous effect that gives one card a keyword while active.
@@ -182,6 +223,7 @@ class LobbyModifier:
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
 # Province's strength beside a stat change. Each is ongoing and lasts to the end of the turn
 # unless the card says otherwise. So they are recorded in one list and expire together (CR,
-# Duration of Effects). The three that name a card are forgotten when it leaves the table; the two
-# that name a Province slot and a player are not, because neither ever leaves it.
-Ongoing = Modifier | KeywordGrant | Minimum | ProvinceModifier | LobbyModifier
+# Duration of Effects). The three that name a card are forgotten when it leaves the table; the
+# three that name a condition, a Province slot or a player are not, because none of those is a
+# card that can leave it.
+Ongoing = Modifier | ConditionalModifier | KeywordGrant | Minimum | ProvinceModifier | LobbyModifier

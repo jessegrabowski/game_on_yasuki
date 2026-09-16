@@ -4,7 +4,13 @@ from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import enforce_state_based_actions, resolve_effects
 from yasuki_core.engine.table import BATTLEFIELD
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    Condition,
+    ConditionalModifier,
+    Duration,
+    Modifier,
+    Stat,
+)
 from yasuki_core.engine.rules.stats.calculation import active_modifiers
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.production import effective_gold_production
@@ -146,3 +152,17 @@ def test_a_card_a_state_rule_destroys_loses_its_modifiers_in_the_same_enforcemen
 
     assert hero not in game.table.battlefield.cards
     assert game.ongoing == []
+
+
+def test_a_conditional_modifier_survives_the_sweep_of_departed_targets():
+    """It names no target, so there is no departure to forget it on. The end of the turn is what
+    drops it."""
+    game = two_seat_game()
+    penalty = ConditionalModifier(
+        "src", Condition.ATTACKING, Stat.FORCE, -1, Duration.UNTIL_END_OF_TURN
+    )
+    game.ongoing.append(penalty)
+
+    enforce_state_based_actions(game)
+
+    assert game.ongoing == [penalty]

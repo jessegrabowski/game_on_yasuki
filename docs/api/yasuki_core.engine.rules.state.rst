@@ -16,6 +16,7 @@ yasuki_core.engine.rules.state
     claim_once_per_turn
     once_key
     rules_at_start
+    seat_once_key
     used_this_turn
 
 .. automodule:: yasuki_core.engine.rules.state

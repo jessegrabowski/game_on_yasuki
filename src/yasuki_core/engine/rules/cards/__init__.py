@@ -35,6 +35,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     spirit_wars,
     the_blackest_storm,
     the_coming_storm,
+    the_harbinger,
     the_heavens_will,
     the_hidden_city,
     the_hidden_emperor_episode_6,

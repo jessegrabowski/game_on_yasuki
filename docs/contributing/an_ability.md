@@ -96,6 +96,31 @@ in place of the gain (CR, Rehonoring 0.1 and 0.2). {card}`Blessed Sword` names i
 way. Leave the field empty when the ability rehonors him as one of its own effects, since the CR
 substitutes only where rehonoring "is not one of that action or trait's effects".
 
+### Who it reaches
+
+`GrantModifier` names one target, and most cards do too: "give a target Personality +2F". Some
+name a condition instead. {card}`Flashy Technique` reads *"Open: If you have not played another
+Flashy Technique this turn, Personalities have -1F while attacking."* There is no target to choose,
+and the Personalities it means are whichever ones are attacking whenever Force is read, including
+one Recruited after the card was played. That is `GrantConditionalModifier`, which carries a
+{class}`~yasuki_core.engine.rules.vocabulary.modifiers.Condition` where `GrantModifier` carries a
+target id:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/the_harbinger.py
+:pyobject: _flashy_technique_effects
+:language: python
+```
+
+The card's two clauses are different kinds of thing, and the handler keeps them apart. The
+handler checks "if you have not played another this turn" once, when the action resolves, and the
+action stays legal when that fails and does nothing. The handler never checks "while attacking".
+That clause is the condition the record carries, and the read path asks it of each Personality on
+every read.
+
+A condition the enum does not have yet is added in
+`src/yasuki_core/engine/rules/stats/conditions.py`, next to the one that is there.
+[Stats: printed against effective](../design/systems/stats.md) shows the read side.
+
 ## Where the rest lives
 
 [Abilities and costs](../design/systems/abilities-and-costs.md) covers the model and the cost

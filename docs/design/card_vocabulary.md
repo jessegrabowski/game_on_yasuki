@@ -73,6 +73,7 @@ deferred through `Then` instead.
    MeleeAttack
    Negated
    GrantPriority
+   GrantConditionalModifier
    GrantKeyword
    GrantMinimum
    GrantLobbyBonus
@@ -97,6 +98,7 @@ deferred through `Then` instead.
    Show
    ShuffleDeck
    SpendOncePerTurn
+   SpendSeatOncePerTurn
    Straighten
    TakeFavor
    Then
@@ -204,7 +206,7 @@ A modifier adjusts one `Stat` for one `Duration`. A counter is named scalar stat
 each counter declares the per-count stat it grants, so a card's wealth tokens raise its Gold
 Production without a modifier being recorded.
 
-The five ongoing types differ by what they rest on, and `Duration` decides how long one lasts.
+The six ongoing types differ by what they rest on, and `Duration` decides how long one lasts.
 [Stats: printed against effective](systems/stats.md) explains both. This page lists the closed
 set a card can return.
 
@@ -215,6 +217,8 @@ set a card can return.
 
    Stat
    Duration
+   Condition
+   ConditionalModifier
    KeywordGrant
    LobbyModifier
    Minimum
