@@ -45,6 +45,7 @@ departure from it.
 the moment the stat is read. It names no target, so "Personalities have -1F while attacking"
 reaches a Personality Recruited after it was played and stops reaching one the moment he goes
 home, with nothing to withdraw. The condition is evaluated on every read and never stored.
+[Adding a condition](#adding-a-condition) below shows the code path.
 
 {class}`~.KeywordGrant` grants a keyword instead of a number. Asking whether a card is a Farm
 therefore goes through {func}`~.effective_keywords`, never through its printed keywords.
@@ -58,6 +59,39 @@ so a `Modifier` cannot name one at all.
 {class}`~.LobbyModifier` rests on a player. A Lobby Bonus is not a property of any card, and the
 datasheet adds that an adjustment to Family Honor through one is neither an Honor gain nor an
 Honor loss.
+
+## Adding a condition
+
+A `ConditionalModifier` is read in the same loop as a `Modifier`. The difference is what decides
+whether the record reaches the card being read: a `Modifier` compares its `target_id`, and a
+`ConditionalModifier` asks {func}`~.condition_holds`:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/stats/calculation.py
+:start-at: for recorded in game.ongoing:
+:end-at: yield Modifier(recorded.source_id, card.id, stat, recorded.amount, recorded.duration)
+:dedent: 4
+:language: python
+```
+
+Each `Condition` is one predicate over the game and a card, in
+`src/yasuki_core/engine/rules/stats/conditions.py`. `ATTACKING` is the first:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/stats/conditions.py
+:pyobject: _attacking
+:language: python
+```
+
+A new condition is an enum member on {class}`~.Condition` with a line of docstring saying what it
+asks, a predicate like this one, and an entry in the module's table mapping the member to it. The
+predicate reads the board and nothing else. It is called on every stat read of every card while a
+record naming it is in force, so it does no work it can avoid and stores nothing between calls. The
+docstring names the exact scope, since {card}`Flashy Technique` says "Personalities" and
+`ATTACKING` is therefore a Personality in the attacking army, while a card saying "units" would
+want a member of its own.
+
+The rest of the machinery reads the record as it reads any other. `grant_applies` looks at its
+`duration` and `source_id`, the end-of-turn sweep drops it by `duration`, and the sweep that
+forgets records whose target left the table keeps it, since it has none.
 
 ## How long one lasts
 
