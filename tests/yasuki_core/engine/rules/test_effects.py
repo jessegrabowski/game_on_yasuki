@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     DiscardFavor,
     Dishonor,
+    Evaluate,
     GainHonor,
     PlaceInProvince,
     Effect,
@@ -601,3 +602,20 @@ def test_an_attack_performs_every_effect_in_its_outcome():
     resolve_effects(game, [fear])
 
     assert target not in game.table.battlefield.cards
+
+
+@choice_resolver("test_evaluate_on_the_board")
+def _honor_for_each_card_in_play(game, source_id, chosen, seat):
+    return [GainHonor(seat, len(game.table.battlefield.cards))]
+
+
+def test_evaluate_reads_the_board_as_it_stands_when_it_resolves():
+    # Built while one card is in play, resolved after a second arrived: the resolver sees two.
+    game = two_seat_game()
+    put_in_play(game, holding("first"))
+    evaluate = Evaluate("test_evaluate_on_the_board", "first", PlayerId.P1)
+    put_in_play(game, holding("second"))
+
+    resolve_effects(game, [evaluate])
+
+    assert game.table.seats[PlayerId.P1].honor == 2

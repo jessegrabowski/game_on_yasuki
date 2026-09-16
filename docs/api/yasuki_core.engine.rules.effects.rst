@@ -30,6 +30,7 @@ yasuki_core.engine.rules.effects
     Dishonor
     DrawCard
     Effect
+    Evaluate
     Fear
     GainGold
     GainHonor
