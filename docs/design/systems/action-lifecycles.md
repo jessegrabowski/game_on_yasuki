@@ -40,9 +40,9 @@ end in a question of its own: `SelectAbilityTarget` resumes by setting `pending`
 
 What is on the stack, and what each continues:
 
-- `ResolveRecruit` and `FinishRecruit` in `rulebook/recruit.py`: the two halves of a Recruit
-  after its payment and after the card's entry, with `ResolveEquip` in `rulebook/equip.py` the
-  same for an Equip.
+- `ResolveRecruit`, `EnterPlay` and `FinishRecruit` in `rulebook/recruit.py`: the three parts of
+  a Recruit after its payment, the card's before-entry effects, its entry, and what follows the
+  entry, with `ResolveEquip` in `rulebook/equip.py` the same for an Equip.
 - `ResolveStrategy` and `DiscardPlayed` in `abilities/strategy.py`: a played Strategy's ability,
   then its discard. `SelectAbilityTarget` and `ApplyAbilityEffects` in `abilities/activation.py`:
   an ability's targeting or its untargeted effects, deferred behind its cost.

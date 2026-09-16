@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, InvestAbility
+from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
@@ -36,16 +37,74 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 _ABILITIES: dict[str, tuple[Ability, ...]] = {}
 _INVEST: dict[str, InvestAbility] = {}
 _INTERRUPTS: dict[str, Interrupt] = {}
-# The Holdings whose own text overrides the rule that a Holding enters play bowed. Registered from
-# the set module the card lives in, like everything else a card does, rather than listed centrally,
-# so the layout guard scans it and the card index checks it.
-_ENTERS_UNBOWED = FlagRegistry("enters unbowed", "already enters play unbowed")
-register_enters_unbowed = _ENTERS_UNBOWED.make_register()
+
+
+@dataclass(frozen=True, slots=True)
+class EntryState:
+    """The state a card is in as it enters play. Arriving in a state is not a change of state: a
+    card entering play bowed did not bow (CR, Bowed and Unbowed), so nothing announces it and no
+    card reacts to it.
+
+    Attributes
+    ----------
+    bowed : bool or None
+        Whether the card arrives bowed. None leaves whatever was decided before this one. Default
+        None.
+    dishonorable : bool or None
+        Whether the Personality arrives dishonorable. None leaves his status as it stands, since
+        entering play does not change it (CR, Honorable and Dishonorable). Default None.
+    """
+
+    bowed: bool | None = None
+    dishonorable: bool | None = None
+
+    def over(self, base: "EntryState") -> "EntryState":
+        """This state laid over ``base``: every field set here wins, and the rest are ``base``'s."""
+        return EntryState(
+            bowed=base.bowed if self.bowed is None else self.bowed,
+            dishonorable=base.dishonorable if self.dishonorable is None else self.dishonorable,
+        )
+
+
+# Cards whose own text says what state they enter play in ("Enters play unbowed", "Gakuya enters
+# play dishonorable"). The handler answers for the card, given the game, and its answer is laid over
+# the rulebook's default.
+EntryStateHandler = Callable[[GameState, L5RCard], EntryState]
+ENTRY_STATES: HandlerRegistry[EntryStateHandler] = HandlerRegistry(
+    "entry states", "already names the state it enters play in"
+)
+entry_state = ENTRY_STATES.make_decorator()
+
+
+def entry_state_of(game: GameState, card: L5RCard) -> EntryState:
+    """The state ``card`` enters play in: the rulebook's default, a Holding bowed and anything else
+    unbowed with its status unchanged, under whatever the card's own text says."""
+    default = EntryState(bowed=isinstance(card.printed, HoldingPrint))
+    handler = ENTRY_STATES.get(card.printed_id)
+    return default if handler is None else handler(game, card).over(default)
+
 
 # Personalities whose text says they cannot attack: the Attacker may not assign them to a
 # battlefield, and nothing stops them defending.
 _CANNOT_ATTACK = FlagRegistry("cannot attack", "already cannot attack")
 register_cannot_attack = _CANNOT_ATTACK.make_register()
+
+
+# Cards with something to do before they enter play ("Before Gonshiro enters play, dishonor him").
+# The handler's effects resolve while the card still stands where it came from, and the card
+# arrives once that cascade has settled. Unlike an entry state, these are effects: they announce
+# themselves and other cards react.
+BeforeEnteringPlay = Callable[[GameState, L5RCard], list[Effect]]
+BEFORE_ENTERING_PLAY: HandlerRegistry[BeforeEnteringPlay] = HandlerRegistry(
+    "before entering play", "already acts before entering play"
+)
+before_entering_play = BEFORE_ENTERING_PLAY.make_decorator()
+
+
+def effects_before_entering_play(game: GameState, card: L5RCard) -> list[Effect]:
+    """The effects ``card``'s own text resolves before it enters play, or none."""
+    handler = BEFORE_ENTERING_PLAY.get(card.printed_id)
+    return [] if handler is None else handler(game, card)
 
 
 @dataclass(frozen=True, slots=True)
@@ -128,11 +187,6 @@ def may_attack(card: L5RCard) -> bool:
     """Whether ``card``'s text leaves it able to attack, which is what lets the Attacker assign
     it."""
     return card.printed_id not in _CANNOT_ATTACK
-
-
-def enters_play_bowed(card: L5RCard) -> bool:
-    """Whether ``card`` bows as it enters play: every Holding but the few that say otherwise."""
-    return isinstance(card.printed, HoldingPrint) and card.printed_id not in _ENTERS_UNBOWED
 
 
 def register_invest(printed_id: str, value: InvestAbility) -> None:

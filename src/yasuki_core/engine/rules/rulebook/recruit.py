@@ -6,7 +6,12 @@ from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import finish_invest
-from yasuki_core.engine.rules.abilities.registry import enters_play_bowed, invest_amounts
+from yasuki_core.engine.rules.abilities.registry import (
+    EntryState,
+    effects_before_entering_play,
+    entry_state_of,
+    invest_amounts,
+)
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
 from yasuki_core.engine.rules.effects import Ask, Effect, GainHonor
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -72,8 +77,8 @@ def recruit(
 
 @dataclass(frozen=True, slots=True)
 class ResolveRecruit:
-    """Finish a Recruit once its cost is paid: bring the card from its province into play (bowed for
-    a Holding) and refill the vacated province.
+    """Finish a Recruit once its cost is paid: resolve what the card does before entering play,
+    then bring it from its province into play and refill the vacated province.
 
     Attributes
     ----------
@@ -139,15 +144,75 @@ def resolve_recruit(
     renew: bool = False,
     proclaim: bool = False,
 ) -> None:
+    """Resolve what the card does before entering play while it still stands in its Province, and
+    queue its entry behind that, so a question the cascade asks is answered before it arrives."""
+    card = game.table.cards_by_id[card_id]
+    game.stack.append(EnterPlay(seat, card_id, invest_amount, renew, proclaim))
+    triggers.resolve_effects(game, effects_before_entering_play(game, card))
+
+
+@dataclass(frozen=True, slots=True)
+class EnterPlay:
+    """Bring a Recruited card from its Province into play in its entry state and refill the vacated
+    Province. Queued by :func:`~.resolve_recruit` behind the card's before-entry effects.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The recruiting seat.
+    card_id : str
+        The card leaving its province for play.
+    invest_amount : int or None
+        The gold Invested while recruiting, or None when the recruit took no Invest.
+    renew : bool
+        Whether to refill the vacated province face-up on top of the card's own Renew keyword.
+    proclaim : bool
+        Whether the recruit is Proclaimed.
+    """
+
+    seat: PlayerId
+    card_id: str
+    invest_amount: int | None
+    renew: bool
+    proclaim: bool
+
+    def resume(self, game: GameState) -> None:
+        enter_play(
+            game,
+            seat=self.seat,
+            card_id=self.card_id,
+            invest_amount=self.invest_amount,
+            renew=self.renew,
+            proclaim=self.proclaim,
+        )
+
+
+def _arrive(card: L5RCard, state: EntryState) -> None:
+    """Put ``card`` in its entry state. Direct writes, since arriving in a state is not bowing or
+    being dishonored (CR, Bowed and Unbowed) and nothing is announced."""
+    if state.bowed:
+        card.bow()
+    if state.dishonorable is True:
+        card.dishonor()
+    elif state.dishonorable is False:
+        card.rehonor()
+
+
+def enter_play(
+    game: GameState,
+    seat: PlayerId,
+    card_id: str,
+    invest_amount: int | None,
+    renew: bool,
+    proclaim: bool,
+) -> None:
     card = game.table.cards_by_id[card_id]
     # Read the Province before the move; afterwards no Province holds the card to look it up by.
     province_key = province_key_holding(game, seat, card_id)
     # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
     # rather than dropping it at the origin.
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
-    if enters_play_bowed(card):
-        # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton section 6).
-        card.bow()
+    _arrive(card, entry_state_of(game, card))
     fortification = keywords.FORTIFICATION in effective_keywords(game, card)
     if province_key is not None:
         if fortification:

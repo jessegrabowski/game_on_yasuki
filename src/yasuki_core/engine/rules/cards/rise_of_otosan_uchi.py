@@ -11,6 +11,8 @@ from yasuki_core.engine.rules.abilities.model import (
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
+    EntryState,
+    entry_state,
     register_interrupt,
     register_may_remain_bowed,
     register_ability,
@@ -502,6 +504,16 @@ register_ability(
         targets_any_location=True,
     ),
 )
+
+
+# --- Matsu Gakuya (Experienced) ---
+
+
+@entry_state("matsu_gakuya_experienced")
+def _matsu_gakuya_experienced_entry_state(game: GameState, card: L5RCard) -> EntryState:
+    """Gakuya enters play dishonorable. His Response, which reads what the action destroyed or put
+    into play, is not modeled."""
+    return EntryState(dishonorable=True)
 
 
 # --- Rebuilt Harbor ---

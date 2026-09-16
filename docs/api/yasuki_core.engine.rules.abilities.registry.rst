@@ -7,6 +7,7 @@ yasuki_core.engine.rules.abilities.registry
 
 .. autosummary::
 
+    EntryState
     RecruitTiming
 
 .. rubric:: Functions
@@ -15,7 +16,8 @@ yasuki_core.engine.rules.abilities.registry
 
     abilities_for
     ability_for
-    enters_play_bowed
+    effects_before_entering_play
+    entry_state_of
     fixed_invest_amount
     granted_tireless
     interrupt_for

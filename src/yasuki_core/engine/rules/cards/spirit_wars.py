@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
 from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.abilities.registry import register_ability, register_enters_unbowed
+from yasuki_core.engine.rules.abilities.registry import EntryState, entry_state, register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Effect, GainHonor
 from yasuki_core.engine.rules.state import GameState
@@ -12,7 +12,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 # --- Poorly Placed Garden ---
 
 
-register_enters_unbowed("poorly_placed_garden")
+@entry_state("poorly_placed_garden")
+def _poorly_placed_garden_entry_state(game: GameState, card: L5RCard) -> EntryState:
+    return EntryState(bowed=False)
 
 
 def _poorly_placed_garden_targets(game: GameState, source: L5RCard) -> list[str]:

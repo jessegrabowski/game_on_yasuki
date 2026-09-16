@@ -419,7 +419,8 @@ def test_rural_market_ignores_another_cards_entry():
 
 
 def test_flow_emits_entered_play_from_recruit_resolution():
-    # The wiring test: resolve_recruit moves the card into play and must fire EnteredPlay.
+    # The wiring test: a resolved Recruit queues the card's entry, and entering must fire
+    # EnteredPlay.
     game = two_seat_game()
     rural = holding(
         "P1-rural",
@@ -431,6 +432,7 @@ def test_flow_emits_entered_play_from_recruit_resolution():
     game.table.cards_by_id[rural.id] = rural  # being recruited, not yet on the battlefield
 
     recruit.resolve_recruit(game, PlayerId.P1, rural.id)
+    sequence.run_stack(game)
 
     assert rural in game.table.battlefield.cards
     assert rural.counters == {"wealth": 1}

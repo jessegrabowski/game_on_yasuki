@@ -3,7 +3,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
-from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
+from yasuki_core.engine.rules.abilities.registry import (
+    before_entering_play,
+    register_ability,
+    register_invest,
+)
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.queries import (
@@ -28,11 +32,11 @@ from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.triggers import action_did, choice_resolver
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, HonorChanged
+from yasuki_core.engine.rules.vocabulary.game_events import HonorChanged
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
@@ -144,15 +148,13 @@ register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro
 GONSHIRO_UNIT_COST = 9
 
 
-@on(EnteredPlay, "matsu_gonshiro_soul_of_matsu_shimei")
-def _matsu_gonshiro_soul_of_matsu_shimei_entered_play(ctx: TriggerContext) -> list[Effect]:
-    """Before Gonshiro enters play, dishonor him. Modeled after he enters, since nothing opens a
-    window before a card arrives, and the difference is not observable until a card reacts to his
-    entering play while he is still honorable. "You must assign Gonshiro to a battlefield
+@before_entering_play("matsu_gonshiro_soul_of_matsu_shimei")
+def _matsu_gonshiro_soul_of_matsu_shimei_before_entering_play(
+    game: GameState, card: L5RCard
+) -> list[Effect]:
+    """Before Gonshiro enters play, dishonor him. "You must assign Gonshiro to a battlefield
     whenever legal" is a restriction on the seat and is not modeled."""
-    if ctx.event.card_id != ctx.card.id:
-        return []
-    return [Dishonor(ctx.card.id, ctx.card.owner)]
+    return [Dishonor(card.id, card.owner)]
 
 
 def _matsu_gonshiro_soul_of_matsu_shimei_unit_gold_cost(

@@ -21,7 +21,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_options
 from yasuki_core.engine.rules.effects import Bow, Fear, Move, Straighten, TakeFavor
 from yasuki_core.engine.rules.state import GameState
@@ -1211,3 +1211,35 @@ def test_doji_yuten_interrupts_once_a_turn():
 
         assert session.game.pending is None
         assert session.game.table.cards_by_id["guard"].bowed is True
+
+
+# --- Matsu Gakuya (Experienced) ---
+
+GAKUYA = "matsu_gakuya_experienced"
+
+
+def test_gakuya_enters_play_dishonorable_without_being_dishonored(reacting):
+    # Arriving in a state is not a change of state, so nothing is announced for a card to react to.
+    seen: list[str] = []
+    reacting(Dishonored, "dishonor_probe", lambda ctx: seen.append(ctx.event.card_id) or [])
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, gold_production=8))
+    put_in_play(state, personality("probe", printed_id="dishonor_probe"))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    gakuya = register(state, personality("gakuya", printed_id=GAKUYA, gold_cost=6))
+    gakuya.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(gakuya)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+
+    session.act(P1, Recruit("gakuya"))
+    pay(session, P1)
+
+    game = session.game
+    assert game.table.cards_by_id["gakuya"] in game.table.battlefield.cards
+    assert game.table.cards_by_id["gakuya"].dishonorable
+    assert not game.table.cards_by_id["gakuya"].bowed
+    assert seen == []
