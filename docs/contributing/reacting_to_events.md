@@ -100,6 +100,33 @@ change rather than a card change.
 A card also answers its own `Destroyed` and `CardDiscarded` even though it has already left the
 battlefield. Everything else only fires for cards in play.
 
+## Whose action, and where
+
+```{card-image} Bayushi Gihei
+:printing: chaos_reigns_part_iii
+:width: 220px
+```
+
+{card}`Bayushi Gihei` reads *"After your action destroys or dishonors a card at this location, give
+Gihei +2F and a target player loses 1 Honor."* The text has two guards. *Your action* is
+{func}`~yasuki_core.engine.rules.triggers.caused_by`, which compares the event's `cause` to a seat
+and is false when the rulebook caused it. *At this location* compares Gihei's location to the other
+card's, which the event supplies:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_iii.py
+:pyobject: _bayushi_gihei_reacts
+:language: python
+```
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_iii.py
+:pyobject: _bayushi_gihei_destroyed
+:language: python
+```
+
+A destroyed card is in its discard by the time `Destroyed` fires, so asking the board where it is
+would answer wrongly. `Destroyed.location` is where it stood. A dishonored card is still in play,
+so the `Dishonored` handler looks the card up and reads its location from the board.
+
 ## Returning effects, not changes
 
 Your trigger returns effects. It never writes to the board.
