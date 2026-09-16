@@ -472,6 +472,47 @@ class DelayedEffect(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class Evaluate(Effect):
+    """Produce the effects the resolver named ``resolver`` returns for the board as it stands when
+    this resolves.
+
+    What a card holds in a :class:`~.DelayedEffect` when what it does at the later moment depends
+    on how that moment went: "after this battle's resolution, if the Province was not destroyed,
+    gain 2 Honor" reads the outcome only once there is one. The resolver is a registered choice
+    resolver, called with ``subjects`` as its chosen ids.
+
+    Attributes
+    ----------
+    resolver : str
+        The registered choice resolver that decides the effects.
+    source_id : str
+        The card the effect belongs to, handed to the resolver.
+    seat : PlayerId
+        The seat the effect belongs to, handed to the resolver.
+    subjects : tuple of str, optional
+        The ids the resolver reads as its chosen cards. Default empty.
+    """
+
+    resolver: str
+    source_id: str
+    seat: PlayerId
+    subjects: tuple[str, ...] = ()
+
+    def describe(self) -> str:
+        return f"{self.source_id} evaluates {self.resolver}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        return []
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS
+
+        return tuple(
+            CHOICE_RESOLVERS[self.resolver](game, self.source_id, self.subjects, self.seat)
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class DestroyProvince(Effect):
     """Destroy ``seat``'s Province ``zone``: its contents go to the discard face-up and the Province
     itself leaves the board. A Province already gone is a no-op.

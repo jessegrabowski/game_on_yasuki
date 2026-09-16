@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.effects import (
     AttachCard,
     Banish,
     DelayedEffect,
+    Evaluate,
     BanishTopFate,
     Bow,
     Ask,
@@ -119,6 +120,10 @@ EFFECTS = [
     (
         SpendOncePerTurn("miaka", "iweko_miaka_favor_payment"),
         "miaka spends its iweko_miaka_favor_payment for the turn",
+    ),
+    (
+        Evaluate("tashiko", "tashiko", PlayerId.P2),
+        "tashiko evaluates tashiko",
     ),
     (
         GrantAbility("kaede", "kaede", ("raider",), Duration.UNTIL_END_OF_TURN),

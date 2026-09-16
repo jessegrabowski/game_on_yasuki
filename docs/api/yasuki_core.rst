@@ -87,13 +87,13 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.recruit <yasuki_core.engine.rules.rulebook.recruit>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_based_actions <yasuki_core.engine.rules.state_based_actions>
-    yasuki_core.engine.rules.stats.attachment_grants <yasuki_core.engine.rules.stats.attachment_grants>
     yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>
     yasuki_core.engine.rules.stats.card_values <yasuki_core.engine.rules.stats.card_values>
     yasuki_core.engine.rules.stats.conditions <yasuki_core.engine.rules.stats.conditions>
     yasuki_core.engine.rules.stats.keyword_grants <yasuki_core.engine.rules.stats.keyword_grants>
     yasuki_core.engine.rules.stats.ongoing_grants <yasuki_core.engine.rules.stats.ongoing_grants>
     yasuki_core.engine.rules.stats.province_strength <yasuki_core.engine.rules.stats.province_strength>
+    yasuki_core.engine.rules.stats.stat_grants <yasuki_core.engine.rules.stats.stat_grants>
     yasuki_core.engine.rules.triggers <yasuki_core.engine.rules.triggers>
     yasuki_core.engine.rules.turn.action_sequence <yasuki_core.engine.rules.turn.action_sequence>
     yasuki_core.engine.rules.turn.provinces <yasuki_core.engine.rules.turn.provinces>

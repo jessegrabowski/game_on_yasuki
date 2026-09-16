@@ -64,6 +64,7 @@ deferred through `Then` instead.
    DiscardFavor
    Dishonor
    DrawCard
+   Evaluate
    Effect
    Fear
    GainGold

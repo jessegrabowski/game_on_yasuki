@@ -16,7 +16,7 @@ totals the Personality's Force.
 The +1PH is written in the text, so it is a grant:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/cards/ivory_edition.py
-:pyobject: _haramaki_do_attachment_grant
+:pyobject: _haramaki_do_stat_grant
 :language: python
 ```
 

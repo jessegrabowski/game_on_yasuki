@@ -33,13 +33,17 @@ and are not the same cost.
 :width: 220px
 ```
 
-`@attachment_grant` is for a stat the attachment's text hands over. {card}`Haramaki-do` prints +2F
-and reads "This Personality has +1PH", and only the second half is a handler:
+`@stat_grant` is for a stat the attachment's text hands over. {card}`Haramaki-do` prints +2F and
+reads "This Personality has +1PH", and only the second half is a handler. The handler's first line
+says whom the grant reaches, here the Personality the Item hangs on:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/cards/ivory_edition.py
-:pyobject: _haramaki_do_attachment_grant
+:pyobject: _haramaki_do_stat_grant
 :language: python
 ```
+
+The scope check comes first because the handler runs on every stat read of every card in play
+while the Item is out, and only the bearer is meant to receive it.
 
 A printed number on an attachment already reaches the unit through {func}`~.unit_force`.
 [Stats and costs](stats_and_costs.md) is when a number needs a handler at all.

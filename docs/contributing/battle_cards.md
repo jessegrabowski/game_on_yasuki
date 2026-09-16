@@ -75,6 +75,27 @@ Her first sentence, *"Kaede cannot attack"*, is `register_cannot_attack("daidoji
 Attacker's assignment then never offers her, and the Defender's still does, which is the only way
 her trait ever fires.
 
+## After the battle, if it went a certain way
+
+A `DelayedEffect` held to `END_OF_BATTLE` resolves once the outcome is recorded, but it holds a
+fixed effect. When what happens depends on how the battle went, the held effect is an `Evaluate`,
+which calls a registered resolver on the board as it stands at that moment. {card}`Daidoji Tashiko`
+reads *"Engage: After this battle's resolution, if it was at a Province and the Province was not
+destroyed, gain 2 Honor."*:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/shattered_empire.py
+:pyobject: _daidoji_tashiko_effects
+:language: python
+```
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/shattered_empire.py
+:pyobject: _resolve_daidoji_tashiko
+:language: python
+```
+
+The resolver reads `attack.battlefields[attack.current].outcome`, which `_resolve_battle` writes
+before it releases the delayed effects and before it clears `attack.current`.
+
 ## Where the rest lives
 
 [Cards that attach](attachments.md) is the attachment side, including the two bow costs.

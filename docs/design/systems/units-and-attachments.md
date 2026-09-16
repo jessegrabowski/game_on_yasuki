@@ -101,6 +101,6 @@ Writing either of these onto a card duplicates a rule that already fires.
 
 ## Where a card plugs in
 
-Through `@attach_restriction` for what it will hang on, `@attachment_grant` for a stat it gives its
+Through `@attach_restriction` for what it will hang on, `@stat_grant` for a stat it gives its
 Personality, and ordinary abilities for everything else.
 [Cards that attach](../../contributing/attachments.md) is the worked version.

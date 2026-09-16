@@ -17,6 +17,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "Response: after X..." | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
 | "X have +NF while Y" for the rest of the turn | effects returning `GrantConditionalModifier(...)` | {card}`Flashy Technique` |
 | "cannot attack" | `register_cannot_attack(id)` | {card}`Daidoji Kaede` |
+| "After this battle's resolution, if X, ..." | effects returning `DelayedEffect(Evaluate(...), END_OF_BATTLE)` | {card}`Daidoji Tashiko` |
 | Gives a card an ability, as in "she has 'Battle: Ranged 3'" | `@granted_ability(id)` and effects returning `GrantAbility(...)` | {card}`Daidoji Kaede` |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
 | "Interrupt: ..." against a pending effect | `register_interrupt(id, Interrupt(...))` | {card}`Okura is Released` |
@@ -25,7 +26,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "You may Recruit this Holding as a Political Open action" | `register_recruit_timing(id, RecruitTiming(...))` | {card}`The Ivory Courtroom` |
 | Gives another card's abilities Tireless | `@tireless_grant(id)` | {card}`Shrine to Inari` |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
-| Gives the Personality it hangs on a stat | `@attachment_grant(id)` | {card}`Haramaki-do` |
+| Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |
 | Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
 | Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
@@ -165,7 +166,7 @@ that the header names the card the block registers, on the modules your commit t
 
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, an entry point of a registry (`gold`, `invest`,
-`keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
+`keywords`, `recruit_discount`, `invest_discount`, `stat_grant`, `attach_restriction`,
 `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`, `entry_state`,
 `before_entering_play`), or the event a
 trigger answers (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`,
