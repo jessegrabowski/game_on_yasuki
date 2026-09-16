@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.card_values import effective_force
-from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass, PlayStrategy
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -55,13 +55,7 @@ def _play(session: EngineSession, card_id: str) -> None:
     pay(session, P1)
 
 
-def test_flashy_technique_penalizes_personalities_only_while_they_attack():
-    session = _flashy_in_hand("flashy")
-    _play(session, "flashy")
-    raider = session.game.table.cards_by_id["raider"]
-    guard = session.game.table.cards_by_id["guard"]
-    assert effective_force(session.game, raider) == 3
-
+def _attack_with_the_raider(session: EngineSession) -> None:
     end_phase(session)
     session.act(P1, DeclareAttack())
     session.submit(P1, DecisionResponse(("raider@0",)))
@@ -69,16 +63,39 @@ def test_flashy_technique_penalizes_personalities_only_while_they_attack():
     choice = session.game.pending
     session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
 
+
+def test_flashy_technique_penalizes_personalities_only_while_they_attack():
+    session = _flashy_in_hand("flashy")
+    _play(session, "flashy")
+    raider = session.game.table.cards_by_id["raider"]
+    guard = session.game.table.cards_by_id["guard"]
+    assert effective_force(session.game, raider) == 3
+
+    _attack_with_the_raider(session)
+
     assert effective_force(session.game, raider) == 2
     assert effective_force(session.game, guard) == 3
 
 
-def test_a_second_flashy_technique_waits_for_the_next_turn():
+def test_a_second_flashy_technique_is_legal_and_adds_no_second_penalty():
     session = _flashy_in_hand("first", "second")
     _play(session, "first")
-    assert PlayStrategy("second") not in session.legal_actions(P1)
-
-    end_turn(session)
-    end_turn(session)
-
+    session.act(P2, Pass())  # the opportunity comes back to P1
     assert PlayStrategy("second") in session.legal_actions(P1)
+    _play(session, "second")
+
+    _attack_with_the_raider(session)
+
+    assert effective_force(session.game, session.game.table.cards_by_id["raider"]) == 2
+
+
+def test_the_limit_resets_with_the_turn():
+    session = _flashy_in_hand("first", "second")
+    _play(session, "first")
+    end_turn(session)
+    end_turn(session)
+    _play(session, "second")
+
+    _attack_with_the_raider(session)
+
+    assert effective_force(session.game, session.game.table.cards_by_id["raider"]) == 2
