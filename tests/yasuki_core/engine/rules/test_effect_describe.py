@@ -49,6 +49,7 @@ from yasuki_core.engine.rules.effects import (
     PayFavorCost,
     PutIntoPlay,
     SpendOncePerTurn,
+    SpendSeatOncePerTurn,
     PayGold,
     IgnoreHonorRequirements,
     InterruptStep,
@@ -117,6 +118,10 @@ EFFECTS = [
     (
         SpendOncePerTurn("miaka", "iweko_miaka_favor_payment"),
         "miaka spends its iweko_miaka_favor_payment for the turn",
+    ),
+    (
+        SpendSeatOncePerTurn(PlayerId.P1, "flashy_technique"),
+        "P1 spends flashy_technique for the turn",
     ),
     (
         GrantConditionalModifier(

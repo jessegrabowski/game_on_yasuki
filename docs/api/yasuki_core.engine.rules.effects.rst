@@ -61,6 +61,7 @@ yasuki_core.engine.rules.effects
     Show
     ShuffleDeck
     SpendOncePerTurn
+    SpendSeatOncePerTurn
     Straighten
     TakeFavor
     Then

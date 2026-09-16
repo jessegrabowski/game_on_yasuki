@@ -39,7 +39,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     ProvinceModifier,
     Stat,
 )
-from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, seat_once_key
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, flow_resolves
 from yasuki_core.engine.table import (
     BATTLEFIELD,
@@ -694,6 +694,22 @@ class SpendOncePerTurn(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is not None:
             claim_once_per_turn(game, card, self.tag)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class SpendSeatOncePerTurn(Effect):
+    """Claim ``seat``'s once-per-turn use of ``tag``: the :class:`~.SpendOncePerTurn` of a limit
+    that rests on the player rather than on a card."""
+
+    seat: PlayerId
+    tag: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} spends {self.tag} for the turn"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.use_once(seat_once_key(self.seat, self.tag, game.turn))
         return []
 
 
