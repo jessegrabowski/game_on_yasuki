@@ -57,8 +57,14 @@ def attack_targets(game: GameState, source: L5RCard) -> list[str]:
     if attack is None or attack.current is None:
         return []
     enemy = attack.defender if source.owner is attack.attacker else attack.attacker
+    return attack_targets_at(game, attack.current, enemy)
+
+
+def attack_targets_at(game: GameState, battlefield: int, seat: PlayerId) -> list[str]:
+    """The ids an attack effect may be pointed at among ``seat``'s units at ``battlefield``: each
+    unit's Followers, or its Personality when he carries none (CR, Ranged Attack)."""
     targets: list[str] = []
-    for personality in units_at(game, attack.current, enemy):
+    for personality in units_at(game, battlefield, seat):
         followers = followers_of(game, personality)
         if followers:
             targets.extend(follower.id for follower in followers)
