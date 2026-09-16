@@ -220,6 +220,35 @@ register_ability(
 )
 
 
+# --- I Do Not Forget ---
+
+
+def _i_do_not_forget_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in personalities_in_play(game) if card.dishonorable]
+
+
+def _i_do_not_forget_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Their controller loses Honor equal to their printed Personal Honor or 1, whichever is
+    higher. The face-up hand discard and "you may not ally with them" are not modeled: nothing
+    reveals a hand card to another player's action, and alliances do not exist."""
+    return [GainHonor(target.owner, -max(target.personal_honor, 1))]
+
+
+register_ability(
+    "i_do_not_forget",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.POLITICAL}),
+        label="Political Open: a target dishonorable Personality's controller loses Honor equal to "
+        "their printed Personal Honor, or 1",
+        cost=no_cost,
+        targets=_i_do_not_forget_targets,
+        effects=_i_do_not_forget_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
+
+
 # --- Impressment ---
 
 register_event_entry("impressment", timing=ActionTiming.DYNASTY)
