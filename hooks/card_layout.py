@@ -27,6 +27,7 @@ _DECORATORS = {
     "attachment_grant",
     "attach_restriction",
     "attack_strength_against",
+    "entry_state",
     "favor_payer",
     "granted_ability",
     "lobby_bar",
@@ -41,7 +42,6 @@ _CALLS = {
     "register_ability",
     "register_edict",
     "register_event_entry",
-    "register_enters_unbowed",
     "register_interrupt",
     "register_invest",
     "register_may_not_lobby",
@@ -239,6 +239,7 @@ ROLES = frozenset(
         "province_strength",
         "lobby_bonus",
         "favor_payer",
+        "entry_state",
         "lobby_bar",
         # triggers, named for the event they answer
         "assigned",

@@ -86,8 +86,10 @@ appearing verbatim on unrelated cards.
 clauses are already the rulebook: every Holding enters play bowed, and Gold Production is a printed
 stat rather than behavior. The card needs no handler at all.
 
-The reverse is not free. "Enters play unbowed" overrides the default, and `register_enters_unbowed`
-is what carries it.
+The reverse is not free. "Enters play unbowed" overrides the default, and an `@entry_state` handler
+returning `EntryState(bowed=False)` is what carries it. The same handler carries "enters play
+dishonorable". A state a card arrives in is not a change of state, so nothing announces it: a card
+entering play bowed did not bow (CR, Bowed and Unbowed).
 
 ## Invest changes the stat, a discount does not
 

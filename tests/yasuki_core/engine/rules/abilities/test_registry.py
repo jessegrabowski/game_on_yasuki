@@ -5,14 +5,16 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import (
     _ABILITIES,
-    _ENTERS_UNBOWED,
     _INVEST,
+    ENTRY_STATES,
     GRANTED_ABILITIES,
+    EntryState,
     abilities_for,
     ability_for,
+    entry_state,
+    entry_state_of,
     granted_ability,
     register_ability,
-    register_enters_unbowed,
     register_invest,
 )
 
@@ -22,8 +24,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import HoldingPrint
-
-from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import holding, personality, put_in_play, two_seat_game
 
 
 def test_a_second_unkeyed_ability_for_one_card_is_refused():
@@ -113,13 +114,32 @@ def test_a_second_invest_for_one_card_is_refused():
         _INVEST.pop("guard_probe", None)
 
 
-def test_a_second_enters_unbowed_for_one_card_is_refused():
-    # A set absorbs a repeated registration where the dict registries raise, so without this guard a
-    # card listed from two set modules would be invisible rather than loud.
-    register_enters_unbowed("guard_probe")
+def test_a_second_entry_state_for_one_card_is_refused():
+    entry_state("guard_probe")(lambda game, card: EntryState())
 
     try:
-        with pytest.raises(ValueError, match="guard_probe already enters play unbowed"):
-            register_enters_unbowed("guard_probe")
+        with pytest.raises(ValueError, match="guard_probe already names the state"):
+            entry_state("guard_probe")(lambda game, card: EntryState())
     finally:
-        _ENTERS_UNBOWED.discard("guard_probe")
+        ENTRY_STATES.pop("guard_probe")
+
+
+def test_the_rulebook_bows_an_entering_holding_and_leaves_a_personality_as_he_stands():
+    game = two_seat_game()
+
+    assert entry_state_of(game, holding("farm")) == EntryState(bowed=True, dishonorable=None)
+    assert entry_state_of(game, personality("samurai")) == EntryState(
+        bowed=False, dishonorable=None
+    )
+
+
+def test_a_cards_entry_state_overrides_only_the_fields_it_sets():
+    game = two_seat_game()
+    entry_state("guard_probe")(lambda game, card: EntryState(dishonorable=True))
+
+    try:
+        state = entry_state_of(game, personality("samurai", printed_id="guard_probe"))
+    finally:
+        ENTRY_STATES.pop("guard_probe")
+
+    assert state == EntryState(bowed=False, dishonorable=True)

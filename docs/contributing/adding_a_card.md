@@ -33,7 +33,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Puts itself into play as an Edict | `register_edict(id)` | {card}`Act With Authority` |
 | An Event played from the Province it sits in | `register_event_entry(id)` | {card}`Shadow of the Dark God` |
 | Raises its own Gold Production as it bows | `register_self_grant(id, n)`, or `@self_grant(id)` when the grant has a condition | {card}`Jade Mine`, {card}`Slave Pits` |
-| Enters play unbowed where the rule says bowed | `register_enters_unbowed(id)` | {card}`Poorly Placed Garden` |
+| Enters play in a state the rule does not give it ("Enters play unbowed", "enters play dishonorable") | `@entry_state(id)` | {card}`Poorly Placed Garden`, {card}`Matsu Gakuya` |
 | "May remain bowed" | `register_may_remain_bowed(id)` | {card}`Culling Grounds` |
 | Waives the bow cost of the Personality it hangs on | `register_bow_waiver(id)` | {card}`Shadowlands Ambassador` |
 | Pays somebody's Imperial Favor cost | `@favor_payer(id)` | {card}`Manjodh` |
@@ -165,7 +165,8 @@ that the header names the card the block registers, on the modules your commit t
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, an entry point of a registry (`gold`, `invest`,
 `keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
-`attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`), or the event a
+`attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`, `entry_state`),
+or the event a
 trigger answers (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`,
 `turn_started`, `counter_gained`, `card_discarded`, `producing_gold`, `produced_gold`,
 `entered_play_or_destroyed`). A card printing

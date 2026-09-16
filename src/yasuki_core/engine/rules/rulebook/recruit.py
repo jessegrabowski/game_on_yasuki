@@ -6,7 +6,11 @@ from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import finish_invest
-from yasuki_core.engine.rules.abilities.registry import enters_play_bowed, invest_amounts
+from yasuki_core.engine.rules.abilities.registry import (
+    EntryState,
+    entry_state_of,
+    invest_amounts,
+)
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
 from yasuki_core.engine.rules.effects import Ask, Effect, GainHonor
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -72,8 +76,8 @@ def recruit(
 
 @dataclass(frozen=True, slots=True)
 class ResolveRecruit:
-    """Finish a Recruit once its cost is paid: bring the card from its province into play (bowed for
-    a Holding) and refill the vacated province.
+    """Finish a Recruit once its cost is paid: bring the card from its province into play in its
+    entry state and refill the vacated province.
 
     Attributes
     ----------
@@ -145,9 +149,7 @@ def resolve_recruit(
     # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
     # rather than dropping it at the origin.
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
-    if enters_play_bowed(card):
-        # Holdings enter play bowed; Personalities enter unbowed (rules-skeleton section 6).
-        card.bow()
+    _arrive(card, entry_state_of(game, card))
     fortification = keywords.FORTIFICATION in effective_keywords(game, card)
     if province_key is not None:
         if fortification:
@@ -167,6 +169,17 @@ def resolve_recruit(
         )
         return
     _announce_entering_play(game, card_id, invest_amount, proclaim)
+
+
+def _arrive(card: L5RCard, state: EntryState) -> None:
+    """Put ``card`` in its entry state. Direct writes, since arriving in a state is not bowing or
+    being dishonored (CR, Bowed and Unbowed) and nothing is announced."""
+    if state.bowed:
+        card.bow()
+    if state.dishonorable is True:
+        card.dishonor()
+    elif state.dishonorable is False:
+        card.rehonor()
 
 
 def _province_slots(game: GameState, seat: PlayerId) -> tuple[str, ...]:
