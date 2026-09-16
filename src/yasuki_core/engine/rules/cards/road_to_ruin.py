@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.board.seats import cards_in_play
+from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_event_entry
 from yasuki_core.engine.rules.abilities.model import (
@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.abilities.model import (
     CardLocation,
     Interrupt,
     Interruption,
+    itself,
 )
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -28,10 +29,12 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     RangedAttack,
     Straighten,
+    seppuku,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
+    Dishonored,
     EnteredPlay,
     ProducedGold,
     ProducingGold,
@@ -118,6 +121,48 @@ register_ability(
         cost=no_cost,
         targets=_kakita_harudei_drunkard_targets,
         effects=_kakita_harudei_drunkard_effects,
+    ),
+)
+
+
+# --- Kitsune Rumiko ---
+
+RUMIKO_HONOR = 1
+RUMIKO_HONOR_WITH_BEIKO = 2
+BEIKO_SENSEI = "beiko_sensei"
+
+
+@on(Dishonored, "kitsune_rumiko")
+def _kitsune_rumiko_dishonored(ctx: TriggerContext) -> list[Effect]:
+    """If Rumiko is ever dishonorable, she commits seppuku. "If ever" is timed after the
+    dishonoring (CR, "If" Triggers), and the seppuku is her own trait's doing."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return seppuku(ctx.card.id, ctx.card.owner)
+
+
+def _kitsune_rumiko_targets(game: GameState, source: L5RCard) -> list[str]:
+    return itself(game, source) if game.active is source.owner else []
+
+
+def _kitsune_rumiko_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Gain 1 Honor, or 2 Honor if your Sensei is Beiko Sensei. Compassion, which waives the bow
+    while her controller has fewer Provinces, is not modeled: nothing reads Bushido Virtues."""
+    amount = (
+        RUMIKO_HONOR_WITH_BEIKO if cards_named(game, source.owner, BEIKO_SENSEI) else RUMIKO_HONOR
+    )
+    return [GainHonor(source.owner, amount, personalities=(source.id,))]
+
+
+register_ability(
+    "kitsune_rumiko",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open, bow: if it is your turn, gain 1 Honor, or 2 with Beiko Sensei",
+        cost=bow_cost,
+        targets=_kitsune_rumiko_targets,
+        effects=_kitsune_rumiko_effects,
+        hits_every_target=True,
     ),
 )
 
