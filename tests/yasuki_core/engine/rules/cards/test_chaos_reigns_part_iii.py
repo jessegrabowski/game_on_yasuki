@@ -2,10 +2,16 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
+from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.effects import Destroy, Dishonor
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
+    DeclareAttack,
+    Pass,
     PlayStrategy,
     Recruit,
 )
@@ -16,12 +22,13 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     KANPEKI_DYNASTY,
     ZOMBIE_FOLLOWER,
 )
-from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.replay.game_log import replay
-from yasuki_core.engine.rules.triggers import fire
+from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -29,6 +36,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint, WindPrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -552,3 +560,90 @@ def test_teru_gets_force_when_the_controller_declines():
     assert session.game.table.cards_by_id["theirs"].dishonorable
     assert session.game.table.seats[P1].honor == 0
     assert effective_force(session.game, session.game.table.cards_by_id["teru"]) == 5
+
+
+# --- Bayushi Gihei ---
+
+GIHEI_PROBE = "probe_gihei_battle_dishonor"
+GIHEI_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: dishonor a target enemy Personality",
+    cost=no_cost,
+    targets=lambda game, source: [
+        card.id for card in personalities_in_play(game) if card.owner is not source.owner
+    ],
+    effects=lambda game, source, target: [Dishonor(target.id, source.owner)],
+)
+
+
+def _gihei_at_the_battle(*, gihei_assigned: bool) -> EngineSession:
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("gihei", printed_id="bayushi_gihei", force=3))
+    put_in_play(state, personality("prober", printed_id=GIHEI_PROBE, force=3))
+    put_in_play(state, personality("guard", owner=P2, force=1))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    attackers = ("prober@0", "gihei@0") if gihei_assigned else ("prober@0",)
+    session.submit(P1, DecisionResponse(attackers))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(P2, Pass())
+    return session
+
+
+def test_gihei_reacts_to_his_controllers_action_dishonoring_a_card_where_he_stands():
+    with probe_ability(GIHEI_PROBE, GIHEI_ABILITY):
+        session = _gihei_at_the_battle(gihei_assigned=True)
+        session.act(P1, ActivateAbility("prober"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        assert session.game.pending.seat is P1
+        session.submit(P1, DecisionResponse(("P2",)))
+
+    game = session.game
+    assert effective_force(game, game.table.cards_by_id["gihei"]) == 5
+    assert game.table.seats[P2].honor == -1
+
+
+def test_gihei_at_home_ignores_a_dishonoring_at_the_battlefield():
+    with probe_ability(GIHEI_PROBE, GIHEI_ABILITY):
+        session = _gihei_at_the_battle(gihei_assigned=False)
+        session.act(P1, ActivateAbility("prober"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert effective_force(game, game.table.cards_by_id["gihei"]) == 3
+
+
+def test_gihei_reacts_to_a_destruction_where_he_stood_by_reading_the_event():
+    # A card in his controller's home shares Gihei's location; it is in its discard when the event
+    # fires, so the event carries where it stood. Another seat's home is a different location.
+    game = two_seat_game()
+    gihei = put_in_play(game, personality("gihei", printed_id="bayushi_gihei", force=3))
+    own = put_in_play(game, personality("own"))
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+
+    resolve_effects(game, [Destroy(theirs.id, P1)])
+    assert game.pending is None
+
+    resolve_effects(game, [Destroy(own.id, P1)])
+    assert isinstance(game.pending, ChooseOption)
+    assert effective_force(game, gihei) == 5
+
+
+def test_gihei_ignores_the_other_seats_action():
+    game = two_seat_game()
+    gihei = put_in_play(game, personality("gihei", printed_id="bayushi_gihei", force=3))
+    own = put_in_play(game, personality("own"))
+
+    resolve_effects(game, [Destroy(own.id, P2)])
+
+    assert game.pending is None
+    assert effective_force(game, gihei) == 3
