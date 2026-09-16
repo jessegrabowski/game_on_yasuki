@@ -164,8 +164,9 @@ Name every function in the block for the card and the job it does, as `_<card id
 role is one of `cost`, `targets`, `effects`, `interrupt`, an entry point of a registry (`gold`, `invest`,
 `keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
 `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`), or the event a
-trigger answers (`entered_play`, `destroyed`, `straightened`, `turn_started`, `counter_gained`,
-`card_discarded`, `producing_gold`, `produced_gold`, `entered_play_or_destroyed`). A card printing
+trigger answers (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`,
+`turn_started`, `counter_gained`, `card_discarded`, `producing_gold`, `produced_gold`,
+`entered_play_or_destroyed`). A card printing
 several abilities qualifies the role with that ability's key, as in
 `_incendiary_archers_fear_effects`, since one name per role would collide between them, and the key
 has to be one the module really registers. A choice resolver is named for the choice instead,

@@ -1,7 +1,7 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import register_edict
+from yasuki_core.engine.rules.abilities.idioms import ask_who_loses_honor, register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.board.queries import (
@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_dis
 from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls_printed
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    AskOption,
+    Ask,
     Choose,
     CreateToken,
     Dishonor,
@@ -24,21 +24,52 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GainHonor,
     GrantKeyword,
+    GrantModifier,
     MeleeAttack,
     PlaceInProvince,
+    Rehonor,
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration
+from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, Dishonored, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.board.queries import province_zones
-from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.triggers import TriggerContext, caused_by, choice_resolver, on
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
+
+
+# --- Bayushi Gihei ---
+
+GIHEI_FORCE = 2
+GIHEI_HONOR = 1
+
+
+def _bayushi_gihei_reacts(ctx: TriggerContext, where: Location | None) -> list[Effect]:
+    """After your action destroys or dishonors a card at Gihei's location, give him +2F and a
+    target player loses 1 Honor. "Your action" is read off the event's cause."""
+    gihei = ctx.card
+    if not caused_by(ctx, gihei.owner) or where != location_of(ctx.game.table, gihei):
+        return []
+    return [
+        GrantModifier(gihei.id, gihei.id, Stat.FORCE, GIHEI_FORCE, Duration.UNTIL_END_OF_TURN),
+        ask_who_loses_honor(ctx.game, gihei.owner, GIHEI_HONOR, gihei.id),
+    ]
+
+
+@on(Destroyed, "bayushi_gihei")
+def _bayushi_gihei_destroyed(ctx: TriggerContext) -> list[Effect]:
+    return _bayushi_gihei_reacts(ctx, ctx.event.location)
+
+
+@on(Dishonored, "bayushi_gihei")
+def _bayushi_gihei_dishonored(ctx: TriggerContext) -> list[Effect]:
+    dishonored = ctx.game.table.cards_by_id[ctx.event.card_id]
+    return _bayushi_gihei_reacts(ctx, location_of(ctx.game.table, dishonored))
 
 
 # --- Chuda Jomei ---
@@ -153,7 +184,61 @@ register_invest(
 )
 
 
+# --- Doji Teru ---
+
+TERU_HONOR = 2
+TERU_FORCE = 2
+
+
+def _doji_teru_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if card.owner is not source.owner and card.dishonorable
+    ]
+
+
+def _doji_teru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Their controller may rehonor them. If this rehonored them, gain 2 Honor; otherwise, give
+    Teru +2F. The gain names no Personality: rehonoring is one of the action's own effects, so the
+    CR does not substitute it for the gain (CR, Rehonoring 0.1)."""
+    return [
+        Ask(
+            target.owner,
+            f"Rehonor {target.name}?",
+            "doji_teru",
+            subjects=(target.id,),
+            source_id=source.id,
+        )
+    ]
+
+
+@choice_resolver("doji_teru")
+def _resolve_doji_teru(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    teru = game.table.cards_by_id[source_id]
+    if chosen:
+        return [Rehonor(chosen[0]), GainHonor(teru.owner, TERU_HONOR)]
+    return [GrantModifier(source_id, source_id, Stat.FORCE, TERU_FORCE, Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "doji_teru",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: another player's dishonorable Personality may be rehonored, for 2 Honor, "
+        "or Teru gets +2F",
+        cost=no_cost,
+        targets=_doji_teru_targets,
+        effects=_doji_teru_effects,
+    ),
+)
+
+
 # --- Hungry Moon ---
+
+HUNGRY_MOON_HONOR = 3
 
 
 def _hungry_moon_dishonor_targets(game: GameState, source: L5RCard) -> list[str]:
@@ -178,22 +263,8 @@ def _hungry_moon_wealth_effects(game: GameState, source: L5RCard, target: L5RCar
         return []
     return [
         AdjustCounter(target.id, WEALTH, -held),
-        AskOption(
-            source.owner,
-            tuple(info.name for info in game.table.seats.values()),
-            "Who loses 3 Honor?",
-            "hungry_moon_player",
-            source.id,
-        ),
+        ask_who_loses_honor(game, source.owner, HUNGRY_MOON_HONOR, source.id),
     ]
-
-
-@choice_resolver("hungry_moon_player")
-def _resolve_hungry_moon_player(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
-    return [GainHonor(named, -3)]
 
 
 register_ability(

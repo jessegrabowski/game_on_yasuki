@@ -38,7 +38,7 @@ from yasuki_core.engine.rules.triggers import (
     resolve_effects,
     resume_paused_cascade,
 )
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.cards import L5RCard
@@ -354,7 +354,7 @@ def test_destroy_effect_discards_the_card_and_emits_destroyed():
 
     events = apply_effect(game, Destroy(farm.id, PlayerId.P1))
 
-    assert events == [Destroyed(farm.id, PlayerId.P1)]
+    assert events == [Destroyed(farm.id, PlayerId.P1, Location.home(PlayerId.P1))]
     assert farm not in game.table.battlefield.cards
     assert farm in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
 

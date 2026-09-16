@@ -246,6 +246,8 @@ ROLES = frozenset(
         "turn_started",
         "counter_gained",
         "card_discarded",
+        "dishonored",
+        "rehonored",
         "entered_play_or_destroyed",
     }
 )

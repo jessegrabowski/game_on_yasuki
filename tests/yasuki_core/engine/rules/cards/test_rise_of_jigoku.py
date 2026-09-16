@@ -1006,3 +1006,58 @@ def test_draw_strength_offers_only_unbowed_personalities_at_the_battle():
     pay(session, P1)
 
     assert session.game.pending.candidates == ("bushi",)
+
+
+# --- I Do Not Forget ---
+
+
+def _i_do_not_forget_game(*, personal_honor: int) -> EngineSession:
+    state = TableState.empty_two_seat()
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="forget",
+                name="I Do Not Forget",
+                printed_id="i_do_not_forget",
+                side=Side.FATE,
+                owner=P1,
+                gold_cost=0,
+            ),
+        )
+    )
+    put_in_play(state, personality("honorable", owner=PlayerId.P2, personal_honor=3))
+    put_in_play(state, personality("disgraced", owner=PlayerId.P2, personal_honor=personal_honor))
+    session = EngineSession.start(state, P1)
+    session.game.table.cards_by_id["disgraced"].dishonor()
+    return session
+
+
+def test_i_do_not_forget_targets_only_a_dishonorable_personality():
+    session = _i_do_not_forget_game(personal_honor=3)
+
+    session.act(P1, PlayStrategy("forget"))
+    pay(session, P1)
+
+    assert session.game.pending.candidates == ("disgraced",)
+
+
+def test_i_do_not_forget_costs_the_printed_personal_honor_the_cap_hides():
+    session = _i_do_not_forget_game(personal_honor=3)
+
+    session.act(P1, PlayStrategy("forget"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("disgraced",)))
+
+    assert session.game.table.seats[PlayerId.P2].honor == -3
+
+
+def test_i_do_not_forget_costs_at_least_one():
+    session = _i_do_not_forget_game(personal_honor=0)
+
+    session.act(P1, PlayStrategy("forget"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("disgraced",)))
+
+    assert session.game.table.seats[PlayerId.P2].honor == -1

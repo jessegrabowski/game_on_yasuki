@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import Cause, PlayerId
+from yasuki_core.engine.table import Location
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
@@ -51,10 +52,23 @@ class Destroyed:
     """A card was destroyed, sent to a discard by destruction, distinct from being discarded from
     hand. ``cause`` names who or what destroyed it, which cards ask about: several react only to a
     Personality destroyed for having zero Chi, and others only to a destruction that was not their
-    own doing."""
+    own doing.
+
+    Attributes
+    ----------
+    card_id : str
+        The card destroyed.
+    cause : PlayerId or Rulebook
+        Who or what destroyed it.
+    location : Location, optional
+        Where the card stood when it was destroyed. It is in its discard by the time this is
+        announced, so a card reacting to a destruction "at this location" reads it here. Default
+        None, for a destruction announced without one.
+    """
 
     card_id: str
     cause: Cause
+    location: Location | None = None
 
 
 @dataclass(frozen=True, slots=True)

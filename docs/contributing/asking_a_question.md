@@ -76,7 +76,9 @@ into the second:
 ```
 
 `resolver_context` is how a chained question remembers. The second resolver declares it as a
-keyword parameter, and only a resolver whose card supplies one needs to.
+keyword parameter, and only a resolver whose card supplies one needs to. When the card fixes the
+direction, as in "a target player loses 3 Honor", {func}`~.ask_who_loses_honor` asks the one
+question that is left. {card}`Hungry Moon` and {card}`Bayushi Gihei` call it.
 
 ## How many go where
 

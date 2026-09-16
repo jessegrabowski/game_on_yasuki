@@ -19,9 +19,16 @@ from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
 from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
-from yasuki_core.engine.rules.effects import AttachCard, DelayStraighten, Destroy, MeleeAttack
+from yasuki_core.engine.rules.effects import (
+    AttachCard,
+    DelayStraighten,
+    Destroy,
+    Dishonor,
+    MeleeAttack,
+)
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.stats.card_values import effective_force
@@ -39,12 +46,14 @@ from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
     end_phase,
+    end_turn,
     holding,
     pay,
     personality,
     province_card,
     put_in_play,
     register,
+    sensei,
     token_template,
     two_seat_game,
 )
@@ -686,3 +695,51 @@ def test_unity_of_spirit_is_not_offered_against_a_personality_who_is_not_a_yojim
 
         assert not isinstance(session.game.pending, ChooseInterrupt)
         assert "kakita" not in [card.id for card in session.game.table.battlefield.cards]
+
+
+# --- Kitsune Rumiko ---
+
+
+def test_rumiko_commits_seppuku_when_dishonored():
+    game = two_seat_game()
+    rumiko = put_in_play(game, personality("rumiko", printed_id="kitsune_rumiko", personal_honor=3))
+
+    resolve_effects(game, [Dishonor(rumiko.id, PlayerId.P2)])
+    run_stack(game)
+
+    # Rehonored before the destruction, so her printed Personal Honor is not lost (CR, Seppuku).
+    assert rumiko in game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].cards
+    assert not rumiko.dishonorable
+    assert game.table.seats[P1].honor == 0
+
+
+def _rumiko_session(*, beiko: bool = False) -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("rumiko", printed_id="kitsune_rumiko"))
+    if beiko:
+        put_in_play(state, sensei(P1, printed_id="beiko_sensei"))
+    return EngineSession.start(state, P1)
+
+
+def test_rumiko_bows_to_gain_an_honor_on_her_controllers_turn():
+    session = _rumiko_session()
+
+    session.act(P1, ActivateAbility("rumiko"))
+
+    assert session.game.table.seats[P1].honor == 1
+    assert session.game.table.cards_by_id["rumiko"].bowed
+
+
+def test_rumiko_gains_two_with_beiko_sensei():
+    session = _rumiko_session(beiko=True)
+
+    session.act(P1, ActivateAbility("rumiko"))
+
+    assert session.game.table.seats[P1].honor == 2
+
+
+def test_rumiko_is_withheld_on_the_other_seats_turn():
+    session = _rumiko_session()
+    end_turn(session)
+
+    assert ActivateAbility("rumiko") not in session.legal_actions(P1)
