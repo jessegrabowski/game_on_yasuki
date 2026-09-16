@@ -2,7 +2,6 @@ from collections.abc import Iterator
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.units.membership import attachments_of
-from yasuki_core.engine.rules.stats.attachment_grants import granted_stat
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     ConditionalModifier,
@@ -13,6 +12,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.rules.stats.conditions import condition_holds
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
+from yasuki_core.engine.rules.stats.stat_grants import granted_stats
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -39,11 +39,11 @@ def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
 
 def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
     """Every modifier adjusting ``card``'s ``stat`` right now: one from each counter it holds,
-    granting its per-count stat while in play, one from each card attached to it, for the modifier
-    that card prints plus whatever its own text grants, one from each Sensei its seat controls when
-    ``card`` is a Stronghold, the recorded modifiers targeting it, and the recorded conditional
-    modifiers whose condition ``card`` meets at this read, a ``WHILE_SOURCE_IN_PLAY`` one of either
-    only while its source is on the battlefield.
+    granting its per-count stat while in play, one from each card attached to it for the modifier
+    that card prints, one from each card in play whose text gives it a stat, one from each Sensei
+    its seat controls when ``card`` is a Stronghold, the recorded modifiers targeting it, and the
+    recorded conditional modifiers whose condition ``card`` meets at this read, a
+    ``WHILE_SOURCE_IN_PLAY`` one of either only while its source is on the battlefield.
 
     Everything but the recorded modifiers is read off the board, so a derived grant lasts exactly as
     long as the card granting it stays in play, whenever that card arrived."""
@@ -55,9 +55,11 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
             yield Modifier(card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY)
     printed_modifier = f"{stat.value}_modifier"
     for attached in attachments_of(game, card):
-        amount = getattr(attached, printed_modifier, 0) + granted_stat(game, attached, card, stat)
+        amount = getattr(attached, printed_modifier, 0)
         if amount:
             yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
+    for granting, amount in granted_stats(game, card, stat):
+        yield Modifier(granting.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
     # Kensai raises the limit rather than exempting him from it: Two-Handed still binds a
     # Kensai, and that rule is checked separately.
     if stat is Stat.WEAPON_LIMIT and keywords.KENSAI in effective_keywords(game, card):

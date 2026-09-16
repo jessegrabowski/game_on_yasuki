@@ -4,9 +4,9 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import Choose, Destroy, Effect, Move
-from yasuki_core.engine.rules.stats.attachment_grants import attachment_grant
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.units.membership import attachments_of
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
@@ -61,12 +61,14 @@ register_ability(
 # --- Shadowlands Ambassador ---
 
 
-@attachment_grant("shadowlands_ambassador")
-def _shadowlands_ambassador_attachment_grant(
-    game: GameState, card: L5RCard, host: L5RCard
-) -> dict[Stat, int]:
+@stat_grant("shadowlands_ambassador")
+def _shadowlands_ambassador_stat_grant(
+    game: GameState, source: L5RCard, card: L5RCard, stat: Stat
+) -> int:
     """This Personality has -1PH. The Force 2 and the -1 Chi are printed on the card."""
-    return {Stat.PERSONAL_HONOR: -1}
+    if stat is not Stat.PERSONAL_HONOR or attached_to(game, source) is not card:
+        return 0
+    return -1
 
 
 # Once a turn, his Personality may ignore the cost of bowing to pay for one of their own abilities.

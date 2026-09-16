@@ -7,6 +7,12 @@ second.
 One prefix marks that second reading everywhere. A function beginning `effective_` means the same
 thing wherever it appears: ask the board what this is, do not read the print.
 
+No effective value is ever stored. The CR gives a stat no state beyond its printed number and
+whatever is true of the board when someone reads it, so every read derives the value again from
+counters, attachments, the cards in play and the records in force, and there is no cache to
+invalidate when the board changes. A read costs a few hundred nanoseconds, and that is the budget
+every derived source spends within.
+
 ## The read path
 
 {func}`~.effective_stat` is the whole calculation:
@@ -34,9 +40,32 @@ The named readers wrap it. {func}`~.effective_force`, {func}`~.effective_chi`,
 {func}`~.effective_keywords` answers the same question for keywords, and
 {func}`~.effective_province_strength` for a Province.
 
+## Recorded and derived
+
+A change to a stat is one of two kinds, and which kind decides where it lives.
+
+A recorded change comes from an action. It is written into `game.ongoing` as data, a
+{class}`~.Duration` ends it, and it outlives whatever created it, so a Strategy in the discard can
+still be the source of one. Because replay compares it by value, a record holds only data: a
+target id or a {class}`~.Condition`, and a fixed amount.
+
+A derived change comes from a card in play. Nothing is written anywhere, since the card being on
+the battlefield is the whole record. It is read off the board on every read and ends the moment
+the card leaves. Because nothing stores it, it can be code, and `@stat_grant` is that code.
+
+Each payload has one atom per kind. A stat delta is {class}`~.Modifier` or
+{class}`~.ConditionalModifier` when recorded and `@stat_grant` when derived. A keyword is
+{class}`~.KeywordGrant` or `@keyword_grant`. An ability is {class}`~.AbilityGrant` and a stat
+floor is {class}`~.Minimum`, and neither has a derived form until a card asks for one. A new derived hook
+takes `(game, granting, card, ...)` and decides its own scope in its first line, and a new record
+takes a target or a condition and a fixed value. A derived handler runs on every read of every
+card while its card is in play, so it rejects the cards outside its scope before doing any other
+work and keeps nothing between calls.
+
 ## The seven kinds of ongoing effect
 
-A modifier is one of seven things, and which one a card needs is decided by what it rests on.
+A recorded change is one of seven things, and which one a card needs is decided by what it rests
+on.
 
 {class}`~.Modifier` adjusts one stat on one card. It is the common case and everything else is a
 departure from it.
@@ -109,8 +138,10 @@ ends when its *target* leaves the table, because a card that leaves play ceases 
 
 ## Where a card plugs in
 
-A card that grants a stat to the Personality it hangs on uses `@attachment_grant`. A card that
-grants a keyword sometimes uses `@keyword_grant`. A card that changes a Province's strength uses
+A card in play whose text gives a stat to a card, itself or another, uses `@stat_grant`, and its
+handler names the scope, as {card}`Haramaki-do` reaching the Personality it hangs on. A card that
+grants a keyword sometimes uses
+`@keyword_grant`. A card that changes a Province's strength uses
 `@province_strength_grant`.
 
 For which hook a printed sentence wants, see [Adding a Card](../../contributing/adding_a_card.md).

@@ -25,7 +25,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "You may Recruit this Holding as a Political Open action" | `register_recruit_timing(id, RecruitTiming(...))` | {card}`The Ivory Courtroom` |
 | Gives another card's abilities Tireless | `@tireless_grant(id)` | {card}`Shrine to Inari` |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
-| Gives the Personality it hangs on a stat | `@attachment_grant(id)` | {card}`Haramaki-do` |
+| Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do` |
 | Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
 | Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
@@ -165,7 +165,7 @@ that the header names the card the block registers, on the modules your commit t
 
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, an entry point of a registry (`gold`, `invest`,
-`keywords`, `recruit_discount`, `invest_discount`, `attachment_grant`, `attach_restriction`,
+`keywords`, `recruit_discount`, `invest_discount`, `stat_grant`, `attach_restriction`,
 `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`, `entry_state`,
 `before_entering_play`), or the event a
 trigger answers (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`,

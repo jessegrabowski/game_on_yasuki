@@ -3,7 +3,8 @@ from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.stats.attachment_grants import attachment_grant
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
+from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.effects import Effect, Fear, MeleeAttack, RangedAttack
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
@@ -60,10 +61,12 @@ register_ability(
 HARAMAKI_DO_FEAR = 3
 
 
-@attachment_grant("haramaki_do")
-def _haramaki_do_attachment_grant(game: GameState, card: L5RCard, host: L5RCard) -> dict[Stat, int]:
+@stat_grant("haramaki_do")
+def _haramaki_do_stat_grant(game: GameState, source: L5RCard, card: L5RCard, stat: Stat) -> int:
     """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
-    return {Stat.PERSONAL_HONOR: 1}
+    if stat is not Stat.PERSONAL_HONOR or attached_to(game, source) is not card:
+        return 0
+    return 1
 
 
 def _haramaki_do_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

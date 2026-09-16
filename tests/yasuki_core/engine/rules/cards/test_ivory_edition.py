@@ -30,6 +30,16 @@ def test_haramaki_do_gives_its_personality_both_halves_of_what_it_says():
     assert effective_personal_honor(game, hero) == 3
 
 
+def test_the_granted_honor_reaches_only_the_personality_wearing_the_armor():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", personal_honor=2))
+    bystander = put_in_play(game, personality("bystander", personal_honor=2))
+    attached(game, attachment("armor", printed_id="haramaki_do", force_modifier=2), "hero")
+
+    assert effective_personal_honor(game, hero) == 3
+    assert effective_personal_honor(game, bystander) == 2
+
+
 def test_the_granted_honor_leaves_when_the_armor_does():
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", force=2, personal_honor=2))
