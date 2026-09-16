@@ -439,7 +439,7 @@ def test_a_melee_card_emits_a_melee_attack_and_not_a_ranged_one(printed_id):
     wrong attacks and no test of the outcome would notice."""
     session = _melee_battle(printed_id)
     source = session.game.table.cards_by_id["hero"]
-    ability = ability_for(source)
+    ability = ability_for(session.game, source)
 
     effects = ability.effects(session.game, source, session.game.table.cards_by_id["guard"])
 

@@ -28,6 +28,7 @@ _DECORATORS = {
     "attach_restriction",
     "attack_strength_against",
     "favor_payer",
+    "granted_ability",
     "lobby_bar",
     "lobby_bonus_grant",
     "proclaim_gain",
@@ -47,6 +48,7 @@ _CALLS = {
     "register_recruit_timing",
     "register_may_remain_bowed",
     "register_bow_waiver",
+    "register_cannot_attack",
 }
 
 
@@ -224,6 +226,7 @@ ROLES = frozenset(
         "applies",
         "proclaim_gain",
         "tireless_grant",
+        "granted_ability",
         # the per-registry hooks
         "invest",
         "gold",
@@ -238,6 +241,7 @@ ROLES = frozenset(
         "favor_payer",
         "lobby_bar",
         # triggers, named for the event they answer
+        "assigned",
         "producing_gold",
         "produced_gold",
         "entered_play",

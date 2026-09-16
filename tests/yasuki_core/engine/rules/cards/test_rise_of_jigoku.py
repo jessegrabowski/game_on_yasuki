@@ -856,7 +856,7 @@ def _heart_of_honor(game: GameState):
         ),
     )
     game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(card)
-    return card, ability_for(card, None)
+    return card, ability_for(game, card, None)
 
 
 def _heart_of_honor_battle(personal_honor: int) -> GameState:

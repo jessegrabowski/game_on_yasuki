@@ -60,6 +60,21 @@ A card that acts in a battle it is not present at, or from home, sets `battle_de
 actually uses. `targets_any_location` and `located_at` sit beside it, and a Strategy played out of
 hand needs the second.
 
+## Assigning, and a card that cannot
+
+A Personality moves to a battlefield when its seat assigns it in the Maneuvers Segment, and
+{class}`~yasuki_core.engine.rules.vocabulary.game_events.Assigned` is the event a trait reads for
+"after X assigns to a battlefield". {card}`Daidoji Kaede` answers it with a Force bonus:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py
+:pyobject: _daidoji_kaede_assigned
+:language: python
+```
+
+Her first sentence, *"Kaede cannot attack"*, is `register_cannot_attack("daidoji_kaede")`. The
+Attacker's assignment then never offers her, and the Defender's still does, which is the only way
+her trait ever fires.
+
 ## Where the rest lives
 
 [Cards that attach](attachments.md) is the attachment side, including the two bow costs.

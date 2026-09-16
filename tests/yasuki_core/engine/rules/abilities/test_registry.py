@@ -7,8 +7,10 @@ from yasuki_core.engine.rules.abilities.registry import (
     _ABILITIES,
     _ENTERS_UNBOWED,
     _INVEST,
+    GRANTED_ABILITIES,
     abilities_for,
     ability_for,
+    granted_ability,
     register_ability,
     register_enters_unbowed,
     register_invest,
@@ -17,8 +19,11 @@ from yasuki_core.engine.rules.abilities.registry import (
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import HoldingPrint
+
+from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 
 
 def test_a_second_unkeyed_ability_for_one_card_is_refused():
@@ -64,13 +69,38 @@ def test_a_card_may_register_several_keyed_abilities():
             side=Side.DYNASTY,
             owner=PlayerId.P1,
         )
-        assert [held.key for held in abilities_for(card)] == ["fear", "ranged"]
-        assert ability_for(card, "ranged").label == "Battle: Ranged 3"
-        assert ability_for(card, "absent") is None
+        game = two_seat_game()
+        assert [held.key for held in abilities_for(game, card)] == ["fear", "ranged"]
+        assert ability_for(game, card, "ranged").label == "Battle: Ranged 3"
+        assert ability_for(game, card, "absent") is None
         with pytest.raises(ValueError, match="prints several abilities; name one by key"):
-            ability_for(card)
+            ability_for(game, card)
     finally:
         _ABILITIES.pop("guard_probe", None)
+
+
+def test_a_granted_ability_follows_the_printed_ones_and_answers_to_its_key():
+    plain = _ABILITIES["millet_farm"][0]
+    granted_ability("grant_probe")(
+        lambda context: replace(plain, key=f"granted_{context[0]}", label="Battle: Ranged 3")
+    )
+
+    try:
+        game = two_seat_game()
+        granting = put_in_play(game, holding("granting", printed_id="grant_probe"))
+        farm = put_in_play(game, holding("farm", printed_id="millet_farm"))
+        game.ongoing.append(
+            AbilityGrant(granting.id, farm.id, ("raider",), Duration.WHILE_SOURCE_IN_PLAY)
+        )
+
+        assert [held.key for held in abilities_for(game, farm)] == [None, "granted_raider"]
+        assert ability_for(game, farm, "granted_raider").label == "Battle: Ranged 3"
+
+        game.table.battlefield.remove(granting)
+
+        assert abilities_for(game, farm) == (plain,)
+    finally:
+        GRANTED_ABILITIES.pop("grant_probe", None)
 
 
 def test_a_second_invest_for_one_card_is_refused():

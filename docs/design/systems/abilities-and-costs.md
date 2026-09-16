@@ -75,6 +75,24 @@ card in play is once per turn without it. `legality.activatable` enforces that t
 once-per-turn keys a handler claims by hand. The registration audit compares both with the card's text and rejects a
 registration that leaves one off or invents one.
 
+## Abilities a card is given
+
+{func}`~.abilities_for` is the one place the engine asks what abilities a card has, and it answers
+with two lists joined: the ones registered for the card's printed id, then the ones an
+{class}`~.AbilityGrant` record in `game.ongoing` gives it.
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/abilities/registry.py
+:pyobject: abilities_for
+:language: python
+```
+
+A granted ability is code like a printed one. The granting card registers a factory with
+`@granted_ability`, and the record carries the `context` the factory builds from, the ids the
+granting action chose. Legality, once-per-turn keys and the activation menu all read
+`abilities_for`, so a granted ability answers to each of them through the same path a printed one
+does. The factory's `Ability` needs a `key` whenever its card could already hold one, since the
+two are told apart the way any two abilities on one card are.
+
 ## What narrows a target list
 
 A handler's `targets` output is not final. `legal_targets` in `legality.py` narrows it by the Rules

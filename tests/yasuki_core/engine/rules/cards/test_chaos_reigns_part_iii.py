@@ -445,7 +445,7 @@ def test_walk_with_tengoku_is_offered_under_both_of_its_designators():
 
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
         offered = legality.activatable(session.game, P1, frozenset({designator}))
-        assert (spell, ability_for(spell, None)) in offered
+        assert (spell, ability_for(session.game, spell, None)) in offered
 
 
 # --- Hungry Moon ---

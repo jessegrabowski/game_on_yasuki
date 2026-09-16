@@ -105,7 +105,7 @@ def test_it_is_offered_under_both_of_its_printed_designators():
     game = EngineSession.start(state, PLAYER).game
     in_hand = (CardLocation.HAND,)
 
-    uncertainty = ability_for(card)
+    uncertainty = ability_for(game, card)
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
         assert legality.activatable(game, PLAYER, frozenset({designator}), at=in_hand) == [
             (card, uncertainty)

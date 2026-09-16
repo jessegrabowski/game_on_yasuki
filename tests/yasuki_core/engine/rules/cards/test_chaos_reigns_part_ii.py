@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, DeclareAttack, Pass
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     DecisionResponse,
@@ -12,6 +12,8 @@ from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
+from yasuki_core.engine.rules.battle.resolution import assignment_candidates
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
@@ -25,6 +27,7 @@ from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
     personality,
+    province_card,
     put_in_play,
     register,
     token_template,
@@ -343,3 +346,73 @@ def test_fortified_farmlands_loses_renew_when_the_other_farm_goes():
     game.table.battlefield.remove(game.table.cards_by_id["farm0"])
 
     assert "Renew" not in effective_keywords(game, farmlands)
+
+
+# --- Daidoji Kaede ---
+
+
+def _kaede_defending(*, marked: str | None = "raider") -> EngineSession:
+    """P1 attacks with a raider and a scout. P2's Kaede (Force 3) used her Open on ``marked``
+    during the Action Phase, then defends against the raider's battlefield. Returns the session at
+    the Combat Segment with the Defender holding the opportunity."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "def-prov1", seat=PlayerId.P2, index=1)
+    put_in_play(state, personality("raider", force=2))
+    put_in_play(state, personality("scout", force=2))
+    put_in_play(state, personality("kaede", owner=PlayerId.P2, printed_id="daidoji_kaede", force=3))
+    session = EngineSession.start(state, P1)
+    if marked is not None:
+        session.act(P1, Pass())
+        session.act(PlayerId.P2, ActivateAbility("kaede", ability_key="opposition"))
+        session.submit(PlayerId.P2, DecisionResponse((marked,)))
+        session.act(P1, Pass())
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0", "scout@1")))
+    session.submit(PlayerId.P2, DecisionResponse(("kaede@0",)))
+    session.submit(P1, DecisionResponse(("0",)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    return session
+
+
+def test_kaede_cannot_be_assigned_by_the_attacker():
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    put_in_play(state, personality("kaede", printed_id="daidoji_kaede"))
+    put_in_play(state, personality("bushi"))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+
+    session.act(P1, DeclareAttack())
+
+    assert assignment_candidates(session.game, P1) == ("bushi@0",)
+
+
+def test_kaede_gains_force_after_assigning_to_defend():
+    session = _kaede_defending(marked=None)
+
+    assert effective_force(session.game, session.game.table.cards_by_id["kaede"]) == 4
+
+
+def test_kaede_has_the_ranged_attack_while_the_marked_personality_opposes_her():
+    session = _kaede_defending(marked="raider")
+
+    session.act(PlayerId.P2, ActivateAbility("kaede", ability_key="ranged"))
+    session.submit(PlayerId.P2, DecisionResponse(("raider",)))
+
+    assert "raider" not in [card.id for card in session.game.table.battlefield.cards]
+
+
+def test_kaede_lacks_the_ranged_attack_when_the_marked_personality_is_elsewhere():
+    session = _kaede_defending(marked="scout")  # the scout attacks the other Province
+
+    assert ActivateAbility("kaede", ability_key="ranged") not in session.legal_actions(PlayerId.P2)
+
+
+def test_kaede_lacks_the_ranged_attack_without_her_open():
+    session = _kaede_defending(marked=None)
+
+    assert ActivateAbility("kaede", ability_key="ranged") not in session.legal_actions(PlayerId.P2)

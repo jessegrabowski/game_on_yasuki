@@ -161,7 +161,7 @@ class GameRunner:
                     items.append((f"Equip: Pay {cost} gold", action))
             elif isinstance(action, PlayStrategy):
                 card = game.table.cards_by_id[card_id]
-                ability = ability_for(card, action.ability_key)
+                ability = ability_for(game, card, action.ability_key)
                 cost = effective_gold_cost(game, card)
                 label = ability.label if ability is not None else "Play this Strategy"
                 items.append((label if cost == 0 else f"{label} -- Pay {cost} gold", action))
@@ -189,7 +189,7 @@ class GameRunner:
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if isinstance(action, ActivateAbility) and action.card_id == card_id:
-                ability = ability_for(card, action.ability_key)
+                ability = ability_for(self.session.game, card, action.ability_key)
                 label = ability.label if ability is not None else "Activate ability"
                 items.append((label, action))
         return items

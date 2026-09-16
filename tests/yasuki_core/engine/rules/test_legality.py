@@ -344,7 +344,7 @@ def test_an_ability_that_acts_from_the_hand_is_found_there():
     found = activatable(session.game, PlayerId.P1, open_timing, at=(CardLocation.HAND,))
 
     assert [(held.id, offered.label) for held, offered in found] == [
-        (card.id, ability_for(card).label)
+        (card.id, ability_for(session.game, card).label)
     ]
 
 

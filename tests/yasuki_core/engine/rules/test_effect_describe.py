@@ -42,6 +42,7 @@ from yasuki_core.engine.rules.effects import (
     RangedAttack,
     GrantKeyword,
     GrantMinimum,
+    GrantAbility,
     GrantConditionalModifier,
     GrantLobbyBonus,
     GrantProvinceStrength,
@@ -118,6 +119,10 @@ EFFECTS = [
     (
         SpendOncePerTurn("miaka", "iweko_miaka_favor_payment"),
         "miaka spends its iweko_miaka_favor_payment for the turn",
+    ),
+    (
+        GrantAbility("kaede", "kaede", ("raider",), Duration.UNTIL_END_OF_TURN),
+        "kaede grants kaede an ability (UNTIL_END_OF_TURN)",
     ),
     (
         SpendSeatOncePerTurn(PlayerId.P1, "flashy_technique"),

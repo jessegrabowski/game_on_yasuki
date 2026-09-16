@@ -78,9 +78,10 @@ when an `effective_*` function exists for it.
 
 ## What you can react to
 
-Twelve events:
+Thirteen events:
 
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.EnteredPlay`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.Assigned`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Destroyed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Straightened`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Dishonored`

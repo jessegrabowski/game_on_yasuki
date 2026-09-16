@@ -61,6 +61,29 @@ so a card with keys puts the key in the name. `_incendiary_archers_ranged_effect
 `_incendiary_archers_fear_effects` are the pattern, and the `card-layout` pre-commit hook checks
 that the key in a name is one the module really registers.
 
+## An ability a card is given
+
+A card can come to hold a second ability without printing one. {card}`Daidoji Kaede` reads
+*"Open: While a target Personality opposes Kaede (this turn), she has, 'Battle: Ranged 3.'"* The
+Open is printed and the Ranged Attack is not. Her module registers the Open with `key="opposition"`
+and a factory under `@granted_ability` that builds the Battle ability from the id the Open chose:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py
+:pyobject: _daidoji_kaede_opposition_effects
+:language: python
+```
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py
+:pyobject: _daidoji_kaede_granted_ability
+:language: python
+```
+
+The rules on this page apply as soon as the grant is recorded. Kaede then holds two abilities, so
+the printed Open needs a key of its own even though the card prints only one, and the granted
+ability's "while" is its `targets` returning nothing when the named Personality is not opposing
+her. `GrantAbility` is the effect, and [Abilities and costs](../design/systems/abilities-and-costs.md)
+shows how `abilities_for` reads the record.
+
 ## Where the rest lives
 
 [Abilities and costs](../design/systems/abilities-and-costs.md) covers the ability model.

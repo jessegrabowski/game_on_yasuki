@@ -6,6 +6,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, InvestAbility
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
+from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
@@ -39,6 +41,11 @@ _INTERRUPTS: dict[str, Interrupt] = {}
 # so the layout guard scans it and the card index checks it.
 _ENTERS_UNBOWED = FlagRegistry("enters unbowed", "already enters play unbowed")
 register_enters_unbowed = _ENTERS_UNBOWED.make_register()
+
+# Personalities whose text says they cannot attack: the Attacker may not assign them to a
+# battlefield, and nothing stops them defending.
+_CANNOT_ATTACK = FlagRegistry("cannot attack", "already cannot attack")
+register_cannot_attack = _CANNOT_ATTACK.make_register()
 
 
 @dataclass(frozen=True, slots=True)
@@ -91,6 +98,16 @@ def granted_tireless(game: GameState, card: L5RCard) -> bool:
     )
 
 
+# The ability a card grants, built from the context its granting action recorded ("While a target
+# Personality opposes Kaede, she has 'Battle: Ranged 3'"). One per granting card: the record names
+# the card, and the card's factory says what it gives.
+AbilityFactory = Callable[[tuple[str, ...]], Ability]
+GRANTED_ABILITIES: HandlerRegistry[AbilityFactory] = HandlerRegistry(
+    "granted abilities", "already grants an ability"
+)
+granted_ability = GRANTED_ABILITIES.make_decorator()
+
+
 def register_ability(printed_id: str, value: Ability) -> None:
     """Register ``value`` as one of ``printed_id``'s activated abilities.
 
@@ -105,6 +122,12 @@ def register_ability(printed_id: str, value: Ability) -> None:
         if any(held.key == value.key for held in registered):
             raise ValueError(f"{printed_id} already has an ability keyed {value.key!r}")
     _ABILITIES[printed_id] = (*registered, value)
+
+
+def may_attack(card: L5RCard) -> bool:
+    """Whether ``card``'s text leaves it able to attack, which is what lets the Attacker assign
+    it."""
+    return card.printed_id not in _CANNOT_ATTACK
 
 
 def enters_play_bowed(card: L5RCard) -> bool:
@@ -161,20 +184,28 @@ def fixed_invest_amount(game: GameState, card: L5RCard) -> int | None:
     return amounts[0]
 
 
-def abilities_for(card: L5RCard) -> tuple[Ability, ...]:
-    """Every activated ability registered for ``card``'s printed id, in registration order."""
-    return _ABILITIES.get(card.printed_id, ())
+def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
+    """Every activated ability ``card`` has right now: the ones registered for its printed id, in
+    registration order, then the ones recorded grants give it, in the order they were granted."""
+    printed = _ABILITIES.get(card.printed_id, ())
+    granted = tuple(
+        GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](grant.context)
+        for grant in game.ongoing
+        if isinstance(grant, AbilityGrant)
+        and grant.target_id == card.id
+        and grant_applies(game, grant)
+    )
+    return (*printed, *granted)
 
 
-def ability_for(card: L5RCard, key: str | None = None) -> Ability | None:
-    """The activated ability ``key`` names on ``card``, or None if no registered ability answers to
-    it.
+def ability_for(game: GameState, card: L5RCard, key: str | None = None) -> Ability | None:
+    """The activated ability ``key`` names on ``card``, or None if no ability it has answers to it.
 
-    ``key`` is None for a card printing one ability, which is the only one it could mean. Raise
-    ValueError when a card printing several is asked without a key, because the caller is holding
-    an action that failed to say which ability it takes.
+    ``key`` is None for a card with one ability, which is the only one it could mean. Raise
+    ValueError when a card with several is asked without a key, because the caller is holding an
+    action that failed to say which ability it takes.
     """
-    registered = abilities_for(card)
+    registered = abilities_for(game, card)
     if key is not None:
         return next((held for held in registered if held.key == key), None)
     if len(registered) > 1:

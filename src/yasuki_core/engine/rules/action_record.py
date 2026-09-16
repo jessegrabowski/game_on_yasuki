@@ -23,7 +23,7 @@ def action_keywords(game: GameState) -> frozenset[str]:
             | PlayStrategy(card_id=card_id, ability_key=key)
         ):
             card = game.table.cards_by_id.get(card_id)
-            return frozenset() if card is None else ability_for(card, key).keywords
+            return frozenset() if card is None else ability_for(game, card, key).keywords
         case Recruit(card_id=card_id):
             added = recruit_timing_of(game, card_id)
             as_rulebook = ACTION_TIMINGS[Recruit] in game.round.timings.active

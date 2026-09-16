@@ -29,6 +29,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Straightened,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import (
+    AbilityGrant,
     Condition,
     ConditionalModifier,
     Duration,
@@ -618,6 +619,27 @@ class GrantConditionalModifier(Effect):
             ConditionalModifier(
                 self.source_id, self.condition, self.stat, self.amount, self.duration
             )
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantAbility(Effect):
+    """Record a continuous ability grant: the ``source`` card gives ``target`` the ability its
+    registered factory builds from ``context``, for ``duration``. The ability counterpart of
+    :class:`~.GrantModifier`."""
+
+    source_id: str
+    target_id: str
+    context: tuple[str, ...]
+    duration: Duration
+
+    def describe(self) -> str:
+        return f"{self.source_id} grants {self.target_id} an ability ({self.duration.name})"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(
+            AbilityGrant(self.source_id, self.target_id, self.context, self.duration)
         )
         return []
 

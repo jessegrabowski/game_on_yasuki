@@ -18,7 +18,8 @@ from yasuki_core.engine.rules.board.queries import units_at
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
-from yasuki_core.engine.rules.vocabulary.game_events import Destroyed
+from yasuki_core.engine.rules.abilities.registry import may_attack
+from yasuki_core.engine.rules.vocabulary.game_events import Assigned, Destroyed
 from yasuki_core.engine.rules.battle.records import (
     AttackPhase,
     BattleOutcome,
@@ -98,8 +99,10 @@ def assignable_units(game: GameState, seat: PlayerId) -> list[L5RCard]:
     Both clauses sit on the Personality rather than on the unit he leads: he must be unbowed
     (*"A unit led by a bowed Personality may not be assigned"*) and at home, since assigning moves
     a unit out of home rather than between battlefields. A bowed Follower blocks nothing, since it
-    only stops contributing Force once a battle resolves.
+    only stops contributing Force once a battle resolves. The Attacker also leaves behind a
+    Personality whose text says he cannot attack.
     """
+    attacking = game.attack is not None and seat is game.attack.attacker
     return [
         card
         for card in game.table.battlefield.cards
@@ -107,6 +110,7 @@ def assignable_units(game: GameState, seat: PlayerId) -> list[L5RCard]:
         and isinstance(card.printed, PersonalityPrint)
         and not card.bowed
         and location_of(game.table, card).is_home
+        and (not attacking or may_attack(card))
     ]
 
 
@@ -145,19 +149,38 @@ def _ask_to_assign(game: GameState, seat: PlayerId) -> None:
 
 
 def apply_assignment(game: GameState, request: AssignUnits, response: DecisionResponse) -> None:
-    """Send each Personality the answer names to its battlefield, then ask the other seat.
+    """Send each Personality the answer names to its battlefield, raise ``Assigned`` for each, then
+    ask the other seat.
 
-    The Defender answering ends the segment.
+    The next step of the segment is queued behind the events, so a trigger that pauses for a
+    decision is answered before the Defender is asked or the Fight Segment opens.
     """
     attack = _declared_attack(game)
+    assigned: list[Assigned] = []
     for token in response.choices:
         card_id, battlefield = assignment(token)
         ops.assign(game.table, game.table.cards_by_id[card_id], battlefield)
         attack.assigned_in[card_id] = MANEUVERS_WINDOW
-    if request.seat is attack.attacker:
-        _ask_to_assign(game, attack.defender)
-        return
-    begin_fight(game)
+        assigned.append(Assigned(card_id, battlefield, request.seat))
+    game.stack.append(AfterAssignment(request.seat))
+    if assigned:
+        triggers.fire_all(game, assigned)
+
+
+@dataclass(frozen=True, slots=True)
+class AfterAssignment:
+    """Continue the Maneuvers Segment once ``seat``'s assignment and whatever it triggered have
+    settled: the Defender is asked after the Attacker, and the Defender answering ends the
+    segment."""
+
+    seat: PlayerId
+
+    def resume(self, game: GameState) -> None:
+        attack = _declared_attack(game)
+        if self.seat is attack.attacker:
+            _ask_to_assign(game, attack.defender)
+            return
+        begin_fight(game)
 
 
 def army_force(game: GameState, battlefield: int, seat: PlayerId) -> int:

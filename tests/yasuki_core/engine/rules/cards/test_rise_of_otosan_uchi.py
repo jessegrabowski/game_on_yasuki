@@ -715,7 +715,7 @@ def test_a_second_servant_is_only_at_risk_of_its_own_bargain():
     first = _servant_of(session)
     resolve_effects(session.game, [Straighten("grounds")])
     grounds = session.game.table.cards_by_id["grounds"]
-    ability = ability_for(grounds, None)
+    ability = ability_for(session.game, grounds, None)
     resolve_effects(
         session.game,
         [*ability.cost(session.game, grounds), *ability.effects(session.game, grounds, grounds)],
@@ -1062,7 +1062,7 @@ def test_kitsu_watanabe_is_offered_under_both_of_his_designators():
 
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
         offered = legality.activatable(session.game, P1, frozenset({designator}))
-        assert (watanabe, ability_for(watanabe, None)) in offered
+        assert (watanabe, ability_for(session.game, watanabe, None)) in offered
 
 
 # --- Doji Yuten ---
