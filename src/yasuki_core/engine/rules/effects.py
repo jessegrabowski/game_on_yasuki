@@ -46,6 +46,7 @@ from yasuki_core.engine.table import (
     Location,
     ZoneKey,
     ZoneRole,
+    location_of,
 )
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
@@ -378,7 +379,8 @@ class Destroy(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None:
             return []
-        return [Destroyed(member.id, self.cause) for member in _remove_unit(game, card)]
+        location = location_of(game.table, card)
+        return [Destroyed(member.id, self.cause, location) for member in _remove_unit(game, card)]
 
 
 @dataclass(frozen=True, slots=True)
