@@ -16,6 +16,7 @@ yasuki_core.engine.rules.abilities.registry
 
     abilities_for
     ability_for
+    effects_before_entering_play
     entry_state_of
     fixed_invest_amount
     granted_tireless

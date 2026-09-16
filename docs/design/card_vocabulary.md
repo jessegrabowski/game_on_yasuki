@@ -193,6 +193,7 @@ the action rather than by deserializing it.
    gold.payment.ContinuePayment
    gold.production.CompleteProduction
    rulebook.equip.ResolveEquip
+   rulebook.recruit.EnterPlay
    rulebook.recruit.FinishRecruit
    rulebook.recruit.ResolveRecruit
    triggers.ResumeCascade

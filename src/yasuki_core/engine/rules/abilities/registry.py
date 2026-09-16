@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, InvestAbility
+from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
@@ -87,6 +88,23 @@ def entry_state_of(game: GameState, card: L5RCard) -> EntryState:
 # battlefield, and nothing stops them defending.
 _CANNOT_ATTACK = FlagRegistry("cannot attack", "already cannot attack")
 register_cannot_attack = _CANNOT_ATTACK.make_register()
+
+
+# Cards with something to do before they enter play ("Before Gonshiro enters play, dishonor him").
+# The handler's effects resolve while the card still stands where it came from, and the card
+# arrives once that cascade has settled. Unlike an entry state, these are effects: they announce
+# themselves and other cards react.
+BeforeEnteringPlay = Callable[[GameState, L5RCard], list[Effect]]
+BEFORE_ENTERING_PLAY: HandlerRegistry[BeforeEnteringPlay] = HandlerRegistry(
+    "before entering play", "already acts before entering play"
+)
+before_entering_play = BEFORE_ENTERING_PLAY.make_decorator()
+
+
+def effects_before_entering_play(game: GameState, card: L5RCard) -> list[Effect]:
+    """The effects ``card``'s own text resolves before it enters play, or none."""
+    handler = BEFORE_ENTERING_PLAY.get(card.printed_id)
+    return [] if handler is None else handler(game, card)
 
 
 @dataclass(frozen=True, slots=True)

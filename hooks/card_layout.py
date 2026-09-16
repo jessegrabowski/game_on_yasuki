@@ -27,6 +27,7 @@ _DECORATORS = {
     "attachment_grant",
     "attach_restriction",
     "attack_strength_against",
+    "before_entering_play",
     "entry_state",
     "favor_payer",
     "granted_ability",
@@ -240,6 +241,7 @@ ROLES = frozenset(
         "lobby_bonus",
         "favor_payer",
         "entry_state",
+        "before_entering_play",
         "lobby_bar",
         # triggers, named for the event they answer
         "assigned",

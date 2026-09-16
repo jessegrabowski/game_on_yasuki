@@ -89,7 +89,10 @@ stat rather than behavior. The card needs no handler at all.
 The reverse is not free. "Enters play unbowed" overrides the default, and an `@entry_state` handler
 returning `EntryState(bowed=False)` is what carries it. The same handler carries "enters play
 dishonorable". A state a card arrives in is not a change of state, so nothing announces it: a card
-entering play bowed did not bow (CR, Bowed and Unbowed).
+entering play bowed did not bow (CR, Bowed and Unbowed). "Before X enters play, dishonor him" is
+different, an effect that resolves while the card still stands in its Province, and
+`@before_entering_play` carries that one. Its `Dishonored` is announced and other cards react
+before the card arrives.
 
 ## Invest changes the stat, a discount does not
 

@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
-from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.abilities.costs import no_cost
@@ -22,7 +22,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itse
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 from yasuki_core.engine.rules.effects import GainHonor
 from yasuki_core.engine.rules.legality import recruit_cost
-from yasuki_core.engine.rules.triggers import fire, resolve_effects
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
@@ -458,13 +458,52 @@ def test_meiji_stops_nobody_while_his_controller_has_no_wind():
 GONSHIRO = "matsu_gonshiro_soul_of_matsu_shimei"
 
 
-def test_gonshiro_enters_play_dishonored():
-    game = two_seat_game()
-    gonshiro = put_in_play(game, personality("gonshiro", printed_id=GONSHIRO))
+def _gonshiro_in_a_province() -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, gold_production=8))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    gonshiro = register(state, personality("gonshiro", printed_id=GONSHIRO, gold_cost=6))
+    gonshiro.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(gonshiro)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+    return session
 
-    fire(game, EnteredPlay(gonshiro.id))
 
-    assert gonshiro.dishonorable
+def test_gonshiro_is_dishonored_before_he_enters_play(reacting):
+    # A card reacting to his entry sees him already dishonorable (CR, Timing: "before").
+    seen: list[bool] = []
+    reacting(
+        EnteredPlay,
+        "entry_probe",
+        lambda ctx: seen.append(ctx.game.table.cards_by_id[ctx.event.card_id].dishonorable) or [],
+    )
+    session = _gonshiro_in_a_province()
+    put_in_play(session.game, personality("probe", printed_id="entry_probe"))
+
+    session.act(P1, Recruit("gonshiro"))
+    pay(session, P1)
+
+    assert seen == [True]
+    assert session.game.table.cards_by_id["gonshiro"] in session.game.table.battlefield.cards
+
+
+def test_the_dishonoring_is_reacted_to_while_gonshiro_still_stands_in_his_province():
+    session = _gonshiro_in_a_province()
+    put_in_play(session.game, personality("gihei", printed_id="bayushi_gihei", force=3))
+
+    session.act(P1, Recruit("gonshiro"))
+    pay(session, P1)
+
+    game = session.game
+    assert isinstance(game.pending, ChooseOption)
+    assert game.table.cards_by_id["gonshiro"] not in game.table.battlefield.cards
+    session.submit(P1, DecisionResponse(("P2",)))
+    assert game.table.cards_by_id["gonshiro"] in game.table.battlefield.cards
+    assert game.table.cards_by_id["gonshiro"].dishonorable
 
 
 def _gonshiro_attacking(*, dishonored: bool = True) -> EngineSession:
