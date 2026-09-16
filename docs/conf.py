@@ -180,6 +180,7 @@ numpydoc_xref_aliases = {
     "Side": "yasuki_core.game_pieces.constants.Side",
     "Stat": "yasuki_core.engine.rules.vocabulary.modifiers.Stat",
     "TableState": "yasuki_core.engine.table.TableState",
+    "Trait": "yasuki_core.engine.players.Trait",
     "TriggerContext": "yasuki_core.engine.rules.triggers.TriggerContext",
     "UnitView": "yasuki_core.engine.rules.projection.UnitView",
     "VictoryRule": "yasuki_core.engine.rules.vocabulary.victory.VictoryRule",
