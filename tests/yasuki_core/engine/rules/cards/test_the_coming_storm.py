@@ -111,7 +111,7 @@ def _natsuyo_game(*, holds_favor: bool = True) -> GameState:
 
 def _natsuyo_ability(game: GameState):
     natsuyo = game.table.cards_by_id["natsuyo"]
-    return natsuyo, ability_for(natsuyo, None)
+    return natsuyo, ability_for(game, natsuyo, None)
 
 
 def test_doji_natsuyo_discards_the_favor_to_gain_an_honor():

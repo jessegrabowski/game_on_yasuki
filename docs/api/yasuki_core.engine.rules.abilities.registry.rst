@@ -21,6 +21,7 @@ yasuki_core.engine.rules.abilities.registry
     interrupt_for
     invest_amounts
     invest_for
+    may_attack
     may_stay_bowed
     recruit_timing_of
     register_ability

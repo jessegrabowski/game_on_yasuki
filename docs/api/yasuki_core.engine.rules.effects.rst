@@ -33,6 +33,7 @@ yasuki_core.engine.rules.effects
     Fear
     GainGold
     GainHonor
+    GrantAbility
     GrantConditionalModifier
     GrantKeyword
     GrantLobbyBonus

@@ -73,6 +73,7 @@ deferred through `Then` instead.
    MeleeAttack
    Negated
    GrantPriority
+   GrantAbility
    GrantConditionalModifier
    GrantKeyword
    GrantMinimum
@@ -207,7 +208,7 @@ A modifier adjusts one `Stat` for one `Duration`. A counter is named scalar stat
 each counter declares the per-count stat it grants, so a card's wealth tokens raise its Gold
 Production without a modifier being recorded.
 
-The six ongoing types differ by what they rest on, and `Duration` decides how long one lasts.
+The seven ongoing types differ by what they rest on, and `Duration` decides how long one lasts.
 [Stats: printed against effective](systems/stats.md) explains both. This page lists the closed
 set a card can return.
 
@@ -218,6 +219,7 @@ set a card can return.
 
    Stat
    Duration
+   AbilityGrant
    Condition
    ConditionalModifier
    KeywordGrant

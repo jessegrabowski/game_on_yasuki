@@ -257,7 +257,7 @@ def _oaths(game: GameState):
         ),
     )
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
-    return card, ability_for(card, None)
+    return card, ability_for(game, card, None)
 
 
 def test_honor_your_oaths_reads_the_favor_without_spending_it():

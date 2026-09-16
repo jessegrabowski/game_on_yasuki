@@ -245,7 +245,7 @@ def test_a_lobby_bonus_adjusts_whatever_amount_is_checked():
 
 def _court_targets(game: GameState, court: L5RCard) -> list[str]:
     """Who Shigekawa's Court could straighten right now."""
-    return legality.legal_targets(game, court, ability_for(court, None))
+    return legality.legal_targets(game, court, ability_for(game, court, None))
 
 
 def _lobby_with(game: GameState, card_id: str) -> None:

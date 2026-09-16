@@ -7,6 +7,7 @@ yasuki_core.engine.rules.vocabulary.modifiers
 
 .. autosummary::
 
+    AbilityGrant
     Condition
     ConditionalModifier
     Duration

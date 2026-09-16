@@ -89,7 +89,7 @@ def resolve_strategy(game: GameState, card_id: str, ability_key: str | None = No
     hits every target at once or pauses to be pointed at one.
     """
     card = game.table.cards_by_id[card_id]
-    ability = ability_for(card, ability_key)
+    ability = ability_for(game, card, ability_key)
     if ability is None:
         raise ValueError(f"{card_id} has no ability to resolve")
     game.stack.append(DiscardPlayed(card_id))

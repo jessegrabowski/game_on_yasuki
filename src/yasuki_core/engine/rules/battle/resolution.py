@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.board.queries import units_at
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
+from yasuki_core.engine.rules.abilities.registry import may_attack
 from yasuki_core.engine.rules.vocabulary.game_events import Assigned, Destroyed
 from yasuki_core.engine.rules.battle.records import (
     AttackPhase,
@@ -98,8 +99,10 @@ def assignable_units(game: GameState, seat: PlayerId) -> list[L5RCard]:
     Both clauses sit on the Personality rather than on the unit he leads: he must be unbowed
     (*"A unit led by a bowed Personality may not be assigned"*) and at home, since assigning moves
     a unit out of home rather than between battlefields. A bowed Follower blocks nothing, since it
-    only stops contributing Force once a battle resolves.
+    only stops contributing Force once a battle resolves. The Attacker also leaves behind a
+    Personality whose text says he cannot attack.
     """
+    attacking = game.attack is not None and seat is game.attack.attacker
     return [
         card
         for card in game.table.battlefield.cards
@@ -107,6 +110,7 @@ def assignable_units(game: GameState, seat: PlayerId) -> list[L5RCard]:
         and isinstance(card.printed, PersonalityPrint)
         and not card.bowed
         and location_of(game.table, card).is_home
+        and (not attacking or may_attack(card))
     ]
 
 

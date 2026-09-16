@@ -3,20 +3,37 @@ from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import owned_holdings
+from yasuki_core.engine.rules.abilities.registry import (
+    granted_ability,
+    register_ability,
+    register_cannot_attack,
+)
+from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
+    opposed_units_in_battle,
+    opposing_units_in_battle,
+    owned_holdings,
+    personalities_in_play,
+)
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Choose,
     CreateToken,
     DrawCard,
     Effect,
+    GrantAbility,
     GrantModifier,
     MoveToDeck,
+    RangedAttack,
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.vocabulary.game_events import CounterGained, EnteredPlay, TurnStarted
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    Assigned,
+    CounterGained,
+    EnteredPlay,
+    TurnStarted,
+)
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
@@ -33,6 +50,76 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint
+
+
+# --- Daidoji Kaede ---
+
+KAEDE_ASSIGNED_FORCE = 1
+KAEDE_RANGED = 3
+
+register_cannot_attack("daidoji_kaede")
+
+
+@on(Assigned, "daidoji_kaede")
+def _daidoji_kaede_assigned(ctx: TriggerContext) -> list[Effect]:
+    """After Kaede assigns to a battlefield, give her +1F. Only ever as a defender, since she cannot
+    attack."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [
+        GrantModifier(
+            ctx.card.id, ctx.card.id, Stat.FORCE, KAEDE_ASSIGNED_FORCE, Duration.UNTIL_END_OF_TURN
+        )
+    ]
+
+
+def _daidoji_kaede_opposition_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Enemy Personalities, the only ones that can come to oppose Kaede (CR, Opposed)."""
+    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
+
+
+def _daidoji_kaede_opposition_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [GrantAbility(source.id, source.id, (target.id,), Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "daidoji_kaede",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        key="opposition",
+        label=f"Open: while a target Personality opposes Kaede this turn, she has Battle: "
+        f"Ranged {KAEDE_RANGED} Attack",
+        cost=no_cost,
+        targets=_daidoji_kaede_opposition_targets,
+        effects=_daidoji_kaede_opposition_effects,
+    ),
+)
+
+
+@granted_ability("daidoji_kaede")
+def _daidoji_kaede_granted_ability(context: tuple[str, ...]) -> Ability:
+    """The "Battle: Ranged 3" her Open gives her, usable while the Personality it named opposes
+    her at the battle being fought."""
+    opposing_id = context[0]
+
+    def targets(game: GameState, source: L5RCard) -> list[str]:
+        opposed = source.id in opposed_units_in_battle(game, source.owner)
+        opposes = opposing_id in opposing_units_in_battle(game, source.owner)
+        return attack_targets(game, source) if opposed and opposes else []
+
+    def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+        return [RangedAttack(KAEDE_RANGED, target.id, source.owner)]
+
+    return Ability(
+        timings=(ActionTiming.BATTLE,),
+        key="ranged",
+        label=f"Battle: Ranged {KAEDE_RANGED} Attack",
+        cost=no_cost,
+        targets=targets,
+        effects=effects,
+    )
 
 
 # --- Fortified Farmlands ---

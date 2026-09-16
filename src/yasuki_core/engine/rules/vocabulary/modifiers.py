@@ -112,6 +112,35 @@ class ConditionalModifier:
 
 
 @dataclass(frozen=True, slots=True)
+class AbilityGrant:
+    """A continuous effect that gives one card an activated ability while active: "she has,
+    'Battle: Ranged 3'".
+
+    The ability itself is code, registered under the granting card's printed id, and is built
+    from ``context`` each time the card's abilities are read, so a grant that depends on what the
+    action chose carries that choice here.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the grant comes from, whose registered factory builds the ability, and which
+        expires a ``WHILE_SOURCE_IN_PLAY`` grant by leaving play.
+    target_id : str
+        The card that has the ability while the grant lasts.
+    context : tuple of str
+        What the granting action settled, handed to the factory: the ids the ability's own
+        condition or targets read.
+    duration : Duration
+        When the grant stops applying.
+    """
+
+    source_id: str
+    target_id: str
+    context: tuple[str, ...]
+    duration: Duration
+
+
+@dataclass(frozen=True, slots=True)
 class KeywordGrant:
     """A continuous effect that gives one card a keyword while active.
 
@@ -223,7 +252,15 @@ class LobbyModifier:
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
 # Province's strength beside a stat change. Each is ongoing and lasts to the end of the turn
 # unless the card says otherwise. So they are recorded in one list and expire together (CR,
-# Duration of Effects). The three that name a card are forgotten when it leaves the table; the
+# Duration of Effects). The four that name a card are forgotten when it leaves the table; the
 # three that name a condition, a Province slot or a player are not, because none of those is a
 # card that can leave it.
-Ongoing = Modifier | ConditionalModifier | KeywordGrant | Minimum | ProvinceModifier | LobbyModifier
+Ongoing = (
+    Modifier
+    | ConditionalModifier
+    | AbilityGrant
+    | KeywordGrant
+    | Minimum
+    | ProvinceModifier
+    | LobbyModifier
+)

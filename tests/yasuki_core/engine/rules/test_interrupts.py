@@ -651,7 +651,7 @@ def test_a_cost_is_not_open_to_the_interrupt_step_but_the_effect_is():
     # and the Honor Interrupt answers "the action's" gains and losses (ShE datasheet).
     game = _inside_an_action()
     source = put_in_play(game, holding("P1-h", printed_id="honor_cost_probe"))
-    ability = ability_for(source)
+    ability = ability_for(game, source)
     assert ability is not None
 
     defer_ability(game, source, ability)

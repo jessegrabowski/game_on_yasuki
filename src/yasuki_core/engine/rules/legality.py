@@ -91,7 +91,7 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         return frozenset()
     if isinstance(action, ActivateAbility):
         card = game.table.cards_by_id[action.card_id]
-        ability = ability_for(card, action.ability_key)
+        ability = ability_for(game, card, action.ability_key)
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
         return frozenset(ability.timings)
@@ -627,7 +627,7 @@ def activatable(
         # after the Spell landed on him.
         if is_spell(card) and not has_caster(game, card):
             continue
-        for ability in abilities_for(card):
+        for ability in abilities_for(game, card):
             if permitted.isdisjoint(ability.timings):
                 continue
             if not _bow_permits(game, card, ability):
@@ -695,7 +695,7 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
     return any(
         BattleDesignator.ABSENT in ability.battle_designators and _bow_permits(game, card, ability)
         for _, card in _seat_cards(game, seat)
-        for ability in abilities_for(card)
+        for ability in abilities_for(game, card)
     )
 
 

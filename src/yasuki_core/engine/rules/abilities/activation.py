@@ -22,7 +22,7 @@ def activate(game: GameState, card_id: str, ability_key: str | None = None) -> N
     deferral safe: an action may only be announced when it could find a legal target, so the
     candidates ``legal_actions`` validated are still there to hit."""
     card = game.table.cards_by_id[card_id]
-    ability = ability_for(card, ability_key)
+    ability = ability_for(game, card, ability_key)
     if ActionTiming.RESPONSE in ability.timings:
         game.responded.add(card_id)
     if not ability.repeatable:
@@ -83,7 +83,7 @@ class ApplyAbilityEffects:
 
     def resume(self, game: GameState) -> None:
         source = game.table.cards_by_id[self.card_id]
-        ability = ability_for(source, self.ability_key)
+        ability = ability_for(game, source, self.ability_key)
         _record_targets(game, self.target_ids)
         effects = [
             effect
@@ -113,7 +113,7 @@ def apply_ability_target(
 ) -> None:
     source = game.table.cards_by_id[request.source_card_id]
     target = game.table.cards_by_id[response.choices[0]]
-    ability = ability_for(source, request.ability_key)
+    ability = ability_for(game, source, request.ability_key)
     _record_targets(game, (target.id,))
     triggers.resolve_action_effects(game, ability.effects(game, source, target))
 
