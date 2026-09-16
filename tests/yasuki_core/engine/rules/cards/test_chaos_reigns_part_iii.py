@@ -3,8 +3,12 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.registry import ability_for
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    PlayStrategy,
+    Recruit,
+)
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     FUSHICHO,
@@ -497,3 +501,54 @@ def test_hungry_moon_on_a_holding_with_no_wealth_asks_nobody_to_pay():
 
     assert session.game.pending is None
     assert session.game.table.seats[P2].honor == 0
+
+
+# --- Doji Teru ---
+
+
+def _teru_game() -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("teru", printed_id="doji_teru", force=3))
+    put_in_play(state, personality("own", owner=P1))
+    put_in_play(state, personality("theirs", owner=P2))
+    put_in_play(state, personality("upright", owner=P2))
+    session = EngineSession.start(state, P1)
+    session.game.table.cards_by_id["own"].dishonor()
+    session.game.table.cards_by_id["theirs"].dishonor()
+    return session
+
+
+def test_teru_targets_only_another_players_dishonorable_personality():
+    session = _teru_game()
+
+    session.act(P1, ActivateAbility("teru"))
+
+    assert session.game.pending.candidates == ("theirs",)
+
+
+def test_teru_gains_honor_when_the_controller_rehonors_their_personality():
+    # Rehonoring is the action's own effect, so it is not substituted for the gain (CR, Rehonoring
+    # 0.1): both happen.
+    session = _teru_game()
+
+    session.act(P1, ActivateAbility("teru"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+    asked = session.game.pending
+    assert asked.seat is P2
+    session.submit(P2, DecisionResponse(asked.candidates))
+
+    assert not session.game.table.cards_by_id["theirs"].dishonorable
+    assert session.game.table.seats[P1].honor == 2
+    assert effective_force(session.game, session.game.table.cards_by_id["teru"]) == 3
+
+
+def test_teru_gets_force_when_the_controller_declines():
+    session = _teru_game()
+
+    session.act(P1, ActivateAbility("teru"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+    session.submit(P2, DecisionResponse())
+
+    assert session.game.table.cards_by_id["theirs"].dishonorable
+    assert session.game.table.seats[P1].honor == 0
+    assert effective_force(session.game, session.game.table.cards_by_id["teru"]) == 5

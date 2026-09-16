@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_dis
 from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls_printed
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Ask,
     Choose,
     CreateToken,
     Dishonor,
@@ -23,13 +24,15 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GainHonor,
     GrantKeyword,
+    GrantModifier,
     MeleeAttack,
     PlaceInProvince,
+    Rehonor,
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
@@ -149,6 +152,58 @@ def _resolve_doji_maya_experienced(
 register_invest(
     "doji_maya_experienced",
     InvestAbility(amounts=(MAYA_INVEST,), effect=_doji_maya_experienced_invest),
+)
+
+
+# --- Doji Teru ---
+
+TERU_HONOR = 2
+TERU_FORCE = 2
+
+
+def _doji_teru_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if card.owner is not source.owner and card.dishonorable
+    ]
+
+
+def _doji_teru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Their controller may rehonor them. If this rehonored them, gain 2 Honor; otherwise, give
+    Teru +2F. The gain names no Personality: rehonoring is one of the action's own effects, so the
+    CR does not substitute it for the gain (CR, Rehonoring 0.1)."""
+    return [
+        Ask(
+            target.owner,
+            f"Rehonor {target.name}?",
+            "doji_teru",
+            subjects=(target.id,),
+            source_id=source.id,
+        )
+    ]
+
+
+@choice_resolver("doji_teru")
+def _resolve_doji_teru(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    teru = game.table.cards_by_id[source_id]
+    if chosen:
+        return [Rehonor(chosen[0]), GainHonor(teru.owner, TERU_HONOR)]
+    return [GrantModifier(source_id, source_id, Stat.FORCE, TERU_FORCE, Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "doji_teru",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: another player's dishonorable Personality may be rehonored, for 2 Honor, "
+        "or Teru gets +2F",
+        cost=no_cost,
+        targets=_doji_teru_targets,
+        effects=_doji_teru_effects,
+    ),
 )
 
 
