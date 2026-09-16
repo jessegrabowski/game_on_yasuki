@@ -504,6 +504,9 @@ def test_the_dishonoring_is_reacted_to_while_gonshiro_still_stands_in_his_provin
     session.submit(P1, DecisionResponse(("P2",)))
     assert game.table.cards_by_id["gonshiro"] in game.table.battlefield.cards
     assert game.table.cards_by_id["gonshiro"].dishonorable
+    assert [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)].cards] == [
+        "refill"
+    ]
 
 
 def _gonshiro_attacking(*, dishonored: bool = True) -> EngineSession:
