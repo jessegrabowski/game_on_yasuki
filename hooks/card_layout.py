@@ -238,6 +238,7 @@ ROLES = frozenset(
         "favor_payer",
         "lobby_bar",
         # triggers, named for the event they answer
+        "assigned",
         "producing_gold",
         "produced_gold",
         "entered_play",

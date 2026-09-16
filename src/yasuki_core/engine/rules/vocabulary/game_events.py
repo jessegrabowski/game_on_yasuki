@@ -91,6 +91,26 @@ class EnteredPlay:
 
 
 @dataclass(frozen=True, slots=True)
+class Assigned:
+    """A Personality was assigned from home to a battlefield in the Maneuvers Segment, by either
+    seat. Raised after the unit has moved, so a trigger reading his location sees the battlefield.
+
+    Attributes
+    ----------
+    card_id : str
+        The Personality assigned.
+    battlefield : int
+        The battlefield he was sent to.
+    seat : PlayerId
+        The seat that assigned him.
+    """
+
+    card_id: str
+    battlefield: int
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
 class Straightened:
     """A bowed card was straightened, whether by the start of its controller's turn or by an effect.
     The event names the change, so a card already standing raises nothing."""
@@ -188,7 +208,8 @@ class HonorChanged:
 
 
 GameEvent = (
-    TurnStarted
+    Assigned
+    | TurnStarted
     | CardDiscarded
     | CounterGained
     | Destroyed

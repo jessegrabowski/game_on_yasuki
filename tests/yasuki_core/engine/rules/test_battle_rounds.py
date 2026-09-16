@@ -12,13 +12,18 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayStrategy,
 )
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseBattlefield, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    AssignUnits,
+    ChooseBattlefield,
+    Confirm,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules import legality, triggers
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
-from yasuki_core.engine.rules.effects import Bow, GrantPriority
+from yasuki_core.engine.rules.effects import Ask, Bow, GrantPriority
 from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
     BEGINNING_OF_COMBAT,
@@ -31,7 +36,8 @@ from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import Assigned, CardDiscarded
+from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint
@@ -568,3 +574,39 @@ def test_granting_the_opportunity_restarts_the_count_of_consecutive_passes():
     session.act(ATTACKER, Pass())
 
     assert session.game.attack.battle_segment is BattleSegment.ENGAGE
+
+
+def test_a_trigger_that_pauses_on_assignment_is_answered_before_the_defender_assigns(reacting):
+    """The Defender's question is queued behind whatever the Attacker's assignment triggers, so a
+    trait that asks something does not have its question overwritten by the next step."""
+    reacting(
+        Assigned,
+        "assignment_probe",
+        lambda ctx: [Ask(ctx.card.owner, "Bow the probe?", "assignment_probe", (ctx.card.id,))]
+        if ctx.event.card_id == ctx.card.id
+        else [],
+    )
+
+    @choice_resolver("assignment_probe")
+    def _resolve(game, source_id, chosen, seat):
+        return [Bow(chosen[0])] if chosen else []
+
+    try:
+        state = TableState.empty_two_seat()
+        province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+        province_card(state, "def-prov0", seat=DEFENDER, index=0)
+        put_in_play(state, personality("hero", owner=ATTACKER, printed_id="assignment_probe"))
+        put_in_play(state, personality("guard", owner=DEFENDER))
+        session = EngineSession.start(state, ATTACKER)
+        end_phase(session)
+        session.act(ATTACKER, DeclareAttack())
+
+        session.submit(ATTACKER, DecisionResponse(("hero@0",)))
+        assert isinstance(session.game.pending, Confirm)
+        session.submit(ATTACKER, DecisionResponse(("hero",)))
+
+        assert session.game.table.cards_by_id["hero"].bowed is True
+        assert isinstance(session.game.pending, AssignUnits)
+        assert session.game.pending.seat is DEFENDER
+    finally:
+        CHOICE_RESOLVERS.pop("assignment_probe", None)

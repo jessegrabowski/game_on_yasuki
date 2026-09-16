@@ -7,6 +7,7 @@ yasuki_core.engine.rules.battle.resolution
 
 .. autosummary::
 
+    AfterAssignment
     FightNextBattle
 
 .. rubric:: Functions

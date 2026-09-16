@@ -7,6 +7,7 @@ yasuki_core.engine.rules.vocabulary.game_events
 
 .. autosummary::
 
+    Assigned
     CardDiscarded
     CounterGained
     Destroyed
