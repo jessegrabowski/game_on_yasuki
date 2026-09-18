@@ -91,6 +91,20 @@ def loaded(root):
     return f, state
 
 
+class PreviewOnlyImages:
+    """Art for the preview alone, which is the one label Tk refuses to build without an image.
+    Unsized requests are a panel's cells, which fall through to named placeholders."""
+
+    def __init__(self, preview=None):
+        self._preview = preview
+
+    def front(self, image_front, bowed, dishonorable, target=None):
+        return self._preview if target else None
+
+    def back(self, side, bowed, dishonorable, image_back, target=None):
+        return self._preview if target else None
+
+
 class DummyEventNamespace(tk.Event):
     def __init__(self, **kwargs):
         for key, value in kwargs.items():

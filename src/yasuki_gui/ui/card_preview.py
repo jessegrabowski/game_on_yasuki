@@ -1,11 +1,11 @@
 import tkinter as tk
 from typing import Any
 
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
 from yasuki_gui.constants import CARD_W, CARD_H, PREVIEW_SCALE
 from yasuki_gui.layout import card_view_placement
 from yasuki_gui.ui.images import ImageProvider
+from yasuki_gui.visuals.cardface import RenderCard
 
 
 class CardPreview:
@@ -36,7 +36,7 @@ class CardPreview:
         """Whether a preview is currently up."""
         return self._label is not None
 
-    def show(self, card: L5RCard, card_rootx: int, card_rooty: int) -> None:
+    def show(self, card: RenderCard, card_rootx: int, card_rooty: int) -> None:
         """Float ``card`` enlarged beside where it sits, given that point in screen coordinates.
 
         Shows the card's front when it is face up and its back otherwise, so a preview never reveals

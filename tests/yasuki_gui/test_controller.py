@@ -4,7 +4,6 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Draw
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.tags import allocation_tag, card_tag, zone_tag
-
 from tests.yasuki_gui.conftest import DummyEventNamespace
 
 

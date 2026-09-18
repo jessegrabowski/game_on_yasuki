@@ -9,12 +9,6 @@ yasuki_gui.ui.card_strip
 
     CardStrip
 
-.. rubric:: Functions
-
-.. autosummary::
-
-    card_face
-
 .. automodule:: yasuki_gui.ui.card_strip
     :members:
     :undoc-members:
