@@ -2,7 +2,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Draw, MoveCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.ui.info_box import PlayerInfoBox
+import pytest
+
+from yasuki_gui.ui.info_box import PlayerInfoBox, possessive
 
 
 def test_cell_counts_mirror_the_table(root, loaded):
@@ -31,6 +33,26 @@ def test_box_reads_its_own_seats_piles(root, loaded):
     counts = box.cell_counts()
     assert counts["fate_deck"] == len(state.decks[DeckKey(PlayerId.P2, Side.FATE)].cards)
     assert counts["hand"] == len(state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards)
+
+
+def test_opening_a_pile_titles_it_in_full_after_its_owner(root, loaded):
+    """The cell caption is cut to fit its column, so the panel it opens is what names the pile."""
+    field, state = loaded
+    box = PlayerInfoBox(root, field, PlayerId.P1)
+    opened = []
+    box.on_inspect = lambda cards, title: opened.append(title)
+    field.dispatch(Draw(DeckKey(PlayerId.P1, Side.DYNASTY)))
+    card = state.battlefield.cards[-1]
+    field.dispatch(MoveCard(card.id, ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)))
+
+    box._inspect(ZoneRole.DYNASTY_DISCARD, "Dynasty Discard")
+
+    assert opened == ["Your Dynasty Discard"]
+
+
+@pytest.mark.parametrize("name, expected", [("Ada", "Ada's"), ("You", "Your")])
+def test_a_pile_is_named_after_its_owner(name, expected):
+    assert possessive(name) == expected
 
 
 class _Wheel:

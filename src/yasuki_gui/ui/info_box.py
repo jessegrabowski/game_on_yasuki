@@ -22,16 +22,23 @@ _CELL_H = 78
 # The 3x3 grid of off-board piles, top-to-bottom and left-to-right. Decks and the hand count are
 # display-only; discard and banish piles open an inspect dialog. The third column holds only the
 # hand count (the playable hand itself stays on the board); its lower cells are intentionally blank.
+# A pile's caption fits its cell under the deck heading its column carries, and its title names the
+# pile in full for the panel that opens on it.
 _DECK_CELLS: tuple[tuple[int, int, Side, str], ...] = (
     (0, 0, Side.FATE, "Fate"),
     (0, 1, Side.DYNASTY, "Dynasty"),
 )
-_PILE_CELLS: tuple[tuple[int, int, ZoneRole, str], ...] = (
-    (1, 0, ZoneRole.FATE_DISCARD, "Fate disc"),
-    (1, 1, ZoneRole.DYNASTY_DISCARD, "Dyn disc"),
-    (2, 0, ZoneRole.FATE_BANISH, "Fate ban"),
-    (2, 1, ZoneRole.DYNASTY_BANISH, "Dyn ban"),
+_PILE_CELLS: tuple[tuple[int, int, ZoneRole, str, str], ...] = (
+    (1, 0, ZoneRole.FATE_DISCARD, "Discard", "Fate Discard"),
+    (1, 1, ZoneRole.DYNASTY_DISCARD, "Discard", "Dynasty Discard"),
+    (2, 0, ZoneRole.FATE_BANISH, "Banished", "Banished Fate Cards"),
+    (2, 1, ZoneRole.DYNASTY_BANISH, "Banished", "Banished Dynasty Cards"),
 )
+
+
+def possessive(name: str) -> str:
+    """``name`` as the owner of something: "Ada's", or "Your" for the seat named "You"."""
+    return "Your" if name == "You" else f"{name}'s"
 
 
 class _Cell(tk.Canvas):
@@ -193,17 +200,18 @@ class PlayerInfoBox(tk.Frame):
             cell = _Cell(self._grid, caption)
             cell.grid(row=row, column=col, padx=2, pady=2)
             self._deck_cells[side] = cell
-        for row, col, role, caption in _PILE_CELLS:
-            cell = _Cell(self._grid, caption, on_click=partial(self._inspect, role, caption))
+        for row, col, role, caption, title in _PILE_CELLS:
+            cell = _Cell(self._grid, caption, on_click=partial(self._inspect, role, title))
             cell.grid(row=row, column=col, padx=2, pady=2)
             self._pile_cells[role] = cell
         self._hand_cell = _Cell(self._grid, "Hand")
         self._hand_cell.grid(row=0, column=2, padx=2, pady=2)
 
-    def _inspect(self, role: ZoneRole, label: str) -> None:
+    def _inspect(self, role: ZoneRole, title: str) -> None:
         cards = self.field.zone_render_cards(ZoneKey(self.owner, role))
         if cards and self.on_inspect is not None:
-            self.on_inspect(cards, label)
+            owner = self.field.state.seats[self.owner].name
+            self.on_inspect(cards, f"{possessive(owner)} {title}")
 
     def cell_counts(self) -> dict[str, int]:
         """The count shown in each grid cell, keyed by a stable cell name, read from the field's
@@ -212,7 +220,7 @@ class PlayerInfoBox(tk.Frame):
             f"{side.name.lower()}_deck": self.field.deck_summary(DeckKey(self.owner, side))[0]
             for side in (Side.FATE, Side.DYNASTY)
         }
-        for _, _, role, _ in _PILE_CELLS:
+        for _, _, role, _, _ in _PILE_CELLS:
             counts[role.value] = len(self.field.zone_render_cards(ZoneKey(self.owner, role)))
         counts["hand"] = self.field.hand_count(self.owner)
         return counts

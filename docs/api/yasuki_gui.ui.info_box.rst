@@ -9,6 +9,12 @@ yasuki_gui.ui.info_box
 
     PlayerInfoBox
 
+.. rubric:: Functions
+
+.. autosummary::
+
+    possessive
+
 .. automodule:: yasuki_gui.ui.info_box
     :members:
     :undoc-members:
