@@ -383,18 +383,9 @@ class FieldView(tk.Canvas):
         return hittest_resolve_tag_at(self, event)
 
     def card_under_pointer(self, x_root: int, y_root: int) -> tuple[RenderCard, int, int] | None:
-        """Find the card under a screen point, across any zone: a battlefield sprite, the card under
-        the point in a hand, or the top card of a province or pile.
-
-        Returns
-        -------
-        card : RenderCard
-            The card there.
-        x_root, y_root : int
-            Its center in screen coordinates.
-
-        None when the point is off the board or on bare felt.
-        """
+        """The card under a screen point and its center in screen coordinates, across any zone: a
+        battlefield sprite, the card under the point in a hand, or the top card of a province or
+        pile. None when the point is off the board or on bare felt."""
         x, y = x_root - self.winfo_rootx(), y_root - self.winfo_rooty()
         width, height = self._canvas_size()
         if not (0 <= x < width and 0 <= y < height):

@@ -98,7 +98,7 @@ class CardPanel(FloatingPanel):
 
         Parameters
         ----------
-        card : RenderCard
+        card : L5RCard or HiddenFace
             The card to draw, front up or back up as it says.
         x, y : int
             The sprite's center on the canvas.
@@ -128,17 +128,8 @@ class CardPanel(FloatingPanel):
         return tag[len(self.tag_prefix) :]
 
     def card_under_pointer(self, x_root: int, y_root: int) -> tuple[RenderCard, int, int] | None:
-        """Find the card under a screen point.
-
-        Returns
-        -------
-        card : RenderCard
-            The card there.
-        x_root, y_root : int
-            Its center in screen coordinates.
-
-        None when the panel is closed, rolled up, or the point is off its cards.
-        """
+        """The card under a screen point and its center in screen coordinates. None when the panel
+        is closed, rolled up, or the point is off its cards."""
         if not self.showing or self.minimized:
             return None
         x = x_root - self.canvas.winfo_rootx()

@@ -179,17 +179,8 @@ class GameWindow:
             self.card_preview.show(*found)
 
     def card_under_pointer(self, x_root: int, y_root: int) -> tuple[RenderCard, int, int] | None:
-        """Find the card under a screen point on the topmost surface holding one.
-
-        Returns
-        -------
-        card : RenderCard
-            The card there.
-        x_root, y_root : int
-            Its center in screen coordinates.
-
-        None when neither a panel nor the board has a card there.
-        """
+        """The card under a screen point on the topmost surface holding one, and its center in
+        screen coordinates. None when neither a panel nor the board has a card there."""
         for panel in self._card_panels:
             found = panel.card_under_pointer(x_root, y_root)
             if found is not None:
