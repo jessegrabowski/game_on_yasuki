@@ -1,6 +1,10 @@
+from typing import TypeGuard
+
 from yasuki_core.engine.rules.vocabulary.actions import Action, DeclareAttack, Pass
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
     AssignUnits,
+    ChooseCards,
     ChooseAmount,
     ChooseBattlefield,
     ChooseDistribution,
@@ -9,6 +13,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseOption,
     ChoosePayment,
     Confirm,
+    DecisionRequest,
     DecisionResponse,
     assignment,
     assignment_token,
@@ -194,8 +199,31 @@ class Presenter:
                 selected=frozenset(window.field.selection),
                 stats=view.stats,
             )
+        self._show_look()
         window.opponent_panel.refresh()
         window.human_panel.refresh()
+
+    def _show_look(self) -> None:
+        """Keep the look window in step with the engine: open over the cards in view, with the
+        current question's candidates offered and, while arranging, the placed cards gone."""
+        runner, field = self.host.runner, self.window.field
+        pending = runner.pending
+        candidates = (
+            frozenset(pending.candidates) if self._asks_about_the_look(pending) else frozenset()
+        )
+        selection = frozenset(field.selection)
+        placed = selection if isinstance(pending, ArrangeCards) else frozenset()
+        self.window.show_look(
+            runner.look_cards(), candidates, selected=selection - placed, placed=placed
+        )
+
+    def _asks_about_the_look(
+        self, pending: DecisionRequest | None
+    ) -> TypeGuard[ChooseCards | ArrangeCards]:
+        """Whether the pending question is one about the cards in view."""
+        return isinstance(pending, ChooseCards | ArrangeCards) and set(pending.candidates) <= set(
+            self.host.runner.looked_at()
+        )
 
     def _prompt(self, view: GameView) -> tuple[str, list[ButtonSpec]]:
         """What the prompt box should say, and the buttons it should offer, for whatever the engine
@@ -219,7 +247,7 @@ class Presenter:
                 ("Yes", lambda asked=pending: self.submit_answer(asked.candidates), True),
                 ("No", lambda: self.submit_answer(()), pending.accepts(DecisionResponse())),
             ]
-            if pending.cancellable:
+            if runner.can_cancel():
                 buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(), buttons
         if isinstance(pending, ChooseBattlefield):
@@ -242,7 +270,7 @@ class Presenter:
                 (option, lambda chosen=option: self.submit_answer((chosen,)), True)
                 for option in pending.candidates
             ]
-            if pending.cancellable:
+            if runner.can_cancel():
                 options.append(("Cancel", self.cancel, True))
             return pending.prompt(), options
         if isinstance(pending, ChooseInvestAmount):
@@ -259,6 +287,8 @@ class Presenter:
                 ("Spend", self.submit_amount, True),
                 ("Cancel", self.cancel, True),
             ]
+        if self._asks_about_the_look(pending):
+            return self._look_prompt(pending)
         if pending is not None:
             answer = self._board_answer()
             # A payment is picked whole and answered one producer at a time. What makes it
@@ -269,7 +299,7 @@ class Presenter:
                 else pending.accepts(answer)
             )
             board_buttons: list[ButtonSpec] = [(pending.confirm_label, self.confirm, ready)]
-            if pending.cancellable:
+            if runner.can_cancel():
                 board_buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(answer), board_buttons
         if view.responding_to is not None:
@@ -283,6 +313,42 @@ class Presenter:
             (_ACTION_LABELS[type(action)], lambda chosen=action: self.act(chosen), True)
             for action in _button_actions(runner.legal_actions())
         ]
+
+    def _look_prompt(self, pending: ChooseCards | ArrangeCards) -> tuple[str, list[ButtonSpec]]:
+        """The buttons for a question about the cards in view. None of them is Cancel: the seat has
+        read the cards, and the engine refuses to unread them.
+
+        A choice offers Confirm, gray until a card is picked, and Decline when choosing nothing is
+        an answer. An arrangement offers Confirm once every card is placed, Keep Order while none
+        is, and Undo while any is.
+        """
+        answer = self._board_answer()
+        if isinstance(pending, ArrangeCards):
+            buttons: list[ButtonSpec] = [
+                ("Confirm", self.confirm, pending.accepts(answer)),
+                ("Keep Order", lambda: self.submit_answer(pending.unchanged), not answer.choices),
+                ("Undo", self.undo, bool(answer.choices)),
+            ]
+            return pending.prompt(answer), buttons
+        buttons = [
+            (pending.confirm_label, self.confirm, pending.accepts(answer) and bool(answer.choices))
+        ]
+        if pending.decline_label is not None:
+            buttons.append((pending.decline_label, lambda: self.submit_answer(()), True))
+        return pending.prompt(answer), buttons
+
+    def on_look_card_clicked(self, card_id: str) -> None:
+        """Pick a card in the look window. For a choice of one, the click replaces any earlier
+        pick. For an arrangement, the click places the card and Undo is what takes it back."""
+        field = self.window.field
+        pending = self.host.runner.pending
+        if isinstance(pending, ArrangeCards) and card_id in field.selection:
+            return
+        if isinstance(pending, ChooseCards) and pending.maximum == 1:
+            for picked in [picked for picked in field.selection if picked != card_id]:
+                field.toggle_selection(picked)
+        field.toggle_selection(card_id)
+        self.refresh()
 
     def act(self, action: Action) -> None:
         """Take ``action`` on the human's behalf."""
@@ -482,17 +548,16 @@ class Presenter:
         if isinstance(self.host.runner.pending, AssignUnits):
             if field.undo_assignment():
                 self.present()
-        elif isinstance(self.host.runner.pending, ChoosePayment):
+        elif isinstance(self.host.runner.pending, ChoosePayment | ArrangeCards):
             field.undo_last_selection()
         elif self.host.runner.undo_last():
             field.end_selection()
             self.refresh()
 
     def cancel_via_escape(self, _event=None) -> None:
-        """Escape backs out of a cancellable pending decision. It does nothing otherwise, which
-        leaves the board's own Escape (clearing the selection) alone."""
-        pending = self.host.runner.pending
-        if pending is not None and pending.cancellable:
+        """Escape backs out of the pending decision when the engine allows it. It does nothing
+        otherwise, which leaves the board's own Escape (clearing the selection) alone."""
+        if self.host.runner.can_cancel():
             self.cancel()
 
     def load_human_deck(self, path: str) -> None:

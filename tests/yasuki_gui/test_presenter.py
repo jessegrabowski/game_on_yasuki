@@ -1,10 +1,25 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy, Recruit
-from yasuki_core.engine.rules.effects import TakeFavor
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy, Recruit
+from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.board.queries import remaining_look, top_of_deck
+from yasuki_core.engine.rules.effects import (
+    Arrange,
+    Choose,
+    EndLook,
+    LookAtTop,
+    MoveToDeck,
+    TakeFavor,
+)
+from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
+from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
     ChooseAmount,
+    ChooseCards,
     ChooseInterrupt,
     ChooseInvestAmount,
     ChooseOption,
@@ -1530,3 +1545,183 @@ def test_the_adjustment_discards_the_card_and_resolves_the_fear(a_fear_to_interr
     assert not session.game.table.cards_by_id["guard"].bowed
     hand = session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)].cards
     assert "P2-courage0" not in [card.id for card in hand]
+
+
+# --- Looking at cards ---
+
+
+@choice_resolver("presenter_look_bottom", prompt="You may put one at the bottom of your deck")
+def _bottom_and_arrange(game, source_id, chosen, seat):
+    fate = DeckKey(P1, Side.FATE)
+    rest = tuple(card_id for card_id in remaining_look(game) if card_id not in chosen)
+    bottomed = [MoveToDeck(card_id, fate, from_bottom=0) for card_id in chosen]
+    if not rest:
+        return [*bottomed, EndLook()]
+    return [*bottomed, Arrange(seat, rest, PUT_BACK_ON_TOP, source_id)]
+
+
+register_ability(
+    "presenter_looker",
+    Ability(
+        timings=(ActionTiming.LIMITED,),
+        label="look at three",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [
+            LookAtTop(P1, DeckKey(P1, Side.FATE), 3),
+            Choose(
+                P1,
+                top_of_deck(game, DeckKey(P1, Side.FATE), 3),
+                0,
+                1,
+                "presenter_look_bottom",
+                source.id,
+            ),
+        ],
+    ),
+)
+
+
+@pytest.fixture
+def looking():
+    """A presenter mid-look: P1 has looked at the top three of ``top, second, third, fourth`` and
+    is asked to put up to one on the bottom, after which the rest are arranged back on top."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("looker", printed_id="presenter_looker"))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(state, fate_card(card_id, P1))
+        for card_id in reversed(("top", "second", "third", "fourth"))
+    ]
+    session = EngineSession.start(state, P1)
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    window.bind_to(presenter)
+    presenter.act(ActivateAbility("looker"))
+    presenter.submit_answer(("looker",))
+    try:
+        yield presenter, window, session
+    finally:
+        window.root.destroy()
+
+
+def _enabled(presenter, label: str) -> bool:
+    for text, _, ready in _specs(presenter):
+        if text == label:
+            return ready
+    raise AssertionError(f"no button reads {label!r}")
+
+
+def _fate_deck(session) -> list[str]:
+    return [card.id for card in reversed(session.game.table.decks[DeckKey(P1, Side.FATE)].cards)]
+
+
+def test_a_look_opens_its_window_over_the_cards_and_not_the_pile_dialog(looking):
+    presenter, window, session = looking
+
+    assert isinstance(session.game.pending, ChooseCards)
+    assert window.look_view.showing
+    assert set(window.look_view._drawn) == {"card:top", "card:second", "card:third"}
+    assert presenter.host.runner.search_view() is None
+
+
+def test_a_may_choice_in_a_look_offers_confirm_and_decline_and_no_cancel(looking):
+    presenter, window, session = looking
+
+    assert _buttons(window) == ["Confirm", "Decline"]
+    assert not _enabled(presenter, "Confirm")
+
+    presenter.on_look_card_clicked("second")
+
+    assert _enabled(presenter, "Confirm")
+    assert window.field.selection == ("second",)
+
+
+def test_a_second_click_in_a_choice_of_one_replaces_the_first(looking):
+    presenter, window, session = looking
+    presenter.on_look_card_clicked("second")
+
+    presenter.on_look_card_clicked("third")
+
+    assert window.field.selection == ("third",)
+
+
+def test_the_look_window_veils_a_card_the_question_does_not_offer(looking):
+    presenter, window, session = looking
+    session.game.pending = ChooseCards(P1, ("top",), 0, 1, "presenter_look_bottom", "looker")
+
+    presenter.present()
+
+    assert "card:top" in window.look_view._drawn
+    assert "card:shown:second" in window.look_view._drawn
+    presenter.on_look_card_clicked("second")
+    assert window.field.selection == ()
+
+
+def test_putting_a_card_on_the_bottom_takes_it_out_of_the_window_and_asks_for_the_order(looking):
+    presenter, window, session = looking
+    presenter.on_look_card_clicked("second")
+
+    _press(presenter, "Confirm")
+
+    assert isinstance(session.game.pending, ArrangeCards)
+    assert set(window.look_view._drawn) == {"card:top", "card:third"}
+    assert _buttons(window) == ["Confirm", "Keep Order", "Undo"]
+    assert _enabled(presenter, "Keep Order") and not _enabled(presenter, "Undo")
+    assert not _enabled(presenter, "Confirm")
+
+
+def test_arranging_places_cards_one_click_at_a_time_and_undoes_them(looking):
+    presenter, window, session = looking
+    _press(presenter, "Decline")
+    assert isinstance(session.game.pending, ArrangeCards)
+
+    presenter.on_look_card_clicked("second")
+    assert "card:second" not in window.look_view._drawn  # a placed card leaves the window
+    assert not _enabled(presenter, "Keep Order") and _enabled(presenter, "Undo")
+    assert not _enabled(presenter, "Confirm")
+
+    presenter.undo()
+    assert "card:second" in window.look_view._drawn
+    assert window.field.selection == ()
+
+    for card_id in ("third", "top", "second"):
+        presenter.on_look_card_clicked(card_id)
+    assert _enabled(presenter, "Confirm")
+    _press(presenter, "Confirm")
+
+    assert _fate_deck(session) == ["second", "top", "third", "fourth"]
+    assert session.game.look is None
+    assert not window.look_view.showing
+
+
+def test_keep_order_answers_with_the_unchanged_arrangement(looking):
+    presenter, window, session = looking
+    _press(presenter, "Decline")
+
+    _press(presenter, "Keep Order")
+
+    assert _fate_deck(session) == ["top", "second", "third", "fourth"]
+    assert session.game.look is None
+    assert not window.look_view.showing
+
+
+def test_escape_does_nothing_during_a_look(looking):
+    """The engine refuses to unread the cards, so the client never asks it to."""
+    presenter, window, session = looking
+    before = session.game.pending
+
+    presenter.cancel_via_escape()
+
+    assert session.game.pending is before
+    assert session.game.look is not None
+
+
+def test_a_placed_card_is_not_taken_back_by_clicking_it(looking):
+    presenter, window, session = looking
+    _press(presenter, "Decline")
+    presenter.on_look_card_clicked("second")
+
+    presenter.on_look_card_clicked("second")
+
+    assert window.field.selection == ("second",)
