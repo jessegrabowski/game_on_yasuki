@@ -19,6 +19,7 @@ from yasuki_gui.ui.card_panel import CardPanel
 from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.card_strip import CardStrip
 from yasuki_gui.ui.info_box import PlayerInfoBox
+from yasuki_gui.ui.look_view import LOOK_H, LOOK_W, LookView
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
 from yasuki_gui.ui.prompt_box import PromptBox
@@ -140,6 +141,8 @@ class GameWindow:
         # One strip for every pile either player opens, retitled as it is reused, so a player who
         # has moved it finds it where they left it.
         self.card_strip = CardStrip(self.field, ImageProvider(self.field))
+        # The cards a look shows, opened over the board while the questions about them are asked.
+        self.look_view = LookView(self.field, ImageProvider(self.field))
         # Drawn on the window itself, so it floats over the board, the sidebar and every panel.
         # One preview shared by the board and every panel, so none can hide or clip another's.
         self.card_preview = CardPreview(self.root, ImageProvider(self.root))
@@ -147,7 +150,11 @@ class GameWindow:
         # The view key has one owner. Panels sit over the board, so they are asked first, and the
         # board answers for whatever the pointer is on when no panel is. Bound alongside the
         # board's own keys rather than through them, so reconfiguring those cannot drop it.
-        self._card_panels: tuple[CardPanel, ...] = (self.battle_view, self.card_strip)
+        self._card_panels: tuple[CardPanel, ...] = (
+            self.look_view,
+            self.battle_view,
+            self.card_strip,
+        )
         self.root.bind_all(f"<KeyPress-{hotkeys.view}>", self._on_view_key, add="+")
 
         # A panel reads the board through the FieldView it is handed, so the field is built first.
@@ -194,6 +201,22 @@ class GameWindow:
         # rather than measured against an unplaced panel and corrected on a later redraw.
         self.card_strip.open_at(STRIP_INSET, STRIP_INSET)
         self.card_strip.show(cards, title)
+
+    def show_look(
+        self,
+        cards: list[L5RCard],
+        candidates: frozenset[str],
+        selected: frozenset[str] = frozenset(),
+        placed: frozenset[str] = frozenset(),
+    ) -> None:
+        """Float the look over the board while ``cards`` are in view, and take it away when none
+        are. The arguments are ``LookView.refresh``'s and are passed straight through."""
+        if not cards:
+            self.look_view.close()
+            return
+        board_w, board_h = widget_size(self.field)
+        self.look_view.open_over((board_w - LOOK_W) // 2, (board_h - LOOK_H) // 2, LOOK_W, LOOK_H)
+        self.look_view.refresh(cards, candidates, selected=selected, placed=placed)
 
     def show_battle(
         self,
