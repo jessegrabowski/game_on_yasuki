@@ -30,6 +30,7 @@ yasuki_core.engine.rules.effects
     Dishonor
     DrawCard
     Effect
+    EndLook
     Evaluate
     Fear
     GainGold
@@ -45,6 +46,7 @@ yasuki_core.engine.rules.effects
     IgnoreHonorRequirements
     InterruptStep
     InterruptingEffect
+    LookAtTop
     LoseGame
     MeleeAttack
     Move

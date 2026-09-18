@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionRequest,
 )
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     CounterGained,
@@ -1386,6 +1387,66 @@ class BanishTopFate(Effect):
         deck = game.table.decks[DeckKey(self.seat, Side.FATE)]
         if deck.cards:
             ops.move_card(game.table, deck.cards[-1], ZoneKey(self.seat, ZoneRole.FATE_BANISH))
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class LookAtTop(Effect):
+    """Let ``seat`` look at the top ``count`` cards of ``deck``, opening a :class:`~.Look`.
+
+    The cards stay where they are: the seat reads them and the decisions that follow say where each
+    goes. Each card gains the seat as a peeker. A deck shorter than ``count`` shows what it has.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat looking.
+    deck : DeckKey
+        The deck looked at.
+    count : int
+        How many cards from the top.
+    """
+
+    seat: PlayerId
+    deck: DeckKey
+    count: int
+
+    def describe(self) -> str:
+        side = self.deck.side.name.lower()
+        return f"{self.seat.name} looks at the top {self.count} of {self.deck.owner.name}'s {side} deck"
+
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
+        """An empty deck has nothing to look at."""
+        return bool(game.table.decks[self.deck].cards)
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Raise RuntimeError if a look is already open: two at once would overwrite each other, and
+        the first card's EndLook would close the second's."""
+        if game.look is not None:
+            raise RuntimeError("a look is already open")
+        seen = list(reversed(game.table.decks[self.deck].peek(self.count)))
+        for card in seen:
+            card.add_peeker(self.seat)
+        game.look = Look(self.seat, self.deck, tuple(card.id for card in seen))
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class EndLook(Effect):
+    """Close the open :class:`~.Look`, once the last question about its cards is answered.
+
+    The cards keep their peeker: a card that stayed in the deck is still one the seat has read, and
+    entering a deck from anywhere else scrubs it anyway.
+    """
+
+    def describe(self) -> str:
+        return "the look ends"
+
+    def is_interruptible(self) -> bool:
+        return False  # bookkeeping, not something a card can act against
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.look = None
         return []
 
 

@@ -60,6 +60,13 @@ class DecisionRequest(ABC):
         return "Confirm"
 
     @property
+    def decline_label(self) -> str | None:
+        """The text of a button that answers with nothing, or None for a request that has no such
+        answer. A "may" question offers one, so that saying no is a click of its own rather than a
+        confirm with nothing chosen."""
+        return None
+
+    @property
     def cancellable(self) -> bool:
         """Whether the seat may back out of this decision, undoing the action that raised it. False
         for a forced decision the seat must answer."""
@@ -703,6 +710,11 @@ class ChooseCards(DecisionRequest):
             and self.minimum <= len(chosen) <= self.maximum
             and distinct <= set(self.candidates)
         )
+
+    @property
+    def decline_label(self) -> str | None:
+        """ "Decline" when choosing nothing is an answer, None when at least one card is owed."""
+        return "Decline" if self.minimum == 0 else None
 
     @property
     def cancellable(self) -> bool:

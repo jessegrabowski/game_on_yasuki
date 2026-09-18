@@ -386,3 +386,8 @@ def test_an_interrupt_token_missing_its_card_or_key_is_refused(token):
 def test_an_interrupt_names_the_effect_it_guards():
     assert _interrupt().prompt() == "P1 gains 3 honor. Take an Interrupt?"
     assert _interrupt().confirm_label == "Pass"
+
+
+def test_a_may_choice_offers_a_decline_and_a_must_does_not():
+    assert _choose(0, 1).decline_label == "Decline"
+    assert _choose(1, 1).decline_label is None

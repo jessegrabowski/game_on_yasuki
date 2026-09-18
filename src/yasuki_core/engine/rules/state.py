@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.battle.records import AttackPhase
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
+from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.modifiers import Ongoing
 from yasuki_core.engine.rules.turn.structure import ActionRound, Moment, PHASE_TIMINGS, Phase
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
@@ -97,6 +98,11 @@ class GameState:
         Deferred engine work: the later steps of an action sequence, run once the current decision
         clears. Ephemeral: replay rebuilds it by re-running the engine, so it is never serialized.
         Default empty.
+    look : Look or None
+        The cards a seat is looking at in a deck, or None when nobody is. Opened by
+        :class:`~.LookAtTop` and closed by :class:`~.EndLook`. While one is open no decision may
+        be backed out of, since the seat has read cards it cannot unread. Ephemeral and rebuilt by
+        replay. Default None.
     ongoing : list of Modifier, KeywordGrant, Minimum, ProvinceModifier or LobbyModifier
         The ongoing records in force: every continuous grant a card has created, kept in creation
         order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike it may
@@ -172,6 +178,7 @@ class GameState:
     rng: Generator = field(default_factory=lambda: default_rng(0), compare=False, repr=False)
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
+    look: Look | None = None
     ongoing: list[Ongoing] = field(default_factory=list)
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)

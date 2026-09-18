@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.table import Zone, ZoneKey, ZoneRole, location_of, province_holding
+from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole, location_of, province_holding
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -37,6 +37,33 @@ def province_key_of(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey:
     if key is None:
         raise ValueError(f"no province of {seat.name} holds card {card_id}")
     return key
+
+
+def top_of_deck(game: GameState, deck: DeckKey, count: int) -> tuple[str, ...]:
+    """The ids of the top ``count`` cards of ``deck``, top first, or fewer when the deck is
+    shorter."""
+    return tuple(card.id for card in reversed(game.table.decks[deck].peek(count)))
+
+
+def remaining_look(game: GameState) -> tuple[str, ...]:
+    """The cards of the open look still where they were looked at, top first. Empty when no look is
+    open. A resolver asking the next question about a look reads its pool here, so a card an earlier
+    answer moved out has already dropped from view.
+
+    A card is still in view while it is in the deck and the seat is still among its peekers.
+    Entering a deck scrubs the peekers, so a card put back on top or on the bottom leaves the pool
+    as surely as one taken into hand, while one nothing has touched keeps the peek the look gave
+    it.
+    """
+    look = game.look
+    if look is None:
+        return ()
+    in_deck = {card.id: card for card in game.table.decks[look.deck].cards}
+    return tuple(
+        card_id
+        for card_id in look.card_ids
+        if card_id in in_deck and look.seat in in_deck[card_id].peekers
+    )
 
 
 def has_keyword(game: GameState, card: L5RCard, keyword: str) -> bool:

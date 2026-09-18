@@ -21,7 +21,9 @@ yasuki_core.engine.rules.board.queries
     province_key_holding
     province_key_of
     province_zones
+    remaining_look
     sincerity_seed_targets
+    top_of_deck
     units_at
 
 .. automodule:: yasuki_core.engine.rules.board.queries

@@ -361,6 +361,10 @@ def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
     """
     if game.awaiting_decision or game.game_over:
         return
+    if game.look is not None:
+        # A resolver that forgot EndLook would otherwise leave every later cancel refused, by
+        # either seat, for the rest of the game, with a message about cards nobody is looking at.
+        raise RuntimeError("the action ended with a look still open")
     if game.round is not acted_in:
         return
     if open_response_window(game):
