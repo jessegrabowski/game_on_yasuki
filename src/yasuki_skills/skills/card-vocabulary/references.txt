@@ -5,6 +5,7 @@ docs/design/systems/abilities-and-costs.md
 docs/design/systems/stats.md
 docs/design/systems/gold.md
 docs/design/systems/decisions-and-resumption.md
+docs/design/systems/looking-at-cards.md
 docs/design/systems/units-and-attachments.md
 docs/design/systems/battle.md
 docs/design/systems/the-imperial-favor.md
