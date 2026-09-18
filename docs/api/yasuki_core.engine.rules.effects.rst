@@ -9,6 +9,7 @@ yasuki_core.engine.rules.effects
 
     AdjustCounter
     ApplyEffects
+    Arrange
     Ask
     AskAmount
     AskDistribution
@@ -56,6 +57,7 @@ yasuki_core.engine.rules.effects
     PayFavorCost
     PayGold
     PlaceInProvince
+    PlaceOnDeck
     PutIntoPlay
     RangedAttack
     RecruitCard

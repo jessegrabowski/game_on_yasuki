@@ -7,6 +7,7 @@ yasuki_core.engine.rules.vocabulary.decisions
 
 .. autosummary::
 
+    ArrangeCards
     AssignUnits
     BanishForLegacy
     ChooseAbilityTarget

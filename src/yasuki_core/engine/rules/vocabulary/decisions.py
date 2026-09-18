@@ -723,6 +723,50 @@ class ChooseCards(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ArrangeCards(DecisionRequest):
+    """The seat must put every candidate in an order, as when a card says "put the rest back in any
+    order" or "put them on the bottom of your deck in any order".
+
+    The answer names every candidate exactly once, in the order the seat placed them: the first
+    named is placed first and each later one goes outside it, so for a top placement the last named
+    ends on top and for a bottom placement the last named ends on the bottom. A client that has the
+    seat click cards one at a time onto the deck sends them in click order.
+
+    Attributes
+    ----------
+    resolver : str
+        The registered choice resolver that turns the order into effects.
+    source_id : str or None
+        A card id handed to the resolver as its context, or None.
+    to_bottom : bool
+        Whether the cards are going to the bottom of the deck rather than the top. It decides the
+        wording and which order :attr:`unchanged` is.
+    """
+
+    resolver: str
+    source_id: str | None
+    to_bottom: bool
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        registered = CHOICE_PROMPTS.get(self.resolver)
+        if registered is not None:
+            return registered
+        end = "on the bottom of your deck" if self.to_bottom else "back on your deck"
+        return f"Put them {end} in any order"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        chosen = response.choices
+        return len(chosen) == len(self.candidates) and set(chosen) == set(self.candidates)
+
+    @property
+    def unchanged(self) -> tuple[str, ...]:
+        """The answer that leaves the cards in the order they were looked at, top first: the
+        candidates reversed for a top placement, since the last placed ends on top, and in order for
+        a bottom one. A client offers it as "Keep Order"."""
+        return self.candidates if self.to_bottom else tuple(reversed(self.candidates))
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseDistribution(DecisionRequest):
     """The seat must divide ``count`` identical creations among one or more of the candidates, as
     when a card creates several Followers and its controller chooses how to attach them.

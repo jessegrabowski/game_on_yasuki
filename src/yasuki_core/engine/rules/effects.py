@@ -8,6 +8,7 @@ from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
     ChooseAmount,
     ChooseCards,
     ChooseDistribution,
@@ -1451,6 +1452,39 @@ class EndLook(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class PlaceOnDeck(Effect):
+    """Put ``card_ids`` on one end of ``deck`` in the order given, each outside the one before it,
+    so the last named ends outermost: on top for the top, at the very bottom for the bottom. A card
+    that no longer exists is skipped.
+
+    Attributes
+    ----------
+    card_ids : tuple of str
+        The cards, in placement order.
+    deck : DeckKey
+        The deck they land in.
+    to_bottom : bool, optional
+        Whether they go under the deck rather than on top of it. Default False.
+    """
+
+    card_ids: tuple[str, ...]
+    deck: DeckKey
+    to_bottom: bool = False
+
+    def describe(self) -> str:
+        end = "the bottom" if self.to_bottom else "the top"
+        side = self.deck.side.name.lower()
+        return f"put {len(self.card_ids)} on {end} of {self.deck.owner.name}'s {side} deck"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        for card_id in self.card_ids:
+            card = game.table.cards_by_id.get(card_id)
+            if card is not None:
+                ops.move_card(game.table, card, self.deck, to_bottom=self.to_bottom)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class MoveToDeck(Effect):
     """Move a card into a deck at a stated depth, counting from whichever end names it.
 
@@ -1951,6 +1985,52 @@ class Choose(InterruptingEffect):
             maximum=self.maximum,
             resolver=self.resolver,
             source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class Arrange(InterruptingEffect):
+    """Pause the cascade so ``seat`` puts ``candidates`` in an order, then hand the order to a
+    resolver. The answer's contract is :class:`~.ArrangeCards`'s.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat arranging.
+    candidates : tuple of str
+        The card ids to order.
+    resolver : str
+        The registered choice resolver naming what the order does.
+    source_id : str or None
+        A card id handed to the resolver as its context, or None.
+    to_bottom : bool, optional
+        Whether the cards are going to the bottom of a deck rather than the top. Default False.
+    """
+
+    seat: PlayerId
+    candidates: tuple[str, ...]
+    resolver: str
+    source_id: str | None
+    to_bottom: bool = False
+
+    def pauses(self, game: GameState) -> bool:
+        """Nothing to arrange is nothing to ask: the cascade walks past an empty arrangement."""
+        return bool(self.candidates)
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        return []
+
+    def describe(self) -> str:
+        end = "the bottom" if self.to_bottom else "the top"
+        return f"{self.seat.name} orders {len(self.candidates)} for {end} for {self.resolver}"
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return ArrangeCards(
+            seat=self.seat,
+            candidates=self.candidates,
+            resolver=self.resolver,
+            source_id=self.source_id,
+            to_bottom=self.to_bottom,
         )
 
 

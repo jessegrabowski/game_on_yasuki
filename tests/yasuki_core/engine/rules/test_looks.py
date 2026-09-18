@@ -4,8 +4,17 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import remaining_look, top_of_deck
-from yasuki_core.engine.rules.effects import Choose, EndLook, LookAtTop, MoveToDeck, MoveToHand
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.effects import (
+    Arrange,
+    Choose,
+    EndLook,
+    LookAtTop,
+    MoveToDeck,
+    MoveToHand,
+    PlaceOnDeck,
+)
+from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
+from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, choice_resolver, resolve_effects
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, ChooseCards
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
@@ -174,6 +183,47 @@ def test_declining_a_looked_at_card_leaves_the_deck_as_it_was():
     assert session.game.look is None
 
 
+def test_placing_on_top_leaves_the_last_named_on_top():
+    game = two_seat_game()
+    _stack_fate(game.table, "deep")
+    for card_id in ("a", "b", "c"):
+        register(game.table, fate_card(card_id, P1))
+        game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(game.table.cards_by_id[card_id])
+
+    PlaceOnDeck(("a", "b", "c"), FATE).perform(game)
+
+    assert [card.id for card in reversed(game.table.decks[FATE].cards)] == ["c", "b", "a", "deep"]
+
+
+def test_placing_on_the_bottom_leaves_the_last_named_at_the_bottom():
+    game = two_seat_game()
+    _stack_fate(game.table, "deep")
+    for card_id in ("a", "b", "c"):
+        register(game.table, fate_card(card_id, P1))
+        game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(game.table.cards_by_id[card_id])
+
+    PlaceOnDeck(("a", "b", "c"), FATE, to_bottom=True).perform(game)
+
+    assert [card.id for card in reversed(game.table.decks[FATE].cards)] == ["deep", "a", "b", "c"]
+
+
+def test_placing_a_vanished_card_skips_it():
+    game = two_seat_game()
+    _stack_fate(game.table, "deep")
+
+    PlaceOnDeck(("gone",), FATE).perform(game)
+
+    assert [card.id for card in game.table.decks[FATE].cards] == ["deep"]
+
+
+def test_arranging_nothing_asks_nothing():
+    game = two_seat_game()
+
+    resolve_effects(game, [Arrange(P1, (), "r", None)])
+
+    assert game.pending is None
+
+
 def test_a_second_look_over_an_open_one_raises():
     game = two_seat_game()
     _stack_fate(game.table, "top", "second")
@@ -215,3 +265,8 @@ def test_a_look_left_open_when_its_action_ends_raises():
 
     with pytest.raises(RuntimeError, match="look still open"):
         session.submit(P1, DecisionResponse(("top",)))
+
+
+def test_the_put_back_resolvers_raise_outside_a_look():
+    with pytest.raises(ValueError, match="no look"):
+        CHOICE_RESOLVERS[PUT_BACK_ON_TOP](two_seat_game(), None, ("a",), P1)

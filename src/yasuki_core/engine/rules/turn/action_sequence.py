@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
     AssignUnits,
     BanishForLegacy,
     ChooseAbilityTarget,
@@ -224,6 +225,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_card_choice(game, request, response)
         case ChooseDistribution():
             _apply_card_choice(game, request, response)
+        case ArrangeCards():
+            _apply_card_choice(game, request, response)
         case Confirm():
             _apply_card_choice(game, request, response)
         case ChooseInvestAmount():
@@ -296,7 +299,12 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
 
 def _apply_card_choice(
     game: GameState,
-    request: ChooseCards | ChooseAmount | ChooseOption | ChooseDistribution | Confirm,
+    request: ChooseCards
+    | ChooseAmount
+    | ChooseOption
+    | ChooseDistribution
+    | ArrangeCards
+    | Confirm,
     response: DecisionResponse,
 ) -> None:
     resolver = triggers.CHOICE_RESOLVERS[request.resolver]

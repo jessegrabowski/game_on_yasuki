@@ -2,6 +2,7 @@ from typing import Protocol, runtime_checkable
 
 from yasuki_core.engine.rules.vocabulary.decisions import (
     BanishForLegacy,
+    ArrangeCards,
     ChooseDistribution,
     ChooseLegacyCard,
     ChoosePayment,
@@ -40,15 +41,17 @@ class AutoAgent:
     candidates that the request accepts (the whole list for an ordering). Generic by construction,
     it leans on the request's own ``accepts`` rather than knowing the decision type.
 
-    One answer a prefix of distinct candidates cannot express is handled rather than left to fail: a
-    division names one candidate several times, and is answered here by heaping the whole of it onto
-    the first."""
+    Two answers get a shape of their own. A division names one candidate several times, and is
+    answered by heaping the whole of it onto the first. An ordering is answered with the order the
+    cards already had, since the whole list as a prefix would place them back reversed."""
 
     name = "auto"
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
         if isinstance(request, ChooseDistribution):
             return DecisionResponse(request.candidates[:1] * request.count)
+        if isinstance(request, ArrangeCards):
+            return DecisionResponse(request.unchanged)
         for size in range(len(request.candidates) + 1):
             response = DecisionResponse(request.candidates[:size])
             if request.accepts(response):
