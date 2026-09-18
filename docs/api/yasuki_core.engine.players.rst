@@ -9,6 +9,7 @@ yasuki_core.engine.players
 
     PlayerId
     Rulebook
+    Trait
 
 .. automodule:: yasuki_core.engine.players
     :members:

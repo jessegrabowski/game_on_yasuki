@@ -58,7 +58,7 @@ class Destroyed:
     ----------
     card_id : str
         The card destroyed.
-    cause : PlayerId or Rulebook
+    cause : PlayerId, Rulebook or Trait
         Who or what destroyed it.
     location : Location, optional
         Where the card stood when it was destroyed. It is in its discard by the time this is

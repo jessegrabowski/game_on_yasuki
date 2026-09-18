@@ -1,5 +1,5 @@
 from yasuki_core import ruleset
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility, itself
@@ -212,7 +212,7 @@ def _matsu_gonshiro_soul_of_matsu_shimei_before_entering_play(
 ) -> list[Effect]:
     """Before Gonshiro enters play, dishonor him. "You must assign Gonshiro to a battlefield
     whenever legal" is a restriction on the seat and is not modeled."""
-    return [Dishonor(card.id, card.owner)]
+    return [Dishonor(card.id, Trait(card.id))]
 
 
 def _matsu_gonshiro_soul_of_matsu_shimei_unit_gold_cost(
