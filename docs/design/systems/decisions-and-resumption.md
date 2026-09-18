@@ -83,6 +83,10 @@ the question is asked again on the board it was first asked on. {func}`~.cancel`
 narrower owner of the clear. It exists for replaying tapes that hold a `Cancel`, and it clears
 after its undo, so a refused cancel leaves the question in place.
 
+Backing out is refused outright while `GameState.look` is set, whatever the request's own
+`cancellable` says. A seat that has looked at the top of its deck has information it cannot give
+back, so every question asked about those cards is committed the moment the look opened.
+
 ## The unfinished work
 
 `GameState.stack` holds what is waiting, last in and first out. A cascade that pauses mid-list
