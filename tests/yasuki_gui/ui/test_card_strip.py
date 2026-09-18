@@ -1,73 +1,23 @@
 import tkinter as tk
-from unittest.mock import Mock
 
 import pytest
 
-from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.ui.card_preview import CardPreview
-from yasuki_gui.ui.card_strip import CardStrip, card_face
+from yasuki_gui import theme
+from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.ui.card_strip import CELL_PAD, STRIP_H, STRIP_W, CardStrip
+from yasuki_gui.ui.floating_panel import BORDER, TITLEBAR_H
+
+from tests.yasuki_core.engine.builders import personality
+from tests.yasuki_gui.conftest import DummyEventNamespace, PreviewOnlyImages
 
 
-class _Images:
-    """Records which face was asked for, so a test reads the decision rather than the pixels.
-
-    A sized request is the preview's, and an unsized one is a cell's, because cells with no art
-    fall through to named placeholders while the preview needs a real Tk image.
-    """
-
-    def __init__(self, front=None, back=None, preview=None):
-        self._front, self._back, self._preview = front, back, preview
-        self.asked: list[str] = []
-
-    def front(self, image_front, bowed, dishonorable, target=None):
-        self.asked.append("front")
-        return self._preview if target else self._front
-
-    def back(self, side, bowed, dishonorable, image_back, target=None):
-        self.asked.append("back")
-        return self._preview if target else self._back
-
-
-def _card(*, face_up: bool, name: str = "A Card"):
-    card = Mock()
-    card.name = name
-    card.face_up = face_up
-    card.bowed = False
-    card.dishonorable = False
-    card.side = Side.FATE
-    card.image_front = None
-    card.image_back = None
+def _card(card_id: str = "a-card", *, face_up: bool = True, bowed: bool = False):
+    card = personality(card_id, name=card_id.title())
+    if not face_up:
+        card.turn_face_down()
+    if bowed:
+        card.bow()
     return card
-
-
-@pytest.mark.parametrize("face_up, expected", [(True, "front"), (False, "back")])
-def test_a_card_shows_the_face_it_is_turned_to(face_up, expected):
-    images = _Images(front="front-art", back="back-art")
-
-    photo = card_face(images, _card(face_up=face_up))
-
-    assert images.asked == [expected]
-    assert photo == f"{expected}-art"
-
-
-def test_a_strip_of_backs_shows_only_the_face_up_card():
-    """The property the opponent-hand view rests on: one revealed card among concealed ones is the
-    only one a reader can identify."""
-    images = _Images(front="front-art", back="back-art")
-    hand = [
-        _card(face_up=False),
-        _card(face_up=True, name="The Imperial Favor"),
-        _card(face_up=False),
-    ]
-
-    faces = [card_face(images, card) for card in hand]
-
-    assert faces == ["back-art", "front-art", "back-art"]
-
-
-def test_a_missing_image_falls_through_to_the_caller():
-    """A card with no art returns None so the strip can draw its name instead of an empty cell."""
-    assert card_face(_Images(), _card(face_up=True)) is None
 
 
 @pytest.fixture
@@ -83,17 +33,21 @@ def board():
         root.destroy()
 
 
-@pytest.fixture
-def art(board):
-    """A real one-pixel image, for the preview label Tk refuses to build from anything else."""
-    return tk.PhotoImage(master=board, width=1, height=1)
+def _center_x(strip, tag) -> int:
+    return strip._drawn[tag].x
+
+
+def _texts(canvas) -> list[str]:
+    return [
+        canvas.itemcget(item, "text") for item in canvas.find_all() if canvas.type(item) == "text"
+    ]
 
 
 def test_showing_a_pile_titles_the_strip_after_it(board):
     """One panel serves every pile, so what it is showing has to be readable off its title bar."""
-    strip = CardStrip(board, _Images())
+    strip = CardStrip(board, PreviewOnlyImages())
 
-    strip.show([_card(face_up=True)], "Fate Discard")
+    strip.show([_card()], "Fate Discard")
     assert strip._title.cget("text") == "Fate Discard"
 
     strip.show([], "Dynasty Banish")
@@ -102,145 +56,116 @@ def test_showing_a_pile_titles_the_strip_after_it(board):
 
 def test_showing_a_pile_replaces_the_one_before_it(board):
     """Reopening on another pile must not leave the previous pile's cards behind it."""
-    strip = CardStrip(board, _Images())
-    strip.show([_card(face_up=True), _card(face_up=True)], "Fate Discard")
+    strip = CardStrip(board, PreviewOnlyImages())
+    strip.show([_card("one"), _card("two")], "Fate Discard")
 
-    strip.show([_card(face_up=True)], "Dynasty Discard")
+    strip.show([_card("three")], "Dynasty Discard")
 
-    assert len(strip._row.winfo_children()) == 1
-
-
-def test_the_scrollregion_is_re_read_when_the_row_settles(board):
-    """The cards are laid out after the panel is placed, so a scrollregion measured while filling
-    would be the wrong size until something forced a redraw."""
-    strip = CardStrip(board, _Images())
-    strip.open_at(10, 10)
-    strip.show([_card(face_up=True), _card(face_up=True)], "Fate Discard")
-
-    assert strip._row.bind("<Configure>"), "the row re-reports its size as it is laid out"
-    strip._fit_scrollregion()
-    assert strip._canvas.cget("scrollregion")
+    assert _texts(strip.canvas) == ["Three"]
 
 
-def _strip_with_preview(board, art):
-    """A strip wired the way the game window wires it: one preview drawn on the window."""
-    strip = CardStrip(board, _Images(preview=art))
-    strip.preview = CardPreview(board, _Images(preview=art))
-    return strip
+def test_cards_run_left_to_right_a_pad_apart(board):
+    strip = CardStrip(board, PreviewOnlyImages())
+
+    strip.show([_card("one"), _card("two")], "Fate Discard")
+
+    assert _center_x(strip, "card:one") == CELL_PAD + CARD_W // 2
+    assert _center_x(strip, "card:two") == 2 * CELL_PAD + CARD_W + CARD_W // 2
 
 
-def test_the_preview_key_enlarges_the_hovered_card(board, art):
-    """The board previews a card under the pointer with V. A card in the strip reads the
-    same way."""
-    strip = _strip_with_preview(board, art)
-    strip.show([_card(face_up=True)], "Fate Discard")
-    strip.open_at(10, 10)
-    strip._set_hovered((_card(face_up=True), strip))
+def test_a_bowed_card_takes_its_turned_width(board):
+    strip = CardStrip(board, PreviewOnlyImages())
 
-    strip._toggle_preview()
+    strip.show([_card("one", bowed=True), _card("two")], "Fate Discard")
 
-    assert strip.preview.showing
+    assert _center_x(strip, "card:one") == CELL_PAD + CARD_H // 2
+    assert _center_x(strip, "card:two") == 2 * CELL_PAD + CARD_H + CARD_W // 2
 
 
-def test_the_preview_key_does_nothing_with_no_card_under_the_pointer(board, art):
-    """Pressing it over the panel's chrome or empty space must not conjure a preview."""
-    strip = _strip_with_preview(board, art)
-    strip.show([], "Fate Discard")
-    strip.open_at(10, 10)
+def test_the_strip_scrolls_over_exactly_the_row(board):
+    strip = CardStrip(board, PreviewOnlyImages())
 
-    strip._toggle_preview()
+    strip.show([_card("one"), _card("two")], "Fate Discard")
 
-    assert not strip.preview.showing
+    right = 3 * CELL_PAD + 2 * CARD_W
+    assert strip.canvas.cget("scrollregion") == f"0 0 {right} {2 * CELL_PAD + CARD_H}"
 
 
-def test_the_preview_key_is_ignored_while_the_strip_is_closed(board, art):
-    """The key is bound for the panel's whole life, so a closed strip has to leave the press to the
-    board's own preview rather than acting on cards nobody can see."""
-    strip = _strip_with_preview(board, art)
-    strip._set_hovered((_card(face_up=True), strip))
+def test_a_strip_of_backs_names_only_the_face_up_card(board):
+    """The property the opponent-hand view rests on: one revealed card among concealed ones is the
+    only one a reader can identify."""
+    strip = CardStrip(board, PreviewOnlyImages())
 
-    strip._toggle_preview()
+    strip.show(
+        [_card("a", face_up=False), _card("favor", face_up=True), _card("b", face_up=False)],
+        "Hand",
+    )
 
-    assert not strip.preview.showing
-
-
-def test_a_second_press_puts_the_preview_away(board, art):
-    strip = _strip_with_preview(board, art)
-    strip.open_at(10, 10)
-    strip._set_hovered((_card(face_up=True), strip))
-    strip._toggle_preview()
-
-    strip._toggle_preview()
-
-    assert not strip.preview.showing
+    assert _texts(strip.canvas) == ["Favor"]
 
 
-def test_closing_the_strip_drops_its_preview(board, art):
-    strip = _strip_with_preview(board, art)
-    strip.open_at(10, 10)
-    strip._set_hovered((_card(face_up=True), strip))
-    strip._toggle_preview()
-
-    strip.close()
-
-    assert not strip.preview.showing
-
-
-def test_reopening_the_strip_does_not_stack_preview_keys(board, art):
-    """The key is bound once for the panel's life. Binding it per open would stack handlers, and an
-    even number of them toggles the preview straight back off, so V would silently stop working
-    after the first pile."""
-    strip = _strip_with_preview(board, art)
-    key = f"<KeyPress-{strip.hotkeys.view}>"
-    bound_once = strip.bind_all(key)
-
-    for pile in ("Fate Discard", "Dynasty Discard", "Fate Banish"):
-        strip.open_at(10, 10)
-        strip.show([_card(face_up=True)], pile)
-
-    assert strip.bind_all(key) == bound_once
-
-
-def test_a_pile_with_no_art_still_names_every_card(board):
+def test_a_pile_with_no_art_names_its_face_up_cards_and_draws_backs(board):
     """Art is fetched over the network and cached, so a strip opened before it arrives has to read
     as the pile it is rather than as a row of blank cells."""
-    strip = CardStrip(board, _Images())
+    strip = CardStrip(board, PreviewOnlyImages())
 
-    strip.show([_card(face_up=True, name="Hida Kisada"), _card(face_up=False)], "Fate Discard")
+    strip.show([_card("hida-kisada"), _card("hidden", face_up=False)], "Fate Discard")
 
-    placeholders = [
-        child
-        for holder in strip._row.winfo_children()
-        for child in holder.winfo_children()
-        if isinstance(child, tk.Canvas)
+    assert _texts(strip.canvas) == ["Hida-Kisada"]
+    backs = [
+        item
+        for item in strip.canvas.find_all()
+        if strip.canvas.type(item) == "rectangle"
+        and strip.canvas.itemcget(item, "fill") == theme.CARD_BACK
     ]
-    assert len(placeholders) == 2
-    assert placeholders[0].itemcget(1, "text") == "Hida Kisada"
+    assert len(backs) == 1
 
 
-def test_an_open_strip_leaves_a_board_preview_alone(board, art):
-    """The key is bound app-wide and the strip's handler runs after the board's, so a strip that
-    took every press would close the preview the board had just opened -- with the strip open, V
-    over a battlefield card would do nothing at all."""
-    strip = _strip_with_preview(board, art)
+def test_a_scrolled_strip_finds_the_card_under_the_pointer(board):
+    """A click lands in window coordinates and the cards sit in canvas coordinates, which part ways
+    the moment the strip scrolls."""
+    strip = CardStrip(board, PreviewOnlyImages())
     strip.open_at(10, 10)
-    strip.show([_card(face_up=True)], "Fate Discard")
-    strip._set_hovered(None)  # the pointer is over the board, not the strip
-    strip.preview.show(_card(face_up=True), board.winfo_rootx(), board.winfo_rooty())
+    strip.show([_card(f"card-{index}") for index in range(20)], "Fate Deck")
+    strip.canvas.xview_moveto(1.0)
+    strip.update_idletasks()
+    scrolled_by = strip.canvas.canvasx(0)
+    assert scrolled_by > 0
 
-    strip._toggle_preview()
+    at_window_x = _center_x(strip, "card:card-19") - scrolled_by
+    assert strip.card_at(DummyEventNamespace(x=at_window_x, y=CELL_PAD + CARD_H // 2)) == "card-19"
 
-    assert strip.preview.showing
 
-
-def test_an_open_strip_still_closes_its_own_preview(board, art):
-    """The guard above must not cost the strip its own second-press close."""
-    strip = _strip_with_preview(board, art)
+def test_the_scrollbar_is_laid_out_under_the_cards(board):
+    """The canvas already fills the body when the strip adds its scrollbar, and pack hands out room
+    in packing order, so a scrollbar packed after it is mapped nowhere and the pile past the panel's
+    edge is unreachable."""
+    strip = CardStrip(board, PreviewOnlyImages())
     strip.open_at(10, 10)
-    strip._set_hovered((_card(face_up=True), strip))
-    strip._toggle_preview()
-    assert strip.preview.showing
+    strip.show([_card(f"card-{index}") for index in range(20)], "Fate Deck")
+    strip.update_idletasks()
 
-    strip._toggle_preview()
+    assert strip.body.pack_slaves()[0] is strip._scroll
 
-    assert not strip.preview.showing
+
+def test_the_strip_opens_exactly_one_row_tall(board):
+    """The strip never wraps, and its height is what tells the player so."""
+    strip = CardStrip(board, PreviewOnlyImages())
+    strip.open_over(10, 10, STRIP_W, STRIP_H)
+    strip.show([_card("one")], "Fate Discard")
+    strip.update_idletasks()
+
+    assert strip.place_info()["height"] == str(STRIP_H)
+    row_and_bar = 2 * CELL_PAD + CARD_H + strip._scroll.winfo_reqheight()
+    assert STRIP_H - TITLEBAR_H - 2 * BORDER == row_and_bar
+
+
+def test_the_wheel_scrolls_the_row(board):
+    strip = CardStrip(board, PreviewOnlyImages())
+    strip.open_at(10, 10)
+    strip.show([_card(f"card-{index}") for index in range(20)], "Fate Deck")
+    strip.update_idletasks()
+
+    strip._on_wheel(DummyEventNamespace(delta=-1))
+
+    assert strip.canvas.canvasx(0) == CARD_W + CELL_PAD
