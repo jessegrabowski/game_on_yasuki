@@ -8,6 +8,7 @@ from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
     ChooseAmount,
     ChooseCards,
     ChooseDistribution,
@@ -16,6 +17,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionRequest,
 )
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     CounterGained,
@@ -1390,6 +1392,99 @@ class BanishTopFate(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class LookAtTop(Effect):
+    """Let ``seat`` look at the top ``count`` cards of ``deck``, opening a :class:`~.Look`.
+
+    The cards stay where they are: the seat reads them and the decisions that follow say where each
+    goes. Each card gains the seat as a peeker. A deck shorter than ``count`` shows what it has.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat looking.
+    deck : DeckKey
+        The deck looked at.
+    count : int
+        How many cards from the top.
+    """
+
+    seat: PlayerId
+    deck: DeckKey
+    count: int
+
+    def describe(self) -> str:
+        side = self.deck.side.name.lower()
+        return f"{self.seat.name} looks at the top {self.count} of {self.deck.owner.name}'s {side} deck"
+
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
+        """An empty deck has nothing to look at."""
+        return bool(game.table.decks[self.deck].cards)
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Raise RuntimeError if a look is already open: two at once would overwrite each other, and
+        the first card's EndLook would close the second's."""
+        if game.look is not None:
+            raise RuntimeError("a look is already open")
+        seen = list(reversed(game.table.decks[self.deck].peek(self.count)))
+        for card in seen:
+            card.add_peeker(self.seat)
+        game.look = Look(self.seat, self.deck, tuple(card.id for card in seen))
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class EndLook(Effect):
+    """Close the open :class:`~.Look`, once the last question about its cards is answered.
+
+    The cards keep their peeker: a card that stayed in the deck is still one the seat has read, and
+    entering a deck from anywhere else scrubs it anyway.
+    """
+
+    def describe(self) -> str:
+        return "the look ends"
+
+    def is_interruptible(self) -> bool:
+        return False  # bookkeeping, not something a card can act against
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.look = None
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class PlaceOnDeck(Effect):
+    """Put ``card_ids`` on one end of ``deck`` in the order given, each outside the one before it,
+    so the last named ends outermost: on top for the top, at the very bottom for the bottom. A card
+    that no longer exists is skipped.
+
+    Attributes
+    ----------
+    card_ids : tuple of str
+        The cards, in placement order.
+    deck : DeckKey
+        The deck they land in.
+    to_bottom : bool, optional
+        Whether they go under the deck rather than on top of it. Default False.
+    """
+
+    card_ids: tuple[str, ...]
+    deck: DeckKey
+    to_bottom: bool = False
+
+    def describe(self) -> str:
+        end = "the bottom" if self.to_bottom else "the top"
+        side = self.deck.side.name.lower()
+        return f"put {len(self.card_ids)} on {end} of {self.deck.owner.name}'s {side} deck"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        for card_id in self.card_ids:
+            card = game.table.cards_by_id.get(card_id)
+            if card is not None:
+                ops.move_card(game.table, card, self.deck, to_bottom=self.to_bottom)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class MoveToDeck(Effect):
     """Move a card into a deck at a stated depth, counting from whichever end names it.
 
@@ -1890,6 +1985,52 @@ class Choose(InterruptingEffect):
             maximum=self.maximum,
             resolver=self.resolver,
             source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class Arrange(InterruptingEffect):
+    """Pause the cascade so ``seat`` puts ``candidates`` in an order, then hand the order to a
+    resolver. The answer's contract is :class:`~.ArrangeCards`'s.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat arranging.
+    candidates : tuple of str
+        The card ids to order.
+    resolver : str
+        The registered choice resolver naming what the order does.
+    source_id : str or None
+        A card id handed to the resolver as its context, or None.
+    to_bottom : bool, optional
+        Whether the cards are going to the bottom of a deck rather than the top. Default False.
+    """
+
+    seat: PlayerId
+    candidates: tuple[str, ...]
+    resolver: str
+    source_id: str | None
+    to_bottom: bool = False
+
+    def pauses(self, game: GameState) -> bool:
+        """Nothing to arrange is nothing to ask: the cascade walks past an empty arrangement."""
+        return bool(self.candidates)
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        return []
+
+    def describe(self) -> str:
+        end = "the bottom" if self.to_bottom else "the top"
+        return f"{self.seat.name} orders {len(self.candidates)} for {end} for {self.resolver}"
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return ArrangeCards(
+            seat=self.seat,
+            candidates=self.candidates,
+            resolver=self.resolver,
+            source_id=self.source_id,
+            to_bottom=self.to_bottom,
         )
 
 

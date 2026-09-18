@@ -2,7 +2,11 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.bots.agents import AGENTS, AutoAgent, make_agent
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseDistribution, DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
+    ChooseDistribution,
+    DiscardToHandSize,
+)
 
 
 def test_auto_agent_answers_with_the_shortest_accepting_prefix():
@@ -54,3 +58,12 @@ def test_an_agent_built_by_name_answers():
 def test_an_unknown_agent_name_says_what_is_available():
     with pytest.raises(KeyError, match="paying"):
         make_agent("clever")
+
+
+def test_auto_agent_keeps_the_order_it_was_shown():
+    """The whole list as a prefix would place the cards back reversed, so an ordering is answered
+    with the order they already had."""
+    request = ArrangeCards(PlayerId.P1, ("top", "mid", "low"), "r", None, to_bottom=False)
+    response = AutoAgent().decide(request, view=None)
+    assert request.accepts(response)
+    assert response.choices == ("low", "mid", "top")

@@ -138,12 +138,25 @@ class EngineSession:
             self.game = replay(self.log)
             raise
 
+    def can_cancel(self, seat: PlayerId) -> bool:
+        """Whether :meth:`cancel` would take ``seat``'s request right now: a decision of its own is
+        pending, the request allows backing out, and no cards are being looked at. A client offers
+        Cancel on this and nothing else, so it never offers a way out the engine then refuses."""
+        pending = self.game.pending
+        return (
+            pending is not None
+            and pending.seat is seat
+            and pending.cancellable
+            and self.game.look is None
+        )
+
     def cancel(self, seat: PlayerId) -> None:
         """Back out of ``seat``'s pending decision, unwinding the whole action that raised it.
 
         Backing out of one step of a multi-step action undoes every step of it, including the cost
         it has already paid. See :meth:`abort`. Raise ``RuntimeError`` if no decision is pending, or
-        ``ValueError`` if ``seat`` is not the seat being asked or the action cannot be unwound.
+        ``ValueError`` if ``seat`` is not the seat being asked, the seat is looking at cards, or the
+        action cannot be unwound.
         """
         pending = self.game.pending
         if pending is None:
@@ -152,6 +165,8 @@ class EngineSession:
             raise ValueError(f"{seat.name} cannot cancel {pending.seat.name}'s decision")
         if not pending.cancellable:
             raise ValueError(f"{type(pending).__name__} cannot be canceled")
+        if self.game.look is not None:
+            raise ValueError("cards have been looked at, which cannot be taken back")
         if not self.abort(seat):
             raise ValueError("the opportunity has passed; there is nothing left to unwind")
 
@@ -169,15 +184,16 @@ class EngineSession:
 
         Refuse once the action has moved anything another seat holds. Taking back a card an opponent
         has already drawn does not take back their having seen it, so an action that reached across
-        the table is committed the moment it did. Refuse likewise for a decision the rules force,
-        for an action already complete, once another seat has resolved a step of its own, and while
-        another seat is the one being asked. An action that has handed the question on is past the
-        point where its announcer may take it back.
+        the table is committed the moment it did. Refuse likewise while the seat is looking at cards
+        in a deck, which it cannot unread, for a decision the rules force, for an action already
+        complete, once another seat has resolved a step of its own, and while another seat is the
+        one being asked. An action that has handed the question on is past the point where its
+        announcer may take it back.
 
         Return whether anything was unwound.
         """
         pending = self.game.pending
-        if pending is None or not pending.cancellable:
+        if pending is None or not pending.cancellable or self.game.look is not None:
             return False  # nothing in flight, or a decision the seat is not allowed to back out of
         if pending.seat is not seat:
             return False  # another seat is mid-decision; the question is not this seat's to erase

@@ -50,8 +50,8 @@ in the data.
 
 `docs/design/card_vocabulary.md` lists the vocabulary itself. Then one page per system:
 `effects.md`, `triggers-and-the-cascade.md`, `abilities-and-costs.md`, `stats.md`, `gold.md`,
-`decisions-and-resumption.md`, `units-and-attachments.md`, `battle.md` and `the-imperial-favor.md`,
-all under `docs/design/systems/`.
+`decisions-and-resumption.md`, `looking-at-cards.md`, `units-and-attachments.md`, `battle.md` and
+`the-imperial-favor.md`, all under `docs/design/systems/`.
 
 Handlers for printed cards are the `implementing-a-card` skill. The turn machine that fires events
 and offers actions is `turns-and-actions`.

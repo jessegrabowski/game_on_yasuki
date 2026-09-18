@@ -160,6 +160,7 @@ numpydoc_xref_aliases = {
     "LOCAL_DEBUG_OVERRIDE": "yasuki_gui.ui.game_window.LOCAL_DEBUG_OVERRIDE",
     "LobbyModifier": "yasuki_core.engine.rules.vocabulary.modifiers.LobbyModifier",
     "Location": "yasuki_core.engine.table.Location",
+    "Look": "yasuki_core.engine.rules.vocabulary.looks.Look",
     "Minimum": "yasuki_core.engine.rules.vocabulary.modifiers.Minimum",
     "Modifier": "yasuki_core.engine.rules.vocabulary.modifiers.Modifier",
     "Moment": "yasuki_core.engine.rules.turn.structure.Moment",

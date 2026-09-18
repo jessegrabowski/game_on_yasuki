@@ -6,6 +6,7 @@ from yasuki_core.bots.policies import PassPolicy
 from yasuki_core.engine.driver import Controls, MAX_ACTIONS_PER_ROUND
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.board.queries import remaining_look
 from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for, invest_amounts
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.interrupts import rulebook_interrupt
@@ -277,6 +278,8 @@ class GameRunner:
             return None
         if isinstance(pending, Confirm):
             return None  # a question is answered yes or no, wherever its subjects happen to sit
+        if set(pending.candidates) <= set(self.looked_at()):
+            return None  # the cards are in view in the look window, not down in a pile
         table = self.session.game.table
         if any(card_id not in table.cards_by_id for card_id in pending.candidates):
             return None  # not cards at all. An Invest amount is answered by buttons
@@ -290,6 +293,19 @@ class GameRunner:
         # unless a Legacy card happens to be sitting there.
         pool = self.legacy_search_pool() if legacy else self._piles_holding(candidates)
         return SearchView(self._panes(pool), candidates)
+
+    def looked_at(self) -> tuple[str, ...]:
+        """The ids of the cards the human is looking at in a deck, still there, top first. Empty
+        when no look is open or it is the opponent's."""
+        game = self.session.game
+        if game.look is None or game.look.seat is not self.human:
+            return ()
+        return remaining_look(game)
+
+    def look_cards(self) -> list[L5RCard]:
+        """The cards of :meth:`looked_at`, for a window to draw."""
+        table = self.session.game.table
+        return [table.cards_by_id[card_id] for card_id in self.looked_at()]
 
     def _piles_holding(self, candidates: set[str]) -> list[L5RCard]:
         """Every card in each of the human's piles that holds a candidate. The whole pile is shown
@@ -416,6 +432,10 @@ class GameRunner:
         """Answer the human's pending decision. A request whose answer carries more than the chosen
         ids (a payment and its boosts) is answered with that request's own response type."""
         self.session.submit(self.human, response)
+
+    def can_cancel(self) -> bool:
+        """Whether the human may back out of the pending decision right now."""
+        return self.session.can_cancel(self.human)
 
     def cancel(self) -> None:
         """Back out of the human's pending decision, undoing the action that raised it."""

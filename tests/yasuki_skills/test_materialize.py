@@ -22,6 +22,14 @@ def _rural_market_entered_play(ctx):
 def _canonical_order(cards):
     ordered = sorted(cards)
     return ordered
+
+
+class Market:
+    def produce(self):
+        return 2
+
+    def describe(self):
+        return "market"
 '''
 
 
@@ -68,6 +76,30 @@ def test_a_whole_object_is_included_with_its_decorator(docs: Path):
     assert "_canonical_order" not in body
     assert body.startswith("Before.")
     assert body.rstrip().endswith("After.")
+
+
+def test_a_method_is_included_by_its_dotted_name(docs: Path):
+    page = written(
+        docs,
+        "```{literalinclude} ../../src/yasuki_core/cards.py\n"
+        ":pyobject: Market.produce\n:language: python\n```\n",
+    )
+
+    body = render(page, docs)
+
+    assert "def produce(self):" in body
+    assert "def describe" not in body
+    assert "class Market" not in body
+
+
+def test_a_method_the_class_does_not_have_fails_the_render(docs: Path):
+    page = written(
+        docs,
+        "```{literalinclude} ../../src/yasuki_core/cards.py\n:pyobject: Market.sell\n```\n",
+    )
+
+    with pytest.raises(MaterializeError, match="Market.sell"):
+        render(page, docs)
 
 
 def test_the_included_text_is_fenced_in_the_declared_language(docs: Path):

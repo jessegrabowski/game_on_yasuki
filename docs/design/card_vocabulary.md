@@ -44,6 +44,7 @@ deferred through `Then` instead.
 .. autosummary::
 
    AdjustCounter
+   Arrange
    Ask
    AskAmount
    AskDistribution
@@ -69,6 +70,8 @@ deferred through `Then` instead.
    Fear
    GainGold
    GainHonor
+   LookAtTop
+   EndLook
    LoseGame
    WinGame
    MeleeAttack
@@ -90,6 +93,7 @@ deferred through `Then` instead.
    PayFavorCost
    PayGold
    PlaceInProvince
+   PlaceOnDeck
    PutIntoPlay
    RangedAttack
    RecruitCard

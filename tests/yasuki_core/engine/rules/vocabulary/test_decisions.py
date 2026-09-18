@@ -5,6 +5,7 @@ from yasuki_core.engine.players import PlayerId
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
     ChooseInterrupt,
     interrupt_choice,
     interrupt_token,
@@ -386,3 +387,30 @@ def test_an_interrupt_token_missing_its_card_or_key_is_refused(token):
 def test_an_interrupt_names_the_effect_it_guards():
     assert _interrupt().prompt() == "P1 gains 3 honor. Take an Interrupt?"
     assert _interrupt().confirm_label == "Pass"
+
+
+def test_a_may_choice_offers_a_decline_and_a_must_does_not():
+    assert _choose(0, 1).decline_label == "Decline"
+    assert _choose(1, 1).decline_label is None
+
+
+def _arrange(*candidates: str, to_bottom: bool = False) -> ArrangeCards:
+    return ArrangeCards(PlayerId.P1, candidates, "r", "src", to_bottom)
+
+
+def test_an_arrangement_is_every_candidate_exactly_once():
+    assert _arrange("a", "b", "c").accepts(DecisionResponse(("c", "a", "b")))
+    assert not _arrange("a", "b", "c").accepts(DecisionResponse(("a", "b")))
+    assert not _arrange("a", "b", "c").accepts(DecisionResponse(("a", "b", "c", "d")))
+    assert not _arrange("a", "b", "c").accepts(DecisionResponse(("a", "a", "b")))
+
+
+def test_the_unchanged_arrangement_keeps_the_looked_at_order_at_either_end():
+    """The last placed ends outermost, so keeping the top order places bottom-up and keeping the
+    bottom order places top-down."""
+    assert _arrange("top", "mid", "low").unchanged == ("low", "mid", "top")
+    assert _arrange("top", "mid", "low", to_bottom=True).unchanged == ("top", "mid", "low")
+
+
+def test_an_arrangement_cannot_be_backed_out_of():
+    assert not _arrange("a").cancellable

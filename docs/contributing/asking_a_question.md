@@ -62,6 +62,11 @@ effects:
 
 `@choice_resolver` on that function binds the two.
 
+A minimum of zero makes the choice a "may". Where the cards are shown in a window of their own,
+as a look at the top of a deck is, the client offers a Decline button beside Confirm so that saying
+no is a click of its own. That is {attr}`~.DecisionRequest.decline_label`, and a card never sets
+it.
+
 ## A mode
 
 {class}`~.AskOption` offers a fixed set of answers that are not cards. "A target player gains or
@@ -91,6 +96,21 @@ question that is left. {card}`Hungry Moon` and {card}`Bayushi Gihei` call it.
 ```
 
 A recipient named twice gets two.
+
+## An order
+
+{class}`~.Arrange` asks the seat to put cards in an order, for "put the rest back in any order".
+{card}`Banish All Doubt` looks at four, puts one in hand, and puts the other three on the bottom:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/the_harbinger.py
+:pyobject: _resolve_banish_all_doubt
+:language: python
+```
+
+The resolver it names, `PUT_ON_BOTTOM`, is the rulebook's, so the card writes none of its own. The
+answer comes back in the order the seat placed the cards, first placed first, and
+{class}`~.PlaceOnDeck` puts the last one outermost. [Looking at cards](../design/systems/looking-at-cards.md)
+has the whole shape, including the look the cards sit in while the questions are asked.
 
 ## Two rules that catch people
 

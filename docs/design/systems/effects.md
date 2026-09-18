@@ -53,6 +53,14 @@ def perform(self, game: GameState) -> list[GameEvent]:
 Nothing on the board moved. The modifier is recorded, and every later read of that stat adds it up.
 [Stats](stats.md) covers the read path.
 
+{class}`~.LookAtTop` is the same shape for a card that reads "look at the top four cards of your
+Fate deck". It moves nothing: it writes a {class}`~.Look` to `game.look` naming the seat, the deck
+and the cards top first, and marks the seat as a peeker of each. The questions that follow are
+ordinary {class}`~.Choose` effects whose candidates are those cards, and a resolver asking the next
+one reads {func}`~.remaining_look` so a card an earlier answer moved out has left the pool.
+{class}`~.EndLook` clears the slot when the last question is answered. While a look is open no
+decision can be backed out of, because the seat has read cards it cannot unread.
+
 ## Which effects another card can react to
 
 A trigger fires on an event, so an effect that raises none is invisible to every other card.

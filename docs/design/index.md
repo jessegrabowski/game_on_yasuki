@@ -17,6 +17,7 @@ systems/turn-flow
 systems/actions-and-legality
 systems/action-lifecycles
 systems/decisions-and-resumption
+systems/looking-at-cards
 systems/the-replay-log
 systems/units-and-attachments
 systems/battle

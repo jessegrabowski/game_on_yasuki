@@ -1,23 +1,38 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import (
     RecruitTiming,
     register_ability,
     register_invest,
     register_recruit_timing,
 )
-from yasuki_core.engine.rules.board.queries import attack_targets, owned_personalities
+from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
+    has_keyword,
+    owned_personalities,
+    remaining_look,
+    top_of_deck,
+)
+from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.units.membership import shares_unit
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
+    Arrange,
     AttackEffect,
+    Bow,
     Choose,
     CounterOnAttachedProvince,
+    DrawCard,
     Effect,
+    EndLook,
+    LookAtTop,
+    MoveToDeck,
     MoveToHand,
+    PayGold,
     RangedAttack,
     RecruitCard,
     Rehonor,
@@ -67,6 +82,72 @@ register_ability(
         cost=bow_cost,
         targets=_agasha_beiru_targets,
         effects=_agasha_beiru_effects,
+    ),
+)
+
+
+# --- Beset from All Sides ---
+
+BESET_GOLD = 2
+
+
+def _beset_from_all_sides_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [PayGold(source.owner, BESET_GOLD, source.name)]
+
+
+def _beset_from_all_sides_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your unbowed Courtiers."""
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if not card.bowed and has_keyword(game, card, keywords.COURTIER)
+    ]
+
+
+def _beset_from_all_sides_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Bow the Courtier and look at as many cards as his Chi. A Courtier of no Chi, or an empty
+    deck, leaves only the draw."""
+    seat = source.owner
+    fate = DeckKey(seat, Side.FATE)
+    seen = top_of_deck(game, fate, effective_chi(game, target))
+    if not seen:
+        return [Bow(target.id), DrawCard(seat)]
+    return [
+        Bow(target.id),
+        LookAtTop(seat, fate, len(seen)),
+        Choose(seat, seen, 0, 1, "beset_from_all_sides", source.id),
+        DrawCard(seat),
+    ]
+
+
+@choice_resolver("beset_from_all_sides", prompt="You may put one at the bottom of your deck")
+def _resolve_beset_from_all_sides(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The chosen card goes to the bottom of the deck and the rest go back on top in the order the
+    seat gives, then the draw waiting behind the choice takes whatever ended on top."""
+    fate = DeckKey(seat, Side.FATE)
+    to_bottom = [MoveToDeck(card_id, fate, from_bottom=0) for card_id in chosen]
+    rest = tuple(card_id for card_id in remaining_look(game) if card_id not in chosen)
+    if not rest:
+        return [*to_bottom, EndLook()]
+    return [*to_bottom, Arrange(seat, rest, PUT_BACK_ON_TOP, source_id)]
+
+
+register_ability(
+    "beset_from_all_sides",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.POLITICAL}),
+        label="Political Open, 2 Gold: Bow your target unbowed Courtier. Look at a number of cards "
+        "on the top of your Fate deck equal to his Chi. You may put one at the bottom of your "
+        "deck. Put the rest back in any order. Draw a card.",
+        cost=_beset_from_all_sides_cost,
+        targets=_beset_from_all_sides_targets,
+        effects=_beset_from_all_sides_effects,
+        located_at=(CardLocation.HAND,),
     ),
 )
 

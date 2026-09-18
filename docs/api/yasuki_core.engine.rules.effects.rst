@@ -9,6 +9,7 @@ yasuki_core.engine.rules.effects
 
     AdjustCounter
     ApplyEffects
+    Arrange
     Ask
     AskAmount
     AskDistribution
@@ -30,6 +31,7 @@ yasuki_core.engine.rules.effects
     Dishonor
     DrawCard
     Effect
+    EndLook
     Evaluate
     Fear
     GainGold
@@ -45,6 +47,7 @@ yasuki_core.engine.rules.effects
     IgnoreHonorRequirements
     InterruptStep
     InterruptingEffect
+    LookAtTop
     LoseGame
     MeleeAttack
     Move
@@ -54,6 +57,7 @@ yasuki_core.engine.rules.effects
     PayFavorCost
     PayGold
     PlaceInProvince
+    PlaceOnDeck
     PutIntoPlay
     RangedAttack
     RecruitCard
