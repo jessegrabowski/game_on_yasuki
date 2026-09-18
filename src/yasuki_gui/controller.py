@@ -63,7 +63,6 @@ class FieldController:
             self._hotkeys.draw,
             self._hotkeys.shuffle,
             self._hotkeys.inspect,
-            self._hotkeys.view,
         }
         for key in {k for k in old if k}:
             try:
@@ -80,7 +79,6 @@ class FieldController:
             hotkeys.draw,
             hotkeys.shuffle,
             hotkeys.inspect,
-            hotkeys.view,
         }
         for k in {k for k in keys if k}:
             self.view.bind_all(f"<KeyPress-{k}>", self.on_key)
@@ -463,16 +461,7 @@ class FieldController:
         key = getattr(e, "keysym", "").lower()
         hk = self._hotkeys
 
-        if key == hk.view:
-            # Toggle: a second V closes the preview; otherwise open it for the card under the
-            # pointer (works over any zone, battlefield, hand, or province).
-            if self._preview_showing():
-                self._hide_card_view()
-            else:
-                self._show_card_view(e)
-            return
-
-        self._hide_card_view()  # any other key dismisses a floating preview
+        self._hide_card_view()  # any key of the board's dismisses a floating preview
 
         if self._hover_zone_tag and key in {hk.flip, hk.fill, hk.destroy, hk.dishonor}:
             ctx = ActionContext(
@@ -505,45 +494,9 @@ class FieldController:
         if act.when(self.view, ctx):
             act.run(self.view, ctx)
 
-    def _preview_showing(self) -> bool:
-        return self.view.preview is not None and self.view.preview.showing
-
     def _hide_card_view(self) -> None:
         if self.view.preview is not None:
             self.view.preview.hide()
-
-    def _card_under_pointer(self, e: tk.Event) -> tuple[L5RCard, int, int] | None:
-        """The card under the pointer and its canvas center, across any zone: a battlefield sprite,
-        the hovered card in a hand, or the top card of a province or pile. None if none is there."""
-        tag = self.view.resolve_tag_at(e)
-        if not tag:
-            return None
-        if tag.startswith("card:"):
-            sprite = self.view.sprites.get(tag)
-            return (sprite.card, sprite.x, sprite.y) if sprite else None
-        key = self.view.key_for_tag(tag)
-        if key is not None and key.role is ZoneRole.HAND:
-            hand = self.view.hands.get(tag)
-            if hand is None or not hand.cards:
-                return None
-            px = self.view.winfo_pointerx() - self.view.winfo_rootx()
-            idx = hand.index_at(px)
-            idx = len(hand.cards) - 1 if idx is None else idx
-            cx, cy = hand.center_for_index(idx)
-            return (hand.cards[idx], cx, cy)
-        zone = self.view.zones.get(tag)
-        if zone is None or not zone.cards:
-            return None
-        return (zone.cards[-1], zone.x, zone.y)  # a province or pile shows its top card
-
-    def _show_card_view(self, e: tk.Event) -> None:
-        """Float an enlarged preview of the card under the pointer, over the whole window so a
-        panel laid over the board cannot hide it."""
-        found = self._card_under_pointer(e)
-        if found is None or self.view.preview is None:
-            return
-        card, cx, cy = found
-        self.view.preview.show(card, self.view.winfo_rootx() + cx, self.view.winfo_rooty() + cy)
 
     def on_toggle_player(self, e: tk.Event) -> None:
         """Switch the viewing/acting seat (debug only), flipping the board to that seat's view."""

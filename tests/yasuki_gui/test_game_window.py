@@ -1,3 +1,5 @@
+import tkinter as tk
+
 import pytest
 from numpy.random import default_rng
 
@@ -5,7 +7,11 @@ import yasuki_gui.config as gui_config
 import yasuki_gui.ui.game_window as game_window_mod
 from yasuki_core.engine.players import PlayerId
 from yasuki_gui.session import build_demo_state
+from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.game_window import GameWindow
+
+from tests.yasuki_core.engine.builders import personality
+from tests.yasuki_gui.conftest import DummyEventNamespace, PreviewOnlyImages
 
 # Every widget the window promises a collaborator. Named rather than discovered, so a widget
 # dropped from the class fails here instead of quietly leaving the tuple shorter.
@@ -120,3 +126,75 @@ def test_a_local_override_turns_the_debug_flag_on_for_the_modules_that_read_it(m
         assert "DEBUG" in built.root.title()
     finally:
         built.root.destroy()
+
+
+def test_the_board_previews_through_the_window_preview(window):
+    """The board dismisses the preview on its own keys and clicks, so it has to be the same one the
+    view key opens."""
+    assert window.field.preview is window.card_preview
+
+
+def _press_view_key(window, x_root, y_root):
+    window._on_view_key(DummyEventNamespace(x_root=x_root, y_root=y_root))
+
+
+def _strip_card_point(window):
+    window.show_cards([personality("hida")], "Fate Discard")
+    window.root.update_idletasks()
+    visual = window.card_strip._drawn["card:hida"]
+    canvas = window.card_strip.canvas
+    return canvas.winfo_rootx() + visual.x, canvas.winfo_rooty() + visual.y
+
+
+def test_the_view_key_enlarges_a_strip_card_and_puts_it_away_again(window):
+    """One handler owns the key across the board and every panel, so a press over a panel card
+    opens the preview and the next press closes it, wherever the pointer is."""
+    art = tk.PhotoImage(master=window.root, width=1, height=1)
+    window.card_preview = CardPreview(window.root, PreviewOnlyImages(art))
+    point = _strip_card_point(window)
+
+    _press_view_key(window, *point)
+    assert window.card_preview.showing
+
+    _press_view_key(window, *point)
+    assert not window.card_preview.showing
+
+
+def test_the_view_key_over_a_panel_puts_away_a_preview_the_board_opened(window):
+    art = tk.PhotoImage(master=window.root, width=1, height=1)
+    window.card_preview = CardPreview(window.root, PreviewOnlyImages(art))
+    window.card_preview.show(personality("board"), 0, 0)
+
+    _press_view_key(window, *_strip_card_point(window))
+
+    assert not window.card_preview.showing
+
+
+def test_the_view_key_off_the_board_opens_nothing(window):
+    art = tk.PhotoImage(master=window.root, width=1, height=1)
+    window.card_preview = CardPreview(window.root, PreviewOnlyImages(art))
+
+    _press_view_key(window, window.field.winfo_rootx() - 50, window.field.winfo_rooty() - 50)
+
+    assert not window.card_preview.showing
+
+
+def test_the_view_key_is_bound_once_for_the_whole_window(window):
+    """Bound on the ``all`` tag by the window, not by the board or by each panel, so there is one
+    handler to reason about however many panels are open."""
+    key = f"<KeyPress-{window.field._hotkeys.view}>"
+
+    assert window.root.bind_all(key)
+    assert not window.card_strip.bind(key)
+    assert not window.battle_view.bind(key)
+
+
+def test_reconfiguring_the_board_keys_leaves_the_view_key_bound(window):
+    """The board rebinds its own keys by replacing the app-wide script for each. The view key is
+    not one of them, so a hotkeys change cannot drop it."""
+    key = f"<KeyPress-{window.field._hotkeys.view}>"
+    before = window.root.bind_all(key)
+
+    window.field.configure_hotkeys(window.field._hotkeys)
+
+    assert window.root.bind_all(key) == before

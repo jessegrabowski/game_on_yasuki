@@ -382,6 +382,55 @@ class FieldView(tk.Canvas):
     def resolve_tag_at(self, event: tk.Event) -> str | None:
         return hittest_resolve_tag_at(self, event)
 
+    def card_under_pointer(self, x_root: int, y_root: int) -> tuple[RenderCard, int, int] | None:
+        """Find the card under a screen point, across any zone: a battlefield sprite, the card under
+        the point in a hand, or the top card of a province or pile.
+
+        Returns
+        -------
+        card : RenderCard
+            The card there.
+        x_root, y_root : int
+            Its center in screen coordinates.
+
+        None when the point is off the board or on bare felt.
+        """
+        x, y = x_root - self.winfo_rootx(), y_root - self.winfo_rooty()
+        width, height = self._canvas_size()
+        if not (0 <= x < width and 0 <= y < height):
+            return None
+        found = self._card_and_center_at(x, y)
+        if found is None:
+            return None
+        card, center_x, center_y = found
+        return card, self.winfo_rootx() + center_x, self.winfo_rooty() + center_y
+
+    def _card_and_center_at(self, x: int, y: int) -> tuple[RenderCard, int, int] | None:
+        tag = self._board_tag_at(x, y)
+        if tag is None:
+            return None
+        if tag.startswith("card:"):
+            sprite = self._sprites.get(tag)
+            return (sprite.card, sprite.x, sprite.y) if sprite else None
+        if tag in self._hands:
+            hand = self._hands[tag]
+            if not hand.cards:
+                return None
+            index = hand.index_at(x)
+            index = len(hand.cards) - 1 if index is None else index
+            return (hand.cards[index], *hand.center_for_index(index))
+        zone = self._zones.get(tag)
+        if zone is None or not zone.cards:
+            return None
+        return (zone.cards[-1], zone.x, zone.y)  # a province or pile shows its top card
+
+    def _board_tag_at(self, x: int, y: int) -> str | None:
+        for item in reversed(self.find_overlapping(x, y, x, y)):
+            for tag in self.gettags(item):
+                if tag.startswith(("card:", "zone:")):
+                    return tag
+        return None
+
     def key_for_tag(self, tag: str) -> ZoneKey | DeckKey | None:
         return self._tag_to_key.get(tag)
 

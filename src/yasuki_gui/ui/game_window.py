@@ -15,12 +15,14 @@ from yasuki_gui.layout import divider_y
 from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.battle_view import BattleView, LaneButton, PendingArmy
+from yasuki_gui.ui.card_panel import CardPanel
 from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.card_strip import CardStrip, STRIP_H, STRIP_W
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
 from yasuki_gui.ui.prompt_box import PromptBox
+from yasuki_gui.visuals.cardface import RenderCard
 
 # Where the strip first opens, far enough in that the board still reads behind it.
 STRIP_INSET = 40
@@ -122,8 +124,9 @@ class GameWindow:
         canvas_w = max(400, self.root.winfo_width() - SIDEBAR_WIDTH)
         canvas_h = max(300, self.root.winfo_height())
 
+        hotkeys = load_hotkeys()
         self.field = FieldView(self.content, width=canvas_w, height=canvas_h)
-        self.field.configure_hotkeys(load_hotkeys())
+        self.field.configure_hotkeys(hotkeys)
         # The table backs panel and dialog reads; the board itself renders from the redacted
         # projection the client pushes in later.
         self.field.state = table
@@ -137,13 +140,15 @@ class GameWindow:
         # One strip for every pile either player opens, retitled as it is reused, so a player who
         # has moved it finds it where they left it.
         self.card_strip = CardStrip(self.field, ImageProvider(self.field))
-        # The same keys the board reads, so a card previews the same way wherever it is looked at.
-        self.card_strip.hotkeys = load_hotkeys()
         # Drawn on the window itself, so it floats over the board, the sidebar and every panel.
-        # One preview shared by the board and the strip, so neither can hide or clip the other's.
+        # One preview shared by the board and every panel, so none can hide or clip another's.
         self.card_preview = CardPreview(self.root, ImageProvider(self.root))
         self.field.preview = self.card_preview
-        self.card_strip.preview = self.card_preview
+        # The view key has one owner. Panels sit over the board, so they are asked first, and the
+        # board answers for whatever the pointer is on when no panel is. Bound alongside the
+        # board's own keys rather than through them, so reconfiguring those cannot drop it.
+        self._card_panels: tuple[CardPanel, ...] = (self.battle_view, self.card_strip)
+        self.root.bind_all(f"<KeyPress-{hotkeys.view}>", self._on_view_key, add="+")
 
         # A panel reads the board through the FieldView it is handed, so the field is built first.
         self.opponent_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P2)
@@ -162,6 +167,34 @@ class GameWindow:
         self.field.on_local_player_changed = self.relayout_panels
         self.field.apply_profile_to_panels = self.apply_profile_to_panels
         self.relayout_panels()
+
+    def _on_view_key(self, event: tk.Event) -> None:
+        """Toggle the enlarged card: put an open preview away wherever the pointer is, otherwise
+        enlarge whatever card is under it, on a panel or on the board."""
+        if self.card_preview.showing:
+            self.card_preview.hide()
+            return
+        found = self.card_under_pointer(event.x_root, event.y_root)
+        if found is not None:
+            self.card_preview.show(*found)
+
+    def card_under_pointer(self, x_root: int, y_root: int) -> tuple[RenderCard, int, int] | None:
+        """Find the card under a screen point on the topmost surface holding one.
+
+        Returns
+        -------
+        card : RenderCard
+            The card there.
+        x_root, y_root : int
+            Its center in screen coordinates.
+
+        None when neither a panel nor the board has a card there.
+        """
+        for panel in self._card_panels:
+            found = panel.card_under_pointer(x_root, y_root)
+            if found is not None:
+                return found
+        return self.field.card_under_pointer(x_root, y_root)
 
     def show_cards(self, cards: list[L5RCard], title: str) -> None:
         """Lay a pile out over the board in the strip panel, reusing the one panel for every
