@@ -1,8 +1,18 @@
+import pytest
+
+from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.action_record import action_keywords
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Equip, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    Equip,
+    PlayStrategy,
+    Recruit,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
+    ChooseAbilityTarget,
     ChooseCards,
     ChooseFortificationProvince,
     ChoosePayment,
@@ -26,6 +36,7 @@ from yasuki_core.game_pieces.prints import (
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
+    fate_card,
     holding,
     pay,
     personality,
@@ -360,3 +371,154 @@ def test_a_plain_holding_is_not_recruited_in_the_action_phase():
     session = EngineSession.start(state, P1)
 
     assert Recruit("farm") not in session.legal_actions(P1)
+
+
+# --- Beset from All Sides ---
+
+
+def _beset_game(*, chi: int = 3, deck: tuple[str, ...] = ("top", "second", "third", "fourth")):
+    """P1 holding Beset from All Sides, gold for it, an unbowed Courtier of ``chi`` Chi, and a Fate
+    deck reading ``deck`` from the top."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("sh", printed_id="plain_stronghold", gold_production=4, owner=P1))
+    put_in_play(state, personality("courtier", chi=chi, keywords=("Courtier",)))
+    put_in_play(state, personality("bushi", chi=chi))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                FatePrint,
+                id="beset",
+                name="Beset from All Sides",
+                printed_id="beset_from_all_sides",
+                side=Side.FATE,
+                owner=P1,
+                gold_cost=2,
+                keywords=("Political",),
+            ),
+        )
+    )
+    state.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(state, fate_card(card_id, P1)) for card_id in reversed(deck)
+    ]
+    return EngineSession.start(state, P1)
+
+
+def _fate_deck(session: EngineSession) -> list[str]:
+    """P1's Fate deck, top first."""
+    return [card.id for card in reversed(session.game.table.decks[DeckKey(P1, Side.FATE)].cards)]
+
+
+def _hand(session: EngineSession) -> list[str]:
+    return [card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
+
+
+def _play_beset_to_the_look(session: EngineSession) -> None:
+    session.act(P1, PlayStrategy("beset"))
+    pay(session, P1)
+    pending = session.game.pending
+    assert isinstance(pending, ChooseAbilityTarget) and pending.candidates == ("courtier",)
+    session.submit(P1, DecisionResponse(("courtier",)))
+
+
+def test_beset_targets_only_unbowed_courtiers():
+    """Neither the Personality without the keyword nor the Courtier already bowed is offered."""
+    session = _beset_game()
+    tired = put_in_play(session.game, personality("tired", keywords=("Courtier",)))
+    tired.bow()  # after start, which straightens the active seat's board
+    session.act(P1, PlayStrategy("beset"))
+    pay(session, P1)
+
+    assert session.game.pending.candidates == ("courtier",)
+
+
+def test_beset_can_be_backed_out_of_until_the_cards_are_seen():
+    session = _beset_game()
+    session.act(P1, PlayStrategy("beset"))
+    pay(session, P1)
+
+    session.cancel(P1)
+
+    assert session.game.pending is None
+    assert "beset" in _hand(session)
+    assert not session.game.table.cards_by_id["courtier"].bowed
+
+
+def test_beset_looks_at_the_courtiers_chi_in_cards_and_cannot_be_backed_out_of():
+    session = _beset_game(chi=3)
+
+    _play_beset_to_the_look(session)
+
+    assert session.game.look.card_ids == ("top", "second", "third")
+    assert session.game.table.cards_by_id["courtier"].bowed
+    pending = session.game.pending
+    assert isinstance(pending, ChooseCards) and pending.candidates == ("top", "second", "third")
+    assert pending.decline_label == "Decline"
+    with pytest.raises(ValueError):
+        session.cancel(P1)
+
+
+def test_beset_puts_the_chosen_card_on_the_bottom_and_draws_what_was_put_on_top_last():
+    session = _beset_game(chi=3)
+    _play_beset_to_the_look(session)
+
+    session.submit(P1, DecisionResponse(("second",)))
+    pending = session.game.pending
+    assert isinstance(pending, ArrangeCards) and set(pending.candidates) == {"top", "third"}
+    assert not pending.to_bottom
+    session.submit(P1, DecisionResponse(("top", "third")))
+
+    assert _hand(session) == ["third"]
+    assert _fate_deck(session) == ["top", "fourth", "second"]
+    assert session.game.look is None
+    assert session.game.pending is None
+    assert session.log.replay() == session.game
+
+
+def test_beset_declined_puts_every_card_back_before_the_draw():
+    session = _beset_game(chi=2)
+    _play_beset_to_the_look(session)
+
+    session.submit(P1, DecisionResponse(()))
+    pending = session.game.pending
+    assert isinstance(pending, ArrangeCards) and pending.candidates == ("top", "second")
+    session.submit(P1, DecisionResponse(pending.unchanged))
+
+    assert _hand(session) == ["top"]
+    assert _fate_deck(session) == ["second", "third", "fourth"]
+
+
+def test_beset_with_one_card_seen_has_nothing_to_arrange_after_it_goes_to_the_bottom():
+    session = _beset_game(chi=1)
+    _play_beset_to_the_look(session)
+
+    session.submit(P1, DecisionResponse(("top",)))
+
+    assert session.game.pending is None
+    assert _hand(session) == ["second"]
+    assert _fate_deck(session) == ["third", "fourth", "top"]
+
+
+def test_a_bot_plays_beset_through_to_the_draw():
+    """The bots answer by prefix: nothing for the may-choice, the look's own order for the
+    arrangement. Both are legal, so a bot never stalls on the chain."""
+    session = _beset_game(chi=3)
+    agent = AutoAgent()
+    session.act(P1, PlayStrategy("beset"))
+    pay(session, P1)
+    while session.game.pending is not None:
+        session.submit(P1, agent.decide(session.game.pending, session.project(P1)))
+
+    assert session.game.look is None
+    assert _hand(session) == ["top"]
+    assert _fate_deck(session) == ["second", "third", "fourth"]
+
+
+def test_beset_on_an_empty_fate_deck_bows_the_courtier_and_asks_nothing():
+    session = _beset_game(deck=())
+
+    _play_beset_to_the_look(session)
+
+    assert session.game.table.cards_by_id["courtier"].bowed
+    assert session.game.pending is None
+    assert session.game.look is None
