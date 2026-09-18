@@ -224,7 +224,7 @@ def test_a_defended_province_sits_below_the_units_defending_it(view):
         viewer=P2,
     )
 
-    province = view.canvas.coords("province:keep")[1]
+    province = view.canvas.coords("battle:shown:keep")[1]
     defender = view.canvas.coords("battle:hida")[1]
 
     assert province > defender
@@ -270,7 +270,7 @@ def test_the_heading_stays_beside_the_province_it_names(view):
     than leaving it labelling the far end of the board."""
     view.refresh(_attack(_battlefield(0, occupant=personality("keep"), strength=4)), viewer=P2)
 
-    province = view.canvas.coords("province:keep")[1]
+    province = view.canvas.coords("battle:shown:keep")[1]
     strength = _text_at(view, "4")[1]
     name = _text_at(view, "Battlefield 1")[1]
 
@@ -282,7 +282,7 @@ def test_the_heading_stays_beside_the_province_it_names(view):
 def test_an_upright_lane_keeps_its_heading_at_the_top(view):
     view.refresh(_attack(_battlefield(0, occupant=personality("keep"), strength=4)), viewer=P1)
 
-    province = view.canvas.coords("province:keep")[1]
+    province = view.canvas.coords("battle:shown:keep")[1]
     strength = _text_at(view, "4")[1]
     name = _text_at(view, "Battlefield 1")[1]
 
@@ -497,7 +497,7 @@ def test_the_province_card_stands_at_the_head_of_the_defending_side(view):
         )
     )
 
-    province_y = view.canvas.coords("province:shrine")[1]
+    province_y = view.canvas.coords("battle:shown:shrine")[1]
     defender_y = view.canvas.coords("battle:hida")[1]
     assert province_y < defender_y
 
@@ -515,7 +515,7 @@ def test_a_lane_with_the_room_keeps_its_three_rows_clear_of_each_other(view):
         )
     )
 
-    province = view.canvas.bbox("province:shrine")
+    province = view.canvas.bbox("battle:shown:shrine")
     defending = view.canvas.bbox("battle:hida")
     attacking = view.canvas.bbox("battle:akodo")
     assert province[3] < defending[1]
@@ -671,9 +671,9 @@ def test_a_provinces_fortifications_stand_in_the_lane_with_it(view):
         )
     )
 
-    province_y = view.canvas.coords("province:shrine")[1]
-    wall_y = view.canvas.coords("province:wall")[1]
-    gate_y = view.canvas.coords("province:gate")[1]
+    province_y = view.canvas.coords("battle:shown:shrine")[1]
+    wall_y = view.canvas.coords("battle:shown:wall")[1]
+    gate_y = view.canvas.coords("battle:shown:gate")[1]
 
     # Fanned inboard from the Province, each a step further toward the units defending it.
     assert province_y < wall_y < gate_y
@@ -694,7 +694,7 @@ def test_a_fortification_is_tucked_behind_the_province_it_defends(view):
 
     stacking = view.canvas.find_all()
     drawn = {
-        name: max(stacking.index(item) for item in view.canvas.find_withtag(f"province:{name}"))
+        name: max(stacking.index(item) for item in view.canvas.find_withtag(f"battle:shown:{name}"))
         for name in ("shrine", "wall", "gate")
     }
     assert drawn["gate"] < drawn["wall"] < drawn["shrine"]
@@ -714,9 +714,9 @@ def test_a_mirrored_lane_fans_its_fortifications_the_other_way(view):
         viewer=P2,
     )
 
-    province_y = view.canvas.coords("province:shrine")[1]
-    wall_y = view.canvas.coords("province:wall")[1]
-    gate_y = view.canvas.coords("province:gate")[1]
+    province_y = view.canvas.coords("battle:shown:shrine")[1]
+    wall_y = view.canvas.coords("battle:shown:wall")[1]
+    gate_y = view.canvas.coords("battle:shown:gate")[1]
 
     assert province_y > wall_y > gate_y
 
@@ -725,7 +725,7 @@ def test_an_empty_province_draws_no_card(view):
     view.refresh(_attack(_battlefield(0, defending=(_unit("hida"),))))
 
     tags = {tag for item in view.canvas.find_all() for tag in view.canvas.gettags(item)}
-    assert not [tag for tag in tags if tag.startswith("province:")]
+    assert not [tag for tag in tags if tag.startswith("battle:shown:")]
 
 
 def test_the_province_card_is_not_a_card_the_player_can_act_on(view):
@@ -759,6 +759,33 @@ def test_a_unit_in_a_lane_is_a_card_the_player_can_act_on(view):
     view._on_context_click(_click((left + right) // 2, (top + bottom) // 2))
 
     assert asked == ["hida"]
+
+
+def test_a_unit_in_a_lane_is_under_the_pointer(view):
+    """A unit in a lane is drawn only there, so the lane has to answer the view key the way the
+    board answers for a card at home."""
+    view.open_at(0, 0)
+    view.master.update_idletasks()
+    view.refresh(_attack(_battlefield(0, defending=(_unit("hida"),))))
+    left, top, right, bottom = view.canvas.bbox("battle:hida")
+
+    found = view.card_under_pointer(
+        view.canvas.winfo_rootx() + (left + right) // 2,
+        view.canvas.winfo_rooty() + (top + bottom) // 2,
+    )
+
+    assert found is not None and found[0].id == "hida"
+
+
+def test_clicking_the_province_in_a_lane_picks_nothing(view):
+    picked = []
+    view.on_card_click = picked.append
+    view.refresh(_attack(_battlefield(0, occupant=personality("keep"), defending=(_unit("hida"),))))
+    left, top, right, bottom = view.canvas.bbox("battle:shown:keep")
+
+    view._on_click(_click((left + right) // 2, (top + bottom) // 2))
+
+    assert picked == []
 
 
 def test_clicking_a_unit_in_a_lane_picks_it(view):

@@ -18,16 +18,12 @@ from yasuki_gui.layout import (
     tower_draw_order,
     unit_tower_positions,
 )
-from yasuki_gui.ui.floating_panel import BORDER, FloatingPanel, TITLEBAR_H
+from yasuki_gui.ui.card_panel import CardPanel
 from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.visuals.cardface import RenderCard, to_render_card
-from yasuki_gui.visuals.sprite import CardSpriteVisual
 
 # What a unit's sprite is tagged with here, and what a right-click reads back off it.
 _CARD_TAG = "battle:"
-# The Defender's Province card, tagged apart because it is not a unit: it belongs to the seat
-# being attacked, and nothing the player can do to a unit applies to it.
-_PROVINCE_TAG = "province:"
 # The lane's own army total, tagged apart from the per-card stamps.
 # This lets a reader, and a test, tell an army's Force from the Force of one card standing in it.
 _ARMY_FORCE_TAG = "army-force"
@@ -253,7 +249,7 @@ def _outcome_lines(
     return lines
 
 
-class BattleView(FloatingPanel):
+class BattleView(CardPanel):
     """The attack in progress, drawn as one vertical lane per battlefield.
 
     Each lane leads with the Province Strength the attackers have to clear, marks each side's Force
@@ -265,17 +261,7 @@ class BattleView(FloatingPanel):
     """
 
     def __init__(self, master: tk.Misc):
-        super().__init__(master, "Attack", width=PANEL_W, height=PANEL_H)
-        # Sized to the panel it fills, so the layout it computes before Tk maps it is the one it
-        # ends up with.
-        self.canvas = tk.Canvas(
-            self.body,
-            bg=theme.SURFACE,
-            highlightthickness=0,
-            width=PANEL_W - 2 * BORDER,
-            height=PANEL_H - TITLEBAR_H - 2 * BORDER,
-        )
-        self.canvas.pack(fill="both", expand=True)
+        super().__init__(master, "Attack", width=PANEL_W, height=PANEL_H, tag_prefix=_CARD_TAG)
         # A unit in a lane is still the player's to recall, and the lane is now the only place it
         # is drawn, so the picking and the menu the board gives its cards are reachable here too.
         self.on_card_menu: Callable[[str], None] | None = None
@@ -380,31 +366,19 @@ class BattleView(FloatingPanel):
             return
         if index in self._collapsed:
             return
-        card_id = self._card_at(event)
+        card_id = self.card_at(event)
         if card_id is not None and self.on_card_click:
             self.on_card_click(card_id)
 
     def _on_context_click(self, event: tk.Event) -> None:
         """Offer the card menu for a unit standing in a lane, so one sent here can be brought
         back."""
-        card_id = self._card_at(event)
+        card_id = self.card_at(event)
         if card_id is not None and self.on_card_menu:
             self.on_card_menu(card_id)
 
-    def _card_at(self, event: tk.Event) -> str | None:
-        """The id of the unit card under the pointer, or None on bare lane or the Province card.
-
-        Topmost first, because a unit is drawn as a tower: taking the bottommost would answer a
-        click on a Personality with the Follower fanned out behind him.
-        """
-        for item in reversed(self.canvas.find_overlapping(event.x, event.y, event.x, event.y)):
-            for tag in self.canvas.gettags(item):
-                if tag.startswith(_CARD_TAG):
-                    return tag[len(_CARD_TAG) :]
-        return None
-
     def _redraw(self) -> None:
-        self.canvas.delete("all")
+        self.clear()
         self._lane_spans = {}
         if self._attack is None:
             return
@@ -670,9 +644,9 @@ class BattleView(FloatingPanel):
             for step, card in enumerate(view.fortifications, start=1)
         ]
         for card, spot in tower_draw_order(fan):
-            self._draw_card(card, spot, _PROVINCE_TAG)
+            self._draw_card(card, spot, pickable=False)
         if view.occupant is not None:
-            self._draw_card(to_render_card(view.occupant), (x, y), _PROVINCE_TAG)
+            self._draw_card(to_render_card(view.occupant), (x, y), pickable=False)
 
     def _draw_army(
         self, army: tuple[UnitView, ...], span: tuple[int, int], y: int, *, sink: bool
@@ -693,7 +667,12 @@ class BattleView(FloatingPanel):
                 self._draw_card(card, spot)
             self._draw_card(unit.leader, leader)
 
-    def _draw_card(self, card: RenderCard, at: tuple[int, int], tag: str = _CARD_TAG) -> None:
-        CardSpriteVisual(card, at[0], at[1], f"{tag}{card.id}", stats=self._stats).draw(
-            self.canvas, selected=card.id in self._selected
+    def _draw_card(self, card: RenderCard, at: tuple[int, int], *, pickable: bool = True) -> None:
+        self.draw_card(
+            card,
+            at[0],
+            at[1],
+            selected=card.id in self._selected,
+            stats=self._stats,
+            pickable=pickable,
         )
