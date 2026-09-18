@@ -162,19 +162,30 @@ def _resolve(argument: str, page: Path, source_root: Path) -> Path:
 
 
 def _pyobject(text: str, name: str, target: Path, page: Path) -> list[str]:
-    """Return the source of one top-level function or class, decorators included."""
-    for node in ast.parse(text).body:
-        if not isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef):
-            continue
+    """Return the source of one function or class, decorators included. A dotted name such as
+    ``Klass.method`` walks into the class, as Sphinx's ``pyobject`` does."""
+    node: ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef | None = None
+    body = ast.parse(text).body
+    for part in name.split("."):
+        node = _named(body, part)
+        if node is None:
+            raise MaterializeError(f"{page}: {target.name} has no '{name}' to include")
+        body = node.body if isinstance(node, ast.ClassDef) else []
+    assert node is not None  # the name has at least one part, so the loop ran
 
-        if node.name != name:
-            continue
+    first = node.decorator_list[0].lineno if node.decorator_list else node.lineno
 
-        first = node.decorator_list[0].lineno if node.decorator_list else node.lineno
+    return text.splitlines()[first - 1 : node.end_lineno]
 
-        return text.splitlines()[first - 1 : node.end_lineno]
 
-    raise MaterializeError(f"{page}: {target.name} has no '{name}' to include")
+def _named(
+    body: list[ast.stmt], name: str
+) -> ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef | None:
+    for node in body:
+        if isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef):
+            if node.name == name:
+                return node
+    return None
 
 
 def _slice(lines: list[str], options: dict[str, str], target: Path, page: Path) -> list[str]:
