@@ -4,7 +4,7 @@ import pytest
 
 from yasuki_gui import theme
 from yasuki_gui.constants import CARD_H, CARD_W
-from yasuki_gui.ui.card_strip import CELL_PAD, STRIP_H, STRIP_W, CardStrip
+from yasuki_gui.ui.card_strip import CELL_PAD, ROW_H, CardStrip
 from yasuki_gui.ui.floating_panel import BORDER, TITLEBAR_H
 
 from tests.yasuki_core.engine.builders import personality
@@ -88,7 +88,7 @@ def test_the_strip_scrolls_over_exactly_the_row(board):
     strip.show([_card("one"), _card("two")], "Fate Discard")
 
     right = 3 * CELL_PAD + 2 * CARD_W
-    assert strip.canvas.cget("scrollregion") == f"0 0 {right} {2 * CELL_PAD + CARD_H}"
+    assert strip.canvas.cget("scrollregion") == f"0 0 {right} {ROW_H}"
 
 
 def test_a_strip_of_backs_names_only_the_face_up_card(board):
@@ -151,13 +151,12 @@ def test_the_scrollbar_is_laid_out_under_the_cards(board):
 def test_the_strip_opens_exactly_one_row_tall(board):
     """The strip never wraps, and its height is what tells the player so."""
     strip = CardStrip(board, PreviewOnlyImages())
-    strip.open_over(10, 10, STRIP_W, STRIP_H)
+    strip.open_at(10, 10)
     strip.show([_card("one")], "Fate Discard")
     strip.update_idletasks()
 
-    assert strip.place_info()["height"] == str(STRIP_H)
-    row_and_bar = 2 * CELL_PAD + CARD_H + strip._scroll.winfo_reqheight()
-    assert STRIP_H - TITLEBAR_H - 2 * BORDER == row_and_bar
+    height = int(strip.place_info()["height"])
+    assert height - TITLEBAR_H - 2 * BORDER == ROW_H + strip._scroll.winfo_reqheight()
 
 
 def test_the_wheel_scrolls_the_row(board):

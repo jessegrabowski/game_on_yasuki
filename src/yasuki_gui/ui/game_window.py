@@ -17,7 +17,7 @@ from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.battle_view import BattleView, LaneButton, PendingArmy
 from yasuki_gui.ui.card_panel import CardPanel
 from yasuki_gui.ui.card_preview import CardPreview
-from yasuki_gui.ui.card_strip import CardStrip, STRIP_H, STRIP_W
+from yasuki_gui.ui.card_strip import CardStrip
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
@@ -192,7 +192,7 @@ class GameWindow:
         pile."""
         # Placed before it is filled, so the cards are laid out at the size they will be shown at
         # rather than measured against an unplaced panel and corrected on a later redraw.
-        self.card_strip.open_over(STRIP_INSET, STRIP_INSET, STRIP_W, STRIP_H)
+        self.card_strip.open_at(STRIP_INSET, STRIP_INSET)
         self.card_strip.show(cards, title)
 
     def show_battle(
