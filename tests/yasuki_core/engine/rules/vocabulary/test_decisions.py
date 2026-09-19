@@ -412,5 +412,14 @@ def test_the_unchanged_arrangement_keeps_the_looked_at_order_at_either_end():
     assert _arrange("top", "mid", "low", to_bottom=True).unchanged == ("top", "mid", "low")
 
 
+def test_keeping_order_places_the_rest_as_looked_at_after_what_is_already_placed():
+    assert _arrange("top", "mid", "low").keeping_order(("mid",)) == ("mid", "low", "top")
+    assert _arrange("top", "mid", "low", to_bottom=True).keeping_order(("low",)) == (
+        "low",
+        "top",
+        "mid",
+    )
+
+
 def test_an_arrangement_cannot_be_backed_out_of():
     assert not _arrange("a").cancellable

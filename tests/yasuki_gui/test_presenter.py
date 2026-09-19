@@ -1671,6 +1671,17 @@ def test_putting_a_card_on_the_bottom_takes_it_out_of_the_window_and_asks_for_th
     assert not _enabled(presenter, "Confirm")
 
 
+def test_keep_order_after_a_placement_keeps_the_rest_as_looked_at(looking):
+    presenter, window, session = looking
+    _press(presenter, "Decline")
+    presenter.on_look_card_clicked("second")
+
+    _press(presenter, "Keep Order")
+
+    assert _fate_deck(session) == ["top", "third", "second", "fourth"]
+    assert session.game.look is None
+
+
 def test_arranging_places_cards_one_click_at_a_time_and_undoes_them(looking):
     presenter, window, session = looking
     _press(presenter, "Decline")
@@ -1678,7 +1689,7 @@ def test_arranging_places_cards_one_click_at_a_time_and_undoes_them(looking):
 
     presenter.on_look_card_clicked("second")
     assert "card:second" not in window.look_view._drawn  # a placed card leaves the window
-    assert not _enabled(presenter, "Keep Order") and _enabled(presenter, "Undo")
+    assert _enabled(presenter, "Keep Order") and _enabled(presenter, "Undo")
     assert not _enabled(presenter, "Confirm")
 
     presenter.undo()
