@@ -4,6 +4,7 @@ from collections.abc import Callable
 
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.factory import side_of_record
 from yasuki_gui import theme
 from yasuki_core.database import query_all_cards
 from yasuki_gui.ui.images import ImageProvider
@@ -172,15 +173,19 @@ class Dialogs:
             padx=12, pady=12
         )
 
-    def database_search(self, title: str, on_pick: Callable[[dict], None]) -> None:
-        """Pick any card in the database by title, for a debug client that puts cards on the table
-        from nowhere.
+    def database_search(self, title: str, side: Side, on_pick: Callable[[dict], None]) -> None:
+        """Pick any ``side`` card in the database by title, for a debug client that puts cards on
+        the table from nowhere.
 
         The whole card list is read once as the window opens and filtered in memory as the seat
         types, with the list capped so a one-letter query does not rebuild thousands of rows. Choose
         hands the selected record to ``on_pick``. Cancel closes without a pick.
         """
-        every = [(self._title_of(record).lower(), record) for record in query_all_cards()]
+        every = [
+            (self._title_of(record).lower(), record)
+            for record in query_all_cards()
+            if side_of_record(record) is side
+        ]
         win = tk.Toplevel(self.toplevel)
         win.title(title)
         win.transient(self.toplevel)

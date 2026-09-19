@@ -16,6 +16,7 @@ yasuki_core.game_pieces.factory
     build_print
     build_token_templates
     resolve_decklist
+    side_of_record
 
 .. automodule:: yasuki_core.game_pieces.factory
     :members:

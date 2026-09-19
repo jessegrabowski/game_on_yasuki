@@ -130,6 +130,12 @@ def _section_for_type(card_type: str | None) -> str:
     return "dynasty" if card_type in _DYNASTY_BY_TYPE else "fate"
 
 
+def side_of_record(record: dict) -> Side:
+    """The side a database record's card is played from, decided by its first type."""
+    card_type = (record.get("types") or [None])[0]
+    return Side.DYNASTY if _section_for_type(card_type) == "dynasty" else Side.FATE
+
+
 def build_print(record: dict) -> CardPrint:
     """The print a database record describes, wearing the record's own art.
 

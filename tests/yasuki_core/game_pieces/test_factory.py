@@ -11,6 +11,7 @@ from yasuki_core.game_pieces.factory import (
     resolve_decklist,
     build_token_templates,
     build_print,
+    side_of_record,
 )
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side, AttachmentType
@@ -182,6 +183,11 @@ def test_card_sides_follow_their_section():
     assert r.dynasty[0].side is Side.DYNASTY
     assert r.fate[0].side is Side.FATE
     assert r.pre_game[0].side is Side.STRONGHOLD
+
+
+def test_a_record_side_follows_its_first_type():
+    assert side_of_record({"types": ["Holding"]}) is Side.DYNASTY
+    assert side_of_record({"types": ["Strategy"]}) is Side.FATE
 
 
 def test_stronghold_and_sensei_carry_starting_honor_but_wind_does_not():
