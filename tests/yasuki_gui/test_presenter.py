@@ -1728,9 +1728,6 @@ def test_a_placed_card_is_not_taken_back_by_clicking_it(looking):
     assert window.field.selection == ("second",)
 
 
-# --- The debug menu ---
-
-
 def test_debug_gold_lands_in_the_pool_and_shows_on_the_board(board):
     presenter, window, session = board
 
@@ -1742,6 +1739,8 @@ def test_debug_gold_lands_in_the_pool_and_shows_on_the_board(board):
 
 
 def _database_record(name: str, card_type: str) -> dict:
+    """What the debug menu's database picker hands the presenter. The tests skip the picker, a
+    modal dialog over the live database, and deliver its pick directly."""
     return {
         "name": name,
         "card_id": name.lower().replace(" ", "_"),
@@ -1759,9 +1758,18 @@ def test_a_fate_debug_card_from_the_database_lands_in_the_hand(board):
     presenter._debug_card(_database_record("Debug Strategy", "Strategy"))
 
     hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
-    assert [card.printed.name for card in hand][-1] == "Debug Strategy"
-    assert hand[-1].id == "debug-1"
+    assert hand[-1].printed.name == "Debug Strategy"
     assert session.log.replay() == session.game
+
+
+def test_each_debug_card_takes_the_next_free_id(board):
+    presenter, window, session = board
+
+    presenter._debug_card(_database_record("Debug Strategy", "Strategy"))
+    presenter._debug_card(_database_record("Debug Tactic", "Strategy"))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand[-2:]] == ["debug-1", "debug-2"]
 
 
 def test_a_dynasty_debug_card_is_placed_on_the_board_like_a_legacy_card(board):
