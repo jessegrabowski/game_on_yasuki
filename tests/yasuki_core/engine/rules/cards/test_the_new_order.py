@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -52,13 +52,31 @@ def _fate_deck(session: EngineSession) -> list[str]:
     return [card.id for card in reversed(session.game.table.decks[FATE].cards)]
 
 
-def test_plain_library_enters_play_bowed_and_looks_at_three_after_the_recruit():
+def test_recruiting_plain_library_offers_its_look_as_a_response_rather_than_taking_it():
+    """The after-Recruit text is a Response the seat takes or declines, as with Courts of Otosan
+    Uchi. Nothing has been looked at until it is taken."""
     session = _library_game()
     session.act(P1, Recruit("library"))
 
     pay(session, P1)
 
     assert session.game.table.cards_by_id["library"].bowed
+    assert session.game.pending is None
+    assert session.game.look is None
+    assert ActivateAbility("library") in session.legal_actions(P1)
+
+
+def _recruit_and_respond(session: EngineSession) -> None:
+    session.act(P1, Recruit("library"))
+    pay(session, P1)
+    session.act(P1, ActivateAbility("library"))
+
+
+def test_plain_library_looks_at_three_when_taken():
+    session = _library_game()
+
+    _recruit_and_respond(session)
+
     pending = session.game.pending
     assert isinstance(pending, ChooseCards) and pending.candidates == ("a", "b", "c")
     assert pending.minimum == 0 and pending.maximum == 2
@@ -67,8 +85,7 @@ def test_plain_library_enters_play_bowed_and_looks_at_three_after_the_recruit():
 
 def test_plain_library_places_the_picked_cards_at_the_bottom_in_pick_order():
     session = _library_game()
-    session.act(P1, Recruit("library"))
-    pay(session, P1)
+    _recruit_and_respond(session)
 
     session.submit(P1, DecisionResponse(("c", "a")))
 
@@ -80,10 +97,19 @@ def test_plain_library_places_the_picked_cards_at_the_bottom_in_pick_order():
 
 def test_plain_library_may_place_nothing():
     session = _library_game()
-    session.act(P1, Recruit("library"))
-    pay(session, P1)
+    _recruit_and_respond(session)
 
     session.submit(P1, DecisionResponse(()))
 
     assert _fate_deck(session) == ["a", "b", "c", "d"]
     assert session.game.look is None
+
+
+def test_plain_library_is_not_offered_after_another_recruit():
+    session = _library_game()
+    session.act(P1, Recruit("library"))
+    pay(session, P1)
+    session.act(P1, ActivateAbility("library"))
+    session.submit(P1, DecisionResponse(()))
+
+    assert ActivateAbility("library") not in session.legal_actions(P1)
