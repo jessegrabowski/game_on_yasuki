@@ -185,9 +185,18 @@ def test_card_sides_follow_their_section():
     assert r.pre_game[0].side is Side.STRONGHOLD
 
 
-def test_a_record_side_follows_its_first_type():
-    assert side_of_record({"types": ["Holding"]}) is Side.DYNASTY
-    assert side_of_record({"types": ["Strategy"]}) is Side.FATE
+@pytest.mark.parametrize(
+    "record, side",
+    [
+        ({"types": ["Holding"]}, Side.DYNASTY),
+        ({"types": ["Strategy"]}, Side.FATE),
+        ({"types": ["Personality", "Strategy"]}, Side.DYNASTY),
+        ({"types": []}, Side.FATE),
+        ({}, Side.FATE),
+    ],
+)
+def test_a_record_side_follows_its_first_type(record, side):
+    assert side_of_record(record) is side
 
 
 def test_stronghold_and_sensei_carry_starting_honor_but_wind_does_not():

@@ -35,7 +35,8 @@ def test_a_fate_debug_card_lands_in_the_hand_as_a_real_card():
 
     card = game.table.cards_by_id["dbg-1"]
     assert card in game.table.zones[HAND].cards
-    assert card.owner is P1 and not card.is_token
+    assert card.owner is P1
+    assert not card.is_token
     assert card.printed.name == "Debug Strategy"
 
 
@@ -48,8 +49,11 @@ def test_a_dynasty_debug_card_asks_which_province_card_it_displaces():
 
     pending = session.game.pending
     assert isinstance(pending, PlaceDebugCard)
-    assert pending.seat is P1 and "old" in pending.candidates
+    assert pending.seat is P1
+    assert "old" in pending.candidates
+    assert pending.accepts(DecisionResponse(("old",)))
     assert not pending.accepts(DecisionResponse(("old", "old")))
+    assert not pending.accepts(DecisionResponse(("dbg-1",)))
 
 
 def test_placing_a_dynasty_debug_card_discards_what_was_there_and_lands_face_up():
@@ -90,6 +94,17 @@ def test_a_dynasty_debug_card_refuses_a_seat_with_no_province_card():
 
     with pytest.raises(ValueError, match="no Province card"):
         apply_debug(game, DebugCard(P1, "dbg-1", A_PERSONALITY))
+
+
+def test_a_refused_debug_step_leaves_the_tape_untouched():
+    session = EngineSession.start(dealt_table(), P1)
+    session.debug(DebugCard(P1, "dbg-1", A_STRATEGY))
+
+    with pytest.raises(ValueError, match="already"):
+        session.debug(DebugCard(P1, "dbg-1", A_STRATEGY))
+
+    assert [type(entry) for entry in session.log.entries] == [Debug]
+    assert session.log.replay() == session.game
 
 
 def test_debug_steps_are_taped_replay_and_round_trip():
