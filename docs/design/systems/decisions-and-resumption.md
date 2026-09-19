@@ -87,6 +87,12 @@ Backing out is refused outright while `GameState.look` is set, whatever the requ
 `cancellable` says. A seat that has looked at the top of its deck has information it cannot give
 back, so every question asked about those cards is committed the moment the look opened.
 
+A request whose `reopens_on_cancel` is true backs out one decision instead of unwinding the
+action: the tape loses only the answer that raised it, and the question before it comes back on
+replay. That is the shape of every step an Interrupt from hand takes, the target question and the
+Strategy's own payment included, because the action being interrupted belongs to whoever
+announced it and a seat backing out of its Interrupt may not take that action off the tape.
+
 ## The unfinished work
 
 `GameState.stack` holds what is waiting, last in and first out. A cascade that pauses mid-list

@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseBattlefield,
     ChooseInterrupt,
     ChooseInterruptAdjustment,
+    ChoosePayment,
     DecisionResponse,
     interrupt_token,
 )
@@ -730,3 +731,17 @@ def test_interrupts_from_both_seats_net_against_the_change_and_never_reverse_it(
 
     assert game.pending is None
     assert game.table.seats[P1].honor == 1  # -1 then +1 net to nothing, not a gain turned loss
+
+
+def test_backing_out_of_an_interrupts_payment_returns_to_the_offer():
+    # The payment was raised by the answer naming the Interrupt, not by the interrupted action, so
+    # a cancel there steps back one decision and leaves the Attacker's Fear standing.
+    session = _fear_announced({}, strategies=(OKURA,))
+    session.submit(DEFENDER, DecisionResponse(("okura",)))
+    assert isinstance(session.game.pending, ChoosePayment)
+
+    assert session.can_cancel(DEFENDER)
+    session.cancel(DEFENDER)
+
+    assert isinstance(session.game.pending, ChooseInterrupt)
+    assert session.game.action == ActivateAbility("raider")
