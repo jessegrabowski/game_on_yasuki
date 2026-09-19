@@ -16,25 +16,37 @@ from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_dis
 from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls_printed
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Arrange,
     Ask,
     Choose,
     CreateToken,
+    Discard,
     Dishonor,
     DrawCard,
     Effect,
+    EndLook,
+    LookAtTop,
     GainHonor,
     GrantKeyword,
     GrantModifier,
     MeleeAttack,
+    MoveToHand,
     PlaceInProvince,
     Rehonor,
+    Show,
     ShuffleDeck,
 )
+from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, Dishonored, EnteredPlay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.board.queries import province_zones
+from yasuki_core.engine.rules.board.queries import (
+    has_keyword,
+    province_zones,
+    remaining_look,
+    top_of_deck,
+)
 from yasuki_core.engine.rules.triggers import TriggerContext, caused_by, choice_resolver, on
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey, Location, location_of
@@ -111,6 +123,101 @@ register_ability(
         cost=no_cost,
         targets=_chuda_jomei_targets,
         effects=_chuda_jomei_effects,
+    ),
+)
+
+
+# --- Comprehensive Education ---
+
+COMPREHENSIVE_EDUCATION_LOOK = 5
+
+
+def _comprehensive_education_edicts_and_kata(
+    game: GameState, card_ids: tuple[str, ...]
+) -> tuple[str, ...]:
+    return tuple(
+        card_id
+        for card_id in card_ids
+        if has_keyword(game, game.table.cards_by_id[card_id], keywords.EDICT)
+        or has_keyword(game, game.table.cards_by_id[card_id], keywords.KATA)
+    )
+
+
+def _comprehensive_education_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Look at five, then the first of the two "may" questions, each skipped when it has no
+    candidates. With no Edict or Kata among them the rest go straight to the bottom."""
+    seat = source.owner
+    fate = DeckKey(seat, Side.FATE)
+    seen = top_of_deck(game, fate, COMPREHENSIVE_EDUCATION_LOOK)
+    if not seen:
+        return []
+    return [
+        LookAtTop(seat, fate, len(seen)),
+        *_comprehensive_education_take(game, seen, seat, source.id),
+    ]
+
+
+def _comprehensive_education_take(
+    game: GameState, seen: tuple[str, ...], seat: PlayerId, source_id: str
+) -> list[Effect]:
+    offered = _comprehensive_education_edicts_and_kata(game, seen)
+    if not offered:
+        return [_comprehensive_education_bottom(seat, seen, source_id)]
+    return [Choose(seat, offered, 0, 1, "comprehensive_education_take", source_id)]
+
+
+@choice_resolver(
+    "comprehensive_education_take",
+    prompt="You may show one that is an Edict or Kata and put it in your hand",
+)
+def _resolve_comprehensive_education_take(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    taken: list[Effect] = [Show(chosen[0]), MoveToHand(chosen[0], seat)] if chosen else []
+    rest = tuple(card_id for card_id in remaining_look(game) if card_id not in chosen)
+    discardable = _comprehensive_education_edicts_and_kata(game, rest)
+    if discardable:
+        next_step = Choose(
+            seat, discardable, 0, len(discardable), "comprehensive_education_discard", source_id
+        )
+    else:
+        next_step = _comprehensive_education_bottom(seat, rest, source_id)
+    return [*taken, next_step]
+
+
+@choice_resolver(
+    "comprehensive_education_discard", prompt="You may discard any that are Edicts or Kata"
+)
+def _resolve_comprehensive_education_discard(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    discarded: list[Effect] = [Discard(card_id, seat) for card_id in chosen]
+    rest = tuple(card_id for card_id in remaining_look(game) if card_id not in chosen)
+    return [*discarded, _comprehensive_education_bottom(seat, rest, source_id)]
+
+
+def _comprehensive_education_bottom(
+    seat: PlayerId, rest: tuple[str, ...], source_id: str
+) -> Effect:
+    """ "Put the rest on the bottom of your deck in any order", or nothing left to put."""
+    if not rest:
+        return EndLook()
+    return Arrange(seat, rest, PUT_ON_BOTTOM, source_id, to_bottom=True)
+
+
+register_ability(
+    "comprehensive_education",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: Look at the top 5 cards of your Fate deck. You may show one that is an Edict "
+        "or Kata and put it in your hand, and you may discard any that are Edicts or Kata. Put the "
+        "rest on the bottom of your deck in any order.",
+        cost=no_cost,
+        targets=itself,
+        effects=_comprehensive_education_effects,
+        located_at=(CardLocation.HAND,),
     ),
 )
 

@@ -22,7 +22,12 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     KANPEKI_DYNASTY,
     ZOMBIE_FOLLOWER,
 )
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ArrangeCards,
+    ChooseCards,
+    ChooseOption,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
@@ -647,3 +652,115 @@ def test_gihei_ignores_the_other_seats_action():
 
     assert game.pending is None
     assert effective_force(game, gihei) == 3
+
+
+# --- Comprehensive Education ---
+
+
+def _education_game(deck) -> EngineSession:
+    """P1 holding Comprehensive Education over a Fate deck reading ``deck`` from the top, each
+    entry an id or an (id, keyword) pair."""
+    state = TableState.empty_two_seat()
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="education",
+                name="Comprehensive Education",
+                printed_id="comprehensive_education",
+                side=Side.FATE,
+                owner=P1,
+                gold_cost=0,
+                keywords=("Unique",),
+            ),
+        )
+    )
+    cards = []
+    for entry in deck:
+        card_id, keyword = entry if isinstance(entry, tuple) else (entry, None)
+        keywords = (keyword,) if keyword else ()
+        cards.append(
+            register(
+                state,
+                L5RCard.of(
+                    ActionPrint,
+                    id=card_id,
+                    name=card_id,
+                    side=Side.FATE,
+                    owner=P1,
+                    keywords=keywords,
+                ),
+            )
+        )
+    state.decks[DeckKey(P1, Side.FATE)].cards = list(reversed(cards))
+    return EngineSession.start(state, P1)
+
+
+def _education_fate_deck(session: EngineSession) -> list[str]:
+    return [card.id for card in reversed(session.game.table.decks[DeckKey(P1, Side.FATE)].cards)]
+
+
+def _play_education(session: EngineSession) -> None:
+    session.act(P1, PlayStrategy("education"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("education",)))  # the Strategy is its own target
+
+
+def test_comprehensive_education_walks_take_then_discard_then_bottom():
+    session = _education_game(
+        [("edict1", "Edict"), "plain1", ("kata1", "Kata"), ("edict2", "Edict"), "plain2", "deep"]
+    )
+    _play_education(session)
+    pending = session.game.pending
+    assert isinstance(pending, ChooseCards)
+    assert pending.candidates == ("edict1", "kata1", "edict2")
+    assert pending.decline_label == "Decline"
+
+    session.submit(P1, DecisionResponse(("kata1",)))
+    pending = session.game.pending
+    assert isinstance(pending, ChooseCards)
+    assert pending.candidates == ("edict1", "edict2") and pending.maximum == 2
+    assert session.game.table.cards_by_id["kata1"].shown
+
+    session.submit(P1, DecisionResponse(("edict2",)))
+    pending = session.game.pending
+    assert isinstance(pending, ArrangeCards) and pending.to_bottom
+    assert pending.candidates == ("edict1", "plain1", "plain2")
+
+    session.submit(P1, DecisionResponse(("plain2", "edict1", "plain1")))
+
+    hand = [card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
+    assert hand == ["kata1"]
+    discard = [
+        card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
+    ]
+    assert "edict2" in discard
+    assert _education_fate_deck(session) == ["deep", "plain2", "edict1", "plain1"]
+    assert session.game.look is None
+    assert session.log.replay() == session.game
+
+
+def test_comprehensive_education_with_no_edict_or_kata_goes_straight_to_the_bottom():
+    session = _education_game(["a", "b", "c", "d", "e", "deep"])
+    _play_education(session)
+
+    pending = session.game.pending
+    assert isinstance(pending, ArrangeCards) and pending.candidates == ("a", "b", "c", "d", "e")
+    session.submit(P1, DecisionResponse(pending.unchanged))
+    assert _education_fate_deck(session) == ["deep", "a", "b", "c", "d", "e"]
+
+
+def test_comprehensive_education_declining_both_may_questions_still_buries_the_rest():
+    session = _education_game([("edict1", "Edict"), "plain", "p2", "p3", "p4", "deep"])
+    _play_education(session)
+
+    session.submit(P1, DecisionResponse(()))  # take none
+    session.submit(P1, DecisionResponse(()))  # discard none
+    pending = session.game.pending
+    assert isinstance(pending, ArrangeCards)
+    assert pending.candidates == ("edict1", "plain", "p2", "p3", "p4")
+    session.submit(P1, DecisionResponse(pending.unchanged))
+
+    assert _education_fate_deck(session) == ["deep", "edict1", "plain", "p2", "p3", "p4"]
+    assert session.game.look is None
