@@ -144,3 +144,13 @@ reaches, so an Interrupt answering `Bow` or `Destroy` is offered against what an
 An Interrupt that reads "Target your X" sets `targets`, and the step asks for the target with a
 {class}`~.ChooseInterruptTarget` once the card is named, passing the chosen card to `interrupt` as
 a fourth argument. A card whose `targets` finds nothing is not offered.
+
+The action's targeting is itself the first effect in the window. Once a seat has chosen an
+ability's target, {func}`~.apply_ability_target` resolves a single
+{class}`~yasuki_core.engine.rules.abilities.activation.ResolveAbility` effect: performing it
+records the target as the action's and produces the ability's effects against that target as its
+follow-on. That is where "the action targets him instead of another card, if legal" lives.
+{card}`Final Sacrifice` answers `ResolveAbility` and replaces it with one naming the Yojimbo, so the
+ability is built against him and nothing has to be redirected. "If legal" is
+{func}`~yasuki_core.engine.rules.interrupts.legal_substitutes`: of the cards the Interrupt names,
+those the ability could target other than the one chosen.
