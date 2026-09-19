@@ -4,15 +4,26 @@ from collections.abc import Callable
 
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.factory import side_of_record
 from yasuki_gui import theme
+from yasuki_core.database import query_all_cards
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.visuals import DeckVisual
+
+
+# The most rows the database picker lists at once. Past this the seat has not typed enough to
+# find anything, and rebuilding the list is what makes typing feel slow.
+SEARCH_ROWS = 200
 
 
 class Dialogs:
     def __init__(self, toplevel: tk.Misc, image_provider: ImageProvider):
         self.toplevel = toplevel
         self.images = image_provider
+
+    @staticmethod
+    def _title_of(record: dict) -> str:
+        return record.get("extended_title") or record["name"]
 
     def card_search(
         self,
@@ -161,6 +172,57 @@ class Dialogs:
         tk.Label(win, text="TODO: Reveal to opponent", bg=theme.PANEL, fg=theme.INK).pack(
             padx=12, pady=12
         )
+
+    def database_search(self, title: str, side: Side, on_pick: Callable[[dict], None]) -> None:
+        """Pick any ``side`` card in the database by title, for a debug client that puts cards on
+        the table from nowhere.
+
+        The whole card list is read once as the window opens and filtered in memory as the seat
+        types, with the list capped so a one-letter query does not rebuild thousands of rows. Choose
+        hands the selected record to ``on_pick``. Cancel closes without a pick.
+        """
+        every = [
+            (self._title_of(record).lower(), record)
+            for record in query_all_cards()
+            if side_of_record(record) is side
+        ]
+        win = tk.Toplevel(self.toplevel)
+        win.title(title)
+        win.transient(self.toplevel)
+        win.grab_set()
+        frame = tk.Frame(win, padx=12, pady=12)
+        frame.pack(fill="both", expand=True)
+        query = tk.StringVar()
+        entry = tk.Entry(frame, textvariable=query, width=40)
+        entry.pack(fill="x")
+        listbox = tk.Listbox(frame, height=18, width=50, exportselection=False)
+        listbox.pack(fill="both", expand=True, pady=(8, 0))
+        records: list[dict] = []
+
+        def refilter(*_args) -> None:
+            typed = query.get().strip().lower()
+            matching = [record for title, record in every if typed in title] if typed else []
+            records[:] = matching[:SEARCH_ROWS]
+            listbox.delete(0, "end")
+            for record in records:
+                listbox.insert("end", self._title_of(record))
+
+        query.trace_add("write", refilter)
+
+        def choose() -> None:
+            selected = listbox.curselection()
+            if not selected:
+                return
+            record = records[selected[0]]
+            win.destroy()
+            on_pick(record)
+
+        listbox.bind("<Double-Button-1>", lambda _event: choose())
+        buttons = tk.Frame(frame)
+        buttons.pack(pady=(12, 0))
+        tk.Button(buttons, text="Cancel", command=win.destroy).pack(side="right", padx=(8, 0))
+        tk.Button(buttons, text="Choose", command=choose).pack(side="right")
+        entry.focus_set()
 
     def preferences(
         self,

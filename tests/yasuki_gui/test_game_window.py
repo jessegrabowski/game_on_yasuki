@@ -11,7 +11,7 @@ from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.game_window import GameWindow
 
 from tests.yasuki_core.engine.builders import personality
-from tests.yasuki_gui.conftest import DummyEventNamespace, PreviewOnlyImages
+from tests.yasuki_gui.conftest import DummyEventNamespace, PreviewOnlyImages, menubar_cascades
 
 # Every widget the window promises a collaborator. Named rather than discovered, so a widget
 # dropped from the class fails here instead of quietly leaving the tuple shorter.
@@ -124,6 +124,7 @@ def test_a_local_override_turns_the_debug_flag_on_for_the_modules_that_read_it(m
         assert built.debug
         assert gui_config.DEBUG_MODE
         assert "DEBUG" in built.root.title()
+        assert "Debug" in menubar_cascades(built.menubar)
     finally:
         built.root.destroy()
 
@@ -198,3 +199,19 @@ def test_reconfiguring_the_board_keys_leaves_the_view_key_bound(window):
     window.field.configure_hotkeys(window.field._hotkeys)
 
     assert window.root.bind_all(key) == before
+
+
+def test_binding_points_each_debug_hook_at_its_own_presenter_method(window):
+    called = []
+
+    # bind_to wires every presenter method, so the stub answers to any name with a recorder.
+    class _Presenter:
+        def __getattr__(self, name):
+            return lambda *args: called.append(name)
+
+    window.bind_to(_Presenter())
+    window.field.on_debug_gold()
+    window.field.on_debug_card_to_hand()
+    window.field.on_debug_card_to_province()
+
+    assert called == ["debug_gold", "debug_card_to_hand", "debug_card_to_province"]

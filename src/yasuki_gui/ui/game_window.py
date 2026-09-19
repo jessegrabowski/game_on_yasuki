@@ -40,6 +40,9 @@ class ClientBindings(Protocol):
     def on_board_menu(self) -> None: ...
     def load_human_deck(self, path: str, /) -> None: ...
     def load_opponent_deck(self, path: str, /) -> None: ...
+    def debug_gold(self) -> None: ...
+    def debug_card_to_hand(self) -> None: ...
+    def debug_card_to_province(self) -> None: ...
     def undo(self, event=None, /) -> None: ...
     def cancel_via_escape(self, event=None, /) -> None: ...
 
@@ -169,7 +172,7 @@ class GameWindow:
         # Cancel.
         self.field.bind("<space>", lambda _event: self.prompt_box.invoke_primary())
 
-        self.menubar = build_menubar(self.root, self.field)
+        self.menubar = build_menubar(self.root, self.field, debug=self.debug)
         self.root.config(menu=self.menubar)
 
         self.field.on_local_player_changed = self.relayout_panels
@@ -281,6 +284,9 @@ class GameWindow:
         self.field.on_board_menu = presenter.on_board_menu
         self.field.load_deck_from_file = presenter.load_human_deck
         self.field.load_opponent_deck_from_file = presenter.load_opponent_deck
+        self.field.on_debug_gold = presenter.debug_gold
+        self.field.on_debug_card_to_hand = presenter.debug_card_to_hand
+        self.field.on_debug_card_to_province = presenter.debug_card_to_province
         self.battle_view.on_card_menu = presenter.on_card_activated
         self.battle_view.on_card_click = presenter.on_lane_card_clicked
         self.look_view.on_card_click = presenter.on_look_card_clicked

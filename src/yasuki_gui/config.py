@@ -6,8 +6,10 @@ from typing import Any
 from yasuki_core import DEFAULT_DSN
 from yasuki_core.yaml_io import load_yaml
 
-# Global debug flag
-DEBUG_MODE: bool = False
+# Global debug flag: the seat toggle, the Debug menu, and the title that says so. Set from the
+# environment so a developer turns it on per launch (``YASUKI_DEBUG=1 pixi run play``) without
+# editing source.
+DEBUG_MODE: bool = os.environ.get("YASUKI_DEBUG", "").lower() not in ("", "0", "false", "no")
 
 
 @dataclass(frozen=True)

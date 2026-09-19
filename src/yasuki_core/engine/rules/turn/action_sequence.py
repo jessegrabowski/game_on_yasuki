@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.abilities.activation import apply_ability_target, 
 from yasuki_core.engine.rules.abilities.strategy import (
     play_strategy,
 )
+from yasuki_core.engine.debug import PlaceDebugCard, apply_debug_placement
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
@@ -205,6 +206,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             apply_legacy_choice(game, request, response)
         case PlaceLegacy():
             apply_legacy_placement(game, request, response)
+        case PlaceDebugCard():
+            apply_debug_placement(game, request, response)
         case ChooseAbilityTarget():
             apply_ability_target(game, request, response)
         case ChooseEquipTarget():

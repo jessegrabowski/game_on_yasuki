@@ -10,6 +10,7 @@ yasuki_core.engine.replay.game_log
     Act
     Answer
     Cancel
+    Debug
     GameLog
 
 .. rubric:: Functions
@@ -19,6 +20,7 @@ yasuki_core.engine.replay.game_log
     act_and_log
     build_game
     cancel_and_log
+    debug_and_log
     game_log_from_dict
     game_log_to_dict
     replay
