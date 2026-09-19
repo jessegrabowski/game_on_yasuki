@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInheritanceTarget,
     ChooseInterrupt,
     ChooseInterruptEffect,
+    ChooseInterruptTarget,
     ChooseInvestAmount,
     ChooseLegacyCard,
     ChooseLobbyTarget,
@@ -57,7 +58,11 @@ from yasuki_core.engine.rules.rulebook.recruit import (
 from yasuki_core.engine.rules.rulebook.cycle import cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor_payment import use_favor_ability
-from yasuki_core.engine.rules.interrupts import apply_interrupt, apply_interrupt_effect
+from yasuki_core.engine.rules.interrupts import (
+    apply_interrupt,
+    apply_interrupt_effect,
+    apply_interrupt_target,
+)
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
 from yasuki_core.engine.rules.rulebook.kharmic import kharmic_draw, kharmic_refill
 from yasuki_core.engine.rules.rulebook.legacy import (
@@ -220,6 +225,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             apply_fortification_province(game, request, response)
         case ChooseInterrupt():
             apply_interrupt(game, request, response)
+        case ChooseInterruptTarget():
+            apply_interrupt_target(game, request, response)
         case ChooseInterruptEffect():
             apply_interrupt_effect(game, request, response)
         case ChooseCards():

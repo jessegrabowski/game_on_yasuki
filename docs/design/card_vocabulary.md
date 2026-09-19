@@ -163,6 +163,7 @@ Legality with respect to game state is checked separately.
    ChooseInheritanceTarget
    ChooseInterrupt
    ChooseInterruptEffect
+   ChooseInterruptTarget
    ChooseInvestAmount
    ChooseOption
    LeaveBowed

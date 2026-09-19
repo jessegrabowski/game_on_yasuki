@@ -7,7 +7,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.costs import can_pay
 from yasuki_core.engine.rules.abilities.activation import ResolveAbility
 from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt
-from yasuki_core.engine.rules.abilities.registry import interrupt_for
+from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.effects import (
@@ -22,7 +22,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.legality import has_presence, location_permits
+from yasuki_core.engine.rules.legality import has_presence, legal_targets, location_permits
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInterrupt,
     ChooseInterruptAdjustment,
     ChooseInterruptEffect,
+    ChooseInterruptTarget,
     DecisionResponse,
     interrupt_choice,
     interrupt_token,
@@ -204,10 +205,13 @@ class Replacement:
         The action's effect, as first handed to step E, that the Interrupt answered.
     card_id : str
         The card whose Interrupt was taken.
+    target_id : str, optional
+        The target the Interrupt was taken against, for one that takes a target. Default None.
     """
 
     bound: Effect
     card_id: str
+    target_id: str | None = None
 
     def answers(self, effect: Effect) -> bool:
         return effect == self.bound
@@ -217,7 +221,10 @@ class Replacement:
         interrupt = interrupt_for(card)
         if interrupt is None:
             raise RuntimeError(f"{self.card_id} prints no Interrupt to apply")
-        return interrupt.interrupt(game, card, effect).replacement
+        if self.target_id is None:
+            return interrupt.interrupt(game, card, effect).replacement
+        target = game.table.cards_by_id[self.target_id]
+        return interrupt.interrupt(game, card, effect, target).replacement
 
 
 def _unique(effects: Iterable[Effect]) -> list[Effect]:
@@ -299,12 +306,32 @@ def answered_by(
     game: GameState, card: L5RCard, interrupt: Interrupt, foreseen: tuple[Effect, ...]
 ) -> list[Effect]:
     """Those of ``foreseen`` that ``card``'s ``interrupt`` may be taken against: of its type as
-    the Interrupts already taken leave it, and within its ``applies``."""
+    the Interrupts already taken leave it, within its ``applies``, and with a target to name where
+    it takes one."""
     return _unique(
         effect
         for effect in foreseen
         if isinstance(as_modified(game, effect), interrupt.answers)
         and interrupt.applies(game, card, effect)
+        and (interrupt.targets is None or interrupt.targets(game, card, effect))
+    )
+
+
+def legal_substitutes(
+    game: GameState, targeting: ResolveAbility, candidate_ids: list[str]
+) -> tuple[str, ...]:
+    """Those of ``candidate_ids`` the ability about to resolve could target in place of its chosen
+    target: legal targets of the ability that are not the one already chosen (CR, Substitution and
+    Targets). What an Interrupt reading "the action targets X instead, if legal" offers."""
+    source = game.table.cards_by_id[targeting.card_id]
+    ability = ability_for(game, source, targeting.ability_key)
+    if ability is None:
+        return ()
+    legal = set(legal_targets(game, source, ability))
+    return tuple(
+        candidate
+        for candidate in candidate_ids
+        if candidate in legal and candidate != targeting.target_id
     )
 
 
@@ -373,8 +400,8 @@ def apply_interrupt(game: GameState, request: ChooseInterrupt, response: Decisio
     """Act on the seat's answer at the Interrupt window and bring the window back for the next.
 
     A pass records the seat as passed. Naming a card asks, where the forecast holds several
-    effects the card could answer, which one, then a rulebook Interrupt asks for its adjustment,
-    and only then is the card discarded or played. Raise
+    effects the card could answer, which one, then a rulebook Interrupt asks for its adjustment
+    and a targeted Interrupt for its target, and only then is the card discarded or played. Raise
     ``RuntimeError`` if the answer names a card the seat can no longer take the Interrupt with.
     """
     window = _window(game)
@@ -470,6 +497,17 @@ def _take(
         _play_interrupt(game, seat, window, card_id, effect)
 
 
+def apply_interrupt_target(
+    game: GameState, request: ChooseInterruptTarget, response: DecisionResponse
+) -> None:
+    """Take the Interrupt the seat named against the chosen target. Raise ``RuntimeError`` if the
+    target is no longer one the Interrupt can be taken against."""
+    window = _window(game)
+    answered = _answerable(game, request.seat, window, request.card_id, None)
+    effect = _named(answered, lambda effect: effect.describe() == request.effect)
+    _play_interrupt(game, request.seat, window, request.card_id, effect, response.choices[0])
+
+
 def _window(game: GameState) -> InterruptWindow:
     paused = triggers.paused_effect(game)
     if not isinstance(paused, InterruptWindow):
@@ -483,6 +521,7 @@ def _play_interrupt(
     window: InterruptWindow,
     card_id: str,
     effect: Effect,
+    target_id: str | None = None,
 ) -> None:
     foreseen = forecast(game, window.effects)
     played = next(
@@ -494,8 +533,20 @@ def _play_interrupt(
     card, interrupt, location = played
     if effect not in answered_by(game, card, interrupt, foreseen):
         raise RuntimeError(f"{card_id} no longer answers {effect.describe()}")
-    interruption = interrupt.interrupt(game, card, effect)
-    game.modifications.append(Replacement(effect, card.id))
+    if interrupt.targets is None:
+        interruption = interrupt.interrupt(game, card, effect)
+    else:
+        candidates = interrupt.targets(game, card, effect)
+        if target_id is None:
+            game.pending = ChooseInterruptTarget(
+                seat, candidates, card.id, card.name, effect.describe()
+            )
+            return
+        if target_id not in candidates:
+            raise RuntimeError(f"{target_id} is no longer a target {card_id} can be taken against")
+        target = game.table.cards_by_id[target_id]
+        interruption = interrupt.interrupt(game, card, effect, target)
+    game.modifications.append(Replacement(effect, card.id, target_id))
     game.stack.append(ReopenWindow(window))
     if location is CardLocation.HAND:
         play_strategy_with(game, card, interruption.effects)

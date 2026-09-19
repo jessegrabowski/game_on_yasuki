@@ -140,3 +140,7 @@ type, so Doji Yuten answers a bowing of his controller's other Personality and n
 An attack's outcome, the `Bow` behind a Fear or the `Destroy` behind a Ranged Attack, follows the
 comparison through the cascade as an effect of its own and is in the forecast when the attack
 reaches, so an Interrupt answering `Bow` or `Destroy` is offered against what an attack would do.
+
+An Interrupt that reads "Target your X" sets `targets`, and the step asks for the target with a
+{class}`~.ChooseInterruptTarget` once the card is named, passing the chosen card to `interrupt` as
+a fourth argument. A card whose `targets` finds nothing is not offered.

@@ -57,7 +57,12 @@ class Interrupt[T: Effect]:
         either does.
     interrupt : callable
         Maps ``(game, source_card, effect)`` to the :class:`~.Interruption` it makes of the pending
-        effect: what replaces it and what else happens.
+        effect: what replaces it and what else happens. With ``targets`` set, the chosen target is
+        passed as a fourth argument.
+    targets : callable, optional
+        Maps ``(game, source_card, effect)`` to the ids of the cards the Interrupt may target, for
+        a card that reads "Interrupt: Target your X". The step asks for the target once the card is
+        chosen, and does not offer a card that could target nothing. Default None, untargeted.
     applies : callable, optional
         Maps ``(game, source_card, effect)`` to whether this Interrupt may answer that particular
         effect, for a card whose text narrows it beyond the type, as "your other Personality's
@@ -75,10 +80,11 @@ class Interrupt[T: Effect]:
 
     label: str
     answers: type[T] | UnionType
-    interrupt: Callable[[GameState, L5RCard, T], Interruption]
+    interrupt: Callable[..., Interruption]
     applies: Callable[[GameState, L5RCard, T], bool] = lambda game, source, effect: True
     located_at: tuple[CardLocation, ...] = (CardLocation.HAND,)
     cost: Cost = no_cost
+    targets: Callable[[GameState, L5RCard, T], tuple[str, ...]] | None = None
 
 
 @dataclass(frozen=True, slots=True)

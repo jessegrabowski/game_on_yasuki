@@ -596,6 +596,43 @@ class ChooseInterruptEffect(ChooseOption):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseInterruptTarget(DecisionRequest):
+    """The seat must choose the target of the Interrupt it has just named, for a card that reads
+    "Interrupt: Target your X". The candidates are the cards the Interrupt may target, all in
+    play, so a client renders them as board selections. Backing out reopens the offer the card
+    was named against, since naming it moved nothing.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose Interrupt is being taken.
+    card_name : str
+        Its title, for the prompt.
+    effect : str
+        The action's effect the Interrupt answers, as its description reads, to find it again in
+        the forecast once the target is chosen.
+    """
+
+    card_id: str
+    card_name: str
+    effect: str
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return f"Choose a target for {self.card_name}"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        return True
+
+    @property
+    def reopens_on_cancel(self) -> bool:
+        return True
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseBattlefield(DecisionRequest):
     """The Attacker must choose where the next battle is fought.
 

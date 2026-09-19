@@ -1,18 +1,21 @@
+from dataclasses import replace
+
 import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules import interrupts
-from yasuki_core.engine.rules.abilities.activation import defer_ability
+from yasuki_core.engine.rules.abilities.activation import ResolveAbility, defer_ability
 from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, Interruption, itself
 from yasuki_core.engine.rules.abilities.registry import (
     ability_for,
     register_ability,
     register_interrupt,
 )
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.board.queries import attack_targets, owned_personalities
 from yasuki_core.engine.rules.effects import (
     Bow,
+    Destroy,
     Fear,
     GainHonor,
     Negated,
@@ -41,6 +44,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInterrupt,
     ChooseInterruptAdjustment,
     ChooseInterruptEffect,
+    ChooseInterruptTarget,
+    ChoosePayment,
     DecisionResponse,
     interrupt_token,
 )
@@ -170,6 +175,42 @@ register_interrupt(
         answers=Bow,
         interrupt=lambda game, source, effect: Interruption(
             effect, effects=(GainHonor(source.owner, 1),)
+        ),
+    ),
+)
+
+
+register_ability(
+    "bow_then_destroy_probe",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: bow a target enemy unbowed Personality, then destroy it",
+        cost=lambda game, source: [],
+        targets=lambda game, source: [
+            card.id
+            for seat in game.table.seats
+            if seat is not source.owner
+            for card in owned_personalities(game, seat)
+            if not card.bowed
+        ],
+        effects=lambda game, source, target: [
+            Bow(target.id),
+            Then((Destroy(target.id, source.owner),)),
+        ],
+    ),
+)
+
+
+register_interrupt(
+    "substitute_probe",
+    Interrupt(
+        label="Interrupt: the action targets your other Personality instead, if legal",
+        answers=ResolveAbility,
+        interrupt=lambda game, source, targeting, target: Interruption(
+            replace(targeting, target_id=target.id, effects=None)
+        ),
+        targets=lambda game, source, targeting: interrupts.legal_substitutes(
+            game, targeting, [card.id for card in owned_personalities(game, source.owner)]
         ),
     ),
 )
@@ -782,6 +823,146 @@ def test_interrupts_from_both_seats_net_against_the_change_and_never_reverse_it(
 
     assert game.pending is None
     assert game.table.seats[P1].honor == 1  # -1 then +1 net to nothing, not a gain turned loss
+
+
+# --- a targeted Interrupt that substitutes the action's target ---
+
+
+def _substitution_game(*, stand_in_bowed: bool = False) -> GameState:
+    """P2's ability is about to resolve against P1's victim, with P1 holding the substitute probe
+    and a second Personality to point the action at."""
+    game = two_seat_game()
+    source = put_in_play(game, holding("P2-src", owner=P2, printed_id="bow_then_destroy_probe"))
+    put_in_play(game, personality("P1-victim"))
+    stand_in = put_in_play(game, personality("P1-stand-in"))
+    if stand_in_bowed:
+        stand_in.bow()
+    _strategy(game.table, "P1-sub", "substitute_probe", P1)
+    game.action = ActivateAbility(source.id)
+    game.action_seat = P2
+    return game
+
+
+TARGETING = ResolveAbility("P2-src", "P1-victim")
+
+
+def _on_the_table(game: GameState) -> set[str]:
+    return {card.id for card in game.table.battlefield.cards}
+
+
+def test_the_actions_targeting_is_held_at_the_step_ahead_of_what_it_does():
+    game = _substitution_game()
+
+    resolve_action_effects(game, [TARGETING])
+
+    request = game.pending
+    assert isinstance(request, ChooseInterrupt)
+    assert request.seat is P1 and request.candidates == ("P1-sub",)
+    assert request.description == "P2-src targets P1-victim; bow P1-victim; destroy P1-victim"
+    assert not game.table.cards_by_id["P1-victim"].bowed
+    assert game.action_targets == ()
+
+
+def test_naming_a_targeted_interrupt_asks_for_its_target_before_anything_moves():
+    game = _substitution_game()
+    resolve_action_effects(game, [TARGETING])
+
+    action_sequence.submit(game, DecisionResponse(("P1-sub",)))
+
+    request = game.pending
+    assert isinstance(request, ChooseInterruptTarget)
+    assert request.seat is P1 and request.candidates == ("P1-stand-in",)
+    assert request.card_id == "P1-sub"
+    assert not game.table.cards_by_id["P1-victim"].bowed
+    assert "P1-sub" in {card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards}
+
+
+def test_substituting_the_target_resolves_the_whole_ability_against_the_stand_in():
+    game = _substitution_game()
+    resolve_action_effects(game, [TARGETING])
+
+    action_sequence.submit(game, DecisionResponse(("P1-sub",)))
+    action_sequence.submit(game, DecisionResponse(("P1-stand-in",)))
+    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
+    sequence.run_stack(game)
+
+    assert game.pending is None
+    assert "P1-victim" in _on_the_table(game) and not game.table.cards_by_id["P1-victim"].bowed
+    assert "P1-stand-in" not in _on_the_table(game)
+    assert game.action_targets == ("P1-stand-in",)
+
+
+def test_a_stand_in_the_action_could_not_target_is_not_offered():
+    # "If legal": a bowed Personality is no target for an ability naming an unbowed one, and with
+    # no legal stand-in the Interrupt itself is not offered.
+    game = _substitution_game(stand_in_bowed=True)
+
+    resolve_action_effects(game, [TARGETING])
+    sequence.run_stack(game)
+
+    assert game.pending is None
+    assert "P1-victim" not in _on_the_table(game)
+
+
+def _substitution_session() -> EngineSession:
+    """P2 has announced the probe against P1's victim through a session, so the tape holds the
+    action a cancel unwinds to."""
+    table = _substitution_game().table
+    session = EngineSession.start(table, P2)
+    session.act(P2, ActivateAbility("P2-src"))
+    session.submit(P2, DecisionResponse(("P1-victim",)))
+    assert _asked(session) is P1
+    return session
+
+
+def test_backing_out_of_the_target_question_reopens_the_offer():
+    session = _substitution_session()
+    session.submit(P1, DecisionResponse(("P1-sub",)))
+    assert isinstance(session.game.pending, ChooseInterruptTarget)
+
+    assert session.can_cancel(P1)
+    session.cancel(P1)
+
+    assert isinstance(session.game.pending, ChooseInterrupt)
+
+
+def test_backing_out_of_the_interrupts_payment_returns_to_its_target_question():
+    # The payment was raised by the answer naming the Interrupt, not by the interrupted action, so
+    # a cancel there steps back one decision and leaves P2's action standing.
+    session = _substitution_session()
+    session.submit(P1, DecisionResponse(("P1-sub",)))
+    session.submit(P1, DecisionResponse(("P1-stand-in",)))
+    assert isinstance(session.game.pending, ChoosePayment)
+
+    assert session.can_cancel(P1)
+    session.cancel(P1)
+
+    assert isinstance(session.game.pending, ChooseInterruptTarget)
+    assert session.game.action == ActivateAbility("P2-src")
+
+
+def test_the_substitution_replays_to_the_same_board():
+    session = _substitution_session()
+    session.submit(P1, DecisionResponse(("P1-sub",)))
+    session.submit(P1, DecisionResponse(("P1-stand-in",)))
+    pay(session, P1)
+    assert session.game.pending is None
+
+    rebuilt = replay(session.log)
+
+    assert rebuilt == session.game
+    assert "P1-victim" in _on_the_table(rebuilt)
+    assert "P1-stand-in" not in _on_the_table(rebuilt)
+
+
+def test_an_answer_naming_a_stand_in_no_longer_legal_is_refused():
+    game = _substitution_game()
+    resolve_action_effects(game, [TARGETING])
+    action_sequence.submit(game, DecisionResponse(("P1-sub",)))
+    game.table.cards_by_id["P1-stand-in"].bow()
+
+    with pytest.raises(RuntimeError, match="no longer"):
+        action_sequence.submit(game, DecisionResponse(("P1-stand-in",)))
 
 
 # --- the window opens once, before anything resolves ---
