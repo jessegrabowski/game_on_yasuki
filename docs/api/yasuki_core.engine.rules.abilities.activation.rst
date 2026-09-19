@@ -8,6 +8,7 @@ yasuki_core.engine.rules.abilities.activation
 .. autosummary::
 
     ApplyAbilityEffects
+    ResolveAbility
     SelectAbilityTarget
 
 .. rubric:: Functions
