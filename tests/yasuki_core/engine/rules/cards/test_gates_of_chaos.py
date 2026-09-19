@@ -1,19 +1,26 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
-from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.decisions import ArrangeCards, DecisionResponse
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production, untaken_self_grant
 from yasuki_core.engine.rules.vocabulary.game_events import ProducingGold
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.triggers import TriggerContext, _TRIGGERS
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import Side
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     dealt_table,
     end_phase,
+    fate_card,
     holding,
+    personality,
     province_card,
     put_in_play,
+    register,
 )
 
 P1 = PlayerId.P1
@@ -193,3 +200,48 @@ def test_the_first_player_is_not_offered_a_recruit_only_courtesy_could_pay_for()
     pits = going_second.game.table.cards_by_id["sp"]
     assert maximum_gold_production(going_second.game, pits) == 3
     assert Recruit("target") in going_second.legal_actions(P1)
+
+
+# --- Divination Bowl ---
+
+
+def _bowl_game(deck=("a", "b", "c", "d")) -> EngineSession:
+    """P1's Personality carrying a Divination Bowl, over a Fate deck reading ``deck`` from the
+    top."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("bearer"))
+    attached(state, attachment("bowl", printed_id="divination_bowl"), "bearer")
+    state.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(state, fate_card(card_id, P1)) for card_id in reversed(deck)
+    ]
+    return EngineSession.start(state, P1)
+
+
+def _fate_deck(session: EngineSession) -> list[str]:
+    return [card.id for card in reversed(session.game.table.decks[DeckKey(P1, Side.FATE)].cards)]
+
+
+def test_divination_bowl_looks_at_three_and_puts_them_back_in_the_order_given():
+    session = _bowl_game()
+    session.act(P1, ActivateAbility("bowl", "look"))
+    session.submit(P1, DecisionResponse(("bowl",)))
+    pending = session.game.pending
+    assert isinstance(pending, ArrangeCards) and pending.candidates == ("a", "b", "c")
+    assert session.game.table.cards_by_id["bowl"].bowed
+
+    session.submit(P1, DecisionResponse(("a", "c", "b")))
+
+    assert _fate_deck(session) == ["b", "c", "a", "d"]
+    assert session.game.look is None
+    assert session.log.replay() == session.game
+
+
+def test_divination_bowl_draws_and_destroys_itself():
+    session = _bowl_game()
+
+    session.act(P1, ActivateAbility("bowl", "draw"))
+    session.submit(P1, DecisionResponse(("bowl",)))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["a"]
+    assert "bowl" not in {card.id for card in session.game.table.battlefield.cards}
