@@ -237,7 +237,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.factory import build_token_print
+from yasuki_core.game_pieces.factory import build_print
 from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint, PersonalityPrint
 
 P1, P2 = PlayerId.P1, PlayerId.P2
@@ -246,7 +246,7 @@ hand = state.zones[ZoneKey(P1, ZoneRole.HAND)]
 
 # The Naga Follower the Spearmen can become, loaded as a creatable token template. A created
 # token is stamped from a print the table already holds, the way a deck load provides one.
-state.creatable_tokens[NAGA_FOLLOWER] = build_token_print(
+state.creatable_tokens[NAGA_FOLLOWER] = build_print(
     {
         "card_id": NAGA_FOLLOWER,
         "name": "Naga",

@@ -13,7 +13,7 @@ yasuki_core.game_pieces.factory
 
 .. autosummary::
 
-    build_token_print
+    build_print
     build_token_templates
     resolve_decklist
 

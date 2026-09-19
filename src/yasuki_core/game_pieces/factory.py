@@ -130,11 +130,13 @@ def _section_for_type(card_type: str | None) -> str:
     return "dynasty" if card_type in _DYNASTY_BY_TYPE else "fate"
 
 
-def build_token_print(record: dict) -> CardPrint:
-    """The print a spawn stamps a token from.
+def build_print(record: dict) -> CardPrint:
+    """The print a database record describes, wearing the record's own art.
 
     The record has the ``get_card_by_id`` shape (the image as an ``image_path`` column, not a
-    ``prints`` list), as returned by ``database.get_creates_for_cards`` and ``get_card_by_id``.
+    ``prints`` list), as ``database.get_card_by_id``, ``search_cards`` and
+    ``get_creates_for_cards`` return it. A token is stamped from one, and so is a card a debug
+    client puts on the table.
 
     Parameters
     ----------
@@ -163,7 +165,7 @@ def build_token_templates(token_records: dict[str, dict]) -> dict[str, CardPrint
     templates : dict mapping str to CardPrint
         Each token card id to the print a spawn stamps it from.
     """
-    return {token_id: build_token_print(record) for token_id, record in token_records.items()}
+    return {token_id: build_print(record) for token_id, record in token_records.items()}
 
 
 def _name_index(records: list[dict]) -> dict[str, dict]:

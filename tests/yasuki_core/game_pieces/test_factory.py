@@ -10,7 +10,7 @@ from yasuki_core.game_pieces.factory import (
     _select_print,
     resolve_decklist,
     build_token_templates,
-    build_token_print,
+    build_print,
 )
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side, AttachmentType
@@ -348,7 +348,7 @@ def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
     # The token record carries the get_card_by_id shape the factory builds a live token from.
     assert record["card_id"] == "bird_of_prey"
     assert "image_path" in record and record.get("types")
-    assert build_token_print(record).side is not None
+    assert build_print(record).side is not None
 
 
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")

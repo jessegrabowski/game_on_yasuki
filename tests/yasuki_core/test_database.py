@@ -23,7 +23,7 @@ from yasuki_core.database import (
 )
 from yasuki_core.search.compile_sql import build_search_filters
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.factory import build_token_print
+from yasuki_core.game_pieces.factory import build_print
 from yasuki_core.paths import SETS_DIR, resolve_set_image_path
 from yasuki_core.search import parse_and_build_query
 
@@ -812,7 +812,7 @@ def test_rulebook_proxy_loads_and_builds_without_stats():
     proxies = get_rulebook_proxies()
     assert set(proxies) == set(RULEBOOK_PROXY_IDS)
 
-    printed = build_token_print(proxies["imperial_favor"])
+    printed = build_print(proxies["imperial_favor"])
     assert printed.name == "The Imperial Favor"
     # Side.FATE is what lets the Favor sit in a hand, which is where it is represented.
     assert printed.side is Side.FATE
