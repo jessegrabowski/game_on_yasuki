@@ -17,9 +17,10 @@ seat, the deck and the cards top first, and marks the seat as a peeker of each:
 
 The look is a field of the state rather than of any one decision because the chain that follows it
 is made of ordinary decisions. "Put one in your hand" is a {class}`~.ChooseCards`, "put the rest
-back in any order" is an {class}`~.ArrangeCards`, and a card such as
-{card}`Temples of Gisei Toshi`, which names a type before looking, would ask a
-{class}`~.ChooseOption` first. Every one of them has to know which cards are in view, and a client has to know what to draw in the window it opens, so the fact lives in one place.
+back in any order" is an {class}`~.ArrangeCards`, and {card}`Temples of Gisei Toshi`, which
+names a type before looking, asks a {class}`~.ChooseOption` first. Every one of them has to know
+which cards are in view, and a client has to know what to draw in the window it opens, so the fact
+lives in one place.
 {class}`~.EndLook` clears it when the last question is answered.
 
 A handler builds its first question from {func}`~.top_of_deck`, so the candidates and the look
@@ -67,19 +68,21 @@ and the engine never reverses. {class}`~.PlaceOnDeck` applies the answer with th
 leaves the cards as they were looked at, which a client offers as one click for the seat that does
 not care.
 
-## The two endings
+## The three endings
 
-Most cards of the class end one of two ways, so the rulebook registers both resolvers once and a
+Most cards of the class end one of three ways, so the rulebook registers each resolver once and a
 card names one instead of writing its own:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/looks.py
 :start-at: PUT_BACK_ON_TOP = "put_back_on_top"
-:end-at: PUT_ON_BOTTOM = "put_on_bottom"
+:end-at: TAKE_ONE_AND_SHUFFLE = "take_one_and_shuffle"
 :language: python
 ```
 
-Each puts the cards where the seat ordered them and closes the look. A card whose ending is neither,
-such as one that shuffles, closes the look from its own resolver. A look left open past the end of
+The first two put the cards where the seat ordered them, and the third takes one into hand and
+shuffles. Each closes the look. A card whose ending is none of these, such as
+{card}`Temples of Gisei Toshi` leaving the rest where they lie, closes the look from its own
+resolver. A look left open past the end of
 its action raises, and a second look opened over the first raises, so a resolver that forgets
 {class}`~.EndLook` fails in the test that drives the card rather than by refusing every later
 cancel in a game.
