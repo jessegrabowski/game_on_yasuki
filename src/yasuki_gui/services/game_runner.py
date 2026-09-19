@@ -439,8 +439,9 @@ class GameRunner:
         """Put ``amount`` Gold in the human's pool from nowhere, on the tape."""
         self.session.debug(DebugGold(self.human, amount))
 
-    def debug_card(self, printed: CardPrint, zone: ZoneKey) -> None:
-        """Put a new copy of ``printed`` in the human's ``zone`` from nowhere, on the tape. The id
+    def debug_card(self, printed: CardPrint) -> None:
+        """Put a new copy of ``printed`` on the table from nowhere, on the tape: a Fate card into
+        the human's hand, a Dynasty card into a Province the human then picks on the board. The id
         counts the debug cards already on the table, so a replay makes the same one."""
         taken = {
             card_id
@@ -448,7 +449,7 @@ class GameRunner:
             if card_id.startswith("debug-")
         }
         card_id = f"debug-{len(taken) + 1}"
-        self.session.debug(DebugCard(self.human, card_id, printed, zone))
+        self.session.debug(DebugCard(self.human, card_id, printed))
 
     def can_cancel(self) -> bool:
         """Whether the human may back out of the pending decision right now."""

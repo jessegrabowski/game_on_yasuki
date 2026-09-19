@@ -219,30 +219,6 @@ class Dialogs:
         tk.Button(buttons, text="Choose", command=choose).pack(side="right")
         entry.focus_set()
 
-    def option(
-        self, title: str, question: str, options: list[str], on_pick: Callable[[str], None]
-    ) -> None:
-        """Put ``question`` to the player with one button per option. Closing the window picks
-        nothing."""
-        win = tk.Toplevel(self.toplevel)
-        win.title(title)
-        win.transient(self.toplevel)
-        win.grab_set()
-        frame = tk.Frame(win, padx=12, pady=12)
-        frame.pack(fill="both", expand=True)
-        tk.Label(frame, text=question).pack(anchor="w")
-        buttons = tk.Frame(frame)
-        buttons.pack(pady=(12, 0))
-
-        def pick(chosen: str) -> None:
-            win.destroy()
-            on_pick(chosen)
-
-        for text in options:
-            tk.Button(buttons, text=text, command=lambda chosen=text: pick(chosen)).pack(
-                side="left", padx=4
-            )
-
     def preferences(
         self,
         current_name: str,

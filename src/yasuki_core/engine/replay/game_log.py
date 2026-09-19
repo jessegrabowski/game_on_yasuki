@@ -2,12 +2,7 @@ from dataclasses import dataclass, field
 
 from yasuki_core.engine.debug import DebugCard, DebugGold, DebugStep, apply_debug
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.replay.serialization import (
-    decode_print,
-    decode_zone_key,
-    encode_print,
-    encode_zone_key,
-)
+from yasuki_core.engine.replay.serialization import decode_print, encode_print
 from yasuki_core.engine.replay.snapshot import (
     InitialRecord,
     build_initial_state,
@@ -251,22 +246,15 @@ def _encode_debug(step: DebugStep) -> dict:
     match step:
         case DebugGold(amount=amount):
             return {"kind": "gold", "amount": amount}
-        case DebugCard(card_id=card_id, printed=printed, zone=zone):
-            return {
-                "kind": "card",
-                "card_id": card_id,
-                "printed": encode_print(printed),
-                "zone": encode_zone_key(zone),
-            }
+        case DebugCard(card_id=card_id, printed=printed):
+            return {"kind": "card", "card_id": card_id, "printed": encode_print(printed)}
     raise ValueError(f"no encoding for debug step {type(step).__name__}")
 
 
 def _decode_debug(seat: PlayerId, payload: dict) -> DebugStep:
     if payload["kind"] == "gold":
         return DebugGold(seat, payload["amount"])
-    return DebugCard(
-        seat, payload["card_id"], decode_print(payload["printed"]), decode_zone_key(payload["zone"])
-    )
+    return DebugCard(seat, payload["card_id"], decode_print(payload["printed"]))
 
 
 def _decode_input(payload: dict) -> GameInput:

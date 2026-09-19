@@ -9,12 +9,14 @@ yasuki_core.engine.debug
 
     DebugCard
     DebugGold
+    PlaceDebugCard
 
 .. rubric:: Functions
 
 .. autosummary::
 
     apply_debug
+    apply_debug_placement
 
 .. automodule:: yasuki_core.engine.debug
     :members:

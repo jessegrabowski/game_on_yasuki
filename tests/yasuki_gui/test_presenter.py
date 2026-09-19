@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.debug import PlaceDebugCard
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy, Recruit
 from yasuki_core.engine.rules.abilities.model import Ability, itself
@@ -1740,21 +1741,42 @@ def test_debug_gold_lands_in_the_pool_and_shows_on_the_board(board):
     assert session.log.replay() == session.game
 
 
-def test_a_debug_card_from_the_database_lands_where_it_was_sent(board):
-    presenter, window, session = board
-    record = {
-        "name": "Debug Strategy",
-        "card_id": "debug_strategy",
-        "types": ["Strategy"],
+def _database_record(name: str, card_type: str) -> dict:
+    return {
+        "name": name,
+        "card_id": name.lower().replace(" ", "_"),
+        "types": [card_type],
         "keywords": [],
         "clans": [],
         "text": "",
         "image_path": None,
     }
 
-    presenter._debug_card(record, ZoneKey(P1, ZoneRole.HAND))
+
+def test_a_fate_debug_card_from_the_database_lands_in_the_hand(board):
+    presenter, window, session = board
+
+    presenter._debug_card(_database_record("Debug Strategy", "Strategy"))
 
     hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
     assert [card.printed.name for card in hand][-1] == "Debug Strategy"
     assert hand[-1].id == "debug-1"
+    assert session.log.replay() == session.game
+
+
+def test_a_dynasty_debug_card_is_placed_on_the_board_like_a_legacy_card(board):
+    presenter, window, session = board
+    first = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    displaced = session.game.table.zones[first].cards[0].id
+
+    presenter._debug_card(_database_record("Debug Farm", "Holding"))
+
+    assert isinstance(session.game.pending, PlaceDebugCard)
+    assert "Place" in _buttons(window)
+
+    window.field.toggle_selection(displaced)
+    presenter.confirm()
+
+    assert session.game.pending is None
+    assert [card.printed.name for card in session.game.table.zones[first].cards] == ["Debug Farm"]
     assert session.log.replay() == session.game

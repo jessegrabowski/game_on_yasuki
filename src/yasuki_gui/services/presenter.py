@@ -19,7 +19,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     assignment_token,
 )
 from yasuki_core.engine.rules.projection import GameView, unit_view
-from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.factory import build_print
 from yasuki_gui.services.game_runner import SearchView
@@ -571,37 +570,15 @@ class Presenter:
 
     def debug_card_to_hand(self) -> None:
         """Pick any Fate card in the database and put a copy in the human's hand."""
-        seat = self.host.human_seat
-        self._dialogs().database_search(
-            "Add Card to Hand",
-            lambda record: self._debug_card(record, ZoneKey(seat, ZoneRole.HAND)),
-        )
+        self._dialogs().database_search("Add Card to Hand", self._debug_card)
 
     def debug_card_to_province(self) -> None:
-        """Pick any Dynasty card in the database, then which Province it fills, discarding what
-        was there."""
-        seat = self.host.human_seat
-        provinces = sorted(
-            (
-                key
-                for key in self.host.session.game.table.zones
-                if key.owner is seat and key.role is ZoneRole.PROVINCE
-            ),
-            key=lambda key: key.idx,
-        )
+        """Pick any Dynasty card in the database, then which Province it fills on the board,
+        discarding the card there."""
+        self._dialogs().database_search("Add Card to Province", self._debug_card)
 
-        def picked(record: dict) -> None:
-            self._dialogs().option(
-                "Add Card to Province",
-                "Which Province?",
-                [str(key.idx + 1) for key in provinces],
-                lambda chosen: self._debug_card(record, provinces[int(chosen) - 1]),
-            )
-
-        self._dialogs().database_search("Add Card to Province", picked)
-
-    def _debug_card(self, record: dict, zone: ZoneKey) -> None:
-        self.host.runner.debug_card(build_print(record), zone)
+    def _debug_card(self, record: dict) -> None:
+        self.host.runner.debug_card(build_print(record))
         self.present()
 
     def _dialogs(self) -> Dialogs:
