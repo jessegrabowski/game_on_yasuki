@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 
+from yasuki_core.engine.debug import DebugStep
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.replay.snapshot import InitialRecord
@@ -18,6 +19,7 @@ from yasuki_core.engine.replay.game_log import (
     GameLog,
     build_game,
     act_and_log,
+    debug_and_log,
     submit_and_log,
     replay,
 )
@@ -137,6 +139,12 @@ class EngineSession:
         except Exception:
             self.game = replay(self.log)
             raise
+
+    def debug(self, step: DebugStep) -> None:
+        """Apply a developer's step, Gold or a card from nowhere, and record it so the game still
+        replays to itself. For a debug client only. Raise ``RuntimeError`` while a decision is
+        pending."""
+        self._drive(lambda: debug_and_log(self.game, self.log, step))
 
     def can_cancel(self, seat: PlayerId) -> bool:
         """Whether :meth:`cancel` would take ``seat``'s request right now: a decision of its own is

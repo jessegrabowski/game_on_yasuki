@@ -132,6 +132,8 @@ numpydoc_xref_aliases = {
     "Cost": "yasuki_core.engine.rules.abilities.costs.Cost",
     "DecisionRequest": "yasuki_core.engine.rules.vocabulary.decisions.DecisionRequest",
     "DecisionResponse": "yasuki_core.engine.rules.vocabulary.decisions.DecisionResponse",
+    "DebugCard": "yasuki_core.engine.debug.DebugCard",
+    "DebugGold": "yasuki_core.engine.debug.DebugGold",
     "Deck": "yasuki_core.game_pieces.deck.Deck",
     "DeckBuilderRepository": "yasuki_gui.ui.deck_builder.deck_data.DeckBuilderRepository",
     "DeckBuilderWindow": "yasuki_gui.ui.deck_builder.deck_builder.DeckBuilderWindow",

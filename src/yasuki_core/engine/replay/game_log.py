@@ -1,6 +1,13 @@
 from dataclasses import dataclass, field
 
+from yasuki_core.engine.debug import DebugCard, DebugGold, DebugStep, apply_debug
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.replay.serialization import (
+    decode_print,
+    decode_zone_key,
+    encode_print,
+    encode_zone_key,
+)
 from yasuki_core.engine.replay.snapshot import (
     InitialRecord,
     build_initial_state,
@@ -75,7 +82,24 @@ class Cancel:
     seat: PlayerId
 
 
-GameInput = Act | Answer | Cancel
+@dataclass(frozen=True, slots=True)
+class Debug:
+    """Tape entry: a developer put Gold or a card on the table from nowhere. Recorded so the game
+    still replays to itself. Only a debug client writes one.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat the step was taken for.
+    step : DebugGold or DebugCard
+        What was put where.
+    """
+
+    seat: PlayerId
+    step: DebugStep
+
+
+GameInput = Act | Answer | Cancel | Debug
 
 
 @dataclass(slots=True)
@@ -135,6 +159,12 @@ def submit_and_log(game: GameState, log: GameLog, response: DecisionResponse) ->
     log.entries.append(Answer(seat, response))
 
 
+def debug_and_log(game: GameState, log: GameLog, step: DebugStep) -> None:
+    """Apply a developer's step and, on success, record it."""
+    apply_debug(game, step)
+    log.entries.append(Debug(step.seat, step))
+
+
 def cancel_and_log(game: GameState, log: GameLog) -> None:
     """Cancel the pending decision and, on success, record it. A decision that cannot be cancelled
     raises out of ``action_sequence.cancel`` before anything is recorded, so the tape holds only
@@ -178,6 +208,8 @@ def _apply(game: GameState, entry: GameInput) -> None:
             if pending is None or pending.seat is not seat:
                 raise ValueError(f"log out of step: {seat.name} cancelled with no matching request")
             action_sequence.cancel(game)
+        case Debug(step=step):
+            apply_debug(game, step)
 
 
 def game_log_to_dict(log: GameLog) -> dict:
@@ -209,7 +241,32 @@ def _encode_input(entry: GameInput) -> dict:
             "seat": entry.seat.name,
             "choices": list(entry.response.choices),
         }
+    if isinstance(entry, Debug):
+        return {"kind": "debug", "seat": entry.seat.name, "step": _encode_debug(entry.step)}
     return {"kind": "cancel", "seat": entry.seat.name}
+
+
+def _encode_debug(step: DebugStep) -> dict:
+    """The step without its seat, which the entry around it carries."""
+    match step:
+        case DebugGold(amount=amount):
+            return {"kind": "gold", "amount": amount}
+        case DebugCard(card_id=card_id, printed=printed, zone=zone):
+            return {
+                "kind": "card",
+                "card_id": card_id,
+                "printed": encode_print(printed),
+                "zone": encode_zone_key(zone),
+            }
+    raise ValueError(f"no encoding for debug step {type(step).__name__}")
+
+
+def _decode_debug(seat: PlayerId, payload: dict) -> DebugStep:
+    if payload["kind"] == "gold":
+        return DebugGold(seat, payload["amount"])
+    return DebugCard(
+        seat, payload["card_id"], decode_print(payload["printed"]), decode_zone_key(payload["zone"])
+    )
 
 
 def _decode_input(payload: dict) -> GameInput:
@@ -217,6 +274,9 @@ def _decode_input(payload: dict) -> GameInput:
         return Act(PlayerId[payload["seat"]], _decode_action(payload["action"]))
     if payload["kind"] == "answer":
         return Answer(PlayerId[payload["seat"]], DecisionResponse(tuple(payload["choices"])))
+    if payload["kind"] == "debug":
+        seat = PlayerId[payload["seat"]]
+        return Debug(seat, _decode_debug(seat, payload["step"]))
     return Cancel(PlayerId[payload["seat"]])
 
 
