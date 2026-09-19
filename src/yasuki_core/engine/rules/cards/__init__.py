@@ -43,6 +43,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     the_hidden_emperor_episode_6,
     the_hidden_emperor_the_dark_journey_home,
     the_imperial_gift_2,
+    the_new_order,
     thousand_years_of_darkness,
     torn_asunder,
     twenty_festivals,
