@@ -7,16 +7,22 @@ yasuki_core.engine.rules.interrupts
 
 .. autosummary::
 
-    ResumeInterrupted
+    Adjustment
+    ReopenWindow
+    Replacement
     RulebookInterrupt
 
 .. rubric:: Functions
 
 .. autosummary::
 
+    answered_by
     apply_interrupt
+    apply_interrupt_effect
+    as_modified
     card_interrupts_for
     discardable_for
+    forecast
     interrupt_request
     interrupters
     rulebook_interrupt

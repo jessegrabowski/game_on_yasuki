@@ -153,6 +153,8 @@ def forget_action(game: GameState) -> None:
     game.action_is_favor = False
     game.action = None
     game.interrupts_taken.clear()
+    game.interrupts_offered = False
+    game.modifications.clear()
 
 
 def open_round(game: GameState) -> None:
@@ -365,6 +367,9 @@ def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
         # A resolver that forgot EndLook would otherwise leave every later cancel refused, by
         # either seat, for the rest of the game, with a message about cards nobody is looking at.
         raise RuntimeError("the action ended with a look still open")
+    # An Interrupt bound to an effect the action never produced, a negation on the outcome of an
+    # attack that then missed, is spent with the action and must not answer a Response's effect.
+    game.modifications.clear()
     if game.round is not acted_in:
         return
     if open_response_window(game):

@@ -583,6 +583,19 @@ class ChooseInterruptAdjustment(ChooseOption):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseInterruptEffect(ChooseOption):
+    """Which of the action's effects the Interrupt the seat just named answers, asked only when
+    the forecast holds more than one it could. The candidates are the effects as the seat reads
+    them. Answered through its own handler rather than a resolver, since the Interrupt window it
+    was asked from stays paused until the Interrupt is taken; ``resolver`` names nothing.
+    Backing out reopens the offer the card was named against."""
+
+    @property
+    def reopens_on_cancel(self) -> bool:
+        return True
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseBattlefield(DecisionRequest):
     """The Attacker must choose where the next battle is fought.
 

@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.modifiers import Ongoing
 from yasuki_core.engine.rules.turn.structure import ActionRound, Moment, PHASE_TIMINGS, Phase
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
-from yasuki_core.engine.rules.vocabulary.work import WorkItem
+from yasuki_core.engine.rules.vocabulary.work import Modification, WorkItem
 
 
 def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:
@@ -154,6 +154,15 @@ class GameState:
         The once-per-action rulebook Interrupts taken against the action now resolving, as the
         Interrupt's key and the seat that took it. Cleared as the next action begins. Ephemeral
         and rebuilt by replay. Default empty.
+    interrupts_offered : bool
+        Whether the action now resolving has opened its Interrupt window. An action opens one,
+        over the effects it first hands to step E, and what it defers behind them resolves without
+        another (CR, Action Sequence step D). Cleared as the next action begins. Ephemeral and
+        rebuilt by replay. Default False.
+    modifications : list of Modification
+        What the Interrupts taken against the action now resolving make of its effects, each
+        bound to the effect it answers and applied as that effect comes up to resolve. Cleared as
+        the next action begins. Ephemeral and rebuilt by replay. Default empty.
     """
 
     table: TableState
@@ -192,6 +201,8 @@ class GameState:
     action_is_favor: bool = False
     action_events: list[GameEvent] = field(default_factory=list)
     interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)
+    interrupts_offered: bool = False
+    modifications: list[Modification] = field(default_factory=list)
 
     @property
     def awaiting_decision(self) -> bool:

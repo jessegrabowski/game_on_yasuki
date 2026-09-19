@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     InterruptingEffect,
-    InterruptStep,
+    InterruptWindow,
     Effect,
     Then,
 )
@@ -219,12 +219,12 @@ def _advance(
     :class:`~.ResumeCascade`, so :func:`~.resume_cascade` continues from precisely here once the
     seat answers.
 
-    ``interruptible`` says the effects in hand are an action's own, the only ones the Interrupt
-    step is open against (ShE datasheet, Interrupt). Each is held there on its way through, wrapped
-    as an :class:`~.InterruptStep`, which pauses the same way while a seat has an Interrupt to take
-    against it. What a trigger returns is a trait's or the rulebook's, never the action's, so it is
-    applied unwrapped, and a ``Then`` among the action's effects carries the flag to the deferred
-    step."""
+    ``interruptible`` says the effects in hand are an action's own, the only ones an Interrupt may
+    modify (ShE datasheet, Interrupt). Each is checked against the modifications the action's
+    :class:`~.InterruptWindow` collected before it is applied, and resolves as what the Interrupt
+    made of it. What a trigger returns is a trait's or the rulebook's, never the action's, so it
+    is applied as returned, and a ``Then`` among the action's effects carries the flag to the
+    deferred step."""
     resolved = 0
     firing = list(firing)
     while True:
@@ -236,7 +236,7 @@ def _advance(
                 game.stack.append(ApplyEffects(effect.effects, interruptible=interruptible))
                 continue
             if interruptible and not isinstance(effect, InterruptingEffect):
-                effect = InterruptStep(effect)
+                effect = _modified(game, effect)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
@@ -273,6 +273,17 @@ def _advance(
         game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
+
+
+def _modified(game: GameState, effect: Effect) -> Effect:
+    """``effect`` as the Interrupts taken against the action make of it: every modification bound
+    to it applies in the order the Interrupts were taken, and is spent."""
+    original = effect
+    for modification in list(game.modifications):
+        if modification.answers(original):
+            effect = modification.apply(game, effect)
+            game.modifications.remove(modification)
+    return effect
 
 
 def _refuse_mid_decision(game: GameState, driver: str) -> None:
@@ -510,13 +521,19 @@ def resolve_effects(game: GameState, effects: list[Effect]) -> None:
 
 def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:
     """Apply ``effects`` as an action's own, which is what step E of the Action Sequence hands
-    over: each is held at the Interrupt step on its way through (ShE datasheet, Interrupt), and
-    the derived-event cascade runs as in :func:`~.resolve_effects`.
+    over. The first effects an action hands over are held at its Interrupt window first (CR,
+    Action Sequence step D), and every effect resolves as the Interrupts taken there make of it.
+    What the action defers behind them through a ``Then`` opens no second window. The
+    derived-event cascade runs as in :func:`~.resolve_effects`.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "resolve_action_effects")
-    _advance(game, tuple(effects), [], None, [], interruptible=True)
+    if game.interrupts_offered:
+        _advance(game, tuple(effects), [], None, [], interruptible=True)
+        return
+    game.interrupts_offered = True
+    _advance(game, (InterruptWindow(tuple(effects)),), [], None, [], interruptible=True)
 
 
 def action_did(game: GameState, kind: type[GameEvent]) -> tuple[GameEvent, ...]:

@@ -108,13 +108,27 @@ A Strategy printing an Interrupt is not an `Ability`. It has no target and no ef
 since what it does is decided against the effect it interrupts, and no round offers it. It is
 registered with `register_interrupt` as an {class}`~.Interrupt`, whose `answers` names the effect
 type it may be played against and whose `interrupt` maps the pending effect to an
-{class}`~.Interruption`: the effect that resolves in its place and whatever else happens. The
-Interrupt step in `rules/interrupts.py` offers it from hand while such an effect waits to resolve,
-and the Strategy is then paid for and discarded the way any Strategy is. Any of the action's own
-effects can be answered, and only those: the step is open against what step E hands to
-`resolve_action_effects`, never against a cost, a trait's effects or a rulebook procedure's, and an
-Interrupt names the type it answers. A card that reads "negate" returns {class}`~.Negated` around
-the effect it answers, which resolves as nothing where the effect would have.
+{class}`~.Interruption`: the effect that resolves in its place and whatever else happens.
+
+The Interrupt window is step D of the Action Sequence, and it opens once per action. When an
+action hands its effects to {func}`~yasuki_core.engine.rules.triggers.resolve_action_effects`,
+they are held in an {class}`~.InterruptWindow` before any of them resolves, and each seat in turn,
+the active player first, may take an Interrupt against what the action is about to do
+(CR, Action Sequence step D; ShE datasheet, Interrupt). What it is about to do is the
+{func}`~yasuki_core.engine.rules.interrupts.forecast`: the effects in order, a `Then`'s contents,
+an ability's effects behind the {class}`~yasuki_core.engine.rules.abilities.activation.ResolveAbility`
+that targets them, and an attack's outcome when the attack reaches on the board as it stands. The
+step is an action round: a pass holds until someone takes an Interrupt, which reopens the window
+to every seat, and it closes once every seat has passed in turn. An
+Interrupt taken there is stored as a modification bound to the effect it answered and applied when
+that effect comes up to resolve, which is the CR's "delayed until those effects occur": Okura's
+destroy waits on the Fear it modifies, and a Courage discard adjusts the Fear as it resolves. A
+card that reads "negate" returns {class}`~.Negated` around the effect it answers, which resolves as
+nothing where the effect would have, and the forecast then shows nothing behind it. When the
+forecast holds several effects a card could answer, {class}`~.ChooseInterruptEffect` asks which.
+Any of the action's own effects can be answered, and only those: the window is over what step E
+hands to `resolve_action_effects`, never a cost, a trait's effects or a rulebook procedure's, and
+what a choice resolver produces later is not foreseeable and is not offered.
 
 A Personality or attachment prints an Interrupt too, taken from play rather than from hand. Its
 `located_at` names the battlefield, and it is offered under the gates an activated ability in play
@@ -124,5 +138,5 @@ costs, and a card that cannot pay is not offered. `applies` narrows the offer be
 type, so Doji Yuten answers a bowing of his controller's other Personality and not his own.
 
 An attack's outcome, the `Bow` behind a Fear or the `Destroy` behind a Ranged Attack, follows the
-comparison through the cascade as an effect of its own, so an Interrupt answering `Bow` or
-`Destroy` is offered against what an attack does.
+comparison through the cascade as an effect of its own and is in the forecast when the attack
+reaches, so an Interrupt answering `Bow` or `Destroy` is offered against what an attack would do.

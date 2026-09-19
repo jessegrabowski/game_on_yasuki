@@ -198,11 +198,12 @@ be a walk driven mid-decision.
 {func}`~yasuki_core.engine.rules.triggers.resolve_effects` is the walk entered with effects in
 hand and an empty queue, which is how a cost, a rulebook procedure's effects or a resolver's output
 gets its derived reactions. {func}`~yasuki_core.engine.rules.triggers.resolve_action_effects` is
-the same walk for an action's own effects, the ones step E of the Action Sequence hands over, and
-the only ones the walk holds at the Interrupt step: each is wrapped as an `InterruptStep` on its
-way through, while what a trigger returns inside that cascade is a trait's or the rulebook's and is
-applied unwrapped. A `Then` among the action's effects carries that provenance to the deferred
-step. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
+the same walk for an action's own effects, the ones step E of the Action Sequence hands over. The
+first effects an action hands over are held in an `InterruptWindow` before any resolves, once per
+action, and every one of the action's effects is checked against the modifications the window
+collected before it is applied, while what a trigger returns inside that cascade is a trait's or
+the rulebook's and is applied as returned. A `Then` among the action's effects carries that
+provenance to the deferred step, which opens no second window. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
 effects held until a given moment. {func}`~yasuki_core.engine.rules.triggers.enforce_state_based_actions`
 is how a caller that mutated the board directly gets the same guarantee the walk gives itself
 after every effect: it settles the rules first and starts a walk only if that raised anything.

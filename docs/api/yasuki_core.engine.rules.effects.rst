@@ -45,7 +45,7 @@ yasuki_core.engine.rules.effects
     GrantPriority
     GrantProvinceStrength
     IgnoreHonorRequirements
-    InterruptStep
+    InterruptWindow
     InterruptingEffect
     LookAtTop
     LoseGame

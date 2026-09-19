@@ -295,6 +295,26 @@ def test_aitso_answers_the_destruction_a_ranged_attack_would_make():
         assert "guard" in {card.id for card in session.game.table.battlefield.cards}
 
 
+WEAK_RANGED_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: Ranged 1 Attack",
+    cost=no_cost,
+    targets=_enemy_personalities,
+    effects=lambda game, source, target: [RangedAttack(1, target.id, source.owner)],
+)
+
+
+def test_aitso_is_not_offered_against_an_attack_that_cannot_reach():
+    # "If the action would destroy": the window forecasts an attack's outcome on the board as it
+    # stands, and a Ranged 1 Attack on a 2F guard would destroy nobody.
+    with probe_ability(RANGED_PROBE, WEAK_RANGED_ABILITY):
+        session = _aitso_defending(probe=RANGED_PROBE)
+
+        assert session.game.pending is None
+        assert "guard" in {card.id for card in session.game.table.battlefield.cards}
+        assert _dynasty_deck(session) == []
+
+
 def test_aitso_may_negate_her_own_destruction():
     with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
         session = _aitso_defending(target="aitso")
