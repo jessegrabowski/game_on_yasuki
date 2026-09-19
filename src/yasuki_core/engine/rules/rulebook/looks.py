@@ -1,13 +1,14 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.effects import Effect, EndLook, PlaceOnDeck
+from yasuki_core.engine.rules.effects import Effect, EndLook, MoveToHand, PlaceOnDeck, ShuffleDeck
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.vocabulary.looks import Look
 
-# The two endings a look has when a card says "in any order", registered once so a card names one
-# rather than writing its own. Each puts the cards where the seat ordered them and closes the look.
+# The endings a look has often enough to register once, so a card names one rather than writing
+# its own. Each closes the look.
 PUT_BACK_ON_TOP = "put_back_on_top"
 PUT_ON_BOTTOM = "put_on_bottom"
+TAKE_ONE_AND_SHUFFLE = "take_one_and_shuffle"
 
 
 def _open_look(game: GameState) -> Look:
@@ -29,3 +30,13 @@ def _put_on_bottom(
     game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [PlaceOnDeck(chosen, _open_look(game).deck, to_bottom=True), EndLook()]
+
+
+@choice_resolver(TAKE_ONE_AND_SHUFFLE, prompt="Put one in your hand")
+def _take_one_and_shuffle(
+    game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "Put one in your hand. Shuffle the deck." The look closes before the shuffle, which would
+    otherwise leave it naming cards that have moved."""
+    deck = _open_look(game).deck
+    return [MoveToHand(chosen[0], seat), EndLook(), ShuffleDeck(deck)]

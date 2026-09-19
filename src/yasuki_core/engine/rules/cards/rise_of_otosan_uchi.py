@@ -20,9 +20,13 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
+    has_keyword,
     owned_holdings,
     owned_personalities,
+    top_of_deck,
 )
+from yasuki_core.engine.rules.board.seats import cards_in_play
+from yasuki_core.engine.rules.rulebook.looks import TAKE_ONE_AND_SHUFFLE
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
@@ -41,6 +45,7 @@ from yasuki_core.engine.rules.effects import (
     Fear,
     GainHonor,
     GrantProvinceStrength,
+    LookAtTop,
     MeleeAttack,
     Move,
     MoveToDeck,
@@ -66,7 +71,7 @@ from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.prints import PersonalityPrint, RingPrint
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 
@@ -502,6 +507,57 @@ register_ability(
         located_at=(CardLocation.HAND,),
         battle_designators=frozenset({BattleDesignator.ABSENT}),
         targets_any_location=True,
+    ),
+)
+
+
+# --- Master Your Thoughts ---
+
+
+def _master_your_thoughts_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your Monk and Shugenja Personalities, bowed or not: the text asks for no more."""
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if has_keyword(game, card, keywords.MONK) or has_keyword(game, card, keywords.SHUGENJA)
+    ]
+
+
+def _master_your_thoughts_rings(game: GameState, seat: PlayerId) -> int:
+    return sum(isinstance(card.printed, RingPrint) for card in cards_in_play(game, seat))
+
+
+def _master_your_thoughts_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """The bow is what lets the seat look ("bow ... to look"), so a target already bowed bows
+    nothing and looks at nothing (CR, To)."""
+    if target.bowed:
+        return []
+    seat = source.owner
+    fate = DeckKey(seat, Side.FATE)
+    seen = top_of_deck(game, fate, _master_your_thoughts_rings(game, seat) + 1)
+    if not seen:
+        return [Bow(target.id)]
+    return [
+        Bow(target.id),
+        LookAtTop(seat, fate, len(seen)),
+        Choose(seat, seen, 1, 1, TAKE_ONE_AND_SHUFFLE, source.id),
+    ]
+
+
+register_ability(
+    "master_your_thoughts",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.KIHO}),
+        label="Kiho Open: Bow your target Monk or Shugenja Personality to look at a number of "
+        "cards on the top of your Fate deck equal to the number of Rings you control plus 1. Put "
+        "one in your hand. Shuffle the deck.",
+        cost=no_cost,
+        targets=_master_your_thoughts_targets,
+        effects=_master_your_thoughts_effects,
+        located_at=(CardLocation.HAND,),
     ),
 )
 

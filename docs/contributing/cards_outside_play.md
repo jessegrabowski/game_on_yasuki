@@ -130,6 +130,27 @@ print an explicit "Destroy a Terrain" clause ahead of putting themselves into pl
 nothing of the kind. Nothing is implemented for Terrain yet, and the first one written has to
 settle what a battlefield attachment is before it can settle anything else.
 
+## Looking at the top of a deck
+
+{card}`Beset from All Sides` is played from hand and looks at cards that stay in the deck. The
+handler opens the look and asks the first question about it in one list:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/a_line_in_the_sand.py
+:pyobject: _beset_from_all_sides_effects
+:language: python
+```
+
+The resolver reads what is still in view and asks the next question, naming the rulebook's ending
+so the card writes no resolver for it:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/a_line_in_the_sand.py
+:pyobject: _resolve_beset_from_all_sides
+:language: python
+```
+
+[Looking at cards](../design/systems/looking-at-cards.md) is the whole shape, including why the
+look is state and why nothing can be backed out of once it opens.
+
 ## Where the rest lives
 
 [Abilities and costs](../design/systems/abilities-and-costs.md) covers `located_at` alongside the

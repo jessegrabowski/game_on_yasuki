@@ -33,6 +33,7 @@ KENSAI = "Kensai"
 # A Strategy that puts itself into play and stays there. A player holds one at a time unless a
 # card says otherwise (ShE datasheet, Edicts).
 EDICT = "Edict"
+KATA = "Kata"
 
 # The boldface keyword marking a card the Courage rulebook Interrupt can discard to move a Fear
 # effect by 2 (ShE datasheet, Courage Rulebook ability).
@@ -75,6 +76,7 @@ FARM = "Farm"
 JADE = "Jade"
 KIMONO = "Kimono"
 MAGISTRATE = "Magistrate"
+MONK = "Monk"
 MARKET = "Market"
 MERCHANT_CARAVAN = "Merchant Caravan"
 NAGA = "Naga"
@@ -95,6 +97,7 @@ DUELIST = "Duelist"
 EARTH = "Earth"
 ECONOMIC = "Economic"
 IAIJUTSU = "Iaijutsu"
+KIHO = "Kiho"
 MAHO = "Maho"
 POLITICAL = "Political"
 TACTICAL = "Tactical"

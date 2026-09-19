@@ -1,13 +1,79 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.gold.self_grants import register_self_grant, SELF_GRANT, self_grant
 from yasuki_core.engine.rules.board.seats import went_second
-from yasuki_core.engine.rules.effects import DelayStraighten, Effect, GainHonor, GrantModifier
+from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.board.queries import top_of_deck
+from yasuki_core.engine.rules.effects import (
+    Arrange,
+    DelayStraighten,
+    Destroy,
+    DrawCard,
+    Effect,
+    GainHonor,
+    GrantModifier,
+    LookAtTop,
+)
+from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.table import DeckKey
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.vocabulary.game_events import ProducingGold
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.game_pieces.cards import L5RCard
+
+
+# --- Divination Bowl ---
+
+DIVINATION_BOWL_LOOK = 3
+
+
+def _divination_bowl_look_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    seat = source.owner
+    fate = DeckKey(seat, Side.FATE)
+    seen = top_of_deck(game, fate, DIVINATION_BOWL_LOOK)
+    if not seen:
+        return []
+    return [LookAtTop(seat, fate, len(seen)), Arrange(seat, seen, PUT_BACK_ON_TOP, source.id)]
+
+
+def _divination_bowl_draw_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [DrawCard(source.owner), Destroy(source.id, source.owner)]
+
+
+register_ability(
+    "divination_bowl",
+    Ability(
+        key="look",
+        timings=(ActionTiming.LIMITED,),
+        label="Limited, bow: Look at the top three cards of your Fate deck. Put them back in any "
+        "order.",
+        cost=bow_cost,
+        targets=itself,
+        hits_every_target=True,
+        effects=_divination_bowl_look_effects,
+    ),
+)
+register_ability(
+    "divination_bowl",
+    Ability(
+        key="draw",
+        timings=(ActionTiming.LIMITED,),
+        label="Limited, bow: Draw a card. Destroy this Item.",
+        cost=bow_cost,
+        targets=itself,
+        hits_every_target=True,
+        effects=_divination_bowl_draw_effects,
+    ),
+)
 
 
 # --- Jade Mine ---

@@ -319,15 +319,16 @@ class Presenter:
         read the cards, and the engine refuses to unread them.
 
         A choice offers Confirm, gray until a card is picked, and Decline when choosing nothing is
-        an answer. An arrangement offers Confirm once every card is placed, Keep Order while none
-        is, and Undo while any is.
+        an answer. An arrangement offers Confirm once every card is placed, Keep Order for whatever
+        is still in the window, and Undo while anything has been placed.
         """
         answer = self._board_answer()
         if isinstance(pending, ArrangeCards):
+            placed = answer.choices
             buttons: list[ButtonSpec] = [
                 ("Confirm", self.confirm, pending.accepts(answer)),
-                ("Keep Order", lambda: self.submit_answer(pending.unchanged), not answer.choices),
-                ("Undo", self.undo, bool(answer.choices)),
+                ("Keep Order", lambda: self.submit_answer(pending.keeping_order(placed)), True),
+                ("Undo", self.undo, bool(placed)),
             ]
             return pending.prompt(answer), buttons
         buttons = [

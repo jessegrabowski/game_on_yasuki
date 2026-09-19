@@ -12,8 +12,6 @@ from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.ui.images import ImageProvider
 
 CELL_PAD = 12
-# What a card the seat may not pick is veiled with, so it reads as shown rather than offered.
-_VEIL_TAG = "veil"
 # Room for six cards in a row: one more than the longest look a Shattered Empire card prints, so a
 # look sized by a stat has some headroom before the row runs past the panel.
 LOOK_W = 6 * (CARD_W + CELL_PAD) + CELL_PAD
@@ -26,9 +24,9 @@ class LookView(CardPanel):
 
     Opened and closed by the game rather than the player, like the battle view: a stray dismissal
     would hide cards the seat still has to answer about. A card the current question offers is drawn
-    plain and a click reports it; one it does not is veiled and answers nothing. A card the seat has
-    already placed while arranging is not drawn at all, which is what makes the arranging read as
-    taking cards off the table one by one.
+    and a click reports it; one it does not is drawn the same and answers nothing. A card the seat
+    has already placed while arranging is not drawn at all, which is what makes the arranging read
+    as taking cards off the table one by one.
 
     Attributes
     ----------
@@ -57,7 +55,7 @@ class LookView(CardPanel):
         cards : list of L5RCard
             The cards in view, top first.
         candidates : frozenset of str
-            The ids the current question may be answered with. The rest are veiled.
+            The ids the current question may be answered with. The rest answer no click.
         selected : frozenset of str, optional
             The ids picked so far, ringed. Default empty.
         placed : frozenset of str, optional
@@ -71,22 +69,7 @@ class LookView(CardPanel):
         center = widget_size(self.canvas)[0] // 2
         y = CELL_PAD + CARD_H // 2
         for x, card in zip(centered_row(center, len(shown), step=CARD_W + CELL_PAD), shown):
-            pickable = card.id in candidates
-            self.draw_card(card, x, y, selected=card.id in selected, pickable=pickable)
-            if not pickable:
-                self._veil(x, y)
-
-    def _veil(self, x: int, y: int) -> None:
-        self.canvas.create_rectangle(
-            x - CARD_W // 2,
-            y - CARD_H // 2,
-            x + CARD_W // 2,
-            y + CARD_H // 2,
-            fill=theme.PANEL,
-            stipple="gray50",
-            outline="",
-            tags=(_VEIL_TAG,),
-        )
+            self.draw_card(card, x, y, selected=card.id in selected, pickable=card.id in candidates)
 
     def _on_click(self, event: tk.Event) -> None:
         card_id = self.card_at(event)

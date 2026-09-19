@@ -763,7 +763,13 @@ class ArrangeCards(DecisionRequest):
         """The answer that leaves the cards in the order they were looked at, top first: the
         candidates reversed for a top placement, since the last placed ends on top, and in order for
         a bottom one. A client offers it as "Keep Order"."""
-        return self.candidates if self.to_bottom else tuple(reversed(self.candidates))
+        return self.keeping_order(())
+
+    def keeping_order(self, placed: tuple[str, ...]) -> tuple[str, ...]:
+        """The answer that places ``placed`` as the seat already has and the rest in the order they
+        were looked at, so "Keep Order" applies to whatever is still in the window."""
+        rest = tuple(card_id for card_id in self.candidates if card_id not in placed)
+        return (*placed, *(rest if self.to_bottom else reversed(rest)))
 
 
 @dataclass(frozen=True, slots=True)
