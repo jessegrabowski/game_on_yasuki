@@ -5,6 +5,8 @@ import pytest
 
 from yasuki_gui.ui.menus import build_menubar
 
+from tests.yasuki_gui.conftest import menubar_cascades
+
 
 @pytest.fixture
 def root():
@@ -90,26 +92,16 @@ class TestBuildMenubar:
         root.winfo_toplevel = Mock(return_value=root_mock)
 
 
-def _menu_labels(menubar: tk.Menu) -> list[str]:
-    labels = []
-    for index in range(menubar.index("end") + 1):
-        try:
-            labels.append(menubar.entrycget(index, "label"))
-        except tk.TclError:
-            pass
-    return labels
-
-
 def test_the_debug_menu_appears_only_in_debug_mode(root, mock_field_view):
-    assert "Debug" not in _menu_labels(build_menubar(root, mock_field_view))
-    assert "Debug" in _menu_labels(build_menubar(root, mock_field_view, debug=True))
+    assert "Debug" not in menubar_cascades(build_menubar(root, mock_field_view))
+    assert "Debug" in menubar_cascades(build_menubar(root, mock_field_view, debug=True))
 
 
 def test_a_debug_command_runs_the_hook_the_window_set(root, mock_field_view):
-    """The menu is built before the presenter is bound, so it reads the hook at click time."""
-    menubar = build_menubar(root, mock_field_view, debug=True)
-    debug_menu = root.nametowidget(menubar.entrycget(_menu_labels(menubar).index("Debug"), "menu"))
+    debug_menu = menubar_cascades(build_menubar(root, mock_field_view, debug=True))["Debug"]
     ran = []
+    # The window binds the presenter after the menu is built, so the entry must read the hook when
+    # clicked rather than capture it.
     mock_field_view.on_debug_gold = lambda: ran.append("gold")
 
     debug_menu.invoke(0)
