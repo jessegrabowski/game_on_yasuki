@@ -35,7 +35,7 @@ from yasuki_core.engine.table import DeckKey, Location, TableState, ZoneKey, Zon
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import FatePrint
+from yasuki_core.game_pieces.prints import FatePrint, RingPrint
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
@@ -57,6 +57,7 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     end_turn,
     holding,
+    fate_card,
     pay,
     personality,
     province_card,
@@ -1243,3 +1244,83 @@ def test_gakuya_enters_play_dishonorable_without_being_dishonored(reacting):
     assert game.table.cards_by_id["gakuya"].dishonorable
     assert not game.table.cards_by_id["gakuya"].bowed
     assert seen == []
+
+
+# --- Master Your Thoughts ---
+
+
+def _thoughts_game(*, rings: int = 0, deck=("a", "b", "c", "d")) -> EngineSession:
+    """P1 holding Master Your Thoughts, an unbowed Monk and a Bushi, ``rings`` Rings in play, and
+    a Fate deck reading ``deck`` from the top."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("monk", keywords=("Monk",)))
+    put_in_play(state, personality("bushi"))
+    for index in range(rings):
+        put_in_play(
+            state,
+            register(
+                state,
+                L5RCard.of(
+                    RingPrint, id=f"ring{index}", name=f"Ring {index}", side=Side.FATE, owner=P1
+                ),
+            ),
+        )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                FatePrint,
+                id="thoughts",
+                name="Master Your Thoughts",
+                printed_id="master_your_thoughts",
+                side=Side.FATE,
+                owner=P1,
+                gold_cost=0,
+                keywords=("Kiho",),
+            ),
+        )
+    )
+    state.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(state, fate_card(card_id, P1)) for card_id in reversed(deck)
+    ]
+    return EngineSession.start(state, P1)
+
+
+def _thoughts_on(session: EngineSession, target: str) -> None:
+    session.act(P1, PlayStrategy("thoughts"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse((target,)))
+
+
+def test_master_your_thoughts_looks_at_one_more_card_than_rings_controlled():
+    session = _thoughts_game(rings=2)
+
+    _thoughts_on(session, "monk")
+
+    assert session.game.look.card_ids == ("a", "b", "c")
+    assert session.game.table.cards_by_id["monk"].bowed
+
+
+def test_master_your_thoughts_with_no_rings_looks_at_one_and_takes_it():
+    session = _thoughts_game(rings=0)
+
+    _thoughts_on(session, "monk")
+
+    assert session.game.look.card_ids == ("a",)
+    session.submit(P1, DecisionResponse(("a",)))
+    assert _hand(session, P1) == ["a"]
+    assert session.game.look is None
+    assert session.log.replay() == session.game
+
+
+def test_master_your_thoughts_on_a_bowed_target_looks_at_nothing():
+    """ "Bow ... to look" makes the look contingent on the bow happening (CR, To). The target
+    need not be unbowed, so a bowed Monk is legal and the action does nothing."""
+    session = _thoughts_game()
+    session.game.table.cards_by_id["monk"].bow()  # after start, which straightens the board
+
+    _thoughts_on(session, "monk")
+
+    assert session.game.look is None
+    assert session.game.pending is None
+    assert _hand(session, P1) == []
