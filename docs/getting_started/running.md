@@ -78,7 +78,9 @@ gui:
 ### Debug logging
 
 Debug output includes database queries, GUI events, card loading, and full
-exception tracebacks:
+exception tracebacks, and the client opens in debug mode: the window title says so, `Ctrl+T`
+switches the seat being played, and a Debug menu puts Gold or any card from the database on the
+table. `YASUKI_DEBUG=1` in the environment does the same for the client alone:
 
 ```bash
 pixi run python play.py --debug
