@@ -1646,7 +1646,7 @@ def test_a_second_click_in_a_choice_of_one_replaces_the_first(looking):
     assert window.field.selection == ("third",)
 
 
-def test_the_look_window_veils_a_card_the_question_does_not_offer(looking):
+def test_the_look_window_draws_a_card_the_question_does_not_offer_unpickable(looking):
     presenter, window, session = looking
     session.game.pending = ChooseCards(P1, ("top",), 0, 1, "presenter_look_bottom", "looker")
 

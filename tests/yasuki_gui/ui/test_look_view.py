@@ -64,7 +64,7 @@ def test_clicking_an_offered_card_reports_it(view):
     assert picked == ["second"]
 
 
-def test_a_card_the_question_does_not_offer_is_veiled_and_reports_nothing(view):
+def test_a_card_the_question_does_not_offer_reports_nothing(view):
     picked = []
     view.on_card_click = picked.append
     view.refresh(_cards("top", "second"), frozenset({"top"}))
@@ -72,7 +72,6 @@ def test_a_card_the_question_does_not_offer_is_veiled_and_reports_nothing(view):
     view._on_click(_center(view, "card:shown:second"))
 
     assert picked == []
-    assert view.canvas.find_withtag("veil")
 
 
 def test_a_placed_card_is_not_drawn(view):
