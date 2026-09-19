@@ -704,7 +704,6 @@ def _education_fate_deck(session: EngineSession) -> list[str]:
 def _play_education(session: EngineSession) -> None:
     session.act(P1, PlayStrategy("education"))
     pay(session, P1)
-    session.submit(P1, DecisionResponse(("education",)))  # the Strategy is its own target
 
 
 def test_comprehensive_education_walks_take_then_discard_then_bottom():

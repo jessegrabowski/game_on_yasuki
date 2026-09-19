@@ -33,7 +33,6 @@ def _temples_game() -> EngineSession:
 
 def _name(session: EngineSession, named: str) -> None:
     session.act(P1, ActivateAbility("temples"))
-    session.submit(P1, DecisionResponse(("temples",)))
     pending = session.game.pending
     assert isinstance(pending, ChooseOption) and pending.candidates == ("Follower", "Item", "Spell")
     session.submit(P1, DecisionResponse((named,)))

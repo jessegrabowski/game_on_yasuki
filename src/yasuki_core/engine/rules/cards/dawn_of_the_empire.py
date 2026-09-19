@@ -104,6 +104,7 @@ register_ability(
         "it in your hand.",
         cost=bow_cost,
         targets=itself,
+        hits_every_target=True,
         effects=_temples_of_gisei_toshi_effects,
     ),
 )

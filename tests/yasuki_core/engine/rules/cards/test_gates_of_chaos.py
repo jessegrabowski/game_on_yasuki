@@ -224,7 +224,6 @@ def _fate_deck(session: EngineSession) -> list[str]:
 def test_divination_bowl_looks_at_three_and_puts_them_back_in_the_order_given():
     session = _bowl_game()
     session.act(P1, ActivateAbility("bowl", "look"))
-    session.submit(P1, DecisionResponse(("bowl",)))
     pending = session.game.pending
     assert isinstance(pending, ArrangeCards) and pending.candidates == ("a", "b", "c")
     assert session.game.table.cards_by_id["bowl"].bowed
@@ -240,7 +239,6 @@ def test_divination_bowl_draws_and_destroys_itself():
     session = _bowl_game()
 
     session.act(P1, ActivateAbility("bowl", "draw"))
-    session.submit(P1, DecisionResponse(("bowl",)))
 
     hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
     assert [card.id for card in hand] == ["a"]

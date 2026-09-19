@@ -216,6 +216,7 @@ register_ability(
         "rest on the bottom of your deck in any order.",
         cost=no_cost,
         targets=itself,
+        hits_every_target=True,
         effects=_comprehensive_education_effects,
         located_at=(CardLocation.HAND,),
     ),

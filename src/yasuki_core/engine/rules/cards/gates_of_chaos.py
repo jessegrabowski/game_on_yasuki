@@ -58,6 +58,7 @@ register_ability(
         "order.",
         cost=bow_cost,
         targets=itself,
+        hits_every_target=True,
         effects=_divination_bowl_look_effects,
     ),
 )
@@ -69,6 +70,7 @@ register_ability(
         label="Limited, bow: Draw a card. Destroy this Item.",
         cost=bow_cost,
         targets=itself,
+        hits_every_target=True,
         effects=_divination_bowl_draw_effects,
     ),
 )
