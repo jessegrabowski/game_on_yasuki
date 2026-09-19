@@ -19,7 +19,9 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     assignment_token,
 )
 from yasuki_core.engine.rules.projection import GameView, unit_view
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.factory import build_print
 from yasuki_gui.services.game_runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.labels import turn_context
@@ -31,6 +33,8 @@ from yasuki_gui.ui.prompt_box import ButtonSpec
 
 # How long the board lingers on "Opponent's turn" before the opponent's turn auto-runs.
 OPPONENT_TURN_DELAY_MS = 700
+# What the debug menu's "Add Gold" hands over.
+DEBUG_GOLD = 100
 
 
 # The prompt-box label for each action a seat takes from a button rather than by clicking a card.
@@ -560,6 +564,50 @@ class Presenter:
         if self.host.runner.can_cancel():
             self.cancel()
 
+    def debug_gold(self) -> None:
+        """Put 100 Gold in the human's pool, from nowhere."""
+        self.host.runner.debug_gold(DEBUG_GOLD)
+        self.present()
+
+    def debug_card_to_hand(self) -> None:
+        """Pick any Fate card in the database and put a copy in the human's hand."""
+        seat = self.host.human_seat
+        self._dialogs().database_search(
+            "Add Card to Hand",
+            lambda record: self._debug_card(record, ZoneKey(seat, ZoneRole.HAND)),
+        )
+
+    def debug_card_to_province(self) -> None:
+        """Pick any Dynasty card in the database, then which Province it fills, discarding what
+        was there."""
+        seat = self.host.human_seat
+        provinces = sorted(
+            (
+                key
+                for key in self.host.session.game.table.zones
+                if key.owner is seat and key.role is ZoneRole.PROVINCE
+            ),
+            key=lambda key: key.idx,
+        )
+
+        def picked(record: dict) -> None:
+            self._dialogs().option(
+                "Add Card to Province",
+                "Which Province?",
+                [str(key.idx + 1) for key in provinces],
+                lambda chosen: self._debug_card(record, provinces[int(chosen) - 1]),
+            )
+
+        self._dialogs().database_search("Add Card to Province", picked)
+
+    def _debug_card(self, record: dict, zone: ZoneKey) -> None:
+        self.host.runner.debug_card(build_print(record), zone)
+        self.present()
+
+    def _dialogs(self) -> Dialogs:
+        root = self.window.root
+        return Dialogs(root, ImageProvider(root))
+
     def load_human_deck(self, path: str) -> None:
         """Deal the decklist at ``path`` to the human and show the game it starts."""
         self.host.load_human_deck(path)
@@ -593,5 +641,4 @@ class Presenter:
             self.host.runner.submit(DecisionResponse((card_id,)))
             self.present()
 
-        root = self.window.root
-        Dialogs(root, ImageProvider(root)).card_search(search.panes, search.choosable, on_pick)
+        self._dialogs().card_search(search.panes, search.choosable, on_pick)

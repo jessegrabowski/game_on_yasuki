@@ -88,3 +88,30 @@ class TestBuildMenubar:
 
         root_mock = Mock()
         root.winfo_toplevel = Mock(return_value=root_mock)
+
+
+def _menu_labels(menubar: tk.Menu) -> list[str]:
+    labels = []
+    for index in range(menubar.index("end") + 1):
+        try:
+            labels.append(menubar.entrycget(index, "label"))
+        except tk.TclError:
+            pass
+    return labels
+
+
+def test_the_debug_menu_appears_only_in_debug_mode(root, mock_field_view):
+    assert "Debug" not in _menu_labels(build_menubar(root, mock_field_view))
+    assert "Debug" in _menu_labels(build_menubar(root, mock_field_view, debug=True))
+
+
+def test_a_debug_command_runs_the_hook_the_window_set(root, mock_field_view):
+    """The menu is built before the presenter is bound, so it reads the hook at click time."""
+    menubar = build_menubar(root, mock_field_view, debug=True)
+    debug_menu = root.nametowidget(menubar.entrycget(_menu_labels(menubar).index("Debug"), "menu"))
+    ran = []
+    mock_field_view.on_debug_gold = lambda: ran.append("gold")
+
+    debug_menu.invoke(0)
+
+    assert ran == ["gold"]

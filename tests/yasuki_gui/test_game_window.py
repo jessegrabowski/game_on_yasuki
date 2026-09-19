@@ -198,3 +198,17 @@ def test_reconfiguring_the_board_keys_leaves_the_view_key_bound(window):
     window.field.configure_hotkeys(window.field._hotkeys)
 
     assert window.root.bind_all(key) == before
+
+
+def test_binding_points_the_debug_hooks_at_the_presenter(window):
+    class _Presenter:
+        def __getattr__(self, name):
+            return lambda *args: None
+
+    presenter = _Presenter()
+
+    window.bind_to(presenter)
+
+    assert window.field.on_debug_gold is not None
+    assert window.field.on_debug_card_to_hand is not None
+    assert window.field.on_debug_card_to_province is not None

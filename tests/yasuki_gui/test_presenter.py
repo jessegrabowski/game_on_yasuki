@@ -1725,3 +1725,36 @@ def test_a_placed_card_is_not_taken_back_by_clicking_it(looking):
     presenter.on_look_card_clicked("second")
 
     assert window.field.selection == ("second",)
+
+
+# --- The debug menu ---
+
+
+def test_debug_gold_lands_in_the_pool_and_shows_on_the_board(board):
+    presenter, window, session = board
+
+    presenter.debug_gold()
+
+    assert session.game.gold[P1] == 100
+    assert window.field.gold == 100
+    assert session.log.replay() == session.game
+
+
+def test_a_debug_card_from_the_database_lands_where_it_was_sent(board):
+    presenter, window, session = board
+    record = {
+        "name": "Debug Strategy",
+        "card_id": "debug_strategy",
+        "types": ["Strategy"],
+        "keywords": [],
+        "clans": [],
+        "text": "",
+        "image_path": None,
+    }
+
+    presenter._debug_card(record, ZoneKey(P1, ZoneRole.HAND))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.printed.name for card in hand][-1] == "Debug Strategy"
+    assert hand[-1].id == "debug-1"
+    assert session.log.replay() == session.game

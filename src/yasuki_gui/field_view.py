@@ -138,6 +138,10 @@ class FieldView(tk.Canvas):
         # Fire when the menu bar picks a decklist for either seat. The menu looks them up by name,
         # so they are declared here rather than left to whoever assigns them.
         self.load_deck_from_file: Callable[[str], None] | None = None
+        # The debug menu's commands, set by the window only when the client runs in debug mode.
+        self.on_debug_gold: Callable[[], None] | None = None
+        self.on_debug_card_to_hand: Callable[[], None] | None = None
+        self.on_debug_card_to_province: Callable[[], None] | None = None
         self.load_opponent_deck_from_file: Callable[[str], None] | None = None
 
         # Set by whoever owns the window; the controller draws the view-key preview through it.
