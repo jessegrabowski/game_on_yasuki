@@ -200,6 +200,19 @@ register_interrupt(
 )
 
 
+register_ability(
+    "battle_gain_probe",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle: gain 1 Honor",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [GainHonor(source.owner, 1)],
+        hits_every_target=True,
+    ),
+)
+
+
 register_interrupt(
     "interrupt_probe",
     Interrupt(
@@ -1307,3 +1320,31 @@ def test_a_question_the_action_asks_is_not_offered_at_the_step():
 
     assert game.round.kind is not RoundKind.INTERRUPT
     assert isinstance(game.pending, ChooseCards)
+
+
+def test_a_seat_with_no_unit_at_the_battle_is_not_offered_a_rulebook_interrupt():
+    # CR, Actions in Battle: the Rule of Presence applies to Interrupts. The Defender kept its
+    # guard home, so it has no unit at the battlefield and the Honor discard is not offered.
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("raider", owner=ATTACKER, printed_id="battle_gain_probe"))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    _honor_card(state, "P2-honor0", DEFENDER)
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("raider@0",)))
+    session.submit(DEFENDER, DecisionResponse(()))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseBattlefield)
+    session.submit(choice.seat, DecisionResponse(("0",)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    while session.game.round.priority is not ATTACKER:
+        session.act(session.game.round.priority, Pass())
+
+    session.act(ATTACKER, ActivateAbility("raider"))
+
+    assert session.game.round.kind is not RoundKind.INTERRUPT
+    assert session.game.table.seats[ATTACKER].honor == 1

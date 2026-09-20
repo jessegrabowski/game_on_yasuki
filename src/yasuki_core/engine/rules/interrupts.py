@@ -22,7 +22,6 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import (
-    has_presence,
     legal_targets,
     location_permits,
     permitted_timings_in,
@@ -273,16 +272,15 @@ def card_interrupts_for(
     game: GameState, seat: PlayerId, foreseen: tuple[Effect, ...]
 ) -> list[tuple[L5RCard, Interrupt, CardLocation]]:
     """The Interrupts ``seat`` could take against an action about to do ``foreseen``, each with
-    where it is taken from, while the seat has a unit at any battle being fought (CR, Rule of
-    Presence).
+    where it is taken from. The Rule of Presence is the round's to apply, through
+    :func:`~yasuki_core.engine.rules.legality.permitted_timings_in`, so a seat with no unit at
+    the battle is never asked here.
 
     A Strategy in hand is offered when its Interrupt answers one of the effects and the seat can
     reach its Gold Cost. A card in play, on the battlefield or face up in a Province, is offered
     under the gates an activated ability answers to: unbowed, within the Rules of Location, unused
     this turn where the arc makes abilities once per turn, and able to pay the Interrupt's cost.
     """
-    if not has_presence(game, seat):
-        return []
     offered: list[tuple[L5RCard, Interrupt, CardLocation]] = []
     once = ruleset.ACTIVE.abilities_once_per_turn
     for location, card in seat_cards(game, seat):

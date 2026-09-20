@@ -117,8 +117,10 @@ of kind `INTERRUPT` is pushed over the round the action was taken in, the active
 Action Sequence step D; ShE datasheet, Interrupt). Inside it `legal_actions` offers each seat a
 {class}`~.PlayInterrupt` per card whose Interrupt answers the forecast and a
 {class}`~.DiscardToInterrupt` per card a rulebook Interrupt could discard, plus a `Pass`. A seat
-holding none is skipped, a seat that took an Interrupt is offered again when the opportunity comes
-round, and consecutive passes close the step and resolve the held action. What the action is about
+holding none is skipped, as is a seat with no unit at the battlefield while a battle is being
+fought (CR, Actions in Battle: the Rule of Presence applies to Interrupts), a seat that took an
+Interrupt is offered again when the opportunity comes round, and consecutive passes close the
+step and resolve the held action. What the action is about
 to do is the {func}`~yasuki_core.engine.rules.interrupts.forecast`: the effects in order, a
 `Then`'s contents, an ability's built effects behind the
 {class}`~yasuki_core.engine.rules.abilities.activation.ResolveAbility` that targets them, and an
