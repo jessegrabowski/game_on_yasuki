@@ -281,7 +281,7 @@ class Presenter:
                 options.append(("Cancel", self.cancel, True))
             return pending.prompt(), options
         if isinstance(pending, ChooseDebugSeat):
-            # Which player gets a debug Personality: one button per seat, worded by its name.
+            # A seat is not a board card, so the answer is a button each, worded by the seat's name.
             seats = self.host.session.game.table.seats
             return pending.prompt(), [
                 (seats[PlayerId[name]].name, lambda n=name: self.submit_answer((n,)), True)
