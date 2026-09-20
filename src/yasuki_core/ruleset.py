@@ -53,6 +53,10 @@ class Ruleset:
     ----------
     name : str
         The name an ability carries in its ``ruleset`` field to be read under this ruleset alone.
+    arcs : tuple of str
+        The arcs this ruleset governs, as ``set_info.yaml`` names them. An ability registered under
+        this ruleset alone is implemented in the card's first printing among these arcs' sets.
+        Default empty.
     clan_alignments : frozenset of str
         The legal Clan Alignments, as canonical :func:`~.normalize_clan` slugs. A card's clan counts
         toward alignment only if it resolves into this set. Every other clan name is unaligned.
@@ -93,6 +97,7 @@ class Ruleset:
 
     name: str
     clan_alignments: frozenset[str]
+    arcs: tuple[str, ...] = ()
     clan_aliases: dict[str, str] = field(default_factory=dict)
     off_clan_surcharge: int = 2
     honor_victory_at: int = 40
@@ -178,6 +183,7 @@ _SHATTERED_EMPIRE_BATTLE_SEGMENTS = (
 # clans, Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
 SHATTERED_EMPIRE = Ruleset(
     name="shattered_empire",
+    arcs=("Onyx Edition", "Shattered Empire"),
     clan_alignments=frozenset(
         {AKASHA, CRAB, CRANE, DRAGON, LION, MANTIS, PHOENIX, SCORPION, SPIDER, UNICORN}
     ),
@@ -223,6 +229,7 @@ ACTIVE = SHATTERED_EMPIRE
 # card; the Onyx/ShE datasheet grants two again.
 IMPERIAL = Ruleset(
     name="imperial",
+    arcs=("Clan Wars", 'Hidden Emperor - "Jade"'),
     clan_alignments=SHATTERED_EMPIRE.clan_alignments,
     abilities_once_per_turn=False,
     lobby_keywords=frozenset({keywords.POLITICAL}),

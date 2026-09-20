@@ -81,6 +81,7 @@ def created_tokens(module: pathlib.Path) -> tuple[tuple[str, str], ...]:
 def first_printing_module(
     cards_dir: pathlib.Path = DEFAULT_CARDS_PATH,
     set_info_path: pathlib.Path = DEFAULT_SET_INFO_PATH,
+    arcs: tuple[str, ...] | None = None,
 ) -> dict[str, str]:
     """
     The module name each card id belongs in: the file stem of its earliest-released set.
@@ -96,6 +97,9 @@ def first_printing_module(
     set_info_path : path, optional
         The arc-grouped set metadata carrying each set's release date. Default is the packaged
         ``set_info.yaml``.
+    arcs : tuple of str, optional
+        The arcs whose sets count, as ``set_info.yaml`` names them, for a registration made under
+        one ruleset. A card printed in none of them is absent. Default None, every set.
 
     Returns
     -------
@@ -106,10 +110,13 @@ def first_printing_module(
     released = {
         entry["set_name"]: entry.get("release_date") or UNDATED
         for arc in metadata["arcs"]
+        if arcs is None or arc.get("name") in arcs
         for entry in arc["sets"]
     }
 
     printings = collections.defaultdict(set)
     for entry in set_entries(cards_dir):
+        if arcs is not None and entry.set_name not in released:
+            continue
         printings[entry.card_id].add((released.get(entry.set_name, UNDATED), entry.source.stem))
     return {card_id: min(dated)[1] for card_id, dated in printings.items()}
