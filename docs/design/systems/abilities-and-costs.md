@@ -84,8 +84,11 @@ Interrupt step against them, and a card reading "your action" does not see them.
 ## Abilities a card is given
 
 {func}`~.abilities_for` is the one place the engine asks what abilities a card has, and it answers
-with two lists joined: the ones registered for the card's printed id, then the ones an
-{class}`~.AbilityGrant` record in `game.ongoing` gives it.
+with two lists joined: the ones registered for the card's printed id and in force under the
+active ruleset, then the ones an {class}`~.AbilityGrant` record in `game.ongoing` gives it. An
+ability names no ruleset unless the card's text differs between arcs, in which case the card
+registers one `Ability` per ruleset, each with `ruleset=ruleset.SHATTERED_EMPIRE.name` or the
+like, and only the one naming `ruleset.ACTIVE` is read.
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/abilities/registry.py
 :pyobject: abilities_for

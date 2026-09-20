@@ -51,6 +51,8 @@ class Ruleset:
 
     Attributes
     ----------
+    name : str
+        The name an ability carries in its ``ruleset`` field to be read under this ruleset alone.
     clan_alignments : frozenset of str
         The legal Clan Alignments, as canonical :func:`~.normalize_clan` slugs. A card's clan counts
         toward alignment only if it resolves into this set. Every other clan name is unaligned.
@@ -89,6 +91,7 @@ class Ruleset:
         different players entitled to act. Default Limited, the CR's.
     """
 
+    name: str
     clan_alignments: frozenset[str]
     clan_aliases: dict[str, str] = field(default_factory=dict)
     off_clan_surcharge: int = 2
@@ -174,6 +177,7 @@ _SHATTERED_EMPIRE_BATTLE_SEGMENTS = (
 # the same alignment as Akasha and resolves to it. Every other clan name a card carries -- minor
 # clans, Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
 SHATTERED_EMPIRE = Ruleset(
+    name="shattered_empire",
     clan_alignments=frozenset(
         {AKASHA, CRAB, CRANE, DRAGON, LION, MANTIS, PHOENIX, SCORPION, SPIDER, UNICORN}
     ),
@@ -218,6 +222,7 @@ ACTIVE = SHATTERED_EMPIRE
 # alongside it for the draw. Gold Edition then removed them all, leaving every use to come from a
 # card; the Onyx/ShE datasheet grants two again.
 IMPERIAL = Ruleset(
+    name="imperial",
     clan_alignments=SHATTERED_EMPIRE.clan_alignments,
     abilities_once_per_turn=False,
     lobby_keywords=frozenset({keywords.POLITICAL}),

@@ -2,6 +2,7 @@ from dataclasses import replace
 
 import pytest
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import (
     _ABILITIES,
@@ -11,6 +12,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     EntryState,
     abilities_for,
     ability_for,
+    ability_registrations,
     entry_state,
     entry_state_of,
     granted_ability,
@@ -27,6 +29,9 @@ from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import HoldingPrint, StrongholdPrint
 from tests.yasuki_core.engine.builders import holding, personality, put_in_play, two_seat_game
+
+SHE = ruleset.SHATTERED_EMPIRE.name
+IMPERIAL = ruleset.IMPERIAL.name
 
 
 def test_a_second_unkeyed_ability_for_one_card_is_refused():
@@ -202,3 +207,72 @@ def test_a_cards_entry_state_overrides_only_the_fields_it_sets():
         ENTRY_STATES.pop("guard_probe")
 
     assert state == EntryState(bowed=False, dishonorable=True)
+
+
+def _probe_card(printed_id: str) -> L5RCard:
+    return L5RCard.of(
+        HoldingPrint,
+        id="probe",
+        name="Probe",
+        printed_id=printed_id,
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+    )
+
+
+def test_an_ability_naming_a_ruleset_is_read_only_while_it_is_active(monkeypatch):
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("scope_probe", replace(plain, label="ShE", ruleset=SHE))
+    register_ability("scope_probe", replace(plain, label="Imperial", ruleset=IMPERIAL))
+
+    try:
+        game = two_seat_game()
+        card = _probe_card("scope_probe")
+        assert [held.label for held in abilities_for(game, card)] == ["ShE"]
+
+        monkeypatch.setattr(ruleset, "ACTIVE", ruleset.IMPERIAL)
+        assert [held.label for held in abilities_for(game, card)] == ["Imperial"]
+    finally:
+        _ABILITIES.pop("scope_probe")
+
+
+def test_an_ability_naming_no_ruleset_is_read_under_every_one(monkeypatch):
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("scope_probe", plain)
+
+    try:
+        game = two_seat_game()
+        card = _probe_card("scope_probe")
+        assert abilities_for(game, card) == (plain,)
+
+        monkeypatch.setattr(ruleset, "ACTIVE", ruleset.IMPERIAL)
+        assert abilities_for(game, card) == (plain,)
+    finally:
+        _ABILITIES.pop("scope_probe")
+
+
+def test_an_unkeyed_ability_collides_only_with_one_read_under_the_same_ruleset():
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("scope_probe", replace(plain, ruleset=SHE))
+
+    try:
+        register_ability("scope_probe", replace(plain, ruleset=IMPERIAL))
+        with pytest.raises(ValueError, match="scope_probe prints several abilities"):
+            register_ability("scope_probe", replace(plain, ruleset=SHE))
+        with pytest.raises(ValueError, match="scope_probe prints several abilities"):
+            register_ability("scope_probe", plain)
+    finally:
+        _ABILITIES.pop("scope_probe")
+
+
+def test_ability_registrations_lists_what_is_in_force_under_one_ruleset():
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("scope_probe", replace(plain, ruleset=IMPERIAL))
+
+    try:
+        assert "scope_probe" not in ability_registrations()
+        assert ability_registrations(ruleset_name=IMPERIAL)["scope_probe"] == (
+            replace(plain, ruleset=IMPERIAL),
+        )
+    finally:
+        _ABILITIES.pop("scope_probe")

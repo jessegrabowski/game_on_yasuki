@@ -47,6 +47,7 @@ def test_an_arc_names_its_own_battle_segments():
     """A battle's own sequence is arc config like the Attack Phase's, so an arc that walks only one
     of them names only that one and raises on the other."""
     arc = Ruleset(
+        name="probe",
         clan_alignments=frozenset(),
         battle_segments=(BattleSegment.COMBAT,),
         battle_segment_names={BattleSegment.COMBAT: "Melee"},
@@ -61,6 +62,7 @@ def test_an_arc_walks_its_own_sequence_rather_than_the_enums_order():
     """The seam an older arc's Cavalry Maneuvers segment goes through: the order comes off the
     ruleset, so adding a member to `Segment` does not silently put it in every arc's sequence."""
     arc = Ruleset(
+        name="probe",
         clan_alignments=frozenset(),
         attack_segments=(Segment.DECLARATION, Segment.FIGHT),
         segment_names={Segment.DECLARATION: "Declaration", Segment.FIGHT: "Battles"},

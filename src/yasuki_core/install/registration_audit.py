@@ -242,13 +242,12 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     """
     printed = printed_ability_counts(cards_dir)
     problems = []
-    registering = (
-        set(registry._ABILITIES) | set(registry._INTERRUPTS) | set(registry.RECRUIT_TIMINGS)
-    )
+    abilities = registry.ability_registrations()
+    registering = set(abilities) | set(registry._INTERRUPTS) | set(registry.RECRUIT_TIMINGS)
     for card_id in sorted(registering):
         shows = printed.get(card_id, 0)
         registered = (
-            len(registry._ABILITIES.get(card_id, ()))
+            len(abilities.get(card_id, ()))
             + (card_id in registry._INTERRUPTS)
             + (card_id in registry.RECRUIT_TIMINGS)
         )
@@ -318,7 +317,7 @@ def mislabeled_abilities(
     cards_dir : path, optional
         Directory of per-set YAML files. Default is the packaged ``sets`` directory.
     abilities : mapping of str to sequence of :class:`~yasuki_core.engine.rules.abilities.model.Ability`, optional
-        Card id to its registered abilities. Defaults to the engine's own ability registry.
+        Card id to its registered abilities. Defaults to the ones in force under the active ruleset.
 
     Returns
     -------
@@ -326,7 +325,7 @@ def mislabeled_abilities(
         Sorted problem descriptions, empty when every registration reads as its card prints.
     """
     if abilities is None:
-        abilities = registry._ABILITIES
+        abilities = registry.ability_registrations()
     printed = printed_abilities(cards_dir)
     problems = []
     for card_id in sorted(abilities):
