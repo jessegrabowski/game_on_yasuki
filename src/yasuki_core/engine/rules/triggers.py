@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import Moment
+from yasuki_core.engine.rules.turn.structure import Moment, RoundKind
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     ConditionalModifier,
     LobbyModifier,
@@ -240,7 +240,7 @@ def _advance(
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
-                _stash(game, effect, tuple(pending), firing, event, queue, interruptible)
+                _stash(game, tuple(pending), firing, event, queue, interruptible)
                 game.pending = effect.request(game)
                 return
             _trace.append(f"    {effect.describe()}")
@@ -268,8 +268,10 @@ def _advance(
                 f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
             )
         event = queue.pop(0)
-        # Kept for the Response Step, which asks what the action it follows actually did.
-        game.action_events.append(event)
+        # Kept for the Response Step, which asks what the action it follows actually did. What an
+        # Interrupt or a Response does inside its own round is its doing, not the action's.
+        if game.round.kind not in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+            game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
 
@@ -399,8 +401,6 @@ class ResumeCascade:
 
     Attributes
     ----------
-    paused : Effect
-        The interrupting effect that raised the choice, for an answer that needs it back.
     effects : tuple of Effect
         The effects still to apply for the paused trigger, after the one that raised the choice.
     firing : tuple of (str, callable)
@@ -414,7 +414,6 @@ class ResumeCascade:
         Default False.
     """
 
-    paused: Effect
     effects: tuple[Effect, ...]
     firing: tuple[tuple[str, Trigger], ...]
     event: GameEvent | None
@@ -430,7 +429,6 @@ class ResumeCascade:
 
 def _stash(
     game: GameState,
-    paused: Effect,
     effects: tuple[Effect, ...],
     firing: list[tuple[L5RCard, Trigger]],
     event: GameEvent | None,
@@ -438,16 +436,7 @@ def _stash(
     interruptible: bool,
 ) -> None:
     remaining = tuple((card.id, trigger) for card, trigger in firing)
-    game.stack.append(ResumeCascade(paused, effects, remaining, event, tuple(queue), interruptible))
-
-
-def paused_effect(game: GameState) -> Effect:
-    """The interrupting effect whose decision is pending, read from the stash at the top of the
-    stack. Raise ``RuntimeError`` if no cascade is stashed there."""
-    item = game.stack[-1] if game.stack else None
-    if not isinstance(item, ResumeCascade):
-        raise RuntimeError("no interrupting effect is paused")
-    return item.paused
+    game.stack.append(ResumeCascade(effects, remaining, event, tuple(queue), interruptible))
 
 
 def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:

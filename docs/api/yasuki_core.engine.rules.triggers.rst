@@ -24,7 +24,6 @@ yasuki_core.engine.rules.triggers
     fire
     fire_all
     on
-    paused_effect
     resolve_action_effects
     resolve_delayed
     resolve_effects

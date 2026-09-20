@@ -147,9 +147,10 @@ class GameState:
         Favor Icon). Ephemeral and rebuilt by replay. Default False.
     action_events : list of GameEvent
         What the action now resolving has done so far, in the order it happened, cleared as the next
-        action begins. A Response reads it to ask what it is responding to  "discarded a Fate card"
-        is a fact about the action rather than about the board it left behind. Ephemeral and rebuilt
-        by replay. Default empty.
+        action begins. What an Interrupt or a Response does inside its own round is left out. A
+        Response reads it to ask what it is responding to: "discarded a Fate card" is a fact about
+        the action rather than about the board it left behind. Ephemeral and rebuilt by replay.
+        Default empty.
     interrupts_taken : set of (str, PlayerId)
         The once-per-action rulebook Interrupts taken against the action now resolving, as the
         Interrupt's key and the seat that took it. Cleared as the next action begins. Ephemeral

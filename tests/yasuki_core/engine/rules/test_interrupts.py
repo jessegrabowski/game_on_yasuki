@@ -200,6 +200,66 @@ register_interrupt(
 )
 
 
+register_ability(
+    "battle_gain_probe",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle: gain 1 Honor",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [GainHonor(source.owner, 1)],
+        hits_every_target=True,
+    ),
+)
+
+
+register_ability(
+    "reads_honor_probe",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: gain 1 Honor, or 5 once above zero",
+        cost=lambda game, source: [],
+        targets=lambda game, source: [
+            card.id
+            for seat in game.table.seats
+            if seat is not source.owner
+            for card in owned_personalities(game, seat)
+        ],
+        effects=lambda game, source, target: [
+            GainHonor(source.owner, 1 if game.table.seats[source.owner].honor == 0 else 5)
+        ],
+    ),
+)
+
+
+register_interrupt(
+    "gift_probe",
+    Interrupt(
+        label="Interrupt: the acting seat gains 1 Honor, leave the gain alone",
+        answers=GainHonor,
+        interrupt=lambda game, source, effect: Interruption(
+            effect, effects=(GainHonor(effect.seat, 1),)
+        ),
+    ),
+)
+
+
+register_ability(
+    "gain_then_choose_probe",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: gain 1 Honor, then choose",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [
+            GainHonor(source.owner, 1),
+            Choose(source.owner, ("either", "or"), 1, 1, "interrupt_probe_choice", None),
+        ],
+        hits_every_target=True,
+    ),
+)
+
+
 register_interrupt(
     "interrupt_probe",
     Interrupt(
@@ -628,7 +688,7 @@ def test_a_negated_effect_resolves_as_nothing_and_the_action_goes_on():
 
     assert not _guard_bowed(session)
     assert session.game.pending is None
-    assert _event_names(session) == ["CardDiscarded", "HonorChanged"]
+    assert _event_names(session) == ["HonorChanged"]
 
 
 def test_a_negated_attack_leaves_its_outcome_unreached():
@@ -654,7 +714,8 @@ def test_a_rulebook_discard_rejoins_the_cascade_where_the_fear_stood():
 
     _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_UP)
 
-    assert _event_names(session) == ["CardDiscarded", "HonorChanged"]
+    assert _guard_bowed(session)
+    assert _event_names(session) == ["HonorChanged"]
 
 
 def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
@@ -669,13 +730,14 @@ def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
     session.act(DEFENDER, PlayInterrupt("okura"))
     pay(session, DEFENDER)
 
-    # The replacement splices in where the Fear stood, so the ability's next effect applies before
-    # a reaction to what the replacement did fires, the same as after a rulebook discard.
-    assert _event_names(session) == ["CardDiscarded", "Destroyed", "HonorChanged"]
+    # The replacement resolves where the Fear stood, so the ability's next effect applies before
+    # a reaction to what the replacement did fires, the same as after a rulebook discard. Okura's
+    # own discard happened inside the step and is not among the action's events.
+    assert _event_names(session) == ["Destroyed", "HonorChanged"]
     assert honor_seen == [1]
 
 
-def test_a_played_interrupts_own_effects_resolve_before_its_discard():
+def test_a_played_interrupts_own_effects_resolve_inside_the_step_and_are_not_the_actions():
     session = _fear_announced(
         {}, strategies=(("probe", "interrupt_probe", DEFENDER),), probe="fear_then_honor_probe"
     )
@@ -683,14 +745,14 @@ def test_a_played_interrupts_own_effects_resolve_before_its_discard():
     session.act(DEFENDER, PlayInterrupt("probe"))
     pay(session, DEFENDER)
 
-    # The Strategy's own effect, then its discard, then the interrupted ability's next effect.
+    # The Strategy's own gain and its discard happened inside the step, before the action resolved
+    # its gain, and only the action's own gain is on its record.
+    assert _honor(session, DEFENDER) == 1 and _honor(session, ATTACKER) == 1
+    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["probe"]
     assert [
         (type(event).__name__, getattr(event, "seat", None)) for event in session.game.action_events
-    ] == [
-        ("HonorChanged", DEFENDER),
-        ("CardDiscarded", None),
-        ("HonorChanged", ATTACKER),
-    ]
+    ] == [("HonorChanged", ATTACKER)]
 
 
 # --- when the step does not open ---
@@ -1288,3 +1350,140 @@ def test_the_step_closes_into_a_decision_the_held_action_asks():
     assert game.table.seats[P1].honor == 1
     action_sequence.submit(game, DecisionResponse(("either",)))
     assert game.pending is None and game.table.seats[P1].honor == 2
+
+
+# --- the step under the rules of battle, and what a cancel unwinds ---
+
+
+def test_a_question_the_action_asks_is_not_offered_at_the_step():
+    # A choice is nothing to interrupt, and what its answer produces is not known until it is
+    # answered, so an action that only asks opens no step at all.
+    game = _inside_an_action()
+    _strategy(game.table, "P2-neg", "negate_action_probe", P2)
+
+    resolve_action_effects(
+        game, [Choose(P1, ("either", "or"), 1, 1, "interrupt_probe_choice", None)]
+    )
+
+    assert game.round.kind is not RoundKind.INTERRUPT
+    assert isinstance(game.pending, ChooseCards)
+
+
+def test_a_seat_with_no_unit_at_the_battle_is_not_offered_a_rulebook_interrupt():
+    # CR, Actions in Battle: the Rule of Presence applies to Interrupts. The Defender kept its
+    # guard home, so it has no unit at the battlefield and the Honor discard is not offered.
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=ATTACKER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("raider", owner=ATTACKER, printed_id="battle_gain_probe"))
+    put_in_play(state, personality("guard", owner=DEFENDER, force=2))
+    _honor_card(state, "P2-honor0", DEFENDER)
+    session = EngineSession.start(state, ATTACKER)
+    end_phase(session)
+    session.act(ATTACKER, DeclareAttack())
+    session.submit(ATTACKER, DecisionResponse(("raider@0",)))
+    session.submit(DEFENDER, DecisionResponse(()))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseBattlefield)
+    session.submit(choice.seat, DecisionResponse(("0",)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    while session.game.round.priority is not ATTACKER:
+        session.act(session.game.round.priority, Pass())
+
+    session.act(ATTACKER, ActivateAbility("raider"))
+
+    assert session.game.round.kind is not RoundKind.INTERRUPT
+    assert session.game.table.seats[ATTACKER].honor == 1
+
+
+def test_a_substituted_ability_resolves_with_the_values_the_step_forecast():
+    # The stand-in is settled when Final Sacrifice's probe is taken, so the Honor discard bound to
+    # "P2 gains 1" finds that gain even after another Interrupt has changed the board the ability
+    # would otherwise have been rebuilt on.
+    game = two_seat_game()
+    put_in_play(game, holding("P2-src", owner=P2, printed_id="reads_honor_probe"))
+    put_in_play(game, personality("P1-victim"))
+    put_in_play(game, personality("P1-stand-in"))
+    _strategy(game.table, "P1-sub", "substitute_probe", P1)
+    _strategy(game.table, "P1-gift", "gift_probe", P1)
+    _honor_card(game.table, "P1-honor0", P1)
+    game.action = ActivateAbility("P2-src")
+    game.action_seat = P2
+    resolve_action_effects(game, [ResolveAbility("P2-src", "P1-victim").built(game)])
+    action_sequence.perform(game, PlayInterrupt("P1-sub"))
+    action_sequence.submit(game, DecisionResponse(("P1-stand-in",)))
+    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
+    action_sequence.perform(game, DiscardToInterrupt("P1-honor0", "honor"))
+    action_sequence.submit(game, DecisionResponse(("Reduce by 1",)))
+    action_sequence.perform(game, PlayInterrupt("P1-gift"))
+    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
+
+    assert game.round.kind is not RoundKind.INTERRUPT and game.pending is None
+    assert game.table.seats[P2].honor == 1  # the gift's 1, then the gain of 1 reduced to 0
+
+
+def test_cancelling_the_actions_own_question_unwinds_the_action_past_the_step():
+    # The passes and Interrupts the step recorded are not the action that raised the question,
+    # so a cancel walks back past them to the announcement, cost and gain included.
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("P1-src", printed_id="gain_then_choose_probe"))
+    _honor_card(state, "P1-honor0", P1)
+    session = EngineSession.start(state, P1)
+    session.act(P1, ActivateAbility("P1-src"))
+    assert _asked(session) is P1
+    session.act(P1, Pass())
+    assert isinstance(session.game.pending, ChooseCards)
+    assert session.game.table.seats[P1].honor == 1
+
+    assert session.can_cancel(P1)
+    session.cancel(P1)
+
+    assert session.game.pending is None and session.game.action is None
+    assert session.game.round.kind is not RoundKind.INTERRUPT
+    assert session.game.table.seats[P1].honor == 0
+    assert ActivateAbility("P1-src") in session.legal_actions(P1)
+
+
+def test_cancelling_the_actions_own_question_is_refused_once_another_seat_interrupted():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("P1-src", printed_id="gain_then_choose_probe"))
+    _honor_card(state, "P2-honor0", P2)
+    session = EngineSession.start(state, P1)
+    session.act(P1, ActivateAbility("P1-src"))
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
+    assert isinstance(session.game.pending, ChooseCards)
+
+    assert not session.abort(P1)
+    assert isinstance(session.game.pending, ChooseCards)
+
+
+def test_the_adjustment_question_reads_the_effect_as_it_stands():
+    session = _fear_announced({DEFENDER: 2})
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_UP)
+
+    session.act(DEFENDER, DiscardToInterrupt("P2-courage1", "courage"))
+
+    question = session.game.pending
+    assert isinstance(question, ChooseInterruptAdjustment)
+    assert question.question == "Fear 4 on guard. Give it +2 or -2 strength?"
+
+
+def test_the_which_effect_question_reads_each_effect_as_it_stands_and_takes_the_answer():
+    game = _inside_an_action()
+    left = put_in_play(game, personality("P1-left", force=2))
+    right = put_in_play(game, personality("P1-right", force=2))
+    _courage_card(game.table, "P2-courage0", P2)
+    _strategy(game.table, "okura", "okura_is_released", P2)
+    resolve_action_effects(game, [Fear(FEAR, left.id, P2), Fear(FEAR, right.id, P2)])
+    action_sequence.perform(game, DiscardToInterrupt("P2-courage0", "courage"))
+    action_sequence.submit(game, DecisionResponse(("Fear 2 on P1-left",)))
+    action_sequence.submit(game, DecisionResponse(("+2 strength",)))
+
+    action_sequence.perform(game, PlayInterrupt("okura"))
+
+    which = game.pending
+    assert isinstance(which, ChooseInterruptEffect)
+    assert which.candidates == ("Fear 4 on P1-left", "Fear 2 on P1-right")
+    action_sequence.submit(game, DecisionResponse(("Fear 4 on P1-left",)))
+    assert isinstance(game.pending, ChoosePayment)

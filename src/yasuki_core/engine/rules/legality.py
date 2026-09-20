@@ -137,12 +137,18 @@ def permitted_timings_in(
     game: GameState, round: ActionRound, seat: PlayerId
 ) -> frozenset[ActionTiming]:
     """The designators ``round`` permits ``seat``, for a round other than the open one: what an
-    Interrupt asks of the round its action was taken in."""
-    if (
-        round.kind is RoundKind.BATTLE_SEGMENT
-        and not has_presence(game, seat)
-        and not has_absent_ability(game, seat)
-    ):
+    Interrupt asks of the round its action was taken in.
+
+    None at all during a battle for a seat with no unit at the battlefield being fought, in a
+    battle segment and in the Interrupt step over one alike (CR, Actions in Battle: the Rule of
+    Presence applies to every action type, Interrupts included).
+    """
+    in_battle = round.kind is RoundKind.BATTLE_SEGMENT or (
+        round.kind is RoundKind.INTERRUPT
+        and game.attack is not None
+        and game.attack.current is not None
+    )
+    if in_battle and not has_presence(game, seat) and not has_absent_ability(game, seat):
         return frozenset()
     timings = round.timings
     return timings.active if seat is game.active else timings.others

@@ -22,7 +22,6 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import (
-    has_presence,
     legal_targets,
     location_permits,
     permitted_timings_in,
@@ -152,8 +151,8 @@ def forecast(game: GameState, effects: tuple[Effect, ...]) -> tuple[Effect, ...]
     it: the effects in order, a ``Then``'s contents where it stands, an ability's effects behind
     the :class:`~.ResolveAbility` that targets them, and an attack's outcome behind the attack
     when it reaches on the board as it stands. An effect that is nothing to interrupt, an Honor
-    change of zero, is left out. What a choice resolver produces later is not foreseeable and is
-    not offered."""
+    change of zero or a question the action asks, is left out, and what a choice resolver
+    produces later is not foreseeable and is not offered."""
     seen: list[Effect] = []
     for effect in effects:
         if isinstance(effect, Then):
@@ -219,16 +218,24 @@ class Replacement:
         The card whose Interrupt was taken.
     target_id : str, optional
         The target the Interrupt was taken against, for one that takes a target. Default None.
+    replacement : Effect, optional
+        What resolves instead, settled when the Interrupt was taken, for a replacement whose
+        contents read the board: a substituted :class:`~.ResolveAbility` is built against its new
+        target then, so the forecast and the resolution read one object. Used while the effect
+        still stands as bound. Default None, asked of the card as the effect comes up.
     """
 
     bound: Effect
     card_id: str
     target_id: str | None = None
+    replacement: Effect | None = None
 
     def answers(self, effect: Effect) -> bool:
         return effect == self.bound
 
     def apply(self, game: GameState, effect: Effect) -> Effect:
+        if self.replacement is not None and effect == self.bound:
+            return self.replacement
         card = game.table.cards_by_id[self.card_id]
         interrupt = interrupt_for(card)
         if interrupt is None:
@@ -273,16 +280,15 @@ def card_interrupts_for(
     game: GameState, seat: PlayerId, foreseen: tuple[Effect, ...]
 ) -> list[tuple[L5RCard, Interrupt, CardLocation]]:
     """The Interrupts ``seat`` could take against an action about to do ``foreseen``, each with
-    where it is taken from, while the seat has a unit at any battle being fought (CR, Rule of
-    Presence).
+    where it is taken from. The Rule of Presence is the round's to apply, through
+    :func:`~yasuki_core.engine.rules.legality.permitted_timings_in`, so a seat with no unit at
+    the battle is never asked here.
 
     A Strategy in hand is offered when its Interrupt answers one of the effects and the seat can
     reach its Gold Cost. A card in play, on the battlefield or face up in a Province, is offered
     under the gates an activated ability answers to: unbowed, within the Rules of Location, unused
     this turn where the arc makes abilities once per turn, and able to pay the Interrupt's cost.
     """
-    if not has_presence(game, seat):
-        return []
     offered: list[tuple[L5RCard, Interrupt, CardLocation]] = []
     once = ruleset.ACTIVE.abilities_once_per_turn
     for location, card in seat_cards(game, seat):
@@ -448,7 +454,7 @@ def _ask_which(
 ) -> None:
     game.pending = ChooseInterruptEffect(
         seat=seat,
-        candidates=tuple(effect.narrate(game) for effect in answered),
+        candidates=tuple(as_modified(game, effect).narrate(game) for effect in answered),
         question="Which effect?",
         resolver=INTERRUPT_EFFECT_QUESTION,
         source_id=card_id,
@@ -500,7 +506,9 @@ def apply_interrupt_effect(
     is no longer one the seat can take the Interrupt with."""
     key = request.resolver_context[0] or None
     answered = _answerable(game, request.seat, request.source_id, key)
-    effect = _named(answered, lambda effect: effect.narrate(game) == response.choices[0])
+    effect = _named(
+        answered, lambda effect: as_modified(game, effect).narrate(game) == response.choices[0]
+    )
     if key is None:
         _play(game, request.seat, request.source_id, effect)
     else:
@@ -556,13 +564,27 @@ def _play(
             raise RuntimeError(f"{target_id} is no longer a target {card_id} can be taken against")
         target = game.table.cards_by_id[target_id]
         interruption = interrupt.interrupt(game, card, effect, target)
-    bound = answered_by(game, card, interrupt, foreseen) if interrupt.answers_every else [effect]
-    game.modifications.extend(Replacement(each, card.id, target_id) for each in bound)
+    if interrupt.answers_every:
+        bound = answered_by(game, card, interrupt, foreseen)
+        game.modifications.extend(Replacement(each, card.id, target_id) for each in bound)
+    else:
+        game.modifications.append(
+            Replacement(effect, card.id, target_id, _settled(game, interruption.replacement))
+        )
     if location is CardLocation.HAND:
         play_strategy_with(game, card, interruption.effects)
         return
     spent = SpendOncePerTurn(card.id, INTERRUPT_TAG)
     triggers.resolve_effects(game, [spent, *interrupt.cost(game, card), *interruption.effects])
+
+
+def _settled(game: GameState, replacement: Effect) -> Effect | None:
+    """A substituted targeting built against its new target now, so what the step forecasts is
+    what resolves; None for any other replacement, which the card is asked for as the effect comes
+    up."""
+    if isinstance(replacement, ResolveAbility) and replacement.effects is None:
+        return replacement.built(game)
+    return None
 
 
 def _ask_adjustment(
@@ -572,7 +594,7 @@ def _ask_adjustment(
     game.pending = ChooseInterruptAdjustment(
         seat=seat,
         candidates=tuple(wording for wording, _ in taken.adjustments),
-        question=f"{effect.narrate(game)}. {taken.question}",
+        question=f"{as_modified(game, effect).narrate(game)}. {taken.question}",
         resolver=INTERRUPT_ADJUSTMENT_QUESTION,
         source_id=card_id,
         resolver_context=(key, effect.describe()),
