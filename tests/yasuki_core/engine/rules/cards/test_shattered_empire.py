@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint, WindPrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, PersonalityPrint, WindPrint
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
@@ -21,27 +21,36 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
-from yasuki_core.engine.rules.effects import GainHonor
+from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.rules.vocabulary.actions import UseFavorAbility
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, FavorDiscarded
+from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.turn import action_sequence, sequence
+from yasuki_core.engine.players import Trait
+from yasuki_core.engine.rules.rulebook.lobby import lobby_bonus
+from yasuki_core.engine.rules.board.queries import province_zones
+from yasuki_core.engine import ops
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, AttachmentType, Side
 
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
 from yasuki_core.engine.rules.turn.action_sequence import submit
-from yasuki_core.engine.rules.vocabulary.decisions import Confirm
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, Confirm
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
     end_phase,
+    fate_card,
     holding,
     pay,
     personality,
@@ -239,7 +248,7 @@ def _edict(card_id: str, printed_id: str) -> L5RCard:
 
 
 def _play_the_edict(session: EngineSession) -> None:
-    session.act(P1, PlayStrategy("crane"))
+    session.act(P1, PlayStrategy("crane", "enter"))
     while session.game.pending is not None:
         session.submit(P1, DecisionResponse(()))
 
@@ -269,7 +278,7 @@ def test_an_edict_discards_the_one_already_out():
 def test_an_edict_naming_a_clan_is_not_offered_to_another():
     session = _edict_game(clan=ruleset.LION)
 
-    assert PlayStrategy("crane") not in session.legal_actions(P1)
+    assert PlayStrategy("crane", "enter") not in session.legal_actions(P1)
 
 
 def test_a_second_copy_of_an_edict_discards_the_first():
@@ -285,6 +294,135 @@ def test_a_second_copy_of_an_edict_discards_the_first():
     assert "first" not in in_play
     discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
     assert "first" in {card.id for card in discard.cards}
+
+
+def _crane_edict_in_play(
+    *, hand: tuple[str, ...] = ("held",), deck: tuple[str, ...] = ("top",)
+) -> GameState:
+    """Way of the Crane in play for a Crane seat, with ``hand`` in hand and ``deck`` on top of the
+    Fate deck, just after the seat's own action discarded the Favor."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    put_in_play(state, register(state, stronghold(P1, clan=ruleset.CRANE)))
+    put_in_play(state, register(state, _edict("crane", "way_of_the_crane_experienced")))
+    for index in range(3):
+        province_card(state, f"p1-prov{index}", seat=P1, index=index)
+    for card_id in hand:
+        state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, fate_card(card_id, P1)))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card(c, P1)) for c in deck]
+    game = GameState.start(state, P1, seed=0)
+    game.action_seat = P1
+    game.action_events[:] = [FavorDiscarded(P1)]
+    return game
+
+
+CRANE_DRAW = ActivateAbility("crane", "draw")
+
+
+def _hand_ids(game: GameState) -> list[str]:
+    return [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
+
+
+def test_way_of_the_crane_gives_one_lobby_bonus_per_province():
+    game = _crane_edict_in_play()  # three Provinces
+    assert lobby_bonus(game, P1) == 3
+
+    first, _ = next(province_zones(game, P1))
+    ops.destroy_province(game.table, P1, first)
+
+    assert lobby_bonus(game, P1) == 2
+
+
+def test_way_of_the_crane_is_offered_in_the_response_step_after_your_action_discards_the_favor():
+    """A trait worded "after your action", offered where a Response is so the seat orders it among
+    the other answers to the same action, or passes it."""
+    game = _crane_edict_in_play()
+
+    assert sequence.open_response_window(game) is True
+
+    assert CRANE_DRAW in legality.legal_actions(game, P1)
+
+
+def test_way_of_the_crane_draws_then_discards_as_a_trait():
+    """The card just drawn is among the ones offered for the discard, and the discard is the
+    trait's doing rather than an action's."""
+    game = _crane_edict_in_play()
+    sequence.open_response_window(game)
+
+    action_sequence.perform(game, CRANE_DRAW)
+
+    assert isinstance(game.pending, ChooseCards)
+    assert set(game.pending.candidates) == {"held", "top"}
+    assert _hand_ids(game) == ["held", "top"]
+    submit(game, DecisionResponse(("top",)))
+
+    assert _hand_ids(game) == ["held"]
+    discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    assert "top" in {card.id for card in discard.cards}
+    discarded = next(event for event in game.action_events if isinstance(event, CardDiscarded))
+    assert discarded.cause == Trait("crane")
+
+
+def test_way_of_the_crane_draws_once_per_turn():
+    game = _crane_edict_in_play(deck=("top", "second"))
+    sequence.open_response_window(game)
+    action_sequence.perform(game, CRANE_DRAW)
+    submit(game, DecisionResponse(("held",)))
+    game.action_events[:] = [FavorDiscarded(P1)]
+
+    assert sequence.open_response_window(game) is False
+
+
+def test_passing_on_way_of_the_crane_keeps_it_for_later_in_the_turn():
+    game = _crane_edict_in_play()
+    sequence.open_response_window(game)
+    while game.round.kind is RoundKind.RESPONSE:
+        action_sequence.perform(game, Pass())
+    assert _hand_ids(game) == ["held"]
+    game.action_events[:] = [FavorDiscarded(P1)]
+
+    assert sequence.open_response_window(game) is True
+
+
+def test_way_of_the_crane_counts_your_action_discarding_the_other_seats_favor():
+    """Lies, Lies, Lies... (Experienced): "The player with :favor: discards it." Your action, so
+    the trait answers it."""
+    game = _crane_edict_in_play()
+    game.action_events[:] = [FavorDiscarded(PlayerId.P2)]
+
+    assert sequence.open_response_window(game) is True
+
+    assert CRANE_DRAW in legality.legal_actions(game, P1)
+
+
+def test_way_of_the_crane_ignores_a_favor_discarded_by_the_other_seats_action():
+    game = _crane_edict_in_play()
+    game.action_seat = PlayerId.P2
+
+    assert sequence.open_response_window(game) is False
+
+
+def test_the_rulebook_favor_ability_opens_way_of_the_cranes_window():
+    """The whole road from the table: the Favor discarded as a cost, the action resolving, and the
+    Step opening with the trait offered."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    put_in_play(state, register(state, stronghold(P1, clan=ruleset.CRANE)))
+    put_in_play(state, register(state, _edict("crane", "way_of_the_crane_experienced")))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, fate_card("spent", P1)))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("top", P1))]
+    session = EngineSession.start(state, P1)
+    TakeFavor(P1).perform(session.game)
+
+    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.submit(P1, DecisionResponse(("spent",)))
+
+    assert session.game.round.kind is RoundKind.RESPONSE
+    assert CRANE_DRAW in session.legal_actions(P1)
 
 
 # --- Doji Yasuko, Soul of Doji Takeji ---
