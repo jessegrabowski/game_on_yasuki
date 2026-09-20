@@ -628,7 +628,7 @@ def test_a_negated_effect_resolves_as_nothing_and_the_action_goes_on():
 
     assert not _guard_bowed(session)
     assert session.game.pending is None
-    assert _event_names(session) == ["CardDiscarded", "HonorChanged"]
+    assert _event_names(session) == ["HonorChanged"]
 
 
 def test_a_negated_attack_leaves_its_outcome_unreached():
@@ -654,7 +654,8 @@ def test_a_rulebook_discard_rejoins_the_cascade_where_the_fear_stood():
 
     _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_UP)
 
-    assert _event_names(session) == ["CardDiscarded", "HonorChanged"]
+    assert _guard_bowed(session)
+    assert _event_names(session) == ["HonorChanged"]
 
 
 def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
@@ -669,13 +670,14 @@ def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
     session.act(DEFENDER, PlayInterrupt("okura"))
     pay(session, DEFENDER)
 
-    # The replacement splices in where the Fear stood, so the ability's next effect applies before
-    # a reaction to what the replacement did fires, the same as after a rulebook discard.
-    assert _event_names(session) == ["CardDiscarded", "Destroyed", "HonorChanged"]
+    # The replacement resolves where the Fear stood, so the ability's next effect applies before
+    # a reaction to what the replacement did fires, the same as after a rulebook discard. Okura's
+    # own discard happened inside the step and is not among the action's events.
+    assert _event_names(session) == ["Destroyed", "HonorChanged"]
     assert honor_seen == [1]
 
 
-def test_a_played_interrupts_own_effects_resolve_before_its_discard():
+def test_a_played_interrupts_own_effects_resolve_inside_the_step_and_are_not_the_actions():
     session = _fear_announced(
         {}, strategies=(("probe", "interrupt_probe", DEFENDER),), probe="fear_then_honor_probe"
     )
@@ -683,14 +685,14 @@ def test_a_played_interrupts_own_effects_resolve_before_its_discard():
     session.act(DEFENDER, PlayInterrupt("probe"))
     pay(session, DEFENDER)
 
-    # The Strategy's own effect, then its discard, then the interrupted ability's next effect.
+    # The Strategy's own gain and its discard happened inside the step, before the action resolved
+    # its gain, and only the action's own gain is on its record.
+    assert _honor(session, DEFENDER) == 1 and _honor(session, ATTACKER) == 1
+    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["probe"]
     assert [
         (type(event).__name__, getattr(event, "seat", None)) for event in session.game.action_events
-    ] == [
-        ("HonorChanged", DEFENDER),
-        ("CardDiscarded", None),
-        ("HonorChanged", ATTACKER),
-    ]
+    ] == [("HonorChanged", ATTACKER)]
 
 
 # --- when the step does not open ---

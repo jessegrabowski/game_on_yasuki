@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DynastyDiscard,
     Pass,
+    PlayInterrupt,
     PlayStrategy,
     UseFavorAbility,
 )
@@ -36,7 +37,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, StrongholdPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.builders import (
+    pay,
     attached,
     attachment,
     end_phase,
@@ -208,6 +211,21 @@ def test_a_discard_no_player_made_offers_nothing():
         "spare-fate-0", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True
     )
     assert not _step_is_open(session)
+
+
+def test_a_caravansary_is_not_offered_for_the_discard_of_your_own_interrupt():
+    # Okura is P2's Interrupt to P1's Fear, and its discard happens inside the Interrupt step: it
+    # is P2's doing, not the action's, so P1's action did not discard P2's Fate card.
+    session = _fear_announced({}, strategies=(("okura", "okura_is_released", DEFENDER),))
+    put_in_play(
+        session.game,
+        holding("caravansary", printed_id="caravansary", owner=DEFENDER, gold_production=2),
+    )
+    session.act(DEFENDER, PlayInterrupt("okura"))
+    pay(session, DEFENDER)
+
+    assert session.game.round.kind is not RoundKind.RESPONSE
+    assert not any(isinstance(event, CardDiscarded) for event in session.game.action_events)
 
 
 def test_a_caravansary_already_at_three_is_not_offered():

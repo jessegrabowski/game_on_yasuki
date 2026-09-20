@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import Moment
+from yasuki_core.engine.rules.turn.structure import Moment, RoundKind
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     ConditionalModifier,
     LobbyModifier,
@@ -268,8 +268,10 @@ def _advance(
                 f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
             )
         event = queue.pop(0)
-        # Kept for the Response Step, which asks what the action it follows actually did.
-        game.action_events.append(event)
+        # Kept for the Response Step, which asks what the action it follows actually did. What an
+        # Interrupt or a Response does inside its own round is its doing, not the action's.
+        if game.round.kind not in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+            game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
 

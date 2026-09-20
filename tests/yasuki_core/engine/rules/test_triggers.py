@@ -3,7 +3,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
-from yasuki_core.engine.rules.turn.structure import END_OF_TURN
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, ActionRound, RoundKind
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     DecisionResponse,
@@ -695,3 +695,14 @@ def test_a_card_reacts_to_an_honor_gain(reacting):
     resolve_effects(game, [GainHonor(PlayerId.P2, 3), GainHonor(PlayerId.P1, -1)])
 
     assert seen == [HonorChanged(PlayerId.P2, 3), HonorChanged(PlayerId.P1, -1)]
+
+
+@pytest.mark.parametrize("kind", [RoundKind.INTERRUPT, RoundKind.RESPONSE])
+def test_an_event_inside_an_interrupt_or_response_round_is_not_the_actions(kind):
+    game = two_seat_game()
+    game.round = ActionRound(timings=game.round.timings, priority=PlayerId.P1, kind=kind)
+
+    resolve_effects(game, [GainHonor(PlayerId.P1, 1)])
+
+    assert game.table.seats[PlayerId.P1].honor == 1
+    assert game.action_events == []
