@@ -213,6 +213,37 @@ register_ability(
 )
 
 
+register_ability(
+    "reads_honor_probe",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: gain 1 Honor, or 5 once above zero",
+        cost=lambda game, source: [],
+        targets=lambda game, source: [
+            card.id
+            for seat in game.table.seats
+            if seat is not source.owner
+            for card in owned_personalities(game, seat)
+        ],
+        effects=lambda game, source, target: [
+            GainHonor(source.owner, 1 if game.table.seats[source.owner].honor == 0 else 5)
+        ],
+    ),
+)
+
+
+register_interrupt(
+    "gift_probe",
+    Interrupt(
+        label="Interrupt: the acting seat gains 1 Honor, leave the gain alone",
+        answers=GainHonor,
+        interrupt=lambda game, source, effect: Interruption(
+            effect, effects=(GainHonor(effect.seat, 1),)
+        ),
+    ),
+)
+
+
 register_interrupt(
     "interrupt_probe",
     Interrupt(
@@ -1348,3 +1379,29 @@ def test_a_seat_with_no_unit_at_the_battle_is_not_offered_a_rulebook_interrupt()
 
     assert session.game.round.kind is not RoundKind.INTERRUPT
     assert session.game.table.seats[ATTACKER].honor == 1
+
+
+def test_a_substituted_ability_resolves_with_the_values_the_step_forecast():
+    # The stand-in is settled when Final Sacrifice's probe is taken, so the Honor discard bound to
+    # "P2 gains 1" finds that gain even after another Interrupt has changed the board the ability
+    # would otherwise have been rebuilt on.
+    game = two_seat_game()
+    put_in_play(game, holding("P2-src", owner=P2, printed_id="reads_honor_probe"))
+    put_in_play(game, personality("P1-victim"))
+    put_in_play(game, personality("P1-stand-in"))
+    _strategy(game.table, "P1-sub", "substitute_probe", P1)
+    _strategy(game.table, "P1-gift", "gift_probe", P1)
+    _honor_card(game.table, "P1-honor0", P1)
+    game.action = ActivateAbility("P2-src")
+    game.action_seat = P2
+    resolve_action_effects(game, [ResolveAbility("P2-src", "P1-victim").built(game)])
+    action_sequence.perform(game, PlayInterrupt("P1-sub"))
+    action_sequence.submit(game, DecisionResponse(("P1-stand-in",)))
+    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
+    action_sequence.perform(game, DiscardToInterrupt("P1-honor0", "honor"))
+    action_sequence.submit(game, DecisionResponse(("Reduce by 1",)))
+    action_sequence.perform(game, PlayInterrupt("P1-gift"))
+    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
+
+    assert game.round.kind is not RoundKind.INTERRUPT and game.pending is None
+    assert game.table.seats[P2].honor == 1  # the gift's 1, then the gain of 1 reduced to 0

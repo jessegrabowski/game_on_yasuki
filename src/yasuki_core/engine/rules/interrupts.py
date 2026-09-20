@@ -218,16 +218,24 @@ class Replacement:
         The card whose Interrupt was taken.
     target_id : str, optional
         The target the Interrupt was taken against, for one that takes a target. Default None.
+    replacement : Effect, optional
+        What resolves instead, settled when the Interrupt was taken, for a replacement whose
+        contents read the board: a substituted :class:`~.ResolveAbility` is built against its new
+        target then, so the forecast and the resolution read one object. Used while the effect
+        still stands as bound. Default None, asked of the card as the effect comes up.
     """
 
     bound: Effect
     card_id: str
     target_id: str | None = None
+    replacement: Effect | None = None
 
     def answers(self, effect: Effect) -> bool:
         return effect == self.bound
 
     def apply(self, game: GameState, effect: Effect) -> Effect:
+        if self.replacement is not None and effect == self.bound:
+            return self.replacement
         card = game.table.cards_by_id[self.card_id]
         interrupt = interrupt_for(card)
         if interrupt is None:
@@ -554,13 +562,27 @@ def _play(
             raise RuntimeError(f"{target_id} is no longer a target {card_id} can be taken against")
         target = game.table.cards_by_id[target_id]
         interruption = interrupt.interrupt(game, card, effect, target)
-    bound = answered_by(game, card, interrupt, foreseen) if interrupt.answers_every else [effect]
-    game.modifications.extend(Replacement(each, card.id, target_id) for each in bound)
+    if interrupt.answers_every:
+        bound = answered_by(game, card, interrupt, foreseen)
+        game.modifications.extend(Replacement(each, card.id, target_id) for each in bound)
+    else:
+        game.modifications.append(
+            Replacement(effect, card.id, target_id, _settled(game, interruption.replacement))
+        )
     if location is CardLocation.HAND:
         play_strategy_with(game, card, interruption.effects)
         return
     spent = SpendOncePerTurn(card.id, INTERRUPT_TAG)
     triggers.resolve_effects(game, [spent, *interrupt.cost(game, card), *interruption.effects])
+
+
+def _settled(game: GameState, replacement: Effect) -> Effect | None:
+    """A substituted targeting built against its new target now, so what the step forecasts is
+    what resolves; None for any other replacement, which the card is asked for as the effect comes
+    up."""
+    if isinstance(replacement, ResolveAbility) and replacement.effects is None:
+        return replacement.built(game)
+    return None
 
 
 def _ask_adjustment(
