@@ -8,11 +8,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.invest import equip_invest_amount, finish_invest
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.board.queries import owned_personalities
-from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseEquipTarget,
-    ChoosePayment,
-    DecisionResponse,
-)
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseEquipTarget, DecisionResponse
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request
@@ -140,7 +136,9 @@ def equip_targets(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
 
 
 def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
-    """Announce an Equip by asking which Personality the card joins. Answering that raises the cost.
+    """Announce an Equip: defer the choice of which Personality the card joins, then pause for its
+    cost payment. Once paid, the stack raises the target choice, and answering that attaches the
+    card (CR, Action Sequence steps B and C).
 
     Equip is the rulebook action, with a cost and a target. An effect that merely *attaches* a card
     reaches the same board without paying (CR, Equip), so the two do not share a path.
@@ -150,55 +148,48 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
     decision, and a variable one would need a step this path does not have.
     """
     card = game.table.cards_by_id[card_id]
-    game.pending = ChooseEquipTarget(
-        seat=card.owner,
-        candidates=tuple(target.id for target in equip_targets(game, card)),
-        source_card_id=card_id,
-        invest_amount=equip_invest_amount(game, card) if invest else None,
-    )
+    candidates = tuple(target.id for target in equip_targets(game, card))
+    invest_amount = equip_invest_amount(game, card) if invest else None
+    game.stack.append(SelectEquipTarget(card_id, candidates, invest_amount))
+    amount = effective_gold_cost(game, card) + (invest_amount or 0)
+    game.pending = payment_request(game, card.owner, amount, card.name, target=card)
+
+
+@dataclass(frozen=True, slots=True)
+class SelectEquipTarget:
+    """Raise an Equip's target choice once its cost has been paid. Deferred so a payment whose own
+    cascade pauses for a decision resolves fully before the Personality is chosen.
+
+    Attributes
+    ----------
+    card_id : str
+        The attachment being Equipped, still in hand.
+    candidates : tuple of str
+        The Personalities it may join, fixed before paying so the choice is never left empty.
+    invest_amount : int or None
+        The Invest cost paid alongside the Gold Cost, or None when the Equip took no Invest.
+        Default None.
+    """
+
+    card_id: str
+    candidates: tuple[str, ...]
+    invest_amount: int | None = None
+
+    def resume(self, game: GameState) -> None:
+        owner = game.table.cards_by_id[self.card_id].owner
+        game.pending = ChooseEquipTarget(
+            seat=owner,
+            candidates=self.candidates,
+            source_card_id=self.card_id,
+            invest_amount=self.invest_amount,
+        )
 
 
 def apply_equip_target(
     game: GameState, request: ChooseEquipTarget, response: DecisionResponse
 ) -> None:
-    """Take the chosen Personality and put the Equip's cost to the seat."""
-    card = game.table.cards_by_id[request.source_card_id]
-    game.pending = announce_equip(
-        game, card, card.owner, response.choices[0], invest_amount=request.invest_amount
-    )
-
-
-@dataclass(frozen=True, slots=True)
-class ResolveEquip:
-    """Finish an Equip once its cost is paid: move the attachment from its owner's hand onto the
-    battlefield and attach it to the target Personality.
-
-    Attributes
-    ----------
-    card_id : str
-        The attachment leaving hand for play.
-    target_id : str
-        The Personality it attaches to.
-    invest_amount : int or None
-        The Invest cost paid, applied once the card is in play, or None when the Equip took no
-        Invest. Default None.
-    """
-
-    card_id: str
-    target_id: str
-    invest_amount: int | None = None
-
-    def resume(self, game: GameState) -> None:
-        resolve_equip(game, self.card_id, self.target_id, self.invest_amount)
-
-
-def announce_equip(
-    game: GameState, card: L5RCard, seat: PlayerId, target_id: str, invest_amount: int | None = None
-) -> ChoosePayment:
-    """Queue the attach and build the payment it must be paid with."""
-    game.stack.append(ResolveEquip(card.id, target_id, invest_amount))
-    amount = effective_gold_cost(game, card) + (invest_amount or 0)
-    return payment_request(game, seat, amount, card.name, target=card)
+    """Attach the paid-for card to the chosen Personality."""
+    resolve_equip(game, request.source_card_id, response.choices[0], request.invest_amount)
 
 
 def resolve_equip(

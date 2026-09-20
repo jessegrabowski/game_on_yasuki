@@ -265,11 +265,12 @@ def test_an_equip_offers_every_grant_its_legality_counted():
     put_in_play(
         game, holding("of", owner=PlayerId.P1, printed_id="outlying_farms", gold_production=2)
     )
-    hero = put_in_play(game, personality("hero", owner=PlayerId.P1))
+    put_in_play(game, personality("hero", owner=PlayerId.P1))
     blade = attachment("blade", owner=PlayerId.P1, gold_cost=4)
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(register(game.table, blade))
 
-    payment = equip.announce_equip(game, blade, PlayerId.P1, hero.id)
+    equip.equip(game, blade.id)
+    payment = game.pending
 
     # The cost is 4 and the Farm makes 2, so the payment is answerable only because it quotes the
     # ceiling the Farm can still reach for itself.

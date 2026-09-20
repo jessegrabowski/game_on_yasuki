@@ -343,8 +343,8 @@ def test_a_follower_that_costs_honor_charges_it_as_it_enters_play(printed_id, lo
     before = session.game.table.seats[ATTACKER].honor
 
     session.act(ATTACKER, Equip("troops"))
-    session.submit(ATTACKER, DecisionResponse(("hero",)))
     pay(session, ATTACKER)
+    session.submit(ATTACKER, DecisionResponse(("hero",)))
 
     assert session.game.table.seats[ATTACKER].honor == before - loss
 
@@ -367,8 +367,8 @@ def test_ashigaru_spearmen_offers_the_draw_only_when_it_arrives_from_hand():
     session = _equip_from_hand("ashigaru_spearmen")
 
     session.act(ATTACKER, Equip("troops"))
-    session.submit(ATTACKER, DecisionResponse(("hero",)))
     pay(session, ATTACKER)
+    session.submit(ATTACKER, DecisionResponse(("hero",)))
 
     assert session.game.pending is not None
     assert "additional card" in session.game.pending.prompt()

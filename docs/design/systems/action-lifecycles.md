@@ -42,7 +42,8 @@ What is on the stack, and what each continues:
 
 - `ResolveRecruit`, `EnterPlay` and `FinishRecruit` in `rulebook/recruit.py`: the three parts of
   a Recruit after its payment, the card's before-entry effects, its entry, and what follows the
-  entry, with `ResolveEquip` in `rulebook/equip.py` the same for an Equip.
+  entry. `SelectEquipTarget` in `rulebook/equip.py` is an Equip's target choice, deferred behind
+  its payment.
 - `ResolveStrategy` and `DiscardPlayed` in `abilities/strategy.py`: a played Strategy's ability,
   then its discard. `SelectAbilityTarget` and `ApplyAbilityEffects` in `abilities/activation.py`:
   an ability's targeting or its untargeted effects, deferred behind its cost.

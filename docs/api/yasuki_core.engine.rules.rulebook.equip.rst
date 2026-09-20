@@ -7,13 +7,12 @@ yasuki_core.engine.rules.rulebook.equip
 
 .. autosummary::
 
-    ResolveEquip
+    SelectEquipTarget
 
 .. rubric:: Functions
 
 .. autosummary::
 
-    announce_equip
     apply_equip_target
     creation_targets
     equip

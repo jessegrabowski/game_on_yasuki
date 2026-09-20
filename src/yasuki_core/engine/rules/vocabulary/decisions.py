@@ -401,10 +401,10 @@ class ChooseEquipTarget(DecisionRequest):
     Attributes
     ----------
     source_card_id : str
-        The attachment being Equipped, still in hand until the cost is paid.
+        The attachment being Equipped, still in hand with its cost already paid.
     invest_amount : int or None
-        The Invest cost being paid alongside the Gold Cost, or None when the Equip takes no Invest.
-        A free Invest is an amount of zero, not None.
+        The Invest cost paid alongside the Gold Cost, or None when the Equip took no Invest. A
+        free Invest is an amount of zero, not None.
     """
 
     source_card_id: str
@@ -418,7 +418,7 @@ class ChooseEquipTarget(DecisionRequest):
 
     @property
     def cancellable(self) -> bool:
-        """Backing out abandons the Equip before anything is paid."""
+        """Backing out unwinds the whole Equip, the cost it paid included."""
         return True
 
 
