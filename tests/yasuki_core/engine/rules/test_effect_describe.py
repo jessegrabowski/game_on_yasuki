@@ -42,6 +42,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
     MoveToHand,
     Fear,
+    AdditionalAction,
     GrantPriority,
     RangedAttack,
     GrantKeyword,
@@ -175,6 +176,10 @@ EFFECTS = [
     (
         GrantPriority(PlayerId.P1),
         "P1 takes the opportunity to act",
+    ),
+    (
+        AdditionalAction(PlayerId.P1),
+        "P1 takes an additional action",
     ),
     (
         DelayedEffect(GrantPriority(PlayerId.P1), BEGINNING_OF_COMBAT),

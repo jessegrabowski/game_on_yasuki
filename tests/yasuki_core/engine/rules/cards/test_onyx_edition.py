@@ -4,10 +4,15 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
+    DeclareAttack,
     Lobby,
+    Pass,
     Recruit,
     UseFavorAbility,
 )
+from yasuki_core.engine.rules.board.queries import has_keyword
+from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
@@ -21,6 +26,7 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseBattlefield,
     ChooseCards,
     ChooseInvestAmount,
     DecisionResponse,
@@ -45,6 +51,7 @@ from tests.yasuki_core.engine.builders import (
     holding,
     pay,
     personality,
+    province_card,
     put_in_play,
     register,
     stronghold,
@@ -52,7 +59,7 @@ from tests.yasuki_core.engine.builders import (
     two_seat_game,
 )
 
-P1 = PlayerId.P1
+P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 # --- Kitsu Hayako ---
@@ -473,3 +480,95 @@ def test_the_estate_is_not_offered_after_an_action_that_paid_no_favor():
     session.act(P1, ActivateAbility("traders"))
 
     assert ActivateAbility("estate") not in session.legal_actions(P1)
+
+
+# --- The Dark Capital of the Spider ---
+
+
+DARK_CAPITAL = "the_dark_capital_of_the_spider"
+
+
+def _dark_capital_in_combat(
+    *, strategies: tuple[tuple[str, str, PlayerId], ...] = ()
+) -> EngineSession:
+    """P1's raider (3F) faces P2's guard (2F) in the Combat Segment, with the Dark Capital as P1's
+    Stronghold. ``strategies`` are ``(card_id, printed_id, owner)`` triples put in hand."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    capital = L5RCard.of(
+        StrongholdPrint,
+        id="capital",
+        name="The Dark Capital of the Spider",
+        printed_id=DARK_CAPITAL,
+        side=Side.STRONGHOLD,
+        owner=P1,
+        gold_production=4,
+        province_strength=7,
+        clan="Spider",
+    )
+    put_in_play(state, capital)
+    put_in_play(state, personality("raider", owner=P1, force=3))
+    put_in_play(state, personality("guard", owner=P2, force=2))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseBattlefield)
+    session.submit(choice.seat, DecisionResponse(("0",)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(P2, Pass())
+    return session
+
+
+def test_the_capital_gives_its_own_personality_shadowlands_and_fear_equal_to_his_force():
+    session = _dark_capital_in_combat()
+
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseCards) and choice.candidates == ("guard",)
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert has_keyword(game, game.table.cards_by_id["raider"], keywords.SHADOWLANDS)
+    assert game.table.cards_by_id["guard"].bowed  # Fear 3 reaches the 2F guard
+    assert not game.table.cards_by_id["capital"].bowed  # Tireless
+    assert game.round.priority is P2
+
+
+def test_the_capital_gives_an_enemy_shadowlands_and_keeps_the_opportunity_to_act():
+    session = _dark_capital_in_combat()
+
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert has_keyword(game, game.table.cards_by_id["guard"], keywords.SHADOWLANDS)
+    assert not game.table.cards_by_id["guard"].bowed
+    assert game.round.priority is P1 and game.round.passes == 0
+    assert game.additional_action is None
+
+
+def test_a_pass_at_the_additional_opportunity_does_not_count_toward_closing_the_round():
+    session = _dark_capital_in_combat()
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    session.act(P1, Pass())
+
+    assert session.game.round.priority is P2 and session.game.round.passes == 1
+
+
+def test_the_capital_replays_to_the_same_board():
+    session = _dark_capital_in_combat()
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert replay(session.log) == session.game

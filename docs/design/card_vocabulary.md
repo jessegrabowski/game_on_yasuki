@@ -77,6 +77,7 @@ deferred through `Then` instead.
    WinGame
    MeleeAttack
    Negated
+   AdditionalAction
    GrantPriority
    GrantAbility
    GrantConditionalModifier

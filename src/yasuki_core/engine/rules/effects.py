@@ -902,6 +902,22 @@ class GrantPriority(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class AdditionalAction(Effect):
+    """Grant ``seat`` an additional action: once the action now resolving is done, the opportunity
+    to act stays with ``seat`` instead of passing on (CR, Additional Action). A pass taken at that
+    opportunity does not count toward closing the round."""
+
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} takes an additional action"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.additional_action = self.seat
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class GrantKeyword(Effect):
     """Record a keyword grant: the ``source`` card gives ``target`` ``keyword`` for ``duration``.
 

@@ -10,11 +10,14 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
+    AdditionalAction,
     AdjustCounter,
     Banish,
     Choose,
     CreateToken,
     Effect,
+    Fear,
+    GrantKeyword,
     Move,
     Straighten,
     TakeFavor,
@@ -24,7 +27,14 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Enter
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.action_record import action_keywords
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
-from yasuki_core.engine.rules.board.queries import owned_personalities, sincerity_seed_targets
+from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
+    owned_personalities,
+    personalities_in_play,
+    sincerity_seed_targets,
+)
+from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -134,6 +144,59 @@ def _resolve_spearmen_of_the_akasha(
     if not chosen:
         return []
     return [Banish(source_id), CreateToken(NAGA_FOLLOWER, seat, source_id, attach_to=chosen[0])]
+
+
+# --- The Dark Capital of the Spider ---
+
+# "You lose 1 Honor less from your cards" is not modeled: nothing reads how much Honor a card's
+# effect costs its own controller. The Battle ability is.
+
+DARK_CAPITAL_FEAR = "the_dark_capital_of_the_spider"
+
+
+def _the_dark_capital_of_the_spider_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _the_dark_capital_of_the_spider_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Give a target Personality Shadowlands. If they are yours, Fear equal to their Force.
+    Otherwise, take an additional action." The Fear targets the way any Fear does, chosen as it
+    resolves, and is not raised when nothing at the battle can be targeted."""
+    effects: list[Effect] = [
+        GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN)
+    ]
+    if target.owner is not source.owner:
+        return [*effects, AdditionalAction(source.owner)]
+    feared = attack_targets(game, source)
+    if feared:
+        effects.append(Choose(source.owner, tuple(feared), 1, 1, DARK_CAPITAL_FEAR, target.id))
+    return effects
+
+
+@choice_resolver(DARK_CAPITAL_FEAR, prompt="Fear equal to their Force: choose its target")
+def _the_dark_capital_of_the_spider_fear(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """``source_id`` is the Personality given Shadowlands, whose Force the Fear reads as it
+    resolves."""
+    strength = effective_force(game, game.table.cards_by_id[source_id])
+    return [Fear(strength, chosen[0], seat)]
+
+
+register_ability(
+    "the_dark_capital_of_the_spider",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Tireless Battle: Give a target Personality Shadowlands. If they are yours, Fear "
+        "equal to their Force. Otherwise, take an additional action.",
+        cost=no_cost,
+        targets=_the_dark_capital_of_the_spider_targets,
+        effects=_the_dark_capital_of_the_spider_effects,
+        tireless=True,
+    ),
+)
 
 
 # --- The Palatial Estate of the Crane ---
