@@ -240,7 +240,7 @@ def _advance(
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
-                _stash(game, effect, tuple(pending), firing, event, queue, interruptible)
+                _stash(game, tuple(pending), firing, event, queue, interruptible)
                 game.pending = effect.request(game)
                 return
             _trace.append(f"    {effect.describe()}")
@@ -399,8 +399,6 @@ class ResumeCascade:
 
     Attributes
     ----------
-    paused : Effect
-        The interrupting effect that raised the choice, for an answer that needs it back.
     effects : tuple of Effect
         The effects still to apply for the paused trigger, after the one that raised the choice.
     firing : tuple of (str, callable)
@@ -414,7 +412,6 @@ class ResumeCascade:
         Default False.
     """
 
-    paused: Effect
     effects: tuple[Effect, ...]
     firing: tuple[tuple[str, Trigger], ...]
     event: GameEvent | None
@@ -430,7 +427,6 @@ class ResumeCascade:
 
 def _stash(
     game: GameState,
-    paused: Effect,
     effects: tuple[Effect, ...],
     firing: list[tuple[L5RCard, Trigger]],
     event: GameEvent | None,
@@ -438,16 +434,7 @@ def _stash(
     interruptible: bool,
 ) -> None:
     remaining = tuple((card.id, trigger) for card, trigger in firing)
-    game.stack.append(ResumeCascade(paused, effects, remaining, event, tuple(queue), interruptible))
-
-
-def paused_effect(game: GameState) -> Effect:
-    """The interrupting effect whose decision is pending, read from the stash at the top of the
-    stack. Raise ``RuntimeError`` if no cascade is stashed there."""
-    item = game.stack[-1] if game.stack else None
-    if not isinstance(item, ResumeCascade):
-        raise RuntimeError("no interrupting effect is paused")
-    return item.paused
+    game.stack.append(ResumeCascade(effects, remaining, event, tuple(queue), interruptible))
 
 
 def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:
