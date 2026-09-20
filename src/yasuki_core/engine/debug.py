@@ -5,10 +5,10 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.queries import province_cards, province_key_of
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest, DecisionResponse
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
 
 
 @dataclass(frozen=True, slots=True)
@@ -48,7 +48,27 @@ class DebugCard:
     printed: CardPrint
 
 
-DebugStep = DebugGold | DebugCard
+@dataclass(frozen=True, slots=True)
+class DebugPersonality:
+    """A developer's step: put a new copy of a Personality straight into play, from nowhere. The
+    seat that took the step then picks which player gets it, on the board.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that took the step and answers which player gets the Personality.
+    card_id : str
+        The id the new card takes, chosen by the caller so a replay makes the same card.
+    printed : PersonalityPrint
+        What the Personality is.
+    """
+
+    seat: PlayerId
+    card_id: str
+    printed: PersonalityPrint
+
+
+DebugStep = DebugGold | DebugCard | DebugPersonality
 
 
 @dataclass(frozen=True, slots=True)
@@ -75,13 +95,36 @@ class PlaceDebugCard(DecisionRequest):
         return len(response.choices) == 1 and response.choices[0] in self.candidates
 
 
+@dataclass(frozen=True, slots=True)
+class ChooseDebugSeat(DecisionRequest):
+    """The seat must choose which player a debug Personality enters play under. The candidates are
+    the seats at the table, by ``PlayerId`` name. Nothing is on the table until it is answered.
+
+    Attributes
+    ----------
+    card_id : str
+        The id the Personality takes when it enters play.
+    printed : PersonalityPrint
+        What the Personality is.
+    """
+
+    card_id: str
+    printed: PersonalityPrint
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return f"Choose who gets {self.printed.name}"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return len(response.choices) == 1 and response.choices[0] in self.candidates
+
+
 def apply_debug(game: GameState, step: DebugStep) -> None:
     """Apply a developer's step to the game, outside any action or decision.
 
     Raise ``RuntimeError`` while a decision is pending, since a card or Gold appearing under an
     open question would leave the question about a board it was not asked on. Raise ``ValueError``
-    for a card id already on the table, or a Dynasty card for a seat with no Province card to
-    displace.
+    for a card id already on the table, a Dynasty card for a seat with no Province card to
+    displace, or a Personality step whose print is not a Personality.
     """
     if game.pending is not None:
         raise RuntimeError("a debug step cannot land while a decision is pending")
@@ -90,6 +133,8 @@ def apply_debug(game: GameState, step: DebugStep) -> None:
             game.gold[seat] = game.gold.get(seat, 0) + amount
         case DebugCard(seat=seat, card_id=card_id, printed=printed):
             _add_card(game, seat, card_id, printed)
+        case DebugPersonality(seat=seat, card_id=card_id, printed=printed):
+            _ask_who_gets(game, seat, card_id, printed)
 
 
 def apply_debug_placement(
@@ -103,6 +148,25 @@ def apply_debug_placement(
     card = game.table.cards_by_id[request.card_id]
     ops.move_card(game.table, card, zone)
     card.turn_face_up()
+
+
+def apply_debug_seat(game: GameState, request: ChooseDebugSeat, response: DecisionResponse) -> None:
+    """Put the Personality into play under the chosen seat, face up and unplaced, so the client
+    clusters it into that seat's home row. Nothing is announced: it did not enter play by any
+    action, so no trait or reaction fires."""
+    owner = PlayerId[response.choices[0]]
+    card = L5RCard(id=request.card_id, printed=request.printed, owner=owner)
+    game.table.cards_by_id[card.id] = card
+    ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
+
+
+def _ask_who_gets(game: GameState, seat: PlayerId, card_id: str, printed: CardPrint) -> None:
+    if card_id in game.table.cards_by_id:
+        raise ValueError(f"a card with id {card_id!r} is already on the table")
+    if not isinstance(printed, PersonalityPrint):
+        raise ValueError(f"{printed.name} is not a Personality")
+    candidates = tuple(player.name for player in game.table.seats)
+    game.pending = ChooseDebugSeat(seat, candidates, card_id, printed)
 
 
 def _add_card(game: GameState, seat: PlayerId, card_id: str, printed: CardPrint) -> None:

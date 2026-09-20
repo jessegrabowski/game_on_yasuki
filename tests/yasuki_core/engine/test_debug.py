@@ -2,7 +2,14 @@ import json
 
 import pytest
 
-from yasuki_core.engine.debug import DebugCard, DebugGold, PlaceDebugCard, apply_debug
+from yasuki_core.engine.debug import (
+    ChooseDebugSeat,
+    DebugCard,
+    DebugGold,
+    DebugPersonality,
+    PlaceDebugCard,
+    apply_debug,
+)
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import Answer, Debug, game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm, DecisionResponse
@@ -14,6 +21,7 @@ from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
 from tests.yasuki_core.engine.builders import dealt_table, province_card, two_seat_game
 
 P1 = PlayerId.P1
+P2 = PlayerId.P2
 HAND = ZoneKey(P1, ZoneRole.HAND)
 FIRST = ZoneKey(P1, ZoneRole.PROVINCE, 0)
 A_STRATEGY = ActionPrint(name="Debug Strategy", side=Side.FATE)
@@ -71,6 +79,45 @@ def test_placing_a_dynasty_debug_card_discards_what_was_there_and_lands_face_up(
     assert "old" in {card.id for card in discard}
     assert [type(entry) for entry in session.log.entries] == [Debug, Answer]
     assert session.log.replay() == session.game
+
+
+def test_a_debug_personality_asks_which_player_gets_it():
+    session = EngineSession.start(dealt_table(), P1)
+
+    session.debug(DebugPersonality(P1, "dbg-1", A_PERSONALITY))
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseDebugSeat)
+    assert pending.seat is P1
+    assert pending.candidates == ("P1", "P2")
+    assert pending.accepts(DecisionResponse(("P2",)))
+    assert not pending.accepts(DecisionResponse(("P1", "P2")))
+    assert "dbg-1" not in session.game.table.cards_by_id
+
+
+def test_a_debug_personality_enters_play_under_the_chosen_player():
+    session = EngineSession.start(dealt_table(), P1)
+    session.debug(DebugPersonality(P1, "dbg-1", A_PERSONALITY))
+
+    session.submit(P1, DecisionResponse(("P2",)))
+
+    card = session.game.table.cards_by_id["dbg-1"]
+    assert session.game.pending is None
+    assert card.owner is P2
+    assert card.face_up
+    assert not card.bowed
+    assert card in session.game.table.battlefield.cards
+    assert [type(entry) for entry in session.log.entries] == [Debug, Answer]
+    assert session.log.replay() == session.game
+    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
+    assert restored.replay() == session.game
+
+
+def test_a_debug_personality_refuses_a_print_that_is_not_a_personality():
+    game = two_seat_game()
+
+    with pytest.raises(ValueError, match="not a Personality"):
+        apply_debug(game, DebugPersonality(P1, "dbg-1", A_STRATEGY))
 
 
 def test_a_debug_step_is_refused_while_a_decision_is_pending():

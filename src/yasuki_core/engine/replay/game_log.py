@@ -1,6 +1,12 @@
 from dataclasses import dataclass, field
 
-from yasuki_core.engine.debug import DebugCard, DebugGold, DebugStep, apply_debug
+from yasuki_core.engine.debug import (
+    DebugCard,
+    DebugGold,
+    DebugPersonality,
+    DebugStep,
+    apply_debug,
+)
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.serialization import decode_print, encode_print
 from yasuki_core.engine.replay.snapshot import (
@@ -86,7 +92,7 @@ class Debug:
     ----------
     seat : PlayerId
         The seat the step was taken for.
-    step : DebugGold or DebugCard
+    step : DebugGold, DebugCard or DebugPersonality
         What was put where.
     """
 
@@ -248,12 +254,16 @@ def _encode_debug(step: DebugStep) -> dict:
             return {"kind": "gold", "amount": amount}
         case DebugCard(card_id=card_id, printed=printed):
             return {"kind": "card", "card_id": card_id, "printed": encode_print(printed)}
+        case DebugPersonality(card_id=card_id, printed=printed):
+            return {"kind": "personality", "card_id": card_id, "printed": encode_print(printed)}
     raise ValueError(f"no encoding for debug step {type(step).__name__}")
 
 
 def _decode_debug(seat: PlayerId, payload: dict) -> DebugStep:
     if payload["kind"] == "gold":
         return DebugGold(seat, payload["amount"])
+    if payload["kind"] == "personality":
+        return DebugPersonality(seat, payload["card_id"], decode_print(payload["printed"]))
     return DebugCard(seat, payload["card_id"], decode_print(payload["printed"]))
 
 

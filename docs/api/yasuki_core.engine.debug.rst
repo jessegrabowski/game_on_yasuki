@@ -7,8 +7,10 @@ yasuki_core.engine.debug
 
 .. autosummary::
 
+    ChooseDebugSeat
     DebugCard
     DebugGold
+    DebugPersonality
     PlaceDebugCard
 
 .. rubric:: Functions
@@ -17,6 +19,7 @@ yasuki_core.engine.debug
 
     apply_debug
     apply_debug_placement
+    apply_debug_seat
 
 .. automodule:: yasuki_core.engine.debug
     :members:
