@@ -32,7 +32,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
 | Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
 | Changes a Province's strength | `@province_strength_grant(id)` | {card}`Defensive Memorial` |
-| Puts itself into play as an Edict | `register_edict(id)` | {card}`Act With Authority` |
+| Puts itself into play from hand, as an Edict, Kata or Ring | `register_entry(id, ...)` | {card}`Act With Authority` |
 | An Event played from the Province it sits in | `register_event_entry(id)` | {card}`Shadow of the Dark God` |
 | Raises its own Gold Production as it bows | `register_self_grant(id, n)`, or `@self_grant(id)` when the grant has a condition | {card}`Jade Mine`, {card}`Slave Pits` |
 | Enters play in a state the rule does not give it ("Enters play unbowed", "enters play dishonorable") | `@entry_state(id)` | {card}`Poorly Placed Garden`, {card}`Matsu Gakuya` |
@@ -160,6 +160,11 @@ the module of the same name as its YAML file, and add the card in id order under
 ```python
 # --- Rice Farm ---
 ```
+
+The module is an address, not a claim about the text. A card's text can be rewritten between arcs
+under one id (Ring of Air is one id across two dozen printings), and the ruleset the engine plays
+under decides which text it models. The first printing still decides the module because it is the
+one location the hooks can compute from an id alone.
 
 Everything the card does goes in that one block: its triggers, its target predicates, its effects
 helper, its registration. A pre-commit hook asserts the ordering, the one-header-per-card rule, and
