@@ -109,9 +109,9 @@ Edict clears `keywords.EDICT`, which is the rulebook's limit of one at a time re
 (ShE datasheet, Edicts), and a Kata clears `keywords.KATA`:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/abilities/idioms.py
-:start-at: others = [
-:end-at: ]
-:dedent: 8
+:start-at: def cleared(
+:end-before: def effects(
+:dedent: 4
 :language: python
 ```
 
