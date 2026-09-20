@@ -3,6 +3,7 @@ from typing import NamedTuple
 
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
+from yasuki_core.engine.debug import DebugCard, DebugGold, DebugPersonality
 from yasuki_core.engine.driver import Controls, MAX_ACTIONS_PER_ROUND
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
@@ -43,6 +44,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import CardPrint
 
 
 # The places a search can look. Every search dialog offers all three, and disables the ones the
@@ -432,6 +434,29 @@ class GameRunner:
         """Answer the human's pending decision. A request whose answer carries more than the chosen
         ids (a payment and its boosts) is answered with that request's own response type."""
         self.session.submit(self.human, response)
+
+    def debug_gold(self, amount: int) -> None:
+        """Put ``amount`` Gold in the human's pool from nowhere, on the tape."""
+        self.session.debug(DebugGold(self.human, amount))
+
+    def debug_card(self, printed: CardPrint) -> None:
+        """Put a new copy of ``printed`` on the table from nowhere, on the tape: a Fate card into
+        the human's hand, a Dynasty card into a Province the human then picks on the board."""
+        self.session.debug(DebugCard(self.human, self._next_debug_id(), printed))
+
+    def debug_personality(self, printed: CardPrint) -> None:
+        """Put a new copy of the Personality ``printed`` straight into play from nowhere, on the
+        tape, under the player the human then picks on the board."""
+        self.session.debug(DebugPersonality(self.human, self._next_debug_id(), printed))
+
+    def _next_debug_id(self) -> str:
+        """Counts the debug cards already on the table, so a replay makes the same one."""
+        taken = {
+            card_id
+            for card_id in self.session.game.table.cards_by_id
+            if card_id.startswith("debug-")
+        }
+        return f"debug-{len(taken) + 1}"
 
     def can_cancel(self) -> bool:
         """Whether the human may back out of the pending decision right now."""

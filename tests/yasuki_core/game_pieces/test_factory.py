@@ -10,7 +10,8 @@ from yasuki_core.game_pieces.factory import (
     _select_print,
     resolve_decklist,
     build_token_templates,
-    build_token_print,
+    build_print,
+    side_of_record,
 )
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side, AttachmentType
@@ -184,6 +185,20 @@ def test_card_sides_follow_their_section():
     assert r.pre_game[0].side is Side.STRONGHOLD
 
 
+@pytest.mark.parametrize(
+    "record, side",
+    [
+        ({"types": ["Holding"]}, Side.DYNASTY),
+        ({"types": ["Strategy"]}, Side.FATE),
+        ({"types": ["Personality", "Strategy"]}, Side.DYNASTY),
+        ({"types": []}, Side.FATE),
+        ({}, Side.FATE),
+    ],
+)
+def test_a_record_side_follows_its_first_type(record, side):
+    assert side_of_record(record) is side
+
+
 def test_stronghold_and_sensei_carry_starting_honor_but_wind_does_not():
     stronghold, sensei, wind = _resolve().pre_game
     assert stronghold.starting_honor == 10
@@ -348,7 +363,7 @@ def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
     # The token record carries the get_card_by_id shape the factory builds a live token from.
     assert record["card_id"] == "bird_of_prey"
     assert "image_path" in record and record.get("types")
-    assert build_token_print(record).side is not None
+    assert build_print(record).side is not None
 
 
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")

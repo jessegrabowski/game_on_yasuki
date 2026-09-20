@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.debug import ChooseDebugSeat, PlaceDebugCard
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy, Recruit
 from yasuki_core.engine.rules.abilities.model import Ability, itself
@@ -1736,3 +1737,84 @@ def test_a_placed_card_is_not_taken_back_by_clicking_it(looking):
     presenter.on_look_card_clicked("second")
 
     assert window.field.selection == ("second",)
+
+
+def test_debug_gold_lands_in_the_pool_and_shows_on_the_board(board):
+    presenter, window, session = board
+
+    presenter.debug_gold()
+
+    assert session.game.gold[P1] == 100
+    assert window.field.gold == 100
+    assert session.log.replay() == session.game
+
+
+def _database_record(name: str, card_type: str) -> dict:
+    """What the debug menu's database picker hands the presenter. The tests skip the picker, a
+    modal dialog over the live database, and deliver its pick directly."""
+    return {
+        "name": name,
+        "card_id": name.lower().replace(" ", "_"),
+        "types": [card_type],
+        "keywords": [],
+        "clans": [],
+        "text": "",
+        "image_path": None,
+    }
+
+
+def test_a_fate_debug_card_from_the_database_lands_in_the_hand(board):
+    presenter, window, session = board
+
+    presenter._debug_card(_database_record("Debug Strategy", "Strategy"))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert hand[-1].printed.name == "Debug Strategy"
+    assert session.log.replay() == session.game
+
+
+def test_each_debug_card_takes_the_next_free_id(board):
+    presenter, window, session = board
+
+    presenter._debug_card(_database_record("Debug Strategy", "Strategy"))
+    presenter._debug_card(_database_record("Debug Tactic", "Strategy"))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand[-2:]] == ["debug-1", "debug-2"]
+
+
+def test_a_debug_personality_offers_each_seat_by_name_and_enters_play_under_the_pick(board):
+    presenter, window, session = board
+    seats = session.game.table.seats
+
+    presenter._debug_personality(_database_record("Debug Bushi", "Personality"))
+
+    assert isinstance(session.game.pending, ChooseDebugSeat)
+    assert _buttons(window) == [seats[P1].name, seats[P2].name]
+    assert not window.field.selecting
+
+    _press(presenter, seats[P2].name)
+
+    assert session.game.pending is None
+    spawned = session.game.table.cards_by_id["debug-1"]
+    assert spawned.owner is P2
+    assert spawned in session.game.table.battlefield.cards
+    assert session.log.replay() == session.game
+
+
+def test_a_dynasty_debug_card_is_placed_on_the_board_like_a_legacy_card(board):
+    presenter, window, session = board
+    first = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    displaced = session.game.table.zones[first].cards[0].id
+
+    presenter._debug_card(_database_record("Debug Farm", "Holding"))
+
+    assert isinstance(session.game.pending, PlaceDebugCard)
+    assert "Place" in _buttons(window)
+
+    window.field.toggle_selection(displaced)
+    presenter.confirm()
+
+    assert session.game.pending is None
+    assert [card.printed.name for card in session.game.table.zones[first].cards] == ["Debug Farm"]
+    assert session.log.replay() == session.game

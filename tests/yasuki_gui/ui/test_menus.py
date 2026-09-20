@@ -5,6 +5,8 @@ import pytest
 
 from yasuki_gui.ui.menus import build_menubar
 
+from tests.yasuki_gui.conftest import menubar_cascades
+
 
 @pytest.fixture
 def root():
@@ -88,3 +90,20 @@ class TestBuildMenubar:
 
         root_mock = Mock()
         root.winfo_toplevel = Mock(return_value=root_mock)
+
+
+def test_the_debug_menu_appears_only_in_debug_mode(root, mock_field_view):
+    assert "Debug" not in menubar_cascades(build_menubar(root, mock_field_view))
+    assert "Debug" in menubar_cascades(build_menubar(root, mock_field_view, debug=True))
+
+
+def test_a_debug_command_runs_the_hook_the_window_set(root, mock_field_view):
+    debug_menu = menubar_cascades(build_menubar(root, mock_field_view, debug=True))["Debug"]
+    ran = []
+    # The window binds the presenter after the menu is built, so the entry must read the hook when
+    # clicked rather than capture it.
+    mock_field_view.on_debug_gold = lambda: ran.append("gold")
+
+    debug_menu.invoke(0)
+
+    assert ran == ["gold"]

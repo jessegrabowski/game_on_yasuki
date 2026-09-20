@@ -11,7 +11,7 @@ from yasuki_core.engine.table import AttachTarget, DeckKey, TableState, ZoneKey,
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.factory import build_token_print
+from yasuki_core.game_pieces.factory import build_print
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     CardPrint,
@@ -121,7 +121,7 @@ def token_template(
     database-loaded one does.
     """
     state = target.table if isinstance(target, GameState) else target
-    printed = build_token_print(
+    printed = build_print(
         {
             "card_id": card_id,
             "name": name,

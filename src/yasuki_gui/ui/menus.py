@@ -7,7 +7,9 @@ from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.deck_builder import open_deck_builder as _open_deck_builder
 
 
-def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
+def build_menubar(root: tk.Misc, field_view, *, debug: bool = False) -> tk.Menu:
+    """The window's menubar. ``debug`` adds the Debug menu, whose commands put Gold and cards on
+    the table from nowhere through the hooks the window sets on ``field_view``."""
     menubar = tk.Menu(root)
     app_menu = tk.Menu(menubar, tearoff=0)
 
@@ -75,4 +77,24 @@ def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
     deck_menu.add_command(label="Deck Builder…", command=open_deck_builder)
     menubar.add_cascade(label="Deck", menu=deck_menu)
 
+    if debug:
+        debug_menu = tk.Menu(menubar, tearoff=0)
+        for label, hook in (
+            ("Add 100 Gold", "on_debug_gold"),
+            ("Add Card to Hand…", "on_debug_card_to_hand"),
+            ("Add Card to Province…", "on_debug_card_to_province"),
+            ("Spawn Personality…", "on_debug_spawn_personality"),
+        ):
+            debug_menu.add_command(
+                label=label, command=lambda hook=hook: _call_hook(field_view, hook)
+            )
+        menubar.add_cascade(label="Debug", menu=debug_menu)
+
     return menubar
+
+
+def _call_hook(field_view, hook: str) -> None:
+    """Run the hook named ``hook`` on the board, if the window has set one."""
+    command = getattr(field_view, hook, None)
+    if callable(command):
+        command()

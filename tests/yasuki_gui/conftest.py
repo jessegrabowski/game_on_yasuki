@@ -109,3 +109,13 @@ class DummyEventNamespace(tk.Event):
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
+
+
+def menubar_cascades(menubar: tk.Menu) -> dict[str, tk.Menu]:
+    """Each cascade's label to its submenu. Walks the raw entries, since on X11 a menubar carries a
+    tearoff entry at index 0 that a label-only listing would silently skip past."""
+    return {
+        menubar.entrycget(index, "label"): menubar.nametowidget(menubar.entrycget(index, "menu"))
+        for index in range(menubar.index("end") + 1)
+        if menubar.type(index) == "cascade"
+    }
