@@ -1,8 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.model import Ability, once_tag
 from yasuki_core.engine.rules.abilities.registry import ability_for
+from yasuki_core.engine.rules.effects import Effect
+from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
 from yasuki_core.engine.rules.legality import legal_targets
@@ -108,14 +110,66 @@ def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
     triggers.resolve_effects(game, ability.cost(game, card))
 
 
+@dataclass(frozen=True, slots=True)
+class ResolveAbility(Effect):
+    """An ability about to resolve against the target its seat chose: the action's targeting, held
+    at the Interrupt step ahead of everything the ability does (CR, Action Sequence step D).
+
+    Performing it records the target as the action's and hands the ability's effects against
+    that target on as its follow-on. The effects are built once, as the target is chosen, so what
+    the Interrupt window forecasts is what resolves and an Interrupt bound to one of them finds
+    it. An Interrupt that substitutes targeting replaces this effect with one naming the new
+    target and no built effects, so the ability is built afresh against that target.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose ability is resolving.
+    target_id : str
+        The card the ability targets.
+    ability_key : str, optional
+        Names the ability among the several the card prints. Default None, the card's only
+        ability.
+    effects : tuple of Effect, optional
+        The ability's effects against the target, built as the target was chosen. Default None,
+        built when first read.
+    """
+
+    card_id: str
+    target_id: str
+    ability_key: str | None = None
+    effects: tuple[Effect, ...] | None = None
+
+    def describe(self) -> str:
+        return f"{self.card_id} targets {self.target_id}"
+
+    def narrate(self, game: GameState) -> str:
+        by_id = game.table.cards_by_id
+        return f"{by_id[self.card_id].name} targets {by_id[self.target_id].name}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        _record_targets(game, (self.target_id,))
+        return []
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        return self.effects if self.effects is not None else self._build(game)
+
+    def built(self, game: GameState) -> "ResolveAbility":
+        """This targeting with the ability's effects built against its target on the board as it
+        stands."""
+        return replace(self, effects=self._build(game))
+
+    def _build(self, game: GameState) -> tuple[Effect, ...]:
+        source = game.table.cards_by_id[self.card_id]
+        ability = ability_for(game, source, self.ability_key)
+        return tuple(ability.effects(game, source, game.table.cards_by_id[self.target_id]))
+
+
 def apply_ability_target(
     game: GameState, request: ChooseAbilityTarget, response: DecisionResponse
 ) -> None:
-    source = game.table.cards_by_id[request.source_card_id]
-    target = game.table.cards_by_id[response.choices[0]]
-    ability = ability_for(game, source, request.ability_key)
-    _record_targets(game, (target.id,))
-    triggers.resolve_action_effects(game, ability.effects(game, source, target))
+    targeting = ResolveAbility(request.source_card_id, response.choices[0], request.ability_key)
+    triggers.resolve_action_effects(game, [targeting.built(game)])
 
 
 def _record_targets(game: GameState, target_ids: tuple[str, ...]) -> None:

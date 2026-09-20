@@ -22,10 +22,10 @@ its `request` returns, stashes the remainder of the cascade, and resumes once th
 effect cannot declare itself interrupting without supplying that decision, because `request` is
 abstract on the category.
 
-An action's own effects are held at the Interrupt step on their way through. The walker wraps each
-as an `InterruptStep`, which pauses only while a seat holds an Interrupt answering that effect's
-type and performs it once every seat has declined, so an effect nothing answers costs a lookup and
-nothing more. Which effects are the action's own is decided at the entry point: step E of the
+An action's own effects are held at the Interrupt window before any of them resolves. The walker
+holds them in an `InterruptWindow`, which pauses only while a seat holds an Interrupt answering
+something in the forecast and hands the effects on once every seat has passed, so an action nothing
+answers costs a lookup and nothing more. Which effects are the action's own is decided at the entry point: step E of the
 Action Sequence hands them to `resolve_action_effects`, and everything else, a cost, a trait's
 return, a rulebook procedure's effects, goes through `resolve_effects` and is never held there. An
 effect opts out through `is_interruptible` only when there is nothing to interrupt, such as an
@@ -86,7 +86,7 @@ deferred through `Then` instead.
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
-   InterruptStep
+   InterruptWindow
    Move
    MoveToDeck
    MoveToHand
@@ -162,6 +162,8 @@ Legality with respect to game state is checked separately.
    ChooseFortificationProvince
    ChooseInheritanceTarget
    ChooseInterrupt
+   ChooseInterruptEffect
+   ChooseInterruptTarget
    ChooseInvestAmount
    ChooseOption
    LeaveBowed

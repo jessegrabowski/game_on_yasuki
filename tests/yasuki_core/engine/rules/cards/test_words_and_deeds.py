@@ -1,8 +1,16 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.effects import Bow
+from yasuki_core.engine.rules.triggers import resolve_action_effects
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.words_and_deeds import MILITIA_RECRUIT
-from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Confirm, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseInterrupt,
+    ChooseInterruptTarget,
+    ChoosePayment,
+    Confirm,
+    DecisionResponse,
+)
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 
@@ -15,8 +23,9 @@ from tests.yasuki_core.engine.builders import (
     token_template,
     two_seat_game,
 )
+from tests.yasuki_core.engine.rules.test_interrupts import _strategy
 
-P1 = PlayerId.P1
+P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 # --- Militia Training Ground ---
@@ -94,3 +103,74 @@ def test_the_grounds_replay_to_the_same_board():
     session.submit(P1, DecisionResponse(("hero",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Final Sacrifice ---
+
+
+def _sacrifice_session(*, yojimbo_bowed: bool = False) -> EngineSession:
+    """P2's probe is bowing P1's courtier, with a Yojimbo beside him and Final Sacrifice in hand."""
+    game = two_seat_game()
+    put_in_play(game, holding("P2-src", owner=P2, printed_id="bow_then_destroy_probe"))
+    put_in_play(game, personality("courtier", keywords=("Courtier",)))
+    yojimbo = put_in_play(game, personality("yojimbo", keywords=("Yojimbo",)))
+    if yojimbo_bowed:
+        yojimbo.bow()
+    _strategy(game.table, "sacrifice", "final_sacrifice", P1)
+    session = EngineSession.start(game.table, P2)
+    session.act(P2, ActivateAbility("P2-src"))
+    session.submit(P2, DecisionResponse(("courtier",)))
+    return session
+
+
+def test_final_sacrifice_targets_a_yojimbo_and_the_action_goes_for_him_instead():
+    session = _sacrifice_session()
+    pending = session.game.pending
+    assert isinstance(pending, ChooseInterrupt)
+    assert (pending.seat, pending.candidates) == (P1, ("sacrifice",))
+
+    session.submit(P1, DecisionResponse(("sacrifice",)))
+    target = session.game.pending
+    assert isinstance(target, ChooseInterruptTarget)
+    assert target.candidates == ("yojimbo",)
+    session.submit(P1, DecisionResponse(("yojimbo",)))
+    pay(session, P1)
+
+    assert session.game.pending is None
+    on_the_table = {card.id for card in session.game.table.battlefield.cards}
+    assert "courtier" in on_the_table and not session.game.table.cards_by_id["courtier"].bowed
+    assert "yojimbo" not in on_the_table
+    assert session.game.action_targets == ("yojimbo",)
+
+
+def test_final_sacrifice_is_not_offered_when_no_yojimbo_is_a_legal_target():
+    # "If legal": the probe targets an unbowed Personality, so a bowed Yojimbo cannot take the
+    # courtier's place and the Interrupt is not offered.
+    session = _sacrifice_session(yojimbo_bowed=True)
+
+    assert session.game.pending is None
+    assert "courtier" not in {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_final_sacrifice_answers_the_targeting_and_not_what_the_action_then_does():
+    game = two_seat_game()
+    put_in_play(game, holding("P2-src", owner=P2, printed_id="bow_then_destroy_probe"))
+    put_in_play(game, personality("courtier", keywords=("Courtier",)))
+    put_in_play(game, personality("yojimbo", keywords=("Yojimbo",)))
+    _strategy(game.table, "sacrifice", "final_sacrifice", P1)
+    game.action = ActivateAbility("P2-src")
+    game.action_targets = ("courtier",)
+
+    resolve_action_effects(game, [Bow("courtier")])
+
+    assert game.pending is None
+    assert game.table.cards_by_id["courtier"].bowed
+
+
+def test_the_final_sacrifice_game_replays_to_the_same_board():
+    session = _sacrifice_session()
+    session.submit(P1, DecisionResponse(("sacrifice",)))
+    session.submit(P1, DecisionResponse(("yojimbo",)))
+    pay(session, P1)
+
+    assert replay(session.log) == session.game

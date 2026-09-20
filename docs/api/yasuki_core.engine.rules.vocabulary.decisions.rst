@@ -20,6 +20,8 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseInheritanceTarget
     ChooseInterrupt
     ChooseInterruptAdjustment
+    ChooseInterruptEffect
+    ChooseInterruptTarget
     ChooseInvestAmount
     ChooseLegacyCard
     ChooseLobbyTarget

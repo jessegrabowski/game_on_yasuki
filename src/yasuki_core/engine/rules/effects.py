@@ -148,45 +148,43 @@ class InterruptingEffect(Effect, ABC):
 
 
 @dataclass(frozen=True, slots=True)
-class InterruptStep(InterruptingEffect):
-    """An effect held at the Interrupt step: while it waits to resolve inside an action, each seat
-    in turn may take an Interrupt that replaces it (ShE datasheet, Interrupt).
+class InterruptWindow(InterruptingEffect):
+    """An action's effects held at the Interrupt step: before any of them resolves, each seat in
+    turn may take an Interrupt against what the action is about to do (CR, Action Sequence step
+    D; ShE datasheet, Interrupt).
 
-    The walker wraps every effect it applies inside an action, so the step is open against all of
-    them, and a handler never returns one. It pauses only while :func:`~yasuki_core.engine.rules.interrupts.interrupters` names a
-    seat with something to take, and performs the held effect once every seat has declined. A
-    replacement an Interrupt makes keeps the declines, so a seat that passed is not asked again
-    about the effect that stood in for the one it passed on.
+    :func:`~yasuki_core.engine.rules.triggers.resolve_action_effects` opens one over the effects
+    step E hands it, once per action. It pauses while
+    :func:`~yasuki_core.engine.rules.interrupts.interrupters` names a seat with something to take
+    against the forecast of those effects, and once every seat has passed it performs nothing and
+    hands the effects on as its follow-on, each then resolving with the modifications the window
+    collected applied to it. A pass holds until someone takes an Interrupt, which reopens the
+    window to every seat, as in any action round.
 
     Attributes
     ----------
-    effect : Effect
-        The effect waiting to resolve.
-    declined : frozenset of PlayerId, optional
-        The seats that have declined an Interrupt against it. Default empty.
+    effects : tuple of Effect
+        The action's effects, in the order they will resolve.
+    passed : frozenset of PlayerId, optional
+        The seats that have passed on the window. Default empty.
     """
 
-    effect: Effect
-    declined: frozenset[PlayerId] = frozenset()
+    effects: tuple[Effect, ...]
+    passed: frozenset[PlayerId] = frozenset()
 
     def describe(self) -> str:
-        return self.effect.describe()
+        return f"interrupt window over {len(self.effects)} effects"
 
-    def narrate(self, game: GameState) -> str:
-        return self.effect.narrate(game)
+    def has_passed(self, seat: PlayerId) -> bool:
+        return seat in self.passed
 
-    def is_interruptible(self) -> bool:
-        return self.effect.is_interruptible()
+    def passed_by(self, seat: PlayerId) -> "InterruptWindow":
+        return replace(self, passed=self.passed | {seat})
 
-    def has_declined(self, seat: PlayerId) -> bool:
-        return seat in self.declined
-
-    def declined_by(self, seat: PlayerId) -> "InterruptStep":
-        return replace(self, declined=self.declined | {seat})
-
-    def replaced_by(self, effect: Effect) -> "InterruptStep":
-        """This step holding ``effect`` in place of the one an Interrupt answered."""
-        return replace(self, effect=effect)
+    def reopened(self) -> "InterruptWindow":
+        """This window with every pass cleared, as it comes back once a seat has taken an
+        Interrupt: the step is an action round, and a pass holds only until someone acts."""
+        return replace(self, passed=frozenset())
 
     # Imported where they are used: the Interrupt step reads the hands and the round, and the
     # module that does so imports this one.
@@ -201,11 +199,11 @@ class InterruptStep(InterruptingEffect):
         return interrupt_request(game, self)
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        """Commit the held effect, reached once nobody is left to ask."""
-        return self.effect.perform(game)
+        """Nothing: the window is over, and the effects follow."""
+        return []
 
     def follow_on(self, game: GameState) -> tuple[Effect, ...]:
-        return self.effect.follow_on(game)
+        return self.effects
 
 
 @dataclass(frozen=True, slots=True)

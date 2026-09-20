@@ -1510,7 +1510,7 @@ def test_the_courage_interrupt_is_offered_on_the_card_and_adjusted_on_the_panel(
     a_fear_to_interrupt,
 ):
     presenter, window, _ = a_fear_to_interrupt
-    assert _status(window) == "Fear 2 on guard. Take an Interrupt?"
+    assert _status(window) == "raider targets guard; Fear 2 on guard; bow guard. Take an Interrupt?"
     assert _buttons(window) == ["Pass"]
     assert not window.field.selecting
     offered = []
@@ -1531,7 +1531,7 @@ def test_cancelling_the_adjustment_returns_to_the_interrupt_offer(a_fear_to_inte
 
     _press(presenter, "Cancel")
 
-    assert _status(window) == "Fear 2 on guard. Take an Interrupt?"
+    assert _status(window) == "raider targets guard; Fear 2 on guard; bow guard. Take an Interrupt?"
     assert _buttons(window) == ["Pass"]
     assert "P2-courage0" in session.game.table.cards_by_id
 

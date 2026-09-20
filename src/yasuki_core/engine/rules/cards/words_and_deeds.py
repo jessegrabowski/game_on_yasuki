@@ -1,13 +1,54 @@
+from dataclasses import replace
+
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.activation import ResolveAbility
+from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, Interruption
+from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.effects import Ask, Bow, CreateToken, Effect, PayGold, Unpayable
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.gold.payment import can_afford
+from yasuki_core.engine.rules.interrupts import legal_substitutes
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
+
+
+# --- Final Sacrifice ---
+
+
+def _final_sacrifice_targets(
+    game: GameState, source: L5RCard, targeting: ResolveAbility
+) -> tuple[str, ...]:
+    """Your Yojimbo the action could target instead: "if legal", so one the ability could not
+    have targeted is not offered."""
+    yojimbo = [
+        card.id
+        for card in game.table.battlefield.cards
+        if card.owner is source.owner and has_keyword(game, card, keywords.YOJIMBO)
+    ]
+    return legal_substitutes(game, targeting, yojimbo)
+
+
+def _final_sacrifice_interrupt(
+    game: GameState, source: L5RCard, targeting: ResolveAbility, target: L5RCard
+) -> Interruption:
+    """ "Interrupt: Target your Yojimbo. The action targets him instead of another card, if
+    legal." """
+    return Interruption(replace(targeting, target_id=target.id, effects=None))
+
+
+register_interrupt(
+    "final_sacrifice",
+    Interrupt(
+        label="Interrupt: the action targets your Yojimbo instead of another card, if legal",
+        answers=ResolveAbility,
+        interrupt=_final_sacrifice_interrupt,
+        targets=_final_sacrifice_targets,
+    ),
+)
 
 
 # --- Militia Training Ground ---

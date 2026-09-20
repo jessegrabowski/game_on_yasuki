@@ -57,7 +57,7 @@ def play_strategy_with(game: GameState, card: L5RCard, effects: tuple[Effect, ..
     game.stack.append(DiscardPlayed(card.id))
     game.stack.append(ApplyEffects(effects))
     game.pending = payment_request(
-        game, card.owner, effective_gold_cost(game, card), card.name, target=card
+        game, card.owner, effective_gold_cost(game, card), card.name, target=card, reopens=True
     )
 
 

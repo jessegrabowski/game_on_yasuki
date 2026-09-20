@@ -7,6 +7,7 @@ yasuki_core.engine.rules.vocabulary.work
 
 .. autosummary::
 
+    Modification
     WorkItem
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.work

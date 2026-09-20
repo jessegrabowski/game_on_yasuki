@@ -112,6 +112,11 @@ class ChoosePayment(DecisionRequest):
         Each producer that can still raise its own yield this turn, paired with the extra Gold it
         would add. What it costs and how it asks are the card's business, settled in the window it
         opens as it bows. Only the figure is here, because reachability cannot be judged without it.
+    reopens : bool
+        Whether backing out returns to the decision answered just before this one instead of
+        unwinding the action. True for the payment of an Interrupt played from hand, which an
+        answer named against someone's action: the cancel takes back that answer, not the action
+        it interrupted. Default False.
     """
 
     amount: int
@@ -120,6 +125,7 @@ class ChoosePayment(DecisionRequest):
     label: str
     target_id: str = ""
     grantable: tuple[tuple[str, int], ...] = ()
+    reopens: bool = False
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return f"Pay {self.shortfall(partial)} gold for {self.label}"
@@ -171,6 +177,10 @@ class ChoosePayment(DecisionRequest):
     def cancellable(self) -> bool:
         """A Recruit's payment can be backed out of: nothing is committed until it is answered."""
         return True
+
+    @property
+    def reopens_on_cancel(self) -> bool:
+        return self.reopens
 
 
 @dataclass(frozen=True, slots=True)
@@ -566,6 +576,56 @@ class ChooseInterruptAdjustment(ChooseOption):
     lists. Backing out reopens the offer the card was named against, since naming it moved
     nothing: the card is discarded only once the adjustment is answered.
     """
+
+    @property
+    def reopens_on_cancel(self) -> bool:
+        return True
+
+
+@dataclass(frozen=True, slots=True)
+class ChooseInterruptEffect(ChooseOption):
+    """Which of the action's effects the Interrupt the seat just named answers, asked only when
+    the forecast holds more than one it could. The candidates are the effects as the seat reads
+    them. Answered through its own handler rather than a resolver, since the Interrupt window it
+    was asked from stays paused until the Interrupt is taken; ``resolver`` names nothing.
+    Backing out reopens the offer the card was named against."""
+
+    @property
+    def reopens_on_cancel(self) -> bool:
+        return True
+
+
+@dataclass(frozen=True, slots=True)
+class ChooseInterruptTarget(DecisionRequest):
+    """The seat must choose the target of the Interrupt it has just named, for a card that reads
+    "Interrupt: Target your X". The candidates are the cards the Interrupt may target, all in
+    play, so a client renders them as board selections. Backing out reopens the offer the card
+    was named against, since naming it moved nothing.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose Interrupt is being taken.
+    card_name : str
+        Its title, for the prompt.
+    effect : str
+        The action's effect the Interrupt answers, as its description reads, to find it again in
+        the forecast once the target is chosen.
+    """
+
+    card_id: str
+    card_name: str
+    effect: str
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return f"Choose a target for {self.card_name}"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        return True
 
     @property
     def reopens_on_cancel(self) -> bool:
