@@ -280,24 +280,49 @@ def test_honor_your_oaths_is_not_offered_without_the_favor():
     assert ability.targets(game, source) == []
 
 
-def test_paying_the_favor_for_the_second_clause_makes_it_a_favor_action():
-    """ShE datasheet, The Favor Icon: an action with alternate costs is a Favor action only when the
-    Favor is the half actually paid."""
+def test_discarding_the_favor_for_the_second_clause_is_not_a_favor_cost():
+    """The Favor icon is a cost only in the cost block (ShE datasheet, The Favor Icon). Here it is
+    in the effect text, so a card watching for a Favor action sees none."""
     game = _oaths_game(yojimbo=True)
     source, ability = _oaths(game)
     game.action = ActivateAbility(source.id)
+    game.action_seat = PlayerId.P1
+    estate = put_in_play(
+        game,
+        L5RCard.of(
+            StrongholdPrint,
+            id="estate",
+            name="The Palatial Estate of the Crane",
+            printed_id="the_palatial_estate_of_the_crane",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+        ),
+    )
 
     resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
     submit(game, DecisionResponse(choices=(DISCARD_THE_FAVOR,)))
 
     assert game.table.seats[PlayerId.P1].honor == 1
-    assert game.favor_holder is None, "this half of the cost discards it"
-    assert is_favor_action(game)
+    assert game.favor_holder is None
+    assert not is_favor_action(game)
+    assert ability_for(game, estate, None).targets(game, estate) == []
 
 
-def test_bowing_the_yojimbo_instead_leaves_an_ordinary_action():
-    """The same clause paid the other way. The Favor is untouched and no card watching for a Favor
-    action sees one."""
+def test_nothing_may_discard_the_favor_in_the_seats_place():
+    """ "Discarding the Favor can happen only if you control it" (CR, Imperial Favor). Manjodh pays
+    Favor costs, and this is not one, so without the Favor only the Yojimbo is offered."""
+    game = _oaths_game(holds_favor=False, yojimbo=True)
+    source, ability = _oaths(game)
+    put_in_play(game, personality("manjodh", printed_id="manjodh"))
+
+    resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
+
+    assert game.pending is not None
+    assert DISCARD_THE_FAVOR not in game.pending.candidates
+    assert "Bow your target Yojimbo" in game.pending.candidates
+
+
+def test_bowing_the_yojimbo_instead_leaves_the_favor_untouched():
     game = _oaths_game(yojimbo=True)
     source, ability = _oaths(game)
     game.action = ActivateAbility(source.id)

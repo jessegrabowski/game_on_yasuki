@@ -1,10 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook.favor_payment import (
-    DISCARD_THE_FAVOR,
-    favor_cost_for_seat,
-    favor_payer,
-    favor_payment_options,
-)
+from yasuki_core.engine.rules.rulebook.favor_payment import DISCARD_THE_FAVOR, favor_payer
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_edict
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
@@ -18,6 +13,7 @@ from yasuki_core.engine.rules.effects import (
     AskOption,
     Bow,
     Choose,
+    DiscardFavor,
     DrawCard,
     Effect,
     GainHonor,
@@ -117,13 +113,15 @@ def _honor_your_oaths_effects(game: GameState, source: L5RCard, target: L5RCard)
     """Move the target home, then offer the clause that buys an honor and a card.
 
     The two ways to buy it are offered together and only when each can actually be met, so a seat
-    with no Yojimbo and no way to pay the Favor is never asked a question it cannot answer.
+    with no Yojimbo and no Favor is never asked a question it cannot answer. The discard is an
+    effect rather than a cost, so nothing may pay it in the Favor's place: "discarding the Favor
+    can happen only if you control it" (CR, Imperial Favor).
     """
     seat = source.owner
     options: list[str] = []
     if _honor_your_oaths_bowable_yojimbo(game, seat):
         options.append(BOW_A_YOJIMBO)
-    if favor_payment_options(game, seat):
+    if game.favor_holder is seat:
         options.append(DISCARD_THE_FAVOR)
     moved = [Move(target.id, Location.home(target.owner))]
     if not options:
@@ -147,12 +145,13 @@ def _honor_your_oaths_reward(seat: PlayerId) -> list[Effect]:
 def _resolve_honor_your_oaths_second_clause(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Charge whichever half the seat named. Paying the Favor here is what makes this a Favor
-    action. Bowing the Yojimbo leaves it an ordinary one (ShE datasheet, The Favor Icon)."""
+    """Resolve whichever half the seat named. Neither makes this a Favor action: the Favor icon is
+    a cost only in an action's cost block, and here it is in the effect text (ShE datasheet, The
+    Favor Icon)."""
     if not chosen or chosen[0] == DECLINE_SECOND_CLAUSE:
         return []
     if chosen[0] == DISCARD_THE_FAVOR:
-        return [*favor_cost_for_seat(game, seat, source_id), *_honor_your_oaths_reward(seat)]
+        return [DiscardFavor(seat), *_honor_your_oaths_reward(seat)]
     return [
         Choose(
             seat,
