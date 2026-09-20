@@ -21,8 +21,12 @@ configuration and not a property of the enum, so `Ruleset` carries the order.
 to the next seat, and closes the round once every seat has passed consecutively. The active
 player finishing is not what ends a round.
 
-{func}`~.open_response_window` opens the Response Step over the round an action was taken in, and
-reports whether it opened at all.
+The Action Sequence's two windows are rounds over the round the action was taken in.
+{func}`~yasuki_core.engine.rules.interrupts.open_interrupt_window` opens the Interrupt step (D)
+once the action's targets are chosen and its effects held, and {func}`~.open_response_window`
+opens the Response Step once they have resolved (between E and F). Each reports whether it opened
+at all, since a step nobody could act in is a pass nobody needs to be asked for, and each closes
+back to the suspended round on consecutive passes.
 
 ## What a designator means
 
