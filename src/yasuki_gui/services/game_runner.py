@@ -145,9 +145,9 @@ class GameRunner:
         the Kharmic ability that spends it, an Equip for an attachment, and a Strategy played for
         its Gold Cost. Empty when the card offers nothing right now.
 
-        Neither Equipping nor playing a Strategy names a target here. Equipping picks its
-        Personality first and pays afterwards. A Strategy pays first and is pointed at its target on
-        the far side, which is the CR's order for any action (Action Sequence steps B and C)."""
+        Neither Equipping nor playing a Strategy names a target here. Both pay first and are
+        pointed at their target on the far side, which is the CR's order for any action (Action
+        Sequence steps B and C)."""
         game = self.session.game
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():

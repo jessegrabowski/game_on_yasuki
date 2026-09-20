@@ -199,7 +199,7 @@ the action rather than by deserializing it.
    effects.ApplyEffects
    gold.payment.ContinuePayment
    gold.production.CompleteProduction
-   rulebook.equip.ResolveEquip
+   rulebook.equip.SelectEquipTarget
    rulebook.recruit.EnterPlay
    rulebook.recruit.FinishRecruit
    rulebook.recruit.ResolveRecruit

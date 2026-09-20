@@ -38,8 +38,8 @@ def _hand_an_attachment(state, card):
 
 def _equip(session, card_id, target_id):
     session.act(P1, Equip(card_id))
-    session.submit(P1, DecisionResponse((target_id,)))
     pay(session, P1)
+    session.submit(P1, DecisionResponse((target_id,)))
 
 
 def test_ichiro_yojimbo_brings_a_second_follower():

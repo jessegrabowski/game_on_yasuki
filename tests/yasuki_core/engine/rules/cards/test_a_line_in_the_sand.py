@@ -112,7 +112,6 @@ def test_investing_raises_the_price_by_the_invest_cost():
     session = _sand_game()
 
     session.act(P1, Equip("weapon", invest=True))
-    session.submit(P1, DecisionResponse(("bearer",)))
 
     pending = session.project(P1).pending
     assert isinstance(pending, ChoosePayment)
@@ -122,8 +121,8 @@ def test_investing_raises_the_price_by_the_invest_cost():
 def test_investing_fetches_another_copy_out_of_the_fate_deck():
     session = _sand_game()
     session.act(P1, Equip("weapon", invest=True))
-    session.submit(P1, DecisionResponse(("bearer",)))
     pay(session, P1)
+    session.submit(P1, DecisionResponse(("bearer",)))
 
     pending = session.project(P1).pending
     assert isinstance(pending, ChooseCards)
@@ -139,8 +138,8 @@ def test_investing_raises_the_cards_gold_cost_permanently():
     lasting property of the card in play, not a one-off payment."""
     session = _sand_game()
     session.act(P1, Equip("weapon", invest=True))
-    session.submit(P1, DecisionResponse(("bearer",)))
     pay(session, P1)
+    session.submit(P1, DecisionResponse(("bearer",)))
     session.submit(P1, DecisionResponse(("spare",)))
 
     weapon = session.game.table.cards_by_id["weapon"]
@@ -150,8 +149,8 @@ def test_investing_raises_the_cards_gold_cost_permanently():
 def test_equipping_without_the_invest_leaves_the_cost_and_the_deck_alone():
     session = _sand_game()
     session.act(P1, Equip("weapon"))
-    session.submit(P1, DecisionResponse(("bearer",)))
     pay(session, P1)
+    session.submit(P1, DecisionResponse(("bearer",)))
 
     assert session.project(P1).pending is None  # no search was raised
     assert effective_gold_cost(session.game, session.game.table.cards_by_id["weapon"]) == 3
@@ -171,8 +170,8 @@ def test_the_invested_cost_dies_with_the_card():
     printed."""
     session = _sand_game()
     session.act(P1, Equip("weapon", invest=True))
-    session.submit(P1, DecisionResponse(("bearer",)))
     pay(session, P1)
+    session.submit(P1, DecisionResponse(("bearer",)))
     session.submit(P1, DecisionResponse(("spare",)))
     weapon = session.game.table.cards_by_id["weapon"]
     assert effective_gold_cost(session.game, weapon) == 4

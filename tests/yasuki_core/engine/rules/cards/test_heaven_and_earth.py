@@ -57,8 +57,8 @@ def test_equipping_the_sword_gains_an_honor():
     session = EngineSession.start(state, P1)
 
     session.act(P1, Equip("sword"))
-    session.submit(P1, DecisionResponse(("bearer",)))
     pay(session, P1)
+    session.submit(P1, DecisionResponse(("bearer",)))
 
     assert session.game.table.seats[P1].honor == 1
 
@@ -73,8 +73,8 @@ def test_equipping_the_sword_to_a_dishonorable_bearer_rehonors_him_instead():
     session = EngineSession.start(state, P1)
 
     session.act(P1, Equip("sword"))
-    session.submit(P1, DecisionResponse(("bearer",)))
     pay(session, P1)
+    session.submit(P1, DecisionResponse(("bearer",)))
 
     assert not session.game.table.cards_by_id["bearer"].dishonorable
     assert session.game.table.seats[P1].honor == 0

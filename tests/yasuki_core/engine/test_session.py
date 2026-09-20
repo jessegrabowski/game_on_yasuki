@@ -798,7 +798,8 @@ def _attachment_in_hand(
     return card
 
 
-def test_equip_pays_then_attaches_the_card_from_hand():
+def test_equip_pays_before_choosing_the_target_then_attaches_the_card():
+    """CR, Action Sequence: costs are paid in step B and targets chosen in step C."""
     state = _dealt_table()
     _gold_source(state, "P1-SH", 8)
     hero = _personality_in_play(state, "P1-hero")
@@ -806,13 +807,13 @@ def test_equip_pays_then_attaches_the_card_from_hand():
     session = EngineSession.start(state, PlayerId.P1)
 
     session.act(PlayerId.P1, Equip("P1-katana"))
-    target = session.project(PlayerId.P1).pending
-    assert isinstance(target, ChooseEquipTarget) and target.candidates == ("P1-hero",)
-    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
-
     pending = session.project(PlayerId.P1).pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 3
     pay(session, PlayerId.P1)
+
+    target = session.project(PlayerId.P1).pending
+    assert isinstance(target, ChooseEquipTarget) and target.candidates == ("P1-hero",)
+    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
 
     game = session.game
     katana = game.table.cards_by_id["P1-katana"]
@@ -820,6 +821,26 @@ def test_equip_pays_then_attaches_the_card_from_hand():
     assert game.table.units == {"P1-katana": hero.id}
     hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     assert katana not in hand
+
+
+def test_cancel_at_the_equip_target_unwinds_the_cost_already_paid():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _personality_in_play(state, "P1-hero")
+    katana = _attachment_in_hand(state, "P1-katana", gold_cost=3, keywords=("Weapon",))
+    session = EngineSession.start(state, PlayerId.P1)
+    session.act(PlayerId.P1, Equip("P1-katana"))
+    pay(session, PlayerId.P1)
+    assert isinstance(session.game.pending, ChooseEquipTarget)
+
+    session.cancel(PlayerId.P1)
+
+    game = session.game
+    assert game.pending is None and not game.stack
+    assert katana in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
+    assert game.gold[PlayerId.P1] == 0
+    assert not game.table.cards_by_id["P1-SH"].bowed
+    assert Equip("P1-katana") in session.legal_actions(PlayerId.P1)
 
 
 def test_equip_is_withheld_when_the_seat_cannot_cover_the_cost():
@@ -857,6 +878,7 @@ def test_a_second_weapon_is_offered_only_to_a_kensai():
     session = EngineSession.start(state, PlayerId.P1)
 
     session.act(PlayerId.P1, Equip("P1-second"))
+    pay(session, PlayerId.P1)
     target = session.project(PlayerId.P1).pending
 
     assert isinstance(target, ChooseEquipTarget)
@@ -898,8 +920,8 @@ def test_an_equip_replays_to_the_same_board():
     _attachment_in_hand(state, "P1-katana", gold_cost=3, keywords=("Weapon",))
     session = EngineSession.start(state, PlayerId.P1)
     session.act(PlayerId.P1, Equip("P1-katana"))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
     pay(session, PlayerId.P1)
+    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
 
     assert replay(session.log).table == session.game.table
 
@@ -927,8 +949,8 @@ def test_equipping_announces_that_the_card_entered_play():
     session = EngineSession.start(state, PlayerId.P1)
 
     session.act(PlayerId.P1, Equip("P1-katana"))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
     pay(session, PlayerId.P1)
+    session.submit(PlayerId.P1, DecisionResponse(("P1-hero",)))
 
     assert _EQUIP_ARRIVALS == [True]  # and it came from hand, which some cards distinguish
 
