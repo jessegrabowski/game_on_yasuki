@@ -161,18 +161,21 @@ def apply_debug_seat(game: GameState, request: ChooseDebugSeat, response: Decisi
 
 
 def _ask_who_gets(game: GameState, seat: PlayerId, card_id: str, printed: CardPrint) -> None:
-    if card_id in game.table.cards_by_id:
-        raise ValueError(f"a card with id {card_id!r} is already on the table")
+    _refuse_taken_id(game, card_id)
     if not isinstance(printed, PersonalityPrint):
         raise ValueError(f"{printed.name} is not a Personality")
     candidates = tuple(player.name for player in game.table.seats)
     game.pending = ChooseDebugSeat(seat, candidates, card_id, printed)
 
 
-def _add_card(game: GameState, seat: PlayerId, card_id: str, printed: CardPrint) -> None:
-    table = game.table
-    if card_id in table.cards_by_id:
+def _refuse_taken_id(game: GameState, card_id: str) -> None:
+    if card_id in game.table.cards_by_id:
         raise ValueError(f"a card with id {card_id!r} is already on the table")
+
+
+def _add_card(game: GameState, seat: PlayerId, card_id: str, printed: CardPrint) -> None:
+    _refuse_taken_id(game, card_id)
+    table = game.table
     card = L5RCard(id=card_id, printed=printed, owner=seat)
     if printed.side is Side.FATE:
         table.cards_by_id[card_id] = card
