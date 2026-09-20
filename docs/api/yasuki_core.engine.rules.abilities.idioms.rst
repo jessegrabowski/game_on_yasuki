@@ -12,7 +12,6 @@ yasuki_core.engine.rules.abilities.idioms
     one_wealth
     plays_clan
     plus_one_gp_this_turn
-    register_edict
     register_entry
     register_event_entry
 

@@ -19,7 +19,6 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 
@@ -113,19 +112,6 @@ def register_entry(
             key=key,
             keywords=ability_keywords,
         ),
-    )
-
-
-def register_edict(
-    printed_id: str, *, clan: str | None = None, ability_keywords: frozenset[str] = frozenset()
-) -> None:
-    """Register ``printed_id``'s Open ability to put itself into play as an Edict, discarding the
-    owner's others (ShE datasheet, Edicts), for a ``clan`` its controller must be playing."""
-    register_entry(
-        printed_id,
-        clears=keywords.EDICT,
-        condition=None if clan is None else plays_clan(clan),
-        ability_keywords=ability_keywords,
     )
 
 

@@ -1,7 +1,7 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import register_edict
+from yasuki_core.engine.rules.abilities.idioms import plays_clan, register_entry
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import (
     before_entering_play,
@@ -312,52 +312,70 @@ register_ability(
 
 # --- Way of the Akasha ---
 
-register_edict("way_of_the_akasha", clan=ruleset.AKASHA)
+register_entry("way_of_the_akasha", clears=keywords.EDICT, condition=plays_clan(ruleset.AKASHA))
 
 
 # --- Way of the Crab (Experienced) ---
 
-register_edict("way_of_the_crab_experienced", clan=ruleset.CRAB)
+register_entry(
+    "way_of_the_crab_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.CRAB)
+)
 
 
 # --- Way of the Crane (Experienced) ---
 
-register_edict("way_of_the_crane_experienced", clan=ruleset.CRANE)
+register_entry(
+    "way_of_the_crane_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.CRANE)
+)
 
 
 # --- Way of the Dragon (Experienced) ---
 
-register_edict("way_of_the_dragon_experienced", clan=ruleset.DRAGON)
+register_entry(
+    "way_of_the_dragon_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.DRAGON)
+)
 
 
 # --- Way of the Lion (Experienced) ---
 
-register_edict("way_of_the_lion_experienced", clan=ruleset.LION)
+register_entry(
+    "way_of_the_lion_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.LION)
+)
 
 
 # --- Way of the Mantis (Experienced) ---
 
-register_edict("way_of_the_mantis_experienced", clan=ruleset.MANTIS)
+register_entry(
+    "way_of_the_mantis_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.MANTIS)
+)
 
 
 # --- Way of the Phoenix (Experienced) ---
 
-register_edict("way_of_the_phoenix_experienced", clan=ruleset.PHOENIX)
+register_entry(
+    "way_of_the_phoenix_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.PHOENIX)
+)
 
 
 # --- Way of the Scorpion (Experienced) ---
 
-register_edict("way_of_the_scorpion_experienced", clan=ruleset.SCORPION)
+register_entry(
+    "way_of_the_scorpion_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.SCORPION)
+)
 
 
 # --- Way of the Spider (Experienced) ---
 
-register_edict("way_of_the_spider_experienced", clan=ruleset.SPIDER)
+register_entry(
+    "way_of_the_spider_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.SPIDER)
+)
 
 
 # --- Way of the Unicorn (Experienced) ---
 
-register_edict("way_of_the_unicorn_experienced", clan=ruleset.UNICORN)
+register_entry(
+    "way_of_the_unicorn_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.UNICORN)
+)
 
 
 # --- Weapon Artist ---

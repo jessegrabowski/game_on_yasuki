@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.rulebook.favor_payment import (
     favor_payment_options,
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.idioms import register_edict
+from yasuki_core.engine.rules.abilities.idioms import register_entry
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability, tireless_grant
 from yasuki_core.engine.rules.action_record import action_keywords
@@ -41,13 +41,13 @@ from yasuki_core.game_pieces.counters import WEALTH
 # --- Act With Authority ---
 
 # "Open: Put this Edict into play." Its granted Favor ability has no handler yet.
-register_edict("act_with_authority")
+register_entry("act_with_authority", clears=keywords.EDICT)
 
 
 # --- Asceticism ---
 
 # "Open: Put this Edict into play." Its Equip surcharge has no handler yet.
-register_edict("asceticism")
+register_entry("asceticism", clears=keywords.EDICT)
 
 
 # --- Caravansary ---
@@ -253,7 +253,9 @@ def _manjodh_favor_payer(game: GameState, card: L5RCard) -> list[Effect] | None:
 # --- Rumormongering ---
 
 # "Political Open: Put this Edict into play." Its Favor-discard reaction has no handler yet.
-register_edict("rumormongering", ability_keywords=frozenset({keywords.POLITICAL}))
+register_entry(
+    "rumormongering", clears=keywords.EDICT, ability_keywords=frozenset({keywords.POLITICAL})
+)
 
 
 # --- Shrine to Inari ---
