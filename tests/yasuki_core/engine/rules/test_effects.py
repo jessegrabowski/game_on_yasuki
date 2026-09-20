@@ -35,6 +35,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     Dishonored,
+    FavorDiscarded,
     HonorChanged,
     Rehonored,
 )
@@ -550,9 +551,10 @@ def test_discarding_the_favor_leaves_it_held_by_nobody():
     game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
     TakeFavor(PlayerId.P1).perform(game)
 
-    DiscardFavor(PlayerId.P1).perform(game)
+    events = DiscardFavor(PlayerId.P1).perform(game)
 
     assert game.favor_holder is None
+    assert events == [FavorDiscarded(PlayerId.P1)]
 
 
 def test_discarding_the_favor_does_not_touch_another_seats_hold():

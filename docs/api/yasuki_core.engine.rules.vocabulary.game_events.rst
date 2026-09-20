@@ -13,6 +13,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     Destroyed
     Dishonored
     EnteredPlay
+    FavorDiscarded
     HonorChanged
     ProducedGold
     ProducingGold
