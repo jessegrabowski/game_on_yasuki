@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Equip,
+    Pass,
     PlayStrategy,
     Recruit,
 )
@@ -313,13 +314,16 @@ def _courtroom_in_province(*, dishonorable: tuple[str, ...] = ()) -> EngineSessi
     return EngineSession.start(state, P1)
 
 
-def test_the_courtroom_takes_the_favor_and_rehonors_a_chosen_personality():
+def test_the_courtroom_responds_to_its_own_recruit_by_taking_the_favor():
     session = _courtroom_in_province(dishonorable=("shamed", "disgraced"))
     end_phase(session)
     end_phase(session)  # through the Battle phase into the Dynasty phase
-
     session.act(P1, Recruit("courtroom"))
     pay(session, P1)
+    assert session.game.favor_holder is None, "nothing happens until the Response is taken"
+    assert ActivateAbility("courtroom") in session.legal_actions(P1)
+
+    session.act(P1, ActivateAbility("courtroom"))
     assert session.game.favor_holder is P1
     assert set(session.game.pending.candidates) == {"shamed", "disgraced"}
     session.submit(P1, DecisionResponse(("shamed",)))
@@ -329,26 +333,74 @@ def test_the_courtroom_takes_the_favor_and_rehonors_a_chosen_personality():
     assert game.table.cards_by_id["disgraced"].dishonorable is True
 
 
+def test_the_courtroom_rehonor_may_be_declined():
+    session = _courtroom_in_province(dishonorable=("shamed",))
+    end_phase(session)
+    end_phase(session)
+    session.act(P1, Recruit("courtroom"))
+    pay(session, P1)
+    session.act(P1, ActivateAbility("courtroom"))
+
+    session.submit(P1, DecisionResponse(()))
+
+    assert session.game.favor_holder is P1
+    assert session.game.table.cards_by_id["shamed"].dishonorable is True
+
+
 def test_the_courtroom_asks_nothing_with_nobody_to_rehonor():
     session = _courtroom_in_province()
     end_phase(session)
     end_phase(session)
-
     session.act(P1, Recruit("courtroom"))
     pay(session, P1)
+
+    session.act(P1, ActivateAbility("courtroom"))
 
     assert session.game.favor_holder is P1
     assert session.game.pending is None
 
 
+def test_passing_the_response_leaves_the_favor_uncontrolled():
+    session = _courtroom_in_province()
+    end_phase(session)
+    end_phase(session)
+    session.act(P1, Recruit("courtroom"))
+    pay(session, P1)
+
+    session.act(P1, Pass())
+
+    assert session.game.favor_holder is None
+    assert ActivateAbility("courtroom") not in session.legal_actions(P1)
+
+
+def test_the_courtroom_in_play_does_not_respond_to_another_cards_recruit():
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    put_in_play(state, holding("mine", gold_production=4))
+    put_in_play(state, holding("courtroom", printed_id="the_ivory_courtroom"))
+    province_card(state, "farm", printed_id="rice_farm", gold_cost=2)
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+
+    session.act(P1, Recruit("farm"))
+    pay(session, P1)
+
+    assert session.game.round_stack == []
+    assert ActivateAbility("courtroom") not in session.legal_actions(P1)
+
+
 def test_the_courtroom_may_be_recruited_in_the_action_phase_as_a_political_action():
-    # "You may Recruit this Holding as a Political Open action."
+    # "Political Open, :gstar:: If this Holding is in your Province, Recruit it."
     session = _courtroom_in_province()
 
     assert Recruit("courtroom") in session.legal_actions(P1)
     session.act(P1, Recruit("courtroom"))
     assert action_keywords(session.game) == {keywords.POLITICAL}
     pay(session, P1)
+    session.act(P1, ActivateAbility("courtroom"))
 
     assert session.game.favor_holder is P1
 

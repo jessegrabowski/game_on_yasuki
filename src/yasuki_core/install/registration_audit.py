@@ -190,7 +190,8 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
 
     A card implemented in half behaves correctly in the half it has, so nothing else reports it.
     Shortfalls only: :func:`~.printed_ability_count` reads a floor, so a card registering more
-    than it appears to print is not reported as a defect.
+    than it appears to print is not reported as a defect. A Recruit timing counts as one ability,
+    since it implements a printed "Political Open: Recruit it" of its own.
 
     Parameters
     ----------
@@ -204,10 +205,16 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     """
     printed = printed_ability_counts(cards_dir)
     problems = []
-    registering = set(registry._ABILITIES) | set(registry._INTERRUPTS)
+    registering = (
+        set(registry._ABILITIES) | set(registry._INTERRUPTS) | set(registry.RECRUIT_TIMINGS)
+    )
     for card_id in sorted(registering):
         shows = printed.get(card_id, 0)
-        registered = len(registry._ABILITIES.get(card_id, ())) + (card_id in registry._INTERRUPTS)
+        registered = (
+            len(registry._ABILITIES.get(card_id, ()))
+            + (card_id in registry._INTERRUPTS)
+            + (card_id in registry.RECRUIT_TIMINGS)
+        )
         if shows > registered:
             problems.append(
                 f"abilities: {card_id} registers {registered} of the {shows} "
