@@ -223,6 +223,39 @@ class KharmicRefill:
 
 
 @dataclass(frozen=True, slots=True)
+class PlayInterrupt:
+    """Take the Interrupt a card prints against the action now held at the Interrupt step: a
+    Strategy from hand, played and paid for, or a card in play, which pays the Interrupt's own
+    cost. Which of the action's effects it answers, its target and its payment follow as
+    decisions.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose Interrupt is taken.
+    """
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class DiscardToInterrupt:
+    """Take a rulebook Interrupt the ShE datasheet grants, discarding a card carrying its keyword
+    to adjust one of the held action's effects. The adjustment follows as a decision.
+
+    Attributes
+    ----------
+    card_id : str
+        The card discarded for it.
+    key : str
+        The rulebook Interrupt taken, ``"courage"`` or ``"honor"``.
+    """
+
+    card_id: str
+    key: str
+
+
+@dataclass(frozen=True, slots=True)
 class DeclareAttack:
     """Declare an attack in the Attack Phase, creating a battlefield at each of the Defender's
     Provinces (CR, Declare an Attack).
@@ -248,6 +281,8 @@ Action = (
     | Lobby
     | UseFavorAbility
     | DeclareAttack
+    | PlayInterrupt
+    | DiscardToInterrupt
 )
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
@@ -267,4 +302,6 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     Legacy: ActionTiming.DYNASTY,
     Inheritance: ActionTiming.DYNASTY,
     DeclareAttack: ActionTiming.ATTACK,
+    PlayInterrupt: ActionTiming.INTERRUPT,
+    DiscardToInterrupt: ActionTiming.INTERRUPT,
 }

@@ -6,9 +6,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
-    ChooseInterrupt,
-    interrupt_choice,
-    interrupt_token,
     Confirm,
     DecisionRequest,
     ChooseCards,
@@ -352,41 +349,6 @@ def test_a_distribution_with_no_registered_wording_still_says_what_it_wants():
     )
 
     assert request.prompt() == "Divide them among one or more cards (2 of 2 left)"
-
-
-def _interrupt() -> ChooseInterrupt:
-    return ChooseInterrupt(
-        seat=PlayerId.P2,
-        candidates=(interrupt_token("a", "honor"), interrupt_token("b", "courage"), "okura"),
-        description="P1 gains 3 honor",
-    )
-
-
-def test_an_interrupt_takes_one_way_to_answer_or_a_pass():
-    request = _interrupt()
-
-    assert request.accepts(DecisionResponse())
-    assert request.accepts(DecisionResponse((interrupt_token("a", "honor"),)))
-    assert request.accepts(DecisionResponse(("okura",)))
-    assert not request.accepts(DecisionResponse(request.candidates[:2]))
-    assert not request.accepts(DecisionResponse(("b@honor",)))
-
-
-def test_an_interrupt_token_round_trips():
-    assert interrupt_choice(interrupt_token("card@x", "honor")) == ("card@x", "honor")
-    assert interrupt_choice(interrupt_token("c", "courage")) == ("c", "courage")
-    assert interrupt_choice("plain-card") == ("plain-card", None)
-
-
-@pytest.mark.parametrize("token", ["@honor", "card@"])
-def test_an_interrupt_token_missing_its_card_or_key_is_refused(token):
-    with pytest.raises(ValueError, match="not an interrupt token"):
-        interrupt_choice(token)
-
-
-def test_an_interrupt_names_the_effect_it_guards():
-    assert _interrupt().prompt() == "P1 gains 3 honor. Take an Interrupt?"
-    assert _interrupt().confirm_label == "Pass"
 
 
 def test_a_may_choice_offers_a_decline_and_a_must_does_not():

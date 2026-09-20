@@ -33,11 +33,13 @@ reports whether it opened at all.
 - `ATTACK` belongs to the Attack Phase's Declaration Segment
 - `ENGAGE` and `BATTLE` belong to a battle's Engage and Combat Segments, Defender acting first
 - `RESPONSE` belongs to the Response Step over another action
-- `INTERRUPT` belongs to no round
+- `INTERRUPT` belongs to the Interrupt step, a round of its own
 
-No round grants `INTERRUPT`. The Interrupt step offers it instead, from hand, while an effect it
-answers waits to resolve inside an action: see `rules/interrupts.py` and
-[Abilities and costs](abilities-and-costs.md).
+The Interrupt step is an `ActionRound` of kind `INTERRUPT`, pushed over the round an action was
+taken in once the action's effects are held and some seat holds an Interrupt to take, the way the
+Response Step is pushed after the action resolves. It permits nothing but `INTERRUPT`, opens on
+the active player, and closes on consecutive passes, at which point the held action resolves: see
+`rules/interrupts.py` and [Abilities and costs](abilities-and-costs.md).
 
 ## Where a card plugs in
 

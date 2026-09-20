@@ -31,16 +31,12 @@ class ContinuePayment:
     target_id : str
         The card being paid for, since a producer's yield can depend on what it pays for. Empty for
         a rulebook cost that prices no card.
-    reopens : bool
-        Whether each request it raises backs out to the decision before it rather than unwinding
-        the action, as the first request did. Default False.
     """
 
     seat: PlayerId
     amount: int
     label: str
     target_id: str = ""
-    reopens: bool = False
 
     def resume(self, game: GameState) -> None:
         """Spend once the seat's pool covers the amount, or ask it to bow more producers.
@@ -60,9 +56,7 @@ class ContinuePayment:
                 f"{self.seat.name} cannot cover {self.amount} for {self.label}: the pool holds "
                 f"{game.gold[self.seat]} and everything still unbowed cannot make up the difference"
             )
-        game.pending = payment_request(
-            game, self.seat, self.amount, self.label, target=target, reopens=self.reopens
-        )
+        game.pending = payment_request(game, self.seat, self.amount, self.label, target=target)
 
 
 def payment_request(
@@ -71,8 +65,6 @@ def payment_request(
     amount: int,
     label: str,
     target: L5RCard | None = None,
-    *,
-    reopens: bool = False,
 ) -> ChoosePayment:
     """Queue the payment's completion and build the first request for ``amount`` gold from ``seat``.
 
@@ -98,14 +90,11 @@ def payment_request(
     target : L5RCard, optional
         The card being paid for, for a producer whose yield depends on what it pays for. Omit for a
         rulebook cost, which prices no card. Default None.
-    reopens : bool, optional
-        Whether backing out of the payment returns to the decision answered just before it, for a
-        cost an answer raised rather than an action. Default False.
     """
     producers = gold_producers(game, seat)
     targets = () if target is None else (target,)
     target_id = "" if target is None else target.id
-    game.stack.append(ContinuePayment(seat, amount, label, target_id, reopens))
+    game.stack.append(ContinuePayment(seat, amount, label, target_id))
     return ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
@@ -122,7 +111,6 @@ def payment_request(
             for producer in producers
             if (extra := untaken_self_grant(game, producer))
         ),
-        reopens=reopens,
     )
 
 

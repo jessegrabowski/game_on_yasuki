@@ -12,6 +12,7 @@ yasuki_core.engine.rules.vocabulary.actions
     BattleDesignator
     Cycle
     DeclareAttack
+    DiscardToInterrupt
     DynastyDiscard
     Equip
     Inheritance
@@ -20,6 +21,7 @@ yasuki_core.engine.rules.vocabulary.actions
     Legacy
     Lobby
     Pass
+    PlayInterrupt
     PlayStrategy
     Recruit
     UseFavorAbility

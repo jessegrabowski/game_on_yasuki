@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
     Pass,
+    PlayInterrupt,
     PlayStrategy,
     Recruit,
 )
@@ -17,7 +18,6 @@ from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.cards.road_to_ruin import UNITY_CHI, UNITY_FORCE
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
 from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
 from yasuki_core.engine.rules.effects import (
     AttachCard,
@@ -29,6 +29,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.turn.sequence import run_stack
+from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.stats.card_values import effective_force
@@ -667,10 +668,10 @@ def test_unity_of_spirit_negates_a_melee_attack_on_the_yojimbo():
         session.act(PlayerId.P2, Pass())
         session.act(P1, ActivateAbility("raider"))
         session.submit(P1, DecisionResponse(("kakita",)))
-        assert isinstance(session.game.pending, ChooseInterrupt)
-        assert "unity" in session.game.pending.candidates
+        assert session.game.round.kind is RoundKind.INTERRUPT
+        assert PlayInterrupt("unity") in session.legal_actions(PlayerId.P2)
 
-        session.submit(PlayerId.P2, DecisionResponse(("unity",)))
+        session.act(PlayerId.P2, PlayInterrupt("unity"))
 
         assert "kakita" in [card.id for card in session.game.table.battlefield.cards]
 
@@ -682,7 +683,7 @@ def test_unity_of_spirit_is_not_offered_without_a_courtier_or_shugenja():
         session.act(P1, ActivateAbility("raider"))
         session.submit(P1, DecisionResponse(("kakita",)))
 
-        assert not isinstance(session.game.pending, ChooseInterrupt)
+        assert session.game.round.kind is not RoundKind.INTERRUPT
         assert "kakita" not in [card.id for card in session.game.table.battlefield.cards]
 
 
@@ -693,7 +694,7 @@ def test_unity_of_spirit_is_not_offered_against_a_personality_who_is_not_a_yojim
         session.act(P1, ActivateAbility("raider"))
         session.submit(P1, DecisionResponse(("kakita",)))
 
-        assert not isinstance(session.game.pending, ChooseInterrupt)
+        assert session.game.round.kind is not RoundKind.INTERRUPT
         assert "kakita" not in [card.id for card in session.game.table.battlefield.cards]
 
 

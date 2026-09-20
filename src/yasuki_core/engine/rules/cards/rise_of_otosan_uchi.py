@@ -62,7 +62,8 @@ from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
-from yasuki_core.engine.rules.legality import permits
+from yasuki_core.engine.rules.action_record import action_round
+from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.units.composition import followers_of
@@ -371,7 +372,7 @@ def _doji_yuten_applies(game: GameState, source: L5RCard, effect: Bow | Move) ->
     """A Battle action's bowing or moving of one of Yuten's controller's other Personalities.
     A Move names any card in the unit, so the Personality is read off the unit. "Yuten cannot
     attack" is not modeled."""
-    if not permits(game, source.owner, ActionTiming.BATTLE):
+    if ActionTiming.BATTLE not in permitted_timings_in(game, action_round(game), source.owner):
         return False
     card = game.table.cards_by_id.get(effect.card_id)
     if card is None:

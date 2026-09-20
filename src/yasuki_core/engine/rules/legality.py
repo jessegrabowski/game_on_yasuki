@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     BattleDesignator,
     Cycle,
     DeclareAttack,
+    DiscardToInterrupt,
     DynastyDiscard,
     Equip,
     Inheritance,
@@ -30,6 +31,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Legacy,
     Lobby,
     Pass,
+    PlayInterrupt,
     PlayStrategy,
     Recruit,
     UseFavorAbility,
@@ -52,7 +54,7 @@ from yasuki_core.engine.rules.rulebook import lobby
 from yasuki_core.engine.rules.rulebook.lobby import lobby_candidates, lobby_key
 from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.state import GameState, used_this_turn
-from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
 from yasuki_core.engine.table import DeckKey, location_of, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -128,13 +130,21 @@ def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming
     :func:`~yasuki_core.engine.rules.turn.sequence.yield_priority` already does for a round that
     permits it nothing.
     """
+    return permitted_timings_in(game, game.round, seat)
+
+
+def permitted_timings_in(
+    game: GameState, round: ActionRound, seat: PlayerId
+) -> frozenset[ActionTiming]:
+    """The designators ``round`` permits ``seat``, for a round other than the open one: what an
+    Interrupt asks of the round its action was taken in."""
     if (
-        game.round.kind is RoundKind.BATTLE_SEGMENT
+        round.kind is RoundKind.BATTLE_SEGMENT
         and not has_presence(game, seat)
         and not has_absent_ability(game, seat)
     ):
         return frozenset()
-    timings = game.round.timings
+    timings = round.timings
     return timings.active if seat is game.active else timings.others
 
 
@@ -167,6 +177,7 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_lobby(game, seat),
         *_favor_abilities(game, seat),
         *_declare_attack(game, seat),
+        *_interrupts(game, seat),
     ]
 
 
@@ -205,8 +216,20 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _favor_abilities(game, seat)
         case DeclareAttack():
             return bool(_declare_attack(game, seat))
+        case PlayInterrupt() | DiscardToInterrupt():
+            return action in _interrupts(game, seat)
         case _:
             raise ValueError(f"no legality rule for action {type(action).__name__}")
+
+
+def _interrupts(game: GameState, seat: PlayerId) -> list[Action]:
+    """The Interrupts ``seat`` may take in an open Interrupt step, against the action held there.
+    Imported where it is used: the Interrupt module reads legality for targets and presence."""
+    from yasuki_core.engine.rules.interrupts import interrupt_actions
+
+    if not permits(game, seat, ActionTiming.INTERRUPT):
+        return []
+    return interrupt_actions(game, seat)
 
 
 def _may_act(game: GameState, seat: PlayerId) -> bool:
@@ -575,7 +598,7 @@ def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
     return [card for card in legacy_search_pool(game, seat) if is_legacy_card(game, card)]
 
 
-def _seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, L5RCard]]:
+def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, L5RCard]]:
     """Every card ``seat`` could activate something on, with where it is sitting.
 
     A card in hand is yielded like any other. Only an ability whose ``located_at`` names the hand is
@@ -620,7 +643,7 @@ def activatable(
     ready: list[tuple[L5RCard, Ability]] = []
     # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
     present = has_presence(game, seat)
-    for location, card in _seat_cards(game, seat):
+    for location, card in seat_cards(game, seat):
         if location not in at:
             continue
         # The attach rule cannot settle casting alone: a Personality can stop being a Shugenja
@@ -694,7 +717,7 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
     all, rather than skipped."""
     return any(
         BattleDesignator.ABSENT in ability.battle_designators and _bow_permits(game, card, ability)
-        for _, card in _seat_cards(game, seat)
+        for _, card in seat_cards(game, seat)
         for ability in abilities_for(game, card)
     )
 

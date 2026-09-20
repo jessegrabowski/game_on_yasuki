@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Cycle,
     DeclareAttack,
+    DiscardToInterrupt,
     DynastyDiscard,
     Equip,
     Inheritance,
@@ -23,9 +24,10 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Legacy,
     Lobby,
     Pass,
-    UseFavorAbility,
+    PlayInterrupt,
     PlayStrategy,
     Recruit,
+    UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.replay.game_log import (
@@ -390,6 +392,8 @@ ROUND_TRIPPED_ACTIONS = [
     ActivateAbility("card"),
     PlayStrategy("card"),
     DeclareAttack(),
+    PlayInterrupt("card"),
+    DiscardToInterrupt("card", "honor"),
 ]
 
 

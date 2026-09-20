@@ -16,24 +16,38 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
-    InterruptWindow,
     SpendOncePerTurn,
     Then,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.legality import has_presence, legal_targets, location_permits
+from yasuki_core.engine.rules.legality import (
+    has_presence,
+    legal_targets,
+    location_permits,
+    permitted_timings_in,
+    seat_cards,
+)
 from yasuki_core.engine.rules.state import GameState, used_this_turn
-from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.action_record import action_is_unstoppable
+from yasuki_core.engine.rules.turn.structure import (
+    INTERRUPT_TIMINGS,
+    ActionRound,
+    RoundKind,
+    RoundTimings,
+)
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.actions import (
+    Action,
+    ActionTiming,
+    DiscardToInterrupt,
+    PlayInterrupt,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseInterrupt,
     ChooseInterruptAdjustment,
     ChooseInterruptEffect,
     ChooseInterruptTarget,
     DecisionResponse,
-    interrupt_choice,
-    interrupt_token,
 )
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -122,8 +136,6 @@ RULEBOOK_INTERRUPTS: tuple[RulebookInterrupt, ...] = (
 
 _RULEBOOK_INTERRUPTS_BY_KEY = {interrupt.key: interrupt for interrupt in RULEBOOK_INTERRUPTS}
 
-RULEBOOK_INTERRUPT_RESOLVER = "rulebook_interrupt"
-
 
 def rulebook_interrupt(key: str) -> RulebookInterrupt[Effect]:
     """The rulebook Interrupt named ``key``. Raise ``KeyError`` for a key the datasheet has none
@@ -136,7 +148,7 @@ def _hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
 
 
 def forecast(game: GameState, effects: tuple[Effect, ...]) -> tuple[Effect, ...]:
-    """What an action handing ``effects`` to step E is about to do, as the Interrupt window offers
+    """What an action handing ``effects`` to step E is about to do, as the Interrupt step offers
     it: the effects in order, a ``Then``'s contents where it stands, an ability's effects behind
     the :class:`~.ResolveAbility` that targets them, and an attack's outcome behind the attack
     when it reaches on the board as it stands. An effect that is nothing to interrupt, an Honor
@@ -157,7 +169,7 @@ def forecast(game: GameState, effects: tuple[Effect, ...]) -> tuple[Effect, ...]
 
 def as_modified(game: GameState, effect: Effect) -> Effect:
     """``effect`` as the Interrupts already taken against the action will have it resolve, read
-    without spending them: what the window forecasts behind a negated attack is nothing."""
+    without spending them: what the step forecasts behind a negated attack is nothing."""
     for modification in game.modifications:
         if modification.answers(effect):
             effect = modification.apply(game, effect)
@@ -265,28 +277,28 @@ def card_interrupts_for(
     Presence).
 
     A Strategy in hand is offered when its Interrupt answers one of the effects and the seat can
-    reach its Gold Cost. A card in play is offered under the gates an activated ability answers
-    to: unbowed, within the Rules of Location, unused this turn where the arc makes abilities
-    once per turn, and able to pay the Interrupt's cost.
+    reach its Gold Cost. A card in play, on the battlefield or face up in a Province, is offered
+    under the gates an activated ability answers to: unbowed, within the Rules of Location, unused
+    this turn where the arc makes abilities once per turn, and able to pay the Interrupt's cost.
     """
     if not has_presence(game, seat):
         return []
     offered: list[tuple[L5RCard, Interrupt, CardLocation]] = []
-    for card in _hand(game, seat):
-        interrupt = _answering(game, card, foreseen, CardLocation.HAND)
-        if interrupt is not None and effective_gold_cost(game, card) <= reachable_gold(
-            game, seat, card
-        ):
-            offered.append((card, interrupt, CardLocation.HAND))
     once = ruleset.ACTIVE.abilities_once_per_turn
-    for card in game.table.battlefield.cards:
-        if card.owner is not seat or card.bowed or not location_permits(game, card):
+    for location, card in seat_cards(game, seat):
+        interrupt = _answering(game, card, foreseen, location)
+        if interrupt is None:
+            continue
+        if location is CardLocation.HAND:
+            if effective_gold_cost(game, card) <= reachable_gold(game, seat, card):
+                offered.append((card, interrupt, location))
+            continue
+        if card.bowed or not location_permits(game, card):
             continue
         if once and used_this_turn(game, card, INTERRUPT_TAG):
             continue
-        interrupt = _answering(game, card, foreseen, CardLocation.BATTLEFIELD)
-        if interrupt is not None and can_pay(game, card, interrupt.cost):
-            offered.append((card, interrupt, CardLocation.BATTLEFIELD))
+        if can_pay(game, card, interrupt.cost):
+            offered.append((card, interrupt, location))
     return offered
 
 
@@ -335,85 +347,105 @@ def legal_substitutes(
     )
 
 
-def interrupters(game: GameState, window: InterruptWindow) -> list[PlayerId]:
-    """The seats still to be offered an Interrupt at ``window``, the active player first (ShE
-    datasheet, Interrupt).
-
-    Nobody during a Response Step, since a Response is not interruptible. A pass holds until
-    someone takes an Interrupt, which reopens the window to every seat, and the window closes
-    once every seat has passed in turn (CR, Interrupt Actions: an action round).
-    """
-    if game.round.kind is RoundKind.RESPONSE:
-        return []
-    foreseen = forecast(game, window.effects)
-    if not foreseen:
-        return []
-    order = [game.active, *(seat for seat in game.table.seats if seat is not game.active)]
-    return [
-        seat
-        for seat in order
-        if not window.has_passed(seat)
-        and (
-            rulebook_interrupts_for(game, seat, foreseen)
-            or card_interrupts_for(game, seat, foreseen)
-        )
-    ]
+def held_action(game: GameState) -> triggers.HeldAction:
+    """The action held at the Interrupt step, from the stack. Raise ``RuntimeError`` if none is."""
+    for item in reversed(game.stack):
+        if isinstance(item, triggers.HeldAction):
+            return item
+    raise RuntimeError("no action is held at the Interrupt step")
 
 
-def interrupt_request(game: GameState, window: InterruptWindow) -> ChooseInterrupt:
-    """The Interrupt offered to the first seat :func:`~.interrupters` names at ``window``."""
-    seat = interrupters(game, window)[0]
-    foreseen = forecast(game, window.effects)
-    discards = tuple(
-        interrupt_token(card.id, interrupt.key)
+def foreseen_now(game: GameState) -> tuple[Effect, ...]:
+    """The forecast of the action held at the Interrupt step."""
+    return forecast(game, held_action(game).effects)
+
+
+def interrupt_actions(game: GameState, seat: PlayerId) -> list[Action]:
+    """The Interrupts ``seat`` may take against the action held at the Interrupt step, as actions:
+    a :class:`~.DiscardToInterrupt` per card a rulebook Interrupt could discard, and a
+    :class:`~.PlayInterrupt` per card printing an Interrupt that answers the forecast."""
+    foreseen = foreseen_now(game)
+    discards: list[Action] = [
+        DiscardToInterrupt(card.id, interrupt.key)
         for interrupt in rulebook_interrupts_for(game, seat, foreseen)
         for card in discardable_for(game, seat, interrupt)
-    )
-    plays = tuple(card.id for card, _, _ in card_interrupts_for(game, seat, foreseen))
-    return ChooseInterrupt(
-        seat=seat,
-        candidates=discards + plays,
-        description="; ".join(effect.narrate(game) for effect in foreseen),
-    )
+    ]
+    plays: list[Action] = [
+        PlayInterrupt(card.id) for card, _, _ in card_interrupts_for(game, seat, foreseen)
+    ]
+    return discards + plays
 
 
-@dataclass(frozen=True, slots=True)
-class ReopenWindow:
-    """Bring the Interrupt window back once the Interrupt just taken has resolved, with every
-    seat's pass cleared: the step is an action round, and a pass holds only until someone acts
-    (CR, Interrupt Actions and Action Rounds). Stacked above the stash and beneath the Strategy's
-    own work, so the window returns through the same door a pass does.
+def open_interrupt_window(game: GameState) -> bool:
+    """Open the Interrupt step over the action just held, as a round of its own, and report
+    whether it opened (CR, Action Sequence step D; ShE datasheet, Interrupt).
 
-    Attributes
-    ----------
-    window : InterruptWindow
-        The window as it stood.
+    Only when a seat entitled to act holds an Interrupt to take: a step nobody could act in is a
+    pass nobody needs to be asked for. Nobody during a Response Step, since a Response is not
+    interruptible. The active player acts first. During the acting seat's Unstoppable action no
+    other seat is entitled at all (ShE datasheet, Unstoppable).
     """
+    if game.round.kind is RoundKind.RESPONSE:
+        return False
+    step = ActionRound(
+        timings=_window_timings(game), priority=game.active, kind=RoundKind.INTERRUPT
+    )
+    order = [game.active, *(seat for seat in game.table.seats if seat is not game.active)]
+    first = next(
+        (
+            seat
+            for seat in order
+            if ActionTiming.INTERRUPT in permitted_timings_in(game, step, seat)
+            and interrupt_actions(game, seat)
+        ),
+        None,
+    )
+    if first is None:
+        return False
+    game.round_stack.append(game.round)
+    game.round = replace(step, priority=first)
+    return True
 
-    window: InterruptWindow
 
-    def resume(self, game: GameState) -> None:
-        triggers.resume_paused_cascade(game, [self.window.reopened()])
+def _window_timings(game: GameState) -> RoundTimings:
+    if not action_is_unstoppable(game):
+        return INTERRUPT_TIMINGS
+    acting_is_active = game.action_seat is game.active
+    return RoundTimings(
+        active=frozenset({ActionTiming.INTERRUPT}) if acting_is_active else frozenset(),
+        others=frozenset() if acting_is_active else frozenset({ActionTiming.INTERRUPT}),
+    )
 
 
-def apply_interrupt(game: GameState, request: ChooseInterrupt, response: DecisionResponse) -> None:
-    """Act on the seat's answer at the Interrupt window and bring the window back for the next.
-
-    A pass records the seat as passed. Naming a card asks, where the forecast holds several
-    effects the card could answer, which one, then a rulebook Interrupt asks for its adjustment
-    and a targeted Interrupt for its target, and only then is the card discarded or played. Raise
-    ``RuntimeError`` if the answer names a card the seat can no longer take the Interrupt with.
-    """
-    window = _window(game)
-    seat = request.seat
-    if not response.choices:
-        triggers.resume_paused_cascade(game, [window.passed_by(seat)])
+def play_interrupt(game: GameState, seat: PlayerId, card_id: str) -> None:
+    """Take the Interrupt ``card_id`` prints against the held action. Where the forecast holds
+    several effects it could answer, ask which first."""
+    answered = _answerable(game, seat, card_id, None)
+    if len(answered) == 1 or _answers_every(game, card_id):
+        _play(game, seat, card_id, answered[0])
         return
-    card_id, key = interrupt_choice(response.choices[0])
-    answered = _answerable(game, seat, window, card_id, key)
+    _ask_which(game, seat, card_id, None, answered)
+
+
+def _answers_every(game: GameState, card_id: str) -> bool:
+    interrupt = interrupt_for(game.table.cards_by_id[card_id])
+    return interrupt is not None and interrupt.answers_every
+
+
+def discard_to_interrupt(game: GameState, seat: PlayerId, card_id: str, key: str) -> None:
+    """Take the rulebook Interrupt ``key``, discarding ``card_id`` for it, against the held action.
+    Where the forecast holds several effects it could answer, ask which first, then the
+    adjustment."""
+    answered = _answerable(game, seat, card_id, key)
     if len(answered) == 1:
-        _take(game, seat, window, card_id, key, answered[0])
+        _ask_adjustment(game, seat, card_id, key, answered[0])
         return
+    _ask_which(game, seat, card_id, key, answered)
+
+
+def _ask_which(
+    game: GameState, seat: PlayerId, card_id: str, key: str | None, answered: list[Effect]
+) -> None:
     game.pending = ChooseInterruptEffect(
         seat=seat,
         candidates=tuple(effect.narrate(game) for effect in answered),
@@ -424,12 +456,10 @@ def apply_interrupt(game: GameState, request: ChooseInterrupt, response: Decisio
     )
 
 
-def _answerable(
-    game: GameState, seat: PlayerId, window: InterruptWindow, card_id: str, key: str | None
-) -> list[Effect]:
+def _answerable(game: GameState, seat: PlayerId, card_id: str, key: str | None) -> list[Effect]:
     """The forecast effects the seat's ``card_id`` may answer, through the rulebook Interrupt
     ``key`` or the card's own. Raise ``RuntimeError`` if the card is no longer one it can take."""
-    foreseen = forecast(game, window.effects)
+    foreseen = foreseen_now(game)
     if key is not None:
         taken = next(
             (
@@ -457,21 +487,24 @@ def _answerable(
     return answered_by(game, card, interrupt, foreseen)
 
 
-# The label a ChooseInterruptEffect carries in its resolver slot; answered by its own handler, it
-# names no registered resolver.
+# The label a ChooseInterruptEffect or ChooseInterruptAdjustment carries in its resolver slot;
+# each is answered by its own handler and names no registered resolver.
 INTERRUPT_EFFECT_QUESTION = "interrupt_effect"
+INTERRUPT_ADJUSTMENT_QUESTION = "interrupt_adjustment"
 
 
 def apply_interrupt_effect(
     game: GameState, request: ChooseInterruptEffect, response: DecisionResponse
 ) -> None:
-    """Take the Interrupt the seat named against the effect it picked. Raise ``RuntimeError`` if
-    the card is no longer one the seat can take the Interrupt with."""
-    window = _window(game)
+    """Take the Interrupt against the effect the seat picked. Raise ``RuntimeError`` if the card
+    is no longer one the seat can take the Interrupt with."""
     key = request.resolver_context[0] or None
-    answered = _answerable(game, request.seat, window, request.source_id, key)
+    answered = _answerable(game, request.seat, request.source_id, key)
     effect = _named(answered, lambda effect: effect.narrate(game) == response.choices[0])
-    _take(game, request.seat, window, request.source_id, key, effect)
+    if key is None:
+        _play(game, request.seat, request.source_id, effect)
+    else:
+        _ask_adjustment(game, request.seat, request.source_id, key, effect)
 
 
 def _named(effects: list[Effect], matches: Callable[[Effect], bool]) -> Effect:
@@ -483,47 +516,24 @@ def _named(effects: list[Effect], matches: Callable[[Effect], bool]) -> Effect:
     return found
 
 
-def _take(
-    game: GameState,
-    seat: PlayerId,
-    window: InterruptWindow,
-    card_id: str,
-    key: str | None,
-    effect: Effect,
-) -> None:
-    if key is not None:
-        _ask_adjustment(game, seat, window, card_id, key, effect)
-    else:
-        _play_interrupt(game, seat, window, card_id, effect)
-
-
 def apply_interrupt_target(
     game: GameState, request: ChooseInterruptTarget, response: DecisionResponse
 ) -> None:
-    """Take the Interrupt the seat named against the chosen target. Raise ``RuntimeError`` if the
-    target is no longer one the Interrupt can be taken against."""
-    window = _window(game)
-    answered = _answerable(game, request.seat, window, request.card_id, None)
+    """Take the Interrupt against the chosen target. Raise ``RuntimeError`` if the target is no
+    longer one the Interrupt can be taken against."""
+    answered = _answerable(game, request.seat, request.card_id, None)
     effect = _named(answered, lambda effect: effect.describe() == request.effect)
-    _play_interrupt(game, request.seat, window, request.card_id, effect, response.choices[0])
+    _play(game, request.seat, request.card_id, effect, response.choices[0])
 
 
-def _window(game: GameState) -> InterruptWindow:
-    paused = triggers.paused_effect(game)
-    if not isinstance(paused, InterruptWindow):
-        raise RuntimeError(f"{type(paused).__name__} opens no Interrupt window")
-    return paused
-
-
-def _play_interrupt(
+def _play(
     game: GameState,
     seat: PlayerId,
-    window: InterruptWindow,
     card_id: str,
     effect: Effect,
     target_id: str | None = None,
 ) -> None:
-    foreseen = forecast(game, window.effects)
+    foreseen = foreseen_now(game)
     played = next(
         (offer for offer in card_interrupts_for(game, seat, foreseen) if offer[0].id == card_id),
         None,
@@ -546,8 +556,8 @@ def _play_interrupt(
             raise RuntimeError(f"{target_id} is no longer a target {card_id} can be taken against")
         target = game.table.cards_by_id[target_id]
         interruption = interrupt.interrupt(game, card, effect, target)
-    game.modifications.append(Replacement(effect, card.id, target_id))
-    game.stack.append(ReopenWindow(window))
+    bound = answered_by(game, card, interrupt, foreseen) if interrupt.answers_every else [effect]
+    game.modifications.extend(Replacement(each, card.id, target_id) for each in bound)
     if location is CardLocation.HAND:
         play_strategy_with(game, card, interruption.effects)
         return
@@ -556,41 +566,29 @@ def _play_interrupt(
 
 
 def _ask_adjustment(
-    game: GameState,
-    seat: PlayerId,
-    window: InterruptWindow,
-    card_id: str,
-    key: str,
-    effect: Effect,
+    game: GameState, seat: PlayerId, card_id: str, key: str, effect: Effect
 ) -> None:
     taken = rulebook_interrupt(key)
     game.pending = ChooseInterruptAdjustment(
         seat=seat,
         candidates=tuple(wording for wording, _ in taken.adjustments),
         question=f"{effect.narrate(game)}. {taken.question}",
-        resolver=RULEBOOK_INTERRUPT_RESOLVER,
+        resolver=INTERRUPT_ADJUSTMENT_QUESTION,
         source_id=card_id,
         resolver_context=(key, effect.describe()),
     )
 
 
-@triggers.choice_resolver(RULEBOOK_INTERRUPT_RESOLVER)
-def _resolve_rulebook_interrupt(
-    game: GameState,
-    source_id: str,
-    chosen: tuple[str, ...],
-    seat: PlayerId,
-    resolver_context: tuple[str, ...],
-) -> list[Effect]:
-    """Discard the named card, bind the adjustment to the effect it answers, and bring the window
-    back. The window is still paused: naming the card asked further questions without resuming
-    it."""
-    key, described = resolver_context
+def apply_interrupt_adjustment(
+    game: GameState, request: ChooseInterruptAdjustment, response: DecisionResponse
+) -> None:
+    """Discard the card and bind the chosen adjustment to the effect it answers. Raise
+    ``RuntimeError`` if the card is no longer one the seat can discard to interrupt."""
+    key, described = request.resolver_context
     taken = rulebook_interrupt(key)
-    window = _window(game)
-    answered = _answerable(game, seat, window, source_id, key)
+    answered = _answerable(game, request.seat, request.source_id, key)
     effect = _named(answered, lambda effect: effect.describe() == described)
     if taken.once_per_action:
-        game.interrupts_taken.add((taken.key, seat))
-    game.modifications.append(Adjustment(effect, key, taken.delta_for(chosen[0])))
-    return [Discard(source_id, seat), window.reopened()]
+        game.interrupts_taken.add((taken.key, request.seat))
+    game.modifications.append(Adjustment(effect, key, taken.delta_for(response.choices[0])))
+    triggers.resolve_effects(game, [Discard(request.source_id, request.seat)])

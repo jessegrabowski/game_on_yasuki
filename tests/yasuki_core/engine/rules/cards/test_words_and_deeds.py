@@ -1,11 +1,11 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import Bow
 from yasuki_core.engine.rules.triggers import resolve_action_effects
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, PlayInterrupt
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.words_and_deeds import MILITIA_RECRUIT
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseInterrupt,
     ChooseInterruptTarget,
     ChoosePayment,
     Confirm,
@@ -125,11 +125,10 @@ def _sacrifice_session(*, yojimbo_bowed: bool = False) -> EngineSession:
 
 def test_final_sacrifice_targets_a_yojimbo_and_the_action_goes_for_him_instead():
     session = _sacrifice_session()
-    pending = session.game.pending
-    assert isinstance(pending, ChooseInterrupt)
-    assert (pending.seat, pending.candidates) == (P1, ("sacrifice",))
+    assert session.game.round.kind is RoundKind.INTERRUPT
+    assert session.legal_actions(P1) == [Pass(), PlayInterrupt("sacrifice")]
 
-    session.submit(P1, DecisionResponse(("sacrifice",)))
+    session.act(P1, PlayInterrupt("sacrifice"))
     target = session.game.pending
     assert isinstance(target, ChooseInterruptTarget)
     assert target.candidates == ("yojimbo",)
@@ -148,7 +147,7 @@ def test_final_sacrifice_is_not_offered_when_no_yojimbo_is_a_legal_target():
     # courtier's place and the Interrupt is not offered.
     session = _sacrifice_session(yojimbo_bowed=True)
 
-    assert session.game.pending is None
+    assert session.game.round.kind is not RoundKind.INTERRUPT
     assert "courtier" not in {card.id for card in session.game.table.battlefield.cards}
 
 
@@ -163,13 +162,13 @@ def test_final_sacrifice_answers_the_targeting_and_not_what_the_action_then_does
 
     resolve_action_effects(game, [Bow("courtier")])
 
-    assert game.pending is None
+    assert game.round.kind is not RoundKind.INTERRUPT
     assert game.table.cards_by_id["courtier"].bowed
 
 
 def test_the_final_sacrifice_game_replays_to_the_same_board():
     session = _sacrifice_session()
-    session.submit(P1, DecisionResponse(("sacrifice",)))
+    session.act(P1, PlayInterrupt("sacrifice"))
     session.submit(P1, DecisionResponse(("yojimbo",)))
     pay(session, P1)
 

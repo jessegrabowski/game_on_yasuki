@@ -20,6 +20,7 @@ yasuki_core.engine.rules.turn.sequence
     apply_discard
     begin_game
     begin_next_turn
+    close_interrupt_window
     close_response_window
     forget_action
     next_phase

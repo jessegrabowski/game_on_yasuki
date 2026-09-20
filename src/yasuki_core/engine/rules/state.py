@@ -155,7 +155,7 @@ class GameState:
         Interrupt's key and the seat that took it. Cleared as the next action begins. Ephemeral
         and rebuilt by replay. Default empty.
     interrupts_offered : bool
-        Whether the action now resolving has opened its Interrupt window. An action opens one,
+        Whether the action now resolving has opened its Interrupt step. An action opens one,
         over the effects it first hands to step E, and what it defers behind them resolves without
         another (CR, Action Sequence step D). Cleared as the next action begins. Ephemeral and
         rebuilt by replay. Default False.

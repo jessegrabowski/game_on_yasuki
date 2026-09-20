@@ -54,6 +54,15 @@ RESPONSE_TIMINGS = RoundTimings(
 )
 
 
+# The Interrupt step, D of the Action Sequence: a round of its own over the effects an action is
+# about to resolve, open to every seat and permitting nothing but Interrupts (CR, Interrupt
+# Actions: "following an action round which begins with the active player").
+INTERRUPT_TIMINGS = RoundTimings(
+    active=frozenset({ActionTiming.INTERRUPT}),
+    others=frozenset({ActionTiming.INTERRUPT}),
+)
+
+
 class RoundKind(Enum):
     """What sort of Action Round is open.
 
@@ -63,6 +72,7 @@ class RoundKind(Enum):
     """
 
     PHASE = "phase"
+    INTERRUPT = "interrupt"
     RESPONSE = "response"
     BATTLE_SEGMENT = "battle_segment"
 

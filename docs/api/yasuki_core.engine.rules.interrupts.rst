@@ -8,7 +8,6 @@ yasuki_core.engine.rules.interrupts
 .. autosummary::
 
     Adjustment
-    ReopenWindow
     Replacement
     RulebookInterrupt
 
@@ -17,16 +16,20 @@ yasuki_core.engine.rules.interrupts
 .. autosummary::
 
     answered_by
-    apply_interrupt
+    apply_interrupt_adjustment
     apply_interrupt_effect
     apply_interrupt_target
     as_modified
     card_interrupts_for
+    discard_to_interrupt
     discardable_for
     forecast
-    interrupt_request
-    interrupters
+    foreseen_now
+    held_action
+    interrupt_actions
     legal_substitutes
+    open_interrupt_window
+    play_interrupt
     rulebook_interrupt
     rulebook_interrupts_for
 
