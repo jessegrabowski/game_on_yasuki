@@ -41,7 +41,7 @@ _DECORATORS = {
 
 _CALLS = {
     "register_ability",
-    "register_edict",
+    "register_entry",
     "register_event_entry",
     "register_interrupt",
     "register_invest",

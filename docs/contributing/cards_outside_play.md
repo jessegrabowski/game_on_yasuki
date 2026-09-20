@@ -86,40 +86,42 @@ Personality, so it is an attachment and [Cards that attach](attachments.md) cove
 is a Strategy that grants a lasting ability and is then discarded like any other Strategy, so
 nothing about it stays.
 
-## Edicts and Kata, which clear their own kind
+## One idiom for entering from hand
 
-An Edict puts itself into play and discards your others, which is the rulebook's limit of one at a
-time restated on the card:
-
-```python
-def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    others = [
-        card.id
-        for card in game.table.battlefield.cards
-        if card.owner is source.owner
-        and card.id != source.id
-        and keywords.EDICT in effective_keywords(game, card)
-    ]
-    return [
-        PutIntoPlay(source.id),
-        *(Discard(card_id, source.owner) for card_id in others),
-    ]
-```
-
-{func}`~.register_edict` bundles that with an `Open` ability and
-`located_at=(CardLocation.HAND,)`, so registering one takes a line:
+An Edict prints "Open: Put this Edict into play", a Kata prints the same with its own kind, and a
+Ring with an action entry prints "Open: If X, put this Ring into play". Each is an ability taken
+from hand, with nothing to pay, whose effect is the card entering. {func}`~.register_entry` builds
+that ability, so registering one takes a line:
 
 ```python
-register_edict("act_with_authority")
-register_edict("way_of_the_crab_experienced", clan=ruleset.CRAB)
+register_entry("act_with_authority", clears=keywords.EDICT)
+register_entry("way_of_the_crab_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.CRAB))
 ```
 
-The optional `clan` is for the Edicts naming a clan their controller must be playing.
+The parameters are the clauses a card can add to that sentence.
 
-**Kata print the same shape**, "put this card into play, discard all your other Kata."
-`register_edict` hardcodes `keywords.EDICT`, so a Kata cannot use it as it stands. The same
-function taking the keyword as an argument would cover both, and that is the shape to reach for
-when the first Kata is written.
+`condition` is the "If X": a callable over the game and the card that, when it returns False,
+withholds the entry from `legal_actions` the way a missing target withholds any ability.
+{func}`~.plays_clan` is the one the clan Edicts use.
+
+`clears` is a keyword whose other holders the owner controls are discarded as the card enters. An
+Edict clears `keywords.EDICT`, which is the rulebook's limit of one at a time restated on the card
+(ShE datasheet, Edicts), and a Kata clears `keywords.KATA`:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/abilities/idioms.py
+:start-at: def cleared(
+:end-before: def effects(
+:dedent: 4
+:language: python
+```
+
+`timing` is the designator, `OPEN` unless the card says otherwise, and a tuple for a card printing
+"Open/Dynasty". `extra_effects` resolves after the card enters, for an entry that goes on to do
+something else. `key` names the entry on a card that prints another ability beside it, which every
+Ring does.
+
+Show of Power, the one ShE-legal Kata, is not written because its other half is blocked on Fear
+retargeting. When it is, its entry is `register_entry("show_of_power", clears=keywords.KATA)`.
 
 ## Terrain, which attaches to a battlefield
 

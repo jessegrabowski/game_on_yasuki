@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
@@ -17,59 +19,97 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 
 
-def register_edict(
-    printed_id: str, *, clan: str | None = None, ability_keywords: frozenset[str] = frozenset()
-) -> None:
-    """Register ``printed_id``'s Open ability to put itself into play as an Edict.
+def plays_clan(clan: str) -> Callable[[GameState, L5RCard], bool]:
+    """The entry condition "if you are a <clan> player", read from the owner's Stronghold."""
 
-    Every Edict prints the same action (put this into play, discard your other Edicts), so it is
-    registered rather than written out per card. Discarding the others is the rulebook's own limit
-    of one Edict at a time restated on the card (ShE datasheet, Edicts).
+    def condition(game: GameState, source: L5RCard) -> bool:
+        return is_clan(game, source.owner, clan)
+
+    return condition
+
+
+def register_entry(
+    printed_id: str,
+    *,
+    timing: ActionTiming | tuple[ActionTiming, ...] = ActionTiming.OPEN,
+    condition: Callable[[GameState, L5RCard], bool] | None = None,
+    clears: str | None = None,
+    extra_effects: Callable[[GameState, L5RCard], list[Effect]] | None = None,
+    key: str | None = None,
+    label: str | None = None,
+    ability_keywords: frozenset[str] = frozenset(),
+) -> None:
+    """Register ``printed_id``'s ability to put itself into play from hand.
+
+    The shape every Edict, Kata and action-entry Ring prints: an ability taken from hand whose
+    effect is the card entering play, with nothing to pay. Step F does not discard the card
+    afterward because it is now in play (CR, Action Sequence).
 
     Parameters
     ----------
     printed_id : str
-        The Edict's printed id.
-    clan : str, optional
-        A clan its controller must be playing, for the Edicts that name one. Default None, for an
-        Edict anyone may put into play.
+        The card's printed id.
+    timing : ActionTiming or tuple of ActionTiming, optional
+        The designators the entry is taken under, as in "Open/Dynasty". Default ``OPEN``.
+    condition : callable, optional
+        Maps ``(game, source_card)`` to whether the entry may be taken right now, for a card whose
+        text opens with "If X". Default None, for a card anyone may put into play at any time.
+    clears : str, optional
+        A keyword whose other holders the owner controls are discarded as the card enters, as an
+        Edict discards the owner's other Edicts (ShE datasheet, Edicts). Default None.
+    extra_effects : callable, optional
+        Maps ``(game, source_card)`` to effects resolved after the card enters, for a card whose
+        entry prints a further clause. Default None.
+    key : str, optional
+        The ability's key, needed when the card prints another ability. Default None.
+    label : str, optional
+        What a client shows for the entry. Default names the designators and ``clears``.
     ability_keywords : frozenset of str, optional
         The ability keywords the entry prints, as in "Political Open". Default empty.
     """
+    timings = timing if isinstance(timing, tuple) else (timing,)
 
     def targets(game: GameState, source: L5RCard) -> list[str]:
-        if clan is not None and not is_clan(game, source.owner, clan):
+        if condition is not None and not condition(game, source):
             return []
         return [source.id]
 
-    def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-        others = [
+    def cleared(game: GameState, source: L5RCard) -> list[str]:
+        if clears is None:
+            return []
+        return [
             card.id
             for card in game.table.battlefield.cards
             if card.owner is source.owner
             and card.id != source.id
-            and keywords.EDICT in effective_keywords(game, card)
-        ]
-        return [
-            PutIntoPlay(source.id),
-            *(Discard(card_id, source.owner) for card_id in others),
+            and clears in effective_keywords(game, card)
         ]
 
+    def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+        return [
+            PutIntoPlay(source.id),
+            *(Discard(card_id, source.owner) for card_id in cleared(game, source)),
+            *(extra_effects(game, source) if extra_effects is not None else ()),
+        ]
+
+    if label is None:
+        designators = "/".join(held.name.capitalize() for held in timings)
+        label = f"{designators}: Put this {clears or 'card'} into play"
     register_ability(
         printed_id,
         Ability(
-            timings=(ActionTiming.OPEN,),
-            label="Open: Put this Edict into play",
+            timings=timings,
+            label=label,
             cost=no_cost,
             targets=targets,
             effects=effects,
             hits_every_target=True,
             located_at=(CardLocation.HAND,),
+            key=key,
             keywords=ability_keywords,
         ),
     )

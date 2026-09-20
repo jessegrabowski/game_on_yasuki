@@ -1,7 +1,11 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import ask_who_loses_honor, register_edict
+from yasuki_core.engine.rules.abilities.idioms import (
+    ask_who_loses_honor,
+    plays_clan,
+    register_entry,
+)
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.board.queries import (
@@ -569,4 +573,4 @@ register_ability(
 
 # "Open: If you are an Akasha Clan player, put this Edict into play." Its Dynasty-phase trigger has
 # no handler yet.
-register_edict("zealotry", clan=ruleset.AKASHA)
+register_entry("zealotry", clears=keywords.EDICT, condition=plays_clan(ruleset.AKASHA))
