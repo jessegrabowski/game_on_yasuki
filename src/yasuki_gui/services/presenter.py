@@ -21,7 +21,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.factory import build_print
+from yasuki_core.game_pieces.factory import build_print, side_of_record
 from yasuki_gui.services.game_runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.labels import turn_context
@@ -571,12 +571,18 @@ class Presenter:
 
     def debug_card_to_hand(self) -> None:
         """Pick any Fate card in the database and put a copy in the human's hand."""
-        self._dialogs().database_search("Add Card to Hand", Side.FATE, self._debug_card)
+        self._dialogs().database_search(
+            "Add Card to Hand", lambda record: side_of_record(record) is Side.FATE, self._debug_card
+        )
 
     def debug_card_to_province(self) -> None:
         """Pick any Dynasty card in the database, then which Province it fills on the board,
         discarding the card there."""
-        self._dialogs().database_search("Add Card to Province", Side.DYNASTY, self._debug_card)
+        self._dialogs().database_search(
+            "Add Card to Province",
+            lambda record: side_of_record(record) is Side.DYNASTY,
+            self._debug_card,
+        )
 
     def _debug_card(self, record: dict) -> None:
         self.host.runner.debug_card(build_print(record))
