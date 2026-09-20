@@ -25,6 +25,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "Interrupt: Target your X. The action targets him instead" | `Interrupt(answers=ResolveAbility, targets=...)` replacing its `target_id` | {card}`Final Sacrifice` |
 | "Interrupt: ... negate the action's effects" | `Interrupt(answers=Effect, answers_every=True)` returning `Negated` | none yet |
 | "Interrupt: ..." on an Event in a Province | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.PROVINCE,)))` | none yet |
+| "Unstoppable Battle: ..." | `Ability(..., unstoppable=True)` | none yet |
 | May Proclaim for an amount other than Personal Honor | `@proclaim_gain(id)` | {card}`Ninube Aitso, "Doji Yeiko" (Experienced)` |
 | "You may Recruit this Holding as a Political Open action" | `register_recruit_timing(id, RecruitTiming(...))` | {card}`The Ivory Courtroom` |
 | Gives another card's abilities Tireless | `@tireless_grant(id)` | {card}`Shrine to Inari` |

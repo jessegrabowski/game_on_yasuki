@@ -20,6 +20,21 @@ def action_round(game: GameState) -> ActionRound:
     return game.round
 
 
+def action_is_unstoppable(game: GameState) -> bool:
+    """Whether the action now resolving is Unstoppable: from an ability printing the modifier
+    (ShE datasheet, Unstoppable). A rulebook action never is."""
+    match game.action:
+        case (
+            ActivateAbility(card_id=card_id, ability_key=key)
+            | PlayStrategy(card_id=card_id, ability_key=key)
+        ):
+            card = game.table.cards_by_id.get(card_id)
+            ability = None if card is None else ability_for(game, card, key)
+            return ability is not None and ability.unstoppable
+        case _:
+            return False
+
+
 def action_keywords(game: GameState) -> frozenset[str]:
     """The ability keywords of the action now resolving, such as Political, or none outside one.
 

@@ -133,6 +133,9 @@ class Ability:
     tireless : bool, optional
         The Tireless keyword: the ability may be used even while its card is bowed (CR, Tireless).
         Default False, which leaves it to the rule that a bowed card's abilities cannot be used.
+    unstoppable : bool, optional
+        Whether other players may not play Interrupts to the action, the Unstoppable modifier
+        printed ahead of the designator (ShE datasheet, Unstoppable). Default False.
     keywords : frozenset of str, optional
         The ability keywords printed ahead of the designator, as in "Political Battle:". They
         classify the action the ability produces and rise to the card that holds it, and the
@@ -156,6 +159,7 @@ class Ability:
     tireless: bool = False
     keywords: frozenset[str] = frozenset()
     repeatable: bool = False
+    unstoppable: bool = False
 
 
 def once_tag(ability: Ability) -> str:

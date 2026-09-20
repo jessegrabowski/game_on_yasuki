@@ -7,6 +7,7 @@ yasuki_core.engine.rules.action_record
 
 .. autosummary::
 
+    action_is_unstoppable
     action_keywords
     action_round
 

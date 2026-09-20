@@ -161,6 +161,20 @@ register_ability(
 )
 
 
+register_ability(
+    "unstoppable_probe",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Unstoppable Open: gain 2 Honor",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [GainHonor(source.owner, 2)],
+        hits_every_target=True,
+        unstoppable=True,
+    ),
+)
+
+
 register_interrupt(
     "negate_action_probe",
     Interrupt(
@@ -1158,6 +1172,33 @@ def test_a_card_interrupt_answers_the_effect_as_earlier_interrupts_left_it():
 
 
 # --- the step is a round ---
+
+
+def test_an_unstoppable_action_entitles_no_other_seat_to_interrupt():
+    game = two_seat_game()
+    put_in_play(game, holding("P1-h", printed_id="unstoppable_probe"))
+    _honor_card(game.table, "P2-honor0", P2)
+    session = EngineSession.start(game.table, P1)
+
+    session.act(P1, ActivateAbility("P1-h"))
+
+    assert session.game.round.kind is not RoundKind.INTERRUPT
+    assert session.game.table.seats[P1].honor == 2
+
+
+def test_an_unstoppable_action_still_opens_the_step_for_its_own_seat():
+    game = two_seat_game()
+    put_in_play(game, holding("P1-h", printed_id="unstoppable_probe"))
+    _honor_card(game.table, "P1-honor0", P1)
+    _honor_card(game.table, "P2-honor0", P2)
+    session = EngineSession.start(game.table, P1)
+
+    session.act(P1, ActivateAbility("P1-h"))
+
+    assert _asked(session) is P1
+    assert session.legal_actions(P2) == []
+    _discard_to_interrupt(session, P1, "P1-honor0", HONOR_UP)
+    assert session.game.table.seats[P1].honor == 3
 
 
 def test_an_interrupt_answering_every_effect_binds_to_all_of_them():

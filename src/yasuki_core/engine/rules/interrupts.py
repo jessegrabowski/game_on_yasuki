@@ -29,10 +29,12 @@ from yasuki_core.engine.rules.legality import (
     seat_cards,
 )
 from yasuki_core.engine.rules.state import GameState, used_this_turn
+from yasuki_core.engine.rules.action_record import action_is_unstoppable
 from yasuki_core.engine.rules.turn.structure import (
     INTERRUPT_TIMINGS,
     ActionRound,
     RoundKind,
+    RoundTimings,
 )
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -380,11 +382,14 @@ def open_interrupt_window(game: GameState) -> bool:
 
     Only when a seat entitled to act holds an Interrupt to take: a step nobody could act in is a
     pass nobody needs to be asked for. Nobody during a Response Step, since a Response is not
-    interruptible. The active player acts first.
+    interruptible. The active player acts first. During the acting seat's Unstoppable action no
+    other seat is entitled at all (ShE datasheet, Unstoppable).
     """
     if game.round.kind is RoundKind.RESPONSE:
         return False
-    step = ActionRound(timings=INTERRUPT_TIMINGS, priority=game.active, kind=RoundKind.INTERRUPT)
+    step = ActionRound(
+        timings=_window_timings(game), priority=game.active, kind=RoundKind.INTERRUPT
+    )
     order = [game.active, *(seat for seat in game.table.seats if seat is not game.active)]
     first = next(
         (
@@ -400,6 +405,16 @@ def open_interrupt_window(game: GameState) -> bool:
     game.round_stack.append(game.round)
     game.round = replace(step, priority=first)
     return True
+
+
+def _window_timings(game: GameState) -> RoundTimings:
+    if not action_is_unstoppable(game):
+        return INTERRUPT_TIMINGS
+    acting_is_active = game.action_seat is game.active
+    return RoundTimings(
+        active=frozenset({ActionTiming.INTERRUPT}) if acting_is_active else frozenset(),
+        others=frozenset() if acting_is_active else frozenset({ActionTiming.INTERRUPT}),
+    )
 
 
 def play_interrupt(game: GameState, seat: PlayerId, card_id: str) -> None:

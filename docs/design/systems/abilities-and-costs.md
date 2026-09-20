@@ -136,7 +136,9 @@ procedure's, and what a choice resolver produces later is not foreseeable and is
 
 An Interrupt is an action on the tape, so "the action" it modifies stays the one held beneath the
 step: the action record is not reset by an Interrupt, and backing out of any question an Interrupt
-asks unwinds the Interrupt alone. The rulebook Interrupts' once-per-action limit is `GameState.interrupts_taken`,
+asks unwinds the Interrupt alone. During an action whose ability sets `unstoppable`, the modifier
+printed ahead of its designator, no other seat is entitled in the step (ShE datasheet,
+Unstoppable). The rulebook Interrupts' once-per-action limit is `GameState.interrupts_taken`,
 cleared with the action.
 
 A Personality or attachment prints an Interrupt too, taken from play rather than from hand, and an
