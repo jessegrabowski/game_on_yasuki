@@ -244,6 +244,22 @@ register_interrupt(
 )
 
 
+register_ability(
+    "gain_then_choose_probe",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: gain 1 Honor, then choose",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [
+            GainHonor(source.owner, 1),
+            Choose(source.owner, ("either", "or"), 1, 1, "interrupt_probe_choice", None),
+        ],
+        hits_every_target=True,
+    ),
+)
+
+
 register_interrupt(
     "interrupt_probe",
     Interrupt(
@@ -1405,3 +1421,38 @@ def test_a_substituted_ability_resolves_with_the_values_the_step_forecast():
 
     assert game.round.kind is not RoundKind.INTERRUPT and game.pending is None
     assert game.table.seats[P2].honor == 1  # the gift's 1, then the gain of 1 reduced to 0
+
+
+def test_cancelling_the_actions_own_question_unwinds_the_action_past_the_step():
+    # The passes and Interrupts the step recorded are not the action that raised the question,
+    # so a cancel walks back past them to the announcement, cost and gain included.
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("P1-src", printed_id="gain_then_choose_probe"))
+    _honor_card(state, "P1-honor0", P1)
+    session = EngineSession.start(state, P1)
+    session.act(P1, ActivateAbility("P1-src"))
+    assert _asked(session) is P1
+    session.act(P1, Pass())
+    assert isinstance(session.game.pending, ChooseCards)
+    assert session.game.table.seats[P1].honor == 1
+
+    assert session.can_cancel(P1)
+    session.cancel(P1)
+
+    assert session.game.pending is None and session.game.action is None
+    assert session.game.round.kind is not RoundKind.INTERRUPT
+    assert session.game.table.seats[P1].honor == 0
+    assert ActivateAbility("P1-src") in session.legal_actions(P1)
+
+
+def test_cancelling_the_actions_own_question_is_refused_once_another_seat_interrupted():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("P1-src", printed_id="gain_then_choose_probe"))
+    _honor_card(state, "P2-honor0", P2)
+    session = EngineSession.start(state, P1)
+    session.act(P1, ActivateAbility("P1-src"))
+    _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
+    assert isinstance(session.game.pending, ChooseCards)
+
+    assert not session.abort(P1)
+    assert isinstance(session.game.pending, ChooseCards)

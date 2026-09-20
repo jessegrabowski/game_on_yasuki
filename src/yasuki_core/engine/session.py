@@ -6,9 +6,13 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.replay.snapshot import InitialRecord
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
+    DiscardToInterrupt,
     DynastyDiscard,
+    Pass,
+    PlayInterrupt,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules import legality, projection
@@ -16,6 +20,7 @@ from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.replay.game_log import (
     Act,
     Answer,
+    GameInput,
     GameLog,
     build_game,
     act_and_log,
@@ -23,6 +28,42 @@ from yasuki_core.engine.replay.game_log import (
     submit_and_log,
     replay,
 )
+
+
+def _inside_the_interrupt_step(entry: object) -> bool:
+    return isinstance(entry, Act) and isinstance(
+        entry.action, Pass | PlayInterrupt | DiscardToInterrupt
+    )
+
+
+def _before_the_interrupt_step(entries: list[GameInput], cut: int, seat: PlayerId) -> int:
+    """``cut`` moved back past the Interrupt step's entries ending there: the passes and
+    Interrupts any seat took, each with the answers it asked, and ``seat``'s own answers between
+    them. Stops at anything else, so an answer another seat gave the action itself is never
+    walked over."""
+    while cut:
+        entry = entries[cut - 1]
+        if isinstance(entry, Answer) and entry.seat is seat:
+            cut -= 1
+        elif _inside_the_interrupt_step(entry):
+            cut -= 1
+        elif isinstance(entry, Answer) and _answers_an_interrupt(entries, cut - 1):
+            cut -= 1
+        else:
+            break
+    return cut
+
+
+def _answers_an_interrupt(entries: list[GameInput], index: int) -> bool:
+    """Whether the answer at ``index`` was asked by an Interrupt the same seat took: the nearest
+    entry before it that is not that seat's answer is a step entry of the seat's."""
+    seat = entries[index].seat
+    while index and isinstance(entries[index - 1], Answer) and entries[index - 1].seat is seat:
+        index -= 1
+    if not index:
+        return False
+    before = entries[index - 1]
+    return _inside_the_interrupt_step(before) and before.seat is seat
 
 
 def _position(game: GameState, seat: PlayerId) -> tuple:
@@ -215,6 +256,11 @@ class EngineSession:
             opened_by = Act
             while cut and isinstance(entries[cut - 1], Answer) and entries[cut - 1].seat is seat:
                 cut -= 1
+            if self.game.round.kind is not RoundKind.INTERRUPT:
+                # The question is the action's own, asked once its Interrupt step closed. What the
+                # step recorded, passes and Interrupts by any seat with the answers they asked, is
+                # not the action that raised it, and the walk goes back past all of it.
+                cut = _before_the_interrupt_step(entries, cut, seat)
         opener = entries[cut - 1] if cut else None
         if not isinstance(opener, opened_by) or opener.seat is not seat:
             return False  # the pending decision is not one this seat's own step raised
