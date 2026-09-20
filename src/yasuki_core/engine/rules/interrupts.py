@@ -275,17 +275,15 @@ def card_interrupts_for(
     Presence).
 
     A Strategy in hand is offered when its Interrupt answers one of the effects and the seat can
-    reach its Gold Cost. A card in play is offered under the gates an activated ability answers
-    to: unbowed, within the Rules of Location, unused this turn where the arc makes abilities
-    once per turn, and able to pay the Interrupt's cost.
+    reach its Gold Cost. A card in play, on the battlefield or face up in a Province, is offered
+    under the gates an activated ability answers to: unbowed, within the Rules of Location, unused
+    this turn where the arc makes abilities once per turn, and able to pay the Interrupt's cost.
     """
     if not has_presence(game, seat):
         return []
     offered: list[tuple[L5RCard, Interrupt, CardLocation]] = []
     once = ruleset.ACTIVE.abilities_once_per_turn
     for location, card in seat_cards(game, seat):
-        if location is CardLocation.PROVINCE:
-            continue
         interrupt = _answering(game, card, foreseen, location)
         if interrupt is None:
             continue

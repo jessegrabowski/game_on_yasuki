@@ -8,6 +8,7 @@ from yasuki_core.engine.rules import interrupts, legality
 from yasuki_core.engine.rules.abilities.activation import ResolveAbility, defer_ability
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
+    CardLocation,
     Interrupt,
     Interruption,
     itself,
@@ -22,6 +23,7 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     Destroy,
+    Discard,
     Fear,
     GainHonor,
     Negated,
@@ -154,6 +156,20 @@ register_ability(
             GainHonor(source.owner, 1),
             GainHonor(source.owner, 1 if game.table.seats[source.owner].honor == 0 else 5),
         ],
+    ),
+)
+
+
+register_interrupt(
+    "province_event_probe",
+    Interrupt(
+        label="Interrupt: discard this Event from play to gain 1 Honor as the action bows a card",
+        answers=Bow,
+        interrupt=lambda game, source, effect: Interruption(
+            effect, effects=(GainHonor(source.owner, 1),)
+        ),
+        located_at=(CardLocation.PROVINCE,),
+        cost=lambda game, source: [Discard(source.id, source.owner)],
     ),
 )
 
@@ -1130,6 +1146,25 @@ def test_a_card_interrupt_answers_the_effect_as_earlier_interrupts_left_it():
 
 
 # --- the step is a round ---
+
+
+def test_an_interrupt_on_an_event_in_a_province_is_offered_and_taken_from_there():
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+    event = holding("P2-event", owner=P2, printed_id="province_event_probe")
+    event.turn_face_up()
+    province = ProvinceZone(owner=P2)
+    province.add(register(game.table, event))
+    game.table.zones[ZoneKey(P2, ZoneRole.PROVINCE, 0)] = province
+    resolve_action_effects(game, [Bow(farm.id)])
+
+    assert legality.legal_actions(game, P2) == [Pass(), PlayInterrupt("P2-event")]
+    action_sequence.perform(game, PlayInterrupt("P2-event"))
+    sequence.run_stack(game)
+
+    assert game.table.seats[P2].honor == 1 and farm.bowed
+    discard = game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)].cards
+    assert "P2-event" in {card.id for card in discard}
 
 
 def test_the_step_is_a_round_over_the_round_the_action_was_taken_in():
