@@ -213,5 +213,11 @@ def test_binding_points_each_debug_hook_at_its_own_presenter_method(window):
     window.field.on_debug_gold()
     window.field.on_debug_card_to_hand()
     window.field.on_debug_card_to_province()
+    window.field.on_debug_spawn_personality()
 
-    assert called == ["debug_gold", "debug_card_to_hand", "debug_card_to_province"]
+    assert called == [
+        "debug_gold",
+        "debug_card_to_hand",
+        "debug_card_to_province",
+        "debug_spawn_personality",
+    ]

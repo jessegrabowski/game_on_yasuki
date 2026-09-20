@@ -142,6 +142,7 @@ class FieldView(tk.Canvas):
         self.on_debug_gold: Callable[[], None] | None = None
         self.on_debug_card_to_hand: Callable[[], None] | None = None
         self.on_debug_card_to_province: Callable[[], None] | None = None
+        self.on_debug_spawn_personality: Callable[[], None] | None = None
         self.load_opponent_deck_from_file: Callable[[str], None] | None = None
 
         # Set by whoever owns the window; the controller draws the view-key preview through it.

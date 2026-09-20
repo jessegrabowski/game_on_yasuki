@@ -1,5 +1,7 @@
 from typing import TypeGuard
 
+from yasuki_core.engine.debug import ChooseDebugSeat
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import Action, DeclareAttack, Pass
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
@@ -22,6 +24,7 @@ from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import build_print, side_of_record
+from yasuki_core.game_pieces.prints import PersonalityPrint
 from yasuki_gui.services.game_runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.labels import turn_context
@@ -100,7 +103,8 @@ class Presenter:
             | ChooseOption
             | ChooseInterrupt
             | Confirm
-            | ChooseBattlefield,
+            | ChooseBattlefield
+            | ChooseDebugSeat,
         ):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
             # amount is named on the prompt's spinner and a yes/no question on its buttons, so
@@ -277,6 +281,13 @@ class Presenter:
             if runner.can_cancel():
                 options.append(("Cancel", self.cancel, True))
             return pending.prompt(), options
+        if isinstance(pending, ChooseDebugSeat):
+            # Which player gets a debug Personality: one button per seat, worded by its name.
+            seats = self.host.session.game.table.seats
+            return pending.prompt(), [
+                (seats[PlayerId[name]].name, lambda n=name: self.submit_answer((n,)), True)
+                for name in pending.candidates
+            ]
         if isinstance(pending, ChooseInvestAmount):
             # An amount, not a board card. Answered by one button per affordable amount.
             amounts: list[ButtonSpec] = [
@@ -584,8 +595,23 @@ class Presenter:
             self._debug_card,
         )
 
+    def debug_spawn_personality(self) -> None:
+        """Pick any Personality in the database, then which player it enters play under."""
+        self._dialogs().database_search(
+            "Spawn Personality",
+            lambda record: "Personality" in (record.get("types") or ()),
+            self._debug_personality,
+        )
+
     def _debug_card(self, record: dict) -> None:
         self.host.runner.debug_card(build_print(record))
+        self.present()
+
+    def _debug_personality(self, record: dict) -> None:
+        printed = build_print(record)
+        if not isinstance(printed, PersonalityPrint):
+            raise ValueError(f"{printed.name} is not a Personality")
+        self.host.runner.debug_personality(printed)
         self.present()
 
     def _dialogs(self) -> Dialogs:

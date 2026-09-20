@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.debug import PlaceDebugCard
+from yasuki_core.engine.debug import ChooseDebugSeat, PlaceDebugCard
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy, Recruit
 from yasuki_core.engine.rules.abilities.model import Ability, itself
@@ -1770,6 +1770,25 @@ def test_each_debug_card_takes_the_next_free_id(board):
 
     hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
     assert [card.id for card in hand[-2:]] == ["debug-1", "debug-2"]
+
+
+def test_a_debug_personality_offers_each_seat_by_name_and_enters_play_under_the_pick(board):
+    presenter, window, session = board
+    seats = session.game.table.seats
+
+    presenter._debug_personality(_database_record("Debug Bushi", "Personality"))
+
+    assert isinstance(session.game.pending, ChooseDebugSeat)
+    assert _buttons(window) == [seats[P1].name, seats[P2].name]
+    assert not window.field.selecting
+
+    _press(presenter, seats[P2].name)
+
+    assert session.game.pending is None
+    spawned = session.game.table.cards_by_id["debug-1"]
+    assert spawned.owner is P2
+    assert spawned in session.game.table.battlefield.cards
+    assert session.log.replay() == session.game
 
 
 def test_a_dynasty_debug_card_is_placed_on_the_board_like_a_legacy_card(board):

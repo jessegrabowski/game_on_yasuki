@@ -83,6 +83,7 @@ def build_menubar(root: tk.Misc, field_view, *, debug: bool = False) -> tk.Menu:
             ("Add 100 Gold", "on_debug_gold"),
             ("Add Card to Hand…", "on_debug_card_to_hand"),
             ("Add Card to Province…", "on_debug_card_to_province"),
+            ("Spawn Personality…", "on_debug_spawn_personality"),
         ):
             debug_menu.add_command(
                 label=label, command=lambda hook=hook: _call_hook(field_view, hook)
