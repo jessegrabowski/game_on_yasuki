@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     attack_targets,
     has_keyword,
     opposed_units_in_battle,
@@ -261,6 +262,7 @@ register_ability(
         f"{GONSHIRO_UNIT_COST} or less, and commit seppuku after the battle",
         cost=_matsu_gonshiro_soul_of_matsu_shimei_cost,
         targets=_matsu_gonshiro_soul_of_matsu_shimei_targets,
+        targeting_message="an enemy unit costing 9 or less",
         effects=_matsu_gonshiro_soul_of_matsu_shimei_effects,
     ),
 )
@@ -306,6 +308,7 @@ register_ability(
         f"{MAYUKO_SECOND_MELEE}",
         cost=_shinjo_mayuko_soul_of_shinjo_wei_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_shinjo_mayuko_soul_of_shinjo_wei_effects,
     ),
 )
@@ -470,6 +473,7 @@ register_ability(
         label="Open: Bow to Equip a +2F/+1C One-Handed Sword to a Personality",
         cost=bow_cost,
         targets=_weapon_artist_targets,
+        targeting_message="a Personality",
         effects=_weapon_artist_effects,
     ),
 )

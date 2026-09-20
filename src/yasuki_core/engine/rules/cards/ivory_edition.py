@@ -1,7 +1,7 @@
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.board.queries import ATTACK_TARGET, attack_targets
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.units.membership import attached_to
@@ -27,6 +27,7 @@ register_ability(
         label=f"Battle: Fear {ROBURO_FEAR}",
         cost=no_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_daigotsu_roburo_effects,
     ),
 )
@@ -50,6 +51,7 @@ register_ability(
         label=f"Battle, Bow: Melee {NAGAMAKI_MELEE} Attack",
         cost=bow_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_exquisite_nagamaki_of_the_fox_clan_effects,
     ),
 )
@@ -80,6 +82,7 @@ register_ability(
         label=f"Battle: Fear {HARAMAKI_DO_FEAR}",
         cost=no_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_haramaki_do_effects,
     ),
 )
@@ -110,6 +113,7 @@ register_ability(
         label=f"Battle, Bow: Ranged {INCENDIARY_ARCHERS_RANGED} Attack",
         cost=bow_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_incendiary_archers_ranged_effects,
         key="ranged",
     ),
@@ -122,6 +126,7 @@ register_ability(
         label=f"Battle: Fear {INCENDIARY_ARCHERS_FEAR}",
         cost=no_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_incendiary_archers_fear_effects,
         key="fear",
     ),

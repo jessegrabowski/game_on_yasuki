@@ -95,6 +95,7 @@ register_ability(
         label="Open: Bow to straighten a Personality who Lobbied this turn",
         cost=bow_cost,
         targets=_shigekawas_court_targets,
+        targeting_message="a Personality who Lobbied this turn",
         effects=_shigekawas_court_effects,
     ),
 )

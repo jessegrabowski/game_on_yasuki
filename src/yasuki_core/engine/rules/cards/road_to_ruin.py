@@ -87,6 +87,7 @@ register_ability(
         label="Open: give a Personality two -1F tokens and destroy this Item",
         cost=no_cost,
         targets=_dull_tanto_targets,
+        targeting_message="a Personality",
         effects=_dull_tanto_effects,
     ),
 )
@@ -120,6 +121,7 @@ register_ability(
         label="Iaijutsu Battle: bow a target enemy Personality with lower Chi",
         cost=no_cost,
         targets=_kakita_harudei_drunkard_targets,
+        targeting_message="an enemy Personality with lower Chi",
         effects=_kakita_harudei_drunkard_effects,
     ),
 )
@@ -259,6 +261,7 @@ register_ability(
         label="Economic Open: Discard this Event to refill its Province with a non-Unique Holding you control no copies of",
         cost=no_cost,
         targets=_repairing_the_ruins_targets,
+        targeting_message="a non-Unique Holding you control no copies of",
         effects=_repairing_the_ruins_effects,
         located_at=(CardLocation.PROVINCE,),
     ),
@@ -356,6 +359,7 @@ register_ability(
         "+2C",
         cost=no_cost,
         targets=_unity_of_spirit_targets,
+        targeting_message="your opposed Personality",
         effects=_unity_of_spirit_effects,
         located_at=(CardLocation.HAND,),
     ),
@@ -417,6 +421,7 @@ register_ability(
         label="Bow: straighten your target card",
         cost=bow_cost,
         targets=_verdant_wilds_targets,
+        targeting_message="your card",
         effects=_verdant_wilds_effects,
     ),
 )

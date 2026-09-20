@@ -66,6 +66,7 @@ register_ability(
         "Aoi and straighten them",
         cost=no_cost,
         targets=_doji_aoi_soul_of_doji_chitose_targets,
+        targeting_message="your Personality",
         effects=_doji_aoi_soul_of_doji_chitose_effects,
         battle_designators=frozenset({BattleDesignator.HOME}),
         targets_any_location=True,
@@ -189,6 +190,7 @@ register_ability(
         label="Response: seed a Sincerity token onto one of your Sincerity cards",
         cost=no_cost,
         targets=_training_court_targets,
+        targeting_message="one of your Sincerity cards",
         effects=_training_court_effects,
         tireless=True,
     ),
@@ -221,6 +223,7 @@ register_ability(
         label="Open: Bow to Equip a 1F Cavalry Follower to your Samurai",
         cost=bow_cost,
         targets=_utaku_gorou_stablemaster_targets,
+        targeting_message="your Samurai",
         effects=_utaku_gorou_stablemaster_effects,
     ),
 )

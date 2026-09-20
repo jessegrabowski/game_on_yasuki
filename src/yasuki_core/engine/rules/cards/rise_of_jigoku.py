@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, reg
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     attack_targets,
     has_keyword,
     owned_holdings,
@@ -137,6 +138,7 @@ register_ability(
         label="Battle: bow your target unbowed Personality for a Melee Attack equal to their Chi",
         cost=no_cost,
         targets=_draw_strength_from_your_oaths_targets,
+        targeting_message="your unbowed Personality",
         effects=_draw_strength_from_your_oaths_effects,
         located_at=(CardLocation.HAND,),
     ),
@@ -214,6 +216,7 @@ register_ability(
         ),
         cost=no_cost,
         targets=_heart_of_honor_targets,
+        targeting_message="your Personality",
         effects=_heart_of_honor_effects,
         located_at=(CardLocation.HAND,),
     ),
@@ -243,6 +246,7 @@ register_ability(
         "their printed Personal Honor, or 1",
         cost=no_cost,
         targets=_i_do_not_forget_targets,
+        targeting_message="a dishonorable Personality",
         effects=_i_do_not_forget_effects,
         located_at=(CardLocation.HAND,),
     ),
@@ -288,6 +292,7 @@ register_ability(
         label=f"Battle, Bow: Melee {JADE_LEGION_MELEE} Attack",
         cost=bow_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_jade_legion_effects,
     ),
 )
@@ -383,6 +388,7 @@ register_ability(
         label=f"Open: Bow and pay {ONI_COST} gold to bow your Personality for an Oni of his Chi",
         cost=_mishime_sensei_cost,
         targets=_mishime_sensei_targets,
+        targeting_message="your Personality",
         effects=_mishime_sensei_effects,
     ),
 )
@@ -446,6 +452,7 @@ register_ability(
         label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
         cost=bow_cost,
         targets=_modest_farm_targets,
+        targeting_message="a Holding in your Province",
         effects=_modest_farm_effects,
     ),
 )
@@ -498,6 +505,7 @@ register_ability(
         label="Spend a Wealth token: straighten a Farm",
         cost=_rural_market_cost,
         targets=_rural_market_targets,
+        targeting_message="your Farm",
         effects=_rural_market_effects,
         tireless=True,
     ),
@@ -598,6 +606,7 @@ register_ability(
         label="Open: Bow to give your Personality Cavalry, and may destroy this for a Follower",
         cost=bow_cost,
         targets=_shinjo_fields_targets,
+        targeting_message="your Personality",
         effects=_shinjo_fields_effects,
     ),
 )

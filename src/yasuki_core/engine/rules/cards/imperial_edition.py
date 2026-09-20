@@ -3,7 +3,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, bow_parent_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import attack_targets, personalities_in_play
+from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
+    attack_targets,
+    personalities_in_play,
+)
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.stats.card_values import effective_chi
@@ -147,6 +151,7 @@ register_ability(
         label=f"Battle: Fear {SKELETAL_TROOPS_FEAR}",
         cost=no_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_skeletal_troops_effects,
     ),
 )
@@ -218,6 +223,7 @@ register_ability(
         label="Limited: destroy a bowed Personality with Chi no higher than this Shugenja's",
         cost=_touch_of_death_cost,
         targets=_touch_of_death_targets,
+        targeting_message="a bowed Personality with Chi no higher than this Shugenja's",
         effects=_touch_of_death_effects,
     ),
 )

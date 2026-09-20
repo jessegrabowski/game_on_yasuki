@@ -35,6 +35,7 @@ register_ability(
         label="Battle: move your target opposed Personality home, gain 1 Honor and draw a card",
         cost=no_cost,
         targets=_discretionary_valor_targets,
+        targeting_message="your opposed Personality",
         effects=_discretionary_valor_effects,
         located_at=(CardLocation.HAND,),
     ),

@@ -73,6 +73,11 @@ def has_keyword(game: GameState, card: L5RCard, keyword: str) -> bool:
     return any(carried.lower() == wanted for carried in effective_keywords(game, card))
 
 
+# What an attack effect targets, worded for the target prompt of every ability that reaches
+# through attack_targets.
+ATTACK_TARGET = "an enemy Follower or Personality without Followers"
+
+
 def attack_targets(game: GameState, source: L5RCard) -> list[str]:
     """The ids an attack effect from ``source`` may be pointed at: the enemy army's Followers and
     its Personalities carrying none (CR, Ranged Attack). Empty outside a battle.

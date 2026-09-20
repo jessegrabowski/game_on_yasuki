@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     attack_targets,
     has_keyword,
     owned_holdings,
@@ -106,6 +107,7 @@ register_ability(
         label=f"Battle: Melee {ASETHS_LEGION_MELEE} Attack",
         cost=no_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_aseths_legion_effects,
     ),
 )
@@ -311,6 +313,7 @@ register_ability(
         label="Response: bow your Courtier to move a player's Honor",
         cost=no_cost,
         targets=_courts_of_otosan_uchi_targets,
+        targeting_message="your Courtier",
         effects=_courts_of_otosan_uchi_effects,
         tireless=True,
     ),
@@ -458,6 +461,7 @@ register_ability(
         label="Battle/Open: Destroy your target Holding to create a 2F/2C/3PH Ancestor Personality",
         cost=no_cost,
         targets=_kitsu_watanabe_experienced_targets,
+        targeting_message="your Holding",
         effects=_kitsu_watanabe_experienced_effects,
     ),
 )
@@ -504,6 +508,7 @@ register_ability(
         "current Province a strength bonus equal to the target's Force",
         cost=no_cost,
         targets=_man_the_walls_targets,
+        targeting_message="your Follower or Personality at any location",
         effects=_man_the_walls_effects,
         located_at=(CardLocation.HAND,),
         battle_designators=frozenset({BattleDesignator.ABSENT}),
@@ -557,6 +562,7 @@ register_ability(
         "one in your hand. Shuffle the deck.",
         cost=no_cost,
         targets=_master_your_thoughts_targets,
+        targeting_message="your Monk or Shugenja Personality",
         effects=_master_your_thoughts_effects,
         located_at=(CardLocation.HAND,),
     ),

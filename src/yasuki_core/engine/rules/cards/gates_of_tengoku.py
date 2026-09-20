@@ -156,6 +156,7 @@ register_ability(
         label="Bow: seed a Sincerity token onto a Province Sincerity card",
         cost=bow_cost,
         targets=_shrine_of_sincerity_targets,
+        targeting_message="a Sincerity card in your Province",
         effects=_shrine_of_sincerity_effects,
     ),
 )

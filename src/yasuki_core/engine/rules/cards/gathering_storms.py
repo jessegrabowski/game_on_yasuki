@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     attack_targets,
     followers_in_play,
     owned_holdings,
@@ -74,6 +75,7 @@ register_ability(
         label="Banish a Fate card: give a Port +1 Gold Production",
         cost=_ichiba_district_cost,
         targets=_ichiba_district_targets,
+        targeting_message="your Port",
         effects=plus_one_gp_this_turn,
     ),
 )
@@ -133,6 +135,7 @@ register_ability(
         label="Battle, Bow: Give -2F to a target Personality or to one or two target Followers",
         cost=bow_cost,
         targets=_mantis_kama_targets,
+        targeting_message="a Personality or Follower",
         effects=_mantis_kama_effects,
     ),
 )
@@ -160,6 +163,7 @@ register_ability(
         label="Tireless Open: Destroy this Holding to draw a card and give your target Market a +1GP Wealth token",
         cost=_otokoshi_district_cost,
         targets=_otokoshi_district_targets,
+        targeting_message="your Market",
         effects=_otokoshi_district_effects,
         tireless=True,
     ),
@@ -211,6 +215,7 @@ register_ability(
         label=f"Battle: Destroy Bunrakuken's target Follower to make Ranged {BUNRAKUKEN_RANGED}",
         cost=_yoritomo_bunrakuken_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_yoritomo_bunrakuken_effects,
     ),
 )

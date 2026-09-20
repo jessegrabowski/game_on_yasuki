@@ -34,6 +34,7 @@ register_ability(
         label="Battle: Move home a target defending Personality",
         cost=no_cost,
         targets=_incapacitated_targets,
+        targeting_message="a defending Personality",
         effects=_incapacitated_effects,
         located_at=(CardLocation.HAND,),
     ),
