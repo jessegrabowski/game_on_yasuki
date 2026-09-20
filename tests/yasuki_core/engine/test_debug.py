@@ -154,6 +154,16 @@ def test_a_refused_debug_step_leaves_the_tape_untouched():
     assert session.log.replay() == session.game
 
 
+def test_a_tape_with_an_unknown_debug_kind_is_refused():
+    session = EngineSession.start(dealt_table(), P1)
+    session.debug(DebugGold(P1, 100))
+    taped = game_log_to_dict(session.log)
+    taped["entries"][0]["step"]["kind"] = "token"
+
+    with pytest.raises(ValueError, match="token"):
+        game_log_from_dict(taped)
+
+
 def test_debug_steps_are_taped_replay_and_round_trip():
     session = EngineSession.start(dealt_table(), P1)
 

@@ -260,11 +260,14 @@ def _encode_debug(step: DebugStep) -> dict:
 
 
 def _decode_debug(seat: PlayerId, payload: dict) -> DebugStep:
-    if payload["kind"] == "gold":
-        return DebugGold(seat, payload["amount"])
-    if payload["kind"] == "personality":
-        return DebugPersonality(seat, payload["card_id"], decode_print(payload["printed"]))
-    return DebugCard(seat, payload["card_id"], decode_print(payload["printed"]))
+    match payload["kind"]:
+        case "gold":
+            return DebugGold(seat, payload["amount"])
+        case "card":
+            return DebugCard(seat, payload["card_id"], decode_print(payload["printed"]))
+        case "personality":
+            return DebugPersonality(seat, payload["card_id"], decode_print(payload["printed"]))
+    raise ValueError(f"no debug step of kind {payload['kind']!r}")
 
 
 def _decode_input(payload: dict) -> GameInput:
