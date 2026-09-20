@@ -92,7 +92,7 @@ class ApplyAbilityEffects:
             for target_id in self.target_ids
             for effect in ability.effects(game, source, game.table.cards_by_id[target_id])
         ]
-        triggers.resolve_action_effects(game, effects)
+        _resolve(game, effects, trait=ability is not None and ability.trait)
 
 
 def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
@@ -169,7 +169,17 @@ def apply_ability_target(
     game: GameState, request: ChooseAbilityTarget, response: DecisionResponse
 ) -> None:
     targeting = ResolveAbility(request.source_card_id, response.choices[0], request.ability_key)
-    triggers.resolve_action_effects(game, [targeting.built(game)])
+    source = game.table.cards_by_id[request.source_card_id]
+    ability = ability_for(game, source, request.ability_key)
+    _resolve(game, [targeting.built(game)], trait=ability is not None and ability.trait)
+
+
+def _resolve(game: GameState, effects: list[Effect], *, trait: bool) -> None:
+    """Hand ``effects`` over as the action's own, or as a trait's when the ability is one."""
+    if trait:
+        triggers.resolve_effects(game, effects)
+        return
+    triggers.resolve_action_effects(game, effects)
 
 
 def _record_targets(game: GameState, target_ids: tuple[str, ...]) -> None:
