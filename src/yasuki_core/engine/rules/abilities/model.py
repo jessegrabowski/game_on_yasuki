@@ -144,6 +144,12 @@ class Ability:
         The Repeatable modifier: the ability may be used more than once per turn in an arc whose
         ruleset makes abilities once per turn (CR, Using Abilities 0.3). Default False. The
         registration audit checks it against the printed text.
+    trait : bool, optional
+        Whether this is a trait worded "after X, you may ..." rather than an action: offered in the
+        Response Step, so its controller orders it among the Responses to the same action and may
+        decline it, but resolved as a trait's effects, with no Interrupt step against them. A trait
+        is not an action (CR, Traits), so a card reading "your action" does not see its effects.
+        Default False.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -160,6 +166,7 @@ class Ability:
     keywords: frozenset[str] = frozenset()
     repeatable: bool = False
     unstoppable: bool = False
+    trait: bool = False
 
 
 def once_tag(ability: Ability) -> str:

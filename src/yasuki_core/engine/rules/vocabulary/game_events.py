@@ -39,6 +39,23 @@ class CardDiscarded:
 
 
 @dataclass(frozen=True, slots=True)
+class FavorDiscarded:
+    """The Imperial Favor left ``seat``'s control for nobody's.
+
+    The Favor is not a card and carries no cause of its own. A trait reading "after your action
+    discards the Favor" reads the seat that announced the action now resolving off the game
+    instead.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that held it.
+    """
+
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
 class CounterGained:
     """A card gained ``amount`` of a counter: the actual number added, after any floor."""
 
@@ -215,6 +232,7 @@ GameEvent = (
     | Destroyed
     | Dishonored
     | EnteredPlay
+    | FavorDiscarded
     | HonorChanged
     | ProducedGold
     | ProducingGold

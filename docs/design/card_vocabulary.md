@@ -130,6 +130,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    Destroyed
    Dishonored
    EnteredPlay
+   FavorDiscarded
    HonorChanged
    ProducedGold
    ProducingGold

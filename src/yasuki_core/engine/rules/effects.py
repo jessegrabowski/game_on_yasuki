@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     Dishonored,
     EnteredPlay,
+    FavorDiscarded,
     GameEvent,
     HonorChanged,
     Rehonored,
@@ -552,10 +553,11 @@ class DiscardFavor(Effect):
         return f"{self.seat.name} discards the Imperial Favor"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        if game.favor_holder is self.seat:
-            game.favor_holder = None
-            favor_proxy.sync_proxy(game)
-        return []
+        if game.favor_holder is not self.seat:
+            return []
+        game.favor_holder = None
+        favor_proxy.sync_proxy(game)
+        return [FavorDiscarded(self.seat)]
 
 
 @dataclass(frozen=True, slots=True)

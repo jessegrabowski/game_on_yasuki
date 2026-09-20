@@ -17,6 +17,8 @@ from yasuki_core.engine.rules.board.queries import (
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_personalities,
+    province_zones,
+    top_of_deck,
     units_at,
 )
 from yasuki_core.engine.rules.effects import (
@@ -24,6 +26,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     DelayedEffect,
     Destroy,
+    Discard,
     Dishonor,
     DrawCard,
     Effect,
@@ -34,7 +37,7 @@ from yasuki_core.engine.rules.effects import (
     seppuku,
 )
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
-from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
+from yasuki_core.engine.rules.rulebook.lobby import lobby_bar, lobby_bonus_grant
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -44,10 +47,12 @@ from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
-from yasuki_core.engine.rules.vocabulary.game_events import HonorChanged
+from yasuki_core.engine.rules.vocabulary.game_events import FavorDiscarded, HonorChanged
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import WindPrint
 
 
@@ -324,8 +329,72 @@ register_entry(
 
 # --- Way of the Crane (Experienced) ---
 
+# "As a Focus Effect, after this duel ends, if you won it, gain 1 Honor and give your provinces
+# +1PS." Duels are not modeled, so the Focus Effect has no handler.
 register_entry(
-    "way_of_the_crane_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.CRANE)
+    "way_of_the_crane_experienced",
+    clears=keywords.EDICT,
+    condition=plays_clan(ruleset.CRANE),
+    key="enter",
+)
+
+
+@lobby_bonus_grant("way_of_the_crane_experienced")
+def _way_of_the_crane_experienced_lobby_bonus(game: GameState, card: L5RCard) -> int:
+    """ "You have a +1 Lobby bonus for each of your Provinces." """
+    return sum(1 for _ in province_zones(game, card.owner))
+
+
+def _way_of_the_crane_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Itself, once the action just resolved was its controller's and discarded the Favor.
+
+    Whose Favor it was does not matter: the text names the action, so an action of yours that makes
+    the holder discard it counts, and a discard of your own Favor that was not your action does
+    not.
+    """
+    if game.action_seat is not source.owner:
+        return []
+    return [source.id] if action_did(game, FavorDiscarded) else []
+
+
+def _way_of_the_crane_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """The card to discard is picked from the hand as it stands after the draw, so the one about
+    to be drawn is offered along with the rest."""
+    seat = source.owner
+    held = tuple(card.id for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards)
+    hand_after = held + top_of_deck(game, DeckKey(seat, Side.FATE), 1)
+    if not hand_after:
+        return [DrawCard(seat)]
+    return [DrawCard(seat), Choose(seat, hand_after, 1, 1, "way_of_the_crane_discard", source.id)]
+
+
+@choice_resolver("way_of_the_crane_discard", prompt="Discard a card")
+def _resolve_way_of_the_crane_discard(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Discard(chosen[0], Trait(source_id))]
+
+
+# Once per turn under the ruleset's rationing of abilities, which the printed "once per turn"
+# restates.
+register_ability(
+    "way_of_the_crane_experienced",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        label=(
+            "After your action discards the Imperial Favor, once per turn you may draw, then"
+            " discard a card"
+        ),
+        cost=no_cost,
+        targets=_way_of_the_crane_experienced_targets,
+        effects=_way_of_the_crane_experienced_effects,
+        hits_every_target=True,
+        tireless=True,
+        trait=True,
+        key="draw",
+    ),
 )
 
 
