@@ -24,7 +24,6 @@ from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import build_print, side_of_record
-from yasuki_core.game_pieces.prints import PersonalityPrint
 from yasuki_gui.services.game_runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.labels import turn_context
@@ -608,10 +607,7 @@ class Presenter:
         self.present()
 
     def _debug_personality(self, record: dict) -> None:
-        printed = build_print(record)
-        if not isinstance(printed, PersonalityPrint):
-            raise ValueError(f"{printed.name} is not a Personality")
-        self.host.runner.debug_personality(printed)
+        self.host.runner.debug_personality(build_print(record))
         self.present()
 
     def _dialogs(self) -> Dialogs:

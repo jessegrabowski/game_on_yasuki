@@ -59,13 +59,13 @@ class DebugPersonality:
         The seat that took the step and answers which player gets the Personality.
     card_id : str
         The id the new card takes, chosen by the caller so a replay makes the same card.
-    printed : PersonalityPrint
-        What the Personality is.
+    printed : CardPrint
+        What the Personality is. A print of any other type is refused when the step is applied.
     """
 
     seat: PlayerId
     card_id: str
-    printed: PersonalityPrint
+    printed: CardPrint
 
 
 DebugStep = DebugGold | DebugCard | DebugPersonality
