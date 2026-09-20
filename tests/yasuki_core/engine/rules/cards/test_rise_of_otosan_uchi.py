@@ -4,7 +4,12 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    Pass,
+    PlayInterrupt,
+    Recruit,
+)
 from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     CAVALRY_FOLLOWER,
     HORROR,
@@ -47,7 +52,7 @@ from yasuki_core.game_pieces.prints import ActionPrint
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
+from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from yasuki_core.engine.rules.units.composition import followers_of
@@ -1123,10 +1128,10 @@ def test_doji_yuten_negates_the_bowing_of_his_controllers_other_personality():
     with probe_ability(BOW_PROBE, BOW_ABILITY):
         session = _yuten_defending()
         _raider_targets_the_guard(session)
-        assert isinstance(session.game.pending, ChooseInterrupt)
-        assert session.game.pending.seat is P2
+        assert session.game.round.kind is RoundKind.INTERRUPT
+        assert session.game.round.priority is P2
 
-        session.submit(P2, DecisionResponse(("yuten",)))
+        session.act(P2, PlayInterrupt("yuten"))
 
         game = session.game
         assert game.table.cards_by_id["guard"].bowed is False
@@ -1138,9 +1143,9 @@ def test_doji_yuten_answers_the_bow_a_fear_would_make():
     with probe_ability(FEAR_PROBE, FEAR_ABILITY):
         session = _yuten_defending(probe=FEAR_PROBE)
         _raider_targets_the_guard(session)
-        assert isinstance(session.game.pending, ChooseInterrupt)
+        assert session.game.round.kind is RoundKind.INTERRUPT
 
-        session.submit(P2, DecisionResponse(("yuten",)))
+        session.act(P2, PlayInterrupt("yuten"))
 
         assert session.game.table.cards_by_id["guard"].bowed is False
 
@@ -1170,9 +1175,9 @@ def test_doji_yuten_answers_a_move_that_names_a_follower_in_his_personalitys_uni
         )
         session.act(P1, ActivateAbility("raider"))
         session.submit(P1, DecisionResponse(("ashigaru",)))
-        assert isinstance(session.game.pending, ChooseInterrupt)
+        assert session.game.round.kind is RoundKind.INTERRUPT
 
-        session.submit(P2, DecisionResponse(("yuten",)))
+        session.act(P2, PlayInterrupt("yuten"))
 
         guard = session.game.table.cards_by_id["guard"]
         assert not location_of(session.game.table, guard).is_home
@@ -1185,7 +1190,7 @@ def test_doji_yuten_is_not_offered_against_his_own_bowing():
 
         session.submit(P1, DecisionResponse(("yuten",)))
 
-        assert session.game.pending is None
+        assert session.game.round.kind is not RoundKind.INTERRUPT
         assert session.game.table.cards_by_id["yuten"].bowed is True
 
 
@@ -1193,24 +1198,24 @@ def test_doji_yuten_is_not_offered_while_bowed_or_away_from_the_battle():
     with probe_ability(BOW_PROBE, BOW_ABILITY):
         at_home = _yuten_defending(yuten_defends=False)
         _raider_targets_the_guard(at_home)
-        assert at_home.game.pending is None
+        assert at_home.game.round.kind is not RoundKind.INTERRUPT
 
         bowed = _yuten_defending()
         bowed.game.table.cards_by_id["yuten"].bow()
         _raider_targets_the_guard(bowed)
-        assert bowed.game.pending is None
+        assert bowed.game.round.kind is not RoundKind.INTERRUPT
 
 
 def test_doji_yuten_interrupts_once_a_turn():
     with probe_ability(BOW_PROBE, BOW_ABILITY):
         session = _yuten_defending()
         _raider_targets_the_guard(session)
-        session.submit(P2, DecisionResponse(("yuten",)))
+        session.act(P2, PlayInterrupt("yuten"))
         session.act(P2, Pass())
 
         _raider_targets_the_guard(session)
 
-        assert session.game.pending is None
+        assert session.game.round.kind is not RoundKind.INTERRUPT
         assert session.game.table.cards_by_id["guard"].bowed is True
 
 

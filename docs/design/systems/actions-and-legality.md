@@ -17,9 +17,11 @@ dispatching.
 {func}`~.permitted_timings` gives the ones the current round allows, and {func}`~.permits` asks
 about one. An ability is offered when those two sets intersect.
 
-No round lists `INTERRUPT`, so that intersection never offers an Interrupt as an action. The
-Interrupt step in `rules/interrupts.py` asks {func}`~.activatable` for it directly, while an effect
-the Interrupt answers waits to resolve.
+An Interrupt round lists `INTERRUPT` and nothing else, so inside one the intersection offers only
+{class}`~.PlayInterrupt` and {class}`~.DiscardToInterrupt`, which `rules/interrupts.py` computes
+against the forecast of the action held beneath the round, and a `Pass`. An Interrupt printed on a
+card is not an {class}`~yasuki_core.engine.rules.abilities.model.Ability` and never reaches
+{func}`~.activatable`.
 
 ## Targets
 

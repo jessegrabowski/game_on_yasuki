@@ -157,6 +157,9 @@ class GameView:
         The action an open Response Step answers, worded for a player, or None when no Step is open.
         A seat holding no Response still sees it: the Step is the whole table's, and a seat is
         passing on something it should be told the name of.
+    interrupting : str or None
+        The action an open Interrupt step is held against, worded for a player, or None when no
+        step is open. Shown to every seat for the same reason.
     attack : AttackView or None
         The attack in progress, or None outside one. Public to both seats: who is attacking
         whom, and which units stand where, is on the table for everyone to see. A Province's
@@ -183,6 +186,7 @@ class GameView:
     favor_holder: PlayerId | None
     pending: DecisionRequest | None
     responding_to: str | None
+    interrupting: str | None
     legacy_pool: tuple[L5RCard, ...]
     dynasty_deck: tuple[L5RCard, ...]
     attack: AttackView | None
@@ -254,6 +258,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
         favor_holder=game.favor_holder,
         pending=pending,
         responding_to=(game.action_taken if game.round.kind is RoundKind.RESPONSE else None),
+        interrupting=(game.action_taken if game.round.kind is RoundKind.INTERRUPT else None),
         legacy_pool=tuple(sorted(legacy_candidates(game, viewer), key=lambda card: card.id)),
         dynasty_deck=tuple(
             sorted(game.table.decks[DeckKey(viewer, Side.DYNASTY)].cards, key=lambda card: card.id)

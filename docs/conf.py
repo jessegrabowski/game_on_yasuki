@@ -165,7 +165,6 @@ numpydoc_xref_aliases = {
     "LobbyModifier": "yasuki_core.engine.rules.vocabulary.modifiers.LobbyModifier",
     "Location": "yasuki_core.engine.table.Location",
     "Look": "yasuki_core.engine.rules.vocabulary.looks.Look",
-    "InterruptWindow": "yasuki_core.engine.rules.effects.InterruptWindow",
     "Minimum": "yasuki_core.engine.rules.vocabulary.modifiers.Minimum",
     "Modification": "yasuki_core.engine.rules.vocabulary.work.Modification",
     "Modifier": "yasuki_core.engine.rules.vocabulary.modifiers.Modifier",

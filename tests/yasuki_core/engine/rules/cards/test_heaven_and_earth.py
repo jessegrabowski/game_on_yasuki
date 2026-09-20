@@ -4,8 +4,14 @@ from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import AttachCard, Dishonor
 from yasuki_core.engine.rules.triggers import resolve_effects
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, Equip
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    Equip,
+    PlayInterrupt,
+)
+from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -89,10 +95,10 @@ def test_the_sword_is_destroyed_to_negate_its_bearers_dishonoring():
         session = EngineSession.start(state, P2)
         session.act(P2, ActivateAbility("courtier"))
         session.submit(P2, DecisionResponse(("bearer",)))
-        assert isinstance(session.game.pending, ChooseInterrupt)
-        assert session.game.pending.seat is P1
+        assert session.game.round.kind is RoundKind.INTERRUPT
+        assert session.game.round.priority is P1
 
-        session.submit(P1, DecisionResponse(("sword",)))
+        session.act(P1, PlayInterrupt("sword"))
 
         game = session.game
         assert game.table.cards_by_id["bearer"].dishonorable is False
@@ -112,7 +118,7 @@ def test_the_sword_is_not_offered_against_another_personalitys_dishonoring():
 
         session.submit(P2, DecisionResponse(("bystander",)))
 
-        assert session.game.pending is None
+        assert session.game.round.kind is not RoundKind.INTERRUPT
         assert session.game.table.cards_by_id["bystander"].dishonorable is True
 
 

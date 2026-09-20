@@ -1,6 +1,7 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.abilities.registry import ability_for, recruit_timing_of
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
     ACTION_TIMINGS,
     ActivateAbility,
@@ -9,6 +10,14 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
     UseFavorAbility,
 )
+
+
+def action_round(game: GameState) -> ActionRound:
+    """The round the action now resolving was taken in: the one beneath an open Interrupt step or
+    Response Step, else the round that is open."""
+    if game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE) and game.round_stack:
+        return game.round_stack[-1]
+    return game.round
 
 
 def action_keywords(game: GameState) -> frozenset[str]:

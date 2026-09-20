@@ -21,7 +21,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseAmount,
     ChooseCards,
-    ChooseInterrupt,
     ChooseInvestAmount,
     ChooseOption,
     Confirm,
@@ -280,58 +279,6 @@ def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
     assert _status(window) == "Does P2 gain or lose 1 Honor?"
     assert _buttons(window) == ["Gain 1 Honor", "Lose 1 Honor", "Cancel"]
     assert not window.field.selecting
-
-
-@pytest.fixture
-def an_interrupt_offered(board):
-    presenter, window, session = board
-    for card_id, name in (("hc", "Honor Fate"), ("okura", "Okura is Released")):
-        card = L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=P1)
-        session.game.table.cards_by_id[card.id] = card
-    session.game.pending = ChooseInterrupt(
-        seat=P1, candidates=("hc@honor", "okura"), description="P2 gains 2 honor"
-    )
-    return presenter, window, session
-
-
-def test_an_interrupt_leaves_the_panel_with_only_a_pass(an_interrupt_offered):
-    # The ways to take it live on the cards. The panel says what waits and offers to decline, and
-    # the board stays out of selection mode so a click on a card reaches its menu.
-    presenter, window, _ = an_interrupt_offered
-
-    presenter.present()
-
-    assert _status(window) == "P2 gains 2 honor. Take an Interrupt?"
-    assert _buttons(window) == ["Pass"]
-    assert not window.field.selecting
-
-
-def test_clicking_a_card_while_an_interrupt_waits_offers_its_ways_to_take_it(an_interrupt_offered):
-    presenter, window, _ = an_interrupt_offered
-    offered = []
-    window.popup_at_pointer = lambda entries: offered.extend(entries)
-
-    presenter.on_card_activated("hc")
-    presenter.on_card_activated("okura")
-
-    assert [label for label, _ in offered] == [
-        "Honor Repeatable Interrupt: If the action has any Honor gains or losses, discard an "
-        "Honor card to increase or reduce one such gain or loss by 1.",
-        "Play Okura is Released",
-    ]
-
-
-def test_a_card_the_interrupt_does_not_name_offers_nothing(an_interrupt_offered):
-    presenter, window, session = an_interrupt_offered
-    session.game.table.cards_by_id["idle"] = L5RCard.of(
-        FatePrint, id="idle", name="Idle", side=Side.FATE, owner=P1
-    )
-    offered = []
-    window.popup_at_pointer = lambda entries: offered.extend(entries)
-
-    presenter.on_card_activated("idle")
-
-    assert offered == []
 
 
 def test_a_variable_gold_cost_is_named_on_a_spinner_rather_than_a_button_each(board):
@@ -1510,7 +1457,7 @@ def test_the_courage_interrupt_is_offered_on_the_card_and_adjusted_on_the_panel(
     a_fear_to_interrupt,
 ):
     presenter, window, _ = a_fear_to_interrupt
-    assert _status(window) == "raider targets guard; Fear 2 on guard; bow guard. Take an Interrupt?"
+    assert _status(window) == "Interrupts to the ability on raider"
     assert _buttons(window) == ["Pass"]
     assert not window.field.selecting
     offered = []
@@ -1531,9 +1478,19 @@ def test_cancelling_the_adjustment_returns_to_the_interrupt_offer(a_fear_to_inte
 
     _press(presenter, "Cancel")
 
-    assert _status(window) == "raider targets guard; Fear 2 on guard; bow guard. Take an Interrupt?"
+    assert _status(window) == "Interrupts to the ability on raider"
     assert _buttons(window) == ["Pass"]
     assert "P2-courage0" in session.game.table.cards_by_id
+
+
+def test_a_card_the_interrupt_step_offers_nothing_through_offers_nothing(a_fear_to_interrupt):
+    presenter, window, session = a_fear_to_interrupt
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("guard")
+
+    assert offered == []
 
 
 def test_the_adjustment_discards_the_card_and_resolves_the_fear(a_fear_to_interrupt):

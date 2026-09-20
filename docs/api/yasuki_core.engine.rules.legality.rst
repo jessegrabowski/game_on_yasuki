@@ -29,9 +29,11 @@ yasuki_core.engine.rules.legality
     location_permits
     permits
     permitted_timings
+    permitted_timings_in
     proclaim_key
     recruit_cost
     recruit_timings
+    seat_cards
     timings_of
 
 .. automodule:: yasuki_core.engine.rules.legality

@@ -8,6 +8,7 @@ yasuki_core.engine.rules.action_record
 .. autosummary::
 
     action_keywords
+    action_round
 
 .. automodule:: yasuki_core.engine.rules.action_record
     :members:

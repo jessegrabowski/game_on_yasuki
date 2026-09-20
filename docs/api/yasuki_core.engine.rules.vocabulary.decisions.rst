@@ -18,7 +18,6 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseEquipTarget
     ChooseFortificationProvince
     ChooseInheritanceTarget
-    ChooseInterrupt
     ChooseInterruptAdjustment
     ChooseInterruptEffect
     ChooseInterruptTarget
@@ -40,8 +39,6 @@ yasuki_core.engine.rules.vocabulary.decisions
 
     assignment
     assignment_token
-    interrupt_choice
-    interrupt_token
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.decisions
     :members:

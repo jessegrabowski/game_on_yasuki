@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     TurnStarted,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.interrupts import interrupt_actions
 from yasuki_core.engine.rules.legality import activatable, permitted_timings
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
@@ -74,6 +75,11 @@ def run_stack(game: GameState) -> None:
     refills.
     """
     while game.stack and game.pending is None:
+        if game.round.kind is RoundKind.INTERRUPT and isinstance(
+            game.stack[-1], triggers.HeldAction
+        ):
+            # The action waits beneath its Interrupt round until every seat has passed.
+            return
         game.stack.pop().resume(game)
     if game.pending is None:
         refill_short_provinces(game)
@@ -179,10 +185,17 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
             break
         # Permitted-but-idle still gets asked: whether to decline a window is the seat's own call,
         # and auto-passing on its behalf is a strategy its policy owns, not a rule of the round.
-        if permitted_timings(game, seat):
+        # The Interrupt step is the exception: it opened only because a seat held an Interrupt,
+        # and a seat holding none is a pass nobody needs to be asked for.
+        if permitted_timings(game, seat) and (
+            game.round.kind is not RoundKind.INTERRUPT or interrupt_actions(game, seat)
+        ):
             game.round = replace(game.round, priority=seat, passes=passes)
             return
         passes += 1
+    if game.round.kind is RoundKind.INTERRUPT:
+        close_interrupt_window(game)
+        return
     if game.round.kind is RoundKind.RESPONSE:
         close_response_window(game)
         return
@@ -369,7 +382,9 @@ def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
         raise RuntimeError("the action ended with a look still open")
     # An Interrupt bound to an effect the action never produced, a negation on the outcome of an
     # attack that then missed, is spent with the action and must not answer a Response's effect.
-    game.modifications.clear()
+    # Inside the Interrupt step the action has not resolved yet, and what was just bound waits.
+    if game.round.kind is not RoundKind.INTERRUPT:
+        game.modifications.clear()
     if game.round is not acted_in:
         return
     if open_response_window(game):
@@ -388,9 +403,10 @@ def open_response_window(game: GameState) -> bool:
 
     Only when a seat actually holds a Response: a step nobody could act in is a pass nobody needs to
     be asked for. A Response is itself an action, and one taken inside the step opens no step of its
-    own. The window that is already open is the one it belongs to.
+    own. The window that is already open is the one it belongs to. An Interrupt is not responded
+    to either (ShE datasheet, Response): none opens inside the Interrupt step.
     """
-    if game.round.kind is RoundKind.RESPONSE:
+    if game.round.kind in (RoundKind.RESPONSE, RoundKind.INTERRUPT):
         return False
     # Cleared before the seats are polled, not after: a card still marked from the last Step would
     # not count as a responder, and so could never open another one.
@@ -408,3 +424,12 @@ def close_response_window(game: GameState) -> None:
     """Close the Response Step and hand the opportunity on from the round it suspended."""
     game.round = game.round_stack.pop()
     yield_priority(game, passed=False)
+
+
+def close_interrupt_window(game: GameState) -> None:
+    """Close the Interrupt step once every seat has passed: restore the round the action was taken
+    in and resolve the action held beneath the step, then hand the opportunity on from that round
+    unless the action paused for a decision, in which case the answer hands it on."""
+    game.round = game.round_stack.pop()
+    run_stack(game)
+    yield_after_action(game, game.round)

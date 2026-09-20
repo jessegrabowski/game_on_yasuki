@@ -110,25 +110,32 @@ registered with `register_interrupt` as an {class}`~.Interrupt`, whose `answers`
 type it may be played against and whose `interrupt` maps the pending effect to an
 {class}`~.Interruption`: the effect that resolves in its place and whatever else happens.
 
-The Interrupt window is step D of the Action Sequence, and it opens once per action. When an
-action hands its effects to {func}`~yasuki_core.engine.rules.triggers.resolve_action_effects`,
-they are held in an {class}`~.InterruptWindow` before any of them resolves, and each seat in turn,
-the active player first, may take an Interrupt against what the action is about to do
-(CR, Action Sequence step D; ShE datasheet, Interrupt). What it is about to do is the
-{func}`~yasuki_core.engine.rules.interrupts.forecast`: the effects in order, a `Then`'s contents,
-an ability's effects behind the {class}`~yasuki_core.engine.rules.abilities.activation.ResolveAbility`
-that targets them, and an attack's outcome when the attack reaches on the board as it stands. The
-step is an action round: a pass holds until someone takes an Interrupt, which reopens the window
-to every seat, and it closes once every seat has passed in turn. An
-Interrupt taken there is stored as a modification bound to the effect it answered and applied when
-that effect comes up to resolve, which is the CR's "delayed until those effects occur": Okura's
-destroy waits on the Fear it modifies, and a Courage discard adjusts the Fear as it resolves. A
-card that reads "negate" returns {class}`~.Negated` around the effect it answers, which resolves as
-nothing where the effect would have, and the forecast then shows nothing behind it. When the
-forecast holds several effects a card could answer, {class}`~.ChooseInterruptEffect` asks which.
-Any of the action's own effects can be answered, and only those: the window is over what step E
-hands to `resolve_action_effects`, never a cost, a trait's effects or a rulebook procedure's, and
-what a choice resolver produces later is not foreseeable and is not offered.
+The Interrupt step is step D of the Action Sequence, and it is a round of its own. When an action
+hands its effects to {func}`~yasuki_core.engine.rules.triggers.resolve_action_effects`, they are
+held on the stack as a `HeldAction` and, when any seat holds an Interrupt to take, an `ActionRound`
+of kind `INTERRUPT` is pushed over the round the action was taken in, the active player first (CR,
+Action Sequence step D; ShE datasheet, Interrupt). Inside it `legal_actions` offers each seat a
+{class}`~.PlayInterrupt` per card whose Interrupt answers the forecast and a
+{class}`~.DiscardToInterrupt` per card a rulebook Interrupt could discard, plus a `Pass`. A seat
+holding none is skipped, a seat that took an Interrupt is offered again when the opportunity comes
+round, and consecutive passes close the step and resolve the held action. What the action is about
+to do is the {func}`~yasuki_core.engine.rules.interrupts.forecast`: the effects in order, a
+`Then`'s contents, an ability's built effects behind the
+{class}`~yasuki_core.engine.rules.abilities.activation.ResolveAbility` that targets them, and an
+attack's outcome when the attack reaches on the board as it stands. An Interrupt taken is stored
+as a modification bound to the effect it answered and applied when that effect comes up to
+resolve, which is the CR's "delayed until those effects occur": Okura's destroy waits on the Fear
+it modifies, and a Courage discard adjusts the Fear as it resolves. A card that reads "negate"
+returns {class}`~.Negated` around the effect it answers, which resolves as nothing where the
+effect would have, and the forecast then shows nothing behind it. When the forecast holds several
+effects a card could answer, {class}`~.ChooseInterruptEffect` asks which. Any of the action's own effects can be answered, and only those: the step is over
+what step E hands to `resolve_action_effects`, never a cost, a trait's effects or a rulebook
+procedure's, and what a choice resolver produces later is not foreseeable and is not offered.
+
+An Interrupt is an action on the tape, so "the action" it modifies stays the one held beneath the
+step: the action record is not reset by an Interrupt, and backing out of any question an Interrupt
+asks unwinds the Interrupt alone. The rulebook Interrupts' once-per-action limit is `GameState.interrupts_taken`,
+cleared with the action.
 
 A Personality or attachment prints an Interrupt too, taken from play rather than from hand. Its
 `located_at` names the battlefield, and it is offered under the gates an activated ability in play

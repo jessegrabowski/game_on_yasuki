@@ -112,11 +112,6 @@ class ChoosePayment(DecisionRequest):
         Each producer that can still raise its own yield this turn, paired with the extra Gold it
         would add. What it costs and how it asks are the card's business, settled in the window it
         opens as it bows. Only the figure is here, because reachability cannot be judged without it.
-    reopens : bool
-        Whether backing out returns to the decision answered just before this one instead of
-        unwinding the action. True for the payment of an Interrupt played from hand, which an
-        answer named against someone's action: the cancel takes back that answer, not the action
-        it interrupted. Default False.
     """
 
     amount: int
@@ -125,7 +120,6 @@ class ChoosePayment(DecisionRequest):
     label: str
     target_id: str = ""
     grantable: tuple[tuple[str, int], ...] = ()
-    reopens: bool = False
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return f"Pay {self.shortfall(partial)} gold for {self.label}"
@@ -177,10 +171,6 @@ class ChoosePayment(DecisionRequest):
     def cancellable(self) -> bool:
         """A Recruit's payment can be backed out of: nothing is committed until it is answered."""
         return True
-
-    @property
-    def reopens_on_cancel(self) -> bool:
-        return self.reopens
 
 
 @dataclass(frozen=True, slots=True)
@@ -505,102 +495,37 @@ class AssignUnits(DecisionRequest):
         return len(set(assigned)) == len(assigned)
 
 
-def interrupt_token(card_id: str, key: str) -> str:
-    """The candidate string pairing the card ``card_id`` with the rulebook Interrupt ``key`` that
-    discards it: how a rulebook Interrupt names one way to answer. The same separator the
-    assignment tokens use, so a client splits both alike."""
-    return f"{card_id}{ASSIGNMENT_SEPARATOR}{key}"
-
-
-def interrupt_choice(token: str) -> tuple[str, str | None]:
-    """The card and rulebook Interrupt :func:`~.interrupt_token` encoded, or a bare card id and no
-    key, which names a card to play rather than discard.
-
-    Returns
-    -------
-    card_id : str
-        The card to discard or play.
-    key : str or None
-        The rulebook Interrupt the card is discarded for, or None for a card to play.
-
-    Raises
-    ------
-    ValueError
-        If ``token`` carries a separator but no card or no key.
-    """
-    card_id, separator, key = token.rpartition(ASSIGNMENT_SEPARATOR)
-    if not separator:
-        return token, None
-    if not card_id or not key:
-        raise ValueError(f"not an interrupt token: {token!r}")
-    return card_id, key
-
-
-@dataclass(frozen=True, slots=True)
-class ChooseInterrupt(DecisionRequest):
-    """The seat may interrupt ``effect``, which waits to resolve: discard a card carrying the
-    keyword a rulebook Interrupt asks for to adjust it, or play an Interrupt from hand that
-    answers it.
-
-    A candidate is a card paired with the rulebook Interrupt that discards it, or the id of a
-    Strategy to play, both read through :func:`~.interrupt_choice`. A rulebook discard is answered
-    in two steps: naming the card here, then the adjustment on the
-    :class:`~.ChooseInterruptAdjustment` that follows. Declining is the empty answer, and is what
-    most seats do most of the time, so the request is neither forced nor cancellable.
-
-    Attributes
-    ----------
-    description : str
-        The effect as it stands, in the words its own description uses.
-    """
-
-    description: str
-
-    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return f"{self.description}. Take an Interrupt?"
-
-    @property
-    def confirm_label(self) -> str:
-        return "Pass"
-
-    def accepts(self, response: DecisionResponse) -> bool:
-        return len(response.choices) <= 1 and set(response.choices) <= set(self.candidates)
-
-
 @dataclass(frozen=True, slots=True)
 class ChooseInterruptAdjustment(ChooseOption):
-    """The adjustment a rulebook Interrupt gives the effect it interrupts, asked once the seat has
-    named the card to discard for it: increase or reduce, in the datasheet's words.
-
-    A :class:`~.ChooseOption` in every other respect, so a client offers it as the wordings it
-    lists. Backing out reopens the offer the card was named against, since naming it moved
-    nothing: the card is discarded only once the adjustment is answered.
-    """
+    """The adjustment a rulebook Interrupt gives the effect it answers, asked once the seat has
+    taken it: increase or reduce, in the datasheet's words. A :class:`~.ChooseOption` in every
+    other respect, so a client offers it as the wordings it lists. Answered through its own handler
+    rather than a resolver; ``resolver`` names nothing. Backing out unwinds the Interrupt action,
+    which has moved nothing yet: the card is discarded only once the adjustment is answered."""
 
     @property
-    def reopens_on_cancel(self) -> bool:
+    def cancellable(self) -> bool:
         return True
 
 
 @dataclass(frozen=True, slots=True)
 class ChooseInterruptEffect(ChooseOption):
-    """Which of the action's effects the Interrupt the seat just named answers, asked only when
-    the forecast holds more than one it could. The candidates are the effects as the seat reads
-    them. Answered through its own handler rather than a resolver, since the Interrupt window it
-    was asked from stays paused until the Interrupt is taken; ``resolver`` names nothing.
-    Backing out reopens the offer the card was named against."""
+    """Which of the action's effects the Interrupt just taken answers, asked only when the
+    forecast holds more than one it could. The candidates are the effects as the seat reads
+    them. Answered through its own handler rather than a resolver; ``resolver`` names nothing.
+    Backing out unwinds the Interrupt action, which has moved nothing yet."""
 
     @property
-    def reopens_on_cancel(self) -> bool:
+    def cancellable(self) -> bool:
         return True
 
 
 @dataclass(frozen=True, slots=True)
 class ChooseInterruptTarget(DecisionRequest):
-    """The seat must choose the target of the Interrupt it has just named, for a card that reads
+    """The seat must choose the target of the Interrupt it has just taken, for a card that reads
     "Interrupt: Target your X". The candidates are the cards the Interrupt may target, all in
-    play, so a client renders them as board selections. Backing out reopens the offer the card
-    was named against, since naming it moved nothing.
+    play, so a client renders them as board selections. Backing out unwinds the Interrupt action,
+    which has moved nothing yet.
 
     Attributes
     ----------
@@ -625,10 +550,6 @@ class ChooseInterruptTarget(DecisionRequest):
 
     @property
     def cancellable(self) -> bool:
-        return True
-
-    @property
-    def reopens_on_cancel(self) -> bool:
         return True
 
 

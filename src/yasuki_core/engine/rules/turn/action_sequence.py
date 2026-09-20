@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Cycle,
     DeclareAttack,
+    DiscardToInterrupt,
     DynastyDiscard,
     Equip,
     Inheritance,
@@ -23,6 +24,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Legacy,
     Lobby,
     Pass,
+    PlayInterrupt,
     PlayStrategy,
     Recruit,
     UseFavorAbility,
@@ -40,7 +42,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseEquipTarget,
     ChooseFortificationProvince,
     ChooseInheritanceTarget,
-    ChooseInterrupt,
+    ChooseInterruptAdjustment,
     ChooseInterruptEffect,
     ChooseInterruptTarget,
     ChooseInvestAmount,
@@ -65,9 +67,11 @@ from yasuki_core.engine.rules.rulebook.cycle import cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor_payment import use_favor_ability
 from yasuki_core.engine.rules.interrupts import (
-    apply_interrupt,
+    apply_interrupt_adjustment,
     apply_interrupt_effect,
     apply_interrupt_target,
+    discard_to_interrupt,
+    play_interrupt,
 )
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
 from yasuki_core.engine.rules.rulebook.kharmic import kharmic_draw, kharmic_refill
@@ -133,7 +137,11 @@ def perform(game: GameState, action: Action) -> None:
     # Read before the handler runs: one that opens a round of its own leaves that round on
     # `game.round`, and the round to hand on from is the one the action was taken in.
     acted_in = game.round
-    if not isinstance(action, Pass) and game.round.kind is not RoundKind.RESPONSE:
+    # An Interrupt or a Response answers "the action", which stays the one it answers.
+    if not isinstance(action, Pass) and game.round.kind not in (
+        RoundKind.RESPONSE,
+        RoundKind.INTERRUPT,
+    ):
         game.action_events.clear()
         game.action_taken = describe_action(game, action)
         game.action_seat = game.round.priority
@@ -175,6 +183,10 @@ def perform(game: GameState, action: Action) -> None:
         case DeclareAttack():
             resolution.declare_attack(game)
             resolution.open_maneuvers(game)
+        case PlayInterrupt(card_id=card_id):
+            play_interrupt(game, acted_in.priority, card_id)
+        case DiscardToInterrupt(card_id=card_id, key=key):
+            discard_to_interrupt(game, acted_in.priority, card_id, key)
         case _:
             raise ValueError(f"no handler for action {type(action).__name__}")
     # An action resolves fully before the next input; one that paused for a decision leaves its
@@ -233,12 +245,12 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             apply_lobby_target(game, request, response)
         case ChooseFortificationProvince():
             apply_fortification_province(game, request, response)
-        case ChooseInterrupt():
-            apply_interrupt(game, request, response)
         case ChooseInterruptTarget():
             apply_interrupt_target(game, request, response)
         case ChooseInterruptEffect():
             apply_interrupt_effect(game, request, response)
+        case ChooseInterruptAdjustment():
+            apply_interrupt_adjustment(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
         case ChooseAmount():

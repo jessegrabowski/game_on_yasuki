@@ -18,10 +18,10 @@ from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
 from yasuki_core.engine.driver import Controls
 from tests.yasuki_core.engine.builders import province_card
+from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
-    ChooseInterrupt,
     Confirm,
     DecisionResponse,
     DiscardToHandSize,
@@ -29,15 +29,17 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.vocabulary.actions import (
-    PlayStrategy,
     ActivateAbility,
-    Recruit,
     Cycle,
+    DiscardToInterrupt,
     Equip,
     KharmicDraw,
     KharmicRefill,
     Legacy,
     Pass,
+    PlayInterrupt,
+    PlayStrategy,
+    Recruit,
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
@@ -450,27 +452,23 @@ def test_board_menu_is_empty_when_no_rulebook_ability_is_legal():
     assert runner.board_menu() == []
 
 
-def test_interrupt_menu_pairs_each_way_to_take_it_with_its_answer():
-    # The interrupted effect waits on the seat, so its ways to answer hang off the cards they spend,
-    # each already the response the card menu submits. A rulebook Interrupt reads as the datasheet
-    # prints it: the adjustment is the question that follows, not part of the entry.
-    game_runner = _runner(p1_hand=2)
-    hc, okura = game_runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
-    game_runner.session.game.pending = ChooseInterrupt(
-        seat=PlayerId.P1,
-        candidates=(f"{hc.id}@honor", okura.id),
-        description="P2 gains 2 honor",
-    )
+def test_interrupt_menu_pairs_each_way_to_take_it_with_its_action():
+    # The step's ways to answer hang off the cards they spend, each already the action the card
+    # menu takes. A rulebook Interrupt reads as the datasheet prints it: the adjustment is the
+    # question that follows, not part of the entry.
+    session = _fear_announced({DEFENDER: 1}, strategies=(("okura", "okura_is_released", DEFENDER),))
+    game_runner = GameRunner(session, DEFENDER)
 
-    assert game_runner.interrupt_menu(hc.id) == [
-        (rulebook_interrupt("honor").label, DecisionResponse((f"{hc.id}@honor",)))
+    assert game_runner.interrupt_menu("P2-courage0") == [
+        (rulebook_interrupt("courage").label, DiscardToInterrupt("P2-courage0", "courage"))
     ]
-    assert game_runner.interrupt_menu(okura.id) == [
-        (f"Play {okura.name}", DecisionResponse((okura.id,)))
+    assert game_runner.interrupt_menu("okura") == [
+        ("Interrupt: destroy what the action's Fear bows", PlayInterrupt("okura"))
     ]
+    assert game_runner.interrupt_menu("guard") == []
 
 
-def test_interrupt_menu_is_empty_when_no_interrupt_is_pending():
+def test_interrupt_menu_is_empty_when_no_interrupt_step_is_open():
     game_runner = _runner(p1_hand=1)
     card = game_runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0]
 

@@ -12,7 +12,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     InterruptingEffect,
-    InterruptWindow,
     Effect,
     Then,
 )
@@ -470,6 +469,25 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
     )
 
 
+@dataclass(frozen=True, slots=True)
+class HeldAction:
+    """An action's effects held at the Interrupt step, beneath the Interrupt round open over them.
+    :func:`~yasuki_core.engine.rules.turn.sequence.run_stack` leaves it in place while that round
+    is open, and once the round closes it resumes the action: the effects resolve as the
+    Interrupts taken make of them.
+
+    Attributes
+    ----------
+    effects : tuple of Effect
+        The action's effects, in the order they will resolve.
+    """
+
+    effects: tuple[Effect, ...]
+
+    def resume(self, game: GameState) -> None:
+        _advance(game, self.effects, [], None, [], interruptible=True)
+
+
 def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
     """Pop the cascade the answered choice paused and continue it with ``produced`` spliced in.
 
@@ -521,19 +539,28 @@ def resolve_effects(game: GameState, effects: list[Effect]) -> None:
 
 def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:
     """Apply ``effects`` as an action's own, which is what step E of the Action Sequence hands
-    over. The first effects an action hands over are held at its Interrupt window first (CR,
-    Action Sequence step D), and every effect resolves as the Interrupts taken there make of it.
-    What the action defers behind them through a ``Then`` opens no second window. The
-    derived-event cascade runs as in :func:`~.resolve_effects`.
+    over. The first effects an action hands over are held beneath an Interrupt round first (CR,
+    Action Sequence step D), when any seat holds an Interrupt to take, and every effect resolves
+    as the Interrupts taken there make of it. What the action defers behind them through a
+    ``Then`` opens no second round. The derived-event cascade runs as in
+    :func:`~.resolve_effects`.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
+    # Imported where it is used: the Interrupt step reads the hands and the round, and the module
+    # that does so imports this one.
+    from yasuki_core.engine.rules.interrupts import open_interrupt_window
+
     _refuse_mid_decision(game, "resolve_action_effects")
     if game.interrupts_offered:
         _advance(game, tuple(effects), [], None, [], interruptible=True)
         return
     game.interrupts_offered = True
-    _advance(game, (InterruptWindow(tuple(effects)),), [], None, [], interruptible=True)
+    held = HeldAction(tuple(effects))
+    game.stack.append(held)
+    if not open_interrupt_window(game):
+        game.stack.pop()
+        held.resume(game)
 
 
 def action_did(game: GameState, kind: type[GameEvent]) -> tuple[GameEvent, ...]:

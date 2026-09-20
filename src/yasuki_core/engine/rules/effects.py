@@ -148,65 +148,6 @@ class InterruptingEffect(Effect, ABC):
 
 
 @dataclass(frozen=True, slots=True)
-class InterruptWindow(InterruptingEffect):
-    """An action's effects held at the Interrupt step: before any of them resolves, each seat in
-    turn may take an Interrupt against what the action is about to do (CR, Action Sequence step
-    D; ShE datasheet, Interrupt).
-
-    :func:`~yasuki_core.engine.rules.triggers.resolve_action_effects` opens one over the effects
-    step E hands it, once per action. It pauses while
-    :func:`~yasuki_core.engine.rules.interrupts.interrupters` names a seat with something to take
-    against the forecast of those effects, and once every seat has passed it performs nothing and
-    hands the effects on as its follow-on, each then resolving with the modifications the window
-    collected applied to it. A pass holds until someone takes an Interrupt, which reopens the
-    window to every seat, as in any action round.
-
-    Attributes
-    ----------
-    effects : tuple of Effect
-        The action's effects, in the order they will resolve.
-    passed : frozenset of PlayerId, optional
-        The seats that have passed on the window. Default empty.
-    """
-
-    effects: tuple[Effect, ...]
-    passed: frozenset[PlayerId] = frozenset()
-
-    def describe(self) -> str:
-        return f"interrupt window over {len(self.effects)} effects"
-
-    def has_passed(self, seat: PlayerId) -> bool:
-        return seat in self.passed
-
-    def passed_by(self, seat: PlayerId) -> "InterruptWindow":
-        return replace(self, passed=self.passed | {seat})
-
-    def reopened(self) -> "InterruptWindow":
-        """This window with every pass cleared, as it comes back once a seat has taken an
-        Interrupt: the step is an action round, and a pass holds only until someone acts."""
-        return replace(self, passed=frozenset())
-
-    # Imported where they are used: the Interrupt step reads the hands and the round, and the
-    # module that does so imports this one.
-    def pauses(self, game: GameState) -> bool:
-        from yasuki_core.engine.rules.interrupts import interrupters
-
-        return bool(interrupters(game, self))
-
-    def request(self, game: GameState) -> DecisionRequest:
-        from yasuki_core.engine.rules.interrupts import interrupt_request
-
-        return interrupt_request(game, self)
-
-    def perform(self, game: GameState) -> list[GameEvent]:
-        """Nothing: the window is over, and the effects follow."""
-        return []
-
-    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
-        return self.effects
-
-
-@dataclass(frozen=True, slots=True)
 class Negated(Effect):
     """An effect an Interrupt negated: it resolves as nothing where ``effect`` would have.
 

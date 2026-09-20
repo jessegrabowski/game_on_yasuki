@@ -10,7 +10,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseBattlefield,
     ChooseDistribution,
-    ChooseInterrupt,
     ChooseInvestAmount,
     ChooseOption,
     ChoosePayment,
@@ -100,7 +99,6 @@ class Presenter:
             ChooseAmount
             | ChooseInvestAmount
             | ChooseOption
-            | ChooseInterrupt
             | Confirm
             | ChooseBattlefield
             | ChooseDebugSeat,
@@ -266,10 +264,6 @@ class Presenter:
             # battlefield, and the whole map goes over as the one answer the CR's simultaneous
             # assignment calls for.
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
-        if isinstance(pending, ChooseInterrupt):
-            # Taken from the card's own menu, the way an action is at any other timing, so the
-            # panel only offers to decline.
-            return pending.prompt(), [(pending.confirm_label, lambda: self.submit_answer(()), True)]
         if isinstance(pending, ChooseOption):
             # An outcome the card spells out rather than anything on the board: "gain or lose" or
             # "which player". It is read as a list of wordings and answered by picking one.
@@ -320,6 +314,10 @@ class Presenter:
             # A Response Step: say what is being answered, or the Pass button asks the seat to
             # decline something it was never told the name of.
             whose = f"Responses to {view.responding_to}"
+        elif view.interrupting is not None:
+            # An Interrupt step, the same way: the Interrupts themselves are taken from a card's
+            # own menu, and the panel offers Pass.
+            whose = f"Interrupts to {view.interrupting}"
         else:
             whose = turn_context(view)
         # Pass and Declare are buttons; a Recruit is invoked by clicking a holding on the board.
@@ -527,16 +525,11 @@ class Presenter:
                 self.refresh()
             self.window.popup_at_pointer(self._assignment_menu())
             return
-        if isinstance(runner.pending, ChooseInterrupt):
-            self.window.popup_at_pointer(
-                (label, lambda chosen=answer: self.submit_answer(chosen.choices))
-                for label, answer in runner.interrupt_menu(card_id)
-            )
-            return
         self._offer(
             runner.province_menu(card_id)
             + runner.hand_menu(card_id)
             + runner.ability_menu(card_id)
+            + runner.interrupt_menu(card_id)
             + runner.inheritance_menu(card_id)
             + runner.favor_menu(card_id)
         )

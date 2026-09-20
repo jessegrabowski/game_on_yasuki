@@ -19,9 +19,10 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.vocabulary.actions import (
-    ActivateAbility,
     Action,
+    ActivateAbility,
     Cycle,
+    DiscardToInterrupt,
     DynastyDiscard,
     Equip,
     Inheritance,
@@ -29,17 +30,16 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     KharmicRefill,
     Legacy,
     Lobby,
+    PlayInterrupt,
     PlayStrategy,
     Recruit,
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseInterrupt,
     ChooseLegacyCard,
     Confirm,
     DecisionRequest,
     DecisionResponse,
-    interrupt_choice,
 )
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -230,26 +230,19 @@ class GameRunner:
             if ability.key in offered
         ]
 
-    def interrupt_menu(self, card_id: str) -> list[tuple[str, DecisionResponse]]:
-        """The ways the pending Interrupt offers to take through ``card_id``, for its left-click
-        menu while the interrupted effect waits: a rulebook Interrupt worded as the datasheet
-        prints it, or the Strategy's own Interrupt. Empty for a card the offer does not name, and
-        whenever no Interrupt is pending."""
-        pending = self.pending
-        if not isinstance(pending, ChooseInterrupt):
-            return []
+    def interrupt_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The Interrupts the open Interrupt step offers the human through ``card_id``, for its
+        left-click menu: a rulebook Interrupt worded as the datasheet prints it, or the card's own.
+        Empty for a card the step offers nothing through, and whenever no step is open."""
         card = self.session.game.table.cards_by_id[card_id]
-        items: list[tuple[str, DecisionResponse]] = []
-        for token in pending.candidates:
-            candidate, key = interrupt_choice(token)
-            if candidate != card_id:
-                continue
-            if key is None:
+        items: list[tuple[str, Action]] = []
+        for action in self.legal_actions():
+            if isinstance(action, PlayInterrupt) and action.card_id == card_id:
                 interrupt = interrupt_for(card)
                 label = interrupt.label if interrupt is not None else f"Play {card.name}"
-            else:
-                label = rulebook_interrupt(key).label
-            items.append((label, DecisionResponse((token,))))
+                items.append((label, action))
+            elif isinstance(action, DiscardToInterrupt) and action.card_id == card_id:
+                items.append((rulebook_interrupt(action.key).label, action))
         return items
 
     def board_menu(self) -> list[tuple[str, Action]]:

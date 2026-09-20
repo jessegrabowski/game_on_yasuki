@@ -28,9 +28,10 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
     Pass,
+    PlayInterrupt,
     Recruit,
 )
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseInterrupt
+from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
@@ -275,9 +276,9 @@ def _dynasty_deck(session: EngineSession) -> list[str]:
 def test_aitso_reshuffles_herself_into_the_dynasty_deck_to_negate_the_destruction():
     with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
         session = _aitso_defending()
-        assert isinstance(session.game.pending, ChooseInterrupt)
+        assert session.game.round.kind is RoundKind.INTERRUPT
 
-        session.submit(PlayerId.P2, DecisionResponse(("aitso",)))
+        session.act(PlayerId.P2, PlayInterrupt("aitso"))
 
         game = session.game
         assert "guard" in {card.id for card in game.table.battlefield.cards}
@@ -288,9 +289,9 @@ def test_aitso_reshuffles_herself_into_the_dynasty_deck_to_negate_the_destructio
 def test_aitso_answers_the_destruction_a_ranged_attack_would_make():
     with probe_ability(RANGED_PROBE, RANGED_ABILITY):
         session = _aitso_defending(probe=RANGED_PROBE)
-        assert isinstance(session.game.pending, ChooseInterrupt)
+        assert session.game.round.kind is RoundKind.INTERRUPT
 
-        session.submit(PlayerId.P2, DecisionResponse(("aitso",)))
+        session.act(PlayerId.P2, PlayInterrupt("aitso"))
 
         assert "guard" in {card.id for card in session.game.table.battlefield.cards}
 
@@ -310,7 +311,7 @@ def test_aitso_is_not_offered_against_an_attack_that_cannot_reach():
     with probe_ability(RANGED_PROBE, WEAK_RANGED_ABILITY):
         session = _aitso_defending(probe=RANGED_PROBE)
 
-        assert session.game.pending is None
+        assert session.game.round.kind is not RoundKind.INTERRUPT
         assert "guard" in {card.id for card in session.game.table.battlefield.cards}
         assert _dynasty_deck(session) == []
 
@@ -319,7 +320,7 @@ def test_aitso_may_negate_her_own_destruction():
     with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
         session = _aitso_defending(target="aitso")
 
-        session.submit(PlayerId.P2, DecisionResponse(("aitso",)))
+        session.act(PlayerId.P2, PlayInterrupt("aitso"))
 
         assert _dynasty_deck(session) == ["aitso"]
         assert session.game.pending is None
@@ -329,7 +330,7 @@ def test_declining_aitso_lets_the_destruction_resolve():
     with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
         session = _aitso_defending()
 
-        session.submit(PlayerId.P2, DecisionResponse())
+        session.act(PlayerId.P2, Pass())
 
         in_play = {card.id for card in session.game.table.battlefield.cards}
         assert "guard" not in in_play and "aitso" in in_play
@@ -338,7 +339,7 @@ def test_declining_aitso_lets_the_destruction_resolve():
 def test_aitsos_interrupt_replays_to_the_same_board():
     with probe_ability(DESTROY_PROBE, DESTROY_ABILITY):
         session = _aitso_defending()
-        session.submit(PlayerId.P2, DecisionResponse(("aitso",)))
+        session.act(PlayerId.P2, PlayInterrupt("aitso"))
 
         rebuilt = replay(session.log)
 

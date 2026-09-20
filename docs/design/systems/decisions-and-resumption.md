@@ -89,9 +89,9 @@ back, so every question asked about those cards is committed the moment the look
 
 A request whose `reopens_on_cancel` is true backs out one decision instead of unwinding the
 action: the tape loses only the answer that raised it, and the question before it comes back on
-replay. That is the shape of every step an Interrupt from hand takes, the target question and the
-Strategy's own payment included, because the action being interrupted belongs to whoever
-announced it and a seat backing out of its Interrupt may not take that action off the tape.
+replay. An Interrupt is an action of its own on the tape, so backing out of any question it asks,
+which effect, its target, its adjustment or its payment, unwinds the Interrupt and leaves the
+interrupted action held beneath the step, where it belongs to whoever announced it.
 
 ## The unfinished work
 

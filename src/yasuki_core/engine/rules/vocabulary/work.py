@@ -18,7 +18,7 @@ class WorkItem(Protocol):
 
 class Modification(Protocol):
     """What an Interrupt makes of one of the action's effects, held on ``GameState.modifications``
-    from the Interrupt window until that effect comes up to resolve (CR, Interrupt Actions: an
+    from the Interrupt step until that effect comes up to resolve (CR, Interrupt Actions: an
     Interrupt "may modify the effects of the action it interrupts", and what it does "is delayed
     until those effects occur")."""
 
