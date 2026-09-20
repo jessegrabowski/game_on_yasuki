@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import remaining_look, top_of_deck
 from yasuki_core.engine.rules.effects import (
+    Bow,
     Arrange,
     Choose,
     EndLook,
@@ -1042,6 +1043,53 @@ def test_both_battle_segments_are_passed_from_the_prompt_box(a_battle):
     _run_the_opponent(presenter)
 
     assert session.game.attack.fought == frozenset({0})
+
+
+register_ability(
+    "presenter_lane_fighter",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle: bow him",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [Bow(target.id)],
+        hits_every_target=True,
+    ),
+)
+
+
+def test_a_left_click_on_a_lane_unit_outside_a_selection_opens_its_menu():
+    """The same click the board answers with the card's menu, so the two surfaces agree."""
+    state = TableState.empty_two_seat()
+    province_card(state, "p2-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "p1-prov0", seat=P1, index=0)
+    put_in_play(state, personality("hero", owner=P1, force=5, printed_id="presenter_lane_fighter"))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(GameRunner(session, P1)), window)
+    window.bind_to(presenter)
+    try:
+        presenter.present()
+        _press(presenter, "Declare an attack")
+        _send(presenter, window, ["hero"], 0)
+        _press(presenter, "Done assigning")
+        _run_the_opponent(presenter)
+        _press_lane(presenter, 0, "Fight here")
+        _run_the_opponent(presenter)
+        _press(presenter, "Pass")  # the Engage Segment, which a Battle ability is not offered in
+        _run_the_opponent(presenter)
+        assert session.game.attack.battle_segment is BattleSegment.COMBAT
+        assert not window.field.selecting
+        opened = []
+        window.popup_at_pointer = lambda entries: opened.append(list(entries))
+
+        presenter.on_lane_card_clicked("hero")
+
+        assert [label for label, _ in opened[0]] == ["Battle: bow him"]
+        assert window.field.selection == ()
+    finally:
+        window.root.destroy()
 
 
 def _lane_sequence(window) -> list[str]:

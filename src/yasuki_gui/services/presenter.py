@@ -535,9 +535,16 @@ class Presenter:
         )
 
     def on_lane_card_clicked(self, card_id: str) -> None:
-        """Pick or unpick a unit standing at a battlefield. The board and the lanes share one
-        selection, so picking here drops anything picked at home."""
+        """A left click on a unit standing at a battlefield does what one at home does: while the
+        board is selecting, pick or unpick the unit, and otherwise open the card's menu.
+
+        The board and the lanes share one selection, so picking here drops anything picked at
+        home.
+        """
         field = self.window.field
+        if not field.selecting:
+            self.on_card_activated(card_id)
+            return
         field.toggle_selection(field.unit_leader(card_id))
         self.refresh()
 
