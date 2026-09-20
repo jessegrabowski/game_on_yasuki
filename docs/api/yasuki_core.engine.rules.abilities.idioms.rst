@@ -10,8 +10,10 @@ yasuki_core.engine.rules.abilities.idioms
     ask_who_loses_honor
     ask_whose_honor_moves
     one_wealth
+    plays_clan
     plus_one_gp_this_turn
     register_edict
+    register_entry
     register_event_entry
 
 .. automodule:: yasuki_core.engine.rules.abilities.idioms
