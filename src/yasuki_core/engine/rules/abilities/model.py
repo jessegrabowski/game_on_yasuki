@@ -110,6 +110,10 @@ class Ability:
     targets : callable
         Maps ``(game, source_card)`` to the ids of the cards the ability may target, empty when
         none are legal, which also means the ability can't be offered.
+    targeting_message : str, optional
+        What the ability targets, worded as the card prints it: "your Courtier at any location".
+        The target prompt reads "Target your Courtier at any location for Inexplicable Challenge".
+        Default None, which prompts for a card by the card's name alone.
     effects : callable
         Maps ``(game, source_card, target_card)`` to the effects the ability emits against a
         target.
@@ -167,6 +171,7 @@ class Ability:
     repeatable: bool = False
     unstoppable: bool = False
     trait: bool = False
+    targeting_message: str | None = None
 
 
 def once_tag(ability: Ability) -> str:

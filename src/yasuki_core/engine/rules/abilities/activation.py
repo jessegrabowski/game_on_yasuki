@@ -53,12 +53,15 @@ class SelectAbilityTarget:
     ability_key: str | None = None
 
     def resume(self, game: GameState) -> None:
-        owner = game.table.cards_by_id[self.card_id].owner
+        source = game.table.cards_by_id[self.card_id]
+        ability = ability_for(game, source, self.ability_key)
         game.pending = ChooseAbilityTarget(
-            seat=owner,
+            seat=source.owner,
             candidates=self.candidates,
             source_card_id=self.card_id,
             ability_key=self.ability_key,
+            source_name=source.name,
+            targeting_message=ability.targeting_message if ability is not None else None,
         )
 
 
