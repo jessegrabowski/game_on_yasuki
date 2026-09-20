@@ -406,10 +406,15 @@ def play_interrupt(game: GameState, seat: PlayerId, card_id: str) -> None:
     """Take the Interrupt ``card_id`` prints against the held action. Where the forecast holds
     several effects it could answer, ask which first."""
     answered = _answerable(game, seat, card_id, None)
-    if len(answered) == 1:
+    if len(answered) == 1 or _answers_every(game, card_id):
         _play(game, seat, card_id, answered[0])
         return
     _ask_which(game, seat, card_id, None, answered)
+
+
+def _answers_every(game: GameState, card_id: str) -> bool:
+    interrupt = interrupt_for(game.table.cards_by_id[card_id])
+    return interrupt is not None and interrupt.answers_every
 
 
 def discard_to_interrupt(game: GameState, seat: PlayerId, card_id: str, key: str) -> None:
@@ -536,7 +541,8 @@ def _play(
             raise RuntimeError(f"{target_id} is no longer a target {card_id} can be taken against")
         target = game.table.cards_by_id[target_id]
         interruption = interrupt.interrupt(game, card, effect, target)
-    game.modifications.append(Replacement(effect, card.id, target_id))
+    bound = answered_by(game, card, interrupt, foreseen) if interrupt.answers_every else [effect]
+    game.modifications.extend(Replacement(each, card.id, target_id) for each in bound)
     if location is CardLocation.HAND:
         play_strategy_with(game, card, interruption.effects)
         return

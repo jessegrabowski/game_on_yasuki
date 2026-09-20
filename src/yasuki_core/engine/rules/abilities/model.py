@@ -76,6 +76,10 @@ class Interrupt[T: Effect]:
         Maps ``(game, source_card)`` to the effects paid to take an Interrupt from play, resolved
         before the Interrupt's own. A Strategy from hand pays its Gold Cost instead. Default
         ``no_cost``.
+    answers_every : bool, optional
+        Whether the Interrupt answers every effect of the action it could, at once, as "negate
+        the action's effects" does, instead of one the seat picks. ``interrupt`` is then asked of
+        each effect as it comes up to resolve, and its own ``effects`` resolve once. Default False.
     """
 
     label: str
@@ -85,6 +89,7 @@ class Interrupt[T: Effect]:
     located_at: tuple[CardLocation, ...] = (CardLocation.HAND,)
     cost: Cost = no_cost
     targets: Callable[[GameState, L5RCard, T], tuple[str, ...]] | None = None
+    answers_every: bool = False
 
 
 @dataclass(frozen=True, slots=True)

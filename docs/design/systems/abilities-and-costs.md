@@ -128,7 +128,9 @@ resolve, which is the CR's "delayed until those effects occur": Okura's destroy 
 it modifies, and a Courage discard adjusts the Fear as it resolves. A card that reads "negate"
 returns {class}`~.Negated` around the effect it answers, which resolves as nothing where the
 effect would have, and the forecast then shows nothing behind it. When the forecast holds several
-effects a card could answer, {class}`~.ChooseInterruptEffect` asks which. Any of the action's own effects can be answered, and only those: the step is over
+effects a card could answer, {class}`~.ChooseInterruptEffect` asks which, and a card that answers
+the action as a whole, "negate the action's effects", sets `answers_every` and binds to all of
+them at once. Any of the action's own effects can be answered, and only those: the step is over
 what step E hands to `resolve_action_effects`, never a cost, a trait's effects or a rulebook
 procedure's, and what a choice resolver produces later is not foreseeable and is not offered.
 

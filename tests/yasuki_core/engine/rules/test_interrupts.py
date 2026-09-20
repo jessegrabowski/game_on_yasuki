@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
     Discard,
+    Effect,
     Fear,
     GainHonor,
     Negated,
@@ -156,6 +157,17 @@ register_ability(
             GainHonor(source.owner, 1),
             GainHonor(source.owner, 1 if game.table.seats[source.owner].honor == 0 else 5),
         ],
+    ),
+)
+
+
+register_interrupt(
+    "negate_action_probe",
+    Interrupt(
+        label="Interrupt: negate the action's effects",
+        answers=Effect,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+        answers_every=True,
     ),
 )
 
@@ -1146,6 +1158,20 @@ def test_a_card_interrupt_answers_the_effect_as_earlier_interrupts_left_it():
 
 
 # --- the step is a round ---
+
+
+def test_an_interrupt_answering_every_effect_binds_to_all_of_them():
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+    _strategy(game.table, "P2-negate", "negate_action_probe", P2)
+    resolve_action_effects(game, [GainHonor(P1, 2), Bow(farm.id)])
+
+    action_sequence.perform(game, PlayInterrupt("P2-negate"))
+    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
+    sequence.run_stack(game)
+
+    assert game.pending is None and game.round.kind is not RoundKind.INTERRUPT
+    assert game.table.seats[P1].honor == 0 and not farm.bowed
 
 
 def test_an_interrupt_on_an_event_in_a_province_is_offered_and_taken_from_there():
