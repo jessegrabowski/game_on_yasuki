@@ -152,8 +152,8 @@ def forecast(game: GameState, effects: tuple[Effect, ...]) -> tuple[Effect, ...]
     it: the effects in order, a ``Then``'s contents where it stands, an ability's effects behind
     the :class:`~.ResolveAbility` that targets them, and an attack's outcome behind the attack
     when it reaches on the board as it stands. An effect that is nothing to interrupt, an Honor
-    change of zero, is left out. What a choice resolver produces later is not foreseeable and is
-    not offered."""
+    change of zero or a question the action asks, is left out, and what a choice resolver
+    produces later is not foreseeable and is not offered."""
     seen: list[Effect] = []
     for effect in effects:
         if isinstance(effect, Then):

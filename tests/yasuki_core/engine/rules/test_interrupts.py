@@ -1290,3 +1290,20 @@ def test_the_step_closes_into_a_decision_the_held_action_asks():
     assert game.table.seats[P1].honor == 1
     action_sequence.submit(game, DecisionResponse(("either",)))
     assert game.pending is None and game.table.seats[P1].honor == 2
+
+
+# --- the step under the rules of battle, and what a cancel unwinds ---
+
+
+def test_a_question_the_action_asks_is_not_offered_at_the_step():
+    # A choice is nothing to interrupt, and what its answer produces is not known until it is
+    # answered, so an action that only asks opens no step at all.
+    game = _inside_an_action()
+    _strategy(game.table, "P2-neg", "negate_action_probe", P2)
+
+    resolve_action_effects(
+        game, [Choose(P1, ("either", "or"), 1, 1, "interrupt_probe_choice", None)]
+    )
+
+    assert game.round.kind is not RoundKind.INTERRUPT
+    assert isinstance(game.pending, ChooseCards)

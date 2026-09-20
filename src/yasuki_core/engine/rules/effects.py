@@ -134,6 +134,11 @@ class InterruptingEffect(Effect, ABC):
     def request(self, game: GameState) -> DecisionRequest:
         """The decision to put to the seat."""
 
+    def is_interruptible(self) -> bool:
+        """False: a question the action asks is nothing to interrupt, and what its answer produces
+        is not known until it is answered, so neither is offered at the Interrupt step."""
+        return False
+
     def pauses(self, game: GameState) -> bool:
         """Whether the cascade stops here. True unless a subclass finds nobody to answer, in which
         case the walker performs the effect instead of asking."""
