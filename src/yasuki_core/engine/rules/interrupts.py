@@ -454,7 +454,7 @@ def _ask_which(
 ) -> None:
     game.pending = ChooseInterruptEffect(
         seat=seat,
-        candidates=tuple(effect.narrate(game) for effect in answered),
+        candidates=tuple(as_modified(game, effect).narrate(game) for effect in answered),
         question="Which effect?",
         resolver=INTERRUPT_EFFECT_QUESTION,
         source_id=card_id,
@@ -506,7 +506,9 @@ def apply_interrupt_effect(
     is no longer one the seat can take the Interrupt with."""
     key = request.resolver_context[0] or None
     answered = _answerable(game, request.seat, request.source_id, key)
-    effect = _named(answered, lambda effect: effect.narrate(game) == response.choices[0])
+    effect = _named(
+        answered, lambda effect: as_modified(game, effect).narrate(game) == response.choices[0]
+    )
     if key is None:
         _play(game, request.seat, request.source_id, effect)
     else:
@@ -592,7 +594,7 @@ def _ask_adjustment(
     game.pending = ChooseInterruptAdjustment(
         seat=seat,
         candidates=tuple(wording for wording, _ in taken.adjustments),
-        question=f"{effect.narrate(game)}. {taken.question}",
+        question=f"{as_modified(game, effect).narrate(game)}. {taken.question}",
         resolver=INTERRUPT_ADJUSTMENT_QUESTION,
         source_id=card_id,
         resolver_context=(key, effect.describe()),

@@ -1456,3 +1456,34 @@ def test_cancelling_the_actions_own_question_is_refused_once_another_seat_interr
 
     assert not session.abort(P1)
     assert isinstance(session.game.pending, ChooseCards)
+
+
+def test_the_adjustment_question_reads_the_effect_as_it_stands():
+    session = _fear_announced({DEFENDER: 2})
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_UP)
+
+    session.act(DEFENDER, DiscardToInterrupt("P2-courage1", "courage"))
+
+    question = session.game.pending
+    assert isinstance(question, ChooseInterruptAdjustment)
+    assert question.question == "Fear 4 on guard. Give it +2 or -2 strength?"
+
+
+def test_the_which_effect_question_reads_each_effect_as_it_stands_and_takes_the_answer():
+    game = _inside_an_action()
+    left = put_in_play(game, personality("P1-left", force=2))
+    right = put_in_play(game, personality("P1-right", force=2))
+    _courage_card(game.table, "P2-courage0", P2)
+    _strategy(game.table, "okura", "okura_is_released", P2)
+    resolve_action_effects(game, [Fear(FEAR, left.id, P2), Fear(FEAR, right.id, P2)])
+    action_sequence.perform(game, DiscardToInterrupt("P2-courage0", "courage"))
+    action_sequence.submit(game, DecisionResponse(("Fear 2 on P1-left",)))
+    action_sequence.submit(game, DecisionResponse(("+2 strength",)))
+
+    action_sequence.perform(game, PlayInterrupt("okura"))
+
+    which = game.pending
+    assert isinstance(which, ChooseInterruptEffect)
+    assert which.candidates == ("Fear 4 on P1-left", "Fear 2 on P1-right")
+    action_sequence.submit(game, DecisionResponse(("Fear 4 on P1-left",)))
+    assert isinstance(game.pending, ChoosePayment)
