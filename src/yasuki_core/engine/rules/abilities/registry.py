@@ -37,7 +37,7 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 
 _ABILITIES: dict[str, tuple[Ability, ...]] = {}
 _INVEST: dict[str, InvestAbility] = {}
-_INTERRUPTS: dict[str, Interrupt] = {}
+_INTERRUPTS: dict[str, tuple[Interrupt, ...]] = {}
 
 
 @dataclass(frozen=True, slots=True)
@@ -168,18 +168,18 @@ GRANTED_ABILITIES: HandlerRegistry[AbilityFactory] = HandlerRegistry(
 granted_ability = GRANTED_ABILITIES.make_decorator()
 
 
-def in_force(ability: Ability, *, ruleset_name: str | None = None) -> bool:
-    """Whether ``ability`` is read under one ruleset: every arc reads an ability naming none.
+def in_force(registered: Ability | Interrupt, *, ruleset_name: str | None = None) -> bool:
+    """Whether ``registered`` is read under one ruleset: every arc reads one naming none.
 
     Parameters
     ----------
-    ability : :class:`~yasuki_core.engine.rules.abilities.model.Ability`
-        The registered ability.
+    registered : :class:`~yasuki_core.engine.rules.abilities.model.Ability` or :class:`~yasuki_core.engine.rules.abilities.model.Interrupt`
+        The registered ability or Interrupt.
     ruleset_name : str, optional
         The name of the ruleset asked about. Default the active ruleset's.
     """
     name = ruleset.ACTIVE.name if ruleset_name is None else ruleset_name
-    return ability.ruleset is None or ability.ruleset == name
+    return registered.ruleset is None or registered.ruleset == name
 
 
 def ability_registrations(*, ruleset_name: str | None = None) -> dict[str, tuple[Ability, ...]]:
@@ -197,7 +197,7 @@ def ability_registrations(*, ruleset_name: str | None = None) -> dict[str, tuple
     return {printed_id: held for printed_id, held in in_force_by_id.items() if held}
 
 
-def _read_together(one: Ability, other: Ability) -> bool:
+def _read_together(one: Ability | Interrupt, other: Ability | Interrupt) -> bool:
     """Whether some ruleset reads both abilities, which is when their keys have to differ."""
     return None in (one.ruleset, other.ruleset) or one.ruleset == other.ruleset
 
@@ -234,15 +234,18 @@ def register_invest(printed_id: str, value: InvestAbility) -> None:
 
 
 def register_interrupt(printed_id: str, value: Interrupt) -> None:
-    """Register ``value`` as ``printed_id``'s Interrupt."""
-    if printed_id in _INTERRUPTS:
+    """Register ``value`` as ``printed_id``'s Interrupt. Raise ValueError if the card already has
+    one read under the same ruleset."""
+    registered = _INTERRUPTS.get(printed_id, ())
+    if any(_read_together(held, value) for held in registered):
         raise ValueError(f"{printed_id} already has an interrupt")
-    _INTERRUPTS[printed_id] = value
+    _INTERRUPTS[printed_id] = (*registered, value)
 
 
 def interrupt_for(card: L5RCard) -> Interrupt | None:
-    """The Interrupt registered for ``card``'s printed id, or None."""
-    return _INTERRUPTS.get(card.printed_id)
+    """The Interrupt registered for ``card``'s printed id and in force under the active ruleset,
+    or None."""
+    return next((held for held in _INTERRUPTS.get(card.printed_id, ()) if in_force(held)), None)
 
 
 def invest_amounts(game: GameState, card: L5RCard) -> tuple[int, ...] | None:
