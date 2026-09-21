@@ -1,6 +1,6 @@
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.board.queries import ATTACK_TARGET, attack_targets
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Effect, GainHonor, PayGold, RangedAttack
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
@@ -39,6 +39,7 @@ register_ability(
         label=f"Battle, {VASSAL_GOLD} Gold: Ranged {VASSAL_RANGED} Attack",
         cost=_questionable_vassal_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_questionable_vassal_effects,
     ),
 )

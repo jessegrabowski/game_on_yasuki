@@ -1,7 +1,7 @@
 from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.board.queries import ATTACK_TARGET, attack_targets
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Ask, DelayedEffect, DrawCard, Effect, RangedAttack
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
@@ -59,6 +59,7 @@ register_ability(
         label=f"Battle, Bow: Ranged {SPEARMEN_RANGED} Attack",
         cost=bow_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_ashigaru_spearmen_effects,
     ),
 )

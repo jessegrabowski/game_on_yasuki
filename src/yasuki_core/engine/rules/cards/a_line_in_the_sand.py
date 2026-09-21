@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_recruit_timing,
 )
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     attack_targets,
     has_keyword,
     owned_personalities,
@@ -81,6 +82,7 @@ register_ability(
         label="Earth Open: Recruit a target Fortification in your discard pile and give its Province a +1 strength Wall token",
         cost=bow_cost,
         targets=_agasha_beiru_targets,
+        targeting_message="a Fortification in your discard pile",
         effects=_agasha_beiru_effects,
     ),
 )
@@ -146,6 +148,7 @@ register_ability(
         "deck. Put the rest back in any order. Draw a card.",
         cost=_beset_from_all_sides_cost,
         targets=_beset_from_all_sides_targets,
+        targeting_message="your unbowed Courtier",
         effects=_beset_from_all_sides_effects,
         located_at=(CardLocation.HAND,),
     ),
@@ -194,6 +197,7 @@ register_ability(
         label=f"Battle: Ranged {KHAN_RANGED} Attack",
         cost=no_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_legion_of_the_khan_effects,
     ),
 )

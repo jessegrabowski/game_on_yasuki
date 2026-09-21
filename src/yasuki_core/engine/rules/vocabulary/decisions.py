@@ -375,13 +375,20 @@ class ChooseAbilityTarget(DecisionRequest):
     ability_key : str, optional
         Names the ability among the several the card prints, so the one announced is the one
         that resolves. Default None, the card's only ability.
+    source_name : str, optional
+        The card's name, for the prompt. Default empty, which leaves the card unnamed.
+    targeting_message : str, optional
+        What the ability targets, as its card words it. Default None, which asks for a card.
     """
 
     source_card_id: str
     ability_key: str | None = None
+    source_name: str = ""
+    targeting_message: str | None = None
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return "Choose a target for the ability"
+        asked = f"Target {self.targeting_message or 'a card'}"
+        return f"{asked} for {self.source_name}" if self.source_name else asked
 
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)

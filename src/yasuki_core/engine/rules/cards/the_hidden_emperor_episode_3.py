@@ -50,6 +50,7 @@ register_ability(
         "of your Fate deck. Put one in your hand. Shuffle the deck.",
         cost=no_cost,
         targets=_banish_all_shadows_targets,
+        targeting_message="your unbowed Monk or Shugenja",
         effects=_banish_all_shadows_effects,
         located_at=(CardLocation.HAND,),
     ),

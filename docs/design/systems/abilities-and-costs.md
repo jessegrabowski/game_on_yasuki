@@ -64,6 +64,9 @@ Personality's bow is consulted at the moment of payment.
 ## The optional fields
 
 `key` names an ability among several its card prints, so an action can say which one it takes.
+`targeting_message` is what the ability targets, worded as the card prints it, which the target
+prompt reads:
+"Target your Courtier at any location for Inexplicable Challenge".
 `tireless` lets an ability be used while its card is bowed. `located_at` says where the card must
 be, defaulting to the battlefield. `battle_designators` and `targets_any_location` govern what a
 battle ability can reach, and [Adding a Card](../../contributing/adding_a_card.md) explains both

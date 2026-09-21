@@ -93,6 +93,7 @@ register_ability(
         f"Ranged {KAEDE_RANGED} Attack",
         cost=no_cost,
         targets=_daidoji_kaede_opposition_targets,
+        targeting_message="a Personality opposing Kaede",
         effects=_daidoji_kaede_opposition_effects,
     ),
 )
@@ -158,6 +159,7 @@ register_ability(
         label="Bow: give a Farm +2 Gold Production",
         cost=bow_cost,
         targets=_millet_farm_targets,
+        targeting_message="your Farm",
         effects=_millet_farm_effects,
     ),
 )
@@ -244,6 +246,7 @@ register_ability(
         label="Open: Reshuffle a Naga Follower in your discard pile to create a 1F Naga Follower and attach it to your target Commander",
         cost=no_cost,
         targets=_tarkasha_targets,
+        targeting_message="your Commander",
         effects=_tarkasha_effects,
     ),
 )

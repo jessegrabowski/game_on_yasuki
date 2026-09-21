@@ -76,6 +76,7 @@ register_ability(
         label="Open: Destroy your unbowed Personality to create Oni Followers equal to his Chi",
         cost=no_cost,
         targets=_suiteiru_no_oni_targets,
+        targeting_message="your unbowed Personality",
         effects=_suiteiru_no_oni_effects,
     ),
 )

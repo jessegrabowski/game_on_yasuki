@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
+    ChooseAbilityTarget,
     Confirm,
     DecisionRequest,
     ChooseCards,
@@ -150,6 +151,16 @@ def test_every_decision_states_its_own_prompt():
         if getattr(cls.prompt, "__isabstractmethod__", False)
     ]
     assert abstract == []
+
+
+def test_the_target_prompt_names_the_condition_and_the_card():
+    worded = ChooseAbilityTarget(
+        PlayerId.P1, ("a",), "c", source_name="Banish all Shadows", targeting_message="your Monk"
+    )
+    unworded = ChooseAbilityTarget(PlayerId.P1, ("a",), "c", source_name="Millet Farm")
+
+    assert worded.prompt() == "Target your Monk for Banish all Shadows"
+    assert unworded.prompt() == "Target a card for Millet Farm"
 
 
 def test_payment_prompt_counts_down_as_producers_are_picked():

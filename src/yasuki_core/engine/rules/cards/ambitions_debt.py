@@ -42,6 +42,7 @@ register_ability(
         label="Battle/Open: A target Personality has a minimum Chi of 1. Give him -2F/-2C",
         cost=no_cost,
         targets=_uncertainty_targets,
+        targeting_message="a Personality",
         effects=_uncertainty_effects,
         located_at=(CardLocation.HAND,),
     ),

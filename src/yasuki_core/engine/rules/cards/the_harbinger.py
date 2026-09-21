@@ -78,6 +78,7 @@ register_ability(
         "bottom of your deck in any order.",
         cost=no_cost,
         targets=_banish_all_doubt_targets,
+        targeting_message="your performing unbowed Tactician",
         effects=_banish_all_doubt_effects,
         located_at=(CardLocation.HAND,),
     ),

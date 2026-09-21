@@ -52,6 +52,7 @@ register_ability(
         label="Battle: move a target unit home and destroy one of its attachments",
         cost=no_cost,
         targets=_rout_targets,
+        targeting_message="a unit",
         effects=_rout_effects,
         located_at=(CardLocation.HAND,),
     ),

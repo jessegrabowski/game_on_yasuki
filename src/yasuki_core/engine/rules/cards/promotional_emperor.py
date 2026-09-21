@@ -43,6 +43,7 @@ register_ability(
         label=f"Open: Pay {ASHIGARU_COST} gold to Equip a 1F Ashigaru Follower to a Personality",
         cost=_colonial_farm_cost,
         targets=_colonial_farm_targets,
+        targeting_message="your Personality",
         effects=_colonial_farm_effects,
     ),
 )

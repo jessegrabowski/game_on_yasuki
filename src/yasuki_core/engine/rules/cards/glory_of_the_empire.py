@@ -86,6 +86,7 @@ register_ability(
         f"without attachments and move a target player's Honor by {CHALLENGE_HONOR}",
         cost=no_cost,
         targets=_inexplicable_challenge_targets,
+        targeting_message="your Courtier at any location",
         effects=_inexplicable_challenge_effects,
         located_at=(CardLocation.HAND,),
         targets_any_location=True,

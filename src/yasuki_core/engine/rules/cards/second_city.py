@@ -77,6 +77,7 @@ register_ability(
         label="Political Open, bow: dishonor a target Personality",
         cost=bow_cost,
         targets=_slanderer_targets,
+        targeting_message="a Personality",
         effects=_slanderer_effects,
     ),
 )

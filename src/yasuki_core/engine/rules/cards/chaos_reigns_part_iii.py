@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     attack_targets,
     owned_holdings,
     personalities_in_play,
@@ -126,6 +127,7 @@ register_ability(
         label="Open: Give a target Human Personality Shadowlands",
         cost=no_cost,
         targets=_chuda_jomei_targets,
+        targeting_message="a Human Personality",
         effects=_chuda_jomei_effects,
     ),
 )
@@ -249,6 +251,7 @@ register_ability(
         label=f"Battle: Melee {MAYA_MELEE} Attack",
         cost=no_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_doji_maya_experienced_effects,
     ),
 )
@@ -343,6 +346,7 @@ register_ability(
         "or Teru gets +2F",
         cost=no_cost,
         targets=_doji_teru_targets,
+        targeting_message="another player's dishonorable Personality",
         effects=_doji_teru_effects,
     ),
 )
@@ -386,6 +390,7 @@ register_ability(
         label="Open: dishonor a target bowed Personality",
         cost=no_cost,
         targets=_hungry_moon_dishonor_targets,
+        targeting_message="a bowed Personality",
         effects=_hungry_moon_dishonor_effects,
         located_at=(CardLocation.HAND,),
         key="dishonor",
@@ -399,6 +404,7 @@ register_ability(
         label="Open: destroy a target Holding's Wealth tokens, and a player loses 3 Honor",
         cost=no_cost,
         targets=_hungry_moon_wealth_targets,
+        targeting_message="a Holding with Wealth tokens",
         effects=_hungry_moon_wealth_effects,
         located_at=(CardLocation.HAND,),
         key="wealth",
@@ -448,6 +454,7 @@ register_ability(
         label="Open: Bow to create a 1F Undead Follower and attach it to your target Personality",
         cost=bow_cost,
         targets=_kengun_grounds_targets,
+        targeting_message="your Personality",
         effects=_kengun_grounds_effects,
     ),
 )
@@ -512,6 +519,7 @@ register_ability(
         label=f"Battle: Melee {IKARICHI_MELEE} Attack",
         cost=no_cost,
         targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
         effects=_moto_ikarichi_bloodseeker_effects,
     ),
 )

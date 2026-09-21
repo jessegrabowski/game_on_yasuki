@@ -181,6 +181,7 @@ register_ability(
         label="Battle: Move a target enemy Personality home",
         cost=no_cost,
         targets=_honor_your_oaths_targets,
+        targeting_message="an enemy Personality",
         effects=_honor_your_oaths_effects,
         located_at=(CardLocation.HAND,),
     ),

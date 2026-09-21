@@ -73,6 +73,7 @@ register_ability(
         "attach it to them",
         cost=no_cost,
         targets=_refugees_targets,
+        targeting_message="a Personality without Followers",
         effects=_refugees_effects,
         located_at=(CardLocation.HAND,),
         battle_designators=frozenset({BattleDesignator.ABSENT}),
