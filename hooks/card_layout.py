@@ -53,6 +53,7 @@ _CALLS = {
     "register_ability",
     "register_entry",
     "register_event_entry",
+    "register_ring",
     "register_interrupt",
     "register_invest",
     "register_may_not_lobby",

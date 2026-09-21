@@ -1,14 +1,16 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.idioms import register_entry
+from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.idioms import PITCH, register_entry, register_ring
+from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import abilities_for
 from yasuki_core.engine.rules.effects import GainHonor
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint
+from yasuki_core.game_pieces.prints import ActionPrint, RingPrint
 
 from tests.yasuki_core.engine.builders import put_in_play, register, stronghold, two_seat_game
 
@@ -27,6 +29,18 @@ register_entry(
     extra_effects=lambda game, source: [GainHonor(source.owner, 2)],
 )
 register_entry("entry_probe_labeled", label="Custom")
+
+RING_ABILITY = Ability(
+    timings=(ActionTiming.OPEN,),
+    label="Open: bow: gain 1 Honor",
+    cost=bow_cost,
+    targets=itself,
+    effects=lambda game, source, target: [GainHonor(source.owner, 1)],
+    hits_every_target=True,
+    key="gain",
+)
+register_ring("ring_probe", ability=RING_ABILITY, pitch=True)
+register_ring("ring_probe_unpitched", ability=RING_ABILITY, pitch=False)
 
 
 def _probe(
@@ -53,8 +67,8 @@ def _game(held: L5RCard, *in_play: L5RCard) -> EngineSession:
     return EngineSession.start(state, P1)
 
 
-def _enter(session: EngineSession, card_id: str) -> None:
-    session.act(P1, PlayStrategy(card_id))
+def _enter(session: EngineSession, card_id: str, key: str | None = None) -> None:
+    session.act(P1, PlayStrategy(card_id, key))
     while session.game.pending is not None:
         session.submit(P1, DecisionResponse(()))
 
@@ -123,3 +137,41 @@ def test_the_label_names_the_designators_and_the_kind_cleared_unless_given():
         "Open: Put this Probe into play",
         "Custom",
     ]
+
+
+def _ring(card_id: str, printed_id: str) -> L5RCard:
+    return L5RCard.of(
+        RingPrint, id=card_id, name=printed_id, printed_id=printed_id, side=Side.FATE, owner=P1
+    )
+
+
+def test_a_rings_ability_in_play_bows_it():
+    session = _game(_probe("held", "entry_probe"), _ring("ring", "ring_probe"))
+
+    session.act(P1, ActivateAbility("ring", "gain"))
+    while session.game.pending is not None:
+        session.submit(P1, DecisionResponse(()))
+
+    assert session.game.table.cards_by_id["ring"].bowed
+    assert session.game.table.seats[P1].honor == 1
+
+
+def test_a_pitched_ring_resolves_from_hand_and_is_discarded():
+    session = _game(_ring("ring", "ring_probe"))
+    assert PlayStrategy("ring", PITCH) in session.legal_actions(P1)
+
+    _enter(session, "ring", PITCH)
+
+    assert "ring" in _discarded(session, P1)
+    assert "ring" not in _in_play(session)
+    assert session.game.table.seats[P1].honor == 1
+
+
+def test_a_ring_without_a_pitch_cannot_be_played_from_hand():
+    session = _game(_ring("ring", "ring_probe_unpitched"))
+
+    assert not any(
+        action.card_id == "ring"
+        for action in session.legal_actions(P1)
+        if isinstance(action, PlayStrategy)
+    )

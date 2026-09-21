@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from dataclasses import replace
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.players import PlayerId
@@ -21,6 +22,9 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
+
+# The key of the ability a Ring is discarded from hand to use.
+PITCH = "pitch"
 
 
 def plays_clan(clan: str) -> Callable[[GameState, L5RCard], bool]:
@@ -113,6 +117,43 @@ def register_entry(
             keywords=ability_keywords,
         ),
     )
+
+
+def register_ring(
+    printed_id: str, *, ability: Ability, pitch: bool, ruleset: str | None = None
+) -> None:
+    """Register a Ring's printed ability, and the cast that discards the Ring from hand to use it.
+
+    A Ring's text may let its holder discard it from hand for an effect, normally to use the Ring's
+    ability without cost (CR, Ring). That cast is the same ability again, taken from hand with
+    nothing to pay, and step F discards the card because it is still in hand.
+
+    Parameters
+    ----------
+    printed_id : str
+        The Ring's printed id.
+    ability : :class:`~yasuki_core.engine.rules.abilities.model.Ability`
+        The ability as printed on the Ring in play. It needs a ``key`` when ``pitch`` is set,
+        since the cast is a second ability on the card.
+    pitch : bool
+        Whether the Ring may be discarded from hand to use ``ability``.
+    ruleset : str, optional
+        The name of the one ruleset both registrations are in force under, for a Ring whose text
+        differs between arcs. Default None, for a text every arc reads.
+    """
+    register_ability(printed_id, replace(ability, ruleset=ruleset))
+    if pitch:
+        register_ability(
+            printed_id,
+            replace(
+                ability,
+                key=PITCH,
+                label=f"Discard from hand: {ability.label}",
+                cost=no_cost,
+                located_at=(CardLocation.HAND,),
+                ruleset=ruleset,
+            ),
+        )
 
 
 def register_event_entry(
