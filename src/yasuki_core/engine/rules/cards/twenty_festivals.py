@@ -95,6 +95,8 @@ def _the_unassailable_fortress_of_the_crab_effects(
     fewer units than the opposing army." A unit is a Personality with his attachments (CR, Unit),
     so the armies are compared by Personalities."""
     attack = game.attack
+    if attack is None or attack.current is None:
+        return [Straighten(target.id)]
     enemy = attack.attacker if source.owner is attack.defender else attack.defender
     own_army = units_at(game, attack.current, source.owner)
     enemy_army = units_at(game, attack.current, enemy)
