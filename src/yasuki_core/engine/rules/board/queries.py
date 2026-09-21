@@ -9,7 +9,12 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import SINCERITY
-from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
+    HoldingPrint,
+    PersonalityPrint,
+    RingPrint,
+)
 
 
 def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Zone]]:
@@ -120,6 +125,15 @@ def personalities_in_play(game: GameState) -> tuple[L5RCard, ...]:
     Personality" with no side attached to it."""
     return tuple(
         card for card in game.table.battlefield.cards if isinstance(card.printed, PersonalityPrint)
+    )
+
+
+def rings_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
+    """The Rings ``seat`` has in play."""
+    return tuple(
+        card
+        for card in game.table.battlefield.cards
+        if isinstance(card.printed, RingPrint) and card.owner is seat
     )
 
 

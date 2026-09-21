@@ -22,6 +22,7 @@ yasuki_core.engine.rules.board.queries
     province_key_of
     province_zones
     remaining_look
+    rings_in_play
     sincerity_seed_targets
     top_of_deck
     units_at
