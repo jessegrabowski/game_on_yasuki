@@ -27,7 +27,8 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.action_record import action_keywords
+from yasuki_core.engine.rules.action_record import action_keywords, action_round
+from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.queries import (
@@ -251,8 +252,8 @@ register_ability(
 
 # --- The Dark Capital of the Spider ---
 
-# "You lose 1 Honor less from your cards" is not modeled: nothing reads how much Honor a card's
-# effect costs its own controller. The Battle ability is.
+# "You lose 1 Honor less from your cards" (2 on the back) is not modeled: nothing reads how much
+# Honor a card's effect costs its own controller. The Battle ability is.
 
 DARK_CAPITAL_FEAR = "the_dark_capital_of_the_spider"
 
@@ -297,6 +298,38 @@ register_ability(
         cost=no_cost,
         targets=_the_dark_capital_of_the_spider_targets,
         effects=_the_dark_capital_of_the_spider_effects,
+        tireless=True,
+    ),
+)
+
+
+# --- The Dark Capital of the Spider (back) ---
+
+
+def _the_dark_capital_of_the_spider__back_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "If they are yours and this is a Battle, Fear equal to their Force. Otherwise, take an
+    additional action." Taken as an Open, even on the controller's own Personality, it is the
+    additional action."""
+    in_battle = ActionTiming.BATTLE in permitted_timings_in(game, action_round(game), source.owner)
+    if in_battle:
+        return _the_dark_capital_of_the_spider_effects(game, source, target)
+    return [
+        GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN),
+        AdditionalAction(source.owner),
+    ]
+
+
+register_ability(
+    "the_dark_capital_of_the_spider__back",
+    Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        label="Tireless Battle/Open: Give a target Personality Shadowlands. If they are yours and "
+        "this is a Battle, Fear equal to their Force. Otherwise, take an additional action.",
+        cost=no_cost,
+        targets=_the_dark_capital_of_the_spider_targets,
+        effects=_the_dark_capital_of_the_spider__back_effects,
         tireless=True,
     ),
 )

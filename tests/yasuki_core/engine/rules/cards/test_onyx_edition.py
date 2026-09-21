@@ -594,11 +594,13 @@ def test_the_castle_back_gains_the_honor_without_a_second_target():
     assert game.table.seats[P1].honor == 1
 
 
-def _dark_capital_in_combat() -> EngineSession:
+def _dark_capital_in_combat(*, flipped: bool = False) -> EngineSession:
     """P1's raider (3F) faces P2's guard (2F) in the Combat Segment, with the Dark Capital as P1's
     Stronghold."""
     cards = [
-        flip_stronghold(DARK_CAPITAL, card_id="capital", gold_production=4, clan="Spider"),
+        flip_stronghold(
+            DARK_CAPITAL, card_id="capital", flipped=flipped, gold_production=4, clan="Spider"
+        ),
         personality("raider", owner=P1, force=3),
         personality("guard", owner=P2, force=2),
     ]
@@ -644,6 +646,42 @@ def test_a_pass_at_the_additional_opportunity_does_not_count_toward_closing_the_
     session.act(P1, Pass())
 
     assert session.game.round.priority is P2 and session.game.round.passes == 1
+
+
+def test_the_capital_back_fears_as_the_front_does_in_a_battle():
+    session = _dark_capital_in_combat(flipped=True)
+
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.table.cards_by_id["guard"].bowed
+    assert game.round.priority is P2
+
+
+def test_the_capital_back_takes_an_additional_action_on_its_own_personality_as_an_open():
+    game = two_seat_game()
+    put_in_play(game, flip_stronghold(DARK_CAPITAL, card_id="capital", flipped=True))
+    put_in_play(game, personality("raider", force=3))
+    session = EngineSession.start(game.table, P1)
+
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+
+    game = session.game
+    assert game.pending is None
+    assert has_keyword(game, game.table.cards_by_id["raider"], keywords.SHADOWLANDS)
+    assert game.round.priority is P1 and game.round.passes == 0
+
+
+def test_the_capital_front_offers_no_open():
+    game = two_seat_game()
+    put_in_play(game, flip_stronghold(DARK_CAPITAL, card_id="capital"))
+    put_in_play(game, personality("raider", force=3))
+    session = EngineSession.start(game.table, P1)
+
+    assert ActivateAbility("capital") not in session.legal_actions(P1)
 
 
 def test_the_capital_replays_to_the_same_board():
