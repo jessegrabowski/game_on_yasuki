@@ -330,7 +330,7 @@ def card_flip_face() -> Action:
         card = _card(view, ctx.card_tag)
         return (
             card is not None
-            and card.back_card_id is not None
+            and card.printed.back_card_id is not None
             and _may(view, _card_owner(view, ctx))
         )
 

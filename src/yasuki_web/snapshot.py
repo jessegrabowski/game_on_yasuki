@@ -81,8 +81,8 @@ def _card(
     if locked := locked_ops(view):
         # Present only on a card that refuses something, so an ordinary card carries no extra bytes.
         card["locked"] = sorted(op.value for op in locked)
-    if view.back_card_id is not None:
-        card["back_card_id"] = view.back_card_id
+    if view.printed.back_card_id is not None:
+        card["back_card_id"] = view.printed.back_card_id
         card["showing_back"] = view.showing_back
     if face.art_swap is not None:
         card["art"] = face.art_swap

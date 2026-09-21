@@ -23,7 +23,7 @@ from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, StrongholdPrint
 from tests.yasuki_core.engine.builders import holding, personality, put_in_play, two_seat_game
 
 
@@ -78,6 +78,33 @@ def test_a_card_may_register_several_keyed_abilities():
             ability_for(game, card)
     finally:
         _ABILITIES.pop("guard_probe", None)
+
+
+def test_a_flipped_card_dispatches_to_its_back_faces_ability():
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("flip_probe__back", replace(plain, label="Open: Flipped"))
+
+    try:
+        card = L5RCard.of(
+            StrongholdPrint,
+            id="probe",
+            name="Probe",
+            printed_id="flip_probe",
+            side=Side.STRONGHOLD,
+            back_card_id="flip_probe__back",
+            back_printed=StrongholdPrint(
+                name="Probe", side=Side.STRONGHOLD, printed_id="flip_probe__back"
+            ),
+            owner=PlayerId.P1,
+        )
+        game = two_seat_game()
+        assert ability_for(game, card) is None
+
+        card.flip_face()
+
+        assert ability_for(game, card).label == "Open: Flipped"
+    finally:
+        _ABILITIES.pop("flip_probe__back", None)
 
 
 def test_a_granted_ability_follows_the_printed_ones_and_answers_to_its_key():
