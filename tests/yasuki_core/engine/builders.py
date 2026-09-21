@@ -1,7 +1,9 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.turn import sequence
-from yasuki_core.engine.rules.vocabulary.actions import Pass
+from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseBattlefield, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.bots.agents import PayingAgent
 from yasuki_core.engine.rules.gold.self_grants import is_production_window
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Confirm
@@ -200,6 +202,67 @@ def stronghold(
         clans=clans,
         starting_honor=starting_honor,
     )
+
+
+def flip_stronghold(
+    printed_id: str,
+    *,
+    card_id: str = "sh",
+    owner: PlayerId = PlayerId.P1,
+    flipped: bool = False,
+    **printed,
+) -> L5RCard:
+    """A double-faced Stronghold whose back print carries ``<printed_id>__back``, showing its back
+    when ``flipped``. ``printed`` are further front characteristics."""
+    return L5RCard.of(
+        StrongholdPrint,
+        id=card_id,
+        name=printed_id,
+        printed_id=printed_id,
+        side=Side.STRONGHOLD,
+        owner=owner,
+        back_card_id=f"{printed_id}__back",
+        back_printed=StrongholdPrint(
+            name=printed_id, side=Side.STRONGHOLD, printed_id=f"{printed_id}__back"
+        ),
+        showing_back=flipped,
+        **printed,
+    )
+
+
+def combat_segment(
+    cards: list[L5RCard],
+    attackers: dict[str, int],
+    defenders: dict[str, int],
+    *,
+    attacker: PlayerId = PlayerId.P1,
+) -> EngineSession:
+    """The Combat Segment at battlefield 0 of ``attacker``'s attack, with ``cards`` in play and each
+    seat's Personalities assigned by id to the battlefield index given, the defender passed, so the
+    attacker holds priority. A Province is created for every battlefield index named."""
+    defender = PlayerId.P2 if attacker is PlayerId.P1 else PlayerId.P1
+    state = TableState.empty_two_seat()
+    for index in sorted({*attackers.values(), *defenders.values(), 0}):
+        province_card(state, f"atk-prov{index}", seat=attacker, index=index)
+        province_card(state, f"def-prov{index}", seat=defender, index=index)
+    for card in cards:
+        put_in_play(state, card)
+    session = EngineSession.start(state, attacker)
+    end_phase(session)
+    session.act(attacker, DeclareAttack())
+    assigned = {
+        seat: tuple(f"{card_id}@{battlefield}" for card_id, battlefield in army.items())
+        for seat, army in ((attacker, attackers), (defender, defenders))
+    }
+    session.submit(attacker, DecisionResponse(assigned[attacker]))
+    session.submit(defender, DecisionResponse(assigned[defender]))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseBattlefield)
+    session.submit(choice.seat, DecisionResponse(("0",)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(defender, Pass())
+    return session
 
 
 def sensei(owner: PlayerId = PlayerId.P1, *, printed_id: str | None = None) -> L5RCard:

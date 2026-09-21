@@ -4,7 +4,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
-    DeclareAttack,
     Lobby,
     Pass,
     Recruit,
@@ -12,7 +11,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
@@ -26,7 +24,6 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseBattlefield,
     ChooseCards,
     ChooseInvestAmount,
     DecisionResponse,
@@ -46,13 +43,14 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 
 from tests.yasuki_core.engine.builders import (
     attachment,
+    combat_segment,
+    flip_stronghold,
     dealt_table,
     end_phase,
     end_turn,
     holding,
     pay,
     personality,
-    province_card,
     put_in_play,
     register,
     stronghold,
@@ -495,44 +493,16 @@ def _ancient_castle_in_combat(
 ) -> EngineSession:
     """The Combat Segment of ``attacker``'s attack: P1's "matsu" (Lion, 3 PH) and "crane" against
     P2's "guard", with the Ancient Castle as P1's Stronghold and the non-acting seat passed."""
-    defender = P2 if attacker is P1 else P1
-    state = TableState.empty_two_seat()
-    province_card(state, "atk-prov0", seat=attacker, index=0)
-    province_card(state, "def-prov0", seat=defender, index=0)
-    put_in_play(
-        state,
-        L5RCard.of(
-            StrongholdPrint,
-            id="castle",
-            name="The Ancient Castle of the Lion",
-            printed_id=ANCIENT_CASTLE,
-            side=Side.STRONGHOLD,
-            owner=P1,
-            back_card_id=f"{ANCIENT_CASTLE}__back",
-            back_printed=StrongholdPrint(
-                name="The Ancient Castle of the Lion",
-                side=Side.STRONGHOLD,
-                printed_id=f"{ANCIENT_CASTLE}__back",
-            ),
-            showing_back=flipped,
-        ),
-    )
-    put_in_play(state, personality("matsu", force=2, personal_honor=3, clans=("Lion",)))
-    put_in_play(state, personality("crane", force=2, personal_honor=3, clans=("Crane",)))
-    put_in_play(state, personality("guard", owner=P2, force=2, personal_honor=defender_honor))
-    session = EngineSession.start(state, attacker)
-    end_phase(session)
-    session.act(attacker, DeclareAttack())
-    p1_army, p2_army = ("matsu@0", "crane@0"), ("guard@0",)
-    session.submit(attacker, DecisionResponse(p1_army if attacker is P1 else p2_army))
-    session.submit(defender, DecisionResponse(p2_army if attacker is P1 else p1_army))
-    choice = session.game.pending
-    assert isinstance(choice, ChooseBattlefield)
-    session.submit(choice.seat, DecisionResponse(("0",)))
-    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
-        session.act(session.game.round.priority, Pass())
-    session.act(defender, Pass())
-    return session
+    cards = [
+        flip_stronghold(ANCIENT_CASTLE, card_id="castle", flipped=flipped),
+        personality("matsu", force=2, personal_honor=3, clans=("Lion",)),
+        personality("crane", force=2, personal_honor=3, clans=("Crane",)),
+        personality("guard", owner=P2, force=2, personal_honor=defender_honor),
+    ]
+    p1_army, p2_army = {"matsu": 0, "crane": 0}, {"guard": 0}
+    if attacker is P1:
+        return combat_segment(cards, p1_army, p2_army)
+    return combat_segment(cards, p2_army, p1_army, attacker=P2)
 
 
 def test_the_castle_sends_a_defender_home_and_straightens_itself_for_honor():
@@ -611,40 +581,15 @@ def test_the_castle_back_gains_the_honor_without_a_second_target():
     assert game.table.seats[P1].honor == 1
 
 
-def _dark_capital_in_combat(
-    *, strategies: tuple[tuple[str, str, PlayerId], ...] = ()
-) -> EngineSession:
+def _dark_capital_in_combat() -> EngineSession:
     """P1's raider (3F) faces P2's guard (2F) in the Combat Segment, with the Dark Capital as P1's
-    Stronghold. ``strategies`` are ``(card_id, printed_id, owner)`` triples put in hand."""
-    state = TableState.empty_two_seat()
-    province_card(state, "atk-prov0", seat=P1, index=0)
-    province_card(state, "def-prov0", seat=P2, index=0)
-    capital = L5RCard.of(
-        StrongholdPrint,
-        id="capital",
-        name="The Dark Capital of the Spider",
-        printed_id=DARK_CAPITAL,
-        side=Side.STRONGHOLD,
-        owner=P1,
-        gold_production=4,
-        province_strength=7,
-        clan="Spider",
-    )
-    put_in_play(state, capital)
-    put_in_play(state, personality("raider", owner=P1, force=3))
-    put_in_play(state, personality("guard", owner=P2, force=2))
-    session = EngineSession.start(state, P1)
-    end_phase(session)
-    session.act(P1, DeclareAttack())
-    session.submit(P1, DecisionResponse(("raider@0",)))
-    session.submit(P2, DecisionResponse(("guard@0",)))
-    choice = session.game.pending
-    assert isinstance(choice, ChooseBattlefield)
-    session.submit(choice.seat, DecisionResponse(("0",)))
-    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
-        session.act(session.game.round.priority, Pass())
-    session.act(P2, Pass())
-    return session
+    Stronghold."""
+    cards = [
+        flip_stronghold(DARK_CAPITAL, card_id="capital", gold_production=4, clan="Spider"),
+        personality("raider", owner=P1, force=3),
+        personality("guard", owner=P2, force=2),
+    ]
+    return combat_segment(cards, {"raider": 0}, {"guard": 0})
 
 
 def test_the_capital_gives_its_own_personality_shadowlands_and_fear_equal_to_his_force():
