@@ -14,6 +14,16 @@ def card_slug(text: str) -> str:
 
 
 HEADER = re.compile(r"^# --- (.+) ---$", re.M)
+# The reverse face of a double-faced card is its own card id, the front's with ``__back`` appended
+# (``yasuki_core.install.card_index``), and its header names it by the same title plus this marker.
+BACK_MARKER = " (back)"
+
+
+def header_id(title: str) -> str:
+    """The card id a section header's title names."""
+    if title.endswith(BACK_MARKER):
+        return card_slug(title.removesuffix(BACK_MARKER)) + "__back"
+    return card_slug(title)
 
 
 # Registrations that name a card id, by the form they take. Choice resolvers are absent: they key on
@@ -95,7 +105,7 @@ def registered_ids(module: pathlib.Path) -> tuple[str, ...]:
 def _sections(source: str) -> list[tuple[int, str]]:
     """Each ``(line number, card id)`` a section header declares, in source order."""
     return [
-        (number, card_slug(match.group(1)))
+        (number, header_id(match.group(1)))
         for number, line in enumerate(source.splitlines(), start=1)
         if (match := HEADER.match(line))
     ]
