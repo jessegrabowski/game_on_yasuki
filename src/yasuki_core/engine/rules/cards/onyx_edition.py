@@ -195,7 +195,7 @@ def _resolve_the_ancient_castle_of_the_lion(
 ) -> list[Effect]:
     if not chosen:
         return []
-    return [Straighten(source_id), GainHonor(seat, ANCIENT_CASTLE_HONOR)]
+    return [Straighten(source_id), GainHonor(seat, ANCIENT_CASTLE_HONOR, personalities=chosen)]
 
 
 register_ability(
@@ -218,16 +218,14 @@ register_ability(
 def _the_ancient_castle_of_the_lion__back_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
 ) -> int:
-    """Your attacking Lion Clan Personalities have +1F: the controller's Lion Personalities at the
-    battlefield of a battle in the controller's own attack."""
+    """Your attacking Lion Clan Personalities have +1F: the controller's Lion Personalities in an
+    attacking army, at any battlefield of the controller's own attack (CR, Attack)."""
     attack = game.attack
     if stat is not Stat.FORCE or card.owner is not source.owner or attack is None:
         return 0
-    if attack.attacker is not source.owner or attack.current is None:
+    if attack.attacker is not source.owner or ruleset.LION not in card_alignments(card):
         return 0
-    if ruleset.LION not in card_alignments(card):
-        return 0
-    return 1 if location_of(game.table, card).battlefield == attack.current else 0
+    return 1 if location_of(game.table, card).battlefield is not None else 0
 
 
 def _the_ancient_castle_of_the_lion__back_effects(

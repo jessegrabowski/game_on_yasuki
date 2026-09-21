@@ -554,11 +554,24 @@ def test_the_castle_reaches_only_defending_personalities():
 def test_the_castle_back_adds_a_force_to_attacking_lion_personalities():
     session = _ancient_castle_in_combat(flipped=True)
     game = session.game
-    reserve = put_in_play(game, personality("reserve", force=2, clans=("Lion",)))
+    lion_at_home = put_in_play(game, personality("lion_at_home", force=2, clans=("Lion",)))
 
     assert effective_force(game, game.table.cards_by_id["matsu"]) == 3
     assert effective_force(game, game.table.cards_by_id["crane"]) == 2
-    assert effective_force(game, reserve) == 2  # a Lion at home is not attacking
+    assert effective_force(game, lion_at_home) == 2
+
+
+def test_the_castle_back_counts_a_lion_at_another_battlefield_as_attacking():
+    cards = [
+        flip_stronghold(ANCIENT_CASTLE, card_id="castle", flipped=True),
+        personality("matsu", force=2, clans=("Lion",)),
+        personality("akodo", force=2, clans=("Lion",)),
+        personality("guard", owner=P2, force=2),
+    ]
+    game = combat_segment(cards, {"matsu": 0, "akodo": 1}, {"guard": 0}).game
+
+    assert game.attack.current == 0
+    assert effective_force(game, game.table.cards_by_id["akodo"]) == 3
 
 
 def test_the_castle_back_grants_nothing_while_defending():
