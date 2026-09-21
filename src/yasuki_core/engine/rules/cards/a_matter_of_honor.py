@@ -3,7 +3,11 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.clans import card_alignments
-from yasuki_core.engine.rules.board.queries import has_keyword, opposed_units_in_battle
+from yasuki_core.engine.rules.board.queries import (
+    has_keyword,
+    opposed_units_in_battle,
+    opposing_units_in_battle,
+)
 from yasuki_core.engine.rules.effects import Effect, GrantModifier
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
@@ -11,6 +15,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.table import location_of
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -81,8 +86,11 @@ def _the_impregnable_fortress_of_the_crab_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
 ) -> int:
     """Your Crab Clan Personalities have +1F while opposed."""
-    if stat is not Stat.FORCE or card.owner is not source.owner:
+    attack = game.attack
+    if stat is not Stat.FORCE or card.owner is not source.owner or attack is None:
         return 0
     if ruleset.CRAB not in card_alignments(card):
         return 0
-    return 1 if card.id in opposed_units_in_battle(game, source.owner) else 0
+    if location_of(game.table, card).battlefield != attack.current:
+        return 0
+    return 1 if opposing_units_in_battle(game, source.owner) else 0

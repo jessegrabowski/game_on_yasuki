@@ -68,3 +68,14 @@ def test_the_fortress_gives_crab_personalities_a_force_while_opposed():
     assert effective_force(game, game.table.cards_by_id["crab"]) == 3
     assert effective_force(game, game.table.cards_by_id["crane"]) == 2
     assert effective_force(game, game.table.cards_by_id["crab_at_home"]) == 2
+
+
+def test_the_fortress_grants_nothing_at_an_undefended_battle():
+    cards = [
+        flip_stronghold(IMPREGNABLE_FORTRESS),
+        personality("crab", force=2, clans=("Crab",)),
+        personality("guard", owner=P2),
+    ]
+    game = combat_segment(cards, {"crab": 0}, {}).game
+
+    assert effective_force(game, game.table.cards_by_id["crab"]) == 2
