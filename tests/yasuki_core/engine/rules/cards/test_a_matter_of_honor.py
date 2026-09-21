@@ -48,11 +48,11 @@ def test_the_garrison_back_prints_the_same_ability():
     assert effective_force(session.game, session.game.table.cards_by_id["lion"]) == 3
 
 
-def _fortress_battle() -> EngineSession:
+def _fortress_battle(*, flipped: bool = False) -> EngineSession:
     """P1's Crab and Crane (2F each) opposed by P2's guard, a second Crab left at home, the
     Impregnable Fortress as P1's Stronghold."""
     cards = [
-        flip_stronghold(IMPREGNABLE_FORTRESS),
+        flip_stronghold(IMPREGNABLE_FORTRESS, flipped=flipped),
         personality("crab", force=2, clans=("Crab",)),
         personality("crane", force=2, clans=("Crane",)),
         personality("guard", owner=P2),
@@ -79,3 +79,10 @@ def test_the_fortress_grants_nothing_at_an_undefended_battle():
     game = combat_segment(cards, {"crab": 0}, {}).game
 
     assert effective_force(game, game.table.cards_by_id["crab"]) == 2
+
+
+def test_the_fortress_back_prints_the_same_trait():
+    game = _fortress_battle(flipped=True).game
+
+    assert effective_force(game, game.table.cards_by_id["crab"]) == 3
+    assert effective_force(game, game.table.cards_by_id["crab_at_home"]) == 2

@@ -83,6 +83,11 @@ register_ability(
 
 # --- The Unassailable Fortress of the Crab ---
 
+UNASSAILABLE_FORTRESS_LABEL = (
+    "Battle: Straighten your target opposed Personality, and his attachments if your army has "
+    "fewer units than the opposing army"
+)
+
 
 def _the_unassailable_fortress_of_the_crab_targets(game: GameState, source: L5RCard) -> list[str]:
     return list(opposed_units_in_battle(game, source.owner))
@@ -111,10 +116,24 @@ register_ability(
     "the_unassailable_fortress_of_the_crab",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle: Straighten your target opposed Personality, and his attachments if your "
-        "army has fewer units than the opposing army",
+        label=UNASSAILABLE_FORTRESS_LABEL,
         cost=no_cost,
         targets=_the_unassailable_fortress_of_the_crab_targets,
         effects=_the_unassailable_fortress_of_the_crab_effects,
+    ),
+)
+
+
+# --- The Unassailable Fortress of the Crab (back) ---
+
+register_ability(
+    "the_unassailable_fortress_of_the_crab__back",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Tireless {UNASSAILABLE_FORTRESS_LABEL}",
+        cost=no_cost,
+        targets=_the_unassailable_fortress_of_the_crab_targets,
+        effects=_the_unassailable_fortress_of_the_crab_effects,
+        tireless=True,
     ),
 )

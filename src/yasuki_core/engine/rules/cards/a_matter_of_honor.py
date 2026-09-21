@@ -94,3 +94,13 @@ def _the_impregnable_fortress_of_the_crab_stat_grant(
     if location_of(game.table, card).battlefield != attack.current:
         return 0
     return 1 if opposing_units_in_battle(game, source.owner) else 0
+
+
+# --- The Impregnable Fortress of the Crab (back) ---
+
+
+@stat_grant("the_impregnable_fortress_of_the_crab__back")
+def _the_impregnable_fortress_of_the_crab__back_stat_grant(
+    game: GameState, source: L5RCard, card: L5RCard, stat: Stat
+) -> int:
+    return _the_impregnable_fortress_of_the_crab_stat_grant(game, source, card, stat)

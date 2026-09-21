@@ -63,10 +63,10 @@ def test_the_halls_back_is_tireless_where_the_front_is_not():
     assert effective_force(back.game, back.game.table.cards_by_id["samurai"]) == 5
 
 
-def _fortress_battle(*, guards: int) -> EngineSession:
+def _fortress_battle(*, guards: int, flipped: bool = False) -> EngineSession:
     """P1's bowed hero, carrying a bowed Follower, opposed by ``guards`` enemy Personalities."""
     cards = [
-        flip_stronghold(UNASSAILABLE_FORTRESS),
+        flip_stronghold(UNASSAILABLE_FORTRESS, flipped=flipped),
         personality("hero", force=3),
         *(personality(f"guard{index}", owner=P2) for index in range(guards)),
     ]
@@ -100,3 +100,19 @@ def test_the_fortress_leaves_the_attachments_bowed_against_an_army_no_larger():
     cards = session.game.table.cards_by_id
     assert not cards["hero"].bowed
     assert cards["banner"].bowed
+
+
+def test_the_fortress_back_is_tireless_where_the_front_is_not():
+    front = _fortress_battle(guards=2)
+    front.game.table.cards_by_id["sh"].bow()
+    assert not _offered(front)
+
+    back = _fortress_battle(guards=2, flipped=True)
+    back.game.table.cards_by_id["sh"].bow()
+    assert _offered(back)
+    back.act(P1, ActivateAbility("sh"))
+    back.submit(P1, DecisionResponse(("hero",)))
+
+    cards = back.game.table.cards_by_id
+    assert not cards["hero"].bowed
+    assert not cards["banner"].bowed
