@@ -68,15 +68,16 @@ class L5RCard:
 
     def __getattr__(self, name: str):
         """Answer a printed characteristic off the face this copy presents."""
-        # The slots are missing until __init__ sets them; without this guard a read during
-        # construction would recurse here forever.
+        # showing_back is declared after printed and back_printed, so its slot existing means all
+        # three are set; without this guard a read during construction would recurse here forever.
         try:
-            for slot in ("printed", "back_printed", "showing_back"):
-                object.__getattribute__(self, slot)
+            face = object.__getattribute__(self, "printed")
+            if object.__getattribute__(self, "showing_back"):
+                face = object.__getattribute__(self, "back_printed") or face
         except AttributeError:
             raise AttributeError(name) from None
         try:
-            return getattr(self.active_face, name)
+            return getattr(face, name)
         except AttributeError:
             # Reported against the card, not the print: whoever hit this was reading a card.
             raise AttributeError(
