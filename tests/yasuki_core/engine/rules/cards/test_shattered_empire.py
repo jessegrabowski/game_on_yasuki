@@ -345,10 +345,19 @@ def test_way_of_the_crane_is_offered_in_the_response_step_after_your_action_disc
     assert CRANE_DRAW in legality.legal_actions(game, P1)
 
 
-def test_way_of_the_crane_draws_then_discards_as_a_trait():
+def test_way_of_the_crane_draws_then_discards_as_a_trait(reacting):
     """The card just drawn is among the ones offered for the discard, and the discard is the
-    trait's doing rather than an action's."""
+    trait's doing rather than an action's. A Response's doings stay off the action record, so the
+    cause is read by a card reacting to the discard."""
     game = _crane_edict_in_play()
+    put_in_play(game, holding("witness", printed_id="crane_discard_witness"))
+    causes = []
+
+    def witness(ctx):
+        causes.append(ctx.event.cause)
+        return []
+
+    reacting(CardDiscarded, "crane_discard_witness", witness)
     sequence.open_response_window(game)
 
     action_sequence.perform(game, CRANE_DRAW)
@@ -361,8 +370,7 @@ def test_way_of_the_crane_draws_then_discards_as_a_trait():
     assert _hand_ids(game) == ["held"]
     discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
     assert "top" in {card.id for card in discard.cards}
-    discarded = next(event for event in game.action_events if isinstance(event, CardDiscarded))
-    assert discarded.cause == Trait("crane")
+    assert causes == [Trait("crane")]
 
 
 def test_way_of_the_crane_draws_once_per_turn():
