@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.units.composition import unit_force
+from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.session import EngineSession
 
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -60,6 +61,7 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1, P2 = PlayerId.P1, PlayerId.P2
+ANCIENT_CASTLE = "the_ancient_castle_of_the_lion"
 
 
 # --- Kitsu Hayako ---
@@ -486,6 +488,127 @@ def test_the_estate_is_not_offered_after_an_action_that_paid_no_favor():
 
 
 DARK_CAPITAL = "the_dark_capital_of_the_spider"
+
+
+def _ancient_castle_in_combat(
+    *, attacker: PlayerId = P1, flipped: bool = False, defender_honor: int = 1
+) -> EngineSession:
+    """The Combat Segment of ``attacker``'s attack: P1's "matsu" (Lion, 3 PH) and "crane" against
+    P2's "guard", with the Ancient Castle as P1's Stronghold and the non-acting seat passed."""
+    defender = P2 if attacker is P1 else P1
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=attacker, index=0)
+    province_card(state, "def-prov0", seat=defender, index=0)
+    put_in_play(
+        state,
+        L5RCard.of(
+            StrongholdPrint,
+            id="castle",
+            name="The Ancient Castle of the Lion",
+            printed_id=ANCIENT_CASTLE,
+            side=Side.STRONGHOLD,
+            owner=P1,
+            back_card_id=f"{ANCIENT_CASTLE}__back",
+            back_printed=StrongholdPrint(
+                name="The Ancient Castle of the Lion",
+                side=Side.STRONGHOLD,
+                printed_id=f"{ANCIENT_CASTLE}__back",
+            ),
+            showing_back=flipped,
+        ),
+    )
+    put_in_play(state, personality("matsu", force=2, personal_honor=3, clans=("Lion",)))
+    put_in_play(state, personality("crane", force=2, personal_honor=3, clans=("Crane",)))
+    put_in_play(state, personality("guard", owner=P2, force=2, personal_honor=defender_honor))
+    session = EngineSession.start(state, attacker)
+    end_phase(session)
+    session.act(attacker, DeclareAttack())
+    p1_army, p2_army = ("matsu@0", "crane@0"), ("guard@0",)
+    session.submit(attacker, DecisionResponse(p1_army if attacker is P1 else p2_army))
+    session.submit(defender, DecisionResponse(p2_army if attacker is P1 else p1_army))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseBattlefield)
+    session.submit(choice.seat, DecisionResponse(("0",)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(defender, Pass())
+    return session
+
+
+def test_the_castle_sends_a_defender_home_and_straightens_itself_for_honor():
+    session = _ancient_castle_in_combat()
+
+    session.act(P1, ActivateAbility("castle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    game = session.game
+    assert game.table.cards_by_id["castle"].bowed
+    assert isinstance(game.pending, ChooseCards)
+    assert set(game.pending.candidates) == {"matsu", "crane"}
+    session.submit(P1, DecisionResponse(("matsu",)))
+
+    assert location_of(game.table, game.table.cards_by_id["guard"]).is_home
+    assert not game.table.cards_by_id["castle"].bowed
+    assert game.table.seats[P1].honor == 1
+
+
+def test_the_castle_stays_bowed_when_the_second_target_is_declined():
+    session = _ancient_castle_in_combat()
+    session.act(P1, ActivateAbility("castle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    session.submit(P1, DecisionResponse(()))
+
+    game = session.game
+    assert game.pending is None
+    assert game.table.cards_by_id["castle"].bowed
+    assert game.table.seats[P1].honor == 0
+
+
+def test_the_castle_offers_no_second_target_without_a_higher_personal_honor():
+    session = _ancient_castle_in_combat(defender_honor=3)
+
+    session.act(P1, ActivateAbility("castle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert location_of(game.table, game.table.cards_by_id["guard"]).is_home
+
+
+def test_the_castle_reaches_only_defending_personalities():
+    session = _ancient_castle_in_combat(attacker=P2)
+
+    assert ActivateAbility("castle") not in session.legal_actions(P1)
+
+
+def test_the_castle_back_adds_a_force_to_attacking_lion_personalities():
+    session = _ancient_castle_in_combat(flipped=True)
+    game = session.game
+    reserve = put_in_play(game, personality("reserve", force=2, clans=("Lion",)))
+
+    assert effective_force(game, game.table.cards_by_id["matsu"]) == 3
+    assert effective_force(game, game.table.cards_by_id["crane"]) == 2
+    assert effective_force(game, reserve) == 2  # a Lion at home is not attacking
+
+
+def test_the_castle_back_grants_nothing_while_defending():
+    session = _ancient_castle_in_combat(attacker=P2, flipped=True)
+    game = session.game
+
+    assert effective_force(game, game.table.cards_by_id["matsu"]) == 2
+
+
+def test_the_castle_back_gains_the_honor_without_a_second_target():
+    session = _ancient_castle_in_combat(flipped=True)
+
+    session.act(P1, ActivateAbility("castle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert location_of(game.table, game.table.cards_by_id["guard"]).is_home
+    assert game.table.cards_by_id["castle"].bowed
+    assert game.table.seats[P1].honor == 1
 
 
 def _dark_capital_in_combat(

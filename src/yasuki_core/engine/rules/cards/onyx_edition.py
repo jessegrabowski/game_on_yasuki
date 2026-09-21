@@ -1,3 +1,4 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.lobby import register_may_not_lobby
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
@@ -17,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Effect,
     Fear,
+    GainHonor,
     GrantKeyword,
     Move,
     Straighten,
@@ -27,16 +29,20 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Enter
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.action_record import action_keywords
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
+    opposing_units_in_battle,
     owned_personalities,
     personalities_in_play,
     sincerity_seed_targets,
+    units_at,
 )
-from yasuki_core.engine.rules.stats.card_values import effective_force
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration
+from yasuki_core.engine.rules.stats.card_values import effective_force, effective_personal_honor
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import location_of
+from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 
@@ -144,6 +150,105 @@ def _resolve_spearmen_of_the_akasha(
     if not chosen:
         return []
     return [Banish(source_id), CreateToken(NAGA_FOLLOWER, seat, source_id, attach_to=chosen[0])]
+
+
+# --- The Ancient Castle of the Lion ---
+
+ANCIENT_CASTLE_HONOR = 1
+
+
+def _the_ancient_castle_of_the_lion_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The enemy's defending Personalities: none while the Stronghold's controller defends."""
+    attack = game.attack
+    if attack is None or attack.attacker is not source.owner:
+        return []
+    return list(opposing_units_in_battle(game, source.owner))
+
+
+def _the_ancient_castle_of_the_lion_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Move home a target enemy defending Personality. You may target your Personality with
+    higher Personal Honor to straighten this Stronghold and gain 1 Honor." The second target is
+    optional, chosen as the ability resolves among the controller's Personalities at the battle."""
+    honor = effective_personal_honor(game, target)
+    higher = tuple(
+        card.id
+        for card in units_at(game, game.attack.current, source.owner)
+        if effective_personal_honor(game, card) > honor
+    )
+    effects: list[Effect] = [Move(target.id, Location.home(target.owner))]
+    if higher:
+        effects.append(
+            Choose(source.owner, higher, 0, 1, "the_ancient_castle_of_the_lion", source.id)
+        )
+    return effects
+
+
+@choice_resolver(
+    "the_ancient_castle_of_the_lion",
+    prompt="You may target your Personality with higher Personal Honor to straighten this "
+    "Stronghold and gain 1 Honor",
+)
+def _resolve_the_ancient_castle_of_the_lion(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    if not chosen:
+        return []
+    return [Straighten(source_id), GainHonor(seat, ANCIENT_CASTLE_HONOR)]
+
+
+register_ability(
+    "the_ancient_castle_of_the_lion",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle, bow: Move home a target enemy defending Personality. You may target your "
+        "Personality with higher Personal Honor to straighten this Stronghold and gain 1 Honor",
+        cost=bow_cost,
+        targets=_the_ancient_castle_of_the_lion_targets,
+        effects=_the_ancient_castle_of_the_lion_effects,
+    ),
+)
+
+
+# --- The Ancient Castle of the Lion (back) ---
+
+
+@stat_grant("the_ancient_castle_of_the_lion__back")
+def _the_ancient_castle_of_the_lion__back_stat_grant(
+    game: GameState, source: L5RCard, card: L5RCard, stat: Stat
+) -> int:
+    """Your attacking Lion Clan Personalities have +1F: the controller's Lion Personalities at the
+    battlefield of a battle in the controller's own attack."""
+    attack = game.attack
+    if stat is not Stat.FORCE or card.owner is not source.owner or attack is None:
+        return 0
+    if attack.attacker is not source.owner or attack.current is None:
+        return 0
+    if ruleset.LION not in card_alignments(card):
+        return 0
+    return 1 if location_of(game.table, card).battlefield == attack.current else 0
+
+
+def _the_ancient_castle_of_the_lion__back_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [
+        Move(target.id, Location.home(target.owner)),
+        GainHonor(source.owner, ANCIENT_CASTLE_HONOR),
+    ]
+
+
+register_ability(
+    "the_ancient_castle_of_the_lion__back",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle, bow: Move home a target enemy defending Personality. Gain 1 Honor",
+        cost=bow_cost,
+        targets=_the_ancient_castle_of_the_lion_targets,
+        effects=_the_ancient_castle_of_the_lion__back_effects,
+    ),
+)
 
 
 # --- The Dark Capital of the Spider ---
