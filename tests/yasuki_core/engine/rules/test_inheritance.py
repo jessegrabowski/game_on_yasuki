@@ -1,4 +1,7 @@
+from dataclasses import replace
+
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, Inheritance
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseInheritanceTarget, DecisionResponse
@@ -101,6 +104,22 @@ def test_it_turns_the_stronghold_over_and_raises_the_chosen_holding():
 
     assert live["P2-SH"].active_face.name == "Sun"
     assert effective_gold_production(session.game, live["P2-farm"]) == 4
+
+
+def test_turning_the_stronghold_over_returns_its_dispatch_to_the_front():
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("P2-SH__back", replace(plain, label="Open: Moon"))
+    try:
+        session = _second_players_turn()
+        live = session.game.table.cards_by_id
+        assert ability_for(session.game, live["P2-SH"]).label == "Open: Moon"
+
+        session.act(P2, Inheritance())
+        session.submit(P2, DecisionResponse(("P2-farm",)))
+
+        assert ability_for(session.game, live["P2-SH"]) is None
+    finally:
+        _ABILITIES.pop("P2-SH__back", None)
 
 
 def test_the_target_choice_offers_the_seats_own_holdings():

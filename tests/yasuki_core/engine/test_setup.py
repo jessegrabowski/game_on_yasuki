@@ -396,7 +396,7 @@ def test_the_table_validates_after_setup():
     state.validate()  # raises on any structural violation
 
 
-def _two_seat_table(p1_honor, p2_honor, *, p2_has_back=True):
+def _two_seat_table(p1_honor, p2_honor, *, p2_has_back=True, p2_back_printed=None):
     state = TableState.empty_two_seat()
     state.seats[PlayerId.P1].honor = p1_honor
     state.seats[PlayerId.P2].honor = p2_honor
@@ -414,7 +414,10 @@ def _two_seat_table(p1_honor, p2_honor, *, p2_has_back=True):
         name="Front2",
         side=Side.STRONGHOLD,
         owner=PlayerId.P2,
+        printed_id="p2sh",
+        province_strength=7,
         back_card_id="p2sh__back" if p2_has_back else None,
+        back_printed=p2_back_printed,
     )
     for card in (p1_sh, p2_sh):
         state.battlefield.add(card)
@@ -430,6 +433,17 @@ def test_lower_honor_player_goes_second_and_their_stronghold_flips():
     assert second is PlayerId.P2  # lower honor -> second
     assert p2_sh.showing_back is True
     assert p1_sh.showing_back is False  # the first player's stronghold stays front-up
+
+
+def test_the_flipped_stronghold_reads_its_backs_characteristics():
+    back = StrongholdPrint(
+        name="Back2", side=Side.STRONGHOLD, printed_id="p2sh__back", province_strength=9
+    )
+    state, _, p2_sh = _two_seat_table(10, 4, p2_back_printed=back)
+
+    flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2), rng=UNDRAWN)
+
+    assert (p2_sh.printed_id, p2_sh.province_strength) == ("p2sh__back", 9)
 
 
 def test_an_honor_tie_is_settled_by_a_draw():
