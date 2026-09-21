@@ -93,6 +93,43 @@ def duplicate_registrations(
     return problems
 
 
+# Back faces whose printed text the engine cannot model yet, so their fronts stand implemented
+# alone. The Palatial Estate's back gives the seat's Favor actions Repeatable, which no rule reads.
+UNMODELED_BACKS = frozenset({"the_palatial_estate_of_the_crane__back"})
+
+
+def unregistered_back_faces(
+    registries: dict[str, frozenset[str]] | None = None, known: frozenset[str] | None = None
+) -> list[str]:
+    """
+    One human-readable line per implemented card whose back face has no registration at all.
+
+    A double-faced card is two card ids, and a front implemented without its back plays as a
+    blank once flipped, which nothing else reports. A back listed in ``UNMODELED_BACKS`` is a
+    known gap and is not reported.
+
+    Parameters
+    ----------
+    registries : dict mapping str to frozenset of str, optional
+        Registry name to the card ids it keys on. Defaults to the engine's own registries.
+    known : frozenset of str, optional
+        Every card id. Defaults to the packaged index.
+    """
+    if registries is None:
+        registries = registered_card_ids()
+    if known is None:
+        known = read_index()
+
+    registered = frozenset().union(*registries.values())
+    return [
+        f"{card_id} is implemented but its back face {card_id}__back is not"
+        for card_id in sorted(registered)
+        if f"{card_id}__back" in known
+        and f"{card_id}__back" not in registered
+        and f"{card_id}__back" not in UNMODELED_BACKS
+    ]
+
+
 def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -> list[str]:
     """
     One human-readable line per handler keyed on an id no card has, each with a nearest-match hint.
@@ -439,6 +476,7 @@ def main(
 ) -> int:
     problems = (
         unregistered_card_ids(registries)
+        + unregistered_back_faces(registries)
         + duplicate_registrations(trigger_registry)
         + unvalidated_registries()
         + mislabeled_abilities()

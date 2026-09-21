@@ -17,6 +17,7 @@ yasuki_core.install.registration_audit
     printed_ability_counts
     registered_card_ids
     short_ability_registrations
+    unregistered_back_faces
     unregistered_card_ids
     unvalidated_registries
 
