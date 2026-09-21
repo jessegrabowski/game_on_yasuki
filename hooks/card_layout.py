@@ -258,6 +258,9 @@ ROLES = frozenset(
         "effects",
         "interrupt",
         "applies",
+        # the parts of an entry from hand
+        "condition",
+        "entry_effects",
         "proclaim_gain",
         "tireless_grant",
         "granted_ability",

@@ -46,6 +46,7 @@ def register_entry(
     key: str | None = None,
     label: str | None = None,
     ability_keywords: frozenset[str] = frozenset(),
+    ruleset: str | None = None,
 ) -> None:
     """Register ``printed_id``'s ability to put itself into play from hand.
 
@@ -74,6 +75,9 @@ def register_entry(
         What a client shows for the entry. Default names the designators and ``clears``.
     ability_keywords : frozenset of str, optional
         The ability keywords the entry prints, as in "Political Open". Default empty.
+    ruleset : str, optional
+        The name of the one ruleset the entry is in force under, for a card whose text differs
+        between arcs. Default None, for a text every arc reads.
     """
     timings = timing if isinstance(timing, tuple) else (timing,)
 
@@ -115,6 +119,7 @@ def register_entry(
             located_at=(CardLocation.HAND,),
             key=key,
             keywords=ability_keywords,
+            ruleset=ruleset,
         ),
     )
 

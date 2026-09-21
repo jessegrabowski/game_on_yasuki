@@ -123,6 +123,33 @@ Ring does.
 Show of Power, the one ShE-legal Kata, is not written because its other half is blocked on Fear
 retargeting. When it is, its entry is `register_entry("show_of_power", clears=keywords.KATA)`.
 
+## Rings, which are used from hand as well as from play
+
+A Ring prints one ability and a trait letting its holder discard it from hand to use that ability
+without cost (CR, Ring). {func}`~.register_ring` registers both from one `Ability`: the printed
+one from play, and with `pitch=True` a copy keyed `PITCH` that is taken from hand for nothing and
+discarded at step F, because it is still in hand when the ability is done.
+
+```python
+register_ring(
+    "ring_of_air",
+    ability=Ability(..., key="air", keywords=frozenset({keywords.AIR}), repeatable=True),
+    pitch=True,
+    ruleset=ruleset.SHATTERED_EMPIRE.name,
+)
+```
+
+A Ring whose ability is an Interrupt registers it once with `register_interrupt`, located in both
+the hand and the battlefield. The Interrupt step pays the card's Gold Cost from hand, which a Ring
+has none of, and the Interrupt's own `cost` from play, so one registration is both casts.
+
+A Ring's text was rewritten between arcs under one id, so every registration names its ruleset and
+the card sits in the first printing among that ruleset's arcs. How a Ring enters play is the
+card's own clause. {card}`Ring of the Void` prints an action, which is `register_entry` under a
+`Limited` timing with the "two or fewer Rings" condition and the hand discard as extra effects.
+The other four print "Play after X", which nothing lets a card in hand answer yet, so their entry
+has no handler and the comment above each says what the clause waits on.
+
 ## Terrain, which attaches to a battlefield
 
 Terrain is by far the largest of these kinds and does not follow the pattern. A Terrain enters play
