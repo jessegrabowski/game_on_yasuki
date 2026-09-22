@@ -45,6 +45,15 @@ than the actions: {func}`~.is_kharmic_card` and {func}`~.kharmic_in_hand` for Kh
 {func}`~.activatable` is the ability version: whether a card's ability can be announced at all,
 cost included.
 
+Unique and Singular are rules on every route into play rather than actions of their own.
+{func}`~.copy_may_enter` refuses a Unique card while its seat controls a Unique card with the
+same title (CR, Unique), and a Singular card while a card with the same title is in play under
+any seat (ShE datasheet, Singular). It is asked by the Recruit and Equip offers, by the entry
+abilities {func}`~.register_entry` and {func}`~.register_event_entry` build, and by the
+`PutIntoPlay` and `RecruitCard` effects, so a card effect cannot bring a duplicate in either. The
+CR's Experienced exception to Unique is overlaying, which is not modeled, so an Experienced
+version entering normally is refused like any other copy.
+
 ## Where a card plugs in
 
 A card does not register legality. It names a timing and returns a target list, and everything
