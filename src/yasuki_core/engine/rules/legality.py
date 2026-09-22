@@ -46,6 +46,7 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.rulebook.equip import equip_targets
+from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
@@ -458,6 +459,8 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
             continue
         if permitted.isdisjoint(recruit_timings(game, card.id)):
             continue
+        if not copy_may_enter(game, seat, card):
+            continue
         if (
             enforce_honor
             and isinstance(card.printed, PersonalityPrint)
@@ -495,6 +498,8 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         if only is not None and card.id != only:
             continue
         if not isinstance(card.printed, AttachmentPrint):
+            continue
+        if not copy_may_enter(game, seat, card):
             continue
         affordable = fixed + sum(
             maximum_gold_production(game, producer, targets=(card,)) for producer in variable

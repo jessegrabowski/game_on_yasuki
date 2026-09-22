@@ -4,6 +4,7 @@ from typing import ClassVar
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.rulebook import favor_proxy
+from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
@@ -995,6 +996,8 @@ class PutIntoPlay(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None or any(held is card for held in game.table.battlefield.cards):
             return []
+        if not copy_may_enter(game, card.owner, card):
+            return []
         hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
         from_hand = any(held is card for held in hand.cards)
         ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
@@ -1693,6 +1696,14 @@ class RecruitCard(InterruptingEffect):
     def describe(self) -> str:
         renewed = ", renewing the province" if self.renew else ""
         return f"recruit {self.card_id} out of sequence{renewed}"
+
+    def pauses(self, game: GameState) -> bool:
+        """No payment is asked for a card Unique or Singular keeps out of play."""
+        card = game.table.cards_by_id[self.card_id]
+        return copy_may_enter(game, card.owner, card)
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        return []
 
     def request(self, game: GameState) -> DecisionRequest:
         # Announcing a recruit builds a payment, and the payment loop is written in the effects

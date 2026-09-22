@@ -3,10 +3,11 @@ from dataclasses import replace
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
+from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -82,6 +83,8 @@ def register_entry(
     timings = timing if isinstance(timing, tuple) else (timing,)
 
     def targets(game: GameState, source: L5RCard) -> list[str]:
+        if not copy_may_enter(game, source.owner, source):
+            return []
         if condition is not None and not condition(game, source):
             return []
         return [source.id]
@@ -183,6 +186,9 @@ def register_event_entry(
         The ability keywords the entry prints, as in "Political Open". Default empty.
     """
 
+    def targets(game: GameState, source: L5RCard) -> list[str]:
+        return [source.id] if copy_may_enter(game, source.owner, source) else []
+
     def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
         return [PutIntoPlay(source.id)]
 
@@ -192,7 +198,7 @@ def register_event_entry(
             timings=(timing,),
             label=f"{timing.name.capitalize()}: Put this Event into play",
             cost=no_cost,
-            targets=itself,
+            targets=targets,
             effects=effects,
             hits_every_target=True,
             located_at=(CardLocation.PROVINCE,),

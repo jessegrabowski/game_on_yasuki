@@ -35,6 +35,10 @@ KENSAI = "Kensai"
 EDICT = "Edict"
 KATA = "Kata"
 
+# Only one copy of a Singular card may be in play at a time, under any seat (ShE datasheet,
+# Singular). Deck construction is not limited, unlike Unique.
+SINGULAR = "Singular"
+
 # The boldface keyword marking a card the Courage rulebook Interrupt can discard to move a Fear
 # effect by 2 (ShE datasheet, Courage Rulebook ability).
 COURAGE = "Courage"
