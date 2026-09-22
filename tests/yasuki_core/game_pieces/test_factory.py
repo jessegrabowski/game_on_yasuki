@@ -455,7 +455,7 @@ def test_unknown_name_is_reported_and_not_built():
 
 def test_double_faced_card_carries_its_back_print_when_the_record_is_present():
     deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni")
-    sh = resolve_decklist(deck, [FLIP_FRONT, FLIP_BACK], PlayerId.P1).pre_game[0]
+    sh = resolve_decklist(deck, [FLIP_FRONT], PlayerId.P1, backs=[FLIP_BACK]).pre_game[0]
     assert sh.back_card_id == "kyuden_kuni__back"
     assert isinstance(sh.back_printed, StrongholdPrint)
     # Each face is its own print, so it carries its own printed_id, and the back dispatches to its
@@ -464,6 +464,20 @@ def test_double_faced_card_carries_its_back_print_when_the_record_is_present():
     assert sh.back_printed.printed_id == "kyuden_kuni__back"
     assert sh.back_printed.starting_honor == 8
     assert sh.back_printed.image_front.as_posix() == "sets/goc/kk_b.png"
+
+
+def test_a_back_record_never_resolves_a_decklist_entry():
+    """A back shares its front's title, so an entry naming it must resolve to the front, and a
+    back with no front in the records resolves nothing."""
+    same_title = {**FLIP_BACK, "name": "Kyuden Kuni", "extended_title": "Kyuden Kuni"}
+    deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni")
+
+    with_front = resolve_decklist(deck, [FLIP_FRONT], PlayerId.P1, backs=[same_title])
+    without = resolve_decklist(deck, [], PlayerId.P1, backs=[same_title])
+
+    assert with_front.pre_game[0].printed_id == "kyuden_kuni"
+    assert with_front.pre_game[0].back_printed.printed_id == "kyuden_kuni__back"
+    assert without.pre_game == [] and without.unresolved == ["Kyuden Kuni"]
 
 
 def test_two_copies_of_a_flip_card_share_both_prints():
