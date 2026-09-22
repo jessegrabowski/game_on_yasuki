@@ -14,7 +14,7 @@ from yasuki_core.game_pieces.factory import (
     side_of_record,
 )
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.game_pieces.constants import Side, AttachmentType
+from yasuki_core.game_pieces.constants import Element, Side, AttachmentType
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AncestorPrint,
@@ -634,3 +634,19 @@ def test_two_copies_of_a_card_share_one_print():
     assert first.printed is second.printed
     first.bow()
     assert not second.bowed
+
+
+def test_a_ring_reads_its_element_off_its_keyword():
+    record = {
+        "card_id": "ring_of_air",
+        "name": "Ring of Air",
+        "extended_title": "Ring of Air",
+        "types": ["Ring"],
+        "decks": ["Fate"],
+        "keywords": ["Unique", "Air"],
+        "text": "",
+        "is_unique": True,
+        "focus": 4,
+    }
+
+    assert build_print(record).element is Element.AIR
