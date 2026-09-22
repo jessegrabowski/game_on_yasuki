@@ -3,7 +3,13 @@ from typing import Any
 
 from numpy.random import Generator, default_rng
 
-from yasuki_core.database import get_cards_by_names, get_creates_for_cards, get_rulebook_proxies
+from yasuki_core.database import (
+    back_face_ids,
+    get_back_faces,
+    get_cards_by_names,
+    get_creates_for_cards,
+    get_rulebook_proxies,
+)
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.setup import flip_second_player_stronghold, setup_seat
@@ -54,7 +60,7 @@ def build_state_from_deck(
     # One extra stream for the turn-order tie-break; the per-seat children are unchanged by it.
     *seat_streams, order_stream = deal.spawn(len(seats) + 1)
     seat_rngs = dict(zip((seat for seat, _ in seats), seat_streams, strict=True))
-    resolved_by_path: dict[str, tuple[Decklist, list[dict], dict[str, list[str]]]] = {}
+    resolved_by_path: dict[str, tuple[Decklist, list[dict], dict[str, list[str]], list[dict]]] = {}
     # Below the rng draw on purpose: the desktop client degrades to placeholder decks when the
     # database is unreachable, so a database call above it would mask a defect in the deal itself.
     state.creatable_tokens.update(build_token_templates(get_rulebook_proxies()))
@@ -63,14 +69,15 @@ def build_state_from_deck(
         if key not in resolved_by_path:
             parsed = parse_deck_yaml(Path(path).read_text())
             records = get_cards_by_names(_deck_card_names(parsed))
+            backs = get_back_faces(back_face_ids(records))
             # One relational pull of every token the deck can create, so a card that creates one
             # mid-game needs no live database call. The templates sit on the table for the rest of
             # the game.
             creates, tokens = get_creates_for_cards([record["card_id"] for record in records])
             state.creatable_tokens.update(build_token_templates(tokens))
-            resolved_by_path[key] = (parsed, records, creates)
-        parsed, records, creates = resolved_by_path[key]
-        resolved = resolve_decklist(parsed, records, seat, creates)
+            resolved_by_path[key] = (parsed, records, creates, backs)
+        parsed, records, creates, backs = resolved_by_path[key]
+        resolved = resolve_decklist(parsed, records, seat, creates, backs=backs)
         setup_seat(state, seat, resolved, rng=seat_rngs[seat])
     second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2), rng=order_stream)
     first = PlayerId.P2 if second is PlayerId.P1 else PlayerId.P1

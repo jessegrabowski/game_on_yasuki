@@ -53,6 +53,8 @@ from yasuki_core.game_pieces.factory import (
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
 from yasuki_core.database import (
+    back_face_ids,
+    get_back_faces,
     get_cards_by_names,
     get_creates_for_cards,
     get_card_by_id,
@@ -450,6 +452,7 @@ class GameRoom:
             }
         )
         records = await asyncio.to_thread(get_cards_by_names, names)
+        backs = await asyncio.to_thread(get_back_faces, back_face_ids(records))
         # One relational pull of every token the loaded cards can create, so spawning a token needs
         # no live database call. The templates live on the table for the rest of the game.
         card_ids = [record["card_id"] for record in records]
@@ -461,7 +464,7 @@ class GameRoom:
         self._token_names = {tid: tpl.name for tid, tpl in self.state.creatable_tokens.items()}
         deals = self._deal_rng.spawn(len(self.pending_decks))
         for (seat, parsed), deal in zip(self.pending_decks.items(), deals, strict=True):
-            resolved = resolve_decklist(parsed, records, seat, creates_map)
+            resolved = resolve_decklist(parsed, records, seat, creates_map, backs=backs)
             setup_seat(self.state, seat, resolved, rng=deal)
         # In a two-player game the lower-honor seat goes second, its stronghold flipped to its back
         # face (when it has one). A goldfish/solo table (one seat) and an honor tie leave both
