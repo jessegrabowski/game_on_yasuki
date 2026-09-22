@@ -114,29 +114,30 @@ def test_a_flipped_card_dispatches_to_its_back_faces_ability():
         _ABILITIES.pop("flip_probe__back", None)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="the deck query excludes back rows, so the factory synthesizes a back that keeps the "
-    "front's printed_id; real back records are the next step of the active-face plan",
-)
 def test_a_factory_built_card_flipped_dispatches_to_its_back():
     plain = _ABILITIES["millet_farm"][0]
     register_ability("kyuden_probe__back", replace(plain, label="Open: Flipped"))
-    record = {
+    front = {
         "card_id": "kyuden_probe",
         "name": "Kyuden Probe",
         "extended_title": "Kyuden Probe",
         "types": ["Stronghold"],
         "decks": ["Pre-Game"],
         "back_card_id": "kyuden_probe__back",
-        "prints": [
-            {"print_id": 1, "set_name": "S", "image_path": "a.png", "back_image_path": "b.png"}
-        ],
+        "prints": [{"print_id": 1, "set_name": "S", "image_path": "a.png"}],
+    }
+    back = {
+        "card_id": "kyuden_probe__back",
+        "name": "Kyuden Probe",
+        "extended_title": "Kyuden Probe",
+        "types": ["Stronghold"],
+        "decks": ["Pre-Game"],
+        "prints": [{"print_id": 2, "set_name": "S", "image_path": "b.png"}],
     }
 
     try:
         deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Probe")
-        card = resolve_decklist(deck, [record], PlayerId.P1).pre_game[0]
+        card = resolve_decklist(deck, [front], PlayerId.P1, backs=[back]).pre_game[0]
         card.flip_face()
 
         assert ability_for(two_seat_game(), card).label == "Open: Flipped"

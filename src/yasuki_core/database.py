@@ -483,38 +483,76 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
                 (lower_names, lower_names),
             )
             cards = cur.fetchall()
-
-            if not cards:
-                return []
-
-            card_ids = [c["card_id"] for c in cards]
-            cur.execute(
-                """
-                SELECT p.print_id, p.card_id, s.set_name, pi.path AS image_path,
-                    COALESCE(back.path, pback.path) AS back_image_path, p.flavor_text
-                FROM prints p
-                JOIN l5r_sets s ON s.set_id = p.set_id
-                JOIN cards c ON c.card_id = p.card_id
-                LEFT JOIN print_images pi
-                    ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
-                LEFT JOIN prints bp ON bp.card_id = c.back_card_id AND bp.printing_id = p.printing_id
-                LEFT JOIN print_images back
-                    ON back.print_id = bp.print_id AND back.role = 'front' AND back.size = 'master'
-                LEFT JOIN print_images pback
-                    ON pback.print_id = p.print_id AND pback.role = 'back' AND pback.size = 'master'
-                WHERE p.card_id = ANY(%s)
-                ORDER BY s.release_date NULLS LAST, p.print_id
-                """,
-                (card_ids,),
-            )
-            prints_by_card: dict[str, list] = {}
-            for row in cur.fetchall():
-                prints_by_card.setdefault(row["card_id"], []).append(row)
-
-            for card in cards:
-                card["prints"] = prints_by_card.get(card["card_id"], [])
-
+            _attach_prints(cur, cards)
             return cards
+
+
+def back_face_ids(records: list[dict]) -> list[str]:
+    """The back-face ids the double-faced cards among ``records`` link to, for
+    :func:`get_back_faces`."""
+    return [record["back_card_id"] for record in records if record.get("back_card_id")]
+
+
+def get_back_faces(card_ids: list[str]) -> list[dict]:
+    """
+    Fetch the back-face records named by ``card_ids``, including their prints.
+
+    The companion to :func:`get_cards_by_names` for building a double-faced card: that query
+    refuses back rows because a back is never deck-legal, and this one returns nothing else, so a
+    caller resolving a decklist fetches the fronts by name and then their backs by the
+    ``back_card_id`` each front carries.
+
+    Parameters
+    ----------
+    card_ids : list of str
+        Back-face card ids, as the fronts' ``back_card_id`` names them.
+
+    Returns
+    -------
+    cards : list of dict
+        The back records among ``card_ids``, each with a ``prints`` key as
+        :func:`get_cards_by_names` shapes it.
+    """
+    if not card_ids:
+        return []
+    select_sql, _ = _card_select()
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(f"{select_sql} WHERE c.card_id = ANY(%s) AND c.is_back", (card_ids,))
+            cards = cur.fetchall()
+            _attach_prints(cur, cards)
+            return cards
+
+
+def _attach_prints(cur, cards: list[dict]) -> None:
+    """Give each of ``cards`` its ``prints`` list, in release order, with the back art each printing
+    shows: the back face's own printing when the card has one, else the printing's own back image."""
+    if not cards:
+        return
+    cur.execute(
+        """
+        SELECT p.print_id, p.card_id, s.set_name, pi.path AS image_path,
+            COALESCE(back.path, pback.path) AS back_image_path, p.flavor_text
+        FROM prints p
+        JOIN l5r_sets s ON s.set_id = p.set_id
+        JOIN cards c ON c.card_id = p.card_id
+        LEFT JOIN print_images pi
+            ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
+        LEFT JOIN prints bp ON bp.card_id = c.back_card_id AND bp.printing_id = p.printing_id
+        LEFT JOIN print_images back
+            ON back.print_id = bp.print_id AND back.role = 'front' AND back.size = 'master'
+        LEFT JOIN print_images pback
+            ON pback.print_id = p.print_id AND pback.role = 'back' AND pback.size = 'master'
+        WHERE p.card_id = ANY(%s)
+        ORDER BY s.release_date NULLS LAST, p.print_id
+        """,
+        ([card["card_id"] for card in cards],),
+    )
+    prints_by_card: dict[str, list] = {}
+    for row in cur.fetchall():
+        prints_by_card.setdefault(row["card_id"], []).append(row)
+    for card in cards:
+        card["prints"] = prints_by_card.get(card["card_id"], [])
 
 
 def all_card_ids() -> set[str]:

@@ -21,6 +21,7 @@ RECORDS = [
         "types": ["Stronghold"],
         "decks": ["Pre-Game"],
         "starting_honor": 10,
+        "back_card_id": "kyuden_hida__back",
         "prints": [{"print_id": 1, "set_name": "IE", "image_path": "sets/ie/kh.png"}],
     },
     {
@@ -41,6 +42,20 @@ RECORDS = [
     },
 ]
 
+# The stronghold's back face, as database.get_back_faces returns it for the id the front links.
+BACKS = [
+    {
+        "card_id": "kyuden_hida__back",
+        "name": "Kyuden Hida",
+        "extended_title": "Kyuden Hida",
+        "types": ["Stronghold"],
+        "decks": ["Pre-Game"],
+        "starting_honor": 10,
+        "province_strength": 9,
+        "prints": [{"print_id": 4, "set_name": "IE", "image_path": "sets/ie/kh_back.png"}],
+    }
+]
+
 # Decks sized to outlast the opening deal (4 provinces + 5-card starting hand): dynasty keeps
 # 10 - 4 = 6 and fate keeps 10 - 5 = 5.
 DECK_YAML = (
@@ -59,6 +74,9 @@ class _FakeWS:
 @pytest.fixture
 def room(monkeypatch):
     monkeypatch.setattr(ws_module, "get_cards_by_names", lambda names: RECORDS)
+    monkeypatch.setattr(
+        ws_module, "get_back_faces", lambda ids: [b for b in BACKS if b["card_id"] in ids]
+    )
     rooms["r1"] = {"players": [], "max_players": 2}
     try:
         yield GameRoom("r1")
@@ -133,6 +151,19 @@ def test_a_solo_goldfisher_resets_on_their_own(room):
     asyncio.run(room.handle_reset(ada))  # lone seat, so unanimous
     assert not room.setup_done
     assert room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards == []
+
+
+def test_the_seat_going_second_plays_its_strongholds_back_face(room):
+    ada, kenji = _both_loaded(room)
+    asyncio.run(room.handle_ready(ada, True))
+    asyncio.run(room.handle_ready(kenji, True))
+
+    strongholds = [
+        card for card in room.state.battlefield.cards if card.printed.name == "Kyuden Hida"
+    ]
+    flipped = [card for card in strongholds if card.showing_back]
+    assert len(strongholds) == 2 and len(flipped) == 1
+    assert (flipped[0].printed_id, flipped[0].province_strength) == ("kyuden_hida__back", 9)
 
 
 def test_both_ready_deals_the_table_and_broadcasts(room):

@@ -131,6 +131,22 @@ def test_a_mirror_match_still_settles_turn_order():
     assert not _stronghold(state, first).showing_back
 
 
+def test_the_flipped_stronghold_plays_as_its_back_face():
+    """The bundled deck's Dark Capital prints 7 Province Strength on its front and 9 on its back,
+    and the back is its own card id, so the seat that goes second reads the back's."""
+    state, first = build_state_from_deck(
+        DEMO_DECK_PATH, opponent_deck_path=DEMO_DECK_PATH, rng=default_rng(7)
+    )
+    second = PlayerId.P2 if first is PlayerId.P1 else PlayerId.P1
+
+    flipped, upright = _stronghold(state, second), _stronghold(state, first)
+    assert (flipped.printed_id, flipped.province_strength) == (
+        "the_dark_capital_of_the_spider__back",
+        9,
+    )
+    assert (upright.printed_id, upright.province_strength) == ("the_dark_capital_of_the_spider", 7)
+
+
 def test_rulebook_proxies_reach_a_table_whatever_the_decks_hold():
     """ShE datasheet: the Favor is available to every player, so it reaches the table even though no
     card in the dealt decks creates it."""

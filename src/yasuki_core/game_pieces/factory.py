@@ -65,6 +65,7 @@ def resolve_decklist(
     records: list[dict],
     owner: PlayerId,
     creates_map: dict[str, list[str]] | None = None,
+    backs: list[dict] | None = None,
 ) -> ResolvedDeck:
     """Resolve a parsed decklist into typed card instances owned by ``owner``.
 
@@ -85,6 +86,11 @@ def resolve_decklist(
     creates_map : dict mapping str to list of str, optional
         Each card id to the token card ids it creates, as returned by
         ``database.get_creates_for_cards``. Stamped onto the built card's ``creates``. Default none.
+    backs : list of dict, optional
+        Back-face records as returned by ``database.get_back_faces``, looked up by id for a
+        double-faced entry's other face and never by name, since a back shares its front's title
+        and is not a card a decklist may name. Default none, which leaves every back synthesized
+        from its front's back art.
 
     Returns
     -------
@@ -92,7 +98,7 @@ def resolve_decklist(
         The per-section card instances plus any entry names absent from ``records``.
     """
     index = _name_index(records)
-    by_id = {record["card_id"]: record for record in records}
+    by_id = {record["card_id"]: record for record in (*records, *(backs or ()))}
     resolved = ResolvedDeck()
     sections = {"pre_game": resolved.pre_game, "dynasty": resolved.dynasty, "fate": resolved.fate}
     next_id = 0
