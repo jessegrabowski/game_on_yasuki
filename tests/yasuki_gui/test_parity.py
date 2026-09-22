@@ -103,3 +103,11 @@ class TestFlipFace:
         field.dispatch(FlipFace((front.id,)))
         assert front.showing_back is True
         assert front.active_face is front.back_printed
+
+    def test_still_offered_once_the_back_is_showing(self, loaded):
+        field, state = loaded
+        front = _inject_double_faced(state)
+        field.reconcile_all()
+        field.dispatch(FlipFace((front.id,)))
+        field.reconcile_all()
+        assert ACTIONS["card.flip_face"].when(field, ActionContext(card_tag=card_tag("DF")))

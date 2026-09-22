@@ -5,9 +5,12 @@ from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Lobby,
+    Pass,
     Recruit,
     UseFavorAbility,
 )
+from yasuki_core.engine.rules.board.queries import has_keyword
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
@@ -31,6 +34,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.units.composition import unit_force
+from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.session import EngineSession
 
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -39,6 +43,8 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 
 from tests.yasuki_core.engine.builders import (
     attachment,
+    combat_segment,
+    flip_stronghold,
     dealt_table,
     end_phase,
     end_turn,
@@ -52,7 +58,8 @@ from tests.yasuki_core.engine.builders import (
     two_seat_game,
 )
 
-P1 = PlayerId.P1
+P1, P2 = PlayerId.P1, PlayerId.P2
+ANCIENT_CASTLE = "the_ancient_castle_of_the_lion"
 
 
 # --- Kitsu Hayako ---
@@ -473,3 +480,214 @@ def test_the_estate_is_not_offered_after_an_action_that_paid_no_favor():
     session.act(P1, ActivateAbility("traders"))
 
     assert ActivateAbility("estate") not in session.legal_actions(P1)
+
+
+# --- The Dark Capital of the Spider ---
+
+
+DARK_CAPITAL = "the_dark_capital_of_the_spider"
+
+
+def _ancient_castle_in_combat(
+    *, attacker: PlayerId = P1, flipped: bool = False, defender_honor: int = 1
+) -> EngineSession:
+    """The Combat Segment of ``attacker``'s attack: P1's "matsu" (Lion, 3 PH) and "crane" against
+    P2's "guard", with the Ancient Castle as P1's Stronghold and the non-acting seat passed."""
+    cards = [
+        flip_stronghold(ANCIENT_CASTLE, card_id="castle", flipped=flipped),
+        personality("matsu", force=2, personal_honor=3, clans=("Lion",)),
+        personality("crane", force=2, personal_honor=3, clans=("Crane",)),
+        personality("guard", owner=P2, force=2, personal_honor=defender_honor),
+    ]
+    p1_army, p2_army = {"matsu": 0, "crane": 0}, {"guard": 0}
+    if attacker is P1:
+        return combat_segment(cards, p1_army, p2_army)
+    return combat_segment(cards, p2_army, p1_army, attacker=P2)
+
+
+def test_the_castle_sends_a_defender_home_and_straightens_itself_for_honor():
+    session = _ancient_castle_in_combat()
+
+    session.act(P1, ActivateAbility("castle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    game = session.game
+    assert game.table.cards_by_id["castle"].bowed
+    assert isinstance(game.pending, ChooseCards)
+    assert set(game.pending.candidates) == {"matsu", "crane"}
+    session.submit(P1, DecisionResponse(("matsu",)))
+
+    assert location_of(game.table, game.table.cards_by_id["guard"]).is_home
+    assert not game.table.cards_by_id["castle"].bowed
+    assert game.table.seats[P1].honor == 1
+
+
+def test_the_castle_stays_bowed_when_the_second_target_is_declined():
+    session = _ancient_castle_in_combat()
+    session.act(P1, ActivateAbility("castle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    session.submit(P1, DecisionResponse(()))
+
+    game = session.game
+    assert game.pending is None
+    assert game.table.cards_by_id["castle"].bowed
+    assert game.table.seats[P1].honor == 0
+
+
+def test_the_castle_offers_no_second_target_without_a_higher_personal_honor():
+    session = _ancient_castle_in_combat(defender_honor=3)
+
+    session.act(P1, ActivateAbility("castle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert location_of(game.table, game.table.cards_by_id["guard"]).is_home
+
+
+def test_the_castle_reaches_only_defending_personalities():
+    session = _ancient_castle_in_combat(attacker=P2)
+
+    assert ActivateAbility("castle") not in session.legal_actions(P1)
+
+
+def test_the_castle_back_adds_a_force_to_attacking_lion_personalities():
+    session = _ancient_castle_in_combat(flipped=True)
+    game = session.game
+    lion_at_home = put_in_play(game, personality("lion_at_home", force=2, clans=("Lion",)))
+
+    assert effective_force(game, game.table.cards_by_id["matsu"]) == 3
+    assert effective_force(game, game.table.cards_by_id["crane"]) == 2
+    assert effective_force(game, lion_at_home) == 2
+
+
+def test_the_castle_back_counts_a_lion_at_another_battlefield_as_attacking():
+    cards = [
+        flip_stronghold(ANCIENT_CASTLE, card_id="castle", flipped=True),
+        personality("matsu", force=2, clans=("Lion",)),
+        personality("akodo", force=2, clans=("Lion",)),
+        personality("guard", owner=P2, force=2),
+    ]
+    game = combat_segment(cards, {"matsu": 0, "akodo": 1}, {"guard": 0}).game
+
+    assert game.attack.current == 0
+    assert effective_force(game, game.table.cards_by_id["akodo"]) == 3
+
+
+def test_the_castle_back_grants_nothing_while_defending():
+    session = _ancient_castle_in_combat(attacker=P2, flipped=True)
+    game = session.game
+
+    assert effective_force(game, game.table.cards_by_id["matsu"]) == 2
+
+
+def test_the_castle_back_gains_the_honor_without_a_second_target():
+    session = _ancient_castle_in_combat(flipped=True)
+
+    session.act(P1, ActivateAbility("castle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert location_of(game.table, game.table.cards_by_id["guard"]).is_home
+    assert game.table.cards_by_id["castle"].bowed
+    assert game.table.seats[P1].honor == 1
+
+
+def _dark_capital_in_combat(*, flipped: bool = False) -> EngineSession:
+    """P1's raider (3F) faces P2's guard (2F) in the Combat Segment, with the Dark Capital as P1's
+    Stronghold."""
+    cards = [
+        flip_stronghold(
+            DARK_CAPITAL, card_id="capital", flipped=flipped, gold_production=4, clan="Spider"
+        ),
+        personality("raider", owner=P1, force=3),
+        personality("guard", owner=P2, force=2),
+    ]
+    return combat_segment(cards, {"raider": 0}, {"guard": 0})
+
+
+def test_the_capital_gives_its_own_personality_shadowlands_and_fear_equal_to_his_force():
+    session = _dark_capital_in_combat()
+
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseCards) and choice.candidates == ("guard",)
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert has_keyword(game, game.table.cards_by_id["raider"], keywords.SHADOWLANDS)
+    assert game.table.cards_by_id["guard"].bowed  # Fear 3 reaches the 2F guard
+    assert not game.table.cards_by_id["capital"].bowed  # Tireless
+    assert game.round.priority is P2
+
+
+def test_the_capital_gives_an_enemy_shadowlands_and_keeps_the_opportunity_to_act():
+    session = _dark_capital_in_combat()
+
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert has_keyword(game, game.table.cards_by_id["guard"], keywords.SHADOWLANDS)
+    assert not game.table.cards_by_id["guard"].bowed
+    assert game.round.priority is P1 and game.round.passes == 0
+    assert game.additional_action is None
+
+
+def test_a_pass_at_the_additional_opportunity_does_not_count_toward_closing_the_round():
+    session = _dark_capital_in_combat()
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    session.act(P1, Pass())
+
+    assert session.game.round.priority is P2 and session.game.round.passes == 1
+
+
+def test_the_capital_back_fears_as_the_front_does_in_a_battle():
+    session = _dark_capital_in_combat(flipped=True)
+
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.table.cards_by_id["guard"].bowed
+    assert game.round.priority is P2
+
+
+def test_the_capital_back_takes_an_additional_action_on_its_own_personality_as_an_open():
+    game = two_seat_game()
+    put_in_play(game, flip_stronghold(DARK_CAPITAL, card_id="capital", flipped=True))
+    put_in_play(game, personality("raider", force=3))
+    session = EngineSession.start(game.table, P1)
+
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+
+    game = session.game
+    assert game.pending is None
+    assert has_keyword(game, game.table.cards_by_id["raider"], keywords.SHADOWLANDS)
+    assert game.round.priority is P1 and game.round.passes == 0
+
+
+def test_the_capital_front_offers_no_open():
+    game = two_seat_game()
+    put_in_play(game, flip_stronghold(DARK_CAPITAL, card_id="capital"))
+    put_in_play(game, personality("raider", force=3))
+    session = EngineSession.start(game.table, P1)
+
+    assert ActivateAbility("capital") not in session.legal_actions(P1)
+
+
+def test_the_capital_replays_to_the_same_board():
+    session = _dark_capital_in_combat()
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert replay(session.log) == session.game

@@ -252,8 +252,11 @@ def encode_card(card: L5RCard) -> dict:
     if name not in _PERSISTED_FIELDS:
         raise KeyError(f"{name} has no persisted-field list; add one to _PERSISTED_FIELDS")
     payload = {"__type__": name}
+    # Printed fields come off the front print, not the card: a flipped card forwards its reads to
+    # the back, and the payload persists the front with showing_back so decode_card rebuilds it.
     for field_name in _PERSISTED_FIELDS[name]:
-        payload[field_name] = _encode_value(getattr(card, field_name))
+        source = card if field_name in _INSTANCE_FIELDS else card.printed
+        payload[field_name] = _encode_value(getattr(source, field_name))
     return payload
 
 

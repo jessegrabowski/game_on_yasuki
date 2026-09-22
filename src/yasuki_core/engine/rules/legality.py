@@ -407,7 +407,7 @@ def _inheritance(game: GameState, seat: PlayerId) -> list[Action]:
     stronghold = seat_stronghold(game, seat)
     # Turning the Stronghold over is what pays for the grant, and flip_face is a no-op without a
     # back face.
-    if stronghold is None or stronghold.back_card_id is None:
+    if stronghold is None or stronghold.printed.back_card_id is None:
         return []
     if not owned_holdings(game, seat):
         return []

@@ -12,6 +12,7 @@ from yasuki_core.install.registration_audit import (
     duplicate_registrations,
     main,
     registered_card_ids,
+    unregistered_back_faces,
     unregistered_card_ids,
 )
 from yasuki_core.engine.rules.abilities.model import Ability
@@ -68,6 +69,31 @@ def test_a_misspelled_id_is_reported_with_its_registry_and_a_suggestion():
     problems = unregistered_card_ids({"abilities": frozenset({"milet_farm"})})
 
     assert problems == ["abilities: no card has the id 'milet_farm'. Did you mean millet_farm?"]
+
+
+def test_an_implemented_front_with_an_unregistered_back_is_reported():
+    known = frozenset({"kyuden", "kyuden__back", "farm"})
+    registries = {"abilities": frozenset({"kyuden", "farm"})}
+
+    problems = unregistered_back_faces(registries, known)
+
+    assert problems == ["kyuden is implemented but its back face kyuden__back is not"]
+
+
+def test_a_back_registered_in_any_registry_satisfies_the_check():
+    known = frozenset({"kyuden", "kyuden__back"})
+    registries = {"abilities": frozenset({"kyuden"}), "stat grants": frozenset({"kyuden__back"})}
+
+    assert unregistered_back_faces(registries, known) == []
+
+
+def test_a_back_the_engine_cannot_model_yet_is_not_reported():
+    known = frozenset(
+        {"the_palatial_estate_of_the_crane", "the_palatial_estate_of_the_crane__back"}
+    )
+    registries = {"abilities": frozenset({"the_palatial_estate_of_the_crane"})}
+
+    assert unregistered_back_faces(registries, known) == []
 
 
 def test_an_id_with_no_near_match_is_still_reported():

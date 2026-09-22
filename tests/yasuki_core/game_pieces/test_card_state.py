@@ -2,7 +2,7 @@ from dataclasses import replace
 
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import CardPrint
+from yasuki_core.game_pieces.prints import CardPrint, StrongholdPrint
 from yasuki_core.engine.players import PlayerId
 
 
@@ -75,6 +75,32 @@ def test_counters_survive_a_face_flip():
 
     assert card.showing_back is True
     assert card.counters == {"wealth": 2}
+
+
+def test_a_flipped_card_reads_as_its_back_face():
+    card = L5RCard.of(
+        StrongholdPrint,
+        id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        printed_id="kyuden",
+        province_strength=7,
+        back_card_id="kyuden__back",
+        back_printed=StrongholdPrint(
+            name="Kyuden, Defiled",
+            side=Side.STRONGHOLD,
+            printed_id="kyuden__back",
+            province_strength=9,
+        ),
+        owner=PlayerId.P1,
+    )
+
+    card.flip_face()
+
+    assert (card.printed_id, card.province_strength) == ("kyuden__back", 9)
+    # The physical card is still the front: that is what has a back to flip to.
+    assert card.printed.back_card_id == "kyuden__back"
+    assert card.back_card_id is None
 
 
 def test_counters_participate_in_card_equality():

@@ -21,9 +21,11 @@ from yasuki_core.engine.rules.abilities.registry import (
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.decklist import parse_deck_yaml
+from yasuki_core.game_pieces.factory import resolve_decklist
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, StrongholdPrint
 from tests.yasuki_core.engine.builders import holding, personality, put_in_play, two_seat_game
 
 
@@ -78,6 +80,63 @@ def test_a_card_may_register_several_keyed_abilities():
             ability_for(game, card)
     finally:
         _ABILITIES.pop("guard_probe", None)
+
+
+def test_a_flipped_card_dispatches_to_its_back_faces_ability():
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("flip_probe__back", replace(plain, label="Open: Flipped"))
+
+    try:
+        card = L5RCard.of(
+            StrongholdPrint,
+            id="probe",
+            name="Probe",
+            printed_id="flip_probe",
+            side=Side.STRONGHOLD,
+            back_card_id="flip_probe__back",
+            back_printed=StrongholdPrint(
+                name="Probe", side=Side.STRONGHOLD, printed_id="flip_probe__back"
+            ),
+            owner=PlayerId.P1,
+        )
+        game = two_seat_game()
+        assert ability_for(game, card) is None
+
+        card.flip_face()
+
+        assert ability_for(game, card).label == "Open: Flipped"
+    finally:
+        _ABILITIES.pop("flip_probe__back", None)
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="the deck query excludes back rows, so the factory synthesizes a back that keeps the "
+    "front's printed_id; real back records are the next step of the active-face plan",
+)
+def test_a_factory_built_card_flipped_dispatches_to_its_back():
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("kyuden_probe__back", replace(plain, label="Open: Flipped"))
+    record = {
+        "card_id": "kyuden_probe",
+        "name": "Kyuden Probe",
+        "extended_title": "Kyuden Probe",
+        "types": ["Stronghold"],
+        "decks": ["Pre-Game"],
+        "back_card_id": "kyuden_probe__back",
+        "prints": [
+            {"print_id": 1, "set_name": "S", "image_path": "a.png", "back_image_path": "b.png"}
+        ],
+    }
+
+    try:
+        deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Probe")
+        card = resolve_decklist(deck, [record], PlayerId.P1).pre_game[0]
+        card.flip_face()
+
+        assert ability_for(two_seat_game(), card).label == "Open: Flipped"
+    finally:
+        _ABILITIES.pop("kyuden_probe__back", None)
 
 
 def test_a_granted_ability_follows_the_printed_ones_and_answers_to_its_key():

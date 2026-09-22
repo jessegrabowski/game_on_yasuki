@@ -141,7 +141,7 @@ def flip_second_player_stronghold(
     else:
         loser = first if honor_first < honor_second else second
     stronghold = _find_stronghold(state, loser)
-    if stronghold is not None and stronghold.back_card_id is not None:
+    if stronghold is not None and stronghold.printed.back_card_id is not None:
         stronghold.flip_face()
     return loser
 

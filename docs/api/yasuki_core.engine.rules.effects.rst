@@ -7,6 +7,7 @@ yasuki_core.engine.rules.effects
 
 .. autosummary::
 
+    AdditionalAction
     AdjustCounter
     ApplyEffects
     Arrange

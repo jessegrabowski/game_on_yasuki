@@ -1,3 +1,4 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.lobby import register_may_not_lobby
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
@@ -10,11 +11,15 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import (
+    AdditionalAction,
     AdjustCounter,
     Banish,
     Choose,
     CreateToken,
     Effect,
+    Fear,
+    GainHonor,
+    GrantKeyword,
     Move,
     Straighten,
     TakeFavor,
@@ -22,11 +27,23 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.action_record import action_keywords
+from yasuki_core.engine.rules.action_record import action_keywords, action_round
+from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
-from yasuki_core.engine.rules.board.queries import owned_personalities, sincerity_seed_targets
+from yasuki_core.engine.rules.board.clans import card_alignments
+from yasuki_core.engine.rules.board.queries import (
+    attack_targets,
+    opposing_units_in_battle,
+    owned_personalities,
+    personalities_in_play,
+    sincerity_seed_targets,
+    units_at,
+)
+from yasuki_core.engine.rules.stats.card_values import effective_force, effective_personal_honor
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import location_of
+from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
 
@@ -134,6 +151,188 @@ def _resolve_spearmen_of_the_akasha(
     if not chosen:
         return []
     return [Banish(source_id), CreateToken(NAGA_FOLLOWER, seat, source_id, attach_to=chosen[0])]
+
+
+# --- The Ancient Castle of the Lion ---
+
+ANCIENT_CASTLE_HONOR = 1
+
+
+def _the_ancient_castle_of_the_lion_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The enemy's defending Personalities: none while the Stronghold's controller defends."""
+    attack = game.attack
+    if attack is None or attack.attacker is not source.owner:
+        return []
+    return list(opposing_units_in_battle(game, source.owner))
+
+
+def _the_ancient_castle_of_the_lion_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Move home a target enemy defending Personality. You may target your Personality with
+    higher Personal Honor to straighten this Stronghold and gain 1 Honor." The second target is
+    optional, chosen as the ability resolves among the controller's Personalities at the battle."""
+    honor = effective_personal_honor(game, target)
+    higher = tuple(
+        card.id
+        for card in units_at(game, game.attack.current, source.owner)
+        if effective_personal_honor(game, card) > honor
+    )
+    effects: list[Effect] = [Move(target.id, Location.home(target.owner))]
+    if higher:
+        effects.append(
+            Choose(source.owner, higher, 0, 1, "the_ancient_castle_of_the_lion", source.id)
+        )
+    return effects
+
+
+@choice_resolver(
+    "the_ancient_castle_of_the_lion",
+    prompt="You may target your Personality with higher Personal Honor to straighten this "
+    "Stronghold and gain 1 Honor",
+)
+def _resolve_the_ancient_castle_of_the_lion(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    if not chosen:
+        return []
+    return [Straighten(source_id), GainHonor(seat, ANCIENT_CASTLE_HONOR, personalities=chosen)]
+
+
+register_ability(
+    "the_ancient_castle_of_the_lion",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle, bow: Move home a target enemy defending Personality. You may target your "
+        "Personality with higher Personal Honor to straighten this Stronghold and gain 1 Honor",
+        cost=bow_cost,
+        targets=_the_ancient_castle_of_the_lion_targets,
+        effects=_the_ancient_castle_of_the_lion_effects,
+    ),
+)
+
+
+# --- The Ancient Castle of the Lion (back) ---
+
+
+@stat_grant("the_ancient_castle_of_the_lion__back")
+def _the_ancient_castle_of_the_lion__back_stat_grant(
+    game: GameState, source: L5RCard, card: L5RCard, stat: Stat
+) -> int:
+    """Your attacking Lion Clan Personalities have +1F: the controller's Lion Personalities in an
+    attacking army, at any battlefield of the controller's own attack (CR, Attack)."""
+    attack = game.attack
+    if stat is not Stat.FORCE or card.owner is not source.owner or attack is None:
+        return 0
+    if attack.attacker is not source.owner or ruleset.LION not in card_alignments(card):
+        return 0
+    return 1 if location_of(game.table, card).battlefield is not None else 0
+
+
+def _the_ancient_castle_of_the_lion__back_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [
+        Move(target.id, Location.home(target.owner)),
+        GainHonor(source.owner, ANCIENT_CASTLE_HONOR),
+    ]
+
+
+register_ability(
+    "the_ancient_castle_of_the_lion__back",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle, bow: Move home a target enemy defending Personality. Gain 1 Honor",
+        cost=bow_cost,
+        targets=_the_ancient_castle_of_the_lion_targets,
+        effects=_the_ancient_castle_of_the_lion__back_effects,
+    ),
+)
+
+
+# --- The Dark Capital of the Spider ---
+
+# "You lose 1 Honor less from your cards" (2 on the back) is not modeled: nothing reads how much
+# Honor a card's effect costs its own controller. The Battle ability is.
+
+DARK_CAPITAL_FEAR = "the_dark_capital_of_the_spider"
+
+
+def _the_dark_capital_of_the_spider_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _the_dark_capital_of_the_spider_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Give a target Personality Shadowlands. If they are yours, Fear equal to their Force.
+    Otherwise, take an additional action." The Fear targets the way any Fear does, chosen as it
+    resolves, and is not raised when nothing at the battle can be targeted."""
+    effects: list[Effect] = [
+        GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN)
+    ]
+    if target.owner is not source.owner:
+        return [*effects, AdditionalAction(source.owner)]
+    feared = attack_targets(game, source)
+    if feared:
+        effects.append(Choose(source.owner, tuple(feared), 1, 1, DARK_CAPITAL_FEAR, target.id))
+    return effects
+
+
+@choice_resolver(DARK_CAPITAL_FEAR, prompt="Fear equal to their Force: choose its target")
+def _the_dark_capital_of_the_spider_fear(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """``source_id`` is the Personality given Shadowlands, whose Force the Fear reads as it
+    resolves."""
+    strength = effective_force(game, game.table.cards_by_id[source_id])
+    return [Fear(strength, chosen[0], seat)]
+
+
+register_ability(
+    "the_dark_capital_of_the_spider",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Tireless Battle: Give a target Personality Shadowlands. If they are yours, Fear "
+        "equal to their Force. Otherwise, take an additional action.",
+        cost=no_cost,
+        targets=_the_dark_capital_of_the_spider_targets,
+        effects=_the_dark_capital_of_the_spider_effects,
+        tireless=True,
+    ),
+)
+
+
+# --- The Dark Capital of the Spider (back) ---
+
+
+def _the_dark_capital_of_the_spider__back_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "If they are yours and this is a Battle, Fear equal to their Force. Otherwise, take an
+    additional action." Taken as an Open, even on the controller's own Personality, it is the
+    additional action."""
+    in_battle = ActionTiming.BATTLE in permitted_timings_in(game, action_round(game), source.owner)
+    if in_battle:
+        return _the_dark_capital_of_the_spider_effects(game, source, target)
+    return [
+        GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN),
+        AdditionalAction(source.owner),
+    ]
+
+
+register_ability(
+    "the_dark_capital_of_the_spider__back",
+    Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        label="Tireless Battle/Open: Give a target Personality Shadowlands. If they are yours and "
+        "this is a Battle, Fear equal to their Force. Otherwise, take an additional action.",
+        cost=no_cost,
+        targets=_the_dark_capital_of_the_spider_targets,
+        effects=_the_dark_capital_of_the_spider__back_effects,
+        tireless=True,
+    ),
+)
 
 
 # --- The Palatial Estate of the Crane ---

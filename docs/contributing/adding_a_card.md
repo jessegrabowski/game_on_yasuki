@@ -173,6 +173,15 @@ Everything the card does goes in that one block: its triggers, its target predic
 helper, its registration. A pre-commit hook asserts the ordering, the one-header-per-card rule, and
 that the header names the card the block registers, on the modules your commit touches.
 
+The reverse face of a double-faced card is a card of its own, with the front's id and `__back`
+appended, and it gets its own block directly after the front's under the front's title plus
+`(back)`. A back that prints the front's ability registers the front's handlers again under its own
+id:
+
+```python
+# --- The Grand Halls of the Lion (back) ---
+```
+
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, an entry point of a registry (`gold`, `invest`,
 `keywords`, `recruit_discount`, `invest_discount`, `stat_grant`, `attach_restriction`,

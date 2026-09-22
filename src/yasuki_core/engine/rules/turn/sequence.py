@@ -177,6 +177,12 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
     A pass counts toward closing. Taking an action resets the count. A seat the round permits
     nothing never receives the opportunity, and counts as having passed.
     """
+    if not passed and game.additional_action is game.round.priority:
+        # The seat keeps the opportunity, and its consecutive-pass count starts again, so a pass
+        # taken at the additional opportunity does not count toward closing the round.
+        game.additional_action = None
+        game.round = replace(game.round, passes=0)
+        return
     seats = list(game.table.seats)
     passes = game.round.passes + 1 if passed else 0
     after = seats.index(game.round.priority) + 1

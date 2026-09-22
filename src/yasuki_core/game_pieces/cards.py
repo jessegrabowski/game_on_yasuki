@@ -8,12 +8,14 @@ class L5RCard:
     """One physical copy of a card in a game: its identity, its state, and the print it presents.
 
     Characteristics (name, keywords, printed stats) belong to the :class:`~.CardPrint` in
-    ``printed``, which every copy of that card shares and none of them mutates. Reads forward, so
-    ``card.gold_production`` answers from the print, but ``isinstance`` does not: ask
-    ``isinstance(card.printed, HoldingPrint)`` for the card's type.
+    ``printed``, which every copy of that card shares and none of them mutates. Reads forward to
+    the face the card presents, so ``card.gold_production`` and ``card.printed_id`` answer from
+    ``active_face``, but ``isinstance`` does not: ask ``isinstance(card.printed, HoldingPrint)``
+    for the card's type.
 
     A double-faced card carries both prints and flips by choosing between them: its two faces
-    share one identity, one ``L5RCard``.
+    share one identity, one ``L5RCard``. What belongs to the physical card rather than the face it
+    shows, such as whether it has a back at all, reads ``card.printed`` explicitly.
     """
 
     # Every copy on the table belongs to a seat: dealt from that seat's deck, or spawned by it.
@@ -65,15 +67,17 @@ class L5RCard:
         return cls(printed=print_cls(**printed), **fields)
 
     def __getattr__(self, name: str):
-        """Answer a printed characteristic off the print this copy presents."""
-        # printed lives in a slot, so it is missing until __init__ sets it; without this guard a
-        # read during construction would recurse here forever.
+        """Answer a printed characteristic off the face this copy presents."""
+        # showing_back is declared after printed and back_printed, so its slot existing means all
+        # three are set; without this guard a read during construction would recurse here forever.
         try:
-            printed = object.__getattribute__(self, "printed")
+            face = object.__getattribute__(self, "printed")
+            if object.__getattribute__(self, "showing_back"):
+                face = object.__getattribute__(self, "back_printed") or face
         except AttributeError:
             raise AttributeError(name) from None
         try:
-            return getattr(printed, name)
+            return getattr(face, name)
         except AttributeError:
             # Reported against the card, not the print: whoever hit this was reading a card.
             raise AttributeError(

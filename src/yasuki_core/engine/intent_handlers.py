@@ -240,7 +240,7 @@ def _flip_card(card: L5RCard) -> bool:
 
 
 def _flip_face_card(card: L5RCard) -> bool:
-    if card.back_card_id is None:
+    if card.printed.back_card_id is None:
         return False
     card.flip_face()
     return True

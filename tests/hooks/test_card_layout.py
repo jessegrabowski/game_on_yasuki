@@ -18,6 +18,11 @@ PORT = """# --- Teardrop Island ---
 def _teardrop_island_gold(card, game, seat):
     return 2
 """
+BACK = """# --- Modest Farm (back) ---
+
+
+register_ability("modest_farm__back", Ability(effects=_modest_farm_effects))
+"""
 
 
 def written(tmp_path: pathlib.Path, source: str) -> str:
@@ -34,6 +39,21 @@ def test_a_module_following_the_layout_reports_nothing(tmp_path, capsys):
 def test_sections_out_of_alphabetical_order_are_reported(tmp_path, capsys):
     assert main([written(tmp_path, PORT + "\n\n" + FARM)]) == 1
     assert "modest_farm follows teardrop_island" in capsys.readouterr().err
+
+
+def test_a_back_header_names_the_reverse_face(tmp_path, capsys):
+    assert main([written(tmp_path, FARM + "\n\n" + BACK + "\n\n" + PORT)]) == 0
+    assert capsys.readouterr().err == ""
+
+
+def test_a_back_header_over_the_front_registration_is_reported(tmp_path, capsys):
+    misheaded = FARM.replace("# --- Modest Farm ---", "# --- Modest Farm (back) ---")
+
+    assert main([written(tmp_path, misheaded)]) == 1
+    assert (
+        "the header names modest_farm__back, the block registers modest_farm"
+        in capsys.readouterr().err
+    )
 
 
 def test_a_second_header_for_one_card_is_reported(tmp_path, capsys):
