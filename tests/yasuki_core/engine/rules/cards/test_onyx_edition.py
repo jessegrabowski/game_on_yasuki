@@ -1,20 +1,31 @@
 import pytest
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.effects import TakeFavor
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.idioms import PITCH
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.effects import Move, TakeFavor
+from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
     ActivateAbility,
+    DeclareAttack,
     Lobby,
     Pass,
+    PlayInterrupt,
+    PlayStrategy,
     Recruit,
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import location_of
+from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
-from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import FatePrint, RingPrint, StrongholdPrint
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
@@ -48,18 +59,28 @@ from tests.yasuki_core.engine.builders import (
     dealt_table,
     end_phase,
     end_turn,
+    fate_card,
     holding,
     pay,
     personality,
+    province_card,
     put_in_play,
     register,
     stronghold,
     token_template,
     two_seat_game,
 )
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 ANCIENT_CASTLE = "the_ancient_castle_of_the_lion"
+
+
+@pytest.fixture(autouse=True)
+def _onyx(monkeypatch):
+    # The Rings register their Onyx text under the Onyx ruleset, and nothing else here reads a
+    # rule the two rulesets differ on, so the whole module plays under it.
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.ONYX)
 
 
 # --- Kitsu Hayako ---
@@ -691,3 +712,261 @@ def test_the_capital_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("guard",)))
 
     assert replay(session.log) == session.game
+
+
+# --- The five Rings ---
+
+P2 = PlayerId.P2
+MOVE_PROBE = "probe_battle_move_an_enemy_home"
+
+
+def _ring(card_id: str, printed_id: str, owner: PlayerId = P1) -> L5RCard:
+    return L5RCard.of(
+        RingPrint, id=card_id, name=printed_id, printed_id=printed_id, side=Side.FATE, owner=owner
+    )
+
+
+def _ring_game(*in_play: L5RCard, held: tuple[L5RCard, ...] = ()) -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    for card in in_play:
+        put_in_play(state, register(state, card))
+    for card in held:
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    return EngineSession.start(state, P1)
+
+
+def _answer_until_settled(session: EngineSession, *answers: str) -> None:
+    """Answer each decision the action raises: a named answer where one of ``answers`` is among
+    the candidates, an empty answer to everything else, payments included."""
+    pending = session.game.pending
+    while pending is not None:
+        named = [each for each in answers if each in getattr(pending, "candidates", ())]
+        session.submit(pending.seat, DecisionResponse(tuple(named[:1])))
+        pending = session.game.pending
+
+
+def _in_play(session: EngineSession) -> set[str]:
+    return {card.id for card in session.game.table.battlefield.cards}
+
+
+def _fate_discard(session: EngineSession, seat: PlayerId) -> set[str]:
+    pile = session.game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)]
+    return {card.id for card in pile.cards}
+
+
+def test_ring_of_air_straightens_a_bowed_personality_and_bows():
+    session = _ring_game(personality("samurai"), _ring("air", "ring_of_air"))
+    session.game.table.cards_by_id["samurai"].bow()
+
+    session.act(P1, ActivateAbility("air", "air"))
+    _answer_until_settled(session, "samurai")
+
+    cards = session.game.table.cards_by_id
+    assert not cards["samurai"].bowed
+    assert cards["air"].bowed
+
+
+def test_ring_of_air_pitched_from_hand_straightens_and_is_discarded():
+    session = _ring_game(personality("samurai"), held=(_ring("air", "ring_of_air"),))
+    session.game.table.cards_by_id["samurai"].bow()
+
+    session.act(P1, PlayStrategy("air", PITCH))
+    _answer_until_settled(session, "samurai")
+
+    assert not session.game.table.cards_by_id["samurai"].bowed
+    assert "air" in _fate_discard(session, P1)
+    assert "air" not in _in_play(session)
+
+
+def test_ring_of_the_void_enters_from_hand_and_discards_the_rest_of_the_hand():
+    held = (_ring("void", "ring_of_the_void"), fate_card("one", P1), fate_card("two", P1))
+    session = _ring_game(held=held)
+    assert PlayStrategy("void", "enter") in session.legal_actions(P1)
+
+    session.act(P1, PlayStrategy("void", "enter"))
+    _answer_until_settled(session)
+
+    assert "void" in _in_play(session)
+    assert _fate_discard(session, P1) == {"one", "two"}
+    assert session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards == []
+
+
+def test_ring_of_the_void_is_withheld_with_three_rings_in_play():
+    rings = [_ring(f"r{index}", "ring_of_air") for index in range(3)]
+    session = _ring_game(*rings, held=(_ring("void", "ring_of_the_void"),))
+
+    assert PlayStrategy("void", "enter") not in session.legal_actions(P1)
+
+
+def test_ring_of_the_void_counts_only_its_holders_rings():
+    theirs = [_ring(f"r{index}", "ring_of_air", P2) for index in range(3)]
+    session = _ring_game(*theirs, held=(_ring("void", "ring_of_the_void"),))
+
+    assert PlayStrategy("void", "enter") in session.legal_actions(P1)
+
+
+def _void_draw_game(*, opponent_holds: int) -> EngineSession:
+    session = _ring_game(
+        _ring("void", "ring_of_the_void"),
+        held=tuple(fate_card(f"theirs{index}", P2) for index in range(opponent_holds)),
+    )
+    state = session.game.table
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("top", P1))]
+    return session
+
+
+def test_ring_of_the_void_draws_and_keeps_the_card_while_not_ahead():
+    session = _void_draw_game(opponent_holds=1)
+
+    session.act(P1, ActivateAbility("void", "void"))
+
+    assert session.game.pending is None
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["top"]
+
+
+def test_ring_of_the_void_discards_a_card_once_the_hand_is_the_largest():
+    session = _void_draw_game(opponent_holds=0)
+
+    session.act(P1, ActivateAbility("void", "void"))
+
+    assert isinstance(session.game.pending, ChooseCards)
+    assert session.game.pending.candidates == ("top",)
+    session.submit(P1, DecisionResponse(("top",)))
+    assert "top" in _fate_discard(session, P1)
+
+
+def _enemy_personalities(game, source):
+    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
+
+
+MOVE_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: move a target enemy Personality home",
+    cost=no_cost,
+    targets=_enemy_personalities,
+    effects=lambda game, source, target: [Move(target.id, Location.home(target.owner))],
+)
+
+
+def _battle(
+    *,
+    raider_force: int = 2,
+    raider_printed_id: str | None = None,
+    in_play: tuple[L5RCard, ...] = (),
+    held: tuple[L5RCard, ...] = (),
+) -> EngineSession:
+    """P1 attacks P2's Province with a raider; P2 defends with a guard of Force 3. Left in the
+    Combat Segment with P1 holding the opportunity."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("raider", force=raider_force, printed_id=raider_printed_id))
+    put_in_play(state, personality("guard", owner=P2, force=3))
+    for card in in_play:
+        put_in_play(state, register(state, card))
+    for card in held:
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    if session.game.round.priority is not P1:
+        session.act(P2, Pass())
+    return session
+
+
+def _resolve_the_battle(session: EngineSession) -> None:
+    while session.game.attack.current is not None:
+        session.act(session.game.round.priority, Pass())
+
+
+def _fire_battle(*, raider_force: int) -> EngineSession:
+    # An enemy Holding is the target, because resolution does not destroy it either way.
+    return _battle(
+        raider_force=raider_force,
+        in_play=(_ring("fire", "ring_of_fire"), holding("farm", owner=P2)),
+    )
+
+
+def test_ring_of_fire_destroys_the_target_after_a_battle_its_holder_lost():
+    session = _fire_battle(raider_force=1)
+
+    session.act(P1, ActivateAbility("fire", "fire"))
+    _answer_until_settled(session, "farm")
+    _resolve_the_battle(session)
+
+    assert "farm" not in _in_play(session)
+
+
+def test_ring_of_fire_spares_the_target_after_a_battle_its_holder_won():
+    session = _fire_battle(raider_force=5)
+
+    session.act(P1, ActivateAbility("fire", "fire"))
+    _answer_until_settled(session, "farm")
+    _resolve_the_battle(session)
+
+    assert "farm" in _in_play(session)
+
+
+def test_ring_of_fire_spares_the_target_after_a_tie():
+    session = _fire_battle(raider_force=3)
+
+    session.act(P1, ActivateAbility("fire", "fire"))
+    _answer_until_settled(session, "farm")
+    _resolve_the_battle(session)
+
+    assert "farm" in _in_play(session)
+
+
+def test_ring_of_water_moves_a_personality_to_the_battlefield_and_another_home():
+    session = _battle(in_play=(_ring("water", "ring_of_water"), personality("reserve")))
+
+    session.act(P1, ActivateAbility("water", "water"))
+    _answer_until_settled(session, "reserve")
+    table = session.game.table
+    assert location_of(table, table.cards_by_id["reserve"]).battlefield == 0
+
+    session.act(P2, Pass())
+    table.cards_by_id["water"].unbow()
+    session.act(P1, ActivateAbility("water", "water"))
+    _answer_until_settled(session, "raider")
+
+    assert location_of(table, table.cards_by_id["raider"]).is_home
+
+
+def test_ring_of_earth_negates_the_battle_actions_move_from_play():
+    with probe_ability(MOVE_PROBE, MOVE_ABILITY):
+        session = _battle(
+            raider_printed_id=MOVE_PROBE, in_play=(_ring("earth", "ring_of_earth", P2),)
+        )
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+        assert session.game.round.kind is RoundKind.INTERRUPT
+
+        session.act(P2, PlayInterrupt("earth"))
+        _answer_until_settled(session)
+
+        table = session.game.table
+        assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
+        assert table.cards_by_id["earth"].bowed
+
+
+def test_ring_of_earth_pitched_from_hand_negates_the_move_and_is_discarded():
+    with probe_ability(MOVE_PROBE, MOVE_ABILITY):
+        session = _battle(raider_printed_id=MOVE_PROBE, held=(_ring("earth", "ring_of_earth", P2),))
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        session.act(P2, PlayInterrupt("earth"))
+        _answer_until_settled(session)
+
+        table = session.game.table
+        assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
+        assert "earth" in _fate_discard(session, P2)

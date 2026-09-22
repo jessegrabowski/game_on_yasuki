@@ -80,6 +80,10 @@ class Interrupt[T: Effect]:
         Whether the Interrupt answers every effect of the action it could, at once, as "negate
         the action's effects" does, instead of one the seat picks. ``interrupt`` is then asked of
         each effect as it comes up to resolve, and its own ``effects`` resolve once. Default False.
+    ruleset : str, optional
+        The name of the one :class:`~yasuki_core.ruleset.Ruleset` the Interrupt is in force under,
+        for a card whose text was rewritten between arcs under one id. Default None, for an
+        Interrupt every arc reads.
     """
 
     label: str
@@ -90,6 +94,7 @@ class Interrupt[T: Effect]:
     cost: Cost = no_cost
     targets: Callable[[GameState, L5RCard, T], tuple[str, ...]] | None = None
     answers_every: bool = False
+    ruleset: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -154,6 +159,10 @@ class Ability:
         decline it, but resolved as a trait's effects, with no Interrupt step against them. A trait
         is not an action (CR, Traits), so a card reading "your action" does not see its effects.
         Default False.
+    ruleset : str, optional
+        The name of the one :class:`~yasuki_core.ruleset.Ruleset` the ability is in force under,
+        for a card whose text was rewritten between arcs under one id. Default None, for an
+        ability every arc reads.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -172,6 +181,7 @@ class Ability:
     unstoppable: bool = False
     trait: bool = False
     targeting_message: str | None = None
+    ruleset: str | None = None
 
 
 def once_tag(ability: Ability) -> str:

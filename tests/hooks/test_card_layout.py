@@ -2,7 +2,7 @@ import pathlib
 
 import pytest
 
-from hooks.card_layout import main
+from hooks.card_layout import main, scoped_registrations
 
 FARM = """# --- Modest Farm ---
 
@@ -112,3 +112,41 @@ def test_one_card_alone_is_a_whole_valid_module(tmp_path, source):
     # The checks compare sequences pairwise, so a module with nothing to compare has to pass
     # rather than raise on an empty zip or a one-element window.
     assert main([written(tmp_path, source)]) == 0
+
+
+SCOPED = """# --- Ring of Air ---
+
+register_entry("ring_of_air", key="enter", ruleset=ruleset.SHATTERED_EMPIRE.name)
+register_ability(
+    "ring_of_air",
+    Ability(
+        timings=(),
+        label="",
+        cost=None,
+        targets=None,
+        effects=None,
+        key="air",
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+register_entry("ring_of_air", key="enter", ruleset="shattered_empire")
+
+
+@on(EnteredPlay, "ring_of_air")
+def _ring_of_air_entered_play(ctx):
+    return []
+"""
+
+
+def test_a_registration_names_the_ruleset_it_is_made_under(tmp_path):
+    # The scope is read off the attribute chain alone, so a name spelled as a string literal is
+    # not one the placement test can resolve against the ruleset module.
+    module = tmp_path / "onyx_edition.py"
+    module.write_text(SCOPED, encoding="utf-8")
+
+    assert scoped_registrations(module) == (
+        ("ring_of_air", "SHATTERED_EMPIRE"),
+        ("ring_of_air", "SHATTERED_EMPIRE"),
+        ("ring_of_air", None),
+        ("ring_of_air", None),
+    )

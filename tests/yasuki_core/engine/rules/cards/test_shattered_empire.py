@@ -3,7 +3,13 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, PersonalityPrint, WindPrint
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    FatePrint,
+    PersonalityPrint,
+    RingPrint,
+    WindPrint,
+)
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
@@ -18,7 +24,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, Decision
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.effects import Destroy
 from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.idioms import ask_who_loses_honor
+from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
@@ -44,6 +50,11 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, Confirm
+from yasuki_core.engine.rules.vocabulary.actions import PlayInterrupt
+from yasuki_core.engine.rules.effects import Move
+from yasuki_core.engine.table import Location, location_of
+from yasuki_core.engine.rules.board.queries import personalities_in_play
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.builders import (
@@ -857,3 +868,202 @@ def test_tashiko_gains_nothing_when_her_province_falls():
     outcome = session.game.attack.battlefields[0].outcome
     assert outcome.province_destroyed is True
     assert session.game.table.seats[P2].honor == outcome.honor.get(P2, 0)
+
+
+# --- The five Rings ---
+
+MOVE_PROBE = "probe_battle_move_an_enemy_home"
+
+
+def _ring(card_id: str, printed_id: str, owner: PlayerId = P1) -> L5RCard:
+    return L5RCard.of(
+        RingPrint, id=card_id, name=printed_id, printed_id=printed_id, side=Side.FATE, owner=owner
+    )
+
+
+def _ring_game(*in_play: L5RCard, held: tuple[L5RCard, ...] = ()) -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    for card in in_play:
+        put_in_play(state, register(state, card))
+    for card in held:
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    return EngineSession.start(state, P1)
+
+
+def _answer_until_settled(session: EngineSession, *answers: str) -> None:
+    """Answer each decision the action raises: a named answer where one of ``answers`` is among
+    the candidates, an empty answer to everything else, payments included."""
+    pending = session.game.pending
+    while pending is not None:
+        named = [each for each in answers if each in getattr(pending, "candidates", ())]
+        session.submit(pending.seat, DecisionResponse(tuple(named[:1])))
+        pending = session.game.pending
+
+
+def _in_play(session: EngineSession) -> set[str]:
+    return {card.id for card in session.game.table.battlefield.cards}
+
+
+def _fate_discard(session: EngineSession, seat: PlayerId) -> set[str]:
+    pile = session.game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)]
+    return {card.id for card in pile.cards}
+
+
+def test_ring_of_air_straightens_two_bowed_cards_of_one_unit():
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(state, personality("samurai"))
+    attached(state, attachment("guard", attachment_type=AttachmentType.FOLLOWER), "samurai")
+    put_in_play(state, register(state, _ring("air", "ring_of_air")))
+    session = EngineSession.start(state, P1)
+    for card_id in ("samurai", "guard"):
+        session.game.table.cards_by_id[card_id].bow()
+
+    session.act(P1, ActivateAbility("air", "air"))
+    _answer_until_settled(session, "samurai", "guard")
+
+    cards = session.game.table.cards_by_id
+    assert not cards["samurai"].bowed and not cards["guard"].bowed
+    assert cards["air"].bowed
+
+
+def test_ring_of_air_offers_a_second_card_only_from_the_targets_unit():
+    session = _ring_game(personality("samurai"), personality("other"), _ring("air", "ring_of_air"))
+    for card_id in ("samurai", "other"):
+        session.game.table.cards_by_id[card_id].bow()
+
+    session.act(P1, ActivateAbility("air", "air"))
+    _answer_until_settled(session, "samurai")
+
+    cards = session.game.table.cards_by_id
+    assert not cards["samurai"].bowed
+    assert cards["other"].bowed
+
+
+def test_ring_of_air_pitched_from_hand_straightens_one_and_is_discarded():
+    session = _ring_game(personality("samurai"), held=(_ring("air", "ring_of_air"),))
+    session.game.table.cards_by_id["samurai"].bow()
+
+    session.act(P1, PlayStrategy("air", PITCH))
+    _answer_until_settled(session, "samurai")
+
+    assert not session.game.table.cards_by_id["samurai"].bowed
+    assert "air" in _fate_discard(session, P1)
+
+
+def test_ring_of_the_void_has_no_action_entry_and_draws_as_an_open_action():
+    session = _ring_game(
+        _ring("void", "ring_of_the_void"), held=(_ring("held", "ring_of_the_void"),)
+    )
+    state = session.game.table
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("top", P1))]
+    assert PlayStrategy("held", "enter") not in session.legal_actions(P1)
+
+    session.act(P1, ActivateAbility("void", "void"))
+
+    hand = [card.id for card in state.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
+    assert hand == ["held", "top"]
+    assert isinstance(session.game.pending, ChooseCards)
+
+
+def _enemy_personalities(game, source):
+    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
+
+
+MOVE_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: move a target enemy Personality home",
+    cost=no_cost,
+    targets=_enemy_personalities,
+    effects=lambda game, source, target: [Move(target.id, Location.home(target.owner))],
+)
+
+
+def _ring_battle(
+    *,
+    raider_printed_id: str | None = None,
+    guard_force: int = 3,
+    in_play: tuple[L5RCard, ...] = (),
+    held: tuple[L5RCard, ...] = (),
+) -> EngineSession:
+    """P1 attacks P2's Province with a raider; P2 defends with a guard. Left in the Combat Segment
+    with P1 holding the opportunity."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("raider", force=2, printed_id=raider_printed_id))
+    put_in_play(state, personality("guard", owner=P2, force=guard_force))
+    for card in in_play:
+        put_in_play(state, register(state, card))
+    for card in held:
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    if session.game.round.priority is not P1:
+        session.act(P2, Pass())
+    return session
+
+
+def test_ring_of_fire_lowers_an_enemy_personalitys_force_for_the_turn():
+    session = _ring_battle(guard_force=6, in_play=(_ring("fire", "ring_of_fire"),))
+
+    session.act(P1, ActivateAbility("fire", "fire"))
+    _answer_until_settled(session, "guard")
+
+    assert effective_force(session.game, session.game.table.cards_by_id["guard"]) == 6 - 4
+
+
+def test_ring_of_water_moves_a_personality_to_the_battlefield_and_another_home():
+    session = _ring_battle(in_play=(_ring("water", "ring_of_water"), personality("reserve")))
+
+    session.act(P1, ActivateAbility("water", "water"))
+    _answer_until_settled(session, "reserve")
+    table = session.game.table
+    assert location_of(table, table.cards_by_id["reserve"]).battlefield == 0
+
+    session.act(P2, Pass())
+    table.cards_by_id["water"].unbow()
+    session.act(P1, ActivateAbility("water", "water"))
+    _answer_until_settled(session, "raider")
+
+    assert location_of(table, table.cards_by_id["raider"]).is_home
+
+
+def test_ring_of_earth_negates_the_battle_actions_move():
+    with probe_ability(MOVE_PROBE, MOVE_ABILITY):
+        session = _ring_battle(
+            raider_printed_id=MOVE_PROBE, in_play=(_ring("earth", "ring_of_earth", P2),)
+        )
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        session.act(P2, PlayInterrupt("earth"))
+        _answer_until_settled(session)
+
+        table = session.game.table
+        assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
+        assert table.cards_by_id["earth"].bowed
+
+
+def test_ring_of_earth_pitched_from_hand_negates_the_move_and_is_discarded():
+    with probe_ability(MOVE_PROBE, MOVE_ABILITY):
+        session = _ring_battle(
+            raider_printed_id=MOVE_PROBE, held=(_ring("earth", "ring_of_earth", P2),)
+        )
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        session.act(P2, PlayInterrupt("earth"))
+        _answer_until_settled(session)
+
+        table = session.game.table
+        assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
+        assert "earth" in _fate_discard(session, P2)

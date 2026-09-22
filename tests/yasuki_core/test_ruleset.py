@@ -1,7 +1,9 @@
 import pytest
 
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
-from yasuki_core.ruleset import Ruleset, SHATTERED_EMPIRE, normalize_clan
+from yasuki_core import DATABASE_DIR
+from yasuki_core.ruleset import IMPERIAL, Ruleset, SHATTERED_EMPIRE, normalize_clan
+from yasuki_core.yaml_io import read_yaml
 
 
 def test_normalize_clan_folds_case_suffix_and_surrounding_whitespace():
@@ -47,6 +49,7 @@ def test_an_arc_names_its_own_battle_segments():
     """A battle's own sequence is arc config like the Attack Phase's, so an arc that walks only one
     of them names only that one and raises on the other."""
     arc = Ruleset(
+        name="probe",
         clan_alignments=frozenset(),
         battle_segments=(BattleSegment.COMBAT,),
         battle_segment_names={BattleSegment.COMBAT: "Melee"},
@@ -61,6 +64,7 @@ def test_an_arc_walks_its_own_sequence_rather_than_the_enums_order():
     """The seam an older arc's Cavalry Maneuvers segment goes through: the order comes off the
     ruleset, so adding a member to `Segment` does not silently put it in every arc's sequence."""
     arc = Ruleset(
+        name="probe",
         clan_alignments=frozenset(),
         attack_segments=(Segment.DECLARATION, Segment.FIGHT),
         segment_names={Segment.DECLARATION: "Declaration", Segment.FIGHT: "Battles"},
@@ -70,3 +74,11 @@ def test_an_arc_walks_its_own_sequence_rather_than_the_enums_order():
     assert arc.segment_name(Segment.FIGHT) == "Battles"
     with pytest.raises(KeyError):
         arc.segment_name(Segment.MANEUVERS)
+
+
+def test_every_ruleset_governs_arcs_the_set_info_names():
+    # A registration under a ruleset is placed by the ruleset's arcs, so an arc name the set
+    # metadata does not spell would place nothing.
+    named = {arc["name"] for arc in read_yaml(DATABASE_DIR / "set_info.yaml")["arcs"]}
+
+    assert {*SHATTERED_EMPIRE.arcs, *IMPERIAL.arcs} <= named

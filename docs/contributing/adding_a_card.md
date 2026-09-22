@@ -169,6 +169,14 @@ under one id (Ring of Air is one id across two dozen printings), and the ruleset
 under decides which text it models. The first printing still decides the module because it is the
 one location the hooks can compute from an id alone.
 
+A card whose text differs between arcs is implemented once per ruleset. Each `Ability` names its
+ruleset, and that registration goes in the card's first printing among the sets of the arcs the
+ruleset governs, under its own header. Ring of Air's Onyx Edition ability sits in
+`onyx_edition.py`, its Shattered Empire ability in `shattered_empire.py`, and an implementation
+of its 1995 text would sit in `pre_imperial.py`. The
+placement test reads the `ruleset=ruleset.SHATTERED_EMPIRE.name` keyword off the registration to
+know which rule applies.
+
 Everything the card does goes in that one block: its triggers, its target predicates, its effects
 helper, its registration. A pre-commit hook asserts the ordering, the one-header-per-card rule, and
 that the header names the card the block registers, on the modules your commit touches.

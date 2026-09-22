@@ -14,6 +14,7 @@ yasuki_core.engine.rules.abilities.idioms
     plus_one_gp_this_turn
     register_entry
     register_event_entry
+    register_ring
 
 .. automodule:: yasuki_core.engine.rules.abilities.idioms
     :members:

@@ -1,23 +1,34 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import plays_clan, register_entry
-from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility, itself
+from yasuki_core.engine.rules.abilities.idioms import plays_clan, register_entry, register_ring
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+    InvestAbility,
+    itself,
+)
 from yasuki_core.engine.rules.abilities.registry import (
     before_entering_play,
     register_ability,
     register_cannot_attack,
+    register_interrupt,
     register_invest,
 )
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator, PlayStrategy
 from yasuki_core.engine.rules.board.clans import card_alignments
+from yasuki_core.engine.rules.board.seats import cards_in_play
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
+    followers_in_play,
     has_keyword,
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_personalities,
+    personalities_in_play,
     province_zones,
     top_of_deck,
     units_at,
@@ -33,8 +44,12 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Evaluate,
     GainHonor,
+    GrantModifier,
     MeleeAttack,
+    Move,
+    Negated,
     Rehonor,
+    Straighten,
     seppuku,
 )
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
@@ -43,18 +58,20 @@ from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
+from yasuki_core.engine.rules.action_record import action_round
+from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.triggers import action_did, choice_resolver
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
-from yasuki_core.engine.rules.units.membership import attachments_of
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.game_events import FavorDiscarded, HonorChanged
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import WindPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, WindPrint
 
 
 # --- Daidoji Tashiko ---
@@ -265,6 +282,212 @@ register_ability(
         targeting_message="an enemy unit costing 9 or less",
         effects=_matsu_gonshiro_soul_of_matsu_shimei_effects,
     ),
+)
+
+
+# --- Ring of Air ---
+
+# "Play after you resolve two or more Favor actions in one turn." Nothing lets a card in hand
+# answer an action resolving yet, so the entry has no handler.
+
+
+def _ring_of_air_unit(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
+    personality = card if isinstance(card.printed, PersonalityPrint) else attached_to(game, card)
+    return unit_of(game, personality) if personality is not None else (card,)
+
+
+def _ring_of_air_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [
+        card.id
+        for card in cards_in_play(game, source.owner)
+        if card.bowed and isinstance(card.printed, PersonalityPrint | AttachmentPrint)
+    ]
+
+
+def _ring_of_air_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Straighten one or two of your target cards in one unit": the first is the target, and the
+    second is offered from the rest of that unit."""
+    others = tuple(
+        card.id for card in _ring_of_air_unit(game, target) if card.bowed and card is not target
+    )
+    if not others:
+        return [Straighten(target.id)]
+    return [
+        Straighten(target.id),
+        Choose(source.owner, others, 0, 1, "ring_of_air_second", source.id),
+    ]
+
+
+@choice_resolver("ring_of_air_second")
+def _resolve_ring_of_air_second(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Straighten(card_id) for card_id in chosen]
+
+
+register_ring(
+    "ring_of_air",
+    ability=Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        label="Repeatable Battle/Open, bow: straighten one or two of your target cards in one unit",
+        cost=bow_cost,
+        targets=_ring_of_air_targets,
+        effects=_ring_of_air_effects,
+        key="air",
+        repeatable=True,
+    ),
+    pitch=True,
+    ruleset=ruleset.SHATTERED_EMPIRE.name,
+)
+
+
+# --- Ring of Earth ---
+
+# "Play after a battle resolves at a Province if it was not destroyed, you were not the Attacker,
+# and any enemy units were ever at its battlefield." Nothing records what a battle did once it
+# resolves, so the entry has no handler. The pitch is the Interrupt taken from hand, which the
+# Interrupt step plays as a Strategy.
+
+
+def _ring_of_earth_applies(game: GameState, source: L5RCard, effect: Move) -> bool:
+    """A Battle action's moving of a Personality, read off the unit the Move names a card in."""
+    if ActionTiming.BATTLE not in permitted_timings_in(game, action_round(game), source.owner):
+        return False
+    card = game.table.cards_by_id.get(effect.card_id)
+    if card is None:
+        return False
+    return isinstance(card.printed, PersonalityPrint) or attached_to(game, card) is not None
+
+
+def _ring_of_earth_interrupt(game: GameState, source: L5RCard, effect: Move) -> Interruption:
+    return Interruption(Negated(effect))
+
+
+register_interrupt(
+    "ring_of_earth",
+    Interrupt(
+        label="Repeatable Interrupt, bow: the Battle action cannot move Personalities",
+        answers=Move,
+        interrupt=_ring_of_earth_interrupt,
+        applies=_ring_of_earth_applies,
+        located_at=(CardLocation.HAND, CardLocation.BATTLEFIELD),
+        cost=bow_cost,
+        answers_every=True,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
+# --- Ring of Fire ---
+
+# "Play after you win a duel during a battle, if your Personality did not enter the duel with
+# higher duel stat than the other." Duels are not modeled, so the entry has no handler.
+
+RING_OF_FIRE_PENALTY = -4
+
+
+def _ring_of_fire_targets(game: GameState, source: L5RCard) -> list[str]:
+    enemy = (*personalities_in_play(game), *followers_in_play(game))
+    return [card.id for card in enemy if card.owner is not source.owner]
+
+
+def _ring_of_fire_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [
+        GrantModifier(
+            source.id, target.id, Stat.FORCE, RING_OF_FIRE_PENALTY, Duration.UNTIL_END_OF_TURN
+        )
+    ]
+
+
+register_ring(
+    "ring_of_fire",
+    ability=Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=f"Repeatable Battle, bow: give a target enemy Follower or Personality "
+        f"{RING_OF_FIRE_PENALTY}F",
+        cost=bow_cost,
+        targets=_ring_of_fire_targets,
+        effects=_ring_of_fire_effects,
+        key="fire",
+        repeatable=True,
+    ),
+    pitch=True,
+    ruleset=ruleset.SHATTERED_EMPIRE.name,
+)
+
+
+# --- Ring of the Void ---
+
+# "Play if you ever have the same number of Fate cards in play as in your hand, not counting this
+# Ring." Nothing lets a card in hand answer the board changing yet, so the entry has no handler.
+# The draw's follow-up is the resolver the Onyx printing registers under "ring_of_the_void": the
+# two texts differ only in the designator.
+
+
+def _ring_of_the_void_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [DrawCard(source.owner), Evaluate("ring_of_the_void", source.id, source.owner)]
+
+
+register_ring(
+    "ring_of_the_void",
+    ability=Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open, bow: draw a card, then discard one if you now hold the most",
+        cost=bow_cost,
+        targets=itself,
+        effects=_ring_of_the_void_effects,
+        hits_every_target=True,
+        key="void",
+    ),
+    pitch=True,
+    ruleset=ruleset.SHATTERED_EMPIRE.name,
+)
+
+
+# --- Ring of Water ---
+
+# "Play after a battle resolves where you control a Terrain and destroyed a Province." Terrain is
+# not modeled and nothing records what a battle did once it resolves, so the entry has no handler.
+
+
+def _ring_of_water_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your Personalities at the current battlefield, to move home, and, while an enemy unit is
+    there to oppose them, your Personalities anywhere else, to move to it."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return []
+    here, elsewhere = [], []
+    for card in owned_personalities(game, source.owner):
+        at_battle = location_of(game.table, card).battlefield == attack.current
+        (here if at_battle else elsewhere).append(card.id)
+    if not opposing_units_in_battle(game, source.owner):
+        return here
+    return here + elsewhere
+
+
+def _ring_of_water_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    current = game.attack.current
+    if location_of(game.table, target).battlefield == current:
+        return [Move(target.id, Location.home(target.owner))]
+    return [Move(target.id, Location.at_battlefield(current))]
+
+
+register_ring(
+    "ring_of_water",
+    ability=Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Absent Repeatable Battle, bow: move your target Personality home, or one anywhere "
+        "to the battlefield if they would be opposed",
+        cost=bow_cost,
+        targets=_ring_of_water_targets,
+        effects=_ring_of_water_effects,
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
+        targets_any_location=True,
+        key="water",
+        repeatable=True,
+    ),
+    pitch=True,
+    ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
 

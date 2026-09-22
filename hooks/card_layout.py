@@ -53,6 +53,7 @@ _CALLS = {
     "register_ability",
     "register_entry",
     "register_event_entry",
+    "register_ring",
     "register_interrupt",
     "register_invest",
     "register_may_not_lobby",
@@ -85,7 +86,14 @@ class CardFunction(typing.NamedTuple):
 
 
 def registered_ids(module: pathlib.Path) -> tuple[str, ...]:
-    """The card ids ``module`` registers a handler for, in source order and with repeats.
+    """The card ids ``module`` registers a handler for, in source order and with repeats."""
+    return tuple(card_id for card_id, _ in scoped_registrations(module))
+
+
+def scoped_registrations(module: pathlib.Path) -> tuple[tuple[str, str | None], ...]:
+    """Each card id ``module`` registers a handler for, in source order and with repeats, paired
+    with the ``ruleset`` constant the registration names as ``ruleset=ruleset.X.name``, or None
+    when it names none.
 
     Sorted by position rather than taken in walk order: ``ast.walk`` is breadth-first, so a bare
     ``register_ability(...)`` statement is reached before a decorator further up the file, and the
@@ -98,8 +106,23 @@ def registered_ids(module: pathlib.Path) -> tuple[str, ...]:
                 # @on(Event, "id") puts the id last; every other form puts it first.
                 argument = node.args[-1] if node.func.id == "on" else node.args[0]
                 if isinstance(argument, ast.Constant) and isinstance(argument.value, str):
-                    found.append((argument.lineno, argument.col_offset, argument.value))
-    return tuple(value for _, _, value in sorted(found))
+                    position = (argument.lineno, argument.col_offset)
+                    found.append((position, argument.value, _ruleset_named(node)))
+    return tuple((card_id, scope) for _, card_id, scope in sorted(found))
+
+
+RULESET_NAME = re.compile(r"ruleset\.(\w+)\.name")
+
+
+def _ruleset_named(registration: ast.Call) -> str | None:
+    """The ``X`` in a ``ruleset=ruleset.X.name`` keyword anywhere in the registration, including on
+    an ``Ability(...)`` built inside it, or None."""
+    for node in ast.walk(registration):
+        if isinstance(node, ast.keyword) and node.arg == "ruleset":
+            spelled = RULESET_NAME.fullmatch(ast.unparse(node.value))
+            if spelled is not None:
+                return spelled.group(1)
+    return None
 
 
 def _sections(source: str) -> list[tuple[int, str]]:
@@ -235,6 +258,9 @@ ROLES = frozenset(
         "effects",
         "interrupt",
         "applies",
+        # the parts of an entry from hand
+        "condition",
+        "entry_effects",
         "proclaim_gain",
         "tireless_grant",
         "granted_ability",

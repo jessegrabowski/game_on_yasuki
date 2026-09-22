@@ -6705,9 +6705,9 @@ cards:
   keywords:
   - Unique
   - Air
-  text: Play after you resolve two or more Favor actions in one turn. You may discard this Ring from your
-    hand to use its ability without cost.<br><b>Air Repeatable Battle/Open, :bow::</b> Straighten your
-    target Personality or attachment.
+  text: Play after you resolve two or more Favor actions in one turn. You may discard this Ring from
+    your hand to use its ability without cost.<br><b>Repeatable Battle/Open, :bow::</b> Straighten
+    one or two of your target cards in one unit.
   focus: 4
   is_unique: true
   legality:
@@ -6739,9 +6739,10 @@ cards:
   keywords:
   - Unique
   - Earth
-  text: Play after a battle resolves at your Province, if it was not destroyed and any enemy units were
-    ever at its battlefield. You may discard this Ring from your hand to use its ability without cost.<br><b>Earth
-    Repeatable Interrupt, :bow::</b> The Battle action cannot move Personalities.
+  text: Play after a battle resolves at a Province if it was not destroyed, you were not the
+    Attacker, and any enemy units were ever at its battlefield. You may discard this Ring from your
+    hand to use its ability without cost.<br><b>Repeatable Interrupt, :bow::</b> The Battle action
+    cannot move Personalities.
   focus: 4
   is_unique: true
   legality:
@@ -6773,10 +6774,10 @@ cards:
   keywords:
   - Unique
   - Fire
-  text: Play after you win a duel during a battle, if your Personality did not enter the duel with higher
-    Chi than the other. You may discard this Ring from your hand to use its ability without cost.<br><b>Fire
-    Battle, :bow::</b> Target an enemy card without attachments. After this battle resolves, if you lost
-    the battle, destroy the target.
+  text: Play after you win a duel during a battle, if your Personality did not enter the duel with
+    higher duel stat than the other. You may discard this Ring from your hand to use its ability
+    without cost.<br><b>Repeatable Battle, :bow::</b> Give a target enemy Follower or Personality
+    -4F.
   focus: 4
   is_unique: true
   legality:
@@ -6808,10 +6809,10 @@ cards:
   keywords:
   - Unique
   - Water
-  text: Play after a battle resolves in which you played a Terrain, destroyed a Terrain, and destroyed
-    any cards or provinces during resolution. You may discard this Ring from your hand to use its ability
-    without cost.<br><b>Water Absent Repeatable Battle, :bow::</b> Move your target Personality home or,
-    if he would be opposed, move your target Personality at any location to the current battlefield.
+  text: Play after a battle resolves where you control a Terrain and destroyed a Province. You may
+    discard this Ring from your hand to use its ability without cost.<br><b>Absent Repeatable
+    Battle, :bow::</b> Target your Personality at any location. Move them home or, if they would be
+    opposed, to the current battlefield.
   focus: 4
   is_unique: true
   legality:
@@ -6843,9 +6844,10 @@ cards:
   keywords:
   - Unique
   - Void
-  text: You may discard this Ring from your hand to use its Void ability without cost.<br><b>Limited:</b>
-    Play if you have two or fewer Rings in play. Discard your hand. <br><b>Void Limited, :bow::</b> Draw
-    a card. If you now have more cards in your hand than any other player, discard a card.
+  text: Play if you ever have the same number of Fate cards in play as in your hand, not counting
+    this Ring. You may discard this Ring from your hand to use its ability without cost.<br><b>Open,
+    :bow::</b> Draw a card. If you now have more cards in your hand than any other player, discard a
+    card.
   focus: 4
   is_unique: true
   legality:
