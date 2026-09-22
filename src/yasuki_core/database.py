@@ -483,38 +483,39 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
                 (lower_names, lower_names),
             )
             cards = cur.fetchall()
-
-            if not cards:
-                return []
-
-            card_ids = [c["card_id"] for c in cards]
-            cur.execute(
-                """
-                SELECT p.print_id, p.card_id, s.set_name, pi.path AS image_path,
-                    COALESCE(back.path, pback.path) AS back_image_path, p.flavor_text
-                FROM prints p
-                JOIN l5r_sets s ON s.set_id = p.set_id
-                JOIN cards c ON c.card_id = p.card_id
-                LEFT JOIN print_images pi
-                    ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
-                LEFT JOIN prints bp ON bp.card_id = c.back_card_id AND bp.printing_id = p.printing_id
-                LEFT JOIN print_images back
-                    ON back.print_id = bp.print_id AND back.role = 'front' AND back.size = 'master'
-                LEFT JOIN print_images pback
-                    ON pback.print_id = p.print_id AND pback.role = 'back' AND pback.size = 'master'
-                WHERE p.card_id = ANY(%s)
-                ORDER BY s.release_date NULLS LAST, p.print_id
-                """,
-                (card_ids,),
-            )
-            prints_by_card: dict[str, list] = {}
-            for row in cur.fetchall():
-                prints_by_card.setdefault(row["card_id"], []).append(row)
-
-            for card in cards:
-                card["prints"] = prints_by_card.get(card["card_id"], [])
-
+            _attach_prints(cur, cards)
             return cards
+
+
+def _attach_prints(cur, cards: list[dict]) -> None:
+    """Give each of ``cards`` its ``prints`` list, in release order, with the back art each printing
+    shows: the back face's own printing when the card has one, else the printing's own back image."""
+    if not cards:
+        return
+    cur.execute(
+        """
+        SELECT p.print_id, p.card_id, s.set_name, pi.path AS image_path,
+            COALESCE(back.path, pback.path) AS back_image_path, p.flavor_text
+        FROM prints p
+        JOIN l5r_sets s ON s.set_id = p.set_id
+        JOIN cards c ON c.card_id = p.card_id
+        LEFT JOIN print_images pi
+            ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
+        LEFT JOIN prints bp ON bp.card_id = c.back_card_id AND bp.printing_id = p.printing_id
+        LEFT JOIN print_images back
+            ON back.print_id = bp.print_id AND back.role = 'front' AND back.size = 'master'
+        LEFT JOIN print_images pback
+            ON pback.print_id = p.print_id AND pback.role = 'back' AND pback.size = 'master'
+        WHERE p.card_id = ANY(%s)
+        ORDER BY s.release_date NULLS LAST, p.print_id
+        """,
+        ([card["card_id"] for card in cards],),
+    )
+    prints_by_card: dict[str, list] = {}
+    for row in cur.fetchall():
+        prints_by_card.setdefault(row["card_id"], []).append(row)
+    for card in cards:
+        card["prints"] = prints_by_card.get(card["card_id"], [])
 
 
 def all_card_ids() -> set[str]:
