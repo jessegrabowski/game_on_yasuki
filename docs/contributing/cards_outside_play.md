@@ -144,11 +144,13 @@ the hand and the battlefield. The Interrupt step pays the card's Gold Cost from 
 has none of, and the Interrupt's own `cost` from play, so one registration is both casts.
 
 A Ring's text was rewritten between arcs under one id, so every registration names its ruleset and
-the card sits in the first printing among that ruleset's arcs. How a Ring enters play is the
-card's own clause. {card}`Ring of the Void` prints an action, which is `register_entry` under a
-`Limited` timing with the "two or fewer Rings" condition and the hand discard as extra effects.
-The other four print "Play after X", which nothing lets a card in hand answer yet, so their entry
-has no handler and the comment above each says what the clause waits on.
+the card sits in the first printing among that ruleset's arcs: the Onyx Edition text in
+`onyx_edition.py` under `ruleset.ONYX.name`, and the Shattered Empire text in
+`shattered_empire.py` under `ruleset.SHATTERED_EMPIRE.name`. How a Ring enters play is the
+card's own clause. The Onyx {card}`Ring of the Void` prints an action, which is `register_entry`
+under a `Limited` timing with the "two or fewer Rings" condition and the hand discard as extra
+effects. Every other Ring prints "Play after X" or "Play if X", which nothing lets a card in hand
+answer yet, so its entry has no handler and the comment above each says what the clause waits on.
 
 ## Terrain, which attaches to a battlefield
 

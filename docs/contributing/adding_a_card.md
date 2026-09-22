@@ -171,8 +171,9 @@ one location the hooks can compute from an id alone.
 
 A card whose text differs between arcs is implemented once per ruleset. Each `Ability` names its
 ruleset, and that registration goes in the card's first printing among the sets of the arcs the
-ruleset governs, under its own header. Ring of Air's Shattered Empire ability sits in
-`onyx_edition.py`, and an implementation of its 1995 text would sit in `pre_imperial.py`. The
+ruleset governs, under its own header. Ring of Air's Onyx Edition ability sits in
+`onyx_edition.py`, its Shattered Empire ability in `shattered_empire.py`, and an implementation
+of its 1995 text would sit in `pre_imperial.py`. The
 placement test reads the `ruleset=ruleset.SHATTERED_EMPIRE.name` keyword off the registration to
 know which rule applies.
 
