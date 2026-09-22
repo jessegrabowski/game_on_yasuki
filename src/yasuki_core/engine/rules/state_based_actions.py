@@ -2,13 +2,16 @@ from collections.abc import Callable
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import Rulebook
+from yasuki_core.engine.registrar import FlagRegistry
+from yasuki_core.engine.rules.board.queries import rings_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.effects import Destroy, Discard, Effect, LoseGame, WinGame
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Element
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.table import ZoneRole
-from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, RingPrint
 
 # A state-based action reads the board and returns the effects the rules demand of it. Unlike a
 # trigger it answers to no event: the CR states these as conditions that hold at all times rather
@@ -103,10 +106,37 @@ def lost_last_province(game: GameState) -> list[Effect]:
 
 
 # The rulebook's own list, in the order they are checked.
+# Rings whose text says they do not count toward an Enlightenment Victory, by printed id.
+NO_ENLIGHTENMENT = FlagRegistry("no enlightenment", "already does not count toward Enlightenment")
+register_no_enlightenment = NO_ENLIGHTENMENT.make_register()
+
+
+def enlightenment(game: GameState) -> list[Effect]:
+    """Win the game for a seat controlling Rings of all five elements (CR, Enlightenment Victory).
+
+    The CR wins "immediately", so this is a state-based rule rather than a check at a moment in
+    the turn. A Ring registered through ``register_no_enlightenment`` is left out of the count.
+    """
+    if game.game_over:
+        return []
+    for seat, rules in game.active_rules.items():
+        if VictoryRule.ENLIGHTENMENT not in rules:
+            continue
+        elements = {
+            card.printed.element
+            for card in rings_in_play(game, seat)
+            if isinstance(card.printed, RingPrint) and card.printed_id not in NO_ENLIGHTENMENT
+        }
+        if len(elements) == len(Element):
+            return [WinGame(seat, "Enlightenment Victory with Rings of all five elements")]
+    return []
+
+
 STATE_BASED_ACTIONS: tuple[StateBasedAction, ...] = (
     chi_death,
     orphaned_attachments,
     lost_last_province,
+    enlightenment,
 )
 
 

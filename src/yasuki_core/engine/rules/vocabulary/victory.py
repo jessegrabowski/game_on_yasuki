@@ -20,6 +20,7 @@ class VictoryRule(Enum):
     MILITARY_LOSS = "military_loss"
     DISHONOR_LOSS = "dishonor_loss"
     HONOR_VICTORY = "honor_victory"
+    ENLIGHTENMENT = "enlightenment"
 
 
 @dataclass(frozen=True, slots=True)
