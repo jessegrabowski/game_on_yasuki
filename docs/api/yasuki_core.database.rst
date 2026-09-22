@@ -9,9 +9,11 @@ yasuki_core.database
 
     all_card_ids
     apply_sslmode
+    back_face_ids
     card_display_names
     close_pool
     count_cards_filtered
+    get_back_faces
     get_card_backs
     get_card_by_id
     get_card_revisions

@@ -15,7 +15,10 @@ from yasuki_core.database import (
     query_random_cards,
     query_stat_ranges,
     query_types_with_stat,
+    back_face_ids,
+    get_back_faces,
     get_card_backs,
+    get_cards_by_names,
     get_connection_string,
     get_db_connection,
     get_rulebook_proxies,
@@ -664,6 +667,21 @@ def test_cross_face_filter_works_through_pagination_and_count():
     assert "the_dark_capital_of_the_spider" in ids
     assert not any(i.endswith("__back") for i in ids)
     assert count_cards_filtered("", options) == total
+
+
+def test_get_back_faces_returns_the_backs_the_fronts_link_with_their_prints():
+    fronts = get_cards_by_names(["The Dark Capital of the Spider", "Millet Farm"])
+
+    backs = get_back_faces(back_face_ids(fronts))
+
+    assert [back["card_id"] for back in backs] == ["the_dark_capital_of_the_spider__back"]
+    assert backs[0]["province_strength"] == 9
+    assert backs[0]["prints"] and all(p["image_path"] for p in backs[0]["prints"])
+
+
+def test_get_back_faces_refuses_a_front_and_answers_nothing_for_no_ids():
+    assert get_back_faces(["the_dark_capital_of_the_spider", "millet_farm"]) == []
+    assert get_back_faces([]) == []
 
 
 def test_double_faced_flip_image_from_back_card():

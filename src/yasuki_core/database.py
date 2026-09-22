@@ -487,6 +487,43 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
             return cards
 
 
+def back_face_ids(records: list[dict]) -> list[str]:
+    """The back-face ids the double-faced cards among ``records`` link to, for
+    :func:`get_back_faces`."""
+    return [record["back_card_id"] for record in records if record.get("back_card_id")]
+
+
+def get_back_faces(card_ids: list[str]) -> list[dict]:
+    """
+    Fetch the back-face records named by ``card_ids``, including their prints.
+
+    The companion to :func:`get_cards_by_names` for building a double-faced card: that query
+    refuses back rows because a back is never deck-legal, and this one returns nothing else, so a
+    caller resolving a decklist fetches the fronts by name and then their backs by the
+    ``back_card_id`` each front carries.
+
+    Parameters
+    ----------
+    card_ids : list of str
+        Back-face card ids, as the fronts' ``back_card_id`` names them.
+
+    Returns
+    -------
+    cards : list of dict
+        The back records among ``card_ids``, each with a ``prints`` key as
+        :func:`get_cards_by_names` shapes it.
+    """
+    if not card_ids:
+        return []
+    select_sql, _ = _card_select()
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(f"{select_sql} WHERE c.card_id = ANY(%s) AND c.is_back", (card_ids,))
+            cards = cur.fetchall()
+            _attach_prints(cur, cards)
+            return cards
+
+
 def _attach_prints(cur, cards: list[dict]) -> None:
     """Give each of ``cards`` its ``prints`` list, in release order, with the back art each printing
     shows: the back face's own printing when the card has one, else the printing's own back image."""
