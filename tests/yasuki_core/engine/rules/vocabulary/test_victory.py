@@ -4,11 +4,15 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
+from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
+from yasuki_core.engine.rules.triggers import enforce_state_based_actions
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Element, Side
+from yasuki_core.game_pieces.prints import RingPrint
 
-from tests.yasuki_core.engine.builders import end_turn, fate_card, register
+from tests.yasuki_core.engine.builders import end_turn, fate_card, put_in_play, register
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 HONOR_VICTORY_AT = ruleset.ACTIVE.honor_victory_at
@@ -174,3 +178,79 @@ def test_an_honor_victory_replays_to_the_same_ending():
 
     assert (rebuilt.winner, rebuilt.win_reason) == (session.game.winner, session.game.win_reason)
     assert rebuilt.table == session.game.table
+
+
+register_no_enlightenment("no_enlightenment_probe")
+
+
+def _ring(
+    card_id: str, element: Element, *, owner: PlayerId = P1, printed_id: str | None = None
+) -> L5RCard:
+    return L5RCard.of(
+        RingPrint,
+        id=card_id,
+        name=card_id,
+        printed_id=printed_id,
+        side=Side.FATE,
+        owner=owner,
+        element=element,
+    )
+
+
+def _rings_of(*elements: Element) -> list[L5RCard]:
+    return [_ring(f"ring{index}", element) for index, element in enumerate(elements)]
+
+
+def test_controlling_rings_of_all_five_elements_wins_immediately():
+    session = _game()
+    for ring in _rings_of(*Element):
+        put_in_play(session.game, ring)
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.winner is P1
+    assert session.game.win_reason == "Enlightenment Victory with Rings of all five elements"
+
+
+def test_five_rings_of_four_elements_win_nothing():
+    session = _game()
+    for ring in _rings_of(Element.AIR, Element.AIR, Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(session.game, ring)
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.game_over is False
+
+
+def test_a_ring_registered_as_not_counting_does_not_complete_the_set():
+    session = _game()
+    for ring in _rings_of(Element.AIR, Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(session.game, ring)
+    put_in_play(session.game, _ring("void", Element.VOID, printed_id="no_enlightenment_probe"))
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.game_over is False
+
+
+def test_rings_split_between_the_seats_win_nobody():
+    session = _game()
+    for ring in _rings_of(Element.AIR, Element.EARTH, Element.FIRE):
+        put_in_play(session.game, ring)
+    for card_id, element in (("water", Element.WATER), ("void", Element.VOID)):
+        put_in_play(session.game, _ring(card_id, element, owner=P2))
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.game_over is False
+
+
+def test_a_seat_excused_enlightenment_holds_five_elements_and_does_not_win():
+    session = _game()
+    session.game.active_rules[P1] = session.game.active_rules[P1] - {VictoryRule.ENLIGHTENMENT}
+    for ring in _rings_of(*Element):
+        put_in_play(session.game, ring)
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.game_over is False

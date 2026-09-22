@@ -57,6 +57,7 @@ _CALLS = {
     "register_interrupt",
     "register_invest",
     "register_may_not_lobby",
+    "register_no_enlightenment",
     "register_recruit_timing",
     "register_may_remain_bowed",
     "register_bow_waiver",

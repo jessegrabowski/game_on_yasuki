@@ -33,6 +33,13 @@ production across phases.
 A card that exempts its controller from a loss condition drops a rule from that seat's set. It does
 not set a flag somewhere for the loss check to consult.
 
+The rules are checked at the moment the CR names for each. An Honor Victory is read off the Honor a
+seat starts its turn with and a Dishonor loss off the Honor it ends its turn with, so both are
+called by the turn flow at that boundary. An Enlightenment Victory is won "immediately" by a seat
+controlling Rings of all five elements, so {func}`~.enlightenment` is a state-based action and
+runs after every committed effect. A Ring whose text says it does not count registers through
+`register_no_enlightenment`.
+
 ## What replay rebuilds
 
 Most of the rest is ephemeral. `stack`, `ongoing`, `delayed`, `round_stack`, `responded`,

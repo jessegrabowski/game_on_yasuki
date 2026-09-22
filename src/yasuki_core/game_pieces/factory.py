@@ -22,7 +22,7 @@ from yasuki_core.game_pieces.prints import (
     StrongholdPrint,
     WindPrint,
 )
-from yasuki_core.game_pieces.constants import Side, AttachmentType
+from yasuki_core.game_pieces.constants import Element, Side, AttachmentType
 
 # The print each database card type resolves to, per deck section. A section the record's type is
 # unknown in falls back to that section's base print.
@@ -389,6 +389,15 @@ def _attachment_stats(attachment_type: AttachmentType, record: dict) -> dict[str
     return {"force": 0, "chi": 0, "force_modifier": force, "chi_modifier": chi}
 
 
+_ELEMENT_KEYWORDS = {element.value: element for element in Element}
+
+
+def _ring_element(record: dict) -> Element | None:
+    """The element a Ring prints as a keyword, or None for a Ring naming none."""
+    keywords = record.get("keywords") or ()
+    return next((_ELEMENT_KEYWORDS[kw] for kw in keywords if kw in _ELEMENT_KEYWORDS), None)
+
+
 def _stat_fields(print_cls: type[CardPrint], card_type: str | None, record: dict) -> dict:
     """
     The numeric and category stats a given print subclass holds, drawn from the database record.
@@ -414,6 +423,10 @@ def _stat_fields(print_cls: type[CardPrint], card_type: str | None, record: dict
             attachment_type = AttachmentType(card_type)
             fields["attachment_type"] = attachment_type
             fields.update(_attachment_stats(attachment_type, record))
+        elif print_cls is RingPrint:
+            element = _ring_element(record)
+            if element is not None:
+                fields["element"] = element
         return fields
     # A sensei's are deltas the stronghold receives rather than its own characteristics, but the
     # record columns and the stats read off them are the same three.
