@@ -172,7 +172,7 @@ register_ring(
         repeatable=True,
     ),
     pitch=True,
-    ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ruleset=ruleset.ONYX.name,
 )
 
 
@@ -207,7 +207,7 @@ register_interrupt(
         located_at=(CardLocation.HAND, CardLocation.BATTLEFIELD),
         cost=bow_cost,
         answers_every=True,
-        ruleset=ruleset.SHATTERED_EMPIRE.name,
+        ruleset=ruleset.ONYX.name,
     ),
 )
 
@@ -256,7 +256,7 @@ register_ring(
         keywords=frozenset({keywords.FIRE}),
     ),
     pitch=True,
-    ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ruleset=ruleset.ONYX.name,
 )
 
 
@@ -283,7 +283,7 @@ register_entry(
     condition=_ring_of_the_void_condition,
     extra_effects=_ring_of_the_void_entry_effects,
     key="enter",
-    ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ruleset=ruleset.ONYX.name,
 )
 
 
@@ -326,7 +326,7 @@ register_ring(
         keywords=frozenset({keywords.VOID}),
     ),
     pitch=True,
-    ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ruleset=ruleset.ONYX.name,
 )
 
 
@@ -375,7 +375,7 @@ register_ring(
         repeatable=True,
     ),
     pitch=True,
-    ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ruleset=ruleset.ONYX.name,
 )
 
 

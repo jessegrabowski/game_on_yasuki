@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -183,7 +183,7 @@ _SHATTERED_EMPIRE_BATTLE_SEGMENTS = (
 # clans, Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
 SHATTERED_EMPIRE = Ruleset(
     name="shattered_empire",
-    arcs=("Onyx Edition", "Shattered Empire"),
+    arcs=("Shattered Empire",),
     clan_alignments=frozenset(
         {AKASHA, CRAB, CRANE, DRAGON, LION, MANTIS, PHOENIX, SCORPION, SPIDER, UNICORN}
     ),
@@ -219,6 +219,11 @@ SHATTERED_EMPIRE = Ruleset(
         BattleSegment.AFTER_RESOLUTION: "After Resolution",
     },
 )
+
+# Onyx Edition's rules differ from Shattered Empire's in ways the engine does not model yet, so it
+# starts as a copy. What it holds apart today is its printings: a card whose text Shattered Empire
+# rewrote registers its Onyx text under this name.
+ONYX = replace(SHATTERED_EMPIRE, name="onyx", arcs=("Onyx Edition",))
 
 # The ruleset the engine plays under. Named once so no module decides for itself which arc is live.
 ACTIVE = SHATTERED_EMPIRE

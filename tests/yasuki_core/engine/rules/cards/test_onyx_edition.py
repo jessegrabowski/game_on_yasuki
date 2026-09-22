@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH
@@ -73,6 +74,13 @@ from tests.yasuki_core.engine.rules.conftest import probe_ability
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 ANCIENT_CASTLE = "the_ancient_castle_of_the_lion"
+
+
+@pytest.fixture(autouse=True)
+def _onyx(monkeypatch):
+    # The Rings register their Onyx text under the Onyx ruleset, and nothing else here reads a
+    # rule the two rulesets differ on, so the whole module plays under it.
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.ONYX)
 
 
 # --- Kitsu Hayako ---
