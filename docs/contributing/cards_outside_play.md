@@ -127,14 +127,15 @@ retargeting. When it is, its entry is `register_entry("show_of_power", clears=ke
 
 A Ring prints one ability and a trait letting its holder discard it from hand to use that ability
 without cost (CR, Ring). {func}`~.register_ring` registers both from one `Ability`: the printed
-one from play, and with `pitch=True` a copy keyed `PITCH` that is taken from hand for nothing and
-discarded at step F, because it is still in hand when the ability is done.
+one from play, and with `pitch` set to the trait as the card prints it a copy keyed `PITCH` that
+is taken from hand for nothing and discarded at step F, because it is still in hand when the
+ability is done. The trait's sentence is what a client shows for the cast.
 
 ```python
 register_ring(
     "ring_of_air",
     ability=Ability(..., key="air", keywords=frozenset({keywords.AIR}), repeatable=True),
-    pitch=True,
+    pitch="You may discard this Ring from your hand to use its ability without cost.",
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 ```

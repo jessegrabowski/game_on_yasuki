@@ -40,7 +40,7 @@ def _blessed_sword_interrupt(game: GameState, source: L5RCard, effect: Dishonor)
 register_interrupt(
     "blessed_sword",
     Interrupt(
-        label="Interrupt: destroy this Item to negate this Personality's dishonoring",
+        label="Before this Personality is dishonored, destroy this Item and negate the dishonoring.",
         answers=Dishonor,
         interrupt=_blessed_sword_interrupt,
         applies=_blessed_sword_applies,

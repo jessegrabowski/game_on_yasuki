@@ -31,7 +31,6 @@ register_ability(
     "incapacitated",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle: Move home a target defending Personality",
         cost=no_cost,
         targets=_incapacitated_targets,
         targeting_message="a defending Personality",

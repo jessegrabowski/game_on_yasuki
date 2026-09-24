@@ -46,8 +46,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.LIMITED,),
         keywords=frozenset({keywords.KIHO}),
-        label="Kiho Limited: Bow your target unbowed Monk or Shugenja. Look at the top four cards "
-        "of your Fate deck. Put one in your hand. Shuffle the deck.",
         cost=no_cost,
         targets=_banish_all_shadows_targets,
         targeting_message="your unbowed Monk or Shugenja",

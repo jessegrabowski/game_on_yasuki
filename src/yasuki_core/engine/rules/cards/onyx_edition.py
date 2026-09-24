@@ -3,6 +3,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.lobby import register_may_not_lobby
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
+    RING_PITCH,
     one_wealth,
     register_entry,
     register_event_entry,
@@ -109,8 +110,6 @@ register_ability(
     "doji_aoi_soul_of_doji_chitose",
     Ability(
         timings=(ActionTiming.RESPONSE,),
-        label="Home Tireless Response: after a Political action, move your target Personality to "
-        "Aoi and straighten them",
         cost=no_cost,
         targets=_doji_aoi_soul_of_doji_chitose_targets,
         targeting_message="your Personality",
@@ -171,7 +170,6 @@ register_ring(
     "ring_of_air",
     ability=Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
-        label="Air Repeatable Battle/Open, bow: straighten your target Personality or attachment",
         cost=bow_cost,
         targets=_ring_of_air_targets,
         effects=_ring_of_air_effects,
@@ -179,7 +177,7 @@ register_ring(
         keywords=frozenset({keywords.AIR}),
         repeatable=True,
     ),
-    pitch=True,
+    pitch=RING_PITCH,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -208,7 +206,6 @@ def _ring_of_earth_interrupt(game: GameState, source: L5RCard, effect: Move) -> 
 register_interrupt(
     "ring_of_earth",
     Interrupt(
-        label="Earth Repeatable Interrupt, bow: the Battle action cannot move Personalities",
         answers=Move,
         interrupt=_ring_of_earth_interrupt,
         applies=_ring_of_earth_applies,
@@ -255,15 +252,13 @@ register_ring(
     "ring_of_fire",
     ability=Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Fire Battle, bow: after this battle, if you lost it, destroy a target enemy card "
-        "without attachments",
         cost=bow_cost,
         targets=_ring_of_fire_targets,
         effects=_ring_of_fire_effects,
         key="fire",
         keywords=frozenset({keywords.FIRE}),
     ),
-    pitch=True,
+    pitch=RING_PITCH,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -324,8 +319,8 @@ def _resolve_ring_of_the_void_discard(
 register_ring(
     "ring_of_the_void",
     ability=Ability(
+        printed_index=1,
         timings=(ActionTiming.LIMITED,),
-        label="Void Limited, bow: draw a card, then discard one if you now hold the most",
         cost=bow_cost,
         targets=itself,
         effects=_ring_of_the_void_effects,
@@ -333,7 +328,7 @@ register_ring(
         key="void",
         keywords=frozenset({keywords.VOID}),
     ),
-    pitch=True,
+    pitch="You may discard this Ring from your hand to use its Void ability without cost.",
     ruleset=ruleset.ONYX.name,
 )
 
@@ -371,8 +366,6 @@ register_ring(
     "ring_of_water",
     ability=Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Water Absent Repeatable Battle, bow: move your target Personality home, or one "
-        "anywhere to the battlefield if he would be opposed",
         cost=bow_cost,
         targets=_ring_of_water_targets,
         effects=_ring_of_water_effects,
@@ -382,7 +375,7 @@ register_ring(
         keywords=frozenset({keywords.WATER}),
         repeatable=True,
     ),
-    pitch=True,
+    pitch=RING_PITCH,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -473,8 +466,6 @@ register_ability(
     "the_ancient_castle_of_the_lion",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle, bow: Move home a target enemy defending Personality. You may target your "
-        "Personality with higher Personal Honor to straighten this Stronghold and gain 1 Honor",
         cost=bow_cost,
         targets=_the_ancient_castle_of_the_lion_targets,
         effects=_the_ancient_castle_of_the_lion_effects,
@@ -512,7 +503,6 @@ register_ability(
     "the_ancient_castle_of_the_lion__back",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle, bow: Move home a target enemy defending Personality. Gain 1 Honor",
         cost=bow_cost,
         targets=_the_ancient_castle_of_the_lion_targets,
         effects=_the_ancient_castle_of_the_lion__back_effects,
@@ -563,8 +553,6 @@ register_ability(
     "the_dark_capital_of_the_spider",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Tireless Battle: Give a target Personality Shadowlands. If they are yours, Fear "
-        "equal to their Force. Otherwise, take an additional action.",
         cost=no_cost,
         targets=_the_dark_capital_of_the_spider_targets,
         effects=_the_dark_capital_of_the_spider_effects,
@@ -595,8 +583,6 @@ register_ability(
     "the_dark_capital_of_the_spider__back",
     Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
-        label="Tireless Battle/Open: Give a target Personality Shadowlands. If they are yours and "
-        "this is a Battle, Fear equal to their Force. Otherwise, take an additional action.",
         cost=no_cost,
         targets=_the_dark_capital_of_the_spider_targets,
         effects=_the_dark_capital_of_the_spider__back_effects,
@@ -625,7 +611,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.RESPONSE,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Political Response: after paying the Imperial Favor, take it",
         cost=no_cost,
         targets=_the_palatial_estate_of_the_crane_targets,
         effects=_the_palatial_estate_of_the_crane_effects,
@@ -656,7 +641,6 @@ register_ability(
         # one is taken in the Step that follows the Recruit which brought the Holding into play.
         timings=(ActionTiming.RESPONSE,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Response: seed a Sincerity token onto one of your Sincerity cards",
         cost=no_cost,
         targets=_training_court_targets,
         targeting_message="one of your Sincerity cards",
@@ -689,7 +673,6 @@ register_ability(
     "utaku_gorou_stablemaster",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Bow to Equip a 1F Cavalry Follower to your Samurai",
         cost=bow_cost,
         targets=_utaku_gorou_stablemaster_targets,
         targeting_message="your Samurai",

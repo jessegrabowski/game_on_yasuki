@@ -116,7 +116,6 @@ register_ability(
     "wisdom_gained",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Each player may search for a Ring, starting with you",
         cost=no_cost,
         targets=_wisdom_gained_targets,
         effects=_wisdom_gained_effects,

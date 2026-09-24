@@ -134,7 +134,6 @@ register_ability(
     "draw_strength_from_your_oaths",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle: bow your target unbowed Personality for a Melee Attack equal to their Chi",
         cost=no_cost,
         targets=_draw_strength_from_your_oaths_targets,
         targeting_message="your unbowed Personality",
@@ -159,7 +158,6 @@ register_ability(
     "harvested_land",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Bow, destroy: give your other Farms +1 Gold Production",
         cost=_harvested_land_cost,
         targets=_harvested_land_targets,
         effects=plus_one_gp_this_turn,
@@ -209,10 +207,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
         keywords=frozenset({keywords.BUSHIDO_VIRTUE}),
-        label=(
-            "Battle/Open: Straighten your target Personality, and as a Battle action give one "
-            "with 3 or more Personal Honor +2F and gain 1 Honor"
-        ),
         cost=no_cost,
         targets=_heart_of_honor_targets,
         targeting_message="your Personality",
@@ -241,8 +235,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Political Open: a target dishonorable Personality's controller loses Honor equal to "
-        "their printed Personal Honor, or 1",
         cost=no_cost,
         targets=_i_do_not_forget_targets,
         targeting_message="a dishonorable Personality",
@@ -288,7 +280,6 @@ register_ability(
     "jade_legion",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle, Bow: Melee {JADE_LEGION_MELEE} Attack",
         cost=bow_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -384,7 +375,6 @@ register_ability(
     "mishime_sensei",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label=f"Open: Bow and pay {ONI_COST} gold to bow your Personality for an Oni of his Chi",
         cost=_mishime_sensei_cost,
         targets=_mishime_sensei_targets,
         targeting_message="your Personality",
@@ -448,7 +438,6 @@ register_ability(
     "modest_farm",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
         cost=bow_cost,
         targets=_modest_farm_targets,
         targeting_message="a Holding in your Province",
@@ -501,7 +490,6 @@ register_ability(
     "rural_market",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Spend a Wealth token: straighten a Farm",
         cost=_rural_market_cost,
         targets=_rural_market_targets,
         targeting_message="your Farm",
@@ -602,7 +590,6 @@ register_ability(
     "shinjo_fields",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Bow to give your Personality Cavalry, and may destroy this for a Follower",
         cost=bow_cost,
         targets=_shinjo_fields_targets,
         targeting_message="your Personality",

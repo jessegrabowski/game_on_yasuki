@@ -58,7 +58,6 @@ register_ability(
     "the_grand_halls_of_the_lion",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=GRAND_HALLS_LABEL,
         cost=no_cost,
         targets=_the_grand_halls_of_the_lion_targets,
         effects=_the_grand_halls_of_the_lion_effects,
@@ -72,7 +71,6 @@ register_ability(
     "the_grand_halls_of_the_lion__back",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Tireless {GRAND_HALLS_LABEL}",
         cost=no_cost,
         targets=_the_grand_halls_of_the_lion_targets,
         effects=_the_grand_halls_of_the_lion_effects,
@@ -116,7 +114,6 @@ register_ability(
     "the_unassailable_fortress_of_the_crab",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=UNASSAILABLE_FORTRESS_LABEL,
         cost=no_cost,
         targets=_the_unassailable_fortress_of_the_crab_targets,
         effects=_the_unassailable_fortress_of_the_crab_effects,
@@ -130,7 +127,6 @@ register_ability(
     "the_unassailable_fortress_of_the_crab__back",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Tireless {UNASSAILABLE_FORTRESS_LABEL}",
         cost=no_cost,
         targets=_the_unassailable_fortress_of_the_crab_targets,
         effects=_the_unassailable_fortress_of_the_crab_effects,

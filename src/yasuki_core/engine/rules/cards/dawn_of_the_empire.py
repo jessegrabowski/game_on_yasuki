@@ -98,10 +98,8 @@ def _resolve_temples_of_gisei_toshi_none(
 register_ability(
     "temples_of_gisei_toshi",
     Ability(
+        printed_index=1,
         timings=(ActionTiming.LIMITED,),
-        label='Limited, bow: Name "Follower", "Item", or "Spell". Look at the top four cards of '
-        "your Fate deck. You may show one of those cards that is of the type you named, then put "
-        "it in your hand.",
         cost=bow_cost,
         targets=itself,
         hits_every_target=True,

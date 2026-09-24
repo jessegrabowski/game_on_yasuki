@@ -458,14 +458,21 @@ def test_interrupt_menu_pairs_each_way_to_take_it_with_its_action():
     # The step's ways to answer hang off the cards they spend, each already the action the card
     # menu takes. A rulebook Interrupt reads as the datasheet prints it: the adjustment is the
     # question that follows, not part of the entry.
-    session = _fear_announced({DEFENDER: 1}, strategies=(("okura", "okura_is_released", DEFENDER),))
+    okura = "<b>Interrupt:</b> If the action has any :fear:, those effects destroy cards after they bow them."
+    session = _fear_announced(
+        {DEFENDER: 1}, strategies=(("okura", "okura_is_released", DEFENDER, okura),)
+    )
     game_runner = GameRunner(session, DEFENDER)
 
     assert game_runner.interrupt_menu("P2-courage0") == [
         (rulebook_interrupt("courage").label, DiscardToInterrupt("P2-courage0", "courage"))
     ]
     assert game_runner.interrupt_menu("okura") == [
-        ("Interrupt: destroy what the action's Fear bows", PlayInterrupt("okura"))
+        (
+            "Interrupt: If the action has any :fear:, those effects destroy cards after they bow"
+            " them.",
+            PlayInterrupt("okura"),
+        )
     ]
     assert game_runner.interrupt_menu("guard") == []
 
@@ -493,10 +500,11 @@ def test_ability_menu_offers_millet_farm_activation_in_play():
         printed_id="millet_farm",
         keywords=("Farm",),
         gold_production=1,
+        text="<b>Open, :bow::</b> Give your target Farm Holding +2GP.",
     )
     runner = _runner_with_in_play(millet)  # Action phase by default
     assert [label for label, _ in runner.ability_menu("millet")] == [
-        "Bow: give a Farm +2 Gold Production"
+        "Open, :bow:: Give your target Farm Holding +2GP."
     ]
 
 
@@ -600,6 +608,8 @@ def test_a_hand_strategy_offers_a_play_priced_at_its_gold_cost():
                 side=Side.FATE,
                 owner=PlayerId.P1,
                 gold_cost=2,
+                text="<b>Open, :gstar::</b> Destroy a target Personality whose unit's total Gold "
+                "Cost equals the amount paid minus 2. Lose 3 Honor.",
             ),
         )
     )
@@ -607,7 +617,10 @@ def test_a_hand_strategy_offers_a_play_priced_at_its_gold_cost():
     label, action = runner.hand_menu("P1-killer")[0]
 
     assert action == PlayStrategy("P1-killer")
-    assert label == "Open: Spend Gold to destroy a target Personality -- Pay 2 gold"
+    assert label == (
+        "Open, :gstar:: Destroy a target Personality whose unit's total Gold Cost equals the "
+        "amount paid minus 2. Lose 3 Honor. -- Pay 2 gold"
+    )
 
 
 def test_an_investable_attachment_prices_its_two_equips_apart():

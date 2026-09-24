@@ -83,7 +83,6 @@ register_ability(
     "hired_killer",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Spend Gold to destroy a target Personality",
         cost=_hired_killer_cost,
         targets=itself,
         effects=lambda game, source, target: [],

@@ -124,7 +124,6 @@ register_ability(
     "chuda_jomei",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Give a target Human Personality Shadowlands",
         cost=no_cost,
         targets=_chuda_jomei_targets,
         targeting_message="a Human Personality",
@@ -217,9 +216,6 @@ register_ability(
     "comprehensive_education",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Look at the top 5 cards of your Fate deck. You may show one that is an Edict "
-        "or Kata and put it in your hand, and you may discard any that are Edicts or Kata. Put the "
-        "rest on the bottom of your deck in any order.",
         cost=no_cost,
         targets=itself,
         hits_every_target=True,
@@ -248,7 +244,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         keywords=frozenset({keywords.IAIJUTSU}),
-        label=f"Battle: Melee {MAYA_MELEE} Attack",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -342,8 +337,6 @@ register_ability(
     "doji_teru",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: another player's dishonorable Personality may be rehonored, for 2 Honor, "
-        "or Teru gets +2F",
         cost=no_cost,
         targets=_doji_teru_targets,
         targeting_message="another player's dishonorable Personality",
@@ -387,7 +380,6 @@ register_ability(
     "hungry_moon",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: dishonor a target bowed Personality",
         cost=no_cost,
         targets=_hungry_moon_dishonor_targets,
         targeting_message="a bowed Personality",
@@ -400,8 +392,8 @@ register_ability(
 register_ability(
     "hungry_moon",
     Ability(
+        printed_index=1,
         timings=(ActionTiming.OPEN,),
-        label="Open: destroy a target Holding's Wealth tokens, and a player loses 3 Honor",
         cost=no_cost,
         targets=_hungry_moon_wealth_targets,
         targeting_message="a Holding with Wealth tokens",
@@ -451,7 +443,6 @@ register_ability(
     "kengun_grounds",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Bow to create a 1F Undead Follower and attach it to your target Personality",
         cost=bow_cost,
         targets=_kengun_grounds_targets,
         targeting_message="your Personality",
@@ -516,7 +507,6 @@ register_ability(
     "moto_ikarichi_bloodseeker",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Melee {IKARICHI_MELEE} Attack",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -543,7 +533,6 @@ register_ability(
     "moto_traders",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Bow to draw a card",
         cost=bow_cost,
         targets=itself,
         effects=_moto_traders_effects,
@@ -568,7 +557,6 @@ register_ability(
     "walk_with_tengoku",
     Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
-        label="Battle/Open: Bow to create a 3F/2C/3PH Fushicho, banished at the end of the turn",
         cost=bow_cost,
         targets=itself,
         effects=_walk_with_tengoku_effects,

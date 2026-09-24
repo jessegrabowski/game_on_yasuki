@@ -49,7 +49,6 @@ register_ability(
     "rout",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle: move a target unit home and destroy one of its attachments",
         cost=no_cost,
         targets=_rout_targets,
         targeting_message="a unit",

@@ -57,7 +57,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Open: Bow and pay the Imperial Favor to gain 1 Honor",
         cost=_doji_natsuyo_cost,
         targets=itself,
         effects=_doji_natsuyo_effects,

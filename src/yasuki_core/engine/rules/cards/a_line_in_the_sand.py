@@ -79,7 +79,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.EARTH}),
-        label="Earth Open: Recruit a target Fortification in your discard pile and give its Province a +1 strength Wall token",
         cost=bow_cost,
         targets=_agasha_beiru_targets,
         targeting_message="a Fortification in your discard pile",
@@ -143,9 +142,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Political Open, 2 Gold: Bow your target unbowed Courtier. Look at a number of cards "
-        "on the top of your Fate deck equal to his Chi. You may put one at the bottom of your "
-        "deck. Put the rest back in any order. Draw a card.",
         cost=_beset_from_all_sides_cost,
         targets=_beset_from_all_sides_targets,
         targeting_message="your unbowed Courtier",
@@ -194,7 +190,6 @@ register_ability(
     "legion_of_the_khan",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Ranged {KHAN_RANGED} Attack",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -260,11 +255,8 @@ def _resolve_the_ivory_courtroom(
 register_ability(
     "the_ivory_courtroom",
     Ability(
+        printed_index=1,
         timings=(ActionTiming.RESPONSE,),
-        label=(
-            "Tireless Response: After the action Recruits this Holding, take the Imperial Favor,"
-            " and you may rehonor your target Personality"
-        ),
         cost=no_cost,
         targets=_the_ivory_courtroom_targets,
         effects=_the_ivory_courtroom_effects,

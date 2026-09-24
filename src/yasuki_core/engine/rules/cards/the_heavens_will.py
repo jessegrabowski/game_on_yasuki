@@ -32,7 +32,6 @@ register_ability(
     "discretionary_valor",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle: move your target opposed Personality home, gain 1 Honor and draw a card",
         cost=no_cost,
         targets=_discretionary_valor_targets,
         targeting_message="your opposed Personality",

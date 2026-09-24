@@ -29,7 +29,6 @@ register_ability(
     "ancient_tome",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open, 3 Gold, Bow: Draw a card",
         cost=_ancient_tome_cost,
         targets=itself,
         effects=_ancient_tome_effects,

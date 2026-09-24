@@ -25,7 +25,6 @@ def _okura_is_released_interrupt(game: GameState, source: L5RCard, effect: Fear)
 register_interrupt(
     "okura_is_released",
     Interrupt(
-        label="Interrupt: destroy what the action's Fear bows",
         answers=Fear,
         interrupt=_okura_is_released_interrupt,
     ),

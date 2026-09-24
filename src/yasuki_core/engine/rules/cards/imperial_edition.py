@@ -58,7 +58,6 @@ register_ability(
     "fantastic_gardens",
     Ability(
         timings=(ActionTiming.LIMITED,),
-        label=f"Repeatable Limited: Bow to gain {GARDENS_HONOR} Honor",
         repeatable=True,
         cost=bow_cost,
         targets=itself,
@@ -116,7 +115,6 @@ register_ability(
     "imperial_gift",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Gain 2 Honor and search your Fate deck for an Item",
         cost=no_cost,
         targets=_imperial_gift_targets,
         effects=_imperial_gift_effects,
@@ -148,7 +146,6 @@ register_ability(
     "skeletal_troops",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Fear {SKELETAL_TROOPS_FEAR}",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -174,8 +171,6 @@ register_ability(
     "sneak_attack",
     Ability(
         timings=(ActionTiming.ENGAGE,),
-        label="Engage: The Attacker has the first opportunity to take a Battle action or pass in "
-        "this battle",
         cost=no_cost,
         targets=itself,
         effects=_sneak_attack_effects,
@@ -220,7 +215,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.LIMITED,),
         keywords=frozenset({keywords.MAHO}),
-        label="Limited: destroy a bowed Personality with Chi no higher than this Shugenja's",
         cost=_touch_of_death_cost,
         targets=_touch_of_death_targets,
         targeting_message="a bowed Personality with Chi no higher than this Shugenja's",
