@@ -1,24 +1,13 @@
 from collections.abc import Callable
 from dataclasses import dataclass
-from enum import Enum
 from types import UnionType
 
 from yasuki_core.engine.rules.abilities.costs import Cost, no_cost
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import Effect
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
-
-
-class CardLocation(str, Enum):
-    """Where a card must be for its behavior to be offered. Distinct from ``ZoneRole``, which
-    cannot name the battlefield, since that is a field of its own on the table, not a keyed zone."""
-
-    BATTLEFIELD = "battlefield"
-    PROVINCE = "province"
-    HAND = "hand"
-    # A seat's rulebook zone, where a proxy card stands for abilities the rules give every player.
-    RULEBOOK = "rulebook"
 
 
 @dataclass(frozen=True, slots=True)
