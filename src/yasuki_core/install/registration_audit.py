@@ -21,6 +21,7 @@ from yasuki_core.bots import hints  # noqa: F401
 
 # Without this the registries are empty and every check below passes vacuously.
 from yasuki_core.engine.rules import cards  # noqa: F401
+from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine import rules
 from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, iter_set_entries, read_index
 from yasuki_core.install.text_split import split_text_box
@@ -44,6 +45,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "abilities": frozenset(registry._ABILITIES),
         "invest abilities": frozenset(registry._INVEST),
         "interrupts": frozenset(registry._INTERRUPTS),
+        "rulebook proxies": frozenset(proxies.RULEBOOK_PROXY_PRINTS),
         "triggers": frozenset(
             card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
         ),
@@ -363,6 +365,7 @@ VALIDATED_REGISTRIES = {
     "_INTERRUPTS",
     "CHI_DEATH_EXEMPT",
     "_TRIGGERS",
+    "RULEBOOK_PROXY_PRINTS",
 }
 
 

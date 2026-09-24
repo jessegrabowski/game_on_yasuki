@@ -260,6 +260,16 @@ cards:
   chi: '*'
   gold_cost: '*'
   is_proxy: true
+- id: kharmic
+  title: Kharmic
+  types:
+  - Other
+  - Proxy
+  decks:
+  - Other
+  text: '<b>Repeatable Open, :g2::</b> Discard a Kharmic card to draw a card.<br><b>Repeatable Open,
+    :g2::</b> Discard a Kharmic card from your Province and refill it face-up.'
+  is_proxy: true
 - id: imperial_favor
   title: The Imperial Favor
   types:

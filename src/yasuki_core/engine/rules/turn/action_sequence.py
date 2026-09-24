@@ -19,8 +19,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DynastyDiscard,
     Equip,
     Inheritance,
-    KharmicDraw,
-    KharmicRefill,
     Legacy,
     Lobby,
     Pass,
@@ -74,7 +72,6 @@ from yasuki_core.engine.rules.interrupts import (
     play_interrupt,
 )
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
-from yasuki_core.engine.rules.rulebook.kharmic import kharmic_draw, kharmic_refill
 from yasuki_core.engine.rules.rulebook.legacy import (
     apply_legacy_banish,
     apply_legacy_choice,
@@ -107,8 +104,6 @@ _ACTION_WORDING: dict[type, str] = {
     Equip: "the Equip of",
     ActivateAbility: "the ability on",
     DynastyDiscard: "the discard of",
-    KharmicDraw: "the Kharmic draw on",
-    KharmicRefill: "the Kharmic refill on",
     PlayStrategy: "the Strategy",
     Legacy: "Legacy",
     Cycle: "Cycle",
@@ -170,10 +165,6 @@ def perform(game: GameState, action: Action) -> None:
             lobby(game)
         case UseFavorAbility(key=key):
             use_favor_ability(game, key)
-        case KharmicDraw(card_id=card_id):
-            kharmic_draw(game, card_id)
-        case KharmicRefill(card_id=card_id):
-            kharmic_refill(game, card_id)
         case ActivateAbility(card_id=card_id, ability_key=ability_key):
             activate(game, card_id, ability_key)
             # Resolve the target, unless the cost's cascade paused for a decision first.

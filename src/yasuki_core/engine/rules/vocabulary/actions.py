@@ -195,34 +195,6 @@ class UseFavorAbility:
 
 
 @dataclass(frozen=True, slots=True)
-class KharmicDraw:
-    """Take the Fate Kharmic rulebook ability (Repeatable Open, 2 Gold): discard a Kharmic card from
-    hand to draw a card.
-
-    Attributes
-    ----------
-    card_id : str
-        The Kharmic card in hand to spend.
-    """
-
-    card_id: str
-
-
-@dataclass(frozen=True, slots=True)
-class KharmicRefill:
-    """Take the Dynasty Kharmic rulebook ability (Repeatable Open, 2 Gold): discard a Kharmic card
-    from one of your Provinces and refill it face-up.
-
-    Attributes
-    ----------
-    card_id : str
-        The face-up Kharmic card in a Province to spend.
-    """
-
-    card_id: str
-
-
-@dataclass(frozen=True, slots=True)
 class PlayInterrupt:
     """Take the Interrupt a card prints against the action now held at the Interrupt step: a
     Strategy from hand, played and paid for, or a card in play, which pays the Interrupt's own
@@ -275,8 +247,6 @@ Action = (
     | Legacy
     | ActivateAbility
     | Cycle
-    | KharmicDraw
-    | KharmicRefill
     | Inheritance
     | Lobby
     | UseFavorAbility
@@ -293,8 +263,6 @@ Action = (
 # differs by arc.
 ACTION_TIMINGS: dict[type, ActionTiming] = {
     Cycle: ActionTiming.LIMITED,
-    KharmicDraw: ActionTiming.OPEN,
-    KharmicRefill: ActionTiming.OPEN,
     Recruit: ActionTiming.DYNASTY,
     # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.
     Equip: ActionTiming.OPEN,

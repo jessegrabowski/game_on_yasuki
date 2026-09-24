@@ -26,8 +26,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DynastyDiscard,
     Equip,
     Inheritance,
-    KharmicDraw,
-    KharmicRefill,
     Legacy,
     Lobby,
     PlayInterrupt,
@@ -100,8 +98,8 @@ class GameRunner:
     def province_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The labeled actions offered for a face-up province card, for its left-click menu: a plain
         Recruit plus its second purchase option where one exists (Invest for an Invest holding,
-        Proclaim for an own-clan Personality), all labeled with their gold, a Dynasty Discard, and
-        the Kharmic ability that spends the card. Empty when the card offers nothing right now."""
+        Proclaim for an own-clan Personality), all labeled with their gold, and a Dynasty Discard.
+        Empty when the card offers nothing right now. Kharmic is on the seat's proxy card."""
         game = self.session.game
         card = game.table.cards_by_id[card_id]
         # Deferred until a Recruit action confirms this is a recruitable card: recruit_cost reads
@@ -123,13 +121,6 @@ class GameRunner:
                     items.append((f"Recruit: Pay {base} gold", action))
             elif isinstance(action, DynastyDiscard):
                 items.append(("Discard from province", action))
-            elif isinstance(action, KharmicRefill):
-                items.append(
-                    (
-                        f"Kharmic: Pay {legality.KHARMIC_COST} gold to refill this Province face-up",
-                        action,
-                    )
-                )
         return items
 
     def _proclaim_label(self, game: GameState, card: L5RCard, base: int) -> str:
@@ -142,8 +133,8 @@ class GameRunner:
 
     def hand_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The labeled actions offered for one of the human's hand cards, for its left-click menu:
-        the Kharmic ability that spends it, an Equip for an attachment, and a Strategy played for
-        its Gold Cost. Empty when the card offers nothing right now.
+        an Equip for an attachment, and a Strategy played for its Gold Cost. Empty when the card
+        offers nothing right now. Kharmic is on the seat's proxy card.
 
         Neither Equipping nor playing a Strategy names a target here. Both pay first and are
         pointed at their target on the far side, which is the CR's order for any action (Action
@@ -153,9 +144,7 @@ class GameRunner:
         for action in self.legal_actions():
             if getattr(action, "card_id", None) != card_id:
                 continue
-            if isinstance(action, KharmicDraw):
-                items.append((f"Kharmic: Pay {legality.KHARMIC_COST} gold to draw a card", action))
-            elif isinstance(action, Equip):
+            if isinstance(action, Equip):
                 card = game.table.cards_by_id[card_id]
                 cost = effective_gold_cost(game, card)
                 if action.invest:

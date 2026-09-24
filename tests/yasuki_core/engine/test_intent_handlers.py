@@ -54,6 +54,7 @@ from yasuki_core.engine.intents import (
     roll_dice,
 )
 from yasuki_core.engine.intent_handlers import apply_intent
+from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_PROXY
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -2230,9 +2231,12 @@ def test_a_token_moved_between_hands_survives():
 
 
 def _rulebook_proxy(table: TableState) -> L5RCard:
-    printed = CardPrint(name="Proxy", side=Side.STRONGHOLD, printed_id="proxy", card_type="Other")
     return ops.spawn_token(
-        table, "P1-proxy", printed, PlayerId.P1, dest=ZoneKey(PlayerId.P1, ZoneRole.RULEBOOK)
+        table,
+        "P1-kharmic",
+        KHARMIC_PROXY,
+        PlayerId.P1,
+        dest=ZoneKey(PlayerId.P1, ZoneRole.RULEBOOK),
     )
 
 

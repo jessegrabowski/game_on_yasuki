@@ -6,7 +6,6 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
-    KharmicDraw,
     Pass,
     PlayStrategy,
     Recruit,
@@ -19,6 +18,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.rise_of_jigoku import CAVALRY_FOLLOWER, MISHIMES_ONI
+from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, kharmic_proxy
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as keywords_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
@@ -773,10 +773,16 @@ def _blood_of_fu_leng_game(chi: int | None = 3) -> EngineSession:
     return EngineSession.start(state, P1)
 
 
+def _kharmic_draw(session: EngineSession) -> None:
+    """Take the Kharmic draw from P1's proxy, pay, and spend Blood of Fu Leng on it."""
+    session.act(P1, ActivateAbility(kharmic_proxy(session.game, P1).id, KHARMIC_DRAW))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("blood",)))
+
+
 def _kharmic_it_away(session: EngineSession, target: str = "shiba") -> None:
     """Spend Blood of Fu Leng on the Kharmic draw, then point its penalty at ``target``."""
-    session.act(P1, KharmicDraw("blood"))
-    pay(session, P1)
+    _kharmic_draw(session)
     asked = session.game.pending
     assert asked is not None and target in asked.candidates
     session.submit(asked.seat, DecisionResponse((target,)))
@@ -835,8 +841,7 @@ def test_it_asks_for_no_target_with_no_personality_in_play():
     without pausing to be pointed at one."""
     session = _blood_of_fu_leng_game(chi=None)
 
-    session.act(P1, KharmicDraw("blood"))
-    pay(session, P1)
+    _kharmic_draw(session)
 
     assert session.game.pending is None
     assert session.game.ongoing == []

@@ -26,8 +26,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DynastyDiscard,
     Equip,
     Inheritance,
-    KharmicDraw,
-    KharmicRefill,
     Legacy,
     Lobby,
     Pass,
@@ -68,9 +66,6 @@ from yasuki_core.game_pieces.prints import (
     WindPrint,
 )
 
-
-# What the Kharmic rulebook abilities cost to use.
-KHARMIC_COST = 2
 
 # The Gold Production the Inheritance ability grants the Holding it targets (ShE).
 INHERITANCE_PRODUCTION = 3
@@ -179,7 +174,6 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_strategies(game, seat),
         *_dynasty_discards(game, seat),
         *_legacy(game, seat),
-        *_kharmic(game, seat),
         *_inheritance(game, seat),
         *_lobby(game, seat),
         *_favor_abilities(game, seat),
@@ -215,8 +209,6 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _strategies(game, seat, only=card_id)
         case DynastyDiscard(card_id=card_id):
             return action in _dynasty_discards(game, seat, only=card_id)
-        case KharmicDraw(card_id=card_id) | KharmicRefill(card_id=card_id):
-            return action in _kharmic(game, seat, only=card_id)
         case Lobby():
             return bool(_lobby(game, seat))
         case UseFavorAbility():
@@ -336,47 +328,6 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
             continue
         actions.append(UseFavorAbility(ability.key))
     return actions
-
-
-def _kharmic(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """A Kharmic action for each card the seat could spend (from hand to draw, or from a Province
-    to refill it face-up) when the round permits Open actions and the seat can reach the cost. Both
-    are Repeatable, so neither claims a once-per-turn key. ``only`` narrows to a single card."""
-    if reachable_gold(game, seat) < KHARMIC_COST:
-        return []
-    actions: list[Action] = []
-    if permits(game, seat, ACTION_TIMINGS[KharmicDraw]):
-        actions.extend(
-            KharmicDraw(card.id)
-            for card in kharmic_in_hand(game, seat)
-            if only is None or card.id == only
-        )
-    if permits(game, seat, ACTION_TIMINGS[KharmicRefill]):
-        actions.extend(
-            KharmicRefill(card.id)
-            for card in kharmic_in_provinces(game, seat)
-            if only is None or card.id == only
-        )
-    return actions
-
-
-def is_kharmic_card(game: GameState, card: L5RCard) -> bool:
-    """Whether ``card`` carries the Kharmic keyword, so a Kharmic ability can spend it."""
-    return has_keyword(game, card, keywords.KHARMIC)
-
-
-def kharmic_in_hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The Kharmic cards ``seat`` holds, which the Fate Kharmic ability discards to draw."""
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    return [card for card in hand.cards if is_kharmic_card(game, card)]
-
-
-def kharmic_in_provinces(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The Kharmic cards face-up in ``seat``'s Provinces, which the Dynasty Kharmic ability discards
-    to refill face-up. A face-down Province card is unknown to its owner, so it cannot be named."""
-    return [
-        card for card in province_cards(game, seat) if card.face_up and is_kharmic_card(game, card)
-    ]
 
 
 def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
