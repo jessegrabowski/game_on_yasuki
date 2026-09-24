@@ -138,6 +138,7 @@ def perform(game: GameState, action: Action) -> None:
         RoundKind.INTERRUPT,
     ):
         game.action_events.clear()
+        game.action_resolved = False
         game.action_taken = describe_action(game, action)
         game.action_seat = game.round.priority
         game.action_targets = ()

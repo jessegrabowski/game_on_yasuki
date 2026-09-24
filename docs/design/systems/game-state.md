@@ -43,8 +43,8 @@ runs after every committed effect. A Ring whose text says it does not count regi
 ## What replay rebuilds
 
 Most of the rest is ephemeral. `stack`, `ongoing`, `delayed`, `round_stack`, `responded`,
-`created_by`, `tokens_created`, `attack`, `look`, `action` and its companions are all rebuilt by
-re-running the tape rather than serialized. [The replay log](the-replay-log.md) covers why.
+`created_by`, `tokens_created`, `attack`, `look`, `turn_events`, `action` and its companions are all
+rebuilt by re-running the tape rather than serialized. [The replay log](the-replay-log.md) covers why.
 
 `pending` is the question the engine has stopped on, or None, and `stack` is the work waiting
 behind it. Together they are the engine's whole notion of "part-way through". A client reads
@@ -80,7 +80,10 @@ its abilities were pointed at, in order. Both are what a Response reads when its
 action was yours" or "if it targeted this Personality". `action_events` is what the action did, in
 order, for a Response that asks "if it discarded a Fate card". What an Interrupt or a Response does
 inside its own round is left out of it, since a Strategy played as an Interrupt to your opponent's
-action is your doing and not the action's. The action's keywords, such as Political, are not
+action is your doing and not the action's. `turn_events` is the same record for the whole turn,
+steps included, and `ActionResolved` is on it once per action, so a card that counts what happened
+this turn folds over it rather than asking the state to keep a count for it:
+{func}`~.favor_actions_this_turn` is the one such fold. The action's keywords, such as Political, are not
 stored: {func}`~.action_keywords` reads them off the ability's registration or off the ruleset for
 a rulebook action.
 

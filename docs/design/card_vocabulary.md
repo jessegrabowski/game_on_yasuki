@@ -125,6 +125,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
 
 .. autosummary::
 
+   ActionResolved
    Assigned
    CardDiscarded
    CounterGained

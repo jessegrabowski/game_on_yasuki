@@ -7,11 +7,13 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import state_based_actions, triggers
 from yasuki_core.engine.rules.rulebook import favor_proxy, proxies
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize, LeaveBowed
 from yasuki_core.engine.rules.effects import AdjustCounter, ApplyEffects, RevealProvinces
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    ActionResolved,
     CardDiscarded,
     EnteredPlay,
     GameEvent,
@@ -154,6 +156,7 @@ def forget_action(game: GameState) -> None:
     boundary is not that, and would let a Step open on an action two turns gone.
     """
     game.action_events.clear()
+    game.action_resolved = False
     game.action_taken = ""
     game.action_seat = None
     game.action_targets = ()
@@ -277,6 +280,7 @@ def begin_next_turn(game: GameState) -> None:
     if game.game_over:
         return
     game.turn += 1
+    game.turn_events = ()
     game.active = _other(game.active)
     game.phase = Phase.ACTION
     _begin_turn(game)
@@ -394,9 +398,31 @@ def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
         game.modifications.clear()
     if game.round is not acted_in:
         return
+    _announce_resolution(game)
+    if game.awaiting_decision or game.game_over:
+        return
     if open_response_window(game):
         return
     yield_priority(game, passed=False)
+
+
+def _announce_resolution(game: GameState) -> None:
+    """Announce :class:`~.ActionResolved` once for the action just resolved, before the Response
+    Step, so a card in hand reading "Play after you resolve X" enters where the CR's "immediately"
+    puts it. An action taken inside an Interrupt or Response step is not announced, because the
+    action record names the action it answers."""
+    if game.action_resolved or game.action is None or game.action_seat is None:
+        return
+    if game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+        return
+    game.action_resolved = True
+    resolved = ActionResolved(
+        seat=game.action_seat,
+        card_id=getattr(game.action, "card_id", None),
+        favor=is_favor_action(game),
+        printed=isinstance(game.action, ActivateAbility | PlayStrategy),
+    )
+    triggers.fire(game, resolved)
 
 
 def _responders(game: GameState) -> list[PlayerId]:

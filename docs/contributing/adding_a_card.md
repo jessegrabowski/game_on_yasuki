@@ -54,7 +54,7 @@ exists.
 
 These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straightened`,
 `Dishonored`, `Rehonored`, `CardDiscarded`, `CounterGained`, `Revealed`, `TurnStarted`,
-`ProducingGold` and `ProducedGold`. A card whose moment is not one of them needs a new event,
+`ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose moment is not one of them needs a new event,
 which is a core change.
 
 ## Three cards, complete

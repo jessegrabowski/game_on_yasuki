@@ -69,11 +69,19 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.effects import TakeFavor
+from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
     end_phase,
     end_turn,
+    fate_card,
     holding,
     put_in_play,
     register,
@@ -778,3 +786,71 @@ def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
     game = GameState.start(state, PlayerId.P1)
     sequence.begin_game(game)
     return game
+
+
+register_ability(
+    "resolution_probe",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: nothing",
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+    ),
+)
+
+
+def _resolutions(game: GameState) -> list[ActionResolved]:
+    return [event for event in game.turn_events if isinstance(event, ActionResolved)]
+
+
+def _probe_session() -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("probe", printed_id="resolution_probe"))
+    return EngineSession.start(state, PlayerId.P1)
+
+
+def test_an_action_announces_its_resolution_once():
+    session = _probe_session()
+
+    session.act(PlayerId.P1, ActivateAbility("probe"))
+
+    assert _resolutions(session.game) == [
+        ActionResolved(PlayerId.P1, "probe", favor=False, printed=True)
+    ]
+
+
+def test_a_pass_announces_no_resolution():
+    session = _probe_session()
+
+    session.act(PlayerId.P1, Pass())
+
+    assert _resolutions(session.game) == []
+
+
+def test_a_favor_action_that_paused_for_a_choice_is_announced_once_as_a_favor_action():
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
+    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    TakeFavor(PlayerId.P1).perform(game)
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    hand.add(register(game.table, fate_card("first", PlayerId.P1)))
+    hand.add(register(game.table, fate_card("second", PlayerId.P1)))
+
+    action_sequence.perform(game, UseFavorAbility("discard_to_draw"))
+    assert _resolutions(game) == []
+    submit(game, DecisionResponse(choices=("first",)))
+
+    assert _resolutions(game) == [ActionResolved(PlayerId.P1, None, favor=True, printed=False)]
+
+
+def test_the_turn_history_is_dropped_as_the_next_turn_begins():
+    session = _probe_session()
+    session.act(PlayerId.P1, ActivateAbility("probe"))
+
+    end_turn(session)
+
+    assert _resolutions(session.game) == []
+    assert any(isinstance(event, TurnStarted) for event in session.game.turn_events)

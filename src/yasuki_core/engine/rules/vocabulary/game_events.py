@@ -224,8 +224,36 @@ class HonorChanged:
     amount: int
 
 
+@dataclass(frozen=True, slots=True)
+class ActionResolved:
+    """An action has fully resolved, before the Response Step it may open.
+
+    Announced once per action however many decisions or Interrupt steps it passed through, and not
+    for a Pass. An action taken inside an Interrupt or Response step is not announced, since the
+    action record names the action it answers rather than the step's own.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that took the action.
+    card_id : str or None
+        The card the action was taken from, or None for a rulebook action.
+    favor : bool
+        Whether it was a Favor action (ShE datasheet, The Favor Icon), read as it resolved, which
+        is the last moment that is settled.
+    printed : bool
+        Whether it was a card's printed ability, as against a rulebook action such as a Recruit.
+    """
+
+    seat: PlayerId
+    card_id: str | None
+    favor: bool
+    printed: bool
+
+
 GameEvent = (
-    Assigned
+    ActionResolved
+    | Assigned
     | TurnStarted
     | CardDiscarded
     | CounterGained

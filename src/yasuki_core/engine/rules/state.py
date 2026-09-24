@@ -150,6 +150,15 @@ class GameState:
         action begins. What an Interrupt or a Response does inside its own round is left out. A
         Response reads it to ask what it is responding to: "discarded a Fate card" is a fact about
         the action rather than about the board it left behind. Ephemeral and rebuilt by replay.
+    action_resolved : bool
+        Whether the action now resolving has announced its :class:`~.ActionResolved`, so the
+        announcement is made once however many answers hand the opportunity on. Ephemeral and
+        rebuilt by replay. Default False.
+    turn_events : tuple of GameEvent
+        Every event of the turn so far, in the order it happened, including what Interrupt and
+        Response steps did. What a card folds over to count what happened this turn, as "after
+        you resolve two or more Favor actions in one turn" does. Reset as the next turn begins.
+        Ephemeral and rebuilt by replay. Default empty.
         Default empty.
     interrupts_taken : set of (str, PlayerId)
         The once-per-action rulebook Interrupts taken against the action now resolving, as the
@@ -205,6 +214,8 @@ class GameState:
     action_targets: tuple[str, ...] = ()
     action_is_favor: bool = False
     action_events: list[GameEvent] = field(default_factory=list)
+    action_resolved: bool = False
+    turn_events: tuple[GameEvent, ...] = ()
     interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)
     additional_action: PlayerId | None = None
     interrupts_offered: bool = False

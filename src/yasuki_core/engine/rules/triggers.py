@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    ActionResolved,
     CardDiscarded,
     Destroyed,
     GameEvent,
@@ -299,9 +300,12 @@ def _advance(
                 f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
             )
         event = queue.pop(0)
+        game.turn_events += (event,)
         # Kept for the Response Step, which asks what the action it follows actually did. What an
-        # Interrupt or a Response does inside its own round is its doing, not the action's.
-        if game.round.kind not in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+        # Interrupt or a Response does inside its own round is its doing, not the action's, and
+        # the announcement that the action resolved is about it rather than by it.
+        inside_a_step = game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE)
+        if not inside_a_step and not isinstance(event, ActionResolved):
             game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
