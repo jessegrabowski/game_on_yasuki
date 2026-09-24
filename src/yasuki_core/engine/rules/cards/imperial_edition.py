@@ -217,7 +217,7 @@ register_ability(
         keywords=frozenset({keywords.MAHO}),
         cost=_touch_of_death_cost,
         targets=_touch_of_death_targets,
-        targeting_message="a bowed Personality with Chi no higher than this Shugenja's",
+        targeting_message="a bowed Personality with equal or lower Chi",
         effects=_touch_of_death_effects,
     ),
 )
