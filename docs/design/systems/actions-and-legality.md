@@ -42,7 +42,9 @@ than the actions: {func}`~.cycle_candidates` for Cycle, {func}`~.legacy_search_p
 {func}`~.recruit_cost` for what a Recruit will cost this seat.
 
 {func}`~.activatable` is the ability version: whether a card's ability can be announced at all,
-cost included.
+cost included. {func}`~.playable` applies the same tests to a card played out of hand, which is
+the one place the two part: a card's own hand ability is played, while one a keyword confers is
+activated where the card sits.
 
 Unique and Singular are rules on every route into play rather than actions of their own.
 {func}`~.copy_may_enter` refuses a Unique card while its seat controls a Unique card with the
