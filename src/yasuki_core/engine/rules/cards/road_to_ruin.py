@@ -257,7 +257,7 @@ register_ability(
         keywords=frozenset({keywords.ECONOMIC}),
         cost=no_cost,
         targets=_repairing_the_ruins_targets,
-        targeting_message="a non-Unique Holding you control no copies of",
+        targeting_message="a non-Unique Holding of which you do not control any copies",
         effects=_repairing_the_ruins_effects,
         located_at=(CardLocation.PROVINCE,),
     ),

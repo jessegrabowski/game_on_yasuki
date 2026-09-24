@@ -377,7 +377,7 @@ register_ability(
         timings=(ActionTiming.OPEN,),
         cost=_mishime_sensei_cost,
         targets=_mishime_sensei_targets,
-        targeting_message="your Personality",
+        targeting_message="your unbowed Personality",
         effects=_mishime_sensei_effects,
     ),
 )

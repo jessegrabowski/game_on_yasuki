@@ -286,7 +286,7 @@ register_ability(
         timings=(ActionTiming.BATTLE,),
         cost=_matsu_gonshiro_soul_of_matsu_shimei_cost,
         targets=_matsu_gonshiro_soul_of_matsu_shimei_targets,
-        targeting_message="an enemy unit costing 9 or less",
+        targeting_message="an enemy Personality whose unit's total Gold Cost is 9 or less",
         effects=_matsu_gonshiro_soul_of_matsu_shimei_effects,
     ),
 )
@@ -692,7 +692,7 @@ register_ability(
         timings=(ActionTiming.OPEN,),
         cost=bow_cost,
         targets=_weapon_artist_targets,
-        targeting_message="a Personality",
+        targeting_message="your Personality",
         effects=_weapon_artist_effects,
     ),
 )

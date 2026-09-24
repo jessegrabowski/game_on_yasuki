@@ -643,7 +643,7 @@ register_ability(
         keywords=frozenset({keywords.POLITICAL}),
         cost=no_cost,
         targets=_training_court_targets,
-        targeting_message="one of your Sincerity cards",
+        targeting_message="a Sincerity card without tokens in your Province",
         effects=_training_court_effects,
         tireless=True,
     ),

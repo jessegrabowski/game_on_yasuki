@@ -396,7 +396,7 @@ register_ability(
         timings=(ActionTiming.OPEN,),
         cost=no_cost,
         targets=_hungry_moon_wealth_targets,
-        targeting_message="a Holding with Wealth tokens",
+        targeting_message="a Holding",
         effects=_hungry_moon_wealth_effects,
         located_at=(CardLocation.HAND,),
         key="wealth",

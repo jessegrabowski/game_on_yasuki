@@ -91,7 +91,7 @@ register_ability(
         key="opposition",
         cost=no_cost,
         targets=_daidoji_kaede_opposition_targets,
-        targeting_message="a Personality opposing Kaede",
+        targeting_message="a Personality",
         effects=_daidoji_kaede_opposition_effects,
     ),
 )
