@@ -89,11 +89,12 @@ Interrupt step against them, and a card reading "your action" does not see them.
 ## Abilities a card is given
 
 {func}`~.abilities_for` is the one place the engine asks what abilities a card has, and it answers
-with two lists joined: the ones registered for the card's printed id and in force under the
-active ruleset, then the ones an {class}`~.AbilityGrant` record in `game.ongoing` gives it. An
-ability names no ruleset unless the card's text differs between arcs, in which case the card
-registers one `Ability` per ruleset, each with `ruleset=ruleset.SHATTERED_EMPIRE.name` or the
-like, and only the one naming `ruleset.ACTIVE` is read.
+with three lists joined: the ones registered for the card's printed id and in force under the
+active ruleset, then the ones an {class}`~.AbilityGrant` record in `game.ongoing` gives it, then
+the ones its keywords confer. An ability names no ruleset unless the card's text differs between
+arcs, in which case the card registers one `Ability` per ruleset, each with
+`ruleset=ruleset.SHATTERED_EMPIRE.name` or the like, and only the one naming `ruleset.ACTIVE` is
+read.
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/abilities/registry.py
 :pyobject: abilities_for
@@ -106,6 +107,16 @@ granting action chose. Legality, once-per-turn keys and the activation menu all 
 `abilities_for`, so a granted ability answers to each of them through the same path a printed one
 does. The factory's `Ability` needs a `key` whenever its card could already hold one, since the
 two are told apart the way any two abilities on one card are.
+
+A keyword ability is one the rulebook attaches to a keyword rather than to a card, as the Kharmic
+abilities come with the Kharmic keyword (ShE datasheet). {func}`~.register_keyword_ability` files
+it under the keyword its `from_keyword` names, and `abilities_for` reads
+{func}`~.effective_keywords` for the card, so a keyword another card grants brings the ability
+with it. It always carries a `key`, because it sits beside whatever the card prints, and an
+action naming no key means the card's own ability. `from_keyword` also decides what a card in
+hand does with it: a card's own hand ability is played, as a Strategy is, while a keyword ability
+is activated in place, so {func}`~.activatable` offers it from the hand and {func}`~.playable`
+leaves it out.
 
 ## What narrows a target list
 

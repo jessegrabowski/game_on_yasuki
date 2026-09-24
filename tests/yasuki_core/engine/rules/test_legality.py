@@ -54,7 +54,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.effects import AdjustCounter
 from yasuki_core.engine.replay.game_log import replay
-from yasuki_core.engine.rules.legality import activatable, has_absent_ability
+from yasuki_core.engine.rules.legality import activatable, has_absent_ability, playable
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import WEALTH
 
@@ -341,7 +341,7 @@ def test_an_ability_that_acts_from_the_hand_is_found_there():
     session = EngineSession.start(state, PlayerId.P1)
     open_timing = frozenset({ActionTiming.OPEN})
 
-    found = activatable(session.game, PlayerId.P1, open_timing, at=(CardLocation.HAND,))
+    found = playable(session.game, PlayerId.P1, open_timing)
 
     assert [(held.id, offered.label) for held, offered in found] == [
         (card.id, ability_for(session.game, card).label)
@@ -356,7 +356,7 @@ def test_an_ability_that_acts_from_play_is_not_found_in_the_hand():
     session = EngineSession.start(state, PlayerId.P1)
     open_timing = frozenset({ActionTiming.OPEN})
 
-    assert activatable(session.game, PlayerId.P1, open_timing, at=(CardLocation.HAND,)) == []
+    assert playable(session.game, PlayerId.P1, open_timing) == []
 
 
 def test_a_card_in_hand_is_never_activated_in_play():

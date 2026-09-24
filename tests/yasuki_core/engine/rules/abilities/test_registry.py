@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     _INVEST,
     ENTRY_STATES,
     GRANTED_ABILITIES,
+    KEYWORD_ABILITIES,
     EntryState,
     abilities_for,
     ability_for,
@@ -19,6 +20,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     granted_ability,
     register_ability,
     register_invest,
+    register_keyword_ability,
 )
 
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
@@ -29,7 +31,7 @@ from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.game_pieces.factory import resolve_decklist
-from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration
+from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration, KeywordGrant
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import HoldingPrint, StrongholdPrint
 from tests.yasuki_core.engine.builders import holding, personality, put_in_play, two_seat_game
@@ -210,6 +212,65 @@ def test_a_card_built_without_its_text_shows_its_name():
     card = holding("farm", name="Rice Farm")
 
     assert ability_label(card, _labelless()) == "Rice Farm"
+
+
+def test_a_keyword_ability_joins_every_card_carrying_the_keyword_after_its_own():
+    plain = _ABILITIES["millet_farm"][0]
+    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe"))
+
+    try:
+        game = two_seat_game()
+        farm = put_in_play(game, holding("farm", printed_id="millet_farm", keywords=("probe",)))
+        bare = put_in_play(game, holding("bare", printed_id="millet_farm"))
+
+        assert [held.key for held in abilities_for(game, farm)] == [None, "probe"]
+        assert ability_for(game, farm) is plain
+        assert ability_for(game, farm, "probe").from_keyword == "Probe"
+        assert abilities_for(game, bare) == (plain,)
+    finally:
+        KEYWORD_ABILITIES.pop("probe", None)
+
+
+def test_a_granted_keyword_brings_its_abilities_with_it():
+    plain = _ABILITIES["millet_farm"][0]
+    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe"))
+
+    try:
+        game = two_seat_game()
+        granting = put_in_play(game, holding("granting"))
+        farm = put_in_play(game, holding("farm", printed_id="millet_farm"))
+        game.ongoing.append(
+            KeywordGrant(granting.id, farm.id, "Probe", Duration.WHILE_SOURCE_IN_PLAY)
+        )
+
+        assert [held.key for held in abilities_for(game, farm)] == [None, "probe"]
+
+        game.table.battlefield.remove(granting)
+
+        assert abilities_for(game, farm) == (plain,)
+    finally:
+        KEYWORD_ABILITIES.pop("probe", None)
+
+
+def test_a_keyword_ability_must_name_its_keyword_and_a_key():
+    plain = _ABILITIES["millet_farm"][0]
+
+    with pytest.raises(ValueError, match="names the keyword"):
+        register_keyword_ability(replace(plain, key="probe"))
+    with pytest.raises(ValueError, match="needs a key"):
+        register_keyword_ability(replace(plain, from_keyword="Probe"))
+    assert "probe" not in KEYWORD_ABILITIES
+
+
+def test_a_keyword_may_not_confer_two_abilities_under_one_key():
+    plain = replace(_ABILITIES["millet_farm"][0], key="probe", from_keyword="Probe")
+    register_keyword_ability(plain)
+
+    try:
+        with pytest.raises(ValueError, match="already confers an ability keyed 'probe'"):
+            register_keyword_ability(plain)
+    finally:
+        KEYWORD_ABILITIES.pop("probe", None)
 
 
 def test_a_second_invest_for_one_card_is_refused():

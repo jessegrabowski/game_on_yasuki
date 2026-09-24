@@ -10,6 +10,7 @@ yasuki_core.engine.rules.action_record
     action_is_unstoppable
     action_keywords
     action_round
+    resolving_ability
 
 .. automodule:: yasuki_core.engine.rules.action_record
     :members:

@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, InvestA
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -37,6 +38,8 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 
 
 _ABILITIES: dict[str, tuple[Ability, ...]] = {}
+# The abilities a keyword confers on every card carrying it, by the keyword's lowercase form.
+KEYWORD_ABILITIES: dict[str, tuple[Ability, ...]] = {}
 _INVEST: dict[str, InvestAbility] = {}
 _INTERRUPTS: dict[str, tuple[Interrupt, ...]] = {}
 
@@ -207,6 +210,24 @@ def register_ability(printed_id: str, value: Ability) -> None:
     _ABILITIES[printed_id] = (*registered, value)
 
 
+def register_keyword_ability(value: Ability) -> None:
+    """Register ``value`` as one of the abilities its ``from_keyword`` confers on every card carrying
+    that keyword.
+
+    Raise ValueError for an ability naming no keyword or no key: it sits beside whatever the card
+    prints, so an action has to name it by key to tell the two apart.
+    """
+    if value.from_keyword is None:
+        raise ValueError("a keyword ability names the keyword that confers it")
+    if value.key is None:
+        raise ValueError(f"the {value.from_keyword} ability needs a key")
+    keyword = value.from_keyword.lower()
+    registered = KEYWORD_ABILITIES.get(keyword, ())
+    if any(held.key == value.key and _read_together(held, value) for held in registered):
+        raise ValueError(f"{value.from_keyword} already confers an ability keyed {value.key!r}")
+    KEYWORD_ABILITIES[keyword] = (*registered, value)
+
+
 def may_attack(card: L5RCard) -> bool:
     """Whether ``card``'s text leaves it able to attack, which is what lets the Attacker assign
     it."""
@@ -268,7 +289,7 @@ def fixed_invest_amount(game: GameState, card: L5RCard) -> int | None:
 def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     """Every activated ability ``card`` has right now: the ones registered for its printed id and
     in force under the active ruleset, in registration order, then the ones recorded grants give
-    it, in the order they were granted."""
+    it, in the order they were granted, then the ones its keywords confer."""
     printed = tuple(held for held in _ABILITIES.get(card.printed_id, ()) if in_force(held))
     granted = tuple(
         GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](grant.context)
@@ -277,19 +298,35 @@ def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
         and grant.target_id == card.id
         and grant_applies(game, grant)
     )
-    return (*printed, *granted)
+    return (*printed, *granted, *_conferred(game, card))
+
+
+def _conferred(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
+    if not KEYWORD_ABILITIES:
+        return ()
+    carried = {keyword.lower() for keyword in effective_keywords(game, card)}
+    return tuple(
+        held
+        for keyword, conferred in KEYWORD_ABILITIES.items()
+        if keyword in carried
+        for held in conferred
+        if in_force(held)
+    )
 
 
 def ability_for(game: GameState, card: L5RCard, key: str | None = None) -> Ability | None:
     """The activated ability ``key`` names on ``card``, or None if no ability it has answers to it.
 
-    ``key`` is None for a card with one ability, which is the only one it could mean. Raise
-    ValueError when a card with several is asked without a key, because the caller is holding an
-    action that failed to say which ability it takes.
+    ``key`` is None for the card's one unkeyed ability, or its only ability. Raise ValueError when
+    a card with several keyed abilities is asked without a key, because the caller is holding an
+    action that failed to say which it takes.
     """
     registered = abilities_for(game, card)
     if key is not None:
         return next((held for held in registered if held.key == key), None)
+    unkeyed = [held for held in registered if held.key is None]
+    if len(unkeyed) == 1:
+        return unkeyed[0]
     if len(registered) > 1:
         raise ValueError(f"{card.printed_id} prints several abilities; name one by key")
     return next(iter(registered), None)

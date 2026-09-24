@@ -10,8 +10,9 @@ the rules rather than the history.
 or None. Everything else reads that.
 
 A card on the table represents it, and `rulebook/favor_proxy.py` is the only place that card is
-made or unmade. (A rulebook *ability* is represented differently: by a proxy dealt once into the
-seat's rulebook zone by `rulebook/proxies.py`, as the Kharmic abilities are.)
+made or unmade. (A rulebook *ability* is represented differently: conferred by a keyword on the
+card it spends, as the Kharmic abilities are, or held by a proxy dealt once into the seat's
+rulebook zone by `rulebook/proxies.py`.)
 
 ```python
 def sync_proxy(game: GameState) -> None:

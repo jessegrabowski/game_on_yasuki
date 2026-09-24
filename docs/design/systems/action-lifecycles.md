@@ -10,7 +10,7 @@ An action that costs something splits into three parts.
 
 Announcing queues the work and builds the question the seat has to answer.
 {func}`~.announce_recruit` does this for a Recruit, and an ability's cost effects do it for an
-activated ability, including the rulebook Kharmic abilities on the seat's proxy card.
+activated ability, including the rulebook Kharmic abilities on the card they spend.
 
 The pause is a pending decision on `GameState`. Nothing further happens until a seat answers,
 which is what lets a human, a bot and a replayed tape all drive the same machine.
@@ -88,11 +88,16 @@ a card because a created attachment has no card to ask about yet.
 
 One module per action covers the rest: `cycle.py`, `legacy.py`, `inheritance.py`, `lobby.py`,
 `dynasty_discard.py`, and the three Favor modules. `kharmic.py` is different in kind: the two
-Kharmic abilities are registered as activated abilities on a proxy card (`KHARMIC_PROXY_ID`) that
-`rulebook/proxies.py` deals into each seat's rulebook zone as the game begins, for every proxy the
-active {class}`~yasuki_core.ruleset.Ruleset` names in `rulebook_proxies`. From there they are
-announced, paid, targeted and interrupted as any card's ability is. The zone is not a card zone:
-nothing in play sees what it holds, and the sandbox refuses to move anything into or out of it.
+Kharmic abilities are registered through {func}`~.register_keyword_ability` as abilities the
+Kharmic keyword confers on every card carrying it, one activated from the hand and one from a
+Province, each spending the card it is used on. From there they are announced, paid and
+interrupted as any card's ability is, and a card that grants Kharmic grants the abilities with it.
+
+A player ability with no card to sit on has a second home. `rulebook/proxies.py` deals a proxy
+card into each seat's rulebook zone as the game begins, for every proxy the active
+{class}`~yasuki_core.ruleset.Ruleset` names in `rulebook_proxies`, and abilities registered on
+the proxy are activated from there. No arc names one yet. The zone is not a card zone: nothing in
+play sees what it holds, and the sandbox refuses to move anything into or out of it.
 
 ## Where a card plugs in
 

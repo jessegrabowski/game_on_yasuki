@@ -6155,7 +6155,6 @@ kharda
 kharma
 kharma_in_death
 kharmas_first_form
-kharmic
 kharmic_confrontation
 kharmic_lamentation
 kharmic_strike

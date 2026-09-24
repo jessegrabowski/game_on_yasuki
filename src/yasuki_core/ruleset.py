@@ -4,7 +4,6 @@ from typing import Protocol
 
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.game_pieces.constants import KHARMIC_PROXY_ID
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 
 
@@ -223,7 +222,6 @@ SHATTERED_EMPIRE = Ruleset(
     },
     lobby_timing=ActionTiming.OPEN,
     lobby_keywords=frozenset({keywords.POLITICAL}),
-    rulebook_proxies=(KHARMIC_PROXY_ID,),
     favor_abilities=(
         FavorAbility(
             "discard_to_draw",

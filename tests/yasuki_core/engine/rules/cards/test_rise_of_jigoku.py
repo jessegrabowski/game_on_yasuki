@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.rise_of_jigoku import CAVALRY_FOLLOWER, MISHIMES_ONI
-from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, kharmic_proxy
+from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as keywords_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
@@ -34,7 +34,6 @@ from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, SenseiPrint,
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.abilities.model import CardLocation
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.state import GameState
@@ -774,10 +773,9 @@ def _blood_of_fu_leng_game(chi: int | None = 3) -> EngineSession:
 
 
 def _kharmic_draw(session: EngineSession) -> None:
-    """Take the Kharmic draw from P1's proxy, pay, and spend Blood of Fu Leng on it."""
-    session.act(P1, ActivateAbility(kharmic_proxy(session.game, P1).id, KHARMIC_DRAW))
+    """Take the Kharmic draw on Blood of Fu Leng and pay for it."""
+    session.act(P1, ActivateAbility("blood", KHARMIC_DRAW))
     pay(session, P1)
-    session.submit(P1, DecisionResponse(("blood",)))
 
 
 def _kharmic_it_away(session: EngineSession, target: str = "shiba") -> None:
@@ -925,12 +923,9 @@ def test_heart_of_honor_is_offered_from_hand_under_both_of_its_designators():
     game = two_seat_game()
     put_in_play(game, personality("bushi"))
     card, ability = _heart_of_honor(game)
-    in_hand = (CardLocation.HAND,)
 
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
-        assert legality.activatable(game, P1, frozenset({designator}), at=in_hand) == [
-            (card, ability)
-        ]
+        assert legality.playable(game, P1, frozenset({designator})) == [(card, ability)]
 
 
 # --- Draw Strength from Your Oaths ---
