@@ -73,7 +73,6 @@ register_ability(
     "suiteiru_no_oni",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Destroy your unbowed Personality to create Oni Followers equal to his Chi",
         cost=no_cost,
         targets=_suiteiru_no_oni_targets,
         targeting_message="your unbowed Personality",

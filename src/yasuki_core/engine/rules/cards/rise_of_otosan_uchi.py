@@ -104,7 +104,6 @@ register_ability(
     "aseths_legion",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Melee {ASETHS_LEGION_MELEE} Attack",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -165,7 +164,6 @@ register_ability(
     "blessings_of_the_red_panda_spirit",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Each player gains 1 Honor and draws a card",
         cost=no_cost,
         targets=_blessings_of_the_red_panda_spirit_targets,
         effects=_blessings_of_the_red_panda_spirit_effects,
@@ -249,7 +247,6 @@ register_ability(
     "bound_in_blood",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Bow and spend Gold to banish your target Personalities and Recruit a Horror",
         cost=_bound_in_blood_cost,
         targets=itself,
         effects=lambda game, source, target: [],
@@ -310,7 +307,6 @@ register_ability(
     "courts_of_otosan_uchi",
     Ability(
         timings=(ActionTiming.RESPONSE,),
-        label="Response: bow your Courtier to move a player's Honor",
         cost=no_cost,
         targets=_courts_of_otosan_uchi_targets,
         targeting_message="your Courtier",
@@ -359,7 +355,6 @@ register_ability(
     "culling_grounds",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Bow and lose 1 Honor to recruit a 0F/2C Expendable Personality",
         cost=bow_cost,
         targets=itself,
         effects=_culling_grounds_effects,
@@ -398,8 +393,6 @@ def _doji_yuten_interrupt(game: GameState, source: L5RCard, effect: Bow | Move) 
 register_interrupt(
     "doji_yuten",
     Interrupt(
-        label="Interrupt: negate your other Personality's bowing or movement from the Battle "
-        "action",
         answers=Bow | Move,
         interrupt=_doji_yuten_interrupt,
         applies=_doji_yuten_applies,
@@ -458,7 +451,6 @@ register_ability(
     "kitsu_watanabe_experienced",
     Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
-        label="Battle/Open: Destroy your target Holding to create a 2F/2C/3PH Ancestor Personality",
         cost=no_cost,
         targets=_kitsu_watanabe_experienced_targets,
         targeting_message="your Holding",
@@ -503,9 +495,8 @@ def _man_the_walls_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "man_the_walls",
     Ability(
+        printed_index=1,
         timings=(ActionTiming.BATTLE,),
-        label="Absent Battle: Bow your target Follower or Personality at any location to give the "
-        "current Province a strength bonus equal to the target's Force",
         cost=no_cost,
         targets=_man_the_walls_targets,
         targeting_message="your Follower or Personality at any location",
@@ -557,9 +548,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.KIHO}),
-        label="Kiho Open: Bow your target Monk or Shugenja Personality to look at a number of "
-        "cards on the top of your Fate deck equal to the number of Rings you control plus 1. Put "
-        "one in your hand. Shuffle the deck.",
         cost=no_cost,
         targets=_master_your_thoughts_targets,
         targeting_message="your Monk or Shugenja Personality",

@@ -54,8 +54,6 @@ register_ability(
     Ability(
         key="look",
         timings=(ActionTiming.LIMITED,),
-        label="Limited, bow: Look at the top three cards of your Fate deck. Put them back in any "
-        "order.",
         cost=bow_cost,
         targets=itself,
         hits_every_target=True,
@@ -65,9 +63,9 @@ register_ability(
 register_ability(
     "divination_bowl",
     Ability(
+        printed_index=1,
         key="draw",
         timings=(ActionTiming.LIMITED,),
-        label="Limited, bow: Draw a card. Destroy this Item.",
         cost=bow_cost,
         targets=itself,
         hits_every_target=True,

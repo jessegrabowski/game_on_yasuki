@@ -189,7 +189,7 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 empty for a cost-only production ability), `keywords` (the classifiers that rise to the card, such
 as `Political`), `modifiers` (`Repeatable`, `Tireless`, `Absent`, ...), `cost` (the icon cost as
 printed, null when free), `rules_text`. Derived from the card's current text by
-`install/text_split.py` after the MRP and errata folds, so it is never edited directly: fix the
+`game_pieces/text_split.py` after the MRP and errata folds, so it is never edited directly: fix the
 text or the splitter and reload.
 
 ### `card_revisions` columns

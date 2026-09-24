@@ -4,8 +4,8 @@ import re
 
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.install.card_index import DEFAULT_CARDS_PATH
-from yasuki_core.install.reminders import REMINDER_TEXT
-from yasuki_core.install.text_split import ability_keywords, strip_markup
+from yasuki_core.game_pieces.reminders import REMINDER_TEXT
+from yasuki_core.game_pieces.text_split import ability_keywords, strip_markup
 
 from tests.yasuki_core.card_corpus import set_entries
 

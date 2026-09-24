@@ -56,7 +56,6 @@ register_ability(
     "ashigaru_spearmen",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle, Bow: Ranged {SPEARMEN_RANGED} Attack",
         cost=bow_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,

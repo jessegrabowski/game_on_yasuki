@@ -2,6 +2,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
+    RING_PITCH,
     plays_clan,
     register_entry,
     register_ring,
@@ -125,7 +126,6 @@ register_ability(
     "daidoji_tashiko",
     Ability(
         timings=(ActionTiming.ENGAGE,),
-        label=f"Engage: gain {TASHIKO_HONOR} Honor after this battle if its Province survives",
         cost=no_cost,
         targets=itself,
         effects=_daidoji_tashiko_effects,
@@ -212,7 +212,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.RESPONSE,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Political Response: after a Strategy gained a player Honor, draw a card",
         cost=no_cost,
         targets=_doji_yasuko_soul_of_doji_takeji_targets,
         effects=_doji_yasuko_soul_of_doji_takeji_effects,
@@ -285,8 +284,6 @@ register_ability(
     "matsu_gonshiro_soul_of_matsu_shimei",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Rehonor Gonshiro to destroy a target enemy unit costing "
-        f"{GONSHIRO_UNIT_COST} or less, and commit seppuku after the battle",
         cost=_matsu_gonshiro_soul_of_matsu_shimei_cost,
         targets=_matsu_gonshiro_soul_of_matsu_shimei_targets,
         targeting_message="an enemy unit costing 9 or less",
@@ -341,14 +338,13 @@ register_ring(
     "ring_of_air",
     ability=Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
-        label="Repeatable Battle/Open, bow: straighten one or two of your target cards in one unit",
         cost=bow_cost,
         targets=_ring_of_air_targets,
         effects=_ring_of_air_effects,
         key="air",
         repeatable=True,
     ),
-    pitch=True,
+    pitch=RING_PITCH,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
@@ -378,7 +374,6 @@ def _ring_of_earth_interrupt(game: GameState, source: L5RCard, effect: Move) -> 
 register_interrupt(
     "ring_of_earth",
     Interrupt(
-        label="Repeatable Interrupt, bow: the Battle action cannot move Personalities",
         answers=Move,
         interrupt=_ring_of_earth_interrupt,
         applies=_ring_of_earth_applies,
@@ -415,15 +410,13 @@ register_ring(
     "ring_of_fire",
     ability=Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Repeatable Battle, bow: give a target enemy Follower or Personality "
-        f"{RING_OF_FIRE_PENALTY}F",
         cost=bow_cost,
         targets=_ring_of_fire_targets,
         effects=_ring_of_fire_effects,
         key="fire",
         repeatable=True,
     ),
-    pitch=True,
+    pitch=RING_PITCH,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
@@ -444,14 +437,13 @@ register_ring(
     "ring_of_the_void",
     ability=Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open, bow: draw a card, then discard one if you now hold the most",
         cost=bow_cost,
         targets=itself,
         effects=_ring_of_the_void_effects,
         hits_every_target=True,
         key="void",
     ),
-    pitch=True,
+    pitch=RING_PITCH,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
@@ -488,8 +480,6 @@ register_ring(
     "ring_of_water",
     ability=Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Absent Repeatable Battle, bow: move your target Personality home, or one anywhere "
-        "to the battlefield if they would be opposed",
         cost=bow_cost,
         targets=_ring_of_water_targets,
         effects=_ring_of_water_effects,
@@ -498,7 +488,7 @@ register_ring(
         key="water",
         repeatable=True,
     ),
-    pitch=True,
+    pitch=RING_PITCH,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
@@ -539,8 +529,6 @@ register_ability(
     "shinjo_mayuko_soul_of_shinjo_wei",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Dishonor Mayuko to make a Melee {MAYUKO_FIRST_MELEE}, then a Melee "
-        f"{MAYUKO_SECOND_MELEE}",
         cost=_shinjo_mayuko_soul_of_shinjo_wei_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -621,10 +609,7 @@ register_ability(
     "way_of_the_crane_experienced",
     Ability(
         timings=(ActionTiming.RESPONSE,),
-        label=(
-            "After your action discards the Imperial Favor, once per turn you may draw, then"
-            " discard a card"
-        ),
+        label="After your action discards :favor:, once per turn you may draw, then discard a card.",
         cost=no_cost,
         targets=_way_of_the_crane_experienced_targets,
         effects=_way_of_the_crane_experienced_effects,
@@ -705,7 +690,6 @@ register_ability(
     "weapon_artist",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Bow to Equip a +2F/+1C One-Handed Sword to a Personality",
         cost=bow_cost,
         targets=_weapon_artist_targets,
         targeting_message="a Personality",

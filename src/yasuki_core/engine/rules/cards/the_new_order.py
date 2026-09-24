@@ -56,8 +56,6 @@ register_ability(
     "plain_library",
     Ability(
         timings=(ActionTiming.RESPONSE,),
-        label="Tireless Response: After the action Recruits this Holding, look at the top three "
-        "cards of your Fate deck. Place zero to two of them at the bottom of your deck.",
         cost=no_cost,
         targets=_plain_library_targets,
         effects=_plain_library_effects,

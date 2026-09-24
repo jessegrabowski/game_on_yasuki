@@ -36,7 +36,6 @@ register_ability(
     "questionable_vassal",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle, {VASSAL_GOLD} Gold: Ranged {VASSAL_RANGED} Attack",
         cost=_questionable_vassal_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,

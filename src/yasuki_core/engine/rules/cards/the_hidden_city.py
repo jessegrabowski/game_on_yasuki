@@ -98,8 +98,6 @@ register_ability(
     "outer_walls",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle: Even if you control no units at the current battlefield: Give its province "
-        "+3 strength",
         cost=no_cost,
         targets=itself,
         effects=_outer_walls_effects,

@@ -24,7 +24,6 @@ register_ability(
     "daigotsu_roburo",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Fear {ROBURO_FEAR}",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -48,7 +47,6 @@ register_ability(
     "exquisite_nagamaki_of_the_fox_clan",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle, Bow: Melee {NAGAMAKI_MELEE} Attack",
         cost=bow_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -79,7 +77,6 @@ register_ability(
     "haramaki_do",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Fear {HARAMAKI_DO_FEAR}",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -110,7 +107,6 @@ register_ability(
     "incendiary_archers",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle, Bow: Ranged {INCENDIARY_ARCHERS_RANGED} Attack",
         cost=bow_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -122,8 +118,8 @@ register_ability(
 register_ability(
     "incendiary_archers",
     Ability(
+        printed_index=1,
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Fear {INCENDIARY_ARCHERS_FEAR}",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,

@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.text_split import split_text_box
 from yasuki_core.game_pieces.prints import HoldingPrint
 
 
@@ -297,3 +298,28 @@ def ability_for(game: GameState, card: L5RCard, key: str | None = None) -> Abili
 def invest_for(card: L5RCard) -> InvestAbility | None:
     """The Invest ability registered for ``card``'s printed id, or None."""
     return _INVEST.get(card.printed_id)
+
+
+def printed_ability_line(card: L5RCard, index: int) -> str:
+    """The ``index``-th ability ``card``'s text prints, as printed: prefix, icons and all.
+
+    The card's name when its text prints no such ability, which a card built without its text
+    does. The registration audit is what holds a real registration's index to the printing.
+    """
+    abilities = split_text_box(card.printed.text).abilities
+    return abilities[index].printed if index < len(abilities) else card.name
+
+
+def ability_label(card: L5RCard, ability: Ability) -> str:
+    """What a client shows for ``ability`` on ``card``: its own ``label`` when it has one, and
+    otherwise the printed ability it implements, read off the card's text."""
+    if ability.label is not None:
+        return ability.label
+    return printed_ability_line(card, ability.printed_index)
+
+
+def interrupt_label(card: L5RCard, interrupt: Interrupt[Effect]) -> str:
+    """What a client shows for ``interrupt`` on ``card``, the way :func:`~.ability_label` does."""
+    if interrupt.label is not None:
+        return interrupt.label
+    return printed_ability_line(card, interrupt.printed_index)

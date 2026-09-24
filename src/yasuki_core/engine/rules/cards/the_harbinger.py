@@ -73,9 +73,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.LIMITED,),
         keywords=frozenset({keywords.TACTICAL}),
-        label="Tactical Limited: Target your performing unbowed Tactician to look at the top four "
-        "cards of your Fate deck. Put one of them in your hand and put the other three on the "
-        "bottom of your deck in any order.",
         cost=no_cost,
         targets=_banish_all_doubt_targets,
         targeting_message="your performing unbowed Tactician",
@@ -113,7 +110,6 @@ register_ability(
     "flashy_technique",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Personalities have -1F while attacking this turn",
         cost=no_cost,
         targets=itself,
         effects=_flashy_technique_effects,

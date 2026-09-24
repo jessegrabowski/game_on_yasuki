@@ -84,7 +84,6 @@ register_ability(
     "dull_tanto",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: give a Personality two -1F tokens and destroy this Item",
         cost=no_cost,
         targets=_dull_tanto_targets,
         targeting_message="a Personality",
@@ -118,7 +117,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         keywords=frozenset({keywords.IAIJUTSU}),
-        label="Iaijutsu Battle: bow a target enemy Personality with lower Chi",
         cost=no_cost,
         targets=_kakita_harudei_drunkard_targets,
         targeting_message="an enemy Personality with lower Chi",
@@ -160,7 +158,6 @@ register_ability(
     "kitsune_rumiko",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open, bow: if it is your turn, gain 1 Honor, or 2 with Beiko Sensei",
         cost=bow_cost,
         targets=_kitsune_rumiko_targets,
         effects=_kitsune_rumiko_effects,
@@ -258,7 +255,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.ECONOMIC}),
-        label="Economic Open: Discard this Event to refill its Province with a non-Unique Holding you control no copies of",
         cost=no_cost,
         targets=_repairing_the_ruins_targets,
         targeting_message="a non-Unique Holding you control no copies of",
@@ -355,8 +351,6 @@ register_ability(
     "unity_of_spirit",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle: straighten your target opposed Personality, a Yojimbo also gaining +2F or "
-        "+2C",
         cost=no_cost,
         targets=_unity_of_spirit_targets,
         targeting_message="your opposed Personality",
@@ -389,7 +383,7 @@ def _unity_of_spirit_interrupt(
 register_interrupt(
     "unity_of_spirit",
     Interrupt(
-        label="Interrupt: negate the action's Melee or Ranged Attack targeting your Yojimbo",
+        printed_index=1,
         answers=MeleeAttack | RangedAttack,
         interrupt=_unity_of_spirit_interrupt,
         applies=_unity_of_spirit_applies,
@@ -417,8 +411,8 @@ def _verdant_wilds_effects(game: GameState, source: L5RCard, target: L5RCard) ->
 register_ability(
     "verdant_wilds",
     Ability(
+        printed_index=1,
         timings=(ActionTiming.OPEN,),
-        label="Bow: straighten your target card",
         cost=bow_cost,
         targets=_verdant_wilds_targets,
         targeting_message="your card",

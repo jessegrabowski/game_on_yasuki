@@ -5,6 +5,7 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import (
+    ability_label,
     _ABILITIES,
     _INVEST,
     ENTRY_STATES,
@@ -21,6 +22,9 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.decklist import parse_deck_yaml
@@ -167,6 +171,45 @@ def test_a_granted_ability_follows_the_printed_ones_and_answers_to_its_key():
         assert abilities_for(game, farm) == (plain,)
     finally:
         GRANTED_ABILITIES.pop("grant_probe", None)
+
+
+def _labelless(**fields) -> Ability:
+    return Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=lambda game, source: [],
+        effects=lambda game, source, target: [],
+        **fields,
+    )
+
+
+def _printed(text: str) -> L5RCard:
+    return L5RCard.of(
+        HoldingPrint, id="farm", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1, text=text
+    )
+
+
+def test_an_unlabeled_ability_shows_the_printed_line_its_index_names():
+    card = _printed(
+        "<b>Open, :bow::</b> Give your target Farm Holding +2GP.<br><b>Open:</b> Draw a card."
+    )
+
+    assert ability_label(card, _labelless()) == "Open, :bow:: Give your target Farm Holding +2GP."
+    assert ability_label(card, _labelless(printed_index=1)) == "Open: Draw a card."
+
+
+def test_a_labeled_ability_shows_its_label_whatever_the_card_prints():
+    card = _printed("<b>Open:</b> Draw a card.")
+
+    assert ability_label(card, _labelless(label="Open: Put this Event into play")) == (
+        "Open: Put this Event into play"
+    )
+
+
+def test_a_card_built_without_its_text_shows_its_name():
+    card = holding("farm", name="Rice Farm")
+
+    assert ability_label(card, _labelless()) == "Rice Farm"
 
 
 def test_a_second_invest_for_one_card_is_refused():

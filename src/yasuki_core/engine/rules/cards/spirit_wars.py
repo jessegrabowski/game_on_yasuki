@@ -33,7 +33,6 @@ register_ability(
     "poorly_placed_garden",
     Ability(
         timings=(ActionTiming.LIMITED,),
-        label="Limited: bow this Holding to gain 2 Honor",
         cost=bow_cost,
         targets=_poorly_placed_garden_targets,
         effects=_poorly_placed_garden_effects,

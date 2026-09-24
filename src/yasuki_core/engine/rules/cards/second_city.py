@@ -40,7 +40,6 @@ register_ability(
     "harsh_choices",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Destroy this Province to draw 3 cards",
         cost=no_cost,
         targets=_harsh_choices_targets,
         effects=_harsh_choices_effects,
@@ -74,7 +73,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Political Open, bow: dishonor a target Personality",
         cost=bow_cost,
         targets=_slanderer_targets,
         targeting_message="a Personality",

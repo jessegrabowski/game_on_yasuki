@@ -6,6 +6,7 @@ import sys
 from yasuki_core.engine.rules import cards
 from yasuki_core.install import registration_audit
 from yasuki_core.install.registration_audit import (
+    unprinted_registrations,
     mislabeled_abilities,
     unvalidated_registries,
     card_keyed_data,
@@ -278,6 +279,59 @@ def test_no_card_registers_less_than_it_prints_but_the_known_few():
     reported = {line.split()[1] for line in registration_audit.short_ability_registrations()}
 
     assert reported == KNOWN_SHORT | COUNTED_SHORT
+
+
+def _unlabeled(
+    *,
+    timings: tuple[ActionTiming, ...] = (ActionTiming.LIMITED,),
+    printed_index: int = 0,
+) -> Ability:
+    return Ability(
+        timings=timings,
+        cost=no_cost,
+        targets=lambda game, source: [],
+        effects=lambda game, source, target: [],
+        printed_index=printed_index,
+    )
+
+
+def _unprinted(**abilities) -> list[str]:
+    return unprinted_registrations(abilities=abilities, interrupts={})
+
+
+def test_an_index_on_a_printed_ability_of_the_right_designator_passes():
+    # Banish All Shadows prints one Kiho Limited ability.
+    assert _unprinted(banish_all_shadows=[_unlabeled()]) == []
+
+
+def test_an_index_past_what_the_card_prints_is_reported():
+    assert _unprinted(banish_all_shadows=[_unlabeled(printed_index=1)]) == [
+        "abilities: banish_all_shadows names printed ability 1, and its text prints 1"
+    ]
+
+
+def test_an_index_on_an_ability_of_another_designator_is_reported():
+    assert _unprinted(banish_all_shadows=[_unlabeled(timings=(ActionTiming.BATTLE,))]) == [
+        "abilities: banish_all_shadows names printed ability 0, which is Limited where the "
+        "registration is Battle"
+    ]
+
+
+def test_a_labeled_registration_names_no_printed_ability_and_is_not_judged():
+    labeled = Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: Put this Event into play",
+        cost=no_cost,
+        targets=lambda game, source: [],
+        effects=lambda game, source, target: [],
+        printed_index=7,
+    )
+
+    assert _unprinted(banish_all_shadows=[labeled]) == []
+
+
+def test_every_shipped_registration_names_an_ability_its_card_prints():
+    assert unprinted_registrations() == []
 
 
 def _battle_ability(

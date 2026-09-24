@@ -74,7 +74,6 @@ register_ability(
     "caravansary",
     Ability(
         timings=(ActionTiming.RESPONSE,),
-        label="Response: take a +1GP Wealth token for the Fate card your action discarded",
         cost=no_cost,
         targets=_caravansary_targets,
         effects=_caravansary_effects,
@@ -178,7 +177,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Battle: Move a target enemy Personality home",
         cost=no_cost,
         targets=_honor_your_oaths_targets,
         targeting_message="an enemy Personality",
@@ -224,7 +222,6 @@ register_ability(
     "latest_fashions",
     Ability(
         timings=(ActionTiming.RESPONSE,),
-        label="Response: after a Political action targeting or from this Personality, gain 1 Honor",
         cost=no_cost,
         targets=_latest_fashions_targets,
         effects=_latest_fashions_effects,

@@ -1,7 +1,7 @@
 import re
 from dataclasses import dataclass
 
-from yasuki_core.install.reminders import is_reminder
+from yasuki_core.game_pieces.reminders import is_reminder
 
 # The designators are a closed set; the CR names them and says they are not keywords. Everything
 # else in an ability's bold prefix is an ability keyword, which the CR inherits up to the card:
@@ -75,7 +75,8 @@ class Ability:
 
     ``keywords`` classify the ability and rise to the card that holds it. The CR reads a Strategy
     with a Political ability as a Political Strategy. ``modifiers`` change how the ability behaves
-    and stay where they are printed.
+    and stay where they are printed. ``printed`` is the whole ability as the card prints it, prefix
+    and all, with the markup off and the icons as drawn: what a client shows for the ability.
     """
 
     designators: tuple[str, ...]
@@ -83,6 +84,7 @@ class Ability:
     modifiers: tuple[str, ...]
     cost: str | None
     text: str
+    printed: str = ""
 
 
 @dataclass(frozen=True, slots=True)
@@ -194,6 +196,7 @@ def _segment_abilities(plain: str) -> list[Ability]:
                 modifiers=modifiers,
                 cost=(groups.get("cost") or "").strip(" ,") or None,
                 text=plain[match.end() : end].strip(),
+                printed=plain[match.start() : end].strip(),
             )
         )
     return out

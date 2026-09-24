@@ -16,16 +16,19 @@ yasuki_core.engine.rules.abilities.registry
 
     abilities_for
     ability_for
+    ability_label
     ability_registrations
     effects_before_entering_play
     entry_state_of
     fixed_invest_amount
     granted_tireless
     interrupt_for
+    interrupt_label
     invest_amounts
     invest_for
     may_attack
     may_stay_bowed
+    printed_ability_line
     recruit_timing_of
     register_ability
     register_interrupt

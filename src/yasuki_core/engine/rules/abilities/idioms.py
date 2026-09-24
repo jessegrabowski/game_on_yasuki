@@ -30,6 +30,8 @@ from yasuki_core.game_pieces.counters import WEALTH
 
 # The key of the ability a Ring is discarded from hand to use.
 PITCH = "pitch"
+# The trait every Ring prints for its cast from hand, which is what a client shows for it.
+RING_PITCH = "You may discard this Ring from your hand to use its ability without cost."
 
 
 def plays_clan(clan: str) -> Callable[[GameState, L5RCard], bool]:
@@ -77,7 +79,8 @@ def register_entry(
     key : str, optional
         The ability's key, needed when the card prints another ability. Default None.
     label : str, optional
-        What a client shows for the entry. Default names the designators and ``clears``.
+        What a client shows for the entry, when the card prints its entry as a trait rather than
+        an ability. Default None, which shows the printed ability.
     ability_keywords : frozenset of str, optional
         The ability keywords the entry prints, as in "Political Open". Default empty.
     ruleset : str, optional
@@ -111,9 +114,6 @@ def register_entry(
             *(extra_effects(game, source) if extra_effects is not None else ()),
         ]
 
-    if label is None:
-        designators = "/".join(held.name.capitalize() for held in timings)
-        label = f"{designators}: Put this {clears or 'card'} into play"
     register_ability(
         printed_id,
         Ability(
@@ -132,7 +132,7 @@ def register_entry(
 
 
 def register_ring(
-    printed_id: str, *, ability: Ability, pitch: bool, ruleset: str | None = None
+    printed_id: str, *, ability: Ability, pitch: str | None, ruleset: str | None = None
 ) -> None:
     """Register a Ring's printed ability, and the cast that discards the Ring from hand to use it.
 
@@ -147,8 +147,9 @@ def register_ring(
     ability : :class:`~yasuki_core.engine.rules.abilities.model.Ability`
         The ability as printed on the Ring in play. It needs a ``key`` when ``pitch`` is set,
         since the cast is a second ability on the card.
-    pitch : bool
-        Whether the Ring may be discarded from hand to use ``ability``.
+    pitch : str or None
+        The trait letting the Ring be discarded from hand to use ``ability``, as the card prints
+        it, which is what a client shows for the cast. None for a Ring that prints no such trait.
     ruleset : str, optional
         The name of the one ruleset both registrations are in force under, for a Ring whose text
         differs between arcs. Default None, for a text every arc reads.
@@ -160,7 +161,7 @@ def register_ring(
             replace(
                 ability,
                 key=PITCH,
-                label=f"Discard from hand: {ability.label}",
+                label=pitch,
                 cost=no_cost,
                 located_at=(CardLocation.HAND,),
                 ruleset=ruleset,

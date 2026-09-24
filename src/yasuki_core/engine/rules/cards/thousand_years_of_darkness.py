@@ -59,7 +59,6 @@ register_ability(
     "ashura",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Fear {ASHURA_FEAR}",
         cost=no_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
@@ -91,7 +90,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         repeatable=True,
-        label=f"Battle, Bow: Ranged {TOSEKIKI_RANGED} Attack",
         cost=bow_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,

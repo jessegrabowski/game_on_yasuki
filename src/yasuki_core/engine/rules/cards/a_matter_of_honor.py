@@ -56,7 +56,6 @@ register_ability(
     "the_honorable_garrison_of_the_lion",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=HONORABLE_GARRISON_LABEL,
         cost=no_cost,
         targets=_the_honorable_garrison_of_the_lion_targets,
         effects=_the_honorable_garrison_of_the_lion_effects,
@@ -70,7 +69,6 @@ register_ability(
     "the_honorable_garrison_of_the_lion__back",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=HONORABLE_GARRISON_LABEL,
         cost=no_cost,
         targets=_the_honorable_garrison_of_the_lion_targets,
         effects=_the_honorable_garrison_of_the_lion_effects,

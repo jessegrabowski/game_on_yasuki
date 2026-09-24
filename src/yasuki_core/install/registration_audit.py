@@ -1,13 +1,17 @@
 import ast
+import datetime
 import difflib
 from collections import Counter
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 import re
 import sys
 from pathlib import Path
 
 from yasuki_core.engine.rules.abilities import registry
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core import DATABASE_DIR, ruleset
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt
+from yasuki_core.engine.rules.effects import Effect
+from yasuki_core.yaml_io import read_yaml
 from yasuki_core.engine.rules import (
     state_based_actions,
     triggers,
@@ -24,8 +28,15 @@ from yasuki_core.bots import hints  # noqa: F401
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine import rules
-from yasuki_core.install.card_index import DEFAULT_CARDS_PATH, iter_set_entries, read_index
-from yasuki_core.install.text_split import split_text_box
+from yasuki_core.install.card_index import (
+    DEFAULT_CARDS_PATH,
+    SetEntry,
+    iter_set_entries,
+    read_index,
+)
+from yasuki_core.game_pieces.text_split import split_text_box
+
+DEFAULT_SET_INFO_PATH = DATABASE_DIR / "set_info.yaml"
 
 
 def registered_card_ids() -> dict[str, frozenset[str]]:
@@ -379,6 +390,137 @@ def mislabeled_abilities(
     return problems
 
 
+# Sorts before every real release date, so a set with no recorded date never counts as newest.
+_UNDATED = datetime.date(1, 1, 1)
+
+
+def _arcs_of(ruleset_name: str | None) -> tuple[str, ...]:
+    """The arcs the named ruleset governs, or the active ruleset's for a registration naming none.
+    Empty when no ruleset carries the name."""
+    name = ruleset.ACTIVE.name if ruleset_name is None else ruleset_name
+    for held in vars(ruleset).values():
+        if isinstance(held, ruleset.Ruleset) and held.name == name:
+            return held.arcs
+    return ()
+
+
+def modeled_printings(
+    cards_dir: Path = DEFAULT_CARDS_PATH, set_info_path: Path = DEFAULT_SET_INFO_PATH
+) -> Callable[[str, str | None], SetEntry | None]:
+    """A lookup from a card id and a ruleset name to the printing a registration under that
+    ruleset models: the card's newest printing among the ruleset's arcs, or its newest anywhere
+    when it has none there, which is the text the database gives the card.
+
+    Parameters
+    ----------
+    cards_dir : path, optional
+        Directory of per-set YAML files. Default is the packaged ``sets`` directory.
+    set_info_path : path, optional
+        The arc-grouped set metadata carrying each set's release date. Default is the packaged
+        ``set_info.yaml``.
+
+    Returns
+    -------
+    callable
+        Maps ``(card_id, ruleset_name)`` to the modeled :class:`~.SetEntry`, or None for an id no
+        set prints with text.
+    """
+    metadata = read_yaml(set_info_path)
+    arc_of, released = {}, {}
+    for arc in metadata["arcs"]:
+        for entry in arc.get("sets", ()):
+            arc_of[entry["set_name"]] = arc["name"]
+            released[entry["set_name"]] = entry.get("release_date") or _UNDATED
+    printings: dict[str, list[SetEntry]] = {}
+    for entry in iter_set_entries(cards_dir):
+        if entry.text.strip():
+            printings.setdefault(entry.card_id, []).append(entry)
+
+    def lookup(card_id: str, ruleset_name: str | None) -> SetEntry | None:
+        held = printings.get(card_id, [])
+        arcs = _arcs_of(ruleset_name)
+        in_arcs = [entry for entry in held if arc_of.get(entry.set_name) in arcs]
+        candidates = in_arcs or held
+        if not candidates:
+            return None
+        return max(candidates, key=lambda entry: released.get(entry.set_name, _UNDATED))
+
+    return lookup
+
+
+def unprinted_registrations(
+    cards_dir: Path = DEFAULT_CARDS_PATH,
+    abilities: Mapping[str, Sequence[Ability]] | None = None,
+    interrupts: Mapping[str, Sequence[Interrupt[Effect]]] | None = None,
+) -> list[str]:
+    """
+    One human-readable line per registration whose ``printed_index`` names no ability its card
+    prints, or one the registration could not be.
+
+    A registration with no ``label`` shows the printed ability its index names, read off the card's
+    text, so the index has to land on an ability the modeled printing prints under designators
+    that cover the registration's timings. A registration with a ``label`` is one the text prints
+    no ability for, and is left alone.
+
+    Parameters
+    ----------
+    cards_dir : path, optional
+        Directory of per-set YAML files. Default is the packaged ``sets`` directory.
+    abilities : mapping of str to sequence of :class:`~yasuki_core.engine.rules.abilities.model.Ability`, optional
+        Card id to its registered abilities. Defaults to every registration, whatever its ruleset,
+        since each is judged against the printing its own ruleset models.
+    interrupts : mapping of str to sequence of :class:`~yasuki_core.engine.rules.abilities.model.Interrupt`, optional
+        Card id to its registered Interrupts. Defaults to every registration.
+
+    Returns
+    -------
+    list of str
+        Sorted problem descriptions, empty when every index lands where it should.
+    """
+    if abilities is None:
+        abilities = registry._ABILITIES
+    if interrupts is None:
+        interrupts = registry._INTERRUPTS
+    printing_of = modeled_printings(cards_dir)
+    problems: list[str] = []
+    for card_id in sorted(set(abilities) | set(interrupts)):
+        held: list[tuple[str, int, str | None, frozenset[str]]] = [
+            (
+                f"{card_id}[{a.key}]" if a.key else card_id,
+                a.printed_index,
+                a.ruleset,
+                frozenset(t.name.capitalize() for t in a.timings),
+            )
+            for a in abilities.get(card_id, ())
+            if a.label is None
+        ]
+        held += [
+            (card_id, i.printed_index, i.ruleset, frozenset({"Interrupt"}))
+            for i in interrupts.get(card_id, ())
+            if i.label is None
+        ]
+        for name, index, ruleset_name, timings in held:
+            printing = printing_of(card_id, ruleset_name)
+            if printing is None:
+                # An id no set prints is the unregistered-id check's to report, not a wrong index.
+                continue
+            printed = split_text_box(printing.text).abilities
+            if index >= len(printed):
+                problems.append(
+                    f"abilities: {name} names printed ability {index}, and its text prints "
+                    f"{len(printed)}"
+                )
+                continue
+            ability = printed[index]
+            if ability.designators and not timings <= frozenset(ability.designators):
+                problems.append(
+                    f"abilities: {name} names printed ability {index}, which is "
+                    f"{'/'.join(ability.designators)} where the registration is "
+                    f"{'/'.join(sorted(timings))}"
+                )
+    return sorted(problems)
+
+
 # The per-card registries registration_audit validates by name. Everything built through the
 # registrar is absent on purpose -- those report themselves, which is the point of it.
 VALIDATED_REGISTRIES = {
@@ -506,6 +648,7 @@ def main(
         + duplicate_registrations(trigger_registry)
         + unvalidated_registries()
         + mislabeled_abilities()
+        + unprinted_registrations()
     )
     for problem in problems:
         print(problem, file=sys.stderr)

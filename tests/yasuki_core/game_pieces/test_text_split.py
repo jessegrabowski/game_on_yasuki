@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.install.text_split import ability_keywords, split_text_box, strip_markup
+from yasuki_core.game_pieces.text_split import ability_keywords, split_text_box, strip_markup
 
 
 def traits(text):
@@ -20,6 +20,15 @@ def test_an_ability_is_found_by_its_designator_not_its_markup():
     assert abilities(marked) == abilities(bare)
     assert abilities(bare) == [
         (("Political",), ("Open",), None, "Target two Personalities controlled by the same player.")
+    ]
+
+
+def test_an_ability_keeps_the_line_it_was_printed_as():
+    box = split_text_box("<b>Battle, :bow::</b> :ranged: 3.<br><b>Open:</b> Draw a card.")
+
+    assert [ability.printed for ability in box.abilities] == [
+        "Battle, :bow:: :ranged: 3.",
+        "Open: Draw a card.",
     ]
 
 

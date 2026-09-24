@@ -352,7 +352,12 @@ def _courage_card(table: TableState, card_id: str, owner: PlayerId) -> L5RCard:
 
 
 def _strategy(
-    table: TableState, card_id: str, printed_id: str, owner: PlayerId, gold_cost: int = 0
+    table: TableState,
+    card_id: str,
+    printed_id: str,
+    owner: PlayerId,
+    gold_cost: int = 0,
+    text: str = "",
 ) -> L5RCard:
     card = L5RCard.of(
         ActionPrint,
@@ -362,6 +367,7 @@ def _strategy(
         side=Side.FATE,
         owner=owner,
         gold_cost=gold_cost,
+        text=text,
     )
     table.zones[ZoneKey(owner, ZoneRole.HAND)].add(register(table, card))
     return card
@@ -580,7 +586,8 @@ def _fear_announced(
     watcher: str | None = None,
 ) -> EngineSession:
     """A session in which the Attacker has just aimed Fear ``FEAR`` at the Defender's 2F guard in
-    the Combat Segment. ``strategies`` are ``(card_id, printed_id, owner)`` triples."""
+    the Combat Segment. ``strategies`` are ``(card_id, printed_id, owner)`` triples, with the
+    card's printed text as an optional fourth element."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
     province_card(state, "def-prov0", seat=DEFENDER, index=0)
@@ -591,8 +598,8 @@ def _fear_announced(
     for seat, count in courage_cards.items():
         for index in range(count):
             _courage_card(state, f"{seat.name}-courage{index}", seat)
-    for card_id, printed_id, owner in strategies:
-        _strategy(state, card_id, printed_id, owner)
+    for card_id, printed_id, owner, *text in strategies:
+        _strategy(state, card_id, printed_id, owner, text=text[0] if text else "")
     session = EngineSession.start(state, ATTACKER)
     end_phase(session)
     session.act(ATTACKER, DeclareAttack())

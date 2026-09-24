@@ -122,6 +122,8 @@ yasuki_core
     yasuki_core.game_pieces.deck <yasuki_core.game_pieces.deck>
     yasuki_core.game_pieces.factory <yasuki_core.game_pieces.factory>
     yasuki_core.game_pieces.prints <yasuki_core.game_pieces.prints>
+    yasuki_core.game_pieces.reminders <yasuki_core.game_pieces.reminders>
+    yasuki_core.game_pieces.text_split <yasuki_core.game_pieces.text_split>
     yasuki_core.game_setup <yasuki_core.game_setup>
     yasuki_core.install.card_index <yasuki_core.install.card_index>
     yasuki_core.install.coverage_report <yasuki_core.install.coverage_report>
@@ -129,9 +131,7 @@ yasuki_core
     yasuki_core.install.images_to_sql <yasuki_core.install.images_to_sql>
     yasuki_core.install.install_db <yasuki_core.install.install_db>
     yasuki_core.install.registration_audit <yasuki_core.install.registration_audit>
-    yasuki_core.install.reminders <yasuki_core.install.reminders>
     yasuki_core.install.sets_to_sql <yasuki_core.install.sets_to_sql>
-    yasuki_core.install.text_split <yasuki_core.install.text_split>
     yasuki_core.install.utils <yasuki_core.install.utils>
     yasuki_core.install.yaml_to_sql <yasuki_core.install.yaml_to_sql>
     yasuki_core.paths <yasuki_core.paths>

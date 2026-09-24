@@ -43,7 +43,6 @@ def _final_sacrifice_interrupt(
 register_interrupt(
     "final_sacrifice",
     Interrupt(
-        label="Interrupt: the action targets your Yojimbo instead of another card, if legal",
         answers=ResolveAbility,
         interrupt=_final_sacrifice_interrupt,
         targets=_final_sacrifice_targets,
@@ -108,7 +107,6 @@ register_ability(
     "militia_training_ground",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label=f"Open: Bow or pay {GOLD_INSTEAD_OF_BOWING} gold to Equip a 0F Follower",
         cost=_militia_training_ground_cost,
         targets=_militia_training_ground_targets,
         targeting_message="your Personality",

@@ -68,9 +68,6 @@ register_ability(
     "refugees",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Absent Battle: Move home a target Personality without Followers. Bow the target as "
-        "they move. The target's controller may pay 1 Gold to create a 1F Ashigaru Follower and "
-        "attach it to them",
         cost=no_cost,
         targets=_refugees_targets,
         targeting_message="a Personality without Followers",

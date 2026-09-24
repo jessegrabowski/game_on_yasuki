@@ -72,7 +72,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.ECONOMIC}),
-        label="Banish a Fate card: give a Port +1 Gold Production",
         cost=_ichiba_district_cost,
         targets=_ichiba_district_targets,
         targeting_message="your Port",
@@ -132,7 +131,6 @@ register_ability(
     "mantis_kama",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label="Battle, Bow: Give -2F to a target Personality or to one or two target Followers",
         cost=bow_cost,
         targets=_mantis_kama_targets,
         targeting_message="a Personality or Follower",
@@ -160,7 +158,6 @@ register_ability(
     "otokoshi_district",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Tireless Open: Destroy this Holding to draw a card and give your target Market a +1GP Wealth token",
         cost=_otokoshi_district_cost,
         targets=_otokoshi_district_targets,
         targeting_message="your Market",
@@ -212,7 +209,6 @@ register_ability(
     "yoritomo_bunrakuken",
     Ability(
         timings=(ActionTiming.BATTLE,),
-        label=f"Battle: Destroy Bunrakuken's target Follower to make Ranged {BUNRAKUKEN_RANGED}",
         cost=_yoritomo_bunrakuken_cost,
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,

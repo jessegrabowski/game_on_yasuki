@@ -11,12 +11,14 @@ yasuki_core.install.registration_audit
     duplicate_registrations
     main
     mislabeled_abilities
+    modeled_printings
     module_level_collections
     printed_abilities
     printed_ability_count
     printed_ability_counts
     registered_card_ids
     short_ability_registrations
+    unprinted_registrations
     unregistered_back_faces
     unregistered_card_ids
     unvalidated_registries

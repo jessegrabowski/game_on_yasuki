@@ -139,7 +139,7 @@ def test_extra_effects_resolve_after_the_card_enters():
     assert session.game.table.seats[P1].honor == 2
 
 
-def test_the_label_names_the_designators_and_the_kind_cleared_unless_given():
+def test_the_entry_shows_its_printed_ability_unless_a_label_is_given():
     game = two_seat_game()
     probes = [
         _probe("gaining", "entry_probe_gaining"),
@@ -149,11 +149,7 @@ def test_the_label_names_the_designators_and_the_kind_cleared_unless_given():
 
     labels = [ability.label for probe in probes for ability in abilities_for(game, probe)]
 
-    assert labels == [
-        "Open/Dynasty: Put this card into play",
-        "Open: Put this Probe into play",
-        "Custom",
-    ]
+    assert labels == [None, None, "Custom"]
 
 
 def _ring(card_id: str, printed_id: str) -> L5RCard:

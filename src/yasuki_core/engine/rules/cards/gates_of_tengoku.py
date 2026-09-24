@@ -82,8 +82,6 @@ def _ninube_aitso_doji_yeiko_experienced_interrupt(
 register_interrupt(
     "ninube_aitso_doji_yeiko_experienced",
     Interrupt(
-        label="Interrupt: reshuffle Aitso into your Dynasty deck to negate your Personality's "
-        "destruction",
         answers=Destroy,
         interrupt=_ninube_aitso_doji_yeiko_experienced_interrupt,
         applies=_ninube_aitso_doji_yeiko_experienced_applies,
@@ -153,7 +151,6 @@ register_ability(
     "shrine_of_sincerity",
     Ability(
         timings=(ActionTiming.DYNASTY,),
-        label="Bow: seed a Sincerity token onto a Province Sincerity card",
         cost=bow_cost,
         targets=_shrine_of_sincerity_targets,
         targeting_message="a Sincerity card in your Province",
@@ -230,7 +227,6 @@ register_ability(
     "the_bad_death_of_hida_daizu",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Spend Gold to banish a target Personality at the end of the turn",
         cost=_the_bad_death_of_hida_daizu_cost,
         targets=itself,
         effects=lambda game, source, target: [],

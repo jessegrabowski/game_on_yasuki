@@ -12,7 +12,7 @@ from yasuki_core.game_pieces.counters import ALL_COUNTERS
 from yasuki_core.install.format_metadata import populate_format_metadata
 from yasuki_core.install.card_index import LOCAL_SET_SUFFIX
 from yasuki_core.install.sets_to_sql import coerce_date, set_slug
-from yasuki_core.install.text_split import ability_keywords, split_text_box
+from yasuki_core.game_pieces.text_split import ability_keywords, split_text_box
 from yasuki_core.yaml_io import read_yaml
 from yasuki_core.install.utils import normalize_name
 

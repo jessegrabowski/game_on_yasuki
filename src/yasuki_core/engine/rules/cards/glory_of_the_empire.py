@@ -82,8 +82,6 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         keywords=frozenset({keywords.POLITICAL}),
-        label="Political Battle: Target your Courtier at any location to bow a target enemy card "
-        f"without attachments and move a target player's Honor by {CHALLENGE_HONOR}",
         cost=no_cost,
         targets=_inexplicable_challenge_targets,
         targeting_message="your Courtier at any location",
@@ -124,8 +122,8 @@ def _traveling_peddler_effects(game: GameState, source: L5RCard, target: L5RCard
 register_ability(
     "traveling_peddler",
     Ability(
+        printed_index=1,
         timings=(ActionTiming.LIMITED,),
-        label=f"Limited, Bow: Pay {PEDDLER_DRAW_COST} gold to draw a card",
         cost=_traveling_peddler_cost,
         targets=itself,
         effects=_traveling_peddler_effects,
