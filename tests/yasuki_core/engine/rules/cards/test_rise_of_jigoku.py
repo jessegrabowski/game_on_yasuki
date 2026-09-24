@@ -606,21 +606,22 @@ def test_mishime_takes_his_discount_once_from_a_strategy_that_charges_gold_twice
 
 
 @pytest.mark.parametrize(
-    ("source_owner", "lost"),
-    [(P1, 0), (P2, 2), (None, 2)],
-    ids=["own card", "opponent's card", "rulebook"],
+    ("source_owner", "amount", "change"),
+    [(P1, -2, 0), (P2, -2, -2), (None, -2, -2), (P1, 2, 2)],
+    ids=["own card's loss", "opponent's card's loss", "rulebook loss", "own card's gain"],
 )
-def test_mishime_blocks_honor_loss_only_from_his_controllers_own_cards(source_owner, lost):
-    """Dying dishonorably and every other rulebook loss is no card's effect (CR, Dishonorable), so
-    it lands with a source of None."""
+def test_mishime_blocks_honor_loss_only_from_his_controllers_own_cards(
+    source_owner, amount, change
+):
+    """A rulebook loss is no card's effect (CR, Dishonorable)."""
     source = personality("source", owner=source_owner) if source_owner else None
     source_id = source.id if source else None
     session = _mishime_game(in_play=(source,) if source else ())
     before = session.game.table.seats[P1].honor
 
-    resolve_effects(session.game, [GainHonor(P1, -2, source_id=source_id)])
+    resolve_effects(session.game, [GainHonor(P1, amount, source_id=source_id)])
 
-    assert session.game.table.seats[P1].honor == before - lost
+    assert session.game.table.seats[P1].honor == before + change
 
 
 def test_mishime_does_not_target_a_bowed_personality():
