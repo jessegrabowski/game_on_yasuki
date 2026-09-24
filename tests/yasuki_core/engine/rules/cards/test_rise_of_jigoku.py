@@ -6,6 +6,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
+    Equip,
     Pass,
     PlayStrategy,
     Recruit,
@@ -23,7 +24,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as 
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.gold.production import effective_gold_production
-from yasuki_core.engine.rules.effects import Destroy, Discard, GainHonor
+from yasuki_core.engine.rules.effects import Destroy, Discard, GainHonor, PayGold
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -34,6 +35,7 @@ from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, SenseiPrint,
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.state import GameState
@@ -44,6 +46,7 @@ from yasuki_core.engine.table import Location
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.prints import ActionPrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attachment,
     end_phase,
@@ -454,9 +457,9 @@ def test_backing_out_of_the_first_step_unwinds_it_too():
 # --- Mishime Sensei ---
 
 
-def _mishime_game(*, chi=3, stronghold_production=6, in_play=()):
-    """P1's Mishime Sensei in play with a Personality to feed it and a Stronghold that can raise the
-    five gold the ability charges."""
+def _mishime_game(*, chi=3, stronghold_production=6, in_hand=(), in_play=()):
+    """P1's Mishime Sensei in play with a Personality to feed it and a Stronghold that can raise
+    what the ability charges."""
     state = TableState.empty_two_seat()
     put_in_play(state, stronghold(P1, gold_production=stronghold_production))
     put_in_play(
@@ -468,11 +471,15 @@ def _mishime_game(*, chi=3, stronghold_production=6, in_play=()):
             side=Side.FATE,
             owner=P1,
             printed_id="mishime_sensei",
+            keywords=("Spider Clan", keywords.MAHO, keywords.SHADOWLANDS),
         ),
     )
     put_in_play(state, personality("victim", force=1, chi=chi))
     for card in in_play:
         put_in_play(state, card)
+    for card in in_hand:
+        register(state, card)
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(card)
     token_template(
         state,
         MISHIMES_ONI,
@@ -541,10 +548,61 @@ def test_the_oni_copies_the_chi_the_target_has_rather_than_the_chi_he_prints():
     assert effective_force(session.game, oni) == 5
 
 
-def test_mishime_is_withheld_when_the_seat_cannot_raise_five_gold():
-    session = _mishime_game(stronghold_production=4)
+def test_mishimes_own_maho_ability_costs_two_less_for_his_shadowlands():
+    """His five-gold Open ability is a Maho action by the icon beside his title, and he is a
+    Shadowlands card his controller controls, so it costs three."""
+    assert ActivateAbility("sensei") in _mishime_game(stronghold_production=3).legal_actions(P1)
+    assert ActivateAbility("sensei") not in _mishime_game(stronghold_production=2).legal_actions(P1)
 
-    assert ActivateAbility("sensei") not in session.legal_actions(P1)
+
+def test_each_other_player_with_a_shadowlands_card_takes_two_more_gold_off():
+    oni = personality("oni", owner=P2, keywords=(keywords.SHADOWLANDS,))
+    session = _mishime_game(stronghold_production=1, in_play=(oni,))
+
+    assert ActivateAbility("sensei") in session.legal_actions(P1)
+
+
+def test_mishime_takes_two_gold_off_a_spell_but_not_off_an_item():
+    shugenja = personality("shugenja", keywords=(keywords.SHUGENJA,))
+    spell = attachment("spell", attachment_type=AttachmentType.SPELL, gold_cost=3)
+    item = attachment("item", gold_cost=3)
+    session = _mishime_game(stronghold_production=1, in_play=(shugenja,), in_hand=(spell, item))
+
+    legal = session.legal_actions(P1)
+
+    assert Equip("spell") in legal
+    assert Equip("item") not in legal
+
+
+def test_mishime_takes_his_discount_once_from_a_strategy_that_charges_gold_twice():
+    """A Maho Strategy costing 3 whose action also charges 3 is one action, so the 2 off comes from
+    its Gold Cost and the action's own 3 is paid whole."""
+    card = L5RCard.of(
+        ActionPrint,
+        id="probe",
+        name="probe",
+        printed_id="maho_probe",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=3,
+        keywords=(keywords.MAHO,),
+    )
+    ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=lambda game, source: [PayGold(source.owner, 3, "probe")],
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+        located_at=(CardLocation.HAND,),
+    )
+
+    with probe_ability("maho_probe", ability):
+        session = _mishime_game(in_hand=(card,))
+        session.act(P1, PlayStrategy("probe"))
+        assert session.game.pending.amount == 1
+        session.submit(P1, DecisionResponse(("P1-SH",)))
+
+        assert session.game.pending.amount == 3
 
 
 @pytest.mark.parametrize(

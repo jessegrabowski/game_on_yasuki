@@ -4,7 +4,7 @@ from dataclasses import dataclass, replace
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.costs import can_pay
+from yasuki_core.engine.rules.abilities.costs import can_pay, priced_cost
 from yasuki_core.engine.rules.abilities.activation import ResolveAbility
 from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt
 from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for
@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.effects import (
     SpendOncePerTurn,
     Then,
 )
-from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import (
     legal_targets,
@@ -296,7 +296,7 @@ def card_interrupts_for(
         if interrupt is None:
             continue
         if location is CardLocation.HAND:
-            if effective_gold_cost(game, card) <= reachable_gold(game, seat, card):
+            if discounted_gold_cost(game, card) <= reachable_gold(game, seat, card):
                 offered.append((card, interrupt, location))
             continue
         if card.bowed or not location_permits(game, card):
@@ -575,7 +575,8 @@ def _play(
         play_strategy_with(game, card, interruption.effects)
         return
     spent = SpendOncePerTurn(card.id, INTERRUPT_TAG)
-    triggers.resolve_effects(game, [spent, *interrupt.cost(game, card), *interruption.effects])
+    paid = priced_cost(game, card, interrupt.cost)
+    triggers.resolve_effects(game, [spent, *paid, *interruption.effects])
 
 
 def _settled(game: GameState, replacement: Effect) -> Effect | None:

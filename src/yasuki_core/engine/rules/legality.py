@@ -46,7 +46,11 @@ from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.rulebook.equip import equip_targets
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
+from yasuki_core.engine.rules.gold.discounts import (
+    discounted_gold,
+    discounted_gold_cost,
+    effective_recruit_discount,
+)
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
 from yasuki_core.engine.rules.rulebook import lobby
@@ -456,11 +460,11 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
             maximum_gold_production(game, producer, targets=(card,)) for producer in variable
         )
         base = effective_gold_cost(game, card)
-        if base > affordable or not equip_targets(game, card):
+        if discounted_gold(game, card, base) > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
         invest = fixed_invest_amount(game, card)
-        if invest is not None and base + invest <= affordable:
+        if invest is not None and discounted_gold(game, card, base + invest) <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips
 
@@ -476,7 +480,7 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
         PlayStrategy(card.id, ability.key)
         for card, ability in playable(game, seat, permitted_timings(game, seat))
         if (only is None or card.id == only)
-        and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
+        and discounted_gold_cost(game, card, ability.keywords) <= reachable_gold(game, seat, card)
     ]
 
 
@@ -673,7 +677,7 @@ def _usable(
                 and not location_permits(game, card)
             ):
                 continue
-            if not can_pay(game, card, ability.cost):
+            if not can_pay(game, card, ability.cost, ability.keywords):
                 continue
             if legal_targets(game, card, ability):
                 ready.append((card, ability))

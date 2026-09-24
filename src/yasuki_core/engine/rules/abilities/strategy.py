@@ -4,7 +4,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.activation import defer_ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.effects import ApplyEffects, Discard, Effect
-from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -45,8 +45,16 @@ def play_strategy(game: GameState, card_id: str, ability_key: str | None = None)
     seat = card.owner
     game.stack.append(ResolveStrategy(card_id, ability_key))
     game.pending = payment_request(
-        game, seat, effective_gold_cost(game, card), card.name, target=card
+        game, seat, strategy_cost(game, card, ability_key), card.name, target=card
     )
+
+
+def strategy_cost(game: GameState, card: L5RCard, ability_key: str | None = None) -> int:
+    """The Gold a seat pays to play ``card`` for the ability ``ability_key`` names: its Gold Cost
+    less the discounts its controller has on that action."""
+    ability = ability_for(game, card, ability_key)
+    ability_keywords = ability.keywords if ability is not None else frozenset()
+    return discounted_gold_cost(game, card, ability_keywords)
 
 
 def play_strategy_with(game: GameState, card: L5RCard, effects: tuple[Effect, ...]) -> None:
@@ -57,7 +65,7 @@ def play_strategy_with(game: GameState, card: L5RCard, effects: tuple[Effect, ..
     game.stack.append(DiscardPlayed(card.id))
     game.stack.append(ApplyEffects(effects))
     game.pending = payment_request(
-        game, card.owner, effective_gold_cost(game, card), card.name, target=card
+        game, card.owner, discounted_gold_cost(game, card), card.name, target=card
     )
 
 

@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.board.seats import cards_named
+from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, register_event_entry
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
@@ -15,9 +15,11 @@ from yasuki_core.engine.rules.board.queries import (
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
 from yasuki_core.engine.rules.stats.province_strength import province_strength_grant
+from yasuki_core.engine.rules.gold.discounts import action_discount
 from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import permits, recruit_cost
+from yasuki_core.engine.rules.rulebook.equip import is_spell
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -306,8 +308,28 @@ def _makeshift_fortifications_province_strength(
 
 MISHIMES_ONI = "oni_personality_variable_chi"
 ONI_COST = 5
+# "You pay :g2: less ... for each player who controls any :shadowlands: cards."
+MISHIME_SENSEI_DISCOUNT = 2
 
 register_honor_loss_shield("mishime_sensei")
+
+
+@action_discount("mishime_sensei")
+def _mishime_sensei_action_discount(
+    game: GameState, sensei: L5RCard, paid_for: L5RCard, action_keywords: frozenset[str]
+) -> int:
+    """2 Gold off a Maho action or a Spell for each player who controls a Shadowlands card.
+
+    Mishime prints the Shadowlands keyword, so his controller always counts, and his own Open
+    ability is a Maho action through the Maho icon beside his title.
+    """
+    if keywords.MAHO not in action_keywords and not is_spell(paid_for):
+        return 0
+    shadowlands_seats = sum(
+        any(has_keyword(game, card, keywords.SHADOWLANDS) for card in cards_in_play(game, seat))
+        for seat in game.table.seats
+    )
+    return MISHIME_SENSEI_DISCOUNT * shadowlands_seats
 
 
 @on(EnteredPlay, "mishime_sensei")

@@ -1,6 +1,7 @@
 from dataclasses import dataclass, replace
 
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.abilities.costs import priced_cost
 from yasuki_core.engine.rules.abilities.model import Ability, once_tag
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.effects import Effect
@@ -110,7 +111,7 @@ def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
         if ability.hits_every_target
         else SelectAbilityTarget(card.id, targets, ability.key)
     )
-    triggers.resolve_effects(game, ability.cost(game, card))
+    triggers.resolve_effects(game, priced_cost(game, card, ability.cost, ability.keywords))
 
 
 @dataclass(frozen=True, slots=True)
