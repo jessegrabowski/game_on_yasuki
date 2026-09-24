@@ -282,8 +282,7 @@ def test_the_offer_stops_at_what_the_seat_can_raise():
 
 
 def test_a_discount_raises_what_the_seat_can_declare():
-    """Five Gold and Mishime's two off reach a declared six, the third body."""
-    session = _blood_game(gold_production=5, mishime=True)
+    session = _blood_game(gold_production=5, mishime=True)  # six declared costs four
 
     session.act(P1, ActivateAbility("spell"))
 
@@ -291,8 +290,8 @@ def test_a_discount_raises_what_the_seat_can_declare():
 
 
 def test_a_discount_lowers_the_payment_but_not_the_bodies_it_buys():
-    """The declared amount is what the card reads and the discount comes off what is paid, as a
-    Recruit's surcharge sits on top of the Gold Cost it matches (CR, Recruit)."""
+    """The card reads the declared amount, as Recruit matches the Gold Cost before its surcharge
+    (CR, Recruit)."""
     session = _blood_game(mishime=True)
 
     session.act(P1, ActivateAbility("spell"))

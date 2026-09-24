@@ -4,8 +4,7 @@ import pytest
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import bow_cost
-from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     PITCH,
     declarable_gold,
@@ -249,10 +248,14 @@ def test_a_ruleset_reading_the_trait_as_an_action_is_refused(monkeypatch):
         fire(game, TurnStarted(P1))
 
 
-@pytest.mark.parametrize(("ability_keywords", "paid"), [(frozenset({"Maho"}), 4), (frozenset(), 6)])
-def test_a_variable_cost_reads_the_keywords_printed_on_its_ability(ability_keywords, paid):
-    """A "Maho Open:" ability on a card without Maho is still a Maho action, so Mishime Sensei takes
-    his 2 off what is paid for the declared 6."""
+@pytest.mark.parametrize(
+    ("ability_keywords", "declarable", "paid"),
+    [(frozenset({"Maho"}), 7, 4), (frozenset(), 5, 6)],
+    ids=["maho ability", "plain ability"],
+)
+def test_a_variable_cost_reads_the_keywords_printed_on_its_ability(
+    ability_keywords, declarable, paid
+):
     game = two_seat_game()
     put_in_play(game, stronghold(P1, gold_production=5))
     put_in_play(game, sensei(P1, printed_id="mishime_sensei", keywords=("Shadowlands",)))
@@ -266,5 +269,5 @@ def test_a_variable_cost_reads_the_keywords_printed_on_its_ability(ability_keywo
     )
 
     with probe_ability("variable_probe", ability):
-        assert declarable_gold(game, source) == 5 + 6 - paid
+        assert declarable_gold(game, source) == declarable
         assert declared_payment(game, source, 6, "probe").amount == paid

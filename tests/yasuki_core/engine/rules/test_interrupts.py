@@ -549,8 +549,8 @@ def test_an_abilitys_gain_is_interruptible():
 
 @pytest.mark.parametrize(("mishime", "offered"), [(False, True), (True, False)])
 def test_a_loss_a_card_prevents_is_not_offered_to_the_honor_interrupt(mishime, offered):
-    """I Do Not Forget on your own dishonorable Personality costs you Honor from your own card,
-    which Mishime Sensei says you do not lose, so there is no loss to increase or reduce."""
+    """I Do Not Forget on your own Personality is a loss from your own card, which Mishime
+    prevents."""
     table = TableState.empty_two_seat()
     _strategy(table, "forget", "i_do_not_forget", P1)
     put_in_play(table, personality("disgraced", personal_honor=2))

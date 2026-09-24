@@ -549,8 +549,8 @@ def test_the_oni_copies_the_chi_the_target_has_rather_than_the_chi_he_prints():
 
 
 def test_mishimes_own_maho_ability_costs_two_less_for_his_shadowlands():
-    """His five-gold Open ability is a Maho action by the icon beside his title, and he is a
-    Shadowlands card his controller controls, so it costs three."""
+    """The Maho icon beside his title makes his own ability a Maho action (ShE datasheet, Iconised
+    Keywords)."""
     assert ActivateAbility("sensei") in _mishime_game(stronghold_production=3).legal_actions(P1)
     assert ActivateAbility("sensei") not in _mishime_game(stronghold_production=2).legal_actions(P1)
 
@@ -575,8 +575,6 @@ def test_mishime_takes_two_gold_off_a_spell_but_not_off_an_item():
 
 
 def test_mishime_takes_his_discount_once_from_a_strategy_that_charges_gold_twice():
-    """A Maho Strategy costing 3 whose action also charges 3 is one action, so the 2 off comes from
-    its Gold Cost and the action's own 3 is paid whole."""
     card = L5RCard.of(
         ActionPrint,
         id="probe",
