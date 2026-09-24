@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
@@ -788,3 +789,27 @@ def test_a_hand_triggers_question_reaches_only_the_cards_owner(reacting):
     assert isinstance(game.pending, Confirm) and game.pending.seat is PlayerId.P1
     assert project(game, PlayerId.P1).pending == game.pending
     assert project(game, PlayerId.P2).pending is None
+
+
+def test_a_trigger_registered_under_a_ruleset_fires_only_while_it_is_active(reacting, monkeypatch):
+    game = two_seat_game()
+    put_in_play(game, holding("played", printed_id="hand_probe"))
+    seen: list[str] = []
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: seen.append("onyx") or [],
+        ruleset=ruleset.ONYX.name,
+    )
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: seen.append("she") or [],
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    )
+
+    fire(game, TurnStarted(PlayerId.P1))
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.ONYX)
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert seen == ["she", "onyx"]

@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.triggers import Registration
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 
 
@@ -119,10 +120,33 @@ def another_trigger(ctx):
     return []
 
 
+def _registered(trigger) -> Registration:
+    return Registration(trigger, None)
+
+
 def test_a_trigger_registered_twice_for_one_card_is_reported():
     # _TRIGGERS appends rather than overwrites, so the duplicate does not shadow the original and
     # both fire, and the card's effect happens twice.
-    registry = {EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": [a_trigger, a_trigger]}}}
+    registry = {
+        EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": [_registered(a_trigger)] * 2}}
+    }
+
+    assert duplicate_registrations(registry) == [
+        "triggers: millet_farm registers a_trigger for EnteredPlay 2 times in the battlefield",
+    ]
+
+
+def test_the_same_trigger_under_two_rulesets_is_legitimate():
+    # A card whose text differs between arcs registers once per ruleset, and no ruleset reads both.
+    scoped = [Registration(a_trigger, "onyx"), Registration(a_trigger, "shattered_empire")]
+    registry = {EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": scoped}}}
+
+    assert duplicate_registrations(registry) == []
+
+
+def test_a_trigger_for_every_arc_and_again_under_one_is_reported():
+    twice_under_onyx = [Registration(a_trigger, None), Registration(a_trigger, "onyx")]
+    registry = {EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": twice_under_onyx}}}
 
     assert duplicate_registrations(registry) == [
         "triggers: millet_farm registers a_trigger for EnteredPlay 2 times in the battlefield",
@@ -132,7 +156,11 @@ def test_a_trigger_registered_twice_for_one_card_is_reported():
 def test_two_different_triggers_on_one_card_are_legitimate():
     # A card may react to the same event in two ways; only the *same* handler twice is the defect.
     registry = {
-        EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": [a_trigger, another_trigger]}}
+        EnteredPlay: {
+            CardLocation.BATTLEFIELD: {
+                "millet_farm": [_registered(a_trigger), _registered(another_trigger)]
+            }
+        }
     }
 
     assert duplicate_registrations(registry) == []
@@ -140,7 +168,10 @@ def test_two_different_triggers_on_one_card_are_legitimate():
 
 def test_the_same_trigger_on_two_cards_is_legitimate():
     # Shared helpers are registered for many cards on purpose.
-    in_play = {"millet_farm": [a_trigger], "modest_farm": [a_trigger]}
+    in_play = {
+        "millet_farm": [_registered(a_trigger)],
+        "modest_farm": [_registered(another_trigger)],
+    }
     registry = {EnteredPlay: {CardLocation.BATTLEFIELD: in_play}}
 
     assert duplicate_registrations(registry) == []
@@ -182,7 +213,7 @@ def test_the_cli_writes_each_problem_to_stderr_and_fails(capsys):
     # otherwise go unnoticed while the engine happens to be clean.
     registries = {"abilities": frozenset({"milet_farm"}), "triggers": frozenset({"rice_frm"})}
     trigger_registry = {
-        EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": [a_trigger, a_trigger]}}
+        EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": [_registered(a_trigger)] * 2}}
     }
     expected = unregistered_card_ids(registries) + duplicate_registrations(trigger_registry)
 

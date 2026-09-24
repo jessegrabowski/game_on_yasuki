@@ -1,5 +1,6 @@
 import ast
 import difflib
+from collections import Counter
 from collections.abc import Mapping, Sequence
 import re
 import sys
@@ -68,7 +69,7 @@ def card_keyed_data() -> dict[str, frozenset[str]]:
 
 
 def duplicate_registrations(
-    trigger_registry: dict[type, dict[CardLocation, dict[str, list[triggers.Trigger]]]]
+    trigger_registry: dict[type, dict[CardLocation, dict[str, list[triggers.Registration]]]]
     | None = None,
 ) -> list[str]:
     """
@@ -82,7 +83,8 @@ def duplicate_registrations(
     ----------
     trigger_registry : dict, optional
         Event type to a dict of :class:`~yasuki_core.engine.rules.vocabulary.locations.CardLocation`
-        to a dict of card id to its triggers. Defaults to the engine's own trigger registry.
+        to a dict of card id to its :class:`~yasuki_core.engine.rules.triggers.Registration`
+        records. Defaults to the engine's own trigger registry.
     """
     if trigger_registry is None:
         trigger_registry = triggers._TRIGGERS
@@ -91,14 +93,28 @@ def duplicate_registrations(
     for event_type, by_zone in sorted(trigger_registry.items(), key=lambda item: item[0].__name__):
         for location, by_card in sorted(by_zone.items(), key=lambda item: item[0].value):
             for card_id, hooks in sorted(by_card.items()):
-                names = [hook.__qualname__ for hook in hooks]
-                repeated = sorted({name for name in names if names.count(name) > 1})
-                for name in repeated:
+                for name, count in _read_together_counts(hooks).items():
                     problems.append(
                         f"triggers: {card_id} registers {name} for {event_type.__name__} "
-                        f"{names.count(name)} times in the {location.value}"
+                        f"{count} times in the {location.value}"
                     )
     return problems
+
+
+def _read_together_counts(hooks: Sequence[triggers.Registration]) -> dict[str, int]:
+    """Each trigger name some ruleset would read more than once, with how many times: the same
+    function registered twice under one ruleset, or once for every arc and again under one."""
+    by_name: dict[str, list[str | None]] = {}
+    for held in hooks:
+        by_name.setdefault(held.trigger.__qualname__, []).append(held.ruleset)
+    counts = {}
+    for name, rulesets in sorted(by_name.items()):
+        unscoped = rulesets.count(None)
+        per_ruleset = Counter(each for each in rulesets if each is not None)
+        widest = unscoped + max(per_ruleset.values(), default=0)
+        if widest > 1:
+            counts[name] = widest
+    return counts
 
 
 # Back faces whose printed text the engine cannot model yet, so their fronts stand implemented
@@ -480,7 +496,8 @@ def unvalidated_registries(collections: set[str] | None = None) -> list[str]:
 
 def main(
     registries: dict[str, frozenset[str]] | None = None,
-    trigger_registry: dict[type, dict[str, list[triggers.Trigger]]] | None = None,
+    trigger_registry: dict[type, dict[CardLocation, dict[str, list[triggers.Registration]]]]
+    | None = None,
 ) -> int:
     problems = (
         unregistered_card_ids(registries)

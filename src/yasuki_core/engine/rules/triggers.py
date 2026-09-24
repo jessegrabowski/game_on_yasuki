@@ -1,4 +1,5 @@
 import collections
+from typing import NamedTuple
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
@@ -25,6 +26,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     ProvinceModifier,
 )
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
+from yasuki_core.ruleset import in_force
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
@@ -55,11 +57,20 @@ class TriggerContext:
 
 Trigger = Callable[[TriggerContext], list[Effect]]
 
-# event type -> printed_id -> triggers. Populated by the @on decorators below, on import; kept
-# grouped by printed_id so collection is a lookup, not a rebuild per event.
-# event type -> where the card must be -> printed id -> its triggers. A zone nothing registers for
-# is never walked, so a hand is read only for an event some card in hand answers.
-_TRIGGERS: dict[type, dict[CardLocation, dict[str, list[Trigger]]]] = {}
+
+class Registration(NamedTuple):
+    """A trigger as registered: the function, and the one ruleset it is read under, or None for
+    every arc."""
+
+    trigger: Trigger
+    ruleset: str | None
+
+
+# event type -> where the card must be -> printed id -> its registrations. Populated by the @on
+# decorators below, on import, and grouped by printed id so collection is a lookup rather than a
+# rebuild per event. A zone nothing registers for is never walked, so a hand is read only for an
+# event some card in hand answers.
+_TRIGGERS: dict[type, dict[CardLocation, dict[str, list[Registration]]]] = {}
 
 
 def on(
@@ -67,6 +78,7 @@ def on(
     printed_id: str,
     *,
     where: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,),
+    ruleset: str | None = None,
 ) -> Callable[[Trigger], Trigger]:
     """Register the decorated function as ``printed_id``'s trigger for ``event_type``.
 
@@ -80,12 +92,16 @@ def on(
         Where the card must be for the trigger to fire. A card in hand answers only when its
         registration says so, as a Ring whose text reads "Play after X" does. Default the
         battlefield alone.
+    ruleset : str, optional
+        The name of the one ruleset the trigger is in force under, for a card whose text differs
+        between arcs. Default None, for a text every arc reads.
     """
 
     def register(trigger: Trigger) -> Trigger:
         by_zone = _TRIGGERS.setdefault(event_type, {})
+        registered = Registration(trigger, ruleset)
         for location in where:
-            by_zone.setdefault(location, {}).setdefault(printed_id, []).append(trigger)
+            by_zone.setdefault(location, {}).setdefault(printed_id, []).append(registered)
         return trigger
 
     return register
@@ -202,21 +218,26 @@ def _card_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Tri
     firing = [
         (card, trigger)
         for card in game.table.battlefield.cards
-        for trigger in in_play.get(card.printed_id, ())
+        for trigger in _read_triggers(in_play, card)
     ]
     # A departed card answers only for its own leaving, and for nothing that happens after.
     departed = _departed_subject(game, event)
     if departed is not None:
-        firing.extend((departed, trigger) for trigger in in_play.get(departed.printed_id, ()))
+        firing.extend((departed, trigger) for trigger in _read_triggers(in_play, departed))
     in_hand = by_zone.get(CardLocation.HAND)
     if in_hand:
         firing.extend(
             (card, trigger)
             for seat in game.table.seats
             for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
-            for trigger in in_hand.get(card.printed_id, ())
+            for trigger in _read_triggers(in_hand, card)
         )
     return firing
+
+
+def _read_triggers(by_card: dict[str, list[Registration]], card: L5RCard) -> list[Trigger]:
+    """``card``'s registered triggers that the active ruleset reads."""
+    return [held.trigger for held in by_card.get(card.printed_id, ()) if in_force(held)]
 
 
 def _named_subject(game: GameState, event: GameEvent) -> L5RCard | None:

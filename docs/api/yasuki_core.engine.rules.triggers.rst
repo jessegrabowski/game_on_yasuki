@@ -8,6 +8,7 @@ yasuki_core.engine.rules.triggers
 .. autosummary::
 
     HeldAction
+    Registration
     ResumeCascade
     TriggerContext
 

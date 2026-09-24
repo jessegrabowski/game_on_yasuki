@@ -23,8 +23,9 @@ def reacting():
         trigger,
         *,
         where: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,),
+        ruleset: str | None = None,
     ):
-        triggers.on(event, printed_id, where=where)(trigger)
+        triggers.on(event, printed_id, where=where, ruleset=ruleset)(trigger)
         registered.append((event, printed_id))
 
     yield _register

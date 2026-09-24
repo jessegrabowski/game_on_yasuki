@@ -153,10 +153,10 @@ def _window_effects(game, producer):
     event = ProducingGold(producer.id, producer.owner)
     return [
         effect
-        for trigger in _TRIGGERS[ProducingGold][CardLocation.BATTLEFIELD].get(
+        for registered in _TRIGGERS[ProducingGold][CardLocation.BATTLEFIELD].get(
             producer.printed_id, []
         )
-        for effect in trigger(TriggerContext(game, producer, event))
+        for effect in registered.trigger(TriggerContext(game, producer, event))
     ]
 
 
