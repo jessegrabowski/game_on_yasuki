@@ -20,11 +20,7 @@ from yasuki_core.engine.driver import Controls
 from tests.yasuki_core.engine.builders import province_card
 from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
-from yasuki_core.engine.rules.rulebook.kharmic import (
-    KHARMIC_DRAW,
-    KHARMIC_REFILL,
-    kharmic_proxy,
-)
+from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     Confirm,
@@ -521,20 +517,16 @@ def test_ability_menu_is_empty_for_a_card_with_no_ability():
     assert runner.ability_menu("plain") == []
 
 
-def test_kharmic_hangs_off_the_seats_proxy_card():
-    # The two rulebook Kharmic abilities are activated from the seat's proxy card in its rulebook
-    # zone, so they are on its ability menu and on no hand or Province card.
+def test_a_kharmic_card_offers_its_kharmic_ability_on_its_own_menu():
     game_runner = GameRunner(EngineSession.start(_kharmic_table(), PlayerId.P1), PlayerId.P1)
-    proxy = kharmic_proxy(game_runner.session.game, PlayerId.P1)
 
-    menu = game_runner.ability_menu(proxy.id)
-
-    assert [action for _, action in menu] == [
-        ActivateAbility(proxy.id, KHARMIC_DRAW),
-        ActivateAbility(proxy.id, KHARMIC_REFILL),
+    assert [action for _, action in game_runner.ability_menu("P1-k0")] == [
+        ActivateAbility("P1-k0", KHARMIC_DRAW)
+    ]
+    assert [action for _, action in game_runner.ability_menu("P1-pk0")] == [
+        ActivateAbility("P1-pk0", KHARMIC_REFILL)
     ]
     assert game_runner.hand_menu("P1-k0") == []
-    assert not any(isinstance(a, ActivateAbility) for _, a in game_runner.province_menu("P1-pk0"))
 
 
 def _equip_runner(*, printed_id: str | None = None) -> GameRunner:

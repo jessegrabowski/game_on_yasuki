@@ -1,17 +1,16 @@
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.board.queries import rulebook_proxy
-from yasuki_core.engine.rules.rulebook import kharmic
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_core.game_pieces.constants import KHARMIC_PROXY_ID
 from yasuki_core.game_pieces.prints import CardPrint
 
 # The print each rulebook proxy presents, by id. The rules own these prints: a rulebook ability
 # exists on every table whatever the card catalog holds, so they are not read from
 # ``creatable_tokens``. The catalog record of the same id carries the printed text the registration
-# audit checks and the art the clients draw.
-RULEBOOK_PROXY_PRINTS: dict[str, CardPrint] = {KHARMIC_PROXY_ID: kharmic.KHARMIC_PROXY}
+# audit checks and the art the clients draw. Empty until an arc grants a player ability through a
+# proxy.
+RULEBOOK_PROXY_PRINTS: dict[str, CardPrint] = {}
 
 
 def spawn_rulebook_proxies(game: GameState) -> None:
