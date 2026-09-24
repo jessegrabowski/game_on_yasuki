@@ -9,6 +9,7 @@ yasuki_core.engine.rules.board.queries
 
     attack_targets
     attack_targets_at
+    favor_actions_this_turn
     followers_in_play
     has_keyword
     opposed_units_in_battle

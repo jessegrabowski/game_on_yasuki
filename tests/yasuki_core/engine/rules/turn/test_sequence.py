@@ -72,6 +72,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.board.queries import favor_actions_this_turn
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
@@ -844,6 +845,8 @@ def test_a_favor_action_that_paused_for_a_choice_is_announced_once_as_a_favor_ac
     submit(game, DecisionResponse(choices=("first",)))
 
     assert _resolutions(game) == [ActionResolved(PlayerId.P1, None, favor=True, printed=False)]
+    assert favor_actions_this_turn(game, PlayerId.P1) == 1
+    assert favor_actions_this_turn(game, PlayerId.P2) == 0
 
 
 def test_the_turn_history_is_dropped_as_the_next_turn_begins():
