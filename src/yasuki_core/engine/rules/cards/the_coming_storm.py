@@ -91,7 +91,6 @@ register_ability(
     "shigekawas_court",
     Ability(
         timings=(ActionTiming.OPEN,),
-        label="Open: Bow to straighten a Personality who Lobbied this turn",
         cost=bow_cost,
         targets=_shigekawas_court_targets,
         targeting_message="a Personality who Lobbied this turn",
