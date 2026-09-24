@@ -390,6 +390,7 @@ ROUND_TRIPPED_ACTIONS = [
     KharmicDraw("card"),
     KharmicRefill("card"),
     ActivateAbility("card"),
+    ActivateAbility("card", "refill"),
     PlayStrategy("card"),
     DeclareAttack(),
     PlayInterrupt("card"),
