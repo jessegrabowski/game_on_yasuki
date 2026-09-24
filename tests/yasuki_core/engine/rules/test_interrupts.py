@@ -53,6 +53,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Cycle,
     DeclareAttack,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -82,6 +83,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    sensei,
     stronghold,
     two_seat_game,
 )
@@ -543,6 +545,26 @@ def test_an_abilitys_gain_is_interruptible():
     assert _asked(session) is P2
     _discard_to_interrupt(session, P2, "P2-honor0", HONOR_UP)
     assert _honor(session, P1) == 3
+
+
+@pytest.mark.parametrize(("mishime", "offered"), [(False, True), (True, False)])
+def test_a_loss_a_card_prevents_is_not_offered_to_the_honor_interrupt(mishime, offered):
+    """I Do Not Forget on your own dishonorable Personality costs you Honor from your own card,
+    which Mishime Sensei says you do not lose, so there is no loss to increase or reduce."""
+    table = TableState.empty_two_seat()
+    _strategy(table, "forget", "i_do_not_forget", P1)
+    put_in_play(table, personality("disgraced", personal_honor=2))
+    if mishime:
+        put_in_play(table, sensei(P1, printed_id="mishime_sensei"))
+    _honor_card(table, "P2-honor0", P2)
+    session = EngineSession.start(table, P1)
+    session.game.table.cards_by_id["disgraced"].dishonor()
+
+    session.act(P1, PlayStrategy("forget"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("disgraced",)))
+
+    assert (DiscardToInterrupt("P2-honor0", "honor") in session.legal_actions(P2)) is offered
 
 
 def test_neither_seat_can_back_out_while_the_interrupt_step_is_open():

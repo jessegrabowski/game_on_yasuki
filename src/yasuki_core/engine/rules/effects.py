@@ -111,9 +111,10 @@ class Effect(ABC):
         name, unlike :meth:`~.Effect.describe`, which names them by id for the log."""
         return self.describe()
 
-    def is_interruptible(self) -> bool:
+    def is_interruptible(self, game: GameState) -> bool:
         """Whether the Interrupt step is open against this effect at all, when it is an action's
-        own. True unless the effect is nothing to interrupt, such as an Honor change of zero."""
+        own. True unless the effect is nothing to interrupt, such as an Honor change of zero or a
+        loss a card prevents."""
         return True
 
     def follow_on(self, game: GameState) -> tuple["Effect", ...]:
@@ -137,7 +138,7 @@ class InterruptingEffect(Effect, ABC):
     def request(self, game: GameState) -> DecisionRequest:
         """The decision to put to the seat."""
 
-    def is_interruptible(self) -> bool:
+    def is_interruptible(self, game: GameState) -> bool:
         """False: a question the action asks is nothing to interrupt, and what its answer produces
         is not known until it is answered, so neither is offered at the Interrupt step."""
         return False
@@ -1409,7 +1410,7 @@ class EndLook(Effect):
     def describe(self) -> str:
         return "the look ends"
 
-    def is_interruptible(self) -> bool:
+    def is_interruptible(self, game: GameState) -> bool:
         return False  # bookkeeping, not something a card can act against
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -1623,9 +1624,11 @@ class GainHonor(Effect):
         verb = "gains" if amount >= 0 else "loses"
         return f"{whose} {verb} {abs(amount)} honor"
 
-    def is_interruptible(self) -> bool:
-        # A change of zero is not a gain or loss (CR, Honor Gains and Losses), so there is nothing
-        # to interrupt.
+    def is_interruptible(self, game: GameState) -> bool:
+        # A change of zero is not a gain or loss (CR, Honor Gains and Losses), and neither is a loss
+        # a card says its seat does not take, so there is nothing to interrupt.
+        if self.amount < 0 and self._shielded(game):
+            return False
         return self.amount != 0
 
     def perform(self, game: GameState) -> list[GameEvent]:

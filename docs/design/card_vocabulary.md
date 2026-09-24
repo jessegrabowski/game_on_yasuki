@@ -30,7 +30,7 @@ more. Which effects are the action's own is decided at the entry point: step E o
 Action Sequence hands them to `resolve_action_effects`, and everything else, a cost, a trait's
 return, a rulebook procedure's effects, goes through `resolve_effects` and is never held there. An
 effect opts out through `is_interruptible` only when there is nothing to interrupt, such as an
-Honor change of zero.
+Honor change of zero or an Honor loss a card prevents.
 
 `seppuku` is the one builder in the module: the CR defines seppuku as two effects, a rehonoring and
 then a destruction, and a handler returns that pair so each passes the Interrupt step on its own.

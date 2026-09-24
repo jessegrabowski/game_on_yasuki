@@ -158,7 +158,7 @@ def forecast(game: GameState, effects: tuple[Effect, ...]) -> tuple[Effect, ...]
         if isinstance(effect, Then):
             seen.extend(forecast(game, effect.effects))
             continue
-        if effect.is_interruptible():
+        if effect.is_interruptible(game):
             seen.append(effect)
         stands = as_modified(game, effect)
         if isinstance(stands, ResolveAbility | AttackEffect):
