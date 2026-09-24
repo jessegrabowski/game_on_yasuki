@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field, replace
+from enum import Enum
 from typing import Protocol
 
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -12,6 +13,22 @@ def normalize_clan(name: str) -> str:
     surrounding whitespace stripped, so ``"Crab Clan"``, ``"Crab"``, and ``"crab"`` all compare
     equal."""
     return name.strip().lower().removesuffix(" clan")
+
+
+class RingEntry(Enum):
+    """How a Ring whose text reads "Play after X" enters play.
+
+    IMMEDIATE
+        Offered the moment X resolves, and again each time X happens again, as the Twenty
+        Festivals CR reads the Ring rule: the entry may not be delayed and the condition may be
+        fulfilled more than once.
+    AS_ACTION
+        A placeholder for an arc that reads the trait as an action the player takes. Nothing is
+        implemented behind it, and a registration read under it raises.
+    """
+
+    IMMEDIATE = "immediate"
+    AS_ACTION = "as_action"
 
 
 @dataclass(frozen=True, slots=True)
@@ -91,6 +108,8 @@ class Ruleset:
         Whether an ability on a card in play, and a player ability, may be used only once per turn
         unless it prints Repeatable (CR, Using Abilities 0.3). Earlier arcs let every ability
         repeat. Default True, the CR's.
+    ring_entry : RingEntry
+        How a Ring's "Play after X" trait puts it into play. Default immediate, the CR's.
     lobby_timing : ActionTiming
         The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
         Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
@@ -113,6 +132,7 @@ class Ruleset:
     battle_segments: tuple[BattleSegment, ...] = ()
     battle_segment_names: dict[BattleSegment, str] = field(default_factory=dict)
     abilities_once_per_turn: bool = True
+    ring_entry: RingEntry = RingEntry.IMMEDIATE
     lobby_timing: ActionTiming = ActionTiming.LIMITED
     lobby_keywords: frozenset[str] = frozenset()
     favor_abilities: tuple[FavorAbility, ...] = ()
@@ -235,6 +255,11 @@ ONYX = replace(SHATTERED_EMPIRE, name="onyx", arcs=("Onyx Edition",))
 
 # The ruleset the engine plays under. Named once so no module decides for itself which arc is live.
 ACTIVE = SHATTERED_EMPIRE
+
+
+def ring_entry() -> RingEntry:
+    """How the active ruleset puts a "Play after X" Ring into play."""
+    return ACTIVE.ring_entry
 
 
 class Scoped(Protocol):
