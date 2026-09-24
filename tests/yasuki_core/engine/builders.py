@@ -265,7 +265,12 @@ def combat_segment(
     return session
 
 
-def sensei(owner: PlayerId = PlayerId.P1, *, printed_id: str | None = None) -> L5RCard:
+def sensei(
+    owner: PlayerId = PlayerId.P1,
+    *,
+    printed_id: str | None = None,
+    keywords: tuple[str, ...] = (),
+) -> L5RCard:
     """A Sensei. Like a Stronghold and a Wind it starts in play, so tests put it there directly."""
     return L5RCard.of(
         SenseiPrint,
@@ -274,6 +279,7 @@ def sensei(owner: PlayerId = PlayerId.P1, *, printed_id: str | None = None) -> L
         side=Side.FATE,
         owner=owner,
         printed_id=printed_id,
+        keywords=keywords,
     )
 
 

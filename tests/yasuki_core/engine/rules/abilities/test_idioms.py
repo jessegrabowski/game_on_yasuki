@@ -5,8 +5,11 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     PITCH,
+    declarable_gold,
+    declared_payment,
     register_entry,
     register_ring,
     register_trait_entry,
@@ -28,7 +31,15 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, RingPrint
 
-from tests.yasuki_core.engine.builders import put_in_play, register, stronghold, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    holding,
+    put_in_play,
+    register,
+    sensei,
+    stronghold,
+    two_seat_game,
+)
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 
 P1 = PlayerId.P1
 P2 = PlayerId.P2
@@ -236,3 +247,24 @@ def test_a_ruleset_reading_the_trait_as_an_action_is_refused(monkeypatch):
 
     with pytest.raises(NotImplementedError, match="AS_ACTION"):
         fire(game, TurnStarted(P1))
+
+
+@pytest.mark.parametrize(("ability_keywords", "paid"), [(frozenset({"Maho"}), 4), (frozenset(), 6)])
+def test_a_variable_cost_reads_the_keywords_printed_on_its_ability(ability_keywords, paid):
+    """A "Maho Open:" ability on a card without Maho is still a Maho action, so Mishime Sensei takes
+    his 2 off what is paid for the declared 6."""
+    game = two_seat_game()
+    put_in_play(game, stronghold(P1, gold_production=5))
+    put_in_play(game, sensei(P1, printed_id="mishime_sensei", keywords=("Shadowlands",)))
+    source = put_in_play(game, holding("source", printed_id="variable_probe"))
+    ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        keywords=ability_keywords,
+    )
+
+    with probe_ability("variable_probe", ability):
+        assert declarable_gold(game, source) == 5 + 6 - paid
+        assert declared_payment(game, source, 6, "probe").amount == paid

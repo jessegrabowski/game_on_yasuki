@@ -1,6 +1,10 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost
-from yasuki_core.engine.rules.abilities.idioms import register_event_entry
+from yasuki_core.engine.rules.abilities.idioms import (
+    declarable_gold,
+    declared_payment,
+    register_event_entry,
+)
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
     CardLocation,
@@ -26,7 +30,6 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     MoveToDeck,
     Negated,
-    PayGold,
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
@@ -34,7 +37,6 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
-from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import sincerity_seed_targets
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -163,7 +165,7 @@ register_ability(
 
 
 def _the_bad_death_of_hida_daizu_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]:
-    """Every amount the seat could spend, from nothing up to what it can raise.
+    """Every amount the seat could spend, from nothing up to what it can declare.
 
     The card reads "equal to or less than", so one amount reaches every unit at or under it and the
     same target is reachable at many amounts. Spending more than the target costs is legal and
@@ -174,7 +176,7 @@ def _the_bad_death_of_hida_daizu_amounts(game: GameState, source: L5RCard) -> tu
     """
     if not personalities_in_play(game):
         return ()
-    return tuple(range(reachable_gold(game, source.owner) + 1))
+    return tuple(range(declarable_gold(game, source) + 1))
 
 
 def _the_bad_death_of_hida_daizu_cost(game: GameState, source: L5RCard) -> list[Effect]:
@@ -205,7 +207,9 @@ def _resolve_the_bad_death_of_hida_daizu(
     targets = tuple(
         card.id for card in personalities_in_play(game) if unit_gold_cost(game, card) <= paid
     )
-    payment = PayGold(seat, paid, "The Bad Death of Hida Daizu")
+    payment = declared_payment(
+        game, game.table.cards_by_id[source_id], paid, "The Bad Death of Hida Daizu"
+    )
     if not targets:
         return [payment]
     return [payment, Choose(seat, targets, 1, 1, "the_bad_death_of_hida_daizu_target", source_id)]

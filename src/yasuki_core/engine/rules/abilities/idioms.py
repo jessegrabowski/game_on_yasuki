@@ -4,7 +4,7 @@ from dataclasses import replace
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.registry import ability_for, register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.board.queries import favor_actions_this_turn
@@ -18,8 +18,11 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GainHonor,
     GrantModifier,
+    PayGold,
     PutIntoPlay,
 )
+from yasuki_core.engine.rules.gold.discounts import unspent_action_discount
+from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
@@ -286,6 +289,37 @@ def plus_one_gp_this_turn(game: GameState, source: L5RCard, target: L5RCard) -> 
 
 def one_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, 1)]
+
+
+def declarable_gold(game: GameState, source: L5RCard, ability_key: str | None = None) -> int:
+    """The largest amount ``source``'s controller can declare for the variable Gold cost of the
+    ability ``ability_key`` names: what they can raise plus what their discount on it takes off.
+
+    The declared amount is what the action reads, and a discount lowers only what is paid for it.
+    The CR's own variable costs read the same way: Recruit matches the Gold Cost against the amount
+    declared and charges the off-clan 2 Gold on top of it (CR, Recruit).
+    """
+    discount = unspent_action_discount(game, source, _ability_keywords(game, source, ability_key))
+    return reachable_gold(game, source.owner) + discount
+
+
+def declared_payment(
+    game: GameState,
+    source: L5RCard,
+    declared: int,
+    label: str,
+    ability_key: str | None = None,
+) -> PayGold:
+    """The payment for ``declared`` Gold on the variable cost of the ability ``ability_key`` names,
+    lowered by what is left of its controller's discount on the action. The action still reads
+    ``declared``."""
+    discount = unspent_action_discount(game, source, _ability_keywords(game, source, ability_key))
+    return PayGold(source.owner, max(0, declared - discount), label)
+
+
+def _ability_keywords(game: GameState, source: L5RCard, ability_key: str | None) -> frozenset[str]:
+    ability = ability_for(game, source, ability_key)
+    return ability.keywords if ability is not None else frozenset()
 
 
 def ask_who_loses_honor(game: GameState, seat: PlayerId, amount: int, source_id: str) -> AskOption:
