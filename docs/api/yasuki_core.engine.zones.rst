@@ -14,6 +14,7 @@ yasuki_core.engine.zones
     FateDiscardZone
     HandZone
     ProvinceZone
+    RulebookZone
     Zone
 
 .. automodule:: yasuki_core.engine.zones

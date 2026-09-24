@@ -86,6 +86,7 @@ _PUBLIC_ROLES: Final = frozenset(
         ZoneRole.FATE_BANISH,
         ZoneRole.DYNASTY_DISCARD,
         ZoneRole.DYNASTY_BANISH,
+        ZoneRole.RULEBOOK,
     }
 )
 

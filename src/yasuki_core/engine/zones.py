@@ -91,6 +91,16 @@ class DynastyDiscardZone(Zone):
 
 
 @dataclass(slots=True)
+class RulebookZone(Zone):
+    """Where a seat's rulebook proxies sit: cards that stand for abilities the rules give every
+    player, activated from here and in play nowhere."""
+
+    name: str = "Rulebook"
+    allowed_side: Side | None = None
+    max_capacity: float = math.inf
+
+
+@dataclass(slots=True)
 class DynastyBanishZone(Zone):
     name: str = "Dynasty Banish"
     allowed_side: Side | None = Side.DYNASTY

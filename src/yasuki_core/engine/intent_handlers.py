@@ -63,6 +63,10 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
     if card is None or not owns_card(state, seat, intent.card_id):
         return []
     dest = intent.to
+    # A rulebook proxy stands for an ability the rules give the seat; it is not a card to be moved,
+    # and its zone takes nothing else.
+    if _in_rulebook_zone(state, card) or _is_rulebook_zone(dest):
+        return []
 
     if dest == BATTLEFIELD:
         ops.move_card(state, card, BATTLEFIELD, position=intent.position)
@@ -486,11 +490,21 @@ def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[
         return []
     # Only spawned tokens may leave the table outright; a real card from a deck or zone is never
     # destroyable and must instead be moved to a discard or banish.
-    if not card.is_token:
+    if not card.is_token or _in_rulebook_zone(state, card):
         return []
     ops.remove_card(state, card)
     state.seq += 1
     return [Event(state.seq, seat, intent, (intent.card_id,))]
+
+
+def _is_rulebook_zone(dest: MoveDest) -> bool:
+    return isinstance(dest, ZoneKey) and dest.role is ZoneRole.RULEBOOK
+
+
+def _in_rulebook_zone(state: TableState, card: L5RCard) -> bool:
+    return any(
+        card in zone.cards for key, zone in state.zones.items() if key.role is ZoneRole.RULEBOOK
+    )
 
 
 def _on_battlefield(state: TableState, card: L5RCard) -> bool:

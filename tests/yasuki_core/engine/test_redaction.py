@@ -250,6 +250,7 @@ def _expected_visible(card, viewer, location):
         ZoneRole.FATE_BANISH,
         ZoneRole.DYNASTY_DISCARD,
         ZoneRole.DYNASTY_BANISH,
+        ZoneRole.RULEBOOK,
     ):
         default = True
     elif key.role is ZoneRole.HAND:

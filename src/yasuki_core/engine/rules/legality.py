@@ -628,12 +628,17 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
                     yield CardLocation.PROVINCE, card
         elif key.role is ZoneRole.HAND:
             yield from ((CardLocation.HAND, card) for card in zone.cards)
+        elif key.role is ZoneRole.RULEBOOK:
+            yield from ((CardLocation.RULEBOOK, card) for card in zone.cards)
 
 
 # Where a card is when activating it is what its ability means. A card in hand is *played* rather
 # than activated, and pays a Gold Cost to do it, so it answers to its own action and is left out of
 # the default.
 IN_PLAY: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD, CardLocation.PROVINCE)
+# Where an ability is activated from: the places a card is in play, plus the seat's rulebook zone,
+# whose proxies are activated the same way and are in play nowhere.
+ACTIVATED_FROM: tuple[CardLocation, ...] = (*IN_PLAY, CardLocation.RULEBOOK)
 
 
 def activatable(
@@ -641,15 +646,15 @@ def activatable(
     seat: PlayerId,
     permitted: frozenset[ActionTiming],
     *,
-    at: tuple[CardLocation, ...] = IN_PLAY,
+    at: tuple[CardLocation, ...] = ACTIVATED_FROM,
 ) -> list[tuple[L5RCard, Ability]]:
     """Each card ``seat`` may use an ability on right now, paired with the ability it may use:
     controlled, sitting somewhere the ability acts from, its designator among ``permitted``, its
     cost payable, and with at least one legal target.
 
-    ``at`` narrows which of those places count, and defaults to the ones a card is *in play* in.
-    Playing a card out of hand asks for ``CardLocation.HAND`` explicitly, because it is a
-    different action with a cost of its own.
+    ``at`` narrows which of those places count, and defaults to the ones an ability is activated
+    from: where a card is in play, and the seat's rulebook zone. Playing a card out of hand asks
+    for ``CardLocation.HAND`` explicitly, because it is a different action with a cost of its own.
     """
     ready: list[tuple[L5RCard, Ability]] = []
     # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
