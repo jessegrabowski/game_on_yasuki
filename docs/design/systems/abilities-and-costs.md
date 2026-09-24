@@ -11,7 +11,6 @@ register_ability(
     "poorly_placed_garden",
     Ability(
         timings=(ActionTiming.LIMITED,),
-        label="Limited: bow this Holding to gain 2 Honor",
         cost=bow_cost,
         targets=_poorly_placed_garden_targets,
         effects=_poorly_placed_garden_effects,
@@ -63,6 +62,12 @@ Personality's bow is consulted at the moment of payment.
 
 ## The optional fields
 
+`label` is what a client shows for the ability, and is left unset for an ability the card prints:
+{func}`~.ability_label` then reads the printed ability off the card's own text, prefix and icons as
+drawn, so no wording is written twice. `printed_index` says which printed ability that is, counting
+from zero, for a card printing several. A `label` is written only for a registration the text
+prints no ability for, such as an Event's entry or a Ring's cast from hand, and the registration
+audit holds every unlabeled index to the printing the registration models.
 `key` names an ability among several its card prints, so an action can say which one it takes.
 `targeting_message` is what the ability targets, worded as the card prints it, which the target
 prompt reads:

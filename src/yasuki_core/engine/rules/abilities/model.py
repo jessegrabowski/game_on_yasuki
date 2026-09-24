@@ -40,8 +40,13 @@ class Interrupt[T: Effect]:
 
     Attributes
     ----------
-    label : str
-        What a client shows for the card.
+    label : str, optional
+        What a client shows for the card, when the wording is not a printed ability. Default None,
+        which shows the printed ability ``printed_index`` names, as :func:`~.interrupt_label` reads
+        it off the card.
+    printed_index : int, optional
+        Which of the card's printed abilities this is, counting from zero in the order the text
+        box prints them. Default 0.
     answers : type
         The effect type the Interrupt may be taken against, or a union of them: one naming
         ``Fear`` is offered while a Fear effect waits to resolve, one naming ``Bow | Move`` while
@@ -77,9 +82,10 @@ class Interrupt[T: Effect]:
         Interrupt every arc reads.
     """
 
-    label: str
     answers: type[T] | UnionType
     interrupt: Callable[..., Interruption]
+    label: str | None = None
+    printed_index: int = 0
     applies: Callable[[GameState, L5RCard, T], bool] = lambda game, source, effect: True
     located_at: tuple[CardLocation, ...] = (CardLocation.HAND,)
     cost: Cost = no_cost
@@ -98,8 +104,14 @@ class Ability:
         The designators printed on the card, saying when the ability may be used and by whom. A card
         printing more than one, as in "Battle/Open", may be used in any round that permits any
         of them.
-    label : str
-        A short human description for the activation menu.
+    label : str, optional
+        What the activation menu shows, when the wording is not a printed ability: a rulebook
+        procedure, or a way of using the card its text does not print as an ability. Default None,
+        which shows the printed ability ``printed_index`` names, as :func:`~.ability_label` reads
+        it off the card, icons and all.
+    printed_index : int, optional
+        Which of the card's printed abilities this registration implements, counting from zero in
+        the order the text box prints them. Default 0, the card's first or only ability.
     cost : callable
         Maps ``(game, source_card)`` to the effects paid to activate, applied before the ability's
         own.
@@ -157,10 +169,11 @@ class Ability:
     """
 
     timings: tuple[ActionTiming, ...]
-    label: str
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
     effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]]
+    label: str | None = None
+    printed_index: int = 0
     hits_every_target: bool = False
     located_at: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,)
     battle_designators: frozenset[BattleDesignator] = frozenset()

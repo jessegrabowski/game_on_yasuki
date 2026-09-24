@@ -8,7 +8,13 @@ from yasuki_core.engine.driver import Controls, MAX_ACTIONS_PER_ROUND
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.board.queries import remaining_look
-from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for, invest_amounts
+from yasuki_core.engine.rules.abilities.registry import (
+    ability_for,
+    ability_label,
+    interrupt_for,
+    interrupt_label,
+    invest_amounts,
+)
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
@@ -155,7 +161,9 @@ class GameRunner:
                 card = game.table.cards_by_id[card_id]
                 ability = ability_for(game, card, action.ability_key)
                 cost = effective_gold_cost(game, card)
-                label = ability.label if ability is not None else "Play this Strategy"
+                label = (
+                    ability_label(card, ability) if ability is not None else "Play this Strategy"
+                )
                 items.append((label if cost == 0 else f"{label} -- Pay {cost} gold", action))
         return items
 
@@ -182,7 +190,7 @@ class GameRunner:
         for action in self.legal_actions():
             if isinstance(action, ActivateAbility) and action.card_id == card_id:
                 ability = ability_for(self.session.game, card, action.ability_key)
-                label = ability.label if ability is not None else "Activate ability"
+                label = ability_label(card, ability) if ability is not None else "Activate ability"
                 items.append((label, action))
         return items
 
@@ -228,7 +236,11 @@ class GameRunner:
         for action in self.legal_actions():
             if isinstance(action, PlayInterrupt) and action.card_id == card_id:
                 interrupt = interrupt_for(card)
-                label = interrupt.label if interrupt is not None else f"Play {card.name}"
+                label = (
+                    interrupt_label(card, interrupt)
+                    if interrupt is not None
+                    else f"Play {card.name}"
+                )
                 items.append((label, action))
             elif isinstance(action, DiscardToInterrupt) and action.card_id == card_id:
                 items.append((rulebook_interrupt(action.key).label, action))

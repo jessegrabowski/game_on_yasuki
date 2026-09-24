@@ -77,7 +77,8 @@ def register_entry(
     key : str, optional
         The ability's key, needed when the card prints another ability. Default None.
     label : str, optional
-        What a client shows for the entry. Default names the designators and ``clears``.
+        What a client shows for the entry, when the card prints its entry as a trait rather than
+        an ability. Default None, which shows the printed ability.
     ability_keywords : frozenset of str, optional
         The ability keywords the entry prints, as in "Political Open". Default empty.
     ruleset : str, optional
@@ -111,9 +112,6 @@ def register_entry(
             *(extra_effects(game, source) if extra_effects is not None else ()),
         ]
 
-    if label is None:
-        designators = "/".join(held.name.capitalize() for held in timings)
-        label = f"{designators}: Put this {clears or 'card'} into play"
     register_ability(
         printed_id,
         Ability(

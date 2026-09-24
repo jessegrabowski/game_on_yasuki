@@ -23,6 +23,15 @@ def test_an_ability_is_found_by_its_designator_not_its_markup():
     ]
 
 
+def test_an_ability_keeps_the_line_it_was_printed_as():
+    box = split_text_box("<b>Battle, :bow::</b> :ranged: 3.<br><b>Open:</b> Draw a card.")
+
+    assert [ability.printed for ability in box.abilities] == [
+        "Battle, :bow:: :ranged: 3.",
+        "Open: Draw a card.",
+    ]
+
+
 def test_a_cost_with_no_designator_is_still_an_ability():
     # The production template of every pre-Onyx Holding: a bow and a colon, no designator word.
     assert abilities("<b>:bow::</b> Produce 2 Gold.") == [((), (), ":bow:", "Produce 2 Gold.")]
