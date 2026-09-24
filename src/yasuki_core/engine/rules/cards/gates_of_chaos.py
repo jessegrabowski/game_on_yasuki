@@ -145,5 +145,5 @@ def _resolve_slave_pits_grant(
         GrantModifier(
             card.id, card.id, Stat.GOLD_PRODUCTION, SLAVE_PITS_GRANT, Duration.UNTIL_END_OF_TURN
         ),
-        GainHonor(seat, -SLAVE_PITS_HONOR_COST),
+        GainHonor(seat, -SLAVE_PITS_HONOR_COST, source_id=card.id),
     ]

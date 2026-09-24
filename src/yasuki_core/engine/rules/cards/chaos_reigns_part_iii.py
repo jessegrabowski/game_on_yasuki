@@ -100,7 +100,7 @@ def _chuda_jomei_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After Jomei enters play, lose 3 Honor."""
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [GainHonor(ctx.card.owner, -JOMEI_HONOR_LOSS)]
+    return [GainHonor(ctx.card.owner, -JOMEI_HONOR_LOSS, source_id=ctx.card.id)]
 
 
 def _chuda_jomei_targets(game: GameState, source: L5RCard) -> list[str]:
@@ -417,7 +417,7 @@ def _kengun_grounds_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Holding enters play, lose 2 Honor."""
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [GainHonor(ctx.card.owner, -KENGUN_HONOR_LOSS)]
+    return [GainHonor(ctx.card.owner, -KENGUN_HONOR_LOSS, source_id=ctx.card.id)]
 
 
 def _kengun_grounds_targets(game: GameState, source: L5RCard) -> list[str]:
@@ -435,7 +435,7 @@ def _kengun_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) -
         CreateToken(ZOMBIE_FOLLOWER, source.owner, source.id, attach_to=target.id)
     ]
     if keywords.SHADOWLANDS not in effective_keywords(game, target):
-        effects.append(GainHonor(source.owner, -UNTAINTED_HONOR_LOSS))
+        effects.append(GainHonor(source.owner, -UNTAINTED_HONOR_LOSS, source_id=source.id))
     return effects
 
 
@@ -491,7 +491,7 @@ def _moto_ikarichi_bloodseeker_entered_play(ctx: TriggerContext) -> list[Effect]
     """After Ikarichi enters play, lose 2 Honor."""
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [GainHonor(ctx.card.owner, -IKARICHI_HONOR_LOSS)]
+    return [GainHonor(ctx.card.owner, -IKARICHI_HONOR_LOSS, source_id=ctx.card.id)]
 
 
 IKARICHI_MELEE = 4

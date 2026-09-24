@@ -34,6 +34,7 @@ from yasuki_core.engine.rules.effects import (
     MeleeAttack,
     PayGold,
     RecruitCard,
+    register_honor_loss_shield,
     Straighten,
     Then,
 )
@@ -227,7 +228,7 @@ def _i_do_not_forget_effects(game: GameState, source: L5RCard, target: L5RCard) 
     """Their controller loses Honor equal to their printed Personal Honor or 1, whichever is
     higher. The face-up hand discard and "you may not ally with them" are not modeled: nothing
     reveals a hand card to another player's action, and alliances do not exist."""
-    return [GainHonor(target.owner, -max(target.personal_honor, 1))]
+    return [GainHonor(target.owner, -max(target.personal_honor, 1), source_id=source.id)]
 
 
 register_ability(
@@ -305,6 +306,8 @@ def _makeshift_fortifications_province_strength(
 
 MISHIMES_ONI = "oni_personality_variable_chi"
 ONI_COST = 5
+
+register_honor_loss_shield("mishime_sensei")
 
 
 @on(EnteredPlay, "mishime_sensei")

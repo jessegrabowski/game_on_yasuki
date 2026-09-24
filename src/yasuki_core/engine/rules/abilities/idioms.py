@@ -322,7 +322,7 @@ def _resolve_honor_loss_player(
     resolver_context: tuple[str, ...] = (),
 ) -> list[Effect]:
     named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
-    return [GainHonor(named, -int(resolver_context[0]))]
+    return [GainHonor(named, -int(resolver_context[0]), source_id=source_id)]
 
 
 def ask_whose_honor_moves(
@@ -386,4 +386,4 @@ def _resolve_honor_swing(
     moved = PlayerId[resolver_context[0]]
     amount = int(resolver_context[1])
     delta = amount if chosen[0].startswith("Gain") else -amount
-    return [GainHonor(moved, delta)]
+    return [GainHonor(moved, delta, source_id=source_id)]

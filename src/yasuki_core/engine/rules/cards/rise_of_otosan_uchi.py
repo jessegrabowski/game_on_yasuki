@@ -347,7 +347,7 @@ def _culling_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) 
     payment to raise. The Honor is the price."""
     return [
         CreateToken(EXPENDABLE_SERVANT, source.owner, source.id),
-        GainHonor(source.owner, -1),
+        GainHonor(source.owner, -1, source_id=source.id),
     ]
 
 

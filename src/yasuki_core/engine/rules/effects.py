@@ -3,6 +3,7 @@ from dataclasses import dataclass, replace
 from typing import ClassVar
 
 from yasuki_core.engine import ops
+from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.players import Cause, PlayerId
@@ -1568,6 +1569,13 @@ class WinGame(Effect):
         return []
 
 
+# Cards whose controller does not lose Honor from their own cards' effects, keyed on printed id. A
+# rulebook loss, such as a dishonorable Personality's destruction, is no card's effect and still
+# lands (CR, Dishonorable).
+HONOR_LOSS_SHIELDS = FlagRegistry("honor loss shields", "already shields its controller's Honor")
+register_honor_loss_shield = HONOR_LOSS_SHIELDS.make_register()
+
+
 @dataclass(frozen=True, slots=True)
 class GainHonor(Effect):
     """Move ``seat``'s Family Honor by ``amount``. Negative loses honor. The two directions are one
@@ -1589,12 +1597,16 @@ class GainHonor(Effect):
         the whole gain (CR, Rehonoring 0.1 and 0.2). A handler whose action rehonors him as one of
         its own effects leaves this empty, since the CR substitutes only where rehonoring "is not
         one of that action or trait's effects". Default empty.
+    source_id : str, optional
+        The card whose effect this is, so a shield against a seat's own cards' losses can tell
+        them from anyone else's. Default None, a rulebook change.
     """
 
     seat: PlayerId
     amount: int
     adjustment: int = 0
     personalities: tuple[str, ...] = ()
+    source_id: str | None = None
 
     @property
     def adjusted(self) -> int:
@@ -1618,6 +1630,8 @@ class GainHonor(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         amount = self.adjusted
+        if amount < 0 and self._shielded(game):
+            return []
         rehonored = self._substituted_for(game) if amount > 0 else []
         if rehonored:
             for card in rehonored:
@@ -1626,6 +1640,17 @@ class GainHonor(Effect):
         if not ops.set_honor(game.table, self.seat, delta=amount):
             return []
         return [HonorChanged(self.seat, amount)]
+
+    def _shielded(self, game: GameState) -> bool:
+        """Whether the loss comes from a card ``seat`` controls while ``seat`` controls a card
+        that says it does not lose Honor from its own cards' effects."""
+        source = game.table.cards_by_id.get(self.source_id) if self.source_id else None
+        if source is None or source.owner is not self.seat:
+            return False
+        return any(
+            card.owner is self.seat and card.printed_id in HONOR_LOSS_SHIELDS
+            for card in game.table.battlefield.cards
+        )
 
     def _substituted_for(self, game: GameState) -> list[L5RCard]:
         """The seat's own dishonorable Personalities among ``personalities``, whose rehonoring

@@ -135,7 +135,7 @@ def _skeletal_troops_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Follower enters play, lose 2 Honor."""
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [GainHonor(ctx.card.owner, -SKELETAL_TROOPS_HONOR_LOSS)]
+    return [GainHonor(ctx.card.owner, -SKELETAL_TROOPS_HONOR_LOSS, source_id=ctx.card.id)]
 
 
 def _skeletal_troops_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

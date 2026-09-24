@@ -21,7 +21,7 @@ def _questionable_vassal_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Follower enters play, lose 1 Honor."""
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [GainHonor(ctx.card.owner, -VASSAL_HONOR_LOSS)]
+    return [GainHonor(ctx.card.owner, -VASSAL_HONOR_LOSS, source_id=ctx.card.id)]
 
 
 def _questionable_vassal_cost(game: GameState, source: L5RCard) -> list[Effect]:

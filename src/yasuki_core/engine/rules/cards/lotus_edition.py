@@ -76,7 +76,7 @@ def _resolve_hired_killer_target(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Destroy the target, then lose the Honor, in the order the card prints them."""
-    return [Destroy(chosen[0], seat), GainHonor(seat, -HONOR_LOST)]
+    return [Destroy(chosen[0], seat), GainHonor(seat, -HONOR_LOST, source_id=source_id)]
 
 
 register_ability(

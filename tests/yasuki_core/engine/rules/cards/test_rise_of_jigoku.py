@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as 
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.gold.production import effective_gold_production
-from yasuki_core.engine.rules.effects import Destroy, Discard
+from yasuki_core.engine.rules.effects import Destroy, Discard, GainHonor
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -61,6 +61,7 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1 = PlayerId.P1
+P2 = PlayerId.P2
 
 
 def _rural_market_game(wealth=1):
@@ -453,7 +454,7 @@ def test_backing_out_of_the_first_step_unwinds_it_too():
 # --- Mishime Sensei ---
 
 
-def _mishime_game(*, chi=3, stronghold_production=6):
+def _mishime_game(*, chi=3, stronghold_production=6, in_play=()):
     """P1's Mishime Sensei in play with a Personality to feed it and a Stronghold that can raise the
     five gold the ability charges."""
     state = TableState.empty_two_seat()
@@ -470,6 +471,8 @@ def _mishime_game(*, chi=3, stronghold_production=6):
         ),
     )
     put_in_play(state, personality("victim", force=1, chi=chi))
+    for card in in_play:
+        put_in_play(state, card)
     token_template(
         state,
         MISHIMES_ONI,
@@ -542,6 +545,24 @@ def test_mishime_is_withheld_when_the_seat_cannot_raise_five_gold():
     session = _mishime_game(stronghold_production=4)
 
     assert ActivateAbility("sensei") not in session.legal_actions(P1)
+
+
+@pytest.mark.parametrize(
+    ("source_owner", "lost"),
+    [(P1, 0), (P2, 2), (None, 2)],
+    ids=["own card", "opponent's card", "rulebook"],
+)
+def test_mishime_blocks_honor_loss_only_from_his_controllers_own_cards(source_owner, lost):
+    """Dying dishonorably and every other rulebook loss is no card's effect (CR, Dishonorable), so
+    it lands with a source of None."""
+    source = personality("source", owner=source_owner) if source_owner else None
+    source_id = source.id if source else None
+    session = _mishime_game(in_play=(source,) if source else ())
+    before = session.game.table.seats[P1].honor
+
+    resolve_effects(session.game, [GainHonor(P1, -2, source_id=source_id)])
+
+    assert session.game.table.seats[P1].honor == before - lost
 
 
 def test_mishime_does_not_target_a_bowed_personality():
