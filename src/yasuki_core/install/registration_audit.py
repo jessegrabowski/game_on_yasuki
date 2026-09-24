@@ -47,7 +47,10 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "interrupts": frozenset(registry._INTERRUPTS),
         "rulebook proxies": frozenset(proxies.RULEBOOK_PROXY_PRINTS),
         "triggers": frozenset(
-            card_id for by_card in triggers._TRIGGERS.values() for card_id in by_card
+            card_id
+            for by_zone in triggers._TRIGGERS.values()
+            for by_card in by_zone.values()
+            for card_id in by_card
         ),
     }
 
@@ -65,7 +68,8 @@ def card_keyed_data() -> dict[str, frozenset[str]]:
 
 
 def duplicate_registrations(
-    trigger_registry: dict[type, dict[str, list[triggers.Trigger]]] | None = None,
+    trigger_registry: dict[type, dict[CardLocation, dict[str, list[triggers.Trigger]]]]
+    | None = None,
 ) -> list[str]:
     """
     One human-readable line per card id whose trigger is registered more than once.
@@ -76,22 +80,24 @@ def duplicate_registrations(
 
     Parameters
     ----------
-    trigger_registry : dict mapping event type to a dict of card id to triggers, optional
-        Defaults to the engine's own trigger registry.
+    trigger_registry : dict, optional
+        Event type to a dict of :class:`~yasuki_core.engine.rules.vocabulary.locations.CardLocation`
+        to a dict of card id to its triggers. Defaults to the engine's own trigger registry.
     """
     if trigger_registry is None:
         trigger_registry = triggers._TRIGGERS
 
     problems = []
-    for event_type, by_card in sorted(trigger_registry.items(), key=lambda item: item[0].__name__):
-        for card_id, hooks in sorted(by_card.items()):
-            names = [hook.__qualname__ for hook in hooks]
-            repeated = sorted({name for name in names if names.count(name) > 1})
-            for name in repeated:
-                problems.append(
-                    f"triggers: {card_id} registers {name} for {event_type.__name__} "
-                    f"{names.count(name)} times"
-                )
+    for event_type, by_zone in sorted(trigger_registry.items(), key=lambda item: item[0].__name__):
+        for location, by_card in sorted(by_zone.items(), key=lambda item: item[0].value):
+            for card_id, hooks in sorted(by_card.items()):
+                names = [hook.__qualname__ for hook in hooks]
+                repeated = sorted({name for name in names if names.count(name) > 1})
+                for name in repeated:
+                    problems.append(
+                        f"triggers: {card_id} registers {name} for {event_type.__name__} "
+                        f"{names.count(name)} times in the {location.value}"
+                    )
     return problems
 
 

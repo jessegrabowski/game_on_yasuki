@@ -15,7 +15,7 @@ from yasuki_core.install.registration_audit import (
     unregistered_back_faces,
     unregistered_card_ids,
 )
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -122,23 +122,26 @@ def another_trigger(ctx):
 def test_a_trigger_registered_twice_for_one_card_is_reported():
     # _TRIGGERS appends rather than overwrites, so the duplicate does not shadow the original and
     # both fire, and the card's effect happens twice.
-    problems = duplicate_registrations({EnteredPlay: {"millet_farm": [a_trigger, a_trigger]}})
+    registry = {EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": [a_trigger, a_trigger]}}}
 
-    assert problems == [
-        "triggers: millet_farm registers a_trigger for EnteredPlay 2 times",
+    assert duplicate_registrations(registry) == [
+        "triggers: millet_farm registers a_trigger for EnteredPlay 2 times in the battlefield",
     ]
 
 
 def test_two_different_triggers_on_one_card_are_legitimate():
     # A card may react to the same event in two ways; only the *same* handler twice is the defect.
-    assert (
-        duplicate_registrations({EnteredPlay: {"millet_farm": [a_trigger, another_trigger]}}) == []
-    )
+    registry = {
+        EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": [a_trigger, another_trigger]}}
+    }
+
+    assert duplicate_registrations(registry) == []
 
 
 def test_the_same_trigger_on_two_cards_is_legitimate():
     # Shared helpers are registered for many cards on purpose.
-    registry = {EnteredPlay: {"millet_farm": [a_trigger], "modest_farm": [a_trigger]}}
+    in_play = {"millet_farm": [a_trigger], "modest_farm": [a_trigger]}
+    registry = {EnteredPlay: {CardLocation.BATTLEFIELD: in_play}}
 
     assert duplicate_registrations(registry) == []
 
@@ -178,7 +181,9 @@ def test_the_cli_writes_each_problem_to_stderr_and_fails(capsys):
     # Both kinds of problem, because the CLI is where they are joined and a dropped half would
     # otherwise go unnoticed while the engine happens to be clean.
     registries = {"abilities": frozenset({"milet_farm"}), "triggers": frozenset({"rice_frm"})}
-    trigger_registry = {EnteredPlay: {"millet_farm": [a_trigger, a_trigger]}}
+    trigger_registry = {
+        EnteredPlay: {CardLocation.BATTLEFIELD: {"millet_farm": [a_trigger, a_trigger]}}
+    }
     expected = unregistered_card_ids(registries) + duplicate_registrations(trigger_registry)
 
     assert main(registries, trigger_registry) == 1

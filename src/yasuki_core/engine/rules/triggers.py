@@ -23,7 +23,8 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     LobbyModifier,
     ProvinceModifier,
 )
-from yasuki_core.engine.table import ZoneRole
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
 
@@ -55,14 +56,35 @@ Trigger = Callable[[TriggerContext], list[Effect]]
 
 # event type -> printed_id -> triggers. Populated by the @on decorators below, on import; kept
 # grouped by printed_id so collection is a lookup, not a rebuild per event.
-_TRIGGERS: dict[type, dict[str, list[Trigger]]] = {}
+# event type -> where the card must be -> printed id -> its triggers. A zone nothing registers for
+# is never walked, so a hand is read only for an event some card in hand answers.
+_TRIGGERS: dict[type, dict[CardLocation, dict[str, list[Trigger]]]] = {}
 
 
-def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
-    """Register the decorated function as ``printed_id``'s trigger for ``event_type``."""
+def on(
+    event_type: type,
+    printed_id: str,
+    *,
+    where: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,),
+) -> Callable[[Trigger], Trigger]:
+    """Register the decorated function as ``printed_id``'s trigger for ``event_type``.
+
+    Parameters
+    ----------
+    event_type : type
+        The event the trigger answers.
+    printed_id : str
+        The card's printed id.
+    where : tuple of :class:`~yasuki_core.engine.rules.vocabulary.locations.CardLocation`, optional
+        Where the card must be for the trigger to fire. A card in hand answers only when its
+        registration says so, as a Ring whose text reads "Play after X" does. Default the
+        battlefield alone.
+    """
 
     def register(trigger: Trigger) -> Trigger:
-        _TRIGGERS.setdefault(event_type, {}).setdefault(printed_id, []).append(trigger)
+        by_zone = _TRIGGERS.setdefault(event_type, {})
+        for location in where:
+            by_zone.setdefault(location, {}).setdefault(printed_id, []).append(trigger)
         return trigger
 
     return register
@@ -172,18 +194,27 @@ def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]
 
 
 def _card_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
-    by_id = _TRIGGERS.get(type(event))
-    if not by_id:
+    by_zone = _TRIGGERS.get(type(event))
+    if not by_zone:
         return []
+    in_play = by_zone.get(CardLocation.BATTLEFIELD, {})
     firing = [
         (card, trigger)
         for card in game.table.battlefield.cards
-        for trigger in by_id.get(card.printed_id, ())
+        for trigger in in_play.get(card.printed_id, ())
     ]
     # A departed card answers only for its own leaving, and for nothing that happens after.
     departed = _departed_subject(game, event)
     if departed is not None:
-        firing.extend((departed, trigger) for trigger in by_id.get(departed.printed_id, ()))
+        firing.extend((departed, trigger) for trigger in in_play.get(departed.printed_id, ()))
+    in_hand = by_zone.get(CardLocation.HAND)
+    if in_hand:
+        firing.extend(
+            (card, trigger)
+            for seat in game.table.seats
+            for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
+            for trigger in in_hand.get(card.printed_id, ())
+        )
     return firing
 
 

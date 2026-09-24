@@ -99,7 +99,9 @@ moment your card names is not one of them, it needs a new event in the engine, w
 change rather than a card change.
 
 A card also answers its own `Destroyed` and `CardDiscarded` even though it has already left the
-battlefield. Everything else only fires for cards in play.
+battlefield. Everything else fires for cards in play, and for a card in hand only when its
+registration says so, as `@on(ActionResolved, id, where=(CardLocation.HAND,))` does for a Ring
+whose text reads "Play after X".
 
 ## Whose action, and where
 

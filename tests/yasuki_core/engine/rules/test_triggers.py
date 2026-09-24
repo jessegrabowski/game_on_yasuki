@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, ActionRound, RoundKind
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    Confirm,
     ChooseCards,
     DecisionResponse,
     DiscardToHandSize,
@@ -17,7 +18,10 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     HonorChanged,
     TurnStarted,
 )
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
+from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.effects import (
+    Ask,
     AdjustCounter,
     ApplyEffects,
     Choose,
@@ -42,13 +46,14 @@ from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, PersonalityPrint
 
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
     province_card,
     put_in_play,
+    register,
     two_seat_game,
 )
 
@@ -706,3 +711,80 @@ def test_an_event_inside_an_interrupt_or_response_round_is_not_the_actions(kind)
 
     assert game.table.seats[PlayerId.P1].honor == 1
     assert game.action_events == []
+
+
+@choice_resolver("hand_probe_answer")
+def _resolve_hand_probe_answer(game, source_id, chosen, seat):
+    return []
+
+
+def _held(game, card_id: str, owner: PlayerId = PlayerId.P1) -> L5RCard:
+    card = L5RCard.of(
+        FatePrint, id=card_id, name="Probe", printed_id="hand_probe", side=Side.FATE, owner=owner
+    )
+    game.table.zones[ZoneKey(owner, ZoneRole.HAND)].add(register(game.table, card))
+    return card
+
+
+def test_a_trigger_registered_for_the_hand_fires_for_a_card_in_hand(reacting):
+    game = two_seat_game()
+    _held(game, "held")
+    put_in_play(game, holding("played", printed_id="hand_probe"))
+    seen: list[str] = []
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: seen.append(ctx.card.id) or [],
+        where=(CardLocation.HAND,),
+    )
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert seen == ["held"]
+
+
+def test_a_registration_for_both_zones_fires_in_each(reacting):
+    game = two_seat_game()
+    _held(game, "held")
+    put_in_play(game, holding("played", printed_id="hand_probe"))
+    seen: list[str] = []
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: seen.append(ctx.card.id) or [],
+        where=(CardLocation.BATTLEFIELD, CardLocation.HAND),
+    )
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert sorted(seen) == ["held", "played"]
+
+
+def test_a_battlefield_registration_does_not_hear_from_hand(reacting):
+    game = two_seat_game()
+    _held(game, "held")
+    seen: list[str] = []
+    reacting(TurnStarted, "hand_probe", lambda ctx: seen.append(ctx.card.id) or [])
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert seen == []
+
+
+def test_a_hand_triggers_question_reaches_only_the_cards_owner(reacting):
+    game = two_seat_game()
+    _held(game, "held")
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: [
+            Ask(ctx.card.owner, "Put it into play?", "hand_probe_answer", source_id=ctx.card.id)
+        ],
+        where=(CardLocation.HAND,),
+    )
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert isinstance(game.pending, Confirm) and game.pending.seat is PlayerId.P1
+    assert project(game, PlayerId.P1).pending == game.pending
+    assert project(game, PlayerId.P2).pending is None
