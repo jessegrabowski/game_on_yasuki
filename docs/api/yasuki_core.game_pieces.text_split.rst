@@ -1,7 +1,7 @@
-yasuki_core.install.text_split
-==============================
+yasuki_core.game_pieces.text_split
+==================================
 
-.. currentmodule:: yasuki_core.install.text_split
+.. currentmodule:: yasuki_core.game_pieces.text_split
 
 .. rubric:: Classes
 
@@ -18,6 +18,6 @@ yasuki_core.install.text_split
     split_text_box
     strip_markup
 
-.. automodule:: yasuki_core.install.text_split
+.. automodule:: yasuki_core.game_pieces.text_split
     :members:
     :undoc-members:

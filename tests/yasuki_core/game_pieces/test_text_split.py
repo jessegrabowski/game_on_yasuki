@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.install.text_split import ability_keywords, split_text_box, strip_markup
+from yasuki_core.game_pieces.text_split import ability_keywords, split_text_box, strip_markup
 
 
 def traits(text):

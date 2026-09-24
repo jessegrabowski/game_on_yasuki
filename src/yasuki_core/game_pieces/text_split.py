@@ -1,7 +1,7 @@
 import re
 from dataclasses import dataclass
 
-from yasuki_core.install.reminders import is_reminder
+from yasuki_core.game_pieces.reminders import is_reminder
 
 # The designators are a closed set; the CR names them and says they are not keywords. Everything
 # else in an ability's bold prefix is an ability keyword, which the CR inherits up to the card:
