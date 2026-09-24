@@ -2,6 +2,10 @@ import pytest
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.model import itself
+from yasuki_core.engine.rules.vocabulary.decisions import Confirm
+from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.abilities.model import Ability
@@ -970,3 +974,37 @@ def test_ring_of_earth_pitched_from_hand_negates_the_move_and_is_discarded():
         table = session.game.table
         assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
         assert "earth" in _fate_discard(session, P2)
+
+
+FAVOR_PROBE = "favor_probe_onyx"
+register_ability(
+    FAVOR_PROBE,
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Favor Open: nothing",
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+        repeatable=True,
+    ),
+)
+
+
+def _air_in_hand_game() -> EngineSession:
+    return _ring_game(
+        holding("favor", printed_id=FAVOR_PROBE, keywords=(keywords.FAVOR,)),
+        held=(_ring("air", "ring_of_air"),),
+    )
+
+
+def test_ring_of_air_is_offered_after_the_second_favor_action_of_the_turn():
+    session = _air_in_hand_game()
+
+    session.act(P1, ActivateAbility("favor"))
+    assert session.game.pending is None
+    session.act(P2, Pass())
+    session.act(P1, ActivateAbility("favor"))
+
+    assert isinstance(session.game.pending, Confirm) and session.game.pending.seat is P1
+    assert project(session.game, P2).pending is None

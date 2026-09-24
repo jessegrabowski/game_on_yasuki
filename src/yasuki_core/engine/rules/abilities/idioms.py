@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
+from yasuki_core.engine.rules.board.queries import favor_actions_this_turn
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
@@ -22,6 +23,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
 from yasuki_core.ruleset import RingEntry, ring_entry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
@@ -215,6 +217,21 @@ def register_trait_entry(
         return [Ask(card.owner, question, TRAIT_ENTRY, subjects=(card.id,), source_id=card.id)]
 
     on(event_type, printed_id, where=(CardLocation.HAND,), ruleset=ruleset)(entry)
+
+
+def resolved_favor_actions(at_least: int) -> Callable[[TriggerContext], bool]:
+    """The guard for "Play after you resolve ``at_least`` or more Favor actions in one turn": the
+    :class:`~.ActionResolved` firing is the owner's Favor action, and it brings the owner's count
+    this turn to ``at_least``."""
+
+    def guard(ctx: TriggerContext) -> bool:
+        event = ctx.event
+        if not isinstance(event, ActionResolved) or not event.favor:
+            return False
+        owner = ctx.card.owner
+        return event.seat is owner and favor_actions_this_turn(ctx.game, owner) >= at_least
+
+    return guard
 
 
 def register_event_entry(
