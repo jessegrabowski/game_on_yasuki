@@ -7365,7 +7365,8 @@ cards:
   keywords:
   - Imperial
   - Retainer
-  text: 'You have a +5 Lobby Bonus. Open, :bow: Straighten a target Personality who Lobbied this turn.'
+  text: 'You have a +5 Lobby Bonus.<br><b>Open, :bow::</b> Straighten a target Personality who Lobbied
+    this turn.'
   gold_cost: 1
   gold_production: 1
   legality:
