@@ -106,6 +106,7 @@ yasuki_core
     yasuki_core.engine.rules.vocabulary.actions <yasuki_core.engine.rules.vocabulary.actions>
     yasuki_core.engine.rules.vocabulary.decisions <yasuki_core.engine.rules.vocabulary.decisions>
     yasuki_core.engine.rules.vocabulary.game_events <yasuki_core.engine.rules.vocabulary.game_events>
+    yasuki_core.engine.rules.vocabulary.locations <yasuki_core.engine.rules.vocabulary.locations>
     yasuki_core.engine.rules.vocabulary.looks <yasuki_core.engine.rules.vocabulary.looks>
     yasuki_core.engine.rules.vocabulary.modifiers <yasuki_core.engine.rules.vocabulary.modifiers>
     yasuki_core.engine.rules.vocabulary.segments <yasuki_core.engine.rules.vocabulary.segments>

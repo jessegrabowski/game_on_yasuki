@@ -1827,10 +1827,14 @@ class ApplyEffects:
         The effects to resolve, in order.
     interruptible : bool, optional
         Whether the effects are an action's own, open to the Interrupt step. Default False.
+    triggered : bool, optional
+        Whether the effects are a trigger's, so a decision among them is the trigger's question and
+        cannot be backed out of. Default False.
     """
 
     effects: tuple[Effect, ...]
     interruptible: bool = False
+    triggered: bool = False
 
     def resume(self, game: GameState) -> None:
         # The cascade imports this module, so the one module this item drives cannot be imported at
@@ -1840,7 +1844,7 @@ class ApplyEffects:
         if self.interruptible:
             triggers.resolve_action_effects(game, list(self.effects))
         else:
-            triggers.resolve_effects(game, list(self.effects))
+            triggers.resolve_effects(game, list(self.effects), triggered=self.triggered)
 
 
 @dataclass(frozen=True, slots=True)

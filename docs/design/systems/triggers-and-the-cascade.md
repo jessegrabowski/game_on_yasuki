@@ -43,8 +43,10 @@ engine order them, settle the rules between them, and replay the game from its i
 
 A seat may control three copies of {card}`Rural Market`, all sharing a `printed_id`. Collection
 walks the battlefield and gathers every trigger registered for the event, so all three fire and
-each decides for itself whether the event was about it. `_card_triggers`, the half of `_collect`
-that gathers the cards' triggers:
+each decides for itself whether the event was about it. The registry is keyed by where the card
+must be, and a hand is walked only for an event some card registers to answer from hand, so the
+common case costs nothing extra. `_card_triggers`, the half of `_collect` that gathers the cards'
+triggers:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/triggers.py
 :pyobject: _card_triggers

@@ -1,9 +1,12 @@
 import collections
+from typing import NamedTuple
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    WINDOWS,
+    ActionResolved,
     CardDiscarded,
     Destroyed,
     GameEvent,
@@ -23,7 +26,9 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     LobbyModifier,
     ProvinceModifier,
 )
-from yasuki_core.engine.table import ZoneRole
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
+from yasuki_core.ruleset import in_force
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
 
@@ -53,16 +58,51 @@ class TriggerContext:
 
 Trigger = Callable[[TriggerContext], list[Effect]]
 
-# event type -> printed_id -> triggers. Populated by the @on decorators below, on import; kept
-# grouped by printed_id so collection is a lookup, not a rebuild per event.
-_TRIGGERS: dict[type, dict[str, list[Trigger]]] = {}
+
+class Registration(NamedTuple):
+    """A trigger as registered: the function, and the one ruleset it is read under, or None for
+    every arc."""
+
+    trigger: Trigger
+    ruleset: str | None
 
 
-def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
-    """Register the decorated function as ``printed_id``'s trigger for ``event_type``."""
+# event type -> where the card must be -> printed id -> its registrations. Populated by the @on
+# decorators below, on import, and grouped by printed id so collection is a lookup rather than a
+# rebuild per event. A zone nothing registers for is never walked, so a hand is read only for an
+# event some card in hand answers.
+_TRIGGERS: dict[type, dict[CardLocation, dict[str, list[Registration]]]] = {}
+
+
+def on(
+    event_type: type,
+    printed_id: str,
+    *,
+    where: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,),
+    ruleset: str | None = None,
+) -> Callable[[Trigger], Trigger]:
+    """Register the decorated function as ``printed_id``'s trigger for ``event_type``.
+
+    Parameters
+    ----------
+    event_type : type
+        The event the trigger answers.
+    printed_id : str
+        The card's printed id.
+    where : tuple of :class:`~yasuki_core.engine.rules.vocabulary.locations.CardLocation`, optional
+        Where the card must be for the trigger to fire. A card in hand answers only when its
+        registration says so, as a Ring whose text reads "Play after X" does. Default the
+        battlefield alone.
+    ruleset : str, optional
+        The name of the one ruleset the trigger is in force under, for a card whose text differs
+        between arcs. Default None, for a text every arc reads.
+    """
 
     def register(trigger: Trigger) -> Trigger:
-        _TRIGGERS.setdefault(event_type, {}).setdefault(printed_id, []).append(trigger)
+        by_zone = _TRIGGERS.setdefault(event_type, {})
+        registered = Registration(trigger, ruleset)
+        for location in where:
+            by_zone.setdefault(location, {}).setdefault(printed_id, []).append(registered)
         return trigger
 
     return register
@@ -172,19 +212,33 @@ def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]
 
 
 def _card_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
-    by_id = _TRIGGERS.get(type(event))
-    if not by_id:
+    by_zone = _TRIGGERS.get(type(event))
+    if not by_zone:
         return []
+    in_play = by_zone.get(CardLocation.BATTLEFIELD, {})
     firing = [
         (card, trigger)
         for card in game.table.battlefield.cards
-        for trigger in by_id.get(card.printed_id, ())
+        for trigger in _read_triggers(in_play, card)
     ]
     # A departed card answers only for its own leaving, and for nothing that happens after.
     departed = _departed_subject(game, event)
     if departed is not None:
-        firing.extend((departed, trigger) for trigger in by_id.get(departed.printed_id, ()))
+        firing.extend((departed, trigger) for trigger in _read_triggers(in_play, departed))
+    in_hand = by_zone.get(CardLocation.HAND)
+    if in_hand:
+        firing.extend(
+            (card, trigger)
+            for seat in game.table.seats
+            for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
+            for trigger in _read_triggers(in_hand, card)
+        )
     return firing
+
+
+def _read_triggers(by_card: dict[str, list[Registration]], card: L5RCard) -> list[Trigger]:
+    """``card``'s registered triggers that the active ruleset reads."""
+    return [held.trigger for held in by_card.get(card.printed_id, ()) if in_force(held)]
 
 
 def _named_subject(game: GameState, event: GameEvent) -> L5RCard | None:
@@ -206,6 +260,7 @@ def _advance(
     queue: list[GameEvent],
     *,
     interruptible: bool,
+    triggered: bool = False,
 ) -> None:
     """Run the effect-and-trigger cascade to a fixpoint from an arbitrary resume point.
 
@@ -223,7 +278,13 @@ def _advance(
     :class:`~.InterruptWindow` collected before it is applied, and resolves as what the Interrupt
     made of it. What a trigger returns is a trait's or the rulebook's, never the action's, so it
     is applied as returned, and a ``Then`` among the action's effects carries the flag to the
-    deferred step."""
+    deferred step.
+
+    ``triggered`` says the effects in hand are a trigger's, so a decision among them is marked as
+    the trigger's question, one that cannot be backed out of. The machine sets it itself once it
+    fires a trigger for an event that has happened, and a stash or a ``Then`` carries it on to the
+    effects that follow. A trigger firing in one of the ``WINDOWS`` a step opens before committing
+    asks on the step's behalf, and its question stays the step's own."""
     resolved = 0
     firing = list(firing)
     while True:
@@ -232,7 +293,9 @@ def _advance(
             effect = pending.pop(0)
             if isinstance(effect, Then):
                 _trace.append(f"    {effect.describe()}")
-                game.stack.append(ApplyEffects(effect.effects, interruptible=interruptible))
+                game.stack.append(
+                    ApplyEffects(effect.effects, interruptible=interruptible, triggered=triggered)
+                )
                 continue
             if interruptible and not isinstance(effect, InterruptingEffect):
                 effect = _modified(game, effect)
@@ -240,8 +303,9 @@ def _advance(
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
-                _stash(game, tuple(pending), firing, event, queue, interruptible)
-                game.pending = effect.request(game)
+                _stash(game, tuple(pending), firing, event, queue, interruptible, triggered)
+                request = effect.request(game)
+                game.pending = replace(request, triggered=True) if triggered else request
                 return
             _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
@@ -255,6 +319,7 @@ def _advance(
             card, trigger = firing.pop(0)
             _trace.append(f"  {card.printed_id} ({card.id}) reacts")
             effects = tuple(trigger(TriggerContext(game, card, event)))
+            triggered = type(event) not in WINDOWS
             continue
         if not queue:
             # The walk can be entered on a board something else already made illegal, and with
@@ -268,9 +333,12 @@ def _advance(
                 f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
             )
         event = queue.pop(0)
+        game.turn_events += (event,)
         # Kept for the Response Step, which asks what the action it follows actually did. What an
-        # Interrupt or a Response does inside its own round is its doing, not the action's.
-        if game.round.kind not in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+        # Interrupt or a Response does inside its own round is its doing, not the action's, and
+        # the announcement that the action resolved is about it rather than by it.
+        inside_a_step = game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE)
+        if not inside_a_step and not isinstance(event, ActionResolved):
             game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
@@ -412,6 +480,9 @@ class ResumeCascade:
     interruptible : bool, optional
         Whether the effects still to apply are an action's own, open to the Interrupt step.
         Default False.
+    triggered : bool, optional
+        Whether the effects still to apply are a trigger's, so a decision among them is the
+        trigger's question. Default False.
     """
 
     effects: tuple[Effect, ...]
@@ -419,6 +490,7 @@ class ResumeCascade:
     event: GameEvent | None
     queue: tuple[GameEvent, ...]
     interruptible: bool = False
+    triggered: bool = False
 
     def resume(self, game: GameState) -> None:
         # An interrupting effect whose answer produces no effects of its own, a payment, say, leaves
@@ -434,9 +506,12 @@ def _stash(
     event: GameEvent | None,
     queue: list[GameEvent],
     interruptible: bool,
+    triggered: bool,
 ) -> None:
     remaining = tuple((card.id, trigger) for card, trigger in firing)
-    game.stack.append(ResumeCascade(effects, remaining, event, tuple(queue), interruptible))
+    game.stack.append(
+        ResumeCascade(effects, remaining, event, tuple(queue), interruptible, triggered)
+    )
 
 
 def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:
@@ -455,6 +530,7 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
         item.event,
         list(item.queue),
         interruptible=item.interruptible,
+        triggered=item.triggered,
     )
 
 
@@ -514,16 +590,17 @@ def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
     _advance(game, (), [], None, list(events), interruptible=False)
 
 
-def resolve_effects(game: GameState, effects: list[Effect]) -> None:
+def resolve_effects(game: GameState, effects: list[Effect], *, triggered: bool = False) -> None:
     """Apply ``effects`` and run the derived-event cascade the same way :func:`~.fire` does, so a
     triggered reaction to those effects still resolves. The effects are not an action's own, so
     none is held at the Interrupt step: a cost, a rulebook procedure's effects, a trait's, and an
-    Interrupt's own effects all come through here.
+    Interrupt's own effects all come through here. ``triggered`` says they are a trigger's, deferred
+    by a ``Then``, so a decision among them is the trigger's question.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "resolve_effects")
-    _advance(game, tuple(effects), [], None, [], interruptible=False)
+    _advance(game, tuple(effects), [], None, [], interruptible=False, triggered=triggered)
 
 
 def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:

@@ -149,8 +149,13 @@ the card sits in the first printing among that ruleset's arcs: the Onyx Edition 
 `shattered_empire.py` under `ruleset.SHATTERED_EMPIRE.name`. How a Ring enters play is the
 card's own clause. The Onyx {card}`Ring of the Void` prints an action, which is `register_entry`
 under a `Limited` timing with the "two or fewer Rings" condition and the hand discard as extra
-effects. Every other Ring prints "Play after X" or "Play if X", which nothing lets a card in hand
-answer yet, so its entry has no handler and the comment above each says what the clause waits on.
+effects. A Ring printing "Play after X" names an event, and {func}`~.register_trait_entry` registers a
+trigger from hand for it: when the event fires and the guard holds, the owner alone is asked
+whether to put the Ring into play, and declining leaves it in hand for the next time the
+condition is fulfilled (CR, Ring). {card}`Ring of Air` reads `ActionResolved` with
+{func}`~.favor_actions_this_turn` as its guard. The Rings whose "after X" names a battle or a
+duel, and the Void's "Play if", still have no handler, and the comment above each says what the
+clause waits on.
 
 ## Terrain, which attaches to a battlefield
 

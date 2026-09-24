@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import claim_once_per_turn
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS, TriggerContext, _TRIGGERS
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 
@@ -152,8 +153,10 @@ def _window_effects(game, producer):
     event = ProducingGold(producer.id, producer.owner)
     return [
         effect
-        for trigger in _TRIGGERS.get(ProducingGold, {}).get(producer.printed_id, [])
-        for effect in trigger(TriggerContext(game, producer, event))
+        for registered in _TRIGGERS[ProducingGold][CardLocation.BATTLEFIELD].get(
+            producer.printed_id, []
+        )
+        for effect in registered.trigger(TriggerContext(game, producer, event))
     ]
 
 

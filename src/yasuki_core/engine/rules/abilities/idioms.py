@@ -7,10 +7,12 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
+from yasuki_core.engine.rules.board.queries import favor_actions_this_turn
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Ask,
     AskOption,
     Discard,
     Effect,
@@ -20,7 +22,9 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
+from yasuki_core.ruleset import RingEntry, ring_entry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
 
@@ -162,6 +166,72 @@ def register_ring(
                 ruleset=ruleset,
             ),
         )
+
+
+# The key of the answer that puts a "Play after X" Ring into play.
+TRAIT_ENTRY = "trait_entry"
+
+
+@choice_resolver(TRAIT_ENTRY)
+def _resolve_trait_entry(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [PutIntoPlay(card_id) for card_id in chosen]
+
+
+def register_trait_entry(
+    printed_id: str,
+    event_type: type,
+    guard: Callable[[TriggerContext], bool],
+    *,
+    ruleset: str | None = None,
+) -> None:
+    """Register ``printed_id``'s "Play after X" trait: from hand, when ``event_type`` fires and
+    ``guard`` holds, its owner is asked whether to put it into play.
+
+    The CR's Ring rule: the card may enter immediately after its condition is fulfilled, this may
+    not be delayed, and the condition may be fulfilled more than once. So the question is asked
+    each time the event fires with the guard holding, and declining leaves the card in hand for
+    the next time.
+
+    Parameters
+    ----------
+    printed_id : str
+        The card's printed id.
+    event_type : type
+        The event whose resolution the text names.
+    guard : callable
+        Maps the trigger context to whether this firing fulfills the condition.
+    ruleset : str, optional
+        The name of the one ruleset the trait is in force under, for a card whose text differs
+        between arcs. Default None, for a text every arc reads.
+    """
+
+    def entry(ctx: TriggerContext) -> list[Effect]:
+        if ring_entry() is not RingEntry.IMMEDIATE:
+            raise NotImplementedError(f"{ring_entry().name} Ring entry is not implemented")
+        card = ctx.card
+        if not guard(ctx) or not copy_may_enter(ctx.game, card.owner, card):
+            return []
+        question = f"Put {card.name} into play?"
+        return [Ask(card.owner, question, TRAIT_ENTRY, subjects=(card.id,), source_id=card.id)]
+
+    on(event_type, printed_id, where=(CardLocation.HAND,), ruleset=ruleset)(entry)
+
+
+def resolved_favor_actions(at_least: int) -> Callable[[TriggerContext], bool]:
+    """The guard for "Play after you resolve ``at_least`` or more Favor actions in one turn": the
+    :class:`~.ActionResolved` firing is the owner's Favor action, and it brings the owner's count
+    this turn to ``at_least``."""
+
+    def guard(ctx: TriggerContext) -> bool:
+        event = ctx.event
+        if not isinstance(event, ActionResolved) or not event.favor:
+            return False
+        owner = ctx.card.owner
+        return event.seat is owner and favor_actions_this_turn(ctx.game, owner) >= at_least
+
+    return guard
 
 
 def register_event_entry(

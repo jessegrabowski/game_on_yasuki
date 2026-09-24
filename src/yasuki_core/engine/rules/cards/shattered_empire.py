@@ -1,7 +1,13 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import plays_clan, register_entry, register_ring
+from yasuki_core.engine.rules.abilities.idioms import (
+    plays_clan,
+    register_entry,
+    register_ring,
+    register_trait_entry,
+    resolved_favor_actions,
+)
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
     CardLocation,
@@ -65,7 +71,11 @@ from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
-from yasuki_core.engine.rules.vocabulary.game_events import FavorDiscarded, HonorChanged
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    ActionResolved,
+    FavorDiscarded,
+    HonorChanged,
+)
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
@@ -287,8 +297,10 @@ register_ability(
 
 # --- Ring of Air ---
 
-# "Play after you resolve two or more Favor actions in one turn." Nothing lets a card in hand
-# answer an action resolving yet, so the entry has no handler.
+# "Play after you resolve two or more Favor actions in one turn."
+register_trait_entry(
+    "ring_of_air", ActionResolved, resolved_favor_actions(2), ruleset=ruleset.SHATTERED_EMPIRE.name
+)
 
 
 def _ring_of_air_unit(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:

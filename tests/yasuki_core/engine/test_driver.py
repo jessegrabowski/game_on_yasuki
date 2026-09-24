@@ -12,6 +12,7 @@ from yasuki_core.engine.replay.game_log import Act, Answer
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine import driver
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.effects import Choose
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.vocabulary.game_events import Straightened
@@ -227,7 +228,7 @@ def test_the_observer_sees_a_turn_only_once_its_opening_has_resolved():
     try:
         play_game(session, _passing(), turn_limit=2, observer=Watcher())
     finally:
-        triggers._TRIGGERS[Straightened].pop("driver_pause", None)
+        triggers._TRIGGERS[Straightened][CardLocation.BATTLEFIELD].pop("driver_pause", None)
 
     assert revealed_by_turn[2] is True
 

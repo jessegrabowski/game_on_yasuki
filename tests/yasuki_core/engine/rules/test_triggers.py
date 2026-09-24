@@ -1,10 +1,12 @@
 import pytest
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, ActionRound, RoundKind
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    Confirm,
     ChooseCards,
     DecisionResponse,
     DiscardToHandSize,
@@ -15,9 +17,13 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     EnteredPlay,
     HonorChanged,
+    ProducingGold,
     TurnStarted,
 )
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
+from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.effects import (
+    Ask,
     AdjustCounter,
     ApplyEffects,
     Choose,
@@ -25,6 +31,7 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     GainHonor,
     IgnoreHonorRequirements,
+    Then,
 )
 from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
@@ -42,13 +49,14 @@ from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, PersonalityPrint
 
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
     province_card,
     put_in_play,
+    register,
     two_seat_game,
 )
 
@@ -570,6 +578,76 @@ def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
     assert game.stack == []
 
 
+def test_a_triggers_question_is_marked_as_the_triggers_own():
+    game = two_seat_game()
+    wheat = _wheat_farm(game)
+    _keyworded_farm(game, card_id="P1-other-farm")
+
+    fire(game, EnteredPlay(wheat.id))
+
+    assert game.pending.triggered
+
+
+def test_a_question_raised_outside_a_trigger_is_not_marked():
+    game = two_seat_game()
+    resolve_effects(game, [Choose(PlayerId.P1, (), 0, 0, "test_sandwich", None)])
+
+    assert not game.pending.triggered
+
+
+def test_a_question_asked_in_a_producers_window_is_not_marked(reacting):
+    # ProducingGold opens a window before the bow: the payment step's own question, not a reaction.
+    game = two_seat_game()
+    producer = holding("P1-mine", printed_id="window_probe")
+    put_in_play(game, producer)
+    reacting(
+        ProducingGold,
+        "window_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id)],
+    )
+
+    fire(game, ProducingGold(producer.id, PlayerId.P1))
+
+    assert isinstance(game.pending, ChooseCards) and not game.pending.triggered
+
+
+def test_the_mark_follows_a_triggers_effects_through_a_then(reacting):
+    game = two_seat_game()
+    asker = holding("P1-later", printed_id="then_probe")
+    put_in_play(game, asker)
+    reacting(
+        EnteredPlay,
+        "then_probe",
+        lambda ctx: [Then((Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),))],
+    )
+
+    fire(game, EnteredPlay(asker.id))
+    sequence.run_stack(game)
+
+    assert isinstance(game.pending, ChooseCards) and game.pending.triggered
+
+
+# A test-only trigger asking twice, so the second question is raised from the stash the first
+# left, not from the trigger's own effects.
+@on(EnteredPlay, "test_two_questions")
+def _two_questions(ctx):
+    return [
+        Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),
+        Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),
+    ]
+
+
+def test_the_mark_follows_a_triggers_effects_through_the_stash():
+    game = two_seat_game()
+    asker = holding("P1-asker", printed_id="test_two_questions", name="Asker", owner=PlayerId.P1)
+    put_in_play(game, asker)
+
+    fire(game, EnteredPlay(asker.id))
+    action_sequence.submit(game, DecisionResponse(()))
+
+    assert isinstance(game.pending, ChooseCards) and game.pending.triggered
+
+
 def test_effects_after_a_choice_in_the_same_trigger_still_resolve():
     game = two_seat_game()
     sandwich = holding(
@@ -706,3 +784,104 @@ def test_an_event_inside_an_interrupt_or_response_round_is_not_the_actions(kind)
 
     assert game.table.seats[PlayerId.P1].honor == 1
     assert game.action_events == []
+
+
+@choice_resolver("hand_probe_answer")
+def _resolve_hand_probe_answer(game, source_id, chosen, seat):
+    return []
+
+
+def _held(game, card_id: str, owner: PlayerId = PlayerId.P1) -> L5RCard:
+    card = L5RCard.of(
+        FatePrint, id=card_id, name="Probe", printed_id="hand_probe", side=Side.FATE, owner=owner
+    )
+    game.table.zones[ZoneKey(owner, ZoneRole.HAND)].add(register(game.table, card))
+    return card
+
+
+def test_a_trigger_registered_for_the_hand_fires_for_a_card_in_hand(reacting):
+    game = two_seat_game()
+    _held(game, "held")
+    put_in_play(game, holding("played", printed_id="hand_probe"))
+    seen: list[str] = []
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: seen.append(ctx.card.id) or [],
+        where=(CardLocation.HAND,),
+    )
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert seen == ["held"]
+
+
+def test_a_registration_for_both_zones_fires_in_each(reacting):
+    game = two_seat_game()
+    _held(game, "held")
+    put_in_play(game, holding("played", printed_id="hand_probe"))
+    seen: list[str] = []
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: seen.append(ctx.card.id) or [],
+        where=(CardLocation.BATTLEFIELD, CardLocation.HAND),
+    )
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert sorted(seen) == ["held", "played"]
+
+
+def test_a_battlefield_registration_does_not_hear_from_hand(reacting):
+    game = two_seat_game()
+    _held(game, "held")
+    seen: list[str] = []
+    reacting(TurnStarted, "hand_probe", lambda ctx: seen.append(ctx.card.id) or [])
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert seen == []
+
+
+def test_a_hand_triggers_question_reaches_only_the_cards_owner(reacting):
+    game = two_seat_game()
+    _held(game, "held")
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: [
+            Ask(ctx.card.owner, "Put it into play?", "hand_probe_answer", source_id=ctx.card.id)
+        ],
+        where=(CardLocation.HAND,),
+    )
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert isinstance(game.pending, Confirm) and game.pending.seat is PlayerId.P1
+    assert project(game, PlayerId.P1).pending == game.pending
+    assert project(game, PlayerId.P2).pending is None
+
+
+def test_a_trigger_registered_under_a_ruleset_fires_only_while_it_is_active(reacting, monkeypatch):
+    game = two_seat_game()
+    put_in_play(game, holding("played", printed_id="hand_probe"))
+    seen: list[str] = []
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: seen.append("onyx") or [],
+        ruleset=ruleset.ONYX.name,
+    )
+    reacting(
+        TurnStarted,
+        "hand_probe",
+        lambda ctx: seen.append("she") or [],
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    )
+
+    fire(game, TurnStarted(PlayerId.P1))
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.ONYX)
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert seen == ["she", "onyx"]

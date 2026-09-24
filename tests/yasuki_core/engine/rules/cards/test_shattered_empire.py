@@ -1,3 +1,4 @@
+import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -11,6 +12,7 @@ from yasuki_core.game_pieces.prints import (
     WindPrint,
 )
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
@@ -1067,3 +1069,79 @@ def test_ring_of_earth_pitched_from_hand_negates_the_move_and_is_discarded():
         table = session.game.table
         assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
         assert "earth" in _fate_discard(session, P2)
+
+
+FAVOR_PROBE = "favor_probe_shattered"
+register_ability(
+    FAVOR_PROBE,
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Favor Open: nothing",
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+        repeatable=True,
+    ),
+)
+
+
+def _favor_twice(session: EngineSession) -> None:
+    session.act(P1, ActivateAbility("favor"))
+    session.act(P2, Pass())
+    session.act(P1, ActivateAbility("favor"))
+
+
+def _air_in_hand_game() -> EngineSession:
+    return _ring_game(
+        holding("favor", printed_id=FAVOR_PROBE, keywords=(keywords.FAVOR,)),
+        held=(_ring("air", "ring_of_air"),),
+    )
+
+
+def test_ring_of_air_is_offered_after_the_second_favor_action_of_the_turn():
+    session = _air_in_hand_game()
+
+    session.act(P1, ActivateAbility("favor"))
+    assert session.game.pending is None
+    session.act(P2, Pass())
+    session.act(P1, ActivateAbility("favor"))
+
+    assert isinstance(session.game.pending, Confirm) and session.game.pending.seat is P1
+    assert project(session.game, P2).pending is None
+
+
+def test_ring_of_air_question_cannot_be_backed_out_of():
+    # Backing out would unwind the Favor action that resolved, which the Ring only reacts to.
+    session = _air_in_hand_game()
+    _favor_twice(session)
+
+    assert not session.can_cancel(P1)
+    with pytest.raises(ValueError, match="a trigger asked"):
+        session.cancel(P1)
+
+
+def test_ring_of_air_enters_play_on_yes_and_is_offered_again_after_a_third():
+    session = _air_in_hand_game()
+    _favor_twice(session)
+    session.submit(P1, DecisionResponse(()))
+    assert "air" not in _in_play(session)
+
+    session.act(P2, Pass())
+    session.act(P1, ActivateAbility("favor"))
+    session.submit(P1, DecisionResponse(("air",)))
+
+    assert "air" in _in_play(session)
+
+
+def test_ring_of_air_is_not_offered_by_the_opponents_favor_actions():
+    session = _ring_game(
+        holding("favor", owner=P2, printed_id=FAVOR_PROBE, keywords=(keywords.FAVOR,)),
+        held=(_ring("air", "ring_of_air"),),
+    )
+    session.act(P1, Pass())
+    session.act(P2, ActivateAbility("favor"))
+    session.act(P1, Pass())
+    session.act(P2, ActivateAbility("favor"))
+
+    assert session.game.pending is None

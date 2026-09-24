@@ -87,6 +87,12 @@ Backing out is refused outright while `GameState.look` is set, whatever the requ
 `cancellable` says. A seat that has looked at the top of its deck has information it cannot give
 back, so every question asked about those cards is committed the moment the look opened.
 
+A request a trigger raised is refused the same way, whatever its `cancellable` says. A trigger
+reacts to an event that has already happened, so its question has no action of its own to unwind,
+and the tape's nearest action is one that already resolved. The cascade marks the request
+`triggered` when it raises it on a trigger's behalf, and the mark follows the trigger's effects
+through a stash and a `Then`. Declining is how a seat says no to a "may" question a trait asks.
+
 A request whose `reopens_on_cancel` is true backs out one decision instead of unwinding the
 action: the tape loses only the answer that raised it, and the question before it comes back on
 replay. An Interrupt is an action of its own on the tape, so backing out of any question it asks,

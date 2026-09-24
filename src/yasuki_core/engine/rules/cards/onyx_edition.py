@@ -7,6 +7,8 @@ from yasuki_core.engine.rules.abilities.idioms import (
     register_entry,
     register_event_entry,
     register_ring,
+    register_trait_entry,
+    resolved_favor_actions,
 )
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
@@ -44,7 +46,11 @@ from yasuki_core.engine.rules.effects import (
     TakeFavor,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    ActionResolved,
+    CardDiscarded,
+    EnteredPlay,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
@@ -143,8 +149,10 @@ register_invest(
 
 # --- Ring of Air ---
 
-# "Play after you resolve two or more Favor actions in one turn." Nothing lets a card in hand
-# answer an action resolving yet, so the entry has no handler.
+# "Play after you resolve two or more Favor actions in one turn."
+register_trait_entry(
+    "ring_of_air", ActionResolved, resolved_favor_actions(2), ruleset=ruleset.ONYX.name
+)
 
 
 def _ring_of_air_targets(game: GameState, source: L5RCard) -> list[str]:

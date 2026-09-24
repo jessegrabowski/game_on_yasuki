@@ -78,7 +78,7 @@ when an `effective_*` function exists for it.
 
 ## What you can react to
 
-Thirteen events:
+Fourteen events:
 
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.EnteredPlay`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Assigned`
@@ -93,13 +93,16 @@ Thirteen events:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.HonorChanged`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducingGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducedGold`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.ActionResolved`
 
 Each one carries the fields your guard reads, so follow the link for the event you want. If the
 moment your card names is not one of them, it needs a new event in the engine, which is a core
 change rather than a card change.
 
 A card also answers its own `Destroyed` and `CardDiscarded` even though it has already left the
-battlefield. Everything else only fires for cards in play.
+battlefield. Everything else fires for cards in play, and for a card in hand only when its
+registration says so, as `@on(ActionResolved, id, where=(CardLocation.HAND,))` does for a Ring
+whose text reads "Play after X".
 
 ## Whose action, and where
 

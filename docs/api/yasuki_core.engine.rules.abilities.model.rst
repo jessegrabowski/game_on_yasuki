@@ -8,7 +8,6 @@ yasuki_core.engine.rules.abilities.model
 .. autosummary::
 
     Ability
-    CardLocation
     Interrupt
     Interruption
     InvestAbility

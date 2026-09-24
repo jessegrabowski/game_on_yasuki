@@ -1,16 +1,32 @@
+from dataclasses import replace
+
+import pytest
+
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost
-from yasuki_core.engine.rules.abilities.idioms import PITCH, register_entry, register_ring
+from yasuki_core.engine.rules.abilities.idioms import (
+    PITCH,
+    register_entry,
+    register_ring,
+    register_trait_entry,
+)
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import abilities_for
 from yasuki_core.engine.rules.effects import GainHonor
+from yasuki_core.engine.rules.projection import project
+from yasuki_core.engine.rules.triggers import fire
+from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.vocabulary.decisions import Confirm
+from yasuki_core.engine.rules.vocabulary.game_events import TurnStarted
+from yasuki_core.ruleset import RingEntry
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint, RingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, RingPrint
 
 from tests.yasuki_core.engine.builders import put_in_play, register, stronghold, two_seat_game
 
@@ -41,6 +57,7 @@ RING_ABILITY = Ability(
 )
 register_ring("ring_probe", ability=RING_ABILITY, pitch=True)
 register_ring("ring_probe_unpitched", ability=RING_ABILITY, pitch=False)
+register_trait_entry("trait_entry_probe", TurnStarted, lambda ctx: ctx.event.seat is ctx.card.owner)
 
 
 def _probe(
@@ -175,3 +192,51 @@ def test_a_ring_without_a_pitch_cannot_be_played_from_hand():
         for action in session.legal_actions(P1)
         if isinstance(action, PlayStrategy)
     )
+
+
+def _trait_probe_game():
+    game = two_seat_game()
+    held = L5RCard.of(
+        FatePrint, id="held", name="Probe", printed_id="trait_entry_probe", side=Side.FATE, owner=P1
+    )
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(game.table, held))
+    return game
+
+
+def test_a_trait_entry_asks_its_owner_alone_when_the_guard_holds():
+    game = _trait_probe_game()
+
+    fire(game, TurnStarted(P1))
+
+    assert isinstance(game.pending, Confirm) and game.pending.seat is P1
+    assert project(game, P2).pending is None
+
+
+def test_a_trait_entry_stays_quiet_when_the_guard_fails():
+    game = _trait_probe_game()
+
+    fire(game, TurnStarted(P2))
+
+    assert game.pending is None
+
+
+def test_declining_a_trait_entry_leaves_the_card_in_hand_for_the_next_time():
+    game = _trait_probe_game()
+    fire(game, TurnStarted(P1))
+
+    submit(game, DecisionResponse(()))
+    assert "held" in {card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards}
+
+    fire(game, TurnStarted(P1))
+    assert isinstance(game.pending, Confirm)
+    submit(game, DecisionResponse(("held",)))
+
+    assert "held" in {card.id for card in game.table.battlefield.cards}
+
+
+def test_a_ruleset_reading_the_trait_as_an_action_is_refused(monkeypatch):
+    monkeypatch.setattr(ruleset, "ACTIVE", replace(ruleset.ACTIVE, ring_entry=RingEntry.AS_ACTION))
+    game = _trait_probe_game()
+
+    with pytest.raises(NotImplementedError, match="AS_ACTION"):
+        fire(game, TurnStarted(P1))

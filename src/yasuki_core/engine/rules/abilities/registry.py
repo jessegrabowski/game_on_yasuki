@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from yasuki_core import ruleset
+from yasuki_core.ruleset import in_force
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, InvestAbility
@@ -166,20 +166,6 @@ GRANTED_ABILITIES: HandlerRegistry[AbilityFactory] = HandlerRegistry(
     "granted abilities", "already grants an ability"
 )
 granted_ability = GRANTED_ABILITIES.make_decorator()
-
-
-def in_force(registered: Ability | Interrupt, *, ruleset_name: str | None = None) -> bool:
-    """Whether ``registered`` is read under one ruleset: every arc reads one naming none.
-
-    Parameters
-    ----------
-    registered : :class:`~yasuki_core.engine.rules.abilities.model.Ability` or :class:`~yasuki_core.engine.rules.abilities.model.Interrupt`
-        The registered ability or Interrupt.
-    ruleset_name : str, optional
-        The name of the ruleset asked about. Default the active ruleset's.
-    """
-    name = ruleset.ACTIVE.name if ruleset_name is None else ruleset_name
-    return registered.ruleset is None or registered.ruleset == name
 
 
 def ability_registrations(*, ruleset_name: str | None = None) -> dict[str, tuple[Ability, ...]]:

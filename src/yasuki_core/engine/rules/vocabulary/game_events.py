@@ -224,8 +224,42 @@ class HonorChanged:
     amount: int
 
 
+@dataclass(frozen=True, slots=True)
+class ActionResolved:
+    """An action has fully resolved, before the Response Step it may open.
+
+    Announced once per action however many decisions or Interrupt steps it passed through, and not
+    for a Pass. An action taken inside an Interrupt or Response step is not announced, since the
+    action record names the action it answers rather than the step's own.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that took the action.
+    card_id : str or None
+        The card the action was taken from, or None for a rulebook action.
+    favor : bool
+        Whether it was a Favor action (ShE datasheet, The Favor Icon), read as it resolved, which
+        is the last moment that is settled.
+    printed : bool
+        Whether it was a card's printed ability, as against a rulebook action such as a Recruit.
+    """
+
+    seat: PlayerId
+    card_id: str | None
+    favor: bool
+    printed: bool
+
+
+# Events a step fires before it commits anything, to open a window for the cards it concerns. A
+# question a trigger asks in one belongs to the step that opened it, so backing out unwinds the
+# step's action as it would from any other question of the action's own. Every other event has
+# happened by the time a trigger reads it.
+WINDOWS: frozenset[type] = frozenset({ProducingGold})
+
 GameEvent = (
-    Assigned
+    ActionResolved
+    | Assigned
     | TurnStarted
     | CardDiscarded
     | CounterGained

@@ -1,24 +1,13 @@
 from collections.abc import Callable
 from dataclasses import dataclass
-from enum import Enum
 from types import UnionType
 
 from yasuki_core.engine.rules.abilities.costs import Cost, no_cost
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import Effect
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
-
-
-class CardLocation(str, Enum):
-    """Where a card must be for its behavior to be offered. Distinct from ``ZoneRole``, which
-    cannot name the battlefield, since that is a field of its own on the table, not a keyed zone."""
-
-    BATTLEFIELD = "battlefield"
-    PROVINCE = "province"
-    HAND = "hand"
-    # A seat's rulebook zone, where a proxy card stands for abilities the rules give every player.
-    RULEBOOK = "rulebook"
 
 
 @dataclass(frozen=True, slots=True)
@@ -69,7 +58,7 @@ class Interrupt[T: Effect]:
         Maps ``(game, source_card, effect)`` to whether this Interrupt may answer that particular
         effect, for a card whose text narrows it beyond the type, as "your other Personality's
         bowing" does. Default answers every effect of the type.
-    located_at : tuple of CardLocation, optional
+    located_at : tuple of :class:`~yasuki_core.engine.rules.vocabulary.locations.CardLocation`, optional
         Where the card has to be for the Interrupt to be offered. A Strategy's is taken from hand
         and the card is played; a Personality's or attachment's is taken from play, under the
         gates an activated ability in play answers to, and the card is not discarded for it.
@@ -127,7 +116,7 @@ class Ability:
     hits_every_target : bool
         Whether the ability hits every card ``targets`` returns rather than one chosen among them,
         as an untargeted "your other Farms" grant instead of a single pick. Default False.
-    located_at : tuple of CardLocation, optional
+    located_at : tuple of :class:`~yasuki_core.engine.rules.vocabulary.locations.CardLocation`, optional
         Where the card has to be for the ability to be offered. An Event acts from the Province it
         sits face-up in, never from play. Default the battlefield alone.
     battle_designators : frozenset of BattleDesignator, optional

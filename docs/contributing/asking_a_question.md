@@ -26,6 +26,10 @@ The offer is not made at all when the controller cannot pay, which is what "may 
 seat with no Gold. Withholding the question is often the correct reading of a card that offers
 something.
 
+A question a card in hand raises is private to its owner. `project` hands the pending decision
+only to the seat it names, so a Ring offered from hand after its condition is met is never shown
+to the opponent, who would otherwise learn the hand held it.
+
 ## A number
 
 {class}`~.AskAmount` takes the amounts the seat may name. {card}`Hired Killer` asks how much Gold

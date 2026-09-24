@@ -3,6 +3,7 @@ from collections.abc import Iterator
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole, location_of, province_holding
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -132,6 +133,15 @@ def personalities_in_play(game: GameState) -> tuple[L5RCard, ...]:
     Personality" with no side attached to it."""
     return tuple(
         card for card in game.table.battlefield.cards if isinstance(card.printed, PersonalityPrint)
+    )
+
+
+def favor_actions_this_turn(game: GameState, seat: PlayerId) -> int:
+    """How many Favor actions ``seat`` has resolved this turn, folded over the turn's events."""
+    return sum(
+        1
+        for event in game.turn_events
+        if isinstance(event, ActionResolved) and event.seat is seat and event.favor
     )
 
 

@@ -4,6 +4,7 @@ import pytest
 
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 
 
@@ -16,13 +17,21 @@ def reacting():
     """
     registered: list[tuple[type, str]] = []
 
-    def _register(event: type, printed_id: str, trigger):
-        triggers.on(event, printed_id)(trigger)
+    def _register(
+        event: type,
+        printed_id: str,
+        trigger,
+        *,
+        where: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,),
+        ruleset: str | None = None,
+    ):
+        triggers.on(event, printed_id, where=where, ruleset=ruleset)(trigger)
         registered.append((event, printed_id))
 
     yield _register
     for event, printed_id in registered:
-        triggers._TRIGGERS[event].pop(printed_id, None)
+        for by_card in triggers._TRIGGERS.get(event, {}).values():
+            by_card.pop(printed_id, None)
 
 
 @contextmanager
