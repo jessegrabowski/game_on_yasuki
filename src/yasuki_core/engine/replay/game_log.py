@@ -24,8 +24,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DiscardToInterrupt,
     DynastyDiscard,
     Equip,
-    KharmicDraw,
-    KharmicRefill,
     Inheritance,
     Legacy,
     Lobby,
@@ -303,12 +301,8 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "lobby"}
         case UseFavorAbility(key=key):
             return {"kind": "use_favor_ability", "key": key}
-        case KharmicDraw(card_id=card_id):
-            return {"kind": "kharmic_draw", "card_id": card_id}
-        case KharmicRefill(card_id=card_id):
-            return {"kind": "kharmic_refill", "card_id": card_id}
-        case ActivateAbility(card_id=card_id):
-            return {"kind": "activate_ability", "card_id": card_id}
+        case ActivateAbility(card_id=card_id, ability_key=key):
+            return {"kind": "activate_ability", "card_id": card_id, "key": key}
         case PlayStrategy(card_id=card_id):
             return {"kind": "play_strategy", "card_id": card_id}
         case DeclareAttack():
@@ -344,12 +338,8 @@ def _decode_action(payload: dict) -> Action:
         return Lobby()
     if kind == "use_favor_ability":
         return UseFavorAbility(payload["key"])
-    if kind == "kharmic_draw":
-        return KharmicDraw(payload["card_id"])
-    if kind == "kharmic_refill":
-        return KharmicRefill(payload["card_id"])
     if kind == "activate_ability":
-        return ActivateAbility(payload["card_id"])
+        return ActivateAbility(payload["card_id"], payload.get("key"))
     if kind == "play_strategy":
         return PlayStrategy(payload["card_id"])
     if kind == "declare_attack":

@@ -10,6 +10,7 @@ _ROLE_TAG = {
     ZoneRole.DYNASTY_DISCARD: "dynasty_discard",
     ZoneRole.DYNASTY_BANISH: "dynasty_banish",
     ZoneRole.PROVINCE: "province",
+    ZoneRole.RULEBOOK: "rulebook",
 }
 
 

@@ -41,10 +41,9 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destr
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
-    KharmicDraw,
-    KharmicRefill,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.rulebook.kharmic import is_kharmic_action
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import province_holdings
@@ -70,7 +69,7 @@ def _blood_of_fu_leng_card_discarded(ctx: TriggerContext) -> list[Effect]:
     """
     if ctx.event.card_id != ctx.card.id:
         return []
-    if not isinstance(ctx.game.action, KharmicDraw | KharmicRefill):
+    if not is_kharmic_action(ctx.game):
         return []
     targets = tuple(card.id for card in personalities_in_play(ctx.game))
     if not targets:

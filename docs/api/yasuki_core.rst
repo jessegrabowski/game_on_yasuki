@@ -74,7 +74,6 @@ yasuki_core
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.rulebook.copies <yasuki_core.engine.rules.rulebook.copies>
-    yasuki_core.engine.rules.rulebook.costs <yasuki_core.engine.rules.rulebook.costs>
     yasuki_core.engine.rules.rulebook.cycle <yasuki_core.engine.rules.rulebook.cycle>
     yasuki_core.engine.rules.rulebook.dishonor <yasuki_core.engine.rules.rulebook.dishonor>
     yasuki_core.engine.rules.rulebook.dynasty_discard <yasuki_core.engine.rules.rulebook.dynasty_discard>
@@ -86,6 +85,7 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.kharmic <yasuki_core.engine.rules.rulebook.kharmic>
     yasuki_core.engine.rules.rulebook.legacy <yasuki_core.engine.rules.rulebook.legacy>
     yasuki_core.engine.rules.rulebook.lobby <yasuki_core.engine.rules.rulebook.lobby>
+    yasuki_core.engine.rules.rulebook.proxies <yasuki_core.engine.rules.rulebook.proxies>
     yasuki_core.engine.rules.rulebook.recruit <yasuki_core.engine.rules.rulebook.recruit>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_based_actions <yasuki_core.engine.rules.state_based_actions>

@@ -24,6 +24,13 @@ def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Z
             yield key, zone
 
 
+def rulebook_proxy(game: GameState, seat: PlayerId, printed_id: str) -> L5RCard | None:
+    """The proxy ``seat`` activates the rulebook abilities of ``printed_id`` from, or None before
+    one is dealt."""
+    zone = game.table.zones[ZoneKey(seat, ZoneRole.RULEBOOK)]
+    return next((card for card in zone.cards if card.printed_id == printed_id), None)
+
+
 def province_cards(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
     """Every card in ``seat``'s Provinces, face-up or not, in Province order."""
     for _, zone in province_zones(game, seat):

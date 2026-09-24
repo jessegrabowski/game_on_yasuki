@@ -17,6 +17,8 @@ class CardLocation(str, Enum):
     BATTLEFIELD = "battlefield"
     PROVINCE = "province"
     HAND = "hand"
+    # A seat's rulebook zone, where a proxy card stands for abilities the rules give every player.
+    RULEBOOK = "rulebook"
 
 
 @dataclass(frozen=True, slots=True)

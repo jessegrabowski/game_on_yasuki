@@ -9,8 +9,8 @@ only then does a card reach the table. Each multi-step action lives in its own m
 An action that costs something splits into three parts.
 
 Announcing queues the work and builds the question the seat has to answer.
-{func}`~.announce_recruit` does this for a Recruit, and `announce_rulebook_cost` does it for the
-rulebook actions that charge gold.
+{func}`~.announce_recruit` does this for a Recruit, and an ability's cost effects do it for an
+activated ability, including the rulebook Kharmic abilities on the seat's proxy card.
 
 The pause is a pending decision on `GameState`. Nothing further happens until a seat answers,
 which is what lets a human, a bot and a replayed tape all drive the same machine.
@@ -86,9 +86,13 @@ effect is how a card borrows the whole sequence.
 {func}`~.equip_targets` and {func}`~.creation_targets`, which judges a token template rather than
 a card because a created attachment has no card to ask about yet.
 
-One module per action covers the rest: `cycle.py`, `kharmic.py`, `legacy.py`, `inheritance.py`,
-`lobby.py`, `dynasty_discard.py`, and the three Favor modules. `costs.py` is the exception, a
-shared helper, not an action.
+One module per action covers the rest: `cycle.py`, `legacy.py`, `inheritance.py`, `lobby.py`,
+`dynasty_discard.py`, and the three Favor modules. `kharmic.py` is different in kind: the two
+Kharmic abilities are registered as activated abilities on a proxy card (`KHARMIC_PROXY_ID`) that
+`rulebook/proxies.py` deals into each seat's rulebook zone as the game begins, for every proxy the
+active {class}`~yasuki_core.ruleset.Ruleset` names in `rulebook_proxies`. From there they are
+announced, paid, targeted and interrupted as any card's ability is. The zone is not a card zone:
+nothing in play sees what it holds, and the sandbox refuses to move anything into or out of it.
 
 ## Where a card plugs in
 

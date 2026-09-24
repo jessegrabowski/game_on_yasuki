@@ -5,7 +5,7 @@ from dataclasses import replace
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import state_based_actions, triggers
-from yasuki_core.engine.rules.rulebook import favor_proxy
+from yasuki_core.engine.rules.rulebook import favor_proxy, proxies
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
@@ -64,6 +64,7 @@ def begin_game(game: GameState) -> None:
     a question is open.
     """
     game.stack.append(OpenFirstTurn())
+    proxies.spawn_rulebook_proxies(game)
     _begin_pregame(game)
     run_stack(game)
 

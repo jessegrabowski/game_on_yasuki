@@ -22,6 +22,7 @@ _ZONE_DEST = {
     ZoneRole.DYNASTY_DISCARD: "the dynasty discard",
     ZoneRole.DYNASTY_BANISH: "the dynasty banish",
     ZoneRole.PROVINCE: "a province",
+    ZoneRole.RULEBOOK: "the rulebook",
 }
 
 

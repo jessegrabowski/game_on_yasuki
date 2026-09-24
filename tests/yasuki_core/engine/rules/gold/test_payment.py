@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.gold.production import gold_handler, GOLD_HANDLERS
 from yasuki_core.engine.rules.gold.self_grants import GOLD_SELF_GRANT, register_self_grant
 from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.effects import (
+    ApplyEffects,
     Ask,
     Destroy,
     GrantModifier,
@@ -27,7 +28,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.rules.gold.payment import ContinuePayment
+from yasuki_core.engine.rules.gold.payment import ContinuePayment, payment_request
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 
@@ -48,7 +49,6 @@ from yasuki_core.engine.rules.gold.payment import (
     payment_in_flight,
     refusal_would_strand,
 )
-from yasuki_core.engine.rules.rulebook import costs
 
 
 def test_affordability_counts_the_pool_and_every_unbowed_producer():
@@ -433,7 +433,7 @@ def test_a_payment_that_runs_out_of_producers_raises():
         sequence.run_stack(game)
 
 
-def test_a_rulebook_cost_resolves_its_effects_after_a_partial_payment():
+def test_a_payment_for_effects_resolves_them_after_a_partial_payment():
     """The completion is queued above whatever the announcing action left on the stack, so a cost
     that buys effects rather than a card still resolves them once the pool catches up."""
     game = two_seat_game()
@@ -441,9 +441,8 @@ def test_a_rulebook_cost_resolves_its_effects_after_a_partial_payment():
     put_in_play(game, holding("b", owner=PlayerId.P1, gold_production=2))
     victim = put_in_play(game, holding("victim", owner=PlayerId.P1))
 
-    game.pending = costs.announce_rulebook_cost(
-        game, PlayerId.P1, 3, "probe", (Destroy("victim", PlayerId.P1),)
-    )
+    game.stack.append(ApplyEffects((Destroy("victim", PlayerId.P1),), interruptible=True))
+    game.pending = payment_request(game, PlayerId.P1, 3, "probe")
     action_sequence.submit(game, DecisionResponse(("a",)))  # one of the three
 
     assert isinstance(game.pending, ChoosePayment)

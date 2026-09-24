@@ -54,6 +54,7 @@ from yasuki_core.engine.intents import (
     roll_dice,
 )
 from yasuki_core.engine.intent_handlers import apply_intent
+from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_PROXY
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -2227,3 +2228,35 @@ def test_a_token_moved_between_hands_survives():
 
     assert [c.id for c in table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards] == ["favor-1"]
     table.validate()
+
+
+def _rulebook_proxy(table: TableState) -> L5RCard:
+    return ops.spawn_token(
+        table,
+        "P1-kharmic",
+        KHARMIC_PROXY,
+        PlayerId.P1,
+        dest=ZoneKey(PlayerId.P1, ZoneRole.RULEBOOK),
+    )
+
+
+def test_a_rulebook_proxy_cannot_be_moved_or_removed():
+    table = TableState.empty_two_seat()
+    proxy = _rulebook_proxy(table)
+
+    assert apply_intent(table, PlayerId.P1, MoveCard(proxy.id, BATTLEFIELD)) == []
+    assert apply_intent(table, PlayerId.P1, RemoveCard(proxy.id)) == []
+    assert proxy in table.zones[ZoneKey(PlayerId.P1, ZoneRole.RULEBOOK)].cards
+
+
+def test_nothing_can_be_moved_into_the_rulebook_zone():
+    table = TableState.empty_two_seat()
+    card = register(table, fate_card("f1", PlayerId.P1))
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+
+    moved = apply_intent(
+        table, PlayerId.P1, MoveCard("f1", ZoneKey(PlayerId.P1, ZoneRole.RULEBOOK))
+    )
+
+    assert moved == []
+    assert card in table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards

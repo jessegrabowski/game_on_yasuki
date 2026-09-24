@@ -37,8 +37,7 @@ it reads, and they are what the Absent, Home and Remote designators on an abilit
 ## Rulebook actions
 
 Several rulebook actions carry their own legality, and `legality.py` holds the predicates rather
-than the actions: {func}`~.is_kharmic_card` and {func}`~.kharmic_in_hand` for Kharmic,
-{func}`~.cycle_candidates` for Cycle, {func}`~.legacy_search_pool` and
+than the actions: {func}`~.cycle_candidates` for Cycle, {func}`~.legacy_search_pool` and
 {func}`~.legacy_candidates` for Legacy, {func}`~.can_proclaim` for Proclaim, and
 {func}`~.recruit_cost` for what a Recruit will cost this seat.
 

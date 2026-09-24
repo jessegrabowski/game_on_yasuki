@@ -5,7 +5,7 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
     DiscardToInterrupt,
-    KharmicDraw,
+    Cycle,
     Pass,
     PlayInterrupt,
 )
@@ -59,7 +59,7 @@ def test_okura_is_not_offered_against_an_effect_it_does_not_answer():
     game = two_seat_game()
     _honor_card(game.table, "P2-honor0", DEFENDER)
     _strategy(game.table, "okura", "okura_is_released", DEFENDER)
-    game.action = KharmicDraw("the-interrupted-action")
+    game.action = Cycle()
 
     resolve_action_effects(game, [GainHonor(ATTACKER, 2)])
 
@@ -74,7 +74,7 @@ def test_okura_is_not_offered_when_its_gold_cost_is_out_of_reach():
     game = two_seat_game()
     target = put_in_play(game, personality("guard", owner=DEFENDER, force=2))
     _strategy(game.table, "okura", "okura_is_released", DEFENDER, gold_cost=1)
-    game.action = KharmicDraw("the-interrupted-action")
+    game.action = Cycle()
 
     resolve_action_effects(game, [Fear(2, target.id, ATTACKER)])
 

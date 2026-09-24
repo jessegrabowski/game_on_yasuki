@@ -16,8 +16,6 @@ yasuki_core.engine.rules.vocabulary.actions
     DynastyDiscard
     Equip
     Inheritance
-    KharmicDraw
-    KharmicRefill
     Legacy
     Lobby
     Pass

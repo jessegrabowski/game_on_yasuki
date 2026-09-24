@@ -13,6 +13,7 @@ from yasuki_core.engine.zones import (
     DynastyDiscardZone,
     DynastyBanishZone,
     ProvinceZone,
+    RulebookZone,
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -27,6 +28,7 @@ class ZoneRole(str, Enum):
     DYNASTY_DISCARD = "dynasty_discard"
     DYNASTY_BANISH = "dynasty_banish"
     PROVINCE = "province"
+    RULEBOOK = "rulebook"
 
 
 # Per-seat zones present from table construction; provinces are created on demand
@@ -37,6 +39,7 @@ _FIXED_ZONES: tuple[tuple[ZoneRole, type[Zone]], ...] = (
     (ZoneRole.FATE_BANISH, FateBanishZone),
     (ZoneRole.DYNASTY_DISCARD, DynastyDiscardZone),
     (ZoneRole.DYNASTY_BANISH, DynastyBanishZone),
+    (ZoneRole.RULEBOOK, RulebookZone),
 )
 
 

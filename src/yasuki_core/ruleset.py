@@ -2,6 +2,7 @@ from dataclasses import dataclass, field, replace
 
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.game_pieces.constants import KHARMIC_PROXY_ID
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 
 
@@ -93,6 +94,10 @@ class Ruleset:
         The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
         Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
         different players entitled to act. Default Limited, the CR's.
+    rulebook_proxies : tuple of str
+        The ids of the proxy cards dealt to each seat's rulebook zone as a game begins, one per
+        rulebook ability family the arc grants, whose abilities are activated from there. Empty for
+        an arc that grants none through a proxy. Default empty.
     """
 
     name: str
@@ -110,6 +115,7 @@ class Ruleset:
     lobby_timing: ActionTiming = ActionTiming.LIMITED
     lobby_keywords: frozenset[str] = frozenset()
     favor_abilities: tuple[FavorAbility, ...] = ()
+    rulebook_proxies: tuple[str, ...] = ()
 
     def segment_name(self, segment: Segment) -> str:
         """What this arc calls ``segment``.
@@ -196,6 +202,7 @@ SHATTERED_EMPIRE = Ruleset(
     },
     lobby_timing=ActionTiming.OPEN,
     lobby_keywords=frozenset({keywords.POLITICAL}),
+    rulebook_proxies=(KHARMIC_PROXY_ID,),
     favor_abilities=(
         FavorAbility(
             "discard_to_draw",
