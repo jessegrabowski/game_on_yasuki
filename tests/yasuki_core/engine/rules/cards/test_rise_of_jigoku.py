@@ -34,7 +34,6 @@ from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, SenseiPrint,
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.abilities.model import CardLocation
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.state import GameState
@@ -925,12 +924,9 @@ def test_heart_of_honor_is_offered_from_hand_under_both_of_its_designators():
     game = two_seat_game()
     put_in_play(game, personality("bushi"))
     card, ability = _heart_of_honor(game)
-    in_hand = (CardLocation.HAND,)
 
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
-        assert legality.activatable(game, P1, frozenset({designator}), at=in_hand) == [
-            (card, ability)
-        ]
+        assert legality.playable(game, P1, frozenset({designator})) == [(card, ability)]
 
 
 # --- Draw Strength from Your Oaths ---

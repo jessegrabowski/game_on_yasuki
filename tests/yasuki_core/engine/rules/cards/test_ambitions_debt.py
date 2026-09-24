@@ -1,7 +1,6 @@
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
-from yasuki_core.engine.rules.abilities.model import CardLocation
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
@@ -103,14 +102,11 @@ def test_it_is_offered_under_both_of_its_printed_designators():
     put_in_play(state, personality("shiba", owner=OPPONENT, force=3, chi=2))
     card = _uncertainty(state)
     game = EngineSession.start(state, PLAYER).game
-    in_hand = (CardLocation.HAND,)
 
     uncertainty = ability_for(game, card)
     for designator in (ActionTiming.OPEN, ActionTiming.BATTLE):
-        assert legality.activatable(game, PLAYER, frozenset({designator}), at=in_hand) == [
-            (card, uncertainty)
-        ]
-    assert legality.activatable(game, PLAYER, frozenset({ActionTiming.DYNASTY}), at=in_hand) == []
+        assert legality.playable(game, PLAYER, frozenset({designator})) == [(card, uncertainty)]
+    assert legality.playable(game, PLAYER, frozenset({ActionTiming.DYNASTY})) == []
 
 
 def test_the_penalty_and_the_minimum_both_wear_off_when_the_turn_ends():

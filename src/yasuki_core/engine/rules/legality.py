@@ -1,4 +1,4 @@
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
@@ -238,9 +238,9 @@ def _may_act(game: GameState, seat: PlayerId) -> bool:
 
 
 def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """An ActivateAbility for each card whose activated ability the seat can use now: sitting
-    somewhere that ability acts from, its designator permitted by the current round, controlled,
-    cost payable, and with at least one legal target. ``only`` narrows to a single card."""
+    """An ActivateAbility for each ability the seat can use now on a card it controls: sitting
+    somewhere the ability acts from, its designator permitted by the current round, cost payable,
+    and with at least one legal target. ``only`` narrows to a single card."""
     return [
         ActivateAbility(card.id, ability.key)
         for card, ability in activatable(game, seat, permitted_timings(game, seat))
@@ -469,13 +469,12 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     """The Strategies ``seat`` can play: each one in hand whose designator this round permits, whose
     Gold Cost it can reach, and which has a legal target.
 
-    Asks :func:`~yasuki_core.engine.rules.activatable` for the hand, since the card's own
-    ability decides when it may be played. ``only`` narrows to a single card.
+    Asks :func:`~yasuki_core.engine.rules.playable` for the hand, since the card's own ability
+    decides when it may be played. ``only`` narrows to a single card.
     """
-    playable = activatable(game, seat, permitted_timings(game, seat), at=(CardLocation.HAND,))
     return [
         PlayStrategy(card.id, ability.key)
-        for card, ability in playable
+        for card, ability in playable(game, seat, permitted_timings(game, seat))
         if (only is None or card.id == only)
         and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
     ]
@@ -583,30 +582,55 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
             yield from ((CardLocation.RULEBOOK, card) for card in zone.cards)
 
 
-# Where a card is when activating it is what its ability means. A card in hand is *played* rather
-# than activated, and pays a Gold Cost to do it, so it answers to its own action and is left out of
-# the default.
-IN_PLAY: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD, CardLocation.PROVINCE)
-# Where an ability is activated from: the places a card is in play, plus the seat's rulebook zone,
-# whose proxies are activated the same way and are in play nowhere.
-ACTIVATED_FROM: tuple[CardLocation, ...] = (*IN_PLAY, CardLocation.RULEBOOK)
+# Every place ``seat_cards`` yields a card from. A card's own ability in hand is *played* rather
+# than activated, and pays a Gold Cost to do it, so ``_played`` and ``_activated`` tell the two
+# actions apart below rather than the location alone.
+ACTIVATED_FROM: tuple[CardLocation, ...] = (
+    CardLocation.BATTLEFIELD,
+    CardLocation.PROVINCE,
+    CardLocation.RULEBOOK,
+    CardLocation.HAND,
+)
 
 
 def activatable(
+    game: GameState, seat: PlayerId, permitted: frozenset[ActionTiming]
+) -> list[tuple[L5RCard, Ability]]:
+    """Each card ``seat`` may activate an ability on right now, paired with the ability: controlled,
+    sitting somewhere the ability acts from, its designator among ``permitted``, its cost payable,
+    and with at least one legal target.
+
+    A card's own ability acts from where the card is in play, or from the seat's rulebook zone.
+    One a keyword confers acts from the hand as well. Playing a card's own ability out of hand is
+    a different action with a cost of its own, which :func:`playable` lists.
+    """
+    return _usable(game, seat, permitted, at=ACTIVATED_FROM, offered=_activated)
+
+
+def playable(
+    game: GameState, seat: PlayerId, permitted: frozenset[ActionTiming]
+) -> list[tuple[L5RCard, Ability]]:
+    """Each card in hand ``seat`` may play right now, paired with the ability it plays as, under
+    the tests :func:`activatable` applies."""
+    return _usable(game, seat, permitted, at=(CardLocation.HAND,), offered=_played)
+
+
+def _activated(location: CardLocation, ability: Ability) -> bool:
+    return location is not CardLocation.HAND or ability.from_keyword is not None
+
+
+def _played(location: CardLocation, ability: Ability) -> bool:
+    return not _activated(location, ability)
+
+
+def _usable(
     game: GameState,
     seat: PlayerId,
     permitted: frozenset[ActionTiming],
     *,
-    at: tuple[CardLocation, ...] = ACTIVATED_FROM,
+    at: tuple[CardLocation, ...],
+    offered: Callable[[CardLocation, Ability], bool],
 ) -> list[tuple[L5RCard, Ability]]:
-    """Each card ``seat`` may use an ability on right now, paired with the ability it may use:
-    controlled, sitting somewhere the ability acts from, its designator among ``permitted``, its
-    cost payable, and with at least one legal target.
-
-    ``at`` narrows which of those places count, and defaults to the ones an ability is activated
-    from: where a card is in play, and the seat's rulebook zone. Playing a card out of hand asks
-    for ``CardLocation.HAND`` explicitly, because it is a different action with a cost of its own.
-    """
     ready: list[tuple[L5RCard, Ability]] = []
     # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
     present = has_presence(game, seat)
@@ -618,6 +642,8 @@ def activatable(
         if is_spell(card) and not has_caster(game, card):
             continue
         for ability in abilities_for(game, card):
+            if location not in ability.located_at or not offered(location, ability):
+                continue
             if permitted.isdisjoint(ability.timings):
                 continue
             if not _bow_permits(game, card, ability):
@@ -628,14 +654,12 @@ def activatable(
                 continue
             if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
                 continue
-            if location not in ability.located_at:
-                continue
-            # An ability on a card in play is once per turn unless it prints Repeatable (CR,
-            # Using Abilities 0.3), where the arc says so. A card played from hand is spent, so
-            # nothing rations it.
+            # An activated ability is once per turn unless it prints Repeatable (CR, Using
+            # Abilities 0.3), where the arc says so. A card played from hand is spent, so nothing
+            # rations it.
             if (
                 ruleset.ACTIVE.abilities_once_per_turn
-                and location is not CardLocation.HAND
+                and _activated(location, ability)
                 and not ability.repeatable
                 and used_this_turn(game, card, once_tag(ability))
             ):

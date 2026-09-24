@@ -1,4 +1,5 @@
 from yasuki_core import ruleset
+from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import ability_for, recruit_timing_of
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
@@ -20,19 +21,25 @@ def action_round(game: GameState) -> ActionRound:
     return game.round
 
 
-def action_is_unstoppable(game: GameState) -> bool:
-    """Whether the action now resolving is Unstoppable: from an ability printing the modifier
-    (ShE datasheet, Unstoppable). A rulebook action never is."""
+def resolving_ability(game: GameState) -> Ability | None:
+    """The ability the action now resolving was taken from, or None for an action taken from none:
+    a Recruit, a rulebook action, or no action at all."""
     match game.action:
         case (
             ActivateAbility(card_id=card_id, ability_key=key)
             | PlayStrategy(card_id=card_id, ability_key=key)
         ):
             card = game.table.cards_by_id.get(card_id)
-            ability = None if card is None else ability_for(game, card, key)
-            return ability is not None and ability.unstoppable
+            return None if card is None else ability_for(game, card, key)
         case _:
-            return False
+            return None
+
+
+def action_is_unstoppable(game: GameState) -> bool:
+    """Whether the action now resolving is Unstoppable: from an ability printing the modifier
+    (ShE datasheet, Unstoppable). A rulebook action never is."""
+    ability = resolving_ability(game)
+    return ability is not None and ability.unstoppable
 
 
 def action_keywords(game: GameState) -> frozenset[str]:

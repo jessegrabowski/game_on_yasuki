@@ -7,8 +7,9 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import state_based_actions, triggers
 from yasuki_core.engine.rules.rulebook import favor_proxy, proxies
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
+from yasuki_core.engine.rules.action_record import resolving_ability
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize, LeaveBowed
 from yasuki_core.engine.rules.effects import AdjustCounter, ApplyEffects, RevealProvinces
@@ -416,11 +417,12 @@ def _announce_resolution(game: GameState) -> None:
     if game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
         return
     game.action_resolved = True
+    ability = resolving_ability(game)
     resolved = ActionResolved(
         seat=game.action_seat,
         card_id=getattr(game.action, "card_id", None),
         favor=is_favor_action(game),
-        printed=isinstance(game.action, ActivateAbility | PlayStrategy),
+        printed=ability is not None and ability.from_keyword is None,
     )
     triggers.fire(game, resolved)
 

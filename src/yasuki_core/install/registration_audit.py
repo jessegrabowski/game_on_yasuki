@@ -554,6 +554,7 @@ NOT_KEYED_BY_CARD = {
     "_RULEBOOK_TRIGGERS",  # keyed by event type: the rulebook's own triggers, no card behind them
     "WINDOWS",  # the event types a step fires before committing
     "_CONDITIONS",  # keyed by Condition: what a conditional modifier asks of a card
+    "KEYWORD_ABILITIES",  # keyed by keyword: the abilities one confers on every card carrying it
 }
 
 
