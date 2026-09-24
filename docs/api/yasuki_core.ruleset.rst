@@ -9,11 +9,13 @@ yasuki_core.ruleset
 
     FavorAbility
     Ruleset
+    Scoped
 
 .. rubric:: Functions
 
 .. autosummary::
 
+    in_force
     normalize_clan
 
 .. automodule:: yasuki_core.ruleset

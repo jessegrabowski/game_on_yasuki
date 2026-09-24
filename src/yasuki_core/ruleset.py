@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field, replace
+from typing import Protocol
 
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -234,6 +235,27 @@ ONYX = replace(SHATTERED_EMPIRE, name="onyx", arcs=("Onyx Edition",))
 
 # The ruleset the engine plays under. Named once so no module decides for itself which arc is live.
 ACTIVE = SHATTERED_EMPIRE
+
+
+class Scoped(Protocol):
+    """A registration that may name the one ruleset it is in force under."""
+
+    @property
+    def ruleset(self) -> str | None: ...
+
+
+def in_force(registered: Scoped, *, ruleset_name: str | None = None) -> bool:
+    """Whether ``registered`` is read under one ruleset: every arc reads one naming none.
+
+    Parameters
+    ----------
+    registered : :class:`~yasuki_core.ruleset.Scoped`
+        An ability, Interrupt or trigger registration carrying a ``ruleset`` name or None.
+    ruleset_name : str, optional
+        The name of the ruleset asked about. Default the active ruleset's.
+    """
+    name = ACTIVE.name if ruleset_name is None else ruleset_name
+    return registered.ruleset is None or registered.ruleset == name
 
 
 # The pre-Gold rulebook, which granted four uses of the Favor rather than two and asked nothing

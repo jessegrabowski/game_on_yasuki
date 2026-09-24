@@ -21,7 +21,6 @@ yasuki_core.engine.rules.abilities.registry
     entry_state_of
     fixed_invest_amount
     granted_tireless
-    in_force
     interrupt_for
     invest_amounts
     invest_for
