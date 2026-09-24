@@ -251,6 +251,12 @@ class ActionResolved:
     printed: bool
 
 
+# Events a step fires before it commits anything, to open a window for the cards it concerns. A
+# question a trigger asks in one belongs to the step that opened it, so backing out unwinds the
+# step's action as it would from any other question of the action's own. Every other event has
+# happened by the time a trigger reads it.
+WINDOWS: frozenset[type] = frozenset({ProducingGold})
+
 GameEvent = (
     ActionResolved
     | Assigned

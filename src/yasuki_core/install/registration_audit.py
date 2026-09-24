@@ -410,6 +410,7 @@ NOT_KEYED_BY_CARD = {
     "_AFTER_BATTLE_SEGMENT",  # the segment order
     "_ACTION_WORDING",  # keyed by action type, for describe_action
     "_RULEBOOK_TRIGGERS",  # keyed by event type: the rulebook's own triggers, no card behind them
+    "WINDOWS",  # the event types a step fires before committing
     "_CONDITIONS",  # keyed by Condition: what a conditional modifier asks of a card
 }
 

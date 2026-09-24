@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from yasuki_core.engine.players import PlayerId
 
@@ -38,10 +38,15 @@ class DecisionRequest(ABC):
     candidates : tuple of str
         The ids the seat may choose among, the request's legal options. A client renders these as
         the selectable cards, and a well-formed answer draws only from them.
+    triggered : bool, optional
+        Whether a trigger raised the request, reacting to an event already committed. Backing out
+        is refused for such a request whatever its ``cancellable`` says, because the event it
+        answers cannot be taken back. Keyword-only. Default False.
     """
 
     seat: PlayerId
     candidates: tuple[str, ...]
+    triggered: bool = field(default=False, kw_only=True)
 
     @abstractmethod
     def accepts(self, response: DecisionResponse) -> bool:

@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     EnteredPlay,
     HonorChanged,
+    ProducingGold,
     TurnStarted,
 )
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
@@ -30,6 +31,7 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     GainHonor,
     IgnoreHonorRequirements,
+    Then,
 )
 from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
@@ -574,6 +576,76 @@ def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
     assert other.counters == {"wealth": 1}  # the choice resolved
     assert probe.counters == {"wealth": 1}  # the stashed trigger resumed and applied its effect
     assert game.stack == []
+
+
+def test_a_triggers_question_is_marked_as_the_triggers_own():
+    game = two_seat_game()
+    wheat = _wheat_farm(game)
+    _keyworded_farm(game, card_id="P1-other-farm")
+
+    fire(game, EnteredPlay(wheat.id))
+
+    assert game.pending.triggered
+
+
+def test_a_question_raised_outside_a_trigger_is_not_marked():
+    game = two_seat_game()
+    resolve_effects(game, [Choose(PlayerId.P1, (), 0, 0, "test_sandwich", None)])
+
+    assert not game.pending.triggered
+
+
+def test_a_question_asked_in_a_producers_window_is_not_marked(reacting):
+    # ProducingGold opens a window before the bow: the payment step's own question, not a reaction.
+    game = two_seat_game()
+    producer = holding("P1-mine", printed_id="window_probe")
+    put_in_play(game, producer)
+    reacting(
+        ProducingGold,
+        "window_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id)],
+    )
+
+    fire(game, ProducingGold(producer.id, PlayerId.P1))
+
+    assert isinstance(game.pending, ChooseCards) and not game.pending.triggered
+
+
+def test_the_mark_follows_a_triggers_effects_through_a_then(reacting):
+    game = two_seat_game()
+    asker = holding("P1-later", printed_id="then_probe")
+    put_in_play(game, asker)
+    reacting(
+        EnteredPlay,
+        "then_probe",
+        lambda ctx: [Then((Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),))],
+    )
+
+    fire(game, EnteredPlay(asker.id))
+    sequence.run_stack(game)
+
+    assert isinstance(game.pending, ChooseCards) and game.pending.triggered
+
+
+# A test-only trigger asking twice, so the second question is raised from the stash the first
+# left, not from the trigger's own effects.
+@on(EnteredPlay, "test_two_questions")
+def _two_questions(ctx):
+    return [
+        Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),
+        Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),
+    ]
+
+
+def test_the_mark_follows_a_triggers_effects_through_the_stash():
+    game = two_seat_game()
+    asker = holding("P1-asker", printed_id="test_two_questions", name="Asker", owner=PlayerId.P1)
+    put_in_play(game, asker)
+
+    fire(game, EnteredPlay(asker.id))
+    action_sequence.submit(game, DecisionResponse(()))
+
+    assert isinstance(game.pending, ChooseCards) and game.pending.triggered
 
 
 def test_effects_after_a_choice_in_the_same_trigger_still_resolve():

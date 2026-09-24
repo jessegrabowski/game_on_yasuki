@@ -1,3 +1,4 @@
+import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -1108,6 +1109,16 @@ def test_ring_of_air_is_offered_after_the_second_favor_action_of_the_turn():
 
     assert isinstance(session.game.pending, Confirm) and session.game.pending.seat is P1
     assert project(session.game, P2).pending is None
+
+
+def test_ring_of_air_question_cannot_be_backed_out_of():
+    # Backing out would unwind the Favor action that resolved, which the Ring only reacts to.
+    session = _air_in_hand_game()
+    _favor_twice(session)
+
+    assert not session.can_cancel(P1)
+    with pytest.raises(ValueError, match="a trigger asked"):
+        session.cancel(P1)
 
 
 def test_ring_of_air_enters_play_on_yes_and_is_offered_again_after_a_third():
