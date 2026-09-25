@@ -212,6 +212,23 @@ def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]
     ]
 
 
+def terrains_at(game: GameState, battlefield: int) -> list[L5RCard]:
+    """The Terrains in play at ``battlefield``, in play order. They stand there in neither side or
+    army (CR, Side), so :func:`~.units_at` never counts one."""
+    return [
+        card
+        for card in game.table.battlefield.cards
+        if location_of(game.table, card).battlefield == battlefield
+        and keywords.TERRAIN in effective_keywords(game, card)
+    ]
+
+
+def controls_terrain_at(game: GameState, seat: PlayerId, battlefield: int) -> bool:
+    """Whether ``seat`` controls a Terrain at ``battlefield``. Control is ownership until the engine
+    models the two apart."""
+    return any(card.owner is seat for card in terrains_at(game, battlefield))
+
+
 def opposing_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]:
     """The ids of the enemy Personalities ``seat`` faces at the battle now being fought.
 

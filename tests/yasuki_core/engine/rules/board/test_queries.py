@@ -1,14 +1,24 @@
 import pytest
 
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.board.queries import has_keyword, owned_holdings, province_key_of
+from yasuki_core.engine.rules.board.queries import (
+    controls_terrain_at,
+    has_keyword,
+    owned_holdings,
+    province_key_of,
+    terrains_at,
+)
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
+from yasuki_core.engine.table import Location
 
 from tests.yasuki_core.engine.builders import (
     holding,
+    personality,
     province_card,
     put_in_play,
     stronghold,
+    terrain_at,
     two_seat_game,
 )
 
@@ -68,3 +78,16 @@ def test_province_key_of_raises_when_no_province_holds_the_card():
 
     with pytest.raises(ValueError, match=in_play.id):
         province_key_of(game, PlayerId.P1, in_play.id)
+
+
+def test_a_terrain_is_found_and_controlled_only_at_its_own_battlefield():
+    game = two_seat_game()
+    ground = terrain_at(game, "ground", battlefield=0, owner=PlayerId.P1)
+    hero = put_in_play(game, personality("P1-hero", owner=PlayerId.P1))
+    ops.set_location(game.table, hero, Location.at_battlefield(0))
+
+    assert terrains_at(game, battlefield=0) == [ground]
+    assert terrains_at(game, battlefield=1) == []
+    assert controls_terrain_at(game, PlayerId.P1, battlefield=0)
+    assert not controls_terrain_at(game, PlayerId.P2, battlefield=0)
+    assert not controls_terrain_at(game, PlayerId.P1, battlefield=1)
