@@ -415,6 +415,7 @@ def _resolve_battle(game: GameState) -> None:
     # Where this battle's events start. Every battle of an Attack Phase runs inside one action, so
     # an outcome reading the action's events rather than its own would collect its predecessors'.
     events_before = len(game.action_events)
+    province_stood = attack.battlefields[battlefield].province in game.table.zones
 
     attack.battle_segment = BattleSegment.RESOLUTION
     # Queued first, so a trigger that pauses the resolution's cascade to ask a question stashes it
@@ -426,6 +427,7 @@ def _resolve_battle(game: GameState) -> None:
             winner=winner,
             honor_before=honor_before,
             events_before=events_before,
+            province_stood=province_stood,
         )
     )
     triggers.resolve_effects(game, effects)
@@ -452,6 +454,9 @@ class AnnounceResolution:
         Each seat's Family Honor as resolution began.
     events_before : int
         Where the resolution's events start in the action's events.
+    province_stood : bool
+        Whether the battlefield's Province stood as resolution began, so a Province destroyed
+        earlier is not credited to it.
     """
 
     battlefield: int
@@ -459,6 +464,7 @@ class AnnounceResolution:
     winner: PlayerId | None
     honor_before: dict[PlayerId, int]
     events_before: int
+    province_stood: bool
 
     def resume(self, game: GameState) -> None:
         attack = _declared_attack(game)
@@ -469,6 +475,7 @@ class AnnounceResolution:
             winner=self.winner,
             honor_before=self.honor_before,
             destructions=destructions,
+            province_stood=self.province_stood,
         )
         attack.amend(self.battlefield, outcome=outcome)
         # Queued before the announcement, so a trait that pauses on it stashes its cascade above
@@ -562,6 +569,7 @@ def _outcome(
     winner: PlayerId | None,
     honor_before: dict[PlayerId, int],
     destructions: list[Destroyed],
+    province_stood: bool,
 ) -> BattleOutcome:
     """What the battle at ``battlefield`` turned out to have done.
 
@@ -575,7 +583,7 @@ def _outcome(
     return BattleOutcome(
         winner=winner,
         destroyed=tuple(event.card_id for event in destructions),
-        province_destroyed=province not in game.table.zones,
+        province_destroyed=province_stood and province not in game.table.zones,
         honor={
             seat: honor - honor_before[seat]
             for seat, honor in _honor(game).items()

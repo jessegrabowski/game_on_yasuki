@@ -26,10 +26,10 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
-from yasuki_core.engine.rules.effects import Ask, DelayedEffect, Discard, Move
+from yasuki_core.engine.rules.effects import Ask, DelayedEffect, DestroyProvince, Discard, Move
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
-from yasuki_core.engine.rules.triggers import apply_effect
+from yasuki_core.engine.rules.triggers import apply_effect, resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved, CardDiscarded
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -1286,3 +1286,16 @@ def test_a_question_asked_during_resolution_is_answered_before_the_battle_announ
     [resolved] = _battles_resolved(session)
     assert resolved.destroyed == ("ashura",)
     assert resolved.destroyed_controllers == frozenset({PlayerId.P1})
+
+
+def test_a_province_destroyed_before_resolution_is_not_credited_to_it():
+    session = _one_battlefield({"a": 9}, {"d": 2}, defender_provinces=2)
+    pending = session.game.pending
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    resolve_effects(session.game, [DestroyProvince(PlayerId.P2, _province(PlayerId.P2, 0))])
+
+    _pass_out_the_segments(session)
+
+    [resolved] = _battles_resolved(session)
+    assert not resolved.province_destroyed
+    assert resolved.destroyed == ("d",)
