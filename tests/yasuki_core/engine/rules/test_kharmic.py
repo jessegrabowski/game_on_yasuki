@@ -1,9 +1,11 @@
 import json
 
+import pytest
+
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import abilities_for
-from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL
+from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL, kharmic_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, PlayStrategy
 from yasuki_core.engine.replay.game_log import game_log_from_dict, game_log_to_dict, replay
 from yasuki_core.engine.session import EngineSession
@@ -261,3 +263,8 @@ def test_a_kharmic_use_replays_to_the_same_board_from_a_stored_tape():
     stored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
 
     assert replay(stored) == session.game
+
+
+def test_a_kharmic_ability_names_one_of_the_two_forms():
+    with pytest.raises(ValueError, match="'banish' is not a Kharmic form"):
+        kharmic_ability("banish")

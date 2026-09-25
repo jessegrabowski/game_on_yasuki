@@ -8,6 +8,7 @@ yasuki_core.engine.rules.rulebook.kharmic
 .. autosummary::
 
     is_kharmic_action
+    kharmic_ability
 
 .. automodule:: yasuki_core.engine.rules.rulebook.kharmic
     :members:
