@@ -1092,10 +1092,10 @@ register_ability(
 )
 
 
-def _resolved_with_a_responder() -> EngineSession:
+def _resolved_with_a_responder(*, defender_provinces: int = 2) -> EngineSession:
     """A battle the Attacker wins, resolved with the Attacker holding a Response, so the step opens.
-    The Defender keeps a second Province, so the win does not end the game."""
-    session = _one_battlefield({"a": 4}, {"d": 2}, defender_provinces=2)
+    Two Defender Provinces by default, so the win does not end the game."""
+    session = _one_battlefield({"a": 4}, {"d": 2}, defender_provinces=defender_provinces)
     put_in_play(
         session.game.table, holding("probe", printed_id="battle_response_probe", owner=PlayerId.P1)
     )
@@ -1128,6 +1128,16 @@ def test_passing_out_of_the_response_step_runs_after_resolution():
     assert attack.battle_segment is None and attack.current is None
     assert session.game.table.cards_by_id["a"].bowed
     assert location_of(session.game.table, session.game.table.cards_by_id["a"]).is_home
+
+
+def test_a_win_opens_no_response_step_over_the_finished_game():
+    """The Defender's last Province falls at resolution, which ends the game there (CR, Military
+    Loss/Victory), and a game that is won is over rather than responded to."""
+    session = _resolved_with_a_responder(defender_provinces=1)
+
+    assert session.game.game_over
+    assert session.game.round.kind is not RoundKind.RESPONSE
+    assert session.game.round_stack == []
 
 
 def test_a_trait_pausing_on_the_announcement_resolves_before_the_step_opens(reacting):

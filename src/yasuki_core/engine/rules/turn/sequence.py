@@ -451,10 +451,13 @@ def open_response_window(game: GameState) -> bool:
     """Open the Response Step over the round the action was taken in, and report whether it opened.
 
     Only when a seat actually holds a Response: a step nobody could act in is a pass nobody needs to
-    be asked for. A Response is itself an action, and one taken inside the step opens no step of its
-    own. The window that is already open is the one it belongs to. An Interrupt is not responded
+    be asked for. Never over a game a seat has already won, which ends the moment it is won (CR,
+    Setup step F). A Response is itself an action, and one taken inside the step opens no step of
+    its own. The window that is already open is the one it belongs to. An Interrupt is not responded
     to either (ShE datasheet, Response): none opens inside the Interrupt step.
     """
+    if game.game_over:
+        return False
     if game.round.kind in (RoundKind.RESPONSE, RoundKind.INTERRUPT):
         return False
     # Cleared before the seats are polled, not after: a card still marked from the last Step would
