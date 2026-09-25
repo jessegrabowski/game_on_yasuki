@@ -461,9 +461,11 @@ class BattleView(CardPanel):
         # Outermost on the side it belongs to, past the Defender's own units: it is what they are
         # standing in front of.
         self._draw_province(view, (left + right) // 2, province_y, mirrored=mirrored)
+        self.canvas.create_line(left + 6, divider, right - 6, divider, fill=theme.INK_DIM)
+        # Beneath the units, which are what the player acts with.
+        self._draw_terrains(view, span, divider)
         # Each army's tower fans away from the divider, so a unit never stacks over the other side.
         self._draw_army(defense.units, span, defending_y, sink=mirrored)
-        self.canvas.create_line(left + 6, divider, right - 6, divider, fill=theme.INK_DIM)
         self._draw_army(offense.units, span, attacking_y, sink=not mirrored)
         if view.outcome is not None:
             # Over the rows rather than beside them: the armies have gone home by now, so the space
@@ -660,6 +662,12 @@ class BattleView(CardPanel):
             self._draw_card(card, spot, pickable=False)
         if view.occupant is not None:
             self._draw_card(to_render_card(view.occupant), (x, y), pickable=False)
+
+    def _draw_terrains(self, view: BattlefieldView, span: tuple[int, int], y: int) -> None:
+        """The Terrains at the battlefield, in a centered row on the line between the armies."""
+        terrains = [to_render_card(card) for card in view.terrains]
+        for x, card in zip(_centered_in(span, len(terrains)), terrains):
+            self._draw_card(card, (x, y))
 
     def _draw_army(
         self, army: tuple[UnitView, ...], span: tuple[int, int], y: int, *, sink: bool
