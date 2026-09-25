@@ -72,6 +72,7 @@ numpydoc_xref_param_type = True
 # our prose type fields use ("dict mapping (deck, era) to str"); the second is our own unions,
 # type aliases and TypeVars, which autodoc documents nowhere.
 numpydoc_xref_ignore = {
+    "Ongoing",
     "of",
     "or",
     "optional",

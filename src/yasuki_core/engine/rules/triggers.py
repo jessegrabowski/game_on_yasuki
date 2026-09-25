@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     ConditionalModifier,
     LobbyModifier,
     ProvinceModifier,
+    SeatAbilityGrant,
 )
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.ruleset import in_force
@@ -405,7 +406,9 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     game.ongoing[:] = [
         record
         for record in game.ongoing
-        if isinstance(record, ConditionalModifier | ProvinceModifier | LobbyModifier)
+        if isinstance(
+            record, ConditionalModifier | ProvinceModifier | LobbyModifier | SeatAbilityGrant
+        )
         or record.target_id in on_table
     ]
 

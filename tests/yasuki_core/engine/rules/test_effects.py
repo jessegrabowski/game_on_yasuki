@@ -27,6 +27,7 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     Effect,
     Rehonor,
+    RevokeGrants,
     seppuku,
     TakeFavor,
     InterruptingEffect,
@@ -40,6 +41,13 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Rehonored,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    AbilityGrant,
+    Duration,
+    Modifier,
+    SeatAbilityGrant,
+    Stat,
+)
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint
@@ -621,3 +629,21 @@ def test_evaluate_reads_the_board_as_it_stands_when_it_resolves():
     resolve_effects(game, [evaluate])
 
     assert game.table.seats[PlayerId.P1].honor == 2
+
+
+def test_revoking_grants_takes_one_sources_ability_grants_and_nothing_else():
+    game = two_seat_game()
+    kept = [
+        Modifier("ground", "farm", Stat.FORCE, 1, Duration.UNTIL_END_OF_TURN),
+        AbilityGrant("other", "farm", (), Duration.UNTIL_END_OF_TURN),
+        SeatAbilityGrant("other", PlayerId.P1, (), Duration.UNTIL_END_OF_TURN),
+    ]
+    game.ongoing = [
+        AbilityGrant("ground", "farm", (), Duration.UNTIL_END_OF_TURN),
+        *kept,
+        SeatAbilityGrant("ground", PlayerId.P1, (), Duration.WHILE_SOURCE_IN_PLAY),
+    ]
+
+    RevokeGrants("ground").perform(game)
+
+    assert game.ongoing == kept

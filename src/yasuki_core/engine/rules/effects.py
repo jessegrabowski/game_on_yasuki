@@ -42,6 +42,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Minimum,
     Modifier,
     ProvinceModifier,
+    SeatAbilityGrant,
     Stat,
 )
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, seat_once_key
@@ -631,6 +632,51 @@ class GrantAbility(Effect):
         game.ongoing.append(
             AbilityGrant(self.source_id, self.target_id, self.context, self.duration)
         )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantSeatAbility(Effect):
+    """Record a continuous ability grant on a player: the ``source`` card gives every card ``seat``
+    owns the ability its registered factory builds from ``context``, for ``duration``. The
+    player-scoped counterpart of :class:`~.GrantAbility`."""
+
+    source_id: str
+    seat: PlayerId
+    context: tuple[str, ...]
+    duration: Duration
+
+    def describe(self) -> str:
+        return f"{self.source_id} grants {self.seat.name}'s cards an ability ({self.duration.name})"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(
+            SeatAbilityGrant(self.source_id, self.seat, self.context, self.duration)
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class RevokeGrants(Effect):
+    """Remove every ability grant the ``source`` card gave, whatever its duration: a grant good
+    for one use is revoked by the use."""
+
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.source_id} revokes its grants"
+
+    def is_interruptible(self) -> bool:
+        """False: bookkeeping on a record, with nothing on the board to interrupt."""
+        return False
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing = [
+            recorded
+            for recorded in game.ongoing
+            if recorded.source_id != self.source_id
+            or not isinstance(recorded, AbilityGrant | SeatAbilityGrant)
+        ]
         return []
 
 

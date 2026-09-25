@@ -85,6 +85,7 @@ deferred through `Then` instead.
    GrantMinimum
    GrantLobbyBonus
    GrantProvinceStrength
+   GrantSeatAbility
    GrantModifier
    IgnoreHonorRequirements
    InterruptingEffect
@@ -100,6 +101,7 @@ deferred through `Then` instead.
    RecruitCard
    RefillProvince
    Rehonor
+   RevokeGrants
    seppuku
    RevealProvinces
    Show
@@ -237,6 +239,7 @@ set a card can return.
    Minimum
    Modifier
    ProvinceModifier
+   SeatAbilityGrant
 ```
 
 ```{eval-rst}

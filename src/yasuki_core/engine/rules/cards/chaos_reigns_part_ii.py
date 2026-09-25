@@ -98,7 +98,9 @@ register_ability(
 
 
 @granted_ability("daidoji_kaede")
-def _daidoji_kaede_granted_ability(context: tuple[str, ...]) -> Ability:
+def _daidoji_kaede_granted_ability(
+    game: GameState, kaede: L5RCard, context: tuple[str, ...]
+) -> Ability:
     """The "Battle: Ranged 3" her Open gives her, usable while the Personality it named opposes
     her at the battle being fought."""
     opposing_id = context[0]

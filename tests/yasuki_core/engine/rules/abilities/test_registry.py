@@ -31,10 +31,23 @@ from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.game_pieces.factory import resolve_decklist
-from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration, KeywordGrant
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    AbilityGrant,
+    Duration,
+    KeywordGrant,
+    SeatAbilityGrant,
+)
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import HoldingPrint, StrongholdPrint
-from tests.yasuki_core.engine.builders import holding, personality, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    fate_card,
+    holding,
+    personality,
+    put_in_play,
+    register,
+    two_seat_game,
+)
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 
 SHE = ruleset.SHATTERED_EMPIRE.name
 IMPERIAL = ruleset.IMPERIAL.name
@@ -154,7 +167,9 @@ def test_a_factory_built_card_flipped_dispatches_to_its_back():
 def test_a_granted_ability_follows_the_printed_ones_and_answers_to_its_key():
     plain = _ABILITIES["millet_farm"][0]
     granted_ability("grant_probe")(
-        lambda context: replace(plain, key=f"granted_{context[0]}", label="Battle: Ranged 3")
+        lambda game, card, context: replace(
+            plain, key=f"granted_{context[0]}", label="Battle: Ranged 3"
+        )
     )
 
     try:
@@ -214,6 +229,28 @@ def test_a_card_built_without_its_text_shows_its_name():
     assert ability_label(card, _labelless()) == "Rice Farm"
 
 
+def test_a_seat_grant_reaches_every_card_its_seat_owns_and_none_of_the_opponents():
+    plain = _ABILITIES["millet_farm"][0]
+    granted_ability("grant_probe")(lambda game, card, context: replace(plain, key=context[0]))
+
+    try:
+        game = two_seat_game()
+        granting = put_in_play(game, holding("granting", printed_id="grant_probe"))
+        own = put_in_play(game, holding("own"))
+        theirs = put_in_play(game, holding("theirs", owner=PlayerId.P2))
+        held = fate_card("held", PlayerId.P1)
+        game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(register(game.table, held))
+        game.ongoing.append(
+            SeatAbilityGrant(granting.id, PlayerId.P1, ("licensed",), Duration.UNTIL_END_OF_TURN)
+        )
+
+        assert [held.key for held in abilities_for(game, own)] == ["licensed"]
+        assert [held.key for held in abilities_for(game, held)] == ["licensed"]
+        assert abilities_for(game, theirs) == ()
+    finally:
+        GRANTED_ABILITIES.pop("grant_probe", None)
+
+
 def test_a_keyword_ability_joins_every_card_carrying_the_keyword_after_its_own():
     plain = _ABILITIES["millet_farm"][0]
     register_keyword_ability(replace(plain, key="probe", from_keyword="Probe"))
@@ -250,6 +287,26 @@ def test_a_granted_keyword_brings_its_abilities_with_it():
         assert abilities_for(game, farm) == (plain,)
     finally:
         KEYWORD_ABILITIES.pop("probe", None)
+
+
+def test_a_granted_ability_under_a_keyword_abilitys_key_stands_in_for_it():
+    plain = _ABILITIES["millet_farm"][0]
+    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe"))
+    granted_ability("grant_probe")(
+        lambda game, card, context: replace(plain, key="probe", label=f"Granted to {card.id}")
+    )
+
+    try:
+        game = two_seat_game()
+        granting = put_in_play(game, holding("granting", printed_id="grant_probe"))
+        farm = put_in_play(game, holding("farm", printed_id="millet_farm", keywords=("probe",)))
+        game.ongoing.append(AbilityGrant(granting.id, farm.id, (), Duration.UNTIL_END_OF_TURN))
+
+        assert [held.key for held in abilities_for(game, farm)] == [None, "probe"]
+        assert ability_for(game, farm, "probe").label == "Granted to farm"
+    finally:
+        KEYWORD_ABILITIES.pop("probe", None)
+        GRANTED_ABILITIES.pop("grant_probe", None)
 
 
 def test_a_keyword_ability_must_name_its_keyword_and_a_key():

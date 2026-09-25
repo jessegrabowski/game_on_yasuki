@@ -45,6 +45,7 @@ yasuki_core.engine.rules.effects
     GrantModifier
     GrantPriority
     GrantProvinceStrength
+    GrantSeatAbility
     IgnoreHonorRequirements
     InterruptingEffect
     LookAtTop
@@ -64,6 +65,7 @@ yasuki_core.engine.rules.effects
     RefillProvince
     Rehonor
     RevealProvinces
+    RevokeGrants
     Show
     ShuffleDeck
     SpendOncePerTurn
