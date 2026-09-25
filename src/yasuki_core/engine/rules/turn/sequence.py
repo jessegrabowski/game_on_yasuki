@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.interrupts import interrupt_actions
-from yasuki_core.engine.rules.legality import activatable, permitted_timings
+from yasuki_core.engine.rules.legality import activatable, permitted_timings, playable
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
@@ -437,9 +437,14 @@ def _announce_resolution(game: GameState) -> None:
 
 
 def _responders(game: GameState) -> list[PlayerId]:
-    """Every seat holding a Response it could take against the action or battle just resolved."""
+    """Every seat holding a Response it could take against the action or battle just resolved,
+    on a card in play or as a Strategy in hand."""
     responding = frozenset({ActionTiming.RESPONSE})
-    return [seat for seat in game.table.seats if activatable(game, seat, responding)]
+    return [
+        seat
+        for seat in game.table.seats
+        if activatable(game, seat, responding) or playable(game, seat, responding)
+    ]
 
 
 def open_response_window(game: GameState) -> bool:
