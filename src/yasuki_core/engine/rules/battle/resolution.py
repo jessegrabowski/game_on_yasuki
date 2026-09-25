@@ -417,20 +417,64 @@ def _resolve_battle(game: GameState) -> None:
     events_before = len(game.action_events)
 
     attack.battle_segment = BattleSegment.RESOLUTION
-    triggers.resolve_effects(game, effects)
-    destructions = _resolution_destructions(game, events_before)
-    outcome = _outcome(
-        game,
-        battlefield,
-        winner=winner,
-        honor_before=honor_before,
-        destructions=destructions,
+    # Queued first, so a trigger that pauses the resolution's cascade to ask a question stashes it
+    # above the announcement, which then sees everything the resolution did.
+    game.stack.append(
+        AnnounceResolution(
+            battlefield,
+            last_battle=last_battle,
+            winner=winner,
+            honor_before=honor_before,
+            events_before=events_before,
+        )
     )
-    attack.amend(battlefield, outcome=outcome)
-    # Queued before the announcement, so a trait that pauses on it stashes its cascade above the
-    # work and resumes first.
-    game.stack.append(AfterResolution(battlefield, last_battle=last_battle))
-    triggers.fire(game, _battle_resolved(attack, battlefield, outcome, destructions))
+    triggers.resolve_effects(game, effects)
+
+
+@dataclass(frozen=True, slots=True)
+class AnnounceResolution:
+    """Record what a battle's resolution did and announce :class:`~.BattleResolved`, once its
+    cascade has settled (CR, Battle Resolution).
+
+    A work item, since a trigger among the resolution's effects may pause to ask a question and the
+    outcome must include what the answer does.
+
+    Attributes
+    ----------
+    battlefield : int
+        The battlefield whose battle resolved.
+    last_battle : bool
+        Whether it was the Attack Phase's last, which sends every defending unit home.
+    winner : PlayerId or None
+        The seat whose Force was higher, read before resolution destroyed the armies, or None on a
+        tie.
+    honor_before : dict mapping PlayerId to int
+        Each seat's Family Honor as resolution began.
+    events_before : int
+        Where the resolution's events start in the action's events.
+    """
+
+    battlefield: int
+    last_battle: bool
+    winner: PlayerId | None
+    honor_before: dict[PlayerId, int]
+    events_before: int
+
+    def resume(self, game: GameState) -> None:
+        attack = _declared_attack(game)
+        destructions = _resolution_destructions(game, self.events_before)
+        outcome = _outcome(
+            game,
+            self.battlefield,
+            winner=self.winner,
+            honor_before=self.honor_before,
+            destructions=destructions,
+        )
+        attack.amend(self.battlefield, outcome=outcome)
+        # Queued before the announcement, so a trait that pauses on it stashes its cascade above
+        # the work and resumes first.
+        game.stack.append(AfterResolution(self.battlefield, last_battle=self.last_battle))
+        triggers.fire(game, _battle_resolved(attack, self.battlefield, outcome, destructions))
 
 
 @dataclass(frozen=True, slots=True)
@@ -440,8 +484,8 @@ class AfterResolution:
 
     A work item, since the step is an Action Round the seats pass out of. It is queued twice: once
     to open the step, and again beneath it to run the After Resolution clauses when the step
-    closes, with :class:`~.EndBattle` queued beneath those. A card that reads "after a battle's Resolution Segment" acts in the step, while the
-    battle segment still reads Resolution.
+    closes, with :class:`~.EndBattle` queued beneath those. A card that reads "after a battle's
+    Resolution Segment" acts in the step, while the battle segment still reads Resolution.
 
     Attributes
     ----------
