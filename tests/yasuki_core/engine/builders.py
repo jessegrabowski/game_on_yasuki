@@ -312,6 +312,19 @@ def terrain(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
     )
 
 
+def contentious_terrain(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        name="Contentious Terrain",
+        printed_id="contentious_terrain",
+        side=Side.FATE,
+        owner=owner,
+        gold_cost=0,
+        keywords=("Terrain",),
+    )
+
+
 def doro_no_oni(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
     """Doro no Oni as printed: a Terrain by its ability keyword alone, with none on its type line."""
     return L5RCard.of(

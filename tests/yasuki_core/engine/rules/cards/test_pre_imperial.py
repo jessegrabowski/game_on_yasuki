@@ -5,7 +5,6 @@ from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.battle.resolution import army_force
 from yasuki_core.engine.rules.stats.calculation import effective_stat
-from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass, PlayStrategy, Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
@@ -22,6 +21,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
 
 from tests.yasuki_core.engine.builders import (
+    contentious_terrain,
     end_phase,
     pay,
     personality,
@@ -46,19 +46,6 @@ def _fate_discard(table: TableState, seat: PlayerId) -> set[str]:
 
 def _recruited(session, card_id):
     return session.game.table.cards_by_id[card_id] in session.game.table.battlefield.cards
-
-
-def _contentious_terrain(card_id: str, owner: PlayerId = P1) -> L5RCard:
-    return L5RCard.of(
-        ActionPrint,
-        id=card_id,
-        name="Contentious Terrain",
-        printed_id="contentious_terrain",
-        side=Side.FATE,
-        owner=owner,
-        gold_cost=0,
-        keywords=(keywords.TERRAIN,),
-    )
 
 
 def _in_combat(*terrains: L5RCard) -> EngineSession:
@@ -103,7 +90,7 @@ def _play_terrain(session: EngineSession, seat: PlayerId, card_id: str) -> None:
 
 
 def test_contentious_terrain_enters_play_at_the_battlefield_in_no_army():
-    session = _in_combat(_contentious_terrain("ct"))
+    session = _in_combat(contentious_terrain("ct"))
     session.act(P2, Pass())
 
     _play_terrain(session, P1, "ct")
@@ -115,7 +102,7 @@ def test_contentious_terrain_enters_play_at_the_battlefield_in_no_army():
 
 
 def test_contentious_terrain_gives_only_its_players_personalities_there_1_force():
-    session = _in_combat(_contentious_terrain("ct"))
+    session = _in_combat(contentious_terrain("ct"))
     session.act(P2, Pass())
 
     _play_terrain(session, P1, "ct")
@@ -125,7 +112,7 @@ def test_contentious_terrain_gives_only_its_players_personalities_there_1_force(
 
 
 def test_contentious_terrain_leaves_its_players_personalities_elsewhere_alone():
-    session = _in_combat(_contentious_terrain("ct"))
+    session = _in_combat(contentious_terrain("ct"))
     session.act(P2, Pass())
 
     _play_terrain(session, P1, "ct")
@@ -135,7 +122,7 @@ def test_contentious_terrain_leaves_its_players_personalities_elsewhere_alone():
 
 
 def test_contentious_terrain_played_by_the_defender_strengthens_the_defending_army():
-    session = _in_combat(_contentious_terrain("ct", owner=P2))
+    session = _in_combat(contentious_terrain("ct", owner=P2))
 
     _play_terrain(session, P2, "ct")
 
@@ -144,7 +131,7 @@ def test_contentious_terrain_played_by_the_defender_strengthens_the_defending_ar
 
 
 def test_contentious_terrain_destroys_the_terrain_already_at_the_battlefield():
-    session = _in_combat(_contentious_terrain("first"), _contentious_terrain("second", owner=P2))
+    session = _in_combat(contentious_terrain("first"), contentious_terrain("second", owner=P2))
     session.act(P2, Pass())
     _play_terrain(session, P1, "first")
 
@@ -157,7 +144,7 @@ def test_contentious_terrain_destroys_the_terrain_already_at_the_battlefield():
 
 
 def test_contentious_terrain_asks_which_terrain_to_destroy_when_there_are_several():
-    session = _in_combat(_contentious_terrain("ct"))
+    session = _in_combat(contentious_terrain("ct"))
     table = session.game.table
     for card_id in ("left", "right"):
         terrain_at(table, card_id, battlefield=0, owner=P2)
@@ -174,7 +161,7 @@ def test_contentious_terrain_asks_which_terrain_to_destroy_when_there_are_severa
 
 
 def test_contentious_terrain_is_discarded_once_its_battle_ends():
-    session = _in_combat(_contentious_terrain("ct"))
+    session = _in_combat(contentious_terrain("ct"))
     session.act(P2, Pass())
     _play_terrain(session, P1, "ct")
 
