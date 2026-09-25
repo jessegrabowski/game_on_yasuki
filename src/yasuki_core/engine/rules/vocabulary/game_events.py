@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import Cause, PlayerId
-from yasuki_core.engine.table import Location
+from yasuki_core.engine.table import Location, ZoneKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 
@@ -251,6 +251,46 @@ class ActionResolved:
     printed: bool
 
 
+@dataclass(frozen=True, slots=True)
+class BattleResolved:
+    """A battle has resolved and its survivors have gone home (CR, After Resolution).
+
+    Announced once per battle, after the resolution's destruction and the Attacker's units'
+    return, and before the effects delayed to the end of the battle. The outcome fields copy the
+    :class:`~yasuki_core.engine.rules.battle.records.BattleOutcome` the attack records, so the
+    event outlives the attack that recorded them.
+
+    Attributes
+    ----------
+    battlefield : int
+        The index of the battlefield the battle was fought at.
+    province : ZoneKey
+        The Province the battlefield sat at, whether or not it still stands.
+    attacker : PlayerId
+        The seat that declared the attack.
+    defender : PlayerId
+        The seat whose Province was attacked.
+    winner : PlayerId or None
+        The seat whose Force was higher, or None if the battle was tied.
+    province_destroyed : bool
+        Whether the Province was destroyed.
+    destroyed : tuple of str
+        The ids of the cards the resolution destroyed, in the order they went.
+    ever_present : frozenset of (PlayerId, str)
+        Each seat and the Personality it ever had at the battlefield during the attack, whether or
+        not the Personality was still there when the battle was fought.
+    """
+
+    battlefield: int
+    province: ZoneKey
+    attacker: PlayerId
+    defender: PlayerId
+    winner: PlayerId | None
+    province_destroyed: bool
+    destroyed: tuple[str, ...]
+    ever_present: frozenset[tuple[PlayerId, str]]
+
+
 # Events a step fires before it commits anything, to open a window for the cards it concerns. A
 # question a trigger asks in one belongs to the step that opened it, so backing out unwinds the
 # step's action as it would from any other question of the action's own. Every other event has
@@ -260,6 +300,7 @@ WINDOWS: frozenset[type] = frozenset({ProducingGold})
 GameEvent = (
     ActionResolved
     | Assigned
+    | BattleResolved
     | TurnStarted
     | CardDiscarded
     | CounterGained

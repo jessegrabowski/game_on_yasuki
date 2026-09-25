@@ -16,7 +16,10 @@ from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.vocabulary.segments import Segment
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.rules.effects import Move
+from yasuki_core.engine.rules.triggers import apply_effect
+from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved
+from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import AttachmentType
 
@@ -995,3 +998,73 @@ def test_each_battlefield_records_only_its_own_casualties():
     battlefields = session.game.attack.battlefields
     assert battlefields[0].outcome.destroyed == ("def0",)
     assert battlefields[1].outcome.destroyed == ("def1",)
+
+
+def _battles_resolved(session: EngineSession) -> list[BattleResolved]:
+    return [event for event in session.game.turn_events if isinstance(event, BattleResolved)]
+
+
+def test_a_fought_battle_announces_battle_resolved_once_with_its_outcome():
+    session = _one_battlefield({"a": 9}, {"d": 2}, province_strength=3)
+
+    _fight_one_battle(session)
+
+    assert _battles_resolved(session) == [
+        BattleResolved(
+            battlefield=0,
+            province=_province(PlayerId.P2, 0),
+            attacker=PlayerId.P1,
+            defender=PlayerId.P2,
+            winner=PlayerId.P1,
+            province_destroyed=True,
+            destroyed=("d",),
+            ever_present=frozenset({(PlayerId.P1, "a"), (PlayerId.P2, "d")}),
+        )
+    ]
+
+
+def test_a_passed_attack_phase_announces_no_battle():
+    session = _to_battle(_session())
+
+    session.act(PlayerId.P1, Pass())
+
+    assert _battles_resolved(session) == []
+
+
+def test_a_unit_moved_home_before_the_fight_is_still_recorded_as_present():
+    # Applied raw: the session is paused on the choice of battlefield, and a cascade refuses to run
+    # mid-decision, while the move itself asks nothing.
+    session = _one_battlefield({"a": 4}, {"d": 2})
+    apply_effect(session.game, Move("d", Location.home(PlayerId.P2)))
+
+    _fight_one_battle(session)
+
+    (resolved,) = _battles_resolved(session)
+    assert (PlayerId.P2, "d") in resolved.ever_present
+    assert resolved.destroyed == ()
+
+
+def test_a_unit_arriving_by_a_move_after_assignment_is_recorded_as_present():
+    session = _one_battlefield({"a": 4}, {"d": 2})
+    put_in_play(session.game.table, personality("late", owner=PlayerId.P2, force=1))
+    apply_effect(session.game, Move("late", Location.at_battlefield(0)))
+
+    _fight_one_battle(session)
+
+    (resolved,) = _battles_resolved(session)
+    assert (PlayerId.P2, "late") in resolved.ever_present
+    assert "late" in resolved.destroyed
+
+
+def test_each_battlefield_records_only_the_units_that_stood_at_it():
+    session, attackers = _declared(defender_provinces=2, units=1)
+    session.submit(PlayerId.P1, DecisionResponse((assignment_token(attackers[0], 0),)))
+    session.submit(PlayerId.P2, DecisionResponse((assignment_token("P2-hero0", 1),)))
+
+    _fight_every_battlefield(session)
+
+    present = {event.battlefield: event.ever_present for event in _battles_resolved(session)}
+    assert present == {
+        0: frozenset({(PlayerId.P1, attackers[0])}),
+        1: frozenset({(PlayerId.P2, "P2-hero0")}),
+    }

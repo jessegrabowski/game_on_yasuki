@@ -20,7 +20,7 @@ from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.abilities.registry import may_attack
-from yasuki_core.engine.rules.vocabulary.game_events import Assigned, Destroyed
+from yasuki_core.engine.rules.vocabulary.game_events import Assigned, BattleResolved, Destroyed
 from yasuki_core.engine.rules.battle.records import (
     AttackPhase,
     BattleOutcome,
@@ -410,6 +410,7 @@ def _resolve_battle(game: GameState) -> None:
     )
     attack.battlefields = _with_outcome(attack.battlefields, battlefield, outcome)
     after_resolution(game, battlefield, last_battle=last_battle)
+    triggers.fire(game, _battle_resolved(attack, battlefield, outcome))
     triggers.resolve_delayed(game, END_OF_BATTLE)
     attack.current = None
     game.stack.append(FightNextBattle())
@@ -463,6 +464,22 @@ def _outcome(
             for seat, honor in _honor(game).items()
             if honor != honor_before[seat]
         },
+    )
+
+
+def _battle_resolved(
+    attack: AttackPhase, battlefield: int, outcome: BattleOutcome
+) -> BattleResolved:
+    info = attack.battlefields[battlefield]
+    return BattleResolved(
+        battlefield=battlefield,
+        province=info.province,
+        attacker=attack.attacker,
+        defender=attack.defender,
+        winner=outcome.winner,
+        province_destroyed=outcome.province_destroyed,
+        destroyed=outcome.destroyed,
+        ever_present=info.ever_present,
     )
 
 
