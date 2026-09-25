@@ -14,8 +14,15 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.effects import Destroy, DestroyProvince, Effect, GainHonor, Rehonor
-from yasuki_core.engine.rules.board.queries import units_at
+from yasuki_core.engine.rules.effects import (
+    Destroy,
+    DestroyProvince,
+    Discard,
+    Effect,
+    GainHonor,
+    Rehonor,
+)
+from yasuki_core.engine.rules.board.queries import terrains_at, units_at
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
@@ -274,7 +281,8 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     exempts his whole unit from the bow but not from the trip home, as does a card that says the
     resolution does not bow its player's units. Once the Attack Phase's last
     battle is over, defending units return home without bowing. Every one of them, at every
-    battlefield, holds the ground they defended until then.
+    battlefield, holds the ground they defended until then. Last, every Terrain at this battlefield
+    is discarded, announced like any discard.
     """
     attack = _declared_attack(game)
     exempt = attack.battlefields[battlefield].bow_exempt
@@ -292,6 +300,11 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
         for index in range(len(attack.battlefields)):
             for personality in units_at(game, index, attack.defender):
                 ops.return_home(game.table, personality)
+    discards: list[Effect] = [
+        Discard(terrain.id, Rulebook.AFTER_RESOLUTION) for terrain in terrains_at(game, battlefield)
+    ]
+    if discards:
+        triggers.resolve_effects(game, discards)
 
 
 @dataclass(frozen=True, slots=True)
@@ -425,8 +438,8 @@ class AfterResolution:
     Resolution once it closes (CR, Battle Sequence).
 
     A work item, since the step is an Action Round the seats pass out of. It is queued twice: once
-    to open the step, and again beneath it to bow and send home the survivors when the step
-    closes. A card that reads "after a battle's Resolution Segment" acts in the step, while the
+    to open the step, and again beneath it to run the After Resolution clauses when the step
+    closes, with :class:`~.EndBattle` queued beneath those. A card that reads "after a battle's Resolution Segment" acts in the step, while the
     battle segment still reads Resolution.
 
     Attributes
@@ -450,10 +463,21 @@ class AfterResolution:
         if not self.responded and open_response_window(game):
             game.stack.append(replace(self, responded=True))
             return
-        attack = _declared_attack(game)
-        attack.battle_segment = BattleSegment.AFTER_RESOLUTION
+        _declared_attack(game).battle_segment = BattleSegment.AFTER_RESOLUTION
+        # Queued first, so a question the Terrain discard asks stashes its cascade above it and is
+        # answered before the battle ends.
+        game.stack.append(EndBattle())
         after_resolution(game, self.battlefield, last_battle=self.last_battle)
+
+
+@dataclass(frozen=True, slots=True)
+class EndBattle:
+    """End the battle After Resolution closes: resolve what was delayed to the end of the battle,
+    then move on to the next battlefield."""
+
+    def resume(self, game: GameState) -> None:
         triggers.resolve_delayed(game, END_OF_BATTLE)
+        attack = _declared_attack(game)
         attack.battle_segment = None
         attack.current = None
         game.stack.append(FightNextBattle())

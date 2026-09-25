@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     assignment_token,
 )
 from yasuki_core.bots.policies import EconomicPolicy, GoldRushPolicy
-from yasuki_core.engine.rules.turn.structure import Phase, RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE, Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession
@@ -20,11 +20,11 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
-from yasuki_core.engine.rules.effects import Ask, Move
+from yasuki_core.engine.rules.effects import Ask, DelayedEffect, Discard, Move
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.triggers import apply_effect
-from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved
+from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved, CardDiscarded
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -42,6 +42,7 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
     stronghold,
+    terrain_at,
     two_seat_game,
 )
 
@@ -1161,3 +1162,76 @@ def test_a_trait_pausing_on_the_announcement_resolves_before_the_step_opens(reac
 
     assert session.game.round.kind is RoundKind.RESPONSE
     assert not session.game.table.cards_by_id["a"].bowed
+
+
+def test_after_resolution_discards_the_terrain_at_its_own_battlefield_only():
+    game = two_seat_game()
+    for index in range(2):
+        province_card(game, f"def-prov{index}", seat=PlayerId.P2, index=index)
+    resolution.declare_attack(game, PlayerId.P1)
+    here = terrain_at(game, "here", battlefield=0)
+    there = terrain_at(game, "there", battlefield=1)
+
+    resolution.after_resolution(game, 0, last_battle=False)
+
+    discard = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
+    assert here in discard
+    assert location_of(game.table, there).battlefield == 1
+
+
+def test_a_terrain_adds_nothing_to_either_armys_force():
+    session = _one_battlefield({"a": 4}, {"d": 2})
+    terrain_at(session.game, "ground", battlefield=0)
+
+    assert resolution.army_force(session.game, 0, PlayerId.P1) == 4
+    assert resolution.army_force(session.game, 0, PlayerId.P2) == 2
+
+
+def test_a_question_asked_on_a_terrains_discard_is_answered_before_the_battle_moves_on(reacting):
+    reacting(
+        CardDiscarded,
+        "terrain_discard_probe",
+        lambda ctx: (
+            [Ask(ctx.card.owner, "Answer it?", TRAIT_ENTRY, source_id=ctx.card.id)]
+            if ctx.event.card_id == "ground"
+            else []
+        ),
+    )
+    session = _one_battlefield({"a": 4}, {"d": 2}, defender_provinces=2)
+    table = session.game.table
+    put_in_play(table, holding("probe", printed_id="terrain_discard_probe", owner=PlayerId.P1))
+    terrain_at(table, "ground", battlefield=0)
+    pending = session.game.pending
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    while session.game.round.kind is RoundKind.BATTLE_SEGMENT:
+        session.act(session.game.round.priority, Pass())
+    assert isinstance(session.game.pending, Confirm)
+    assert session.game.attack.battle_segment is BattleSegment.AFTER_RESOLUTION
+
+    session.submit(PlayerId.P1, DecisionResponse(()))
+
+    assert session.game.attack.current is None
+    assert isinstance(session.game.pending, ChooseBattlefield)
+
+
+def test_the_terrain_is_discarded_before_the_end_of_battle_delays_resolve(reacting):
+    discarded: list[str] = []
+
+    def record(ctx):
+        if ctx.event.card_id in ("ground", "marker"):
+            discarded.append(ctx.event.card_id)
+        return []
+
+    reacting(CardDiscarded, "discard_order_probe", record)
+    session = _one_battlefield({"a": 4}, {"d": 2}, defender_provinces=2)
+    table = session.game.table
+    put_in_play(table, holding("probe", printed_id="discard_order_probe", owner=PlayerId.P1))
+    put_in_play(table, holding("marker", owner=PlayerId.P1))
+    terrain_at(table, "ground", battlefield=0)
+    apply_effect(session.game, DelayedEffect(Discard("marker", PlayerId.P1), END_OF_BATTLE))
+    pending = session.game.pending
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+
+    _pass_out_the_segments(session)
+
+    assert discarded == ["ground", "marker"]
