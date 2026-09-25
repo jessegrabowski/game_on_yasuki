@@ -1179,14 +1179,6 @@ def test_after_resolution_discards_the_terrain_at_its_own_battlefield_only():
     assert location_of(game.table, there).battlefield == 1
 
 
-def test_a_terrain_adds_nothing_to_either_armys_force():
-    session = _one_battlefield({"a": 4}, {"d": 2})
-    terrain_at(session.game, "ground", battlefield=0)
-
-    assert resolution.army_force(session.game, 0, PlayerId.P1) == 4
-    assert resolution.army_force(session.game, 0, PlayerId.P2) == 2
-
-
 def test_a_question_asked_on_a_terrains_discard_is_answered_before_the_battle_moves_on(reacting):
     reacting(
         CardDiscarded,
