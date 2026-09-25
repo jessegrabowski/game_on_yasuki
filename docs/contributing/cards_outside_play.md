@@ -166,8 +166,23 @@ Terrain is by far the largest of these kinds and does not follow the pattern. A 
 attached to a battlefield, not to a seat, so what it has to get along with is whatever Terrain is
 already there. How that is handled is the card's own business and varies across the pool. Many
 print an explicit "Destroy a Terrain" clause ahead of putting themselves into play, and many say
-nothing of the kind. Nothing is implemented for Terrain yet, and the first one written has to
-settle what a battlefield attachment is before it can settle anything else.
+nothing of the kind.
+
+A Terrain in play has a battlefield location and belongs to no unit, so it is in neither army and
+adds no Force (CR, Side). {class}`~.PutIntoPlay` takes the battlefield, and
+{func}`~.terrains_at` and {func}`~.controls_terrain_at` read it back. The rulebook discards it after
+its battle resolves. A Terrain printing "Battle: Destroy a Terrain (if able). Put this Terrain into
+play." and nothing more is one line:
+
+```python
+register_terrain("contentious_terrain")
+```
+
+Most Terrains print the other template, "If there are no Terrains at the current battlefield: Put
+this card into play there", which has no idiom yet.
+
+What the Terrain does while it stands there is the card's own handler. {card}`Contentious Terrain`
+gives its player's Personalities at its battlefield +1F through a stat grant.
 
 ## Looking at the top of a deck
 

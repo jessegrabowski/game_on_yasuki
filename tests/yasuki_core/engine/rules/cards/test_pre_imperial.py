@@ -1,8 +1,17 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.engine.rules.battle.resolution import army_force
+from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass, PlayStrategy, Recruit
-from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse, assignment_token
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseCards,
+    DecisionResponse,
+    assignment_token,
+)
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.table import location_of
 from yasuki_core.engine.session import EngineSession
@@ -17,14 +26,151 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    terrain_at,
 )
 
 P1 = PlayerId.P1
 P2 = PlayerId.P2
 
 
+def _in_hand(state: TableState, card: L5RCard) -> L5RCard:
+    state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    return card
+
+
+def _fate_discard(table: TableState, seat: PlayerId) -> set[str]:
+    return {card.id for card in table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards}
+
+
 def _recruited(session, card_id):
     return session.game.table.cards_by_id[card_id] in session.game.table.battlefield.cards
+
+
+def _contentious_terrain(card_id: str, owner: PlayerId = P1) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        name="Contentious Terrain",
+        printed_id="contentious_terrain",
+        side=Side.FATE,
+        owner=owner,
+        gold_cost=0,
+        keywords=(keywords.TERRAIN,),
+    )
+
+
+def _in_combat(*terrains: L5RCard) -> EngineSession:
+    """P1's ``a`` attacks P2's ``d`` at P2's first Province, 3F against 3F, with ``terrains`` in
+    their owners' hands and P1's ``home`` left at home. Paused as the Combat Segment opens, with
+    the Defender holding the first opportunity. P2 keeps a second Province, so taking the first
+    does not end the game."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=P2, index=0)
+    province_card(state, "def-prov1", seat=P2, index=1)
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    put_in_play(state, personality("a", owner=P1, force=3))
+    put_in_play(state, personality("d", owner=P2, force=3))
+    put_in_play(state, personality("home", owner=P1, force=3))
+    for terrain in terrains:
+        _in_hand(state, terrain)
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse((assignment_token("a", 0),)))
+    session.submit(P2, DecisionResponse((assignment_token("d", 0),)))
+    session.submit(P1, DecisionResponse(("0",)))
+    while session.game.attack.battle_segment is BattleSegment.ENGAGE:
+        session.act(session.game.round.priority, Pass())
+    return session
+
+
+def _play_terrain(session: EngineSession, seat: PlayerId, card_id: str) -> None:
+    session.act(seat, PlayStrategy(card_id))
+    pay(session, seat)
+
+
+def test_contentious_terrain_enters_play_at_the_battlefield_in_no_army():
+    session = _in_combat(_contentious_terrain("ct"))
+    session.act(P2, Pass())
+
+    _play_terrain(session, P1, "ct")
+
+    game = session.game
+    terrain = game.table.cards_by_id["ct"]
+    assert location_of(game.table, terrain).battlefield == 0
+    assert (P1, "ct") not in game.attack.battlefields[0].ever_present
+
+
+def test_contentious_terrain_gives_only_its_players_personalities_there_1_force():
+    session = _in_combat(_contentious_terrain("ct"))
+    session.act(P2, Pass())
+
+    _play_terrain(session, P1, "ct")
+
+    assert army_force(session.game, 0, P1) == 4
+    assert army_force(session.game, 0, P2) == 3
+
+
+def test_contentious_terrain_leaves_its_players_personalities_elsewhere_alone():
+    session = _in_combat(_contentious_terrain("ct"))
+    session.act(P2, Pass())
+
+    _play_terrain(session, P1, "ct")
+
+    home = session.game.table.cards_by_id["home"]
+    assert effective_stat(session.game, home, Stat.FORCE) == 3
+
+
+def test_contentious_terrain_played_by_the_defender_strengthens_the_defending_army():
+    session = _in_combat(_contentious_terrain("ct", owner=P2))
+
+    _play_terrain(session, P2, "ct")
+
+    assert army_force(session.game, 0, P2) == 4
+    assert army_force(session.game, 0, P1) == 3
+
+
+def test_contentious_terrain_destroys_the_terrain_already_at_the_battlefield():
+    session = _in_combat(_contentious_terrain("first"), _contentious_terrain("second", owner=P2))
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "first")
+
+    session.act(P2, PlayStrategy("second"))
+    pay(session, P2)
+
+    table = session.game.table
+    assert "first" in _fate_discard(table, P1)
+    assert location_of(table, table.cards_by_id["second"]).battlefield == 0
+
+
+def test_contentious_terrain_asks_which_terrain_to_destroy_when_there_are_several():
+    session = _in_combat(_contentious_terrain("ct"))
+    table = session.game.table
+    for card_id in ("left", "right"):
+        terrain_at(table, card_id, battlefield=0, owner=P2)
+
+    session.act(P2, Pass())
+    session.act(P1, PlayStrategy("ct"))
+    pay(session, P1)
+    assert isinstance(session.game.pending, ChooseCards)
+    session.submit(P1, DecisionResponse(("right",)))
+
+    assert location_of(table, table.cards_by_id["left"]).battlefield == 0
+    assert "right" in _fate_discard(table, P2)
+    assert location_of(table, table.cards_by_id["ct"]).battlefield == 0
+
+
+def test_contentious_terrain_is_discarded_once_its_battle_ends():
+    session = _in_combat(_contentious_terrain("ct"))
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "ct")
+
+    while session.game.attack is not None and session.game.attack.current == 0:
+        session.act(session.game.round.priority, Pass())
+
+    table = session.game.table
+    assert "ct" in _fate_discard(table, P1)
+    assert effective_stat(session.game, table.cards_by_id["a"], Stat.FORCE) == 3
 
 
 def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
@@ -100,7 +246,7 @@ def _battle_resolved_holding_the_cry(*, held_by: PlayerId) -> EngineSession:
     province_card(state, "atk-prov0", seat=P1, index=0)
     put_in_play(state, personality("a", owner=P1, force=4))
     put_in_play(state, personality("d", owner=P2, force=2))
-    state.zones[ZoneKey(held_by, ZoneRole.HAND)].add(register(state, _rallying_cry(held_by)))
+    _in_hand(state, _rallying_cry(held_by))
     session = EngineSession.start(state, P1)
     end_phase(session)
     session.act(P1, DeclareAttack())

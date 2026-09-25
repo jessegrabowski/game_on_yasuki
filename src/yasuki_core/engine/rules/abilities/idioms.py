@@ -7,13 +7,15 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import ability_for, register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
-from yasuki_core.engine.rules.board.queries import favor_actions_this_turn
+from yasuki_core.engine.rules.board.queries import favor_actions_this_turn, terrains_at
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
     AskOption,
+    Choose,
+    Destroy,
     Discard,
     Effect,
     GainHonor,
@@ -282,6 +284,74 @@ def register_event_entry(
             hits_every_target=True,
             located_at=(CardLocation.PROVINCE,),
             keywords=ability_keywords,
+        ),
+    )
+
+
+# The choice of which Terrain a Terrain entering play destroys, when more than one is there.
+TERRAIN_ENTRY = "terrain_entry"
+
+
+def _terrain_enters(game: GameState, source_id: str, destroyed: tuple[str, ...]) -> list[Effect]:
+    """Destroy ``destroyed``, then put ``source_id`` into play at the battlefield being fought."""
+    attack = game.attack
+    assert attack is not None and attack.current is not None
+    owner = game.table.cards_by_id[source_id].owner
+    return [
+        *(Destroy(card_id, cause=owner) for card_id in destroyed),
+        PutIntoPlay(source_id, battlefield=attack.current),
+    ]
+
+
+@choice_resolver(TERRAIN_ENTRY, prompt="Choose a Terrain to destroy")
+def _resolve_terrain_entry(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return _terrain_enters(game, source_id, destroyed=chosen)
+
+
+def register_terrain(printed_id: str) -> None:
+    """Register ``printed_id``'s "Battle: Destroy a Terrain (if able). Put this Terrain into play."
+
+    Taken from hand during a battle. Its Terrain enters play at the current battlefield, standing
+    in no unit there (CR, Terrain). The Terrain it destroys is its owner's pick when there is more
+    than one to pick from, and none is no obstacle, since the destruction is only "if able".
+    "A Terrain" is read as one at the current battlefield. Every Terrain is discarded when its own
+    battle ends, so no other battlefield holds one.
+    """
+
+    def targets(game: GameState, source: L5RCard) -> list[str]:
+        attack = game.attack
+        if attack is None or attack.current is None:
+            return []
+        return [source.id] if copy_may_enter(game, source.owner, source) else []
+
+    def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+        attack = game.attack
+        assert attack is not None and attack.current is not None
+        standing = tuple(card.id for card in terrains_at(game, attack.current))
+        if len(standing) > 1:
+            return [
+                Choose(
+                    seat=source.owner,
+                    candidates=standing,
+                    minimum=1,
+                    maximum=1,
+                    resolver=TERRAIN_ENTRY,
+                    source_id=source.id,
+                )
+            ]
+        return _terrain_enters(game, source.id, destroyed=standing)
+
+    register_ability(
+        printed_id,
+        Ability(
+            timings=(ActionTiming.BATTLE,),
+            cost=no_cost,
+            targets=targets,
+            effects=effects,
+            hits_every_target=True,
+            located_at=(CardLocation.HAND,),
         ),
     )
 
