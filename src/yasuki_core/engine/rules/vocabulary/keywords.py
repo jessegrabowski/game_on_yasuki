@@ -64,6 +64,10 @@ SHUGENJA = "Shugenja"
 # Cards carrying this accrue and receive seeded Sincerity tokens.
 SINCERITY = "Sincerity"
 
+# A Strategy that puts itself into play at the current battlefield, where it stands in neither side
+# or army, and is discarded once that battle ends (CR, Terrain; CR, Side).
+TERRAIN = "Terrain"
+
 # A Two-Handed Weapon is exclusive: its Personality may hold no other, even a Kensai (CR,
 # Two-Handed).
 TWO_HANDED = "Two-Handed"

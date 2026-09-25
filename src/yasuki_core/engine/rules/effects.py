@@ -1034,11 +1034,22 @@ class PutIntoPlay(Effect):
     What a card that puts itself into play does: an Edict, a Kata, a Terrain. The played card is
     not discarded afterward because it is no longer in hand (CR, Action Sequence step F).
     Does nothing for a card already there.
+
+    Attributes
+    ----------
+    card_id : str
+        The card entering play.
+    battlefield : int, optional
+        The battlefield it enters play at, for a Terrain, which stands there in no unit (CR,
+        Location). Default None, which puts it in its owner's home.
     """
 
     card_id: str
+    battlefield: int | None = None
 
     def describe(self) -> str:
+        if self.battlefield is not None:
+            return f"put {self.card_id} into play at battlefield {self.battlefield}"
         return f"put {self.card_id} into play"
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -1050,6 +1061,11 @@ class PutIntoPlay(Effect):
         hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
         from_hand = any(held is card for held in hand.cards)
         ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
+        # Not through place_unit: a Terrain is no unit, and the presence record it keeps is of
+        # units alone.
+        if self.battlefield is not None:
+            assert game.attack is not None and 0 <= self.battlefield < len(game.attack.battlefields)
+            ops.set_location(game.table, card, Location.at_battlefield(self.battlefield))
         return [EnteredPlay(self.card_id, from_hand=from_hand)]
 
 
