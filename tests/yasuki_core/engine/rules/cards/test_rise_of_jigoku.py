@@ -39,7 +39,12 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itse
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS, ActionRound, RoundKind
+from yasuki_core.engine.rules.turn.structure import (
+    BATTLE_SEGMENT_TIMINGS,
+    INTERRUPT_TIMINGS,
+    ActionRound,
+    RoundKind,
+)
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import Location
@@ -1038,6 +1043,21 @@ def test_heart_of_honor_pays_nothing_extra_to_a_target_below_three_personal_hono
     assert not bushi.bowed
     assert effective_force(game, bushi) == 3
     assert game.table.seats[P1].honor == 0
+
+
+def test_heart_of_honor_pays_the_battle_half_under_an_open_interrupt_step():
+    """The step suspends the Combat Segment it opened over, and the Battle half is the segment's."""
+    game = _heart_of_honor_battle(personal_honor=3)
+    source, ability = _heart_of_honor(game)
+    bushi = game.table.cards_by_id["bushi"]
+    game.round_stack.append(game.round)
+    game.round = ActionRound(timings=INTERRUPT_TIMINGS, priority=P1, kind=RoundKind.INTERRUPT)
+
+    resolve_effects(game, ability.effects(game, source, bushi))
+
+    assert not bushi.bowed
+    assert effective_force(game, bushi) == 5  # 3 printed, +2F
+    assert game.table.seats[P1].honor == 1
 
 
 def test_heart_of_honor_only_straightens_as_an_open_action():
