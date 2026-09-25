@@ -102,8 +102,10 @@ read.
 ```
 
 A granted ability is code like a printed one. The granting card registers a factory with
-`@granted_ability`, and the record carries the `context` the factory builds from, the ids the
-granting action chose. Legality, once-per-turn keys and the activation menu all read
+`@granted_ability`, called with the game, the card the ability is being built for, and the
+`context` the record carries, the ids the granting action chose. It is called on every read, so a
+label or a cost may be settled by the card that holds it. Legality, once-per-turn keys and the
+activation menu all read
 `abilities_for`, so a granted ability answers to each of them through the same path a printed one
 does. The factory's `Ability` needs a `key` whenever its card could already hold one, since the
 two are told apart the way any two abilities on one card are.

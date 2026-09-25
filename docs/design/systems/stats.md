@@ -83,6 +83,11 @@ Personality was targeted. {func}`~.abilities_for` reads these beside the card's 
 abilities, so a granted ability answers to legality, once per turn and the activation menu the
 way a printed one does.
 
+{class}`~.SeatAbilityGrant` gives every card a player owns an activated ability, built the
+same way from the granting card's factory. It rests on the player because the cards it reaches are
+whichever the player holds when it is used: The Sacred Ground of the Phoenix licenses "the next
+time you use the rulebook Kharmic ability", and the card spent may be one drawn after the Open.
+
 {class}`~.KeywordGrant` grants a keyword instead of a number. Asking whether a card is a Farm
 therefore goes through {func}`~.effective_keywords`, never through its printed keywords.
 
