@@ -1,10 +1,19 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.favor_payment import (
     favor_cost_for_seat,
     favor_payment_options,
 )
 from yasuki_core.engine.rules.effects import TakeFavor
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+    PlayStrategy,
+)
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -12,12 +21,20 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
-from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint
+from yasuki_core.game_pieces.prints import ActionPrint, DynastyPrint, FatePrint
 from yasuki_core.game_pieces.cards import L5RCard
 
-from tests.yasuki_core.engine.builders import end_phase, province_card, put_in_play, register
+from tests.yasuki_core.engine.builders import (
+    end_phase,
+    pay,
+    personality,
+    province_card,
+    put_in_play,
+    register,
+    terrain_at,
+)
 
-P1 = PlayerId.P1
+P1, P2 = PlayerId.P1, PlayerId.P2
 SOURCE = "rulebook"
 
 
@@ -125,3 +142,75 @@ def test_commanding_favor_is_offered_from_the_province_it_sits_in():
     session = _event_in_province()
 
     assert ActivateAbility("event") in session.legal_actions(P1)
+
+
+def _well_prepared_in_combat(*, terrain_owner: PlayerId | None) -> EngineSession:
+    """P1's ``a`` attacks P2's ``d``, with Well Prepared in P1's hand and a Terrain at the
+    battlefield owned by ``terrain_owner``, or none. Paused in the Combat Segment with P1 holding
+    the opportunity."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=P2, index=0)
+    province_card(state, "def-prov1", seat=P2, index=1)
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    put_in_play(state, personality("a", owner=P1, force=3))
+    put_in_play(state, personality("d", owner=P2, force=3))
+    if terrain_owner is not None:
+        terrain_at(state, "ground", battlefield=0, owner=terrain_owner)
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="prepared",
+                name="Well Prepared",
+                printed_id="well_prepared",
+                side=Side.FATE,
+                owner=P1,
+                gold_cost=0,
+            ),
+        )
+    )
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("a@0",)))
+    session.submit(P2, DecisionResponse(("d@0",)))
+    session.submit(P1, DecisionResponse(("0",)))
+    for _ in range(4):
+        if session.game.attack.battle_segment is BattleSegment.COMBAT:
+            break
+        session.act(session.game.round.priority, Pass())
+    else:
+        raise AssertionError("the battle never reached its Combat Segment")
+    session.act(P2, Pass())
+    return session
+
+
+def _play_well_prepared_on(session: EngineSession, target_id: str) -> None:
+    session.act(P1, PlayStrategy("prepared"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse((target_id,)))
+
+
+@pytest.mark.parametrize("terrain_owner", [None, P2], ids=["no-terrain", "enemy-terrain"])
+def test_well_prepared_is_not_offered_without_a_terrain_of_your_own(terrain_owner):
+    session = _well_prepared_in_combat(terrain_owner=terrain_owner)
+
+    assert PlayStrategy("prepared") not in session.legal_actions(P1)
+
+
+def test_well_prepared_bows_a_standing_target():
+    session = _well_prepared_in_combat(terrain_owner=P1)
+
+    _play_well_prepared_on(session, "d")
+
+    assert session.game.table.cards_by_id["d"].bowed
+
+
+def test_well_prepared_straightens_a_bowed_target():
+    session = _well_prepared_in_combat(terrain_owner=P1)
+    session.game.table.cards_by_id["d"].bow()
+
+    _play_well_prepared_on(session, "d")
+
+    assert not session.game.table.cards_by_id["d"].bowed
