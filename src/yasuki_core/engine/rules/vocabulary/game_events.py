@@ -81,11 +81,16 @@ class Destroyed:
         Where the card stood when it was destroyed. It is in its discard by the time this is
         announced, so a card reacting to a destruction "at this location" reads it here. Default
         None, for a destruction announced without one.
+    controller : PlayerId, optional
+        The seat that controlled it. A created card leaves the table as it is destroyed, so a card
+        reacting to "a card you do not control" reads it here. Control is ownership until the
+        engine models the two apart. Default None, for a destruction announced without one.
     """
 
     card_id: str
     cause: Cause
     location: Location | None = None
+    controller: PlayerId | None = None
 
 
 @dataclass(frozen=True, slots=True)

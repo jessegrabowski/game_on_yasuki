@@ -335,7 +335,10 @@ class Destroy(Effect):
         if card is None:
             return []
         location = location_of(game.table, card)
-        return [Destroyed(member.id, self.cause, location) for member in _remove_unit(game, card)]
+        return [
+            Destroyed(member.id, self.cause, location, controller=member.owner)
+            for member in _remove_unit(game, card)
+        ]
 
 
 @dataclass(frozen=True, slots=True)
