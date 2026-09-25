@@ -208,6 +208,15 @@ _DESIGNATORS = (
     "Response",
     "Engage",
 )
+# A printed designator whose registration goes by another name: the older arcs print Reaction for
+# the action the ShE datasheet calls a Response, and the engine registers both as RESPONSE.
+_AS_REGISTERED = {"Reaction": "Response"}
+
+
+def _registered_designators(printed: Sequence[str]) -> frozenset[str]:
+    return frozenset(_AS_REGISTERED.get(word, word) for word in printed)
+
+
 _QUALIFIERS = (
     r"(?:Absent|Kiho|Maho|Iaijutsu|Ninja|Economic|Repeatable|Tireless|Political"
     r"|Air|Earth|Fire|Water|Void)"
@@ -318,7 +327,7 @@ def printed_abilities(
         for ability in split_text_box(entry.text).abilities:
             printed.setdefault(entry.card_id, set()).add(
                 (
-                    frozenset(ability.designators),
+                    _registered_designators(ability.designators),
                     frozenset(ability.keywords),
                     frozenset(ability.modifiers),
                 )
@@ -512,7 +521,8 @@ def unprinted_registrations(
                 )
                 continue
             ability = printed[index]
-            if ability.designators and not timings <= frozenset(ability.designators):
+            designators = _registered_designators(ability.designators)
+            if designators and not timings <= designators:
                 problems.append(
                     f"abilities: {name} names printed ability {index}, which is "
                     f"{'/'.join(ability.designators)} where the registration is "

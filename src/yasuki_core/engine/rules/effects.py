@@ -4,6 +4,7 @@ from typing import ClassVar
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import FlagRegistry
+from yasuki_core.engine.rules.battle.presence import place_unit
 from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.players import Cause, PlayerId
@@ -255,7 +256,7 @@ class Move(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
         if card is not None:
-            ops.move_unit(game.table, card, self.to)
+            place_unit(game, card, self.to)
         return []
 
 
@@ -1270,6 +1271,33 @@ class AskOption(InterruptingEffect):
             source_id=self.source_id,
             resolver_context=self.resolver_context,
         )
+
+
+@dataclass(frozen=True, slots=True)
+class ExemptFromResolutionBow(Effect):
+    """The resolution of the battle at ``battlefield`` does not bow ``seat``'s units there (CR,
+    After Resolution 0.1). Nothing happens outside an attack.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat whose units keep standing.
+    battlefield : int
+        The battlefield whose battle it is.
+    """
+
+    seat: PlayerId
+    battlefield: int
+
+    def describe(self) -> str:
+        return f"the resolution at battlefield {self.battlefield} does not bow {self.seat.name}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        attack = game.attack
+        if attack is not None:
+            exempt = attack.battlefields[self.battlefield].bow_exempt
+            attack.amend(self.battlefield, bow_exempt=exempt | {self.seat})
+        return []
 
 
 @dataclass(frozen=True, slots=True)

@@ -58,6 +58,7 @@ yasuki_core
     yasuki_core.engine.rules.abilities.strategy <yasuki_core.engine.rules.abilities.strategy>
     yasuki_core.engine.rules.action_record <yasuki_core.engine.rules.action_record>
     yasuki_core.engine.rules.attack_effects <yasuki_core.engine.rules.attack_effects>
+    yasuki_core.engine.rules.battle.presence <yasuki_core.engine.rules.battle.presence>
     yasuki_core.engine.rules.battle.records <yasuki_core.engine.rules.battle.records>
     yasuki_core.engine.rules.battle.resolution <yasuki_core.engine.rules.battle.resolution>
     yasuki_core.engine.rules.board.clans <yasuki_core.engine.rules.board.clans>

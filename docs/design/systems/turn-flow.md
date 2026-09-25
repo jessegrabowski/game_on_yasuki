@@ -8,7 +8,15 @@ A turn runs three phases: `ACTION`, `BATTLE`, `DYNASTY`. Each opens an Action Ro
 where players take actions, and closes when every seat passes consecutively.
 
 `RoundKind` says what kind of round is open. `PHASE` is the ordinary one a phase opens. `RESPONSE`
-is the window that opens over an action just taken. `BATTLE_SEGMENT` is one step of a battle.
+is the window that opens over an action just taken, and over a battle just resolved.
+`BATTLE_SEGMENT` is one step of a battle.
+
+A battle's resolution opens a Response Step of its own. {class}`~.AfterResolution` is the work
+item that opens it once `BattleResolved` has been announced, and the item waits beneath the step
+the way a held action waits beneath its Interrupt round. When the seats pass out of the step, the
+item runs After Resolution, bows and sends home the survivors, and moves the fight on. The battle
+segment reads `RESOLUTION` for as long as the step is open, which is what a card reading "after a
+battle's Resolution Segment" checks.
 
 Two segment vocabularies sit below the phases. `Segment` names the Attack Phase's steps,
 `DECLARATION`, `MANEUVERS` and `FIGHT`. `BattleSegment` names one battle's, `ENGAGE`, `COMBAT`,

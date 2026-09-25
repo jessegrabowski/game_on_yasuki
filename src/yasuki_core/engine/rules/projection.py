@@ -1,6 +1,7 @@
 from collections.abc import Iterator
 from dataclasses import dataclass
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
 from yasuki_core.engine.rules.battle import resolution
@@ -154,7 +155,8 @@ class GameView:
         in the shuffle is the part it must not learn, which is what the sort strips. Never
         populated for the other seat.
     responding_to : str or None
-        The action an open Response Step answers, worded for a player, or None when no Step is open.
+        The action or battle an open Response Step answers, worded for a player, or None when no
+        Step is open.
         A seat holding no Response still sees it: the Step is the whole table's, and a seat is
         passing on something it should be told the name of.
     interrupting : str or None
@@ -217,6 +219,18 @@ def _identifiable_ids(table: ViewSnapshot) -> set[str]:
     return ids
 
 
+def _responding_to(game: GameState) -> str | None:
+    """What the open Response Step answers: the battle's Resolution Segment when its resolution
+    opened the Step, the action taken otherwise, or None outside a Step."""
+    if game.round.kind is not RoundKind.RESPONSE:
+        return None
+    attack = game.attack
+    if attack is not None and attack.battle_segment is BattleSegment.RESOLUTION:
+        segment = ruleset.ACTIVE.battle_segment_name(BattleSegment.RESOLUTION)
+        return f"the battle's {segment}"
+    return game.action_taken
+
+
 def _modified_cards(game: GameState, identifiable: set[str]) -> Iterator[L5RCard]:
     """Every identifiable card any active modifier reaches.
 
@@ -257,7 +271,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
         gold=dict(game.gold),
         favor_holder=game.favor_holder,
         pending=pending,
-        responding_to=(game.action_taken if game.round.kind is RoundKind.RESPONSE else None),
+        responding_to=_responding_to(game),
         interrupting=(game.action_taken if game.round.kind is RoundKind.INTERRUPT else None),
         legacy_pool=tuple(sorted(legacy_candidates(game, viewer), key=lambda card: card.id)),
         dynasty_deck=tuple(

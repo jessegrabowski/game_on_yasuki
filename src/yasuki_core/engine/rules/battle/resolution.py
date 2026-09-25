@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core.engine import ops
+from yasuki_core.engine.rules.battle.presence import place_unit
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.table import location_of
+from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
@@ -19,7 +20,7 @@ from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.abilities.registry import may_attack
-from yasuki_core.engine.rules.vocabulary.game_events import Assigned, Destroyed
+from yasuki_core.engine.rules.vocabulary.game_events import Assigned, BattleResolved, Destroyed
 from yasuki_core.engine.rules.battle.records import (
     AttackPhase,
     BattleOutcome,
@@ -159,7 +160,7 @@ def apply_assignment(game: GameState, request: AssignUnits, response: DecisionRe
     assigned: list[Assigned] = []
     for token in response.choices:
         card_id, battlefield = assignment(token)
-        ops.assign(game.table, game.table.cards_by_id[card_id], battlefield)
+        place_unit(game, game.table.cards_by_id[card_id], Location.at_battlefield(battlefield))
         attack.assigned_in[card_id] = MANEUVERS_WINDOW
         assigned.append(Assigned(card_id, battlefield, request.seat))
     game.stack.append(AfterAssignment(request.seat))
@@ -270,13 +271,16 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
 
     Attacking units at this battlefield bow and then return home, both as effects of the
     resolution and neither as movement. Every card in the unit bows, and a Conqueror Personality
-    exempts his whole unit from the bow but not from the trip home. Once the Attack Phase's last
+    exempts his whole unit from the bow but not from the trip home, as does a card that says the
+    resolution does not bow its player's units. Once the Attack Phase's last
     battle is over, defending units return home without bowing. Every one of them, at every
     battlefield, holds the ground they defended until then.
     """
     attack = _declared_attack(game)
+    exempt = attack.battlefields[battlefield].bow_exempt
     for personality in units_at(game, battlefield, attack.attacker):
-        if keywords.CONQUEROR not in effective_keywords(game, personality):
+        conqueror = keywords.CONQUEROR in effective_keywords(game, personality)
+        if personality.owner not in exempt and not conqueror:
             personality.bow()
             for attached in attachments_of(game, personality):
                 attached.bow()
@@ -399,6 +403,7 @@ def _resolve_battle(game: GameState) -> None:
     # an outcome reading the action's events rather than its own would collect its predecessors'.
     events_before = len(game.action_events)
 
+    attack.battle_segment = BattleSegment.RESOLUTION
     triggers.resolve_effects(game, effects)
     outcome = _outcome(
         game,
@@ -407,11 +412,51 @@ def _resolve_battle(game: GameState) -> None:
         honor_before=honor_before,
         events_before=events_before,
     )
-    attack.battlefields = _with_outcome(attack.battlefields, battlefield, outcome)
-    after_resolution(game, battlefield, last_battle=last_battle)
-    triggers.resolve_delayed(game, END_OF_BATTLE)
-    attack.current = None
-    game.stack.append(FightNextBattle())
+    attack.amend(battlefield, outcome=outcome)
+    # Queued before the announcement, so a trait that pauses on it stashes its cascade above the
+    # work and resumes first.
+    game.stack.append(AfterResolution(battlefield, last_battle=last_battle))
+    triggers.fire(game, _battle_resolved(attack, battlefield, outcome))
+
+
+@dataclass(frozen=True, slots=True)
+class AfterResolution:
+    """Open the Response Step a battle's resolution leaves for Reactions, then run After
+    Resolution once it closes (CR, Battle Sequence).
+
+    A work item, since the step is an Action Round the seats pass out of. It is queued twice: once
+    to open the step, and again beneath it to bow and send home the survivors when the step
+    closes. A card that reads "after a battle's Resolution Segment" acts in the step, while the
+    battle segment still reads Resolution.
+
+    Attributes
+    ----------
+    battlefield : int
+        The battlefield whose battle resolved.
+    last_battle : bool
+        Whether it was the Attack Phase's last, which sends every defending unit home.
+    responded : bool, optional
+        Whether the Response Step has already been offered. Default False.
+    """
+
+    battlefield: int
+    last_battle: bool
+    responded: bool = False
+
+    def resume(self, game: GameState) -> None:
+        # The Response Step is the turn machine's, which imports this module.
+        from yasuki_core.engine.rules.turn.sequence import open_response_window
+
+        if not self.responded and open_response_window(game):
+            game.stack.append(replace(self, responded=True))
+            return
+        attack = _declared_attack(game)
+        attack.battle_segment = BattleSegment.AFTER_RESOLUTION
+        after_resolution(game, self.battlefield, last_battle=self.last_battle)
+        triggers.resolve_delayed(game, END_OF_BATTLE)
+        attack.battle_segment = None
+        attack.current = None
+        game.stack.append(FightNextBattle())
 
 
 def _winner(game: GameState, battlefield: int) -> PlayerId | None:
@@ -465,14 +510,19 @@ def _outcome(
     )
 
 
-def _with_outcome(
-    battlefields: tuple[BattlefieldInfo, ...], battlefield: int, outcome: BattleOutcome
-) -> tuple[BattlefieldInfo, ...]:
-    """``battlefields`` with ``battlefield``'s outcome recorded."""
-    # A NamedTuple, so this is a replacement rather than an assignment.
-    return tuple(
-        info._replace(outcome=outcome) if index == battlefield else info
-        for index, info in enumerate(battlefields)
+def _battle_resolved(
+    attack: AttackPhase, battlefield: int, outcome: BattleOutcome
+) -> BattleResolved:
+    info = attack.battlefields[battlefield]
+    return BattleResolved(
+        battlefield=battlefield,
+        province=info.province,
+        attacker=attack.attacker,
+        defender=attack.defender,
+        winner=outcome.winner,
+        province_destroyed=outcome.province_destroyed,
+        destroyed=outcome.destroyed,
+        ever_present=info.ever_present,
     )
 
 

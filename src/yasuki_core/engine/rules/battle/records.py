@@ -36,10 +36,20 @@ class BattlefieldInfo(NamedTuple):
         The Province this battlefield sits at.
     outcome : BattleOutcome or None
         What the battle fought here did, or None until one has been.
+    ever_present : frozenset of (PlayerId, str)
+        Each seat and the Personality it ever had at this battlefield, by assignment or by a move,
+        whether or not the Personality was still there when the battle was fought. An entry stays
+        once written, because "any enemy units were ever at its battlefield" asks about the whole
+        attack. Default empty.
+    bow_exempt : frozenset of PlayerId
+        The seats whose units the battle's resolution does not bow (CR, After Resolution 0.1), as
+        Rallying Cry grants. Default empty.
     """
 
     province: ZoneKey
     outcome: BattleOutcome | None = None
+    ever_present: frozenset[tuple[PlayerId, str]] = frozenset()
+    bow_exempt: frozenset[PlayerId] = frozenset()
 
 
 @dataclass(slots=True)
@@ -83,6 +93,14 @@ class AttackPhase:
     current: int | None = None
     battle_segment: BattleSegment | None = None
     assigned_in: dict[str, str] = field(default_factory=dict)
+
+    def amend(self, battlefield: int, **changes: object) -> None:
+        """Record ``changes`` on the battlefield at index ``battlefield``."""
+        # A NamedTuple, so this is a replacement rather than an assignment.
+        self.battlefields = tuple(
+            info._replace(**changes) if index == battlefield else info
+            for index, info in enumerate(self.battlefields)
+        )
 
     @property
     def current_province(self) -> ZoneKey:

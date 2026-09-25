@@ -78,7 +78,7 @@ when an `effective_*` function exists for it.
 
 ## What you can react to
 
-Fourteen events:
+Fifteen events:
 
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.EnteredPlay`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Assigned`
@@ -94,6 +94,7 @@ Fourteen events:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducingGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducedGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ActionResolved`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.BattleResolved`
 
 Each one carries the fields your guard reads, so follow the link for the event you want. If the
 moment your card names is not one of them, it needs a new event in the engine, which is a core
