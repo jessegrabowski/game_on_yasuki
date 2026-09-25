@@ -90,6 +90,14 @@ class AttackPhase:
     battle_segment: BattleSegment | None = None
     assigned_in: dict[str, str] = field(default_factory=dict)
 
+    def amend(self, battlefield: int, **changes: object) -> None:
+        """Record ``changes`` on the battlefield at index ``battlefield``."""
+        # A NamedTuple, so this is a replacement rather than an assignment.
+        self.battlefields = tuple(
+            info._replace(**changes) if index == battlefield else info
+            for index, info in enumerate(self.battlefields)
+        )
+
     @property
     def current_province(self) -> ZoneKey:
         """The Province the battle now being fought sits at: what a card means by "the current

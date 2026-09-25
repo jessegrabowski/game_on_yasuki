@@ -408,7 +408,7 @@ def _resolve_battle(game: GameState) -> None:
         honor_before=honor_before,
         events_before=events_before,
     )
-    attack.battlefields = _with_outcome(attack.battlefields, battlefield, outcome)
+    attack.amend(battlefield, outcome=outcome)
     after_resolution(game, battlefield, last_battle=last_battle)
     triggers.fire(game, _battle_resolved(attack, battlefield, outcome))
     triggers.resolve_delayed(game, END_OF_BATTLE)
@@ -480,17 +480,6 @@ def _battle_resolved(
         province_destroyed=outcome.province_destroyed,
         destroyed=outcome.destroyed,
         ever_present=info.ever_present,
-    )
-
-
-def _with_outcome(
-    battlefields: tuple[BattlefieldInfo, ...], battlefield: int, outcome: BattleOutcome
-) -> tuple[BattlefieldInfo, ...]:
-    """``battlefields`` with ``battlefield``'s outcome recorded."""
-    # A NamedTuple, so this is a replacement rather than an assignment.
-    return tuple(
-        info._replace(outcome=outcome) if index == battlefield else info
-        for index, info in enumerate(battlefields)
     )
 
 
