@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -79,9 +81,20 @@ def _in_combat(*terrains: L5RCard) -> EngineSession:
     session.submit(P1, DecisionResponse((assignment_token("a", 0),)))
     session.submit(P2, DecisionResponse((assignment_token("d", 0),)))
     session.submit(P1, DecisionResponse(("0",)))
-    while session.game.attack.battle_segment is BattleSegment.ENGAGE:
-        session.act(session.game.round.priority, Pass())
+    _pass_while(session, lambda s: s.game.attack.battle_segment is BattleSegment.ENGAGE)
     return session
+
+
+def _pass_while(session: EngineSession, still: Callable[[EngineSession], bool]) -> None:
+    """Pass with whichever seat holds the opportunity while ``still`` holds.
+
+    Bounded, so a battle that fails to advance fails the test instead of hanging it.
+    """
+    for _ in range(20):
+        if not still(session):
+            return
+        session.act(session.game.round.priority, Pass())
+    raise AssertionError("the battle never advanced")
 
 
 def _play_terrain(session: EngineSession, seat: PlayerId, card_id: str) -> None:
@@ -165,8 +178,7 @@ def test_contentious_terrain_is_discarded_once_its_battle_ends():
     session.act(P2, Pass())
     _play_terrain(session, P1, "ct")
 
-    while session.game.attack is not None and session.game.attack.current == 0:
-        session.act(session.game.round.priority, Pass())
+    _pass_while(session, lambda s: s.game.attack is not None and s.game.attack.current == 0)
 
     table = session.game.table
     assert "ct" in _fate_discard(table, P1)
