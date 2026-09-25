@@ -220,6 +220,19 @@ def _rows(height: int, *, mirrored: bool = False) -> tuple[int, int, int, int]:
     return band - province, band - defending, band - divider, band - attacking
 
 
+def _centered_in(span: tuple[int, int], count: int) -> list[int]:
+    """The x centers of ``count`` cards in a row centered in the lane ``span``, at the board's own
+    spacing.
+
+    The step tightens when the row is wider than the lane, so a long row overlaps into a fan rather
+    than spilling over the lane beside it.
+    """
+    left, right = span
+    usable = right - left - CARD_W - 2 * LANE_GAP
+    step = min(COLUMN_STEP, max(usable // max(count - 1, 1), MIN_STEP))
+    return centered_row((left + right) // 2, count, step=step)
+
+
 class _OutcomeLine(NamedTuple):
     """One line of the outcome block, and whether it is the kind that gets the loud type."""
 
@@ -651,17 +664,8 @@ class BattleView(CardPanel):
     def _draw_army(
         self, army: tuple[UnitView, ...], span: tuple[int, int], y: int, *, sink: bool
     ) -> None:
-        """One side's units, in a centered row at the board's own spacing, each stacked as a tower.
-
-        The step tightens when the row is wider than the lane, so a large army overlaps into a fan
-        rather than spilling over the lane beside it.
-        """
-        if not army:
-            return
-        left, right = span
-        usable = right - left - CARD_W - 2 * LANE_GAP
-        step = min(COLUMN_STEP, max(usable // max(len(army) - 1, 1), MIN_STEP))
-        for x, unit in zip(centered_row((left + right) // 2, len(army), step=step), army):
+        """One side's units, in a centered row at the board's own spacing, each stacked as a tower."""
+        for x, unit in zip(_centered_in(span, len(army)), army):
             leader, attached = unit_tower_positions(x, y, len(unit.attached), sink=sink)
             for card, spot in tower_draw_order(list(zip(unit.attached, attached))):
                 self._draw_card(card, spot)
