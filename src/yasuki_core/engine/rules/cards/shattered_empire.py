@@ -31,6 +31,7 @@ from yasuki_core.engine.rules.board.seats import cards_in_play
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
+    controls_terrain_at,
     followers_in_play,
     has_keyword,
     opposed_units_in_battle,
@@ -467,8 +468,25 @@ register_ring(
 
 # --- Ring of Water ---
 
-# "Play after a battle resolves where you control a Terrain and destroyed a Province." Terrain is
-# not modeled and nothing records what a battle did once it resolves, so the entry has no handler.
+
+def _ring_of_water_condition(ctx: TriggerContext) -> bool:
+    """ "Play after a battle resolves where you control a Terrain and destroyed a Province." The
+    Attacker is the one who destroys a Province (CR, Battle Resolution)."""
+    event = ctx.event
+    if not isinstance(event, BattleResolved) or not event.province_destroyed:
+        return False
+    owner = ctx.card.owner
+    return event.attacker is owner and controls_terrain_at(
+        ctx.game, owner, battlefield=event.battlefield
+    )
+
+
+register_trait_entry(
+    "ring_of_water",
+    BattleResolved,
+    _ring_of_water_condition,
+    ruleset=ruleset.SHATTERED_EMPIRE.name,
+)
 
 
 def _ring_of_water_targets(game: GameState, source: L5RCard) -> list[str]:

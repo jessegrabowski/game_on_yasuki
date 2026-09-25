@@ -393,9 +393,29 @@ register_ring(
 
 # --- Ring of Water ---
 
-# "Play after a battle resolves in which you played a Terrain, destroyed a Terrain, and destroyed
-# any cards or provinces during resolution." Terrain is not modeled and nothing records what a
-# battle did once it resolves, so the entry has no handler.
+
+def _ring_of_water_condition(ctx: TriggerContext) -> bool:
+    """ "Play after a battle resolves in which you played a Terrain, destroyed a Terrain, and
+    destroyed any cards or provinces during resolution." Resolution's destruction belongs to the
+    seat whose enemy army it destroys, and a Province's to the Attacker (CR, Battle Resolution)."""
+    event = ctx.event
+    if not isinstance(event, BattleResolved):
+        return False
+    owner = ctx.card.owner
+    played = any(seat is owner for seat, _ in event.terrains_played)
+    destroyed_terrain = any(seat is owner for seat, _ in event.terrains_destroyed)
+    destroyed_in_resolution = (event.province_destroyed and event.attacker is owner) or any(
+        seat is not owner for seat in event.destroyed_controllers
+    )
+    return played and destroyed_terrain and destroyed_in_resolution
+
+
+register_trait_entry(
+    "ring_of_water",
+    BattleResolved,
+    _ring_of_water_condition,
+    ruleset=ruleset.ONYX.name,
+)
 
 
 def _ring_of_water_targets(game: GameState, source: L5RCard) -> list[str]:

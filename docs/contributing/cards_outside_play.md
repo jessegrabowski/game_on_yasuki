@@ -157,8 +157,12 @@ condition is fulfilled (CR, Ring). {card}`Ring of Air` reads `ActionResolved` wi
 {func}`~.resolved_favor_actions` as its guard. {card}`Ring of Earth` reads `BattleResolved`, whose
 outcome fields and presence record answer "if it was not destroyed", "you were not the Attacker"
 and "any enemy units were ever at its battlefield", the last through
-{func}`~.enemy_units_ever_present`. The Rings whose "after X" names a duel or a Terrain, and the
-Void's "Play if", still have no handler, and the comment above each says what the clause waits on.
+{func}`~.enemy_units_ever_present`. {card}`Ring of Water` reads it too. Its ShE text asks
+{func}`~.controls_terrain_at` about the battlefield, since a Terrain is discarded only after the
+event. Its Onyx text reads `terrains_played`, `terrains_destroyed` and `destroyed_controllers`,
+which record the Terrains each seat played and destroyed at the battlefield and the seats whose
+cards the resolution destroyed. The Rings whose "after X" names a duel, and the Void's "Play if",
+still have no handler, and the comment above each says what the clause waits on.
 
 ## Terrain, which attaches to a battlefield
 
