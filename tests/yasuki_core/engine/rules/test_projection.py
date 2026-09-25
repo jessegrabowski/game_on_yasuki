@@ -27,6 +27,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    terrain_at,
     two_seat_game,
 )
 
@@ -577,6 +578,18 @@ def test_a_fortification_the_viewer_cannot_identify_reaches_it_as_a_back():
     view = project(game, PlayerId.P1)
 
     assert [card.card_id for card in view.attack.battlefields[0].fortifications] == ["p2-wall"]
+
+
+def test_a_terrain_reaches_the_view_of_its_own_battlefield():
+    game = two_seat_game()
+    for index in range(2):
+        province_card(game, f"p2-holding{index}", seat=PlayerId.P2, index=index, face_up=True)
+    resolution.declare_attack(game, PlayerId.P1)
+    terrain_at(game, "ground", battlefield=1)
+
+    lanes = project(game, PlayerId.P2).attack.battlefields
+
+    assert [[card.id for card in lane.terrains] for lane in lanes] == [[], ["ground"]]
 
 
 def test_a_province_with_nothing_attached_carries_no_fortifications():

@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.turn.structure import Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.legality import legacy_candidates
-from yasuki_core.engine.rules.board.queries import units_at
+from yasuki_core.engine.rules.board.queries import terrains_at, units_at
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.table import DeckKey, ZoneKey
 from yasuki_core.game_pieces.cards import L5RCard
@@ -55,6 +55,8 @@ class BattlefieldView:
         at the battlefield with it and are already counted in ``strength``.
     strength : int
         The Province's effective Strength, which the attacking Force must clear to destroy it.
+    terrains : tuple of L5RCard or HiddenCard
+        The Terrains in play here, in play order. They stand at the battlefield in neither army.
     attacking : tuple of UnitView
         The Attacker's units here.
     defending : tuple of UnitView
@@ -77,6 +79,7 @@ class BattlefieldView:
     occupant: L5RCard | HiddenCard | None
     fortifications: tuple[L5RCard | HiddenCard, ...]
     strength: int
+    terrains: tuple[L5RCard | HiddenCard, ...]
     attacking: tuple[UnitView, ...]
     defending: tuple[UnitView, ...]
     attacking_force: int
@@ -328,13 +331,18 @@ def _fortifications(table: ViewSnapshot, province: ZoneKey) -> tuple[L5RCard | H
     than not at all.
     """
     attached = [card_id for card_id, key in table.province_attachments.items() if key == province]
+    return _as_seen(table, attached)
+
+
+def _as_seen(table: ViewSnapshot, card_ids: list[str]) -> tuple[L5RCard | HiddenCard, ...]:
+    """The cards in play among ``card_ids`` as the snapshot's viewer sees them, in that order."""
     in_play: dict[str, L5RCard | HiddenCard] = {}
     for placed in table.battlefield:
         card = placed.card
         # A card the viewer cannot identify keeps its id under a different name, and it still has to
-        # be found here: an unidentifiable Fortification reaches the client as a back, not as a gap.
+        # be found here: an unidentifiable card in play reaches the client as a back, not as a gap.
         in_play[card.card_id if isinstance(card, HiddenCard) else card.id] = card
-    return tuple(in_play[card_id] for card_id in attached if card_id in in_play)
+    return tuple(in_play[card_id] for card_id in card_ids if card_id in in_play)
 
 
 def _destroyed_names(game: GameState, outcome: BattleOutcome | None) -> tuple[str, ...]:
@@ -366,6 +374,7 @@ def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
                 occupant=_occupant(table, info.province),
                 fortifications=_fortifications(table, info.province),
                 strength=effective_province_strength(game, info.province),
+                terrains=_as_seen(table, [card.id for card in terrains_at(game, index)]),
                 attacking=_units(game, index, attack.attacker),
                 defending=_units(game, index, attack.defender),
                 attacking_force=resolution.army_force(game, index, attack.attacker),

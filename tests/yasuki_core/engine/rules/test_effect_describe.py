@@ -142,6 +142,10 @@ EFFECTS = [
         "put edict into play",
     ),
     (
+        PutIntoPlay("terrain", battlefield=1),
+        "put terrain into play at battlefield 1",
+    ),
+    (
         SpendOncePerTurn("miaka", "iweko_miaka_favor_payment"),
         "miaka spends its iweko_miaka_favor_payment for the turn",
     ),

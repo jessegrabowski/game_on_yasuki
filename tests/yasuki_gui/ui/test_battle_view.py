@@ -27,7 +27,7 @@ from yasuki_gui.ui.battle_view import (
 
 from yasuki_core.game_pieces.constants import AttachmentType
 
-from tests.yasuki_core.engine.builders import attachment, holding, personality
+from tests.yasuki_core.engine.builders import attachment, holding, personality, terrain
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -60,6 +60,7 @@ def _battlefield(
     fought=False,
     occupant=None,
     fortifications=(),
+    terrains=(),
     outcome=None,
     destroyed_names=(),
 ):
@@ -68,6 +69,7 @@ def _battlefield(
         occupant=occupant,
         fortifications=fortifications,
         strength=strength,
+        terrains=terrains,
         attacking=attacking,
         defending=defending,
         attacking_force=_force(attacking),
@@ -1076,3 +1078,41 @@ def test_a_collapsed_lane_draws_no_sequence(view):
 
     assert _sequence_chips(view) == ["Engage", "Combat", "Resolution", "After-Resolution"]
     assert _lit_sequence_chips(view) == []
+
+
+def test_a_terrain_stands_in_the_middle_of_the_lane_between_the_armies(view):
+    view.refresh(
+        _attack(
+            _battlefield(
+                0,
+                attacking=(_unit("akodo"),),
+                defending=(_unit("hida"),),
+                terrains=(terrain("ground"),),
+            )
+        )
+    )
+
+    left, right = view._lane_spans[0]
+    terrain_x, terrain_y = view.canvas.coords("battle:ground")[:2]
+    assert terrain_x == (left + right) // 2
+    assert view.canvas.coords("battle:hida")[1] < terrain_y < view.canvas.coords("battle:akodo")[1]
+
+
+def test_a_terrain_is_drawn_beneath_the_units(view):
+    view.refresh(
+        _attack(
+            _battlefield(
+                0,
+                attacking=(_unit("akodo"),),
+                defending=(_unit("hida"),),
+                terrains=(terrain("ground"),),
+            )
+        )
+    )
+
+    stacking = view.canvas.find_all()
+    drawn = {
+        name: max(stacking.index(item) for item in view.canvas.find_withtag(f"battle:{name}"))
+        for name in ("ground", "hida", "akodo")
+    }
+    assert drawn["ground"] < drawn["hida"] < drawn["akodo"]

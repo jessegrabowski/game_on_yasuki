@@ -14,6 +14,7 @@ class Rulebook(Enum):
     member per rulebook procedure that acts, so a card can react to the specific one and not just to
     "not a player at all". Duel resolution joins when duels exist."""
 
+    AFTER_RESOLUTION = "after_resolution"
     BATTLE_RESOLUTION = "battle_resolution"
     CHI_DEATH = "chi_death"
     MAXIMUM_HAND_SIZE = "maximum_hand_size"

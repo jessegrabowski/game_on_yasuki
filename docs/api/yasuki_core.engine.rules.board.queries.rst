@@ -9,6 +9,7 @@ yasuki_core.engine.rules.board.queries
 
     attack_targets
     attack_targets_at
+    controls_terrain_at
     favor_actions_this_turn
     followers_in_play
     has_keyword
@@ -26,6 +27,7 @@ yasuki_core.engine.rules.board.queries
     rings_in_play
     rulebook_proxy
     sincerity_seed_targets
+    terrains_at
     top_of_deck
     units_at
 

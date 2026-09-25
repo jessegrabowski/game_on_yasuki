@@ -9,12 +9,20 @@ from yasuki_core.engine.rules.gold.self_grants import is_production_window
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, Confirm
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import AttachTarget, DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import (
+    AttachTarget,
+    DeckKey,
+    Location,
+    TableState,
+    ZoneKey,
+    ZoneRole,
+)
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.factory import build_print
 from yasuki_core.game_pieces.prints import (
+    ActionPrint,
     AttachmentPrint,
     CardPrint,
     FatePrint,
@@ -296,6 +304,22 @@ def wind(owner: PlayerId = PlayerId.P1, *, name: str = "Wind") -> L5RCard:
 
 def fate_card(card_id: str, owner: PlayerId, *, name: str = "F") -> L5RCard:
     return L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=owner)
+
+
+def terrain(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint, id=card_id, name="Terrain", side=Side.FATE, owner=owner, keywords=("Terrain",)
+    )
+
+
+def terrain_at(
+    target: GameState | TableState, card_id: str, battlefield: int, *, owner: PlayerId = PlayerId.P1
+) -> L5RCard:
+    """A Terrain in play at ``battlefield``, in no unit, as one that put itself into play stands."""
+    state = target.table if isinstance(target, GameState) else target
+    card = put_in_play(state, terrain(card_id, owner=owner))
+    ops.set_location(state, card, Location.at_battlefield(battlefield))
+    return card
 
 
 def two_seat_game(first_player: PlayerId = PlayerId.P1) -> GameState:
