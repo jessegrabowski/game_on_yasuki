@@ -1269,12 +1269,11 @@ def _earth_battle(
     attacker: PlayerId,
     raider_force: int = 1,
     assign_raider: bool = True,
-    held_by: PlayerId = P1,
 ) -> EngineSession:
     """``attacker`` attacks the other seat's first Province with a raider of ``raider_force``; the
     Defender holds a guard of Force 3 and a second Province, so a lost battle does not end the
-    game. Ring of Earth waits in ``held_by``'s hand. Left where the resolution's first question
-    stands, or with the battle over when it asks none."""
+    game. Ring of Earth waits in P1's hand. Left on the resolution's first question, or on the
+    choice of the next battlefield when it asks none."""
     defender = P2 if attacker is P1 else P1
     state = TableState.empty_two_seat()
     province_card(state, "def-prov0", seat=defender, index=0)
@@ -1282,9 +1281,7 @@ def _earth_battle(
     province_card(state, "atk-prov0", seat=attacker, index=0)
     put_in_play(state, personality("raider", owner=attacker, force=raider_force))
     put_in_play(state, personality("guard", owner=defender, force=3))
-    state.zones[ZoneKey(held_by, ZoneRole.HAND)].add(
-        register(state, _ring("earth", "ring_of_earth", held_by))
-    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, _ring("earth", "ring_of_earth")))
     session = EngineSession.start(state, attacker)
     end_phase(session)
     session.act(attacker, DeclareAttack())
