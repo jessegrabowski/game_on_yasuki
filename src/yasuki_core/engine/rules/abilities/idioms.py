@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
-from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
+from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, BattleResolved
 from yasuki_core.ruleset import RingEntry, ring_entry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
@@ -235,6 +235,12 @@ def resolved_favor_actions(at_least: int) -> Callable[[TriggerContext], bool]:
         return event.seat is owner and favor_actions_this_turn(ctx.game, owner) >= at_least
 
     return guard
+
+
+def enemy_units_ever_present(event: BattleResolved, seat: PlayerId) -> bool:
+    """Whether "any enemy units were ever at its battlefield" holds for ``seat``: a Personality
+    of another seat's is on the battle's presence record."""
+    return any(owner is not seat for owner, _ in event.ever_present)
 
 
 def register_event_entry(
