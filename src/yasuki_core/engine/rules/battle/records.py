@@ -36,10 +36,16 @@ class BattlefieldInfo(NamedTuple):
         The Province this battlefield sits at.
     outcome : BattleOutcome or None
         What the battle fought here did, or None until one has been.
+    ever_present : frozenset of (PlayerId, str)
+        Each seat and the Personality it ever had at this battlefield, by assignment or by a move,
+        whether or not the Personality was still there when the battle was fought. An entry stays
+        once written, because "any enemy units were ever at its battlefield" asks about the whole
+        attack. Default empty.
     """
 
     province: ZoneKey
     outcome: BattleOutcome | None = None
+    ever_present: frozenset[tuple[PlayerId, str]] = frozenset()
 
 
 @dataclass(slots=True)

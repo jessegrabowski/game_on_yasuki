@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine import ops
+from yasuki_core.engine.rules.battle.presence import place_unit
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.table import location_of
+from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
@@ -159,7 +160,7 @@ def apply_assignment(game: GameState, request: AssignUnits, response: DecisionRe
     assigned: list[Assigned] = []
     for token in response.choices:
         card_id, battlefield = assignment(token)
-        ops.assign(game.table, game.table.cards_by_id[card_id], battlefield)
+        place_unit(game, game.table.cards_by_id[card_id], Location.at_battlefield(battlefield))
         attack.assigned_in[card_id] = MANEUVERS_WINDOW
         assigned.append(Assigned(card_id, battlefield, request.seat))
     game.stack.append(AfterAssignment(request.seat))
