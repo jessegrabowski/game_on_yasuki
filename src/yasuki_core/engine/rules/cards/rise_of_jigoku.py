@@ -322,7 +322,7 @@ def _mishime_sensei_action_discount(game: GameState, sensei: L5RCard, purchase: 
     ability is a Maho action through the Maho icon beside his title.
     """
     for_spell = purchase.card is not None and is_spell(purchase.card)
-    if keywords.MAHO not in purchase.keywords and not for_spell:
+    if not purchase.has_keyword(keywords.MAHO) and not for_spell:
         return 0
     shadowlands_seats = sum(
         any(has_keyword(game, card, keywords.SHADOWLANDS) for card in cards_in_play(game, seat))

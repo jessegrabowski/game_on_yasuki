@@ -69,6 +69,11 @@ class Purchase:
     keywords: frozenset[str]
     plays_card: bool
 
+    def has_keyword(self, keyword: str) -> bool:
+        """Whether the action carries ``keyword``, compared without regard to case as the rest of
+        the engine compares keywords."""
+        return keyword.lower() in {held.lower() for held in self.keywords}
+
 
 def card_purchase(game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
     """A payment for an Interrupt ``card`` prints, which is the card's own action and carries its

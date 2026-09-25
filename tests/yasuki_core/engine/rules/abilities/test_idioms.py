@@ -250,8 +250,8 @@ def test_a_ruleset_reading_the_trait_as_an_action_is_refused(monkeypatch):
 
 @pytest.mark.parametrize(
     ("ability_keywords", "declarable", "paid"),
-    [(frozenset({"Maho"}), 7, 4), (frozenset(), 5, 6)],
-    ids=["maho ability", "plain ability"],
+    [(frozenset({"Maho"}), 7, 4), (frozenset({"maho"}), 7, 4), (frozenset(), 5, 6)],
+    ids=["maho ability", "maho spelled in lowercase", "plain ability"],
 )
 def test_a_variable_cost_reads_the_keywords_printed_on_its_ability(
     ability_keywords, declarable, paid
