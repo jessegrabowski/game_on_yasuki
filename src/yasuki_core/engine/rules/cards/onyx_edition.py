@@ -1,3 +1,6 @@
+from dataclasses import replace
+from functools import cache
+
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.lobby import register_may_not_lobby
@@ -20,6 +23,7 @@ from yasuki_core.engine.rules.abilities.model import (
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
+    granted_ability,
     invest_amounts,
     register_ability,
     register_interrupt,
@@ -41,12 +45,21 @@ from yasuki_core.engine.rules.effects import (
     Fear,
     GainHonor,
     GrantKeyword,
+    GrantSeatAbility,
     Move,
     Negated,
+    RevokeGrants,
     Straighten,
     TakeFavor,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.kharmic import (
+    KHARMIC_COST,
+    KHARMIC_DRAW,
+    KHARMIC_REFILL,
+    is_kharmic_action,
+    kharmic_ability,
+)
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
     CardDiscarded,
@@ -61,6 +74,7 @@ from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
+    has_keyword,
     opposing_units_in_battle,
     owned_personalities,
     personalities_in_play,
@@ -71,7 +85,7 @@ from yasuki_core.engine.rules.board.queries import (
 from yasuki_core.engine.rules.board.seats import cards_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_force, effective_personal_honor
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, SeatAbilityGrant, Stat
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -617,6 +631,103 @@ register_ability(
         hits_every_target=True,
     ),
 )
+
+
+# --- The Sacred Ground of the Phoenix ---
+
+
+def _the_sacred_ground_of_the_phoenix_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [
+        GrantSeatAbility(source.id, source.owner, (form, source.id), Duration.UNTIL_END_OF_TURN)
+        for form in (KHARMIC_DRAW, KHARMIC_REFILL)
+    ]
+
+
+# Cached: the factory runs on every read of every card the seat owns, for two forms at two prices.
+@cache
+def _the_sacred_ground_of_the_phoenix_licensed(context: tuple[str, ...], *, free: bool) -> Ability:
+    """The rulebook Kharmic ability of the form ``context`` names, as the Stronghold licenses it:
+    under the rulebook ability's own key, so it stands in for it on a Kharmic card and is the only
+    one on any other, and costing nothing when ``free``. The label rewords the datasheet's clause
+    for the card it sits on."""
+    form, _ = context
+    rulebook = kharmic_ability(form)
+    outcome = "draw a card" if form == KHARMIC_DRAW else "refill its Province face-up"
+    designator = "Open" if free else f"Open, :g{KHARMIC_COST}:"
+    return replace(
+        rulebook,
+        label=f"{designator}: Discard this card to {outcome}",
+        cost=no_cost if free else rulebook.cost,
+    )
+
+
+def _the_sacred_ground_of_the_phoenix_action_resolved(ctx: TriggerContext) -> list[Effect]:
+    """Revoke the license once the seat has used the rulebook Kharmic ability: "the next time (this
+    turn)". After the action, so every trigger and the Response Step read the licensed ability as
+    the action's own, and outside its effects, so nothing offers the revoke to an Interrupt."""
+    licensed = any(
+        isinstance(recorded, SeatAbilityGrant) and recorded.source_id == ctx.card.id
+        for recorded in ctx.game.ongoing
+    )
+    if not licensed or ctx.event.seat is not ctx.card.owner or not is_kharmic_action(ctx.game):
+        return []
+    return [RevokeGrants(ctx.card.id)]
+
+
+on(ActionResolved, "the_sacred_ground_of_the_phoenix")(
+    _the_sacred_ground_of_the_phoenix_action_resolved
+)
+
+register_ability(
+    "the_sacred_ground_of_the_phoenix",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        effects=_the_sacred_ground_of_the_phoenix_effects,
+        hits_every_target=True,
+    ),
+)
+
+
+@granted_ability("the_sacred_ground_of_the_phoenix")
+def _the_sacred_ground_of_the_phoenix_granted_ability(
+    game: GameState, card: L5RCard, context: tuple[str, ...]
+) -> Ability:
+    """The front's "or": free on a Kharmic card and the printed gold on any other, decided by the
+    card the seat spends."""
+    return _the_sacred_ground_of_the_phoenix_licensed(
+        context, free=has_keyword(game, card, keywords.KHARMIC)
+    )
+
+
+# --- The Sacred Ground of the Phoenix (back) ---
+
+on(ActionResolved, "the_sacred_ground_of_the_phoenix__back")(
+    _the_sacred_ground_of_the_phoenix_action_resolved
+)
+
+
+register_ability(
+    "the_sacred_ground_of_the_phoenix__back",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        effects=_the_sacred_ground_of_the_phoenix_effects,
+        hits_every_target=True,
+    ),
+)
+
+
+@granted_ability("the_sacred_ground_of_the_phoenix__back")
+def _the_sacred_ground_of_the_phoenix__back_granted_ability(
+    game: GameState, card: L5RCard, context: tuple[str, ...]
+) -> Ability:
+    """The back's "and": free on any card."""
+    return _the_sacred_ground_of_the_phoenix_licensed(context, free=True)
 
 
 # --- Training Court ---
