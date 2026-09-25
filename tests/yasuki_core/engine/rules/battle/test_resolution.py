@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     ChooseBattlefield,
+    ChooseCards,
     DecisionResponse,
     assignment,
     assignment_token,
@@ -25,10 +26,10 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
-from yasuki_core.engine.rules.effects import Ask, DelayedEffect, Discard, Move
+from yasuki_core.engine.rules.effects import Ask, DelayedEffect, DestroyProvince, Discard, Move
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
-from yasuki_core.engine.rules.triggers import apply_effect
+from yasuki_core.engine.rules.triggers import apply_effect, resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved, CardDiscarded
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -1035,6 +1036,9 @@ def test_a_fought_battle_announces_battle_resolved_once_with_its_outcome():
             province_destroyed=True,
             destroyed=("d",),
             ever_present=frozenset({(PlayerId.P1, "a"), (PlayerId.P2, "d")}),
+            destroyed_controllers=frozenset({PlayerId.P2}),
+            terrains_played=frozenset(),
+            terrains_destroyed=frozenset(),
         )
     ]
 
@@ -1256,3 +1260,42 @@ def test_the_terrain_is_discarded_before_the_end_of_battle_delays_resolve(reacti
     _pass_out_the_segments(session)
 
     assert discarded == ["ground", "marker"]
+
+
+def test_a_question_asked_during_resolution_is_answered_before_the_battle_announces_itself():
+    # Ashura's trait asks for a card to destroy as resolution destroys him. The outcome and the
+    # announcement wait for the answer, so they see everything the resolution did.
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "def-prov1", seat=PlayerId.P2, index=1)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, personality("ashura", owner=PlayerId.P1, printed_id="ashura", force=1))
+    put_in_play(state, personality("guard", owner=PlayerId.P2, force=5))
+    session = _to_battle(EngineSession.start(state, PlayerId.P1))
+    session.act(PlayerId.P1, DeclareAttack())
+    session.submit(PlayerId.P1, DecisionResponse((assignment_token("ashura", 0),)))
+    session.submit(PlayerId.P2, DecisionResponse((assignment_token("guard", 0),)))
+    session.submit(PlayerId.P1, DecisionResponse(("0",)))
+    while session.game.round.kind is RoundKind.BATTLE_SEGMENT:
+        session.act(session.game.round.priority, Pass())
+    assert isinstance(session.game.pending, ChooseCards)
+    assert _battles_resolved(session) == []
+
+    session.submit(PlayerId.P1, DecisionResponse(("guard",)))
+
+    [resolved] = _battles_resolved(session)
+    assert resolved.destroyed == ("ashura",)
+    assert resolved.destroyed_controllers == frozenset({PlayerId.P1})
+
+
+def test_a_province_destroyed_before_resolution_is_not_credited_to_it():
+    session = _one_battlefield({"a": 9}, {"d": 2}, defender_provinces=2)
+    pending = session.game.pending
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    resolve_effects(session.game, [DestroyProvince(PlayerId.P2, _province(PlayerId.P2, 0))])
+
+    _pass_out_the_segments(session)
+
+    [resolved] = _battles_resolved(session)
+    assert not resolved.province_destroyed
+    assert resolved.destroyed == ("d",)

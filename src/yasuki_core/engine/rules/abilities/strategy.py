@@ -3,10 +3,13 @@ from dataclasses import dataclass
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.activation import defer_ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
+from yasuki_core.engine.rules.battle.presence import record_terrain_played
 from yasuki_core.engine.rules.effects import ApplyEffects, Discard, Effect
 from yasuki_core.engine.rules.gold.discounts import card_purchase, discounted_gold_cost
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -94,12 +97,21 @@ def resolve_strategy(game: GameState, card_id: str, ability_key: str | None = No
     """Resolve a paid-for Strategy: its ability against its target, and then its discard.
 
     The discard is stacked *under* the ability's own work so it runs after it, whether the ability
-    hits every target at once or pauses to be pointed at one.
+    hits every target at once or pauses to be pointed at one. A Terrain played during a battle is
+    recorded as played before its ability resolves, so one whose entry is negated still counts
+    (CR, Play).
     """
     card = game.table.cards_by_id[card_id]
     ability = ability_for(game, card, ability_key)
     if ability is None:
         raise ValueError(f"{card_id} has no ability to resolve")
+    attack = game.attack
+    if (
+        attack is not None
+        and attack.current is not None
+        and keywords.TERRAIN in effective_keywords(game, card)
+    ):
+        record_terrain_played(game, card, battlefield=attack.current)
     game.stack.append(DiscardPlayed(card_id))
     defer_ability(game, card, ability, plays_card=True)
 

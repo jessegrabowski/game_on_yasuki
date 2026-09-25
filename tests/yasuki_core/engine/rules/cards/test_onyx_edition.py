@@ -10,15 +10,23 @@ from yasuki_core.engine.rules.abilities.registry import (
     ability_for,
     ability_label,
     register_ability,
+    register_interrupt,
 )
-from yasuki_core.engine.rules.abilities.model import itself
+from yasuki_core.engine.rules.abilities.model import Interrupt, Interruption, itself
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Destroy, Move, RevokeGrants, TakeFavor
+from yasuki_core.engine.rules.effects import (
+    Destroy,
+    Effect,
+    Move,
+    Negated,
+    RevokeGrants,
+    TakeFavor,
+)
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -72,6 +80,7 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 
 from tests.yasuki_core.engine.builders import (
     attachment,
+    contentious_terrain,
     combat_segment,
     flip_stronghold,
     dealt_table,
@@ -85,6 +94,7 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
     stronghold,
+    terrain_at,
     token_template,
     two_seat_game,
 )
@@ -1391,3 +1401,186 @@ def test_ring_of_earth_is_not_offered_after_a_battle_at_the_enemys_province():
     session = _earth_battle(attacker=P1)
 
     assert not isinstance(session.game.pending, Confirm)
+
+
+register_interrupt(
+    "negate_terrain_probe",
+    Interrupt(
+        label="Interrupt: negate the action's effects",
+        answers=Effect,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+        answers_every=True,
+    ),
+)
+
+
+def _water_combat(
+    *,
+    raider_force: int = 9,
+    defenders: tuple[str, ...] = ("guard@0",),
+    held: dict[PlayerId, tuple[L5RCard, ...]],
+    their_terrain: PlayerId | None = None,
+) -> EngineSession:
+    """P1 attacks P2's first Province with a raider of ``raider_force`` against a guard of Force 3,
+    P2 assigning ``defenders``, with ``held`` in each seat's hand and, when ``their_terrain`` names
+    a seat, that seat's Terrain already at the battlefield. P2 keeps a second Province. Paused as
+    the Combat Segment opens, with the Defender holding the first opportunity."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=P2, index=0)
+    province_card(state, "def-prov1", seat=P2, index=1)
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    put_in_play(state, personality("raider", owner=P1, force=raider_force))
+    put_in_play(state, personality("guard", owner=P2, force=3))
+    for seat, cards in held.items():
+        for card in cards:
+            state.zones[ZoneKey(seat, ZoneRole.HAND)].add(register(state, card))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(P2, DecisionResponse(defenders))
+    session.submit(P1, DecisionResponse(("0",)))
+    if their_terrain is not None:
+        terrain_at(session.game, "old-ground", battlefield=0, owner=their_terrain)
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    return session
+
+
+def _play_terrain(session: EngineSession, seat: PlayerId, card_id: str) -> None:
+    session.act(seat, PlayStrategy(card_id))
+    pay(session, seat)
+
+
+def _fight_out(session: EngineSession) -> None:
+    """Pass until the battle asks its first question after resolving, or moves on."""
+    while session.game.pending is None and session.game.attack.current is not None:
+        session.act(session.game.round.priority, Pass())
+
+
+def _water_offered_to(session: EngineSession, seat: PlayerId) -> bool:
+    pending = session.game.pending
+    return isinstance(pending, Confirm) and pending.seat is seat
+
+
+def test_ring_of_water_is_offered_after_playing_and_destroying_a_terrain_and_winning():
+    session = _water_combat(
+        held={P1: (_ring("water", "ring_of_water"), contentious_terrain("mine"))},
+        their_terrain=P2,
+    )
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "mine")
+    _fight_out(session)
+
+    assert _water_offered_to(session, P1)
+    session.submit(P1, DecisionResponse(("water",)))
+    assert "water" in _in_play(session)
+
+
+def test_ring_of_water_is_offered_to_a_defender_who_played_and_destroyed_a_terrain_and_won():
+    session = _water_combat(
+        raider_force=1,
+        held={P2: (_ring("water", "ring_of_water", P2), contentious_terrain("theirs", owner=P2))},
+        their_terrain=P1,
+    )
+    _play_terrain(session, P2, "theirs")
+    _fight_out(session)
+
+    assert _water_offered_to(session, P2)
+
+
+def test_ring_of_water_is_offered_when_resolution_destroys_only_the_province():
+    session = _water_combat(
+        defenders=(),
+        held={P1: (_ring("water", "ring_of_water"), contentious_terrain("mine"))},
+        their_terrain=P2,
+    )
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "mine")
+    _fight_out(session)
+
+    outcome = session.game.attack.battlefields[0].outcome
+    assert outcome.destroyed == () and outcome.province_destroyed
+    assert _water_offered_to(session, P1)
+
+
+def test_ring_of_water_is_offered_after_a_tie_that_destroyed_the_enemy_army():
+    # Contentious Terrain's +1F brings the raider to 3 against the guard's 3. On a tie each side
+    # destroys the other's army (CR, Battle Resolution), so P1 destroyed cards with no winner.
+    session = _water_combat(
+        raider_force=2,
+        held={P1: (_ring("water", "ring_of_water"), contentious_terrain("mine"))},
+        their_terrain=P2,
+    )
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "mine")
+    _fight_out(session)
+
+    assert session.game.attack.battlefields[0].outcome.winner is None
+    assert _water_offered_to(session, P1)
+
+
+def test_ring_of_water_is_not_offered_without_destroying_a_terrain():
+    session = _water_combat(
+        held={P1: (_ring("water", "ring_of_water"), contentious_terrain("mine"))}
+    )
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "mine")
+    _fight_out(session)
+
+    assert not _water_offered_to(session, P1)
+
+
+def test_ring_of_water_is_not_offered_when_only_the_opponent_destroyed_a_terrain():
+    # P1's Terrain enters on empty ground, then P2's destroys it. P1 still wins the battle.
+    session = _water_combat(
+        held={
+            P1: (_ring("water", "ring_of_water"), contentious_terrain("mine")),
+            P2: (contentious_terrain("theirs", owner=P2),),
+        },
+    )
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "mine")
+    _play_terrain(session, P2, "theirs")
+    _fight_out(session)
+
+    info = session.game.attack.battlefields[0]
+    assert info.terrains_destroyed == frozenset({(P2, "mine")})
+    assert not _water_offered_to(session, P1)
+
+
+def test_ring_of_water_is_not_offered_when_resolution_destroyed_only_your_own_cards():
+    # Contentious Terrain's +1F leaves the raider at 2 against the guard's 3, so the Defender wins.
+    session = _water_combat(
+        raider_force=1,
+        held={P1: (_ring("water", "ring_of_water"), contentious_terrain("mine"))},
+        their_terrain=P2,
+    )
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "mine")
+    _fight_out(session)
+
+    assert not _water_offered_to(session, P1)
+
+
+def test_a_terrain_whose_entry_is_negated_still_counts_as_played():
+    # Playing is putting the card into the resolution area (CR, Play), which happens whether or not
+    # the Terrain's own effects are negated.
+    negator = L5RCard.of(
+        ActionPrint,
+        id="negator",
+        name="Negator",
+        printed_id="negate_terrain_probe",
+        side=Side.FATE,
+        owner=P2,
+        gold_cost=0,
+    )
+    session = _water_combat(held={P1: (contentious_terrain("mine"),), P2: (negator,)})
+    session.act(P2, Pass())
+    _play_terrain(session, P1, "mine")
+    session.act(P2, PlayInterrupt("negator"))
+    pay(session, P2)
+
+    table = session.game.table
+    assert not any(card.id == "mine" for card in table.battlefield.cards)
+    assert session.game.attack.battlefields[0].terrains_played == frozenset({(P1, "mine")})

@@ -93,7 +93,7 @@ destroyed, gain 2 Honor."*:
 :language: python
 ```
 
-The resolver reads `attack.battlefields[attack.current].outcome`, which `_resolve_battle` writes
+The resolver reads `attack.battlefields[attack.current].outcome`, which {class}`~.AnnounceResolution` writes
 before it releases the delayed effects and before it clears `attack.current`.
 
 ## Where the rest lives

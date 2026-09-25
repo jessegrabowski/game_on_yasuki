@@ -71,6 +71,7 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
     stronghold,
+    terrain_at,
     token_template,
     two_seat_game,
 )
@@ -1199,5 +1200,50 @@ def test_ring_of_earth_is_not_offered_to_the_attacker():
 
 def test_ring_of_earth_is_not_offered_when_no_enemy_unit_was_ever_at_the_battlefield():
     session = _earth_battle(attacker=P2, assign_raider=False)
+
+    assert not isinstance(session.game.pending, Confirm)
+
+
+def _water_battle(*, raider_force: int, terrain_owner: PlayerId | None) -> EngineSession:
+    """P1 attacks P2's first Province with a raider of ``raider_force`` against a guard of Force 3,
+    with a Terrain owned by ``terrain_owner`` at the battlefield, or none. P2 keeps a second
+    Province. Ring of Water waits in P1's hand. Left on the resolution's first question, or on the
+    choice of the next battlefield when it asks none."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=P2, index=0)
+    province_card(state, "def-prov1", seat=P2, index=1)
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    put_in_play(state, personality("raider", owner=P1, force=raider_force))
+    put_in_play(state, personality("guard", owner=P2, force=3))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, _ring("water", "ring_of_water")))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    session.submit(P1, DecisionResponse(("0",)))
+    if terrain_owner is not None:
+        terrain_at(session.game, "ground", battlefield=0, owner=terrain_owner)
+    while session.game.pending is None and session.game.attack.current is not None:
+        session.act(session.game.round.priority, Pass())
+    return session
+
+
+def test_ring_of_water_is_offered_after_destroying_a_province_where_you_control_a_terrain():
+    session = _water_battle(raider_force=9, terrain_owner=P1)
+
+    assert isinstance(session.game.pending, Confirm) and session.game.pending.seat is P1
+    session.submit(P1, DecisionResponse(("water",)))
+
+    assert "water" in _in_play(session)
+
+
+@pytest.mark.parametrize(
+    ("raider_force", "terrain_owner"),
+    [(1, P1), (9, P2), (9, None)],
+    ids=["province-stood", "enemy-terrain", "no-terrain"],
+)
+def test_ring_of_water_is_not_offered_otherwise(raider_force, terrain_owner):
+    session = _water_battle(raider_force=raider_force, terrain_owner=terrain_owner)
 
     assert not isinstance(session.game.pending, Confirm)

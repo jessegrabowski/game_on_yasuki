@@ -9,6 +9,7 @@ yasuki_core.engine.rules.battle.resolution
 
     AfterAssignment
     AfterResolution
+    AnnounceResolution
     EndBattle
     FightNextBattle
 

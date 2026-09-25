@@ -44,12 +44,18 @@ class BattlefieldInfo(NamedTuple):
     bow_exempt : frozenset of PlayerId
         The seats whose units the battle's resolution does not bow (CR, After Resolution 0.1), as
         Rallying Cry grants. Default empty.
+    terrains_played : frozenset of (PlayerId, str)
+        Each seat and the Terrain it played here from its hand. Default empty.
+    terrains_destroyed : frozenset of (PlayerId, str)
+        Each seat and the Terrain here it destroyed. Default empty.
     """
 
     province: ZoneKey
     outcome: BattleOutcome | None = None
     ever_present: frozenset[tuple[PlayerId, str]] = frozenset()
     bow_exempt: frozenset[PlayerId] = frozenset()
+    terrains_played: frozenset[tuple[PlayerId, str]] = frozenset()
+    terrains_destroyed: frozenset[tuple[PlayerId, str]] = frozenset()
 
 
 @dataclass(slots=True)

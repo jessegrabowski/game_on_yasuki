@@ -415,21 +415,73 @@ def _resolve_battle(game: GameState) -> None:
     # Where this battle's events start. Every battle of an Attack Phase runs inside one action, so
     # an outcome reading the action's events rather than its own would collect its predecessors'.
     events_before = len(game.action_events)
+    province_stood = attack.battlefields[battlefield].province in game.table.zones
 
     attack.battle_segment = BattleSegment.RESOLUTION
-    triggers.resolve_effects(game, effects)
-    outcome = _outcome(
-        game,
-        battlefield,
-        winner=winner,
-        honor_before=honor_before,
-        events_before=events_before,
+    # Queued first, so a trigger that pauses the resolution's cascade to ask a question stashes it
+    # above the announcement, which then sees everything the resolution did.
+    game.stack.append(
+        AnnounceResolution(
+            battlefield,
+            last_battle=last_battle,
+            winner=winner,
+            honor_before=honor_before,
+            events_before=events_before,
+            province_stood=province_stood,
+        )
     )
-    attack.amend(battlefield, outcome=outcome)
-    # Queued before the announcement, so a trait that pauses on it stashes its cascade above the
-    # work and resumes first.
-    game.stack.append(AfterResolution(battlefield, last_battle=last_battle))
-    triggers.fire(game, _battle_resolved(attack, battlefield, outcome))
+    triggers.resolve_effects(game, effects)
+
+
+@dataclass(frozen=True, slots=True)
+class AnnounceResolution:
+    """Record what a battle's resolution did and announce :class:`~.BattleResolved`, once its
+    cascade has settled (CR, Battle Resolution).
+
+    A work item, since a trigger among the resolution's effects may pause to ask a question and the
+    outcome must include what the answer does.
+
+    Attributes
+    ----------
+    battlefield : int
+        The battlefield whose battle resolved.
+    last_battle : bool
+        Whether it was the Attack Phase's last, which sends every defending unit home.
+    winner : PlayerId or None
+        The seat whose Force was higher, read before resolution destroyed the armies, or None on a
+        tie.
+    honor_before : dict mapping PlayerId to int
+        Each seat's Family Honor as resolution began.
+    events_before : int
+        Where the resolution's events start in the action's events.
+    province_stood : bool
+        Whether the battlefield's Province stood as resolution began, so a Province destroyed
+        earlier is not credited to it.
+    """
+
+    battlefield: int
+    last_battle: bool
+    winner: PlayerId | None
+    honor_before: dict[PlayerId, int]
+    events_before: int
+    province_stood: bool
+
+    def resume(self, game: GameState) -> None:
+        attack = _declared_attack(game)
+        destructions = _resolution_destructions(game, self.events_before)
+        outcome = _outcome(
+            game,
+            self.battlefield,
+            winner=self.winner,
+            honor_before=self.honor_before,
+            destructions=destructions,
+            province_stood=self.province_stood,
+        )
+        attack.amend(self.battlefield, outcome=outcome)
+        # Queued before the announcement, so a trait that pauses on it stashes its cascade above
+        # the work and resumes first.
+        game.stack.append(AfterResolution(self.battlefield, last_battle=self.last_battle))
+        triggers.fire(game, _battle_resolved(attack, self.battlefield, outcome, destructions))
 
 
 @dataclass(frozen=True, slots=True)
@@ -439,8 +491,8 @@ class AfterResolution:
 
     A work item, since the step is an Action Round the seats pass out of. It is queued twice: once
     to open the step, and again beneath it to run the After Resolution clauses when the step
-    closes, with :class:`~.EndBattle` queued beneath those. A card that reads "after a battle's Resolution Segment" acts in the step, while the
-    battle segment still reads Resolution.
+    closes, with :class:`~.EndBattle` queued beneath those. A card that reads "after a battle's
+    Resolution Segment" acts in the step, while the battle segment still reads Resolution.
 
     Attributes
     ----------
@@ -501,13 +553,23 @@ def _honor(game: GameState) -> dict[PlayerId, int]:
     return {seat: info.honor for seat, info in game.table.seats.items()}
 
 
+def _resolution_destructions(game: GameState, events_before: int) -> list[Destroyed]:
+    """The destructions the resolution announced, in the order they went."""
+    return [
+        event
+        for event in game.action_events[events_before:]
+        if isinstance(event, Destroyed) and event.cause is Rulebook.BATTLE_RESOLUTION
+    ]
+
+
 def _outcome(
     game: GameState,
     battlefield: int,
     *,
     winner: PlayerId | None,
     honor_before: dict[PlayerId, int],
-    events_before: int,
+    destructions: list[Destroyed],
+    province_stood: bool,
 ) -> BattleOutcome:
     """What the battle at ``battlefield`` turned out to have done.
 
@@ -520,12 +582,8 @@ def _outcome(
     province = _declared_attack(game).battlefields[battlefield].province
     return BattleOutcome(
         winner=winner,
-        destroyed=tuple(
-            event.card_id
-            for event in game.action_events[events_before:]
-            if isinstance(event, Destroyed) and event.cause is Rulebook.BATTLE_RESOLUTION
-        ),
-        province_destroyed=province not in game.table.zones,
+        destroyed=tuple(event.card_id for event in destructions),
+        province_destroyed=province_stood and province not in game.table.zones,
         honor={
             seat: honor - honor_before[seat]
             for seat, honor in _honor(game).items()
@@ -535,7 +593,7 @@ def _outcome(
 
 
 def _battle_resolved(
-    attack: AttackPhase, battlefield: int, outcome: BattleOutcome
+    attack: AttackPhase, battlefield: int, outcome: BattleOutcome, destructions: list[Destroyed]
 ) -> BattleResolved:
     info = attack.battlefields[battlefield]
     return BattleResolved(
@@ -547,6 +605,11 @@ def _battle_resolved(
         province_destroyed=outcome.province_destroyed,
         destroyed=outcome.destroyed,
         ever_present=info.ever_present,
+        destroyed_controllers=frozenset(
+            event.controller for event in destructions if event.controller is not None
+        ),
+        terrains_played=info.terrains_played,
+        terrains_destroyed=info.terrains_destroyed,
     )
 
 

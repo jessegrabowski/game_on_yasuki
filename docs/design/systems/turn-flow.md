@@ -11,10 +11,13 @@ where players take actions, and closes when every seat passes consecutively.
 is the window that opens over an action just taken, and over a battle just resolved.
 `BATTLE_SEGMENT` is one step of a battle.
 
-A battle's resolution opens a Response Step of its own. {class}`~.AfterResolution` is the work
-item that opens it once `BattleResolved` has been announced, and the item waits beneath the step
-the way a held action waits beneath its Interrupt round. When the step closes, the item runs After
-Resolution, bows and sends home the survivors, and moves the fight on. The battle
+A battle's resolution opens a Response Step of its own. {class}`~.AnnounceResolution` records the
+outcome and announces `BattleResolved` once the resolution's own cascade has settled, including any
+question a trigger in it asks, so the outcome sees everything the resolution did.
+{class}`~.AfterResolution` is the work item that opens the step once `BattleResolved` has been
+announced, and the item waits beneath the step the way a held action waits beneath its Interrupt
+round. When the step closes, the item runs After Resolution, bows and sends home the survivors, and
+moves the fight on. The battle
 segment reads `RESOLUTION` for as long as the step is open, which is what a card reading "after a
 battle's Resolution Segment" checks.
 
