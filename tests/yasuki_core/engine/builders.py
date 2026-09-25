@@ -312,6 +312,24 @@ def terrain(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
     )
 
 
+def doro_no_oni(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
+    """Doro no Oni as printed: a Terrain by its ability keyword alone, with none on its type line."""
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        name="Doro no Oni",
+        side=Side.FATE,
+        owner=owner,
+        keywords=("Nonhuman", "Oni", "Shadowlands"),
+        text=(
+            "Followers and Personalities have -1F at this battlefield. Before this battle resolves, destroy "
+            "all Followers and Personalities at this battlefield with 0F, then each player must destroy "
+            "one of their bowed cards here <i>(if able)</i>.<br><b>Terrain Battle:</b> Destroy a "
+            "Terrain <i>(if able)</i>. Put this Terrain into play. Lose 2 Honor."
+        ),
+    )
+
+
 def terrain_at(
     target: GameState | TableState, card_id: str, battlefield: int, *, owner: PlayerId = PlayerId.P1
 ) -> L5RCard:

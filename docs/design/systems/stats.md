@@ -89,7 +89,9 @@ whichever the player holds when it is used: The Sacred Ground of the Phoenix lic
 time you use the rulebook Kharmic ability", and the card spent may be one drawn after the Open.
 
 {class}`~.KeywordGrant` grants a keyword instead of a number. Asking whether a card is a Farm
-therefore goes through {func}`~.effective_keywords`, never through its printed keywords.
+therefore goes through {func}`~.effective_keywords`, never through its printed keywords. It also
+carries the keywords printed on the card's abilities, which the CR's Keyword Inheritance makes the
+card's own: a Strategy printing "Terrain Battle:" is a Terrain.
 
 {class}`~.Minimum` floors a stat instead of adding to it, and applies to the total rather than to
 any one part of it. Where several apply to one stat, the most restrictive wins.

@@ -171,8 +171,10 @@ nothing of the kind.
 A Terrain in play has a battlefield location and belongs to no unit, so it is in neither army and
 adds no Force (CR, Side). {class}`~.PutIntoPlay` takes the battlefield, and
 {func}`~.terrains_at` and {func}`~.controls_terrain_at` read it back. The rulebook discards it after
-its battle resolves. A Terrain printing "Battle: Destroy a Terrain (if able). Put this Terrain into
-play." and nothing more is one line:
+its battle resolves. Many Terrains print the keyword only on their entry ability, as "Terrain
+Battle:", and are Terrains all the same, because an ability's keywords are its card's too (CR,
+Keyword Inheritance). {func}`~.effective_keywords` reads them. A Terrain printing "Battle: Destroy a
+Terrain (if able). Put this Terrain into play." and nothing more is one line:
 
 ```python
 register_terrain("contentious_terrain")
