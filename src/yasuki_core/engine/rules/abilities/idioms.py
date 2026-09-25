@@ -310,7 +310,12 @@ def _resolve_terrain_entry(
     return _terrain_enters(game, source_id, destroyed=chosen)
 
 
-def register_terrain(printed_id: str) -> None:
+def register_terrain(
+    printed_id: str,
+    *,
+    timings: tuple[ActionTiming, ...] = (ActionTiming.BATTLE,),
+    ability_keywords: frozenset[str] = frozenset(),
+) -> None:
     """Register ``printed_id``'s "Battle: Destroy a Terrain (if able). Put this Terrain into play."
 
     Taken from hand during a battle. Its Terrain enters play at the current battlefield, standing
@@ -318,6 +323,15 @@ def register_terrain(printed_id: str) -> None:
     than one to pick from, and none is no obstacle, since the destruction is only "if able".
     "A Terrain" is read as one at the current battlefield. Every Terrain is discarded when its own
     battle ends, so no other battlefield holds one.
+
+    Parameters
+    ----------
+    printed_id : str
+        The Terrain's printed id.
+    timings : tuple of ActionTiming, optional
+        The designators the entry is taken under, as in "Battle/Engage". Default ``BATTLE``.
+    ability_keywords : frozenset of str, optional
+        The ability keywords the entry prints, as in "Political Terrain Battle". Default empty.
     """
 
     def targets(game: GameState, source: L5RCard) -> list[str]:
@@ -346,12 +360,13 @@ def register_terrain(printed_id: str) -> None:
     register_ability(
         printed_id,
         Ability(
-            timings=(ActionTiming.BATTLE,),
+            timings=timings,
             cost=no_cost,
             targets=targets,
             effects=effects,
             hits_every_target=True,
             located_at=(CardLocation.HAND,),
+            keywords=ability_keywords,
         ),
     )
 

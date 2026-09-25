@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import (
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import doro_no_oni, holding, put_in_play, two_seat_game
 
 
 def _shrine_of_courtesy(seat):
@@ -22,6 +22,15 @@ def test_a_card_without_a_grant_carries_only_its_printed_keywords():
     game = two_seat_game()
     plain = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
     assert effective_keywords(game, plain) == frozenset({"Farm"})
+
+
+def test_a_card_carries_the_keywords_printed_on_its_abilities():
+    game = two_seat_game()
+    doro = put_in_play(game, doro_no_oni("doro", owner=PlayerId.P1))
+
+    assert effective_keywords(game, doro) == frozenset(
+        {"Nonhuman", "Oni", "Shadowlands", "Terrain"}
+    )
 
 
 def test_a_recorded_grant_gives_a_card_a_keyword_it_does_not_print():

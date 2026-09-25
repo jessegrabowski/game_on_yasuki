@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     a_line_in_the_sand,
     a_matter_of_honor,
     a_perfect_cut,
+    aftermath,
     ambitions_debt,
     anvil_of_despair,
     chaos_reigns_part_i,

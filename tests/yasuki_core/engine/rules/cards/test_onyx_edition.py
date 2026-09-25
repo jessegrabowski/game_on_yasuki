@@ -1,6 +1,9 @@
+from dataclasses import replace
+
 import pytest
 
 from yasuki_core import ruleset
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
@@ -15,7 +18,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Move, RevokeGrants, TakeFavor
+from yasuki_core.engine.rules.effects import Destroy, Move, RevokeGrants, TakeFavor
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -34,7 +37,7 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
-from yasuki_core.game_pieces.prints import FatePrint, RingPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, RingPrint, StrongholdPrint
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
@@ -51,7 +54,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
-from yasuki_core.engine.rules.triggers import fire
+from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.rulebook.kharmic import (
     KHARMIC_DRAW,
@@ -60,6 +63,7 @@ from yasuki_core.engine.rules.rulebook.kharmic import (
 )
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
 
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -95,6 +99,86 @@ def _onyx(monkeypatch):
     # The Rings register their Onyx text under the Onyx ruleset, and nothing else here reads a
     # rule the two rulesets differ on, so the whole module plays under it.
     monkeypatch.setattr(ruleset, "ACTIVE", ruleset.ONYX)
+
+
+# --- Fields of Slaughter ---
+
+
+def _fields_of_slaughter(card_id: str = "fields") -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        name="Fields of Slaughter",
+        printed_id="fields_of_slaughter",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+
+
+def _fields_of_slaughter_game() -> GameState:
+    """Fields of Slaughter in play for P1 at battlefield 0."""
+    game = two_seat_game()
+    fields = put_in_play(game, _fields_of_slaughter())
+    ops.set_location(game.table, fields, Location.at_battlefield(0))
+    return game
+
+
+@pytest.mark.parametrize(
+    ("owner", "location", "gained"),
+    [
+        (P2, Location.at_battlefield(0), 2),
+        (P1, Location.at_battlefield(0), 0),
+        (P2, Location.home(P2), 0),
+        (P2, Location.at_battlefield(1), 0),
+    ],
+    ids=["enemy-here", "own-here", "enemy-at-home", "enemy-elsewhere"],
+)
+def test_fields_of_slaughter_gains_2_honor_only_for_an_enemy_card_destroyed_there(
+    owner, location, gained
+):
+    game = _fields_of_slaughter_game()
+    doomed = put_in_play(game, personality("doomed", owner=owner))
+    ops.set_location(game.table, doomed, location)
+
+    resolve_effects(game, [Destroy("doomed", P1)])
+
+    assert game.table.seats[P1].honor == gained
+
+
+def test_fields_of_slaughter_counts_a_created_card_that_leaves_the_table():
+    game = _fields_of_slaughter_game()
+    token = put_in_play(game, replace(personality("ashigaru", owner=P2), is_token=True))
+    ops.set_location(game.table, token, Location.at_battlefield(0))
+
+    resolve_effects(game, [Destroy("ashigaru", P1)])
+
+    assert "ashigaru" not in game.table.cards_by_id
+    assert game.table.seats[P1].honor == 2
+
+
+def test_fields_of_slaughter_enters_play_in_the_engage_segment():
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=P2, index=0)
+    province_card(state, "def-prov1", seat=P2, index=1)
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    put_in_play(state, personality("a", owner=P1))
+    put_in_play(state, personality("d", owner=P2))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, _fields_of_slaughter()))
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("a@0",)))
+    session.submit(P2, DecisionResponse(("d@0",)))
+    session.submit(P1, DecisionResponse(("0",)))
+    session.act(P2, Pass())
+
+    session.act(P1, PlayStrategy("fields"))
+    pay(session, P1)
+
+    game = session.game
+    assert game.attack.battle_segment is BattleSegment.ENGAGE
+    assert location_of(game.table, game.table.cards_by_id["fields"]).battlefield == 0
 
 
 # --- Kitsu Hayako ---

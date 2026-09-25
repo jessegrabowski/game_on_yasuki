@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD
 from yasuki_core.engine.table import Location
 
 from tests.yasuki_core.engine.builders import (
+    doro_no_oni,
     holding,
     personality,
     province_card,
@@ -91,3 +92,12 @@ def test_a_terrain_is_found_and_controlled_only_at_its_own_battlefield():
     assert controls_terrain_at(game, PlayerId.P1, battlefield=0)
     assert not controls_terrain_at(game, PlayerId.P2, battlefield=0)
     assert not controls_terrain_at(game, PlayerId.P1, battlefield=1)
+
+
+def test_a_terrain_named_only_by_its_ability_keyword_is_a_terrain():
+    game = two_seat_game()
+    doro = put_in_play(game, doro_no_oni("doro", owner=PlayerId.P2))
+    ops.set_location(game.table, doro, Location.at_battlefield(0))
+
+    assert terrains_at(game, battlefield=0) == [doro]
+    assert controls_terrain_at(game, PlayerId.P2, battlefield=0)
