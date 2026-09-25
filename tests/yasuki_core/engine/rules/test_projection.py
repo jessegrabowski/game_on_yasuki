@@ -8,8 +8,9 @@ from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.battle.records import BattleOutcome
-from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo, BattleOutcome
+from yasuki_core.engine.rules.turn.structure import RESPONSE_TIMINGS, ActionRound, Phase, RoundKind
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import triggers
@@ -647,3 +648,23 @@ def test_a_battlefield_with_no_outcome_names_nothing_destroyed():
     view = project(game, PlayerId.P1)
 
     assert view.attack.battlefields[0].destroyed_names == ()
+
+
+def test_a_response_step_over_a_battles_resolution_names_the_segment():
+    # The last action recorded is whatever preceded the battle, and naming it would tell the seat
+    # it is responding to the wrong thing.
+    game = two_seat_game()
+    game.action_taken = "the attack"
+    game.attack = AttackPhase(
+        attacker=PlayerId.P1,
+        defender=PlayerId.P2,
+        battlefields=(BattlefieldInfo(province=ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)),),
+        current=0,
+        battle_segment=BattleSegment.RESOLUTION,
+    )
+    game.round = ActionRound(
+        timings=RESPONSE_TIMINGS, priority=PlayerId.P1, kind=RoundKind.RESPONSE
+    )
+
+    assert project(game, PlayerId.P1).responding_to == "the battle's Resolution Segment"
+    assert project(game, PlayerId.P2).responding_to == "the battle's Resolution Segment"
