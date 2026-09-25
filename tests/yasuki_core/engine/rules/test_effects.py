@@ -82,6 +82,17 @@ def test_every_effect_implements_perform():
     assert missing == []
 
 
+def test_every_effect_reads_the_game_to_answer_whether_it_is_interruptible():
+    # The Interrupt step asks every one of an action's effects, passing the game. An override that
+    # takes no argument raises only once a card first routes that effect through the step.
+    wrong = [
+        cls.__name__
+        for cls in _effect_types()
+        if inspect.signature(cls.is_interruptible) != inspect.signature(Effect.is_interruptible)
+    ]
+    assert wrong == []
+
+
 def test_effect_discovery_finds_concrete_effects_and_excludes_the_base():
     # Guards the discovery above: if it silently found nothing, the other tests would pass
     # vacuously.
