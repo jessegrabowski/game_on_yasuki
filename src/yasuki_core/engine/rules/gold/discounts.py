@@ -71,14 +71,21 @@ class Purchase:
 
 
 def card_purchase(game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
-    """A payment for ``card`` itself or for an action on it that no registered ability describes:
-    an Equip, or an Interrupt."""
+    """A payment for an Interrupt ``card`` prints, which is the card's own action and carries its
+    keywords."""
     return Purchase(
         seat=card.owner,
         card=card,
         keywords=frozenset(effective_keywords(game, card)),
         plays_card=plays_card,
     )
+
+
+def equip_purchase(card: L5RCard) -> Purchase:
+    """A payment to Equip ``card``. Equip is a player ability the rulebook grants (CR, Player
+    Abilities and Traits), so it carries none of the card's keywords, though it pays for the
+    card."""
+    return Purchase(seat=card.owner, card=card, keywords=frozenset(), plays_card=True)
 
 
 # An action-discount handler lowers the Gold its controller pays, from the game, the card granting

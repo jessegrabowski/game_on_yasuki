@@ -19,6 +19,7 @@ yasuki_core.engine.rules.gold.discounts
     effective_action_discount
     effective_invest_discount
     effective_recruit_discount
+    equip_purchase
     unspent_action_discount
 
 .. automodule:: yasuki_core.engine.rules.gold.discounts

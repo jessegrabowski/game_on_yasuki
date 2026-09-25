@@ -563,10 +563,12 @@ def test_each_other_player_with_a_shadowlands_card_takes_two_more_gold_off():
     assert ActivateAbility("sensei") in session.legal_actions(P1)
 
 
-def test_mishime_takes_two_gold_off_a_spell_but_not_off_an_item():
+def test_mishime_takes_two_gold_off_a_spell_but_not_off_a_maho_item():
+    """Equip is a player ability, so a Maho Item's keyword does not make Equipping it a Maho action
+    (CR, Player Abilities and Traits)."""
     shugenja = personality("shugenja", keywords=(keywords.SHUGENJA,))
     spell = attachment("spell", attachment_type=AttachmentType.SPELL, gold_cost=3)
-    item = attachment("item", gold_cost=3)
+    item = attachment("item", gold_cost=3, keywords=(keywords.MAHO,))
     session = _mishime_game(stronghold_production=1, in_play=(shugenja,), in_hand=(spell, item))
 
     legal = session.legal_actions(P1)
