@@ -950,7 +950,7 @@ def test_the_license_is_consumed_after_the_action_and_not_among_its_effects():
     assert not any(
         isinstance(effect, RevokeGrants) for effect in licensed.effects(game, plain, plain)
     )
-    assert not RevokeGrants("ground").is_interruptible()
+    assert not RevokeGrants("ground").is_interruptible(game)
 
 
 def test_the_opponents_kharmic_use_leaves_the_license_standing():

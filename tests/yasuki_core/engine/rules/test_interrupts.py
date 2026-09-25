@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.effects import (
     Fear,
     GainHonor,
     Negated,
+    RevokeGrants,
     Straighten,
     Then,
 )
@@ -1193,6 +1194,17 @@ def test_the_forecast_reads_through_an_attacks_outcome_and_a_deferred_step():
     )
 
     assert foreseen == (Fear(FEAR, guard.id, P2), Bow(guard.id), Bow(farm.id))
+
+
+def test_the_forecast_leaves_out_bookkeeping_on_a_record():
+    # The step asks each effect whether it is interruptible at all, so an effect that only rewrites
+    # an ongoing record is asked and dropped rather than offered.
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+
+    foreseen = interrupts.forecast(game, (RevokeGrants(farm.id), Bow(farm.id)))
+
+    assert foreseen == (Bow(farm.id),)
 
 
 def test_the_forecast_shows_no_outcome_for_an_attack_that_cannot_reach():

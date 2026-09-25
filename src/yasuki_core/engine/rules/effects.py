@@ -669,7 +669,7 @@ class RevokeGrants(Effect):
     def describe(self) -> str:
         return f"{self.source_id} revokes its grants"
 
-    def is_interruptible(self) -> bool:
+    def is_interruptible(self, game: GameState) -> bool:
         """False: bookkeeping on a record, with nothing on the board to interrupt."""
         return False
 
