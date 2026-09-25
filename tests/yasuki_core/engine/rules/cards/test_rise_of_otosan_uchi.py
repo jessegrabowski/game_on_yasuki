@@ -68,6 +68,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    sensei,
     stronghold,
     token_template,
     two_seat_game,
@@ -217,8 +218,9 @@ def test_it_cannot_be_backed_out_of_once_the_opponent_has_been_given_something()
 # --- Bound in Blood ---
 
 
-def _blood_game(*, bodies=(("acolyte", 3, 2), ("novice", 2, 1)), gold_production=12):
-    """The Spell on a Shugenja, with ``bodies`` of (id, gold cost, chi) to bind besides him."""
+def _blood_game(*, bodies=(("acolyte", 3, 2), ("novice", 2, 1)), gold_production=12, mishime=False):
+    """The Spell on a Shugenja, with ``bodies`` of (id, gold cost, chi) to bind besides him, and
+    Mishime Sensei's two Gold off Maho Spells when ``mishime``."""
     game = two_seat_game()
     token_template(
         game,
@@ -231,7 +233,15 @@ def _blood_game(*, bodies=(("acolyte", 3, 2), ("novice", 2, 1)), gold_production
     put_in_play(game, personality("shugenja", force=1, chi=4, keywords=("Shugenja",)))
     for card_id, gold_cost, chi in bodies:
         put_in_play(game, personality(card_id, force=1, chi=chi, gold_cost=gold_cost))
-    attached(game, attachment("spell", printed_id="bound_in_blood"), "shugenja")
+    spell = attachment(
+        "spell",
+        printed_id="bound_in_blood",
+        attachment_type=AttachmentType.SPELL,
+        keywords=("Maho", "Shadowlands"),
+    )
+    attached(game, spell, "shugenja")
+    if mishime:
+        put_in_play(game, sensei(P1, printed_id="mishime_sensei", keywords=("Maho", "Shadowlands")))
     return EngineSession.start(game.table, P1)
 
 
@@ -269,6 +279,38 @@ def test_the_offer_stops_at_what_the_seat_can_raise():
     session.act(P1, ActivateAbility("spell"))
 
     assert session.game.pending.candidates == ("2", "4")
+
+
+def test_a_discount_raises_what_the_seat_can_declare():
+    session = _blood_game(gold_production=5, mishime=True)  # six declared costs four
+
+    session.act(P1, ActivateAbility("spell"))
+
+    assert session.game.pending.candidates == ("2", "4", "6")
+
+
+def test_a_discount_lowers_the_payment_but_not_the_bodies_it_buys():
+    """The card reads the declared amount, as Recruit matches the Gold Cost before its surcharge
+    (CR, Recruit)."""
+    session = _blood_game(mishime=True)
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("6",)))
+    assert session.game.pending.amount == 4
+    pay(session, P1)
+
+    assert session.game.pending.minimum == 3
+    assert session.game.pending.maximum == 3
+
+
+def test_a_declared_amount_the_discount_covers_asks_for_no_payment():
+    session = _blood_game(mishime=True)
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("2",)))
+
+    assert session.game.pending.minimum == 1
+    assert session.game.gold[P1] == 0
 
 
 def test_bound_in_blood_measures_the_horror_against_what_it_bound():

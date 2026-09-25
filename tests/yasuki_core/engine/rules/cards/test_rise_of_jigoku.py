@@ -6,6 +6,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
+    Equip,
     Pass,
     PlayStrategy,
     Recruit,
@@ -23,7 +24,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as 
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.gold.production import effective_gold_production
-from yasuki_core.engine.rules.effects import Destroy, Discard
+from yasuki_core.engine.rules.effects import Destroy, Discard, GainHonor, PayGold
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -34,6 +35,7 @@ from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, SenseiPrint,
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.state import GameState
@@ -44,6 +46,7 @@ from yasuki_core.engine.table import Location
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.prints import ActionPrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attachment,
     end_phase,
@@ -55,12 +58,14 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    sensei,
     stronghold,
     token_template,
     two_seat_game,
 )
 
 P1 = PlayerId.P1
+P2 = PlayerId.P2
 
 
 def _rural_market_game(wealth=1):
@@ -453,9 +458,9 @@ def test_backing_out_of_the_first_step_unwinds_it_too():
 # --- Mishime Sensei ---
 
 
-def _mishime_game(*, chi=3, stronghold_production=6):
-    """P1's Mishime Sensei in play with a Personality to feed it and a Stronghold that can raise the
-    five gold the ability charges."""
+def _mishime_game(*, chi=3, stronghold_production=6, in_hand=(), in_play=()):
+    """P1's Mishime Sensei in play with a Personality to feed it and a Stronghold that can raise
+    what the ability charges."""
     state = TableState.empty_two_seat()
     put_in_play(state, stronghold(P1, gold_production=stronghold_production))
     put_in_play(
@@ -467,9 +472,15 @@ def _mishime_game(*, chi=3, stronghold_production=6):
             side=Side.FATE,
             owner=P1,
             printed_id="mishime_sensei",
+            keywords=("Spider Clan", keywords.MAHO, keywords.SHADOWLANDS),
         ),
     )
     put_in_play(state, personality("victim", force=1, chi=chi))
+    for card in in_play:
+        put_in_play(state, card)
+    for card in in_hand:
+        register(state, card)
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(card)
     token_template(
         state,
         MISHIMES_ONI,
@@ -538,10 +549,110 @@ def test_the_oni_copies_the_chi_the_target_has_rather_than_the_chi_he_prints():
     assert effective_force(session.game, oni) == 5
 
 
-def test_mishime_is_withheld_when_the_seat_cannot_raise_five_gold():
-    session = _mishime_game(stronghold_production=4)
+def test_mishimes_own_maho_ability_costs_two_less_for_his_shadowlands():
+    """The Maho icon beside his title makes his own ability a Maho action (ShE datasheet, Iconised
+    Keywords)."""
+    assert ActivateAbility("sensei") in _mishime_game(stronghold_production=3).legal_actions(P1)
+    assert ActivateAbility("sensei") not in _mishime_game(stronghold_production=2).legal_actions(P1)
 
-    assert ActivateAbility("sensei") not in session.legal_actions(P1)
+
+def test_each_other_player_with_a_shadowlands_card_takes_two_more_gold_off():
+    oni = personality("oni", owner=P2, keywords=(keywords.SHADOWLANDS,))
+    session = _mishime_game(stronghold_production=1, in_play=(oni,))
+
+    assert ActivateAbility("sensei") in session.legal_actions(P1)
+
+
+def test_mishime_takes_two_gold_off_a_spell_but_not_off_a_maho_item():
+    """Equip is a player ability, so a Maho Item's keyword does not make Equipping it a Maho action
+    (CR, Player Abilities and Traits)."""
+    shugenja = personality("shugenja", keywords=(keywords.SHUGENJA,))
+    spell = attachment("spell", attachment_type=AttachmentType.SPELL, gold_cost=3)
+    item = attachment("item", gold_cost=3, keywords=(keywords.MAHO,))
+    session = _mishime_game(stronghold_production=1, in_play=(shugenja,), in_hand=(spell, item))
+
+    legal = session.legal_actions(P1)
+
+    assert Equip("spell") in legal
+    assert Equip("item") not in legal
+
+
+def test_mishime_takes_his_discount_once_from_a_strategy_that_charges_gold_twice():
+    card = L5RCard.of(
+        ActionPrint,
+        id="probe",
+        name="probe",
+        printed_id="maho_probe",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=3,
+        keywords=(keywords.MAHO,),
+    )
+    ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=lambda game, source: [PayGold(source.owner, 3, "probe")],
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+        located_at=(CardLocation.HAND,),
+    )
+
+    with probe_ability("maho_probe", ability):
+        session = _mishime_game(in_hand=(card,))
+        session.act(P1, PlayStrategy("probe"))
+        assert session.game.pending.amount == 1
+        session.submit(P1, DecisionResponse(("P1-SH",)))
+
+        assert session.game.pending.amount == 3
+
+
+@pytest.mark.parametrize(("gold", "offered"), [(3, False), (4, True)])
+def test_a_strategy_is_offered_only_when_its_gold_cost_and_its_abilitys_gold_are_both_reachable(
+    gold, offered
+):
+    """Under Mishime the probe charges 1 for its Gold Cost and then 3 for its ability, 4 in all."""
+    card = L5RCard.of(
+        ActionPrint,
+        id="probe",
+        name="probe",
+        printed_id="maho_probe",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=3,
+        keywords=(keywords.MAHO,),
+    )
+    ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=lambda game, source: [PayGold(source.owner, 3, "probe")],
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+        located_at=(CardLocation.HAND,),
+    )
+
+    with probe_ability("maho_probe", ability):
+        session = _mishime_game(stronghold_production=gold, in_hand=(card,))
+
+        assert (PlayStrategy("probe") in session.legal_actions(P1)) is offered
+
+
+@pytest.mark.parametrize(
+    ("source_owner", "amount", "change"),
+    [(P1, -2, 0), (P2, -2, -2), (None, -2, -2), (P1, 2, 2)],
+    ids=["own card's loss", "opponent's card's loss", "rulebook loss", "own card's gain"],
+)
+def test_mishime_blocks_honor_loss_only_from_his_controllers_own_cards(
+    source_owner, amount, change
+):
+    """A rulebook loss is no card's effect (CR, Dishonorable)."""
+    source = personality("source", owner=source_owner) if source_owner else None
+    source_id = source.id if source else None
+    session = _mishime_game(in_play=(source,) if source else ())
+    before = session.game.table.seats[P1].honor
+
+    resolve_effects(session.game, [GainHonor(P1, amount, source_id=source_id)])
+
+    assert session.game.table.seats[P1].honor == before + change
 
 
 def test_mishime_does_not_target_a_bowed_personality():
@@ -747,11 +858,15 @@ def test_makeshift_fortifications_walls_the_province_it_was_recruited_from():
     assert effective_province_strength(session.game, first) == 7
 
 
-def _blood_of_fu_leng_game(chi: int | None = 3) -> EngineSession:
+def _blood_of_fu_leng_game(chi: int | None = 3, *, mishime: bool = False) -> EngineSession:
     """P1 holding Blood of Fu Leng and gold enough for the Kharmic cost, with one Personality to hit
     unless ``chi`` is None, which leaves the board empty of them."""
     state = TableState.empty_two_seat()
     put_in_play(state, holding("sh", printed_id="plain_stronghold", gold_production=2, owner=P1))
+    if mishime:
+        put_in_play(
+            state, sensei(P1, printed_id="mishime_sensei", keywords=(keywords.SHADOWLANDS,))
+        )
     if chi is not None:
         put_in_play(state, personality("shiba", owner=PlayerId.P2, chi=chi))
     state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
@@ -764,12 +879,31 @@ def _blood_of_fu_leng_game(chi: int | None = 3) -> EngineSession:
                 printed_id="blood_of_fu_leng",
                 side=Side.FATE,
                 owner=P1,
-                keywords=("Kharmic",),
+                keywords=(keywords.KHARMIC, keywords.MAHO, keywords.SHADOWLANDS),
             ),
         )
     )
     state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("P1-fd", P1))]
     return EngineSession.start(state, P1)
+
+
+def test_mishime_takes_nothing_off_the_kharmic_draw_on_a_maho_card():
+    """Kharmic is a player ability, not an action on the card it discards (CR, Kharmic)."""
+    session = _blood_of_fu_leng_game(mishime=True)
+
+    session.act(P1, ActivateAbility("blood", KHARMIC_DRAW))
+
+    assert session.game.pending.amount == 2
+
+
+def test_mishime_takes_nothing_off_the_kharmic_draw_on_a_spell():
+    spell = attachment("spell", attachment_type=AttachmentType.SPELL, keywords=(keywords.KHARMIC,))
+    session = _mishime_game(in_hand=(spell,))
+    kharmic = ability_for(session.game, spell, KHARMIC_DRAW)
+
+    paid = kharmic.discounted_cost(session.game, spell, plays_card=False)
+
+    assert [effect.amount for effect in paid] == [2]
 
 
 def _kharmic_draw(session: EngineSession) -> None:

@@ -32,6 +32,7 @@ yasuki_core.engine.rules.legality
     recruit_cost
     recruit_timings
     seat_cards
+    strategy_gold
     timings_of
 
 .. automodule:: yasuki_core.engine.rules.legality

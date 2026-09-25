@@ -21,7 +21,7 @@ ASHURA_FEAR = 4
 def _ashura_entered_play(ctx: TriggerContext) -> list[Effect]:
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [GainHonor(ctx.card.owner, -ASHURA_HONOR_LOSS)]
+    return [GainHonor(ctx.card.owner, -ASHURA_HONOR_LOSS, source_id=ctx.card.id)]
 
 
 @on(Destroyed, "ashura")
@@ -78,7 +78,7 @@ def _tosekiki_entered_play(ctx: TriggerContext) -> list[Effect]:
     """After this Follower enters play, lose 3 Honor."""
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [GainHonor(ctx.card.owner, -TOSEKIKI_HONOR_LOSS)]
+    return [GainHonor(ctx.card.owner, -TOSEKIKI_HONOR_LOSS, source_id=ctx.card.id)]
 
 
 def _tosekiki_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

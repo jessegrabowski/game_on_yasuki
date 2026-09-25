@@ -286,7 +286,7 @@ def _the_forgotten_entered_play_or_destroyed(ctx: TriggerContext) -> list[Effect
         return []
     seat = ctx.card.owner
     dead = ctx.game.table.creatable_tokens[FORGOTTEN_DEAD]
-    effects: list[Effect] = [GainHonor(seat, -FORGOTTEN_HONOR_LOSS)]
+    effects: list[Effect] = [GainHonor(seat, -FORGOTTEN_HONOR_LOSS, source_id=ctx.card.id)]
     bearers = tuple(bearer.id for bearer in creation_targets(ctx.game, seat, dead))
     if bearers:
         effects.append(Choose(seat, bearers, 1, 1, "the_forgotten", ctx.card.id))

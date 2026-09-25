@@ -29,7 +29,7 @@ def activate(game: GameState, card_id: str, ability_key: str | None = None) -> N
         game.responded.add(card_id)
     if not ability.repeatable:
         claim_once_per_turn(game, card, once_tag(ability))
-    defer_ability(game, card, ability)
+    defer_ability(game, card, ability, plays_card=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,11 +98,13 @@ class ApplyAbilityEffects:
         _resolve(game, effects, trait=ability is not None and ability.trait)
 
 
-def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
+def defer_ability(game: GameState, card: L5RCard, ability: Ability, *, plays_card: bool) -> None:
     """Stack ``ability``'s effects behind its cost, and pay the cost.
 
     The cost resolves first and targeting follows it (CR, Action Sequence steps B and C), and an
     ``hits_every_target`` ability hits every one it found rather than pausing to be pointed at one.
+    ``plays_card`` says whether taking the ability plays ``card``, as a Strategy from hand is
+    played, whose Gold Cost has then already taken its share of the action's discount.
     """
     targets = tuple(legal_targets(game, card, ability))
     game.stack.append(
@@ -110,7 +112,7 @@ def defer_ability(game: GameState, card: L5RCard, ability: Ability) -> None:
         if ability.hits_every_target
         else SelectAbilityTarget(card.id, targets, ability.key)
     )
-    triggers.resolve_effects(game, ability.cost(game, card))
+    triggers.resolve_effects(game, ability.discounted_cost(game, card, plays_card=plays_card))
 
 
 @dataclass(frozen=True, slots=True)

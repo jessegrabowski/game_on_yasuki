@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseEquipTarget, DecisionResponse
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.discounts import discounted_gold, equip_purchase
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.registrar import HandlerRegistry
@@ -151,7 +152,8 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
     candidates = tuple(target.id for target in equip_targets(game, card))
     invest_amount = equip_invest_amount(game, card) if invest else None
     game.stack.append(SelectEquipTarget(card_id, candidates, invest_amount))
-    amount = effective_gold_cost(game, card) + (invest_amount or 0)
+    purchase = equip_purchase(card)
+    amount = discounted_gold(game, purchase, effective_gold_cost(game, card) + (invest_amount or 0))
     game.pending = payment_request(game, card.owner, amount, card.name, target=card)
 
 

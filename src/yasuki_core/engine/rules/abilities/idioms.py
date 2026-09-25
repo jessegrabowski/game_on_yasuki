@@ -4,7 +4,7 @@ from dataclasses import replace
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.registry import ability_for, register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.board.queries import favor_actions_this_turn
@@ -20,6 +20,8 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     PutIntoPlay,
 )
+from yasuki_core.engine.rules.gold.discounts import unspent_action_discount
+from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
@@ -288,6 +290,26 @@ def one_wealth(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, 1)]
 
 
+def declarable_gold(game: GameState, source: L5RCard, ability_key: str | None = None) -> int:
+    """The largest amount ``source``'s controller can declare for the variable Gold cost of the
+    ability ``ability_key`` names: what they can raise plus what their discount on it takes off.
+
+    The declared amount is what the action reads, and a discount lowers only what is paid for it.
+    The CR's own variable costs read the same way: Recruit matches the Gold Cost against the amount
+    declared and charges the off-clan 2 Gold on top of it (CR, Recruit).
+    """
+    return reachable_gold(game, source.owner) + _unspent_discount(game, source, ability_key)
+
+
+def _unspent_discount(game: GameState, source: L5RCard, ability_key: str | None) -> int:
+    """The most the ability's discount could take off its variable amount: all of it, as though
+    nothing else in the action had spent any. The cost's pricing trims what the seat cannot pay."""
+    ability = ability_for(game, source, ability_key)
+    if ability is None:
+        return 0
+    return unspent_action_discount(game, ability.purchase(game, source, plays_card=False))
+
+
 def ask_who_loses_honor(game: GameState, seat: PlayerId, amount: int, source_id: str) -> AskOption:
     """The question "a target player loses N Honor" prints: name the player, the acting seat's
     call.
@@ -322,7 +344,7 @@ def _resolve_honor_loss_player(
     resolver_context: tuple[str, ...] = (),
 ) -> list[Effect]:
     named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
-    return [GainHonor(named, -int(resolver_context[0]))]
+    return [GainHonor(named, -int(resolver_context[0]), source_id=source_id)]
 
 
 def ask_whose_honor_moves(
@@ -386,4 +408,4 @@ def _resolve_honor_swing(
     moved = PlayerId[resolver_context[0]]
     amount = int(resolver_context[1])
     delta = amount if chosen[0].startswith("Gain") else -amount
-    return [GainHonor(moved, delta)]
+    return [GainHonor(moved, delta, source_id=source_id)]

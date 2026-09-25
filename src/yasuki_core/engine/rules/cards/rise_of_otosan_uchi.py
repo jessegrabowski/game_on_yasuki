@@ -1,7 +1,11 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import ask_whose_honor_moves, register_event_entry
+from yasuki_core.engine.rules.abilities.idioms import (
+    ask_whose_honor_moves,
+    declarable_gold,
+    register_event_entry,
+)
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
     CardLocation,
@@ -51,7 +55,6 @@ from yasuki_core.engine.rules.effects import (
     Move,
     MoveToDeck,
     Negated,
-    PayGold,
     ShuffleDeck,
     SpendOncePerTurn,
     Then,
@@ -60,7 +63,6 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.action_record import action_round
@@ -183,14 +185,14 @@ MOST_SACRIFICES = 4
 
 def _bound_in_blood_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]:
     """The sums worth spending: two Gold buys one Personality and every two more buys another, up to
-    four or however many the seat has, and never more than it can raise.
+    four or however many the seat has, and never more than it can declare.
 
     Nothing smaller is offered. An action whose targeting is priced by a variable Gold cost may only
     be announced for an amount that buys a legal target (CR, Good Faith).
     """
     seat = source.owner
     bodies = min(MOST_SACRIFICES, len(owned_personalities(game, seat)))
-    affordable = reachable_gold(game, seat) // GOLD_PER_SACRIFICE
+    affordable = declarable_gold(game, source) // GOLD_PER_SACRIFICE
     return tuple(count * GOLD_PER_SACRIFICE for count in range(1, min(bodies, affordable) + 1))
 
 
@@ -213,12 +215,11 @@ def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
 def _resolve_bound_in_blood(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Pay what was named, then take the bodies it bought."""
+    """Take the bodies the declared amount bought."""
     spent = int(chosen[0])
     bodies = min(MOST_SACRIFICES, spent // GOLD_PER_SACRIFICE)
     offered = tuple(card.id for card in owned_personalities(game, seat))
     return [
-        PayGold(seat, spent, "Bound in Blood"),
         Choose(seat, offered, bodies, bodies, "bound_in_blood_sacrifice", source_id),
     ]
 
@@ -347,7 +348,7 @@ def _culling_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) 
     payment to raise. The Honor is the price."""
     return [
         CreateToken(EXPENDABLE_SERVANT, source.owner, source.id),
-        GainHonor(source.owner, -1),
+        GainHonor(source.owner, -1, source_id=source.id),
     ]
 
 

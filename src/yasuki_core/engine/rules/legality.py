@@ -4,8 +4,9 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook import favor_payment
 from yasuki_core.engine.rules.rulebook import favor_abilities
-from yasuki_core.engine.rules.abilities.costs import can_pay
+from yasuki_core.engine.rules.abilities.costs import payable
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, once_tag
+from yasuki_core.engine.rules.effects import PayGold
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
     ability_for,
@@ -46,7 +47,12 @@ from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.rulebook.equip import equip_targets
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
+from yasuki_core.engine.rules.gold.discounts import (
+    discounted_gold,
+    equip_purchase,
+    discounted_gold_cost,
+    effective_recruit_discount,
+)
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
 from yasuki_core.engine.rules.rulebook import lobby
@@ -456,11 +462,12 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
             maximum_gold_production(game, producer, targets=(card,)) for producer in variable
         )
         base = effective_gold_cost(game, card)
-        if base > affordable or not equip_targets(game, card):
+        purchase = equip_purchase(card)
+        if discounted_gold(game, purchase, base) > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
         invest = fixed_invest_amount(game, card)
-        if invest is not None and base + invest <= affordable:
+        if invest is not None and discounted_gold(game, purchase, base + invest) <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips
 
@@ -476,8 +483,16 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
         PlayStrategy(card.id, ability.key)
         for card, ability in playable(game, seat, permitted_timings(game, seat))
         if (only is None or card.id == only)
-        and effective_gold_cost(game, card) <= reachable_gold(game, seat, card)
+        and strategy_gold(game, card, ability) <= reachable_gold(game, seat, card)
     ]
+
+
+def strategy_gold(game: GameState, card: L5RCard, ability: Ability) -> int:
+    """The Gold playing ``card`` for ``ability`` charges in all: its Gold Cost and the Gold its
+    ability's cost adds, with the action's one discount spent across both."""
+    gold_cost = discounted_gold_cost(game, ability.purchase(game, card, plays_card=True))
+    added = ability.discounted_cost(game, card, plays_card=True)
+    return gold_cost + sum(effect.amount for effect in added if isinstance(effect, PayGold))
 
 
 def recruit_cost(game: GameState, card: L5RCard) -> int:
@@ -673,7 +688,8 @@ def _usable(
                 and not location_permits(game, card)
             ):
                 continue
-            if not can_pay(game, card, ability.cost):
+            costs = ability.discounted_cost(game, card, plays_card=_played(location, ability))
+            if not payable(game, costs):
                 continue
             if legal_targets(game, card, ability):
                 ready.append((card, ability))

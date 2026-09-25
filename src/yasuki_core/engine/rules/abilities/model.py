@@ -2,11 +2,13 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from types import UnionType
 
-from yasuki_core.engine.rules.abilities.costs import Cost, no_cost
+from yasuki_core.engine.rules.abilities.costs import Cost, no_cost, priced_cost
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
+from yasuki_core.engine.rules.gold.discounts import Purchase
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -192,6 +194,26 @@ class Ability:
     targeting_message: str | None = None
     ruleset: str | None = None
     from_keyword: str | None = None
+
+    def purchase(self, game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
+        """What taking this ability on ``card`` pays for, when taking it plays the card or not.
+
+        An ability a keyword confers is a player ability the rulebook grants, so it is no action of
+        the card's, carries only its own keywords, and plays nothing (CR, Kharmic).
+        """
+        if self.from_keyword is not None:
+            return Purchase(seat=card.owner, card=None, keywords=self.keywords, plays_card=False)
+        return Purchase(
+            seat=card.owner,
+            card=card,
+            keywords=self.keywords | frozenset(effective_keywords(game, card)),
+            plays_card=plays_card,
+        )
+
+    def discounted_cost(self, game: GameState, card: L5RCard, *, plays_card: bool) -> list[Effect]:
+        """The effects ``card`` spends to take this ability, less its seat's discount on it."""
+        purchase = self.purchase(game, card, plays_card=plays_card)
+        return priced_cost(game, purchase, self.cost(game, card))
 
 
 def once_tag(ability: Ability) -> str:

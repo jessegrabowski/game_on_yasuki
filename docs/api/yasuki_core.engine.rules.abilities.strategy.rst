@@ -18,6 +18,7 @@ yasuki_core.engine.rules.abilities.strategy
     play_strategy
     play_strategy_with
     resolve_strategy
+    strategy_cost
 
 .. automodule:: yasuki_core.engine.rules.abilities.strategy
     :members:

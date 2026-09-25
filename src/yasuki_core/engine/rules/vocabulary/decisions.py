@@ -298,9 +298,9 @@ class ChooseAmount(DecisionRequest):
     """The seat must say how much Gold to spend on an action whose cost block prints a variable
     amount: the ``:X:`` whose effects scale with what is paid (CR, Costs).
 
-    The candidates are the amounts the seat could pay, rendered as strings. The answer feeds the
-    named resolver, which prices the payment and shapes what the amount bought. A client shows a
-    number, not a board selection.
+    The candidates are the amounts the seat could declare, rendered as strings. The engine charges
+    the declared amount less ``discount`` and hands the amount to the named resolver, which shapes
+    what it bought. A client shows a number, not a board selection.
 
     Attributes
     ----------
@@ -310,11 +310,14 @@ class ChooseAmount(DecisionRequest):
         The registered choice resolver the chosen amount is handed to.
     source_id : str
         The card charging the cost, handed to the resolver as its context.
+    discount : int, optional
+        The Gold taken off the declared amount when it is charged. Default 0.
     """
 
     question: str
     resolver: str
     source_id: str
+    discount: int = 0
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question

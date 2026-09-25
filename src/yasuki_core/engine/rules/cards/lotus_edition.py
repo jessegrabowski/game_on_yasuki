@@ -3,9 +3,9 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itse
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.abilities.idioms import declarable_gold
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
-from yasuki_core.engine.rules.effects import AskAmount, Choose, Destroy, Effect, GainHonor, PayGold
-from yasuki_core.engine.rules.gold.producers import reachable_gold
+from yasuki_core.engine.rules.effects import AskAmount, Choose, Destroy, Effect, GainHonor
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
@@ -20,7 +20,7 @@ PAID_ABOVE_UNIT_COST = 2
 
 
 def _hired_killer_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]:
-    """Every amount the seat could spend, from nothing up to what it can raise.
+    """Every amount the seat could spend, from nothing up to what it can declare.
 
     The seat names its own amount rather than picking from the ones that reach a legal target.
     Which Personality an amount reaches is the card's own arithmetic, so an amount that reaches
@@ -31,7 +31,7 @@ def _hired_killer_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]:
     """
     if not personalities_in_play(game):
         return ()
-    return tuple(range(reachable_gold(game, source.owner) + 1))
+    return tuple(range(declarable_gold(game, source) + 1))
 
 
 def _hired_killer_cost(game: GameState, source: L5RCard) -> list[Effect]:
@@ -52,8 +52,8 @@ def _hired_killer_cost(game: GameState, source: L5RCard) -> list[Effect]:
 def _resolve_hired_killer(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Pay the amount, then choose among the Personalities it reaches. More than one unit can cost
-    the same, so the choice remains after the amount is settled.
+    """Choose among the Personalities the declared amount reaches. More than one unit can cost the
+    same, so the choice remains after the amount is settled.
 
     An amount that reaches no Personality destroys nothing: the Gold is spent in the cost step and
     the effects after it do not happen, the Honor loss included, because an effect that requires a
@@ -65,10 +65,9 @@ def _resolve_hired_killer(
         for card in personalities_in_play(game)
         if unit_gold_cost(game, card) == paid - PAID_ABOVE_UNIT_COST
     )
-    payment = PayGold(seat, paid, "Hired Killer")
     if not targets:
-        return [payment]
-    return [payment, Choose(seat, targets, 1, 1, "hired_killer_target", source_id)]
+        return []
+    return [Choose(seat, targets, 1, 1, "hired_killer_target", source_id)]
 
 
 @choice_resolver("hired_killer_target", prompt="Choose a Personality to destroy")
@@ -76,7 +75,7 @@ def _resolve_hired_killer_target(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Destroy the target, then lose the Honor, in the order the card prints them."""
-    return [Destroy(chosen[0], seat), GainHonor(seat, -HONOR_LOST)]
+    return [Destroy(chosen[0], seat), GainHonor(seat, -HONOR_LOST, source_id=source_id)]
 
 
 register_ability(

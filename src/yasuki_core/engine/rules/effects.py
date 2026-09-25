@@ -3,6 +3,7 @@ from dataclasses import dataclass, replace
 from typing import ClassVar
 
 from yasuki_core.engine import ops
+from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.players import Cause, PlayerId
@@ -110,9 +111,10 @@ class Effect(ABC):
         name, unlike :meth:`~.Effect.describe`, which names them by id for the log."""
         return self.describe()
 
-    def is_interruptible(self) -> bool:
+    def is_interruptible(self, game: GameState) -> bool:
         """Whether the Interrupt step is open against this effect at all, when it is an action's
-        own. True unless the effect is nothing to interrupt, such as an Honor change of zero."""
+        own. True unless the effect is nothing to interrupt, such as an Honor change of zero or a
+        loss a card prevents."""
         return True
 
     def follow_on(self, game: GameState) -> tuple["Effect", ...]:
@@ -136,7 +138,7 @@ class InterruptingEffect(Effect, ABC):
     def request(self, game: GameState) -> DecisionRequest:
         """The decision to put to the seat."""
 
-    def is_interruptible(self) -> bool:
+    def is_interruptible(self, game: GameState) -> bool:
         """False: a question the action asks is nothing to interrupt, and what its answer produces
         is not known until it is answered, so neither is offered at the Interrupt step."""
         return False
@@ -1127,22 +1129,26 @@ class AskAmount(InterruptingEffect):
     a resolver.
 
     The ``:X:`` in a cost block: the amount is settled during the Pay Costs step and everything the
-    action does is shaped by it, so the resolver both charges it and reads it (CR, Action Sequence,
-    Good Faith).
+    action does is shaped by it (CR, Action Sequence, Good Faith). The seat declares the amount, the
+    engine charges it less ``discount``, and the resolver reads the amount declared.
 
     Attributes
     ----------
     seat : PlayerId
         The seat choosing and paying.
     amounts : tuple of int
-        The amounts on offer, which the caller has already narrowed to what the seat can raise and
-        what would leave the action something legal to do.
+        The amounts on offer, which the caller narrows to what the seat can declare and what would
+        leave the action something legal to do. Pricing the cost narrows them to what the seat can
+        pay.
     question : str
         What the amount is for, as the seat reads it.
     resolver : str
         The registered choice resolver the chosen amount is handed to.
     source_id : str
         The card charging the cost.
+    discount : int, optional
+        The Gold the action's discount takes off the declared amount: what is left of it once the
+        cost's fixed Gold has taken its share. Default 0.
     """
 
     seat: PlayerId
@@ -1150,6 +1156,7 @@ class AskAmount(InterruptingEffect):
     question: str
     resolver: str
     source_id: str
+    discount: int = 0
 
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
@@ -1165,6 +1172,7 @@ class AskAmount(InterruptingEffect):
             question=self.question,
             resolver=self.resolver,
             source_id=self.source_id,
+            discount=self.discount,
         )
 
 
@@ -1408,7 +1416,7 @@ class EndLook(Effect):
     def describe(self) -> str:
         return "the look ends"
 
-    def is_interruptible(self) -> bool:
+    def is_interruptible(self, game: GameState) -> bool:
         return False  # bookkeeping, not something a card can act against
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -1568,6 +1576,13 @@ class WinGame(Effect):
         return []
 
 
+# Cards whose controller does not lose Honor from their own cards' effects, keyed on printed id. A
+# rulebook loss, such as a dishonorable Personality's destruction, is no card's effect and still
+# lands (CR, Dishonorable).
+HONOR_LOSS_SHIELDS = FlagRegistry("honor loss shields", "already shields its controller's Honor")
+register_honor_loss_shield = HONOR_LOSS_SHIELDS.make_register()
+
+
 @dataclass(frozen=True, slots=True)
 class GainHonor(Effect):
     """Move ``seat``'s Family Honor by ``amount``. Negative loses honor. The two directions are one
@@ -1589,12 +1604,16 @@ class GainHonor(Effect):
         the whole gain (CR, Rehonoring 0.1 and 0.2). A handler whose action rehonors him as one of
         its own effects leaves this empty, since the CR substitutes only where rehonoring "is not
         one of that action or trait's effects". Default empty.
+    source_id : str, optional
+        The card whose effect this is, so a shield against a seat's own cards' losses can tell
+        them from anyone else's. Default None, a rulebook change.
     """
 
     seat: PlayerId
     amount: int
     adjustment: int = 0
     personalities: tuple[str, ...] = ()
+    source_id: str | None = None
 
     @property
     def adjusted(self) -> int:
@@ -1611,13 +1630,17 @@ class GainHonor(Effect):
         verb = "gains" if amount >= 0 else "loses"
         return f"{whose} {verb} {abs(amount)} honor"
 
-    def is_interruptible(self) -> bool:
-        # A change of zero is not a gain or loss (CR, Honor Gains and Losses), so there is nothing
-        # to interrupt.
+    def is_interruptible(self, game: GameState) -> bool:
+        # A change of zero is not a gain or loss (CR, Honor Gains and Losses), and neither is a loss
+        # a card says its seat does not take, so there is nothing to interrupt.
+        if self.amount < 0 and self._shielded(game):
+            return False
         return self.amount != 0
 
     def perform(self, game: GameState) -> list[GameEvent]:
         amount = self.adjusted
+        if amount < 0 and self._shielded(game):
+            return []
         rehonored = self._substituted_for(game) if amount > 0 else []
         if rehonored:
             for card in rehonored:
@@ -1626,6 +1649,17 @@ class GainHonor(Effect):
         if not ops.set_honor(game.table, self.seat, delta=amount):
             return []
         return [HonorChanged(self.seat, amount)]
+
+    def _shielded(self, game: GameState) -> bool:
+        """Whether the loss comes from a card ``seat`` controls while ``seat`` controls a card
+        that says it does not lose Honor from its own cards' effects."""
+        source = game.table.cards_by_id.get(self.source_id) if self.source_id else None
+        if source is None or source.owner is not self.seat:
+            return False
+        return any(
+            card.owner is self.seat and card.printed_id in HONOR_LOSS_SHIELDS
+            for card in game.table.battlefield.cards
+        )
 
     def _substituted_for(self, game: GameState) -> list[L5RCard]:
         """The seat's own dishonorable Personalities among ``personalities``, whose rehonoring

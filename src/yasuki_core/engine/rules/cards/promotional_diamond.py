@@ -65,7 +65,7 @@ def _resolve_suiteiru_no_oni(
     for the lot in Honor."""
     return [
         *(CreateToken(SUITEIRUS_PODLING, seat, source_id, attach_to=bearer) for bearer in chosen),
-        GainHonor(seat, -len(chosen)),
+        GainHonor(seat, -len(chosen), source_id=source_id),
     ]
 
 

@@ -53,6 +53,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Cycle,
     DeclareAttack,
     Pass,
+    PlayStrategy,
     Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -82,6 +83,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    sensei,
     stronghold,
     two_seat_game,
 )
@@ -545,6 +547,26 @@ def test_an_abilitys_gain_is_interruptible():
     assert _honor(session, P1) == 3
 
 
+@pytest.mark.parametrize(("mishime", "offered"), [(False, True), (True, False)])
+def test_a_loss_a_card_prevents_is_not_offered_to_the_honor_interrupt(mishime, offered):
+    """I Do Not Forget on your own Personality is a loss from your own card, which Mishime
+    prevents."""
+    table = TableState.empty_two_seat()
+    _strategy(table, "forget", "i_do_not_forget", P1)
+    put_in_play(table, personality("disgraced", personal_honor=2))
+    if mishime:
+        put_in_play(table, sensei(P1, printed_id="mishime_sensei"))
+    _honor_card(table, "P2-honor0", P2)
+    session = EngineSession.start(table, P1)
+    session.game.table.cards_by_id["disgraced"].dishonor()
+
+    session.act(P1, PlayStrategy("forget"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("disgraced",)))
+
+    assert (DiscardToInterrupt("P2-honor0", "honor") in session.legal_actions(P2)) is offered
+
+
 def test_neither_seat_can_back_out_while_the_interrupt_step_is_open():
     # The step is a round with no decision pending: there is nothing to cancel, and the action
     # held beneath it is not the interrupting seat's to unwind.
@@ -864,7 +886,7 @@ def test_a_cost_is_not_open_to_the_interrupt_step_but_the_effect_is():
     ability = ability_for(game, source)
     assert ability is not None
 
-    defer_ability(game, source, ability)
+    defer_ability(game, source, ability, plays_card=False)
     assert game.pending is None
     assert game.table.seats[P1].honor == -1
 
