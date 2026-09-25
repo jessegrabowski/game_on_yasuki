@@ -41,11 +41,15 @@ class BattlefieldInfo(NamedTuple):
         whether or not the Personality was still there when the battle was fought. An entry stays
         once written, because "any enemy units were ever at its battlefield" asks about the whole
         attack. Default empty.
+    bow_exempt : frozenset of PlayerId
+        The seats whose units the battle's resolution does not bow (CR, After Resolution 0.1), as
+        Rallying Cry grants. Default empty.
     """
 
     province: ZoneKey
     outcome: BattleOutcome | None = None
     ever_present: frozenset[tuple[PlayerId, str]] = frozenset()
+    bow_exempt: frozenset[PlayerId] = frozenset()
 
 
 @dataclass(slots=True)

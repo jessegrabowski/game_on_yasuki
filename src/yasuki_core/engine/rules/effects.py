@@ -1274,6 +1274,33 @@ class AskOption(InterruptingEffect):
 
 
 @dataclass(frozen=True, slots=True)
+class ExemptFromResolutionBow(Effect):
+    """The resolution of the battle at ``battlefield`` does not bow ``seat``'s units there (CR,
+    After Resolution 0.1). Nothing happens outside an attack.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat whose units keep standing.
+    battlefield : int
+        The battlefield whose battle it is.
+    """
+
+    seat: PlayerId
+    battlefield: int
+
+    def describe(self) -> str:
+        return f"the resolution at battlefield {self.battlefield} does not bow {self.seat.name}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        attack = game.attack
+        if attack is not None:
+            exempt = attack.battlefields[self.battlefield].bow_exempt
+            attack.amend(self.battlefield, bow_exempt=exempt | {self.seat})
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class Bow(Effect):
     """Bow a card."""
 

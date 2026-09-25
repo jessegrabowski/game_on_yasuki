@@ -34,6 +34,7 @@ yasuki_core.engine.rules.effects
     Effect
     EndLook
     Evaluate
+    ExemptFromResolutionBow
     Fear
     GainGold
     GainHonor

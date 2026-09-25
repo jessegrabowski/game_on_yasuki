@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.effects import (
     EndLook,
     LookAtTop,
     Bow,
+    ExemptFromResolutionBow,
     Ask,
     CounterOnAttachedProvince,
     Unpayable,
@@ -82,6 +83,10 @@ EFFECTS = [
     (DrawCard(PlayerId.P1), "P1 draws a card"),
     (Destroy("farm_1", PlayerId.P1), "destroy farm_1"),
     (Bow("farm_1"), "bow farm_1"),
+    (
+        ExemptFromResolutionBow(PlayerId.P1, 0),
+        "the resolution at battlefield 0 does not bow P1",
+    ),
     (Straighten("farm_1"), "straighten farm_1"),
     (Dishonor("hero_1", PlayerId.P2), "dishonor hero_1"),
     (Negated(Bow("hero_1")), "negated: bow hero_1"),

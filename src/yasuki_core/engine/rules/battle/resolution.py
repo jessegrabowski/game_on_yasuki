@@ -271,13 +271,16 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
 
     Attacking units at this battlefield bow and then return home, both as effects of the
     resolution and neither as movement. Every card in the unit bows, and a Conqueror Personality
-    exempts his whole unit from the bow but not from the trip home. Once the Attack Phase's last
+    exempts his whole unit from the bow but not from the trip home, as does a card that says the
+    resolution does not bow its player's units. Once the Attack Phase's last
     battle is over, defending units return home without bowing. Every one of them, at every
     battlefield, holds the ground they defended until then.
     """
     attack = _declared_attack(game)
+    exempt = attack.battlefields[battlefield].bow_exempt
     for personality in units_at(game, battlefield, attack.attacker):
-        if keywords.CONQUEROR not in effective_keywords(game, personality):
+        conqueror = keywords.CONQUEROR in effective_keywords(game, personality)
+        if personality.owner not in exempt and not conqueror:
             personality.bow()
             for attached in attachments_of(game, personality):
                 attached.bow()
