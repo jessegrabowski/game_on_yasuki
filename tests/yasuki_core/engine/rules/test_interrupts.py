@@ -886,7 +886,7 @@ def test_a_cost_is_not_open_to_the_interrupt_step_but_the_effect_is():
     ability = ability_for(game, source)
     assert ability is not None
 
-    defer_ability(game, source, ability)
+    defer_ability(game, source, ability, plays_card=False)
     assert game.pending is None
     assert game.table.seats[P1].honor == -1
 

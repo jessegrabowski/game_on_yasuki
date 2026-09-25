@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.effects import (
     SpendOncePerTurn,
     Then,
 )
-from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
+from yasuki_core.engine.rules.gold.discounts import card_purchase, discounted_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import (
     legal_targets,
@@ -296,7 +296,8 @@ def card_interrupts_for(
         if interrupt is None:
             continue
         if location is CardLocation.HAND:
-            if discounted_gold_cost(game, card) <= reachable_gold(game, seat, card):
+            cost = discounted_gold_cost(game, card_purchase(game, card, plays_card=True))
+            if cost <= reachable_gold(game, seat, card):
                 offered.append((card, interrupt, location))
             continue
         if card.bowed or not location_permits(game, card):
@@ -575,7 +576,8 @@ def _play(
         play_strategy_with(game, card, interruption.effects)
         return
     spent = SpendOncePerTurn(card.id, INTERRUPT_TAG)
-    paid = priced_cost(game, card, interrupt.cost)
+    purchase = card_purchase(game, card, plays_card=False)
+    paid = priced_cost(game, purchase, interrupt.cost(game, card))
     triggers.resolve_effects(game, [spent, *paid, *interruption.effects])
 
 

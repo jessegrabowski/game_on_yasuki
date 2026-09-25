@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.effects import (
     PayGold,
     Unpayable,
 )
-from yasuki_core.engine.rules.gold.discounts import unspent_action_discount
+from yasuki_core.engine.rules.gold.discounts import Purchase, card_purchase, unspent_action_discount
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
@@ -88,17 +88,12 @@ def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [Bow(parent.id)]
 
 
-def priced_cost(
-    game: GameState,
-    card: L5RCard,
-    cost: Cost,
-    ability_keywords: frozenset[str] = frozenset(),
-) -> list[Effect]:
-    """The effects ``card`` spends to pay ``cost``, its Gold payments lowered by what is left of
-    its controller's discount on the action. A payment discounted to nothing is not asked for."""
-    discount = unspent_action_discount(game, card, ability_keywords)
+def priced_cost(game: GameState, purchase: Purchase, effects: list[Effect]) -> list[Effect]:
+    """A cost's ``effects`` with their Gold payments lowered by what is left of ``purchase``'s
+    discount. A payment discounted to nothing is not asked for."""
+    discount = unspent_action_discount(game, purchase)
     priced: list[Effect] = []
-    for effect in cost(game, card):
+    for effect in effects:
         if isinstance(effect, PayGold):
             taken = min(discount, effect.amount)
             discount -= taken
@@ -109,18 +104,19 @@ def priced_cost(
     return priced
 
 
-def can_pay(
-    game: GameState,
-    card: L5RCard,
-    cost: Cost,
-    ability_keywords: frozenset[str] = frozenset(),
-) -> bool:
-    """Whether ``card`` can pay ``cost``: every effect it spends is payable against the current
-    state. Each effect owns its own precondition, so a new cost effect needs no change here.
+def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:
+    """Whether ``card`` can pay ``cost`` for an action on it that no registered ability describes,
+    as an Interrupt taken from play is."""
+    purchase = card_purchase(game, card, plays_card=False)
+    return payable(game, priced_cost(game, purchase, cost(game, card)))
+
+
+def payable(game: GameState, effects: list[Effect]) -> bool:
+    """Whether every effect a cost spends is payable against the current state. Each effect owns
+    its own precondition, so a new cost effect needs no change here.
 
     Judged whole rather than effect by effect, because a cost's parts compete for the same cards:
     one that bows a Gold producer leaves it unable to bow again to pay the cost's own Gold half.
     """
-    effects = priced_cost(game, card, cost, ability_keywords)
     bowed = frozenset(effect.card_id for effect in effects if isinstance(effect, Bow))
     return all(effect.is_payable(game, bowed_by_cost=bowed) for effect in effects)

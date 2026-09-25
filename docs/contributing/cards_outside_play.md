@@ -26,7 +26,7 @@ there. Resolution stacks the discard before deferring the ability:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/abilities/strategy.py
 :start-at: game.stack.append(DiscardPlayed(card_id))
-:end-at: defer_ability(game, card, ability)
+:end-at: defer_ability(game, card, ability, plays_card=True)
 :dedent: 4
 :language: python
 ```

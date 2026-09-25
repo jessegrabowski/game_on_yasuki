@@ -299,8 +299,7 @@ def declarable_gold(game: GameState, source: L5RCard, ability_key: str | None = 
     The CR's own variable costs read the same way: Recruit matches the Gold Cost against the amount
     declared and charges the off-clan 2 Gold on top of it (CR, Recruit).
     """
-    discount = unspent_action_discount(game, source, _ability_keywords(game, source, ability_key))
-    return reachable_gold(game, source.owner) + discount
+    return reachable_gold(game, source.owner) + _unspent_discount(game, source, ability_key)
 
 
 def declared_payment(
@@ -313,13 +312,15 @@ def declared_payment(
     """The payment for ``declared`` Gold on the variable cost of the ability ``ability_key`` names,
     lowered by what is left of its controller's discount on the action. The action still reads
     ``declared``."""
-    discount = unspent_action_discount(game, source, _ability_keywords(game, source, ability_key))
-    return PayGold(source.owner, max(0, declared - discount), label)
+    paid = max(0, declared - _unspent_discount(game, source, ability_key))
+    return PayGold(source.owner, paid, label)
 
 
-def _ability_keywords(game: GameState, source: L5RCard, ability_key: str | None) -> frozenset[str]:
+def _unspent_discount(game: GameState, source: L5RCard, ability_key: str | None) -> int:
     ability = ability_for(game, source, ability_key)
-    return ability.keywords if ability is not None else frozenset()
+    if ability is None:
+        return 0
+    return unspent_action_discount(game, ability.purchase(game, source, plays_card=False))
 
 
 def ask_who_loses_honor(game: GameState, seat: PlayerId, amount: int, source_id: str) -> AskOption:

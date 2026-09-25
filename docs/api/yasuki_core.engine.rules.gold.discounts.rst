@@ -3,10 +3,17 @@ yasuki_core.engine.rules.gold.discounts
 
 .. currentmodule:: yasuki_core.engine.rules.gold.discounts
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    Purchase
+
 .. rubric:: Functions
 
 .. autosummary::
 
+    card_purchase
     discounted_gold
     discounted_gold_cost
     effective_action_discount

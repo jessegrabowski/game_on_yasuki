@@ -58,6 +58,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    sensei,
     stronghold,
     token_template,
     two_seat_game,
@@ -825,11 +826,15 @@ def test_makeshift_fortifications_walls_the_province_it_was_recruited_from():
     assert effective_province_strength(session.game, first) == 7
 
 
-def _blood_of_fu_leng_game(chi: int | None = 3) -> EngineSession:
+def _blood_of_fu_leng_game(chi: int | None = 3, *, mishime: bool = False) -> EngineSession:
     """P1 holding Blood of Fu Leng and gold enough for the Kharmic cost, with one Personality to hit
     unless ``chi`` is None, which leaves the board empty of them."""
     state = TableState.empty_two_seat()
     put_in_play(state, holding("sh", printed_id="plain_stronghold", gold_production=2, owner=P1))
+    if mishime:
+        put_in_play(
+            state, sensei(P1, printed_id="mishime_sensei", keywords=(keywords.SHADOWLANDS,))
+        )
     if chi is not None:
         put_in_play(state, personality("shiba", owner=PlayerId.P2, chi=chi))
     state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
@@ -842,12 +847,31 @@ def _blood_of_fu_leng_game(chi: int | None = 3) -> EngineSession:
                 printed_id="blood_of_fu_leng",
                 side=Side.FATE,
                 owner=P1,
-                keywords=("Kharmic",),
+                keywords=(keywords.KHARMIC, keywords.MAHO, keywords.SHADOWLANDS),
             ),
         )
     )
     state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("P1-fd", P1))]
     return EngineSession.start(state, P1)
+
+
+def test_mishime_takes_nothing_off_the_kharmic_draw_on_a_maho_card():
+    """Kharmic is a player ability, not an action on the card it discards (CR, Kharmic)."""
+    session = _blood_of_fu_leng_game(mishime=True)
+
+    session.act(P1, ActivateAbility("blood", KHARMIC_DRAW))
+
+    assert session.game.pending.amount == 2
+
+
+def test_mishime_takes_nothing_off_the_kharmic_draw_on_a_spell():
+    spell = attachment("spell", attachment_type=AttachmentType.SPELL, keywords=(keywords.KHARMIC,))
+    session = _mishime_game(in_hand=(spell,))
+    kharmic = ability_for(session.game, spell, KHARMIC_DRAW)
+
+    paid = kharmic.discounted_cost(session.game, spell, plays_card=False)
+
+    assert [effect.amount for effect in paid] == [2]
 
 
 def _kharmic_draw(session: EngineSession) -> None:
