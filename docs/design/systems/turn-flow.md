@@ -13,8 +13,8 @@ is the window that opens over an action just taken, and over a battle just resol
 
 A battle's resolution opens a Response Step of its own. {class}`~.AfterResolution` is the work
 item that opens it once `BattleResolved` has been announced, and the item waits beneath the step
-the way a held action waits beneath its Interrupt round. When the seats pass out of the step, the
-item runs After Resolution, bows and sends home the survivors, and moves the fight on. The battle
+the way a held action waits beneath its Interrupt round. When the step closes, the item runs After
+Resolution, bows and sends home the survivors, and moves the fight on. The battle
 segment reads `RESOLUTION` for as long as the step is open, which is what a card reading "after a
 battle's Resolution Segment" checks.
 
@@ -29,12 +29,23 @@ configuration and not a property of the enum, so `Ruleset` carries the order.
 to the next seat, and closes the round once every seat has passed consecutively. The active
 player finishing is not what ends a round.
 
+A seat the round permits nothing is skipped and counts as having passed. Permitted-but-idle is not:
+whether to decline a window is the seat's own call, and auto-passing on its behalf is a strategy a
+policy owns rather than a rule of the round. The two steps are the exception, because each opened
+only because some seat held an Interrupt or a Response, so a seat holding none is skipped there too.
+
 The Action Sequence's two windows are rounds over the round the action was taken in.
 {func}`~yasuki_core.engine.rules.interrupts.open_interrupt_window` opens the Interrupt step (D)
 once the action's targets are chosen and its effects held, and {func}`~.open_response_window`
 opens the Response Step once they have resolved (between E and F). Each reports whether it opened
-at all, since a step nobody could act in is a pass nobody needs to be asked for, and each closes
-back to the suspended round on consecutive passes.
+at all, since a step nobody could act in is a pass nobody needs to be asked for, and each opens on
+the first seat in turn order holding something to take rather than on the active seat.
+
+A step closes back to the suspended round once no seat holds anything to take in it: consecutive
+passes where every seat holds one, and no pass at all where the only holder takes what it held.
+Nobody is asked to pass a step with nothing left in it. {func}`~.close_response_window` runs
+whatever waited beneath the step before handing the opportunity on, since the step closes on a
+Response taken as readily as on a pass, and a battle's After Resolution waits there.
 
 ## What a designator means
 
@@ -49,9 +60,9 @@ back to the suspended round on consecutive passes.
 
 The Interrupt step is an `ActionRound` of kind `INTERRUPT`, pushed over the round an action was
 taken in once the action's effects are held and some seat holds an Interrupt to take, the way the
-Response Step is pushed after the action resolves. It permits nothing but `INTERRUPT`, opens on
-the active player, and closes on consecutive passes, at which point the held action resolves: see
-`rules/interrupts.py` and [Abilities and costs](abilities-and-costs.md).
+Response Step is pushed after the action resolves. It permits nothing but `INTERRUPT`, opens on the
+first seat holding one, and closes once no seat holds one, at which point the held action resolves:
+see `rules/interrupts.py` and [Abilities and costs](abilities-and-costs.md).
 
 ## Where a card plugs in
 

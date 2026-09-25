@@ -156,14 +156,22 @@ def test_the_response_answers_one_discard_once():
     assert ActivateAbility("caravansary") not in session.legal_actions(P1)
 
 
+def test_taking_the_response_closes_the_step_with_nobody_asked_to_pass():
+    session = _caravansary_game()
+    session.act(P1, ActivateAbility("probe"))
+
+    session.act(P1, ActivateAbility("caravansary"))
+
+    assert not _step_is_open(session)
+    assert session.game.round.priority is P2
+
+
 def test_a_later_step_in_the_same_turn_does_not_offer_the_response_again():
     """The Response prints no Repeatable, so it is once per turn (CR, Using Abilities 0.3): the
     second discarding action opens a Step the Caravansary has nothing left to say in."""
     session = _caravansary_game(in_hand=2)
     session.act(P1, ActivateAbility("probe"))
-    session.act(P1, ActivateAbility("caravansary"))
-    session.act(P2, Pass())
-    session.act(P1, Pass())  # both pass, so the Step closes
+    session.act(P1, ActivateAbility("caravansary"))  # the only Response, so the Step closes
     session.act(P2, Pass())  # priority back around to P1
 
     session.act(P1, ActivateAbility("probe"))
