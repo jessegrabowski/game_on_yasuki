@@ -18,7 +18,8 @@ from yasuki_core.engine.rules.stats.province_strength import province_strength_g
 from yasuki_core.engine.rules.gold.discounts import Purchase, action_discount
 from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.legality import permits, recruit_cost
+from yasuki_core.engine.rules.action_record import action_round
+from yasuki_core.engine.rules.legality import permitted_timings_in, recruit_cost
 from yasuki_core.engine.rules.rulebook.equip import is_spell
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.effects import (
@@ -188,7 +189,7 @@ def _heart_of_honor_effects(game: GameState, source: L5RCard, target: L5RCard) -
     only round that permits the Battle half (CR, Battle Sequence).
     """
     effects: list[Effect] = [Straighten(target.id)]
-    if not permits(game, source.owner, ActionTiming.BATTLE):
+    if ActionTiming.BATTLE not in permitted_timings_in(game, action_round(game), source.owner):
         return effects
     if effective_personal_honor(game, target) < HEART_OF_HONOR_HONORABLE:
         return effects

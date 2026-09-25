@@ -3,7 +3,12 @@ import pytest
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, DeclareAttack, Pass
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     ChooseBattlefield,
@@ -1093,10 +1098,10 @@ register_ability(
 )
 
 
-def _resolved_with_a_responder() -> EngineSession:
+def _resolved_with_a_responder(*, defender_provinces: int = 2) -> EngineSession:
     """A battle the Attacker wins, resolved with the Attacker holding a Response, so the step opens.
-    The Defender keeps a second Province, so the win does not end the game."""
-    session = _one_battlefield({"a": 4}, {"d": 2}, defender_provinces=2)
+    Two Defender Provinces by default, so the win does not end the game."""
+    session = _one_battlefield({"a": 4}, {"d": 2}, defender_provinces=defender_provinces)
     put_in_play(
         session.game.table, holding("probe", printed_id="battle_response_probe", owner=PlayerId.P1)
     )
@@ -1121,7 +1126,7 @@ def test_a_battles_resolution_opens_a_response_step_before_after_resolution():
 def test_passing_out_of_the_response_step_runs_after_resolution():
     session = _resolved_with_a_responder()
 
-    session.act(session.game.round.priority, Pass())
+    # The Attacker is the only seat holding a Response, so its pass closes the step.
     session.act(session.game.round.priority, Pass())
 
     attack = session.game.attack
@@ -1129,6 +1134,30 @@ def test_passing_out_of_the_response_step_runs_after_resolution():
     assert attack.battle_segment is None and attack.current is None
     assert session.game.table.cards_by_id["a"].bowed
     assert location_of(session.game.table, session.game.table.cards_by_id["a"]).is_home
+
+
+def test_taking_the_response_runs_after_resolution_too():
+    """The step closes on the Response taken, with nobody left to ask, so the After Resolution held
+    beneath it has to run there and not wait for the next input."""
+    session = _resolved_with_a_responder()
+
+    session.act(session.game.round.priority, ActivateAbility("probe"))
+
+    attack = session.game.attack
+    assert session.game.round.kind is RoundKind.PHASE
+    assert attack.battle_segment is None and attack.current is None
+    assert session.game.table.cards_by_id["a"].bowed
+    assert location_of(session.game.table, session.game.table.cards_by_id["a"]).is_home
+
+
+def test_a_win_opens_no_response_step_over_the_finished_game():
+    """The Defender's last Province falls at resolution, which ends the game there (CR, Military
+    Loss/Victory), and a game that is won is over rather than responded to."""
+    session = _resolved_with_a_responder(defender_provinces=1)
+
+    assert session.game.game_over
+    assert session.game.round.kind is not RoundKind.RESPONSE
+    assert session.game.round_stack == []
 
 
 def test_a_trait_pausing_on_the_announcement_resolves_before_the_step_opens(reacting):

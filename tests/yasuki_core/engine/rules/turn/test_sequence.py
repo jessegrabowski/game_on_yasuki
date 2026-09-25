@@ -467,21 +467,26 @@ def test_begin_game_leaves_an_ordinary_seat_enforcing_honor_requirements():
 # --- the Response Step ---
 
 
-def _responder_game() -> GameState:
-    """A game whose active seat holds one Response. A Caravansary answering its own Fate discard."""
+def _responder_game(*holders: PlayerId) -> GameState:
+    """A game where each of ``holders`` holds one Response, the active seat by default. A
+    Caravansary per holder, answering its owner's own Fate discard."""
+    holders = holders or (PlayerId.P1,)
     state = TableState.empty_two_seat()
-    put_in_play(
-        state,
-        holding(
-            "caravansary",
-            printed_id="caravansary",
-            name="Caravansary",
-            owner=PlayerId.P1,
-            gold_production=2,
-        ),
-    )
+    for seat in holders:
+        put_in_play(
+            state,
+            holding(
+                f"caravansary-{seat.name}",
+                printed_id="caravansary",
+                name="Caravansary",
+                owner=seat,
+                gold_production=2,
+            ),
+        )
     game = GameState.start(state, PlayerId.P1)
-    game.action_events[:] = [CardDiscarded("some-fate", Side.FATE, PlayerId.P1)]
+    game.action_events[:] = [
+        CardDiscarded(f"some-fate-{seat.name}", Side.FATE, seat) for seat in holders
+    ]
     return game
 
 
@@ -517,8 +522,8 @@ def test_a_response_step_opens_no_step_of_its_own():
     assert sequence.open_response_window(game) is False
 
 
-def test_a_response_step_is_open_to_every_seat_and_to_nothing_else():
-    """Any player may respond, and no one may take an Open action inside someone else's Step."""
+def test_a_response_step_permits_every_seat_a_response_and_nothing_else():
+    """Which is permission, not an opportunity: only a seat holding one is asked."""
     game = _responder_game()
 
     assert sequence.open_response_window(game) is True
@@ -531,17 +536,81 @@ def test_a_response_step_is_open_to_every_seat_and_to_nothing_else():
 
 def test_passing_a_response_step_returns_to_the_round_it_suspended():
     """The Step is a round over a round: passing it out closes it and hands the opportunity back,
-    rather than passing the phase out from under the action that opened it."""
+    rather than passing the phase out from under the action that opened it. The one seat holding a
+    Response is the only seat asked, so its pass closes the Step."""
     game = _responder_game()
     suspended = game.round
     sequence.open_response_window(game)
 
-    for _ in PlayerId:
-        action_sequence.perform(game, Pass())
+    action_sequence.perform(game, Pass())
 
     assert game.phase is Phase.ACTION
     assert game.round_stack == []
     assert game.round.timings == suspended.timings
+
+
+def test_taking_the_only_response_closes_the_step():
+    game = _responder_game()
+    suspended = game.round
+    sequence.open_response_window(game)
+
+    action_sequence.perform(game, ActivateAbility("caravansary-P1"))
+
+    assert game.round_stack == []
+    assert game.round.timings == suspended.timings
+    assert game.table.cards_by_id["caravansary-P1"].counters == {"wealth": 1}
+
+
+def test_the_step_opens_on_the_seat_holding_the_response():
+    """The active seat acts first in every other round."""
+    game = _responder_game(PlayerId.P2)
+
+    assert sequence.open_response_window(game) is True
+
+    assert game.round.priority is PlayerId.P2
+
+
+def test_every_seat_holding_a_response_is_asked_before_the_step_closes():
+    game = _responder_game(PlayerId.P1, PlayerId.P2)
+    sequence.open_response_window(game)
+
+    action_sequence.perform(game, ActivateAbility("caravansary-P1"))
+
+    assert game.round.kind is RoundKind.RESPONSE
+    assert game.round.priority is PlayerId.P2
+
+    action_sequence.perform(game, ActivateAbility("caravansary-P2"))
+
+    assert game.round_stack == []
+
+
+register_ability(
+    "banked_wealth_probe",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        label="Response: nothing, once any wealth is banked",
+        cost=no_cost,
+        targets=lambda game, source: [source.id]
+        if any(card.counters.get("wealth") for card in game.table.cards_by_id.values())
+        else [],
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+    ),
+)
+
+
+def test_a_seat_that_gains_a_response_mid_step_is_asked_before_the_step_closes():
+    """The seats are polled as the opportunity comes round, so a Response the first one's effect
+    made available is offered instead of missed."""
+    game = _responder_game()
+    put_in_play(game, holding("probe", printed_id="banked_wealth_probe", owner=PlayerId.P2))
+    sequence.open_response_window(game)
+    assert game.round.priority is PlayerId.P1
+
+    action_sequence.perform(game, ActivateAbility("caravansary-P1"))
+
+    assert game.round.kind is RoundKind.RESPONSE
+    assert game.round.priority is PlayerId.P2
 
 
 def test_a_new_phase_leaves_no_response_step_open():
@@ -559,11 +628,11 @@ def test_an_action_is_worded_for_the_seat_that_must_answer_it():
     game = _responder_game()
 
     assert (
-        action_sequence.describe_action(game, Recruit("caravansary"))
+        action_sequence.describe_action(game, Recruit("caravansary-P1"))
         == "the Recruit of Caravansary"
     )
     assert (
-        action_sequence.describe_action(game, ActivateAbility("caravansary"))
+        action_sequence.describe_action(game, ActivateAbility("caravansary-P1"))
         == "the ability on Caravansary"
     )
     assert action_sequence.describe_action(game, Legacy()) == "Legacy"

@@ -189,7 +189,8 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
     has passed consecutively.
 
     A pass counts toward closing. Taking an action resets the count. A seat the round permits
-    nothing never receives the opportunity, and counts as having passed.
+    nothing never receives the opportunity, and counts as having passed, as does a seat holding no
+    action for the open Interrupt or Response step.
     """
     if not passed and game.additional_action is game.round.priority:
         # The seat keeps the opportunity, and its consecutive-pass count starts again, so a pass
@@ -205,11 +206,9 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
             break
         # Permitted-but-idle still gets asked: whether to decline a window is the seat's own call,
         # and auto-passing on its behalf is a strategy its policy owns, not a rule of the round.
-        # The Interrupt step is the exception: it opened only because a seat held an Interrupt,
+        # A step is the exception: it opened only because a seat held an Interrupt or a Response,
         # and a seat holding none is a pass nobody needs to be asked for.
-        if permitted_timings(game, seat) and (
-            game.round.kind is not RoundKind.INTERRUPT or interrupt_actions(game, seat)
-        ):
+        if permitted_timings(game, seat) and _holds_a_step_action(game, seat):
             game.round = replace(game.round, priority=seat, passes=passes)
             return
         passes += 1
@@ -436,42 +435,59 @@ def _announce_resolution(game: GameState) -> None:
     triggers.fire(game, resolved)
 
 
-def _responders(game: GameState) -> list[PlayerId]:
-    """Every seat holding a Response it could take against the action or battle just resolved,
+def _holds_response(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` holds a Response it could take against the action or battle just resolved,
     on a card in play or as a Strategy in hand."""
     responding = frozenset({ActionTiming.RESPONSE})
-    return [
-        seat
-        for seat in game.table.seats
-        if activatable(game, seat, responding) or playable(game, seat, responding)
-    ]
+    return bool(activatable(game, seat, responding) or playable(game, seat, responding))
+
+
+def _holds_a_step_action(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` holds an action the open Interrupt or Response step exists to offer. True in
+    any other round, which is nobody's to hold."""
+    if game.round.kind is RoundKind.INTERRUPT:
+        return bool(interrupt_actions(game, seat))
+    if game.round.kind is RoundKind.RESPONSE:
+        return _holds_response(game, seat)
+    return True
 
 
 def open_response_window(game: GameState) -> bool:
     """Open the Response Step over the round the action was taken in, and report whether it opened.
 
     Only when a seat actually holds a Response: a step nobody could act in is a pass nobody needs to
-    be asked for. A Response is itself an action, and one taken inside the step opens no step of its
-    own. The window that is already open is the one it belongs to. An Interrupt is not responded
-    to either (ShE datasheet, Response): none opens inside the Interrupt step.
+    be asked for, and the first seat in turn order holding one acts first. Never over a game a seat
+    has already won, which ends the moment it is won (CR, Setup step F). A Response is itself an
+    action, and one taken inside the step opens no step of its own. The window that is already open
+    is the one it belongs to. An Interrupt is not responded to either (ShE datasheet, Response):
+    none opens inside the Interrupt step.
     """
+    if game.game_over:
+        return False
     if game.round.kind in (RoundKind.RESPONSE, RoundKind.INTERRUPT):
         return False
     # Cleared before the seats are polled, not after: a card still marked from the last Step would
     # not count as a responder, and so could never open another one.
     game.responded.clear()
-    if not _responders(game):
+    order = [game.active, *(seat for seat in game.table.seats if seat is not game.active)]
+    first = next((seat for seat in order if _holds_response(game, seat)), None)
+    if first is None:
         return False
     game.round_stack.append(game.round)
-    game.round = ActionRound(
-        timings=RESPONSE_TIMINGS, priority=game.active, kind=RoundKind.RESPONSE
-    )
+    game.round = ActionRound(timings=RESPONSE_TIMINGS, priority=first, kind=RoundKind.RESPONSE)
     return True
 
 
 def close_response_window(game: GameState) -> None:
-    """Close the Response Step and hand the opportunity on from the round it suspended."""
+    """Close the Response Step, run whatever waited beneath it, and hand the opportunity on from the
+    round it suspended, unless that work paused for a decision or ended the game, where the answer
+    hands it on instead."""
     game.round = game.round_stack.pop()
+    # A battle's After Resolution waits beneath the step, and the step closes on a Response taken as
+    # well as on a pass, which is past the point where `perform` drains the stack itself.
+    run_stack(game)
+    if game.awaiting_decision or game.game_over:
+        return
     yield_priority(game, passed=False)
 
 
