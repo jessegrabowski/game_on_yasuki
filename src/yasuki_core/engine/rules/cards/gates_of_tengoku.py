@@ -2,7 +2,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     declarable_gold,
-    declared_payment,
     register_event_entry,
 )
 from yasuki_core.engine.rules.abilities.model import (
@@ -197,7 +196,7 @@ def _the_bad_death_of_hida_daizu_cost(game: GameState, source: L5RCard) -> list[
 def _resolve_the_bad_death_of_hida_daizu(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Pay the amount, then choose among the Personalities it reaches.
+    """Choose among the Personalities the declared amount reaches.
 
     An amount below every unit's Gold Cost reaches no target: the Gold is spent in the cost step and
     the effects after it do not happen, because an effect that requires a target and cannot find one
@@ -207,12 +206,9 @@ def _resolve_the_bad_death_of_hida_daizu(
     targets = tuple(
         card.id for card in personalities_in_play(game) if unit_gold_cost(game, card) <= paid
     )
-    payment = declared_payment(
-        game, game.table.cards_by_id[source_id], paid, "The Bad Death of Hida Daizu"
-    )
     if not targets:
-        return [payment]
-    return [payment, Choose(seat, targets, 1, 1, "the_bad_death_of_hida_daizu_target", source_id)]
+        return []
+    return [Choose(seat, targets, 1, 1, "the_bad_death_of_hida_daizu_target", source_id)]
 
 
 @choice_resolver(

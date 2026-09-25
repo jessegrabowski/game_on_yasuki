@@ -1129,22 +1129,26 @@ class AskAmount(InterruptingEffect):
     a resolver.
 
     The ``:X:`` in a cost block: the amount is settled during the Pay Costs step and everything the
-    action does is shaped by it, so the resolver both charges it and reads it (CR, Action Sequence,
-    Good Faith).
+    action does is shaped by it (CR, Action Sequence, Good Faith). The seat declares the amount, the
+    engine charges it less ``discount``, and the resolver reads the amount declared.
 
     Attributes
     ----------
     seat : PlayerId
         The seat choosing and paying.
     amounts : tuple of int
-        The amounts on offer, which the caller has already narrowed to what the seat can raise and
-        what would leave the action something legal to do.
+        The amounts on offer, which the caller narrows to what the seat can declare and what would
+        leave the action something legal to do. Pricing the cost narrows them to what the seat can
+        pay.
     question : str
         What the amount is for, as the seat reads it.
     resolver : str
         The registered choice resolver the chosen amount is handed to.
     source_id : str
         The card charging the cost.
+    discount : int, optional
+        The Gold the action's discount takes off the declared amount: what is left of it once the
+        cost's fixed Gold has taken its share. Default 0.
     """
 
     seat: PlayerId
@@ -1152,6 +1156,7 @@ class AskAmount(InterruptingEffect):
     question: str
     resolver: str
     source_id: str
+    discount: int = 0
 
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
@@ -1167,6 +1172,7 @@ class AskAmount(InterruptingEffect):
             question=self.question,
             resolver=self.resolver,
             source_id=self.source_id,
+            discount=self.discount,
         )
 
 

@@ -4,18 +4,17 @@ import pytest
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     PITCH,
     declarable_gold,
-    declared_payment,
     register_entry,
     register_ring,
     register_trait_entry,
 )
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import abilities_for
-from yasuki_core.engine.rules.effects import GainHonor
+from yasuki_core.engine.rules.effects import AskAmount, GainHonor, PayGold
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.turn.action_sequence import submit
@@ -248,26 +247,54 @@ def test_a_ruleset_reading_the_trait_as_an_action_is_refused(monkeypatch):
         fire(game, TurnStarted(P1))
 
 
-@pytest.mark.parametrize(
-    ("ability_keywords", "declarable", "paid"),
-    [(frozenset({"Maho"}), 7, 4), (frozenset({"maho"}), 7, 4), (frozenset(), 5, 6)],
-    ids=["maho ability", "maho spelled in lowercase", "plain ability"],
-)
-def test_a_variable_cost_reads_the_keywords_printed_on_its_ability(
-    ability_keywords, declarable, paid
-):
+def _variable_cost_game(ability_keywords, fixed_gold):
+    """P1 with 5 Gold, Mishime Sensei's discount, and a probe ability costing ``fixed_gold`` plus an
+    X offered up to what the seat can declare."""
     game = two_seat_game()
     put_in_play(game, stronghold(P1, gold_production=5))
     put_in_play(game, sensei(P1, printed_id="mishime_sensei", keywords=("Shadowlands",)))
     source = put_in_play(game, holding("source", printed_id="variable_probe"))
     ability = Ability(
         timings=(ActionTiming.OPEN,),
-        cost=no_cost,
+        cost=lambda game, source: [
+            *([PayGold(source.owner, fixed_gold, "probe")] if fixed_gold else []),
+            AskAmount(
+                source.owner,
+                tuple(range(declarable_gold(game, source) + 1)),
+                "How much?",
+                "variable_probe",
+                source.id,
+            ),
+        ],
         targets=itself,
         effects=lambda game, source, target: [],
         keywords=ability_keywords,
     )
+    return game, source, ability
+
+
+@pytest.mark.parametrize(
+    ("ability_keywords", "discount", "most"),
+    [(frozenset({"Maho"}), 2, 7), (frozenset({"maho"}), 2, 7), (frozenset(), 0, 5)],
+    ids=["maho ability", "maho spelled in lowercase", "plain ability"],
+)
+def test_a_variable_cost_reads_the_keywords_printed_on_its_ability(
+    ability_keywords, discount, most
+):
+    game, source, ability = _variable_cost_game(ability_keywords, fixed_gold=0)
 
     with probe_ability("variable_probe", ability):
-        assert declarable_gold(game, source) == declarable
-        assert declared_payment(game, source, 6, "probe").amount == paid
+        (asked,) = ability.discounted_cost(game, source, plays_card=False)
+
+    assert asked.discount == discount
+    assert max(asked.amounts) == most
+
+
+def test_fixed_gold_spends_the_discount_before_a_variable_amount_in_the_same_cost():
+    game, source, ability = _variable_cost_game(frozenset({"Maho"}), fixed_gold=2)
+
+    with probe_ability("variable_probe", ability):
+        (asked,) = ability.discounted_cost(game, source, plays_card=False)
+
+    assert asked.discount == 0
+    assert max(asked.amounts) == 5

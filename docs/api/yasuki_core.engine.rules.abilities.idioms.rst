@@ -10,7 +10,6 @@ yasuki_core.engine.rules.abilities.idioms
     ask_who_loses_honor
     ask_whose_honor_moves
     declarable_gold
-    declared_payment
     one_wealth
     plays_clan
     plus_one_gp_this_turn

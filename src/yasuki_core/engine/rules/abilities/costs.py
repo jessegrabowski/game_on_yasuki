@@ -7,12 +7,14 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.effects import (
     Ask,
+    AskAmount,
     Bow,
     Effect,
     PayGold,
     Unpayable,
 )
 from yasuki_core.engine.rules.gold.discounts import Purchase, card_purchase, unspent_action_discount
+from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
@@ -89,8 +91,12 @@ def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
 
 
 def priced_cost(game: GameState, purchase: Purchase, effects: list[Effect]) -> list[Effect]:
-    """A cost's ``effects`` with their Gold payments lowered by what is left of ``purchase``'s
-    discount. A payment discounted to nothing is not asked for."""
+    """A cost's ``effects`` with what is left of ``purchase``'s discount spent once across them.
+
+    The fixed Gold payments take it first, and a payment discounted to nothing is not asked for.
+    A variable amount carries what remains, and keeps on offer only the amounts the seat can still
+    pay once the fixed Gold is paid.
+    """
     discount = unspent_action_discount(game, purchase)
     priced: list[Effect] = []
     for effect in effects:
@@ -101,7 +107,18 @@ def priced_cost(game: GameState, purchase: Purchase, effects: list[Effect]) -> l
                 continue
             effect = replace(effect, amount=effect.amount - taken)
         priced.append(effect)
-    return priced
+    fixed = sum(effect.amount for effect in priced if isinstance(effect, PayGold))
+    budget = reachable_gold(game, purchase.seat) - fixed
+    return [
+        replace(
+            effect,
+            discount=discount,
+            amounts=tuple(amount for amount in effect.amounts if amount - discount <= budget),
+        )
+        if isinstance(effect, AskAmount)
+        else effect
+        for effect in priced
+    ]
 
 
 def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:

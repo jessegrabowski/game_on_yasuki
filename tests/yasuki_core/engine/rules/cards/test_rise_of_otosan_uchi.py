@@ -303,6 +303,16 @@ def test_a_discount_lowers_the_payment_but_not_the_bodies_it_buys():
     assert session.game.pending.maximum == 3
 
 
+def test_a_declared_amount_the_discount_covers_asks_for_no_payment():
+    session = _blood_game(mishime=True)
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("2",)))
+
+    assert session.game.pending.minimum == 1
+    assert session.game.gold[P1] == 0
+
+
 def test_bound_in_blood_measures_the_horror_against_what_it_bound():
     session = _blood_game()
 

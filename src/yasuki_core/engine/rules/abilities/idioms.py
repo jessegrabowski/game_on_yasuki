@@ -18,7 +18,6 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GainHonor,
     GrantModifier,
-    PayGold,
     PutIntoPlay,
 )
 from yasuki_core.engine.rules.gold.discounts import unspent_action_discount
@@ -302,21 +301,9 @@ def declarable_gold(game: GameState, source: L5RCard, ability_key: str | None = 
     return reachable_gold(game, source.owner) + _unspent_discount(game, source, ability_key)
 
 
-def declared_payment(
-    game: GameState,
-    source: L5RCard,
-    declared: int,
-    label: str,
-    ability_key: str | None = None,
-) -> PayGold:
-    """The payment for ``declared`` Gold on the variable cost of the ability ``ability_key`` names,
-    lowered by what is left of its controller's discount on the action. The action still reads
-    ``declared``."""
-    paid = max(0, declared - _unspent_discount(game, source, ability_key))
-    return PayGold(source.owner, paid, label)
-
-
 def _unspent_discount(game: GameState, source: L5RCard, ability_key: str | None) -> int:
+    """The most the ability's discount could take off its variable amount: all of it, as though
+    nothing else in the action had spent any. The cost's pricing trims what the seat cannot pay."""
     ability = ability_for(game, source, ability_key)
     if ability is None:
         return 0

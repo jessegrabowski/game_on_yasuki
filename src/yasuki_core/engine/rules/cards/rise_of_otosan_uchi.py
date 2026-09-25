@@ -4,7 +4,6 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     ask_whose_honor_moves,
     declarable_gold,
-    declared_payment,
     register_event_entry,
 )
 from yasuki_core.engine.rules.abilities.model import (
@@ -216,12 +215,11 @@ def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
 def _resolve_bound_in_blood(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Pay what was named, less any discount, then take the bodies the named amount bought."""
+    """Take the bodies the declared amount bought."""
     spent = int(chosen[0])
     bodies = min(MOST_SACRIFICES, spent // GOLD_PER_SACRIFICE)
     offered = tuple(card.id for card in owned_personalities(game, seat))
     return [
-        declared_payment(game, game.table.cards_by_id[source_id], spent, "Bound in Blood"),
         Choose(seat, offered, bodies, bodies, "bound_in_blood_sacrifice", source_id),
     ]
 

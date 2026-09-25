@@ -79,6 +79,7 @@ from yasuki_core.engine.rules.rulebook.legacy import (
     legacy,
 )
 from yasuki_core.engine.rules.rulebook.lobby import apply_lobby_target, lobby
+from yasuki_core.engine.rules.effects import PayGold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.sequence import (
     BeginNextTurn,
@@ -246,7 +247,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         case ChooseCards():
             _apply_card_choice(game, request, response)
         case ChooseAmount():
-            _apply_card_choice(game, request, response)
+            _apply_amount_choice(game, request, response)
         case ChooseOption():
             _apply_card_choice(game, request, response)
         case ChooseDistribution():
@@ -321,6 +322,20 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     target_ids = (request.target_id,) if request.target_id in game.table.cards_by_id else ()
     for card_id in response.choices:
         produce_gold(game, card_id, target_ids)
+
+
+def _apply_amount_choice(
+    game: GameState, request: ChooseAmount, response: DecisionResponse
+) -> None:
+    """Charge the declared amount less the action's discount, then hand the declared amount to the
+    card's resolver, which reads it. A charge discounted to nothing is not asked for."""
+    resolver = triggers.CHOICE_RESOLVERS[request.resolver]
+    charged = max(0, int(response.choices[0]) - request.discount)
+    source = game.table.cards_by_id[request.source_id]
+    payment = [PayGold(request.seat, charged, source.name)] if charged else []
+    produced = resolver(game, request.source_id, response.choices, request.seat)
+    triggers.resume_paused_cascade(game, [*payment, *produced])
+    run_stack(game)
 
 
 def _apply_card_choice(
