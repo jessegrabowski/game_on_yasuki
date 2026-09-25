@@ -418,18 +418,19 @@ def _resolve_battle(game: GameState) -> None:
 
     attack.battle_segment = BattleSegment.RESOLUTION
     triggers.resolve_effects(game, effects)
+    destructions = _resolution_destructions(game, events_before)
     outcome = _outcome(
         game,
         battlefield,
         winner=winner,
         honor_before=honor_before,
-        events_before=events_before,
+        destructions=destructions,
     )
     attack.amend(battlefield, outcome=outcome)
     # Queued before the announcement, so a trait that pauses on it stashes its cascade above the
     # work and resumes first.
     game.stack.append(AfterResolution(battlefield, last_battle=last_battle))
-    triggers.fire(game, _battle_resolved(attack, battlefield, outcome))
+    triggers.fire(game, _battle_resolved(attack, battlefield, outcome, destructions))
 
 
 @dataclass(frozen=True, slots=True)
@@ -501,13 +502,22 @@ def _honor(game: GameState) -> dict[PlayerId, int]:
     return {seat: info.honor for seat, info in game.table.seats.items()}
 
 
+def _resolution_destructions(game: GameState, events_before: int) -> list[Destroyed]:
+    """The destructions the resolution announced, in the order they went."""
+    return [
+        event
+        for event in game.action_events[events_before:]
+        if isinstance(event, Destroyed) and event.cause is Rulebook.BATTLE_RESOLUTION
+    ]
+
+
 def _outcome(
     game: GameState,
     battlefield: int,
     *,
     winner: PlayerId | None,
     honor_before: dict[PlayerId, int],
-    events_before: int,
+    destructions: list[Destroyed],
 ) -> BattleOutcome:
     """What the battle at ``battlefield`` turned out to have done.
 
@@ -520,11 +530,7 @@ def _outcome(
     province = _declared_attack(game).battlefields[battlefield].province
     return BattleOutcome(
         winner=winner,
-        destroyed=tuple(
-            event.card_id
-            for event in game.action_events[events_before:]
-            if isinstance(event, Destroyed) and event.cause is Rulebook.BATTLE_RESOLUTION
-        ),
+        destroyed=tuple(event.card_id for event in destructions),
         province_destroyed=province not in game.table.zones,
         honor={
             seat: honor - honor_before[seat]
@@ -535,7 +541,7 @@ def _outcome(
 
 
 def _battle_resolved(
-    attack: AttackPhase, battlefield: int, outcome: BattleOutcome
+    attack: AttackPhase, battlefield: int, outcome: BattleOutcome, destructions: list[Destroyed]
 ) -> BattleResolved:
     info = attack.battlefields[battlefield]
     return BattleResolved(
@@ -547,6 +553,11 @@ def _battle_resolved(
         province_destroyed=outcome.province_destroyed,
         destroyed=outcome.destroyed,
         ever_present=info.ever_present,
+        destroyed_controllers=frozenset(
+            event.controller for event in destructions if event.controller is not None
+        ),
+        terrains_played=info.terrains_played,
+        terrains_destroyed=info.terrains_destroyed,
     )
 
 

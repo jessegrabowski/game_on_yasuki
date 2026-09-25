@@ -1035,6 +1035,9 @@ def test_a_fought_battle_announces_battle_resolved_once_with_its_outcome():
             province_destroyed=True,
             destroyed=("d",),
             ever_present=frozenset({(PlayerId.P1, "a"), (PlayerId.P2, "d")}),
+            destroyed_controllers=frozenset({PlayerId.P2}),
+            terrains_played=frozenset(),
+            terrains_destroyed=frozenset(),
         )
     ]
 

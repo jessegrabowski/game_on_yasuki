@@ -1,4 +1,5 @@
 from yasuki_core.engine import ops
+from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.table import Location
@@ -23,3 +24,21 @@ def place_unit(game: GameState, card: L5RCard, location: Location) -> bool:
             location.battlefield, ever_present=present | {(personality.owner, personality.id)}
         )
     return moved
+
+
+def record_terrain_played(game: GameState, card: L5RCard, battlefield: int) -> None:
+    """Record that ``card``'s owner played it, a Terrain, from hand at ``battlefield``."""
+    attack = game.attack
+    assert attack is not None
+    played = attack.battlefields[battlefield].terrains_played
+    attack.amend(battlefield, terrains_played=played | {(card.owner, card.id)})
+
+
+def record_terrain_destroyed(
+    game: GameState, seat: PlayerId, card: L5RCard, battlefield: int
+) -> None:
+    """Record that ``seat`` destroyed ``card``, a Terrain at ``battlefield``."""
+    attack = game.attack
+    assert attack is not None
+    destroyed = attack.battlefields[battlefield].terrains_destroyed
+    attack.amend(battlefield, terrains_destroyed=destroyed | {(seat, card.id)})

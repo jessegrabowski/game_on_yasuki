@@ -4,12 +4,14 @@ from typing import ClassVar
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import FlagRegistry
-from yasuki_core.engine.rules.battle.presence import place_unit
+from yasuki_core.engine.rules.battle.presence import place_unit, record_terrain_destroyed
 from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
-from yasuki_core.engine.players import Cause, PlayerId
+from yasuki_core.engine.players import Cause, PlayerId, Trait
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseAmount,
@@ -310,6 +312,17 @@ def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> t
     return unit
 
 
+def _destroying_seat(game: GameState, cause: Cause) -> PlayerId | None:
+    """The seat a destruction belongs to: the seat that acted, or the controller of the card whose
+    trait did it. None for the rulebook, and for a trait whose card has left the table."""
+    if isinstance(cause, PlayerId):
+        return cause
+    if isinstance(cause, Trait):
+        source = game.table.cards_by_id.get(cause.card_id)
+        return None if source is None else source.owner
+    return None
+
+
 @dataclass(frozen=True, slots=True)
 class Destroy(Effect):
     """Destroy a card, sending it to its owner's discard by side. A Personality takes his unit with
@@ -335,6 +348,13 @@ class Destroy(Effect):
         if card is None:
             return []
         location = location_of(game.table, card)
+        destroyer = _destroying_seat(game, self.cause)
+        if (
+            destroyer is not None
+            and location.battlefield is not None
+            and keywords.TERRAIN in effective_keywords(game, card)
+        ):
+            record_terrain_destroyed(game, destroyer, card, battlefield=location.battlefield)
         return [
             Destroyed(member.id, self.cause, location, controller=member.owner)
             for member in _remove_unit(game, card)
