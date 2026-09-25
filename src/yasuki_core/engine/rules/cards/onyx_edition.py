@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
     register_entry,
     register_event_entry,
     register_ring,
+    register_terrain,
     enemy_units_ever_present,
     register_trait_entry,
     resolved_favor_actions,
@@ -65,6 +66,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
     BattleResolved,
     CardDiscarded,
+    Destroyed,
     EnteredPlay,
 )
 from yasuki_core.engine.rules.state import GameState
@@ -134,6 +136,33 @@ register_ability(
         targets_any_location=True,
         tireless=True,
     ),
+)
+
+
+# --- Fields of Slaughter ---
+
+FIELDS_OF_SLAUGHTER_HONOR = 2
+
+
+@on(Destroyed, "fields_of_slaughter")
+def _fields_of_slaughter_destroyed(ctx: TriggerContext) -> list[Effect]:
+    """ "Gain 2 Honor after each time a card at this battlefield that you do not control is
+    destroyed." """
+    event = ctx.event
+    if not isinstance(event, Destroyed) or event.location is None:
+        return []
+    here = location_of(ctx.game.table, ctx.card).battlefield
+    if here is None or event.location.battlefield != here:
+        return []
+    if event.controller is None or event.controller is ctx.card.owner:
+        return []
+    return [GainHonor(ctx.card.owner, FIELDS_OF_SLAUGHTER_HONOR, source_id=ctx.card.id)]
+
+
+register_terrain(
+    "fields_of_slaughter",
+    timings=(ActionTiming.BATTLE, ActionTiming.ENGAGE),
+    ability_keywords=frozenset({keywords.POLITICAL, keywords.TERRAIN}),
 )
 
 
