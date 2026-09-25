@@ -12,25 +12,35 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     assignment_token,
 )
 from yasuki_core.bots.policies import EconomicPolicy, GoldRushPolicy
-from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.vocabulary.segments import Segment
+from yasuki_core.engine.rules.turn.structure import Phase, RoundKind
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.rules.effects import Move
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
+from yasuki_core.engine.rules.effects import Ask, Move
+from yasuki_core.engine.rules.vocabulary.decisions import Confirm
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.triggers import apply_effect
 from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.game_pieces.constants import AttachmentType
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.rules.test_interrupts import _honor_card
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
     end_phase,
+    holding,
     personality,
     province_card,
     put_in_play,
+    register,
     stronghold,
     two_seat_game,
 )
@@ -1068,3 +1078,86 @@ def test_each_battlefield_records_only_the_units_that_stood_at_it():
         0: frozenset({(PlayerId.P1, attackers[0])}),
         1: frozenset({(PlayerId.P2, "P2-hero0")}),
     }
+
+
+register_ability(
+    "battle_response_probe",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+    ),
+)
+
+
+def _resolved_with_a_responder() -> EngineSession:
+    """A battle the Attacker wins, resolved with the Attacker holding a Response, so the step opens.
+    The Defender keeps a second Province, so the win does not end the game."""
+    session = _one_battlefield({"a": 4}, {"d": 2}, defender_provinces=2)
+    put_in_play(
+        session.game.table, holding("probe", printed_id="battle_response_probe", owner=PlayerId.P1)
+    )
+    pending = session.game.pending
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    while session.game.round.kind is RoundKind.BATTLE_SEGMENT:
+        session.act(session.game.round.priority, Pass())
+    return session
+
+
+def test_a_battles_resolution_opens_a_response_step_before_after_resolution():
+    session = _resolved_with_a_responder()
+
+    attack = session.game.attack
+    assert session.game.round.kind is RoundKind.RESPONSE
+    assert attack.battle_segment is BattleSegment.RESOLUTION and attack.current == 0
+    assert not session.game.table.cards_by_id["a"].bowed
+    assert location_of(session.game.table, session.game.table.cards_by_id["a"]).battlefield == 0
+    assert _battles_resolved(session)
+
+
+def test_passing_out_of_the_response_step_runs_after_resolution():
+    session = _resolved_with_a_responder()
+
+    session.act(session.game.round.priority, Pass())
+    session.act(session.game.round.priority, Pass())
+
+    attack = session.game.attack
+    assert session.game.round.kind is RoundKind.PHASE
+    assert attack.battle_segment is None and attack.current is None
+    assert session.game.table.cards_by_id["a"].bowed
+    assert location_of(session.game.table, session.game.table.cards_by_id["a"]).is_home
+
+
+def test_a_trait_pausing_on_the_announcement_resolves_before_the_step_opens(reacting):
+    # The stash of a paused trait and the After Resolution work item share the stack, so the item
+    # has to be queued first: answered the other way round, the answer would find the wrong item.
+    reacting(
+        BattleResolved,
+        "battle_hand_probe",
+        lambda ctx: [Ask(ctx.card.owner, "Play it?", TRAIT_ENTRY, source_id=ctx.card.id)],
+        where=(CardLocation.HAND,),
+    )
+    session = _one_battlefield({"a": 4}, {"d": 2}, defender_provinces=2)
+    table = session.game.table
+    put_in_play(table, holding("probe", printed_id="battle_response_probe", owner=PlayerId.P1))
+    held = L5RCard.of(
+        FatePrint,
+        id="held",
+        name="Probe",
+        printed_id="battle_hand_probe",
+        side=Side.FATE,
+        owner=PlayerId.P1,
+    )
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(register(table, held))
+    pending = session.game.pending
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    while session.game.round.kind is RoundKind.BATTLE_SEGMENT:
+        session.act(session.game.round.priority, Pass())
+    assert isinstance(session.game.pending, Confirm)
+
+    session.submit(PlayerId.P1, DecisionResponse(()))
+
+    assert session.game.round.kind is RoundKind.RESPONSE
+    assert not session.game.table.cards_by_id["a"].bowed

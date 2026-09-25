@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.battle.presence import place_unit
@@ -400,6 +400,7 @@ def _resolve_battle(game: GameState) -> None:
     # an outcome reading the action's events rather than its own would collect its predecessors'.
     events_before = len(game.action_events)
 
+    attack.battle_segment = BattleSegment.RESOLUTION
     triggers.resolve_effects(game, effects)
     outcome = _outcome(
         game,
@@ -409,11 +410,50 @@ def _resolve_battle(game: GameState) -> None:
         events_before=events_before,
     )
     attack.amend(battlefield, outcome=outcome)
-    after_resolution(game, battlefield, last_battle=last_battle)
+    # Queued before the announcement, so a trait that pauses on it stashes its cascade above the
+    # work and resumes first.
+    game.stack.append(AfterResolution(battlefield, last_battle=last_battle))
     triggers.fire(game, _battle_resolved(attack, battlefield, outcome))
-    triggers.resolve_delayed(game, END_OF_BATTLE)
-    attack.current = None
-    game.stack.append(FightNextBattle())
+
+
+@dataclass(frozen=True, slots=True)
+class AfterResolution:
+    """Open the Response Step a battle's resolution leaves for Reactions, then run After
+    Resolution once it closes (CR, Battle Sequence).
+
+    A work item, since the step is an Action Round the seats pass out of. It is queued twice: once
+    to open the step, and again beneath it to bow and send home the survivors when the step
+    closes. A card that reads "after a battle's Resolution Segment" acts in the step, while the
+    battle segment still reads Resolution.
+
+    Attributes
+    ----------
+    battlefield : int
+        The battlefield whose battle resolved.
+    last_battle : bool
+        Whether it was the Attack Phase's last, which sends every defending unit home.
+    responded : bool, optional
+        Whether the Response Step has already been offered. Default False.
+    """
+
+    battlefield: int
+    last_battle: bool
+    responded: bool = False
+
+    def resume(self, game: GameState) -> None:
+        # The Response Step is the turn machine's, which imports this module.
+        from yasuki_core.engine.rules.turn.sequence import open_response_window
+
+        if not self.responded and open_response_window(game):
+            game.stack.append(replace(self, responded=True))
+            return
+        attack = _declared_attack(game)
+        attack.battle_segment = BattleSegment.AFTER_RESOLUTION
+        after_resolution(game, self.battlefield, last_battle=self.last_battle)
+        triggers.resolve_delayed(game, END_OF_BATTLE)
+        attack.battle_segment = None
+        attack.current = None
+        game.stack.append(FightNextBattle())
 
 
 def _winner(game: GameState, battlefield: int) -> PlayerId | None:

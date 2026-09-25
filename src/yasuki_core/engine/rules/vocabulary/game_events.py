@@ -253,10 +253,13 @@ class ActionResolved:
 
 @dataclass(frozen=True, slots=True)
 class BattleResolved:
-    """A battle has resolved and its survivors have gone home (CR, After Resolution).
+    """A battle has resolved (CR, Resolution), before After Resolution bows and sends home its
+    survivors.
 
-    Announced once per battle, after the resolution's destruction and the Attacker's units'
-    return, and before the effects delayed to the end of the battle. The outcome fields copy the
+    Announced once per battle, after the resolution's destruction and the outcome are recorded and
+    before anything bows, so a card that prevents the bow and one reading "after a battle resolves"
+    both act here. "After this battle ends" is later, once After Resolution is done, and is the
+    ``END_OF_BATTLE`` moment a delayed effect waits for. The outcome fields copy the
     :class:`~yasuki_core.engine.rules.battle.records.BattleOutcome` the attack records, so the
     event outlives the attack that recorded them.
 

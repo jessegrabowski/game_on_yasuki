@@ -72,6 +72,18 @@ def begin_game(game: GameState) -> None:
     run_stack(game)
 
 
+def _waits_beneath_its_round(game: GameState) -> bool:
+    """Whether the top of the stack is held beneath the round open over it until every seat has
+    passed: an action beneath its Interrupt round, or a battle's After Resolution beneath the
+    Response Step its resolution opened."""
+    top = game.stack[-1]
+    held = game.round.kind is RoundKind.INTERRUPT and isinstance(top, triggers.HeldAction)
+    resolving = game.round.kind is RoundKind.RESPONSE and isinstance(
+        top, resolution.AfterResolution
+    )
+    return held or resolving
+
+
 def run_stack(game: GameState) -> None:
     """Drain deferred work, running each item until the stack empties or one pauses for a decision.
     A work item may itself emit a decision (setting ``pending``), so resolution stops there and
@@ -79,10 +91,7 @@ def run_stack(game: GameState) -> None:
     refills.
     """
     while game.stack and game.pending is None:
-        if game.round.kind is RoundKind.INTERRUPT and isinstance(
-            game.stack[-1], triggers.HeldAction
-        ):
-            # The action waits beneath its Interrupt round until every seat has passed.
+        if _waits_beneath_its_round(game):
             return
         game.stack.pop().resume(game)
     if game.pending is None:
@@ -428,7 +437,7 @@ def _announce_resolution(game: GameState) -> None:
 
 
 def _responders(game: GameState) -> list[PlayerId]:
-    """Every seat holding a Response it could take against the action just resolved."""
+    """Every seat holding a Response it could take against the action or battle just resolved."""
     responding = frozenset({ActionTiming.RESPONSE})
     return [seat for seat in game.table.seats if activatable(game, seat, responding)]
 
