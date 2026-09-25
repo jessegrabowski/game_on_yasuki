@@ -154,9 +154,11 @@ effects. A Ring printing "Play after X" names an event, and {func}`~.register_tr
 trigger from hand for it: when the event fires and the guard holds, the owner alone is asked
 whether to put the Ring into play, and declining leaves it in hand for the next time the
 condition is fulfilled (CR, Ring). {card}`Ring of Air` reads `ActionResolved` with
-{func}`~.favor_actions_this_turn` as its guard. The Rings whose "after X" names a battle or a
-duel, and the Void's "Play if", still have no handler, and the comment above each says what the
-clause waits on.
+{func}`~.resolved_favor_actions` as its guard. {card}`Ring of Earth` reads `BattleResolved`, whose
+outcome fields and presence record answer "if it was not destroyed", "you were not the Attacker"
+and "any enemy units were ever at its battlefield", the last through
+{func}`~.enemy_units_ever_present`. The Rings whose "after X" names a duel or a Terrain, and the
+Void's "Play if", still have no handler, and the comment above each says what the clause waits on.
 
 ## Terrain, which attaches to a battlefield
 

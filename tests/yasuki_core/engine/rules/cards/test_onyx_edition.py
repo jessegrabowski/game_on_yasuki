@@ -1262,3 +1262,51 @@ def test_ring_of_air_is_offered_after_the_second_favor_action_of_the_turn():
 
     assert isinstance(session.game.pending, Confirm) and session.game.pending.seat is P1
     assert project(session.game, P2).pending is None
+
+
+def _earth_battle(
+    *,
+    attacker: PlayerId,
+    raider_force: int = 1,
+    assign_raider: bool = True,
+    held_by: PlayerId = P1,
+) -> EngineSession:
+    """``attacker`` attacks the other seat's first Province with a raider of ``raider_force``; the
+    Defender holds a guard of Force 3 and a second Province, so a lost battle does not end the
+    game. Ring of Earth waits in ``held_by``'s hand. Left where the resolution's first question
+    stands, or with the battle over when it asks none."""
+    defender = P2 if attacker is P1 else P1
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=defender, index=0)
+    province_card(state, "def-prov1", seat=defender, index=1)
+    province_card(state, "atk-prov0", seat=attacker, index=0)
+    put_in_play(state, personality("raider", owner=attacker, force=raider_force))
+    put_in_play(state, personality("guard", owner=defender, force=3))
+    state.zones[ZoneKey(held_by, ZoneRole.HAND)].add(
+        register(state, _ring("earth", "ring_of_earth", held_by))
+    )
+    session = EngineSession.start(state, attacker)
+    end_phase(session)
+    session.act(attacker, DeclareAttack())
+    session.submit(attacker, DecisionResponse(("raider@0",) if assign_raider else ()))
+    session.submit(defender, DecisionResponse(("guard@0",)))
+    session.submit(attacker, DecisionResponse(("0",)))
+    while session.game.pending is None and session.game.attack.current is not None:
+        session.act(session.game.round.priority, Pass())
+    return session
+
+
+def test_ring_of_earth_is_offered_after_a_battle_at_the_owners_province():
+    session = _earth_battle(attacker=P2)
+
+    assert isinstance(session.game.pending, Confirm) and session.game.pending.seat is P1
+    session.submit(P1, DecisionResponse(("earth",)))
+
+    assert "earth" in _in_play(session)
+
+
+def test_ring_of_earth_is_not_offered_after_a_battle_at_the_enemys_province():
+    # The Onyx text drops the Attacker clause for "at your Province", which the Attacker's is not.
+    session = _earth_battle(attacker=P1)
+
+    assert not isinstance(session.game.pending, Confirm)

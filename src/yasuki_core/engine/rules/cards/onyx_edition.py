@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
     register_entry,
     register_event_entry,
     register_ring,
+    enemy_units_ever_present,
     register_trait_entry,
     resolved_favor_actions,
 )
@@ -62,6 +63,7 @@ from yasuki_core.engine.rules.rulebook.kharmic import (
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
+    BattleResolved,
     CardDiscarded,
     EnteredPlay,
 )
@@ -198,9 +200,22 @@ register_ring(
 
 # --- Ring of Earth ---
 
-# "Play after a battle resolves at your Province, if it was not destroyed and any enemy units were
-# ever at its battlefield." Nothing records what a battle did once it resolves, so the entry has no
-# handler. The pitch is the Interrupt taken from hand, which the Interrupt step plays as a Strategy.
+# The pitch is the Interrupt taken from hand, which the Interrupt step plays as a Strategy.
+
+
+def _ring_of_earth_condition(ctx: TriggerContext) -> bool:
+    """ "Play after a battle resolves at your Province, if it was not destroyed and any enemy units
+    were ever at its battlefield." """
+    event = ctx.event
+    if not isinstance(event, BattleResolved) or event.province_destroyed:
+        return False
+    owner = ctx.card.owner
+    return event.defender is owner and enemy_units_ever_present(event, owner)
+
+
+register_trait_entry(
+    "ring_of_earth", BattleResolved, _ring_of_earth_condition, ruleset=ruleset.ONYX.name
+)
 
 
 def _ring_of_earth_applies(game: GameState, source: L5RCard, effect: Move) -> bool:
