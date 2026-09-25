@@ -606,6 +606,36 @@ def test_mishime_takes_his_discount_once_from_a_strategy_that_charges_gold_twice
         assert session.game.pending.amount == 3
 
 
+@pytest.mark.parametrize(("gold", "offered"), [(3, False), (4, True)])
+def test_a_strategy_is_offered_only_when_its_gold_cost_and_its_abilitys_gold_are_both_reachable(
+    gold, offered
+):
+    """Under Mishime the probe charges 1 for its Gold Cost and then 3 for its ability, 4 in all."""
+    card = L5RCard.of(
+        ActionPrint,
+        id="probe",
+        name="probe",
+        printed_id="maho_probe",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=3,
+        keywords=(keywords.MAHO,),
+    )
+    ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=lambda game, source: [PayGold(source.owner, 3, "probe")],
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+        located_at=(CardLocation.HAND,),
+    )
+
+    with probe_ability("maho_probe", ability):
+        session = _mishime_game(stronghold_production=gold, in_hand=(card,))
+
+        assert (PlayStrategy("probe") in session.legal_actions(P1)) is offered
+
+
 @pytest.mark.parametrize(
     ("source_owner", "amount", "change"),
     [(P1, -2, 0), (P2, -2, -2), (None, -2, -2), (P1, 2, 2)],

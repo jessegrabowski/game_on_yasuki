@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.rulebook import favor_payment
 from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.abilities.costs import payable
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, once_tag
+from yasuki_core.engine.rules.effects import PayGold
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
     ability_for,
@@ -482,9 +483,16 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
         PlayStrategy(card.id, ability.key)
         for card, ability in playable(game, seat, permitted_timings(game, seat))
         if (only is None or card.id == only)
-        and discounted_gold_cost(game, ability.purchase(game, card, plays_card=True))
-        <= reachable_gold(game, seat, card)
+        and strategy_gold(game, card, ability) <= reachable_gold(game, seat, card)
     ]
+
+
+def strategy_gold(game: GameState, card: L5RCard, ability: Ability) -> int:
+    """The Gold playing ``card`` for ``ability`` charges in all: its Gold Cost and the Gold its
+    ability's cost adds, with the action's one discount spent across both."""
+    gold_cost = discounted_gold_cost(game, ability.purchase(game, card, plays_card=True))
+    added = ability.discounted_cost(game, card, plays_card=True)
+    return gold_cost + sum(effect.amount for effect in added if isinstance(effect, PayGold))
 
 
 def recruit_cost(game: GameState, card: L5RCard) -> int:
