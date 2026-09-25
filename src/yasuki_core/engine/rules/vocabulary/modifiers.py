@@ -141,6 +141,36 @@ class AbilityGrant:
 
 
 @dataclass(frozen=True, slots=True)
+class SeatAbilityGrant:
+    """A continuous effect that gives every card one player owns an activated ability while
+    active: "the next time you use the rulebook Kharmic ability, you may use it on a non-Kharmic
+    card".
+
+    The ability is code, as an :class:`~.AbilityGrant`'s is, built from ``context`` each time a
+    card's abilities are read. It rests on the player because the cards it reaches are whichever
+    the player holds when it is used, drawn after the grant or not. Ownership is the test, so a
+    card the player controls but does not own is not reached.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the grant comes from, whose registered factory builds the ability, and which
+        expires a ``WHILE_SOURCE_IN_PLAY`` grant by leaving play.
+    seat : PlayerId
+        The player whose owned cards have the ability while the grant lasts.
+    context : tuple of str
+        What the granting action settled, handed to the factory.
+    duration : Duration
+        When the grant stops applying.
+    """
+
+    source_id: str
+    seat: PlayerId
+    context: tuple[str, ...]
+    duration: Duration
+
+
+@dataclass(frozen=True, slots=True)
 class KeywordGrant:
     """A continuous effect that gives one card a keyword while active.
 
@@ -253,12 +283,13 @@ class LobbyModifier:
 # Province's strength beside a stat change. Each is ongoing and lasts to the end of the turn
 # unless the card says otherwise. So they are recorded in one list and expire together (CR,
 # Duration of Effects). The four that name a card are forgotten when it leaves the table; the
-# three that name a condition, a Province slot or a player are not, because none of those is a
+# four that name a condition, a Province slot or a player are not, because none of those is a
 # card that can leave it.
 Ongoing = (
     Modifier
     | ConditionalModifier
     | AbilityGrant
+    | SeatAbilityGrant
     | KeywordGrant
     | Minimum
     | ProvinceModifier

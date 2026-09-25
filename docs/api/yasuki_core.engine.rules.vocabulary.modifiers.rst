@@ -16,6 +16,7 @@ yasuki_core.engine.rules.vocabulary.modifiers
     Minimum
     Modifier
     ProvinceModifier
+    SeatAbilityGrant
     Stat
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.modifiers

@@ -48,6 +48,7 @@ from yasuki_core.engine.rules.effects import (
     GrantKeyword,
     GrantMinimum,
     GrantAbility,
+    GrantSeatAbility,
     GrantConditionalModifier,
     GrantLobbyBonus,
     GrantProvinceStrength,
@@ -66,6 +67,7 @@ from yasuki_core.engine.rules.effects import (
     Show,
     ShuffleDeck,
     Rehonor,
+    RevokeGrants,
     Straighten,
     Then,
 )
@@ -83,6 +85,7 @@ EFFECTS = [
     (Straighten("farm_1"), "straighten farm_1"),
     (Dishonor("hero_1", PlayerId.P2), "dishonor hero_1"),
     (Negated(Bow("hero_1")), "negated: bow hero_1"),
+    (RevokeGrants("ground"), "ground revokes its grants"),
     (Rehonor("hero_1"), "rehonor hero_1"),
     (BanishTopFate(PlayerId.P2), "banish the top of P2's fate deck"),
     (
@@ -144,6 +147,10 @@ EFFECTS = [
     (
         GrantAbility("kaede", "kaede", ("raider",), Duration.UNTIL_END_OF_TURN),
         "kaede grants kaede an ability (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantSeatAbility("ground", PlayerId.P1, ("free_draw",), Duration.UNTIL_END_OF_TURN),
+        "ground grants P1's cards an ability (UNTIL_END_OF_TURN)",
     ),
     (
         SpendSeatOncePerTurn(PlayerId.P1, "flashy_technique"),

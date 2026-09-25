@@ -20,6 +20,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "After this battle's resolution, if X, ..." | effects returning `DelayedEffect(Evaluate(...), END_OF_BATTLE)` | {card}`Daidoji Tashiko` |
 | Gives a card an ability, as in "she has 'Battle: Ranged 3'" | `@granted_ability(id)` and effects returning `GrantAbility(...)` | {card}`Daidoji Kaede` |
 | A rulebook ability every card with a keyword has, as Kharmic | `register_keyword_ability(Ability(..., from_keyword=...))` | `rulebook/kharmic.py` |
+| Gives every card you own an ability, as "the next time you use the rulebook Kharmic ability, you may ..." | `@granted_ability(id)` and effects returning `GrantSeatAbility(...)` | {card}`The Sacred Ground of the Phoenix` |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
 | "Interrupt: ..." against a pending effect | `register_interrupt(id, Interrupt(...))` | {card}`Okura is Released` |
 | "Interrupt: ..." on a card in play | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.BATTLEFIELD,)))` | {card}`Doji Yuten` |

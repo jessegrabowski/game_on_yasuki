@@ -653,8 +653,9 @@ def _usable(
         if location not in at:
             continue
         # The attach rule cannot settle casting alone: a Personality can stop being a Shugenja
-        # after the Spell landed on him.
-        if is_spell(card) and not has_caster(game, card):
+        # after the Spell landed on him. A Spell not yet in play is cast by nobody and asks no
+        # caster of a keyword ability used from the hand.
+        if location is CardLocation.BATTLEFIELD and is_spell(card) and not has_caster(game, card):
             continue
         for ability in abilities_for(game, card):
             if location not in ability.located_at or not offered(location, ability):

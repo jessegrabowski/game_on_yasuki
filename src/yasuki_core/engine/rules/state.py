@@ -103,7 +103,7 @@ class GameState:
         :class:`~.LookAtTop` and closed by :class:`~.EndLook`. While one is open no decision may
         be backed out of, since the seat has read cards it cannot unread. Ephemeral and rebuilt by
         replay. Default None.
-    ongoing : list of Modifier, KeywordGrant, Minimum, ProvinceModifier or LobbyModifier
+    ongoing : list of Ongoing
         The ongoing records in force: every continuous grant a card has created, kept in creation
         order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike it may
         be non-empty at rest within a turn, so its order is load-bearing. Default empty.

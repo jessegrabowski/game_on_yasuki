@@ -169,10 +169,11 @@ class Ability:
         for a card whose text was rewritten between arcs under one id. Default None, for an
         ability every arc reads.
     from_keyword : str, optional
-        The keyword that confers this ability on every card carrying it, as the rulebook Kharmic
-        abilities come with the Kharmic keyword. Such an ability is activated wherever its card
+        The keyword whose rulebook ability this is, as the two Kharmic abilities are the Kharmic
+        keyword's: set on an ability the keyword confers on every card carrying it, and on a
+        variant of one that another card grants. Such an ability is activated wherever its card
         sits, the hand included, where a card's own ability would instead be played. Default None,
-        for an ability the card prints or is granted.
+        for a card's own ability.
     """
 
     timings: tuple[ActionTiming, ...]

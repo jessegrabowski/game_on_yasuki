@@ -1,17 +1,20 @@
 import json
 
+import pytest
+
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import abilities_for
-from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL
+from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL, kharmic_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, PlayStrategy
 from yasuki_core.engine.replay.game_log import game_log_from_dict, game_log_to_dict, replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import FatePrint
 from tests.yasuki_core.engine.builders import (
+    attachment,
     end_phase,
     fate_card,
     holding,
@@ -261,3 +264,23 @@ def test_a_kharmic_use_replays_to_the_same_board_from_a_stored_tape():
     stored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
 
     assert replay(stored) == session.game
+
+
+def test_a_kharmic_ability_names_one_of_the_two_forms():
+    with pytest.raises(ValueError, match="'banish' is not a Kharmic form"):
+        kharmic_ability("banish")
+
+
+def test_a_kharmic_spell_in_hand_offers_kharmic_with_no_caster_in_play():
+    # A Spell's abilities need a Shugenja to cast them once it is attached. In hand it is attached
+    # to nobody, and Kharmic is the keyword's ability rather than the Spell's own.
+    state = _table(hand_kharmic=0)
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(
+            state,
+            attachment("spell", attachment_type=AttachmentType.SPELL, keywords=KHARMIC, owner=P1),
+        )
+    )
+    session = EngineSession.start(state, P1)
+
+    assert ActivateAbility("spell", KHARMIC_DRAW) in session.legal_actions(P1)

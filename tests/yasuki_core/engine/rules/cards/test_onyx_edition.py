@@ -2,7 +2,12 @@ import pytest
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.registry import (
+    abilities_for,
+    ability_for,
+    ability_label,
+    register_ability,
+)
 from yasuki_core.engine.rules.abilities.model import itself
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.projection import project
@@ -10,7 +15,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Move, TakeFavor
+from yasuki_core.engine.rules.effects import Move, RevokeGrants, TakeFavor
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -48,6 +53,11 @@ from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISC
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules.rulebook.kharmic import (
+    KHARMIC_DRAW,
+    KHARMIC_REFILL,
+    is_kharmic_action,
+)
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.session import EngineSession
@@ -714,6 +724,250 @@ def test_the_capital_replays_to_the_same_board():
     session.act(P1, ActivateAbility("capital"))
     session.submit(P1, DecisionResponse(("raider",)))
     session.submit(P1, DecisionResponse(("guard",)))
+
+    assert replay(session.log) == session.game
+
+
+# --- The Sacred Ground of the Phoenix ---
+
+SACRED_GROUND = "the_sacred_ground_of_the_phoenix"
+
+
+def _sacred_ground(
+    *, flipped: bool = False, production: int = 4, opponent_kharmic: bool = False
+) -> EngineSession:
+    """P1 has used the Sacred Ground's Open, holding a Kharmic and a plain card in hand and one of
+    each face-up in a Province, with gold enough for one paid Kharmic use. P2 has passed the
+    window back, unless ``opponent_kharmic`` gives P2 a Kharmic card and the gold to spend it, in
+    which case P2 still holds the window."""
+    state = TableState.empty_two_seat()
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    put_in_play(
+        state,
+        flip_stronghold(
+            SACRED_GROUND, card_id="ground", flipped=flipped, gold_production=production
+        ),
+    )
+    hand = state.zones[ZoneKey(P1, ZoneRole.HAND)]
+    hand.add(
+        register(
+            state,
+            L5RCard.of(
+                FatePrint,
+                id="k",
+                name="Kharmic Fate",
+                side=Side.FATE,
+                owner=P1,
+                keywords=("Kharmic",),
+            ),
+        )
+    )
+    hand.add(register(state, fate_card("plain", P1)))
+    province_card(state, "pk", printed_id="plain_holding", keywords=("Kharmic",), index=0)
+    province_card(state, "pp", printed_id="plain_holding", index=1)
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("fd", P1))]
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+        register(state, holding("dd", printed_id="plain_holding"))
+    ]
+    if opponent_kharmic:
+        put_in_play(
+            state, holding("P2-sh", printed_id="plain_stronghold", gold_production=2, owner=P2)
+        )
+        state.zones[ZoneKey(P2, ZoneRole.HAND)].add(
+            register(
+                state,
+                L5RCard.of(
+                    FatePrint,
+                    id="P2-k",
+                    name="Kharmic Fate",
+                    side=Side.FATE,
+                    owner=P2,
+                    keywords=("Kharmic",),
+                ),
+            )
+        )
+        state.decks[DeckKey(P2, Side.FATE)].cards = [register(state, fate_card("P2-fd", P2))]
+    session = EngineSession.start(state, P1)
+    session.act(P1, ActivateAbility("ground"))
+    if not opponent_kharmic:
+        session.act(P2, Pass())  # the Open handed the window on; P2 declines it
+    return session
+
+
+def _kharmic_offers(session: EngineSession) -> set[ActivateAbility]:
+    return {
+        action
+        for action in session.legal_actions(P1)
+        if isinstance(action, ActivateAbility) and action.card_id != "ground"
+    }
+
+
+def _kharmic_draw_labels(session: EngineSession) -> dict[str, str]:
+    """What the menu shows for the Kharmic draw on each hand card that has one."""
+    game = session.game
+    return {
+        card_id: ability_label(game.table.cards_by_id[card_id], ability)
+        for card_id in ("k", "plain")
+        for ability in abilities_for(game, game.table.cards_by_id[card_id])
+        if ability.key == KHARMIC_DRAW
+    }
+
+
+def test_the_license_stands_in_for_kharmic_on_a_kharmic_card_and_adds_it_to_any_other():
+    session = _sacred_ground()
+
+    assert _kharmic_offers(session) == {
+        ActivateAbility("k", KHARMIC_DRAW),
+        ActivateAbility("plain", KHARMIC_DRAW),
+        ActivateAbility("pk", KHARMIC_REFILL),
+        ActivateAbility("pp", KHARMIC_REFILL),
+    }
+    assert _kharmic_draw_labels(session) == {
+        "k": "Open: Discard this card to draw a card",
+        "plain": "Open, :g2:: Discard this card to draw a card",
+    }
+
+
+def test_the_front_is_free_on_a_kharmic_card_and_the_use_revokes_the_license():
+    session = _sacred_ground()
+
+    session.act(P1, ActivateAbility("k", KHARMIC_DRAW))
+
+    game = session.game
+    assert game.pending is None
+    assert [c.id for c in game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards] == ["k"]
+    assert [c.id for c in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards] == ["plain", "fd"]
+    assert not game.table.cards_by_id["ground"].bowed
+    assert game.ongoing == []
+    session.act(P2, Pass())
+    assert _kharmic_offers(session) == {ActivateAbility("pk", KHARMIC_REFILL)}
+    assert _kharmic_draw_labels(session) == {
+        "k": "Repeatable Open, :g2:: Discard a Kharmic card to draw a card"
+    }
+
+
+def test_the_front_costs_the_printed_gold_on_a_non_kharmic_card():
+    session = _sacred_ground()
+
+    session.act(P1, ActivateAbility("pp", KHARMIC_REFILL))
+    pay(session, P1)
+
+    game = session.game
+    assert game.table.cards_by_id["ground"].bowed
+    province = game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 1)]
+    assert [c.id for c in province.cards] == ["dd"] and province.cards[0].face_up
+    assert game.ongoing == []
+
+
+def test_the_license_reaches_a_card_drawn_after_the_open():
+    # The license rests on the seat, not on the cards held when the Open resolved.
+    session = _sacred_ground()
+    TakeFavor(P1).perform(session.game)
+
+    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.submit(P1, DecisionResponse(("plain",)))
+    session.act(P2, Pass())
+
+    assert ActivateAbility("fd", KHARMIC_DRAW) in session.legal_actions(P1)
+    assert session.game.ongoing != []
+
+
+def test_cancelling_at_the_payment_leaves_the_license():
+    session = _sacred_ground()
+
+    session.act(P1, ActivateAbility("plain", KHARMIC_DRAW))
+    session.cancel(P1)
+
+    assert ActivateAbility("plain", KHARMIC_DRAW) in session.legal_actions(P1)
+
+
+def test_the_license_is_gone_at_the_end_of_the_turn():
+    session = _sacred_ground()
+    end_turn(session)
+    session.act(P2, Pass())
+
+    assert _kharmic_offers(session) == {
+        ActivateAbility("k", KHARMIC_DRAW),
+        ActivateAbility("pk", KHARMIC_REFILL),
+    }
+
+
+def test_the_back_is_free_on_any_card():
+    session = _sacred_ground(flipped=True, production=0)
+
+    assert _kharmic_offers(session) == {
+        ActivateAbility("k", KHARMIC_DRAW),
+        ActivateAbility("plain", KHARMIC_DRAW),
+        ActivateAbility("pk", KHARMIC_REFILL),
+        ActivateAbility("pp", KHARMIC_REFILL),
+    }
+    assert _kharmic_draw_labels(session)["plain"] == "Open: Discard this card to draw a card"
+
+    session.act(P1, ActivateAbility("plain", KHARMIC_DRAW))
+
+    assert session.game.pending is None
+    assert [c.id for c in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards] == ["k", "fd"]
+    session.act(P2, Pass())
+    assert _kharmic_offers(session) == set()
+
+
+def test_a_licensed_use_on_a_non_kharmic_card_reads_as_a_kharmic_action_while_it_resolves(
+    reacting,
+):
+    # A card discarded by the licensed use asks "was that a Kharmic action?" the way Blood of Fu
+    # Leng does. The license is revoked only after the action resolves, so the answer is yes.
+    session = _sacred_ground()
+    state = session.game.table
+    probe = L5RCard.of(
+        FatePrint, id="probe", name="Probe", printed_id="kharmic_probe", side=Side.FATE, owner=P1
+    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, probe))
+
+    def saw_a_kharmic_action(ctx):
+        if ctx.event.card_id == ctx.card.id and is_kharmic_action(ctx.game):
+            ctx.card.set_note("kharmic")
+        return []
+
+    reacting(CardDiscarded, "kharmic_probe", saw_a_kharmic_action)
+
+    session.act(P1, ActivateAbility("probe", KHARMIC_DRAW))
+    pay(session, P1)
+
+    assert session.game.table.cards_by_id["probe"].note == "kharmic"
+    assert session.game.ongoing == []
+
+
+def test_the_license_is_consumed_after_the_action_and_not_among_its_effects():
+    # Nothing in the licensed ability's own effects revokes the license, so an Interrupt to the
+    # action has nothing of the license to answer, and what does revoke it cannot be interrupted.
+    session = _sacred_ground()
+    game = session.game
+    plain = game.table.cards_by_id["plain"]
+    licensed = ability_for(game, plain, KHARMIC_DRAW)
+
+    assert not any(
+        isinstance(effect, RevokeGrants) for effect in licensed.effects(game, plain, plain)
+    )
+    assert not RevokeGrants("ground").is_interruptible()
+
+
+def test_the_opponents_kharmic_use_leaves_the_license_standing():
+    # "The next time you use the rulebook Kharmic ability": P2's use is not P1's.
+    session = _sacred_ground(opponent_kharmic=True)
+
+    session.act(P2, ActivateAbility("P2-k", KHARMIC_DRAW))
+    pay(session, P2)
+
+    assert len(session.game.ongoing) == 2
+    assert ActivateAbility("plain", KHARMIC_DRAW) in session.legal_actions(P1)
+
+
+def test_the_sacred_ground_replays_to_the_same_board():
+    session = _sacred_ground()
+    session.act(P1, ActivateAbility("plain", KHARMIC_DRAW))
+    pay(session, P1)
 
     assert replay(session.log) == session.game
 

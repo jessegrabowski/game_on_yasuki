@@ -28,6 +28,42 @@ def is_kharmic_action(game: GameState) -> bool:
     return ability is not None and ability.from_keyword == keywords.KHARMIC
 
 
+def kharmic_ability(form: str) -> Ability:
+    """The rulebook Kharmic ability of one form on the card it spends: Repeatable Open at the
+    printed cost, the ``KHARMIC_DRAW`` form activated from the hand or the ``KHARMIC_REFILL`` form
+    activated from a Province. Raise ValueError for any other ``form``.
+
+    The datasheet names the forms by side, Fate and Dynasty. They are keyed here by where the card
+    sits, which is the same thing on every board a card produces today.
+
+    A card that changes how the ability is used builds on this with ``dataclasses.replace``, so
+    the form's effects have one home.
+    """
+    if form == KHARMIC_DRAW:
+        located_at = CardLocation.HAND
+        effects = _kharmic_draw_effects
+        text = "Discard a Kharmic card to draw a card"
+    elif form == KHARMIC_REFILL:
+        located_at = CardLocation.PROVINCE
+        effects = _kharmic_refill_effects
+        text = "Discard a Kharmic card from your Province and refill it face-up"
+    else:
+        raise ValueError(f"{form!r} is not a Kharmic form")
+
+    return Ability(
+        timings=(ActionTiming.OPEN,),
+        label=f"Repeatable Open, :g{KHARMIC_COST}:: {text}",
+        cost=_kharmic_cost,
+        targets=itself,
+        effects=effects,
+        hits_every_target=True,
+        key=form,
+        repeatable=True,
+        located_at=(located_at,),
+        from_keyword=keywords.KHARMIC,
+    )
+
+
 def _kharmic_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [PayGold(source.owner, KHARMIC_COST, keywords.KHARMIC)]
 
@@ -41,36 +77,8 @@ def _kharmic_refill_effects(game: GameState, source: L5RCard, target: L5RCard) -
     return [Discard(source.id, source.owner), Then((RefillProvince(vacated, face_up=True),))]
 
 
-# The datasheet's two Kharmic abilities, Repeatable Open at 2 Gold, conferred by the keyword on the
-# card they spend: activated from the hand or the Province the card sits in, paid and interrupted
-# as any card's ability is, and spending the card it is used on. A face-down Province card is not
-# offered, because its owner has not seen it.
-register_keyword_ability(
-    Ability(
-        timings=(ActionTiming.OPEN,),
-        label=f"Repeatable Open, {KHARMIC_COST} Gold: Discard a Kharmic card to draw a card",
-        cost=_kharmic_cost,
-        targets=itself,
-        effects=_kharmic_draw_effects,
-        hits_every_target=True,
-        key=KHARMIC_DRAW,
-        repeatable=True,
-        located_at=(CardLocation.HAND,),
-        from_keyword=keywords.KHARMIC,
-    )
-)
-register_keyword_ability(
-    Ability(
-        timings=(ActionTiming.OPEN,),
-        label=f"Repeatable Open, {KHARMIC_COST} Gold: Discard a Kharmic card from your Province and "
-        "refill it face-up",
-        cost=_kharmic_cost,
-        targets=itself,
-        effects=_kharmic_refill_effects,
-        hits_every_target=True,
-        key=KHARMIC_REFILL,
-        repeatable=True,
-        located_at=(CardLocation.PROVINCE,),
-        from_keyword=keywords.KHARMIC,
-    )
-)
+# The datasheet's two Kharmic abilities, conferred by the keyword on the card they spend and paid
+# and interrupted as any card's ability is. A face-down Province card is not offered, because its
+# owner has not seen it.
+register_keyword_ability(kharmic_ability(KHARMIC_DRAW))
+register_keyword_ability(kharmic_ability(KHARMIC_REFILL))

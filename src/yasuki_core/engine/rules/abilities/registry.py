@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import TypeGuard
 
 from yasuki_core.ruleset import in_force
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
@@ -10,7 +11,7 @@ from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
-from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant
+from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Ongoing, SeatAbilityGrant
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.text_split import split_text_box
@@ -162,10 +163,10 @@ def granted_tireless(game: GameState, card: L5RCard) -> bool:
     )
 
 
-# The ability a card grants, built from the context its granting action recorded ("While a target
-# Personality opposes Kaede, she has 'Battle: Ranged 3'"). One per granting card: the record names
-# the card, and the card's factory says what it gives.
-AbilityFactory = Callable[[tuple[str, ...]], Ability]
+# The ability a card grants, built for the card that holds it from the context its granting action
+# recorded ("While a target Personality opposes Kaede, she has 'Battle: Ranged 3'"). One per
+# granting card: the record names the card, and the card's factory says what it gives.
+AbilityFactory = Callable[[GameState, L5RCard, tuple[str, ...]], Ability]
 GRANTED_ABILITIES: HandlerRegistry[AbilityFactory] = HandlerRegistry(
     "granted abilities", "already grants an ability"
 )
@@ -289,16 +290,26 @@ def fixed_invest_amount(game: GameState, card: L5RCard) -> int | None:
 def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     """Every activated ability ``card`` has right now: the ones registered for its printed id and
     in force under the active ruleset, in registration order, then the ones recorded grants give
-    it, in the order they were granted, then the ones its keywords confer."""
+    it or every card of its owner's, in the order they were granted, then the ones its
+    keywords confer. A keyword's ability yields to a granted one under the same key, which is
+    how a card changes a rulebook ability for a while."""
     printed = tuple(held for held in _ABILITIES.get(card.printed_id, ()) if in_force(held))
     granted = tuple(
-        GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](grant.context)
+        GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](
+            game, card, grant.context
+        )
         for grant in game.ongoing
-        if isinstance(grant, AbilityGrant)
-        and grant.target_id == card.id
-        and grant_applies(game, grant)
+        if _grants_to(grant, card) and grant_applies(game, grant)
     )
-    return (*printed, *granted, *_conferred(game, card))
+    shadowed = {held.key for held in granted}
+    conferred = tuple(held for held in _conferred(game, card) if held.key not in shadowed)
+    return (*printed, *granted, *conferred)
+
+
+def _grants_to(recorded: Ongoing, card: L5RCard) -> TypeGuard[AbilityGrant | SeatAbilityGrant]:
+    if isinstance(recorded, AbilityGrant):
+        return recorded.target_id == card.id
+    return isinstance(recorded, SeatAbilityGrant) and recorded.seat is card.owner
 
 
 def _conferred(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
