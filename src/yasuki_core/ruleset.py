@@ -4,6 +4,7 @@ from typing import Protocol
 
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 
 
@@ -113,6 +114,11 @@ class Ruleset:
         The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
         Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
         different players entitled to act. Default Limited, the CR's.
+    focus_limit : int or None
+        How many times one seat may focus in a duel, or None where the arc caps it only by what the
+        seat has to focus with. Default 4, the CR's.
+    duel_stat_default : Stat
+        The stat a duel compares where nothing overrides it. Default Chi, the CR's.
     rulebook_proxies : tuple of str
         The ids of the proxy cards dealt to each seat's rulebook zone as a game begins, one per
         rulebook ability family the arc grants, whose abilities are activated from there. Empty for
@@ -135,6 +141,8 @@ class Ruleset:
     lobby_timing: ActionTiming = ActionTiming.LIMITED
     lobby_keywords: frozenset[str] = frozenset()
     favor_abilities: tuple[FavorAbility, ...] = ()
+    focus_limit: int | None = 4
+    duel_stat_default: Stat = Stat.CHI
     rulebook_proxies: tuple[str, ...] = ()
 
     def segment_name(self, segment: Segment) -> str:
