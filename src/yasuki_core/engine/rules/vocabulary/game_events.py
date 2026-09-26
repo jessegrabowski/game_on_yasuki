@@ -490,8 +490,9 @@ class DuelResolved:
 
     Attributes
     ----------
-    winner : PlayerId or None
-        The seat whose Personality won, or None where nobody did.
+    winners : frozenset of PlayerId
+        The seats whose Personalities won, which is empty on a tie. A set rather than one seat
+        because the CR lets both Personalities win a duel.
     losers : frozenset of PlayerId
         The seats whose Personalities lost.
     totals : frozenset of (PlayerId, int)
@@ -500,7 +501,7 @@ class DuelResolved:
         The id of the card that created the duel.
     """
 
-    winner: PlayerId | None
+    winners: frozenset[PlayerId]
     losers: frozenset[PlayerId]
     totals: frozenset[tuple[PlayerId, int]]
     source_card_id: str

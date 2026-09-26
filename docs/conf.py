@@ -141,7 +141,7 @@ numpydoc_xref_aliases = {
     "DuelOutcome": "yasuki_core.engine.rules.duel.records.DuelOutcome",
     "FocusProcedure": "yasuki_core.engine.rules.duel.focusing.FocusProcedure",
     "DuelRecord": "yasuki_core.engine.rules.duel.records.DuelRecord",
-    "DuelStep": "yasuki_core.engine.rules.duel.records.DuelStep",
+    "DuelStep": "yasuki_core.engine.rules.vocabulary.segments.DuelStep",
     "DeckBuilderRepository": "yasuki_gui.ui.deck_builder.deck_data.DeckBuilderRepository",
     "DeckBuilderWindow": "yasuki_gui.ui.deck_builder.deck_builder.DeckBuilderWindow",
     "DeckCard": "yasuki_core.accounts.decks.DeckCard",

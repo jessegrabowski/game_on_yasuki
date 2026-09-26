@@ -3,7 +3,9 @@ import pytest
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.duel.procedure import declare_duel
-from yasuki_core.engine.rules.triggers import enforce_state_based_actions
+from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
+from yasuki_core.engine.rules.effects import DelayedEffect, GainHonor
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
@@ -18,6 +20,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     DuelResolved,
     FocusedCardsRevealed,
     FocusEffectsResolved,
+    HonorChanged,
     StrikeDeclared,
 )
 from yasuki_core.engine.session import EngineSession
@@ -118,7 +121,7 @@ def test_the_resolution_carries_the_totals():
         _fought(session)
 
         resolved = _events(session, DuelResolved)[0]
-        assert resolved.winner is P2
+        assert resolved.winners == frozenset({P2})
         assert resolved.losers == frozenset({P1})
         # One focused card worth 1 on top of each Chi.
         assert resolved.totals == frozenset({(P1, 3), (P2, 6)})
@@ -211,6 +214,51 @@ def test_a_duel_that_ends_without_resolving_says_so_in_its_end():
     ended = [event for event in game.turn_events if isinstance(event, DuelEnded)]
     assert [event.resolved for event in ended] == [False]
     assert not [event for event in game.turn_events if isinstance(event, DuelResolved)]
+
+
+def test_an_effect_delayed_to_the_duels_end_resolves_as_a_consequence(reacting):
+    # How a card gives a duel a consequence: it delays an ordinary effect to the moment the duel
+    # ends, which the CR puts after the outcome and before the focused cards are discarded.
+    reacting(
+        DuelDeclared, HOOK_PROBE, lambda ctx: [DelayedEffect(GainHonor(P1, 5), DUEL_CONSEQUENCES)]
+    )
+
+    with probe_ability(HOOK_PROBE, DUEL_ABILITY):
+        session = _duel_game()
+        _challenge(session)
+
+        assert session.game.delayed == [(DUEL_CONSEQUENCES, GainHonor(P1, 5))]
+
+        _fought(session)
+
+    assert session.game.table.seats[P1].honor == 5
+    assert session.game.delayed == []
+    events = list(session.game.turn_events)
+    gained = next(event for event in events if isinstance(event, HonorChanged))
+    # The duel is over before its consequence resolves, and its outcome is there to be read.
+    assert events.index(_events(session, DuelEnded)[0]) < events.index(gained)
+    assert session.game.duel.outcome.totals
+
+
+def test_a_duel_that_ends_without_resolving_drops_the_consequences_that_waited_for_it():
+    # Driven without a session for the same reason as the test above. The consequence has no outcome
+    # to act on, and one left held would resolve off the next duel's end.
+    game = two_seat_game()
+    put_in_play(game, personality("challenger", owner=P1))
+    put_in_play(game, personality("rival", owner=P2))
+    declare_duel(
+        game,
+        challenger_duelist="challenger",
+        challenged_duelist="rival",
+        source="challenger",
+    )
+    apply_effect(game, DelayedEffect(GainHonor(P1, 5), DUEL_CONSEQUENCES))
+    ops.remove_card(game.table, game.table.cards_by_id["rival"])
+
+    enforce_state_based_actions(game)
+
+    assert game.delayed == []
+    assert game.table.seats[P1].honor == 0
 
 
 @pytest.mark.parametrize(

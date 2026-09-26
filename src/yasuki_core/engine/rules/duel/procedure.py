@@ -208,13 +208,14 @@ def strike(game: GameState, seat: PlayerId) -> None:
     # close that cycle.
     from yasuki_core.engine.rules.duel.resolution import (
         DecideTheDuel,
-        EndTheDuel,
+        DiscardFocusedCards,
         RevealFocusedCards,
     )
 
     duel = duel_in_progress(game)
     duel.struck = seat
     duel.option = None
-    # Pushed in reverse, so they run in the CR's order: reveal, then the outcome, then the end.
-    game.stack.extend((EndTheDuel(), DecideTheDuel(), RevealFocusedCards()))
+    # Pushed in reverse, so they run in the CR's order: the reveal, the Focus Effects it queues, the
+    # outcome and the duel's end with the consequences that wait for it, then the discard.
+    game.stack.extend((DiscardFocusedCards(), DecideTheDuel(), RevealFocusedCards()))
     triggers.fire(game, StrikeDeclared(seat=seat))

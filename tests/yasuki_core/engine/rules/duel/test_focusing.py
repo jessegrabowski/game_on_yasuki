@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focusing as focusing_rules
 from yasuki_core.engine.rules.duel import resolution
 from yasuki_core.engine.rules.duel.focusing import TWENTY_FESTIVALS_FOCUSING
-from yasuki_core.engine.rules.duel.records import DuelStep
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine.rules.effects import Effect, GainHonor, StartDuel
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -154,7 +154,7 @@ def test_the_focused_cards_count_toward_the_totals_either_way(either_procedure):
         # Two Focus Values of 1 against one, on 3 Chi each, whether they were added as each card was
         # focused or totaled at the reveal.
         assert session.game.duel.outcome.totals == {P1: 4, P2: 5}
-        assert session.game.duel.outcome.winner is P2
+        assert session.game.duel.outcome.winners == (P2,)
 
 
 def test_a_duel_replays_from_its_tape_either_way(either_procedure):

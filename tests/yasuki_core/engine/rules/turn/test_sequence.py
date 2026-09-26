@@ -42,6 +42,7 @@ from yasuki_core.engine.rules.turn.structure import (
     Turn,
 )
 from yasuki_core.engine.rules.battle import resolution
+from yasuki_core.engine.rules.duel import resolution as duel_resolution
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseDiscard,
     Confirm,
@@ -77,6 +78,7 @@ from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import favor_actions_this_turn, rulebook_proxy
 from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.rulebook.lobby import LOBBY
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.game_pieces.constants import ONYX_LOBBY_PROXY_ID
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit
@@ -816,6 +818,19 @@ def test_resolving_one_moment_drops_it_and_leaves_the_others_waiting():
     assert game.delayed == [(later, Banish("staying"))]
 
 
+def test_discarding_a_moment_forgets_its_effects_without_resolving_them():
+    game = GameState.start(TableState.empty_two_seat(), PlayerId.P1)
+    later = Moment(Phase.ACTION, Boundary.BEGINNING)
+    card = register(game.table, fate_card("gone", PlayerId.P1))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+    game.delayed = [(END_OF_TURN, Banish("gone")), (later, Banish("staying"))]
+
+    triggers.discard_delayed(game, END_OF_TURN)
+
+    assert game.delayed == [(later, Banish("staying"))]
+    assert "gone" in game.table.cards_by_id
+
+
 def test_an_effect_delayed_while_the_moment_resolves_waits_for_the_next_one():
     """The list is rebuilt before the held effects run, so a delay one of them schedules survives to
     its own moment instead of being swept up by the walk that created it."""
@@ -831,14 +846,15 @@ def test_every_fired_moment_has_a_resolve_call_behind_it():
     """``FIRED_MOMENTS`` is what ``DelayedEffect`` validates against, so a moment listed there with
     no call site behind it would let through the delay it exists to refuse.
 
-    The turn's own moments are named as constants at their call sites in the turn sequence, and a
-    battle's end at its call site in battle resolution. A battle segment's beginning is fired
-    generically as its round opens, so it is covered by
+    The turn's own moments are named as constants at their call sites in the turn sequence, a
+    battle's end at its call site in battle resolution, and a duel's consequences at theirs in duel
+    resolution. A battle segment's beginning is fired generically as its round opens, so it is
+    covered by
     ``test_battle_rounds.test_a_delay_to_a_segments_beginning_resolves_as_it_opens`` instead.
     """
     called = {
         name
-        for module in (sequence, resolution)
+        for module in (sequence, resolution, duel_resolution)
         for name in re.findall(r"resolve_delayed\(game, (\w+)\)", inspect.getsource(module))
     }
     segment_beginnings = {Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS}
@@ -854,6 +870,8 @@ def test_every_fired_moment_has_a_resolve_call_behind_it():
         # does reach at an edge it does not, and an edge it does reach on a stage it does not.
         (Moment(Turn.CURRENT, Boundary.BEGINNING), "at the beginning of the turn"),
         (Moment(Phase.ACTION, Boundary.END), "at the end of the Action Phase"),
+        # A duel's steps have one edge the flow reaches, and it is not this one.
+        (Moment(DuelStep.FOCUSING, Boundary.END), "at the end of the Focusing Step"),
     ],
 )
 def test_a_delayed_effect_refuses_a_moment_nothing_resolves(moment, worded):

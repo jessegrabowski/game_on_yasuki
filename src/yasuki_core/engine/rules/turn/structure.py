@@ -3,7 +3,7 @@ from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, DuelStep, Segment
 
 
 class Phase(Enum):
@@ -130,7 +130,7 @@ class Boundary(Enum):
 
 # The stretches of play a Moment can name the edge of: the turn, one of its phases, or one of the
 # Attack Phase's segments.
-Stage = Turn | Phase | Segment | BattleSegment
+Stage = Turn | Phase | Segment | BattleSegment | DuelStep
 
 
 @dataclass(frozen=True, slots=True)
@@ -140,7 +140,7 @@ class Moment:
 
     Attributes
     ----------
-    stage : Turn, Phase, Segment or BattleSegment
+    stage : Turn, Phase, Segment, BattleSegment or DuelStep
         The stretch of play whose edge this names.
     boundary : Boundary
         Which edge of that stretch.
@@ -150,6 +150,10 @@ class Moment:
     boundary: Boundary
 
     def describe(self) -> str:
+        if self.stage is DuelStep.ENDED and self.boundary is Boundary.BEGINNING:
+            # The CR's own wording for a duel's consequences, which is the one edge of a duel's
+            # steps a card delays an effect to.
+            return "as the duel ends"
         return f"at the {self.boundary.value} of the {self._stage_name()}"
 
     def _stage_name(self) -> str:
@@ -160,6 +164,8 @@ class Moment:
                 return f"{phase.value.title()} Phase"
             case Segment() | BattleSegment() as segment:
                 return f"{segment.value.replace('_', ' ').title()} Segment"
+            case DuelStep() as step:
+                return f"{step.value.title()} Step"
             case _:
                 raise ValueError(f"no name for the stage {self.stage!r}")
 
@@ -173,6 +179,10 @@ BEGINNING_OF_COMBAT = Moment(BattleSegment.COMBAT, Boundary.BEGINNING)
 # "After this battle ends": the battle ends once After Resolution has sent its survivors home
 # (CR, After Resolution).
 END_OF_BATTLE = Moment(BattleSegment.AFTER_RESOLUTION, Boundary.END)
+# "Apply these consequences now": a duel ends when its resolution step closes, and the consequences
+# it gave for the winner or the loser resolve as it ends, before its focused cards are discarded
+# (CR, Duel).
+DUEL_CONSEQUENCES = Moment(DuelStep.ENDED, Boundary.BEGINNING)
 
 # The moments the flow reaches. Any other Moment is constructible and correctly worded, so an effect
 # delayed to one would be held for the rest of the game with nothing to resolve it. The battle
@@ -182,6 +192,7 @@ FIRED_MOMENTS: frozenset[Moment] = frozenset(
     {
         END_OF_TURN,
         END_OF_BATTLE,
+        DUEL_CONSEQUENCES,
         *(Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS),
     }
 )

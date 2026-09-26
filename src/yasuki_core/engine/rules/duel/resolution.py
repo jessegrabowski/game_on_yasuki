@@ -10,9 +10,11 @@ from yasuki_core.engine.rules.duel.focus_effects import (
 )
 from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.procedure import duel_in_progress, duel_stat
-from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelStep, DuelWork
+from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelWork
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -46,8 +48,12 @@ class RevealFocusedCards(DuelWork):
 
 @dataclass(frozen=True, slots=True)
 class DecideTheDuel(DuelWork):
-    """Total both sides and record who won (CR, Duel 0.0.9-0.0.12). The consequences a card has
-    given the duel apply to the outcome recorded here, before the duel ends."""
+    """Total both sides, record who won, and end the duel (CR, Duel 0.0.9-0.0.12).
+
+    The duel ends when this step ends, which is before its consequences apply and before its focused
+    cards are discarded (CR, Duel). Those consequences are effects their cards delayed until
+    ``DUEL_CONSEQUENCES``, and they resolve here.
+    """
 
     def resume(self, game: GameState) -> None:
         duel = duel_in_progress(game)
@@ -60,18 +66,21 @@ class DecideTheDuel(DuelWork):
         triggers.fire(
             game,
             DuelResolved(
-                winner=outcome.winner,
+                winners=frozenset(outcome.winners),
                 losers=frozenset(outcome.losers),
                 totals=frozenset(outcome.totals.items()),
                 source_card_id=duel.source,
             ),
         )
+        duel.step = DuelStep.ENDED
+        triggers.fire(game, DuelEnded(resolved=outcome.resolved, source_card_id=duel.source))
+        triggers.resolve_delayed(game, DUEL_CONSEQUENCES)
 
 
 @dataclass(frozen=True, slots=True)
-class EndTheDuel(DuelWork):
-    """End the duel the totals have decided, discarding what was focused (CR, Duel: "Discard all
-    focused cards", the entry's last step)."""
+class DiscardFocusedCards(DuelWork):
+    """Discard what the duel focused and take the focusing areas off the table, the last step of the
+    CR's DUEL entry, after the duel has ended and its consequences have applied."""
 
     def resume(self, game: GameState) -> None:
         triggers.fire_all(game, end_duel(game))
@@ -97,27 +106,26 @@ def duel_total(game: GameState, duel: DuelRecord, seat: PlayerId) -> int:
 
 
 def end_duel(game: GameState) -> list[GameEvent]:
-    """End the duel on the outcome already recorded for it, discarding what was focused and taking
-    the focusing areas off the table (CR, Duel: the focused cards are discarded as the duel ends).
-    Return the events that and the focus procedure's own cleanup raise, for the caller's cascade to
-    drain.
+    """Discard the duel's focused cards and take its focusing areas off the table (CR, Duel), running
+    the focus procedure's own cleanup first. Return the events that raises, for the caller's cascade
+    to drain.
 
     The record stays on the game with its outcome, so what resolves after a duel can still read how
     it went. The next duel declared replaces it.
 
-    Raise ``RuntimeError`` where the duel has no outcome, which is a step that ended a duel it never
-    decided.
+    Raise ``RuntimeError`` where the duel has no outcome, which is a step that cleared up after a
+    duel nothing ever decided.
     """
-    duel = duel_in_progress(game)
-    if duel.outcome is None:
-        raise RuntimeError("the duel is ending with no outcome recorded")
+    # Read straight off the game rather than through `duel_in_progress`, since the duel has ended
+    # by the time its focused cards are discarded.
+    duel = game.duel
+    if duel is None or duel.outcome is None:
+        raise RuntimeError("the duel's focused cards are being discarded before it was decided")
     duel.option = None
     events: list[GameEvent] = []
-    # Before the step says ENDED, so the procedure's cleanup still reads a duel in progress, and
-    # while the focused cards are still in their areas for it to read.
+    # While the focused cards are still in their areas, since a procedure's cleanup may read them.
     for effect in ruleset.ACTIVE.focus_procedure.cleanup(game, duel):
         events.extend(triggers.apply_effect(game, effect))
-    duel.step = DuelStep.ENDED
     for seat in (duel.challenger, duel.challenged):
         for card in focused_cards(game, seat):
             events.extend(triggers.apply_effect(game, Discard(card.id, Rulebook.DUEL_RESOLUTION)))
@@ -126,7 +134,6 @@ def end_duel(game: GameState) -> list[GameEvent]:
             raise RuntimeError(
                 f"{seat.name}'s focusing area still held {[card.id for card in left]}"
             )
-    events.append(DuelEnded(resolved=duel.outcome.resolved, source_card_id=duel.source))
     return events
 
 
@@ -136,13 +143,19 @@ def end_without_resolution(game: GameState) -> list[GameEvent]:
 
     The duel's queued work goes with it, so no step of a duel that has ended runs. Work queued by
     whatever created the duel is left alone: the action that declared it still has its own steps to
-    finish. An outstanding focus-or-strike is not withdrawn here, because only the decision layer
-    clears a pending request; answering one for a duel that has ended raises instead.
+    finish. Effects delayed until the duel's end are dropped rather than resolved, since the duel
+    reached no outcome for a consequence to act on. An outstanding focus-or-strike is not withdrawn
+    here, because only the decision layer clears a pending request; answering one for a duel that has
+    ended raises instead.
     """
     duel = duel_in_progress(game)
+    duel.step = DuelStep.ENDED
     game.stack[:] = [item for item in game.stack if not isinstance(item, DuelWork)]
-    duel.outcome = DuelOutcome(winner=None, losers=(), totals={}, resolved=False)
-    return end_duel(game)
+    # The duel reached no outcome, so the consequences that waited for its end have nothing to
+    # apply to, and one left held would resolve off the next duel's end (CR, Duel).
+    triggers.discard_delayed(game, DUEL_CONSEQUENCES)
+    duel.outcome = DuelOutcome(winners=(), losers=(), totals={}, resolved=False)
+    return [DuelEnded(resolved=False, source_card_id=duel.source), *end_duel(game)]
 
 
 def _is_duelist(game: GameState, card: L5RCard) -> bool:
@@ -158,12 +171,12 @@ def _outcome_on_totals(game: GameState, duel: DuelRecord) -> DuelOutcome:
     totals = {seat: duel_total(game, duel, seat) for seat in (challenger, challenged)}
     if totals[challenger] != totals[challenged]:
         winner = max(totals, key=lambda seat: totals[seat])
-        return DuelOutcome(winner, (duel.opponent_of(winner),), totals, resolved=True)
+        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals, resolved=True)
     duelists = {
         seat: _is_duelist(game, game.table.cards_by_id[duel.duelist_of(seat)])
         for seat in (challenger, challenged)
     }
     if duelists[challenger] != duelists[challenged]:
         winner = challenger if duelists[challenger] else challenged
-        return DuelOutcome(winner, (duel.opponent_of(winner),), totals, resolved=True)
-    return DuelOutcome(None, (challenger, challenged), totals, resolved=True)
+        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals, resolved=True)
+    return DuelOutcome((), (challenger, challenged), totals, resolved=True)

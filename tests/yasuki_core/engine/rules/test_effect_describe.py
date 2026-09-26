@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.turn.structure import (
     BEGINNING_OF_ACTION_PHASE,
     BEGINNING_OF_COMBAT,
+    DUEL_CONSEQUENCES,
     END_OF_TURN,
 )
 from yasuki_core.engine.rules.effects import (
@@ -222,6 +223,10 @@ EFFECTS = [
     (
         DelayedEffect(GrantPriority(PlayerId.P1), BEGINNING_OF_COMBAT),
         "P1 takes the opportunity to act at the beginning of the Combat Segment",
+    ),
+    (
+        DelayedEffect(GainHonor(PlayerId.P1, 2), DUEL_CONSEQUENCES),
+        "P1 gains 2 honor as the duel ends",
     ),
     (
         GrantKeyword("fields", "shinjo_1", "Cavalry", Duration.UNTIL_END_OF_TURN),

@@ -794,5 +794,14 @@ def resolve_delayed(game: GameState, moment: Moment) -> None:
     held = [effect for held_until, effect in game.delayed if held_until == moment]
     if not held:
         return
-    game.delayed = [entry for entry in game.delayed if entry[0] != moment]
+    discard_delayed(game, moment)
     resolve_effects(game, held)
+
+
+def discard_delayed(game: GameState, moment: Moment) -> None:
+    """Forget the effects held until ``moment`` without resolving them.
+
+    What a stretch of play owes when it ends before reaching ``moment``. An effect left held would
+    resolve off the next stretch of play to reach that edge instead.
+    """
+    game.delayed = [entry for entry in game.delayed if entry[0] != moment]

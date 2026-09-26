@@ -23,3 +23,18 @@ class BattleSegment(Enum):
     COMBAT = "combat"
     RESOLUTION = "resolution"
     AFTER_RESOLUTION = "after_resolution"
+
+
+class DuelStep(Enum):
+    """Which step of the duel procedure is open.
+
+    The CR's own sequence: the focusing loop the duelists alternate in, the reveal a strike causes,
+    and the resolution that reads the totals. A duel sits at :attr:`ENDED` from the moment its
+    resolution step closes, which is when the CR says the duel has ended, and stays there while its
+    consequences apply and its focused cards are discarded.
+    """
+
+    FOCUSING = "focusing"
+    REVEAL = "reveal"
+    RESOLUTION = "resolution"
+    ENDED = "ended"

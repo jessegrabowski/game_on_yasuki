@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focus_effects, focusing, procedure, resolution
-from yasuki_core.engine.rules.duel.records import DuelStep
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.effects import Ask, GrantModifier, StartDuel
@@ -153,7 +153,7 @@ def test_the_higher_total_wins_the_duel():
         outcome = session.game.duel.outcome
         assert outcome.resolved
         assert outcome.totals == {P1: 3, P2: 6}
-        assert outcome.winner is P2
+        assert outcome.winners == (P2,)
         assert outcome.losers == (P1,)
 
 
@@ -165,7 +165,7 @@ def test_a_tie_is_lost_by_both_personalities():
 
         outcome = session.game.duel.outcome
         assert outcome.totals == {P1: 3, P2: 3}
-        assert outcome.winner is None
+        assert outcome.winners == ()
         assert set(outcome.losers) == {P1, P2}
 
 
@@ -176,7 +176,7 @@ def test_a_duelist_wins_a_tie_against_a_non_duelist():
         _strike_out(session)
 
         outcome = session.game.duel.outcome
-        assert outcome.winner is P2
+        assert outcome.winners == (P2,)
         assert outcome.losers == (P1,)
 
 
@@ -187,7 +187,7 @@ def test_two_duelists_tie_and_both_lose():
         _strike_out(session)
 
         outcome = session.game.duel.outcome
-        assert outcome.winner is None
+        assert outcome.winners == ()
         assert set(outcome.losers) == {P1, P2}
 
 
@@ -216,7 +216,7 @@ def test_the_duel_stat_is_chi_as_it_stands_rather_than_as_printed():
         _strike_out(session)
 
         assert session.game.duel.outcome.totals == {P1: 5, P2: 6}
-        assert session.game.duel.outcome.winner is P2
+        assert session.game.duel.outcome.winners == (P2,)
 
 
 def test_the_duel_stat_comes_from_the_ruleset(monkeypatch):
@@ -229,7 +229,7 @@ def test_the_duel_stat_comes_from_the_ruleset(monkeypatch):
         _strike_out(session)
 
         assert session.game.duel.outcome.totals == {P1: 1, P2: 4}
-        assert session.game.duel.outcome.winner is P2
+        assert session.game.duel.outcome.winners == (P2,)
 
 
 def _resume_next(game, step: type) -> None:
@@ -241,8 +241,8 @@ def _resume_next(game, step: type) -> None:
 
 
 def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
-    # The CR discards the focused cards as the duel's last step, after its outcome and after the
-    # consequences that may alter it, so a consequence reads a card that is still in the area.
+    # The CR discards the focused cards as the duel's last step, after the duel has ended and its
+    # consequences have applied, so a consequence reads a card that is still in its area.
     game = _duel_on_a_bare_game()
     card = register(game.table, focus_card("P2-fv1", P2, 1))
     game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(card)
@@ -255,11 +255,12 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     _resume_next(game, resolution.DecideTheDuel)
 
     outcome = game.duel.outcome
-    assert outcome.resolved and outcome.winner is P2
+    assert outcome.resolved and outcome.winners == (P2,)
     assert [held.id for held in focusing.focused_cards(game, P2)] == ["P2-fv1"]
-    assert game.duel.step is DuelStep.RESOLUTION
+    # The duel has ended the moment its resolution step closed, before the discard (CR, Duel).
+    assert game.duel.step is DuelStep.ENDED
 
-    _resume_next(game, resolution.EndTheDuel)
+    _resume_next(game, resolution.DiscardFocusedCards)
 
     assert game.duel.step is DuelStep.ENDED
     assert game.duel.outcome == outcome
@@ -323,7 +324,7 @@ def test_a_duelist_off_the_board_ends_the_duel_without_resolution():
 
     duel = game.duel
     assert duel.step is DuelStep.ENDED
-    assert duel.outcome == (None, (), {}, False)
+    assert duel.outcome == ((), (), {}, False)
     # The focusing loop does not pick up again on a duel that has ended.
     assert game.stack == []
     assert not [key for key in game.table.zones if key.role is ZoneRole.FOCUS]
@@ -405,4 +406,4 @@ def test_a_duel_step_is_refused_once_the_duel_has_ended():
         # The record stays on the game, so a step that escaped the early exit would otherwise find
         # a duel to act on and overwrite its outcome.
         with pytest.raises(RuntimeError, match="no duel"):
-            resolution.EndTheDuel().resume(session.game)
+            resolution.DecideTheDuel().resume(session.game)
