@@ -44,6 +44,7 @@ from yasuki_core.engine.rules.effects import (
     GainGold,
     TakeFavor,
     GainHonor,
+    AdjustPending,
     LoseGame,
     WinGame,
     Move,
@@ -125,6 +126,7 @@ EFFECTS = [
     ),
     (GainGold(PlayerId.P2, 3), "P2 gains 3 gold"),
     (GainHonor(PlayerId.P1, 2), "P1 gains 2 honor"),
+    (AdjustPending(GainHonor(PlayerId.P1, 2), -1), "P1 gains 2 honor, adjusted by -1"),
     (GainHonor(PlayerId.P2, -4), "P2 loses 4 honor"),
     (
         LoseGame(PlayerId.P2, "no Provinces remaining", "Military Victory"),
