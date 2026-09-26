@@ -18,8 +18,8 @@ dispatching.
 about one. An ability is offered when those two sets intersect.
 
 An Interrupt round lists `INTERRUPT` and nothing else, so inside one the intersection offers only
-{class}`~.PlayInterrupt` and {class}`~.DiscardToInterrupt`, which `rules/interrupts.py` computes
-against the forecast of the action held beneath the round, and a `Pass`. An Interrupt printed on a
+{class}`~.PlayInterrupt`, which `rules/interrupts.py` computes against the forecast of the action
+held beneath the round, and a `Pass`. An Interrupt printed on a
 card is not an {class}`~yasuki_core.engine.rules.abilities.model.Ability` and never reaches
 {func}`~.activatable`.
 
