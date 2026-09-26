@@ -4,12 +4,15 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
-from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.board.queries import personalities_in_play, rulebook_proxy
+from yasuki_core.engine.rules.rulebook import proxies
+from yasuki_core.engine.rules.rulebook.lobby import LOBBY
 from yasuki_core.engine.rules.turn import action_sequence, sequence
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, Lobby
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
+from yasuki_core.game_pieces.constants import ONYX_LOBBY_PROXY_ID
 
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -37,8 +40,10 @@ def test_the_announcing_seat_is_recorded_until_the_action_is_forgotten():
     game = two_seat_game()
     game.table.seats[P1].honor = 10
     put_in_play(game, personality("courtier", personal_honor=2))
+    proxies.spawn_rulebook_proxies(game)
+    lobby = ActivateAbility(rulebook_proxy(game, P1, ONYX_LOBBY_PROXY_ID).id, LOBBY)
 
-    action_sequence.perform(game, Lobby())
+    action_sequence.perform(game, lobby)
 
     assert game.action_seat is P1
     sequence.forget_action(game)

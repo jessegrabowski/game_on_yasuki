@@ -16,6 +16,10 @@ ONYX_FAVOR_PROXY_ID = "onyx_favor"
 PRE_GOLD_FAVOR_PROXY_ID = "pre_gold_favor"
 # The Inheritance rulebook ability has one too. Its id is not "inheritance", a printed Event's id.
 INHERITANCE_PROXY_ID = "the_inheritance_rule"
+# The Lobby rulebook ability is activated from a proxy too, one per arc family, since the arcs word
+# it differently: Onyx Edition's Open Lobby and the pre-Gold rulebook's Limited one.
+ONYX_LOBBY_PROXY_ID = "onyx_lobby"
+IMPERIAL_LOBBY_PROXY_ID = "imperial_lobby"
 
 
 class Side(str, Enum):

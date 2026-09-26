@@ -828,20 +828,3 @@ class ChooseDistribution(DecisionRequest):
     def cancellable(self) -> bool:
         """Backing out unwinds the whole action that raised it, cost included."""
         return True
-
-
-@dataclass(frozen=True, slots=True)
-class ChooseLobbyTarget(DecisionRequest):
-    """The seat must choose which Personality its Lobby bows. The candidates are its own unbowed
-    Personalities with 1 or more Personal Honor, so a client renders them as board selections."""
-
-    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return "Choose a Personality to bow for the Imperial Favor"
-
-    def accepts(self, response: DecisionResponse) -> bool:
-        return _chooses_exactly_one(self, response)
-
-    @property
-    def cancellable(self) -> bool:
-        """Backing out unwinds the whole action that raised it."""
-        return True

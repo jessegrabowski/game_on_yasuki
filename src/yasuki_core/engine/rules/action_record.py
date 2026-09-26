@@ -1,4 +1,3 @@
-from yasuki_core import ruleset
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import ability_for, recruit_timing_of
 from yasuki_core.engine.rules.state import GameState
@@ -6,7 +5,6 @@ from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
     ACTION_TIMINGS,
     ActivateAbility,
-    Lobby,
     PlayStrategy,
     Recruit,
 )
@@ -44,8 +42,9 @@ def action_is_unstoppable(game: GameState) -> bool:
 def action_keywords(game: GameState) -> frozenset[str]:
     """The ability keywords of the action now resolving, such as Political, or none outside one.
 
-    A card's ability carries the keywords its registration declares. A rulebook action carries what
-    the arc's ruleset says it is designated, so Lobby is Political under the ShE datasheet.
+    A card's ability carries the keywords its registration declares, and so does a rulebook ability
+    on a proxy, so Lobby is Political. A rulebook action carries what the arc's ruleset says it is
+    designated.
     """
     match game.action:
         case ActivateAbility() | PlayStrategy():
@@ -55,7 +54,5 @@ def action_keywords(game: GameState) -> frozenset[str]:
             added = recruit_timing_of(game, card_id)
             as_rulebook = ACTION_TIMINGS[Recruit] in game.round.timings.active
             return frozenset() if added is None or as_rulebook else added.keywords
-        case Lobby():
-            return ruleset.ACTIVE.lobby_keywords
         case _:
             return frozenset()

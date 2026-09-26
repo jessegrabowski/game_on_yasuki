@@ -15,7 +15,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
-    Lobby,
     Pass,
     PlayInterrupt,
     PlayStrategy,
@@ -39,7 +38,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInterruptEffect,
     ChooseInterruptTarget,
     ChooseInvestAmount,
-    ChooseLobbyTarget,
     ChooseOption,
     ChoosePayment,
     Confirm,
@@ -60,7 +58,6 @@ from yasuki_core.engine.rules.interrupts import (
     discard_to_interrupt,
     play_interrupt,
 )
-from yasuki_core.engine.rules.rulebook.lobby import apply_lobby_target, lobby
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.effects import DiscardFromHand, PayGold
 from yasuki_core.engine.rules.state import GameState
@@ -86,7 +83,6 @@ _ACTION_WORDING: dict[type, str] = {
     Equip: "the Equip of",
     ActivateAbility: "the ability on",
     PlayStrategy: "the Strategy",
-    Lobby: "Lobby",
     DeclareAttack: "the attack",
 }
 
@@ -127,8 +123,6 @@ def perform(game: GameState, action: Action) -> None:
             recruit(game, card_id, invest, proclaim=proclaim)
         case Equip(card_id=card_id, invest=invest):
             equip(game, card_id, invest=invest)
-        case Lobby():
-            lobby(game)
         case ActivateAbility(card_id=card_id, ability_key=ability_key):
             activate(game, card_id, ability_key)
             # Resolve the target, unless the cost's cascade paused for a decision first.
@@ -186,8 +180,6 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             apply_ability_target(game, request, response)
         case ChooseEquipTarget():
             apply_equip_target(game, request, response)
-        case ChooseLobbyTarget():
-            apply_lobby_target(game, request, response)
         case ChooseFortificationProvince():
             apply_fortification_province(game, request, response)
         case ChooseInterruptTarget():

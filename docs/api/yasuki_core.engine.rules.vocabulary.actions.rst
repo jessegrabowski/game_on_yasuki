@@ -13,7 +13,6 @@ yasuki_core.engine.rules.vocabulary.actions
     DeclareAttack
     DiscardToInterrupt
     Equip
-    Lobby
     Pass
     PlayInterrupt
     PlayStrategy

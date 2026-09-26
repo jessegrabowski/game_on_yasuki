@@ -22,7 +22,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
-    Lobby,
     Pass,
     PlayInterrupt,
     PlayStrategy,
@@ -46,9 +45,6 @@ from yasuki_core.engine.rules.gold.discounts import (
 )
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
-from yasuki_core.engine.rules.rulebook import lobby
-from yasuki_core.engine.rules.rulebook.lobby import lobby_candidates, lobby_key
-from yasuki_core.engine.rules.rulebook.lobby import lobby_amount
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
@@ -86,8 +82,6 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
         return frozenset(ability.timings)
-    if isinstance(action, Lobby):
-        return frozenset({ruleset.ACTIVE.lobby_timing})
     if isinstance(action, Recruit):
         return recruit_timings(game, action.card_id)
     timing = ACTION_TIMINGS.get(type(action))
@@ -159,7 +153,6 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_recruits(game, seat),
         *_equips(game, seat),
         *_strategies(game, seat),
-        *_lobby(game, seat),
         *_declare_attack(game, seat),
         *_interrupts(game, seat),
     ]
@@ -184,8 +177,6 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _equips(game, seat, only=card_id)
         case PlayStrategy(card_id=card_id):
             return action in _strategies(game, seat, only=card_id)
-        case Lobby():
-            return bool(_lobby(game, seat))
         case DeclareAttack():
             return bool(_declare_attack(game, seat))
         case PlayInterrupt() | DiscardToInterrupt():
@@ -219,37 +210,6 @@ def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> l
         for card, ability in activatable(game, seat, permitted_timings(game, seat))
         if only is None or card.id == only
     ]
-
-
-def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
-    """The Lobby ability when the seat can take it.
-
-    ShE datasheet: "If it is your turn and you have higher Family Honor than each other player, bow
-    your target unbowed Personality with 1 or more Personal Honor to take the Imperial Favor."
-    Which Personality bows is chosen when the action resolves, so this offers the ability once.
-
-    Both sides of the comparison are read through :func:`~.lobby_amount`, since the datasheet
-    adjusts an amount by the Bonuses and Penalties on the player it is about rather than on the
-    player acting. Family Honor is what this Lobby checks. A Wind's own Lobby checks something else
-    and reads it the same way.
-    """
-    if not permits(game, seat, ruleset.ACTIVE.lobby_timing):
-        return []
-    if seat is not game.active:
-        return []
-    if game.has_used(lobby_key(seat, game.turn)):
-        return []
-    if not lobby.may_lobby(game, seat):
-        return []
-    seats = game.table.seats
-    honor = lobby_amount(game, seat, seats[seat].honor)
-    if any(
-        lobby_amount(game, other, info.honor) >= honor
-        for other, info in seats.items()
-        if other is not seat
-    ):
-        return []
-    return [Lobby()] if lobby_candidates(game, seat) else []
 
 
 def has_wind(game: GameState, seat: PlayerId) -> bool:

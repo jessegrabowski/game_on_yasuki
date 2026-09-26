@@ -32,7 +32,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DiscardToInterrupt,
     Equip,
-    Lobby,
     PlayInterrupt,
     PlayStrategy,
     Recruit,
@@ -251,24 +250,19 @@ class GameRunner:
         return items
 
     def board_menu(self) -> list[tuple[str, Action]]:
-        """The labeled rulebook abilities, for a right-click on the empty board: those on the
-        human's rulebook proxies, which are never drawn, and the rulebook actions that belong to no
-        card. The board is the only place either can be offered. The Favor abilities are left to
-        :meth:`favor_menu`, and Inheritance to :meth:`inheritance_menu`, on the Stronghold it turns
-        over. Empty when none is legal now."""
+        """The labeled abilities on the human's rulebook proxies, for a right-click on the empty
+        board. The proxies are never drawn, so the board is the only place they can be offered.
+        The Favor abilities are left to :meth:`favor_menu`, and Inheritance to
+        :meth:`inheritance_menu`, on the Stronghold it turns over. Empty when none is legal now."""
         game = self.session.game
         proxies = game.table.zones[ZoneKey(self.human, ZoneRole.RULEBOOK)].cards
-        labels = {
-            Lobby(): "Lobby: bow a Personality to take the Imperial Favor",
-        }
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
-            if isinstance(action, ActivateAbility) and not is_favor_ability(action):
-                card = game.table.cards_by_id[action.card_id]
-                if card in proxies and not is_inheritance(action):
-                    items.append((self._ability_label(card, action), action))
-            elif action in labels:
-                items.append((labels[action], action))
+            if not isinstance(action, ActivateAbility) or is_favor_ability(action):
+                continue
+            card = game.table.cards_by_id[action.card_id]
+            if card in proxies and not is_inheritance(action):
+                items.append((self._ability_label(card, action), action))
         return items
 
     def legacy_search_pool(self) -> list:
