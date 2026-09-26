@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import pytest
 
 from yasuki_core import ruleset
@@ -7,9 +9,10 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focusing as focusing_rules
+from yasuki_core.engine.rules.duel import resolution
 from yasuki_core.engine.rules.duel.focusing import TWENTY_FESTIVALS_FOCUSING
 from yasuki_core.engine.rules.duel.records import DuelStep
-from yasuki_core.engine.rules.effects import StartDuel
+from yasuki_core.engine.rules.effects import Effect, GainHonor, StartDuel
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DECK_TOP,
@@ -26,7 +29,11 @@ from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import personality, put_in_play, register
 from tests.yasuki_core.engine.rules.conftest import probe_ability
-from tests.yasuki_core.engine.rules.duel.conftest import PRE_GOLD_FOCUSING, focusing
+from tests.yasuki_core.engine.rules.duel.conftest import (
+    PRE_GOLD_FOCUSING,
+    PreGoldFocusing,
+    focusing,
+)
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -53,9 +60,15 @@ def _focus_card(card_id: str, owner: PlayerId, focus: int) -> L5RCard:
     return L5RCard.of(FatePrint, id=card_id, name=card_id, side=Side.FATE, owner=owner, focus=focus)
 
 
-def _duel_game(*, held: dict[PlayerId, int] = {}, deck: dict[PlayerId, int] = {}) -> EngineSession:
+def _duel_game(
+    *,
+    held: dict[PlayerId, int] | None = None,
+    deck: dict[PlayerId, int] | None = None,
+) -> EngineSession:
     """P1's challenger and P2's rival at 3 Chi each, holding ``held`` cards of Focus Value 1 and with
     ``deck`` of them in each Fate deck."""
+    held = held or {}
+    deck = deck or {}
     state = TableState.empty_two_seat()
     put_in_play(state, personality("challenger", owner=P1, printed_id=FOCUS_PROBE))
     put_in_play(state, personality("rival", owner=P2))
@@ -161,6 +174,27 @@ def test_a_duel_replays_from_its_tape_either_way(either_procedure):
         assert replay(session.log) == session.game
 
 
+@dataclass(frozen=True, slots=True)
+class _DealingFocusing(PreGoldFocusing):
+    """A procedure whose setup acts, which neither shipped procedure's does: the Lotus rules deal
+    three cards into a pool before the first option, and this stands in for that step."""
+
+    def begin(self, game, duel) -> list[Effect]:
+        return [GainHonor(duel.challenged, 2)]
+
+
+def test_the_procedures_setup_runs_before_the_first_option_is_put():
+    with probe_ability(FOCUS_PROBE, DUEL_ABILITY):
+        with focusing(_DealingFocusing()):
+            session = _duel_game(held={P1: 1, P2: 1})
+            _challenge(session)
+
+            # Honor moved as the duel was declared, and the challenged seat still has its option.
+            assert session.game.table.seats[P2].honor == 2
+            assert isinstance(session.game.pending, FocusOrStrike)
+            assert session.game.pending.seat is P2
+
+
 def test_only_the_shipped_procedure_offers_the_top_of_the_deck():
     with probe_ability(FOCUS_PROBE, DUEL_ABILITY):
         with focusing(TWENTY_FESTIVALS_FOCUSING):
@@ -180,9 +214,9 @@ def test_a_fifth_focus_is_legal_only_where_the_procedure_sets_no_limit():
         with focusing(TWENTY_FESTIVALS_FOCUSING):
             session = _duel_game(held={P1: 6, P2: 6})
             _challenge(session)
-            for _ in range(TWENTY_FESTIVALS_FOCUSING.focus_limit):
-                session.submit(P2, DecisionResponse((focus_token(f"P2-h{_}"),)))
-                session.submit(P1, DecisionResponse((focus_token(f"P1-h{_}"),)))
+            for index in range(TWENTY_FESTIVALS_FOCUSING.focus_limit):
+                session.submit(P2, DecisionResponse((focus_token(f"P2-h{index}"),)))
+                session.submit(P1, DecisionResponse((focus_token(f"P1-h{index}"),)))
             assert session.game.duel.step is DuelStep.ENDED
 
         with focusing(PRE_GOLD_FOCUSING):
@@ -226,5 +260,6 @@ def test_the_focus_value_lands_on_the_duel_stat_only_where_the_arc_says_so():
             duel = session.game.duel
             rival = session.game.table.cards_by_id["rival"]
             assert focusing_rules.focus_value(session.game.table.cards_by_id["P2-h0"]) == 1
+            assert resolution.duel_stat(session.game, rival) == 4
             assert ruleset.ACTIVE.focus_procedure.focus_total(session.game, duel, P2) == 0
-            assert any(record.target_id == rival.id for record in session.game.ongoing)
+            assert resolution.duel_total(session.game, duel, P2) == 4

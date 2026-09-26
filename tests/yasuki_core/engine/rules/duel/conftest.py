@@ -1,10 +1,10 @@
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules.duel.focusing import FocusProcedure, focus_value, focused_cards
+from yasuki_core.engine.rules.duel.focusing import FocusProcedure, focus_value
 from yasuki_core.engine.rules.duel.records import DuelRecord
 from yasuki_core.engine.rules.effects import Destroy, Effect, GrantModifier
 from yasuki_core.engine.rules.state import GameState
@@ -74,14 +74,9 @@ def focusing(procedure: FocusProcedure):
     ``ruleset.ACTIVE`` is a module global, so a procedure left behind would decide every later duel
     in the process.
     """
-    from dataclasses import replace
-
     live = ruleset.ACTIVE
     ruleset.ACTIVE = replace(live, focus_procedure=procedure)
     try:
         yield
     finally:
         ruleset.ACTIVE = live
-
-
-__all__ = ["PRE_GOLD_FOCUSING", "PreGoldFocusing", "focused_cards", "focusing"]
