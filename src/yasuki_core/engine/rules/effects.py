@@ -991,12 +991,10 @@ class EndDuel(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         # As in StartDuel: the duel's own modules import this one.
-        from yasuki_core.engine.rules.duel.procedure import current_duel
-        from yasuki_core.engine.rules.duel.records import DuelStep
+        from yasuki_core.engine.rules.duel.procedure import duel_being_fought
         from yasuki_core.engine.rules.duel.resolution import end_without_resolution
 
-        duel = current_duel(game)
-        if duel is None or duel.step is DuelStep.ENDED:
+        if duel_being_fought(game) is None:
             return []
         return end_without_resolution(game)
 

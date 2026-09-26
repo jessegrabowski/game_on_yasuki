@@ -5,7 +5,7 @@ from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.rules.board.queries import rings_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_chi
-from yasuki_core.engine.rules.duel.records import DuelStep
+from yasuki_core.engine.rules.duel.procedure import duel_being_fought
 from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
@@ -98,8 +98,8 @@ def duelist_left_play(game: GameState) -> list[Effect]:
     A condition rather than a reaction to the leaving, so a Personality destroyed, discarded, moved
     out of play or taken by any other route ends the duel the same way.
     """
-    duel = game.duel
-    if duel is None or duel.step is DuelStep.ENDED:
+    duel = duel_being_fought(game)
+    if duel is None:
         return []
     in_play = {card.id for card in game.table.battlefield.cards}
     if duel.challenger_duelist in in_play and duel.challenged_duelist in in_play:

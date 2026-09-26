@@ -19,17 +19,18 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
 
-def current_duel(game: GameState) -> DuelRecord | None:
-    """The duel on the game, being fought or already ended, or None before the first one."""
-    return game.duel
+def duel_being_fought(game: GameState) -> DuelRecord | None:
+    """The duel being fought, or None where none is. A duel that has ended is not one being fought,
+    however long its record stays on the game for what resolves after it to read."""
+    duel = game.duel
+    return None if duel is None or duel.step is DuelStep.ENDED else duel
 
 
 def duel_in_progress(game: GameState) -> DuelRecord:
     """The duel being fought. Raise ``RuntimeError`` where none is, since every caller here is part
-    of a duel's own procedure and has no second thing to mean. A duel that has ended is not one
-    being fought, however long its record stays on the game."""
-    duel = game.duel
-    if duel is None or duel.step is DuelStep.ENDED:
+    of a duel's own procedure and has no second thing to mean."""
+    duel = duel_being_fought(game)
+    if duel is None:
         raise RuntimeError("no duel is being fought")
     return duel
 
@@ -38,15 +39,14 @@ def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duel
     """Whether a challenge between these two cards happens at all (CR, Challenge): it does not where
     one player controls both, nor where either card is not a Personality.
 
-    A card that has left play since it was targeted names nothing here and is refused with them.
+    An id naming no card on the table is refused too, which is what a Personality that left play
+    between being targeted and the duel being declared amounts to.
     """
     challenger = game.table.cards_by_id.get(challenger_duelist)
     challenged = game.table.cards_by_id.get(challenged_duelist)
     if challenger is None or challenged is None:
         return False
-    if not isinstance(challenger.printed, PersonalityPrint):
-        return False
-    if not isinstance(challenged.printed, PersonalityPrint):
+    if not all(isinstance(card.printed, PersonalityPrint) for card in (challenger, challenged)):
         return False
     return challenger.owner is not challenged.owner
 
@@ -70,11 +70,8 @@ def declare_duel(
     none.
 
     Raise ``RuntimeError`` where a duel is already being fought. One effect that creates several
-    duels fights them one after another (CR, Duration), which nothing models: a duel is one of
-    several procedures a single effect may have to run in sequence, each of which can pause, and
-    that belongs to one mechanism rather than to a queue of this procedure's own. Nothing
-    Shattered Empire-legal reaches it, since Wanton Destruction (Training Grounds) is the only card
-    in the corpus that duels twice.
+    duels fights them one after another (CR, Duration), and running several sub-procedures in
+    sequence from one effect is unbuilt.
     """
     if not challenge_is_legal(game, challenger_duelist, challenged_duelist):
         return
@@ -152,8 +149,8 @@ def focus(game: GameState, seat: PlayerId, token: str) -> None:
 
     The card is peeked back to the seat that focused it, whichever source it came from: a player
     may read every card in its own focusing area, and may not read another player's (CR, Focusing
-    Area). One taken off the Fate deck is taken unseen and becomes readable once it has landed,
-    which is what stops a seat choosing to focus it on what it turns out to be.
+    Area). One taken off the Fate deck is chosen unseen and read once it has landed, so the seat
+    commits to it before learning what it is.
 
     Raise ``ValueError`` if ``token`` names no source this seat can focus with.
     """

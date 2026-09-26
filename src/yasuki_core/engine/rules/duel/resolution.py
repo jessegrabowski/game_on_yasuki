@@ -17,11 +17,8 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 @dataclass(frozen=True, slots=True)
 class RevealFocusedCards(DuelWork):
-    """Turn both focus stacks face up, the step a strike opens (CR, Duel 0.0.7).
-
-    A step of its own rather than the head of the resolution, because the Focus Effects of the cards
-    it reveals resolve between it and the outcome.
-    """
+    """Turn both focus stacks face up, the step a strike opens (CR, Duel 0.0.7). A step of its own
+    because the Focus Effects of the cards it reveals resolve between it and the outcome."""
 
     def resume(self, game: GameState) -> None:
         reveal_focused_cards(game)
@@ -44,11 +41,7 @@ class EndTheDuel(DuelWork):
     focused cards", the entry's last step)."""
 
     def resume(self, game: GameState) -> None:
-        duel = duel_in_progress(game)
-        outcome = duel.outcome
-        if outcome is None:
-            raise RuntimeError("the duel is ending with no outcome recorded")
-        triggers.fire_all(game, end_duel(game, outcome))
+        triggers.fire_all(game, end_duel(game))
 
 
 def reveal_focused_cards(game: GameState) -> None:
@@ -83,16 +76,20 @@ def focus_value(card: L5RCard) -> int:
     return printed if isinstance(printed, int) else 0
 
 
-def end_duel(game: GameState, outcome: DuelOutcome) -> list[GameEvent]:
-    """End the duel with ``outcome``, discarding what was focused and taking the focusing areas off
-    the table (CR, Duel: the focused cards are discarded as the duel ends). Return the events the
-    discards raise, for the caller's cascade to drain.
+def end_duel(game: GameState) -> list[GameEvent]:
+    """End the duel on the outcome already recorded for it, discarding what was focused and taking
+    the focusing areas off the table (CR, Duel: the focused cards are discarded as the duel ends).
+    Return the events the discards raise, for the caller's cascade to drain.
 
     The record stays on the game with its outcome, so what resolves after a duel can still read how
     it went. The next duel declared replaces it.
+
+    Raise ``RuntimeError`` where the duel has no outcome, which is a step that ended a duel it never
+    decided.
     """
     duel = duel_in_progress(game)
-    duel.outcome = outcome
+    if duel.outcome is None:
+        raise RuntimeError("the duel is ending with no outcome recorded")
     duel.option = None
     duel.step = DuelStep.ENDED
     events: list[GameEvent] = []
@@ -116,8 +113,10 @@ def end_without_resolution(game: GameState) -> list[GameEvent]:
     finish. An outstanding focus-or-strike is not withdrawn here, because only the decision layer
     clears a pending request; answering one for a duel that has ended raises instead.
     """
+    duel = duel_in_progress(game)
     game.stack[:] = [item for item in game.stack if not isinstance(item, DuelWork)]
-    return end_duel(game, DuelOutcome(winner=None, losers=(), totals={}, resolved=False))
+    duel.outcome = DuelOutcome(winner=None, losers=(), totals={}, resolved=False)
+    return end_duel(game)
 
 
 def _is_duelist(game: GameState, card: L5RCard) -> bool:
