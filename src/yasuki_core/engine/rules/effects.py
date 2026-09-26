@@ -1437,6 +1437,31 @@ class Bow(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class TurnOver(Effect):
+    """Turn a two-faced card over to whichever face it is not showing.
+
+    It names no face, since a Stronghold that a card already turned to its front goes back to its
+    back (ShE datasheet, The Inheritance Rule).
+    """
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"turn {self.card_id} over"
+
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
+        """A card with no back face has nothing to turn over to."""
+        card = game.table.cards_by_id.get(self.card_id)
+        return card is not None and card.printed.back_card_id is not None
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            card.flip_face()
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class Straighten(Effect):
     """Straighten (unbow) a card. Announces the change, which a card that watches for its own
     straightening reads. One already standing, or forbidden to straighten, announces nothing."""

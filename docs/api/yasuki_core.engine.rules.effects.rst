@@ -79,6 +79,7 @@ yasuki_core.engine.rules.effects
     Straighten
     TakeFavor
     Then
+    TurnOver
     Unpayable
     WinGame
 
