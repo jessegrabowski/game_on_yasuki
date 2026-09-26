@@ -62,6 +62,13 @@ class CardPrint:
 
 
 @dataclass(frozen=True, slots=True)
+class RulebookPrint(CardPrint):
+    """A card standing for something the rules give a player, such as the Imperial Favor. Queries
+    for Fate cards pass over it. Its side is Fate so that the Favor's proxy can sit in a hand, which
+    admits only Fate-side cards."""
+
+
+@dataclass(frozen=True, slots=True)
 class DynastyPrint(CardPrint):
     gold_cost: int | None = None
     image_back: Path | None = DYNASTY_BACK

@@ -66,6 +66,7 @@ from yasuki_core.game_pieces.prints import (
     PersonalityPrint,
     RegionPrint,
     RingPrint,
+    RulebookPrint,
     SenseiPrint,
     StrongholdPrint,
     WindPrint,
@@ -91,6 +92,7 @@ _PRINT_REGISTRY: dict[str, type[CardPrint]] = {
         AttachmentPrint,
         RingPrint,
         AncestorPrint,
+        RulebookPrint,
         DynastyPrint,
         PersonalityPrint,
         HoldingPrint,
@@ -139,6 +141,7 @@ _PERSISTED_PRINT_FIELDS: dict[str, tuple[str, ...]] = {
     + ("attachment_type", "attach_restrictions", "force", "chi", "force_modifier", "chi_modifier"),
     "RingPrint": _FATE_PRINT_FIELDS + ("element",),
     "AncestorPrint": _FATE_PRINT_FIELDS,
+    "RulebookPrint": _BASE_PRINT_FIELDS,
     "DynastyPrint": _DYNASTY_PRINT_FIELDS,
     "PersonalityPrint": _DYNASTY_PRINT_FIELDS
     + ("force", "chi", "personal_honor", "honor_requirement", "weapon_limit"),

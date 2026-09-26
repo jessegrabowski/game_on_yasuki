@@ -19,7 +19,9 @@ from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AncestorPrint,
     AttachmentPrint,
+    FatePrint,
     PersonalityPrint,
+    RulebookPrint,
     SenseiPrint,
     StrongholdPrint,
     WindPrint,
@@ -650,3 +652,26 @@ def test_a_ring_reads_its_element_off_its_keyword():
     }
 
     assert build_print(record).element is Element.AIR
+
+
+def _other_proxy_record(card_id: str) -> dict:
+    return {
+        "card_id": card_id,
+        "name": card_id,
+        "extended_title": card_id,
+        "types": ["Other", "Proxy"],
+        "decks": ["Other"],
+        "text": "",
+        "is_unique": False,
+    }
+
+
+def test_the_imperial_favor_record_builds_a_rulebook_print_on_the_fate_side():
+    printed = build_print(_other_proxy_record("imperial_favor"))
+
+    assert type(printed) is RulebookPrint
+    assert printed.side is Side.FATE
+
+
+def test_a_marker_token_sharing_the_proxy_type_still_builds_a_fate_print():
+    assert type(build_print(_other_proxy_record("token_wealth"))) is FatePrint
