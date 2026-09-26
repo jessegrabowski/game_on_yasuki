@@ -324,5 +324,7 @@ register_interrupt(
         applies=_is_honor_loss,
         located_at=(CardLocation.RULEBOOK,),
         cost=_favor_cost(None),
+        keywords=frozenset({keywords.POLITICAL}),
+        from_rulebook=True,
     ),
 )

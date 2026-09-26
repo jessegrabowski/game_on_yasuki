@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, replace
-from typing import ClassVar
+from typing import ClassVar, Self
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import FlagRegistry
@@ -934,6 +934,10 @@ class AttackEffect(Effect, ABC):
 
     def _compared_stat(self) -> str:
         return "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
+
+    def adjusted_by(self, delta: int) -> Self:
+        """This attack with ``delta`` more strength."""
+        return replace(self, strength=self.strength + delta)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         """The comparison itself changes nothing. What it decides arrives as :meth:`follow_on`."""
@@ -1877,6 +1881,10 @@ class GainHonor(Effect):
     def adjusted(self) -> int:
         return adjusted_honor_change(self.amount, self.adjustment)
 
+    def adjusted_by(self, delta: int) -> Self:
+        """This change with its size moved ``delta`` further, by :func:`adjusted_honor_change`."""
+        return replace(self, adjustment=self.adjustment + delta)
+
     def describe(self) -> str:
         return self._describe(self.seat.name)
 
@@ -1939,6 +1947,59 @@ def adjusted_honor_change(amount: int, adjustment: int) -> int:
     """
     size = max(0, abs(amount) + adjustment)
     return size if amount > 0 else -size
+
+
+@dataclass(frozen=True, slots=True)
+class Adjustment:
+    """An Interrupt's adjustment to one effect of the action, bound to the effect as the forecast
+    showed it and applied as it comes up to resolve. Two Courage discards on one Fear are two of
+    these, each adjusting what the one before left. Plain data, so a game with one pending compares
+    equal to its replay.
+
+    Attributes
+    ----------
+    bound : AttackEffect or GainHonor
+        The action's effect, as first handed to step E, that the Interrupt answered.
+    delta : int
+        The adjustment chosen.
+    """
+
+    bound: AttackEffect | GainHonor
+    delta: int
+
+    def answers(self, effect: Effect) -> bool:
+        return effect == self.bound
+
+    def apply(self, game: GameState, effect: Effect) -> Effect:
+        """``effect`` adjusted, or left as it is where an earlier Interrupt made it something with
+        nothing to adjust."""
+        if isinstance(effect, AttackEffect | GainHonor):
+            return effect.adjusted_by(self.delta)
+        return effect
+
+
+@dataclass(frozen=True, slots=True)
+class AdjustPending(Effect):
+    """Bind an :class:`Adjustment` of ``delta`` to ``bound``, an effect of the action held at the
+    Interrupt step, to apply when that effect comes up to resolve.
+
+    Attributes
+    ----------
+    bound : AttackEffect or GainHonor
+        The action's effect, as first handed to step E.
+    delta : int
+        What to add to its strength or to the size of its Honor change.
+    """
+
+    bound: AttackEffect | GainHonor
+    delta: int
+
+    def describe(self) -> str:
+        return f"{self.bound.describe()}, adjusted by {self.delta:+d}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.modifications.append(Adjustment(self.bound, self.delta))
+        return []
 
 
 @dataclass(frozen=True, slots=True)

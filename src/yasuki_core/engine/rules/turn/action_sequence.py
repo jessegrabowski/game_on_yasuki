@@ -13,7 +13,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     DeclareAttack,
-    DiscardToInterrupt,
     Equip,
     Pass,
     PlayInterrupt,
@@ -34,7 +33,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseDistribution,
     ChooseEquipTarget,
     ChooseFortificationProvince,
-    ChooseInterruptAdjustment,
     ChooseInterruptEffect,
     ChooseInterruptTarget,
     ChooseInvestAmount,
@@ -52,10 +50,8 @@ from yasuki_core.engine.rules.rulebook.recruit import (
     recruit,
 )
 from yasuki_core.engine.rules.interrupts import (
-    apply_interrupt_adjustment,
     apply_interrupt_effect,
     apply_interrupt_target,
-    discard_to_interrupt,
     play_interrupt,
 )
 from yasuki_core.engine.rules.board.seats import cards_in_hand
@@ -73,7 +69,7 @@ from yasuki_core.engine.rules.turn.structure import RoundKind
 # this dispatcher, and a registry read before the card modules load is silently empty.
 # Guarded by test_importing_the_engine_registers_the_cards.
 from yasuki_core.engine.rules import cards  # noqa: F401
-from yasuki_core.engine.rules.rulebook import dishonor, dynasty_discard  # noqa: F401
+from yasuki_core.engine.rules.rulebook import courage_and_honor, dishonor, dynasty_discard  # noqa: F401
 
 
 # How each action reads when a Response Step names the thing it answers. A Response is taken against
@@ -132,10 +128,8 @@ def perform(game: GameState, action: Action) -> None:
         case DeclareAttack():
             resolution.declare_attack(game)
             resolution.open_maneuvers(game)
-        case PlayInterrupt(card_id=card_id):
-            play_interrupt(game, acted_in.priority, card_id)
-        case DiscardToInterrupt(card_id=card_id, key=key):
-            discard_to_interrupt(game, acted_in.priority, card_id, key)
+        case PlayInterrupt(card_id=card_id, interrupt_key=key):
+            play_interrupt(game, acted_in.priority, card_id, key)
         case _:
             raise ValueError(f"no handler for action {type(action).__name__}")
     # An action resolves fully before the next input; one that paused for a decision leaves its
@@ -186,8 +180,6 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             apply_interrupt_target(game, request, response)
         case ChooseInterruptEffect():
             apply_interrupt_effect(game, request, response)
-        case ChooseInterruptAdjustment():
-            apply_interrupt_adjustment(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
         case ChooseAmount():

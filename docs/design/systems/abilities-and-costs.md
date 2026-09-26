@@ -152,8 +152,8 @@ hands its effects to {func}`~yasuki_core.engine.rules.triggers.resolve_action_ef
 held on the stack as a `HeldAction` and, when any seat holds an Interrupt to take, an `ActionRound`
 of kind `INTERRUPT` is pushed over the round the action was taken in, the active player first (CR,
 Action Sequence step D; ShE datasheet, Interrupt). Inside it `legal_actions` offers each seat a
-{class}`~.PlayInterrupt` per card whose Interrupt answers the forecast and a
-{class}`~.DiscardToInterrupt` per card a rulebook Interrupt could discard, plus a `Pass`. A seat
+{class}`~.PlayInterrupt` per card and Interrupt that answers the forecast, naming by key an
+Interrupt a keyword on the card confers, plus a `Pass`. A seat
 holding none is skipped, as is a seat with no unit at the battlefield while a battle is being
 fought (CR, Actions in Battle: the Rule of Presence applies to Interrupts), a seat that took an
 Interrupt is offered again when the opportunity comes round, and consecutive passes close the
@@ -177,8 +177,21 @@ An Interrupt is an action on the tape, so "the action" it modifies stays the one
 step: the action record is not reset by an Interrupt, and backing out of any question an Interrupt
 asks unwinds the Interrupt alone. During an action whose ability sets `unstoppable`, the modifier
 printed ahead of its designator, no other seat is entitled in the step (ShE datasheet,
-Unstoppable). The rulebook Interrupts' once-per-action limit is `GameState.interrupts_taken`,
-cleared with the action.
+Unstoppable). An Interrupt's `limit` says how often a seat may take it: once per turn for one taken
+from play (CR, Using Abilities 0.3), once per action for a Repeatable rulebook Interrupt, recorded
+in `GameState.interrupts_taken` and cleared with the action, or without limit for one that prints
+"any number of times per action".
+
+A keyword confers an Interrupt on every card carrying it through `register_keyword_interrupt`,
+keyed and marked `from_keyword` and `from_rulebook`, the way a keyword confers an ability.
+{func}`~.interrupts_for` lists a card's own Interrupt and the ones its keywords confer, and
+{func}`~.interrupt_for` finds one by key even after the card has lost the keyword. Taken from hand,
+a rulebook Interrupt pays its own `cost` and plays nothing. The datasheet's Courage and Honor
+Interrupts, in `rulebook/courage_and_honor.py`, are two of these. Each asks for its adjustment
+through an {class}`~.AskOption` among its own effects, and the answer returns an
+{class}`~.AdjustPending` that binds the adjustment to the effect, followed by the discard. The
+question comes before the discard, against the CR's order, so that backing out of it leaves the
+card in hand.
 
 A Personality or attachment prints an Interrupt too, taken from play rather than from hand, and an
 Event face up in a Province may as well. Its `located_at` names the battlefield or the Province,

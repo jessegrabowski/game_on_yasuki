@@ -9,6 +9,7 @@ yasuki_core.engine.rules.abilities.model
 
     Ability
     Interrupt
+    InterruptLimit
     Interruption
     InvestAbility
 

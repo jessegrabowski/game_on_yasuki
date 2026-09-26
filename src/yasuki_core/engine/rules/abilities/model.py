@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass
+from enum import Enum
 from types import UnionType
 
 from yasuki_core.engine.rules.abilities.costs import Cost, no_cost, priced_cost
@@ -20,7 +21,7 @@ class Interruption:
     ----------
     replacement : Effect
         The effect that resolves in place of the interrupted one, the same one when the Interrupt
-        leaves it alone.
+        leaves it alone, which binds nothing to it.
     effects : tuple of Effect, optional
         What else the Interrupt does, resolved as the Strategy's own effects before the
         replacement returns. Default none.
@@ -28,6 +29,20 @@ class Interruption:
 
     replacement: Effect
     effects: tuple[Effect, ...] = ()
+
+
+class InterruptLimit(Enum):
+    """How often one seat may take an Interrupt.
+
+    ``ONCE_PER_TURN`` is the default for an Interrupt a card prints and takes from play (CR, Using
+    Abilities 0.3), which the arc's ``abilities_once_per_turn`` switches. ``ONCE_PER_ACTION`` is
+    what the ShE datasheet makes of Repeatable on an Interrupt. ``UNLIMITED`` is for an Interrupt
+    that prints "any number of times per action", as Courage does.
+    """
+
+    ONCE_PER_TURN = "once_per_turn"
+    ONCE_PER_ACTION = "once_per_action"
+    UNLIMITED = "unlimited"
 
 
 @dataclass(frozen=True, slots=True)
@@ -82,6 +97,21 @@ class Interrupt[T: Effect]:
         The name of the one :class:`~yasuki_core.ruleset.Ruleset` the Interrupt is in force under,
         for a card whose text was rewritten between arcs under one id. Default None, for an
         Interrupt every arc reads.
+    key : str, optional
+        Names the Interrupt among the several a card may hold, its own and those its keywords
+        confer, so the action taking it names which. Default None, the card's printed Interrupt.
+    keywords : frozenset of str, optional
+        The ability keywords printed ahead of the designator, as in "Political Interrupt:" or
+        "Courage Repeatable Interrupt:". Default empty.
+    limit : :class:`~.InterruptLimit`, optional
+        How often one seat may take it. Default once per turn.
+    from_keyword : str, optional
+        The keyword that confers this Interrupt on every card carrying it. A keyword's Interrupt is
+        a rulebook one, so ``from_rulebook`` is set with it. Default None, a card's own Interrupt.
+    from_rulebook : bool, optional
+        Whether the rulebook confers this Interrupt rather than the card printing it. Taken from
+        hand, it pays its own ``cost`` and plays nothing, where a card's own hand Interrupt plays
+        the card. Default False.
     """
 
     answers: type[T] | UnionType
@@ -94,6 +124,26 @@ class Interrupt[T: Effect]:
     targets: Callable[[GameState, L5RCard, T], tuple[str, ...]] | None = None
     answers_every: bool = False
     ruleset: str | None = None
+    key: str | None = None
+    keywords: frozenset[str] = frozenset()
+    limit: InterruptLimit = InterruptLimit.ONCE_PER_TURN
+    from_keyword: str | None = None
+    from_rulebook: bool = False
+
+    def __post_init__(self) -> None:
+        """Raise ValueError for a keyword's Interrupt not marked ``from_rulebook``."""
+        if self.from_keyword is not None and not self.from_rulebook:
+            raise ValueError(f"the {self.from_keyword} Interrupt is a rulebook Interrupt")
+
+    def purchase(self, game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
+        """What taking this Interrupt on ``card`` pays for, the way :meth:`Ability.purchase` says."""
+        return _purchase(
+            game,
+            card,
+            keywords=self.keywords,
+            from_rulebook=self.from_rulebook,
+            plays_card=plays_card,
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -214,12 +264,11 @@ class Ability:
         An ability the rulebook confers is a player ability, so it is no action of the card's,
         carries only its own keywords, and plays nothing (CR, Kharmic).
         """
-        if self.from_rulebook:
-            return Purchase(seat=card.owner, card=None, keywords=self.keywords, plays_card=False)
-        return Purchase(
-            seat=card.owner,
-            card=card,
-            keywords=self.keywords | frozenset(effective_keywords(game, card)),
+        return _purchase(
+            game,
+            card,
+            keywords=self.keywords,
+            from_rulebook=self.from_rulebook,
             plays_card=plays_card,
         )
 
@@ -227,6 +276,24 @@ class Ability:
         """The effects ``card`` spends to take this ability, less its seat's discount on it."""
         purchase = self.purchase(game, card, plays_card=plays_card)
         return priced_cost(game, purchase, self.cost(game, card))
+
+
+def _purchase(
+    game: GameState,
+    card: L5RCard,
+    *,
+    keywords: frozenset[str],
+    from_rulebook: bool,
+    plays_card: bool,
+) -> Purchase:
+    if from_rulebook:
+        return Purchase(seat=card.owner, card=None, keywords=keywords, plays_card=False)
+    return Purchase(
+        seat=card.owner,
+        card=card,
+        keywords=keywords | frozenset(effective_keywords(game, card)),
+        plays_card=plays_card,
+    )
 
 
 def once_tag(ability: Ability) -> str:

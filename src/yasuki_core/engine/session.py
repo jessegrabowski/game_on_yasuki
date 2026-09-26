@@ -7,12 +7,7 @@ from yasuki_core.engine.table import TableState
 from yasuki_core.engine.replay.snapshot import InitialRecord
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.vocabulary.actions import (
-    Action,
-    DiscardToInterrupt,
-    Pass,
-    PlayInterrupt,
-)
+from yasuki_core.engine.rules.vocabulary.actions import Action, Pass, PlayInterrupt
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules import legality, projection
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
@@ -41,9 +36,7 @@ def _has_shown_cards(game: GameState) -> bool:
 
 
 def _inside_the_interrupt_step(entry: object) -> bool:
-    return isinstance(entry, Act) and isinstance(
-        entry.action, Pass | PlayInterrupt | DiscardToInterrupt
-    )
+    return isinstance(entry, Act) and isinstance(entry.action, Pass | PlayInterrupt)
 
 
 def _before_the_interrupt_step(entries: list[GameInput], cut: int, seat: PlayerId) -> int:

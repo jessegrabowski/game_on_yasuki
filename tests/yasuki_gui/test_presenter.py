@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.effects import (
     MoveToDeck,
     TakeFavor,
 )
+from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_LABEL
 from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -28,7 +29,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.gold.payment import payment_request
-from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_gui.services.game_runner import GameRunner
@@ -1514,7 +1514,7 @@ def test_the_courage_interrupt_is_offered_on_the_card_and_adjusted_on_the_panel(
     window.popup_at_pointer = lambda entries: offered.extend(entries)
 
     presenter.on_card_activated("P2-courage0")
-    assert [label for label, _ in offered] == [rulebook_interrupt("courage").label]
+    assert [label for label, _ in offered] == [COURAGE_LABEL]
     offered[0][1]()
 
     assert _status(window) == "Fear 2 on guard. Give it +2 or -2 strength?"

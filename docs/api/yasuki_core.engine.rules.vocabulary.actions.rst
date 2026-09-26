@@ -11,7 +11,6 @@ yasuki_core.engine.rules.vocabulary.actions
     ActivateAbility
     BattleDesignator
     DeclareAttack
-    DiscardToInterrupt
     Equip
     Pass
     PlayInterrupt

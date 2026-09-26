@@ -20,7 +20,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     BattleDesignator,
     DeclareAttack,
-    DiscardToInterrupt,
     Equip,
     Pass,
     PlayInterrupt,
@@ -179,7 +178,7 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _strategies(game, seat, only=card_id)
         case DeclareAttack():
             return bool(_declare_attack(game, seat))
-        case PlayInterrupt() | DiscardToInterrupt():
+        case PlayInterrupt():
             return action in _interrupts(game, seat)
         case _:
             raise ValueError(f"no legality rule for action {type(action).__name__}")
