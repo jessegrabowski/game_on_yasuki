@@ -8,6 +8,7 @@ and desktop client surface that same engine. The dependency direction is one-way
 :maxdepth: 1
 
 engine
+build_from_the_vocabulary
 systems/effects
 systems/triggers-and-the-cascade
 systems/stats
