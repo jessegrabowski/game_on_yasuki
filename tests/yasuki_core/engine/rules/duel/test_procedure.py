@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focusing, procedure
-from yasuki_core.engine.rules.duel.records import DuelStep
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine.rules.effects import StartDuel, TakeFavor
 from yasuki_core.engine.rules.triggers import apply_effect
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
@@ -20,11 +20,11 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     FocusOrStrike,
     focus_token,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import StrikeDeclared
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.prints import RulebookPrint
+from yasuki_core.engine.rules.vocabulary.game_events import StrikeDeclared
 
 from tests.yasuki_core.engine.builders import (
     fate_card,

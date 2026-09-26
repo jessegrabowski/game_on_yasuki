@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 
 
 @pytest.fixture
@@ -25,8 +26,9 @@ def reacting():
         *,
         where: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,),
         ruleset: str | None = None,
+        boundary: Boundary | None = None,
     ):
-        triggers.on(event, printed_id, where=where, ruleset=ruleset)(trigger)
+        triggers.on(event, printed_id, where=where, ruleset=ruleset, boundary=boundary)(trigger)
         registered.append((event, printed_id))
 
     yield _register

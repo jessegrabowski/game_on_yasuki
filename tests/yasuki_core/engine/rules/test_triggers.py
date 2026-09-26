@@ -16,11 +16,13 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     ConditionFulfilled,
     Destroyed,
+    DuelDeclared,
     EnteredPlay,
     HonorChanged,
     ProducingGold,
     TurnStarted,
 )
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.state import GameState
@@ -60,6 +62,7 @@ from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, PersonalityP
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
+    personality,
     province_card,
     put_in_play,
     register,
@@ -627,6 +630,37 @@ def test_a_question_asked_in_a_producers_window_is_not_marked(reacting):
     fire(game, ProducingGold(producer.id, PlayerId.P1))
 
     assert isinstance(game.pending, ChooseCards) and not game.pending.triggered
+
+
+@pytest.mark.parametrize("boundary, marked", [(Boundary.BEGINNING, False), (Boundary.END, True)])
+def test_only_the_opening_edge_of_a_duels_declaration_is_a_window(reacting, boundary, marked):
+    # One event names both edges of the declaration, so what makes a question the step's own is the
+    # boundary rather than the event type: at the opening edge the duel has not committed yet.
+    game = two_seat_game()
+    duelist = personality("P1-duelist", printed_id="duel_window_probe")
+    put_in_play(game, duelist)
+    reacting(
+        DuelDeclared,
+        "duel_window_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id)],
+        boundary=boundary,
+    )
+
+    fire(
+        game,
+        DuelDeclared(
+            boundary=boundary,
+            challenger=PlayerId.P1,
+            challenged=PlayerId.P2,
+            challenger_duelist="P1-duelist",
+            challenged_duelist="P2-rival",
+            source_card_id="P1-duelist",
+            challenger_stat=2,
+            challenged_stat=2,
+        ),
+    )
+
+    assert isinstance(game.pending, ChooseCards) and game.pending.triggered is marked
 
 
 def test_the_mark_follows_a_triggers_effects_through_a_then(reacting):

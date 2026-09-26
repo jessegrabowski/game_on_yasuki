@@ -15,7 +15,6 @@ yasuki_core.engine.rules.vocabulary.game_events
     CardFocused
     ConditionFulfilled
     CounterGained
-    DeclaringDuel
     Destroyed
     Dishonored
     DuelDeclared
@@ -34,6 +33,13 @@ yasuki_core.engine.rules.vocabulary.game_events
     Straightened
     StrikeDeclared
     TurnStarted
+
+.. rubric:: Functions
+
+.. autosummary::
+
+    names_both_edges
+    opens_a_window
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.game_events
     :members:

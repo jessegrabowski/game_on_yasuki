@@ -1,7 +1,7 @@
 import pytest
 
-from yasuki_core.engine.rules.turn.structure import Boundary, Moment, Phase, Turn
-from yasuki_core.engine.rules.vocabulary.segments import Segment
+from yasuki_core.engine.rules.turn.structure import Moment, Phase, Turn
+from yasuki_core.engine.rules.vocabulary.segments import Boundary, Segment
 
 
 @pytest.mark.parametrize(

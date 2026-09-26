@@ -5,12 +5,12 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.focusing import focused_cards
-from yasuki_core.engine.rules.duel.records import DuelRecord, DuelStep, DuelWork
+from yasuki_core.engine.rules.duel.records import DuelRecord, DuelWork
+from yasuki_core.engine.rules.vocabulary.segments import Boundary, DuelStep
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardFocused,
-    DeclaringDuel,
     DuelDeclared,
     GameEvent,
     StrikeDeclared,
@@ -100,17 +100,17 @@ def declare_duel(
     # sits above it and resolves before the first seat is asked.
     game.stack.append(OfferFocusOrStrike(challenged))
     return [
-        _declaration(duel, DeclaringDuel, challenger_stat, challenged_stat),
-        _declaration(duel, DuelDeclared, challenger_stat, challenged_stat),
+        _declaration(duel, Boundary.BEGINNING, challenger_stat, challenged_stat),
+        _declaration(duel, Boundary.END, challenger_stat, challenged_stat),
     ]
 
 
-def _declaration[EventT: DeclaringDuel | DuelDeclared](
-    duel: DuelRecord, kind: type[EventT], challenger_stat: int, challenged_stat: int
-) -> EventT:
-    """``kind`` built from ``duel`` and the duel stats it begins on. The two declaration events carry
-    the same fields, since one opens the window the other closes."""
-    return kind(
+def _declaration(
+    duel: DuelRecord, boundary: Boundary, challenger_stat: int, challenged_stat: int
+) -> DuelDeclared:
+    """The declaration at one of its edges, built from ``duel`` and the duel stats it begins on."""
+    return DuelDeclared(
+        boundary=boundary,
         challenger=duel.challenger,
         challenged=duel.challenged,
         challenger_duelist=duel.challenger_duelist,

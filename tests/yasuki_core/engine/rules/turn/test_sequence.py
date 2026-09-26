@@ -30,7 +30,6 @@ from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     BATTLE_SEGMENT_TIMINGS,
-    Boundary,
     BEGINNING_OF_ACTION_PHASE,
     END_OF_TURN,
     FIRED_MOMENTS,
@@ -78,7 +77,7 @@ from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import favor_actions_this_turn, rulebook_proxy
 from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.rulebook.lobby import LOBBY
-from yasuki_core.engine.rules.vocabulary.segments import DuelStep
+from yasuki_core.engine.rules.vocabulary.segments import Boundary, DuelStep
 from yasuki_core.game_pieces.constants import ONYX_LOBBY_PROXY_ID
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit

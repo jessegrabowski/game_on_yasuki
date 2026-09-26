@@ -3,7 +3,12 @@ from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, DuelStep, Segment
+from yasuki_core.engine.rules.vocabulary.segments import (
+    BattleSegment,
+    Boundary,
+    DuelStep,
+    Segment,
+)
 
 
 class Phase(Enum):
@@ -119,13 +124,6 @@ class Turn(Enum):
     """The turn itself as a stage of play, the one enclosing every :class:`~.Phase`."""
 
     CURRENT = "turn"
-
-
-class Boundary(Enum):
-    """Which edge of a stage of play a :class:`~.Moment` names."""
-
-    BEGINNING = "beginning"
-    END = "end"
 
 
 # The stretches of play a Moment can name the edge of: the turn, one of its phases, or one of the

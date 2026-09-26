@@ -124,6 +124,7 @@ numpydoc_xref_aliases = {
     "BattlefieldCardView": "yasuki_core.engine.redaction.BattlefieldCardView",
     "BattlefieldZone": "yasuki_core.engine.zones.BattlefieldZone",
     "BoardPos": "yasuki_core.engine.table.BoardPos",
+    "Boundary": "yasuki_core.engine.rules.vocabulary.segments.Boundary",
     "COLUMN_STEP": "yasuki_gui.layout.COLUMN_STEP",
     "CardPrint": "yasuki_core.game_pieces.prints.CardPrint",
     "PersonalityPrint": "yasuki_core.game_pieces.prints.PersonalityPrint",

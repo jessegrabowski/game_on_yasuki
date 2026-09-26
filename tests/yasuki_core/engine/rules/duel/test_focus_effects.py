@@ -2,7 +2,7 @@ from contextlib import contextmanager
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.duel.focus_effects import FOCUS_EFFECTS, focus_effect
-from yasuki_core.engine.rules.duel.records import DuelStep
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine.rules.effects import Ask, GainHonor
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (

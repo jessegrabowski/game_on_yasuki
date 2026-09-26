@@ -38,3 +38,10 @@ class DuelStep(Enum):
     REVEAL = "reveal"
     RESOLUTION = "resolution"
     ENDED = "ended"
+
+
+class Boundary(Enum):
+    """Which edge of a stage of play a moment names."""
+
+    BEGINNING = "beginning"
+    END = "end"
