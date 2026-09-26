@@ -4,7 +4,8 @@ from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.duel.procedure import duel_in_progress, focused_cards
+from yasuki_core.engine.rules.duel.focusing import focus_value, focused_cards
+from yasuki_core.engine.rules.duel.procedure import duel_in_progress
 from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelStep, DuelWork
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.state import GameState
@@ -68,14 +69,6 @@ def duel_stat(game: GameState, card: L5RCard) -> int:
     return effective_stat(game, card, ruleset.ACTIVE.duel_stat_default)
 
 
-def focus_value(card: L5RCard) -> int:
-    """The Focus Value printed on ``card``, or zero where it prints none. A card with no printed
-    Focus Value contributes nothing rather than refusing to be focused: what may be focused is the
-    focus procedure's business, and this only adds up what was."""
-    printed = getattr(card.printed, "focus", None)
-    return printed if isinstance(printed, int) else 0
-
-
 def end_duel(game: GameState) -> list[GameEvent]:
     """End the duel on the outcome already recorded for it, discarding what was focused and taking
     the focusing areas off the table (CR, Duel: the focused cards are discarded as the duel ends).
@@ -93,6 +86,9 @@ def end_duel(game: GameState) -> list[GameEvent]:
     duel.option = None
     duel.step = DuelStep.ENDED
     events: list[GameEvent] = []
+    owed = ruleset.ACTIVE.focus_procedure.cleanup(game, duel)
+    if owed:
+        triggers.resolve_effects(game, owed)
     for seat in (duel.challenger, duel.challenged):
         for card in focused_cards(game, seat):
             events.extend(triggers.apply_effect(game, Discard(card.id, Rulebook.DUEL_RESOLUTION)))

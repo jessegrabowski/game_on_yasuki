@@ -139,6 +139,7 @@ numpydoc_xref_aliases = {
     "DebugPersonality": "yasuki_core.engine.debug.DebugPersonality",
     "Deck": "yasuki_core.game_pieces.deck.Deck",
     "DuelOutcome": "yasuki_core.engine.rules.duel.records.DuelOutcome",
+    "FocusProcedure": "yasuki_core.engine.rules.duel.focusing.FocusProcedure",
     "DuelRecord": "yasuki_core.engine.rules.duel.records.DuelRecord",
     "DuelStep": "yasuki_core.engine.rules.duel.records.DuelStep",
     "DeckBuilderRepository": "yasuki_gui.ui.deck_builder.deck_data.DeckBuilderRepository",

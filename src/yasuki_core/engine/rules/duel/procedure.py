@@ -3,19 +3,14 @@ from dataclasses import dataclass
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.records import DuelRecord, DuelStep, DuelWork
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    DECK_TOP,
     STRIKE,
     DecisionResponse,
     FocusOrStrike,
-    focus_source,
-    focus_token,
 )
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
-from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
 
@@ -90,6 +85,9 @@ def declare_duel(
     ops.create_focus_area(game.table, challenged)
     duel.step = DuelStep.FOCUSING
     game.stack.append(OfferFocusOrStrike(challenged))
+    opening = ruleset.ACTIVE.focus_procedure.begin(game, duel)
+    if opening:
+        triggers.resolve_effects(game, opening)
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,17 +105,9 @@ class OfferFocusOrStrike(DuelWork):
 
 
 def focus_sources(game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
-    """The tokens ``seat`` may focus with right now: one per card in its hand, and the top of its
-    Fate deck where it has one. Empty for a seat that has focused as often as the ruleset's
-    ``focus_limit`` allows, which leaves it nothing to do but strike."""
-    limit = ruleset.ACTIVE.focus_limit
-    if limit is not None and duel.focuses(seat) >= limit:
-        return ()
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    sources = [focus_token(card.id) for card in hand.cards]
-    if game.table.decks[DeckKey(seat, Side.FATE)].cards:
-        sources.append(DECK_TOP)
-    return tuple(sources)
+    """What ``seat`` may focus with right now, as this arc's focus procedure offers it. Empty for a
+    seat the procedure permits no focus, which leaves it nothing to do but strike."""
+    return ruleset.ACTIVE.focus_procedure.sources(game, duel, seat)
 
 
 def offer_focus_or_strike(game: GameState, seat: PlayerId) -> None:
@@ -148,22 +138,17 @@ def apply_focus_or_strike(
 
 
 def focus(game: GameState, seat: PlayerId, token: str) -> None:
-    """Focus the card ``token`` names into ``seat``'s focusing area, face down.
+    """Focus the card ``token`` names for ``seat``, counting it against the seat's own limit.
 
-    The card is peeked back to the seat that focused it, whichever source it came from: a player
-    may read every card in its own focusing area, and may not read another player's (CR, Focusing
-    Area). One taken off the Fate deck is chosen unseen and read once it has landed, so the seat
-    commits to it before learning what it is.
-
-    Raise ``ValueError`` if ``token`` names no source this seat can focus with.
+    What a focus does belongs to the arc's focus procedure, which may return effects of its own for
+    the duel to resolve. Raise ``ValueError`` if ``token`` names no source this seat can focus
+    with.
     """
     duel = duel_in_progress(game)
-    card = _source_card(game, seat, token)
-    ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.FOCUS))
-    card.turn_face_down()
-    card.clear_peekers()
-    card.add_peeker(seat)
+    effects = ruleset.ACTIVE.focus_procedure.focus(game, duel, seat, token)
     duel.focused[seat] = duel.focuses(seat) + 1
+    if effects:
+        triggers.resolve_effects(game, effects)
 
 
 def strike(game: GameState, seat: PlayerId) -> None:
@@ -182,25 +167,3 @@ def strike(game: GameState, seat: PlayerId) -> None:
     duel.option = None
     # Pushed in reverse, so they run in the CR's order: reveal, then the outcome, then the end.
     game.stack.extend((EndTheDuel(), DecideTheDuel(), RevealFocusedCards()))
-
-
-def focused_cards(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
-    """What ``seat`` has focused, in the order it focused them. Empty for a seat with no focusing
-    area, which is every seat outside a duel."""
-    zone = game.table.zones.get(ZoneKey(seat, ZoneRole.FOCUS))
-    return () if zone is None else tuple(zone.cards)
-
-
-def _source_card(game: GameState, seat: PlayerId, token: str) -> L5RCard:
-    """The card ``token`` names, as :func:`~.focus_sources` offered it."""
-    if token == DECK_TOP:
-        deck = game.table.decks[DeckKey(seat, Side.FATE)]
-        if not deck.cards:
-            raise ValueError(f"{seat.name} has no Fate card to focus off the deck")
-        return deck.cards[-1]
-    card_id = focus_source(token)
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    for card in hand.cards:
-        if card.id == card_id:
-            return card
-    raise ValueError(f"{card_id!r} is not in {seat.name}'s hand to focus")

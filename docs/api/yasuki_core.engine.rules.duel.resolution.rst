@@ -19,7 +19,6 @@ yasuki_core.engine.rules.duel.resolution
     duel_total
     end_duel
     end_without_resolution
-    focus_value
     reveal_focused_cards
 
 .. automodule:: yasuki_core.engine.rules.duel.resolution

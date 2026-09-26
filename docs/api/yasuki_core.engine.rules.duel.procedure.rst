@@ -20,7 +20,6 @@ yasuki_core.engine.rules.duel.procedure
     duel_in_progress
     focus
     focus_sources
-    focused_cards
     offer_focus_or_strike
     strike
 
