@@ -7,7 +7,7 @@ yasuki_core.engine.rules.rulebook.legacy
 
 .. autosummary::
 
-    legacy
+    is_legacy
 
 .. automodule:: yasuki_core.engine.rules.rulebook.legacy
     :members:

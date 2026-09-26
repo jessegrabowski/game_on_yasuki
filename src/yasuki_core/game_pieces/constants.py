@@ -8,6 +8,8 @@ IMPERIAL_FAVOR_ID = "imperial_favor"
 RULEBOOK_PROXY_IDS = (IMPERIAL_FAVOR_ID,)
 # The Cycle rulebook ability is activated from a proxy each seat holds in its rulebook zone.
 CYCLE_PROXY_ID = "cycle"
+# The Legacy rulebook ability is activated from a proxy each seat holds in its rulebook zone.
+LEGACY_PROXY_ID = "legacy"
 
 
 class Side(str, Enum):

@@ -2,6 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.cycle import is_cycle
+from yasuki_core.engine.rules.rulebook.legacy import is_legacy
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
@@ -36,7 +37,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DiscardToInterrupt,
     Equip,
-    Legacy,
     Pass,
     PlayInterrupt,
     PlayStrategy,
@@ -433,7 +433,13 @@ def test_board_menu_offers_legacy_in_the_dynasty_phase():
     runner = _runner(p1_hand=1)  # a hand card to pay the banish cost
     _to_dynasty(runner)
 
-    assert runner.board_menu() == [("Legacy: banish a card to search for a Legacy card", Legacy())]
+    [(label, action)] = runner.board_menu()
+    assert is_legacy(action)
+    assert label == (
+        "Dynasty: Banish a card from your hand to search your deck and Provinces for a Legacy card. "
+        "Put it face up in one of your Provinces, discarding the card there. If you fail to find a "
+        "Legacy card, you lose the game."
+    )
 
 
 def test_board_menu_offers_cycle_on_the_opening_turn():
@@ -761,7 +767,8 @@ def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
     runner_ = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
     runner_.session.game.table.cards_by_id["pv"].turn_face_down()
     _to_dynasty(runner_)
-    runner_.act(Legacy())
+    [(_, legacy)] = runner_.board_menu()
+    runner_.act(legacy)
 
     # The banish cost is paid from hand, which the board shows. That stays a board selection.
     assert runner_.search_view() is None

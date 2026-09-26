@@ -32,7 +32,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DiscardToInterrupt,
     Equip,
     Inheritance,
-    Legacy,
     Lobby,
     PlayInterrupt,
     PlayStrategy,
@@ -261,7 +260,6 @@ class GameRunner:
         game = self.session.game
         proxies = game.table.zones[ZoneKey(self.human, ZoneRole.RULEBOOK)].cards
         labels = {
-            Legacy(): "Legacy: banish a card to search for a Legacy card",
             Lobby(): "Lobby: bow a Personality to take the Imperial Favor",
         }
         items: list[tuple[str, Action]] = []

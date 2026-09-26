@@ -51,7 +51,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
     DiscardToInterrupt,
-    Legacy,
     Pass,
     PlayInterrupt,
     PlayStrategy,
@@ -791,7 +790,7 @@ def test_a_played_interrupts_own_effects_resolve_inside_the_step_and_are_not_the
 def _inside_an_action() -> GameState:
     game = two_seat_game()
     _honor_card(game.table, "P2-honor0", P2)
-    game.action = Legacy()
+    game.action = DeclareAttack()
     return game
 
 
@@ -907,7 +906,7 @@ def test_a_then_among_the_actions_effects_is_still_the_actions():
 def test_a_delayed_change_at_the_end_of_the_turn_asks_nobody():
     game = GameState.start(dealt_table(hand=0), P1)
     _honor_card(game.table, "P2-honor0", P2)
-    game.action = Legacy()
+    game.action = DeclareAttack()
     game.delayed.append((END_OF_TURN, GainHonor(P1, -2)))
 
     for _ in range(3):

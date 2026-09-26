@@ -5,7 +5,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
-from yasuki_core.game_pieces.constants import CYCLE_PROXY_ID, Side
+from yasuki_core.game_pieces.constants import CYCLE_PROXY_ID, LEGACY_PROXY_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     FatePrint,
@@ -17,7 +17,6 @@ from yasuki_core.game_pieces.prints import (
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
-    Legacy,
     Pass,
     Recruit,
 )
@@ -65,6 +64,7 @@ from tests.yasuki_core.engine.builders import (
 )
 from yasuki_core.engine.rules.board.queries import rulebook_proxy
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE
+from yasuki_core.engine.rules.rulebook.legacy import LEGACY
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, is_dynasty_discard
 from yasuki_core.bots.agents import make_agent
 from yasuki_core.bots.policies import make_policy
@@ -179,7 +179,8 @@ def test_is_legal_and_the_enumeration_agree_across_a_driven_game():
             for action in offered:
                 assert legality.is_legal(session.game, seat, action), (seat, action)
             cycle = ActivateAbility(rulebook_proxy(session.game, seat, CYCLE_PROXY_ID).id, CYCLE)
-            for action in (*UNKNOWN_CARD, Legacy(), cycle):
+            legacy = ActivateAbility(rulebook_proxy(session.game, seat, LEGACY_PROXY_ID).id, LEGACY)
+            for action in (*UNKNOWN_CARD, legacy, cycle):
                 if action not in offered:
                     assert not legality.is_legal(session.game, seat, action), (seat, action)
             checked += len(offered)

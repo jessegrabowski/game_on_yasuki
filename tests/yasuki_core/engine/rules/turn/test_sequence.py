@@ -18,7 +18,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     UseFavorAbility,
     ActionTiming,
     ActivateAbility,
-    Legacy,
     Pass,
     Recruit,
 )
@@ -623,7 +622,6 @@ def test_an_action_is_worded_for_the_seat_that_must_answer_it():
         action_sequence.describe_action(game, ActivateAbility("caravansary-P1"))
         == "the ability on Caravansary"
     )
-    assert action_sequence.describe_action(game, Legacy()) == "Legacy"
     assert action_sequence.describe_action(game, Lobby()) == "Lobby"
     assert (
         action_sequence.describe_action(game, UseFavorAbility("discard_to_draw"))

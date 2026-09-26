@@ -6,7 +6,6 @@ from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, i
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    Legacy,
     Pass,
     Recruit,
 )
@@ -346,7 +345,7 @@ def test_an_action_the_engine_refused_never_reaches_the_tape():
             observer=_counting(session),
         )
 
-    assert not any(isinstance(e, Act) and isinstance(e.action, Legacy) for e in session.log.entries)
+    assert not any(isinstance(e, Act) and e.action == Cheater.action for e in session.log.entries)
 
 
 def test_a_turn_whose_end_was_never_observed_is_not_recorded():

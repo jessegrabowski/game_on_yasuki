@@ -9,7 +9,8 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.board.queries import rulebook_proxy
 from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE
-from yasuki_core.game_pieces.constants import CYCLE_PROXY_ID
+from yasuki_core.engine.rules.rulebook.legacy import LEGACY
+from yasuki_core.game_pieces.constants import CYCLE_PROXY_ID, LEGACY_PROXY_ID
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.vocabulary.actions import (
     Lobby,
@@ -18,7 +19,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActionTiming,
     ActivateAbility,
-    Legacy,
     Pass,
     PlayStrategy,
     Recruit,
@@ -72,13 +72,14 @@ def test_each_rulebook_action_reports_the_designator_the_cr_prints():
 
     proxies.spawn_rulebook_proxies(game)
     cycle = ActivateAbility(rulebook_proxy(game, PlayerId.P1, CYCLE_PROXY_ID).id, CYCLE)
+    legacy = ActivateAbility(rulebook_proxy(game, PlayerId.P1, LEGACY_PROXY_ID).id, LEGACY)
 
     assert legality.timings_of(game, cycle) == {ActionTiming.LIMITED}
     assert legality.timings_of(game, Recruit("x")) == {ActionTiming.DYNASTY}
     assert legality.timings_of(game, ActivateAbility("x", DYNASTY_DISCARD)) == {
         ActionTiming.DYNASTY
     }
-    assert legality.timings_of(game, Legacy()) == {ActionTiming.DYNASTY}
+    assert legality.timings_of(game, legacy) == {ActionTiming.DYNASTY}
 
 
 def test_every_action_has_a_designator_or_a_stated_reason_not_to():

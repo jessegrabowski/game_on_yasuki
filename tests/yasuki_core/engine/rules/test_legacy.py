@@ -1,25 +1,39 @@
 import pytest
+from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
-from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, LEGACY_PROXY_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint, RulebookPrint
-from yasuki_core.engine.rules.vocabulary.actions import Legacy
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    DynastyPrint,
+    FatePrint,
+    HoldingPrint,
+    RulebookPrint,
+)
+from yasuki_core.engine.rules.abilities.model import Interrupt, Interruption
+from yasuki_core.engine.rules.abilities.registry import register_interrupt
+from yasuki_core.engine.rules.board.queries import rulebook_proxy
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, PlayInterrupt
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
-from yasuki_core.engine.rules.effects import TakeFavor
+from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, CardDiscarded
+from yasuki_core.engine.rules.effects import Effect, Negated, TakeFavor
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.turn.structure import Phase, RoundKind
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.rulebook import legacy
+from yasuki_core.engine.rules.rulebook import legacy, proxies
 from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import end_phase, holding, put_in_play, register
+
+
+def _legacy(game: GameState, seat: PlayerId = PlayerId.P1) -> ActivateAbility:
+    return ActivateAbility(rulebook_proxy(game, seat, LEGACY_PROXY_ID).id, legacy.LEGACY)
 
 
 def _province(table: TableState, index: int):
@@ -142,12 +156,12 @@ def test_legacy_search_pool_is_the_whole_deck_plus_face_down_provinces():
 
 def test_legacy_is_offered_in_the_dynasty_phase_with_a_card_to_banish():
     session = _dynasty_session()
-    assert Legacy() in session.legal_actions(PlayerId.P1)
+    assert _legacy(session.game) in session.legal_actions(PlayerId.P1)
 
 
 def test_legacy_is_not_offered_without_a_card_to_banish():
     session = _dynasty_session(hand=0)
-    assert Legacy() not in session.legal_actions(PlayerId.P1)
+    assert _legacy(session.game) not in session.legal_actions(PlayerId.P1)
 
 
 def _holding_the_favor(state: TableState) -> TableState:
@@ -161,25 +175,25 @@ def test_legacy_is_not_offered_with_only_the_imperial_favor_in_hand():
     session = _dynasty_session_from(_holding_the_favor(_table(hand=0)))
     TakeFavor(PlayerId.P1).perform(session.game)
 
-    assert Legacy() not in session.legal_actions(PlayerId.P1)
+    assert _legacy(session.game) not in session.legal_actions(PlayerId.P1)
 
 
 def test_the_imperial_favor_is_not_a_legacy_banish_candidate():
     session = _dynasty_session_from(_holding_the_favor(_table(hand=1)))
     TakeFavor(PlayerId.P1).perform(session.game)
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
 
     assert session.game.pending.candidates == ("P1-h0",)
 
 
 def test_legacy_is_not_offered_outside_the_dynasty_phase():
     session = EngineSession.start(_table(), PlayerId.P1, seed=7)  # Action phase
-    assert Legacy() not in session.legal_actions(PlayerId.P1)
+    assert _legacy(session.game) not in session.legal_actions(PlayerId.P1)
 
 
 def test_legacy_whiff_loses_the_game():
     session = _dynasty_session(legacy_in=None)
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
 
     assert session.game.loser is PlayerId.P1
@@ -195,7 +209,7 @@ def test_legacy_whiff_loses_the_game():
 
 def test_legacy_banishes_the_chosen_hand_card():
     session = _dynasty_session(hand=2, legacy_in=None)
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h1",)))
 
     banish = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH)]
@@ -204,7 +218,7 @@ def test_legacy_banishes_the_chosen_hand_card():
 
 def test_legacy_finds_a_deck_card_and_places_it_face_up_over_a_province():
     session = _dynasty_session(legacy_in="deck")
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
     assert session.game.pending == ChooseCards(
         seat=PlayerId.P1,
@@ -233,7 +247,8 @@ def test_legacy_places_a_face_down_province_card_and_refills_its_old_province():
     # so drive flow directly on an unrevealed GameState rather than through a session.
     game = GameState.start(_table(legacy_in="province"), PlayerId.P1)
     game.phase = Phase.DYNASTY
-    legacy.legacy(game)
+    proxies.spawn_rulebook_proxies(game)
+    action_sequence.perform(game, _legacy(game))
     action_sequence.submit(game, DecisionResponse(("P1-h0",)))
     action_sequence.submit(game, DecisionResponse(("P1-leg",)))
     assert "P1-leg" not in game.pending.candidates  # the found card can't be its own sacrifice
@@ -245,7 +260,7 @@ def test_legacy_places_a_face_down_province_card_and_refills_its_old_province():
 
 def test_a_found_card_with_no_province_to_displace_is_revealed_where_it_sits():
     session = _dynasty_session(provinces=0, legacy_in="deck")
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
 
@@ -257,19 +272,19 @@ def test_a_found_card_with_no_province_to_displace_is_revealed_where_it_sits():
 
 def test_legacy_is_once_per_turn():
     session = _dynasty_session(legacy_in="deck")
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
 
-    assert Legacy() not in session.legal_actions(PlayerId.P1)
+    assert _legacy(session.game) not in session.legal_actions(PlayerId.P1)
 
 
 def test_legacy_search_offers_every_found_card_to_choose_among():
     session = _dynasty_session(legacy_in="deck")  # seeds "P1-leg" in the deck
     deck = session.game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
     deck.cards.insert(1, register(session.game.table, _legacy_holding(PlayerId.P1, "P1-leg2")))
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
 
     assert set(session.game.pending.candidates) == {"P1-leg", "P1-leg2"}
@@ -279,7 +294,7 @@ def test_legacy_places_the_chosen_card_not_a_default():
     session = _dynasty_session(legacy_in="deck")  # "P1-leg" is first in search order
     deck = session.game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
     deck.cards.insert(1, register(session.game.table, _legacy_holding(PlayerId.P1, "P1-leg2")))
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
 
     session.submit(PlayerId.P1, DecisionResponse(("P1-leg2",)))  # pick the runner-up on purpose
@@ -294,7 +309,7 @@ def test_legacy_places_the_chosen_card_not_a_default():
 
 def test_a_completed_legacy_sequence_replays_to_the_same_state():
     session = _dynasty_session(legacy_in="deck")
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
@@ -313,7 +328,7 @@ def test_the_reshuffle_draws_on_the_games_own_generator():
         session = _dynasty_session(legacy_in="deck")
         session.game.seed, session.game.turn = seed, turn
         session.game.rng = default_rng(seed)
-        session.act(PlayerId.P1, Legacy())
+        session.act(PlayerId.P1, _legacy(session.game))
         session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
         session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
         session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
@@ -382,24 +397,25 @@ def test_the_search_shows_the_seat_its_face_down_province_cards():
     buried = _buried_province_card(session)
     assert buried.peekers == frozenset()  # unseen until the search runs
 
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
 
     assert buried.peekers == frozenset({PlayerId.P1})
 
 
-def test_the_banish_pick_can_be_cancelled():
+def test_the_banish_pick_can_be_cancelled_and_leaves_legacy_unspent():
     session = _dynasty_session(legacy_in="deck")
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
 
     assert session.can_cancel(PlayerId.P1)
     session.cancel(PlayerId.P1)
     assert session.game.pending is None
+    assert _legacy(session.game) in session.legal_actions(PlayerId.P1)
 
 
 def test_no_pick_after_the_search_can_be_cancelled():
     session = _dynasty_session(legacy_in="deck")
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
     assert session.game.pending.resolver == legacy.FIND_RESOLVER
 
@@ -414,7 +430,7 @@ def test_no_pick_after_the_search_can_be_cancelled():
 
 def test_a_resolved_legacy_no_longer_bars_backing_out():
     session = _dynasty_session(legacy_in="deck")
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
@@ -427,7 +443,7 @@ def test_the_search_does_not_show_the_pool_to_the_opponent():
     session = _dynasty_session(legacy_in="deck")
     buried = _buried_province_card(session)
 
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
 
     assert PlayerId.P2 not in buried.peekers
@@ -449,10 +465,107 @@ def test_a_reaction_to_the_displaced_card_sees_the_province_it_left(reacting):
     session = _dynasty_session(legacy_in="deck")
     put_in_play(session.game, holding("P1-eyes", owner=PlayerId.P1, printed_id="legacy_probe"))
 
-    session.act(PlayerId.P1, Legacy())
+    session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
 
     assert seen == [[]]  # the displaced card gone, the Legacy card not yet in its place
     assert [c.id for c in _province(session.game.table, 1).cards] == ["P1-leg"]
+
+
+def test_each_seat_is_dealt_its_own_legacy_proxy():
+    session = _dynasty_session()
+
+    proxies_dealt = [rulebook_proxy(session.game, seat, LEGACY_PROXY_ID) for seat in PlayerId]
+    assert [proxy.owner for proxy in proxies_dealt] == list(PlayerId)
+
+
+def test_an_arc_without_legacy_deals_no_legacy_proxy(monkeypatch):
+    # The Legacy keyword arrived with the Twenty Festivals CR, so the Clan Wars and Jade rulebooks
+    # grant no Legacy ability.
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.IMPERIAL)
+    session = _dynasty_session()
+
+    assert rulebook_proxy(session.game, PlayerId.P1, LEGACY_PROXY_ID) is None
+
+
+def test_legacy_resolves_as_a_rulebook_ability(reacting):
+    resolved = []
+    reacting(ActionResolved, "legacy_probe", lambda ctx: resolved.append(ctx.event) or [])
+    session = _dynasty_session(legacy_in="deck")
+    put_in_play(session.game, holding("P1-eyes", owner=PlayerId.P1, printed_id="legacy_probe"))
+    session.act(PlayerId.P1, _legacy(session.game))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
+
+    assert [event.printed for event in resolved] == [False]
+
+
+register_interrupt(
+    "legacy_negate_probe",
+    Interrupt(
+        label="Interrupt: negate the action's effects",
+        answers=Effect,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+        answers_every=True,
+    ),
+)
+
+
+def _opponent_holds_a_negation(state: TableState) -> TableState:
+    """``state`` with P2 holding an Interrupt that negates every effect of an action. Dealt before
+    the session starts, so a cancel's replay deals it too."""
+    card = L5RCard.of(
+        ActionPrint,
+        id="P2-negate",
+        name="Negate",
+        printed_id="legacy_negate_probe",
+        side=Side.FATE,
+        owner=PlayerId.P2,
+    )
+    state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(register(state, card))
+    return state
+
+
+def test_the_search_waits_for_the_interrupt_step_after_the_banish():
+    session = _dynasty_session_from(_opponent_holds_a_negation(_table(legacy_in="deck")))
+    buried = _buried_province_card(session)
+    session.act(PlayerId.P1, _legacy(session.game))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+
+    assert session.game.round.kind is RoundKind.INTERRUPT
+    assert session.game.action_taken == "the ability on Legacy"  # the banner the opponent reads
+    assert buried.peekers == frozenset()
+    assert not session.game.hidden_card_shown
+
+    session.act(PlayerId.P2, Pass())
+    assert session.game.pending.resolver == legacy.FIND_RESOLVER
+    assert buried.peekers == frozenset({PlayerId.P1})
+
+
+def test_the_opponents_interrupt_question_can_be_cancelled():
+    session = _dynasty_session_from(_opponent_holds_a_negation(_table(legacy_in="deck")))
+    session.act(PlayerId.P1, _legacy(session.game))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.act(PlayerId.P2, PlayInterrupt("P2-negate"))
+
+    assert session.game.pending.seat is PlayerId.P2
+    assert session.can_cancel(PlayerId.P2)
+    session.cancel(PlayerId.P2)
+    assert session.game.round.kind is RoundKind.INTERRUPT
+    assert PlayInterrupt("P2-negate") in session.legal_actions(PlayerId.P2)
+
+
+def test_a_negated_legacy_neither_searches_nor_loses_but_keeps_its_banish():
+    session = _dynasty_session_from(_opponent_holds_a_negation(_table(legacy_in=None)))
+    session.act(PlayerId.P1, _legacy(session.game))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.act(PlayerId.P2, PlayInterrupt("P2-negate"))
+    session.submit(PlayerId.P2, DecisionResponse(()))  # the cost of zero
+
+    banish = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH)]
+    assert not session.game.game_over
+    assert session.game.pending is None
+    assert [card.id for card in banish.cards] == ["P1-h0"]

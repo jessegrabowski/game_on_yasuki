@@ -5,7 +5,8 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Legacy, Pass
+from yasuki_core.engine.rules.rulebook.legacy import LEGACY
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass
 from yasuki_core.bots.policies import (
     POLICIES,
     PassPolicy,
@@ -16,7 +17,7 @@ from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import dealt_table
 
-ACTIONS = [Legacy(), Pass(), ActivateAbility("card-1", DYNASTY_DISCARD)]
+ACTIONS = [ActivateAbility("P1-legacy", LEGACY), Pass(), ActivateAbility("card-1", DYNASTY_DISCARD)]
 
 
 def _draws(policy, view, count):

@@ -3,10 +3,10 @@ from dataclasses import replace
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.cycle import is_cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, is_dynasty_discard
+from yasuki_core.engine.rules.rulebook.legacy import is_legacy
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    Legacy,
     Pass,
     Recruit,
 )
@@ -97,7 +97,7 @@ def test_it_takes_legacy_ahead_of_a_purchase_when_the_pool_beats_the_board():
     province_card(session.game, "onboard", seat=P1, gold_cost=3, gold_production=2)
     buried = holding("buried", owner=P1, keywords=("Legacy",), gold_production=5, gold_cost=3)
 
-    assert _choice(session, [buried]) == Legacy()
+    assert is_legacy(_choice(session, [buried]))
 
 
 def test_it_takes_legacy_over_a_board_it_cannot_pay_for():
@@ -108,7 +108,7 @@ def test_it_takes_legacy_over_a_board_it_cannot_pay_for():
     province_card(session.game, "unreachable", seat=P1, gold_cost=9, gold_production=8)
     buried = holding("buried", owner=P1, keywords=("Legacy",), gold_production=3, gold_cost=2)
 
-    assert _choice(session, [buried]) == Legacy()
+    assert is_legacy(_choice(session, [buried]))
 
 
 def test_it_declines_legacy_the_board_already_beats():

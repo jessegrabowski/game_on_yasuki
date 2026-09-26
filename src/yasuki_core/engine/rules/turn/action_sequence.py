@@ -17,7 +17,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DiscardToInterrupt,
     Equip,
     Inheritance,
-    Legacy,
     Lobby,
     Pass,
     PlayInterrupt,
@@ -67,7 +66,6 @@ from yasuki_core.engine.rules.interrupts import (
     play_interrupt,
 )
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
-from yasuki_core.engine.rules.rulebook.legacy import legacy
 from yasuki_core.engine.rules.rulebook.lobby import apply_lobby_target, lobby
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.effects import DiscardFromHand, PayGold
@@ -94,7 +92,6 @@ _ACTION_WORDING: dict[type, str] = {
     Equip: "the Equip of",
     ActivateAbility: "the ability on",
     PlayStrategy: "the Strategy",
-    Legacy: "Legacy",
     Inheritance: "Inheritance",
     Lobby: "Lobby",
     DeclareAttack: "the attack",
@@ -143,8 +140,6 @@ def perform(game: GameState, action: Action) -> None:
             recruit(game, card_id, invest, proclaim=proclaim)
         case Equip(card_id=card_id, invest=invest):
             equip(game, card_id, invest=invest)
-        case Legacy():
-            legacy(game)
         case Inheritance():
             inheritance(game)
         case Lobby():

@@ -4,7 +4,8 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
-from yasuki_core.engine.rules.vocabulary.actions import Action, Legacy
+from yasuki_core.engine.rules.rulebook.legacy import is_legacy
+from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.bots.policies import PassPolicy, RandomPolicy
@@ -101,7 +102,7 @@ def test_the_driver_stops_when_the_game_ends():
     # dynasty deck loses. A driver that only watched the turn counter would play on regardless.
     class AlwaysLegacy:
         def choose(self, view: GameView, actions: list[Action]) -> Action:
-            return next((a for a in actions if isinstance(a, Legacy)), actions[0])
+            return next((a for a in actions if is_legacy(a)), actions[0])
 
     session = _session()
     controls = {seat: Controls(AlwaysLegacy(), AutoAgent()) for seat in PlayerId}
