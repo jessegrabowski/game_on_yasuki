@@ -4,7 +4,9 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     ask_whose_honor_moves,
     declarable_gold,
+    register_entry,
     register_event_entry,
+    register_ring,
 )
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
@@ -30,7 +32,11 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     top_of_deck,
 )
-from yasuki_core.engine.rules.board.seats import cards_in_play
+from yasuki_core.engine.rules.board.seats import (
+    cards_in_hand,
+    cards_in_play,
+    seat_named,
+)
 from yasuki_core.engine.rules.rulebook.looks import TAKE_ONE_AND_SHUFFLE
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
@@ -38,6 +44,7 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
     AskAmount,
+    AskOption,
     AttackEffect,
     Banish,
     Bow,
@@ -45,6 +52,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Destroy,
     Discard,
+    DiscardFromHand,
     DrawCard,
     Effect,
     Fear,
@@ -69,10 +77,11 @@ from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.state import GameState, used_this_turn
+from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint, RingPrint
@@ -361,6 +370,100 @@ register_ability(
         effects=_culling_grounds_effects,
         hits_every_target=True,
     ),
+)
+
+
+# --- Dark Ring of the Void (Experienced) ---
+
+DARK_VOID_HONOR_LOSS = 3
+DARK_VOID_BANISHED = 2
+
+
+def _dark_ring_of_the_void_experienced_condition(game: GameState, source: L5RCard) -> bool:
+    """ "If this is the only card in your hand when announcing this action." Read as no other card
+    in hand, since once announced the Ring is in the resolution area rather than the hand."""
+    return all(card.id == source.id for card in cards_in_hand(game, source.owner))
+
+
+def _dark_ring_of_the_void_experienced_entry_effects(
+    game: GameState, source: L5RCard
+) -> list[Effect]:
+    return [GainHonor(source.owner, -DARK_VOID_HONOR_LOSS, source_id=source.id)]
+
+
+register_entry(
+    "dark_ring_of_the_void_experienced",
+    condition=_dark_ring_of_the_void_experienced_condition,
+    extra_effects=_dark_ring_of_the_void_experienced_entry_effects,
+    key="enter",
+)
+register_no_enlightenment("dark_ring_of_the_void_experienced")
+
+
+def _dark_ring_of_the_void_experienced_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Bow the Ring and banish two cards from either of your discard piles. The banish is written
+    as "X to Y" after the colon, which this engine reads as part of the cost."""
+    piles = tuple(
+        card.id
+        for role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD)
+        for card in game.table.zones[ZoneKey(source.owner, role)].cards
+    )
+    return [
+        *bow_cost(game, source),
+        Choose(
+            source.owner,
+            piles,
+            DARK_VOID_BANISHED,
+            DARK_VOID_BANISHED,
+            "dark_ring_of_the_void_experienced_banish",
+            source.id,
+        ),
+    ]
+
+
+@choice_resolver("dark_ring_of_the_void_experienced_banish", prompt="Banish two cards")
+def _resolve_dark_ring_of_the_void_experienced_banish(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Banish(card_id) for card_id in chosen]
+
+
+def _dark_ring_of_the_void_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Name the target player."""
+    names = tuple(info.name for info in game.table.seats.values())
+    return [
+        AskOption(
+            source.owner,
+            names,
+            "Who discards a card at random?",
+            "dark_ring_of_the_void_experienced",
+            source.id,
+        )
+    ]
+
+
+@choice_resolver("dark_ring_of_the_void_experienced")
+def _resolve_dark_ring_of_the_void_experienced(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    named = seat_named(game, chosen[0])
+    return [DiscardFromHand(named, 1, seat, None)]
+
+
+register_ring(
+    "dark_ring_of_the_void_experienced",
+    ability=Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=_dark_ring_of_the_void_experienced_cost,
+        targets=itself,
+        effects=_dark_ring_of_the_void_experienced_effects,
+        hits_every_target=True,
+        key="void",
+        keywords=frozenset({keywords.VOID}),
+    ),
+    pitch=None,
 )
 
 
