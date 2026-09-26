@@ -172,6 +172,24 @@ def test_a_reaction_to_the_resolution_reads_the_stats_off_the_declaration(reacti
     assert session.game.duel.outcome.totals == {P1: 3, P2: 6}
 
 
+def test_the_declaration_window_opens_before_the_first_option_is_put(reacting):
+    # The duel queues the first option and then announces the window, so that whatever a card does
+    # in the window resolves before either seat is asked to focus.
+    pending_when_the_window_fired: list = []
+    reacting(
+        DeclaringDuel,
+        HOOK_PROBE,
+        lambda ctx: pending_when_the_window_fired.append(ctx.game.pending) or [],
+    )
+
+    with probe_ability(HOOK_PROBE, DUEL_ABILITY):
+        session = _duel_game()
+        _challenge(session)
+
+        assert pending_when_the_window_fired == [None]
+        assert session.game.pending.seat is P2
+
+
 def test_a_resolved_duel_announces_its_end_after_its_outcome():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
