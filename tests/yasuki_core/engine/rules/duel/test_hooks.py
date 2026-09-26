@@ -66,6 +66,12 @@ def _duel_game(*, chi: dict[PlayerId, int] | None = None) -> EngineSession:
     return EngineSession.start(state, P1)
 
 
+def _challenge(session: EngineSession) -> None:
+    """Take the probe action that puts challenger and rival in a duel."""
+    session.act(P1, ActivateAbility("challenger"))
+    session.submit(P1, DecisionResponse(("rival",)))
+
+
 def _fought(session: EngineSession) -> None:
     """Focus one card each, then strike with P2."""
     session.submit(P2, DecisionResponse((focus_token("P2-fv0"),)))
@@ -80,8 +86,7 @@ def _events(session: EngineSession, kind: type) -> list:
 def test_declaring_a_duel_announces_the_window_and_then_the_duel():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
-        session.act(P1, ActivateAbility("challenger"))
-        session.submit(P1, DecisionResponse(("rival",)))
+        _challenge(session)
 
         window = _events(session, DeclaringDuel)
         declared = _events(session, DuelDeclared)
@@ -96,8 +101,7 @@ def test_declaring_a_duel_announces_the_window_and_then_the_duel():
 def test_each_focus_and_the_strike_are_announced():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
-        session.act(P1, ActivateAbility("challenger"))
-        session.submit(P1, DecisionResponse(("rival",)))
+        _challenge(session)
         _fought(session)
 
         assert [
@@ -112,8 +116,7 @@ def test_each_focus_and_the_strike_are_announced():
 def test_the_reveal_names_both_seats_cards():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
-        session.act(P1, ActivateAbility("challenger"))
-        session.submit(P1, DecisionResponse(("rival",)))
+        _challenge(session)
         _fought(session)
 
         revealed = _events(session, FocusedCardsRevealed)
@@ -125,8 +128,7 @@ def test_the_reveal_names_both_seats_cards():
 def test_the_resolution_carries_the_totals_and_the_stats_the_duel_began_on():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game(chi={P1: 2, P2: 5})
-        session.act(P1, ActivateAbility("challenger"))
-        session.submit(P1, DecisionResponse(("rival",)))
+        _challenge(session)
         _fought(session)
 
         resolved = _events(session, DuelResolved)[0]
@@ -140,8 +142,7 @@ def test_the_resolution_carries_the_totals_and_the_stats_the_duel_began_on():
 def test_a_resolved_duel_announces_its_end_after_its_outcome():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
-        session.act(P1, ActivateAbility("challenger"))
-        session.submit(P1, DecisionResponse(("rival",)))
+        _challenge(session)
         _fought(session)
 
         ended = _events(session, DuelEnded)
@@ -173,7 +174,15 @@ def test_a_duel_that_ends_without_resolving_says_so_in_its_end():
 
 @pytest.mark.parametrize(
     "event_type",
-    [DeclaringDuel, DuelDeclared, CardFocused, StrikeDeclared, FocusedCardsRevealed, DuelResolved],
+    [
+        DeclaringDuel,
+        DuelDeclared,
+        CardFocused,
+        StrikeDeclared,
+        FocusedCardsRevealed,
+        DuelResolved,
+        DuelEnded,
+    ],
 )
 def test_a_card_can_react_to_each_duel_event(reacting, event_type):
     # Every duel event has to be reachable by an ordinary @on registration, which is the only way a
@@ -183,8 +192,7 @@ def test_a_card_can_react_to_each_duel_event(reacting, event_type):
 
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
-        session.act(P1, ActivateAbility("challenger"))
-        session.submit(P1, DecisionResponse(("rival",)))
+        _challenge(session)
         _fought(session)
 
     # CardFocused fires once per focus and the rest once per duel, so the claim is that the
