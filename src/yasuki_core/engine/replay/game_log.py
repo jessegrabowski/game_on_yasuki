@@ -19,7 +19,6 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    Cycle,
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
@@ -292,8 +291,6 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "legacy"}
         case Inheritance():
             return {"kind": "inheritance"}
-        case Cycle():
-            return {"kind": "cycle"}
         case Lobby():
             return {"kind": "lobby"}
         case UseFavorAbility(key=key):
@@ -327,8 +324,6 @@ def _decode_action(payload: dict) -> Action:
         return Legacy()
     if kind == "inheritance":
         return Inheritance()
-    if kind == "cycle":
-        return Cycle()
     if kind == "lobby":
         return Lobby()
     if kind == "use_favor_ability":

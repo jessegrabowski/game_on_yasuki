@@ -10,7 +10,6 @@ yasuki_core.engine.rules.vocabulary.actions
     ActionTiming
     ActivateAbility
     BattleDesignator
-    Cycle
     DeclareAttack
     DiscardToInterrupt
     Equip

@@ -5,6 +5,7 @@ import sys
 
 from yasuki_core.engine.rules import cards
 from yasuki_core.install import registration_audit
+from yasuki_core.install.card_index import read_index
 from yasuki_core.install.registration_audit import (
     unprinted_registrations,
     mislabeled_abilities,
@@ -17,6 +18,7 @@ from yasuki_core.install.registration_audit import (
     unregistered_card_ids,
 )
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.rulebook.proxies import RULEBOOK_PROXY_PRINTS
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -52,9 +54,8 @@ def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():
 # Registries that exist before the first card that registers into one. Listing them keeps the
 # emptiness guard below meaningful for every other registry; drop an entry when its first card
 # lands. "no enlightenment" waits on the Dark Rings and Legacy of Fudo, the Rings that do not
-# count toward Enlightenment. "rulebook proxies" waits on the first player ability an arc grants
-# through a proxy dealt into the rulebook zone.
-KNOWINGLY_EMPTY: set[str] = {"no enlightenment", "rulebook proxies"}
+# count toward Enlightenment.
+KNOWINGLY_EMPTY: set[str] = {"no enlightenment"}
 
 
 def test_no_registry_reports_as_empty():
@@ -67,6 +68,11 @@ def test_no_registry_reports_as_empty():
     assert all(populated.values())
     assert all(card_keyed_data().values())
     assert KNOWINGLY_EMPTY <= registered_card_ids().keys(), "a listed registry no longer exists"
+
+
+def test_a_rulebook_proxy_is_known_without_a_catalog_record():
+    assert not RULEBOOK_PROXY_PRINTS.keys() & read_index()
+    assert unregistered_card_ids({"abilities": frozenset(RULEBOOK_PROXY_PRINTS)}) == []
 
 
 def test_a_misspelled_id_is_reported_with_its_registry_and_a_suggestion():

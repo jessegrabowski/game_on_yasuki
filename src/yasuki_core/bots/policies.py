@@ -5,7 +5,6 @@ from numpy.random import Generator, default_rng
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    Cycle,
     DeclareAttack,
     Equip,
     Legacy,
@@ -13,6 +12,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.cycle import CYCLE, is_cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.bots.agents import PayingAgent
 from yasuki_core.bots.hints import ABILITY_HINTS, optional_cost_answer
@@ -210,13 +210,13 @@ class EconomicCyclePolicy:
         self._answering = PayingAgent()
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
-        cycle = next((action for action in actions if isinstance(action, Cycle)), None)
+        cycle = next((action for action in actions if is_cycle(action)), None)
         if cycle is not None and cards_to_cycle(view):
             return cycle
         return self._buying.choose(view, actions)
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
-        if isinstance(request, ChooseCards) and request.resolver == "cycle":
+        if isinstance(request, ChooseCards) and request.resolver == CYCLE:
             return DecisionResponse(cards_to_cycle(view))
         return self._answering.decide(request, view)
 
@@ -247,7 +247,7 @@ class GoldRushPolicy:
         self._answering = PayingAgent()
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
-        cycle = next((action for action in actions if isinstance(action, Cycle)), None)
+        cycle = next((action for action in actions if is_cycle(action)), None)
         if cycle is not None and _barren_province_cards(view):
             return cycle
         legacy = next((action for action in actions if isinstance(action, Legacy)), None)
@@ -266,7 +266,7 @@ class GoldRushPolicy:
         if isinstance(request, ChooseAbilityTarget):
             return DecisionResponse((_best_ability_target(view, request),))
         if isinstance(request, ChooseCards):
-            if request.resolver == "cycle":
+            if request.resolver == CYCLE:
                 return DecisionResponse(_barren_province_cards(view))
             answer = optional_cost_answer(request.resolver)
             if answer is not None:

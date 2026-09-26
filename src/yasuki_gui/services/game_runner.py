@@ -29,7 +29,6 @@ from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    Cycle,
     DiscardToInterrupt,
     Equip,
     Inheritance,
@@ -196,10 +195,12 @@ class GameRunner:
                 and action.card_id == card_id
                 and not is_dynasty_discard(action)
             ):
-                ability = ability_for(self.session.game, card, action.ability_key)
-                label = ability_label(card, ability) if ability is not None else "Activate ability"
-                items.append((label, action))
+                items.append((self._ability_label(card, action), action))
         return items
+
+    def _ability_label(self, card: L5RCard, action: ActivateAbility) -> str:
+        ability = ability_for(self.session.game, card, action.ability_key)
+        return ability_label(card, ability) if ability is not None else "Activate ability"
 
     def inheritance_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The Inheritance action offered on the human's own Stronghold, when it is legal now. Empty
@@ -254,14 +255,24 @@ class GameRunner:
         return items
 
     def board_menu(self) -> list[tuple[str, Action]]:
-        """The labeled rulebook abilities, for a right-click on the empty board. These belong to no
-        card, so the board is the only place they can be offered. Empty when none is legal now."""
+        """The labeled rulebook abilities, for a right-click on the empty board: those on the
+        human's rulebook proxies, which are never drawn, and the rulebook actions that belong to no
+        card. The board is the only place either can be offered. Empty when none is legal now."""
+        game = self.session.game
+        proxies = game.table.zones[ZoneKey(self.human, ZoneRole.RULEBOOK)].cards
         labels = {
             Legacy(): "Legacy: banish a card to search for a Legacy card",
-            Cycle(): "Cycle: put Province cards on the bottom of your deck",
             Lobby(): "Lobby: bow a Personality to take the Imperial Favor",
         }
-        return [(labels[action], action) for action in self.legal_actions() if action in labels]
+        items: list[tuple[str, Action]] = []
+        for action in self.legal_actions():
+            if isinstance(action, ActivateAbility):
+                card = game.table.cards_by_id[action.card_id]
+                if card in proxies:
+                    items.append((self._ability_label(card, action), action))
+            elif action in labels:
+                items.append((labels[action], action))
+        return items
 
     def legacy_search_pool(self) -> list:
         """The cards the human's Legacy search looks through: its whole dynasty deck plus its

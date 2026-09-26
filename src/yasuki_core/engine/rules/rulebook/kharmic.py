@@ -61,6 +61,7 @@ def kharmic_ability(form: str) -> Ability:
         repeatable=True,
         located_at=(located_at,),
         from_keyword=keywords.KHARMIC,
+        from_rulebook=True,
     )
 
 

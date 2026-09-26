@@ -13,7 +13,6 @@ from yasuki_core.engine.debug import (
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    Cycle,
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
@@ -59,7 +58,6 @@ from yasuki_core.engine.rules.rulebook.recruit import (
     apply_invest_amount,
     recruit,
 )
-from yasuki_core.engine.rules.rulebook.cycle import cycle
 from yasuki_core.engine.rules.rulebook.favor_payment import use_favor_ability
 from yasuki_core.engine.rules.interrupts import (
     apply_interrupt_adjustment,
@@ -98,7 +96,6 @@ _ACTION_WORDING: dict[type, str] = {
     ActivateAbility: "the ability on",
     PlayStrategy: "the Strategy",
     Legacy: "Legacy",
-    Cycle: "Cycle",
     Inheritance: "Inheritance",
     Lobby: "Lobby",
     DeclareAttack: "the attack",
@@ -151,8 +148,6 @@ def perform(game: GameState, action: Action) -> None:
             legacy(game)
         case Inheritance():
             inheritance(game)
-        case Cycle():
-            cycle(game)
         case Lobby():
             lobby(game)
         case UseFavorAbility(key=key):

@@ -152,13 +152,6 @@ class ActivateAbility:
 
 
 @dataclass(frozen=True, slots=True)
-class Cycle:
-    """Take the Cycle rulebook ability (Limited, your first turn only): put one or more face-up
-    Province cards on the bottom of your dynasty deck, then refill and reveal your Provinces. Which
-    cards, and the order they go under in, are chosen through the decision the action raises."""
-
-
-@dataclass(frozen=True, slots=True)
 class Lobby:
     """Take the Lobby rulebook ability: on your turn, with higher Family Honor than each other
     player, bow a Personality to take the Imperial Favor. Which Personality bows is chosen through
@@ -232,7 +225,6 @@ Action = (
     | Equip
     | Legacy
     | ActivateAbility
-    | Cycle
     | Inheritance
     | Lobby
     | UseFavorAbility
@@ -248,7 +240,6 @@ Action = (
 # makes Lobby Limited where the ShE datasheet makes it Open, and which Favor abilities exist at all
 # differs by arc.
 ACTION_TIMINGS: dict[type, ActionTiming] = {
-    Cycle: ActionTiming.LIMITED,
     Recruit: ActionTiming.DYNASTY,
     # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.
     Equip: ActionTiming.OPEN,

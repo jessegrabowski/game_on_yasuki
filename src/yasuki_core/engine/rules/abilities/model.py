@@ -172,12 +172,14 @@ class Ability:
         The keyword whose rulebook ability this is, as the two Kharmic abilities are the Kharmic
         keyword's: set on an ability the keyword confers on every card carrying it, and on a
         variant of one that another card grants. Such an ability is activated wherever its card
-        sits, the hand included, where a card's own ability would instead be played. Default None,
-        for a card's own ability.
-    from_location : bool, optional
-        Whether this is a rulebook ability conferred on every card sitting where ``located_at``
-        names, as Dynasty Discard is on every face-up Province card. It is a player ability, as a
-        keyword's is. Default False.
+        sits, the hand included, where a card's own ability would instead be played. A keyword's
+        ability is a rulebook ability, so ``from_rulebook`` is set with it. Default None, for a
+        card's own ability.
+    from_rulebook : bool, optional
+        Whether the rulebook confers this ability rather than the card printing it: through a
+        keyword, on every card at a location as Dynasty Discard is, or on a proxy in a seat's
+        rulebook zone as Cycle is. It is a player ability, so it plays no card, carries only its own
+        keywords, and is not announced as printed. Default False.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -199,13 +201,12 @@ class Ability:
     targeting_message: str | None = None
     ruleset: str | None = None
     from_keyword: str | None = None
-    from_location: bool = False
+    from_rulebook: bool = False
 
-    @property
-    def from_rulebook(self) -> bool:
-        """Whether the rulebook confers this ability, through a keyword or a location, rather than
-        the card printing it."""
-        return self.from_keyword is not None or self.from_location
+    def __post_init__(self) -> None:
+        """Raise ValueError for a keyword's ability not marked ``from_rulebook``."""
+        if self.from_keyword is not None and not self.from_rulebook:
+            raise ValueError(f"the {self.from_keyword} ability is a rulebook ability")
 
     def purchase(self, game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
         """What taking this ability on ``card`` pays for, when taking it plays the card or not.

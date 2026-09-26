@@ -900,7 +900,8 @@ def _kharmic_offers(session: EngineSession) -> set[ActivateAbility]:
     return {
         action
         for action in session.legal_actions(P1)
-        if isinstance(action, ActivateAbility) and action.card_id != "ground"
+        if isinstance(action, ActivateAbility)
+        and action.ability_key in (KHARMIC_DRAW, KHARMIC_REFILL)
     }
 
 

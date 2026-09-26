@@ -7,7 +7,9 @@ yasuki_core.engine.rules.rulebook.cycle
 
 .. autosummary::
 
-    cycle
+    cycle_candidates
+    is_cycle
+    is_first_turn
 
 .. automodule:: yasuki_core.engine.rules.rulebook.cycle
     :members:
