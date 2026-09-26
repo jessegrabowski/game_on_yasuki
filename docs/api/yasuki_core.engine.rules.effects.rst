@@ -74,11 +74,13 @@ yasuki_core.engine.rules.effects
     Show
     ShuffleDeck
     SpendOncePerTurn
+    SpendSeatOncePerGame
     SpendSeatOncePerTurn
     StartDuel
     Straighten
     TakeFavor
     Then
+    TurnOver
     Unpayable
     WinGame
 

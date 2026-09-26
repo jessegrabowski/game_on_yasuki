@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.game_pieces.constants import (
     CYCLE_PROXY_ID,
+    INHERITANCE_PROXY_ID,
     LEGACY_PROXY_ID,
     ONYX_FAVOR_PROXY_ID,
     PRE_GOLD_FAVOR_PROXY_ID,
@@ -201,7 +202,7 @@ ONYX = Ruleset(
     },
     lobby_timing=ActionTiming.OPEN,
     lobby_keywords=frozenset({keywords.POLITICAL}),
-    rulebook_proxies=(CYCLE_PROXY_ID, LEGACY_PROXY_ID, ONYX_FAVOR_PROXY_ID),
+    rulebook_proxies=(CYCLE_PROXY_ID, LEGACY_PROXY_ID, INHERITANCE_PROXY_ID, ONYX_FAVOR_PROXY_ID),
     battle_segments=_ONYX_BATTLE_SEGMENTS,
     battle_segment_names={
         BattleSegment.ENGAGE: "Engage Segment",

@@ -56,6 +56,7 @@ from yasuki_core.engine.rules.state import (
     GameState,
     StraightenDelay,
     claim_once_per_turn,
+    seat_game_key,
     seat_once_key,
 )
 from yasuki_core.engine.rules.turn.structure import (
@@ -815,6 +816,22 @@ class SpendSeatOncePerTurn(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class SpendSeatOncePerGame(Effect):
+    """Claim ``seat``'s once-per-game use of ``tag``: the :class:`~.SpendSeatOncePerTurn` of a limit
+    that never resets. :func:`~.seat_used_this_game` reads it."""
+
+    seat: PlayerId
+    tag: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} spends {self.tag} for the game"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.use_once(seat_game_key(self.seat, self.tag))
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class PayFavorCost(Effect):
     """Record that the action now resolving is paying a Favor cost.
 
@@ -1434,6 +1451,31 @@ class Bow(Effect):
             return []
         card.bow()
         return [Bowed(self.card_id)]
+
+
+@dataclass(frozen=True, slots=True)
+class TurnOver(Effect):
+    """Turn a two-faced card over to whichever face it is not showing.
+
+    It names no face, since a Stronghold that a card already turned to its front goes back to its
+    back (ShE datasheet, The Inheritance Rule).
+    """
+
+    card_id: str
+
+    def describe(self) -> str:
+        return f"turn {self.card_id} over"
+
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
+        """A card with no back face has nothing to turn over to."""
+        card = game.table.cards_by_id.get(self.card_id)
+        return card is not None and card.printed.back_card_id is not None
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is not None:
+            card.flip_face()
+        return []
 
 
 @dataclass(frozen=True, slots=True)

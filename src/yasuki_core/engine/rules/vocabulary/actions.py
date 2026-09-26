@@ -77,13 +77,6 @@ class Recruit:
 
 
 @dataclass(frozen=True, slots=True)
-class Inheritance:
-    """Take the Inheritance rulebook ability (Dynasty, once per game, only if you did not go first):
-    turn your Stronghold over to give a Holding you control +3 Gold Production for the turn. The
-    Holding is chosen through the decision the action raises. [ShE]"""
-
-
-@dataclass(frozen=True, slots=True)
 class PlayStrategy:
     """Play a Strategy from hand for its Gold Cost, resolve its ability, and discard it.
 
@@ -200,7 +193,6 @@ Action = (
     | PlayStrategy
     | Equip
     | ActivateAbility
-    | Inheritance
     | Lobby
     | DeclareAttack
     | PlayInterrupt
@@ -216,7 +208,6 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     Recruit: ActionTiming.DYNASTY,
     # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.
     Equip: ActionTiming.OPEN,
-    Inheritance: ActionTiming.DYNASTY,
     DeclareAttack: ActionTiming.ATTACK,
     PlayInterrupt: ActionTiming.INTERRUPT,
     DiscardToInterrupt: ActionTiming.INTERRUPT,

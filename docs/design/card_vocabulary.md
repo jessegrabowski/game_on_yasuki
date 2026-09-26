@@ -114,6 +114,7 @@ deferred through `Then` instead.
    Straighten
    TakeFavor
    Then
+   TurnOver
    Unpayable
 ```
 
@@ -170,7 +171,6 @@ Legality with respect to game state is checked separately.
    ChooseDistribution
    ChooseEquipTarget
    ChooseFortificationProvince
-   ChooseInheritanceTarget
    ChooseInterruptEffect
    ChooseInterruptTarget
    ChooseInvestAmount

@@ -15,7 +15,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
-    Inheritance,
     Lobby,
     Pass,
     PlayInterrupt,
@@ -36,7 +35,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseDistribution,
     ChooseEquipTarget,
     ChooseFortificationProvince,
-    ChooseInheritanceTarget,
     ChooseInterruptAdjustment,
     ChooseInterruptEffect,
     ChooseInterruptTarget,
@@ -62,7 +60,6 @@ from yasuki_core.engine.rules.interrupts import (
     discard_to_interrupt,
     play_interrupt,
 )
-from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
 from yasuki_core.engine.rules.rulebook.lobby import apply_lobby_target, lobby
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.effects import DiscardFromHand, PayGold
@@ -89,7 +86,6 @@ _ACTION_WORDING: dict[type, str] = {
     Equip: "the Equip of",
     ActivateAbility: "the ability on",
     PlayStrategy: "the Strategy",
-    Inheritance: "Inheritance",
     Lobby: "Lobby",
     DeclareAttack: "the attack",
 }
@@ -131,8 +127,6 @@ def perform(game: GameState, action: Action) -> None:
             recruit(game, card_id, invest, proclaim=proclaim)
         case Equip(card_id=card_id, invest=invest):
             equip(game, card_id, invest=invest)
-        case Inheritance():
-            inheritance(game)
         case Lobby():
             lobby(game)
         case ActivateAbility(card_id=card_id, ability_key=ability_key):
@@ -192,8 +186,6 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             apply_ability_target(game, request, response)
         case ChooseEquipTarget():
             apply_equip_target(game, request, response)
-        case ChooseInheritanceTarget():
-            apply_inheritance_target(game, request, response)
         case ChooseLobbyTarget():
             apply_lobby_target(game, request, response)
         case ChooseFortificationProvince():

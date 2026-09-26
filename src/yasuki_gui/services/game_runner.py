@@ -8,6 +8,7 @@ from yasuki_core.engine.driver import Controls, MAX_ACTIONS_PER_ROUND
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.board.queries import remaining_look
+from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.abilities.registry import (
     ability_for,
     ability_label,
@@ -17,10 +18,10 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.interrupts import rulebook_interrupt
-from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
+from yasuki_core.engine.rules.rulebook.inheritance import is_inheritance
 from yasuki_core.engine.rules.rulebook.legacy import FIND_RESOLVER
 from yasuki_core.engine.rules.rulebook.recruit import PROCLAIM_GAINS
 from yasuki_core.engine.rules.state import GameState
@@ -31,7 +32,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DiscardToInterrupt,
     Equip,
-    Inheritance,
     Lobby,
     PlayInterrupt,
     PlayStrategy,
@@ -201,15 +201,17 @@ class GameRunner:
         return ability_label(card, ability) if ability is not None else "Activate ability"
 
     def inheritance_menu(self, card_id: str) -> list[tuple[str, Action]]:
-        """The Inheritance action offered on the human's own Stronghold, when it is legal now. Empty
-        for any other card, and for a seat that went first or has already spent it."""
-        stronghold = legality.seat_stronghold(self.session.game, self.human)
+        """The Inheritance ability on the human's rulebook proxy, offered on its own Stronghold
+        when it is legal now. Empty for any other card, and for a seat that went first or has
+        already spent it."""
+        game = self.session.game
+        stronghold = seat_stronghold(game, self.human)
         if stronghold is None or stronghold.id != card_id:
             return []
         return [
-            (f"Inheritance: turn over for +{INHERITANCE_PRODUCTION}GP", action)
+            (self._ability_label(game.table.cards_by_id[action.card_id], action), action)
             for action in self.legal_actions()
-            if isinstance(action, Inheritance)
+            if is_inheritance(action)
         ]
 
     def favor_menu(self, card_id: str) -> list[tuple[str, Action]]:
@@ -252,7 +254,8 @@ class GameRunner:
         """The labeled rulebook abilities, for a right-click on the empty board: those on the
         human's rulebook proxies, which are never drawn, and the rulebook actions that belong to no
         card. The board is the only place either can be offered. The Favor abilities are left to
-        :meth:`favor_menu`. Empty when none is legal now."""
+        :meth:`favor_menu`, and Inheritance to :meth:`inheritance_menu`, on the Stronghold it turns
+        over. Empty when none is legal now."""
         game = self.session.game
         proxies = game.table.zones[ZoneKey(self.human, ZoneRole.RULEBOOK)].cards
         labels = {
@@ -262,7 +265,7 @@ class GameRunner:
         for action in self.legal_actions():
             if isinstance(action, ActivateAbility) and not is_favor_ability(action):
                 card = game.table.cards_by_id[action.card_id]
-                if card in proxies:
+                if card in proxies and not is_inheritance(action):
                     items.append((self._ability_label(card, action), action))
             elif action in labels:
                 items.append((labels[action], action))

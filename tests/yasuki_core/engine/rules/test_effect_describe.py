@@ -66,6 +66,7 @@ from yasuki_core.engine.rules.effects import (
     StartDuel,
     EndDuel,
     SpendSeatOncePerTurn,
+    SpendSeatOncePerGame,
     PayGold,
     IgnoreHonorRequirements,
     MoveToDeck,
@@ -79,6 +80,7 @@ from yasuki_core.engine.rules.effects import (
     ReshuffleFromHand,
     RevokeGrants,
     Straighten,
+    TurnOver,
     Then,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Condition, Duration, Stat
@@ -180,6 +182,11 @@ EFFECTS = [
         SpendSeatOncePerTurn(PlayerId.P1, "flashy_technique"),
         "P1 spends flashy_technique for the turn",
     ),
+    (
+        SpendSeatOncePerGame(PlayerId.P2, "inheritance"),
+        "P2 spends inheritance for the game",
+    ),
+    (TurnOver("P2-SH"), "turn P2-SH over"),
     (
         GrantConditionalModifier(
             "flashy", Condition.ATTACKING, Stat.FORCE, -1, Duration.UNTIL_END_OF_TURN

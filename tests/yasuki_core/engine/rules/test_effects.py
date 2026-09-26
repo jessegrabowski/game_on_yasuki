@@ -35,6 +35,8 @@ from yasuki_core.engine.rules.effects import (
     Rehonor,
     ReshuffleFromHand,
     RevokeGrants,
+    SpendSeatOncePerGame,
+    TurnOver,
     seppuku,
     TakeFavor,
     InterruptingEffect,
@@ -49,7 +51,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     HonorChanged,
     Rehonored,
 )
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, seat_used_this_game
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
     Duration,
@@ -64,6 +66,7 @@ from yasuki_core.game_pieces.counters import WEALTH
 
 from tests.yasuki_core.engine.builders import (
     fate_card,
+    flip_stronghold,
     holding,
     personality,
     province_card,
@@ -274,6 +277,37 @@ def test_granting_a_counter_always_applies():
     game = two_seat_game()
     card = put_in_play(game, holding("P1-h"))
     assert AdjustCounter(card.id, WEALTH, 1).is_payable(game) is True
+
+
+def test_turning_over_alternates_a_two_faced_card_between_its_faces():
+    game = two_seat_game()
+    card = put_in_play(game, flip_stronghold("keep", flipped=True))
+
+    resolve_effects(game, [TurnOver(card.id)])
+    assert card.showing_back is False
+    resolve_effects(game, [TurnOver(card.id)])
+    assert card.showing_back is True
+
+
+def test_only_a_card_with_a_back_face_can_pay_to_turn_over():
+    game = two_seat_game()
+    two_faced = put_in_play(game, flip_stronghold("keep"))
+    one_faced = put_in_play(game, holding("P1-h"))
+
+    assert TurnOver(two_faced.id).is_payable(game) is True
+    assert TurnOver(one_faced.id).is_payable(game) is False
+    assert TurnOver("gone").is_payable(game) is False
+
+
+def test_a_once_per_game_spend_outlasts_the_turn_and_binds_only_its_seat():
+    game = two_seat_game()
+
+    resolve_effects(game, [SpendSeatOncePerGame(PlayerId.P2, "probe")])
+    game.turn += 5
+
+    assert seat_used_this_game(game, PlayerId.P2, "probe") is True
+    assert seat_used_this_game(game, PlayerId.P1, "probe") is False
+    assert seat_used_this_game(game, PlayerId.P2, "other") is False
 
 
 def test_banishing_needs_a_fate_card_to_banish():
