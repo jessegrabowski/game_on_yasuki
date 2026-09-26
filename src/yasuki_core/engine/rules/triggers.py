@@ -538,6 +538,23 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
 
 
 @dataclass(frozen=True, slots=True)
+class AnnounceEvent:
+    """Announce ``event`` once the work queued above it has run, for a procedure that settles the
+    board before telling anything a card arrived, where the settling may stop to ask a question.
+
+    Attributes
+    ----------
+    event : GameEvent
+        What to announce.
+    """
+
+    event: GameEvent
+
+    def resume(self, game: GameState) -> None:
+        fire(game, self.event)
+
+
+@dataclass(frozen=True, slots=True)
 class HeldAction:
     """An action's effects held at the Interrupt step, beneath the Interrupt round open over them.
     :func:`~yasuki_core.engine.rules.turn.sequence.run_stack` leaves it in place while that round

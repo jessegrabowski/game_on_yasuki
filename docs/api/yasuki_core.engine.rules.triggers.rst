@@ -7,6 +7,7 @@ yasuki_core.engine.rules.triggers
 
 .. autosummary::
 
+    AnnounceEvent
     HeldAction
     Registration
     ResumeCascade

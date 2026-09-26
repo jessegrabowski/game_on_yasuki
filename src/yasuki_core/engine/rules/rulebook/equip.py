@@ -201,10 +201,31 @@ def resolve_equip(
     card = game.table.cards_by_id[card_id]
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
-    # Legal before anything is told it arrived, for the reason _put_into_play gives.
+    # Queued beneath the settling, which may stop to ask a question: the board is legal before
+    # anything is told the card arrived, for the reason _put_into_play gives, and the Invest runs
+    # after the arrival's own cascade.
+    game.stack.append(FinishInvest(card_id, invest_amount))
+    game.stack.append(triggers.AnnounceEvent(EnteredPlay(card_id, from_hand=True)))
     triggers.enforce_state_based_actions(game)
-    triggers.fire(game, EnteredPlay(card_id, from_hand=True))
-    finish_invest(game, card, invest_amount)
+
+
+@dataclass(frozen=True, slots=True)
+class FinishInvest:
+    """Run an Equipped card's Invest once its arrival has been announced.
+
+    Attributes
+    ----------
+    card_id : str
+        The card that entered play.
+    invest_amount : int or None
+        The Invest cost paid alongside the Gold Cost, or None when the Equip took no Invest.
+    """
+
+    card_id: str
+    invest_amount: int | None
+
+    def resume(self, game: GameState) -> None:
+        finish_invest(game, game.table.cards_by_id[self.card_id], self.invest_amount)
 
 
 def is_spell(card: L5RCard) -> bool:

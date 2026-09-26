@@ -122,11 +122,10 @@ def advance(game: GameState) -> None:
     """Advance the active player's turn to the next phase. Past the Dynasty phase, run the end of
     the turn and begin the next. The gold pool empties on every phase change.
 
-    Pause instead of finishing the turn if the end-of-turn discard needs an answer: record the
-    request on ``game.pending`` and return, leaving the caller to :func:`~.submit` a response before
-    advancing again. That discard is the only question the end of a turn may ask. Raise
-    ``RuntimeError`` if a delayed effect asks one of its own, and if called while a decision is
-    already pending.
+    Pause instead of finishing the turn if the end of it asks a question, as the hand-size discard
+    or a delayed effect may: record the request on ``game.pending`` and return, leaving the caller
+    to :func:`~.submit` a response, after which the turn finishes. Raise ``RuntimeError`` if called
+    while a decision is already pending.
     """
     if game.awaiting_decision:
         raise RuntimeError("cannot advance while a decision is pending")
@@ -229,27 +228,64 @@ def _end_turn(game: GameState) -> None:
     # Ending the turn is not an action, so a delayed effect resolving here has nothing to
     # interrupt and nobody to respond to.
     forget_action(game)
+    # The rest of the end of the turn is queued beneath the delayed effects, so one that asks a
+    # question, or changes what a card watches, is answered before the turn goes on.
+    game.stack.append(DrawAtEndOfTurn(seat))
     triggers.resolve_delayed(game, END_OF_TURN)
-    if game.pending is not None:
-        # What is left of the end of the turn (Sincerity, the fate draw, the hand-size discard)
-        # has nowhere to resume from, and setting the discard request would strand the paused
-        # effect's own cascade behind it. Nothing delayed today asks a question.
-        raise RuntimeError("a delayed effect paused the end of the turn, which cannot resume")
-    _accrue_sincerity(game, seat)
-    ops.draw_to_hand(game.table, seat)
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    # A rulebook proxy is not a card, so it neither counts toward the limit nor can be discarded to
-    # meet it.
-    held = [card for card in hand.cards if not favor_proxy.is_rulebook_proxy(card)]
-    excess = len(held) - MAX_HAND_SIZE
-    if excess > 0:
-        candidates = tuple(card.id for card in held)
-        game.pending = DiscardToHandSize(seat, candidates, count=excess)
-        return
     # Reached inside an action's own drain, after that drain has emptied the stack, so this nested
     # one runs only what the turn boundary queues.
-    game.stack.append(BeginNextTurn())
     run_stack(game)
+
+
+@dataclass(frozen=True, slots=True)
+class DrawAtEndOfTurn:
+    """Accrue Sincerity and draw the Fate card that ends ``seat``'s turn, then check its hand
+    against the maximum hand size.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat whose turn is ending.
+    """
+
+    seat: PlayerId
+
+    def resume(self, game: GameState) -> None:
+        _accrue_sincerity(game, self.seat)
+        ops.draw_to_hand(game.table, self.seat)
+        # Queued before the board settles, so a condition the draw fulfills is announced, and a
+        # card in hand watching it offered, before the hand is checked against the limit.
+        game.stack.append(EnforceMaximumHandSize(self.seat))
+        triggers.enforce_state_based_actions(game)
+
+
+@dataclass(frozen=True, slots=True)
+class EnforceMaximumHandSize:
+    """Ask the seat ending its turn to discard down to the maximum hand size, or begin the next
+    turn when it holds no more than that.
+
+    A work item, so what the end-of-turn draw fulfilled is offered first. The discard is asked with
+    nothing left beneath it, since answering it begins the next turn.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat whose turn is ending.
+    """
+
+    seat: PlayerId
+
+    def resume(self, game: GameState) -> None:
+        hand = game.table.zones[ZoneKey(self.seat, ZoneRole.HAND)]
+        # A rulebook proxy is not a card, so it neither counts toward the limit nor can be
+        # discarded to meet it.
+        held = [card for card in hand.cards if not favor_proxy.is_rulebook_proxy(card)]
+        excess = len(held) - MAX_HAND_SIZE
+        if excess > 0:
+            candidates = tuple(card.id for card in held)
+            game.pending = DiscardToHandSize(self.seat, candidates, count=excess)
+            return
+        game.stack.append(BeginNextTurn())
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
@@ -283,16 +319,25 @@ def begin_next_turn(game: GameState) -> None:
     # the list rebuilds identically under replay.
     game.ongoing = [m for m in game.ongoing if m.duration is not Duration.UNTIL_END_OF_TURN]
     # Modifiers expiring can make the board illegal on their own, with no effect committing and so
-    # no cascade to catch it. Settle that before the new turn starts and anything reads the board.
+    # no cascade to catch it. Settle that before the new turn starts and anything reads the board,
+    # with the turn's opening queued beneath in case the settling asks a question.
+    game.stack.append(OpenNextTurn())
     triggers.enforce_state_based_actions(game)
-    triggers.resolve_effects(game, state_based_actions.dishonor_loss(game))
-    if game.game_over:
-        return
-    game.turn += 1
-    game.turn_events = ()
-    game.active = _other(game.active)
-    game.phase = Phase.ACTION
-    _begin_turn(game)
+
+
+@dataclass(frozen=True, slots=True)
+class OpenNextTurn:
+    """Pass the turn to the other seat and open it, once the board the last one left is settled."""
+
+    def resume(self, game: GameState) -> None:
+        triggers.resolve_effects(game, state_based_actions.dishonor_loss(game))
+        if game.game_over:
+            return
+        game.turn += 1
+        game.turn_events = ()
+        game.active = _other(game.active)
+        game.phase = Phase.ACTION
+        _begin_turn(game)
 
 
 def _begin_turn(game: GameState) -> None:
