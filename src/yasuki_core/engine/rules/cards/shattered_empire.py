@@ -654,7 +654,7 @@ register_ability(
         hits_every_target=True,
         tireless=True,
         trait=True,
-        key="draw",
+        key="draw_and_discard",
     ),
 )
 

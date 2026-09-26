@@ -82,7 +82,7 @@ _FAVOR_PROXY_CARD_IDS = frozenset(
 
 def is_favor_ability(action: Action) -> TypeGuard[ActivateAbility]:
     """Whether ``action`` takes a rulebook Favor ability on a seat's Favor proxy. The card is
-    checked as well as the key, because a card may print an ability under the same key."""
+    checked as well as the key, because the Kharmic draw shares the pre-Gold Favor draw's key."""
     return (
         isinstance(action, ActivateAbility)
         and action.ability_key in FAVOR_ABILITY_KEYS

@@ -8,6 +8,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.costs import payable
 from yasuki_core.engine.rules.abilities.registry import abilities_for, ability_for, interrupt_for
+from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW
 from yasuki_core.engine.rules.rulebook.lobby import is_lobby
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
@@ -143,10 +144,9 @@ def test_the_arc_decides_which_favor_proxy_is_dealt(game, proxy_id, keys):
 
 
 @pre_gold_arc
-def test_a_cards_own_ability_under_a_favor_key_is_no_favor_ability(game):
-    # Divination Bowl prints an ability keyed "draw", as the pre-Gold Favor draw is.
+def test_the_kharmic_draw_is_no_favor_ability_though_it_shares_the_key(game):
     assert is_favor_ability(_favor(game, "draw"))
-    assert not is_favor_ability(ActivateAbility("P1-bowl", "draw"))
+    assert not is_favor_ability(ActivateAbility("P1-kharmic", KHARMIC_DRAW))
 
 
 @pytest.mark.parametrize(

@@ -338,7 +338,7 @@ def _crane_edict_in_play(
     return game
 
 
-CRANE_DRAW = ActivateAbility("crane", "draw")
+CRANE_DRAW = ActivateAbility("crane", "draw_and_discard")
 
 
 def _hand_ids(game: GameState) -> list[str]:

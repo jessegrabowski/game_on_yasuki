@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     ability_label,
     _ABILITIES,
     _INVEST,
+    _RULEBOOK_KEYS,
     ENTRY_STATES,
     GRANTED_ABILITIES,
     KEYWORD_ABILITIES,
@@ -29,6 +30,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
 from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.rulebook.cycle import CYCLE
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt, Interruption
 from yasuki_core.engine.rules.effects import Fear
 from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_INTERRUPT
@@ -323,6 +325,29 @@ def test_a_keyword_ability_must_name_its_keyword_and_a_key():
     with pytest.raises(ValueError, match="needs a key"):
         register_keyword_ability(replace(plain, from_keyword="Probe", from_rulebook=True))
     assert "probe" not in KEYWORD_ABILITIES
+
+
+def test_a_printed_ability_may_not_take_a_rulebook_key():
+    plain = _ABILITIES["millet_farm"][0]
+
+    with pytest.raises(ValueError, match="which the rulebook reserves"):
+        register_ability("key_probe", replace(plain, key=CYCLE))
+    assert "key_probe" not in _ABILITIES
+
+
+def test_a_rulebook_ability_may_not_take_a_key_a_printed_card_holds():
+    plain = _ABILITIES["millet_farm"][0]
+    register_ability("key_probe", replace(plain, key="probe_only"))
+
+    try:
+        with pytest.raises(ValueError, match="key_probe already keys an ability 'probe_only'"):
+            register_keyword_ability(
+                replace(plain, key="probe_only", from_keyword="Probe", from_rulebook=True)
+            )
+    finally:
+        _ABILITIES.pop("key_probe", None)
+    assert "probe" not in KEYWORD_ABILITIES
+    assert "probe_only" not in _RULEBOOK_KEYS
 
 
 def test_a_keyword_ability_is_a_rulebook_ability():
