@@ -66,8 +66,10 @@ def test_no_registry_reports_as_empty():
     populated = {
         name: ids for name, ids in registered_card_ids().items() if name not in KNOWINGLY_EMPTY
     }
-    assert all(populated.values())
-    assert all(card_keyed_data().values())
+    empty_registries = sorted(name for name, ids in populated.items() if not ids)
+    empty_data = sorted(name for name, ids in card_keyed_data().items() if not ids)
+    assert empty_registries == []
+    assert empty_data == []
     assert KNOWINGLY_EMPTY <= registered_card_ids().keys(), "a listed registry no longer exists"
 
 
