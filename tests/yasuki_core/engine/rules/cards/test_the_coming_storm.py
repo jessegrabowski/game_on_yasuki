@@ -15,7 +15,7 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
-from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import RulebookPrint, StrongholdPrint
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -97,7 +97,7 @@ def test_defensive_memorial_enters_bowed_and_still_produces_its_gold():
 def _natsuyo_game(*, holds_favor: bool = True) -> GameState:
     """Doji Natsuyo in play, her controller holding the Imperial Favor unless a test says not."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(

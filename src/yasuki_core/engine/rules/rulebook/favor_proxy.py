@@ -2,7 +2,8 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, RULEBOOK_PROXY_IDS
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
+from yasuki_core.game_pieces.prints import RulebookPrint
 
 
 def sync_proxy(game: GameState) -> None:
@@ -47,4 +48,4 @@ def is_rulebook_proxy(card: L5RCard) -> bool:
 
     Not counted toward the maximum hand size.
     """
-    return card.printed_id in RULEBOOK_PROXY_IDS
+    return isinstance(card.printed, RulebookPrint)

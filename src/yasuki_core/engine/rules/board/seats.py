@@ -2,8 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS
-from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import FatePrint, RulebookPrint, StrongholdPrint
 
 
 def cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
@@ -23,7 +22,7 @@ def cards_in_hand(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
     return tuple(
         card
         for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
-        if card.id not in game.announced_from_hand and card.printed_id not in RULEBOOK_PROXY_IDS
+        if card.id not in game.announced_from_hand and not isinstance(card.printed, RulebookPrint)
     )
 
 

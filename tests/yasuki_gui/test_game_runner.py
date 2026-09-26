@@ -1,6 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine import ops
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
@@ -11,6 +12,7 @@ from yasuki_core.game_pieces.prints import (
     HoldingPrint,
     PersonalityPrint,
     RingPrint,
+    RulebookPrint,
     StrongholdPrint,
 )
 from yasuki_core.engine.rules.turn.structure import Phase
@@ -1043,7 +1045,7 @@ def test_ability_menu_offers_one_entry_per_ability_the_card_prints():
 def _favor_runner(p1_hand: int = 0) -> GameRunner:
     """A runner whose seat holds the Imperial Favor, so its proxy is in hand to be clicked."""
     state = _dealt_table(p1_hand)
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     game_runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
@@ -1074,6 +1076,19 @@ def test_an_ordinary_hand_card_offers_no_favor_ability():
     assert game_runner.favor_menu("P1-h0") == []
 
 
+def test_another_rulebook_proxy_in_hand_offers_no_favor_ability():
+    game_runner = _favor_runner(p1_hand=1)
+    other_proxy = ops.spawn_token(
+        game_runner.session.game.table,
+        "P1-other-proxy",
+        RulebookPrint(name="Other Proxy", side=Side.FATE, printed_id="test_other_proxy"),
+        PlayerId.P1,
+        dest=ZoneKey(PlayerId.P1, ZoneRole.HAND),
+    )
+
+    assert game_runner.favor_menu(other_proxy.id) == []
+
+
 def test_the_favor_proxy_offers_nothing_it_cannot_pay_for():
     """The ShE ability discards a Fate card alongside the Favor, and the proxy is not one, so a hand
     holding only the proxy cannot take it."""
@@ -1097,13 +1112,10 @@ def test_taking_a_favor_ability_from_the_menu_runs_it():
 
 
 def test_a_rivals_favor_proxy_offers_the_human_nothing():
-    """A seat that can pay a Favor cost some other way may use the abilities while the rival holds
-    the Favor. The rival's proxy is face up in its hand, so it is on screen and clickable, and
-    hanging the human's own abilities off it would read as taking the rival's card."""
     favor_payer("test_favor_payer")(lambda game, card: [])
     try:
         state = _dealt_table(p1_hand=1)
-        state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
             name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
         )
         payer = L5RCard.of(

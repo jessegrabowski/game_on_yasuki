@@ -32,6 +32,7 @@ from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     FatePrint,
     PersonalityPrint,
+    RulebookPrint,
     StrongholdPrint,
 )
 
@@ -303,7 +304,7 @@ def _courtroom_in_province(*, dishonorable: tuple[str, ...] = ()) -> EngineSessi
     """P1 with the Courtroom face-up in a Province, the Favor uncontrolled, and ``dishonorable``
     Personalities in play."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(state, holding("mine", gold_production=4))
@@ -375,7 +376,7 @@ def test_passing_the_response_leaves_the_favor_uncontrolled():
 
 def test_the_courtroom_in_play_does_not_respond_to_another_cards_recruit():
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(state, holding("mine", gold_production=4))

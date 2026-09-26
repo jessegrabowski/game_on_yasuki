@@ -21,7 +21,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
-from yasuki_core.game_pieces.prints import ActionPrint, DynastyPrint, FatePrint
+from yasuki_core.game_pieces.prints import ActionPrint, DynastyPrint, RulebookPrint
 from yasuki_core.game_pieces.cards import L5RCard
 
 from tests.yasuki_core.engine.builders import (
@@ -42,7 +42,7 @@ def _game(*, holds_favor: bool = True) -> GameState:
     """Commanding Favor in play, its controller holding the Imperial Favor unless a test says
     not."""
     game = GameState.start(TableState.empty_two_seat(), P1, seed=0)
-    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(

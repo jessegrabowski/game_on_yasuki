@@ -45,7 +45,13 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
-from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, RingPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    FatePrint,
+    RingPrint,
+    RulebookPrint,
+    StrongholdPrint,
+)
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
@@ -516,7 +522,7 @@ def _aoi_after_a_lobby() -> EngineSession:
     """P1 has just Lobbied, bowing a Courtier, with Doji Aoi at home. Lobby is Political under the
     datasheet, so the Response Step that follows is one Aoi may answer."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     state.seats[P1].honor = 10
@@ -569,7 +575,7 @@ def test_doji_aoi_is_not_offered_after_an_action_that_is_not_political():
 def _estate_holding_the_favor() -> EngineSession:
     """P1's Stronghold is the Palatial Estate, P1 holds the Favor and a Fate card to spend."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(
@@ -835,7 +841,7 @@ def _sacred_ground(
     window back, unless ``opponent_kharmic`` gives P2 a Kharmic card and the gold to spend it, in
     which case P2 still holds the window."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(
@@ -1145,7 +1151,7 @@ def test_ring_of_the_void_enters_from_hand_and_discards_the_rest_of_the_hand():
 
 
 def _hold_the_favor(session: EngineSession, seat: PlayerId) -> None:
-    session.game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    session.game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     resolve_effects(session.game, [TakeFavor(seat)])

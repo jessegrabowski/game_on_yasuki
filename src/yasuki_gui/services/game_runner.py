@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.rulebook import favor_abilities, favor_proxy
+from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.rulebook.legacy import FIND_RESOLVER
 from yasuki_core.engine.rules.rulebook.recruit import PROCLAIM_GAINS
 from yasuki_core.engine.rules.state import GameState
@@ -48,6 +48,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import CardPrint
 
@@ -215,7 +216,7 @@ class GameRunner:
         player looks for them, so it is what they are hung off.
         """
         card = self.session.game.table.cards_by_id.get(card_id)
-        if card is None or not favor_proxy.is_rulebook_proxy(card) or card.owner is not self.human:
+        if card is None or card.printed_id != IMPERIAL_FAVOR_ID or card.owner is not self.human:
             return []
         offered = {
             action.key: action

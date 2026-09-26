@@ -37,7 +37,7 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, loc
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
-from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, HoldingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint, RulebookPrint
 from yasuki_gui.layout import divider_y
 from yasuki_gui.services.presenter import Presenter
 from yasuki_gui.ui.floating_panel import MIN_H
@@ -1425,7 +1425,7 @@ def test_a_unit_sent_to_a_battlefield_can_still_be_unassigned(a_battle):
 def holding_the_favor():
     """A presenter whose seat holds the Imperial Favor, with a Fate card its ability can discard."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, fate_card("spare", P1)))

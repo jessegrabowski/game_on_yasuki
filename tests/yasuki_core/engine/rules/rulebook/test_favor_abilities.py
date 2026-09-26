@@ -25,7 +25,7 @@ from yasuki_core.engine.table import (
     location_of,
 )
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
-from yasuki_core.game_pieces.prints import FatePrint
+from yasuki_core.game_pieces.prints import RulebookPrint
 
 from tests.yasuki_core.engine.builders import (
     fate_card,
@@ -39,7 +39,7 @@ from tests.yasuki_core.engine.builders import (
 @pytest.fixture
 def game() -> GameState:
     game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
-    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     return game
