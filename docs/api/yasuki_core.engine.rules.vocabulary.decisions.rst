@@ -17,7 +17,6 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseDistribution
     ChooseEquipTarget
     ChooseFortificationProvince
-    ChooseInterruptAdjustment
     ChooseInterruptEffect
     ChooseInterruptTarget
     ChooseInvestAmount

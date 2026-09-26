@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.board.queries import attack_targets, owned_personalities
 from yasuki_core.engine.rules.effects import (
+    AdjustPending,
     Bow,
     Choose,
     Destroy,
@@ -50,7 +51,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     DeclareAttack,
-    DiscardToInterrupt,
     Pass,
     PlayInterrupt,
     PlayStrategy,
@@ -59,8 +59,8 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseBattlefield,
     ChooseCards,
-    ChooseInterruptAdjustment,
     ChooseInterruptEffect,
+    ChooseOption,
     ChooseInterruptTarget,
     ChoosePayment,
     DecisionResponse,
@@ -296,6 +296,16 @@ register_interrupt(
 )
 
 
+register_interrupt(
+    "bow_negating_probe",
+    Interrupt(
+        label="Interrupt: negate a Bow",
+        answers=Bow,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+    ),
+)
+
+
 register_ability(
     "bow_then_destroy_probe",
     Ability(
@@ -360,6 +370,7 @@ def _strategy(
     owner: PlayerId,
     gold_cost: int = 0,
     text: str = "",
+    keywords: tuple[str, ...] = (),
 ) -> L5RCard:
     card = L5RCard.of(
         ActionPrint,
@@ -370,6 +381,7 @@ def _strategy(
         owner=owner,
         gold_cost=gold_cost,
         text=text,
+        keywords=keywords,
     )
     table.zones[ZoneKey(owner, ZoneRole.HAND)].add(register(table, card))
     return card
@@ -382,15 +394,14 @@ COURAGE_UP, COURAGE_DOWN = ("courage", "+2 strength"), ("courage", "-2 strength"
 def _discard_to_interrupt(
     session: EngineSession, seat: PlayerId, card_id: str, adjustment: tuple[str, str]
 ) -> None:
-    """Take a rulebook Interrupt: the action naming the card, then the adjustment it asks for."""
     key, wording = adjustment
-    session.act(seat, DiscardToInterrupt(card_id, key))
+    session.act(seat, PlayInterrupt(card_id, key))
     session.submit(seat, DecisionResponse((wording,)))
 
 
 def _discard_to_interrupt_in(game: GameState, card_id: str, adjustment: tuple[str, str]) -> None:
     key, wording = adjustment
-    action_sequence.perform(game, DiscardToInterrupt(card_id, key))
+    action_sequence.perform(game, PlayInterrupt(card_id, key))
     action_sequence.submit(game, DecisionResponse((wording,)))
 
 
@@ -450,7 +461,7 @@ def _proclaim_session(
 def test_the_opponent_is_offered_the_honor_interrupt_and_the_gain_shrinks():
     session = _proclaim_session({P2: 1})
     assert _asked(session) is P2
-    assert session.legal_actions(P2) == [Pass(), DiscardToInterrupt("P2-honor0", "honor")]
+    assert session.legal_actions(P2) == [Pass(), PlayInterrupt("P2-honor0", "honor")]
     assert session.project(P2).interrupting == "the Recruit of P1-samurai"
 
     _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
@@ -464,10 +475,10 @@ def test_the_opponent_is_offered_the_honor_interrupt_and_the_gain_shrinks():
 def test_naming_the_card_asks_for_the_adjustment_before_anything_moves():
     session = _proclaim_session({P2: 1})
 
-    session.act(P2, DiscardToInterrupt("P2-honor0", "honor"))
+    session.act(P2, PlayInterrupt("P2-honor0", "honor"))
 
     pending = session.game.pending
-    assert isinstance(pending, ChooseInterruptAdjustment)
+    assert isinstance(pending, ChooseOption)
     assert (pending.seat, pending.candidates) == (P2, ("Increase by 1", "Reduce by 1"))
     assert pending.prompt() == f"P1 gains {PERSONAL_HONOR} honor. Increase or reduce it by 1?"
     assert session.game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards == []
@@ -477,13 +488,16 @@ def test_backing_out_of_the_adjustment_reopens_the_offer():
     # Naming the card moved nothing, so the seat may change its mind up to the adjustment, and
     # only that step comes back: the interrupted action stays where it was.
     session = _proclaim_session({P2: 1})
-    session.act(P2, DiscardToInterrupt("P2-honor0", "honor"))
+    session.act(P2, PlayInterrupt("P2-honor0", "honor"))
 
     session.cancel(P2)
 
     assert session.game.pending is None and _asked(session) is P2
-    assert DiscardToInterrupt("P2-honor0", "honor") in session.legal_actions(P2)
+    hand = session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)]
+    assert "P2-honor0" in [card.id for card in hand.cards]
+    assert PlayInterrupt("P2-honor0", "honor") in session.legal_actions(P2)
     assert _honor(session, P1) == 0
+    assert session.game.modifications == []
     _discard_to_interrupt(session, P2, "P2-honor0", HONOR_DOWN)
     assert _honor(session, P1) == PERSONAL_HONOR - 1
 
@@ -564,7 +578,7 @@ def test_a_loss_a_card_prevents_is_not_offered_to_the_honor_interrupt(mishime, o
     pay(session, P1)
     session.submit(P1, DecisionResponse(("disgraced",)))
 
-    assert (DiscardToInterrupt("P2-honor0", "honor") in session.legal_actions(P2)) is offered
+    assert (PlayInterrupt("P2-honor0", "honor") in session.legal_actions(P2)) is offered
 
 
 def test_neither_seat_can_back_out_while_the_interrupt_step_is_open():
@@ -642,6 +656,57 @@ def _fear_announced(
 
 def _guard_bowed(session: EngineSession) -> bool:
     return session.game.table.cards_by_id["guard"].bowed
+
+
+def test_a_strategy_offers_its_own_interrupt_and_the_one_its_keyword_confers():
+    session = _fear_announced({DEFENDER: 1})
+    _strategy(session.game.table, "okura", "okura_is_released", DEFENDER, keywords=("Courage",))
+
+    offered = session.legal_actions(DEFENDER)
+    assert PlayInterrupt("okura") in offered
+    assert PlayInterrupt("okura", "courage") in offered
+
+    _discard_to_interrupt(session, DEFENDER, "okura", COURAGE_DOWN)
+
+    assert not _guard_bowed(session)
+    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)]
+    assert [card.id for card in discard.cards] == ["okura"]
+
+
+def test_discarding_a_strategy_for_courage_does_not_play_it_or_charge_its_gold():
+    session = _fear_announced({DEFENDER: 1})
+    _strategy(
+        session.game.table,
+        "okura",
+        "okura_is_released",
+        DEFENDER,
+        gold_cost=9,
+        keywords=("Courage",),
+    )
+    gold = session.game.gold[DEFENDER]
+
+    assert PlayInterrupt("okura") not in session.legal_actions(DEFENDER)
+    _discard_to_interrupt(session, DEFENDER, "okura", COURAGE_DOWN)
+
+    assert session.game.gold[DEFENDER] == gold
+    assert not _guard_bowed(session)
+
+
+@pytest.mark.parametrize(
+    ("effect", "adjusted"),
+    [
+        (Fear(FEAR, "guard", P1), Fear(FEAR - 2, "guard", P1)),
+        (GainHonor(P1, 3), GainHonor(P1, 3, adjustment=-2)),
+    ],
+    ids=["fear", "honor"],
+)
+def test_an_adjustment_applies_to_the_effect_it_is_bound_to(effect, adjusted):
+    game = two_seat_game()
+
+    AdjustPending(effect, -2).perform(game)
+
+    assert interrupts.as_modified(game, effect) == adjusted
+    assert interrupts.as_modified(game, GainHonor(P2, 3)) == GainHonor(P2, 3)
 
 
 def test_the_defender_is_offered_the_courage_interrupt_and_a_reduction_saves_the_target():
@@ -927,11 +992,6 @@ def test_a_seat_may_take_the_honor_interrupt_once_per_action():
     assert game.table.seats[P1].honor == 1 + 2
 
 
-def test_an_unknown_rulebook_interrupt_is_a_key_error():
-    with pytest.raises(KeyError):
-        interrupts.rulebook_interrupt("valor")
-
-
 def test_the_offer_names_the_card_and_the_player_as_the_seat_reads_them():
     # The log describes an effect by id, which is what a replay needs and not what a player is
     # asked about: the offer and the adjustment question both name the board as the seat sees it.
@@ -1122,7 +1182,7 @@ def test_the_step_opens_before_the_first_effect_and_offers_the_whole_action():
     assert _asked_seat(game) is P2
     assert legality.legal_actions(game, P2) == [
         Pass(),
-        DiscardToInterrupt("P2-honor0", "honor"),
+        PlayInterrupt("P2-honor0", "honor"),
         PlayInterrupt("P2-probe"),
     ]
     assert game.table.seats[P1].honor == 0 and not farm.bowed
@@ -1145,7 +1205,7 @@ def test_a_modification_binds_to_the_effect_named_and_not_the_next_of_its_kind()
     _honor_card(game.table, "P2-honor1", P2)
 
     resolve_action_effects(game, [GainHonor(P1, 2), GainHonor(P1, 3)])
-    action_sequence.perform(game, DiscardToInterrupt("P2-honor0", "honor"))
+    action_sequence.perform(game, PlayInterrupt("P2-honor0", "honor"))
     which = game.pending
     assert isinstance(which, ChooseInterruptEffect)
     assert which.candidates == ("P1 gains 2 honor", "P1 gains 3 honor")
@@ -1162,7 +1222,7 @@ def test_backing_out_of_which_effect_unwinds_the_interrupt():
     _honor_card(game.table, "P2-honor0", P2)
     session = EngineSession.start(game.table, P1)
     session.act(P1, ActivateAbility("P1-h"))
-    session.act(P2, DiscardToInterrupt("P2-honor0", "honor"))
+    session.act(P2, PlayInterrupt("P2-honor0", "honor"))
     assert isinstance(session.game.pending, ChooseInterruptEffect)
 
     assert session.can_cancel(P2)
@@ -1217,7 +1277,7 @@ def test_an_interrupt_bound_to_an_effect_the_action_never_produces_is_spent_with
     # P2 answers the Bow behind the Fear, then makes the Fear miss with Courage: the Bow never
     # comes up, and the modification does not outlive the action to answer a later Bow.
     session = _fear_announced(
-        {DEFENDER: 1}, strategies=(("probe", "bow_interrupt_probe", DEFENDER),)
+        {DEFENDER: 1}, strategies=(("probe", "bow_negating_probe", DEFENDER),)
     )
     session.act(DEFENDER, PlayInterrupt("probe"))
     pay(session, DEFENDER)
@@ -1250,7 +1310,7 @@ def test_an_answer_naming_an_effect_the_forecast_no_longer_holds_is_refused():
     game = _inside_an_action()
     _honor_card(game.table, "P2-honor1", P2)
     resolve_action_effects(game, [GainHonor(P1, 2), GainHonor(P1, 3)])
-    action_sequence.perform(game, DiscardToInterrupt("P2-honor0", "honor"))
+    action_sequence.perform(game, PlayInterrupt("P2-honor0", "honor"))
     request = game.pending
     assert isinstance(request, ChooseInterruptEffect)
 
@@ -1454,7 +1514,7 @@ def test_a_substituted_ability_resolves_with_the_values_the_step_forecast():
     action_sequence.perform(game, PlayInterrupt("P1-sub"))
     action_sequence.submit(game, DecisionResponse(("P1-stand-in",)))
     action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
-    action_sequence.perform(game, DiscardToInterrupt("P1-honor0", "honor"))
+    action_sequence.perform(game, PlayInterrupt("P1-honor0", "honor"))
     action_sequence.submit(game, DecisionResponse(("Reduce by 1",)))
     action_sequence.perform(game, PlayInterrupt("P1-gift"))
     action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
@@ -1502,10 +1562,10 @@ def test_the_adjustment_question_reads_the_effect_as_it_stands():
     session = _fear_announced({DEFENDER: 2})
     _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_UP)
 
-    session.act(DEFENDER, DiscardToInterrupt("P2-courage1", "courage"))
+    session.act(DEFENDER, PlayInterrupt("P2-courage1", "courage"))
 
     question = session.game.pending
-    assert isinstance(question, ChooseInterruptAdjustment)
+    assert isinstance(question, ChooseOption)
     assert question.question == "Fear 4 on guard. Give it +2 or -2 strength?"
 
 
@@ -1516,7 +1576,7 @@ def test_the_which_effect_question_reads_each_effect_as_it_stands_and_takes_the_
     _courage_card(game.table, "P2-courage0", P2)
     _strategy(game.table, "okura", "okura_is_released", P2)
     resolve_action_effects(game, [Fear(FEAR, left.id, P2), Fear(FEAR, right.id, P2)])
-    action_sequence.perform(game, DiscardToInterrupt("P2-courage0", "courage"))
+    action_sequence.perform(game, PlayInterrupt("P2-courage0", "courage"))
     action_sequence.submit(game, DecisionResponse(("Fear 2 on P1-left",)))
     action_sequence.submit(game, DecisionResponse(("+2 strength",)))
 

@@ -17,7 +17,6 @@ from yasuki_core.engine.rules.abilities.registry import (
     invest_amounts,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
@@ -30,7 +29,6 @@ from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    DiscardToInterrupt,
     Equip,
     PlayInterrupt,
     PlayStrategy,
@@ -232,21 +230,19 @@ class GameRunner:
 
     def interrupt_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The Interrupts the open Interrupt step offers the human through ``card_id``, for its
-        left-click menu: a rulebook Interrupt worded as the datasheet prints it, or the card's own.
-        Empty for a card the step offers nothing through, and whenever no step is open."""
+        left-click menu: each the card prints or a keyword on it confers, worded as printed. Empty
+        for a card the step offers nothing through, and whenever no step is open."""
         card = self.session.game.table.cards_by_id[card_id]
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if isinstance(action, PlayInterrupt) and action.card_id == card_id:
-                interrupt = interrupt_for(card)
+                interrupt = interrupt_for(card, action.interrupt_key)
                 label = (
                     interrupt_label(card, interrupt)
                     if interrupt is not None
                     else f"Play {card.name}"
                 )
                 items.append((label, action))
-            elif isinstance(action, DiscardToInterrupt) and action.card_id == card_id:
-                items.append((rulebook_interrupt(action.key).label, action))
         return items
 
     def board_menu(self) -> list[tuple[str, Action]]:

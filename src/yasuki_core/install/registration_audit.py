@@ -565,6 +565,8 @@ NOT_KEYED_BY_CARD = {
     "KEYWORD_ABILITIES",  # keyed by keyword: the abilities one confers on every card carrying it
     "LOCATION_ABILITIES",  # keyed by location: the abilities it confers on every card sitting there
     "KEYWORD_INTERRUPTS",  # keyed by keyword: the Interrupts one confers on every card carrying it
+    "_COURAGE_ADJUSTMENTS",  # keyed by the wording of an adjustment the Interrupt offers
+    "_HONOR_ADJUSTMENTS",  # likewise
     "_LOCATION_ZONE_ROLES",  # the zone role each location off the battlefield names
     "RULEBOOK_PROXY_PRINTS",  # keyed by an engine-owned proxy id, which names no catalog card
     "FAVOR_ABILITY_KEYS",  # the keys of the abilities on the Favor proxies

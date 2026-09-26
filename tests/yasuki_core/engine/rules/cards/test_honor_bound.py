@@ -5,7 +5,6 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
-    DiscardToInterrupt,
     Pass,
     PlayInterrupt,
 )
@@ -48,7 +47,7 @@ def test_okura_leaves_a_target_the_fear_does_not_reach_alone():
 
     session.act(DEFENDER, PlayInterrupt("okura"))
     pay(session, DEFENDER)
-    session.act(DEFENDER, DiscardToInterrupt("P2-courage0", "courage"))
+    session.act(DEFENDER, PlayInterrupt("P2-courage0", "courage"))
     session.submit(DEFENDER, DecisionResponse(("-2 strength",)))
 
     assert _in_play(session, "guard")
@@ -66,7 +65,7 @@ def test_okura_is_not_offered_against_an_effect_it_does_not_answer():
     assert game.round.kind is RoundKind.INTERRUPT
     assert legality.legal_actions(game, DEFENDER) == [
         Pass(),
-        DiscardToInterrupt("P2-honor0", "honor"),
+        PlayInterrupt("P2-honor0", "honor"),
     ]
 
 

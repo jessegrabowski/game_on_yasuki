@@ -6,20 +6,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.costs import can_pay, priced_cost
 from yasuki_core.engine.rules.abilities.activation import ResolveAbility
-from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt
-from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for
+from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt, InterruptLimit
+from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for, interrupts_for
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
-from yasuki_core.engine.rules.board.queries import has_keyword
-from yasuki_core.engine.rules.effects import (
-    AttackEffect,
-    Discard,
-    Effect,
-    Fear,
-    GainHonor,
-    SpendOncePerTurn,
-    Then,
-)
-from yasuki_core.engine.rules.gold.discounts import card_purchase, discounted_gold_cost
+from yasuki_core.engine.rules.effects import AttackEffect, Effect, SpendOncePerTurn, Then
+from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import (
     legal_targets,
@@ -35,115 +26,13 @@ from yasuki_core.engine.rules.turn.structure import (
     RoundKind,
     RoundTimings,
 )
-from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.actions import (
-    Action,
-    ActionTiming,
-    DiscardToInterrupt,
-    PlayInterrupt,
-)
+from yasuki_core.engine.rules.vocabulary.actions import Action, ActionTiming, PlayInterrupt
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseInterruptAdjustment,
     ChooseInterruptEffect,
     ChooseInterruptTarget,
     DecisionResponse,
 )
-from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-
-
-@dataclass(frozen=True, slots=True)
-class RulebookInterrupt[T: Effect]:
-    """A rulebook Interrupt every player holds: discard a card carrying ``keyword`` to adjust a
-    pending effect of type ``answers`` by one of ``adjustments``.
-
-    Attributes
-    ----------
-    key : str
-        Names the ability, for the once-per-action record.
-    label : str
-        The ability as the datasheet prints it, which a client offers on the card it discards.
-    keyword : str
-        The keyword a card must carry to be discarded for it.
-    answers : type
-        The effect type the Interrupt may be taken against.
-    question : str
-        What the seat is asked once it has named the card, ahead of ``adjustments``.
-    adjustments : tuple of (str, int)
-        The adjustments the seat may choose between, each as the seat reads it and as the delta it
-        gives the effect.
-    adjust : callable
-        Maps the pending effect and the chosen delta to the effect that replaces it.
-    once_per_action : bool
-        Whether a seat may take it once per action, as the datasheet makes of Repeatable on an
-        Interrupt unless the ability says otherwise.
-    """
-
-    key: str
-    label: str
-    keyword: str
-    answers: type[T]
-    question: str
-    adjustments: tuple[tuple[str, int], ...]
-    adjust: Callable[[T, int], T]
-    once_per_action: bool
-
-    def delta_for(self, wording: str) -> int:
-        """The delta behind ``wording``, one of the adjustments as the seat reads them."""
-        return dict(self.adjustments)[wording]
-
-
-def _adjust_fear(effect: Fear, delta: int) -> Fear:
-    return replace(effect, strength=effect.strength + delta)
-
-
-def _adjust_honor(effect: GainHonor, delta: int) -> GainHonor:
-    return replace(effect, adjustment=effect.adjustment + delta)
-
-
-# The two rulebook Interrupts the ShE datasheet grants, worded as it prints them. Courage may be
-# taken any number of times per action, which the datasheet says in as many words, and Honor once,
-# which is its default for a Repeatable Interrupt.
-RULEBOOK_INTERRUPTS: tuple[RulebookInterrupt, ...] = (
-    RulebookInterrupt(
-        key="courage",
-        label=(
-            "Courage Repeatable Interrupt: If the action has any Fear effects, any number of times "
-            "per action, discard a Courage card to give one such effect +2 or -2 strength."
-        ),
-        keyword=keywords.COURAGE,
-        answers=Fear,
-        question="Give it +2 or -2 strength?",
-        adjustments=(("+2 strength", 2), ("-2 strength", -2)),
-        adjust=_adjust_fear,
-        once_per_action=False,
-    ),
-    RulebookInterrupt(
-        key="honor",
-        label=(
-            "Honor Repeatable Interrupt: If the action has any Honor gains or losses, discard an "
-            "Honor card to increase or reduce one such gain or loss by 1."
-        ),
-        keyword=keywords.HONOR,
-        answers=GainHonor,
-        question="Increase or reduce it by 1?",
-        adjustments=(("Increase by 1", 1), ("Reduce by 1", -1)),
-        adjust=_adjust_honor,
-        once_per_action=True,
-    ),
-)
-
-_RULEBOOK_INTERRUPTS_BY_KEY = {interrupt.key: interrupt for interrupt in RULEBOOK_INTERRUPTS}
-
-
-def rulebook_interrupt(key: str) -> RulebookInterrupt[Effect]:
-    """The rulebook Interrupt named ``key``. Raise ``KeyError`` for a key the datasheet has none
-    for."""
-    return _RULEBOOK_INTERRUPTS_BY_KEY[key]
-
-
-def _hand(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    return game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
 
 
 def forecast(game: GameState, effects: tuple[Effect, ...]) -> tuple[Effect, ...]:
@@ -176,39 +65,11 @@ def as_modified(game: GameState, effect: Effect) -> Effect:
 
 
 @dataclass(frozen=True, slots=True)
-class Adjustment:
-    """A rulebook Interrupt's answer to one effect of the action: the adjustment it gives it,
-    bound to the effect as the forecast showed it and applied as it comes up to resolve. Two
-    Courage discards on one Fear are two of these, each adjusting what the one before left.
-    Plain data, so a game with one pending compares equal to its replay.
-
-    Attributes
-    ----------
-    bound : Effect
-        The action's effect, as first handed to step E, that the Interrupt answered.
-    key : str
-        The rulebook Interrupt taken.
-    delta : int
-        The adjustment chosen.
-    """
-
-    bound: Effect
-    key: str
-    delta: int
-
-    def answers(self, effect: Effect) -> bool:
-        return effect == self.bound
-
-    def apply(self, game: GameState, effect: Effect) -> Effect:
-        return rulebook_interrupt(self.key).adjust(effect, self.delta)
-
-
-@dataclass(frozen=True, slots=True)
 class Replacement:
     """A card Interrupt's answer to one effect of the action, bound to the effect as the forecast
-    showed it. What resolves instead is asked of the card as the effect comes up, against the
-    effect as earlier Interrupts leave it, so a negation after a Courage adjustment negates the
-    adjusted Fear. The card's own effects resolved when it was taken.
+    showed it. What resolves instead is asked of the card's Interrupt as the effect comes up,
+    against the effect as earlier Interrupts leave it, so a negation after a Courage adjustment
+    negates the adjusted Fear. The Interrupt's own effects resolved when it was taken.
 
     Attributes
     ----------
@@ -223,12 +84,16 @@ class Replacement:
         contents read the board: a substituted :class:`~.ResolveAbility` is built against its new
         target then, so the forecast and the resolution read one object. Used while the effect
         still stands as bound. Default None, asked of the card as the effect comes up.
+    interrupt_key : str, optional
+        The key of the Interrupt taken, for one a keyword conferred. Default None, the card's
+        printed Interrupt.
     """
 
     bound: Effect
     card_id: str
     target_id: str | None = None
     replacement: Effect | None = None
+    interrupt_key: str | None = None
 
     def answers(self, effect: Effect) -> bool:
         return effect == self.bound
@@ -237,9 +102,9 @@ class Replacement:
         if self.replacement is not None and effect == self.bound:
             return self.replacement
         card = game.table.cards_by_id[self.card_id]
-        interrupt = interrupt_for(card)
+        interrupt = interrupt_for(card, self.interrupt_key)
         if interrupt is None:
-            raise RuntimeError(f"{self.card_id} prints no Interrupt to apply")
+            raise RuntimeError(f"{self.card_id} has no Interrupt {self.interrupt_key!r} to apply")
         if self.target_id is None:
             return interrupt.interrupt(game, card, effect).replacement
         target = game.table.cards_by_id[self.target_id]
@@ -252,26 +117,6 @@ def _unique(effects: Iterable[Effect]) -> list[Effect]:
     return list(dict.fromkeys(effects))
 
 
-def discardable_for(game: GameState, seat: PlayerId, interrupt: RulebookInterrupt) -> list[L5RCard]:
-    """The cards ``seat`` holds that ``interrupt`` may discard."""
-    return [card for card in _hand(game, seat) if has_keyword(game, card, interrupt.keyword)]
-
-
-def rulebook_interrupts_for(
-    game: GameState, seat: PlayerId, foreseen: tuple[Effect, ...]
-) -> list[RulebookInterrupt]:
-    """The rulebook Interrupts ``seat`` could take against an action about to do ``foreseen``:
-    answering one of them, not already spent on this action where once is the limit, and with a
-    card to discard."""
-    return [
-        interrupt
-        for interrupt in RULEBOOK_INTERRUPTS
-        if any(isinstance(as_modified(game, effect), interrupt.answers) for effect in foreseen)
-        and not (interrupt.once_per_action and (interrupt.key, seat) in game.interrupts_taken)
-        and discardable_for(game, seat, interrupt)
-    ]
-
-
 # The once-per-turn tag an Interrupt taken from play is claimed under (CR, Using Abilities 0.3).
 INTERRUPT_TAG = "interrupt"
 
@@ -280,45 +125,58 @@ def card_interrupts_for(
     game: GameState, seat: PlayerId, foreseen: tuple[Effect, ...]
 ) -> list[tuple[L5RCard, Interrupt, CardLocation]]:
     """The Interrupts ``seat`` could take against an action about to do ``foreseen``, each with
-    where it is taken from. The Rule of Presence is the round's to apply, through
-    :func:`~yasuki_core.engine.rules.legality.permitted_timings_in`, so a seat with no unit at
-    the battle is never asked here.
+    the card offering it and where it is taken from. The Rule of Presence is the round's to apply,
+    through :func:`~yasuki_core.engine.rules.legality.permitted_timings_in`, so a seat with no
+    unit at the battle is never asked here.
 
-    A Strategy in hand is offered when its Interrupt answers one of the effects and the seat can
-    reach its Gold Cost. A card in play, on the battlefield or face up in a Province, is offered
-    under the gates an activated ability answers to: unbowed, within the Rules of Location, unused
-    this turn where the arc makes abilities once per turn, and able to pay the Interrupt's cost.
+    Each is offered when it answers one of the effects, within its limit. A card's own Interrupt
+    in hand is a Strategy, offered when the seat can reach its Gold Cost. Anything else is offered
+    when the seat can pay the Interrupt's cost, and a card in play only while unbowed and within
+    the Rules of Location.
     """
-    offered: list[tuple[L5RCard, Interrupt, CardLocation]] = []
-    once = ruleset.ACTIVE.abilities_once_per_turn
-    for location, card in seat_cards(game, seat):
-        interrupt = _answering(game, card, foreseen, location)
-        if interrupt is None:
-            continue
-        if location is CardLocation.HAND:
-            cost = discounted_gold_cost(game, card_purchase(game, card, plays_card=True))
-            if cost <= reachable_gold(game, seat, card):
-                offered.append((card, interrupt, location))
-            continue
-        if card.bowed or not location_permits(game, card):
-            continue
-        if once and used_this_turn(game, card, INTERRUPT_TAG):
-            continue
-        if can_pay(game, card, interrupt.cost):
-            offered.append((card, interrupt, location))
-    return offered
+    return [
+        (card, interrupt, location)
+        for location, card in seat_cards(game, seat)
+        for interrupt in interrupts_for(game, card)
+        if location in interrupt.located_at
+        and _within_limit(game, seat, card, interrupt)
+        and answered_by(game, card, interrupt, foreseen)
+        and _affordable(game, seat, card, interrupt, location)
+    ]
 
 
-def _answering(
-    game: GameState, card: L5RCard, foreseen: tuple[Effect, ...], location: CardLocation
-) -> Interrupt | None:
-    """``card``'s Interrupt if it is taken from ``location`` and answers one of ``foreseen``."""
-    interrupt = interrupt_for(card)
-    if interrupt is None or location not in interrupt.located_at:
-        return None
-    if not answered_by(game, card, interrupt, foreseen):
-        return None
-    return interrupt
+def _within_limit(game: GameState, seat: PlayerId, card: L5RCard, interrupt: Interrupt) -> bool:
+    match interrupt.limit:
+        case InterruptLimit.ONCE_PER_TURN:
+            once = ruleset.ACTIVE.abilities_once_per_turn
+            return not (once and used_this_turn(game, card, INTERRUPT_TAG))
+        case InterruptLimit.ONCE_PER_ACTION:
+            return (_action_tag(card, interrupt), seat) not in game.interrupts_taken
+        case InterruptLimit.UNLIMITED:
+            return True
+
+
+def _action_tag(card: L5RCard, interrupt: Interrupt) -> str:
+    """What a once-per-action Interrupt is recorded under in ``interrupts_taken``: its key, so a
+    seat's second card carrying the same keyword is held to the same limit."""
+    return interrupt.key or card.id
+
+
+def _affordable(
+    game: GameState, seat: PlayerId, card: L5RCard, interrupt: Interrupt, location: CardLocation
+) -> bool:
+    if _plays_card(interrupt, location):
+        purchase = interrupt.purchase(game, card, plays_card=True)
+        return discounted_gold_cost(game, purchase) <= reachable_gold(game, seat, card)
+    if location is not CardLocation.HAND and (card.bowed or not location_permits(game, card)):
+        return False
+    return can_pay(game, card, interrupt.cost)
+
+
+def _plays_card(interrupt: Interrupt, location: CardLocation) -> bool:
+    """Whether taking ``interrupt`` from ``location`` plays the card: a card's own Interrupt in
+    hand does, and one the rulebook confers pays its own cost instead (CR, Kharmic)."""
+    return location is CardLocation.HAND and not interrupt.from_rulebook
 
 
 def answered_by(
@@ -368,19 +226,12 @@ def foreseen_now(game: GameState) -> tuple[Effect, ...]:
 
 
 def interrupt_actions(game: GameState, seat: PlayerId) -> list[Action]:
-    """The Interrupts ``seat`` may take against the action held at the Interrupt step, as actions:
-    a :class:`~.DiscardToInterrupt` per card a rulebook Interrupt could discard, and a
-    :class:`~.PlayInterrupt` per card printing an Interrupt that answers the forecast."""
-    foreseen = foreseen_now(game)
-    discards: list[Action] = [
-        DiscardToInterrupt(card.id, interrupt.key)
-        for interrupt in rulebook_interrupts_for(game, seat, foreseen)
-        for card in discardable_for(game, seat, interrupt)
+    """The Interrupts ``seat`` may take against the action held at the Interrupt step, as a
+    :class:`~.PlayInterrupt` per card and Interrupt that answers the forecast."""
+    return [
+        PlayInterrupt(card.id, interrupt.key)
+        for card, interrupt, _ in card_interrupts_for(game, seat, foreseen_now(game))
     ]
-    plays: list[Action] = [
-        PlayInterrupt(card.id) for card, _, _ in card_interrupts_for(game, seat, foreseen)
-    ]
-    return discards + plays
 
 
 def open_interrupt_window(game: GameState) -> bool:
@@ -424,35 +275,14 @@ def _window_timings(game: GameState) -> RoundTimings:
     )
 
 
-def play_interrupt(game: GameState, seat: PlayerId, card_id: str) -> None:
-    """Take the Interrupt ``card_id`` prints against the held action. Where the forecast holds
-    several effects it could answer, ask which first."""
-    answered = _answerable(game, seat, card_id, None)
-    if len(answered) == 1 or _answers_every(game, card_id):
-        _play(game, seat, card_id, answered[0])
+def play_interrupt(game: GameState, seat: PlayerId, card_id: str, key: str | None = None) -> None:
+    """Take the Interrupt keyed ``key`` on ``card_id`` against the held action. Where the forecast
+    holds several effects it could answer, ask which first."""
+    card, interrupt, _ = _offer(game, seat, card_id, key)
+    answered = answered_by(game, card, interrupt, foreseen_now(game))
+    if len(answered) == 1 or interrupt.answers_every:
+        _play(game, seat, card_id, key, answered[0])
         return
-    _ask_which(game, seat, card_id, None, answered)
-
-
-def _answers_every(game: GameState, card_id: str) -> bool:
-    interrupt = interrupt_for(game.table.cards_by_id[card_id])
-    return interrupt is not None and interrupt.answers_every
-
-
-def discard_to_interrupt(game: GameState, seat: PlayerId, card_id: str, key: str) -> None:
-    """Take the rulebook Interrupt ``key``, discarding ``card_id`` for it, against the held action.
-    Where the forecast holds several effects it could answer, ask which first, then the
-    adjustment."""
-    answered = _answerable(game, seat, card_id, key)
-    if len(answered) == 1:
-        _ask_adjustment(game, seat, card_id, key, answered[0])
-        return
-    _ask_which(game, seat, card_id, key, answered)
-
-
-def _ask_which(
-    game: GameState, seat: PlayerId, card_id: str, key: str | None, answered: list[Effect]
-) -> None:
     game.pending = ChooseInterruptEffect(
         seat=seat,
         candidates=tuple(as_modified(game, effect).narrate(game) for effect in answered),
@@ -463,41 +293,27 @@ def _ask_which(
     )
 
 
-def _answerable(game: GameState, seat: PlayerId, card_id: str, key: str | None) -> list[Effect]:
-    """The forecast effects the seat's ``card_id`` may answer, through the rulebook Interrupt
-    ``key`` or the card's own. Raise ``RuntimeError`` if the card is no longer one it can take."""
-    foreseen = foreseen_now(game)
-    if key is not None:
-        taken = next(
-            (
-                interrupt
-                for interrupt in rulebook_interrupts_for(game, seat, foreseen)
-                if interrupt.key == key
-                and card_id in {card.id for card in discardable_for(game, seat, interrupt)}
-            ),
-            None,
-        )
-        if taken is None:
-            raise RuntimeError(
-                f"{card_id} is no longer a card {seat.name} can discard to interrupt"
-            )
-        return _unique(
-            effect for effect in foreseen if isinstance(as_modified(game, effect), taken.answers)
-        )
-    played = next(
-        (offer for offer in card_interrupts_for(game, seat, foreseen) if offer[0].id == card_id),
+def _offer(
+    game: GameState, seat: PlayerId, card_id: str, key: str | None
+) -> tuple[L5RCard, Interrupt, CardLocation]:
+    """The seat's offer of ``card_id``'s Interrupt keyed ``key``. Raise ``RuntimeError`` if it is
+    no longer one the seat can take."""
+    offer = next(
+        (
+            offer
+            for offer in card_interrupts_for(game, seat, foreseen_now(game))
+            if offer[0].id == card_id and offer[1].key == key
+        ),
         None,
     )
-    if played is None:
-        raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can play")
-    card, interrupt, _ = played
-    return answered_by(game, card, interrupt, foreseen)
+    if offer is None:
+        raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can take")
+    return offer
 
 
-# The label a ChooseInterruptEffect or ChooseInterruptAdjustment carries in its resolver slot;
-# each is answered by its own handler and names no registered resolver.
+# The label a ChooseInterruptEffect carries in its resolver slot. It is answered by its own
+# handler and names no registered resolver.
 INTERRUPT_EFFECT_QUESTION = "interrupt_effect"
-INTERRUPT_ADJUSTMENT_QUESTION = "interrupt_adjustment"
 
 
 def apply_interrupt_effect(
@@ -510,10 +326,12 @@ def apply_interrupt_effect(
     effect = _named(
         answered, lambda effect: as_modified(game, effect).narrate(game) == response.choices[0]
     )
-    if key is None:
-        _play(game, request.seat, request.source_id, effect)
-    else:
-        _ask_adjustment(game, request.seat, request.source_id, key, effect)
+    _play(game, request.seat, request.source_id, key, effect)
+
+
+def _answerable(game: GameState, seat: PlayerId, card_id: str, key: str | None) -> list[Effect]:
+    card, interrupt, _ = _offer(game, seat, card_id, key)
+    return answered_by(game, card, interrupt, foreseen_now(game))
 
 
 def _named(effects: list[Effect], matches: Callable[[Effect], bool]) -> Effect:
@@ -530,26 +348,22 @@ def apply_interrupt_target(
 ) -> None:
     """Take the Interrupt against the chosen target. Raise ``RuntimeError`` if the target is no
     longer one the Interrupt can be taken against."""
-    answered = _answerable(game, request.seat, request.card_id, None)
+    key = request.interrupt_key
+    answered = _answerable(game, request.seat, request.card_id, key)
     effect = _named(answered, lambda effect: effect.describe() == request.effect)
-    _play(game, request.seat, request.card_id, effect, response.choices[0])
+    _play(game, request.seat, request.card_id, key, effect, response.choices[0])
 
 
 def _play(
     game: GameState,
     seat: PlayerId,
     card_id: str,
+    key: str | None,
     effect: Effect,
     target_id: str | None = None,
 ) -> None:
     foreseen = foreseen_now(game)
-    played = next(
-        (offer for offer in card_interrupts_for(game, seat, foreseen) if offer[0].id == card_id),
-        None,
-    )
-    if played is None:
-        raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can play")
-    card, interrupt, location = played
+    card, interrupt, location = _offer(game, seat, card_id, key)
     if effect not in answered_by(game, card, interrupt, foreseen):
         raise RuntimeError(f"{card_id} no longer answers {effect.describe()}")
     if interrupt.targets is None:
@@ -558,7 +372,12 @@ def _play(
         candidates = interrupt.targets(game, card, effect)
         if target_id is None:
             game.pending = ChooseInterruptTarget(
-                seat, candidates, card.id, card.name, effect.describe()
+                seat=seat,
+                candidates=candidates,
+                card_id=card.id,
+                card_name=card.name,
+                effect=effect.describe(),
+                interrupt_key=key,
             )
             return
         if target_id not in candidates:
@@ -567,18 +386,40 @@ def _play(
         interruption = interrupt.interrupt(game, card, effect, target)
     if interrupt.answers_every:
         bound = answered_by(game, card, interrupt, foreseen)
-        game.modifications.extend(Replacement(each, card.id, target_id) for each in bound)
-    else:
-        game.modifications.append(
-            Replacement(effect, card.id, target_id, _settled(game, interruption.replacement))
+        game.modifications.extend(
+            Replacement(bound=each, card_id=card.id, target_id=target_id, interrupt_key=key)
+            for each in bound
         )
-    if location is CardLocation.HAND:
+    elif interruption.replacement != effect:
+        game.modifications.append(
+            Replacement(
+                bound=effect,
+                card_id=card.id,
+                target_id=target_id,
+                replacement=_settled(game, interruption.replacement),
+                interrupt_key=key,
+            )
+        )
+    if _plays_card(interrupt, location):
         play_strategy_with(game, card, interruption.effects)
         return
-    spent = SpendOncePerTurn(card.id, INTERRUPT_TAG)
-    purchase = card_purchase(game, card, plays_card=False)
+    purchase = interrupt.purchase(game, card, plays_card=False)
     paid = priced_cost(game, purchase, interrupt.cost(game, card))
-    triggers.resolve_effects(game, [spent, *paid, *interruption.effects])
+    claimed = _claim(game, seat, card, interrupt)
+    triggers.resolve_effects(game, [*claimed, *paid, *interruption.effects])
+
+
+def _claim(game: GameState, seat: PlayerId, card: L5RCard, interrupt: Interrupt) -> list[Effect]:
+    """Spend the use of ``interrupt`` its limit counts. A once-per-action use is recorded now, and a
+    once-per-turn use is returned as the effect that claims it, to resolve with the cost."""
+    match interrupt.limit:
+        case InterruptLimit.ONCE_PER_TURN:
+            return [SpendOncePerTurn(card.id, INTERRUPT_TAG)]
+        case InterruptLimit.ONCE_PER_ACTION:
+            game.interrupts_taken.add((_action_tag(card, interrupt), seat))
+            return []
+        case InterruptLimit.UNLIMITED:
+            return []
 
 
 def _settled(game: GameState, replacement: Effect) -> Effect | None:
@@ -588,32 +429,3 @@ def _settled(game: GameState, replacement: Effect) -> Effect | None:
     if isinstance(replacement, ResolveAbility) and replacement.effects is None:
         return replacement.built(game)
     return None
-
-
-def _ask_adjustment(
-    game: GameState, seat: PlayerId, card_id: str, key: str, effect: Effect
-) -> None:
-    taken = rulebook_interrupt(key)
-    game.pending = ChooseInterruptAdjustment(
-        seat=seat,
-        candidates=tuple(wording for wording, _ in taken.adjustments),
-        question=f"{as_modified(game, effect).narrate(game)}. {taken.question}",
-        resolver=INTERRUPT_ADJUSTMENT_QUESTION,
-        source_id=card_id,
-        resolver_context=(key, effect.describe()),
-    )
-
-
-def apply_interrupt_adjustment(
-    game: GameState, request: ChooseInterruptAdjustment, response: DecisionResponse
-) -> None:
-    """Discard the card and bind the chosen adjustment to the effect it answers. Raise
-    ``RuntimeError`` if the card is no longer one the seat can discard to interrupt."""
-    key, described = request.resolver_context
-    taken = rulebook_interrupt(key)
-    answered = _answerable(game, request.seat, request.source_id, key)
-    effect = _named(answered, lambda effect: effect.describe() == described)
-    if taken.once_per_action:
-        game.interrupts_taken.add((taken.key, request.seat))
-    game.modifications.append(Adjustment(effect, key, taken.delta_for(response.choices[0])))
-    triggers.resolve_effects(game, [Discard(request.source_id, request.seat)])

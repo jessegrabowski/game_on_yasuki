@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     granted_ability,
     register_ability,
     register_invest,
+    interrupt_for,
     register_keyword_ability,
     register_keyword_interrupt,
     register_location_ability,
@@ -30,6 +31,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt, Interruption
 from yasuki_core.engine.rules.effects import Fear
+from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_INTERRUPT
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
@@ -519,3 +521,13 @@ def test_a_keyword_interrupt_is_a_rulebook_interrupt():
             interrupt=lambda game, source, effect: Interruption(effect),
             from_keyword="Probe",
         )
+
+
+def test_a_keyword_interrupt_is_found_by_key_on_a_card_without_the_keyword():
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm", printed_id="millet_farm"))
+
+    courage = interrupt_for(farm, COURAGE_INTERRUPT)
+
+    assert courage is not None and courage.from_keyword == "Courage"
+    assert interrupt_for(farm) is None

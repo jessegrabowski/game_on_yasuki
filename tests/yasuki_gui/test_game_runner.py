@@ -2,6 +2,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core import ruleset
+from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_INTERRUPT, COURAGE_LABEL
 from yasuki_core.engine.rules.rulebook.cycle import is_cycle
 from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
 from yasuki_core.engine.rules.rulebook.legacy import is_legacy
@@ -33,11 +34,9 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
-    DiscardToInterrupt,
     Equip,
     Pass,
     PlayInterrupt,
@@ -471,7 +470,7 @@ def test_interrupt_menu_pairs_each_way_to_take_it_with_its_action():
     game_runner = GameRunner(session, DEFENDER)
 
     assert game_runner.interrupt_menu("P2-courage0") == [
-        (rulebook_interrupt("courage").label, DiscardToInterrupt("P2-courage0", "courage"))
+        (COURAGE_LABEL, PlayInterrupt("P2-courage0", COURAGE_INTERRUPT))
     ]
     assert game_runner.interrupt_menu("okura") == [
         (

@@ -14,7 +14,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     DeclareAttack,
-    DiscardToInterrupt,
     Equip,
     Pass,
     PlayInterrupt,
@@ -378,7 +377,7 @@ ROUND_TRIPPED_ACTIONS = [
     PlayStrategy("card"),
     DeclareAttack(),
     PlayInterrupt("card"),
-    DiscardToInterrupt("card", "honor"),
+    PlayInterrupt("card", "honor"),
 ]
 
 

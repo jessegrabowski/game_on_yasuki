@@ -20,7 +20,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     DeclareAttack,
-    DiscardToInterrupt,
     Equip,
     Pass,
     PlayInterrupt,
@@ -289,10 +288,8 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "play_strategy", "card_id": card_id}
         case DeclareAttack():
             return {"kind": "declare_attack"}
-        case PlayInterrupt(card_id=card_id):
-            return {"kind": "play_interrupt", "card_id": card_id}
-        case DiscardToInterrupt(card_id=card_id, key=key):
-            return {"kind": "discard_to_interrupt", "card_id": card_id, "key": key}
+        case PlayInterrupt(card_id=card_id, interrupt_key=key):
+            return {"kind": "play_interrupt", "card_id": card_id, "key": key}
     raise ValueError(f"no encoding for action {action!r}")
 
 
@@ -315,7 +312,5 @@ def _decode_action(payload: dict) -> Action:
     if kind == "declare_attack":
         return DeclareAttack()
     if kind == "play_interrupt":
-        return PlayInterrupt(payload["card_id"])
-    if kind == "discard_to_interrupt":
-        return DiscardToInterrupt(payload["card_id"], payload["key"])
+        return PlayInterrupt(payload["card_id"], payload.get("key"))
     raise ValueError(f"unknown action kind {kind!r}")

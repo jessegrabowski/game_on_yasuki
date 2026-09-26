@@ -492,19 +492,6 @@ class AssignUnits(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
-class ChooseInterruptAdjustment(ChooseOption):
-    """The adjustment a rulebook Interrupt gives the effect it answers, asked once the seat has
-    taken it: increase or reduce, in the datasheet's words. A :class:`~.ChooseOption` in every
-    other respect, so a client offers it as the wordings it lists. Answered through its own handler
-    rather than a resolver; ``resolver`` names nothing. Backing out unwinds the Interrupt action,
-    which has moved nothing yet: the card is discarded only once the adjustment is answered."""
-
-    @property
-    def cancellable(self) -> bool:
-        return True
-
-
-@dataclass(frozen=True, slots=True)
 class ChooseInterruptEffect(ChooseOption):
     """Which of the action's effects the Interrupt just taken answers, asked only when the
     forecast holds more than one it could. The candidates are the effects as the seat reads
@@ -532,11 +519,15 @@ class ChooseInterruptTarget(DecisionRequest):
     effect : str
         The action's effect the Interrupt answers, as its description reads, to find it again in
         the forecast once the target is chosen.
+    interrupt_key : str, optional
+        The key of the Interrupt taken, for one a keyword confers. Default None, the one the card
+        prints.
     """
 
     card_id: str
     card_name: str
     effect: str
+    interrupt_key: str | None = None
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return f"Choose a target for {self.card_name}"

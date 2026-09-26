@@ -138,35 +138,21 @@ class ActivateAbility:
 
 @dataclass(frozen=True, slots=True)
 class PlayInterrupt:
-    """Take the Interrupt a card prints against the action now held at the Interrupt step: a
-    Strategy from hand, played and paid for, or a card in play, which pays the Interrupt's own
-    cost. Which of the action's effects it answers, its target and its payment follow as
-    decisions.
+    """Take one of a card's Interrupts against the action now held at the Interrupt step: its own
+    as a Strategy from hand, played and paid for, or from a card in play, which pays the
+    Interrupt's own cost, or one a keyword on the card confers, which pays its own cost. Which of
+    the action's effects it answers, its target and its payment follow as decisions.
 
     Attributes
     ----------
     card_id : str
         The card whose Interrupt is taken.
+    interrupt_key : str, optional
+        The Interrupt taken, for one a keyword confers. Default None, the one the card prints.
     """
 
     card_id: str
-
-
-@dataclass(frozen=True, slots=True)
-class DiscardToInterrupt:
-    """Take a rulebook Interrupt the ShE datasheet grants, discarding a card carrying its keyword
-    to adjust one of the held action's effects. The adjustment follows as a decision.
-
-    Attributes
-    ----------
-    card_id : str
-        The card discarded for it.
-    key : str
-        The rulebook Interrupt taken, ``"courage"`` or ``"honor"``.
-    """
-
-    card_id: str
-    key: str
+    interrupt_key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -180,16 +166,7 @@ class DeclareAttack:
 
 
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
-Action = (
-    Pass
-    | Recruit
-    | PlayStrategy
-    | Equip
-    | ActivateAbility
-    | DeclareAttack
-    | PlayInterrupt
-    | DiscardToInterrupt
-)
+Action = Pass | Recruit | PlayStrategy | Equip | ActivateAbility | DeclareAttack | PlayInterrupt
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
 # to taking an action rather than one, and ActivateAbility because it reads its designator off the
@@ -200,5 +177,4 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     Equip: ActionTiming.OPEN,
     DeclareAttack: ActionTiming.ATTACK,
     PlayInterrupt: ActionTiming.INTERRUPT,
-    DiscardToInterrupt: ActionTiming.INTERRUPT,
 }

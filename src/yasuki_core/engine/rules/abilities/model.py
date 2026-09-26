@@ -21,7 +21,7 @@ class Interruption:
     ----------
     replacement : Effect
         The effect that resolves in place of the interrupted one, the same one when the Interrupt
-        leaves it alone.
+        leaves it alone, which binds nothing to it.
     effects : tuple of Effect, optional
         What else the Interrupt does, resolved as the Strategy's own effects before the
         replacement returns. Default none.
