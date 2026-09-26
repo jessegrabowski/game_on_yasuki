@@ -10,6 +10,10 @@ RULEBOOK_PROXY_IDS = (IMPERIAL_FAVOR_ID,)
 CYCLE_PROXY_ID = "cycle"
 # The Legacy rulebook ability is activated from a proxy each seat holds in its rulebook zone.
 LEGACY_PROXY_ID = "legacy"
+# The rulebook Favor abilities are activated from a proxy each seat holds in its rulebook zone, one
+# per arc family. Neither is the Favor card a holder's hand shows, which is ``IMPERIAL_FAVOR_ID``.
+ONYX_FAVOR_PROXY_ID = "onyx_favor"
+PRE_GOLD_FAVOR_PROXY_ID = "pre_gold_favor"
 
 
 class Side(str, Enum):

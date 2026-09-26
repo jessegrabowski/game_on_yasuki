@@ -2,8 +2,6 @@ from collections.abc import Callable, Iterator
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.rulebook import favor_payment
-from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.abilities.costs import payable
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, once_tag
 from yasuki_core.engine.rules.effects import PayGold
@@ -30,7 +28,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayInterrupt,
     PlayStrategy,
     Recruit,
-    UseFavorAbility,
 )
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
 from yasuki_core.engine.rules.units.composition import in_a_unit
@@ -98,11 +95,6 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         return frozenset(ability.timings)
     if isinstance(action, Lobby):
         return frozenset({ruleset.ACTIVE.lobby_timing})
-    if isinstance(action, UseFavorAbility):
-        granted = {ability.key: ability for ability in ruleset.ACTIVE.favor_abilities}
-        if action.key not in granted:
-            raise ValueError(f"this arc grants no Favor ability {action.key!r}")
-        return frozenset({granted[action.key].timing})
     if isinstance(action, Recruit):
         return recruit_timings(game, action.card_id)
     timing = ACTION_TIMINGS.get(type(action))
@@ -176,7 +168,6 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_strategies(game, seat),
         *_inheritance(game, seat),
         *_lobby(game, seat),
-        *_favor_abilities(game, seat),
         *_declare_attack(game, seat),
         *_interrupts(game, seat),
     ]
@@ -205,8 +196,6 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _strategies(game, seat, only=card_id)
         case Lobby():
             return bool(_lobby(game, seat))
-        case UseFavorAbility():
-            return action in _favor_abilities(game, seat)
         case DeclareAttack():
             return bool(_declare_attack(game, seat))
         case PlayInterrupt() | DiscardToInterrupt():
@@ -280,35 +269,6 @@ def has_wind(game: GameState, seat: PlayerId) -> bool:
         for card in game.table.battlefield.cards
         if card.owner is seat
     )
-
-
-def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
-    """The arc's Favor abilities the seat can take: designator permitted, no Wind in play, the
-    rulebook's own restriction met, and a Favor cost somebody can pay.
-
-    Good Faith: the whole cost has to be payable, which is the Favor and whatever else that arc's
-    ability charges. Holding the Favor is not the test, since a seat may pay with an alternate.
-
-    A Wind bars them outright: "While you have a Wind in play, you may not take rulebook Favor
-    actions, an effect which cannot be overcome by card effects" (ShE datasheet, Winds), so no
-    card registry answers to it the way :func:`lobby.may_lobby` lets cards speak to Lobbying.
-    """
-    if has_wind(game, seat):
-        return []
-    actions: list[Action] = []
-    for ability in favor_abilities.available_favor_abilities():
-        if not permits(game, seat, ability.timing):
-            continue
-        if ability.active_seat_only and seat is not game.active:
-            continue
-        spent = game.has_used(favor_payment.favor_ability_key(seat, ability.key, game.turn))
-        if ruleset.ACTIVE.abilities_once_per_turn and spent:
-            continue
-        cost = favor_payment.favor_ability_cost(game, seat, ability.key)
-        if not all(effect.is_payable(game) for effect in cost):
-            continue
-        actions.append(UseFavorAbility(ability.key))
-    return actions
 
 
 def inheritance_key(seat: PlayerId) -> str:

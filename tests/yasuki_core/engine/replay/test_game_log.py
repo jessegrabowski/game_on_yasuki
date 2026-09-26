@@ -22,7 +22,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayInterrupt,
     PlayStrategy,
     Recruit,
-    UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.replay.game_log import (
@@ -378,7 +377,6 @@ ROUND_TRIPPED_ACTIONS = [
     Equip("card", invest=True),
     Inheritance(),
     Lobby(),
-    UseFavorAbility("draw"),
     ActivateAbility("card"),
     ActivateAbility("card", "refill"),
     PlayStrategy("card"),

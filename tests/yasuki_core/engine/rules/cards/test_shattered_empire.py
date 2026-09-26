@@ -38,7 +38,6 @@ from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredP
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.rules.vocabulary.actions import UseFavorAbility
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, FavorDiscarded
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.turn import action_sequence, sequence
@@ -66,6 +65,7 @@ from tests.yasuki_core.engine.rules.conftest import probe_ability
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.builders import (
+    datasheet_favor_ability,
     attached,
     attachment,
     end_phase,
@@ -454,7 +454,7 @@ def test_the_rulebook_favor_ability_opens_way_of_the_cranes_window():
     session = EngineSession.start(state, P1)
     TakeFavor(P1).perform(session.game)
 
-    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.act(P1, datasheet_favor_ability("discard_to_draw"))
     session.submit(P1, DecisionResponse(("spent",)))
 
     assert session.game.round.kind is RoundKind.RESPONSE

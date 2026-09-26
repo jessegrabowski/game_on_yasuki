@@ -1,7 +1,8 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.turn import sequence
-from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass
+from yasuki_core.engine.rules.board.queries import rulebook_proxy_id
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, DeclareAttack, Pass
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseBattlefield, DecisionResponse
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.bots.agents import PayingAgent
@@ -18,7 +19,7 @@ from yasuki_core.engine.table import (
     ZoneRole,
 )
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.constants import AttachmentType, ONYX_FAVOR_PROXY_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.factory import build_print
 from yasuki_core.game_pieces.prints import (
@@ -363,6 +364,12 @@ def terrain_at(
     card = put_in_play(state, terrain(card_id, owner=owner))
     ops.set_location(state, card, Location.at_battlefield(battlefield))
     return card
+
+
+def datasheet_favor_ability(key: str, seat: PlayerId = PlayerId.P1) -> ActivateAbility:
+    """Take the Onyx/ShE datasheet Favor ability ``key`` on the proxy ``seat`` is dealt as a
+    session starts."""
+    return ActivateAbility(rulebook_proxy_id(seat, ONYX_FAVOR_PROXY_ID), key)
 
 
 def two_seat_game(first_player: PlayerId = PlayerId.P1) -> GameState:

@@ -1457,7 +1457,9 @@ def test_clicking_the_favor_proxy_offers_its_rulebook_abilities(holding_the_favo
 
     presenter.on_card_activated(_proxy_id(session))
 
-    assert [label for label, _ in offered] == ["Favor: discard a Fate card to draw a card"]
+    assert [label for label, _ in offered] == [
+        "Favor: Political Open, :favor:: If it is your turn, discard a Fate card to draw a card."
+    ]
 
 
 def test_taking_a_favor_ability_from_the_card_menu_asks_for_its_discard(holding_the_favor):

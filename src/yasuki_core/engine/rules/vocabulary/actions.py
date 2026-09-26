@@ -151,22 +151,6 @@ class Lobby:
 
 
 @dataclass(frozen=True, slots=True)
-class UseFavorAbility:
-    """Take one of the rulebook abilities the Imperial Favor pays for.
-
-    Which abilities exist, and what each is designated, comes from the arc's ruleset rather than
-    from here: the pre-Gold rulebook granted four and the ShE datasheet grants two.
-
-    Attributes
-    ----------
-    key : str
-        Names the ability among the arc's, matching a ``FavorAbility.key``.
-    """
-
-    key: str
-
-
-@dataclass(frozen=True, slots=True)
 class PlayInterrupt:
     """Take the Interrupt a card prints against the action now held at the Interrupt step: a
     Strategy from hand, played and paid for, or a card in play, which pays the Interrupt's own
@@ -218,7 +202,6 @@ Action = (
     | ActivateAbility
     | Inheritance
     | Lobby
-    | UseFavorAbility
     | DeclareAttack
     | PlayInterrupt
     | DiscardToInterrupt
@@ -226,10 +209,9 @@ Action = (
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
 # to taking an action rather than one, and ActivateAbility because it reads its designator off the
-# card. The same action is Open on one Holding and Dynasty on another. Lobby and UseFavorAbility
-# are absent because they read their designators off the arc's ruleset: the Twenty Festivals CR
-# makes Lobby Limited where the ShE datasheet makes it Open, and which Favor abilities exist at all
-# differs by arc.
+# card. The same action is Open on one Holding and Dynasty on another. Lobby is absent because it
+# reads its designator off the arc's ruleset: the Twenty Festivals CR makes Lobby Limited where the
+# ShE datasheet makes it Open.
 ACTION_TIMINGS: dict[type, ActionTiming] = {
     Recruit: ActionTiming.DYNASTY,
     # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.

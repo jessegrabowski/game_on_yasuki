@@ -1,4 +1,3 @@
-from yasuki_core import ruleset
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.activation import apply_ability_target, activate
 from yasuki_core.engine.rules.abilities.strategy import (
@@ -22,7 +21,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayInterrupt,
     PlayStrategy,
     Recruit,
-    UseFavorAbility,
 )
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.duel import procedure as duel_procedure
@@ -57,7 +55,6 @@ from yasuki_core.engine.rules.rulebook.recruit import (
     apply_invest_amount,
     recruit,
 )
-from yasuki_core.engine.rules.rulebook.favor_payment import use_favor_ability
 from yasuki_core.engine.rules.interrupts import (
     apply_interrupt_adjustment,
     apply_interrupt_effect,
@@ -100,15 +97,9 @@ _ACTION_WORDING: dict[type, str] = {
 
 def describe_action(game: GameState, action: Action) -> str:
     """``action`` worded for a player: "the Recruit of Courts of Otosan Uchi"."""
-    if isinstance(action, UseFavorAbility):
-        return f"the Imperial Favor's ability to {_favor_ability_label(action.key)}"
     wording = _ACTION_WORDING.get(type(action), type(action).__name__)
     card = game.table.cards_by_id.get(getattr(action, "card_id", ""))
     return f"{wording} {card.name}" if card is not None else wording
-
-
-def _favor_ability_label(key: str) -> str:
-    return next(ability.label for ability in ruleset.ACTIVE.favor_abilities if ability.key == key)
 
 
 def perform(game: GameState, action: Action) -> None:
@@ -144,8 +135,6 @@ def perform(game: GameState, action: Action) -> None:
             inheritance(game)
         case Lobby():
             lobby(game)
-        case UseFavorAbility(key=key):
-            use_favor_ability(game, key)
         case ActivateAbility(card_id=card_id, ability_key=ability_key):
             activate(game, card_id, ability_key)
             # Resolve the target, unless the cost's cascade paused for a decision first.
