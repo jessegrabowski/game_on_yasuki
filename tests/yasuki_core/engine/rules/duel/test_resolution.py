@@ -7,7 +7,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.duel import focusing, procedure, resolution
+from yasuki_core.engine.rules.duel import focus_effects, focusing, procedure, resolution
 from yasuki_core.engine.rules.duel.records import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
@@ -250,6 +250,8 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     procedure.strike(game, P2)
 
     _resume_next(game, resolution.RevealFocusedCards)
+    # The reveal queues the Focus Effect step, which has nothing to do here.
+    _resume_next(game, focus_effects.ResolveFocusEffects)
     _resume_next(game, resolution.DecideTheDuel)
 
     outcome = game.duel.outcome

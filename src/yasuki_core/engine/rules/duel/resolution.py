@@ -4,6 +4,10 @@ from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.duel.focus_effects import (
+    ResolveFocusEffects,
+    cards_with_focus_effects,
+)
 from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.procedure import duel_in_progress, duel_stat
 from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelStep, DuelWork
@@ -15,6 +19,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     DuelEnded,
     DuelResolved,
     FocusedCardsRevealed,
+    FocusEffectsResolved,
     GameEvent,
 )
 from yasuki_core.game_pieces.cards import L5RCard
@@ -28,6 +33,9 @@ class RevealFocusedCards(DuelWork):
     def resume(self, game: GameState) -> None:
         duel = duel_in_progress(game)
         reveal_focused_cards(game)
+        # Queued before the announcement, so a card reacting to the reveal resolves before the first
+        # Focus Effect is named.
+        game.stack.append(ResolveFocusEffects(cards_with_focus_effects(game, duel)))
         revealed = frozenset(
             (seat, card.id)
             for seat in (duel.challenger, duel.challenged)
@@ -43,6 +51,9 @@ class DecideTheDuel(DuelWork):
 
     def resume(self, game: GameState) -> None:
         duel = duel_in_progress(game)
+        # The Focus Effects have all resolved by the time this step runs, so the step that follows
+        # them announces it (CR, Duel: the effects resolve, then the duel is decided).
+        triggers.fire(game, FocusEffectsResolved(source_card_id=duel.source))
         duel.step = DuelStep.RESOLUTION
         outcome = _outcome_on_totals(game, duel)
         duel.outcome = outcome

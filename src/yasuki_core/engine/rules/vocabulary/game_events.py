@@ -467,6 +467,21 @@ class FocusedCardsRevealed:
 
 
 @dataclass(frozen=True, slots=True)
+class FocusEffectsResolved:
+    """Every revealed Focus Effect has resolved, before the duel is decided (CR, Duel).
+
+    Announced whether or not any card carried one, since the CR's step happens either way.
+
+    Attributes
+    ----------
+    source_card_id : str
+        The id of the card that created the duel.
+    """
+
+    source_card_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class DuelResolved:
     """A duel has been decided, before the focused cards are discarded and the duel ends.
 
@@ -533,6 +548,7 @@ GameEvent = (
     | DuelResolved
     | EnteredPlay
     | FocusedCardsRevealed
+    | FocusEffectsResolved
     | StrikeDeclared
     | FavorDiscarded
     | HonorChanged

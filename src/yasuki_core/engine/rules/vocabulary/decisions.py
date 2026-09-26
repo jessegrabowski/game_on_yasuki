@@ -614,6 +614,30 @@ class FocusOrStrike(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseFocusEffect(DecisionRequest):
+    """The active player must name the next revealed Focus Effect to resolve (CR, Duel).
+
+    The candidates are the focused cards still carrying an unresolved Focus Effect, so a client
+    offers them where they lie in the focusing areas. The seat picks one at a time and is asked again
+    until none are left, which is the CR's "in an order chosen by the active player".
+
+    There is no answer that declines. A Focus Effect resolves whether its controller wants it to, and
+    a card whose own text makes it optional asks that question itself once it is resolving. The seat
+    is asked only while two or more are left, since one has no order to choose.
+    """
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return "Choose the next Focus Effect to resolve"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Resolve"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseFortificationProvince(DecisionRequest):
     """The seat must choose which of its Provinces a Fortification attaches to.
 

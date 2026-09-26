@@ -4,11 +4,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.duel.procedure import declare_duel
 from yasuki_core.engine.rules.triggers import enforce_state_based_actions
-from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import StartDuel
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
     DecisionResponse,
@@ -21,6 +17,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     DuelEnded,
     DuelResolved,
     FocusedCardsRevealed,
+    FocusEffectsResolved,
     StrikeDeclared,
 )
 from yasuki_core.engine.session import EngineSession
@@ -34,23 +31,12 @@ from tests.yasuki_core.engine.builders import (
     two_seat_game,
 )
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.duel.conftest import CHALLENGE_ABILITY, CHALLENGE_PROBE
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
-HOOK_PROBE = "probe_challenge_for_the_duel_events"
-
-
-def _enemy_personalities(game, source):
-    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
-
-
-DUEL_ABILITY = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="Open: challenge a target enemy Personality to a duel",
-    cost=no_cost,
-    targets=_enemy_personalities,
-    effects=lambda game, source, target: [StartDuel(source.id, target.id, source.id)],
-)
+HOOK_PROBE = CHALLENGE_PROBE
+DUEL_ABILITY = CHALLENGE_ABILITY
 
 
 def _duel_game(*, chi: dict[PlayerId, int] | None = None) -> EngineSession:
@@ -190,7 +176,7 @@ def test_the_declaration_window_opens_before_the_first_option_is_put(reacting):
         assert session.game.pending.seat is P2
 
 
-def test_a_resolved_duel_announces_its_end_after_its_outcome():
+def test_a_resolved_duel_announces_its_steps_in_the_crs_order():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
         _challenge(session)
@@ -199,7 +185,11 @@ def test_a_resolved_duel_announces_its_end_after_its_outcome():
         ended = _events(session, DuelEnded)
         assert [event.resolved for event in ended] == [True]
         events = list(session.game.turn_events)
-        assert events.index(_events(session, DuelResolved)[0]) < events.index(ended[0])
+        order = [
+            events.index(_events(session, kind)[0])
+            for kind in (FocusedCardsRevealed, FocusEffectsResolved, DuelResolved, DuelEnded)
+        ]
+        assert order == sorted(order)
 
 
 def test_a_duel_that_ends_without_resolving_says_so_in_its_end():
@@ -231,6 +221,7 @@ def test_a_duel_that_ends_without_resolving_says_so_in_its_end():
         CardFocused,
         StrikeDeclared,
         FocusedCardsRevealed,
+        FocusEffectsResolved,
         DuelResolved,
         DuelEnded,
     ],
@@ -239,7 +230,12 @@ def test_a_card_can_react_to_each_duel_event(reacting, event_type):
     # Every duel event has to be reachable by an ordinary @on registration, which is the only way a
     # printed card will ever read one.
     seen: list = []
-    reacting(event_type, HOOK_PROBE, lambda ctx: seen.append(ctx.event) or [])
+
+    def _record_what_fired(ctx) -> list:
+        seen.append(ctx.event)
+        return []
+
+    reacting(event_type, HOOK_PROBE, _record_what_fired)
 
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()

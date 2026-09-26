@@ -23,6 +23,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     DuelResolved
     EnteredPlay
     FavorDiscarded
+    FocusEffectsResolved
     FocusedCardsRevealed
     HonorChanged
     PhaseStarted
