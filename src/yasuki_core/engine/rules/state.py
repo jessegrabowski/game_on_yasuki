@@ -165,6 +165,10 @@ class GameState:
         Resolution Area; CR, Entering-Play Areas). The engine keeps them in the hand zone until
         they land, and a count of a hand leaves them out. Ephemeral and rebuilt by replay. Default
         empty.
+    asked_outside_action : bool
+        Whether the question now pending arose outside any action, as a debug step's does, so
+        answering it, and what follows from the answer, hands no opportunity on. Ephemeral and
+        rebuilt by replay. Default False.
     interrupts_taken : set of (str, PlayerId)
         The once-per-action rulebook Interrupts taken against the action now resolving, as the
         Interrupt's key and the seat that took it. Cleared as the next action begins. Ephemeral
@@ -222,6 +226,7 @@ class GameState:
     action_resolved: bool = False
     turn_events: tuple[GameEvent, ...] = ()
     announced_from_hand: frozenset[str] = frozenset()
+    asked_outside_action: bool = False
     interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)
     additional_action: PlayerId | None = None
     interrupts_offered: bool = False

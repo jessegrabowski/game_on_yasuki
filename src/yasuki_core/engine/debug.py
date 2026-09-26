@@ -135,6 +135,8 @@ def apply_debug(game: GameState, step: DebugStep) -> None:
             _add_card(game, seat, card_id, printed)
         case DebugPersonality(seat=seat, card_id=card_id, printed=printed):
             _ask_who_gets(game, seat, card_id, printed)
+    # No seat acted, so answering what the step asks is no action to hand the opportunity on from.
+    game.asked_outside_action = game.pending is not None
 
 
 def apply_debug_placement(

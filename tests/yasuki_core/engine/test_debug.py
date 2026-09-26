@@ -75,6 +75,7 @@ def test_placing_a_dynasty_debug_card_discards_what_was_there_and_lands_face_up(
     assert session.game.pending is None
     assert [card.id for card in session.game.table.zones[FIRST].cards] == ["dbg-1"]
     assert session.game.table.cards_by_id["dbg-1"].face_up
+    assert session.game.round.priority is P1
     discard = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].cards
     assert "old" in {card.id for card in discard}
     assert [type(entry) for entry in session.log.entries] == [Debug, Answer]
@@ -107,6 +108,7 @@ def test_a_debug_personality_enters_play_under_the_chosen_player():
     assert card.face_up
     assert not card.bowed
     assert card in session.game.table.battlefield.cards
+    assert session.game.round.priority is P1
     assert [type(entry) for entry in session.log.entries] == [Debug, Answer]
     assert session.log.replay() == session.game
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
