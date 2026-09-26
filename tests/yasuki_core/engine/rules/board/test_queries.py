@@ -6,10 +6,13 @@ from yasuki_core.engine.rules.board.queries import (
     controls_terrain_at,
     has_keyword,
     owned_holdings,
+    phase_history,
     province_key_of,
     terrains_at,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
+from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, PhaseStarted
 from yasuki_core.engine.table import Location
 
 from tests.yasuki_core.engine.builders import (
@@ -101,3 +104,17 @@ def test_a_terrain_named_only_by_its_ability_keyword_is_a_terrain():
 
     assert terrains_at(game, battlefield=0) == [doro]
     assert controls_terrain_at(game, PlayerId.P2, battlefield=0)
+
+
+def test_the_phase_history_holds_what_happened_since_the_latest_phase_began():
+    game = two_seat_game()
+    earlier, later = Destroyed("a", PlayerId.P1), Destroyed("b", PlayerId.P1)
+    game.turn_events = (
+        earlier,
+        PhaseStarted(Phase.ACTION),
+        earlier,
+        PhaseStarted(Phase.BATTLE),
+        later,
+    )
+
+    assert phase_history(game) == (later,)

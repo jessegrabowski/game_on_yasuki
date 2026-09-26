@@ -27,6 +27,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
+    phase_history,
     has_keyword,
     owned_holdings,
     owned_personalities,
@@ -83,14 +84,20 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_ACTION_PHASE
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
-from yasuki_core.engine.rules.units.membership import attached_to, unit_of
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay, Straightened
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    Bowed,
+    CardDiscarded,
+    Destroyed,
+    EnteredPlay,
+    Straightened,
+)
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
-from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint, RingPrint
@@ -526,6 +533,80 @@ register_ring(
         hits_every_target=True,
         key="earth",
         keywords=frozenset({keywords.EARTH}),
+    ),
+    pitch=None,
+)
+
+
+# --- Dark Ring of Fire (Experienced) ---
+
+DARK_FIRE_HONOR_LOSS = 3
+DARK_FIRE_DESTROYED = 2
+
+
+def _dark_ring_of_fire_experienced_condition(game: GameState, source: L5RCard) -> bool:
+    """ "If two or more Personalities have been destroyed this phase by their controller's
+    actions." A destruction the rulebook or a trait causes is no action's."""
+    by_id = game.table.cards_by_id
+    destroyed = [
+        event
+        for event in phase_history(game)
+        if isinstance(event, Destroyed)
+        and isinstance(event.cause, PlayerId)
+        and event.cause is event.controller
+        and (card := by_id.get(event.card_id)) is not None
+        and isinstance(card.printed, PersonalityPrint)
+    ]
+    return len(destroyed) >= DARK_FIRE_DESTROYED
+
+
+def _dark_ring_of_fire_experienced_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:
+    return [GainHonor(source.owner, -DARK_FIRE_HONOR_LOSS, source_id=source.id)]
+
+
+register_entry(
+    "dark_ring_of_fire_experienced",
+    timing=(ActionTiming.BATTLE, ActionTiming.OPEN),
+    condition=_dark_ring_of_fire_experienced_condition,
+    extra_effects=_dark_ring_of_fire_experienced_entry_effects,
+    key="enter",
+)
+register_no_enlightenment("dark_ring_of_fire_experienced")
+
+
+def _dark_ring_of_fire_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Each card without attachments in the unit of a Personality the action bowed who stands at
+    a battlefield. The action's bows include those paid as its cost, as "the action bowed" reads."""
+    by_id = game.table.cards_by_id
+    targets: list[str] = []
+    for event in action_did(game, Bowed):
+        bowed = by_id.get(event.card_id)
+        if bowed is None or not isinstance(bowed.printed, PersonalityPrint):
+            continue
+        if location_of(game.table, bowed).battlefield is None:
+            continue
+        for card in unit_of(game, bowed):
+            if card.id not in targets and not attachments_of(game, card):
+                targets.append(card.id)
+    return targets
+
+
+def _dark_ring_of_fire_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [Destroy(target.id, source.owner)]
+
+
+register_ring(
+    "dark_ring_of_fire_experienced",
+    ability=Ability(
+        printed_index=1,
+        timings=(ActionTiming.RESPONSE,),
+        cost=bow_cost,
+        targets=_dark_ring_of_fire_experienced_targets,
+        effects=_dark_ring_of_fire_experienced_effects,
+        key="fire",
+        keywords=frozenset({keywords.FIRE}),
     ),
     pitch=None,
 )

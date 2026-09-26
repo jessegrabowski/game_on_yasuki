@@ -18,6 +18,7 @@ yasuki_core.engine.rules.board.queries
     owned_holdings
     owned_personalities
     personalities_in_play
+    phase_history
     province_cards
     province_holdings
     province_key_holding
