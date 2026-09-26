@@ -15,7 +15,6 @@ yasuki_core.engine.rules.duel.resolution
 
 .. autosummary::
 
-    duel_stat
     duel_total
     end_duel
     end_without_resolution
