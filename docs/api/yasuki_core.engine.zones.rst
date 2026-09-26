@@ -12,6 +12,7 @@ yasuki_core.engine.zones
     DynastyDiscardZone
     FateBanishZone
     FateDiscardZone
+    FocusZone
     HandZone
     ProvinceZone
     RulebookZone

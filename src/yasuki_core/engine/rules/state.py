@@ -7,6 +7,7 @@ from yasuki_core.engine.table import TableState, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.battle.records import AttackPhase
+from yasuki_core.engine.rules.duel.records import DuelRecord, DuelStep
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.looks import Look
@@ -77,6 +78,12 @@ class GameState:
     attack : AttackPhase or None
         The attack declared in the Attack Phase now open: None outside that phase and inside it
         until the active player declares. Ephemeral and rebuilt by replay. Default None.
+    duel : DuelRecord or None
+        The duel being fought, or the last one fought once it has ended, so what resolves after a
+        duel can still read how it went. None until the first one. A duel happens inside a battle
+        or outside one, so this is not scoped to a phase the way ``attack`` is. Ephemeral and
+        rebuilt by replay, and set through :meth:`begin_duel` rather than by assignment.
+        Default None.
     once_per : set of str
         Usage flags for once-per-turn and once-per-game abilities (the Inheritance Rule, Proclaim,
         ...), keyed by a caller-chosen string. Default empty.
@@ -206,6 +213,7 @@ class GameState:
     win_reason: str | None = None
     active_rules: dict[PlayerId, frozenset[VictoryRule]] = field(default_factory=dict)
     attack: AttackPhase | None = None
+    duel: DuelRecord | None = None
     once_per: set[str] = field(default_factory=set)
     straighten_delayed: dict[str, int] = field(default_factory=dict)
     seed: int = 0
@@ -306,6 +314,17 @@ class GameState:
         """
         self.winner = seat
         self.win_reason = reason
+
+    def begin_duel(self, duel: DuelRecord) -> None:
+        """Record ``duel`` as the duel being fought, replacing a duel that has already ended.
+
+        Raise ``RuntimeError`` if one is still being fought: nothing in this era creates a duel
+        inside another, so a second one is a bug in whatever failed to end the first rather than a
+        nesting to support.
+        """
+        if self.duel is not None and self.duel.step is not DuelStep.ENDED:
+            raise RuntimeError("a duel is already being fought")
+        self.duel = duel
 
     def add_gold(self, seat: PlayerId, amount: int) -> None:
         """Add ``amount`` produced gold to ``seat``'s pool."""

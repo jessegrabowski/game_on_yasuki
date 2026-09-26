@@ -957,6 +957,65 @@ class Fear(AttackEffect):
 
 
 @dataclass(frozen=True, slots=True)
+class StartDuel(Effect):
+    """Have ``challenger`` challenge ``challenged`` to a duel, and open its focusing.
+
+    A card creating a duel names the two Personalities and nothing else. No duel happens where the
+    challenge is illegal or either card has left play (CR, Challenge).
+
+    Attributes
+    ----------
+    challenger : str
+        The id of the Personality issuing the challenge.
+    challenged : str
+        The id of the Personality challenged, whose seat has the first option to focus or strike.
+    source_card_id : str
+        The id of the card creating the duel, which the duel records so a consequence can name what
+        set it.
+    """
+
+    challenger: str
+    challenged: str
+    source_card_id: str
+
+    def describe(self) -> str:
+        return f"duel: {self.challenger} challenges {self.challenged}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        # The procedure imports this module for the effects a duel resolves, so importing it here
+        # would close that cycle.
+        from yasuki_core.engine.rules.duel.procedure import declare_duel
+
+        declare_duel(
+            game,
+            challenger_duelist=self.challenger,
+            challenged_duelist=self.challenged,
+            source=self.source_card_id,
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class EndDuel(Effect):
+    """End the duel being fought without resolution, which is what a duelist leaving play does to it
+    (CR, Duel). Nothing the duel would have done happens: there is no winner, no loser, and no
+    totals. A no-op where no duel is being fought, so the state-based rule that raises it may raise
+    it more than once."""
+
+    def describe(self) -> str:
+        return "end the duel without resolution"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        # As in StartDuel: the duel's own modules import this one.
+        from yasuki_core.engine.rules.duel.procedure import duel_being_fought
+        from yasuki_core.engine.rules.duel.resolution import end_without_resolution
+
+        if duel_being_fought(game) is None:
+            return []
+        return end_without_resolution(game)
+
+
+@dataclass(frozen=True, slots=True)
 class GrantPriority(Effect):
     """Hand ``seat`` the opportunity to act in the round now open, overriding the seat that round
     started on. A card naming the first actor in a round still to open delays this to that round's

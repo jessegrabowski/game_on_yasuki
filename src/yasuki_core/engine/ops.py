@@ -16,7 +16,7 @@ from yasuki_core.engine.table import (
     location_of,
     unit_members,
 )
-from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.engine.zones import FocusZone, ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
@@ -417,6 +417,23 @@ def create_province(state: TableState, seat: PlayerId) -> ZoneKey:
     key = ZoneKey(seat, ZoneRole.PROVINCE, idx)
     state.zones[key] = ProvinceZone(owner=seat)
     return key
+
+
+def create_focus_area(state: TableState, seat: PlayerId) -> ZoneKey:
+    """Add ``seat``'s focusing area if it has none, and return its key. A duel creates one per
+    duelist as it is declared and drops it as it ends, so a seat outside a duel has no such zone
+    and nothing has to represent an empty one."""
+    key = ZoneKey(seat, ZoneRole.FOCUS)
+    if key not in state.zones:
+        state.zones[key] = FocusZone(owner=seat)
+    return key
+
+
+def remove_focus_area(state: TableState, seat: PlayerId) -> list[L5RCard]:
+    """Drop ``seat``'s focusing area and return the cards left in it, which the caller moves
+    wherever the duel ending sends them. Returns an empty list where there is no such zone."""
+    zone = state.zones.pop(ZoneKey(seat, ZoneRole.FOCUS), None)
+    return [] if zone is None else list(zone.cards)
 
 
 def straighten(state: TableState, seat: PlayerId, skip: Container[str] = ()) -> list[str]:

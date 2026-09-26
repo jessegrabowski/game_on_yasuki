@@ -29,10 +29,15 @@ class ZoneRole(str, Enum):
     DYNASTY_BANISH = "dynasty_banish"
     PROVINCE = "province"
     RULEBOOK = "rulebook"
+    FOCUS = "focus"
+    # Reserved: the pool a Lotus-era duel deals focusable cards into, which the shipped focus
+    # procedure has no use for. Named here so adding that procedure is not a change to the state
+    # layer.
+    FOCUS_POOL = "focus_pool"
 
 
-# Per-seat zones present from table construction; provinces are created on demand
-# (CREATE_PROVINCE) and so are absent here.
+# Per-seat zones present from table construction; provinces and focusing areas are created on
+# demand (CREATE_PROVINCE, and a duel being declared) and so are absent here.
 _FIXED_ZONES: tuple[tuple[ZoneRole, type[Zone]], ...] = (
     (ZoneRole.HAND, HandZone),
     (ZoneRole.FATE_DISCARD, FateDiscardZone),

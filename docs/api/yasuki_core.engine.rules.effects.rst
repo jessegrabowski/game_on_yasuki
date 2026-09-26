@@ -32,6 +32,7 @@ yasuki_core.engine.rules.effects
     Dishonor
     DrawCard
     Effect
+    EndDuel
     EndLook
     Evaluate
     ExemptFromResolutionBow
@@ -71,6 +72,7 @@ yasuki_core.engine.rules.effects
     ShuffleDeck
     SpendOncePerTurn
     SpendSeatOncePerTurn
+    StartDuel
     Straighten
     TakeFavor
     Then

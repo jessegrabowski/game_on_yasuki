@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.battle import resolution
+from yasuki_core.engine.rules.duel import procedure as duel_procedure
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     AssignUnits,
@@ -35,6 +36,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     ChooseAmount,
     ChooseBattlefield,
+    FocusOrStrike,
     ChooseCards,
     ChooseDistribution,
     ChooseEquipTarget,
@@ -263,6 +265,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             resolution.apply_assignment(game, request, response)
         case ChooseBattlefield():
             resolution.fight_battle(game, int(response.choices[0]))
+        case FocusOrStrike():
+            duel_procedure.apply_focus_or_strike(game, request, response)
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
     # Symmetric with `perform`: an answered decision resolves fully before the next input. A
