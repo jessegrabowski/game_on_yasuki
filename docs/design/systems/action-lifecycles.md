@@ -115,6 +115,10 @@ once the Interrupt step has closed. The Tk client never draws the zone and lists
 abilities on the board menu. The zone is not a card zone: nothing in play sees
 what it holds, and the sandbox refuses to move anything into or out of it.
 
+The Favor's rulebook abilities sit on a proxy of their own, one per arc family, which
+[The Imperial Favor](the-imperial-favor.md) describes. The Tk client lists them on the Favor card
+in the holder's hand instead of the board menu.
+
 ## Where a card plugs in
 
 Through the effect vocabulary, not these modules. A card that recruits returns

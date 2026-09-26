@@ -12,7 +12,7 @@ or None. Everything else reads that.
 A card on the table represents it, and `rulebook/favor_proxy.py` is the only place that card is
 made or unmade. (A rulebook *ability* is represented differently: conferred by a keyword on the
 card it spends, as the Kharmic abilities are, or held by a proxy dealt once into the seat's
-rulebook zone by `rulebook/proxies.py`.)
+rulebook zone by `rulebook/proxies.py`, as the Favor's own abilities are.)
 
 ```python
 def sync_proxy(game: GameState) -> None:
@@ -31,28 +31,32 @@ A rules function that asks the board who holds the Favor has the direction backw
 
 ## What the Favor buys
 
-`rulebook/favor_abilities.py` holds the rulebook's own Favor abilities, registered by key:
+The rulebook's own Favor abilities sit on a Favor ability proxy, which `rulebook/proxies.py` deals
+into each seat's rulebook zone. It is a different card from the Favor in the holder's hand, which
+stays a rendering of `favor_holder` and carries no ability, because an ability without a keyword on
+a hand card would be played rather than activated. `rulebook/favor_abilities.py` registers each
+ability on its proxy as an ordinary `Ability` with `from_rulebook` set, its designator and keywords
+as the rulebook prints them, and the printed text as its label.
+
+The proxy an arc deals decides which abilities exist. `ONYX` names the Onyx Favor proxy in
+`rulebook_proxies`, carrying the datasheet's two Political abilities, and `SHATTERED_EMPIRE`
+inherits it. `IMPERIAL` names the pre-Gold proxy, carrying the three pre-Gold abilities the engine
+implements. The fourth, preventing a Family Honor loss, is not registered. No proxy ability names a
+`ruleset`.
+
+An ability's whole price goes in its cost, the Favor and anything else it charges:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/favor_abilities.py
-:start-at: @favor_ability("send_attacker_home", cost=_choose_attacker)
-:end-at: def _send_attacker_home(game: GameState, seat: PlayerId) -> list[Effect]:
+:start-at: def _favor_cost(extra: SeatCost | None)
+:end-before: def _on_your_turn(
 :language: python
 ```
 
-Which abilities exist at all is arc configuration. {func}`~.available_favor_abilities` intersects
-what `ruleset.ACTIVE` lists with what this engine implements, so an arc naming an ability nobody has
-written yet offers nothing instead of failing.
-
-The `cost` argument is the ability's own price, on top of the Favor. The module states why it goes
-there and not in the effects:
-
-```python
-# The whole cost goes in the cost builder, never half of it here and half in the effects: an
-# ability is offered only when ``can_pay`` judges its cost payable, and a cost hidden among the
-# effects is a cost nothing checks.
-FAVOR_ABILITY_COSTS: dict[str, "FavorAbilityEffects"] = {}
-FAVOR_ABILITY_EFFECTS: dict[str, "FavorAbilityEffects"] = {}
-```
+A choice that names what the ability acts on is in the cost, so an ability with nothing to name is
+withheld. A Wind in play makes the cost unpayable, and no payer can answer it. "If it is your turn"
+is in the targets: the proxy targets itself only while its seat is active.
+{func}`~.is_favor_ability` recognizes the actions by key and proxy, and the Tk client lists them on
+the Favor card in the holder's hand.
 
 ## Paying with the Favor
 
