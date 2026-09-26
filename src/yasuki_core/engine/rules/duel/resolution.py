@@ -11,7 +11,12 @@ from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    DuelEnded,
+    DuelResolved,
+    FocusedCardsRevealed,
+    GameEvent,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -21,7 +26,14 @@ class RevealFocusedCards(DuelWork):
     because the Focus Effects of the cards it reveals resolve between it and the outcome."""
 
     def resume(self, game: GameState) -> None:
+        duel = duel_in_progress(game)
         reveal_focused_cards(game)
+        revealed = frozenset(
+            (seat, card.id)
+            for seat in (duel.challenger, duel.challenged)
+            for card in focused_cards(game, seat)
+        )
+        triggers.fire(game, FocusedCardsRevealed(revealed=revealed))
 
 
 @dataclass(frozen=True, slots=True)
@@ -32,7 +44,18 @@ class DecideTheDuel(DuelWork):
     def resume(self, game: GameState) -> None:
         duel = duel_in_progress(game)
         duel.step = DuelStep.RESOLUTION
-        duel.outcome = _outcome_on_totals(game, duel)
+        outcome = _outcome_on_totals(game, duel)
+        duel.outcome = outcome
+        triggers.fire(
+            game,
+            DuelResolved(
+                winner=outcome.winner,
+                losers=frozenset(outcome.losers),
+                totals=frozenset(outcome.totals.items()),
+                entry_stats=frozenset(duel.entry_stats.items()),
+                source_card_id=duel.source,
+            ),
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -93,6 +116,7 @@ def end_duel(game: GameState) -> list[GameEvent]:
             raise RuntimeError(
                 f"{seat.name}'s focusing area still held {[card.id for card in left]}"
             )
+    events.append(DuelEnded(resolved=duel.outcome.resolved, source_card_id=duel.source))
     return events
 
 

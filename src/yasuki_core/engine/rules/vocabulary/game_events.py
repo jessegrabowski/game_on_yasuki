@@ -330,23 +330,175 @@ class BattleResolved:
     terrains_destroyed: frozenset[tuple[PlayerId, str]]
 
 
+@dataclass(frozen=True, slots=True)
+class DeclaringDuel:
+    """A duel has been created and is about to put the first focus-or-strike option.
+
+    The window a card acts in to change the duel before it is focused, which is what Hidden Strength
+    reads when it compares the two duel stats "at that time". Both Personalities and the focusing
+    areas already exist here, and nothing has been focused.
+
+    Attributes
+    ----------
+    challenger : PlayerId
+        The seat whose card created the duel.
+    challenged : PlayerId
+        The seat challenged, which has the first option.
+    challenger_duelist : str
+        The id of the challenger's Personality.
+    challenged_duelist : str
+        The id of the challenged seat's Personality.
+    source_card_id : str
+        The id of the card that created the duel.
+    """
+
+    challenger: PlayerId
+    challenged: PlayerId
+    challenger_duelist: str
+    challenged_duelist: str
+    source_card_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class DuelDeclared:
+    """A duel has been created, read after the window :class:`~.DeclaringDuel` opened has closed.
+
+    Attributes
+    ----------
+    challenger : PlayerId
+        The seat whose card created the duel.
+    challenged : PlayerId
+        The seat challenged, which has the first option.
+    challenger_duelist : str
+        The id of the challenger's Personality.
+    challenged_duelist : str
+        The id of the challenged seat's Personality.
+    source_card_id : str
+        The id of the card that created the duel.
+    """
+
+    challenger: PlayerId
+    challenged: PlayerId
+    challenger_duelist: str
+    challenged_duelist: str
+    source_card_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class CardFocused:
+    """A card has been focused, and is in its seat's focusing area face down.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that focused it.
+    card_id : str
+        The card focused.
+    focused : int
+        How many times that seat has now focused in this duel.
+    """
+
+    seat: PlayerId
+    card_id: str
+    focused: int
+
+
+@dataclass(frozen=True, slots=True)
+class StrikeDeclared:
+    """A seat has struck, ending the focusing before anything is revealed.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that struck.
+    """
+
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
+class FocusedCardsRevealed:
+    """Both focus stacks have been turned face up (CR, Duel 0.0.7).
+
+    Attributes
+    ----------
+    revealed : frozenset of (PlayerId, str)
+        Each seat and a card it had focused.
+    """
+
+    revealed: frozenset[tuple[PlayerId, str]]
+
+
+@dataclass(frozen=True, slots=True)
+class DuelResolved:
+    """A duel has been decided, before the focused cards are discarded and the duel ends.
+
+    The entry stats are what each Personality's duel stat was when the duel was declared, which a
+    card comparing the two as the duel began cannot read off the board afterwards.
+
+    Attributes
+    ----------
+    winner : PlayerId or None
+        The seat whose Personality won, or None where nobody did.
+    losers : frozenset of PlayerId
+        The seats whose Personalities lost.
+    totals : frozenset of (PlayerId, int)
+        Each seat and what its Personality totalled.
+    entry_stats : frozenset of (PlayerId, int)
+        Each seat and its Personality's duel stat as the duel was declared.
+    source_card_id : str
+        The id of the card that created the duel.
+    """
+
+    winner: PlayerId | None
+    losers: frozenset[PlayerId]
+    totals: frozenset[tuple[PlayerId, int]]
+    entry_stats: frozenset[tuple[PlayerId, int]]
+    source_card_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class DuelEnded:
+    """A duel is over, whether or not it resolved (CR, Duel). The focused cards have been discarded
+    and the focusing areas are gone.
+
+    Attributes
+    ----------
+    resolved : bool
+        Whether the duel reached its resolution. False for a duel a duelist left play in the middle
+        of, and for one a refused challenge never started.
+    source_card_id : str
+        The id of the card that created the duel.
+    """
+
+    resolved: bool
+    source_card_id: str
+
+
 # Events a step fires before it commits anything, to open a window for the cards it concerns. A
 # question a trigger asks in one belongs to the step that opened it, so backing out unwinds the
 # step's action as it would from any other question of the action's own. Every other event has
 # happened by the time a trigger reads it.
-WINDOWS: frozenset[type] = frozenset({ProducingGold})
+WINDOWS: frozenset[type] = frozenset({DeclaringDuel, ProducingGold})
 
 GameEvent = (
     ActionResolved
     | Assigned
     | BattleResolved
+    | CardFocused
     | ConditionFulfilled
     | TurnStarted
     | CardDiscarded
     | CounterGained
+    | DeclaringDuel
     | Destroyed
     | Dishonored
+    | DuelDeclared
+    | DuelEnded
+    | DuelResolved
     | EnteredPlay
+    | FocusedCardsRevealed
+    | StrikeDeclared
     | FavorDiscarded
     | HonorChanged
     | ProducedGold

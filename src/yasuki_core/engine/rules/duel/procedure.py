@@ -4,10 +4,17 @@ from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.records import DuelRecord, DuelStep, DuelWork
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat
-from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    CardFocused,
+    DeclaringDuel,
+    DuelDeclared,
+    GameEvent,
+    StrikeDeclared,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
     DecisionResponse,
@@ -88,13 +95,37 @@ def declare_duel(
     ops.create_focus_area(game.table, challenger)
     ops.create_focus_area(game.table, challenged)
     duel.step = DuelStep.FOCUSING
-    # The option is queued before the setup runs, so that work the setup pushes sits above it and
-    # a procedure that deals cards before the first option finishes doing so first.
+    duel.entry_stats = {
+        seat: duel_stat(game, game.table.cards_by_id[duel.duelist_of(seat)])
+        for seat in (challenger, challenged)
+    }
+    # The option is queued before the setup runs and before the window is announced, so that work
+    # either of them pushes sits above it and resolves before the first seat is asked.
     game.stack.append(OfferFocusOrStrike(challenged))
     events: list[GameEvent] = []
     for effect in ruleset.ACTIVE.focus_procedure.begin(game, duel):
         events.extend(triggers.apply_effect(game, effect))
-    return events
+    return [*events, _declaring(duel), _declared(duel)]
+
+
+def _declaring(duel: DuelRecord) -> DeclaringDuel:
+    return DeclaringDuel(
+        challenger=duel.challenger,
+        challenged=duel.challenged,
+        challenger_duelist=duel.challenger_duelist,
+        challenged_duelist=duel.challenged_duelist,
+        source_card_id=duel.source,
+    )
+
+
+def _declared(duel: DuelRecord) -> DuelDeclared:
+    return DuelDeclared(
+        challenger=duel.challenger,
+        challenged=duel.challenged,
+        challenger_duelist=duel.challenger_duelist,
+        challenged_duelist=duel.challenged_duelist,
+        source_card_id=duel.source,
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -146,8 +177,10 @@ def apply_focus_or_strike(
     if token == STRIKE:
         strike(game, request.seat)
         return
-    focus(game, request.seat, token)
+    # Queued before the focus, so that what a card does in reaction to the focus resolves before
+    # the other duelist is asked.
     game.stack.append(OfferFocusOrStrike(duel.opponent_of(request.seat)))
+    focus(game, request.seat, token)
 
 
 def focus(game: GameState, seat: PlayerId, token: str) -> None:
@@ -162,6 +195,12 @@ def focus(game: GameState, seat: PlayerId, token: str) -> None:
     duel.focused[seat] = duel.focuses(seat) + 1
     if effects:
         triggers.resolve_effects(game, effects)
+    # The card the procedure just moved, read off the area rather than off the token, since a token
+    # is the procedure's own vocabulary. One focus moves one card today.
+    focused = focused_cards(game, seat)
+    if not focused:
+        raise RuntimeError(f"{seat.name} focused {token!r} and its focusing area is empty")
+    triggers.fire(game, CardFocused(seat=seat, card_id=focused[-1].id, focused=duel.focuses(seat)))
 
 
 def strike(game: GameState, seat: PlayerId) -> None:
@@ -180,3 +219,4 @@ def strike(game: GameState, seat: PlayerId) -> None:
     duel.option = None
     # Pushed in reverse, so they run in the CR's order: reveal, then the outcome, then the end.
     game.stack.extend((EndTheDuel(), DecideTheDuel(), RevealFocusedCards()))
+    triggers.fire(game, StrikeDeclared(seat=seat))
