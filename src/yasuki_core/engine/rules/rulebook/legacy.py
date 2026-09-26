@@ -1,6 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_key_of
+from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.effects import (
     Banish,
     Choose,
@@ -14,7 +15,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.legality import legacy_candidates, legacy_key, legacy_search_pool
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 
 BANISH_RESOLVER = "legacy_banish"
@@ -27,8 +28,7 @@ def legacy(game: GameState) -> None:
     search and placement follow once the banished card is chosen."""
     seat = game.active
     game.use_once(legacy_key(seat, game.turn))
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    candidates = tuple(card.id for card in hand.cards)
+    candidates = tuple(card.id for card in cards_in_hand(game, seat))
     triggers.resolve_action_effects(
         game,
         [Choose(seat=seat, candidates=candidates, minimum=1, maximum=1, resolver=BANISH_RESOLVER)],

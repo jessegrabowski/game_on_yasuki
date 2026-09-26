@@ -389,6 +389,16 @@ def test_way_of_the_crane_draws_then_discards_as_a_trait(reacting):
     assert causes == [Trait("crane")]
 
 
+def test_way_of_the_crane_does_not_offer_the_imperial_favor_as_its_discard():
+    game = _crane_edict_in_play()
+    resolve_effects(game, [TakeFavor(P1)])
+    sequence.open_response_window(game)
+
+    action_sequence.perform(game, CRANE_DRAW)
+
+    assert set(game.pending.candidates) == {"held", "top"}
+
+
 def test_way_of_the_crane_draws_once_per_turn():
     game = _crane_edict_in_play(deck=("top", "second"))
     sequence.open_response_window(game)

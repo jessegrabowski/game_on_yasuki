@@ -43,7 +43,7 @@ from yasuki_core.engine.rules.board.queries import (
     province_cards,
     units_at,
 )
-from yasuki_core.engine.rules.board.seats import seat_stronghold
+from yasuki_core.engine.rules.board.seats import cards_in_hand, seat_stronghold
 from yasuki_core.engine.rules.rulebook.equip import equip_targets
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -344,8 +344,7 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
         return []
     if game.has_used(legacy_key(seat, game.turn)):
         return []
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    return [Legacy()] if hand.cards else []
+    return [Legacy()] if cards_in_hand(game, seat) else []
 
 
 def inheritance_key(seat: PlayerId) -> str:
