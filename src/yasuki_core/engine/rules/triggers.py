@@ -776,7 +776,7 @@ def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:
         held.resume(game)
 
 
-def action_did(game: GameState, kind: type[GameEvent]) -> tuple[GameEvent, ...]:
+def action_did[E: GameEvent](game: GameState, kind: type[E]) -> tuple[E, ...]:
     """Every event of ``kind`` the action now resolving has produced, in the order it happened.
 
     What a Response reads to know what it is answering: "discarded a Fate card" and "Recruits this
